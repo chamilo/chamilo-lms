@@ -114,7 +114,7 @@ class NotebookManager
         }
 
         // Database table definition
-        $t_notebook = Database::get_course_table(TABLE_NOTEBOOK);
+        $table = Database::get_course_table(TABLE_NOTEBOOK);
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT
@@ -122,8 +122,8 @@ class NotebookManager
                 title				AS note_title,
                 description 		AS note_comment,
                 session_id			AS session_id
-               FROM $t_notebook
-               WHERE c_id = $course_id AND notebook_id = '".intval($notebook_id)."' ";
+                FROM $table
+                WHERE c_id = $course_id AND notebook_id = '".intval($notebook_id)."' ";
         $result = Database::query($sql);
         if (Database::num_rows($result) != 1) {
             return [];
@@ -199,11 +199,10 @@ class NotebookManager
         }
 
         // Database table definition
-        $t_notebook = Database::get_course_table(TABLE_NOTEBOOK);
-
+        $table = Database::get_course_table(TABLE_NOTEBOOK);
         $course_id = api_get_course_int_id();
 
-        $sql = "DELETE FROM $t_notebook
+        $sql = "DELETE FROM $table
                 WHERE
                     c_id = $course_id AND
                     notebook_id='".intval($notebook_id)."' AND
@@ -214,7 +213,7 @@ class NotebookManager
             return false;
         }
 
-        //update item_property (delete)
+        // Update item_property (delete)
         api_item_property_update(
             api_get_course_info(),
             TOOL_NOTEBOOK,
@@ -231,6 +230,7 @@ class NotebookManager
      */
     public static function display_notes()
     {
+        $sessionId = api_get_session_id();
         $_user = api_get_user_info();
         if (!isset($_GET['direction'])) {
             $sort_direction = 'ASC';
@@ -246,15 +246,7 @@ class NotebookManager
         // action links
         echo '<div class="actions">';
         if (!api_is_anonymous()) {
-            if (api_get_session_id() == 0) {
-                echo '<a href="index.php?'.api_get_cidreq().'&action=addnote">'.
-                    Display::return_icon(
-                        'new_note.png',
-                        get_lang('NoteAddNew'),
-                        '',
-                        '32'
-                    ).'</a>';
-            } elseif (api_is_allowed_to_session_edit(false, true)) {
+            if ($sessionId == 0 || api_is_allowed_to_session_edit(false, true)) {
                 echo '<a href="index.php?'.api_get_cidreq().'&action=addnote">'.
                     Display::return_icon('new_note.png', get_lang('NoteAddNew'), '', '32').'</a>';
             }
@@ -278,17 +270,16 @@ class NotebookManager
         }
 
         // Database table definition
-        $t_notebook = Database::get_course_table(TABLE_NOTEBOOK);
+        $table = Database::get_course_table(TABLE_NOTEBOOK);
         $order_by = " ORDER BY ".$notebookView." $sort_direction ";
 
         // Condition for the session
-        $session_id = api_get_session_id();
-        $condition_session = api_get_session_condition($session_id);
+        $condition_session = api_get_session_condition($sessionId);
 
         $cond_extra = $notebookView == 'update_date' ? " AND update_date <> ''" : " ";
         $course_id = api_get_course_int_id();
 
-        $sql = "SELECT * FROM $t_notebook
+        $sql = "SELECT * FROM $table
                 WHERE
                     c_id = $course_id AND
                     user_id = '".api_get_user_id()."'

@@ -111,6 +111,7 @@ class CourseCopyLearnpath extends Resource
      * @param string $content_license
      * @param int    $debug
      * @param string $visibility
+     * @param int    $categoryId
      * @param array  $items
      */
     public function __construct(
@@ -140,6 +141,7 @@ class CourseCopyLearnpath extends Resource
         $publicated_on,
         $expired_on,
         $session_id,
+        $categoryId,
         $items
     ) {
         parent::__construct($id, RESOURCE_LEARNPATH);
@@ -168,6 +170,7 @@ class CourseCopyLearnpath extends Resource
         $this->session_id = $session_id;
         $this->author = $author;
         $this->preview_image = $preview_image;
+        $this->categoryId = $categoryId;
         $this->items = $items;
     }
 

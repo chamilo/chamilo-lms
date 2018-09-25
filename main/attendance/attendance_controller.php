@@ -45,11 +45,10 @@ class AttendanceController
     {
         $attendance = new Attendance();
         $data = [];
-
         if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
             if (!empty($_POST['title'])) {
                 $check = Security::check_token();
-                $last_id = 0;
+                $attendanceId = 0;
                 if ($check) {
                     $attendance->set_name($_POST['title']);
                     $attendance->set_description($_POST['description']);
@@ -62,10 +61,15 @@ class AttendanceController
                         $link_to_gradebook = true;
                     }
                     $attendance->category_id = isset($_POST['category_id']) ? $_POST['category_id'] : 0;
-                    $last_id = $attendance->attendance_add($link_to_gradebook);
+                    $attendanceId = $attendance->attendance_add($link_to_gradebook);
+
+                    if ($attendanceId) {
+                        $form = new FormValidator('attendance_add');
+                        Skill::saveSkills($form, ITEM_TYPE_ATTENDANCE, $attendanceId);
+                    }
                     Security::clear_token();
                 }
-                header('Location: index.php?action=calendar_add&attendance_id='.$last_id.'&'.api_get_cidreq());
+                header('Location: index.php?action=calendar_add&attendance_id='.$attendanceId.'&'.api_get_cidreq());
                 exit;
             } else {
                 $data['error'] = true;
@@ -120,8 +124,13 @@ class AttendanceController
                         $link_to_gradebook = true;
                     }
                     $attendance->attendance_edit($attendance_id, $link_to_gradebook);
+
+                    $form = new FormValidator('attendance_edit');
+                    Skill::saveSkills($form, ITEM_TYPE_ATTENDANCE, $attendance_id);
+                    Display::addFlash(Display::return_message(get_lang('Updated')));
+
                     Security::clear_token();
-                    header('location:index.php?action=attendance_list&'.api_get_cidreq());
+                    header('Location:index.php?action=attendance_list&'.api_get_cidreq());
                     exit;
                 }
             } else {
@@ -170,6 +179,7 @@ class AttendanceController
         $attendance = new Attendance();
         if (!empty($attendance_id)) {
             $affected_rows = $attendance->attendance_delete($attendance_id);
+            Skill::deleteSkillsFromItem($attendance_id, ITEM_TYPE_ATTENDANCE);
         }
 
         if ($affected_rows) {
@@ -365,13 +375,28 @@ class AttendanceController
                 $my_calendar_id,
                 $groupId
             );
-            $data['attendant_calendar_all'] = $attendance->get_attendance_calendar($attendance_id, 'all', null, $groupId);
+            $data['attendant_calendar_all'] = $attendance->get_attendance_calendar(
+                $attendance_id,
+                'all',
+                null,
+                $groupId
+            );
             $data['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id, 0, $groupId);
             $data['next_attendance_calendar_id'] = $attendance->get_next_attendance_calendar_id($attendance_id);
             $data['next_attendance_calendar_datetime'] = $attendance->getNextAttendanceCalendarDatetime($attendance_id);
         } else {
-            $data['attendant_calendar_all'] = $attendance->get_attendance_calendar($attendance_id, 'all', null, $groupId);
-            $data['attendant_calendar'] = $attendance->get_attendance_calendar($attendance_id, $filter_type, null, $groupId);
+            $data['attendant_calendar_all'] = $attendance->get_attendance_calendar(
+                $attendance_id,
+                'all',
+                null,
+                $groupId
+            );
+            $data['attendant_calendar'] = $attendance->get_attendance_calendar(
+                $attendance_id,
+                $filter_type,
+                null,
+                $groupId
+            );
         }
 
         $data['edit_table'] = intval($edit);

@@ -18,21 +18,21 @@ class HookObserver
      *
      * @ORM\Column(name="class_name", type="string", length=255, nullable=true)
      */
-    private $className;
+    protected $className;
 
     /**
      * @var string
      *
      * @ORM\Column(name="path", type="string", length=255, nullable=false)
      */
-    private $path;
+    protected $path;
 
     /**
      * @var string
      *
      * @ORM\Column(name="plugin_name", type="string", length=255, nullable=true)
      */
-    private $pluginName;
+    protected $pluginName;
 
     /**
      * @var int
@@ -41,7 +41,7 @@ class HookObserver
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * Set className.

@@ -21,6 +21,12 @@ if ($allow) {
 
 // The section (for the tabs).
 $this_section = SECTION_CAMPUS;
+$includeFile = !empty($_GET['include']);
+if ($includeFile) {
+    $this_section = SECTION_INCLUDE;
+} elseif (api_get_configuration_value('plugin_redirection_enabled')) {
+    RedirectionPlugin::redirectUser(api_get_user_id());
+}
 
 $header_title = null;
 if (!api_is_anonymous()) {
@@ -66,7 +72,7 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
     Session::erase('term_and_condition');
 }
 //If we are not logged in and customapages activated
-if (!api_get_user_id() && CustomPages::enabled()) {
+if (!api_user_is_login() && CustomPages::enabled()) {
     if (Request::get('loggedout')) {
         CustomPages::display(CustomPages::LOGGED_OUT);
     } else {
@@ -104,29 +110,31 @@ if (!empty($_POST['submitAuth'])) {
     Event::open();
 }
 
+if (!api_is_anonymous()) {
+    $url = api_get_configuration_value('redirect_index_to_url_for_logged_users');
+    if (!empty($url)) {
+        header("Location: $url");
+        exit;
+    }
+}
+
 if (api_get_setting('display_categories_on_homepage') === 'true') {
     $controller->tpl->assign('course_category_block', $controller->return_courses_in_categories());
 }
-
 $controller->set_login_form();
 
 //@todo move this inside the IndexManager
 if (!api_is_anonymous()) {
     $controller->tpl->assign('profile_block', $controller->return_profile_block());
     $controller->tpl->assign('user_image_block', $controller->return_user_image_block());
-
-    if (api_is_platform_admin()) {
-        $controller->tpl->assign('course_block', $controller->return_course_block());
-    } else {
-        $controller->tpl->assign('teacher_block', $controller->return_teacher_link());
-    }
+    $controller->tpl->assign('course_block', $controller->return_course_block());
 }
-
-$hot_courses = '';
+$hotCourses = '';
 $announcements_block = '';
 
 // Display the Site Use Cookie Warning Validation
 $useCookieValidation = api_get_setting('cookie_warning');
+
 if ($useCookieValidation === 'true') {
     if (isset($_POST['acceptCookies'])) {
         api_set_site_use_cookie_warning_cookie();
@@ -140,19 +148,28 @@ if ($useCookieValidation === 'true') {
     }
 }
 
-// When loading a chamilo page do not include the hot courses and news
-
 if (!isset($_REQUEST['include'])) {
     if (api_get_setting('show_hot_courses') == 'true') {
-        $hot_courses = $controller->return_hot_courses();
+        $hotCourses = $controller->return_hot_courses();
     }
     $announcements_block = $controller->return_announcements();
 }
-
-$controller->tpl->assign('hot_courses', $hot_courses);
+if (api_get_configuration_value('show_hot_sessions') === true) {
+    $hotSessions = SessionManager::getHotSessions();
+    $controller->tpl->assign('hot_sessions', $hotSessions);
+}
+$controller->tpl->assign('hot_courses', $hotCourses);
 $controller->tpl->assign('announcements_block', $announcements_block);
-$controller->tpl->assign('home_page_block', $controller->return_home_page());
-$controller->tpl->assign('navigation_course_links', $controller->return_navigation_links());
+if ($includeFile) {
+    // If we are including a static page, then home_welcome is empty
+    $controller->tpl->assign('home_welcome', '');
+    $controller->tpl->assign('home_include', $controller->return_home_page($includeFile));
+} else {
+    // If we are including the real homepage, then home_include is empty
+    $controller->tpl->assign('home_welcome', $controller->return_home_page(false));
+    $controller->tpl->assign('home_include', '');
+}
+$controller->tpl->assign('navigation_links', $controller->return_navigation_links());
 $controller->tpl->assign('notice_block', $controller->return_notice());
 //$controller->tpl->assign('main_navigation_block', $controller->return_navigation_links());
 $controller->tpl->assign('help_block', $controller->return_help());
@@ -164,11 +181,9 @@ $controller->tpl->assign('total_exercises', CourseManager::getCountExercisesFrom
 if (api_is_platform_admin() || api_is_drh()) {
     $controller->tpl->assign('skills_block', $controller->returnSkillLinks());
 }
-
 if (api_is_anonymous()) {
     $controller->tpl->setLoginBodyClass();
 }
-
 // direct login to course
 if (isset($_GET['firstpage'])) {
     api_set_firstpage_parameter($_GET['firstpage']);

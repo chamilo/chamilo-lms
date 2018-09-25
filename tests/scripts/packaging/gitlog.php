@@ -40,7 +40,7 @@ if (!empty($argv[1])) {
     }
 }
 
-$git = new \SebastianBergmann\Git\Git($repository);
+$git = new \YWarnier\PHPGit\Git($repository);
 echo "Log from branch: ".$git->getCurrentBranch().PHP_EOL;
 
 $logs = $git->getRevisions('DESC', $number);

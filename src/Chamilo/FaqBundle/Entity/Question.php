@@ -12,7 +12,7 @@ use Knp\DoctrineBehaviors\Model as ORMBehaviors;
  *
  * @ORM\Entity(repositoryClass="Chamilo\FaqBundle\Entity\QuestionRepository")
  * @ORM\Table(name="faq_question")
- * *
+ *
  *
  * @package Chamilo\FaqBundle\Entity
  */
@@ -23,7 +23,7 @@ class Question
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\GeneratedValue
      */
     protected $id;
 
@@ -80,7 +80,7 @@ class Question
      */
     public function __toString()
     {
-        return $this->getHeadline();
+        return (string) $this->getHeadline();
     }
 
     /**

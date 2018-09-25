@@ -84,7 +84,7 @@ class CourseDescription
             true,
             true
         );
-        $course_id = api_get_course_int_id();
+        $course_id = $this->course_id ?: api_get_course_int_id();
         $sql = "SELECT * FROM $table
 		        WHERE c_id = $course_id $condition_session
 		        ORDER BY id ";
@@ -245,7 +245,7 @@ class CourseDescription
             );
         }
 
-        return ($last_id > 0) ? 1 : 0;
+        return $last_id > 0 ? 1 : 0;
     }
 
     /**
@@ -314,7 +314,7 @@ class CourseDescription
         );
 
         if ($this->id > 0) {
-            //insert into item_property
+            // Insert into item_property
             api_item_property_update(
                 api_get_course_info(),
                 TOOL_COURSE_DESCRIPTION,

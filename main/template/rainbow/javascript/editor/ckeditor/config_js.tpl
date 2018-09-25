@@ -20,42 +20,67 @@ CKEDITOR.editorConfig = function (config) {
     ];
     //Style for default CKEditor Chamilo LMS
     config.stylesSet = [
-        { 
+        {
             name : 'Titre',
             element : 'h2',
             attributes : { 'class': 'ck ck-titre' }
         },
-        { 
+        {
             name : 'Parcours',
             element : 'h4',
             attributes : { 'class': 'ck ck-parcours' }
         },
-        { 
+        {
             name : 'Etape',
             element : 'h5',
             attributes : { 'class': 'ck ck-etape' }
         },
-        { 
+        {
             name : 'Texte',
             element : 'p',
             attributes : { 'class': 'ck ck-texte' }
         },
-        { 
+        {
             name : 'Source',
             element : 'p',
             attributes : { 'class': 'ck ck-source' }
         },
-        { 
+        {
             name : 'Consignes',
             element : 'p',
             attributes : { 'class': 'ck ck-consignes' }
         },
-        { 
+        {
+            name : 'Title 1',
+            element : 'h1',
+            attributes : { 'class': 'ck ck-title' }
+        },
+        {
+            name : 'Title 2',
+            element : 'h2',
+            attributes : { 'class': 'ck ck-title2' }
+        },
+        {
+            name : 'Alert Success',
+            element : 'div',
+            attributes : { 'class': 'alert alert-success' }
+        },
+        {
+            name : 'Alert Info',
+            element : 'div',
+            attributes : { 'class': 'alert alert-info' }
+        },
+        {
+            name : 'Alert Warning',
+            element : 'div',
+            attributes : { 'class': 'alert alert-warning' }
+        },
+        {
             name : 'Alert Danger',
-            element : 'p',
+            element : 'div',
             attributes : { 'class': 'alert alert-danger' }
         },
-        { 
+        {
             name : 'Section Article' ,
             element : 'h3' ,
             attributes : { 'class': 'ck ck-article' }
@@ -100,8 +125,7 @@ CKEDITOR.editorConfig = function (config) {
             attributes: { 'class':'ck-style3'}
         }
     ];
-    
-    
+
     {% if moreButtonsInMaximizedMode %}
         config.toolbar = 'minToolbar';
         config.smallToolbar = 'minToolbar';
@@ -109,11 +133,23 @@ CKEDITOR.editorConfig = function (config) {
     {% endif %}
 
     // File manager (elFinder)
-    config.filebrowserBrowseUrl = '{{ _p.web_lib ~ 'elfinder/filemanager.php' }}';
+    config.filebrowserBrowseUrl = '{{ _p.web_lib ~ 'elfinder/filemanager.php?' }}{{ course_condition }}';
+    config.videobrowserBrowseUrl = '{{ _p.web_lib ~ 'elfinder/filemanager.php?' }}{{ course_condition }}';
 
+    config.enterMode = CKEDITOR.ENTER_BR;
     // Allows to use "class" attribute inside divs and spans.
     config.allowedContent = true;
-    config.contentsCss = '{{ cssEditor }}';
-
-    config.customConfig = '{{ _p.web_main ~ 'inc/lib/javascript/ckeditor/config_js.php'}}';
+    // Option to set the "styles" menu
+    config.contentsCss = [
+        '{{ bootstrap_css }}',
+        '{{ font_awesome_css }}',
+        '{{ css_editor }}',
+    ];
 };
+
+// Sets default target to "_blank" in link plugin
+CKEDITOR.on('dialogDefinition', function (ev) {
+    if (ev.data.name == 'link'){
+        ev.data.definition.getContents('target').get('linkTargetType')['default']='_blank';
+    }
+});

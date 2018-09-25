@@ -17,7 +17,7 @@ $rules = [
     'yoda_style' => false,
     'phpdoc_to_comment' => false,
     'phpdoc_no_package' => false,
-    'increment_style' => false,
+    'increment_style' => ['style' => 'post'],
     'no_useless_else' => false,
     //'no_php4_constructor' => true,
     'single_quote' => false,
@@ -76,6 +76,8 @@ $finder = PhpCsFixer\Finder::create()
     ->exclude('plugin/ims_lti')
     ->exclude('plugin/sepe/src/wsse')
     ->exclude('plugin/test2pdf/class')
+    ->exclude('plugin/jcapture/src')
+    ->exclude('plugin/jcapture/lib')
     ->exclude('tests')
     ->exclude('var')
     ->exclude('vendor')

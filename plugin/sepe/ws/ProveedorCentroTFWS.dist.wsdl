@@ -1,0 +1,913 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="ProveedorCentroTFWS" targetNamespace="http://impl.ws.application.proveedorcentro.meyss.spee.es" xmlns:entrada="http://entrada.bean.domain.common.proveedorcentro.meyss.spee.es" xmlns:entsal="http://entsal.bean.domain.common.proveedorcentro.meyss.spee.es" xmlns:impl="http://impl.ws.application.proveedorcentro.meyss.spee.es" xmlns:salida="http://salida.bean.domain.common.proveedorcentro.meyss.spee.es" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:sp="http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200702" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://impl.ws.application.proveedorcentro.meyss.spee.es" xmlns="http://impl.ws.application.proveedorcentro.meyss.spee.es">
+			<xsd:import namespace="http://salida.bean.domain.common.proveedorcentro.meyss.spee.es"/>
+			<xsd:import namespace="http://entsal.bean.domain.common.proveedorcentro.meyss.spee.es"/>
+			<xsd:element name="crearCentro">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" ref="entsal:DATOS_IDENTIFICATIVOS"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="crearCentroResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" ref="salida:RESPUESTA_DATOS_CENTRO"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="obtenerDatosCentro">
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="obtenerDatosCentroResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" ref="salida:RESPUESTA_DATOS_CENTRO"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="crearAccion">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" ref="entsal:ACCION_FORMATIVA"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="crearAccionResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" ref="salida:RESPUESTA_OBT_ACCION"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="obtenerAccion">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" ref="entsal:ID_ACCION"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="obtenerAccionResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" ref="salida:RESPUESTA_OBT_ACCION"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="obtenerListaAcciones">
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="obtenerListaAccionesResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" ref="salida:RESPUESTA_OBT_LISTA_ACCIONES"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="eliminarAccion">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" ref="entsal:ID_ACCION"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="eliminarAccionResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" ref="salida:RESPUESTA_ELIMINAR_ACCION"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:schema>
+    <xsd:schema targetNamespace="http://entsal.bean.domain.common.proveedorcentro.meyss.spee.es" xmlns="http://entsal.bean.domain.common.proveedorcentro.meyss.spee.es">
+			<xsd:simpleType name="tipo_fecha">
+				<xsd:restriction base="xsd:string">
+					<xsd:pattern value="(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/\d{4}"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="tipo_si_no">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="SI"/>
+					<xsd:enumeration value="NO"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="tipo_documento">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="D"/>
+					<xsd:enumeration value="E"/>
+					<xsd:enumeration value="U"/>
+					<xsd:enumeration value="W"/>
+					<xsd:enumeration value="G"/>
+					<xsd:enumeration value="H"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="codigo_retorno">
+				<xsd:restriction base="xsd:int">
+					<xsd:minInclusive value="-2"/>
+					<xsd:maxInclusive value="2"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="origen">
+				<xsd:restriction base="xsd:string">
+					<xsd:minLength value="2"/>
+					<xsd:maxLength value="2"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="codigo_centro">
+				<xsd:restriction base="xsd:string">
+					<xsd:length value="16"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="string_40">
+				<xsd:restriction base="xsd:string">
+					<xsd:minLength value="1"/>
+					<xsd:maxLength value="40"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="url">
+				<xsd:restriction base="xsd:string">
+					<xsd:minLength value="1"/>
+					<xsd:maxLength value="400"/>
+					<xsd:pattern value="^(http|https|HTTP|HTTPS){1}://\w{1}(\w|[-_.~!*&apos;();:@&amp;=+$,/?%#]|\[|\])*$"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="telefono">
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="15"/>
+					<xsd:pattern value="^([+]\d)?\d{9,15}$"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="email">
+				<xsd:restriction base="xsd:string">
+					<xsd:minLength value="1"/>
+					<xsd:maxLength value="250"/>
+					<xsd:pattern value="^\w([.]?(\w|[!#$&apos;*+\-/=?\^_`{|}~]))*@(\w|[.\-]){1,254}[.](\w){2,6}$"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+
+			<xsd:element name="DATOS_IDENTIFICATIVOS">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="ID_CENTRO" nillable="false">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element maxOccurs="1" minOccurs="1" name="ORIGEN_CENTRO" nillable="false" type="origen"/>
+									<xsd:element maxOccurs="1" minOccurs="1" name="CODIGO_CENTRO" nillable="false" type="codigo_centro"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="1" name="NOMBRE_CENTRO" nillable="false" type="string_40"/>
+						<xsd:element maxOccurs="1" minOccurs="1" name="URL_PLATAFORMA" nillable="false" type="url"/>
+						<xsd:element maxOccurs="1" minOccurs="1" name="URL_SEGUIMIENTO" nillable="false" type="url"/>
+						<xsd:element maxOccurs="1" minOccurs="1" name="TELEFONO" nillable="false" type="telefono"/>
+						<xsd:element maxOccurs="1" minOccurs="1" name="EMAIL" nillable="false" type="email"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="ID_ACCION">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="ORIGEN_ACCION" nillable="false">
+							<xsd:simpleType>
+								<xsd:restriction base="xsd:string">
+									<xsd:length value="2"/>
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="1" name="CODIGO_ACCION" nillable="false">
+							<xsd:simpleType>
+								<xsd:restriction base="xsd:string">
+									<xsd:length value="30"/>
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="ACCION_FORMATIVA">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="ID_ACCION" nillable="false">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element maxOccurs="1" minOccurs="1" name="ORIGEN_ACCION" nillable="false">
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:string">
+												<xsd:length value="2"/>
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:element>
+									<xsd:element maxOccurs="1" minOccurs="1" name="CODIGO_ACCION" nillable="false">
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:string">
+												<xsd:length value="30"/>
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="1" name="SITUACION" nillable="false">
+							<xsd:simpleType>
+								<xsd:restriction base="xsd:string">
+									<xsd:length value="2"/>
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="1" name="ID_ESPECIALIDAD_PRINCIPAL" nillable="false">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element maxOccurs="1" minOccurs="1" name="ORIGEN_ESPECIALIDAD" nillable="false">
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:string">
+												<xsd:length value="2"/>
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:element>
+									<xsd:element maxOccurs="1" minOccurs="1" name="AREA_PROFESIONAL" nillable="false">
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:string">
+												<xsd:length value="4"/>
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:element>
+									<xsd:element maxOccurs="1" minOccurs="1" name="CODIGO_ESPECIALIDAD" nillable="false">
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:string">
+												<xsd:length value="14"/>
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="1" name="DURACION" nillable="false" type="xsd:int"/>
+						<xsd:element maxOccurs="1" minOccurs="1" name="FECHA_INICIO" nillable="false" type="tipo_fecha"/>
+						<xsd:element maxOccurs="1" minOccurs="1" name="FECHA_FIN" nillable="false" type="tipo_fecha"/>
+						<xsd:element maxOccurs="1" minOccurs="1" name="IND_ITINERARIO_COMPLETO" nillable="false" type="tipo_si_no"/>
+						<xsd:element maxOccurs="1" minOccurs="1" name="TIPO_FINANCIACION" nillable="false">
+							<xsd:simpleType>
+								<xsd:restriction base="xsd:string">
+									<xsd:length value="2"/>
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="1" name="NUMERO_ASISTENTES" nillable="false" type="xsd:int"/>
+						<xsd:element maxOccurs="1" minOccurs="1" name="DESCRIPCION_ACCION" nillable="false">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element maxOccurs="1" minOccurs="1" name="DENOMINACION_ACCION" nillable="false">
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:string">
+												<xsd:minLength value="1"/>
+												<xsd:maxLength value="250"/>
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:element>
+									<xsd:element maxOccurs="1" minOccurs="1" name="INFORMACION_GENERAL" nillable="false">
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:string">
+												<xsd:minLength value="0"/>
+												<xsd:maxLength value="650"/>
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:element>
+									<xsd:element maxOccurs="1" minOccurs="1" name="HORARIOS" nillable="false">
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:string">
+												<xsd:minLength value="0"/>
+												<xsd:maxLength value="650"/>
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:element>
+									<xsd:element maxOccurs="1" minOccurs="1" name="REQUISITOS" nillable="false">
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:string">
+												<xsd:minLength value="0"/>
+												<xsd:maxLength value="650"/>
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:element>
+									<xsd:element maxOccurs="1" minOccurs="1" name="CONTACTO_ACCION" nillable="false">
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:string">
+												<xsd:minLength value="0"/>
+												<xsd:maxLength value="650"/>
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="1" name="ESPECIALIDADES_ACCION">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element maxOccurs="unbounded" minOccurs="0" name="ESPECIALIDAD">
+										<xsd:complexType>
+											<xsd:sequence>
+												<xsd:element maxOccurs="1" minOccurs="1" name="ID_ESPECIALIDAD" nillable="false">
+													<xsd:complexType>
+														<xsd:sequence>
+															<xsd:element maxOccurs="1" minOccurs="1" name="ORIGEN_ESPECIALIDAD" nillable="false">
+																<xsd:simpleType>
+																	<xsd:restriction base="xsd:string">
+																		<xsd:length value="2"/>
+																	</xsd:restriction>
+																</xsd:simpleType>
+															</xsd:element>
+															<xsd:element maxOccurs="1" minOccurs="1" name="AREA_PROFESIONAL" nillable="false">
+																<xsd:simpleType>
+																	<xsd:restriction base="xsd:string">
+																		<xsd:length value="4"/>
+																	</xsd:restriction>
+																</xsd:simpleType>
+															</xsd:element>
+															<xsd:element maxOccurs="1" minOccurs="1" name="CODIGO_ESPECIALIDAD" nillable="false">
+																<xsd:simpleType>
+																	<xsd:restriction base="xsd:string">
+																		<xsd:length value="14"/>
+																	</xsd:restriction>
+																</xsd:simpleType>
+															</xsd:element>
+														</xsd:sequence>
+													</xsd:complexType>
+												</xsd:element>
+												<xsd:element maxOccurs="1" minOccurs="1" name="CENTRO_IMPARTICION" nillable="false">
+													<xsd:complexType>
+														<xsd:sequence>
+															<xsd:element maxOccurs="1" minOccurs="1" name="ORIGEN_CENTRO" nillable="false">
+																<xsd:simpleType>
+																	<xsd:restriction base="xsd:string">
+																		<xsd:length value="2"/>
+																	</xsd:restriction>
+																</xsd:simpleType>
+															</xsd:element>
+															<xsd:element maxOccurs="1" minOccurs="1" name="CODIGO_CENTRO" nillable="false" type="codigo_centro"/>
+														</xsd:sequence>
+													</xsd:complexType>
+												</xsd:element>
+												<xsd:element maxOccurs="1" minOccurs="1" name="FECHA_INICIO" nillable="false" type="tipo_fecha"/>
+												<xsd:element maxOccurs="1" minOccurs="1" name="FECHA_FIN" nillable="false" type="tipo_fecha"/>
+												<xsd:element maxOccurs="1" minOccurs="1" name="MODALIDAD_IMPARTICION" nillable="false">
+													<xsd:simpleType>
+														<xsd:restriction base="xsd:string">
+															<xsd:length value="2"/>
+														</xsd:restriction>
+													</xsd:simpleType>
+												</xsd:element>
+												<xsd:element maxOccurs="1" minOccurs="1" name="DATOS_DURACION" nillable="false">
+													<xsd:complexType>
+														<xsd:sequence>
+															<xsd:element maxOccurs="1" minOccurs="1" name="HORAS_PRESENCIAL" nillable="false" type="xsd:int"/>
+															<xsd:element maxOccurs="1" minOccurs="1" name="HORAS_TELEFORMACION" nillable="false" type="xsd:int"/>
+														</xsd:sequence>
+													</xsd:complexType>
+												</xsd:element>
+												<xsd:element maxOccurs="1" minOccurs="1" name="CENTROS_SESIONES_PRESENCIALES">
+													<xsd:complexType>
+														<xsd:sequence>
+															<xsd:element maxOccurs="unbounded" minOccurs="0" name="CENTRO_PRESENCIAL" nillable="false">
+																<xsd:complexType>
+																	<xsd:sequence>
+																		<xsd:element maxOccurs="1" minOccurs="1" name="ORIGEN_CENTRO" nillable="false">
+																			<xsd:simpleType>
+																				<xsd:restriction base="xsd:string">
+																					<xsd:length value="2"/>
+																				</xsd:restriction>
+																			</xsd:simpleType>
+																		</xsd:element>
+																		<xsd:element maxOccurs="1" minOccurs="1" name="CODIGO_CENTRO" nillable="false" type="codigo_centro"/>
+																	</xsd:sequence>
+																</xsd:complexType>
+															</xsd:element>
+														</xsd:sequence>
+													</xsd:complexType>
+												</xsd:element>
+												<xsd:element maxOccurs="1" minOccurs="1" name="TUTORES_FORMADORES">
+													<xsd:complexType>
+														<xsd:sequence>
+															<xsd:element maxOccurs="unbounded" minOccurs="0" name="TUTOR_FORMADOR" nillable="false">
+																<xsd:complexType>
+																	<xsd:sequence>
+																		<xsd:element maxOccurs="1" minOccurs="1" name="ID_TUTOR" nillable="false">
+																			<xsd:complexType>
+																				<xsd:sequence>
+																					<xsd:element maxOccurs="1" minOccurs="1" name="TIPO_DOCUMENTO" nillable="false" type="tipo_documento"/>
+																					<xsd:element maxOccurs="1" minOccurs="1" name="NUM_DOCUMENTO" nillable="false">
+																						<xsd:simpleType>
+																							<xsd:restriction base="xsd:string">
+																								<xsd:length value="10"/>
+																							</xsd:restriction>
+																						</xsd:simpleType>
+																					</xsd:element>
+																					<xsd:element maxOccurs="1" minOccurs="1" name="LETRA_NIF" nillable="false">
+																						<xsd:simpleType>
+																							<xsd:restriction base="xsd:string">
+																								<xsd:length value="1"/>
+																							</xsd:restriction>
+																						</xsd:simpleType>
+																					</xsd:element>
+																				</xsd:sequence>
+																			</xsd:complexType>
+																		</xsd:element>
+																		<xsd:element maxOccurs="1" minOccurs="1" name="ACREDITACION_TUTOR" nillable="false">
+																			<xsd:simpleType>
+																				<xsd:restriction base="xsd:string">
+																					<xsd:maxLength value="200"/>
+																				</xsd:restriction>
+																			</xsd:simpleType>
+																		</xsd:element>
+																		<xsd:element maxOccurs="1" minOccurs="1" name="EXPERIENCIA_PROFESIONAL" nillable="false" type="xsd:int"/>
+																		<xsd:element maxOccurs="1" minOccurs="1" name="COMPETENCIA_DOCENTE" nillable="false">
+																			<xsd:simpleType>
+																				<xsd:restriction base="xsd:string">
+																				<xsd:maxLength value="2"/>
+																				</xsd:restriction>
+																			</xsd:simpleType>
+																		</xsd:element>
+																		<xsd:element maxOccurs="1" minOccurs="1" name="EXPERIENCIA_MODALIDAD_TELEFORMACION" nillable="false" type="xsd:int"/>
+																		<xsd:element maxOccurs="1" minOccurs="1" name="FORMACION_MODALIDAD_TELEFORMACION" nillable="false">
+																			<xsd:simpleType>
+																				<xsd:restriction base="xsd:string">
+																				<xsd:maxLength value="2"/>
+																				</xsd:restriction>
+																			</xsd:simpleType>
+																		</xsd:element>
+																	</xsd:sequence>
+																</xsd:complexType>
+															</xsd:element>
+														</xsd:sequence>
+													</xsd:complexType>
+												</xsd:element>
+												<xsd:element maxOccurs="1" minOccurs="1" name="USO" nillable="false">
+													<xsd:complexType>
+														<xsd:sequence>
+															<xsd:element maxOccurs="1" minOccurs="0" name="HORARIO_MANANA">
+																<xsd:complexType>
+																	<xsd:sequence>
+																		<xsd:element maxOccurs="1" minOccurs="1" name="NUM_PARTICIPANTES" nillable="false" type="xsd:int"/>
+																		<xsd:element maxOccurs="1" minOccurs="1" name="NUMERO_ACCESOS" nillable="false" type="xsd:int"/>
+																		<xsd:element maxOccurs="1" minOccurs="1" name="DURACION_TOTAL" nillable="false" type="xsd:int"/>
+																	</xsd:sequence>
+																</xsd:complexType>
+															</xsd:element>
+															<xsd:element maxOccurs="1" minOccurs="0" name="HORARIO_TARDE">
+																<xsd:complexType>
+																	<xsd:sequence>
+																		<xsd:element maxOccurs="1" minOccurs="1" name="NUM_PARTICIPANTES" nillable="false" type="xsd:int"/>
+																		<xsd:element maxOccurs="1" minOccurs="1" name="NUMERO_ACCESOS" nillable="false" type="xsd:int"/>
+																		<xsd:element maxOccurs="1" minOccurs="1" name="DURACION_TOTAL" nillable="false" type="xsd:int"/>
+																	</xsd:sequence>
+																</xsd:complexType>
+															</xsd:element>
+															<xsd:element maxOccurs="1" minOccurs="0" name="HORARIO_NOCHE">
+																<xsd:complexType>
+																	<xsd:sequence>
+																		<xsd:element maxOccurs="1" minOccurs="1" name="NUM_PARTICIPANTES" nillable="false" type="xsd:int"/>
+																		<xsd:element maxOccurs="1" minOccurs="1" name="NUMERO_ACCESOS" nillable="false" type="xsd:int"/>
+																		<xsd:element maxOccurs="1" minOccurs="1" name="DURACION_TOTAL" nillable="false" type="xsd:int"/>
+																	</xsd:sequence>
+																</xsd:complexType>
+															</xsd:element>
+															<xsd:element maxOccurs="1" minOccurs="0" name="SEGUIMIENTO_EVALUACION">
+																<xsd:complexType>
+																	<xsd:sequence>
+																		<xsd:element maxOccurs="1" minOccurs="1" name="NUM_PARTICIPANTES" nillable="false" type="xsd:int"/>
+																		<xsd:element maxOccurs="1" minOccurs="1" name="NUMERO_ACTIVIDADES_APRENDIZAJE" nillable="false" type="xsd:int"/>
+																		<xsd:element maxOccurs="1" minOccurs="1" name="NUMERO_INTENTOS" nillable="false" type="xsd:int"/>
+																		<xsd:element maxOccurs="1" minOccurs="1" name="NUMERO_ACTIVIDADES_EVALUACION" nillable="false" type="xsd:int"/>
+																	</xsd:sequence>
+																</xsd:complexType>
+															</xsd:element>
+														</xsd:sequence>
+													</xsd:complexType>
+												</xsd:element>
+											</xsd:sequence>
+										</xsd:complexType>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="1" name="PARTICIPANTES">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element maxOccurs="unbounded" minOccurs="0" name="PARTICIPANTE">
+										<xsd:complexType>
+											<xsd:sequence>
+												<xsd:element maxOccurs="1" minOccurs="1" name="ID_PARTICIPANTE" nillable="false">
+													<xsd:complexType>
+														<xsd:sequence>
+															<xsd:element maxOccurs="1" minOccurs="1" name="TIPO_DOCUMENTO" nillable="false" type="tipo_documento"/>
+															<xsd:element maxOccurs="1" minOccurs="1" name="NUM_DOCUMENTO" nillable="false">
+																<xsd:simpleType>
+																	<xsd:restriction base="xsd:string">
+																		<xsd:length value="10"/>
+																	</xsd:restriction>
+																</xsd:simpleType>
+															</xsd:element>
+															<xsd:element maxOccurs="1" minOccurs="1" name="LETRA_NIF" nillable="false">
+																<xsd:simpleType>
+																	<xsd:restriction base="xsd:string">
+																		<xsd:length value="1"/>
+																	</xsd:restriction>
+																</xsd:simpleType>
+															</xsd:element>
+														</xsd:sequence>
+													</xsd:complexType>
+												</xsd:element>
+												<xsd:element maxOccurs="1" minOccurs="1" name="INDICADOR_COMPETENCIAS_CLAVE" nillable="false">
+													<xsd:simpleType>
+														<xsd:restriction base="xsd:string">
+															<xsd:length value="2"/>
+														</xsd:restriction>
+													</xsd:simpleType>
+												</xsd:element>
+												<xsd:element maxOccurs="1" minOccurs="1" name="CONTRATO_FORMACION">
+													<xsd:complexType>
+														<xsd:sequence>
+															<xsd:element maxOccurs="1" minOccurs="0" name="ID_CONTRATO_CFA" nillable="false">
+																<xsd:simpleType>
+																	<xsd:restriction base="xsd:string">
+																		<xsd:pattern value="^[A-Za-z]\d{13}$"/>
+																	</xsd:restriction>
+																</xsd:simpleType>
+															</xsd:element>
+															<xsd:element maxOccurs="1" minOccurs="0" name="CIF_EMPRESA" nillable="false">
+																<xsd:simpleType>
+																	<xsd:restriction base="xsd:string">
+																		<xsd:length value="9"/>
+																	</xsd:restriction>
+																</xsd:simpleType>
+															</xsd:element>
+															<xsd:element maxOccurs="1" minOccurs="0" name="ID_TUTOR_EMPRESA" nillable="false">
+																<xsd:complexType>
+																	<xsd:sequence>
+																		<xsd:element maxOccurs="1" minOccurs="1" name="TIPO_DOCUMENTO" nillable="false" type="tipo_documento"/>
+																		<xsd:element maxOccurs="1" minOccurs="1" name="NUM_DOCUMENTO" nillable="false">
+																			<xsd:simpleType>
+																				<xsd:restriction base="xsd:string">
+																					<xsd:length value="10"/>
+																				</xsd:restriction>
+																			</xsd:simpleType>
+																		</xsd:element>
+																		<xsd:element maxOccurs="1" minOccurs="1" name="LETRA_NIF" nillable="false">
+																			<xsd:simpleType>
+																				<xsd:restriction base="xsd:string">
+																					<xsd:length value="1"/>
+																				</xsd:restriction>
+																			</xsd:simpleType>
+																		</xsd:element>
+																	</xsd:sequence>
+																</xsd:complexType>
+															</xsd:element>
+															<xsd:element maxOccurs="1" minOccurs="0" name="ID_TUTOR_FORMACION" nillable="false">
+																<xsd:complexType>
+																	<xsd:sequence>
+																		<xsd:element maxOccurs="1" minOccurs="1" name="TIPO_DOCUMENTO" nillable="false" type="tipo_documento"/>
+																		<xsd:element maxOccurs="1" minOccurs="1" name="NUM_DOCUMENTO" nillable="false">
+																			<xsd:simpleType>
+																				<xsd:restriction base="xsd:string">
+																					<xsd:length value="10"/>
+																				</xsd:restriction>
+																			</xsd:simpleType>
+																		</xsd:element>
+																		<xsd:element maxOccurs="1" minOccurs="1" name="LETRA_NIF" nillable="false">
+																			<xsd:simpleType>
+																				<xsd:restriction base="xsd:string">
+																					<xsd:length value="1"/>
+																				</xsd:restriction>
+																			</xsd:simpleType>
+																		</xsd:element>
+																	</xsd:sequence>
+																</xsd:complexType>
+															</xsd:element>
+														</xsd:sequence>
+													</xsd:complexType>
+												</xsd:element>
+												<xsd:element maxOccurs="1" minOccurs="1" name="ESPECIALIDADES_PARTICIPANTE">
+													<xsd:complexType>
+														<xsd:sequence>
+															<xsd:element maxOccurs="unbounded" minOccurs="1" name="ESPECIALIDAD" nillable="false">
+																<xsd:complexType>
+																	<xsd:sequence>
+																		<xsd:element maxOccurs="1" minOccurs="1" name="ID_ESPECIALIDAD" nillable="false">
+																			<xsd:complexType>
+																				<xsd:sequence>
+																					<xsd:element maxOccurs="1" minOccurs="1" name="ORIGEN_ESPECIALIDAD" nillable="false">
+																						<xsd:simpleType>
+																							<xsd:restriction base="xsd:string">
+																								<xsd:length value="2"/>
+																							</xsd:restriction>
+																						</xsd:simpleType>
+																					</xsd:element>
+																					<xsd:element maxOccurs="1" minOccurs="1" name="AREA_PROFESIONAL" nillable="false">
+																						<xsd:simpleType>
+																							<xsd:restriction base="xsd:string">
+																								<xsd:length value="4"/>
+																							</xsd:restriction>
+																						</xsd:simpleType>
+																					</xsd:element>
+																					<xsd:element maxOccurs="1" minOccurs="1" name="CODIGO_ESPECIALIDAD" nillable="false">
+																						<xsd:simpleType>
+																							<xsd:restriction base="xsd:string">
+																								<xsd:length value="14"/>
+																							</xsd:restriction>
+																						</xsd:simpleType>
+																					</xsd:element>
+																				</xsd:sequence>
+																			</xsd:complexType>
+																		</xsd:element>
+																		<xsd:element maxOccurs="1" minOccurs="0" name="FECHA_ALTA" nillable="false" type="tipo_fecha"/>
+																		<xsd:element maxOccurs="1" minOccurs="0" name="FECHA_BAJA" nillable="false" type="tipo_fecha"/>
+																		<xsd:element maxOccurs="1" minOccurs="1" name="TUTORIAS_PRESENCIALES">
+																			<xsd:complexType>
+																				<xsd:sequence>
+																					<xsd:element maxOccurs="unbounded" minOccurs="0" name="TUTORIA_PRESENCIAL" nillable="false">
+																						<xsd:complexType>
+																							<xsd:sequence>
+																								<xsd:element maxOccurs="1" minOccurs="1" name="CENTRO_PRESENCIAL_TUTORIA" nillable="false">
+																									<xsd:complexType>
+																										<xsd:sequence>
+																											<xsd:element maxOccurs="1" minOccurs="1" name="ORIGEN_CENTRO" nillable="false">
+																												<xsd:simpleType>
+																													<xsd:restriction base="xsd:string">
+																														<xsd:length value="2"/>
+																													</xsd:restriction>
+																												</xsd:simpleType>
+																											</xsd:element>
+																											<xsd:element maxOccurs="1" minOccurs="1" name="CODIGO_CENTRO" nillable="false" type="codigo_centro"/>
+																										</xsd:sequence>
+																									</xsd:complexType>
+																								</xsd:element>
+																								<xsd:element maxOccurs="1" minOccurs="1" name="FECHA_INICIO" nillable="false" type="tipo_fecha"/>
+																								<xsd:element maxOccurs="1" minOccurs="1" name="FECHA_FIN" nillable="false" type="tipo_fecha"/>
+																							</xsd:sequence>
+																						</xsd:complexType>
+																					</xsd:element>
+																				</xsd:sequence>
+																			</xsd:complexType>
+																		</xsd:element>
+																		<xsd:element maxOccurs="1" minOccurs="1" name="EVALUACION_FINAL">
+																			<xsd:complexType>
+																				<xsd:sequence>
+																					<xsd:element maxOccurs="1" minOccurs="0" name="CENTRO_PRESENCIAL_EVALUACION" nillable="false">
+																						<xsd:complexType>
+																							<xsd:sequence>
+																								<xsd:element maxOccurs="1" minOccurs="1" name="ORIGEN_CENTRO" nillable="false">
+																									<xsd:simpleType>
+																										<xsd:restriction base="xsd:string">
+																											<xsd:length value="2"/>
+																										</xsd:restriction>
+																									</xsd:simpleType>
+																								</xsd:element>
+																								<xsd:element maxOccurs="1" minOccurs="1" name="CODIGO_CENTRO" nillable="false" type="codigo_centro"/>
+																							</xsd:sequence>
+																						</xsd:complexType>
+																					</xsd:element>
+																					<xsd:element maxOccurs="1" minOccurs="0" name="FECHA_INICIO" nillable="false" type="tipo_fecha"/>
+																					<xsd:element maxOccurs="1" minOccurs="0" name="FECHA_FIN" nillable="false" type="tipo_fecha"/>
+																				</xsd:sequence>
+																			</xsd:complexType>
+																		</xsd:element>
+																		<xsd:element maxOccurs="1" minOccurs="1" name="RESULTADOS">
+																			<xsd:complexType>
+																				<xsd:sequence>
+																					<xsd:element maxOccurs="1" minOccurs="0" name="RESULTADO_FINAL" nillable="false">
+																						<xsd:simpleType>
+																							<xsd:restriction base="xsd:string">
+																								<xsd:length value="1"/>
+																							</xsd:restriction>
+																						</xsd:simpleType>
+																					</xsd:element>
+																					<xsd:element maxOccurs="1" minOccurs="0" name="CALIFICACION_FINAL" nillable="false">
+																						<xsd:simpleType>
+																							<xsd:restriction base="xsd:int"/>
+																						</xsd:simpleType>
+																					</xsd:element>
+																					<xsd:element maxOccurs="1" minOccurs="0" name="PUNTUACION_FINAL" nillable="false">
+																						<xsd:simpleType>
+																							<xsd:restriction base="xsd:int"/>
+																						</xsd:simpleType>
+																					</xsd:element>
+																				</xsd:sequence>
+																			</xsd:complexType>
+																		</xsd:element>
+																	</xsd:sequence>
+																</xsd:complexType>
+															</xsd:element>
+														</xsd:sequence>
+													</xsd:complexType>
+												</xsd:element>
+											</xsd:sequence>
+										</xsd:complexType>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+	</xsd:schema>
+    <xsd:schema targetNamespace="http://salida.bean.domain.common.proveedorcentro.meyss.spee.es" xmlns="http://salida.bean.domain.common.proveedorcentro.meyss.spee.es">
+			<xsd:import namespace="http://entsal.bean.domain.common.proveedorcentro.meyss.spee.es"/>
+			<xsd:simpleType name="mensaje_error">
+				<xsd:restriction base="xsd:string">
+					<xsd:length value="250"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+
+			<xsd:element name="RESPUESTA_DATOS_CENTRO">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="CODIGO_RETORNO" nillable="false" type="entsal:codigo_retorno"/>
+						<xsd:element maxOccurs="1" minOccurs="1" name="ETIQUETA_ERROR" nillable="true" type="mensaje_error"/>
+						<xsd:element maxOccurs="1" ref="entsal:DATOS_IDENTIFICATIVOS"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="RESPUESTA_OBT_ACCION">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="CODIGO_RETORNO" nillable="false" type="entsal:codigo_retorno"/>
+						<xsd:element maxOccurs="1" minOccurs="1" name="ETIQUETA_ERROR" nillable="true" type="mensaje_error"/>
+						<xsd:element maxOccurs="1" ref="entsal:ACCION_FORMATIVA"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="RESPUESTA_OBT_LISTA_ACCIONES">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="CODIGO_RETORNO" nillable="false" type="entsal:codigo_retorno"/>
+						<xsd:element maxOccurs="1" minOccurs="1" name="ETIQUETA_ERROR" nillable="true" type="mensaje_error"/>
+						<xsd:element maxOccurs="unbounded" minOccurs="0" ref="entsal:ID_ACCION"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="RESPUESTA_ELIMINAR_ACCION">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="CODIGO_RETORNO" nillable="false" type="entsal:codigo_retorno"/>
+						<xsd:element maxOccurs="1" minOccurs="1" name="ETIQUETA_ERROR" nillable="true" type="mensaje_error"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+		</xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="obtenerDatosCentroMessageRequest">
+    <wsdl:part element="impl:obtenerDatosCentro" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="crearAccionMessageResponse">
+    <wsdl:part element="impl:crearAccionResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="eliminarAccionMessageResponse">
+    <wsdl:part element="impl:eliminarAccionResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerListaAccionesMessageResponse">
+    <wsdl:part element="impl:obtenerListaAccionesResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="crearCentroMessageResponse">
+    <wsdl:part element="impl:crearCentroResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="crearCentroMessageRequest">
+    <wsdl:part element="impl:crearCentro" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="crearAccionMessageRequest">
+    <wsdl:part element="impl:crearAccion" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerAccionMessageRequest">
+    <wsdl:part element="impl:obtenerAccion" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerDatosCentroMessageResponse">
+    <wsdl:part element="impl:obtenerDatosCentroResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerListaAccionesMessageRequest">
+    <wsdl:part element="impl:obtenerListaAcciones" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="eliminarAccionMessageRequest">
+    <wsdl:part element="impl:eliminarAccion" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerAccionMessageResponse">
+    <wsdl:part element="impl:obtenerAccionResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="IProveedorCentroEndPoint">
+    <wsdl:operation name="crearCentro">
+      <wsdl:input message="impl:crearCentroMessageRequest" name="crearCentroInput">
+    </wsdl:input>
+      <wsdl:output message="impl:crearCentroMessageResponse" name="crearCentroOutput">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerDatosCentro">
+      <wsdl:input message="impl:obtenerDatosCentroMessageRequest" name="obtenerDatosCentroInput">
+    </wsdl:input>
+      <wsdl:output message="impl:obtenerDatosCentroMessageResponse" name="obtenerDatosCentroOutput">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="crearAccion">
+      <wsdl:input message="impl:crearAccionMessageRequest" name="crearAccionInput">
+    </wsdl:input>
+      <wsdl:output message="impl:crearAccionMessageResponse" name="crearAccionOutput">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerAccion">
+      <wsdl:input message="impl:obtenerAccionMessageRequest" name="obtenerAccionInput">
+    </wsdl:input>
+      <wsdl:output message="impl:obtenerAccionMessageResponse" name="obtenerAccionOutput">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerListaAcciones">
+      <wsdl:input message="impl:obtenerListaAccionesMessageRequest" name="obtenerListaAccionesInput">
+    </wsdl:input>
+      <wsdl:output message="impl:obtenerListaAccionesMessageResponse" name="obtenerListaAccionesOutput">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="eliminarAccion">
+      <wsdl:input message="impl:eliminarAccionMessageRequest" name="eliminarAccionInput">
+    </wsdl:input>
+      <wsdl:output message="impl:eliminarAccionMessageResponse" name="eliminarAccionOutput">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ProveedorCentroEndPointSoapBinding" type="impl:IProveedorCentroEndPoint">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsp:PolicyReference URI="#UsernameTokenPolicy" wsdl:required="false"/>
+    <wsdl:operation name="crearCentro">
+      <soap:operation soapAction="crearCentro"/>
+      <wsdl:input name="crearCentroInput">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="crearCentroOutput">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerDatosCentro">
+      <soap:operation soapAction="obtenerDatosCentro"/>
+      <wsdl:input name="obtenerDatosCentroInput">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="obtenerDatosCentroOutput">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="crearAccion">
+      <soap:operation soapAction="crearAccion"/>
+      <wsdl:input name="crearAccionInput">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="crearAccionOutput">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerAccion">
+      <soap:operation soapAction="obtenerAccion"/>
+      <wsdl:input name="obtenerAccionInput">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="obtenerAccionOutput">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerListaAcciones">
+      <soap:operation soapAction="obtenerListaAcciones"/>
+      <wsdl:input name="obtenerListaAccionesInput">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="obtenerListaAccionesOutput">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="eliminarAccion">
+      <soap:operation soapAction="eliminarAccion"/>
+      <wsdl:input name="eliminarAccionInput">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="eliminarAccionOutput">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ProveedorCentroTFWS">
+    <wsdl:port binding="impl:ProveedorCentroEndPointSoapBinding" name="ProveedorCentroEndPoint">
+      <soap:address location="http://change-this-url.com/plugin/sepe/ws/service.php"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

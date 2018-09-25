@@ -9,15 +9,19 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_block_anonymous_users();
+
+$allowToTrack = api_is_platform_admin(true, true) || api_is_teacher();
+
+if (!$allowToTrack) {
+    api_not_allowed(true);
+}
+
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
 $active = isset($_GET['active']) ? intval($_GET['active']) : 1;
 $sleepingDays = isset($_GET['sleeping_days']) ? intval($_GET['sleeping_days']) : null;
-
 $nameTools = get_lang('Teachers');
-
-api_block_anonymous_users();
-
 $this_section = SECTION_TRACKING;
 
 $interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('MySpace')];

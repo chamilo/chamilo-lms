@@ -35,7 +35,7 @@ class TestCategory
     public function getCategory($id, $courseId = 0)
     {
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $id = intval($id);
+        $id = (int) $id;
         $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
         $sql = "SELECT * FROM $table
                 WHERE id = $id AND c_id = ".$courseId;
@@ -158,7 +158,7 @@ class TestCategory
         $id = intval($this->id);
         $name = Database::escape_string($this->name);
         $description = Database::escape_string($this->description);
-        $cat = $this->getCategory($id);
+        $cat = $this->getCategory($id, $courseId);
         $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
         $courseInfo = api_get_course_info_by_id($courseId);
         if (empty($courseInfo)) {
@@ -219,7 +219,6 @@ class TestCategory
         $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
 
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $field = Database::escape_string($field);
         $categories = [];
         if (empty($field)) {
             $sql = "SELECT id FROM $table
@@ -228,9 +227,10 @@ class TestCategory
             $res = Database::query($sql);
             while ($row = Database::fetch_array($res)) {
                 $category = new TestCategory();
-                $categories[] = $category->getCategory($row['id']);
+                $categories[] = $category->getCategory($row['id'], $courseId);
             }
         } else {
+            $field = Database::escape_string($field);
             $sql = "SELECT $field FROM $table
                     WHERE c_id = $courseId
                     ORDER BY $field ASC";
@@ -801,7 +801,7 @@ class TestCategory
         }
         $category_name_list = self::getListOfCategoriesNameForTest($exerciseId);
 
-        $table = new HTML_Table(['class' => 'data_table']);
+        $table = new HTML_Table(['class' => 'table table-bordered', 'id' => 'category_results']);
         $table->setHeaderContents(0, 0, get_lang('Categories'));
         $table->setHeaderContents(0, 1, get_lang('AbsoluteScore'));
         $table->setHeaderContents(0, 2, get_lang('RelativeScore'));
@@ -1254,6 +1254,7 @@ class TestCategory
      */
     public function displayCategories($courseId, $sessionId = 0)
     {
+        $sessionId = (int) $sessionId;
         $categories = $this->getCategories($courseId, $sessionId);
         $html = '';
         foreach ($categories as $category) {
@@ -1266,11 +1267,16 @@ class TestCategory
             $content .= '<div class="sectioncomment">';
             $content .= $category['description'];
             $content .= '</div>';
-            $links = '<a href="'.api_get_self().'?action=editcategory&category_id='.$category['id'].'&'.api_get_cidreq().'">'.
-                Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
-            $links .= ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=deletecategory&category_id='.$category['id'].'" ';
-            $links .= 'onclick="return confirmDelete(\''.self::protectJSDialogQuote(get_lang('DeleteCategoryAreYouSure').'['.$rowname).'] ?\', \'id_cat'.$category['id'].'\');">';
-            $links .= Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL).'</a>';
+            $links = '';
+
+            if (!$sessionId) {
+                $links .= '<a href="'.api_get_self().'?action=editcategory&category_id='.$category['id'].'&'.api_get_cidreq().'">'.
+                    Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
+                $links .= ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=deletecategory&category_id='.$category['id'].'" ';
+                $links .= 'onclick="return confirmDelete(\''.self::protectJSDialogQuote(get_lang('DeleteCategoryAreYouSure').'['.$rowname).'] ?\', \'id_cat'.$category['id'].'\');">';
+                $links .= Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL).'</a>';
+            }
+
             $html .= Display::panel($content, $category['title'].$links);
         }
 

@@ -110,7 +110,9 @@ if (api_is_platform_admin()) {
     }
     $items[] = ['url' => 'extra_fields.php?type=user', 'label' => get_lang('ManageUserFields')];
     $items[] = ['url' => 'usergroups.php', 'label' => get_lang('Classes')];
-    $items[] = ['url' => 'user_linking_requests.php', 'label' => get_lang('UserLinkingRequests')];
+    if (api_get_configuration_value('show_link_request_hrm_user')) {
+        $items[] = ['url' => 'user_linking_requests.php', 'label' => get_lang('UserLinkingRequests')];
+    }
 } elseif (api_is_session_admin() && api_get_configuration_value('limit_session_admin_role')) {
     $items = [
         ['url' => 'user_list.php', 'label' => get_lang('UserList')],
@@ -264,9 +266,17 @@ if (api_is_platform_admin()) {
         }
     }
 
+    if (api_get_plugin_setting('dictionary', 'enable_plugin_dictionary') == 'true') {
+        $items[] = [
+            'url' => api_get_path(WEB_PLUGIN_PATH).'dictionary/terms.php',
+            'label' => get_lang('Dictionary'),
+        ];
+    }
+
     if (api_get_setting('allow_terms_conditions') == 'true') {
         $items[] = ['url' => 'legal_add.php', 'label' => get_lang('TermsAndConditions')];
     }
+
     $blocks['platform']['items'] = $items;
     $blocks['platform']['extra'] = null;
 }
@@ -330,7 +340,9 @@ if (api_is_global_platform_admin()) {
     ];
 }
 
-if (api_is_platform_admin()) {
+$allowCareer = api_get_configuration_value('allow_session_admin_read_careers');
+
+if (api_is_platform_admin() || ($allowCareer && api_is_session_admin())) {
     // option only visible in development mode. Enable through code if required
     if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) {
         $items[] = ['url' => 'user_move_stats.php', 'label' => get_lang('MoveUserStats')];
@@ -446,10 +458,10 @@ if (api_is_platform_admin()) {
             'url' => 'skills_gradebook.php',
             'label' => get_lang('SkillsAndGradebooks'),
         ];
-        $items[] = [
+        /*$items[] = array(
             'url' => api_get_path(WEB_CODE_PATH).'admin/skill_badge.php',
-            'label' => get_lang('Badges'),
-        ];
+            'label' => get_lang('Badges')
+        );*/
         $blocks['skills']['items'] = $items;
         $blocks['skills']['extra'] = null;
         $blocks['skills']['search_form'] = null;
@@ -522,8 +534,30 @@ if (api_is_platform_admin()) {
         }
     }
 
-    /* Chamilo.org */
+    if (!api_get_configuration_value('disable_gdpr')) {
+        // Data protection
+        $blocks['data_privacy']['icon'] = Display::return_icon(
+            'platform.png',
+            get_lang('Platform'),
+            [],
+            ICON_SIZE_MEDIUM,
+            false
+        );
+        $blocks['data_privacy']['label'] = api_ucfirst(get_lang('PersonalDataPrivacy'));
+        $blocks['data_privacy']['class'] = 'block-admin-platform';
+        $blocks['data_privacy']['editable'] = false;
 
+        $items = [];
+        $items[] = [
+            'url' => api_get_path(WEB_CODE_PATH).'admin/user_list_consent.php',
+            'label' => get_lang('UserList'),
+        ];
+
+        $blocks['data_privacy']['items'] = $items;
+        $blocks['data_privacy']['extra'] = null;
+        $blocks['data_privacy']['search_form'] = null;
+    }
+    /* Chamilo.org */
     $blocks['chamilo']['icon'] = Display::return_icon(
         'platform.png',
         'Chamilo.org',

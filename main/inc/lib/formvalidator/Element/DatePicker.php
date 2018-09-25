@@ -32,20 +32,9 @@ class DatePicker extends HTML_QuickForm_text
     public function toHtml()
     {
         if ($this->_flagFrozen) {
-            $value = $this->getValue();
-            if (!empty($value) && $value != '0000-00-00') {
-                $value = api_format_date($value, DATE_FORMAT_LONG_NO_DAY);
-                $this->updateAttributes(
-                    [
-                        'value' => $value,
-                    ]
-                );
-            }
-
-            $frozen = $this->getFrozenHtml();
-
-            return $frozen;
+            return $this->getFrozenHtml();
         }
+
         $id = $this->getAttribute('id');
         $value = $this->getValue();
         $label = $this->getLabel();
@@ -62,9 +51,10 @@ class DatePicker extends HTML_QuickForm_text
                 <p class="form-control disabled" id="'.$id.'_alt_text">'.$value.'</p>
                 <input class="form-control" type="hidden" id="'.$id.'_alt" value="'.$value.'">
                 <span class="input-group-btn">
-                    <button class="btn btn-default" type="button">
-                        <span class="fa fa-times text-danger" aria-hidden="true"></span>
-                        <span class="sr-only">'.get_lang('Reset').'</span>
+                    <button class="btn btn-default" type="button"
+                            title="'.sprintf(get_lang('ResetFieldX'), $this->_label).'">
+                        <span class="fa fa-trash text-danger" aria-hidden="true"></span>
+                        <span class="sr-only">'.sprintf(get_lang('ResetFieldX'), $this->_label).'</span>
                     </button>
                 </span>
             </div>
@@ -92,7 +82,6 @@ class DatePicker extends HTML_QuickForm_text
     public function getTemplate($layout)
     {
         $size = $this->getColumnsSize();
-        $id = $this->getAttribute('id');
         $value = $this->getValue();
 
         if (empty($size)) {
@@ -131,7 +120,6 @@ class DatePicker extends HTML_QuickForm_text
 
                     {element}
                 </div>';
-                break;
             case FormValidator::LAYOUT_HORIZONTAL:
                 return '
                 <div class="form-group {error_class}">
@@ -158,10 +146,8 @@ class DatePicker extends HTML_QuickForm_text
                         <!-- END label_3 -->
                     </div>
                 </div>';
-                break;
             case FormValidator::LAYOUT_BOX_NO_LABEL:
                 return '{element}';
-                break;
         }
     }
 

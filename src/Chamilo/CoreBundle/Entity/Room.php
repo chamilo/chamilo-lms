@@ -20,42 +20,42 @@ class Room
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=true, unique=false)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var string
      *
      * @ORM\Column(name="geolocation", type="string", length=255, nullable=true, unique=false)
      */
-    private $geolocation;
+    protected $geolocation;
 
     /**
      * @var string
      *
      * @ORM\Column(name="ip", type="string", length=39, nullable=true, unique=false)
      */
-    private $ip;
+    protected $ip;
 
     /**
      * @var string
      *
      * @ORM\Column(name="ip_mask", type="string", length=6, nullable=true, unique=false)
      */
-    private $ipMask;
+    protected $ipMask;
 
     /**
      * @var BranchSync
@@ -63,7 +63,7 @@ class Room
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\BranchSync")
      * @ORM\JoinColumn(name="branch_id", referencedColumnName="id")
      */
-    private $branch;
+    protected $branch;
 
     /**
      * Get id.

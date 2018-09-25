@@ -174,16 +174,16 @@ switch ($action) {
          */
         require_once __DIR__.'/../global.inc.php';
         $now = time();
-        $page = intval($_REQUEST['page']); //page
-        $limit = intval($_REQUEST['rows']); // quantity of rows
+        $page = (int) $_REQUEST['page']; //page
+        $limit = (int) $_REQUEST['rows']; // quantity of rows
         //index to filter
         $sidx = isset($_REQUEST['sidx']) && !empty($_REQUEST['sidx']) ? $_REQUEST['sidx'] : 'id';
         $sord = $_REQUEST['sord']; //asc or desc
         if (!in_array($sord, ['asc', 'desc'])) {
             $sord = 'desc';
         }
-        $session_id = intval($_REQUEST['session_id']);
-        $course_id = intval($_REQUEST['course_id']);
+        $session_id = (int) $_REQUEST['session_id'];
+        $course_id = (int) $_REQUEST['course_id'];
 
         //Filter users that does not belong to the session
         if (!api_is_platform_admin()) {
@@ -302,8 +302,8 @@ switch ($action) {
     case 'session_courses_lp_by_week':
         require_once __DIR__.'/../global.inc.php';
         $now = time();
-        $page = intval($_REQUEST['page']); //page
-        $limit = intval($_REQUEST['rows']); // quantity of rows
+        $page = (int) $_REQUEST['page']; //page
+        $limit = (int) $_REQUEST['rows']; // quantity of rows
         $sidx = isset($_REQUEST['sidx']) && !empty($_REQUEST['sidx']) ? $_REQUEST['sidx'] : 'course';
         $sidx = str_replace(['week desc,', ' '], '', $sidx);
         $sord = $_REQUEST['sord']; //asc or desc
@@ -311,8 +311,8 @@ switch ($action) {
             $sord = 'desc';
         }
 
-        $session_id = intval($_REQUEST['session_id']);
-        $course_id = intval($_REQUEST['course_id']);
+        $session_id = (int) $_REQUEST['session_id'];
+        $course_id = (int) $_REQUEST['course_id'];
 
         //Filter users that does not belong to the session
         if (!api_is_platform_admin()) {
@@ -445,8 +445,8 @@ switch ($action) {
     case 'session_courses_lp_by_course':
         require_once __DIR__.'/../global.inc.php';
         $now = time();
-        $page = intval($_REQUEST['page']); //page
-        $limit = intval($_REQUEST['rows']); // quantity of rows
+        $page = (int) $_REQUEST['page']; //page
+        $limit = (int) $_REQUEST['rows']; // quantity of rows
         $sidx = isset($_REQUEST['sidx']) && !empty($_REQUEST['sidx']) ? $_REQUEST['sidx'] : 'id';
         $sidx = str_replace(['course asc,', ' '], '', $sidx);
 
@@ -454,8 +454,8 @@ switch ($action) {
         if (!in_array($sord, ['asc', 'desc'])) {
             $sord = 'desc';
         }
-        $session_id = intval($_REQUEST['session_id']);
-        $course_id = intval($_REQUEST['course_id']);
+        $session_id = (int) $_REQUEST['session_id'];
+        $course_id = (int) $_REQUEST['course_id'];
 
         //Filter users that does not belong to the session
         if (!api_is_platform_admin()) {
@@ -492,7 +492,8 @@ switch ($action) {
             $lps[$item['code']] = $flat_list;
             $item['title'] = Display::url(
                 $item['title'],
-                api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id, ['target' => SESSION_LINK_TARGET]
+                api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id,
+                ['target' => SESSION_LINK_TARGET]
             );
             foreach ($flat_list as $lp_id => $lp_item) {
                 $temp[$count]['id'] = $lp_id;

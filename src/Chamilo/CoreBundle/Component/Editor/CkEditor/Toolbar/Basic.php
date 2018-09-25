@@ -147,11 +147,10 @@ class Basic extends Toolbar
         $config = [];
         if (api_get_setting('more_buttons_maximized_mode') === 'true') {
             $config['toolbar_minToolbar'] = $this->getMinimizedToolbar();
-
             $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
         }
 
-        $config['customConfig'] = api_get_path(WEB_LIBRARY_JS_PATH).'ckeditor/config_js.php';
+        $config['customConfig'] = api_get_path(WEB_LIBRARY_JS_PATH).'ckeditor/config_js.php?'.api_get_cidreq();
         $config['flash_flvPlayer'] = api_get_path(WEB_LIBRARY_JS_PATH).'ckeditor/plugins/flash/swf/player.swf';
 
         /*filebrowserFlashBrowseUrl
@@ -182,7 +181,7 @@ class Basic extends Toolbar
 
         $config['image2_chamilo_alignClasses'] = [
             'pull-left',
-            'block-center',
+            'text-center',
             'pull-right',
             'img-va-baseline',
             'img-va-top',

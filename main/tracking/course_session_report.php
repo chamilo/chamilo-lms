@@ -9,9 +9,9 @@
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
-$this_section = "session_my_space";
-
-$is_allowedToTrack = $is_courseAdmin || $is_platformAdmin || $is_session_general_coach || $is_sessionAdmin;
+$session_id = isset($_GET['session_id']) ? intval($_GET['session_id']) : null;
+$this_section = 'session_my_space';
+$is_allowedToTrack = Tracking::isAllowToTrack($session_id);
 
 if (!$is_allowedToTrack) {
     api_not_allowed(true);
@@ -28,7 +28,6 @@ if (api_is_platform_admin()) {
 }
 $global = true;
 
-$session_id = isset($_GET['session_id']) ? intval($_GET['session_id']) : null;
 if (empty($session_id)) {
     $session_id = 1;
 }

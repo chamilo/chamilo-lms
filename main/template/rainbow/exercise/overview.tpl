@@ -18,7 +18,6 @@
         <div class="description">
             {{ data.description }}
         </div>
-
     {% if data.url is not empty %}
         <div class="exercise-btn">
             <a href="{{ data.url }}" class="btn btn-success btn-exercise">
@@ -26,33 +25,31 @@
             </a>
         </div>
     {% endif %}
-
-    {% if data.attempts is not empty %}
-        {% if count == data.attempts %}
-            <div class="attempts error">
+    {% if count == data.attempts %}
+        <div class="alert alert-error" role="alert">
+            {{ "Attempts" |get_lang }} {{ count }} / {{ data.attempts }}
+        </div>
+    {% else %}
+        <div class="attempts">
+            <ul class="attempts-status">
+                {% if count != 0 %}
+                    {% for i in 0..count - 1 %}
+                        <li><img src="{{ _p.web_css_theme }}images/attempt-check.png"></li>
+                    {% endfor %}
+                {% endif %}
+                {% if count != data.attempts %}
+                    {% for i in 0..data.attempts - count - 1 %}
+                        <li><img src="{{ _p.web_css_theme }}images/attempt-nocheck.png"></li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+            <div class="details">
                 {{ "Attempts" |get_lang }} {{ count }} / {{ data.attempts }}
             </div>
-        {% else %}
-            <div class="attempts">
-                <ul class="attempts-status">
-                    {% if count != 0 %}
-                        {% for i in 0..count - 1 %}
-                            <li><img src="{{ _p.web_css_theme }}images/attempt-check.png"></li>
-                        {% endfor %}
-                    {% endif %}
-                    {% if count != data.attempts %}
-                        {% for i in 0..data.attempts - count - 1 %}
-                            <li><img src="{{ _p.web_css_theme }}images/attempt-nocheck.png"></li>
-                        {% endfor %}
-                    {% endif %}
-                </ul>
-                <div class="details">
-                    {{ "Attempts" |get_lang }} {{ count }} / {{ data.attempts }}
-                </div>
-            </div>
-        {% endif %}
+        </div>
     {% endif %}
 
+    
     {% if table_result is not empty %}
         <div class="table-responsive">
             {{ table_result }}

@@ -20,8 +20,8 @@ class UserForm extends FormValidator
      * @param int form_type 1 = user_info
      * @param user array
      * @param string form name
-     * @param method
-     * @param action
+     * @param string $method
+     * @param string $action
      */
     public function __construct($form_type, $user, $form_name, $method = 'post', $action = null)
     {
@@ -74,7 +74,12 @@ class UserForm extends FormValidator
             $this->addElement('static', 'fname', get_lang('FirstName'), $this->user_info['firstname']);
         }
         $this->addElement('static', 'uname', get_lang('UserName'), $this->user_info['username']);
-        $this->addElement('static', 'email', get_lang('Email'), '<a href="mailto:'.$this->user_info['email'].'">'.$this->user_info['email'].'</a>');
+        $this->addElement(
+            'static',
+            'email',
+            get_lang('Email'),
+            '<a href="mailto:'.$this->user_info['email'].'">'.$this->user_info['email'].'</a>'
+        );
         $this->addElement('static', 'ofcode', get_lang('OfficialCode'), $this->user_info['official_code']);
         $this->addElement('static', 'phone', get_lang('Phone'), $this->user_info['phone']);
         $this->addButtonSave(get_lang('Back'), 'submit');

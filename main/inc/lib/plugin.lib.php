@@ -108,7 +108,7 @@ class AppPlugin
         $pluginList = [];
         if (!empty($pluginListName)) {
             foreach ($pluginListName as $pluginName) {
-                $pluginInfo = $this->getPluginInfo($pluginName);
+                $pluginInfo = $this->getPluginInfo($pluginName, true);
                 if (isset($pluginInfo['plugin_class'])) {
                     $pluginList[] = $pluginInfo['plugin_class']::create();
                 }
@@ -652,7 +652,6 @@ class AppPlugin
         /** @var Plugin $obj */
         foreach ($pluginList as $obj) {
             $settings = $obj->getCourseSettings();
-
             $subValues = [];
             if (!empty($settings)) {
                 foreach ($settings as $v) {

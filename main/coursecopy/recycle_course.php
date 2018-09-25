@@ -36,10 +36,10 @@ Display::display_header($nameTools);
 
 // Display the tool title
 echo Display::page_header($nameTools);
+$action = isset($_POST['action']) ? $_POST['action'] : '';
 
 if (Security::check_token('post') && (
-        isset($_POST['action']) &&
-        $_POST['action'] == 'course_select_form' ||
+        $action === 'course_select_form' ||
         (
             isset($_POST['recycle_option']) &&
             $_POST['recycle_option'] == 'full_backup'
@@ -48,17 +48,16 @@ if (Security::check_token('post') && (
 ) {
     // Clear token
     Security::clear_token();
-
-    if (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
+    if (isset($_POST['action']) && $_POST['action'] === 'course_select_form') {
         $course = CourseSelectForm::get_posted_course();
     } else {
         $cb = new CourseBuilder();
         $course = $cb->build();
     }
     $recycle_type = '';
-    if (isset($_POST['recycle_option']) && $_POST['recycle_option'] == 'full_backup') {
+    if (isset($_POST['recycle_option']) && $_POST['recycle_option'] === 'full_backup') {
         $recycle_type = 'full_backup';
-    } elseif (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
+    } elseif (isset($_POST['action']) && $_POST['action'] === 'course_select_form') {
         $recycle_type = 'select_items';
     }
     $cr = new CourseRecycler($course);
@@ -66,7 +65,7 @@ if (Security::check_token('post') && (
     echo Display::return_message(get_lang('RecycleFinished'), 'confirm');
 } elseif (Security::check_token('post') && (
         isset($_POST['recycle_option']) &&
-        $_POST['recycle_option'] == 'select_items'
+        $_POST['recycle_option'] === 'select_items'
     )
 ) {
     // Clear token

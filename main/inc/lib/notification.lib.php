@@ -218,6 +218,7 @@ class Notification extends Model
      *                              NOTIFICATION_TYPE_MESSAGE,
      *                              NOTIFICATION_TYPE_INVITATION,
      *                              NOTIFICATION_TYPE_GROUP
+     * @param int    $messageId
      * @param array  $userList      recipients: user list of ids
      * @param string $title
      * @param string $content
@@ -226,6 +227,7 @@ class Notification extends Model
      * @param array  $smsParameters
      */
     public function saveNotification(
+        $messageId,
         $type,
         $userList,
         $title,
@@ -234,8 +236,9 @@ class Notification extends Model
         $attachments = [],
         $smsParameters = []
     ) {
-        $this->type = intval($type);
-        $content = $this->formatContent($content, $senderInfo);
+        $this->type = (int) $type;
+        $messageId = (int) $messageId;
+        $content = $this->formatContent($messageId, $content, $senderInfo);
         $titleToNotification = $this->formatTitle($title, $senderInfo);
         $settingToCheck = '';
         $avoid_my_self = false;
@@ -349,13 +352,14 @@ class Notification extends Model
      * Formats the content in order to add the welcome message,
      * the notification preference, etc.
      *
+     * @param int    $messageId
      * @param string $content
      * @param array  $senderInfo result of api_get_user_info() or
      *                           GroupPortalManager:get_group_data()
      *
      * @return string
      * */
-    public function formatContent($content, $senderInfo)
+    public function formatContent($messageId, $content, $senderInfo)
     {
         $hook = HookNotificationContent::create();
         if (!empty($hook)) {
@@ -369,9 +373,9 @@ class Notification extends Model
         $newMessageText = $linkToNewMessage = '';
         $showEmail = api_get_configuration_value('show_user_email_in_notification');
         $senderInfoName = '';
-        if (!empty($senderInfo)) {
+        if (!empty($senderInfo) && isset($senderInfo['complete_name'])) {
             $senderInfoName = $senderInfo['complete_name'];
-            if ($showEmail) {
+            if ($showEmail && isset($senderInfo['complete_name_with_email_forced'])) {
                 $senderInfoName = $senderInfo['complete_name_with_email_forced'];
             }
         }
@@ -381,7 +385,7 @@ class Notification extends Model
                 $newMessageText = '';
                 $linkToNewMessage = Display::url(
                     get_lang('SeeMessage'),
-                    api_get_path(WEB_CODE_PATH).'messages/inbox.php'
+                    api_get_path(WEB_CODE_PATH).'messages/view_message.php?id='.$messageId
                 );
                 break;
             case self::NOTIFICATION_TYPE_MESSAGE:
@@ -397,7 +401,7 @@ class Notification extends Model
                 }
                 $linkToNewMessage = Display::url(
                     get_lang('SeeMessage'),
-                    api_get_path(WEB_CODE_PATH).'messages/inbox.php'
+                    api_get_path(WEB_CODE_PATH).'messages/view_message.php?id='.$messageId
                 );
                 break;
             case self::NOTIFICATION_TYPE_INVITATION:
@@ -413,7 +417,7 @@ class Notification extends Model
                 );
                 break;
             case self::NOTIFICATION_TYPE_GROUP:
-                $topic_page = intval($_REQUEST['topics_page_nr']);
+                $topicPage = isset($_REQUEST['topics_page_nr']) ? (int) $_REQUEST['topics_page_nr'] : 0;
                 if (!empty($senderInfo)) {
                     $senderName = $senderInfo['group_info']['name'];
                     $newMessageText = sprintf(get_lang('YouHaveReceivedANewMessageInTheGroupX'), $senderName);
@@ -423,11 +427,11 @@ class Notification extends Model
                     );
                     $newMessageText .= '<br />'.get_lang('User').': '.$senderName;
                 }
-                $group_url = api_get_path(WEB_CODE_PATH).'social/group_topics.php?id='.$senderInfo['group_info']['id'].'&topic_id='.$senderInfo['group_info']['topic_id'].'&msg_id='.$senderInfo['group_info']['msg_id'].'&topics_page_nr='.$topic_page;
-                $linkToNewMessage = Display::url(get_lang('SeeMessage'), $group_url);
+                $groupUrl = api_get_path(WEB_CODE_PATH).'social/group_topics.php?id='.$senderInfo['group_info']['id'].'&topic_id='.$senderInfo['group_info']['topic_id'].'&msg_id='.$senderInfo['group_info']['msg_id'].'&topics_page_nr='.$topicPage;
+                $linkToNewMessage = Display::url(get_lang('SeeMessage'), $groupUrl);
                 break;
         }
-        $preference_url = api_get_path(WEB_CODE_PATH).'auth/profile.php';
+        $preferenceUrl = api_get_path(WEB_CODE_PATH).'auth/profile.php';
 
         // You have received a new message text
         if (!empty($newMessageText)) {
@@ -462,7 +466,7 @@ class Notification extends Model
         $content = $content.'<br /><hr><i>'.
             sprintf(
                 get_lang('YouHaveReceivedThisNotificationBecauseYouAreSubscribedOrInvolvedInItToChangeYourNotificationPreferencesPleaseClickHereX'),
-                Display::url($preference_url, $preference_url)
+                Display::url($preferenceUrl, $preferenceUrl)
             ).'</i>';
 
         if (!empty($hook)) {

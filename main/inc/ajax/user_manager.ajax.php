@@ -20,7 +20,7 @@ switch ($action) {
             'firstname' => $query,
             'lastname' => $query,
         ];
-        $users = UserManager::get_user_list_like($conditions, [], false, 'OR');
+        $users = UserManager::getUserListLike($conditions, [], false, 'OR');
         $result = [];
         if (!empty($users)) {
             foreach ($users as $user) {

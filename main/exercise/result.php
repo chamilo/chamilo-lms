@@ -13,6 +13,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $id = isset($_REQUEST['id']) ? intval($_GET['id']) : null; //exe id
 $show_headers = isset($_REQUEST['show_headers']) ? intval($_REQUEST['show_headers']) : null; //exe id
 $origin = api_get_origin();
+$this_section = 'results';
 
 if ($origin == 'learnpath') {
     $show_headers = false;

@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\UserRelUser;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\UserBundle\Entity\User as UserEntity;
 
 $cidReset = true;
 
@@ -15,21 +15,23 @@ if (!isset($_REQUEST['u'])) {
 }
 
 $em = Database::getManager();
-$relationsRepo = $em->getRepository('ChamiloCoreBundle:UserRelUser');
-/** @var User $user */
+$userRepository = UserManager::getRepository();
+/** @var UserEntity $user */
 $user = UserManager::getManager()->find($_REQUEST['u']);
 
 if (!$user) {
     api_not_allowed(true);
 }
 
-$subscribedUsers = $user->getHrm();
+$subscribedUsers = $userRepository->getAssignedHrmUserList(
+    $user->getId(),
+    api_get_current_access_url_id()
+);
 
 $hrmOptions = [];
-
 /** @var UserRelUser $subscribedUser */
 foreach ($subscribedUsers as $subscribedUser) {
-    /** @var User $hrm */
+    /** @var UserEntity $hrm */
     $hrm = UserManager::getManager()->find($subscribedUser->getFriendUserId());
 
     if (!$hrm) {
@@ -58,13 +60,12 @@ if ($form->validate()) {
     foreach ($subscribedUsers as $subscribedUser) {
         $em->remove($subscribedUser);
     }
-
     $em->flush();
 
     $values = $form->exportValues();
 
     foreach ($values['hrm'] as $hrmId) {
-        /** @var User $hrm */
+        /** @var UserEntity $hrm */
         $hrm = UserManager::getManager()->find($hrmId);
 
         if (!$hrm) {

@@ -20,6 +20,7 @@ $current_course_tool = TOOL_COURSE_MAINTENANCE;
 
 api_protect_global_admin_script();
 api_protect_limit_for_session_admin();
+api_set_more_memory_and_time_limits();
 
 $xajax = new xajax();
 $xajax->registerFunction('search_courses');
@@ -28,12 +29,7 @@ if (!api_is_allowed_to_edit() && !api_is_session_admin()) {
     api_not_allowed(true);
 }
 
-// Remove memory and time limits as much as possible as this might be a long process...
-if (function_exists('ini_set')) {
-    api_set_memory_limit('256M');
-    ini_set('max_execution_time', 1800);
-}
-
+$action = isset($_POST['action']) ? $_POST['action'] : '';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 $nameTools = get_lang('CopyCourse');
@@ -111,7 +107,13 @@ function display_form()
 
     // origin
     $html .= '<label class="col-sm-2 control-label">'.get_lang('OriginCoursesFromSession').': </label>';
-    $html .= '<div class="col-sm-5">'.make_select_session_list('sessions_list_origin', $sessions, ['onchange' => 'javascript: xajax_search_courses(this.value,\'origin\');']).'</div>';
+    $html .= '<div class="col-sm-5">';
+    $html .= make_select_session_list(
+        'sessions_list_origin',
+        $sessions,
+        ['onchange' => 'javascript: xajax_search_courses(this.value,\'origin\');']
+    );
+    $html .= '</div>';
     $html .= '<div class="col-sm-5" id="ajax_list_courses_origin">';
     $html .= '<select id="origin" class="form-control" name="SessionCoursesListOrigin[]" ></select>';
     $html .= '</div></div>';
@@ -155,13 +157,13 @@ function display_form()
  */
 function search_courses($id_session, $type)
 {
-    global $tbl_course, $tbl_session_rel_course, $course_list;
+    global $tbl_course, $tbl_session_rel_course;
     $xajax_response = new xajaxResponse();
     $select_destination = '';
     $return = null;
 
     if (!empty($type)) {
-        $id_session = intval($id_session);
+        $id_session = (int) $id_session;
         if ($type == 'origin') {
             $course_list = SessionManager::get_course_list_by_session_id($id_session);
             $temp_course_list = [];
@@ -179,7 +181,6 @@ function search_courses($id_session, $type)
             // Build select for destination sessions where is not included current session from select origin
             if (!empty($id_session)) {
                 $sessions = SessionManager::get_sessions_list([], ['name', 'ASC']);
-
                 $select_destination .= '<select name="sessions_list_destination" class="form-control" onchange = "javascript: xajax_search_courses(this.value,\'destination\');">';
                 $select_destination .= '<option value = "0">-- '.get_lang('SelectASession').' --</option>';
                 foreach ($sessions as $session) {
@@ -278,10 +279,7 @@ if (isset($_POST['copy_only_session_items']) && $_POST['copy_only_session_items'
 
 /*  MAIN CODE  */
 if (Security::check_token('post') && (
-        (
-            isset($_POST['action']) &&
-            $_POST['action'] == 'course_select_form'
-        ) || (
+        ($action === 'course_select_form') || (
             isset($_POST['copy_option']) &&
             $_POST['copy_option'] == 'full_copy'
         )
@@ -290,23 +288,28 @@ if (Security::check_token('post') && (
     // Clear token
     Security::clear_token();
     $destination_course = $origin_course = $destination_session = $origin_session = '';
-    if (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
+    if ($action === 'course_select_form') {
         $destination_course = $_POST['destination_course'];
         $origin_course = $_POST['origin_course'];
         $destination_session = $_POST['destination_session'];
         $origin_session = $_POST['origin_session'];
 
-        $course = CourseSelectForm::get_posted_course(
-            'copy_course',
-            $origin_session,
-            $origin_course
-        );
+        if ($course_code != $origin_course) {
+            $course = CourseSelectForm::get_posted_course(
+                'copy_course',
+                $origin_session,
+                $origin_course
+            );
 
-        $cr = new CourseRestorer($course);
-        //$cr->set_file_option($_POST['same_file_name_option']);
-        $cr->restore($destination_course, $destination_session);
-        echo Display::return_message(get_lang('CopyFinished'), 'confirmation');
-        display_form();
+            $cr = new CourseRestorer($course);
+            //$cr->set_file_option($_POST['same_file_name_option']);
+            $cr->restore($destination_course, $destination_session);
+            echo Display::return_message(get_lang('CopyFinished'), 'confirmation');
+            display_form();
+        } else {
+            echo Display::return_message(get_lang('PleaseSelectACourse'), 'confirm');
+            display_form();
+        }
     } else {
         $arr_course_origin = [];
         $arr_course_destination = [];
@@ -335,14 +338,20 @@ if (Security::check_token('post') && (
                 $course_code = $arr_course_origin[0];
                 $course_destinatination = $arr_course_destination[0];
 
-                $course_origin = api_get_course_info($course_code);
-                $cb = new CourseBuilder('', $course_origin);
-                $course = $cb->build($origin_session, $course_code, $with_base_content);
-                $cr = new CourseRestorer($course);
-                $cr->restore($course_destinatination, $destination_session);
+                if ($course_code != $course_destinatination) {
+                    $course_origin = api_get_course_info($course_code);
+                    $cb = new CourseBuilder('', $course_origin);
+                    $course = $cb->build($origin_session, $course_code, $with_base_content);
+                    $cr = new CourseRestorer($course);
+                    $cr->restore($course_destinatination, $destination_session);
+
+                    echo Display::return_message(get_lang('CopyFinished'), 'confirm');
+                    display_form();
+                } else {
+                    echo Display::return_message(get_lang('PleaseSelectACourse'), 'confirm');
+                    display_form();
+                }
             }
-            echo Display::return_message(get_lang('CopyFinished'), 'confirm');
-            display_form();
         } else {
             echo Display::return_message(get_lang('YouMustSelectACourseFromOriginalSession'), 'error');
             display_form();

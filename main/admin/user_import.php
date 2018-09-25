@@ -25,7 +25,6 @@ function validate_data($users, $checkUniqueEmail = false)
 
     // 1. Check if mandatory fields are set.
     $mandatory_fields = ['LastName', 'FirstName'];
-
     if (api_get_setting('registration', 'email') == 'true' || $checkUniqueEmail) {
         $mandatory_fields[] = 'Email';
     }
@@ -55,13 +54,13 @@ function validate_data($users, $checkUniqueEmail = false)
                 $errors[] = $user;
             }
             // 2.2. Check whether the username was used twice in import file.
-            if (isset($usernames[$user['UserName']])) {
+            if (isset($usernames[$username])) {
                 $user['error'] = get_lang('UserNameUsedTwice');
                 $errors[] = $user;
             }
-            $usernames[$user['UserName']] = 1;
+            $usernames[$username] = 1;
             // 2.3. Check whether username is already occupied.
-            if (!UserManager::is_username_available($user['UserName'])) {
+            if (!UserManager::is_username_available($username)) {
                 $user['error'] = get_lang('UserNameNotAvailable');
                 $errors[] = $user;
             }
@@ -219,6 +218,21 @@ function save_data($users)
                     }
                 }
             }
+
+            if (isset($user['Sessions']) && is_array($user['Sessions'])) {
+                foreach ($user['Sessions'] as $sessionId) {
+                    $sessionInfo = api_get_session_info($sessionId);
+                    if (!empty($sessionInfo)) {
+                        SessionManager::subscribeUsersToSession(
+                            $sessionId,
+                            [$user_id],
+                            SESSION_VISIBLE_READ_ONLY,
+                            false
+                        );
+                    }
+                }
+            }
+
             if (!empty($user['ClassId'])) {
                 $classId = explode('|', trim($user['ClassId']));
                 foreach ($classId as $id) {
@@ -250,10 +264,27 @@ function save_data($users)
  */
 function parse_csv_data($file)
 {
-    $users = Import :: csvToArray($file);
+    $users = Import::csvToArray($file);
+    $allowRandom = api_get_configuration_value('generate_random_login');
+    if ($allowRandom) {
+        $factory = new RandomLib\Factory();
+        $generator = $factory->getLowStrengthGenerator();
+        $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    }
+
     foreach ($users as $index => $user) {
+        if (isset($user['UserName'])) {
+            if ($allowRandom) {
+                $username = $generator->generateString(10, $chars);
+                $user['UserName'] = $username;
+            }
+        }
         if (isset($user['Courses'])) {
             $user['Courses'] = explode('|', trim($user['Courses']));
+        }
+
+        if (isset($user['Sessions'])) {
+            $user['Sessions'] = explode('|', trim($user['Sessions']));
         }
 
         // Lastname is needed.
@@ -356,7 +387,7 @@ function parse_xml_data($file)
 }
 
 $this_section = SECTION_PLATFORM_ADMIN;
-api_protect_admin_script(true, null, 'login');
+api_protect_admin_script(true, null);
 api_protect_limit_for_session_admin();
 
 $defined_auth_sources[] = PLATFORM_AUTH_SOURCE;
@@ -373,9 +404,7 @@ $extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', true);
 $user_id_error = [];
 $error_message = '';
 
-if (isset($_POST['formSent']) && $_POST['formSent'] and
-    $_FILES['import_file']['size'] !== 0
-) {
+if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['size'] !== 0) {
     $file_type = $_POST['file_type'];
     Security::clear_token();
     $tok = Security::get_token();
@@ -477,7 +506,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] and
     }
 }
 
-Display :: display_header($tool_name);
+Display::display_header($tool_name);
 
 $form = new FormValidator('user_import', 'post', api_get_self());
 $form->addElement('header', '', $tool_name);
@@ -545,10 +574,10 @@ if ($count_fields > 0) {
 <pre>
 <b>LastName</b>;<b>FirstName</b>;<b>Email</b>;UserName;Password;AuthSource;OfficialCode;PhoneNumber;Status;ExpiryDate;<span style="color:red;"><?php if (count($list) > 0) {
     echo implode(';', $list).';';
-} ?></span>Courses;ClassId;
+} ?></span>Courses;Sessions;ClassId;
 <b>xxx</b>;<b>xxx</b>;<b>xxx</b>;xxx;xxx;<?php echo implode('/', $defined_auth_sources); ?>;xxx;xxx;user/teacher/drh;0000-00-00 00:00:00;<span style="color:red;"><?php if (count($list_reponse) > 0) {
     echo implode(';', $list_reponse).';';
-} ?></span>xxx1|xxx2|xxx3;1;<br />
+} ?></span>xxx1|xxx2|xxx3;sessionId|sessionId|sessionId;1;<br />
 </pre>
 </blockquote>
 <p><?php echo get_lang('XMLMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
@@ -570,6 +599,7 @@ if ($count_fields > 0) {
     echo '</span>';
 } ?>&lt;/Status&gt;
         &lt;Courses&gt;xxx1|xxx2|xxx3&lt;/Courses&gt;
+        &lt;Sessions&gt;sessionId|sessionId|sessionId&lt;/Sessions&gt;
         &lt;ClassId&gt;1&lt;/ClassId&gt;
         &lt;/Contact&gt;
 &lt;/Contacts&gt;

@@ -24,56 +24,56 @@ class CBlogPost
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="blog_id", type="integer", nullable=false)
      */
-    private $blogId;
+    protected $blogId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=250, nullable=false)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      *
      * @ORM\Column(name="full_text", type="text", nullable=false)
      */
-    private $fullText;
+    protected $fullText;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="date_creation", type="datetime", nullable=false)
      */
-    private $dateCreation;
+    protected $dateCreation;
 
     /**
      * @var int
      *
      * @ORM\Column(name="author_id", type="integer", nullable=false)
      */
-    private $authorId;
+    protected $authorId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="post_id", type="integer")
      */
-    private $postId;
+    protected $postId;
 
     /**
      * Set title.

@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Repository\TrackECourseAccessRepository;
+
 /**
  * See the progress for a user when the gamification mode is active.
  *
@@ -24,19 +26,14 @@ $userId = api_get_user_id();
 $sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
 $allowAccess = false;
 
-$userManager = UserManager::getManager();
 $entityManager = Database::getManager();
+$user = api_get_user_entity($userId);
 
-$user = $userManager->findUserBy(['id' => $userId]);
-
-if (empty($sessionId)) {
-    $trackCourseAccessRepository = $entityManager->getRepository(
-        'ChamiloCoreBundle:TrackECourseAccess'
-    );
-
+if (empty($sessionId) && $user) {
+    /** @var TrackECourseAccessRepository $trackCourseAccessRepository */
+    $trackCourseAccessRepository = $entityManager->getRepository('ChamiloCoreBundle:TrackECourseAccess');
     $lastCourseAccess = $trackCourseAccessRepository->getLastAccessByUser($user);
     $lastSessionId = 0;
-
     if ($lastCourseAccess) {
         $lastSessionId = $lastCourseAccess->getSessionId();
     }
@@ -54,10 +51,9 @@ if (empty($sessionId)) {
 }
 
 $sessionCourseSubscriptions = $user->getSessionCourseSubscriptions();
-$currentSession = $entityManager->find('ChamiloCoreBundle:Session', $sessionId);
+$currentSession = api_get_session_entity($sessionId);
 
 $sessionList = [];
-
 foreach ($sessionCourseSubscriptions as $subscription) {
     $session = $subscription->getSession();
 

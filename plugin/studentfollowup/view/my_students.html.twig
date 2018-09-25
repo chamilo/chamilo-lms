@@ -10,10 +10,10 @@
         <tr>
             <td>{{ user.user.completeNameWithUsername }}</td>
             <td>
-                <a href="{{ my_students_url }}&student={{ user.user.id }}">
+                <a href="{{ my_students_url }}student={{ user.user.id }}">
                     <img src="{{ '2rightarrow.png'|icon() }}">
                 </a>
-                <a href="{{ post_url }}&student_id={{ user.user.id }}">
+                <a href="{{ post_url }}student_id={{ user.user.id }}">
                     <img src="{{ 'blog.png'|icon() }}">
                 </a>
             </td>

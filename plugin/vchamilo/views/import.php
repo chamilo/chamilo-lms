@@ -112,7 +112,8 @@ $form->addElement(
 );
 
 // Database name.
-$form->addText('to_main_database',
+$form->addText(
+    'to_main_database',
     [
         $plugin->get_lang('maindatabase'),
         $plugin->get_lang('DatabaseDescription'),

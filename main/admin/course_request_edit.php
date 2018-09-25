@@ -76,7 +76,12 @@ if ($course_validation_feature) {
         $form->addRule('wanted_code', get_lang('ThisFieldIsRequired'), 'required');
 
         // The teacher.
-        $titular = $form->addText('tutor_name', get_lang('Professor'), null, ['size' => '60', 'disabled' => 'disabled']);
+        $titular = $form->addText(
+            'tutor_name',
+            get_lang('Professor'),
+            null,
+            ['size' => '60', 'disabled' => 'disabled']
+        );
 
         // Description of the requested course.
         $form->addElement('textarea', 'description', get_lang('Description'));
@@ -101,7 +106,9 @@ if ($course_validation_feature) {
         if ($course_request_info['status'] != COURSE_REQUEST_ACCEPTED) {
             $submit_buttons[] = $form->addButtonSave(get_lang('Accept'), 'accept_button', true);
         }
-        if ($course_request_info['status'] != COURSE_REQUEST_ACCEPTED && $course_request_info['status'] != COURSE_REQUEST_REJECTED) {
+        if ($course_request_info['status'] != COURSE_REQUEST_ACCEPTED &&
+            $course_request_info['status'] != COURSE_REQUEST_REJECTED
+        ) {
             $submit_buttons[] = $form->addButtonCancel(get_lang('Reject'), 'reject_button', true);
         }
         if ($course_request_info['status'] != COURSE_REQUEST_ACCEPTED && intval($course_request_info['info']) <= 0) {

@@ -120,11 +120,12 @@ function online_logout($user_id = null, $logout_redirect = false)
     		ORDER BY login_date DESC
     		LIMIT 0,1";
     $q_last_connection = Database::query($sql);
+    $i_id_last_connection = 0;
     if (Database::num_rows($q_last_connection) > 0) {
         $i_id_last_connection = Database::result($q_last_connection, 0, "login_id");
     }
 
-    if (!isset($_SESSION['login_as'])) {
+    if (!isset($_SESSION['login_as']) && !empty($i_id_last_connection)) {
         $current_date = api_get_utc_datetime();
         $sql = "UPDATE $tbl_track_login SET logout_date='".$current_date."'
         		WHERE login_id='$i_id_last_connection'";
@@ -345,7 +346,7 @@ function who_is_online_count($time_limit = null, $friends = false)
     $current_date = api_get_utc_datetime($online_time);
 
     if ($friends) {
-        // 	who friends from social network is online
+        // who friends from social network is online
         $query = "SELECT DISTINCT count(login_user_id) as count
 				  FROM $track_online_table INNER JOIN $friend_user_table
                   ON (friend_user_id = login_user_id)
@@ -366,7 +367,7 @@ function who_is_online_count($time_limit = null, $friends = false)
         $access_url_id = api_get_current_access_url_id();
         if ($access_url_id != -1) {
             if ($friends) {
-                // 	friends from social network is online
+                // friends from social network is online
                 $query = "SELECT DISTINCT count(login_user_id) as count
 							FROM $track_online_table track
 							INNER JOIN $friend_user_table ON (friend_user_id = login_user_id)
@@ -416,10 +417,9 @@ function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit
         return false;
     }
 
+    $time_limit = (int) $time_limit;
     if (empty($time_limit)) {
         $time_limit = api_get_setting('time_limit_whosonline');
-    } else {
-        $time_limit = intval($time_limit);
     }
 
     $online_time = time() - $time_limit * 60;
@@ -430,16 +430,28 @@ function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit
     $courseInfo = api_get_course_info($course_code);
     $courseId = $courseInfo['real_id'];
 
-    $from = intval($from);
-    $number_of_items = intval($number_of_items);
+    $from = (int) $from;
+    $number_of_items = (int) $number_of_items;
+
+    $urlCondition = '';
+    $urlJoin = '';
+    if (api_is_multiple_url_enabled()) {
+        $accessUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $urlId = api_get_current_access_url_id();
+        $urlJoin = " INNER JOIN $accessUrlUser a ON (a.user_id = u.id) ";
+        $urlCondition = " AND a.access_url_id = $urlId ";
+    }
 
     $query = "SELECT o.login_user_id, o.login_date
-              FROM $track_online_table o INNER JOIN $tableUser u
+              FROM $track_online_table o 
+              INNER JOIN $tableUser u
               ON (o.login_user_id = u.id)
+              $urlJoin
               WHERE
                 u.status <> '".ANONYMOUS."' AND 
                 o.c_id = $courseId AND 
                 o.login_date >= '$current_date'
+                $urlCondition
               LIMIT $from, $number_of_items ";
 
     $result = Database::query($query);
@@ -469,9 +481,7 @@ function who_is_online_in_this_course_count(
     }
     $track_online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
     $tableUser = Database::get_main_table(TABLE_MAIN_USER);
-
     $time_limit = Database::escape_string($time_limit);
-
     $online_time = time() - $time_limit * 60;
     $current_date = api_get_utc_datetime($online_time);
     $courseId = api_get_course_int_id($coursecode);
@@ -480,13 +490,26 @@ function who_is_online_in_this_course_count(
         return false;
     }
 
+    $urlCondition = '';
+    $urlJoin = '';
+    if (api_is_multiple_url_enabled()) {
+        $accessUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $urlId = api_get_current_access_url_id();
+        $urlJoin = " INNER JOIN $accessUrlUser a ON (a.user_id = u.id) ";
+        $urlCondition = " AND a.access_url_id = $urlId ";
+    }
+
     $query = "SELECT count(login_user_id) as count
-              FROM $track_online_table o INNER JOIN $tableUser u 
+              FROM $track_online_table o 
+              INNER JOIN $tableUser u              
               ON (login_user_id = u.id)
+              $urlJoin
               WHERE 
                 u.status <> '".ANONYMOUS."' AND
                 c_id = $courseId AND 
-                login_date >= '$current_date' ";
+                login_date >= '$current_date'
+                $urlCondition
+                ";
     $result = Database::query($query);
     if (Database::num_rows($result) > 0) {
         $row = Database::fetch_array($result);
@@ -513,17 +536,29 @@ function whoIsOnlineInThisSessionCount($timeLimit, $sessionId)
     $tableUser = Database::get_main_table(TABLE_MAIN_USER);
 
     $timeLimit = Database::escape_string($timeLimit);
-
     $online_time = time() - $timeLimit * 60;
     $current_date = api_get_utc_datetime($online_time);
 
+    $urlCondition = '';
+    $urlJoin = '';
+    if (api_is_multiple_url_enabled()) {
+        $accessUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $urlId = api_get_current_access_url_id();
+        $urlJoin = " INNER JOIN $accessUrlUser a ON (a.user_id = u.id) ";
+        $urlCondition = " AND a.access_url_id = $urlId ";
+    }
+
     $query = "SELECT count(login_user_id) as count
-              FROM $tblTrackOnline o INNER JOIN $tableUser u 
+              FROM $tblTrackOnline o 
+              INNER JOIN $tableUser u 
               ON (login_user_id = u.id)
+              $urlJoin
               WHERE 
                     u.status <> '".ANONYMOUS."' AND 
                     session_id = $sessionId AND 
-                    login_date >= '$current_date' ";
+                    login_date >= '$current_date' 
+                    $urlCondition
+            ";
     $result = Database::query($query);
 
     if (Database::num_rows($result) > 0) {

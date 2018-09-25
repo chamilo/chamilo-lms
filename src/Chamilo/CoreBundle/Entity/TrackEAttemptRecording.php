@@ -25,56 +25,56 @@ class TrackEAttemptRecording
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="exe_id", type="integer", nullable=false)
      */
-    private $exeId;
+    protected $exeId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="question_id", type="integer", nullable=false)
      */
-    private $questionId;
+    protected $questionId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="marks", type="integer", nullable=false)
      */
-    private $marks;
+    protected $marks;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="insert_date", type="datetime", nullable=false)
      */
-    private $insertDate;
+    protected $insertDate;
 
     /**
      * @var int
      *
      * @ORM\Column(name="author", type="integer", nullable=false)
      */
-    private $author;
+    protected $author;
 
     /**
      * @var string
      *
      * @ORM\Column(name="teacher_comment", type="text", nullable=false)
      */
-    private $teacherComment;
+    protected $teacherComment;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * Set exeId.

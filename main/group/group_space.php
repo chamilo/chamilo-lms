@@ -446,7 +446,8 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
     // Query
     if (api_get_setting('show_email_addresses') === 'true') {
         $sql = "SELECT user.id 	AS col0,
-				".(api_is_western_name_order() ?
+				".(
+            api_is_western_name_order() ?
                 "user.firstname 	AS col1,
 				user.lastname 	AS col2,"
                 :
@@ -488,7 +489,8 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
         } else {
             $sql = "SELECT DISTINCT
 						user.id 	AS col0,
-						".(api_is_western_name_order() ?
+						".(
+                api_is_western_name_order() ?
                     "user.firstname 	AS col1,
 						user.lastname 	AS col2 "
                     :

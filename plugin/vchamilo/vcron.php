@@ -41,7 +41,8 @@ $VCRON->TRACE = '/data/log/chamilo/vcrontrace.log'; // Trace file where to colle
 $VCRON->TRACE_ENABLE = true; // enables tracing
 
 if (!is_dir($_configuration['root_sys'].'plugin/vchamilo/log')) {
-    mkdir($_configuration['root_sys'].'plugin/vchamilo/log', 0777, true);
+    $mode = api_get_permissions_for_new_directories();
+    mkdir($_configuration['root_sys'].'plugin/vchamilo/log', $mode, true);
 }
 
 /**

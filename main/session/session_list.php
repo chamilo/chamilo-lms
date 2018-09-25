@@ -57,7 +57,7 @@ $courseSelect = $sessionFilter->addElement(
     'course_name',
     get_lang('SearchCourse'),
     null,
-        ['url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course']
+    ['url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course']
 );
 
 if (!empty($courseId)) {
@@ -142,53 +142,6 @@ if (!isset($_GET['keyword'])) {
 
 $hideSearch = api_get_configuration_value('hide_search_form_in_session_list');
 
-$defaultValues = [];
-
-$filters = isset($_GET['filters']) ? $_GET['filters'] : '';
-$filterToSend = [];
-if (!empty($filters)) {
-    $filterToSend = ['groupOp' => 'AND'];
-    $filters = unserialize(urldecode($filters));
-    if ($filters) {
-        $count = 1;
-        $countExtraField = 1;
-        foreach ($result['column_model'] as $column) {
-            if ($count > 5) {
-                if (isset($filters[$column['name']])) {
-                    $defaultValues['jqg'.$countExtraField] = $filters[$column['name']];
-                    $filterToSend['rules'][] = ['field' => $column['name'], 'op' => 'cn', 'data' => $filters[$column['name']]];
-                }
-                $countExtraField++;
-            }
-            $count++;
-        }
-    }
-}
-
-$defaultValues = json_encode($defaultValues);
-
-// jqgrid will use this URL to do the selects
-if (!empty($courseId)) {
-    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&course_id='.$courseId;
-} else {
-    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions';
-}
-
-if (isset($_REQUEST['keyword'])) {
-    //Begin with see the searchOper param
-    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_force_search=true&rows=20&page=1&sidx=&sord=asc&filters=&searchField=s.name&searchString='.Security::remove_XSS($_REQUEST['keyword']).'&searchOper=bw';
-}
-
-if (isset($_REQUEST['id_category'])) {
-    $sessionCategory = SessionManager::get_session_category($_REQUEST['id_category']);
-    if (!empty($sessionCategory)) {
-        //Begin with see the searchOper param
-        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_force_search=true&rows=20&page=1&sidx=&sord=asc&filters=&searchField=sc.name&searchString='.Security::remove_XSS($sessionCategory['name']).'&searchOper=bw';
-    }
-}
-
-$url .= '&list_type='.$list_type;
-
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
      return \'<a href="session_edit.php?page=resume_session.php&id=\'+options.rowId+\'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>'.
@@ -200,6 +153,8 @@ $action_links = 'function action_formatter(cellvalue, options, rowObject) {
 }';
 
 $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
+$allowOrder = api_get_configuration_value('session_list_order');
+$orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
 
 ?>
     <script>
@@ -233,6 +188,7 @@ $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
         function show_cols(grid, added_cols) {
             grid.showCol('name').trigger('reloadGrid');
             for (key in added_cols) {
+                //console.log('show: ' + key);
                 grid.showCol(key);
             };
         }
@@ -240,7 +196,6 @@ $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
         var second_filters = [];
 
         $(function() {
-
             date_pick_today = function(elem) {
                 $(elem).datetimepicker({dateFormat: "yy-mm-dd"});
                 $(elem).datetimepicker('setDate', (new Date()));
@@ -316,7 +271,10 @@ $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
                                         if (subvalue.data == undefined) {
                                         }
 
+                                        //if (added_cols[value.field] == undefined) {
                                         added_cols[subvalue.field] = subvalue.field;
+                                        //}
+                                        //grid.showCol(value.field);
                                     });
                                 }
                             });
@@ -329,6 +287,31 @@ $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
                 };
 
             original_cols = grid.jqGrid('getGridParam', 'colModel');
+
+            <?php if ($allowOrder) {
+                ?>
+            options = {
+                update: function (e, ui) {
+                    var rowNum = jQuery("#sessions").getGridParam('rowNum');
+                    var page = jQuery("#sessions").getGridParam('page');
+                    page = page - 1;
+                    var start = rowNum * page;
+                    var list = jQuery('#sessions').jqGrid('getRowData');
+                    var orderList = [];
+                    $(list).each(function(index, e) {
+                        index = index + start;
+                        orderList.push({'order':index, 'id': e.id});
+                    });
+                    orderList = JSON.stringify(orderList);
+                    $.get("<?php echo $orderUrl; ?>", "order="+orderList, function (result) {
+                        console.log(result);
+                    });
+                }
+            };
+            // Sortable rows
+            grid.jqGrid('sortableRows', options);
+            <?php
+            } ?>
 
             grid.jqGrid('navGrid','#sessions_pager',
                 {edit:false,add:false,del:false},
@@ -360,15 +343,6 @@ $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
                 $(this).find('option:first').attr('selected', 'selected');
             });
 
-            var defaultValues = jQuery.parseJSON('<?php echo $defaultValues; ?>');
-            if (defaultValues) {
-                $('.input-elm').each(function() {
-                    if (defaultValues.hasOwnProperty($(this).attr('id'))) {
-                        $(this).val(defaultValues[$(this).attr('id')]);
-                    }
-                });
-            }
-
             $('.delete-rule').each(function(){
                 $(this).click(function(){
                     $('.input-elm').each(function(){
@@ -391,9 +365,11 @@ if (api_is_platform_admin()) {
 }
 
 if ($list_type == 'complete') {
-    echo '<a href="'.api_get_self().'?list_type=simple">'.Display::return_icon('view_remove.png', get_lang('Simple'), '', ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="'.api_get_self().'?list_type=simple">'.
+        Display::return_icon('view_remove.png', get_lang('Simple'), '', ICON_SIZE_MEDIUM).'</a>';
 } else {
-    echo '<a href="'.api_get_self().'?list_type=complete">'.Display::return_icon('view_text.png', get_lang('Complete'), '', ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="'.api_get_self().'?list_type=complete">'.
+        Display::return_icon('view_text.png', get_lang('Complete'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 
 echo $actions;

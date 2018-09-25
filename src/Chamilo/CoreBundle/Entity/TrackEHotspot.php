@@ -25,63 +25,63 @@ class TrackEHotspot
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $hotspotId;
+    protected $hotspotId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="hotspot_user_id", type="integer", nullable=false)
      */
-    private $hotspotUserId;
+    protected $hotspotUserId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="hotspot_course_code", type="string", length=50, nullable=false)
      */
-    private $hotspotCourseCode;
+    protected $hotspotCourseCode;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer", nullable=true)
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="hotspot_exe_id", type="integer", nullable=false)
      */
-    private $hotspotExeId;
+    protected $hotspotExeId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="hotspot_question_id", type="integer", nullable=false)
      */
-    private $hotspotQuestionId;
+    protected $hotspotQuestionId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="hotspot_answer_id", type="integer", nullable=false)
      */
-    private $hotspotAnswerId;
+    protected $hotspotAnswerId;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="hotspot_correct", type="boolean", nullable=false)
      */
-    private $hotspotCorrect;
+    protected $hotspotCorrect;
 
     /**
      * @var string
      *
      * @ORM\Column(name="hotspot_coordinate", type="text", nullable=false)
      */
-    private $hotspotCoordinate;
+    protected $hotspotCoordinate;
 
     /**
      * Set hotspotUserId.

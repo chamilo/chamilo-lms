@@ -5,7 +5,10 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\SkillBundle\Entity\Profile;
+use Chamilo\SkillBundle\Entity\SkillRelCourse;
+use Chamilo\SkillBundle\Entity\SkillRelItem;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,69 +34,81 @@ class Skill
     protected $issuedSkills;
 
     /**
+     * // uncomment if api_get_configuration_value('allow_skill_rel_items')
+     * ORM\OneToMany(targetEntity="Chamilo\SkillBundle\Entity\SkillRelItem", mappedBy="skill", cascade={"persist"}).
+     */
+    protected $items;
+
+    /**
+     * // uncomment if api_get_configuration_value('allow_skill_rel_items')
+     * ORM\OneToMany(targetEntity="Chamilo\SkillBundle\Entity\SkillRelCourse", mappedBy="skill", cascade={"persist"}).
+     */
+    protected $courses;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="short_code", type="string", length=100, nullable=false)
      */
-    private $shortCode;
+    protected $shortCode;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=false)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var int
      *
      * @ORM\Column(name="access_url_id", type="integer", nullable=false)
      */
-    private $accessUrlId;
+    protected $accessUrlId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="icon", type="string", length=255, nullable=false)
      */
-    private $icon;
+    protected $icon;
 
     /**
      * @var string
      *
      * @ORM\Column(name="criteria", type="text", nullable=true)
      */
-    private $criteria;
+    protected $criteria;
 
     /**
      * @var int
      *
      * @ORM\Column(name="status", type="integer", nullable=false, options={"default": 1})
      */
-    private $status;
+    protected $status;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="updated_at", type="datetime", nullable=false)
      */
-    private $updatedAt;
+    protected $updatedAt;
 
     /**
      * @return string
@@ -240,30 +255,6 @@ class Skill
     }
 
     /**
-     * Get the icon (badge image) URL.
-     *
-     * @param bool $getSmall Optional. Allow get the small image
-     *
-     * @return string
-     */
-    public function getWebIconPath($getSmall = false)
-    {
-        if ($getSmall) {
-            if (empty($this->icon)) {
-                return \Display::return_icon('badges-default.png', null, null, ICON_SIZE_BIG, null, true);
-            }
-
-            return api_get_path(WEB_UPLOAD_PATH).'badges/'.sha1($this->name).'-small.png';
-        }
-
-        if (empty($this->icon)) {
-            return \Display::return_icon('badges-default.png', null, null, ICON_SIZE_HUGE, null, true);
-        }
-
-        return api_get_path(WEB_UPLOAD_PATH)."badges/{$this->icon}";
-    }
-
-    /**
      * Set criteria.
      *
      * @param string $criteria
@@ -373,5 +364,119 @@ class Skill
     public function getIssuedSkills()
     {
         return $this->issuedSkills;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getItems()
+    {
+        return $this->items;
+    }
+
+    /**
+     * @param ArrayCollection $items
+     *
+     * @return Skill
+     */
+    public function setItems($items)
+    {
+        $this->items = $items;
+
+        return $this;
+    }
+
+    /**
+     * @param int $itemId
+     *
+     * @return bool
+     */
+    public function hasItem($typeId, $itemId)
+    {
+        if ($this->getItems()->count()) {
+            $found = false;
+            /** @var SkillRelItem $item */
+            foreach ($this->getItems() as $item) {
+                if ($item->getItemId() == $itemId && $item->getItemType() == $typeId) {
+                    $found = true;
+                    break;
+                }
+            }
+
+            return $found;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param SkillRelItem $skillRelItem
+     */
+    public function addItem(SkillRelItem $skillRelItem)
+    {
+        $skillRelItem->setSkill($this);
+        $this->items[] = $skillRelItem;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getCourses()
+    {
+        return $this->courses;
+    }
+
+    /**
+     * @param ArrayCollection $courses
+     *
+     * @return Skill
+     */
+    public function setCourses($courses)
+    {
+        $this->courses = $courses;
+
+        return $this;
+    }
+
+    /**
+     * @param SkillRelCourse $searchItem
+     *
+     * @return bool
+     */
+    public function hasCourseAndSession(SkillRelCourse $searchItem)
+    {
+        if ($this->getCourses()->count()) {
+            $found = false;
+            /** @var SkillRelCourse $item */
+            foreach ($this->getCourses() as $item) {
+                $sessionPassFilter = false;
+                $session = $item->getSession();
+                $sessionId = !empty($session) ? $session->getId() : 0;
+                $searchSessionId = !empty($searchItem->getSession()) ? $searchItem->getSession()->getId() : 0;
+
+                if ($sessionId === $searchSessionId) {
+                    $sessionPassFilter = true;
+                }
+                if ($item->getCourse()->getId() == $searchItem->getCourse()->getId() &&
+                    $sessionPassFilter
+                ) {
+                    $found = true;
+                    break;
+                }
+            }
+
+            return $found;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param SkillRelCourse $item
+     */
+    public function addToCourse(SkillRelCourse $item)
+    {
+        $item->setSkill($this);
+        $this->courses[] = $item;
     }
 }

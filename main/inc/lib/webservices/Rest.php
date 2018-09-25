@@ -220,7 +220,7 @@ class Rest extends WebService
                 'title' => $course->getTitle(),
                 'code' => $course->getCode(),
                 'directory' => $course->getDirectory(),
-                'urlPicture' => $course->getPicturePath(true),
+                'urlPicture' => CourseManager::getPicturePath($course, true),
                 'teachers' => $teachers,
             ];
         }
@@ -247,7 +247,7 @@ class Rest extends WebService
             'title' => $this->course->getTitle(),
             'code' => $this->course->getCode(),
             'directory' => $this->course->getDirectory(),
-            'urlPicture' => $this->course->getPicturePath(true),
+            'urlPicture' => CourseManager::getPicturePath($this->course, true),
             'teachers' => $teachers,
             'tools' => array_map(
                 function ($tool) {
@@ -341,16 +341,16 @@ class Rest extends WebService
                     'title' => $document['title'],
                     'path' => $document['path'],
                     'url' => $webPath.http_build_query([
-                            'username' => $this->user->getUsername(),
-                            'api_key' => $this->apiKey,
-                            'cidReq' => $this->course->getCode(),
-                            'id_session' => $sessionId,
-                            'gidReq' => 0,
-                            'gradebook' => 0,
-                            'origin' => '',
-                            'action' => 'download',
-                            'id' => $document['id'],
-                        ]),
+                        'username' => $this->user->getUsername(),
+                        'api_key' => $this->apiKey,
+                        'cidReq' => $this->course->getCode(),
+                        'id_session' => $sessionId,
+                        'gidReq' => 0,
+                        'gradebook' => 0,
+                        'origin' => '',
+                        'action' => 'download',
+                        'id' => $document['id'],
+                    ]),
                     'icon' => $icon,
                     'size' => format_file_size($document['size']),
                 ];
@@ -792,13 +792,13 @@ class Rest extends WebService
                     'title' => Security::remove_XSS($lpDetails['lp_name']),
                     'progress' => intval($progress),
                     'url' => api_get_path(WEB_CODE_PATH).'webservices/api/v2.php?'.http_build_query([
-                            'hash' => $this->encodeParams([
-                                'action' => 'course_learnpath',
-                                'lp_id' => $lpId,
-                                'course' => $this->course->getId(),
-                                'session' => $sessionId,
-                            ]),
+                        'hash' => $this->encodeParams([
+                            'action' => 'course_learnpath',
+                            'lp_id' => $lpId,
+                            'course' => $this->course->getId(),
+                            'session' => $sessionId,
                         ]),
+                    ]),
                 ];
             }
 
@@ -844,15 +844,15 @@ class Rest extends WebService
         Login::init_user($this->user->getId(), true);
 
         $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.http_build_query([
-                'cidReq' => $this->course->getCode(),
-                'id_session' => $sessionId,
-                'gidReq' => 0,
-                'gradebook' => 0,
-                'origin' => '',
-                'action' => 'view',
-                'lp_id' => intval($lpId),
-                'isStudentView' => 'true',
-            ]);
+            'cidReq' => $this->course->getCode(),
+            'id_session' => $sessionId,
+            'gidReq' => 0,
+            'gradebook' => 0,
+            'origin' => '',
+            'action' => 'view',
+            'lp_id' => intval($lpId),
+            'isStudentView' => 'true',
+        ]);
 
         header("Location: $url");
         exit;
@@ -955,8 +955,7 @@ class Rest extends WebService
      */
     public function getMessageUsers($search)
     {
-        /** @var UserRepository $repo */
-        $repo = Database::getManager()->getRepository('ChamiloUserBundle:User');
+        $repo = UserManager::getRepository();
 
         $users = $repo->findUsersToSendMessage($this->user->getId(), $search);
 
@@ -1160,8 +1159,6 @@ class Rest extends WebService
         $results = [];
         $orig_user_id_value = [];
         $userManager = UserManager::getManager();
-        $userRepository = UserManager::getRepository();
-
         $firstName = $user_param['firstname'];
         $lastName = $user_param['lastname'];
         $status = $user_param['status'];

@@ -53,14 +53,14 @@ class ch_yesno extends survey_question
     public function render(FormValidator $form, $questionData = [], $answers = null)
     {
         if (is_array($questionData['options'])) {
+            $class = 'radio-inline';
+            $labelClass = 'radio-inline';
             if ($questionData['display'] == 'vertical') {
-                $class = 'radio';
-            } else {
-                $class = 'radio-inline';
+                $class = 'radio-vertical';
             }
 
             $name = 'question'.$questionData['question_id'];
-            $radioAttributes = ['radio-class' => $class, 'label-class' => $class];
+            $radioAttributes = ['radio-class' => $class, 'label-class' => $labelClass];
 
             if (!empty($questionData['is_required'])) {
                 $radioAttributes['required'] = 'required';

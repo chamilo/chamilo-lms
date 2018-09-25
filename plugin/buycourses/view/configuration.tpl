@@ -52,7 +52,9 @@
                                      title="{{ 'CourseVisibilityHidden'|get_lang }}">
                             {% endif %}
 
-                            <a href="{{ _p.web_course ~ item.course_code ~ '/index.php' }}">{{ item.course_title }}</a>
+                            <a href="{{ _p.web_course ~ item.course_directory ~ '/index.php' }}">
+                                {{ item.course_title }}
+                            </a>
                             <span class="label label-info">{{ item.course_visual_code }}</span>
                         </td>
                         <td class="text-center">

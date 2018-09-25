@@ -1,5 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Entity\BranchSync;
+use Chamilo\CoreBundle\Entity\Repository\BranchSyncRepository;
+
 /**
  * Responses to AJAX calls.
  */
@@ -109,10 +113,8 @@ function version_check()
  * Check if the current installation is up to date
  * The code is borrowed from phpBB and slighlty modified.
  *
- * @author The phpBB Group <support@phpbb.com> (the code)
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University (the modifications)
- * @author Yannick Warnier <ywarnier@beeznest.org> for the move to HTTP request
- * @copyright (C) 2001 The phpBB Group
+ * @throws \Exception
+ * @throws \InvalidArgumentException
  *
  * @return string language string with some layout (color)
  */
@@ -156,10 +158,20 @@ function check_system_version()
         );
 
         // The number of sessions
-        $number_of_sessions = Statistics::countSessions();
+        $number_of_sessions = SessionManager::count_sessions(api_get_current_access_url_id());
         $packager = api_get_configuration_value('packager');
         if (empty($packager)) {
             $packager = 'chamilo';
+        }
+
+        $uniqueId = '';
+        $entityManager = Database::getManager();
+        /** @var BranchSyncRepository $branch */
+        $repository = $entityManager->getRepository('ChamiloCoreBundle:BranchSync');
+        /** @var BranchSync $branch */
+        $branch = $repository->getTopBranch();
+        if (is_a($branch, '\Chamilo\CoreBundle\Entity\BranchSync')) {
+            $uniqueId = $branch->getUniqueId();
         }
 
         $data = [
@@ -183,6 +195,7 @@ function check_system_version()
             // the default config file (main/install/configuration.dist.php)
             // or in the installed config file. The default value is 'chamilo'
             'packager' => $packager,
+            'unique_id' => $uniqueId,
         ];
 
         $version = null;

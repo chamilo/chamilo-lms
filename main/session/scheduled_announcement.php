@@ -100,6 +100,10 @@ switch ($action) {
             $res = $object->save($values);
 
             if ($res) {
+                $extraFieldValue = new ExtraFieldValue('scheduled_announcement');
+                $values['item_id'] = $res;
+                $extraFieldValue->saveFieldValues($values);
+
                 Display::addFlash(
                     Display::return_message(
                         get_lang('ItemAdded'),
@@ -122,8 +126,8 @@ switch ($action) {
         break;
     case 'edit':
         // Action handling: Editing
-        $url = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.intval($_GET['id']).'&session_id='.$sessionId;
-        $form = $object->returnSimpleForm($url, 'edit', $sessionInfo);
+        $url = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.$id.'&session_id='.$sessionId;
+        $form = $object->returnSimpleForm($id, $url, 'edit', $sessionInfo);
         if ($form->validate()) {
             $values = $form->getSubmitValues();
             $values['id'] = $id;
@@ -131,10 +135,16 @@ switch ($action) {
             $values['date'] = api_get_utc_datetime($values['date']);
             $res = $object->update($values);
 
+            $extraFieldValue = new ExtraFieldValue('scheduled_announcement');
+            $values['item_id'] = $id;
+            $extraFieldValue->saveFieldValues($values);
+
             Display::addFlash(Display::return_message(
                 get_lang('Updated'),
                 'confirmation'
             ));
+            header("Location: $url");
+            exit;
         }
         $item = $object->get($id);
         $item['date'] = api_get_local_time($item['date']);
@@ -142,7 +152,7 @@ switch ($action) {
         $content = $form->returnForm();
         break;
     case 'delete':
-        $object->delete($_GET['id']);
+        $object->delete($id);
         $content = $object->getGrid($sessionId);
         break;
     default:

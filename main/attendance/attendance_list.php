@@ -19,7 +19,7 @@ if (api_is_allowed_to_edit(null, true)) {
     echo '</div>';
 }
 $attendance = new Attendance();
-if ($attendance->get_number_of_attendances() == 0) {
+if ($attendance->getNumberOfAttendances() == 0) {
     $attendance->set_name(get_lang('Attendances'));
     $attendance->set_description(get_lang('Attendances'));
     $attendance->attendance_add();
@@ -28,7 +28,7 @@ $default_column = isset($default_column) ? $default_column : null;
 $parameters = isset($parameters) ? $parameters : null;
 $table = new SortableTable(
     'attendance_list',
-    ['Attendance', 'get_number_of_attendances'],
+    ['Attendance', 'getNumberOfAttendances'],
     ['Attendance', 'get_attendance_data'],
     $default_column
 );

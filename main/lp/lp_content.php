@@ -27,8 +27,8 @@ if (empty($lp_controller_touched)) {
 /** @var learnpath $learnPath */
 $learnPath = Session::read('oLP');
 $learnPath->error = '';
-$lp_type = $learnPath->get_type();
-$lp_item_id = $learnPath->get_current_item_id();
+$lpType = $learnPath->get_type();
+$lpItemId = $learnPath->get_current_item_id();
 
 /**
  * Get a link to the corresponding document.
@@ -36,15 +36,15 @@ $lp_item_id = $learnPath->get_current_item_id();
 $src = '';
 if ($debug > 0) {
     error_log('New lp - In lp_content.php - Looking for file url');
-    error_log("lp_type $lp_type");
-    error_log("lp_item_id $lp_item_id");
+    error_log("lp_type $lpType");
+    error_log("lp_item_id $lpItemId");
 }
 
 $list = $learnPath->get_toc();
 $dir = false;
 
 foreach ($list as $toc) {
-    if ($toc['id'] == $lp_item_id && $toc['type'] == 'dir') {
+    if ($toc['id'] == $lpItemId && $toc['type'] == 'dir') {
         $dir = true;
     }
 }
@@ -52,38 +52,35 @@ foreach ($list as $toc) {
 if ($dir) {
     $src = 'blank.php';
 } else {
-    switch ($lp_type) {
+    switch ($lpType) {
         case 1:
             $learnPath->stop_previous_item();
-            $prereq_check = $learnPath->prerequisites_match($lp_item_id);
-
-            if ($prereq_check === true) {
-                $src = $learnPath->get_link('http', $lp_item_id);
+            $prerequisiteCheck = $learnPath->prerequisites_match($lpItemId);
+            if ($prerequisiteCheck === true) {
+                $src = $learnPath->get_link('http', $lpItemId);
                 $learnPath->start_current_item(); // starts time counter manually if asset
                 $src = $learnPath->fixBlockedLinks($src);
-
                 break;
             }
-
-            $src = 'blank.php?error=prerequisites';
+            $src = 'blank.php?error=prerequisites&prerequisite_message='.$learnPath->error;
             break;
         case 2:
             $learnPath->stop_previous_item();
-            $prereq_check = $learnPath->prerequisites_match($lp_item_id);
+            $prerequisiteCheck = $learnPath->prerequisites_match($lpItemId);
 
-            if ($prereq_check === true) {
-                $src = $learnPath->get_link('http', $lp_item_id);
+            if ($prerequisiteCheck === true) {
+                $src = $learnPath->get_link('http', $lpItemId);
                 $learnPath->start_current_item(); // starts time counter manually if asset
             } else {
-                $src = 'blank.php?error=prerequisites';
+                $src = 'blank.php?error=prerequisites&prerequisite_message='.$learnPath->error;
             }
             break;
         case 3:
             // save old if asset
             $learnPath->stop_previous_item(); // save status manually if asset
-            $prereq_check = $learnPath->prerequisites_match($lp_item_id);
-            if ($prereq_check === true) {
-                $src = $learnPath->get_link('http', $lp_item_id);
+            $prerequisiteCheck = $learnPath->prerequisites_match($lpItemId);
+            if ($prerequisiteCheck === true) {
+                $src = $learnPath->get_link('http', $lpItemId);
                 $learnPath->start_current_item(); // starts time counter manually if asset
             } else {
                 $src = 'blank.php';
@@ -97,7 +94,7 @@ if ($dir) {
 if ($debug > 0) {
     error_log('New lp - In lp_content.php - File url is '.$src);
 }
-$learnPath->set_previous_item($lp_item_id);
+$learnPath->set_previous_item($lpItemId);
 
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [

@@ -82,7 +82,7 @@ if ($session) {
             $usersInfo[$user->getId()][$course->getId().'_score'] = Tracking::get_avg_student_score(
                 $user->getId(),
                 $course->getCode(),
-                null,
+                [],
                 $session->getId(),
                 false,
                 false,
@@ -91,7 +91,7 @@ if ($session) {
             $usersInfo[$user->getId()][$course->getId().'_progress'] = Tracking::get_avg_student_progress(
                 $user->getId(),
                 $course->getCode(),
-                null,
+                [],
                 $session->getId()
             );
 

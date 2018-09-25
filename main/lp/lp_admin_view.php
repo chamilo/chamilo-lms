@@ -33,6 +33,7 @@ $_course = api_get_course_info();
 if ((!$is_allowed_to_edit) || ($isStudentView)) {
     error_log('New LP - User not authorized in lp_admin_view.php');
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
+    exit;
 }
 
 if (api_is_in_gradebook()) {
@@ -61,6 +62,7 @@ if (isset($_REQUEST['updateaudio'])) {
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('BasicOverview')];
 }
 
+$htmlHeadXtra[] = '<script>'.$learnPath->get_js_dropdown_array().'</script>';
 // Theme calls.
 $show_learn_path = true;
 $lp_theme_css = $learnPath->get_theme();

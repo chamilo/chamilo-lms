@@ -53,8 +53,7 @@ function get_tabs($courseId = null)
     $navigation['mycourses']['icon'] = 'my-course.png';
 
     // My Profile
-    $navigation['myprofile']['url'] = api_get_path(WEB_CODE_PATH)
-        .'auth/profile.php'
+    $navigation['myprofile']['url'] = api_get_path(WEB_CODE_PATH).'auth/profile.php'
         .(!empty($courseInfo['path']) ? '?coursePath='.$courseInfo['path'].'&amp;courseCode='.$courseInfo['official_code'] : '');
     $navigation['myprofile']['title'] = get_lang('ModifyProfile');
     $navigation['myprofile']['key'] = 'profile';
@@ -156,16 +155,16 @@ function get_tabs($courseId = null)
  */
 function getCustomTabs()
 {
+    $urlId = api_get_current_access_url_id();
     $tableSettingsCurrent = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $sql = "SELECT * FROM $tableSettingsCurrent
             WHERE 
                 variable = 'show_tabs' AND
-                subkey like 'custom_tab_%'";
+                subkey LIKE 'custom_tab_%' AND access_url = $urlId ";
     $result = Database::query($sql);
     $customTabs = [];
     while ($row = Database::fetch_assoc($result)) {
         $shouldAdd = true;
-
         if (strpos($row['subkey'], Plugin::TAB_FILTER_NO_STUDENT) !== false && api_is_student()) {
             $shouldAdd = false;
         } elseif (strpos($row['subkey'], Plugin::TAB_FILTER_ONLY_STUDENT) !== false && !api_is_student()) {
@@ -202,6 +201,26 @@ function return_logo($theme = '')
 }
 
 /**
+ * Check if user have access to "who is online" page.
+ *
+ * @return bool
+ */
+function accessToWhoIsOnline()
+{
+    $user_id = api_get_user_id();
+    $course_id = api_get_course_int_id();
+    $access = false;
+    if ((api_get_setting('showonline', 'world') == 'true' && !$user_id) ||
+        (api_get_setting('showonline', 'users') == 'true' && $user_id) ||
+        (api_get_setting('showonline', 'course') == 'true' && $user_id && $course_id)
+    ) {
+        $access = true;
+    }
+
+    return $access;
+}
+
+/**
  * Return HTML string of a list as <li> items.
  *
  * @return string
@@ -209,19 +228,11 @@ function return_logo($theme = '')
 function returnNotificationMenu()
 {
     $courseInfo = api_get_course_info();
-    $course_id = 0;
-    if (!empty($courseInfo)) {
-        $course_id = $courseInfo['code'];
-    }
-
     $user_id = api_get_user_id();
     $sessionId = api_get_session_id();
     $html = '';
 
-    if ((api_get_setting('showonline', 'world') == 'true' && !$user_id) ||
-        (api_get_setting('showonline', 'users') == 'true' && $user_id) ||
-        (api_get_setting('showonline', 'course') == 'true' && $user_id && $course_id)
-    ) {
+    if (accessToWhoIsOnline()) {
         $number = getOnlineUsersCount();
         $number_online_in_course = getOnlineUsersInCourseCount($user_id, $courseInfo);
 
@@ -230,7 +241,7 @@ function returnNotificationMenu()
             (api_get_setting('showonline', 'world') == 'true' && !$user_id) ||
             (api_get_setting('showonline', 'users') == 'true' && $user_id)
         ) {
-            $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_self" title="'
+            $html .= '<li class="user-online"><a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_self" title="'
                 .get_lang('UsersOnline').'" >'
                 .Display::return_icon('user.png', get_lang('UsersOnline'), [], ICON_SIZE_TINY)
                 .' '.$number.'</a></li>';
@@ -243,19 +254,23 @@ function returnNotificationMenu()
                 api_get_setting('showonline', 'course') == 'true' && isset($courseInfo['sysCode'])
             )
         ) {
-            $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$courseInfo['sysCode']
+            $html .= '<li class="user-online-course"><a href="'.api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$courseInfo['sysCode']
                 .'" target="_self">'
                 .Display::return_icon('course.png', get_lang('UsersOnline').' '.get_lang('InThisCourse'), [], ICON_SIZE_TINY)
                 .' '.$number_online_in_course.' </a></li>';
         }
 
-        if (isset($user_id) && $sessionId != 0) {
-            $numberOnlineInSession = getOnlineUsersInSessionCount($sessionId);
-
-            $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$user_id.'" target="_self">'
-                .Display::return_icon('session.png', get_lang('UsersConnectedToMySessions'), [], ICON_SIZE_TINY)
-                .' '.$numberOnlineInSession
-                .'</a></li>';
+        if (!empty($sessionId)) {
+            $allow = api_is_platform_admin(true) ||
+                api_is_coach($sessionId, null, false) ||
+                SessionManager::isUserSubscribedAsStudent($sessionId, api_get_user_id());
+            if ($allow) {
+                $numberOnlineInSession = getOnlineUsersInSessionCount($sessionId);
+                $html .= '<li class="user-online-session">
+                            <a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php" target="_self">'
+                            .Display::return_icon('session.png', get_lang('UsersConnectedToMySessions'), [], ICON_SIZE_TINY)
+                            .' '.$numberOnlineInSession.'</a></li>';
+            }
         }
     }
 
@@ -358,7 +373,6 @@ function return_navigation_array()
             if (!empty($result) && $result['selected_value'] === 'installed') {
                 // Students
                 $url = api_get_path(WEB_PLUGIN_PATH).'studentfollowup/posts.php';
-
                 if (api_is_platform_admin() || api_is_drh() || api_is_teacher()) {
                     $url = api_get_path(WEB_PLUGIN_PATH).'studentfollowup/my_students.php';
                 }
@@ -380,19 +394,16 @@ function return_navigation_array()
 
         // Custom tabs
         $customTabs = getCustomTabs();
-
         if (!empty($customTabs)) {
             foreach ($customTabs as $tab) {
                 if (api_get_setting($tab['variable'], $tab['subkey']) == 'true' &&
                     isset($possible_tabs[$tab['subkey']])
                 ) {
-                    $possible_tabs[$tab['subkey']]['url'] = api_get_path(WEB_PATH)
-                        .$possible_tabs[$tab['subkey']]['url'];
+                    $possible_tabs[$tab['subkey']]['url'] = api_get_path(WEB_PATH).$possible_tabs[$tab['subkey']]['url'];
                     $navigation[$tab['subkey']] = $possible_tabs[$tab['subkey']];
                 } else {
                     if (isset($possible_tabs[$tab['subkey']])) {
-                        $possible_tabs[$tab['subkey']]['url'] = api_get_path(WEB_PATH)
-                            .$possible_tabs[$tab['subkey']]['url'];
+                        $possible_tabs[$tab['subkey']]['url'] = api_get_path(WEB_PATH).$possible_tabs[$tab['subkey']]['url'];
                         $menu_navigation[$tab['subkey']] = $possible_tabs[$tab['subkey']];
                     }
                 }
@@ -434,7 +445,6 @@ function return_navigation_array()
 function menuArray()
 {
     $mainNavigation = return_navigation_array();
-
     unset($mainNavigation['possible_tabs']);
     unset($mainNavigation['menu_navigation']);
     //$navigation = $navigation['navigation'];
@@ -506,11 +516,7 @@ function menuArray()
         );
     }
     if (!empty($open) || !empty($openMenuTabsLoggedIn)) {
-        if (strpos($open.$openMenuTabsLoggedIn, 'show_menu') === false) {
-            if (api_is_anonymous()) {
-                $mainNavigation['navigation'][SECTION_CAMPUS] = null;
-            }
-        } else {
+        if (strpos($open.$openMenuTabsLoggedIn, 'show_menu') !== false) {
             $list = explode("\n", api_get_user_id() && !api_is_anonymous() ? $openMenuTabsLoggedIn : $open);
 
             foreach ($list as $link) {
@@ -821,7 +827,8 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
             }
         }
 
-        if (!empty($lis)) {
+	if (!empty($lis)) {
+            //Ofaj
             $html .= Display::tag('ul', get_lang('YouAreHere').': '.$lis, ['class' => 'breadcrumb']);
         }
     }

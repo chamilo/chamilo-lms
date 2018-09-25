@@ -490,7 +490,114 @@ table.lp_overview img {
     right: 5px;
     top: 84px;
 }
+#learning_path_toc .panel-collapse .list{
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+#learning_path_toc .panel-default{
+    background-color:#f5f5f5;
+    margin-top: 0;
+    border-radius: 0;
+}
+.scorm-title{
+    display: none;
+}
+#learning_path_toc .higher{
+    border-bottom: 1px solid #84bd00;
+}
+#learning_path_toc .panel-heading h4{
+    font-weight: bold;
+}
+#learning_path_toc .panel-heading{
+    background: url('images/arrow-right.png') no-repeat 10px center #e1e1e1;
+    padding-left: 30px;
+}
+#learning_path_toc .panel-parent .panel-heading{
+    background: url('images/arrow-right.png') no-repeat 20px center #e1e1e1;
+    padding-left: 40px;
+}
+#learning_path_toc .panel-heading.active{
+    background: url('images/arrow-down.png') no-repeat 10px center #e1e1e1;
+    padding-left: 30px;
+}
+#learning_path_toc .panel-parent .panel-heading.active{
+    background: url('images/arrow-down.png') no-repeat 20px center #e1e1e1;
+    padding-left: 40px;
+}
+.scorm-collapse .panel-collapse .list li{
+    padding-left: 20px;
+}
+.scorm_item_normal .sub-item a:last-child{
+    display: inline-block;
+    width: 100%;
+    padding-right: 20px;
+}
+.scorm_item_normal.scorm_highlight .sub-item.item-quiz a{
+    background: url("images/pencil-active.png") no-repeat right center;
+}
+.scorm_item_normal .sub-item.item-quiz a{
+    background: url("images/pencil.png") no-repeat right center;
+}
+.scorm_item_normal.scorm_highlight .sub-item.item-document a{
+    background: url("images/document-active.png") no-repeat right center;
+}
+.scorm_item_normal .sub-item.item-document a{
+    background: url("images/document.png") no-repeat right center;
+}
+.scorm_item_normal .sub-item{
+    font-size: 12px;
+}
+.scorm_item_normal.scorm_not_attempted .sub-item{
+    background: url("images/not-completed.png") no-repeat;
+    padding-left: 25px;
+}
+.panel-parent .scorm_item_normal.scorm_not_attempted .sub-item{
+    background: url("images/not-completed.png") no-repeat 20px 0;
+    padding-left: 45px;
+}
+.scorm_item_normal.scorm_highlight .sub-item{
+    background: url("images/not-completed-active.png") no-repeat;
+    padding-left: 25px;
+}
+.panel-parent .scorm_item_normal.scorm_highlight .sub-item{
+    background: url("images/not-completed-active.png") no-repeat 20px 0;
+    padding-left: 45px;
+}
+.scorm_item_normal.scorm_completed .sub-item {
+    background: url("images/completed.png") no-repeat;
+    padding-left: 25px;
+}
+.panel-parent .scorm_item_normal.scorm_completed .sub-item {
+    background: url("images/completed.png") no-repeat 20px 0;
+    padding-left: 45px;
+}
+.scorm_item_normal.scorm_highlight.scorm_completed .sub-item {
+    background: url("images/completed-active.png") no-repeat;
+    padding-left: 25px;
+}
+.panel-parent .scorm_item_normal.scorm_highlight.scorm_completed .sub-item {
+    background: url("images/completed-active.png") no-repeat 20px 0;
+    padding-left: 45px;
+}
 
+.attempts .attempts-status{
+    display: inline-block;
+    margin: 0;
+    padding: 10px 0;
+    list-style: none;
+    color: #162A83;
+}
+.attempts .details{
+    color: #162A83;
+    font-size: 11px;
+}
+.attempts .attempts-status li{
+    display: inline-block;
+}
+.mejs__container{
+    background: transparent;
+}
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) {
     #learning_path_right_zone .lp-view-tabs .tab-content {

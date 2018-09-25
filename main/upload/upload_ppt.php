@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 /**
@@ -12,16 +13,14 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
-$htmlHeadXtra[] = '<script language="javascript" src="../inc/lib/javascript/upload.js" type="text/javascript"></script>';
-$htmlHeadXtra[] = '<script type="text/javascript">
-	var myUpload = new upload(0);
-</script>';
-
 if (isset($_POST['convert'])) {
     $cwdir = getcwd();
     if (isset($_FILES['user_file'])) {
         $allowed_extensions = ['odp', 'sxi', 'ppt', 'pps', 'sxd', 'pptx'];
-        if (in_array(strtolower(pathinfo($_FILES['user_file']['name'], PATHINFO_EXTENSION)), $allowed_extensions)) {
+        if (in_array(
+            strtolower(pathinfo($_FILES['user_file']['name'], PATHINFO_EXTENSION)),
+            $allowed_extensions
+        )) {
             require_once api_get_path(SYS_CODE_PATH).'lp/lp_upload.php';
             if (isset($o_ppt) && $first_item_id != 0) {
                 if (api_get_setting('search_enabled') == 'true') {
@@ -33,7 +32,13 @@ if (isset($_POST['convert'])) {
                             foreach ($values as $value) {
                                 $value = trim($value);
                                 if (!empty($value)) {
-                                    add_specific_field_value($specific_field['id'], api_get_course_id(), TOOL_LEARNPATH, $o_ppt->lp_id, $value);
+                                    add_specific_field_value(
+                                        $specific_field['id'],
+                                        api_get_course_id(),
+                                        TOOL_LEARNPATH,
+                                        $o_ppt->lp_id,
+                                        $value
+                                    );
                                 }
                             }
                         }

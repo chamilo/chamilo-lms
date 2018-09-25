@@ -14,12 +14,12 @@
  * goal of this DB is to get stats on the usage of language vars for a common
  * user. This class requires the SQLite extension of PHP to be installed. The
  * check for the availability of sqlite_open() should be made before calling
- * the constructor (preferrably).
+ * the constructor (preferably).
  */
 class langstats
 {
     public $db; //database connector
-    public $error; //errores almacenados
+    public $error; //stored errors
     public $db_type = 'sqlite';
 
     public function __construct($file = '')
@@ -97,7 +97,7 @@ class langstats
      * @param string The language term used
      * @param string The file from which the language term came from
      *
-     * @return bool true
+     * @return mixed
      */
     public function add_use($term, $term_file = '')
     {
@@ -114,6 +114,7 @@ class langstats
         while ($row = $ress->fetchArray(SQLITE3_BOTH)) {
             $num = $row[3];
             $num++;
+            $i++;
             $res = $this->db->query(
                 'UPDATE lang_freq SET term_count = '.$num.' WHERE id = '.$row[0]
             );
@@ -124,7 +125,6 @@ class langstats
             } else {
                 return $row[0];
             }
-            $i++;
         }
         if ($i == 0) {
             //No term found in the table, register as new term
@@ -139,6 +139,8 @@ class langstats
                 return $this->db->lastInsertRowID();
             }
         }
+
+        return true;
     }
 
     /**
@@ -164,13 +166,13 @@ class langstats
     /**
      * Clear all records in lang_freq.
      *
-     * @return bool true
+     * @return resource true
      */
     public function clear_all()
     {
         $res = sqlite_query($this->db, 'DELETE FROM lang_freq WHERE 1=1');
 
-        return $list;
+        return $res;
     }
 
     /**

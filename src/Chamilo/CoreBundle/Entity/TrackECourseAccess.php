@@ -28,56 +28,56 @@ class TrackECourseAccess
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $courseAccessId;
+    protected $courseAccessId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer", nullable=false)
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    private $userId;
+    protected $userId;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="login_course_date", type="datetime", nullable=false)
      */
-    private $loginCourseDate;
+    protected $loginCourseDate;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="logout_course_date", type="datetime", nullable=true)
      */
-    private $logoutCourseDate;
+    protected $logoutCourseDate;
 
     /**
      * @var int
      *
      * @ORM\Column(name="counter", type="integer", nullable=false)
      */
-    private $counter;
+    protected $counter;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="user_ip", type="string", length=39, nullable=false)
      */
-    private $userIp;
+    protected $userIp;
 
     /**
      * Set cId.

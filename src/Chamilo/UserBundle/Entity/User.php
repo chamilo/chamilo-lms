@@ -41,7 +41,7 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  *  }
  * )
  * @UniqueEntity("username")
- * @ORM\Entity(repositoryClass="Chamilo\UserBundle\Entity\Repository\UserRepository")
+ * @ORM\Entity(repositoryClass="Chamilo\UserBundle\Repository\UserRepository")
  */
 class User implements UserInterface //implements ParticipantInterface, ThemeUser
 {
@@ -272,9 +272,8 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
      */
     protected $curriculumItems;
 
-    /*
+    /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelUser", mappedBy="user")
-     *
      */
     protected $portals;
 
@@ -519,7 +518,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
      */
     public function getEncoderName()
     {
-        return "legacy_encoder";
+        return 'legacy_encoder';
     }
 
     /**
@@ -539,6 +538,30 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     }
 
     /**
+     * @param ArrayCollection $value
+     */
+    public function setDropBoxSentFiles($value)
+    {
+        $this->dropBoxSentFiles = $value;
+    }
+
+    /**
+     * @param ArrayCollection $value
+     */
+    public function setDropBoxReceivedFiles($value)
+    {
+        $this->dropBoxReceivedFiles = $value;
+    }
+
+    /**
+     * @param ArrayCollection $courses
+     */
+    public function setCourses($courses)
+    {
+        $this->courses = $courses;
+    }
+
+    /**
      * @return ArrayCollection
      */
     public function getCourses()
@@ -555,7 +578,8 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
             [
                 new Assert\Length(['min' => 5]),
                 // Alpha numeric + "_" or "-"
-                new Assert\Regex([
+                new Assert\Regex(
+                    [
                         'pattern' => '/^[a-z\-_0-9]+$/i',
                         'htmlPattern' => '/^[a-z\-_0-9]+$/i', ]
                 ),
@@ -565,7 +589,8 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
                     'htmlPattern' => '/[a-z]{3}/i')
                 ),*/
                 // Min 2 numbers
-                new Assert\Regex([
+                new Assert\Regex(
+                    [
                         'pattern' => '/[0-9]{2}/',
                         'htmlPattern' => '/[0-9]{2}/', ]
                 ),
@@ -643,6 +668,14 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     }
 
     /**
+     * @param $value
+     */
+    public function setPortals($value)
+    {
+        $this->portals = $value;
+    }
+
+    /**
      * @return ArrayCollection
      */
     public function getCurriculumItems()
@@ -652,10 +685,14 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
 
     /**
      * @param $items
+     *
+     * @return $this
      */
     public function setCurriculumItems($items)
     {
         $this->curriculumItems = $items;
+
+        return $this;
     }
 
     /**
@@ -712,6 +749,18 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     public function getSalt()
     {
         return $this->salt;
+    }
+
+    /**
+     * @param ArrayCollection $classes
+     *
+     * @return $this
+     */
+    public function setClasses($classes)
+    {
+        $this->classes = $classes;
+
+        return $this;
     }
 
     /**
@@ -1005,13 +1054,6 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     public function getPictureUri()
     {
         return $this->pictureUri;
-    }
-
-    public function getPictureLegacy()
-    {
-        $id = $this->id;
-
-        return 'users/'.substr((string) $id, 0, 1).'/'.$id.'/'.'small_'.$this->getPictureUri();
     }
 
     /**
@@ -1387,22 +1429,6 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     }
 
     /**
-     * @param string $imageName
-     */
-    public function setImageName($imageName)
-    {
-        $this->imageName = $imageName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getImageName()
-    {
-        return $this->imageName;
-    }
-
-    /**
      * @return string
      */
     public function getSlug()
@@ -1441,6 +1467,13 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
      */
     public function getLastLogin()
     {
+        // If not last_login has been registered in the user table
+        // (for users without login after version 1.10), get the last login
+        // from the track_e_login table
+        /*if (empty($this->lastLogin)) {
+            return $this->getExtendedLastLogin();
+        }*/
+
         return $this->lastLogin;
     }
 
@@ -1455,7 +1488,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     /**
      * {@inheritdoc}
      */
-    public function setExtraFields($extraFields)
+    public function setExtraFieldList($extraFields)
     {
         $this->extraFields = new ArrayCollection();
         foreach ($extraFields as $extraField) {
@@ -1463,6 +1496,11 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
         }
 
         return $this;
+    }
+
+    public function setExtraFields($extraFields)
+    {
+        $this->extraFields = $extraFields;
     }
 
     /**
@@ -1549,6 +1587,11 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     public function getSessionCourseSubscriptions()
     {
         return $this->sessionCourseSubscriptions;
+    }
+
+    public function setSessionCourseSubscriptions($value)
+    {
+        $this->sessionCourseSubscriptions = $value;
     }
 
     /**
@@ -2269,6 +2312,11 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
         return $this;
     }
 
+    /**
+     * @param bool $boolean
+     *
+     * @return $this|UserInterface
+     */
     public function setSuperAdmin($boolean)
     {
         if (true === $boolean) {
@@ -2322,6 +2370,9 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
         return $this->groups ?: $this->groups = new ArrayCollection();
     }
 
+    /**
+     * @return array
+     */
     public function getGroupNames()
     {
         $names = [];
@@ -2332,11 +2383,21 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
         return $names;
     }
 
+    /**
+     * @param string $name
+     *
+     * @return bool
+     */
     public function hasGroup($name)
     {
         return in_array($name, $this->getGroupNames());
     }
 
+    /**
+     * @param GroupInterface $group
+     *
+     * @return $this
+     */
     public function addGroup(GroupInterface $group)
     {
         if (!$this->getGroups()->contains($group)) {
@@ -2355,6 +2416,11 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
         return $this;
     }
 
+    /**
+     * @param string $role
+     *
+     * @return $this|UserInterface
+     */
     public function addRole($role)
     {
         $role = strtoupper($role);
@@ -2427,6 +2493,18 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     }
 
     /**
+     * @param $value
+     *
+     * @return $this
+     */
+    public function setAchievedSkills($value)
+    {
+        $this->achievedSkills = $value;
+
+        return $this;
+    }
+
+    /**
      * Check if the user has the skill.
      *
      * @param Skill $skill The skill
@@ -2477,6 +2555,40 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     }
 
     /**
+     * Get sessionAsGeneralCoach.
+     *
+     * @param ArrayCollection $value
+     *
+     * @return $this
+     */
+    public function setSessionAsGeneralCoach($value)
+    {
+        $this->sessionAsGeneralCoach = $value;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCommentedUserSkills()
+    {
+        return $this->commentedUserSkills;
+    }
+
+    /**
+     * @param mixed $commentedUserSkills
+     *
+     * @return User
+     */
+    public function setCommentedUserSkills($commentedUserSkills)
+    {
+        $this->commentedUserSkills = $commentedUserSkills;
+
+        return $this;
+    }
+
+    /**
      * Get the list of HRM who have assigned this user.
      *
      * @return array
@@ -2503,5 +2615,15 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
             ->getResult();
 
         return $hrmList;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPictureLegacy()
+    {
+        $id = $this->id;
+
+        return 'users/'.substr((string) $id, 0, 1).'/'.$id.'/'.'small_'.$this->getPictureUri();
     }
 }

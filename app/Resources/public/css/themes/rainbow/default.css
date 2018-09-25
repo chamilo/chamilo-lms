@@ -82,6 +82,21 @@ hr{
 #course-block .list-group .list-group-item{
     float: left;
 }
+#form-login .form-group{
+    display: none;
+}
+#login_block .nav-pills {
+    margin-bottom: 0;
+    padding-top: 0;
+    margin-top: 0;
+}
+#form-login label{
+    display:none;
+}
+#form-login .input-group{
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
 .title{
     position: static;
     font-size: 25px;
@@ -121,6 +136,18 @@ hr{
 }
 .title-green a:hover{
     color: #666;
+}
+.teachers{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: inline-block;
+}
+.teachers li{
+    display: inline-block;
+}
+.course-items-session img{
+    display: inline-block;
 }
 .list-faq{
     border: 1px solid #e5e5e5;
@@ -690,9 +717,9 @@ footer #footer_right{
     color: #FFFFFF;
 }
 .hotspot-image{
-    margin: auto;
-    border: 2px solid #e3e3e3;
-    padding: 10px;
+    /*margin: auto;*/
+    /*border: 2px solid #e3e3e3;*/
+    /*padding: 10px;*/
 }
 .sidebar-well .well{
     border-radius: 0;
@@ -1100,15 +1127,17 @@ ul.exercise-draggable-answer .touch-items:hover{
     background: none;
     border: none;
     border-radius: 0;
-    margin-bottom: 10px;
     min-height: 40px;
-
-    /* Extra */
     display: inline-block;
     width: 85%;
     margin-bottom: 0px;
 }
-
+.section-results .alert table{
+    width: 100% !important;
+}
+.question-result .page-header img{
+    display: none;
+}
 .question_options .droppable .gallery .exercise-draggable-answer-option{
     background: #FFF;
     border: 1px solid #162a83;
@@ -1156,12 +1185,12 @@ svg path{
     stroke-width: 2;
 }
 svg circle{
-    fill:rgb(255,255,255);
+    /*fill:rgb(255,255,255);
     stroke:rgb(132,189,0);
     stroke-width: 2;
     r: 10;
     cy:15;
-    cx:15;
+    cx:15;*/
 }
 .point_end ._jsPlumb_endpoint svg circle{
     fill:rgb(255,255,255);
@@ -1368,6 +1397,9 @@ svg circle{
     color: #70A42D;
     padding: 10px;
 }
+.exercise-overview .page-header img{
+    display: none;
+}
 .table.table-striped tr td .alert.alert-warning{
     border-top: none;
     padding-left: 0;
@@ -1405,7 +1437,6 @@ svg circle{
     display: block;
     font-style: normal;
     font-weight: normal;
-    line-height: 1;
     font-size-adjust: none;
     font-stretch: normal;
     font-feature-settings: normal;
@@ -1567,6 +1598,15 @@ blockquote p {
 }
 .session-teachers{
     display: none;
+}
+.section-mycourses #skillList .table thead tr th{
+    border-bottom: 2px solid #84bd00;
+}
+.section-mycourses #skillList .table-bordered tbody tr td{
+    border: 1px solid #84bd00;
+}
+.section-mycourses #skillList .table .thumbnail{
+    border: none;
 }
 /* Large desktop */
 @media (min-width: 1200px) {
@@ -2085,4 +2125,12 @@ blockquote p {
 
 .toolbar-cookie {
     bottom:90px;
+}
+
+.ofaj-search .form-group label {
+    font-weight: normal;
+}
+
+.panel-default .panel-heading a {
+    color: #666;
 }

@@ -420,7 +420,7 @@ if (api_is_allowed_to_edit(null, true) ||
     }
 } else {
     echo Display::page_header(get_lang('AttendanceSheetReport'));
-    // View for students ?>
+    // View for students?>
     <?php if (!empty($users_presence)) {
         ?>
         <div>

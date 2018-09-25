@@ -23,49 +23,49 @@ class TrackEHotpotatoes
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="exe_name", type="string", length=255, nullable=false)
      */
-    private $exeName;
+    protected $exeName;
 
     /**
      * @var int
      *
      * @ORM\Column(name="exe_user_id", type="integer", nullable=true)
      */
-    private $exeUserId;
+    protected $exeUserId;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="exe_date", type="datetime", nullable=false)
      */
-    private $exeDate;
+    protected $exeDate;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer", nullable=false)
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="exe_result", type="smallint", nullable=false)
      */
-    private $exeResult;
+    protected $exeResult;
 
     /**
      * @var int
      *
      * @ORM\Column(name="exe_weighting", type="smallint", nullable=false)
      */
-    private $exeWeighting;
+    protected $exeWeighting;
 
     /**
      * Set exeName.

@@ -27,77 +27,77 @@ class Message
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_sender_id", type="integer", nullable=false)
      */
-    private $userSenderId;
+    protected $userSenderId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_receiver_id", type="integer", nullable=false)
      */
-    private $userReceiverId;
+    protected $userReceiverId;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="msg_status", type="smallint", nullable=false)
      */
-    private $msgStatus;
+    protected $msgStatus;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="send_date", type="datetime", nullable=false)
      */
-    private $sendDate;
+    protected $sendDate;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      *
      * @ORM\Column(name="content", type="text", nullable=false)
      */
-    private $content;
+    protected $content;
 
     /**
      * @var int
      *
      * @ORM\Column(name="group_id", type="integer", nullable=false)
      */
-    private $groupId;
+    protected $groupId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="parent_id", type="integer", nullable=false)
      */
-    private $parentId;
+    protected $parentId;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="update_date", type="datetime", nullable=true)
      */
-    private $updateDate;
+    protected $updateDate;
 
     /**
      * @var int
      *
      * @ORM\Column(name="votes", type="integer", nullable=true)
      */
-    private $votes;
+    protected $votes;
 
     /**
      * Set userSenderId.

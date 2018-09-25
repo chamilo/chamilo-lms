@@ -18,49 +18,49 @@ class OpenidAssociation
      *
      * @ORM\Column(name="idp_endpoint_uri", type="text", nullable=false)
      */
-    private $idpEndpointUri;
+    protected $idpEndpointUri;
 
     /**
      * @var string
      *
      * @ORM\Column(name="session_type", type="string", length=30, nullable=false)
      */
-    private $sessionType;
+    protected $sessionType;
 
     /**
      * @var string
      *
      * @ORM\Column(name="assoc_handle", type="text", nullable=false)
      */
-    private $assocHandle;
+    protected $assocHandle;
 
     /**
      * @var string
      *
      * @ORM\Column(name="assoc_type", type="text", nullable=false)
      */
-    private $assocType;
+    protected $assocType;
 
     /**
      * @var int
      *
      * @ORM\Column(name="expires_in", type="bigint", nullable=false)
      */
-    private $expiresIn;
+    protected $expiresIn;
 
     /**
      * @var string
      *
      * @ORM\Column(name="mac_key", type="text", nullable=false)
      */
-    private $macKey;
+    protected $macKey;
 
     /**
      * @var int
      *
      * @ORM\Column(name="created", type="bigint", nullable=false)
      */
-    private $created;
+    protected $created;
 
     /**
      * @var int
@@ -69,7 +69,7 @@ class OpenidAssociation
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * Set idpEndpointUri.

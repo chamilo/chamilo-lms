@@ -9,7 +9,7 @@ use Skill as SkillManager;
 /**
  * Page for assign skills to a user.
  *
- * @autor: Jose Loguercio <jose.loguercio@beeznest.com>
+ * @author: Jose Loguercio <jose.loguercio@beeznest.com>
  *
  * @package chamilo.badge
  */

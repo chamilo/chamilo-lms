@@ -23,9 +23,13 @@ class ToolAdmin extends AbstractAdmin
         $formMapper
             ->add('name')
             ->add('description', 'ckeditor')
-            ->add('toolResourceRights', 'sonata_type_collection', [
+            ->add(
+                'toolResourceRights',
+                'sonata_type_collection',
+                [
                 'cascade_validation' => true,
-            ], [
+            ],
+                [
                     //'allow_delete' => true,
                     //'by_reference' => false,
                     'edit' => 'inline',

@@ -152,7 +152,8 @@ class Dropbox_Work
 
             $this->id = Database::insert(Database::get_course_table(TABLE_DROPBOX_FILE), $params);
             if ($this->id) {
-                $sql = "UPDATE ".Database::get_course_table(TABLE_DROPBOX_FILE)." SET id = iid WHERE iid = {$this->id}";
+                $sql = "UPDATE ".Database::get_course_table(TABLE_DROPBOX_FILE)." SET id = iid 
+                        WHERE iid = {$this->id}";
                 Database::query($sql);
             }
         }
@@ -402,7 +403,7 @@ class Dropbox_SentWork extends Dropbox_Work
         $this->recipients = [];
         $sql = "SELECT dest_user_id, feedback_date, feedback
                 FROM ".Database::get_course_table(TABLE_DROPBOX_POST)."
-                WHERE c_id = $course_id AND file_id = ".intval($id)."";
+                WHERE c_id = $course_id AND file_id = ".intval($id);
         $result = Database::query($sql);
         while ($res = Database::fetch_array($result, 'ASSOC')) {
             // Check for deleted users

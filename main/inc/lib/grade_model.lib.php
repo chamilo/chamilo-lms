@@ -84,10 +84,10 @@ class GradeModel extends Model
         if ($action == 'edit') {
             $header = get_lang('Modify');
         }
-
-        $form->addElement('header', $header);
         $id = isset($_GET['id']) ? intval($_GET['id']) : '';
-        $form->addElement('hidden', 'id', $id);
+
+        $form->addHeader($header);
+        $form->addHidden('id', $id);
         $form->addText('name', get_lang('Name'));
         $form->addHtmlEditor(
             'description',
@@ -172,7 +172,6 @@ class GradeModel extends Model
 
         //New rule added in the formvalidator compare_fields that filters a group of fields in order to compare with the wanted value
         $form->addRule($component_array, get_lang('AllMustWeight100'), 'compare_fields', '==@100');
-
         $form->addElement('label', '', get_lang('AllMustWeight100'));
 
         if ($action == 'edit') {
@@ -237,11 +236,11 @@ class GradeModel extends Model
     }
 
     /**
-     * @param array $params
+     * {@inheritdoc}
      */
-    public function update($params)
+    public function update($params, $showQuery = false)
     {
-        parent::update($params);
+        parent::update($params, $showQuery);
 
         if (!empty($params['id'])) {
             foreach ($params['components'] as $component) {
@@ -287,7 +286,6 @@ class GradeModel extends Model
             }
             $form->addElement('select', $name, get_lang('GradeModel'), $grade_model_options);
             $default_platform_setting = api_get_setting('gradebook_default_grade_model_id');
-
             $default = -1;
 
             if ($default_platform_setting == -1) {
@@ -324,13 +322,13 @@ class GradeModelComponents extends Model
 
     /**
      * @param array $params
-     * @param bool  $show_query
+     * @param bool  $showQuery
      *
      * @return bool
      */
-    public function save($params, $show_query = false)
+    public function save($params, $showQuery = false)
     {
-        $id = parent::save($params, $show_query);
+        $id = parent::save($params, $showQuery);
 
         return $id;
     }

@@ -41,9 +41,6 @@
     padding-right: 0.9em;
 }
 
-
-
-
 .doc_table {
     width: 30%;
     text-align: left;
@@ -81,7 +78,7 @@
 }
 #mode-selector {
     width: 100px;
-    padding: 4px;    
+    padding: 4px;
     top: 0px;
     z-index: 9;
 	float:left;

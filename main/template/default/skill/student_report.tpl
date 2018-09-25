@@ -1,12 +1,13 @@
 {% if allow_skill_tool %}
     <div class="btn-group">
-        <a class="btn btn-default" href="{{ _p.web_main }}social/skills_wheel.php">{{ 'SkillsWheel' | get_lang }}</a>
+        <a class="btn btn-default" href="{{ _p.web_main }}social/skills_wheel.php">
+            {{ 'SkillsWheel' | get_lang }}
+        </a>
     </div>
 {% endif %}
 
-<h1 class="page-header">{{ 'SkillsAcquired' | get_lang }}</h1>
-
 {% if rows %}
+    <h1 class="page-header">{{ 'SkillsAcquired' | get_lang }}</h1>
     <table class="table">
         <thead>
             <tr>
@@ -23,7 +24,10 @@
                 <td>{{ row.skill_name }}</td>
                 <td>{{ row.achieved_at }}</td>
                 {% if row.course_name %}
-                    <td><img src="{{ row.course_image }}" alt="{{ row.course_name }}" width="32"> {{ row.course_name }}</td>
+                    <td>
+                        <img src="{{ row.course_image }}" alt="{{ row.course_name }}" width="32">
+                        {{ row.course_name }}
+                    </td>
                 {% else %}
                     <td> - </td>
                 {% endif %}
@@ -31,12 +35,7 @@
         {% endfor %}
         </tbody>
     </table>
-
     {% if skill_table %}
         {{ skill_table }}
     {% endif %}
-{% else %}
-    <div class="alert alert-info">
-        {{ 'NoResults' | get_lang }}
-    </div>
 {% endif %}

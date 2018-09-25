@@ -11,12 +11,11 @@
 	{color:#000;}
 .color-red h3,
 .color-blue h3,
-.color-orange h3
-	{color:#FFF;}
-/* End Colors */
+.color-orange h3 {
+    color: #FFF;
+}
 
-//#columns #column1 .widget { margin: 30px 35px 0 25px; }
-//#columns #column3 .widget { margin: 30px 25px 0 35px; }
+/* End Colors */
 
 .widget {
     margin: 30px 20px 0 20px;

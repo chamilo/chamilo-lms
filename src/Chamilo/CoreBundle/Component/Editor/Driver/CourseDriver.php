@@ -227,6 +227,7 @@ class CourseDriver extends Driver implements DriverInterface
      */
     public function upload($fp, $dst, $name, $tmpname, $hashes = [])
     {
+        // Needed to load course information in elfinder
         $this->setConnectorFromPlugin();
 
         if ($this->allowToEdit()) {
@@ -255,7 +256,7 @@ class CourseDriver extends Driver implements DriverInterface
                     $this->connector->course,
                     $realPath,
                     'file',
-                    intval($result['size']),
+                    (int) $result['size'],
                     $result['name']
                 );
             }
@@ -329,23 +330,24 @@ class CourseDriver extends Driver implements DriverInterface
     /**
      * {@inheritdoc}
      */
-    protected function _mkdir($path, $name)
+    public function mkdir($path, $name)
     {
-        if ($this->allowToEdit() == false) {
+        // Needed to load course information in elfinder
+        $this->setConnectorFromPlugin();
+
+        if ($this->allowToEdit() === false) {
             return false;
         }
 
-        $path = $this->_joinPath($path, $name);
+        $result = parent::mkdir($path, $name);
 
-        if (mkdir($path)) {
-            $this->setConnectorFromPlugin();
-            chmod($path, $this->options['dirMode']);
-            clearstatcache();
+        if ($result && isset($result['hash'])) {
             $_course = $this->connector->course;
             $realPathRoot = $this->getCourseDocumentSysPath();
+            $realPath = $this->realpath($result['hash']);
 
             // Removing course path
-            $newPath = str_replace($realPathRoot, '/', $path);
+            $newPath = str_replace($realPathRoot, '/', $realPath);
             $documentId = add_document(
                 $_course,
                 $newPath,
@@ -361,12 +363,12 @@ class CourseDriver extends Driver implements DriverInterface
             );
 
             if (empty($documentId)) {
-                unlink($path);
+                $this->rm($result['hash']);
 
                 return false;
             }
 
-            return $path;
+            return $result;
         }
 
         return false;

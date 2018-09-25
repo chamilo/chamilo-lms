@@ -212,11 +212,21 @@ abstract class AbstractLink implements GradebookItem
         }
     }
 
+    /**
+     * @return array
+     */
     public function getStudentList()
     {
+        if (empty($this->studentList)) {
+            return [];
+        }
+
         return $this->studentList;
     }
 
+    /**
+     * @param array $list
+     */
     public function setStudentList($list)
     {
         $this->studentList = $list;
@@ -553,15 +563,9 @@ abstract class AbstractLink implements GradebookItem
         return 'link';
     }
 
-    /* Seems to be not used anywhere */
-    public function get_not_created_links()
-    {
-        return null;
-    }
-
     public function get_all_links()
     {
-        return null;
+        return [];
     }
 
     public function add_linked_data()
@@ -650,6 +654,41 @@ abstract class AbstractLink implements GradebookItem
         }
 
         return [];
+    }
+
+    /**
+     * @return string
+     */
+    public function getSkillsFromItem()
+    {
+        $toolType = '';
+        switch ($this->type) {
+            case LINK_ATTENDANCE:
+                $toolType = ITEM_TYPE_ATTENDANCE;
+                break;
+            case LINK_EXERCISE:
+                $toolType = ITEM_TYPE_EXERCISE;
+                break;
+            case LINK_FORUM_THREAD:
+                $toolType = ITEM_TYPE_FORUM_THREAD;
+                break;
+            case LINK_LEARNPATH:
+                $toolType = ITEM_TYPE_LEARNPATH;
+                break;
+            case LINK_HOTPOTATOES:
+                $toolType = ITEM_TYPE_HOTPOTATOES;
+                break;
+            case LINK_STUDENTPUBLICATION:
+                $toolType = ITEM_TYPE_STUDENT_PUBLICATION;
+                break;
+            case LINK_SURVEY:
+                $toolType = ITEM_TYPE_SURVEY;
+                break;
+        }
+
+        $skillToString = Skill::getSkillRelItemsToString($toolType, $this->get_ref_id());
+
+        return $skillToString;
     }
 
     /**

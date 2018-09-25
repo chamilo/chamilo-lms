@@ -1,4 +1,6 @@
 /*
+    Deprecated stylesheet. Use document.css.
+
     Theme Name: Frame Scorm
     URI Project: http://www.chamilo.org
     Description: Styles main base of Chamilo LMS appearance, works with Bootstrap 3.0.x
@@ -8,6 +10,7 @@
 */
 
 @import url(../assets/fontawesome/css/font-awesome.min.css);
+@import url(../assets/bootstrap/dist/css/bootstrap.min.css);
 
 @font-face {
   font-family: 'Open Sans';
@@ -36,10 +39,10 @@
 
 
 body{
-    color: #162a83;
+    color: #666;
     font-family: 'Open Sans', sans-serif;
     line-height: 30px;
-   
+
 }
 .ck{
     display: block;
@@ -74,7 +77,11 @@ body{
     padding: 2% 3%;
     line-height: 20px;
 }
-
+.ck-title{
+    display: block;
+    font-weight: bold;
+    color: #000;
+}
 .ck-title2{
     padding-top: 0;
     margin-top: 0;
@@ -84,61 +91,28 @@ body{
 }
 .ck-title2:after{
     background-color:#E95839;
-    margin: 10px 0px 0px;
+    margin: 10px 0 0;
     width: 50px;
     height: 2px;
     display: block;
     content: "";
-    
 }
-.ck-parcours{
-    font-family: 'Verdana';
-    font-size: 18px;
-    font-weight: bold;
-    color: #162a83;
-}
-.ck-etape{
-    font-family: 'Verdana';
-    font-size: 14px;
-    font-weight: bold;
-    color: #162a83;
-}
-.ck-titre{
-    font-family: 'Verdana';
-    font-size: 23px;
-    color: #162a83;
-}
-.ck-texte{
-    font-family: 'Verdana';
-    font-size: 14px;
-    color: #162a83;
-}
-.ck-source{
-    font-family: 'Verdana';
-    font-size: 12px;
-    color: #162a83;
-}
-.ck-consignes{
-    font-family: 'Verdana';
-    font-size: 14px;
-    font-weight: bold;
-    color: #162a83;
-}
+
 figure .image.alignleft{
     margin: 0 20px 20px 0;
 }
 figure .image.alignright{
-    margin: 0 20px 0px 20px;
+    margin: 0 20px 0 20px;
 }
 figure .image{
-    margin: 0 20px 0px 20px;
+    margin: 0 20px 0 20px;
 }
-figure figcaption{   
+figure figcaption{
     text-align: left;
     background-color: #f3f3f3;
-    padding-top: 0px;
-    margin: 0px;
-    border-radius: 0px;
+    padding-top: 0;
+    margin: 0;
+    border-radius: 0;
     padding-left: 5px;
 }
 figure{
@@ -171,28 +145,30 @@ blockquote p {
     background-color: yellow;
 }
 /* line horizontal separation */
-.ck-title {
-    border-top: 1px solid #84bd00;
-    display: inline-block;
-    width: 100%;
-    padding-top: 15px;
-    font-weight: normal;
-    font-size: 25px;
+.ck-style1 {
+    height: 6px;
+    background: url(../../main/img/document/hr-1.png) repeat-x 0 0;
+    border: 0;
 }
 .ck-style2 {
     height: 6px;
     background: url(../../main/img/document/hr-2.png) repeat-x 0 0;
     border: 0;
 }
-.ck-title3 { 
-  border-top: 1px solid #84bd00;
+.ck-style3 {
+  border-top: 1px dashed #8c8b8b;
+}
+.ck-style3:after {
+  content: '\002702';
   display: inline-block;
-  width: 100%;
-  padding-top: 15px;
-  font-weight: bold;
-  font-size: 16px;
-} 
-
+  position: relative;
+  top: -12px;
+  left: 40px;
+  padding: 0 3px;
+  background: #FFF;
+  color: #8c8b8b;
+  font-size: 18px;
+}
 .alert {
   padding: 15px;
   margin-bottom: 20px;
@@ -227,14 +203,10 @@ blockquote p {
 .alert-success .alert-link {
   color: #2b542c;
 }
-.result-body .exercise-message .alert-info {
-  color: #FFFFFF !important;
-  background-color: #84bd00 !important;
-  border-color: #84bd00 !important;
-  border-radius: 0;
-}
-.result-body .exercise-message .alert-info p span{
-    color: #FFFFFF !important;
+.alert-info {
+  color: #31708f;
+  background-color: #d9edf7;
+  border-color: #bce8f1;
 }
 .alert-info hr {
   border-top-color: #a6e1ec;
@@ -265,7 +237,6 @@ blockquote p {
   color: #843534;
 }
 .img-responsive {
-  display: block;
   max-width: 100%;
   height: auto;
 }
@@ -294,28 +265,49 @@ blockquote p {
     vertical-align: text-bottom;
 }
 
+.text-center .img-responsive {
+    margin-left: auto;
+    margin-right: auto;
+}
+.ck-parcours{
+    font-family: 'Verdana';
+    font-size: 18px;
+    font-weight: bold;
+    color: #162a83;
+}
+.ck-etape{
+    font-family: 'Verdana';
+    font-size: 14px;
+    font-weight: bold;
+    color: #162a83;
+}
+.ck-titre{
+    font-family: 'Verdana';
+    font-size: 30px;
+    color: #162a83;
+}
+.ck-texte{
+    font-family: 'Verdana';
+    font-size: 14px;
+    color: #162a83;
+    line-height: 25px;
+}
+.ck-source{
+    font-family: 'Verdana';
+    font-size: 12px;
+    color: #162a83;
+}
+.ck-consignes{
+    font-family: 'Verdana';
+    font-size: 14px;
+    font-weight: bold;
+    color: #162a83;
+}
+.mejs__container{
+    background: transparent;
+}
 @media (max-width: 767px) {
     .img-responsive {
         display: block;
     }
-}
-
-.result-body .alert.alert-info{
-    background: none;
-    color: #162A83;
-    border:none;
-    border-top: 1px solid #84BD00;
-}
-.result-body .alert.alert-info p{
-    padding-bottom: 10px;
-}
-.result-body .alert.alert-info .btn.btn-info {
-    color: #fff;
-    background-color: #84BD00;
-    border-color: #84BD00;
-}
-.result-body .alert.alert-info .btn.btn-info:hover {
-    color: #fff;
-    background-color: #772583;
-    border-color: #772583;
 }

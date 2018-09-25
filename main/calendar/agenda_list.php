@@ -6,17 +6,19 @@
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
+$type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
+
 $interbreadcrumb[] = [
-    'url' => api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php',
+    'url' => api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type='.Security::remove_XSS($type),
     'name' => get_lang('Agenda'),
 ];
 
 $currentCourseId = api_get_course_int_id();
-$currentGroupdId = api_get_group_id();
+$groupId = api_get_group_id();
 
-if (!empty($currentGroupdId)) {
-    $groupProperties = GroupManager::get_group_properties($currentGroupdId);
-    $currentGroupdId = $groupProperties['iid'];
+if (!empty($groupId)) {
+    $groupProperties = GroupManager::get_group_properties($groupId);
+    $groupId = $groupProperties['iid'];
     $interbreadcrumb[] = [
         "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
         "name" => get_lang('Groups'),
@@ -27,13 +29,12 @@ if (!empty($currentGroupdId)) {
     ];
 }
 
-$type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
 $agenda = new Agenda($type);
 $events = $agenda->getEvents(
     null,
     null,
     $currentCourseId,
-    $currentGroupdId,
+    $groupId,
     null,
     'array'
 );

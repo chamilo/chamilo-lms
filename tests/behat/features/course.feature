@@ -7,8 +7,6 @@ Feature: Course tools basic testing
 
   Background:
     Given I am a platform administrator
-    And I am a "English" user
-    # This is executed just before each scenario below
 
   Scenario: See the courses list
     Given I am on "/main/admin/course_list.php"
@@ -22,6 +20,13 @@ Feature: Course tools basic testing
   Scenario: Access the course creation page
     Given I am on "/main/admin/course_add.php"
     Then I should not see "not authorized"
+
+  Scenario: Create a private course before testing
+    Given I am on "/main/admin/course_add.php"
+    When I fill in "title" with "TEMP_PRIVATE"
+    Then I check the "Private access (access authorized to group members only)" radio button
+    And I press "submit"
+    Then I should see "Course TEMP_PRIVATE added"
 
   Scenario: Create a course before testing
     Given I am on "/main/admin/course_add.php"

@@ -269,7 +269,7 @@ function search_users($needle, $type)
 $xajax->processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '
-<script type="text/javascript">
+<script>
 function add_user_to_session (code, content) {
 	document.getElementById("user_to_add").value = "";
 	document.getElementById("ajax_list_users_single").innerHTML = "";
@@ -316,13 +316,11 @@ $form_sent = 0;
 $errorMsg = $firstLetterUser = $firstLetterSession = '';
 $UserList = $SessionList = [];
 $sessions = [];
-$noPHP_SELF = true;
-
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
     $firstLetterUser = isset($_POST['firstLetterUser']) ? $_POST['firstLetterUser'] : '';
     $firstLetterSession = isset($_POST['firstLetterSession']) ? $_POST['firstLetterSession'] : '';
-    $UserList = $_POST['sessionUsersList'];
+    $UserList = isset($_POST['sessionUsersList']) ? $_POST['sessionUsersList'] : [];
 
     if (!is_array($UserList)) {
         $UserList = [];
@@ -332,7 +330,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
         $notEmptyList = api_get_configuration_value('session_multiple_subscription_students_list_avoid_emptying');
 
         // Added a parameter to send emails when registering a user
-        SessionManager::subscribe_users_to_session(
+        SessionManager::subscribeUsersToSession(
             $id_session,
             $UserList,
             null,
@@ -751,7 +749,7 @@ $newLinks .= Display::url(
                     if ($ajax_search) {
                         ?>
                         <div class="separate-action">
-                            <button class="btn btn-primary" type="button"
+                            <button name="remove_user" class="btn btn-primary" type="button"
                                     onclick="remove_item(document.getElementById('destination_users'))">
                                 <em class="fa fa-chevron-left"></em>
                             </button>
@@ -760,14 +758,14 @@ $newLinks .= Display::url(
                     } else {
                         ?>
                         <div class="separate-action">
-                            <button class="btn btn-primary" type="button"
+                            <button name="add_user" class="btn btn-primary" type="button"
                                     onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))"
                                     onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))">
                                 <em class="fa fa-chevron-right"></em>
                             </button>
                         </div>
                         <div class="separate-action">
-                            <button class="btn btn-primary" type="button"
+                            <button name="remove_user" class="btn btn-primary" type="button"
                                     onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))"
                                     onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))">
                                 <em class="fa fa-chevron-left"></em>
@@ -777,10 +775,10 @@ $newLinks .= Display::url(
                         <?php
                     }
                     if (!empty($addProcess)) {
-                        echo '<button class="btn btn-success" type="button" value="" onclick="valide()" >'
+                        echo '<button name="next" class="btn btn-success" type="button" value="" onclick="valide()" >'
                             .get_lang('FinishSessionCreation').'</button>';
                     } else {
-                        echo '<button class="btn btn-success" type="button" value="" onclick="valide()" >'
+                        echo '<button name="next" class="btn btn-success" type="button" value="" onclick="valide()" >'
                             .get_lang('SubscribeUsersToSession').'</button>';
                     }
                     ?>

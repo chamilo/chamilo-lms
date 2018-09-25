@@ -1,45 +1,40 @@
 {% for item in hot_courses %}
     {% if item.title %}
-        <div class="col-xs-12 col-sm-4 col-md-3">
-            <div class="items">
+        <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="items items-hotcourse">
                 <div class="image">
-                    <img src="{{ item.course_image_large }}" class="img-responsive">
+                        <a title="{{ item.title}}" href="{{ _p.web }}course/{{ item.real_id  }}/about">
+                            <img src="{{ item.course_image_large }}" class="img-responsive" alt="{{ item.title }}">
+                        </a>
+
                     {% if item.categoryName != '' %}
                         <span class="category">{{ item.categoryName }}</span>
                         <div class="cribbon"></div>
                     {% endif %}
-                    <div class="black-shadow">
-                        <div class="author-card">  
-                        {% for teacher in item.teachers %}
-                            {% set counter = counter + 1 %}
-                            {% if counter <= 3 %}
-                                <a href="{{ teacher.url }}" class="ajax" data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                    <img src="{{ teacher.avatar }}"/>
-                                </a>
-                                <div class="teachers-details">
-                                     <h5>
-                                        <a href="{{ teacher.url }}" class="ajax" data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                            {{ teacher.firstname }} {{ teacher.lastname }}
-                                        </a>
-                                     </h5>
-                                </div>       
-                            {% endif %}
-                        {% endfor %}
-                        </div>
-                    </div>
                     <div class="user-actions">{{ item.description_button }}</div>
                 </div>
                 <div class="description">
-                    <h4 class="title">
-                            {{ item.title }}
-                    </h4>
-                    <div class="ranking">
-<!--                        {{ item.rating_html }} -->
+                    <div class="block-title">
+                        <h5 class="title">
+                            <a alt="{{ item.title }}" title="{{ item.title }}" href="{{ _p.web }}course/{{ item.real_id  }}/about">
+                                {{ item.title_cut}}
+                            </a>
+                        </h5>
                     </div>
-                    <div class="toolbar">
-                        <div class="btn-group" role="group">
-                            {{ item.register_button }}
-                            {{ item.unsubscribe_button }}
+                    <div class="ranking">
+                        {{ item.rating_html }}
+                    </div>
+                    <div class="toolbar row">
+                        <div class="col-sm-4">
+                            {% if item.price %}
+                                {{ item.price }}
+                            {% endif %}
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="btn-group" role="group">
+                                {{ item.register_button }}
+                                {{ item.unsubscribe_button }}
+                            </div>
                         </div>
                     </div>
                 </div>

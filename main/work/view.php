@@ -53,7 +53,8 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
     $interbreadcrumb[] = ['url' => '#', 'name' => $userInfo['complete_name']];
     $interbreadcrumb[] = ['url' => '#', 'name' => $work['title']];
 
-    if (($courseInfo['show_score'] == 0 &&
+    if ((
+        $courseInfo['show_score'] == 0 &&
         $work['active'] == 1 &&
         $work['accepted'] == 1
         ) ||
@@ -161,57 +162,72 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
         $commentForm = getWorkCommentForm($work, $my_folder_data);
 
         $tpl = new Template();
-
         $tpl->assign('work', $work);
         $tpl->assign('comments', $comments);
 
-        if (isset($work['contains_file'])) {
-            if (isset($work['download_url'])) {
+        $actions = '';
+        if (isset($work['contains_file']) && !empty($work['contains_file'])) {
+            if (isset($work['download_url']) && !empty($work['download_url'])) {
                 $actions = Display::url(
                     Display::return_icon(
-                        'save.png',
-                        get_lang('Download'),
+                        'back.png',
+                        get_lang('BackToWorksList'),
                         null,
                         ICON_SIZE_MEDIUM
                     ),
-                    $work['download_url']
+                    api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq()
                 );
 
-                if (!empty($work['url_correction'])) {
+                // Check if file can be downloaded
+                $file = getFileContents($work['id'], $courseInfo, api_get_session_id(), false);
+                if (!empty($file)) {
                     $actions .= Display::url(
                         Display::return_icon(
-                            'check-circle.png',
-                            get_lang('Correction'),
+                            'save.png',
+                            get_lang('Download'),
                             null,
                             ICON_SIZE_MEDIUM
                         ),
-                        $work['download_url'].'&correction=1'
+                        $work['download_url']
                     );
-                    if (api_is_allowed_to_edit()) {
-                        $actions .= Display::url(
-                            Display::return_icon(
-                                'delete.png',
-                                get_lang('Delete').': '.get_lang('Correction'),
-                                null,
-                                ICON_SIZE_MEDIUM
-                            ),
-                            api_get_self().'?action=delete_correction&id='.$id.'&'.api_get_cidreq()
-                        );
-                    }
                 }
+            }
+        }
 
-                $tpl->assign(
-                    'actions',
-                    Display::toolbarAction('toolbar', [$actions])
+        if (isset($work['url_correction']) && !empty($work['url_correction']) && !empty($work['download_url'])) {
+            $actions .= Display::url(
+                Display::return_icon(
+                    'check-circle.png',
+                    get_lang('Correction'),
+                    null,
+                    ICON_SIZE_MEDIUM
+                ),
+                $work['download_url'].'&correction=1'
+            );
+            if (api_is_allowed_to_edit()) {
+                $actions .= Display::url(
+                    Display::return_icon(
+                        'delete.png',
+                        get_lang('Delete').': '.get_lang('Correction'),
+                        null,
+                        ICON_SIZE_MEDIUM
+                    ),
+                    api_get_self().'?action=delete_correction&id='.$id.'&'.api_get_cidreq()
                 );
             }
+        }
+
+        if (!empty($actions)) {
+            $tpl->assign(
+                'actions',
+                Display::toolbarAction('toolbar', [$actions])
+            );
         }
 
         if (api_is_allowed_to_session_edit()) {
             $tpl->assign('form', $commentForm);
         }
         $tpl->assign('is_allowed_to_edit', api_is_allowed_to_edit());
-
         $template = $tpl->get_template('work/view.tpl');
         $content = $tpl->fetch($template);
         $tpl->assign('content', $content);

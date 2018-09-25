@@ -14,6 +14,7 @@
 class learnpathItem
 {
     const DEBUG = 0; // Logging parameter.
+    public $iId;
     public $attempt_id; // Also called "objectives" SCORM-wise.
     public $audio; // The path to an audio file (stored in document/audio/).
     public $children = []; // Contains the ids of children items.
@@ -106,12 +107,12 @@ class learnpathItem
             error_log("learnpathItem constructor: id: $id user_id: $user_id course_id: $course_id");
             error_log("item_content: ".print_r($item_content, 1));
         }
-        $id = intval($id);
+        $id = (int) $id;
         if (empty($item_content)) {
             if (empty($course_id)) {
                 $course_id = api_get_course_int_id();
             } else {
-                $course_id = intval($course_id);
+                $course_id = (int) $course_id;
             }
             $sql = "SELECT * FROM $items_table
                     WHERE iid = $id";
@@ -125,6 +126,7 @@ class learnpathItem
         }
 
         $this->lp_id = $row['lp_id'];
+        $this->iId = $row['iid'];
         $this->max_score = $row['max_score'];
         $this->min_score = $row['min_score'];
         $this->name = $row['title'];
@@ -363,7 +365,7 @@ class learnpathItem
         }
         $res = 1;
         if (!empty($this->attempt_id)) {
-            $res = intval($this->attempt_id);
+            $res = (int) $this->attempt_id;
         }
         if (self::DEBUG > 0) {
             error_log(
@@ -501,6 +503,7 @@ class learnpathItem
         }
         $path = $this->get_path();
         $type = $this->get_type();
+
         if (empty($path)) {
             if ($type == 'dir') {
                 return '';
@@ -1046,17 +1049,15 @@ class learnpathItem
         if ($recursivity > $max) {
             return [];
         }
-        if (!isset($type)) {
-            $type = $this->get_type();
-        }
+
+        $type = empty($type) ? $this->get_type() : $type;
+
         if (!isset($abs_path)) {
             $path = $this->get_file_path();
             $abs_path = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/'.$path;
         }
 
         $files_list = [];
-        $type = $this->get_type();
-
         switch ($type) {
             case TOOL_DOCUMENT:
             case TOOL_QUIZ:
@@ -1077,23 +1078,24 @@ class learnpathItem
                     case 'htm':
                     case 'shtml':
                     case 'css':
-                        $wanted_attributes = [
+                        $wantedAttributes = [
                             'src',
                             'url',
                             '@import',
                             'href',
                             'value',
                         ];
+
                         // Parse it for included resources.
-                        $file_content = file_get_contents($abs_path);
+                        $fileContent = file_get_contents($abs_path);
                         // Get an array of attributes from the HTML source.
                         $attributes = DocumentManager::parse_HTML_attributes(
-                            $file_content,
-                            $wanted_attributes
+                            $fileContent,
+                            $wantedAttributes
                         );
 
                         // Look at 'src' attributes in this file
-                        foreach ($wanted_attributes as $attr) {
+                        foreach ($wantedAttributes as $attr) {
                             if (isset($attributes[$attr])) {
                                 // Find which kind of path these are (local or remote).
                                 $sources = $attributes[$attr];
@@ -2447,12 +2449,19 @@ class learnpathItem
                                 if (isset($refs_list[$prereqs_string]) &&
                                     isset($items[$refs_list[$prereqs_string]])
                                 ) {
-                                    if ($items[$refs_list[$prereqs_string]]->type == 'quiz') {
+                                    /** @var learnpathItem $itemToCheck */
+                                    $itemToCheck = $items[$refs_list[$prereqs_string]];
+                                    if ($itemToCheck->type == 'quiz') {
                                         // 1. Checking the status in current items.
-                                        $status = $items[$refs_list[$prereqs_string]]->get_status(true);
+                                        $status = $itemToCheck->get_status(true);
                                         $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
 
                                         if (!$returnstatus) {
+                                            $explanation = sprintf(
+                                                get_lang('ItemXBlocksThisElement'),
+                                                $itemToCheck->get_title()
+                                            );
+                                            $this->prereq_alert = $explanation;
                                             if (self::DEBUG > 1) {
                                                 error_log(
                                                     'New LP - Prerequisite '.$prereqs_string.' not complete',
@@ -2480,7 +2489,8 @@ class learnpathItem
                                                             exe_user_id = '.$user_id.' AND
                                                             orig_lp_id = '.$this->lp_id.' AND
                                                             orig_lp_item_id = '.$prereqs_string.' AND
-                                                            status <> "incomplete"
+                                                            status <> "incomplete" AND
+                                                            c_id = '.$course_id.'
                                                         ORDER BY exe_date DESC
                                                         LIMIT 0, 1';
                                                 $rs_quiz = Database::query($sql);
@@ -2495,7 +2505,11 @@ class learnpathItem
                                                         ) {
                                                             $returnstatus = true;
                                                         } else {
-                                                            $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
+                                                            $explanation = sprintf(
+                                                                get_lang('YourResultAtXBlocksThisElement'),
+                                                                $itemToCheck->get_title()
+                                                            );
+                                                            $this->prereq_alert = $explanation;
                                                             $returnstatus = false;
                                                         }
                                                     } else {
@@ -2505,23 +2519,26 @@ class learnpathItem
                                                         ) {
                                                             $returnstatus = true;
                                                         } else {
-                                                            $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
+                                                            $explanation = sprintf(
+                                                                get_lang('YourResultAtXBlocksThisElement'),
+                                                                $itemToCheck->get_title()
+                                                            );
+                                                            $this->prereq_alert = $explanation;
                                                             $returnstatus = false;
                                                         }
                                                     }
                                                 } else {
-                                                    $this->prereq_alert = get_lang(
-                                                        'LearnpathPrereqNotCompleted'
-                                                    );
+                                                    $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
                                                     $returnstatus = false;
                                                 }
                                             }
                                         } else {
-                                            // 3. for multiple attempts we check that there are minimum 1 item completed.
+                                            // 3. For multiple attempts we check that there are minimum 1 item completed
                                             // Checking in the database.
                                             $sql = 'SELECT exe_result, exe_weighting
                                                     FROM '.Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES).'
                                                     WHERE
+                                                        c_id = '.$course_id.' AND 
                                                         exe_exo_id = '.$items[$refs_list[$prereqs_string]]->path.' AND
                                                         exe_user_id = '.$user_id.' AND
                                                         orig_lp_id = '.$this->lp_id.' AND
@@ -2539,34 +2556,41 @@ class learnpathItem
                                                             $returnstatus = true;
                                                             break;
                                                         } else {
-                                                            $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
+                                                            $explanation = sprintf(
+                                                                get_lang('YourResultAtXBlocksThisElement'),
+                                                                $itemToCheck->get_title()
+                                                            );
+                                                            $this->prereq_alert = $explanation;
                                                             $returnstatus = false;
                                                         }
                                                     } else {
-                                                        if ($quiz['exe_result'] >= $items[$refs_list[$prereqs_string]]->get_mastery_score()) {
+                                                        if ($quiz['exe_result'] >=
+                                                            $items[$refs_list[$prereqs_string]]->get_mastery_score()
+                                                        ) {
                                                             $returnstatus = true;
                                                             break;
                                                         } else {
-                                                            $this->prereq_alert = get_lang(
-                                                                'LearnpathPrereqNotCompleted'
-                                                            );
+                                                            $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
                                                             $returnstatus = false;
                                                         }
                                                     }
                                                 }
                                             } else {
-                                                $this->prereq_alert = get_lang(
-                                                    'LearnpathPrereqNotCompleted'
-                                                );
+                                                $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
                                                 $returnstatus = false;
                                             }
                                         }
 
                                         return $returnstatus;
                                     } else {
-                                        $status = $items[$refs_list[$prereqs_string]]->get_status(false);
+                                        $status = $itemToCheck->get_status(false);
                                         $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
                                         if (!$returnstatus) {
+                                            $explanation = sprintf(
+                                                get_lang('ItemXBlocksThisElement'),
+                                                $itemToCheck->get_title()
+                                            );
+                                            $this->prereq_alert = $explanation;
                                             if (self::DEBUG > 1) {
                                                 error_log(
                                                     'New LP - Prerequisite '.$prereqs_string.' not complete',
@@ -2595,43 +2619,39 @@ class learnpathItem
                                                         session_id = '.$sessionId.'
                                                     LIMIT 0, 1';
                                             $rs_lp = Database::query($sql);
-                                            $lp_id = Database::fetch_row($rs_lp);
-                                            $my_lp_id = $lp_id[0];
+                                            if (Database::num_rows($rs_lp)) {
+                                                $lp_id = Database::fetch_row($rs_lp);
+                                                $my_lp_id = $lp_id[0];
 
-                                            $sql = 'SELECT status FROM '.$lp_item_view.'
-                                                   WHERE
-                                                        c_id = '.$course_id.' AND
-                                                        lp_view_id = '.$my_lp_id.' AND
-                                                        lp_item_id = '.$refs_list[$prereqs_string].'
-                                                    LIMIT 0, 1';
-                                            $rs_lp = Database::query($sql);
-                                            $status_array = Database::fetch_row($rs_lp);
-                                            $status = $status_array[0];
+                                                $sql = 'SELECT status FROM '.$lp_item_view.'
+                                                        WHERE
+                                                            c_id = '.$course_id.' AND
+                                                            lp_view_id = '.$my_lp_id.' AND
+                                                            lp_item_id = '.$refs_list[$prereqs_string].'
+                                                        LIMIT 0, 1';
+                                                $rs_lp = Database::query($sql);
+                                                $status_array = Database::fetch_row($rs_lp);
+                                                $status = $status_array[0];
 
-                                            $returnstatus = ($status == $this->possible_status[2]) || ($status == $this->possible_status[3]);
-                                            if (!$returnstatus && empty($this->prereq_alert)) {
-                                                $this->prereq_alert = get_lang(
-                                                    'LearnpathPrereqNotCompleted'
-                                                );
-                                            }
-                                            if (!$returnstatus) {
-                                                if (self::DEBUG > 1) {
-                                                    error_log(
-                                                        'New LP - Prerequisite '.$prereqs_string.' not complete',
-                                                        0
-                                                    );
+                                                $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
+                                                if (!$returnstatus && empty($this->prereq_alert)) {
+                                                    $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
                                                 }
-                                            } else {
-                                                if (self::DEBUG > 1) {
-                                                    error_log(
-                                                        'New LP - Prerequisite '.$prereqs_string.' complete',
-                                                        0
-                                                    );
+                                                if (!$returnstatus) {
+                                                    if (self::DEBUG > 1) {
+                                                        error_log(
+                                                            'New LP - Prerequisite '.$prereqs_string.' not complete'
+                                                        );
+                                                    }
+                                                } else {
+                                                    if (self::DEBUG > 1) {
+                                                        error_log('New LP - Prerequisite '.$prereqs_string.' complete');
+                                                    }
                                                 }
+
+                                                return $returnstatus;
                                             }
                                         }
-
-                                        return $returnstatus;
                                     }
                                 } else {
                                     if (self::DEBUG > 1) {
@@ -3569,7 +3589,7 @@ class learnpathItem
         }
 
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
-        $lp_id = intval($this->lp_id);
+        $lp_id = (int) $this->lp_id;
         $sql = "SELECT * FROM $lp_table WHERE iid = $lp_id";
         $res = Database::query($sql);
         $accumulateScormTime = 'false';
@@ -3790,8 +3810,8 @@ class learnpathItem
         }
 
         if ((($save === false && $this->type == 'sco') ||
-            ($this->type == 'sco' && ($credit == 'no-credit' || $mode == 'review' || $mode == 'browse'))) &&
-            ($this->seriousgame_mode != 1 && $this->type == 'sco')
+           ($this->type == 'sco' && ($credit == 'no-credit' || $mode == 'review' || $mode == 'browse'))) &&
+           ($this->seriousgame_mode != 1 && $this->type == 'sco')
         ) {
             if ($debug) {
                 error_log(
@@ -4483,7 +4503,7 @@ class learnpathItem
      */
     public function getForumThread($lpCourseId, $lpSessionId = 0)
     {
-        $lpSessionId = intval($lpSessionId);
+        $lpSessionId = (int) $lpSessionId;
         $forumThreadTable = Database::get_course_table(TABLE_FORUM_THREAD);
         $itemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
@@ -4547,7 +4567,7 @@ class learnpathItem
         $threadRepo = $em->getRepository('ChamiloCourseBundle:CForumThread');
         $forumThread = $threadRepo->findOneBy([
             'threadTitle' => "{$this->title} - {$this->db_id}",
-            'forumId' => intval($currentForumId),
+            'forumId' => (int) $currentForumId,
         ]);
 
         if (!$forumThread) {
@@ -4614,5 +4634,13 @@ class learnpathItem
     public function getLastScormSessionTime()
     {
         return $this->last_scorm_session_time;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iId;
     }
 }

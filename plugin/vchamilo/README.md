@@ -18,6 +18,14 @@ Once the plugin is fully setup, you will be able to create new Chamilo instances
 Changelog
 =========
 
+*Version 1.7*
+
+Added support for (optional) custom CSS folder
+Database upgrade needed:
+
+  ALTER TABLE vchamilo ADD COLUMN css_theme_folder varchar(255);
+
+
 *Version 1.6*
 
 Database upgrade needed:

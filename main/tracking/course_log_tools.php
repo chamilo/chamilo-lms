@@ -14,18 +14,17 @@ $groupId = isset($_REQUEST['gidReq']) ? intval($_REQUEST['gidReq']) : 0;
 $from_myspace = false;
 $from = isset($_GET['from']) ? $_GET['from'] : null;
 
+$this_section = SECTION_COURSES;
 if ($from == 'myspace') {
     $from_myspace = true;
-    $this_section = "session_my_space";
-} else {
-    $this_section = SECTION_COURSES;
+    $this_section = 'session_my_space';
 }
 
 // Access restrictions.
-$is_allowedToTrack = api_is_platform_admin() || api_is_allowed_to_create_course() || api_is_session_admin() || api_is_drh() || api_is_course_tutor();
+$is_allowedToTrack = Tracking::isAllowToTrack($session_id);
 
 if (!$is_allowedToTrack) {
-    api_not_allowed();
+    api_not_allowed(true);
     exit;
 }
 
@@ -69,7 +68,7 @@ if (isset($_GET['origin']) && $_GET['origin'] == 'resume_session') {
     ];
 }
 
-$view = (isset($_REQUEST['view']) ? $_REQUEST['view'] : '');
+$view = isset($_REQUEST['view']) ? $_REQUEST['view'] : '';
 $nameTools = get_lang('Tracking');
 
 // Display the header.
@@ -96,44 +95,13 @@ if (empty($session_id)) {
     );
 }
 $nbStudents = count($a_students);
-
 $student_ids = array_keys($a_students);
 $studentCount = count($student_ids);
 
 /* MAIN CODE */
 
 echo '<div class="actions">';
-
-echo Display::url(
-    Display::return_icon('user.png', get_lang('StudentsTracking'), [], ICON_SIZE_MEDIUM),
-    'courseLog.php?'.api_get_cidreq()
-);
-
-if (empty($groupId)) {
-    echo Display::url(
-        Display::return_icon('group.png', get_lang('GroupReporting'), [], ICON_SIZE_MEDIUM),
-        'course_log_groups.php?'.api_get_cidreq()
-    );
-    echo Display::url(
-        Display::return_icon('course_na.png', get_lang('CourseTracking'), [], ICON_SIZE_MEDIUM),
-        '#'
-    );
-} else {
-    echo Display::url(
-        Display::return_icon('group_na.png', get_lang('GroupReporting'), [], ICON_SIZE_MEDIUM),
-        '#'
-    );
-    echo Display::url(
-        Display::return_icon('course.png', get_lang('CourseTracking'), [], ICON_SIZE_MEDIUM),
-        'course_log_tools.php?'.api_get_cidreq(true, false).'&gidReq=0'
-    );
-}
-
-echo Display::url(
-    Display::return_icon('tools.png', get_lang('ResourcesTracking'), [], ICON_SIZE_MEDIUM),
-    'course_log_resources.php?'.api_get_cidreq()
-);
-
+echo TrackingCourseLog::actionsLeft('courses', api_get_session_id());
 echo '<span style="float:right; padding-top:0px;">';
 echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
     Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -178,11 +146,12 @@ if ($lpReporting) {
                     $session_id
                 );
             }
+
+            $lp_avg_progress = null;
             if ($studentCount > 0) {
                 $lp_avg_progress = $lp_avg_progress / $studentCount;
-            } else {
-                $lp_avg_progress = null;
             }
+
             // Separated presentation logic.
             if (is_null($lp_avg_progress)) {
                 $lp_avg_progress = '0%';
@@ -205,7 +174,7 @@ if ($lpReporting) {
 }
 
 if ($exerciseReporting) {
-    // Exercices tracking.
+    // Exercises tracking.
     echo '<div class="report_section">';
     echo Display::page_subheader(
         Display::return_icon(

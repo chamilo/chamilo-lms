@@ -58,7 +58,10 @@ $form->addText(
 $form->applyFilter('visual_code', 'api_strtoupper');
 $form->applyFilter('visual_code', 'html_filter');
 
-$countCategories = $courseCategoriesRepo->countAllInAccessUrl($accessUrlId);
+$countCategories = $courseCategoriesRepo->countAllInAccessUrl(
+    $accessUrlId,
+    api_get_configuration_value('allow_base_course_category')
+);
 
 if ($countCategories >= 100) {
     // Category code
@@ -72,9 +75,11 @@ if ($countCategories >= 100) {
         ['url' => $url]
     );
 } else {
-    $categories = $courseCategoriesRepo->findAllInAccessUrl($accessUrlId);
+    $categories = $courseCategoriesRepo->findAllInAccessUrl(
+        $accessUrlId,
+        api_get_configuration_value('allow_base_course_category')
+    );
     $categoriesOptions = [null => get_lang('None')];
-
     /** @var CourseCategory $category */
     foreach ($categories as $category) {
         $categoriesOptions[$category->getCode()] = (string) $category;

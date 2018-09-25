@@ -26,245 +26,245 @@ class CLp
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="lp_type", type="integer", nullable=false)
      */
-    private $lpType;
+    protected $lpType;
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="ref", type="text", nullable=true)
      */
-    private $ref;
+    protected $ref;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var string
      *
      * @ORM\Column(name="path", type="text", nullable=false)
      */
-    private $path;
+    protected $path;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="force_commit", type="boolean", nullable=false)
      */
-    private $forceCommit;
+    protected $forceCommit;
 
     /**
      * @var string
      *
      * @ORM\Column(name="default_view_mod", type="string", length=32, nullable=false, options={"default":"embedded"})
      */
-    private $defaultViewMod;
+    protected $defaultViewMod;
 
     /**
      * @var string
      *
      * @ORM\Column(name="default_encoding", type="string", length=32, nullable=false, options={"default":"UTF-8"})
      */
-    private $defaultEncoding;
+    protected $defaultEncoding;
 
     /**
      * @var int
      *
      * @ORM\Column(name="display_order", type="integer", nullable=false, options={"default":"0"})
      */
-    private $displayOrder;
+    protected $displayOrder;
 
     /**
      * @var string
      *
      * @ORM\Column(name="content_maker", type="text", nullable=false)
      */
-    private $contentMaker;
+    protected $contentMaker;
 
     /**
      * @var string
      *
      * @ORM\Column(name="content_local", type="string", length=32, nullable=false, options={"default":"local"})
      */
-    private $contentLocal;
+    protected $contentLocal;
 
     /**
      * @var string
      *
      * @ORM\Column(name="content_license", type="text", nullable=false)
      */
-    private $contentLicense;
+    protected $contentLicense;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="prevent_reinit", type="boolean", nullable=false, options={"default":"1"})
      */
-    private $preventReinit;
+    protected $preventReinit;
 
     /**
      * @var string
      *
      * @ORM\Column(name="js_lib", type="text", nullable=false)
      */
-    private $jsLib;
+    protected $jsLib;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="debug", type="boolean", nullable=false)
      */
-    private $debug;
+    protected $debug;
 
     /**
      * @var string
      *
      * @ORM\Column(name="theme", type="string", length=255, nullable=false)
      */
-    private $theme;
+    protected $theme;
 
     /**
      * @var string
      *
      * @ORM\Column(name="preview_image", type="string", length=255, nullable=false)
      */
-    private $previewImage;
+    protected $previewImage;
 
     /**
      * @var string
      *
      * @ORM\Column(name="author", type="string", length=255, nullable=false)
      */
-    private $author;
+    protected $author;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="prerequisite", type="integer", nullable=false)
      */
-    private $prerequisite;
+    protected $prerequisite;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="hide_toc_frame", type="boolean", nullable=false)
      */
-    private $hideTocFrame;
+    protected $hideTocFrame;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="seriousgame_mode", type="boolean", nullable=false)
      */
-    private $seriousgameMode;
+    protected $seriousgameMode;
 
     /**
      * @var int
      *
      * @ORM\Column(name="use_max_score", type="integer", nullable=false, options={"default":"1"})
      */
-    private $useMaxScore;
+    protected $useMaxScore;
 
     /**
      * @var int
      *
      * @ORM\Column(name="autolaunch", type="integer", nullable=false)
      */
-    private $autolaunch;
+    protected $autolaunch;
 
     /**
      * @var int
      *
      * @ORM\Column(name="category_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
-    private $categoryId;
+    protected $categoryId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="max_attempts", type="integer", nullable=false)
      */
-    private $maxAttempts;
+    protected $maxAttempts;
 
     /**
      * @var int
      *
      * @ORM\Column(name="subscribe_users", type="integer", nullable=false)
      */
-    private $subscribeUsers;
+    protected $subscribeUsers;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_on", type="datetime", nullable=false)
      */
-    private $createdOn;
+    protected $createdOn;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="modified_on", type="datetime", nullable=false)
      */
-    private $modifiedOn;
+    protected $modifiedOn;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="publicated_on", type="datetime", nullable=true)
      */
-    private $publicatedOn;
+    protected $publicatedOn;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="expired_on", type="datetime", nullable=true)
      */
-    private $expiredOn;
+    protected $expiredOn;
 
     /**
      * @var string
      *
      * @ORM\Column(name="accumulate_scorm_time", type="integer", nullable=false, options={"default":1})
      */
-    private $accumulateScormTime;
+    protected $accumulateScormTime;
 
     /**
      * Constructor.

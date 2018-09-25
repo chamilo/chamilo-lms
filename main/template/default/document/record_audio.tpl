@@ -20,10 +20,11 @@
                 <button class="btn btn-primary" type="button" id="btn-start-record">
                     <span class="fa fa-circle fa-fw" aria-hidden="true"></span> {{ 'StartRecordingAudio'|get_lang }}
                 </button>
-                <button class="btn btn-danger" type="button" id="btn-stop-record" disabled>
+                <button class="btn btn-danger hidden" type="button" id="btn-stop-record" disabled>
                     <span class="fa fa-square fa-fw" aria-hidden="true"></span> {{ 'StopRecordingAudio'|get_lang }}
                 </button>
-                <button class="btn btn-success" type="button" id="btn-save-record" disabled>
+                <button class="btn btn-success hidden" type="button" id="btn-save-record"
+                    data-loadingtext="{{ 'Uploading'|get_lang }}" disabled>
                     <span class="fa fa-send fa-fw" aria-hidden="true"></span> {{ 'SaveRecordedAudio'|get_lang }}
                 </button>
             </div>
@@ -64,7 +65,9 @@
                 btnStopId: '#btn-stop-record',
                 btnSaveId: '#btn-save-record',
                 plyrPreviewId: '#record-preview',
-                directory: '{{ directory }}'
+                directory: '{{ directory }}',
+                reload_page: 1,
+                type : 'document'
             },
             {
                 blockId: '#record-audio-wami',

@@ -89,7 +89,7 @@ var AMTcgiloc = "//chart.googleapis.com/chart?cht=tx&chs=1x0&chl=";
 var AScgiloc = '//www.imathas.com/imathas/filter/graph/svgimg.php'; //path to CGI script
 
 //for editor graphs IMG fallback
-var mathcolor = "blue";        // change it to "" (to inherit) or another color
+var mathcolor = "black";        // change it to "" (to inherit) or another color
 // Modified by Ivan Tcholakov, 01-JUL-2010.
 //var mathfontsize = "1em";      // change to e.g. 1.2em for larger math
 var mathfontsize = "1.2em";

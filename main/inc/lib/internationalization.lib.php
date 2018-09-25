@@ -60,11 +60,11 @@ define('PERSON_NAME_EMAIL_ADDRESS', PERSON_NAME_WESTERN_ORDER);
 define('PERSON_NAME_DATA_EXPORT', PERSON_NAME_EASTERN_ORDER);
 
 /**
- * Returns a translated (localized) string, called by its identificator.
+ * Returns a translated (localized) string, called by its ID.
  *
- * @param string $variable this is the identificator (name) of the translated string to be retrieved
- * @param string $reserved this parameter has been reserved for future use
- * @param string $language (optional)    Language indentificator. If it is omited, the current interface language is assumed.
+ * @param string $variable              this is the ID (name) of the translated string to be retrieved
+ * @param bool   $returnEmptyIfNotFound If variable is not found, then: if false: returns variable name with or without brackets; true: returns ''
+ * @param string $language              (optional)    Language ID. If it is omitted, the current interface language is assumed.
  *
  * @return string returns the requested string in the correspondent language
  *
@@ -82,7 +82,7 @@ define('PERSON_NAME_DATA_EXPORT', PERSON_NAME_EASTERN_ORDER);
  *
  * @see http://translate.chamilo.org/
  */
-function get_lang($variable, $reserved = null, $language = null)
+function get_lang($variable, $returnEmptyIfNotFound = false, $language = null)
 {
     // For serving some old hacks:
     // By manipulating this global variable the translation may
@@ -141,17 +141,18 @@ function get_lang($variable, $reserved = null, $language = null)
     // - from a local variable after reloading the language files - on test server mode or when requested language
     // is different than the genuine interface language.
     $read_global_variables = $is_interface_language;
+    $langvar = '';
 
     if ($read_global_variables) {
         if (isset($GLOBALS[$variable])) {
             $langvar = $GLOBALS[$variable];
         } elseif (isset($GLOBALS["lang$variable"])) {
             $langvar = $GLOBALS["lang$variable"];
-        } else {
+        } elseif (!$returnEmptyIfNotFound) {
             $langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
         }
     }
-    if (empty($langvar) || !is_string($langvar)) {
+    if (empty($langvar) || !is_string($langvar) && !$returnEmptyIfNotFound) {
         $langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
     }
     $ret = $cache[$language][$variable] = $langvar;
@@ -166,6 +167,8 @@ function get_lang($variable, $reserved = null, $language = null)
  * @param bool $purified              (optional)    When it is true, a purified (refined)
  *                                    language value will be returned, for example 'french' instead of 'french_unicode'
  * @param bool $setParentLanguageName
+ *
+ * @throws Exception
  *
  * @return string the current language of the interface
  */
@@ -414,8 +417,8 @@ function api_get_timezone()
  * @param bool  $returnObj
  *
  * @return string|DateTime The DATETIME in UTC to be inserted in the DB,
- *                or null if the format of the argument is not supported
- *                or datetime
+ *                         or null if the format of the argument is not supported
+ *                         or datetime
  *
  * @author Julio Montoya - Adding the 2nd parameter
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
@@ -492,7 +495,7 @@ function api_get_local_time(
     }
 
     if (is_numeric($time)) {
-        $time = intval($time);
+        $time = (int) $time;
         if ($return_null_if_invalid_date) {
             if (strtotime(date('d-m-Y H:i:s', $time)) !== (int) $time) {
                 return null;
@@ -540,7 +543,10 @@ function api_strtotime($time, $timezone = null)
         date_default_timezone_set($timezone);
     }
     $timestamp = strtotime($time);
-    date_default_timezone_set($system_timezone);
+    if (!empty($timezone)) {
+        // only reset timezone if it was changed
+        date_default_timezone_set($system_timezone);
+    }
 
     return $timestamp;
 }
@@ -849,8 +855,7 @@ function api_get_months_long($language = null)
  * @param string     $language   (optional)
  *                               The language id. If it is omitted, the current interface language is assumed.
  *                               This parameter has meaning with the format PERSON_NAME_COMMON_CONVENTION only.
- * @param string     $encoding   (optional)    The used internally by this function
- *                               character encoding. If it is omitted, the platform character set will be used by default.
+ * @param string     $username
  *
  * @return string The result is sort of full name of the person.
  *                Sample results:
@@ -869,7 +874,6 @@ function api_get_person_name(
     $title = null,
     $format = null,
     $language = null,
-    $encoding = null,
     $username = null
 ) {
     static $valid = [];
@@ -1076,9 +1080,9 @@ function api_utf8_decode($string, $to_encoding = null)
 }
 
 /**
- * Converts a given string into the system ecoding (or platform character set).
- * When $from encoding is omited on UTF-8 platforms then language dependent encoding
- * is guessed/assumed. On non-UTF-8 platforms omited $from encoding is assumed as UTF-8.
+ * Converts a given string into the system encoding (or platform character set).
+ * When $from encoding is omitted on UTF-8 platforms then language dependent encoding
+ * is guessed/assumed. On non-UTF-8 platforms omitted $from encoding is assumed as UTF-8.
  * When the parameter $check_utf8_validity is true the function checks string's
  * UTF-8 validity and decides whether to try to convert it or not.
  * This function is useful for problem detection or making workarounds.
@@ -2185,7 +2189,8 @@ function _api_validate_person_name_format($format)
 
 /**
  * Removes leading, trailing and duplicate whitespace and/or commas in a full person name.
- * Cleaning is needed for the cases when not all parts of the name are available or when the name is constructed using a "dirty" pattern.
+ * Cleaning is needed for the cases when not all parts of the name are available
+ * or when the name is constructed using a "dirty" pattern.
  *
  * @param string $person_name the input person name
  *

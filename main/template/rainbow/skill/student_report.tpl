@@ -13,23 +13,23 @@
 </style>
 <h1 class="page-header">{{ 'MyBadges' | get_lang }}</h1>
 <p>
-{{ 'MySkillsReportIntroduction' | get_lang }}
+    {{ 'MySkillsReportIntroduction' | get_lang }}
 </p>
 {% if rows %}
-<div class="communications">
-    {% if skill_table %}
-        {{ skill_table }}
-    {% endif %}
-</div>
+    <div class="communications">
+        {% if skill_table %}
+            {{ skill_table }}
+        {% endif %}
+    </div>
     <h6 class="table-header">{{ 'SkillsHistory' | get_lang }}</h6>
     <table class="table">
         <thead>
-            <tr>
-                <th>{{ 'Badge' | get_lang }}</th>
-                <th>{{ 'Skill' | get_lang }}</th>
-                <th>{{ 'Date' | get_lang }}</th>
-                <th>{{ 'Course' | get_lang }}</th>
-            </tr>
+        <tr>
+            <th>{{ 'Badge' | get_lang }}</th>
+            <th>{{ 'Skill' | get_lang }}</th>
+            <th>{{ 'Date' | get_lang }}</th>
+            <th>{{ 'Course' | get_lang }}</th>
+        </tr>
         </thead>
         <tbody>
         {% for row in rows %}

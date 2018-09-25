@@ -6,60 +6,73 @@
 <html lang="{{ document_language }}" class="no-js"> <!--<![endif]-->
 <head>
 {% block head %}
-{% include template ~ "/layout/head.tpl" %}
+    {% include 'layout/head.tpl'|get_template %}
 {% endblock %}
 </head>
-<body dir="{{ text_direction }}" class="{{ section_name }} {{ login_class }}">
-<noscript>{{ "NoJavascript"|get_lang }}</noscript>
-<div class="wrap">
-    {% if displayCookieUsageWarning == true %}
-    <!-- Display Cookies validation -->
-    <div class="toolbar-cookie alert-warning">
-        <form onSubmit="$(this).toggle('slow')" action="" method="post">
-            <input value=1 type="hidden" name="acceptCookies"/>
-            <div class="cookieUsageValidation">
-                {{ "YouAcceptCookies" | get_lang }}
-                <span style="margin-left:20px;" onclick="$(this).next().toggle('slow'); $(this).toggle('slow')">
-                    ({{"More" | get_lang }})
-                </span>
-                <div style="display:none; margin:20px 0;">
-                    {{ "HelpCookieUsageValidation" | get_lang}}
-                </div>
-                <span style="margin-left:20px;" onclick="$(this).parent().parent().submit()">
-                    ({{"Accept" | get_lang }})
-                </span>
+<body>
+    <!-- START MAIN -->
+    <main id="main" dir="{{ text_direction }}" class="{{ section_name }} {{ login_class }}">
+    <noscript>{{ "NoJavascript"|get_lang }}</noscript>
+            {% if show_course_shortcut is not null %}
+            <!-- TOOLS SHOW COURSE -->
+            <div id="cm-tools" class="nav-tools">
+                {{ show_course_shortcut }}
             </div>
-        </form>
-    </div>
-    {% endif %}
-
-    {% if show_header == true %}
-    {% include template ~ "/layout/page_header.tpl" %}
-    {% endif %}
-    {% if show_course_shortcut is not null %}
-        <div class="nav-tools">
-            {{ show_course_shortcut }}
-        </div>
-    {% endif %}
-	<section id="content-section">
-        <div class="container{{ fluid == true ? '-fluid' : '' }}">
-            {% block breadcrumb %}
-                <div id="page-breadcrumb">
-                    {{ breadcrumb }}
+            <!-- END TOOLS SHOW COURSE -->
+            {% endif %}
+            {% if displayCookieUsageWarning == true %}
+                <!-- START DISPLAY COOKIES VALIDATION -->
+                <div class="toolbar-cookie alert-warning">
+                    <form onSubmit="$(this).toggle('slow')" action="" method="post">
+                        <input value=1 type="hidden" name="acceptCookies"/>
+                        <div class="cookieUsageValidation">
+                            {{ "YouAcceptCookies" | get_lang }}
+                            <span style="margin-left:20px;" onclick="$(this).next().toggle('slow'); $(this).toggle('slow')">
+                                ({{"More" | get_lang }})
+                            </span>
+                            <div style="display:none; margin:20px 0;">
+                                {{ "HelpCookieUsageValidation" | get_lang}}
+                            </div>
+                            <span style="margin-left:20px;" onclick="$(this).parent().parent().submit()">
+                                ({{"Accept" | get_lang }})
+                            </span>
+                        </div>
+                    </form>
                 </div>
-            {% endblock %}
+                <!-- END DISPLAY COOKIES VALIDATION -->
+            {% endif %}
 
-            {% block body %}
-                {{ content }}
-            {% endblock %}
-        </div>
-	</section>
+            <!-- START HEADER -->
+            <header id="cm-header">
+                {% if show_header == true %}
+                    {% include 'layout/page_header.tpl'|get_template %}
+                {% endif %}
+            </header>
+            <!-- END HEADER -->
+            <!-- START CONTENT -->
+            <section id="cm-content">
+                <div class="container{{ fluid == true ? '-fluid':'' }}">
+                    {% block breadcrumb %}
+                        {{ breadcrumb }}
+                    {% endblock %}
+                    {% block body %}
+                        {{ content }}
+                    {% endblock %}
+                </div>
+            </section>
+            <!-- END CONTENT -->
 
-    {% if show_footer == true %}
-	{% include template ~ "/layout/page_footer.tpl" %}
-    {% endif %}
+            <!-- START FOOTER -->
 
-    {% include template ~ '/layout/footer.js.tpl' %}
-</div>
-  </body>
+                {% if show_footer == true %}
+                    <footer class="footer">
+                        {% include 'layout/page_footer.tpl'|get_template %}
+                    </footer>
+                {% endif %}
+
+            <!-- END FOOTER -->
+
+        </main>
+    <!-- END MAIN -->
+</body>
 </html>

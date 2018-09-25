@@ -308,7 +308,7 @@ if ($studentBoss) {
     }
 }
 
-if ($studentBossList) {
+if (!empty($studentBossList)) {
     $studentBossList = array_column($studentBossList, 'boss_id');
 }
 
@@ -389,7 +389,7 @@ if ($form->validate()) {
 
         $picture_uri = $user_data['picture_uri'];
         if (isset($user['delete_picture']) && $user['delete_picture']) {
-            $picture_uri = UserManager::delete_user_picture($user_id);
+            $picture_uri = UserManager::deleteUserPicture($user_id);
         } elseif (!empty($picture['name'])) {
             $picture_uri = UserManager::update_user_picture(
                 $user_id,
@@ -415,7 +415,7 @@ if ($form->validate()) {
         $language = $user['language'];
         $address = isset($user['address']) ? $user['address'] : null;
 
-        if ($user['radio_expiration_date'] == '1' && !$user_data['platform_admin']) {
+        if (!$user_data['platform_admin'] && $user['radio_expiration_date'] == '1') {
             $expiration_date = $user['expiration_date'];
         } else {
             $expiration_date = null;
@@ -484,11 +484,14 @@ if ($form->validate()) {
 
         $extraFieldValue = new ExtraFieldValue('user');
         $extraFieldValue->saveFieldValues($user);
+        $userInfo = api_get_user_info($user_id);
+        $message = get_lang('UserUpdated').': '.Display::url(
+            $userInfo['complete_name_with_username'],
+            api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id
+        );
 
-        $tok = Security::get_token();
-
-        Display::addFlash(Display::return_message(get_lang('UserUpdated')));
-        header('Location: user_list.php?sec_token='.$tok);
+        Display::addFlash(Display::return_message($message, 'normal', false));
+        header('Location: user_list.php');
         exit();
     }
 }

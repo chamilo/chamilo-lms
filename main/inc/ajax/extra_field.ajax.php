@@ -6,14 +6,26 @@ use Chamilo\CoreBundle\Entity\Tag;
 require_once __DIR__.'/../global.inc.php';
 
 $action = isset($_GET['a']) ? $_GET['a'] : '';
+$type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
+$fieldId = isset($_REQUEST['field_id']) ? $_REQUEST['field_id'] : null;
 
 switch ($action) {
-    case 'get_second_select_options':
-        $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
-        $field_id = isset($_REQUEST['field_id']) ? $_REQUEST['field_id'] : null;
-        $option_value_id = isset($_REQUEST['option_value_id']) ? $_REQUEST['option_value_id'] : null;
+    case 'delete_file':
+        api_protect_admin_script();
 
-        if (!empty($type) && !empty($field_id) && !empty($option_value_id)) {
+        $itemId = isset($_REQUEST['item_id']) ? $_REQUEST['item_id'] : null;
+        $extraFieldValue = new ExtraFieldValue($type);
+        $data = $extraFieldValue->get_values_by_handler_and_field_id($itemId, $fieldId);
+        if (!empty($data) && isset($data['id']) && !empty($data['value'])) {
+            $extraFieldValue->deleteValuesByHandlerAndFieldAndValue($itemId, $data['field_id'], $data['value']);
+            echo 1;
+            break;
+        }
+        echo 0;
+        break;
+    case 'get_second_select_options':
+        $option_value_id = isset($_REQUEST['option_value_id']) ? $_REQUEST['option_value_id'] : null;
+        if (!empty($type) && !empty($fieldId) && !empty($option_value_id)) {
             $field_options = new ExtraFieldOption($type);
             echo $field_options->get_second_select_field_options_by_field(
                 $option_value_id,
@@ -23,9 +35,6 @@ switch ($action) {
         break;
     case 'search_tags':
         header('Content-Type: application/json');
-
-        $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
-        $fieldId = isset($_REQUEST['field_id']) ? $_REQUEST['field_id'] : null;
         $tag = isset($_REQUEST['q']) ? $_REQUEST['q'] : null;
         $result = [];
 
@@ -70,8 +79,16 @@ switch ($action) {
         $result = $extraField->searchOptionsFromTags($from, $search, $options);
         $options = [];
         $groups = [];
+
         foreach ($result as $data) {
-            $groups[$data['display_text']][] = [
+            // Try to get the translation
+            $displayText = $data['display_text'];
+            $valueToTranslate = str_replace('-', '', $data['value']);
+            $valueTranslated = str_replace(['[=', '=]'], '', get_lang($valueToTranslate));
+            if ($valueToTranslate != $valueTranslated) {
+                $displayText = $valueTranslated;
+            }
+            $groups[$displayText][] = [
                 'id' => $data['id'],
                 'text' => $data['tag'],
             ];

@@ -4,9 +4,7 @@
 /**
  * Controller script. Prepares the common background
  * variables to give to the scripts corresponding to
- * the requested action
- * This file contains class used like controller,
- * it should be included inside a dispatcher file (e.g: index.php).
+ * the requested action.
  *
  * @author Christian Fasanando <christian1827@gmail.com>
  *
@@ -16,8 +14,6 @@
  */
 class DashboardController
 {
-    private $toolname;
-    private $view;
     private $user_id;
 
     /**
@@ -26,28 +22,20 @@ class DashboardController
     public function __construct()
     {
         $this->user_id = api_get_user_id();
-        $this->toolname = 'dashboard';
-        $this->view = new View($this->toolname);
     }
 
     /**
-     * Display blocks from dashboard plugin paths.
-     *
-     * @param string $msg (optional)
-     *                    render to dashboard.php view
+     * Display blocks from dashboard plugin paths
+     * render to dashboard.php view.
      */
-    public function display($msg = false)
+    public function display()
     {
-        $data = [];
+        $tpl = new Template(get_lang('Dashboard'));
         $user_id = $this->user_id;
-
-        $block_data_without_plugin = DashboardManager::get_block_data_without_plugin();
         $dashboard_blocks = DashboardManager::get_enabled_dashboard_blocks();
         $user_block_data = DashboardManager::get_user_block_data($user_id);
         $user_blocks_id = array_keys($user_block_data);
-
-        $data_block = null;
-
+        $blocks = null;
         if (!empty($dashboard_blocks)) {
             foreach ($dashboard_blocks as $block) {
                 // display only user blocks
@@ -71,25 +59,65 @@ class DashboardController
                         }
                     }
 
-                    $data_block[$path] = $obj->get_block();
+                    $blocks[$path] = $obj->get_block();
                     // set user block column
-                    $data_block[$path]['column'] = $user_block_data[$block['id']]['column'];
+                    $blocks[$path]['column'] = $user_block_data[$block['id']]['column'];
                 }
             }
-
-            $data['blocks'] = $data_block;
-            $data['dashboard_view'] = 'blocks';
         }
 
-        if ($msg) {
-            $data['msg'] = $msg;
+        $view = isset($_GET['view']) ? $_GET['view'] : 'blocks';
+        api_block_anonymous_users();
+        $link_blocks_view = $link_list_view = null;
+        if ($view == 'list') {
+            $link_blocks_view = '<a href="'.api_get_self().'?view=blocks">'.
+                Display::return_icon('blocks.png', get_lang('DashboardBlocks'), '', ICON_SIZE_MEDIUM).'</a>';
+        } else {
+            $link_list_view = '<a href="'.api_get_self().'?view=list">'.
+                Display::return_icon('edit.png', get_lang('EditBlocks'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
-        // render to the view
-        $this->view->set_data($data);
-        $this->view->set_layout('layout');
-        $this->view->set_template('dashboard');
-        $this->view->render();
+        $configuration_link = null;
+        if (api_is_platform_admin()) {
+            $configuration_link = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins">'
+                .Display::return_icon(
+                    'settings.png',
+                    get_lang('ConfigureDashboardPlugin'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                ).'</a>';
+        }
+
+        $actions = Display::toolbarAction('toolbar', [0 => $link_blocks_view.$link_list_view.$configuration_link]);
+        $tpl->assign('actions', $actions);
+
+        // block dashboard view
+        $columns = [];
+        $blockList = null;
+        if (isset($view) && $view == 'blocks') {
+            if (isset($blocks) && count($blocks) > 0) {
+                // group content html by number of column
+                if (is_array($blocks)) {
+                    $tmp_columns = [];
+                    foreach ($blocks as $block) {
+                        $tmp_columns[] = $block['column'];
+                        if (in_array($block['column'], $tmp_columns)) {
+                            $columns['column_'.$block['column']][] = $block['content_html'];
+                        }
+                    }
+                }
+            }
+        } else {
+            $user_id = api_get_user_id();
+            $blockList = DashboardManager::display_user_dashboard_list($user_id);
+            $tpl->assign('blocklist', $blockList);
+        }
+
+        $tpl->assign('columns', $columns);
+        $template = $tpl->get_template('dashboard/index.tpl');
+        $content = $tpl->fetch($template);
+        $tpl->assign('content', $content);
+        $tpl->display_one_col_template();
     }
 
     /**
@@ -98,24 +126,14 @@ class DashboardController
      */
     public function store_user_block()
     {
-        $data = [];
-        $user_id = $this->user_id;
         if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
             $enabled_blocks = $_POST['enabled_blocks'];
             $columns = $_POST['columns'];
-            $affected_rows = DashboardManager::store_user_blocks($user_id, $enabled_blocks, $columns);
-            if ($affected_rows) {
-                $data['success'] = true;
-            }
+            DashboardManager::store_user_blocks($this->user_id, $enabled_blocks, $columns);
+            Display::addFlash(Display::return_message(get_lang('Saved')));
         }
-
-        $data['dashboard_view'] = 'list';
-
-        // render to the view
-        $this->view->set_data($data);
-        $this->view->set_layout('layout');
-        $this->view->set_template('dashboard');
-        $this->view->render();
+        header('Location: '.api_get_path(WEB_CODE_PATH).'dashboard/index.php');
+        exit;
     }
 
     /**
@@ -124,8 +142,9 @@ class DashboardController
      */
     public function close_user_block($path)
     {
-        $user_id = $this->user_id;
-        $result = DashboardManager::close_user_block($user_id, $path);
-        $this->display($result);
+        DashboardManager::close_user_block($this->user_id, $path);
+        Display::addFlash(Display::return_message(get_lang('Saved')));
+        header('Location: '.api_get_path(WEB_CODE_PATH).'dashboard/index.php');
+        exit;
     }
 }

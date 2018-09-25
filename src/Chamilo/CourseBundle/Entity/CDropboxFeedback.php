@@ -27,49 +27,49 @@ class CDropboxFeedback
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="feedback_id", type="integer")
      */
-    private $feedbackId;
+    protected $feedbackId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="file_id", type="integer", nullable=false)
      */
-    private $fileId;
+    protected $fileId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="author_user_id", type="integer", nullable=false)
      */
-    private $authorUserId;
+    protected $authorUserId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="feedback", type="text", nullable=false)
      */
-    private $feedback;
+    protected $feedback;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="feedback_date", type="datetime", nullable=false)
      */
-    private $feedbackDate;
+    protected $feedbackDate;
 
     /**
      * Set fileId.

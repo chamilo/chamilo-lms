@@ -14,20 +14,18 @@ require_once __DIR__.'/../inc/global.inc.php';
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
-// Access restrictions
-api_protect_admin_script(true);
+$id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
+$relation = isset($_REQUEST['relation']) ? (int) $_REQUEST['relation'] : '';
+$usergroup = new UserGroup();
+$groupInfo = $usergroup->get($id);
+$usergroup->protectScript($groupInfo);
 
 // setting breadcrumbs
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 $interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
 
-// Database Table Definitions
-
 // setting the name of the tool
 $tool_name = get_lang('SubscribeUsersToClass');
-
-$id = intval($_GET['id']);
-$relation = isset($_REQUEST['relation']) ? intval($_REQUEST['relation']) : '';
 
 $htmlHeadXtra[] = '
 <script>
@@ -66,8 +64,8 @@ function validate_filter() {
     document.formulaire.submit();
 }
 
-function checked_in_no_group(checked) {
-
+function checked_in_no_group(checked) 
+{
     $("#relation")
     .find("option")
     .attr("selected", false);
@@ -88,7 +86,6 @@ function change_select(val) {
 </script>';
 
 $form_sent = 0;
-
 $extra_field_list = UserManager::get_extra_fields();
 $new_field_list = [];
 if (is_array($extra_field_list)) {
@@ -103,13 +100,9 @@ if (is_array($extra_field_list)) {
     }
 }
 
-$usergroup = new UserGroup();
-
 if (empty($id)) {
     api_not_allowed(true);
 }
-
-$groupInfo = $usergroup->get($id);
 
 $first_letter_user = '';
 
@@ -124,12 +117,14 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 
     // If "social group" you need to select a role
     if ($groupInfo['group_type'] == 1 && empty($relation)) {
-        Display::addFlash(Display::return_message(get_lang('SelectRole')));
+        Display::addFlash(Display::return_message(get_lang('SelectRole'), 'warning'));
+        header('Location: '.api_get_self().'?id='.$id);
+        exit;
     }
 
     if ($form_sent == 1) {
         Display::addFlash(Display::return_message(get_lang('Updated')));
-        //added a parameter to send emails when registering a user
+        // Added a parameter to send emails when registering a user
         $usergroup->subscribe_users_to_usergroup(
             $id,
             $elements_posted,
@@ -243,7 +238,7 @@ if (!empty($filters) && !empty($filterData)) {
 }
 
 $elements_not_in = $elements_in = [];
-$complete_user_list = UserManager::get_user_list_like([], $order);
+$complete_user_list = UserManager::getUserListLike([], $order, false, 'AND');
 
 if (!empty($complete_user_list)) {
     foreach ($complete_user_list as $item) {
@@ -280,9 +275,8 @@ if (!empty($complete_user_list)) {
 }
 
 $user_with_any_group = isset($_REQUEST['user_with_any_group']) && !empty($_REQUEST['user_with_any_group']) ? true : false;
-
 if ($user_with_any_group) {
-    $user_list = UserManager::get_user_list_like($conditions, $order, true);
+    $user_list = UserManager::getUserListLike($conditions, $order, true, 'AND');
     $new_user_list = [];
     foreach ($user_list as $item) {
         if (!in_array($item['user_id'], $list_all)) {
@@ -291,7 +285,7 @@ if ($user_with_any_group) {
     }
     $user_list = $new_user_list;
 } else {
-    $user_list = UserManager::get_user_list_like($conditions, $order, true);
+    $user_list = UserManager::getUserListLike($conditions, $order, true, 'AND');
 }
 
 if (!empty($user_list)) {

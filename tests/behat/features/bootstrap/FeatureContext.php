@@ -1,5 +1,6 @@
 <?php
 
+use Behat\Gherkin\Node\TableNode;
 use Behat\MinkExtension\Context\MinkContext;
 
 /**
@@ -29,20 +30,6 @@ class FeatureContext extends MinkContext
     }
 
     /**
-     * @Given /^I am a session administrator$/
-     */
-    public function iAmASessionAdministrator()
-    {
-        $this->visit('/index.php?logout=logout');
-        $this->iAmOnHomepage();
-        $this->fillFields(new \Behat\Gherkin\Node\TableNode([
-            ['login', 'amaurichard'],
-            ['password', 'amaurichard']
-        ]));
-        $this->pressButton('submitAuth');
-    }
-
-    /**
      * @Given /^I am a teacher$/
      */
     public function iAmATeacher()
@@ -52,17 +39,6 @@ class FeatureContext extends MinkContext
         $this->fillField('login', 'mmosquera');
         $this->fillField('password', 'mmosquera');
         $this->pressButton('submitAuth');
-    }
-
-    /**
-     * @Given /^I am a teacher in course "([^"]*)"$/
-     * @Todo implement
-     */
-    public function iAmATeacherInCourse($course)
-    {
-        //$sql = "SELECT * FROM course_rel_user WHERE c_id = X AND user_id = ";
-        //$result = ...
-        //if ($result !== false) { ... }
     }
 
     /**
@@ -134,22 +110,20 @@ class FeatureContext extends MinkContext
     }
 
     /**
-     * @Given /^I am in course "([^"]*)"$/
-     * @Todo redefine function to be different from I am on course TEMP homepage
+     * @Given /^I am on course "([^"]*)" homepage$/
      */
-    public function iAmInCourse($argument)
+    public function iAmOnCourseXHomepage($courseCode)
     {
-        $this->visit('/main/course_home/course_home.php?cDir=' . $argument);
+        $this->visit('/courses/'.$courseCode.'/index.php');
         $this->assertElementNotOnPage('.alert-danger');
     }
 
     /**
-     * @Given /^I am on course "([^"]*)" homepage$/
+     * @Given /^I am on course "([^"]*)" homepage in session "([^"]*)"$/
      */
-    public function iAmOnCourseXHomepage($argument)
+    public function iAmOnCourseXHomepageInSessionY($courseCode, $sessionName)
     {
-        $this->visit('/main/course_home/course_home.php?cDir=' . $argument);
-        $this->assertElementNotOnPage('.alert-danger');
+        $this->visit('/main/course_home/redirect.php?cidReq='.$courseCode.'&session_name='.$sessionName);
     }
 
     /**
@@ -168,7 +142,7 @@ class FeatureContext extends MinkContext
     {
         $this->visit('/index.php?logout=logout');
         $this->iAmOnHomepage();
-        $this->fillFields(new \Behat\Gherkin\Node\TableNode([
+        $this->fillFields(new TableNode([
             ['login', $username],
             ['password', $username]
         ]));
@@ -208,7 +182,7 @@ class FeatureContext extends MinkContext
     public function iHaveAPublicPasswordProtectedCourse($code, $password)
     {
         $this->visit('/main/admin/course_add.php');
-        $this->fillFields(new \Behat\Gherkin\Node\TableNode([
+        $this->fillFields(new TableNode([
             ['title', 'Password Protected'],
             ['visual_code', $code],
             ['visibility', 3]
@@ -233,7 +207,7 @@ class FeatureContext extends MinkContext
     /**
      * @When /^I invite to a friend with id "([^"]*)" to a social group with id "([^"]*)"$/
      */
-    public function iInviteAFrienToASocialGroup($friendId, $groupId)
+    public function iInviteAFriendToASocialGroup($friendId, $groupId)
     {
         $this->visit('/main/social/group_invitation.php?id=' . $groupId);
         $this->fillField('invitation[]', $friendId);
@@ -390,6 +364,22 @@ class FeatureContext extends MinkContext
     }
 
     /**
+     * @When /^(?:|I )fill in select bootstrap static by text "(?P<field>(?:[^"]|\\")*)" select "(?P<value>(?:[^"]|\\")*)"$/
+     */
+    public function iFillInSelectStaticBootstrapInputWithAndSelectByText($field, $value)
+    {
+        $this->getSession()->wait(1000);
+        $this->getSession()->executeScript("
+           $('$field > option').each(function(index, option) {
+                if (option.text == '$value') {
+                    $('$field').selectpicker('val', option.value);
+                }                
+            });
+        ");
+    }
+
+
+    /**
      * @When /^wait for the page to be loaded$/
      */
     public function waitForThePageToBeLoaded()
@@ -456,5 +446,122 @@ class FeatureContext extends MinkContext
         ");
 
         return true;
+    }
+
+    /**
+     * @Then /^I should see an icon with title "([^"]*)"$/
+     */
+    public function iShouldSeeAnIconWithTitle($value)
+    {
+        $el = $this->getSession()->getPage()->find('xpath', "//img[@title='$value']");
+        if (null === $el) {
+            throw new Exception(
+                'Could not find an icon with title: '.$value
+            );
+        }
+        return true;
+    }
+    /**
+     * @Then /^I should not see an icon with title "([^"]*)"$/
+     */
+    public function iShouldNotSeeAnIconWithTitle($value)
+    {
+        $el = $this->getSession()->getPage()->find('xpath', "//img[@title='$value']");
+        if (null === $el) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @Given /^I am a student subscribed to session "([^"]*)"$/
+     *
+     * @param string$sessionName
+     */
+    public function iAmStudentSubscribedToXSession($sessionName)
+    {
+        $this->iAmAPlatformAdministrator();
+        $this->visit('/main/session/session_add.php');
+        $this->fillField('name', $sessionName);
+        $this->pressButton('Next step');
+        $this->selectOption('NoSessionCoursesList[]', 'TEMP (TEMP)');
+        $this->pressButton('add_course');
+        $this->pressButton('Next step');
+        $this->assertPageContainsText('Update successful');
+        $this->fillField('user_to_add', 'acostea');
+        $this->waitForThePageToBeLoaded();
+        $this->clickLink('Costea Andrea (acostea)');
+        $this->pressButton('Finish session creation');
+        $this->assertPageContainsText('Session overview');
+        //$this->assertPageContainsText('Costea Andrea (acostea)');
+        $this->iAmAStudent();
+    }
+
+    /**
+     * Example: Then I should see the table "#category_results":
+     *               | Categories    | Absolute score | Relative score |
+     *               | Categoryname2 | 50 / 70        | 71.43%         |
+     *               | Categoryname1 | 60 / 60        | 100%           |
+     *
+     * @Then /^I should see the table "([^"]*)":$/
+     *
+     * @param string    $tableId
+     * @param TableNode $tableData
+     *
+     * @throws Exception
+     */
+    public function assertPageContainsTable($tableId, TableNode $tableData)
+    {
+        $table = $this->getSession()->getPage()->find('css', $tableId);
+        $rows = $tableData->getRowsHash();
+        $i = 1;
+
+        $right = array_keys($rows);
+
+        foreach ($right as $text) {
+            $cell = $table->find('css', 'tr:nth-child('.$i.') :nth-child(1)');
+            $i++;
+
+            if (!$cell) {
+                throw new Exception('Cell not found.');
+            }
+
+            if ($cell->getText() != $text) {
+                throw new Exception('Table text not found.');
+            }
+        }
+
+        $i = 1;
+
+        foreach ($rows as $field => $cols) {
+            if (is_array($cols)) {
+                $j = 2;
+
+                foreach ($cols as $col) {
+                    $cell = $table->find('css', 'tr:nth-child('.$i.') :nth-child('.$j.')');
+                    $j++;
+
+                    if (!$cell) {
+                        throw new Exception('Cell not found.');
+                    }
+
+                    if ($cell->getText() != $col) {
+                        throw new Exception('Table text not found. Found "'.$cell->getText().'" <> "'.$col.'"');
+                    }
+                }
+            } else {
+                $cell = $table->find('css', 'tr:nth-child('.$i.') :nth-child(2)');
+
+                if (!$cell) {
+                    throw new Exception('Cell not found.');
+                }
+
+                if ($cell->getText() != $cols) {
+                    throw new Exception('Table text not found. Found "'.$cell->getText().'" <> "'.$cols.'"');
+                }
+            }
+
+            $i++;
+        }
     }
 }

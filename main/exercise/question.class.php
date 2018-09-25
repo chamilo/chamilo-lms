@@ -50,6 +50,10 @@ abstract class Question
         MULTIPLE_ANSWER_COMBINATION => ['multiple_answer_combination.class.php', 'MultipleAnswerCombination'],
         UNIQUE_ANSWER_NO_OPTION => ['unique_answer_no_option.class.php', 'UniqueAnswerNoOption'],
         MULTIPLE_ANSWER_TRUE_FALSE => ['multiple_answer_true_false.class.php', 'MultipleAnswerTrueFalse'],
+        MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY => [
+            'MultipleAnswerTrueFalseDegreeCertainty.php',
+            'MultipleAnswerTrueFalseDegreeCertainty',
+        ],
         MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE => [
             'multiple_answer_combination_true_false.class.php',
             'MultipleAnswerCombinationTrueFalse',
@@ -124,7 +128,7 @@ abstract class Question
      */
     public static function read($id, $course_id = null)
     {
-        $id = intval($id);
+        $id = (int) $id;
         if (!empty($course_id)) {
             $course_info = api_get_course_info_by_id($course_id);
         } else {
@@ -494,8 +498,8 @@ abstract class Question
 
             // update or add category for a question
             foreach ($category_list as $category_id) {
-                $category_id = intval($category_id);
-                $question_id = intval($this->id);
+                $category_id = (int) $category_id;
+                $question_id = (int) $this->id;
                 $sql = "SELECT count(*) AS nb
                         FROM $table
                         WHERE
@@ -649,28 +653,35 @@ abstract class Question
     /**
      * Get default hot spot folder in documents.
      *
+     * @param array $courseInfo
+     *
      * @return string
      */
-    public function getHotSpotFolderInCourse()
+    public function getHotSpotFolderInCourse($courseInfo = [])
     {
-        if (empty($this->course) || empty($this->course['directory'])) {
+        $courseInfo = empty($courseInfo) ? $this->course : $courseInfo;
+
+        if (empty($courseInfo) || empty($courseInfo['directory'])) {
             // Stop everything if course is not set.
             api_not_allowed();
         }
 
-        $pictureAbsolutePath = api_get_path(SYS_COURSE_PATH).$this->course['directory'].'/document/images/';
+        $pictureAbsolutePath = api_get_path(SYS_COURSE_PATH).$courseInfo['directory'].'/document/images/';
         $picturePath = basename($pictureAbsolutePath);
 
         if (!is_dir($picturePath)) {
             create_unexisting_directory(
-                $this->course,
+                $courseInfo,
                 api_get_user_id(),
                 0,
                 0,
                 0,
                 dirname($pictureAbsolutePath),
                 '/'.$picturePath,
-                $picturePath
+                $picturePath,
+                '',
+                false,
+                false
             );
         }
 
@@ -772,7 +783,7 @@ abstract class Question
      * @author Olivier Brouckaert
      *
      * @param int   $questionId - ID of the target question
-     * @param array $courseInfo
+     * @param array $courseInfo destination course info
      *
      * @return bool - true if copied, otherwise false
      */
@@ -783,8 +794,12 @@ abstract class Question
         }
 
         $course_id = $courseInfo['real_id'];
-        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $destination_path = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/images';
+        $destination_path = $this->getHotSpotFolderInCourse($courseInfo);
+
+        if (empty($destination_path)) {
+            return false;
+        }
+
         $source_path = $this->getHotSpotFolderInCourse();
 
         // if the question has got an ID and if the picture exists
@@ -792,12 +807,13 @@ abstract class Question
             return false;
         }
 
+        $sourcePictureName = $this->getPictureFilename($course_id);
         $picture = $this->generatePictureName();
-
-        if (file_exists($source_path.'/'.$this->picture)) {
+        $result = false;
+        if (file_exists($source_path.'/'.$sourcePictureName)) {
             // for backward compatibility
-            $result = @copy(
-                $source_path.'/'.$this->picture,
+            $result = copy(
+                $source_path.'/'.$sourcePictureName,
                 $destination_path.'/'.$picture
             );
         } else {
@@ -818,7 +834,8 @@ abstract class Question
             return false;
         }
 
-        $sql = "UPDATE $TBL_QUESTIONS SET
+        $table = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $sql = "UPDATE $table SET
                 picture = '".Database::escape_string($picture)."'
                 WHERE c_id = $course_id AND id='".intval($questionId)."'";
         Database::query($sql);
@@ -1312,14 +1329,14 @@ abstract class Question
         $TBL_REPONSES = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $TBL_QUIZ_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
 
-        $id = intval($this->id);
+        $id = (int) $this->id;
 
         // if the question must be removed from all exercises
         if (!$deleteFromEx) {
             //update the question_order of each question to avoid inconsistencies
             $sql = "SELECT exercice_id, question_order 
                     FROM $TBL_EXERCISE_QUESTION
-                    WHERE c_id = $course_id AND question_id = ".intval($id)."";
+                    WHERE c_id = $course_id AND question_id = ".intval($id);
 
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
@@ -1519,12 +1536,13 @@ abstract class Question
     public static function getInstance($type)
     {
         if (!is_null($type)) {
-            list($file_name, $class_name) = self::get_question_type($type);
-            if (!empty($file_name)) {
-                if (class_exists($class_name)) {
-                    return new $class_name();
+            list($fileName, $className) = self::get_question_type($type);
+            if (!empty($fileName)) {
+                include_once $fileName;
+                if (class_exists($className)) {
+                    return new $className();
                 } else {
-                    echo 'Can\'t instanciate class '.$class_name.' of type '.$type;
+                    echo 'Can\'t instanciate class '.$className.' of type '.$type;
                 }
             }
         }
@@ -1778,7 +1796,8 @@ abstract class Question
             unset($question_type_custom_list[HOT_SPOT_DELINEATION]);
         }
 
-        echo '<div class="well">';
+        echo '<div class="panel panel-default">';
+        echo '<div class="panel-body">';
         echo '<ul class="question_menu">';
         foreach ($question_type_custom_list as $i => $a_type) {
             // @todo remove require_once classes are already loaded using composer
@@ -1832,6 +1851,7 @@ abstract class Question
         echo '</div></li>';
         echo '</ul>';
         echo '</div>';
+        echo '</div>';
     }
 
     /**
@@ -1845,7 +1865,7 @@ abstract class Question
     public static function saveQuestionOption($question_id, $name, $course_id, $position = 0)
     {
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
-        $params['question_id'] = intval($question_id);
+        $params['question_id'] = (int) $question_id;
         $params['name'] = $name;
         $params['position'] = $position;
         $params['c_id'] = $course_id;
@@ -1935,7 +1955,7 @@ abstract class Question
     {
         $counterLabel = '';
         if (!empty($counter)) {
-            $counterLabel = intval($counter);
+            $counterLabel = (int) $counter;
         }
         $score_label = get_lang('Wrong');
         $class = 'error';
@@ -1956,7 +1976,7 @@ abstract class Question
                 $score['result'] = " ? / ".$weight;
                 $model = ExerciseLib::getCourseScoreModel();
                 if (!empty($model)) {
-                    $score['result'] = " ? ";
+                    $score['result'] = ' ? ';
                 }
 
                 $hide = api_get_configuration_value('hide_free_question_score');
@@ -1979,8 +1999,12 @@ abstract class Question
             'used' => $score['score'],
             'missing' => $score['weight'],
         ];
-        $header .= Display::page_subheader2($counterLabel.". ".$this->question);
-        $header .= ExerciseLib::getQuestionRibbon($class, $score_label, $score['result'], $scoreCurrent);
+        $header .= Display::page_subheader2($counterLabel.'. '.$this->question);
+        // dont display score for certainty degree questions
+        if ($this->type != MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+            $header .= $exercise->getQuestionRibbon($class, $score_label, $score['result'], $scoreCurrent);
+        }
+
         if ($this->type != READING_COMPREHENSION) {
             // Do not show the description (the text to read) if the question is of type READING_COMPREHENSION
             $header .= Display::div(

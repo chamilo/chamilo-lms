@@ -17,11 +17,6 @@ if (!api_is_platform_admin()) {
     api_protect_admin_script();
 }
 
-// Database table definitions
-$table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
-$table_user = Database::get_main_table(TABLE_MAIN_USER);
-$database = Database::get_main_database();
-
 $userId = isset($_REQUEST['user_id']) ? intval($_REQUEST['user_id']) : '';
 
 $userInfo = api_get_user_info($userId);
@@ -60,7 +55,7 @@ if (api_drh_can_access_all_session_content()) {
         api_not_allowed(true);
     }
 } else {
-    if (!$userIsFollowed) {
+    if (!api_is_platform_admin() && !$userIsFollowed) {
         api_not_allowed(true);
     }
 }
@@ -76,15 +71,6 @@ $usernameInput->freeze();
 // Password
 $group = [];
 $auth_sources = 0; //make available wider as we need it in case of form reset (see below)
-/*if (count($extAuthSource) > 0) {
-    $group[] =& $form->createElement('radio', 'password_auto', null, get_lang('ExternalAuthentication').' ', 2);
-    $auth_sources = array();
-    foreach ($extAuthSource as $key => $info) {
-        $auth_sources[$key] = $key;
-    }
-    $group[] =& $form->createElement('select', 'auth_source', null, $auth_sources);
-    $group[] =& $form->createElement('static', '', '', '<br />');
-}*/
 $group[] = &$form->createElement('radio', 'password_auto', get_lang('Password'), get_lang('AutoGeneratePassword').'<br />', 1);
 $group[] = &$form->createElement('radio', 'password_auto', 'id="radio_user_password"', null, 0);
 $group[] = &$form->createElement('password', 'password', null, ['onkeydown' => 'javascript: password_switch_radio_button(document.user_add,"password[password_auto]");']);
@@ -116,17 +102,7 @@ if ($form->validate()) {
         $username = $userInfo['username'];
         $send_mail = intval($user['mail']['send_mail']);
         $auth_source = PLATFORM_AUTH_SOURCE;
-
         $resetPassword = $user['password']['password_auto'] == '1' ? 0 : 2;
-
-        if (count($extAuthSource) > 0 && $user['password']['password_auto'] == '2') {
-            //$auth_source = $user['password']['auth_source'];
-            //$password = 'PLACEHOLDER';
-        } else {
-            //$auth_source = PLATFORM_AUTH_SOURCE;
-            //$password = $user['password']['password_auto'] == '1' ? api_generate_password() : $user['password']['password'];
-        }
-
         $auth_source = $userInfo['auth_source'];
         $password = $user['password']['password_auto'] == '1' ? api_generate_password() : $user['password']['password'];
 

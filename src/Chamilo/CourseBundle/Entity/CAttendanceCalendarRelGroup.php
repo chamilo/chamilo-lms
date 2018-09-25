@@ -26,35 +26,35 @@ class CAttendanceCalendarRelGroup
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="group_id", type="integer", nullable=false)
      */
-    private $groupId;
+    protected $groupId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="calendar_id", type="integer", nullable=false)
      */
-    private $calendarId;
+    protected $calendarId;
 
     /**
      * Set cId.

@@ -24,4 +24,4 @@
 </p>
 {% endif %}
 
-{% include template ~ '/work/comments.tpl' %}
+{% include 'work/comments.tpl'|get_template %}

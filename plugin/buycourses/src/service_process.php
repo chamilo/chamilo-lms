@@ -24,7 +24,9 @@ $serviceId = intval($_REQUEST['i']);
 if (empty($currentUserId)) {
     api_not_allowed(true);
 }
-
+$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(
+        WEB_PLUGIN_PATH
+    ).'buycourses/resources/css/style.css"/>';
 $em = Database::getManager();
 $plugin = BuyCoursesPlugin::create();
 $includeServices = $plugin->get('include_services');
@@ -114,7 +116,7 @@ $selectOptions = [
 ];
 
 if ($typeUser) {
-    $users = $em->getRepository('ChamiloUserBundle:User')->findAll();
+    $users = UserManager::getRepository()->findAll();
     $selectOptions[$userInfo['user_id']] = api_get_person_name(
         $userInfo['firstname'],
         $userInfo['lastname']
@@ -131,7 +133,7 @@ if ($typeUser) {
     $form->addSelect('info_select', get_lang('User'), $selectOptions);
 } elseif ($typeCourse) {
     /** @var User $user */
-    $user = $em->getRepository('ChamiloUserBundle:User')->find($currentUserId);
+    $user = UserManager::getRepository()->find($currentUserId);
     $courses = $user->getCourses();
     $checker = false;
     foreach ($courses as $course) {
@@ -150,7 +152,7 @@ if ($typeUser) {
 } elseif ($typeSession) {
     $sessions = [];
     /** @var User $user */
-    $user = $em->getRepository('ChamiloUserBundle:User')->find($currentUserId);
+    $user = UserManager::getRepository()->find($currentUserId);
     $userSubscriptions = $user->getSessionCourseSubscriptions();
 
     /** @var SessionRelCourseRelUser $userSubscription */
@@ -173,7 +175,7 @@ if ($typeUser) {
 } elseif ($typeFinalLp) {
     // We need here to check the current user courses first
     /** @var User $user */
-    $user = $em->getRepository('ChamiloUserBundle:User')->find($currentUserId);
+    $user = UserManager::getRepository()->find($currentUserId);
     $courses = $user->getCourses();
     $courseLpList = [];
     $sessionLpList = [];
@@ -252,6 +254,6 @@ $tpl->assign('buying_service', true);
 $tpl->assign('service', $serviceInfo);
 $tpl->assign('user', api_get_user_info());
 $tpl->assign('form', $form->returnForm());
-$content = $tpl->fetch('buycourses/view/process.tpl');
+$content = $tpl->fetch('buycourses/view/service_process.tpl');
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

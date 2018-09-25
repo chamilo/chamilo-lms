@@ -221,7 +221,8 @@ $groupInfo = GroupManager::get_group_properties($groupId);
 
 // The user who posted it can edit his thread only if the course admin allowed this in the properties of the forum
 // The course admin him/herself can do this off course always
-if ((isset($groupInfo['iid']) &&
+if ((
+    isset($groupInfo['iid']) &&
         GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo)
     ) || (
         $current_forum['allow_edit'] == 1 &&
@@ -261,7 +262,8 @@ if (!empty($my_post) && is_array($my_post)) {
     $post_minor = (int) $id_posts[0];
 }
 
-if ((isset($groupInfo['iid']) &&
+if ((
+    isset($groupInfo['iid']) &&
         GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo)
     ) ||
     api_is_allowed_to_edit(false, true) &&
@@ -417,14 +419,18 @@ if (!empty($attachment_list) && is_array($attachment_list)) {
             Security::remove_XSS($attachment['comment'], STUDENT).'</span>';
 
         if (($current_forum['allow_edit'] == 1 && $rows[$display_post_id]['user_id'] == $_user['user_id']) ||
-            (api_is_allowed_to_edit(false, true) && !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId))
+            (api_is_allowed_to_edit(false, true) &&
+            !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId))
         ) {
             echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.
                 api_get_cidreq().'&action=delete_attach&id_attach='.$attachment['id'].'&forum='.$forumId.
                 '&thread='.$threadId.
                 '" onclick="javascript:if(!confirm(\''.
-                addslashes(api_htmlentities(
-                    get_lang('ConfirmYourChoice'), ENT_QUOTES)
+                addslashes(
+                    api_htmlentities(
+                    get_lang('ConfirmYourChoice'),
+                    ENT_QUOTES
+                )
                 ).'\')) return false;">'.Display::return_icon(
                     'delete.gif',
                     get_lang('Delete')

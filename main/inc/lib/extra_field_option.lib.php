@@ -140,14 +140,14 @@ class ExtraFieldOption extends Model
      */
     public function saveOptions($params, $showQuery = false)
     {
-        $optionInfo = self::get_field_option_by_field_and_option(
+        $optionInfo = $this->get_field_option_by_field_and_option(
             $params['field_id'],
             $params['option_value']
         );
 
         if ($optionInfo == false) {
             $optionValue = api_replace_dangerous_char($params['option_value']);
-            $order = self::get_max_order($params['field_id']);
+            $order = $this->get_max_order($params['field_id']);
             $newParams = [
                 'field_id' => $params['field_id'],
                 'value' => trim($optionValue),
@@ -339,7 +339,7 @@ class ExtraFieldOption extends Model
                 $list = explode(';', $params['field_options']);
 
                 foreach ($list as $option) {
-                    $option_info = self::get_field_option_by_field_and_option($field_id, $option);
+                    $option_info = $this->get_field_option_by_field_and_option($field_id, $option);
 
                     // Use URLify only for new items
                     $optionValue = api_replace_dangerous_char($option);
@@ -349,7 +349,7 @@ class ExtraFieldOption extends Model
                         continue;
                     }
 
-                    $order = self::get_max_order($field_id);
+                    $order = $this->get_max_order($field_id);
 
                     $new_params = [
                         'field_id' => $field_id,
@@ -392,13 +392,13 @@ class ExtraFieldOption extends Model
         }
 
         if (empty($params['option_order'])) {
-            $order = self::get_max_order($field_id);
+            $order = $this->get_max_order($field_id);
             $params['option_order'] = $order;
         }
         if ($insert_repeated) {
             parent::save($params, $show_query);
         } else {
-            $check = self::get_field_option_by_field_and_option(
+            $check = $this->get_field_option_by_field_and_option(
                 $field_id,
                 $params['option_value']
             );
@@ -647,7 +647,7 @@ class ExtraFieldOption extends Model
                     $html = ExtraField::extra_field_double_select_convert_array_to_string($options);
                     break;
                 case ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD:
-                    $html = ExtraField::extrafieldSelectWithTextConvertArrayToString($options);
+                    $html = ExtraField::extraFieldSelectWithTextConvertArrayToString($options);
                     break;
                 case ExtraField::FIELD_TYPE_TRIPLE_SELECT:
                     $html = ExtraField::tripleSelectConvertArrayToString($options);
@@ -688,16 +688,6 @@ class ExtraFieldOption extends Model
         }
 
         return $max;
-    }
-
-    /**
-     * Update the option using the given params.
-     *
-     * @param array $params data to be saved
-     */
-    public function update($params)
-    {
-        parent::update($params);
     }
 
     /**

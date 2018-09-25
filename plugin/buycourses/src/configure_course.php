@@ -33,7 +33,7 @@ $editingCourse = intval($_REQUEST['t']) === BuyCoursesPlugin::PRODUCT_TYPE_COURS
 $editingSession = intval($_REQUEST['t']) === BuyCoursesPlugin::PRODUCT_TYPE_SESSION;
 
 $entityManager = Database::getManager();
-$userRepo = $entityManager->getRepository('ChamiloUserBundle:User');
+$userRepo = UserManager::getRepository();
 
 $currency = $plugin->getSelectedCurrency();
 $currencyIso = null;
@@ -222,7 +222,8 @@ if ($editingCourse) {
 
 if ($commissionsEnable === 'true') {
     $platformCommission = $plugin->getPlatformCommission();
-    $form->addHtml('
+    $form->addHtml(
+        '
         <div class="form-group">
             <label for="sliders" class="col-sm-2 control-label">
                 '.get_plugin_lang('Commissions', 'BuyCoursesPlugin').'

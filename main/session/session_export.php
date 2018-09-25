@@ -315,5 +315,5 @@ $defaults = [];
 $defaults['file_type'] = 'csv';
 $form->setDefaults($defaults);
 $form->display();
-unset($Courses);
+unset($courses);
 Display::display_footer();

@@ -3,10 +3,13 @@
     {{ bug_notification }}
 </div>
 {% block topbar %}
-    {% include template ~ "/layout/topbar.tpl" %}
+    {% include 'layout/topbar.tpl'|get_template %}
 {% endblock %}
-<div class="extra-header">{{ header_extra_content }}</div>
-<header id="header-section" class="header-movil">
+
+{% if header_extra_content is not null %}
+    {{ header_extra_content }}
+{% endif %}
+
     <div class="container">
         <div class="row">
             <div class="col-md-3 col-xs-4">
@@ -58,6 +61,6 @@
     </div>
 </header>
 {% block menu %}
-    {% include template ~ "/layout/menu.tpl" %}
+    {% include 'layout/menu.tpl'|get_template %}
 {% endblock %}
-{% include template ~ "/layout/course_navigation.tpl" %}
+{% include 'layout/course_navigation.tpl'|get_template %}

@@ -38,6 +38,15 @@ class Session
     const COACH = 2;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
      * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="SessionRelCourse", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
      */
@@ -61,154 +70,154 @@ class Session
     protected $currentCourse;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=150, nullable=false, unique=false)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true, unique=false)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="show_description", type="boolean", nullable=true)
      */
-    private $showDescription;
+    protected $showDescription;
 
     /**
      * @var int
      *
      * @ORM\Column(name="duration", type="integer", nullable=true)
      */
-    private $duration;
+    protected $duration;
 
     /**
      * @var int
      *
      * @ORM\Column(name="nbr_courses", type="smallint", nullable=true, unique=false)
      */
-    private $nbrCourses;
+    protected $nbrCourses;
 
     /**
      * @var int
      *
      * @ORM\Column(name="nbr_users", type="integer", nullable=true, unique=false)
      */
-    private $nbrUsers;
+    protected $nbrUsers;
 
     /**
      * @var int
      *
      * @ORM\Column(name="nbr_classes", type="integer", nullable=true, unique=false)
      */
-    private $nbrClasses;
+    protected $nbrClasses;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_admin_id", type="integer", nullable=true, unique=false)
      */
-    private $sessionAdminId;
+    protected $sessionAdminId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="visibility", type="integer", nullable=false, unique=false)
      */
-    private $visibility;
+    protected $visibility;
 
     /**
      * @var int
      *
      * @ORM\Column(name="promotion_id", type="integer", nullable=true, unique=false)
      */
-    private $promotionId;
+    protected $promotionId;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="display_start_date", type="datetime", nullable=true, unique=false)
      */
-    private $displayStartDate;
+    protected $displayStartDate;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="display_end_date", type="datetime", nullable=true, unique=false)
      */
-    private $displayEndDate;
+    protected $displayEndDate;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="access_start_date", type="datetime", nullable=true, unique=false)
      */
-    private $accessStartDate;
+    protected $accessStartDate;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="access_end_date", type="datetime", nullable=true, unique=false)
      */
-    private $accessEndDate;
+    protected $accessEndDate;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="coach_access_start_date", type="datetime", nullable=true, unique=false)
      */
-    private $coachAccessStartDate;
+    protected $coachAccessStartDate;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="coach_access_end_date", type="datetime", nullable=true, unique=false)
      */
-    private $coachAccessEndDate;
+    protected $coachAccessEndDate;
+
+    /**
+     * Only available when "session_list_order" setting is on.
+     *
+     * @var int
+     *
+     * @ORM\Column(name="position", type="integer", nullable=false)
+     */
+    //protected $position;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CItemProperty", mappedBy="session")
      */
-    //private $items;
+    //protected $items;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="sessionAsGeneralCoach")
      * @ORM\JoinColumn(name="id_coach", referencedColumnName="id")
      */
-    private $generalCoach;
+    protected $generalCoach;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SessionCategory", inversedBy="session")
      * @ORM\JoinColumn(name="session_category_id", referencedColumnName="id")
      */
-    private $category;
+    protected $category;
 
     /**
      * @var bool
      * @ORM\Column(name="send_subscription_notification", type="boolean", nullable=false, options={"default":false})
      */
-    private $sendSubscriptionNotification;
+    protected $sendSubscriptionNotification;
 
     /**
      * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CStudentPublication", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
      */
-    private $studentPublications;
+    protected $studentPublications;
 
     /**
      * Constructor.
@@ -218,7 +227,6 @@ class Session
         $this->items = new ArrayCollection();
 
         $this->nbrClasses = 0;
-        $this->nbrUsers = 0;
         $this->nbrUsers = 0;
 
         $this->displayStartDate = new \DateTime();
@@ -350,11 +358,11 @@ class Session
     {
         if ($this->getUsers()->count()) {
             $criteria = Criteria::create()->where(
-                Criteria::expr()->eq("user", $subscription->getUser())
+                Criteria::expr()->eq('user', $subscription->getUser())
             )->andWhere(
-                Criteria::expr()->eq("session", $subscription->getSession())
+                Criteria::expr()->eq('session', $subscription->getSession())
             )->andWhere(
-                Criteria::expr()->eq("relationType", $subscription->getRelationType())
+                Criteria::expr()->eq('relationType', $subscription->getRelationType())
             );
 
             $relation = $this->getUsers()->matching($criteria);
@@ -403,7 +411,7 @@ class Session
     {
         if ($this->getCourses()->count()) {
             $criteria = Criteria::create()->where(
-                Criteria::expr()->eq("course", $course)
+                Criteria::expr()->eq('course', $course)
             );
             $relation = $this->getCourses()->matching($criteria);
 
@@ -500,14 +508,14 @@ class Session
     public function getUserInCourse(User $user, Course $course, $status = null)
     {
         $criteria = Criteria::create()->where(
-            Criteria::expr()->eq("course", $course)
+            Criteria::expr()->eq('course', $course)
         )->andWhere(
-            Criteria::expr()->eq("user", $user)
+            Criteria::expr()->eq('user', $user)
         );
 
         if (!is_null($status)) {
             $criteria->andWhere(
-                Criteria::expr()->eq("status", $status)
+                Criteria::expr()->eq('status', $status)
             );
         }
 
@@ -519,7 +527,7 @@ class Session
      *
      * @param string $name
      *
-     * @return Session
+     * @return $this
      */
     public function setName($name)
     {
@@ -543,7 +551,7 @@ class Session
      *
      * @param string $description
      *
-     * @return Groups
+     * @return $this
      */
     public function setDescription($description)
     {
@@ -583,7 +591,7 @@ class Session
      */
     public function getNbrCourses()
     {
-        return $this->nbrCourses;
+        return (int) $this->nbrCourses;
     }
 
     /**
@@ -911,11 +919,7 @@ class Session
     {
         $now = new \Datetime('now');
 
-        if ($now > $this->getAccessStartDate()) {
-            return true;
-        }
-
-        return false;
+        return $now > $this->getAccessStartDate();
     }
 
     /**
@@ -1013,11 +1017,11 @@ class Session
     {
         if ($this->getUserCourseSubscriptions()->count()) {
             $criteria = Criteria::create()->where(
-                Criteria::expr()->eq("user", $subscription->getUser())
+                Criteria::expr()->eq('user', $subscription->getUser())
             )->andWhere(
-                Criteria::expr()->eq("course", $subscription->getCourse())
+                Criteria::expr()->eq('course', $subscription->getCourse())
             )->andWhere(
-                Criteria::expr()->eq("session", $subscription->getSession())
+                Criteria::expr()->eq('session', $subscription->getSession())
             );
             $relation = $this->getUserCourseSubscriptions()->matching($criteria);
 
@@ -1077,8 +1081,8 @@ class Session
     /**
      * Get user from course by status.
      *
-     * @param \Chamilo\CoreBundle\Entity\Course $course
-     * @param int                               $status
+     * @param Course $course
+     * @param int    $status
      *
      * @return \Doctrine\Common\Collections\ArrayCollection|\Doctrine\Common\Collections\Collection
      */
@@ -1086,33 +1090,13 @@ class Session
     {
         $criteria = Criteria::create()
             ->where(
-                Criteria::expr()->eq("course", $course)
+                Criteria::expr()->eq('course', $course)
             )
             ->andWhere(
-                Criteria::expr()->eq("status", $status)
+                Criteria::expr()->eq('status', $status)
             );
 
         return $this->userCourseSubscriptions->matching($criteria);
-    }
-
-    public function getBuyCoursePluginPrice()
-    {
-        // start buycourse validation
-        // display the course price and buy button if the buycourses plugin is enabled and this course is configured
-        $plugin = \BuyCoursesPlugin::create();
-        $isThisCourseInSale = $plugin->buyCoursesForGridCatalogValidator($this->id, \BuyCoursesPlugin::PRODUCT_TYPE_SESSION);
-        $return = [];
-
-        if ($isThisCourseInSale) {
-            // set the Price label
-            $return['html'] = $isThisCourseInSale['html'];
-            // set the Buy button instead register.
-            if ($isThisCourseInSale['verificator']) {
-                $return['buy_button'] = $plugin->returnBuyCourseButton($this->id, \BuyCoursesPlugin::PRODUCT_TYPE_SESSION);
-            }
-        }
-        // end buycourse validation
-        return $return;
     }
 
     /**
@@ -1152,4 +1136,24 @@ class Session
     {
         return $this->studentPublications;
     }
+
+    /**
+     * @return int
+     */
+    /*public function getPosition()
+    {
+        return $this->position;
+    }*/
+
+    /**
+     * @param int $position
+     *
+     * @return Session
+     */
+    /*public function setPosition($position)
+    {
+        $this->position = $position;
+
+        return $this;
+    }*/
 }

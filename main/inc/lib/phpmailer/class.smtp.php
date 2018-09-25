@@ -86,9 +86,9 @@ class SMTP
   private $error;     // error if any on the last call
   private $helo_rply; // the reply the server sent to us for HELO
 
-  /**
-   * Initialize the class so that the data is in a known state.
-   */
+    /**
+     * Initialize the class so that the data is in a known state.
+     */
     public function __construct()
     {
         $this->smtp_conn = 0;

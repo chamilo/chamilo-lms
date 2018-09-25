@@ -4,6 +4,7 @@
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
+use ChamiloSession as Session;
 
 /**
  * Import a backup.
@@ -22,11 +23,7 @@ if (!api_is_allowed_to_edit()) {
     api_not_allowed(true);
 }
 
-// Remove memory and time limits as much as possible as this might be a long process...
-if (function_exists('ini_set')) {
-    api_set_memory_limit('256M');
-    ini_set('max_execution_time', 1800);
-}
+api_set_more_memory_and_time_limits();
 
 // Section for the tabs
 $this_section = SECTION_COURSES;
@@ -44,45 +41,34 @@ Display::display_header($nameTools);
 // Display the tool title
 echo Display::page_header($nameTools);
 
+$action = isset($_POST['action']) ? $_POST['action'] : '';
+$importOption = isset($_POST['import_option']) ? $_POST['import_option'] : '';
+
 /* MAIN CODE */
 $filename = '';
-if (Security::check_token('post') && (
-        (
-            isset($_POST['action']) &&
-            $_POST['action'] == 'course_select_form'
-        ) || (
-            isset($_POST['import_option']) &&
-            $_POST['import_option'] == 'full_backup'
-        )
-    )
-) {
+if (Security::check_token('post') && ($action === 'course_select_form' || $importOption === 'full_backup')) {
     // Clear token
     Security::clear_token();
 
     $error = false;
-    if (isset($_POST['action']) &&
-        $_POST['action'] == 'course_select_form'
-    ) {
+    if ($action === 'course_select_form') {
         // Partial backup here we recover the documents posted
-        // This gets $_POST['course']. Beware that when using Suhosin,
-        // the post.max_value_length limit might get in the way of the
-        // restoration of a course with many items. A value of 1,000,000 bytes
-        // might be too short.
-        $course = CourseSelectForm::get_posted_course();
+        $filename = Session::read('backup_file');
+        $course = CourseArchiver::readCourse($filename, false);
+        $course = CourseSelectForm::get_posted_course(null, null, null, $course);
     } else {
-        if ($_POST['backup_type'] == 'server') {
+        if ($_POST['backup_type'] === 'server') {
             $filename = $_POST['backup_server'];
             $delete_file = false;
         } else {
             if ($_FILES['backup']['error'] == 0) {
-                $filename = CourseArchiver::importUploadedFile(
-                    $_FILES['backup']['tmp_name']
-                );
+                $filename = CourseArchiver::importUploadedFile($_FILES['backup']['tmp_name']);
                 if ($filename === false) {
                     $error = true;
                 } else {
-                    $delete_file = true;
+                    $delete_file = false;
                 }
+                Session::write('backup_file', $filename);
             } else {
                 $error = true;
             }
@@ -99,7 +85,8 @@ if (Security::check_token('post') && (
         $cr->set_file_option($_POST['same_file_name_option']);
         $cr->restore();
         echo Display::return_message(get_lang('ImportFinished'));
-        echo '<a class="btn btn-default" href="'.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/index.php">'.get_lang('CourseHomepage').'</a>';
+        echo '<a class="btn btn-default" href="'.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/index.php">'.
+            get_lang('CourseHomepage').'</a>';
     } else {
         if (!$error) {
             echo Display::return_message(get_lang('NoResourcesInBackupFile'), 'warning');
@@ -118,24 +105,21 @@ if (Security::check_token('post') && (
         }
     }
     CourseArchiver::cleanBackupDir();
-} elseif (Security::check_token('post') && (
-        isset($_POST['import_option']) &&
-        $_POST['import_option'] == 'select_items'
-    )
-) {
+} elseif (Security::check_token('post') && $importOption === 'select_items') {
     // Clear token
     Security::clear_token();
 
-    if ($_POST['backup_type'] == 'server') {
+    if ($_POST['backup_type'] === 'server') {
         $filename = $_POST['backup_server'];
         $delete_file = false;
     } else {
         $filename = CourseArchiver::importUploadedFile($_FILES['backup']['tmp_name']);
-        $delete_file = true;
+        $delete_file = false;
+        Session::write('backup_file', $filename);
     }
     $course = CourseArchiver::readCourse($filename, $delete_file);
 
-    if ($course->has_resources() && ($filename !== false)) {
+    if ($course->has_resources() && $filename !== false) {
         $hiddenFields['same_file_name_option'] = $_POST['same_file_name_option'];
         // Add token to Course select form
         $hiddenFields['sec_token'] = Security::get_token();
@@ -149,9 +133,7 @@ if (Security::check_token('post') && (
     }
 } else {
     $user = api_get_user_info();
-    $backups = CourseArchiver::getAvailableBackups(
-        $is_platformAdmin ? null : $user['user_id']
-    );
+    $backups = CourseArchiver::getAvailableBackups($is_platformAdmin ? null : $user['user_id']);
     $backups_available = count($backups) > 0;
 
     $form = new FormValidator(
@@ -283,6 +265,10 @@ if (Security::check_token('post') && (
     $form->addElement('hidden', 'sec_token');
     $form->setConstants(['sec_token' => $token]);
     $form->display();
+}
+
+if (!isset($_POST['action'])) {
+    Session::erase('backup_file');
 }
 
 Display::display_footer();

@@ -31,7 +31,6 @@ if (empty($ttl)) {
 }
 
 if ($form->validate()) {
-    $em = Database::getManager();
     $values = $form->exportValues();
     $password = $values['pass1'];
     $token = $values['token'];
@@ -66,7 +65,5 @@ if ($form->validate()) {
 }
 
 $tpl = new Template(null);
-$tpl->assign('form', $form->toHtml());
-$content = $tpl->get_template('auth/set_temp_password.tpl');
-$tpl->assign('content', $tpl->fetch($content));
+$tpl->assign('content', $form->toHtml());
 $tpl->display_one_col_template();

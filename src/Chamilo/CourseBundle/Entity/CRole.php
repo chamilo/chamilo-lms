@@ -25,42 +25,42 @@ class CRole
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="role_name", type="string", length=250, nullable=false)
      */
-    private $roleName;
+    protected $roleName;
 
     /**
      * @var string
      *
      * @ORM\Column(name="role_comment", type="text", nullable=true)
      */
-    private $roleComment;
+    protected $roleComment;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="default_role", type="boolean", nullable=true)
      */
-    private $defaultRole;
+    protected $defaultRole;
 
     /**
      * @var int
      *
      * @ORM\Column(name="role_id", type="integer")
      */
-    private $roleId;
+    protected $roleId;
 
     /**
      * Set roleName.

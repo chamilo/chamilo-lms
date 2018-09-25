@@ -1,4 +1,4 @@
-{% extends template ~ "/layout/layout_1_col.tpl" %}
+{% extends 'layout/layout_1_col.tpl'|get_template %}
 
 {% block content %}
     {{ form_filter }}
@@ -6,7 +6,15 @@
     {% for item in data %}
     <div id="career-{{ item.id }}" class="career panel panel-default">
         <div  class="panel-heading">
-            <h4><a href="{{ _p.web }}main/admin/careers.php?action=edit&id={{ item.id }}">{{ item.name }}</a></h4>
+            <h4>
+                {% if _u.is_admin %}
+                    <a href="{{ _p.web }}main/admin/careers.php?action=edit&id={{ item.id }}">
+                    {{ item.name }}
+                    </a>
+                {% else %}
+                    {{ item.name }}
+                {% endif %}
+            </h4>
         </div>
         <div class="panel-body">
             {{ item.description }}
@@ -20,7 +28,6 @@
                 {% for prom in promotions %}
                     {% set line = prom.sessions|length + 1 %}
                     <tr>
-
                         <td class="promo" rowspan="{{ line }}">
                             <h4 id="promotion-id-{{ prom.id }}">
                                 <a title="{{ prom.name }}" href="{{ _p.web }}main/admin/promotions.php?action=edit&id={{ prom.id }}">
@@ -45,7 +52,11 @@
                             <td class="courses">
                                 <ul>
                                 {% for course in session.courses %}
-                                <li><a href="{{ _p.web }}courses/{{ course.directory }}/index.php?id_session={{ sessionid }}" title="{{ course.title }}">{{ course.title }}</a></li>
+                                <li>
+                                    <a href="{{ _p.web }}courses/{{ course.directory }}/index.php?id_session={{ sessionid }}" title="{{ course.title }}">
+                                        {{ course.title }}
+                                    </a>
+                                </li>
                                 {% endfor %}
                                 </ul>
                             </td>
@@ -57,5 +68,4 @@
         </div>
     </div>
     {% endfor %}
-
 {% endblock %}

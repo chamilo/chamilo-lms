@@ -21,6 +21,22 @@ use Doctrine\ORM\Mapping as ORM;
 class AccessUrlRelUser
 {
     /**
+     * @var int
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\Column(name="access_url_id", type="integer")
+     */
+    protected $accessUrlId;
+
+    /**
+     * @var int
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\Column(name="user_id", type="integer")
+     */
+    protected $userId;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
@@ -31,21 +47,6 @@ class AccessUrlRelUser
      * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
      */
     protected $portal;
-    /**
-     * @var int
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\Column(name="access_url_id", type="integer")
-     */
-    private $accessUrlId;
-
-    /**
-     * @var int
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\Column(name="user_id", type="integer")
-     */
-    private $userId;
 
     /**
      * Set accessUrlId.

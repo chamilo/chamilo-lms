@@ -124,7 +124,7 @@ switch ($action) {
         exit;
         break;
     case 'make_visible':
-        /*	Visible */
+        /* Visible */
         if ($is_allowed_to_edit) {
             if (!empty($itemId)) {
                 if (isset($itemId) && $itemId == 'all') {
@@ -138,7 +138,7 @@ switch ($action) {
         }
         break;
     case 'make_invisible':
-        /*	Invisible */
+        /* Invisible */
         if (!empty($itemId)) {
             if (isset($itemId) && $itemId == 'all') {
             } else {
@@ -161,7 +161,7 @@ switch ($action) {
 
 $htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-upload']);
 
-Display :: display_header(null);
+Display::display_header(null);
 
 $documentsAddedInWork = getAllDocumentsFromWorkToString($workId, $courseInfo);
 
@@ -370,7 +370,6 @@ echo $documentsAddedInWork;
 $tableWork = Display::grid_html('results');
 
 echo workGetExtraFieldData($workId);
-
 echo Display::panel($tableWork);
 
 echo '<div class="list-work-results">';

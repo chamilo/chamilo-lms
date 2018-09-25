@@ -6,8 +6,6 @@
  *
  * @author Arnaud Ligot <arnaud@cblue.be>
  *
- * @version $Id: $
- *
  * A small peace of code to enable user to access images included into survey
  * which are accessible by non authenticated users. This file is included
  * by document/download.php
@@ -44,7 +42,8 @@ function check_download_survey($course, $invitation, $doc_url)
         exit;
     }
 
-    // Very basic security check: check if a text field from a survey/answer/option contains the name of the document requested
+    // Very basic security check: check if a text field from
+    // a survey/answer/option contains the name of the document requested
     // Fetch survey ID
     // If this is the case there will be a language choice
     $sql = "SELECT * FROM $table_survey

@@ -1,4 +1,4 @@
-{% include template ~ '/skill/skill_wheel.js.tpl' %}
+{% include 'skill/skill_wheel.js.tpl'|get_template %}
 <script>
     /* Skill search input in the left menu */
     function check_skills_sidebar() {
@@ -568,7 +568,7 @@
                                 <ul class="list-unstyled" id="skill-change-background-options">
                                     <li><a href="#" data-color="#FFFFFF">{{ 'White' | get_lang }}</a></li>
                                     <li><a href="#" data-color="#000000">{{ 'Black' | get_lang }}</a></li>
-                                    <li><a href="#" data-color="#A9E2F3">{{ 'LightBlue' }}</a></li>
+                                    <li><a href="#" data-color="#A9E2F3">{{ 'LightBlue'|get_lang }}</a></li>
                                     <li><a href="#" data-color="#848484">{{ 'Gray' | get_lang }}</a></li>
                                     <li><a href="#" data-color="#F7F8E0">{{ 'Corn' | get_lang }}</a></li>
                                 </ul>

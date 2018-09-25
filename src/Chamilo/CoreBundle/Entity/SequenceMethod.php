@@ -20,42 +20,42 @@ class SequenceMethod
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=false)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var string
      *
      * @ORM\Column(name="formula", type="text")
      */
-    private $formula;
+    protected $formula;
 
     /**
      * @var string
      *
      * @ORM\Column(name="assign", type="integer")
      */
-    private $assign;
+    protected $assign;
 
     /**
      * @var string
      *
      * @ORM\Column(name="met_type", type="string")
      */
-    private $metType;
+    protected $metType;
 
     /**
      * @var string
      *
      * @ORM\Column(name="act_false", type="string")
      */
-    private $actFalse;
+    protected $actFalse;
 
     /**
      * Get id.

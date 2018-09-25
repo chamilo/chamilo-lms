@@ -20,28 +20,28 @@ class SkillRelGradebook
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="gradebook_id", type="integer", nullable=false)
      */
-    private $gradebookId;
+    protected $gradebookId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="skill_id", type="integer", nullable=false)
      */
-    private $skillId;
+    protected $skillId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="type", type="string", length=10, nullable=false)
      */
-    private $type;
+    protected $type;
 
     /**
      * Set gradebookId.

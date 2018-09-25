@@ -14,59 +14,60 @@ use Doctrine\ORM\Mapping as ORM;
 class AccessUrl
 {
     /**
-     * @ORM\OneToMany(targetEntity="AccessUrlRelCourse", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
-     */
-    protected $course;
-    /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AccessUrlRelCourse", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
+     */
+    protected $course;
 
     /**
      * @var string
      *
      * @ORM\Column(name="url", type="string", length=255, nullable=false, unique=false)
      */
-    private $url;
+    protected $url;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", unique=false)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var int
      *
      * @ORM\Column(name="active", type="integer", nullable=false, unique=false)
      */
-    private $active;
+    protected $active;
 
     /**
      * @var int
      *
      * @ORM\Column(name="created_by", type="integer", nullable=false, unique=false)
      */
-    private $createdBy;
+    protected $createdBy;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="tms", type="datetime", nullable=true)
      */
-    private $tms;
+    protected $tms;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="url_type", type="boolean", nullable=true)
      */
-    private $urlType;
+    protected $urlType;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SettingsCurrent", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
@@ -76,8 +77,11 @@ class AccessUrl
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SessionCategory", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
      */
-    private $sessionCategory;
+    protected $sessionCategory;
 
+    /**
+     * AccessUrl constructor.
+     */
     public function __construct()
     {
         $this->tms = new \DateTime();

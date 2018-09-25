@@ -169,43 +169,70 @@ CKEDITOR.plugins.add( 'video',
 
 
 var en = {
-		toolbar	: 'Video',
-		dialogTitle : 'Video properties',
-		fakeObject : 'Video',
-		properties : 'Edit video',
-		widthRequired : 'Width field cannot be empty',
-		heightRequired : 'Height field cannot be empty',
-		poster: 'Poster image',
-		sourceVideo: 'Source video',
-		sourceType : 'Video type',
-		linkTemplate :  '<a href="%src%">%type%</a> ',
-		fallbackTemplate : 'Your browser doesn\'t support video.<br>Please download the file: %links%'
-	};
+  toolbar: 'Video',
+  dialogTitle: 'Video properties',
+  fakeObject: 'Video',
+  properties: 'Edit video',
+  widthRequired: 'Width field cannot be empty',
+  heightRequired: 'Height field cannot be empty',
+  poster: 'Poster image',
+  sourceVideo: 'Source video',
+  sourceType: 'Video type',
+  linkTemplate: '<a href="%src%">%type%</a> ',
+  fallbackTemplate: 'Your browser doesn\'t support video.<br>Please download the file: %links%',
+  infoLabel: 'Information',
+  html360: 'This feature (only MP4 videos) is currently still in BETA mode.<br />It only works on dynamic pages, not inside documents created<br />in the documents tool or seen through learning paths.<br />Please do not add more than one 360° video on a single page<br /> as more than one on the same page might generate conflicts.',
+  video360: 'Enable 360° video player',
+  video360stereo: 'Stereo video (1:1 aspect ratio)'
+};
 
 var es = {
-		toolbar	: 'Video',
-		dialogTitle : 'Propiedades de video',
-		fakeObject : 'Video',
-		properties : 'Editar el video',
-		widthRequired : 'La anchura no se puede dejar en blanco',
-		heightRequired : 'La altura no se puede dejar en blanco',
-		poster: 'Imagen de presentación',
-		sourceVideo: 'Archivo de video',
-		sourceType : 'Tipo',
-		linkTemplate :  '<a href="%src%">%type%</a> ',
-		fallbackTemplate : 'Su navegador no soporta VIDEO.<br>Por favor, descargue el fichero: %links%'
-	};
+  toolbar: 'Vídeo',
+  dialogTitle: 'Propiedades del vídeo',
+  fakeObject: 'Vídeo',
+  properties: 'Editar el vídeo',
+  widthRequired: 'La anchura no se puede dejar en blanco',
+  heightRequired: 'La altura no se puede dejar en blanco',
+  poster: 'Imagen de presentación',
+  sourceVideo: 'Archivo de vídeo',
+  sourceType: 'Tipo',
+  linkTemplate: '<a href="%src%">%type%</a> ',
+  fallbackTemplate: 'Su navegador no soporta el tag video.<br>Por favor, descargue el fichero: %links%',
+  infoLabel: 'Información',
+  html360: 'Esta funcionalidad (sólo MP4) todavía se encuentra en modo BETA.<br />Sólo funciona en páginas dinámicas, mas no dentro de documentos<br />creados en la herramienta de documentos o visualizados a través<br />de las lecciones.<br />Por favor no colocar más de un vídeo 360° en una misma página<br />ya que puede provocar conflictos y bloquearlos todos.',
+  video360: 'Habilitar reproductor de vídeo 360°',
+  video360stereo: 'Vídeo estéreo (relación de aspecto 1:1)'
+};
 
-	// v3
-	if (CKEDITOR.skins)
-	{
-		en = { video : en} ;
-		es = { video : es} ;
-	}
+var fr = {
+	toolbar: 'Vidéo',
+	dialogTitle: 'Propiétés de la vidéo',
+	fakeObject: 'Vidéo',
+	properties: 'Éditer la vidéo',
+	widthRequired: 'La largeur ne peut pas être vide',
+	heightRequired: 'La hauteur ne peut pas être vide',
+	poster: 'Image de prévisualisation',
+	sourceVideo: 'Fichier vidéo',
+	sourceType: 'Type',
+	linkTemplate: '<a href="%src%">%type%</a> ',
+	fallbackTemplate: 'Votre navigateur ne supporte pas le tag video.<br>Merci de télécharger la vidéo ici: %links%',
+	infoLabel: 'Information',
+	html360: 'Cette fonctionnalité (MP4 uniquement) est actuellement en mode BETA.<br />Elle ne fonctionne que sur les pages dynamiques, et pas<br />dans les documents créés à partir de l\'outil document ou visualisés<br />au travers de l\'outil parcours.<br />Merci de ne pas placer plus d\'une vidéo 360° par page. Cela<br />peut causer des conflits et toutes les rendre inactives.',
+	video360: 'Activer la visualisation 360°',
+	video360stereo: 'Vidéo stéréo (proportions 1:1 / apparence de 2 vidéos superposées)'
+};
+
+// v3
+if (CKEDITOR.skins)
+{
+	en = { video : en} ;
+	es = { video : es} ;
+	fr = { video : fr} ;
+}
 
 // Translations
 CKEDITOR.plugins.setLang( 'video', 'en', en );
-
 CKEDITOR.plugins.setLang( 'video', 'es', es );
+CKEDITOR.plugins.setLang( 'video', 'fr', fr );
 
 })();

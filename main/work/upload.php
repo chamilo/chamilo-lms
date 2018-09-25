@@ -83,8 +83,8 @@ $form = new FormValidator(
 
 setWorkUploadForm($form, $workInfo['allow_text_assignment']);
 
-$form->addElement('hidden', 'id', $work_id);
-$form->addElement('hidden', 'sec_token', $token);
+$form->addHidden('id', $work_id);
+$form->addHidden('sec_token', $token);
 
 $allowRedirect = api_get_configuration_value('allow_redirect_to_main_page_after_work_upload');
 $urlToRedirect = '';
@@ -122,7 +122,7 @@ if ($form->validate()) {
     } else {
         // Bad token or can't add works
         Display::addFlash(
-            Display::return_message(get_lang('IsNotPosibleSaveTheDocument'), 'error')
+            Display::return_message(get_lang('ImpossibleToSaveTheDocument'), 'error')
         );
     }
 }
@@ -131,7 +131,7 @@ $url = api_get_path(WEB_AJAX_PATH).'work.ajax.php?'.api_get_cidreq().'&a=upload_
 
 $htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
 $htmlHeadXtra[] = to_javascript_work();
-Display :: display_header(null);
+Display::display_header(null);
 
 // Only text
 if ($workInfo['allow_text_assignment'] == 1) {

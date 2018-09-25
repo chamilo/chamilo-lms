@@ -213,7 +213,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument
         $pages = explode('||page_break||', $body);
         foreach ($pages as $key => $page_content) {
             // For every pages, we create a new file.
-            $key += 1;
+            $key++;
             $page_content = $this->format_page_content(
                 $header,
                 $page_content,

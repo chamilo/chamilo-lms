@@ -21,7 +21,12 @@ class Version20160706145000 extends AbstractMigrationChamilo
      */
     public function up(Schema $schema)
     {
-        $this->addSql("INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (8, 10, 'tags', 'Tags', 1, 1, NOW())");
+        $connection = $this->connection;
+        $sql = "SELECT id FROM extra_field WHERE variable = 'tags'";
+        $result = $connection->executeQuery($sql)->fetchAll();
+        if (empty($result)) {
+            $this->addSql("INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (8, 10, 'tags', 'Tags', 1, 1, NOW())");
+        }
     }
 
     /**

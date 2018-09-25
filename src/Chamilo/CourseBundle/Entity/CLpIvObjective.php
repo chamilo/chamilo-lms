@@ -26,70 +26,70 @@ class CLpIvObjective
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="lp_iv_id", type="bigint", nullable=false)
      */
-    private $lpIvId;
+    protected $lpIvId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="order_id", type="integer", nullable=false)
      */
-    private $orderId;
+    protected $orderId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="objective_id", type="string", length=255, nullable=false)
      */
-    private $objectiveId;
+    protected $objectiveId;
 
     /**
      * @var float
      *
      * @ORM\Column(name="score_raw", type="float", precision=10, scale=0, nullable=false)
      */
-    private $scoreRaw;
+    protected $scoreRaw;
 
     /**
      * @var float
      *
      * @ORM\Column(name="score_max", type="float", precision=10, scale=0, nullable=false)
      */
-    private $scoreMax;
+    protected $scoreMax;
 
     /**
      * @var float
      *
      * @ORM\Column(name="score_min", type="float", precision=10, scale=0, nullable=false)
      */
-    private $scoreMin;
+    protected $scoreMin;
 
     /**
      * @var string
      *
      * @ORM\Column(name="status", type="string", length=32, nullable=false)
      */
-    private $status;
+    protected $status;
 
     /**
      * Set lpIvId.

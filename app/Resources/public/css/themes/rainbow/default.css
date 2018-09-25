@@ -2130,3 +2130,7 @@ blockquote p {
 .ofaj-search .form-group label {
     font-weight: normal;
 }
+
+.panel-default .panel-heading a {
+    color: #666;
+}

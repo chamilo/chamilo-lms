@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
  *
  * @package Chamilo\ApiBundle\GraphQL\Map
  */
-class ScalarResolverMap extends ResolverMap implements ContainerAwareInterface
+class ScalarMap extends ResolverMap implements ContainerAwareInterface
 {
     use ApiGraphQLTrait;
 

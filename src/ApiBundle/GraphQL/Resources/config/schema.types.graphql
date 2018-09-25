@@ -92,6 +92,46 @@ type Course {
     ): String
     "Teachers list in course. Or tutors list from course in session."
     teachers: [User!]
+    "List of available tools for student view."
+    tools(
+        "Filter by one type of tool"
+        type: CourseToolType
+    ): [CourseTool!]
+}
+
+"Global summary of the course."
+type ToolDescription {
+    name: String
+    category: String
+    image: String
+    customIcon: String
+    descriptions: [CourseDescription!]
+}
+
+"A section for the course description."
+type CourseDescription {
+    id: Int
+    title: String
+    content: String
+    descriptionType: Int
+}
+
+"Announcements related to the course."
+type ToolAnnouncements {
+    name: String
+    category: String
+    image: String
+    customIcon: String
+    announcements: [CourseAnnouncement!]
+}
+
+"A course announcement."
+type CourseAnnouncement {
+    id: Int
+    title: String
+    content: String
+    author: User!
+    lastUpdateDate: DateTime
 }
 
 "A session registered on the platform."
@@ -123,6 +163,10 @@ type SessionCategory {
     endDate: DateTime
 }
 
+# Unions
+
+union CourseTool = ToolDescription | ToolAnnouncements
+
 # Enums
 
 "One of the statuses for the user."
@@ -151,6 +195,12 @@ enum ImageSize {
     SIZE_BIG
     "Image in small size: 128px."
     SIZE_HUGE
+}
+
+"One of the types of course tool"
+enum CourseToolType {
+    TOOL_COURSE_DESCRIPTION
+    TOOL_ANNOUNCEMENT
 }
 
 # Scalars

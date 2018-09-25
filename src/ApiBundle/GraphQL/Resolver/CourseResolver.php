@@ -28,7 +28,7 @@ class CourseResolver implements ResolverInterface, ContainerAwareInterface
      *
      * @return array
      */
-    public function resolveTools(Course $course, Argument $args, \ArrayObject $context)
+    public function getTools(Course $course, Argument $args, \ArrayObject $context)
     {
         $sessionId = 0;
 

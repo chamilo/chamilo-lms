@@ -92,6 +92,8 @@ class Course
     //protected $items;
 
     /**
+     * @var ArrayCollection
+     *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CTool", mappedBy="course", cascade={"persist", "remove"})
      */
     protected $tools;
@@ -383,11 +385,23 @@ class Course
     }
 
     /**
+     * @param Session $session
+     *
      * @return ArrayCollection
      */
-    public function getTools()
+    public function getTools(Session $session = null)
     {
-        return $this->tools;
+        $orWhere = Criteria::expr()->eq('sessionId', 0);
+
+        if ($session) {
+            $orWhere = Criteria::expr()->in('sessionId', [0, $session->getId()]);
+        }
+
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->isNull('sessionId'))
+            ->orWhere($orWhere);
+
+        return $this->tools->matching($criteria);
     }
 
     /**

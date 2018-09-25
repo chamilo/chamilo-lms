@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
  *
  * @package Chamilo\ApiBundle\GraphQL\Map
  */
-class EnumResolverMap extends ResolverMap implements ContainerAwareInterface
+class EnumMap extends ResolverMap implements ContainerAwareInterface
 {
     use ApiGraphQLTrait;
 
@@ -36,6 +36,10 @@ class EnumResolverMap extends ResolverMap implements ContainerAwareInterface
                 'SIZE_LARGE' => ICON_SIZE_LARGE,
                 'SIZE_BIG' => ICON_SIZE_BIG,
                 'SIZE_HUGE' => ICON_SIZE_HUGE,
+            ],
+            'CourseToolType' => [
+                'TOOL_COURSE_DESCRIPTION' => TOOL_COURSE_DESCRIPTION,
+                'TOOL_ANNOUNCEMENT' => TOOL_ANNOUNCEMENT,
             ],
         ];
     }

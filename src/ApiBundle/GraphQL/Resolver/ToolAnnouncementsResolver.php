@@ -8,28 +8,25 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CTool;
 use GraphQL\Error\UserError;
-use Overblog\GraphQLBundle\Definition\Argument;
-use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class ToolAnnouncementsResolver.
  *
  * @package Chamilo\ApiBundle\GraphQL\Resolver
  */
-class ToolAnnouncementsResolver implements ResolverInterface, ContainerAwareInterface
+class ToolAnnouncementsResolver implements ContainerAwareInterface
 {
     use ApiGraphQLTrait;
-    use CourseToolResolverTrait;
 
     /**
      * @param CTool        $tool
-     * @param Argument     $args
      * @param \ArrayObject $context
      *
      * @return array
      */
-    public function resolveAnnouncements(CTool $tool, Argument $args, \ArrayObject $context): array
+    public function getAnnouncements(CTool $tool, \ArrayObject $context): array
     {
         /** @var Course $course */
         $course = $context->offsetGet('course');

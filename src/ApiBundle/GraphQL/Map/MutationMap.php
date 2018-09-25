@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
  *
  * @package Chamilo\ApiBundle\GraphQL\Map
  */
-class MutationResolverMap extends ResolverMap implements ContainerAwareInterface
+class MutationMap extends ResolverMap implements ContainerAwareInterface
 {
     use ApiGraphQLTrait;
 

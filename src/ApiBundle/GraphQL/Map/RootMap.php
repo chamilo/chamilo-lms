@@ -4,6 +4,7 @@
 namespace Chamilo\ApiBundle\GraphQL\Map;
 
 use Chamilo\ApiBundle\GraphQL\ApiGraphQLTrait;
+use Chamilo\ApiBundle\GraphQL\Resolver\ToolDescriptionResolver;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\Session;
@@ -12,6 +13,7 @@ use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
+use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\UserBundle\Entity\User;
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
@@ -23,7 +25,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
  * Class RootResolverMap
  * @package Chamilo\ApiBundle\GraphQL\Map
  */
-class RootResolverMap extends ResolverMap implements ContainerAwareInterface
+class RootMap extends ResolverMap implements ContainerAwareInterface
 {
     use ApiGraphQLTrait;
 
@@ -35,16 +37,12 @@ class RootResolverMap extends ResolverMap implements ContainerAwareInterface
         return [
             'Query' => [
                 self::RESOLVE_FIELD => function ($value, Argument $args, \ArrayObject $context, ResolveInfo $info) {
-                    switch ($info->fieldName) {
-                        case 'viewer':
-                            return $this->resolveViewer();
-                        case 'course':
-                            return $this->resolveCourse($args['id']);
-                        case 'session':
-                            $this->resolveSession($args['id']);
-                        case 'sessionCategory':
-                            return $this->resolveSessionCategory($args['id']);
-                    }
+                    $context->offsetSet('course', null);
+                    $context->offsetSet('session', null);
+
+                    $method = 'resolve'.ucfirst($info->fieldName);
+
+                    return $this->$method($args, $context);
                 },
             ],
             'UserMessage' => [
@@ -77,55 +75,86 @@ class RootResolverMap extends ResolverMap implements ContainerAwareInterface
                 },
             ],
             'Course' => [
-                self::RESOLVE_FIELD => function (
-                    Course $course,
-                    Argument $args,
-                    \ArrayObject $context,
-                    ResolveInfo $info
-                ) {
-                    $context->offsetSet('course', $course);
+                'picture' => function (Course $course, Argument $args, \ArrayObject $context, ResolveInfo $info) {
+                    return \CourseManager::getPicturePath($course, $args['fullSize']);
+                },
+                'teachers' => function (Course $course, Argument $args, \ArrayObject $context, ResolveInfo $info) {
+                    if ($context->offsetExists('session')) {
+                        /** @var Session $session */
+                        $session = $context->offsetGet('session');
 
-                    switch ($info->fieldName) {
-                        case 'picture':
-                            return \CourseManager::getPicturePath($course, $args['fullSize']);
-                        case 'teachers':
-                            if ($context->offsetExists('session')) {
-                                /** @var Session $session */
-                                $session = $context->offsetGet('session');
+                        if ($session) {
+                            $coaches = [];
+                            $coachSubscriptions = $session->getUserCourseSubscriptionsByStatus(
+                                $course,
+                                Session::COACH
+                            );
 
-                                if ($session) {
-                                    $coaches = [];
-                                    $coachSubscriptions = $session->getUserCourseSubscriptionsByStatus(
-                                        $course,
-                                        Session::COACH
-                                    );
-
-                                    /** @var SessionRelCourseRelUser $coachSubscription */
-                                    foreach ($coachSubscriptions as $coachSubscription) {
-                                        $coaches[] = $coachSubscription->getUser();
-                                    }
-
-                                    return $coaches;
-                                }
+                            /** @var SessionRelCourseRelUser $coachSubscription */
+                            foreach ($coachSubscriptions as $coachSubscription) {
+                                $coaches[] = $coachSubscription->getUser();
                             }
 
-                            $courseRepo = $this->em->getRepository('ChamiloCoreBundle:Course');
-                            $teachers = $courseRepo
-                                ->getSubscribedTeachers($course)
-                                ->getQuery()
-                                ->getResult();
-
-                            return $teachers;
-                        default:
-                            $method = 'get'.ucfirst($info->fieldName);
-
-                            if (method_exists($course, $method)) {
-                                return $course->$method();
-                            }
-
-                            return null;
+                            return $coaches;
+                        }
                     }
-                }
+
+                    $courseRepo = $this->em->getRepository('ChamiloCoreBundle:Course');
+                    $teachers = $courseRepo
+                        ->getSubscribedTeachers($course)
+                        ->getQuery()
+                        ->getResult();
+
+                    return $teachers;
+                },
+                'tools' => function (Course $course, Argument $args, \ArrayObject $context, ResolveInfo $info) {
+                    $session = null;
+
+                    if ($context->offsetExists('session')) {
+                        /** @var Session $session */
+                        $session = $context->offsetGet('session');
+                    }
+
+                    $tools = $course->getTools($session);
+
+                    if (!isset($args['type'])) {
+                        return $tools;
+                    }
+
+                    return $tools->filter(
+                        function (CTool $tool) use ($args) {
+                            if ($tool->getName() === $args['type']) {
+                                return true;
+                            }
+                        }
+                    );
+                },
+            ],
+            'CourseTool' => [
+                self::RESOLVE_TYPE => function (CTool $tool) {
+                    switch ($tool->getName()) {
+                        case TOOL_COURSE_DESCRIPTION:
+                            return 'ToolDescription';
+                        case TOOL_ANNOUNCEMENT:
+                        default:
+                            return 'ToolAnnouncements';
+                    }
+                },
+            ],
+            'ToolDescription' => [
+                'descriptions' => function (CTool $tool, Argument $args, \ArrayObject $context) {
+                    $resolver = $this->container->get('Chamilo\ApiBundle\GraphQL\Resolver\ToolDescriptionResolver');
+
+                    return $resolver->getDescriptions($tool, $context);
+                },
+            ],
+            //'CourseDescription' => [],
+            'ToolAnnouncements' => [
+                'announcements' => function (CTool $tool, Argument $args, \ArrayObject $context) {
+                    $resolver = $this->container->get('Chamilo\ApiBundle\GraphQL\Resolver\ToolAnnouncementsResolver');
+
+                    return $resolver ? $resolver->getAnnouncements($tool, $context) : [];
+                },
             ],
             'Session' => [
                 self::RESOLVE_FIELD => function (
@@ -203,7 +232,7 @@ class RootResolverMap extends ResolverMap implements ContainerAwareInterface
     /**
      * @return User
      */
-    private function resolveViewer()
+    protected function resolveViewer()
     {
         $this->checkAuthorization();
 
@@ -211,16 +240,20 @@ class RootResolverMap extends ResolverMap implements ContainerAwareInterface
     }
 
     /**
-     * @param int $id
+     * @param Argument     $args
+     *
+     * @param \ArrayObject $context
      *
      * @return Course
      */
-    private function resolveCourse($id)
+    protected function resolveCourse(Argument $args, \ArrayObject $context)
     {
         $this->checkAuthorization();
 
+        $id = (int) $args['id'];
+
         $courseRepo = $this->em->getRepository('ChamiloCoreBundle:Course');
-        $course = $courseRepo->find((int) $id);
+        $course = $courseRepo->find($id);
 
         if (!$course) {
             throw new UserError($this->translator->trans('Course not found.'));
@@ -232,41 +265,46 @@ class RootResolverMap extends ResolverMap implements ContainerAwareInterface
             throw new UserError($this->translator->trans('Not allowed'));
         }
 
+        $context->offsetSet('course', $course);
+
         return $course;
     }
 
     /**
-     * @param int $id
+     * @param Argument     $args
+     * @param \ArrayObject $context
      *
      * @return Session
      */
-    private function resolveSession($id)
+    protected function resolveSession(Argument $args, \ArrayObject $context)
     {
         $this->checkAuthorization();
 
         $sessionRepo = $this->em->getRepository('ChamiloCoreBundle:Session');
         /** @var Session $session */
-        $session = $sessionRepo->find((int) $id);
+        $session = $sessionRepo->find($args['id']);
 
         if (!$session) {
             throw new UserError($this->translator->trans('Session not found.'));
         }
 
+        $context->offsetSet('course', $session);
+
         return $session;
     }
 
     /**
-     * @param int $id
+     * @param Argument $args
      *
      * @return SessionCategory
      */
-    private function resolveSessionCategory($id)
+    protected function resolveSessionCategory(Argument $args)
     {
         $this->checkAuthorization();
 
         $repo = $this->em->getRepository('ChamiloCoreBundle:SessionCategory');
         /** @var SessionCategory $category */
-        $category = $repo->find((int) $id);
+        $category = $repo->find($args['id']);
 
         if (!$category) {
             throw new UserError($this->translator->trans('Session category not found.'));

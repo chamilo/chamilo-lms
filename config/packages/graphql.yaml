@@ -4,13 +4,19 @@ overblog_graphql:
             query: Query
             mutation: Mutation
             resolver_maps:
-                - Chamilo\ApiBundle\GraphQL\Map\RootResolverMap
-                - Chamilo\ApiBundle\GraphQL\Map\UserResolverMap
-                - Chamilo\ApiBundle\GraphQL\Map\EnumResolverMap
-                - Chamilo\ApiBundle\GraphQL\Map\ScalarResolverMap
-                - Chamilo\ApiBundle\GraphQL\Map\MutationResolverMap
+                - Chamilo\ApiBundle\GraphQL\Map\RootMap
+                - Chamilo\ApiBundle\GraphQL\Map\UserMap
+                - Chamilo\ApiBundle\GraphQL\Map\EnumMap
+                - Chamilo\ApiBundle\GraphQL\Map\ScalarMap
+                - Chamilo\ApiBundle\GraphQL\Map\MutationMap
         mappings:
             types:
                 -
                     type: graphql
                     dir: "%kernel.root_dir%/ApiBundle/GraphQL/Resources/config"
+
+services:
+    Chamilo\ApiBundle\GraphQL\:
+        resource: "../../src/ApiBundle/GraphQL/*"
+        arguments:
+            - "@service_container"

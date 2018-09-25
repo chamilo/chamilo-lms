@@ -41,9 +41,6 @@ services:
         arguments:
             $debug: '%kernel.debug%'
 
-    Chamilo\ApiBundle\GraphQL\:
-        resource: "../src/ApiBundle/GraphQL/*"
-
     Doctrine\ORM\EntityManager: "@doctrine.orm.default_entity_manager"
 
 sylius_settings:

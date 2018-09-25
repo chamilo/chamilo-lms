@@ -472,9 +472,23 @@ switch ($action) {
             $announcement_to_modify = '';
         }
 
-        $announcementInfo = AnnouncementManager::get_by_id($courseId, $id);
-        if (isset($announcementInfo) && !empty($announcementInfo)) {
+        $announcementInfo = [];
+        if (!empty($id)) {
+            $announcementInfo = AnnouncementManager::get_by_id($courseId, $id);
+        }
+
+        $showSubmitButton = true;
+        if (!empty($announcementInfo)) {
             $to = AnnouncementManager::loadEditUsers('announcement', $id);
+
+            if (!empty($group_id)) {
+                $separated = CourseManager::separateUsersGroups($to);
+                if (isset($separated['groups']) && count($separated['groups']) > 1) {
+                    $form->freeze();
+                    Display::addFlash(Display::return_message(get_lang('LockByTeacher')));
+                    $showSubmitButton = false;
+                }
+            }
 
             $defaults = [
                 'title' => $announcementInfo['title'],
@@ -548,7 +562,10 @@ switch ($action) {
 
         $form->addCheckBox('send_me_a_copy_by_email', null, get_lang('SendAnnouncementCopyToMyself'));
         $defaults['send_me_a_copy_by_email'] = true;
-        $form->addButtonSave(get_lang('ButtonPublishAnnouncement'));
+
+        if ($showSubmitButton) {
+            $form->addButtonSave(get_lang('ButtonPublishAnnouncement'));
+        }
         $form->setDefaults($defaults);
 
         if ($form->validate()) {
@@ -619,7 +636,7 @@ switch ($action) {
                             $sendToUsersInSession
                         );
                     } else {
-                        $insert_id = AnnouncementManager::add_group_announcement(
+                        $insert_id = AnnouncementManager::addGroupAnnouncement(
                             $data['title'],
                             $data['content'],
                             $group_id,

@@ -685,17 +685,17 @@ class AnnouncementManager
     }
 
     /**
-     * @param $title
-     * @param $newContent
-     * @param $to
-     * @param $to_users
+     * @param string $title
+     * @param string $newContent
+     * @param int    $groupId
+     * @param array  $to_users
      * @param array  $file
      * @param string $file_comment
      * @param bool   $sendToUsersInSession
      *
      * @return bool|int
      */
-    public static function add_group_announcement(
+    public static function addGroupAnnouncement(
         $title,
         $newContent,
         $groupId,
@@ -739,7 +739,6 @@ class AnnouncementManager
                 );
             }
 
-            $send_to_groups = CourseManager::separateUsersGroups($to);
             $send_to_users = CourseManager::separateUsersGroups($to_users);
 
             // if nothing was selected in the menu then send to all the group
@@ -1139,7 +1138,7 @@ class AnnouncementManager
             // This is the iid of c_group_info
             $toGroup = $row['to_group_id'];
             if (empty($row['to_user_id']) && !empty($groupId) && $groupId != $toGroup) {
-                continue;
+                //continue;
             }
             switch ($toGroup) {
                 // it was send to one specific user
@@ -1821,6 +1820,12 @@ class AnnouncementManager
             ICON_SIZE_SMALL
         );
 
+        $editIconDisable = Display::return_icon(
+            'edit_na.png',
+            get_lang('Edit'),
+            '',
+            ICON_SIZE_SMALL
+        );
         $deleteIcon = Display::return_icon(
             'delete.png',
             get_lang('Delete'),
@@ -1885,7 +1890,21 @@ class AnnouncementManager
                     (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()) ||
                     ($row['to_group_id'] == $group_id && $isTutor)
                 ) {
-                    $modify_icons = "<a href=\"".$actionUrl."&action=modify&id=".$row['id']."\">".$editIcon."</a>";
+                    $disableEdit = false;
+                    $to = self::loadEditUsers('announcement', $row['id']);
+                    if (!empty($group_id)) {
+                        $separated = CourseManager::separateUsersGroups($to);
+                        if (isset($separated['groups']) && count($separated['groups']) > 1) {
+                           $disableEdit = true;
+                        }
+                    }
+
+                    if ($disableEdit === true) {
+                        $modify_icons = "<a href='#'>".$editIconDisable."</a>";
+                    } else {
+                        $modify_icons = "<a href=\"".$actionUrl."&action=modify&id=".$row['id']."\">".$editIcon."</a>";
+                    }
+
                     if ($row['visibility'] == 1) {
                         $image_visibility = "visible";
                         $alt_visibility = get_lang('Hide');

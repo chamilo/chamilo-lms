@@ -1956,6 +1956,29 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     }
 
     /**
+     * @param int $lastId Optional. The ID of the last received message
+     *
+     * @return ArrayCollection
+     */
+    public function getUnreadReceivedMessages($lastId = 0): ArrayCollection
+    {
+        $criteria = Criteria::create();
+        $criteria->where(
+            Criteria::expr()->eq('msgStatus', MESSAGE_STATUS_UNREAD)
+        );
+
+        if ($lastId > 0) {
+            $criteria->andWhere(
+                Criteria::expr()->gt('id', (int) $lastId)
+            );
+        }
+
+        $criteria->orderBy(['sendDate' => Criteria::DESC]);
+
+        return $this->receivedMessages->matching($criteria);
+    }
+
+    /**
      * @return ArrayCollection
      */
     public function getCourseGroupsAsMember(): ArrayCollection

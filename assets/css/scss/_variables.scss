@@ -1,0 +1,57 @@
+// ---------------------------------------------------------
+// BREAKPOINTS
+// ---------------------------------------------------------
+
+$breakpoint-xl : 1440px;
+$breakpoint-lg : 1200px;
+$breakpoint-md : 992px;
+$breakpoint-sm : 768px;
+$breakpoint-xs : 0;
+
+// ---------------------------------------------------------
+// GREYSCALE COLORS
+// ---------------------------------------------------------
+
+$grey-100             : #f9fafb;
+$grey-200             : #f2f3f5;
+$grey-300             : #e6eaf0;
+$grey-400             : #d3d9e3;
+$grey-500             : #b9c2d0;
+$grey-600             : #7c8695;
+$grey-700             : #72777a;
+$grey-800             : #565a5c;
+$grey-900             : #313435;
+
+
+// ---------------------------------------------------------
+// COLORS THEME DEFAULT
+// ---------------------------------------------------------
+
+$default-danger       : #ff3c7e;
+$default-dark         : #313435;
+$default-grey         : #565a5c;
+$default-info         : #4abaff;
+$default-primary      : #7774e7;
+$default-success      : #37c936;
+$default-text-color   : #72777a;
+$default-warning      : #fc0;
+$default-white        : #fff;
+$default-active       : #006b9e;
+$default-background   : #FFFFFF;
+$default-sidebar      : #0181bf;
+
+// ---------------------------------------------------------
+// OTHERS
+// ---------------------------------------------------------
+
+$collapsed-size       : 70px;
+$header-height        : 65px;
+$offscreen-size       : 280px;
+
+// ---------------------------------------------------------
+// FONTS
+// ---------------------------------------------------------
+
+$font-primary: Roboto, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+$font-secondary: $font-primary;
+$font-size-base: 0.875rem;

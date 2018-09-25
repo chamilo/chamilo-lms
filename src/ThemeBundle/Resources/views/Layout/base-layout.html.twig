@@ -95,13 +95,11 @@
         <!-- MAIN CONTENT -->
         {% autoescape false %}
         <main class='main-content bg-content'>
-            <div id='mainContent'>
-                <div class="gap-20 masonry pos-r">
-                    <div class="container">
-                        {% block page_content %}
+            <div class="container box-body">
+                <div class="pt-1 pb-1">
+                {% block page_content %}
 
-                        {% endblock %}
-                    </div>
+                {% endblock %}
                 </div>
             </div>
         </main>

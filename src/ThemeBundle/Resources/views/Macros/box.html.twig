@@ -152,18 +152,15 @@
     {% endautoescape %}
 {% endmacro %}
 
-
 {% macro panel(header, content, title, footer, subtitle, top_image) %}
     {% autoescape false %}
-        <div class="card">
-            {% if top_image %}
-                {{ top_image }}
-            {% endif %}
-
+        <div class="card" style="width: 20rem;">
             {% if header %}
                 <div class="card-header"> {{ header }} </div>
             {% endif %}
-
+            {% if top_image %}
+                {{ top_image }}
+            {% endif %}
             <div class="card-body">
                 {% if title %}
                     <h5 class="card-title">{{ title }}</h5>
@@ -171,11 +168,10 @@
                 {% if subtitle %}
                     <h5 class="card-subtitle mb-2 text-muted">{{ subtitle }}</h5>
                 {% endif %}
-                <p class="card-text">
-                    {{ content }}
-                </p>
-            </div>
 
+                {{ content }}
+
+            </div>
             {% if footer %}
                 <div class="card-footer">
                     {{ footer }}

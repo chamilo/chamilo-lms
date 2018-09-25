@@ -1122,12 +1122,13 @@ class AnnouncementManager
      *
      * @return array
      */
-    public static function load_edit_users($tool, $id)
+    public static function loadEditUsers($tool, $id)
     {
         $table = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tool = Database::escape_string($tool);
         $id = (int) $id;
         $courseId = api_get_course_int_id();
+        $groupId = api_get_group_id();
 
         $sql = "SELECT to_user_id, to_group_id FROM $table
                 WHERE c_id = $courseId AND tool='$tool' AND ref = $id";
@@ -1137,6 +1138,9 @@ class AnnouncementManager
         while ($row = Database::fetch_array($result)) {
             // This is the iid of c_group_info
             $toGroup = $row['to_group_id'];
+            if (!empty($groupId) && $groupId != $toGroup) {
+                continue;
+            }
             switch ($toGroup) {
                 // it was send to one specific user
                 case null:

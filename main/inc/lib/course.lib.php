@@ -6050,8 +6050,8 @@ class CourseManager
      */
     public static function addGroupMultiSelect($form, $groupInfo, $to = [])
     {
-        $group_users = GroupManager::get_subscribed_users($groupInfo);
-        $array = self::buildSelectOptions([$groupInfo], $group_users, $to);
+        $groupUsers = GroupManager::get_subscribed_users($groupInfo);
+        $array = self::buildSelectOptions([$groupInfo], $groupUsers, $to);
 
         $result = [];
         foreach ($array as $content) {

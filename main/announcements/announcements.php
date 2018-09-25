@@ -474,7 +474,7 @@ switch ($action) {
 
         $announcementInfo = AnnouncementManager::get_by_id($courseId, $id);
         if (isset($announcementInfo) && !empty($announcementInfo)) {
-            $to = AnnouncementManager::load_edit_users('announcement', $id);
+            $to = AnnouncementManager::loadEditUsers('announcement', $id);
 
             $defaults = [
                 'title' => $announcementInfo['title'],

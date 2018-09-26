@@ -2131,6 +2131,6 @@ blockquote p {
     font-weight: normal;
 }
 
-.panel-default .panel-heading a {
+#personal_data .panel-default .panel-heading a {
     color: #666;
 }

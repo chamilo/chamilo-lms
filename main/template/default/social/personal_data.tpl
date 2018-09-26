@@ -2,7 +2,7 @@
 {% import 'macro/macro.tpl'|get_template as display %}
 
 {% block content %}
-<div class="row">
+<div id="personal_data" class="row">
     <div class="col-md-3">
         <div class="social-network-menu">
             {{ social_avatar_block }}

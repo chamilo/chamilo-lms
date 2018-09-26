@@ -67,7 +67,7 @@
                                         <div class="notifications">{{ item.notifications }}</div>
                                     {% endif %}
                                     {% if item.student_info %}
-                                        {% if (item.student_info.progress is not null) and (item.student_info.score is not null) %}
+                                        {% if item.student_info.progress is not null or item.student_info.score is not null or item.student_info.certificate is not null %}
                                             <div class="course-student-info">
                                                 <div class="student-info">
                                                     {% if (item.student_info.progress is not null) %}

@@ -29,8 +29,6 @@ class AnnouncementManager extends BaseEntityManager
      * @param string          $titleToSearch
      * @param User|null       $userToSearch
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     *
      * @return mixed
      */
     public function getAnnouncements(

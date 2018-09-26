@@ -46,7 +46,7 @@ type User {
     email: String
     officialCode: String
     status: UserStatus
-    picture(size: ImageSize = SIZE_SMALL): String
+    picture(size: ImageSize = ICON_SIZE_SMALL): String
     "Received messages for the user."
     messages(
         "Last received by the app message ID."
@@ -184,17 +184,17 @@ enum UserStatus {
 "One of the sizes for the picture."
 enum ImageSize {
     "Image in small size: 16px."
-    SIZE_TINY
+    ICON_SIZE_TINY
     "Image in small size: 22px."
-    SIZE_SMALL
+    ICON_SIZE_SMALL
     "Image in small size: 32px."
-    SIZE_MEDIUM
+    ICON_SIZE_MEDIUM
     "Image in small size: 48px."
-    SIZE_LARGE
+    ICON_SIZE_LARGE
     "Image in small size: 64px."
-    SIZE_BIG
+    ICON_SIZE_BIG
     "Image in small size: 128px."
-    SIZE_HUGE
+    ICON_SIZE_HUGE
 }
 
 "One of the types of course tool"

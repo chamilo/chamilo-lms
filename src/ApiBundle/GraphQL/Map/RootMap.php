@@ -9,10 +9,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionCategory;
-use Chamilo\CoreBundle\Entity\SessionRelCourse;
-use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
-use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\UserBundle\Entity\User;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -45,6 +42,19 @@ class RootMap extends ResolverMap implements ContainerAwareInterface
                     return $this->$method($args, $context);
                 },
             ],
+            'User' => [
+                self::RESOLVE_FIELD => function (
+                    User $user,
+                    Argument $args,
+                    \ArrayObject $context,
+                    ResolveInfo $info
+                ) {
+                    $context->offsetSet('user', $user);
+                    $resolver = $this->container->get('chamilo_api.graphql.resolver.user');
+
+                    return $this->resolveField($info->fieldName, $user, $resolver, $args, $context);
+                },
+            ],
             'UserMessage' => [
                 self::RESOLVE_FIELD => function (
                     Message $message,
@@ -52,109 +62,79 @@ class RootMap extends ResolverMap implements ContainerAwareInterface
                     \ArrayObject $context,
                     ResolveInfo $info
                 ) {
-                    switch ($info->fieldName) {
-                        case 'sender':
-                            return $message->getUserSender();
-                        case 'excerpt':
-                            $striped = strip_tags($message->getContent());
-                            $replaced = str_replace(["\r\n", "\n"], ' ', $striped);
-                            $trimmed = trim($replaced);
-
-                            return api_trunc_str($trimmed, $args['length']);
-                        case 'hasAttachments':
-                            return $message->getAttachments()->count() > 0;
-                        default:
-                            $method = 'get'.ucfirst($info->fieldName);
-
-                            if (method_exists($message, $method)) {
-                                return $message->$method();
-                            }
-
-                            return null;
+                    if ('sender' === $info->fieldName) {
+                        return $message->getUserSender();
                     }
+
+                    if ('hasAttachments' === $info->fieldName) {
+                        return $message->getAttachments()->count() > 0;
+                    }
+
+                    return $this->resolveField($info->fieldName, $message);
                 },
             ],
             'Course' => [
-                'picture' => function (Course $course, Argument $args, \ArrayObject $context, ResolveInfo $info) {
-                    return \CourseManager::getPicturePath($course, $args['fullSize']);
-                },
-                'teachers' => function (Course $course, Argument $args, \ArrayObject $context, ResolveInfo $info) {
-                    if ($context->offsetExists('session')) {
-                        /** @var Session $session */
-                        $session = $context->offsetGet('session');
+                self::RESOLVE_FIELD => function (
+                    Course $course,
+                    Argument $args,
+                    \ArrayObject $context,
+                    ResolveInfo $info
+                ) {
+                    $context->offsetSet('course', $course);
+                    $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
 
-                        if ($session) {
-                            $coaches = [];
-                            $coachSubscriptions = $session->getUserCourseSubscriptionsByStatus(
-                                $course,
-                                Session::COACH
-                            );
-
-                            /** @var SessionRelCourseRelUser $coachSubscription */
-                            foreach ($coachSubscriptions as $coachSubscription) {
-                                $coaches[] = $coachSubscription->getUser();
-                            }
-
-                            return $coaches;
-                        }
-                    }
-
-                    $courseRepo = $this->em->getRepository('ChamiloCoreBundle:Course');
-                    $teachers = $courseRepo
-                        ->getSubscribedTeachers($course)
-                        ->getQuery()
-                        ->getResult();
-
-                    return $teachers;
-                },
-                'tools' => function (Course $course, Argument $args, \ArrayObject $context, ResolveInfo $info) {
-                    $session = null;
-
-                    if ($context->offsetExists('session')) {
-                        /** @var Session $session */
-                        $session = $context->offsetGet('session');
-                    }
-
-                    $tools = $course->getTools($session);
-
-                    if (!isset($args['type'])) {
-                        return $tools;
-                    }
-
-                    return $tools->filter(
-                        function (CTool $tool) use ($args) {
-                            if ($tool->getName() === $args['type']) {
-                                return true;
-                            }
-                        }
-                    );
-                },
-            ],
-            'CourseTool' => [
-                self::RESOLVE_TYPE => function (CTool $tool) {
-                    switch ($tool->getName()) {
-                        case TOOL_COURSE_DESCRIPTION:
-                            return 'ToolDescription';
-                        case TOOL_ANNOUNCEMENT:
-                        default:
-                            return 'ToolAnnouncements';
-                    }
+                    return $this->resolveField($info->fieldName, $course, $resolver, $args, $context);
                 },
             ],
             'ToolDescription' => [
-                'descriptions' => function (CTool $tool, Argument $args, \ArrayObject $context) {
-                    $resolver = $this->container->get('Chamilo\ApiBundle\GraphQL\Resolver\ToolDescriptionResolver');
+                self::RESOLVE_FIELD => function (
+                    CTool $tool,
+                    Argument $args,
+                    \ArrayObject $context,
+                    ResolveInfo $info
+                ) {
+                    if ('descriptions' === $info->fieldName) {
+                        $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
 
-                    return $resolver->getDescriptions($tool, $context);
+                        return $resolver->getDescriptions($tool, $context);
+                    }
+
+                    return $this->resolveField($info->fieldName, $tool);
                 },
             ],
             //'CourseDescription' => [],
             'ToolAnnouncements' => [
-                'announcements' => function (CTool $tool, Argument $args, \ArrayObject $context) {
-                    $resolver = $this->container->get('Chamilo\ApiBundle\GraphQL\Resolver\ToolAnnouncementsResolver');
+                self::RESOLVE_FIELD => function (
+                    CTool $tool,
+                    Argument $args,
+                    \ArrayObject $context,
+                    ResolveInfo $info
+                ) {
+                    if ('announcements' === $info->fieldName) {
+                        $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
 
-                    return $resolver ? $resolver->getAnnouncements($tool, $context) : [];
+                        return $resolver->getAnnouncements($tool, $context);
+                    }
+
+                    return $this->resolveField($info->fieldName, $tool);
                 },
+            ],
+            'CourseAnnouncement' => [
+                'content' => function(\stdClass $announcement, Argument $args, \ArrayObject $context) {
+                    /** @var User $reader */
+                    $reader = $context->offsetGet('user');
+                    /** @var Course $course */
+                    $course = $context->offsetGet('course');
+                    /** @var Session $session */
+                    $session = $context->offsetGet('session');
+
+                    return \AnnouncementManager::parseContent(
+                        $reader->getId(),
+                        $announcement->content,
+                        $course->getCode(),
+                        $session ? $session->getId() : 0
+                    );
+                }
             ],
             'Session' => [
                 self::RESOLVE_FIELD => function (
@@ -164,43 +144,9 @@ class RootMap extends ResolverMap implements ContainerAwareInterface
                     ResolveInfo $info
                 ) {
                     $context->offsetSet('session', $session);
+                    $resolver = $this->container->get('chamilo_api.graphql.resolver.session');
 
-                    switch ($info->fieldName) {
-                        case 'description':
-                            if (false === $session->getShowDescription()) {
-                                return '';
-                            }
-
-                            return $session->getDescription();
-                        case 'numberOfUsers':
-                            return $session->getNbrUsers();
-                        case 'numberOfCourses':
-                            return $session->getNbrCourses();
-                        case 'courses':
-                            $authChecker = $this->container->get('security.authorization_checker');
-                            $courses = [];
-
-                            /** @var SessionRelCourse $sessionCourse */
-                            foreach ($session->getCourses() as $sessionCourse) {
-                                $course = $sessionCourse->getCourse();
-
-                                $session->setCurrentCourse($course);
-
-                                if (false !== $authChecker->isGranted(SessionVoter::VIEW, $session)) {
-                                    $courses[] = $course;
-                                }
-                            }
-
-                            return $courses;
-                        default:
-                            $method = 'get'.ucfirst($info->fieldName);
-
-                            if (method_exists($session, $method)) {
-                                return $session->$method();
-                            }
-
-                            return null;
-                    }
+                    return $this->resolveField($info->fieldName, $session, $resolver, $args, $context);
                 },
             ],
             'SessionCategory' => [
@@ -210,23 +156,43 @@ class RootMap extends ResolverMap implements ContainerAwareInterface
                     \ArrayObject $context,
                     ResolveInfo $info
                 ) {
-                    switch ($info->fieldName) {
-                        case 'startDate':
-                            return $category->getDateStart();
-                        case 'endDate':
-                            return $category->getDateEnd();
-                        default:
-                            $method = 'get'.ucfirst($info->fieldName);
-
-                            if (method_exists($category, $method)) {
-                                return $category->$method();
-                            }
-
-                            return null;
+                    if ('startDate' === $info->fieldName) {
+                        return $category->getDateStart();
                     }
-                }
+
+                    if ('endDate' === $info->fieldName) {
+                        return $category->getDateEnd();
+                    }
+
+                    return $this->resolveField($info->fieldName, $category);
+                },
             ],
         ];
+    }
+
+    /**
+     * @param string            $fieldName
+     * @param object            $object
+     * @param object|null       $resolver
+     * @param Argument|null     $args
+     * @param \ArrayObject|null $context
+     *
+     * @return mixed
+     */
+    private function resolveField(
+        $fieldName,
+        $object,
+        $resolver = null,
+        Argument $args = null,
+        \ArrayObject $context = null
+    ) {
+        $method = 'get'.ucfirst($fieldName);
+
+        if ($resolver && $args && $context && method_exists($resolver, $method)) {
+            return $resolver->$method($object, $args, $context);
+        }
+
+        return $object->$method();
     }
 
     /**
@@ -240,13 +206,11 @@ class RootMap extends ResolverMap implements ContainerAwareInterface
     }
 
     /**
-     * @param Argument     $args
-     *
-     * @param \ArrayObject $context
+     * @param Argument $args
      *
      * @return Course
      */
-    protected function resolveCourse(Argument $args, \ArrayObject $context)
+    protected function resolveCourse(Argument $args)
     {
         $this->checkAuthorization();
 
@@ -265,18 +229,15 @@ class RootMap extends ResolverMap implements ContainerAwareInterface
             throw new UserError($this->translator->trans('Not allowed'));
         }
 
-        $context->offsetSet('course', $course);
-
         return $course;
     }
 
     /**
-     * @param Argument     $args
-     * @param \ArrayObject $context
+     * @param Argument $args
      *
      * @return Session
      */
-    protected function resolveSession(Argument $args, \ArrayObject $context)
+    protected function resolveSession(Argument $args)
     {
         $this->checkAuthorization();
 
@@ -287,8 +248,6 @@ class RootMap extends ResolverMap implements ContainerAwareInterface
         if (!$session) {
             throw new UserError($this->translator->trans('Session not found.'));
         }
-
-        $context->offsetSet('course', $session);
 
         return $session;
     }

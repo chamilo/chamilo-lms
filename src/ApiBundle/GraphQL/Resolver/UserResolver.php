@@ -1,73 +1,30 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\ApiBundle\GraphQL\Map;
+namespace Chamilo\ApiBundle\GraphQL\Resolver;
 
 use Chamilo\ApiBundle\GraphQL\ApiGraphQLTrait;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\UserBundle\Entity\User;
-use GraphQL\Type\Definition\ResolveInfo;
+use Doctrine\Common\Collections\ArrayCollection;
 use Overblog\GraphQLBundle\Definition\Argument;
-use Overblog\GraphQLBundle\Resolver\ResolverMap;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
- * Class UserResolverMap.
+ * Class UserResolver.
  *
- * @package Chamilo\ApiBundle\GraphQL\Map
+ * @package Chamilo\ApiBundle\GraphQL\Resolver
  */
-class UserMap extends ResolverMap implements ContainerAwareInterface
+class UserResolver implements ContainerAwareInterface
 {
     use ApiGraphQLTrait;
-
-    /**
-     * @return array
-     */
-    protected function map()
-    {
-        return [
-            'User' => [
-                self::RESOLVE_FIELD => function (
-                    User $user,
-                    Argument $args,
-                    \ArrayObject $context,
-                    ResolveInfo $info
-                ) {
-                    $context->offsetSet('user', $user);
-
-                    switch ($info->fieldName) {
-                        case 'email':
-                            return $this->resolveEmail($user);
-                        case 'picture':
-                            return $this->resolvePicture($user, $args['size']);
-                        case 'messages':
-                            return $this->resolveMessages($user, $args['lastId']);
-                        case 'messageContacts':
-                            return $this->resolveMessageContacts($user, $args['filter']);
-                        case 'courses':
-                            return $this->resolveCourses($user);
-                        case 'sessions':
-                            return $this->resolveSessions($user);
-                        default:
-                            $method = 'get'.ucfirst($info->fieldName);
-
-                            if (method_exists($user, $method)) {
-                                return $user->$method();
-                            }
-
-                            return null;
-                    }
-                },
-            ],
-        ];
-    }
 
     /**
      * @param User $user
      *
      * @return string
      */
-    private function resolveEmail(User $user)
+    public function getEmail(User $user)
     {
         $this->protectCurrentUserData($user);
 
@@ -81,59 +38,63 @@ class UserMap extends ResolverMap implements ContainerAwareInterface
     }
 
     /**
-     * @param User $user
-     * @param int  $size
+     * @param User     $user
+     * @param Argument $args
      *
      * @return string
      */
-    private function resolvePicture(User $user, $size)
+    public function getPicture(User $user, Argument $args)
     {
         $assets = $this->container->get('templating.helper.assets');
-        $path = $user->getAvatarOrAnonymous((int) $size);
+        $path = $user->getAvatarOrAnonymous($args['size']);
 
         return $assets->getUrl($path);
     }
 
     /**
-     * @param User $user
-     * @param int  $lastId
+     * @param User     $user
+     * @param Argument $args
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
-    private function resolveMessages(User $user, $lastId)
+    public function getMessages(User $user, Argument $args)
     {
         $this->protectCurrentUserData($user);
 
-        return $user->getUnreadReceivedMessages($lastId);
+        return $user->getUnreadReceivedMessages($args['lastId']);
     }
 
     /**
-     * @param User   $user
-     * @param string $filter
+     * @param User     $user
+     * @param Argument $args
      *
-     * @return array|mixed
+     * @return array
      */
-    private function resolveMessageContacts(User $user, $filter)
+    public function getMessageContacts(User $user, Argument $args)
     {
         $this->protectCurrentUserData($user);
 
-        if (strlen($filter) < 3) {
+        if (strlen($args['filter']) < 3) {
             return [];
         }
 
         $usersRepo = $this->em->getRepository('ChamiloUserBundle:User');
-        $users = $usersRepo->findUsersToSendMessage($user->getId(), $filter);
+        $users = $usersRepo->findUsersToSendMessage($user->getId(), $args['filter']);
 
         return $users;
     }
 
     /**
-     * @param User $user
+     * @param User         $user
+     * @param Argument     $args
+     * @param \ArrayObject $context
      *
      * @return array
      */
-    private function resolveCourses(User $user)
+    public function getCourses(User $user, Argument $args, \ArrayObject $context)
     {
+        $context->offsetSet('session', null);
+
         $this->protectCurrentUserData($user);
 
         $coursesInfo = \CourseManager::get_courses_list_by_user_id($user->getId());
@@ -159,7 +120,7 @@ class UserMap extends ResolverMap implements ContainerAwareInterface
      *
      * @return array
      */
-    private function getUserSessions(User $user)
+    private function findUserSessions(User $user)
     {
         $allowOrder = api_get_configuration_value('session_list_order');
         $showAllSessions = api_get_configuration_value('show_all_sessions_on_my_course_page') === true;
@@ -297,11 +258,11 @@ class UserMap extends ResolverMap implements ContainerAwareInterface
      *
      * @return array
      */
-    public function resolveSessions(User $user)
+    public function getSessions(User $user)
     {
         $this->protectCurrentUserData($user);
 
-        $sessionsId = $this->getUserSessions($user);
+        $sessionsId = $this->findUserSessions($user);
 
         if (empty($sessionsId)) {
             return [];

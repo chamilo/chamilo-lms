@@ -30,12 +30,12 @@ class EnumMap extends ResolverMap implements ContainerAwareInterface
                 'STUDENT' => User::STUDENT,
             ],
             'ImageSize' => [
-                'SIZE_TINY' => ICON_SIZE_TINY,
-                'SIZE_SMALL' => ICON_SIZE_SMALL,
-                'SIZE_MEDIUM' => ICON_SIZE_MEDIUM,
-                'SIZE_LARGE' => ICON_SIZE_LARGE,
-                'SIZE_BIG' => ICON_SIZE_BIG,
-                'SIZE_HUGE' => ICON_SIZE_HUGE,
+                'ICON_SIZE_TINY' => ICON_SIZE_TINY,
+                'ICON_SIZE_SMALL' => ICON_SIZE_SMALL,
+                'ICON_SIZE_MEDIUM' => ICON_SIZE_MEDIUM,
+                'ICON_SIZE_LARGE' => ICON_SIZE_LARGE,
+                'ICON_SIZE_BIG' => ICON_SIZE_BIG,
+                'ICON_SIZE_HUGE' => ICON_SIZE_HUGE,
             ],
             'CourseToolType' => [
                 'TOOL_COURSE_DESCRIPTION' => TOOL_COURSE_DESCRIPTION,

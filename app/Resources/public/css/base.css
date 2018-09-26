@@ -9338,6 +9338,10 @@ ul.dropdown-menu.inner > li > a {
 
 /* end document mp3 preview */
 
+#announcement_preview_result .label {
+    display: inline-table;
+}
+
 /* Fix grid with one row and multiples columns. Works for .col-sm-6.col-md-4.col-lg-3 */
 .row.clear-rows-6-4-3 {
 }

@@ -6024,10 +6024,10 @@ class CourseManager
 
                 switch ($type) {
                     case 'GROUP':
-                        $groupList[] = intval($id);
+                        $groupList[] = (int) $id;
                         break;
                     case 'USER':
-                        $userList[] = intval($id);
+                        $userList[] = (int) $id;
                         break;
                 }
             }

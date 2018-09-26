@@ -111,10 +111,14 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
                     \ArrayObject $context,
                     ResolveInfo $info
                 ) {
-                    if ('announcements' === $info->fieldName) {
-                        $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
+                    $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
 
+                    if ('announcements' === $info->fieldName) {
                         return $resolver->getAnnouncements($tool, $context);
+                    }
+
+                    if ('announcement' === $info->fieldName) {
+                        return $resolver->getAnnouncement($args['id'], $context);
                     }
 
                     return $this->resolveField($info->fieldName, $tool);

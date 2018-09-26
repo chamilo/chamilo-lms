@@ -123,6 +123,7 @@ type ToolAnnouncements {
     image: String
     customIcon: String
     announcements: [CourseAnnouncement!]
+    announcement(id: Int!): CourseAnnouncement
 }
 
 "A course announcement."

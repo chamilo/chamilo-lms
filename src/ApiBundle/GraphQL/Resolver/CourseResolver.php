@@ -13,6 +13,7 @@ use Chamilo\CourseBundle\Entity\CTool;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Overblog\GraphQLBundle\Definition\Argument;
+use Overblog\GraphQLBundle\Error\UserError;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
@@ -153,21 +154,48 @@ class CourseResolver implements ContainerAwareInterface
         $announcements = [];
 
         for ($z = 0; $z < count($announcementsInfo); $z += 2) {
-            /** @var CAnnouncement $a */
-            $a = $announcementsInfo[$z];
-            /** @var CItemProperty $ip */
-            $ip = $announcementsInfo[$z + 1];
-
-            $announcement = new \stdClass();
-            $announcement->id = $a->getIid();
-            $announcement->title = $a->getTitle();
-            $announcement->content = $a->getContent();
-            $announcement->author = $ip->getInsertUser();
-            $announcement->lastUpdateDate = $ip->getLasteditDate();
-
-            $announcements[] = $announcement;
+            $announcements[] = self::getAnnouncementObject($announcementsInfo[$z], $announcementsInfo[$z + 1]);
         }
 
         return $announcements;
+    }
+
+    /**
+     * @param int          $id
+     * @param \ArrayObject $context
+     *
+     * @return \stdClass
+     */
+    public function getAnnouncement($id, \ArrayObject $context)
+    {
+        $announcementInfo = \AnnouncementManager::getAnnouncementInfoById(
+            $id,
+            $context->offsetGet('course')->getId(),
+            $this->getCurrentUser()->getId()
+        );
+
+        if (empty($announcementInfo)) {
+            throw new UserError($this->translator->trans('Announcement not found.'));
+        }
+
+        return self::getAnnouncementObject($announcementInfo['announcement'], $announcementInfo['item_property']);
+    }
+
+    /**
+     * @param CAnnouncement $a
+     * @param CItemProperty $ip
+     *
+     * @return \stdClass
+     */
+    private static function getAnnouncementObject(CAnnouncement $a, CItemProperty $ip)
+    {
+        $announcement = new \stdClass();
+        $announcement->id = $a->getIid();
+        $announcement->title = $a->getTitle();
+        $announcement->content = $a->getContent();
+        $announcement->author = $ip->getInsertUser();
+        $announcement->lastUpdateDate = $ip->getLasteditDate();
+
+        return $announcement;
     }
 }

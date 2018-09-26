@@ -376,6 +376,10 @@ class AnnouncementManager
             ]
         );
 
+        if (empty($result)) {
+            return [];
+        }
+
         return [
             'announcement' => $result[0],
             'item_property' => $result[1],

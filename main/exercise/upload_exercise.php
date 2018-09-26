@@ -140,7 +140,7 @@ function lp_upload_quiz_action_handling()
     $path_info = pathinfo($_FILES['user_upload_quiz']['name']);
 
     // Check if the document is an Excel document
-    if ($path_info['extension'] != 'xls') {
+    if (!in_array($path_info['extension'], ['xls', 'xlsx'])) {
         return;
     }
 

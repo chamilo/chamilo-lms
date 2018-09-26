@@ -1581,6 +1581,7 @@ class IndexManager
                                 $params['date'] = $session_box['dates'];
                                 $params['image'] = isset($imageField['value']) ? $imageField['value'] : null;
                                 $params['duration'] = isset($session_box['duration']) ? ' '.$session_box['duration'] : null;
+                                $params['edit_actions'] = $actions;
                                 $params['show_actions'] = SessionManager::cantEditSession($session_id);
                                 $params['show_description'] = $session_box['show_description'] == 1 && $portalShowDescription;
                                 $params['description'] = $session_box['description'];

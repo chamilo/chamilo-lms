@@ -4,7 +4,7 @@ overblog_graphql:
             query: Query
             mutation: Mutation
             resolver_maps:
-                - '%chamilo_api.graphql.resolver_map.root.class%'
+                - '%chamilo_api.graphql.resolver_map.query.class%'
                 - '%chamilo_api.graphql.resolver_map.enum.class%'
                 - '%chamilo_api.graphql.resolver_map.union.class%'
                 - '%chamilo_api.graphql.resolver_map.scalar.class%'
@@ -16,14 +16,13 @@ overblog_graphql:
                     dir: "%kernel.root_dir%/ApiBundle/GraphQL/Resources/config"
 
 parameters:
-    chamilo_api.graphql.resolver_map.root.class: Chamilo\ApiBundle\GraphQL\Map\RootMap
+    chamilo_api.graphql.resolver_map.query.class: Chamilo\ApiBundle\GraphQL\Map\QueryMap
     chamilo_api.graphql.resolver_map.enum.class: Chamilo\ApiBundle\GraphQL\Map\EnumMap
     chamilo_api.graphql.resolver_map.union.class: Chamilo\ApiBundle\GraphQL\Map\UnionMap
     chamilo_api.graphql.resolver_map.scalar.class: Chamilo\ApiBundle\GraphQL\Map\ScalarMap
     chamilo_api.graphql.resolver_map.mutation.class: Chamilo\ApiBundle\GraphQL\Map\MutationMap
 
 services:
-
     chamilo_api.graphql.resolver.user:
         class: Chamilo\ApiBundle\GraphQL\Resolver\UserResolver
         arguments: [ '@service_container' ]
@@ -36,7 +35,7 @@ services:
         class: Chamilo\ApiBundle\GraphQL\Resolver\SessionResolver
         arguments: [ '@service_container' ]
 
-    Chamilo\ApiBundle\GraphQL\:
-        resource: "../../src/ApiBundle/GraphQL/*"
+    Chamilo\ApiBundle\GraphQL\Map\:
+        resource: "../../src/ApiBundle/GraphQL/Map/*"
         arguments:
             - "@service_container"

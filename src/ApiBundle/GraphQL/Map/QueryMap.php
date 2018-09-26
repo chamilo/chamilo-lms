@@ -19,10 +19,11 @@ use Overblog\GraphQLBundle\Resolver\ResolverMap;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
- * Class RootResolverMap
+ * Class QueryMap.
+ *
  * @package Chamilo\ApiBundle\GraphQL\Map
  */
-class RootMap extends ResolverMap implements ContainerAwareInterface
+class QueryMap extends ResolverMap implements ContainerAwareInterface
 {
     use ApiGraphQLTrait;
 
@@ -120,7 +121,7 @@ class RootMap extends ResolverMap implements ContainerAwareInterface
                 },
             ],
             'CourseAnnouncement' => [
-                'content' => function(\stdClass $announcement, Argument $args, \ArrayObject $context) {
+                'content' => function (\stdClass $announcement, Argument $args, \ArrayObject $context) {
                     /** @var User $reader */
                     $reader = $context->offsetGet('user');
                     /** @var Course $course */
@@ -134,7 +135,7 @@ class RootMap extends ResolverMap implements ContainerAwareInterface
                         $course->getCode(),
                         $session ? $session->getId() : 0
                     );
-                }
+                },
             ],
             'Session' => [
                 self::RESOLVE_FIELD => function (

@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="course", columns={"c_id"})
  *  }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CForumForumRepository")
  */
 class CForumForum
 {
@@ -196,6 +196,11 @@ class CForumForum
      * @ORM\Column(name="moderated", type="boolean", nullable=true)
      */
     protected $moderated;
+
+    /**
+     * @var CItemProperty
+     */
+    protected $itemProperty;
 
     /**
      * @var ArrayCollection
@@ -790,5 +795,27 @@ class CForumForum
     public function getThreads()
     {
         return $this->threads;
+    }
+
+    /**
+     * Set itemProperty.
+     *
+     * @param CItemProperty $itemProperty
+     *
+     * @return CForumForum
+     */
+    public function setItemProperty(CItemProperty $itemProperty)
+    {
+        $this->itemProperty = $itemProperty;
+
+        return $this;
+    }
+
+    /**
+     * @return CItemProperty
+     */
+    public function getItemProperty()
+    {
+        return $this->itemProperty;
     }
 }

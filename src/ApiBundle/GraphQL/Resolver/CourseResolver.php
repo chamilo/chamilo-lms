@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
+use Chamilo\CourseBundle\Entity\CForumCategory;
 use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Repository\CNotebookRepository;
@@ -216,5 +217,23 @@ class CourseResolver implements ContainerAwareInterface
         );
 
         return $notebooks;
+    }
+
+    /**
+     * @param \ArrayObject $context
+     *
+     * @return array
+     */
+    public function getForumCategories(\ArrayObject $context): array
+    {
+        /** @var Course $course */
+        $course = $context->offsetGet('course');
+        /** @var Session $session */
+        $session = $context->offsetGet('session');
+
+        $catRepo = $this->em->getRepository('ChamiloCourseBundle:CForumCategory');
+        $cats = $catRepo->findAllInCourse(false, $course, $session);
+
+        return $cats;
     }
 }

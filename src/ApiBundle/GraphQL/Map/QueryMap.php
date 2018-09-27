@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionCategory;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CourseBundle\Entity\CForumCategory;
 use Chamilo\CourseBundle\Entity\CNotebook;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\UserBundle\Entity\User;
@@ -161,6 +162,33 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
             'CourseNote' => [
                 'id' => function (CNotebook $note) {
                     return $note->getIid();
+                },
+            ],
+            'ToolForums' => [
+                self::RESOLVE_FIELD => function (
+                    CTool $tool,
+                    Argument $args,
+                    \ArrayObject $context,
+                    ResolveInfo $info
+                ) {
+                    if ('categories' === $info->fieldName) {
+                        $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
+
+                        return $resolver->getForumCategories($context);
+                    }
+
+                    return $this->resolveField($info->fieldName, $tool);
+                },
+            ],
+            'CourseForumCategory' => [
+                'id' => function (CForumCategory $category) {
+                    return $category->getIid();
+                },
+                'title' => function (CForumCategory $category) {
+                    return $category->getCatTitle();
+                },
+                'comment' => function (CForumCategory $category) {
+                    return $category->getCatComment();
                 },
             ],
             'Session' => [

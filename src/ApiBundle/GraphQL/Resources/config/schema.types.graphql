@@ -116,7 +116,7 @@ type CourseDescription {
     descriptionType: Int
 }
 
-"Personal notes relevant to student or coursework"
+"Personal notes relevant to student or coursework."
 type ToolNotebook {
     name: String
     category: String
@@ -125,7 +125,7 @@ type ToolNotebook {
     notes: [CourseNote!]
 }
 
-"Note by user in notebook tool"
+"Note by user in notebook tool."
 type CourseNote {
     id: Int
     title: String
@@ -152,6 +152,57 @@ type CourseAnnouncement {
     content: String
     author: User!
     lastUpdateDate: DateTime
+}
+
+"Course forum tool."
+type ToolForums {
+    name: String
+    category: String
+    image: String
+    customIcon: String
+    categories: [CourseForumCategory!]
+}
+
+type CourseForumCategory {
+    id: Int
+    title: String
+    comment: String
+    locked: Int
+    forums: [CourseForum!]
+}
+
+type CourseForum {
+    id: Int
+    title: String
+    comment: String
+    image: String
+    numberOfThreads: Int
+    numberOfPosts: Int
+    threads: [CourseForumThread!]
+}
+
+type CourseForumThread {
+    id: Int
+    title: String
+    userPoster: User
+    date: DateTime
+    sticky: Boolean
+    locked: Int
+    numberOfViews: Int
+    numberOfReplies: Int
+    closeDate: DateTime
+    posts: [CourseForumPost!]
+}
+
+type CourseForumPost {
+    id: Int
+    title: String
+    text: String
+    userPoster: User
+    date: DateTime
+    parent: CourseForumPost
+    visible: Boolean
+    status: Int
 }
 
 "A session registered on the platform."
@@ -185,7 +236,7 @@ type SessionCategory {
 
 # Unions
 
-union CourseTool = ToolDescription | ToolAnnouncements | ToolNotebook
+union CourseTool = ToolDescription | ToolAnnouncements | ToolNotebook | ToolForums
 
 # Enums
 
@@ -222,6 +273,7 @@ enum CourseToolType {
     TOOL_COURSE_DESCRIPTION
     TOOL_ANNOUNCEMENT
     TOOL_NOTEBOOK
+    TOOL_FORUM
 }
 
 # Scalars

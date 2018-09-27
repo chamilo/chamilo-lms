@@ -3,6 +3,7 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -81,6 +82,13 @@ class CForumCategory
      * @var CItemProperty
      */
     private $itemProperty;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumForum", mappedBy="forumCategory")
+     */
+    private $forums;
 
     /**
      * Get iid.
@@ -258,6 +266,16 @@ class CForumCategory
     public function getCId()
     {
         return $this->cId;
+    }
+
+    /**
+     * Get forums.
+     *
+     * @return ArrayCollection
+     */
+    public function getForums()
+    {
+        return $this->forums;
     }
 
     /**

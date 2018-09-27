@@ -3,6 +3,7 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -50,11 +51,12 @@ class CForumThread
     protected $threadTitle;
 
     /**
-     * @var int
+     * @var CForumForum|null
      *
-     * @ORM\Column(name="forum_id", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumForum", inversedBy="threads")
+     * @ORM\JoinColumn(name="forum_id", referencedColumnName="iid")
      */
-    protected $forumId;
+    protected $forum;
 
     /**
      * @var int
@@ -162,6 +164,13 @@ class CForumThread
     protected $lpItemId;
 
     /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", mappedBy="thread")
+     */
+    protected $posts;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -218,15 +227,15 @@ class CForumThread
     }
 
     /**
-     * Set forumId.
+     * Set forum.
      *
-     * @param int $forumId
+     * @param CForumForum|null $forum
      *
      * @return CForumThread
      */
-    public function setForumId($forumId)
+    public function setForum(CForumForum $forum = null)
     {
-        $this->forumId = $forumId;
+        $this->forum = $forum;
 
         return $this;
     }
@@ -234,11 +243,11 @@ class CForumThread
     /**
      * Get forumId.
      *
-     * @return int
+     * @return CForumForum|null
      */
-    public function getForumId()
+    public function getForum()
     {
-        return $this->forumId;
+        return $this->forum;
     }
 
     /**
@@ -633,5 +642,13 @@ class CForumThread
     public function getIid()
     {
         return $this->iid;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getPosts()
+    {
+        return $this->posts;
     }
 }

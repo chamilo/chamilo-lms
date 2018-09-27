@@ -276,7 +276,7 @@ class WSCMForum extends WSCM
             $post
                 ->setPostTitle($title)
                 ->setPostText(isset($content) ? (api_html_entity_decode($content)) : null)
-                ->setThreadId($thread_id)
+                ->setThread($thread_id)
                 ->setForumId($forum_id)
                 ->setPosterId($user_id)
                 ->setPostDate($postDate)

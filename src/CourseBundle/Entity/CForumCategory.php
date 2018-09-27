@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="session_id", columns={"session_id"})
  *  }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CForumCategoryRepository")
  */
 class CForumCategory
 {
@@ -76,6 +76,21 @@ class CForumCategory
      * @ORM\Column(name="cat_id", type="integer")
      */
     protected $catId;
+
+    /**
+     * @var CItemProperty
+     */
+    private $itemProperty;
+
+    /**
+     * Get iid.
+     *
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iid;
+    }
 
     /**
      * Set catTitle.
@@ -243,5 +258,25 @@ class CForumCategory
     public function getCId()
     {
         return $this->cId;
+    }
+
+    /**
+     * @param CItemProperty $itemProperty
+     *
+     * @return CForumCategory
+     */
+    public function setItemProperty(CItemProperty $itemProperty)
+    {
+        $this->itemProperty = $itemProperty;
+
+        return $this;
+    }
+
+    /**
+     * @return CItemProperty
+     */
+    public function getItemProperty()
+    {
+        return $this->itemProperty;
     }
 }

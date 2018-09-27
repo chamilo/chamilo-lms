@@ -116,6 +116,25 @@ type CourseDescription {
     descriptionType: Int
 }
 
+"Personal notes relevant to student or coursework"
+type ToolNotebook {
+    name: String
+    category: String
+    image: String
+    customIcon: String
+    notes: [CourseNote!]
+}
+
+"Note by user in notebook tool"
+type CourseNote {
+    id: Int
+    title: String
+    description: String
+    creationDate: DateTime
+    updateDate: DateTime
+    status: Int
+}
+
 "Announcements related to the course."
 type ToolAnnouncements {
     name: String
@@ -166,7 +185,7 @@ type SessionCategory {
 
 # Unions
 
-union CourseTool = ToolDescription | ToolAnnouncements
+union CourseTool = ToolDescription | ToolAnnouncements | ToolNotebook
 
 # Enums
 
@@ -202,6 +221,7 @@ enum ImageSize {
 enum CourseToolType {
     TOOL_COURSE_DESCRIPTION
     TOOL_ANNOUNCEMENT
+    TOOL_NOTEBOOK
 }
 
 # Scalars

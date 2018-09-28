@@ -328,7 +328,6 @@ if (!empty($diagnosis)) {
         'diagnosisCollapse'
     );
 }
-
 $controller->tpl->assign('diagnosis_block', $block);
 $controller->tpl->assign('profile_block', $controller->return_profile_block());
 $controller->tpl->assign('user_image_block', $controller->return_user_image_block());

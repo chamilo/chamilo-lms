@@ -189,6 +189,16 @@ class CGroupInfo
     protected $tutors;
 
     /**
+     * Get iid.
+     *
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iid;
+    }
+
+    /**
      * Set name.
      *
      * @param string $name

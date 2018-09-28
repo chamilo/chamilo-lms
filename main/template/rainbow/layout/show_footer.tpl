@@ -2,12 +2,14 @@
     </section>
     <!-- END CONTENT -->
 
+
+    {% if show_footer == true %}
     <!-- START FOOTER -->
     <footer class="footer">
-        {% if show_footer == true %}
-            {% include 'layout/page_footer.tpl'|get_template %}
-        {% endif %}
+        {% include 'layout/page_footer.tpl'|get_template %}
     </footer>
+    {% endif %}
+
     <!-- END FOOTER -->
 
     </main>

@@ -1,72 +1,55 @@
 {% import "ChamiloThemeBundle:Macros:box.html.twig" as macro %}
 
 {% autoescape false %}
-
 {% for item in hot_courses %}
-    {% if item.title %}
-
+    <div class="col-md-3">
+        {% if item.title %}
             {% set tools %}
-                {% if item.categoryName != '' %}
-                    <span class="category">{{ item.categoryName }}</span>
-                    <div class="cribbon"></div>
-                {% endif %}
                 <div class="user-actions">{{ item.description_button }}</div>
-
             {% endset %}
 
             {% set image %}
-                {% if item.is_registered %}
-                    <a title="{{ item.title}}" href="{{ item.course_public_url }}">
-                        <img src="{{ item.course_image_large }}" class="card-img-top" alt="{{ item.title }}">
-                    </a>
-                {% else %}
-                    <img src="{{ item.course_image_large }}" class="card-img-top" alt="{{ item.title }}">
+                {% if item.categoryName != '' %}
+                    <div class="category">
+                        {{ item.categoryName }}
+                    </div>
                 {% endif %}
+                <a title="{{ item.title}}" href="{{ item.course_public_url }}">
+                    <img src="{{ item.course_image_large }}" class="card-img-top" alt="{{ item.title }}">
+                </a>
             {% endset %}
 
             {% set content %}
-
-
-
                 <div class="card-title">
-
-                    {% if item.is_registered %}
-                        <h5 class="title">
-                            <a title="{{ item.title }}" href="{{ item.course_public_url }}">{{ item.title_cut}}</a>
-                        </h5>
-                    {% else %}
-                        <h5 class="title" title="{{ item.title }}">
-                            {{ item.title_cut}}
-                        </h5>
-                    {% endif %}
+                    <h5 class="title">
+                        <a title="{{ item.title }}" href="{{ item.course_public_url }}">{{ item.title}}</a>
+                    </h5>
                 </div>
 
                 <div class="ranking">
                     {{ item.rating_html }}
                 </div>
 
-                <div class="block-author">
+                <div class="card-author d-flex flex-row bd-highlight mb-3">
                     {% for teacher in item.teachers %}
                         {% if item.teachers | length > 2 %}
                             <a href="{{ teacher.url }}" class="ajax" data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
                                 <img src="{{ teacher.avatar }}" alt="{{ 'TeacherPicture' | get_lang }}" />
                             </a>
                         {% else %}
-                            <a href="{{ teacher.url }}" class="ajax" data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
+                            <a href="{{ teacher.url }}" class="ajax p-2 bd-highlight" data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
                                 <img src="{{ teacher.avatar }}" alt="{{ 'TeacherPicture' | get_lang }}" />
                             </a>
-                            <div class="teachers-details">
-                                <h5>
-                                    <a href="{{ teacher.url }}" class="ajax" data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
+                            <div class="details p-2 bd-highlight">
+                                <a href="{{ teacher.url }}" class="ajax" data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
                                         {{ teacher.firstname }} {{ teacher.lastname }}
-                                    </a>
-                                </h5>
-                                <p>{{ 'Teacher' | get_lang }}</p>
+                                </a>
+                                <div class="name">{{ 'Teacher' | get_lang }}</div>
                             </div>
                         {% endif %}
                     {% endfor %}
                 </div>
-
+                <!--
                 <div class="toolbar row">
                     <div class="col-sm-4">
                         {#{% if item.price %}#}
@@ -75,16 +58,14 @@
                     </div>
                     <div class="col-sm-8">
                         <div class="btn-group" role="group">
-                            {{ item.register_button }}
+                            {# item.register_button #}
                             {#{{ item.unsubscribe_button }}#}
                         </div>
                     </div>
-                </div>
+                </div> -->
             {% endset %}
-
             {{ macro.panel('', content, '', '', '', image) }}
-
-
     {% endif %}
+    </div>
 {% endfor %}
 {% endautoescape %}

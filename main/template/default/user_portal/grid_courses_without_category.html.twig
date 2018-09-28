@@ -1,3 +1,91 @@
+{% import "ChamiloThemeBundle:Macros:box.html.twig" as macro %}
+
+{% if not courses is empty %}
+    <div class="course-columns">
+        <div class="row">
+
+
+    {% for item in courses %}
+        <div class="col-sm">
+        {% if item.title %}
+            {% set image %}
+                {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') and not item.current_user_is_teacher %}
+                    <img src="{{ item.image }}" class="card-img-top">
+                {% else %}
+                    <a title="{{ item.title }}" href="{{ item.link }}">
+                        <img src="{{ item.image }}" alt="{{ item.title }}" class="card-img-top">
+                    </a>
+                {% endif %}
+            {% endset %}
+
+            {% set content %}
+                <div class="card-title">
+                    <h5 class="title">
+                        {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') and not item.current_user_is_teacher %}
+                            {{ item.title_cut }} {{ item.code_course }}
+                        {% else %}
+                            <a title="{{ item.title }}" href="{{ item.link }}">{{ item.title_cut }} {{ item.code_course }}</a>
+                        {% endif %}
+                    </h5>
+                </div>
+                <div class="block-author">
+                    {% if item.teachers | length > 6 %}
+                        <a id="plist-{{ loop.index }}" data-trigger="focus" tabindex="0" role="button" class="btn btn-default panel_popover" data-toggle="popover" title="{{ 'CourseTeachers' | get_lang }}" data-html="true">
+                            <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                        </a>
+                        <div id="popover-content-plist-{{ loop.index }}" class="hide">
+                            {% for teacher in item.teachers %}
+                                <div class="popover-teacher">
+                                    <a href="{{ teacher.url }}" class="ajax"
+                                       data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
+                                        <img src="{{ teacher.avatar }}"/>
+                                    </a>
+                                    <div class="teachers-details">
+                                        <h5>
+                                            <a href="{{ teacher.url }}" class="ajax"
+                                               data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
+                                                {{ teacher.firstname }} {{ teacher.lastname }}
+                                            </a>
+                                        </h5>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {% for teacher in item.teachers %}
+                            {% if item.teachers | length <= 2 %}
+                                <a href="{{ teacher.url }}" class="ajax"
+                                   data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
+                                    <img src="{{ teacher.avatar }}"/>
+                                </a>
+                                <div class="teachers-details">
+                                    <h5>
+                                        <a href="{{ teacher.url }}" class="ajax"
+                                           data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
+                                            {{ teacher.firstname }} {{ teacher.lastname }}
+                                        </a>
+                                    </h5>
+                                    <p>{{ 'Teacher' | get_lang }}</p>
+                                </div>
+                            {% elseif item.teachers | length <= 6 %}
+                                <a href="{{ teacher.url }}" class="ajax"
+                                   data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
+                                    <img src="{{ teacher.avatar }}"/>
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            {% endset %}
+            {{ macro.panel('', content, '', '', '', image) }}
+        {% endif %}
+        </div>
+    {% endfor %}
+        </div>
+    </div>
+{% endif %}
+
+
 {% if not courses is empty %}
     <div class="grid-courses">
         <div class="row">
@@ -8,13 +96,7 @@
                             {% if item.is_special_course %}
                                 <div class="pin">{{ item.icon }}</div>
                             {% endif %}
-                            {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') and not item.current_user_is_teacher %}
-                                <img src="{{ item.image }}" class="img-responsive">
-                            {% else %}
-                                <a title="{{ item.title }}" href="{{ item.link }}">
-                                    <img src="{{ item.image }}" alt="{{ item.title }}" class="img-responsive">
-                                </a>
-                            {% endif %}
+
                             {% if item.category != '' %}
                                 <span class="category">{{ item.category }}</span>
                                 <div class="cribbon"></div>
@@ -38,63 +120,8 @@
                             {% endif %}
                         </div>
                         <div class="description">
-                            <div class="block-title">
-                                <h4 class="title" title="{{ item.title }}">
-                                    {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') and not item.current_user_is_teacher %}
-                                        {{ item.title_cut }} {{ item.code_course }}
-                                    {% else %}
-                                        <a title="{{ item.title }}" href="{{ item.link }}">{{ item.title_cut }} {{ item.code_course }}</a>
-                                    {% endif %}
-                                </h4>
-                            </div>
-                            <div class="block-author">
-                                {% if item.teachers | length > 6 %}
-                                    <a id="plist-{{ loop.index }}" data-trigger="focus" tabindex="0" role="button" class="btn btn-default panel_popover" data-toggle="popover" title="{{ 'CourseTeachers' | get_lang }}" data-html="true">
-                                        <i class="fa fa-graduation-cap" aria-hidden="true"></i>
-                                    </a>
-                                    <div id="popover-content-plist-{{ loop.index }}" class="hide">
-                                        {% for teacher in item.teachers %}
-                                        <div class="popover-teacher">
-                                            <a href="{{ teacher.url }}" class="ajax"
-                                               data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                                <img src="{{ teacher.avatar }}"/>
-                                            </a>
-                                            <div class="teachers-details">
-                                                <h5>
-                                                    <a href="{{ teacher.url }}" class="ajax"
-                                                       data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                                        {{ teacher.firstname }} {{ teacher.lastname }}
-                                                    </a>
-                                                </h5>
-                                            </div>
-                                        </div>
-                                        {% endfor %}
-                                    </div>
-                                {% else %}
-                                    {% for teacher in item.teachers %}
-                                        {% if item.teachers | length <= 2 %}
-                                            <a href="{{ teacher.url }}" class="ajax"
-                                               data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                                <img src="{{ teacher.avatar }}"/>
-                                            </a>
-                                            <div class="teachers-details">
-                                                <h5>
-                                                    <a href="{{ teacher.url }}" class="ajax"
-                                                       data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                                        {{ teacher.firstname }} {{ teacher.lastname }}
-                                                    </a>
-                                                </h5>
-                                                <p>{{ 'Teacher' | get_lang }}</p>
-                                            </div>                                       
-                                        {% elseif item.teachers | length <= 6 %}
-                                            <a href="{{ teacher.url }}" class="ajax"
-                                               data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                                <img src="{{ teacher.avatar }}"/>
-                                            </a>
-                                        {% endif %}
-                                    {% endfor %}
-                                {% endif %}
-                            </div>
+
+
                             {% if item.notifications %}
                                 <div class="notifications">{{ item.notifications }}</div>
                             {% endif %}

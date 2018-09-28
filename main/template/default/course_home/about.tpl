@@ -107,6 +107,7 @@
             </div>
 
             <div class="col-sm-4">
+                {% if allowSubscribe == true %}
                 <div class="panel panel-default">
                     <div class="panel-body">
                         {% if is_premium == false %}
@@ -139,6 +140,7 @@
                         {% endif %}
                     </div>
                 </div>
+                {% endif %}
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <div class="panel-teachers">

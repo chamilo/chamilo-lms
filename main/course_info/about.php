@@ -124,7 +124,16 @@ $topics = [
 ];
 
 $subscriptionUser = CourseManager::is_user_subscribed_in_course($userId, $course->getCode());
-
+$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+$sql = "SELECT code, visibility FROM $course_table
+                    WHERE id = $courseId AND subscribe = '".SUBSCRIBE_NOT_ALLOWED."'";
+$allowSubscribe = null;
+error_log(api_is_platform_admin());
+if (Database::num_rows(Database::query($sql)) > 0 && !api_is_platform_admin()) {
+    $allowSubscribe = false;
+} else {
+    $allowSubscribe = true;
+}
 $plugin = BuyCoursesPlugin::create();
 $checker = $plugin->isEnabled();
 $courseIsPremium = null;
@@ -165,6 +174,7 @@ $template->assign('course', $courseItem);
 $essence = Essence\Essence::instance();
 $template->assign('essence', $essence);
 $template->assign('is_premium', $courseIsPremium);
+$template->assign('allowSubscribe', $allowSubscribe);
 $template->assign('token', $token);
 $template->assign('url', $urlCourse);
 $layout = $template->get_template('course_home/about.tpl');

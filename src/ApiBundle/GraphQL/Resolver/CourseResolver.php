@@ -8,8 +8,10 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
+use Chamilo\CourseBundle\Entity\CForumCategory;
 use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\CourseBundle\Repository\CNotebookRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Overblog\GraphQLBundle\Definition\Argument;
@@ -197,5 +199,41 @@ class CourseResolver implements ContainerAwareInterface
         $announcement->lastUpdateDate = $ip->getLasteditDate();
 
         return $announcement;
+    }
+
+    /**
+     * @param \ArrayObject $context
+     *
+     * @return array
+     */
+    public function getNotes(\ArrayObject $context): array
+    {
+        /** @var CNotebookRepository $notebooksRepo */
+        $notebooksRepo = $this->em->getRepository('ChamiloCourseBundle:CNotebook');
+        $notebooks = $notebooksRepo->findByUser(
+            $this->getCurrentUser(),
+            $context->offsetGet('course'),
+            $context->offsetGet('session')
+        );
+
+        return $notebooks;
+    }
+
+    /**
+     * @param \ArrayObject $context
+     *
+     * @return array
+     */
+    public function getForumCategories(\ArrayObject $context): array
+    {
+        /** @var Course $course */
+        $course = $context->offsetGet('course');
+        /** @var Session $session */
+        $session = $context->offsetGet('session');
+
+        $catRepo = $this->em->getRepository('ChamiloCourseBundle:CForumCategory');
+        $cats = $catRepo->findAllInCourse(false, $course, $session);
+
+        return $cats;
     }
 }

@@ -3,6 +3,7 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -14,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="course", columns={"c_id"})
  *  }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CForumForumRepository")
  */
 class CForumForum
 {
@@ -77,9 +78,10 @@ class CForumForum
     protected $forumLastPost;
 
     /**
-     * @var int
+     * @var CForumCategory|null
      *
-     * @ORM\Column(name="forum_category", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumCategory", inversedBy="forums")
+     * @ORM\JoinColumn(name="forum_category", referencedColumnName="iid")
      */
     protected $forumCategory;
 
@@ -194,6 +196,18 @@ class CForumForum
      * @ORM\Column(name="moderated", type="boolean", nullable=true)
      */
     protected $moderated;
+
+    /**
+     * @var CItemProperty
+     */
+    protected $itemProperty;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumThread", mappedBy="forum")
+     */
+    protected $threads;
 
     /**
      * Set forumTitle.
@@ -318,11 +332,11 @@ class CForumForum
     /**
      * Set forumCategory.
      *
-     * @param int $forumCategory
+     * @param CForumCategory|null $forumCategory
      *
      * @return CForumForum
      */
-    public function setForumCategory($forumCategory)
+    public function setForumCategory(CForumCategory $forumCategory = null)
     {
         $this->forumCategory = $forumCategory;
 
@@ -332,7 +346,7 @@ class CForumForum
     /**
      * Get forumCategory.
      *
-     * @return int
+     * @return CForumCategory|null
      */
     public function getForumCategory()
     {
@@ -761,5 +775,47 @@ class CForumForum
         $this->moderated = $moderated;
 
         return $this;
+    }
+
+    /**
+     * Get iid.
+     *
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iid;
+    }
+
+    /**
+     * Get threads.
+     *
+     * @return ArrayCollection
+     */
+    public function getThreads()
+    {
+        return $this->threads;
+    }
+
+    /**
+     * Set itemProperty.
+     *
+     * @param CItemProperty $itemProperty
+     *
+     * @return CForumForum
+     */
+    public function setItemProperty(CItemProperty $itemProperty)
+    {
+        $this->itemProperty = $itemProperty;
+
+        return $this;
+    }
+
+    /**
+     * @return CItemProperty
+     */
+    public function getItemProperty()
+    {
+        return $this->itemProperty;
     }
 }

@@ -40,6 +40,8 @@ class EnumMap extends ResolverMap implements ContainerAwareInterface
             'CourseToolType' => [
                 'TOOL_COURSE_DESCRIPTION' => TOOL_COURSE_DESCRIPTION,
                 'TOOL_ANNOUNCEMENT' => TOOL_ANNOUNCEMENT,
+                'TOOL_NOTEBOOK' => TOOL_NOTEBOOK,
+                'TOOL_FORUM' => TOOL_FORUM,
             ],
         ];
     }

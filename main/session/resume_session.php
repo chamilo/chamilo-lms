@@ -220,8 +220,10 @@ if ($session->getNbrCourses() === 0) {
                 api_get_path(WEB_CODE_PATH).'admin/skill_rel_course.php?session_id='.$sessionId.'&course_id='.$course->getId()
             );
         }
-
         $courseItem .= $orderButtons;
+
+        $courseItem .= '<a href="add_users_to_session_course.php?id_session='.$sessionId.'&course_id='.$course->getId().'">'.
+            Display::return_icon('new_user.png', get_lang('AddUsers'), ['style' => 'width:22px'], ICON_SIZE_MEDIUM).'</a>';
         $courseItem .= '<a href="session_course_user_list.php?id_session='.$sessionId.'&course_code='.$course->getCode().'">'.
                 Display::return_icon('user.png', get_lang('Users'), '', ICON_SIZE_SMALL).'</a>';
         $courseItem .= '<a href="'.api_get_path(WEB_CODE_PATH).'user/user_import.php?action=import&cidReq='.$course->getCode().'&id_session='.$sessionId.'">'.

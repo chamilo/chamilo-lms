@@ -563,6 +563,9 @@ $template->assign('lp_author', $lp->get_author());
 $template->assign('lp_mode', $lp->mode);
 $template->assign('lp_title_scorm', $lp->name);
 // ofaj
+$template->assign('lp_item_parents', $lp->getCurrentItemParentNames($lp->get_current_item_id()));
+
+// ofaj
 $template->assign('title_course', $lp->course_info['title']);
 if (api_get_configuration_value('lp_view_accordion') === true && $lpType == 1) {
     $template->assign('data_panel', $lp->getParentToc($get_toc_list));

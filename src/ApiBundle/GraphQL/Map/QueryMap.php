@@ -12,6 +12,8 @@ use Chamilo\CoreBundle\Entity\SessionCategory;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CourseBundle\Entity\CForumCategory;
 use Chamilo\CourseBundle\Entity\CForumForum;
+use Chamilo\CourseBundle\Entity\CForumPost;
+use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Entity\CNotebook;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\UserBundle\Entity\User;
@@ -182,6 +184,10 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
                         return $resolver->getForum($args['id'], $context);
                     }
 
+                    if ('thread' === $info->fieldName) {
+                        return $resolver->getThread($args['id'], $context);
+                    }
+
                     return $this->resolveField($info->fieldName, $tool);
                 },
             ],
@@ -217,8 +223,39 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
                 'numberOfPosts' => function (CForumForum $forum) {
                     return (int) $forum->getForumPosts();
                 },
-                'threads' => function (CForumForum $forum) {
-                    return [];
+                'threads' => function (CForumForum $forum, Argument $args, \ArrayObject $context) {
+                    $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
+
+                    return $resolver->getThreads($forum, $context);
+                },
+            ],
+            'CourseForumThread' => [
+                'id' => function (CForumThread $thread) {
+                    return $thread->getIid();
+                },
+                'title' => function (CForumThread $thread) {
+                    return $thread->getThreadTitle();
+                },
+                'userPoster' => function (CForumThread $thread) {
+                    $userRepo = $this->em->getRepository('ChamiloUserBundle:User');
+                    $user = $userRepo->find($thread->getThreadPosterId());
+
+                    return $user;
+                },
+                'date' => function (CForumThread $thread) {
+                    return $thread->getThreadDate();
+                },
+                'sticky' => function (CForumThread $thread) {
+                    return $thread->getThreadSticky();
+                },
+                'numberOfViews' => function (CForumThread $thread) {
+                    return $thread->getThreadViews();
+                },
+                'numberOfReplies' => function (CForumThread $thread) {
+                    return $thread->getThreadReplies();
+                },
+                'closeDate' => function (CForumThread $thread) {
+                    return $thread->getThreadCloseDate();
                 },
             ],
             'Session' => [

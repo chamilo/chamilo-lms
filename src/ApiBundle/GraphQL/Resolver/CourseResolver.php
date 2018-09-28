@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\CForumCategory;
 use Chamilo\CourseBundle\Entity\CForumForum;
+use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Repository\CNotebookRepository;
@@ -276,5 +277,47 @@ class CourseResolver implements ContainerAwareInterface
         }
 
         return $forum;
+    }
+
+    /**
+     * @param CForumForum  $forum
+     * @param \ArrayObject $context
+     *
+     * @return array
+     */
+    public function getThreads(CForumForum $forum, \ArrayObject $context): array
+    {
+        /** @var Course $course */
+        $course = $context->offsetGet('course');
+        /** @var Session $session */
+        $session = $context->offsetGet('session');
+
+        $threadRepo = $this->em->getRepository('ChamiloCourseBundle:CForumThread');
+        $threads = $threadRepo->findAllInCourseByForum(false, $forum, $course, $session);
+
+        return $threads;
+    }
+
+    /**
+     * @param int          $id
+     * @param \ArrayObject $context
+     *
+     * @return CForumThread
+     */
+    public function getThread($id, \ArrayObject $context)
+    {
+        /** @var Course $course */
+        $course = $context->offsetGet('course');
+        /** @var Session $session */
+        $session = $context->offsetGet('session');
+
+        $threadRepo = $this->em->getRepository('ChamiloCourseBundle:CForumThread');
+        $thread = $threadRepo->findOneInCourse($id, $course, $session);
+
+        if (empty($thread)) {
+            throw new UserError($this->translator->trans('Forum thread not found in this course.'));
+        }
+
+        return $thread;
     }
 }

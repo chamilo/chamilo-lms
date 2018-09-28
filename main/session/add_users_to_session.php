@@ -281,6 +281,8 @@ function add_user_to_session (code, content) {
 	}
 	destination.options[destination.length] = new Option(content,code);
 	destination.selectedIndex = -1;
+	
+	$("#remove_user").show();
 	sortOptions(destination.options);
 }
 
@@ -709,12 +711,7 @@ $newLinks .= Display::url(
                     <?php
                     if ($ajax_search) {
                         ?>
-                        <div class="separate-action">
-                            <button name="remove_user" class="btn btn-primary" type="button"
-                                    onclick="remove_item(document.getElementById('destination_users'))">
-                                <em class="fa fa-chevron-left"></em>
-                            </button>
-                        </div>
+
                         <?php
                     } else {
                         ?>
@@ -750,6 +747,12 @@ $newLinks .= Display::url(
                 <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15"
                         class="form-control">
                 </select>
+                <br />
+                <button style="display:none" id="remove_user" name="remove_user" class="btn btn-primary" type="button"
+                        onclick="remove_item(document.getElementById('destination_users'))">
+                    <?php echo get_lang('Remove'); ?> <em class="fa fa-trash"></em>
+                </button>
+
             </div>
         </div>
     </form>

@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionCategory;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CourseBundle\Entity\CForumCategory;
+use Chamilo\CourseBundle\Entity\CForumForum;
 use Chamilo\CourseBundle\Entity\CNotebook;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\UserBundle\Entity\User;
@@ -171,10 +172,14 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
                     \ArrayObject $context,
                     ResolveInfo $info
                 ) {
-                    if ('categories' === $info->fieldName) {
-                        $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
+                    $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
 
+                    if ('categories' === $info->fieldName) {
                         return $resolver->getForumCategories($context);
+                    }
+
+                    if ('forum' === $info->fieldName) {
+                        return $resolver->getForum($args['id'], $context);
                     }
 
                     return $this->resolveField($info->fieldName, $tool);
@@ -189,6 +194,31 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
                 },
                 'comment' => function (CForumCategory $category) {
                     return $category->getCatComment();
+                },
+                'forums' => function (CForumCategory $category, Argument $args, \ArrayObject $context) {
+                    $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
+
+                    return $resolver->getForums($category, $context);
+                },
+            ],
+            'CourseForum' => [
+                'id' => function (CForumForum $forum) {
+                    return $forum->getIid();
+                },
+                'title' => function (CForumForum $forum) {
+                    return $forum->getForumTitle();
+                },
+                'comment' => function (CForumForum $forum) {
+                    return $forum->getForumComment();
+                },
+                'numberOfThreads' => function (CForumForum $forum) {
+                    return (int) $forum->getForumThreads();
+                },
+                'numberOfPosts' => function (CForumForum $forum) {
+                    return (int) $forum->getForumPosts();
+                },
+                'threads' => function (CForumForum $forum) {
+                    return [];
                 },
             ],
             'Session' => [

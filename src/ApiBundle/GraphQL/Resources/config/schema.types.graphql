@@ -161,6 +161,7 @@ type ToolForums {
     image: String
     customIcon: String
     categories: [CourseForumCategory!]
+    forum(id: Int!): CourseForum
 }
 
 type CourseForumCategory {

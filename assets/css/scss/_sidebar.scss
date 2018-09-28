@@ -195,7 +195,7 @@
 
   .sidebar-link {
     &.active::before {
-      background: $default-warning;
+      background: $default-yellow;
       content: '';
       display: block;
       height: 100%;
@@ -227,7 +227,7 @@
           color: $default-white;
 
           &.dropdown-toggle {
-            background: $default-active;
+            background: $default-link;
           }
 
           .icon-holder {
@@ -278,14 +278,14 @@
       }
 
       &.active {
-        background: $default-active;
+        background: $default-link;
       }
 
       &:hover,
       &:focus {
         color: $default-info;
         text-decoration: none;
-        background: $default-active;
+        background: $default-link;
 
         .icon-holder {
           color: $default-info;

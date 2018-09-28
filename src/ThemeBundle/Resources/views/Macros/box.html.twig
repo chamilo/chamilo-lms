@@ -154,7 +154,7 @@
 
 {% macro panel(header, content, title, footer, subtitle, top_image) %}
     {% autoescape false %}
-        <div class="card" style="width: 20rem;">
+        <div class="card" >
             {% if header %}
                 <div class="card-header"> {{ header }} </div>
             {% endif %}

@@ -53,12 +53,12 @@ ul {
 }
 
 a {
-  color: $default-info;
+  color: $default-link;
 
   &:hover,
   &:focus {
     text-decoration: none;
-    color: darken($default-info, 10%);
+    color: darken($default-link, 20%);
   }
 
   &:focus {
@@ -254,3 +254,32 @@ footer {
   padding: 10px;
   position: relative;
 }
+.carousel-item img{
+  max-width: 100%;
+  height: auto;
+}
+
+.card{
+  border: none;
+  .category{
+    position: absolute;
+    border-radius: 10px;
+    background-color: $default-yellow;
+    color: $default-black;
+    font-weight: bold;
+    padding: 0.2rem 0.8rem;
+    top: -0.8rem;
+    left: 0.5rem;
+  }
+  .card-body{
+    padding: 0.5rem 0.25rem;
+    .card-title{
+      .title{
+        font-size: 16px;
+        font-weight: bold;
+        line-height: 22px;
+      }
+    }
+  }
+}
+

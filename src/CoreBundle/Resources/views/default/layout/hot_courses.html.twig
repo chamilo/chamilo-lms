@@ -34,10 +34,8 @@
                 {{ "HottestCourses"|get_lang }}
             </h5>
         </div>
-        <div class="card-columns">-
-
-                {% include '@ChamiloCore/default/layout/hot_course_item.html.twig' %}
-
+        <div class="row">
+            {% include '@ChamiloCore/default/layout/hot_course_item.html.twig' %}
         </div>
     {% endif %}
 {% endautoescape %}

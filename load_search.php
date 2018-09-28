@@ -12,14 +12,6 @@ $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_PATH).'web/assets/cropper/dis
 
 $htmlHeadXtra[] = '<script>		
 $(document).ready(function() {		
-    /*$("#filiere_panel").hide();			
-    $("#dispo_panel").hide();    		
-    $("#dispo_pendant_panel").hide();		
-    $("#niveau_panel").hide();		
-    $("#methode_panel").hide();		
-    $("#themes_panel").hide();    		
-    $("#objectifs_panel").hide();*/	
-            
     $("#filiere").on("click", function() {		
         $("#filiere_panel").toggle();		
         return false;		
@@ -172,7 +164,7 @@ if ($userToLoadInfo) {
 $extraFieldUser = new ExtraField('user');
 
 $userForm = new FormValidator('user_form', 'post', api_get_self());
-
+$jqueryExtra = '';
 $userForm->addHtml('<div class="panel-group" id="search_extrafield" role="tablist" aria-multiselectable="true">');
 $userForm->addHtml('<div class="panel panel-default">');
 $userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">'.get_lang('Filiere').'</a></div>');
@@ -214,6 +206,7 @@ $userForm->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('Dis
 $fieldsToShow = [
     'datedebutstage',
     'datefinstage',
+    'deja_sur_place',
     'poursuiteapprentissagestage',
     'heures_disponibilite_par_semaine_stage',
 ];
@@ -323,6 +316,7 @@ $extra = $extraField->addElements(
 
 $fieldsToShow = [
     'heures_disponibilite_par_semaine',
+    'moment_de_disponibilite',
 ];
 
 $extra = $extraFieldUser->addElements(
@@ -428,6 +422,78 @@ $extra = $extraField->addElements(
 );
 
 $form->addHtml('</div></div></div>');
+
+
+// Enviroment
+$userForm->addHtml('<div class="panel panel-default">');
+$userForm->addHtml(
+    '<div class="panel-heading">
+    <a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseEight" aria-expanded="true" aria-controls="collapseEight">'.
+    get_lang('MonEnvironnementDeTravail').'</a></div>');
+$userForm->addHtml('<div id="collapseEight" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingEight">');
+$userForm->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('MonEnvironnementDeTravailExplanation').'</p>');
+
+$fieldsToShow = [
+    'outil_de_travail_ordinateur',
+    'outil_de_travail_ordinateur_so',
+    'outil_de_travail_tablette',
+    'outil_de_travail_tablette_so',
+    'outil_de_travail_smartphone',
+    'outil_de_travail_smartphone_so',
+];
+
+$userForm->addLabel(null, get_lang('MonEnvironnementDeTravailExplanationIntro1'));
+
+$extra = $extraFieldUser->addElements(
+    $userForm,
+    $userToLoad,
+    [],
+    $filter,
+    true,
+    $fieldsToShow,
+    $fieldsToShow,
+    [],
+    [],
+    false,
+    $forceShowFields
+);
+
+$userForm->addLabel(null, get_lang('MonEnvironnementDeTravailExplanationIntro2'));
+
+$jqueryExtra .= $extra['jquery_ready_content'];
+
+
+$fieldsToShow = [
+    'browser_platforme',
+    'browser_platforme_autre',
+    'browser_platforme_version',
+];
+$extra = $extraFieldUser->addElements(
+    $userForm,
+    $userToLoad,
+    [],
+    $filter,
+    true,
+    $fieldsToShow,
+    $fieldsToShow,
+    [],
+    [],
+    false,
+    $forceShowFields, //$forceShowFields = false
+    [],
+    [],
+    $fieldsToShow
+);
+
+$jqueryExtra .= $extra['jquery_ready_content'];
+
+$userForm->addHtml('<p class="text-info">'.get_lang('MonEnvironnementDeTravailRenvoiFAQ').'</p>');
+
+$userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseEight]');
+$userForm->addHtml('</div></div></div>');
+
+
+
 
 $form->addButtonSave(get_lang('SaveDiagnosticChanges'), 'save');
 $form->addButtonSearch(get_lang('SearchSessions'), 'search');
@@ -688,7 +754,7 @@ if (!empty($tagsData)) {
 
 $htmlHeadXtra[] = '<script>
 $(function() {
-    '.$extra['jquery_ready_content'].'
+    '.$jqueryExtra.'
     '.$jsTag.'
 });
 </script>';
@@ -895,7 +961,8 @@ $(document).ready(function() {
         "#collapseFour",
         "#collapseFive",
         "#collapseSix",
-        "#collapseSeven"         
+        "#collapseSeven",
+        "#collapseEight"         
     ];
     
     $.each(blocks, function( index, value ) {    

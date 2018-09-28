@@ -82,6 +82,11 @@
                     {{ display.collapseMenu('profile', 'Profile'|get_lang, profile_block) }}
                 {% endif %}
                 {% if section_name != 'section-mycampus' %}
+
+                {% if diagnosis_block %}
+                    {{ diagnosis_block }}
+                {% endif %}
+
                 <!-- BLOCK COURSE -->
                 {% if course_block %}
                     {{ display.collapseMenu('courses', 'Courses'|get_lang, course_block) }}

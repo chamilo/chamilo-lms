@@ -2127,7 +2127,7 @@ blockquote p {
     bottom:90px;
 }
 
-.ofaj-search .form-group label {
+.ofaj-search .form-group label, #user_form .form-group label{
     font-weight: normal;
 }
 

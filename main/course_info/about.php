@@ -124,15 +124,14 @@ $topics = [
 ];
 
 $subscriptionUser = CourseManager::is_user_subscribed_in_course($userId, $course->getCode());
-$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-$sql = "SELECT code, visibility FROM $course_table
-                    WHERE id = $courseId AND subscribe = '".SUBSCRIBE_NOT_ALLOWED."'";
+
+$courseInfo = api_get_course_info_by_id($courseId);
 $allowSubscribe = null;
-error_log(api_is_platform_admin());
-if (Database::num_rows(Database::query($sql)) > 0 && !api_is_platform_admin()) {
-    $allowSubscribe = false;
-} else {
+if ($courseInfo['subscribe'] == true || api_is_platform_admin()) {
     $allowSubscribe = true;
+}
+else {
+    $allowSubscribe = false;
 }
 $plugin = BuyCoursesPlugin::create();
 $checker = $plugin->isEnabled();

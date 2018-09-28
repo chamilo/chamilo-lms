@@ -29,6 +29,7 @@ $exercise_id = isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) 
 
 $objExercise = new Exercise();
 $result = $objExercise->read($exercise_id);
+
 if (!$result) {
     api_not_allowed(true);
 }
@@ -145,7 +146,7 @@ $visible_return = $objExercise->is_visible(
     $learnpath_id,
     $learnpath_item_id,
     null,
-    false
+    true
 );
 
 // Exercise is not visible remove the button
@@ -190,7 +191,6 @@ if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANS
         $blockShowAnswers = true;
     }
 }
-
 if (!empty($attempts)) {
     $i = $counter;
     foreach ($attempts as $attempt_result) {

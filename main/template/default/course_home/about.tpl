@@ -107,7 +107,7 @@
             </div>
 
             <div class="col-sm-4">
-                {% if allowSubscribe == true %}
+                {% if allow_subscribe == true %}
                 <div class="panel panel-default">
                     <div class="panel-body">
                         {% if is_premium == false %}

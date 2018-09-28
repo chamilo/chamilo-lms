@@ -320,4 +320,27 @@ class CourseResolver implements ContainerAwareInterface
 
         return $thread;
     }
+
+    /**
+     * @param CForumThread $thread
+     * @param \ArrayObject $context
+     *
+     * @return array
+     */
+    public function getPosts(CForumThread $thread, \ArrayObject $context)
+    {
+        /** @var Course $course */
+        $course = $context->offsetGet('course');
+
+        $postRepo = $this->em->getRepository('ChamiloCourseBundle:CForumPost');
+        $posts = $postRepo->findAllInCourseByThread(
+            api_is_allowed_to_edit(false, true),
+            api_is_allowed_to_edit(),
+            $thread,
+            $course,
+            $this->getCurrentUser()
+        );
+
+        return $posts;
+    }
 }

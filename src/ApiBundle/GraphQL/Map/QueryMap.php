@@ -257,6 +257,37 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
                 'closeDate' => function (CForumThread $thread) {
                     return $thread->getThreadCloseDate();
                 },
+                'posts' => function (CForumThread $thread, Argument $args, \ArrayObject $context) {
+                    $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
+
+                    return $resolver->getPosts($thread, $context);
+                }
+            ],
+            'CourseForumPost' => [
+                'id' => function (CForumPost $post) {
+                    return $post->getIid();
+                },
+                'title' => function (CForumPost $post) {
+                    return $post->getPostTitle();
+                },
+                'text' => function (CForumPost $post) {
+                    return $post->getPostText();
+                },
+                'userPoster' => function (CForumPost $post) {
+                    $userRepo = $this->em->getRepository('ChamiloUserBundle:User');
+                    $user = $userRepo->find($post->getPosterId());
+
+                    return $user;
+                },
+                'date' => function (CForumPost $post) {
+                    return $post->getPostDate();
+                },
+                'parent' => function (CForumPost $post) {
+                    $postRepo = $this->em->getRepository('ChamiloCourseBundle:CForumPost');
+                    $parent = $postRepo->find((int) $post->getPostParentId());
+
+                    return $parent;
+                },
             ],
             'Session' => [
                 self::RESOLVE_FIELD => function (

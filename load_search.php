@@ -444,7 +444,7 @@ $fieldsToShow = [
 
 $userForm->addLabel(null, get_lang('MonEnvironnementDeTravailExplanationIntro1'));
 
-$extra = $extraField->addElements(
+$extra = $extraFieldUser->addElements(
     $userForm,
     $userToLoad,
     [],
@@ -455,10 +455,7 @@ $extra = $extraField->addElements(
     [],
     [],
     false,
-    $forceShowFields, //$forceShowFields = false
-    [],
-    [],
-    $fieldsToShow
+    $forceShowFields
 );
 
 $userForm->addLabel(null, get_lang('MonEnvironnementDeTravailExplanationIntro2'));
@@ -471,10 +468,9 @@ $fieldsToShow = [
     'browser_platforme_autre',
     'browser_platforme_version',
 ];
-
-$extra = $extraField->addElements(
+$extra = $extraFieldUser->addElements(
     $userForm,
-    null,
+    $userToLoad,
     [],
     $filter,
     true,

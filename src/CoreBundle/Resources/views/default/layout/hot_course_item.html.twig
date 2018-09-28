@@ -5,17 +5,15 @@
     <div class="col-md-3">
         {% if item.title %}
             {% set tools %}
-                {% if item.categoryName != '' %}
-                    <span class="category">{{ item.categoryName }}</span>
-                    <div class="cribbon"></div>
-                {% endif %}
                 <div class="user-actions">{{ item.description_button }}</div>
             {% endset %}
 
             {% set image %}
-                <div class="category">
-                    {{ item.categoryName }}
-                </div>
+                {% if item.categoryName != '' %}
+                    <div class="category">
+                        {{ item.categoryName }}
+                    </div>
+                {% endif %}
                 <a title="{{ item.title}}" href="{{ item.course_public_url }}">
                     <img src="{{ item.course_image_large }}" class="card-img-top" alt="{{ item.title }}">
                 </a>
@@ -32,28 +30,26 @@
                     {{ item.rating_html }}
                 </div>
 
-                <div class="block-author">
+                <div class="card-author d-flex flex-row bd-highlight mb-3">
                     {% for teacher in item.teachers %}
                         {% if item.teachers | length > 2 %}
                             <a href="{{ teacher.url }}" class="ajax" data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
                                 <img src="{{ teacher.avatar }}" alt="{{ 'TeacherPicture' | get_lang }}" />
                             </a>
                         {% else %}
-                            <a href="{{ teacher.url }}" class="ajax" data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
+                            <a href="{{ teacher.url }}" class="ajax p-2 bd-highlight" data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
                                 <img src="{{ teacher.avatar }}" alt="{{ 'TeacherPicture' | get_lang }}" />
                             </a>
-                            <div class="teachers-details">
-                                <h5>
-                                    <a href="{{ teacher.url }}" class="ajax" data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
+                            <div class="details p-2 bd-highlight">
+                                <a href="{{ teacher.url }}" class="ajax" data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
                                         {{ teacher.firstname }} {{ teacher.lastname }}
-                                    </a>
-                                </h5>
-                                <p>{{ 'Teacher' | get_lang }}</p>
+                                </a>
+                                <div class="name">{{ 'Teacher' | get_lang }}</div>
                             </div>
                         {% endif %}
                     {% endfor %}
                 </div>
-
+                <!--
                 <div class="toolbar row">
                     <div class="col-sm-4">
                         {#{% if item.price %}#}
@@ -62,11 +58,11 @@
                     </div>
                     <div class="col-sm-8">
                         <div class="btn-group" role="group">
-                            {{ item.register_button }}
+                            {# item.register_button #}
                             {#{{ item.unsubscribe_button }}#}
                         </div>
                     </div>
-                </div>
+                </div> -->
             {% endset %}
             {{ macro.panel('', content, '', '', '', image) }}
     {% endif %}

@@ -244,8 +244,8 @@ if ($session->getNbrCourses() === 0) {
 }
 $courseListToShow .= '</table><br />';
 
-$url = Display::url(
-    Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL),
+$url = '&nbsp;'.Display::url(
+    Display::return_icon('user_subscribe_session.png', get_lang('Add'), [], ICON_SIZE_SMALL),
     "add_users_to_session.php?page=resume_session.php&id_session=$sessionId"
 );
 $url .= Display::url(

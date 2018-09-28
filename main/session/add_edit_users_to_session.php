@@ -327,14 +327,14 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     }
 
     if ($form_sent == 1) {
-        //$notEmptyList = api_get_configuration_value('session_multiple_subscription_students_list_avoid_emptying');
+        $notEmptyList = api_get_configuration_value('session_multiple_subscription_students_list_avoid_emptying');
 
         // Added a parameter to send emails when registering a user
         SessionManager::subscribeUsersToSession(
             $id_session,
             $UserList,
             null,
-            false
+            !$notEmptyList
         );
         Display::addFlash(Display::return_message(get_lang('Updated')));
         header('Location: resume_session.php?id_session='.$id_session);
@@ -364,6 +364,43 @@ if ($orderListByOfficialCode === 'true') {
 }
 
 if ($ajax_search) {
+    $sql = "
+        SELECT u.id, u.lastname, u.firstname, u.username, session_id, u.official_code
+        FROM $tbl_user u
+        INNER JOIN $tbl_session_rel_user su
+            ON su.user_id = u.id
+            AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+            AND su.session_id = ".intval($id_session)."
+        WHERE u.status<>".DRH."
+            AND u.status <> 6
+        $order_clause
+    ";
+
+    if (api_is_multiple_url_enabled()) {
+        $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $access_url_id = api_get_current_access_url_id();
+        if ($access_url_id != -1) {
+            $sql = "
+                SELECT u.id, u.lastname, u.firstname, u.username, session_id, u.official_code
+                FROM $tbl_user u
+                INNER JOIN $tbl_session_rel_user su
+                    ON su.user_id = u.id
+                    AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+                    AND su.session_id = ".intval($id_session)."
+                INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id = u.id)
+                WHERE access_url_id = $access_url_id
+                    AND u.status <> ".DRH."
+                    AND u.status <> 6
+                $order_clause
+            ";
+        }
+    }
+    $result = Database::query($sql);
+    $users = Database::store_result($result);
+    foreach ($users as $user) {
+        $sessionUsersList[$user['id']] = $user;
+    }
+
     $sessionUserInfo = SessionManager::getTotalUserCoursesInSession($id_session);
 
     // Filter the user list in all courses in the session
@@ -376,6 +413,10 @@ if ($ajax_search) {
         if (!array_key_exists($sessionUser['id'], $sessionUsersList)) {
             continue;
         }
+
+        /*if ($sessionUser['count'] != $countSessionCoursesList) {
+            unset($sessionUsersList[$sessionUser['id']]);
+        }*/
     }
 
     unset($users); //clean to free memory
@@ -645,12 +686,11 @@ $newLinks .= Display::url(
         <div id="multiple-add-session" class="row">
             <div class="col-md-4">
                 <div class="form-group">
+                    <label><?php echo get_lang('UserListInPlatform'); ?> </label>
                     <?php
                     if (!($add_type == 'multiple')) {
                         ?>
-                        <input
-                                placeholder="<?php echo get_lang('Search'); ?>"
-                                type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,'single')"
+                        <input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,'single')"
                                class="form-control"/>
                         <div id="ajax_list_users_single" class="select-list-ajax"></div>
                         <?php
@@ -747,8 +787,29 @@ $newLinks .= Display::url(
             </div>
 
             <div class="col-md-4">
+                <label><?php echo get_lang('UserListInSession'); ?> :</label>
                 <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15"
                         class="form-control">
+                    <?php
+                    foreach ($sessionUsersList as $enreg) {
+                        ?>
+                        <option value="<?php echo $enreg['id']; ?>">
+                            <?php
+                            $personName = $enreg['lastname'].' '.$enreg['firstname'].' ('.$enreg['username'].') '
+                                .$enreg['official_code'];
+                        if ($showOfficialCode) {
+                            $officialCode =
+                                    !empty($enreg['official_code']) ? $enreg['official_code'].' - ' : '? - ';
+                            $personName =
+                                    $officialCode.$enreg['lastname'].' '.$enreg['firstname'].' ('.$enreg['username']
+                                    .')';
+                        }
+                        echo $personName; ?>
+                        </option>
+                        <?php
+                    }
+                    unset($sessionUsersList);
+                    ?>
                 </select>
             </div>
         </div>

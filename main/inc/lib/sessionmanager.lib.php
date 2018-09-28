@@ -2121,24 +2121,10 @@ class SessionManager
         }
 
         // update number of users in the session
-        $nbr_users = count($userList);
-        if ($empty_users) {
-            // update number of users in the session
-            $sql = "UPDATE $tbl_session SET nbr_users= $nbr_users
-                    WHERE id = $sessionId ";
-            Database::query($sql);
-        } else {
-            if ($registerUsersToAllCourses) {
-                $sql = "UPDATE $tbl_session SET nbr_users = nbr_users + $nbr_users
-                        WHERE id = $sessionId";
-                Database::query($sql);
-            } else {
-                $sql = "UPDATE $tbl_session 
-                        SET nbr_users = (SELECT count(user_id) FROM $tbl_session_rel_user WHERE session_id = $sessionId)
-                        WHERE id = $sessionId";
-                Database::query($sql);
-            }
-        }
+        $sql = "UPDATE $tbl_session 
+                SET nbr_users = (SELECT count(user_id) FROM $tbl_session_rel_user WHERE session_id = $sessionId)
+                WHERE id = $sessionId";
+        Database::query($sql);
     }
 
     /**

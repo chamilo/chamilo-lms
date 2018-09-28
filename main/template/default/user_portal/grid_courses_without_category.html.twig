@@ -34,55 +34,36 @@
                             {% endif %}
                         </h5>
                     </div>
-                    {% if item.notifications %}
-                        <div class="notifications">{{ item.notifications }}</div>
-                    {% endif %}
-                    <div class="card-author d-flex flex-row bd-highlight mb-3">
-                        {% if item.teachers | length > 6 %}
-                            <a id="plist-{{ loop.index }}" data-trigger="focus" tabindex="0" role="button" class="btn btn-default panel_popover" data-toggle="popover" title="{{ 'CourseTeachers' | get_lang }}" data-html="true">
-                                <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                    <div class="card-author mb-2">
+                        <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                        {% if item.teachers | length >= 3 %}
+                            <a id="plist-{{ loop.index }}" data-trigger="focus" tabindex="0" role="button" class="list-name" data-toggle="popover" title="{{ 'CourseTeachers' | get_lang }}" data-html="true">
+                                {{ 'CourseTeachers' | get_lang }}
                             </a>
-                            <div id="popover-content-plist-{{ loop.index }}" class="hide">
+                            <div id="popover-content-plist-{{ loop.index }}" style="display: none;">
                                 {% for teacher in item.teachers %}
                                     <div class="popover-teacher">
                                         <a href="{{ teacher.url }}" class="ajax"
                                            data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                            <img src="{{ teacher.avatar }}"/>
+                                            {{ teacher.firstname }} {{ teacher.lastname }}
                                         </a>
-                                        <div class="teachers-details">
-                                            <h5>
-                                                <a href="{{ teacher.url }}" class="ajax"
-                                                   data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                                    {{ teacher.firstname }} {{ teacher.lastname }}
-                                                </a>
-                                            </h5>
-                                        </div>
                                     </div>
                                 {% endfor %}
                             </div>
                         {% else %}
                             {% for teacher in item.teachers %}
                                 {% if item.teachers | length <= 2 %}
-                                    <a href="{{ teacher.url }}" class="ajax p-2 bd-highlight"
+                                    <a href="{{ teacher.url }}" class="ajax name"
                                        data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                        <img src="{{ teacher.avatar }}"/>
-                                    </a>
-                                    <div class="details p-2 bd-highlight">
-                                        <a href="{{ teacher.url }}" class="ajax"
-                                           data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                            {{ teacher.firstname }} {{ teacher.lastname }}
-                                        </a>
-                                        <div class="name">{{ 'Teacher' | get_lang }}</div>
-                                    </div>
-                                {% elseif item.teachers | length <= 6 %}
-                                    <a href="{{ teacher.url }}" class="ajax p-2 bd-highlight"
-                                       data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                        <img src="{{ teacher.avatar }}"/>
+                                        {{ teacher.firstname }} {{ teacher.lastname }}
                                     </a>
                                 {% endif %}
                             {% endfor %}
                         {% endif %}
                     </div>
+                    {% if item.notifications %}
+                        <div class="notifications">{{ item.notifications }}</div>
+                    {% endif %}
                 {% endset %}
                 {{ macro.panel('', content, '', '', '', image) }}
             {% endif %}

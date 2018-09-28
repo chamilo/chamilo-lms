@@ -11,6 +11,9 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionCategory;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CourseBundle\Entity\CForumCategory;
+use Chamilo\CourseBundle\Entity\CForumForum;
+use Chamilo\CourseBundle\Entity\CForumPost;
+use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Entity\CNotebook;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\UserBundle\Entity\User;
@@ -171,10 +174,18 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
                     \ArrayObject $context,
                     ResolveInfo $info
                 ) {
-                    if ('categories' === $info->fieldName) {
-                        $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
+                    $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
 
+                    if ('categories' === $info->fieldName) {
                         return $resolver->getForumCategories($context);
+                    }
+
+                    if ('forum' === $info->fieldName) {
+                        return $resolver->getForum($args['id'], $context);
+                    }
+
+                    if ('thread' === $info->fieldName) {
+                        return $resolver->getThread($args['id'], $context);
                     }
 
                     return $this->resolveField($info->fieldName, $tool);
@@ -189,6 +200,93 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
                 },
                 'comment' => function (CForumCategory $category) {
                     return $category->getCatComment();
+                },
+                'forums' => function (CForumCategory $category, Argument $args, \ArrayObject $context) {
+                    $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
+
+                    return $resolver->getForums($category, $context);
+                },
+            ],
+            'CourseForum' => [
+                'id' => function (CForumForum $forum) {
+                    return $forum->getIid();
+                },
+                'title' => function (CForumForum $forum) {
+                    return $forum->getForumTitle();
+                },
+                'comment' => function (CForumForum $forum) {
+                    return $forum->getForumComment();
+                },
+                'numberOfThreads' => function (CForumForum $forum) {
+                    return (int) $forum->getForumThreads();
+                },
+                'numberOfPosts' => function (CForumForum $forum) {
+                    return (int) $forum->getForumPosts();
+                },
+                'threads' => function (CForumForum $forum, Argument $args, \ArrayObject $context) {
+                    $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
+
+                    return $resolver->getThreads($forum, $context);
+                },
+            ],
+            'CourseForumThread' => [
+                'id' => function (CForumThread $thread) {
+                    return $thread->getIid();
+                },
+                'title' => function (CForumThread $thread) {
+                    return $thread->getThreadTitle();
+                },
+                'userPoster' => function (CForumThread $thread) {
+                    $userRepo = $this->em->getRepository('ChamiloUserBundle:User');
+                    $user = $userRepo->find($thread->getThreadPosterId());
+
+                    return $user;
+                },
+                'date' => function (CForumThread $thread) {
+                    return $thread->getThreadDate();
+                },
+                'sticky' => function (CForumThread $thread) {
+                    return $thread->getThreadSticky();
+                },
+                'numberOfViews' => function (CForumThread $thread) {
+                    return $thread->getThreadViews();
+                },
+                'numberOfReplies' => function (CForumThread $thread) {
+                    return $thread->getThreadReplies();
+                },
+                'closeDate' => function (CForumThread $thread) {
+                    return $thread->getThreadCloseDate();
+                },
+                'posts' => function (CForumThread $thread, Argument $args, \ArrayObject $context) {
+                    $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
+
+                    return $resolver->getPosts($thread, $context);
+                }
+            ],
+            'CourseForumPost' => [
+                'id' => function (CForumPost $post) {
+                    return $post->getIid();
+                },
+                'title' => function (CForumPost $post) {
+                    return $post->getPostTitle();
+                },
+                'text' => function (CForumPost $post) {
+                    return $post->getPostText();
+                },
+                'userPoster' => function (CForumPost $post) {
+                    $userRepo = $this->em->getRepository('ChamiloUserBundle:User');
+                    $user = $userRepo->find($post->getPosterId());
+
+                    return $user;
+                },
+                'date' => function (CForumPost $post) {
+                    return $post->getPostDate();
+                },
+                'parent' => function (CForumPost $post) {
+                    $postRepo = $this->em->getRepository('ChamiloCourseBundle:CForumPost');
+                    $parent = $postRepo->find((int) $post->getPostParentId());
+
+                    return $parent;
                 },
             ],
             'Session' => [

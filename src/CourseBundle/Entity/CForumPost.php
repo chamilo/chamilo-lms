@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="c_id_visible_post_date", columns={"c_id", "visible", "post_date"})
  *  }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CForumPostRepository")
  */
 class CForumPost
 {

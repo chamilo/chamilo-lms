@@ -2066,7 +2066,7 @@ function getPosts(
 
     $criteria = Criteria::create();
     $criteria
-        ->where(Criteria::expr()->eq('threadId', $threadId))
+        ->where(Criteria::expr()->eq('thread', $threadId))
         ->andWhere(Criteria::expr()->eq('cId', $forumInfo['c_id']))
         ->andWhere($visibleCriteria)
     ;

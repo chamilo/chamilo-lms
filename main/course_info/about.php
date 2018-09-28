@@ -129,8 +129,7 @@ $courseInfo = api_get_course_info_by_id($courseId);
 $allowSubscribe = null;
 if ($courseInfo['subscribe'] == true || api_is_platform_admin()) {
     $allowSubscribe = true;
-}
-else {
+} else {
     $allowSubscribe = false;
 }
 $plugin = BuyCoursesPlugin::create();

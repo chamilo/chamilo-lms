@@ -160,7 +160,7 @@ switch ($action) {
             $previewGroups = array_unique($previewGroups);
             foreach ($previewGroups as $groupId) {
                 $groupInfo = GroupManager::get_group_properties($groupId);
-                $previewGroupNames[] = Display::label($groupInfo['name'],'info');
+                $previewGroupNames[] = Display::label($groupInfo['name'], 'info');
             }
             $previewTotal = $previewGroupNames;
         }
@@ -174,7 +174,7 @@ switch ($action) {
             $previewTotal = array_merge($previewTotal, $previewUserNames);
         }
 
-        $previewTotal = array_map(function($value) { return ''.$value; }, $previewTotal);
+        $previewTotal = array_map(function ($value) { return ''.$value; }, $previewTotal);
 
         echo json_encode($previewTotal);
         break;

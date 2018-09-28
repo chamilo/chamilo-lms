@@ -1987,7 +1987,7 @@ class SessionManager
             foreach ($course_list as $courseId) {
                 // for each course in the session
                 $nbr_users = 0;
-                $courseId = (int)$courseId;
+                $courseId = (int) $courseId;
 
                 $sql = "SELECT DISTINCT user_id
                         FROM $tbl_session_rel_course_rel_user
@@ -2043,7 +2043,7 @@ class SessionManager
 
                         // Avoid duplicate entries.
                         if ($status === false || ($status !== false && $status != 0)) {
-                            $enreg_user = (int)$enreg_user;
+                            $enreg_user = (int) $enreg_user;
                             $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user (session_id, c_id, user_id, visibility, status)
                                     VALUES($sessionId, $courseId, $enreg_user, $session_visibility, 0)";
                             $result = Database::query($sql);

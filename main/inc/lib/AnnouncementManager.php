@@ -1908,7 +1908,6 @@ class AnnouncementManager
                     }
                 }
 
-
                 $title = $row['title'].$groupReference.$sent_to_icon;
                 $item_visibility = api_get_item_visibility(
                     $courseInfo,

@@ -25,29 +25,32 @@
                         <a title="{{ item.title }}" href="{{ item.course_public_url }}">{{ item.title}}</a>
                     </h5>
                 </div>
+                <div class="card-author mb-2">
+                    <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                    {% if item.teachers | length >= 3 %}
+                        <a id="plist-{{ loop.index }}" data-trigger="focus" tabindex="0" role="button" class="list-name" data-toggle="popover" title="{{ 'CourseTeachers' | get_lang }}" data-html="true">
+                            {{ 'CourseTeachers' | get_lang }}
+                        </a>
+                        <div id="popover-content-plist-{{ loop.index }}" style="display: none;">
+                            {% for teacher in item.teachers %}
+                                <div class="popover-teacher">
+                                    <a href="{{ teacher.url }}" class="ajax name" data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
+                                        {{ teacher.firstname }} {{ teacher.lastname }}
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {% for teacher in item.teachers %}
+                            <a href="{{ teacher.url }}" class="ajax name" data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
+                                {{ teacher.firstname }} {{ teacher.lastname }}
+                            </a>
+                        {% endfor %}
+                    {% endif %}
 
+                </div>
                 <div class="ranking">
                     {{ item.rating_html }}
-                </div>
-
-                <div class="card-author d-flex flex-row bd-highlight mb-3">
-                    {% for teacher in item.teachers %}
-                        {% if item.teachers | length > 2 %}
-                            <a href="{{ teacher.url }}" class="ajax" data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                <img src="{{ teacher.avatar }}" alt="{{ 'TeacherPicture' | get_lang }}" />
-                            </a>
-                        {% else %}
-                            <a href="{{ teacher.url }}" class="ajax p-2 bd-highlight" data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                <img src="{{ teacher.avatar }}" alt="{{ 'TeacherPicture' | get_lang }}" />
-                            </a>
-                            <div class="details p-2 bd-highlight">
-                                <a href="{{ teacher.url }}" class="ajax" data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                        {{ teacher.firstname }} {{ teacher.lastname }}
-                                </a>
-                                <div class="name">{{ 'Teacher' | get_lang }}</div>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
                 </div>
                 <!--
                 <div class="toolbar row">

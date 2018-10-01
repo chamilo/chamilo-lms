@@ -302,10 +302,10 @@ class CourseBuilder
             }
 
             if (!empty($this->course->type) && $this->course->type == 'partial') {
-                $sql = "SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size
+                $sql = "SELECT d.iid, d.path, d.comment, d.title, d.filetype, d.size
                         FROM $table_doc d 
                         INNER JOIN $table_prop p
-                        ON (p.ref = d.id AND d.c_id = p.c_id)
+                        ON (p.ref = d.iid AND d.c_id = p.c_id)
                         WHERE
                             d.c_id = $courseId AND
                             p.c_id = $courseId AND
@@ -317,10 +317,10 @@ class CourseBuilder
                             $session_condition
                         ORDER BY path";
             } else {
-                $sql = "SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size
+                $sql = "SELECT d.iid, d.path, d.comment, d.title, d.filetype, d.size
                         FROM $table_doc d 
                         INNER JOIN $table_prop p
-                        ON (p.ref = d.id AND d.c_id = p.c_id)
+                        ON (p.ref = d.iid AND d.c_id = p.c_id)
                         WHERE
                             d.c_id = $courseId AND
                             p.c_id = $courseId AND
@@ -334,7 +334,7 @@ class CourseBuilder
             $db_result = Database::query($sql);
             while ($obj = Database::fetch_object($db_result)) {
                 $doc = new Document(
-                    $obj->id,
+                    $obj->iid,
                     $obj->path,
                     $obj->comment,
                     $obj->title,
@@ -345,10 +345,10 @@ class CourseBuilder
             }
         } else {
             if (!empty($this->course->type) && $this->course->type == 'partial') {
-                $sql = "SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size
+                $sql = "SELECT d.iid, d.path, d.comment, d.title, d.filetype, d.size
                         FROM $table_doc d 
                         INNER JOIN $table_prop p
-                        ON (p.ref = d.id AND d.c_id = p.c_id)
+                        ON (p.ref = d.iid AND d.c_id = p.c_id)
                         WHERE
                             d.c_id = $courseId AND
                             p.c_id = $courseId AND
@@ -360,10 +360,10 @@ class CourseBuilder
                             (d.session_id = 0 OR d.session_id IS NULL)
                         ORDER BY path";
             } else {
-                $sql = "SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size
+                $sql = "SELECT d.iid, d.path, d.comment, d.title, d.filetype, d.size
                         FROM $table_doc d 
                         INNER JOIN $table_prop p
-                        ON (p.ref = d.id AND d.c_id = p.c_id)
+                        ON (p.ref = d.iid AND d.c_id = p.c_id)
                         WHERE
                             d.c_id = $courseId AND
                             p.c_id = $courseId AND
@@ -378,7 +378,7 @@ class CourseBuilder
             $result = Database::query($sql);
             while ($obj = Database::fetch_object($result)) {
                 $doc = new Document(
-                    $obj->id,
+                    $obj->iid,
                     $obj->path,
                     $obj->comment,
                     $obj->title,

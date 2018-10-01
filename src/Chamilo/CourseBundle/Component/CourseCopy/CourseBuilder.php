@@ -305,7 +305,7 @@ class CourseBuilder
                 $sql = "SELECT d.iid, d.path, d.comment, d.title, d.filetype, d.size
                         FROM $table_doc d 
                         INNER JOIN $table_prop p
-                        ON (p.ref = d.iid AND d.c_id = p.c_id)
+                        ON (p.ref = d.id AND d.c_id = p.c_id)
                         WHERE
                             d.c_id = $courseId AND
                             p.c_id = $courseId AND
@@ -320,7 +320,7 @@ class CourseBuilder
                 $sql = "SELECT d.iid, d.path, d.comment, d.title, d.filetype, d.size
                         FROM $table_doc d 
                         INNER JOIN $table_prop p
-                        ON (p.ref = d.iid AND d.c_id = p.c_id)
+                        ON (p.ref = d.id AND d.c_id = p.c_id)
                         WHERE
                             d.c_id = $courseId AND
                             p.c_id = $courseId AND
@@ -348,7 +348,7 @@ class CourseBuilder
                 $sql = "SELECT d.iid, d.path, d.comment, d.title, d.filetype, d.size
                         FROM $table_doc d 
                         INNER JOIN $table_prop p
-                        ON (p.ref = d.iid AND d.c_id = p.c_id)
+                        ON (p.ref = d.id AND d.c_id = p.c_id)
                         WHERE
                             d.c_id = $courseId AND
                             p.c_id = $courseId AND
@@ -363,7 +363,7 @@ class CourseBuilder
                 $sql = "SELECT d.iid, d.path, d.comment, d.title, d.filetype, d.size
                         FROM $table_doc d 
                         INNER JOIN $table_prop p
-                        ON (p.ref = d.iid AND d.c_id = p.c_id)
+                        ON (p.ref = d.id AND d.c_id = p.c_id)
                         WHERE
                             d.c_id = $courseId AND
                             p.c_id = $courseId AND

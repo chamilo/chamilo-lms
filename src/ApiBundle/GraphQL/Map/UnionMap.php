@@ -34,6 +34,8 @@ class UnionMap extends ResolverMap implements ContainerAwareInterface
                             return 'ToolNotebook';
                         case TOOL_FORUM:
                             return 'ToolForums';
+                        case TOOL_CALENDAR_EVENT:
+                            return 'ToolAgenda';
                     }
                 },
             ],

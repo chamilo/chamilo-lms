@@ -343,4 +343,45 @@ class CourseResolver implements ContainerAwareInterface
 
         return $posts;
     }
+
+    /**
+     * @param \ArrayObject $context
+     *
+     * @return array
+     */
+    public function getAgenda(\ArrayObject $context): array
+    {
+        /** @var Session|null $session */
+        $session = $context->offsetGet('session');
+        /** @var Course $course */
+        $course = $context->offsetGet('course');
+
+        $agenda = new \Agenda(
+            'course',
+            $this->getCurrentUser()->getId(),
+            $course->getId(),
+            $session ? $session->getId() : 0
+        );
+        $result = $agenda->parseAgendaFilter(null);
+        $firstDay = new \DateTime('now', new \DateTimeZone('UTC'));
+        $firstDay->modify('first day of this month');
+        $firstDay->setTime(0, 0);
+        $lastDay = new \DateTime('now', new \DateTimeZone('UTC'));
+        $lastDay->modify('last day of this month');
+        $lastDay->setTime(0, 0);
+
+        $groupId = current($result['groups']);
+        $userId = current($result['users']);
+
+        $events = $agenda->getEvents(
+            $firstDay->getTimestamp(),
+            $lastDay->getTimestamp(),
+            $course->getId(),
+            $groupId,
+            $userId,
+            'array'
+        );
+
+        return $events;
+    }
 }

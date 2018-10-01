@@ -207,6 +207,27 @@ type CourseForumPost {
     status: Int
 }
 
+"A comprehensive diary/calendar tool"
+type ToolAgenda {
+    name: String
+    category: String
+    image: String
+    customIcon: String
+    events: [CourseAgendaEvent!]
+}
+
+type CourseAgendaEvent {
+    id: Int
+    className: String
+    title: String
+    description: String
+    startDate: DateTime
+    endDate: DateTime
+    allDay: Boolean
+    borderColor: String
+    backgroundColor: String
+}
+
 "A session registered on the platform."
 type Session {
     "The unique ID of the session."
@@ -238,7 +259,7 @@ type SessionCategory {
 
 # Unions
 
-union CourseTool = ToolDescription | ToolAnnouncements | ToolNotebook | ToolForums
+union CourseTool = ToolDescription | ToolAnnouncements | ToolNotebook | ToolForums | ToolAgenda
 
 # Enums
 
@@ -276,6 +297,7 @@ enum CourseToolType {
     TOOL_ANNOUNCEMENT
     TOOL_NOTEBOOK
     TOOL_FORUM
+    TOOL_CALENDAR_EVENT
 }
 
 # Scalars

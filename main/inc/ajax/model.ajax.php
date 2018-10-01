@@ -1355,7 +1355,7 @@ switch ($action) {
             $columns[] = 'actions';
         }
 
-        $whereCondition = " AND te.status = '' ";
+        $whereCondition .= " AND te.status = '' ";
 
         $result = ExerciseLib::get_exam_results_data(
             $start,

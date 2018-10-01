@@ -20,14 +20,12 @@ sonata_media:
                 small: {width: 100, quality: 100}
                 medium: {width: 300, quality: 100}
                 big: {width: 970, quality: 100}
-
         sonata_collection:
             providers:
                 - sonata.media.provider.image
             formats:
                 preview: {width: 100, quality: 100}
                 wide: {width: 820, quality: 100}
-
         sonata_category:
             providers:
                 - sonata.media.provider.image

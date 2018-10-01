@@ -125,9 +125,8 @@ $topics = [
 
 $subscriptionUser = CourseManager::is_user_subscribed_in_course($userId, $course->getCode());
 
-$courseInfo = api_get_course_info_by_id($courseId);
 $allowSubscribe = false;
-if ($courseInfo['subscribe'] == true || api_is_platform_admin()) {
+if ($course->getSubscribe() == true || api_is_platform_admin()) {
     $allowSubscribe = true;
 }
 $plugin = BuyCoursesPlugin::create();

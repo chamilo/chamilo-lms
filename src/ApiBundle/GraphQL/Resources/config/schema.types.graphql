@@ -228,6 +228,25 @@ type CourseAgendaEvent {
     backgroundColor: String
 }
 
+type ToolDocuments {
+    name: String
+    category: String
+    image: String
+    customIcon: String
+    documents(dirId: Int): [CourseDocument!]
+}
+
+type CourseDocument {
+  id: Int
+  fileType: String
+  title: String
+  comment: String
+  path: String
+  icon: String
+  size: String
+  url: String
+}
+
 "A session registered on the platform."
 type Session {
     "The unique ID of the session."
@@ -259,7 +278,7 @@ type SessionCategory {
 
 # Unions
 
-union CourseTool = ToolDescription | ToolAnnouncements | ToolNotebook | ToolForums | ToolAgenda
+union CourseTool = ToolDescription | ToolAnnouncements | ToolNotebook | ToolForums | ToolAgenda | ToolDocuments
 
 # Enums
 
@@ -298,6 +317,7 @@ enum CourseToolType {
     TOOL_NOTEBOOK
     TOOL_FORUM
     TOOL_CALENDAR_EVENT
+    TOOL_DOCUMENT
 }
 
 # Scalars

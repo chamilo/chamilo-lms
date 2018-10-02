@@ -319,6 +319,16 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
                     return new \DateTime($event['end'], new \DateTimeZone('UTC'));
                 },
             ],
+            'ToolDocuments' => [
+                'documents' => function (CTool $tool, Argument $args, \ArrayObject $context) {
+                    $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
+
+                    $dirId = !empty($args['dirId']) ? $args['dirId'] : null;
+
+                    return $resolver->getDocuments($dirId, $context);
+                },
+            ],
+            //'CourseDocument' => [],
             'Session' => [
                 self::RESOLVE_FIELD => function (
                     Session $session,

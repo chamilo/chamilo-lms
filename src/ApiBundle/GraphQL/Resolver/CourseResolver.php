@@ -384,4 +384,87 @@ class CourseResolver implements ContainerAwareInterface
 
         return $events;
     }
+
+    /**
+     * @param int          $dirId
+     * @param \ArrayObject $context
+     *
+     * @return array
+     */
+    public function getDocuments($dirId, \ArrayObject $context): array
+    {
+        $path = '/';
+        /** @var Course $course */
+        $course = $context->offsetGet('course');
+        /** @var Session $session */
+        $session = $context->offsetGet('session');
+
+        if (!empty($dirId)) {
+            $directory = $this->em->getRepository('ChamiloCourseBundle:CDocument')->find($dirId);
+
+            if (empty($directory)) {
+                throw new UserError($this->translator->trans('Directory not found.'));
+            }
+
+            if (empty($directory->getCourse())) {
+                throw new UserError('The directory has not been assigned to a course.');
+            }
+
+            if ($directory->getCourse()->getId() !== $course->getId()) {
+                throw new UserError('The directory has not been assgined to this course.');
+            }
+
+            $path = $directory->getPath();
+        }
+
+        $documents = \DocumentManager::getAllDocumentData(
+            ['code' => $course->getCode(), 'real_id' => $course->getId()],
+            $path,
+            0,
+            null,
+            false,
+            false,
+            $session ? $session->getId() : 0
+        );
+
+        if (empty($documents)) {
+            return [];
+        }
+
+        $webPath = api_get_path(WEB_CODE_PATH).'document/document.php?';
+
+        $results = array_map(
+            function ($documentInfo) use ($webPath, $course, $session) {
+                $icon = $documentInfo['filetype'] == 'file'
+                    ? choose_image($documentInfo['path'])
+                    : chooseFolderIcon($documentInfo['path']);
+
+                return [
+                    'id' => $documentInfo['id'],
+                    'fileType' => $documentInfo['filetype'],
+                    'title' => $documentInfo['title'],
+                    'comment' => $documentInfo['comment'],
+                    'path' => $documentInfo['path'],
+                    'icon' => $icon,
+                    'size' => format_file_size($documentInfo['size']),
+                    'url' => $webPath.http_build_query(
+                            [
+                                'username' => $this->getCurrentUser()->getUsername(),
+                                'api_key' => '', //$this->apiKey,
+                                'cidReq' => $course->getCode(),
+                                'id_session' => $session ? $session->getId() : 0,
+                                'gidReq' => 0,
+                                'gradebook' => 0,
+                                'origin' => '',
+                                'action' => 'download',
+                                'id' => $documentInfo['id'],
+                            ]
+                        ),
+                ];
+            },
+            $documents
+        );
+
+        return $results;
+    }
 }

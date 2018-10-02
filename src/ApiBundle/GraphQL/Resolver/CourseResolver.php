@@ -492,4 +492,72 @@ class CourseResolver implements ContainerAwareInterface
 
         return $categories;
     }
+
+    /**
+     * @param CLpCategory  $category
+     * @param \ArrayObject $context
+     *
+     * @return array
+     */
+    public function getLearnpathsByCategory(CLpCategory $category, \ArrayObject $context): array
+    {
+        $user = $this->getCurrentUser();
+        /** @var Course $course */
+        $course = $context->offsetGet('course');
+        /** @var Session $session */
+        $session = $context->offsetGet('session');
+        $sessionId = $session ? $session->getId() : 0;
+
+        $lpList = new \LearnpathList(
+            $user->getId(),
+            $course->getCode(),
+            $sessionId,
+            null,
+            false,
+            $category->getId()
+        );
+
+        $flatList = $lpList->get_flat_list();
+        $lps = [];
+
+        foreach ($flatList as $lpId => $lpInfo) {
+            if (empty($lpInfo['lp_visibility'])) {
+                continue;
+            }
+
+            if (
+                !\learnpath::is_lp_visible_for_student($lpId, $user->getId(), $course->getCode(), $sessionId)
+            ) {
+                continue;
+            }
+
+            $timeLimits = !empty($lpInfo['expired_on']);
+
+            if ($timeLimits) {
+                if (!empty($lpInfo['publicated_on']) && !empty($lpInfo['expired_on'])) {
+                    $utc = new \DateTimeZone('UTC');
+
+                    $starTime = new \DateTime($lpInfo['publicated_on'], $utc);
+                    $endTime = new \DateTime($lpInfo['expired_on'], $utc);
+                    $now = new \DateTime('now', $utc);
+
+                    $isActived = $now > $starTime && $endTime > $now;
+
+                    if (!$isActived) {
+                        continue;
+                    }
+                }
+            }
+
+            $progress = \learnpath::getProgress($lpId, $user->getId(), $course->getId(), $sessionId);
+
+            $lps[] = [
+                'id' => $lpId,
+                'title' => \Security::remove_XSS($lpInfo['lp_name']),
+                'progress' => (int) $progress,
+            ];
+        }
+
+        return $lps;
+    }
 }

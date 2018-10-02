@@ -14,6 +14,7 @@ use Chamilo\CourseBundle\Entity\CForumCategory;
 use Chamilo\CourseBundle\Entity\CForumForum;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
+use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CNotebook;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\UserBundle\Entity\User;
@@ -334,6 +335,13 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
                     $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
 
                     return $resolver->getLearnpathCategories($context);
+                },
+            ],
+            'CourseLearnpathCategory' => [
+                'learnpaths' => function (CLpCategory $category, Argument $args, \ArrayObject $context) {
+                    $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
+
+                    return $resolver->getLearnpathsByCategory($category, $context);
                 },
             ],
             'Session' => [

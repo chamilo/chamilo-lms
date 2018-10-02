@@ -259,6 +259,13 @@ type ToolLearningPath {
 type CourseLearnpathCategory {
     id: Int
     name: String
+    learnpaths: [CourseLearnpath!]
+}
+
+type CourseLearnpath {
+    id: Int
+    title: String
+    progress: Int
 }
 
 "A session registered on the platform."

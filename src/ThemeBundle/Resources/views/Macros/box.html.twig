@@ -180,3 +180,32 @@
         </div>
     {% endautoescape %}
 {% endmacro %}
+
+{% macro rowpanel(id, title, subtitle, content, image) %}
+    {% autoescape false %}
+        <div class="card card-line card-{{ id }} mt-3 mb-3">
+            <div class="card-body pb-3">
+                <div class="row">
+                    <div class="col-sm-3">
+                        {% if image %}
+                            {{ image }}
+                        {% endif %}
+                    </div>
+                    <div class="col-sm-9">
+                        {% if title %}
+                            <h5 class="card-title">{{ title }}</h5>
+                        {% endif %}
+                        {% if subtitle %}
+                            <p class="card-subtitle mb-2 text-muted">{{ subtitle }}</p>
+                        {% endif %}
+                        {% if content %}
+                            <div class="description">
+                                {{ content }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endautoescape %}
+{% endmacro %}

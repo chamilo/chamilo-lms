@@ -1,25 +1,45 @@
-<p class="lead">{{ 'MyCoursePageCategoryIntroduction'|get_lang }}</p>
-<ul class="media-list">
+{% import "ChamiloThemeBundle:Macros:box.html.twig" as macro %}
+
+<h2>{{ 'CourseCategory'|get_lang }}</h2>
+<p>{{ 'MyCoursePageCategoryIntroduction'|get_lang }}</p>
+{% autoescape false %}
+<div class="row">
     {% for category in course_categories %}
+    <div class="col-sm-12">
         {% if category %}
-            <li class="media">
-                <div class="media-left">
-                    <a href="{{ _p.web_self ~ '?' ~ {'category':category.code}|url_encode }}">
-                        <img src="{{ category.image ? _p.web_upload ~ category.image : 'session_default.png'|icon(128) }}"
-                             alt="{{ category.name }}" width="200" class="media-object">
+
+            {% set image %}
+                <a href="{{ _p.web_self ~ '?' ~ {'category':category.code}|url_encode }}">
+                    <img src="{{ category.image ? _p.web_upload ~ category.image : 'session_default.png'|icon(128) }}"
+                         alt="{{ category.name }}" class="img-fluid">
+                </a>
+            {% endset %}
+
+            {% set title %}
+                <a href="{{ _p.web_self ~ '?' ~ {'category':category.code}|url_encode }}">
+                    {{ category.name }}
+                </a>
+            {% endset %}
+
+            {% set subtitle %}
+                {{ category.code }}
+            {% endset %}
+
+            {% set content %}
+                {% if category.description %}
+                    {{ category.description }}
+                {% endif %}
+                <div class="float-right">
+                    <a href="{{ _p.web_self ~ '?' ~ {'category':category.code}|url_encode }}" class="btn btn-outline-primary btn-sm">
+                        {{ 'View'|get_lang }}
                     </a>
                 </div>
-                <div class="media-body">
-                    <h4 class="media-heading">{{ category.name }}</h4>
-                    <p>{{ category.code }}</p>
-                    {% if category.description %}
-                        <p>{{ category.description }}</p>
-                    {% endif %}
-                    <a href="{{ _p.web_self ~ '?' ~ {'category':category.code}|url_encode }}" class="btn btn-default">
-                        {{ 'View'|get_lang }} <span class="fa fa-arrow-right" aria-hidden="true"></span>
-                    </a>
-                </div>
-            </li>
+            {% endset %}
+
+            {{ macro.rowpanel('category', title, subtitle, content, image) }}
+
         {% endif %}
+    </div>
     {% endfor %}
-</ul>
+</div>
+{% endautoescape %}

@@ -329,6 +329,13 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
                 },
             ],
             //'CourseDocument' => [],
+            'ToolLearningPath' => [
+                'categories' => function (CTool $tool, Argument $args, \ArrayObject $context) {
+                    $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
+
+                    return $resolver->getLearnpathCategories($context);
+                },
+            ],
             'Session' => [
                 self::RESOLVE_FIELD => function (
                     Session $session,

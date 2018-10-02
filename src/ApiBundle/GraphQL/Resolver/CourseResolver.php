@@ -12,6 +12,7 @@ use Chamilo\CourseBundle\Entity\CForumCategory;
 use Chamilo\CourseBundle\Entity\CForumForum;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Entity\CItemProperty;
+use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Repository\CNotebookRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -466,5 +467,29 @@ class CourseResolver implements ContainerAwareInterface
         );
 
         return $results;
+    }
+
+    /**
+     * @param \ArrayObject $context
+     *
+     * @return array
+     */
+    public function getLearnpathCategories(\ArrayObject $context): array
+    {
+        /** @var Course $course */
+        $course = $context->offsetGet('course');
+
+        $none = new CLpCategory();
+        $none
+            ->setId(0)
+            ->setCId($course->getId())
+            ->setName($this->translator->trans('Without category.'))
+            ->setPosition(0);
+
+        $categories = \learnpath::getCategories($course->getId());
+
+        array_unshift($categories, $none);
+
+        return $categories;
     }
 }

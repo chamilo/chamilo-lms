@@ -11,7 +11,7 @@
             {% set image %}
                 <a href="{{ _p.web_self ~ '?' ~ {'category':category.code}|url_encode }}">
                     <img src="{{ category.image ? _p.web_upload ~ category.image : 'session_default.png'|icon(128) }}"
-                         alt="{{ category.name }}" class="img-fluid">
+                         alt="{{ category.name }}" class="img-fluid mb-1">
                 </a>
             {% endset %}
 
@@ -36,7 +36,7 @@
                 </div>
             {% endset %}
 
-            {{ macro.rowpanel('category', title, subtitle, content, image) }}
+            {{ macro.panel_row('category', title, subtitle, content, image) }}
 
         {% endif %}
     </div>

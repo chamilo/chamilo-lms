@@ -260,7 +260,6 @@ footer {
 }
 
 .card{
-  border: none;
   transform: perspective(1px) translateZ(0);
   transition-property: box-shadow;
   transition-duration: 0.3s;
@@ -268,6 +267,11 @@ footer {
   &:hover,
   &:focus{
     box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.20);
+  }
+  &.card-category{
+    .card-subtitle{
+      font-size: 12px;
+    }
   }
   /*&.card-line{
     &:hover{

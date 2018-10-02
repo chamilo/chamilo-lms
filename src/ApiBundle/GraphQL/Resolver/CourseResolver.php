@@ -12,6 +12,7 @@ use Chamilo\CourseBundle\Entity\CForumCategory;
 use Chamilo\CourseBundle\Entity\CForumForum;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Entity\CItemProperty;
+use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Repository\CNotebookRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -383,5 +384,180 @@ class CourseResolver implements ContainerAwareInterface
         );
 
         return $events;
+    }
+
+    /**
+     * @param int          $dirId
+     * @param \ArrayObject $context
+     *
+     * @return array
+     */
+    public function getDocuments($dirId, \ArrayObject $context): array
+    {
+        $path = '/';
+        /** @var Course $course */
+        $course = $context->offsetGet('course');
+        /** @var Session $session */
+        $session = $context->offsetGet('session');
+
+        if (!empty($dirId)) {
+            $directory = $this->em->getRepository('ChamiloCourseBundle:CDocument')->find($dirId);
+
+            if (empty($directory)) {
+                throw new UserError($this->translator->trans('Directory not found.'));
+            }
+
+            if (empty($directory->getCourse())) {
+                throw new UserError('The directory has not been assigned to a course.');
+            }
+
+            if ($directory->getCourse()->getId() !== $course->getId()) {
+                throw new UserError('The directory has not been assgined to this course.');
+            }
+
+            $path = $directory->getPath();
+        }
+
+        $documents = \DocumentManager::getAllDocumentData(
+            ['code' => $course->getCode(), 'real_id' => $course->getId()],
+            $path,
+            0,
+            null,
+            false,
+            false,
+            $session ? $session->getId() : 0
+        );
+
+        if (empty($documents)) {
+            return [];
+        }
+
+        $webPath = api_get_path(WEB_CODE_PATH).'document/document.php?';
+
+        $results = array_map(
+            function ($documentInfo) use ($webPath, $course, $session) {
+                $icon = $documentInfo['filetype'] == 'file'
+                    ? choose_image($documentInfo['path'])
+                    : chooseFolderIcon($documentInfo['path']);
+
+                return [
+                    'id' => $documentInfo['id'],
+                    'fileType' => $documentInfo['filetype'],
+                    'title' => $documentInfo['title'],
+                    'comment' => $documentInfo['comment'],
+                    'path' => $documentInfo['path'],
+                    'icon' => $icon,
+                    'size' => format_file_size($documentInfo['size']),
+                    'url' => $webPath.http_build_query(
+                            [
+                                'username' => $this->getCurrentUser()->getUsername(),
+                                'api_key' => '', //$this->apiKey,
+                                'cidReq' => $course->getCode(),
+                                'id_session' => $session ? $session->getId() : 0,
+                                'gidReq' => 0,
+                                'gradebook' => 0,
+                                'origin' => '',
+                                'action' => 'download',
+                                'id' => $documentInfo['id'],
+                            ]
+                        ),
+                ];
+            },
+            $documents
+        );
+
+        return $results;
+    }
+
+    /**
+     * @param \ArrayObject $context
+     *
+     * @return array
+     */
+    public function getLearnpathCategories(\ArrayObject $context): array
+    {
+        /** @var Course $course */
+        $course = $context->offsetGet('course');
+
+        $none = new CLpCategory();
+        $none
+            ->setId(0)
+            ->setCId($course->getId())
+            ->setName($this->translator->trans('Without category.'))
+            ->setPosition(0);
+
+        $categories = \learnpath::getCategories($course->getId());
+
+        array_unshift($categories, $none);
+
+        return $categories;
+    }
+
+    /**
+     * @param CLpCategory  $category
+     * @param \ArrayObject $context
+     *
+     * @return array
+     */
+    public function getLearnpathsByCategory(CLpCategory $category, \ArrayObject $context): array
+    {
+        $user = $this->getCurrentUser();
+        /** @var Course $course */
+        $course = $context->offsetGet('course');
+        /** @var Session $session */
+        $session = $context->offsetGet('session');
+        $sessionId = $session ? $session->getId() : 0;
+
+        $lpList = new \LearnpathList(
+            $user->getId(),
+            $course->getCode(),
+            $sessionId,
+            null,
+            false,
+            $category->getId()
+        );
+
+        $flatList = $lpList->get_flat_list();
+        $lps = [];
+
+        foreach ($flatList as $lpId => $lpInfo) {
+            if (empty($lpInfo['lp_visibility'])) {
+                continue;
+            }
+
+            if (
+                !\learnpath::is_lp_visible_for_student($lpId, $user->getId(), $course->getCode(), $sessionId)
+            ) {
+                continue;
+            }
+
+            $timeLimits = !empty($lpInfo['expired_on']);
+
+            if ($timeLimits) {
+                if (!empty($lpInfo['publicated_on']) && !empty($lpInfo['expired_on'])) {
+                    $utc = new \DateTimeZone('UTC');
+
+                    $starTime = new \DateTime($lpInfo['publicated_on'], $utc);
+                    $endTime = new \DateTime($lpInfo['expired_on'], $utc);
+                    $now = new \DateTime('now', $utc);
+
+                    $isActived = $now > $starTime && $endTime > $now;
+
+                    if (!$isActived) {
+                        continue;
+                    }
+                }
+            }
+
+            $progress = \learnpath::getProgress($lpId, $user->getId(), $course->getId(), $sessionId);
+
+            $lps[] = [
+                'id' => $lpId,
+                'title' => \Security::remove_XSS($lpInfo['lp_name']),
+                'progress' => (int) $progress,
+            ];
+        }
+
+        return $lps;
     }
 }

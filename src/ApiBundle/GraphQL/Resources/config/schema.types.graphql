@@ -228,6 +228,46 @@ type CourseAgendaEvent {
     backgroundColor: String
 }
 
+type ToolDocuments {
+    name: String
+    category: String
+    image: String
+    customIcon: String
+    documents(dirId: Int): [CourseDocument!]
+}
+
+type CourseDocument {
+  id: Int
+  fileType: String
+  title: String
+  comment: String
+  path: String
+  icon: String
+  size: String
+  url: String
+}
+
+"A specific sequence of learning objects/experiences."
+type ToolLearningPath {
+    name: String
+    category: String
+    image: String
+    customIcon: String
+    categories: [CourseLearnpathCategory!]
+}
+
+type CourseLearnpathCategory {
+    id: Int
+    name: String
+    learnpaths: [CourseLearnpath!]
+}
+
+type CourseLearnpath {
+    id: Int
+    title: String
+    progress: Int
+}
+
 "A session registered on the platform."
 type Session {
     "The unique ID of the session."
@@ -259,7 +299,7 @@ type SessionCategory {
 
 # Unions
 
-union CourseTool = ToolDescription | ToolAnnouncements | ToolNotebook | ToolForums | ToolAgenda
+union CourseTool = ToolDescription | ToolAnnouncements | ToolNotebook | ToolForums | ToolAgenda | ToolDocuments | ToolLearningPath
 
 # Enums
 
@@ -298,6 +338,8 @@ enum CourseToolType {
     TOOL_NOTEBOOK
     TOOL_FORUM
     TOOL_CALENDAR_EVENT
+    TOOL_DOCUMENT
+    TOOL_LEARNPATH
 }
 
 # Scalars

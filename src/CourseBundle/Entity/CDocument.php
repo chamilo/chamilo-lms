@@ -85,6 +85,8 @@ class CDocument extends AbstractResource implements ResourceInterface
     protected $readonly;
 
     /**
+     * @var Course|null
+     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", cascade={"persist"})
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */

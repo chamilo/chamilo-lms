@@ -343,3 +343,43 @@ footer {
   }
 }
 
+.course-accordion{
+  .card-header{
+    padding: 0;
+    background-color: $default-white;
+    .btn-link{
+      display: inline-block;
+      width: 100%;
+    }
+  }
+  .card-body{
+    .tools{
+      width: 160px;
+      height: 160px;
+      display: block;
+      float: left;
+      text-align: center;
+      border: 1px solid rgba(0, 0, 0, 0.125) ;
+      cursor: pointer;
+      position: relative;
+      background-color: transparent;
+      .big_icon{
+        position: absolute;
+        width: 64px;
+        height: 64px;
+        top: 50%;
+        margin-top: -50px;
+        left: 50%;
+        margin-left: -32px;
+        text-align: center;
+      }
+      .content{
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        z-index: 999;
+      }
+    }
+  }
+}

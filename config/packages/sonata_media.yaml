@@ -45,7 +45,7 @@ sonata_media:
     filesystem:
         # define where the uploaded file will be stored
         local:
-            directory: '%kernel.root_dir%/../public/uploads/media'
+            directory: '%kernel.root_dir%/../var/upload/media'
             create: true
     providers:
         file:

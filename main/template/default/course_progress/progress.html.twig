@@ -1,8 +1,9 @@
+{% autoescape false %}
 {{ actions }}
 {{ message }}
 {{ flash_messages }}
 {% if data is not empty %}
-{% set tutor =  false|api_is_allowed_to_edit(true) %}
+{# set tutor =  false|api_is_allowed_to_edit(true) #}
 <div id="course-progress" class="thematic">
     <div class="row">
         <div class="col-md-12">
@@ -34,13 +35,14 @@
                                 </div>
                             </td>
                             <td>
+                                {#
                                 {% if tutor %}
                                 <div class="pull-right">
                                     <a title="{{ 'EditThematicPlan' | get_lang }}" href="index.php?{{ _p.web_cid_query }}&origin=thematic_details&action=thematic_plan_list&thematic_id={{ item.id }}&width=700&height=500'" class="btn btn-default">
                                         <i class="fa fa-pencil" aria-hidden="true"></i>
                                     </a>
                                 </div>
-                                {% endif %}
+                                {% endif %} #}
                                 <div class="thematic_plan_{{ item.id }}">
                                     {% if item.thematic_plan is empty %}
                                     <div class="alert-thematic">
@@ -124,3 +126,4 @@
 {% else %}
     <div class="alert alert-info" role="alert">{{ 'ThereIsNoAThematicSection' | get_lang }}</div>
 {% endif %}
+{% endautoescape %}

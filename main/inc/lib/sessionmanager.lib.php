@@ -614,9 +614,9 @@ class SessionManager
             foreach ($sessions as $session) {
                 $session_id = $session['id'];
                 if ($showCountUsers) {
-                    $session['users'] = SessionManager::get_users_by_session(
+                    $session['users'] = self::get_users_by_session(
                         $session['id'],
-                        null,
+                        0,
                         true
                     );
                 }
@@ -8188,7 +8188,6 @@ SQL;
                     [
                         'name' => 'id',
                         'index' => 's.id',
-                        'width' => '160',
                         'width' => '160',
                         'hidden' => 'true',
                     ],

@@ -972,6 +972,9 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Hide country flags in the language switcher
 // $_configuration['hide_flag_language_switcher'] = false;
 
+// Hide complete name in who is online page
+// $_configuration['hide_complete_name_in_whoisonline'] = false;
+
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email

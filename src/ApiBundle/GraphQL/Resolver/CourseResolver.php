@@ -17,6 +17,7 @@ use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Repository\CNotebookRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
+use Firebase\JWT\JWT;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Error\UserError;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -555,9 +556,42 @@ class CourseResolver implements ContainerAwareInterface
                 'id' => $lpId,
                 'title' => \Security::remove_XSS($lpInfo['lp_name']),
                 'progress' => (int) $progress,
+                'url' => $this->generateLpUrl($lpId, $course, $session),
             ];
         }
 
         return $lps;
+    }
+
+    /**
+     * @param int          $lpId
+     * @param Course       $course
+     * @param Session|null $session
+     *
+     * @return string
+     */
+    private function generateLpUrl($lpId, Course $course, Session $session = null)
+    {
+        $user = $this->getCurrentUser();
+        $secret = $this->container->getParameter('secret');
+        $time = time();
+
+        $payload = [
+            'iat' => $time,
+            'exp' => $time + (60 * 30 * 1),
+            'data' => [
+                'user' => $user->getId(),
+                'lp' => (int) $lpId,
+                'course' => [
+                    'id' => $course->getId(),
+                    'code' => $course->getCode(),
+                ],
+                'session' => $session ? $session->getId() : null,
+            ],
+        ];
+
+        $token = JWT::encode($payload, $secret, 'HS384');
+
+        return $this->container->get('router')->generate('chamilo_graphql_learnpath', ['token' => $token]);
     }
 }

@@ -1,0 +1,4 @@
+chamilo_graphql_course_learnpath:
+    resource: '@ChamiloApiBundle/GraphQL/Controller/ApiController.php'
+    type: annotation
+    prefix: /graphql

@@ -266,6 +266,7 @@ type CourseLearnpath {
     id: Int
     title: String
     progress: Int
+    url: String
 }
 
 "A session registered on the platform."

@@ -344,6 +344,7 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
                     return $resolver->getLearnpathsByCategory($category, $context);
                 },
             ],
+            //'CourseLearnpath' => [],
             'Session' => [
                 self::RESOLVE_FIELD => function (
                     Session $session,

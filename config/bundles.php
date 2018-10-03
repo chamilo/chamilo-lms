@@ -54,6 +54,7 @@ return [
     Chamilo\NotificationBundle\ChamiloNotificationBundle::class => ['all' => true],
     Chamilo\SettingsBundle\ChamiloSettingsBundle::class => ['all' => true],
     Chamilo\TimelineBundle\ChamiloTimelineBundle::class => ['all' => true],
+    Chamilo\ApiBundle\ChamiloApiBundle::class => ['all' => true],
     winzou\Bundle\StateMachineBundle\winzouStateMachineBundle::class => ['all' => true],
     Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle::class => ['all' => true],
     Sylius\Bundle\ResourceBundle\SyliusResourceBundle::class => ['all' => true],

@@ -25,3 +25,6 @@ chamilo_page:
 
 chamilo_faq:
     resource: "@ChamiloFaqBundle/Resources/config/routing.yml"
+
+chamilo_graphql:
+    resource: "@ChamiloApiBundle/GraphQL/Resources/config/routing.yaml"

@@ -378,4 +378,20 @@ class Message
     {
         return $this->attachments;
     }
+
+    /**
+     * Get an excerpt from the content.
+     *
+     * @param int $length Optional. Length of the excerpt.
+     *
+     * @return string
+     */
+    public function getExcerpt($length = 50)
+    {
+        $striped = strip_tags($this->content);
+        $replaced = str_replace(["\r\n", "\n"], ' ', $striped);
+        $trimmed = trim($replaced);
+
+        return api_trunc_str($trimmed, $length);
+    }
 }

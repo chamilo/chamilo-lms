@@ -5950,7 +5950,17 @@ div#chat-remote-video video {
     padding-top: 10px;
     border-bottom: 1px solid #ECF0F1;
 }
+.toolbar-edit {
+    display: inline-block;
+    width: 100%;
+    margin-top: 10px;
+}
 
+.bar-progress {
+    display: inline-block;
+    width: 100%;
+}
+/*
 .grid-courses .items .course-student-info {
     background-color: #d9edf7;
     border: 1px solid #bce8f1;
@@ -5965,19 +5975,7 @@ div#chat-remote-video video {
     color: #666;
 }
 
-.toolbar-edit {
-    display: inline-block;
-    width: 100%;
-    margin-top: 10px;
-}
-
-.bar-progress {
-    display: inline-block;
-    width: 100%;
-}
-
 .grid-courses .items {
-    /* position: relative; */
     vertical-align: top;
     white-space: normal;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
@@ -6191,7 +6189,6 @@ div#chat-remote-video video {
     color: #fff;
 }
 
-/*---- */
 .grid-courses .items .block-author {
     display: flex;
     margin: 5px 0 5px;
@@ -6227,7 +6224,7 @@ div#chat-remote-video video {
     margin-top: 15px;
     margin-bottom: 15px;
 }
-
+*/
 .title-session,
 .title-courses {
     text-align: center;

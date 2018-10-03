@@ -1002,7 +1002,7 @@ function delete_post($post_id)
                 'parent_of_deleted_post' => $post->getPostParentId(),
                 'course' => $course_id,
                 'post' => $post->getPostId(),
-                'thread_of_deleted_post' => $post->getThreadId(),
+                'thread_of_deleted_post' => $post->getThread() ? $post->getThread()->getIid() : 0,
                 'forum_of_deleted_post' => $post->getForumId(),
             ]);
 
@@ -2020,7 +2020,7 @@ function getThreadInfo($threadId, $cId)
     if ($forumThread) {
         $thread['threadId'] = $forumThread->getThreadId();
         $thread['threadTitle'] = $forumThread->getThreadTitle();
-        $thread['forumId'] = $forumThread->getForumId();
+        $thread['forumId'] = $forumThread->getForum() ? $forumThread->getForum()->getIid() : 0;
         $thread['sessionId'] = $forumThread->getSessionId();
         $thread['threadSticky'] = $forumThread->getThreadSticky();
         $thread['locked'] = $forumThread->getLocked();
@@ -2066,7 +2066,7 @@ function getPosts(
 
     $criteria = Criteria::create();
     $criteria
-        ->where(Criteria::expr()->eq('threadId', $threadId))
+        ->where(Criteria::expr()->eq('thread', $threadId))
         ->andWhere(Criteria::expr()->eq('cId', $forumInfo['c_id']))
         ->andWhere($visibleCriteria)
     ;
@@ -2121,7 +2121,7 @@ function getPosts(
             'post_id' => $post->getPostId(),
             'post_title' => $post->getPostTitle(),
             'post_text' => $post->getPostText(),
-            'thread_id' => $post->getThreadId(),
+            'thread_id' => $post->getThread() ? $post->getThread()->getIid() : 0,
             'forum_id' => $post->getForumId(),
             'poster_id' => $post->getPosterId(),
             'poster_name' => $post->getPosterName(),
@@ -2710,12 +2710,14 @@ function store_thread(
     }
     $clean_post_title = $values['post_title'];
 
+    $forum = $em->find('ChamiloCourseBundle:CForumForum', $values['forum_id']);
+
     // We first store an entry in the forum_thread table because the thread_id is used in the forum_post table.
     $lastThread = new CForumThread();
     $lastThread
         ->setCId($course_id)
         ->setThreadTitle($clean_post_title)
-        ->setForumId($values['forum_id'])
+        ->setForum($forum)
         ->setThreadPosterId($userId)
         ->setThreadPosterName(isset($values['poster_name']) ? $values['poster_name'] : null)
         ->setThreadDate($post_date)
@@ -2810,7 +2812,7 @@ function store_thread(
         ->setCId($course_id)
         ->setPostTitle($clean_post_title)
         ->setPostText($values['post_text'])
-        ->setThreadId($lastThread->getIid())
+        ->setThread($lastThread)
         ->setForumId($values['forum_id'])
         ->setPosterId($userId)
         ->setPosterName(isset($values['poster_name']) ? $values['poster_name'] : null)

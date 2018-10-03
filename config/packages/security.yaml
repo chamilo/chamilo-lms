@@ -19,6 +19,7 @@ security:
     role_hierarchy:
         ROLE_SONATA_ADMIN: ROLE_USER
         ROLE_ADMIN:
+            - ROLE_SUPER_ADMIN
             - ROLE_SONATA_ADMIN
             - ROLE_QUESTION_MANAGER
             - ROLE_SESSION_MANAGER

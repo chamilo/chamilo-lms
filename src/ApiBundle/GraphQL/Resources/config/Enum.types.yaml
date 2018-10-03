@@ -1,9 +1,0 @@
-CourseToolType:
-    type: enum
-    config:
-        description: 'One of the types of course tool'
-        values:
-            TOOL_DESCRIPTION:
-                value: '@=constant("TOOL_COURSE_DESCRIPTION")'
-            TOOL_ANNOUNCEMENT:
-                value: '@=constant("TOOL_ANNOUNCEMENT")'

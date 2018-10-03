@@ -9,7 +9,32 @@ type Query {
     sessionCategory(id: Int!): SessionCategory!
 }
 
+type Mutation {
+    "Authenticate user."
+    authenticate(username: String!, password: String!): AuthenticatePayload!
+    "Send messages to user contacts."
+    viewerSendMessage(
+        "Unique IDs of users who will receive the message."
+        receivers: [Int!]!,
+        subject: String!,
+        content: String!
+    ): [ViewerSendMessagePayload!]
+}
+
 # Objects
+
+type AuthenticatePayload {
+    "Authorization token."
+    token: String!
+}
+
+"The status for each message in queue."
+type ViewerSendMessagePayload {
+    "The unique ID for the receiver user."
+    receiverId: Int!
+    "It indicates if the message was or wasn't sent."
+    sent: Boolean!
+}
 
 "A registered user on the platform."
 type User {
@@ -21,7 +46,7 @@ type User {
     email: String
     officialCode: String
     status: UserStatus
-    picture(size: ImageSize = SIZE_SMALL): String
+    picture(size: ImageSize = ICON_SIZE_SMALL): String
     "Received messages for the user."
     messages(
         "Last received by the app message ID."
@@ -67,6 +92,180 @@ type Course {
     ): String
     "Teachers list in course. Or tutors list from course in session."
     teachers: [User!]
+    "List of available tools for student view."
+    tools(
+        "Filter by one type of tool"
+        type: CourseToolType
+    ): [CourseTool!]
+}
+
+"Global summary of the course."
+type ToolDescription {
+    name: String
+    category: String
+    image: String
+    customIcon: String
+    descriptions: [CourseDescription!]
+}
+
+"A section for the course description."
+type CourseDescription {
+    id: Int
+    title: String
+    content: String
+    descriptionType: Int
+}
+
+"Personal notes relevant to student or coursework."
+type ToolNotebook {
+    name: String
+    category: String
+    image: String
+    customIcon: String
+    notes: [CourseNote!]
+}
+
+"Note by user in notebook tool."
+type CourseNote {
+    id: Int
+    title: String
+    description: String
+    creationDate: DateTime
+    updateDate: DateTime
+    status: Int
+}
+
+"Announcements related to the course."
+type ToolAnnouncements {
+    name: String
+    category: String
+    image: String
+    customIcon: String
+    announcements: [CourseAnnouncement!]
+    announcement(id: Int!): CourseAnnouncement
+}
+
+"A course announcement."
+type CourseAnnouncement {
+    id: Int
+    title: String
+    content: String
+    author: User!
+    lastUpdateDate: DateTime
+}
+
+"Course forum tool."
+type ToolForums {
+    name: String
+    category: String
+    image: String
+    customIcon: String
+    categories: [CourseForumCategory!]
+    forum(id: Int!): CourseForum
+    thread(id: Int!): CourseForumThread
+}
+
+type CourseForumCategory {
+    id: Int
+    title: String
+    comment: String
+    locked: Int
+    forums: [CourseForum!]
+}
+
+type CourseForum {
+    id: Int
+    title: String
+    comment: String
+    image: String
+    numberOfThreads: Int
+    numberOfPosts: Int
+    threads: [CourseForumThread!]
+}
+
+type CourseForumThread {
+    id: Int
+    title: String
+    userPoster: User
+    date: DateTime
+    sticky: Boolean
+    locked: Int
+    numberOfViews: Int
+    numberOfReplies: Int
+    closeDate: DateTime
+    posts: [CourseForumPost!]
+}
+
+type CourseForumPost {
+    id: Int
+    title: String
+    text: String
+    userPoster: User
+    date: DateTime
+    parent: CourseForumPost
+    visible: Boolean
+    status: Int
+}
+
+"A comprehensive diary/calendar tool"
+type ToolAgenda {
+    name: String
+    category: String
+    image: String
+    customIcon: String
+    events: [CourseAgendaEvent!]
+}
+
+type CourseAgendaEvent {
+    id: Int
+    className: String
+    title: String
+    description: String
+    startDate: DateTime
+    endDate: DateTime
+    allDay: Boolean
+    borderColor: String
+    backgroundColor: String
+}
+
+type ToolDocuments {
+    name: String
+    category: String
+    image: String
+    customIcon: String
+    documents(dirId: Int): [CourseDocument!]
+}
+
+type CourseDocument {
+  id: Int
+  fileType: String
+  title: String
+  comment: String
+  path: String
+  icon: String
+  size: String
+  url: String
+}
+
+"A specific sequence of learning objects/experiences."
+type ToolLearningPath {
+    name: String
+    category: String
+    image: String
+    customIcon: String
+    categories: [CourseLearnpathCategory!]
+}
+
+type CourseLearnpathCategory {
+    id: Int
+    name: String
+    learnpaths: [CourseLearnpath!]
+}
+
+type CourseLearnpath {
+    id: Int
+    title: String
+    progress: Int
 }
 
 "A session registered on the platform."
@@ -98,6 +297,10 @@ type SessionCategory {
     endDate: DateTime
 }
 
+# Unions
+
+union CourseTool = ToolDescription | ToolAnnouncements | ToolNotebook | ToolForums | ToolAgenda | ToolDocuments | ToolLearningPath
+
 # Enums
 
 "One of the statuses for the user."
@@ -115,17 +318,28 @@ enum UserStatus {
 "One of the sizes for the picture."
 enum ImageSize {
     "Image in small size: 16px."
-    SIZE_TINY
+    ICON_SIZE_TINY
     "Image in small size: 22px."
-    SIZE_SMALL
+    ICON_SIZE_SMALL
     "Image in small size: 32px."
-    SIZE_MEDIUM
+    ICON_SIZE_MEDIUM
     "Image in small size: 48px."
-    SIZE_LARGE
+    ICON_SIZE_LARGE
     "Image in small size: 64px."
-    SIZE_BIG
+    ICON_SIZE_BIG
     "Image in small size: 128px."
-    SIZE_HUGE
+    ICON_SIZE_HUGE
+}
+
+"One of the types of course tool"
+enum CourseToolType {
+    TOOL_COURSE_DESCRIPTION
+    TOOL_ANNOUNCEMENT
+    TOOL_NOTEBOOK
+    TOOL_FORUM
+    TOOL_CALENDAR_EVENT
+    TOOL_DOCUMENT
+    TOOL_LEARNPATH
 }
 
 # Scalars

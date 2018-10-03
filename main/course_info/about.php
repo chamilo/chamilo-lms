@@ -162,7 +162,7 @@ $htmlHeadXtra[] = api_get_asset('readmore-js/readmore.js');
 
 $template = new Template($course->getTitle(), true, true, false, true, false);
 $template->assign('course', $courseItem);
-$essence = Essence\Essence::instance();
+$essence = new Essence\Essence();
 $template->assign('essence', $essence);
 $template->assign('is_premium', $courseIsPremium);
 $template->assign('token', $token);

@@ -5,7 +5,9 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Traits\CourseTrait;
+use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -187,6 +189,16 @@ class CGroupInfo
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupRelTutor", mappedBy="group")
      */
     protected $tutors;
+
+    /**
+     * Get iid.
+     *
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iid;
+    }
 
     /**
      * Set name.
@@ -674,5 +686,33 @@ class CGroupInfo
         $this->tutors = $tutors;
 
         return $this;
+    }
+
+    /**
+     * @param User|null $user
+     *
+     * @return bool
+     */
+    public function userIsTutor(User $user = null): bool
+    {
+        if (empty($user)) {
+            return false;
+        }
+
+        if (0 === $this->tutors->count()) {
+            return false;
+        }
+
+        $criteria = Criteria::create()
+            ->where(
+                Criteria::expr()->eq('cId', $this->course)
+            )
+            ->andWhere(
+                Criteria::expr()->eq('user', $user)
+            );
+
+        $relation = $this->tutors->matching($criteria);
+
+        return $relation->count() > 0;
     }
 }

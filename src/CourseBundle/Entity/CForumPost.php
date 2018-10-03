@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="c_id_visible_post_date", columns={"c_id", "visible", "post_date"})
  *  }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CForumPostRepository")
  */
 class CForumPost
 {
@@ -65,11 +65,12 @@ class CForumPost
     protected $postText;
 
     /**
-     * @var int
+     * @var CForumThread|null
      *
-     * @ORM\Column(name="thread_id", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumThread", inversedBy="posts")
+     * @ORM\JoinColumn(name="thread_id", referencedColumnName="iid")
      */
-    protected $threadId;
+    protected $thread;
 
     /**
      * @var int
@@ -176,27 +177,27 @@ class CForumPost
     }
 
     /**
-     * Set threadId.
+     * Set thread.
      *
-     * @param int $threadId
+     * @param CForumThread|null $thread
      *
      * @return CForumPost
      */
-    public function setThreadId($threadId)
+    public function setThread(CForumThread $thread = null)
     {
-        $this->threadId = $threadId;
+        $this->thread = $thread;
 
         return $this;
     }
 
     /**
-     * Get threadId.
+     * Get thread.
      *
-     * @return int
+     * @return CForumThread|null
      */
-    public function getThreadId()
+    public function getThread()
     {
-        return $this->threadId;
+        return $this->thread;
     }
 
     /**

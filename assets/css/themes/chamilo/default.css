@@ -8,16 +8,3 @@
 
 body {
 }
-
-a {
-  color: #337AB7;
-  text-decoration: none;
-}
-a:hover,
-a:focus {
-  color: #2E75A3;
-  text-decoration: none;
-}
-a:focus {
-  outline: none;
-}

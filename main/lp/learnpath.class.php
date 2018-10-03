@@ -13224,7 +13224,7 @@ EOD;
                 /** @var \Chamilo\CourseBundle\Entity\CForumThread $thread */
                 $thread = $repo->find($threadId);
                 if ($thread) {
-                    $itemList['forum'][] = $thread->getForumId();
+                    $itemList['forum'][] = $thread->getForum() ? $thread->getForum()->getIid() : 0;
                     $threadList[] = $thread->getIid();
                 }
             }

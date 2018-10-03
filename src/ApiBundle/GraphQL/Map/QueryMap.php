@@ -14,6 +14,7 @@ use Chamilo\CourseBundle\Entity\CForumCategory;
 use Chamilo\CourseBundle\Entity\CForumForum;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
+use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CNotebook;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\UserBundle\Entity\User;
@@ -287,6 +288,60 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
                     $parent = $postRepo->find((int) $post->getPostParentId());
 
                     return $parent;
+                },
+            ],
+            'ToolAgenda' => [
+                self::RESOLVE_FIELD => function (
+                    CTool $tool,
+                    Argument $args,
+                    \ArrayObject $context,
+                    ResolveInfo $info
+                ) {
+                    if ('events' === $info->fieldName) {
+                        $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
+
+                        return $resolver->getAgenda($context);
+                    }
+
+                    return $this->resolveField($info->fieldName, $tool);
+                },
+            ],
+            'CourseAgendaEvent' => [
+                'id' => function (array $event) {
+                    return $event['unique_id'];
+                },
+                'description' => function (array $event) {
+                    return $event['comment'];
+                },
+                'startDate' => function (array $event) {
+                    return new \DateTime($event['start'], new \DateTimeZone('UTC'));
+                },
+                'endDate' => function (array $event) {
+                    return new \DateTime($event['end'], new \DateTimeZone('UTC'));
+                },
+            ],
+            'ToolDocuments' => [
+                'documents' => function (CTool $tool, Argument $args, \ArrayObject $context) {
+                    $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
+
+                    $dirId = !empty($args['dirId']) ? $args['dirId'] : null;
+
+                    return $resolver->getDocuments($dirId, $context);
+                },
+            ],
+            //'CourseDocument' => [],
+            'ToolLearningPath' => [
+                'categories' => function (CTool $tool, Argument $args, \ArrayObject $context) {
+                    $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
+
+                    return $resolver->getLearnpathCategories($context);
+                },
+            ],
+            'CourseLearnpathCategory' => [
+                'learnpaths' => function (CLpCategory $category, Argument $args, \ArrayObject $context) {
+                    $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
+
+                    return $resolver->getLearnpathsByCategory($category, $context);
                 },
             ],
             'Session' => [

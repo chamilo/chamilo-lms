@@ -6654,6 +6654,14 @@ SQL;
                 $userInfo = api_get_user_info_from_username($data['Username']);
                 $sessionInfo = self::get_session_by_name($data['SessionName']);
 
+                if (empty($sessionInfo)) {
+                    Display::addFlash(Display::return_message(get_lang('NoSessionId').' - '.$data['SessionName'], 'warning'));
+                }
+
+                if (empty($userInfo)) {
+                    Display::addFlash(Display::return_message(get_lang('UserDoesNotExist').' - '.$data['Username'], 'warning'));
+                }
+
                 if (!empty($userInfo) && !empty($sessionInfo)) {
                     $userSessionList[$userInfo['user_id']]['session_list'][] = [
                         'session_id' => $sessionInfo['id'],

@@ -154,14 +154,14 @@
 
 {% macro panel(header, content, title, footer, subtitle, top_image) %}
     {% autoescape false %}
-        <div class="card card-line mt-3 mb-3">
+        <div class="card mt-3 mb-3">
             {% if header %}
                 <div class="card-header"> {{ header }} </div>
             {% endif %}
             {% if top_image %}
                 {{ top_image }}
             {% endif %}
-            <div class="card-body pb-3">
+            <div class="card-body p-3">
                 {% if title %}
                     <h5 class="card-title">{{ title }}</h5>
                 {% endif %}
@@ -177,6 +177,67 @@
                     {{ footer }}
                 </div>
             {% endif %}
+        </div>
+    {% endautoescape %}
+{% endmacro %}
+
+{% macro panel_course(id, header, content, title, footer, subtitle, top_image) %}
+    {% autoescape false %}
+        <div class="card card-{{ id }} mt-3 mb-3">
+            {% if header %}
+                <div class="card-header"> {{ header }} </div>
+            {% endif %}
+            {% if top_image %}
+                {{ top_image }}
+            {% endif %}
+            <div class="card-body p-3">
+                {% if title %}
+                    <h5 class="card-title">{{ title }}</h5>
+                {% endif %}
+                {% if subtitle %}
+                    <h5 class="card-subtitle mb-2 text-muted">{{ subtitle }}</h5>
+                {% endif %}
+
+                {{ content }}
+
+            </div>
+            {% if footer %}
+                <div class="card-footer">
+                    {{ footer }}
+                </div>
+            {% endif %}
+        </div>
+    {% endautoescape %}
+{% endmacro %}
+
+{% macro panel_row(id, title, subtitle, content, image) %}
+    {% autoescape false %}
+        <div class="card card-{{ id }} p-3 mt-3 mb-3">
+            <div class="card-body pb-3">
+                <div class="row">
+                    <div class="col-sm-3">
+                        {% if image %}
+                            {{ image }}
+                        {% endif %}
+                    </div>
+                    <div class="col-sm-9">
+                        {% if title %}
+                            <h5 class="card-title">{{ title }}</h5>
+                        {% endif %}
+                        {% if subtitle %}
+                            <p class="card-subtitle mb-2 text-muted">
+                                <strong>{{ 'Code'|get_lang }} :</strong>
+                                {{ subtitle }}
+                            </p>
+                        {% endif %}
+                        {% if content %}
+                            <div class="description">
+                                {{ content }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
         </div>
     {% endautoescape %}
 {% endmacro %}

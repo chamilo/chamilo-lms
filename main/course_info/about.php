@@ -125,6 +125,10 @@ $topics = [
 
 $subscriptionUser = CourseManager::is_user_subscribed_in_course($userId, $course->getCode());
 
+$allowSubscribe = false;
+if ($course->getSubscribe() == true || api_is_platform_admin()) {
+    $allowSubscribe = true;
+}
 $plugin = BuyCoursesPlugin::create();
 $checker = $plugin->isEnabled();
 $courseIsPremium = null;
@@ -165,6 +169,7 @@ $template->assign('course', $courseItem);
 $essence = new Essence\Essence();
 $template->assign('essence', $essence);
 $template->assign('is_premium', $courseIsPremium);
+$template->assign('allow_subscribe', $allowSubscribe);
 $template->assign('token', $token);
 $template->assign('url', $urlCourse);
 $layout = $template->get_template('course_home/about.tpl');

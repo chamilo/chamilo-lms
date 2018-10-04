@@ -465,10 +465,10 @@ class AnnouncementManager
         $allow = !api_get_configuration_value('hide_announcement_sent_to_users_info');
         if (api_is_allowed_to_edit(false, true) && $allow) {
             $sent_to = self::sent_to('announcement', $id);
-            $sent_to_form = self::sent_to_form($sent_to);
+            $sentToForm = self::sent_to_form($sent_to);
             $html .= Display::tag(
                 'td',
-                get_lang('SentTo').': '.$sent_to_form,
+                get_lang('SentTo').': '.$sentToForm,
                 ['class' => 'announcements_datum']
             );
         }
@@ -572,7 +572,6 @@ class AnnouncementManager
 
         $courseId = $courseInfo['real_id'];
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
-
         $authorId = empty($authorId) ? api_get_user_id() : $authorId;
 
         if (empty($end_date)) {
@@ -684,17 +683,17 @@ class AnnouncementManager
     }
 
     /**
-     * @param $title
-     * @param $newContent
-     * @param $to
-     * @param $to_users
+     * @param string $title
+     * @param string $newContent
+     * @param int    $groupId
+     * @param array  $to_users
      * @param array  $file
      * @param string $file_comment
      * @param bool   $sendToUsersInSession
      *
      * @return bool|int
      */
-    public static function add_group_announcement(
+    public static function addGroupAnnouncement(
         $title,
         $newContent,
         $groupId,
@@ -738,7 +737,6 @@ class AnnouncementManager
                 );
             }
 
-            $send_to_groups = CourseManager::separateUsersGroups($to);
             $send_to_users = CourseManager::separateUsersGroups($to_users);
 
             // Store in item_property (first the groups, then the users)
@@ -954,7 +952,7 @@ class AnnouncementManager
                             $courseInfo,
                             TOOL_ANNOUNCEMENT,
                             $announcementId,
-                            "AnnouncementUpdated",
+                            'AnnouncementUpdated',
                             api_get_user_id(),
                             0,
                             $user['user_id'],
@@ -1118,15 +1116,17 @@ class AnnouncementManager
      *
      * @param string $tool
      * @param int    $id
+     * @param bool   $includeGroupWhenLoadingUser
      *
      * @return array
      */
-    public static function load_edit_users($tool, $id)
+    public static function loadEditUsers($tool, $id, $includeGroupWhenLoadingUser = false)
     {
         $table = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tool = Database::escape_string($tool);
         $id = (int) $id;
         $courseId = api_get_course_int_id();
+        $groupId = api_get_group_id();
 
         $sql = "SELECT to_user_id, to_group_id FROM $table
                 WHERE c_id = $courseId AND tool='$tool' AND ref = $id";
@@ -1136,6 +1136,9 @@ class AnnouncementManager
         while ($row = Database::fetch_array($result)) {
             // This is the iid of c_group_info
             $toGroup = $row['to_group_id'];
+            if (empty($row['to_user_id']) && !empty($groupId) && $groupId != $toGroup) {
+                //continue;
+            }
             switch ($toGroup) {
                 // it was send to one specific user
                 case null:
@@ -1154,9 +1157,16 @@ class AnnouncementManager
                         if (!in_array('USER:'.$row['to_user_id'], $to)) {
                             $to[] = 'USER:'.$row['to_user_id'];
                         }
+                    } else {
+                        if (!in_array('GROUP:'.$toGroup, $to)) {
+                            $to[] = 'GROUP:'.$toGroup;
+                        }
                     }
-                    if (!in_array('GROUP:'.$toGroup, $to)) {
-                        $to[] = 'GROUP:'.$toGroup;
+
+                    if ($includeGroupWhenLoadingUser) {
+                        if (!in_array('GROUP:'.$toGroup, $to)) {
+                            $to[] = 'GROUP:'.$toGroup;
+                        }
                     }
                     break;
             }
@@ -1186,16 +1196,15 @@ class AnnouncementManager
         $group_names = self::get_course_groups();
 
         // we count the number of users and the number of groups
+        $number_users = 0;
         if (isset($sent_to_array['users'])) {
             $number_users = count($sent_to_array['users']);
-        } else {
-            $number_users = 0;
         }
+        $number_groups = 0;
         if (isset($sent_to_array['groups'])) {
             $number_groups = count($sent_to_array['groups']);
-        } else {
-            $number_groups = 0;
         }
+
         $total_numbers = $number_users + $number_groups;
 
         // starting the form if there is more than one user/group
@@ -1204,33 +1213,52 @@ class AnnouncementManager
             // outputting the name of the groups
             if (is_array($sent_to_array['groups'])) {
                 foreach ($sent_to_array['groups'] as $group_id) {
-                    $output[] = $group_names[$group_id]['name'];
+                    $users = GroupManager::getStudents($group_id);
+                    $userToArray = [];
+                    foreach ($users as $student) {
+                        $userToArray[] = $student['complete_name_with_username'];
+                    }
+                    $output[] =
+                        '<br />'.
+                        Display::label($group_names[$group_id]['name'], 'info').
+                        '&nbsp;'.implode(', ', $userToArray);
                 }
             }
 
             if (isset($sent_to_array['users'])) {
                 if (is_array($sent_to_array['users'])) {
+                    $usersToArray = [];
                     foreach ($sent_to_array['users'] as $user_id) {
                         $user_info = api_get_user_info($user_id);
-                        $output[] = $user_info['complete_name_with_username'];
+                        $usersToArray[] = $user_info['complete_name_with_username'];
                     }
+                    $output[] = '<br />'.Display::label(get_lang('Users')).'&nbsp;'.implode(', ', $usersToArray);
                 }
             }
         } else {
             // there is only one user/group
-            if (isset($sent_to_array['users']) and is_array($sent_to_array['users'])) {
+            if (isset($sent_to_array['users']) && is_array($sent_to_array['users'])) {
                 $user_info = api_get_user_info($sent_to_array['users'][0]);
                 $output[] = api_get_person_name($user_info['firstname'], $user_info['lastname']);
             }
-            if (isset($sent_to_array['groups']) and
-                is_array($sent_to_array['groups']) and
-                isset($sent_to_array['groups'][0]) and
+            if (isset($sent_to_array['groups']) &&
+                is_array($sent_to_array['groups']) &&
+                isset($sent_to_array['groups'][0]) &&
                 $sent_to_array['groups'][0] !== 0
             ) {
                 $group_id = $sent_to_array['groups'][0];
-                $output[] = "&nbsp;".$group_names[$group_id]['name'];
+
+                $users = GroupManager::getStudents($group_id);
+                $userToArray = [];
+                foreach ($users as $student) {
+                    $userToArray[] = $student['complete_name_with_username'];
+                }
+                $output[] =
+                    '<br />'.
+                    Display::label($group_names[$group_id]['name'], 'info').
+                    '&nbsp;'.implode(', ', $userToArray);
             }
-            if (empty($sent_to_array['groups']) and empty($sent_to_array['users'])) {
+            if (empty($sent_to_array['groups']) && empty($sent_to_array['users'])) {
                 $output[] = "&nbsp;".get_lang('Everybody');
             }
         }
@@ -1238,7 +1266,7 @@ class AnnouncementManager
         if (!empty($output)) {
             $output = array_filter($output);
             if (count($output) > 0) {
-                $output = implode(', ', $output);
+                $output = implode('<br />', $output);
             }
 
             return $output;
@@ -1586,8 +1614,21 @@ class AnnouncementManager
             ICON_SIZE_SMALL
         );
 
+        $editIconDisable = Display::return_icon(
+            'edit_na.png',
+            get_lang('Edit'),
+            '',
+            ICON_SIZE_SMALL
+        );
         $deleteIcon = Display::return_icon(
             'delete.png',
+            get_lang('Delete'),
+            '',
+            ICON_SIZE_SMALL
+        );
+
+        $deleteIconDisable = Display::return_icon(
+            'delete_na.png',
             get_lang('Delete'),
             '',
             ICON_SIZE_SMALL

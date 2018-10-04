@@ -156,8 +156,8 @@ switch ($action) {
         break;
     case 'view':
         $interbreadcrumb[] = [
-            "url" => api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq(),
-            "name" => $nameTools,
+            'url' => api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq(),
+            'name' => $nameTools,
         ];
 
         $nameTools = get_lang('View');
@@ -309,8 +309,16 @@ switch ($action) {
         if ($sessionId != 0 && api_is_allowed_to_session_edit(false, true) == false) {
             api_not_allowed();
         }
+        $delete = false;
+        if (api_is_platform_admin()) {
+            $delete = true;
+        }
 
         if (!api_is_session_general_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $id)) {
+            $delete = true;
+        }
+
+        if ($delete) {
             AnnouncementManager::delete_announcement($_course, $id);
             Display::addFlash(Display::return_message(get_lang('AnnouncementDeleted')));
         }
@@ -382,7 +390,7 @@ switch ($action) {
         $url = api_get_self().'?action='.$action.'&id='.$id.'&'.api_get_cidreq();
 
         $form = new FormValidator(
-            'f1',
+            'announcement',
             'post',
             $url,
             null,
@@ -472,9 +480,23 @@ switch ($action) {
             $announcement_to_modify = '';
         }
 
-        $announcementInfo = AnnouncementManager::get_by_id($courseId, $id);
-        if (isset($announcementInfo) && !empty($announcementInfo)) {
-            $to = AnnouncementManager::load_edit_users('announcement', $id);
+        $announcementInfo = [];
+        if (!empty($id)) {
+            $announcementInfo = AnnouncementManager::get_by_id($courseId, $id);
+        }
+
+        $showSubmitButton = true;
+        if (!empty($announcementInfo)) {
+            $to = AnnouncementManager::loadEditUsers('announcement', $id);
+
+            if (!empty($group_id)) {
+                $separated = CourseManager::separateUsersGroups($to);
+                if (isset($separated['groups']) && count($separated['groups']) > 1) {
+                    $form->freeze();
+                    Display::addFlash(Display::return_message(get_lang('LockByTeacher')));
+                    $showSubmitButton = false;
+                }
+            }
 
             $defaults = [
                 'title' => $announcementInfo['title'],
@@ -489,10 +511,47 @@ switch ($action) {
             }
         }
 
+        $ajaxUrl = api_get_path(WEB_AJAX_PATH).'announcement.ajax.php?'.api_get_cidreq().'&a=preview';
+
+        $form->addHtml("
+            <script>
+                $(document).on('ready', function () {
+                    $('#announcement_preview').on('click', function() {  
+                        var users = [];
+                        $('#users_to option').each(function() {
+                            users.push($(this).val());                            
+                        });
+                        
+                        var form = $('#announcement').serialize();
+                        $.ajax({
+                            type: 'POST',
+                            dataType: 'json',
+                            url: '".$ajaxUrl."',
+                            data: {users : JSON.stringify(users), form: form},  
+                            beforeSend: function() {
+                                $('#announcement_preview_result').html('<i class=\"fa fa-spinner\"></i>');
+                                $('#send_button').hide();
+                            },  
+                            success: function(result) {
+                                var resultToString = '';
+                                $.each(result, function(index, value) {
+                                    resultToString += '&nbsp;' + value;
+                                });
+                                $('#announcement_preview_result').html('' +
+                                    '".addslashes(get_lang('AnnouncementWillBeSentTo'))."<br/>' + resultToString
+                                );
+                                $('#announcement_preview_result').show();
+                                $('#send_button').show();                                
+                            }
+                        });
+                    });
+                });
+            </script>
+        ");
+
         if (isset($defaults['users'])) {
             foreach ($defaults['users'] as $value) {
                 $parts = explode(':', $value);
-
                 if (!isset($parts[1]) || empty($parts[1])) {
                     continue;
                 }
@@ -543,12 +602,29 @@ switch ($action) {
         $config = api_get_configuration_value('announcement.hide_send_to_hrm_users');
 
         if ($config === false) {
-            $form->addCheckBox('send_to_hrm_users', null, get_lang('SendAnnouncementCopyToDRH'));
+            $form->addCheckBox(
+                'send_to_hrm_users',
+                null,
+                get_lang('SendAnnouncementCopyToDRH'),
+                ['id' => 'send_to_hrm_users']
+            );
         }
 
         $form->addCheckBox('send_me_a_copy_by_email', null, get_lang('SendAnnouncementCopyToMyself'));
         $defaults['send_me_a_copy_by_email'] = true;
-        $form->addButtonSave(get_lang('ButtonPublishAnnouncement'));
+
+        if ($showSubmitButton) {
+            $form->addLabel('',
+                Display::url(
+                    get_lang('Preview'),
+                    'javascript:void(0)',
+                    ['class' => 'btn btn-default', 'id' => 'announcement_preview']
+                ).'<div id="announcement_preview_result" style="display:none"></div>'
+            );
+            $form->addHtml('<div id="send_button" style="display:none">');
+            $form->addButtonSave(get_lang('ButtonPublishAnnouncement'));
+            $form->addHtml('</div>');
+        }
         $form->setDefaults($defaults);
 
         if ($form->validate()) {
@@ -619,7 +695,7 @@ switch ($action) {
                             $sendToUsersInSession
                         );
                     } else {
-                        $insert_id = AnnouncementManager::add_group_announcement(
+                        $insert_id = AnnouncementManager::addGroupAnnouncement(
                             $data['title'],
                             $data['content'],
                             $group_id,

@@ -594,7 +594,7 @@ switch ($action) {
         }
 
         $startDate = Database::escape_string($_REQUEST['start_date']);
-        $whereCondition .= " AND exe_date > '$startDate' ";
+        $whereCondition .= " AND exe_date > '$startDate' AND te.status = '' ";
         $count = ExerciseLib::get_count_exam_results(
             $exerciseId,
             $whereCondition,
@@ -1350,6 +1350,8 @@ switch ($action) {
         if ($operation !== 'excel') {
             $columns[] = 'actions';
         }
+
+        $whereCondition .= " AND te.status = '' ";
 
         $result = ExerciseLib::get_exam_results_data(
             $start,

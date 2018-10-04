@@ -1050,6 +1050,7 @@ class ImportCsv
                     $this->logger->addInfo(
                         "Course '".$courseInfo['code']."' has 'disable_import_calendar' turn on. Skip"
                     );
+                    $errorFound = true;
                 }
 
                 if (empty($courseInfo)) {

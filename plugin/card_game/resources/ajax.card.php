@@ -2,19 +2,19 @@
 /* For license terms, see /license.txt */
 /**
  * This script answers to AJAX calls to store a new piece as revealed
- * in the plugin_card_game table
+ * in the plugin_card_game table.
+ *
  * @author Damien Renou
+ *
  * @package chamilo.plugin.card_game
  */
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
 if (isset($_SESSION['cardgame'])) {
-
     if ($_SESSION['cardgame'] = 'havedeck') {
-
         $part = '1';
         if (isset($_GET['part'])) {
-            $part = (int)$_GET['part'];
+            $part = (int) $_GET['part'];
             $user = api_get_user_info();
 
             if (isset($user['id'])) {

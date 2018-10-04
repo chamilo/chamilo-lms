@@ -341,6 +341,20 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     protected $sessions;
 
     /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupRelUser", mappedBy="user")
+     */
+    protected $courseGroupsAsMember;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupRelTutor", mappedBy="user")
+     */
+    protected $courseGroupsAsTutor;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="auth_source", type="string", length=50, nullable=true, unique=false)
@@ -472,20 +486,6 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Message", mappedBy="userReceiver")
      */
     private $receivedMessages;
-
-    /**
-     * @var ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupRelUser", mappedBy="user")
-     */
-    protected $courseGroupsAsMember;
-
-    /**
-     * @var ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupRelTutor", mappedBy="user")
-     */
-    protected $courseGroupsAsTutor;
 
     /**
      * Constructor.

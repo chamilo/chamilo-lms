@@ -116,6 +116,34 @@ class UserResolver implements ContainerAwareInterface
     /**
      * @param User $user
      *
+     * @return array
+     */
+    public function getSessions(User $user)
+    {
+        $this->protectCurrentUserData($user);
+
+        $sessionsId = $this->findUserSessions($user);
+
+        if (empty($sessionsId)) {
+            return [];
+        }
+
+        $qb = $this->em->createQueryBuilder();
+        $result = $qb
+            ->select('s')
+            ->from('ChamiloCoreBundle:Session', 's')
+            ->where(
+                $qb->expr()->in('s.id', $sessionsId)
+            )
+            ->getQuery()
+            ->getResult();
+
+        return $result;
+    }
+
+    /**
+     * @param User $user
+     *
      * @todo Based on UserManager::get_sessions_by_category. Review to integrate Symfony
      *
      * @return array
@@ -251,33 +279,5 @@ class UserResolver implements ContainerAwareInterface
         }
 
         return $results;
-    }
-
-    /**
-     * @param User $user
-     *
-     * @return array
-     */
-    public function getSessions(User $user)
-    {
-        $this->protectCurrentUserData($user);
-
-        $sessionsId = $this->findUserSessions($user);
-
-        if (empty($sessionsId)) {
-            return [];
-        }
-
-        $qb = $this->em->createQueryBuilder();
-        $result = $qb
-            ->select('s')
-            ->from('ChamiloCoreBundle:Session', 's')
-            ->where(
-                $qb->expr()->in('s.id', $sessionsId)
-            )
-            ->getQuery()
-            ->getResult();
-
-        return $result;
     }
 }

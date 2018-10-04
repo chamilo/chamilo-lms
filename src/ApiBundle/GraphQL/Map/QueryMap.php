@@ -4,7 +4,6 @@
 namespace Chamilo\ApiBundle\GraphQL\Map;
 
 use Chamilo\ApiBundle\GraphQL\ApiGraphQLTrait;
-use Chamilo\ApiBundle\GraphQL\Resolver\ToolDescriptionResolver;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\Session;
@@ -262,7 +261,7 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
                     $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
 
                     return $resolver->getPosts($thread, $context);
-                }
+                },
             ],
             'CourseForumPost' => [
                 'id' => function (CForumPost $post) {
@@ -379,31 +378,6 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
     }
 
     /**
-     * @param string            $fieldName
-     * @param object            $object
-     * @param object|null       $resolver
-     * @param Argument|null     $args
-     * @param \ArrayObject|null $context
-     *
-     * @return mixed
-     */
-    private function resolveField(
-        $fieldName,
-        $object,
-        $resolver = null,
-        Argument $args = null,
-        \ArrayObject $context = null
-    ) {
-        $method = 'get'.ucfirst($fieldName);
-
-        if ($resolver && $args && $context && method_exists($resolver, $method)) {
-            return $resolver->$method($object, $args, $context);
-        }
-
-        return $object->$method();
-    }
-
-    /**
      * @return User
      */
     protected function resolveViewer()
@@ -478,5 +452,30 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
         }
 
         return $category;
+    }
+
+    /**
+     * @param string            $fieldName
+     * @param object            $object
+     * @param object|null       $resolver
+     * @param Argument|null     $args
+     * @param \ArrayObject|null $context
+     *
+     * @return mixed
+     */
+    private function resolveField(
+        $fieldName,
+        $object,
+        $resolver = null,
+        Argument $args = null,
+        \ArrayObject $context = null
+    ) {
+        $method = 'get'.ucfirst($fieldName);
+
+        if ($resolver && $args && $context && method_exists($resolver, $method)) {
+            return $resolver->$method($object, $args, $context);
+        }
+
+        return $object->$method();
     }
 }

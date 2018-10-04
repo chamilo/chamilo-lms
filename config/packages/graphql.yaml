@@ -25,15 +25,15 @@ parameters:
 services:
     chamilo_api.graphql.resolver.user:
         class: Chamilo\ApiBundle\GraphQL\Resolver\UserResolver
-        arguments: [ '@service_container' ]
+        arguments: ['@service_container']
 
     chamilo_api.graphql.resolver.course:
         class: Chamilo\ApiBundle\GraphQL\Resolver\CourseResolver
-        arguments: [ '@service_container' ]
+        arguments: ['@service_container']
 
     chamilo_api.graphql.resolver.session:
         class: Chamilo\ApiBundle\GraphQL\Resolver\SessionResolver
-        arguments: [ '@service_container' ]
+        arguments: ['@service_container']
 
     Chamilo\ApiBundle\GraphQL\Map\:
         resource: "../../src/ApiBundle/GraphQL/Map/*"

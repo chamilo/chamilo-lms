@@ -187,24 +187,6 @@ class CourseResolver implements ContainerAwareInterface
     }
 
     /**
-     * @param CAnnouncement $a
-     * @param CItemProperty $ip
-     *
-     * @return \stdClass
-     */
-    private static function getAnnouncementObject(CAnnouncement $a, CItemProperty $ip)
-    {
-        $announcement = new \stdClass();
-        $announcement->id = $a->getIid();
-        $announcement->title = $a->getTitle();
-        $announcement->content = $a->getContent();
-        $announcement->author = $ip->getInsertUser();
-        $announcement->lastUpdateDate = $ip->getLasteditDate();
-
-        return $announcement;
-    }
-
-    /**
      * @param \ArrayObject $context
      *
      * @return array
@@ -559,5 +541,23 @@ class CourseResolver implements ContainerAwareInterface
         }
 
         return $lps;
+    }
+
+    /**
+     * @param CAnnouncement $a
+     * @param CItemProperty $ip
+     *
+     * @return \stdClass
+     */
+    private static function getAnnouncementObject(CAnnouncement $a, CItemProperty $ip)
+    {
+        $announcement = new \stdClass();
+        $announcement->id = $a->getIid();
+        $announcement->title = $a->getTitle();
+        $announcement->content = $a->getContent();
+        $announcement->author = $ip->getInsertUser();
+        $announcement->lastUpdateDate = $ip->getLasteditDate();
+
+        return $announcement;
     }
 }

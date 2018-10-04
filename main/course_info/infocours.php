@@ -22,28 +22,16 @@ $nameTools = get_lang('ModifInfo');
 api_protect_course_script(true);
 api_block_anonymous_users();
 $_course = api_get_course_info();
-
-/* Constants and variables */
-define('MODULE_HELP_NAME', 'Settings');
-define('COURSE_CHANGE_PROPERTIES', 'COURSE_CHANGE_PROPERTIES');
-
 $currentCourseRepository = $_course['path'];
-$is_allowedToEdit = api_is_course_admin() || api_is_platform_admin();
+$isAllowToEdit = api_is_course_admin() || api_is_platform_admin();
 $course_code = api_get_course_id();
 $courseId = api_get_course_int_id();
+$isEditable = true;
 
-function is_settings_editable()
-{
-    return isset($GLOBALS['course_info_is_editable']) && $GLOBALS['course_info_is_editable'];
-}
-
-/* MAIN CODE */
-if (!$is_allowedToEdit) {
+if (!$isAllowToEdit) {
     api_not_allowed(true);
 }
 
-//$htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
-//$htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 $show_delete_watermark_text_message = false;
 if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
     if (isset($_GET['delete_watermark'])) {
@@ -695,11 +683,11 @@ if ($exerciseInvisible === 'true' &&
     $form->addGroup($group, '', [get_lang('ExerciseInvisibleInSession')]);
 }
 
-if (is_settings_editable()) {
+if ($isEditable) {
     $form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
 } else {
     // Is it allowed to edit the course settings?
-    if (!is_settings_editable()) {
+    if (!$isEditable) {
         $disabled_output = "disabled";
     }
     $form->freeze();
@@ -753,11 +741,11 @@ if (api_get_configuration_value('allow_exercise_auto_launch')) {
     $group[] = $form->createElement('radio', 'enable_exercise_auto_launch', null, get_lang('Deactivate'), 0);
     $form->addGroup($group, '', [get_lang('ExerciseAutoLaunch')]);
 
-    if (is_settings_editable()) {
+    if ($isEditable) {
         $form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
     } else {
         // Is it allowed to edit the course settings?
-        if (!is_settings_editable()) {
+        if (!$isEditable) {
             $disabled_output = "disabled";
         }
         $form->freeze();
@@ -920,7 +908,7 @@ if (!isset($values['student_delete_own_publication'])) {
 $form->setDefaults($values);
 
 // Validate form
-if ($form->validate() && is_settings_editable()) {
+if ($form->validate() && $isEditable) {
     $updateValues = $form->getSubmitValues();
 
     // update course picture
@@ -1031,10 +1019,8 @@ if ($show_delete_watermark_text_message) {
     );
 }
 
-/*	Header */
-Display::display_header($nameTools, MODULE_HELP_NAME);
+Display::display_header($nameTools, 'Settings');
 
-// Display the form
 echo '<div id="course_settings">';
 $form->display();
 echo '</div>';

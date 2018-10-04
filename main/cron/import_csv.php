@@ -127,6 +127,8 @@ class ImportCsv
         $teacherBackup = [];
         $groupBackup = [];
 
+        $this->prepareImport();
+
         if (!empty($files)) {
             foreach ($files as $file) {
                 $fileInfo = pathinfo($file);
@@ -192,8 +194,6 @@ class ImportCsv
 
                 return 0;
             }
-
-            $this->prepareImport();
 
             $sections = [
                 'students',
@@ -450,6 +450,13 @@ class ImportCsv
             $this->extraFieldIdNameList['course'],
             1,
             'External course id',
+            ''
+        );
+
+        CourseManager::create_course_extra_field(
+            'disable_import_calendar',
+            13,
+            'Disable import calendar',
             ''
         );
 
@@ -1015,6 +1022,8 @@ class ImportCsv
             $eventsToCreate = [];
             $errorFound = false;
 
+            $courseExtraFieldValue = new ExtraFieldValue('course');
+
             foreach ($data as $row) {
                 $sessionId = null;
                 $externalSessionId = null;
@@ -1031,6 +1040,17 @@ class ImportCsv
                     $courseCode = $row['coursecode'];
                 }
                 $courseInfo = api_get_course_info($courseCode);
+
+                $item = $courseExtraFieldValue->get_values_by_handler_and_field_variable(
+                    $courseInfo['real_id'],
+                    'disable_import_calendar'
+                );
+
+                if (!empty($item) && isset($item['value']) && $item['value'] == 1) {
+                    $this->logger->addInfo(
+                        "Course '".$courseInfo['code']."' has 'disable_import_calendar' turn on. Skip"
+                    );
+                }
 
                 if (empty($courseInfo)) {
                     $this->logger->addInfo("Course '$courseCode' does not exists");

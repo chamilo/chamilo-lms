@@ -1282,12 +1282,12 @@ class SocialManager extends UserManager
             $course_url = '&amp;cidReq='.Security::remove_XSS($_GET['cidReq']);
         }
 
+        $hide = api_get_configuration_value('hide_complete_name_in_whoisonline');
         foreach ($user_list as $uid) {
             $user_info = api_get_user_info($uid, true);
             $lastname = $user_info['lastname'];
             $firstname = $user_info['firstname'];
             $completeName = $firstname.', '.$lastname;
-
             $user_rol = $user_info['status'] == 1 ? Display::return_icon('teacher.png', get_lang('Teacher'), null, ICON_SIZE_TINY) : Display::return_icon('user.png', get_lang('Student'), null, ICON_SIZE_TINY);
             $status_icon_chat = null;
             if (isset($user_info['user_is_online_in_chat']) && $user_info['user_is_online_in_chat'] == 1) {
@@ -1301,6 +1301,13 @@ class SocialManager extends UserManager
             if (api_get_setting('show_official_code_whoisonline') == 'true') {
                 $officialCode .= '<div class="items-user-official-code"><p style="min-height: 30px;" title="'.get_lang('OfficialCode').'">'.$user_info['official_code'].'</p></div>';
             }
+
+            if ($hide === true) {
+                $completeName = '';
+                $firstname = '';
+                $lastname = '';
+            }
+
             $img = '<img class="img-responsive img-circle" title="'.$completeName.'" alt="'.$completeName.'" src="'.$userPicture.'">';
 
             $url = null;

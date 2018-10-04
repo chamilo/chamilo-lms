@@ -294,7 +294,7 @@ if ($form->validate()) {
     $skillUser->setSkill($skill);
 
     if ($showLevels) {
-        $level = $skillLevelRepo->find(intval($values['acquired_level']));
+        $level = $skillLevelRepo->find($values['acquired_level']);
         $skillUser->setAcquiredLevel($level);
     }
 

@@ -12,7 +12,6 @@ use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Tool\BaseTool;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
 use Doctrine\Common\Persistence\ObjectManager;
-use Sonata\AdminBundle\Form\Type\ModelReferenceType;
 
 /**
  * Class ToolChain.

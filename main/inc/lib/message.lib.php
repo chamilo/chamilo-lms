@@ -699,7 +699,7 @@ class MessageManager
                     ).' <br />'.$message;
 
                     self::send_message_simple(
-                        $drhInfo['user_id'],
+                        $drhInfo['id'],
                         $subject,
                         $message,
                         $sender_id,

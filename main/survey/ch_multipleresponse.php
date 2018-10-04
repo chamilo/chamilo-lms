@@ -49,9 +49,9 @@ class ch_multipleresponse extends survey_question
         $answers = []
     ) {
         if ($questionData['display'] == 'vertical') {
-            $class = 'checkbox';
+            $class = 'checkbox ';
         } else {
-            $class = 'checkbox-inline';
+            $class = 'checkbox-inline ';
         }
 
         $name = 'question'.$questionData['question_id'];

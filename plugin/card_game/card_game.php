@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Define the CardGame class as an extension of Plugin to
  * install/uninstall the plugin.
@@ -10,6 +11,9 @@
  */
 class CardGame extends Plugin
 {
+    /**
+     * CardGame constructor.
+     */
     protected function __construct()
     {
         parent::__construct(

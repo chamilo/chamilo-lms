@@ -1,5 +1,8 @@
 <?php
 /* For license terms, see /license.txt */
+
+use ChamiloSession as Session;
+
 /**
  * This script answers to AJAX calls to store a new piece as revealed
  * in the plugin_card_game table.
@@ -10,8 +13,10 @@
  */
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
-if (isset($_SESSION['cardgame'])) {
-    if ($_SESSION['cardgame'] = 'havedeck') {
+$cardGameSession = Session::read('cardgame');
+
+if (!empty($cardGameSession)) {
+    if ($cardGameSession = 'havedeck') {
         $part = '1';
         if (isset($_GET['part'])) {
             $part = (int) $_GET['part'];
@@ -24,7 +29,7 @@ if (isset($_SESSION['cardgame'])) {
                         SET access_date = CURDATE() , parts = CONCAT(parts,'!!$part;!') 
                         WHERE user_id = $userId";
                 Database::query($sql);
-                $_SESSION['cardgame'] = 'done';
+                Session::write('cardgame', 'done');
 
                 $sql = "UPDATE plugin_card_game 
                         SET pan = pan + 1 , parts = '' 

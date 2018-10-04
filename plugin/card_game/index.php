@@ -1,5 +1,8 @@
 <?php
 /* For license terms, see /license.txt */
+
+use ChamiloSession as Session;
+
 /**
  * This is the main script of the Card Game plugin.
  * It is loaded on every page through the inclusion of the plugin in the
@@ -17,11 +20,8 @@ if (!api_is_anonymous()) {
 
     $version = '?v=041';
     $interface = 'localhost';
-
     $parsedUrl = parse_url($_SERVER['REQUEST_URI']);
-
     $parsedUrlpath = $parsedUrl['path'];
-
     $pluginPath = api_get_path(WEB_PLUGIN_PATH).'card_game/resources/';
 
     $fh = '<script type="text/javascript" src="'.$pluginPath.'js/cardgame.js'.$version.'" ></script>';
@@ -36,7 +36,8 @@ if (!api_is_anonymous()) {
     $user = api_get_user_info();
     $userId = (int) $user['id'];
 
-    if (!isset($_SESSION['cardgame'])) {
+    $cardGameSession = Session::read('cardgame');
+    if (!empty($cardGameSession)) {
         if (isset($userId)) {
             $sqlCount = "SELECT access_date FROM plugin_card_game WHERE user_id = $userId";
             $resultCount = Database::query($sqlCount)->rowCount();
@@ -46,7 +47,7 @@ if (!api_is_anonymous()) {
                 $sql = "INSERT INTO plugin_card_game (user_id, access_date, pan) 
                         VALUES ($userId, DATE_ADD(CURDATE(), INTERVAL -1 DAY), 1);";
                 $resultInsert = Database::query($sql);
-                $_SESSION['cardgame'] = 'havedeck';
+                Session::write('cardgame', 'havedeck');
             } else {
                 // @todo change date call
                 $sqlDate = "SELECT access_date 
@@ -56,15 +57,15 @@ if (!api_is_anonymous()) {
                 $resultDate = Database::query($sqlDate)->rowCount();
 
                 if ($resultDate == 0) {
-                    $_SESSION['cardgame'] = 'havedeck';
+                    Session::write('cardgame', 'havedeck');
                     $fh .= '<div id="havedeckcardgame" ></div>';
                 } else {
-                    $_SESSION['cardgame'] = 'done';
+                    Session::write('cardgame', 'done');
                 }
             }
         }
     } else {
-        if ($_SESSION['cardgame'] == 'havedeck') {
+        if ($cardGameSession == 'havedeck') {
             $fh .= '<div id="havedeckcardgame" ></div>';
         }
     }

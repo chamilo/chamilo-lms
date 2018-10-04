@@ -1,29 +1,36 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Define the CardGame class as an extension of Plugin to
- * install/uninstall the plugin
+ * install/uninstall the plugin.
+ *
  * @author Damien Renou
+ *
  * @package chamilo.plugin.card_game
  */
-
 class CardGame extends Plugin
 {
-	
-    protected function __construct(){
+    /**
+     * CardGame constructor.
+     */
+    protected function __construct()
+    {
         parent::__construct(
             '1.0',
             'Damien Renou'
         );
     }
-	
-    public static function create(){
+
+    public static function create()
+    {
         static $result = null;
+
         return $result ? $result : $result = new self();
     }
-	
+
     public function install()
-	{
+    {
         $sql = "CREATE TABLE IF NOT EXISTS plugin_card_game(
                 id INT NOT NULL AUTO_INCREMENT,
                 user_id INT NOT NULL,
@@ -34,7 +41,7 @@ class CardGame extends Plugin
         ";
         Database::query($sql);
     }
-	
+
     public function uninstall()
     {
         $sql = "DROP TABLE IF EXISTS plugin_card_game";

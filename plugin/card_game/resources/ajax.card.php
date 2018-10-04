@@ -16,7 +16,7 @@ require_once __DIR__.'/../../../main/inc/global.inc.php';
 $cardGameSession = Session::read('cardgame');
 
 if (!empty($cardGameSession)) {
-    if ($cardGameSession = 'havedeck') {
+    if ($cardGameSession == 'havedeck') {
         $part = '1';
         if (isset($_GET['part'])) {
             $part = (int) $_GET['part'];

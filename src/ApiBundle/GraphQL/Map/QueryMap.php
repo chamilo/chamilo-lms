@@ -284,7 +284,7 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
                 },
                 'parent' => function (CForumPost $post) {
                     $postRepo = $this->em->getRepository('ChamiloCourseBundle:CForumPost');
-                    $parent = $postRepo->find((int) $post->getPostParentId());
+                    $parent = $postRepo->find($post->getPostParentId());
 
                     return $parent;
                 },

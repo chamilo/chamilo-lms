@@ -14,7 +14,7 @@ $em = Database::getManager();
 $toolsRepo = $em->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool');
 
 /** @var ImsLtiTool $baseTool */
-$baseTool = isset($_REQUEST['type']) ? $toolsRepo->find(intval($_REQUEST['type'])) : null;
+$baseTool = isset($_REQUEST['type']) ? $toolsRepo->find($_REQUEST['type']) : null;
 
 /** @var Course $course */
 $course = $em->find('ChamiloCoreBundle:Course', api_get_course_int_id());

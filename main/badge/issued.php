@@ -184,7 +184,7 @@ if ($showLevels && $allowToEdit) {
 
     if ($formAcquiredLevel->validate() && $allowComment) {
         $values = $formAcquiredLevel->exportValues();
-        $level = $skillLevelRepo->find(intval($values['acquired_level']));
+        $level = $skillLevelRepo->find($values['acquired_level']);
         $skillIssue->setAcquiredLevel($level);
 
         $entityManager->persist($skillIssue);

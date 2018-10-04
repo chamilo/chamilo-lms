@@ -69,7 +69,7 @@ $action = isset($_GET['action']) ? $_GET['action'] : '';
 switch ($action) {
     case 'subscribe_user':
         $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : '';
-        SessionManager::subscribe_users_to_session(
+        SessionManager::subscribeUsersToSession(
             $sessionId,
             [$userToLoad],
             SESSION_VISIBLE_READ_ONLY,

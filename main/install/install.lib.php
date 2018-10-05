@@ -3602,26 +3602,36 @@ function fixPostGroupIds($connection)
         $courseId = $row['c_id'];
         $sessionId = $row['session_id'];
         $workId = $row['id'];
-        $itemInfo = api_get_item_property_info(
-            $courseId,
-            'work',
-            $workId,
-            $sessionId
-        );
-        $courseInfo = api_get_course_info_by_id($courseId);
+        $sessionCondition = " session_id = $sessionId";
+        if (empty($sessionId)) {
+            $sessionCondition = ' (session_id = 0 OR session_id IS NULL) ';
+        }
+        $sql = "SELECT * FROM c_item_property
+                WHERE
+                    c_id = $courseId AND
+                    tool = 'work' AND
+                    ref = $workId AND
+                    $sessionCondition ";
+        $itemInfo = $connection->fetchAssoc($sql);
         if (empty($itemInfo)) {
-            api_item_property_update(
-                $courseInfo,
-                'work',
-                $workId,
-                'visible',
-                1,
-                $groupId,
-                null,
-                null,
-                null,
-                $sessionId
-            );
+            $params = [
+                'c_id' => $courseId,
+                'to_group_id' => $groupId,
+                //'to_user_id' => null,
+                'insert_user_id' => 1,
+                'session_id' => $sessionId,
+                'tool' => 'work',
+                'insert_date' => api_get_utc_datetime(),
+                'lastedit_date' => api_get_utc_datetime(),
+                'ref' => $workId,
+                'lastedit_type' => 'visible',
+                'lastedit_user_id' => 1,
+                'visibility' => 1
+            ];
+            $connection->insert('c_item_property', $params);
+            $id = $connection->lastInsertId();
+            $sql = "UPDATE c_item_property SET id = iid WHERE iid = $id";
+            $connection->executeQuery($sql);
         }
     }
     error_log('End - Fix work documents');

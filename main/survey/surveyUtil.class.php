@@ -865,7 +865,7 @@ class SurveyUtil
         $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
 
-        $surveyId = isset($_GET['survey_id']) ? intval($_GET['survey_id']) : 0;
+        $surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : 0;
         $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
 
         // Actions bar
@@ -916,7 +916,7 @@ class SurveyUtil
 
         $display_extra_user_fields = false;
         if (!(isset($_POST['submit_question_filter']) && $_POST['submit_question_filter'] ||
-                isset($_POST['export_report']) && $_POST['export_report']) ||
+            isset($_POST['export_report']) && $_POST['export_report']) ||
             !empty($_POST['fields_filter'])
         ) {
             // Show user fields section with a big th colspan that spans over all fields
@@ -940,14 +940,17 @@ class SurveyUtil
         }
 
         $course_id = api_get_course_int_id();
-        $sql = "SELECT q.question_id, q.type, q.survey_question, count(o.question_option_id) as number_of_options
+        $sql = "SELECT 
+                  q.question_id, 
+                  q.type, 
+                  q.survey_question, 
+                  count(o.question_option_id) as number_of_options
 				FROM $table_survey_question q 
 				LEFT JOIN $table_survey_question_option o
-				ON q.question_id = o.question_id
+				ON q.question_id = o.question_id AND q.c_id = o.c_id
 				WHERE 
 				    q.survey_id = '".$surveyId."' AND
-				    q.c_id = $course_id AND
-				    o.c_id = $course_id
+				    q.c_id = $course_id
 				GROUP BY q.question_id
 				ORDER BY q.sort ASC";
         $result = Database::query($sql);
@@ -962,13 +965,10 @@ class SurveyUtil
                 // We do not show comment and pagebreak question types
                 if ($row['type'] != 'comment' && $row['type'] != 'pagebreak') {
                     echo ' <th';
-                    // <hub> modified tst to include percentage
                     if ($row['number_of_options'] > 0 && $row['type'] != 'percentage') {
-                        // </hub>
                         echo ' colspan="'.$row['number_of_options'].'"';
                     }
                     echo '>';
-
                     echo '<label><input type="checkbox" name="questions_filter[]" value="'.$row['question_id']
                         .'" checked="checked"/> ';
                     echo $row['survey_question'];
@@ -985,7 +985,8 @@ class SurveyUtil
         echo '		<th>&nbsp;</th>'; // the user column
 
         if (!(isset($_POST['submit_question_filter']) && $_POST['submit_question_filter'] ||
-                isset($_POST['export_report']) && $_POST['export_report']) || !empty($_POST['fields_filter'])) {
+            isset($_POST['export_report']) && $_POST['export_report']) || !empty($_POST['fields_filter'])
+        ) {
             //show the fields names for user fields
             foreach ($extra_user_fields as &$field) {
                 echo '<th>'.$field[3].'</th>';
@@ -994,17 +995,21 @@ class SurveyUtil
 
         // cells with option (none for open question)
         $sql = "SELECT 	
-                    sq.question_id, sq.survey_id,
-                    sq.survey_question, sq.display,
-                    sq.sort, sq.type, sqo.question_option_id,
-                    sqo.option_text, sqo.sort as option_sort
+                    sq.question_id, 
+                    sq.survey_id,
+                    sq.survey_question, 
+                    sq.display,
+                    sq.sort, 
+                    sq.type, 
+                    sqo.question_option_id,
+                    sqo.option_text, 
+                    sqo.sort as option_sort
 				FROM $table_survey_question sq
 				LEFT JOIN $table_survey_question_option sqo
-				ON sq.question_id = sqo.question_id
+				ON sq.question_id = sqo.question_id AND sq.c_id = sqo.c_id
 				WHERE
 				    sq.survey_id = '".$surveyId."' AND
-                    sq.c_id = $course_id AND
-                    sqo.c_id = $course_id
+                    sq.c_id = $course_id
 				ORDER BY sq.sort ASC, sqo.sort ASC";
         $result = Database::query($sql);
 
@@ -1018,7 +1023,6 @@ class SurveyUtil
             if (!(isset($_POST['submit_question_filter']) && $_POST['submit_question_filter']) ||
                 (is_array($_POST['questions_filter']) && in_array($row['question_id'], $_POST['questions_filter']))
             ) {
-                // <hub> modif 05-05-2010
                 // we do not show comment and pagebreak question types
                 if ($row['type'] == 'open') {
                     echo '<th>&nbsp;-&nbsp;</th>';
@@ -1037,8 +1041,6 @@ class SurveyUtil
                     $possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
                     $display_percentage_header = 1;
                 }
-                //no column at all if the question was not a question
-                // </hub>
             }
         }
 
@@ -1141,7 +1143,7 @@ class SurveyUtil
         if ($display_extra_user_fields) {
             // Show user fields data, if any, for this user
             $user_fields_values = UserManager::get_extra_user_data(
-                intval($user),
+                $user,
                 false,
                 false,
                 false,
@@ -1151,8 +1153,8 @@ class SurveyUtil
                 echo '<td align="center">'.$value.'</td>';
             }
         }
+
         if (is_array($possible_options)) {
-            // <hub> modified to display open answers and percentage
             foreach ($possible_options as $question_id => &$possible_option) {
                 if ($questions[$question_id]['type'] == 'open') {
                     echo '<td align="center">';

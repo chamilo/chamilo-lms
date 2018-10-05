@@ -61,7 +61,7 @@ class BreadcrumbController extends Controller
         }
 
         return $this->render(
-            'ChamiloThemeBundle:Breadcrumb:breadcrumb.html.twig',
+            '@ChamiloTheme/Breadcrumb/breadcrumb.html.twig',
             [
                 'active' => $list,
                 'title' => $title,

@@ -26,7 +26,7 @@ class IndexController extends BaseController
     public function indexAction(Request $request): Response
     {
         return $this->render(
-            '@ChamiloCore/Index/index.html.twig',
+            '@ChamiloTheme/Index/index.html.twig',
             [
                 'content' => '',
             ]

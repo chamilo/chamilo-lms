@@ -245,7 +245,7 @@ class PageController extends BaseController
         }
 
         return $this->render(
-            '@ChamiloCore/Index/page_edit.html.twig',
+            '@ChamiloTheme/Index/page_edit.html.twig',
             [
                 'page' => $page,
                 'form' => $form->createView(),
@@ -301,7 +301,7 @@ class PageController extends BaseController
         }
 
         return $this->render(
-            '@ChamiloCore/Index/page.html.twig',
+            '@ChamiloTheme/Index/page.html.twig',
             [
                 'page' => $page,
                 'slug' => $slug,

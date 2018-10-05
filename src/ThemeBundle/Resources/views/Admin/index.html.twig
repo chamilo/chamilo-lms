@@ -38,7 +38,7 @@
                     {% set role = role | lower | replace ({ 'role_' : ''}) %}
 
                     {% if role in ['global_admin'] %}
-                        {% include "ChamiloCoreBundle:Admin:" ~ role ~ "/role_index.html.twig" %}
+                        {% include '@ChamiloTheme/Admin/' ~ role ~ '/role_index.html.twig' %}
                     {% endif %}
                 {% endfor %}
             </div>

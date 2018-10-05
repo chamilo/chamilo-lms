@@ -27,6 +27,9 @@ function clean_user_select() {
 var region_value = '{{ region_value }}';
 
 $(document).ready(function() {
+
+    console.log('{{ _p.web_main }}');
+    console.log('{{ _p.web_plugin }}');
     var cookieData = Cookies.getJSON('agenda_cookies');
     var defaultView = (cookieData && cookieData.view) || '{{ default_view }}';
     var defaultStartDate = (cookieData && cookieData.start) || moment.now();

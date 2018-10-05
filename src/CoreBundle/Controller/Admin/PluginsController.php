@@ -28,7 +28,7 @@ class PluginsController extends SyliusSettingsController
         $installedPlugins = $appPlugin->get_installed_plugins();
 
         return $this->render(
-            '@ChamiloCore/Admin/Settings/plugins.html.twig',
+            '@ChamiloTheme/Admin/Settings/plugins.html.twig',
             [
                 'plugins' => $installedPlugins,
             ]
@@ -64,7 +64,7 @@ class PluginsController extends SyliusSettingsController
         $schemas = $manager->getSchemas();
 
         return $this->render(
-            '@ChamiloCore/Admin/Settings/pluginsAdd.html.twig',
+            '@ChamiloTheme/Admin/Settings/pluginsAdd.html.twig',
             [
                 'plugins' => $allPluginsList,
                 'installed_plugins' => $installedPlugins,

@@ -35,7 +35,7 @@ class ResourceDownloadController extends BaseController
         //$helper = $this->container->get('oneup_uploader.templating.uploader_helper');
         //$endpoint = $helper->endpoint('courses');
         return $this->render(
-            '@ChamiloCore/Resource/upload.html.twig',
+            '@ChamiloTheme/Resource/upload.html.twig',
             [
                 'identifier' => $id,
                 'type' => $type,

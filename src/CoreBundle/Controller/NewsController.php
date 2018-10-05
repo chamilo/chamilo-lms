@@ -33,7 +33,7 @@ class NewsController extends BaseController
         }
 
         return $this->render(
-            '@ChamiloCore/News/index.html.twig',
+            '@ChamiloTheme/News/index.html.twig',
             [
                 'toolbar' => $toolBar,
             ]
@@ -55,7 +55,7 @@ class NewsController extends BaseController
             $content = \SystemAnnouncementManager::getAnnouncements($visibility);
 
             return $this->render(
-                '@ChamiloCore/News/slider.html.twig',
+                '@ChamiloTheme/News/slider.html.twig',
                 [
                     'announcements' => $content,
                 ]
@@ -64,7 +64,7 @@ class NewsController extends BaseController
             $content = \SystemAnnouncementManager::getAnnouncement($id, $visibility);
 
             return $this->render(
-                '@ChamiloCore/News/view.html.twig',
+                '@ChamiloTheme/News/view.html.twig',
                 [
                     'announcement' => $content,
                 ]

@@ -1,13 +1,17 @@
 {% extends "@ChamiloTheme/Layout/layout_one_col.html.twig" %}
-{% from '@ChamiloCore/Admin/Settings/actions.html.twig' import update %}
+{% from '@ChamiloTheme/Admin/Settings/actions.html.twig' import update %}
 {% set namespace = app.request.get('namespace') %}
 
 {% block content %}
     <div class="row">
         <div class="col-xs-3 col-md-3">
-        {% include '@ChamiloCore/Admin/Settings/menu.html.twig' %}
+        {% include '@ChamiloTheme/Admin/Settings/menu.html.twig' %}
         </div>
         <div class="col-xs-9 col-md-9">
+            <div class="page-header">
+                <h3>{{ keyword }}</h3>
+            </div>
+
             <form class="form-inline"
                   action="{{ path('chamilo_platform_settings_search', {'keyword': keyword}) }}"
                   method="post"
@@ -19,13 +23,15 @@
             {#</div>#}
             <hr />
             <div class="row">
+                {% for category, form in form_list %}
                 <div class="col-md-12">
+                    <h4>{{ category | trans }}</h4>
                     <div class="box box-primary">
                         <div class="box-body">
                             {{ form_errors(form) }}
                             <form
                                 class="form-horizontal"
-                                action="{{ path('chamilo_platform_settings', { 'namespace': namespace, 'keyword': keyword } ) }}"
+                                action="{{ path('chamilo_platform_settings', {'namespace': category, 'keyword': keyword} ) }}"
                                 method="post"
                                 novalidate
                             >
@@ -35,6 +41,7 @@
                         </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
         </div>
     </div>

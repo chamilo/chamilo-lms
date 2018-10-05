@@ -40,7 +40,7 @@ class EditorController extends Controller
         $templates = $editor->simpleFormatTemplates();
 
         return $this->render(
-            '@ChamiloCore/Editor/templates.html.twig',
+            '@ChamiloTheme/Editor/templates.html.twig',
             ['templates' => $templates]
         );
     }
@@ -54,7 +54,7 @@ class EditorController extends Controller
     {
         \Chat::setDisableChat();
 
-        return $this->render('@ChamiloCore/Editor/elfinder.html.twig');
+        return $this->render('@ChamiloTheme/Editor/elfinder.html.twig');
     }
 
     /**
@@ -103,7 +103,7 @@ class EditorController extends Controller
         $content = ob_get_contents();
 
         return $this->render(
-            '@ChamiloCore/layout_empty.html.twig',
+            '@ChamiloTheme/layout_empty.html.twig',
             ['content' => $content]
         );
     }

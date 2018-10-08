@@ -13,6 +13,7 @@ class WhispeakAuthPlugin extends Plugin
     const SETTING_ENABLE = 'enable';
     const SETTING_API_URL = 'api_url';
     const SETTING_TOKEN = 'token';
+    const SETTING_INSTRUCTION = 'instruction';
 
     const EXTRAFIELD_AUTH_UID = 'whispeak_auth_uid';
 
@@ -28,8 +29,7 @@ class WhispeakAuthPlugin extends Plugin
                 self::SETTING_ENABLE => 'boolean',
                 self::SETTING_API_URL => 'text',
                 self::SETTING_TOKEN => 'text',
-                '<p>Add <code>$_configuration[\'whispeak_auth_enabled\'] = true;</code> '.
-                    'in <code>configuration.php</code> file</p>' => 'html',
+                self::SETTING_INSTRUCTION => 'html',
             ]
         );
     }

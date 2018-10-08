@@ -12,6 +12,12 @@ $strings['instruction'] = '<p>Add <code>$_configuration[\'whispeak_auth_enabled\
     'in the <code>configuration.php</code> file</p>';
 
 $strings['EnrollmentSampleText'] = 'The famous Mona Lisa painting was painted by Leonardo Da Vinci.';
+$strings['AuthentifySampleText1'] = 'Dropping Like Flies.';
+$strings['AuthentifySampleText2'] = 'Keep Your Eyes Peeled.';
+$strings['AuthentifySampleText3'] = 'The fox screams at midnight.';
+$strings['AuthentifySampleText4'] = 'Go Out On a Limb.';
+$strings['AuthentifySampleText5'] = 'Under the Water.';
+$strings['AuthentifySampleText6'] = 'Barking Up The Wrong Tree.';
 
 $strings['RepeatThisPhrase'] = 'Repeat this phrase three times after allowing audio recording:';
 

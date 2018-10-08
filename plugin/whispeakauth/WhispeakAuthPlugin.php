@@ -249,8 +249,19 @@ class WhispeakAuthPlugin extends Plugin
         );
     }
 
+    /**
+     * @return string
+     */
     public function getAuthentifySampleText()
     {
-        return 'Hola hola hola';
+        $phrases = [];
+
+        for ($i = 1; $i <= 6; $i++) {
+            $phrases[] = $this->get_lang("AuthentifySampleText$i");
+        }
+
+        $rand = array_rand($phrases, 1);
+
+        return $phrases[$rand];
     }
 }

@@ -12,5 +12,4 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class ChamiloApiBundle extends Bundle
 {
-
 }

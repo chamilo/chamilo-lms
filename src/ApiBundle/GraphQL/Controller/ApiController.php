@@ -15,6 +15,7 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
  * Class ApiController.
  *
  * @package Chamilo\ApiBundle\GraphQL\Controller
+ *
  */
 class ApiController extends Controller
 {

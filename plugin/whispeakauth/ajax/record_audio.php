@@ -89,7 +89,7 @@ if ($isAuthentify) {
     $result = $plugin->requestAuthentify($user, $newFullPath);
 
     if (empty($result)) {
-        echo Display::return_message($plugin->get_lang('AuthentifyFailed'));
+        echo Display::return_message($plugin->get_lang('AuthentifyFailed'), 'error');
 
         exit;
     }
@@ -97,7 +97,7 @@ if ($isAuthentify) {
     $success = (bool) $result['audio'][0]['result'];
 
     if (!$success) {
-        echo Display::return_message($plugin->get_lang('TryAgain'));
+        echo Display::return_message($plugin->get_lang('TryAgain'), 'warning');
 
         exit;
     }

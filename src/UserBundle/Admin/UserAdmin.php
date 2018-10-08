@@ -5,7 +5,10 @@ namespace Chamilo\UserBundle\Admin;
 
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\UserBundle\Admin\Model\UserAdmin as BaseUserAdmin;
+use Sonata\UserBundle\Form\Type\SecurityRolesType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 /**
  * Class UserAdmin.
@@ -66,8 +69,8 @@ class UserAdmin extends BaseUserAdmin
                 )*/
             ->add('firstname', null, ['required' => false])
             ->add('lastname', null, ['required' => false])
-            ->add('website', 'url', ['required' => false])
-            ->add('biography', 'text', ['required' => false])
+//            ->add('website', 'url', ['required' => false])
+            ->add('biography', TextType::class, ['required' => false])
             /*->add(
                 'gender',
                 'sonata_user_gender',
@@ -102,7 +105,7 @@ class UserAdmin extends BaseUserAdmin
                 ->with('Groups')
                 ->add(
                     'groups',
-                    'sonata_type_model',
+                    ModelType::class,
                     [
                         'required' => false,
                         'expanded' => true,
@@ -113,7 +116,7 @@ class UserAdmin extends BaseUserAdmin
                 ->with('Roles')
                 ->add(
                     'realRoles',
-                    'sonata_security_roles',
+                    SecurityRolesType::class,
                     [
                         'label' => 'form.label_roles',
                         'expanded' => true,

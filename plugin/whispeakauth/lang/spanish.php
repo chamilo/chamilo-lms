@@ -15,6 +15,7 @@ $strings['EnrollmentSampleText'] = 'El famoso cuadro de Mona Lisa fue pintado po
 
 $strings['RepeatThisPhrase'] = 'Repita esta frase tres veces después de permitir la grabación de audio:';
 
+$strings['SpeechAuthAlreadyEnrolled'] = 'Autenticación de voz registrada anteriormente.';
 $strings['SpeechAuthentication'] = 'Atenticación con voz';
 $strings['EnrollmentFailed'] = 'Inscripción fallida.';
 $strings['EnrollmentSuccess'] = 'Inscripción correcta.';

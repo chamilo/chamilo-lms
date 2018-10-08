@@ -264,4 +264,26 @@ class WhispeakAuthPlugin extends Plugin
 
         return $phrases[$rand];
     }
+
+    /**
+     * @return bool
+     */
+    public function toolIsEnabled()
+    {
+        return 'true' === $this->get(self::SETTING_ENABLE);
+    }
+
+    /**
+     * Access not allowed when tool is not enabled.
+     *
+     * @param bool $printHeaders Optional. Print headers.
+     */
+    public function protectTool($printHeaders = true)
+    {
+        if ($this->toolIsEnabled()) {
+            return;
+        }
+
+        api_not_allowed($printHeaders);
+    }
 }

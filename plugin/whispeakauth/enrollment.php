@@ -10,6 +10,8 @@ api_block_anonymous_users(true);
 $userId = api_get_user_id();
 $plugin = WhispeakAuthPlugin::create();
 
+$plugin->protectTool();
+
 $sampleText = $plugin->get_lang('EnrollmentSampleText');
 
 $htmlHeadXtra[] = api_get_js('rtc/RecordRTC.js');

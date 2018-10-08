@@ -31,6 +31,8 @@ if (!$isAllowed) {
 
 $plugin = WhispeakAuthPlugin::create();
 
+$plugin->protectTool(false);
+
 if ($isAuthentify) {
     $em = Database::getManager();
     /** @var User|null $user */

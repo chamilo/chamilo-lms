@@ -7,6 +7,8 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 
 $plugin = WhispeakAuthPlugin::create();
 
+$plugin->protectTool();
+
 $form = new FormValidator('enter_username', 'post', '#');
 $form->addText('username', get_lang('Username'));
 

@@ -16,8 +16,8 @@ require_once __DIR__.'/../inc/global.inc.php';
 $user_id = api_get_user_id();
 $show_full_profile = true;
 // social tab
-$this_section = SECTION_SOCIAL;
 Session::erase('this_section');
+$this_section = SECTION_SOCIAL;
 
 api_block_anonymous_users();
 

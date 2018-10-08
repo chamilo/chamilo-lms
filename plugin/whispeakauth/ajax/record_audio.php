@@ -78,9 +78,21 @@ if ($isEnrollment) {
         exit;
     }
 
+    $reliability = (int) $result['reliability'];
+
+    if ($reliability <= 0) {
+        echo Display::return_message($plugin->get_lang('EnrollmentSignature0'), 'error');
+
+        exit;
+    }
+
     $plugin->saveEnrollment($user, $result['uid']);
 
-    echo Display::return_message($plugin->get_lang('EnrollmentSuccess'), 'success');
+    $message = '<strong>'.$plugin->get_lang('EnrollmentSuccess').'</strong>';
+    $message .= PHP_EOL;
+    $message .= $plugin->get_lang("EnrollmentSignature$reliability");
+
+    echo Display::return_message($message, 'success', false);
 
     exit;
 }

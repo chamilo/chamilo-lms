@@ -20,7 +20,10 @@ $strings['AuthentifySampleText5'] = 'Under the Water.';
 $strings['AuthentifySampleText6'] = 'Barking Up The Wrong Tree.';
 
 $strings['RepeatThisPhrase'] = 'Repeat this phrase three times after allowing audio recording:';
-
+$strings['EnrollmentSignature0'] = 'Unsustainable signature requires a new enrollment.';
+$strings['EnrollmentSignature1'] = 'Passable signature, advice to make a new enrollment.';
+$strings['EnrollmentSignature2'] = 'Correct signature.';
+$strings['EnrollmentSignature3'] = 'Good signature.';
 $strings['SpeechAuthAlreadyEnrolled'] = 'Speech authentication already enrolled previously.';
 $strings['SpeechAuthentication'] = 'Speech authentication';
 $strings['EnrollmentFailed'] = 'Enrollment failed.';

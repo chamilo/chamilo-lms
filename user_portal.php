@@ -188,7 +188,7 @@ if (!$myCourseListAsCategory) {
 }
 
 // Check if a user is enrolled only in one course for going directly to the course after the login.
-if (api_get_setting('go_to_course_after_login') == 'true') {
+if (api_get_setting('go_to_course_after_login') === 'true') {
     $count_of_sessions = $courseAndSessions['session_count'];
     $count_of_courses_no_sessions = $courseAndSessions['course_count'];
     // User is subscribe in 1 session and 0 courses.

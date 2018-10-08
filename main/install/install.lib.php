@@ -3374,7 +3374,7 @@ function finishInstallationWithContainer(
         '',
         false, //$send_mail = false,
         true, //$isAdmin = false
-            '',
+        '',
         false,
         '',
         1

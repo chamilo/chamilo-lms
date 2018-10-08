@@ -170,6 +170,7 @@ class UserManager
      * @param int           $creatorId
      *
      * @return mixed new user id - if the new user creation succeeds, false otherwise
+     *
      * @desc The function tries to retrieve user id from the session.
      * If it exists, the current user id is the creator id. If a problem arises,
      * @assert ('Sam','Gamegie',5,'sam@example.com','jo','jo') > 1

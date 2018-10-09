@@ -28,7 +28,10 @@ window.RecordAudio = (function () {
             formData.append('audio_dir', rtcInfo.directory);
 
             $.ajax({
-                url: _p.web_ajax + 'record_audio_rtc.ajax.php?type='+rtcInfo.type+'&tool=' + (!!txtName.length ? 'document' : 'exercise'),
+                url: _p.web_ajax + 'record_audio_rtc.ajax.php?' + $.param({
+                    type: rtcInfo.type,
+                    tool: (!!txtName.length ? 'document' : 'exercise')
+                }),
                 data: formData,
                 processData: false,
                 contentType: false,

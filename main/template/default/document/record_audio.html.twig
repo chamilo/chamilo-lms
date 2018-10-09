@@ -65,13 +65,15 @@
                 btnStopId: '#btn-stop-record',
                 btnSaveId: '#btn-save-record',
                 plyrPreviewId: '#record-preview',
-                directory: '{{ directory }}'
+                directory: '{{ directory }}',
+                type: 'document',
             },
             {
                 blockId: '#record-audio-wami',
                 containerId: 'record-audio-wami-container',
                 directory: '{{ directory }}',
-                userId: {{ user_id }}
+                userId: {{ user_id }},
+                type: 'document'
             },
             null
         );

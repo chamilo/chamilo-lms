@@ -53,12 +53,14 @@ $(document).on('ready', function () {
         btnPlayId: '#btn-play-record-{{ question_id }}',
         btnStopId: '#btn-stop-record-{{ question_id }}',
         plyrPreviewId: '#record-preview-{{ question_id }}',
-        directory: '{{ directory }}'
+        directory: '{{ directory }}',
+        type: 'document'
     }, {
         blockId: '#record-audio-wami-{{ question_id }}',
         containerId: 'record-audio-wami-container-{{ question_id }}',
         directory: '{{ directory }}',
-        userId: {{ user_id }}
+        userId: {{ user_id }},
+        type: 'document'
     }, '{{ file_name }}');
 
     if (0 === $('#hide_description_{{ question_id }}_options').length) {

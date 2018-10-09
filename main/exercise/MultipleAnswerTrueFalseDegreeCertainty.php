@@ -1204,6 +1204,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $and = '';
         $questionId = (int) $questionId;
         $position = (int) $position;
+        $exeId = (int) $exeId;
 
         if ($questionId >= 0) {
             $and .= " AND question_id = $questionId";

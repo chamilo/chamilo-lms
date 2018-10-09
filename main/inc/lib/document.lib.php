@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
 
 /**
@@ -441,13 +442,14 @@ class DocumentManager
     /**
      * Fetches all document data for the given user/group.
      *
-     * @param array  $courseInfo
-     * @param string $path
-     * @param int    $toGroupId       iid
-     * @param int    $toUserId
-     * @param bool   $canSeeInvisible
-     * @param bool   $search
-     * @param int    $sessionId
+     * @param array     $courseInfo
+     * @param string    $path
+     * @param int       $toGroupId iid
+     * @param int       $toUserId
+     * @param bool      $canSeeInvisible
+     * @param bool      $search
+     * @param int       $sessionId
+     * @param User|null $currentUser
      *
      * @return array with all document data
      */
@@ -458,10 +460,12 @@ class DocumentManager
         $toUserId = null,
         $canSeeInvisible = false,
         $search = false,
-        $sessionId = 0
+        $sessionId = 0,
+        User $currentUser = null
     ) {
         $tblItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tblDocument = Database::get_course_table(TABLE_DOCUMENT);
+        $currentUser = $currentUser ?: api_get_current_user();
 
         $userGroupFilter = '';
         if (!is_null($toUserId)) {
@@ -585,7 +589,7 @@ class DocumentManager
                     $sql = "SELECT id FROM $tblTemplate
                             WHERE
                                 c_id = '".$courseInfo['real_id']."' AND
-                                user_id = '".api_get_user_id()."' AND
+                                user_id = '".$currentUser->getId()."' AND
                                 ref_doc = '".$row['id']."'";
                     $templateResult = Database::query($sql);
                     $row['is_template'] = (Database::num_rows($templateResult) > 0) ? 1 : 0;
@@ -604,7 +608,7 @@ class DocumentManager
                         $row['id'],
                         $courseInfo['code'],
                         $sessionId,
-                        api_get_user_id(),
+                        $currentUser->getId(),
                         $toGroupId
                     );
                     if ($isVisible) {

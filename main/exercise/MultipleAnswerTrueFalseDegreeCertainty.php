@@ -1098,10 +1098,14 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         }
 
         // get student answer option id
-        $studentAnswerOptionId = $splitAnswer[1];
+        $studentAnswerOptionId = isset($splitAnswer[1]) ? $splitAnswer[1] : null;
 
         // we got the correct answer option id, let's compare ti with the student answer
-        $percentage = self::getPercentagePosition($splitAnswer[2]);
+        $percentage = null;
+        if (isset($splitAnswer[2])) {
+            $percentage = self::getPercentagePosition($splitAnswer[2]);
+        }
+
         if ($studentAnswerOptionId == $correctAnswerOptionId) {
             // yeah, student got correct answer
             switch ($percentage) {

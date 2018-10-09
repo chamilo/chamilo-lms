@@ -427,6 +427,7 @@ $defaults['extra_mail_notify_invitation'] = 1;
 $defaults['extra_mail_notify_message'] = 1;
 $defaults['extra_mail_notify_group_message'] = 1;
 
+$form->applyFilter('__ALL__', 'Security::remove_XSS');
 $form->setDefaults($defaults);
 $content = null;
 

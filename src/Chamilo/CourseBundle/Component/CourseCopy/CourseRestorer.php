@@ -1808,7 +1808,7 @@ class CourseRestorer
                         $this->course->resources[RESOURCE_DOCUMENT][$quiz->sound]->is_restored()) {
                         $sql = "SELECT path FROM $table_doc
                                 WHERE
-                                    c_id = ".$this->destination_course_id."  AND
+                                    c_id = ".$this->destination_course_id." AND
                                     id = ".$resources[RESOURCE_DOCUMENT][$quiz->sound]->destination_id;
                         $doc = Database::query($sql);
                         $doc = Database::fetch_object($doc);
@@ -1858,7 +1858,6 @@ class CourseRestorer
                         'expired_time' => (int) $quiz->expired_time,
                         'start_time' => $quiz->start_time,
                         'end_time' => $quiz->end_time,
-                        'save_correct_answers' => 0,
                         'display_category_name' => 0,
                         'save_correct_answers' => isset($quiz->save_correct_answers) ? $quiz->save_correct_answers : 0,
                         'hide_question_title' => isset($quiz->hide_question_title) ? $quiz->hide_question_title : 0,
@@ -1866,7 +1865,7 @@ class CourseRestorer
 
                     $allow = api_get_configuration_value('allow_notification_setting_per_exercise');
                     if ($allow) {
-                        $params['notifications'] = $quiz->notifications;
+                        $params['notifications'] = isset($quiz->notifications) ? $quiz->notifications : '';
                     }
 
                     if ($respect_base_content) {

@@ -169,9 +169,7 @@ if ($intro_cmdEdit || $intro_cmdAdd) {
 if ($intro_dispForm) {
     $default['intro_content'] = $intro_content;
     $form->setDefaults($default);
-    $introduction_section .= '<div id="courseintro" style="width: 98%">';
     $introduction_section .= $form->returnForm();
-    $introduction_section .= '</div>';
 }
 
 $thematic_description_html = '';
@@ -288,55 +286,75 @@ if (!empty($thematic_advance_info)) {
     $introduction_section .= $thematicProgress;
     $introduction_section .= '</div>';
 }
-$editIconButton = '';
+$toolbar = [];
+
 if (api_is_allowed_to_edit() && empty($session_id)) {
-    $editIconButton = Display::url(
-        '<em class="fa fa-wrench"></em> ',
-        api_get_path(WEB_CODE_PATH).'course_info/tools.php?'.api_get_cidreq(),
-        ['class' => 'btn btn-default', 'title' => get_lang('CustomizeIcons')]
-    );
+    $tool = [
+        'name' => get_lang('CustomizeIcons'),
+        'url' => api_get_path(WEB_CODE_PATH).'course_info/tools.php?'.api_get_cidreq(),
+        'icon' => 'fas fa-cog'
+    ];
+    $toolbar[]= $tool;
 }
 
-$toolbar = '';
-$textIntro = '';
 if ($intro_dispCommand) {
     if (empty($intro_content)) {
         // Displays "Add intro" commands
-        $toolbar .= '<div class="toolbar-edit">';
-        $toolbar .= '<div class="btn-group pull-right" role="group">';
+
         if (!empty($courseId)) {
-            $textIntro = '<a class="btn btn-default" title="'.addslashes(get_lang('AddIntro')).'" href="'.api_get_self().'?'.api_get_cidreq().$blogParam.'&intro_cmdAdd=1">';
-            $textIntro .= '<em class="fa fa-file-text"></em> ';
-            $textIntro .= "</a>";
-            $toolbar .= $textIntro.$editIconButton;
+            $tool = [
+                'name' => addslashes(get_lang('AddIntro')),
+                'url' => api_get_self().'?'.api_get_cidreq().$blogParam.'&intro_cmdAdd=1',
+                'icon' => 'fas fa-pencil-alt',
+            ];
+            $toolbar[]= $tool;
         } else {
-            $toolbar .= '<a class="btn btn-default" href="'.api_get_self().'?intro_cmdAdd=1">'.get_lang('AddIntro').'</a>';
-            $toolbar .= $editIconButton;
+            $tool = [
+                'name' => get_lang('AddIntro'),
+                'url' => api_get_self().'?intro_cmdAdd=1',
+                'icon' => 'fas fa-pencil-alt'
+            ];
+            $toolbar[]= $tool;
         }
-        $toolbar .= '</div></div>';
+
     } else {
         // Displays "edit intro && delete intro" commands
-        $toolbar .= '<div class="toolbar-edit">';
-        $toolbar .= '<div class="btn-group pull-right" rol="group">';
+
         if (!empty($courseId)) {
-            $toolbar .=
-                '<a class="btn btn-default" href="'.api_get_self().'?'.api_get_cidreq().$blogParam.'&intro_cmdEdit=1" title="'.get_lang('Modify').'">
-                <em class="fa fa-pencil"></em></a>';
-            $toolbar .= $editIconButton;
-            $toolbar .= "<a class=\"btn btn-default\" href=\"".api_get_self()."?".api_get_cidreq().$blogParam."&intro_cmdDel=1\" onclick=\"javascript:
-                if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
-                "')) return false;\"><em class=\"fa fa-trash-o\"></em></a>";
+            $tool = [
+                'name' => get_lang('Modify'),
+                'url' => api_get_self().'?'.api_get_cidreq().$blogParam.'&intro_cmdEdit=1',
+                'icon' => 'fas fa-pencil-alt'
+            ];
+            $toolbar[]= $tool;
+
+            $tool = [
+                'name' => get_lang('ConfirmYourChoice'),
+                'url' => api_get_self()."?".api_get_cidreq().$blogParam."&intro_cmdDel=1",
+                'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
+                    "')) return false",
+                'icon' => 'fas fa-trash-alt'
+            ];
+            $toolbar[]= $tool;
+
         } else {
-            $toolbar .=
-                '<a class="btn btn-default" href="'.api_get_self().'?intro_cmdEdit=1" title="'.get_lang('Modify').'">
-                <em class="fa fa-pencil"></em>
-                </a>"';
-            $toolbar .= $editIconButton;
-            $toolbar .= "<a class=\"btn btn-default\" href=\"".api_get_self()."?".api_get_cidreq()."&intro_cmdDel=1\" onclick=\"javascript:
-                if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
-                "')) return false;\"><em class=\"fa fa-trash-o\"></em></a>";
+            $tool=[
+                'name' => get_lang('Modify'),
+                'url' => api_get_self().'?intro_cmdEdit=1',
+                'icon' => 'fas fa-pencil-alt'
+            ];
+            $toolbar[]= $tool;
+
+            $tool=[
+                'name' => get_lang('ConfirmYourChoice'),
+                'url' => api_get_self()."?".api_get_cidreq()."&intro_cmdDel=1",
+                'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_ilang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
+                    "')) return false",
+                'icon' => 'fas fa-trash-alt'
+            ];
+            $toolbar[]= $tool;
         }
-        $toolbar .= "</div></div>";
+
         // Fix for chrome XSS filter for videos in iframes - BT#7930
         $browser = api_get_navigator();
         if (strpos($introduction_section, '<iframe') !== false && $browser['name'] == 'Chrome') {
@@ -350,23 +368,26 @@ if ($moduleId != 'course_homepage') {
     $nameSection = get_lang('AddCustomToolsIntro');
 }
 
-$introduction_section .= '<div class="col-md-12">';
+$textContent = [];
 if ($intro_dispDefault) {
     if (!empty($intro_content)) {
-        $introduction_section .= '<div class="page-course">';
-        $introduction_section .= $intro_content;
-        $introduction_section .= '</div>';
+        $textContent = [
+            'name' => 'introduction-course',
+            'help' => $nameSection,
+            'text' => $intro_content
+        ];
     } else {
         if (api_is_allowed_to_edit()) {
-            $introduction_section .= '<div class="help-course">';
-            $introduction_section .= $nameSection.' '.$textIntro;
-            $introduction_section .= '</div>';
+            $textContent = [
+                'name' => 'introduction-section',
+                'help' => $nameSection,
+                'text' => $intro_content
+            ];
         }
     }
 }
 
-$introduction_section .= $toolbar;
-$introduction_section .= '</div>';
+//$introduction_section .= $toolbar;
 $introduction_section .= '</div>';
 
 $browser = api_get_navigator();
@@ -374,3 +395,9 @@ $browser = api_get_navigator();
 if (strpos($introduction_section, '<iframe') !== false && $browser['name'] == 'Chrome') {
     header("X-XSS-Protection: 0");
 }
+$data = null;
+$tpl = new Template(null);
+$tpl->assign('intro',$textContent);
+$tpl->assign('toolbar',$toolbar);
+$introduction_section .= $tpl->fetch($tpl->get_template('auth/introduction_section.html.twig'));
+

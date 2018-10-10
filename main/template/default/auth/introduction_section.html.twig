@@ -1,0 +1,25 @@
+{% autoescape false %}
+    <div class="card">
+        <div class="card-body p-3">
+            <section id="section-intro">
+                <div id="{{ intro.name }}" class="section-intro-content">
+                    {% if intro.text !='' %}
+                        {{ intro.text }}
+                    {% else %}
+                        {{ intro.help }}
+                    {% endif %}
+                </div>
+                <div class="section-intro-toolbar float-right">
+                    <div class="btn-group btn-group-sm" role="group" aria-label="">
+                        {% for item in toolbar %}
+                            <a href="{{ item.url }}" onclick="{{ (item.onclick!='')? item.onclick : '' }}"
+                               title="{{ item.name }}" class="btn btn-light">
+                                <i class="{{ item.icon }}"></i>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+{% endautoescape %}

@@ -283,10 +283,14 @@ switch ($action) {
     case 'send_legal':
         $isBoss = UserManager::userIsBossOfStudent(api_get_user_id(), $student_id);
         if ($isBoss || api_is_platform_admin()) {
+            $currentUserInfo = api_get_user_info();
             $subject = get_lang('SendLegalSubject');
+            $linkLegal = api_get_path(WEB_PATH)."courses/FORUMDAIDE/index.php";
             $content = sprintf(
                 get_lang('SendTermsDescriptionToUrlX'),
-                api_get_path(WEB_PATH)
+                $user_info['complete_name'],
+                "<a href=\"".$linkLegal."\">".$linkLegal."</a>",
+                $currentUserInfo['complete_name']
             );
             MessageManager::send_message_simple($student_id, $subject, $content);
             Display::addFlash(Display::return_message(get_lang('Sent')));

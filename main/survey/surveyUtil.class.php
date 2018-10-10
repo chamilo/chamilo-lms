@@ -518,7 +518,7 @@ class SurveyUtil
      */
     public static function display_question_report($survey_data)
     {
-        $singlePage = isset($_GET['single_page']) ? intval($_GET['single_page']) : 0;
+        $singlePage = isset($_GET['single_page']) ? (int) $_GET['single_page'] : 0;
         $course_id = api_get_course_int_id();
         // Database table definitions
         $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
@@ -526,10 +526,10 @@ class SurveyUtil
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
 
         // Determining the offset of the sql statement (the n-th question of the survey)
-        $offset = !isset($_GET['question']) ? 0 : intval($_GET['question']);
-        $currentQuestion = isset($_GET['question']) ? intval($_GET['question']) : 0;
+        $offset = !isset($_GET['question']) ? 0 : (int) $_GET['question'];
+        $currentQuestion = isset($_GET['question']) ? (int) $_GET['question'] : 0;
         $questions = [];
-        $surveyId = intval($_GET['survey_id']);
+        $surveyId = (int) $_GET['survey_id'];
         $action = Security::remove_XSS($_GET['action']);
 
         echo '<div class="actions">';
@@ -574,9 +574,9 @@ class SurveyUtil
             $sql = "SELECT * FROM $table_survey_question
 			        WHERE
 			            c_id = $course_id AND
-                        survey_id='".intval($_GET['survey_id'])."' AND
-                        type <>'pagebreak' AND 
-                        type <>'comment'
+                        survey_id='".$surveyId."' AND
+                        type <>'pagebreak'  
+                        
                     ORDER BY sort ASC
                     $limitStatement";
             $result = Database::query($sql);
@@ -588,6 +588,7 @@ class SurveyUtil
         foreach ($questions as $question) {
             $chartData = [];
             $options = [];
+            $questionId = (int) $question['question_id'];
             echo '<div class="title-question">';
             echo strip_tags(isset($question['survey_question']) ? $question['survey_question'] : null);
             echo '</div>';
@@ -595,13 +596,13 @@ class SurveyUtil
             if ($question['type'] == 'score') {
                 /** @todo This function should return the options as this is needed further in the code */
                 $options = self::display_question_report_score($survey_data, $question, $offset);
-            } elseif ($question['type'] == 'open') {
+            } elseif ($question['type'] == 'open' || $question['type'] == 'comment') {
                 /** @todo Also get the user who has answered this */
                 $sql = "SELECT * FROM $table_survey_answer
                         WHERE
                             c_id = $course_id AND
-                            survey_id='".intval($_GET['survey_id'])."' AND
-                            question_id = '".intval($question['question_id'])."'";
+                            survey_id='".$surveyId."' AND
+                            question_id = '".$questionId."'";
                 $result = Database::query($sql);
                 while ($row = Database::fetch_array($result, 'ASSOC')) {
                     echo $row['option_id'].'<hr noshade="noshade" size="1" />';
@@ -611,8 +612,8 @@ class SurveyUtil
                 $sql = "SELECT * FROM $table_survey_question_option
                         WHERE
                             c_id = $course_id AND
-                            survey_id='".intval($_GET['survey_id'])."'
-                            AND question_id = '".intval($question['question_id'])."'
+                            survey_id='".$surveyId."'
+                            AND question_id = '".$questionId."'
                         ORDER BY sort ASC";
                 $result = Database::query($sql);
                 while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -622,8 +623,8 @@ class SurveyUtil
                 $sql = "SELECT *, count(answer_id) as total FROM $table_survey_answer
                         WHERE
                             c_id = $course_id AND
-                            survey_id='".intval($_GET['survey_id'])."'
-                            AND question_id = '".intval($question['question_id'])."'
+                            survey_id='".$surveyId."'
+                            AND question_id = '".$questionId."'
                         GROUP BY option_id, value";
                 $result = Database::query($sql);
                 $number_of_answers = [];
@@ -714,6 +715,7 @@ class SurveyUtil
                 echo '</div>';
             }
         }
+
         if (isset($_GET['viewoption'])) {
             echo '<div class="answered-people">';
             echo '<h4>'.get_lang('PeopleWhoAnswered').': '
@@ -963,7 +965,7 @@ class SurveyUtil
                 (is_array($_POST['questions_filter']) && in_array($row['question_id'], $_POST['questions_filter']))
             ) {
                 // We do not show comment and pagebreak question types
-                if ($row['type'] != 'comment' && $row['type'] != 'pagebreak') {
+                if ($row['type'] != 'pagebreak') {
                     echo ' <th';
                     if ($row['number_of_options'] > 0 && $row['type'] != 'percentage') {
                         echo ' colspan="'.$row['number_of_options'].'"';
@@ -1024,7 +1026,7 @@ class SurveyUtil
                 (is_array($_POST['questions_filter']) && in_array($row['question_id'], $_POST['questions_filter']))
             ) {
                 // we do not show comment and pagebreak question types
-                if ($row['type'] == 'open') {
+                if ($row['type'] == 'open' || $row['type'] == 'comment') {
                     echo '<th>&nbsp;-&nbsp;</th>';
                     $possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
                     $display_percentage_header = 1;
@@ -1034,7 +1036,7 @@ class SurveyUtil
                     $display_percentage_header = 0;
                 } elseif ($row['type'] == 'percentage') {
                     $possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
-                } elseif ($row['type'] != 'comment' && $row['type'] != 'pagebreak' && $row['type'] != 'percentage') {
+                } elseif ($row['type'] != 'pagebreak' && $row['type'] != 'percentage') {
                     echo '<th>';
                     echo $row['option_text'];
                     echo '</th>';
@@ -1073,7 +1075,10 @@ class SurveyUtil
                 );
                 $answers_of_user = [];
             }
-            if (isset($questions[$row['question_id']]) && $questions[$row['question_id']]['type'] != 'open') {
+            if (isset($questions[$row['question_id']]) &&
+                $questions[$row['question_id']]['type'] != 'open' &&
+                $questions[$row['question_id']]['type'] != 'comment'
+            ) {
                 $answers_of_user[$row['question_id']][$row['option_id']] = $row;
             } else {
                 $answers_of_user[$row['question_id']][0] = $row;
@@ -1156,7 +1161,7 @@ class SurveyUtil
 
         if (is_array($possible_options)) {
             foreach ($possible_options as $question_id => &$possible_option) {
-                if ($questions[$question_id]['type'] == 'open') {
+                if ($questions[$question_id]['type'] == 'open' || $questions[$question_id]['type'] == 'comment') {
                     echo '<td align="center">';
                     echo $answers_of_user[$question_id]['0']['option_id'];
                     echo '</td>';
@@ -1204,6 +1209,12 @@ class SurveyUtil
         $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
 
+        $surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : 0;
+
+        if (empty($surveyId)) {
+            return false;
+        }
+
         // The first column
         $return = ';';
 
@@ -1219,7 +1230,6 @@ class SurveyUtil
 
         $num = count($extra_user_fields);
         $return .= str_repeat(';', $num);
-
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT
@@ -1229,9 +1239,9 @@ class SurveyUtil
                     count(options.question_option_id) as number_of_options
 				FROM $table_survey_question questions
                 LEFT JOIN $table_survey_question_option options
-				ON questions.question_id = options.question_id AND options.c_id = $course_id
+				ON questions.question_id = options.question_id AND options.c_id = questions.c_id
 				WHERE
-				    questions.survey_id = '".intval($_GET['survey_id'])."' AND
+				    questions.survey_id = '".$surveyId."' AND
                     questions.c_id = $course_id
 				GROUP BY questions.question_id
 				ORDER BY questions.sort ASC";
@@ -1246,8 +1256,8 @@ class SurveyUtil
                     in_array($row['question_id'], $_POST['questions_filter']))
             ) {
                 // We do not show comment and pagebreak question types
-                if ($row['type'] != 'comment' && $row['type'] != 'pagebreak') {
-                    if ($row['number_of_options'] == 0 && $row['type'] == 'open') {
+                if ($row['type'] != 'pagebreak') {
+                    if ($row['number_of_options'] == 0 && ($row['type'] == 'open' || $row['type'] == 'comment')) {
                         $return .= str_replace(
                             "\r\n",
                             '  ',
@@ -1267,11 +1277,10 @@ class SurveyUtil
                 }
             }
         }
-        $return .= "\n";
 
+        $return .= "\n";
         // Getting all the questions and options
         $return .= ';';
-
         // Show the fields names for user fields
         if (!empty($extra_user_fields)) {
             foreach ($extra_user_fields as &$field) {
@@ -1299,9 +1308,9 @@ class SurveyUtil
 				LEFT JOIN $table_survey_question_option survey_question_option
 				ON
 				    survey_question.question_id = survey_question_option.question_id AND
-				    survey_question_option.c_id = $course_id
+				    survey_question_option.c_id = survey_question.c_id
 				WHERE
-				    survey_question.survey_id = '".intval($_GET['survey_id'])."' AND
+				    survey_question.survey_id = '".$surveyId."' AND
 				    survey_question.c_id = $course_id
 				ORDER BY survey_question.sort ASC, survey_question_option.sort ASC";
         $result = Database::query($sql);
@@ -1317,7 +1326,7 @@ class SurveyUtil
             )
             ) {
                 // We do not show comment and pagebreak question types
-                if ($row['type'] != 'comment' && $row['type'] != 'pagebreak') {
+                if ($row['type'] != 'pagebreak') {
                     $row['option_text'] = str_replace(["\r", "\n"], ['', ''], $row['option_text']);
                     $return .= api_html_entity_decode(strip_tags($row['option_text']), ENT_QUOTES).';';
                     $possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
@@ -1331,7 +1340,7 @@ class SurveyUtil
         $old_user = '';
         $answers_of_user = [];
         $sql = "SELECT * FROM $table_survey_answer
-		        WHERE c_id = $course_id AND survey_id='".intval($_GET['survey_id'])."'";
+		        WHERE c_id = $course_id AND survey_id='".$surveyId."'";
         if ($user_id != 0) {
             $sql .= "AND user='".Database::escape_string($user_id)."' ";
         }
@@ -1350,7 +1359,9 @@ class SurveyUtil
                 );
                 $answers_of_user = [];
             }
-            if ($possible_answers_type[$row['question_id']] == 'open') {
+            if ($possible_answers_type[$row['question_id']] == 'open' ||
+                $possible_answers_type[$row['question_id']] == 'comment'
+            ) {
                 $temp_id = 'open'.$open_question_iterator;
                 $answers_of_user[$row['question_id']][$temp_id] = $row;
                 $open_question_iterator++;
@@ -1518,7 +1529,7 @@ class SurveyUtil
                     count(options.question_option_id) as number_of_options
 				FROM $table_survey_question questions
 				LEFT JOIN $table_survey_question_option options
-                ON questions.question_id = options.question_id AND options.c_id = $course_id
+                ON questions.question_id = options.question_id AND options.c_id = questions.c_id
 				WHERE
 				    questions.survey_id = $surveyId AND
 				    questions.c_id = $course_id
@@ -1534,8 +1545,8 @@ class SurveyUtil
                 in_array($row['question_id'], $_POST['questions_filter']))
             ) {
                 // We do not show comment and pagebreak question types
-                if ($row['type'] != 'comment' && $row['type'] != 'pagebreak') {
-                    if ($row['number_of_options'] == 0 && $row['type'] == 'open') {
+                if ($row['type'] != 'pagebreak') {
+                    if ($row['number_of_options'] == 0 && ($row['type'] == 'open' || $row['type'] == 'comment')) {
                         $worksheet->setCellValueByColumnAndRow(
                             $column,
                             $line,
@@ -1592,7 +1603,7 @@ class SurveyUtil
 				LEFT JOIN $table_survey_question_option survey_question_option
 				ON 
 				    survey_question.question_id = survey_question_option.question_id AND 
-				    survey_question_option.c_id = $course_id
+				    survey_question_option.c_id = survey_question.c_id
 				WHERE 
 				    survey_question.survey_id = $surveyId AND
 				    survey_question.c_id = $course_id
@@ -1609,7 +1620,7 @@ class SurveyUtil
                 in_array($row['question_id'], $_POST['questions_filter']))
             ) {
                 // We do not show comment and pagebreak question types
-                if ($row['type'] != 'comment' && $row['type'] != 'pagebreak') {
+                if ($row['type'] != 'pagebreak') {
                     $worksheet->setCellValueByColumnAndRow(
                         $column,
                         $line,
@@ -1656,7 +1667,7 @@ class SurveyUtil
                 $line++;
                 $column = 0;
             }
-            if ($possible_answers_type[$row['question_id']] == 'open') {
+            if ($possible_answers_type[$row['question_id']] == 'open' || $possible_answers_type[$row['question_id']] == 'comment') {
                 $temp_id = 'open'.$open_question_iterator;
                 $answers_of_user[$row['question_id']][$temp_id] = $row;
                 $open_question_iterator++;

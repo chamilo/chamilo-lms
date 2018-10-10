@@ -408,7 +408,8 @@ class CourseResolver implements ContainerAwareInterface
             null,
             false,
             false,
-            $session ? $session->getId() : 0
+            $session ? $session->getId() : 0,
+            $this->getCurrentUser()
         );
 
         if (empty($documents)) {

@@ -1,6 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\UserBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
@@ -21,47 +22,46 @@ if (!$tool) {
 
 /** @var ImsLtiPlugin $imsLtiPlugin */
 $imsLtiPlugin = ImsLtiPlugin::create();
-
+/** @var Session $session */
+$session = $em->find('ChamiloCoreBundle:Session', api_get_session_id());
 /** @var Course $course */
 $course = $em->find('ChamiloCoreBundle:Course', api_get_course_int_id());
 /** @var User $user */
 $user = $em->find('ChamiloUserBundle:User', api_get_user_id());
 
 $siteName = api_get_setting('siteName');
-$institution = api_get_setting('Institution');
-$toolUserId = "$siteName - $institution - {$user->getId()}";
-$toolUserId = api_replace_dangerous_char($toolUserId);
+$toolUserId = ImsLtiPlugin::generateToolUserId($user);
 
-$params = [
-    'lti_message_type' => 'basic-lti-launch-request',
-    'lti_version' => 'LTI-1p0',
+$params = [];
+$params['lti_message_type'] = 'basic-lti-launch-request';
+$params['lti_version'] = 'LTI-1p0';
+$params['resource_link_id'] = $tool->getId();
+$params['resource_link_title'] = $tool->getName();
+$params['resource_link_description'] = $tool->getDescription();
+$params['user_id'] = ImsLtiPlugin::generateToolUserId($user->getId());
+$params['user_image'] = UserManager::getUserPicture($user->getId());
+$params['roles'] = ImsLtiPlugin::getUserRoles($user);
+$params['lis_person_name_given'] = $user->getFirstname();
+$params['lis_person_name_family'] = $user->getLastname();
+$params['lis_person_name_full'] = $user->getCompleteName();
+$params['lis_person_contact_email_primary'] = $user->getEmail();
 
-    'resource_link_id' => $tool->getId(),
-    'resource_link_title' => $tool->getName(),
-    'resource_link_description' => $tool->getDescription(),
+if (api_is_allowed_to_edit(false, true)) {
+    $params['role_scope_mentor'] = ImsLtiPlugin::getRoleScopeMentor($course, $session);
+}
 
-    'user_id' => $toolUserId,
-    'roles' => api_is_teacher() ? 'Instructor' : 'Student',
-
-    'lis_person_name_given' => $user->getFirstname(),
-    'lis_person_name_family' => $user->getLastname(),
-    'lis_person_name_full' => UserManager::formatUserFullName($user),
-    'lis_person_contact_email_primary' => $user->getEmail(),
-
-    'context_id' => $course->getId(),
-    'context_label' => $course->getCode(),
-    'context_title' => $course->getTitle(),
-
-    'launch_presentation_locale' => api_get_language_isocode(),
-    'launch_presentation_document_target' => 'embed',
-
-    'tool_consumer_info_product_family_code' => 'Chamilo LMS',
-    'tool_consumer_info_version' => api_get_version(),
-    'tool_consumer_instance_guid' => api_get_setting('InstitutionUrl'),
-    'tool_consumer_instance_name' => $siteName,
-    'tool_consumer_instance_url' => api_get_path(WEB_PATH),
-    'tool_consumer_instance_contact_email' => api_get_setting('emailAdministrator'),
-];
+$params['context_id'] = $course->getId();
+$params['context_type'] = 'CourseSection';
+$params['context_label'] = $course->getCode();
+$params['context_title'] = $course->getTitle();
+$params['launch_presentation_locale'] = api_get_language_isocode();
+$params['launch_presentation_document_target'] = 'iframe';
+$params['tool_consumer_info_product_family_code'] = 'Chamilo LMS';
+$params['tool_consumer_info_version'] = api_get_version();
+$params['tool_consumer_instance_guid'] = str_replace(['https://', 'http://'], '', api_get_setting('InstitutionUrl'));
+$params['tool_consumer_instance_name'] = $siteName;
+$params['tool_consumer_instance_url'] = api_get_path(WEB_PATH);
+$params['tool_consumer_instance_contact_email'] = api_get_setting('emailAdministrator');
 
 $oauth = new OAuthSimple(
     $tool->getConsumerKey(),

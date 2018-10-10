@@ -1,8 +1,12 @@
 <?php
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\UserBundle\Entity\User;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\DBALException;
@@ -180,8 +184,8 @@ class ImsLtiPlugin extends Plugin
         $this->course_settings = [
             [
                 'name' => $this->get_lang('ImsLtiDescription').$button.'<hr>',
-                'type' => 'html'
-            ]
+                'type' => 'html',
+            ],
         ];
     }
 
@@ -237,5 +241,73 @@ class ImsLtiPlugin extends Plugin
     public function getEntityPath()
     {
         return api_get_path(SYS_PATH).'src/Chamilo/PluginBundle/Entity/'.$this->getCamelCaseName();
+    }
+
+    public static function isInstructor()
+    {
+        api_is_allowed_to_edit(false, true);
+    }
+
+    /**
+     * @param User         $user
+     *
+     * @return string
+     */
+    public static function getUserRoles(User $user)
+    {
+        if ($user->getStatus() === INVITEE) {
+            return 'Learner/GuestLearner';
+        }
+
+        if (!api_is_allowed_to_edit(false, true)) {
+            return 'Learner/Learner';
+        }
+
+        $roles = ['Instructor'];
+
+        if (api_is_platform_admin_by_id($user->getId())) {
+            $roles[] = 'Administrator/SystemAdministrator';
+        }
+
+        return implode(',', $roles);
+    }
+
+    /**
+     * @param int $userId
+     *
+     * @return string
+     */
+    public static function generateToolUserId($userId)
+    {
+        $siteName = api_get_setting('siteName');
+        $institution = api_get_setting('Institution');
+        $toolUserId = "$siteName - $institution - $userId";
+        $toolUserId = api_replace_dangerous_char($toolUserId);
+
+        return $toolUserId;
+    }
+
+    /**
+     * @param Course       $course
+     * @param Session|null $session
+     *
+     * @return string
+     */
+    public static function getRoleScopeMentor(Course $course, Session $session = null)
+    {
+        $scope = [];
+
+        if ($session) {
+            $students = $session->getUserCourseSubscriptionsByStatus($course, Session::STUDENT);
+        } else {
+            $students = $course->getStudents();
+        }
+
+        /** @var SessionRelCourseRelUser|CourseRelUser $subscription */
+        foreach ($students as $subscription) {
+            $scope[] = self::generateToolUserId($subscription->getUser()->getId());
+        }
+
+        return implode(',', $scope);
     }
 }

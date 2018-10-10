@@ -3348,7 +3348,7 @@ class CourseManager
         $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $sessionId = (int) $sessionId;
         $user_id = (int) $user_id;
-        $select = "SELECT DISTINCT *, c.id as real_id ";
+        $select = "SELECT DISTINCT c.*, c.id as real_id ";
 
         if ($getCount) {
             $select = "SELECT COUNT(DISTINCT c.id) as count";

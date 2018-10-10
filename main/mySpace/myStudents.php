@@ -348,9 +348,10 @@ $sessions_coached_by_user = Tracking::get_sessions_coached_by_user(api_get_user_
 // RRHH or session admin
 if (api_is_session_admin() || api_is_drh()) {
     $courses = CourseManager::get_courses_followed_by_drh(api_get_user_id());
-    $session_by_session_admin = SessionManager::get_sessions_followed_by_drh(
-        api_get_user_id()
-    );
+    if (!empty($courses)) {
+        $courses = array_column($courses, 'real_id');
+    }
+    $session_by_session_admin = SessionManager::get_sessions_followed_by_drh(api_get_user_id());
 
     if (!empty($session_by_session_admin)) {
         foreach ($session_by_session_admin as $session_coached_by_user) {

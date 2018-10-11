@@ -22,3 +22,4 @@ $strings['IsGlobal'] = 'Est global';
 $strings['EditExternalTool'] = 'Éditer outil externe';
 $strings['ToolDeleted'] = 'Outil supprimé';
 $strings['ToolAdded'] = 'Outil ajouté';
+$strings['PressToContinue'] = 'Appuyez sur pour continuer à l\'outil externe';

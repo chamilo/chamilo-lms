@@ -3626,7 +3626,7 @@ function fixPostGroupIds($connection)
                 'ref' => $workId,
                 'lastedit_type' => 'visible',
                 'lastedit_user_id' => 1,
-                'visibility' => 1
+                'visibility' => 1,
             ];
             $connection->insert('c_item_property', $params);
             $id = $connection->lastInsertId();

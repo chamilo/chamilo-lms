@@ -3309,12 +3309,12 @@ class Exercise
      *
      * @param int    $exeId
      * @param int    $questionId
-     * @param mixed  $choice                    the user-selected option
-     * @param string $from                      function is called from 'exercise_show' or 'exercise_result'
-     * @param array  $exerciseResultCoordinates the hotspot coordinates $hotspot[$question_id] = coordinates
-     * @param bool   $saved_results             save results in the DB or just show the reponse
-     * @param bool   $from_database             gets information from DB or from the current selection
-     * @param bool   $show_result               show results or not
+     * @param mixed  $choice                                    the user-selected option
+     * @param string $from                                      function is called from 'exercise_show' or 'exercise_result'
+     * @param array  $exerciseResultCoordinates                 the hotspot coordinates $hotspot[$question_id] = coordinates
+     * @param bool   $saved_results                             save results in the DB or just show the reponse
+     * @param bool   $from_database                             gets information from DB or from the current selection
+     * @param bool   $show_result                               show results or not
      * @param int    $propagate_neg
      * @param array  $hotspot_delineation_result
      * @param bool   $showTotalScoreAndUserChoicesInLastAttempt

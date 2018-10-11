@@ -1,18 +1,26 @@
 <div class="row">
     {% if tools|length %}
         <div class="col-sm-3">
-            <h2 class="page-header">{{ 'AvailableTools'|get_plugin_lang('ImsLtiPlugin') }}</h2>
+            <h2>{{ 'AvailableTools'|get_plugin_lang('ImsLtiPlugin') }}</h2>
             <ul class="nav nav-pills nav-stacked">
                 {% for tool in tools %}
                     <li class="{{ type == tool.id ? 'active' : '' }}">
-                        <a href="{{ _p.web_self }}?type={{ tool.id }}&{{ _p.web_cid_query }}">{{ tool.name }}</a>
+                        {% if tool.isActiveDeepLinking %}
+                            <a href="{{ _p.web_plugin }}ims_lti/start.php?id={{ tool.id }}&{{ _p.web_cid_query }}">{{ tool.name }}</a>
+                        {% else %}
+                            <a href="{{ _p.web_self }}?type={{ tool.id }}&{{ _p.web_cid_query }}">{{ tool.name }}</a>
+                        {% endif %}
                     </li>
                 {% endfor %}
             </ul>
         </div>
     {% endif %}
-    <div class="col-sm-9 {{ tools|length ? '' : 'col-sm-offset-3' }}">
-        <h2 class="page-header">{{ 'ToolSettings'|get_plugin_lang('ImsLtiPlugin') }}</h2>
+
+    <div class="{{ tools|length ? 'col-sm-9' : 'col-sm-12' }}">
+        {% if tools|length == 0 %}
+            <h2>{{ 'ToolSettings'|get_plugin_lang('ImsLtiPlugin') }}</h2>
+        {% endif %}
+
         {{ form }}
     </div>
 </div>

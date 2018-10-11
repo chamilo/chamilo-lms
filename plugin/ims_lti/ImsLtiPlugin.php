@@ -260,7 +260,7 @@ class ImsLtiPlugin extends Plugin
         }
 
         if (!api_is_allowed_to_edit(false, true)) {
-            return 'Learner/Learner';
+            return 'Learner';
         }
 
         $roles = ['Instructor'];

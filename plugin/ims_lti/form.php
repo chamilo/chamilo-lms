@@ -9,7 +9,8 @@ use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
 require_once __DIR__.'/../../main/inc/global.inc.php';
 require './OAuthSimple.php';
 
-api_protect_course_script();
+api_protect_course_script(false);
+api_block_anonymous_users(false);
 
 $em = Database::getManager();
 
@@ -33,11 +34,27 @@ $siteName = api_get_setting('siteName');
 $toolUserId = ImsLtiPlugin::generateToolUserId($user);
 
 $params = [];
-$params['lti_message_type'] = 'basic-lti-launch-request';
 $params['lti_version'] = 'LTI-1p0';
-$params['resource_link_id'] = $tool->getId();
-$params['resource_link_title'] = $tool->getName();
-$params['resource_link_description'] = $tool->getDescription();
+
+if ($tool->isActiveDeepLinking()) {
+    $params['lti_message_type'] = 'ContentItemSelectionRequest';
+    $params['content_item_return_url'] = api_get_path(WEB_PLUGIN_PATH).'ims_lti/item_return.php';
+    $params['accept_media_types'] = '*/*';
+    $params['accept_presentation_document_targets'] = 'iframe';
+    //$params['accept_unsigned'];
+    //$params['accept_multiple'];
+    //$params['accept_copy_advice'];
+    //$params['auto_create']';
+    $params['title'] = $tool->getName();
+    $params['text'] = $tool->getDescription();
+    $params['data'] = 'tool:'.$tool->getId();
+} else {
+    $params['lti_message_type'] = 'basic-lti-launch-request';
+    $params['resource_link_id'] = $tool->getId();
+    $params['resource_link_title'] = $tool->getName();
+    $params['resource_link_description'] = $tool->getDescription();
+}
+
 $params['user_id'] = ImsLtiPlugin::generateToolUserId($user->getId());
 $params['user_image'] = UserManager::getUserPicture($user->getId());
 $params['roles'] = ImsLtiPlugin::getUserRoles($user);

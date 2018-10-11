@@ -256,11 +256,11 @@ class ImsLtiPlugin extends Plugin
     public static function getUserRoles(User $user)
     {
         if ($user->getStatus() === INVITEE) {
-            return 'Learner/GuestLearner';
+            return 'Learner/GuestLearner,Learner';
         }
 
         if (!api_is_allowed_to_edit(false, true)) {
-            return 'Learner';
+            return 'Learner,Learner/Learner';
         }
 
         $roles = ['Instructor'];

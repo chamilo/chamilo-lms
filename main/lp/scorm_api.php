@@ -1434,7 +1434,16 @@ function reinit_updatable_vars_list() {
  * @param	string		This parameter can be a string specifying the next
  *						item (like 'next', 'previous', 'first' or 'last') or the id to the next item
  */
-function switch_item(current_item, next_item){
+function switch_item(current_item, next_item) {
+    if (olms.lms_initialized == 0) {
+        // Fix error when flash is not loaded and SCO is not started BT#14944
+        olms.G_LastError 		= G_NotInitialized;
+        olms.G_LastErrorMessage = G_NotInitializedMessage;
+        logit_scorm('Error '+ G_NotInitialized + G_NotInitializedMessage, 0);
+        window.location.reload(false);
+        return false;
+    }
+
     // backup these params
     var orig_current_item   = current_item;
     var orig_next_item      = next_item;

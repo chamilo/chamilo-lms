@@ -63,6 +63,20 @@ class ImsLtiTool
      * @ORM\Column(name="is_global", type="boolean")
      */
     private $isGlobal = false;
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="active_deep_linking", type="boolean", nullable=false, options={"default": false})
+     */
+    private $activeDeepLinking = false;
+
+    public function __construct()
+    {
+        $this->description = null;
+        $this->customParams = null;
+        $this->isGlobal = false;
+        $this->activeDeepLinking = false;
+    }
 
     /**
      * @return int
@@ -217,5 +231,25 @@ class ImsLtiTool
             'key' => 'custom_'.$pairs[0],
             'value' => $pairs[1]
         ];
+    }
+
+    /**
+     * Set activeDeepLinking.
+     *
+     * @param bool $activeDeepLinking
+     */
+    public function setActiveDeepLinking($activeDeepLinking)
+    {
+        $this->activeDeepLinking = $activeDeepLinking;
+    }
+
+    /**
+     * Get activeDeepLinking.
+     *
+     * @return bool
+     */
+    public function isActiveDeepLinking()
+    {
+        return $this->activeDeepLinking;
     }
 }

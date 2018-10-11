@@ -5,7 +5,11 @@
             <ul class="nav nav-pills nav-stacked">
                 {% for tool in tools %}
                     <li class="{{ type == tool.id ? 'active' : '' }}">
-                        <a href="{{ _p.web_self }}?type={{ tool.id }}&{{ _p.web_cid_query }}">{{ tool.name }}</a>
+                        {% if tool.isActiveDeepLinking %}
+                            <a href="{{ _p.web_plugin }}ims_lti/start.php?id={{ tool.id }}&{{ _p.web_cid_query }}">{{ tool.name }}</a>
+                        {% else %}
+                            <a href="{{ _p.web_self }}?type={{ tool.id }}&{{ _p.web_cid_query }}">{{ tool.name }}</a>
+                        {% endif %}
                     </li>
                 {% endfor %}
             </ul>

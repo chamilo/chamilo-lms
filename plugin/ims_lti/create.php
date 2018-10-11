@@ -17,8 +17,12 @@ $form->addText('name', get_lang('Name'));
 $form->addText('base_url', $plugin->get_lang('LaunchUrl'));
 $form->addText('consumer_key', $plugin->get_lang('ConsumerKey'));
 $form->addText('shared_secret', $plugin->get_lang('SharedSecret'));
-$form->addTextarea('description', get_lang('Description'), ['rows' => 10]);
-$form->addTextarea('custom_params', $plugin->get_lang('CustomParams'));
+$form->addButtonAdvancedSettings('lti_adv');
+$form->addHtml('<div id="lti_adv_options" style="display:none;">');
+$form->addTextarea('description', get_lang('Description'), ['rows' => 3]);
+$form->addTextarea('custom_params', [$plugin->get_lang('CustomParams'), $plugin->get_lang('CustomParamsHelp')]);
+$form->addCheckBox('deep_linking', $plugin->get_lang('SupportDeepLinking'), get_lang('Yes'));
+$form->addHtml('</div>');
 $form->addButtonCreate($plugin->get_lang('AddExternalTool'));
 
 if ($form->validate()) {
@@ -32,7 +36,10 @@ if ($form->validate()) {
         ->setConsumerKey($formValues['consumer_key'])
         ->setSharedSecret($formValues['shared_secret'])
         ->setCustomParams($formValues['custom_params'])
-        ->setIsGlobal(true);
+        ->setIsGlobal(true)
+        ->setActiveDeepLinking(
+            isset($formValues['deep_linking'])
+        );
 
     $em->persist($externalTool);
     $em->flush();

@@ -175,7 +175,7 @@ class ImsLtiPlugin extends Plugin
     private function setCourseSettings()
     {
         $button = Display::toolbarButton(
-            $this->get_lang('AddExternalTool'),
+            $this->get_lang('ConfigureExternalTool'),
             api_get_path(WEB_PLUGIN_PATH).'ims_lti/add.php?'.api_get_cidreq(),
             'cog',
             'primary'

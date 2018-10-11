@@ -85,7 +85,7 @@ switch ($action) {
         $currentUserInfo = api_get_user_info();
         $message = isset($_POST['message']) ? $_POST['message'] : '';
         $subject = get_lang('NotificationCertificateSubject');
-        if (!empty($originalMessage)) {
+        if (!empty($message)) {
             foreach ($certificate_list as $index => $value) {
                 $userInfo = api_get_user_info($value['user_id']);
                 if (empty($userInfo)) {

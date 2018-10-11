@@ -107,10 +107,13 @@ $result = $oauth->sign(array(
         echo '<input type="hidden" name="'.$key.'" value="'.$values.'" />';
     }
     ?>
-    <input type="submit" value="Press to continue to external tool"/>
+    <button type="submit">
+        <?php echo $imsLtiPlugin->get_lang('PressToContinue') ?>
+    </button>
 </form>
 
 <script language="javascript">
+    document.querySelector('form [type="submit"]').style.display = "none";
     document.ltiLaunchForm.submit();
 </script>
 </body>

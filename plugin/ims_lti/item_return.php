@@ -1,7 +1,6 @@
 <?php
 /* For license terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
 
@@ -18,11 +17,8 @@ $toolId = str_replace('tool:', '', $_POST['data']);
 
 $plugin = ImsLtiPlugin::create();
 $em = Database::getManager();
-$ltiToolRepo = $em->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool');
 /** @var Course $course */
 $course = $em->find('ChamiloCoreBundle:Course', api_get_course_int_id());
-/** @var Session|null $session */
-$session = $em->find('ChamiloCoreBundle:Session', api_get_session_id());
 /** @var ImsLtiTool|null $ltiTool */
 $ltiTool = $em->find('ChamiloPluginBundle:ImsLti\ImsLtiTool', $toolId);
 
@@ -34,45 +30,31 @@ $contentItems = json_decode($_POST['content_items'], true);
 $contentItems = $contentItems['@graph'];
 
 foreach ($contentItems as $contentItem) {
-    switch ($contentItem['@type']) {
-        case 'LtiLinkItem':
-            $url = empty($contentItem['url']) ? $ltiTool->getLaunchUrl() : $contentItem['url'];
+    if ('LtiLinkItem' === $contentItem['@type']) {
+        if ('application/vnd.ims.lti.v1.ltilink' === $contentItem['mediaType']) {
+            $plugin->saveItemAsLtiLink($contentItem, $ltiTool, $course);
 
-            /** @var ImsLtiTool $newLtiTool */
-            $newLtiTool = $ltiToolRepo->findOneBy(['launchUrl' => $url, 'isGlobal' => false]);
-
-            if (empty($newLtiTool)) {
-                $newLtiTool = new ImsLtiTool();
-                $newLtiTool
-                    ->setLaunchUrl($url)
-                    ->setConsumerKey(
-                        $ltiTool->getConsumerKey()
-                    )
-                    ->setSharedSecret(
-                        $ltiTool->getSharedSecret()
-                    );
-            }
-
-            $newLtiTool
-                ->setName(
-                    !empty($contentItem['title']) ? $contentItem['title'] : $ltiTool->getName()
-                )
-                ->setDescription(
-                    !empty($contentItem['text']) ? $contentItem['text'] : null
-                );
-
-            $em->persist($newLtiTool);
-            $em->flush();
-
-            $courseTool = $plugin->findCourseToolByLink($course, $newLtiTool);
-
-            if ($courseTool) {
-                $plugin->updateCourseTool($courseTool, $newLtiTool);
-            } else {
-                $plugin->addCourseTool($course, $newLtiTool);
-            }
-
-            echo Display::return_message($plugin->get_lang('ToolAdded'), 'success');
-            break;
+            Display::addFlash(
+                Display::return_message($plugin->get_lang('ToolAdded'), 'success')
+            );
+        }
     }
 }
+
+$currentUrl = api_get_path(WEB_PLUGIN_PATH).'ims_lti/start.php?id='.$ltiTool->getId();
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        window.parent.location.href = '<?php echo $currentUrl ?>';
+    </script>
+</body>
+</html>

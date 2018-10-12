@@ -342,4 +342,55 @@ class ImsLtiPlugin extends Plugin
 
         return implode(',', $scope);
     }
+
+    /**
+     * @param array      $contentItem
+     * @param ImsLtiTool $ltiTool
+     * @param Course     $course
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function saveItemAsLtiLink(array $contentItem, ImsLtiTool $ltiTool, Course $course)
+    {
+        $em = Database::getManager();
+        $ltiToolRepo = $em->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool');
+
+        $url = empty($contentItem['url']) ? $ltiTool->getLaunchUrl() : $contentItem['url'];
+
+        /** @var ImsLtiTool $newLtiTool */
+        $newLtiTool = $ltiToolRepo->findOneBy(['launchUrl' => $url, 'isGlobal' => false]);
+
+        if (empty($newLtiTool)) {
+            $newLtiTool = new ImsLtiTool();
+            $newLtiTool
+                ->setLaunchUrl($url)
+                ->setConsumerKey(
+                    $ltiTool->getConsumerKey()
+                )
+                ->setSharedSecret(
+                    $ltiTool->getSharedSecret()
+                );
+        }
+
+        $newLtiTool
+            ->setName(
+                !empty($contentItem['title']) ? $contentItem['title'] : $ltiTool->getName()
+            )
+            ->setDescription(
+                !empty($contentItem['text']) ? $contentItem['text'] : null
+            );
+
+        $em->persist($newLtiTool);
+        $em->flush();
+
+        $courseTool = $this->findCourseToolByLink($course, $newLtiTool);
+
+        if ($courseTool) {
+            $this->updateCourseTool($courseTool, $newLtiTool);
+
+            return;
+        }
+
+        $this->addCourseTool($course, $newLtiTool);
+    }
 }

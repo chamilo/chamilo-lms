@@ -18,6 +18,7 @@ $toolId = str_replace('tool:', '', $_POST['data']);
 
 $plugin = ImsLtiPlugin::create();
 $em = Database::getManager();
+$ltiToolRepo = $em->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool');
 /** @var Course $course */
 $course = $em->find('ChamiloCoreBundle:Course', api_get_course_int_id());
 /** @var Session|null $session */
@@ -33,28 +34,43 @@ $contentItems = json_decode($_POST['content_items'], true);
 $contentItems = $contentItems['@graph'];
 
 foreach ($contentItems as $contentItem) {
-    /** @var ImsLtiTool $newTool */
-    $newTool = clone $ltiTool;
-
     switch ($contentItem['@type']) {
         case 'LtiLinkItem':
-            $newTool
+            $url = empty($contentItem['url']) ? $ltiTool->getLaunchUrl() : $contentItem['url'];
+
+            /** @var ImsLtiTool $newLtiTool */
+            $newLtiTool = $ltiToolRepo->findOneBy(['launchUrl' => $url, 'isGlobal' => false]);
+
+            if (empty($newLtiTool)) {
+                $newLtiTool = new ImsLtiTool();
+                $newLtiTool
+                    ->setLaunchUrl($url)
+                    ->setConsumerKey(
+                        $ltiTool->getConsumerKey()
+                    )
+                    ->setSharedSecret(
+                        $ltiTool->getSharedSecret()
+                    );
+            }
+
+            $newLtiTool
                 ->setName(
                     !empty($contentItem['title']) ? $contentItem['title'] : $ltiTool->getName()
                 )
                 ->setDescription(
                     !empty($contentItem['text']) ? $contentItem['text'] : null
-                )
-                ->setLaunchUrl(
-                    !empty($contentItem['url']) ? $contentItem['url'] : $ltiTool->getLaunchUrl()
-                )
-                ->setIsGlobal(false)
-                ->setActiveDeepLinking(false);
+                );
 
-            $em->persist($newTool);
+            $em->persist($newLtiTool);
             $em->flush();
 
-            $plugin->addCourseTool($course, $newTool);
+            $courseTool = $plugin->findCourseToolByLink($course, $newLtiTool);
+
+            if ($courseTool) {
+                $plugin->updateCourseTool($courseTool, $newLtiTool);
+            } else {
+                $plugin->addCourseTool($course, $newLtiTool);
+            }
 
             echo Display::return_message($plugin->get_lang('ToolAdded'), 'success');
             break;

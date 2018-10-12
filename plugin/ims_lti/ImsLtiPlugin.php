@@ -190,35 +190,67 @@ class ImsLtiPlugin extends Plugin
     }
 
     /**
-     * Add the course tool
-     * @param Course $course
-     * @param ImsLtiTool $tool
+     * @param Course     $course
+     * @param ImsLtiTool $ltiTool
+     *
+     * @return CTool
+     */
+    public function findCourseToolByLink(Course $course, ImsLtiTool $ltiTool)
+    {
+        $em = Database::getManager();
+        $toolRepo = $em->getRepository('ChamiloCourseBundle:CTool');
+
+        /** @var CTool $cTool */
+        $cTool = $toolRepo->findOneBy(
+            [
+                'cId' => $course,
+                'link' => self::generateToolLink($ltiTool)
+            ]
+        );
+
+        return $cTool;
+    }
+
+    /**
+     * @param CTool      $courseTool
+     * @param ImsLtiTool $ltiTool
+     *
      * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function updateCourseTool(CTool $courseTool, ImsLtiTool $ltiTool)
+    {
+        $em = Database::getManager();
+
+        $courseTool->setName($ltiTool->getName());
+
+        $em->persist($courseTool);
+        $em->flush();
+    }
+
+    /**
+     * @param ImsLtiTool $tool
+     *
+     * @return string
+     */
+    private static function generateToolLink(ImsLtiTool $tool)
+    {
+        return  'ims_lti/start.php?id='.$tool->getId();
+    }
+
+    /**
+     * Add the course tool
+     *
+     * @param Course     $course
+     * @param ImsLtiTool $tool
      */
     public function addCourseTool(Course $course, ImsLtiTool $tool)
     {
-        $em = Database::getManager();
-        $cTool = new CTool();
-        $cTool
-            ->setCourse($course)
-            ->setName($tool->getName())
-            ->setLink($this->get_name().'/start.php?'.http_build_query(['id' => $tool->getId()]))
-            ->setImage($this->get_name().'.png')
-            ->setVisibility(1)
-            ->setAdmin(0)
-            ->setAddress('squaregray.gif')
-            ->setAddedTool('NO')
-            ->setTarget('_self')
-            ->setCategory('plugin')
-            ->setSessionId(0);
-
-        $em->persist($cTool);
-        $em->flush();
-
-        $cTool->setId($cTool->getIid());
-
-        $em->persist($cTool);
-        $em->flush();
+        $this->createLinkToCourseTool(
+            $tool->getName(),
+            $course->getId(),
+            null,
+            self::generateToolLink($tool)
+        );
     }
 
     /**

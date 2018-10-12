@@ -23,6 +23,7 @@ $strings['IsGlobal'] = 'Is global';
 $strings['EditExternalTool'] = 'Edit external tool';
 $strings['ToolDeleted'] = 'Tool deleted';
 $strings['ToolAdded'] = 'Tool added';
+$strings['ToolUpdated'] = 'Tool updated';
 $strings['PressToContinue'] = 'Press to continue to external tool';
 $strings['ConfigureExternalTool'] = 'Configure external tools';
 $strings['SupportDeepLinking'] = 'Support Deep-Linking';

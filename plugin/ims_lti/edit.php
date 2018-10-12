@@ -67,7 +67,7 @@ if ($form->validate()) {
     $em->flush();
 
     Display::addFlash(
-        Display::return_message($plugin->get_lang('ToolEdited'), 'success')
+        Display::return_message($plugin->get_lang('ToolUpdated'), 'success')
     );
 
     header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php');

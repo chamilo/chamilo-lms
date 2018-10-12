@@ -1340,14 +1340,13 @@ class Agenda
     }
 
     /**
-     * Clean events
+     * Clean events.
      *
      * @return bool
      */
     public function cleanEvents()
     {
         if (empty($this->events)) {
-
             return false;
         }
 

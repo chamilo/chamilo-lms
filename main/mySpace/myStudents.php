@@ -34,6 +34,10 @@ if (empty($student_id)) {
 // user info
 $user_info = api_get_user_info($student_id);
 
+if (empty($user_info)) {
+    api_not_allowed(true);
+}
+
 $allowToQualify = api_is_allowed_to_edit(null, true) ||
     api_is_course_tutor() ||
     api_is_session_admin() ||

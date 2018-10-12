@@ -1444,6 +1444,8 @@ function switch_item(current_item, next_item) {
         return false;
     }
 
+    olms.switch_finished = 0; //only changed back once LMSInitialize() happens
+
     // backup these params
     var orig_current_item   = current_item;
     var orig_next_item      = next_item;
@@ -1689,7 +1691,6 @@ function switch_item(current_item, next_item) {
             }
         }
     });
-    olms.switch_finished = 0; //only changed back once LMSInitialize() happens
 
     loadForumThread(olms.lms_lp_id, next_item);
     checkCurrentItemPosition(olms.lms_item_id);

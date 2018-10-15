@@ -57,18 +57,22 @@ if (false === $path) {
 }
 
 $originFullPath = api_get_path(SYS_UPLOAD_PATH).'whispeakauth'.$path['path_to_save'];
-$directory = dirname($originFullPath);
-$newFullPath = $directory.'/audio.wav';
+$fileType = mime_content_type($originFullPath);
 
-try {
-    $ffmpeg = FFMpeg::create();
+if ('wav' !== substr($fileType, -3)) {
+    $directory = dirname($originFullPath);
+    $newFullPath = $directory.'/audio.wav';
 
-    $audio = $ffmpeg->open($originFullPath);
-    $audio->save(new Wav(), $newFullPath);
-} catch (Exception $exception) {
-    echo Display::return_message($exception->getMessage(), 'error');
+    try {
+        $ffmpeg = FFMpeg::create();
 
-    exit;
+        $audio = $ffmpeg->open($originFullPath);
+        $audio->save(new Wav(), $newFullPath);
+    } catch (Exception $exception) {
+        echo Display::return_message($exception->getMessage(), 'error');
+
+        exit;
+    }
 }
 
 if ($isEnrollment) {

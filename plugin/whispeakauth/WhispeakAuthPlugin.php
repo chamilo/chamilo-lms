@@ -128,57 +128,6 @@ class WhispeakAuthPlugin extends Plugin
     }
 
     /**
-     * @return string
-     */
-    private function getApiUrl()
-    {
-        $url = $this->get(self::SETTING_API_URL);
-
-        return trim($url, " \t\n\r \v/");
-    }
-
-    /**
-     * @param string $endPoint
-     * @param array  $metadata
-     * @param User   $user
-     * @param string $filePath
-     *
-     * @return array
-     */
-    private function sendRequest($endPoint, array $metadata, User $user, $filePath)
-    {
-        $moderator = $user->getCreatorId() ?: $user->getId();
-        $apiUrl = $this->getApiUrl()."/$endPoint";
-        $headers = [
-            //"Content-Type: application/x-www-form-urlencoded",
-            "Authorization: Bearer ".$this->get(self::SETTING_TOKEN),
-        ];
-        $post = [
-            'metadata' => json_encode($metadata),
-            'moderator' => "moderator_$moderator",
-            'client' => base64_encode($user->getUserId()),
-            'voice' => new CURLFile($filePath),
-        ];
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $apiUrl);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $result = curl_exec($ch);
-        curl_close($ch);
-
-        $result = json_decode($result, true);
-
-        if (!empty($result['error'])) {
-            return null;
-        }
-
-        return json_decode($result, true);
-    }
-
-    /**
      * @param User   $user
      * @param string $filePath
      *
@@ -285,5 +234,56 @@ class WhispeakAuthPlugin extends Plugin
         }
 
         api_not_allowed($printHeaders);
+    }
+
+    /**
+     * @return string
+     */
+    private function getApiUrl()
+    {
+        $url = $this->get(self::SETTING_API_URL);
+
+        return trim($url, " \t\n\r \v/");
+    }
+
+    /**
+     * @param string $endPoint
+     * @param array  $metadata
+     * @param User   $user
+     * @param string $filePath
+     *
+     * @return array
+     */
+    private function sendRequest($endPoint, array $metadata, User $user, $filePath)
+    {
+        $moderator = $user->getCreatorId() ?: $user->getId();
+        $apiUrl = $this->getApiUrl()."/$endPoint";
+        $headers = [
+            //"Content-Type: application/x-www-form-urlencoded",
+            "Authorization: Bearer ".$this->get(self::SETTING_TOKEN),
+        ];
+        $post = [
+            'metadata' => json_encode($metadata),
+            'moderator' => "moderator_$moderator",
+            'client' => base64_encode($user->getUserId()),
+            'voice' => new CURLFile($filePath),
+        ];
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $apiUrl);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        curl_close($ch);
+
+        $result = json_decode($result, true);
+
+        if (!empty($result['error'])) {
+            return null;
+        }
+
+        return json_decode($result, true);
     }
 }

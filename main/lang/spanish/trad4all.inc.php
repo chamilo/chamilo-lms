@@ -8329,4 +8329,7 @@ $CareDetailView = "Vista detallada de vida estudiantil";
 $MoreDataAvailableInTheDatabaseButTrunkedForEfficiencyReasons = "Más datos disponibles en nuestra base de datos pero truncados por razones de eficiencia.";
 $SendAnnouncementCopyToMyself = "Enviarme una copia por e-mail.";
 $CourseHoursDuration = "Duración del curso (h)";
+$AnnouncementWillBeSentTo = "El anuncio será enviado a";
+$FrmReadOutTextIntro = "Necesita adjuntar un archivo de audio de acuerdo al texto, haciendo click en el ícono %s.";
+$CreateReadOutText = "Crear texto leído";
 ?>

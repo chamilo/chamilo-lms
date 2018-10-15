@@ -8305,4 +8305,6 @@ $MoreDataAvailableInTheDatabaseButTrunkedForEfficiencyReasons = "More data avail
 $SendAnnouncementCopyToMyself = "Send a copy by email to myself.";
 $CourseHoursDuration = "Course duration (h)";
 $AnnouncementWillBeSentTo = "Announcement will be sent to";
+$FrmReadOutTextIntro = "You need attach a audio file according to the text, clicking on the %s icon.";
+$CreateReadOutText = "Create read-out text";
 ?>

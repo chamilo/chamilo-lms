@@ -451,11 +451,11 @@ switch ($action) {
                             $description,
                             $prerequisites
                         );
-                    } elseif ($_POST['type'] == TOOL_HIGHLIGHTED_DOCUMENT) {
+                    } elseif ($_POST['type'] == TOOL_READOUT_TEXT) {
                         if (isset($_POST['path']) && $_GET['edit'] != 'true') {
                             $document_id = $_POST['path'];
                         } else {
-                            $document_id = $_SESSION['oLP']->createHighlightedDocument(
+                            $document_id = $_SESSION['oLP']->createReadOutText(
                                 $_course,
                                 $_POST['content_lp'],
                                 $_POST['title'],
@@ -466,7 +466,7 @@ switch ($action) {
                         $new_item_id = $_SESSION['oLP']->add_item(
                             $parent,
                             $previous,
-                            TOOL_HIGHLIGHTED_DOCUMENT,
+                            TOOL_READOUT_TEXT,
                             $document_id,
                             $post_title,
                             $description,

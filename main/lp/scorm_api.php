@@ -387,8 +387,7 @@ function Initialize() {
 function LMSGetValue(param) {
     olms.G_LastError = G_NoError;
     olms.G_LastErrorMessage = 'No error';
-    var result='';
-
+    var result = '';
     // the LMSInitialize is missing
     if (olms.lms_initialized == 0) {
          if (param == 'cmi.core.score.raw') {
@@ -539,7 +538,7 @@ function LMSGetValue(param) {
                         olms.G_LastError = G_NotImplementedError;
                         olms.G_LastErrorString = 'Not implemented yet';
                     }
-                }else if(req_type == 'status'){
+                } else if(req_type == 'status'){
                     result = 'not attempted';
                 }
            } else {
@@ -612,7 +611,9 @@ function LMSGetValue(param) {
         result = '';
         return result;
     }
-    logit_scorm("LMSGetValue\n\t('"+param+"') returned '"+result+"'",1);
+
+    logit_scorm("LMSGetValue ('"+param+"') returned '"+result+"'",1);
+
     return result;
 }
 
@@ -653,7 +654,7 @@ function LMSSetValue(param, val) {
     } else if ( param == "cmi.core.lesson_location" ) {
         olms.lesson_location = val;
         olms.updatable_vars_list['cmi.core.lesson_location']=true;
-        return_value='true';
+        return_value = 'true';
     } else if ( param == "cmi.core.lesson_status" ) {
         olms.lesson_status = val;
         olms.updatable_vars_list['cmi.core.lesson_status'] = true;
@@ -843,7 +844,7 @@ function LMSSetValue(param, val) {
         echo " var mycommit = LMSCommit('force');";
     }
     ?>
-    return(return_value);
+    return return_value;
 }
 
 /**
@@ -1530,7 +1531,9 @@ function switch_item(current_item, next_item) {
             1,
             olms.statusSignalReceived
         );
+
         reinit_updatable_vars_list();
+
         xajax_switch_item_toc(
             olms.lms_lp_id,
             olms.lms_user_id,

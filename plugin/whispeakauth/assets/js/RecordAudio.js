@@ -60,6 +60,7 @@ window.RecordAudio = (function () {
                 localStream = stream;
 
                 recordRTC = RecordRTC(stream, {
+                    recorderType: StereoAudioRecorder,
                     numberOfAudioChannels: 1,
                     type: 'audio'
                 });

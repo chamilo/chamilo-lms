@@ -9230,6 +9230,16 @@ class learnpath
             $formHeader = get_lang('EditTheCurrentDocument');
         }
 
+        if ('edit' === $action) {
+            $urlAudioIcon = Display::url(
+                Display::return_icon('audio.png', get_lang('CreateReadOutText'), [], ICON_SIZE_TINY),
+                api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&lp_id='.$this->lp_id.'&'
+                    .http_build_query(['view' => 'build', 'id' => $id, 'action' => 'add_audio'])
+            );
+        } else {
+            $urlAudioIcon = Display::return_icon('audio.png', get_lang('CreateReadOutText'), [], ICON_SIZE_TINY);
+        }
+
         $form = new FormValidator(
             'frm_add_reading',
             'POST',
@@ -9238,6 +9248,13 @@ class learnpath
             ['enctype' => 'multipart/form-data']
         );
         $form->addHeader($formHeader);
+        $form->addHtml(
+            Display::return_message(
+                sprintf(get_lang('FrmReadOutTextIntro'), $urlAudioIcon),
+                'normal',
+                false
+            )
+        );
         $defaults['title'] = !empty($item_title) ? Security::remove_XSS($item_title) : '';
         $defaults['description'] = $item_description;
 

@@ -303,7 +303,7 @@ function LMSInitialize() {
             dataType: 'script',
             async: false,
             success:function(data) {
-                jQuery("video:not(.skip), audio:not(.skip)").mediaelementplayer();
+                $('video:not(.skip), audio:not(.skip)').mediaelementplayer();
             }
         });
 

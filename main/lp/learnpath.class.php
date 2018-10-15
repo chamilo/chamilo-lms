@@ -2320,7 +2320,7 @@ class learnpath
                         }
                     }
                     break;
-                case 'highlighted_document':
+                case TOOL_READOUT_TEXT:;
                     $autostart_audio = 'false';
                     break;
                 default:
@@ -6258,7 +6258,7 @@ class learnpath
             $title_cut = cut($arrLP[$i]['title'], self::MAX_LP_ITEM_TITLE_LENGTH);
 
             // Link for the documents
-            if ($arrLP[$i]['item_type'] == 'document' || $arrLP[$i]['item_type'] == TOOL_HIGHLIGHTED_DOCUMENT) {
+            if ($arrLP[$i]['item_type'] == 'document' || $arrLP[$i]['item_type'] == TOOL_READOUT_TEXT) {
                 $url = $mainUrl.'&action=view_item&mode=preview_document&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id;
                 $title_cut = Display::url(
                     $title_cut,
@@ -6471,7 +6471,7 @@ class learnpath
                 switch ($arrLP[$i]['item_type']) {
                     case TOOL_DOCUMENT:
                     case TOOL_LP_FINAL_ITEM:
-                    case TOOL_HIGHLIGHTED_DOCUMENT:
+                    case TOOL_READOUT_TEXT:
                         $urlPreviewLink = $mainUrl.'&action=view_item&mode=preview_document&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id;
                         $previewIcon = Display::url(
                             $previewImage,
@@ -7342,7 +7342,7 @@ class learnpath
                         $return .= $this->getSavedFinalItem();
                         break;
                     case TOOL_DOCUMENT:
-                    case TOOL_HIGHLIGHTED_DOCUMENT:
+                    case TOOL_READOUT_TEXT:
                         $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
                         $sql_doc = "SELECT path FROM ".$tbl_doc."
                                     WHERE c_id = ".$course_id." AND iid = ".intval($row['path']);
@@ -7446,7 +7446,7 @@ class learnpath
                     $row_step
                 );
                 break;
-            case TOOL_HIGHLIGHTED_DOCUMENT:
+            case TOOL_READOUT_TEXT:
                 $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
                 $sql = "SELECT lp.*, doc.path as dir
                         FROM $tbl_lp_item as lp
@@ -7461,7 +7461,7 @@ class learnpath
                     $item_id,
                     $row['item_type']
                 );
-                $return .= $this->displayFrmHighlightedDocument(
+                $return .= $this->displayFrmReadOutText(
                     'edit',
                     $item_id,
                     $row_step
@@ -9133,7 +9133,7 @@ class learnpath
     }
 
     /**
-     * Returns the form to update or create a highlighted document.
+     * Returns the form to update or create a read-out text.
      *
      * @param string $action     "add" or "edit"
      * @param int    $id         ID of the lp_item (if already exists)
@@ -9144,7 +9144,7 @@ class learnpath
      *
      * @return string HTML form
      */
-    public function displayFrmHighlightedDocument($action = 'add', $id = 0, $extra_info = 'new')
+    public function displayFrmReadOutText($action = 'add', $id = 0, $extra_info = 'new')
     {
         $course_id = api_get_course_int_id();
         $_course = api_get_course_info();
@@ -9381,7 +9381,7 @@ class learnpath
             $item_type = isset($extra_info['item_type']) ? $extra_info['item_type'] : null;
             $edit = isset($_GET['edit']) ? $_GET['edit'] : null;
 
-            if ($extra_info == 'new' || $item_type == TOOL_HIGHLIGHTED_DOCUMENT || $edit == 'true') {
+            if ($extra_info == 'new' || $item_type == TOOL_READOUT_TEXT || $edit == 'true') {
                 if (!$no_display_edit_textarea) {
                     $content = '';
 
@@ -9406,6 +9406,9 @@ class learnpath
                     }
 
                     $form->addTextarea('content_lp', get_lang('Content'), ['rows' => 20]);
+                    $form
+                        ->defaultRenderer()
+                        ->setElementTemplate($form->getDefaultElementTemplate(), 'content_lp');
                     $form->addButtonSave($text, 'submit_button');
                     $defaults['content_lp'] = $content;
                 }
@@ -9423,7 +9426,7 @@ class learnpath
             $form->addElement('hidden', 'path', $extra_info['path']);
         }
 
-        $form->addElement('hidden', 'type', TOOL_HIGHLIGHTED_DOCUMENT);
+        $form->addElement('hidden', 'type', TOOL_READOUT_TEXT);
         $form->addElement('hidden', 'post_time', time());
         $form->setDefaults($defaults);
 
@@ -9441,7 +9444,7 @@ class learnpath
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
      */
-    public function createHighlightedDocument($courseInfo, $content = '', $title = '', $parentId = 0) {
+    public function createReadOutText($courseInfo, $content = '', $title = '', $parentId = 0) {
         $creatorId = api_get_user_id();
         $sessionId = api_get_session_id();
 
@@ -10493,7 +10496,7 @@ class learnpath
         $headers = [
             get_lang('Files'),
             get_lang('CreateTheDocument'),
-            get_lang('CreateHighlightedDocument'),
+            get_lang('CreateReadOutText'),
             get_lang('Upload'),
         ];
 
@@ -10565,10 +10568,10 @@ class learnpath
         $url = api_get_path(WEB_AJAX_PATH).'document.ajax.php?'.api_get_cidreq().'&a=upload_file&curdirpath=';
         $form->addMultipleUpload($url);
         $new = $this->display_document_form('add', 0);
-        $newHighlighted = $this->displayFrmHighlightedDocument('add');
+        $frmReadOutText = $this->displayFrmReadOutText('add');
         $tabs = Display::tabs(
             $headers,
-            [$documentTree, $new, $newHighlighted, $form->returnForm()],
+            [$documentTree, $new, $frmReadOutText, $form->returnForm()],
             'subtab'
         );
 
@@ -13365,8 +13368,8 @@ EOD;
 
                 return $main_dir_path.'forum/viewthread.php?post='.$id.'&thread='.$myrow['thread_id'].'&forum='
                     .$myrow['forum_id'].'&lp=true&'.$extraParams;
-            case TOOL_HIGHLIGHTED_DOCUMENT:
-                return api_get_path(WEB_CODE_PATH).'lp/highlighted_document.php?&id='.$id.'&lp_id='.$learningPathId.'&'
+            case TOOL_READOUT_TEXT:
+                return api_get_path(WEB_CODE_PATH).'lp/readout_text.php?&id='.$id.'&lp_id='.$learningPathId.'&'
                     .$extraParams;
             case TOOL_DOCUMENT:
                 $document = $em

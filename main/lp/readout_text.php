@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Print a highlighted document inside a session
+ * Print a read-out text inside a session
  *
  * @package chamilo.learnpath
  */
@@ -68,8 +68,8 @@ $htmlHeadXtra[] = '<script>
     var words = '.json_encode($words, JSON_OBJECT_AS_ARRAY).',
         wordsCount = '.count($words).'
 </script>';
-$htmlHeadXtra[] = api_get_js('highlighted_document/js/start.js');
-$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_JS_PATH).'highlighted_document/css/start.css');
+$htmlHeadXtra[] = api_get_js('readout_text/js/start.js');
+$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_JS_PATH).'readout_text/css/start.css');
 
 $template = new Template(strip_tags($document->getTitle()));
 $template->display_blank_template();

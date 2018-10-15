@@ -8299,4 +8299,37 @@ $FilterSessions = "Filtrar sesiones";
 $ScoreModel = "Modelo de evaluación";
 $SyncDatabaseWithSchema = "Sincronizar la base de datos con el esquema";
 $SkillRelCourses = "Asociaciones cursos-competencias";
+$UserRequestWaitingForAction = "Un(a) usuario/a está esperando su intervención para un pedido de datos personales";
+$TheUserXIsWaitingForAnActionGoHereX = "El usuario/a %s está esperando una intervención suya sobre un pedido de datos personales.\n\nPara gestionar los pedidos de datos personales, puede seguir este enlace: %s";
+$RequestType = "Tipo de solicitud";
+$DeleteAccount = "Eliminar cuenta";
+$RequestDate = "Fecha de solicitud";
+$RemoveTerms = "Anular acuerdo de condiciones de uso";
+$InformationRightToBeForgottenLinkX = "Puede encontrar más información sobre el derecho al olvido en la página siguiente: %s";
+$ExplanationDeleteLegal = "Por favor indíquenos porqué desea eliminar su acuerda a nuestras condiciones de uso, para asegurar que lo podamos hacer de la mejor manera posible.";
+$ExplanationDeleteAccount = "Por favor indíquenos porqué desea que eliminemos su cuenta, para asegurar que lo podamos hacer de la mejor manera.";
+$WhyYouWantToDeleteYourLegalAgreement = "Puede solicitar a bajo la eliminación de su acuerdo a nuestras condiciones de uso o la eliminación de su cuenta.<br />
+En el caso de la eliminación de su acuerdo, tendrá que volver a aceptar nuestras condiciones en su próxima conexión, pues no nos es posible proveerle una experiencia personalizada sin al mismo tiempo gestionar algunos de sus datos personales.<br />
+En el caso de la eliminación completa de su cuenta, ésta será eliminada junta con todas sus suscripciones a cursos y toda la información relacionada con su cuenta.<br />
+Por favor seleccione la opción correspondiente con mucho cuidado. En ambos casos, su solicitud será revisada por uno de nuestros administradores, con el fin de evitar cualquier malentendimiento y/o pérdida definitiva de sus datos.";
+$PersonalDataPrivacy = "Protección de datos personales";
+$RequestForAccountDeletion = "Pedido de eliminación de cuenta";
+$TheUserXAskedForAccountDeletionWithJustificationXGoHereX = "El usuario %s ha solicitado la eliminación de su cuenta, explicando que \"%s\". Puede gestionar esta solicitud aquí: %s";
+$TheUserXAskedLegalConsentWithdrawalWithJustificationXGoHereX = "El usuario %s ha solicitado la eliminación de su acuerdo con nuestras condiciones de uso, explicando que \"%s\". Puede gestionar esta solicitud aquí: %s";
+$RequestForLegalConsentWithdrawal = "Pedido de retractación de condiciones de uso";
+$Terms_and_conditionFields = "Champs de conditions d'utilisation";
+$ContentNotAccessibleRequestFromDataPrivacyOfficer = "Este contenido no le es accesible directamente por reglas de accesos definidas por curso. Si necesita acceder a esta información, por favor contacte con nuestro oficial de protección de datos, tal como definido en nuestros términos de protección de datos personales.";
+$LearningCalendar = "Calendario de aprendizaje";
+$ControlPointAdded = "Punto de control añadido";
+$NumberDaysAccumulatedInCalendar = "Número de días acumulados en el calendario";
+$DifferenceOfDaysAndCalendar = "Diferencia entre días y calendario";
+$SkillUserList = "Lista de competencias y usuarios";
+$CourseId = "ID de curso";
+$CareDetailView = "Vista detallada de vida estudiantil";
+$MoreDataAvailableInTheDatabaseButTrunkedForEfficiencyReasons = "Más datos disponibles en nuestra base de datos pero truncados por razones de eficiencia.";
+$SendAnnouncementCopyToMyself = "Enviarme una copia por e-mail.";
+$CourseHoursDuration = "Duración del curso (h)";
+$AnnouncementWillBeSentTo = "El anuncio será enviado a";
+$FrmReadOutTextIntro = "Necesita adjuntar un archivo de audio de acuerdo al texto, haciendo click en el ícono %s.";
+$CreateReadOutText = "Crear texto leído";
 ?>

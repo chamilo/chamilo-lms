@@ -31,11 +31,15 @@ if (!$tool) {
 
 $form = new FormValidator('ims_lti_edit_tool');
 $form->addText('name', get_lang('Name'));
-$form->addTextarea('description', get_lang('Description'), ['rows' => 10]);
 $form->addText('url', $plugin->get_lang('LaunchUrl'));
 $form->addText('consumer_key', $plugin->get_lang('ConsumerKey'));
 $form->addText('shared_secret', $plugin->get_lang('SharedSecret'));
-$form->addTextarea('custom_params', $plugin->get_lang('CustomParams'));
+$form->addButtonAdvancedSettings('lti_adv');
+$form->addHtml('<div id="lti_adv_options" style="display:none;">');
+$form->addTextarea('description', get_lang('Description'), ['rows' => 3]);
+$form->addTextarea('custom_params', [$plugin->get_lang('CustomParams'), $plugin->get_lang('CustomParamsHelp')]);
+$form->addCheckBox('deep_linking', $plugin->get_lang('SupportDeepLinking'), get_lang('Yes'));
+$form->addHtml('</div>');
 $form->addButtonSave(get_lang('Save'));
 $form->addHidden('id', $tool->getId());
 $form->setDefaults([
@@ -44,7 +48,8 @@ $form->setDefaults([
     'url' => $tool->getLaunchUrl(),
     'consumer_key' => $tool->getConsumerKey(),
     'shared_secret' => $tool->getSharedSecret(),
-    'custom_params' => $tool->getCustomParams()
+    'custom_params' => $tool->getCustomParams(),
+    'deep_linking' => $tool->isActiveDeepLinking(),
 ]);
 
 if ($form->validate()) {
@@ -62,7 +67,7 @@ if ($form->validate()) {
     $em->flush();
 
     Display::addFlash(
-        Display::return_message($plugin->get_lang('ToolEdited'), 'success')
+        Display::return_message($plugin->get_lang('ToolUpdated'), 'success')
     );
 
     header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php');

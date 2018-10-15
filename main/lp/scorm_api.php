@@ -863,7 +863,7 @@ function savedata(item_id) {
 
     // Status is NOT modified here see the lp_ajax_save_item.php file
     if (olms.lesson_status != '') {
-        olms.updatable_vars_list['cmi.core.lesson_status'] = true;
+        //olms.updatable_vars_list['cmi.core.lesson_status'] = true;
     }
 
     old_item_id = olms.info_lms_item[0];

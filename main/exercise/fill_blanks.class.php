@@ -991,10 +991,19 @@ class FillBlanks extends Question
         // lets rebuild the sentence with [correct answer][student answer][answer is correct]
         $result = '';
         for ($i = 0; $i < count($listWithStudentAnswer['common_words']) - 1; $i++) {
+            $answerValue = null;
+            if (isset($listWithStudentAnswer['student_answer'][$i])) {
+                $answerValue = $listWithStudentAnswer['student_answer'][$i];
+            }
+            $scoreValue = null;
+            if (isset($listWithStudentAnswer['student_score'][$i])) {
+                $scoreValue = $listWithStudentAnswer['student_score'][$i];
+            }
+
             $result .= $listWithStudentAnswer['common_words'][$i];
             $result .= $listWithStudentAnswer['words_with_bracket'][$i];
-            $result .= $separatorStart.$listWithStudentAnswer['student_answer'][$i].$separatorEnd;
-            $result .= $separatorStart.$listWithStudentAnswer['student_score'][$i].$separatorEnd;
+            $result .= $separatorStart.$answerValue.$separatorEnd;
+            $result .= $separatorStart.$scoreValue.$separatorEnd;
         }
         $result .= $listWithStudentAnswer['common_words'][$i];
         $result .= '::';

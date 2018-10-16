@@ -27,7 +27,7 @@
      inkscape:pageshadow="2"
      inkscape:zoom="3.9296875"
      inkscape:cx="64"
-     inkscape:cy="64"
+     inkscape:cy="88.126658"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -192,7 +192,7 @@
        id="g6370"
        transform="matrix(0.05223282,0,0,0.05223282,4.5362879,266.078)" />
     <g
-       id="g901"
+       id="g22792"
        inkscape:export-filename="/var/www/chamilo2/public/img/icons/64/tool_glossary.png"
        inkscape:export-xdpi="48"
        inkscape:export-ydpi="48">
@@ -215,12 +215,12 @@
         <path
            id="path6322"
            d="m 374.007,117.992 c 4.683,0 8.98,1.622 12.388,4.318 L 327.323,19.993 C 321.8,10.427 309.568,7.15 300.003,12.673 L 117.584,117.992 Z"
-           style="fill:#a0beff;fill-opacity:1"
+           style="fill:#ffb380;fill-opacity:1"
            inkscape:connector-curvature="0" />
         <path
            id="path6324"
            d="M 499.326,317.912 393.773,135.087 c 0.139,0.951 0.234,1.915 0.234,2.905 v 263.82 l 97.999,-56.579 c 9.566,-5.524 12.843,-17.756 7.32,-27.321 z"
-           style="fill:#a0beff;fill-opacity:1"
+           style="fill:#ffb380;fill-opacity:1"
            inkscape:connector-curvature="0" />
       </g>
       <path
@@ -248,7 +248,7 @@
            id="text6872" />
         <text
            xml:space="preserve"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.60777092px;line-height:1.25;font-family:Dyuthi;-inkscape-font-specification:'Dyuthi, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffdc61;fill-opacity:1;stroke:none;stroke-width:0.39019161;"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.60777092px;line-height:1.25;font-family:Dyuthi;-inkscape-font-specification:'Dyuthi, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffdc61;fill-opacity:1;stroke:none;stroke-width:0.39019161"
            x="15.561743"
            y="284.55435"
            id="text6835"><tspan
@@ -256,7 +256,7 @@
              id="tspan6833"
              x="15.561743"
              y="284.55435"
-             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.60777092px;font-family:Dyuthi;-inkscape-font-specification:'Dyuthi, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ffdc61;fill-opacity:1;stroke-width:0.39019161;">C</tspan></text>
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.60777092px;font-family:Dyuthi;-inkscape-font-specification:'Dyuthi, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ffdc61;fill-opacity:1;stroke-width:0.39019161">C</tspan></text>
       </g>
       <g
          transform="translate(0.67604656,-0.26706443)"

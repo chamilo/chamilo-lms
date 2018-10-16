@@ -25,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="3.9296875"
-     inkscape:cx="64"
-     inkscape:cy="64"
+     inkscape:zoom="2.8384075"
+     inkscape:cx="68.630198"
+     inkscape:cy="77.194208"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -372,7 +372,7 @@
        id="g9135"
        transform="matrix(0.05143118,0,0,0.05143118,3.8705708,266.00717)" />
     <g
-       id="g939"
+       id="g16313"
        inkscape:export-filename="/var/www/chamilo2/public/img/icons/64/tool_dropbox.png"
        inkscape:export-xdpi="48"
        inkscape:export-ydpi="48">
@@ -389,28 +389,28 @@
          id="g10516">
         <polygon
            id="polygon9671"
-           points="256,492.601 10.199,401.903 10.199,110.097 256,200.794 "
+           points="10.199,110.097 256,200.794 256,492.601 10.199,401.903 "
            style="fill:#ffdc61;fill-opacity:1"
            transform="matrix(0.04927802,0,0,0.04927802,4.4640316,267.61964)" />
         <polygon
            id="polygon9673"
-           points="256,492.601 501.801,401.903 501.801,110.097 256,200.794 "
+           points="501.801,110.097 256,200.794 256,492.601 501.801,401.903 "
            style="fill:#a0beff;fill-opacity:1"
            transform="matrix(0.04927802,0,0,0.04927802,4.4640316,267.61964)" />
         <polygon
            id="polygon9675"
-           points="501.801,110.097 256,200.794 10.199,110.097 256,19.4 "
+           points="10.199,110.097 256,19.4 501.801,110.097 256,200.794 "
            style="fill:#ffffff"
            transform="matrix(0.04927802,0,0,0.04927802,4.4640316,267.61964)" />
         <polygon
            id="polygon9679"
-           points="186.645,305.889 76.494,265.245 76.494,134.477 186.645,175.121 "
-           style="fill:#ffffff"
+           points="76.494,134.477 186.645,175.121 186.645,305.889 76.494,265.245 "
+           style="fill:#ffb380;fill-opacity:1"
            transform="matrix(0.04927802,0,0,0.04927802,4.4640316,267.61964)" />
         <polygon
            id="polygon9681"
-           points="296.797,134.477 186.645,175.121 76.494,134.477 186.645,93.833 "
-           style="fill:#d7f4ee"
+           points="76.494,134.477 186.645,93.833 296.797,134.477 186.645,175.121 "
+           style="fill:#ffb380;fill-opacity:1"
            transform="matrix(0.04927802,0,0,0.04927802,4.4640316,267.61964)" />
         <path
            id="path9693"

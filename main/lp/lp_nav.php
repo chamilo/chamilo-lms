@@ -53,11 +53,13 @@ if ($myLP) {
 
     if ($mediaplayer) {
         echo $mediaplayer;
-        echo "<script>
+        ?>
+        <script>
             $(function() {
                 jQuery('video:not(.skip), audio:not(.skip)').mediaelementplayer();
             });
-        </script>";
+        </script>
+        <?php
     }
 }
 session_write_close();

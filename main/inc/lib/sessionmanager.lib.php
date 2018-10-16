@@ -117,30 +117,30 @@ class SessionManager
      *
      * @author Carlos Vargas <carlos.vargas@beeznest.com>, from existing code
      *
-     * @param string $name
-     * @param string $startDate                    (YYYY-MM-DD hh:mm:ss)
-     * @param string $endDate                      (YYYY-MM-DD hh:mm:ss)
-     * @param string $displayStartDate             (YYYY-MM-DD hh:mm:ss)
-     * @param string $displayEndDate               (YYYY-MM-DD hh:mm:ss)
-     * @param string $coachStartDate               (YYYY-MM-DD hh:mm:ss)
-     * @param string $coachEndDate                 (YYYY-MM-DD hh:mm:ss)
-     * @param int    $sessionCategoryId            ID of the session category in which this session is registered
-     * @param mixed  $coachId                      If int, this is the session coach id,
-     *                                             if string, the coach ID will be looked for from the user table
-     * @param int    $visibility                   Visibility after end date (0 = read-only, 1 = invisible, 2 = accessible)
-     * @param bool   $fixSessionNameIfExists
-     * @param string $duration
-     * @param string $description                  Optional. The session description
-     * @param int    $showDescription              Optional. Whether show the session description
-     * @param array  $extraFields
-     * @param int    $sessionAdminId               Optional. If this sessions was created by a session admin, assign it to him
-     * @param bool   $sendSubscriptionNotification Optional.
-     *                                             Whether send a mail notification to users being subscribed
-     *
-     * @todo use an array to replace all this parameters or use the model.lib.php ...
+     * @param string   $name
+     * @param string   $startDate                    (YYYY-MM-DD hh:mm:ss)
+     * @param string   $endDate                      (YYYY-MM-DD hh:mm:ss)
+     * @param string   $displayStartDate             (YYYY-MM-DD hh:mm:ss)
+     * @param string   $displayEndDate               (YYYY-MM-DD hh:mm:ss)
+     * @param string   $coachStartDate               (YYYY-MM-DD hh:mm:ss)
+     * @param string   $coachEndDate                 (YYYY-MM-DD hh:mm:ss)
+     * @param mixed    $coachId                      If int, this is the session coach id,
+     *                                               if string, the coach ID will be looked for from the user table
+     * @param int      $sessionCategoryId            ID of the session category in which this session is registered
+     * @param int      $visibility                   Visibility after end date (0 = read-only, 1 = invisible, 2 = accessible)
+     * @param bool     $fixSessionNameIfExists
+     * @param string   $duration
+     * @param string   $description                  Optional. The session description
+     * @param int      $showDescription              Optional. Whether show the session description
+     * @param array    $extraFields
+     * @param int      $sessionAdminId               Optional. If this sessions was created by a session admin, assign it to him
+     * @param bool     $sendSubscriptionNotification Optional.
+     *                                               Whether send a mail notification to users being subscribed
+     * @param int|null $accessUrlId                  Optional.
      *
      * @return mixed Session ID on success, error message otherwise
-     * */
+     * @todo   use an array to replace all this parameters or use the model.lib.php ...
+     */
     public static function create_session(
         $name,
         $startDate,
@@ -158,23 +158,22 @@ class SessionManager
         $showDescription = 0,
         $extraFields = [],
         $sessionAdminId = 0,
-        $sendSubscriptionNotification = false
+        $sendSubscriptionNotification = false,
+        $accessUrlId = null
     ) {
         global $_configuration;
 
         // Check portal limits
-        $access_url_id = 1;
+        $accessUrlId = empty($accessUrlId) && api_get_multiple_access_url()
+            ? api_get_current_access_url_id()
+            : 1;
 
-        if (api_get_multiple_access_url()) {
-            $access_url_id = api_get_current_access_url_id();
-        }
-
-        if (is_array($_configuration[$access_url_id]) &&
-            isset($_configuration[$access_url_id]['hosting_limit_sessions']) &&
-            $_configuration[$access_url_id]['hosting_limit_sessions'] > 0
+        if (is_array($_configuration[$accessUrlId]) &&
+            isset($_configuration[$accessUrlId]['hosting_limit_sessions']) &&
+            $_configuration[$accessUrlId]['hosting_limit_sessions'] > 0
         ) {
             $num = self::count_sessions();
-            if ($num >= $_configuration[$access_url_id]['hosting_limit_sessions']) {
+            if ($num >= $_configuration[$accessUrlId]['hosting_limit_sessions']) {
                 api_warn_hosting_contact('hosting_limit_sessions');
 
                 return get_lang('PortalSessionsLimitReached');
@@ -307,8 +306,7 @@ class SessionManager
                      *
                      */
                     //Adding to the correct URL
-                    $access_url_id = api_get_current_access_url_id();
-                    UrlManager::add_session_to_url($session_id, $access_url_id);
+                    UrlManager::add_session_to_url($session_id, $accessUrlId);
 
                     // add event to system log
                     $user_id = api_get_user_id();

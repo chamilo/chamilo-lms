@@ -235,7 +235,7 @@ class SurveyUtil
         $questions_data = [];
 
         foreach ($my_temp_questions_data as $key => &$value) {
-            if ($value['type'] != 'comment' && $value['type'] != 'pagebreak') {
+            if ($value['type'] != 'pagebreak') {
                 $questions_data[$value['sort']] = $value;
             }
         }
@@ -519,18 +519,18 @@ class SurveyUtil
     public static function display_question_report($survey_data)
     {
         $singlePage = isset($_GET['single_page']) ? (int) $_GET['single_page'] : 0;
+        // Determining the offset of the sql statement (the n-th question of the survey)
+        $offset = !isset($_GET['question']) ? 0 : (int) $_GET['question'];
+        $currentQuestion = isset($_GET['question']) ? (int) $_GET['question'] : 0;
+        $surveyId = (int) $_GET['survey_id'];
+        $action = Security::remove_XSS($_GET['action']);
         $course_id = api_get_course_int_id();
+
         // Database table definitions
         $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
-
-        // Determining the offset of the sql statement (the n-th question of the survey)
-        $offset = !isset($_GET['question']) ? 0 : (int) $_GET['question'];
-        $currentQuestion = isset($_GET['question']) ? (int) $_GET['question'] : 0;
         $questions = [];
-        $surveyId = (int) $_GET['survey_id'];
-        $action = Security::remove_XSS($_GET['action']);
 
         echo '<div class="actions">';
         echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq().'">'.
@@ -575,8 +575,7 @@ class SurveyUtil
 			        WHERE
 			            c_id = $course_id AND
                         survey_id='".$surveyId."' AND
-                        type <>'pagebreak'  
-                        
+                        type <>'pagebreak'                        
                     ORDER BY sort ASC
                     $limitStatement";
             $result = Database::query($sql);
@@ -584,7 +583,6 @@ class SurveyUtil
                 $questions[$row['question_id']] = $row;
             }
         }
-
         foreach ($questions as $question) {
             $chartData = [];
             $options = [];

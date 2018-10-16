@@ -52,8 +52,7 @@ if ($myLP) {
     $mediaplayer = $myLP->get_mediaplayer($lpItemId, $autostart);
 
     if ($mediaplayer) {
-        echo $mediaplayer;
-        ?>
+        echo $mediaplayer; ?>
         <script>
             $(function() {
                 jQuery('video:not(.skip), audio:not(.skip)').mediaelementplayer();

@@ -167,10 +167,10 @@ services:
     sonata.admin.resource_type:
         class: Chamilo\CoreBundle\Admin\ResourceTypeAdmin
         tags:
-        - {name: sonata.admin, manager_type: orm, audit: true, group: "LMS", label: "Resource type"}
+            - {name: sonata.admin, manager_type: orm, audit: true, group: "LMS", label: "Resource type"}
         arguments:
-        - ~
-        - Chamilo\CoreBundle\Entity\Resource\ResourceType
-        - ~
-        calls:
-        - [setTranslationDomain, [ChamiloCoreBundle]]
+            - ~
+            - Chamilo\CoreBundle\Entity\Resource\ResourceType
+            - ~
+            calls:
+            - [setTranslationDomain, [ChamiloCoreBundle]]

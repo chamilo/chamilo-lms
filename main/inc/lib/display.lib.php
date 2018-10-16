@@ -202,6 +202,7 @@ class Display
         if (api_get_setting('enable_tool_introduction') == 'true' || $tool == TOOL_COURSE_HOMEPAGE) {
             $introduction_section = null;
             require api_get_path(SYS_INC_PATH).'introductionSection.inc.php';
+
             return $introduction_section;
         }
     }

@@ -3,13 +3,12 @@
 
 namespace Chamilo\CoreBundle\Admin;
 
-use Chamilo\CoreBundle\Entity\Resource\ResourceFile;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
+use Sonata\AdminBundle\Show\ShowMapper;
 
 /**
  * Class ResourceFileAdmin.

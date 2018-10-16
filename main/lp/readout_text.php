@@ -4,7 +4,7 @@
 use Chamilo\CourseBundle\Entity\CDocument;
 
 /**
- * Print a read-out text inside a session
+ * Print a read-out text inside a session.
  *
  * @package chamilo.learnpath
  */

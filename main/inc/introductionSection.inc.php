@@ -292,9 +292,9 @@ if (api_is_allowed_to_edit() && empty($session_id)) {
     $tool = [
         'name' => get_lang('CustomizeIcons'),
         'url' => api_get_path(WEB_CODE_PATH).'course_info/tools.php?'.api_get_cidreq(),
-        'icon' => 'fas fa-cog'
+        'icon' => 'fas fa-cog',
     ];
-    $toolbar[]= $tool;
+    $toolbar[] = $tool;
 }
 
 if ($intro_dispCommand) {
@@ -307,16 +307,15 @@ if ($intro_dispCommand) {
                 'url' => api_get_self().'?'.api_get_cidreq().$blogParam.'&intro_cmdAdd=1',
                 'icon' => 'fas fa-pencil-alt',
             ];
-            $toolbar[]= $tool;
+            $toolbar[] = $tool;
         } else {
             $tool = [
                 'name' => get_lang('AddIntro'),
                 'url' => api_get_self().'?intro_cmdAdd=1',
-                'icon' => 'fas fa-pencil-alt'
+                'icon' => 'fas fa-pencil-alt',
             ];
-            $toolbar[]= $tool;
+            $toolbar[] = $tool;
         }
-
     } else {
         // Displays "edit intro && delete intro" commands
 
@@ -324,35 +323,34 @@ if ($intro_dispCommand) {
             $tool = [
                 'name' => get_lang('Modify'),
                 'url' => api_get_self().'?'.api_get_cidreq().$blogParam.'&intro_cmdEdit=1',
-                'icon' => 'fas fa-pencil-alt'
+                'icon' => 'fas fa-pencil-alt',
             ];
-            $toolbar[]= $tool;
+            $toolbar[] = $tool;
 
             $tool = [
                 'name' => get_lang('ConfirmYourChoice'),
                 'url' => api_get_self()."?".api_get_cidreq().$blogParam."&intro_cmdDel=1",
                 'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
                     "')) return false",
-                'icon' => 'fas fa-trash-alt'
+                'icon' => 'fas fa-trash-alt',
             ];
-            $toolbar[]= $tool;
-
+            $toolbar[] = $tool;
         } else {
-            $tool=[
+            $tool = [
                 'name' => get_lang('Modify'),
                 'url' => api_get_self().'?intro_cmdEdit=1',
-                'icon' => 'fas fa-pencil-alt'
+                'icon' => 'fas fa-pencil-alt',
             ];
-            $toolbar[]= $tool;
+            $toolbar[] = $tool;
 
-            $tool=[
+            $tool = [
                 'name' => get_lang('ConfirmYourChoice'),
                 'url' => api_get_self()."?".api_get_cidreq()."&intro_cmdDel=1",
                 'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_ilang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
                     "')) return false",
-                'icon' => 'fas fa-trash-alt'
+                'icon' => 'fas fa-trash-alt',
             ];
-            $toolbar[]= $tool;
+            $toolbar[] = $tool;
         }
 
         // Fix for chrome XSS filter for videos in iframes - BT#7930
@@ -374,14 +372,14 @@ if ($intro_dispDefault) {
         $textContent = [
             'name' => 'introduction-course',
             'help' => $nameSection,
-            'text' => $intro_content
+            'text' => $intro_content,
         ];
     } else {
         if (api_is_allowed_to_edit()) {
             $textContent = [
                 'name' => 'introduction-section',
                 'help' => $nameSection,
-                'text' => $intro_content
+                'text' => $intro_content,
             ];
         }
     }
@@ -397,7 +395,6 @@ if (strpos($introduction_section, '<iframe') !== false && $browser['name'] == 'C
 }
 $data = null;
 $tpl = new Template(null);
-$tpl->assign('intro',$textContent);
-$tpl->assign('toolbar',$toolbar);
+$tpl->assign('intro', $textContent);
+$tpl->assign('toolbar', $toolbar);
 $introduction_section .= $tpl->fetch($tpl->get_template('auth/introduction_section.html.twig'));
-

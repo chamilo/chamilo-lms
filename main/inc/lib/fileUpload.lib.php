@@ -216,7 +216,7 @@ function process_uploaded_file($uploaded_file, $show_output = true)
  * @param bool   $treat_spaces_as_hyphens
  *
  * So far only use for unzip_uploaded_document function.
- * If no output wanted on success, set to false
+ * If no output wanted on success, set to false.
  *
  * @return string path of the saved file
  */

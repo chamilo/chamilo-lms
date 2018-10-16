@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Entity\Repository\ItemPropertyRepository;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
+use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpCategory;
@@ -2300,22 +2301,30 @@ class learnpath
 
         if (!empty($row['audio'])) {
             $list = $_SESSION['oLP']->get_toc();
-            $type_quiz = false;
 
-            foreach ($list as $toc) {
-                if ($toc['id'] == $_SESSION['oLP']->current && $toc['type'] == 'quiz') {
-                    $type_quiz = true;
-                }
-            }
+            switch ($row['item_type']) {
+                case 'quiz':
+                    $type_quiz = false;
 
-            if ($type_quiz) {
-                if ($_SESSION['oLP']->prevent_reinit == 1) {
-                    $autostart_audio = $row['status'] === 'completed' ? 'false' : 'true';
-                } else {
-                    $autostart_audio = $autostart;
-                }
-            } else {
-                $autostart_audio = 'true';
+                    foreach ($list as $toc) {
+                        if ($toc['id'] == $_SESSION['oLP']->current) {
+                            $type_quiz = true;
+                        }
+                    }
+
+                    if ($type_quiz) {
+                        if ($_SESSION['oLP']->prevent_reinit == 1) {
+                            $autostart_audio = $row['status'] === 'completed' ? 'false' : 'true';
+                        } else {
+                            $autostart_audio = $autostart;
+                        }
+                    }
+                    break;
+                case TOOL_READOUT_TEXT:;
+                    $autostart_audio = 'false';
+                    break;
+                default:
+                    $autostart_audio = 'true';
             }
 
             $courseInfo = api_get_course_info();
@@ -6253,7 +6262,7 @@ class learnpath
             $title_cut = cut($arrLP[$i]['title'], self::MAX_LP_ITEM_TITLE_LENGTH);
 
             // Link for the documents
-            if ($arrLP[$i]['item_type'] == 'document') {
+            if ($arrLP[$i]['item_type'] == 'document' || $arrLP[$i]['item_type'] == TOOL_READOUT_TEXT) {
                 $url = $mainUrl.'&action=view_item&mode=preview_document&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id;
                 $title_cut = Display::url(
                     $title_cut,
@@ -6466,6 +6475,7 @@ class learnpath
                 switch ($arrLP[$i]['item_type']) {
                     case TOOL_DOCUMENT:
                     case TOOL_LP_FINAL_ITEM:
+                    case TOOL_READOUT_TEXT:
                         $urlPreviewLink = $mainUrl.'&action=view_item&mode=preview_document&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id;
                         $previewIcon = Display::url(
                             $previewImage,
@@ -7336,6 +7346,7 @@ class learnpath
                         $return .= $this->getSavedFinalItem();
                         break;
                     case TOOL_DOCUMENT:
+                    case TOOL_READOUT_TEXT:
                         $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
                         $sql_doc = "SELECT path FROM ".$tbl_doc."
                                     WHERE c_id = ".$course_id." AND iid = ".intval($row['path']);
@@ -7434,6 +7445,27 @@ class learnpath
                     $row['item_type']
                 );
                 $return .= $this->display_document_form(
+                    'edit',
+                    $item_id,
+                    $row_step
+                );
+                break;
+            case TOOL_READOUT_TEXT:
+                $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
+                $sql = "SELECT lp.*, doc.path as dir
+                        FROM $tbl_lp_item as lp
+                        LEFT JOIN $tbl_doc as doc
+                        ON (doc.iid = lp.path AND lp.c_id = doc.c_id)
+                        WHERE
+                            doc.c_id = $course_id AND
+                            lp.iid = ".$item_id;
+                $res_step = Database::query($sql);
+                $row_step = Database::fetch_array($res_step, 'ASSOC');
+                $return .= $this->display_manipulate(
+                    $item_id,
+                    $row['item_type']
+                );
+                $return .= $this->displayFrmReadOutText(
                     'edit',
                     $item_id,
                     $row_step
@@ -9105,6 +9137,473 @@ class learnpath
     }
 
     /**
+     * Returns the form to update or create a read-out text.
+     *
+     * @param string $action     "add" or "edit"
+     * @param int    $id         ID of the lp_item (if already exists)
+     * @param mixed  $extra_info Integer if document ID, string if info ('new')
+     *
+     * @throws Exception
+     * @throws HTML_QuickForm_Error
+     *
+     * @return string HTML form
+     */
+    public function displayFrmReadOutText($action = 'add', $id = 0, $extra_info = 'new')
+    {
+        $course_id = api_get_course_int_id();
+        $_course = api_get_course_info();
+        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
+        $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
+
+        $no_display_edit_textarea = false;
+        $item_description = '';
+        //If action==edit document
+        //We don't display the document form if it's not an editable document (html or txt file)
+        if ($action == 'edit') {
+            if (is_array($extra_info)) {
+                $path_parts = pathinfo($extra_info['dir']);
+                if ($path_parts['extension'] != "txt" && $path_parts['extension'] != "html") {
+                    $no_display_edit_textarea = true;
+                }
+            }
+        }
+        $no_display_add = false;
+
+        if ($id != 0 && is_array($extra_info)) {
+            $item_title = stripslashes($extra_info['title']);
+            $item_description = stripslashes($extra_info['description']);
+            $item_terms = stripslashes($extra_info['terms']);
+            if (empty($item_title)) {
+                $path_parts = pathinfo($extra_info['path']);
+                $item_title = stripslashes($path_parts['filename']);
+            }
+        } elseif (is_numeric($extra_info)) {
+            $sql = "SELECT path, title FROM $tbl_doc WHERE c_id = ".$course_id." AND iid = ".intval($extra_info);
+            $result = Database::query($sql);
+            $row = Database::fetch_array($result);
+            $item_title = $row['title'];
+            $item_title = str_replace('_', ' ', $item_title);
+            if (empty($item_title)) {
+                $path_parts = pathinfo($row['path']);
+                $item_title = stripslashes($path_parts['filename']);
+            }
+        } else {
+            $item_title = '';
+            $item_description = '';
+        }
+
+        if ($id != 0 && is_array($extra_info)) {
+            $parent = $extra_info['parent_item_id'];
+        } else {
+            $parent = 0;
+        }
+
+        $sql = "SELECT * FROM $tbl_lp_item WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
+        $result = Database::query($sql);
+        $arrLP = [];
+
+        while ($row = Database::fetch_array($result)) {
+            $arrLP[] = [
+                'id' => $row['iid'],
+                'item_type' => $row['item_type'],
+                'title' => $row['title'],
+                'path' => $row['path'],
+                'description' => $row['description'],
+                'parent_item_id' => $row['parent_item_id'],
+                'previous_item_id' => $row['previous_item_id'],
+                'next_item_id' => $row['next_item_id'],
+                'display_order' => $row['display_order'],
+                'max_score' => $row['max_score'],
+                'min_score' => $row['min_score'],
+                'mastery_score' => $row['mastery_score'],
+                'prerequisite' => $row['prerequisite'],
+            ];
+        }
+
+        $this->tree_array($arrLP);
+        $arrLP = isset($this->arrMenu) ? $this->arrMenu : [];
+        unset($this->arrMenu);
+
+        if ($action == 'add') {
+            $formHeader = get_lang('CreateTheDocument');
+        } else {
+            $formHeader = get_lang('EditTheCurrentDocument');
+        }
+
+        if ('edit' === $action) {
+            $urlAudioIcon = Display::url(
+                Display::return_icon('audio.png', get_lang('CreateReadOutText'), [], ICON_SIZE_TINY),
+                api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&lp_id='.$this->lp_id.'&'
+                    .http_build_query(['view' => 'build', 'id' => $id, 'action' => 'add_audio'])
+            );
+        } else {
+            $urlAudioIcon = Display::return_icon('audio.png', get_lang('CreateReadOutText'), [], ICON_SIZE_TINY);
+        }
+
+        $form = new FormValidator(
+            'frm_add_reading',
+            'POST',
+            $this->getCurrentBuildingModeURL(),
+            '',
+            ['enctype' => 'multipart/form-data']
+        );
+        $form->addHeader($formHeader);
+        $form->addHtml(
+            Display::return_message(
+                sprintf(get_lang('FrmReadOutTextIntro'), $urlAudioIcon),
+                'normal',
+                false
+            )
+        );
+        $defaults['title'] = !empty($item_title) ? Security::remove_XSS($item_title) : '';
+        $defaults['description'] = $item_description;
+
+        $data = $this->generate_lp_folder($_course);
+
+        if ($action != 'edit') {
+            $folders = DocumentManager::get_all_document_folders($_course, 0, true);
+            DocumentManager::build_directory_selector(
+                $folders,
+                '',
+                [],
+                true,
+                $form,
+                'directory_parent_id'
+            );
+        }
+
+        if (isset($data['id'])) {
+            $defaults['directory_parent_id'] = $data['id'];
+        }
+
+        $form->addElement(
+            'text',
+            'title',
+            get_lang('Title')
+        );
+        $form->applyFilter('title', 'trim');
+        $form->applyFilter('title', 'html_filter');
+
+        $arrHide[0]['value'] = $this->name;
+        $arrHide[0]['padding'] = 20;
+
+        for ($i = 0; $i < count($arrLP); $i++) {
+            if ($action != 'add') {
+                if ($arrLP[$i]['item_type'] == 'dir' &&
+                    !in_array($arrLP[$i]['id'], $arrHide) &&
+                    !in_array($arrLP[$i]['parent_item_id'], $arrHide)
+                ) {
+                    $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
+                    $arrHide[$arrLP[$i]['id']]['padding'] = 20 + $arrLP[$i]['depth'] * 20;
+                }
+            } else {
+                if ($arrLP[$i]['item_type'] == 'dir') {
+                    $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
+                    $arrHide[$arrLP[$i]['id']]['padding'] = 20 + $arrLP[$i]['depth'] * 20;
+                }
+            }
+        }
+
+        $parent_select = $form->addSelect(
+            'parent',
+            get_lang('Parent'),
+            [],
+            ['onchange' => "javascript: load_cbo(this.value, 'frm_add_reading_previous');"]
+        );
+
+        $my_count = 0;
+        foreach ($arrHide as $key => $value) {
+            if ($my_count != 0) {
+                // The LP name is also the first section and is not in the same charset like the other sections.
+                $value['value'] = Security::remove_XSS($value['value']);
+                $parent_select->addOption(
+                    $value['value'],
+                    $key,
+                    'style="padding-left:'.$value['padding'].'px;"'
+                );
+            } else {
+                $value['value'] = Security::remove_XSS($value['value']);
+                $parent_select->addOption(
+                    $value['value'],
+                    $key,
+                    'style="padding-left:'.$value['padding'].'px;"'
+                );
+            }
+            $my_count++;
+        }
+
+        if (!empty($id)) {
+            $parent_select->setSelected($parent);
+        } else {
+            $parent_item_id = Session::read('parent_item_id', 0);
+            $parent_select->setSelected($parent_item_id);
+        }
+
+        if (is_array($arrLP)) {
+            reset($arrLP);
+        }
+
+        $arrHide = [];
+        $s_selected_position = null;
+
+        // POSITION
+        $lastPosition = null;
+
+        for ($i = 0; $i < count($arrLP); $i++) {
+            if (($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) ||
+                $arrLP[$i]['item_type'] == TOOL_LP_FINAL_ITEM
+            ) {
+                if ((isset($extra_info['previous_item_id']) &&
+                    $extra_info['previous_item_id'] == $arrLP[$i]['id']) || $action == 'add'
+                ) {
+                    $s_selected_position = $arrLP[$i]['id'];
+                }
+                $arrHide[$arrLP[$i]['id']]['value'] = get_lang('After').' "'.$arrLP[$i]['title'].'"';
+            }
+            $lastPosition = $arrLP[$i]['id'];
+        }
+
+        if (empty($s_selected_position)) {
+            $s_selected_position = $lastPosition;
+        }
+
+        $position = $form->addSelect(
+            'previous',
+            get_lang('Position'),
+            []
+        );
+        $position->addOption(get_lang('FirstPosition'), 0);
+
+        foreach ($arrHide as $key => $value) {
+            $padding = isset($value['padding']) ? $value['padding'] : 20;
+            $position->addOption(
+                $value['value'],
+                $key,
+                'style="padding-left:'.$padding.'px;"'
+            );
+        }
+        $position->setSelected($s_selected_position);
+
+        if (is_array($arrLP)) {
+            reset($arrLP);
+        }
+
+        $arrHide = [];
+
+        for ($i = 0; $i < count($arrLP); $i++) {
+            if ($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dir' &&
+                $arrLP[$i]['item_type'] !== TOOL_LP_FINAL_ITEM
+            ) {
+                $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
+            }
+        }
+
+        if (!$no_display_add) {
+            $item_type = isset($extra_info['item_type']) ? $extra_info['item_type'] : null;
+            $edit = isset($_GET['edit']) ? $_GET['edit'] : null;
+
+            if ($extra_info == 'new' || $item_type == TOOL_READOUT_TEXT || $edit == 'true') {
+                if (!$no_display_edit_textarea) {
+                    $content = '';
+
+                    if (isset($_POST['content'])) {
+                        $content = stripslashes($_POST['content']);
+                    } elseif (is_array($extra_info)) {
+                        $content = $this->display_document($extra_info['path'], false, false);
+                    } elseif (is_numeric($extra_info)) {
+                        $content = $this->display_document($extra_info, false, false);
+                    }
+
+                    // A new document, it is in the root of the repository.
+                    if (is_array($extra_info) && $extra_info != 'new') {
+                    } else {
+                        $this->generate_lp_folder($_course);
+                    }
+
+                    if ($_GET['action'] == 'add_item') {
+                        $text = get_lang('LPCreateDocument');
+                    } else {
+                        $text = get_lang('SaveDocument');
+                    }
+
+                    $form->addTextarea('content_lp', get_lang('Content'), ['rows' => 20]);
+                    $form
+                        ->defaultRenderer()
+                        ->setElementTemplate($form->getDefaultElementTemplate(), 'content_lp');
+                    $form->addButtonSave($text, 'submit_button');
+                    $defaults['content_lp'] = $content;
+                }
+            } elseif (is_numeric($extra_info)) {
+                $form->addButtonSave(get_lang('SaveDocument'), 'submit_button');
+
+                $return = $this->display_document($extra_info, true, true, true);
+                $form->addElement('html', $return);
+            }
+        }
+
+        if (is_numeric($extra_info)) {
+            $form->addElement('hidden', 'path', $extra_info);
+        } elseif (is_array($extra_info)) {
+            $form->addElement('hidden', 'path', $extra_info['path']);
+        }
+
+        $form->addElement('hidden', 'type', TOOL_READOUT_TEXT);
+        $form->addElement('hidden', 'post_time', time());
+        $form->setDefaults($defaults);
+
+        return $form->returnForm();
+    }
+
+    /**
+     * @param array  $courseInfo
+     * @param string $content
+     * @param string $title
+     * @param int    $parentId
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     *
+     * @return int
+     */
+    public function createReadOutText($courseInfo, $content = '', $title = '', $parentId = 0)
+    {
+        $creatorId = api_get_user_id();
+        $sessionId = api_get_session_id();
+
+        // Generates folder
+        $result = $this->generate_lp_folder($courseInfo);
+        $dir = $result['dir'];
+
+        if (empty($parentId) || $parentId == '/') {
+            $postDir = isset($_POST['dir']) ? $_POST['dir'] : $dir;
+            $dir = isset($_GET['dir']) ? $_GET['dir'] : $postDir; // Please, do not modify this dirname formatting.
+
+            if ($parentId === '/') {
+                $dir = '/';
+            }
+
+            // Please, do not modify this dirname formatting.
+            if (strstr($dir, '..')) {
+                $dir = '/';
+            }
+
+            if (!empty($dir[0]) && $dir[0] == '.') {
+                $dir = substr($dir, 1);
+            }
+            if (!empty($dir[0]) && $dir[0] != '/') {
+                $dir = '/'.$dir;
+            }
+            if (isset($dir[strlen($dir) - 1]) && $dir[strlen($dir) - 1] != '/') {
+                $dir .= '/';
+            }
+        } else {
+            $parentInfo = DocumentManager::get_document_data_by_id(
+                $parentId,
+                $courseInfo['code']
+            );
+            if (!empty($parentInfo)) {
+                $dir = $parentInfo['path'].'/';
+            }
+        }
+
+        $filepath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/'.$dir;
+
+        if (!is_dir($filepath)) {
+            $dir = '/';
+            $filepath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/'.$dir;
+        }
+
+        $originalTitle = !empty($title) ? $title : $_POST['title'];
+
+        if (!empty($title)) {
+            $title = api_replace_dangerous_char(stripslashes($title));
+        } else {
+            $title = api_replace_dangerous_char(stripslashes($_POST['title']));
+        }
+
+        $title = disable_dangerous_file($title);
+        $filename = $title;
+        $content = !empty($content) ? $content : $_POST['content_lp'];
+        $tmpFileName = $filename;
+
+        $i = 0;
+        while (file_exists($filepath.$tmpFileName.'.html')) {
+            $tmpFileName = $filename.'_'.++$i;
+        }
+
+        $filename = $tmpFileName.'.html';
+        $content = stripslashes($content);
+
+        if (file_exists($filepath.$filename)) {
+            return 0;
+        }
+
+        $putContent = file_put_contents($filepath.$filename, $content);
+
+        if ($putContent === false) {
+            return 0;
+        }
+
+        $fileSize = filesize($filepath.$filename);
+        $saveFilePath = $dir.$filename;
+
+        $documentId = add_document(
+            $courseInfo,
+            $saveFilePath,
+            'file',
+            $fileSize,
+            $tmpFileName,
+            '',
+            0, //readonly
+            true,
+            null,
+            $sessionId,
+            $creatorId
+        );
+
+        if (!$documentId) {
+            return 0;
+        }
+
+        api_item_property_update(
+            $courseInfo,
+            TOOL_DOCUMENT,
+            $documentId,
+            'DocumentAdded',
+            $creatorId,
+            null,
+            null,
+            null,
+            null,
+            $sessionId
+        );
+
+        $newComment = isset($_POST['comment']) ? trim($_POST['comment']) : '';
+        $newTitle = $originalTitle;
+
+        if ($newComment || $newTitle) {
+            $em = Database::getManager();
+
+            /** @var CDocument $doc */
+            $doc = $em->find('ChamiloCourseBundle:CDocument', $documentId);
+
+            if ($newComment) {
+                $doc->setComment($newComment);
+            }
+
+            if ($newTitle) {
+                $doc->setTitle($newTitle);
+            }
+
+            $em->persist($doc);
+            $em->flush();
+        }
+
+        return $documentId;
+    }
+
+    /**
      * Return HTML form to add/edit a link item.
      *
      * @param string $action     (add/edit)
@@ -10020,6 +10519,7 @@ class learnpath
         $headers = [
             get_lang('Files'),
             get_lang('CreateTheDocument'),
+            get_lang('CreateReadOutText'),
             get_lang('Upload'),
         ];
 
@@ -10091,9 +10591,10 @@ class learnpath
         $url = api_get_path(WEB_AJAX_PATH).'document.ajax.php?'.api_get_cidreq().'&a=upload_file&curdirpath=';
         $form->addMultipleUpload($url);
         $new = $this->display_document_form('add', 0);
+        $frmReadOutText = $this->displayFrmReadOutText('add');
         $tabs = Display::tabs(
             $headers,
-            [$documentTree, $new, $form->returnForm()],
+            [$documentTree, $new, $frmReadOutText, $form->returnForm()],
             'subtab'
         );
 
@@ -12890,6 +13391,9 @@ EOD;
 
                 return $main_dir_path.'forum/viewthread.php?post='.$id.'&thread='.$myrow['thread_id'].'&forum='
                     .$myrow['forum_id'].'&lp=true&'.$extraParams;
+            case TOOL_READOUT_TEXT:
+                return api_get_path(WEB_CODE_PATH).'lp/readout_text.php?&id='.$id.'&lp_id='.$learningPathId.'&'
+                    .$extraParams;
             case TOOL_DOCUMENT:
                 $document = $em
                     ->getRepository('ChamiloCourseBundle:CDocument')

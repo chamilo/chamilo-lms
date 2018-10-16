@@ -105,6 +105,14 @@ class CDocument extends AbstractResource implements ResourceInterface
     {
     }
 
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->title;
+    }
+
     public function __get($a)
     {
     }

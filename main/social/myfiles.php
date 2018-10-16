@@ -17,6 +17,8 @@ if (api_get_setting('allow_my_files') === 'false') {
     api_not_allowed(true);
 }
 
+$this_section = SECTION_SOCIAL;
+
 $htmlHeadXtra[] = '
 <script>
 function denied_friend (element_input) {

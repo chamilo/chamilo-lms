@@ -303,7 +303,7 @@ function LMSInitialize() {
             dataType: 'script',
             async: false,
             success:function(data) {
-                jQuery("video:not(.skip), audio:not(.skip)").mediaelementplayer();
+                $('video:not(.skip), audio:not(.skip)').mediaelementplayer();
             }
         });
 
@@ -387,8 +387,7 @@ function Initialize() {
 function LMSGetValue(param) {
     olms.G_LastError = G_NoError;
     olms.G_LastErrorMessage = 'No error';
-    var result='';
-
+    var result = '';
     // the LMSInitialize is missing
     if (olms.lms_initialized == 0) {
          if (param == 'cmi.core.score.raw') {
@@ -539,7 +538,7 @@ function LMSGetValue(param) {
                         olms.G_LastError = G_NotImplementedError;
                         olms.G_LastErrorString = 'Not implemented yet';
                     }
-                }else if(req_type == 'status'){
+                } else if(req_type == 'status'){
                     result = 'not attempted';
                 }
            } else {
@@ -612,7 +611,9 @@ function LMSGetValue(param) {
         result = '';
         return result;
     }
-    logit_scorm("LMSGetValue\n\t('"+param+"') returned '"+result+"'",1);
+
+    logit_scorm("LMSGetValue ('"+param+"') returned '"+result+"'",1);
+
     return result;
 }
 
@@ -653,7 +654,7 @@ function LMSSetValue(param, val) {
     } else if ( param == "cmi.core.lesson_location" ) {
         olms.lesson_location = val;
         olms.updatable_vars_list['cmi.core.lesson_location']=true;
-        return_value='true';
+        return_value = 'true';
     } else if ( param == "cmi.core.lesson_status" ) {
         olms.lesson_status = val;
         olms.updatable_vars_list['cmi.core.lesson_status'] = true;
@@ -843,7 +844,7 @@ function LMSSetValue(param, val) {
         echo " var mycommit = LMSCommit('force');";
     }
     ?>
-    return(return_value);
+    return return_value;
 }
 
 /**
@@ -862,7 +863,7 @@ function savedata(item_id) {
 
     // Status is NOT modified here see the lp_ajax_save_item.php file
     if (olms.lesson_status != '') {
-        olms.updatable_vars_list['cmi.core.lesson_status'] = true;
+        //olms.updatable_vars_list['cmi.core.lesson_status'] = true;
     }
 
     old_item_id = olms.info_lms_item[0];
@@ -1434,7 +1435,18 @@ function reinit_updatable_vars_list() {
  * @param	string		This parameter can be a string specifying the next
  *						item (like 'next', 'previous', 'first' or 'last') or the id to the next item
  */
-function switch_item(current_item, next_item){
+function switch_item(current_item, next_item) {
+    if (olms.lms_initialized == 0) {
+        // Fix error when flash is not loaded and SCO is not started BT#14944
+        olms.G_LastError 		= G_NotInitialized;
+        olms.G_LastErrorMessage = G_NotInitializedMessage;
+        logit_scorm('Error '+ G_NotInitialized + G_NotInitializedMessage, 0);
+        window.location.reload(false);
+        return false;
+    }
+
+    olms.switch_finished = 0; //only changed back once LMSInitialize() happens
+
     // backup these params
     var orig_current_item   = current_item;
     var orig_next_item      = next_item;
@@ -1519,7 +1531,9 @@ function switch_item(current_item, next_item){
             1,
             olms.statusSignalReceived
         );
+
         reinit_updatable_vars_list();
+
         xajax_switch_item_toc(
             olms.lms_lp_id,
             olms.lms_user_id,
@@ -1680,7 +1694,6 @@ function switch_item(current_item, next_item){
             }
         }
     });
-    olms.switch_finished = 0; //only changed back once LMSInitialize() happens
 
     loadForumThread(olms.lms_lp_id, next_item);
     checkCurrentItemPosition(olms.lms_item_id);

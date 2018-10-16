@@ -85,7 +85,7 @@ function save_item(
 
     if (!is_a($myLP, 'learnpath')) {
         if ($debug) {
-            error_log("mylp variable is not an learnpath object");
+            error_log('mylp variable is not an learnpath object');
         }
 
         return null;
@@ -146,7 +146,7 @@ function save_item(
             }
         } else {
             if ($debug > 1) {
-                error_log("Score not updated");
+                error_log('Score not updated');
             }
         }
 
@@ -164,7 +164,7 @@ function save_item(
             }
         } else {
             if ($debug > 1) {
-                error_log("Status not updated");
+                error_log('Status not updated');
             }
         }
 
@@ -248,8 +248,14 @@ function save_item(
             ) {
                 if ($score >= $masteryScore) {
                     $myLPI->set_status('passed');
+                    if ($debug) {
+                        error_log('Set status: passed');
+                    }
                 } else {
                     $myLPI->set_status('failed');
+                    if ($debug) {
+                        error_log('Set status: failed');
+                    }
                 }
                 $statusIsSet = true;
             }
@@ -261,6 +267,9 @@ function save_item(
              */
             if (!$statusIsSet && !$masteryScore && !$statusSignalReceived) {
                 if (!empty($status)) {
+                    if ($debug) {
+                        error_log("Set status: $status because: statusSignalReceived ");
+                    }
                     $myLPI->set_status($status);
                     $statusIsSet = true;
                 }
@@ -276,6 +285,9 @@ function save_item(
             if (!$statusIsSet && $credit == 'no-credit' && !$statusSignalReceived) {
                 $mode = $myLPI->get_lesson_mode();
                 if ($mode == 'browse' && $status == 'browsed') {
+                    if ($debug) {
+                        error_log("Set status: $status because mode browse");
+                    }
                     $myLPI->set_status($status);
                     $statusIsSet = true;
                 }
@@ -318,6 +330,9 @@ function save_item(
                         } else {
                             $myStatus = 'failed';
                         }
+                    }
+                    if ($debug) {
+                        error_log("Set status: $myStatus because lmsFinish || userNavigatesAway");
                     }
                     $myLPI->set_status($myStatus);
                     $statusIsSet = true;
@@ -410,6 +425,10 @@ function save_item(
         $myStatusInDB != 'failed'
     ) {
         $myStatusInMemory = $myLPI->get_status(false);
+        if ($debug) {
+            error_log("myStatusInMemory: $myStatusInMemory");
+        }
+
         if ($myStatusInMemory != $myStatusInDB) {
             $myStatus = $myStatusInMemory;
         } else {

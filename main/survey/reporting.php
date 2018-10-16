@@ -125,7 +125,7 @@ if ($action == 'overview') {
     ];
     switch ($action) {
         case 'questionreport':
-            $singlePage = isset($_GET['single_page']) ? intval($_GET['single_page']) : 0;
+            $singlePage = isset($_GET['single_page']) ? (int) $_GET['single_page'] : 0;
             $tool_name = $singlePage ? get_lang('QuestionsOverallReport') : get_lang('DetailedReportByQuestion');
             break;
         case 'userreport':

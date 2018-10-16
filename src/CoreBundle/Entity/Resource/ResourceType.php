@@ -23,6 +23,7 @@ class ResourceType
 
     /**
      * @ORM\Column()
+     *
      * @Assert\NotBlank()
      */
     protected $name;
@@ -40,12 +41,14 @@ class ResourceType
 
     /**
      * @ORM\Column(name="created_at", type="datetime")
+     *
      * @Gedmo\Timestampable(on="create")
      */
     protected $createdAt;
 
     /**
      * @ORM\Column(name="updated_at", type="datetime")
+     *
      * @Gedmo\Timestampable(on="update")
      */
     protected $updatedAt;
@@ -55,6 +58,14 @@ class ResourceType
      */
     public function __construct()
     {
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->name;
     }
 
     /**

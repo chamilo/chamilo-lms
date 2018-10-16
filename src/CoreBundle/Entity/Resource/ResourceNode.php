@@ -13,7 +13,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Base entity for all resources.
  *
  * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\MaterializedPathRepository")
+ *
  * @ORM\Table(name="resource_node")
+ *
  * @Gedmo\Tree(type="materializedPath")
  */
 class ResourceNode
@@ -45,7 +47,7 @@ class ResourceNode
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceType", inversedBy="resourceNodes")
-     * @ORM\JoinColumn(name="resource_type_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="resource_type_id", referencedColumnName="id", nullable=false)
      */
     protected $resourceType;
 
@@ -53,6 +55,14 @@ class ResourceNode
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceLink", mappedBy="resourceNode", cascade={"remove"})
      */
     protected $resourceLinks;
+
+    /**
+     * @var ResourceFile
+     *
+     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceFile", inversedBy="resourceNode", cascade={"remove"})
+     * @ORM\JoinColumn(name="resource_file_id", referencedColumnName="id")
+     */
+    protected $resourceFile;
 
     /**
      * @ORM\ManyToOne(
@@ -77,6 +87,7 @@ class ResourceNode
 
     /**
      * @Gedmo\TreeLevel
+     *
      * @ORM\Column(name="level", type="integer", nullable=true)
      */
     protected $level;
@@ -92,26 +103,21 @@ class ResourceNode
 
     /**
      * @Gedmo\TreePath(separator="`")
+     *
      * @ORM\Column(name="path", type="string", length=3000, nullable=true)
      */
     protected $path;
 
     /**
-     * @var ResourceFile
-     *
-     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceFile", inversedBy="resourceNode")
-     * @ORM\JoinColumn(name="resource_file_id", referencedColumnName="id")
-     */
-    protected $resourceFile;
-
-    /**
      * @ORM\Column(name="created_at", type="datetime")
+     *
      * @Gedmo\Timestampable(on="create")
      */
     protected $createdAt;
 
     /**
      * @ORM\Column(name="updated_at", type="datetime")
+     *
      * @Gedmo\Timestampable(on="update")
      */
     protected $updatedAt;
@@ -131,7 +137,7 @@ class ResourceNode
      */
     public function __toString()
     {
-        return (string) $this->getPath();
+        return (string) $this->getName();
     }
 
     /**
@@ -402,7 +408,7 @@ class ResourceNode
     /**
      * @return ResourceFile
      */
-    public function getResourceFile(): ResourceFile
+    public function getResourceFile()
     {
         return $this->resourceFile;
     }
@@ -424,7 +430,7 @@ class ResourceNode
      */
     public function getDescription(): string
     {
-        return $this->description;
+        return (string) $this->description;
     }
 
     /**

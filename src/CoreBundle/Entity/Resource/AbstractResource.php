@@ -13,7 +13,7 @@ use Sylius\Component\Resource\Model\ResourceInterface;
 abstract class AbstractResource implements ResourceInterface
 {
     /**
-     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", cascade={"remove"})
+     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode")
      * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id")
      */
     public $resourceNode;

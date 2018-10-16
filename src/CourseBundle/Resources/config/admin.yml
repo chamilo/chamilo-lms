@@ -63,5 +63,5 @@ services:
             - ~
             - Chamilo\CourseBundle\Entity\CDocument
             - ~
-            calls:
+        calls:
             - [setTranslationDomain, [ChamiloCoreBundle]]

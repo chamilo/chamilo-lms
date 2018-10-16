@@ -776,7 +776,6 @@ function api_get_path($path = '', $configuration = [])
             \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL
         );
         $root_web = urldecode($root_web);
-        var_dump($root_web);exit;
     }
 
     if (isset($configuration['multiple_access_urls']) &&

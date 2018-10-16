@@ -172,5 +172,5 @@ services:
             - ~
             - Chamilo\CoreBundle\Entity\Resource\ResourceType
             - ~
-            calls:
+        calls:
             - [setTranslationDomain, [ChamiloCoreBundle]]

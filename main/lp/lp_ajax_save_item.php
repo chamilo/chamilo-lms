@@ -85,7 +85,7 @@ function save_item(
 
     if (!is_a($myLP, 'learnpath')) {
         if ($debug) {
-            error_log("mylp variable is not an learnpath object");
+            error_log('mylp variable is not an learnpath object');
         }
 
         return null;
@@ -146,7 +146,7 @@ function save_item(
             }
         } else {
             if ($debug > 1) {
-                error_log("Score not updated");
+                error_log('Score not updated');
             }
         }
 
@@ -164,7 +164,7 @@ function save_item(
             }
         } else {
             if ($debug > 1) {
-                error_log("Status not updated");
+                error_log('Status not updated');
             }
         }
 

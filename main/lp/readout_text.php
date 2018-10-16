@@ -8,7 +8,6 @@ use Chamilo\CourseBundle\Entity\CDocument;
  *
  * @package chamilo.learnpath
  */
-
 $_in_course = true;
 
 require_once __DIR__.'/../inc/global.inc.php';

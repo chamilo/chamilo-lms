@@ -4,11 +4,12 @@ sonata_media:
         gallery: Chamilo\MediaBundle\Entity\Gallery
         gallery_has_media: Chamilo\MediaBundle\Entity\GalleryHasMedia
         category: Chamilo\ClassificationBundle\Entity\Category
-    db_driver: doctrine_orm # | doctrine_mongodb
+    db_driver: doctrine_orm
     default_context: default
     contexts:
         default:  # the default context is mandatory
             download:
+                strategy: sonata.media.security.superadmin_strategy
                 mode: http # X-Sendfile | http
             providers:
                 - sonata.media.provider.dailymotion
@@ -20,18 +21,18 @@ sonata_media:
                 small: {width: 100, quality: 100}
                 medium: {width: 300, quality: 100}
                 big: {width: 970, quality: 100}
-        sonata_collection:
-            providers:
-                - sonata.media.provider.image
-            formats:
-                preview: {width: 100, quality: 100}
-                wide: {width: 820, quality: 100}
-        sonata_category:
-            providers:
-                - sonata.media.provider.image
-            formats:
-                preview: {width: 100, quality: 100}
-                wide: {width: 820, quality: 100}
+#        sonata_collection:
+#            providers:
+#                - sonata.media.provider.image
+#            formats:
+#                preview: {width: 100, quality: 100}
+#                wide: {width: 820, quality: 100}
+#        sonata_category:
+#            providers:
+#                - sonata.media.provider.image
+#            formats:
+#                preview: {width: 100, quality: 100}
+#                wide: {width: 820, quality: 100}
 #        user:
 #            providers:
 #                - sonata.media.provider.image
@@ -45,7 +46,7 @@ sonata_media:
     filesystem:
         # define where the uploaded file will be stored
         local:
-            directory: '%kernel.root_dir%/../var/upload/media'
+            directory: '%kernel.root_dir%/../var/upload/resource'
             create: true
     providers:
         file:
@@ -68,9 +69,9 @@ sonata_media:
             thumbnail: sonata.media.thumbnail.format          # default value
 #           thumbnail: sonata.media.thumbnail.consumer.format # can be used to dispatch the resize action to async task
 #           thumbnail: sonata.media.thumbnail.liip_imagine    # use the LiipImagineBundle to resize the image
-    pixlr:
-        enabled: true
-        referrer: App
+#    pixlr:
+#        enabled: true
+#        referrer: App
     resizer:
         simple:
 #            mode:  outbound

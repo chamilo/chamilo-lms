@@ -12,13 +12,13 @@ oneup_uploader:
             custom_frontend:
                 class: Chamilo\CoreBundle\Controller\ResourceUploaderController
                 name: courses
-        upload:
+        resource:
             #frontend: dropzone # or any uploader you use in the frontend
             #frontend: blueimp
             frontend: custom
             storage:
                 type: flysystem
-                filesystem: oneup_flysystem.upload_filesystem
+                filesystem: oneup_flysystem.resource_filesystem
             root_folder: true
             custom_frontend:
                 class: Chamilo\CoreBundle\Controller\ResourceUploaderController

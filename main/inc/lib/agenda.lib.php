@@ -1319,6 +1319,8 @@ class Agenda
                 break;
         }
 
+        $this->cleanEvents();
+
         switch ($format) {
             case 'json':
                 if (empty($this->events)) {
@@ -1335,6 +1337,25 @@ class Agenda
                 return $this->events;
                 break;
         }
+    }
+
+    /**
+     * Clean events.
+     *
+     * @return bool
+     */
+    public function cleanEvents()
+    {
+        if (empty($this->events)) {
+            return false;
+        }
+
+        foreach ($this->events as &$event) {
+            $event['description'] = Security::remove_XSS($event['description']);
+            $event['title'] = Security::remove_XSS($event['title']);
+        }
+
+        return true;
     }
 
     /**

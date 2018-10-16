@@ -55,6 +55,28 @@ sylius_resource:
                 model: Chamilo\CourseBundle\Entity\CDocument
                 repository: Chamilo\CoreBundle\Repository\ResourceRepository
 
+#
+#sonata.media.provider.private:
+#    class: Sonata\MediaBundle\Provider\FileProvider
+#    tags:
+#        - { name: sonata.media.provider }
+#    arguments:
+#        - 'sonata.media.provider.private'
+#        - '@app.sonata.media.private.filesystem'
+#        - '@sonata.media.cdn.server'
+#        - '@sonata.media.generator.default'
+#        - '@sonata.media.thumbnail.format'
+#
+#chamilo.sonata.media.private.filesystem:
+#    class: Gaufrette\Filesystem
+#    arguments: ['@chamilo.sonata.media.private.adapter']
+#
+#chamilo.sonata.media.private.adapter:
+#    class: Sonata\MediaBundle\Filesystem\Local
+#    arguments:
+#        - "%kernel.root_dir%/../doclib/uploads"
+#        - true
+
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
@@ -73,7 +95,7 @@ parameters:
     mailer_user: admin@example.com
     mailer_password: null
     course_info_is_not_editable: false
-    sonata_media.cdn.host: '/%env(APP_URL_APPEND)%/public/uploads/media'
+    sonata_media.cdn.host: '/%env(APP_URL_APPEND)%/public/resource'
     sonata_page.varnish.command: 'if [ ! -r "/etc/varnish/secret" ]; then echo "VALID ERROR :/"; else varnishadm -S /etc/varnish/secret -T 127.0.0.1:6082 {{ COMMAND }} "{{ EXPRESSION }}"; fi;'
     router.request_context.base_url: '%url_append%'
     asset.request_context.base_path: '%router.request_context.base_url%'

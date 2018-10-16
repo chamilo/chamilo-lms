@@ -2451,6 +2451,7 @@ class learnpathItem
                                 ) {
                                     /** @var learnpathItem $itemToCheck */
                                     $itemToCheck = $items[$refs_list[$prereqs_string]];
+
                                     if ($itemToCheck->type == 'quiz') {
                                         // 1. Checking the status in current items.
                                         $status = $itemToCheck->get_status(true);

@@ -8,9 +8,17 @@ oneup_flysystem:
             local:
                 directory: '%kernel.project_dir%/var/home'
 
-        upload_adapter:
+        resource_adapter:
             local:
-                directory: '%kernel.project_dir%/var/upload'
+                directory: '%kernel.project_dir%/var/upload/resource'
+
+#        resource_private_adapter:
+#            local:
+#                directory: '%kernel.project_dir%/var/upload/resource'
+#
+#        resource_public_adapter:
+#            local:
+#                directory: '%kernel.project_dir%/public/upload/resource'
 
     filesystems:
         courses:
@@ -25,5 +33,11 @@ oneup_flysystem:
             visibility: private
             alias: home_filesystem
 
-        upload:
-            adapter: upload_adapter
+        resource:
+            adapter: resource_adapter
+
+#        resource_public:
+#            adapter: resource_public_adapter
+#
+#        resource_private:
+#            adapter: resource_private_adapter

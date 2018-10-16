@@ -3401,7 +3401,7 @@ class CourseManager
         $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $sessionId = (int) $sessionId;
         $user_id = (int) $user_id;
-        $select = "SELECT DISTINCT *, c.id as real_id ";
+        $select = "SELECT DISTINCT c.*, c.id as real_id ";
 
         if ($getCount) {
             $select = "SELECT COUNT(DISTINCT c.id) as count";
@@ -3440,9 +3440,7 @@ class CourseManager
                 // Teacher of course or teacher inside session
                 $whereConditions = " AND (cru.status = ".COURSEMANAGER." OR srcru.status = 2) ";
             }
-            $courseList = SessionManager::get_course_list_by_session_id(
-                $sessionId
-            );
+            $courseList = SessionManager::get_course_list_by_session_id($sessionId);
             if (!empty($courseList)) {
                 $courseListToString = implode("','", array_keys($courseList));
                 $whereConditions .= " AND c.id IN ('".$courseListToString."')";
@@ -6078,10 +6076,10 @@ class CourseManager
 
                 switch ($type) {
                     case 'GROUP':
-                        $groupList[] = intval($id);
+                        $groupList[] = (int) $id;
                         break;
                     case 'USER':
-                        $userList[] = intval($id);
+                        $userList[] = (int) $id;
                         break;
                 }
             }

@@ -52,9 +52,8 @@ sonata_admin:
                     - sonata.page.admin.page
 #                    - sonata.news.admin.comment
 #                    - sonata.news.admin.post
-#                    - sonata.media.admin.media
+                    - sonata.media.admin.media
                     - sonata.media.admin.gallery
-                    - MediaMonks\SonataMediaBundle\Admin\MediaAdmin
 #                    - sonata.admin.resource_file
 #                    - sonata.comment.admin.thread
 
@@ -127,6 +126,16 @@ sonata_admin:
 #                  label_catalogue: SonataAdminBundle
 #                  items:
 #                      - sonata.admin.access_url
+            sonata.admin.resource:
+                label: Resource
+                label_catalogue: SonataDemoBundle
+                #icon: '<i class="fa fa-th"></i>'
+                items:
+                    - sonata.admin.resource_node
+                    - sonata.admin.resource_file
+                    - sonata.admin.resource_type
+                    - sonata.admin.c_document
+
     assets:
         stylesheets:
             # The default stylesheet list:

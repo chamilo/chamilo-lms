@@ -444,7 +444,7 @@ class DocumentManager
      *
      * @param array     $courseInfo
      * @param string    $path
-     * @param int       $toGroupId iid
+     * @param int       $toGroupId       iid
      * @param int       $toUserId
      * @param bool      $canSeeInvisible
      * @param bool      $search

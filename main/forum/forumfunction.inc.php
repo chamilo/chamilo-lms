@@ -670,7 +670,7 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
 function store_forum($values, $courseInfo = [], $returnId = false)
 {
     $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
-    $course_id = $courseInfo['real_id'];
+    $courseId = $courseInfo['real_id'];
     $session_id = api_get_session_id();
     $group_id = api_get_group_id();
     if (isset($values['group_id']) && !empty($values['group_id'])) {
@@ -690,7 +690,7 @@ function store_forum($values, $courseInfo = [], $returnId = false)
         $sql = "SELECT MAX(forum_order) as sort_max
                 FROM $table_forums
                 WHERE
-                    c_id = $course_id AND
+                    c_id = $courseId AND
                     forum_category='".Database::escape_string($values['forum_category'])."'";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
@@ -770,10 +770,62 @@ function store_forum($values, $courseInfo = [], $returnId = false)
             delete_forum_image($values['forum_id']);
         }
 
+        // Move groups from one group to another
+        if (isset($values['group_forum'])) {
+            $forumData = get_forums($values['forum_id']);
+            $currentGroupId = $forumData['forum_of_group'];
+            if ($currentGroupId != $values['group_forum']) {
+                $threads = get_threads($values['forum_id']);
+                $toGroupId = 'NULL';
+                if (!empty($values['group_forum'])) {
+                    $toGroupId = $values['group_forum'];
+                }
+                $tableItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
+                foreach ($threads as $thread) {
+                    $sql = "UPDATE $tableItemProperty 
+                            SET to_group_id = $toGroupId
+                            WHERE 
+                                tool = '".TOOL_FORUM_THREAD."' AND
+                                ref = ".$thread['thread_id']." AND
+                                c_id = ".$courseId;
+                    Database::query($sql);
+
+                    $posts = getPosts(
+                        $forumData,
+                        $thread['thread_id']
+                    );
+
+                    foreach ($posts as $post) {
+                        $postId = $post['post_id'];
+                        $attachMentList = getAllAttachment($postId);
+                        if (!empty($attachMentList)) {
+                            foreach ($attachMentList as $attachMent) {
+                                $sql = "UPDATE $tableItemProperty 
+                                        SET to_group_id = $toGroupId
+                                        WHERE 
+                                            tool = '".TOOL_FORUM_ATTACH."' AND 
+                                            ref = ".$attachMent['iid']." AND
+                                            c_id = ".$courseId;
+                                Database::query($sql);
+                            }
+                        }
+
+                        $sql = "UPDATE $tableItemProperty 
+                                SET to_group_id = $toGroupId
+                                WHERE 
+                                    tool = '".TOOL_FORUM_POST."' AND
+                                    ref = $postId AND
+                                    c_id = $courseId";
+                        Database::query($sql);
+                    }
+                }
+            }
+        }
+
         Database::update(
             $table_forums,
             $params,
-            ['c_id = ? AND forum_id = ?' => [$course_id, $values['forum_id']]]
+            ['c_id = ? AND forum_id = ?' => [$courseId, $values['forum_id']]]
         );
 
         api_item_property_update(
@@ -792,7 +844,7 @@ function store_forum($values, $courseInfo = [], $returnId = false)
             $new_file_name = isset($new_file_name) ? $new_file_name : '';
         }
         $params = [
-            'c_id' => $course_id,
+            'c_id' => $courseId,
             'forum_title' => $values['forum_title'],
             'forum_image' => $new_file_name,
             'forum_comment' => isset($values['forum_comment']) ? $values['forum_comment'] : null,
@@ -1917,12 +1969,12 @@ function get_last_post_information($forum_id, $show_invisibles = false, $course_
 function get_threads($forum_id, $courseId = null, $sessionId = null)
 {
     $groupId = api_get_group_id();
-    $sessionId = $sessionId !== null ? intval($sessionId) : api_get_session_id();
+    $sessionId = $sessionId !== null ? (int) $sessionId : api_get_session_id();
     $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
     $table_users = Database::get_main_table(TABLE_MAIN_USER);
 
-    $courseId = $courseId !== null ? intval($courseId) : api_get_course_int_id();
+    $courseId = $courseId !== null ? (int) $courseId : api_get_course_int_id();
     $groupInfo = GroupManager::get_group_properties($groupId);
     $groupCondition = '';
 
@@ -3986,10 +4038,11 @@ function increase_thread_view($thread_id)
  *
  * @version february 2006, dokeos 1.8
  *
+ * @param int    $threadId
  * @param string $lastPostId
  * @param string $post_date
  */
-function updateThreadInfo($thread_id, $lastPostId, $post_date)
+function updateThreadInfo($threadId, $lastPostId, $post_date)
 {
     $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
     $course_id = api_get_course_int_id();
@@ -3999,7 +4052,7 @@ function updateThreadInfo($thread_id, $lastPostId, $post_date)
             thread_date = '".Database::escape_string($post_date)."'
             WHERE 
                 c_id = $course_id AND  
-                thread_id='".Database::escape_string($thread_id)."'"; // this needs to be cleaned first
+                thread_id='".Database::escape_string($threadId)."'"; // this needs to be cleaned first
     Database::query($sql);
 }
 
@@ -5043,7 +5096,7 @@ function edit_forum_attachment_file($file_comment, $post_id, $id_attach)
 /**
  * Show a list with all the attachments according to the post's id.
  *
- * @param int $post_id
+ * @param int $postId
  *
  * @return array with the post info
  *
@@ -5051,15 +5104,20 @@ function edit_forum_attachment_file($file_comment, $post_id, $id_attach)
  *
  * @version avril 2008, dokeos 1.8.5
  */
-function get_attachment($post_id)
+function get_attachment($postId)
 {
-    $forum_table_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
+    $table = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
     $course_id = api_get_course_int_id();
     $row = [];
-    $post_id = intval($post_id);
+    $postId = (int) $postId;
+
+    if (empty($postId)) {
+        return [];
+    }
+
     $sql = "SELECT iid, path, filename, comment 
-            FROM $forum_table_attachment
-            WHERE c_id = $course_id AND post_id = $post_id";
+            FROM $table
+            WHERE c_id = $course_id AND post_id = $postId";
     $result = Database::query($sql);
     if (Database::num_rows($result) != 0) {
         $row = Database::fetch_array($result);
@@ -5077,7 +5135,12 @@ function getAllAttachment($postId)
 {
     $forumAttachmentTable = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
     $courseId = api_get_course_int_id();
-    $postId = intval($postId);
+    $postId = (int) $postId;
+
+    if (empty($postId)) {
+        return [];
+    }
+
     $columns = ['iid', 'path', 'filename', 'comment'];
     $conditions = [
         'where' => [

@@ -54,3 +54,14 @@ services:
             - ~
         calls:
             - [setTranslationDomain, [ChamiloCoreBundle]]
+
+    sonata.admin.c_document:
+        class: Chamilo\CourseBundle\Admin\CDocumentAdmin
+        tags:
+            - {name: sonata.admin, manager_type: orm, audit: true, group: "LMS", label: "CDocument"}
+        arguments:
+            - ~
+            - Chamilo\CourseBundle\Entity\CDocument
+            - ~
+        calls:
+            - [setTranslationDomain, [ChamiloCoreBundle]]

@@ -5,10 +5,10 @@ namespace Chamilo\CoreBundle\Entity\Resource;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
+ *
  * @ORM\Table(name="resource_file")
  */
 class ResourceFile
@@ -21,76 +21,75 @@ class ResourceFile
     protected $id;
 
     /**
-     * @ORM\Column()
-     * @Assert\NotBlank()
+     * @ORM\OneToOne(targetEntity="Chamilo\MediaBundle\Entity\Media", cascade={"all"})
      */
-    protected $name;
+    protected $media;
 
-    /**
-     * @var string
-     *
-     * @Assert\NotBlank()
-     *
-     * @ORM\Column(name="hash", type="string", nullable=false)
-     */
-    protected $hash;
+//    /**
+//     * @var string
+//     *
+//     * @Assert\NotBlank()
+//     *
+//     * @ORM\Column(name="hash", type="string", nullable=false)
+//     */
+//    protected $hash;
 
-    /**
-     * @Assert\NotBlank()
-     *
-     * @var string
-     *
-     * @ORM\Column(name="original_filename", type="string", nullable=false)
-     */
-    protected $originalFilename;
+//    /**
+//     * @Assert\NotBlank()
+//     *
+//     * @var string
+//     *
+//     * @ORM\Column(name="original_filename", type="string", nullable=false)
+//     */
+//    protected $originalFilename;
+//
+//    /**
+//     * @Assert\NotBlank()
+//     *
+//     * @var string
+//     *
+//     * @ORM\Column(name="size", type="string", nullable=false)
+//     */
+//    protected $size;
+//
+//    /**
+//     * @Assert\NotBlank()
+//     *
+//     * @var string
+//     *
+//     * @ORM\Column(name="width", type="string", nullable=true)
+//     */
+//    protected $width;
 
-    /**
-     * @Assert\NotBlank()
-     *
-     * @var string
-     *
-     * @ORM\Column(name="size", type="string", nullable=false)
-     */
-    protected $size;
+//    /**
+//     * @Assert\NotBlank()
+//     *
+//     * @var string
+//     *
+//     * @ORM\Column(name="height", type="string", nullable=true)
+//     */
+//    protected $height;
+//
+//    /**
+//     * @var string
+//     *
+//     * @ORM\Column(name="copyright", type="string", nullable=true)
+//     */
+//    protected $copyright;
 
-    /**
-     * @Assert\NotBlank()
-     *
-     * @var string
-     *
-     * @ORM\Column(name="width", type="string", nullable=true)
-     */
-    protected $width;
-
-    /**
-     * @Assert\NotBlank()
-     *
-     * @var string
-     *
-     * @ORM\Column(name="height", type="string", nullable=true)
-     */
-    protected $height;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="copyright", type="string", nullable=true)
-     */
-    protected $copyright;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="contentType", type="string", nullable=true)
-     */
-    protected $contentType;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="extension", type="string", nullable=false)
-     */
-    protected $extension;
+//    /**
+//     * @var string
+//     *
+//     * @ORM\Column(name="contentType", type="string", nullable=true)
+//     */
+//    protected $contentType;
+//
+//    /**
+//     * @var string
+//     *
+//     * @ORM\Column(name="extension", type="string", nullable=false)
+//     */
+//    protected $extension;
 
     /**
      * @var ResourceNode
@@ -108,12 +107,14 @@ class ResourceFile
 
     /**
      * @ORM\Column(name="created_at", type="datetime")
+     *
      * @Gedmo\Timestampable(on="create")
      */
     protected $createdAt;
 
     /**
      * @ORM\Column(name="updated_at", type="datetime")
+     *
      * @Gedmo\Timestampable(on="update")
      */
     protected $updatedAt;
@@ -123,6 +124,8 @@ class ResourceFile
      */
     public function __construct()
     {
+        $this->enabled = true;
+        $this->setOriginalFilename(uniqid());
     }
 
     /**
@@ -250,19 +253,7 @@ class ResourceFile
      */
     public function getCopyright(): string
     {
-        return $this->copyright;
-    }
-
-    /**
-     * @param string $copyright
-     *
-     * @return ResourceFile
-     */
-    public function setCopyright(string $copyright): ResourceFile
-    {
-        $this->copyright = $copyright;
-
-        return $this;
+        return (string) $this->copyright;
     }
 
     /**
@@ -270,7 +261,7 @@ class ResourceFile
      */
     public function getContentType(): string
     {
-        return $this->contentType;
+        return (string) $this->contentType;
     }
 
     /**
@@ -341,6 +332,46 @@ class ResourceFile
     public function setEnabled(bool $enabled): ResourceFile
     {
         $this->enabled = $enabled;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMedia()
+    {
+        return $this->media;
+    }
+
+    /**
+     * @param mixed $media
+     *
+     * @return ResourceFile
+     */
+    public function setMedia($media)
+    {
+        $this->media = $media;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     *
+     * @return ResourceFile
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
 
         return $this;
     }

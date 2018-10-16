@@ -1,14 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CDocument;
+
 /**
- * Print a read-out text inside a session
+ * Print a read-out text inside a session.
  *
  * @package chamilo.learnpath
  */
-
-use Chamilo\CourseBundle\Entity\CDocument;
-
 $_in_course = true;
 
 require_once __DIR__.'/../inc/global.inc.php';

@@ -9460,12 +9460,14 @@ class learnpath
      * @param string $title
      * @param int    $parentId
      *
-     * @return int
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
+     *
+     * @return int
      */
-    public function createReadOutText($courseInfo, $content = '', $title = '', $parentId = 0) {
+    public function createReadOutText($courseInfo, $content = '', $title = '', $parentId = 0)
+    {
         $creatorId = api_get_user_id();
         $sessionId = api_get_session_id();
 

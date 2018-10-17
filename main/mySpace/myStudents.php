@@ -282,7 +282,9 @@ switch ($action) {
         break;
     case 'send_legal':
         $isBoss = UserManager::userIsBossOfStudent(api_get_user_id(), $student_id);
-        if ($isBoss || api_is_platform_admin()) {
+	if ($isBoss || api_is_platform_admin()) {
+            LegalManager::sendLegal($student_id);
+/*
             $currentUserInfo = api_get_user_info();
             $subject = get_lang('SendLegalSubject');
             $linkLegal = api_get_path(WEB_PATH)."courses/FORUMDAIDE/index.php";
@@ -293,7 +295,8 @@ switch ($action) {
                 $currentUserInfo['complete_name']
             );
             MessageManager::send_message_simple($student_id, $subject, $content);
-            Display::addFlash(Display::return_message(get_lang('Sent')));
+	    Display::addFlash(Display::return_message(get_lang('Sent')));
+*/
         }
         break;
     case 'delete_legal':

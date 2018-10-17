@@ -3,7 +3,9 @@
 
 use Chamilo\CourseBundle\Entity\CLpCategory;
 
-if (intval($_GET['default']) == 1) {
+$default = isset($_GET['default']) ? (int) $_GET['default'] : null;
+
+if ($default == 1) {
     $cidReset = true;
 }
 
@@ -19,7 +21,7 @@ if (!$enable) {
     api_not_allowed(true, $plugin->get_lang('ToolDisabled'));
 }
 
-if (intval($_GET['default']) == 1) {
+if ($default == 1) {
     $courseId = 0;
     $courseCode = '';
     $sessionId = 0;

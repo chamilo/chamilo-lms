@@ -206,17 +206,19 @@ class CustomCertificatePlugin extends Plugin
      * Get certificate data.
      *
      * @param int $id The certificate
+     * @param int $userId
      *
      * @return array
      */
-    public static function getCertificateData($id)
+    public static function getCertificateData($id, $userId)
     {
         $id = (int) $id;
-        if (empty($id)) {
+        $userId = (int) $userId;
+
+        if (empty($id) || empty($userId)) {
             return [];
         }
 
-        $userId = api_get_user_id();
         $certificateTable = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         $categoryTable = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $sql = "SELECT cer.user_id AS user_id, cat.session_id AS session_id, cat.course_code AS course_code
@@ -224,6 +226,7 @@ class CustomCertificatePlugin extends Plugin
                 INNER JOIN $categoryTable cat
                 ON (cer.cat_id = cat.id AND cer.user_id = $userId)
                 WHERE cer.id = $id";
+
         $rs = Database::query($sql);
         if (Database::num_rows($rs) > 0) {
             $row = Database::fetch_assoc($rs);
@@ -247,12 +250,16 @@ class CustomCertificatePlugin extends Plugin
      *
      * @param certificate $certificate
      * @param int         $certId
+     * @param int         $userId
      */
-    public static function redirectCheck($certificate, $certId)
+    public static function redirectCheck($certificate, $certId, $userId)
     {
         $certId = (int) $certId;
-        if (api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') == 'true') {
-            $infoCertificate = self::getCertificateData($certId);
+        $userId = !empty($userId) ? $userId : api_get_user_id();
+
+        if (api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') === 'true') {
+            $infoCertificate = self::getCertificateData($certId, $userId);
+            var_dump($infoCertificate);
             if (!empty($infoCertificate)) {
                 if ($certificate->user_id == api_get_user_id() && !empty($certificate->certificate_data)) {
                     $certificateId = $certificate->certificate_data['id'];

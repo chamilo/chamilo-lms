@@ -37,6 +37,10 @@ if ($default == 1) {
 
 if (empty($courseCode)) {
     $courseCode = isset($_REQUEST['course_code']) ? Database::escape_string($_REQUEST['course_code']) : '';
+    $courseInfo = api_get_course_info($courseCode);
+    if (!empty($courseInfo)) {
+        $courseId = $courseInfo['real_id'];
+    }
 }
 
 if (empty($sessionId)) {

@@ -4171,7 +4171,9 @@ class SessionManager
         if (empty($id)) {
             return [];
         }
-        $id = intval($id);
+        $id = (int) $id;
+        $urlId = empty($urlId) ? api_get_current_access_url_id() : (int) $urlId;
+
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $table_access_url_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -4194,8 +4196,6 @@ class SessionManager
                 ON (au.user_id = u.user_id)
                 ";
 
-        $urlId = empty($urlId) ? api_get_current_access_url_id() : (int) $urlId;
-
         if (is_numeric($status)) {
             $status = (int) $status;
             $sql .= " WHERE su.relation_type = $status AND (au.access_url_id = $urlId OR au.access_url_id is null)";
@@ -4203,7 +4203,7 @@ class SessionManager
             $sql .= " WHERE (au.access_url_id = $urlId OR au.access_url_id is null )";
         }
 
-        $sql .= " ORDER BY su.relation_type, ";
+        $sql .= ' ORDER BY su.relation_type, ';
         $sql .= api_sort_by_first_name() ? ' u.firstname, u.lastname' : '  u.lastname, u.firstname';
 
         $result = Database::query($sql);

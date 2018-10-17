@@ -1,5 +1,7 @@
 {% import '@ChamiloTheme/Macros/box.html.twig' as macro %}
+{% extends '@ChamiloTheme/Layout/layout_one_col.html.twig' %}
 
+{% block content %}
 <script>
     $(document).ready(function () {
         $.ajax({
@@ -104,3 +106,4 @@
         </div>
     </div>
 {% endif %}
+{% endblock %}

@@ -671,7 +671,5 @@ if (api_is_platform_admin()) {
 }
 
 // The template contains the call to the AJAX version checker
-$admin_template = $tpl->get_template('admin/settings_index.tpl');
-$content = $tpl->fetch($admin_template);
-$tpl->assign('content', $content);
-$tpl->display_one_col_template();
+$template = $tpl->get_template('admin/settings_index.tpl');
+$tpl->display($template);

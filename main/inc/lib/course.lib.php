@@ -34,29 +34,29 @@ class CourseManager
     /**
      * Creates a course.
      *
-     * @param array $params   columns in the main.course table
-     * @param int   $authorId
+     * @param array $params      Columns in the main.course table.
+     * @param int   $authorId    Optional.
+     * @param int   $accessUrlId Optional.
      *
      * @return mixed false if the course was not created, array with the course info
      */
-    public static function create_course($params, $authorId = 0)
+    public static function create_course($params, $authorId = 0, $accessUrlId = 0)
     {
         global $_configuration;
 
         $hook = HookCreateCourse::create();
 
         // Check portal limits
-        $access_url_id = 1;
-        if (api_get_multiple_access_url()) {
-            $access_url_id = api_get_current_access_url_id();
-        }
+        $accessUrlId = empty($accessUrlId)
+            ? (api_get_multiple_access_url() ? api_get_current_access_url_id() : 1)
+            : $accessUrlId;
 
         $authorId = empty($authorId) ? api_get_user_id() : (int) $authorId;
 
-        if (isset($_configuration[$access_url_id]) && is_array($_configuration[$access_url_id])) {
+        if (isset($_configuration[$accessUrlId]) && is_array($_configuration[$accessUrlId])) {
             $return = self::checkCreateCourseAccessUrlParam(
                 $_configuration,
-                $access_url_id,
+                $accessUrlId,
                 'hosting_limit_courses',
                 'PortalCoursesLimitReached'
             );
@@ -65,7 +65,7 @@ class CourseManager
             }
             $return = self::checkCreateCourseAccessUrlParam(
                 $_configuration,
-                $access_url_id,
+                $accessUrlId,
                 'hosting_limit_active_courses',
                 'PortalActiveCoursesLimitReached'
             );
@@ -99,7 +99,7 @@ class CourseManager
             $params['directory'] = $keys['currentCourseRepository'];
             $course_info = api_get_course_info($params['code']);
             if (empty($course_info)) {
-                $course_id = AddCourse::register_course($params);
+                $course_id = AddCourse::register_course($params, $accessUrlId);
                 $course_info = api_get_course_info_by_id($course_id);
 
                 if ($hook) {

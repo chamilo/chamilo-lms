@@ -776,10 +776,18 @@ function api_get_path($path = '', $configuration = [])
             [],
             UrlGeneratorInterface::ABSOLUTE_URL
         );
+        // Fix for php files inside main
         if (strpos($root_web, 'main') !== false) {
             $pos = (int) strpos($root_web, 'main');
             $root_web = substr($root_web, 0, $pos);
         }
+
+        // Fix for php files inside courses
+        if (strpos($root_web, '/courses/') !== false) {
+            $pos = (int) strpos($root_web, '/courses/');
+            $root_web = substr($root_web, 0, $pos);
+        }
+
         $root_web = urldecode($root_web);
     }
 

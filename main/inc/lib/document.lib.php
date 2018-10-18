@@ -1453,12 +1453,13 @@ class DocumentManager
         $user_id
     ) {
         $table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);
-        $course_code = (int) $courseId;
+        $courseId = (int) $courseId;
         $user_id = (int) $user_id;
         $document_id = (int) $document_id;
+
         $sql = 'SELECT id FROM '.$table_template.'
                 WHERE
-                    c_id = "'.$course_code.'" AND
+                    c_id = "'.$courseId.'" AND
                     user_id = "'.$user_id.'" AND
                     ref_doc = "'.$document_id.'"';
         $result = Database::query($sql);
@@ -1702,14 +1703,15 @@ class DocumentManager
      *
      * @todo move to certificate.lib.php
      *
-     * @param string $course_id
-     * @param int    $document_id
-     * @param int    $session_id
+     * @param int $courseId
+     * @param int $document_id
+     * @param int $session_id
      */
-    public static function attach_gradebook_certificate($course_id, $document_id, $session_id = 0)
+    public static function attach_gradebook_certificate($courseId, $document_id, $session_id = 0)
     {
         $tbl_category = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $session_id = intval($session_id);
+        $courseId = (int) $courseId;
         if (empty($session_id)) {
             $session_id = api_get_session_id();
         }
@@ -1717,12 +1719,12 @@ class DocumentManager
         if (empty($session_id)) {
             $sql_session = 'AND (session_id = 0 OR isnull(session_id)) ';
         } elseif ($session_id > 0) {
-            $sql_session = 'AND session_id='.intval($session_id);
+            $sql_session = 'AND session_id='.$session_id;
         } else {
             $sql_session = '';
         }
         $sql = 'UPDATE '.$tbl_category.' SET document_id="'.intval($document_id).'"
-                WHERE course_code="'.Database::escape_string($course_id).'" '.$sql_session;
+                WHERE c_id ="'.$courseId.'" '.$sql_session;
         Database::query($sql);
     }
 
@@ -1731,15 +1733,16 @@ class DocumentManager
      *
      * @todo move to certificate.lib.php
      *
-     * @param string $course_id
-     * @param int    $session_id
+     * @param int $courseId
+     * @param int $session_id
      *
      * @return int The default certificate id
      */
-    public static function get_default_certificate_id($course_id, $session_id = 0)
+    public static function get_default_certificate_id($courseId, $session_id = 0)
     {
         $tbl_category = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
+        $courseId = (int) $courseId;
         if (empty($session_id)) {
             $session_id = api_get_session_id();
         }
@@ -1747,12 +1750,13 @@ class DocumentManager
         if (empty($session_id)) {
             $sql_session = 'AND (session_id = 0 OR isnull(session_id)) ';
         } elseif ($session_id > 0) {
-            $sql_session = 'AND session_id='.intval($session_id);
+            $sql_session = 'AND session_id='.$session_id;
         } else {
             $sql_session = '';
         }
+
         $sql = 'SELECT document_id FROM '.$tbl_category.'
-                WHERE course_code="'.Database::escape_string($course_id).'" '.$sql_session;
+                WHERE c_id ="'.$courseId.'" '.$sql_session;
 
         $rs = Database::query($sql);
         $num = Database::num_rows($rs);
@@ -1767,26 +1771,25 @@ class DocumentManager
     /**
      * Allow replace user info in file html.
      *
-     * @param int    $user_id
-     * @param string $course_code
-     * @param int    $sessionId
-     * @param bool   $is_preview
+     * @param int   $user_id
+     * @param array $courseInfo
+     * @param int   $sessionId
+     * @param bool  $is_preview
      *
      * @return array
      */
     public static function replace_user_info_into_html(
         $user_id,
-        $course_code,
+        $courseInfo,
         $sessionId,
         $is_preview = false
     ) {
         $user_id = intval($user_id);
-        $course_info = api_get_course_info($course_code);
         $tbl_document = Database::get_course_table(TABLE_DOCUMENT);
-        $course_id = $course_info['real_id'];
+        $course_id = $courseInfo['real_id'];
 
         $document_id = self::get_default_certificate_id(
-            $course_code,
+            $course_id,
             $sessionId
         );
 
@@ -1799,13 +1802,13 @@ class DocumentManager
             $all_user_info = [];
             if (Database::num_rows($rs)) {
                 $row = Database::fetch_array($rs);
-                $filepath = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document'.$row['path'];
+                $filepath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document'.$row['path'];
                 if (is_file($filepath)) {
                     $my_content_html = file_get_contents($filepath);
                 }
                 $all_user_info = self::get_all_info_to_certificate(
                     $user_id,
-                    $course_code,
+                    $courseInfo,
                     $is_preview
                 );
 
@@ -1953,7 +1956,7 @@ class DocumentManager
     /**
      * Remove default certificate.
      *
-     * @param string $course_id              The course code
+     * @param int $course_id              The course code
      * @param int    $default_certificate_id The document id of the default certificate
      */
     public static function remove_attach_certificate($course_id, $default_certificate_id)
@@ -1976,7 +1979,7 @@ class DocumentManager
 
             $sql = 'UPDATE '.$tbl_category.' SET document_id = null
                     WHERE
-                        course_code = "'.Database::escape_string($course_id).'" AND
+                        c_id = "'.Database::escape_string($course_id).'" AND
                         document_id="'.$default_certificate_id.'" '.$sql_session;
             Database::query($sql);
         }
@@ -4481,7 +4484,7 @@ class DocumentManager
 
         if ($fromBaseCourse) {
             $defaultCertificateId = self::get_default_certificate_id(
-                $courseData['code'],
+                $courseData['real_id'],
                 0
             );
             if (!empty($defaultCertificateId)) {
@@ -4531,13 +4534,13 @@ class DocumentManager
                 );
 
                 $defaultCertificateId = self::get_default_certificate_id(
-                    $courseData['code'],
+                    $courseData['real_id'],
                     $sessionId
                 );
 
                 if (!isset($defaultCertificateId)) {
                     self::attach_gradebook_certificate(
-                        $courseData['code'],
+                        $courseData['real_id'],
                         $documentId,
                         $sessionId
                     );
@@ -5445,7 +5448,7 @@ class DocumentManager
                 }
                 if ((isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates') || $is_certificate_mode) {//allow attach certificate to course
                     $visibility_icon_certificate = 'nocertificate';
-                    if (self::get_default_certificate_id(api_get_course_id()) == $id) {
+                    if (self::get_default_certificate_id(api_get_course_int_id()) == $id) {
                         $visibility_icon_certificate = 'certificate';
                         $certificate = get_lang('DefaultCertificate');
                         $preview = get_lang('PreviewCertificate');
@@ -6854,7 +6857,7 @@ class DocumentManager
         if (
             isset($_GET['curdirpath']) &&
             $_GET['curdirpath'] == '/certificates' &&
-            self::get_default_certificate_id(api_get_course_id()) == $id
+            self::get_default_certificate_id(api_get_course_int_id()) == $id
         ) {
             return $btn;
         }

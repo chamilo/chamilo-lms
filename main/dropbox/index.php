@@ -4,6 +4,8 @@
 // The file that contains all the initialisation stuff (and includes all the configuration stuff)
 require_once 'dropbox_init.inc.php';
 
+$_course = api_get_course_info();
+
 $last_access = '';
 // get the last time the user accessed the tool
 if (isset($_SESSION[$_course['id']]) &&

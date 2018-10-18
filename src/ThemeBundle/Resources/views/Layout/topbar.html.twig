@@ -147,7 +147,11 @@
                 <li class="dropdown">
                     <a href="" class="dropdown-toggle no-after peers fxw-nw ai-c lh-1" data-toggle="dropdown">
                         <div class="peer mR-10">
-                            <img class="rounded-circle" src="{{ asset(app.user.avatarOrAnonymous(32)) }}" alt="{{ app.user.completeName }}">
+                            <img
+                                class="rounded-circle"
+                                src="{{ url('legacy_public') ~ app.user.avatarOrAnonymous(32) }}"
+                                alt="{{ app.user.completeName }}"
+                            >
                         </div>
                         <div class="peer">
                             <span class="fsz-sm">{{ app.user.completeName }}</span>

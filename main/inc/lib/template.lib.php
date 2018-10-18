@@ -1577,7 +1577,6 @@ class Template
     {
         // Default root chamilo favicon
         $favico = '<link rel="shortcut icon" href="'.api_get_path(WEB_PATH).'favicon.ico" type="image/x-icon" />';
-
         //Added to verify if in the current Chamilo Theme exist a favicon
         $favicoThemeUrl = api_get_path(SYS_CSS_PATH).$this->themeDir.'images/';
 

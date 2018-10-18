@@ -781,7 +781,7 @@ class GradebookTable extends SortableTable
 
                 $content_html = DocumentManager::replace_user_info_into_html(
                     api_get_user_id(),
-                    $course_code,
+                    api_get_course_info($course_code),
                     api_get_session_id()
                 );
 

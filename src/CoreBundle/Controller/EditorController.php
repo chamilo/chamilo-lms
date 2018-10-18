@@ -123,7 +123,7 @@ class EditorController extends Controller
         }
 
         return $this->render(
-            'ChamiloCoreBundle:Editor:config_js.html.twig',
+            '@ChamiloTheme/Editor/config_js.html.twig',
             [
                 // @todo replace api_get_bootstrap_and_font_awesome
                 'bootstrap_css' => api_get_bootstrap_and_font_awesome(true),

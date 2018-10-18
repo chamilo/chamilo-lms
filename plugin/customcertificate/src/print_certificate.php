@@ -468,10 +468,10 @@ foreach ($userList as $userInfo) {
 }
 $htmlText .= '</body></html>';
 
-$fileName = 'certificate_'.date("Ymd_His");
+$fileName = 'certificate_'.date('Ymd_His');
 $params = [
     'filename' => $fileName,
-    'pdf_title' => "Certificate",
+    'pdf_title' => 'Certificate',
     'pdf_description' => '',
     'format' => 'A4-L',
     'orientation' => 'L',

@@ -169,7 +169,9 @@ class CourseManager
         $conditionsLike = [],
         $onlyThisCourseList = []
     ) {
-        $sql = "SELECT course.*, id as real_id FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." course ";
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $sql = "SELECT course.*, course.id as real_id 
+                FROM $courseTable course ";
 
         if (!empty($urlId)) {
             $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -188,7 +190,7 @@ class CourseManager
                 $sql .= " AND visibility = $visibility ";
             }
         } else {
-            $sql .= "WHERE 1 ";
+            $sql .= 'WHERE 1 ';
             if ($visibility !== -1) {
                 $sql .= " AND visibility = $visibility ";
             }
@@ -235,7 +237,7 @@ class CourseManager
         if (!empty($orderby)) {
             $sql .= " ORDER BY ".Database::escape_string($orderby)." ";
         } else {
-            $sql .= " ORDER BY 1 ";
+            $sql .= ' ORDER BY 1 ';
         }
 
         if (!in_array($orderdirection, ['ASC', 'DESC'])) {
@@ -278,6 +280,7 @@ class CourseManager
     public static function getUserInCourseStatus($userId, $courseId)
     {
         $courseId = (int) $courseId;
+        $userId = (int) $userId;
         if (empty($courseId)) {
             return false;
         }
@@ -287,7 +290,7 @@ class CourseManager
                 "SELECT status FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
                 WHERE
                     c_id  = $courseId AND
-                    user_id = ".intval($userId)
+                    user_id = $userId"
             )
         );
 
@@ -384,7 +387,7 @@ class CourseManager
         }
 
         if (!empty($session_id)) {
-            $session_id = intval($session_id);
+            $session_id = (int) $session_id;
         } else {
             $session_id = api_get_session_id();
         }

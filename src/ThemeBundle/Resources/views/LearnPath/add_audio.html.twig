@@ -1,0 +1,9 @@
+{% extends '@ChamiloTheme/Layout/layout_one_col.html.twig' %}
+{% block content %}
+    {% autoescape false %}
+    {{ pre_page }}
+    {% include '@ChamiloTheme/LearnPath/record_voice.html.twig' %}
+    {{ form }}
+    {{ post_page }}
+    {% endautoescape %}
+{% endblock %}

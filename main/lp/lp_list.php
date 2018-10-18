@@ -940,7 +940,5 @@ $template->assign('introduction', $introduction);
 $template->assign('data', $data);
 $template->assign('lp_is_shown', $lpIsShown);
 $template->assign('filtered_category', $filteredCategoryId);
-$templateName = $template->get_template('learnpath/list.tpl');
-$content = $template->fetch($templateName);
-$template->assign('content', $content);
-$template->display_one_col_template();
+
+$template->displayTemplate('@ChamiloTheme/LearnPath/list.html.twig');

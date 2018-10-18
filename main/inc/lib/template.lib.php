@@ -273,6 +273,16 @@ class Template
     }
 
     /**
+     * @param string $template
+     *
+     * @throws \Twig\Error\Error
+     */
+    public function displayTemplate($template)
+    {
+        $this->returnResponse($this->params, $template);
+    }
+
+    /**
      * Shortcut to display a 1 col layout (index.php).
      * */
     public function display_one_col_template()

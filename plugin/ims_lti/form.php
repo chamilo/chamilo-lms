@@ -30,8 +30,8 @@ $course = $em->find('ChamiloCoreBundle:Course', api_get_course_int_id());
 /** @var User $user */
 $user = $em->find('ChamiloUserBundle:User', api_get_user_id());
 
-$siteName = api_get_setting('siteName');
-$toolUserId = ImsLtiPlugin::generateToolUserId($user);
+$toolUserId = ImsLtiPlugin::generateToolUserId($user->getId());
+$platformDomain = str_replace(['https://', 'http://'], '', api_get_setting('InstitutionUrl'));
 
 $params = [];
 $params['lti_version'] = 'LTI-1p0';
@@ -53,9 +53,20 @@ if ($tool->isActiveDeepLinking()) {
     $params['resource_link_id'] = $tool->getId();
     $params['resource_link_title'] = $tool->getName();
     $params['resource_link_description'] = $tool->getDescription();
+
+    $params['lis_result_sourcedid'] = $tool->getId().':'.$toolUserId;
+    $params['lis_outcome_service_url'] = api_get_path(WEB_PLUGIN_PATH).'ims_lti/outcome_service.php';
+    $params['lis_person_sourcedid'] = $platformDomain.':'.$toolUserId;
+    $params['lis_course_offering_sourcedid'] = "$platformDomain:";
+
+    if ($session) {
+        $params['lis_course_offering_sourcedid'] .= $session->getId().'-'.$course->getCode();
+    } else {
+        $params['lis_course_offering_sourcedid'] .= $course->getCode();
+    }
 }
 
-$params['user_id'] = ImsLtiPlugin::generateToolUserId($user->getId());
+$params['user_id'] = $toolUserId;
 $params['user_image'] = UserManager::getUserPicture($user->getId());
 $params['roles'] = ImsLtiPlugin::getUserRoles($user);
 $params['lis_person_name_given'] = $user->getFirstname();
@@ -75,8 +86,8 @@ $params['launch_presentation_locale'] = api_get_language_isocode();
 $params['launch_presentation_document_target'] = 'iframe';
 $params['tool_consumer_info_product_family_code'] = 'Chamilo LMS';
 $params['tool_consumer_info_version'] = api_get_version();
-$params['tool_consumer_instance_guid'] = str_replace(['https://', 'http://'], '', api_get_setting('InstitutionUrl'));
-$params['tool_consumer_instance_name'] = $siteName;
+$params['tool_consumer_instance_guid'] = $platformDomain;
+$params['tool_consumer_instance_name'] = api_get_setting('siteName');
 $params['tool_consumer_instance_url'] = api_get_path(WEB_PATH);
 $params['tool_consumer_instance_contact_email'] = api_get_setting('emailAdministrator');
 

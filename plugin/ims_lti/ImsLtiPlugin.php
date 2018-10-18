@@ -204,7 +204,7 @@ class ImsLtiPlugin extends Plugin
         $cTool = $toolRepo->findOneBy(
             [
                 'cId' => $course,
-                'link' => self::generateToolLink($ltiTool)
+                'link' => self::generateToolLink($ltiTool),
             ]
         );
 
@@ -392,5 +392,70 @@ class ImsLtiPlugin extends Plugin
         }
 
         $this->addCourseTool($course, $newLtiTool);
+    }
+
+    /**
+     * @return null|SimpleXMLElement
+     */
+    private function getRequestXmlElement()
+    {
+        $request = file_get_contents("php://input");
+
+        if (empty($request)) {
+            return null;
+        }
+
+        $xml = new SimpleXMLElement($request);
+
+        return $xml;
+    }
+
+    public function processServiceRequest()
+    {
+        $xml = $this->getRequestXmlElement();
+
+        if (empty($xml)) {
+            return;
+        }
+
+        $bodyChildren = $xml->imsx_POXBody->children();
+
+        if (empty($bodyChildren)) {
+            return;
+        }
+
+        /** @var SimpleXMLElement $resultRequest */
+        $resultRequest = $bodyChildren[0];
+
+        switch ($resultRequest->getName()) {
+            case 'replaceResultRequest':
+                $this->getReplaceRequest($resultRequest->resultRecord);
+                break;
+            case 'readResultRequest':
+            case 'deleteResultRequest':
+                $this->getReadOrDeleteRequest($resultRequest->resultRecord);
+                break;
+        }
+    }
+
+    /**
+     * @param SimpleXMLElement $resultRecord
+     */
+    private function getReplaceRequest(SimpleXMLElement $resultRecord)
+    {
+        $sourcedId = $resultRecord->sourcedGUID->sourcedId;
+        $resultScore = $resultRecord->result->resultScore->textString;
+
+        error_log("ReplaceRequest sourcedId: $sourcedId - score: $resultScore");
+    }
+
+    /**
+     * @param SimpleXMLElement $resultRecord
+     */
+    private function getReadOrDeleteRequest(SimpleXMLElement $resultRecord)
+    {
+        $sourcedId = $resultRecord->sourcedGUID->sourcedId;
+
+        error_log("ReadOrDeleteRequest sourcedId: $sourcedId");
     }
 }

@@ -126,6 +126,7 @@ class ImsLtiPlugin extends Plugin
             $toolTable->addColumn('shared_secret', Type::STRING);
             $toolTable->addColumn('custom_params', Type::TEXT)->setNotnull(false);
             $toolTable->addColumn('is_global', Type::BOOLEAN);
+            $toolTable->addColumn('active_deep_linking', Type::BOOLEAN)->setNotnull(false)->setDefault(false);
             $toolTable->setPrimaryKey(['id']);
 
             $queries = $pluginSchema->toSql($platform);

@@ -4,7 +4,7 @@
 <link href="https://chamilo.org/chamilo-lms/" rel="help"/>
 <link href="https://chamilo.org/the-association/" rel="author"/>
 <link href="https://chamilo.org/the-association/" rel="copyright"/>
-<link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}"/>
+<link rel="apple-touch-icon" href="{{ url('legacy_public') ~ 'apple-touch-icon.png' }}"/>
 {% autoescape false %}
     {{ favico }}
 {% endautoescape %}
@@ -28,13 +28,13 @@
 {% set message_link = '' %}
 
 {# Files app.css is generated from "assets/css/app.scss" file using the file webpack.config.js #}
-<link rel="stylesheet" href="{{ asset('build/css/app.css') }}"/>
-<link rel="stylesheet" href="{{ asset('build/css/themes/'~ theme ~'/default.css') }}"/>
-<link rel="stylesheet" media="print" href="{{ asset('build/css/print.css') }}"/>
+<link rel="stylesheet" href="{{ url('legacy_public') ~ 'build/css/app.css' }}"/>
+<link rel="stylesheet" href="{{ url('legacy_public') ~ 'build/css/themes/'~ theme ~'/default.css' }}"/>
+<link rel="stylesheet" media="print" href="{{ url('legacy_public') ~ 'build/css/print.css' }}"/>
 {# Add third party js libraries that can't be loaded using webpack #}
 {% include "@ChamiloTheme/Layout/legacy_js.html.twig" %}
 {# app.js is generated using the file webpack.config.js and using yarn read /assets/README.md for more info #}
-<script src="{{ asset('build/app.js') }}"></script>
+<script src="{{ url('legacy_public') ~ 'build/app.js' }}"></script>
 
 {# Check chamilo_js key in assetic.yml #}
 {% block javascripts %}

@@ -31,7 +31,6 @@ $add_result_form = new EvalForm(
 $table = $add_result_form->toHtml();
 if ($add_result_form->validate()) {
     $values = $add_result_form->exportValues();
-    var_dump($values);die;
     $nr_users = $values['nr_users'];
     if ($nr_users == '0') {
         Display::addFlash(Display::return_message(get_lang('AddResultNoStudents'), 'warning', false));

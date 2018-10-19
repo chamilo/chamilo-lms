@@ -938,8 +938,7 @@ EOT;
         $label,
         $required = true,
         $fullPage = false,
-        $config = [],
-        $style = false
+        $config = []
     ) {
         $attributes = [];
         $attributes['rows'] = isset($config['rows']) ? $config['rows'] : 15;
@@ -955,12 +954,11 @@ EOT;
 
         /** @var HtmlEditor $element */
         $element = $this->getElement($name);
-
-        if ($style) {
-            $config['style'] = true;
-        }
+        $config['style'] = false;
         if ($fullPage) {
             $config['fullPage'] = true;
+            // Adds editor_content.css in ckEditor
+            $config['style'] = true;
         }
 
         if ($element->editor) {

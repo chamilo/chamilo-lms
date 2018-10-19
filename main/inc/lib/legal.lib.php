@@ -384,11 +384,13 @@ class LegalManager
         $senderInfo = api_get_user_info();
         $subject = get_lang('SendTermsSubject');
         $webPath = api_get_path(WEB_PATH);
-        $link = '<a href="'.$webPath.'courses/FORUMDAIDE/index.php">'.$webPath.'courses/FORUMDAIDE/index.php</a>';
+
+        // @ofaj
+	    $link = '<a href="'.$webPath.'contrat.php">'.$webPath.'contrat.php</a>';
         $content = sprintf(
             get_lang('SendTermsDescriptionToUrlX'),
             $userInfo['firstName'],
-	    $link,
+	        $link,
             $senderInfo['firstName']
         );
         MessageManager::send_message_simple($userId, $subject, $content);

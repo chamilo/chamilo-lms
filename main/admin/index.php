@@ -204,7 +204,8 @@ if (api_is_platform_admin()) {
         'url' => api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=admin',
         'label' => get_lang('GlobalAgenda'),
     ];
-    $items[] = ['url' => 'configure_homepage.php', 'label' => get_lang('ConfigureHomePage')];
+    // Replaced by page blocks
+    //$items[] = ['url' => 'configure_homepage.php', 'label' => get_lang('ConfigureHomePage')];
     $items[] = ['url' => 'configure_inscription.php', 'label' => get_lang('ConfigureInscription')];
     $items[] = ['url' => 'statistics/index.php', 'label' => get_lang('Statistics')];
     $items[] = [

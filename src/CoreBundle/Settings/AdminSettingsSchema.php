@@ -5,6 +5,7 @@ namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -49,7 +50,7 @@ class AdminSettingsSchema extends AbstractSettingsSchema
                 TextType::class,
                 ['label' => 'emailAdministratorTitle', 'help_block' => 'emailAdministratorComment'])
             ->add('administrator_surname')
-            ->add('administrator_email', 'email')
+            ->add('administrator_email', EmailType::class)
             ->add('administrator_phone')
             ->add('redirect_admin_to_courses_list', YesNoType::class)
 

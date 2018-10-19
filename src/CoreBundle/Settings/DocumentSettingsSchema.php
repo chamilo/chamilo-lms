@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Chamilo\SettingsBundle\Transformer\ArrayToIdentifierTransformer;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
@@ -96,10 +97,10 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                     ],
                 ]
             )
-            ->add('upload_extensions_blacklist', 'textarea')
-            ->add('upload_extensions_whitelist', 'textarea')
-            ->add('upload_extensions_skip', 'textarea')
-            ->add('upload_extensions_replace_by', 'textarea')
+            ->add('upload_extensions_blacklist', TextareaType::class)
+            ->add('upload_extensions_whitelist', TextareaType::class)
+            ->add('upload_extensions_skip', TextareaType::class)
+            ->add('upload_extensions_replace_by', TextareaType::class)
             ->add('permissions_for_new_directories')
             ->add('permissions_for_new_files')
             ->add(
@@ -117,7 +118,7 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
             ->add('users_copy_files', YesNoType::class)
             ->add('pdf_export_watermark_enable', YesNoType::class)
             ->add('pdf_export_watermark_by_course', YesNoType::class)
-            ->add('pdf_export_watermark_text', 'textarea')
+            ->add('pdf_export_watermark_text', TextareaType::class)
             ->add('students_export2pdf', YesNoType::class)
             ->add('show_users_folders', YesNoType::class)
             ->add('show_default_folders', YesNoType::class)

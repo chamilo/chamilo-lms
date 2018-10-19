@@ -468,8 +468,8 @@ class ImsLtiPlugin extends Plugin
      */
     private function getReplaceRequest(SimpleXMLElement $resultRecord)
     {
-        $sourcedId = $resultRecord->sourcedGUID->sourcedId;
-        $resultScore = $resultRecord->result->resultScore->textString;
+        $sourcedId = (string) $resultRecord->sourcedGUID->sourcedId;
+        $resultScore = (float) $resultRecord->result->resultScore->textString;
 
         list($evaluationId, $userId) = explode(':', $sourcedId);
 
@@ -487,7 +487,10 @@ class ImsLtiPlugin extends Plugin
         $result->set_score($evaluation->getMax() * $resultScore);
         $result->add();
 
-        error_log("ReplaceRequest sourcedId: $sourcedId - score: $resultScore");
+        error_log(
+            "ReplaceRequest sourcedId: $sourcedId - lti_score: $resultScore - score: "
+                .($evaluation->getMax() * $resultScore)
+        );
     }
 
     /**

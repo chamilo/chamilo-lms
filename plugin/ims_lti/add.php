@@ -84,7 +84,8 @@ if ($form->validate()) {
         ->setDescription(
             empty($formValues['description']) ? null : $formValues['description']
         )
-        ->setIsGlobal(false);
+        ->setIsGlobal(false)
+        ->setCourse($course);
     $em->persist($tool);
     $em->flush();
 

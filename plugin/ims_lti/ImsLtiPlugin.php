@@ -2,6 +2,7 @@
 /* For license terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CourseBundle\Entity\CTool;
@@ -127,7 +128,25 @@ class ImsLtiPlugin extends Plugin
             $toolTable->addColumn('custom_params', Type::TEXT)->setNotnull(false);
             $toolTable->addColumn('is_global', Type::BOOLEAN);
             $toolTable->addColumn('active_deep_linking', Type::BOOLEAN)->setNotnull(false)->setDefault(false);
+            $toolTable->addColumn('c_id', Type::INTEGER);
+            $toolTable->addForeignKeyConstraint(
+                'course',
+                ['c_id'],
+                ['id'],
+                [],
+                'FK_C5E47F7C91D79BD3'
+            );
+            $toolTable->addColumn('gradebook_eval_id', Type::INTEGER, []);
+            $toolTable->addForeignKeyConstraint(
+                'gradebook_evaluation',
+                ['gradebook_eval_id'],
+                ['id'],
+                ['onDelete' => 'SET NULL'],
+                'FK_C5E47F7C82F80D8B'
+            );
             $toolTable->setPrimaryKey(['id']);
+            $toolTable->addIndex(['c_id'], 'IDX_C5E47F7C91D79BD3');
+            $toolTable->addIndex(['gradebook_eval_id'], 'IDX_C5E47F7C82F80D8B');
 
             $queries = $pluginSchema->toSql($platform);
 
@@ -379,7 +398,8 @@ class ImsLtiPlugin extends Plugin
             )
             ->setDescription(
                 !empty($contentItem['text']) ? $contentItem['text'] : null
-            );
+            )
+            ->setCourse($course);
 
         $em->persist($newLtiTool);
         $em->flush();
@@ -441,11 +461,31 @@ class ImsLtiPlugin extends Plugin
 
     /**
      * @param SimpleXMLElement $resultRecord
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     private function getReplaceRequest(SimpleXMLElement $resultRecord)
     {
         $sourcedId = $resultRecord->sourcedGUID->sourcedId;
         $resultScore = $resultRecord->result->resultScore->textString;
+
+        list($evaluationId, $userId) = explode(':', $sourcedId);
+
+        $em = Database::getManager();
+        /** @var GradebookEvaluation $evaluation */
+        $evaluation = $em->find('ChamiloCoreBundle:GradebookEvaluation', $evaluationId);
+
+        if (empty($evaluation)) {
+            return;
+        }
+
+        $result = new Result();
+        $result->set_evaluation_id($evaluationId);
+        $result->set_user_id($userId);
+        $result->set_score($evaluation->getMax() * $resultScore);
+        $result->add();
 
         error_log("ReplaceRequest sourcedId: $sourcedId - score: $resultScore");
     }

@@ -54,15 +54,17 @@ if ($tool->isActiveDeepLinking()) {
     $params['resource_link_title'] = $tool->getName();
     $params['resource_link_description'] = $tool->getDescription();
 
-    $params['lis_result_sourcedid'] = $tool->getId().':'.$toolUserId;
-    $params['lis_outcome_service_url'] = api_get_path(WEB_PLUGIN_PATH).'ims_lti/outcome_service.php';
-    $params['lis_person_sourcedid'] = $platformDomain.':'.$toolUserId;
-    $params['lis_course_offering_sourcedid'] = "$platformDomain:";
+    $toolEval = $tool->getGradebookEval();
 
-    if ($session) {
-        $params['lis_course_offering_sourcedid'] .= $session->getId().'-'.$course->getCode();
-    } else {
-        $params['lis_course_offering_sourcedid'] .= $course->getCode();
+    if (!empty($toolEval)) {
+        $params['lis_result_sourcedid'] = $toolEval->getId().':'.$user->getId();
+        $params['lis_outcome_service_url'] = api_get_path(WEB_PLUGIN_PATH).'ims_lti/outcome_service.php';
+        $params['lis_person_sourcedid'] = "$platformDomain:$toolUserId";
+        $params['lis_course_offering_sourcedid'] = "$platformDomain:".$course->getId();
+
+        if ($session) {
+            $params['lis_course_offering_sourcedid'] .= ':'.$session->getId();
+        }
     }
 }
 

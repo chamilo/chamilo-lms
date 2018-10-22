@@ -969,6 +969,7 @@ if ($checkFromDatabase && !empty($sessionIdFromGet)) {
         Session::write('id_session', $sessionInfo['id']);
     } else {
         $cidReset = true;
+        $gidReset = true;
         Session::erase('session_name');
         Session::erase('id_session');
 

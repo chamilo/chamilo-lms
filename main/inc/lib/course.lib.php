@@ -1063,6 +1063,7 @@ class CourseManager
      * @param int    $user_id
      * @param string $course_code  , if this parameter is null, it'll check for all courses
      * @param bool   $in_a_session True for checking inside sessions too, by default is not checked
+     * @param int    $session_id
      *
      * @return bool $session_id true if the user is registered in the course, false otherwise
      */
@@ -1072,12 +1073,12 @@ class CourseManager
         $in_a_session = false,
         $session_id = 0
     ) {
-        $user_id = intval($user_id);
+        $user_id = (int) $user_id;
 
         if (empty($session_id)) {
             $session_id = api_get_session_id();
         } else {
-            $session_id = intval($session_id);
+            $session_id = (int) $session_id;
         }
 
         $condition_course = '';
@@ -1109,13 +1110,16 @@ class CourseManager
         }
 
         $tableSessionCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $sql = 'SELECT 1 FROM '.$tableSessionCourseUser.
-            ' WHERE user_id = '.$user_id.' '.$condition_course;
+        $sql = 'SELECT 1 FROM '.$tableSessionCourseUser.'
+            WHERE user_id = '.$user_id.' AND session_id = '.$session_id.' '.$condition_course;
+
         if (Database::num_rows(Database::query($sql)) > 0) {
             return true;
         }
 
-        $sql = 'SELECT 1 FROM '.$tableSessionCourseUser.' WHERE user_id = '.$user_id.' AND status = 2 '.$condition_course;
+        $sql = 'SELECT 1 FROM '.$tableSessionCourseUser.'
+            WHERE user_id = '.$user_id.' AND session_id = '.$session_id.' AND status = 2 '.$condition_course;
+
         if (Database::num_rows(Database::query($sql)) > 0) {
             return true;
         }

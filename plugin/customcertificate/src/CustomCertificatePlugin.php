@@ -205,7 +205,7 @@ class CustomCertificatePlugin extends Plugin
     /**
      * Get certificate data.
      *
-     * @param int $id The certificate
+     * @param int $id     The certificate
      * @param int $userId
      *
      * @return array

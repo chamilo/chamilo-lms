@@ -15,5 +15,3 @@ switch ($action) {
         echo $item['template'];
         break;
 }
-
-

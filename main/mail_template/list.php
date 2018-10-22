@@ -62,14 +62,14 @@ switch ($action) {
         // The validation or display
         if ($form->validate()) {
             //if ($check) {
-                $values = $form->exportValues();
-                $values['template'] = $values['email_template'];
-                $res = $mailTemplate->update($values);
-                if ($res) {
-                    Display::addFlash(
+            $values = $form->exportValues();
+            $values['template'] = $values['email_template'];
+            $res = $mailTemplate->update($values);
+            if ($res) {
+                Display::addFlash(
                         Display::return_message(get_lang('ItemUpdated').': '.$values['name'], 'confirm')
                     );
-                }
+            }
             //}
             header('Location: '.api_get_self());
             exit;
@@ -78,7 +78,7 @@ switch ($action) {
     case 'delete':
         $mailTemplate->delete($id);
         Display::addFlash(
-            Display::return_message(get_lang('Deleted'),'confirm')
+            Display::return_message(get_lang('Deleted'), 'confirm')
         );
         header('Location: '.api_get_self());
         exit;
@@ -86,7 +86,7 @@ switch ($action) {
     case 'set_default':
         $mailTemplate->setDefault($id);
         Display::addFlash(
-            Display::return_message(get_lang('Updated'),'confirm')
+            Display::return_message(get_lang('Updated'), 'confirm')
         );
         header('Location: '.api_get_self());
         break;
@@ -116,7 +116,7 @@ switch ($action) {
                 'index' => 'default_template',
                 'width' => '100',
                 'align' => 'left',
-                'hidden' => 'true'
+                'hidden' => 'true',
             ],
             [
                 'name' => 'actions',
@@ -130,7 +130,6 @@ switch ($action) {
         $extra_params['autowidth'] = 'true'; //use the width of the parent
         //$extra_params['editurl'] = $url; //use the width of the parent
         $extra_params['height'] = 'auto'; //use the width of the parent
-
 
         //With this function we can add actions to the jgrid
         $action_links = 'function action_formatter (cellvalue, options, rowObject) {

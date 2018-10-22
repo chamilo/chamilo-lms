@@ -18,11 +18,9 @@ class MailTemplateManager extends Model
         'default_template',
         'created_at',
         'updated_at',
-        'author_id'
+        'author_id',
     ];
 
-    /**
-     */
     public function __construct()
     {
         parent::__construct();
@@ -69,7 +67,7 @@ class MailTemplateManager extends Model
                 '',
                 '32'
             ).'</a>';
-        $html .='</div>';
+        $html .= '</div>';
         $html .= Display::grid_html('mail_template');
 
         return $html;

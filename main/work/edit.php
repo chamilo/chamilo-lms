@@ -6,6 +6,12 @@ $current_course_tool = TOOL_STUDENTPUBLICATION;
 
 api_protect_course_script(true);
 
+$blockEdition = api_get_configuration_value('block_student_publication_edition');
+
+if ($blockEdition && !api_is_platform_admin()) {
+    api_not_allowed(true);
+}
+
 // Including files
 require_once 'work.lib.php';
 

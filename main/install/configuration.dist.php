@@ -975,6 +975,24 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Hide complete name in who is online page
 // $_configuration['hide_complete_name_in_whoisonline'] = false;
 
+// Block student publication edition BT#14985
+// $_configuration['block_student_publication_edition'] = false;
+
+// Enable system to manage e-mail templates in users registration forms
+/*CREATE TABLE mail_template(
+  id int not null primary key auto_increment,
+  name varchar(255) not null, -- a friendly name for the template, to remember what it is like
+  template text, -- the template content (in Twig format)
+  type varchar(255) not null, -- the type of the mail (we can use current template names to fill that)
+  created_at DATETIME NOT NULL,
+  updated_at DATETIME NOT NULL,
+  author_id INT NOT NULL,
+  url_id INT NOT NULL,
+  default_template TINYINT not null,
+  system int not null default 0 -- whether it can be deleted or not (system = 1 means it's initially from Chamilo, any other template can be created/deleted/edited, but the ones with system=1 cannot)
+);*/
+// $_configuration['mail_template_system'] = false;
+
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email

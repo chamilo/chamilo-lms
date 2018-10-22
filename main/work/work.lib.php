@@ -1404,6 +1404,7 @@ function getWorkListTeacher(
         }
 
         $url = api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq();
+        $blockEdition = api_get_configuration_value('block_student_publication_edition');
         while ($work = Database::fetch_array($result, 'ASSOC')) {
             $workId = $work['id'];
             $work['type'] = Display::return_icon('work.png');
@@ -1456,10 +1457,14 @@ function getWorkListTeacher(
             $work['title'] .= ' '.Display::label(get_count_work($work['id']), 'success');
             $work['sent_date'] = api_get_local_time($work['sent_date']);
 
-            $editLink = Display::url(
-                Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL),
-                api_get_path(WEB_CODE_PATH).'work/edit_work.php?id='.$workId.'&'.api_get_cidreq()
-            );
+            if ($blockEdition && !api_is_platform_admin()) {
+                $editLink = '';
+            } else {
+                $editLink = Display::url(
+                    Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL),
+                    api_get_path(WEB_CODE_PATH).'work/edit_work.php?id='.$workId.'&'.api_get_cidreq()
+                );
+            }
 
             $correctionLink = '&nbsp;'.Display::url(
                 Display::return_icon('upload_package.png', get_lang('UploadCorrections'), '', ICON_SIZE_SMALL),
@@ -1932,6 +1937,8 @@ function get_work_user_list(
             ICON_SIZE_SMALL
         );
 
+        $blockEdition = api_get_configuration_value('block_student_publication_edition');
+
         while ($work = Database::fetch_array($result, 'ASSOC')) {
             $item_id = $work['id'];
             // Get the author ID for that document from the item_property table
@@ -2126,13 +2133,24 @@ function get_work_user_list(
                             $action .= Display::return_icon('edit_na.png', get_lang('Comment'), [], ICON_SIZE_SMALL);
                         }
                     } else {
-                        if ($qualification_exists) {
-                            $action .= '<a href="'.$url.'edit.php?'.api_get_cidreq().'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang('Edit').'"  >'.
-                                Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
+                        if ($blockEdition && !api_is_platform_admin()) {
+                            $editLink = '';
                         } else {
-                            $action .= '<a href="'.$url.'edit.php?'.api_get_cidreq().'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang('Modify').'">'.
-                                Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
+                            if ($qualification_exists) {
+                                $editLink = '<a href="'.$url.'edit.php?'.api_get_cidreq(
+                                    ).'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang(
+                                        'Edit'
+                                    ).'"  >'.
+                                    Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
+                            } else {
+                                $editLink = '<a href="'.$url.'edit.php?'.api_get_cidreq(
+                                    ).'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang(
+                                        'Modify'
+                                    ).'">'.
+                                    Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
+                            }
                         }
+                        $action .= $editLink;
                     }
 
                     if ($work['contains_file']) {

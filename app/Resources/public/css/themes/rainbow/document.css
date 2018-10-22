@@ -11,7 +11,9 @@ body {
     line-height: 30px;
     padding: 1em;
 }
-
+.cke_editable{
+    font-family: 'Open Sans', sans-serif;
+}
 blockquote {
     background: #f9f9f9;
     border-left: 8px solid #ccc;

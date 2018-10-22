@@ -3,12 +3,15 @@ Stylesheet for HTML blocks created with CKEditor to embed in Chamilo pages.
 */
 body{
     padding: 1em;
+    font-family: 'Open Sans', sans-serif;
 }
 /* Hack for show Bootstrap alerts in CKEditor' style select */
 .cke_panel_listItem a > :first-child {
     margin-bottom: 0;
 }
-
+.cke_editable{
+    font-family: 'Open Sans', sans-serif;
+}
 .ck {
     display: block;
     font-feature-settings: normal;

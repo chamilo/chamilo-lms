@@ -139,6 +139,7 @@ class SessionManager
      * @param int|null $accessUrlId                  Optional.
      *
      * @return mixed Session ID on success, error message otherwise
+     *
      * @todo   use an array to replace all this parameters or use the model.lib.php ...
      */
     public static function create_session(

@@ -277,6 +277,13 @@ if (api_is_platform_admin()) {
         $items[] = ['url' => 'legal_add.php', 'label' => get_lang('TermsAndConditions')];
     }
 
+    if (api_get_configuration_value('mail_template_system')) {
+        $items[] = [
+            'url' => api_get_path(WEB_CODE_PATH).'mail_template/list.php',
+            'label' => get_lang('MailTemplate'),
+        ];
+    }
+
     $blocks['platform']['items'] = $items;
     $blocks['platform']['extra'] = null;
 }

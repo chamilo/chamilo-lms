@@ -183,4 +183,26 @@ class MailTemplateManager extends Model
 
         return true;
     }
+
+    /**
+     * @param int $templateId
+     * @param array $userInfo
+     *
+     * @return string
+     */
+    public function parseTemplate($templateId, $userInfo)
+    {
+        $templateInfo = $this->get($templateId);
+        $emailTemplate = $templateInfo['template'];
+
+        $keys = array_keys($userInfo);
+        foreach ($keys as $key) {
+            $emailTemplate = str_replace("{{user.$key}}", $userInfo[$key], $emailTemplate);
+        }
+        $template = new Template();
+        $template->twig->setLoader(new \Twig_Loader_String());
+        $emailBody = $template->twig->render($emailTemplate);
+
+        return $emailBody;
+    }
 }

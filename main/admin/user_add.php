@@ -305,6 +305,19 @@ $returnParams = $extraField->addElements(
     [],
     true
 );
+
+$allowEmailTemplate = api_get_configuration_value('mail_template_system');
+if ($allowEmailTemplate) {
+    $form->addEmailTemplate(
+        [
+            'subject_registration_platform.tpl',
+            'content_registration_platform.tpl',
+            'new_user_first_email_confirmation.tpl',
+            'new_user_second_email_confirmation.tpl',
+        ]
+    );
+}
+
 $jquery_ready_content = $returnParams['jquery_ready_content'];
 
 // the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function
@@ -381,6 +394,8 @@ if ($form->validate()) {
             }
         }
 
+        $template = isset($user['email_template_option']) ? $user['email_template_option'] : [];
+
         $user_id = UserManager::create_user(
             $firstname,
             $lastname,
@@ -399,7 +414,12 @@ if ($form->validate()) {
             $extra,
             null,
             $send_mail,
-            $platform_admin
+            $platform_admin,
+            '',
+            false,
+            null,
+            0,
+            $template
         );
 
         Security::clear_token();

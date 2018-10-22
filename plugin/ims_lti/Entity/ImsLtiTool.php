@@ -3,6 +3,8 @@
 
 namespace Chamilo\PluginBundle\Entity\ImsLti;
 
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -70,12 +72,33 @@ class ImsLtiTool
      */
     private $activeDeepLinking = false;
 
+    /**
+     * @var Course|null
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
+     */
+    private $course = null;
+
+    /**
+     * @var GradebookEvaluation|null
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookEvaluation")
+     * @ORM\JoinColumn(name="gradebook_eval_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    private $gradebookEval = null;
+
+    /**
+     * ImsLtiTool constructor.
+     */
     public function __construct()
     {
         $this->description = null;
         $this->customParams = null;
         $this->isGlobal = false;
         $this->activeDeepLinking = false;
+        $this->course = null;
+        $this->gradebookEval =null;
     }
 
     /**
@@ -251,5 +274,53 @@ class ImsLtiTool
     public function isActiveDeepLinking()
     {
         return $this->activeDeepLinking;
+    }
+
+    /**
+     * Get course.
+     *
+     * @return Course|null
+     */
+    public function getCourse()
+    {
+        return $this->course;
+    }
+
+    /**
+     * Set course.
+     *
+     * @param Course|null $course
+     *
+     * @return ImsLtiTool
+     */
+    public function setCourse(Course $course = null)
+    {
+        $this->course = $course;
+
+        return $this;
+    }
+
+    /**
+     * Get gradebookEval.
+     *
+     * @return GradebookEvaluation|null
+     */
+    public function getGradebookEval()
+    {
+        return $this->gradebookEval;
+    }
+
+    /**
+     * Set gradebookEval.
+     *
+     * @param GradebookEvaluation|null $gradebookEval
+     *
+     * @return ImsLtiTool
+     */
+    public function setGradebookEval($gradebookEval)
+    {
+        $this->gradebookEval = $gradebookEval;
+
+        return $this;
     }
 }

@@ -1,7 +1,7 @@
 IMS/LTI plugin
 ===
 
-Version 1.1 (beta)
+Version 1.2 (beta)
 
 This plugin is meant to be later integrated into Chamilo (in a major version
 release).
@@ -23,8 +23,8 @@ external tool.
 # Changelog
 
 **v1.1**
-
 * Support for Deep-Linking added.
+* Support for outcomes services.
 
 # Installation
 
@@ -34,12 +34,25 @@ external tool.
 
 # Upgrading
 
-**To v1.1**
-
 Run this changes on database:
+
+**To v1.1**
 ```sql
 ALTER TABLE plugin_ims_lti_tool
     ADD active_deep_linking TINYINT(1) DEFAULT '0' NOT NULL,
     CHANGE id id INT AUTO_INCREMENT NOT NULL,
     CHANGE launch_url launch_url VARCHAR(255) NOT NULL;
+```
+
+**To v1.2**
+```sql
+ALTER TABLE plugin_ims_lti_tool ADD c_id INT DEFAULT NULL;
+ALTER TABLE plugin_ims_lti_tool ADD CONSTRAINT FK_C5E47F7C91D79BD3
+    FOREIGN KEY (c_id) REFERENCES course (id);
+CREATE INDEX IDX_C5E47F7C91D79BD3 ON plugin_ims_lti_tool (c_id);
+
+ALTER TABLE plugin_ims_lti_tool ADD gradebook_eval_id INT DEFAULT NULL;
+ALTER TABLE plugin_ims_lti_tool ADD CONSTRAINT FK_C5E47F7C82F80D8B
+    FOREIGN KEY (gradebook_eval_id) REFERENCES gradebook_evaluation (id) ON DELETE SET NULL;
+CREATE INDEX IDX_C5E47F7C82F80D8B ON plugin_ims_lti_tool (gradebook_eval_id);
 ```

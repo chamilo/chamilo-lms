@@ -1938,6 +1938,7 @@ function get_work_user_list(
         );
 
         $blockEdition = api_get_configuration_value('block_student_publication_edition');
+        $blockScoreEdition = api_get_configuration_value('block_student_publication_score_edition');
 
         while ($work = Database::fetch_array($result, 'ASSOC')) {
             $item_id = $work['id'];
@@ -2022,8 +2023,12 @@ function get_work_user_list(
                     if ($qualification_exists) {
                         $feedback .= ' ';
                     }
-                    $feedback .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
-                    $count.' '.Display::returnFontAwesomeIcon('comments-o').'</a> ';
+
+                    $feedback .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang(
+                            'View'
+                        ).'">'.
+                        $count.' '.Display::returnFontAwesomeIcon('comments-o').'</a> ';
+
                 }
 
                 $correction = '';
@@ -2056,9 +2061,13 @@ function get_work_user_list(
                 // Actions.
                 $action = '';
                 if (api_is_allowed_to_edit()) {
-                    $action .= '<a 
-                        href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" 
-                        title="'.get_lang('View').'">'.$rateIcon.'</a> ';
+                    if ($blockScoreEdition && !api_is_platform_admin() && !empty($work['qualification_score'])) {
+                        $rateLink = '';
+                    } else {
+                        $rateLink = '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
+                            $rateIcon.'</a> ';
+                    }
+                    $action .= $rateLink;
 
                     if ($unoconv && empty($work['contains_file'])) {
                         $action .= '<a f

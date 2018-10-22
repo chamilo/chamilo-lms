@@ -1,4 +1,7 @@
 # Legacy routes
+legacy_public:
+    path: ../public/
+
 legacy_index:
     path: ../
 

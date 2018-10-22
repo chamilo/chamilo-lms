@@ -13,6 +13,7 @@ use Sylius\Bundle\ResourceBundle\Form\DataTransformer\ResourceToIdentifierTransf
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
@@ -205,7 +206,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
             ->add('send_email_to_admin_when_create_course', YesNoType::class)
             ->add('allow_user_course_subscription_by_course_admin', YesNoType::class)
             ->add('course_validation', YesNoType::class)
-            ->add('course_validation_terms_and_conditions_url', 'url')
+            ->add('course_validation_terms_and_conditions_url', UrlType::class)
             ->add(
                 'course_hide_tools',
                 ChoiceType::class,

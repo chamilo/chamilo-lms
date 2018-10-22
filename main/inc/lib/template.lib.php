@@ -237,7 +237,7 @@ class Template
      * @param string $template           The template path
      * @param bool   $clearFlashMessages Clear the $_SESSION variables for flash messages
      */
-    public function display($template, $clearFlashMessages = true)
+    public function display($template)
     {
         $template = str_replace('tpl', 'html.twig', $template);
         $templateFile = api_get_path(SYS_PATH).'main/template/'.$template;
@@ -270,6 +270,16 @@ class Template
         $content = Container::getTemplating()->render($template, $params);
         $response->setContent($content);
         $response->send();
+    }
+
+    /**
+     * @param string $template
+     *
+     * @throws \Twig\Error\Error
+     */
+    public function displayTemplate($template)
+    {
+        $this->returnResponse($this->params, $template);
     }
 
     /**
@@ -424,7 +434,7 @@ class Template
         }
         // If a template folder has been manually defined, search for the right
         // file, and if not found, go for the same file in the default template
-        if ($this->templateFolder != 'default') {
+        if ($this->templateFolder !== 'default') {
             // Avoid missing template error, use the default file.
             $file = api_get_path(SYS_CODE_PATH).'template/'.$this->templateFolder.'/'.$name;
             if (!file_exists($file)) {
@@ -866,24 +876,6 @@ class Template
         }
 
         return $icon;
-    }
-
-    /**
-     * Show header template.
-     */
-    public function show_header_template()
-    {
-        $tpl = $this->get_template('layout/show_header.tpl');
-        $this->display($tpl);
-    }
-
-    /**
-     * Show footer template.
-     */
-    public function show_footer_template()
-    {
-        $tpl = $this->get_template('layout/show_footer.tpl');
-        $this->display($tpl);
     }
 
     /**
@@ -1595,7 +1587,6 @@ class Template
     {
         // Default root chamilo favicon
         $favico = '<link rel="shortcut icon" href="'.api_get_path(WEB_PATH).'favicon.ico" type="image/x-icon" />';
-
         //Added to verify if in the current Chamilo Theme exist a favicon
         $favicoThemeUrl = api_get_path(SYS_CSS_PATH).$this->themeDir.'images/';
 

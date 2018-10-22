@@ -9,6 +9,7 @@ use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * This is a code library for Chamilo.
@@ -773,8 +774,20 @@ function api_get_path($path = '', $configuration = [])
         $root_web = Container::$container->get('router')->generate(
             'legacy_index',
             [],
-            \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL
+            UrlGeneratorInterface::ABSOLUTE_URL
         );
+        // Fix for php files inside main
+        if (strpos($root_web, 'main') !== false) {
+            $pos = (int) strpos($root_web, 'main');
+            $root_web = substr($root_web, 0, $pos);
+        }
+
+        // Fix for php files inside courses
+        if (strpos($root_web, '/courses/') !== false) {
+            $pos = (int) strpos($root_web, '/courses/');
+            $root_web = substr($root_web, 0, $pos);
+        }
+
         $root_web = urldecode($root_web);
     }
 
@@ -839,16 +852,13 @@ function api_get_path($path = '', $configuration = [])
     }
 
     $isInitialized = [];
-    $root_rel = $configuration['url_append'] ?? '';
+    //$root_rel = $configuration['url_append'] ?? '';
+    $root_rel = $_SERVER['APP_URL_APPEND'] ?? '';
 
     // Web server base and system server base.
     if (!array_key_exists($root_web, $isInitialized)) {
         // process absolute global roots
-        if (!empty($configuration)) {
-            $code_folder = 'main';
-        } else {
-            $code_folder = $paths[$root_web][REL_CODE_PATH];
-        }
+        $code_folder = 'main';
 
         // Support for the installation process.
         // Developers might use the function api_get_path() directly or indirectly (this is difficult to be traced),

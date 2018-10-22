@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+// Replaced by page blocks
+exit;
 /**
  * Configure the portal homepage (manages multi-urls and languages).
  *

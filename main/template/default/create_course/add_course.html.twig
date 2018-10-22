@@ -1,3 +1,4 @@
+{% autoescape false %}
 {% if just_created == 1%}
     <h3>{{ 'JustCreated'|get_lang }} {{ course_title }}</h3>
     <hr />
@@ -51,3 +52,5 @@
     {% endif %}
 </div>
 <div class="clear"></div>
+
+{% endautoescape %}

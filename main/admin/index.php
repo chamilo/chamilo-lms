@@ -204,7 +204,8 @@ if (api_is_platform_admin()) {
         'url' => api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=admin',
         'label' => get_lang('GlobalAgenda'),
     ];
-    $items[] = ['url' => 'configure_homepage.php', 'label' => get_lang('ConfigureHomePage')];
+    // Replaced by page blocks
+    //$items[] = ['url' => 'configure_homepage.php', 'label' => get_lang('ConfigureHomePage')];
     $items[] = ['url' => 'configure_inscription.php', 'label' => get_lang('ConfigureInscription')];
     $items[] = ['url' => 'statistics/index.php', 'label' => get_lang('Statistics')];
     $items[] = [
@@ -671,7 +672,5 @@ if (api_is_platform_admin()) {
 }
 
 // The template contains the call to the AJAX version checker
-$admin_template = $tpl->get_template('admin/settings_index.tpl');
-$content = $tpl->fetch($admin_template);
-$tpl->assign('content', $content);
-$tpl->display_one_col_template();
+$template = $tpl->get_template('admin/settings_index.tpl');
+$tpl->display($template);

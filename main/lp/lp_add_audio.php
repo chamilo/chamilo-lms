@@ -124,8 +124,6 @@ $tpl->assign('enable_record_audio', api_get_setting('enable_record_audio') === '
 $tpl->assign('cur_dir_path', '/audio');
 $tpl->assign('lp_item_id', $lp_item_id);
 $tpl->assign('lp_dir', api_remove_trailing_slash($lpPathInfo['dir']));
-$template = $tpl->get_template('learnpath/record_voice.tpl');
-$recordVoiceForm .= $tpl->fetch($template);
 $form->addElement('header', get_lang('Or'));
 $form->addElement('header', get_lang('AudioFile'));
 $form->addLabel(null, sprintf(get_lang('AudioFileForItemX'), $lp_item->get_title()));
@@ -163,17 +161,17 @@ $documentTree = DocumentManager::get_document_preview(
     api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=add_audio&lp_id='.$lp->get_id().'&id='.$lp_item_id,
     false,
     true
-    //$folderId = false
 );
 
-$page .= $recordVoiceForm;
-$page .= $form->returnForm();
-$page .= '<legend>'.get_lang('SelectAnAudioFileFromDocuments').'</legend>';
+$tpl->assign('pre_page', $page);
+
+$tpl->assign('form', $form->returnForm());
+
+$page = '<legend>'.get_lang('SelectAnAudioFileFromDocuments').'</legend>';
 $page .= $documentTree;
 $page .= '</div>';
 $page .= '</div>';
 
-$tpl->assign('content', $page);
-$template = $tpl->get_template('learnpath/lp_upload_audio.tpl');
-$content = $tpl->fetch($template);
-$tpl->display_one_col_template();
+$tpl->assign('post_page', $page);
+
+$tpl->displayTemplate('@ChamiloTheme/LearnPath/add_audio.html.twig');

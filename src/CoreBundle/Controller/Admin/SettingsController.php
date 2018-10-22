@@ -6,6 +6,8 @@ namespace Chamilo\CoreBundle\Controller\Admin;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sylius\Bundle\SettingsBundle\Controller\SettingsController as SyliusSettingsController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -56,7 +58,7 @@ class SettingsController extends SyliusSettingsController
         $keyword = $request->get('keyword');
 
         $searchForm = $this->getSearchForm();
-        if ($searchForm->handleRequest($request)->isValid()) {
+        if ($searchForm->isSubmitted() && $searchForm->handleRequest($request)->isValid()) {
             $values = $searchForm->getData();
             $keyword = $values['keyword'];
         }
@@ -65,9 +67,7 @@ class SettingsController extends SyliusSettingsController
             throw $this->createNotFoundException();
         }
 
-        $settingsFromKeyword = $manager->getParametersFromKeywordOrderedByCategory(
-            $keyword
-        );
+        $settingsFromKeyword = $manager->getParametersFromKeywordOrderedByCategory($keyword);
 
         $settings = [];
         if (!empty($settingsFromKeyword)) {
@@ -129,7 +129,7 @@ class SettingsController extends SyliusSettingsController
         $searchForm = $this->getSearchForm();
 
         $keyword = '';
-        if ($searchForm->handleRequest($request)->isValid()) {
+        if ($searchForm->isSubmitted() && $searchForm->handleRequest($request)->isValid()) {
             $values = $searchForm->getData();
             $keyword = $values['keyword'];
             $settingsFromKeyword = $manager->getParametersFromKeyword(
@@ -162,7 +162,7 @@ class SettingsController extends SyliusSettingsController
 
         $form->setData($settings);
 
-        if ($form->handleRequest($request)->isValid()) {
+        if ($form->isSubmitted() && $form->handleRequest($request)->isValid()) {
             $messageType = 'success';
             try {
                 $manager->save($form->getData());
@@ -224,8 +224,8 @@ class SettingsController extends SyliusSettingsController
     private function getSearchForm()
     {
         $builder = $this->container->get('form.factory')->createNamedBuilder('search');
-        $builder->add('keyword', 'text');
-        $builder->add('search', 'submit');
+        $builder->add('keyword', TextType::class);
+        $builder->add('search', SubmitType::class);
         $searchForm = $builder->getForm();
 
         return $searchForm;

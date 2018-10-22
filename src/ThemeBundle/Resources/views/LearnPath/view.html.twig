@@ -1,3 +1,5 @@
+{% extends '@ChamiloTheme/Layout/no_layout.html.twig' %}
+{% block content %}
 {% autoescape false %}
 <div id="learning_path_main" class="{{ is_allowed_to_edit ? 'lp-view-include-breadcrumb' }} {{ lp_mode == 'embedframe' ? 'lp-view-collapsed' }}">
     {% if show_left_column == 1 %}
@@ -67,7 +69,7 @@
                 </div>
                 {# TOC layout #}
                 <div id="toc_id" class="scorm-body" name="toc_name">
-                    {% include template ~ '/learnpath/scorm_list.html.twig' %}
+                    {% include '@ChamiloTheme/LearnPath/scorm_list.html.twig' %}
                 </div>
                 {# end TOC layout #}
             </div>
@@ -326,3 +328,4 @@
     })();
 </script>
 {% endautoescape %}
+{% endblock %}

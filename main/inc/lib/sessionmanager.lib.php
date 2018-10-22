@@ -246,7 +246,7 @@ class SessionManager
                     'visibility' => $visibility,
                     'description' => $description,
                     'show_description' => $showDescription,
-                    'send_subscription_notification' => $sendSubscriptionNotification,
+                    'send_subscription_notification' => (int) $sendSubscriptionNotification,
                 ];
 
                 if (!empty($startDate)) {

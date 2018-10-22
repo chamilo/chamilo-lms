@@ -7,6 +7,8 @@ use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Chamilo\SettingsBundle\Transformer\ArrayToIdentifierTransformer;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
@@ -100,14 +102,14 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
 
         $builder
             ->add('institution')
-            ->add('institution_url', 'url')
+            ->add('institution_url', UrlType::class)
             ->add('institution_address')
             ->add('site_name')
 //            ->add('administrator_email', 'email')
 //            ->add('administrator_name')
 //            ->add('administrator_surname')
 //            ->add('administrator_phone')
-            ->add('timezone', 'timezone')
+            ->add('timezone', TimezoneType::class)
             ->add('theme')
             ->add('gravatar_enabled', YesNoType::class)
             ->add(

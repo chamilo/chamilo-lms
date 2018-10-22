@@ -4,6 +4,7 @@
 namespace Chamilo\CoreBundle\Settings;
 
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
@@ -45,13 +46,13 @@ class TrackingSettingsSchema extends AbstractSettingsSchema
     public function buildForm(FormBuilderInterface $builder)
     {
         $builder
-            ->add('header_extra_content', 'textarea')
-            ->add('footer_extra_content', 'textarea')
-            ->add('meta_title', 'text')
-            ->add('meta_description', 'textarea')
-            ->add('meta_image_path', 'text')
-            ->add('meta_twitter_site', 'text')
-            ->add('meta_twitter_creator', 'text')
+            ->add('header_extra_content', TextareaType::class)
+            ->add('footer_extra_content', TextareaType::class)
+            ->add('meta_title')
+            ->add('meta_description', TextareaType::class)
+            ->add('meta_image_path')
+            ->add('meta_twitter_site')
+            ->add('meta_twitter_creator')
         ;
     }
 }

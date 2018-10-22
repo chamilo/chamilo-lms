@@ -8,6 +8,7 @@ use Chamilo\PageBundle\Entity\Page;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
 use Sonata\PageBundle\Entity\SiteManager;
 use Sonata\UserBundle\Entity\UserManager;
+use Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -184,6 +185,8 @@ class Container
     }
 
     /**
+     * @deprecated
+     *
      * @return \Symfony\Bundle\FrameworkBundle\Routing\Router
      */
     public static function getUrlGenerator()
@@ -253,7 +256,7 @@ class Container
     }
 
     /**
-     * @return CoreAssetsHelper
+     * @return AssetsHelper
      */
     public static function getAsset()
     {

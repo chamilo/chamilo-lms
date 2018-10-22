@@ -566,11 +566,7 @@ $template->assign(
     )
 );
 
-$view = $template->get_template('learnpath/view.tpl');
-$content = $template->fetch($view);
-
-$template->assign('content', $content);
-$template->display_no_layout_template();
+$template->displayTemplate('@ChamiloTheme/LearnPath/view.html.twig');
 
 // Restore a global setting.
 $_setting['show_navigation_menu'] = $save_setting;

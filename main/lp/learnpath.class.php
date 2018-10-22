@@ -33,7 +33,7 @@ use Symfony\Component\Finder\Finder;
  */
 class learnpath
 {
-    const MAX_LP_ITEM_TITLE_LENGTH = 32;
+    public const MAX_LP_ITEM_TITLE_LENGTH = 32;
 
     public $attempt = 0; // The number for the current ID view.
     public $cc; // Course (code) this learnpath is located in. @todo change name for something more comprensible ...
@@ -13397,7 +13397,7 @@ EOD;
             case TOOL_DOCUMENT:
                 $document = $em
                     ->getRepository('ChamiloCourseBundle:CDocument')
-                    ->findOneBy(['cId' => $course_id, 'iid' => $id]);
+                    ->findOneBy(['course' => $course_id, 'iid' => $id]);
 
                 if (empty($document)) {
                     // Try with normal id

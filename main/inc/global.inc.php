@@ -45,14 +45,31 @@ try {
     }
 
     $env = $_SERVER['APP_ENV'] ?? 'dev';
+    $append = $_SERVER['APP_URL_APPEND'] ?? '';
+
     $kernel = new Chamilo\Kernel($env, true);
     $request = Sonata\PageBundle\Request\RequestFactory::createFromGlobals('host_with_path_by_locale');
 
     // This 'load_legacy' variable is needed to know that symfony is loaded using old style legacy mode,
     // and not called from a symfony controller from public/
     $request->request->set('load_legacy', true);
+
+    // @todo fix URL loading
     $request->setBaseUrl($request->getRequestUri());
+    $kernel->boot();
+    if (!empty($append)) {
+        $append = "/$append/";
+    }
+
+    $container = $kernel->getContainer();
+
+    $router = $container->get('router');
+    $context = $router->getContext();
+    $context->setBaseUrl($append);
+    $router->setContext($context);
     $response = $kernel->handle($request);
+    $context = Container::getRouter()->getContext();
+    $context->setBaseUrl($append);
     $container = $kernel->getContainer();
 
     if ($kernel->isInstalled()) {
@@ -66,7 +83,6 @@ try {
         exit;
     }
 
-    $append = $kernel->getUrlAppend();
     $kernel->setApi($_configuration);
 
     // Ensure that _configuration is in the global scope before loading
@@ -91,30 +107,29 @@ try {
     // This is called when when doing the $kernel->handle
 
     // Fix chamilo URL when used inside a folder: example.com/chamilo
-    $append = $kernel->getUrlAppend();
+    /*$append = $kernel->getUrlAppend();
     $appendValue = '';
     if (!empty($append)) {
         $appendValue = "/$append/";
-    }
-    $router = $container->get('router');
+    }*/
+    /*$router = $container->get('router');
     $context = $container->get('router.request_context');
     $host = $router->getContext()->getHost();
     $context->setBaseUrl($appendValue);
-    $container->set('router.request_context', $context);
-    $packages = $container->get('assets.packages');
+    $container->set('router.request_context', $context);*/
 
-    $version = new Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy();
+    /*$version = new Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy();
     $newDefault = new Symfony\Component\Asset\PathPackage($appendValue.'public/', $version);
     $packages = $container->get('assets.packages');
     $packages->setDefaultPackage($newDefault);
-    $container->get('chamilo_core.menu.nav_builder')->setContainer($container);
+    $container->get('chamilo_core.menu.nav_builder')->setContainer($container);*/
 
     if (!is_dir(_MPDF_TEMP_PATH)) {
         mkdir(_MPDF_TEMP_PATH, api_get_permissions_for_new_directories(), true);
     }
 
     /* RETRIEVING ALL THE CHAMILO CONFIG SETTINGS FOR MULTIPLE URLs FEATURE*/
-    if (!empty($_configuration['multiple_access_urls'])) {
+    /*if (!empty($_configuration['multiple_access_urls'])) {
         $_configuration['access_url'] = 1;
         $access_urls = api_get_access_urls();
         $root_rel = api_get_self();
@@ -159,16 +174,16 @@ try {
         }
     } else {
         $_configuration['access_url'] = 1;
-    }
+    }*/
 
     // Check if APCu is available. If so, store the value in $_configuration
-    if (extension_loaded('apcu')) {
+    /*if (extension_loaded('apcu')) {
         $apcEnabled = ini_get('apc.enabled');
         if (!empty($apcEnabled) && $apcEnabled != 'Off' && $apcEnabled != 'off') {
             $_configuration['apc'] = true;
             $_configuration['apc_prefix'] = $_configuration['main_database'].'_'.$_configuration['access_url'].'_';
         }
-    }
+    }*/
 
     $charset = 'UTF-8';
 
@@ -253,7 +268,7 @@ try {
     }*/
 
     // Error reporting settings.
-    if (api_get_setting('server_type') === 'test') {
+    /*if (api_get_setting('server_type') === 'test') {
         ini_set('display_errors', '1');
         ini_set('html_errors', '1');
         error_reporting(-1);
@@ -263,12 +278,12 @@ try {
         }
     } else {
         error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
-    }
+    }*/
 
     ini_set('log_errors', '1');
 
     // Load allowed tag definitions for kses and/or HTMLPurifier.
-    require_once $libraryPath.'formvalidator/Rule/allowed_tags.inc.php';
+    //require_once $libraryPath.'formvalidator/Rule/allowed_tags.inc.php';
 
     // Before we call local.inc.php, let's define a global $this_section variable
     // which will then be usable from the banner and header scripts
@@ -277,13 +292,13 @@ try {
     // Include Chamilo Mail conf this is added here because the api_get_setting works
 
     // Fixes bug in Chamilo 1.8.7.1 array was not set
-    $administrator['email'] = isset($administrator['email']) ? $administrator['email'] : 'admin@example.com';
-    $administrator['name'] = isset($administrator['name']) ? $administrator['name'] : 'Admin';
+    //$administrator['email'] = isset($administrator['email']) ? $administrator['email'] : 'admin@example.com';
+    //$administrator['name'] = isset($administrator['name']) ? $administrator['name'] : 'Admin';
 
     /*  LOAD LANGUAGE FILES SECTION */
     // if we use the javascript version (without go button) we receive a get
     // if we use the non-javascript version (with the go button) we receive a post
-    $user_language = '';
+    /*$user_language = '';
     $browser_language = '';
 
     // see #8149
@@ -304,12 +319,12 @@ try {
         if (!empty($l)) {
             $user_language = $browser_language = $l;
         }
-    }
+    }*/
 
     // Include all files (first english and then current interface language)
-    $langpath = api_get_path(SYS_LANG_PATH);
+    /*$langpath = api_get_path(SYS_LANG_PATH);
 
-    /* This will only work if we are in the page to edit a sub_language */
+    // This will only work if we are in the page to edit a sub_language
     if (isset($this_script) && $this_script == 'sub_language') {
         // getting the arrays of files i.e notification, trad4all, etc
         $language_files_to_load = SubLanguageManager:: get_lang_folder_files_list(
@@ -368,7 +383,7 @@ try {
                 unset(${$item});
             }
         }
-    }
+    }*/
 
     /**
      * Include the trad4all language file.
@@ -404,17 +419,17 @@ try {
 
     // include the local (contextual) parameters of this course or section
     //require_once __DIR__.'/local.inc.php';
-    $_user = api_get_user_info();
+    //$_user = api_get_user_info();
 
     // The global variable $text_dir has been defined in the language file trad4all.inc.php.
     // For determining text direction correspondent to the current language
     // we use now information from the internationalization library.
-    $text_dir = api_get_text_direction();
+    //$text_dir = api_get_text_direction();
 
     // ===== "who is logged in?" module section =====
 
     // check and modify the date of user in the track.e.online table
-    if (isset($_user['user_id'])) {
+    /*if (isset($_user['user_id'])) {
         if (!$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
             preventMultipleLogin($_user['user_id']);
             LoginCheck($_user['user_id']);
@@ -460,7 +475,7 @@ try {
                 Database::query($sql);
             }
         }
-    }
+    }*/
 
     // Add language_measure_frequency to your main/inc/conf/configuration.php in
     // order to generate language variables frequency measurements (you can then
@@ -471,25 +486,24 @@ try {
     if (isset($_configuration['language_measure_frequency']) &&
         $_configuration['language_measure_frequency'] == 1
     ) {
-        require_once api_get_path(SYS_CODE_PATH).'/cron/lang/langstats.class.php';
-        $langstats = new langstats();
+        //require_once api_get_path(SYS_CODE_PATH).'/cron/lang/langstats.class.php';
+        //$langstats = new langstats();
     }
 
     //Default quota for the course documents folder
-    $default_quota = api_get_setting('default_document_quotum');
+    /*$default_quota = api_get_setting('default_document_quotum');
     //Just in case the setting is not correctly set
     if (empty($default_quota)) {
         $default_quota = 100000000;
     }
-    define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
+    define('DEFAULT_DOCUMENT_QUOTA', $default_quota);*/
     // Forcing PclZip library to use a custom temporary folder.
-    define('PCLZIP_TEMPORARY_DIR', api_get_path(SYS_ARCHIVE_PATH));
+    //define('PCLZIP_TEMPORARY_DIR', api_get_path(SYS_ARCHIVE_PATH));
 } catch (Exception $e) {
     error_log($e->getMessage());
-    /*
     var_dump($e->getMessage());
     var_dump($e->getCode());
     var_dump($e->getLine());
     echo $e->getTraceAsString();
-    exit;*/
+    exit;
 }

@@ -4,6 +4,7 @@
 namespace Chamilo\CoreBundle\Settings;
 
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
@@ -34,7 +35,7 @@ class MailSettingsSchema extends AbstractSettingsSchema
     public function buildForm(FormBuilderInterface $builder)
     {
         $builder
-            ->add('noreply_email_address', 'email')
+            ->add('noreply_email_address', EmailType::class)
         ;
     }
 }

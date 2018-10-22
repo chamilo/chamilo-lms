@@ -5,6 +5,7 @@ namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
@@ -48,15 +49,15 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
     public function buildForm(FormBuilderInterface $builder)
     {
         $builder
-            ->add('filter_terms', 'textarea')
+            ->add('filter_terms', TextareaType::class)
             ->add('allow_browser_sniffer', YesNoType::class)
             ->add('admins_can_set_users_pass', YesNoType::class)
             ->add('allow_strength_pass_checker', YesNoType::class)
             ->add('allow_captcha', YesNoType::class)
             ->add('user_reset_password', YesNoType::class)
-            ->add('user_reset_password_token_limit', 'text')
-            ->add('captcha_number_mistakes_to_block_account', 'text')
-            ->add('captcha_time_to_block', 'text')
+            ->add('user_reset_password_token_limit')
+            ->add('captcha_number_mistakes_to_block_account')
+            ->add('captcha_time_to_block')
             ->add('prevent_multiple_simultaneous_login', YesNoType::class)
             ->add('check_password', YesNoType::class)
 

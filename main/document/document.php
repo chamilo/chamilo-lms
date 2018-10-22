@@ -268,7 +268,7 @@ switch ($action) {
                         if ($deleteDocument) {
                             $certificateId = isset($_GET['delete_certificate_id']) ? $_GET['delete_certificate_id'] : null;
                             DocumentManager::remove_attach_certificate(
-                                api_get_course_id(),
+                                api_get_course_int_id(),
                                 $certificateId
                             );
                             Display::addFlash(
@@ -706,7 +706,7 @@ if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates' &&
         // Generate document HTML
         $content_html = DocumentManager::replace_user_info_into_html(
             api_get_user_id(),
-            api_get_course_id(),
+            api_get_course_info(),
             api_get_session_id(),
             true
         );
@@ -1561,9 +1561,10 @@ if (isset($_GET['curdirpath']) &&
     $_GET['set_certificate'] == strval(intval($_GET['set_certificate']))
 ) {
     if (isset($_GET['cidReq'])) {
-        $course_id = Security::remove_XSS($_GET['cidReq']); // course id
+        $course_id = Security::remove_XSS($_GET['cidReq']); // course code
         $document_id = Security::remove_XSS($_GET['set_certificate']); // document id
-        DocumentManager::attach_gradebook_certificate($course_id, $document_id);
+        $courseInfoTemp = api_get_course_info($course_id);
+        DocumentManager::attach_gradebook_certificate($courseInfoTemp['real_id'], $document_id);
         $message = Display::return_message(get_lang('IsDefaultCertificate'), 'normal');
         Display::addFlash(
             $message

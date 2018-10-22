@@ -14,6 +14,11 @@ if (empty($workId)) {
     api_not_allowed(true);
 }
 
+$blockAddDocuments = api_get_configuration_value('block_student_publication_add_documents');
+if ($blockAddDocuments) {
+    api_not_allowed(true);
+}
+
 $my_folder_data = get_work_data_by_id($workId);
 if (empty($my_folder_data)) {
     api_not_allowed(true);

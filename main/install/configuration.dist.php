@@ -978,6 +978,9 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Block student publication edition BT#14985
 // $_configuration['block_student_publication_edition'] = false;
 
+// Block student publication add documents BT#14986
+//$_configuration['block_student_publication_add_documents'] = false;
+
 // Enable system to manage e-mail templates in users registration forms
 /*CREATE TABLE mail_template(
   id int not null primary key auto_increment,

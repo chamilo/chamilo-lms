@@ -337,17 +337,6 @@ class Template
     }
 
     /**
-     * Sets the footer visibility.
-     *
-     * @param bool true if we show the footer
-     */
-    public function set_footer($status)
-    {
-        $this->show_footer = $status;
-        $this->assign('show_footer', $status);
-    }
-
-    /**
      * return true if toolbar has to be displayed for user.
      *
      * @return bool

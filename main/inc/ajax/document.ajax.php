@@ -20,33 +20,27 @@ switch ($action) {
         $courseQuota = DocumentManager::get_course_quota();
 
         // Calculating the total space
-        $already_consumed_space_course = DocumentManager::documents_total_space(
-            api_get_course_int_id()
-        );
+        $total = DocumentManager::documents_total_space(api_get_course_int_id());
 
         // Displaying the quota
-        echo DocumentManager::displaySimpleQuota(
-            $courseQuota,
-            $already_consumed_space_course
-        );
-
+        echo DocumentManager::displaySimpleQuota($courseQuota, $total);
         break;
     case 'upload_file':
         api_protect_course_script(true);
         // User access same as upload.php
-        $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+        $allow = api_is_allowed_to_edit(null, true);
         // This needs cleaning!
         if (api_get_group_id()) {
             $groupInfo = GroupManager::get_group_properties(api_get_group_id());
             // Only course admin or group members allowed
-            if ($is_allowed_to_edit || GroupManager::is_user_in_group(api_get_user_id(), $groupInfo)) {
+            if ($allow || GroupManager::is_user_in_group(api_get_user_id(), $groupInfo)) {
                 if (!GroupManager::allowUploadEditDocument(api_get_user_id(), api_get_course_int_id(), $groupInfo)) {
                     exit;
                 }
             } else {
                 exit;
             }
-        } elseif ($is_allowed_to_edit ||
+        } elseif ($allow ||
             DocumentManager::is_my_shared_folder(api_get_user_id(), $_POST['curdirpath'], api_get_session_id())
         ) {
             // ??

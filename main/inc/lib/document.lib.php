@@ -2840,7 +2840,8 @@ class DocumentManager
                     false,
                     null,
                     $sessionId,
-                    $treat_spaces_as_hyphens
+                    $treat_spaces_as_hyphens,
+                    $fileKey
                 );
 
                 // Showing message when sending zip files

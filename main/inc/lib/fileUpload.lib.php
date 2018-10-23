@@ -235,7 +235,8 @@ function handle_uploaded_document(
     $onlyUploadFile = false,
     $comment = null,
     $sessionId = null,
-    $treat_spaces_as_hyphens = true
+    $treat_spaces_as_hyphens = true,
+    $uploadKey = ''
 ) {
     if (!$userId) {
         return false;
@@ -566,7 +567,10 @@ function handle_uploaded_document(
                     $filePath = $uploadPath.$fileSystemName;
 
                     $request = \Chamilo\CoreBundle\Framework\Container::getRequest();
-                    $content = $request->files->get('file');
+                    $content = $request->files->get($uploadKey);
+                    if (is_array($content)) {
+                        $content = $content[0];
+                    }
 
                     //if (moveUploadedFile($uploadedFile, $fullPath)) {
                     if (true) {
@@ -1381,7 +1385,6 @@ function add_document(
 
     $fileName = basename($path);
     $extension = pathinfo($fileName, PATHINFO_EXTENSION);
-
     //$media->setSize($fileSize);
     $media->setContext('default');
 

@@ -287,6 +287,9 @@ if ($action == 'thematic_list') {
     $html = $form->returnForm();
 }
 $tpl->assign('actions', $toolbar);
+$content = $tpl->fetch($thematicLayout);
+$tpl->assign('content', $content);
+
 if (!empty($html)) {
     $tpl->assign('content', $html);
     $thematicLayout = $tpl->get_template('course_progress/layout.tpl');
@@ -295,4 +298,5 @@ if (!empty($message) && !empty($total_average_of_advances)) {
     $tpl->assign('message', $message);
     $tpl->assign('score_progress', $total_average_of_advances);
 }
-$tpl->display($thematicLayout);
+
+$tpl->display_one_col_template();

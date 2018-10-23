@@ -349,6 +349,7 @@ class ThematicController
         }
 
         if ($action == 'thematic_details') {
+
             if (isset($thematic_id)) {
                 $thematic_data_result = $thematic->get_thematic_list($thematic_id);
                 if (!empty($thematic_data_result)) {
@@ -373,6 +374,7 @@ class ThematicController
             $data['thematic_plan_data'] = $thematic_plan_data;
             $data['thematic_advance_data'] = $thematic_advance_data;
             $data['thematic_data'] = $thematic_data;
+
         }
 
         $data['default_thematic_plan_title'] = $thematic->get_default_thematic_plan_title();

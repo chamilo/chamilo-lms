@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CDocument;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * FILE UPLOAD LIBRARY.
@@ -316,7 +317,7 @@ function handle_uploaded_document(
             $whereToSave = $documentDir.$uploadPath;
 
             // At least if the directory doesn't exist, tell so
-            if (!is_dir($whereToSave)) {
+            /*if (!is_dir($whereToSave)) {
                 if (!mkdir($whereToSave, api_get_permissions_for_new_directories())) {
                     if ($output) {
                         Display::addFlash(
@@ -329,7 +330,7 @@ function handle_uploaded_document(
 
                     return false;
                 }
-            }
+            }*/
 
             // Just upload the file "as is"
             if ($onlyUploadFile) {
@@ -564,8 +565,12 @@ function handle_uploaded_document(
                     $fullPath = $whereToSave.$fileSystemName;
                     $filePath = $uploadPath.$fileSystemName;
 
-                    if (moveUploadedFile($uploadedFile, $fullPath)) {
-                        chmod($fullPath, $filePermissions);
+                    $request = \Chamilo\CoreBundle\Framework\Container::getRequest();
+                    $content = $request->files->get('file');
+
+                    //if (moveUploadedFile($uploadedFile, $fullPath)) {
+                    if (true) {
+                        ///chmod($fullPath, $filePermissions);
                         // Put the document data in the database
                         $documentId = add_document(
                             $courseInfo,
@@ -577,12 +582,15 @@ function handle_uploaded_document(
                             0, // read only
                             true, // save visibility
                             $groupId,
-                            $sessionId
+                            $sessionId,
+                            0,
+                            true,
+                            $content
                         );
 
                         if ($documentId) {
                             // Update document item_property
-                            api_item_property_update(
+                            /*api_item_property_update(
                                 $courseInfo,
                                 TOOL_DOCUMENT,
                                 $documentId,
@@ -593,14 +601,14 @@ function handle_uploaded_document(
                                 null,
                                 null,
                                 $sessionId
-                            );
+                            );*/
 
                             // Redo visibility
-                            api_set_default_visibility($documentId, TOOL_DOCUMENT, null, $courseInfo);
+                            //api_set_default_visibility($documentId, TOOL_DOCUMENT, null, $courseInfo);
                         }
 
                         // If the file is in a folder, we need to update all parent folders
-                        item_property_update_on_folder($courseInfo, $uploadPath, $userId);
+                        //item_property_update_on_folder($courseInfo, $uploadPath, $userId);
 
                         // Display success message to user
                         if ($output) {
@@ -616,7 +624,7 @@ function handle_uploaded_document(
 
                         return $filePath;
                     } else {
-                        if ($output) {
+                        /*if ($output) {
                             Display::addFlash(
                                 Display::return_message(
                                     get_lang('UplUnableToSaveFile'),
@@ -626,7 +634,7 @@ function handle_uploaded_document(
                             );
                         }
 
-                        return false;
+                        return false;*/
                     }
                     break;
                 case 'nothing':
@@ -653,8 +661,9 @@ function handle_uploaded_document(
                             );
                         }
                     } else {
+
                         if (moveUploadedFile($uploadedFile, $fullPath)) {
-                            chmod($fullPath, $filePermissions);
+                            //chmod($fullPath, $filePermissions);
 
                             // Put the document data in the database
                             $documentId = add_document(
@@ -1384,12 +1393,14 @@ function add_document(
     $media->setProviderName($provider);
     $media->setEnabled(true);
 
-
-    $handle = tmpfile();
-    fwrite($handle, $content);
-    $file = new \Sonata\MediaBundle\Extra\ApiMediaFile($handle);
-    $file->setMimetype($media->getContentType());
-
+    if ($content instanceof UploadedFile) {
+        $file = $content;
+    } else {
+        $handle = tmpfile();
+        fwrite($handle, $content);
+        $file = new \Sonata\MediaBundle\Extra\ApiMediaFile($handle);
+        $file->setMimetype($media->getContentType());
+    }
 
     $media->setBinaryContent($file);
 

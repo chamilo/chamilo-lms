@@ -2,33 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Main script for the documents tool.
- *
- * This script allows the user to manage files and directories on a remote http server.
- *
- * The user can : - navigate through files and directories.
- *                 - upload a file
- *                 - delete, copy a file or a directory
- *                 - edit properties & content (name, comments, html content)
- *
- * The script is organised in four sections.
- *
- * 1) Execute the command called by the user
- *                Note: somme commands of this section are organised in two steps.
- *                The script always begins with the second step,
- *                so it allows to return more easily to the first step.
- *
- *                Note (March 2004) some editing functions (renaming, commenting)
- *                are moved to a separate page, edit_document.php. This is also
- *                where xml and other stuff should be added.
- *
- * 2) Define the directory to display
- *
- * 3) Read files and directories from the directory defined in part 2
- * 4) Display all of that on an HTML page
- *
- * @todo eliminate code duplication between
- * document/document.php, scormdocument.php
  *
  * @package chamilo.document
  */

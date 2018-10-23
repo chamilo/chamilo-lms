@@ -431,66 +431,21 @@ class ImsLtiPlugin extends Plugin
         return $xml;
     }
 
+    /**
+     * @return ImsLtiServiceResponse|null
+     */
     public function processServiceRequest()
     {
         $xml = $this->getRequestXmlElement();
 
         if (empty($xml)) {
-            return;
+            return null;
         }
 
-        $bodyChildren = $xml->imsx_POXBody->children();
+        $request = ImsLtiServiceRequestFactory::create($xml);
+        $response = $request->process();
 
-        if (empty($bodyChildren)) {
-            return;
-        }
-
-        /** @var SimpleXMLElement $resultRequest */
-        $resultRequest = $bodyChildren[0];
-
-        switch ($resultRequest->getName()) {
-            case 'replaceResultRequest':
-                $this->getReplaceRequest($resultRequest->resultRecord);
-                break;
-            case 'readResultRequest':
-            case 'deleteResultRequest':
-                $this->getReadOrDeleteRequest($resultRequest->resultRecord);
-                break;
-        }
-    }
-
-    /**
-     * @param SimpleXMLElement $resultRecord
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
-     */
-    private function getReplaceRequest(SimpleXMLElement $resultRecord)
-    {
-        $sourcedId = (string) $resultRecord->sourcedGUID->sourcedId;
-        $resultScore = (float) $resultRecord->result->resultScore->textString;
-
-        list($evaluationId, $userId) = explode(':', $sourcedId);
-
-        $em = Database::getManager();
-        /** @var GradebookEvaluation $evaluation */
-        $evaluation = $em->find('ChamiloCoreBundle:GradebookEvaluation', $evaluationId);
-
-        if (empty($evaluation)) {
-            return;
-        }
-
-        $result = new Result();
-        $result->set_evaluation_id($evaluationId);
-        $result->set_user_id($userId);
-        $result->set_score($evaluation->getMax() * $resultScore);
-        $result->add();
-
-        error_log(
-            "ReplaceRequest sourcedId: $sourcedId - lti_score: $resultScore - score: "
-                .($evaluation->getMax() * $resultScore)
-        );
+        return $response;
     }
 
     /**

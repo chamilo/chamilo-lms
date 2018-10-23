@@ -778,6 +778,7 @@ class CourseHome
                 }
             }
         }
+
         $all_tools_list = CourseHome::filterPluginTools($all_tools_list, $course_tool_category);
 
         return $all_tools_list;
@@ -1774,7 +1775,7 @@ class CourseHome
         }
 
         return Display::return_icon(
-            $image,
+            'tool_'.$image,
             $item['name'],
             ['id' => 'toolimage_'.$toolIid],
             ICON_SIZE_BIG,

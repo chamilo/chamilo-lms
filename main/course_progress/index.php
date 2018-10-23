@@ -75,6 +75,7 @@ $thematic = new Thematic();
 
 // thematic controller object
 $thematic_controller = new ThematicController();
+
 $thematic_data = [];
 if (!empty($thematic_id)) {
     // thematic data by id
@@ -285,6 +286,7 @@ switch ($action) {
     case 'export_documents':
     case 'export_single_documents':
         $thematic_controller->thematic($action);
+
         break;
     case 'thematic_plan_add':
     case 'thematic_plan_edit':

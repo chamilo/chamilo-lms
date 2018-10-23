@@ -42,13 +42,13 @@
                 <!-- END DISPLAY COOKIES VALIDATION -->
             {% endif %}
 
+            {% if show_header == true %}
             <!-- START HEADER -->
             <header id="cm-header">
-                {% if show_header == true %}
-                    {% include 'layout/page_header.tpl'|get_template %}
-                {% endif %}
+                {% include 'layout/page_header.tpl'|get_template %}
             </header>
             <!-- END HEADER -->
+            {% endif %}
 
             <!-- START CONTENT -->
             <section id="cm-content">
@@ -63,13 +63,13 @@
             </section>
             <!-- END CONTENT -->
 
+            {% if show_footer == true %}
             <!-- START FOOTER -->
             <footer class="footer">
-                {% if show_footer == true %}
-                    {% include 'layout/page_footer.tpl'|get_template %}
-                {% endif %}
+                {% include 'layout/page_footer.tpl'|get_template %}
             </footer>
             <!-- END FOOTER -->
+            {% endif %}
 
         </main>
     <!-- END MAIN -->

@@ -44,6 +44,17 @@ if (empty($document_data)) {
     api_not_allowed(true);
 }
 
+$publicPath = api_get_path(WEB_PUBLIC_PATH);
+// http://localhost/chamilo2/courses/ABC/document/aa.html
+$courseCode = api_get_course_id();
+$path = $document_data['path'];
+$type = 'show';
+$url = $publicPath."courses/$courseCode/document$path?type=$type";
+header("Location: $url");
+exit;
+
+
+
 $header_file = $document_data['path'];
 $name_to_show = cut($header_file, 80);
 

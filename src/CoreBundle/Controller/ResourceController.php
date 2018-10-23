@@ -9,6 +9,7 @@ use APY\DataGridBundle\Grid\Export\CSVExport;
 use APY\DataGridBundle\Grid\Export\ExcelExport;
 use APY\DataGridBundle\Grid\Grid;
 use APY\DataGridBundle\Grid\Source\Entity;
+use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
@@ -17,13 +18,16 @@ use Chamilo\CourseBundle\Controller\CourseControllerTrait;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use FOS\RestBundle\View\View;
+use Sonata\MediaBundle\Provider\MediaProviderInterface;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceController as BaseResourceController;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Sylius\Component\Resource\Exception\UpdateHandlingException;
 use Sylius\Component\Resource\ResourceActions;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class ResourceController.
@@ -32,7 +36,8 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  *
  * @package Chamilo\CoreBundle\Controller
  */
-class ResourceController extends BaseResourceController implements CourseControllerInterface
+//class ResourceController extends BaseResourceController implements CourseControllerInterface
+class ResourceController extends BaseController implements CourseControllerInterface
 {
     use CourseControllerTrait;
 
@@ -400,6 +405,79 @@ class ResourceController extends BaseResourceController implements CourseControl
      */
     public function showAction(Request $request): Response
     {
+        $file = $request->get('file');
+        $type = $request->get('type');
+
+        if (empty($type)) {
+            $type = 'show';
+        }
+
+        $documentRepo = $this->getDoctrine()->getRepository('ChamiloCourseBundle:CDocument');
+        $criteria = [
+            'path' => "/$file",
+            'course' =>  $this->getCourse(),
+        ];
+
+        $document = $documentRepo->findOneBy($criteria);
+
+        if (empty($document)) {
+            throw new NotFoundHttpException();
+        }
+
+        /** @var ResourceNode $resourceNode */
+        $resourceNode = $document->getResourceNode();
+
+        $this->denyAccessUnlessGranted(
+            ResourceNodeVoter::VIEW,
+            $resourceNode,
+            'Unauthorised access to resource'
+        );
+
+        $resourceFile = $resourceNode->getResourceFile();
+        $media = $resourceFile->getMedia();
+        $format = MediaProviderInterface::FORMAT_REFERENCE;
+
+        if ($media) {
+            switch ($type) {
+                case 'show':
+                    /** @var \Sonata\MediaBundle\Provider\ImageProvider $provider */
+                    $provider = $this->get('sonata.media.pool')->getProvider($media->getProviderName());
+                    $reference = $provider->getReferenceFile($media);
+
+                    $filename = sprintf('%s/%s',
+                        $provider->getFilesystem()->getAdapter()->getDirectory(),
+                        $provider->generatePrivateUrl($media, $format)
+                    );
+
+                    //var_dump($provider->generatePublicUrl($media, $format));
+
+                    //var_dump($filename);
+                    return new BinaryFileResponse($filename);
+                    exit;
+                    return $this->render('@SonataMedia/Media/view.html.twig', [
+                        'media' => $media,
+                        'formats' => $this->get('sonata.media.pool')->getFormatNamesByContext($media->getContext()),
+                        'format' => $format,
+                    ]);
+                    break;
+                case 'download':
+                    $provider = $this->get('sonata.media.pool')->getProvider($media->getProviderName());
+                    $response = $provider->getDownloadResponse($media, $format, $this->get('sonata.media.pool')->getDownloadMode($media));
+
+                    return $response;
+
+
+                    break;
+            }
+        }
+
+        throw new NotFoundHttpException();
+
+        var_dump($resourceFile->getMedia()->getName());
+
+
+
+
         $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
         $this->isGrantedOr403($configuration, ResourceActions::SHOW);
 

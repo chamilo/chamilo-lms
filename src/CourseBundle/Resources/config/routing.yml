@@ -10,7 +10,7 @@ core_tool:
 core_tool_document:
     path: /courses/{course}/document/{file}
     defaults:
-        _controller: ChamiloCoreBundle:Resource:getDocument
+        _controller: ChamiloCoreBundle:Resource:show
     requirements:
         file: .+ # allow "/" in {file}
 

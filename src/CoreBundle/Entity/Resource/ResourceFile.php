@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Entity\Resource;
 
+use Chamilo\MediaBundle\Entity\Media;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -337,7 +338,7 @@ class ResourceFile
     }
 
     /**
-     * @return mixed
+     * @return Media
      */
     public function getMedia()
     {
@@ -345,7 +346,7 @@ class ResourceFile
     }
 
     /**
-     * @param mixed $media
+     * @param Media $media
      *
      * @return ResourceFile
      */

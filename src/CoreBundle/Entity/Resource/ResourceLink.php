@@ -173,6 +173,11 @@ class ResourceLink implements ResourceInterface
         return $this;
     }
 
+    public function getResourceRight()
+    {
+        return $this->resourceRight;
+    }
+
     /**
      * @return int
      */

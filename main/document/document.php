@@ -40,6 +40,7 @@ $actionsRight = '';
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 $allowUseTool = false;
 
+
 if ($allowDownloadDocumentsByApiKey) {
     try {
         if ($action != 'download') {
@@ -328,6 +329,13 @@ switch ($action) {
         }
         // Launch event
         Event::event_download($document_data['url']);
+
+        $publicPath = api_get_path(WEB_PUBLIC_PATH);
+        $courseCode = api_get_course_id();
+        $path = $document_data['path'];
+        $url = $publicPath."courses/$courseCode/document$path";
+        header("Location: $url");
+        exit;
 
         // Check visibility of document and paths
         if (!($isAllowedToEdit || $groupMemberWithUploadRights) &&

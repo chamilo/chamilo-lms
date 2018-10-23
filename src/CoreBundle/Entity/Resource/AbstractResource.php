@@ -48,7 +48,7 @@ abstract class AbstractResource implements ResourceInterface
     /**
      * @return ResourceNode
      */
-    public function getResourceNode()
+    public function getResourceNode(): ResourceNode
     {
         return $this->resourceNode;
     }

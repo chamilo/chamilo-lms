@@ -20,12 +20,12 @@ sonata_user_admin_security_logout:
 
 # Resources
 
-app_document:
-    resource: |
-        alias: app.document
-        path: /resource/documents
-        form: Chamilo\CoreBundle\Form\Type\DocumentType
-    type: sylius.resource
+#app_document:
+#    resource: |
+#        alias: app.document
+#        path: /resource/documents
+#        form: Chamilo\CoreBundle\Form\Type\DocumentType
+#    type: sylius.resource
 
 app_document_index:
     path: /courses/{course}/resource/documents/

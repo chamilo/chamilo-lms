@@ -46,14 +46,14 @@ services:
 sylius_settings:
     driver: doctrine/orm
 
-sylius_resource:
-    resources:
-        app.document:
-            templates: ChamiloCoreBundle:Document
-            classes:
-                controller: Chamilo\CoreBundle\Controller\ResourceController
-                model: Chamilo\CourseBundle\Entity\CDocument
-                repository: Chamilo\CoreBundle\Repository\ResourceRepository
+#sylius_resource:
+#    resources:
+#        app.document:
+#            templates: ChamiloCoreBundle:Document
+#            classes:
+#                controller: Chamilo\CoreBundle\Controller\ResourceController
+#                model: Chamilo\CourseBundle\Entity\CDocument
+#                repository: Chamilo\CoreBundle\Repository\ResourceRepository
 
 #
 #sonata.media.provider.private:

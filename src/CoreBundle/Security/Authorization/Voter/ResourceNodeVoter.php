@@ -6,6 +6,8 @@ namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
+use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
+use Zend\Permissions\Acl\Resource\GenericResource as SecurityResource;
 use Chamilo\CoreBundle\Entity\Session;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
@@ -100,7 +102,11 @@ class ResourceNodeVoter extends Voter
     }
 
     /**
-     * {@inheritdoc}
+     * @param string         $attribute
+     * @param ResourceNode   $resourceNode
+     * @param TokenInterface $token
+     *
+     * @return bool
      */
     protected function voteOnAttribute($attribute, $resourceNode, TokenInterface $token): bool
     {
@@ -132,7 +138,7 @@ class ResourceNodeVoter extends Voter
         $courseCode = $request->get('course');
         $sessionId = $request->get('session');
 
-        $links = $resourceNode->getLinks();
+        $links = $resourceNode->getResourceLinks();
         $linkFound = false;
 
         /** @var ResourceLink $link */
@@ -171,7 +177,7 @@ class ResourceNodeVoter extends Voter
 
             // Check if resource was sent to a course
             if ($linkCourse instanceof Course && !empty($courseCode)) {
-                $course = $this->container->get('chamilo_core.manager.course')->findOneByCode($courseCode);
+                $course = $this->container->get('chamilo_core.entity.manager.course_manager')->findOneByCode($courseCode);
                 if ($course instanceof Course &&
                     $linkCourse->getCode() === $course->getCode()
                 ) {
@@ -187,14 +193,34 @@ class ResourceNodeVoter extends Voter
         }
 
         // Getting rights from the link
-        $rightFromResourceLink = $link->getRights();
+        $rightFromResourceLink = $link->getResourceRight();
 
         if ($rightFromResourceLink->count()) {
             // Taken rights from the link
             $rights = $rightFromResourceLink;
         } else {
             // Taken the rights from the default tool
-            $rights = $link->getResourceNode()->getTool()->getToolResourceRight();
+            //$rights = $link->getResourceNode()->getTool()->getToolResourceRight();
+            //$rights = $link->getResourceNode()->getResourceType()->getTool()->getToolResourceRight();
+            // By default the rights are:
+            // teacher: CRUD
+            // student: read
+            $readerMask = self::getReaderMask();
+            $editorMask = self::getEditorMask();
+
+            $resourceRight = new ResourceRight();
+            $resourceRight
+                ->setMask($editorMask)
+                ->setRole(self::ROLE_CURRENT_COURSE_TEACHER)
+            ;
+            $rights[] = $resourceRight;
+
+            $resourceRight = new ResourceRight();
+            $resourceRight
+                ->setMask($readerMask)
+                ->setRole(self::ROLE_CURRENT_COURSE_STUDENT)
+            ;
+            $rights[] = $resourceRight;
         }
 
         // Asked mask
@@ -230,7 +256,7 @@ class ResourceNodeVoter extends Voter
         $acl->addRole($admin);
 
         // Adds a resource
-        $resource = new Resource($link);
+        $resource = new SecurityResource($link);
         $acl->addResource($resource);
 
         // Role and permissions settings

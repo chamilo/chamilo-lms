@@ -169,7 +169,8 @@ class Course
      * @Gedmo\Slug(
      *      fields={"title"},
      *      updatable = false,
-     *      unique = true
+     *      unique = true,
+     *      style = "upper"
      * )
      * @ORM\Column(name="code", type="string", length=40, nullable=false, unique=true)
      */

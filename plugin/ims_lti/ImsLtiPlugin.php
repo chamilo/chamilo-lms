@@ -447,14 +447,4 @@ class ImsLtiPlugin extends Plugin
 
         return $response;
     }
-
-    /**
-     * @param SimpleXMLElement $resultRecord
-     */
-    private function getReadOrDeleteRequest(SimpleXMLElement $resultRecord)
-    {
-        $sourcedId = $resultRecord->sourcedGUID->sourcedId;
-
-        error_log("ReadOrDeleteRequest sourcedId: $sourcedId");
-    }
 }

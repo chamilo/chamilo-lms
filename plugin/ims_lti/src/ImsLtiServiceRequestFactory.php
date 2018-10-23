@@ -15,8 +15,8 @@ class ImsLtiServiceRequestFactory
     {
         $bodyChildren = $xml->imsx_POXBody->children();
 
-        if (is_array($bodyChildren) && !empty($bodyChildren)) {
-            switch ($bodyChildren[0]) {
+        if (!empty($bodyChildren)) {
+            switch ($bodyChildren->getName()) {
                 case 'replaceResultRequest':
                     return new ImsLtiServiceReplaceRequest($xml);
                 case 'readResultRequest':

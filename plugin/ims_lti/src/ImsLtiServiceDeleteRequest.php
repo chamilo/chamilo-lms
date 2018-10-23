@@ -19,6 +19,7 @@ class ImsLtiServiceDeleteRequest extends ImsLtiServiceRequest
         parent::__construct($xml);
 
         $this->responseType = ImsLtiServiceResponse::TYPE_DELETE;
+        $this->xmlRequest = $this->xmlRequest->deleteResultRequest;
     }
 
     protected function processBody()

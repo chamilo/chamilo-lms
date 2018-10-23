@@ -19,6 +19,7 @@ class ImsLtiServiceReadRequest extends ImsLtiServiceRequest
         parent::__construct($xml);
 
         $this->responseType = ImsLtiServiceResponse::TYPE_READ;
+        $this->xmlRequest = $this->xmlRequest->readResultRequest;
     }
 
     protected function processBody()

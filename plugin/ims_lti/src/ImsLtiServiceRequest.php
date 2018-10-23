@@ -38,10 +38,10 @@ abstract class ImsLtiServiceRequest
      */
     public function __construct(SimpleXMLElement $xml)
     {
-        $children = $xml->imsx_POXBody->children();
+        $this->statusInfo = new ImsLtiServiceResponseStatus();
 
         $this->xmlHeaderInfo = $xml->imsx_POXHeader->imsx_POXRequestHeaderInfo;
-        $this->xmlRequest = $children[0];
+        $this->xmlRequest = $xml->imsx_POXBody->children();
     }
 
     protected function processHeader()

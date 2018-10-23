@@ -73,14 +73,6 @@ $file_root = $courseInfo['path'].'/document'.str_replace('%2F', '/', $file);
 $file_url_sys = api_get_path(SYS_COURSE_PATH).$file_root;
 $file_url_web = api_get_path(WEB_COURSE_PATH).$file_root;
 
-if (!file_exists($file_url_sys)) {
-    api_not_allowed(true);
-}
-
-if (is_dir($file_url_sys)) {
-    api_not_allowed(true);
-}
-
 $is_allowed_to_edit = api_is_allowed_to_edit();
 //fix the screen when you try to access a protected course through the url
 $is_allowed_in_course = api_is_allowed_in_course() || $is_allowed_to_edit;

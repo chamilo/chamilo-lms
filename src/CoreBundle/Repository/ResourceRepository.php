@@ -41,11 +41,13 @@ class ResourceRepository extends EntityRepository
         $resourceNode = new ResourceNode();
 
         $tool = $this->getTool($resource->getToolName());
-
+        $resourceType = $this->getEntityManager()->getRepository('ChamiloCoreBundle:Resource\ResourceType')->findOneBy(
+            ['name' => $resource->getToolName()]
+        );
         $resourceNode
             ->setName($resource->getResourceName())
             ->setCreator($creator)
-            ->setTool($tool);
+            ->setResourceType($resourceType);
 
         if ($parent !== null) {
             $resourceNode->setParent($parent->getResourceNode());
@@ -55,6 +57,11 @@ class ResourceRepository extends EntityRepository
         $this->getEntityManager()->flush();
 
         return $resourceNode;
+    }
+
+    public function addResourceMedia(ResourceNode $resourceNode, $file)
+    {
+
     }
 
     /**
@@ -87,7 +94,7 @@ class ResourceRepository extends EntityRepository
         $resourceLink
             ->setResourceNode($resourceNode)
             ->addResourceRight($right)
-            ->setPublic(true);
+        ;
 
         $this->getEntityManager()->persist($resourceLink);
         $this->getEntityManager()->flush();

@@ -1318,6 +1318,7 @@ function filter_extension(&$filename)
  * @param int    $sessionId        Session ID, if any
  * @param int    $userId           creator user id
  * @param bool   $sendNotification
+ * @param string $content
  *
  * @return int id if inserted document
  */
@@ -1333,7 +1334,8 @@ function add_document(
     $group_id = 0,
     $sessionId = 0,
     $userId = 0,
-    $sendNotification = true
+    $sendNotification = true,
+    $content = ''
 ) {
     $sessionId = empty($sessionId) ? api_get_session_id() : $sessionId;
     $userId = empty($userId) ? api_get_user_id() : $userId;
@@ -1360,13 +1362,54 @@ function add_document(
     $em->persist($document);
     $em->flush();
 
-    /*$resourceNode = $documentRepo->addResourceNode($document, $userEntity);
+    $resourceNode = $documentRepo->addResourceNode($document, $userEntity);
     $document->setResourceNode($resourceNode);
+
+    $mediaManager = \Chamilo\CoreBundle\Framework\Container::$container->get('sonata.media.manager.media');
+    /** @var \Chamilo\MediaBundle\Entity\Media $media */
+    $media = $mediaManager->create();
+    $media->setName($title);
+
+    $fileName = basename($path);
+    $extension = pathinfo($fileName, PATHINFO_EXTENSION);
+
+    //$media->setSize($fileSize);
+    $media->setContext('default');
+
+    $provider = 'sonata.media.provider.image';
+    if (!in_array($extension, ['jpeg', 'jpg', 'gif', 'png'])) {
+        $provider = 'sonata.media.provider.file';
+    }
+
+    $media->setProviderName($provider);
+    $media->setEnabled(true);
+
+
+    $handle = tmpfile();
+    fwrite($handle, $content);
+    $file = new \Sonata\MediaBundle\Extra\ApiMediaFile($handle);
+    $file->setMimetype($media->getContentType());
+
+
+    $media->setBinaryContent($file);
+
+    $mediaManager->save($media, true);
+
+    $resourceFile = new \Chamilo\CoreBundle\Entity\Resource\ResourceFile();
+    $resourceFile->setMedia($media);
+    $resourceFile->setName($title);
+
+    $em->persist($resourceFile);
+
+    $resourceNode->setResourceFile($resourceFile);
+
+    $em->persist($resourceNode);
+
 
     $em->persist($document);
     $em->flush();
 
-    $resourceRight = new \Chamilo\CoreBundle\Entity\Resource\ResourceRights();
+    /*$resourceRight = new \Chamilo\CoreBundle\Entity\Resource\ResourceRights();
     $resourceRight->setMask(\Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter::getEditorMask());
     $resourceRight->setRole(\Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER);
 

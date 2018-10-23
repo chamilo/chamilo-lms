@@ -509,43 +509,44 @@ if ($form->validate()) {
 
     // Setting the extension
     $extension = 'html';
-
     $content = Security::remove_XSS($values['content'], COURSEMANAGERLOWSECURITY);
 
-    /*if (strpos($content, '/css/frames.css') == false) {
-        $content = str_replace('</head>', '<link rel="stylesheet" href="./css/frames.css" type="text/css" /><style> body{margin:50px;}</style></head>', $content);
-    }*/
-
     // Don't create file with the same name.
-
-    if (file_exists($filepath.$filename.'.'.$extension)) {
+    /*if (file_exists($filepath.$filename.'.'.$extension)) {
         Display::addFlash(Display::return_message(get_lang('FileExists').' '.$title, 'error', false));
         Display:: display_header($nameTools, 'Doc');
         Display:: display_footer();
         exit;
-    }
+    }*/
 
-    if ($fp = @fopen($filepath.$filename.'.'.$extension, 'w')) {
+    //if ($fp = @fopen($filepath.$filename.'.'.$extension, 'w')) {
+    if (true) {
         $content = str_replace(
             api_get_path(WEB_COURSE_PATH),
             api_get_configuration_value('url_append').api_get_path(REL_COURSE_PATH),
             $content
         );
 
-        fputs($fp, $content);
-        fclose($fp);
-        chmod($filepath.$filename.'.'.$extension, api_get_permissions_for_new_files());
-        $file_size = filesize($filepath.$filename.'.'.$extension);
+        //fputs($fp, $content);
+        //fclose($fp);
+        //chmod($filepath.$filename.'.'.$extension, api_get_permissions_for_new_files());
+        //$file_size = filesize($filepath.$filename.'.'.$extension);
         $save_file_path = $dir.$filename.'.'.$extension;
 
         $document_id = add_document(
             $_course,
             $save_file_path,
             'file',
-            $file_size,
+            '',
             $title,
             null,
-            $readonly
+            $readonly,
+            true,
+            0,
+            0,
+            0,
+            true,
+            $content
         );
 
         if ($document_id) {

@@ -67,7 +67,7 @@ class ResourceLink implements ResourceInterface
     protected $userGroup;
 
     /**
-     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceRight", mappedBy="resourceLink", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceRight", mappedBy="resourceLink", cascade={"persist", "remove"})
      */
     protected $resourceRight;
 

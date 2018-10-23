@@ -55,6 +55,7 @@ class ResourceFileAdmin extends AbstractAdmin
     {
         $listMapper
             ->addIdentifier('id')
+            ->addIdentifier('media')
         ;
     }
 }

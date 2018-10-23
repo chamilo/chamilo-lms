@@ -2,7 +2,9 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CDocument;
+use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 
 /**
  * FILE UPLOAD LIBRARY.
@@ -1355,6 +1357,7 @@ function add_document(
     $userEntity = api_get_user_entity($userId);
     $courseEntity = api_get_course_entity(api_get_course_int_id());
     $session = api_get_session_entity($sessionId);
+    $group = api_get_group_entity($group_id);
     $readonly = (int) $readonly;
 
     $em = Database::getManager();
@@ -1412,12 +1415,29 @@ function add_document(
     $resourceFile = new \Chamilo\CoreBundle\Entity\Resource\ResourceFile();
     $resourceFile->setMedia($media);
     $resourceFile->setName($title);
-
     $em->persist($resourceFile);
 
     $resourceNode->setResourceFile($resourceFile);
-
     $em->persist($resourceNode);
+
+    $newVisibility = ResourceLink::VISIBILITY_PUBLISHED;
+    $link = new ResourceLink();
+    $link
+        ->setCourse($courseEntity)
+        ->setSession($session)
+        ->setGroup($group)
+        //->setUser($toUser)
+        ->setResourceNode($resourceNode)
+        ->setVisibility($newVisibility)
+    ;
+
+    /*if (!empty($rights)) {
+        foreach ($rights as $right) {
+            $link->addResourceRight($right);
+        }
+    }*/
+
+    $em->persist($link);
 
 
     $em->persist($document);

@@ -40,7 +40,6 @@ $actionsRight = '';
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 $allowUseTool = false;
 
-
 if ($allowDownloadDocumentsByApiKey) {
     try {
         if ($action != 'download') {
@@ -903,6 +902,7 @@ $documentAndFolders = DocumentManager::getAllDocumentData(
 
 $count = 1;
 $jquery = null;
+
 
 if (!empty($documentAndFolders)) {
     foreach ($documentAndFolders as $file) {
@@ -1935,8 +1935,8 @@ if (!empty($documentAndFolders)) {
                 $invisibility_span_close;
 
             // Last edit date
-            $last_edit_date = api_get_local_time($document_data['lastedit_date']);
-            $display_date = date_to_str_ago($document_data['lastedit_date']).
+            $last_edit_date = api_get_local_time($document_data['updated_at']);
+            $display_date = date_to_str_ago($document_data['updated_at']).
                 ' <div class="muted"><small>'.$last_edit_date."</small></div>";
 
             $row[] = $invisibility_span_open.$display_date.$invisibility_span_close;
@@ -1956,7 +1956,7 @@ if (!empty($documentAndFolders)) {
                 $is_template = isset($document_data['is_template']) ? $document_data['is_template'] : false;
 
                 // If readonly, check if it the owner of the file or if the user is an admin
-                if ($document_data['insert_user_id'] == api_get_user_id() || api_is_platform_admin()) {
+                if ($document_data['creator_id'] == api_get_user_id() || api_is_platform_admin()) {
                     $edit_icons = DocumentManager::build_edit_icons(
                         $document_data,
                         $key,

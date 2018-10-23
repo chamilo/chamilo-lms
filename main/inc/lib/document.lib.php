@@ -518,29 +518,24 @@ class DocumentManager
                     docs.size,
                     docs.readonly,
                     docs.session_id,
-                    last.session_id item_property_session_id,
-                    last.lastedit_date,
-                    last.visibility,
-                    last.insert_user_id
-                FROM $tblItemProperty AS last
+                    creator_id,
+                    visibility,
+                    n.updated_at,
+                    n.created_at                                     
+                FROM resource_node AS n
                 INNER JOIN $tblDocument AS docs
-                ON (
-                    docs.id = last.ref AND
-                    docs.c_id = last.c_id
-                )
-                WHERE                                
-                    last.tool = '".TOOL_DOCUMENT."' AND 
-                    docs.c_id = {$courseInfo['real_id']} AND
-                    last.c_id = {$courseInfo['real_id']} AND
+                ON (docs.resource_node_id = n.id)
+                INNER JOIN resource_link l
+                ON (l.resource_node_id = n.id)                
+                WHERE
+                    docs.c_id = {$courseInfo['real_id']} AND                    
                     docs.path LIKE '".Database::escape_string($path.$addedSlash.'%')."' AND
                     docs.path NOT LIKE '".Database::escape_string($path.$addedSlash.'%/%')."' AND
-                    docs.path NOT LIKE '%_DELETED_%' AND
-                    $userGroupFilter AND
-                    last.visibility $visibilityBit
-                    $conditionSession
-                    $sharedCondition
-                ORDER BY last.iid DESC, last.session_id DESC
+                    docs.path NOT LIKE '%_DELETED_%'
+                    $sharedCondition               
                 ";
+        //$userGroupFilter AND
+        //$conditionSession
         $result = Database::query($sql);
 
         $documentData = [];
@@ -572,7 +567,13 @@ class DocumentManager
             // Then don't list the invisible or deleted documents
             if (($sessionId && $hideInvisibleDocuments) || (!$isCoach && !$isAllowedToEdit)) {
                 $rows = array_filter($rows, function ($row) {
-                    if (in_array($row['visibility'], ['0', '2'])) {
+                    if (in_array(
+                        $row['visibility'],
+                        [
+                            \Chamilo\CoreBundle\Entity\Resource\ResourceLink::VISIBILITY_DELETED,
+                            \Chamilo\CoreBundle\Entity\Resource\ResourceLink::VISIBILITY_DRAFT,
+                        ]
+                    )) {
                         return false;
                     }
 

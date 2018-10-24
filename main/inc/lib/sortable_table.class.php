@@ -328,18 +328,18 @@ class SortableTable extends HTML_Table
             if (count($this->form_actions) > 0) {
                 $html .= '<div class="btn-group" role="group">';
                 $html .= '<a 
-                    class="btn btn-secondary" 
+                    class="btn btn-outline-secondary" 
                     href="?'.$params.'&amp;'.$this->param_prefix.'selectall=1" 
                     onclick="javascript: setCheckbox(true, \''.$table_id.'\'); return false;">'.get_lang('SelectAll').'</a>';
                 $html .= '<a 
-                    class="btn btn-secondary" 
+                    class="btn btn-outline-secondary" 
                     href="?'.$params.'" 
                     onclick="javascript: setCheckbox(false, \''.$table_id.'\'); return false;">'.get_lang('UnSelectAll').'</a> ';
                 $html .= '<div class="btn-group" role="group">
                             <button 
                                 id="'.$table_id.'_actions" 
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                class="btn btn-secondary dropdown-toggle" 
+                                class="btn btn-outline-secondary dropdown-toggle" 
                                 onclick="javascript:return false;">'.
                                 get_lang('Actions').'
                             </button>

@@ -7,6 +7,19 @@
 class ImsLtiServiceReadResponse extends ImsLtiServiceResponse
 {
     /**
+     * ImsLtiServiceReadResponse constructor.
+     *
+     * @param ImsLtiServiceResponseStatus $statusInfo
+     * @param mixed|null                  $bodyParam
+     */
+    public function __construct(ImsLtiServiceResponseStatus $statusInfo, $bodyParam = null)
+    {
+        $statusInfo->setOperationRefIdentifier('readResult');
+
+        parent::__construct($statusInfo, $bodyParam);
+    }
+
+    /**
      * @param SimpleXMLElement $xmlBody
      */
     protected function generateBody(SimpleXMLElement $xmlBody)

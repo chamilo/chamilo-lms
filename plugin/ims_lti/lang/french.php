@@ -27,3 +27,5 @@ $strings['ToolAdded'] = 'outil mis à jour';
 $strings['PressToContinue'] = 'Appuyez sur pour continuer à l\'outil externe';
 $strings['ConfigureExternalTool'] = 'Configure external tools';
 $strings['SupportDeepLinking'] = 'Support Deep-Linking';
+$strings['ScoreNotSet'] = 'Score non défini';
+$strings['ScoreForXUserIsYScore'] = 'Score pour %s est %s';

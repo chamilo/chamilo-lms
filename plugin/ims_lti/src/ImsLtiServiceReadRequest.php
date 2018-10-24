@@ -43,35 +43,28 @@ class ImsLtiServiceReadRequest extends ImsLtiServiceRequest
             return;
         }
 
-        $result = new Result();
-        $result->set_evaluation_id($evaluation->getId());
-        $result->set_user_id($user->getId());
-
-        if (!$result->exists()) {
-            $this->statusInfo
-                ->setSeverity(ImsLtiServiceResponseStatus::SEVERITY_STATUS)
-                ->setCodeMajor(ImsLtiServiceResponseStatus::CODEMAJOR_FAILURE);
-
-            return;
-        }
-
         $results = Result::load(null, $user->getId(), $evaluation->getId());
 
         $ltiScore = '';
+        $responseDescription = get_plugin_lang('ScoreNotSet', 'ImsLtiPlugin');
 
         if (!empty($results)) {
             /** @var Result $result */
             $result = $results[0];
 
-            $ltiScore = $evaluation->getMax() / $result->get_score() * 10;
+            $ltiScore = $evaluation->getMax() / $result->get_score() / 10;
+
+            $responseDescription = sprintf(
+                get_plugin_lang('ScoreForXUserIsYScore', 'ImsLtiPlugin'),
+                $user->getId(),
+                $ltiScore
+            );
         }
 
         $this->statusInfo
             ->setSeverity(ImsLtiServiceResponseStatus::SEVERITY_STATUS)
             ->setCodeMajor(ImsLtiServiceResponseStatus::CODEMAJOR_SUCCESS)
-            ->setDescription(
-                get_plugin_lang('ResultRead', 'ImsLtiPlugin')
-            );
+            ->setDescription($responseDescription);
 
         $this->responseBodyParam = (string) $ltiScore;
     }

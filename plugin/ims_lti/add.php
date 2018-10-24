@@ -99,6 +99,8 @@ if ($form->validate()) {
     exit;
 }
 
+$categories = Category::load(null, null, $course->getCode());
+
 $template = new Template($plugin->get_lang('AddExternalTool'));
 $template->assign('type', $baseTool ? $baseTool->getId() : null);
 $template->assign('tools', $globalTools);
@@ -110,6 +112,13 @@ $actions = Display::url(
     Display::return_icon('add.png', $plugin->get_lang('AddExternalTool'), [], ICON_SIZE_MEDIUM),
     api_get_self().'?'.api_get_cidreq()
 );
+
+if (!empty($categories)) {
+    $actions .= Display::url(
+        Display::return_icon('gradebook.png', $plugin->get_lang('AddToolToGradebook'), [], ICON_SIZE_MEDIUM),
+        './gradebook/add_eval.php?selectcat='.$categories[0]->get_id().'&'.api_get_cidreq()
+    );
+}
 
 $template->assign('actions', Display::toolbarAction('lti_toolbar', [$actions]));
 $template->assign('content', $content);

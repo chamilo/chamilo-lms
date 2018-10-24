@@ -8994,6 +8994,19 @@ function api_protect_limit_for_session_admin()
 }
 
 /**
+ * Limits that a session admin has access to add users.
+ * When limit_session_admin_add_user configuration variable is set to true.
+ */
+function api_protect_session_admin_add_user()
+{
+    $limitAdmin = api_get_configuration_value('limit_session_admin_add_user');
+
+    if (api_is_session_admin() && true === $limitAdmin) {
+        api_not_allowed(true);
+    }
+}
+
+/**
  * @return bool
  */
 function api_is_student_view_active()

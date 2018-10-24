@@ -415,7 +415,7 @@ class ResourceController extends BaseController implements CourseControllerInter
         $documentRepo = $this->getDoctrine()->getRepository('ChamiloCourseBundle:CDocument');
         $criteria = [
             'path' => "/$file",
-            'course' =>  $this->getCourse(),
+            'course' => $this->getCourse(),
         ];
 
         $document = $documentRepo->findOneBy($criteria);
@@ -451,6 +451,7 @@ class ResourceController extends BaseController implements CourseControllerInter
 
                     return new BinaryFileResponse($filename);
                     exit;
+
                     return $this->render('@SonataMedia/Media/view.html.twig', [
                         'media' => $media,
                         'formats' => $this->get('sonata.media.pool')->getFormatNamesByContext($media->getContext()),
@@ -467,11 +468,7 @@ class ResourceController extends BaseController implements CourseControllerInter
         }
 
         throw new NotFoundHttpException();
-
         var_dump($resourceFile->getMedia()->getName());
-
-
-
 
         $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
         $this->isGrantedOr403($configuration, ResourceActions::SHOW);

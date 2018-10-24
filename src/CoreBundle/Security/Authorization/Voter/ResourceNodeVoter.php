@@ -7,15 +7,15 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
-use Zend\Permissions\Acl\Resource\GenericResource as SecurityResource;
 use Chamilo\CoreBundle\Entity\Session;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
-//use Zend\Permissions\Acl\Resource\GenericResource as Resource;
 use Zend\Permissions\Acl\Acl;
+//use Zend\Permissions\Acl\Resource\GenericResource as Resource;
+use Zend\Permissions\Acl\Resource\GenericResource as SecurityResource;
 use Zend\Permissions\Acl\Role\GenericRole as Role;
 
 //use Sonata\AdminBundle\Security\Acl\Permission\MaskBuilder;

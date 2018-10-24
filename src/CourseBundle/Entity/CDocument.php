@@ -361,7 +361,7 @@ class CDocument extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Resource identifier
+     * Resource identifier.
      *
      * @return int
      */

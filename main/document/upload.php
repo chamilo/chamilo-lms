@@ -2,7 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *
  * @package chamilo.document
  */
 // Including the global initialization file

@@ -1,10 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
+use ChamiloSession as Session;
+
 /**
  * Homepage script for the documents tool.
  *
@@ -905,7 +906,6 @@ $documentAndFolders = DocumentManager::getAllDocumentData(
 
 $count = 1;
 $jquery = null;
-
 
 if (!empty($documentAndFolders)) {
     foreach ($documentAndFolders as $file) {

@@ -11,7 +11,7 @@ $publicPath = api_get_path(WEB_PUBLIC_PATH);
 // http://localhost/chamilo2/courses/ABC/document/aa.html
 $courseCode = Security::remove_XSS($_GET['courseCode']);
 $path = Security::remove_XSS($_GET['url']);
-$type = Security::remove_XSS($_GET['type'] ?? 'show') ;
+$type = Security::remove_XSS($_GET['type'] ?? 'show');
 $url = $publicPath."courses/$courseCode/document/$path?type=$type";
 header("Location: $url");
 exit;

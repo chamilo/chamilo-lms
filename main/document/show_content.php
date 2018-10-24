@@ -53,8 +53,6 @@ $url = $publicPath."courses/$courseCode/document$path?type=$type";
 header("Location: $url");
 exit;
 
-
-
 $header_file = $document_data['path'];
 $name_to_show = cut($header_file, 80);
 

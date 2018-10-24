@@ -61,7 +61,6 @@ class ResourceRepository extends EntityRepository
 
     public function addResourceMedia(ResourceNode $resourceNode, $file)
     {
-
     }
 
     /**

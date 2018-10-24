@@ -1,10 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
+use Chamilo\CourseBundle\Entity\CDocument;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-
 
 /**
  * FILE UPLOAD LIBRARY.
@@ -667,7 +666,6 @@ function handle_uploaded_document(
                             );
                         }
                     } else {
-
                         if (moveUploadedFile($uploadedFile, $fullPath)) {
                             //chmod($fullPath, $filePermissions);
 

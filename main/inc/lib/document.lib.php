@@ -1971,7 +1971,7 @@ class DocumentManager
      * Remove default certificate.
      *
      * @param int $course_id              The course code
-     * @param int    $default_certificate_id The document id of the default certificate
+     * @param int $default_certificate_id The document id of the default certificate
      */
     public static function remove_attach_certificate($course_id, $default_certificate_id)
     {

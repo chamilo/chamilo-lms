@@ -148,8 +148,7 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
                     switch ($row['visibility']) {
                         case '0':
                             $newVisibility = ResourceLink::VISIBILITY_DRAFT;
-
-                            $readerMask = ResourceNodeVoter::getReaderMask();
+                            //$readerMask = ResourceNodeVoter::getReaderMask();
                             $editorMask = ResourceNodeVoter::getEditorMask();
 
                             $resourceRight = new ResourceRight();
@@ -158,6 +157,14 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
                                 ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
                             ;
                             $rights[] = $resourceRight;
+
+                            /*$resourceRight = new ResourceRight();
+                            $resourceRight
+                                ->setMask($readerMask)
+                                ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_STUDENT)
+                            ;
+                            $rights[] = $resourceRight;*/
+
                             break;
                         case '1':
                             $newVisibility = ResourceLink::VISIBILITY_PUBLISHED;

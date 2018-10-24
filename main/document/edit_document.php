@@ -2,6 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CDocument;
 
 /**
  * This file allows editing documents.
@@ -263,7 +265,10 @@ if (isset($_POST['comment'])) {
     }
 }
 
-/* WYSIWYG HTML EDITOR - Program Logic */
+$em = Database::getManager();
+/** @var CDocument $document */
+$document = $em->getRepository('ChamiloCourseBundle:CDocument')->find($document_data['iid']);
+
 if ($is_allowed_to_edit) {
     if (isset($_POST['formSent']) && $_POST['formSent'] == 1 && !empty($document_id)) {
         $content = isset($_POST['content']) ? trim(str_replace(["\r", "\n"], '', stripslashes($_POST['content']))) : null;
@@ -276,54 +281,33 @@ if ($is_allowed_to_edit) {
         $read_only_flag = empty($read_only_flag) ? 0 : 1;
 
         if ($file_type != 'link') {
-            $file_size = filesize($document_data['absolute_path']);
+            //$file_size = filesize($document_data['absolute_path']);
         }
 
         if ($read_only_flag == 0) {
             if (!empty($content)) {
-                if ($fp = @fopen($document_data['absolute_path'], 'w')) {
-                    // For flv player, change absolute path temporarily to prevent
-                    // from erasing it in the following lines
-                    $content = str_replace(['flv=h', 'flv=/'], ['flv=h|', 'flv=/|'], $content);
-                    fputs($fp, $content);
-                    fclose($fp);
-                    $filepath = $document_data['absolute_parent_path'];
+                $node = $document->getResourceNode();
+                $file = $node->getResourceFile();
 
-                    update_existing_document(
-                        $_course,
-                        $document_id,
-                        $file_size,
-                        $read_only_flag
-                    );
-                    api_item_property_update(
-                        $_course,
-                        TOOL_DOCUMENT,
-                        $document_id,
-                        'DocumentUpdated',
-                        api_get_user_id(),
-                        null,
-                        null,
-                        null,
-                        null,
-                        $sessionId
-                    );
-                    // Update parent folders
-                    item_property_update_on_folder(
-                        $_course,
-                        $dir,
-                        api_get_user_id()
-                    );
-                } else {
-                    Display::addFlash(Display::return_message(get_lang('Impossible'), 'warning'));
+                if ($file) {
+                    $media = $node->getResourceFile()->getMedia();
+                    $provider = Container::$container->get('sonata.media.pool')->getProvider($media->getProviderName());
+                    $reference = $provider->getReferenceFile($media);
+                    //$node->setUpdatedAt(new \DateTime());
+                    $reference->setContent($content);
+                    $media->setSize($reference->getSize());
+                    $em->merge($media);
+                    $em->merge($node);
+                    $em->flush();
                 }
             } else {
                 if ($document_id) {
-                    update_existing_document($_course, $document_id, $file_size, $read_only_flag);
+                    //update_existing_document($_course, $document_id, $file_size, $read_only_flag);
                 }
             }
         } else {
             if ($document_id) {
-                update_existing_document($_course, $document_id, $file_size, $read_only_flag);
+                //update_existing_document($_course, $document_id, $file_size, $read_only_flag);
             }
         }
 
@@ -336,17 +320,22 @@ if ($is_allowed_to_edit) {
 $content = null;
 $extension = null;
 $filename = null;
-if (file_exists($document_data['absolute_path'])) {
-    $path_info = pathinfo($document_data['absolute_path']);
-    $filename = $path_info['filename'];
 
-    if (is_file($document_data['absolute_path'])) {
-        $extension = $path_info['extension'];
+$path_info = pathinfo($document_data['path']);
+$filename = $path_info['filename'];
+$extension = $path_info['extension'] ?? '';
 
-        if (in_array($extension, ['html', 'htm'])) {
-            $content = file($document_data['absolute_path']);
-            $content = implode('', $content);
-        }
+if (in_array($extension, ['html', 'htm'])) {
+    $em = Database::getManager();
+    /** @var \Chamilo\CoreBundle\Entity\Resource\ResourceNode $node */
+    $node = $em->getRepository('ChamiloCoreBundle:Resource\ResourceNode')->find($document_data['resource_node_id']);
+    $file = $node->getResourceFile();
+
+    if ($file) {
+        $media = $node->getResourceFile()->getMedia();
+        $provider = Container::$container->get('sonata.media.pool')->getProvider($media->getProviderName());
+        $reference = $provider->getReferenceFile($media);
+        $content = $reference->getContent();
     }
 }
 

@@ -5,6 +5,7 @@ namespace Chamilo\CoreBundle\Entity\Resource;
 
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -182,6 +183,8 @@ class ResourceNode
 
     /**
      * @param \DateTime|null $createdAt
+     *
+     * @return $this
      */
     public function setCreatedAt(\DateTime $createdAt = null)
     {
@@ -386,7 +389,7 @@ class ResourceNode
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getResourceLinks()
     {

@@ -67,7 +67,10 @@ class ResourceLink implements ResourceInterface
     protected $userGroup;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceRight", mappedBy="resourceLink", cascade={"persist", "remove"})
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceRight",
+     *     mappedBy="resourceLink", cascade={"persist", "remove"}, orphanRemoval=true
+     * )
      */
     protected $resourceRight;
 
@@ -149,13 +152,13 @@ class ResourceLink implements ResourceInterface
      *
      * @return $this
      */
-    public function setResourceRight(ArrayCollection $rights)
+    public function setResourceRight($rights)
     {
-        $this->resourceRight = new ArrayCollection();
+        $this->resourceRight = $rights;
 
-        foreach ($rights as $right) {
+        /*foreach ($rights as $right) {
             $this->addResourceRight($right);
-        }
+        }*/
 
         return $this;
     }

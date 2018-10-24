@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
 
@@ -570,8 +571,8 @@ class DocumentManager
                     if (in_array(
                         $row['visibility'],
                         [
-                            \Chamilo\CoreBundle\Entity\Resource\ResourceLink::VISIBILITY_DELETED,
-                            \Chamilo\CoreBundle\Entity\Resource\ResourceLink::VISIBILITY_DRAFT,
+                            ResourceLink::VISIBILITY_DELETED,
+                            ResourceLink::VISIBILITY_DRAFT,
                         ]
                     )) {
                         return false;
@@ -1596,11 +1597,10 @@ class DocumentManager
             }
         }
 
-        $doc_id = intval($doc_id);
-        $session_id = intval($session_id);
-
-        //2. Course and Session visibility are handle in local.inc.php/global.inc.php
-        //3. Checking if user exist in course/session
+        $doc_id = (int) $doc_id;
+        $session_id = (int) $session_id;
+        // 2. Course and Session visibility are handle in local.inc.php/global.inc.php
+        // 3. Checking if user exist in course/session
         if ($session_id == 0) {
             if (is_null($userIsSubscribed)) {
                 $userIsSubscribed = CourseManager::is_user_subscribed_in_course(
@@ -1639,10 +1639,23 @@ class DocumentManager
             }
         }
 
+        $em = Database::getManager();
+
         // 4. Checking document visibility (i'm repeating the code in order to be more clear when reading ) - jm
         if ($user_in_course) {
+            $repo = $em->getRepository('ChamiloCourseBundle:CDocument');
+            /** @var \Chamilo\CourseBundle\Entity\CDocument $document */
+            $document = $repo->find($doc_id);
             // 4.1 Checking document visibility for a Course
             if ($session_id == 0) {
+                $link = $document->getCourseSessionResourceLink();
+
+                if ($link->getVisibility() == ResourceLink::VISIBILITY_PUBLISHED) {
+                    return true;
+                }
+
+                return false;
+
                 $item_info = api_get_item_property_info(
                     $course_info['real_id'],
                     'document',
@@ -5084,12 +5097,12 @@ class DocumentManager
             ) {
                 $copy_myfiles_link = $filetype == 'file' ? api_get_self().'?'.$courseParams.'&action=copytomyfiles&id='.$document_data['id'] : api_get_self().'?'.$courseParams;
                 if ($filetype == 'file') {
-                    $copyToMyFiles = '<a href="'.$copy_myfiles_link.'" style="float:right"'.$prevent_multiple_click.'>'.
+                    /*$copyToMyFiles = '<a href="'.$copy_myfiles_link.'" style="float:right"'.$prevent_multiple_click.'>'.
                         Display::return_icon('briefcase.png', get_lang('CopyToMyFiles'), [], ICON_SIZE_SMALL).'&nbsp;&nbsp;</a>';
 
                     if (api_get_setting('allow_my_files') === 'false') {
                         $copyToMyFiles = '';
-                    }
+                    }*/
                 }
             }
 

@@ -111,6 +111,7 @@ class ResourceNodeVoter extends Voter
     protected function voteOnAttribute($attribute, $resourceNode, TokenInterface $token): bool
     {
         $user = $token->getUser();
+
         // Make sure there is a user object (i.e. that the user is logged in)
         if (!$user instanceof UserInterface) {
             return false;
@@ -141,6 +142,8 @@ class ResourceNodeVoter extends Voter
         $links = $resourceNode->getResourceLinks();
         $linkFound = false;
 
+        $courseManager = $this->container->get('chamilo_core.entity.manager.course_manager');
+
         /** @var ResourceLink $link */
         foreach ($links as $link) {
             $linkUser = $link->getUser();
@@ -148,7 +151,7 @@ class ResourceNodeVoter extends Voter
             $linkSession = $link->getSession();
             $linkUserGroup = $link->getUserGroup();
 
-            // Check if resource was sent to the current user
+            // Check if resource was sent to the current user.
             if ($linkUser instanceof UserInterface &&
                 $linkUser->getUsername() === $creator->getUsername()
             ) {
@@ -164,7 +167,7 @@ class ResourceNodeVoter extends Voter
                 $linkCourse instanceof Course && !empty($courseCode)
             ) {
                 $session = $this->container->get('chamilo_core.entity.manager.session_manager')->find($sessionId);
-                $course = $this->container->get('chamilo_core.entity.manager.course_manager')->findOneByCode($courseCode);
+                $course = $courseManager->findOneByCode($courseCode);
                 if ($session instanceof Session &&
                     $course instanceof Course &&
                     $linkCourse->getCode() === $course->getCode() &&
@@ -177,7 +180,7 @@ class ResourceNodeVoter extends Voter
 
             // Check if resource was sent to a course
             if ($linkCourse instanceof Course && !empty($courseCode)) {
-                $course = $this->container->get('chamilo_core.entity.manager.course_manager')->findOneByCode($courseCode);
+                $course = $courseManager->findOneByCode($courseCode);
                 if ($course instanceof Course &&
                     $linkCourse->getCode() === $course->getCode()
                 ) {
@@ -228,42 +231,46 @@ class ResourceNodeVoter extends Voter
         $mask->add($attribute);
         $askedMask = $mask->get();
 
-        // Check all the right this link has.
-        $roles = [];
-        foreach ($rights as $right) {
-            $roles[$right->getMask()] = $right->getRole();
-        }
-
         // Setting zend simple ACL
         $acl = new Acl();
 
         // Creating roles
         // @todo move this in a service
         $userRole = new Role('ROLE_USER');
-        $teacher = new Role(self::ROLE_CURRENT_COURSE_TEACHER);
-        $student = new Role(self::ROLE_CURRENT_COURSE_STUDENT);
+        $teacher = new Role('ROLE_TEACHER');
+        $student = new Role('ROLE_STUDENT');
+        $currentTeacher = new Role(self::ROLE_CURRENT_COURSE_TEACHER);
+        $currentStudent = new Role(self::ROLE_CURRENT_COURSE_STUDENT);
         $superAdmin = new Role('ROLE_SUPER_ADMIN');
         $admin = new Role('ROLE_ADMIN');
 
         // Adding roles to the ACL
-        // User role
-        $acl->addRole($userRole);
-        // Adds role student
-        $acl->addRole($student);
-        // Adds teacher role, inherit student role
-        $acl->addRole($teacher, $student);
-        $acl->addRole($superAdmin);
-        $acl->addRole($admin);
+        $acl
+            ->addRole($userRole)
+            ->addRole($student)
+            ->addRole($teacher)
+            ->addRole($currentStudent)
+            ->addRole($currentTeacher, self::ROLE_CURRENT_COURSE_STUDENT)
+            ->addRole($superAdmin)
+            ->addRole($admin)
+        ;
 
         // Adds a resource
         $resource = new SecurityResource($link);
         $acl->addResource($resource);
 
-        // Role and permissions settings
-        // Students can view
+        // Check all the right this link has.
+        // $roles = [];
+        // Set rights from the ResourceRight
+        foreach ($rights as $right) {
+            //$roles[$right->getMask()] = $right->getRole();
+            $acl->allow($right->getRole(), null, $right->getMask());
+        }
 
+        // var_dump($askedMask, $roles);
+        // Role and permissions settings
         // Student can just view (read)
-        $acl->allow($student, null, self::getReaderMask());
+        //$acl->allow($student, null, self::getReaderMask());
 
         // Teacher can view/edit
         $acl->allow(
@@ -280,14 +287,13 @@ class ResourceNodeVoter extends Voter
         $acl->allow($superAdmin);
 
         foreach ($user->getRoles() as $role) {
+            //var_dump($acl->isAllowed($role, $resource, $askedMask), $role);
             if ($acl->isAllowed($role, $resource, $askedMask)) {
-                //dump('passed');
                 return true;
             }
         }
 
         //dump('not allowed to '.$attribute);
-
         return false;
     }
 }

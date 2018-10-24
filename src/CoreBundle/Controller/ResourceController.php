@@ -442,16 +442,13 @@ class ResourceController extends BaseController implements CourseControllerInter
                 case 'show':
                     /** @var \Sonata\MediaBundle\Provider\ImageProvider $provider */
                     $provider = $this->get('sonata.media.pool')->getProvider($media->getProviderName());
-                    $reference = $provider->getReferenceFile($media);
+                    //$reference = $provider->getReferenceFile($media);
 
                     $filename = sprintf('%s/%s',
                         $provider->getFilesystem()->getAdapter()->getDirectory(),
                         $provider->generatePrivateUrl($media, $format)
                     );
 
-                    //var_dump($provider->generatePublicUrl($media, $format));
-
-                    //var_dump($filename);
                     return new BinaryFileResponse($filename);
                     exit;
                     return $this->render('@SonataMedia/Media/view.html.twig', [
@@ -465,8 +462,6 @@ class ResourceController extends BaseController implements CourseControllerInter
                     $response = $provider->getDownloadResponse($media, $format, $this->get('sonata.media.pool')->getDownloadMode($media));
 
                     return $response;
-
-
                     break;
             }
         }

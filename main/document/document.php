@@ -2,7 +2,9 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
-
+use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
+use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
+use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 /**
  * Homepage script for the documents tool.
  *
@@ -39,6 +41,7 @@ $lib_path = api_get_path(LIBRARY_PATH);
 $actionsRight = '';
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 $allowUseTool = false;
+$em = Database::getManager();
 
 if ($allowDownloadDocumentsByApiKey) {
     try {
@@ -1213,6 +1216,9 @@ if ($isAllowedToEdit ||
         ];
         foreach ($files as $documentId) {
             $data = DocumentManager::get_document_data_by_id($documentId, $courseInfo['code']);
+            /** @var \Chamilo\CourseBundle\Entity\CDocument $document */
+            $document = $em->getRepository('ChamiloCourseBundle:CDocument')->find($documentId);
+
             if (in_array($data['path'], $items)) {
                 // exclude system directories (do not allow deletion)
                 continue;
@@ -1220,6 +1226,9 @@ if ($isAllowedToEdit ||
                 switch ($_POST['action']) {
                     case 'set_invisible':
                         $visibilityCommand = 'invisible';
+
+                        $links = $document->getResourceNode()->getResourceLinks();
+                        exit;
                         if (api_item_property_update(
                             $courseInfo,
                             TOOL_DOCUMENT,
@@ -1408,8 +1417,10 @@ if ($isAllowedToEdit) {
     if ((isset($_GET['set_invisible']) && !empty($_GET['set_invisible'])) ||
         (isset($_GET['set_visible']) && !empty($_GET['set_visible']))
     ) {
+        $defaultVisibility = ResourceLink::VISIBILITY_DRAFT;
         // Make visible or invisible?
         if (isset($_GET['set_visible'])) {
+            $defaultVisibility = ResourceLink::VISIBILITY_PUBLISHED;
             $update_id = intval($_GET['set_visible']);
             $visibility_command = 'visible';
         } else {
@@ -1428,28 +1439,39 @@ if ($isAllowedToEdit) {
             }
         }
 
-        // Update item_property to change visibility
-        if (api_item_property_update(
-            $courseInfo,
-            TOOL_DOCUMENT,
-            $update_id,
-            $visibility_command,
-            api_get_user_id(),
-            null,
-            null,
-            null,
-            null,
-            $sessionId
-        )
-        ) {
-            Display::addFlash(
-                Display::return_message(get_lang('VisibilityChanged'), 'confirmation')
-            );
+        /** @var \Chamilo\CourseBundle\Entity\CDocument $document */
+        $document = $em->getRepository('ChamiloCourseBundle:CDocument')->find($update_id);
+
+        $link = $document->getCourseSessionResourceLink();
+
+        $link->setVisibility($defaultVisibility);
+
+        if ($defaultVisibility === ResourceLink::VISIBILITY_DRAFT) {
+            $editorMask = ResourceNodeVoter::getEditorMask();
+            $rights = [];
+            $resourceRight = new ResourceRight();
+            $resourceRight
+                ->setMask($editorMask)
+                ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
+                ->setResourceLink($link)
+            ;
+            $rights[] = $resourceRight;
+
+            if (!empty($rights)) {
+                $link->setResourceRight($rights);
+                /*foreach ($rights as $right) {
+                    $link->addResourceRight($right);
+                }*/
+            }
         } else {
-            Display::addFlash(
-                Display::return_message(get_lang('ViModProb'), 'error')
-            );
+            $link->setResourceRight([]);
         }
+        $em->persist($link);
+        $em->flush();
+
+        Display::addFlash(
+            Display::return_message(get_lang('VisibilityChanged'), 'confirmation')
+        );
 
         header('Location: '.$currentUrl);
         exit;
@@ -1841,6 +1863,7 @@ if (!empty($documentAndFolders)) {
                 false,
                 $userIsSubscribed
             );
+
             $invisibility_span_open = ($is_visible == 0) ? '<span class="muted">' : '';
             $invisibility_span_close = ($is_visible == 0) ? '</span>' : '';
             $size = 1;

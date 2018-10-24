@@ -7,7 +7,9 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
+use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -111,10 +113,6 @@ class CDocument extends AbstractResource implements ResourceInterface
     public function __toString()
     {
         return (string) $this->title;
-    }
-
-    public function __get($a)
-    {
     }
 
     /**
@@ -334,6 +332,21 @@ class CDocument extends AbstractResource implements ResourceInterface
     }
 
     /**
+     * @return ResourceLink
+     */
+    public function getCourseSessionResourceLink()
+    {
+        $criteria = Criteria::create();
+        $criteria
+            ->where(Criteria::expr()->eq('course', $this->getCourse()))
+            ->andWhere(
+                Criteria::expr()->eq('session', $this->getSession())
+            );
+
+        return $this->getResourceNode()->getResourceLinks()->matching($criteria)->first();
+    }
+
+    /**
      * @ORM\PostPersist()
      *
      * @param LifecycleEventArgs $args
@@ -347,18 +360,27 @@ class CDocument extends AbstractResource implements ResourceInterface
         $em->flush($this);
     }
 
-    // Resource classes
-
+    /**
+     * Resource identifier
+     *
+     * @return int
+     */
     public function getResourceIdentifier(): int
     {
         return $this->getIid();
     }
 
+    /**
+     * @return string
+     */
     public function getResourceName(): string
     {
         return $this->getTitle();
     }
 
+    /**
+     * @return string
+     */
     public function getToolName(): string
     {
         return 'document';

@@ -1381,44 +1381,46 @@ function add_document(
     $resourceNode = $documentRepo->addResourceNode($document, $userEntity);
     $document->setResourceNode($resourceNode);
 
-    $mediaManager = \Chamilo\CoreBundle\Framework\Container::$container->get('sonata.media.manager.media');
-    /** @var \Chamilo\MediaBundle\Entity\Media $media */
-    $media = $mediaManager->create();
-    $media->setName($title);
+    if ($fileType === 'file') {
+        $mediaManager = \Chamilo\CoreBundle\Framework\Container::$container->get('sonata.media.manager.media');
+        /** @var \Chamilo\MediaBundle\Entity\Media $media */
+        $media = $mediaManager->create();
+        $media->setName($title);
 
-    $fileName = basename($path);
-    $extension = pathinfo($fileName, PATHINFO_EXTENSION);
-    //$media->setSize($fileSize);
-    $media->setContext('default');
+        $fileName = basename($path);
+        $extension = pathinfo($fileName, PATHINFO_EXTENSION);
+        $media->setContext('default');
 
-    $provider = 'sonata.media.provider.image';
-    if (!in_array($extension, ['jpeg', 'jpg', 'gif', 'png'])) {
-        $provider = 'sonata.media.provider.file';
+        $provider = 'sonata.media.provider.image';
+        if (!in_array($extension, ['jpeg', 'jpg', 'gif', 'png'])) {
+            $provider = 'sonata.media.provider.file';
+        }
+
+        $media->setProviderName($provider);
+        $media->setEnabled(true);
+
+        if ($content instanceof UploadedFile) {
+            $file = $content;
+            $media->setSize($file->getSize());
+        } else {
+            $handle = tmpfile();
+            fwrite($handle, $content);
+            $file = new \Sonata\MediaBundle\Extra\ApiMediaFile($handle);
+            $file->setMimetype($media->getContentType());
+        }
+
+        $media->setBinaryContent($file);
+
+        $mediaManager->save($media, true);
+
+        $resourceFile = new \Chamilo\CoreBundle\Entity\Resource\ResourceFile();
+        $resourceFile->setMedia($media);
+        $resourceFile->setName($title);
+        $em->persist($resourceFile);
+
+        $resourceNode->setResourceFile($resourceFile);
+        $em->persist($resourceNode);
     }
-
-    $media->setProviderName($provider);
-    $media->setEnabled(true);
-
-    if ($content instanceof UploadedFile) {
-        $file = $content;
-    } else {
-        $handle = tmpfile();
-        fwrite($handle, $content);
-        $file = new \Sonata\MediaBundle\Extra\ApiMediaFile($handle);
-        $file->setMimetype($media->getContentType());
-    }
-
-    $media->setBinaryContent($file);
-
-    $mediaManager->save($media, true);
-
-    $resourceFile = new \Chamilo\CoreBundle\Entity\Resource\ResourceFile();
-    $resourceFile->setMedia($media);
-    $resourceFile->setName($title);
-    $em->persist($resourceFile);
-
-    $resourceNode->setResourceFile($resourceFile);
-    $em->persist($resourceNode);
 
     $newVisibility = ResourceLink::VISIBILITY_PUBLISHED;
     $link = new ResourceLink();
@@ -1438,8 +1440,6 @@ function add_document(
     }*/
 
     $em->persist($link);
-
-
     $em->persist($document);
     $em->flush();
 

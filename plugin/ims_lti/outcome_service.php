@@ -7,6 +7,4 @@ $plugin = ImsLtiPlugin::create();
 
 $process = $plugin->processServiceRequest();
 
-error_log($process);
-
 echo $process;

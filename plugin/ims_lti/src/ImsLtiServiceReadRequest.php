@@ -52,13 +52,15 @@ class ImsLtiServiceReadRequest extends ImsLtiServiceRequest
             /** @var Result $result */
             $result = $results[0];
 
-            $ltiScore = $evaluation->getMax() / $result->get_score() / 10;
+            if (!empty($result->get_score())) {
+                $ltiScore = $result->get_score() / $evaluation->getMax();
 
-            $responseDescription = sprintf(
-                get_plugin_lang('ScoreForXUserIsYScore', 'ImsLtiPlugin'),
-                $user->getId(),
-                $ltiScore
-            );
+                $responseDescription = sprintf(
+                    get_plugin_lang('ScoreForXUserIsYScore', 'ImsLtiPlugin'),
+                    $user->getId(),
+                    $ltiScore
+                );
+            }
         }
 
         $this->statusInfo

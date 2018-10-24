@@ -7,9 +7,12 @@ use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceFile;
 use Chamilo\CoreBundle\Entity\Resource\ResourceType;
 use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
-
 use Chamilo\MediaBundle\Entity\Media;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
+
+echo 'first run: <br />';
+echo 'bin/console sonata:media:fix-media-context';
+//exit;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
@@ -28,8 +31,10 @@ $sql = "SELECT
         FROM c_item_property i 
         INNER JOIN c_document d 
         ON (d.iid = i.ref AND i.c_id = d.c_id) 
-        WHERE i.tool = 'document' AND filetype <> 'folder' AND d.c_id = 4 
-        ORDER BY d.path LIMIT 10";
+        WHERE 
+            i.tool = 'document' AND            
+            d.c_id = 12
+        ORDER BY d.path";
 $result = Database::query($sql);
 
 $fs = Container::$container->get('oneup_flysystem.courses_filesystem');
@@ -82,25 +87,74 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
             $folderPath = $course->getDirectory().'/document/'.$documentData['path'];
             $file = $coursePath.$folderPath;
 
+            $document = $documentManager->find($documentData['iid']);
+
+            var_dump('Parsing document iid #'.$document->getIid());
+
+
+            $node = new ResourceNode();
+            $node
+                ->setName($documentData['title'])
+                ->setDescription($documentData['comment'] ?? '')
+                ->setCreator($author)
+                ->setResourceType($resourceType)
+                ->setCreatedAt($createdAt)
+                ->setUpdatedAt($lastUpdatedAt)
+            ;
+
+            $em->persist($node);
+            $document->setResourceNode($node);
+            $em->persist($document);
+
+            $rights = [];
+            switch ($row['visibility']) {
+                case '0':
+                    $newVisibility = ResourceLink::VISIBILITY_DRAFT;
+                    //$readerMask = ResourceNodeVoter::getReaderMask();
+                    $editorMask = ResourceNodeVoter::getEditorMask();
+
+                    $resourceRight = new ResourceRight();
+                    $resourceRight
+                        ->setMask($editorMask)
+                        ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
+                    ;
+                    $rights[] = $resourceRight;
+
+                    /*$resourceRight = new ResourceRight();
+                    $resourceRight
+                        ->setMask($readerMask)
+                        ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_STUDENT)
+                    ;
+                    $rights[] = $resourceRight;*/
+                    break;
+                case '1':
+                    $newVisibility = ResourceLink::VISIBILITY_PUBLISHED;
+                    break;
+                case '2':
+                    $newVisibility = ResourceLink::VISIBILITY_DELETED;
+                    break;
+            }
+
+            $link = new ResourceLink();
+            $link
+                ->setCourse($course)
+                ->setSession($session)
+                ->setGroup($group)
+                ->setUser($toUser)
+                ->setResourceNode($node)
+                ->setVisibility($newVisibility)
+            ;
+
+            if (!empty($rights)) {
+                foreach ($rights as $right) {
+                    $link->addResourceRight($right);
+                }
+            }
+
             switch ($documentData['filetype']) {
                 case 'folder':
-                    //$fs->createDir($folderPath);
-                    /*$node = new ResourceNode();
-                    $node
-                        ->setName($documentData['title'])
-                        ->setDescription('')
-                        ->setCreator($author)
-                        ->setResourceType($resourceType)
-                        ->setCreatedAt($createdAt)
-                        ->setUpdatedAt($lastUpdatedAt)
-                    ;
-                    $em->persist($node);
-                    $em->flush();*/
                     break;
                 case 'file':
-                    $document = $documentManager->find($documentData['iid']);
-                    var_dump('Parsing document iid #'.$document->getIid());
-
                     /** @var Media $media */
                     $media = $mediaManager->create();
                     $media->setName($documentData['title']);
@@ -125,76 +179,17 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
                     $resourceFile = new ResourceFile();
                     $resourceFile->setMedia($media);
                     $resourceFile->setName($documentData['title']);
+                    $node->setResourceFile($resourceFile);
 
                     $em->persist($resourceFile);
-
-                    $node = new ResourceNode();
-                    $node
-                        ->setName($documentData['title'])
-                        ->setDescription($documentData['comment'] ?? '')
-                        ->setResourceFile($resourceFile)
-                        ->setCreator($author)
-                        ->setResourceType($resourceType)
-                        ->setCreatedAt($createdAt)
-                        ->setUpdatedAt($lastUpdatedAt)
-                    ;
                     $em->persist($node);
-
-                    $document->setResourceNode($node);
-                    $em->persist($document);
-                    $em->flush();
-
-                    $rights = [];
-                    switch ($row['visibility']) {
-                        case '0':
-                            $newVisibility = ResourceLink::VISIBILITY_DRAFT;
-                            //$readerMask = ResourceNodeVoter::getReaderMask();
-                            $editorMask = ResourceNodeVoter::getEditorMask();
-
-                            $resourceRight = new ResourceRight();
-                            $resourceRight
-                                ->setMask($editorMask)
-                                ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
-                            ;
-                            $rights[] = $resourceRight;
-
-                            /*$resourceRight = new ResourceRight();
-                            $resourceRight
-                                ->setMask($readerMask)
-                                ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_STUDENT)
-                            ;
-                            $rights[] = $resourceRight;*/
-
-                            break;
-                        case '1':
-                            $newVisibility = ResourceLink::VISIBILITY_PUBLISHED;
-                            break;
-                        case '2':
-                            $newVisibility = ResourceLink::VISIBILITY_DELETED;
-                            break;
-                    }
-
-                    $link = new ResourceLink();
-                    $link
-                        ->setCourse($course)
-                        ->setSession($session)
-                        ->setGroup($group)
-                        ->setUser($toUser)
-                        ->setResourceNode($node)
-                        ->setVisibility($newVisibility)
-                    ;
-
-                    if (!empty($rights)) {
-                        foreach ($rights as $right) {
-                            $link->addResourceRight($right);
-                        }
-                    }
-
-                    $em->persist($link);
-                    $em->flush();
-
                     break;
             }
+
+
+            $em->persist($link);
+            $em->flush();
+
             break;
     }
 }

@@ -145,7 +145,7 @@ class Display
     public static function display_footer()
     {
         $contents = ob_get_contents();
-        ob_end_clean();
+        if (ob_get_length()) ob_end_clean();
         $tpl = '@ChamiloTheme/Layout/layout_one_col.html.twig';
         $response = new Response();
         $params['content'] = $contents;

@@ -4825,15 +4825,6 @@ ul.holder li.bit-box {
     display: inline-block;
 }
 
-.thematic .score-progress {
-    background-color: #0099FF;
-    border: 1px solid #0099FF;
-    color: #FFF;
-    padding: 12px;
-    text-transform: uppercase;
-    border-radius: 5px;
-}
-
 .thematic .score-progress h3 {
     margin: 0;
     padding: 0;

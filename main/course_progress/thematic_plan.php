@@ -11,6 +11,10 @@ use ChamiloSession as Session;
  * @package chamilo.course_progress
  */
 
+$tpl = new Template(get_lang('ThematicControl'));
+$toolbar = null;
+$formLayout = null;
+
 // actions menu
 $new_thematic_plan_data = [];
 if (!empty($thematic_plan_data)) {
@@ -29,9 +33,6 @@ if (!empty($thematic_simple_list)) {
         }
     }
 }
-
-echo Display::tag('h2', $thematic_data['title']);
-echo $thematic_data['content'];
 
 if (isset($message) && $message == 'ok') {
     echo Display::return_message(get_lang('ThematicSectionHasBeenCreatedSuccessfull'), 'normal');
@@ -100,7 +101,7 @@ if ($action === 'thematic_plan_list') {
         ),
         $form->addButtonSave(get_lang('Save'), 'submit', true),
     ]);
-    $form->display();
+    $formLayout = $form->returnForm();
 } elseif ($action == 'thematic_plan_add' || $action == 'thematic_plan_edit') {
     if ($description_type >= ADD_THEMATIC_PLAN) {
         $header_form = get_lang('NewBloc');
@@ -171,5 +172,15 @@ if ($action === 'thematic_plan_list') {
             )
         );
     }
-    $form->display();
+    $formLayout = $form->returnForm();
 }
+$tpl->assign('title_thematic', $thematic_data['title']);
+$tpl->assign('content_thematic', $thematic_data['content']);
+$tpl->assign('form_thematic', $formLayout);
+$thematicLayout = $tpl->get_template('course_progress/thematic_plan.tpl');
+$content = $tpl->fetch($thematicLayout);
+$tpl->assign('content', $content);
+
+$tpl->display_one_col_template();
+
+

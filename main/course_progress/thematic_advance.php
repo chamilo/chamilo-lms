@@ -12,6 +12,9 @@
 
 // protect a course script
 api_protect_course_script(true);
+$tpl = new Template(get_lang('ThematicControl'));
+$toolbar = null;
+$formLayout = null;
 
 if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
     $header_form = get_lang('NewThematicAdvance');
@@ -225,7 +228,8 @@ if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
         exit;
     }
 
-    $form->display();
+    $formLayout = $form->returnForm();
+
 } elseif ($action == 'thematic_advance_list') {
     // thematic advance list
     echo '<div class="actions">';
@@ -257,3 +261,10 @@ if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
     }
     $table->display();
 }
+$tpl->assign('form_thematic', $formLayout);
+
+$thematicLayout = $tpl->get_template('course_progress/thematic_advance.html.twig');
+$content = $tpl->fetch($thematicLayout);
+$tpl->assign('content', $content);
+
+$tpl->display_one_col_template();

@@ -164,6 +164,28 @@ services:
         calls:
             - [setTranslationDomain, [ChamiloCoreBundle]]
 
+    sonata.admin.resource_link:
+        class: Chamilo\CoreBundle\Admin\ResourceLinkAdmin
+        tags:
+            - {name: sonata.admin, manager_type: orm, audit: true, group: "LMS", label: "Resource link"}
+        arguments:
+            - ~
+            - Chamilo\CoreBundle\Entity\Resource\ResourceLink
+            - ~
+        calls:
+            - [setTranslationDomain, [ChamiloCoreBundle]]
+
+    sonata.admin.resource_right:
+        class: Chamilo\CoreBundle\Admin\ResourceRightAdmin
+        tags:
+            - {name: sonata.admin, manager_type: orm, audit: true, group: "LMS", label: "Resource right"}
+        arguments:
+            - ~
+            - Chamilo\CoreBundle\Entity\Resource\ResourceRight
+            - ~
+        calls:
+            - [setTranslationDomain, [ChamiloCoreBundle]]
+
     sonata.admin.resource_type:
         class: Chamilo\CoreBundle\Admin\ResourceTypeAdmin
         tags:

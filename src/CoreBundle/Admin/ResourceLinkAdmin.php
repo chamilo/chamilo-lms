@@ -8,17 +8,15 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
-use Sonata\AdminBundle\Form\Type\ModelListType;
-use Sonata\AdminBundle\Form\Type\ModelReferenceType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 
 /**
- * Class ResourceNodeAdmin.
+ * Class ResourceLinkAdmin.
  *
  * @package Chamilo\CoreBundle\Admin
  */
-class ResourceNodeAdmin extends AbstractAdmin
+class ResourceLinkAdmin extends AbstractAdmin
 {
     /**
      * @param \Sonata\AdminBundle\Show\ShowMapper $showMapper
@@ -27,7 +25,7 @@ class ResourceNodeAdmin extends AbstractAdmin
     {
         $showMapper
             ->add('id')
-            ->add('name')
+            ->add('resourceNode')
         ;
     }
 
@@ -37,16 +35,14 @@ class ResourceNodeAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('name')
-            ->add('description')
-            ->add('resourceType', ModelType::class, ['property' => 'name', 'btn_add' => false])
-            ->add('creator', ModelAutocompleteType::class, ['property' => 'username'])
-            ->add('resourceFile', ModelType::class, ['property' => 'id', 'btn_add' => 'link_add'])
+            ->add('resourceNode')
+            ->add('visibility')
             ->add(
-                'resourceLinks',
+                'resourceRight',
                 ModelAutocompleteType::class,
-                ['property' => 'id', 'btn_add' => true, 'multiple' => true]
+                ['property' => 'id', 'btn_add' => 'link_add', 'multiple' => true]
             )
+            //->add('resourceNode', ModelType::class, ['property' => 'id', 'btn_add' => 'link_add'])
             ->end()
         ;
     }
@@ -69,7 +65,8 @@ class ResourceNodeAdmin extends AbstractAdmin
     {
         $listMapper
             ->addIdentifier('id')
-            ->addIdentifier('name')
+            ->addIdentifier('resourceNode')
+            ->addIdentifier('visibility')
         ;
     }
 }

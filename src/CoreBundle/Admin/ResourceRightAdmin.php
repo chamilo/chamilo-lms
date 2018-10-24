@@ -14,11 +14,11 @@ use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 
 /**
- * Class ResourceNodeAdmin.
+ * Class ResourceRightAdmin.
  *
  * @package Chamilo\CoreBundle\Admin
  */
-class ResourceNodeAdmin extends AbstractAdmin
+class ResourceRightAdmin extends AbstractAdmin
 {
     /**
      * @param \Sonata\AdminBundle\Show\ShowMapper $showMapper
@@ -27,7 +27,8 @@ class ResourceNodeAdmin extends AbstractAdmin
     {
         $showMapper
             ->add('id')
-            ->add('name')
+            ->add('role')
+            ->add('mask')
         ;
     }
 
@@ -37,16 +38,9 @@ class ResourceNodeAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('name')
-            ->add('description')
-            ->add('resourceType', ModelType::class, ['property' => 'name', 'btn_add' => false])
-            ->add('creator', ModelAutocompleteType::class, ['property' => 'username'])
-            ->add('resourceFile', ModelType::class, ['property' => 'id', 'btn_add' => 'link_add'])
-            ->add(
-                'resourceLinks',
-                ModelAutocompleteType::class,
-                ['property' => 'id', 'btn_add' => true, 'multiple' => true]
-            )
+            ->add('role')
+            ->add('mask')
+            ->add('resourceLink', ModelType::class, ['property' => 'id', 'btn_add' => 'link_add'])
             ->end()
         ;
     }
@@ -69,7 +63,8 @@ class ResourceNodeAdmin extends AbstractAdmin
     {
         $listMapper
             ->addIdentifier('id')
-            ->addIdentifier('name')
+            ->addIdentifier('role')
+            ->addIdentifier('mask')
         ;
     }
 }

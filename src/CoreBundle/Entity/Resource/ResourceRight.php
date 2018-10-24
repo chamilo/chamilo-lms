@@ -39,6 +39,14 @@ class ResourceRight
     protected $mask;
 
     /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->getId();
+    }
+
+    /**
      * @return int
      */
     public function getId()
@@ -67,7 +75,7 @@ class ResourceRight
     }
 
     /**
-     * @return mixed
+     * @return ResourceLink
      */
     public function getResourceLink()
     {
@@ -75,7 +83,7 @@ class ResourceRight
     }
 
     /**
-     * @param mixed $resourceLink
+     * @param ResourceLink $resourceLink
      *
      * @return $this
      */

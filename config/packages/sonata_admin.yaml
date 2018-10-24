@@ -54,7 +54,6 @@ sonata_admin:
 #                    - sonata.news.admin.post
                     - sonata.media.admin.media
                     - sonata.media.admin.gallery
-#                    - sonata.admin.resource_file
 #                    - sonata.comment.admin.thread
 
             sonata.admin.group.site_builder:
@@ -132,6 +131,8 @@ sonata_admin:
                 #icon: '<i class="fa fa-th"></i>'
                 items:
                     - sonata.admin.resource_node
+                    - sonata.admin.resource_link
+                    - sonata.admin.resource_right
                     - sonata.admin.resource_file
                     - sonata.admin.resource_type
                     - sonata.admin.c_document

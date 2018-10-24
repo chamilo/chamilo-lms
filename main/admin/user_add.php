@@ -14,7 +14,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 // User permissions
 api_protect_admin_script(true);
 api_protect_limit_for_session_admin();
-api_protect_session_admin_add_user();
 
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
 

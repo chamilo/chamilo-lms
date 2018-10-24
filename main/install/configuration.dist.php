@@ -411,8 +411,6 @@ ALTER TABLE portfolio_category CHANGE title title LONGTEXT NOT NULL;
 //$_configuration['system_announce_extra_roles'] = false;
 // Limits the features that a session admin has access to from the main admin panel (removes users import and usergroups)
 //$_configuration['limit_session_admin_role'] = false;
-// Limits that a session admin has access to add users
-//$_configuration['limit_session_admin_add_user'] = false;
 // Course tools visibility edition in sessions
 //$_configuration['allow_edit_tool_visibility_in_session'] = false;
 // Enable the support to ODF files

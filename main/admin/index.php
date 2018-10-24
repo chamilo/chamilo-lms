@@ -113,6 +113,11 @@ if (api_is_platform_admin()) {
     if (api_get_configuration_value('show_link_request_hrm_user')) {
         $items[] = ['url' => 'user_linking_requests.php', 'label' => get_lang('UserLinkingRequests')];
     }
+} elseif (api_is_session_admin() && api_get_configuration_value('limit_session_admin_role')) {
+    $items = [
+        ['url' => 'user_list.php', 'label' => get_lang('UserList')],
+        ['url' => 'user_add.php', 'label' => get_lang('AddUsers')],
+    ];
 } else {
     $items = [
         ['url' => 'user_list.php', 'label' => get_lang('UserList')],
@@ -120,24 +125,6 @@ if (api_is_platform_admin()) {
         ['url' => 'user_import.php', 'label' => get_lang('ImportUserListXMLCSV')],
         ['url' => 'usergroups.php', 'label' => get_lang('Classes')],
     ];
-
-    if (api_is_session_admin()) {
-        if (true === api_get_configuration_value('limit_session_admin_role')) {
-            $items = array_filter($items, function (array $item) {
-                $urls = ['user_list.php', 'user_add.php'];
-
-                return in_array($item['url'], $urls);
-            });
-        }
-
-        if (true === api_get_configuration_value('limit_session_admin_add_user')) {
-            $items = array_filter($items, function (array $item) {
-                $urls = ['user_add.php'];
-
-                return !in_array($item['url'], $urls);
-            });
-        }
-    }
 }
 
 $blocks['users']['items'] = $items;

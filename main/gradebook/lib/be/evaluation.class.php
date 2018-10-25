@@ -841,7 +841,7 @@ class Evaluation implements GradebookItem
                 $eval->set_user_id($data['user_id']);
                 $eval->setCourseId($data['c_id']);
                 $courseInfo = api_get_course_info_by_id($data['c_id']);
-                $eval->set_course_code($courseInfo['course_code']);
+                $eval->set_course_code($courseInfo['code']);
                 $eval->set_category_id($data['category_id']);
                 $eval->set_date(api_get_local_time($data['created_at']));
                 $eval->set_weight($data['weight']);

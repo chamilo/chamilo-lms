@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor;
 use Chamilo\CoreBundle\Component\Editor\Connector;
 use Chamilo\CoreBundle\Component\Editor\Finder;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
-use FM\ElFinderPHP\Connector\ElFinderConnector;
+use FM\ElfinderBundle\Connector\ElFinderConnector;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -60,6 +60,8 @@ class EditorController extends Controller
     /**
      * @Route("/connector", methods={"GET", "POST"}, name="editor_connector")
      *
+     * @param Request $request
+     *
      * @return Response
      */
     public function editorConnector(Request $request)
@@ -78,7 +80,7 @@ class EditorController extends Controller
             $this->container->get('doctrine')->getManager(),
             [],
             $this->get('router'),
-            $this->container->get('translator.default'),
+            $this->container->get('translator'),
             $this->container->get('security.authorization_checker'),
             $this->getUser(),
             $courseInfo,

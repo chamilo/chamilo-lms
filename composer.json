@@ -103,9 +103,9 @@
         "friendsofsymfony/jsrouting-bundle": "~2.0",
         "gedmo/doctrine-extensions": "~2.4",
         "gregwar/captcha-bundle": "^2.0",
-        "helios-ag/fm-elfinder-bundle": "~8.0",
+        "helios-ag/fm-elfinder-bundle": "~9.0",
 
-        "knplabs/gaufrette": "~0.5",
+        "knplabs/gaufrette": "~0.7",
         "knplabs/doctrine-behaviors": "~1.5",
         "knplabs/knp-components": "^1.3",
 
@@ -155,6 +155,9 @@
         "overblog/graphql-bundle": "^0.11.4",
         "firebase/php-jwt": "^5.0",
         "simplethings/entity-audit-bundle": "^1.0"
+    },
+    "config": {
+        "component-dir": "public/assets"
     },
     "require-dev": {
         "symfony/var-dumper": "^4.0",

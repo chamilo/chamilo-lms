@@ -4,8 +4,11 @@
 namespace Chamilo\CoreBundle\Component\Editor;
 
 use Chamilo\CoreBundle\Component\Editor\Driver\Driver;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\Routing\Router;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Translation\Translator;
+use Symfony\Component\Translation\TranslatorInterface;
 
 //use Symfony\Component\Security\Core\SecurityContext;
 
@@ -38,27 +41,27 @@ class Connector
     public $driverList = [];
 
     public function __construct(
-        /*EntityManager $entityManager,
+        EntityManager $entityManager,
         array $paths,
-        Router $urlGenerator,
-        Translator $translator,
-        SecurityContext $security,*/
+        RouterInterface $urlGenerator,
+        TranslatorInterface $translator,
+        $security
         //$user,
         //$course = null
     ) {
         $this->paths = [
-            'root_sys' => api_get_path(SYS_PATH),
-            'sys_root' => api_get_path(SYS_PATH), // just an alias
-            'sys_course_path' => api_get_path(SYS_COURSE_PATH),
+            //'root_sys' => api_get_path(SYS_PATH),
+            //'sys_root' => api_get_path(SYS_PATH), // just an alias
+            //'sys_course_path' => api_get_path(SYS_COURSE_PATH),
             //   'sys_config_path' => $app['path.config'],
             'path.temp' => api_get_path(SYS_ARCHIVE_PATH),
             //'sys_log_path' => $app['path.logs']
         ];
-        /*$this->entityManager = $entityManager;
+        $this->entityManager = $entityManager;
         $this->paths = $paths;
         $this->urlGenerator = $urlGenerator;
         $this->translator = $translator;
-        $this->security = $security;*/
+        $this->security = $security;
         $this->user = api_get_user_info();
         $this->course = api_get_course_info();
         $this->driverList = $this->getDefaultDriverList();

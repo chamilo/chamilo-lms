@@ -217,6 +217,7 @@ function process_uploaded_file($uploaded_file, $show_output = true)
  * @param int    $sessionId
  * @param bool   $treat_spaces_as_hyphens
  * @param string $uploadKey
+ * @param int    $parentId
  *
  * So far only use for unzip_uploaded_document function.
  * If no output wanted on success, set to false.
@@ -238,7 +239,8 @@ function handle_uploaded_document(
     $comment = null,
     $sessionId = null,
     $treat_spaces_as_hyphens = true,
-    $uploadKey = ''
+    $uploadKey = '',
+    $parentId = 0
 ) {
     if (!$userId) {
         return false;
@@ -564,7 +566,6 @@ function handle_uploaded_document(
                     );
 
                     $documentTitle = disable_dangerous_file($cleanName);
-                    $fullPath = $whereToSave.$fileSystemName;
                     $filePath = $uploadPath.$fileSystemName;
 
                     $request = \Chamilo\CoreBundle\Framework\Container::getRequest();
@@ -590,7 +591,8 @@ function handle_uploaded_document(
                             $sessionId,
                             0,
                             true,
-                            $content
+                            $content,
+                            $parentId
                         );
 
                         // Display success message to user
@@ -1310,6 +1312,7 @@ function filter_extension(&$filename)
  * @param int    $userId           creator user id
  * @param bool   $sendNotification
  * @param string $content
+ * @param int    $parentId
  *
  * @return CDocument
  */
@@ -1326,7 +1329,8 @@ function add_document(
     $sessionId = 0,
     $userId = 0,
     $sendNotification = true,
-    $content = ''
+    $content = '',
+    $parentId = 0
 ) {
     $sessionId = empty($sessionId) ? api_get_session_id() : $sessionId;
     $userId = empty($userId) ? api_get_user_id() : $userId;
@@ -1338,6 +1342,12 @@ function add_document(
 
     $em = Database::getManager();
     $documentRepo = $em->getRepository('ChamiloCourseBundle:CDocument');
+
+    $parentNode = null;
+    if (!empty($parentId)) {
+        $parent = $documentRepo->find($parentId);
+        $parentNode = $parent->getResourceNode();
+    }
 
     $document = new CDocument();
     $document
@@ -1355,6 +1365,8 @@ function add_document(
     $em->flush();
 
     $resourceNode = $documentRepo->addResourceNode($document, $userEntity);
+    $resourceNode->setParent($parentNode);
+
     $document->setResourceNode($resourceNode);
 
     if ($fileType === 'file') {

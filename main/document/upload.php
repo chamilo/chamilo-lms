@@ -164,7 +164,7 @@ $index = isset($_POST['index_document']) ? $_POST['index_document'] : null;
 // User has submitted a file
 
 if (!empty($_FILES)) {
-    DocumentManager::upload_document(
+    $document = DocumentManager::upload_document(
         $_FILES,
         $_POST['curdirpath'],
         $_POST['title'],
@@ -172,14 +172,17 @@ if (!empty($_FILES)) {
         $unzip,
         $_POST['if_exists'],
         $index,
-        true
+        true,
+        'file',
+        true,
+        $_REQUEST['id'] ?? 0
     );
 
     $redirectUrl = api_get_self().'?'.api_get_cidreq().$certificateLink;
-    if ($document_data) {
+    if ($document) {
         $redirectUrl .= '&'.http_build_query(
             [
-                'id' => $document_data['iid'],
+                'id' => $document->getId(),
             ]
         );
     }

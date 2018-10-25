@@ -10,7 +10,6 @@ use ChamiloSession as Session;
  *
  * @package chamilo.course_progress
  */
-
 $tpl = new Template(get_lang('ThematicControl'));
 $toolbar = null;
 $formLayout = null;
@@ -182,5 +181,3 @@ $content = $tpl->fetch($thematicLayout);
 $tpl->assign('content', $content);
 
 $tpl->display_one_col_template();
-
-

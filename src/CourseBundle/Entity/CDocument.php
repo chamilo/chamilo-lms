@@ -347,7 +347,7 @@ class CDocument extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * This is a "soft delete" only changes visibility, doesn't delete the record
+     * This is a "soft delete" only changes visibility, doesn't delete the record.
      */
     public function setSoftDelete()
     {

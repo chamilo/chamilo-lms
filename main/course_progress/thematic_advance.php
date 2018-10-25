@@ -229,7 +229,6 @@ if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
     }
 
     $formLayout = $form->returnForm();
-
 } elseif ($action == 'thematic_advance_list') {
     // thematic advance list
     echo '<div class="actions">';

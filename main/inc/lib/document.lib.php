@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
+use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
 

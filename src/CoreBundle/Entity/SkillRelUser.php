@@ -34,7 +34,11 @@ class SkillRelUser
     protected $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="SkillRelUserComment", mappedBy="skillRelUser")
+     * @ORM\OneToMany(
+     *     targetEntity="SkillRelUserComment", mappedBy="skillRelUser",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
      */
     protected $comments;
 

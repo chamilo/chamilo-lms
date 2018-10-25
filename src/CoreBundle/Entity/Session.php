@@ -48,8 +48,9 @@ class Session
     protected $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\SkillBundle\Entity\SkillRelCourse", mappedBy="session", cascade={"persist",
-     *                                                                          "remove"})
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\SkillBundle\Entity\SkillRelCourse", mappedBy="session", cascade={"persist", "remove"}
+     * )
      */
     protected $skills;
 
@@ -71,8 +72,12 @@ class Session
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="SessionRelCourseRelUser", mappedBy="session", cascade={"persist"},
-     *                                                        orphanRemoval=true)
+     * @ORM\OneToMany(
+     *     targetEntity="SessionRelCourseRelUser",
+     *     mappedBy="session",
+     *     cascade={"persist"},
+     *     orphanRemoval=true
+     * )
      */
     protected $userCourseSubscriptions;
 
@@ -87,9 +92,11 @@ class Session
     protected $issuedSkills;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelSession", mappedBy="session",
-     *                                                                              cascade={"persist"},
-     *                                                                              orphanRemoval=true)
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelSession",
+     *     mappedBy="session",
+     *     cascade={"persist"}, orphanRemoval=true
+     * )
      */
     protected $urls;
 
@@ -244,9 +251,12 @@ class Session
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CStudentPublication", mappedBy="session",
-     *                                                                                cascade={"persist"},
-     *                                                                                orphanRemoval=true)
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CStudentPublication",
+     *     mappedBy="session",
+     *     cascade={"persist"},
+     *     orphanRemoval=true
+     * )
      */
     protected $studentPublications;
 

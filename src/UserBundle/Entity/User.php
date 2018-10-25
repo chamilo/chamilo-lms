@@ -149,12 +149,14 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="expired", type="boolean")
      */
     protected $expired;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="credentials_expired", type="boolean")
      */
     protected $credentialsExpired;
@@ -215,12 +217,14 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
 
     /**
      * @var \DateTime
+     *
      * @ORM\Column(name="created_at", type="datetime", nullable=true, unique=false)
      */
     //protected $createdAt;
 
     /**
      * @var \DateTime
+     *
      * @ORM\Column(name="updated_at", type="datetime", nullable=true, unique=false)
      */
     //protected $updatedAt;
@@ -299,7 +303,12 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     protected $curriculumItems;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelUser", mappedBy="user")
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelUser",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
      */
     protected $portals;
 
@@ -316,17 +325,32 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     protected $resourceNodes;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SessionRelCourseRelUser", mappedBy="user", cascade={"persist"})
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CoreBundle\Entity\SessionRelCourseRelUser",
+     *     mappedBy="user",
+     *     cascade={"persist"},
+     *     orphanRemoval=true
+     * )
      */
     protected $sessionCourseSubscriptions;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", mappedBy="user", cascade={"persist"})
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
      */
     protected $achievedSkills;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUserComment", mappedBy="feedbackGiver")
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CoreBundle\Entity\SkillRelUserComment",
+     *     mappedBy="feedbackGiver",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
      */
     protected $commentedUserSkills;
 
@@ -336,14 +360,24 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     protected $gradeBookCategories;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SessionRelUser", mappedBy="user")
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CoreBundle\Entity\SessionRelUser",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
      */
     protected $sessions;
 
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupRelUser", mappedBy="user")
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CGroupRelUser",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
      */
     protected $courseGroupsAsMember;
 
@@ -359,133 +393,143 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
      *
      * @ORM\Column(name="auth_source", type="string", length=50, nullable=true, unique=false)
      */
-    private $authSource;
+    protected $authSource;
 
     /**
      * @var int
      *
      * @ORM\Column(name="status", type="integer", nullable=false)
      */
-    private $status;
+    protected $status;
 
     /**
      * @var string
      *
      * @ORM\Column(name="official_code", type="string", length=40, nullable=true, unique=false)
      */
-    private $officialCode;
+    protected $officialCode;
 
     /**
      * @var string
      *
      * @ORM\Column(name="picture_uri", type="string", length=250, nullable=true, unique=false)
      */
-    private $pictureUri;
+    protected $pictureUri;
 
     /**
      * @var int
      *
      * @ORM\Column(name="creator_id", type="integer", nullable=true, unique=false)
      */
-    private $creatorId;
+    protected $creatorId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="competences", type="text", nullable=true, unique=false)
      */
-    private $competences;
+    protected $competences;
 
     /**
      * @var string
      *
      * @ORM\Column(name="diplomas", type="text", nullable=true, unique=false)
      */
-    private $diplomas;
+    protected $diplomas;
 
     /**
      * @var string
      *
      * @ORM\Column(name="openarea", type="text", nullable=true, unique=false)
      */
-    private $openarea;
+    protected $openarea;
 
     /**
      * @var string
      *
      * @ORM\Column(name="teach", type="text", nullable=true, unique=false)
      */
-    private $teach;
+    protected $teach;
 
     /**
      * @var string
      *
      * @ORM\Column(name="productions", type="string", length=250, nullable=true, unique=false)
      */
-    private $productions;
+    protected $productions;
 
     /**
      * @var string
      *
      * @ORM\Column(name="language", type="string", length=40, nullable=true, unique=false)
      */
-    private $language;
+    protected $language;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="registration_date", type="datetime", nullable=false, unique=false)
      */
-    private $registrationDate;
+    protected $registrationDate;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="expiration_date", type="datetime", nullable=true, unique=false)
      */
-    private $expirationDate;
+    protected $expirationDate;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="active", type="boolean", nullable=false, unique=false)
      */
-    private $active;
+    protected $active;
 
     /**
      * @var string
      *
      * @ORM\Column(name="openid", type="string", length=255, nullable=true, unique=false)
      */
-    private $openid;
+    protected $openid;
 
     /**
      * @var string
      *
      * @ORM\Column(name="theme", type="string", length=255, nullable=true, unique=false)
      */
-    private $theme;
+    protected $theme;
 
     /**
      * @var int
      *
      * @ORM\Column(name="hr_dept_id", type="smallint", nullable=true, unique=false)
      */
-    private $hrDeptId;
+    protected $hrDeptId;
 
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Message", mappedBy="userSender")
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CoreBundle\Entity\Message",
+     *     mappedBy="userSender",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
      */
-    private $sentMessages;
+    protected $sentMessages;
 
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Message", mappedBy="userReceiver")
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CoreBundle\Entity\Message",
+     *     mappedBy="userReceiver",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
      */
-    private $receivedMessages;
+    protected $receivedMessages;
 
     /**
      * Constructor.

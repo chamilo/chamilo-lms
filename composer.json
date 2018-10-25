@@ -153,7 +153,8 @@
         "a2lix/translation-form-bundle": "^3.0",
         "oneup/uploader-bundle": "^2.0",
         "overblog/graphql-bundle": "^0.11.4",
-        "firebase/php-jwt": "^5.0"
+        "firebase/php-jwt": "^5.0",
+        "simplethings/entity-audit-bundle": "^1.0"
     },
     "require-dev": {
         "symfony/var-dumper": "^4.0",

@@ -216,7 +216,9 @@ class Version20 extends AbstractMigrationChamilo
         }
 
         $this->addSql('ALTER TABLE c_student_publication ADD filesize INT DEFAULT NULL');
-        $this->addSql('CREATE TABLE IF NOT EXISTS c_group_info_audit (iid INT NOT NULL, rev INT NOT NULL, c_id INT DEFAULT NULL, id INT DEFAULT NULL, name VARCHAR(100) DEFAULT NULL, status TINYINT(1) DEFAULT NULL, category_id INT DEFAULT NULL, description LONGTEXT DEFAULT NULL, max_student INT DEFAULT NULL, doc_state TINYINT(1) DEFAULT NULL, calendar_state TINYINT(1) DEFAULT NULL, work_state TINYINT(1) DEFAULT NULL, announcements_state TINYINT(1) DEFAULT NULL, forum_state TINYINT(1) DEFAULT NULL, wiki_state TINYINT(1) DEFAULT NULL, chat_state TINYINT(1) DEFAULT NULL, secret_directory VARCHAR(255) DEFAULT NULL, self_registration_allowed TINYINT(1) DEFAULT NULL, self_unregistration_allowed TINYINT(1) DEFAULT NULL, session_id INT DEFAULT NULL, revtype VARCHAR(4) NOT NULL, PRIMARY KEY(iid, rev)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('UPDATE user SET created_at = registration_date WHERE CAST(created_at AS CHAR(20)) = "0000-00-00 00:00:00"');
+        $this->addSql('UPDATE user SET updated_at = registration_date WHERE CAST(updated_at AS CHAR(20)) = "0000-00-00 00:00:00"');
+
 
         /*$table = $schema->getTable('course_rel_class');
         if (!$table->hasColumn('c_id')) {

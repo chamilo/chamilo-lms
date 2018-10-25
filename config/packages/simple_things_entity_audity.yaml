@@ -1,0 +1,7 @@
+simple_things_entity_audit:
+    table_prefix: ''
+    table_suffix: _audit
+    revision_field_name: rev
+    revision_type_field_name: revtype
+    revision_table_name: revisions
+    revision_id_field_type: integer

@@ -444,7 +444,8 @@ class ResourceController extends BaseController implements CourseControllerInter
                     $provider = $this->get('sonata.media.pool')->getProvider($media->getProviderName());
                     //$reference = $provider->getReferenceFile($media);
 
-                    $filename = sprintf('%s/%s',
+                    $filename = sprintf(
+                        '%s/%s',
                         $provider->getFilesystem()->getAdapter()->getDirectory(),
                         $provider->generatePrivateUrl($media, $format)
                     );

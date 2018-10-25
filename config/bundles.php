@@ -73,4 +73,5 @@ return [
     Gregwar\CaptchaBundle\GregwarCaptchaBundle::class => ['all' => true],
     FOS\CKEditorBundle\FOSCKEditorBundle::class => ['all' => true],
     Sonata\FormatterBundle\SonataFormatterBundle::class => ['all' => true],
+    SimpleThings\EntityAudit\SimpleThingsEntityAuditBundle::class => ['all' => true],
 ];

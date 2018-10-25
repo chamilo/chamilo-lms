@@ -716,6 +716,12 @@
     color: #666666;
 }
 
+.bootstrap-select.form-control {
+    margin-bottom: 0;
+    padding: 0;
+    border: 1px solid #ced4da;
+}
+
 /*****************************************************
  *              AGENDA                               *
  *****************************************************/
@@ -6717,10 +6723,6 @@ div#chat-remote-video video {
 #session-properties td, #session-user-list td, #session-user-list th {
     text-align: left;
     padding-left: 15px;
-}
-
-#toolbar-agenda .show-tick {
-    width: 420px;
 }
 
 .files-table {

@@ -15,23 +15,26 @@
     {% block title %}
     {{ chamilo_settings_get('platform.institution') }} - {{ chamilo_settings_get('platform.site_name') }}
     {% endblock %}
+        {% set theme = 'chamilo' %}
     </title>
     {% block stylesheets %}
-        {% for stylesheet in sonata_admin.adminPool.getOption('stylesheets', []) %}
+        {# for stylesheet in sonata_admin.adminPool.getOption('stylesheets', [])
             <link rel="stylesheet" href="{{ asset(stylesheet) }}">
-        {% endfor %}
+        endfor #}
     {% endblock %}
-
+    {# Files app.css is generated from "assets/css/app.scss" file using the file webpack.config.js #}
+    <link rel="stylesheet" href="{{ url('legacy_public') ~ 'build/css/app.css' }}"/>
 </head>
-<body class="hold-transition login-page">
+<body class="login-page">
 <div class="login-box">
     <div class="login-logo">
-        {{ chamilo_settings_get('platform.institution') }} - {{ chamilo_settings_get('platform.site_name') }}
+        <img width="250px" src="{{ url('legacy_public') ~ 'build/css/themes/'~ theme ~'/images/logo_chamilo.svg' }}"/>
     </div>
     {# To see login layout check #}
     {# src/Chamilo/UserBundle/Resources/views/Security/base_login.html.twig #}
     {# src/Chamilo/UserBundle/Resources/views/Security/login.html.twig #}
     {% block page_content %}
+
     {% endblock %}
 </div>
 </body>

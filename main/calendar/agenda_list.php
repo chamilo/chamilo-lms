@@ -79,7 +79,7 @@ $tpl = new Template(get_lang('Events'));
 $tpl->assign('agenda_events', $events);
 $tpl->assign('url', $url);
 $tpl->assign('show_action', in_array($type, ['course', 'session']));
-$tpl->assign('agenda_actions', $actions);
+$tpl->assign('actions', $actions);
 $tpl->assign('is_allowed_to_edit', api_is_allowed_to_edit());
 
 if (api_is_allowed_to_edit()) {

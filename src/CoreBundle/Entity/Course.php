@@ -205,7 +205,7 @@ class Course
     protected $categoryCode;
 
     /**
-     * @var bool
+     * @var int
      *
      * @Assert\NotBlank()
      *
@@ -789,7 +789,7 @@ class Course
     /**
      * Set visibility.
      *
-     * @param bool $visibility
+     * @param int $visibility
      *
      * @return Course
      */
@@ -803,11 +803,11 @@ class Course
     /**
      * Get visibility.
      *
-     * @return bool
+     * @return int
      */
     public function getVisibility()
     {
-        return $this->visibility;
+        return (int) $this->visibility;
     }
 
     /**

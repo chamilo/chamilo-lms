@@ -48,7 +48,6 @@ class LoginSuccessHandler
      * @return null|RedirectResponse|Response
      */
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
-    //public function onAuthenticationSuccess(Request $request, TokenInterface $token)
     {
         $request = $event->getRequest();
         $user = $event->getAuthenticationToken()->getUser();

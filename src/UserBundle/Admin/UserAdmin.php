@@ -93,7 +93,8 @@ class UserAdmin extends BaseUserAdmin
             ->end()*/
             ->end();
 
-        if ($this->getSubject() && !$this->getSubject()->hasRole('ROLE_SUPER_ADMIN')) {
+        //if ($this->getSubject() && !$this->getSubject()->hasRole('ROLE_SUPER_ADMIN')) {
+        if ($this->getSubject()) {
             $formMapper
                 ->tab('Security')
                 ->with('Status')

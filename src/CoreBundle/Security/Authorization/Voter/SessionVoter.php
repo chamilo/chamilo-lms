@@ -122,20 +122,20 @@ class SessionVoter extends Voter
                 if (empty($session->getDuration())) {
                     // General coach
                     if ($userIsGeneralCoach && $session->isActiveForCoach()) {
-                        $user->addRole('ROLE_CURRENT_SESSION_COURSE_TEACHER');
+                        $user->addRole(ResourceNodeVoter::ROLE_CURRENT_SESSION_COURSE_TEACHER);
 
                         return true;
                     }
                     // Course-Coach access
                     if ($userIsCourseCoach && $session->isActiveForCoach()) {
-                        $user->addRole('ROLE_CURRENT_SESSION_COURSE_TEACHER');
+                        $user->addRole(ResourceNodeVoter::ROLE_CURRENT_SESSION_COURSE_TEACHER);
 
                         return true;
                     }
 
                     // Student access
                     if ($userIsStudent && $session->isActiveForStudent()) {
-                        $user->addRole('ROLE_CURRENT_SESSION_COURSE_STUDENT');
+                        $user->addRole(ResourceNodeVoter::ROLE_CURRENT_SESSION_COURSE_STUDENT);
 
                         return true;
                     }
@@ -143,19 +143,19 @@ class SessionVoter extends Voter
 
                 if ($this->sessionIsAvailableByDuration($session, $user)) {
                     if ($userIsGeneralCoach) {
-                        $user->addRole('ROLE_CURRENT_SESSION_COURSE_TEACHER');
+                        $user->addRole(ResourceNodeVoter::ROLE_CURRENT_SESSION_COURSE_TEACHER);
 
                         return true;
                     }
 
                     if ($userIsCourseCoach) {
-                        $user->addRole('ROLE_CURRENT_SESSION_COURSE_TEACHER');
+                        $user->addRole(ResourceNodeVoter::ROLE_CURRENT_SESSION_COURSE_TEACHER);
 
                         return true;
                     }
 
                     if ($userIsStudent) {
-                        $user->addRole('ROLE_CURRENT_SESSION_COURSE_STUDENT');
+                        $user->addRole(ResourceNodeVoter::ROLE_CURRENT_SESSION_COURSE_STUDENT);
 
                         return true;
                     }
@@ -167,7 +167,7 @@ class SessionVoter extends Voter
                 $canEdit = $this->canEditSession($user, $session, false);
 
                 if ($canEdit) {
-                    $user->addRole('ROLE_CURRENT_SESSION_COURSE_TEACHER');
+                    $user->addRole(ResourceNodeVoter::ROLE_CURRENT_SESSION_COURSE_TEACHER);
 
                     return true;
                 }

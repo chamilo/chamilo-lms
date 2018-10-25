@@ -120,13 +120,16 @@ class CourseVoter extends Voter
         switch ($attribute) {
             case self::VIEW:
                 // Course is hidden then is not visible for nobody expect admins.
-                if ($course->getVisibility() == Course::HIDDEN) {
+                if ($course->getVisibility() === Course::HIDDEN) {
                     return false;
                 }
 
                 // "Open to the world" no need to check if user is registered or if user exists.
                 // Course::OPEN_WORLD
                 if ($course->isPublic()) {
+                    /*$user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_STUDENT);
+                    $token->setUser($user);*/
+
                     return true;
                 }
 
@@ -136,7 +139,7 @@ class CourseVoter extends Voter
                 }
 
                 // If user is logged in and is open platform, allow access.
-                if ($course->getVisibility() == Course::OPEN_PLATFORM) {
+                if ($course->getVisibility() === Course::OPEN_PLATFORM) {
                     $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_STUDENT);
 
                     if ($course->hasTeacher($user)) {

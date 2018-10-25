@@ -144,7 +144,7 @@ class GroupVoter extends Voter
         switch ($attribute) {
             case self::VIEW:
                 if (!$group->hasUserInCourse($user, $course)) {
-                    $user->addRole('ROLE_CURRENT_SESSION_COURSE_STUDENT');
+                    $user->addRole(ResourceNodeVoter::ROLE_CURRENT_SESSION_COURSE_STUDENT);
 
                     return true;
                 }
@@ -153,7 +153,7 @@ class GroupVoter extends Voter
             case self::EDIT:
             case self::DELETE:
                 if (!$session->hasCoachInCourseWithStatus($user, $course)) {
-                    $user->addRole('ROLE_CURRENT_SESSION_COURSE_TEACHER');
+                    $user->addRole(ResourceNodeVoter::ROLE_CURRENT_SESSION_COURSE_TEACHER);
 
                     return true;
                 }

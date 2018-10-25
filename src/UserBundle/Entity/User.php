@@ -245,7 +245,7 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     //protected $passwordRequestedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseRelUser", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseRelUser", mappedBy="user", orphanRemoval=true)
      */
     protected $courses;
 
@@ -384,7 +384,7 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupRelTutor", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupRelTutor", mappedBy="user", orphanRemoval=true)
      */
     protected $courseGroupsAsTutor;
 

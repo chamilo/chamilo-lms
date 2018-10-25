@@ -148,6 +148,11 @@ class ResourceNodeVoter extends Voter
 
         /** @var ResourceLink $link */
         foreach ($links as $link) {
+            // Block access if visibility is deleted.
+            if ($link->getVisibility() === ResourceLink::VISIBILITY_DELETED) {
+                $linkFound = false;
+                break;
+            }
             $linkUser = $link->getUser();
             $linkCourse = $link->getCourse();
             $linkSession = $link->getSession();
@@ -192,8 +197,8 @@ class ResourceNodeVoter extends Voter
             }
         }
 
-        // No link was found!
-        if ($linkFound === false) {
+        // No link was found or not available
+        if (false === $linkFound) {
             return false;
         }
 

@@ -11,7 +11,7 @@
         {% endblock %}
         <div class="login-box-body">
             {% block sonata_user_login_form %}
-                <form action="{{ path("fos_user_security_check") }}"
+                <form id="123" action="{{ path("fos_user_security_check") }}"
                       method="post" role="form">
                     <input type="hidden" name="_csrf_token"
                            value="{{ csrf_token('authenticate') }}"/>

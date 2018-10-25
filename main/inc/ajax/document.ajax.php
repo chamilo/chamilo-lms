@@ -88,7 +88,7 @@ switch ($action) {
             foreach ($fileList as $file) {
                 $globalFile = [];
                 $globalFile['files'] = $file;
-                $result = DocumentManager::upload_document(
+                $document = DocumentManager::upload_document(
                     $globalFile,
                     $currentDirectory,
                     '',
@@ -101,15 +101,16 @@ switch ($action) {
                 );
 
                 $json = [];
-                if (!empty($result) && is_array($result)) {
+                if (!empty($document)) {
                     $json['name'] = Display::url(
-                        api_htmlentities($result['title']),
-                        api_htmlentities($result['url']),
+                        api_htmlentities($document->getTitle()),
+                        api_htmlentities($document->getTitle()),
                         ['target' => '_blank']
                     );
-                    $json['url'] = $result['url'];
-                    $json['size'] = format_file_size($file['size']);
-                    $json['type'] = api_htmlentities($file['type']);
+                    $json['url'] = '#';
+                    $json['size'] = format_file_size($document->getSize());
+                    //$json['type'] = api_htmlentities($file['type']);
+                    $json['type'] = '';
                     $json['result'] = Display::return_icon(
                         'accept.png',
                         get_lang('Uploaded')

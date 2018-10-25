@@ -216,11 +216,12 @@ function process_uploaded_file($uploaded_file, $show_output = true)
  * @param string $comment
  * @param int    $sessionId
  * @param bool   $treat_spaces_as_hyphens
+ * @param string $uploadKey
  *
  * So far only use for unzip_uploaded_document function.
  * If no output wanted on success, set to false.
  *
- * @return string path of the saved file
+ * @return CDocument|false
  */
 function handle_uploaded_document(
     $courseInfo,
@@ -546,7 +547,6 @@ function handle_uploaded_document(
                     break;
                 case 'rename':
                     // Rename the file if it exists
-                    // Always rename.
                     $cleanName = DocumentManager::getUniqueFileName(
                         $uploadPath,
                         $cleanName,
@@ -577,7 +577,7 @@ function handle_uploaded_document(
                     if (true) {
                         ///chmod($fullPath, $filePermissions);
                         // Put the document data in the database
-                        $documentId = add_document(
+                        $document = add_document(
                             $courseInfo,
                             $filePath,
                             'file',
@@ -593,41 +593,19 @@ function handle_uploaded_document(
                             $content
                         );
 
-                        if ($documentId) {
-                            // Update document item_property
-                            /*api_item_property_update(
-                                $courseInfo,
-                                TOOL_DOCUMENT,
-                                $documentId,
-                                'DocumentAdded',
-                                $userId,
-                                $groupInfo,
-                                $toUserId,
-                                null,
-                                null,
-                                $sessionId
-                            );*/
-
-                            // Redo visibility
-                            //api_set_default_visibility($documentId, TOOL_DOCUMENT, null, $courseInfo);
-                        }
-
-                        // If the file is in a folder, we need to update all parent folders
-                        //item_property_update_on_folder($courseInfo, $uploadPath, $userId);
-
                         // Display success message to user
                         if ($output) {
                             Display::addFlash(
                                 Display::return_message(
                                     get_lang('UplUploadSucceeded').'<br />'.
-                                    get_lang('UplFileSavedAs').' '.$documentTitle,
+                                    get_lang('UplFileSavedAs').' '.$document->getTitle(),
                                     'success',
                                     false
                                 )
                             );
                         }
 
-                        return $filePath;
+                        return $document;
                     } else {
                         /*if ($output) {
                             Display::addFlash(
@@ -1333,7 +1311,7 @@ function filter_extension(&$filename)
  * @param bool   $sendNotification
  * @param string $content
  *
- * @return int id if inserted document
+ * @return CDocument
  */
 function add_document(
     $courseInfo,
@@ -1459,7 +1437,7 @@ function add_document(
         $sql = "UPDATE $table SET id = iid WHERE iid = $documentId";
         Database::query($sql);
 
-        if ($saveVisibility) {
+        /*if ($saveVisibility) {
             api_set_default_visibility(
                 $documentId,
                 TOOL_DOCUMENT,
@@ -1468,7 +1446,7 @@ function add_document(
                 $sessionId,
                 $userId
             );
-        }
+        }*/
 
         $allowNotification = api_get_configuration_value('send_notification_when_document_added');
         if ($sendNotification && $allowNotification) {
@@ -1493,10 +1471,10 @@ function add_document(
             MessageManager::sendMessageToAllUsersInCourse($subject, $message, $courseInfo, $sessionId);
         }
 
-        return $documentId;
-    } else {
-        return false;
+        return $document;
     }
+
+    return false;
 }
 
 /**

@@ -2826,7 +2826,7 @@ class DocumentManager
      * @param string $fileKey
      * @param bool   $treat_spaces_as_hyphens
      *
-     * @return array|bool
+     * @return CDocument|false
      */
     public static function upload_document(
         $files,
@@ -2849,7 +2849,7 @@ class DocumentManager
         if (isset($files[$fileKey])) {
             $uploadOk = process_uploaded_file($files[$fileKey], $show_output);
             if ($uploadOk) {
-                $new_path = handle_uploaded_document(
+                $document = handle_uploaded_document(
                     $course_info,
                     $files[$fileKey],
                     $base_work_dir,
@@ -2868,7 +2868,7 @@ class DocumentManager
                 );
 
                 // Showing message when sending zip files
-                if ($new_path === true && $unzip == 1) {
+                if ($document && $unzip == 1) {
                     if ($show_output) {
                         echo Display::return_message(
                             get_lang('UplUploadSucceeded').'<br />',
@@ -2877,20 +2877,11 @@ class DocumentManager
                         );
                     }
 
-                    return [
-                        'title' => $files[$fileKey]['name'],
-                        'url' => '#',
-                    ];
+                    return $document;
                 }
 
-                if ($new_path) {
-                    $documentId = self::get_document_id(
-                        $course_info,
-                        $new_path,
-                        $sessionId
-                    );
-
-                    if (!empty($documentId)) {
+                if ($document) {
+                    /*
                         $table_document = Database::get_course_table(TABLE_DOCUMENT);
                         $params = [];
 
@@ -2912,29 +2903,20 @@ class DocumentManager
                                 ],
                             ]
                         );
-                    }
+                    }*/
 
                     if ($index_document) {
                         self::index_document(
-                            $documentId,
+                            $document->getId(),
                             $course_info['code'],
                             null,
-                            $_POST['language'],
+                            $_POST['language'] ?? '',
                             $_REQUEST,
                             $ifExists
                         );
                     }
 
-                    if (!empty($documentId) && is_numeric($documentId)) {
-                        $documentData = self::get_document_data_by_id(
-                            $documentId,
-                            $course_info['code'],
-                            false,
-                            $sessionId
-                        );
-
-                        return $documentData;
-                    }
+                    return $document;
                 }
             }
         }

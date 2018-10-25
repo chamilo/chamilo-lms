@@ -4,7 +4,6 @@
 /**
  * @package chamilo.document
  */
-// Including the global initialization file
 require_once __DIR__.'/../inc/global.inc.php';
 
 // Including additional libraries

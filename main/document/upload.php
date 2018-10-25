@@ -300,7 +300,8 @@ $defaults = [
 
 $form->setDefaults($defaults);
 
-$url = api_get_path(WEB_AJAX_PATH).'document.ajax.php?'.api_get_cidreq().'&a=upload_file&curdirpath='.$path;
+$url = api_get_path(WEB_AJAX_PATH).
+    'document.ajax.php?'.api_get_cidreq().'&a=upload_file&curdirpath='.$path.'&directory_parent_id='. (int) ($_REQUEST['id'] ?? 0);
 
 $multipleForm = new FormValidator(
     'drag_drop',

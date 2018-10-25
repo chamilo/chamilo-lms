@@ -49,7 +49,7 @@ switch ($action) {
             exit;
         }
 
-        $directoryParentId = isset($_POST['directory_parent_id']) ? $_POST['directory_parent_id'] : 0;
+        $directoryParentId = isset($_REQUEST['directory_parent_id']) ? $_REQUEST['directory_parent_id'] : 0;
         $currentDirectory = '';
         if (empty($directoryParentId)) {
             $currentDirectory = isset($_REQUEST['curdirpath']) ? $_REQUEST['curdirpath'] : '';
@@ -97,7 +97,9 @@ switch ($action) {
                     $defaultFileExistsOption,
                     false,
                     false,
-                    'files'
+                    'files',
+                    true,
+                    $directoryParentId
                 );
 
                 $json = [];

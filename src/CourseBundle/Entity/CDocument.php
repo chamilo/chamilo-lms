@@ -347,6 +347,14 @@ class CDocument extends AbstractResource implements ResourceInterface
     }
 
     /**
+     * This is a "soft delete" only changes visibility, doesn't delete the record
+     */
+    public function setSoftDelete()
+    {
+        $this->getCourseSessionResourceLink()->setVisibility(ResourceLink::VISIBILITY_DELETED);
+    }
+
+    /**
      * @ORM\PostPersist()
      *
      * @param LifecycleEventArgs $args

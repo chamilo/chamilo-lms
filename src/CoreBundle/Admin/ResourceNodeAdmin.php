@@ -45,7 +45,7 @@ class ResourceNodeAdmin extends AbstractAdmin
             ->add(
                 'resourceLinks',
                 ModelAutocompleteType::class,
-                ['property' => 'id', 'btn_add' => true, 'multiple' => true]
+                ['property' => 'id', 'multiple' => true]
             )
             ->end()
         ;

@@ -342,4 +342,17 @@ class ResourceLink implements ResourceInterface
     {
         return $this;
     }
+
+    /**
+     * @return array
+     */
+    public static function getVisibilityList(): array
+    {
+        return [
+            'Draft' => self::VISIBILITY_DRAFT,
+            'Pending' => self::VISIBILITY_PENDING,
+            'Published' => self::VISIBILITY_PUBLISHED,
+            'Deleted' => self::VISIBILITY_DELETED,
+        ];
+    }
 }

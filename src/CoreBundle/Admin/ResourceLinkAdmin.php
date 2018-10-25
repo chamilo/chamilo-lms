@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Admin;
 
+use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -10,6 +11,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
  * Class ResourceLinkAdmin.
@@ -36,7 +38,7 @@ class ResourceLinkAdmin extends AbstractAdmin
     {
         $formMapper
             ->add('resourceNode')
-            ->add('visibility')
+            ->add('visibility', ChoiceType::class, ['choices' => ResourceLink::getVisibilityList()])
             ->add(
                 'resourceRight',
                 ModelAutocompleteType::class,

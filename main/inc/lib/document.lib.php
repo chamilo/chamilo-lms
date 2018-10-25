@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
@@ -464,7 +465,6 @@ class DocumentManager
         $sessionId = 0,
         User $currentUser = null
     ) {
-        $tblItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tblDocument = Database::get_course_table(TABLE_DOCUMENT);
         $currentUser = $currentUser ?: api_get_current_user();
 
@@ -532,7 +532,8 @@ class DocumentManager
                     docs.c_id = {$courseInfo['real_id']} AND                    
                     docs.path LIKE '".Database::escape_string($path.$addedSlash.'%')."' AND
                     docs.path NOT LIKE '".Database::escape_string($path.$addedSlash.'%/%')."' AND
-                    docs.path NOT LIKE '%_DELETED_%'
+                    docs.path NOT LIKE '%_DELETED_%' AND
+                    l.visibility NOT IN ('".ResourceLink::VISIBILITY_DELETED."')
                     $sharedCondition               
                 ";
         //$userGroupFilter AND
@@ -1047,12 +1048,12 @@ class DocumentManager
     ) {
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
 
-        $groupId = intval($groupId);
+        $groupId = (int) $groupId;
         if (empty($groupId)) {
             $groupId = api_get_group_id();
         }
 
-        $sessionId = intval($sessionId);
+        $sessionId = (int) $sessionId;
         if (empty($sessionId)) {
             $sessionId = api_get_session_id();
         }
@@ -1089,11 +1090,20 @@ class DocumentManager
             $path = $docInfo['path'];
         }
 
-        $documentId = intval($documentId);
+        $em = Database::getManager();
+        $documentId = (int) $documentId;
 
         if (empty($path) || empty($docInfo) || empty($documentId)) {
             return false;
         }
+
+        /** @var CDocument $document */
+        $document = $em->getRepository('ChamiloCourseBundle:CDocument')->find($docInfo['iid']);
+        $document->setSoftDelete();
+        $em->persist($document);
+        $em->flush();
+
+        return true;
 
         $itemInfo = api_get_item_property_info(
             $_course['real_id'],
@@ -1348,7 +1358,6 @@ class DocumentManager
             $url_path = urlencode($row['path']);
             $path = str_replace('%2F', '/', $url_path);
             $pathinfo = pathinfo($row['path']);
-
             $row['url'] = api_get_path(WEB_CODE_PATH).'document/showinframes.php?cidReq='.$course_code.'&id='.$id;
             $row['document_url'] = api_get_path(WEB_CODE_PATH).'document/document.php?cidReq='.$course_code.'&id='.$id;
             $row['absolute_path'] = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document'.$row['path'];

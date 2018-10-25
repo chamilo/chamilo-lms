@@ -1,18 +1,17 @@
 <?php
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
-use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CourseBundle\Entity\CTool;
-use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
 use Chamilo\UserBundle\Entity\User;
+use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
-use Doctrine\DBAL\DBALException;
 use Symfony\Component\Filesystem\Filesystem;
-use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
 
 /**
  * Description of MsiLti
@@ -196,7 +195,7 @@ class ImsLtiPlugin extends Plugin
     {
         $button = Display::toolbarButton(
             $this->get_lang('ConfigureExternalTool'),
-            api_get_path(WEB_PLUGIN_PATH).'ims_lti/add.php?'.api_get_cidreq(),
+            api_get_path(WEB_PLUGIN_PATH).'ims_lti/configure.php?'.api_get_cidreq(),
             'cog',
             'primary'
         );
@@ -365,36 +364,36 @@ class ImsLtiPlugin extends Plugin
 
     /**
      * @param array      $contentItem
-     * @param ImsLtiTool $ltiTool
+     * @param ImsLtiTool $baseLtiTool
      * @param Course     $course
      *
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function saveItemAsLtiLink(array $contentItem, ImsLtiTool $ltiTool, Course $course)
+    public function saveItemAsLtiLink(array $contentItem, ImsLtiTool $baseLtiTool, Course $course)
     {
         $em = Database::getManager();
         $ltiToolRepo = $em->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool');
 
-        $url = empty($contentItem['url']) ? $ltiTool->getLaunchUrl() : $contentItem['url'];
+        $url = empty($contentItem['url']) ? $baseLtiTool->getLaunchUrl() : $contentItem['url'];
 
         /** @var ImsLtiTool $newLtiTool */
-        $newLtiTool = $ltiToolRepo->findOneBy(['launchUrl' => $url, 'isGlobal' => false]);
+        $newLtiTool = $ltiToolRepo->findOneBy(['launchUrl' => $url, 'isGlobal' => false, 'course' => $course]);
 
         if (empty($newLtiTool)) {
             $newLtiTool = new ImsLtiTool();
             $newLtiTool
                 ->setLaunchUrl($url)
                 ->setConsumerKey(
-                    $ltiTool->getConsumerKey()
+                    $baseLtiTool->getConsumerKey()
                 )
                 ->setSharedSecret(
-                    $ltiTool->getSharedSecret()
+                    $baseLtiTool->getSharedSecret()
                 );
         }
 
         $newLtiTool
             ->setName(
-                !empty($contentItem['title']) ? $contentItem['title'] : $ltiTool->getName()
+                !empty($contentItem['title']) ? $contentItem['title'] : $baseLtiTool->getName()
             )
             ->setDescription(
                 !empty($contentItem['text']) ? $contentItem['text'] : null
@@ -446,5 +445,22 @@ class ImsLtiPlugin extends Plugin
         $response = $request->process();
 
         return $response;
+    }
+
+    /**
+     * @param int    $toolId
+     * @param Course $course
+     *
+     * @return bool
+     */
+    public static function existsToolInCourse($toolId, Course $course)
+    {
+        $em = Database::getManager();
+        $toolRepo = $em->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool');
+
+        /** @var ImsLtiTool $tool */
+        $tool = $toolRepo->findOneBy(['id' => $toolId, 'isGlobal' => false, 'course' => $course]);
+
+        return !empty($tool);
     }
 }

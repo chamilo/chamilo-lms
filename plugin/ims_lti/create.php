@@ -13,6 +13,7 @@ $plugin = ImsLtiPlugin::create();
 $em = Database::getManager();
 
 $form = new FormValidator('ism_lti_create_tool');
+$form->addHeader($plugin->get_lang('ToolSettings'));
 $form->addText('name', get_lang('Name'));
 $form->addText('base_url', $plugin->get_lang('LaunchUrl'));
 $form->addText('consumer_key', $plugin->get_lang('ConsumerKey'));
@@ -52,11 +53,13 @@ if ($form->validate()) {
     exit;
 }
 
-$template = new Template($plugin->get_lang('AddExternalTool'));
+$pageTitle = $plugin->get_lang('AddExternalTool');
+
+$template = new Template($pageTitle);
 $template->assign('form', $form->returnForm());
 
 $content = $template->fetch('ims_lti/view/add.tpl');
 
-$template->assign('header', $plugin->get_title());
+$template->assign('header', $pageTitle);
 $template->assign('content', $content);
 $template->display_one_col_template();

@@ -29,3 +29,5 @@ $strings['ConfigureExternalTool'] = 'Configure external tools';
 $strings['SupportDeepLinking'] = 'Support Deep-Linking';
 $strings['ScoreNotSet'] = 'Score not set';
 $strings['ScoreForXUserIsYScore'] = 'Score for %s is %s';
+$strings['AddedTools'] = 'Added tools';
+$strings['ToolEdited'] = 'Tool edited';

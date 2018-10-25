@@ -6,10 +6,16 @@ namespace Chamilo\CourseBundle\Admin;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\ToolChain;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\CoreBundle\Form\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\LanguageType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 /**
  * Class CourseAdmin.
@@ -122,24 +128,24 @@ class CourseAdmin extends AbstractAdmin
     {
         $formMapper
             ->add('title')
-            ->add('code', 'text', [
+            ->add('code', TextType::class, [
                 //'read_only' => true,
             ])
-            ->add('description', 'ckeditor')
-            ->add('courseLanguage', 'language')
+            ->add('description', CKEditorType::class)
+            ->add('courseLanguage', LanguageType::class)
             ->add('departmentName')
             ->add(
                 'visibility',
-                'choice',
+                ChoiceType::class,
                 [
                     'choices' => Course::getStatusList(),
                     'translation_domain' => 'ChamiloCoreBundle',
                 ]
             )
-            ->add('departmentUrl', 'url', ['required' => false])
+            ->add('departmentUrl', UrlType::class, ['required' => false])
             ->add(
                 'urls',
-                'sonata_type_collection',
+                CollectionType::class,
                 [
                     //'cascade_validation' => true,
                 ],
@@ -157,7 +163,7 @@ class CourseAdmin extends AbstractAdmin
             )
             ->add(
                 'users',
-                'sonata_type_collection',
+                CollectionType::class,
                 [
                     //'cascade_validation' => true,
                 ],
@@ -188,7 +194,7 @@ class CourseAdmin extends AbstractAdmin
                 'visibility',
                 null,
                 [],
-                'choice',
+                ChoiceType::class,
                 ['choices' => Course::getStatusList()]
             )
         ;
@@ -203,7 +209,7 @@ class CourseAdmin extends AbstractAdmin
             ->addIdentifier('title')
             ->addIdentifier('code')
             ->add('courseLanguage')
-            ->add('visibility', 'choice', [
+            ->add('visibility', ChoiceType::class, [
                 'choices' => Course::getStatusList(),
             ])
         ;

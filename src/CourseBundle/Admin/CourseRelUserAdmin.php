@@ -9,6 +9,8 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\CoreBundle\Form\Type\TranslatableChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
  * Class CourseAdmin.
@@ -37,16 +39,16 @@ class CourseRelUserAdmin extends AbstractAdmin
             //->add('group', 'text')
             ->add(
                 'status',
-                'choice',
+                ChoiceType::class,
                 [
                     'choices' => CourseRelUser::getStatusList(),
                 ]
             )
             ->add(
                 'relation_type',
-                'sonata_type_translatable_choice',
+                ChoiceType::class,
                 [
-                'choices' => CourseRelUser::getRelationTypeList(),
+                    'choices' => CourseRelUser::getRelationTypeList(),
                 ]
             )
             ->end()

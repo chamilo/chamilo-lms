@@ -35,6 +35,7 @@ class CDocumentAdmin extends AbstractAdmin
     protected function configureShowField(ShowMapper $showMapper)
     {
         $showMapper
+            ->add('course')
             ->add('title')
         ;
     }
@@ -45,6 +46,8 @@ class CDocumentAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
+            ->add('course')
+            ->add('session')
             ->add('title')
         ;
     }
@@ -55,6 +58,8 @@ class CDocumentAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
+            ->add('course')
+            ->add('filetype')
             ->addIdentifier('title')
         ;
     }

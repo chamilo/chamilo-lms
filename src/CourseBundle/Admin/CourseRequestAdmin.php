@@ -8,6 +8,7 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 /**
  * Class CourseRequestAdmin.
@@ -23,7 +24,7 @@ class CourseRequestAdmin extends AbstractAdmin
     {
         $formMapper
             ->add('title')
-            ->add('description', 'textarea', ['attr' => ['class' => 'ckeditor']])
+            ->add('description', TextareaType::class, ['attr' => ['class' => 'ckeditor']])
             ->add('code')
             ->add('user')
             ->add('status')

@@ -28,7 +28,7 @@ $grey-900             : #313435;
 // ---------------------------------------------------------
 
 $default-danger       : #ff3c7e;
-$default-dark         : #313435;
+$default-dark         : #54667a;
 $default-grey         : #565a5c;
 $default-info         : #4abaff;
 $default-primary      : #7774e7;
@@ -38,8 +38,17 @@ $default-yellow       : #FFCC00;
 $default-white        : #FFFFFF;
 $default-black        : #000000;
 $default-link         : rgb(0, 153, 255);
-$default-background   : #FFFFFF;
-$default-sidebar      : #0181bf;
+
+
+// ---------------------------------------------------------
+// COLORS PAGE
+// ---------------------------------------------------------
+
+$page-background      : #f2f8f9;
+$menu-background      :linear-gradient(120deg, #00e4d0, #5983e8);
+$sidebar-link         : #54667A;
+$sidebar-bg           : #FFFFFF;
+$sidebar-focus        : rgba(0, 0, 0, 0.07);
 
 // ---------------------------------------------------------
 // OTHERS

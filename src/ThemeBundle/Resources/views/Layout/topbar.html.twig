@@ -104,21 +104,11 @@
             </ul>
             <!-- END NAVBAR LEFT -->
             <!-- NAVBAR RIGHT -->
+
+
+
             {% if app.user is not null and is_granted('IS_AUTHENTICATED_FULLY') %}
             <ul class="nav-right">
-                <li class="btn-padding">
-                    <a class="btn btn-light btn-create-two btn-sm" href="{{ url('legacy_main', { 'name' : 'create_course/add_course.php' }) }}">
-                        <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
-                        {{ "AddCourse"|trans }}
-                    </a>
-                </li>
-                <li class="btn-padding">
-
-                    <a class="btn btn-light btn-create-one btn-sm" href="{{ url('legacy_main', { 'name' : 'session/session_add.php' }) }}">
-                        <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
-                        {{ "AddSession"|trans }}
-                    </a>
-                </li>
                 <li class="btn-padding">
                     <a class="btn btn-light btn-create-three btn-sm" href="{{ path('legacy_main', { 'name' : '../user_portal.php'}) }}">
                         <i class="fa fa-graduation-cap fa-lg" aria-hidden="true"></i>
@@ -186,6 +176,21 @@
                     </ul>
                 </li>
             </ul>
+            {% else %}
+                <ul class="nav-right">
+                    <li class="btn-padding">
+                        <a class="btn btn-light btn-create-two btn-sm" href="{{ url('legacy_main', { 'name' : 'auth/inscription.php' }) }}">
+                            <i class="fas fa-pencil-alt"></i>
+                            {{ "Register"|trans }}
+                        </a>
+                    </li>
+                    <li class="btn-padding">
+                        <a class="btn btn-light btn-create-one btn-sm" href="{{ url('legacy_main', { 'name' : '../public/login' }) }}">
+                            <i class="fas fa-sign-in-alt"></i>
+                            {{ "Sign in"|trans }}
+                        </a>
+                    </li>
+                </ul>
             {% endif %}
             <!-- END NAVBAR RIGHT -->
         </div>

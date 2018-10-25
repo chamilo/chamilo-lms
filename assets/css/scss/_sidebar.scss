@@ -170,7 +170,7 @@
   overflow: auto;
   padding: 0;
   position: relative;
-  background: $default-sidebar;
+  background: $sidebar-bg;
 
   .nav-header {
     margin-top: 10px;
@@ -183,10 +183,10 @@
 
   .sidebar-divider {
     height: 0;
-    margin: .5rem 0;
+    margin: 0;
     overflow: hidden;
-    border-top: 1px solid #217aa4;
-    border-bottom: 1px solid #16b1fd;
+    border-top: 1px solid #DEE2E6;
+    border-bottom: 1px solid #FFFFFF;
   }
 
   .dropdown-toggle::after {
@@ -254,7 +254,7 @@
     }
 
     a {
-      color: $default-white;
+      color: $sidebar-link;
       transition: all 0.3s ease;
       display: block;
       font-size: 14px;
@@ -283,9 +283,9 @@
 
       &:hover,
       &:focus {
-        color: $default-info;
+        color: $sidebar-link;
         text-decoration: none;
-        background: $default-link;
+        background: $sidebar-focus;
 
         .icon-holder {
           color: $default-info;

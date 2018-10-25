@@ -152,7 +152,7 @@ $tpl->assign(
 
 $actions = $agenda->displayActions('calendar', $userId);
 
-$tpl->assign('toolbar', $actions);
+$tpl->assign('actions', $actions);
 
 // Calendar Type : course, admin, personal
 $tpl->assign('type', $type);

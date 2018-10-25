@@ -10,9 +10,17 @@ use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
 use Chamilo\MediaBundle\Entity\Media;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 
-echo 'first run: <br />';
+/**
+ * Migrate content from c_item_property and c_document tables to the new "Resource" system.
+ *
+ */
+
+echo 'First check if table "classification__category" has a default category; if not then run: <br />';
 echo 'bin/console sonata:media:fix-media-context';
-//exit;
+echo 'change course id in the query';
+exit;
+// For tests to clean all resource stuff:
+//
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 

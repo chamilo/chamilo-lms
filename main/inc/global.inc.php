@@ -500,10 +500,10 @@ try {
     // Forcing PclZip library to use a custom temporary folder.
     //define('PCLZIP_TEMPORARY_DIR', api_get_path(SYS_ARCHIVE_PATH));
 } catch (Exception $e) {
-    error_log($e->getMessage());
+    error_log($e->getMessage());/*
     var_dump($e->getMessage());
     var_dump($e->getCode());
     var_dump($e->getLine());
     echo $e->getTraceAsString();
-    exit;
+    exit;*/
 }

@@ -57,6 +57,8 @@ if (!$signatureValid || !$bodyHashValid) {
     exit;
 }
 
+header('Content-Type: application/xml');
+
 $plugin = ImsLtiPlugin::create();
 
 $process = $plugin->processServiceRequest();

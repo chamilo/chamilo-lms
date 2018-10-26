@@ -1,7 +1,7 @@
 html,
 body {
   height: 100%;
-  .login-page {
+  .bg-chamilo {
     display: -ms-flexbox;
     display: flex;
     -ms-flex-align: center;
@@ -14,6 +14,7 @@ body {
     background: linear-gradient(135deg, #00b7ea 0%,#0068d8 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00b7ea', endColorstr='#0068d8',GradientType=1 );
   }
+
   .login-box {
     width: 100%;
     max-width: 350px;
@@ -22,7 +23,7 @@ body {
     background-color: $default-white;
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
 
     .login-logo{
       margin-bottom: 2em;

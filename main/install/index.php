@@ -329,7 +329,6 @@ if ($encryptPassForm == '1') {
 <head>
     <title>&mdash; <?php echo get_lang('ChamiloInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?></title>
     <style type="text/css" media="screen, projection">
-        @import "../../public/build/vendor.css";
         @import "../../public/build/css/app.css";
         @import "../../public/build/css/themes/chamilo/default.css";
     </style>
@@ -417,12 +416,57 @@ if ($encryptPassForm == '1') {
     </script>
     <meta http-equiv="Content-Type" content="text/html; charset=<?php echo api_get_system_encoding(); ?>" />
 </head>
-<body dir="<?php echo api_get_text_direction(); ?>">
 
-<div id="page-install">
-<div id="main" class="container">
+<body class="bg-chamilo bg-install" dir="<?php echo api_get_text_direction(); ?>">
+
+<div class="install-box">
     <div class="row">
+
+        <div class="col-md-4">
+            <div class="logo-install">
+                <img src="header-logo.png" hspace="10" vspace="10" alt="Chamilo" />
+            </div>
+            <div class="install-steps">
+                <ol class="list-group">
+                    <li class="list-group-item <?php step_active('1'); ?>">
+                        <span class="number"> 1 </span>
+                        <?php echo get_lang('InstallationLanguage'); ?>
+                    </li>
+                    <li class="list-group-item <?php step_active('2'); ?>">
+                        <span class="number"> 2 </span>
+                        <?php echo get_lang('Requirements'); ?>
+                    </li>
+                    <li class="list-group-item <?php step_active('3'); ?>">
+                        <span class="number"> 3 </span>
+                        <?php echo get_lang('Licence'); ?>
+                    </li>
+                    <li class="list-group-item <?php step_active('4'); ?>">
+                        <span class="number"> 4 </span>
+                        <?php echo get_lang('DBSetting'); ?>
+                    </li>
+                    <li class="list-group-item <?php step_active('5'); ?>">
+                        <span class="number"> 5 </span>
+                        <?php echo get_lang('CfgSetting'); ?>
+                    </li>
+                    <li class="list-group-item <?php step_active('6'); ?>">
+                        <span class="number"> 6 </span>
+                        <?php echo get_lang('PrintOverview'); ?>
+                    </li>
+                    <li class="list-group-item <?php step_active('7'); ?>">
+                        <span class="number"> 7 </span>
+                        <?php echo get_lang('Installing'); ?>
+                    </li>
+                </ol>
+            </div>
+            <div id="note">
+                <a class="btn btn-info btn-block" href="<?php echo $installationGuideLink; ?>" target="_blank">
+                    <em class="fa fa-file-text-o"></em> <?php echo get_lang('ReadTheInstallationGuide'); ?>
+                </a>
+            </div>
+        </div>
+
         <div class="col-md-8">
+
         <form class="form-horizontal" id="install_form" method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
 <?php
 
@@ -895,32 +939,9 @@ if (@$_POST['step2']) {
 ?>
           </form>
         </div>
-        <div class="col-md-4">
-            <div class="logo-install">
-                <img src="header-logo.png" hspace="10" vspace="10" alt="Chamilo" />
-            </div>
-            <div class="well install-steps-menu">
-                <ol>
-                    <li <?php step_active('1'); ?>><?php echo get_lang('InstallationLanguage'); ?></li>
-                    <li <?php step_active('2'); ?>><?php echo get_lang('Requirements'); ?></li>
-                    <li <?php step_active('3'); ?>><?php echo get_lang('Licence'); ?></li>
-                    <li <?php step_active('4'); ?>><?php echo get_lang('DBSetting'); ?></li>
-                    <li <?php step_active('5'); ?>><?php echo get_lang('CfgSetting'); ?></li>
-                    <li <?php step_active('6'); ?>><?php echo get_lang('PrintOverview'); ?></li>
-                    <li <?php step_active('7'); ?>><?php echo get_lang('Installing'); ?></li>
-                </ol>
-            </div>
-            <div id="note">
-                <a class="btn btn-primary btn-block" href="<?php echo $installationGuideLink; ?>" target="_blank">
-                    <em class="fa fa-file-text-o"></em> <?php echo get_lang('ReadTheInstallationGuide'); ?>
-                </a>
-            </div>
-        </div>
-        <div class="col-md-12">
-            <div style="text-align: center;">
-                <?php echo $poweredBy; ?>
-            </div>
-        </div>
+        <footer class="install-footer">
+            <?php echo $poweredBy; ?>
+        </footer>
     </div>
   </div>
 </body>

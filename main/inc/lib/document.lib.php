@@ -1281,31 +1281,28 @@ class DocumentManager
      *
      * @return int id of document / false if no doc found
      */
-    public static function get_document_id($courseInfo, $path, $sessionId = null)
+    public static function get_document_id($courseInfo, $path, $sessionId = 0)
     {
         $table = Database::get_course_table(TABLE_DOCUMENT);
         $courseId = $courseInfo['real_id'];
 
-        if (!isset($sessionId)) {
-            $sessionId = api_get_session_id();
-        } else {
-            $sessionId = intval($sessionId);
-        }
+        $sessionId = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
+        $sessionCondition = api_get_session_condition($sessionId, true);
 
         $path = Database::escape_string($path);
         if (!empty($courseId) && !empty($path)) {
             $sql = "SELECT id FROM $table
                     WHERE
                         c_id = $courseId AND
-                        path LIKE BINARY '$path' AND
-                        session_id = $sessionId
+                        path LIKE BINARY '$path'
+                        $sessionCondition
                     LIMIT 1";
 
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
                 $row = Database::fetch_array($result);
 
-                return intval($row['id']);
+                return (int) $row['id'];
             }
         }
 
@@ -1369,6 +1366,7 @@ class DocumentManager
             if (dirname($row['path']) == '.') {
                 $row['parent_id'] = '0';
             } else {
+                var_dump($row['path'].'-'.dirname($row['path']));
                 $row['parent_id'] = self::get_document_id($course_info, dirname($row['path']), $session_id);
             }
             $parents = [];

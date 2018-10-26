@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
@@ -18,7 +19,7 @@ use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 echo 'First check if table "classification__category" has a default category; if not then run: <br />';
 echo 'bin/console sonata:media:fix-media-context';
 echo 'change course id in the query';
-exit;
+//exit;
 // For tests to clean all resource stuff:
 //
 
@@ -44,8 +45,6 @@ $sql = "SELECT
             d.c_id = 12
         ORDER BY d.path";
 $result = Database::query($sql);
-
-$fs = Container::$container->get('oneup_flysystem.courses_filesystem');
 
 $em = Database::getManager();
 $resourceType = $em->getRepository('ChamiloCoreBundle:Resource\ResourceType')->findOneBy(['name' => 'document']);
@@ -84,8 +83,7 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
 
     switch ($row['tool']) {
         case 'document':
-            $documentData = DocumentManager::get_document_data_by_id($documentId, $course->getCode(), $sessionId);
-            //var_dump($documentData);
+            $documentData = DocumentManager::get_document_data_by_id($documentId, $course->getCode(), true, $sessionId);
             if (!$documentData) {
                 //$documentData = DocumentManager::get_document_data_by_id($row['ref'], $course->getCode(), $sessionId);
                 error_log("Skipped item property iid #$itemIid");
@@ -94,17 +92,24 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
 
             $folderPath = $course->getDirectory().'/document/'.$documentData['path'];
             $file = $coursePath.$folderPath;
-
             $document = $documentManager->find($documentData['iid']);
-
             var_dump('Parsing document iid #'.$document->getIid());
 
+            // Find parent node
+            $parentNode = null;
+            if (!empty($documentData['parent_id'])) {
+                /** @var CDocument $parentDocument */
+                $parentDocument = $documentManager->find($documentData['parent_id']);
+                $parentNode = $parentDocument->getResourceNode();
+            }
 
+            // Creating node
             $node = new ResourceNode();
             $node
                 ->setName($documentData['title'])
                 ->setDescription($documentData['comment'] ?? '')
                 ->setCreator($author)
+                ->setParent($parentNode)
                 ->setResourceType($resourceType)
                 ->setCreatedAt($createdAt)
                 ->setUpdatedAt($lastUpdatedAt)
@@ -118,7 +123,6 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
             switch ($row['visibility']) {
                 case '0':
                     $newVisibility = ResourceLink::VISIBILITY_DRAFT;
-                    //$readerMask = ResourceNodeVoter::getReaderMask();
                     $editorMask = ResourceNodeVoter::getEditorMask();
 
                     $resourceRight = new ResourceRight();
@@ -161,6 +165,7 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
 
             switch ($documentData['filetype']) {
                 case 'folder':
+                    // Folder doesn't need a ResourceFile or Media entity
                     break;
                 case 'file':
                     /** @var Media $media */
@@ -194,10 +199,8 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
                     break;
             }
 
-
             $em->persist($link);
             $em->flush();
-
             break;
     }
 }

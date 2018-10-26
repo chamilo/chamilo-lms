@@ -15,7 +15,9 @@ api_block_anonymous_users(false);
 $em = Database::getManager();
 
 /** @var ImsLtiTool $tool */
-$tool = isset($_GET['id']) ? $em->find('ChamiloPluginBundle:ImsLti\ImsLtiTool', intval($_GET['id'])) : 0;
+$tool = isset($_GET['id'])
+    ? $em->find('ChamiloPluginBundle:ImsLti\ImsLtiTool', (int) $_GET['id'])
+    : null;
 
 if (!$tool) {
     api_not_allowed(true);
@@ -30,6 +32,7 @@ $course = $em->find('ChamiloCoreBundle:Course', api_get_course_int_id());
 /** @var User $user */
 $user = $em->find('ChamiloUserBundle:User', api_get_user_id());
 
+$pluginPath = api_get_path(WEB_PLUGIN_PATH).'ims_lti/';
 $toolUserId = ImsLtiPlugin::generateToolUserId($user->getId());
 $platformDomain = str_replace(['https://', 'http://'], '', api_get_setting('InstitutionUrl'));
 
@@ -38,7 +41,7 @@ $params['lti_version'] = 'LTI-1p0';
 
 if ($tool->isActiveDeepLinking()) {
     $params['lti_message_type'] = 'ContentItemSelectionRequest';
-    $params['content_item_return_url'] = api_get_path(WEB_PLUGIN_PATH).'ims_lti/item_return.php';
+    $params['content_item_return_url'] = $pluginPath.'item_return.php';
     $params['accept_media_types'] = '*/*';
     $params['accept_presentation_document_targets'] = 'iframe';
     //$params['accept_unsigned'];
@@ -58,7 +61,7 @@ if ($tool->isActiveDeepLinking()) {
 
     if (!empty($toolEval)) {
         $params['lis_result_sourcedid'] = $toolEval->getId().':'.$user->getId();
-        $params['lis_outcome_service_url'] = api_get_path(WEB_PLUGIN_PATH).'ims_lti/outcome_service.php';
+        $params['lis_outcome_service_url'] = api_get_path(WEB_PATH).'ims_lti/outcome_service/'.$tool->getId();
         $params['lis_person_sourcedid'] = "$platformDomain:$toolUserId";
         $params['lis_course_offering_sourcedid'] = "$platformDomain:".$course->getId();
 

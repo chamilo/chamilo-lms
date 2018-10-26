@@ -539,6 +539,45 @@ class OAuthSimple
                 break;
         }
     }
+
+    /**
+     * @param $string
+     *
+     * @return string
+     */
+    public static function generateBodyHash($string)
+    {
+        $hash = sha1($string, true);
+
+        return base64_encode($hash);
+    }
+
+    /**
+     * @param string $authorizationHeader
+     *
+     * @return array
+     */
+    public static function getAuthorizationParams($authorizationHeader)
+    {
+        if ('OAuth ' !== substr($authorizationHeader, 0, 6)) {
+            return [];
+        }
+
+        $params = [];
+        $authString = str_replace('OAuth ', '', $authorizationHeader);
+        $authParts = explode(',', $authString);
+
+        foreach ($authParts as $authPart) {
+            list($key, $value) = explode('=', $authPart, 2);
+
+            $key = trim($key);
+            $value = trim($value, " \"");
+
+            $params[$key] = urldecode($value);
+        }
+
+        return $params;
+    }
 }
 
 /**

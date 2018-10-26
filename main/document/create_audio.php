@@ -327,28 +327,13 @@ function downloadAudioGoogle($filepath, $dir)
     );
 
     // add document to database
-    $current_session_id = api_get_session_id();
-    $groupId = api_get_group_id();
-    $groupInfo = GroupManager::get_group_properties($groupId);
     $relativeUrlPath = $dir;
-    $doc_id = add_document(
+    add_document(
         $_course,
         $relativeUrlPath.$audio_filename,
         'file',
         filesize($documentPath),
         $audio_title
-    );
-    api_item_property_update(
-        $_course,
-        TOOL_DOCUMENT,
-        $doc_id,
-        'DocumentAdded',
-        $_user['user_id'],
-        $groupInfo,
-        null,
-        null,
-        null,
-        $current_session_id
     );
     echo Display::return_message(get_lang('DocumentCreated'), 'confirm');
     echo '<script>window.location.href="'.$location.'"</script>';

@@ -142,18 +142,6 @@ if (empty($temp_file_2delete)) {
     // Add document to database
     $documentId = add_document($courseInfo, $paintDir.$paintFileName, 'file', filesize($documentPath), $title);
     if ($documentId) {
-        api_item_property_update(
-            $courseInfo,
-            TOOL_DOCUMENT,
-            $documentId,
-            'DocumentAdded',
-            api_get_user_id(),
-            $groupInfo,
-            null,
-            null,
-            null,
-            $sessionId
-        );
         Display::addFlash(Display::return_message(get_lang('Saved')));
     }
 } else {

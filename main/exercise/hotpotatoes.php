@@ -56,7 +56,7 @@ if ($finish == 2 && isset($_POST['imgparams'])) {
 if (api_is_allowed_to_edit(null, true)) {
     if (hotpotatoes_init($document_sys_path.$uploadPath)) {
         // If the directory doesn't exist, create the "HotPotatoes" directory.
-        $doc_id = add_document(
+        add_document(
             $_course,
             '/HotPotatoes_files',
             'folder',

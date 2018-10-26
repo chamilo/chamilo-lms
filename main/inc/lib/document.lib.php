@@ -2042,7 +2042,7 @@ class DocumentManager
                 $id = self::get_document_id_of_directory_certificate();
 
                 if (empty($id)) {
-                    $id = add_document(
+                    add_document(
                         $courseInfo,
                         $dir_name,
                         'folder',
@@ -2055,16 +2055,6 @@ class DocumentManager
                         0,
                         0,
                         false
-                    );
-                }
-
-                if (!empty($id)) {
-                    api_item_property_update(
-                        $courseInfo,
-                        TOOL_DOCUMENT,
-                        $id,
-                        $visibility_command,
-                        api_get_user_id()
                     );
                 }
             }
@@ -2676,23 +2666,12 @@ class DocumentManager
                                         );
 
                                         //Add to item properties to the new folder
-                                        $doc_id = add_document(
+                                        add_document(
                                             $destination_course_info,
                                             $filepath_to_add,
                                             'folder',
                                             0,
                                             basename($filepath_to_add)
-                                        );
-                                        api_item_property_update(
-                                            $destination_course_info,
-                                            TOOL_DOCUMENT,
-                                            $doc_id,
-                                            'FolderCreated',
-                                            $user_id,
-                                            null,
-                                            null,
-                                            null,
-                                            null
                                         );
                                     }
                                 }
@@ -2708,23 +2687,12 @@ class DocumentManager
                                         $size = filesize($destination_filepath);
 
                                         // Add to item properties to the file
-                                        $doc_id = add_document(
+                                        add_document(
                                             $destination_course_info,
                                             $filepath_to_add,
                                             'file',
                                             $size,
                                             basename($filepath_to_add)
-                                        );
-                                        api_item_property_update(
-                                            $destination_course_info,
-                                            TOOL_DOCUMENT,
-                                            $doc_id,
-                                            'FolderCreated',
-                                            $user_id,
-                                            null,
-                                            null,
-                                            null,
-                                            null
                                         );
                                     }
                                 }
@@ -4425,19 +4393,7 @@ class DocumentManager
         $path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
         if (!is_dir($path.'audio')) {
             mkdir($path.'audio', api_get_permissions_for_new_directories());
-            $audioId = add_document($_course, '/audio', 'folder', 0, 'Audio');
-            api_item_property_update(
-                $_course,
-                TOOL_DOCUMENT,
-                $audioId,
-                'FolderCreated',
-                api_get_user_id(),
-                null,
-                null,
-                null,
-                null,
-                api_get_session_id()
-            );
+            add_document($_course, '/audio', 'folder', 0, 'Audio');
         }
 
         return $audioId;

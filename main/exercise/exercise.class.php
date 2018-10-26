@@ -1367,24 +1367,12 @@ class Exercise
                 $result = Database::query($sql);
 
                 if (!Database::num_rows($result)) {
-                    $id = add_document(
+                    add_document(
                         $this->course,
                         str_replace($documentPath, '', $audioPath).'/'.$this->sound,
                         'file',
                         $sound['size'],
                         $sound['name']
-                    );
-                    api_item_property_update(
-                        $this->course,
-                        TOOL_DOCUMENT,
-                        $id,
-                        'DocumentAdded',
-                        api_get_user_id()
-                    );
-                    item_property_update_on_folder(
-                        $this->course,
-                        str_replace($documentPath, '', $audioPath),
-                        api_get_user_id()
                     );
                 }
             }

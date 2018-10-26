@@ -1,9 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Resource\ResourceFile;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
+use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 
 /**
  * FILE UPLOAD LIBRARY.
@@ -568,7 +572,7 @@ function handle_uploaded_document(
                     $documentTitle = disable_dangerous_file($cleanName);
                     $filePath = $uploadPath.$fileSystemName;
 
-                    $request = \Chamilo\CoreBundle\Framework\Container::getRequest();
+                    $request = Container::getRequest();
                     $content = $request->files->get($uploadKey);
                     if (is_array($content)) {
                         $content = $content[0];
@@ -1306,7 +1310,7 @@ function filter_extension(&$filename)
  * @param string $title
  * @param string $comment
  * @param int    $readonly
- * @param bool   $saveVisibility
+ * @param int    $visibility see ResourceLink constants
  * @param int    $group_id         group.id
  * @param int    $sessionId        Session ID, if any
  * @param int    $userId           creator user id
@@ -1314,7 +1318,7 @@ function filter_extension(&$filename)
  * @param string $content
  * @param int    $parentId
  *
- * @return CDocument
+ * @return CDocument|false
  */
 function add_document(
     $courseInfo,
@@ -1324,7 +1328,7 @@ function add_document(
     $title,
     $comment = null,
     $readonly = 0,
-    $saveVisibility = true,
+    $visibility = null,
     $group_id = 0,
     $sessionId = 0,
     $userId = 0,
@@ -1366,11 +1370,11 @@ function add_document(
 
     $resourceNode = $documentRepo->addResourceNode($document, $userEntity);
     $resourceNode->setParent($parentNode);
-
     $document->setResourceNode($resourceNode);
 
+    // Only create a ResourseFile and Media if there's a file involved
     if ($fileType === 'file') {
-        $mediaManager = \Chamilo\CoreBundle\Framework\Container::$container->get('sonata.media.manager.media');
+        $mediaManager = Container::$container->get('sonata.media.manager.media');
         /** @var \Chamilo\MediaBundle\Entity\Media $media */
         $media = $mediaManager->create();
         $media->setName($title);
@@ -1398,10 +1402,9 @@ function add_document(
         }
 
         $media->setBinaryContent($file);
-
         $mediaManager->save($media, true);
 
-        $resourceFile = new \Chamilo\CoreBundle\Entity\Resource\ResourceFile();
+        $resourceFile = new ResourceFile();
         $resourceFile->setMedia($media);
         $resourceFile->setName($title);
         $em->persist($resourceFile);
@@ -1410,7 +1413,14 @@ function add_document(
         $em->persist($resourceNode);
     }
 
-    $newVisibility = ResourceLink::VISIBILITY_PUBLISHED;
+    // By default visibility is published
+    // @todo change visibility
+    //$newVisibility = ResourceLink::VISIBILITY_PUBLISHED;
+
+    if (is_null($visibility)) {
+        $visibility = ResourceLink::VISIBILITY_PUBLISHED;
+    }
+
     $link = new ResourceLink();
     $link
         ->setCourse($courseEntity)
@@ -1418,30 +1428,33 @@ function add_document(
         ->setGroup($group)
         //->setUser($toUser)
         ->setResourceNode($resourceNode)
-        ->setVisibility($newVisibility)
+        ->setVisibility($visibility)
     ;
 
-    /*if (!empty($rights)) {
+    $rights = [];
+    switch ($visibility) {
+        case ResourceLink::VISIBILITY_PENDING:
+        case ResourceLink::VISIBILITY_DRAFT:
+            $editorMask = ResourceNodeVoter::getEditorMask();
+            $resourceRight = new ResourceRight();
+            $resourceRight
+                ->setMask($editorMask)
+                ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
+            ;
+            $rights[] = $resourceRight;
+
+            break;
+    }
+
+    if (!empty($rights)) {
         foreach ($rights as $right) {
             $link->addResourceRight($right);
         }
-    }*/
+    }
 
     $em->persist($link);
     $em->persist($document);
     $em->flush();
-
-    /*$resourceRight = new \Chamilo\CoreBundle\Entity\Resource\ResourceRights();
-    $resourceRight->setMask(\Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter::getEditorMask());
-    $resourceRight->setRole(\Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER);
-
-    $documentRepo->addResourceToCourse($resourceNode, $courseEntity, $resourceRight);
-
-    $resourceRight = new \Chamilo\CoreBundle\Entity\Resource\ResourceRights();
-    $resourceRight->setMask(\Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter::getReaderMask());
-    $resourceRight->setRole(\Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter::ROLE_CURRENT_COURSE_STUDENT);
-
-    $documentRepo->addResourceToCourse($resourceNode, $courseEntity, $resourceRight);*/
 
     $documentId = $document->getIid();
     if ($documentId) {
@@ -1712,7 +1725,7 @@ function create_unexisting_directory(
     $sendNotification = true
 ) {
     $course_id = $_course['real_id'];
-    $session_id = intval($session_id);
+    $session_id = (int) $session_id;
 
     $folderExists = DocumentManager::folderExists(
         $desired_dir_name,
@@ -1783,7 +1796,7 @@ function create_unexisting_directory(
 
             $rs = Database::query($sql);
             if (Database::num_rows($rs) == 0) {
-                $document_id = add_document(
+                $document = add_document(
                     $_course,
                     $systemFolderName,
                     'folder',
@@ -1798,9 +1811,9 @@ function create_unexisting_directory(
                     $sendNotification
                 );
 
-                if ($document_id) {
+                if ($document) {
                     // Update document item_property
-                    if (!empty($visibility)) {
+                    /*if (!empty($visibility)) {
                         $visibilities = [
                             0 => 'invisible',
                             1 => 'visible',
@@ -1831,16 +1844,9 @@ function create_unexisting_directory(
                             null,
                             $session_id
                         );
-                    }
+                    }*/
 
-                    $documentData = DocumentManager::get_document_data_by_id(
-                        $document_id,
-                        $_course['code'],
-                        false,
-                        $session_id
-                    );
-
-                    return $documentData;
+                    return $document;
                 }
             } else {
                 $document = Database::fetch_array($rs);

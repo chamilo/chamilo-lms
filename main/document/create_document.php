@@ -519,29 +519,23 @@ if ($form->validate()) {
         exit;
     }*/
 
-    //if ($fp = @fopen($filepath.$filename.'.'.$extension, 'w')) {
     if (true) {
         $content = str_replace(
             api_get_path(WEB_COURSE_PATH),
             api_get_configuration_value('url_append').api_get_path(REL_COURSE_PATH),
             $content
         );
-
-        //fputs($fp, $content);
-        //fclose($fp);
-        //chmod($filepath.$filename.'.'.$extension, api_get_permissions_for_new_files());
-        //$file_size = filesize($filepath.$filename.'.'.$extension);
         $save_file_path = $dir.$filename.'.'.$extension;
 
-        $document_id = add_document(
+        $document = add_document(
             $_course,
             $save_file_path,
             'file',
             '',
             $title,
-            null,
+            $_POST['comment'] ?? '',
             $readonly,
-            true,
+            null,
             0,
             0,
             0,
@@ -549,46 +543,7 @@ if ($form->validate()) {
             $content
         );
 
-        if ($document_id) {
-            api_item_property_update(
-                $_course,
-                TOOL_DOCUMENT,
-                $document_id,
-                'DocumentAdded',
-                $userId,
-                $group_properties,
-                null,
-                null,
-                null,
-                $current_session_id
-            );
-            // Update parent folders
-            item_property_update_on_folder($_course, $dir, $userId);
-            $new_comment = isset($_POST['comment']) ? trim($_POST['comment']) : '';
-            $new_title = isset($_POST['title']) ? trim($_POST['title']) : '';
-            $new_title = htmlspecialchars($new_title);
-            if ($new_comment || $new_title) {
-                $ct = '';
-                $params = [];
-                if ($new_comment) {
-                    $params['comment'] = $new_comment;
-                }
-                if ($new_title) {
-                    $params['title'] = $new_title;
-                }
-                if (!empty($params)) {
-                    Database::update(
-                        $doc_table,
-                        $params,
-                        ['c_id = ? AND id = ?' => [$course_id, $document_id]]
-                    );
-                }
-            }
-            $dir = substr($dir, 0, -1);
-            $selectcat = '';
-            if (isset($_REQUEST['selectcat'])) {
-                $selectcat = "&selectcat=".intval($_REQUEST['selectcat']);
-            }
+        if ($document) {
             $certificate_condition = '';
             if ($is_certificate_mode) {
                 $df = DocumentManager::get_default_certificate_id($_course['real_id']);
@@ -598,17 +553,17 @@ if ($form->validate()) {
                 $certificate_condition = '&certificate=true&curdirpath=/certificates';
             }
             Display::addFlash(Display::return_message(get_lang('ItemAdded')));
-            header('Location: document.php?'.api_get_cidreq().'&id='.$folder_id.$selectcat.$certificate_condition);
+            header('Location: document.php?'.api_get_cidreq().'&id='.$folder_id.$certificate_condition);
             exit();
         } else {
             Display::addFlash(Display::return_message(get_lang('Impossible'), 'error'));
-            Display :: display_header($nameTools, 'Doc');
-            Display :: display_footer();
+            header('Location: document.php?'.api_get_cidreq().'&id='.$folder_id);
+            exit();
         }
     } else {
         Display::addFlash(Display::return_message(get_lang('Impossible'), 'error'));
-        Display :: display_header($nameTools, 'Doc');
-        Display :: display_footer();
+        header('Location: document.php?'.api_get_cidreq().'&id='.$folder_id);
+        exit();
     }
 } else {
     // Copied from document.php
@@ -632,7 +587,7 @@ if ($form->validate()) {
         }
     }
 
-    Display :: display_header($nameTools, "Doc");
+    Display::display_header($nameTools, "Doc");
     // actions
     // link back to the documents overview
     if ($is_certificate_mode) {

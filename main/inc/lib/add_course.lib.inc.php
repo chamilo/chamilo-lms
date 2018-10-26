@@ -954,7 +954,7 @@ class AddCourse
             $file['title'],
             null,
             0,
-            true,
+            null,
             0,
             0,
             0,

@@ -3,7 +3,6 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\Kernel;
-use ChamiloSession as Session;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -49,23 +48,16 @@ api_check_php_version('../inc/');
 ob_implicit_flush(true);
 
 // Defaults settings
-putenv("APP_LOCALE=en");
-putenv("APP_URL_APPEND=''");
-putenv("APP_ENCRYPT_METHOD='bcrypt'");
-putenv("DATABASE_HOST=");
-putenv("DATABASE_PORT=");
-putenv("DATABASE_NAME=");
-putenv("DATABASE_USER=");
-putenv("DATABASE_PASSWORD=");
-putenv("APP_ENV=dev");
-putenv("APP_DEBUG=1");
-
-// Calling Symfony container
-//$kernel = new Chamilo\Kernel('dev', true);
-/*$kernel->boot();
-$container = $kernel->getContainer();
-$oldSession = $container->get('session');
-Container::setContainer($container);*/
+putenv('APP_LOCALE=en');
+putenv('APP_URL_APPEND=""');
+putenv('APP_ENCRYPT_METHOD="bcrypt"');
+putenv('DATABASE_HOST=');
+putenv('DATABASE_PORT=');
+putenv('DATABASE_NAME=');
+putenv('DATABASE_USER=');
+putenv('DATABASE_PASSWORD=');
+putenv('APP_ENV=dev');
+putenv('APP_DEBUG=1');
 
 session_start();
 
@@ -773,26 +765,31 @@ if (@$_POST['step2']) {
                 '{{APP_URL_APPEND}}' => $urlAppendPath,
             ];
 
+            error_log('Update env file');
             updateEnvFile($distFile, $envFile, $params);
             (new Dotenv())->load($envFile);
 
             // Load Symfony Kernel
             $kernel = new Kernel('dev', true);
             $application = new Application($kernel);
-
+            error_log('Set Kernel');
             // Create database
             /*$input = new ArrayInput([]);
             $command = $application->find('doctrine:schema:create');
             $result = $command->run($input, new ConsoleOutput());*/
 
+            session_unset();
+            $_SESSION = [];
+            session_destroy();
+
             // No errors
             //if ($result == 0) {
             // Boot kernel and get the doctrine from Symfony container
             $kernel->boot();
+            error_log('Boot');
             $containerDatabase = $kernel->getContainer();
-            $sysPath = api_get_path(SYS_PATH);
-            updateWithContainer($containerDatabase);
-        //}
+            upgradeWithContainer($containerDatabase);
+            error_log('Set upgradeWithContainer');
         } else {
             set_file_folder_permissions();
             $database = connectToDatabase(

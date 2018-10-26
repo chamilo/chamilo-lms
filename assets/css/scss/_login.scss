@@ -23,8 +23,42 @@ body {
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+
     .login-logo{
       margin-bottom: 2em;
+    }
+
+    input.form-control{
+      border: none;
+      border-radius: 0;
+      transition: none;
+      &:focus{
+        background-color: transparent;
+        border-color: transparent;
+        outline: 0;
+        box-shadow: none;
+      }
+    }
+
+    .focus-input {
+      position: absolute;
+      display: block;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      &:before{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        height: calc(100% - 20px);
+        bottom: 0;
+        left: 0;
+        padding-left: 13px;
+        padding-top: 3px;
+      }
     }
   }
 }
@@ -80,35 +114,4 @@ input:-ms-input-placeholder { color: #cccccc;}
   background: transparent;
   padding: 0 7px 0 43px;
 }
-input.form-control{
-  border: none;
-  border-radius: 0;
-  transition: none;
-  &:focus{
-    background-color: transparent;
-    border-color: transparent;
-    outline: 0;
-    box-shadow: none;
-  }
-}
 
-.focus-input {
-  position: absolute;
-  display: block;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  &:before{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    height: calc(100% - 20px);
-    bottom: 0;
-    left: 0;
-    padding-left: 13px;
-    padding-top: 3px;
-  }
-}

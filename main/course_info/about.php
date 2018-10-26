@@ -51,7 +51,7 @@ $courseDescriptionTools = $em->getRepository('ChamiloCourseBundle:CCourseDescrip
 $courseValues = new ExtraFieldValue('course');
 $userValues = new ExtraFieldValue('user');
 
-$urlCourse = api_get_path(WEB_PATH).'main/course/about.php?course_id='.$courseId;
+$urlCourse = api_get_path(WEB_PATH).'main/course_info/about.php?course_id='.$courseId;
 $courseTeachers = $course->getTeachers();
 $teachersData = [];
 

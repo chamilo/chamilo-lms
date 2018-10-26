@@ -128,13 +128,13 @@ hr {
 // ---------------------------------------------------------
 
 .main-content {
-  padding: 85px 20px 20px;
+  padding: 75px 20px 20px;
   min-height: calc(100vh - 61px);
   &.bg-content{
     background-color: $page-background;
   }
   .box-body{
-    background-color: $default-white;
+    background-color: transparent;
   }
   @include to($breakpoint-md) {
     padding: 85px 5px 5px;
@@ -258,8 +258,14 @@ footer {
   max-width: 100%;
   height: auto;
 }
-
 .card{
+  border: 0;
+  border-radius: 2px;
+  .card-body{
+    padding: 1.88rem 1.81rem;
+  }
+}
+.card-course{
   transform: perspective(1px) translateZ(0);
   transition-property: box-shadow;
   transition-duration: 0.3s;
@@ -273,27 +279,6 @@ footer {
       font-size: 12px;
     }
   }
-  /*&.card-line{
-    &:hover{
-      &:before{
-        transition: all .3s;
-        width: 100%;
-        left: 0;
-      }
-    }
-    &:before {
-      content: "";
-      margin: 0 auto;
-      width: 0;
-      height: 4px;
-      background: $default-link;
-      display: block;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      transition: all .3s;
-    }
-  }*/
   .category{
     position: absolute;
     border-radius: 10px;

@@ -1,4 +1,7 @@
+{% import '@ChamiloTheme/Macros/box.html.twig' as macro %}
+
 {% autoescape false %}
+    {% set content %}
     <div class="box-header">
         {% if is_granted('ROLE_ADMIN') %}
             <div class="float-right">
@@ -42,4 +45,6 @@
             <span class="sr-only">Next</span>
         </a>
     </div>
+    {% endset %}
+    {{ macro.panel('', '', content, '', '', '', '') }}
 {% endautoescape %}

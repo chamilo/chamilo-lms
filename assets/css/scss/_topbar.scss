@@ -1,7 +1,10 @@
 // ---------------------------------------------------------
 // TOPBAR USER
 // ---------------------------------------------------------
-
+.breadcrumb{
+  background-color: $breadcrumb-color;
+  padding: 0.5rem 0.75rem;
+}
 .header {
   background: $menu-background;
   border-bottom: 1px solid $border-color;
@@ -50,7 +53,7 @@
         }
 
         > a {
-          color: $default-text-color;
+          color: $header-link;
           display: block;
           line-height: $header-height;
           min-height: $header-height;
@@ -69,7 +72,7 @@
 
           &:hover,
           &:focus {
-            color: $default-dark;
+            color: $header-hover;
             text-decoration: none;
           }
 
@@ -126,6 +129,7 @@
     }
 
     .show {
+      font-size: 14px;
       .dropdown-menu {
         transform: scale(1, 1);
       }
@@ -150,6 +154,7 @@
             line-height: 1.5;
             min-height: auto;
             padding: 10px 15px;
+            color: $sidebar-link;
           }
         }
       }

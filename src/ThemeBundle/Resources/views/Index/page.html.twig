@@ -1,3 +1,6 @@
+{% import '@ChamiloTheme/Macros/box.html.twig' as macro %}
+
+{% set content %}
 {% if is_granted('ROLE_ADMIN') and show_edit_page_link %}
     <div class="box-header">
         <div class="float-right">
@@ -10,3 +13,6 @@
 {% endif %}
 
 {{ sonata_page_render_container('content', page) }}
+
+{% endset %}
+{{ macro.panel('', '', content, '', '', '', '') }}

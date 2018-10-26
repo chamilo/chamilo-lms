@@ -109,12 +109,6 @@
 
             {% if app.user is not null and is_granted('IS_AUTHENTICATED_FULLY') %}
             <ul class="nav-right">
-                <li class="btn-padding">
-                    <a class="btn btn-light btn-create-three btn-sm" href="{{ path('legacy_main', { 'name' : '../user_portal.php'}) }}">
-                        <i class="fa fa-graduation-cap fa-lg" aria-hidden="true"></i>
-                        {{ "MyCourses"|trans }}
-                    </a>
-                </li>
 
                 <li class="btn-menu">
                     <a href="{{ url('legacy_main', { 'name' : 'calendar/agenda_js.php' }) }}">
@@ -134,20 +128,17 @@
                         <i class="far fa-envelope"></i>
                     </a>
                 </li>
+
                 <li class="dropdown">
-                    <a href="" class="dropdown-toggle no-after peers fxw-nw ai-c lh-1" data-toggle="dropdown">
-                        <div class="peer mR-10">
-                            <img
-                                class="rounded-circle"
-                                src="{{ url('legacy_public') ~ app.user.avatarOrAnonymous(32) }}"
-                                alt="{{ app.user.completeName }}"
-                            >
-                        </div>
-                        <div class="peer">
-                            <span class="fsz-sm">{{ app.user.completeName }}</span>
-                        </div>
+                    <a href="" class="dropdown-toggle" data-toggle="dropdown">
+                        <span class="profile-text">{{ app.user.firstname }} {{ app.user.lastname }}</span>
+                        <img
+                            class="rounded-circle"
+                            src="{{ url('legacy_public') ~ app.user.avatarOrAnonymous(32) }}"
+                            alt="{{ app.user.firstname }} {{ app.user.lastname }}"
+                        >
                     </a>
-                    <ul class="dropdown-menu fsz-sm">
+                    <ul class="dropdown-menu">
                         <li>
                             <a title="{{ "Inbox"|trans }}" class="dropdown-item"
                                href="{{ url('legacy_main', { 'name' : 'messages/inbox.php' }) }}">

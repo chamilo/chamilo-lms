@@ -153,7 +153,6 @@ if (api_is_platform_admin()) {
     $items[] = ['url' => 'course_category.php', 'label' => get_lang('AdminCategories')];
     $items[] = ['url' => 'subscribe_user2course.php', 'label' => get_lang('AddUsersToACourse')];
     $items[] = ['url' => 'course_user_import.php', 'label' => get_lang('ImportUsersToACourse')];
-    //$items[] = array('url'=>'course_intro_pdf_import.php', 	'label' => get_lang('ImportPDFIntroToCourses'));
 
     if (api_get_setting('gradebook_enable_grade_model') == 'true') {
         $items[] = ['url' => 'grade_models.php', 'label' => get_lang('GradeModel')];

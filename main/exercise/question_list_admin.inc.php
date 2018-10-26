@@ -202,6 +202,10 @@ if (!$inATest) {
                 /** @var Question $objQuestionTmp */
                 $objQuestionTmp = Question::read($id);
 
+                if (empty($objQuestionTmp)) {
+                    continue;
+                }
+
                 $clone_link = Display::url(
                     Display::return_icon(
                         'cd.png',
@@ -212,7 +216,7 @@ if (!$inATest) {
                     api_get_self().'?'.api_get_cidreq().'&clone_question='.$id,
                     ['class' => 'btn btn-default btn-sm']
                 );
-                $edit_link = ($objQuestionTmp->type == CALCULATED_ANSWER && $objQuestionTmp->isAnswered())
+                $edit_link = $objQuestionTmp->type == CALCULATED_ANSWER && $objQuestionTmp->isAnswered()
                     ? Display::span(
                         Display::return_icon(
                             'edit_na.png',

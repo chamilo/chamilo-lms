@@ -23,7 +23,7 @@ Encore
     .addEntry('bootstrap', './assets/js/bootstrap.js')
     // Reads app.scss -> output as web/build/css/base.css
     .addStyleEntry('css/app', './assets/css/app.scss')
-    //.addStyleEntry('css/bootstrap', './assets/css/bootstrap.scss')
+    .addStyleEntry('css/bootstrap', './assets/css/bootstrap.scss')
 
     .addStyleEntry('css/chat', './assets/css/chat.css')
     .addStyleEntry('css/document', './assets/css/document.css')

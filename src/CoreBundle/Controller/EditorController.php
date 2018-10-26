@@ -34,7 +34,7 @@ class EditorController extends Controller
     public function editorTemplatesAction()
     {
         $editor = new CkEditor(
-            $this->get('translator.default'),
+            $this->get('translator'),
             $this->get('router')
         );
         $templates = $editor->simpleFormatTemplates();

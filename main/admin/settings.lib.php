@@ -1077,9 +1077,9 @@ function actionsFilter($id)
 function searchImageFilter($image)
 {
     if (!empty($image)) {
-        return '<img src="'.api_get_path(WEB_PUBLIC_PATH).'img/templates_thumb/'.$image.'" alt="'.get_lang('TemplatePreview').'"/>';
+        return '<img src="'.api_get_path(WEB_PUBLIC_PATH).'img/template_thumb/'.$image.'" alt="'.get_lang('TemplatePreview').'"/>';
     } else {
-        return '<img src="'.api_get_path(WEB_PUBLIC_PATH).'img/templates_thumb/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>';
+        return '<img src="'.api_get_path(WEB_PUBLIC_PATH).'img/template_thumb/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>';
     }
 }
 

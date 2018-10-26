@@ -1366,7 +1366,6 @@ class DocumentManager
             if (dirname($row['path']) == '.') {
                 $row['parent_id'] = '0';
             } else {
-                var_dump($row['path'].'-'.dirname($row['path']));
                 $row['parent_id'] = self::get_document_id($course_info, dirname($row['path']), $session_id);
             }
             $parents = [];

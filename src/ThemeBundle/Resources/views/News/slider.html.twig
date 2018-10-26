@@ -1,17 +1,15 @@
 {% import '@ChamiloTheme/Macros/box.html.twig' as macro %}
 
 {% autoescape false %}
-    {% set content %}
-    <div class="box-header">
+    {% set buttons %}
         {% if is_granted('ROLE_ADMIN') %}
-            <div class="float-right">
-                <a  href="{{ url('legacy_index') }}main/admin/system_announcements.php" class="btn btn-light btn-sm" >
-                    <i class="fas fa-pencil-alt"></i>
-                </a>
-            </div>
+            <a  href="{{ url('legacy_index') }}main/admin/system_announcements.php" class="btn btn-light btn-sm" >
+                <i class="fas fa-pencil-alt"></i>
+            </a>
         {% endif %}
-        <h5>{{ "SystemAnnouncements" | get_lang }}</h5>
-    </div>
+    {% endset %}
+    {% set content %}
+   {{ macro.box_header("SystemAnnouncements" | get_lang, buttons) }}
     <div id="carousel-announcement" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
             {% for announcement in announcements %}

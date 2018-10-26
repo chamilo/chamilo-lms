@@ -18,10 +18,14 @@
     {% endif %}
 {% endblock %}
 
-{% macro box_header(title, collapse, remove, type) %}
+{% macro box_header(title, buttons) %}
     <div class="box-header">
-        <h3 class="box-title">{{ title }}</h3>
-        {{ block('box_header_buttons') }}
+        {% if buttons %}
+        <div class="float-right">
+            {{ buttons }}
+        </div>
+        {% endif %}
+        <h5 class="box-title">{{ title }}</h5>
     </div>
 {% endmacro %}
 

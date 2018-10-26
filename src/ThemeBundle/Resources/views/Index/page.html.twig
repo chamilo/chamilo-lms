@@ -1,18 +1,18 @@
 {% import '@ChamiloTheme/Macros/box.html.twig' as macro %}
 
-{% set content %}
-{% if is_granted('ROLE_ADMIN') and show_edit_page_link %}
-    <div class="box-header">
-        <div class="float-right">
-            <a title="{{ "header.edit_page"|trans({}, 'SonataPageBundle') }}" href="{{ _p.web_public ~ 'internal_page/edit/' ~ slug }}" class="btn btn-light btn-sm" >
-                <i class="fas fa-pencil-alt"></i>
-            </a>
-        </div>
-        <h5>{{ "IntroductionOfPlatform"|trans }}</h5>
-    </div>
-{% endif %}
+{% set buttons %}
+    {% if is_granted('ROLE_ADMIN') and show_edit_page_link %}
+        <a title="{{ "header.edit_page"|trans({}, 'SonataPageBundle') }}" href="{{ _p.web_public ~ 'internal_page/edit/' ~ slug }}" class="btn btn-light btn-sm" >
+            <i class="fas fa-pencil-alt"></i>
+        </a>
+    {% endif %}
+{% endset %}
 
-{{ sonata_page_render_container('content', page) }}
+{% set content %}
+
+    {{ macro.box_header("IntroductionOfPlatform" | get_lang, buttons) }}
+    {{ sonata_page_render_container('content', page) }}
 
 {% endset %}
+
 {{ macro.panel('', '', content, '', '', '', '') }}

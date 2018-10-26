@@ -22,24 +22,23 @@
                 });
             });
         </script>
+
+        {% set buttons %}
+            {% if is_granted('ROLE_ADMIN') %}
+                <a title="{{ "Hide"|get_lang }}"
+                   class="btn btn-light btn-sm"
+                   href="{{ url('admin_settings') }}/search_settings?keyword=show_hot_courses&submit_button=&_qf__search_settings=&category=search_setting"
+                >
+                    <i class="fas fa-pencil-alt"></i>
+                </a>
+            {% endif %}
+        {% endset %}
+
         {% set content %}
-        <div class="box-header">
-            <h5>
-                {% if is_granted('ROLE_ADMIN') %}
-                    <div class="float-right">
-                        <a title="{{ "Hide"|get_lang }}" class="btn btn-light btn-sm"
-                           href="{{ url('admin_settings') }}/search_settings?keyword=show_hot_courses&submit_button=&_qf__search_settings=&category=search_setting"
-                        >
-                            <i class="fas fa-pencil-alt"></i>
-                        </a>
-                    </div>
-                {% endif %}
-                {{ "HottestCourses"|get_lang }}
-            </h5>
-        </div>
-        <div class="row">
-            {% include '@ChamiloTheme/default/layout/hot_course_item.html.twig' %}
-        </div>
+            {{ macro.box_header("HottestCourses" | get_lang, buttons) }}
+            <div class="row">
+                {% include '@ChamiloTheme/default/layout/hot_course_item.html.twig' %}
+            </div>
         {% endset %}
         {{ macro.panel('', '', content, '', '', '', '') }}
     {% endif %}

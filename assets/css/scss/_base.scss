@@ -251,8 +251,15 @@ footer {
 .box-header{
   color: $grey-900;
   display: block;
-  padding: 10px;
+  padding: 0;
   position: relative;
+  .box-title{
+    font-weight: 500;
+    color: #404852;
+    margin-bottom: 22px;
+    font-size: 14px;
+    text-transform: capitalize;
+  }
 }
 .carousel-item img{
   max-width: 100%;

@@ -111,6 +111,24 @@ class SettingsManager implements SettingsManagerInterface
     /**
      * @param AccessUrl $url
      */
+    public function updateSchemas(AccessUrl $url)
+    {
+        $this->url = $url;
+        $schemas = array_keys($this->getSchemas());
+
+        /**
+         * @var string
+         * @var \Sylius\Bundle\SettingsBundle\Schema\SchemaInterface $schema
+         */
+        foreach ($schemas as $schema) {
+            $settings = $this->load($this->convertServiceToNameSpace($schema));
+            $this->update($settings);
+        }
+    }
+
+    /**
+     * @param AccessUrl $url
+     */
     public function installSchemas(AccessUrl $url)
     {
         $this->url = $url;
@@ -624,7 +642,7 @@ class SettingsManager implements SettingsManagerInterface
     }
 
     /**
-     * @param $name
+     * @param string $name
      *
      * @throws \InvalidArgumentException
      *
@@ -735,6 +753,77 @@ class SettingsManager implements SettingsManagerInterface
     }
 
     /**
+     * @param SettingsInterface $settings
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function update(SettingsInterface $settings)
+    {
+        $namespace = $settings->getSchemaAlias();
+
+        /** @var SchemaInterface $schema */
+        $schema = $this->schemaRegistry->get($settings->getSchemaAlias());
+
+        $settingsBuilder = new SettingsBuilder();
+        $schema->buildSettings($settingsBuilder);
+        $parameters = $settingsBuilder->resolve($settings->getParameters());
+        // Transform value. Example array to string using transformer. Example:
+        // 1. Setting "tool_visible_by_default_at_creation" it's a multiple select
+        // 2. Is defined as an array in class DocumentSettingsSchema
+        // 3. Add transformer for that variable "ArrayToIdentifierTransformer"
+        // 4. Here we recover the transformer and convert the array to string
+        foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
+            if (array_key_exists($parameter, $parameters)) {
+                $parameters[$parameter] = $transformer->transform($parameters[$parameter]);
+            }
+        }
+        $settings->setParameters($parameters);
+        $persistedParameters = $this->repository->findBy(
+            ['category' => $this->convertServiceToNameSpace($settings->getSchemaAlias())]
+        );
+
+        $persistedParametersMap = [];
+        /** @var SettingsCurrent $parameter */
+        foreach ($persistedParameters as $parameter) {
+            $persistedParametersMap[$parameter->getVariable()] = $parameter;
+        }
+
+        /** @var SettingsCurrent $url */
+        $url = $this->getUrl();
+        $simpleCategoryName = str_replace('chamilo_core.settings.', '', $namespace);
+
+        foreach ($parameters as $name => $value) {
+            if (isset($persistedParametersMap[$name])) {
+                $parameter = $persistedParametersMap[$name];
+                $parameter->setSelectedValue($value);
+                $parameter->setCategory($simpleCategoryName);
+                $this->manager->merge($parameter);
+            } else {
+                $parameter = new SettingsCurrent();
+                $parameter
+                    ->setVariable($name)
+                    ->setCategory($simpleCategoryName)
+                    ->setTitle($name)
+                    ->setSelectedValue($value)
+                    ->setUrl($url)
+                    ->setAccessUrlChangeable(1)
+                    ->setAccessUrlLocked(1)
+                ;
+
+                /* @var $errors ConstraintViolationListInterface */
+                /*$errors = $this->validator->validate($parameter);
+                if (0 < $errors->count()) {
+                    throw new ValidatorException($errors->get(0)->getMessage());
+                }*/
+                $this->manager->persist($parameter);
+            }
+        }
+
+        $this->manager->flush();
+    }
+
+    /**
      * {@inheritdoc}
      *
      * @throws ValidatorException
@@ -775,7 +864,7 @@ class SettingsManager implements SettingsManagerInterface
             new SettingsEvent($settings, $parameters)
         );*/
 
-        /** @var \Chamilo\CoreBundle\Entity\SettingsCurrent $url */
+        /** @var SettingsCurrent $url */
         $url = $this->getUrl();
         $simpleCategoryName = str_replace('chamilo_core.settings.', '', $namespace);
 
@@ -832,7 +921,7 @@ class SettingsManager implements SettingsManagerInterface
             new SettingsEvent($settings)
         );
 
-        /** @var \Chamilo\CoreBundle\Entity\SettingsCurrent $url */
+        /** @var SettingsCurrent $url */
         $url = $event->getSettings()->getAccessUrl();
 
         foreach ($parameters as $name => $value) {

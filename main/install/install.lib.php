@@ -3168,8 +3168,9 @@ function installPages($container)
 /**
  * @param SymfonyContainer $container
  * @param EntityManager    $manager
+ * @param bool             $upgrade
  */
-function installSchemas($container, $manager)
+function installSchemas($container, $manager, $upgrade = false)
 {
     $settingsManager = Container::getSettingsManager();
 
@@ -3190,23 +3191,29 @@ function installSchemas($container, $manager)
     $toolChain = $container->get('chamilo_course.tool_chain');
     $toolChain->createTools($manager);
 
-    // Installing schemas (filling settings_current table)
-    $settingsManager->installSchemas($accessUrl);
+    if ($upgrade) {
+        $settingsManager->updateSchemas($accessUrl);
+    } else {
+        // Installing schemas (filling settings_current table)
+        $settingsManager->installSchemas($accessUrl);
+    }
 }
 
 /**
  * @param SymfonyContainer $container
  */
-function updateWithContainer($container)
+function upgradeWithContainer($container)
 {
     Container::setContainer($container);
-    Container::setLegacyServices($container);
-
+    Container::setLegacyServices($container, false);
+    error_log('setLegacyServices');
     $manager = Database::getManager();
-
     installGroups($container, $manager);
-    installSchemas($container, $manager);
+    error_log('installGroups');
+    installSchemas($container, $manager, true);
+    error_log('installSchemas');
     installPages($container);
+    error_log('installPages');
 }
 
 /**

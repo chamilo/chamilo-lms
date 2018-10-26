@@ -34,7 +34,6 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
                     'show_number_of_courses' => 'false',
                     'show_empty_course_categories' => 'true',
                     'show_back_link_on_top_of_tree' => 'false',
-                    'show_different_course_language' => 'true',
                     'display_categories_on_homepage' => 'false',
                     'show_closed_courses' => 'false',
                     'allow_students_to_browse_courses' => 'true',
@@ -90,7 +89,6 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
             ->add('show_empty_course_categories', YesNoType::class)
             ->add('show_back_link_on_top_of_tree', YesNoType::class)
             ->add('show_empty_course_categories', YesNoType::class)
-            ->add('show_different_course_language', YesNoType::class)
             ->add('display_categories_on_homepage', YesNoType::class)
             ->add('show_closed_courses', YesNoType::class)
             ->add('allow_students_to_browse_courses', YesNoType::class)

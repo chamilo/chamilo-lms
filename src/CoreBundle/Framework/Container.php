@@ -396,7 +396,7 @@ class Container
     /**
      * @param ContainerInterface $container
      */
-    public static function setLegacyServices($container)
+    public static function setLegacyServices($container, $setSession = true)
     {
         \Database::setConnection($container->get('doctrine.dbal.default_connection'));
         $em = $container->get('doctrine.orm.entity_manager');
@@ -413,8 +413,9 @@ class Container
         // Setting course tool chain (in order to create tools to a course)
         \CourseManager::setToolList($container->get('chamilo_course.tool_chain'));
 
-        self::$session = $container->get('session');
-
+        if ($setSession) {
+            self::$session = $container->get('session');
+        }
         // Setting legacy properties.
         self::$dataDir = $container->get('kernel')->getDataDir();
         self::$courseDir = $container->get('kernel')->getDataDir();

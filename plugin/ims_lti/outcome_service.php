@@ -3,6 +3,8 @@
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
+header('Content-Type: application/xml');
+
 $plugin = ImsLtiPlugin::create();
 
 $process = $plugin->processServiceRequest();

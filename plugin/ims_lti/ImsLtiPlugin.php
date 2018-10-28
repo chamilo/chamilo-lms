@@ -126,8 +126,9 @@ class ImsLtiPlugin extends Plugin
             $toolTable->addColumn('shared_secret', Type::STRING);
             $toolTable->addColumn('custom_params', Type::TEXT)->setNotnull(false);
             $toolTable->addColumn('is_global', Type::BOOLEAN);
-            $toolTable->addColumn('active_deep_linking', Type::BOOLEAN)->setNotnull(false)->setDefault(false);
+            $toolTable->addColumn('active_deep_linking', Type::BOOLEAN)->setDefault(false);
             $toolTable->addColumn('c_id', Type::INTEGER);
+            $toolTable->addColumn('gradebook_eval_id', Type::INTEGER)->setNotnull(false);
             $toolTable->addForeignKeyConstraint(
                 'course',
                 ['c_id'],
@@ -135,7 +136,6 @@ class ImsLtiPlugin extends Plugin
                 [],
                 'FK_C5E47F7C91D79BD3'
             );
-            $toolTable->addColumn('gradebook_eval_id', Type::INTEGER, []);
             $toolTable->addForeignKeyConstraint(
                 'gradebook_evaluation',
                 ['gradebook_eval_id'],

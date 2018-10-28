@@ -127,7 +127,7 @@ class ImsLtiPlugin extends Plugin
             $toolTable->addColumn('custom_params', Type::TEXT)->setNotnull(false);
             $toolTable->addColumn('is_global', Type::BOOLEAN);
             $toolTable->addColumn('active_deep_linking', Type::BOOLEAN)->setDefault(false);
-            $toolTable->addColumn('c_id', Type::INTEGER);
+            $toolTable->addColumn('c_id', Type::INTEGER)->setNotnull(false);
             $toolTable->addColumn('gradebook_eval_id', Type::INTEGER)->setNotnull(false);
             $toolTable->addForeignKeyConstraint(
                 'course',

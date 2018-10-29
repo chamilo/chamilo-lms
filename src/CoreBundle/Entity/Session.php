@@ -101,6 +101,11 @@ class Session
     protected $urls;
 
     /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceLink", mappedBy="session", cascade={"remove"}, orphanRemoval=true)
+     */
+    protected $resourceLinks;
+
+    /**
      * @var AccessUrl
      */
     protected $currentUrl;

@@ -4445,7 +4445,7 @@ class DocumentManager
         $saveFilePath = "$dir/$fileName.html";
 
         if ($fromBaseCourse) {
-            $defaultCertificateId = self::get_default_certificate_id($courseData['real_id'],0);
+            $defaultCertificateId = self::get_default_certificate_id($courseData['real_id'], 0);
             if (!empty($defaultCertificateId)) {
                 // We have a certificate from the course base
                 $documentData = self::get_document_data_by_id(
@@ -4499,8 +4499,6 @@ class DocumentManager
                 $sessionId
             );
         }
-
-
     }
 
     /**

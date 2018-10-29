@@ -4,10 +4,10 @@
 use Chamilo\CoreBundle\Entity\Resource\ResourceFile;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
-use Chamilo\CourseBundle\Entity\CDocument;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
+use Chamilo\CourseBundle\Entity\CDocument;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * FILE UPLOAD LIBRARY.
@@ -1310,7 +1310,7 @@ function filter_extension(&$filename)
  * @param string $title
  * @param string $comment
  * @param int    $readonly
- * @param int    $visibility see ResourceLink constants
+ * @param int    $visibility       see ResourceLink constants
  * @param int    $group_id         group.id
  * @param int    $sessionId        Session ID, if any
  * @param int    $userId           creator user id

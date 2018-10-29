@@ -1873,16 +1873,15 @@ function display_configuration_settings_form(
 
 /**
  * After installation is completed (step 6), this message is displayed.
- *
  */
 function display_after_install_message()
 {
     $html = '<div class="RequirementContent">'.get_lang('FirstUseTip').'</div>';
     $html .= '<div class="alert alert-warning">';
     $html .= '<strong>'.get_lang('SecurityAdvice').'</strong>';
-    $html .=  ': ';
+    $html .= ': ';
     $html .= sprintf(get_lang('ToProtectYourSiteMakeXReadOnlyAndDeleteY'), 'app/config/', 'main/install/');
-    $html .=  '</div></form>
+    $html .= '</div></form>
     <br />
     <a class="btn btn-success btn-block" href="../../index.php">
         '.get_lang('GoToYourNewlyCreatedPortal').'

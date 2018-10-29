@@ -20,8 +20,20 @@ $select_cat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
 $is_allowedToEdit = $is_courseAdmin;
 
 $em = Database::getManager();
+/** @var \Chamilo\CoreBundle\Entity\Course $course */
 $course = $em->find('ChamiloCoreBundle:Course', api_get_course_int_id());
 $ltiToolRepo = $em->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool');
+
+$categories = Category::load(null, null, $course->getCode());
+
+if (empty($categories)) {
+    $message = Display::return_message(
+        get_plugin_lang('GradebookNotSetWarning', 'ImsLtiPlugin'),
+        'warning'
+    );
+
+    api_not_allowed(true, $message);
+}
 
 $evaladd = new Evaluation();
 $evaladd->set_user_id($_user['user_id']);
@@ -48,7 +60,7 @@ $slcLtiTools = $form->createElement('select', 'name', get_lang('Tool'));
 $form->insertElementBefore($slcLtiTools, 'hid_category_id');
 $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 
-$ltiTools = $ltiToolRepo->findByCourse($course);
+$ltiTools = $ltiToolRepo->findBy(['course' => $course, 'gradebookEval' => null]);
 
 /** @var ImsLtiTool $ltiTool */
 foreach ($ltiTools as $ltiTool) {

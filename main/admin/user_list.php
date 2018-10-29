@@ -12,6 +12,8 @@ use ChamiloSession as Session;
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_session_admin_list_users();
+
 $urlId = api_get_current_access_url_id();
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 

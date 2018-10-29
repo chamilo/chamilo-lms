@@ -26,14 +26,14 @@ class ImsLtiServiceResponseStatus
     private $severity = '';
 
     /**
-     * @var int
+     * @var string
      */
-    private $messageRefIdentifier = 0;
+    private $messageRefIdentifier = '';
 
     /**
-     * @var int
+     * @var string
      */
-    private $operationRefIdentifier = 0;
+    private $operationRefIdentifier = '';
 
     /**
      * @var string

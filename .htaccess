@@ -23,6 +23,8 @@ RewriteRule ^courses/([^/]+)/?$ main/course_home/course_home.php?cDir=$1 [QSA,L]
 RewriteRule ^courses/([^/]+)/index.php$ main/course_home/course_home.php?cDir=$1 [QSA,L]
 
 # Rewrite everything in the scorm folder of a course to the download script
+# except JS and CSS files, which can be served directly
+RewriteRule ^courses/([^/]+)/scorm/(.*([\.js|\.css]))$ app/courses/$1/scorm/$2 [QSA,L]
 RewriteRule ^courses/([^/]+)/scorm/(.*)$ main/document/download_scorm.php?doc_url=/$2&cDir=$1 [QSA,L]
 
 # Rewrite everything in the document folder of a course to the download script
@@ -63,6 +65,9 @@ RewriteRule ^main/newscorm/(.*)$ main/lp/$1 [QSA,L]
 
 # service Information
 RewriteRule ^service/(\d{1,})$ plugin/buycourses/src/service_information.php?service_id=$1 [L]
+
+# LTI outcome service
+RewriteRule ^ims_lti/outcome_service/(\d{1,})$ plugin/ims_lti/outcome_service.php?t=$1 [L]
 
 # This rule is very generic and should always remain at the bottom of .htaccess
 # http://my.chamilo.net/jdoe to http://my.chamilo.net/user.php?jdoe

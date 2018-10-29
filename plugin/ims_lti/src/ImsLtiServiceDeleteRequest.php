@@ -24,7 +24,7 @@ class ImsLtiServiceDeleteRequest extends ImsLtiServiceRequest
 
     protected function processBody()
     {
-        $resultRecord = $this->body->replaceResultRequest->resultRecord;
+        $resultRecord = $this->xmlRequest->resultRecord;
         $sourcedId = (string) $resultRecord->sourcedGUID->sourcedId;
 
         $sourcedParts = explode(':', $sourcedId);
@@ -43,11 +43,9 @@ class ImsLtiServiceDeleteRequest extends ImsLtiServiceRequest
             return;
         }
 
-        $result = new Result();
-        $result->set_evaluation_id($evaluation->getId());
-        $result->set_user_id($user->getId());
+        $results = Result::load(null, $user->getId(), $evaluation->getId());
 
-        if (!$result->exists()) {
+        if (empty($results)) {
             $this->statusInfo
                 ->setSeverity(ImsLtiServiceResponseStatus::SEVERITY_STATUS)
                 ->setCodeMajor(ImsLtiServiceResponseStatus::CODEMAJOR_FAILURE);
@@ -55,6 +53,8 @@ class ImsLtiServiceDeleteRequest extends ImsLtiServiceRequest
             return;
         }
 
+        /** @var Result $result */
+        $result = $results[0];
         $result->addResultLog($user->getId(), $evaluation->getId());
         $result->delete();
 

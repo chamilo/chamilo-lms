@@ -48,6 +48,8 @@ abstract class ImsLtiServiceRequest
     {
         $info = $this->xmlHeaderInfo;
 
+        $this->statusInfo->setMessageRefIdentifier($info->imsx_messageIdentifier);
+
         error_log("Service Request: tool version {$info->imsx_version} message ID {$info->imsx_messageIdentifier}");
     }
 

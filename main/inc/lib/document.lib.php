@@ -1656,7 +1656,7 @@ class DocumentManager
             if ($session_id == 0) {
                 $link = $document->getCourseSessionResourceLink();
 
-                if ($link->getVisibility() == ResourceLink::VISIBILITY_PUBLISHED) {
+                if ($link && $link->getVisibility() == ResourceLink::VISIBILITY_PUBLISHED) {
                     return true;
                 }
 
@@ -4445,10 +4445,7 @@ class DocumentManager
         $saveFilePath = "$dir/$fileName.html";
 
         if ($fromBaseCourse) {
-            $defaultCertificateId = self::get_default_certificate_id(
-                $courseData['real_id'],
-                0
-            );
+            $defaultCertificateId = self::get_default_certificate_id($courseData['real_id'],0);
             if (!empty($defaultCertificateId)) {
                 // We have a certificate from the course base
                 $documentData = self::get_document_data_by_id(
@@ -4464,51 +4461,46 @@ class DocumentManager
             }
         }
 
-        if (file_exists($fileFullPath) === false) {
-            $result = file_put_contents($fileFullPath, $fileContent);
-            if ($result) {
-                $fileSize = filesize($fileFullPath);
+        $document = add_document(
+            $courseData,
+            $saveFilePath,
+            $fileType,
+            '',
+            $title,
+            $comment,
+            0, //$readonly = 0,
+            true, //$save_visibility = true,
+            null, //$group_id = null,
+            $sessionId,
+            0,
+            false,
+            $fileContent
+        );
 
-                $documentId = add_document(
-                    $courseData,
-                    $saveFilePath,
-                    $fileType,
-                    $fileSize,
-                    $title,
-                    $comment,
-                    0, //$readonly = 0,
-                    true, //$save_visibility = true,
-                    null, //$group_id = null,
-                    $sessionId
-                );
+        /*api_item_property_update(
+            $courseData,
+            TOOL_DOCUMENT,
+            $documentId,
+            'DocumentAdded',
+            api_get_user_id(),
+            null,
+            null,
+            null,
+            null,
+            $sessionId
+        );*/
 
-                api_item_property_update(
-                    $courseData,
-                    TOOL_DOCUMENT,
-                    $documentId,
-                    'DocumentAdded',
-                    api_get_user_id(),
-                    null,
-                    null,
-                    null,
-                    null,
-                    $sessionId
-                );
+        $defaultCertificateId = self::get_default_certificate_id($courseData['real_id'], $sessionId);
 
-                $defaultCertificateId = self::get_default_certificate_id(
-                    $courseData['real_id'],
-                    $sessionId
-                );
-
-                if (!isset($defaultCertificateId)) {
-                    self::attach_gradebook_certificate(
-                        $courseData['real_id'],
-                        $documentId,
-                        $sessionId
-                    );
-                }
-            }
+        if (!isset($defaultCertificateId)) {
+            self::attach_gradebook_certificate(
+                $courseData['real_id'],
+                $document->getId(),
+                $sessionId
+            );
         }
+
+
     }
 
     /**

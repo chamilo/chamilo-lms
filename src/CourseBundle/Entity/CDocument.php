@@ -342,8 +342,14 @@ class CDocument extends AbstractResource implements ResourceInterface
             ->andWhere(
                 Criteria::expr()->eq('session', $this->getSession())
             );
+        $resourceNode = $this->getResourceNode();
 
-        return $this->getResourceNode()->getResourceLinks()->matching($criteria)->first();
+        $result = null;
+        if ($resourceNode && $resourceNode->getResourceLinks()) {
+            $resourceNode->getResourceLinks()->matching($criteria)->first();
+        }
+
+        return $result;
     }
 
     /**

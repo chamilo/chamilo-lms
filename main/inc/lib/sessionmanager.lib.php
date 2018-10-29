@@ -1722,7 +1722,19 @@ class SessionManager
      * */
     public static function delete($id_checked, $from_ws = false)
     {
-        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+        $sessionId = null;
+        if (is_array($id_checked)) {
+            foreach ($id_checked as $sessionId) {
+                self::delete($sessionId);
+            }
+        } else {
+            $sessionId = (int) $id_checked;
+        }
+
+        if (empty($sessionId)) {
+            return false;
+        }
+
         $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
@@ -1741,7 +1753,7 @@ class SessionManager
         /** @var SequenceRepository $repo */
         $repo = Database::getManager()->getRepository('ChamiloCoreBundle:SequenceResource');
         $sequenceResource = $repo->findRequirementForResource(
-            $id_checked,
+            $sessionId,
             SequenceResource::SESSION_TYPE
         );
 
@@ -1756,21 +1768,13 @@ class SessionManager
             return false;
         }
 
-        if (is_array($id_checked)) {
-            foreach ($id_checked as $sessionId) {
-                self::delete($sessionId);
-            }
-        } else {
-            $id_checked = intval($id_checked);
-        }
-
-        if (self::allowed($id_checked) && !$from_ws) {
+        if (self::allowed($sessionId) && !$from_ws) {
             $qb = $em
                 ->createQuery('
                     SELECT s.sessionAdminId FROM ChamiloCoreBundle:Session s
                     WHERE s.id = ?1
                 ')
-                ->setParameter(1, $id_checked);
+                ->setParameter(1, $sessionId);
 
             $res = $qb->getSingleScalarResult();
 
@@ -1779,18 +1783,16 @@ class SessionManager
             }
         }
 
-        $sessionInfo = api_get_session_info($id_checked);
-
         // Delete documents inside a session
-        $courses = self::getCoursesInSession($id_checked);
+        $courses = self::getCoursesInSession($sessionId);
         foreach ($courses as $courseId) {
             $courseInfo = api_get_course_info_by_id($courseId);
-            DocumentManager::deleteDocumentsFromSession($courseInfo, $id_checked);
+            DocumentManager::deleteDocumentsFromSession($courseInfo, $sessionId);
             $works = Database::select(
                 '*',
                 $tbl_student_publication,
                 [
-                    'where' => ['session_id = ? AND c_id = ?' => [$id_checked, $courseId]],
+                    'where' => ['session_id = ? AND c_id = ?' => [$sessionId, $courseId]],
                 ]
             );
 
@@ -1803,32 +1805,32 @@ class SessionManager
             }
         }
 
+        $sessionEntity = api_get_session_entity($sessionId);
+        $sessionName = $sessionEntity->getName();
+        $em->remove($sessionEntity);
+        $em->flush();
+
         // Class
         $sql = "DELETE FROM $userGroupSessionTable
-                WHERE session_id IN($id_checked)";
+                WHERE session_id = $sessionId";
         Database::query($sql);
 
-        Database::query("DELETE FROM $tbl_student_publication WHERE session_id IN($id_checked)");
-        Database::query("DELETE FROM $tbl_session_rel_course WHERE session_id IN($id_checked)");
-        Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE session_id IN($id_checked)");
-        Database::query("DELETE FROM $tbl_session_rel_user WHERE session_id IN($id_checked)");
-        Database::query("DELETE FROM $tbl_item_properties WHERE session_id IN ($id_checked)");
-        Database::query("DELETE FROM $tbl_url_session WHERE session_id IN($id_checked)");
-
-        Database::query("DELETE FROM $trackCourseAccess WHERE session_id IN($id_checked)");
-        Database::query("DELETE FROM $trackAccess WHERE access_session_id IN($id_checked)");
-
-        $sql = "UPDATE $ticket SET session_id = NULL WHERE session_id IN ($id_checked)";
-        Database::query($sql);
-
-        $sql = "DELETE FROM $tbl_session WHERE id IN ($id_checked)";
+        Database::query("DELETE FROM $tbl_student_publication WHERE session_id = $sessionId");
+        Database::query("DELETE FROM $tbl_session_rel_course WHERE session_id = $sessionId");
+        Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE session_id = $sessionId");
+        Database::query("DELETE FROM $tbl_session_rel_user WHERE session_id = $sessionId");
+        Database::query("DELETE FROM $tbl_item_properties WHERE session_id = $sessionId");
+        Database::query("DELETE FROM $tbl_url_session WHERE session_id = $sessionId");
+        Database::query("DELETE FROM $trackCourseAccess WHERE session_id = $sessionId");
+        Database::query("DELETE FROM $trackAccess WHERE access_session_id = $sessionId");
+        $sql = "UPDATE $ticket SET session_id = NULL WHERE session_id = $sessionId";
         Database::query($sql);
 
         $extraFieldValue = new ExtraFieldValue('session');
-        $extraFieldValue->deleteValuesByItem($id_checked);
+        $extraFieldValue->deleteValuesByItem($sessionId);
 
         $repo->deleteResource(
-            $id_checked,
+            $sessionId,
             SequenceResource::SESSION_TYPE
         );
 
@@ -1836,7 +1838,7 @@ class SessionManager
         Event::addEvent(
             LOG_SESSION_DELETE,
             LOG_SESSION_ID,
-            $sessionInfo['name'].' - id:'.$id_checked,
+            $sessionName.' - id:'.$sessionId,
             api_get_utc_datetime(),
             $userId
         );

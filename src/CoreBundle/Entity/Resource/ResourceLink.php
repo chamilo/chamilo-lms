@@ -37,7 +37,7 @@ class ResourceLink implements ResourceInterface
     protected $resourceNode;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="resourceLinks")
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true)
      */
     protected $session;

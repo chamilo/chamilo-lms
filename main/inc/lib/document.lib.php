@@ -1652,6 +1652,14 @@ class DocumentManager
             $repo = $em->getRepository('ChamiloCourseBundle:CDocument');
             /** @var \Chamilo\CourseBundle\Entity\CDocument $document */
             $document = $repo->find($doc_id);
+            $link = $document->getCourseSessionResourceLink();
+
+            if ($link && $link->getVisibility() == ResourceLink::VISIBILITY_PUBLISHED) {
+                return true;
+            }
+
+            return false;
+
             // 4.1 Checking document visibility for a Course
             if ($session_id == 0) {
                 $link = $document->getCourseSessionResourceLink();

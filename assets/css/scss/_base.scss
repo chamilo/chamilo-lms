@@ -81,7 +81,11 @@ a {
 hr {
   border-top: 1px solid $border-color;
 }
-
+.btn-select{
+  color: #4e718f;
+  background-color: white;
+  border-color: #88b6df;
+}
 .btn-create-one{
   border-color: #b8daff;
   background-color: #cce5ff;
@@ -97,6 +101,123 @@ hr {
   background-color: #ffffff;
   color: #374548 !important;
 }
+
+/** BTN BUTTONS COLORS **/
+.btn{
+  .btn-fw {
+    min-width: 120px;
+  }
+}
+.btn-primary {
+  color: #fff;
+  background-color: #308ee0;
+  border-color: #308ee0;
+  &:hover{
+    background-color: #1e7bcb;
+    border-color: #1d74c0;
+  }
+}
+.btn-secondary {
+  color: #212529;
+  background-color: #e5e5e5;
+  border-color: #e5e5e5;
+  &:hover{
+    background-color: #d2d2d2;
+    border-color: #cccccc;
+  }
+}
+.btn-success {
+  color: #fff;
+  background-color: #00ce68;
+  border-color: #00ce68;
+  &:hover{
+    background-color: #00a855;
+    border-color: #009b4e;
+  }
+}
+.btn-danger {
+  color: #fff;
+  background-color: #e65251;
+  border-color: #e65251;
+  &:hover{
+    background-color: #e13130;
+    border-color: #e02624;
+  }
+}
+.btn-warning {
+  color: #FFF;
+  background-color: #ffaf00;
+  border-color: #ffaf00;
+  &:hover{
+    background-color: #d99500;
+    border-color: #cc8c00;
+  }
+}
+.btn-info {
+  color: #fff;
+  background-color: #8862e0;
+  border-color: #8862e0;
+  &:hover{
+    background-color: #7042da;
+    border-color: #6837d8;
+  }
+}
+.btn-light {
+  color: #212529;
+  background-color: #f3f5f6;
+  border-color: #f3f5f6;
+  &:hover{
+    background-color: #dde3e6;
+    border-color: #d6dde0;
+  }
+}
+.btn-dark {
+  color: #fff;
+  background-color: #424964;
+  border-color: #424964;
+  &:hover{
+    background-color: #33384d;
+    border-color: #2e3345;
+  }
+}
+
+.btn-outline-primary {
+  color: #308ee0;
+  background-color: transparent;
+  background-image: none;
+  border-color: #308ee0;
+}
+.btn-outline-secondary {
+  color: rgba(0, 0, 0, 0.5);
+  background-color: transparent;
+  background-image: none;
+  border-color: #e5e5e5;
+}
+.btn-outline-success {
+  color: #00ce68;
+  background-color: transparent;
+  background-image: none;
+  border-color: #00ce68;
+}
+.btn-outline-danger {
+  color: #e65251;
+  background-color: transparent;
+  background-image: none;
+  border-color: #e65251;
+}
+.btn-outline-warning {
+  color: #ffaf00;
+  background-color: transparent;
+  background-image: none;
+  border-color: #ffaf00;
+}
+.btn-outline-info {
+  color: #8862e0;
+  background-color: transparent;
+  background-image: none;
+  border-color: #8862e0;
+}
+
 .footer p{
   margin: 0;
   padding: 0;

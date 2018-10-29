@@ -680,7 +680,7 @@ function display_language_selection_box(
 
     // Displaying the box.
     $html = '';
-    $html .= "\t\t<select class='selectpicker show-tick' name=\"$name\">\n";
+    $html .= "\t\t<select class='selectpicker show-tick form-control' data-style=\"btn-select\" name=\"$name\">\n";
     foreach ($language_list as $key => $value) {
         if ($key == $default_language) {
             $option_end = ' selected="selected">';
@@ -703,26 +703,27 @@ function display_language_selection_box(
 function display_language_selection()
 {
     ?>
-    <h2><?php get_lang('WelcomeToTheChamiloInstaller'); ?></h2>
-    <div class="RequirementHeading">
-        <h2><?php echo display_step_sequence(); ?>
+        <div class="install-icon">
+            <img width="150px;" src="chamilo-install.svg"/>
+        </div>
+        <h2 class="install-title">
+            <?php echo display_step_sequence(); ?>
             <?php echo get_lang('InstallationLanguage'); ?>
         </h2>
-        <p><?php echo get_lang('PleaseSelectInstallationProcessLanguage'); ?>:</p>
         <form id="lang_form" method="post" action="<?php echo api_get_self(); ?>">
-        <div class="btn-group">
-            <?php echo display_language_selection_box('language_list', api_get_interface_language()); ?>
+            <p><?php echo get_lang('PleaseSelectInstallationProcessLanguage'); ?>:</p>
+            <div class="form-group">
+                <?php echo display_language_selection_box('language_list', api_get_interface_language()); ?>
+            </div>
             <button type="submit" name="step1" class="btn btn-success" value="<?php echo get_lang('Next'); ?>">
                 <em class="fa fa-forward"> </em>
                 <?php echo get_lang('Next'); ?>
             </button>
-        </div>
-        <input type="hidden" name="is_executable" id="is_executable" value="-" />
+            <input type="hidden" name="is_executable" id="is_executable" value="-" />
         </form>
-    </div>
-    <div class="RequirementHeading">
-        <?php echo get_lang('YourLanguageNotThereContactUs'); ?>
-    </div>
+        <div class="RequirementHeading">
+            <?php echo get_lang('YourLanguageNotThereContactUs'); ?>
+        </div>
 <?php
 }
 
@@ -745,7 +746,7 @@ function display_requirements(
     $update_from_version_8 = []
 ) {
     global $_setting, $originalMemoryLimit;
-    echo '<div class="RequirementHeading"><h2>'.display_step_sequence().get_lang('Requirements')."</h2></div>";
+    echo '<h2 class="install-title">'.display_step_sequence().get_lang('Requirements')."</h2>";
     echo '<div class="RequirementText">';
     echo '<strong>'.get_lang('ReadThoroughly').'</strong><br />';
     echo get_lang('MoreDetails').' <a href="../../documentation/installation_guide.html" target="_blank">'.get_lang('ReadTheInstallationGuide').'</a>.<br />'."\n";
@@ -766,7 +767,7 @@ function display_requirements(
     }
 
     //  SERVER REQUIREMENTS
-    echo '<div class="RequirementHeading"><h4>'.get_lang('ServerRequirements').'</h4>';
+    echo '<h4 class="install-subtitle">'.get_lang('ServerRequirements').'</h4>';
     $timezone = checkPhpSettingExists('date.timezone');
     if (!$timezone) {
         echo "<div class='alert alert-warning'>
@@ -774,9 +775,9 @@ function display_requirements(
             get_lang('DateTimezoneSettingNotSet')."</div>";
     }
 
-    echo '<div class="RequirementText">'.get_lang('ServerRequirementsInfo').'</div>';
-    echo '<div class="RequirementContent">';
-    echo '<table class="table">
+    echo '<div class="install-requirement">'.get_lang('ServerRequirementsInfo').'</div>';
+    echo '<div class="table-responsive">';
+    echo '<table class="table table-bordered">
             <tr>
                 <td class="requirements-item">'.get_lang('PHPVersion').' >= '.REQUIRED_PHP_VERSION.'</td>
                 <td class="requirements-value">';
@@ -854,15 +855,15 @@ function display_requirements(
             </tr>
         </table>';
     echo '</div>';
-    echo '</div>';
+
 
     // RECOMMENDED SETTINGS
     // Note: these are the settings for Joomla, does this also apply for Chamilo?
     // Note: also add upload_max_filesize here so that large uploads are possible
-    echo '<div class="RequirementHeading"><h4>'.get_lang('RecommendedSettings').'</h4>';
-    echo '<div class="RequirementText">'.get_lang('RecommendedSettingsInfo').'</div>';
-    echo '<div class="RequirementContent">';
-    echo '<table class="table">
+    echo '<h4 class="install-subtitle">'.get_lang('RecommendedSettings').'</h4>';
+    echo '<div class="install-requirement">'.get_lang('RecommendedSettingsInfo').'</div>';
+    echo '<div class="table-responsive">';
+    echo '<table class="table table-bordered">
             <tr>
                 <th>'.get_lang('Setting').'</th>
                 <th>'.get_lang('Recommended').'</th>
@@ -910,13 +911,12 @@ function display_requirements(
                 <td class="requirements-value">'.compare_setting_values($originalMemoryLimit, REQUIRED_MIN_MEMORY_LIMIT).'</td>
             </tr>
           </table>';
-    echo '  </div>';
     echo '</div>';
 
     // DIRECTORY AND FILE PERMISSIONS
-    echo '<div class="RequirementHeading"><h4>'.get_lang('DirectoryAndFilePermissions').'</h4>';
-    echo '<div class="RequirementText">'.get_lang('DirectoryAndFilePermissionsInfo').'</div>';
-    echo '<div class="RequirementContent">';
+    echo '<h4 class="install-subtitle">'.get_lang('DirectoryAndFilePermissions').'</h4>';
+    echo '<div class="install-requirement">'.get_lang('DirectoryAndFilePermissionsInfo').'</div>';
+    echo '<div class="table-responsive">';
 
     $course_attempt_name = '__XxTestxX__';
     $course_dir = api_get_path(SYS_COURSE_PATH).$course_attempt_name;
@@ -989,7 +989,7 @@ function display_requirements(
         </tr>';
     }
 
-    echo '<table class="table">
+    echo '<table class="table table-bordered">
             '.$oldConf.'
             <tr>
                 <td class="requirements-item">'.api_get_path(SYS_APP_PATH).'</td>
@@ -1020,7 +1020,7 @@ function display_requirements(
                 <td class="requirements-value">'.$file_perm.' </td>
             </tr>
         </table>';
-    echo '  </div>';
+
     echo '</div>';
 
     if ($installType == 'update' && (empty($updatePath) || $badUpdatePath)) {

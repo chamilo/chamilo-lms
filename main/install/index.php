@@ -894,13 +894,14 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
         }
     </script>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 </head>
 <body class="bg-chamilo bg-install" dir="<?php echo api_get_text_direction(); ?>">
 <div class="install-box">
     <div class="row">
         <div class="col-md-4">
             <div class="logo-install">
-                <img src="header-logo.png" hspace="10" vspace="10" alt="Chamilo" />
+                <img src="header-logo.png" class="img-fluid" alt="Chamilo" />
             </div>
             <div class="install-steps">
                 <ol class="list-group">

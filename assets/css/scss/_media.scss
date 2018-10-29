@@ -25,3 +25,21 @@
     @content;
   }
 }
+
+@mixin large($breakpoint){
+  @media (min-width: $breakpoint){
+    @content
+  }
+}
+
+@mixin portrait($start, $end){
+  @media (min-width: $start) and (max-width: $end) {
+    @content
+  }
+}
+
+@mixin landscape($breakpoint){
+  @media (max-width: $breakpoint - 1px){
+    @content
+  }
+}

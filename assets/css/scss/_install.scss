@@ -1,14 +1,55 @@
 .bg-install{
   background: #0068d8 !important;
+  @include portrait($breakpoint-sm, $breakpoint-md){
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
   .install-box{
     width: 100%;
-    max-width: 50%;
+    max-width: 65%;
     padding: 50px 40px;
     margin: auto;
     background-color: $default-white;
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
+
+    .install-icon{
+      text-align: center;
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+    }
+
+    .install-title{
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+      color: #2E75A3;
+    }
+
+    .install-subtitle{
+      font-size: 18px;
+      font-weight: normal;
+    }
+
+    @include portrait($breakpoint-sm, $breakpoint-md){
+      max-width: 95%;
+      padding: 30px 20px;
+    }
+    @include landscape($breakpoint-sm) {
+      max-width: 95%;
+      padding: 30px 20px;
+    }
+    @include to($breakpoint-xs) {
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+    @include to($breakpoint-xs) {
+      max-width: 95%;
+      padding: 20px 10px;
+    }
+
     .install-footer{
       text-align: center;
       font-size: 12px;
@@ -47,4 +88,3 @@
     }
   }
 }
-

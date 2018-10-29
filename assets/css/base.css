@@ -716,12 +716,6 @@
     color: #666666;
 }
 
-.bootstrap-select.form-control {
-    margin-bottom: 0;
-    padding: 0;
-    border: 1px solid #ced4da;
-}
-
 /*****************************************************
  *              AGENDA                               *
  *****************************************************/
@@ -5376,98 +5370,6 @@ div#chat-remote-video video {
 
 .form-search {
     padding-bottom: 50px;
-}
-
-/* INSTALL CHAMILO */
-#page-install {
-    margin-top: 40px;
-}
-
-#page-install .logo-install {
-    text-align: center;
-    margin-bottom: 10px;
-}
-
-#page-install .panel-default {
-    border-color: #DDD;
-}
-
-.installer .logo {
-    text-align: center;
-}
-
-#page-install .icon-install {
-    text-align: center;
-}
-
-.installer .title {
-    text-align: center;
-    color: #FFF;
-    font-weight: bold;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 1);
-}
-
-.installer .text {
-    text-align: center;
-    font-size: 16px;
-    color: #FFF;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 1);
-}
-
-.installer .download-info {
-    padding-top: 10px;
-    text-align: center;
-}
-
-.RequirementHeading h2 {
-    font-weight: bold;
-    font-size: 22px;
-    color: #2E75A3;
-    padding-bottom: 10px;
-    margin-bottom: 30px;
-}
-
-#page-install h2.page-header {
-    font-weight: bold;
-    font-size: 28px;
-}
-
-#page-install .checkbox {
-    margin-bottom: 10px;
-}
-
-#page-install pre {
-    margin-top: 5px !important;
-}
-
-#page-install .page-header {
-    margin: 20px 0 20px;
-}
-
-#page-install .content {
-    padding-left: 3%;
-    padding-right: 3%;
-}
-
-#page-install .install-steps-menu {
-    border: none;
-}
-
-#page-install .install-steps-menu ol li {
-    padding-bottom: 5px;
-    padding-top: 5px;
-}
-
-#page-install .normal-message {
-    padding: 20px;
-    margin: 20px 0;
-    border-radius: 3px;;
-    font-size: 12px;
-    color: #666666;
-}
-
-.install-steps-menu li.current-step {
-    font-weight: bold;
 }
 
 /**** SOCIAL MEDIA ****/

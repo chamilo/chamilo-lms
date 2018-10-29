@@ -2,12 +2,11 @@
 <head>
     <meta charset="utf-8" />
 	<title>Guia de Instalación de Chamilo 1.11</title>
-    <link rel="stylesheet" href="../public/build/vendor.css" type="text/css" media="screen,projection" />
     <link rel="stylesheet" href="../public/build/css/app.css" type="text/css" media="screen,projection" />
     <link rel="stylesheet" href="../public/build/css/themes/chamilo/default.css" type="text/css" media="screen,projection" />
     <link rel="stylesheet" href="default.css" type="text/css" media="screen,projection" />
     <link rel="stylesheet" href="../public/build/css/print.css" type="text/css" media="print" />
-    <script src="../public/build/vendor.js"></script>
+    <script src="../public/build/app.js"></script>
 </head>
 <body>
 <nav class="navbar navbar-default navbar-fixed-top">
@@ -236,11 +235,11 @@ Para instalar, sigue estos sencillos 6 pasos:
     </ol>
   </li>
 </ul>
-    
+
 <span class="text-muted">
   Nota: en caso de instalar Chamilo localmente usando "localhost" o la dirección IP de la máquina durante
   la instalación, algunos problemas podrían presentarse cuando se acceda desde otra computadora. Para evitarlo,
-  recomendamos la lectura 
+  recomendamos la lectura
   <a href="https://beeznest.com/blog/2013/01/15/answering-to-different-addresses-with-chamilo/">
     de este artículo para aprender como cambiar su archivo de configuración
   </a>.
@@ -457,14 +456,14 @@ date.timezone = 'America/New_York'
 </ul>
 Tenga en cuenta que si (desafortunadamente) actualizó desde cualquiera de las versiones 1.9 a 1.10 en contra de
 nuestra recomendaciones, proporcionamos un parche (script) para obtener la mayor parte de orden. Este parche está
-disponible aquí: <br /> 
+disponible aquí: <br />
 <a href="https://raw.githubusercontent.com/chamilo/chamilo-lms/1.10.x/tests/scripts/fix_migrations_1.9.x_1.10.0.php">
   https://raw.githubusercontent.com/chamilo/chamilo-lms/1.10.x/tests/scripts/fix_migrations_1.9.x_1.10.0.php
 </a> o, si está utilizando una versión de desarrollo de Chamilo, directamente en la carpeta tests/scripts/ .
 Debe colocar el fichero en la carpeta /tests/scripts/ , luego edítelo para eliminar la línea del "die();",
 finalmente ejecutelo  su navegador (después de conectarse a su sitio Chamilo como administrador).
 Deberías borrar el script una vez finalizado.<br />
-Este script se proporciona sin garantía. Por favor * siempre * realice una copia de seguridad antes de usarlo. 
+Este script se proporciona sin garantía. Por favor * siempre * realice una copia de seguridad antes de usarlo.
 <br />
 
 <h3>3.3 Actualizar desde Chamilo 1.9.x</h3>
@@ -482,7 +481,7 @@ Este script se proporciona sin garantía. Por favor * siempre * realice una copi
   recomendada: sub-idiomas), debe tomar una copia de seguridad de estas traducciones modificadas antes de
   actualizar. Los sub-idiomas también pueden requerir algún trabajo manual, pero el procedimiento de actualización
   no afectará directamente a los sub-idiomas.
-</p> 
+</p>
 <ul>
   <li>
     Asegúrese que ninguna tabla de una versión anterior (a la 1.9) exista en su base de datos. Estas tablas pueden
@@ -726,7 +725,7 @@ sudo screen -r
 <p>
   A continuación, vaya a la página de administración -&gt; Chamilo Rapid y establecer el host a "localhost" y
   el puerto a "2002". Guarde los cambios. Vaya a su curso, en la pantalla de herramientas de aprendizaje y verá
-  que apareció un nuevo icono. Importar tu PPT. Esto debería funcionar. 
+  que apareció un nuevo icono. Importar tu PPT. Esto debería funcionar.
 </p>
 <p>
   <em>Nota</em>: A veces, esto no se resuelve tan fácilmente. Usted probablemente tenga que solicitar la asistencia
@@ -968,7 +967,7 @@ location ^~ /tests/ {
   <li>Acceda al archivo HTTPd.conf de su Apache y configure su dominio y el hecho de que se carga mod_rewrite</li>
   <li>En su aplicación de servidor Apple, Configuración avanzada, marque la casilla para permitir .htaccess</li>
 </ul>
-<p>  
+<p>
   Alternativamente, puede encontrar el archivo de configuración para su dominio en la carpeta de configuración
   de Apple en /Library/Server/Web/Settings para actualizarlo manualmente.<br />
   Sin embargo, no puede permitir archivos .htaccess en el archivo httpd.conf principal, ya que OS X

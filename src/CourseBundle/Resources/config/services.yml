@@ -14,10 +14,12 @@ services:
     chamilo_course.entity.manager.group_manager:
         class: '%chamilo_course.entity.manager.group_manager.class%'
         arguments: ['%chamilo_course.entity.group%', '@doctrine']
+        public: true
 
     chamilo_course.entity.manager.announcement_manager:
         class: '%chamilo_course.entity.manager.announcement_manager.class%'
         arguments: ['%chamilo_course.entity.announcement%', '@doctrine']
+        public: true
 
     # Event Listeners
     chamilo_course.listener.course:

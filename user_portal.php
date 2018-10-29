@@ -235,14 +235,14 @@ if (api_get_setting('go_to_course_after_login') === 'true') {
     }
 }
 
+$showWelcomeCourse =  false;
 // Show the chamilo mascot
 if (empty($courseAndSessions['html']) && !isset($_GET['history'])) {
-    $controller->tpl->assign(
-        'welcome_to_course_block',
-        $controller->return_welcome_to_course_block()
-    );
+    $controller->setWelComeCourse();
+    $showWelcomeCourse = true;
 }
 
+$controller->tpl->assign('show_welcome_course', $showWelcomeCourse);
 $controller->tpl->assign('content', $courseAndSessions['html']);
 
 // Display the Site Use Cookie Warning Validation
@@ -287,4 +287,4 @@ Session::erase('session_id');
 Session::erase('studentview');
 api_remove_in_gradebook();
 
-$controller->tpl->display_two_col_template();
+$controller->tpl->displayTemplate('@ChamiloTheme/Index/userportal.html.twig');

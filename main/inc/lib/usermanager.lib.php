@@ -495,7 +495,9 @@ class UserManager
 
                     $emailBodyTemplate = '';
                     if (!empty($emailTemplate)) {
-                        if (isset($emailTemplate['content_registration_platform.tpl'])) {
+                        if (isset($emailTemplate['content_registration_platform.tpl']) &&
+                            !empty($emailTemplate['content_registration_platform.tpl'])
+                        ) {
                             $emailBodyTemplate = $mailTemplateManager->parseTemplate(
                                 $emailTemplate['content_registration_platform.tpl'],
                                 $userInfo
@@ -509,7 +511,8 @@ class UserManager
                         $emailBody = $tplContent->fetch($layoutContent);
 
                         if (!empty($emailBodyTemplate) &&
-                            isset($emailTemplate['new_user_first_email_confirmation.tpl'])
+                            isset($emailTemplate['new_user_first_email_confirmation.tpl']) &&
+                            !empty($emailTemplate['new_user_first_email_confirmation.tpl'])
                         ) {
                             $emailBody = $mailTemplateManager->parseTemplate(
                                 $emailTemplate['new_user_first_email_confirmation.tpl'],
@@ -534,7 +537,8 @@ class UserManager
                         $emailBody = $tplContent->fetch($layoutContent);
 
                         if (!empty($emailBodyTemplate) &&
-                            isset($emailTemplate['new_user_second_email_confirmation.tpl'])
+                            isset($emailTemplate['new_user_second_email_confirmation.tpl']) &&
+                            !empty($emailTemplate['new_user_second_email_confirmation.tpl'])
                         ) {
                             $emailBody = $mailTemplateManager->parseTemplate(
                                 $emailTemplate['new_user_second_email_confirmation.tpl'],
@@ -628,7 +632,8 @@ class UserManager
                     $emailBody = $tplContent->fetch($layoutContent);
 
                     if (!empty($emailBodyTemplate) &&
-                        isset($emailTemplate['content_registration_platform_to_admin.tpl'])
+                        isset($emailTemplate['content_registration_platform_to_admin.tpl']) &&
+                        !empty($emailTemplate['content_registration_platform_to_admin.tpl'])
                     ) {
                         $emailBody = $mailTemplateManager->parseTemplate(
                             $emailTemplate['content_registration_platform_to_admin.tpl'],
@@ -1287,7 +1292,10 @@ class UserManager
             $emailBody = $tplContent->fetch($layoutContent);
 
             $mailTemplateManager = new MailTemplateManager();
-            if (!empty($emailTemplate) && isset($emailTemplate['user_edit_content.tpl'])) {
+            if (!empty($emailTemplate) &&
+                isset($emailTemplate['user_edit_content.tpl']) &&
+                !empty($emailTemplate['user_edit_content.tpl'])
+            ) {
                 $userInfo = api_get_user_info($user_id);
                 $emailBody = $mailTemplateManager->parseTemplate($emailTemplate['user_edit_content.tpl'], $userInfo);
             }

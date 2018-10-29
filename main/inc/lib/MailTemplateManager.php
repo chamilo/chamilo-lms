@@ -188,21 +188,25 @@ class MailTemplateManager extends Model
      * @param int   $templateId
      * @param array $userInfo
      *
-     * @return string
+     * @return string|false
      */
     public function parseTemplate($templateId, $userInfo)
     {
         $templateInfo = $this->get($templateId);
-        $emailTemplate = $templateInfo['template'];
+        if (!empty($templateInfo)) {
+            $emailTemplate = $templateInfo['template'];
 
-        $keys = array_keys($userInfo);
-        foreach ($keys as $key) {
-            $emailTemplate = str_replace("{{user.$key}}", $userInfo[$key], $emailTemplate);
+            $keys = array_keys($userInfo);
+            foreach ($keys as $key) {
+                $emailTemplate = str_replace("{{user.$key}}", $userInfo[$key], $emailTemplate);
+            }
+            $template = new Template();
+            $template->twig->setLoader(new \Twig_Loader_String());
+            $emailBody = $template->twig->render($emailTemplate);
+
+            return $emailBody;
         }
-        $template = new Template();
-        $template->twig->setLoader(new \Twig_Loader_String());
-        $emailBody = $template->twig->render($emailTemplate);
 
-        return $emailBody;
+        return false;
     }
 }

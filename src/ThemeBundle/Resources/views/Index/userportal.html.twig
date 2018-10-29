@@ -4,8 +4,9 @@
     {% autoescape false %}
         {{ content }}
 
-        {% if content is null %}
-            {% include '@ChamiloTheme/default/layout/welcome_to_course.html.twig' %}
+        {% if show_welcome_course %}
+            {% include '@ChamiloTheme/Layout/welcome_to_course.html.twig' %}
         {% endif %}
+
     {% endautoescape %}
 {% endblock %}

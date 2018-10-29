@@ -1767,11 +1767,9 @@ class IndexManager
     /**
      * Shows a welcome message when the user doesn't have any content in the course list.
      */
-    public function return_welcome_to_course_block()
+    public function setWelComeCourse()
     {
         $count_courses = CourseManager::count_courses();
-        $tpl = $this->tpl->get_template('layout/welcome_to_course.tpl');
-
         $course_catalog_url = api_get_path(WEB_CODE_PATH).'auth/courses.php';
         $course_list_url = api_get_path(WEB_PATH).'user_portal.php';
 
@@ -1780,8 +1778,6 @@ class IndexManager
         $this->tpl->assign('course_catalog_link', Display::url(get_lang('Here'), $course_catalog_url));
         $this->tpl->assign('course_list_link', Display::url(get_lang('Here'), $course_list_url));
         $this->tpl->assign('count_courses', $count_courses);
-
-        return $this->tpl->fetch($tpl);
     }
 
     /**

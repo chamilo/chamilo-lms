@@ -7386,31 +7386,7 @@ ul#toolnavbox-two li a.btn {
     margin-bottom: 5px;
 }
 
-.select2-container .select2-selection--single {
-    height: 32px !important;
-    border-color: #CCCCCC !important;
-}
 
-.select2-container--default .select2-selection--multiple {
-    background-color: #FFF !important;
-    border: 1px solid #CCC !important;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
-    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-}
-
-.select2-container .select2-search--inline .select2-search__field {
-    margin-top: 6px !important;
-    margin-bottom: 4px !important;
-}
-
-.select2-dropdown {
-    background-color: #FFF !important;
-    border: 1px solid #CCC !important;
-    border-top: none !important;
-}
 
 .page-blank {
     padding: 20px 30px;

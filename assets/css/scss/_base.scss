@@ -17,6 +17,7 @@ body {
   line-height: 1.5;
   letter-spacing: 0.2px;
   overflow-x: hidden;
+  background: $page-background;
 }
 
 h1,
@@ -81,11 +82,7 @@ a {
 hr {
   border-top: 1px solid $border-color;
 }
-.btn-select{
-  color: #4e718f;
-  background-color: white;
-  border-color: #88b6df;
-}
+
 .btn-create-one{
   border-color: #b8daff;
   background-color: #cce5ff;
@@ -224,8 +221,44 @@ hr {
 }
 .footer{
   padding: 18px;
+  background-color: $default-white;
+  border-top: 1px solid #dee2e6;
+}
+/** SELECT */
+
+.btn-select{
+  color: #495057;
+  background-color: white;
+  border-color: $select-color;
+  &.bs-placeholder{
+    color: $select-color !important;
+  }
 }
 
+.select2-container--default{
+  .select2-selection--single {
+    background-color: #fff;
+    border: 1px solid $select-color;
+    border-radius: 4px;
+    height: 40px !important;
+    line-height: 40px;
+    .select2-selection__rendered{
+      line-height: 40px;
+    }
+    .select2-selection__arrow{
+      height: 40px;
+      b{
+        border-color: #495057 transparent transparent transparent;
+        border-width: 6px 5px 0 5px;
+        left: 20%;
+      }
+    }
+  }
+}
+.help-block{
+  font-size: 12px;
+  margin-bottom: 0;
+}
 // ---------------------------------------------------------
 // PAGE CONTAINER
 // ---------------------------------------------------------
@@ -393,6 +426,33 @@ footer {
     padding: 1.88rem 1.81rem;
   }
 }
+/* COURSE CLASSIC */
+.course-list{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 1rem;
+  grid-row-gap: 16px;
+}
+.card-course-classic{
+  border: 1px solid #dee2e6;
+  border-bottom-width: 5px;
+  display: grid;
+  grid-template-columns: auto;
+  grid-gap: 10px;
+  align-items: center;
+  .card-body{
+    padding: 1rem 1.2rem;
+    .title{
+      font-size: 16px;
+      a{
+        color: $grey-800;
+      }
+    }
+  }
+}
+
+
+/* COURSE GRID */
 .card-course{
   transform: perspective(1px) translateZ(0);
   transition-property: box-shadow;

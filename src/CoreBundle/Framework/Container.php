@@ -395,6 +395,7 @@ class Container
 
     /**
      * @param ContainerInterface $container
+     * @param bool               $setSession
      */
     public static function setLegacyServices($container, $setSession = true)
     {

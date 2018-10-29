@@ -1874,21 +1874,21 @@ function display_configuration_settings_form(
 /**
  * After installation is completed (step 6), this message is displayed.
  *
- * @param string $installType
  */
-function display_after_install_message($installType)
+function display_after_install_message()
 {
-    echo '<div class="RequirementContent">'.get_lang('FirstUseTip').'</div>';
-    echo '<div class="alert alert-warning">';
-    echo '<strong>'.get_lang('SecurityAdvice').'</strong>';
-    echo ': ';
-    printf(get_lang('ToProtectYourSiteMakeXReadOnlyAndDeleteY'), 'app/config/', 'main/install/');
-    echo '</div>'; ?></form>
+    $html = '<div class="RequirementContent">'.get_lang('FirstUseTip').'</div>';
+    $html .= '<div class="alert alert-warning">';
+    $html .= '<strong>'.get_lang('SecurityAdvice').'</strong>';
+    $html .=  ': ';
+    $html .= sprintf(get_lang('ToProtectYourSiteMakeXReadOnlyAndDeleteY'), 'app/config/', 'main/install/');
+    $html .=  '</div></form>
     <br />
     <a class="btn btn-success btn-block" href="../../index.php">
-        <?php echo get_lang('GoToYourNewlyCreatedPortal'); ?>
-    </a>
-    <?php
+        '.get_lang('GoToYourNewlyCreatedPortal').'
+    </a>';
+
+    return $html;
 }
 
 /**
@@ -3257,7 +3257,7 @@ function finishInstallationWithContainer(
 ) {
     $sysPath = !empty($sysPath) ? $sysPath : api_get_path(SYS_PATH);
     Container::setContainer($container);
-    Container::setLegacyServices($container);
+    Container::setLegacyServices($container, false);
 
     $manager = Database::getManager();
     $connection = $manager->getConnection();

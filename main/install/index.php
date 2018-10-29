@@ -146,14 +146,8 @@ if ($installationLanguage != 'english') {
     }
 }*/
 
-// Character set during the installation, it is always to be 'UTF-8'.
-$charset = 'UTF-8';
-
 // Enables the portability layer and configures PHP for UTF-8
 \Patchwork\Utf8\Bootup::initAll();
-
-// Page encoding initialization.
-header('Content-Type: text/html; charset='.$charset);
 
 // Setting the error reporting levels.
 error_reporting(E_ALL);
@@ -245,10 +239,10 @@ if (@$_POST['step2_install'] || @$_POST['step2_update_8'] || @$_POST['step2_upda
     $updateFromConfigFile = '';
     unset($_GET['running']);
 } else {
-    $installType = isset($_GET['installType']) ? $_GET['installType'] : null;
+    $installType = isset($_GET['installType']) ? $_GET['installType'] : '';
     $updateFromConfigFile = isset($_GET['updateFromConfigFile']) ? $_GET['updateFromConfigFile'] : false;
 }
-if ($installType == 'update' && in_array($my_old_version, $update_from_version_8)) {
+if ($installType === 'update' && in_array($my_old_version, $update_from_version_8)) {
     // This is the main configuration file of the system before the upgrade.
     // Old configuration file.
     // Don't change to include_once
@@ -257,6 +251,8 @@ if ($installType == 'update' && in_array($my_old_version, $update_from_version_8
         include $oldConfigPath;
     }
 }
+
+$showEmailNotCheckedToStudent = 1;
 
 if (!isset($_GET['running'])) {
     // Extract the path to append to the url if Chamilo is not installed on the web root directory.
@@ -277,7 +273,7 @@ if (!isset($_GET['running'])) {
     $institutionUrlForm = 'http://www.chamilo.org';
     $languageForm = api_get_interface_language();
     $checkEmailByHashSent = 0;
-    $showEmailNotCheckedToStudent = 1;
+
     $userMailCanBeEmpty = 1;
     $allowSelfReg = 'approval';
     $allowSelfRegProf = 1; //by default, a user can register as teacher (but moderation might be in place)
@@ -303,7 +299,7 @@ if (!isset($_GET['running'])) {
 $total_steps = 7;
 if (!$_POST) {
     $current_step = 1;
-} elseif (!empty($_POST['language_list']) or !empty($_POST['step1']) or ((!empty($_POST['step2_update_8']) or (!empty($_POST['step2_update_6']))) && ($emptyUpdatePath or $badUpdatePath))) {
+} elseif (!empty($_POST['language_list']) or !empty($_POST['step1']) || ((!empty($_POST['step2_update_8']) or (!empty($_POST['step2_update_6']))) && ($emptyUpdatePath or $badUpdatePath))) {
     $current_step = 2;
 } elseif (!empty($_POST['step2']) or (!empty($_POST['step2_update_8']) or (!empty($_POST['step2_update_6'])))) {
     $current_step = 3;
@@ -324,154 +320,7 @@ if ($encryptPassForm == '1') {
     $encryptPassForm = 'none';
 }
 
-?>
-<!DOCTYPE html>
-<head>
-    <title>&mdash; <?php echo get_lang('ChamiloInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?></title>
-    <style type="text/css" media="screen, projection">
-        @import "../../public/build/css/app.css";
-        @import "../../public/build/css/themes/chamilo/default.css";
-    </style>
-    <script type="text/javascript" src="../../public/build/app.js"></script>
-    <script type="text/javascript">
-        $(document).ready( function() {
-
-            $("#details_button").click(function() {
-                $( "#details" ).toggle("slow", function() {
-                });
-            });
-
-            $("#button_please_wait").hide();
-            $("button").addClass('btn btn-secondary');
-
-            // Allow Chamilo install in IE
-            $("button").click(function() {
-                $("#is_executable").attr("value",$(this).attr("name"));
-            });
-
-            //Blocking step6 button
-            $("#button_step6").click(function() {
-                $("#button_step6").hide();
-                $("#button_please_wait").html('<?php echo addslashes(get_lang('PleaseWait')); ?>');
-                $("#button_please_wait").show();
-                $("#button_please_wait").attr('disabled', true);
-                $("#is_executable").attr("value",'step6');
-            });
-        });
-
-        init_visibility=0;
-        $(document).ready( function() {
-            $(".advanced_parameters").click(function() {
-                if ($("#id_contact_form").css("display") == "none") {
-                    $("#id_contact_form").css("display","block");
-                    $("#img_plus_and_minus").html(
-                        '&nbsp;<i class="fa fa-eye" aria-hidden="true"></i>&nbsp;<?php echo get_lang('ContactInformation'); ?>'
-                    );
-                } else {
-                    $("#id_contact_form").css("display","none");
-                    $("#img_plus_and_minus").html(
-                        '&nbsp;<i class="fa fa-eye-slash" aria-hidden="true"></i>&nbsp;<?php echo get_lang('ContactInformation'); ?>'
-                    );
-                }
-            });
-        });
-
-        function send_contact_information() {
-            if (!document.getElementById('accept_licence').checked) {
-                alert('<?php echo get_lang('YouMustAcceptLicence'); ?>')
-                ;return false;
-            } else {
-                var data_post = "";
-                data_post += "person_name="+$("#person_name").val()+"&";
-                data_post += "person_email="+$("#person_email").val()+"&";
-                data_post += "company_name="+$("#company_name").val()+"&";
-                data_post += "company_activity="+$("#company_activity option:selected").val()+"&";
-                data_post += "person_role="+$("#person_role option:selected").val()+"&";
-                data_post += "company_country="+$("#country option:selected").val()+"&";
-                data_post += "company_city="+$("#company_city").val()+"&";
-                data_post += "language="+$("#language option:selected").val()+"&";
-                data_post += "financial_decision="+$("input[name='financial_decision']:checked").val();
-
-                $.ajax({
-                    contentType: "application/x-www-form-urlencoded",
-                    beforeSend: function(objeto) {},
-                    type: "POST",
-                    url: "<?php echo api_get_path(WEB_AJAX_PATH); ?>install.ajax.php?a=send_contact_information",
-                    beforeSend : function() {
-                        $('#loader-button').append('  <em class="fa fa-spinner fa-pulse fa-fw"></em>');
-                    },
-                    data: data_post,
-                    success: function(datos) {
-                        if (datos == 'required_field_error') {
-                            message = "<?php echo get_lang('FormHasErrorsPleaseComplete'); ?>";
-                        } else if (datos == '1') {
-                            message = "<?php echo get_lang('ContactInformationHasBeenSent'); ?>";
-                        } else {
-                            message = "<?php echo get_lang('Error').': '.get_lang('ContactInformationHasNotBeenSent'); ?>";
-                        }
-                        alert(message);
-                        $('#license-next').trigger('click');
-                        $('#loader-button').html('');
-                    }
-                });
-            }
-        }
-    </script>
-    <meta charset="UTF-8">
-</head>
-
-<body class="bg-chamilo bg-install" dir="<?php echo api_get_text_direction(); ?>">
-<div class="install-box">
-    <div class="row">
-
-        <div class="col-md-4">
-            <div class="logo-install">
-                <img src="header-logo.png" hspace="10" vspace="10" alt="Chamilo" />
-            </div>
-            <div class="install-steps">
-                <ol class="list-group">
-                    <li class="list-group-item <?php step_active('1'); ?>">
-                        <span class="number"> 1 </span>
-                        <?php echo get_lang('InstallationLanguage'); ?>
-                    </li>
-                    <li class="list-group-item <?php step_active('2'); ?>">
-                        <span class="number"> 2 </span>
-                        <?php echo get_lang('Requirements'); ?>
-                    </li>
-                    <li class="list-group-item <?php step_active('3'); ?>">
-                        <span class="number"> 3 </span>
-                        <?php echo get_lang('Licence'); ?>
-                    </li>
-                    <li class="list-group-item <?php step_active('4'); ?>">
-                        <span class="number"> 4 </span>
-                        <?php echo get_lang('DBSetting'); ?>
-                    </li>
-                    <li class="list-group-item <?php step_active('5'); ?>">
-                        <span class="number"> 5 </span>
-                        <?php echo get_lang('CfgSetting'); ?>
-                    </li>
-                    <li class="list-group-item <?php step_active('6'); ?>">
-                        <span class="number"> 6 </span>
-                        <?php echo get_lang('PrintOverview'); ?>
-                    </li>
-                    <li class="list-group-item <?php step_active('7'); ?>">
-                        <span class="number"> 7 </span>
-                        <?php echo get_lang('Installing'); ?>
-                    </li>
-                </ol>
-            </div>
-            <div id="note">
-                <a class="btn btn-info btn-block" href="<?php echo $installationGuideLink; ?>" target="_blank">
-                    <em class="fa fa-file-text-o"></em> <?php echo get_lang('ReadTheInstallationGuide'); ?>
-                </a>
-            </div>
-        </div>
-
-        <div class="col-md-8">
-
-        <form class="form-horizontal" id="install_form" method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
-<?php
-
+$form = '';
 $instalation_type_label = '';
 if ($installType == 'new') {
     $instalation_type_label = get_lang('NewInstallation');
@@ -481,7 +330,7 @@ if ($installType == 'new') {
 }
 
 if (!empty($instalation_type_label) && empty($_POST['step6'])) {
-    echo '<div class="page-header"><h2>'.$instalation_type_label.'</h2></div>';
+    $form .= '<div class="page-header"><h2>'.$instalation_type_label.'</h2></div>';
 }
 
 if (empty($installationProfile)) {
@@ -491,46 +340,48 @@ if (empty($installationProfile)) {
     }
 }
 
-    ?>
-    <input type="hidden" name="updatePath"         value="<?php if (!$badUpdatePath) {
-        echo api_htmlentities($proposedUpdatePath, ENT_QUOTES);
-    } ?>" />
-    <input type="hidden" name="urlAppendPath"      value="<?php echo api_htmlentities($urlAppendPath, ENT_QUOTES); ?>" />
-    <input type="hidden" name="pathForm"           value="<?php echo api_htmlentities($pathForm, ENT_QUOTES); ?>" />
-    <input type="hidden" name="urlForm"            value="<?php echo api_htmlentities($urlForm, ENT_QUOTES); ?>" />
-    <input type="hidden" name="dbHostForm"         value="<?php echo api_htmlentities($dbHostForm, ENT_QUOTES); ?>" />
-    <input type="hidden" name="dbPortForm"         value="<?php echo api_htmlentities($dbPortForm, ENT_QUOTES); ?>" />
-    <input type="hidden" name="dbUsernameForm"     value="<?php echo api_htmlentities($dbUsernameForm, ENT_QUOTES); ?>" />
-    <input type="hidden" name="dbPassForm"         value="<?php echo api_htmlentities($dbPassForm, ENT_QUOTES); ?>" />
-    <input type="hidden" name="dbNameForm"         value="<?php echo api_htmlentities($dbNameForm, ENT_QUOTES); ?>" />
-    <input type="hidden" name="allowSelfReg"       value="<?php echo api_htmlentities($allowSelfReg, ENT_QUOTES); ?>" />
-    <input type="hidden" name="allowSelfRegProf"   value="<?php echo api_htmlentities($allowSelfRegProf, ENT_QUOTES); ?>" />
-    <input type="hidden" name="emailForm"          value="<?php echo api_htmlentities($emailForm, ENT_QUOTES); ?>" />
-    <input type="hidden" name="adminLastName"      value="<?php echo api_htmlentities($adminLastName, ENT_QUOTES); ?>" />
-    <input type="hidden" name="adminFirstName"     value="<?php echo api_htmlentities($adminFirstName, ENT_QUOTES); ?>" />
-    <input type="hidden" name="adminPhoneForm"     value="<?php echo api_htmlentities($adminPhoneForm, ENT_QUOTES); ?>" />
-    <input type="hidden" name="loginForm"          value="<?php echo api_htmlentities($loginForm, ENT_QUOTES); ?>" />
-    <input type="hidden" name="passForm"           value="<?php echo api_htmlentities($passForm, ENT_QUOTES); ?>" />
-    <input type="hidden" name="languageForm"       value="<?php echo api_htmlentities($languageForm, ENT_QUOTES); ?>" />
-    <input type="hidden" name="campusForm"         value="<?php echo api_htmlentities($campusForm, ENT_QUOTES); ?>" />
-    <input type="hidden" name="educationForm"      value="<?php echo api_htmlentities($educationForm, ENT_QUOTES); ?>" />
-    <input type="hidden" name="institutionForm"    value="<?php echo api_htmlentities($institutionForm, ENT_QUOTES); ?>" />
-    <input type="hidden" name="institutionUrlForm" value="<?php echo api_stristr($institutionUrlForm, 'http://', false) ? api_htmlentities($institutionUrlForm, ENT_QUOTES) : api_stristr($institutionUrlForm, 'https://', false) ? api_htmlentities($institutionUrlForm, ENT_QUOTES) : 'http://'.api_htmlentities($institutionUrlForm, ENT_QUOTES); ?>" />
-    <input type="hidden" name="checkEmailByHashSent" value="<?php echo api_htmlentities($checkEmailByHashSent, ENT_QUOTES); ?>" />
-    <input type="hidden" name="ShowEmailNotCheckedToStudent" value="<?php echo api_htmlentities($showEmailNotCheckedToStudent, ENT_QUOTES); ?>" />
-    <input type="hidden" name="userMailCanBeEmpty" value="<?php echo api_htmlentities($userMailCanBeEmpty, ENT_QUOTES); ?>" />
-    <input type="hidden" name="encryptPassForm"    value="<?php echo api_htmlentities($encryptPassForm, ENT_QUOTES); ?>" />
-    <input type="hidden" name="session_lifetime"   value="<?php echo api_htmlentities($session_lifetime, ENT_QUOTES); ?>" />
-    <input type="hidden" name="old_version"        value="<?php echo api_htmlentities($my_old_version, ENT_QUOTES); ?>" />
-    <input type="hidden" name="new_version"        value="<?php echo api_htmlentities($new_version, ENT_QUOTES); ?>" />
-    <input type="hidden" name="installationProfile" value="<?php echo api_htmlentities($installationProfile, ENT_QUOTES); ?>" />
-<?php
+$institutionUrlFormResult = api_stristr($institutionUrlForm, 'http://', false) ? api_htmlentities($institutionUrlForm, ENT_QUOTES) : api_stristr($institutionUrlForm, 'https://', false) ? api_htmlentities($institutionUrlForm, ENT_QUOTES) : 'http://'.api_htmlentities($institutionUrlForm, ENT_QUOTES);
+
+$form .= '<input type="hidden" name="updatePath"  value="'.(!$badUpdatePath ? api_htmlentities($proposedUpdatePath, ENT_QUOTES) : '').'" />';
+$form .= '<input type="hidden" name="urlAppendPath"      value="'.api_htmlentities($urlAppendPath, ENT_QUOTES).'"/>';
+$form .= '<input type="hidden" name="pathForm"           value="'.api_htmlentities($pathForm, ENT_QUOTES).'"/>';
+$form .= '<input type="hidden" name="urlForm"            value="'.api_htmlentities($urlForm, ENT_QUOTES).'"/>';
+$form .= '<input type="hidden" name="dbHostForm"         value="'.api_htmlentities($dbHostForm, ENT_QUOTES).'"/>';
+$form .= '<input type="hidden" name="dbPortForm"         value="'.api_htmlentities($dbPortForm, ENT_QUOTES).'"/>';
+$form .= '<input type="hidden" name="dbUsernameForm"     value="'.api_htmlentities($dbUsernameForm, ENT_QUOTES).'"/>';
+$form .= '<input type="hidden" name="dbPassForm"         value="'.api_htmlentities($dbPassForm, ENT_QUOTES).'"/>';
+$form .= '<input type="hidden" name="dbNameForm"         value="'.api_htmlentities($dbNameForm, ENT_QUOTES).'"/>';
+$form .= '<input type="hidden" name="allowSelfReg"       value="'.api_htmlentities($allowSelfReg, ENT_QUOTES).'"/>';
+$form .= '<input type="hidden" name="allowSelfRegProf"   value="'.api_htmlentities($allowSelfRegProf, ENT_QUOTES).'"/>';
+$form .= '<input type="hidden" name="emailForm"          value="'.api_htmlentities($emailForm, ENT_QUOTES).'"/>';
+$form .= '<input type="hidden" name="adminLastName"      value="'.api_htmlentities($adminLastName, ENT_QUOTES).'"/>';
+$form .= '<input type="hidden" name="adminFirstName"     value="'.api_htmlentities($adminFirstName, ENT_QUOTES).'"/>';
+$form .= '<input type="hidden" name="adminPhoneForm"     value="'.api_htmlentities($adminPhoneForm, ENT_QUOTES).'"/>';
+$form .= '<input type="hidden" name="loginForm"          value="'.api_htmlentities($loginForm, ENT_QUOTES).'"/>';
+$form .= '<input type="hidden" name="passForm"           value="'.api_htmlentities($passForm, ENT_QUOTES).'"/>';
+$form .= '<input type="hidden" name="languageForm"       value="'.api_htmlentities($languageForm, ENT_QUOTES).'"/>';
+$form .= '<input type="hidden" name="campusForm"         value="'.api_htmlentities($campusForm, ENT_QUOTES).'"/>';
+$form .= '<input type="hidden" name="educationForm"      value="'.api_htmlentities($educationForm, ENT_QUOTES).'"/>';
+$form .= '<input type="hidden" name="institutionForm"    value="'.api_htmlentities($institutionForm, ENT_QUOTES).'"/>';
+$form .= '<input type="hidden" name="institutionUrlForm" value="'.$institutionUrlFormResult.'"/>';
+$form .= '<input type="hidden" name="checkEmailByHashSent" value="'.api_htmlentities($checkEmailByHashSent, ENT_QUOTES).'"/>';
+$form .= '<input type="hidden" name="ShowEmailNotCheckedToStudent" value="'.api_htmlentities($showEmailNotCheckedToStudent, ENT_QUOTES).'"/>';
+$form .= '<input type="hidden" name="userMailCanBeEmpty" value="'.api_htmlentities($userMailCanBeEmpty, ENT_QUOTES).'"/>';
+$form .= '<input type="hidden" name="encryptPassForm"    value="'.api_htmlentities($encryptPassForm, ENT_QUOTES).'"/>';
+$form .= '<input type="hidden" name="session_lifetime"   value="'.api_htmlentities($session_lifetime, ENT_QUOTES).'"/>';
+$form .= '<input type="hidden" name="old_version"        value="'.api_htmlentities($my_old_version, ENT_QUOTES).'"/>';
+$form .= '<input type="hidden" name="new_version"        value="'.api_htmlentities($new_version, ENT_QUOTES).'"/>';
+$form .= '<input type="hidden" name="installationProfile" value="'.api_htmlentities($installationProfile, ENT_QUOTES).'"/>';
 
 if (@$_POST['step2']) {
     // STEP 3 : LICENSE
+    ob_start();
     display_license_agreement();
+    $form .= ob_get_contents();
+    ob_end_clean();
 } elseif (@$_POST['step3']) {
-    //STEP 4 : MYSQL DATABASE SETTINGS
+    // STEP 4 : MYSQL DATABASE SETTINGS
+    ob_start();
     display_database_settings_form(
         $installType,
         $dbHostForm,
@@ -540,12 +391,13 @@ if (@$_POST['step2']) {
         $dbPortForm,
         $installationProfile
     );
+    $form .= ob_get_contents();
+    ob_end_clean();
 } elseif (@$_POST['step4']) {
     //STEP 5 : CONFIGURATION SETTINGS
     //if update, try getting settings from the database...
     if ($installType === 'update') {
         $db_name = $dbNameForm;
-
         $database = connectToDatabase(
             $dbHostForm,
             $dbUsernameForm,
@@ -617,6 +469,7 @@ if (@$_POST['step2']) {
         }
     }
 
+    ob_start();
     display_configuration_settings_form(
         $installType,
         $urlForm,
@@ -634,13 +487,16 @@ if (@$_POST['step2']) {
         $loginForm,
         $passForm
     );
+    $form .= ob_get_contents();
+    ob_end_clean();
 } elseif (@$_POST['step5']) {
+    ob_start();
     //STEP 6 : LAST CHECK BEFORE INSTALL?>
     <div class="RequirementHeading">
-       <h3><?php echo display_step_sequence().get_lang('LastCheck'); ?></h3>
+        <h3><?php echo display_step_sequence().get_lang('LastCheck'); ?></h3>
     </div>
     <div class="RequirementContent">
-       <?php echo get_lang('HereAreTheValuesYouEntered'); ?>
+        <?php echo get_lang('HereAreTheValuesYouEntered'); ?>
     </div>
 
     <?php
@@ -662,7 +518,6 @@ if (@$_POST['step2']) {
     <?php echo get_lang('EncryptMethodUserPass').' : ';
     echo $encryptPassForm; ?>
     <br /><br />
-
     <?php echo get_lang('CampusName').' : '.$campusForm; ?><br />
     <?php echo get_lang('InstituteShortName').' : '.$institutionForm; ?><br />
     <?php echo get_lang('InstituteURL').' : '.$institutionUrlForm; ?><br />
@@ -754,20 +609,22 @@ if (@$_POST['step2']) {
         </tr>
     </table>
     <?php
+    $form .= ob_get_contents();
+    ob_end_clean();
 } elseif (@$_POST['step6']) {
+    ob_start();
     //STEP 6 : INSTALLATION PROCESS
     $current_step = 7;
     $msg = get_lang('InstallExecution');
-    if ($installType == 'update') {
+    if ($installType === 'update') {
         $msg = get_lang('UpdateExecution');
     }
-    echo '<div class="RequirementHeading">
+    $form .= '<div class="RequirementHeading">
       <h3>'.display_step_sequence().$msg.'</h3>';
     if (!empty($installationProfile)) {
-        echo '    <h3>('.$installationProfile.')</h3>';
+        $form .= '    <h3>('.$installationProfile.')</h3>';
     }
-    echo '    <div id="pleasewait" class="alert alert-success">'.get_lang('PleaseWaitThisCouldTakeAWhile').'
-
+    $form .= '<div id="pleasewait" class="alert alert-success">'.get_lang('PleaseWaitThisCouldTakeAWhile').'
       <div class="progress">
       <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
         <span class="sr-only">100% Complete</span>
@@ -776,13 +633,6 @@ if (@$_POST['step2']) {
       </div>
       </div>';
 
-    // Push the web server to send these strings before we start the real
-    // installation process
-    flush();
-    $f = ob_get_contents();
-    if (!empty($f)) {
-        ob_flush(); //#5565
-    }
     if ($installType === 'update') {
         $database = connectToDatabase(
             $dbHostForm,
@@ -889,10 +739,15 @@ if (@$_POST['step2']) {
 
         // No errors
         if ($result == 0) {
+            session_unset();
+            $_SESSION = [];
+            session_destroy();
+
             // Boot kernel and get the doctrine from Symfony container
             $kernel->boot();
             $containerDatabase = $kernel->getContainer();
             $sysPath = api_get_path(SYS_PATH);
+
             finishInstallationWithContainer(
                 $containerDatabase,
                 $sysPath,
@@ -915,18 +770,24 @@ if (@$_POST['step2']) {
         }
     }
 
-    display_after_install_message($installType);
+    $form .= display_after_install_message();
 
     // Hide the "please wait" message sent previously
-    echo '<script>$(\'#pleasewait\').hide(\'fast\');</script>';
+    $form .= '<script>$(\'#pleasewait\').hide(\'fast\');</script>';
+    $form .= ob_get_contents();
+    ob_end_clean();
 } elseif (@$_POST['step1'] || $badUpdatePath) {
     //STEP 1 : REQUIREMENTS
     //make sure that proposed path is set, shouldn't be necessary but...
     if (empty($proposedUpdatePath)) {
         $proposedUpdatePath = $_POST['updatePath'];
     }
+    ob_start();
     display_requirements($installType, $badUpdatePath, $proposedUpdatePath, $update_from_version_8);
+    $form .= ob_get_contents();
+    ob_end_clean();
 } else {
+    ob_start();
     // This is the start screen.
     display_language_selection();
 
@@ -934,16 +795,161 @@ if (@$_POST['step2']) {
         $installationProfile = api_htmlentities($_GET['profile'], ENT_QUOTES);
     }
     echo '<input type="hidden" name="installationProfile" value="'.api_htmlentities($installationProfile, ENT_QUOTES).'" />';
+    $form .= ob_get_contents();
+    ob_end_clean();
 }
 
 $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chamilo </a> &copy; '.date('Y');
 ?>
-          </form>
+<!DOCTYPE html>
+<head>
+    <title>&mdash; <?php echo get_lang('ChamiloInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?></title>
+    <style type="text/css" media="screen, projection">
+        @import "../../public/build/css/app.css";
+        @import "../../public/build/css/themes/chamilo/default.css";
+    </style>
+    <script type="text/javascript" src="../../public/build/app.js"></script>
+    <script type="text/javascript">
+        $(document).ready( function() {
+
+            $("#details_button").click(function() {
+                $( "#details" ).toggle("slow", function() {
+                });
+            });
+
+            $("#button_please_wait").hide();
+            $("button").addClass('btn btn-secondary');
+
+            // Allow Chamilo install in IE
+            $("button").click(function() {
+                $("#is_executable").attr("value",$(this).attr("name"));
+            });
+
+            //Blocking step6 button
+            $("#button_step6").click(function() {
+                $("#button_step6").hide();
+                $("#button_please_wait").html('<?php echo addslashes(get_lang('PleaseWait')); ?>');
+                $("#button_please_wait").show();
+                $("#button_please_wait").attr('disabled', true);
+                $("#is_executable").attr("value",'step6');
+            });
+        });
+
+        init_visibility=0;
+        $(document).ready( function() {
+            $(".advanced_parameters").click(function() {
+                if ($("#id_contact_form").css("display") == "none") {
+                    $("#id_contact_form").css("display","block");
+                    $("#img_plus_and_minus").html(
+                        '&nbsp;<i class="fa fa-eye" aria-hidden="true"></i>&nbsp;<?php echo get_lang('ContactInformation'); ?>'
+                    );
+                } else {
+                    $("#id_contact_form").css("display","none");
+                    $("#img_plus_and_minus").html(
+                        '&nbsp;<i class="fa fa-eye-slash" aria-hidden="true"></i>&nbsp;<?php echo get_lang('ContactInformation'); ?>'
+                    );
+                }
+            });
+        });
+
+        function send_contact_information() {
+            if (!document.getElementById('accept_licence').checked) {
+                alert('<?php echo get_lang('YouMustAcceptLicence'); ?>')
+                ;return false;
+            } else {
+                var data_post = "";
+                data_post += "person_name="+$("#person_name").val()+"&";
+                data_post += "person_email="+$("#person_email").val()+"&";
+                data_post += "company_name="+$("#company_name").val()+"&";
+                data_post += "company_activity="+$("#company_activity option:selected").val()+"&";
+                data_post += "person_role="+$("#person_role option:selected").val()+"&";
+                data_post += "company_country="+$("#country option:selected").val()+"&";
+                data_post += "company_city="+$("#company_city").val()+"&";
+                data_post += "language="+$("#language option:selected").val()+"&";
+                data_post += "financial_decision="+$("input[name='financial_decision']:checked").val();
+
+                $.ajax({
+                    contentType: "application/x-www-form-urlencoded",
+                    beforeSend: function(objeto) {},
+                    type: "POST",
+                    url: "<?php echo api_get_path(WEB_AJAX_PATH); ?>install.ajax.php?a=send_contact_information",
+                    beforeSend : function() {
+                        $('#loader-button').append('  <em class="fa fa-spinner fa-pulse fa-fw"></em>');
+                    },
+                    data: data_post,
+                    success: function(datos) {
+                        if (datos == 'required_field_error') {
+                            message = "<?php echo get_lang('FormHasErrorsPleaseComplete'); ?>";
+                        } else if (datos == '1') {
+                            message = "<?php echo get_lang('ContactInformationHasBeenSent'); ?>";
+                        } else {
+                            message = "<?php echo get_lang('Error').': '.get_lang('ContactInformationHasNotBeenSent'); ?>";
+                        }
+                        alert(message);
+                        $('#license-next').trigger('click');
+                        $('#loader-button').html('');
+                    }
+                });
+            }
+        }
+    </script>
+    <meta charset="UTF-8">
+</head>
+<body class="bg-chamilo bg-install" dir="<?php echo api_get_text_direction(); ?>">
+<div class="install-box">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="logo-install">
+                <img src="header-logo.png" hspace="10" vspace="10" alt="Chamilo" />
+            </div>
+            <div class="install-steps">
+                <ol class="list-group">
+                    <li class="list-group-item <?php step_active('1'); ?>">
+                        <span class="number"> 1 </span>
+                        <?php echo get_lang('InstallationLanguage'); ?>
+                    </li>
+                    <li class="list-group-item <?php step_active('2'); ?>">
+                        <span class="number"> 2 </span>
+                        <?php echo get_lang('Requirements'); ?>
+                    </li>
+                    <li class="list-group-item <?php step_active('3'); ?>">
+                        <span class="number"> 3 </span>
+                        <?php echo get_lang('Licence'); ?>
+                    </li>
+                    <li class="list-group-item <?php step_active('4'); ?>">
+                        <span class="number"> 4 </span>
+                        <?php echo get_lang('DBSetting'); ?>
+                    </li>
+                    <li class="list-group-item <?php step_active('5'); ?>">
+                        <span class="number"> 5 </span>
+                        <?php echo get_lang('CfgSetting'); ?>
+                    </li>
+                    <li class="list-group-item <?php step_active('6'); ?>">
+                        <span class="number"> 6 </span>
+                        <?php echo get_lang('PrintOverview'); ?>
+                    </li>
+                    <li class="list-group-item <?php step_active('7'); ?>">
+                        <span class="number"> 7 </span>
+                        <?php echo get_lang('Installing'); ?>
+                    </li>
+                </ol>
+            </div>
+            <div id="note">
+                <a class="btn btn-info btn-block" href="<?php echo $installationGuideLink; ?>" target="_blank">
+                    <em class="fa fa-file-text-o"></em> <?php echo get_lang('ReadTheInstallationGuide'); ?>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <form class="form-horizontal" id="install_form" method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
+                <?php echo $form; ?>
+            </form>
         </div>
         <footer class="install-footer">
             <?php echo $poweredBy; ?>
         </footer>
     </div>
-  </div>
+</div>
 </body>
 </html>

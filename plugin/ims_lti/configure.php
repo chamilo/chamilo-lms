@@ -200,7 +200,7 @@ $actions = Display::url(
 
 if (!empty($categories)) {
     $actions .= Display::url(
-        Display::return_icon('gradebook.png', $plugin->get_lang('AddToolToGradebook'), [], ICON_SIZE_MEDIUM),
+        Display::return_icon('gradebook.png', get_lang('MakeQualifiable'), [], ICON_SIZE_MEDIUM),
         './gradebook/add_eval.php?selectcat='.$categories[0]->get_id().'&'.api_get_cidreq()
     );
 }

@@ -2,7 +2,7 @@
     {% if global_tools|length or added_tools|length %}
         <div class="col-sm-3">
             {% if added_tools|length %}
-                <h2>{{ 'AddedTools'|get_plugin_lang('ImsLtiPlugin') }}</h2>
+                <h2>{{ 'ToolsAdded'|get_plugin_lang('ImsLtiPlugin') }}</h2>
                 <ul class="nav nav-pills nav-stacked">
                     {% for tool in added_tools %}
                         <li class="{{ type == tool.id ? 'active' : '' }}">

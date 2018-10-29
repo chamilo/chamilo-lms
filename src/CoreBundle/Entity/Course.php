@@ -154,6 +154,11 @@ class Course
     protected $templates;
 
     /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceLink", mappedBy="course", cascade={"remove"}, orphanRemoval=true)
+     */
+    protected $resourceLinks;
+
+    /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SpecificFieldValues", mappedBy="course")
      */
     //protected $specificFieldValues;

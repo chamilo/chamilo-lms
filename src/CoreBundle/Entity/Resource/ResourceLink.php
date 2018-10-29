@@ -49,7 +49,7 @@ class ResourceLink implements ResourceInterface
     protected $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="resourceLinks")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=true)
      */
     protected $course;

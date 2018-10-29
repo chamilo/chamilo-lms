@@ -636,7 +636,6 @@ class UserManager
                         );
                     }
 
-
                     $subject = get_lang('UserAdded');
 
                     foreach ($adminList as $adminId => $data) {

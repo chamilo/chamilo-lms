@@ -185,7 +185,7 @@ class MailTemplateManager extends Model
     }
 
     /**
-     * @param int $templateId
+     * @param int   $templateId
      * @param array $userInfo
      *
      * @return string

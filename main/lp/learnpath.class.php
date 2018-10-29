@@ -2022,8 +2022,6 @@ class learnpath
                 <span class="fa fa-info"></span><span class="sr-only">'.$reportingText.'</span>
             </a>';
 
-
-
         if (!empty($display)) {
             $showReporting = isset($display['show_reporting_icon']) ? $display['show_reporting_icon'] : true;
             if ($showReporting == false) {

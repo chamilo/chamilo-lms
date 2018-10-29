@@ -2028,7 +2028,6 @@ function get_work_user_list(
                             'View'
                         ).'">'.
                         $count.' '.Display::returnFontAwesomeIcon('comments-o').'</a> ';
-
                 }
 
                 $correction = '';

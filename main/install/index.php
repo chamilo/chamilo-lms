@@ -277,7 +277,7 @@ if (!isset($_GET['running'])) {
     $institutionUrlForm = 'http://www.chamilo.org';
     $languageForm = api_get_interface_language();
     $checkEmailByHashSent = 0;
-    $ShowEmailNotCheckedToStudent = 1;
+    $showEmailNotCheckedToStudent = 1;
     $userMailCanBeEmpty = 1;
     $allowSelfReg = 'approval';
     $allowSelfRegProf = 1; //by default, a user can register as teacher (but moderation might be in place)
@@ -332,7 +332,6 @@ if ($encryptPassForm == '1') {
         @import "../../public/build/css/app.css";
         @import "../../public/build/css/themes/chamilo/default.css";
     </style>
-
     <script type="text/javascript" src="../../public/build/app.js"></script>
     <script type="text/javascript">
         $(document).ready( function() {
@@ -365,10 +364,14 @@ if ($encryptPassForm == '1') {
             $(".advanced_parameters").click(function() {
                 if ($("#id_contact_form").css("display") == "none") {
                     $("#id_contact_form").css("display","block");
-                    $("#img_plus_and_minus").html('&nbsp;<i class="fa fa-eye" aria-hidden="true"></i>&nbsp;<?php echo get_lang('ContactInformation'); ?>');
+                    $("#img_plus_and_minus").html(
+                        '&nbsp;<i class="fa fa-eye" aria-hidden="true"></i>&nbsp;<?php echo get_lang('ContactInformation'); ?>'
+                    );
                 } else {
                     $("#id_contact_form").css("display","none");
-                    $("#img_plus_and_minus").html('&nbsp;<i class="fa fa-eye-slash" aria-hidden="true"></i>&nbsp;<?php echo get_lang('ContactInformation'); ?>');
+                    $("#img_plus_and_minus").html(
+                        '&nbsp;<i class="fa fa-eye-slash" aria-hidden="true"></i>&nbsp;<?php echo get_lang('ContactInformation'); ?>'
+                    );
                 }
             });
         });
@@ -414,11 +417,10 @@ if ($encryptPassForm == '1') {
             }
         }
     </script>
-    <meta http-equiv="Content-Type" content="text/html; charset=<?php echo api_get_system_encoding(); ?>" />
+    <meta charset="UTF-8">
 </head>
 
 <body class="bg-chamilo bg-install" dir="<?php echo api_get_text_direction(); ?>">
-
 <div class="install-box">
     <div class="row">
 
@@ -515,7 +517,7 @@ if (empty($installationProfile)) {
     <input type="hidden" name="institutionForm"    value="<?php echo api_htmlentities($institutionForm, ENT_QUOTES); ?>" />
     <input type="hidden" name="institutionUrlForm" value="<?php echo api_stristr($institutionUrlForm, 'http://', false) ? api_htmlentities($institutionUrlForm, ENT_QUOTES) : api_stristr($institutionUrlForm, 'https://', false) ? api_htmlentities($institutionUrlForm, ENT_QUOTES) : 'http://'.api_htmlentities($institutionUrlForm, ENT_QUOTES); ?>" />
     <input type="hidden" name="checkEmailByHashSent" value="<?php echo api_htmlentities($checkEmailByHashSent, ENT_QUOTES); ?>" />
-    <input type="hidden" name="ShowEmailNotCheckedToStudent" value="<?php echo api_htmlentities($ShowEmailNotCheckedToStudent, ENT_QUOTES); ?>" />
+    <input type="hidden" name="ShowEmailNotCheckedToStudent" value="<?php echo api_htmlentities($showEmailNotCheckedToStudent, ENT_QUOTES); ?>" />
     <input type="hidden" name="userMailCanBeEmpty" value="<?php echo api_htmlentities($userMailCanBeEmpty, ENT_QUOTES); ?>" />
     <input type="hidden" name="encryptPassForm"    value="<?php echo api_htmlentities($encryptPassForm, ENT_QUOTES); ?>" />
     <input type="hidden" name="session_lifetime"   value="<?php echo api_htmlentities($session_lifetime, ENT_QUOTES); ?>" />
@@ -753,189 +755,188 @@ if (@$_POST['step2']) {
     </table>
     <?php
 } elseif (@$_POST['step6']) {
-        //STEP 6 : INSTALLATION PROCESS
-        $current_step = 7;
-        $msg = get_lang('InstallExecution');
-        if ($installType == 'update') {
-            $msg = get_lang('UpdateExecution');
-        }
-        echo '<div class="RequirementHeading">
-          <h3>'.display_step_sequence().$msg.'</h3>';
-        if (!empty($installationProfile)) {
-            echo '    <h3>('.$installationProfile.')</h3>';
-        }
-        echo '    <div id="pleasewait" class="alert alert-success">'.get_lang('PleaseWaitThisCouldTakeAWhile').'
+    //STEP 6 : INSTALLATION PROCESS
+    $current_step = 7;
+    $msg = get_lang('InstallExecution');
+    if ($installType == 'update') {
+        $msg = get_lang('UpdateExecution');
+    }
+    echo '<div class="RequirementHeading">
+      <h3>'.display_step_sequence().$msg.'</h3>';
+    if (!empty($installationProfile)) {
+        echo '    <h3>('.$installationProfile.')</h3>';
+    }
+    echo '    <div id="pleasewait" class="alert alert-success">'.get_lang('PleaseWaitThisCouldTakeAWhile').'
 
-          <div class="progress">
-          <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-            <span class="sr-only">100% Complete</span>
-          </div>
-        </div>
-          </div>
-          </div>';
+      <div class="progress">
+      <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+        <span class="sr-only">100% Complete</span>
+      </div>
+    </div>
+      </div>
+      </div>';
 
-        // Push the web server to send these strings before we start the real
-        // installation process
-        flush();
-        $f = ob_get_contents();
-        if (!empty($f)) {
-            ob_flush(); //#5565
-        }
-        if ($installType === 'update') {
-            $database = connectToDatabase(
-                $dbHostForm,
-                $dbUsernameForm,
-                $dbPassForm,
-                $dbNameForm,
-                $dbPortForm
-            );
-            $manager = $database->getManager();
-            $perm = api_get_permissions_for_new_directories();
-            $perm_file = api_get_permissions_for_new_files();
-            migrateSwitch($my_old_version, $manager);
+    // Push the web server to send these strings before we start the real
+    // installation process
+    flush();
+    $f = ob_get_contents();
+    if (!empty($f)) {
+        ob_flush(); //#5565
+    }
+    if ($installType === 'update') {
+        $database = connectToDatabase(
+            $dbHostForm,
+            $dbUsernameForm,
+            $dbPassForm,
+            $dbNameForm,
+            $dbPortForm
+        );
+        $manager = $database->getManager();
+        $perm = api_get_permissions_for_new_directories();
+        $perm_file = api_get_permissions_for_new_files();
+        migrateSwitch($my_old_version, $manager);
 
-            // Create .env file
-            $envFile = api_get_path(SYS_PATH).'.env';
-            $distFile = api_get_path(SYS_PATH).'.env.dist';
+        // Create .env file
+        $envFile = api_get_path(SYS_PATH).'.env';
+        $distFile = api_get_path(SYS_PATH).'.env.dist';
 
-            $params = [
-                '{{DATABASE_HOST}}' => $dbHostForm,
-                '{{DATABASE_PORT}}' => $dbPortForm,
-                '{{DATABASE_NAME}}' => $dbNameForm,
-                '{{DATABASE_USER}}' => $dbUsernameForm,
-                '{{DATABASE_PASSWORD}}' => $dbPassForm,
-                '{{APP_INSTALLED}}' => 1,
-                '{{APP_ENCRYPT_METHOD}}' => $encryptPassForm,
-                '{{APP_URL_APPEND}}' => $urlAppendPath,
-            ];
+        $params = [
+            '{{DATABASE_HOST}}' => $dbHostForm,
+            '{{DATABASE_PORT}}' => $dbPortForm,
+            '{{DATABASE_NAME}}' => $dbNameForm,
+            '{{DATABASE_USER}}' => $dbUsernameForm,
+            '{{DATABASE_PASSWORD}}' => $dbPassForm,
+            '{{APP_INSTALLED}}' => 1,
+            '{{APP_ENCRYPT_METHOD}}' => $encryptPassForm,
+            '{{APP_URL_APPEND}}' => $urlAppendPath,
+        ];
 
-            error_log('Update env file');
-            updateEnvFile($distFile, $envFile, $params);
-            (new Dotenv())->load($envFile);
+        error_log('Update env file');
+        updateEnvFile($distFile, $envFile, $params);
+        (new Dotenv())->load($envFile);
 
-            // Load Symfony Kernel
-            $kernel = new Kernel('dev', true);
-            $application = new Application($kernel);
-            error_log('Set Kernel');
-            // Create database
-            /*$input = new ArrayInput([]);
-            $command = $application->find('doctrine:schema:create');
-            $result = $command->run($input, new ConsoleOutput());*/
+        // Load Symfony Kernel
+        $kernel = new Kernel('dev', true);
+        $application = new Application($kernel);
+        error_log('Set Kernel');
+        // Create database
+        /*$input = new ArrayInput([]);
+        $command = $application->find('doctrine:schema:create');
+        $result = $command->run($input, new ConsoleOutput());*/
 
-            session_unset();
-            $_SESSION = [];
-            session_destroy();
+        session_unset();
+        $_SESSION = [];
+        session_destroy();
 
-            // No errors
-            //if ($result == 0) {
+        // No errors
+        //if ($result == 0) {
+        // Boot kernel and get the doctrine from Symfony container
+        $kernel->boot();
+        error_log('Boot');
+        $containerDatabase = $kernel->getContainer();
+        upgradeWithContainer($containerDatabase);
+        error_log('Set upgradeWithContainer');
+    } else {
+        set_file_folder_permissions();
+        $database = connectToDatabase(
+            $dbHostForm,
+            $dbUsernameForm,
+            $dbPassForm,
+            null,
+            $dbPortForm
+        );
+        $manager = $database->getManager();
+        $dbNameForm = preg_replace('/[^a-zA-Z0-9_\-]/', '', $dbNameForm);
+
+        // Drop and create the database anyways
+        $manager->getConnection()->getSchemaManager()->dropAndCreateDatabase($dbNameForm);
+
+        $database = connectToDatabase(
+            $dbHostForm,
+            $dbUsernameForm,
+            $dbPassForm,
+            $dbNameForm,
+            $dbPortForm
+        );
+
+        $manager = $database->getManager();
+        // Create .env file
+        $envFile = api_get_path(SYS_PATH).'.env';
+        $distFile = api_get_path(SYS_PATH).'.env.dist';
+
+        $params = [
+            '{{DATABASE_HOST}}' => $dbHostForm,
+            '{{DATABASE_PORT}}' => $dbPortForm,
+            '{{DATABASE_NAME}}' => $dbNameForm,
+            '{{DATABASE_USER}}' => $dbUsernameForm,
+            '{{DATABASE_PASSWORD}}' => $dbPassForm,
+            '{{APP_INSTALLED}}' => 1,
+            '{{APP_ENCRYPT_METHOD}}' => $encryptPassForm,
+            '{{APP_URL_APPEND}}' => $urlAppendPath,
+        ];
+
+        updateEnvFile($distFile, $envFile, $params);
+        (new Dotenv())->load($envFile);
+
+        // Load Symfony Kernel
+        $kernel = new Kernel('dev', true);
+        $application = new Application($kernel);
+
+        // Create database
+        $input = new ArrayInput([]);
+        $command = $application->find('doctrine:schema:create');
+        $result = $command->run($input, new ConsoleOutput());
+
+        // No errors
+        if ($result == 0) {
             // Boot kernel and get the doctrine from Symfony container
             $kernel->boot();
-            error_log('Boot');
             $containerDatabase = $kernel->getContainer();
-            upgradeWithContainer($containerDatabase);
-            error_log('Set upgradeWithContainer');
-        } else {
-            set_file_folder_permissions();
-            $database = connectToDatabase(
-                $dbHostForm,
-                $dbUsernameForm,
-                $dbPassForm,
-                null,
-                $dbPortForm
+            $sysPath = api_get_path(SYS_PATH);
+            finishInstallationWithContainer(
+                $containerDatabase,
+                $sysPath,
+                $encryptPassForm,
+                $passForm,
+                $adminLastName,
+                $adminFirstName,
+                $loginForm,
+                $emailForm,
+                $adminPhoneForm,
+                $languageForm,
+                $institutionForm,
+                $institutionUrlForm,
+                $campusForm,
+                $allowSelfReg,
+                $allowSelfRegProf,
+                $installationProfile
             );
-            $manager = $database->getManager();
-            $dbNameForm = preg_replace('/[^a-zA-Z0-9_\-]/', '', $dbNameForm);
-
-            // Drop and create the database anyways
-            $manager->getConnection()->getSchemaManager()->dropAndCreateDatabase($dbNameForm);
-
-            $database = connectToDatabase(
-                $dbHostForm,
-                $dbUsernameForm,
-                $dbPassForm,
-                $dbNameForm,
-                $dbPortForm
-            );
-
-            $manager = $database->getManager();
-            // Create .env file
-            $envFile = api_get_path(SYS_PATH).'.env';
-            $distFile = api_get_path(SYS_PATH).'.env.dist';
-
-            $params = [
-                '{{DATABASE_HOST}}' => $dbHostForm,
-                '{{DATABASE_PORT}}' => $dbPortForm,
-                '{{DATABASE_NAME}}' => $dbNameForm,
-                '{{DATABASE_USER}}' => $dbUsernameForm,
-                '{{DATABASE_PASSWORD}}' => $dbPassForm,
-                '{{APP_INSTALLED}}' => 1,
-                '{{APP_ENCRYPT_METHOD}}' => $encryptPassForm,
-                '{{APP_URL_APPEND}}' => $urlAppendPath,
-            ];
-
-            updateEnvFile($distFile, $envFile, $params);
-            (new Dotenv())->load($envFile);
-
-            // Load Symfony Kernel
-            $kernel = new Kernel('dev', true);
-            $application = new Application($kernel);
-
-            // Create database
-            $input = new ArrayInput([]);
-            $command = $application->find('doctrine:schema:create');
-            $result = $command->run($input, new ConsoleOutput());
-
-            // No errors
-            if ($result == 0) {
-                // Boot kernel and get the doctrine from Symfony container
-                $kernel->boot();
-                $containerDatabase = $kernel->getContainer();
-                $sysPath = api_get_path(SYS_PATH);
-                finishInstallationWithContainer(
-                    $containerDatabase,
-                    $sysPath,
-                    $encryptPassForm,
-                    $passForm,
-                    $adminLastName,
-                    $adminFirstName,
-                    $loginForm,
-                    $emailForm,
-                    $adminPhoneForm,
-                    $languageForm,
-                    $institutionForm,
-                    $institutionUrlForm,
-                    $campusForm,
-                    $allowSelfReg,
-                    $allowSelfRegProf,
-                    $installationProfile
-                );
-                include 'install_files.inc.php';
-            }
+            include 'install_files.inc.php';
         }
-
-        display_after_install_message($installType);
-
-        // Hide the "please wait" message sent previously
-        echo '<script>$(\'#pleasewait\').hide(\'fast\');</script>';
-    } elseif (@$_POST['step1'] || $badUpdatePath) {
-        //STEP 1 : REQUIREMENTS
-        //make sure that proposed path is set, shouldn't be necessary but...
-        if (empty($proposedUpdatePath)) {
-            $proposedUpdatePath = $_POST['updatePath'];
-        }
-        display_requirements($installType, $badUpdatePath, $proposedUpdatePath, $update_from_version_8);
-    } else {
-        // This is the start screen.
-        display_language_selection();
-
-        if (!empty($_GET['profile'])) {
-            $installationProfile = api_htmlentities($_GET['profile'], ENT_QUOTES);
-        }
-        echo '<input type="hidden" name="installationProfile" value="'.api_htmlentities($installationProfile, ENT_QUOTES).'" />';
     }
 
-    $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chamilo </a> &copy; '.date('Y');
+    display_after_install_message($installType);
 
+    // Hide the "please wait" message sent previously
+    echo '<script>$(\'#pleasewait\').hide(\'fast\');</script>';
+} elseif (@$_POST['step1'] || $badUpdatePath) {
+    //STEP 1 : REQUIREMENTS
+    //make sure that proposed path is set, shouldn't be necessary but...
+    if (empty($proposedUpdatePath)) {
+        $proposedUpdatePath = $_POST['updatePath'];
+    }
+    display_requirements($installType, $badUpdatePath, $proposedUpdatePath, $update_from_version_8);
+} else {
+    // This is the start screen.
+    display_language_selection();
+
+    if (!empty($_GET['profile'])) {
+        $installationProfile = api_htmlentities($_GET['profile'], ENT_QUOTES);
+    }
+    echo '<input type="hidden" name="installationProfile" value="'.api_htmlentities($installationProfile, ENT_QUOTES).'" />';
+}
+
+$poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chamilo </a> &copy; '.date('Y');
 ?>
           </form>
         </div>

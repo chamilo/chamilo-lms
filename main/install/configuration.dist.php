@@ -817,7 +817,12 @@ ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA613FECDF FOREIGN KEY (ses
 //$_configuration['send_two_inscription_confirmation_mail'] = false;
 
 // LP view custom settings
-// $_configuration['lp_view_settings'] = ['display' => ['show_reporting_icon' => true]];
+/*$_configuration['lp_view_settings'] = [
+    'display' => [
+        'show_reporting_icon' => true,
+        'hide_lp_arrow_navigation' => false,
+    ],
+];*/
 
 // Force to hide the invisible course documents in sessions
 //$_configuration['hide_invisible_course_documents_in_sessions'] = false;

@@ -2022,6 +2022,8 @@ class learnpath
                 <span class="fa fa-info"></span><span class="sr-only">'.$reportingText.'</span>
             </a>';
 
+
+
         if (!empty($display)) {
             $showReporting = isset($display['show_reporting_icon']) ? $display['show_reporting_icon'] : true;
             if ($showReporting == false) {
@@ -2029,19 +2031,28 @@ class learnpath
             }
         }
 
-        $previousIcon = '
-            <a class="icon-toolbar" id="scorm-previous" href="#" 
-                onclick="switch_item('.$mycurrentitemid.',\'previous\');return false;" title="'.$previousText.'">
-                <span class="fa fa-chevron-left"></span><span class="sr-only">'.$previousText.'</span>
-            </a>';
+        $hideArrows = false;
+        if (isset($settings['display']) && isset($settings['display']['hide_lp_arrow_navigation'])) {
+            $hideArrows = $settings['display']['hide_lp_arrow_navigation'];
+        }
 
-        $nextIcon = '
-            <a class="icon-toolbar" id="scorm-next" href="#" 
-                onclick="switch_item('.$mycurrentitemid.',\'next\');return false;" title="'.$nextText.'">
-                <span class="fa fa-chevron-right"></span><span class="sr-only">'.$nextText.'</span>
-            </a>';
+        $previousIcon = '';
+        $nextIcon = '';
+        if ($hideArrows === false) {
+            $previousIcon = '
+                <a class="icon-toolbar" id="scorm-previous" href="#" 
+                    onclick="switch_item('.$mycurrentitemid.',\'previous\');return false;" title="'.$previousText.'">
+                    <span class="fa fa-chevron-left"></span><span class="sr-only">'.$previousText.'</span>
+                </a>';
 
-        if ($this->mode == 'fullscreen') {
+            $nextIcon = '
+                <a class="icon-toolbar" id="scorm-next" href="#" 
+                    onclick="switch_item('.$mycurrentitemid.',\'next\');return false;" title="'.$nextText.'">
+                    <span class="fa fa-chevron-right"></span><span class="sr-only">'.$nextText.'</span>
+                </a>';
+        }
+
+        if ($this->mode === 'fullscreen') {
             $navbar = '
                   <span id="'.$idBar.'" class="buttons">
                     '.$reportingIcon.'

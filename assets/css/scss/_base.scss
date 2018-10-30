@@ -428,10 +428,16 @@ footer {
 }
 /* COURSE CLASSIC */
 .course-list{
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 1rem;
-  grid-row-gap: 16px;
+    display: grid;
+    grid-gap: 1rem;
+    grid-row-gap: 16px;
+    grid-template-columns: repeat(3, 1fr);
+  @include portrait($breakpoint-sm, $breakpoint-md){
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @include landscape($breakpoint-sm) {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }
 .card-course-classic{
   border: 1px solid #dee2e6;
@@ -442,6 +448,9 @@ footer {
   align-items: center;
   .card-body{
     padding: 1rem 1.2rem;
+    @include portrait($breakpoint-sm, $breakpoint-md){
+      padding: 0.8rem;
+    }
     .title{
       font-size: 16px;
       a{

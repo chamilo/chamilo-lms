@@ -464,3 +464,9 @@
     }
   }
 }
+
+.search-box{
+  @include landscape($breakpoint-sm) {
+    display: none;
+  }
+}

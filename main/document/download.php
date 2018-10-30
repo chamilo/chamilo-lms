@@ -26,16 +26,10 @@ $doc_url = str_replace('///', '&', $doc_url);
 // Still a space present? it must be a '+' (that got replaced by mod_rewrite)
 $doc_url = str_replace(' ', '+', $doc_url);
 
-$sys_course_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
-$docRealPath = realpath($sys_course_path.$doc_url);
+$doc_url = str_replace(['../', '\\..', '\\0', '..\\'], ['', '', '', ''], $doc_url); //echo $doc_url;
 
-if (
-    false === $docRealPath ||
-    0 !== strpos($docRealPath, $sys_course_path.$doc_url)
-) {
-    api_not_allowed(
-        !empty($_GET['origin']) && $_GET['origin'] === 'learnpath'
-    );
+if (strpos($doc_url, '../') || strpos($doc_url, '/..')) {
+    $doc_url = '';
 }
 
 // Dealing with image included into survey: when users receive a link towards a
@@ -43,6 +37,8 @@ if (
 // The administrator should probably be able to disable this code through admin
 // inteface.
 $refer_script = isset($_SERVER["HTTP_REFERER"]) ? strrchr($_SERVER["HTTP_REFERER"], '/') : null;
+
+$sys_course_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 
 if (substr($refer_script, 0, 15) == '/fillsurvey.php') {
     $invitation = substr(strstr($refer_script, 'invitationcode='), 15);

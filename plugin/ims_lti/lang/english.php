@@ -30,3 +30,6 @@ $strings['ScoreNotSet'] = 'Score not set';
 $strings['ScoreForXUserIsYScore'] = 'Score for %s is %s';
 $strings['ToolsAdded'] = 'Added tools';
 $strings['ToolEdited'] = 'Tool edited';
+$strings['ShareLauncherName'] = 'Share launcher\'s name';
+$strings['ShareLauncherEmail'] = 'Share launcher\'s email';
+$strings['ShareLauncherPicture'] = 'Share launcher\'s picture';

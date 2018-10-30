@@ -72,12 +72,22 @@ if ($tool->isActiveDeepLinking()) {
 }
 
 $params['user_id'] = $toolUserId;
-$params['user_image'] = UserManager::getUserPicture($user->getId());
+
+if ($tool->isSharingPicture()) {
+    $params['user_image'] = UserManager::getUserPicture($user->getId());
+}
+
 $params['roles'] = ImsLtiPlugin::getUserRoles($user);
-$params['lis_person_name_given'] = $user->getFirstname();
-$params['lis_person_name_family'] = $user->getLastname();
-$params['lis_person_name_full'] = $user->getCompleteName();
-$params['lis_person_contact_email_primary'] = $user->getEmail();
+
+if ($tool->isSharingName()) {
+    $params['lis_person_name_given'] = $user->getFirstname();
+    $params['lis_person_name_family'] = $user->getLastname();
+    $params['lis_person_name_full'] = $user->getCompleteName();
+}
+
+if ($tool->isSharingEmail()) {
+    $params['lis_person_contact_email_primary'] = $user->getEmail();
+}
 
 if (api_is_allowed_to_edit(false, true)) {
     $params['role_scope_mentor'] = ImsLtiPlugin::getRoleScopeMentor($course, $session);
@@ -109,6 +119,7 @@ $result = $oauth->sign(array(
         'oauth_callback' => 'about:blank'
     )
 ));
+var_dump($params);die;
 ?>
 <!DOCTYPE html>
 <html>

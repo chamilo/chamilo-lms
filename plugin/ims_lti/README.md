@@ -55,4 +55,6 @@ ALTER TABLE plugin_ims_lti_tool ADD gradebook_eval_id INT DEFAULT NULL;
 ALTER TABLE plugin_ims_lti_tool ADD CONSTRAINT FK_C5E47F7C82F80D8B
     FOREIGN KEY (gradebook_eval_id) REFERENCES gradebook_evaluation (id) ON DELETE SET NULL;
 CREATE INDEX IDX_C5E47F7C82F80D8B ON plugin_ims_lti_tool (gradebook_eval_id);
+
+ALTER TABLE plugin_ims_lti_tool ADD privacy LONGTEXT DEFAULT NULL;
 ```

@@ -2451,6 +2451,7 @@ class learnpathItem
                                 ) {
                                     /** @var learnpathItem $itemToCheck */
                                     $itemToCheck = $items[$refs_list[$prereqs_string]];
+
                                     if ($itemToCheck->type == 'quiz') {
                                         // 1. Checking the status in current items.
                                         $status = $itemToCheck->get_status(true);
@@ -2495,8 +2496,10 @@ class learnpathItem
                                                         LIMIT 0, 1';
                                                 $rs_quiz = Database::query($sql);
                                                 if ($quiz = Database::fetch_array($rs_quiz)) {
-                                                    $minScore = $items[$refs_list[$this->get_id()]]->getPrerequisiteMinScore();
-                                                    $maxScore = $items[$refs_list[$this->get_id()]]->getPrerequisiteMaxScore();
+                                                    $minScore = $items[$refs_list[$this->get_id(
+                                                    )]]->getPrerequisiteMinScore();
+                                                    $maxScore = $items[$refs_list[$this->get_id(
+                                                    )]]->getPrerequisiteMaxScore();
 
                                                     if (isset($minScore) && isset($minScore)) {
                                                         // Taking min/max prerequisites values see BT#5776
@@ -2547,8 +2550,10 @@ class learnpathItem
                                             $rs_quiz = Database::query($sql);
                                             if (Database::num_rows($rs_quiz) > 0) {
                                                 while ($quiz = Database::fetch_array($rs_quiz)) {
-                                                    $minScore = $items[$refs_list[$this->get_id()]]->getPrerequisiteMinScore();
-                                                    $maxScore = $items[$refs_list[$this->get_id()]]->getPrerequisiteMaxScore();
+                                                    $minScore = $items[$refs_list[$this->get_id(
+                                                    )]]->getPrerequisiteMinScore();
+                                                    $maxScore = $items[$refs_list[$this->get_id(
+                                                    )]]->getPrerequisiteMaxScore();
 
                                                     if (isset($minScore) && isset($minScore)) {
                                                         // Taking min/max prerequisites values see BT#5776
@@ -2570,7 +2575,9 @@ class learnpathItem
                                                             $returnstatus = true;
                                                             break;
                                                         } else {
-                                                            $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
+                                                            $this->prereq_alert = get_lang(
+                                                                'LearnpathPrereqNotCompleted'
+                                                            );
                                                             $returnstatus = false;
                                                         }
                                                     }
@@ -2582,6 +2589,22 @@ class learnpathItem
                                         }
 
                                         return $returnstatus;
+                                    } elseif ($itemToCheck->type === 'student_publication') {
+                                        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+                                        $workId = $items[$refs_list[$prereqs_string]]->path;
+                                        $count = get_work_count_by_student($user_id, $workId);
+                                        if ($count >= 1) {
+                                            $returnstatus = true;
+                                        } else {
+                                            $returnstatus = false;
+                                            $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
+                                            if (self::DEBUG > 1) {
+                                                error_log(
+                                                    'Student pub, prereq'.$prereqs_string.' not completed',
+                                                    0
+                                                );
+                                            }
+                                        }
                                     } else {
                                         $status = $itemToCheck->get_status(false);
                                         $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];

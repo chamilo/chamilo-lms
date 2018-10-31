@@ -6,12 +6,12 @@ use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
 /**
  * Class FrmAdd.
  */
-class FrmAdd extends FormValidator
+class FrmEdit extends FormValidator
 {
     /**
      * @var ImsLtiTool|null
      */
-    private $baseTool;
+    private $tool;
 
     /**
      * FrmAdd constructor.
@@ -27,21 +27,38 @@ class FrmAdd extends FormValidator
     ) {
         parent::__construct($name, 'POST', '', '', $attributes, self::LAYOUT_HORIZONTAL, true);
 
-        $this->baseTool = $tool;
+        $this->tool = $tool;
     }
 
     /**
-     * Build the form
+     * Build the form.
+     *
+     * @param bool $globalMode
+     *
+     * @throws Exception
      */
-    public function build()
+    public function build($globalMode = true)
     {
         $plugin = ImsLtiPlugin::create();
+        $course = $this->tool->getCourse();
+        $parent = $this->tool->getParent();
 
         $this->addHeader($plugin->get_lang('ToolSettings'));
+
+        if (null !== $course && $globalMode) {
+            $this->addHtml(
+                Display::return_message(
+                    sprintf($plugin->get_lang('ToolAddedOnCourseX'), $course->getTitle()),
+                    'normal',
+                    false
+                )
+            );
+        }
+
         $this->addText('name', get_lang('Name'));
         $this->addTextarea('description', get_lang('Description'));
 
-        if (null === $this->baseTool) {
+        if (null === $parent) {
             $this->addElement('url', 'launch_url', $plugin->get_lang('LaunchUrl'));
             $this->addRule('launch_url', get_lang('Required'), 'required');
             $this->addText('consumer_key', $plugin->get_lang('ConsumerKey'));
@@ -55,8 +72,8 @@ class FrmAdd extends FormValidator
             [$plugin->get_lang('CustomParams'), $plugin->get_lang('CustomParamsHelp')]
         );
 
-        if (null === $this->baseTool ||
-            ($this->baseTool && !$this->baseTool->isActiveDeepLinking())
+        if (null === $parent ||
+            (null !== $parent && !$parent->isActiveDeepLinking())
         ) {
             $this->addCheckBox('deep_linking', null, $plugin->get_lang('SupportDeepLinking'));
         }
@@ -68,23 +85,27 @@ class FrmAdd extends FormValidator
         $this->addCheckBox('share_email', null, $plugin->get_lang('ShareLauncherEmail'));
         $this->addCheckBox('share_picture', null, $plugin->get_lang('ShareLauncherPicture'));
         $this->addHtml('</div>');
-        $this->addButtonCreate($plugin->get_lang('AddExternalTool'));
+        $this->addButtonCreate($plugin->get_lang('EditExternalTool'));
+        $this->addHidden('id', $this->tool->getId());
+        $this->addHidden('action', 'edit');
         $this->applyFilter('__ALL__', 'Security::remove_XSS');
     }
 
     public function setDefaultValues()
     {
-        if (null !== $this->baseTool) {
-            $this->setDefaults(
-                [
-                    'name' => $this->baseTool->getName(),
-                    'description' => $this->baseTool->getDescription(),
-                    'custom_params' => $this->baseTool->getCustomParams(),
-                    'share_name' => $this->baseTool->isSharingName(),
-                    'share_email' => $this->baseTool->isSharingEmail(),
-                    'share_picture' => $this->baseTool->isSharingPicture(),
-                ]
-            );
-        }
+        $this->setDefaults(
+            [
+                'name' => $this->tool->getName(),
+                'description' => $this->tool->getDescription(),
+                'launch_url' => $this->tool->getLaunchUrl(),
+                'consumer_key' => $this->tool->getConsumerKey(),
+                'shared_secret' => $this->tool->getSharedSecret(),
+                'custom_params' => $this->tool->getCustomParams(),
+                'deep_linking' => $this->tool->isActiveDeepLinking(),
+                'share_name' => $this->tool->isSharingName(),
+                'share_email' => $this->tool->isSharingEmail(),
+                'share_picture' => $this->tool->isSharingPicture(),
+            ]
+        );
     }
 }

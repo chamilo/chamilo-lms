@@ -33,3 +33,5 @@ $strings['ToolEdited'] = 'Tool edited';
 $strings['ShareLauncherName'] = 'Share launcher\'s name';
 $strings['ShareLauncherEmail'] = 'Share launcher\'s email';
 $strings['ShareLauncherPicture'] = 'Share launcher\'s picture';
+$strings['NoTool'] = 'Tool not exists';
+$strings['ToolAddedOnCourseX'] = 'Tool addeed on course <strong>%s</strong>.';

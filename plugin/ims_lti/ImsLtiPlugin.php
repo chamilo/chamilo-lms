@@ -126,11 +126,11 @@ class ImsLtiPlugin extends Plugin
             $toolTable->addColumn('consumer_key', Type::STRING);
             $toolTable->addColumn('shared_secret', Type::STRING);
             $toolTable->addColumn('custom_params', Type::TEXT)->setNotnull(false);
-            $toolTable->addColumn('is_global', Type::BOOLEAN);
             $toolTable->addColumn('active_deep_linking', Type::BOOLEAN)->setDefault(false);
             $toolTable->addColumn('c_id', Type::INTEGER)->setNotnull(false);
             $toolTable->addColumn('gradebook_eval_id', Type::INTEGER)->setNotnull(false);
             $toolTable->addColumn('privacy', Type::TEXT)->setNotnull(false)->setDefault(null);
+            $toolTable->addColumn('parent_id', Type::INTEGER)->setNotnull(false);
             $toolTable->addForeignKeyConstraint(
                 'course',
                 ['c_id'],
@@ -145,9 +145,11 @@ class ImsLtiPlugin extends Plugin
                 ['onDelete' => 'SET NULL'],
                 'FK_C5E47F7C82F80D8B'
             );
+            $toolTable->addForeignKeyConstraint($toolTable, ['parent_id'], ['id'], [], 'FK_C5E47F7C727ACA70');
             $toolTable->setPrimaryKey(['id']);
             $toolTable->addIndex(['c_id'], 'IDX_C5E47F7C91D79BD3');
             $toolTable->addIndex(['gradebook_eval_id'], 'IDX_C5E47F7C82F80D8B');
+            $toolTable->addIndex(['parent_id'], 'IDX_C5E47F7C727ACA70');
 
             $queries = $pluginSchema->toSql($platform);
 
@@ -378,18 +380,21 @@ class ImsLtiPlugin extends Plugin
         $url = empty($contentItem['url']) ? $baseLtiTool->getLaunchUrl() : $contentItem['url'];
 
         /** @var ImsLtiTool $newLtiTool */
-        $newLtiTool = $ltiToolRepo->findOneBy(['launchUrl' => $url, 'isGlobal' => false, 'course' => $course]);
+        $newLtiTool = $ltiToolRepo->findOneBy(['launchUrl' => $url, 'parent' => $baseLtiTool, 'course' => $course]);
 
-        if (empty($newLtiTool)) {
+        if (null === $newLtiTool) {
             $newLtiTool = new ImsLtiTool();
             $newLtiTool
                 ->setLaunchUrl($url)
-                ->setConsumerKey(
-                    $baseLtiTool->getConsumerKey()
+                ->setParent(
+                    $baseLtiTool
                 )
-                ->setSharedSecret(
-                    $baseLtiTool->getSharedSecret()
-                );
+                ->setPrivacy(
+                    $baseLtiTool->isSharingName(),
+                    $baseLtiTool->isSharingEmail(),
+                    $baseLtiTool->isSharingEmail()
+                )
+                ->setCourse($course);
         }
 
         $newLtiTool
@@ -398,8 +403,7 @@ class ImsLtiPlugin extends Plugin
             )
             ->setDescription(
                 !empty($contentItem['text']) ? $contentItem['text'] : null
-            )
-            ->setCourse($course);
+            );
 
         $em->persist($newLtiTool);
         $em->flush();
@@ -460,7 +464,7 @@ class ImsLtiPlugin extends Plugin
         $toolRepo = $em->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool');
 
         /** @var ImsLtiTool $tool */
-        $tool = $toolRepo->findOneBy(['id' => $toolId, 'isGlobal' => false, 'course' => $course]);
+        $tool = $toolRepo->findOneBy(['id' => $toolId, 'course' => $course]);
 
         return !empty($tool);
     }

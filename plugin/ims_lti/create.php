@@ -22,11 +22,11 @@ if ($form->validate()) {
     $externalTool
         ->setName($formValues['name'])
         ->setDescription($formValues['description'])
-        ->setLaunchUrl($formValues['base_url'])
+        ->setLaunchUrl($formValues['launch_url'])
         ->setConsumerKey($formValues['consumer_key'])
         ->setSharedSecret($formValues['shared_secret'])
         ->setCustomParams($formValues['custom_params'])
-        ->setIsGlobal(true)
+        ->setCourse(null)
         ->setActiveDeepLinking(
             isset($formValues['deep_linking'])
         )

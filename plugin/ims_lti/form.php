@@ -119,7 +119,6 @@ $result = $oauth->sign(array(
         'oauth_callback' => 'about:blank'
     )
 ));
-var_dump($params);die;
 ?>
 <!DOCTYPE html>
 <html>

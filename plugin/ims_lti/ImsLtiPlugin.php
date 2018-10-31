@@ -105,6 +105,7 @@ class ImsLtiPlugin extends Plugin
      * Creates the plugin tables on database
      *
      * @return boolean
+     * @throws DBALException
      */
     private function createPluginTables()
     {
@@ -129,6 +130,7 @@ class ImsLtiPlugin extends Plugin
             $toolTable->addColumn('active_deep_linking', Type::BOOLEAN)->setDefault(false);
             $toolTable->addColumn('c_id', Type::INTEGER)->setNotnull(false);
             $toolTable->addColumn('gradebook_eval_id', Type::INTEGER)->setNotnull(false);
+            $toolTable->addColumn('privacy', Type::TEXT)->setNotnull(false)->setDefault(null);
             $toolTable->addForeignKeyConstraint(
                 'course',
                 ['c_id'],
@@ -153,7 +155,6 @@ class ImsLtiPlugin extends Plugin
                 Database::query($query);
             }
         }
-
 
         return true;
     }

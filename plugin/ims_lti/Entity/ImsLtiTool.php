@@ -102,7 +102,7 @@ class ImsLtiTool
     {
         $this->description = null;
         $this->customParams = null;
-        $this->isGlobal = false;
+        $this->isGlobal = true;
         $this->activeDeepLinking = false;
         $this->course = null;
         $this->gradebookEval =null;
@@ -236,7 +236,7 @@ class ImsLtiTool
      */
     public function isGlobal()
     {
-        return $this->isGlobal;
+        return $this->course === null;
     }
 
     /**
@@ -299,7 +299,7 @@ class ImsLtiTool
     }
 
     /**
-     * Set course.
+     * Set course. And set isGlobal according to the course or not.
      *
      * @param Course|null $course
      *
@@ -308,6 +308,7 @@ class ImsLtiTool
     public function setCourse(Course $course = null)
     {
         $this->course = $course;
+        $this->isGlobal = $course === null;
 
         return $this;
     }

@@ -25,6 +25,7 @@
                 window.opener.CKEDITOR.tools.callFunction(funcNum, file.url);
                 window.close();
             },
+            startPathHash: 'l2_Lw', // Sets the course driver as default
             resizable: false
         }).elfinder('instance');
     });

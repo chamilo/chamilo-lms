@@ -31,7 +31,7 @@
         </div>
     {% endif %}
 
-    <div class="col-sm-9 {{ not global_tools|length or not added_tools|length ? 'col-md-offset-3' : '' }}">
+    <div class="col-sm-9 {{ not global_tools|length and not added_tools|length ? 'col-md-offset-3' : '' }}">
         {{ form }}
     </div>
 </div>

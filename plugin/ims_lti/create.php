@@ -47,6 +47,11 @@ if ($form->validate()) {
     exit;
 }
 
+$form->setDefaultValues();
+
+$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php', 'name' => $plugin->get_title()];
+
 $pageTitle = $plugin->get_lang('AddExternalTool');
 
 $template = new Template($pageTitle);

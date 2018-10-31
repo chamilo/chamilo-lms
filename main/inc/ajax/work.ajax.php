@@ -22,7 +22,7 @@ switch ($action) {
 
         $onlyOnePublication = api_get_configuration_value('allow_only_one_student_publication_per_user');
         if ($onlyOnePublication) {
-            $count =  get_work_count_by_student($userId, $workId);
+            $count = get_work_count_by_student($userId, $workId);
             if ($count >= 1) {
                 exit;
             }

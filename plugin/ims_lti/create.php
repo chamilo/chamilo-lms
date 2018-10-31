@@ -22,11 +22,11 @@ if ($form->validate()) {
     $externalTool
         ->setName($formValues['name'])
         ->setDescription($formValues['description'])
-        ->setLaunchUrl($formValues['base_url'])
+        ->setLaunchUrl($formValues['launch_url'])
         ->setConsumerKey($formValues['consumer_key'])
         ->setSharedSecret($formValues['shared_secret'])
         ->setCustomParams($formValues['custom_params'])
-        ->setIsGlobal(true)
+        ->setCourse(null)
         ->setActiveDeepLinking(
             isset($formValues['deep_linking'])
         )
@@ -46,6 +46,11 @@ if ($form->validate()) {
     header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php');
     exit;
 }
+
+$form->setDefaultValues();
+
+$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php', 'name' => $plugin->get_title()];
 
 $pageTitle = $plugin->get_lang('AddExternalTool');
 

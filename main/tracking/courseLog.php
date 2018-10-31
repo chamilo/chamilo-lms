@@ -10,13 +10,15 @@ require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_TRACKING;
 
 $courseInfo = api_get_course_info(api_get_course_id());
-$courseCode = $courseInfo['code'];
+$course_code = $courseCode = $courseInfo['code'];
 $from_myspace = false;
 $from = isset($_GET['from']) ? $_GET['from'] : null;
 
 // Starting the output buffering when we are exporting the information.
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 $session_id = isset($_REQUEST['id_session']) ? (int) $_REQUEST['id_session'] : 0;
+
+
 
 $this_section = SECTION_COURSES;
 if ($from == 'myspace') {
@@ -157,12 +159,17 @@ if (isset($_GET['origin']) && $_GET['origin'] == 'resume_session') {
 $view = isset($_REQUEST['view']) ? $_REQUEST['view'] : '';
 $nameTools = get_lang('Tracking');
 
+//Template Tracking
+$tpl = new Template($nameTools);
+
+
 // getting all the students of the course
 if (empty($session_id)) {
     // Registered students in a course outside session.
     $a_students = CourseManager::get_student_list_from_course_code(
         api_get_course_id()
     );
+
 } else {
     // Registered students in session.
     $a_students = CourseManager::get_student_list_from_course_code(
@@ -173,6 +180,7 @@ if (empty($session_id)) {
 }
 
 $nbStudents = count($a_students);
+$user_ids = array_keys($a_students);
 $extra_info = [];
 $userProfileInfo = [];
 // Getting all the additional information of an additional profile field.
@@ -243,6 +251,8 @@ echo Display::toolbarAction(
 );
 
 $course_name = get_lang('Course').' '.$courseInfo['name'];
+
+
 if ($session_id) {
     $titleSession = Display::return_icon(
         'session.png',
@@ -330,6 +340,31 @@ if ($showReporting) {
     }
 }
 
+$usersTracking = TrackingCourseLog::get_user_data(null, $nbStudents, null, 'DESC');
+
+$numberStudentsCompletedLP = 0;
+$averageStudentsTestScore = 0;
+
+foreach ($usersTracking as $userTracking) {
+    if ($userTracking[5] == '100%') {
+        $numberStudentsCompletedLP++;
+    }
+    $averageStudentTestScore = substr($userTracking[7], 0, -1);
+    $averageStudentsTestScore += $averageStudentTestScore;
+}
+$averageStudentsTestScore = round(($averageStudentsTestScore / $nbStudents));
+
+$tpl->assign('students_test_score',$averageStudentsTestScore);
+$tpl->assign('students_completed_lp',$numberStudentsCompletedLP);
+$tpl->assign('number_students',$nbStudents);
+
+$trackingSummaryLayout = $tpl->get_template("tracking/tracking_course_log.tpl");
+$content = $tpl->fetch($trackingSummaryLayout);
+
+echo $content;
+
+
+
 $html .= Display::page_subheader2(get_lang('StudentList'));
 
 // PERSON_NAME_DATA_EXPORT is buggy
@@ -386,12 +421,13 @@ if (count($a_students) > 0) {
 
     $all_datas = [];
     $course_code = $_course['id'];
-    $user_ids = array_keys($a_students);
 
     $table = new SortableTable(
         'users_tracking',
         ['TrackingCourseLog', 'get_number_of_users'],
-        ['TrackingCourseLog', 'get_user_data'],
+        function () use ($usersTracking) {
+            return $usersTracking;
+        },
         1
     );
 
@@ -400,6 +436,8 @@ if (count($a_students) > 0) {
     $parameters['from'] = isset($_GET['myspace']) ? Security::remove_XSS($_GET['myspace']) : null;
 
     $table->set_additional_parameters($parameters);
+
+
     $headers = [];
     // tab of header texts
     $table->set_header(0, get_lang('OfficialCode'), true);

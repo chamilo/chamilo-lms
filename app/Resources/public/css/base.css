@@ -8207,6 +8207,55 @@ ul#toolnavbox-two li a.btn {
 
 /**** END LP COLLAPSE CATEGORY ****/
 
+/****  TRACKING ****/
+.tracking .panel-body{
+    padding: 5px;
+}
+.tracking .tracking-icon{
+    display: block;
+    float: left;
+    height: 70px;
+    width: 70px;
+    text-align: center;
+    line-height: 70px;
+    font-size: 45px;
+}
+.tracking .tracking-info{
+    padding: 5px 10px;
+    margin-left: 70px;
+}
+.tracking .tracking-info .tracking-text{
+    display: block;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.tracking .tracking-info .tracking-number{
+    display: block;
+    font-weight: bold;
+    font-size: 2em;
+}
+.tracking-student{
+    background-color: #7460ee;
+    border-color: #7460ee;
+    color: #ffffff;
+}
+.tracking-lessons{
+    background-color: #26c6da;
+    border-color: #26c6da;
+    color: #ffffff;
+}
+.tracking-exercise{
+    background-color: #fc4b6c;
+    border-color: #fc4b6c;
+    color: #ffffff;
+}
+.tracking-certificate{
+    background-color: #ffb22b;
+    border-color: #ffb22b;
+    color: #ffffff;
+}
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {
     .sidebar-scorm {

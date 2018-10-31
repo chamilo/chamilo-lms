@@ -18,7 +18,8 @@ $from = isset($_GET['from']) ? $_GET['from'] : null;
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 $session_id = isset($_REQUEST['id_session']) ? (int) $_REQUEST['id_session'] : 0;
 
-
+$htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
+$htmlHeadXtra[] = ' ';
 
 $this_section = SECTION_COURSES;
 if ($from == 'myspace') {
@@ -344,16 +345,26 @@ $usersTracking = TrackingCourseLog::get_user_data(null, $nbStudents, null, 'DESC
 
 $numberStudentsCompletedLP = 0;
 $averageStudentsTestScore = 0;
+$scoresDistribution = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 foreach ($usersTracking as $userTracking) {
-    if ($userTracking[5] == '100%') {
+    if ($userTracking[5] === '100%') {
         $numberStudentsCompletedLP++;
     }
     $averageStudentTestScore = substr($userTracking[7], 0, -1);
     $averageStudentsTestScore += $averageStudentTestScore;
+
+    if ($averageStudentTestScore === '100') {
+        $reducedAverage = 9;
+    } else {
+        $reducedAverage = floor($averageStudentTestScore/10);
+    }
+    $scoresDistribution[$reducedAverage]++;
 }
 $averageStudentsTestScore = round(($averageStudentsTestScore / $nbStudents));
 
+
+$tpl->assign('score_distribution',json_encode($scoresDistribution));
 $tpl->assign('students_test_score',$averageStudentsTestScore);
 $tpl->assign('students_completed_lp',$numberStudentsCompletedLP);
 $tpl->assign('number_students',$nbStudents);

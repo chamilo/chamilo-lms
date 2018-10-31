@@ -8236,6 +8236,58 @@ ul#toolnavbox-two li a.btn {
     font-weight: bold;
     font-size: 2em;
 }
+.tracking-top-student .list-top{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.tracking-top-student .list-top li{
+    display: inline-block;
+    width: 100%;
+}
+.tracking-top-student .list-top .avatar{
+    display: block;
+    float: left;
+    height: 60px;
+    width: 60px;
+    text-align: center;
+    line-height: 60px;
+}
+.tracking-top-student .list-top .info{
+    padding: 5px 10px;
+    margin-left: 60px;
+}
+.tracking-top-student .list-top .info .name{
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+}
+.tracking-top-student .list-top .info .progress{
+    height: 18px;
+    margin-top: 10px;
+    border: 1px solid #1e88e5;
+    background: #ffffff;
+    text-shadow: none;
+}
+.tracking-top-student .list-top .info .progress-bar{
+    line-height: 16px;
+    background-color: #1e88e5;
+}
+.tracking-top-student .list-top .avatar .round {
+    line-height: 48px;
+    color: #ffffff;
+    width: 45px;
+    height: 45px;
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    border-radius: 100%;
+    background: #1e88e5;
+}
+.tracking-top-student .list-top .avatar .round img{
+    border-radius: 100%;
+}
 .tracking-student{
     background-color: #7460ee;
     border-color: #7460ee;

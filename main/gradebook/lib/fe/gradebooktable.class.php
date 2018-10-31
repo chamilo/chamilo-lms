@@ -286,7 +286,9 @@ class GradebookTable extends SortableTable
         }
 
         $model = ExerciseLib::getCourseScoreModel();
-
+        $userExerciseScoreInCategory = api_get_configuration_value(
+            'gradebook_use_exercise_score_settings_in_categories'
+        );
         // Categories.
         if (!empty($data_array)) {
             foreach ($data_array as $data) {
@@ -321,7 +323,6 @@ class GradebookTable extends SortableTable
                 }
 
                 $this->dataForGraph['categories'][] = $item->get_name();
-
                 $main_categories[$item->get_id()]['weight'] = $item->get_weight();
                 $total_categories_weight += $item->get_weight();
 
@@ -412,17 +413,32 @@ class GradebookTable extends SortableTable
                                 $data['result_score'][1]
                             );
                         }
-                        $totalResultAverageValue = strip_tags(
-                            $scoredisplay->display_score(
-                                $totalResult,
-                                SCORE_AVERAGE
-                            )
-                        );
+
+                        $mode = SCORE_AVERAGE;
+                        if ($userExerciseScoreInCategory) {
+                            $mode = SCORE_SIMPLE;
+
+                            $result = ExerciseLib::convertScoreToPlatformSetting($totalAverage[0], $totalAverage[1]);
+                            $totalAverage[0] = $result['score'];
+                            $totalAverage[1] = $result['weight'];
+
+                            $result = ExerciseLib::convertScoreToPlatformSetting($totalResult[0], $totalResult[1]);
+                            $totalResult[0] = $result['score'];
+                            $totalResult[1] = $result['weight'];
+
+                            $result = ExerciseLib::convertScoreToPlatformSetting(
+                                $data['result_score'][0],
+                                $data['result_score'][1]
+                            );
+                            $data['my_result_no_float'][0] = $result['score'];
+                        }
+
+                        $totalResultAverageValue = strip_tags($scoredisplay->display_score($totalResult, $mode));
+                        $totalAverageValue = strip_tags($scoredisplay->display_score($totalAverage, $mode));
 
                         $this->dataForGraph['my_result'][] = floatval($totalResultAverageValue);
-                        $this->dataForGraph['my_result_no_float'][] = $data['result_score'][0];
-                        $totalAverageValue = strip_tags($scoredisplay->display_score($totalAverage, SCORE_AVERAGE));
                         $this->dataForGraph['average'][] = floatval($totalAverageValue);
+                        $this->dataForGraph['my_result_no_float'][] = $data['result_score'][0];
 
                         if (empty($model)) {
                             // Ranking

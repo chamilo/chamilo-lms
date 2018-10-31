@@ -1012,6 +1012,9 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Hide percentage in best/average gradebook results
 //$_configuration['hide_gradebook_percentage_user_result'] = true;
 
+// Use exercise platform score settings in the gradebook graph
+// $_configuration['gradebook_use_exercise_score_settings_in_categories'] = true;
+
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email

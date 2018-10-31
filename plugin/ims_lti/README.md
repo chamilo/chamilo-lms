@@ -1,7 +1,7 @@
 IMS/LTI plugin
 ===
 
-Version 1.2 (beta)
+Version 1.3 (beta)
 
 This plugin is meant to be later integrated into Chamilo (in a major version
 release).
@@ -24,7 +24,15 @@ external tool.
 
 **v1.1**
 * Support for Deep-Linking added.
-* Support for outcomes services.
+* Support for outcomes services. And register score on course gradebook.
+
+**v1.2**
+* Register course in which the tool was added.
+* Register parent tool from which the new tool comes from.
+
+**v1.3**
+* Privacy settings added. Allow to indicate id the launcher's data
+  should be sent in request.
 
 # Installation
 
@@ -42,6 +50,12 @@ ALTER TABLE plugin_ims_lti_tool
     ADD active_deep_linking TINYINT(1) DEFAULT '0' NOT NULL,
     CHANGE id id INT AUTO_INCREMENT NOT NULL,
     CHANGE launch_url launch_url VARCHAR(255) NOT NULL;
+    
+ALTER TABLE plugin_ims_lti_tool ADD gradebook_eval_id INT DEFAULT NULL;
+ALTER TABLE plugin_ims_lti_tool ADD CONSTRAINT FK_C5E47F7C82F80D8B
+    FOREIGN KEY (gradebook_eval_id) REFERENCES gradebook_evaluation (id)
+    ON DELETE SET NULL;
+CREATE INDEX IDX_C5E47F7C82F80D8B ON plugin_ims_lti_tool (gradebook_eval_id);
 ```
 
 **To v1.2**
@@ -51,15 +65,13 @@ ALTER TABLE plugin_ims_lti_tool ADD CONSTRAINT FK_C5E47F7C91D79BD3
     FOREIGN KEY (c_id) REFERENCES course (id);
 CREATE INDEX IDX_C5E47F7C91D79BD3 ON plugin_ims_lti_tool (c_id);
 
-ALTER TABLE plugin_ims_lti_tool ADD gradebook_eval_id INT DEFAULT NULL;
-ALTER TABLE plugin_ims_lti_tool ADD CONSTRAINT FK_C5E47F7C82F80D8B
-    FOREIGN KEY (gradebook_eval_id) REFERENCES gradebook_evaluation (id)
-    ON DELETE SET NULL;
-CREATE INDEX IDX_C5E47F7C82F80D8B ON plugin_ims_lti_tool (gradebook_eval_id);
-
-ALTER TABLE plugin_ims_lti_tool ADD privacy LONGTEXT DEFAULT NULL;
 ALTER TABLE plugin_ims_lti_tool ADD parent_id INT DEFAULT NULL, DROP is_global;
 ALTER TABLE plugin_ims_lti_tool ADD CONSTRAINT FK_C5E47F7C727ACA70
     FOREIGN KEY (parent_id) REFERENCES plugin_ims_lti_tool (id);
 CREATE INDEX IDX_C5E47F7C727ACA70 ON plugin_ims_lti_tool (parent_id);
+```
+
+**To v1.3**
+```sql
+ALTER TABLE plugin_ims_lti_tool ADD privacy LONGTEXT DEFAULT NULL;
 ```

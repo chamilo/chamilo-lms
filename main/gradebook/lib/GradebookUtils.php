@@ -1602,7 +1602,6 @@ class GradebookUtils
         $userInfo = api_get_user_info($userId);
 
         $cat = $cats[0];
-
         $allcat = $cats[0]->get_subcategories(
             $userId,
             api_get_course_id(),
@@ -1619,7 +1618,6 @@ class GradebookUtils
                 $loadStats = [2];
             }
         }
-
         $gradebooktable = new GradebookTable(
             $cat,
             $allcat,

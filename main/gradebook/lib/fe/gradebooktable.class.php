@@ -79,6 +79,7 @@ class GradebookTable extends SortableTable
         $this->cats = $cats;
         $this->loadStats = $loadStats;
         $this->datagen = new GradebookDataGenerator($cats, $evals, $links);
+        $this->datagen->hidePercentage = api_get_configuration_value('hide_gradebook_percentage_user_result');
 
         if (!empty($userId)) {
             $this->datagen->userId = $userId;
@@ -684,9 +685,9 @@ class GradebookTable extends SortableTable
                 );
 
                 $row = [
-                        null,
-                        '<h3>'.get_lang('Total').'</h3>',
-                    ];
+                    null,
+                    '<h3>'.get_lang('Total').'</h3>',
+                ];
 
                 if (!$this->exportToPdf) {
                     $row[] = null;
@@ -699,8 +700,9 @@ class GradebookTable extends SortableTable
                     $totalRanking = [];
                     $invalidateRanking = true;
                     $average = 0;
+                    $main_cat[0]->setStudentList($this->studentList);
                     foreach ($this->studentList as $student) {
-                        $score = $main_cat[0]->calc_score($student['user_id']);
+                        $score = $main_cat[0]->calc_score($student['user_id'], null, api_get_course_id());
                         if (!empty($score[0])) {
                             $invalidateRanking = false;
                         }
@@ -711,11 +713,11 @@ class GradebookTable extends SortableTable
                     $totalRanking = AbstractLink::getCurrentUserRanking($user_id, $totalRanking);
 
                     $totalRanking = $scoredisplay->display_score(
-                            $totalRanking,
-                            SCORE_DIV,
-                            SCORE_BOTH,
-                            true
-                        );
+                        $totalRanking,
+                        SCORE_DIV,
+                        SCORE_BOTH,
+                        true
+                    );
 
                     if ($invalidateRanking) {
                         $totalRanking = null;
@@ -728,18 +730,17 @@ class GradebookTable extends SortableTable
                     $totalBest[1] = $main_weight;
 
                     $totalBest = $scoredisplay->display_score(
-                            $totalBest,
-                            SCORE_DIV,
-                            SCORE_BOTH,
-                            true
-                        );
+                        $totalBest,
+                        SCORE_DIV,
+                        SCORE_BOTH,
+                        true
+                    );
                     $row[] = $totalBest;
                 }
                 if (in_array(3, $this->loadStats)) {
                     // Overwrite main weight
                     $totalAverage[0] = $average / count($this->studentList);
                     $totalAverage[1] = $main_weight;
-
                     $totalAverage = $scoredisplay->display_score(
                             $totalAverage,
                             SCORE_DIV,
@@ -749,7 +750,6 @@ class GradebookTable extends SortableTable
 
                     $row[] = $totalAverage;
                 }
-
                 $sortable_data[] = $row;
             }
         }

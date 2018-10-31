@@ -4,8 +4,6 @@
 use ChamiloSession as Session;
 
 /**
- * Script.
- *
  * @package chamilo.gradebook
  */
 require_once __DIR__.'/../inc/global.inc.php';

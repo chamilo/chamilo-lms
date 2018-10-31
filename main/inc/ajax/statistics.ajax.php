@@ -105,8 +105,10 @@ switch ($action) {
 
         echo json_encode($list);
         break;
-        break;
-    case 'recentlogins':
+
+    case 'recent_logins':
+        // Give a JSON array to the stats page main/admin/statistics/index.php
+        // for global recent logins
         header('Content-type: application/json');
         $list = [];
         $all = Statistics::getRecentLoginStats(false, $sessionDuration);
@@ -137,6 +139,42 @@ switch ($action) {
         $distinct = Statistics::getRecentLoginStats(true, $sessionDuration);
         foreach ($distinct as $tick => $tock) {
             $list['datasets'][1]['data'][] = $tock;
+        }
+
+        echo json_encode($list);
+        break;
+
+    case 'tools_usage':
+        // Give a JSON array to the stats page main/admin/statistics/index.php
+        // for global tools usage (number of clicks)
+        header('Content-type: application/json');
+        $list = [];
+        $all = Statistics::getToolsStats();
+        foreach ($all as $tick => $tock) {
+            $list['labels'][] = $tick;
+        }
+
+        // Get the common colors from the palette used for pchart
+        $paletteFile = api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color';
+        $palette = file($paletteFile);
+        // Because the pchart palette has transparency as integer values
+        // (0..100) and chartjs uses percentage (0.0..1.0), we need to divide
+        // the last value by 100, which is a bit overboard for just one chart
+        foreach ($palette as $index => $color) {
+            $components = preg_split('/,/', trim($color));
+            $components[3] = round($components[3] / 100, 1);
+            $palette[$index] = join(',', $components);
+        }
+
+        $list['datasets'][0]['label'] = get_lang('Tools');
+        $list['datasets'][0]['borderColor'] = "rgba(255,255,255,1)";
+
+        $i = 0;
+        foreach ($all as $tick => $tock) {
+            $j = $i%count($palette);
+            $list['datasets'][0]['data'][] = $tock;
+            $list['datasets'][0]['backgroundColor'][] = 'rgba('.$palette[$j].')';
+            $i++;
         }
 
         echo json_encode($list);

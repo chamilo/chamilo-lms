@@ -69,6 +69,7 @@ $actionsLeft = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_
     Display::return_icon('back.png', get_lang('BackToWorksList'), '', ICON_SIZE_MEDIUM).'</a>';
 
 $actionsRight = '';
+$onlyOnePublication = api_get_configuration_value('allow_only_one_student_publication_per_user');
 if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !api_is_invitee()) {
     $url = api_get_path(WEB_CODE_PATH).'work/upload.php?'.api_get_cidreq().'&id='.$workId;
     $actionsRight = Display::url(
@@ -81,6 +82,17 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !api_is_in
         $url,
         ['class' => 'btn-toolbar']
     );
+}
+
+if ($onlyOnePublication) {
+    $count = get_work_count_by_student(
+        api_get_user_id(),
+        $my_folder_data['id']
+    );
+
+    if (!empty($count) && $count >= 1) {
+        $actionsRight = '';
+    }
 }
 
 $tpl = new Template('');

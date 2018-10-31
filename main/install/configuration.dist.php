@@ -1006,6 +1006,9 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 );*/
 // $_configuration['mail_template_system'] = false;
 
+// Students can only upload one publication
+// $_configuration['allow_only_one_student_publication_per_user'] = false;
+
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email

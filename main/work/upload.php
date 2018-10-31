@@ -44,21 +44,23 @@ $token = Security::get_token();
 
 $student_can_edit_in_session = api_is_allowed_to_session_edit(false, true);
 
-//  @todo add an option to allow/block multiple attempts.
-/*
-if (!empty($workInfo) && !empty($workInfo['qualification'])) {
+$onlyOnePublication = api_get_configuration_value('allow_only_one_student_publication_per_user');
+
+if ($onlyOnePublication) {
     $count =  get_work_count_by_student($user_id, $work_id);
     if ($count >= 1) {
-        Display::display_header();
+        api_not_allowed(true);
+
+        /*Display::display_header();
         if (api_get_course_setting('student_delete_own_publication') == '1') {
             echo Display::return_message(get_lang('CantUploadDeleteYourPaperFirst'), 'warning');
         } else {
             echo Display::return_message(get_lang('YouAlreadySentAPaperYouCantUpload'), 'warning');
         }
         Display::display_footer();
-        exit;
+        exit;*/
     }
-}*/
+}
 
 $homework = get_work_assignment_by_id($workInfo['id']);
 $validationStatus = getWorkDateValidationStatus($homework);

@@ -2605,6 +2605,8 @@ class learnpathItem
                                                 );
                                             }
                                         }
+
+                                        return $returnstatus;
                                     } else {
                                         $status = $itemToCheck->get_status(false);
                                         $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];

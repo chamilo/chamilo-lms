@@ -7,7 +7,7 @@
 <script type="text/javascript" src="{{ finderFolder }}js/elfinder.full.js"></script>
 
 <!-- elFinder translation (OPTIONAL) -->
-<script type="text/javascript" src="{{ finderFolder }}js/i18n/elfinder.ru.js"></script>
+{{ elfinder_translation_file }}
 
 <script type="text/javascript" charset="utf-8">
     // Helper function to get parameters from the query string.
@@ -26,7 +26,8 @@
                 window.close();
             },
             startPathHash: 'l2_Lw', // Sets the course driver as default
-            resizable: false
+            resizable: false,
+            lang: '{{ elfinder_lang }}'
         }).elfinder('instance');
     });
 </script>

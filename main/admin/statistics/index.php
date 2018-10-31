@@ -26,7 +26,11 @@ if ($report == 'recentlogins') {
             type: "POST",
             success: function(data) {
                 Chart.defaults.global.responsive = true;
-                var myLine = new Chart(document.getElementById("canvas").getContext("2d")).Line(data);
+                var ctx = document.getElementById("canvas").getContext("2d");
+                var myLoginChart = new Chart(ctx, {
+                    type: "line",
+                    data: data
+                });
             }
         });
     });
@@ -236,7 +240,7 @@ switch ($report) {
         $form->addHidden('report', 'recentlogins');
         $form->display();
 
-        echo '<canvas class="col-md-12" id="canvas" height="100px" style="margin-bottom: 20px"></canvas>';
+        echo '<canvas class="col-md-12" id="canvas" height="200px" style="margin-bottom: 20px"></canvas>';
         Statistics::printRecentLoginStats(false, $sessionDuration);
         Statistics::printRecentLoginStats(true, $sessionDuration);
         break;

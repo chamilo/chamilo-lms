@@ -6259,8 +6259,21 @@ function api_replace_dangerous_char($filename, $treat_spaces_as_hyphens = true)
     $encoding = api_detect_encoding($filename);
     if (empty($encoding)) {
         $encoding = 'ASCII';
+        if (!api_is_valid_ascii($filename)) {
+            // try iconv and try non standard ASCII a.k.a CP437
+            // see BT#15022
+            if (function_exists('iconv')) {
+                $result = iconv('CP437', 'UTF-8', $filename);
+                if (api_is_valid_utf8($result)) {
+                    $filename =  $result;
+                    $encoding = 'UTF-8';
+                }
+            }
+        }
     }
+
     $filename = api_to_system_encoding($filename, $encoding);
+
     $url = URLify::filter(
         $filename,
         250,

@@ -171,7 +171,7 @@ switch ($action) {
 
         $i = 0;
         foreach ($all as $tick => $tock) {
-            $j = $i%count($palette);
+            $j = $i % count($palette);
             $list['datasets'][0]['data'][] = $tock;
             $list['datasets'][0]['backgroundColor'][] = 'rgba('.$palette[$j].')';
             $i++;

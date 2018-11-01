@@ -6265,7 +6265,7 @@ function api_replace_dangerous_char($filename, $treat_spaces_as_hyphens = true)
             if (function_exists('iconv')) {
                 $result = iconv('CP437', 'UTF-8', $filename);
                 if (api_is_valid_utf8($result)) {
-                    $filename =  $result;
+                    $filename = $result;
                     $encoding = 'UTF-8';
                 }
             }

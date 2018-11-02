@@ -381,7 +381,7 @@ class ImsLtiPlugin extends Plugin
                 ->setPrivacy(
                     $baseLtiTool->isSharingName(),
                     $baseLtiTool->isSharingEmail(),
-                    $baseLtiTool->isSharingEmail()
+                    $baseLtiTool->isSharingPicture()
                 )
                 ->setCourse($course);
         }

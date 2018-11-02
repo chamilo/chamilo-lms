@@ -6,6 +6,8 @@
  */
 require_once __DIR__.'/../global.inc.php';
 
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+
 api_protect_admin_script();
 
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
@@ -154,17 +156,7 @@ switch ($action) {
             $list['labels'][] = $tick;
         }
 
-        // Get the common colors from the palette used for pchart
-        $paletteFile = api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color';
-        $palette = file($paletteFile);
-        // Because the pchart palette has transparency as integer values
-        // (0..100) and chartjs uses percentage (0.0..1.0), we need to divide
-        // the last value by 100, which is a bit overboard for just one chart
-        foreach ($palette as $index => $color) {
-            $components = preg_split('/,/', trim($color));
-            $components[3] = round($components[3] / 100, 1);
-            $palette[$index] = join(',', $components);
-        }
+        $palette = ChamiloApi::getColorPalette(true, true);
 
         $list['datasets'][0]['label'] = get_lang('Tools');
         $list['datasets'][0]['borderColor'] = "rgba(255,255,255,1)";
@@ -173,7 +165,7 @@ switch ($action) {
         foreach ($all as $tick => $tock) {
             $j = $i % count($palette);
             $list['datasets'][0]['data'][] = $tock;
-            $list['datasets'][0]['backgroundColor'][] = 'rgba('.$palette[$j].')';
+            $list['datasets'][0]['backgroundColor'][] = $palette[$j];
             $i++;
         }
 

@@ -8,6 +8,8 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
  */
 require_once __DIR__.'/../global.inc.php';
 
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+
 api_protect_admin_script();
 
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;

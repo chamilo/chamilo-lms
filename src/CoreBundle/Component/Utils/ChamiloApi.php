@@ -294,10 +294,14 @@ class ChamiloApi
      * and return it as an array of strings
      * @param bool $decimalOpacity Whether to return the opacity as 0..100 or 0..1
      * @param bool $wrapInRGBA Whether to return it as 1,1,1,100 or rgba(1,1,1,100)
+     * @param int  $fillUpTo If the number of colors is smaller than this number, generate more colors
      * @return array An array of string colors
      */
-    public static function getColorPalette($decimalOpacity = false, $wrapInRGBA = false)
-    {
+    public static function getColorPalette(
+        $decimalOpacity = false,
+        $wrapInRGBA = false,
+        $fillUpTo = null
+    ) {
         // Get the common colors from the palette used for pchart
         $paletteFile = api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color';
         $palette = file($paletteFile);
@@ -314,6 +318,13 @@ class ChamiloApi
         if ($wrapInRGBA) {
             foreach ($palette as $index => $color) {
                 $palette[$index] = 'rgba('.$palette[$index].')';
+            }
+        }
+        // If we want more colors, loop through existing colors
+        $count = count($palette);
+        if (isset($fillUpTo) && $fillUpTo > $count) {
+            for ($i = $count; $i < $fillUpTo; $i++) {
+                $palette[$i] = $palette[$i%$count];
             }
         }
         return $palette;

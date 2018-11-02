@@ -1969,6 +1969,8 @@ class CourseRestorer
             if ($new_id) {
                 $sql = "UPDATE $table_que SET id = iid WHERE iid = $new_id";
                 Database::query($sql);
+            } else {
+                return 0;
             }
 
             $correctAnswers = [];

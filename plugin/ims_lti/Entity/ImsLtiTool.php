@@ -5,6 +5,7 @@ namespace Chamilo\PluginBundle\Entity\ImsLti;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -62,12 +63,6 @@ class ImsLtiTool
     /**
      * @var bool
      *
-     * @ORM\Column(name="is_global", type="boolean")
-     */
-    private $isGlobal = false;
-    /**
-     * @var bool
-     *
      * @ORM\Column(name="active_deep_linking", type="boolean", nullable=false, options={"default": false})
      */
     private $activeDeepLinking = false;
@@ -96,17 +91,32 @@ class ImsLtiTool
     private $gradebookEval = null;
 
     /**
+     * @var ImsLtiTool|null
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     */
+    private $parent;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool", mappedBy="parent")
+     */
+    private $children;
+
+    /**
      * ImsLtiTool constructor.
      */
     public function __construct()
     {
         $this->description = null;
         $this->customParams = null;
-        $this->isGlobal = false;
         $this->activeDeepLinking = false;
         $this->course = null;
         $this->gradebookEval =null;
         $this->privacy = null;
+        $this->children = new ArrayCollection();
     }
 
     /**
@@ -236,18 +246,7 @@ class ImsLtiTool
      */
     public function isGlobal()
     {
-        return $this->isGlobal;
-    }
-
-    /**
-     * @param bool $isGlobal
-     * @return ImsLtiTool
-     */
-    public function setIsGlobal($isGlobal)
-    {
-        $this->isGlobal = $isGlobal;
-
-        return $this;
+        return $this->course === null;
     }
 
     /**
@@ -404,5 +403,29 @@ class ImsLtiTool
     public function unserializePrivacy()
     {
         return unserialize($this->privacy);
+    }
+
+    /**
+     * @return ImsLtiTool|null
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * @param ImsLtiTool $parent
+     *
+     * @return ImsLtiTool
+     */
+    public function setParent(ImsLtiTool $parent)
+    {
+        $this->parent = $parent;
+
+        $this->sharedSecret = $parent->getSharedSecret();
+        $this->consumerKey = $parent->getConsumerKey();
+        $this->privacy = $parent->getPrivacy();
+
+        return $this;
     }
 }

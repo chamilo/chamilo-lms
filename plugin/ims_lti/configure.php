@@ -20,7 +20,7 @@ $action = !empty($_REQUEST['action']) ? $_REQUEST['action'] : 'add';
 /** @var Course $course */
 $course = $em->find('ChamiloCoreBundle:Course', api_get_course_int_id());
 $addedTools = $toolsRepo->findBy(['course' => $course]);
-$globalTools = $toolsRepo->findBy(['isGlobal' => true]);
+$globalTools = $toolsRepo->findBy(['parent' => null, 'course' => null]);
 
 if ($baseTool && !$baseTool->isGlobal()) {
     Display::addFlash(
@@ -33,66 +33,54 @@ if ($baseTool && !$baseTool->isGlobal()) {
 
 switch ($action) {
     case 'add':
-        $form = new FormValidator('ims_lti_add_tool');
-        $form->addHeader($plugin->get_lang('ToolSettings'));
-
-        if ($baseTool) {
-            $form->addHtml('<p class="lead">'.Security::remove_XSS($baseTool->getDescription()).'</p>');
-        }
-
-        $form->addText('name', get_lang('Name'));
-
-        if (!$baseTool) {
-            $form->addElement('url', 'url', $plugin->get_lang('LaunchUrl'));
-            $form->addText('consumer_key', $plugin->get_lang('ConsumerKey'), true);
-            $form->addText('shared_secret', $plugin->get_lang('SharedSecret'), true);
-            $form->addRule('url', get_lang('Required'), 'required');
-        }
-
-        $form->addButtonAdvancedSettings('lti_adv');
-        $form->addHtml('<div id="lti_adv_options" style="display:none;">');
-        $form->addTextarea('description', get_lang('Description'), ['rows' => 3]);
-
-        if (!$baseTool) {
-            $form->addTextarea(
-                'custom_params',
-                [$plugin->get_lang('CustomParams'), $plugin->get_lang('CustomParamsHelp')]
-            );
-            $form->addCheckBox('deep_linking', $plugin->get_lang('SupportDeepLinking'), get_lang('Yes'));
-        }
+        $form = new FrmAdd('ims_lti_add_tool', [], $baseTool);
+        $form->build();
 
         if ($baseTool) {
             $form->addHidden('type', $baseTool->getId());
         }
 
-        $form->addHtml('</div>');
-
-        $form->addButtonCreate($plugin->get_lang('AddExternalTool'));
-
         if ($form->validate()) {
             $formValues = $form->getSubmitValues();
-            $tool = null;
 
-            if ($baseTool) {
-                $tool = clone $baseTool;
-            } else {
-                $tool = new ImsLtiTool();
-                $tool
-                    ->setLaunchUrl($formValues['url'])
-                    ->setConsumerKey($formValues['consumer_key'])
-                    ->setSharedSecret($formValues['shared_secret'])
-                    ->setCustomParams(
-                        empty($formValues['custom_params']) ? null : $formValues['custom_params']
-                    );
-            }
-
+            $tool = new ImsLtiTool();
             $tool
                 ->setName($formValues['name'])
                 ->setDescription(
                     empty($formValues['description']) ? null : $formValues['description']
                 )
-                ->setIsGlobal(false)
-                ->setCourse($course);
+                ->setLaunchUrl(
+                    $baseTool ? $baseTool->getLaunchUrl() : $formValues['launch_url']
+                )
+                ->setConsumerKey(
+                    $baseTool ? $baseTool->getConsumerKey() : $formValues['consumer_key']
+                )
+                ->setSharedSecret(
+                    $baseTool ? $baseTool->getSharedSecret() : $formValues['shared_secret']
+                )
+                ->setCustomParams(
+                    empty($formValues['custom_params']) ? null : $formValues['custom_params']
+                )
+                ->setCourse($course)
+                ->setActiveDeepLinking(false)
+                ->setPrivacy(
+                    !empty($formValues['share_name']),
+                    !empty($formValues['share_email']),
+                    !empty($formValues['share_picture'])
+                );
+
+            if (null === $baseTool ||
+                ($baseTool && !$baseTool->isActiveDeepLinking())
+            ) {
+                $tool
+                    ->setActiveDeepLinking(
+                        !empty($formValues['deep_linking'])
+                    );
+            }
+
+            if ($baseTool) {
+                $tool->setParent($baseTool);
+            }
 
             $em->persist($tool);
             $em->flush();
@@ -106,11 +94,10 @@ switch ($action) {
             header('Location: '.api_get_self().'?'.api_get_cidreq());
             exit;
         }
+
+        $form->setDefaultValues();
         break;
     case 'edit':
-        $form = new FormValidator('ims_lti_edit_tool');
-        $form->addHeader($plugin->get_lang('ToolSettings'));
-
         /** @var ImsLtiTool|null $tool */
         $tool = null;
 
@@ -118,35 +105,19 @@ switch ($action) {
             $tool = $em->find('ChamiloPluginBundle:ImsLti\ImsLtiTool', (int) $_REQUEST['id']);
         }
 
-        if (empty($tool)) {
-            Display::addFlash(
-                Display::return_message($plugin->get_lang('ToolNotAvailable'), 'warning')
-            );
-
-            break;
-        }
-        
-        if (!ImsLtiPlugin::existsToolInCourse($tool->getId(), $course)) {
-            Display::addFlash(
-                Display::return_message($plugin->get_lang('ToolNotAvailable'), 'warning')
+        if (empty($tool) ||
+            !ImsLtiPlugin::existsToolInCourse($tool->getId(), $course)
+        ) {
+            api_not_allowed(
+                true,
+                Display::return_message($plugin->get_lang('ToolNotAvailable'), 'error')
             );
 
             break;
         }
 
-        $form->addText('name', get_lang('Title'));
-        $form->addButtonAdvancedSettings('lti_adv');
-        $form->addHtml('<div id="lti_adv_options" style="display:none;">');
-        $form->addTextarea('description', get_lang('Description'), ['rows' => 3]);
-        $form->addTextarea(
-            'custom_params',
-            [$plugin->get_lang('CustomParams'), $plugin->get_lang('CustomParamsHelp')]
-        );
-        $form->addHtml('</div>');
-        $form->addButtonUpdate($plugin->get_lang('EditExternalTool'));
-        $form->addHidden('id', $tool->getId());
-        $form->addHidden('action', 'edit');
-        $form->applyFilter('__ALL__', 'Security::remove_XSS');
+        $form = new FrmEdit('ims_lti_edit_tool', [], $tool);
+        $form->build(false);
 
         if ($form->validate()) {
             $formValues = $form->getSubmitValues();
@@ -154,9 +125,24 @@ switch ($action) {
             $tool
                 ->setName($formValues['name'])
                 ->setDescription($formValues['description'])
+                ->setActiveDeepLinking(
+                    !empty($formValues['deep_linking'])
+                )
                 ->setCustomParams(
                     empty($formValues['custom_params']) ? null : $formValues['custom_params']
+                )
+                ->setPrivacy(
+                    !empty($formValues['share_name']),
+                    !empty($formValues['share_email']),
+                    !empty($formValues['share_picture'])
                 );
+
+            if (null === $tool->getParent()) {
+                $tool
+                    ->setLaunchUrl($formValues['launch_url'])
+                    ->setConsumerKey($formValues['consumer_key'])
+                    ->setSharedSecret($formValues['shared_secret']);
+            }
 
             $em->persist($tool);
             $em->flush();
@@ -175,11 +161,7 @@ switch ($action) {
             exit;
         }
 
-        $form->setDefaults([
-            'name' => $tool->getName(),
-            'description' => $tool->getDescription(),
-            'custom_params' => $tool->getCustomParams(),
-        ]);
+        $form->setDefaultValues();
         break;
 }
 

@@ -246,7 +246,6 @@ class ExerciseLink extends AbstractLink
         if (isset($stud_id) && empty($type)) {
             // for 1 student
             if ($data = Database::fetch_array($scores)) {
-
                 return [$data['exe_result'], $data['exe_weighting']];
             } else {
                 return null;

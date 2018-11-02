@@ -6388,6 +6388,7 @@ class DocumentManager
             'dropboxusercontent.com',
             'fileserve.com',
             'drive.google.com',
+            'docs.google.com',
             'icloud.com',
             'mediafire.com',
             'mega.nz',

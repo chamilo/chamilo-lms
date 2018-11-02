@@ -105,55 +105,47 @@ class ImsLtiPlugin extends Plugin
      * Creates the plugin tables on database
      *
      * @return boolean
+     * @throws DBALException
      */
     private function createPluginTables()
     {
         $entityManager = Database::getManager();
         $connection = $entityManager->getConnection();
-        $pluginSchema = new Schema();
-        $platform = $connection->getDatabasePlatform();
-        if (!$connection->getSchemaManager()->tablesExist(self::TABLE_TOOL)) {
-            $toolTable = $pluginSchema->createTable(self::TABLE_TOOL);
-            $toolTable->addColumn(
-                'id',
-                \Doctrine\DBAL\Types\Type::INTEGER,
-                ['autoincrement' => true, 'unsigned' => true]
-            );
-            $toolTable->addColumn('name', Type::STRING);
-            $toolTable->addColumn('description', Type::TEXT)->setNotnull(false);
-            $toolTable->addColumn('launch_url', Type::TEXT);
-            $toolTable->addColumn('consumer_key', Type::STRING);
-            $toolTable->addColumn('shared_secret', Type::STRING);
-            $toolTable->addColumn('custom_params', Type::TEXT)->setNotnull(false);
-            $toolTable->addColumn('is_global', Type::BOOLEAN);
-            $toolTable->addColumn('active_deep_linking', Type::BOOLEAN)->setDefault(false);
-            $toolTable->addColumn('c_id', Type::INTEGER)->setNotnull(false);
-            $toolTable->addColumn('gradebook_eval_id', Type::INTEGER)->setNotnull(false);
-            $toolTable->addForeignKeyConstraint(
-                'course',
-                ['c_id'],
-                ['id'],
-                [],
-                'FK_C5E47F7C91D79BD3'
-            );
-            $toolTable->addForeignKeyConstraint(
-                'gradebook_evaluation',
-                ['gradebook_eval_id'],
-                ['id'],
-                ['onDelete' => 'SET NULL'],
-                'FK_C5E47F7C82F80D8B'
-            );
-            $toolTable->setPrimaryKey(['id']);
-            $toolTable->addIndex(['c_id'], 'IDX_C5E47F7C91D79BD3');
-            $toolTable->addIndex(['gradebook_eval_id'], 'IDX_C5E47F7C82F80D8B');
 
-            $queries = $pluginSchema->toSql($platform);
-
-            foreach ($queries as $query) {
-                Database::query($query);
-            }
+        if ($connection->getSchemaManager()->tablesExist(self::TABLE_TOOL)) {
+            return true;
         }
 
+        $queries = [
+            'CREATE TABLE '.self::TABLE_TOOL.' (
+                id INT AUTO_INCREMENT NOT NULL,
+                c_id INT DEFAULT NULL,
+                gradebook_eval_id INT DEFAULT NULL,
+                parent_id INT DEFAULT NULL,
+                name VARCHAR(255) NOT NULL,
+                description LONGTEXT DEFAULT NULL,
+                launch_url VARCHAR(255) NOT NULL,
+                consumer_key VARCHAR(255) NOT NULL,
+                shared_secret VARCHAR(255) NOT NULL,
+                custom_params LONGTEXT DEFAULT NULL,
+                active_deep_linking TINYINT(1) DEFAULT \'0\' NOT NULL,
+                privacy LONGTEXT DEFAULT NULL,
+                INDEX IDX_C5E47F7C91D79BD3 (c_id),
+                INDEX IDX_C5E47F7C82F80D8B (gradebook_eval_id),
+                INDEX IDX_C5E47F7C727ACA70 (parent_id),
+                PRIMARY KEY(id)
+            ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB',
+            'ALTER TABLE '.self::TABLE_TOOL.' ADD CONSTRAINT FK_C5E47F7C91D79BD3
+                FOREIGN KEY (c_id) REFERENCES course (id)',
+            'ALTER TABLE '.self::TABLE_TOOL.' ADD CONSTRAINT FK_C5E47F7C82F80D8B
+                FOREIGN KEY (gradebook_eval_id) REFERENCES gradebook_evaluation (id) ON DELETE SET NULL',
+            'ALTER TABLE '.self::TABLE_TOOL.' ADD CONSTRAINT FK_C5E47F7C727ACA70
+                FOREIGN KEY (parent_id) REFERENCES '.self::TABLE_TOOL.' (id);',
+        ];
+
+        foreach ($queries as $query) {
+            Database::query($query);
+        }
 
         return true;
     }
@@ -377,18 +369,21 @@ class ImsLtiPlugin extends Plugin
         $url = empty($contentItem['url']) ? $baseLtiTool->getLaunchUrl() : $contentItem['url'];
 
         /** @var ImsLtiTool $newLtiTool */
-        $newLtiTool = $ltiToolRepo->findOneBy(['launchUrl' => $url, 'isGlobal' => false, 'course' => $course]);
+        $newLtiTool = $ltiToolRepo->findOneBy(['launchUrl' => $url, 'parent' => $baseLtiTool, 'course' => $course]);
 
-        if (empty($newLtiTool)) {
+        if (null === $newLtiTool) {
             $newLtiTool = new ImsLtiTool();
             $newLtiTool
                 ->setLaunchUrl($url)
-                ->setConsumerKey(
-                    $baseLtiTool->getConsumerKey()
+                ->setParent(
+                    $baseLtiTool
                 )
-                ->setSharedSecret(
-                    $baseLtiTool->getSharedSecret()
-                );
+                ->setPrivacy(
+                    $baseLtiTool->isSharingName(),
+                    $baseLtiTool->isSharingEmail(),
+                    $baseLtiTool->isSharingPicture()
+                )
+                ->setCourse($course);
         }
 
         $newLtiTool
@@ -397,8 +392,7 @@ class ImsLtiPlugin extends Plugin
             )
             ->setDescription(
                 !empty($contentItem['text']) ? $contentItem['text'] : null
-            )
-            ->setCourse($course);
+            );
 
         $em->persist($newLtiTool);
         $em->flush();
@@ -459,7 +453,7 @@ class ImsLtiPlugin extends Plugin
         $toolRepo = $em->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool');
 
         /** @var ImsLtiTool $tool */
-        $tool = $toolRepo->findOneBy(['id' => $toolId, 'isGlobal' => false, 'course' => $course]);
+        $tool = $toolRepo->findOneBy(['id' => $toolId, 'course' => $course]);
 
         return !empty($tool);
     }

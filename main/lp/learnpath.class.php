@@ -13800,6 +13800,8 @@ EOD;
             false
         );
 
+        $courseBuilder->restoreDocumentsFromList();
+
         $zipFile = CourseArchiver::createBackup($courseBuilder->course);
         $zipPath = CourseArchiver::getBackupDir().$zipFile;
         $result = DocumentManager::file_send_for_download(

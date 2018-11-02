@@ -674,9 +674,9 @@ class Statistics
     }
 
     /**
-     * Show some stats about the accesses to the different course tools.
+     * Get course tools usage statistics for the whole platform (by URL if multi-url).
      */
-    public static function printToolStats()
+    public static function getToolsStats()
     {
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
         $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -724,6 +724,19 @@ class Statistics
             $result[$tool_names[$obj->access_tool]] = $obj->number_of_logins;
         }
 
+        return $result;
+    }
+
+    /**
+     * Show some stats about the accesses to the different course tools.
+     *
+     * @param array $result If defined, this serves as data. Otherwise, will get the data from getToolsStats()
+     */
+    public static function printToolStats($result = null)
+    {
+        if (empty($result)) {
+            $result = self::getToolsStats();
+        }
         self::printStats(get_lang('PlatformToolAccess'), $result, true);
     }
 

@@ -776,11 +776,13 @@ ou, si vous travaillez avec Apache 2.4, la syntaxe est légèrement différente 
 	RewriteRule ^courses/([^/]+)/index.php$ main/course_home/course_home.php?cDir=$1 [QSA,L]
 	RewriteRule ^courses/([^/]+)/document/certificates/(.*)$ app/courses/$1/document/certificates/$2 [QSA,L]
 	RewriteRule ^courses/([^/]+)/document/(.*)$ main/document/download.php?doc_url=/$2&cDir=$1 [QSA,L]
+    RewriteRule ^courses/([^/]+)/scorm/(.*([\.js|\.css|\.png|\.jpg|\.jpeg|\.gif]))$ app/courses/$1/scorm/$2 [QSA,L]
 	RewriteRule ^courses/([^/]+)/scorm/(.*)$ main/document/download_scorm.php?doc_url=/$2&cDir=$1 [QSA,L]
 	RewriteRule ^courses/([^/]+)/work/(.*)$ main/work/download.php?file=work/$2&cDir=$1 [QSA,L]
 	RewriteRule ^courses/([^/]+)/upload/(.*)$ app/courses/$1/upload/$2 [QSA,L]
 	RewriteRule ^courses/([^/]+)/course-pic85x85.png$ app/courses/$1/course-pic85x85.png [QSA,L]
 	RewriteRule ^courses/([^/]+)/course-pic.png$ app/courses/$1/course-pic.png [QSA,L]
+    RewriteRule ^courses/([^/]+)/upload/course_home_icons/(.*([\.png|\.jpg|\.jpeg|\.gif]))$ app/courses/$1/upload/course_home_icons/$2 [QSA,L]
 	RewriteRule ^main/upload/users/(.*)/(.*)/my_files/(.*)$ app/upload/users/$1/$2/my_files/$3 [QSA,L]
 	RewriteRule ^session/(\d{1,})/about/?$ main/session/about.php?session_id=$1 [L]
     RewriteRule ^badge/(\d{1,})/user/(\d{1,}) main/badge/issued.php?skill=$1&user=$2 [L]
@@ -802,14 +804,15 @@ Ce sont uniquement les redirections à placer dans un bloc server{}, comme les a
     rewrite ^certificates/$ certificates/index.php last;
     rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
     rewrite ^/courses/([^/]+)/index.php$ /main/course_home/course_home.php?cDir=$1 last;
+    rewrite ^/courses/([^/]+)/scorm/(.*([\.js|\.css|\.png|\.jpg|\.jpeg|\.gif]))$ app/courses/$1/scorm/$2 last;
     rewrite ^/courses/([^/]+)/scorm/(.*)$ /main/document/download_scorm.php?doc_url=/$2&cDir=$1 last;
     # Alternatively, you can choose to give direct access to all SCORM files, which is much faster but less secure
     # rewrite "^/courses/([^/]+)/scorm/(.*)$" /app/courses/$1/scorm/$2 break;
-
     rewrite "^/courses/([^/]+)/document/certificates/(.*)$" /app/courses/$1/document/certificates/$2 last;
     rewrite ^/courses/([^/]+)/document/(.*)$ /main/document/download.php?doc_url=/$2&cDir=$1 last;
     rewrite ^/courses/([^/]+)/upload/([^/]+)/(.*)$ /main/document/download_uploaded_files.php?code=$1&type=$2&file=$3 last;
     rewrite ^/courses/([^/]+)/work/(.*)$ /main/work/download.php?file=work/$2&cDir=$1 last;
+    rewrite ^/courses/([^/]+)/upload/course_home_icons/(.*([\.png|\.jpg|\.jpeg|\.gif]))$ app/courses/$1/upload/course_home_icons/$2 last;
     rewrite ^/courses/([^/]+)/(.*)$ /app/courses/$1/$2 last;
     rewrite ^/session/([^/]+)/about/?$ /main/session/about.php?session_id=$1 last;
     rewrite ^/badge/(\d+) /main/badge/issued.php?issue=$1 last;

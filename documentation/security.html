@@ -24,6 +24,7 @@
   <li><a href="#4.Moving-config-file">Moving your configuration file out of the web directory</a></li>
   <li><a href="#5.Files-permissions">Restricting files permissions</a></li>
   <li><a href="#6.HSTS">HTTP Headers Security</a></li>
+  <li><a href="#7.Direct-web-access">Direct web access to files</a></li>
 </ol>
 
 <h2><a name="1.Disclosing-server-info"></a>1. Disclosing server info</h2>
@@ -171,6 +172,31 @@ This will prevent direct access to your settings and make it seem totally the sa
         we highly recommend the <a href="https://securityheaders.io/">securityheaders.io</a>
         website. If you want to read more about CSP and all related headers
         security techniques, check <a href="https://scotthelme.co.uk/">Scott Helme's blog</a>.
+    <br />
+<hr />
+<h2><a name="7.Direct-web-access">Direct web access to files</a></h2>
+    <p>If .htaccess is enabled or the .htaccess rules are translated into the
+    web server vhost configuration (see installation guide for that), Chamilo
+    will do some natural files access protection.<br />
+    <br />
+    This protection is executed through redirections of some URLs to make the
+    request go through some kind of permissions validation script. For
+    documents, this means going through the main/document/download.php script,
+    but there are some more specific rules (see .htaccess for details).<br />
+    <br />
+    While this does a great job to avoid access by unprivileged users, this
+    also creates an efficiency issue, whereby some files, in version 1.11, can
+    take up to 5 times the load time when it goes through the permissions
+    validation.<br />
+    <br />
+    Because of that, we have taken some decisions to reduce the impact in a
+    reasonable way. For example, static files in SCORM content
+    (in courses/[code]/scorm/) like CSS, JS, PNG, JPG and GIF are *not* scanned
+    this way (there is an exception for that). We believe that these resources
+    do not contain confidential information. If you *DO* have confidential
+    information in images, CSS or JavaScript files, you will need to update
+    these rules to suit your needs.
+    </p>
 <h2>Authors</h2>
 <ul>
 <li>Yannick Warnier, Zend Certified PHP Engineer, BeezNest Belgium SPRL,

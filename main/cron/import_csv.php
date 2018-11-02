@@ -225,7 +225,7 @@ class ImportCsv
                         echo PHP_EOL;
                         $this->logger->addInfo("Reading file: $file");
                         $this->logger->addInfo("Loading method $method ");
-                        if ($method == 'importSessions' || $method == 'importOpenSessions' ) {
+                        if ($method == 'importSessions' || $method == 'importOpenSessions') {
                             $this->$method(
                                 $file,
                                 true,
@@ -2243,10 +2243,9 @@ class ImportCsv
         }
     }
 
-
     /**
      * @param $file
-     * @param bool $moveFile
+     * @param bool  $moveFile
      * @param array $teacherBackup
      * @param array $groupBackup
      */

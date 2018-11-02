@@ -189,7 +189,6 @@ class GradebookDataGenerator
                             $ignore_score_color,
                             true
                         );
-
                         if (!empty($score['score'][0])) {
                             $invalidateResults = false;
                         }

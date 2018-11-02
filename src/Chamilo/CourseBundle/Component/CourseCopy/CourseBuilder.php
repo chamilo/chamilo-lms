@@ -129,7 +129,6 @@ class CourseBuilder
 
     /**
      * @param array $list
-     *
      */
     public function addDocumentList($list)
     {
@@ -142,7 +141,6 @@ class CourseBuilder
 
     /**
      * @param string $text
-     *
      */
     public function findAndSetDocumentsInText($text)
     {
@@ -151,7 +149,7 @@ class CourseBuilder
     }
 
     /**
-     * Parse documents added in the documentsAddedInText variable
+     * Parse documents added in the documentsAddedInText variable.
      */
     public function restoreDocumentsFromList()
     {

@@ -718,7 +718,12 @@ class GradebookTable extends SortableTable
                     $average = 0;
                     $main_cat[0]->setStudentList($this->studentList);
                     foreach ($this->studentList as $student) {
-                        $score = $main_cat[0]->calc_score($student['user_id'], null, api_get_course_id());
+                        $score = $main_cat[0]->calc_score(
+                            $student['user_id'],
+                            null,
+                            api_get_course_id(),
+                            api_get_session_id()
+                        );
                         if (!empty($score[0])) {
                             $invalidateRanking = false;
                         }
@@ -727,8 +732,7 @@ class GradebookTable extends SortableTable
                     }
 
                     $totalRanking = AbstractLink::getCurrentUserRanking($user_id, $totalRanking);
-
-                    $totalRanking = $scoredisplay->display_score(
+²                    $totalRanking = $scoredisplay->display_score(
                         $totalRanking,
                         SCORE_DIV,
                         SCORE_BOTH,

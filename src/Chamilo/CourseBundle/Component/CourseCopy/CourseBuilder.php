@@ -102,6 +102,7 @@ class CourseBuilder
     /* With this array you can filter wich elements of the tools are going
     to be added in the course obj (only works with LPs) */
     public $specific_id_list = [];
+    public $documentsAddedInText = [];
 
     /**
      * Create a new CourseBuilder.
@@ -124,6 +125,70 @@ class CourseBuilder
         $this->course->backup_path = api_get_path(SYS_COURSE_PATH).$_course['path'];
         $this->course->encoding = api_get_system_encoding();
         $this->course->info = $_course;
+    }
+
+    /**
+     * @param array $list
+     *
+     */
+    public function addDocumentList($list)
+    {
+        foreach ($list as $item) {
+            if (!in_array($item[0], $this->documentsAddedInText)) {
+                $this->documentsAddedInText[$item[0]] = $item;
+            }
+        }
+    }
+
+    /**
+     * @param string $text
+     *
+     */
+    public function findAndSetDocumentsInText($text)
+    {
+        $documentList = \DocumentManager::get_resources_from_source_html($text);
+        $this->addDocumentList($documentList);
+    }
+
+    /**
+     * Parse documents added in the documentsAddedInText variable
+     */
+    public function restoreDocumentsFromList()
+    {
+        if (!empty($this->documentsAddedInText)) {
+            $list = [];
+            $courseInfo = api_get_course_info();
+            foreach ($this->documentsAddedInText as $item) {
+                // Get information about source url
+                $url = $item[0]; // url
+                $scope = $item[1]; // scope (local, remote)
+                $type = $item[2]; // type (rel, abs, url)
+
+                $origParseUrl = parse_url($url);
+                $realOrigPath = isset($origParseUrl['path']) ? $origParseUrl['path'] : null;
+
+                if ($scope == 'local') {
+                    if ($type == 'abs' || $type == 'rel') {
+                        $documentFile = strstr($realOrigPath, 'document');
+                        if (strpos($realOrigPath, $documentFile) !== false) {
+                            $documentFile = str_replace('document', '', $documentFile);
+                            $itemDocumentId = \DocumentManager::get_document_id($courseInfo, $documentFile);
+                            // Document found! Add it to the list
+                            if ($itemDocumentId) {
+                                $list[] = $itemDocumentId;
+                            }
+                        }
+                    }
+                }
+            }
+
+            $this->build_documents(
+                api_get_session_id(),
+                api_get_course_int_id(),
+                true,
+                $list
+            );
+        }
     }
 
     /**
@@ -732,6 +797,7 @@ class CourseBuilder
                 $doc = Database::fetch_object($res);
                 $obj->sound = $doc->id;
             }
+            $this->findAndSetDocumentsInText($obj->description);
 
             $quiz = new Quiz($obj);
             $sql = 'SELECT * FROM '.$table_rel.'
@@ -780,6 +846,8 @@ class CourseBuilder
                 $courseId
             );
 
+            $this->findAndSetDocumentsInText($obj->description);
+
             // build the backup resource question object
             $question = new QuizQuestion(
                 $obj->id,
@@ -809,6 +877,10 @@ class CourseBuilder
                     $obj2->hotspot_coordinates,
                     $obj2->hotspot_type
                 );
+
+                $this->findAndSetDocumentsInText($obj2->answer);
+                $this->findAndSetDocumentsInText($obj2->comment);
+
                 if ($obj->type == MULTIPLE_ANSWER_TRUE_FALSE) {
                     $table_options = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
                     $sql = 'SELECT * FROM '.$table_options.'
@@ -1013,6 +1085,8 @@ class CourseBuilder
         // get all test category in course
         $categories = TestCategory::getCategoryListInfo('', $courseId);
         foreach ($categories as $category) {
+            $this->findAndSetDocumentsInText($category->description);
+
             /** @var TestCategory $category */
             $courseCopyTestCategory = new CourseCopyTestCategory(
                 $category->id,

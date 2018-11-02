@@ -158,6 +158,10 @@ class ImportCsv
                         $method = 'importCareersDiagram';
                     }
 
+                    if ($method == 'importOpensessions') {
+                        $method = 'importOpenSessions';
+                    }
+
                     if ($method == 'importSubsessionsextidStatic') {
                         $method = 'importSubscribeUserToCourseSessionExtStatic';
                     }
@@ -200,6 +204,7 @@ class ImportCsv
                 'teachers',
                 'courses',
                 'sessions',
+                'opensessions',
                 'subscribe-static',
                 'courseinsert-static',
                 'unsubscribe-static',
@@ -220,7 +225,7 @@ class ImportCsv
                         echo PHP_EOL;
                         $this->logger->addInfo("Reading file: $file");
                         $this->logger->addInfo("Loading method $method ");
-                        if ($method == 'importSessions') {
+                        if ($method == 'importSessions' || $method == 'importOpenSessions' ) {
                             $this->$method(
                                 $file,
                                 true,
@@ -2236,6 +2241,22 @@ class ImportCsv
         if ($moveFile) {
             $this->moveFile($file);
         }
+    }
+
+
+    /**
+     * @param $file
+     * @param bool $moveFile
+     * @param array $teacherBackup
+     * @param array $groupBackup
+     */
+    private function importOpenSessions(
+        $file,
+        $moveFile = true,
+        &$teacherBackup = [],
+        &$groupBackup = []
+    ) {
+        $this->importSessions($file, $moveFile, $teacherBackup, $groupBackup);
     }
 
     /**

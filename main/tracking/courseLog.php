@@ -2,14 +2,15 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 /**
  * @package chamilo.tracking
  */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_TRACKING;
-
-$courseInfo = api_get_course_info(api_get_course_id());
+$courseId = api_get_course_id();
+$courseInfo = api_get_course_info($courseId);
 $course_code = $courseCode = $courseInfo['code'];
 $from_myspace = false;
 $from = isset($_GET['from']) ? $_GET['from'] : null;
@@ -68,7 +69,7 @@ if (api_is_drh()) {
         // then check if he has also been given access to the corresponding courses
         $coursesFollowedList = CourseManager::get_courses_followed_by_drh(api_get_user_id());
         $coursesFollowedList = array_keys($coursesFollowedList);
-        if (!in_array(api_get_course_id(), $coursesFollowedList)) {
+        if (!in_array($courseId, $coursesFollowedList)) {
             api_not_allowed(true);
             exit;
         }
@@ -168,13 +169,13 @@ $tpl = new Template($nameTools);
 if (empty($session_id)) {
     // Registered students in a course outside session.
     $a_students = CourseManager::get_student_list_from_course_code(
-        api_get_course_id()
+        $courseId
     );
 
 } else {
     // Registered students in session.
     $a_students = CourseManager::get_student_list_from_course_code(
-        api_get_course_id(),
+        $courseId,
         true,
         $sessionId
     );
@@ -347,7 +348,21 @@ $numberStudentsCompletedLP = 0;
 $averageStudentsTestScore = 0;
 $scoresDistribution = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
+$userScoreList = [];
+$listStudentIds = [];
+$timeStudent = [];
+$certificateCount = 0;
+$category = Category:: load(
+    null,
+    null,
+    $course_code,
+    null,
+    null,
+    $session_id
+);
+
 foreach ($usersTracking as $userTracking) {
+    $userId = UserManager::get_user_id_from_username($userTracking[3]);
     if ($userTracking[5] === '100%') {
         $numberStudentsCompletedLP++;
     }
@@ -357,24 +372,55 @@ foreach ($usersTracking as $userTracking) {
     if ($averageStudentTestScore === '100') {
         $reducedAverage = 9;
     } else {
-        $reducedAverage = floor($averageStudentTestScore/10);
+        $reducedAverage = floor($averageStudentTestScore / 10);
     }
     $scoresDistribution[$reducedAverage]++;
+    $scoreStudent = substr($userTracking[5], 0, -1) + substr($userTracking[7], 0, -1);
+    list($hours, $minutes, $seconds) = preg_split('/:/', $userTracking[4]);
+    $myTime = round((3600 * $hours + 60 * $minutes + $seconds) / 60);
+
+    $certificate = false;
+    if (isset($category[0]) && $category[0]->is_certificate_available($userId)) {
+        $certificate = true;
+        $certificateCount++;
+    }
+
+    $listStudent = [
+        'id' => $userId,
+        'fullname' => $userTracking[2] . ', ' . $userTracking[1],
+        'score' => floor($scoreStudent / 2),
+        'lasttime' => $myTime,
+        'avatar' => UserManager::get_user_picture_path_by_id($userId),
+        'certicate' => $certificate
+    ];
+    $listStudentIds[] = $userId;
+    $userScoreList[] = $listStudent;
 }
+
+function sort_by_orden($a, $b)
+{
+    return $a['score'] <= $b['score'];
+}
+
+uasort($userScoreList, 'sort_by_orden');
 $averageStudentsTestScore = round(($averageStudentsTestScore / $nbStudents));
 
+$colors = ChamiloApi::getColorPalette(true, true, 10);
 
-$tpl->assign('score_distribution',json_encode($scoresDistribution));
-$tpl->assign('students_test_score',$averageStudentsTestScore);
-$tpl->assign('students_completed_lp',$numberStudentsCompletedLP);
-$tpl->assign('number_students',$nbStudents);
+$tpl->assign('chart_colors', json_encode($colors));
+$tpl->assign('certificate_count', $certificateCount);
+$tpl->assign('score_distribution', json_encode($scoresDistribution));
+$tpl->assign('json_time_student', json_encode($userScoreList));
+$tpl->assign('students_test_score', $averageStudentsTestScore);
+$tpl->assign('students_completed_lp', $numberStudentsCompletedLP);
+$tpl->assign('number_students', $nbStudents);
+$tpl->assign('top_students', $userScoreList);
+
 
 $trackingSummaryLayout = $tpl->get_template("tracking/tracking_course_log.tpl");
 $content = $tpl->fetch($trackingSummaryLayout);
 
 echo $content;
-
-
 
 $html .= Display::page_subheader2(get_lang('StudentList'));
 

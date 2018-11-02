@@ -41,6 +41,9 @@ RewriteRule ^courses/([^/]+)/work/(.*)$ main/work/download.php?file=work/$2&cDir
 RewriteRule ^courses/([^/]+)/course-pic85x85.png$ main/inc/ajax/course.ajax.php?a=get_course_image&code=$1&image=course_image_source [QSA,L]
 RewriteRule ^courses/([^/]+)/course-pic.png$ main/inc/ajax/course.ajax.php?a=get_course_image&code=$1&image=course_image_large_source [QSA,L]
 
+# Optimize load of custom per-course icons in courses (avoid download.php)
+RewriteRule ^courses/([^/]+)/upload/course_home_icons/(.*([\.js|\.css]))$ app/courses/$1/upload/course_home_icons/$2 [QSA,L]
+
 # Redirect all courses/ to app/courses/
 RewriteRule ^courses/([^/]+)/(.*)$ app/courses/$1/$2 [QSA,L]
 

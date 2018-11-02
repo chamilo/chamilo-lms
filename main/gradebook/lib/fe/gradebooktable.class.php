@@ -732,7 +732,7 @@ class GradebookTable extends SortableTable
                     }
 
                     $totalRanking = AbstractLink::getCurrentUserRanking($user_id, $totalRanking);
-²                    $totalRanking = $scoredisplay->display_score(
+                    $totalRanking = $scoredisplay->display_score(
                         $totalRanking,
                         SCORE_DIV,
                         SCORE_BOTH,

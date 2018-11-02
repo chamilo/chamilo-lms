@@ -45,6 +45,8 @@ $strings['enable_global_conference_per_user'] = 'Enable global conference per us
 $strings['enable_conference_in_course_groups'] = 'Enable conference in course groups';
 $strings['enable_global_conference_link'] = 'Enable the link to the global conference in the homepage';
 
+$strings['disable_download_conference_link'] = 'Disable download conference';
+
 $strings['big_blue_button_record_and_store'] = 'Record and store sessions';
 $strings['bbb_enable_conference_in_groups'] = 'Allow conference in groups';
 $strings['plugin_tool_bbb'] = 'Video';

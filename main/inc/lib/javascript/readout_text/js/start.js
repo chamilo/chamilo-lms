@@ -2,11 +2,8 @@
 
 $(function () {
     var parent$ = window.parent.$,
-        $player = parent$('audio#lp_audio_media_player_html5');
-
-    if ($player.length === 0) {
-        $player = parent$('audio#lp_audio_media_player');
-    }
+        playerSelector = '#' + parent$('mediaelementwrapper').attr('id') + '_html5',
+        $player = parent$(playerSelector);
 
     var player = $player.get(0),
         def = $.Deferred();

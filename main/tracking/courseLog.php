@@ -379,7 +379,7 @@ if ($nbStudents > 0) {
         }
         $scoreStudent = substr($userTracking[5], 0, -1) + substr($userTracking[7], 0, -1);
         list($hours, $minutes, $seconds) = preg_split('/:/', $userTracking[4]);
-        $myTime = round((3600 * $hours + 60 * $minutes + $seconds) / 60);
+        $minutes = round((3600 * $hours + 60 * $minutes + $seconds) / 60);
     
         $certificate = false;
         if (isset($category[0]) && $category[0]->is_certificate_available($userId)) {
@@ -391,7 +391,7 @@ if ($nbStudents > 0) {
             'id' => $userId,
             'fullname' => $userTracking[2] . ', ' . $userTracking[1],
             'score' => floor($scoreStudent / 2),
-            'lasttime' => $myTime,
+            'total_time' => $minutes,
             'avatar' => UserManager::getUserPicture($userId),
             'certicate' => $certificate
         ];

@@ -12,7 +12,7 @@
            //Names
            labels.push(jsonfile[key].fullname);
            //Time plataform total
-           times.push(jsonfile[key].lasttime);
+           times.push(jsonfile[key].total_time);
        });
 
 

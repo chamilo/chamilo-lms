@@ -13,12 +13,13 @@ $courseId = api_get_course_id();
 $courseInfo = api_get_course_info($courseId);
 //keep course_code form as it is loaded (global) by the table's get_user_data
 $course_code = $courseCode = $courseInfo['code'];
+$session_id = $sessionId = api_get_session_id();
+
 $from_myspace = false;
 $from = isset($_GET['from']) ? $_GET['from'] : null;
 
 // Starting the output buffering when we are exporting the information.
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
-$session_id = $sessionId = api_get_session_id();
 
 $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
 $htmlHeadXtra[] = ' ';
@@ -91,6 +92,7 @@ if (!empty($columnsToHideFromSetting) && isset($columnsToHideFromSetting['column
 $columnsToHide = json_encode($columnsToHide);
 
 $csv_content = [];
+
 // Scripts for reporting array hide/show columns
 $js = "<script>
     // hide column and display the button to unhide it
@@ -162,7 +164,6 @@ $nameTools = get_lang('Tracking');
 
 //Template Tracking
 $tpl = new Template($nameTools);
-
 
 // getting all the students of the course
 if (empty($session_id)) {
@@ -252,7 +253,6 @@ echo Display::toolbarAction(
 );
 
 $course_name = get_lang('Course').' '.$courseInfo['name'];
-
 
 if ($session_id) {
     $titleSession = Display::return_icon(

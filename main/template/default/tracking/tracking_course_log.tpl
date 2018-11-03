@@ -26,7 +26,7 @@
                 backgroundColor: "#3ba557",
                 borderWidth: 1,
                 fill: false,
-                label: '{{ "Minutes"|get_lang}}',
+                label: '{{ "Minutes"|get_lang }}',
             }]
         },
         options: {
@@ -38,7 +38,7 @@
                     position: "bottom",
                     scaleLabel: {
                         display: true,
-                        labelString: '{{ "FollowedStudents"|get_lang}}',
+                        labelString: '{{ "Students"|get_lang }}',
                     },
                     ticks: {
                         display: false
@@ -48,7 +48,7 @@
                     position: "left",
                     scaleLabel: {
                         display: true,
-                        labelString: '{{ "TrainingTime"|get_lang}}',
+                        labelString: '{{ "Minutes"|get_lang }}',
                     }
                 }]
             }
@@ -60,7 +60,7 @@
         data: {
             labels: ["0-9%", "10-19%", "20-29%", "30-39%", "40-49%", "50-59%", "60-69%", "70-79%", "80-89%", "90-100%"],
             datasets: [{
-                label: 'Número de alumnos',
+                label: '{{ "NumberOfUsers"|get_lang }}',
                 data: {{ score_distribution }},
                 backgroundColor: {{ chart_colors }},
                 borderColor: {{ chart_colors }},
@@ -89,7 +89,7 @@
                     position: "bottom",
                     scaleLabel: {
                         display: true,
-                        labelString: "Rango de porcentaje %",
+                        labelString: "{{ 'PercentileScoresDistribution'|get_lang }}",
                     },
                     gridLines: {
                       display: true
@@ -178,7 +178,7 @@
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="tracking-chart">
-                        <h4 class="tracking-box-title">Distribución porcentual de notas</h4>
+                        <h4 class="tracking-box-title">{{ 'PercentileScoresDistribution'|get_lang }}</h4>
                         <canvas id="chart-score"></canvas>
                     </div>
                 </div>
@@ -187,7 +187,7 @@
         <div class="col-md-4">
             <div class="panel panel-default tracking-top-student">
                 <div class="panel-body">
-                    <h4 class="tracking-box-title">Alumnos destacados</h4>
+                    <h4 class="tracking-box-title">{{ 'OutstandingStudents'|get_lang }}</h4>
                     <ul class="list-top">
 
                         {% for student in top_students %}
@@ -212,14 +212,14 @@
                         {% endfor %}
 
                     </ul>
-                   <span class="tracking-box-legend">Nota: Se obtiene el % del progreso de lección y media del ejercicios</span>
+                   <span class="tracking-box-legend">{{ 'ProgressObtainedFromLPProgressAndTestsAverage'|get_lang }}</span>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <h4 class="tracking-box-title">{{ "TotalTimeSpentInTheCourse"|get_lang}}</h4>
+                    <h4 class="tracking-box-title">{{ "TotalTimeSpentInTheCourse"|get_lang }}</h4>
                     <canvas id="chart-access"></canvas>
                 </div>
             </div>

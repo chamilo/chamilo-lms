@@ -11,13 +11,14 @@ require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_TRACKING;
 $courseId = api_get_course_id();
 $courseInfo = api_get_course_info($courseId);
+//keep course_code form as it is loaded (global) by the table's get_user_data
 $course_code = $courseCode = $courseInfo['code'];
 $from_myspace = false;
 $from = isset($_GET['from']) ? $_GET['from'] : null;
 
 // Starting the output buffering when we are exporting the information.
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
-$session_id = isset($_REQUEST['id_session']) ? (int) $_REQUEST['id_session'] : 0;
+$session_id = $sessionId = api_get_session_id();
 
 $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
 $htmlHeadXtra[] = ' ';
@@ -139,8 +140,6 @@ $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $TABLECOURSE = Database::get_main_table(TABLE_MAIN_COURSE);
 $table_user = Database::get_main_table(TABLE_MAIN_USER);
 $TABLEQUIZ = Database::get_course_table(TABLE_QUIZ_TEST);
-
-$sessionId = api_get_session_id();
 
 // Breadcrumbs.
 if (isset($_GET['origin']) && $_GET['origin'] == 'resume_session') {
@@ -342,85 +341,82 @@ if ($showReporting) {
     }
 }
 
-$usersTracking = TrackingCourseLog::get_user_data(null, $nbStudents, null, 'DESC');
-
-$numberStudentsCompletedLP = 0;
-$averageStudentsTestScore = 0;
-$scoresDistribution = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-
-$userScoreList = [];
-$listStudentIds = [];
-$timeStudent = [];
-$certificateCount = 0;
-$category = Category:: load(
-    null,
-    null,
-    $course_code,
-    null,
-    null,
-    $session_id
-);
-
-foreach ($usersTracking as $userTracking) {
-    $userId = UserManager::get_user_id_from_username($userTracking[3]);
-    if ($userTracking[5] === '100%') {
-        $numberStudentsCompletedLP++;
+// Show the charts part only if there are students subscribed to this course/session
+if ($nbStudents > 0) {
+    $usersTracking = TrackingCourseLog::get_user_data(null, $nbStudents, null, 'DESC');
+    $numberStudentsCompletedLP = 0;
+    $averageStudentsTestScore = 0;
+    $scoresDistribution = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    
+    $userScoreList = [];
+    $listStudentIds = [];
+    $timeStudent = [];
+    $certificateCount = 0;
+    $category = Category::load(
+        null,
+        null,
+        $course_code,
+        null,
+        null,
+        $session_id
+    );
+    
+    foreach ($usersTracking as $userTracking) {
+        $userId = UserManager::get_user_id_from_username($userTracking[3]);
+        if ($userTracking[5] === '100%') {
+            $numberStudentsCompletedLP++;
+        }
+        $averageStudentTestScore = substr($userTracking[7], 0, -1);
+        $averageStudentsTestScore += $averageStudentTestScore;
+    
+        if ($averageStudentTestScore === '100') {
+            $reducedAverage = 9;
+        } else {
+            $reducedAverage = floor($averageStudentTestScore / 10);
+        }
+        $scoresDistribution[$reducedAverage]++;
+        $scoreStudent = substr($userTracking[5], 0, -1) + substr($userTracking[7], 0, -1);
+        list($hours, $minutes, $seconds) = preg_split('/:/', $userTracking[4]);
+        $myTime = round((3600 * $hours + 60 * $minutes + $seconds) / 60);
+    
+        $certificate = false;
+        if (isset($category[0]) && $category[0]->is_certificate_available($userId)) {
+            $certificate = true;
+            $certificateCount++;
+        }
+    
+        $listStudent = [
+            'id' => $userId,
+            'fullname' => $userTracking[2] . ', ' . $userTracking[1],
+            'score' => floor($scoreStudent / 2),
+            'lasttime' => $myTime,
+            'avatar' => UserManager::get_user_picture_path_by_id($userId),
+            'certicate' => $certificate
+        ];
+        $listStudentIds[] = $userId;
+        $userScoreList[] = $listStudent;
     }
-    $averageStudentTestScore = substr($userTracking[7], 0, -1);
-    $averageStudentsTestScore += $averageStudentTestScore;
-
-    if ($averageStudentTestScore === '100') {
-        $reducedAverage = 9;
-    } else {
-        $reducedAverage = floor($averageStudentTestScore / 10);
-    }
-    $scoresDistribution[$reducedAverage]++;
-    $scoreStudent = substr($userTracking[5], 0, -1) + substr($userTracking[7], 0, -1);
-    list($hours, $minutes, $seconds) = preg_split('/:/', $userTracking[4]);
-    $myTime = round((3600 * $hours + 60 * $minutes + $seconds) / 60);
-
-    $certificate = false;
-    if (isset($category[0]) && $category[0]->is_certificate_available($userId)) {
-        $certificate = true;
-        $certificateCount++;
-    }
-
-    $listStudent = [
-        'id' => $userId,
-        'fullname' => $userTracking[2] . ', ' . $userTracking[1],
-        'score' => floor($scoreStudent / 2),
-        'lasttime' => $myTime,
-        'avatar' => UserManager::get_user_picture_path_by_id($userId),
-        'certicate' => $certificate
-    ];
-    $listStudentIds[] = $userId;
-    $userScoreList[] = $listStudent;
+    
+    uasort($userScoreList, 'sort_by_order');
+    $averageStudentsTestScore = round($averageStudentsTestScore / $nbStudents);
+    
+    $colors = ChamiloApi::getColorPalette(true, true, 10);
+    
+    $tpl->assign('chart_colors', json_encode($colors));
+    $tpl->assign('certificate_count', $certificateCount);
+    $tpl->assign('score_distribution', json_encode($scoresDistribution));
+    $tpl->assign('json_time_student', json_encode($userScoreList));
+    $tpl->assign('students_test_score', $averageStudentsTestScore);
+    $tpl->assign('students_completed_lp', $numberStudentsCompletedLP);
+    $tpl->assign('number_students', $nbStudents);
+    $tpl->assign('top_students', $userScoreList);
+    
+    
+    $trackingSummaryLayout = $tpl->get_template("tracking/tracking_course_log.tpl");
+    $content = $tpl->fetch($trackingSummaryLayout);
+    
+    echo $content;
 }
-
-function sort_by_orden($a, $b)
-{
-    return $a['score'] <= $b['score'];
-}
-
-uasort($userScoreList, 'sort_by_orden');
-$averageStudentsTestScore = round(($averageStudentsTestScore / $nbStudents));
-
-$colors = ChamiloApi::getColorPalette(true, true, 10);
-
-$tpl->assign('chart_colors', json_encode($colors));
-$tpl->assign('certificate_count', $certificateCount);
-$tpl->assign('score_distribution', json_encode($scoresDistribution));
-$tpl->assign('json_time_student', json_encode($userScoreList));
-$tpl->assign('students_test_score', $averageStudentsTestScore);
-$tpl->assign('students_completed_lp', $numberStudentsCompletedLP);
-$tpl->assign('number_students', $nbStudents);
-$tpl->assign('top_students', $userScoreList);
-
-
-$trackingSummaryLayout = $tpl->get_template("tracking/tracking_course_log.tpl");
-$content = $tpl->fetch($trackingSummaryLayout);
-
-echo $content;
 
 $html .= Display::page_subheader2(get_lang('StudentList'));
 
@@ -654,3 +650,10 @@ if ($export_csv) {
     exit;
 }
 Display::display_footer();
+
+
+function sort_by_order($a, $b)
+{
+    return $a['score'] <= $b['score'];
+}
+

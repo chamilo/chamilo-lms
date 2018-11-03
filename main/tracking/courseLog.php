@@ -360,7 +360,7 @@ if ($nbStudents > 0) {
         null,
         $session_id
     );
-    
+
     foreach ($usersTracking as $userTracking) {
         $userId = UserManager::get_user_id_from_username($userTracking[3]);
         if ($userTracking[5] === '100%') {
@@ -374,7 +374,9 @@ if ($nbStudents > 0) {
         } else {
             $reducedAverage = floor($averageStudentTestScore / 10);
         }
-        $scoresDistribution[$reducedAverage]++;
+        if (isset($scoresDistribution[$reducedAverage])) {
+            $scoresDistribution[$reducedAverage]++;
+        }
         $scoreStudent = substr($userTracking[5], 0, -1) + substr($userTracking[7], 0, -1);
         list($hours, $minutes, $seconds) = preg_split('/:/', $userTracking[4]);
         $myTime = round((3600 * $hours + 60 * $minutes + $seconds) / 60);

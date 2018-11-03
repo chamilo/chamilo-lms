@@ -75,6 +75,7 @@ $thematic = new Thematic();
 
 // thematic controller object
 $thematic_controller = new ThematicController();
+
 $thematic_data = [];
 if (!empty($thematic_id)) {
     // thematic data by id
@@ -179,6 +180,7 @@ function check_per_custom_date(obj) {
 </script>';
 
 $thematicControl = Session::read('thematic_control');
+
 
 if ($action == 'thematic_list') {
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('ThematicControl')];

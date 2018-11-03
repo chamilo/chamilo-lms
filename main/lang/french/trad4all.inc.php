@@ -8237,4 +8237,10 @@ $CareDetailView = "Vue détaillée de vie étudiante";
 $MoreDataAvailableInTheDatabaseButTrunkedForEfficiencyReasons = "Plus de données disponibles mais tronquées pour des raisons d'efficacité.";
 $SendAnnouncementCopyToMyself = "M'envoyer une copie par e-mail.";
 $CourseHoursDuration = "Durée du cours (h)";
+$AnnouncementWillBeSentTo = "L'annonce sera envoyée à";
+$FrmReadOutTextIntro = "Il est nécessaire d'ajouter un fichier audio correspondant au texte, en cliquant sur l'icône %s.";
+$CreateReadOutText = "Créer texte lu";
+$OutstandingStudents = "Apprenants distingués";
+$PercentileScoresDistribution = "Distribution des scores en pourcents";
+$ProgressObtainedFromLPProgressAndTestsAverage = "Note: Le progrès ci-dessus est obtenu par une combinaison du progrès dans les parcours et du score dans les exercices";
 ?>

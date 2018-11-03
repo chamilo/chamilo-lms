@@ -130,7 +130,7 @@ class SortableTable extends HTML_Table
             $table_id = $table_name.uniqid();
         }
         $this->table_id = $table_id;
-        parent::__construct(['class' => 'data_table table', 'id' => $table_id]);
+        parent::__construct(['class' => 'table table-bordered data_table', 'id' => $table_id]);
         $this->table_name = $table_name;
         $this->additional_parameters = [];
         $this->param_prefix = $table_name.'_';

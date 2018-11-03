@@ -390,7 +390,7 @@ if ($nbStudents > 0) {
             'fullname' => $userTracking[2] . ', ' . $userTracking[1],
             'score' => floor($scoreStudent / 2),
             'lasttime' => $myTime,
-            'avatar' => UserManager::get_user_picture_path_by_id($userId),
+            'avatar' => UserManager::getUserPicture($userId),
             'certicate' => $certificate
         ];
         $listStudentIds[] = $userId;

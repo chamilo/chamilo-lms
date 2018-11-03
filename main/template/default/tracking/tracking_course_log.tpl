@@ -196,7 +196,7 @@
                             <li>
                                 <div class="avatar">
                                     <span class="round">
-                                        <img title="{{ student.fullname }}" alt="{{ student.fullname }}" src="{{ student.avatar.dir }}{{ student.avatar.file }}" width="40px">
+                                        <img title="{{ student.fullname }}" alt="{{ student.fullname }}" src="{{ student.avatar }}" width="40px">
                                     </span>
                                 </div>
                                 <div class="info">

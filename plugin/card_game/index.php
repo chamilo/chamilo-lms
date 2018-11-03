@@ -71,6 +71,7 @@ if (!api_is_anonymous()) {
     }
 
     $parts = '';
+    $pan = '';
 
     if (isset($userId)) {
         try {

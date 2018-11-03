@@ -8332,4 +8332,7 @@ $CourseHoursDuration = "Duración del curso (h)";
 $AnnouncementWillBeSentTo = "El anuncio será enviado a";
 $FrmReadOutTextIntro = "Necesita adjuntar un archivo de audio de acuerdo al texto, haciendo click en el ícono %s.";
 $CreateReadOutText = "Crear texto leído";
+$OutstandingStudents = "Estudiantes destacados";
+$PercentileScoresDistribution = "Distribución porcentual de notas";
+$ProgressObtainedFromLPProgressAndTestsAverage = "Nota: Este progreso es obtenido a través de una combinación del progreso en las lecciones y de las notas promedias en los ejercicios";
 ?>

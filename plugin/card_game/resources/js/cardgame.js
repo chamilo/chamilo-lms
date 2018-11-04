@@ -8,9 +8,9 @@
 $(document).ready(function ($) {
 
   if (!document.getElementById('havedeckcardgame')) {
-    $('.sidebar .panel-body .img-circle').parent().parent().after('<div class="enjoy-cardgame" onClick="onlyOpenCardView();" ></div>')
+    $('.sidebar .panel-body .img-circle').parent().parent().after('<div id="plugin-cardgame-icon" class="enjoy-cardgame" onClick="onlyOpenCardView();" ></div>')
   } else {
-    $('.sidebar .panel-body .img-circle').parent().parent().after('<div class="enjoy-cardgame-active" onClick="installCardView()" ></div>')
+    $('.sidebar .panel-body .img-circle').parent().parent().after('<div id="plugin-cardgame-icon" class="enjoy-cardgame-active" onClick="installCardView()" ></div>')
   }
 })
 
@@ -170,6 +170,8 @@ function randomOpenCardView () {
     }, 1500)
 
   }
+  $('#plugin-cardgame-icon').removeClass('enjoy-cardgame-active')
+  $('#plugin-cardgame-icon').addClass('enjoy-cardgame')
 }
 
 /**

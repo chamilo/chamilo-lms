@@ -1,18 +1,21 @@
 /* For license terms, see /license.txt */
 $(document).ready(function($){
 	
-	if(!document.getElementById("havedeckcardgame")){
+	if (!document.getElementById("havedeckcardgame")){
 		$('.sidebar .panel-body .img-circle').parent().parent().after('<div class="enjoy-cardgame" onClick="onlyOpenCardView();" ></div>');
-	}else{
+	} else {
 		$('.sidebar .panel-body .img-circle').parent().parent().after('<div class="enjoy-cardgame-active" onClick="installCardView()" ></div>');
 	}
-	
-	
 });
-	
+
+/**
+ * This function inserts the <article> element 'home-card' for the card game
+ * before the .page-content element on the page (the right side of the
+ * "my courses" page) only if the element with id 'home-card' does not exist
+ * yet.
+ */
 function installCardView(){
-	
-	if(!document.getElementById("home-card")){
+	if (!document.getElementById("home-card")) {
 		var mess1 = $("#cardgamemessage").html();
 		var h = '<article id="home-card" style="border:solid 1px gray;" >';
 		h += '<div class="cardgame-pack" >';
@@ -57,8 +60,8 @@ function installCardView(){
 		
 		$('.page-content').before(h);
 		
-	}else{
-		$('#home-card').fadeOut();
+	} else {
+		$('#home-card').fadeToggle();
 	}
 	
 }
@@ -168,6 +171,9 @@ function randomOpenCardView(){
 	}
 }
 
+/**
+ * This function changes the visibility of blocks inside the puzzle area
+ */
 function onlyOpenCardView(){
 	
 	installCardView();
@@ -204,7 +210,7 @@ function onlyOpenCardView(){
 function minimizePuzzle(){
 	
 	$('.puzzlecardone').addClass('puzzleMin');
-	setTimeout(function(){
+	setTimeout(function() {
 		
 		$('.puzzleMinOther').css('display','block');
 		

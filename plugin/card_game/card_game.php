@@ -17,7 +17,7 @@ class CardGame extends Plugin
     protected function __construct()
     {
         parent::__construct(
-            '1.0',
+            '1.1',
             'Damien Renou'
         );
     }

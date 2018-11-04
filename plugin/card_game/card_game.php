@@ -31,14 +31,15 @@ class CardGame extends Plugin
 
     public function install()
     {
+        // 'pan' is the ID of the current background image/panel
         $sql = "CREATE TABLE IF NOT EXISTS plugin_card_game(
-                id INT NOT NULL AUTO_INCREMENT,
-                user_id INT NOT NULL,
-				pan int NOT NULL, -- the ID of the current background image/panel
-				access_date DATE NOT NULL,
-				parts VARCHAR(500) NOT NULL,
-				PRIMARY KEY (id));
-        ";
+            id INT NOT NULL AUTO_INCREMENT,
+            user_id INT NOT NULL,
+            pan int NOT NULL,
+            access_date DATE NOT NULL,
+            parts VARCHAR(500) NOT NULL,
+            PRIMARY KEY (id)
+        )";
         Database::query($sql);
     }
 

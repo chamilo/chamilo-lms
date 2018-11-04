@@ -17,7 +17,7 @@ execute the following changes in your database to update its structure.
 
 ##### Database changes
 You need execute these SQL queries in your database if you are upgrading to 
-Chamilo 1.11.8 and  
+Chamilo 1.11.8 and the card_game plugin was already installed in your previous version.
 
 ```sql
 ALTER TABLE plugin_card_game CHANGE COLUMN idUser user_id INT NOT NULL;

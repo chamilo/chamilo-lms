@@ -79,11 +79,12 @@ if (!api_is_anonymous()) {
             }
         }
     } else {
+        Session::write('cardgame', 'havedeck');
         $fh .= '<div id="havedeckcardgame" ></div>';
     }
 
-    $parts = '';
-    $pan = '';
+    $parts = '1';
+    $pan = '1';
 
     if (isset($userId)) {
         try {

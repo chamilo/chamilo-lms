@@ -146,22 +146,18 @@ function randomOpenCardView () {
     $('#messagePackDeck').css('display', 'block')
     $('#messagePackDeck').css('backgroundColor', 'red')
     $('#messagePackDeck').addClass('messagePackDeckBottom')
-  } else {
-
     var lk = $('#linkcardgame').html()
+    $.ajax({ url: lk + '?loose=1' }).done(function () { })
 
-    $.ajax({
-      url: lk + '?part=' + part
-    }).done(function () {
-
-    })
+  } else {
+    var lk = $('#linkcardgame').html()
+    $.ajax({ url: lk + '?part=' + part }).done(function () { })
 
     setTimeout(function () {
       $('#puzzlepart' + part).addClass('puzzlepartstar')
     }, 600)
 
     setTimeout(function () {
-
       $('#puzzlepart' + part).css('opacity', 0)
     }, 1200)
 

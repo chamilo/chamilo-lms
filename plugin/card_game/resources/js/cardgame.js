@@ -1,4 +1,10 @@
 /* For license terms, see /license.txt */
+/**
+ * Whenever the cardgame.js file is included into the loaded JavaScript,
+ * search for the user picture in the left menu and add a div
+ * "enjoy-cardgame" to it to show a little drawing cards icon to enable
+ * this plugin
+ */
 $(document).ready(function ($) {
 
   if (!document.getElementById('havedeckcardgame')) {
@@ -63,6 +69,9 @@ function installCardView () {
 
 }
 
+/**
+ * Animate the scissors
+ */
 function animationOpenCardView () {
 
   $('#scissors').addClass('scissorsrightinitfinal')
@@ -168,11 +177,12 @@ function randomOpenCardView () {
 }
 
 /**
- * This function changes the visibility of blocks inside the puzzle area
+ * This function adds the cardgame area block (in invisible state), then
+ * changes the visibility of blocks inside the puzzle area to show them
  */
 function onlyOpenCardView () {
 
-  installCardView()
+  installCardView();
 
   var memocardgame = $('#memocardgame').html()
 

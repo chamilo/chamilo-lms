@@ -7442,14 +7442,8 @@ a.sessionView {
     display: block;
 }
 
-.data_table .title {
-    text-align: left;
-    padding-left: 10px;
-}
-
 #course-list.data_table .title {
     width: 390px;
-    padding-left: 0;
 }
 
 .actions label {

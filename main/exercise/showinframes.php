@@ -113,5 +113,9 @@ if ($origin == 'learnpath') {
 }
 $url = $document_web_path.$doc_url.$user_id.'.t.html?time='.intval($time);
 echo '<iframe id="hotpotatoe" name="hotpotatoe" width="100%" height="100%" frameborder="0" src="'.$url.'"></iframe>';
-echo '</body></html>';
-exit;
+
+if ($origin == 'learnpath') {
+    Display::display_reduced_footer();
+} else {
+    Display::display_footer();
+}

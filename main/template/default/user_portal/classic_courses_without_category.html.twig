@@ -7,17 +7,16 @@
     {% for item in courses %}
 
         {% set image %}
+
             {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') and not item.current_user_is_teacher %}
-                <span class="thumbnail">
-                    {% if item.thumbnails != '' %}
-                        <img src="{{ item.thumbnails }}" title="{{ item.title }}"
-                             alt="{{ item.title }}"/>
-                    {% else %}
-                        {{ 'blackboard.png' | img(48, item.title ) }}
-                    {% endif %}
-                </span>
+                {% if item.thumbnails != '' %}
+                    <img src="{{ item.thumbnails }}" title="{{ item.title }}"
+                         alt="{{ item.title }}"/>
+                {% else %}
+                    {{ 'blackboard.png' | img(48, item.title ) }}
+                {% endif %}
             {% else %}
-                <a href="{{ item.link }}" class="thumbnail">
+                <a href="{{ item.link }}">
                     {% if item.thumbnails != '' %}
                         <img src="{{ item.thumbnails }}" title="{{ item.title }}"
                              alt="{{ item.title }}"/>
@@ -26,6 +25,7 @@
                     {% endif %}
                 </a>
             {% endif %}
+
         {% endset %}
 
         {% set title %}

@@ -214,30 +214,20 @@
     {% endautoescape %}
 {% endmacro %}
 
-{% macro box_category_course(id, title, subtitle, content, image) %}
+{% macro box_category_course(id, title, image) %}
     {% autoescape false %}
-        <div class="card card-{{ id }} p-3 mt-3 mb-3">
-            <div class="card-body pb-3">
-                <div class="row">
-                    <div class="col-sm-3">
+        {% set values = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f']%}
+        <div class="card card-{{ id }}" style="border-bottom-color: {{ '#' ~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)~'80'  }}">
+            <div class="card-body">
+                <div class="image-container">
+                    <div class="thumbnail">
                         {% if image %}
                             {{ image }}
                         {% endif %}
                     </div>
-                    <div class="col-sm-9">
+                    <div class="image-content">
                         {% if title %}
-                            <h5 class="card-title">{{ title }}</h5>
-                        {% endif %}
-                        {% if subtitle %}
-                            <p class="card-subtitle mb-2 text-muted">
-                                <strong>{{ 'Code'|get_lang }} :</strong>
-                                {{ subtitle }}
-                            </p>
-                        {% endif %}
-                        {% if content %}
-                            <div class="description">
-                                {{ content }}
-                            </div>
+                            {{ title }}
                         {% endif %}
                     </div>
                 </div>
@@ -253,7 +243,9 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-3">
-                        {{ image }}
+                        <div class="card-icon">
+                            {{ image }}
+                        </div>
                     </div>
                     <div class="col-md-9">
                         {{ title }}

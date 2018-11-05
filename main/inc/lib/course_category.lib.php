@@ -33,11 +33,11 @@ class CourseCategory
      *
      * @return array
      */
-    public static function getCategory($category)
+    public static function getCategory($categoryCode)
     {
         $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $category = Database::escape_string($category);
-        $sql = "SELECT * FROM $table WHERE code ='$category'";
+        $categoryCode = Database::escape_string($categoryCode);
+        $sql = "SELECT * FROM $table WHERE code ='$categoryCode'";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $category = Database::fetch_array($result, 'ASSOC');
@@ -49,10 +49,9 @@ class CourseCategory
             if ($result) {
                 $category['access_url_id'] = $result['access_url_id'];
             }
-
+            $category['course_count'] = self::countCoursesInCategory($categoryCode);
             return $category;
         }
-
         return [];
     }
 
@@ -439,7 +438,7 @@ class CourseCategory
         $categories = self::getCategories($categorySource);
 
         if (count($categories) > 0) {
-            $table = new HTML_Table(['class' => 'data_table']);
+            $table = new HTML_Table(['class' => 'table data_table']);
             $column = 0;
             $row = 0;
             $headers = [

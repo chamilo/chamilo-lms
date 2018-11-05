@@ -3,21 +3,21 @@
 <h2>{{ 'CourseCategory'|get_lang }}</h2>
 <p>{{ 'MyCoursePageCategoryIntroduction'|get_lang }}</p>
 {% autoescape false %}
-<div class="row">
+<div class="category-list">
     {% for category in course_categories %}
-    <div class="col-sm-12">
         {% if category %}
 
             {% set image %}
-                <a href="{{ _p.web_self ~ '?' ~ {'category':category.code}|url_encode }}">
-                    <img src="{{ category.image ? _p.web_upload ~ category.image : 'session_default.png'|icon(128) }}"
-                         alt="{{ category.name }}" class="img-fluid mb-1">
-                </a>
+                <img src="{{ category.image ? _p.web_upload ~ category.image : 'session_default.png'|icon(128) }}"
+                     alt="{{ category.name }}" class="">
             {% endset %}
 
             {% set title %}
                 <a href="{{ _p.web_self ~ '?' ~ {'category':category.code}|url_encode }}">
+                <h5 class="title">
                     {{ category.name }}
+                </h5>
+                <div class="courses">{{ category.course_count }} {{ 'Courses'|get_lang }}</div>
                 </a>
             {% endset %}
 
@@ -25,21 +25,10 @@
                 {{ category.code }}
             {% endset %}
 
-            {% set content %}
-                {% if category.description %}
-                    {{ category.description }}
-                {% endif %}
-                <div class="float-right">
-                    <a href="{{ _p.web_self ~ '?' ~ {'category':category.code}|url_encode }}" class="btn btn-outline-primary btn-sm">
-                        {{ 'View'|get_lang }}
-                    </a>
-                </div>
-            {% endset %}
-
-            {{ macro.box_category_course('category', title, subtitle, content, image) }}
+            {{ macro.box_category_course('category', title,image) }}
 
         {% endif %}
-    </div>
+
     {% endfor %}
 </div>
 {% endautoescape %}

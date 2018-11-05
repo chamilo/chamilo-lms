@@ -6601,7 +6601,7 @@ class Exercise
                 if ($isRandomByCategory == 2) {
                     $tabCategoryQuestions = TestCategory::sortTabByBracketLabel($tabCategoryQuestions);
                 }
-                while (list($cat_id, $tabquestion) = each($tabCategoryQuestions)) {
+                foreach ($tabCategoryQuestions as $tabquestion) {
                     $number_of_random_question = $this->random;
                     if ($this->random == -1) {
                         $number_of_random_question = count($this->questionList);
@@ -7556,7 +7556,7 @@ class Exercise
             }
 
             // here we've got an array with first key, the category_id, second key, score of question for this cat
-            while (list($key, $tab_scores) = each($tab_categories_scores)) {
+            foreach ($tab_categories_scores as $tab_scores) {
                 rsort($tab_scores);
                 for ($i = 0; $i < min($numberRandomQuestions, count($tab_scores)); $i++) {
                     $out_max_score += $tab_scores[$i];

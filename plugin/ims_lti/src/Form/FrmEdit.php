@@ -75,7 +75,11 @@ class FrmEdit extends FormValidator
         if (null === $parent ||
             (null !== $parent && !$parent->isActiveDeepLinking())
         ) {
-            $this->addCheckBox('deep_linking', null, $plugin->get_lang('SupportDeepLinking'));
+            $this->addCheckBox(
+                'deep_linking',
+                [null, $plugin->get_lang('SupportDeppLinkingHelp'), null],
+                $plugin->get_lang('SupportDeepLinking')
+            );
         }
 
         $this->addHtml('</div>');

@@ -58,7 +58,11 @@ class FrmAdd extends FormValidator
         if (null === $this->baseTool ||
             ($this->baseTool && !$this->baseTool->isActiveDeepLinking())
         ) {
-            $this->addCheckBox('deep_linking', null, $plugin->get_lang('SupportDeepLinking'));
+            $this->addCheckBox(
+                'deep_linking',
+                [null, $plugin->get_lang('SupportDeppLinkingHelp'), null],
+                $plugin->get_lang('SupportDeepLinking')
+            );
         }
 
         $this->addHtml('</div>');

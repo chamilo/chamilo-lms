@@ -62,7 +62,7 @@ switch ($action) {
                     empty($formValues['custom_params']) ? null : $formValues['custom_params']
                 )
                 ->setCourse($course)
-                ->setActiveDeepLinking(false)
+                ->setActiveDeepLinking(!empty($formValues['deep_linking']))
                 ->setPrivacy(
                     !empty($formValues['share_name']),
                     !empty($formValues['share_email']),
@@ -85,7 +85,9 @@ switch ($action) {
             $em->persist($tool);
             $em->flush();
 
-            $plugin->addCourseTool($course, $tool);
+            if (!$tool->isActiveDeepLinking()) {
+                $plugin->addCourseTool($course, $tool);
+            }
 
             Display::addFlash(
                 Display::return_message($plugin->get_lang('ToolAdded'), 'success')

@@ -35,3 +35,4 @@ $strings['ShareLauncherEmail'] = 'Share launcher\'s email';
 $strings['ShareLauncherPicture'] = 'Share launcher\'s picture';
 $strings['NoTool'] = 'Tool not exists';
 $strings['ToolAddedOnCourseX'] = 'Tool addeed on course <strong>%s</strong>.';
+$strings['SupportDeppLinkingHelp'] = 'Contact your Tool Provider to verify if Deep Linking support is mandatory';

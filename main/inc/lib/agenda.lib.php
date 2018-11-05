@@ -3371,12 +3371,12 @@ class Agenda
 
         // sorting by hour for every day
         $agendaitems = [];
-        while (list($agendaday, $tmpitems) = each($items)) {
+        foreach ($items as $agendaday => $tmpitems) {
             if (!isset($agendaitems[$agendaday])) {
                 $agendaitems[$agendaday] = '';
             }
             sort($tmpitems);
-            while (list($key, $val) = each($tmpitems)) {
+            foreach ($tmpitems as $val) {
                 $agendaitems[$agendaday] .= $val;
             }
         }

@@ -39,7 +39,7 @@ echo '<tr align="center" id="header3">'.
             '<td width="15%"><b>'.get_lang('FirstName').'</b></td>').
         '<td width="15%"><b>'.get_lang('Login').'</b></td>'.
       '</tr>'."\n";
-while (list($key, $val) = each($nom_form)) {
+foreach ($nom_form as $key => $val) {
     $nbre = $nbre + 1;
     if ($nbre & 1) {
         $ndiv = 2;

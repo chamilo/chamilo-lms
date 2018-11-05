@@ -113,7 +113,7 @@ class ExerciseLink extends AbstractLink
                     $attribute['id'] = $row['id'];
 
                     if (isset($attribute['path']) && is_array($attribute['path'])) {
-                        while (list($key, $path) = each($attribute['path'])) {
+                        foreach ($attribute['path'] as $path) {
                             $title = GetQuizName($path, $documentPath);
                             if ($title == '') {
                                 $title = basename($path);

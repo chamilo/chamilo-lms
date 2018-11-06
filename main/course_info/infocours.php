@@ -42,6 +42,8 @@ if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
 
 $categories = CourseCategory::getCategoriesCanBeAddedInCourse($_course['categoryCode']);
 
+$formOptionsArray = [];
+
 // Build the form
 $form = new FormValidator(
     'update_course',
@@ -49,29 +51,9 @@ $form = new FormValidator(
     api_get_self().'?'.api_get_cidreq()
 );
 
-$form->addHtml('<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">');
 
 // COURSE SETTINGS
-$form->addHtml('<div class="panel panel-default">');
-$form->addHtml('
-    <div class="panel-heading" role="tab" id="heading-course-settings">
-        <h4 class="panel-title">
-            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-course-settings"
-               aria-expanded="true" aria-controls="collapse-course-settings">
-');
-$form->addHtml(
-    Display::return_icon('settings.png', get_lang('CourseSettings')).' '.get_lang('CourseSettings')
-);
-$form->addHtml('
-            </a>
-        </h4>
-    </div>
-');
-$form->addHtml('
-    <div id="collapse-course-settings" class="panel-collapse collapse in" role="tabpanel"
-         aria-labelledby="heading-course-settings">
-        <div class="panel-body">
-');
+
 
 $image = '';
 // Display course picture
@@ -195,13 +177,12 @@ if (!empty($scoreModels)) {
 }
 
 $form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
-$form->addHtml('
-        </div>
-    </div>
-');
-$form->addHtml('</div>');
 
-// COURSE ACCESS
+$formOptionsArray['title'] = get_lang('CourseSettings');
+$formOptionsArray['form'] = $form->returnForm();
+
+//****************************************** COURSE ACCESS
+
 $group = [];
 $group[] = $form->createElement(
     'radio',
@@ -1019,10 +1000,19 @@ if ($show_delete_watermark_text_message) {
     );
 }
 
+//Template Course Info
+$tpl = new Template($nameTools);
+
+
 Display::display_header($nameTools, 'Settings');
 
-echo '<div id="course_settings">';
+/*
 $form->display();
-echo '</div>';
+*/
+
+$tpl->assign('course_settings', $formOptionsArray);
+$courseInfoLayout = $tpl->get_template("course_info/index.html.twig");
+$content = $tpl->fetch($courseInfoLayout);
+echo $content;
 
 Display::display_footer();

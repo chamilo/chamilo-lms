@@ -424,6 +424,9 @@ footer {
   border-radius: 2px;
   .card-body{
     padding: 1.88rem 1.81rem;
+    @include landscape($breakpoint-sm) {
+      padding: 0;
+    }
   }
 }
 /* CATEGORY CLASSIC */
@@ -614,17 +617,90 @@ footer {
     }
   }
 }
+/******************* Accordion B4 *****************/
 
-.course-accordion{
-  .card-header{
+.accordion-b4 {
+  .card {
+    border: 0 none;
+    box-shadow: none;
+  }
+  .card-header {
     padding: 0;
-    background-color: $default-white;
-    .btn-link{
-      display: inline-block;
-      width: 100%;
+    background: #fff;
+    border: none;
+  }
+  .card-title a {
+    display: block;
+    position: relative;
+    background: transparent;
+    color: $menu-background;
+    font-size: 14px;
+    font-weight: bolder;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+    padding: 15px 50px;
+    border-bottom: 2px solid $menu-background;
+    border-radius: 0 15px 0 15px;
+    transition: all 0.10s linear 0s;
+    cursor: pointer;
+    &.collapsed {
+      color: #808080;
+      border-bottom: 1px solid #d3d3d3;
+      margin: 0;
+    }
+    i {
+      color: $menu-background;
+      position: absolute;
+      top: 15px;
+      left: 20px;
+      font-size: 20px;
+    }
+    &:before {
+      content: "";
+      position: absolute;
+      bottom: -15px;
+      left: 36px;
+      border: 7px solid transparent;
+      border-top: 7px solid $menu-background;
+    }
+    &.collapsed {
+      &:before {
+        content: "";
+        position: absolute;
+        bottom: -15px;
+        left: 36px;
+        border: 0 none;
+      }
+      &:hover {
+        color: #6a6060;
+      }
+    }
+    &:after {
+      content: "\f106";
+      font-family: "Font Awesome 5 Free", serif;
+      font-weight: 900;
+      color: $menu-secondary;
+      font-size: 20px;
+      line-height: 20px;
+      position: absolute;
+      top: 18px;
+      right: 25px;
+    }
+    &.collapsed:after {
+      font-family: "Font Awesome 5 Free", serif;
+      font-weight: 900;
+      font-size: 20px;
+      line-height: 20px;
+      position: absolute;
+      top: 18px;
+      right: 25px;
+      content: "\f107";
+      color: #808080;
     }
   }
-  .card-body{
+  .card-body {
+    border-top: 0 none;
+    color: #808080;
     .tools{
       width: 160px;
       height: 160px;
@@ -640,7 +716,7 @@ footer {
         height: 84px;
         top: 40%;
         margin-top: -50px;
-        left: 40%;
+        left: 44%;
         margin-left: -32px;
         text-align: center;
         border: 1px solid rgba(0, 0, 0, 0.125) ;
@@ -649,7 +725,7 @@ footer {
         img{
           transition: transform .2s ease-in;
           &:hover{
-            transform: scale(0.85);
+            transform: scale(1.15);
           }
         }
         a{
@@ -668,3 +744,4 @@ footer {
     }
   }
 }
+

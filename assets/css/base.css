@@ -10,7 +10,10 @@
     Version: 1.0
 */
 
-/*------------------------------*/
+
+
+
+
 .admin-block-version {
     font-size: 12px;
     padding: 5%;
@@ -4547,13 +4550,9 @@ i.size-32.icon-new-work {
 
 .top-mediapost .msg-content p,
 .sub-mediapost .rep-post .msg-content p {
-    /* border-top:1px solid #ECF0F1; */
-    /* padding-top: 10px; */
-    /* padding-bottom: 20px; */
     margin-top: 5px;
     margin-bottom: 20px;
     line-height: 22px;
-    /* padding-left: 10px; */
     padding-right: 10px;
     color: #666666;
 }

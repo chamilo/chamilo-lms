@@ -43,9 +43,11 @@ $default-link         : rgb(0, 153, 255);
 // ---------------------------------------------------------
 // COLORS PAGE
 // ---------------------------------------------------------
+// linear-gradient(120deg, #00a5e4, #4a71d0);
 
 $page-background      : #ffffff;
-$menu-background      :linear-gradient(120deg, #00a5e4, #4a71d0);
+$menu-background      : #4a71d0;
+$menu-secondary       : #ff3c7e;
 $sidebar-link         : #54667A;
 $sidebar-bg           : #FFFFFF;
 $sidebar-focus        : rgba(0, 0, 0, 0.07);

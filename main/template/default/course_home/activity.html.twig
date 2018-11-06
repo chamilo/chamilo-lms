@@ -1,12 +1,14 @@
 {% if app.user.status != 5 %} <!-- main/template/default/course_home/activity.html.twig -->
-<div class="accordion course-accordion" id="course-tools">
+<div class="accordion accordion-b4" id="course-tools">
     {% for block in blocks %}
        <div class="card">
         <div class="card-header" id="heading-{{ block.class }}">
             {% if block.title %}
-                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-{{ block.class }}" aria-expanded="true" aria-controls="collapse-{{ block.class }}">
-                    {{ block.title }}
-                </button>
+            <h5 class="card-title">
+                <a class="{{ ( block.title == 'Authoring') ? ' ' : 'collapse' }}" role="button" data-toggle="collapse" data-target="#collapse-{{ block.class }}" aria-expanded="{{ ( block.title == 'Authoring') ? 'true' : 'false' }}" aria-controls="collapse-{{ block.class }}">
+                    <i class="fas fa-clone"></i> {{ block.title }}
+                </a>
+            </h5>
             {% endif %}
         </div>
 

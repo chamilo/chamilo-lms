@@ -634,12 +634,11 @@ footer {
     position: relative;
     background: transparent;
     color: $menu-background;
-    font-size: 14px;
-    font-weight: bolder;
-    text-transform: uppercase;
+    font-size: 16px;
+    font-weight: normal;
     margin-bottom: 15px;
-    padding: 15px 50px;
-    border-bottom: 2px solid $menu-background;
+    padding: 10px 20px;
+    border-bottom: 1px solid $menu-background;
     border-radius: 0 15px 0 15px;
     transition: all 0.10s linear 0s;
     cursor: pointer;
@@ -660,8 +659,8 @@ footer {
       position: absolute;
       bottom: -15px;
       left: 36px;
-      border: 7px solid transparent;
-      border-top: 7px solid $menu-background;
+      /* border: 7px solid transparent;
+      border-top: 7px solid $menu-background; */
     }
     &.collapsed {
       &:before {

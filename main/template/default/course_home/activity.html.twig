@@ -6,7 +6,7 @@
             {% if block.title %}
             <h5 class="card-title">
                 <a class="{{ ( block.title == 'Authoring') ? ' ' : 'collapse' }}" role="button" data-toggle="collapse" data-target="#collapse-{{ block.class }}" aria-expanded="{{ ( block.title == 'Authoring') ? 'true' : 'false' }}" aria-controls="collapse-{{ block.class }}">
-                    <i class="fas fa-clone"></i> {{ block.title }}
+                    {{ block.title }}
                 </a>
             </h5>
             {% endif %}

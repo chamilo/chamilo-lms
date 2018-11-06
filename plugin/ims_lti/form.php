@@ -106,6 +106,8 @@ $params['tool_consumer_instance_name'] = api_get_setting('siteName');
 $params['tool_consumer_instance_url'] = api_get_path(WEB_PATH);
 $params['tool_consumer_instance_contact_email'] = api_get_setting('emailAdministrator');
 
+$params += $tool->parseCustomParams();
+
 $oauth = new OAuthSimple(
     $tool->getConsumerKey(),
     $tool->getSharedSecret()

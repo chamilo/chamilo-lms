@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Script to switch all PHP files in Chamilo to a more Gettext-like syntax.
+ * Generate Gettext-format language files from the existing language files
  *
  * @package chamilo.cron.lang
  */
@@ -9,7 +9,7 @@
  * Includes and declarations.
  */
 die();
-require_once __DIR__.'/../../inc/global.inc.php';
+require_once __DIR__.'/../../../main/inc/global.inc.php';
 $path = api_get_path(SYS_LANG_PATH).'english';
 ini_set('memory_limit', '128M');
 /**

@@ -47,7 +47,7 @@ $student_can_edit_in_session = api_is_allowed_to_session_edit(false, true);
 $onlyOnePublication = api_get_configuration_value('allow_only_one_student_publication_per_user');
 //  @todo add an option to allow/block multiple attempts.
 if ($onlyOnePublication) {
-    $count =  get_work_count_by_student($user_id, $work_id);
+    $count = get_work_count_by_student($user_id, $work_id);
     if ($count >= 1) {
         api_not_allowed(true);
 
@@ -60,7 +60,7 @@ if ($onlyOnePublication) {
         Display::display_footer();
         exit;*/
     }
-    }
+}
 
 $homework = get_work_assignment_by_id($workInfo['id']);
 $validationStatus = getWorkDateValidationStatus($homework);

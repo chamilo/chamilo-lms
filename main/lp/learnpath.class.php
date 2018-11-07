@@ -2037,13 +2037,13 @@ class learnpath
         $previousIcon = '';
         $nextIcon = '';
         if ($hideArrows === false) {
-        $previousIcon = '
+            $previousIcon = '
             <a class="icon-toolbar" id="scorm-previous" href="#" 
                 onclick="switch_item('.$mycurrentitemid.',\'previous\');return false;" title="'.$previousText.'">
                 <span class="fa fa-chevron-left"></span><span class="sr-only">'.$previousText.'</span>
             </a>';
 
-        $nextIcon = '
+            $nextIcon = '
             <a class="icon-toolbar" id="scorm-next" href="#" 
                 onclick="switch_item('.$mycurrentitemid.',\'next\');return false;" title="'.$nextText.'">
                 <span class="fa fa-chevron-right"></span><span class="sr-only">'.$nextText.'</span>

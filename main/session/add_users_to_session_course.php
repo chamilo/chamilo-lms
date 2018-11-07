@@ -653,10 +653,10 @@ if ($add_type == 'multiple') {
     </div>
     <form name="formulaire" method="post"
           action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&course_id=<?php echo $courseId; ?>&id_session=<?php echo $id_session; ?><?php if (!empty($addProcess)) {
-              echo '&add=true';
-          } ?>" <?php if ($ajax_search) {
-        echo ' onsubmit="valide();"';
-    } ?>>
+            echo '&add=true';
+        } ?>" <?php if ($ajax_search) {
+            echo ' onsubmit="valide();"';
+        } ?>>
         <?php echo '<legend>'.$tool_name.' ('.$session_info['name'].') - '.$courseInfo['title'].' </legend>'; ?>
         <?php
         if ($add_type == 'multiple') {
@@ -733,14 +733,14 @@ if ($add_type == 'multiple') {
                                         <?php
                                         $personName = $enreg['ln'].' '.$enreg['fn'].' ('.$enreg['un'].') '
                                             .$enreg['official_code'];
-                                        if ($showOfficialCode) {
-                                            $officialCode =
+                                    if ($showOfficialCode) {
+                                        $officialCode =
                                                 !empty($enreg['official_code']) ? $enreg['official_code'].' - '
                                                     : '? - ';
-                                            $personName =
+                                        $personName =
                                                 $officialCode.$enreg['ln'].' '.$enreg['fn'].' ('.$enreg['un'].')';
-                                        }
-                                        echo $personName; ?>
+                                    }
+                                    echo $personName; ?>
                                     </option>
                                     <?php
                                 } ?>
@@ -755,7 +755,7 @@ if ($add_type == 'multiple') {
 
             <div class="col-md-4">
                 <?php if ($add_type == 'multiple') {
-                    ?>
+                        ?>
                     <?php echo get_lang('FirstLetterUser'); ?> :
                     <select id="first_letter_user" name="firstLetterUser" onchange="change_select(this.value);">
                         <option value="%">--</option>
@@ -765,7 +765,7 @@ if ($add_type == 'multiple') {
                     <br/>
                     <br/>
                     <?php
-                } ?>
+                    } ?>
                 <div class="control-course">
                     <?php
                     if ($ajax_search) {
@@ -818,14 +818,14 @@ if ($add_type == 'multiple') {
                             <?php
                             $personName = $enreg['lastname'].' '.$enreg['firstname'].' ('.$enreg['username'].') '
                                 .$enreg['official_code'];
-                            if ($showOfficialCode) {
-                                $officialCode =
+                        if ($showOfficialCode) {
+                            $officialCode =
                                     !empty($enreg['official_code']) ? $enreg['official_code'].' - ' : '? - ';
-                                $personName =
+                            $personName =
                                     $officialCode.$enreg['lastname'].' '.$enreg['firstname'].' ('.$enreg['username']
                                     .')';
-                            }
-                            echo $personName; ?>
+                        }
+                        echo $personName; ?>
                         </option>
                         <?php
                     }

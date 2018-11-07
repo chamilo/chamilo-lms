@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\CItemProperty;
 
@@ -1887,11 +1886,9 @@ class AnnouncementManager
                 $to = self::loadEditUsers('announcement', $row['id'], true);
                 $separated = CourseManager::separateUsersGroups($to);
                 if (!empty($group_id)) {
-
                     if (isset($separated['groups']) && count($separated['groups']) > 1) {
                         $disableEdit = true;
                     }
-
 
                     if (empty($separated['groups']) && empty($separated['users'])) {
                         $disableEdit = true;

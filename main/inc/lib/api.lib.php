@@ -6262,7 +6262,7 @@ function api_replace_dangerous_char($filename, $treat_spaces_as_hyphens = true)
                 if (api_is_valid_utf8($result)) {
                     $filename = $result;
                     $encoding = 'UTF-8';
-    }
+                }
             }
         }
     }

@@ -172,8 +172,8 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfC
     $blockAddDocuments = api_get_configuration_value('block_student_publication_add_documents');
 
     if (!$blockAddDocuments) {
-    $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'work/add_document.php?'.api_get_cidreq().'&id='.$workId.'">';
-    $actionsLeft .= Display::return_icon('new_document.png', get_lang('AddDocument'), '', ICON_SIZE_MEDIUM).'</a>';
+        $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'work/add_document.php?'.api_get_cidreq().'&id='.$workId.'">';
+        $actionsLeft .= Display::return_icon('new_document.png', get_lang('AddDocument'), '', ICON_SIZE_MEDIUM).'</a>';
     }
 
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'work/add_user.php?'.api_get_cidreq().'&id='.$workId.'">';

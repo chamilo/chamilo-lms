@@ -2143,20 +2143,20 @@ function get_work_user_list(
                     } else {
                         if ($blockEdition && !api_is_platform_admin()) {
                             $editLink = '';
-                    } else {
-                        if ($qualification_exists) {
+                        } else {
+                            if ($qualification_exists) {
                                 $editLink = '<a href="'.$url.'edit.php?'.api_get_cidreq(
                                     ).'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang(
                                         'Edit'
                                     ).'"  >'.
                                 Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
-                        } else {
+                            } else {
                                 $editLink = '<a href="'.$url.'edit.php?'.api_get_cidreq(
                                     ).'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang(
                                         'Modify'
                                     ).'">'.
                                 Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
-                        }
+                            }
                         }
                         $action .= $editLink;
                     }

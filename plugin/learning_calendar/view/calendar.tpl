@@ -8,7 +8,6 @@
                 for (var i = 0; i < response.length; i++) {
                     var startDate = moment(response[i].start_date + " 13:00:00").toDate();
                     var endDate = moment(response[i].end_date + " 13:00:00").toDate();
-
                     myData.push({
                         id: response[i].id,
                         title: response[i].title,

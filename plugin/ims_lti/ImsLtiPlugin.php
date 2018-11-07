@@ -1,17 +1,17 @@
 <?php
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CourseBundle\Entity\CTool;
-use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
 use Chamilo\UserBundle\Entity\User;
+use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
-use Doctrine\DBAL\DBALException;
 use Symfony\Component\Filesystem\Filesystem;
-use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
 
 /**
  * Description of MsiLti
@@ -105,36 +105,47 @@ class ImsLtiPlugin extends Plugin
      * Creates the plugin tables on database
      *
      * @return boolean
+     * @throws DBALException
      */
     private function createPluginTables()
     {
         $entityManager = Database::getManager();
         $connection = $entityManager->getConnection();
-        $pluginSchema = new Schema();
-        $platform = $connection->getDatabasePlatform();
-        if (!$connection->getSchemaManager()->tablesExist(self::TABLE_TOOL)) {
-            $toolTable = $pluginSchema->createTable(self::TABLE_TOOL);
-            $toolTable->addColumn(
-                'id',
-                \Doctrine\DBAL\Types\Type::INTEGER,
-                ['autoincrement' => true, 'unsigned' => true]
-            );
-            $toolTable->addColumn('name', Type::STRING);
-            $toolTable->addColumn('description', Type::TEXT)->setNotnull(false);
-            $toolTable->addColumn('launch_url', Type::TEXT);
-            $toolTable->addColumn('consumer_key', Type::STRING);
-            $toolTable->addColumn('shared_secret', Type::STRING);
-            $toolTable->addColumn('custom_params', Type::TEXT)->setNotnull(false);
-            $toolTable->addColumn('is_global', Type::BOOLEAN);
-            $toolTable->setPrimaryKey(['id']);
 
-            $queries = $pluginSchema->toSql($platform);
-
-            foreach ($queries as $query) {
-                Database::query($query);
-            }
+        if ($connection->getSchemaManager()->tablesExist(self::TABLE_TOOL)) {
+            return true;
         }
 
+        $queries = [
+            'CREATE TABLE '.self::TABLE_TOOL.' (
+                id INT AUTO_INCREMENT NOT NULL,
+                c_id INT DEFAULT NULL,
+                gradebook_eval_id INT DEFAULT NULL,
+                parent_id INT DEFAULT NULL,
+                name VARCHAR(255) NOT NULL,
+                description LONGTEXT DEFAULT NULL,
+                launch_url VARCHAR(255) NOT NULL,
+                consumer_key VARCHAR(255) NOT NULL,
+                shared_secret VARCHAR(255) NOT NULL,
+                custom_params LONGTEXT DEFAULT NULL,
+                active_deep_linking TINYINT(1) DEFAULT \'0\' NOT NULL,
+                privacy LONGTEXT DEFAULT NULL,
+                INDEX IDX_C5E47F7C91D79BD3 (c_id),
+                INDEX IDX_C5E47F7C82F80D8B (gradebook_eval_id),
+                INDEX IDX_C5E47F7C727ACA70 (parent_id),
+                PRIMARY KEY(id)
+            ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB',
+            'ALTER TABLE '.self::TABLE_TOOL.' ADD CONSTRAINT FK_C5E47F7C91D79BD3
+                FOREIGN KEY (c_id) REFERENCES course (id)',
+            'ALTER TABLE '.self::TABLE_TOOL.' ADD CONSTRAINT FK_C5E47F7C82F80D8B
+                FOREIGN KEY (gradebook_eval_id) REFERENCES gradebook_evaluation (id) ON DELETE SET NULL',
+            'ALTER TABLE '.self::TABLE_TOOL.' ADD CONSTRAINT FK_C5E47F7C727ACA70
+                FOREIGN KEY (parent_id) REFERENCES '.self::TABLE_TOOL.' (id);',
+        ];
+
+        foreach ($queries as $query) {
+            Database::query($query);
+        }
 
         return true;
     }
@@ -176,7 +187,7 @@ class ImsLtiPlugin extends Plugin
     {
         $button = Display::toolbarButton(
             $this->get_lang('ConfigureExternalTool'),
-            api_get_path(WEB_PLUGIN_PATH).'ims_lti/add.php?'.api_get_cidreq(),
+            api_get_path(WEB_PLUGIN_PATH).'ims_lti/configure.php?'.api_get_cidreq(),
             'cog',
             'primary'
         );
@@ -204,7 +215,7 @@ class ImsLtiPlugin extends Plugin
         $cTool = $toolRepo->findOneBy(
             [
                 'cId' => $course,
-                'link' => self::generateToolLink($ltiTool)
+                'link' => self::generateToolLink($ltiTool),
             ]
         );
 
@@ -345,36 +356,39 @@ class ImsLtiPlugin extends Plugin
 
     /**
      * @param array      $contentItem
-     * @param ImsLtiTool $ltiTool
+     * @param ImsLtiTool $baseLtiTool
      * @param Course     $course
      *
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function saveItemAsLtiLink(array $contentItem, ImsLtiTool $ltiTool, Course $course)
+    public function saveItemAsLtiLink(array $contentItem, ImsLtiTool $baseLtiTool, Course $course)
     {
         $em = Database::getManager();
         $ltiToolRepo = $em->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool');
 
-        $url = empty($contentItem['url']) ? $ltiTool->getLaunchUrl() : $contentItem['url'];
+        $url = empty($contentItem['url']) ? $baseLtiTool->getLaunchUrl() : $contentItem['url'];
 
         /** @var ImsLtiTool $newLtiTool */
-        $newLtiTool = $ltiToolRepo->findOneBy(['launchUrl' => $url, 'isGlobal' => false]);
+        $newLtiTool = $ltiToolRepo->findOneBy(['launchUrl' => $url, 'parent' => $baseLtiTool, 'course' => $course]);
 
-        if (empty($newLtiTool)) {
+        if (null === $newLtiTool) {
             $newLtiTool = new ImsLtiTool();
             $newLtiTool
                 ->setLaunchUrl($url)
-                ->setConsumerKey(
-                    $ltiTool->getConsumerKey()
+                ->setParent(
+                    $baseLtiTool
                 )
-                ->setSharedSecret(
-                    $ltiTool->getSharedSecret()
-                );
+                ->setPrivacy(
+                    $baseLtiTool->isSharingName(),
+                    $baseLtiTool->isSharingEmail(),
+                    $baseLtiTool->isSharingPicture()
+                )
+                ->setCourse($course);
         }
 
         $newLtiTool
             ->setName(
-                !empty($contentItem['title']) ? $contentItem['title'] : $ltiTool->getName()
+                !empty($contentItem['title']) ? $contentItem['title'] : $baseLtiTool->getName()
             )
             ->setDescription(
                 !empty($contentItem['text']) ? $contentItem['text'] : null
@@ -392,5 +406,55 @@ class ImsLtiPlugin extends Plugin
         }
 
         $this->addCourseTool($course, $newLtiTool);
+    }
+
+    /**
+     * @return null|SimpleXMLElement
+     */
+    private function getRequestXmlElement()
+    {
+        $request = file_get_contents("php://input");
+
+        if (empty($request)) {
+            return null;
+        }
+
+        $xml = new SimpleXMLElement($request);
+
+        return $xml;
+    }
+
+    /**
+     * @return ImsLtiServiceResponse|null
+     */
+    public function processServiceRequest()
+    {
+        $xml = $this->getRequestXmlElement();
+
+        if (empty($xml)) {
+            return null;
+        }
+
+        $request = ImsLtiServiceRequestFactory::create($xml);
+        $response = $request->process();
+
+        return $response;
+    }
+
+    /**
+     * @param int    $toolId
+     * @param Course $course
+     *
+     * @return bool
+     */
+    public static function existsToolInCourse($toolId, Course $course)
+    {
+        $em = Database::getManager();
+        $toolRepo = $em->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool');
+
+        /** @var ImsLtiTool $tool */
+        $tool = $toolRepo->findOneBy(['id' => $toolId, 'course' => $course]);
+
+        return !empty($tool);
     }
 }

@@ -16,9 +16,8 @@ if (empty($url)) {
 
     return;
 }
-
+try {
 $channel = Reader::import($url);
-
 if (!empty($channel)) {
     /** @var FeedInterface $item */
     foreach ($channel as $item) {
@@ -29,4 +28,8 @@ if (!empty($channel)) {
         }
         echo Display::panel($item->getDescription(), $title);
     }
+    }
+} catch (Exception $e) {
+    echo Display::return_message($plugin->get_lang('no_valid_rss'), 'warning');
+    error_log($e->getMessage());
 }

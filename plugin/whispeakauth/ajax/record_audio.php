@@ -56,7 +56,7 @@ if (false === $path) {
     exit;
 }
 
-$originFullPath = api_get_path(SYS_UPLOAD_PATH).'whispeakauth'.$path['path_to_save'];
+$newFullPath = $originFullPath = api_get_path(SYS_UPLOAD_PATH).'whispeakauth'.$path['path_to_save'];
 $fileType = mime_content_type($originFullPath);
 
 if ('wav' !== substr($fileType, -3)) {

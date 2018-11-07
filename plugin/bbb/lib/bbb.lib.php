@@ -1544,6 +1544,9 @@ class bbb
             );
         }
 
+        $hide = $this->plugin->get('disable_download_conference_link') === 'true' ? true : false;
+
+        if ($hide == false) {
         if ($meetingInfo['has_video_m4v']) {
             $links[] = Display::url(
                 Display::return_icon('save.png', get_lang('DownloadFile')),
@@ -1560,6 +1563,7 @@ class bbb
                     'data-id' => $meetingInfo['id']
                 ]
             );
+            }
         }
 
         if (!$isAdminReport) {

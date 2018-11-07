@@ -15,7 +15,9 @@ api_block_anonymous_users(false);
 $em = Database::getManager();
 
 /** @var ImsLtiTool $tool */
-$tool = isset($_GET['id']) ? $em->find('ChamiloPluginBundle:ImsLti\ImsLtiTool', intval($_GET['id'])) : 0;
+$tool = isset($_GET['id'])
+    ? $em->find('ChamiloPluginBundle:ImsLti\ImsLtiTool', (int) $_GET['id'])
+    : null;
 
 if (!$tool) {
     api_not_allowed(true);
@@ -30,15 +32,16 @@ $course = $em->find('ChamiloCoreBundle:Course', api_get_course_int_id());
 /** @var User $user */
 $user = $em->find('ChamiloUserBundle:User', api_get_user_id());
 
-$siteName = api_get_setting('siteName');
-$toolUserId = ImsLtiPlugin::generateToolUserId($user);
+$pluginPath = api_get_path(WEB_PLUGIN_PATH).'ims_lti/';
+$toolUserId = ImsLtiPlugin::generateToolUserId($user->getId());
+$platformDomain = str_replace(['https://', 'http://'], '', api_get_setting('InstitutionUrl'));
 
 $params = [];
 $params['lti_version'] = 'LTI-1p0';
 
 if ($tool->isActiveDeepLinking()) {
     $params['lti_message_type'] = 'ContentItemSelectionRequest';
-    $params['content_item_return_url'] = api_get_path(WEB_PLUGIN_PATH).'ims_lti/item_return.php';
+    $params['content_item_return_url'] = $pluginPath.'item_return.php';
     $params['accept_media_types'] = '*/*';
     $params['accept_presentation_document_targets'] = 'iframe';
     //$params['accept_unsigned'];
@@ -53,15 +56,38 @@ if ($tool->isActiveDeepLinking()) {
     $params['resource_link_id'] = $tool->getId();
     $params['resource_link_title'] = $tool->getName();
     $params['resource_link_description'] = $tool->getDescription();
+
+    $toolEval = $tool->getGradebookEval();
+
+    if (!empty($toolEval)) {
+        $params['lis_result_sourcedid'] = $toolEval->getId().':'.$user->getId();
+        $params['lis_outcome_service_url'] = api_get_path(WEB_PATH).'ims_lti/outcome_service/'.$tool->getId();
+        $params['lis_person_sourcedid'] = "$platformDomain:$toolUserId";
+        $params['lis_course_offering_sourcedid'] = "$platformDomain:".$course->getId();
+
+        if ($session) {
+            $params['lis_course_offering_sourcedid'] .= ':'.$session->getId();
+        }
+    }
 }
 
-$params['user_id'] = ImsLtiPlugin::generateToolUserId($user->getId());
-$params['user_image'] = UserManager::getUserPicture($user->getId());
+$params['user_id'] = $toolUserId;
+
+if ($tool->isSharingPicture()) {
+    $params['user_image'] = UserManager::getUserPicture($user->getId());
+}
+
 $params['roles'] = ImsLtiPlugin::getUserRoles($user);
-$params['lis_person_name_given'] = $user->getFirstname();
-$params['lis_person_name_family'] = $user->getLastname();
-$params['lis_person_name_full'] = $user->getCompleteName();
-$params['lis_person_contact_email_primary'] = $user->getEmail();
+
+if ($tool->isSharingName()) {
+    $params['lis_person_name_given'] = $user->getFirstname();
+    $params['lis_person_name_family'] = $user->getLastname();
+    $params['lis_person_name_full'] = $user->getCompleteName();
+}
+
+if ($tool->isSharingEmail()) {
+    $params['lis_person_contact_email_primary'] = $user->getEmail();
+}
 
 if (api_is_allowed_to_edit(false, true)) {
     $params['role_scope_mentor'] = ImsLtiPlugin::getRoleScopeMentor($course, $session);
@@ -75,10 +101,12 @@ $params['launch_presentation_locale'] = api_get_language_isocode();
 $params['launch_presentation_document_target'] = 'iframe';
 $params['tool_consumer_info_product_family_code'] = 'Chamilo LMS';
 $params['tool_consumer_info_version'] = api_get_version();
-$params['tool_consumer_instance_guid'] = str_replace(['https://', 'http://'], '', api_get_setting('InstitutionUrl'));
-$params['tool_consumer_instance_name'] = $siteName;
+$params['tool_consumer_instance_guid'] = $platformDomain;
+$params['tool_consumer_instance_name'] = api_get_setting('siteName');
 $params['tool_consumer_instance_url'] = api_get_path(WEB_PATH);
 $params['tool_consumer_instance_contact_email'] = api_get_setting('emailAdministrator');
+
+$params += $tool->parseCustomParams();
 
 $oauth = new OAuthSimple(
     $tool->getConsumerKey(),

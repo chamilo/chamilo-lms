@@ -3,7 +3,9 @@
 
 use Chamilo\CourseBundle\Entity\CLpCategory;
 
-if (intval($_GET['default']) == 1) {
+$default = isset($_GET['default']) ? (int) $_GET['default'] : null;
+
+if ($default == 1) {
     $cidReset = true;
 }
 
@@ -19,7 +21,7 @@ if (!$enable) {
     api_not_allowed(true, $plugin->get_lang('ToolDisabled'));
 }
 
-if (intval($_GET['default']) == 1) {
+if ($default == 1) {
     $courseId = 0;
     $courseCode = '';
     $sessionId = 0;
@@ -35,6 +37,10 @@ if (intval($_GET['default']) == 1) {
 
 if (empty($courseCode)) {
     $courseCode = isset($_REQUEST['course_code']) ? Database::escape_string($_REQUEST['course_code']) : '';
+    $courseInfo = api_get_course_info($courseCode);
+    if (!empty($courseInfo)) {
+        $courseId = $courseInfo['real_id'];
+    }
 }
 
 if (empty($sessionId)) {
@@ -462,10 +468,10 @@ foreach ($userList as $userInfo) {
 }
 $htmlText .= '</body></html>';
 
-$fileName = 'certificate_'.date("Ymd_His");
+$fileName = 'certificate_'.date('Ymd_His');
 $params = [
     'filename' => $fileName,
-    'pdf_title' => "Certificate",
+    'pdf_title' => 'Certificate',
     'pdf_description' => '',
     'format' => 'A4-L',
     'orientation' => 'L',

@@ -168,9 +168,9 @@ class UserManager
      * @param bool          $sendEmailToAllAdmins
      * @param FormValidator $form
      * @param int           $creatorId
+     * @param array         $emailTemplate
      *
      * @return mixed new user id - if the new user creation succeeds, false otherwise
-     *
      * @desc The function tries to retrieve user id from the session.
      * If it exists, the current user id is the creator id. If a problem arises,
      * @assert ('Sam','Gamegie',5,'sam@example.com','jo','jo') > 1
@@ -198,7 +198,8 @@ class UserManager
         $address = '',
         $sendEmailToAllAdmins = false,
         $form = null,
-        $creatorId = 0
+        $creatorId = 0,
+        $emailTemplate = []
     ) {
         $creatorId = empty($creatorId) ? api_get_user_id() : 0;
         $hook = HookCreateUser::create();
@@ -436,9 +437,7 @@ class UserManager
                     false,
                     false
                 );
-                $layoutSubject = $tplSubject->get_template(
-                    'mail/subject_registration_platform.tpl'
-                );
+                $layoutSubject = $tplSubject->get_template('mail/subject_registration_platform.tpl');
                 $emailSubject = $tplSubject->fetch($layoutSubject);
                 $sender_name = api_get_person_name(
                     api_get_setting('administratorName'),
@@ -477,6 +476,9 @@ class UserManager
                 $layoutContent = $tplContent->get_template('mail/content_registration_platform.tpl');
                 $emailBody = $tplContent->fetch($layoutContent);
 
+                $userInfo = api_get_user_info($userId);
+                $mailTemplateManager = new MailTemplateManager();
+
                 $phoneNumber = isset($extra['mobile_phone_number']) ? $extra['mobile_phone_number'] : null;
 
                 $additionalParameters = [
@@ -486,10 +488,32 @@ class UserManager
                     'password' => $original_password,
                 ];
 
+                $emailBodyTemplate = '';
+                if (!empty($emailTemplate)) {
+                    if (isset($emailTemplate['content_registration_platform.tpl']) &&
+                        !empty($emailTemplate['content_registration_platform.tpl'])
+                    ) {
+                        $emailBodyTemplate = $mailTemplateManager->parseTemplate(
+                            $emailTemplate['content_registration_platform.tpl'],
+                            $userInfo
+                        );
+                    }
+                }
+
                 $twoEmail = api_get_configuration_value('send_two_inscription_confirmation_mail');
                 if ($twoEmail === true) {
                     $layoutContent = $tplContent->get_template('mail/new_user_first_email_confirmation.tpl');
                     $emailBody = $tplContent->fetch($layoutContent);
+
+                    if (!empty($emailBodyTemplate) &&
+                        isset($emailTemplate['new_user_first_email_confirmation.tpl']) &&
+                        !empty($emailTemplate['new_user_first_email_confirmation.tpl'])
+                    ) {
+                        $emailBody = $mailTemplateManager->parseTemplate(
+                            $emailTemplate['new_user_first_email_confirmation.tpl'],
+                            $userInfo
+                        );
+                    }
 
                     api_mail_html(
                         $recipient_name,
@@ -507,6 +531,16 @@ class UserManager
                     $layoutContent = $tplContent->get_template('mail/new_user_second_email_confirmation.tpl');
                     $emailBody = $tplContent->fetch($layoutContent);
 
+                    if (!empty($emailBodyTemplate) &&
+                        isset($emailTemplate['new_user_second_email_confirmation.tpl']) &&
+                        !empty($emailTemplate['new_user_second_email_confirmation.tpl'])
+                    ) {
+                        $emailBody = $mailTemplateManager->parseTemplate(
+                            $emailTemplate['new_user_second_email_confirmation.tpl'],
+                            $userInfo
+                        );
+                    }
+
                     api_mail_html(
                         $recipient_name,
                         $email,
@@ -520,6 +554,9 @@ class UserManager
                         $additionalParameters
                     );
                 } else {
+                    if (!empty($emailBodyTemplate)) {
+                        $emailBody = $emailBodyTemplate;
+                    }
                     $sendToInbox = api_get_configuration_value('send_inscription_msg_to_inbox');
                     if ($sendToInbox) {
                         $adminList = self::get_all_administrators();
@@ -587,6 +624,17 @@ class UserManager
 
                     $layoutContent = $tplContent->get_template('mail/content_registration_platform_to_admin.tpl');
                     $emailBody = $tplContent->fetch($layoutContent);
+
+                    if (!empty($emailBodyTemplate) &&
+                        isset($emailTemplate['content_registration_platform_to_admin.tpl']) &&
+                        !empty($emailTemplate['content_registration_platform_to_admin.tpl'])
+                    ) {
+                        $emailBody = $mailTemplateManager->parseTemplate(
+                            $emailTemplate['content_registration_platform_to_admin.tpl'],
+                            $userInfo
+                        );
+                    }
+
                     $subject = get_lang('UserAdded');
 
                     foreach ($adminList as $adminId => $data) {
@@ -629,6 +677,7 @@ class UserManager
      * @param int $user_id The user id
      *
      * @return bool true if user can be deleted
+     *
      * @assert (null) === false
      * @assert (-1) === false
      * @assert ('abc') === false
@@ -1027,6 +1076,7 @@ class UserManager
      * @param bool   $send_email      Whether to send an e-mail to the user after the update is complete
      * @param int    $reset_password  Method used to reset password (0, 1, 2 or 3 - see usage examples for details)
      * @param string $address
+     * @param array  $emailTemplate
      *
      * @return bool|int False on error, or the user ID if the user information was updated
      * @assert (false, false, false, false, false, false, false, false, false, false, false, false, false) === false
@@ -1052,7 +1102,8 @@ class UserManager
         $encrypt_method = '',
         $send_email = false,
         $reset_password = 0,
-        $address = null
+        $address = null,
+        $emailTemplate = []
     ) {
         $hook = HookUpdateUser::create();
         if (!empty($hook)) {
@@ -1175,47 +1226,51 @@ class UserManager
                 PERSON_NAME_EMAIL_ADDRESS
             );
             $email_admin = api_get_setting('emailAdministrator');
-
+            $url = api_get_path(WEB_PATH);
             if (api_is_multiple_url_enabled()) {
                 $access_url_id = api_get_current_access_url_id();
                 if ($access_url_id != -1) {
                     $url = api_get_access_url($access_url_id);
-                    $emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".
-                        get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".
-                        get_lang('Username')." : ".$username.(($reset_password > 0) ? "\n".
-                        get_lang('Pass')." : ".stripslashes($original_password) : "")."\n\n".
-                        get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".$url['url']."\n\n".
-                        get_lang('Problem')."\n\n".
-                        get_lang('SignatureFormula').",\n\n".
-                        api_get_person_name(
-                            api_get_setting('administratorName'),
-                            api_get_setting('administratorSurname')
-                        )."\n".
-                        get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".
-                        get_lang('Email')." : ".api_get_setting('emailAdministrator');
+                    $url = $url['url'];
                 }
-            } else {
-                $emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".
-                    get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".
-                    get_lang('Username')." : ".$username.(($reset_password > 0) ? "\n".
-                    get_lang('Pass')." : ".stripslashes($original_password) : "")."\n\n".
-                    get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".api_get_path(WEB_PATH)."\n\n".
-                    get_lang('Problem')."\n\n".
-                    get_lang('SignatureFormula').",\n\n".
-                    api_get_person_name(
-                        api_get_setting('administratorName'),
-                        api_get_setting('administratorSurname')
-                    )."\n".
-                    get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".
-                    get_lang('Email')." : ".api_get_setting('emailAdministrator');
             }
 
-            $emailbody = nl2br($emailbody);
+            $tplContent = new Template(
+                null,
+                false,
+                false,
+                false,
+                false,
+                false
+            );
+            // variables for the default template
+            $tplContent->assign('complete_name', stripslashes(api_get_person_name($firstname, $lastname)));
+            $tplContent->assign('login_name', $username);
+
+            $originalPassword = '';
+            if ($reset_password > 0) {
+                $originalPassword = stripslashes($original_password);
+            }
+            $tplContent->assign('original_password', $originalPassword);
+            $tplContent->assign('portal_url', $url);
+
+            $layoutContent = $tplContent->get_template('mail/user_edit_content.tpl');
+            $emailBody = $tplContent->fetch($layoutContent);
+
+            $mailTemplateManager = new MailTemplateManager();
+
+            if (!empty($emailTemplate) &&
+                isset($emailTemplate['user_edit_content.tpl']) &&
+                !empty($emailTemplate['user_edit_content.tpl'])
+            ) {
+                $userInfo = api_get_user_info($user_id);
+                $emailBody = $mailTemplateManager->parseTemplate($emailTemplate['user_edit_content.tpl'], $userInfo);
+            }
             api_mail_html(
                 $recipient_name,
                 $email,
                 $emailsubject,
-                $emailbody,
+                $emailBody,
                 $sender_name,
                 $email_admin
             );

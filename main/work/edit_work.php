@@ -14,6 +14,12 @@ if (!api_is_allowed_to_edit()) {
     api_not_allowed(true);
 }
 
+$blockEdition = api_get_configuration_value('block_student_publication_edition');
+
+if ($blockEdition && !api_is_platform_admin()) {
+    api_not_allowed(true);
+}
+
 $courseInfo = api_get_course_info();
 $sessionId = api_get_session_id();
 $groupId = api_get_group_id();

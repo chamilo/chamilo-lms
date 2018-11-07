@@ -2029,6 +2029,14 @@ class learnpath
             }
         }
 
+        $hideArrows = false;
+        if (isset($settings['display']) && isset($settings['display']['hide_lp_arrow_navigation'])) {
+            $hideArrows = $settings['display']['hide_lp_arrow_navigation'];
+        }
+
+        $previousIcon = '';
+        $nextIcon = '';
+        if ($hideArrows === false) {
         $previousIcon = '
             <a class="icon-toolbar" id="scorm-previous" href="#" 
                 onclick="switch_item('.$mycurrentitemid.',\'previous\');return false;" title="'.$previousText.'">
@@ -2040,8 +2048,9 @@ class learnpath
                 onclick="switch_item('.$mycurrentitemid.',\'next\');return false;" title="'.$nextText.'">
                 <span class="fa fa-chevron-right"></span><span class="sr-only">'.$nextText.'</span>
             </a>';
+        }
 
-        if ($this->mode == 'fullscreen') {
+        if ($this->mode === 'fullscreen') {
             $navbar = '
                   <span id="'.$idBar.'" class="buttons">
                     '.$reportingIcon.'
@@ -13794,6 +13803,8 @@ EOD;
             [$this->get_id()],
             false
         );
+
+        $courseBuilder->restoreDocumentsFromList();
 
         $zipFile = CourseArchiver::createBackup($courseBuilder->course);
         $zipPath = CourseArchiver::getBackupDir().$zipFile;

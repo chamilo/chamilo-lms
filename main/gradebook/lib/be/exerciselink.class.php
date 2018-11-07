@@ -199,7 +199,7 @@ class ExerciseLink extends AbstractLink
             if ($exercise->exercise_was_added_in_lp == false) {
                 $sql = "SELECT * FROM $tblStats
                         WHERE
-                            exe_exo_id = ".$exerciseId." AND
+                            exe_exo_id = $exerciseId AND
                             orig_lp_id = 0 AND
                             orig_lp_item_id = 0 AND
                             status <> 'incomplete' AND
@@ -217,7 +217,7 @@ class ExerciseLink extends AbstractLink
                 $sql = "SELECT * 
                         FROM $tblStats
                         WHERE
-                            exe_exo_id = ".$exerciseId." AND
+                            exe_exo_id = $exerciseId AND
                             orig_lp_id = $lpId AND
                             status <> 'incomplete' AND
                             session_id = $sessionId AND

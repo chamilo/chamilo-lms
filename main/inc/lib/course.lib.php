@@ -223,7 +223,9 @@ class CourseManager
         $conditionsLike = [],
         $onlyThisCourseList = []
     ) {
-        $sql = "SELECT course.* FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." course ";
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $sql = "SELECT course.*, course.id as real_id 
+                FROM $courseTable course ";
 
         if (!empty($urlId)) {
             $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -242,7 +244,7 @@ class CourseManager
                 $sql .= " AND visibility = $visibility ";
             }
         } else {
-            $sql .= "WHERE 1 ";
+            $sql .= 'WHERE 1 ';
             if ($visibility !== -1) {
                 $sql .= " AND visibility = $visibility ";
             }
@@ -289,7 +291,7 @@ class CourseManager
         if (!empty($orderby)) {
             $sql .= " ORDER BY ".Database::escape_string($orderby)." ";
         } else {
-            $sql .= " ORDER BY 1 ";
+            $sql .= ' ORDER BY 1 ';
         }
 
         if (!in_array($orderdirection, ['ASC', 'DESC'])) {
@@ -332,6 +334,7 @@ class CourseManager
     public static function getUserInCourseStatus($userId, $courseId)
     {
         $courseId = (int) $courseId;
+        $userId = (int) $userId;
         if (empty($courseId)) {
             return false;
         }
@@ -341,7 +344,7 @@ class CourseManager
                 "SELECT status FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
                 WHERE
                     c_id  = $courseId AND
-                    user_id = ".intval($userId)
+                    user_id = $userId"
             )
         );
 
@@ -438,7 +441,7 @@ class CourseManager
         }
 
         if (!empty($session_id)) {
-            $session_id = intval($session_id);
+            $session_id = (int) $session_id;
         } else {
             $session_id = api_get_session_id();
         }
@@ -1114,6 +1117,7 @@ class CourseManager
      * @param int    $user_id
      * @param string $course_code  , if this parameter is null, it'll check for all courses
      * @param bool   $in_a_session True for checking inside sessions too, by default is not checked
+     * @param int    $session_id
      *
      * @return bool $session_id true if the user is registered in the course, false otherwise
      */
@@ -1123,12 +1127,12 @@ class CourseManager
         $in_a_session = false,
         $session_id = 0
     ) {
-        $user_id = intval($user_id);
+        $user_id = (int) $user_id;
 
         if (empty($session_id)) {
             $session_id = api_get_session_id();
         } else {
-            $session_id = intval($session_id);
+            $session_id = (int) $session_id;
         }
 
         $condition_course = '';
@@ -1160,13 +1164,16 @@ class CourseManager
         }
 
         $tableSessionCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $sql = 'SELECT 1 FROM '.$tableSessionCourseUser.
-            ' WHERE user_id = '.$user_id.' '.$condition_course;
+        $sql = 'SELECT 1 FROM '.$tableSessionCourseUser.'
+            WHERE user_id = '.$user_id.' AND session_id = '.$session_id.' '.$condition_course;
+
         if (Database::num_rows(Database::query($sql)) > 0) {
             return true;
         }
 
-        $sql = 'SELECT 1 FROM '.$tableSessionCourseUser.' WHERE user_id = '.$user_id.' AND status = 2 '.$condition_course;
+        $sql = 'SELECT 1 FROM '.$tableSessionCourseUser.'
+            WHERE user_id = '.$user_id.' AND session_id = '.$session_id.' AND status = 2 '.$condition_course;
+
         if (Database::num_rows(Database::query($sql)) > 0) {
             return true;
         }

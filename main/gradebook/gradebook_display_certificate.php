@@ -131,7 +131,8 @@ switch ($action) {
         if (api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') == 'true' &&
             api_get_course_setting('customcertificate_course_enable', $courseCode) == 1
         ) {
-            $url = api_get_path(WEB_PLUGIN_PATH).'customcertificate/src/print_certificate.php?export_all=1';
+            $params = 'course_code='.api_get_course_id().'&session_id='.api_get_session_id().'&'.api_get_cidreq();
+            $url = api_get_path(WEB_PLUGIN_PATH).'customcertificate/src/print_certificate.php?export_all=1&'.$params;
         } else {
             if (api_is_student_boss()) {
                 $userGroup = new UserGroup();
@@ -307,7 +308,7 @@ if (count($certificate_list) == 0) {
             echo '<td width="50%">'.get_lang('Score').' : '.$valueCertificate['score_certificate'].'</td>';
             echo '<td width="30%">'.get_lang('Date').' : '.api_convert_and_format_date($valueCertificate['created_at']).'</td>';
             echo '<td width="20%">';
-            $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$valueCertificate['id'];
+            $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$valueCertificate['id'].'&user_id='.$value['user_id'];
             $certificates = Display::url(
                 get_lang('Certificate'),
                 $url,

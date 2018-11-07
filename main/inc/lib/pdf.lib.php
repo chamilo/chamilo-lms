@@ -412,9 +412,15 @@ class PDF
             //Fixing only images @todo do the same thing with other elements
             $elements = $doc->getElementsByTagName('img');
             $protocol = api_get_protocol();
+            $replaced = [];
             if (!empty($elements)) {
                 foreach ($elements as $item) {
                     $old_src = $item->getAttribute('src');
+
+                    if (in_array($old_src, $replaced)) {
+                        continue;
+                    }
+
                     if (strpos($old_src, $protocol) === false) {
                         if (strpos($old_src, '/main/default_course_document') === false) {
                             if (strpos($old_src, '/main/inc/lib/') === false &&
@@ -432,6 +438,7 @@ class PDF
                                 );
                                 $new_path = $document_path.$old_src_fixed;
                                 $document_html = str_replace($old_src, $new_path, $document_html);
+                                $replaced[] = $old_src;
                             }
                         }
                     }

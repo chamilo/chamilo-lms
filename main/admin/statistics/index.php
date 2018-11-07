@@ -22,11 +22,44 @@ if ($report == 'recentlogins') {
     <script>
     $(document).ready(function() {
         $.ajax({
-            url: "'.api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?a=recentlogins&session_duration='.$sessionDuration.'",
+            url: "'.api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?a=recent_logins&session_duration='.$sessionDuration.'",
             type: "POST",
             success: function(data) {
                 Chart.defaults.global.responsive = true;
-                var myLine = new Chart(document.getElementById("canvas").getContext("2d")).Line(data);
+                var ctx = document.getElementById("canvas").getContext("2d");
+                var myLoginChart = new Chart(ctx, {
+                    type: "line",
+                    data: data
+                });
+            }
+        });
+    });
+    </script>';
+}
+if ($report == 'tools') {
+    $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
+    $htmlHeadXtra[] = '
+    <script>
+    $(document).ready(function() {
+        $.ajax({
+            url: "'.api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?a=tools_usage",
+            type: "POST",
+            success: function(data) {
+                Chart.defaults.global.responsive = true;
+                var ctx = document.getElementById("canvas").getContext("2d");
+                var myLoginChart = new Chart(ctx, {
+                    type: "pie",
+                    data: data,
+                    options: {
+                      legend: {
+                        position: "left"
+                      },
+                      title: {
+                        text: "'.get_lang('PlatformToolAccess').'",
+                        display: true
+                      }
+                    }
+                });
             }
         });
     });
@@ -198,6 +231,7 @@ switch ($report) {
         Statistics::printStats(get_lang('CountCours'), $courses);
         break;
     case 'tools':
+        echo '<canvas class="col-md-12" id="canvas" height="300px" style="margin-bottom: 20px"></canvas>';
         Statistics::printToolStats();
         break;
     case 'coursebylanguage':
@@ -236,7 +270,7 @@ switch ($report) {
         $form->addHidden('report', 'recentlogins');
         $form->display();
 
-        echo '<canvas class="col-md-12" id="canvas" height="100px" style="margin-bottom: 20px"></canvas>';
+        echo '<canvas class="col-md-12" id="canvas" height="200px" style="margin-bottom: 20px"></canvas>';
         Statistics::printRecentLoginStats(false, $sessionDuration);
         Statistics::printRecentLoginStats(true, $sessionDuration);
         break;

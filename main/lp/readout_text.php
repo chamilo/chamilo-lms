@@ -16,8 +16,8 @@ $current_course_tool = TOOL_LEARNPATH;
 
 api_protect_course_script(true);
 
-$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-$lpId = isset($_GET['lp_id']) ? intval($_GET['lp_id']) : 0;
+$id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+$lpId = isset($_GET['lp_id']) ? (int) $_GET['lp_id'] : 0;
 $courseInfo = api_get_course_info();
 $courseCode = $courseInfo['code'];
 $courseId = $courseInfo['real_id'];

@@ -22,6 +22,7 @@ class GradebookDataGenerator
     const GDG_SORT_DESC = 64;
     const GDG_SORT_ID = 128;
     public $userId;
+    public $hidePercentage = false;
 
     private $items;
     private $evals_links;
@@ -188,7 +189,6 @@ class GradebookDataGenerator
                             $ignore_score_color,
                             true
                         );
-
                         if (!empty($score['score'][0])) {
                             $invalidateResults = false;
                         }
@@ -353,10 +353,15 @@ class GradebookDataGenerator
             api_get_session_id()
         );
 
+        $scoreMode = SCORE_DIV_PERCENT_WITH_CUSTOM;
+        if ($this->hidePercentage) {
+            $scoreMode = SCORE_DIV;
+        }
+
         $scoreDisplay = ScoreDisplay::instance();
         $display = $scoreDisplay->display_score(
             $score,
-            SCORE_DIV_PERCENT_WITH_CUSTOM,
+            $scoreMode,
             SCORE_BOTH,
             true
         );
@@ -380,15 +385,26 @@ class GradebookDataGenerator
     {
         $score = $item->calc_score(null, 'average');
         $scoreDisplay = ScoreDisplay::instance();
+
+        $scoreMode = SCORE_DIV_PERCENT_WITH_CUSTOM;
+
+        if ($this->hidePercentage) {
+            $scoreMode = SCORE_DIV;
+        }
+
         $display = $scoreDisplay->display_score(
             $score,
-            SCORE_DIV_PERCENT_WITH_CUSTOM,
+            $scoreMode,
             SCORE_BOTH,
             true
         );
         $type = $item->get_item_type();
+
         if ($type === 'L' && get_class($item) === 'ExerciseLink') {
             $display = ExerciseLib::show_score($score[0], $score[1], false);
+            $result = ExerciseLib::convertScoreToPlatformSetting($score[0], $score[1]);
+            $score[0] = $result['score'];
+            $score[1] = $result['weight'];
         }
 
         return [

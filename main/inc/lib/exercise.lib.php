@@ -2748,6 +2748,31 @@ HOTSPOT;
     }
 
     /**
+     * @param $score
+     * @param $weight
+     *
+     * @return array
+     */
+    public static function convertScoreToPlatformSetting($score, $weight)
+    {
+        $result = ['score' => $score, 'weight' => $weight];
+
+        $maxNote = api_get_setting('exercise_max_score');
+        $minNote = api_get_setting('exercise_min_score');
+
+        if ($maxNote != '' && $minNote != '') {
+            if (!empty($weight) && intval($weight) != 0) {
+                $score = $minNote + ($maxNote - $minNote) * $score / $weight;
+            } else {
+                $score = $minNote;
+            }
+            $weight = $maxNote;
+        }
+
+        return ['score' => $score, 'weight' => $weight];
+    }
+
+    /**
      * Converts the score with the exercise_max_note and exercise_min_score
      * the platform settings + formats the results using the float_format function.
      *
@@ -2778,18 +2803,10 @@ HOTSPOT;
             return '-';
         }
 
-        $maxNote = api_get_setting('exercise_max_score');
-        $minNote = api_get_setting('exercise_min_score');
-
         if ($use_platform_settings) {
-            if ($maxNote != '' && $minNote != '') {
-                if (!empty($weight) && intval($weight) != 0) {
-                    $score = $minNote + ($maxNote - $minNote) * $score / $weight;
-                } else {
-                    $score = $minNote;
-                }
-                $weight = $maxNote;
-            }
+            $result = self::convertScoreToPlatformSetting($score, $weight);
+            $score = $result['score'];
+            $weight = $result['weight'];
         }
         $percentage = (100 * $score) / ($weight != 0 ? $weight : 1);
         // Formats values

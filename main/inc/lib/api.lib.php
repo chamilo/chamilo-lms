@@ -6254,8 +6254,21 @@ function api_replace_dangerous_char($filename, $treat_spaces_as_hyphens = true)
     $encoding = api_detect_encoding($filename);
     if (empty($encoding)) {
         $encoding = 'ASCII';
+        if (!api_is_valid_ascii($filename)) {
+            // try iconv and try non standard ASCII a.k.a CP437
+            // see BT#15022
+            if (function_exists('iconv')) {
+                $result = iconv('CP437', 'UTF-8', $filename);
+                if (api_is_valid_utf8($result)) {
+                    $filename = $result;
+                    $encoding = 'UTF-8';
     }
+            }
+        }
+    }
+
     $filename = api_to_system_encoding($filename, $encoding);
+
     $url = URLify::filter(
         $filename,
         250,
@@ -8947,6 +8960,19 @@ function api_protect_limit_for_session_admin()
 {
     $limitAdmin = api_get_setting('limit_session_admin_role');
     if (api_is_session_admin() && $limitAdmin === 'true') {
+        api_not_allowed(true);
+    }
+}
+
+/**
+ * Limits that a session admin has access to list users.
+ * When limit_session_admin_list_users configuration variable is set to true.
+ */
+function api_protect_session_admin_list_users()
+{
+    $limitAdmin = api_get_configuration_value('limit_session_admin_list_users');
+
+    if (api_is_session_admin() && true === $limitAdmin) {
         api_not_allowed(true);
     }
 }

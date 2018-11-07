@@ -29,6 +29,7 @@ $exercise_id = isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) 
 
 $objExercise = new Exercise();
 $result = $objExercise->read($exercise_id);
+
 if (!$result) {
     api_not_allowed(true);
 }

@@ -2583,6 +2583,24 @@ class learnpathItem
                                         }
 
                                         return $returnstatus;
+                                    } elseif ($itemToCheck->type === 'student_publication') {
+                                        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+                                        $workId = $items[$refs_list[$prereqs_string]]->path;
+                                        $count = get_work_count_by_student($user_id, $workId);
+                                        if ($count >= 1) {
+                                            $returnstatus = true;
+                                        } else {
+                                            $returnstatus = false;
+                                            $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
+                                            if (self::DEBUG > 1) {
+                                                error_log(
+                                                    'Student pub, prereq'.$prereqs_string.' not completed',
+                                                    0
+                                                );
+                                            }
+                                        }
+
+                                        return $returnstatus;
                                     } else {
                                         $status = $itemToCheck->get_status(false);
                                         $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];

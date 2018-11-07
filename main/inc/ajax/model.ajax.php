@@ -1910,6 +1910,32 @@ switch ($action) {
         }
         $result = $new_result;
         break;
+    case 'get_mail_template':
+        $columns = ['name', 'type', 'default_template', 'actions'];
+        if (!in_array($sidx, $columns)) {
+            $sidx = 'name';
+        }
+
+        if (!in_array($sidx, $columns)) {
+            $sidx = 'name';
+        }
+
+        $result = Database::select(
+            '*',
+            $obj->table,
+            [
+                'where' => ['url_id = ? ' => api_get_current_access_url_id()],
+                'order' => "$sidx $sord",
+                'LIMIT' => "$start , $limit",
+            ]
+        );
+
+        $new_result = [];
+        foreach ($result as $item) {
+            $new_result[] = $item;
+        }
+        $result = $new_result;
+        break;
     case 'get_grade_models':
         $columns = ['name', 'description', 'actions'];
         if (!in_array($sidx, $columns)) {
@@ -2159,6 +2185,7 @@ switch ($action) {
 $allowed_actions = [
     'get_careers',
     'get_promotions',
+    'get_mail_template',
     'get_usergroups',
     'get_usergroups_teacher',
     'get_gradebooks',

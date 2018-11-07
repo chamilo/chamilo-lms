@@ -324,7 +324,12 @@ $returnParams = $extraField->addElements(
 );
 $jqueryReadyContent = $returnParams['jquery_ready_content'];
 
-// the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function
+$allowEmailTemplate = api_get_configuration_value('mail_template_system');
+if ($allowEmailTemplate) {
+    $form->addEmailTemplate(['user_edit_content.tpl']);
+}
+
+// the $jqueryReadyContent variable collects all functions that will be load in the
 $htmlHeadXtra[] = '<script>
 $(document).ready(function(){
     '.$jqueryReadyContent.'
@@ -425,6 +430,8 @@ if ($form->validate()) {
             $username = $email;
         }
 
+        $template = isset($user['email_template_option']) ? $user['email_template_option'] : [];
+
         UserManager::update_user(
             $user_id,
             $firstname,
@@ -446,7 +453,8 @@ if ($form->validate()) {
             null,
             $send_mail,
             $reset_password,
-            $address
+            $address,
+            $template
         );
 
         if (isset($user['student_boss'])) {

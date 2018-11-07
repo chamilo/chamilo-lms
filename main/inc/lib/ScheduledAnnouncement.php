@@ -324,7 +324,7 @@ class ScheduledAnnouncement extends Model
                     }
 
                     if ($users) {
-                        self::update(['id' => $result['id'], 'sent' => 1]);
+                        $this->update(['id' => $result['id'], 'sent' => 1]);
                         $attachments = $this->getAttachmentToString($result['id']);
                         $subject = $result['subject'];
 
@@ -371,8 +371,8 @@ class ScheduledAnnouncement extends Model
 
                             $generalCoach = '';
                             $generalCoachEmail = '';
-                            if (!empty($sessionInfo['coach_id'])) {
-                                $coachInfo = api_get_user_info($sessionInfo['coach_id']);
+                            if (!empty($sessionInfo['id_coach'])) {
+                                $coachInfo = api_get_user_info($sessionInfo['id_coach']);
                                 if (!empty($coachInfo)) {
                                     $generalCoach = $coachInfo['complete_name'];
                                     $generalCoachEmail = $coachInfo['email'];

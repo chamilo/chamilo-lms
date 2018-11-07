@@ -26,25 +26,25 @@ $sessionUrl = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
 $interbreadcrumb[] = [
-    'url' => "session_list.php",
-    "name" => get_lang('SessionList'),
+    'url' => 'session_list.php',
+    'name' => get_lang('SessionList'),
 ];
 $interbreadcrumb[] = [
     'url' => $sessionUrl,
-    "name" => get_lang('SessionOverview'),
+    'name' => get_lang('SessionOverview'),
 ];
 
 if ($action == 'add') {
     $interbreadcrumb[] = [
-        'url' => api_get_self()."?session_id=".$sessionId,
-        "name" => get_lang('ScheduledAnnouncements'),
+        'url' => api_get_self().'?session_id='.$sessionId,
+        'name' => get_lang('ScheduledAnnouncements'),
     ];
     $tool_name = get_lang('Add');
 } elseif ($action == 'edit') {
     $tool_name = get_lang('Edit');
     $interbreadcrumb[] = [
-        'url' => api_get_self()."?session_id=".$sessionId,
-        "name" => get_lang('ScheduledAnnouncements'),
+        'url' => api_get_self().'?session_id='.$sessionId,
+        'name' => get_lang('ScheduledAnnouncements'),
     ];
 } else {
     $tool_name = get_lang('ScheduledAnnouncements');

@@ -1,7 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-if (intval($_GET['default']) == 1) {
+$isDefault = isset($_GET['default']) ? (int) $_GET['default'] : null;
+
+if ($isDefault === 1) {
     $cidReset = true;
 }
 
@@ -17,7 +19,7 @@ $enable = $plugin->get('enable_plugin_customcertificate') == 'true';
 $accessUrlId = api_get_current_access_url_id();
 $course_info = api_get_course_info();
 
-if (intval($_GET['default']) == 1) {
+if ($isDefault === 1) {
     $courseId = 0;
     $courseCode = '';
     $sessionId = 0;
@@ -245,7 +247,7 @@ $dir = '/';
 $courseInfo = api_get_course_info();
 $isAllowedToEdit = api_is_allowed_to_edit(null, true);
 $editorConfig = [
-    'ToolbarSet' => ($isAllowedToEdit ? 'Documents' : 'DocumentsStudent'),
+    'ToolbarSet' => $isAllowedToEdit ? 'Documents' : 'DocumentsStudent',
     'Width' => '100%',
     'Height' => '300',
     'cols-size' => [0, 12, 0],

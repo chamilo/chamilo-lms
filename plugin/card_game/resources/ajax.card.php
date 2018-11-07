@@ -16,7 +16,6 @@ require_once __DIR__.'/../../../main/inc/global.inc.php';
 $cardGameSession = Session::read('cardgame');
 
 if (!empty($cardGameSession)) {
-
     if ($cardGameSession == 'havedeck') {
         $part = '1';
         if (isset($_GET['part'])) {
@@ -24,7 +23,6 @@ if (!empty($cardGameSession)) {
             $userId = api_get_user_id();
 
             if (isset($userId)) {
-
                 $sql = "UPDATE plugin_card_game 
                         SET access_date = CURDATE(), parts = CONCAT(parts,'!!$part;!') 
                         WHERE user_id = $userId";
@@ -47,7 +45,6 @@ if (!empty($cardGameSession)) {
                 Database::query($sql);
                 Session::write('cardgame', 'done');
             }
-
         }
     }
 }

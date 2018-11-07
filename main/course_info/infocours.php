@@ -42,6 +42,8 @@ if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
 
 $categories = CourseCategory::getCategoriesCanBeAddedInCourse($_course['categoryCode']);
 
+$formOptionsArray = [];
+
 // Build the form
 $form = new FormValidator(
     'update_course',
@@ -49,29 +51,31 @@ $form = new FormValidator(
     api_get_self().'?'.api_get_cidreq()
 );
 
-$form->addHtml('<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">');
 
 // COURSE SETTINGS
-$form->addHtml('<div class="panel panel-default">');
-$form->addHtml('
-    <div class="panel-heading" role="tab" id="heading-course-settings">
-        <h4 class="panel-title">
-            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-course-settings"
-               aria-expanded="true" aria-controls="collapse-course-settings">
-');
-$form->addHtml(
-    Display::return_icon('settings.png', get_lang('CourseSettings')).' '.get_lang('CourseSettings')
-);
-$form->addHtml('
-            </a>
-        </h4>
-    </div>
-');
-$form->addHtml('
-    <div id="collapse-course-settings" class="panel-collapse collapse in" role="tabpanel"
-         aria-labelledby="heading-course-settings">
-        <div class="panel-body">
-');
+
+function card_settings_open($id, $title, $open = false, $icon, $parent){
+    $html = '<div class="card">';
+    $html .= '<div class="card-header" id="card_'.$id.'">';
+    $html .= '<h5 class="card-title">';
+    $html .= '<a role="button" class="'.(($open) ? 'collapse':' ').'"  data-toggle="collapse" data-target="#collapse_'.$id.'" aria-expanded="true" aria-controls="collapse_'.$id.'">';
+    if($icon){
+        $html .= Display::return_icon($icon,null,null,ICON_SIZE_SMALL);
+    }
+    $html .= $title;
+    $html .= '</a></h5></div>';
+    $html .= '<div id="collapse_'.$id.'" class="collapse show" aria-labelledby="heading_'.$id.'" data-parent="#'.$parent.'">';
+    $html .= '<div class="card-body">';
+    return $html;
+}
+
+function card_settings_close(){
+    $html = '</div></div></div>';
+    return $html;
+}
+
+
+$form->addHtml(card_settings_open('course_settings', get_lang('CourseSettings'), true, 'settings.png', 'accordionSettings'));
 
 $image = '';
 // Display course picture
@@ -80,9 +84,9 @@ if (file_exists($course_path.'/course-pic85x85.png')) {
     $course_web_path = api_get_path(WEB_COURSE_PATH).$currentCourseRepository; // course web path
     $course_medium_image = $course_web_path.'/course-pic85x85.png?'.rand(1, 1000); // redimensioned image 85x85
     $image = '<div class="row"><label class="col-md-2 control-label">'.get_lang('Image').'</label> 
-                    <div class="col-md-8"><img src="'.$course_medium_image.'" /></div></div>';
+                    <div class="col-md-8"><img class="img-thumbnail" src="'.$course_medium_image.'" /></div></div>';
 }
-$form->addHtml($image);
+
 $form->addText('title', get_lang('Title'), true);
 $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
@@ -145,6 +149,9 @@ $form->addFile(
 );
 
 $allowed_picture_types = api_get_supported_image_extensions(false);
+
+$form->addHtml($image);
+
 $form->addRule(
     'picture',
     get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')',
@@ -195,13 +202,11 @@ if (!empty($scoreModels)) {
 }
 
 $form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
-$form->addHtml('
-        </div>
-    </div>
-');
-$form->addHtml('</div>');
 
-// COURSE ACCESS
+$form->addHtml(card_settings_close());
+
+//************* COURSE ACCESS ******************//
+
 $group = [];
 $group[] = $form->createElement(
     'radio',
@@ -293,12 +298,17 @@ $elements = [
 ];
 
 $form->addPanelOption(
-    'course-access',
-    Display::return_icon('course.png', get_lang('CourseAccess')).' '.get_lang('CourseAccess'),
-    $elements
+    'course_access',
+    get_lang('CourseAccess'),
+    $elements,
+    'course.png',
+    false,
+    'accordionSettings'
 );
 
-// Documents
+//************** END COURSE ACCESS *************//
+
+//************** START DOCUMENTS ***************//
 $globalGroup = [];
 if (api_get_setting('documents_default_visibility_defined_in_course') == 'true') {
     $group = [
@@ -332,11 +342,16 @@ $globalGroup[] = $myButton;
 
 $form->addPanelOption(
     'documents',
-    Display::return_icon('folder.png', get_lang('Documents')).' '.get_lang('Documents'),
-    $globalGroup
+    get_lang('Documents'),
+    $globalGroup,
+    'folder.png',
+    false,
+    'accordionSettings'
 );
 
-// EMAIL NOTIFICATIONS
+// *************** END DOCUMENTS ***************** //
+
+// ************** START EMAIL NOTIFICATIONS *******************//
 
 $globalGroup = [];
 
@@ -476,10 +491,15 @@ $globalGroup[] = $myButton;
 
 $form->addPanelOption(
     'email-notifications',
-    Display::return_icon('mail.png', get_lang('EmailNotifications')).' '.get_lang('EmailNotifications'),
-    $globalGroup
+    get_lang('EmailNotifications'),
+    $globalGroup,
+    'mail.png',
+    false,
+    'accordionSettings'
 );
 
+//************** END EMAIL NOTIFICATIONS ******************//
+//*******************  START USER *******************//
 $group = [];
 $group[] = $form->createElement(
     'radio',
@@ -540,12 +560,18 @@ $globalGroup = [
     get_lang('AllowUserViewUserList') => $group4,
     '' => $myButton,
 ];
-// CHAT SETTINGS
+
 $form->addPanelOption(
     'users',
-    Display::return_icon('user.png', get_lang('UserRights')).' '.get_lang('UserRights'),
-    $globalGroup
+    get_lang('UserRights'),
+    $globalGroup,
+    'user.png',
+    false,
+    'accordionSettings'
 );
+//****************** END USER ****************//
+
+//***************** CHAT SETTINGS ***************//
 
 $group = [];
 $group[] = $form->createElement(
@@ -565,33 +591,16 @@ $globalGroup = [
 
 $form->addPanelOption(
     'chat',
-    Display::return_icon('chat.png', get_lang('ConfigChat'), '', ICON_SIZE_SMALL).' '.get_lang('ConfigChat'),
-    $globalGroup
+    get_lang('ConfigChat'),
+    $globalGroup,
+    'chat.png',
+    false,
+    'accordionSettings'
 );
 
-// LEARNING PATH
-$form->addHtml('<div class="panel panel-default">');
-$form->addHtml('
-    <div class="panel-heading" role="tab" id="heading-learning-path">
-        <h4 class="panel-title">
-            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
-               href="#collapse-learning-path" aria-expanded="false" aria-controls="collapse-learning-path">
-');
-$form->addHtml(
-    Display::return_icon('scorms.png', get_lang('ConfigLearnpath')).' '.get_lang('ConfigLearnpath')
-);
-$form->addHtml('
-            </a>
-        </h4>
-    </div>
-');
-$form->addHtml('
-    <div id="collapse-learning-path" class="panel-collapse collapse" role="tabpanel"
-         aria-labelledby="heading-learning-path">
-        <div class="panel-body">
-');
+//*************** START LEARNING PATH  *************** //
 
-// Auto launch LP
+$globalGroup = [];
 $group = [];
 $group[] = $form->createElement(
     'radio',
@@ -608,7 +617,8 @@ $group[] = $form->createElement(
     2
 );
 $group[] = $form->createElement('radio', 'enable_lp_auto_launch', null, get_lang('Deactivate'), 0);
-$form->addGroup($group, '', [get_lang('LPAutoLaunch')]);
+
+$globalGroup[get_lang('LPAutoLaunch')] = $group;
 
 if (api_get_setting('allow_course_theme') == 'true') {
     // Allow theme into Learning path
@@ -627,7 +637,9 @@ if (api_get_setting('allow_course_theme') == 'true') {
         get_lang('AllowLearningPathThemeDisallow'),
         0
     );
-    $form->addGroup($group, '', [get_lang("AllowLearningPathTheme")]);
+
+    $globalGroup[get_lang("AllowLearningPathTheme")]= $group;
+
 }
 
 $allowLPReturnLink = api_get_setting('allow_lp_return_link');
@@ -655,7 +667,7 @@ if ($allowLPReturnLink === 'true') {
             2
         ),
     ];
-    $form->addGroup($group, '', [get_lang("LpReturnLink")]);
+    $globalGroup[get_lang("LpReturnLink")] = $group;
 }
 
 $exerciseInvisible = api_get_setting('exercise_invisible_in_session');
@@ -680,11 +692,13 @@ if ($exerciseInvisible === 'true' &&
             0
         ),
     ];
-    $form->addGroup($group, '', [get_lang('ExerciseInvisibleInSession')]);
+
+    $globalGroup[get_lang("ExerciseInvisibleInSession")] = $group;
 }
 
 if ($isEditable) {
-    $form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
+    $myButton = $form->addButtonSave(get_lang('SaveSettings'), 'submit_save', true);
+    $globalGroup[] = $myButton;
 } else {
     // Is it allowed to edit the course settings?
     if (!$isEditable) {
@@ -692,11 +706,17 @@ if ($isEditable) {
     }
     $form->freeze();
 }
-$form->addHtml('
-        </div>
-    </div>
-');
-$form->addHtml('</div>');
+
+
+$form->addPanelOption(
+    'config_lp',
+    get_lang('ConfigLearnpath'),
+    $globalGroup,
+    'scorms.png',
+    false,
+    'accordionSettings'
+);
+// ********** END CONFIGURE LEARN PATH ***************//
 
 // Exercise
 if (api_get_configuration_value('allow_exercise_auto_launch')) {
@@ -757,6 +777,7 @@ if (api_get_configuration_value('allow_exercise_auto_launch')) {
     $form->addHtml('</div>');
 }
 
+// *************** START THEMATIC  *************/
 $group = [];
 $group[] = $form->createElement(
     'radio',
@@ -792,19 +813,19 @@ $globalGroup = [
     get_lang('InfoAboutAdvanceInsideHomeCourse') => $group,
     '' => $myButton,
 ];
-// Certificate settings
+
 $form->addPanelOption(
     'thematic',
-    Display::return_icon(
-        'course_progress.png',
-        get_lang('ThematicAdvanceConfiguration')
-    )
-    .' '
-    .get_lang('ThematicAdvanceConfiguration'),
-    $globalGroup
+    get_lang('ThematicAdvanceConfiguration'),
+    $globalGroup,
+    'course_progress.png',
+    false,
+    'accordionSettings'
 );
 
-// Certificate settings
+// ************* END THEMATIC  *********** //
+
+// ************* CERTIFICATE SETTINGS ***************** //
 if (api_get_setting('allow_public_certificates') === 'true') {
     $group = [];
     $group[] = $form->createElement(
@@ -824,8 +845,11 @@ if (api_get_setting('allow_public_certificates') === 'true') {
 
     $form->addPanelOption(
         'certificate',
-        Display::return_icon('certificate.png', get_lang('Certificates')).' '.get_lang('Certificates'),
-        $globalGroup
+        get_lang('Certificates'),
+        $globalGroup,
+        null,
+        false,
+        'accordionSettings'
     );
 }
 
@@ -842,11 +866,14 @@ $globalGroup = [
 
 $form->addPanelOption(
     'forum',
-    Display::return_icon('forum.png', get_lang('Forum')).' '.get_lang('Forum'),
-    $globalGroup
+    get_lang('Forum'),
+    $globalGroup,
+    'forum.png',
+    false,
+    'accordionSettings'
 );
 
-// Student publication
+//********** STUDENT PUBLICATION ***************** //
 $group = [
     $form->createElement('radio', 'show_score', null, get_lang('NewVisible'), 0),
     $form->createElement('radio', 'show_score', null, get_lang('NewUnvisible'), 1),
@@ -865,8 +892,11 @@ $globalGroup = [
 
 $form->addPanelOption(
     'student-publication',
-    Display::return_icon('work.png', get_lang('StudentPublications')).' '.get_lang('StudentPublications'),
-    $globalGroup
+    get_lang('StudentPublications'),
+    $globalGroup,
+    'work.png',
+    false,
+    'accordionSettings'
 );
 
 // Plugin course settings
@@ -1019,10 +1049,19 @@ if ($show_delete_watermark_text_message) {
     );
 }
 
+//Template Course Info
+$tpl = new Template($nameTools);
+
+
 Display::display_header($nameTools, 'Settings');
 
-echo '<div id="course_settings">';
-$form->display();
-echo '</div>';
+
+//$form->display();
+
+
+$tpl->assign('course_settings', $form->returnForm());
+$courseInfoLayout = $tpl->get_template("course_info/index.html.twig");
+$content = $tpl->fetch($courseInfoLayout);
+echo $content;
 
 Display::display_footer();

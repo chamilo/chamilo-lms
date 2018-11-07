@@ -945,23 +945,22 @@ EOT;
      * @param string $title     visible title
      * @param array  $groupList list of group or elements
      */
-    public function addPanelOption($name, $title, $groupList)
+    public function addPanelOption($name, $title, $groupList, $icon, $open = false, $parent)
     {
-        /*$this->addHtml('<div class="panel panel-default">');
-        $this->addHtml(
-            '
-            <div class="panel-heading" role="tab" id="heading-'.$name.'-settings">
-                <h4 class="panel-title">
-                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
-                       href="#collapse-'.$name.'-settings" aria-expanded="false" aria-controls="collapse-'.$name.'-settings">
-        '
-        );
-        $this->addHtml($title);
-        $this->addHtml('</a></h4></div>');
-        $this->addHtml('<div id="collapse-'.$name.'-settings" class="panel-collapse collapse" role="tabpanel"
-             aria-labelledby="heading-'.$name.'-settings">
-            <div class="panel-body">
-        ');
+
+        $html = '<div class="card">';
+        $html .= '<div class="card-header" id="card_'.$name.'">';
+        $html .= '<h5 class="card-title">';
+        $html .= '<a role="button" class="'.(($open) ? 'collapse':' ').'"  data-toggle="collapse" data-target="#collapse_'.$name.'" aria-expanded="true" aria-controls="collapse_'.$name.'">';
+        if($icon){
+            $html .= Display::return_icon($icon,null,null,ICON_SIZE_SMALL);
+        }
+        $html .= $title;
+        $html .= '</a></h5></div>';
+        $html .= '<div id="collapse_'.$name.'" class="collapse '.(($open) ? 'show':' ').'" aria-labelledby="heading_'.$name.'" data-parent="#'.$parent.'">';
+        $html .= '<div class="card-body">';
+
+        $this->addHtml($html);
 
         foreach ($groupList as $groupName => $group) {
             // Add group array
@@ -974,34 +973,7 @@ EOT;
             }
         }
 
-        $this->addHtml('</div></div>');
-        $this->addHtml('</div>');*/
-
-        $this->addHtml('<div class="card">');
-        $this->addHtml(
-            '            
-                <h4 class="card-header">
-                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
-                       href="#collapse-'.$name.'-settings" aria-expanded="false" aria-controls="collapse-'.$name.'-settings">
-        '
-        );
-        $this->addHtml($title);
-        $this->addHtml('</a></h4>');
-        $this->addHtml('<div class="card-body">');
-
-        foreach ($groupList as $groupName => $group) {
-            // Add group array
-            if (!empty($groupName) && is_array($group)) {
-                $this->addGroup($group, '', $groupName);
-            }
-            // Add element
-            if ($group instanceof HTML_QuickForm_element) {
-                $this->addElement($group);
-            }
-        }
-
-        $this->addHtml('</div>');
-        $this->addHtml('</div>');
+        $this->addHtml('</div></div></div>');
     }
 
     /**

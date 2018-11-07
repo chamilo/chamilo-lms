@@ -1,12 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+
 /**
  * Responses to AJAX calls.
  */
 require_once __DIR__.'/../global.inc.php';
-
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 api_protect_admin_script();
 
@@ -107,7 +107,6 @@ switch ($action) {
 
         echo json_encode($list);
         break;
-
     case 'recent_logins':
         // Give a JSON array to the stats page main/admin/statistics/index.php
         // for global recent logins
@@ -119,24 +118,24 @@ switch ($action) {
         }
 
         $list['datasets'][0]['label'] = get_lang('Logins');
-        $list['datasets'][0]['backgroundColor'] = "rgba(151,187,205,0.2)";
-        $list['datasets'][0]['borderColor'] = "rgba(151,187,205,1)";
-        $list['datasets'][0]['pointBackgroundColor'] = "rgba(151,187,205,1)";
-        $list['datasets'][0]['pointBorderColor'] = "#fff";
-        $list['datasets'][0]['pointHoverBackgroundColor'] = "#fff";
-        $list['datasets'][0]['pointHoverBorderColor'] = "rgba(151,187,205,1)";
+        $list['datasets'][0]['backgroundColor'] = 'rgba(151,187,205,0.2)';
+        $list['datasets'][0]['borderColor'] = 'rgba(151,187,205,1)';
+        $list['datasets'][0]['pointBackgroundColor'] = 'rgba(151,187,205,1)';
+        $list['datasets'][0]['pointBorderColor'] = '#fff';
+        $list['datasets'][0]['pointHoverBackgroundColor'] = '#fff';
+        $list['datasets'][0]['pointHoverBorderColor'] = 'rgba(151,187,205,1)';
 
         foreach ($all as $tick => $tock) {
             $list['datasets'][0]['data'][] = $tock;
         }
 
         $list['datasets'][1]['label'] = get_lang('DistinctUsersLogins');
-        $list['datasets'][1]['backgroundColor'] = "rgba(0,204,0,0.2)";
-        $list['datasets'][1]['borderColor'] = "rgba(0,204,0,1)";
-        $list['datasets'][1]['pointBackgroundColor'] = "rgba(0,204,0,1)";
-        $list['datasets'][1]['pointBorderColor'] = "#fff";
-        $list['datasets'][1]['pointHoverBackgroundColor'] = "#fff";
-        $list['datasets'][1]['pointHoverBorderColor'] = "rgba(0,204,0,1)";
+        $list['datasets'][1]['backgroundColor'] = 'rgba(0,204,0,0.2)';
+        $list['datasets'][1]['borderColor'] = 'rgba(0,204,0,1)';
+        $list['datasets'][1]['pointBackgroundColor'] = 'rgba(0,204,0,1)';
+        $list['datasets'][1]['pointBorderColor'] = '#fff';
+        $list['datasets'][1]['pointHoverBackgroundColor'] = '#fff';
+        $list['datasets'][1]['pointHoverBorderColor'] = 'rgba(0,204,0,1)';
 
         $distinct = Statistics::getRecentLoginStats(true, $sessionDuration);
         foreach ($distinct as $tick => $tock) {
@@ -145,7 +144,6 @@ switch ($action) {
 
         echo json_encode($list);
         break;
-
     case 'tools_usage':
         // Give a JSON array to the stats page main/admin/statistics/index.php
         // for global tools usage (number of clicks)
@@ -159,7 +157,7 @@ switch ($action) {
         $palette = ChamiloApi::getColorPalette(true, true);
 
         $list['datasets'][0]['label'] = get_lang('Tools');
-        $list['datasets'][0]['borderColor'] = "rgba(255,255,255,1)";
+        $list['datasets'][0]['borderColor'] = 'rgba(255,255,255,1)';
 
         $i = 0;
         foreach ($all as $tick => $tock) {

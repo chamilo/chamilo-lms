@@ -1006,7 +1006,7 @@ if ($form->validate()) {
 
         if ($is_allowedCreateCourse) {
             if ($usersCanCreateCourse) {
-                $form_data['message'] = '<p>'.get_lang('NowGoCreateYourCourse')."</p>";
+                $form_data['message'] = '<p>'.get_lang('NowGoCreateYourCourse').'</p>';
             }
             $form_data['action'] = api_get_path(WEB_CODE_PATH).'create_course/add_course.php';
 
@@ -1044,9 +1044,9 @@ if ($form->validate()) {
     }
 
     if ($sessionPremiumChecker && $sessionId) {
-        header('Location:'.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/process.php?i='.$sessionId.'&t=2');
         Session::erase('SessionIsPremium');
         Session::erase('sessionId');
+        header('Location:'.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/process.php?i='.$sessionId.'&t=2');
         exit;
     }
 
@@ -1059,7 +1059,6 @@ if ($form->validate()) {
     }
 
     $form_data = CourseManager::redirectToCourse($form_data);
-
     $form_register = new FormValidator('form_register', 'post', $form_data['action']);
     if (!empty($form_data['message'])) {
         $form_register->addElement('html', $form_data['message'].'<br /><br />');

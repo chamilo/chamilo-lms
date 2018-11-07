@@ -111,7 +111,10 @@ class GradebookTable extends SortableTable
             '',
             'width="100px"'
         );
-        $this->set_header($column++, get_lang('Result'), false);
+
+        if (!$this->teacherView) {
+            $this->set_header($column++, get_lang('Result'), false);
+        }
 
         if (empty($model)) {
             if (in_array(1, $this->loadStats)) {
@@ -464,7 +467,6 @@ class GradebookTable extends SortableTable
                         }
                     } else {
                         $row[] = $scoreToDisplay;
-
                         if (!empty($this->cats)) {
                             if ($this->exportToPdf == false) {
                                 $row[] = $this->build_edit_column($item);
@@ -574,6 +576,7 @@ class GradebookTable extends SortableTable
                                     if (!is_null($value_data)) {
                                         // Result
                                         $row[] = $value_data;
+
                                         $best = isset($data['best']) ? $data['best'] : null;
                                         $average = isset($data['average']) ? $data['average'] : null;
                                         $ranking = isset($data['ranking']) ? $data['ranking'] : null;
@@ -700,17 +703,23 @@ class GradebookTable extends SortableTable
                     SCORE_DIV
                 );
 
-                $row = [
-                    null,
-                    '<h3>'.get_lang('Total').'</h3>',
-                ];
+                if (!empty($this->loadStats)) {
+                    $row = [
+                        null,
+                        '<h3>'.get_lang('Total').'</h3>',
+                    ];
 
-                if (!$this->exportToPdf) {
+                    if (!$this->exportToPdf) {
+                        $row[] = null;
+                    }
+
+                    //$row[] = $main_weight;
+                    //$row[] = $totalResult;
                     $row[] = null;
+                    $row[] = null;
+                } else {
+                    $row = [];
                 }
-
-                $row[] = $main_weight;
-                $row[] = $totalResult;
 
                 if (in_array(1, $this->loadStats)) {
                     $totalRanking = [];
@@ -742,13 +751,11 @@ class GradebookTable extends SortableTable
                     if ($invalidateRanking) {
                         $totalRanking = null;
                     }
-
                     $row[] = $totalRanking;
                 }
                 if (in_array(2, $this->loadStats)) {
                     // Overwrite main weight
                     $totalBest[1] = $main_weight;
-
                     $totalBest = $scoredisplay->display_score(
                         $totalBest,
                         SCORE_DIV,
@@ -762,15 +769,17 @@ class GradebookTable extends SortableTable
                     $totalAverage[0] = $average / count($this->studentList);
                     $totalAverage[1] = $main_weight;
                     $totalAverage = $scoredisplay->display_score(
-                            $totalAverage,
-                            SCORE_DIV,
-                            SCORE_BOTH,
-                            true
-                        );
+                        $totalAverage,
+                        SCORE_DIV,
+                        SCORE_BOTH,
+                        true
+                    );
 
                     $row[] = $totalAverage;
                 }
-                $sortable_data[] = $row;
+                if (!empty($row)) {
+                    $sortable_data[] = $row;
+                }
             }
         }
 
@@ -862,7 +871,7 @@ class GradebookTable extends SortableTable
         if (!$this->teacherView) {
             $rowTotal = [];
             $rowTotal[] = ' ';
-            $rowTotal[] = get_lang('FinalScore');
+            $rowTotal[] = '<strong>'.get_lang('FinalScore').'</strong>';
 
             if (!$this->exportToPdf) {
                 $rowTotal[] = ' ';

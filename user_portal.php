@@ -235,7 +235,7 @@ if (api_get_setting('go_to_course_after_login') === 'true') {
     }
 }
 
-$showWelcomeCourse =  false;
+$showWelcomeCourse = false;
 // Show the chamilo mascot
 if (empty($courseAndSessions['html']) && !isset($_GET['history'])) {
     $controller->setWelComeCourse();

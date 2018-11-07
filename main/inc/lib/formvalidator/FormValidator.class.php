@@ -947,17 +947,16 @@ EOT;
      */
     public function addPanelOption($name, $title, $groupList, $icon, $open = false, $parent)
     {
-
         $html = '<div class="card">';
         $html .= '<div class="card-header" id="card_'.$name.'">';
         $html .= '<h5 class="card-title">';
-        $html .= '<a role="button" class="'.(($open) ? 'collapse':' ').'"  data-toggle="collapse" data-target="#collapse_'.$name.'" aria-expanded="true" aria-controls="collapse_'.$name.'">';
-        if($icon){
-            $html .= Display::return_icon($icon,null,null,ICON_SIZE_SMALL);
+        $html .= '<a role="button" class="'.(($open) ? 'collapse' : ' ').'"  data-toggle="collapse" data-target="#collapse_'.$name.'" aria-expanded="true" aria-controls="collapse_'.$name.'">';
+        if ($icon) {
+            $html .= Display::return_icon($icon, null, null, ICON_SIZE_SMALL);
         }
         $html .= $title;
         $html .= '</a></h5></div>';
-        $html .= '<div id="collapse_'.$name.'" class="collapse '.(($open) ? 'show':' ').'" aria-labelledby="heading_'.$name.'" data-parent="#'.$parent.'">';
+        $html .= '<div id="collapse_'.$name.'" class="collapse '.(($open) ? 'show' : ' ').'" aria-labelledby="heading_'.$name.'" data-parent="#'.$parent.'">';
         $html .= '<div class="card-body">';
 
         $this->addHtml($html);

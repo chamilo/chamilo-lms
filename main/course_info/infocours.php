@@ -51,29 +51,31 @@ $form = new FormValidator(
     api_get_self().'?'.api_get_cidreq()
 );
 
-
 // COURSE SETTINGS
 
-function card_settings_open($id, $title, $open = false, $icon, $parent){
+function card_settings_open($id, $title, $open = false, $icon, $parent)
+{
     $html = '<div class="card">';
     $html .= '<div class="card-header" id="card_'.$id.'">';
     $html .= '<h5 class="card-title">';
-    $html .= '<a role="button" class="'.(($open) ? 'collapse':' ').'"  data-toggle="collapse" data-target="#collapse_'.$id.'" aria-expanded="true" aria-controls="collapse_'.$id.'">';
-    if($icon){
-        $html .= Display::return_icon($icon,null,null,ICON_SIZE_SMALL);
+    $html .= '<a role="button" class="'.(($open) ? 'collapse' : ' ').'"  data-toggle="collapse" data-target="#collapse_'.$id.'" aria-expanded="true" aria-controls="collapse_'.$id.'">';
+    if ($icon) {
+        $html .= Display::return_icon($icon, null, null, ICON_SIZE_SMALL);
     }
     $html .= $title;
     $html .= '</a></h5></div>';
     $html .= '<div id="collapse_'.$id.'" class="collapse show" aria-labelledby="heading_'.$id.'" data-parent="#'.$parent.'">';
     $html .= '<div class="card-body">';
+
     return $html;
 }
 
-function card_settings_close(){
+function card_settings_close()
+{
     $html = '</div></div></div>';
+
     return $html;
 }
-
 
 $form->addHtml(card_settings_open('course_settings', get_lang('CourseSettings'), true, 'settings.png', 'accordionSettings'));
 
@@ -638,8 +640,7 @@ if (api_get_setting('allow_course_theme') == 'true') {
         0
     );
 
-    $globalGroup[get_lang("AllowLearningPathTheme")]= $group;
-
+    $globalGroup[get_lang("AllowLearningPathTheme")] = $group;
 }
 
 $allowLPReturnLink = api_get_setting('allow_lp_return_link');
@@ -706,7 +707,6 @@ if ($isEditable) {
     }
     $form->freeze();
 }
-
 
 $form->addPanelOption(
     'config_lp',
@@ -1052,12 +1052,9 @@ if ($show_delete_watermark_text_message) {
 //Template Course Info
 $tpl = new Template($nameTools);
 
-
 Display::display_header($nameTools, 'Settings');
 
-
 //$form->display();
-
 
 $tpl->assign('course_settings', $form->returnForm());
 $courseInfoLayout = $tpl->get_template("course_info/index.html.twig");

@@ -856,7 +856,6 @@ function display_requirements(
         </table>';
     echo '</div>';
 
-
     // RECOMMENDED SETTINGS
     // Note: these are the settings for Joomla, does this also apply for Chamilo?
     // Note: also add upload_max_filesize here so that large uploads are possible

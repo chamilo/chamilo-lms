@@ -254,6 +254,10 @@ class ImsLtiTool
      */
     public function parseCustomParams()
     {
+        if (empty($this->customParams)) {
+            return [];
+        }
+
         $params = [];
         $strings = explode("\n", $this->customParams);
 

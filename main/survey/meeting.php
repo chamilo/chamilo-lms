@@ -123,8 +123,6 @@ foreach ($students as $student) {
             );
             $rowColumn++;
         }
-
-
     }
     $column = 0;
     $table->setCellContents($row, $column, $name);

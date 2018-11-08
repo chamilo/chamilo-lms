@@ -212,7 +212,6 @@ if ($survey_data['survey_type'] == '3') {
     exit;
 }
 
-
 // Storing the answers
 if (count($_POST) > 0) {
     if ($survey_data['survey_type'] === '0') {

@@ -3382,7 +3382,6 @@ class SurveyUtil
                 echo '<a href="'.$url.'">
                     '.$row['title']
                     .'</a></td>';
-
             } else {
                 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
                     $user_id,

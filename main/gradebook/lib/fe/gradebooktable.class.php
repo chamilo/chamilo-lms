@@ -703,23 +703,17 @@ class GradebookTable extends SortableTable
                     SCORE_DIV
                 );
 
-                if (!empty($this->loadStats)) {
-                    $row = [
-                        null,
-                        '<h3>'.get_lang('Total').'</h3>',
-                    ];
+                $row = [
+                    null,
+                    '<strong>'.get_lang('Total').'</strong>',
+                ];
 
-                    if (!$this->exportToPdf) {
-                        $row[] = null;
-                    }
-
-                    //$row[] = $main_weight;
-                    //$row[] = $totalResult;
+                if (!$this->exportToPdf) {
                     $row[] = null;
-                    $row[] = null;
-                } else {
-                    $row = [];
                 }
+
+                $row[] = $main_weight;
+                $row[] = $totalResult;
 
                 if (in_array(1, $this->loadStats)) {
                     $totalRanking = [];
@@ -753,6 +747,7 @@ class GradebookTable extends SortableTable
                     }
                     $row[] = $totalRanking;
                 }
+
                 if (in_array(2, $this->loadStats)) {
                     // Overwrite main weight
                     $totalBest[1] = $main_weight;
@@ -869,7 +864,7 @@ class GradebookTable extends SortableTable
         }
 
         if (!$this->teacherView) {
-            $rowTotal = [];
+            /*$rowTotal = [];
             $rowTotal[] = ' ';
             $rowTotal[] = '<strong>'.get_lang('FinalScore').'</strong>';
 
@@ -886,7 +881,7 @@ class GradebookTable extends SortableTable
                 $rowTotal[] = ' ';
             }
 
-            $sortable_data[] = $rowTotal;
+            $sortable_data[] = $rowTotal;*/
         }
 
         return $sortable_data;

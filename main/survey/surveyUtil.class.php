@@ -2878,6 +2878,8 @@ class SurveyUtil
             return $hideReportingButton ? '-' : $reportingLink;
         }
 
+        $type = $survey->getSurveyType();
+
         // Coach can see that only if the survey is in his session
         if (api_is_allowed_to_edit() ||
             api_is_element_in_the_session(TOOL_SURVEY, $survey_id)
@@ -2893,30 +2895,35 @@ class SurveyUtil
                     $codePath.'survey/generate_link.php?'.http_build_query($params + ['survey_id' => $survey_id])
                 );
             }
-            $actions[] = Display::url(
-                Display::return_icon('backup.png', get_lang('CopySurvey')),
-                $codePath.'survey/copy_survey.php?'.http_build_query($params + ['survey_id' => $survey_id])
-            );
-            $actions[] = Display::url(
-                Display::return_icon('copy.png', get_lang('DuplicateSurvey')),
-                $codePath.'survey/survey_list.php?'
-                    .http_build_query($params + ['action' => 'copy_survey', 'survey_id' => $survey_id])
-            );
 
-            $warning = addslashes(api_htmlentities(get_lang('EmptySurvey').'?', ENT_QUOTES));
-            $actions[] = Display::url(
-                Display::return_icon('clean.png', get_lang('EmptySurvey')),
-                $codePath.'survey/survey_list.php?'
+            if ($type != 3) {
+                $actions[] = Display::url(
+                    Display::return_icon('backup.png', get_lang('CopySurvey')),
+                    $codePath.'survey/copy_survey.php?'.http_build_query($params + ['survey_id' => $survey_id])
+                );
+                $actions[] = Display::url(
+                    Display::return_icon('copy.png', get_lang('DuplicateSurvey')),
+                    $codePath.'survey/survey_list.php?'
+                    .http_build_query($params + ['action' => 'copy_survey', 'survey_id' => $survey_id])
+                );
+
+                $warning = addslashes(api_htmlentities(get_lang('EmptySurvey').'?', ENT_QUOTES));
+                $actions[] = Display::url(
+                    Display::return_icon('clean.png', get_lang('EmptySurvey')),
+                    $codePath.'survey/survey_list.php?'
                     .http_build_query($params + ['action' => 'empty', 'survey_id' => $survey_id]),
-                [
-                    'onclick' => "javascript: if (!confirm('".$warning."')) return false;",
-                ]
+                    [
+                        'onclick' => "javascript: if (!confirm('".$warning."')) return false;",
+                    ]
+                );
+            }
+        }
+        if ($type != 3) {
+            $actions[] = Display::url(
+                Display::return_icon('preview_view.png', get_lang('Preview')),
+                $codePath.'survey/preview.php?'.http_build_query($params + ['survey_id' => $survey_id])
             );
         }
-        $actions[] = Display::url(
-            Display::return_icon('preview_view.png', get_lang('Preview')),
-            $codePath.'survey/preview.php?'.http_build_query($params + ['survey_id' => $survey_id])
-        );
         $actions[] = Display::url(
             Display::return_icon('mail_send.png', get_lang('Publish')),
             $codePath.'survey/survey_invite.php?'.http_build_query($params + ['survey_id' => $survey_id])

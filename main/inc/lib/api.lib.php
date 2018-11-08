@@ -8720,7 +8720,7 @@ function api_mail_html(
     $mail->Mailer = $platform_email['SMTP_MAILER'];
     $mail->Host = $platform_email['SMTP_HOST'];
     $mail->Port = $platform_email['SMTP_PORT'];
-    $mail->CharSet = $platform_email['SMTP_CHARSET'];
+    $mail->CharSet = isset($platform_email['SMTP_CHARSET']) ? $platform_email['SMTP_CHARSET'] : 'UTF-8';
     // Stay far below SMTP protocol 980 chars limit.
     $mail->WordWrap = 200;
 

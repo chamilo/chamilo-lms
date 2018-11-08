@@ -3093,9 +3093,9 @@ class SurveyUtil
         if ($search_restriction) {
             $search_restriction = ' AND '.$search_restriction;
         }
-        $from = intval($from);
-        $number_of_items = intval($number_of_items);
-        $column = intval($column);
+        $from = (int) $from;
+        $number_of_items = (int) $number_of_items;
+        $column = (int) $column;
         if (!in_array(strtolower($direction), ['asc', 'desc'])) {
             $direction = 'asc';
         }
@@ -3122,7 +3122,8 @@ class SurveyUtil
                 survey.iid AS col9,
                 survey.session_id AS session_id,
                 survey.answered,
-                survey.invited
+                survey.invited,
+                survey.survey_type
             FROM $table_survey survey
             LEFT JOIN $table_survey_question survey_question
             ON (survey.survey_id = survey_question.survey_id AND survey_question.c_id = $course_id)
@@ -3135,22 +3136,28 @@ class SurveyUtil
             ORDER BY col$column $direction 
             LIMIT $from,$number_of_items
         ";
-
         $res = Database::query($sql);
         $surveys = [];
         $array = [];
         $efv = new ExtraFieldValue('survey');
-
         while ($survey = Database::fetch_array($res)) {
             $array[0] = $survey[0];
-
             if (self::checkHideEditionToolsByCode($survey['col2'])) {
                 $array[1] = $survey[1];
             } else {
-                $array[1] = Display::url(
-                    $survey[1],
-                    api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey[0].'&'.api_get_cidreq()
-                );
+                // Doodle
+                if ($survey['survey_type'] == 3) {
+                    $array[1] = Display::url(
+                        $survey[1],
+                        api_get_path(WEB_CODE_PATH).'survey/meeting.php?survey_id='.$survey[0].'&'.api_get_cidreq()
+                    );
+                } else {
+                    $array[1] = Display::url(
+                        $survey[1],
+                        api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey[0].'&'.api_get_cidreq()
+                    );
+                }
+
             }
 
             // Validation when belonging to a session
@@ -3307,7 +3314,7 @@ class SurveyUtil
     {
         $_course = api_get_course_info();
         $course_id = $_course['real_id'];
-        $user_id = intval($user_id);
+        $user_id = (int) $user_id;
         $sessionId = api_get_session_id();
         $mandatoryAllowed = api_get_configuration_value('allow_mandatory_survey');
         $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
@@ -3316,16 +3323,6 @@ class SurveyUtil
         $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
         $table_survey = Database::get_course_table(TABLE_SURVEY);
-
-        $sql = "SELECT question_id
-                FROM $table_survey_question
-                WHERE c_id = $course_id";
-        $result = Database::query($sql);
-
-        $all_question_id = [];
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
-            $all_question_id[] = $row;
-        }
 
         echo '<table id="list-survey" class="table ">';
         echo '<thead>';
@@ -3349,8 +3346,8 @@ class SurveyUtil
                 $table_survey_invitation survey_invitation
                 ON (
                     survey.code = survey_invitation.survey_code AND
-                    survey.c_id = survey_invitation.c_id
-                    AND survey.session_id = survey_invitation.session_id
+                    survey.c_id = survey_invitation.c_id AND 
+                    survey.session_id = survey_invitation.session_id
                 )
 				WHERE
                     survey_invitation.user = $user_id AND                    
@@ -3374,10 +3371,16 @@ class SurveyUtil
                     [],
                     ICON_SIZE_TINY
                 );
-                echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?course='.$_course['sysCode']
-                    .'&invitationcode='.$row['invitation_code'].'&cidReq='.$_course['sysCode'].'&id_session='.$row['session_id'].'">
+                $url = api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?course='.$_course['sysCode']
+                    .'&invitationcode='.$row['invitation_code'].'&cidReq='.$_course['sysCode'].'&id_session='.$row['session_id'];
+                if ($row['survey_type'] == 3) {
+                    $url = api_get_path(WEB_CODE_PATH).'survey/meeting.php?course='.$_course['sysCode']
+                        .'&invitationcode='.$row['invitation_code'].'&cidReq='.$_course['sysCode'].'&id_session='.$row['session_id'];
+                }
+                echo '<a href="'.$url.'">
                     '.$row['title']
                     .'</a></td>';
+
             } else {
                 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
                     $user_id,

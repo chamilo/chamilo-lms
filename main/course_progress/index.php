@@ -181,7 +181,6 @@ function check_per_custom_date(obj) {
 
 $thematicControl = Session::read('thematic_control');
 
-
 if ($action == 'thematic_list') {
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('ThematicControl')];
 }

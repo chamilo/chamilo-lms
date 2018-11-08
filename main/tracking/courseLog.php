@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use ChamiloSession as Session;
 
 /**
  * @package chamilo.tracking
@@ -171,7 +171,6 @@ if (empty($session_id)) {
     $a_students = CourseManager::get_student_list_from_course_code(
         $courseId
     );
-
 } else {
     // Registered students in session.
     $a_students = CourseManager::get_student_list_from_course_code(
@@ -347,7 +346,7 @@ if ($nbStudents > 0) {
     $numberStudentsCompletedLP = 0;
     $averageStudentsTestScore = 0;
     $scoresDistribution = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    
+
     $userScoreList = [];
     $listStudentIds = [];
     $timeStudent = [];
@@ -368,7 +367,7 @@ if ($nbStudents > 0) {
         }
         $averageStudentTestScore = substr($userTracking[7], 0, -1);
         $averageStudentsTestScore += $averageStudentTestScore;
-    
+
         if ($averageStudentTestScore === '100') {
             $reducedAverage = 9;
         } else {
@@ -380,30 +379,30 @@ if ($nbStudents > 0) {
         $scoreStudent = substr($userTracking[5], 0, -1) + substr($userTracking[7], 0, -1);
         list($hours, $minutes, $seconds) = preg_split('/:/', $userTracking[4]);
         $minutes = round((3600 * $hours + 60 * $minutes + $seconds) / 60);
-    
+
         $certificate = false;
         if (isset($category[0]) && $category[0]->is_certificate_available($userId)) {
             $certificate = true;
             $certificateCount++;
         }
-    
+
         $listStudent = [
             'id' => $userId,
-            'fullname' => $userTracking[2] . ', ' . $userTracking[1],
+            'fullname' => $userTracking[2].', '.$userTracking[1],
             'score' => floor($scoreStudent / 2),
             'total_time' => $minutes,
             'avatar' => UserManager::getUserPicture($userId),
-            'certicate' => $certificate
+            'certicate' => $certificate,
         ];
         $listStudentIds[] = $userId;
         $userScoreList[] = $listStudent;
     }
-    
+
     uasort($userScoreList, 'sort_by_order');
     $averageStudentsTestScore = round($averageStudentsTestScore / $nbStudents);
-    
+
     $colors = ChamiloApi::getColorPalette(true, true, 10);
-    
+
     $tpl->assign('chart_colors', json_encode($colors));
     $tpl->assign('certificate_count', $certificateCount);
     $tpl->assign('score_distribution', json_encode($scoresDistribution));
@@ -412,11 +411,10 @@ if ($nbStudents > 0) {
     $tpl->assign('students_completed_lp', $numberStudentsCompletedLP);
     $tpl->assign('number_students', $nbStudents);
     $tpl->assign('top_students', $userScoreList);
-    
-    
+
     $trackingSummaryLayout = $tpl->get_template("tracking/tracking_course_log.tpl");
     $content = $tpl->fetch($trackingSummaryLayout);
-    
+
     echo $content;
 }
 
@@ -491,7 +489,6 @@ if (count($a_students) > 0) {
     $parameters['from'] = isset($_GET['myspace']) ? Security::remove_XSS($_GET['myspace']) : null;
 
     $table->set_additional_parameters($parameters);
-
 
     $headers = [];
     // tab of header texts
@@ -653,9 +650,7 @@ if ($export_csv) {
 }
 Display::display_footer();
 
-
 function sort_by_order($a, $b)
 {
     return $a['score'] <= $b['score'];
 }
-

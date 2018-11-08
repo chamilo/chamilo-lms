@@ -17,7 +17,6 @@ if (!isset($_GET['cidReq'])) {
     $cidReset = true;
 }
 
-// Including the global initialization file
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 $current_course_tool = TOOL_SURVEY;
@@ -166,11 +165,12 @@ if (!api_is_session_general_coach() || $extend_rights_for_coachs == 'true') {
     // Action links
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/create_new_survey.php?'.api_get_cidreq().'&amp;action=add">'.
         Display::return_icon('new_survey.png', get_lang('CreateNewSurvey'), '', ICON_SIZE_MEDIUM).'</a> ';
+    $url = api_get_path(WEB_CODE_PATH).'survey/create_meeting.php?'.api_get_cidreq();
+    echo Display::url(Display::return_icon('add.png', get_lang('CreateNewSurvey'), '', ICON_SIZE_MEDIUM), $url);
 }
 echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;search=advanced">'.
     Display::return_icon('search.png', get_lang('Search'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
-
 // Load main content
 if (api_is_session_general_coach() && $extend_rights_for_coachs == 'false') {
     SurveyUtil::display_survey_list_for_coach();

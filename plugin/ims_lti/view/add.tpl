@@ -2,31 +2,55 @@
     {% if global_tools|length or added_tools|length %}
         <div class="col-sm-3">
             {% if added_tools|length %}
-                <h2>{{ 'ToolsAdded'|get_plugin_lang('ImsLtiPlugin') }}</h2>
-                <ul class="nav nav-pills nav-stacked">
-                    {% for tool in added_tools %}
-                        <li class="{{ type == tool.id ? 'active' : '' }}">
-                            <a href="{{ _p.web_plugin }}ims_lti/configure.php?action=edit&id={{ tool.id }}&{{ _p.web_cid_query }}">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">{{ 'ToolsAdded'|get_plugin_lang('ImsLtiPlugin') }}</h2>
+                    </div>
+                    <ul class="list-group">
+                        {% for tool in added_tools %}
+                            <li class="list-group-item {{ type == tool.id ? 'active' : '' }}">
+                                <div class="pull-right">
+                                    {% if tool.isActiveDeepLinking %}
+                                        <a href="{{ _p.web_plugin }}ims_lti/start.php?id={{ tool.id }}&{{ _p.web_cid_query }}">
+                                            {{ 'settings.png'|img(22, 'Configure'|get_lang) }}
+                                        </a>
+                                    {% endif %}
+
+                                    <a href="{{ _p.web_plugin }}ims_lti/configure.php?action=edit&id={{ tool.id }}&{{ _p.web_cid_query }}">
+                                        {{ 'edit.png'|img(22, 'Edit'|get_lang) }}
+                                    </a>
+                                </div>
                                 {{ tool.name }}
-                            </a>
-                        </li>
-                    {% endfor %}
-                </ul>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
             {% endif %}
 
             {% if global_tools|length %}
-                <h2>{{ 'AvailableTools'|get_plugin_lang('ImsLtiPlugin') }}</h2>
-                <ul class="nav nav-pills nav-stacked">
-                    {% for tool in global_tools %}
-                        <li class="{{ type == tool.id ? 'active' : '' }}">
-                            {% if tool.isActiveDeepLinking %}
-                                <a href="{{ _p.web_plugin }}ims_lti/start.php?id={{ tool.id }}&{{ _p.web_cid_query }}">{{ tool.name }}</a>
-                            {% else %}
-                                <a href="{{ _p.web_self }}?type={{ tool.id }}&{{ _p.web_cid_query }}">{{ tool.name }}</a>
-                            {% endif %}
-                        </li>
-                    {% endfor %}
-                </ul>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">{{ 'AvailableTools'|get_plugin_lang('ImsLtiPlugin') }}</h2>
+                    </div>
+                    <ul class="list-group">
+                        {% for tool in global_tools %}
+                            <li class="list-group-item {{ type == tool.id ? 'active' : '' }}">
+                                <div class="pull-right">
+                                    {% if tool.isActiveDeepLinking %}
+                                        <a href="{{ _p.web_plugin }}ims_lti/start.php?id={{ tool.id }}&{{ _p.web_cid_query }}">
+                                            {{ 'settings.png'|img(22, 'Configure'|get_lang) }}
+                                        </a>
+                                    {% else %}
+                                        <a href="{{ _p.web_self }}?type={{ tool.id }}&{{ _p.web_cid_query }}">
+                                            {{ 'add.png'|img(22, 'Add'|get_lang) }}
+                                        </a>
+                                    {% endif %}
+                                </div>
+                                {{ tool.name }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
             {% endif %}
         </div>
     {% endif %}

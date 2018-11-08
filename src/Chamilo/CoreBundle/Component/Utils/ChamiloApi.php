@@ -289,12 +289,15 @@ class ChamiloApi
 
         return api_get_path(WEB_CSS_PATH).'editor_content.css';
     }
+
     /**
      * Get a list of colors from the palette at main/palette/pchart/default.color
-     * and return it as an array of strings
+     * and return it as an array of strings.
+     *
      * @param bool $decimalOpacity Whether to return the opacity as 0..100 or 0..1
-     * @param bool $wrapInRGBA Whether to return it as 1,1,1,100 or rgba(1,1,1,100)
-     * @param int  $fillUpTo If the number of colors is smaller than this number, generate more colors
+     * @param bool $wrapInRGBA     Whether to return it as 1,1,1,100 or rgba(1,1,1,100)
+     * @param int  $fillUpTo       If the number of colors is smaller than this number, generate more colors
+     *
      * @return array An array of string colors
      */
     public static function getColorPalette(
@@ -324,9 +327,10 @@ class ChamiloApi
         $count = count($palette);
         if (isset($fillUpTo) && $fillUpTo > $count) {
             for ($i = $count; $i < $fillUpTo; $i++) {
-                $palette[$i] = $palette[$i%$count];
+                $palette[$i] = $palette[$i % $count];
             }
         }
+
         return $palette;
     }
 }

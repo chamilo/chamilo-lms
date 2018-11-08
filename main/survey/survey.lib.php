@@ -355,6 +355,10 @@ class SurveyManager
                 'visible_results' => $values['visible_results'],
             ];
 
+            if (isset($values['survey_type']) && !empty($values['survey_type'])) {
+                $params['survey_type'] = $values['survey_type'];
+            }
+
             $params = array_merge($params, $extraParams);
             $survey_id = Database::insert($table_survey, $params);
             if ($survey_id > 0) {

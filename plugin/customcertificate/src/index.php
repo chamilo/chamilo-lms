@@ -1,7 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-if (intval($_GET['default']) == 1) {
+$isDefault = isset($_GET['default']) ? (int) $_GET['default'] : null;
+
+if ($isDefault === 1) {
     $cidReset = true;
 }
 
@@ -17,7 +19,7 @@ $enable = $plugin->get('enable_plugin_customcertificate') == 'true';
 $accessUrlId = api_get_current_access_url_id();
 $course_info = api_get_course_info();
 
-if (intval($_GET['default']) == 1) {
+if ($isDefault === 1) {
     $courseId = 0;
     $courseCode = '';
     $sessionId = 0;
@@ -106,13 +108,13 @@ if ($form->validate()) {
             'c_id' => $formValues['c_id'],
             'session_id' => $formValues['session_id'],
             'content_course' => $formValues['content_course'],
-            'contents_type' => intval($formValues['contents_type']),
+            'contents_type' => (int) $formValues['contents_type'],
             'contents' => $contents,
             'date_change' => intval($formValues['date_change']),
             'date_start' => date("Y-m-d", strtotime($date_start)),
             'date_end' => date("Y-m-d", strtotime($date_end)),
             'place' => $formValues['place'],
-            'type_date_expediction' => intval($formValues['type_date_expediction']),
+            'type_date_expediction' => (int) $formValues['type_date_expediction'],
             'day' => $formValues['day'],
             'month' => $formValues['month'],
             'year' => $formValues['year'],
@@ -120,8 +122,8 @@ if ($form->validate()) {
             'signature_text2' => $formValues['signature_text2'],
             'signature_text3' => $formValues['signature_text3'],
             'signature_text4' => $formValues['signature_text4'],
-            'margin_left' => intval($formValues['margin_left']),
-            'margin_right' => intval($formValues['margin_right']),
+            'margin_left' => (int) $formValues['margin_left'],
+            'margin_right' => (int) $formValues['margin_right'],
             'certificate_default' => 0,
         ];
 
@@ -245,7 +247,7 @@ $dir = '/';
 $courseInfo = api_get_course_info();
 $isAllowedToEdit = api_is_allowed_to_edit(null, true);
 $editorConfig = [
-    'ToolbarSet' => ($isAllowedToEdit ? 'Documents' : 'DocumentsStudent'),
+    'ToolbarSet' => $isAllowedToEdit ? 'Documents' : 'DocumentsStudent',
     'Width' => '100%',
     'Height' => '300',
     'cols-size' => [0, 12, 0],

@@ -1292,6 +1292,7 @@ class UserManager
             $emailBody = $tplContent->fetch($layoutContent);
 
             $mailTemplateManager = new MailTemplateManager();
+
             if (!empty($emailTemplate) &&
                 isset($emailTemplate['user_edit_content.tpl']) &&
                 !empty($emailTemplate['user_edit_content.tpl'])
@@ -1299,7 +1300,6 @@ class UserManager
                 $userInfo = api_get_user_info($user_id);
                 $emailBody = $mailTemplateManager->parseTemplate($emailTemplate['user_edit_content.tpl'], $userInfo);
             }
-
             api_mail_html(
                 $recipient_name,
                 $email,

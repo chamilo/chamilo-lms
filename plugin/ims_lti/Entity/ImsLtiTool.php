@@ -254,13 +254,20 @@ class ImsLtiTool
      */
     public function parseCustomParams()
     {
-        $strings = explode($this->customParams, "\n");
-        $pairs = explode('=', $strings);
+        if (empty($this->customParams)) {
+            return [];
+        }
 
-        return [
-            'key' => 'custom_'.$pairs[0],
-            'value' => $pairs[1]
-        ];
+        $params = [];
+        $strings = explode("\n", $this->customParams);
+
+        foreach ($strings as $string) {
+            $pairs = explode('=', $string);
+
+            $params['custom_'.$pairs[0]] = $pairs[1];
+        }
+
+        return $params;
     }
 
     /**

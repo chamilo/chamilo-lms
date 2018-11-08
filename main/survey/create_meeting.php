@@ -146,7 +146,7 @@ if ($form->validate()) {
     }
 
     // Redirecting to the survey page (whilst showing the return message)
-    header('Location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$return['id'].'&'.api_get_cidreq());
+    header('Location: '.api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq());
     exit;
 } else {
     // Displaying the header

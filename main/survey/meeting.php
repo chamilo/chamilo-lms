@@ -9,9 +9,9 @@ $userId = api_get_user_id();
 $courseInfo = api_get_course_info();
 
 $surveyId = isset($_REQUEST['survey_id']) ? (int) $_REQUEST['survey_id'] : 0;
+$invitationcode = isset($_REQUEST['invitationcode']) ? Database::escape_string($_REQUEST['invitationcode']) : 0;
 
-if (!api_is_allowed_to_edit()) {
-    $invitationcode = isset($_REQUEST['invitationcode']) ? Database::escape_string($_REQUEST['invitationcode']) : 0;
+if (!api_is_allowed_to_edit() || !empty($invitationcode)) {
     $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
     $table_survey = Database::get_course_table(TABLE_SURVEY);
 

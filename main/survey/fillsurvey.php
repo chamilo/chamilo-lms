@@ -204,6 +204,15 @@ if (empty($survey_data)) {
 }
 $survey_data['survey_id'] = $survey_invitation['survey_id'];
 
+if ($survey_data['survey_type'] == '3') {
+    header('Location: '.
+        api_get_path(WEB_CODE_PATH).
+        'survey/meeting.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId.'&invitationcode='.Security::remove_XSS($invitationcode)
+    );
+    exit;
+}
+
+
 // Storing the answers
 if (count($_POST) > 0) {
     if ($survey_data['survey_type'] === '0') {

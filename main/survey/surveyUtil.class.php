@@ -3157,7 +3157,6 @@ class SurveyUtil
                         api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey[0].'&'.api_get_cidreq()
                     );
                 }
-
             }
 
             // Validation when belonging to a session
@@ -3373,10 +3372,6 @@ class SurveyUtil
                 );
                 $url = api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?course='.$_course['sysCode']
                     .'&invitationcode='.$row['invitation_code'].'&cidReq='.$_course['sysCode'].'&id_session='.$row['session_id'];
-                if ($row['survey_type'] == 3) {
-                    $url = api_get_path(WEB_CODE_PATH).'survey/meeting.php?course='.$_course['sysCode']
-                        .'&invitationcode='.$row['invitation_code'].'&cidReq='.$_course['sysCode'].'&id_session='.$row['session_id'];
-                }
                 echo '<a href="'.$url.'">
                     '.$row['title']
                     .'</a></td>';

@@ -418,7 +418,8 @@ class Certificate extends Model
         }
 
         $currentUserInfo = api_get_user_info();
-        $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$certificateInfo['id'].'&user_id='.$certificateInfo['user_id'];
+        $url = api_get_path(WEB_PATH).
+            'certificates/index.php?id='.$certificateInfo['id'].'&user_id='.$certificateInfo['user_id'];
         $link = Display::url($url, $url);
 
         $replace = [
@@ -429,11 +430,10 @@ class Certificate extends Model
             $currentUserInfo['lastname'],
             $certificateInfo['score_certificate'],
             api_get_setting('Institution'),
-            $link
+            $link,
         ];
 
         $message = str_replace(self::notificationTags(), $replace, $message);
-
         MessageManager::send_message(
             $userInfo['id'],
             $subject,

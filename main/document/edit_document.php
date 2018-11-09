@@ -193,7 +193,7 @@ if (!api_is_allowed_to_edit()) {
     }
 }
 
-$document_info = api_get_item_property_info(
+/*$document_info = api_get_item_property_info(
     api_get_course_int_id(),
     'document',
     $document_id,
@@ -219,7 +219,7 @@ if (api_is_in_group()) {
         $document_info,
         true
     );
-}
+}*/
 
 /* MAIN TOOL CODE */
 /* Code to change the comment */
@@ -325,10 +325,11 @@ $path_info = pathinfo($document_data['path']);
 $filename = $path_info['filename'];
 $extension = $path_info['extension'] ?? '';
 
+$em = Database::getManager();
+/** @var \Chamilo\CoreBundle\Entity\Resource\ResourceNode $node */
+$node = $em->getRepository('ChamiloCoreBundle:Resource\ResourceNode')->find($document_data['resource_node_id']);
+
 if (in_array($extension, ['html', 'htm'])) {
-    $em = Database::getManager();
-    /** @var \Chamilo\CoreBundle\Entity\Resource\ResourceNode $node */
-    $node = $em->getRepository('ChamiloCoreBundle:Resource\ResourceNode')->find($document_data['resource_node_id']);
     $file = $node->getResourceFile();
 
     if ($file) {
@@ -343,9 +344,9 @@ if (in_array($extension, ['html', 'htm'])) {
 $nameTools = get_lang('EditDocument').': '.Security::remove_XSS($document_data['title']);
 Display::display_header($nameTools, 'Doc');
 
-$owner_id = $document_info['insert_user_id'];
-$last_edit_date = $document_info['lastedit_date'];
-$createdDate = $document_info['insert_date'];
+$owner_id = $node->getCreator()->getId();
+$last_edit_date = $node->getUpdatedAt();
+$createdDate = $node->getCreatedAt();
 $groupInfo = GroupManager::get_group_properties(api_get_group_id());
 
 if ($owner_id == api_get_user_id() ||

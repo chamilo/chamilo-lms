@@ -21,6 +21,8 @@ $nameTools = get_lang('CreateAudio');
 api_protect_course_script();
 api_block_anonymous_users();
 
+$courseInfo = api_get_course_info();
+
 $groupRights = Session::read('group_member_with_upload_rights');
 $groupId = api_get_group_id();
 
@@ -74,18 +76,11 @@ if ($dir[strlen($dir) - 1] != '/') {
     $dir .= '/';
 }
 
-$filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$dir;
-
-if (!is_dir($filepath)) {
-    $filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
-    $dir = '/';
-}
-
 //groups //TODO: clean
 if (!empty($groupId)) {
     $interbreadcrumb[] = [
-        "url" => "../group/group_space.php?".api_get_cidreq(),
-        "name" => get_lang('GroupSpace'),
+        'url' => '../group/group_space.php?'.api_get_cidreq(),
+        'name' => get_lang('GroupSpace'),
     ];
     $group = GroupManager:: get_group_properties($groupId);
     $path = explode('/', $dir);
@@ -95,8 +90,8 @@ if (!empty($groupId)) {
 }
 
 $interbreadcrumb[] = [
-    "url" => "./document.php?curdirpath=".urlencode($dir)."&".api_get_cidreq(),
-    "name" => get_lang('Documents'),
+    'url' => "./document.php?curdirpath=".urlencode($dir)."&".api_get_cidreq(),
+    'name' => get_lang('Documents'),
 ];
 
 if (!api_is_allowed_in_course()) {
@@ -113,7 +108,6 @@ if (!($is_allowed_to_edit || $groupRights ||
     api_not_allowed(true);
 }
 
-/*	Header */
 Event::event_access_tool(TOOL_DOCUMENT);
 
 $display_dir = $dir;
@@ -140,7 +134,7 @@ for ($i = 0; $i < $array_len; $i++) {
 $service = isset($_GET['service']) ? $_GET['service'] : 'google';
 
 if (isset($_POST['text2voice_mode']) && $_POST['text2voice_mode'] == 'google') {
-    downloadAudioGoogle($filepath, $dir);
+    downloadAudioGoogle($dir);
 }
 
 Display:: display_header($nameTools, 'Doc');
@@ -249,13 +243,13 @@ Display::display_footer();
  *
  * @version january 2011, chamilo 1.8.8
  */
-function downloadAudioGoogle($filepath, $dir)
+function downloadAudioGoogle($dir)
 {
     $location = 'create_audio.php?'.api_get_cidreq().'&id='.intval($_POST['id']).'&service=google';
 
     //security
     if (!isset($_POST['lang']) && !isset($_POST['text']) &&
-        !isset($_POST['title']) && !isset($filepath) && !isset($dir)
+        !isset($_POST['title']) && !isset($dir)
     ) {
         echo '<script>window.location.href="'.$location.'"</script>';
 
@@ -263,8 +257,6 @@ function downloadAudioGoogle($filepath, $dir)
     }
 
     $_course = api_get_course_info();
-    $_user = api_get_user_info();
-
     $clean_title = trim($_POST['title']);
     $clean_text = trim($_POST['text']);
     if (empty($clean_title) || empty($clean_text)) {
@@ -282,24 +274,10 @@ function downloadAudioGoogle($filepath, $dir)
     $extension = 'mp3';
     $audio_filename = $clean_title.'.'.$extension;
     $audio_title = str_replace('_', ' ', $clean_title);
-
-    //prevent duplicates
-    if (file_exists($filepath.'/'.$clean_title.'.'.$extension)) {
-        $i = 1;
-        while (file_exists($filepath.'/'.$clean_title.'_'.$i.'.'.$extension)) {
-            $i++;
-        }
-        $audio_filename = $clean_title.'_'.$i.'.'.$extension;
-        $audio_title = $clean_title.'_'.$i.'.'.$extension;
-        $audio_title = str_replace('_', ' ', $audio_title);
-    }
-
-    $documentPath = $filepath.'/'.$audio_filename;
     $clean_text = api_replace_dangerous_char($clean_text);
 
     // adding the file
     // add new file to disk
-
     $proxySettings = api_get_configuration_value('proxy_settings');
     $key = api_get_configuration_value('translate_app_google_key');
     $url = "https://www.googleapis.com/language/translate/v2?key=$key&".$clean_lang."&target=$clean_lang&q=".urlencode($clean_text)."";
@@ -320,20 +298,23 @@ function downloadAudioGoogle($filepath, $dir)
 
         return;
     }
-
-    file_put_contents(
-        $documentPath,
-        $content
-    );
-
+    
     // add document to database
     $relativeUrlPath = $dir;
     add_document(
         $_course,
         $relativeUrlPath.$audio_filename,
         'file',
-        filesize($documentPath),
-        $audio_title
+        '',
+        $audio_title,
+        null,
+        0,
+        null,
+        0,
+        0,
+        0,
+        true,
+        $content
     );
     echo Display::return_message(get_lang('DocumentCreated'), 'confirm');
     echo '<script>window.location.href="'.$location.'"</script>';

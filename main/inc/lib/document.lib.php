@@ -522,7 +522,8 @@ class DocumentManager
                     creator_id,
                     visibility,
                     n.updated_at,
-                    n.created_at                                     
+                    n.created_at,
+                    n.creator_id                                     
                 FROM resource_node AS n
                 INNER JOIN $tblDocument AS docs
                 ON (docs.resource_node_id = n.id)

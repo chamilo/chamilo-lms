@@ -1708,8 +1708,8 @@ function search_img_from_html($html_file)
  * @param bool   $generateNewNameIfExists
  * @param bool   $sendNotification        depends in conf setting "send_notification_when_document_added"
  *
- * @return string actual directory name if it succeeds,
- *                boolean false otherwise
+ * @return CDocument|false
+ *
  */
 function create_unexisting_directory(
     $_course,
@@ -1857,10 +1857,10 @@ function create_unexisting_directory(
                     $session_id
                 );
 
-                /* This means the folder NOT exist in the filesystem
-                 (now this was created) but there is a record in the Database*/
+                $em = Database::getManager();
+                $document = $em->getRepository('ChamiloCourseBundle:CDocument')->find($documentData['iid']);
 
-                return $documentData;
+                return $document;
             }
         }
     }

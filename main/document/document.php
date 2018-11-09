@@ -1393,7 +1393,7 @@ if ($isAllowedToEdit ||
 
             if (!empty($newFolderData)) {
                 $message = Display::return_message(
-                    get_lang('DirCr').' '.$newFolderData['title'],
+                    get_lang('DirCr').' '.$newFolderData->getTitle(),
                     'confirmation'
                 );
             } else {

@@ -68,12 +68,11 @@ if ($dir[strlen($dir) - 1] != '/') {
     $dir .= '/';
 }
 
-$filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$dir;
-
+/*$filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$dir;
 if (!is_dir($filepath)) {
     $filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
     $dir = '/';
-}
+}*/
 
 //groups //TODO: clean
 if (!empty($groupId)) {

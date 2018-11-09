@@ -728,6 +728,7 @@ class UserRepository extends EntityRepository
         }
 
         // TrackEOnline
+        $trackEOnlineList = [];
         /** @var TrackEOnline $item */
         foreach ($trackResults['ChamiloCoreBundle:TrackEOnline'] as $item) {
             $date = $item->getLoginDate() ? $item->getLoginDate()->format($dateFormat) : '';
@@ -869,7 +870,7 @@ class UserRepository extends EntityRepository
 
         // cGroupRelUser
         $criteria = [
-            'userId' => $userId,
+            'user' => $userId,
         ];
         $result = $em->getRepository('ChamiloCourseBundle:CGroupRelUser')->findBy($criteria);
         $cGroupRelUser = [];

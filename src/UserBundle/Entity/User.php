@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\ThemeBundle\Model\UserInterface as ThemeUser;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
@@ -370,7 +371,7 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     protected $sessions;
 
     /**
-     * @var ArrayCollection
+     * @var Collection
      *
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CourseBundle\Entity\CGroupRelUser",
@@ -382,7 +383,7 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     protected $courseGroupsAsMember;
 
     /**
-     * @var ArrayCollection
+     * @var Collection
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupRelTutor", mappedBy="user", orphanRemoval=true)
      */
@@ -2023,17 +2024,17 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
-    public function getCourseGroupsAsMember(): ArrayCollection
+    public function getCourseGroupsAsMember(): Collection
     {
         return $this->courseGroupsAsMember;
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
-    public function getCourseGroupsAsTutor(): ArrayCollection
+    public function getCourseGroupsAsTutor(): Collection
     {
         return $this->courseGroupsAsTutor;
     }

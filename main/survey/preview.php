@@ -5,8 +5,8 @@
  * @package chamilo.survey
  *
  * @author unknown, the initial survey that did not make it in 1.8 because of bad code
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
- * @author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality Test modifications
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting code
+ * @author Julio Montoya <gugli100@gmail.com>, Chamilo: Personality Test modifications
  *
  * @version $Id: survey_list.php 10680 2007-01-11 21:26:23Z pcool $
  */
@@ -25,7 +25,7 @@ $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
 $course_id = api_get_course_int_id();
 $courseInfo = $course_id ? api_get_course_info_by_id($course_id) : [];
 $userId = api_get_user_id();
-$surveyId = intval($_GET['survey_id']);
+$surveyId = (int) $_GET['survey_id'];
 $userInvited = 0;
 $userAnonymous = 0;
 
@@ -49,12 +49,10 @@ if (!isset($_GET['survey_id']) || !is_numeric($_GET['survey_id'])) {
         true,
         Display::return_message(get_lang('InvallidSurvey'), 'error', false)
     );
-    exit;
 }
 
 // Getting the survey information
-$survey_id = intval($_GET['survey_id']);
-$survey_data = SurveyManager::get_survey($survey_id);
+$survey_data = SurveyManager::get_survey($surveyId);
 
 if (empty($survey_data)) {
     api_not_allowed(
@@ -71,12 +69,12 @@ if (api_is_allowed_to_edit()) {
         'name' => get_lang('SurveyList'),
     ];
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&'.api_get_cidreq(),
+        'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$surveyId.'&'.api_get_cidreq(),
         'name' => $urlname,
     ];
 }
 $courseCode = isset($_GET['cidReq']) ? $_GET['cidReq'] : null;
-$surveyAnonymous = SurveyManager::get_survey($survey_id, 0, $courseCode);
+$surveyAnonymous = SurveyManager::get_survey($surveyId, 0, $courseCode);
 $surveyAnonymous = $surveyAnonymous['anonymous'];
 if ($surveyAnonymous == 0 && api_is_anonymous()) {
     api_not_allowed(true);
@@ -89,7 +87,7 @@ if ($surveyAnonymous == 0 && api_is_anonymous()) {
 Display::display_header(get_lang('SurveyPreview'));
 
 // We exit here is the first or last question is a pagebreak (which causes errors)
-SurveyUtil::check_first_last_question($survey_id, false);
+SurveyUtil::check_first_last_question($surveyId, false);
 $counter_question = 0;
 // Only a course admin is allowed to preview a survey: you are a course admin
 if (api_is_course_admin() ||
@@ -127,7 +125,7 @@ if (api_is_course_admin() ||
         $paged_questions = [];
         $counter = 0;
         $sql = "SELECT * FROM $table_survey_question
-                WHERE c_id = $course_id AND survey_id = '".$survey_id."'
+                WHERE c_id = $course_id AND survey_id = '".$surveyId."'
                 ORDER BY sort ASC";
         $result = Database::query($sql);
         $questions_exists = true;
@@ -161,7 +159,7 @@ if (api_is_course_admin() ||
                         survey_question.question_id = survey_question_option.question_id AND
                         survey_question_option.c_id = $course_id
                     WHERE
-                        survey_question.survey_id = '".$survey_id."' AND
+                        survey_question.survey_id = '".$surveyId."' AND
                         survey_question.question_id IN (".Database::escape_string(implode(',', $paged_questions[$_GET['show']]), null, false).") AND
                         survey_question.c_id =  $course_id
                     ORDER BY survey_question.sort, survey_question_option.sort ASC";
@@ -193,7 +191,7 @@ if (api_is_course_admin() ||
             WHERE
                 c_id = $course_id AND
                 type = '".Database::escape_string('pagebreak')."' AND
-                survey_id = '".$survey_id."'";
+                survey_id = '".$surveyId."'";
     $result = Database::query($sql);
     $numberofpages = Database::num_rows($result) + 1;
 
@@ -204,7 +202,7 @@ if (api_is_course_admin() ||
         $show = 0;
     }
 
-    $url = api_get_self().'?survey_id='.$survey_id.'&show='.$show;
+    $url = api_get_self().'?survey_id='.$surveyId.'&show='.$show;
     $form = new FormValidator(
         'question-survey',
         'post',

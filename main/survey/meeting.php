@@ -64,7 +64,8 @@ if (empty($surveyData)) {
 $content = Display::page_header($surveyData['title']);
 
 $interbreadcrumb[] = [
-    'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId,
+    'url' => api_get_path(WEB_CODE_PATH).
+        'survey/survey_list.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId,
     'name' => get_lang('SurveyList'),
 ];
 
@@ -130,25 +131,22 @@ foreach ($students as $student) {
     if ($row % 2) {
         $class = 'class="row_even"';
     }
-    //$table->setRowAttributes($row, $class, true);
-    //$column++;
     $row++;
 }
 
 $content .= $table->toHtml();
 
-$ajaxUrl = api_get_path(WEB_AJAX_PATH).'survey.ajax.php?a=save_question&'.api_get_cidreq().'&survey_id='.$surveyId.'&question_id=';
+$ajaxUrl = api_get_path(WEB_AJAX_PATH).
+    'survey.ajax.php?a=save_question&'.api_get_cidreq().'&survey_id='.$surveyId.'&question_id=';
 
 $content .= '<script>
 $(function() {    
     $(".question").on("change", function() {
-        var questionId = $(this).attr("id");
-        
+        var questionId = $(this).attr("id");        
         var status = 0;
         if ($(this).prop("checked")) {
             status = 1;
-        }
-        
+        }        
         $.ajax({ 
             url: "'.$ajaxUrl.'" + questionId + "&status=" + status,
             success: function (data) {

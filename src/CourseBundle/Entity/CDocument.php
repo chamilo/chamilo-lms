@@ -346,7 +346,7 @@ class CDocument extends AbstractResource implements ResourceInterface
 
         $result = null;
         if ($resourceNode && $resourceNode->getResourceLinks()) {
-            $resourceNode->getResourceLinks()->matching($criteria)->first();
+            $result = $resourceNode->getResourceLinks()->matching($criteria)->first();
         }
 
         return $result;

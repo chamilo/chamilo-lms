@@ -433,6 +433,9 @@ footer {
       cursor: pointer;
       position: relative;
       background-color: transparent;
+      &.cursor-none{
+        cursor: inherit;
+      }
       .big_icon{
         position: absolute;
         width: 84px;

@@ -3666,8 +3666,8 @@ class learnpath
 
                     switch ($lp_item_type) {
                         case 'document':
-                            if(api_get_configuration_value('allow_pdf_viewerjs_in_lp')){
-                                if(Link::is_pdf_link($file)){
+                            if (api_get_configuration_value('allow_pdf_viewerjs_in_lp')) {
+                                if (Link::isPdfLink($file)) {
                                     $pdfUrl = api_get_path(WEB_LIBRARY_PATH).'javascript/ViewerJS/index.html#'.$file;
                                     $file = $pdfUrl;
                                 }

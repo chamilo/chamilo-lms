@@ -3665,6 +3665,14 @@ class learnpath
                     }
 
                     switch ($lp_item_type) {
+                        case 'document':
+                            if(api_get_configuration_value('allow_pdf_viewerjs_in_lp')){
+                                if(Link::is_pdf_link($file)){
+                                    $pdfUrl = api_get_path(WEB_LIBRARY_PATH).'javascript/ViewerJS/index.html#'.$file;
+                                    $file = $pdfUrl;
+                                }
+                            }
+                            break;
                         case 'dir':
                             $file = 'lp_content.php?type=dir';
                             break;
@@ -3742,6 +3750,7 @@ class learnpath
                     }
 
                     $tmp_array = explode('/', $file);
+
                     $document_name = $tmp_array[count($tmp_array) - 1];
                     if (strpos($document_name, '_DELETED_')) {
                         $file = 'blank.php?error=document_deleted';

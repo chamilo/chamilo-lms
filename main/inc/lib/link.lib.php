@@ -1565,6 +1565,24 @@ class Link extends Model
     }
 
     /**
+     * This function checks if the url is a PDF File link.
+     *
+     * @author Jorge Frisancho
+     * @author Alex Aragón - Fixing code
+     *
+     * @version 1.0
+     */
+    public static function is_pdf_link($url)
+    {
+        $is_pdf_link = strrpos($url, ".pdf") || strrpos(
+                $url,
+                ".PDF"
+            );
+
+        return $is_pdf_link;
+    }
+
+    /**
      * Get youtube id from an URL.
      *
      * @param string $url

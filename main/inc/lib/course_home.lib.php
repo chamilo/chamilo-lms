@@ -510,14 +510,15 @@ class CourseHome
         );
 
         $lpTable = Database::get_course_table(TABLE_LP_MAIN);
-
         $orderBy = ' ORDER BY id ';
         switch ($course_tool_category) {
             case TOOL_STUDENT_VIEW:
                 $conditions = ' WHERE visibility = 1 AND 
                                 (category = "authoring" OR category = "interaction" OR category = "plugin") AND 
                                 t.name <> "notebookteacher" ';
-                if ((api_is_coach() || api_is_course_tutor()) && $_SESSION['studentview'] != 'studentview') {
+                if ((api_is_coach() || api_is_course_tutor() || api_is_platform_admin()) &&
+                    $_SESSION['studentview'] != 'studentview'
+                ) {
                     $conditions = ' WHERE (
                         visibility = 1 AND (
                             category = "authoring" OR 
@@ -584,6 +585,7 @@ class CourseHome
         // if the course homepage is loaded many times, so the list of hidden
         // tools might benefit from a shared memory storage later on
         $list = api_get_settings('Tools', 'list', api_get_current_access_url_id());
+
         $hide_list = [];
         $check = false;
         foreach ($list as $line) {

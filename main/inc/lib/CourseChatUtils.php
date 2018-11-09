@@ -132,7 +132,7 @@ class CourseChatUtils
         $absoluteFilePath = $chat_path.$fileTitle;
 
         if (!file_exists($absoluteFilePath)) {
-            $doc_id = add_document(
+            $doc_id = DocumentManager::addDocument(
                 $courseInfo,
                 $filePath,
                 'file',
@@ -146,24 +146,6 @@ class CourseChatUtils
                 0,
                 false
             );
-            $documentLogTypes = ['DocumentAdded', 'invisible'];
-
-            foreach ($documentLogTypes as $logType) {
-                api_item_property_update(
-                    $courseInfo,
-                    TOOL_DOCUMENT,
-                    $doc_id,
-                    $logType,
-                    $this->userId,
-                    $group_info,
-                    null,
-                    null,
-                    null,
-                    $this->sessionId
-                );
-            }
-
-            item_property_update_on_folder($courseInfo, $basepath_chat, $this->userId);
         } else {
             $doc_id = DocumentManager::get_document_id($courseInfo, $filePath);
         }
@@ -476,7 +458,7 @@ class CourseChatUtils
                 @mkdir($chat_path, api_get_permissions_for_new_directories());
                 // Save chat files document for group into item property
                 if ($this->groupId) {
-                    $doc_id = add_document(
+                    DocumentManager::addDocument(
                         $courseInfo,
                         $basepath_chat,
                         'folder',
@@ -489,17 +471,6 @@ class CourseChatUtils
                         0,
                         0,
                         false
-                    );
-                    api_item_property_update(
-                        $courseInfo,
-                        TOOL_DOCUMENT,
-                        $doc_id,
-                        'FolderCreated',
-                        null,
-                        $group_info,
-                        null,
-                        null,
-                        null
                     );
                 }
             }
@@ -522,7 +493,7 @@ class CourseChatUtils
         if (!file_exists($chat_path.$filename_chat)) {
             @fclose(fopen($chat_path.$filename_chat, 'w'));
             if (!api_is_anonymous()) {
-                $doc_id = add_document(
+                DocumentManager::addDocument(
                     $courseInfo,
                     $basepath_chat.'/'.$filename_chat,
                     'file',
@@ -536,33 +507,6 @@ class CourseChatUtils
                     0,
                     false
                 );
-                if ($doc_id) {
-                    api_item_property_update(
-                        $courseInfo,
-                        TOOL_DOCUMENT,
-                        $doc_id,
-                        'DocumentAdded',
-                        $this->userId,
-                        $group_info,
-                        null,
-                        null,
-                        null,
-                        $this->sessionId
-                    );
-                    api_item_property_update(
-                        $courseInfo,
-                        TOOL_DOCUMENT,
-                        $doc_id,
-                        'invisible',
-                        $this->userId,
-                        $group_info,
-                        null,
-                        null,
-                        null,
-                        $this->sessionId
-                    );
-                    item_property_update_on_folder($courseInfo, $basepath_chat, $this->userId);
-                }
             }
         }
 
@@ -588,7 +532,7 @@ class CourseChatUtils
             @rename($chat_path.$basename_chat.'.log.html', $chat_path.$basename_chat.'-'.$i.'.log.html');
             @fclose(fopen($chat_path.$basename_chat.'.log.html', 'w'));
 
-            $doc_id = add_document(
+            $doc_id = DocumentManager::addDocument(
                 $courseInfo,
                 $basepath_chat.'/'.$basename_chat.'-'.$i.'.log.html',
                 'file',
@@ -602,32 +546,6 @@ class CourseChatUtils
                 0,
                 false
             );
-
-            api_item_property_update(
-                $courseInfo,
-                TOOL_DOCUMENT,
-                $doc_id,
-                'DocumentAdded',
-                $this->userId,
-                $group_info,
-                null,
-                null,
-                null,
-                $this->sessionId
-            );
-            api_item_property_update(
-                $courseInfo,
-                TOOL_DOCUMENT,
-                $doc_id,
-                'invisible',
-                $this->userId,
-                $group_info,
-                null,
-                null,
-                null,
-                $this->sessionId
-            );
-            item_property_update_on_folder($courseInfo, $basepath_chat, $this->userId);
             $doc_id = DocumentManager::get_document_id(
                 $courseInfo,
                 $basepath_chat.'/'.$basename_chat.'.log.html'

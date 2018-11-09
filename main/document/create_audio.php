@@ -298,10 +298,10 @@ function downloadAudioGoogle($dir)
 
         return;
     }
-    
+
     // add document to database
     $relativeUrlPath = $dir;
-    add_document(
+    DocumentManager::addDocument(
         $_course,
         $relativeUrlPath.$audio_filename,
         'file',

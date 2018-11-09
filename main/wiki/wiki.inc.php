@@ -2427,7 +2427,7 @@ class Wiki
         $exportPath = $exportDir.'/'.$wikiFileName;
 
         file_put_contents($exportPath, $wikiContents);
-        $doc_id = add_document(
+        $document = DocumentManager::addDocument(
             $_course,
             $groupPath.'/'.$wikiFileName,
             'file',
@@ -2435,16 +2435,9 @@ class Wiki
             $wikiTitle
         );
 
-        api_item_property_update(
-            $_course,
-            TOOL_DOCUMENT,
-            $doc_id,
-            'DocumentAdded',
-            api_get_user_id(),
-            $groupInfo
-        );
+        $id = $document->getId();
 
-        return $doc_id;
+        return $id;
     }
 
     /**

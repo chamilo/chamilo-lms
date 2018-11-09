@@ -140,8 +140,14 @@ if (empty($temp_file_2delete)) {
     // Add new document to disk
     file_put_contents($documentPath, $contents);
     // Add document to database
-    $documentId = add_document($courseInfo, $paintDir.$paintFileName, 'file', filesize($documentPath), $title);
-    if ($documentId) {
+    $document = DocumentManager::addDocument(
+        $courseInfo,
+        $paintDir.$paintFileName,
+        'file',
+        filesize($documentPath),
+        $title
+    );
+    if ($document) {
         Display::addFlash(Display::return_message(get_lang('Saved')));
     }
 } else {
@@ -171,27 +177,15 @@ if (empty($temp_file_2delete)) {
             $sessionId
         );
     } else {
-        //add a new document
-        $documentId = add_document(
+        // add a new document
+        $document = DocumentManager::addDocument(
             $courseInfo,
             $paintDir.$paintFileName,
             'file',
             filesize($documentPath),
             $title
         );
-        if ($documentId) {
-            api_item_property_update(
-                $courseInfo,
-                TOOL_DOCUMENT,
-                $documentId,
-                'DocumentAdded',
-                api_get_user_id(),
-                $groupInfo,
-                null,
-                null,
-                null,
-                $sessionId
-            );
+        if ($document) {
             Display::addFlash(Display::return_message(get_lang('Updated')));
         }
     }

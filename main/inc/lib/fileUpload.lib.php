@@ -1,13 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Resource\ResourceFile;
-use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
-use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CDocument;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * FILE UPLOAD LIBRARY.
@@ -433,7 +428,7 @@ function handle_uploaded_document(
                                 // There might be cases where the file exists on disk but there is no registration of
                                 // that in the database
                                 // In this case, and if we are in overwrite mode, overwrite and create the db record
-                                $documentId = add_document(
+                                $documentId = DocumentManager::addDocument(
                                     $courseInfo,
                                     $filePath,
                                     'file',
@@ -489,7 +484,7 @@ function handle_uploaded_document(
                             return $filePath;
                         } else {
                             // Put the document data in the database
-                            $documentId = add_document(
+                            $documentId = DocumentManager::addDocument(
                                 $courseInfo,
                                 $filePath,
                                 'file',
@@ -582,7 +577,7 @@ function handle_uploaded_document(
                     if (true) {
                         ///chmod($fullPath, $filePermissions);
                         // Put the document data in the database
-                        $document = add_document(
+                        $document = DocumentManager::addDocument(
                             $courseInfo,
                             $filePath,
                             'file',
@@ -654,7 +649,7 @@ function handle_uploaded_document(
                             //chmod($fullPath, $filePermissions);
 
                             // Put the document data in the database
-                            $documentId = add_document(
+                            $documentId = DocumentManager::addDocument(
                                 $courseInfo,
                                 $filePath,
                                 'file',
@@ -1301,208 +1296,6 @@ function filter_extension(&$filename)
 }
 
 /**
- * Adds a new document to the database.
- *
- * @param array  $courseInfo
- * @param string $path
- * @param string $fileType
- * @param int    $fileSize
- * @param string $title
- * @param string $comment
- * @param int    $readonly
- * @param int    $visibility       see ResourceLink constants
- * @param int    $group_id         group.id
- * @param int    $sessionId        Session ID, if any
- * @param int    $userId           creator user id
- * @param bool   $sendNotification
- * @param string $content
- * @param int    $parentId
- *
- * @return CDocument|false
- */
-function add_document(
-    $courseInfo,
-    $path,
-    $fileType,
-    $fileSize,
-    $title,
-    $comment = null,
-    $readonly = 0,
-    $visibility = null,
-    $group_id = 0,
-    $sessionId = 0,
-    $userId = 0,
-    $sendNotification = true,
-    $content = '',
-    $parentId = 0
-) {
-    $sessionId = empty($sessionId) ? api_get_session_id() : $sessionId;
-    $userId = empty($userId) ? api_get_user_id() : $userId;
-    $userEntity = api_get_user_entity($userId);
-    $courseEntity = api_get_course_entity(api_get_course_int_id());
-    $session = api_get_session_entity($sessionId);
-    $group = api_get_group_entity($group_id);
-    $readonly = (int) $readonly;
-
-    $em = Database::getManager();
-    $documentRepo = $em->getRepository('ChamiloCourseBundle:CDocument');
-
-    $parentNode = null;
-    if (!empty($parentId)) {
-        $parent = $documentRepo->find($parentId);
-        $parentNode = $parent->getResourceNode();
-    }
-
-    $document = new CDocument();
-    $document
-        ->setCourse($courseEntity)
-        ->setPath($path)
-        ->setFiletype($fileType)
-        ->setSize($fileSize)
-        ->setTitle($title)
-        ->setComment($comment)
-        ->setReadonly($readonly)
-        ->setSession($session)
-    ;
-
-    $em->persist($document);
-    $em->flush();
-
-    $resourceNode = $documentRepo->addResourceNode($document, $userEntity);
-    $resourceNode->setParent($parentNode);
-    $document->setResourceNode($resourceNode);
-
-    // Only create a ResourseFile and Media if there's a file involved
-    if ($fileType === 'file') {
-        $mediaManager = Container::$container->get('sonata.media.manager.media');
-        /** @var \Chamilo\MediaBundle\Entity\Media $media */
-        $media = $mediaManager->create();
-        $media->setName($title);
-
-        $fileName = basename($path);
-        $extension = pathinfo($fileName, PATHINFO_EXTENSION);
-        $media->setContext('default');
-
-        $provider = 'sonata.media.provider.image';
-        if (!in_array($extension, ['jpeg', 'jpg', 'gif', 'png'])) {
-            $provider = 'sonata.media.provider.file';
-        }
-
-        $media->setProviderName($provider);
-        $media->setEnabled(true);
-
-        if ($content instanceof UploadedFile) {
-            $file = $content;
-            $media->setSize($file->getSize());
-        } else {
-            $handle = tmpfile();
-            fwrite($handle, $content);
-            $file = new \Sonata\MediaBundle\Extra\ApiMediaFile($handle);
-            $file->setMimetype($media->getContentType());
-        }
-
-        $media->setBinaryContent($file);
-        $mediaManager->save($media, true);
-
-        $resourceFile = new ResourceFile();
-        $resourceFile->setMedia($media);
-        $resourceFile->setName($title);
-        $em->persist($resourceFile);
-
-        $resourceNode->setResourceFile($resourceFile);
-        $em->persist($resourceNode);
-    }
-
-    // By default visibility is published
-    // @todo change visibility
-    //$newVisibility = ResourceLink::VISIBILITY_PUBLISHED;
-
-    if (is_null($visibility)) {
-        $visibility = ResourceLink::VISIBILITY_PUBLISHED;
-    }
-
-    $link = new ResourceLink();
-    $link
-        ->setCourse($courseEntity)
-        ->setSession($session)
-        ->setGroup($group)
-        //->setUser($toUser)
-        ->setResourceNode($resourceNode)
-        ->setVisibility($visibility)
-    ;
-
-    $rights = [];
-    switch ($visibility) {
-        case ResourceLink::VISIBILITY_PENDING:
-        case ResourceLink::VISIBILITY_DRAFT:
-            $editorMask = ResourceNodeVoter::getEditorMask();
-            $resourceRight = new ResourceRight();
-            $resourceRight
-                ->setMask($editorMask)
-                ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
-            ;
-            $rights[] = $resourceRight;
-
-            break;
-    }
-
-    if (!empty($rights)) {
-        foreach ($rights as $right) {
-            $link->addResourceRight($right);
-        }
-    }
-
-    $em->persist($link);
-    $em->persist($document);
-    $em->flush();
-
-    $documentId = $document->getIid();
-    if ($documentId) {
-        $table = Database::get_course_table(TABLE_DOCUMENT);
-        $sql = "UPDATE $table SET id = iid WHERE iid = $documentId";
-        Database::query($sql);
-
-        /*if ($saveVisibility) {
-            api_set_default_visibility(
-                $documentId,
-                TOOL_DOCUMENT,
-                $group_id,
-                $courseInfo,
-                $sessionId,
-                $userId
-            );
-        }*/
-
-        $allowNotification = api_get_configuration_value('send_notification_when_document_added');
-        if ($sendNotification && $allowNotification) {
-            $courseTitle = $courseInfo['title'];
-            if (!empty($sessionId)) {
-                $sessionInfo = api_get_session_info($sessionId);
-                $courseTitle .= ' ( '.$sessionInfo['name'].') ';
-            }
-
-            $url = api_get_path(WEB_CODE_PATH).
-                'document/showinframes.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId.'&id='.$documentId;
-            $link = Display::url(basename($title), $url, ['target' => '_blank']);
-            $userInfo = api_get_user_info($userId);
-
-            $message = sprintf(
-                get_lang('DocumentXHasBeenAddedToDocumentInYourCourseXByUserX'),
-                $link,
-                $courseTitle,
-                $userInfo['complete_name']
-            );
-            $subject = sprintf(get_lang('NewDocumentAddedToCourseX'), $courseTitle);
-            MessageManager::sendMessageToAllUsersInCourse($subject, $message, $courseInfo, $sessionId);
-        }
-
-        return $document;
-    }
-
-    return false;
-}
-
-/**
  * Updates an existing document in the database
  * as the file exists, we only need to change the size.
  *
@@ -1796,7 +1589,7 @@ function create_unexisting_directory(
 
             $rs = Database::query($sql);
             if (Database::num_rows($rs) == 0) {
-                $document = add_document(
+                $document = DocumentManager::addDocument(
                     $_course,
                     $systemFolderName,
                     'folder',

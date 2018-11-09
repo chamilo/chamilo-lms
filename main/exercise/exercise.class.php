@@ -1367,7 +1367,7 @@ class Exercise
                 $result = Database::query($sql);
 
                 if (!Database::num_rows($result)) {
-                    add_document(
+                    DocumentManager::addDocument(
                         $this->course,
                         str_replace($documentPath, '', $audioPath).'/'.$this->sound,
                         'file',

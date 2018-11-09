@@ -56,7 +56,7 @@ if ($finish == 2 && isset($_POST['imgparams'])) {
 if (api_is_allowed_to_edit(null, true)) {
     if (hotpotatoes_init($document_sys_path.$uploadPath)) {
         // If the directory doesn't exist, create the "HotPotatoes" directory.
-        add_document(
+        DocumentManager::addDocument(
             $_course,
             '/HotPotatoes_files',
             'folder',
@@ -64,7 +64,7 @@ if (api_is_allowed_to_edit(null, true)) {
             get_lang('HotPotatoesFiles')
         );
         // Update properties in dbase (in any case).
-        api_item_property_update(
+        /*api_item_property_update(
             $_course,
             TOOL_DOCUMENT,
             $doc_id,
@@ -78,7 +78,7 @@ if (api_is_allowed_to_edit(null, true)) {
             $doc_id,
             'invisible',
             api_get_user_id()
-        );
+        );*/
     }
 }
 
@@ -131,14 +131,14 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
                 $filename = api_replace_dangerous_char(trim($_FILES['userFile']['name']));
                 $fld = GenerateHpFolder($document_sys_path.$uploadPath.'/');
                 @mkdir($document_sys_path.$uploadPath.'/'.$fld, api_get_permissions_for_new_directories());
-                $doc_id = add_document($_course, '/HotPotatoes_files/'.$fld, 'folder', 0, $fld);
-                api_item_property_update(
+                $doc_id = DocumentManager::addDocument($_course, '/HotPotatoes_files/'.$fld, 'folder', 0, $fld);
+                /*api_item_property_update(
                     $_course,
                     TOOL_DOCUMENT,
                     $doc_id,
                     'FolderCreated',
                     api_get_user_id()
-                );
+                );*/
             } else {
                 // It is not the first step... get the filename directly from the system params.
                 $filename = $_FILES['userFile']['name'];

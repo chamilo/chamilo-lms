@@ -663,7 +663,7 @@ class learnpath
                         $filepath.'audio',
                         api_get_permissions_for_new_directories()
                     );
-                    $audio_id = add_document(
+                    $audio_id = DocumentManager::addDocument(
                         $_course,
                         '/audio',
                         'folder',
@@ -675,30 +675,6 @@ class learnpath
                         null,
                         $sessionId,
                         $userId
-                    );
-                    api_item_property_update(
-                        $_course,
-                        TOOL_DOCUMENT,
-                        $audio_id,
-                        'FolderCreated',
-                        $userId,
-                        null,
-                        null,
-                        null,
-                        null,
-                        $sessionId
-                    );
-                    api_item_property_update(
-                        $_course,
-                        TOOL_DOCUMENT,
-                        $audio_id,
-                        'invisible',
-                        $userId,
-                        null,
-                        null,
-                        null,
-                        null,
-                        $sessionId
                     );
                 }
 
@@ -1327,36 +1303,12 @@ class learnpath
             $filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
             if (!is_dir($filepath.'audio')) {
                 mkdir($filepath.'audio', api_get_permissions_for_new_directories());
-                $audio_id = add_document(
+                $audio_id = DocumentManager::addDocument(
                     $_course,
                     '/audio',
                     'folder',
                     0,
                     'audio'
-                );
-                api_item_property_update(
-                    $_course,
-                    TOOL_DOCUMENT,
-                    $audio_id,
-                    'FolderCreated',
-                    api_get_user_id(),
-                    null,
-                    null,
-                    null,
-                    null,
-                    api_get_session_id()
-                );
-                api_item_property_update(
-                    $_course,
-                    TOOL_DOCUMENT,
-                    $audio_id,
-                    'invisible',
-                    api_get_user_id(),
-                    null,
-                    null,
-                    null,
-                    null,
-                    api_get_session_id()
                 );
             }
 
@@ -7147,7 +7099,7 @@ class learnpath
                 $file_size = filesize($filepath.$filename);
                 $save_file_path = $dir.$filename;
 
-                $document_id = add_document(
+                $document = DocumentManager::addDocument(
                     $courseInfo,
                     $save_file_path,
                     'file',
@@ -7161,20 +7113,9 @@ class learnpath
                     $creatorId
                 );
 
-                if ($document_id) {
-                    api_item_property_update(
-                        $courseInfo,
-                        TOOL_DOCUMENT,
-                        $document_id,
-                        'DocumentAdded',
-                        $creatorId,
-                        null,
-                        null,
-                        null,
-                        null,
-                        $sessionId
-                    );
+                $document_id = $document->getId();
 
+                if ($document_id) {
                     $new_comment = isset($_POST['comment']) ? trim($_POST['comment']) : '';
                     $new_title = $originalTitle;
 
@@ -9566,7 +9507,7 @@ class learnpath
         $fileSize = filesize($filepath.$filename);
         $saveFilePath = $dir.$filename;
 
-        $documentId = add_document(
+        $document = DocumentManager::addDocument(
             $courseInfo,
             $saveFilePath,
             'file',
@@ -9580,22 +9521,11 @@ class learnpath
             $creatorId
         );
 
-        if (!$documentId) {
+        $documentId = $document->getId();
+
+        if (!$document) {
             return 0;
         }
-
-        api_item_property_update(
-            $courseInfo,
-            TOOL_DOCUMENT,
-            $documentId,
-            'DocumentAdded',
-            $creatorId,
-            null,
-            null,
-            null,
-            null,
-            $sessionId
-        );
 
         $newComment = isset($_POST['comment']) ? trim($_POST['comment']) : '';
         $newTitle = $originalTitle;
@@ -9603,18 +9533,15 @@ class learnpath
         if ($newComment || $newTitle) {
             $em = Database::getManager();
 
-            /** @var CDocument $doc */
-            $doc = $em->find('ChamiloCourseBundle:CDocument', $documentId);
-
             if ($newComment) {
-                $doc->setComment($newComment);
+                $document->setComment($newComment);
             }
 
             if ($newTitle) {
-                $doc->setTitle($newTitle);
+                $document->setTitle($newTitle);
             }
 
-            $em->persist($doc);
+            $em->persist($document);
             $em->flush();
         }
 

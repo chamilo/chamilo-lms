@@ -352,7 +352,7 @@ class CourseRestorer
                     if (empty($documentData)) {
                         /* This means the folder exists in the
                         filesystem but not in the DB, trying to fix it */
-                        add_document(
+                        DocumentManager::addDocument(
                             $course_info,
                             $folderToCreate,
                             'folder',
@@ -413,7 +413,7 @@ class CourseRestorer
                             }
 
                             // This code fixes the possibility for a file without a directory entry to be
-                            $document_id = add_document(
+                            $document_id = DocumentManager::addDocument(
                                 $course_info,
                                 $new,
                                 'folder',
@@ -436,7 +436,7 @@ class CourseRestorer
                             $insertUserId = $this->checkUserId($insertUserId);
                             $toUserId = $this->checkUserId($toUserId, true);
 
-                            api_item_property_update(
+                            /*api_item_property_update(
                                 $course_info,
                                 TOOL_DOCUMENT,
                                 $document_id,
@@ -447,7 +447,7 @@ class CourseRestorer
                                 null,
                                 null,
                                 $my_session_id
-                            );
+                            );*/
                         }
                     }
                 }

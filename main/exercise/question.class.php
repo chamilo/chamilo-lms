@@ -706,7 +706,7 @@ abstract class Question
             $pictureFilename = self::generatePictureName();
             $img = new Image($picture);
             $img->send_image($picturePath.'/'.$pictureFilename, -1, 'jpg');
-            $document_id = add_document(
+            $document = DocumentManager::addDocument(
                 $this->course,
                 '/images/'.$pictureFilename,
                 'file',
@@ -714,20 +714,12 @@ abstract class Question
                 $pictureFilename
             );
 
-            if ($document_id) {
-                $this->picture = $document_id;
+            if ($document) {
+                $this->picture = $document->getId();
 
                 if (!file_exists($picturePath.'/'.$pictureFilename)) {
                     return false;
                 }
-
-                api_item_property_update(
-                    $this->course,
-                    TOOL_DOCUMENT,
-                    $document_id,
-                    'DocumentAdded',
-                    api_get_user_id()
-                );
 
                 $this->resizePicture('width', 800);
 
@@ -840,7 +832,7 @@ abstract class Question
                 WHERE c_id = $course_id AND id='".intval($questionId)."'";
         Database::query($sql);
 
-        $documentId = add_document(
+        $documentId = DocumentManager::addDocument(
             $courseInfo,
             '/images/'.$picture,
             'file',
@@ -852,13 +844,7 @@ abstract class Question
             return false;
         }
 
-        return api_item_property_update(
-            $courseInfo,
-            TOOL_DOCUMENT,
-            $documentId,
-            'DocumentAdded',
-            api_get_user_id()
-        );
+        return true;
     }
 
     /**

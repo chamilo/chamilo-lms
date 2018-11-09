@@ -93,24 +93,12 @@ file_put_contents($documentPath, $contents);
 
 if (empty($drawFileNameFromSession)) {
     //add document to database
-    $doc_id = add_document(
+    $doc_id = DocumentManager::addDocument(
         $_course,
         $relativeUrlPath.'/'.$drawFileName,
         'file',
         filesize($documentPath),
         $title
-    );
-    api_item_property_update(
-        $_course,
-        TOOL_DOCUMENT,
-        $doc_id,
-        'DocumentAdded',
-        api_get_user_id(),
-        $groupInfo,
-        null,
-        null,
-        null,
-        $sessionId
     );
 } else {
     if ($drawFileNameFromSession == $drawFileName) {
@@ -138,24 +126,12 @@ if (empty($drawFileNameFromSession)) {
         );
     } else {
         //add a new document
-        $doc_id = add_document(
+        $doc_id = DocumentManager::addDocument(
             $_course,
             $relativeUrlPath.'/'.$drawFileName,
             'file',
             filesize($documentPath),
             $title
-        );
-        api_item_property_update(
-            $_course,
-            TOOL_DOCUMENT,
-            $doc_id,
-            'DocumentAdded',
-            api_get_user_id(),
-            $groupInfo,
-            null,
-            null,
-            null,
-            $sessionId
         );
     }
 }

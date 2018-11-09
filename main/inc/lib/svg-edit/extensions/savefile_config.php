@@ -117,26 +117,13 @@ $documentPath = $saveDir.'/'.$drawFileName;
 file_put_contents($documentPath, $contents);
 if ($currentTool == 'document/createdraw') {
     //add document to database
-    $doc_id = add_document(
+    $doc_id = DocumentManager::addDocument(
         $_course,
         $relativeUrlPath.'/'.$drawFileName,
         'file',
         filesize($documentPath),
         $title
     );
-    api_item_property_update(
-        $_course,
-        TOOL_DOCUMENT,
-        $doc_id,
-        'DocumentAdded',
-        $_user['user_id'],
-        $groupInfo,
-        null,
-        null,
-        null,
-        $current_session_id
-    );
-
 } elseif ($currentTool == 'document/editdraw') {
     //check path
     if (!isset($_SESSION['draw_file'])) {
@@ -168,24 +155,12 @@ if ($currentTool == 'document/createdraw') {
         );
     } else {
         //add a new document
-        $doc_id = add_document(
+        $doc_id = DocumentManager::addDocument(
             $_course,
             $relativeUrlPath.'/'.$drawFileName,
             'file',
             filesize($documentPath),
             $title
-        );
-        api_item_property_update(
-            $_course,
-            TOOL_DOCUMENT,
-            $doc_id,
-            'DocumentAdded',
-            $_user['user_id'],
-            $groupInfo,
-            null,
-            null,
-            null,
-            $current_session_id
         );
     }
 }

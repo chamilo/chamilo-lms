@@ -831,7 +831,7 @@ class PDF
             $courseDirectory
         );
 
-        $docId = add_document(
+        DocumentManager::addDocument(
             $courseInfo,
             str_replace($courseDirectory, '/', $docPath),
             'file',
@@ -842,14 +842,6 @@ class PDF
             true,
             null,
             $sessionId,
-            $userId
-        );
-
-        api_item_property_update(
-            $courseInfo,
-            TOOL_DOCUMENT,
-            $docId,
-            'DocumentAdded',
             $userId
         );
 

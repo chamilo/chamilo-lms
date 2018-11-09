@@ -76,25 +76,12 @@ if (!$content) {
 }
 
 //add document to database
-$doc_id = add_document(
+$doc_id = DocumentManager::addDocument(
     $_course,
     $webcamdir.'/'.$webcamname_to_save,
     'file',
     filesize($documentPath),
     $title_to_save
 );
-api_item_property_update(
-    $_course,
-    TOOL_DOCUMENT,
-    $doc_id,
-    'DocumentAdded',
-    $_user['user_id'],
-    $groupInfo,
-    null,
-    null,
-    null,
-    $current_session_id
-);
-///
 $url = 'http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['REQUEST_URI']).'/'.$documentPath;
 echo get_lang('ClipSent');

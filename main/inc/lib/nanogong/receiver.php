@@ -66,18 +66,12 @@ if (!file_exists($documentPath)) {
     $groupId = $nano_group_id;
     $file_size = filesize($documentPath);
     $relativeUrlPath = $dir;
-    $doc_id = add_document($_course, $relativeUrlPath . $filename, 'file', filesize($documentPath), $title);
-    api_item_property_update(
+    $doc_id = DocumentManager::addDocument(
         $_course,
-        TOOL_DOCUMENT,
-        $doc_id,
-        'DocumentAdded',
-        $nano_user_id,
-        $groupInfo,
-        null,
-        null,
-        null,
-        $current_session_id
+        $relativeUrlPath.$filename,
+        'file',
+        filesize($documentPath),
+        $title
     );
 } else {
     return get_lang('FileExistRename');

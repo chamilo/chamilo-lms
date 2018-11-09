@@ -32,7 +32,6 @@ $documentInfo = DocumentManager::get_document_data_by_id(
 if (!empty($sessionId)) {
     /* If no data found and session id exists
        try to look the file inside the session */
-
     if (empty($documentInfo)) {
         $documentInfo = DocumentManager::get_document_data_by_id(
             $_GET['id'],
@@ -55,7 +54,6 @@ if (($path == '/shared_folder' ||
     (!api_is_allowed_to_edit() || !api_is_platform_admin())
 ) {
     api_not_allowed(true);
-    exit;
 }
 
 // Creating a ZIP file.
@@ -121,6 +119,7 @@ if (!empty($groupId)) {
 } else {
     $groupCondition = " (props.to_group_id = 0 OR props.to_group_id IS NULL ) ";
 }
+$tblDocument = Database::get_course_table(TABLE_DOCUMENT);
 
 // Admins are allowed to download invisible files
 if (api_is_allowed_to_edit()) {
@@ -134,31 +133,25 @@ if (api_is_allowed_to_edit()) {
 
     // Search for all files that are not deleted => visibility != 2
     $sql = "SELECT
-                path,
+                docs.path,
                 docs.session_id,
                 docs.id,
-                props.to_group_id,
                 docs.c_id
-            FROM $doc_table AS docs
-            INNER JOIN $prop_table AS props
-            ON
-                docs.id = props.ref AND
-                docs.c_id = props.c_id
-                $groupJoin
-			WHERE
-			    props.tool ='".TOOL_DOCUMENT."' AND
+            FROM resource_node AS n
+            INNER JOIN $tblDocument AS docs
+            ON (docs.resource_node_id = n.id)
+            INNER JOIN resource_link l
+            ON (l.resource_node_id = n.id)                
+            WHERE	
+                docs.c_id = $courseId AND
                 docs.path LIKE '".$querypath."/%' AND
-                docs.filetype = 'file' AND
-                props.visibility <> '2' AND
-                $groupCondition AND
-                (props.session_id IN ('0', '$sessionId') OR props.session_id IS NULL) AND
-                docs.c_id = ".$courseId." ";
+                docs.filetype = 'file'";
 
     $sql .= DocumentManager::getSessionFolderFilters($querypath, $sessionId);
 
     $result = Database::query($sql);
     $files = [];
-    while ($row = Database::fetch_array($result)) {
+    while ($row = Database::fetch_array($result, 'ASSOC')) {
         $files[$row['path']] = $row;
     }
 
@@ -175,8 +168,6 @@ if (api_is_allowed_to_edit()) {
                 }
             }
         }
-        //error_log($sysCoursePath.$courseInfo['path'].'/document'.$not_deleted_file['path']);
-        //error_log($sysCoursePath.$courseInfo['path'].'/document'.$remove_dir);
         $zip->add(
             $sysCoursePath.$courseInfo['path'].'/document'.$not_deleted_file['path'],
             PCLZIP_OPT_REMOVE_PATH,
@@ -189,7 +180,6 @@ if (api_is_allowed_to_edit()) {
     Session::erase('doc_files_to_download');
 } else {
     // For other users, we need to create a zip  file with only visible files and folders
-
     if ($path == '/') {
         $querypath = ''; // To prevent ...path LIKE '//%'... in query
     } else {

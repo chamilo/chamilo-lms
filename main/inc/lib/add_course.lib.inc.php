@@ -946,7 +946,7 @@ class AddCourse
      */
     public static function insertDocument($courseInfo, $counter, $file, $authorId = 0)
     {
-        add_document(
+        DocumentManager::addDocument(
             $courseInfo,
             $file['path'],
             $file['filetype'],

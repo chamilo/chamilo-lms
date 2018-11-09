@@ -1,8 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Resource\ResourceFile;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
+use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CDocument;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
 
@@ -2051,7 +2056,7 @@ class DocumentManager
                 $id = self::get_document_id_of_directory_certificate();
 
                 if (empty($id)) {
-                    add_document(
+                    self::addDocument(
                         $courseInfo,
                         $dir_name,
                         'folder',
@@ -2674,8 +2679,8 @@ class DocumentManager
                                             $filepath_dir
                                         );
 
-                                        //Add to item properties to the new folder
-                                        add_document(
+                                        // Add to item properties to the new folder
+                                        self::addDocument(
                                             $destination_course_info,
                                             $filepath_to_add,
                                             'folder',
@@ -2696,7 +2701,7 @@ class DocumentManager
                                         $size = filesize($destination_filepath);
 
                                         // Add to item properties to the file
-                                        add_document(
+                                        self::addDocument(
                                             $destination_course_info,
                                             $filepath_to_add,
                                             'file',
@@ -4402,7 +4407,7 @@ class DocumentManager
         $path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
         if (!is_dir($path.'audio')) {
             mkdir($path.'audio', api_get_permissions_for_new_directories());
-            add_document($_course, '/audio', 'folder', 0, 'Audio');
+            self::addDocument($_course, '/audio', 'folder', 0, 'Audio');
         }
 
         return $audioId;
@@ -4470,7 +4475,7 @@ class DocumentManager
             }
         }
 
-        $document = add_document(
+        $document = self::addDocument(
             $courseData,
             $saveFilePath,
             $fileType,
@@ -6207,27 +6212,9 @@ class DocumentManager
     {
         $file_path = $path;
         if (!self::cloudLinkExists($_course, $path, $url)) {
-            $doc_id = add_document($_course, $file_path, 'link', 0, $name, $url);
-            if ($doc_id) {
-                // Update document item_property
-                api_item_property_update(
-                    $_course,
-                    TOOL_DOCUMENT,
-                    $doc_id,
-                    'DocumentAdded',
-                    api_get_user_id(),
-                    api_get_group_id(),
-                    api_get_user_id(),
-                    null,
-                    null,
-                    api_get_session_id()
-                );
-            }
+            $doc = self::addDocument($_course, $file_path, 'link', 0, $name, $url);
 
-            // If the file is in a folder, we need to update all parent folders
-            item_property_update_on_folder($_course, $file_path, api_get_user_id());
-
-            return $doc_id;
+            return $doc->getId();
         } else {
             return 0;
         }
@@ -6836,5 +6823,208 @@ class DocumentManager
         }
 
         return $btn;
+    }
+
+
+    /**
+     * Adds a new document to the database.
+     *
+     * @param array  $courseInfo
+     * @param string $path
+     * @param string $fileType
+     * @param int    $fileSize
+     * @param string $title
+     * @param string $comment
+     * @param int    $readonly
+     * @param int    $visibility       see ResourceLink constants
+     * @param int    $group_id         group.id
+     * @param int    $sessionId        Session ID, if any
+     * @param int    $userId           creator user id
+     * @param bool   $sendNotification
+     * @param string $content
+     * @param int    $parentId
+     *
+     * @return CDocument|false
+     */
+    public static function addDocument(
+        $courseInfo,
+        $path,
+        $fileType,
+        $fileSize,
+        $title,
+        $comment = null,
+        $readonly = 0,
+        $visibility = null,
+        $group_id = 0,
+        $sessionId = 0,
+        $userId = 0,
+        $sendNotification = true,
+        $content = '',
+        $parentId = 0
+    ) {
+        $sessionId = empty($sessionId) ? api_get_session_id() : $sessionId;
+        $userId = empty($userId) ? api_get_user_id() : $userId;
+        $userEntity = api_get_user_entity($userId);
+        $courseEntity = api_get_course_entity(api_get_course_int_id());
+        $session = api_get_session_entity($sessionId);
+        $group = api_get_group_entity($group_id);
+        $readonly = (int) $readonly;
+
+        $em = Database::getManager();
+        $documentRepo = $em->getRepository('ChamiloCourseBundle:CDocument');
+
+        $parentNode = null;
+        if (!empty($parentId)) {
+            $parent = $documentRepo->find($parentId);
+            $parentNode = $parent->getResourceNode();
+        }
+
+        $document = new CDocument();
+        $document
+            ->setCourse($courseEntity)
+            ->setPath($path)
+            ->setFiletype($fileType)
+            ->setSize($fileSize)
+            ->setTitle($title)
+            ->setComment($comment)
+            ->setReadonly($readonly)
+            ->setSession($session)
+        ;
+
+        $em->persist($document);
+        $em->flush();
+
+        $resourceNode = $documentRepo->addResourceNode($document, $userEntity);
+        $resourceNode->setParent($parentNode);
+        $document->setResourceNode($resourceNode);
+
+        // Only create a ResourseFile and Media if there's a file involved
+        if ($fileType === 'file') {
+            $mediaManager = Container::$container->get('sonata.media.manager.media');
+            /** @var \Chamilo\MediaBundle\Entity\Media $media */
+            $media = $mediaManager->create();
+            $media->setName($title);
+
+            $fileName = basename($path);
+            $extension = pathinfo($fileName, PATHINFO_EXTENSION);
+            $media->setContext('default');
+
+            $provider = 'sonata.media.provider.image';
+            if (!in_array($extension, ['jpeg', 'jpg', 'gif', 'png'])) {
+                $provider = 'sonata.media.provider.file';
+            }
+
+            $media->setProviderName($provider);
+            $media->setEnabled(true);
+
+            if ($content instanceof UploadedFile) {
+                $file = $content;
+                $media->setSize($file->getSize());
+            } else {
+                $handle = tmpfile();
+                fwrite($handle, $content);
+                $file = new \Sonata\MediaBundle\Extra\ApiMediaFile($handle);
+                $file->setMimetype($media->getContentType());
+            }
+
+            $media->setBinaryContent($file);
+            $mediaManager->save($media, true);
+
+            $resourceFile = new ResourceFile();
+            $resourceFile->setMedia($media);
+            $resourceFile->setName($title);
+            $em->persist($resourceFile);
+
+            $resourceNode->setResourceFile($resourceFile);
+            $em->persist($resourceNode);
+        }
+
+        // By default visibility is published
+        // @todo change visibility
+        //$newVisibility = ResourceLink::VISIBILITY_PUBLISHED;
+
+        if (is_null($visibility)) {
+            $visibility = ResourceLink::VISIBILITY_PUBLISHED;
+        }
+
+        $link = new ResourceLink();
+        $link
+            ->setCourse($courseEntity)
+            ->setSession($session)
+            ->setGroup($group)
+            //->setUser($toUser)
+            ->setResourceNode($resourceNode)
+            ->setVisibility($visibility)
+        ;
+
+        $rights = [];
+        switch ($visibility) {
+            case ResourceLink::VISIBILITY_PENDING:
+            case ResourceLink::VISIBILITY_DRAFT:
+                $editorMask = ResourceNodeVoter::getEditorMask();
+                $resourceRight = new ResourceRight();
+                $resourceRight
+                    ->setMask($editorMask)
+                    ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
+                ;
+                $rights[] = $resourceRight;
+
+                break;
+        }
+
+        if (!empty($rights)) {
+            foreach ($rights as $right) {
+                $link->addResourceRight($right);
+            }
+        }
+
+        $em->persist($link);
+        $em->persist($document);
+        $em->flush();
+
+        $documentId = $document->getIid();
+        if ($documentId) {
+            $table = Database::get_course_table(TABLE_DOCUMENT);
+            $sql = "UPDATE $table SET id = iid WHERE iid = $documentId";
+            Database::query($sql);
+
+            /*if ($saveVisibility) {
+                api_set_default_visibility(
+                    $documentId,
+                    TOOL_DOCUMENT,
+                    $group_id,
+                    $courseInfo,
+                    $sessionId,
+                    $userId
+                );
+            }*/
+
+            $allowNotification = api_get_configuration_value('send_notification_when_document_added');
+            if ($sendNotification && $allowNotification) {
+                $courseTitle = $courseInfo['title'];
+                if (!empty($sessionId)) {
+                    $sessionInfo = api_get_session_info($sessionId);
+                    $courseTitle .= ' ( '.$sessionInfo['name'].') ';
+                }
+
+                $url = api_get_path(WEB_CODE_PATH).
+                    'document/showinframes.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId.'&id='.$documentId;
+                $link = Display::url(basename($title), $url, ['target' => '_blank']);
+                $userInfo = api_get_user_info($userId);
+
+                $message = sprintf(
+                    get_lang('DocumentXHasBeenAddedToDocumentInYourCourseXByUserX'),
+                    $link,
+                    $courseTitle,
+                    $userInfo['complete_name']
+                );
+                $subject = sprintf(get_lang('NewDocumentAddedToCourseX'), $courseTitle);
+                MessageManager::sendMessageToAllUsersInCourse($subject, $message, $courseInfo, $sessionId);
+            }
+
+            return $document;
+        }
+
+        return false;
     }
 }

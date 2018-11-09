@@ -298,7 +298,7 @@ abstract class OpenofficeDocument extends learnpath
 
         if (file_exists($this->base_work_dir.'/'.$this->created_dir)) {
             // Register Files to Document tool
-            $ids[] = add_document(
+            $ids[] = DocumentManager::addDocument(
                 $_course,
                 '/'.$this->created_dir,
                 'file',

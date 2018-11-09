@@ -526,7 +526,7 @@ if ($form->validate()) {
         );
         $save_file_path = $dir.$filename.'.'.$extension;
 
-        $document = add_document(
+        $document = DocumentManager::addDocument(
             $_course,
             $save_file_path,
             'file',

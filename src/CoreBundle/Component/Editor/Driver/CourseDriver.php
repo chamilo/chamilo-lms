@@ -252,7 +252,7 @@ class CourseDriver extends Driver implements DriverInterface
 
                 // Removing course path
                 $realPath = str_replace($realPathRoot, '/', $realPath);
-                add_document(
+                \DocumentManager::addDocument(
                     $this->connector->course,
                     $realPath,
                     'file',
@@ -348,7 +348,7 @@ class CourseDriver extends Driver implements DriverInterface
 
             // Removing course path
             $newPath = str_replace($realPathRoot, '/', $realPath);
-            $documentId = add_document(
+            $documentId = DocumentManager::addDocument(
                 $_course,
                 $newPath,
                 'folder',

@@ -58,7 +58,8 @@ class SettingsController extends SyliusSettingsController
         $keyword = $request->get('keyword');
 
         $searchForm = $this->getSearchForm();
-        if ($searchForm->isSubmitted() && $searchForm->handleRequest($request)->isValid()) {
+        $searchForm->handleRequest($request);
+        if ($searchForm->isSubmitted() && $searchForm->isValid()) {
             $values = $searchForm->getData();
             $keyword = $values['keyword'];
         }
@@ -129,7 +130,8 @@ class SettingsController extends SyliusSettingsController
         $searchForm = $this->getSearchForm();
 
         $keyword = '';
-        if ($searchForm->isSubmitted() && $searchForm->handleRequest($request)->isValid()) {
+        $searchForm->handleRequest($request);
+        if ($searchForm->isSubmitted() && $searchForm->isValid()) {
             $values = $searchForm->getData();
             $keyword = $values['keyword'];
             $settingsFromKeyword = $manager->getParametersFromKeyword(
@@ -161,8 +163,9 @@ class SettingsController extends SyliusSettingsController
         }
 
         $form->setData($settings);
+        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->handleRequest($request)->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $messageType = 'success';
             try {
                 $manager->save($form->getData());

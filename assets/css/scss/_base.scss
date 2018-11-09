@@ -447,13 +447,13 @@ footer {
         background-color: #def5ff;
         img{
           transition: transform .2s ease-in;
+          padding-top: 10px;
           &:hover{
             transform: scale(1.15);
           }
         }
         a{
           display: block;
-          padding-top: 10px;
           overflow: hidden;
         }
       }
@@ -463,6 +463,10 @@ footer {
         left: 0;
         width: 100%;
         z-index: 999;
+        .name{
+          padding-top: 5px;
+          padding-bottom: 5px;
+        }
       }
     }
     @include landscape($breakpoint-sm) {

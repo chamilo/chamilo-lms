@@ -22,6 +22,7 @@ $action = isset($_GET['action']) ? $_GET['action'] : '';
 $id = isset($_GET['id']) ? intval($_GET['id']) : '';
 
 $toolName = get_lang('CustomizeIcons');
+$tpl = new Template($toolName);
 
 switch ($action) {
     case 'delete_icon':
@@ -117,49 +118,51 @@ switch ($action) {
             api_get_course_int_id(),
             api_get_session_id()
         );
-        $iconsTools = '<div id="custom-icons">';
-        $iconsTools .= Display::page_header(get_lang('CustomizeIcons'), null, 'h4');
-        $iconsTools .= '<div class="row">';
-        foreach ($toolList as $tool) {
-            $tool['name'] = Security::remove_XSS(stripslashes($tool['name']));
+        $list = [];
+        $tmp = [];
+        foreach ($toolList as $tool){
+            $tmp['id'] = $tool['id'];
+
+            $tmp['name'] = Security::remove_XSS(stripslashes($tool['name']));
             $toolIconName = 'Tool'.api_underscore_to_camel_case($tool['name']);
             $toolIconName = isset($$toolIconName) ? get_lang($toolIconName) : $tool['name'];
 
-            $iconsTools .= '<div class="col-md-2">';
-            $iconsTools .= '<div class="items-tools">';
+            $tmp['name'] = $toolIconName;
+            $tmp['link'] = $tool['link'];
 
             if (!empty($tool['custom_icon'])) {
                 $image = CourseHome::getCustomWebIconPath().$tool['custom_icon'];
-                $icon = Display::img($image, $toolIconName);
+                $icon = Display::img($image, $tool['name']);
             } else {
-                $image = (substr($tool['image'], 0, strpos($tool['image'], '.'))).'.png';
+                $image = 'tool_'.(substr($tool['image'], 0, strpos($tool['image'], '.'))).'.png';
                 $icon = Display::return_icon(
                     $image,
-                    $toolIconName,
+                    null,
                     ['id' => 'tool_'.$tool['id']],
                     ICON_SIZE_BIG,
-                    false
+                    false,
+                    true
                 );
             }
+            $tmp['image'] = $icon;
+            $tmp['visibility'] = $tool['visibility'];
 
             $delete = (!empty($tool['custom_icon'])) ? "<a class=\"btn btn-default\" onclick=\"javascript:
                 if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
                 "')) return false;\" href=\"".api_get_self().'?action=delete_icon&id='.$tool['iid'].'&'.api_get_cidreq()."\">
-            <em class=\"fa fa-trash-o\"></em></a>" : "";
-            $edit = '<a class="btn btn-default" href="'.api_get_self().'?action=edit_icon&id='.$tool['iid'].'&'.api_get_cidreq().'"><em class="fa fa-pencil"></em></a>';
+            <i class=\"fas fa-trash-alt\"></i></a>" : "";
+            $edit = '<a class="btn btn-outline-secondary btn-sm" href="'.api_get_self().'?action=edit_icon&id='.$tool['iid'].'&'.api_get_cidreq().'"><i class="fas fa-pencil-alt"></i></a>';
 
-            $iconsTools .= '<div class="icon-tools">'.$icon.'</div>';
-            $iconsTools .= '<div class="name-tools">'.$toolIconName.'</div>';
-            $iconsTools .= '<div class="toolbar">'.$edit.$delete.'</div>';
-            $iconsTools .= '</div>';
-            $iconsTools .= '</div>';
+            $tmp['action'] = $edit.$delete;
+
+            $list[] = $tmp;
         }
-        $iconsTools .= '</div>';
-        $iconsTools .= '</div>';
-        $content = $iconsTools;
+        $tpl->assign('tools', $list);
+        $layout = $tpl->get_template("course_info/tools.html.twig");
+        $content = $tpl->fetch($layout);
+
         break;
 }
 
-$tpl = new Template($toolName);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

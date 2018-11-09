@@ -63,10 +63,9 @@ if (isset($_REQUEST['certificate']) && $_REQUEST['certificate'] == 'true') {
     $is_certificate_mode = true;
 }
 
+$nameTools = get_lang('CreateDocument');
 if ($is_certificate_mode) {
     $nameTools = get_lang('CreateCertificate');
-} else {
-    $nameTools = get_lang('CreateDocument');
 }
 
 /* Constants and variables */
@@ -620,18 +619,12 @@ if ($form->validate()) {
     }
 
     // HTML-editor
-    echo '<div class="page-create">
-            <div class="row" style="overflow:hidden">
-            <div id="template_col" class="col-md-3">
-                <div class="panel panel-default">
-                <div class="panel-body">
-                    <div id="frmModel" class="items-templates scrollbar-light"></div>
-                </div>
-                </div>
-            </div>
+    echo '<div class="page-create row">          
             <div id="doc_form" class="col-md-9">
                 '.$form->returnForm().'
             </div>
+            <div id="template_col" class="col-md-3">                
+                <div id="frmModel" class="items-templates scrollbar-light"></div>
           </div></div>';
-    Display :: display_footer();
+    Display::display_footer();
 }

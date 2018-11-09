@@ -15,12 +15,12 @@ use ChamiloSession as Session;
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (api_get_setting('allow_social_tool') == 'true') {
+$this_section = SECTION_MYPROFILE;
+if (api_get_setting('allow_social_tool') === 'true') {
     $this_section = SECTION_SOCIAL;
-} else {
-    $this_section = SECTION_MYPROFILE;
 }
 
+$_user = api_get_user_info();
 $_SESSION['this_section'] = $this_section;
 
 if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'], true)) {
@@ -410,7 +410,7 @@ if ($form->validate()) {
     }
 
     $allow_users_to_change_email_with_no_password = true;
-    if ($user_data['auth_source'] == PLATFORM_AUTH_SOURCE &&
+    if (isset($user_data['auth_source']) && $user_data['auth_source'] == PLATFORM_AUTH_SOURCE &&
         api_get_setting('allow_users_to_change_email_with_no_password') === 'false'
     ) {
         $allow_users_to_change_email_with_no_password = false;
@@ -441,7 +441,7 @@ if ($form->validate()) {
     }
 
     // Upload picture if a new one is provided
-    if ($_FILES['picture']['size']) {
+    if (isset($_FILES['picture']) && $_FILES['picture']['size']) {
         $new_picture = UserManager::update_user_picture(
             api_get_user_id(),
             $_FILES['picture']['name'],

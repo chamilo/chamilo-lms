@@ -45,7 +45,6 @@ if (!api_is_allowed_to_edit(false, true) || $isDrhOfCourse) {
     // Show error message if the survey can be seen only by tutors
     if ($survey_data['visible_results'] == SURVEY_VISIBLE_TUTOR) {
         api_not_allowed(true);
-        exit;
     }
 
     Display::display_header(get_lang('ToolSurvey'));

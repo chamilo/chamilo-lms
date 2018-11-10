@@ -1572,14 +1572,11 @@ class Link extends Model
      *
      * @version 1.0
      */
-    public static function is_pdf_link($url)
+    public static function isPdfLink($url)
     {
-        $is_pdf_link = strrpos($url, ".pdf") || strrpos(
-                $url,
-                ".PDF"
-            );
+        $isPdfLink = strrpos(strtolower($url), '.pdf');
 
-        return $is_pdf_link;
+        return $isPdfLink;
     }
 
     /**

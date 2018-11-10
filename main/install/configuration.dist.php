@@ -1015,12 +1015,12 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Use exercise platform score settings in the gradebook graph
 // $_configuration['gradebook_use_exercise_score_settings_in_categories'] = true;
 
+// Activate the view with ViewerJS for PDF files within the lessons for IPad and IPhone
+// $_configuration['allow_pdf_viewerjs_in_lp'] = false;
+
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email
 // You need add a new option called "confirmation" to the registration settings
 //INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_registration', 'confirmation', 'MailConfirmation');
 // ------ (End) Custom DB changes
-
-// Activate the view with ViewerJS for PDF files within the lessons for IPad and IPhone
-// $_configuration['allow_pdf_viewerjs_in_lp'] = false;

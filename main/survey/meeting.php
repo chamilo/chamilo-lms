@@ -3,6 +3,8 @@
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script(true);
+
 $sessionId = api_get_session_id();
 $courseId = api_get_course_int_id();
 $userId = api_get_user_id();

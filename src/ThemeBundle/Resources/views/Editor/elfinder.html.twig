@@ -1,5 +1,6 @@
-{% extends "@ChamiloTheme/Layout/no_layout.html.twig" %}
-
+<head>
+    {% include "@ChamiloTheme/Layout/head.html.twig" %}
+</head>
 {% block chamilo_wrap %}
-{% include '@ChamiloTheme/Editor/elfinder_standalone.html.twig' %}
+    {% include '@ChamiloTheme/Editor/elfinder_standalone.html.twig' %}
 {% endblock %}

@@ -29,7 +29,9 @@
 
 {# Files app.css is generated from "assets/css/app.scss" file using the file webpack.config.js #}
 <link rel="stylesheet" href="{{ url('legacy_public') ~ 'build/css/app.css' }}"/>
-<link rel="stylesheet" href="{{ url('legacy_public') ~ 'build/css/themes/'~ theme ~'/default.css' }}"/>
+{% if theme %}
+<link rel="stylesheet" href="{{ url('legacy_public') ~ 'build/css/themes/'~ theme ~'default.css' }}"/>
+{% endif %}
 <link rel="stylesheet" media="print" href="{{ url('legacy_public') ~ 'build/css/print.css' }}"/>
 {# Add third party js libraries that can't be loaded using webpack #}
 {% include "@ChamiloTheme/Layout/legacy_js.html.twig" %}

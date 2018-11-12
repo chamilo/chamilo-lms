@@ -21,6 +21,7 @@
     }
 
     $().ready(function() {
+        var winheight = document.documentElement.clientHeight;
         var funcNum = getUrlParam('CKEditorFuncNum');
         var elf = $('#elfinder').elfinder({
             url : '{{ url('editor_connector')  }}{{ course_condition }}',  // connector URL (REQUIRED)
@@ -28,7 +29,8 @@
                 window.opener.CKEDITOR.tools.callFunction(funcNum, file.url);
                 window.close();
             },
-            resizable: false
+            resizable: false,
+            height : winheight
         }).elfinder('instance');
     });
 </script>

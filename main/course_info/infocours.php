@@ -718,29 +718,10 @@ $form->addPanelOption(
 );
 // ********** END CONFIGURE LEARN PATH ***************//
 
-// Exercise
+// ********** EXERCISE ********************* //
 if (api_get_configuration_value('allow_exercise_auto_launch')) {
-    $form->addHtml('<div class="panel panel-default">');
-    $form->addHtml('
-        <div class="panel-heading" role="tab" id="heading-exercise">
-            <h4 class="panel-title">
-                <a class="collapsed" 
-                   role="button" data-toggle="collapse" 
-                   data-parent="#accordion" 
-                   href="#collapse-exercise" aria-expanded="false" aria-controls="collapse-exercise">
-    ');
-    $form->addHtml(
-        Display::return_icon('quiz.png', get_lang('Exercise')).' '.get_lang('Exercise')
-    );
-    $form->addHtml('
-                </a>
-            </h4>
-        </div>
-    ');
-    $form->addHtml('
-        <div id="collapse-exercise" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-exercise">
-            <div class="panel-body">
-    ');
+
+    $globalGroup = [];
 
     // Auto launch exercise
     $group = [];
@@ -759,10 +740,12 @@ if (api_get_configuration_value('allow_exercise_auto_launch')) {
         2
     );
     $group[] = $form->createElement('radio', 'enable_exercise_auto_launch', null, get_lang('Deactivate'), 0);
-    $form->addGroup($group, '', [get_lang('ExerciseAutoLaunch')]);
+
+    $globalGroup[get_lang("ExerciseAutoLaunch")] = $group;
 
     if ($isEditable) {
-        $form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
+        $myButton = $form->addButtonSave(get_lang('SaveSettings'), 'submit_save', true);
+        $globalGroup[] = $myButton;
     } else {
         // Is it allowed to edit the course settings?
         if (!$isEditable) {
@@ -770,11 +753,16 @@ if (api_get_configuration_value('allow_exercise_auto_launch')) {
         }
         $form->freeze();
     }
-    $form->addHtml('
-            </div>
-        </div>
-    ');
-    $form->addHtml('</div>');
+
+    $form->addPanelOption(
+        'config_exercise',
+        get_lang('Exercise'),
+        $globalGroup,
+        'quiz.png',
+        false,
+        'accordionSettings'
+    );
+
 }
 
 // *************** START THEMATIC  *************/

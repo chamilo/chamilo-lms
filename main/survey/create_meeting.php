@@ -9,7 +9,7 @@ if (!api_is_allowed_to_edit()) {
     api_not_allowed(true);
 }
 $htmlHeadXtra[] = api_get_css_asset('jt.timepicker/jquery.timepicker.css');
-$htmlHeadXtra[] = api_get_asset('jt.timepickers/jquery.timepicker.js');
+$htmlHeadXtra[] = api_get_asset('jt.timepicker/jquery.timepicker.js');
 $htmlHeadXtra[] = api_get_asset('datepair.js/dist/datepair.js');
 $htmlHeadXtra[] = api_get_asset('datepair.js/dist/jquery.datepair.js');
 

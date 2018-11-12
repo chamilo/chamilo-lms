@@ -1,0 +1,26 @@
+{% autoescape false %}
+<div class="card">
+    <div class="card-body">
+        <h2>{{ "CustomizeIcons" | get_lang }}</h2>
+        <div class="row">
+            {% for tool in tools %}
+            <div class="col-6 col-md-2">
+                <div class="tools cursor-none mt-3 mb-3 p-2">
+                    <div class="big_icon">
+                        <img src="{{ tool.image }}" alt="{{ tool.name }}" title="{{ tool.name }}"/>
+                    </div>
+                    <div class="content">
+                        <div class="name">
+                            {{ tool.name }}
+                        </div>
+                        <div class="tool-btn">
+                            {{ tool.action }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endautoescape %}

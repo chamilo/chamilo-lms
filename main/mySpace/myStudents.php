@@ -922,11 +922,22 @@ if (empty($details)) {
                 $courseInfoItem = api_get_course_info_by_id($courseId);
                 $courseId = $courseInfoItem['real_id'];
                 $courseCodeItem = $courseInfoItem['code'];
-                $isSubscribed = CourseManager::is_user_subscribed_in_course(
-                    $student_id,
-                    $courseCodeItem,
-                    true
-                );
+
+                if (empty($session_info)) {
+                    $isSubscribed = CourseManager::is_user_subscribed_in_course(
+                        $student_id,
+                        $courseCodeItem,
+                        false
+                    );
+                } else {
+                    $isSubscribed = CourseManager::is_user_subscribed_in_course(
+                        $student_id,
+                        $courseCodeItem,
+                        true,
+                        $sId
+                    );
+                }
+
                 if ($isSubscribed) {
                     $timeInSeconds = Tracking::get_time_spent_on_the_course(
                         $user_info['user_id'],

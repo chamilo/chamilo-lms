@@ -84,14 +84,13 @@ $(function() {
     });
     
     $("#remove_button").on("click", function() {
-        if (number >= 1) {
-            number--;
+        if (number > 1) {            
             $("#time_" + number + "_alt").parent().parent().parent().hide();
+            number--;
         }
     });
 });
-</script>
-');
+</script>');
 
 $form->addLabel(
     '',

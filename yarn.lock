@@ -2180,6 +2180,11 @@ date-now@^0.1.4:
   resolved "https://registry.yarnpkg.com/date-now/-/date-now-0.1.4.tgz#eaf439fd4d4848ad74e5cc7dbef200672b9e345b"
   integrity sha1-6vQ5/U1ISK105cx9vvIAZyueNFs=
 
+datepair.js@^0.4.16:
+  version "0.4.16"
+  resolved "https://registry.yarnpkg.com/datepair.js/-/datepair.js-0.4.16.tgz#a468e698abd640b447c060e199966c2a5ce993d4"
+  integrity sha512-inpm1pwjYNSK96uo6cnn3e/HmQlmk/XpAWg/6isu99rXk9SfybrJ6KregEin3A5F3oav0zCw20uG/Y+qC6uwsw==
+
 debug@2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.2.0.tgz#f87057e995b1a1f6ae6a4960664137bc56f039da"
@@ -7311,6 +7316,13 @@ timeago@^1.6.3:
   integrity sha512-x97d1X1KsNapWJTgCOOAy/59XagYu2WsDTAH/yvPsWi5bqtGbLPaVZBv3HZ3jTpakHR+JGGyrI9qC0yuvIAvnQ==
   dependencies:
     jquery ">=1.2.3"
+
+timepicker@^1.11.14:
+  version "1.11.14"
+  resolved "https://registry.yarnpkg.com/timepicker/-/timepicker-1.11.14.tgz#a7b8202fabc4d83514e3f591edc108769f0f096b"
+  integrity sha512-EsI/rWNaY+XrdPro7qEFj/ITNLDb2GVHVrCWb4N+rQImo/hWrC4JctriL2oPAhTss8WD6meYePc5IyG9O9ANcA==
+  dependencies:
+    jquery ">=1.7"
 
 timers-browserify@^2.0.4:
   version "2.0.10"

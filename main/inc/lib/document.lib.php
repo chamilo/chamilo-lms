@@ -670,9 +670,9 @@ class DocumentManager
             }
         }
 
-        $groupCondition = " last.to_group_id = $groupIid";
+        $groupCondition = " l.to_group_id = $groupIid";
         if (empty($groupIid)) {
-            $groupCondition = " (last.to_group_id = 0 OR last.to_group_id IS NULL)";
+            $groupCondition = " (l.group_id = 0 OR l.group_id IS NULL)";
         }
 
         $show_users_condition = '';
@@ -683,10 +683,8 @@ class DocumentManager
         if ($can_see_invisible) {
             // condition for the session
             $session_id = api_get_session_id();
-            //$condition_session = api_get_session_condition($session_id, true, false, 'docs.session_id');
-
             $session_id = $session_id ?: api_get_session_id();
-            $condition_session = " AND (last.session_id = '$session_id' OR (last.session_id = '0' OR last.session_id IS NULL) )";
+            $condition_session = " AND (l.session_id = '$session_id' OR (l.session_id = '0' OR l.session_id IS NULL) )";
             $condition_session .= self::getSessionFolderFilters($path, $session_id);
 
             if ($groupIid != 0) {
@@ -708,25 +706,23 @@ class DocumentManager
                             last.visibility <> 2                            
                             $condition_session ";
             } else {
-                $sql = "SELECT DISTINCT docs.id, path
-                        FROM $TABLE_ITEMPROPERTY  AS last
+                $sql = "SELECT DISTINCT docs.id, docs.path
+                        FROM resource_node AS n
                         INNER JOIN $TABLE_DOCUMENT  AS docs
-                        ON (
-                            docs.id = last.ref AND
-                            docs.c_id = last.c_id                          
-                        )
-                        WHERE
-                            last.tool = '".TOOL_DOCUMENT."' AND
-                            last.c_id = {$_course['real_id']} AND
+                        ON (docs.resource_node_id = n.id)
+                        INNER JOIN resource_link l
+                        ON (l.resource_node_id = n.id)  
+                        WHERE                            
                             docs.c_id = {$_course['real_id']} AND
                             docs.filetype = 'folder' AND
                             docs.path NOT LIKE '%_DELETED_%' AND
                             $groupCondition AND
-                            last.visibility <> 2
+                            l.visibility NOT IN ('".ResourceLink::VISIBILITY_DELETED."')
                             $show_users_condition 
                             $condition_session 
                         ";
             }
+
             $result = Database::query($sql);
 
             if ($result && Database::num_rows($result) != 0) {
@@ -3213,7 +3209,7 @@ class DocumentManager
 
         $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
         $tbl_item_prop = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $condition_session = " AND (last.session_id = '$session_id' OR last.session_id = '0' OR last.session_id IS NULL)";
+        $condition_session = " AND (l.session_id = '$session_id' OR l.session_id = '0' OR l.session_id IS NULL)";
 
         $add_folder_filter = null;
         if (!empty($filter_by_folder)) {
@@ -3225,7 +3221,7 @@ class DocumentManager
         if ($lp_id) {
             // $lp_visibility_condition = " OR filetype='folder'";
             if ($showInvisibleFiles) {
-                $lp_visibility_condition .= ' OR last.visibility = 0';
+                $lp_visibility_condition .= ' OR l.visibility = 0';
             }
         }
 
@@ -3277,17 +3273,16 @@ class DocumentManager
             $levelCondition = " AND docs.path NOT LIKE'/%/%'";
         }
 
-        $sql = "SELECT DISTINCT last.visibility, docs.*
-                FROM $tbl_item_prop AS last 
+        $sql = "SELECT DISTINCT l.visibility, docs.*
+                FROM resource_node AS n
                 INNER JOIN $tbl_doc AS docs
-                ON (docs.id = last.ref AND docs.c_id = last.c_id)
-                WHERE
-                    docs.path NOT LIKE '%_DELETED_%' AND
-                    last.tool = '".TOOL_DOCUMENT."' $condition_session AND
-                    (last.visibility = '1' $lp_visibility_condition) AND
-                    last.visibility <> 2 AND
+                ON (docs.resource_node_id = n.id)
+                INNER JOIN resource_link l
+                ON (l.resource_node_id = n.id)    
+                WHERE                    
+                    docs.path NOT LIKE '%_DELETED_%' AND                    
                     docs.c_id = {$course_info['real_id']} AND
-                    last.c_id = {$course_info['real_id']}
+                    l.visibility NOT IN ('".ResourceLink::VISIBILITY_DELETED."')                    
                     $showOnlyFoldersCondition
                     $folderCondition
                     $levelCondition

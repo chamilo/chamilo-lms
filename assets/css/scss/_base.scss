@@ -419,6 +419,15 @@ footer {
   max-width: 100%;
   height: auto;
 }
+//card cropper
+.card-cropper{
+  padding-top: 1em;
+  padding-bottom: 1em;
+  .cropCanvas{
+    padding-bottom: 1em;
+  }
+}
+
 .card{
   border: 0;
   border-radius: 2px;
@@ -600,7 +609,9 @@ footer {
     }
   }
 }
-
+.checkbox_delete_picture{
+  padding-top: 1em;
+}
 
 /* COURSE GRID */
 .card-course{
@@ -608,6 +619,7 @@ footer {
   transition-property: box-shadow;
   transition-duration: 0.3s;
   box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.15);
+  background-color: $default-white;
   &:hover,
   &:focus{
     box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.20);

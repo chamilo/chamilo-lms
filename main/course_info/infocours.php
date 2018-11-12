@@ -170,7 +170,7 @@ if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
         $delete_url = '<a href="?delete_watermark">'.Display::return_icon('delete.png', get_lang('DelImage')).'</a>';
         $form->addElement(
             'html',
-            '<div class="row"><div class="formw"><a href="'.$url.'">'.$url.' '.$delete_url.'</a></div></div>'
+            '<div class="row"><div class="form"><a href="'.$url.'">'.$url.' '.$delete_url.'</a></div></div>'
         );
     }
     $form->addRule(

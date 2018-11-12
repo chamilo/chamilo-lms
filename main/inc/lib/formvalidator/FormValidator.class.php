@@ -900,33 +900,40 @@ EOT;
     /**
      * @param string $name
      * @param string $label
-     * @param array  $attributes
+     * @param array $attributes
      *
      * @throws Exception if the file doesn't have an id
+     * @throws HTML_QuickForm_Error
      */
     public function addFile($name, $label, $attributes = [])
     {
-        $element = $this->addElement('file', $name, $label, $attributes);
-        if (isset($attributes['crop_image'])) {
-            $id = $element->getAttribute('id');
-            if (empty($id)) {
-                throw new Exception('If you use the crop functionality the element must have an id');
-            }
-            $this->addHtml(
-                '
-                <div class="form-group" id="'.$id.'-form-group" style="display: none;">
-                    <div class="col-sm-offset-2 col-sm-8">
-                        <div id="'.$id.'_crop_image" class="cropCanvas thumbnail">
-                            <img id="'.$id.'_preview_image">
+        try {
+            $element = $this->addElement('file', $name, $label, $attributes);
+            if (isset($attributes['crop_image'])) {
+                $id = $element->getAttribute('id');
+                if (empty($id)) {
+                    throw new Exception('If you use the crop functionality the element must have an id');
+                }
+                $this->addHtml(
+                    '
+                <div class="form-group row" id="'.$id.'-form-group" style="display: none;">
+                    <div class="offset-md-2 col-sm-8">
+                        <div class="card-cropper">
+                            <div id="'.$id.'_crop_image" class="cropCanvas">
+                                <img id="'.$id.'_preview_image">
+                            </div>
+                            <button class="btn btn-primary" type="button" name="cropButton" id="'.$id.'_crop_button">
+                                <em class="fa fa-crop"></em> '.get_lang('CropYourPicture').'
+                            </button>
                         </div>
-                        <button class="btn btn-primary" type="button" name="cropButton" id="'.$id.'_crop_button">
-                            <em class="fa fa-crop"></em> '.get_lang('CropYourPicture').'
-                        </button>
                     </div>
                 </div>'
-            );
-            $this->addHidden($id.'_crop_result', '');
-            $this->addHidden($id.'_crop_image_base_64', '');
+                );
+                $this->addHidden($id.'_crop_result', '');
+                $this->addHidden($id.'_crop_image_base_64', '');
+            }
+        } catch (HTML_Quick|Form_Error $e) {
+            var_dump($e->getMessage());
         }
     }
 

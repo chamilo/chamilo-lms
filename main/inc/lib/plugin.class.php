@@ -964,6 +964,7 @@ class Plugin
             ->findOneBy([
                 'name' => $name,
                 'cId' => $courseId,
+                'category' => 'plugin',
             ]);
 
         if (!$tool) {

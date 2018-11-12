@@ -8,6 +8,15 @@ $this_section = SECTION_COURSES;
 if (!api_is_allowed_to_edit()) {
     api_not_allowed(true);
 }
+$htmlHeadXtra[] = api_get_css_asset('jt.timepicker/jquery.timepicker.css');
+$htmlHeadXtra[] = api_get_asset('jt.timepickers/jquery.timepicker.js');
+$htmlHeadXtra[] = api_get_asset('datepair.js/dist/datepair.js');
+$htmlHeadXtra[] = api_get_asset('datepair.js/dist/jquery.datepair.js');
+
+$interbreadcrumb[] = [
+    'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
+    'name' => get_lang('SurveyList'),
+];
 
 $courseInfo = api_get_course_info();
 
@@ -25,7 +34,6 @@ $form->addHidden('survey_language', $courseInfo['language']);
 $form->addHidden('survey_subtitle', '');
 $form->addHidden('survey_thanks', '');
 $form->addHidden('visible_results', '0');
-
 $form->addHidden('survey_type', 3);
 
 // Setting the form elements
@@ -60,27 +68,25 @@ $hideList = '';
 $maxEvents = 20;
 for ($i = 1; $i <= $maxEvents; $i++) {
     $name = 'time_'.$i;
-    $form->addDateTimePicker($name, get_lang('Time'));
+    $form->addDateTimeRangePicker($name, get_lang('Time'));
     if ($i > 3) {
-        $hideList .= "$('#date_time_wrapper_$name').parent().parent().hide();";
+        $hideList .= "$('#".$name."_alt').parent().parent().parent().hide();";
     }
 }
 
 $form->addHtml('<script>
 $(function() {
     '.$hideList.'
-    var number = 3;
-    
+    var number = 3;    
     $("#add_button").on("click", function() {
         number++;
-        $("#date_time_wrapper_time_" + number).parent().parent().show();       
-        
+        $("#time_" + number + "_alt").parent().parent().parent().show();
     });
     
     $("#remove_button").on("click", function() {
         if (number >= 1) {
             number--;
-            $("#date_time_wrapper_time_" + number).parent().parent().hide();
+            $("#time_" + number + "_alt").parent().parent().parent().hide();
         }
     });
 });
@@ -107,7 +113,6 @@ $form->setDefaults($defaults);
 if ($form->validate()) {
     // Exporting the values
     $values = $form->getSubmitValues();
-
     $values['survey_code'] = SurveyManager::generateSurveyCode($values['survey_title']);
     // Storing the survey
     $surveyData = SurveyManager::store_survey($values);
@@ -116,9 +121,31 @@ if ($form->validate()) {
     for ($i = 1; $i <= $maxEvents; $i++) {
         $name = 'time_'.$i;
         if (isset($values[$name]) && !empty($values[$name])) {
-            $dates[] = $values[$name];
+            $date = $values[$name];
+
+            if (empty($date)) {
+                continue;
+            }
+
+            $start = $name.'_time_range_start';
+            $end = $name.'_time_range_end';
+
+            $start = $values[$start];
+            $end = $values[$end];
+
+            $start = api_get_utc_datetime($values[$name].' '.$start, true);
+            $end = api_get_utc_datetime($values[$name].' '.$end, true);
+
+            if (!empty($start) && !empty($start)) {
+                $row = [
+                    'start' => $start,
+                    'end' => $end,
+                ];
+                $dates[] = $row;
+            }
         }
     }
+
     $questionTable = Database::get_course_table(TABLE_SURVEY_QUESTION);
     $counter = 1;
     if (!empty($surveyData['id'])) {
@@ -127,7 +154,7 @@ if ($form->validate()) {
             $params = [
                 'c_id' => api_get_course_int_id(),
                 'survey_id' => $surveyData['id'],
-                'survey_question' => $date,
+                'survey_question' => $date['start'].'@@'.$date['end'],
                 'survey_question_comment' => '',
                 'type' => 'doodle',
                 'display' => 'horizontal',

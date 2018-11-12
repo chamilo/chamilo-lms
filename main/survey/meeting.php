@@ -10,6 +10,7 @@ $courseInfo = api_get_course_info();
 
 $surveyId = isset($_REQUEST['survey_id']) ? (int) $_REQUEST['survey_id'] : 0;
 $invitationcode = isset($_REQUEST['invitationcode']) ? Database::escape_string($_REQUEST['invitationcode']) : 0;
+$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 
 if (!api_is_allowed_to_edit() || !empty($invitationcode)) {
     $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
@@ -69,9 +70,41 @@ $interbreadcrumb[] = [
     'name' => get_lang('SurveyList'),
 ];
 
-$template = new Template();
-
 $questions = SurveyManager::get_questions($surveyData['iid']);
+
+$url = api_get_self().'?survey_id='.$surveyId.'&invitationcode='.$invitationcode.'&'.api_get_cidreq();
+$urlEdit = $url.'&action=edit';
+
+if (isset($_POST) && !empty($_POST)) {
+    $options = isset($_POST['options']) ? array_keys($_POST['options']) : [];
+
+    foreach ($questions as $item) {
+        $questionId = $item['question_id'];
+        SurveyUtil::remove_answer(
+            $userId,
+            $surveyId,
+            $questionId,
+            $courseId
+        );
+    }
+
+    $status = 1;
+    foreach ($options as $selectedQuestionId) {
+        SurveyUtil::store_answer(
+            $userId,
+            $surveyId,
+            $selectedQuestionId,
+            1,
+            $status,
+            $surveyData
+        );
+    }
+    Display::addFlash(Display::return_message(get_lang('Saved')));
+    header('Location: '.$url);
+    exit;
+}
+
+$template = new Template();
 
 $table = new HTML_Table(['class' => 'table']);
 
@@ -86,27 +119,80 @@ foreach ($questions as $item) {
         $value = isset($value[1]) ? $value[1] : 0;
     }
     $answerList[$item['question_id']] = $answers;
-    $table->setHeaderContents($row, $column, api_get_local_time($item['question']));
+    $parts = explode('@@', $item['question']);
+    $startDateTime = api_get_local_time($parts[0]);
+    $endDateTime = api_get_local_time($parts[1]);
+
+    $date = explode(' ', $startDateTime);
+    $endDate = explode(' ', $endDateTime);
+    $mainDate = $date[0];
+    $startTime = $date[1];
+    $endTime = $endDate[1];
+
+    $mainDate = api_format_date($mainDate, DATE_FORMAT_SHORT);
+    $table->setHeaderContents($row, $column, "<h4>$mainDate</h4> $startTime <br >$endTime");
     $column++;
 }
 
 $row = 1;
 $column = 0;
+// Total counter
+$table->setHeaderContents(
+    $row,
+    0,
+    get_lang('NumberOfUsers').': '.count($students)
+);
+foreach ($questions as $item) {
+    $count = 0;
+    if (isset($answerList[$item['question_id']])) {
+        $count = '<p style="color:cornflowerblue" >
+            <span class="fa fa-check fa-2x"></span>'.count($answerList[$item['question_id']]).'</p>';
+    }
+    $table->setHeaderContents(
+        $row,
+        ++$column,
+        $count
+    );
+}
+
+$row = 2;
+$column = 0;
 foreach ($students as $student) {
     $name = api_get_person_name($student['firstname'], $student['lastname']);
     $studentId = $student['user_id'];
     if ($userId == $studentId) {
+        if ($action !== 'edit') {
+            $name .= Display::url(
+                Display::return_icon('edit.png', get_lang('Edit')),
+                $urlEdit
+            );
+        }
         $rowColumn = 1;
         foreach ($questions as $item) {
             $checked = '';
+            $html = '';
             if (isset($answerList[$item['question_id']][$studentId])) {
-                $checked = 'checked';
+                $checked = Display::return_icon('check-circle.png');
+                if ($action === 'edit') {
+                    $checked = 'checked';
+                }
+            }
+
+            if ($action === 'edit') {
+                $html = '<div class="alert alert-info"><input 
+                    id="'.$item['question_id'].'" 
+                    name="options['.$item['question_id'].']" 
+                    class="question" '.$checked.' 
+                    type="checkbox" 
+                /></div>';
+            } else {
+                $html = $checked;
             }
 
             $table->setHeaderContents(
                 $row,
                 $rowColumn,
-                '<input id="'.$item['question_id'].'" class="question" '.$checked.' type="checkbox"/>'
+                $html
             );
             $rowColumn++;
         }
@@ -133,30 +219,41 @@ foreach ($students as $student) {
     }
     $row++;
 }
+if ($action === 'edit') {
+    $content .= '<form name="meeting" action="'.$urlEdit.'" method="post">';
+}
 
 $content .= $table->toHtml();
 
-$ajaxUrl = api_get_path(WEB_AJAX_PATH).
+if ($action === 'edit') {
+    $content .= '<div class="pull-right">
+        <button name="submit" type="submit" class="btn btn-primary btn-lg">'.get_lang('Save').'</button></div>';
+    $content .= '</form>';
+}
+
+/*$ajaxUrl = api_get_path(WEB_AJAX_PATH).
     'survey.ajax.php?a=save_question&'.api_get_cidreq().'&survey_id='.$surveyId.'&question_id=';
 
 $content .= '<script>
-$(function() {    
+$(function() {
     $(".question").on("change", function() {
-        var questionId = $(this).attr("id");        
+        var questionId = $(this).attr("id");
         var status = 0;
         if ($(this).prop("checked")) {
             status = 1;
-        }        
-        $.ajax({ 
+        }
+        $.ajax({
             url: "'.$ajaxUrl.'" + questionId + "&status=" + status,
             success: function (data) {
+                $("#ajax_result").html("<div class=\"alert alert-info\">"+ "'.get_lang('Saved').'" + "</div>");
+                $("#ajax_result").show();
                 return;
-            }, 
-        });        
-    });    
-  
+            },
+        });
+    });
+
 });
-</script>';
+</script>';*/
 
 $template->assign('content', $content);
 $template->display_one_col_template();

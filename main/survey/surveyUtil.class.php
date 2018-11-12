@@ -698,14 +698,20 @@ class SurveyUtil
                         echo ' </tr>';
                     }
                 }
+
+                $optionResult = '';
+                if (isset($option['question_id']) && isset($number_of_answers[$option['question_id']])) {
+                    if ($number_of_answers[$option['question_id']] == 0) {
+                        $optionResult = '0';
+                    } else {
+                        $optionResult = $number_of_answers[$option['question_id']];
+                    }
+                }
+
                 // displaying the table: footer (totals)
                 echo '	<tr>';
                 echo '		<td class="total"><b>'.get_lang('Total').'</b></td>';
-                echo '		<td class="total"><b>'
-                    .($number_of_answers[$option['question_id']] == 0
-                        ? '0'
-                        : $number_of_answers[$option['question_id']])
-                    .'</b></td>';
+                echo '		<td class="total"><b>'.$optionResult.'</b></td>';
                 echo '		<td class="total">&nbsp;</td>';
                 echo '		<td class="total">&nbsp;</td>';
                 echo '	</tr>';
@@ -2928,12 +2934,15 @@ class SurveyUtil
             Display::return_icon('mail_send.png', get_lang('Publish')),
             $codePath.'survey/survey_invite.php?'.http_build_query($params + ['survey_id' => $survey_id])
         );
-        $actions[] = $hideReportingButton ? null : $reportingLink;
+
+        if ($type != 3) {
+            $actions[] = $hideReportingButton ? null : $reportingLink;
+        }
 
         if (api_is_allowed_to_edit() ||
             api_is_element_in_the_session(TOOL_SURVEY, $survey_id)
         ) {
-            $warning = addslashes(api_htmlentities(get_lang("DeleteSurvey").'?', ENT_QUOTES));
+            $warning = addslashes(api_htmlentities(get_lang('DeleteSurvey').'?', ENT_QUOTES));
             $actions[] = Display::url(
                 Display::return_icon('delete.png', get_lang('Delete')),
                 $codePath.'survey/survey_list.php?'

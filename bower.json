@@ -36,7 +36,10 @@
     "jquery.easy-pie-chart": "^2.1.6",
     "jqueryui-touch-punch": "*",
     "multiselect-two-sides": "2.5.*",
-    "bootstrap-year-calendar": "1.1.*"
+    "bootstrap-year-calendar": "1.1.*",
+    "datepair": "*",
+    "jt.timepicker": "*"
+
   },
   "resolutions": {
     "jquery": "2.1.4"

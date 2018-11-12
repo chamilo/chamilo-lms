@@ -284,6 +284,18 @@ EOT;
 
     /**
      * @param string $name
+     * @param string $label
+     * @param array $attributes
+     *
+     * @return HTML_QuickForm_element
+     */
+    public function addDateTimeRangePicker($name, $label, $attributes = [])
+    {
+        return $this->addElement('DateTimeRangePicker', $name, $label, $attributes);
+    }
+
+    /**
+     * @param string $name
      * @param string $value
      * @param array  $attributes
      */

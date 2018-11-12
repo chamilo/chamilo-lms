@@ -1188,8 +1188,8 @@ class CourseHome
 
         $toolName = api_underscore_to_camel_case($toolName);
 
-        if ('plugin' !== $tool['category'] && isset($GLOBALS['Tool' . $toolName])) {
-            return get_lang('Tool' . $toolName);
+        if ('plugin' !== $tool['category'] && isset($GLOBALS['Tool'.$toolName])) {
+            return get_lang('Tool'.$toolName);
         }
 
         return $toolName;

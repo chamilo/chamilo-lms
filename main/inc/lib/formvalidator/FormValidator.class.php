@@ -285,7 +285,7 @@ EOT;
     /**
      * @param string $name
      * @param string $label
-     * @param array $attributes
+     * @param array  $attributes
      *
      * @return HTML_QuickForm_element
      */

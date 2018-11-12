@@ -1891,13 +1891,15 @@ class SurveyManager
                         WITH (s.code = i.surveyCode AND s.cId = i.cId AND s.sessionId = i.sessionId)
                     INNER JOIN ChamiloCoreBundle:ExtraFieldValues efv WITH efv.itemId = s.iid
                     INNER JOIN ChamiloCoreBundle:ExtraField ef WITH efv.field = ef.id
-                    WHERE i.answered = 0
-                        AND i.cId = :course
-                        AND i.user = :user
-                        AND i.sessionId = :session
-                        AND :now BETWEEN s.availFrom AND s.availTill
-                        AND ef.variable = :variable
-                        AND efv.value = 1
+                    WHERE 
+                        i.answered = 0 AND 
+                        i.cId = :course AND 
+                        i.user = :user AND 
+                        i.sessionId = :session AND 
+                        :now BETWEEN s.availFrom AND s.availTill AND 
+                        ef.variable = :variable AND 
+                        efv.value = 1 AND 
+                        s.surveyType != 3
                     ORDER BY s.availTill ASC
                 ")
                 ->setMaxResults(1)

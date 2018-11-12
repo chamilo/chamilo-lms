@@ -140,15 +140,17 @@ if ($action == 'add' || $action == 'edit') {
             false,
             ['ToolbarSet' => 'Minimal']
         );
-        $form->addFile('image', get_lang('Image'), ['accept' => 'image/*']);
+        $form->addFile('image', get_lang('Image'), ['id' => 'picture', 'class' => 'picture-form', 'accept' => 'image/*', 'crop_image' => true]);
+
         if ($action == 'edit' && !empty($categoryInfo['image'])) {
+            $form->addElement('checkbox', 'delete_picture', null, get_lang('DeletePicture'));
             $form->addHtml('
-                <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-8">'.
+                <div class="form-group row">
+                    <div class="offset-md-2 col-sm-8">'.
                 Display::img(
                     api_get_path(WEB_UPLOAD_PATH).$categoryInfo['image'],
                     get_lang('Image'),
-                    ['width' => 256]
+                    ['width' => 256, 'class' => 'img-thumbnail']
                 ).'</div>
                 </div>
             ');

@@ -6862,10 +6862,24 @@ class DocumentManager
         $content = '',
         $parentId = 0
     ) {
-        $sessionId = empty($sessionId) ? api_get_session_id() : $sessionId;
         $userId = empty($userId) ? api_get_user_id() : $userId;
+
+        if (empty($userId)) {
+            return false;
+        }
+
         $userEntity = api_get_user_entity($userId);
-        $courseEntity = api_get_course_entity(api_get_course_int_id());
+        if (empty($userEntity)) {
+            return false;
+        }
+
+        $courseEntity = api_get_course_entity($courseInfo['real_id']);
+
+        if (empty($courseEntity)) {
+            return false;
+        }
+
+        $sessionId = empty($sessionId) ? api_get_session_id() : $sessionId;
         $session = api_get_session_entity($sessionId);
         $group = api_get_group_entity($group_id);
         $readonly = (int) $readonly;
@@ -6876,7 +6890,9 @@ class DocumentManager
         $parentNode = null;
         if (!empty($parentId)) {
             $parent = $documentRepo->find($parentId);
-            $parentNode = $parent->getResourceNode();
+            if ($parent) {
+                $parentNode = $parent->getResourceNode();
+            }
         }
 
         $document = new CDocument();

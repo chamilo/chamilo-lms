@@ -6875,7 +6875,7 @@ class learnpath
         $creatorId = empty($creatorId) ? api_get_user_id() : $creatorId;
 
         $folder = false;
-        if (!is_dir($filepath.'/'.$dir)) {
+        //if (!is_dir($filepath.'/'.$dir)) {
             $folderData = create_unexisting_directory(
                 $course,
                 $creatorId,
@@ -6890,9 +6890,9 @@ class learnpath
             if (!empty($folderData)) {
                 $folder = true;
             }
-        } else {
+        /*} else {
             $folder = true;
-        }
+        }*/
 
         return $folder;
     }
@@ -6924,7 +6924,7 @@ class learnpath
         $documentId = null;
         if ($folder) {
             $filepath = api_get_path(SYS_COURSE_PATH).$course['path'].'/document';
-            if (!is_dir($filepath.'/'.$dir)) {
+            //if (!is_dir($filepath.'/'.$dir)) {
                 $folderData = create_unexisting_directory(
                     $course,
                     $creatorId,
@@ -6939,20 +6939,21 @@ class learnpath
                     $folder = true;
                 }
 
-                $documentId = $folderData['id'];
-            } else {
+                $documentId = $folderData->getIid();
+            /*} else {
                 $folder = true;
-            }
+            }*/
+
             $dir = $dir.'/';
             if ($folder) {
                 $filepath = api_get_path(SYS_COURSE_PATH).$course['path'].'/document'.$dir;
             }
         }
 
-        if (empty($documentId)) {
+        /*if (empty($documentId)) {
             $dir = api_remove_trailing_slash($dir);
             $documentId = DocumentManager::get_document_id($course, $dir, 0);
-        }
+        }*/
 
         $array = [
             'dir' => $dir,

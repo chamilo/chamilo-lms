@@ -1565,12 +1565,12 @@ function create_unexisting_directory(
     }
 
     if (!is_dir($base_work_dir.$systemFolderName)) {
-        $result = mkdir(
+        /*$result = mkdir(
             $base_work_dir.$systemFolderName,
             api_get_permissions_for_new_directories(),
             true
-        );
-
+        );*/
+        $result = true;
         if ($result) {
             // Check if pathname already exists inside document table
             $tbl_document = Database::get_course_table(TABLE_DOCUMENT);
@@ -1685,7 +1685,7 @@ function move_uploaded_file_collection_into_directory(
     $max_filled_space
 ) {
     $number_of_uploaded_images = count($uploaded_file_collection['name']);
-    $new_file_list = [];
+    $list = [];
     for ($i = 0; $i < $number_of_uploaded_images; $i++) {
         $missing_file['name'] = $uploaded_file_collection['name'][$i];
         $missing_file['type'] = $uploaded_file_collection['type'][$i];
@@ -1695,7 +1695,7 @@ function move_uploaded_file_collection_into_directory(
 
         $upload_ok = process_uploaded_file($missing_file);
         if ($upload_ok) {
-            $new_file_list[] = handle_uploaded_document(
+            $list[] = handle_uploaded_document(
                 $_course,
                 $missing_file,
                 $base_work_dir,
@@ -1711,7 +1711,7 @@ function move_uploaded_file_collection_into_directory(
         unset($missing_file);
     }
 
-    return $new_file_list;
+    return $list;
 }
 
 /**

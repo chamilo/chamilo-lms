@@ -232,15 +232,15 @@ class AddCourse
         $tables[] = 'student_publication';
         $tables[] = 'student_publication_assignment';
         $tables[] = 'document';
-        $tables[] = 'forum_category';
-        $tables[] = 'forum_forum';
-        $tables[] = 'forum_thread';
         $tables[] = 'forum_post';
+        $tables[] = 'forum_thread';
         $tables[] = 'forum_mailcue';
         $tables[] = 'forum_attachment';
         $tables[] = 'forum_notification';
         $tables[] = 'forum_thread_qualify';
         $tables[] = 'forum_thread_qualify_log';
+        $tables[] = 'forum_forum';
+        $tables[] = 'forum_category';
         $tables[] = 'link';
         $tables[] = 'link_category';
         $tables[] = 'online_connected';
@@ -425,25 +425,19 @@ class AddCourse
             $fill_with_exemplary_content = api_get_setting('example_material_course_creation') !== 'false';
         }
         $course_id = (int) $course_id;
+        $courseInfo = api_get_course_info_by_id($course_id);
 
-        if (empty($course_id)) {
+        if (empty($courseInfo)) {
             return false;
         }
-
-        $courseInfo = api_get_course_info_by_id($course_id);
         $authorId = empty($authorId) ? api_get_user_id() : (int) $authorId;
 
-        $tbl_course_homepage = Database::get_course_table(TABLE_TOOL_LIST);
         $TABLEGROUPCATEGORIES = Database::get_course_table(TABLE_GROUP_CATEGORY);
-        $TABLEITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $TABLETOOLDOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
         $TABLESETTING = Database::get_course_table(TABLE_COURSE_SETTING);
         $TABLEGRADEBOOK = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $TABLEGRADEBOOKLINK = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
         $visible_for_course_admin = 0;
-
         $em = Database::getManager();
-
         $course = api_get_course_entity($course_id);
         $settingsManager = CourseManager::getCourseSettingsManager();
         $settingsManager->setCourse($course);
@@ -488,7 +482,7 @@ class AddCourse
             $title = isset($setting['title']) ? $setting['title'] : '';
             Database::query(
                 "INSERT INTO $TABLESETTING (id, c_id, title, variable, value, category)
-                 VALUES ($counter, $course_id, '".$title."', '".$variable."', '".$setting['default']."', '".$setting['category']."')"
+                      VALUES ($counter, $course_id, '".$title."', '".$variable."', '".$setting['default']."', '".$setting['category']."')"
             );
             $counter++;
         }
@@ -532,14 +526,6 @@ class AddCourse
         }
 
         $sys_course_path = api_get_path(SYS_COURSE_PATH);
-        $perm = api_get_permissions_for_new_directories();
-        $perm_file = api_get_permissions_for_new_files();
-
-        $chat_path = $sys_course_path.$course_repository.'/document/chat_files';
-
-        if (!is_dir($chat_path)) {
-            @mkdir($chat_path, api_get_permissions_for_new_directories());
-        }
 
         /*    Documents   */
         if ($fill_with_exemplary_content) {
@@ -585,9 +571,6 @@ class AddCourse
                 $default_document_array[$folder] = $sorted_array;
             }
 
-            // Light protection (adding index.html in every document folder)
-            $htmlpage = "<!DOCTYPE html>\n<html lang=\"en\">\n <head>\n <meta charset=\"utf-8\">\n <title>Not authorized</title>\n  </head>\n  <body>\n  </body>\n</html>";
-
             $example_cert_id = 0;
             if (is_array($default_document_array) && count(
                     $default_document_array
@@ -595,7 +578,7 @@ class AddCourse
             ) {
                 foreach ($default_document_array as $media_type => $array_media) {
                     $path_documents = "/$media_type/";
-
+                    /*
                     //hack until feature #5242 is implemented
                     if ($media_type == 'images') {
                         $media_type = 'images/gallery';
@@ -608,11 +591,11 @@ class AddCourse
                             fwrite($fd, $htmlpage);
                             @chmod($images_folder.'index.html', $perm_file);
                         }
-                    }
+                    }*/
 
                     $course_documents_folder = $sys_course_path.$course_repository."/document/$media_type/";
                     $default_course_path = api_get_path(SYS_CODE_PATH).'default_course_document'.$path_documents;
-
+                    /*
                     if (!is_dir($course_documents_folder)) {
                         // Creating index.html
                         mkdir($course_documents_folder, $perm);
@@ -625,25 +608,13 @@ class AddCourse
                             $course_documents_folder.'index.html',
                             $perm_file
                         );
-                    }
+                    }*/
 
                     if (is_array($array_media) && count($array_media) > 0) {
                         foreach ($array_media as $key => $value) {
                             if (isset($value['dir']) && !empty($value['dir'])) {
                                 if (!is_dir($course_documents_folder.$value['dir'])) {
-                                    //Creating folder
-                                    mkdir(
-                                        $course_documents_folder.$value['dir'],
-                                        $perm
-                                    );
-
-                                    //Creating index.html (for light protection)
-                                    $index_html = $course_documents_folder.$value['dir'].'/index.html';
-                                    $fd = fopen($index_html, 'w');
-                                    fwrite($fd, $htmlpage);
-                                    @chmod($index_html, $perm_file);
-
-                                    //Inserting folder in the DB
+                                    // Inserting folder in the DB
                                     $folder_path = substr(
                                         $value['dir'],
                                         0,
@@ -654,99 +625,55 @@ class AddCourse
 
                                     //hack until feature #5242 is implemented
                                     if ($title == 'gallery') {
-                                        $title = get_lang(
-                                            'DefaultCourseImages'
-                                        );
+                                        $title = get_lang('DefaultCourseImages');
                                     }
 
                                     if ($media_type == 'images/gallery') {
                                         $folder_path = 'gallery/'.$folder_path;
                                     }
 
-                                    Database::query(
-                                        "INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size)
-                                        VALUES ($course_id,'$path_documents".$folder_path."','".$title."','folder','0')"
-                                    );
-                                    $image_id = Database:: insert_id();
-
-                                    Database::insert(
-                                        $TABLEITEMPROPERTY,
-                                        [
-                                            'c_id' => $course_id,
-                                            'tool' => 'document',
-                                            'insert_user_id' => api_get_user_id(),
-                                            'insert_date' => $now,
-                                            'lastedit_date' => $now,
-                                            'ref' => $image_id,
-                                            'lastedit_type' => 'DocumentAdded',
-                                            'lastedit_user_id' => api_get_user_id(),
-                                            'to_group_id' => null,
-                                            'to_user_id' => null,
-                                            'visibility' => 0,
-                                        ]
+                                    create_unexisting_directory(
+                                        $courseInfo,
+                                        api_get_user_id(),
+                                        0,
+                                        0,
+                                        0,
+                                        $path_documents.$folder_path,
+                                        $title,
+                                        $title
                                     );
                                 }
                             }
 
                             if (isset($value['file']) && !empty($value['file'])) {
-                                if (!file_exists(
-                                    $course_documents_folder.$value['file']
-                                )
-                                ) {
-                                    //Copying file
-                                    copy(
+                                if (!file_exists($default_course_path.$value['file'])) {
+                                    // Copying file
+                                    /*copy(
                                         $default_course_path.$value['file'],
                                         $course_documents_folder.$value['file']
-                                    );
-                                    chmod(
-                                        $course_documents_folder.$value['file'],
-                                        $perm_file
-                                    );
-                                    //echo $default_course_path.$value['file']; echo ' - '; echo $course_documents_folder.$value['file']; echo '<br />';
+                                    );*/
                                     $temp = explode('/', $value['file']);
-                                    $file_size = filesize(
-                                        $course_documents_folder.$value['file']
-                                    );
 
                                     //hack until feature #5242 is implemented
                                     if ($media_type == 'images/gallery') {
                                         $value["file"] = 'gallery/'.$value["file"];
                                     }
+                                    //$default_course_path.$value['file']
+                                    DocumentManager::addDocument(
+                                        $courseInfo,
+                                        $default_course_path.$value['file'],
+                                        'file',
+                                        filesize($default_course_path.$value['file']),
+                                        $temp[count($temp) - 1],
+                                        ''
+                                    );
 
-                                    //Inserting file in the DB
-                                    Database::query(
+                                    // Inserting file in the DB
+                                    /*Database::query(
                                         "INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size)
                                         VALUES ($course_id,'$path_documents".$value["file"]."','".$temp[count($temp) - 1]."','file','$file_size')"
                                     );
-                                    $image_id = Database:: insert_id();
-                                    if ($image_id) {
-                                        $sql = "UPDATE $TABLETOOLDOCUMENT SET id = iid WHERE iid = $image_id";
-                                        Database::query($sql);
-
-                                        if ($path_documents.$value['file'] == '/certificates/default.html') {
-                                            $example_cert_id = $image_id;
-                                        }
-                                        $docId = Database::insert(
-                                            $TABLEITEMPROPERTY,
-                                            [
-                                                'c_id' => $course_id,
-                                                'tool' => 'document',
-                                                'insert_user_id' => api_get_user_id(),
-                                                'insert_date' => $now,
-                                                'lastedit_date' => $now,
-                                                'ref' => $image_id,
-                                                'lastedit_type' => 'DocumentAdded',
-                                                'lastedit_user_id' => api_get_user_id(),
-                                                'to_group_id' => null,
-                                                'to_user_id' => null,
-                                                'visibility' => 1,
-                                            ]
-                                        );
-                                        if ($docId) {
-                                            $sql = "UPDATE $TABLEITEMPROPERTY SET id = iid WHERE iid = $docId";
-                                            Database::query($sql);
-                                        }
-                                    }
+                                    $image_id = Database:: insert_id();*/
                                 }
                             }
                         }
@@ -765,7 +692,6 @@ class AddCourse
             );
 
             /*  Links tool */
-
             $link = new Link();
             $link->setCourse($courseInfo);
             $links = [
@@ -916,13 +842,13 @@ class AddCourse
             $course_code = $courseInfo['code'];
             // father gradebook
             Database::query(
-                "INSERT INTO $TABLEGRADEBOOK (name, description, user_id, c_id, parent_id, weight, visible, certif_min_score, session_id, document_id)
-                VALUES ('$course_code','',1,$course_id,0,100,0,75,NULL,$example_cert_id)"
+                "INSERT INTO $TABLEGRADEBOOK (name, locked, generate_certificates, description, user_id, c_id, parent_id, weight, visible, certif_min_score, session_id, document_id)
+                VALUES ('$course_code','0',0,'',1,$course_id,0,100,0,75,NULL,$example_cert_id)"
             );
             $gbid = Database:: insert_id();
             Database::query(
-                "INSERT INTO $TABLEGRADEBOOK (name, description, user_id, c_id, parent_id, weight, visible, certif_min_score, session_id, document_id)
-                VALUES ('$course_code','',1,$course_id,$gbid,100,1,75,NULL,$example_cert_id)"
+                "INSERT INTO $TABLEGRADEBOOK (name, locked, generate_certificates, description, user_id, c_id, parent_id, weight, visible, certif_min_score, session_id, document_id)
+                VALUES ('$course_code','0',0,'',1,$course_id,$gbid,100,1,75,NULL,$example_cert_id)"
             );
             $gbid = Database:: insert_id();
             Database::query(
@@ -931,7 +857,7 @@ class AddCourse
             );
         }
 
-        //Installing plugins in course
+        // Installing plugins in course
         $app_plugin = new AppPlugin();
         $app_plugin->install_course_plugins($course_id);
 

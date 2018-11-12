@@ -2257,7 +2257,6 @@ class CourseManager
      */
     public static function delete_course($code)
     {
-        $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $table_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $table_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);

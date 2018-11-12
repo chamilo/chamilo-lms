@@ -1018,14 +1018,6 @@ function api_get_cdn_path($web_path)
 }
 
 /**
- * @return bool Return true if CAS authentification is activated
- */
-function api_is_cas_activated()
-{
-    return api_get_setting('cas_activate') == "true";
-}
-
-/**
  * @return bool Return true if LDAP authentification is activated
  */
 function api_is_ldap_activated()
@@ -2741,16 +2733,6 @@ function api_get_setting($variable)
         // no break
         case 'openid_authentication':
         case 'service_ppt2lp':
-        case 'add_cas_login_button_cas_button_label':
-        case 'add_cas_login_button_cas_button_comment':
-        case 'add_cas_login_button_cas_image_url':
-        case 'add_cas_logout_button_cas_logout_label':
-        case 'add_cas_logout_button_cas_logout_comment':
-        case 'add_cas_logout_button_cas_logout_image_url':
-        case 'add_facebook_login_button_facebook_button_url':
-        case 'add_shibboleth_login_button_shibboleth_button_label':
-        case 'add_shibboleth_login_button_shibboleth_button_comment':
-        case 'add_shibboleth_login_button_shibboleth_image_url':
         case 'formLogin_hide_unhide_label':
             return false;
             break;
@@ -3824,23 +3806,9 @@ function api_not_allowed(
             $content .= '<h4>'.get_lang('LoginToGoToThisCourse').'</h4>';
         }
 
-        if (api_is_cas_activated()) {
-            $content .= Display::return_message(sprintf(get_lang('YouHaveAnInstitutionalAccount'), api_get_setting("Institution")), '', false);
-            $content .= Display::div(
-                "<br/><a href='".get_cas_direct_URL(api_get_course_id())."'>".sprintf(get_lang('LoginWithYourAccount'), api_get_setting("Institution"))."</a><br/><br/>",
-                ['align' => 'center']
-            );
-            $content .= Display::return_message(get_lang('YouDontHaveAnInstitutionAccount'));
-            $content .= "<p style='text-align:center'><a href='#' onclick='$(this).parent().next().toggle()'>".get_lang('LoginWithExternalAccount')."</a></p>";
-            $content .= "<div style='display:none;'>";
-        }
         $content .= '<div class="well">';
         $content .= $form->returnForm();
         $content .= '</div>';
-        if (api_is_cas_activated()) {
-            $content .= "</div>";
-        }
-
         if (!empty($courseCode)) {
             $content .= '<hr/><p style="text-align:center"><a href="'.$home_url.'">'.
                 get_lang('ReturnToCourseHomepage').'</a></p>';
@@ -3871,18 +3839,6 @@ function api_not_allowed(
         // see same text in auth/gotocourse.php and main_api.lib.php function api_not_allowed (bellow)
         $msg = Display::return_message(get_lang('NotAllowed'), 'error', false);
         $msg .= '<h4>'.get_lang('LoginToGoToThisCourse').'</h4>';
-        $casEnabled = api_is_cas_activated();
-        if ($casEnabled) {
-            $msg .= Display::return_message(
-                sprintf(get_lang('YouHaveAnInstitutionalAccount'), api_get_setting("Institution")),
-                '',
-                false
-            );
-            $msg .= Display::div("<br/><a href='".get_cas_direct_URL(api_get_course_int_id())."'>".getCASLogoHTML()." ".sprintf(get_lang('LoginWithYourAccount'), api_get_setting("Institution"))."</a><br/><br/>", ['align' => 'center']);
-            $msg .= Display::return_message(get_lang('YouDontHaveAnInstitutionAccount'));
-            $msg .= "<p style='text-align:center'><a href='#' onclick='$(this).parent().next().toggle()'>".get_lang('LoginWithExternalAccount')."</a></p>";
-            $msg .= "<div style='display:none;'>";
-        }
         $form = api_get_not_allowed_login_form();
         $msg .= '<div class="well">';
         $msg .= $form->returnForm();

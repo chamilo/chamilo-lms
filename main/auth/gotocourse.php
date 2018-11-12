@@ -51,21 +51,9 @@ if (isset($_GET['firstpage'])) {
         $params
     );
     $form->addButtonNext(get_lang('LoginEnter'), 'submitAuth');
-    // see same text in main_api.lib.php function api_not_allowed
-    if (api_is_cas_activated()) {
-        $msg .= Display::return_message(sprintf(get_lang('YouHaveAnInstitutionalAccount'), api_get_setting("Institution")), '', false);
-        $msg .= Display::div("<br/><a href='".get_cas_direct_URL(api_get_course_id())."'>".getCASLogoHTML()." ".sprintf(get_lang('LoginWithYourAccount'), api_get_setting("Institution"))."</a><br/><br/>", ['align' => 'center']);
-        $msg .= Display::return_message(get_lang('YouDontHaveAnInstitutionAccount'));
-        $msg .= "<p style='text-align:center'><a href='#' onclick='$(this).parent().next().toggle()'>".get_lang('LoginWithExternalAccount')."</a></p>";
-        $msg .= "<div style='display:none;'>";
-    }
-
     $msg .= '<div class="well_login">';
     $msg .= $form->returnForm();
     $msg .= '</div>';
-    if (api_is_cas_activated()) {
-        $msg .= "</div>";
-    }
     $msg .= '<hr/><p style="text-align:center"><a href="'.api_get_path(WEB_PATH).'">'.get_lang('ReturnToCourseHomepage').'</a></p>';
 
     $tpl->assign('content', '<h4>'.get_lang('LoginToGoToThisCourse').'</h4>'.$msg);

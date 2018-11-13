@@ -11,6 +11,9 @@ legacy_main:
     requirements:
         name: .+
 
+legacy_upload:
+    path: ../var/upload/
+
 # Controllers
 controllers:
     resource: '../src/CoreBundle/Controller/'

@@ -15,7 +15,7 @@
   transition: all 0.2s ease;
   width: calc(100% - #{$offscreen-size});
   z-index: 800;
-  box-shadow: 0px 8px 20px -10px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 20px -10px rgba(0, 0, 0, 0.15);
 
   @include to($breakpoint-md) {
     width: 100%;
@@ -74,6 +74,13 @@
           &:focus {
             color: $header-hover;
             text-decoration: none;
+          }
+
+          .rounded-circle{
+            margin-right: 10px;
+            width: 40px;
+            border: 2px solid #fff;
+            box-shadow: 0 5px 10px 0 rgba(43,43,43,0.2);
           }
 
           @include to($breakpoint-md) {
@@ -154,7 +161,7 @@
             line-height: 1.5;
             min-height: auto;
             padding: 10px 15px;
-            color: $sidebar-link;
+            color: $header-link;
           }
         }
       }

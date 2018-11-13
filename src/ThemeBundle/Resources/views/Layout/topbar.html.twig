@@ -105,8 +105,6 @@
             <!-- END NAVBAR LEFT -->
             <!-- NAVBAR RIGHT -->
 
-
-
             {% if app.user is not null and is_granted('IS_AUTHENTICATED_FULLY') %}
             <ul class="nav-right">
 
@@ -131,12 +129,26 @@
 
                 <li class="dropdown">
                     <a href="" class="dropdown-toggle" data-toggle="dropdown">
+
+                        {% set avatar %}
+                            {% if app.user.pictureUri is null %}
+                                <img
+                                    class="rounded-circle"
+                                    src="{{ url('legacy_public') ~ app.user.avatarOrAnonymous(32) }}"
+                                    alt="{{ app.user.firstname }} {{ app.user.lastname }}"
+                                >
+                            {% else %}
+                                <img
+                                    class="rounded-circle"
+                                    src="{{ url('legacy_upload') ~ app.user.getPictureLegacy() }}"
+                                    alt="{{ app.user.firstname }} {{ app.user.lastname }}"
+                                >
+                            {% endif %}
+                        {% endset %}
+
+                        {{ avatar }}
+
                         <span class="profile-text">{{ app.user.firstname }} {{ app.user.lastname }}</span>
-                        <img
-                            class="rounded-circle"
-                            src="{{ url('legacy_public') ~ app.user.avatarOrAnonymous(32) }}"
-                            alt="{{ app.user.firstname }} {{ app.user.lastname }}"
-                        >
                     </a>
                     <ul class="dropdown-menu">
                         <li>

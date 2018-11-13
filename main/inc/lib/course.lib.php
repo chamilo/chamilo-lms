@@ -1366,6 +1366,7 @@ class CourseManager
                         session_id,
                         user.*,
                         course.*,
+                        course.id AS c_id,
                         session.name as session_name
                     ';
             if ($return_count) {
@@ -1412,6 +1413,7 @@ class CourseManager
                     $sql = 'SELECT DISTINCT
                                 course.title,
                                 course.code,
+                                course.id AS c_id,
                                 course_rel_user.status as status_rel,
                                 user.id as user_id,
                                 user.email,
@@ -1575,11 +1577,23 @@ class CourseManager
                             }
                         }
 
+                        if (empty($users[$row_key])) {
+                            $users[$row_key] = [];
+                        }
+
+                        if (!array_key_exists('training_hours', $users[$row_key])) {
+                            $users[$row_key]['training_hours'] = 0;
+                        }
+
                         $users[$row_key]['training_hours'] += Tracking::get_time_spent_on_the_course(
                             $user['user_id'],
                             $courseId,
                             $sessionId
                         );
+
+                        if (!array_key_exists('count_users', $users[$row_key])) {
+                            $users[$row_key]['count_users'] = 0;
+                        }
 
                         $users[$row_key]['count_users'] += $counter;
 
@@ -1629,7 +1643,7 @@ class CourseManager
                         $report_info['time'] = api_time_to_hms(
                             Tracking::get_time_spent_on_the_course(
                                 $user['user_id'],
-                                $courseId,
+                                empty($user['c_id']) ? $courseId : $user['c_id'],
                                 $sessionId
                             )
                         );

@@ -2190,6 +2190,5 @@ class SurveyManager
                 }
             }
         }
-        exit;
     }
 }

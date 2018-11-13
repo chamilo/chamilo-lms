@@ -39,7 +39,7 @@ if (!api_is_allowed_to_edit() || !empty($invitationcode)) {
 }
 
 // getting all the students of the course
-if (empty($sessionId)) {
+/*if (empty($sessionId)) {
     // Registered students in a course outside session.
     $students = CourseManager:: get_student_list_from_course_code(
         api_get_course_id(),
@@ -56,13 +56,16 @@ if (empty($sessionId)) {
         true,
         $sessionId
     );
-}
+}*/
 
 $surveyData = SurveyManager::get_survey($surveyId);
 
 if (empty($surveyData)) {
     api_not_allowed(true);
 }
+
+$invitations = SurveyUtil::get_invited_users($surveyData['code']);
+$students = isset($invitations['course_users']) ? $invitations['course_users'] : [];
 
 $content = Display::page_header($surveyData['title']);
 
@@ -159,9 +162,9 @@ foreach ($questions as $item) {
 
 $row = 2;
 $column = 0;
-foreach ($students as $student) {
-    $name = api_get_person_name($student['firstname'], $student['lastname']);
-    $studentId = $student['user_id'];
+foreach ($students as $studentId) {
+    $userInfo = api_get_user_info($studentId);
+    $name = $userInfo['complete_name'];
     if ($userId == $studentId) {
         if ($action !== 'edit') {
             $name .= Display::url(

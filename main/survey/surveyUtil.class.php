@@ -480,16 +480,18 @@ class SurveyUtil
                 }
 
                 $ch_type = 'ch_'.$question['type'];
-                /** @var survey_question $display */
-                $display = new $ch_type();
+                if (class_exists($ch_type)) {
+                    /** @var survey_question $display */
+                    $display = new $ch_type();
 
-                $url = api_get_self();
-                $form = new FormValidator('question', 'post', $url);
-                $form->addHtml('<div class="survey_question_wrapper"><div class="survey_question">');
-                $form->addHtml($question['survey_question']);
-                $display->render($form, $question, $finalAnswer);
-                $form->addHtml('</div></div>');
-                $form->display();
+                    $url = api_get_self();
+                    $form = new FormValidator('question', 'post', $url);
+                    $form->addHtml('<div class="survey_question_wrapper"><div class="survey_question">');
+                    $form->addHtml($question['survey_question']);
+                    $display->render($form, $question, $finalAnswer);
+                    $form->addHtml('</div></div>');
+                    $form->display();
+                }
             }
         }
     }

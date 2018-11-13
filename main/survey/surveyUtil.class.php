@@ -2907,10 +2907,23 @@ class SurveyUtil
                     Display::return_icon('backup.png', get_lang('CopySurvey')),
                     $codePath.'survey/copy_survey.php?'.http_build_query($params + ['survey_id' => $survey_id])
                 );
+
                 $actions[] = Display::url(
                     Display::return_icon('copy.png', get_lang('DuplicateSurvey')),
                     $codePath.'survey/survey_list.php?'
                     .http_build_query($params + ['action' => 'copy_survey', 'survey_id' => $survey_id])
+                );
+
+                $actions[] = Display::url(
+                    Display::return_icon('star.png', get_lang('MultiplicateSurvey')),
+                    $codePath.'survey/survey_list.php?'
+                    .http_build_query($params + ['action' => 'multiplicate', 'survey_id' => $survey_id])
+                );
+
+                $actions[] = Display::url(
+                    Display::return_icon('star_na.png', get_lang('RemoveMultiplicateQuestions')),
+                    $codePath.'survey/survey_list.php?'
+                    .http_build_query($params + ['action' => 'remove_multiplicate', 'survey_id' => $survey_id])
                 );
 
                 $warning = addslashes(api_htmlentities(get_lang('EmptySurvey').'?', ENT_QUOTES));

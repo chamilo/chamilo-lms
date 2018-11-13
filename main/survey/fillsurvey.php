@@ -97,7 +97,7 @@ if ($invitationcode == 'auto' && isset($_GET['scode'])) {
     // Survey_code of the survey
     $surveyCode = $_GET['scode'];
     if ($isAnonymous) {
-        $autoInvitationcode = "auto-ANONY_".md5(time())."-$surveyCode";
+        $autoInvitationcode = 'auto-ANONY_'.md5(time())."-$surveyCode";
     } else {
         // New invitation code from userid
         $autoInvitationcode = "auto-$userid-$surveyCode";
@@ -742,7 +742,8 @@ if (
                         LEFT JOIN $table_survey_question_option survey_question_option
                             ON survey_question.question_id = survey_question_option.question_id AND
                             survey_question_option.c_id = $course_id
-                        WHERE
+                        WHERE                        
+                            survey_question NOT LIKE '%{{%' AND
                             survey_question.survey_id = '".intval($survey_invitation['survey_id'])."' AND
                             survey_question.question_id IN (".implode(',', $paged_questions[$_GET['show']]).") AND
                             survey_question.c_id =  $course_id
@@ -774,7 +775,7 @@ if (
             }
         }
     } elseif ($survey_data['survey_type'] === '1') {
-        $my_survey_id = intval($survey_invitation['survey_id']);
+        $my_survey_id = (int) $survey_invitation['survey_id'];
         $current_user = Database::escape_string($survey_invitation['user']);
 
         if (isset($_POST['personality'])) {
@@ -787,7 +788,10 @@ if (
             $answer_list = [];
             // Get current user results
             $results = [];
-            $sql = "SELECT survey_group_pri, user, SUM(value) as value
+            $sql = "SELECT 
+                      survey_group_pri, 
+                      user, 
+                      SUM(value) as value
                     FROM $table_survey_answer as survey_answer
                     INNER JOIN $table_survey_question as survey_question
                     ON (survey_question.question_id = survey_answer.question_id)
@@ -807,7 +811,6 @@ if (
                 $results[] = $answer_list;
             }
 
-            //echo '<br />'; print_r($results); echo '<br />';
             // Get the total score for each group of questions
             $totals = [];
             $sql = "SELECT SUM(temp.value) as value, temp.survey_group_pri FROM
@@ -1178,7 +1181,7 @@ if (
 
 // Selecting the maximum number of pages
 $sql = "SELECT * FROM $table_survey_question
-        WHERE
+        WHERE        
             c_id = $course_id AND
             type = '".Database::escape_string('pagebreak')."' AND
             survey_id='".intval($survey_invitation['survey_id'])."'";

@@ -112,7 +112,7 @@ if (api_is_course_admin() ||
     if (isset($_POST['finish_survey'])) {
         echo Display::return_message(get_lang('SurveyFinished'), 'confirm');
         echo $survey_data['survey_thanks'];
-        Display :: display_footer();
+        Display::display_footer();
         exit;
     }
 
@@ -125,7 +125,10 @@ if (api_is_course_admin() ||
         $paged_questions = [];
         $counter = 0;
         $sql = "SELECT * FROM $table_survey_question
-                WHERE c_id = $course_id AND survey_id = '".$surveyId."'
+                WHERE
+                  survey_question NOT LIKE '%{{%' AND 
+                  c_id = $course_id AND 
+                  survey_id = '".$surveyId."'
                 ORDER BY sort ASC";
         $result = Database::query($sql);
         $questions_exists = true;
@@ -161,7 +164,9 @@ if (api_is_course_admin() ||
                     WHERE
                         survey_question.survey_id = '".$surveyId."' AND
                         survey_question.question_id IN (".Database::escape_string(implode(',', $paged_questions[$_GET['show']]), null, false).") AND
-                        survey_question.c_id =  $course_id
+                        survey_question.c_id = $course_id AND
+                        survey_question NOT LIKE '%{{%'
+                        
                     ORDER BY survey_question.sort, survey_question_option.sort ASC";
 
             $result = Database::query($sql);
@@ -189,6 +194,7 @@ if (api_is_course_admin() ||
     // Selecting the maximum number of pages
     $sql = "SELECT * FROM $table_survey_question
             WHERE
+                survey_question NOT LIKE '%{{%' AND 
                 c_id = $course_id AND
                 type = '".Database::escape_string('pagebreak')."' AND
                 survey_id = '".$surveyId."'";
@@ -202,7 +208,7 @@ if (api_is_course_admin() ||
         $show = 0;
     }
 
-    $url = api_get_self().'?survey_id='.$surveyId.'&show='.$show;
+    $url = api_get_self().'?survey_id='.$surveyId.'&show='.$show.'&'.api_get_cidreq();
     $form = new FormValidator(
         'question-survey',
         'post',

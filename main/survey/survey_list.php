@@ -81,7 +81,7 @@ switch ($action) {
         $surveyData = SurveyManager::get_survey($surveyId);
         if (!empty($surveyData)) {
             SurveyManager::removeMultiplicateQuestions($surveyData);
-            Display::addFlash(Display::return_message(get_lang('Removed'), 'confirmation', false));
+            Display::addFlash(Display::return_message(get_lang('Updated'), 'confirmation', false));
         }
         header('Location: '.$listUrl);
         exit;
@@ -90,6 +90,7 @@ switch ($action) {
         $surveyData = SurveyManager::get_survey($surveyId);
         if (!empty($surveyData)) {
             SurveyManager::multiplicateQuestions($surveyData);
+            Display::cleanFlashMessages();
             Display::addFlash(Display::return_message(get_lang('Updated'), 'confirmation', false));
         }
         header('Location: '.$listUrl);

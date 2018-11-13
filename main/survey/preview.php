@@ -83,7 +83,7 @@ if ($surveyAnonymous == 0 && api_is_anonymous()) {
         api_not_allowed(true);
     }
 }
-// Header
+
 Display::display_header(get_lang('SurveyPreview'));
 
 // We exit here is the first or last question is a pagebreak (which causes errors)
@@ -144,6 +144,16 @@ if (api_is_course_admin() ||
             $questions_exists = false;
         }
 
+        $sql = "SELECT count(survey_question.question_id) as count                        
+                FROM $table_survey_question survey_question
+                WHERE 
+                  survey_question.survey_id = '".$surveyId."' AND
+                  survey_question.c_id = $course_id AND 
+                  survey_question LIKE '%{{%' ";
+        $result = Database::query($sql);
+        $sourceQuestions = Database::fetch_array($result, 'ASSOC');
+        $sourceQuestions = $sourceQuestions['count'];
+
         if (array_key_exists($_GET['show'], $paged_questions)) {
             $sql = "SELECT
                         survey_question.question_id,
@@ -165,23 +175,24 @@ if (api_is_course_admin() ||
                         survey_question.survey_id = '".$surveyId."' AND
                         survey_question.question_id IN (".Database::escape_string(implode(',', $paged_questions[$_GET['show']]), null, false).") AND
                         survey_question.c_id = $course_id AND
-                        survey_question NOT LIKE '%{{%'
-                        
+                        survey_question NOT LIKE '%{{%'                        
                     ORDER BY survey_question.sort, survey_question_option.sort ASC";
 
             $result = Database::query($sql);
             $question_counter_max = Database::num_rows($result);
             $limit = 0;
+
             while ($row = Database::fetch_array($result)) {
                 // If the type is not a pagebreak we store it in the $questions array
                 if ($row['type'] != 'pagebreak') {
-                    $questions[$row['sort']]['question_id'] = $row['question_id'];
-                    $questions[$row['sort']]['survey_id'] = $row['survey_id'];
-                    $questions[$row['sort']]['survey_question'] = $row['survey_question'];
-                    $questions[$row['sort']]['display'] = $row['display'];
-                    $questions[$row['sort']]['type'] = $row['type'];
-                    $questions[$row['sort']]['options'][intval($row['option_sort'])] = $row['option_text'];
-                    $questions[$row['sort']]['maximum_score'] = $row['max_value'];
+                    $sort = $row['sort'];
+                    $questions[$sort]['question_id'] = $row['question_id'];
+                    $questions[$sort]['survey_id'] = $row['survey_id'];
+                    $questions[$sort]['survey_question'] = $row['survey_question'];
+                    $questions[$sort]['display'] = $row['display'];
+                    $questions[$sort]['type'] = $row['type'];
+                    $questions[$sort]['options'][intval($row['option_sort'])] = $row['option_text'];
+                    $questions[$sort]['maximum_score'] = $row['max_value'];
                 } else {
                     // If the type is a pagebreak we are finished loading the questions for this page
                     break;
@@ -191,22 +202,27 @@ if (api_is_course_admin() ||
         }
     }
 
+    $before = 0;
+    if (isset($paged_questions[$_GET['show'] -1])) {
+        $before = count($paged_questions[$_GET['show'] -1]);
+    }
+
     // Selecting the maximum number of pages
     $sql = "SELECT * FROM $table_survey_question
             WHERE
                 survey_question NOT LIKE '%{{%' AND 
                 c_id = $course_id AND
-                type = '".Database::escape_string('pagebreak')."' AND
+                type = 'pagebreak' AND
                 survey_id = '".$surveyId."'";
     $result = Database::query($sql);
     $numberofpages = Database::num_rows($result) + 1;
 
     // Displaying the form with the questions
+    $show = 0;
     if (isset($_GET['show'])) {
         $show = (int) $_GET['show'] + 1;
-    } else {
-        $show = 0;
     }
+    $originalShow = isset($_GET['show']) ? (int) $_GET['show'] : 0;
 
     $url = api_get_self().'?survey_id='.$surveyId.'&show='.$show.'&'.api_get_cidreq();
     $form = new FormValidator(
@@ -219,14 +235,25 @@ if (api_is_course_admin() ||
     );
 
     if (is_array($questions) && count($questions) > 0) {
+        $counter = 1;
+        if (!empty($originalShow)) {
+            $before = 0;
+            foreach ($paged_questions as $keyQuestion => $list) {
+                if ($originalShow > $keyQuestion) {
+                    $before += count($list);
+                }
+            }
+            $counter = $before + 1;
+        }
         foreach ($questions as $key => &$question) {
             $ch_type = 'ch_'.$question['type'];
             /** @var survey_question $display */
             $display = new $ch_type();
             $form->addHtml('<div class="survey_question '.$ch_type.'">');
-            $form->addHtml('<h5 class="title">'.$key.'. '.strip_tags($question['survey_question']).'</h5>');
+            $form->addHtml('<h5 class="title">'.$counter.'. '.strip_tags($question['survey_question']).'</h5>');
             $display->render($form, $question);
             $form->addHtml('</div>');
+            $counter++;
         }
     }
     $form->addHtml('<div class="start-survey">');

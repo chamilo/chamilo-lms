@@ -663,6 +663,7 @@ if (
         if (empty($paged_questions)) {
             $sql = "SELECT * FROM $table_survey_question
                     WHERE
+                        survey_question NOT LIKE '%{{%' AND 
                         c_id = $course_id AND 
                         survey_id = '".intval($survey_invitation['survey_id'])."'
                     ORDER BY sort ASC";
@@ -1027,6 +1028,7 @@ if (
                                 ON survey_question.question_id = survey_question_option.question_id AND
                                 survey_question_option.c_id = $course_id
                                 WHERE
+                                    survey_question NOT LIKE '%{{%' AND 
                                     survey_question.survey_id = '".$my_survey_id."' AND
                                     survey_question.c_id = $course_id AND
                                     survey_question.question_id IN (".implode(',', $paged_questions_sec[$val]).")
@@ -1137,6 +1139,7 @@ if (
                             ON survey_question.question_id = survey_question_option.question_id AND
                             survey_question_option.c_id = $course_id
                             WHERE
+                                survey_question NOT LIKE '%{{%' AND 
                                 survey_question.survey_id = '".intval($survey_invitation['survey_id'])."' AND
                                 survey_question.c_id = $course_id  AND
                                 survey_question.question_id IN (".$imploded.")
@@ -1183,7 +1186,7 @@ if (
 $sql = "SELECT * FROM $table_survey_question
         WHERE        
             c_id = $course_id AND
-            type = '".Database::escape_string('pagebreak')."' AND
+            type = 'pagebreak' AND
             survey_id='".intval($survey_invitation['survey_id'])."'";
 $result = Database::query($sql);
 $numberofpages = Database::num_rows($result) + 1;
@@ -1235,12 +1238,27 @@ $form = new FormValidator(
 $form->addHidden('language', $p_l);
 
 if (isset($questions) && is_array($questions)) {
+    $originalShow = isset($_GET['show']) ? (int) $_GET['show'] : 0;
+
+    $questionCounter = 1;
+    if (!empty($originalShow)) {
+        $before = 0;
+        foreach ($paged_questions as $keyQuestion => $list) {
+            if ($originalShow > $keyQuestion) {
+                $before += count($list);
+            }
+        }
+        $questionCounter = $before + 1;
+    }
+
     foreach ($questions as $key => &$question) {
         $ch_type = 'ch_'.$question['type'];
+        //$questionNumber = $question['sort'];
+        $questionNumber = $questionCounter;
         $display = new $ch_type();
         // @todo move this in a function.
         $form->addHtml('<div class="survey_question '.$ch_type.'">');
-        $form->addHtml('<h5 class="title">'.$question['sort'].'. '.strip_tags($question['survey_question']).'</h5>');
+        $form->addHtml('<h5 class="title">'.$questionNumber.'. '.strip_tags($question['survey_question']).'</h5>');
         $userAnswerData = SurveyUtil::get_answers_of_question_by_user($question['survey_id'], $question['question_id']);
         $finalAnswer = null;
 
@@ -1267,6 +1285,7 @@ if (isset($questions) && is_array($questions)) {
         }
         $display->render($form, $question, $finalAnswer);
         $form->addHtml('</div>');
+        $questionCounter++;
     }
 }
 

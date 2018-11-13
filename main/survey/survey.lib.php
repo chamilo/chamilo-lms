@@ -2138,10 +2138,15 @@ class SurveyManager
 
         $classTag = '{{class_name}}';
         $studentTag = '{{student_full_name}}';
-
+        $classCounter = 0;
         foreach ($classList as $class) {
             $className = $class['name'];
             foreach ($questions as $question) {
+                $users = $obj->get_users_by_usergroup($class['id']);
+                if (empty($users)) {
+                    continue;
+                }
+
                 $text = $question['question'];
                 if (strpos($text, $classTag) !== false) {
                     $replacedText = str_replace($classTag, $className, $text);
@@ -2156,10 +2161,10 @@ class SurveyManager
                         'shared_question_id' => 0,
                     ];
                     self::save_question($surveyData, $values);
+                    $classCounter++;
+                    continue;
                 }
 
-                $users = $obj->get_users_by_usergroup($class['id']);
-                //var_dump($question);
                 foreach ($users as $userId) {
                     $userInfo = api_get_user_info($userId);
 
@@ -2188,6 +2193,22 @@ class SurveyManager
                         self::save_question($surveyData, $values);
                     }
                 }
+
+                if ($classCounter < count($classList)) {
+                    // Add end page
+                    $values = [
+                        'c_id' => $courseId,
+                        'question_comment' => 'generated',
+                        'type' => 'pagebreak',
+                        'display' => 'horizontal',
+                        'question' => get_lang('QuestionForNextClass'),
+                        'survey_id' => $surveyId,
+                        'question_id' => 0,
+                        'shared_question_id' => 0,
+                    ];
+                    self::save_question($surveyData, $values);
+                }
+
             }
         }
     }

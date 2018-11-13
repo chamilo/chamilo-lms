@@ -2893,8 +2893,9 @@ class SurveyUtil
             $actions[] = Display::url(
                 Display::return_icon('edit.png', get_lang('Edit')),
                 $codePath.'survey/create_new_survey.php?'
-                    .http_build_query($params + ['action' => 'edit', 'survey_id' => $survey_id])
+                .http_build_query($params + ['action' => 'edit', 'survey_id' => $survey_id])
             );
+
             if (SurveyManager::survey_generation_hash_available()) {
                 $actions[] = Display::url(
                     Display::return_icon('new_link.png', get_lang('GenerateSurveyAccessLink')),
@@ -2937,12 +2938,14 @@ class SurveyUtil
                 );
             }
         }
+
         if ($type != 3) {
             $actions[] = Display::url(
                 Display::return_icon('preview_view.png', get_lang('Preview')),
                 $codePath.'survey/preview.php?'.http_build_query($params + ['survey_id' => $survey_id])
             );
         }
+
         $actions[] = Display::url(
             Display::return_icon('mail_send.png', get_lang('Publish')),
             $codePath.'survey/survey_invite.php?'.http_build_query($params + ['survey_id' => $survey_id])
@@ -2959,9 +2962,9 @@ class SurveyUtil
             $actions[] = Display::url(
                 Display::return_icon('delete.png', get_lang('Delete')),
                 $codePath.'survey/survey_list.php?'
-                    .http_build_query($params + ['action' => 'delete', 'survey_id' => $survey_id]),
+                .http_build_query($params + ['action' => 'delete', 'survey_id' => $survey_id]),
                 [
-                    'onclick' => "javascript: if(!confirm('".$warning."')) return false;",
+                    'onclick' => "javascript: if (!confirm('".$warning."')) return false;",
                 ]
             );
         }

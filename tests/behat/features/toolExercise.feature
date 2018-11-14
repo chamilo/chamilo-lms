@@ -384,7 +384,7 @@ Feature: Exercise tool
       | none          | 80 / 60        | 133.33%        |
       | Total         | 190 / 190      | 100%           |
 
-  Scenario: Teacher see exercise results by categories
+  Scenario: Teacher looks at exercise results by categories
     Given I am on "/user_portal.php"
     And I am on course "TEMP" homepage in session "Session Exercise"
     Then I should see "TEMP (Session Exercise)"
@@ -392,7 +392,7 @@ Feature: Exercise tool
     And I follow "Exercise for Behat test"
     And I follow "Results and feedback"
     Then I should see "Learner score"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     And I follow "Grade activity"
     Then I should see "Score for the test: 190 / 190"
     And I should see the table "#category_results":

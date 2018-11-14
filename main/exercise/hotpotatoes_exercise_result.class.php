@@ -208,60 +208,28 @@ class HotpotatoesExerciseResult
             $exercise_id,
             $hotpotato_name
         );
-        $filename = 'exercise_results_'.api_get_local_time().'.xls';
+        $filename = 'exercise_results_'.api_get_local_time();
         if (!empty($user_id)) {
-            $filename = 'exercise_results_user_'.$user_id.'_'.api_get_local_time().'.xls';
+            $filename = 'exercise_results_user_'.$user_id.'_'.api_get_local_time();
         }
 
-        $spreadsheet = new PHPExcel();
-        $spreadsheet->setActiveSheetIndex(0);
-        $worksheet = $spreadsheet->getActiveSheet();
-
-        $line = 0;
-        $column = 0; //skip the first column (row titles)
-
         // check if exists column 'user'
-        $with_column_user = false;
+        $withColumnUser = false;
         foreach ($this->results as $result) {
             if (!empty($result['last_name']) && !empty($result['first_name'])) {
-                $with_column_user = true;
+                $withColumnUser = true;
                 break;
             }
         }
-
-        if ($with_column_user) {
-            $worksheet->setCellValueByColumnAndRow(
-                $column,
-                $line,
-                get_lang('Email')
-            );
-            $column++;
+        $list = [];
+        if ($withColumnUser) {
+            $list[0][] = get_lang('Email');
             if (api_is_western_name_order()) {
-                $worksheet->setCellValueByColumnAndRow(
-                    $column,
-                    $line,
-                    get_lang('FirstName')
-                );
-                $column++;
-                $worksheet->setCellValueByColumnAndRow(
-                    $column,
-                    $line,
-                    get_lang('LastName')
-                );
-                $column++;
+                $list[0][] = get_lang('FirstName');
+                $list[0][] = get_lang('LastName');
             } else {
-                $worksheet->setCellValueByColumnAndRow(
-                    $column,
-                    $line,
-                    get_lang('LastName')
-                );
-                $column++;
-                $worksheet->setCellValueByColumnAndRow(
-                    $column,
-                    $line,
-                    get_lang('FirstName')
-                );
-                $column++;
+                $list[0][] = get_lang('LastName');
+                $list[0][] = get_lang('FirstName');
             }
         }
 
@@ -278,157 +246,80 @@ class HotpotatoesExerciseResult
 
             //show the fields names for user fields
             foreach ($extra_user_fields as $field) {
-                $worksheet->setCellValueByColumnAndRow(
-                    $column,
-                    $line,
-                    api_html_entity_decode(
-                        strip_tags($field[3]),
-                        ENT_QUOTES,
-                        $charset
-                    )
+                $list[0][] = api_html_entity_decode(
+                    strip_tags($field[3]),
+                    ENT_QUOTES,
+                    $charset
                 );
-                $column++;
             }
         }
 
-        $worksheet->setCellValueByColumnAndRow(
-            $column,
-            $line,
-            get_lang('Title')
-        );
-        $column++;
-        $worksheet->setCellValueByColumnAndRow(
-            $column,
-            $line,
-            get_lang('StartDate')
-        );
-        $column++;
-        $worksheet->setCellValueByColumnAndRow(
-            $column,
-            $line,
-            get_lang('EndDate')
-        );
-        $column++;
-        $worksheet->setCellValueByColumnAndRow(
-            $column,
-            $line,
-            get_lang('Duration').' ('.get_lang('MinMinutes').')'
-        );
-        $column++;
-        $worksheet->setCellValueByColumnAndRow(
-            $column,
-            $line,
-            get_lang('Score')
-        );
-        $column++;
-        $worksheet->setCellValueByColumnAndRow(
-            $column,
-            $line,
-            get_lang('Total')
-        );
-        $column++;
-        $worksheet->setCellValueByColumnAndRow(
-            $column,
-            $line,
-            get_lang('Status')
-        );
-        $line++;
+        $list[0][] = get_lang('Title');
+        $list[0][] = get_lang('StartDate');
+        $list[0][] = get_lang('EndDate');
+        $list[0][] = get_lang('Duration').' ('.get_lang('MinMinutes').')';
+        $list[0][] = get_lang('Score');
+        $list[0][] = get_lang('Total');
+        $list[0][] = get_lang('Status');
 
+        $column = 1;
         foreach ($this->results as $row) {
-            $column = 0;
-
-            if ($with_column_user) {
-                $worksheet->setCellValueByColumnAndRow(
-                    $column,
-                    $line,
-                    api_html_entity_decode(
-                        strip_tags($row['email']),
-                        ENT_QUOTES,
-                        $charset
-                    )
+            if ($withColumnUser) {
+                $list[$column][] = api_html_entity_decode(
+                    strip_tags($row['email']),
+                    ENT_QUOTES,
+                    $charset
                 );
-                $column++;
 
                 if (api_is_western_name_order()) {
-                    $worksheet->setCellValueByColumnAndRow(
-                        $column,
-                        $line,
-                        api_html_entity_decode(
-                            strip_tags($row['first_name']),
-                            ENT_QUOTES,
-                            $charset
-                        )
+                    $list[$column][] = api_html_entity_decode(
+                        strip_tags($row['first_name']),
+                        ENT_QUOTES,
+                        $charset
                     );
-                    $column++;
-                    $worksheet->setCellValueByColumnAndRow(
-                        $column,
-                        $line,
-                        api_html_entity_decode(
-                            strip_tags($row['last_name']),
-                            ENT_QUOTES,
-                            $charset
-                        )
+                    $list[$column][] = api_html_entity_decode(
+                        strip_tags($row['last_name']),
+                        ENT_QUOTES,
+                        $charset
                     );
-                    $column++;
                 } else {
-                    $worksheet->setCellValueByColumnAndRow(
-                        $column,
-                        $line,
-                        api_html_entity_decode(
-                            strip_tags($row['last_name']),
-                            ENT_QUOTES,
-                            $charset
-                        )
+                    $list[$column][] = api_html_entity_decode(
+                        strip_tags($row['last_name']),
+                        ENT_QUOTES,
+                        $charset
                     );
-                    $column++;
-                    $worksheet->setCellValueByColumnAndRow(
-                        $column,
-                        $line,
-                        api_html_entity_decode(
-                            strip_tags($row['first_name']),
-                            ENT_QUOTES,
-                            $charset
-                        )
+                    $list[$column][] = api_html_entity_decode(
+                        strip_tags($row['first_name']),
+                        ENT_QUOTES,
+                        $charset
                     );
-                    $column++;
                 }
             }
 
             if ($export_user_fields) {
                 //show user fields data, if any, for this user
-                $user_fields_values = UserManager::get_extra_user_data(
+                $values = UserManager::get_extra_user_data(
                     $row['user_id'],
                     false,
                     false,
                     false,
                     true
                 );
-                foreach ($user_fields_values as $value) {
-                    $worksheet->setCellValueByColumnAndRow($column, $line, api_html_entity_decode(strip_tags($value), ENT_QUOTES, $charset));
-                    $column++;
+                foreach ($values as $value) {
+                    $list[$column][] = api_html_entity_decode(strip_tags($value), ENT_QUOTES, $charset);
                 }
             }
 
-            $worksheet->setCellValueByColumnAndRow($column, $line, api_html_entity_decode(strip_tags($row['title']), ENT_QUOTES, $charset));
-            $column++;
-            $worksheet->setCellValueByColumnAndRow($column, $line, $row['start_date']);
-            $column++;
-            $worksheet->setCellValueByColumnAndRow($column, $line, $row['end_date']);
-            $column++;
-            $worksheet->setCellValueByColumnAndRow($column, $line, $row['duration']);
-            $column++;
-            $worksheet->setCellValueByColumnAndRow($column, $line, $row['result']);
-            $column++;
-            $worksheet->setCellValueByColumnAndRow($column, $line, $row['max']);
-            $column++;
-            $worksheet->setCellValueByColumnAndRow($column, $line, $row['status']);
-            $line++;
+            $list[$column][] = api_html_entity_decode(strip_tags($row['title']), ENT_QUOTES, $charset);
+            $list[$column][] = $row['start_date'];
+            $list[$column][] = $row['end_date'];
+            $list[$column][] = $row['duration'];
+            $list[$column][] = $row['result'];
+            $list[$column][] = $row['max'];
+            $list[$column][] = $row['status'];
         }
 
-        $file = api_get_path(SYS_ARCHIVE_PATH).api_replace_dangerous_char($filename);
-        $writer = new PHPExcel_Writer_Excel2007($spreadsheet);
-        $writer->save($file);
-        DocumentManager::file_send_for_download($file, true, $filename);
+        Export::arrayToXls($list, $filename);
 
         return true;
     }

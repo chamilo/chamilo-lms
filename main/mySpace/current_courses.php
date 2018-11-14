@@ -9,7 +9,7 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_TRACKING;
 
-$filename = 'reporting.xlsx';
+$filename = 'reporting';
 
 if (!api_is_allowed_to_create_course()) {
     api_not_allowed(true);
@@ -212,37 +212,11 @@ $headers = [
 ];
 
 if (isset($_GET['export'])) {
-    global $charset;
-    $spreadsheet = new PHPExcel();
-    $spreadsheet->setActiveSheetIndex(0);
-    $worksheet = $spreadsheet->getActiveSheet();
-
-    $line = 0;
-    $column = 0; //skip the first column (row titles)
-
-    foreach ($headers as $header) {
-        $worksheet->setCellValueByColumnAndRow($column, $line, $header);
-        $column++;
-    }
-    $line++;
-    foreach ($array as $row) {
-        $column = 0;
-        foreach ($row as $item) {
-            $worksheet->setCellValueByColumnAndRow(
-                $column,
-                $line,
-                html_entity_decode(strip_tags($item))
-            );
-            $column++;
-        }
-        $line++;
-    }
-    $line++;
-
-    $file = api_get_path(SYS_ARCHIVE_PATH).api_replace_dangerous_char($filename);
-    $writer = new PHPExcel_Writer_Excel2007($spreadsheet);
-    $writer->save($file);
-    DocumentManager::file_send_for_download($file, true, $filename);
+    $list = [
+        0 => $headers,
+        1 => $array[0],
+    ];
+    Export::arrayToXls($list, $filename);
     exit;
 }
 

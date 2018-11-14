@@ -3,8 +3,8 @@
 
 use Chamilo\CoreBundle\Component\Editor\Connector;
 use Chamilo\CoreBundle\Component\Filesystem\Data;
-use Ddeboer\DataImport\Writer\CsvWriter;
-use Ddeboer\DataImport\Writer\ExcelWriter;
+use Port\Csv\CsvWriter;
+use Port\Excel\ExcelWriter;
 use MediaAlchemyst\Alchemyst;
 use MediaAlchemyst\DriversContainer;
 use Neutron\TemporaryFilesystem\Manager;

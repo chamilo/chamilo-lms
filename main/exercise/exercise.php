@@ -19,6 +19,8 @@ use ChamiloSession as Session;
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_QUIZ;
 
+$charset = 'UTF-8';
+
 // Setting the tabs
 $this_section = SECTION_COURSES;
 

@@ -86,46 +86,31 @@ class GradeBookResult
      */
     public function exportCompleteReportXLS($data)
     {
-        $filename = 'gradebook-results-'.api_get_local_time().'.xlsx';
-
-        $spreadsheet = new PHPExcel();
-        $spreadsheet->setActiveSheetIndex(0);
-        $worksheet = $spreadsheet->getActiveSheet();
-
-        $line = 1;
-        $column = 0;
-
+        $filename = 'gradebook-results-'.api_get_local_time();
+        $list = [];
         //headers
         foreach ($data[0] as $header_col) {
-            $worksheet->SetCellValueByColumnAndRow(
-                $column,
-                $line,
-                html_entity_decode(strip_tags($header_col))
-            );
-            $column++;
+            $list[0][] = html_entity_decode(strip_tags($header_col));
         }
-        $line++;
-
         $cant_students = count($data[1]);
-
+        $line = 0;
         for ($i = 0; $i < $cant_students; $i++) {
             $column = 0;
             foreach ($data[1][$i] as $col_name) {
-                $worksheet->SetCellValueByColumnAndRow(
+                $list[$column][$line] = html_entity_decode(strip_tags($col_name));
+                /*$worksheet->SetCellValueByColumnAndRow(
                     $column,
                     $line,
                     html_entity_decode(strip_tags($col_name))
-                );
+                );*/
                 $column++;
             }
             $line++;
         }
 
-        $file = api_get_path(SYS_ARCHIVE_PATH).api_replace_dangerous_char($filename);
-        $writer = new PHPExcel_Writer_Excel2007($spreadsheet);
-        $writer->save($file);
-        DocumentManager::file_send_for_download($file, true, $filename);
-        exit;
+        Export::arrayToXls($list, $filename);
+
+        return true;
     }
 
     /**

@@ -18,7 +18,7 @@ class ImsLtiServiceReplaceRequest extends ImsLtiServiceRequest
     {
         parent::__construct($xml);
 
-        $this->responseType = ImsLtiServiceResponse::TYPE_DELETE;
+        $this->responseType = ImsLtiServiceResponse::TYPE_REPLACE;
         $this->xmlRequest = $this->xmlRequest->replaceResultRequest;
     }
 

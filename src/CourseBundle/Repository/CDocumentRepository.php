@@ -9,11 +9,9 @@ use Doctrine\ORM\EntityRepository;
 use Gaufrette\Exception\FileNotFound;
 use Sonata\MediaBundle\Provider\MediaProviderInterface;
 use Sonata\MediaBundle\Provider\Pool;
-use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
 /**
  * Class CDocumentRepository.
- *
  */
 class CDocumentRepository
 {
@@ -61,7 +59,7 @@ class CDocumentRepository
      *
      * @return string
      */
-    public function getDocumentPath($id) :string
+    public function getDocumentPath($id): string
     {
         try {
             $document = $this->find($id);
@@ -78,7 +76,6 @@ class CDocumentRepository
                 $provider->getFilesystem()->getAdapter()->getDirectory(),
                 $provider->generatePrivateUrl($media, $format)
             );
-
 
             return $filename;
         } catch (\Throwable $exception) {

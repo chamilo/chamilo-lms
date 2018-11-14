@@ -120,7 +120,7 @@ switch ($action) {
         );
         $list = [];
         $tmp = [];
-        foreach ($toolList as $tool){
+        foreach ($toolList as $tool) {
             $tmp['id'] = $tool['id'];
 
             $tmp['name'] = Security::remove_XSS(stripslashes($tool['name']));

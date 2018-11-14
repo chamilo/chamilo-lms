@@ -6,7 +6,6 @@ use Chamilo\CoreBundle\Entity\Repository\ItemPropertyRepository;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
-use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpCategory;
@@ -6876,7 +6875,7 @@ class learnpath
 
         $folder = false;
         //if (!is_dir($filepath.'/'.$dir)) {
-            $folderData = create_unexisting_directory(
+        $folderData = create_unexisting_directory(
                 $course,
                 $creatorId,
                 0,
@@ -6887,9 +6886,9 @@ class learnpath
                 get_lang('LearningPaths'),
                 0
             );
-            if (!empty($folderData)) {
-                $folder = true;
-            }
+        if (!empty($folderData)) {
+            $folder = true;
+        }
         /*} else {
             $folder = true;
         }*/
@@ -6925,7 +6924,7 @@ class learnpath
         if ($folder) {
             $filepath = api_get_path(SYS_COURSE_PATH).$course['path'].'/document';
             //if (!is_dir($filepath.'/'.$dir)) {
-                $folderData = create_unexisting_directory(
+            $folderData = create_unexisting_directory(
                     $course,
                     $creatorId,
                     0,
@@ -6935,11 +6934,11 @@ class learnpath
                     $dir,
                     $lp_name
                 );
-                if (!empty($folderData)) {
-                    $folder = true;
-                }
+            if (!empty($folderData)) {
+                $folder = true;
+            }
 
-                $documentId = $folderData->getIid();
+            $documentId = $folderData->getIid();
             /*} else {
                 $folder = true;
             }*/

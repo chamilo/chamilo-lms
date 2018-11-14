@@ -2,9 +2,9 @@
 /* See license terms in /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
-use Mpdf\Output\Destination;
-use Mpdf\Mpdf;
 use Masterminds\HTML5;
+use Mpdf\Mpdf;
+use Mpdf\Output\Destination;
 
 /**
  * Class PDF.
@@ -100,7 +100,7 @@ class PDF
      * Export the given HTML to PDF, using a global template.
      *
      * @uses \export/table_pdf.tpl
- *
+     *
      * @param string     $content
      * @param bool|false $saveToFile
      * @param bool|false $returnHtml
@@ -188,20 +188,20 @@ class PDF
     /**
      * Converts HTML files to PDF.
      *
-     * @param mixed  $htmlFileArray could be an html file path or an array
-     *                                with paths example:
-     *                                /var/www/myfile.html or array('/myfile.html','myotherfile.html') or
-     *                                even an indexed array with both 'title' and 'path' indexes
-     *                                for each element like
-     *                                array(
-     *                                0 => array('title'=>'Hello','path'=>'file.html'),
-     *                                1 => array('title'=>'Bye','path'=>'file2.html')
-     *                                );
+     * @param mixed  $htmlFileArray  could be an html file path or an array
+     *                               with paths example:
+     *                               /var/www/myfile.html or array('/myfile.html','myotherfile.html') or
+     *                               even an indexed array with both 'title' and 'path' indexes
+     *                               for each element like
+     *                               array(
+     *                               0 => array('title'=>'Hello','path'=>'file.html'),
+     *                               1 => array('title'=>'Bye','path'=>'file2.html')
+     *                               );
      * @param string $pdfName        pdf name
      * @param string $courseCode     (if you are using html that are located
-     *                                in the document tool you must provide this)
-     * @param bool   $print_title     add title
-     * @param bool   $complete_style  show header and footer if true
+     *                               in the document tool you must provide this)
+     * @param bool   $print_title    add title
+     * @param bool   $complete_style show header and footer if true
      * @param bool   $addStyle
      *
      * @return false|null
@@ -356,7 +356,7 @@ class PDF
      * @param string $document_html  valid html
      * @param string $css            CSS content of a CSS file
      * @param string $pdf_name       pdf name
-     * @param string $courseCode    course code
+     * @param string $courseCode     course code
      *                               (if you are using html that are located in the document tool you must provide this)
      * @param string $outputMode     the MPDF output mode can be:
      * @param bool   $saveInFile
@@ -712,7 +712,7 @@ class PDF
      * header, footer and watermark (if any).
      *
      * @param array $courseInfo General course information (to fill headers)
-     * @param bool  $complete    Whether we want headers, footers and watermark or not
+     * @param bool  $complete   Whether we want headers, footers and watermark or not
      */
     public function format_pdf($courseInfo, $complete = true)
     {

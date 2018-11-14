@@ -1502,7 +1502,6 @@ function search_img_from_html($html_file)
  * @param bool   $sendNotification        depends in conf setting "send_notification_when_document_added"
  *
  * @return CDocument|false
- *
  */
 function create_unexisting_directory(
     $_course,

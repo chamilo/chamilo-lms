@@ -720,7 +720,6 @@ $form->addPanelOption(
 
 // ********** EXERCISE ********************* //
 if (api_get_configuration_value('allow_exercise_auto_launch')) {
-
     $globalGroup = [];
 
     // Auto launch exercise
@@ -762,7 +761,6 @@ if (api_get_configuration_value('allow_exercise_auto_launch')) {
         false,
         'accordionSettings'
     );
-
 }
 
 // *************** START THEMATIC  *************/

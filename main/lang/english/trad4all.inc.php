@@ -4005,6 +4005,7 @@ $NeverExpires = "Never expires";
 $ActiveAccount = "Account";
 $YourAccountHasToBeApproved = "Your account has to be approved";
 $ApprovalForNewAccount = "Approval for new account";
+$NoticeForNewAccount = "Notice for new account";
 $ManageUser = "Manage user";
 $SubscribeUserToCourseAsTeacher = "Enroll teachers";
 $PasswordEncryptedForSecurity = "Your password is encrypted for security reasons. Thus, after pressing the link an e-mail will be sent to you again with your password.";

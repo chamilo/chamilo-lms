@@ -4005,6 +4005,7 @@ $NeverExpires = "Nunca caduca";
 $ActiveAccount = "Activar cuenta";
 $YourAccountHasToBeApproved = "Su registro deberá ser aprobado posteriormente";
 $ApprovalForNewAccount = "Validación de una nueva cuenta";
+$NoticeForNewAccount = "Notificación de una nueva cuenta";
 $ManageUser = "Gestión de usuario";
 $SubscribeUserToCourseAsTeacher = "Inscribir profesores";
 $PasswordEncryptedForSecurity = "Su contraseña está encriptada para su seguridad. Por ello, cuando haya pulsado en el enlace para regenerar su clave se le remitirá un nuevo correo que contendrá su contraseña.";

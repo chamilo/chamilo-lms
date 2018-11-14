@@ -820,6 +820,44 @@ if ($form->validate()) {
                 }
             }
 
+            $inscriptionNoticeAdmin = api_get_configuration_value('inscription_notice_admin');
+            if ($inscriptionNoticeAdmin) {
+                // Send mail to all platform admin
+                $emailsubject = get_lang('NoticeForNewAccount').': '.$values['username'];
+                $emailbody = get_lang('NoticeForNewAccount')."<br>";
+                $emailbody .= get_lang('UserName').': '.$values['username']."<br>";
+                
+                if (api_is_western_name_order()) {
+                    $emailbody .= get_lang('FirstName').': '.$values['firstname']."<br>";
+                    $emailbody .= get_lang('LastName').': '.$values['lastname']."<br>";
+                } else {
+                    $emailbody .= get_lang('LastName').': '.$values['lastname']."<br>";
+                    $emailbody .= get_lang('FirstName').': '.$values['firstname']."<br>";
+                }
+                $emailbody .= get_lang('Email').': '.$values['email']."<br>";
+                $emailbody .= get_lang('Status').': '.api_get_status_langvars()[$values['status']]."<br>";
+                $emailbody .= get_lang('Phone').': '.$values['phone']."<br>";
+                $emailbody .= get_lang('OfficialCode').': '.$values['official_code']."<br><br>";
+
+                $url_edit = Display::url(
+                    api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id,
+                    api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id
+                );
+
+                $emailbody .= get_lang('ManageUser').": $url_edit";
+                
+                $admins = UserManager::get_all_administrators();
+                foreach ($admins as $admin_info) {
+                    $userInfo = api_get_user_info($user_id);
+                    api_mail_html(
+                        $userInfo['complete_name'],
+                        $userInfo['mail'],
+                        Security::filter_terms($emailsubject),
+                        Security::filter_terms($emailbody)
+                    );
+                }
+            }
+
             /* If the account has to be approved then we set the account to inactive,
             sent a mail to the platform admin and exit the page.*/
             if (api_get_setting('allow_registration') === 'approval') {

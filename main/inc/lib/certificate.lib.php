@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Endroid\QrCode\QrCode;
+
 /**
  * Certificate Class
  * Generate certificates based in the gradebook tool.
@@ -511,8 +513,14 @@ class Certificate extends Model
     {
         // Make sure HTML certificate is generated
         if (!empty($text) && !empty($path)) {
+            $qrCode = new QrCode($text);
+            $qrCode->setWriterByName('png');
+            $qrCode->writeFile($path);
+
             //L low, M - Medium, L large error correction
-            return PHPQRCode\QRcode::png($text, $path, 'M', 2, 2);
+            //return QrCode::png($text, $path, 'M', 2, 2);
+
+            return file_exists($path);
         }
 
         return false;

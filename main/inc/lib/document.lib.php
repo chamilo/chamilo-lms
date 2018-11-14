@@ -2742,27 +2742,40 @@ class DocumentManager
     /**
      * Export document to PDF.
      *
-     * @param int    $document_id
+     * @param int    $documentId
      * @param string $courseCode
      * @param string $orientation
      * @param bool   $showHeaderAndFooter
      */
     public static function export_to_pdf(
-        $document_id,
+        $documentId,
         $courseCode,
         $orientation = 'landscape',
         $showHeaderAndFooter = true
     ) {
         $course_data = api_get_course_info($courseCode);
-        $document_data = self::get_document_data_by_id($document_id, $courseCode);
-        $file_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/document'.$document_data['path'];
-        if ($orientation == 'landscape') {
+        $repo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
+        $document = $repo->find($documentId);
+
+        if (empty($document)) {
+            return false;
+        }
+
+        $filePath = $repo->getDocumentPath($documentId);
+
+        if (empty($filePath)) {
+            return false;
+        }
+
+        $title = $document->getTitle();
+        //$filePath = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/document'.$document_data['path'];
+        $pageFormat = 'A4';
+        $pdfOrientation = 'P';
+        if ($orientation === 'landscape') {
             $pageFormat = 'A4-L';
             $pdfOrientation = 'L';
-        } else {
-            $pageFormat = 'A4';
-            $pdfOrientation = 'P';
         }
+
         $pdf = new PDF(
             $pageFormat,
             $pdfOrientation,
@@ -2779,12 +2792,13 @@ class DocumentManager
         }
 
         $pdf->html_to_pdf(
-            $file_path,
-            $document_data['title'],
+            $filePath,
+            $title,
             $courseCode,
             false,
             $showHeaderAndFooter
         );
+        exit;
     }
 
     /**
@@ -6589,7 +6603,7 @@ class DocumentManager
         $courseParams = api_get_cidreq();
         $webOdfExtensionList = self::get_web_odf_extension_list();
         $path = $documentData['path'];
-        $document_id = $documentData['id'];
+        $documentId = $documentData['id'];
 
         if ($isReadOnly) {
             if (!api_is_course_admin() && !api_is_platform_admin()) {
@@ -6600,24 +6614,24 @@ class DocumentManager
                 $extension == 'svg' && api_browser_support('svg') &&
                 api_get_setting('enabled_support_svg') == 'true'
             ) {
-                return Display::url($iconEn, "edit_draw.php?$courseParams&id=$document_id");
+                return Display::url($iconEn, "edit_draw.php?$courseParams&id=$documentId");
             }
 
             if (
                 in_array($extension, $webOdfExtensionList) &&
                 api_get_configuration_value('enabled_support_odf') === true
             ) {
-                return Display::url($iconEn, "edit_odf.php?$courseParams&id=$document_id");
+                return Display::url($iconEn, "edit_odf.php?$courseParams&id=$documentId");
             }
 
             if (
                 in_array($extension, ['png', 'jpg', 'jpeg', 'bmp', 'gif', 'pxd']) &&
                     api_get_setting('enabled_support_pixlr') == 'true'
             ) {
-                return Display::url($iconEn, "edit_paint.php?$courseParams&id=$document_id");
+                return Display::url($iconEn, "edit_paint.php?$courseParams&id=$documentId");
             }
 
-            return Display::url($iconEn, "edit_document.php?$courseParams&id=$document_id");
+            return Display::url($iconEn, "edit_document.php?$courseParams&id=$documentId");
         }
 
         if (in_array($path, self::get_system_folders())) {
@@ -6625,7 +6639,7 @@ class DocumentManager
         }
 
         if ($isCertificateMode) {
-            return Display::url($iconEn, "edit_document.php?$courseParams&id=$document_id&curdirpath=/certificates");
+            return Display::url($iconEn, "edit_document.php?$courseParams&id=$documentId&curdirpath=/certificates");
         }
 
         $sessionId = api_get_session_id();
@@ -6638,24 +6652,24 @@ class DocumentManager
             $extension == 'svg' && api_browser_support('svg') &&
             api_get_setting('enabled_support_svg') == 'true'
         ) {
-            return Display::url($iconEn, "edit_draw.php?$courseParams&id=$document_id");
+            return Display::url($iconEn, "edit_draw.php?$courseParams&id=$documentId");
         }
 
         if (
             in_array($extension, $webOdfExtensionList) &&
             api_get_configuration_value('enabled_support_odf') === true
         ) {
-            return Display::url($iconEn, "edit_odf.php?$courseParams&id=$document_id");
+            return Display::url($iconEn, "edit_odf.php?$courseParams&id=$documentId");
         }
 
         if (
             in_array($extension, ['png', 'jpg', 'jpeg', 'bmp', 'gif', 'pxd']) &&
                 api_get_setting('enabled_support_pixlr') == 'true'
         ) {
-            return Display::url($iconEn, "edit_paint.php?$courseParams&id=$document_id");
+            return Display::url($iconEn, "edit_paint.php?$courseParams&id=$documentId");
         }
 
-        return Display::url($iconEn, "edit_document.php?$courseParams&id=$document_id");
+        return Display::url($iconEn, "edit_document.php?$courseParams&id=$documentId");
     }
 
     /**

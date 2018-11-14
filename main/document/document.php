@@ -43,6 +43,7 @@ $actionsRight = '';
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 $allowUseTool = false;
 $em = Database::getManager();
+$charset = 'utf-8';
 
 if ($allowDownloadDocumentsByApiKey) {
     try {
@@ -399,10 +400,8 @@ switch ($action) {
         if (api_get_setting('students_export2pdf') == 'true' ||
             $isAllowedToEdit || api_is_platform_admin()
         ) {
-            $documentOrientation = api_get_configuration_value('document_pdf_orientation');
-            $orientation = in_array($documentOrientation, ['landscape', 'portrait'])
-                ? $documentOrientation
-                : 'landscape';
+            $orientation = api_get_configuration_value('document_pdf_orientation');
+            $orientation = in_array($orientation, ['landscape', 'portrait']) ? $orientation : 'landscape';
 
             $showHeaderAndFooter = true;
             if ($is_certificate_mode) {

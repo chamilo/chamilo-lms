@@ -25,8 +25,8 @@ define('SHOW_ERROR_CODES', false);
 // 2. Empty username is formally valid, but it is reserved for the anonymous user.
 // 3. Checking the login_is_email portal setting in order to accept 100 chars maximum
 define('USERNAME_MAX_LENGTH', 100);
-define('_MPDF_TEMP_PATH', __DIR__.'/../../var/cache/mpdf/');
-define('_MPDF_TTFONTDATAPATH', __DIR__.'/../../var/cache/mpdf/');
+//define('_MPDF_TEMP_PATH', __DIR__.'/../../var/cache/mpdf/');
+//define('_MPDF_TTFONTDATAPATH', __DIR__.'/../../var/cache/mpdf/');
 
 require_once __DIR__.'/../../vendor/autoload.php';
 require_once __DIR__.'/../../public/legacy.php';

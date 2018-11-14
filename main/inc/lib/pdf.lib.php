@@ -2,6 +2,9 @@
 /* See license terms in /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Mpdf\Output\Destination;
+use Mpdf\Mpdf;
+use Masterminds\HTML5;
 
 /**
  * Class PDF.
@@ -10,7 +13,7 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
  */
 class PDF
 {
-    /** @var mPDF */
+    /** @var Mpdf */
     public $pdf;
     public $custom_header = [];
     public $custom_footer = [];
@@ -58,7 +61,7 @@ class PDF
         $this->params['pdf_date'] = isset($params['pdf_date']) ? $params['pdf_date'] : api_format_date($localTime, DATE_TIME_FORMAT_LONG);
         $this->params['pdf_date_only'] = isset($params['pdf_date']) ? $params['pdf_date'] : api_format_date($localTime, DATE_FORMAT_LONG);
 
-        $this->pdf = new mPDF(
+        /*$this->pdf = new Mpdf(
             'UTF-8',
             $pageFormat,
             '',
@@ -70,22 +73,35 @@ class PDF
             8,
             8,
             $orientation
-        );
+        );*/
+        $params = [
+            'tempDir' => api_get_path(SYS_ARCHIVE_PATH).'mpdf',
+            'mode' => 'utf-8',
+            'format' => $pageFormat,
+            'orientation' => $orientation,
+            'margin_left' => $params['left'],
+            'margin_right' => $params['right'],
+            'margin_top' => $params['top'],
+            'margin_bottom' => $params['bottom'],
+            'margin_header' => 8,
+            'margin_footer' => 8,
+        ];
 
         // Default value is 96 set in the mpdf library file config.php
         $value = api_get_configuration_value('pdf_img_dpi');
         if (!empty($value)) {
-            $this->pdf->img_dpi = (int) $value;
+            $params['img_dpi'] = (int) $value;
         }
+
+        $this->pdf = new Mpdf($params);
     }
 
     /**
      * Export the given HTML to PDF, using a global template.
      *
      * @uses \export/table_pdf.tpl
-
-     *
-     * @param $content
+ *
+     * @param string     $content
      * @param bool|false $saveToFile
      * @param bool|false $returnHtml
      * @param bool       $addDefaultCss (bootstrap/default/base.css)
@@ -172,7 +188,7 @@ class PDF
     /**
      * Converts HTML files to PDF.
      *
-     * @param mixed  $html_file_array could be an html file path or an array
+     * @param mixed  $htmlFileArray could be an html file path or an array
      *                                with paths example:
      *                                /var/www/myfile.html or array('/myfile.html','myotherfile.html') or
      *                                even an indexed array with both 'title' and 'path' indexes
@@ -181,8 +197,8 @@ class PDF
      *                                0 => array('title'=>'Hello','path'=>'file.html'),
      *                                1 => array('title'=>'Bye','path'=>'file2.html')
      *                                );
-     * @param string $pdf_name        pdf name
-     * @param string $course_code     (if you are using html that are located
+     * @param string $pdfName        pdf name
+     * @param string $courseCode     (if you are using html that are located
      *                                in the document tool you must provide this)
      * @param bool   $print_title     add title
      * @param bool   $complete_style  show header and footer if true
@@ -191,33 +207,28 @@ class PDF
      * @return false|null
      */
     public function html_to_pdf(
-        $html_file_array,
-        $pdf_name = '',
-        $course_code = null,
-        $print_title = false,
+        $htmlFileArray,
+        $pdfName = '',
+        $courseCode = null,
+        $printTitle = false,
         $complete_style = true,
         $addStyle = true
     ) {
-        if (empty($html_file_array)) {
+        if (empty($htmlFileArray)) {
             return false;
         }
 
-        if (is_array($html_file_array)) {
-            if (count($html_file_array) == 0) {
-                return false;
-            }
-        } else {
-            if (!file_exists($html_file_array)) {
+        if (!is_array($htmlFileArray)) {
+            if (!file_exists($htmlFileArray)) {
                 return false;
             }
             // Converting the string into an array
-            $html_file_array = [$html_file_array];
+            $htmlFileArray = [$htmlFileArray];
         }
 
-        if (!empty($course_code)) {
-            $course_data = api_get_course_info($course_code);
-        } else {
-            $course_data = api_get_course_info();
+        $courseInfo = api_get_course_info();
+        if (!empty($courseCode)) {
+            $courseInfo = api_get_course_info($courseCode);
         }
 
         // Clean styles and javascript document
@@ -227,39 +238,39 @@ class PDF
         ];
 
         // Formatting the pdf
-        self::format_pdf($course_data, $complete_style);
+        self::format_pdf($courseInfo, $complete_style);
 
         $counter = 1;
-        foreach ($html_file_array as $file) {
+        foreach ($htmlFileArray as $file) {
             //Add a page break per file
-            $page_break = '<pagebreak>';
-            if ($counter == count($html_file_array)) {
-                $page_break = '';
+            $pageBreak = '<pagebreak>';
+            if ($counter == count($htmlFileArray)) {
+                $pageBreak = '';
             }
             $counter++;
 
             //if the array provided contained subarrays with 'title' entry,
             // then print the title in the PDF
             if (is_array($file) && isset($file['title'])) {
-                $html_title = $file['title'];
+                $htmlTitle = $file['title'];
                 $file = $file['path'];
             } else {
                 //we suppose we've only been sent a file path
-                $html_title = basename($file);
+                $htmlTitle = basename($file);
             }
 
-            if (empty($file) && !empty($html_title)) {
+            if (empty($file) && !empty($htmlTitle)) {
                 //this is a chapter, print title & skip the rest
-                if ($print_title) {
+                if ($printTitle) {
                     $this->pdf->WriteHTML(
-                        '<html><body><h3>'.$html_title.'</h3></body></html>'.$page_break
+                        '<html><body><h3>'.$htmlTitle.'</h3></body></html>'.$pageBreak
                     );
                 }
                 continue;
             }
 
             if (!file_exists($file)) {
-                //the file doesn't exist, skip
+                // the file doesn't exist, skip
                 continue;
             }
 
@@ -270,10 +281,8 @@ class PDF
             }
 
             //it's not a chapter but the file exists, print its title
-            if ($print_title) {
-                $this->pdf->WriteHTML(
-                    '<html><body><h3>'.$html_title.'</h3></body></html>'
-                );
+            if ($printTitle) {
+                $this->pdf->WriteHTML('<html><body><h3>'.$htmlTitle.'</h3></body></html>', 2);
             }
 
             $file_info = pathinfo($file);
@@ -290,54 +299,54 @@ class PDF
                     $filename = basename($filename, '.htm');
                 }
 
-                $document_html = @file_get_contents($file);
-                $document_html = preg_replace($clean_search, '', $document_html);
+                $documentHtml = @file_get_contents($file);
+                $documentHtml = preg_replace($clean_search, '', $documentHtml);
 
                 //absolute path for frames.css //TODO: necessary?
                 $absolute_css_path = api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/frames.css';
-                $document_html = str_replace('href="./css/frames.css"', $absolute_css_path, $document_html);
-
-                if (!empty($course_data['path'])) {
-                    $document_html = str_replace('../', '', $document_html);
+                $documentHtml = str_replace('href="./css/frames.css"', $absolute_css_path, $documentHtml);
+                if (!empty($courseInfo['path'])) {
+                    $documentHtml = str_replace('../', '', $documentHtml);
 
                     // Fix app/upload links convert web to system paths
-                    $document_html = str_replace(
+                    $documentHtml = str_replace(
                         api_get_path(WEB_UPLOAD_PATH),
                         api_get_path(SYS_UPLOAD_PATH),
-                        $document_html
+                        $documentHtml
                     );
                 }
 
-                $document_html = self::fixImagesPaths($document_html, $course_data, $dirName);
-
+                $documentHtml = self::fixImagesPaths($documentHtml, $courseInfo, $dirName);
                 // The library mPDF expects UTF-8 encoded input data.
-                api_set_encoding_html($document_html, 'UTF-8');
+                api_set_encoding_html($documentHtml, 'UTF-8');
                 // TODO: Maybe it is better idea the title to be passed through
-                $title = api_get_title_html($document_html, 'UTF-8', 'UTF-8');
+                $title = api_get_title_html($documentHtml, 'UTF-8', 'UTF-8');
                 // $_GET[] too, as it is done with file name.
                 // At the moment the title is retrieved from the html document itself.
-                //echo $document_html;exit;
+                //echo $documentHtml;exit;
                 if (empty($title)) {
                     $title = $filename; // Here file name is expected to contain ASCII symbols only.
                 }
-                if (!empty($document_html)) {
-                    $this->pdf->WriteHTML($document_html.$page_break);
+
+                if (!empty($documentHtml)) {
+                    $this->pdf->WriteHTML($documentHtml.$pageBreak, 2);
                 }
             } elseif (in_array($extension, ['jpg', 'jpeg', 'png', 'gif'])) {
                 // Images
                 $image = Display::img($file);
-                $this->pdf->WriteHTML('<html><body>'.$image.'</body></html>'.$page_break);
+                $this->pdf->WriteHTML('<html><body>'.$image.'</body></html>'.$pageBreak, 2);
             }
         }
 
-        if (empty($pdf_name)) {
-            $output_file = 'pdf_'.date('Y-m-d-his').'.pdf';
-        } else {
-            $pdf_name = api_replace_dangerous_char($pdf_name);
-            $output_file = $pdf_name.'.pdf';
+        $outputFile = 'pdf_'.api_get_local_time().'.pdf';
+        if (!empty($pdfName)) {
+            $outputFile = $pdfName.'.pdf';
         }
+
+        $outputFile = api_replace_dangerous_char($outputFile);
+
         // F to save the pdf in a file
-        $this->pdf->Output($output_file, 'D');
+        $this->pdf->Output($outputFile, Destination::DOWNLOAD);
         exit;
     }
 
@@ -347,7 +356,7 @@ class PDF
      * @param string $document_html  valid html
      * @param string $css            CSS content of a CSS file
      * @param string $pdf_name       pdf name
-     * @param string $course_code    course code
+     * @param string $courseCode    course code
      *                               (if you are using html that are located in the document tool you must provide this)
      * @param string $outputMode     the MPDF output mode can be:
      * @param bool   $saveInFile
@@ -367,7 +376,7 @@ class PDF
         $document_html,
         $css = '',
         $pdf_name = '',
-        $course_code = null,
+        $courseCode = null,
         $outputMode = 'D',
         $saveInFile = false,
         $fileToSave = null,
@@ -388,8 +397,8 @@ class PDF
         ];
 
         // Formatting the pdf
-        $course_data = api_get_course_info($course_code);
-        self::format_pdf($course_data, $completeHeader);
+        $courseInfo = api_get_course_info($courseCode);
+        self::format_pdf($courseInfo, $completeHeader);
         $document_html = preg_replace($clean_search, '', $document_html);
 
         //absolute path for frames.css //TODO: necessary?
@@ -398,13 +407,13 @@ class PDF
         $document_html = str_replace('../../', '', $document_html);
         $document_html = str_replace('../', '', $document_html);
         $document_html = str_replace(
-            (empty($urlAppend) ? '' : $urlAppend.'/').'courses/'.$course_code.'/document/',
+            (empty($urlAppend) ? '' : $urlAppend.'/').'courses/'.$courseCode.'/document/',
             '',
             $document_html
         );
 
-        if (!empty($course_data['path'])) {
-            $document_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/document/';
+        if (!empty($courseInfo['path'])) {
+            $document_path = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/';
 
             $doc = new DOMDocument();
             @$doc->loadHTML($document_html);
@@ -427,12 +436,12 @@ class PDF
                                 strpos($old_src, '/app/upload/') === false
                             ) {
                                 $old_src_fixed = str_replace(
-                                    api_get_path(REL_COURSE_PATH).$course_data['path'].'/document/',
+                                    api_get_path(REL_COURSE_PATH).$courseInfo['path'].'/document/',
                                     '',
                                     $old_src
                                 );
                                 $old_src_fixed = str_replace(
-                                    'courses/'.$course_data['path'].'/document/',
+                                    'courses/'.$courseInfo['path'].'/document/',
                                     '',
                                     $old_src_fixed
                                 );
@@ -519,12 +528,12 @@ class PDF
      *
      * @return string
      */
-    public static function get_watermark($course_code = null)
+    public static function get_watermark($courseCode = null)
     {
         $web_path = false;
         $urlId = api_get_current_access_url_id();
-        if (!empty($course_code) && api_get_setting('pdf_export_watermark_by_course') == 'true') {
-            $course_info = api_get_course_info($course_code);
+        if (!empty($courseCode) && api_get_setting('pdf_export_watermark_by_course') == 'true') {
+            $course_info = api_get_course_info($courseCode);
             // course path
             $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/'.$urlId.'_pdf_watermark.png';
             if (file_exists($store_path)) {
@@ -544,16 +553,16 @@ class PDF
     /**
      * Deletes the watermark from the Platform or Course.
      *
-     * @param string $course_code course code (optional)
+     * @param string $courseCode course code (optional)
      * @param   mixed   web path of the watermark image, false if there is nothing to return
      *
      * @return bool
      */
-    public function delete_watermark($course_code = null)
+    public function delete_watermark($courseCode = null)
     {
         $urlId = api_get_current_access_url_id();
-        if (!empty($course_code) && api_get_setting('pdf_export_watermark_by_course') == 'true') {
-            $course_info = api_get_course_info($course_code);
+        if (!empty($courseCode) && api_get_setting('pdf_export_watermark_by_course') == 'true') {
+            $course_info = api_get_course_info($courseCode);
             // course path
             $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/'.$urlId.'_pdf_watermark.png';
         } else {
@@ -574,15 +583,15 @@ class PDF
      *
      * @param string $filename    filename
      * @param string $source_file path of the file
-     * @param string $course_code
+     * @param string $courseCode
      *
      * @return mixed web path of the file if sucess, false otherwise
      */
-    public function upload_watermark($filename, $source_file, $course_code = null)
+    public function upload_watermark($filename, $source_file, $courseCode = null)
     {
         $urlId = api_get_current_access_url_id();
-        if (!empty($course_code) && api_get_setting('pdf_export_watermark_by_course') == 'true') {
-            $course_info = api_get_course_info($course_code);
+        if (!empty($courseCode) && api_get_setting('pdf_export_watermark_by_course') == 'true') {
+            $course_info = api_get_course_info($courseCode);
             $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path']; // course path
             $web_path = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/pdf_watermark.png';
         } else {
@@ -606,10 +615,10 @@ class PDF
     /**
      * Returns the default header.
      */
-    public function get_header($course_code = null)
+    public function get_header($courseCode = null)
     {
         /*$header = api_get_setting('pdf_export_watermark_text');
-    	if (!empty($course_code) && api_get_setting('pdf_export_watermark_by_course') == 'true') {
+    	if (!empty($courseCode) && api_get_setting('pdf_export_watermark_by_course') == 'true') {
             $header = api_get_course_setting('pdf_export_watermark_text');
         }
         return $header;*/
@@ -635,17 +644,17 @@ class PDF
     /**
      * Sets the PDF header.
      *
-     * @param array $course_data
+     * @param array $courseInfo
      */
-    public function set_header($course_data)
+    public function set_header($courseInfo)
     {
         $this->pdf->defaultheaderfontsize = 10; // in pts
         $this->pdf->defaultheaderfontstyle = 'BI'; // blank, B, I, or BI
         $this->pdf->defaultheaderline = 1; // 1 to include line below header/above footer
 
         $userId = api_get_user_id();
-        if (!empty($course_data['code'])) {
-            $teacher_list = CourseManager::get_teacher_list_from_course_code($course_data['code']);
+        if (!empty($courseInfo['code'])) {
+            $teacher_list = CourseManager::get_teacher_list_from_course_code($courseInfo['code']);
 
             $teachers = '';
             if (!empty($teacher_list)) {
@@ -702,14 +711,14 @@ class PDF
      * Pre-formats a PDF to the right size and, if not stated otherwise, with
      * header, footer and watermark (if any).
      *
-     * @param array $course_data General course information (to fill headers)
+     * @param array $courseInfo General course information (to fill headers)
      * @param bool  $complete    Whether we want headers, footers and watermark or not
      */
-    public function format_pdf($course_data, $complete = true)
+    public function format_pdf($courseInfo, $complete = true)
     {
-        $course_code = null;
-        if (!empty($course_data)) {
-            $course_code = $course_data['code'];
+        $courseCode = null;
+        if (!empty($courseInfo)) {
+            $courseCode = $courseInfo['code'];
         }
 
         /*$pdf->SetAuthor('Documents Chamilo');
@@ -719,7 +728,8 @@ class PDF
         */
         // TODO: To be read from the html document.
         $this->pdf->directionality = api_get_text_direction();
-        $this->pdf->useOnlyCoreFonts = true;
+        //$this->pdf->useOnlyCoreFonts = true;
+        $this->pdf->onlyCoreFonts = true;
         // Use different Odd/Even headers and footers and mirror margins
         $this->pdf->mirrorMargins = 1;
 
@@ -727,7 +737,7 @@ class PDF
         if ($complete) {
             // Adding watermark
             if (api_get_setting('pdf_export_watermark_enable') == 'true') {
-                $watermark_file = self::get_watermark($course_code);
+                $watermark_file = self::get_watermark($courseCode);
                 if ($watermark_file) {
                     //http://mpdf1.com/manual/index.php?tid=269&searchstring=watermark
                     $this->pdf->SetWatermarkImage($watermark_file);
@@ -739,7 +749,7 @@ class PDF
                         $this->pdf->showWatermarkImage = true;
                     }
                 }
-                if ($course_code) {
+                if ($courseCode) {
                     $watermark_text = api_get_course_setting('pdf_export_watermark_text');
                     if (empty($watermark_text)) {
                         $watermark_text = api_get_setting('pdf_export_watermark_text');
@@ -757,7 +767,7 @@ class PDF
             }
 
             if (empty($this->custom_header)) {
-                self::set_header($course_data);
+                self::set_header($courseInfo);
             } else {
                 $this->pdf->SetHTMLHeader($this->custom_header, 'E');
                 $this->pdf->SetHTMLHeader($this->custom_header, 'O');
@@ -859,8 +869,8 @@ class PDF
      */
     private static function fixImagesPaths($documentHtml, array $courseInfo, $dirName = '')
     {
-        $doc = new DOMDocument();
-        @$doc->loadHTML($documentHtml);
+        $html = new HTML5();
+        $doc = $html->loadHTML($documentHtml);
 
         $elements = $doc->getElementsByTagName('img');
 

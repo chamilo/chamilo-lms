@@ -399,11 +399,12 @@ class ResourceController extends BaseController implements CourseControllerInter
     }
 
     /**
-     * @param Request $request
+     * @param Request             $request
+     * @param CDocumentRepository $documentRepo
      *
      * @return Response
      */
-    public function showAction(Request $request): Response
+    public function showAction(Request $request, CDocumentRepository $documentRepo): Response
     {
         $file = $request->get('file');
         $type = $request->get('type');
@@ -412,7 +413,7 @@ class ResourceController extends BaseController implements CourseControllerInter
             $type = 'show';
         }
 
-        $documentRepo = $this->getDoctrine()->getRepository('ChamiloCourseBundle:CDocument');
+        //$documentRepo = $this->getDoctrine()->getRepository('ChamiloCourseBundle:CDocument');
         $criteria = [
             'path' => "/$file",
             'course' => $this->getCourse(),
@@ -442,8 +443,6 @@ class ResourceController extends BaseController implements CourseControllerInter
                 case 'show':
                     /** @var \Sonata\MediaBundle\Provider\ImageProvider $provider */
                     $provider = $this->get('sonata.media.pool')->getProvider($media->getProviderName());
-                    //$reference = $provider->getReferenceFile($media);
-
                     $filename = sprintf(
                         '%s/%s',
                         $provider->getFilesystem()->getAdapter()->getDirectory(),

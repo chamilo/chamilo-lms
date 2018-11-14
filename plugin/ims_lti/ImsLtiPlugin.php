@@ -298,18 +298,22 @@ class ImsLtiPlugin extends Plugin
      */
     public static function getUserRoles(User $user)
     {
+        if (DRH === $user->getStatus()) {
+            return 'urn:lti:role:ims/lis/Mentor';
+        }
+
         if ($user->getStatus() === INVITEE) {
-            return 'Learner/GuestLearner,Learner';
+            return 'Learner,urn:lti:role:ims/lis/Learner/GuestLearner';
         }
 
         if (!api_is_allowed_to_edit(false, true)) {
-            return 'Learner,Learner/Learner';
+            return 'Learner';
         }
 
         $roles = ['Instructor'];
 
         if (api_is_platform_admin_by_id($user->getId())) {
-            $roles[] = 'Administrator/SystemAdministrator';
+            $roles[] = 'urn:lti:role:ims/lis/Administrator';
         }
 
         return implode(',', $roles);
@@ -331,24 +335,22 @@ class ImsLtiPlugin extends Plugin
     }
 
     /**
-     * @param Course       $course
-     * @param Session|null $session
+     * @param User $currentUser
      *
      * @return string
      */
-    public static function getRoleScopeMentor(Course $course, Session $session = null)
+    public static function getRoleScopeMentor(User $currentUser)
     {
-        $scope = [];
-
-        if ($session) {
-            $students = $session->getUserCourseSubscriptionsByStatus($course, Session::STUDENT);
-        } else {
-            $students = $course->getStudents();
+        if (DRH !== $currentUser->getStatus()) {
+            return '';
         }
 
-        /** @var SessionRelCourseRelUser|CourseRelUser $subscription */
-        foreach ($students as $subscription) {
-            $scope[] = self::generateToolUserId($subscription->getUser()->getId());
+        $followedUsers = UserManager::get_users_followed_by_drh($currentUser->getId());
+
+        $scope = [];
+
+        foreach ($followedUsers as $userInfo) {
+            $scope[] = self::generateToolUserId($userInfo['user_id']);
         }
 
         return implode(',', $scope);

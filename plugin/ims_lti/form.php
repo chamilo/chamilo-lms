@@ -89,8 +89,8 @@ if ($tool->isSharingEmail()) {
     $params['lis_person_contact_email_primary'] = $user->getEmail();
 }
 
-if (api_is_allowed_to_edit(false, true)) {
-    $scopeMentor = ImsLtiPlugin::getRoleScopeMentor($course, $session);
+if (DRH === $user->getStatus()) {
+    $scopeMentor = ImsLtiPlugin::getRoleScopeMentor($user);
 
     if (!empty($scopeMentor)) {
         $params['role_scope_mentor'] = $scopeMentor;

@@ -123,6 +123,8 @@ class PDF
         // Assignments
         $tpl->assign('pdf_content', $content);
 
+        $teacher_list = [];
+
         // Showing only the current teacher/admin instead the all teacher list name see BT#4080
         if (isset($this->params['show_real_course_teachers']) &&
             $this->params['show_real_course_teachers']

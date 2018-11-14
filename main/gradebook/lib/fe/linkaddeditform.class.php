@@ -11,8 +11,8 @@
  */
 class LinkAddEditForm extends FormValidator
 {
-    const TYPE_ADD = 1;
-    const TYPE_EDIT = 2;
+    public const TYPE_ADD = 1;
+    public const TYPE_EDIT = 2;
 
     /**
      * Constructor

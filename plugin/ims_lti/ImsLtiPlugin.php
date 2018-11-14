@@ -394,6 +394,13 @@ class ImsLtiPlugin extends Plugin
                 !empty($contentItem['text']) ? $contentItem['text'] : null
             );
 
+        if (!empty($contentItem['custom'])) {
+            $newLtiTool
+                ->setCustomParams(
+                    $newLtiTool->encodeCustomParams($contentItem['custom'])
+                );
+        }
+
         $em->persist($newLtiTool);
         $em->flush();
 

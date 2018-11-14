@@ -250,6 +250,26 @@ class ImsLtiTool
     }
 
     /**
+     * @param array $params
+     *
+     * @return null|string
+     */
+    public function encodeCustomParams(array $params)
+    {
+        if (empty($params)) {
+            return null;
+        }
+
+        $pairs = [];
+
+        foreach ($params as $key => $value) {
+            $pairs[] = "$key=$value";
+        }
+
+        return implode("\n", $pairs);
+    }
+
+    /**
      * @return array
      */
     public function parseCustomParams()

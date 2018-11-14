@@ -82,7 +82,7 @@ $params['roles'] = ImsLtiPlugin::getUserRoles($user);
 if ($tool->isSharingName()) {
     $params['lis_person_name_given'] = $user->getFirstname();
     $params['lis_person_name_family'] = $user->getLastname();
-    $params['lis_person_name_full'] = $user->getCompleteName();
+    $params['lis_person_name_full'] = $user->getFirstname().' '.$user->getLastname();
 }
 
 if ($tool->isSharingEmail()) {
@@ -90,7 +90,11 @@ if ($tool->isSharingEmail()) {
 }
 
 if (api_is_allowed_to_edit(false, true)) {
-    $params['role_scope_mentor'] = ImsLtiPlugin::getRoleScopeMentor($course, $session);
+    $scopeMentor = ImsLtiPlugin::getRoleScopeMentor($course, $session);
+
+    if (!empty($scopeMentor)) {
+        $params['role_scope_mentor'] = $scopeMentor;
+    }
 }
 
 $params['context_id'] = $course->getId();
@@ -132,7 +136,7 @@ $result = $oauth->sign(array(
       encType="application/x-www-form-urlencoded">
     <?php
     foreach ($result["parameters"] as $key => $values) { //Dump parameters
-        echo '<input type="hidden" name="'.$key.'" value="'.$values.'" />';
+        echo '<input type="hidden" name="'.$key.'" value="'.htmlspecialchars($values).'" />'.PHP_EOL;
     }
     ?>
     <button type="submit">

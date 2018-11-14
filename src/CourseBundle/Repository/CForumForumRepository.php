@@ -8,15 +8,26 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CForumCategory;
 use Chamilo\CourseBundle\Entity\CForumForum;
 use Chamilo\CourseBundle\Entity\CItemProperty;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
  * Class CForumForumRepository.
  *
  * @package Chamilo\CourseBundle\Repository
  */
-class CForumForumRepository extends EntityRepository
+class CForumForumRepository extends ServiceEntityRepository
 {
+    /**
+     * CForumForumRepository constructor.
+     *
+     * @param ManagerRegistry $registry
+     */
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, CForumForum::class);
+    }
+
     /**
      * @param bool           $isAllowedToEdit
      * @param CForumCategory $category

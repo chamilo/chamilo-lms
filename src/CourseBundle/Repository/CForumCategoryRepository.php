@@ -7,15 +7,26 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CForumCategory;
 use Chamilo\CourseBundle\Entity\CItemProperty;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
  * Class CForumCategoryRepository.
  *
  * @package Chamilo\CourseBundle\Repository
  */
-class CForumCategoryRepository extends EntityRepository
+class CForumCategoryRepository extends ServiceEntityRepository
 {
+    /**
+     * CCourseSettingRepository constructor.
+     *
+     * @param ManagerRegistry $registry
+     */
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, CForumCategory::class);
+    }
+
     /**
      * @param bool         $isAllowedToEdit
      * @param Course       $course

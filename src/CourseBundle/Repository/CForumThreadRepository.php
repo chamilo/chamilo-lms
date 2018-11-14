@@ -9,15 +9,26 @@ use Chamilo\CourseBundle\Entity\CForumForum;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\CourseBundle\Entity\CItemProperty;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
  * Class CForumThreadRepository.
  *
  * @package Chamilo\CourseBundle\Repository
  */
-class CForumThreadRepository extends EntityRepository
+class CForumThreadRepository extends ServiceEntityRepository
 {
+    /**
+     * CForumPostRepository constructor.
+     *
+     * @param ManagerRegistry $registry
+     */
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, CForumThread::class);
+    }
+
     /**
      * @param bool            $isAllowedToEdit
      * @param CForumForum     $forum

@@ -5,8 +5,10 @@ namespace Chamilo\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\UserBundle\Entity\User;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query\Expr\Join;
 
 /**
@@ -14,8 +16,18 @@ use Doctrine\ORM\Query\Expr\Join;
  *
  * @package Chamilo\CourseBundle\Repository
  */
-class CStudentPublicationRepository extends EntityRepository
+class CStudentPublicationRepository extends ServiceEntityRepository
 {
+    /**
+     * CStudentPublicationRepository constructor.
+     *
+     * @param ManagerRegistry $registry
+     */
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, CStudentPublication::class);
+    }
+
     /**
      * Find all the works registered by a teacher.
      *

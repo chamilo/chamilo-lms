@@ -10,16 +10,22 @@ parameters:
     chamilo_course.entity.announcement: Chamilo\CourseBundle\Entity\CAnnouncement
 
 services:
+    _defaults:
+        autowire: true
+        public: true
+
+    Sonata\MediaBundle\Provider\Pool: '@sonata.media.pool'
+    Chamilo\CourseBundle\Repository\:
+        resource: ../../Repository
+
     # Managers
     chamilo_course.entity.manager.group_manager:
         class: '%chamilo_course.entity.manager.group_manager.class%'
         arguments: ['%chamilo_course.entity.group%', '@doctrine']
-        public: true
 
     chamilo_course.entity.manager.announcement_manager:
         class: '%chamilo_course.entity.manager.announcement_manager.class%'
         arguments: ['%chamilo_course.entity.announcement%', '@doctrine']
-        public: true
 
     # Event Listeners
     chamilo_course.listener.course:
@@ -78,8 +84,6 @@ services:
 
     chamilo_course.repository.parameter:
         class: Chamilo\CourseBundle\Repository\CCourseSettingRepository
-        factory: ['@doctrine', getRepository]
-        arguments: [Chamilo\CourseBundle\Entity\CCourseSetting]
 
 #    chamilo_settings.repository.parameter:
 #        class: Chamilo\CoreBundle\Repository\SettingsCurrentRepository

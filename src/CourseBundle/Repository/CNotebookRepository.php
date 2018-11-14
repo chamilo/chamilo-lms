@@ -5,16 +5,28 @@ namespace Chamilo\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CourseBundle\Entity\CNotebook;
 use Chamilo\UserBundle\Entity\User;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
  * Class CNotebookRepository.
  *
  * @package Chamilo\CourseBundle\Repository
  */
-class CNotebookRepository extends EntityRepository
+class CNotebookRepository extends ServiceEntityRepository
 {
+    /**
+     * CNotebookRepository constructor.
+     *
+     * @param ManagerRegistry $registry
+     */
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, CNotebook::class);
+    }
+
     /**
      * Get the user notebooks in a course.
      *

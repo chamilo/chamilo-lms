@@ -24,7 +24,7 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @GRID\Source(columns="iid, id, title, filetype", filterable=false)
  *
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CDocumentRepository")
+ * @ORM\Entity
  */
 class CDocument extends AbstractResource implements ResourceInterface
 {

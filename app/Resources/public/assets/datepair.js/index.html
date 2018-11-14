@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+
+    <title>Datepair.js &ndash; Demos and Documentation</title>
+    <meta name="description" content="A javascript plugin for intelligently selecting date and time ranges inspired by Google Calendar." />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+    <script src="https://jonthornton.github.io/jquery-timepicker/jquery.timepicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://jonthornton.github.io/jquery-timepicker/jquery.timepicker.css" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.standalone.css" />
+
+    <script src="lib/pikaday.js"></script>
+    <link rel="stylesheet" type="text/css" href="lib/pikaday.css" />
+
+    <script src="lib/jquery.ptTimeSelect.js"></script>
+    <link rel="stylesheet" type="text/css" href="lib/jquery.ptTimeSelect.css" />
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/ui-lightness/jquery-ui.css" type="text/css" media="all" />
+
+    <script src="lib/moment.min.js"></script>
+    <script src="lib/site.js"></script>
+    <link rel="stylesheet" type="text/css" href="lib/site.css" />
+
+    <script src="dist/datepair.js"></script>
+    <script src="dist/jquery.datepair.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1><a href="https://github.com/jonthornton/jquery-datepair">Datepair.js</a></h1>
+        <p>
+            A javascript plugin for intelligently selecting date and time ranges<br />
+            inspired by Google Calendar. <br />
+        </p>
+
+        <ul id="header-links">
+            <li><a href="https://github.com/jonthornton/jquery-datepair#datepair-plugin-for-jquery">Documentation</a></li>
+            <li><a href="https://github.com/jonthornton/jquery-datepair">Source code on GitHub</a></li>
+            <li><a href="https://github.com/jonthornton/jquery-datepair/zipball/master">Download (zip)</a></li>
+            <li><a href="https://github.com/jonthornton/jquery-datepair/issues?state=open">Help</a></li>
+        </ul>
+    </header>
+
+    <section>
+        <p>Use this plugin to link date and time inputs when you need to select ranges. <br />No dependencies, with optional support for jQuery/Zepto.</p>
+    </section>
+
+    <section id="examples">
+        <article>
+            <div class="demo">
+                <h2>Basic Example</h2>
+                <p>Datepair.js doesn't include any date or time picker widgets, but it's preconfigured to work with <a href="https://github.com/jonthornton/jquery-timepicker">jquery-timepicker</a> and <a href="https://github.com/eternicode/bootstrap-datepicker">Bootstrap Datepicker</a>. Include input widgets as you normally would, and then use Datepair.js to link them.</p>
+
+                <p id="basicExample">
+                    <input type="text" class="date start" />
+                    <input type="text" class="time start" /> to
+                    <input type="text" class="time end" />
+                    <input type="text" class="date end" />
+                </p>
+            </div>
+
+            <pre class="code" data-language="javascript">
+&lt;p id="basicExample"&gt;
+    &lt;input type="text" class="date start" /&gt;
+    &lt;input type="text" class="time start" /&gt; to
+    &lt;input type="text" class="time end" /&gt;
+    &lt;input type="text" class="date end" /&gt;
+&lt;/p&gt;
+
+&lt;!-- include input widgets; this is independent of Datepair.js --&gt;
+&lt;link rel="styleshee" type="text/css" href="jquery.timepicker.css" /&gt;
+&lt;link rel="stylesheet" type="text/css" href="bootstrap-datepicker.css" /&gt;
+&lt;script type="text/javascript" src="bootstrap-datepicker.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="jquery.timepicker.js"&gt;&lt;/script&gt;
+
+&lt;script type="text/javascript" src="datepair.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+    // initialize input widgets first
+    $('#basicExample .time').timepicker({
+        'showDuration': true,
+        'timeFormat': 'g:ia'
+    });
+
+    $('#basicExample .date').datepicker({
+        'format': 'm/d/yyyy',
+        'autoclose': true
+    });
+
+    // initialize datepair
+    var basicExampleEl = document.getElementById('basicExample');
+    var datepair = new Datepair(basicExampleEl);
+&lt;/script&gt;
+            </pre>
+
+            <script>
+                $('#basicExample .time').timepicker({
+                    'showDuration': true,
+                    'timeFormat': 'g:ia'
+                });
+
+                $('#basicExample .date').datepicker({
+                    'format': 'm/d/yyyy',
+                    'autoclose': true
+                });
+
+                var basicExampleEl = document.getElementById('basicExample');
+                var datepair = new Datepair(basicExampleEl);
+            </script>
+        </article>
+
+        <article>
+            <div class="demo">
+                <h2>jQuery Example</h2>
+                <p>Include the optional jquery.datepicker.js file to interact with Datepair.js with a jQuery interface.</p>
+
+                <p id="jqueryExample">
+                    <input type="text" class="date start" />
+                    <input type="text" class="time start" /> to
+                    <input type="text" class="time end" />
+                    <input type="text" class="date end" />
+                </p>
+            </div>
+
+            <pre class="code" data-language="javascript">
+&lt;p id="jqueryExample"&gt;
+    &lt;input type="text" class="date start" /&gt;
+    &lt;input type="text" class="time start" /&gt; to
+    &lt;input type="text" class="time end" /&gt;
+    &lt;input type="text" class="date end" /&gt;
+&lt;/p&gt;
+
+&lt;script type="text/javascript" src="datepair.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="jquery.datepair.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+    // initialize input widgets first
+    $('#jqueryExample .time').timepicker({
+        'showDuration': true,
+        'timeFormat': 'g:ia'
+    });
+
+    $('#jqueryExample .date').datepicker({
+        'format': 'm/d/yyyy',
+        'autoclose': true
+    });
+
+    // initialize datepair
+    $('#jqueryExample').datepair();
+&lt;/script&gt;
+            </pre>
+
+            <script>
+                $('#jqueryExample .time').timepicker({
+                    'showDuration': true,
+                    'timeFormat': 'g:ia'
+                });
+
+                $('#jqueryExample .date').datepicker({
+                    'format': 'm/d/yyyy',
+                    'autoclose': true
+                });
+
+                $('#jqueryExample').datepair();
+            </script>
+        </article>
+
+        <article>
+            <div class="demo">
+                <h2>Date-only Example</h2>
+
+                <p>You can use datepair with just dates, or just times.</p>
+
+                <p id="dateOnlyExample">
+                    <input type="text" class="date start" /> to
+                    <input type="text" class="date end" />
+                </p>
+
+                <p id="timeOnlyExample">
+                    <input type="text" class="time start" /> to
+                    <input type="text" class="time end" />
+                </p>
+            </div>
+
+            <pre class="code" data-language="javascript">
+// HTML not shown for brevity
+
+$('#timeOnlyExample .time').timepicker({
+    'showDuration': true,
+    'timeFormat': 'g:ia'
+});
+
+var timeOnlyExampleEl = document.getElementById('timeOnlyExample');
+var timeOnlyDatepair = new Datepair(timeOnlyExampleEl);
+
+$('#dateOnlyExample .date').datepicker({
+    'format': 'yyyy-m-d',
+    'autoclose': true
+});
+
+var dateOnlyExampleEl = document.getElementById('dateOnlyExample');
+var dateOnlyDatepair = new Datepair(dateOnlyExampleEl);
+            </pre>
+
+            <script>
+                $('#timeOnlyExample .time').timepicker({
+                    'showDuration': true,
+                    'timeFormat': 'g:ia'
+                });
+
+                var timeOnlyExampleEl = document.getElementById('timeOnlyExample');
+                var timeOnlyDatepair = new Datepair(timeOnlyExampleEl);
+
+                $('#dateOnlyExample .date').datepicker({
+                    'format': 'yyyy-m-d',
+                    'autoclose': true
+                });
+
+                var dateOnlyExampleEl = document.getElementById('dateOnlyExample');
+                var dateOnlyDatepair = new Datepair(dateOnlyExampleEl);
+            </script>
+        </article>
+
+        <article>
+            <div class="demo">
+                <h2>Default Delta Example</h2>
+
+                <p>Datepair can automatically set the other input when a first value is selected.</p>
+
+                <p id="defaultDeltaExample">
+                    <input type="text" class="date start" />
+                    <input type="text" class="time start" /> to
+                    <input type="text" class="time end" />
+                    <input type="text" class="date end" />
+                </p>
+            </div>
+
+            <pre class="code" data-language="javascript">
+// HTML not shown for brevity
+
+var defaultDeltaExampleEl = document.getElementById('defaultDeltaExample');
+var defaultDeltaDatepair = new Datepair(defaultDeltaExampleEl, {
+    'defaultDateDelta': 1,      // days
+    'defaultTimeDelta': 7200000 // milliseconds
+});
+            </pre>
+
+            <script>
+                $('#defaultDeltaExample .time').timepicker({
+                    'showDuration': true,
+                    'timeFormat': 'g:ia'
+                });
+
+                $('#defaultDeltaExample .date').datepicker({
+                    'format': 'm/d/yyyy',
+                    'autoclose': true
+                });
+
+                var defaultDeltaExampleEl = document.getElementById('defaultDeltaExample');
+                var defaultDeltaDatepair = new Datepair(defaultDeltaExampleEl, {
+                    'defaultDateDelta': 1,
+                    'defaultTimeDelta': 7200000
+                });
+            </script>
+        </article>
+
+        <article>
+            <div class="demo">
+                <h2>Alternate UI Widgets Example</h2>
+
+                <p>jquery-datepair is widget agnostic and can work with any date and time pickers. Here's an example with <a href="http://pttimeselect.sourceforge.net/example/index.html">jQuery.ptTimeSelect</a> and <a href="https://github.com/dbushell/Pikaday">Pikaday</a>.</p>
+
+                <p id="alternateUiWidgetsExample">
+                    <input type="text" class="date start" />
+                    <input type="text" class="time start" /> to<br />
+                    <input type="text" class="date end" />
+                    <input type="text" class="time end" />
+                </p>
+            </div>
+
+            <pre class="code" data-language="javascript">
+&lt;p id="alternateUiWidgetsExample"&gt;
+    &lt;input type="text" class="date start" /&gt;
+    &lt;input type="text" class="time start" /&gt; to&lt;br /&gt;
+    &lt;input type="text" class="date end" /&gt;
+    &lt;input type="text" class="time end" /&gt;
+&lt;/p>
+&lt;script type="text/javascript" src="pikaday.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="jquery.ptTimeSelect.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="moment.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+    // initialize input widgets
+    // ptTimeSelect doesn't trigger change event by default
+    $('#alternateUiWidgetsExample .time').ptTimeSelect({
+        'onClose': function($self) {
+            $self.trigger('change');
+        }
+    });
+
+    $('#alternateUiWidgetsExample .date').pikaday();
+
+    var TIMEFORMAT = 'h:mm a';
+    var alternateUiWidgetsExampleEl = document.getElementById('alternateUiWidgetsExample');
+    var alternateWidgetsDatepair = new Datepair(alternateUiWidgetsExampleEl, {
+        parseTime: function(input){
+            // use moment.js to parse time
+            var m = moment(input.value, TIMEFORMAT);
+            return m.toDate();
+        },
+        updateTime: function(input, dateObj){
+            var m = moment(dateObj);
+            input.value = m.format(TIMEFORMAT);
+        },
+        parseDate: function(input){
+            var picker = $(input).data('pikaday');
+            return picker.getDate();
+        },
+        updateDate: function(input, dateObj){
+            var picker = $(input).data('pikaday');
+            return picker.setDate(dateObj);
+        }
+    });
+&lt;/script&gt;
+            </pre>
+
+            <script>
+                // initialize input widgets
+                // ptTimeSelect doesn't trigger change event by default
+                $('#alternateUiWidgetsExample .time').ptTimeSelect({
+                    'onClose': function($self) {
+                        $self.trigger('change');
+                    }
+                });
+
+                $('#alternateUiWidgetsExample .date').pikaday();
+
+                var TIMEFORMAT = 'h:mm a';
+                var alternateUiWidgetsExampleEl = document.getElementById('alternateUiWidgetsExample');
+                var alternateWidgetsDatepair = new Datepair(alternateUiWidgetsExampleEl, {
+                    parseTime: function(input){
+                        // use moment.js to parse time
+                        var m = moment(input.value, TIMEFORMAT);
+                        return m.toDate();
+                    },
+                    updateTime: function(input, dateObj){
+                        var m = moment(dateObj);
+                        input.value = m.format(TIMEFORMAT);
+                    },
+                    parseDate: function(input){
+                        var picker = $(input).data('pikaday');
+                        return picker.getDate();
+                    },
+                    updateDate: function(input, dateObj){
+                        var picker = $(input).data('pikaday');
+                        return picker.setDate(dateObj);
+                    }
+                });
+            </script>
+        </article>
+
+        <article>
+            <div class="demo">
+                <h2>Events Example</h2>
+                <p>Datepair fires several events to indicate the status of the inputs.</p>
+
+                <p id="eventsExample">
+                    <input type="text" class="date start" />
+                    <input type="text" class="time start" /> to
+                    <input type="text" class="time end" />
+                    <input type="text" class="date end" />
+                </p>
+
+                <p id="eventsExampleStatus"></p>
+            </div>
+
+            <pre class="code" data-language="javascript">
+// HTML not shown for brevity
+
+// initialize input widgets first
+$('#eventsExample .time').timepicker({
+    'showDuration': true,
+    'timeFormat': 'g:ia'
+});
+
+$('#eventsExample .date').datepicker({
+    'format': 'm/d/yyyy',
+    'autoclose': true
+});
+
+var eventsExampleEl = document.getElementById('eventsExample');
+var eventsExampleDatepair = new Datepair(eventsExampleEl);
+
+// some sample handlers
+$('#eventsExample').on('rangeSelected', function(){
+    $('#eventsExampleStatus').text('Valid range selected');
+}).on('rangeIncomplete', function(){
+    $('#eventsExampleStatus').text('Incomplete range');
+}).on('rangeError', function(){
+    $('#eventsExampleStatus').text('Invalid range');
+});
+            </pre>
+
+            <script>
+                $('#eventsExample .time').timepicker({
+                    'showDuration': true,
+                    'timeFormat': 'g:ia'
+                });
+
+                $('#eventsExample .date').datepicker({
+                    'format': 'm/d/yyyy',
+                    'autoclose': true
+                });
+
+                var eventsExampleEl = document.getElementById('eventsExample');
+                var eventsExampleDatepair = new Datepair(eventsExampleEl);
+
+                $('#eventsExample').on('rangeSelected', function(){
+                    $('#eventsExampleStatus').text('Valid range selected');
+                }).on('rangeIncomplete', function(){
+                    $('#eventsExampleStatus').text('Incomplete range');
+                }).on('rangeError', function(){
+                    $('#eventsExampleStatus').text('Invalid range');
+                });
+            </script>
+        </article>
+
+        <article>
+            <div class="demo">
+                <h2>Anchor Example</h2>
+                <p>Datepair defaults to move the end time/date based on changes to the start time/date. This can be changed to the end inputs, or disabled completely.</p>
+
+                <p>Anchor:
+                    <select id="anchorSelect">
+                        <option value="start">Start</option>
+                        <option value="end">End</option>
+                        <option value="">Null</option>
+                    </select>
+                </p>
+                <p id="anchorExample">
+                    <input type="text" class="date start" />
+                    <input type="text" class="time start" /> to
+                    <input type="text" class="time end" />
+                    <input type="text" class="date end" />
+                </p>
+            </div>
+
+            <pre class="code" data-language="javascript">
+var anchorExampleEl = document.getElementById('anchorExample');
+var anchorDatepair = new Datepair(anchorExampleEl, {
+    anchor: $('#anchorSelect').val()
+});
+
+$('#anchorSelect').on('change', function(){
+    anchorDatepair.option('anchor', $('#anchorSelect').val());
+});
+            </pre>
+
+            <script>
+                $('#anchorExample .time').timepicker({
+                    'showDuration': true,
+                    'timeFormat': 'g:ia'
+                });
+
+                $('#anchorExample .date').datepicker({
+                    'format': 'm/d/yyyy',
+                    'autoclose': true
+                });
+
+                var anchorExampleEl = document.getElementById('anchorExample');
+                var anchorDatepair = new Datepair(anchorExampleEl, {
+                    anchor: $('#anchorSelect').val()
+                });
+
+                $('#anchorSelect').on('change', function(){
+                    anchorDatepair.option('anchor', $('#anchorSelect').val());
+                });
+
+            </script>
+        </article>
+    </section>
+
+    <section>
+        <h2>Need Help?</h2>
+        <p>Check <a href="https://github.com/jonthornton/jquery-datepair#datepair-plugin-for-jquery">the documenation</a> or <a href="https://github.com/jonthornton/jquery-datepair/issues?state=open">submit an issue</a> on GitHub.</p>
+    </section>
+
+    <footer>
+        <p>&copy; 2014 <a href="http://jonthornton.com">Jon Thornton</a></p>
+    </footer>
+
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-15605525-4', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+</body>
+</html>

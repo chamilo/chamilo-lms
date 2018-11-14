@@ -100,7 +100,7 @@ if (!in_array($_GET['type'], $possible_types)) {
     Display :: display_header($tool_name, 'Survey');
     echo $actions;
     echo Display::return_message(get_lang('TypeDoesNotExist'), 'error', false);
-    Display :: display_footer();
+    Display::display_footer();
 }
 
 $error_message = '';
@@ -115,24 +115,29 @@ $surveyQuestion = new $ch_type();
 $formData = [];
 $formData['answers'] = ['', ''];
 
-if ($_GET['type'] == 'yesno') {
-    $formData['answers'][0] = get_lang('Yes');
-    $formData['answers'][1] = get_lang('No');
+switch ($_GET['type']) {
+    case 'yesno':
+        $formData['answers'][0] = get_lang('Yes');
+        $formData['answers'][1] = get_lang('No');
+        break;
+    case 'personality':
+        $formData['answers'][0] = 1;
+        $formData['answers'][1] = 2;
+        $formData['answers'][2] = 3;
+        $formData['answers'][3] = 4;
+        $formData['answers'][4] = 5;
+
+        $formData['values'][0] = 0;
+        $formData['values'][1] = 0;
+        $formData['values'][2] = 1;
+        $formData['values'][3] = 2;
+        $formData['values'][4] = 3;
+        break;
+    case 'open':
+        Display::addFlash(Display::return_message(get_lang('QuestionTags')));
+        break;
 }
 
-if ($_GET['type'] == 'personality') {
-    $formData['answers'][0] = 1;
-    $formData['answers'][1] = 2;
-    $formData['answers'][2] = 3;
-    $formData['answers'][3] = 4;
-    $formData['answers'][4] = 5;
-
-    $formData['values'][0] = 0;
-    $formData['values'][1] = 0;
-    $formData['values'][2] = 1;
-    $formData['values'][3] = 2;
-    $formData['values'][4] = 3;
-}
 
 // We are editing a question
 if (isset($_GET['question_id']) && !empty($_GET['question_id'])) {
@@ -150,7 +155,5 @@ if ($surveyQuestion->getForm()->validate()) {
 }
 
 Display::display_header($tool_name, 'Survey');
-
 echo $surveyQuestion->getForm()->returnForm();
-
-Display :: display_footer();
+Display::display_footer();

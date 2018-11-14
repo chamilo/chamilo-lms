@@ -6466,7 +6466,8 @@ class DocumentManager
         $readonly = (int) $readonly;
 
         $em = Database::getManager();
-        $documentRepo = $em->getRepository('ChamiloCourseBundle:CDocument');
+        $documentRepo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
+        //$documentRepo = $em->getRepository('ChamiloCourseBundle:CDocument');
 
         $parentNode = null;
         if (!empty($parentId)) {

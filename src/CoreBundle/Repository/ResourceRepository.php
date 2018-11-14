@@ -12,18 +12,31 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
-use Chamilo\UserBundle\Entity\Group;
+
 use Chamilo\UserBundle\Entity\User;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\Expr\Join;
-use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 
 /**
  * Class ResourceRepository.
  *
  * @package Chamilo\CoreBundle\Entity
  */
-class ResourceRepository extends EntityRepository
+class ResourceRepository
 {
+    /**
+     * @var EntityManager
+     */
+    protected $entityManager;
+
+    /**
+     * @return EntityManager
+     */
+    public function getEntityManager()
+    {
+        return $this->entityManager;
+    }
+
     /**
      * Creates a ResourceNode.
      *

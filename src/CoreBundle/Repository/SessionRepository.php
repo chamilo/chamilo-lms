@@ -3,7 +3,9 @@
 
 namespace Chamilo\CoreBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use Chamilo\CoreBundle\Entity\Session;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
  * SessionRepository.
@@ -12,6 +14,15 @@ use Doctrine\ORM\EntityRepository;
  *
  * @author  Julio Montoya <gugli100@gmail.com>
  */
-class SessionRepository extends EntityRepository
+class SessionRepository extends ServiceEntityRepository
 {
+    /**
+     * SessionRepository constructor.
+     *
+     * @param ManagerRegistry $registry
+     */
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Session::class);
+    }
 }

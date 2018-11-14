@@ -4,6 +4,8 @@
 namespace Chamilo\CoreBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
  * Class LegalRepository.
@@ -12,6 +14,11 @@ use Doctrine\ORM\EntityRepository;
  */
 class LegalRepository extends EntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Language::class);
+    }
+
     /**
      * Count the legal terms by language (only count one set of terms for each
      * language).

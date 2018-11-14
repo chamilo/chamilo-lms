@@ -15,8 +15,15 @@ services:
         public: true
 
     Sonata\MediaBundle\Provider\Pool: '@sonata.media.pool'
+
+    # Classic entity repositories
     Chamilo\CourseBundle\Repository\:
         resource: ../../Repository
+        exclude: '../../Repository/{CDocumentRepository.php}'
+        tags: ['doctrine.repository_service']
+
+    # Entity repository as a service
+    Chamilo\CourseBundle\Repository\CDocumentRepository: ~
 
     # Managers
     chamilo_course.entity.manager.group_manager:

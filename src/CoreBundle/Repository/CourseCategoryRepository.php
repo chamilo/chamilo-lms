@@ -3,16 +3,28 @@
 
 namespace Chamilo\CoreBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use Chamilo\CoreBundle\Entity\CourseCategory;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
  * Class CCourseCategoryRepository.
  *
  * @package Chamilo\CoreBundle\Repository
  */
-class CourseCategoryRepository extends EntityRepository
+class CourseCategoryRepository extends ServiceEntityRepository
 {
+    /**
+     * CourseCategoryRepository constructor.
+     *
+     * @param ManagerRegistry $registry
+     */
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, CourseCategory::class);
+    }
+
     /**
      * Get all course categories in an access url.
      *

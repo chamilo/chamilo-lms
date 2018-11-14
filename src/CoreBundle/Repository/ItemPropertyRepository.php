@@ -8,13 +8,25 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\UserBundle\Entity\Group;
 use Chamilo\UserBundle\Entity\User;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
  * Class ItemPropertyRepository.
+ * @deprecated
  */
-class ItemPropertyRepository extends EntityRepository
+class ItemPropertyRepository extends ServiceEntityRepository
 {
+    /**
+     * ItemPropertyRepository constructor.
+     *
+     * @param ManagerRegistry $registry
+     */
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, CItemProperty::class);
+    }
+
     /**
      * Get users subscribed to a item LP, Document, etc (item_property).
      *

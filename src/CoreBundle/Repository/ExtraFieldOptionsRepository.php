@@ -4,15 +4,26 @@
 namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
  * Class ExtraFieldOptionsRepository.
  *
  * @package Chamilo\CoreBundle\Repository
  */
-class ExtraFieldOptionsRepository extends EntityRepository
+class ExtraFieldOptionsRepository extends ServiceEntityRepository
 {
+    /**
+     * ExtraFieldOptionsRepository constructor.
+     *
+     * @param ManagerRegistry $registry
+     */
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, ExtraFieldOptions::class);
+    }
+
     /**
      * Get the secondary options. For double select extra field.
      *

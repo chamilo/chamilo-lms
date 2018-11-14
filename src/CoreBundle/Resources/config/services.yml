@@ -10,6 +10,16 @@ parameters:
     chamilo_core.entity.access_url: Chamilo\CoreBundle\Entity\AccessUrl
 
 services:
+    _defaults:
+        autowire: true
+        public: true
+
+    # Classic entity repositories
+    Chamilo\CoreBundle\Repository\:
+        resource: ../../Repository
+        exclude: '../../Repository/{BranchSyncRepository.php,CourseRepository.php}'
+        tags: ['doctrine.repository_service']
+
     # Entity managers
     chamilo_core.entity.manager.course_manager:
         class: '%chamilo_core.entity.manager.course_manager.class%'

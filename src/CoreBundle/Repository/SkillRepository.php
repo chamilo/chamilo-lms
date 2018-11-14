@@ -9,14 +9,26 @@ use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
  * SkillRepository class.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
-class SkillRepository extends EntityRepository
+class SkillRepository extends ServiceEntityRepository
 {
+    /**
+     * SkillRepository constructor.
+     *
+     * @param ManagerRegistry $registry
+     */
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Skill::class);
+    }
+
     /**
      * Get the last acquired skill by a user on course and/or session.
      *

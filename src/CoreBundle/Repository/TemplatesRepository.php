@@ -4,15 +4,27 @@
 namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Templates;
 use Chamilo\UserBundle\Entity\User;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
  * TemplatesRepository class.
  */
-class TemplatesRepository extends EntityRepository
+class TemplatesRepository extends ServiceEntityRepository
 {
+    /**
+     * TemplatesRepository constructor.
+     *
+     * @param ManagerRegistry $registry
+     */
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Templates::class);
+    }
+
     /**
      * Get the course template for a user.
      *

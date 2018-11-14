@@ -4,8 +4,11 @@
 namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
  * ExtraFieldRelTagRepository.
@@ -14,8 +17,18 @@ use Doctrine\ORM\Query\Expr\Join;
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
-class ExtraFieldRelTagRepository extends EntityRepository
+class ExtraFieldRelTagRepository extends ServiceEntityRepository
 {
+    /**
+     * ExtraFieldRelTagRepository constructor.
+     *
+     * @param ManagerRegistry $registry
+     */
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, ExtraFieldRelTag::class);
+    }
+
     /**
      * Get the tags for a item.
      *

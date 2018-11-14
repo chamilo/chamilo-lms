@@ -3,16 +3,28 @@
 
 namespace Chamilo\CoreBundle\Repository;
 
+use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\UserBundle\Entity\User;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
  * Class MessageRepository.
  *
  * @package Chamilo\CoreBundle\Repository
  */
-class MessageRepository extends EntityRepository
+class MessageRepository extends ServiceEntityRepository
 {
+    /**
+     * MessageRepository constructor.
+     *
+     * @param ManagerRegistry $registry
+     */
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Message::class);
+    }
+
     /**
      * @param User $user
      * @param int  $lastMessageId

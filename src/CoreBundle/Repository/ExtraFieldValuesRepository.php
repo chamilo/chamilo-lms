@@ -3,8 +3,10 @@
 
 namespace Chamilo\CoreBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
  * ExtraFieldValuesRepository class.
@@ -13,8 +15,18 @@ use Doctrine\ORM\Query\Expr\Join;
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
-class ExtraFieldValuesRepository extends EntityRepository
+class ExtraFieldValuesRepository extends ServiceEntityRepository
 {
+    /**
+     * ExtraFieldValuesRepository constructor.
+     *
+     * @param ManagerRegistry $registry
+     */
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, ExtraFieldValues::class);
+    }
+
     /**
      * Get the extra field values for visible extra fields.
      *

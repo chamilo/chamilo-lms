@@ -3,15 +3,27 @@
 
 namespace Chamilo\CoreBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use Chamilo\CoreBundle\Entity\Language;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
  * Class LanguageRepository.
  *
  * @package Chamilo\CoreBundle\Repository
  */
-class LanguageRepository extends EntityRepository
+class LanguageRepository extends ServiceEntityRepository
 {
+    /**
+     * LanguageRepository constructor.
+     *
+     * @param ManagerRegistry $registry
+     */
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Language::class);
+    }
+
     /**
      * Get all the sub languages that are made available by the admin.
      *

@@ -3,10 +3,12 @@
 
 namespace Chamilo\CoreBundle\Repository;
 
+use Chamilo\CoreBundle\Entity\Sequence;
 use Chamilo\CoreBundle\Entity\SequenceResource;
-use Doctrine\ORM\EntityRepository;
 use Fhaculty\Graph\Set\Vertices;
 use Fhaculty\Graph\Vertex;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
  * Class SequenceRepository
@@ -14,8 +16,18 @@ use Fhaculty\Graph\Vertex;
  *
  * @package Chamilo\CoreBundle\Repository
  */
-class SequenceRepository extends EntityRepository
+class SequenceRepository extends ServiceEntityRepository
 {
+    /**
+     * SequenceRepository constructor.
+     *
+     * @param ManagerRegistry $registry
+     */
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Sequence::class);
+    }
+
     /**
      * Find the SequenceResource based in the resourceId and type.
      *

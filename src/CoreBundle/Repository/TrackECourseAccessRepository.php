@@ -5,7 +5,8 @@ namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\TrackECourseAccess;
 use Chamilo\UserBundle\Entity\User;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
  * TrackECourseAccessRepository.
@@ -14,8 +15,18 @@ use Doctrine\ORM\EntityRepository;
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
-class TrackECourseAccessRepository extends EntityRepository
+class TrackECourseAccessRepository extends ServiceEntityRepository
 {
+    /**
+     * TrackECourseAccessRepository constructor.
+     *
+     * @param ManagerRegistry $registry
+     */
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, TrackECourseAccess::class);
+    }
+
     /**
      * Get the last registered access by an user.
      *

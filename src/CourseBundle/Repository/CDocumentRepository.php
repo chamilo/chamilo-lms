@@ -3,6 +3,7 @@
 
 namespace Chamilo\CourseBundle\Repository;
 
+use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
@@ -13,24 +14,29 @@ use Sonata\MediaBundle\Provider\Pool;
 /**
  * Class CDocumentRepository.
  */
-class CDocumentRepository
+class CDocumentRepository extends ResourceRepository
 {
     /**
      * @var EntityRepository
      */
     private $repository;
 
+    /**
+     * @var Pool
+     */
     private $mediaPool;
 
     /**
      * CDocumentRepository constructor.
      *
      * @param EntityManager $entityManager
+     * @param Pool          $mediaPool
      */
     public function __construct(EntityManager $entityManager, Pool $mediaPool)
     {
         $this->repository = $entityManager->getRepository(CDocument::class);
         $this->mediaPool = $mediaPool;
+        $this->entityManager = $entityManager;
     }
 
     /**

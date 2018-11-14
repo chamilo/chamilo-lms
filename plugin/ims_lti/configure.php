@@ -126,7 +126,9 @@ switch ($action) {
 
             $tool
                 ->setName($formValues['name'])
-                ->setDescription($formValues['description'])
+                ->setDescription(
+                    empty($formValues['description']) ? null : $formValues['description']
+                )
                 ->setActiveDeepLinking(
                     !empty($formValues['deep_linking'])
                 )

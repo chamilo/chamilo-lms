@@ -59,8 +59,7 @@ class FrmEdit extends FormValidator
         $this->addTextarea('description', get_lang('Description'));
 
         if (null === $parent) {
-            $this->addElement('url', 'launch_url', $plugin->get_lang('LaunchUrl'));
-            $this->addRule('launch_url', get_lang('Required'), 'required');
+            $this->addUrl('launch_url', $plugin->get_lang('LaunchUrl'), true);
             $this->addText('consumer_key', $plugin->get_lang('ConsumerKey'));
             $this->addText('shared_secret', $plugin->get_lang('SharedSecret'));
         }
@@ -89,10 +88,12 @@ class FrmEdit extends FormValidator
         $this->addCheckBox('share_email', null, $plugin->get_lang('ShareLauncherEmail'));
         $this->addCheckBox('share_picture', null, $plugin->get_lang('ShareLauncherPicture'));
         $this->addHtml('</div>');
-        $this->addButtonCreate($plugin->get_lang('EditExternalTool'));
+        $this->addButtonUpdate($plugin->get_lang('EditExternalTool'));
         $this->addHidden('id', $this->tool->getId());
         $this->addHidden('action', 'edit');
         $this->applyFilter('__ALL__', 'Security::remove_XSS');
+        $this->applyFilter('__ALL__', 'htmlspecialchars_decode');
+        $this->applyFilter('__ALL__', 'trim');
     }
 
     public function setDefaultValues()

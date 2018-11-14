@@ -42,8 +42,7 @@ class FrmAdd extends FormValidator
         $this->addTextarea('description', get_lang('Description'));
 
         if (null === $this->baseTool) {
-            $this->addElement('url', 'launch_url', $plugin->get_lang('LaunchUrl'));
-            $this->addRule('launch_url', get_lang('Required'), 'required');
+            $this->addUrl('launch_url', $plugin->get_lang('LaunchUrl'), true);
             $this->addText('consumer_key', $plugin->get_lang('ConsumerKey'));
             $this->addText('shared_secret', $plugin->get_lang('SharedSecret'));
         }
@@ -74,6 +73,8 @@ class FrmAdd extends FormValidator
         $this->addHtml('</div>');
         $this->addButtonCreate($plugin->get_lang('AddExternalTool'));
         $this->applyFilter('__ALL__', 'Security::remove_XSS');
+        $this->applyFilter('__ALL__', 'htmlspecialchars_decode');
+        $this->applyFilter('__ALL__', 'trim');
     }
 
     public function setDefaultValues()

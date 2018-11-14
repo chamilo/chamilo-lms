@@ -1188,6 +1188,7 @@ class GradebookUtils
      * returns users within a course given by param.
      *
      * @param string $courseCode
+     *
      * @deprecated use CourseManager
      *
      * @return array

@@ -4,9 +4,9 @@
 namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
-use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * ExtraFieldValuesRepository class.

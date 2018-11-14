@@ -13,6 +13,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
  * Class ItemPropertyRepository.
+ *
  * @deprecated
  */
 class ItemPropertyRepository extends ServiceEntityRepository

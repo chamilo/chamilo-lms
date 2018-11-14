@@ -12,7 +12,6 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
-
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\Expr\Join;

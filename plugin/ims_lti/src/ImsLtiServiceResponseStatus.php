@@ -13,7 +13,7 @@ class ImsLtiServiceResponseStatus
     const CODEMAJOR_SUCCESS = 'success';
     const CODEMAJOR_PROCESSING = 'processing';
     const CODEMAJOR_FAILURE = 'failure';
-    const CODEMAJOR_UNSUPPORTED = 'supported';
+    const CODEMAJOR_UNSUPPORTED = 'unsupported';
 
     /**
      * @var string

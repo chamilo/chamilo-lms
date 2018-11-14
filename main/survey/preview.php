@@ -203,8 +203,8 @@ if (api_is_course_admin() ||
     }
 
     $before = 0;
-    if (isset($_GET['show']) && isset($paged_questions[$_GET['show'] -1])) {
-        $before = count($paged_questions[$_GET['show'] -1]);
+    if (isset($_GET['show']) && isset($paged_questions[$_GET['show'] - 1])) {
+        $before = count($paged_questions[$_GET['show'] - 1]);
     }
 
     // Selecting the maximum number of pages

@@ -806,7 +806,7 @@ class SurveyManager
      * This function duplicates a survey (and also all the question in that survey.
      *
      * @param int $surveyId id of the survey that has to be duplicated
-     * @param int $courseId  id of the course which survey has to be duplicated
+     * @param int $courseId id of the course which survey has to be duplicated
      *
      * @return true
      *
@@ -2208,7 +2208,6 @@ class SurveyManager
                     ];
                     self::save_question($surveyData, $values);
                 }
-
             }
         }
     }

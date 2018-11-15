@@ -2175,10 +2175,9 @@ class learnpathItem
                             break;
                         }
                     }
+
                     if (empty($this->prereq_alert) && !$andstatus) {
-                        $this->prereq_alert = get_lang(
-                            'LearnpathPrereqNotCompleted'
-                        );
+                        $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
                     }
 
                     return $andstatus;
@@ -2728,9 +2727,7 @@ class learnpathItem
                     }
                 }
                 if (!$orstatus && empty($this->prereq_alert)) {
-                    $this->prereq_alert = get_lang(
-                        'LearnpathPrereqNotCompleted'
-                    );
+                    $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
                 }
 
                 return $orstatus;

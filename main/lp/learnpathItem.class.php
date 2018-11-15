@@ -2451,7 +2451,7 @@ class learnpathItem
                                     /** @var learnpathItem $itemToCheck */
                                     $itemToCheck = $items[$refs_list[$prereqs_string]];
 
-                                    if ($itemToCheck->type == 'quiz') {
+                                    if ($itemToCheck->type === 'quiz') {
                                         // 1. Checking the status in current items.
                                         $status = $itemToCheck->get_status(true);
                                         $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
@@ -2495,10 +2495,18 @@ class learnpathItem
                                                         LIMIT 0, 1';
                                                 $rs_quiz = Database::query($sql);
                                                 if ($quiz = Database::fetch_array($rs_quiz)) {
-                                                    $minScore = $items[$refs_list[$this->get_id(
-                                                    )]]->getPrerequisiteMinScore();
-                                                    $maxScore = $items[$refs_list[$this->get_id(
-                                                    )]]->getPrerequisiteMaxScore();
+                                                    /** @var learnpathItem $myItemToCheck */
+                                                    $myItemToCheck = $items[$refs_list[$this->get_id()]];
+                                                    $minScore = $myItemToCheck->getPrerequisiteMinScore();
+                                                    $maxScore = $myItemToCheck->getPrerequisiteMaxScore();
+
+                                                    if (empty($minScore)) {
+                                                        // Try with mastery_score
+                                                        $masteryScoreAsMin = $myItemToCheck->get_mastery_score();
+                                                        if (!empty($masteryScoreAsMin)) {
+                                                            $minScore = $masteryScoreAsMin;
+                                                        }
+                                                    }
 
                                                     if (isset($minScore) && isset($minScore)) {
                                                         // Taking min/max prerequisites values see BT#5776
@@ -2544,19 +2552,29 @@ class learnpathItem
                                                         exe_exo_id = '.$items[$refs_list[$prereqs_string]]->path.' AND
                                                         exe_user_id = '.$user_id.' AND
                                                         orig_lp_id = '.$this->lp_id.' AND
-                                                        orig_lp_item_id = '.$prereqs_string.' ';
+                                                        orig_lp_item_id = '.$prereqs_string;
 
                                             $rs_quiz = Database::query($sql);
                                             if (Database::num_rows($rs_quiz) > 0) {
                                                 while ($quiz = Database::fetch_array($rs_quiz)) {
-                                                    $minScore = $items[$refs_list[$this->get_id(
-                                                    )]]->getPrerequisiteMinScore();
-                                                    $maxScore = $items[$refs_list[$this->get_id(
-                                                    )]]->getPrerequisiteMaxScore();
+                                                    /** @var learnpathItem $myItemToCheck */
+                                                    $myItemToCheck = $items[$refs_list[$this->get_id()]];
+                                                    $minScore = $myItemToCheck->getPrerequisiteMinScore();
+                                                    $maxScore = $myItemToCheck->getPrerequisiteMaxScore();
+
+                                                    if (empty($minScore)) {
+                                                        // Try with mastery_score
+                                                        $masteryScoreAsMin = $myItemToCheck->get_mastery_score();
+                                                        if (!empty($masteryScoreAsMin)) {
+                                                            $minScore = $masteryScoreAsMin;
+                                                        }
+                                                    }
 
                                                     if (isset($minScore) && isset($minScore)) {
                                                         // Taking min/max prerequisites values see BT#5776
-                                                        if ($quiz['exe_result'] >= $minScore && $quiz['exe_result'] <= $maxScore) {
+                                                        if ($quiz['exe_result'] >= $minScore &&
+                                                            $quiz['exe_result'] <= $maxScore
+                                                        ) {
                                                             $returnstatus = true;
                                                             break;
                                                         } else {
@@ -2574,9 +2592,7 @@ class learnpathItem
                                                             $returnstatus = true;
                                                             break;
                                                         } else {
-                                                            $this->prereq_alert = get_lang(
-                                                                'LearnpathPrereqNotCompleted'
-                                                            );
+                                                            $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
                                                             $returnstatus = false;
                                                         }
                                                     }

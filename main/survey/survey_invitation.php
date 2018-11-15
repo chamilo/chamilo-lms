@@ -63,24 +63,25 @@ if ($survey_data['anonymous'] == 1) {
     );
     $answered_data = [];
 }
+$url = api_get_self().'?survey_id='.$survey_id.'&'.api_get_cidreq();
 
 if (!isset($_GET['view']) || $_GET['view'] == 'invited') {
     echo get_lang('ViewInvited').' | ';
 } else {
-    echo '	<a href="'.api_get_self().'?survey_id='.$survey_id.'&view=invited">'.
+    echo '	<a href="'.$url.'&view=invited">'.
         get_lang('ViewInvited').'</a> |';
 }
 if ($_GET['view'] == 'answered') {
     echo get_lang('ViewAnswered').' | ';
 } else {
-    echo '	<a href="'.api_get_self().'?survey_id='.$survey_id.'&view=answered">'.
+    echo '	<a href="'.$url.'&view=answered">'.
         get_lang('ViewAnswered').'</a> |';
 }
 
 if ($_GET['view'] == 'unanswered') {
     echo get_lang('ViewUnanswered');
 } else {
-    echo '	<a href="'.api_get_self().'?survey_id='.$survey_id.'&view=unanswered">'.
+    echo '	<a href="'.$url.'&view=unanswered">'.
         get_lang('ViewUnanswered').'</a>';
 }
 
@@ -118,11 +119,13 @@ while ($row = Database::fetch_assoc($res)) {
         } else {
             echo '<td>'.$row['user'].'</td>';
         }
-        echo '	<td>'.api_get_local_time($row['invitation_date']).'</td>';
+        echo '	<td>'.Display::dateToStringAgoAndLongDate($row['invitation_date']).'</td>';
         echo '	<td>';
 
         if (in_array($row['user'], $answered_data) && !api_get_configuration_value('hide_survey_reporting_button')) {
-            echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=userreport&survey_id='.$survey_id.'&user='.$row['user'].'">'.
+            echo '<a href="'.
+                api_get_path(WEB_CODE_PATH).
+                'survey/reporting.php?action=userreport&survey_id='.$survey_id.'&user='.$row['user'].'&'.api_get_cidreq().'">'.
                 get_lang('ViewAnswers').'</a>';
         } else {
             echo '-';
@@ -135,6 +138,5 @@ while ($row = Database::fetch_assoc($res)) {
 
 // Closing the table
 echo '</table>';
-
 // Footer
 Display::display_footer();

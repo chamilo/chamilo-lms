@@ -45,7 +45,6 @@ if (!api_is_allowed_to_edit(false, true) || $isDrhOfCourse) {
     // Show error message if the survey can be seen only by tutors
     if ($survey_data['visible_results'] == SURVEY_VISIBLE_TUTOR) {
         api_not_allowed(true);
-        exit;
     }
 
     Display::display_header(get_lang('ToolSurvey'));
@@ -62,7 +61,7 @@ $format = isset($_REQUEST['export_format']) ? $_REQUEST['export_format'] : '';
 if (!empty($exportReport) && !empty($format)) {
     switch ($format) {
         case 'xls':
-            $filename = 'survey_results_'.$survey_id.'.xlsx';
+            $filename = 'survey_results_'.$survey_id;
             $data = SurveyUtil::export_complete_report_xls(
                 $survey_data,
                 $filename,

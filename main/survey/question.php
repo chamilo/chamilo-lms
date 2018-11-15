@@ -115,12 +115,12 @@ $surveyQuestion = new $ch_type();
 $formData = [];
 $formData['answers'] = ['', ''];
 
-if ($_GET['type'] == 'yesno') {
+switch ($_GET['type']) {
+    case 'yesno':
     $formData['answers'][0] = get_lang('Yes');
     $formData['answers'][1] = get_lang('No');
-}
-
-if ($_GET['type'] == 'personality') {
+        break;
+    case 'personality':
     $formData['answers'][0] = 1;
     $formData['answers'][1] = 2;
     $formData['answers'][2] = 3;
@@ -132,6 +132,10 @@ if ($_GET['type'] == 'personality') {
     $formData['values'][2] = 1;
     $formData['values'][3] = 2;
     $formData['values'][4] = 3;
+        break;
+    case 'open':
+        Display::addFlash(Display::return_message(get_lang('QuestionTags')));
+        break;
 }
 
 // We are editing a question
@@ -150,7 +154,5 @@ if ($surveyQuestion->getForm()->validate()) {
 }
 
 Display::display_header($tool_name, 'Survey');
-
 echo $surveyQuestion->getForm()->returnForm();
-
 Display :: display_footer();

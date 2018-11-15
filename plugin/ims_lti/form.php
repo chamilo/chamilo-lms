@@ -112,19 +112,23 @@ $params['tool_consumer_instance_contact_email'] = api_get_setting('emailAdminist
 
 $params += $tool->parseCustomParams();
 
-$oauth = new OAuthSimple(
-    $tool->getConsumerKey(),
-    $tool->getSharedSecret()
-);
-$oauth->setAction('post');
-$oauth->setSignatureMethod('HMAC-SHA1');
-$oauth->setParameters($params);
-$result = $oauth->sign(array(
-    'path' => $tool->getLaunchUrl(),
-    'parameters' => array(
-        'oauth_callback' => 'about:blank'
-    )
-));
+if (!empty($tool->getConsumerKey()) && !empty($tool->getSharedSecret())) {
+    $oauth = new OAuthSimple(
+        $tool->getConsumerKey(),
+        $tool->getSharedSecret()
+    );
+    $oauth->setAction('post');
+    $oauth->setSignatureMethod('HMAC-SHA1');
+    $oauth->setParameters($params);
+    $result = $oauth->sign(array(
+        'path' => $tool->getLaunchUrl(),
+        'parameters' => array(
+            'oauth_callback' => 'about:blank'
+        )
+    ));
+
+    $params = $result['parameters'];
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -135,7 +139,7 @@ $result = $oauth->sign(array(
 <form action="<?php echo $tool->getLaunchUrl() ?>" name="ltiLaunchForm" method="post"
       encType="application/x-www-form-urlencoded">
     <?php
-    foreach ($result["parameters"] as $key => $values) { //Dump parameters
+    foreach ($params as $key => $values) {
         echo '<input type="hidden" name="'.$key.'" value="'.htmlspecialchars($values).'" />'.PHP_EOL;
     }
     ?>

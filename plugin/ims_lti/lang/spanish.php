@@ -36,3 +36,5 @@ $strings['ShareLauncherPicture'] = 'Enviar la foto del usuario';
 $strings['NoTool'] = 'La herramienta no existe';
 $strings['ToolAddedOnCourseX'] = 'Herramienta agregada en el curso <strong>%s</strong>.';
 $strings['SupportDeppLinkingHelp'] = 'Contacte a su Proveedor de Herramienta para verificar si el soporte a Deep Linking es obligatorio';
+$strings['NoAccessToUrl'] = 'Sin acceso a la URL';
+$strings['LaunchUrlNotFound'] = 'URL de lanzamiento no encontrada';

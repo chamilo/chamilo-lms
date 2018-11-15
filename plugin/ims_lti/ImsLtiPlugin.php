@@ -125,8 +125,8 @@ class ImsLtiPlugin extends Plugin
                 name VARCHAR(255) NOT NULL,
                 description LONGTEXT DEFAULT NULL,
                 launch_url VARCHAR(255) NOT NULL,
-                consumer_key VARCHAR(255) NOT NULL,
-                shared_secret VARCHAR(255) NOT NULL,
+                consumer_key VARCHAR(255) DEFAULT NULL,
+                shared_secret VARCHAR(255) DEFAULT NULL,
                 custom_params LONGTEXT DEFAULT NULL,
                 active_deep_linking TINYINT(1) DEFAULT \'0\' NOT NULL,
                 privacy LONGTEXT DEFAULT NULL,
@@ -465,5 +465,45 @@ class ImsLtiPlugin extends Plugin
         $tool = $toolRepo->findOneBy(['id' => $toolId, 'course' => $course]);
 
         return !empty($tool);
+    }
+
+    /**
+     * @param string $configUrl
+     *
+     * @return string
+     * @throws Exception
+     */
+    public function getLaunchUrlFromCartridge($configUrl)
+    {
+        $options = [
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_POST => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER => false,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_SSL_VERIFYPEER => false,
+        ];
+
+        $ch = curl_init($configUrl);
+        curl_setopt_array($ch, $options);
+        $content = curl_exec($ch);
+        $errno = curl_errno($ch);
+        curl_close($ch);
+
+        if ($errno !== 0) {
+            throw new Exception($this->get_lang('NoAccessToUrl'));
+        }
+
+        $xml = new SimpleXMLElement($content);
+        $result = $xml->xpath('blti:launch_url');
+
+        if (empty($result)) {
+            throw new Exception($this->get_lang('LaunchUrlNotFound'));
+        }
+
+        $launchUrl = $result[0];
+
+        return (string) $launchUrl;
     }
 }

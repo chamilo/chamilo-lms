@@ -43,8 +43,8 @@ class FrmAdd extends FormValidator
 
         if (null === $this->baseTool) {
             $this->addUrl('launch_url', $plugin->get_lang('LaunchUrl'), true);
-            $this->addText('consumer_key', $plugin->get_lang('ConsumerKey'));
-            $this->addText('shared_secret', $plugin->get_lang('SharedSecret'));
+            $this->addText('consumer_key', $plugin->get_lang('ConsumerKey'), false);
+            $this->addText('shared_secret', $plugin->get_lang('SharedSecret'), false);
         }
 
         $this->addButtonAdvancedSettings('lti_adv');

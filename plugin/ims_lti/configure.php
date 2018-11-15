@@ -49,15 +49,6 @@ switch ($action) {
                 ->setDescription(
                     empty($formValues['description']) ? null : $formValues['description']
                 )
-                ->setLaunchUrl(
-                    $baseTool ? $baseTool->getLaunchUrl() : $formValues['launch_url']
-                )
-                ->setConsumerKey(
-                    $baseTool ? $baseTool->getConsumerKey() : $formValues['consumer_key']
-                )
-                ->setSharedSecret(
-                    $baseTool ? $baseTool->getSharedSecret() : $formValues['shared_secret']
-                )
                 ->setCustomParams(
                     empty($formValues['custom_params']) ? null : $formValues['custom_params']
                 )
@@ -68,6 +59,33 @@ switch ($action) {
                     !empty($formValues['share_email']),
                     !empty($formValues['share_picture'])
                 );
+
+            if ($baseTool) {
+                $tool
+                    ->setLaunchUrl($baseTool->getLaunchUrl())
+                    ->setConsumerKey($baseTool->getConsumerKey())
+                    ->setSharedSecret($baseTool->getSharedSecret());
+            } else {
+                if (empty($formValues['consumer_key']) && empty($formValues['shared_secret'])) {
+                    try {
+                        $launchUrl = $plugin->getLaunchUrlFromCartridge($formValues['launch_url']);
+                    } catch (Exception $e) {
+                        Display::addFlash(
+                            Display::return_message($e->getMessage(), 'error')
+                        );
+
+                        header('Location: '.api_get_self().'?'.api_get_cidreq());
+                        exit;
+                    }
+
+                    $tool->setLaunchUrl($launchUrl);
+                } else {
+                    $tool
+                        ->setLaunchUrl($formValues['launch_url'])
+                        ->setConsumerKey($formValues['consumer_key'])
+                        ->setSharedSecret($formValues['shared_secret']);
+                }
+            }
 
             if (null === $baseTool ||
                 ($baseTool && !$baseTool->isActiveDeepLinking())

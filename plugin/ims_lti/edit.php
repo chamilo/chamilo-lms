@@ -37,8 +37,12 @@ if ($form->validate()) {
 
     $tool
         ->setName($formValues['name'])
-        ->setDescription($formValues['description'])
-        ->setCustomParams($formValues['custom_params'])
+        ->setDescription(
+            empty($formValues['description']) ? null : $formValues['description']
+        )
+        ->setCustomParams(
+            empty($formValues['custom_params']) ? null : $formValues['custom_params']
+        )
         ->setPrivacy(
             !empty($formValues['share_name']),
             !empty($formValues['share_email']),
@@ -48,8 +52,12 @@ if ($form->validate()) {
     if (null === $tool->getParent()) {
         $tool
             ->setLaunchUrl($formValues['launch_url'])
-            ->setConsumerKey($formValues['consumer_key'])
-            ->setSharedSecret($formValues['shared_secret']);
+            ->setConsumerKey(
+                empty($formValues['consumer_key']) ? null : $formValues['consumer_key']
+            )
+            ->setSharedSecret(
+                empty($formValues['shared_secret']) ? null : $formValues['shared_secret']
+            );
     }
 
     if (null === $tool->getParent() ||

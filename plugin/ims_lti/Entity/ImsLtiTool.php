@@ -45,13 +45,13 @@ class ImsLtiTool
     /**
      * @var string
      *
-     * @ORM\Column(name="consumer_key", type="string")
+     * @ORM\Column(name="consumer_key", type="string", nullable=true)
      */
     private $consumerKey = '';
     /**
      * @var string
      *
-     * @ORM\Column(name="shared_secret", type="string")
+     * @ORM\Column(name="shared_secret", type="string", nullable=true)
      */
     private $sharedSecret = '';
     /**
@@ -117,6 +117,8 @@ class ImsLtiTool
         $this->gradebookEval =null;
         $this->privacy = null;
         $this->children = new ArrayCollection();
+        $this->consumerKey = null;
+        $this->sharedSecret = null;
     }
 
     /**

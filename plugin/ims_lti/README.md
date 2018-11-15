@@ -1,7 +1,7 @@
 IMS/LTI plugin
 ===
 
-Version 1.3 (beta)
+Version 1.4 (beta)
 
 This plugin is meant to be later integrated into Chamilo (in a major version
 release).
@@ -33,6 +33,9 @@ external tool.
 **v1.3**
 * Privacy settings added. Allow to indicate id the launcher's data
   should be sent in request.
+  
+**v1.4**
+* Allow create external tools when there is no key/secret available for launch
 
 # Installation
 
@@ -74,4 +77,11 @@ CREATE INDEX IDX_C5E47F7C727ACA70 ON plugin_ims_lti_tool (parent_id);
 **To v1.3**
 ```sql
 ALTER TABLE plugin_ims_lti_tool ADD privacy LONGTEXT DEFAULT NULL;
+```
+
+**To v.4**
+```sql
+ALTER TABLE plugin_ims_lti_tool
+    CHANGE consumer_key consumer_key VARCHAR(255) DEFAULT NULL,
+    CHANGE shared_secret shared_secret VARCHAR(255) DEFAULT NULL;
 ```

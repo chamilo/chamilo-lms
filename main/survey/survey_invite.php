@@ -23,6 +23,7 @@ if (!api_is_allowed_to_edit(false, true)) {
 }
 
 $course_id = api_get_course_int_id();
+$_course = api_get_course_info();
 
 // Getting the survey information
 $survey_id = Security::remove_XSS($_GET['survey_id']);

@@ -16,6 +16,8 @@
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
+$_course = api_get_course_info();
+
 $this_section = SECTION_COURSES;
 
 $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');

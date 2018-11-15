@@ -25,7 +25,7 @@ $learnpath_id = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : null;
 $submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
 
 /* MAIN CODE */
-if ((!$is_allowed_to_edit) || ($isStudentView)) {
+if ((!$is_allowed_to_edit) || $isStudentView) {
     error_log('New LP - User not authorized in lp_edit_item_prereq.php');
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
     exit;

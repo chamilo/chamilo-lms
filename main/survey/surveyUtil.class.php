@@ -1845,7 +1845,6 @@ class SurveyUtil
         foreach ($questions as $key => &$question) {
             if (is_array($allowed_question_types)) {
                 if (in_array($question['type'], $allowed_question_types)) {
-                    //echo '<option value="'.$question['question_id'].'"';
                     if (isset($_GET['xaxis']) && $_GET['xaxis'] == $question['question_id']) {
                         $defaults['xaxis'] = $question['question_id'];
                     }

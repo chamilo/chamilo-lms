@@ -10290,8 +10290,10 @@ class learnpath
     public function display_item_prerequisites_form($item_id = 0)
     {
         $course_id = api_get_course_int_id();
+        $item_id = (int) $item_id;
+
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        $item_id = intval($item_id);
+
         /* Current prerequisite */
         $sql = "SELECT * FROM $tbl_lp_item
                 WHERE iid = $item_id";
@@ -10329,10 +10331,13 @@ class learnpath
 
         $selectedMinScore = [];
         $selectedMaxScore = [];
+        $masteryScore = [];
+
         while ($row = Database::fetch_array($result)) {
             if ($row['id'] == $item_id) {
                 $selectedMinScore[$row['prerequisite']] = $row['prerequisite_min_score'];
                 $selectedMaxScore[$row['prerequisite']] = $row['prerequisite_max_score'];
+                $masteryScore[$row['prerequisite']] = $row['mastery_score'];
             }
             $arrLP[] = [
                 'id' => $row['iid'],
@@ -10366,6 +10371,7 @@ class learnpath
 
             $selectedMaxScoreValue = isset($selectedMaxScore[$item['id']]) ? $selectedMaxScore[$item['id']] : $item['max_score'];
             $selectedMinScoreValue = isset($selectedMinScore[$item['id']]) ? $selectedMinScore[$item['id']] : 0;
+            $masteryScoreAsMinValue = isset($masteryScore[$item['id']]) ? $masteryScore[$item['id']] : 0;
 
             $return .= '<tr>';
             $return .= '<td '.(($item['item_type'] != TOOL_QUIZ && $item['item_type'] != TOOL_HOTPOTATOES) ? ' colspan="3"' : '').'>';
@@ -10397,6 +10403,11 @@ class learnpath
                 $lpItemObj->max_score = $exercise->get_max_score();
                 $lpItemObj->update();
                 $item['max_score'] = $lpItemObj->max_score;
+
+                if (empty($selectedMinScoreValue) && !empty($masteryScoreAsMinValue)) {
+                    // Backwards compatibility with 1.9.x use mastery_score as min value
+                    $selectedMinScoreValue = $masteryScoreAsMinValue;
+                }
 
                 $return .= '<td>';
                 $return .= '<input 

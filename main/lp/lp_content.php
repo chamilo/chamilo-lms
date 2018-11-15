@@ -62,7 +62,7 @@ if ($dir) {
                 $src = $learnPath->fixBlockedLinks($src);
                 break;
             }
-            $src = 'blank.php?error=prerequisites&prerequisite_message='.$learnPath->error;
+            $src = 'blank.php?error=prerequisites&prerequisite_message='.Security::remove_XSS($learnPath->error);
             break;
         case 2:
             $learnPath->stop_previous_item();
@@ -72,7 +72,7 @@ if ($dir) {
                 $src = $learnPath->get_link('http', $lpItemId);
                 $learnPath->start_current_item(); // starts time counter manually if asset
             } else {
-                $src = 'blank.php?error=prerequisites&prerequisite_message='.$learnPath->error;
+                $src = 'blank.php?error=prerequisites&prerequisite_message='.Security::remove_XSS($learnPath->error);
             }
             break;
         case 3:

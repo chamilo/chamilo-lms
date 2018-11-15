@@ -772,6 +772,12 @@ if (!api_is_allowed_to_edit(null, true)) {
 if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)) {
     echo '<meta http-equiv="refresh" content="0;url='.api_get_self().'?'.api_get_cidreq().'" />';
 } else {
+    // Tool introduction
+    Display::display_introduction_section(
+        TOOL_GRADEBOOK,
+        ['ToolbarSet' => 'AssessmentsIntroduction']
+    );
+
     if (!empty($actionsLeft)) {
         echo $toolbar = Display::toolbarAction(
             'gradebook-student-actions',
@@ -780,11 +786,6 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
     }
 
     if (api_is_allowed_to_edit(null, true)) {
-        // Tool introduction
-        Display::display_introduction_section(
-            TOOL_GRADEBOOK,
-            ['ToolbarSet' => 'AssessmentsIntroduction']
-        );
 
         if (((empty($selectCat)) || (isset($_GET['cidReq']) && $_GET['cidReq'] !== '')) ||
             (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false')

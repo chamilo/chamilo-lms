@@ -18,7 +18,7 @@ class ImsLtiServiceReplaceRequest extends ImsLtiServiceRequest
     {
         parent::__construct($xml);
 
-        $this->responseType = ImsLtiServiceResponse::TYPE_DELETE;
+        $this->responseType = ImsLtiServiceResponse::TYPE_REPLACE;
         $this->xmlRequest = $this->xmlRequest->replaceResultRequest;
     }
 
@@ -26,7 +26,17 @@ class ImsLtiServiceReplaceRequest extends ImsLtiServiceRequest
     {
         $resultRecord = $this->xmlRequest->resultRecord;
         $sourcedId = (string) $resultRecord->sourcedGUID->sourcedId;
-        $resultScore = (float) $resultRecord->result->resultScore->textString;
+        $resultScore = (string) $resultRecord->result->resultScore->textString;
+
+        if (!is_numeric($resultScore)) {
+            $this->statusInfo
+                ->setSeverity(ImsLtiServiceResponseStatus::SEVERITY_ERROR)
+                ->setCodeMajor(ImsLtiServiceResponseStatus::CODEMAJOR_FAILURE);
+
+            return;
+        }
+
+        $resultScore = (float) $resultScore;
 
         if (0 > $resultScore || 1 < $resultScore) {
             $this->statusInfo

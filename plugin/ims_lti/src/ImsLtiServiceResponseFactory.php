@@ -22,6 +22,8 @@ class ImsLtiServiceResponseFactory
                 return new ImsLtiServiceReadResponse($statusInfo, $bodyParam);
             case ImsLtiServiceResponse::TYPE_DELETE:
                 return new ImsLtiServiceDeleteResponse($statusInfo, $bodyParam);
+            default:
+                return new ImsLtiServiceUnsupportedResponse($statusInfo, $type);
         }
 
         return null;

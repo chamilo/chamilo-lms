@@ -16,13 +16,19 @@ class ImsLtiServiceRequestFactory
         $bodyChildren = $xml->imsx_POXBody->children();
 
         if (!empty($bodyChildren)) {
-            switch ($bodyChildren->getName()) {
+            $name = $bodyChildren->getName();
+
+            switch ($name) {
                 case 'replaceResultRequest':
                     return new ImsLtiServiceReplaceRequest($xml);
                 case 'readResultRequest':
                     return new ImsLtiServiceReadRequest($xml);
                 case 'deleteResultRequest':
                     return new ImsLtiServiceDeleteRequest($xml);
+                default:
+                    $name = str_replace(['ResultRequest', 'Request'], '', $name);
+
+                    return new ImsLtiServiceUnsupportedRequest($xml, $name);
             }
         }
 

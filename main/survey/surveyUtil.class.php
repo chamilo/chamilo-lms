@@ -2848,13 +2848,13 @@ class SurveyUtil
                 );
 
                 $actions[] = Display::url(
-                    Display::return_icon('star.png', get_lang('MultiplicateSurvey')),
+                    Display::return_icon('multiplicate_survey.png', get_lang('MultiplicateSurvey')),
                     $codePath.'survey/survey_list.php?'
                     .http_build_query($params + ['action' => 'multiplicate', 'survey_id' => $survey_id])
                 );
 
                 $actions[] = Display::url(
-                    Display::return_icon('star_na.png', get_lang('RemoveMultiplicateQuestions')),
+                    Display::return_icon('multiplicate_survey_na.png', get_lang('RemoveMultiplicateQuestions')),
                     $codePath.'survey/survey_list.php?'
                     .http_build_query($params + ['action' => 'remove_multiplicate', 'survey_id' => $survey_id])
                 );

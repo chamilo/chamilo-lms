@@ -263,23 +263,22 @@ class SharedSurvey
     /**
      * Set surveythanks.
      *
-     * @param string $surveythanks
+     * @param string $value
      *
      * @return SharedSurvey
      */
-    public function setSurveythanks($surveythanks)
+    public function setSurveyThanks($value)
     {
-        $this->surveythanks = $surveythanks;
+        $this->surveythanks = $value;
 
         return $this;
     }
 
     /**
-     * Get surveythanks.
      *
      * @return string
      */
-    public function getSurveythanks()
+    public function getSurveyThanks()
     {
         return $this->surveythanks;
     }

@@ -14,23 +14,20 @@
             {% block sonata_user_login_form %}
                 <form id="form-login-user" action="{{ path("login") }}" method="post" role="form">
 
-                    <div class="wrap-input validate-input m-b-23" data-validate = "Username is reauired">
-                        {{ form_label(form._username,'Username', {'label_attr': {'class': 'label-input'}}) }}
+                    <div class="wrap-input validate-input m-b-23" data-validate = "{{ 'Username is required' | trans }}">
+                        {{ form_label(form._username, 'Username' | trans , {'label_attr': {'class': 'label-input'}}) }}
                         {{ form_widget(form._username, {'attr': {'placeholder': 'Type your username', 'class': 'input-login'}}) }}
                         <i class="focus-input fas fa-user fa-lg"></i>
                     </div>
 
                     <div class="wrap-input validate-input" data-validate="Password is required">
-                        {{ form_label(form._password, 'Password', {'label_attr': {'class': 'label-input'}})}}
+                        {{ form_label(form._password, 'Password' | trans , {'label_attr': {'class': 'label-input'}})}}
                         {{ form_widget(form._password, {'attr': {'placeholder': 'Type your password', 'class': 'input-login'}}) }}
                         <i class="focus-input fas fa-lock fa-lg"></i>
                     </div>
 
                     {{ form_widget(form,{ 'attr': {'class': 'login'} }) }}
-
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
-
-
                     <div class="form-group has-feedback">
                         <div class="checkbox control-group">
                             <label for="remember_me">

@@ -1013,4 +1013,37 @@ class CourseCategory
 
         return true;
     }
+
+
+    /**
+     * Deletes the image on disk and in the database
+     * @param $categoryId
+     * @return bool Always returns true
+     */
+    public static function deletePictureCategory($categoryId)
+    {
+
+        $dirName = 'course_category/';
+        $fileImage = $dirName . 'cc_' . $categoryId . '.jpg';
+        $fileDir = api_get_path(SYS_UPLOAD_PATH) . $fileImage;
+        if (file_exists($fileDir)) {
+            try {
+                unlink($fileDir);
+            } catch (Exception $e) {
+                error_log($e->getMessage());
+            }
+        }
+        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        $result = Database::update(
+            $table,
+            ['image' => ''],
+            ['id = ?' => $categoryId]
+        );
+
+        if ($result) {
+            return true;
+        }
+
+        return false;
+    }
 }

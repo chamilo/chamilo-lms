@@ -80,6 +80,51 @@
                     window.dispatchEvent(window.EVENT);
                 }, 300);
             });
+
+            /**
+             * Notifications Systems
+             */
+            $.get(
+                '{{ url('legacy_main', { name : 'inc/ajax/message.ajax.php'}) }}',
+                {'a': 'get_count_message'},
+                function (data) {
+                    var countFriends = data.ms_friends;
+                    var countInbox = data.ms_inbox
+                    if (countFriends != 0) {
+                        $("#notifications-social").removeClass('d-none');
+                        $("#notifications-social").append(countFriends);
+                    }
+                    if(countInbox != 0){
+                        $("#notifications-inbox").removeClass('d-none');
+                        $("#notifications-inbox").append(countFriends);
+                    }
+                }
+            );
+
+            $('#list_notifications').on('click', e => {
+
+                var $listFriends = $('#list_friends');
+                var $html;
+                $.get(
+                    '{{ url('legacy_main', { name : 'inc/ajax/message.ajax.php'}) }}',
+                    {'a': 'get_notifications_friends'},
+                    function (data) {
+
+                        for (var i in data){
+
+                            $html = '<a class="dropdown-item preview-item">';
+                            $html += '<div class="preview-thumbnail"><img class="rounded-circle" src="'+data[i].avatar+'"/></div>';
+                            $html += '<div class="preview-item-content flex-grow">';
+                            $html += '<h6>'+data[i].fullname+'</h6>';
+                            $html += '<h6>'+data[i].title+'</h6>';
+                            $html += '<p>'+data[i].content+'</p><span class="date">'+data[i].date+'</span>';
+                            $html += '</div></a>';
+                            $listFriends.append($html);
+                        }
+
+                    }
+                );
+            });
         });
     </script>
     <div class="header navbar">
@@ -110,19 +155,26 @@
 
                 <li class="btn-menu">
                     <a href="{{ url('legacy_main', { 'name' : 'calendar/agenda_js.php' }) }}">
-                        <i class="fa fa-calendar fa-lg" aria-hidden="true"></i>
+                        <i class="far fa-calendar"></i>
                     </a>
                 </li>
 
-                <li class="notifications">
-                    <span class="counter bgc-red">3</span>
-                    <a href="#" class="no-after" >
+                <li class="notifications dropdown">
+                    <span id="notifications-social" class="counter d-none"></span>
+                    <a id="list_notifications" href="#" class="dropdown-toggle no-after" data-toggle="dropdown">
                         <i class="far fa-bell"></i>
                     </a>
+
+                    <ul id="list_friends" class="dropdown-menu ">
+                        <li>
+
+                        </li>
+                    </ul>
+
                 </li>
                 <li class="notifications">
-                    <span class="counter bgc-blue">3</span>
-                    <a href="" class="no-after">
+                    <span id="notifications-inbox" class="counter d-none"></span>
+                    <a href="{{ url('legacy_main', { 'name' : 'messages/inbox.php' }) }}" class="no-after">
                         <i class="far fa-envelope"></i>
                     </a>
                 </li>

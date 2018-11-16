@@ -402,7 +402,7 @@ class SocialManager extends UserManager
      *
      * @return array
      */
-    public static function get_list_invitation_of_friends_by_user_id($userId)
+    public static function get_list_invitation_of_friends_by_user_id($userId, $limit)
     {
         $userId = (int) $userId;
 
@@ -416,6 +416,9 @@ class SocialManager extends UserManager
                 WHERE
                     user_receiver_id = '.$userId.' AND
                     msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
+        if($limit){
+            $sql .= ' LIMIT '.$limit;
+        }
         $res = Database::query($sql);
         $list = [];
         while ($row = Database::fetch_array($res, 'ASSOC')) {

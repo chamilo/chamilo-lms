@@ -13,6 +13,28 @@ require_once __DIR__.'/../global.inc.php';
 $action = $_GET['a'];
 
 switch ($action) {
+    case 'get_notifications_friends':
+        $userId = api_get_user_id();
+        $listInvitations = [];
+        $temp = [];
+        if (api_get_setting('allow_social_tool') == 'true') {
+            $list = SocialManager::get_list_invitation_of_friends_by_user_id($userId,3);
+
+            foreach ($list as $row){
+                $user = api_get_user_info($row['user_sender_id']);
+                $temp['title'] = $row['title'];
+                $temp['content'] = $row['content'];
+                $temp['date'] = $row['send_date'];
+                $temp['user_id'] = $user['id'];
+                $temp['fullname'] = $user['complete_name'];
+                $temp['email'] = $user['email'];
+                $temp['avatar'] = $user['avatar_small'];
+                $listInvitations[]=$temp;
+            }
+        }
+        header("Content-type:application/json");
+        echo json_encode($listInvitations);
+        break;
     case 'get_count_message':
         $userId = api_get_user_id();
         $invitations = [];
@@ -124,7 +146,7 @@ switch ($action) {
                 'id' => $user->getId(),
             ];
         }
-
+        header("Content-type:application/json");
         echo json_encode($return);
         break;
     default:

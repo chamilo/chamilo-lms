@@ -74,7 +74,7 @@ class CSurveyInvitation
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="reminder_date", type="datetime", nullable=false)
+     * @ORM\Column(name="reminder_date", type="datetime", nullable=true)
      */
     protected $reminderDate;
 

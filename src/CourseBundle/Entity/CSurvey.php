@@ -118,7 +118,7 @@ class CSurvey
      *
      * @ORM\Column(name="surveythanks", type="text", nullable=true)
      */
-    protected $surveythanks;
+    protected $surveyThanks;
 
     /**
      * @var \DateTime
@@ -241,9 +241,49 @@ class CSurvey
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="is_mandatory", type="boolean", options={"default":false})
      */
     protected $isMandatory = false;
+
+    /**
+     * CSurvey constructor.
+     */
+    public function __construct()
+    {
+        $this->creationDate = new \DateTime();
+        $this->invited = 0;
+        $this->answered = 0;
+        $this->surveyId = 0;
+        $this->inviteMail = '';
+        $this->reminderMail = '';
+        $this->mailSubject = '';
+        $this->shuffle = 0;
+        $this->oneQuestionPerPage = 0;
+        $this->surveyVersion = '';
+        $this->parentId = 0;
+        $this->surveyType = 0;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIid(): int
+    {
+        return $this->iid;
+    }
+
+    /**
+     * @param int $iid
+     *
+     * @return CSurvey
+     */
+    public function setIid(int $iid): CSurvey
+    {
+        $this->iid = $iid;
+
+        return $this;
+    }
 
     /**
      * Set code.
@@ -494,7 +534,7 @@ class CSurvey
      */
     public function setSurveythanks($surveythanks)
     {
-        $this->surveythanks = $surveythanks;
+        $this->surveyThanks = $surveythanks;
 
         return $this;
     }
@@ -506,7 +546,7 @@ class CSurvey
      */
     public function getSurveythanks()
     {
-        return $this->surveythanks;
+        return $this->surveyThanks;
     }
 
     /**

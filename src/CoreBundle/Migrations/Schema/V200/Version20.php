@@ -213,6 +213,9 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('UPDATE user SET created_at = registration_date WHERE CAST(created_at AS CHAR(20)) = "0000-00-00 00:00:00"');
         $this->addSql('UPDATE user SET updated_at = registration_date WHERE CAST(updated_at AS CHAR(20)) = "0000-00-00 00:00:00"');
 
+        $this->addSql('ALTER TABLE c_survey_invitation CHANGE reminder_date reminder_date DATETIME DEFAULT NULL');
+        $this->addSql('UPDATE c_survey_invitation SET reminder_date = NULL WHERE CAST(reminder_date AS CHAR(20)) = "0000-00-00 00:00:00"');
+
         /*$table = $schema->getTable('course_rel_class');
         if (!$table->hasColumn('c_id')) {
             $this->addSql("ALTER TABLE course_rel_class ADD c_id int NOT NULL");

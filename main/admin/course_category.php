@@ -41,6 +41,7 @@ if (!empty($action)) {
 
             $errorMsg = Display::return_message(get_lang('Created'));
         } else {
+
             $ret = CourseCategory::editNode(
                 $_POST['code'],
                 $_POST['name'],
@@ -49,6 +50,13 @@ if (!empty($action)) {
             );
             $categoryInfo = CourseCategory::getCategory($_POST['code']);
             $ret = $categoryInfo['id'];
+
+            //Delete Picture Category
+            $deletePicture = isset($_POST['delete_picture']) ? $_POST['delete_picture'] : '';
+            if ($deletePicture) {
+                CourseCategory::deletePictureCategory($ret);
+            }
+
             $errorMsg = Display::return_message(get_lang('Updated'));
         }
         if (!$ret) {
@@ -162,6 +170,8 @@ if ($action == 'add' || $action == 'edit') {
         $text = get_lang('Save');
         $form->setDefaults($categoryInfo);
         $form->addButtonSave($text);
+
+
     } else {
         $class = "add";
         $text = get_lang('AddCategory');

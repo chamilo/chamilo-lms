@@ -269,6 +269,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                 $input = $(\'[name="'.$id.'_crop_result"]\'),
                 $cropButton = $(\'#'.$id.'_crop_button\'),
                 $formGroup = $(\'#'.$id.'-form-group\');
+                
 
             function isValidType(file) {
                 var fileTypes = [\'image/jpg\', \'image/jpeg\', \'image/gif\', \'image/png\'];
@@ -297,9 +298,9 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                         zoomable: false,
                         rotatable: false,
                         scalable: '.$scalable.',
-                        crop: function(e) {
+                        crop: function(event) {
                             // Output the result data for cropping image.
-                            $input.val(e.x + \',\' + e.y + \',\' + e.width + \',\' + e.height);
+                            $input.val(event.detail.x + \',\' + event.detail.y + \',\' + event.detail.width + \',\' + event.detail.height);
                         }
                     });
             }

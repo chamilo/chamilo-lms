@@ -786,7 +786,6 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
     }
 
     if (api_is_allowed_to_edit(null, true)) {
-
         if (((empty($selectCat)) || (isset($_GET['cidReq']) && $_GET['cidReq'] !== '')) ||
             (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false')
         ) {

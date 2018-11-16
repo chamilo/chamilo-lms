@@ -10332,13 +10332,13 @@ class learnpath
         $selectedMinScore = [];
         $selectedMaxScore = [];
         $masteryScore = [];
-
         while ($row = Database::fetch_array($result)) {
-            if ($row['id'] == $item_id) {
+            if ($row['iid'] == $item_id) {
                 $selectedMinScore[$row['prerequisite']] = $row['prerequisite_min_score'];
                 $selectedMaxScore[$row['prerequisite']] = $row['prerequisite_max_score'];
-                $masteryScore[$row['prerequisite']] = $row['mastery_score'];
             }
+            $masteryScore[$row['iid']] = $row['mastery_score'];
+
             $arrLP[] = [
                 'id' => $row['iid'],
                 'item_type' => $row['item_type'],

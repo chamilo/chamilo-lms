@@ -1290,7 +1290,6 @@ class SurveyUtil
                         .';';
                     }
                 }
-
             }
         }
 
@@ -1598,7 +1597,6 @@ class SurveyUtil
                         $column++;
                     }
                 }
-
             }
         }
 

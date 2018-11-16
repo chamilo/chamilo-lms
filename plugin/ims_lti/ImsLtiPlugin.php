@@ -506,4 +506,41 @@ class ImsLtiPlugin extends Plugin
 
         return (string) $launchUrl;
     }
+
+    /**
+     * @param array $params
+     */
+    public function trimParams(array &$params)
+    {
+        foreach ($params as $key => $value) {
+            $newValue = preg_replace('/\s+/', ' ', $value);
+
+            $params[$key] = trim($newValue);
+        }
+    }
+
+    /**
+     * @param ImsLtiTool $tool
+     * @param array      $params
+     *
+     * @return array
+     */
+    public function removeUrlParamsFromLaunchParams(ImsLtiTool $tool, array &$params)
+    {
+        $urlQuery = parse_url($tool->getLaunchUrl(), PHP_URL_QUERY);
+
+        if (empty($urlQuery)) {
+            return $params;
+        }
+
+        $queryParams = [];
+        parse_str($urlQuery, $queryParams);
+        $queryKeys = array_keys($queryParams);
+
+        foreach ($queryKeys as $key) {
+            if (isset($params[$key])) {
+                unset($params[$key]);
+            }
+        }
+    }
 }

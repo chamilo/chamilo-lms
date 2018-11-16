@@ -15,7 +15,7 @@ $action = $_GET['a'];
 switch ($action) {
     case 'get_count_message':
         $userId = api_get_user_id();
-        $total_invitations = 0;
+        $invitations = [];
         $group_pending_invitations = 0;
 
         // Setting notifications
@@ -40,9 +40,15 @@ switch ($action) {
             } else {
                 $group_pending_invitations = 0;
             }
-            $total_invitations = intval($number_of_new_messages_of_friend) + $group_pending_invitations + intval($count_unread_message);
+            $invitations = [
+                'ms_friends' => intval($number_of_new_messages_of_friend),
+                'ms_groups' => $group_pending_invitations,
+                'ms_inbox' => intval($count_unread_message)
+            ];
+
         }
-        echo $total_invitations;
+        header("Content-type:application/json");
+        echo json_encode($invitations);
         break;
     case 'send_message':
         $subject = isset($_REQUEST['subject']) ? trim($_REQUEST['subject']) : null;

@@ -6104,7 +6104,8 @@ $CourseRequestLegalNote = "La información de esta solicitud de formación es co
 $EnableCourseValidation = "Solicitud de cursos";
 $EnableCourseValidationComment = "Cuando la solicitud de cursos está activada, un profesor no podrá crear un curso por si mismo sino que tendrá que rellenar una solicitud. El administrador de la plataforma revisará la solicitud y la aprobará o rechazará. Esta funcionalidad se basa en mensajes de correo electrónico automáticos por lo que debe asegurarse de que su instalación de Chamilo usa un servidor de correo y una dirección de correo dedicada a ello.";
 $CourseRequestAskInfoEmailSubject = "%s Solicitud de informacion %s";
-$CourseRequestAskInfoEmailText = "Hemos recibido su solicitud para la creación de un curso con el código% s. Antes de considerar su aprobación necesitamos alguna información adicional. \ N \ nPor favor, realice una breve descripción del contenido del curso, los objetivos y los estudiantes u otro tipo de usuarios que vayan a participar. Si es su caso, mencione el nombre de la institución u órgano en nombre de la cual Usted ha hecho la solicitud.";
+$CourseRequestAskInfoEmailText = "Hemos recibido su solicitud para la creación de un curso con el código %s. Antes de considerar su aprobación necesitamos alguna información adicional.\n\n
+Por favor, realice una breve descripción del contenido del curso, los objetivos y los estudiantes u otro tipo de usuarios que vayan a participar. Si es su caso, mencione el nombre de la institución u órgano en nombre de la cual Usted ha hecho la solicitud.";
 $CourseRequestAcceptedEmailSubject = "%s La petición del curso %s ha sido aprobada";
 $CourseRequestAcceptedEmailText = "Su solicitud del curso %s ha sido aprobada. Un nuevo curso %s ha sido creado y Usted ha quedado inscrito en él como profesor.\n\nPodrá acceder al curso creado desde: %s";
 $CourseRequestRejectedEmailSubject = "%s La solicitud del curso %s ha sido rechazada";

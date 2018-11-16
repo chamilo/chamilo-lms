@@ -161,6 +161,18 @@ class Agenda
     }
 
     /**
+     * Returns the type previously set (and filtered) through setType
+     * If setType() was not called, then type defaults to "personal" as
+     * set in the class definition.
+     */
+    public function getType()
+    {
+        if (isset($this->type)) {
+            return $this->type;
+        }
+    }
+
+    /**
      * @param int $id
      */
     public function setSessionId($id)

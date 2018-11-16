@@ -28,9 +28,12 @@ class LocaleListener implements EventSubscriberInterface
     private $defaultLocale;
 
     /**
-     * @param string $defaultLocale
+     * LocaleListener constructor.
+     *
+     * @param string             $defaultLocale
+     * @param ContainerInterface $container
      */
-    public function __construct($defaultLocale = 'en', ContainerInterface $container)
+    public function __construct($defaultLocale, ContainerInterface $container)
     {
         $this->defaultLocale = $defaultLocale;
         $this->container = $container;
@@ -71,7 +74,6 @@ class LocaleListener implements EventSubscriberInterface
 
             if (!empty($platformLocale)) {
                 $localeList['platform_lang'] = $platformLocale;
-                //$locale = $platformLocale;
             }
 
             // 2. Check user locale
@@ -79,7 +81,7 @@ class LocaleListener implements EventSubscriberInterface
             $userLocale = $request->getSession()->get('_locale_user');
             if (!empty($userLocale)) {
                 //$locale = $userLocale;
-                $localeList['user_profil_lang'] = $userLocale;
+                $localeList['user_profile_lang'] = $userLocale;
             }
 
             // 3. Check course locale
@@ -122,7 +124,7 @@ class LocaleListener implements EventSubscriberInterface
                 'language_priority_1',
             ];
 
-            $locale = $this->defaultLocale;
+            $locale = '';
             foreach ($priorityList as $setting) {
                 $priority = $settings->getSetting("language.$setting");
                 if (!empty($priority) && isset($localeList[$priority])) {
@@ -134,7 +136,7 @@ class LocaleListener implements EventSubscriberInterface
                 // Use default order
                 $priorityList = [
                     'platform_lang',
-                    'user_profil_lang',
+                    'user_profile_lang',
                     'course_lang',
                     'user_selected_lang',
                 ];
@@ -143,6 +145,10 @@ class LocaleListener implements EventSubscriberInterface
                         $locale = $localeList[$setting];
                     }
                 }
+            }
+
+            if (empty($locale)) {
+                $locale = $this->defaultLocale;
             }
 
             // if no explicit locale has been set on this request, use one from the session

@@ -121,9 +121,41 @@ class CSurveyQuestion
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="is_required", type="boolean", options={"default": false})
      */
     protected $isMandatory = false;
+
+    /**
+     * CSurveyQuestion constructor.
+     */
+    public function __construct()
+    {
+        $this->questionId = 0;
+        $this->surveyGroupPri = '';
+        $this->surveyGroupSec1 = '';
+        $this->surveyGroupSec2 = '';
+    }
+
+    /**
+     * @return int
+     */
+    public function getIid(): int
+    {
+        return $this->iid;
+    }
+
+    /**
+     * @param int $iid
+     *
+     * @return CSurveyQuestion
+     */
+    public function setIid(int $iid): CSurveyQuestion
+    {
+        $this->iid = $iid;
+
+        return $this;
+    }
 
     /**
      * Set surveyId.
@@ -278,7 +310,7 @@ class CSurveyQuestion
      */
     public function setSharedQuestionId($sharedQuestionId)
     {
-        $this->sharedQuestionId = $sharedQuestionId;
+        $this->sharedQuestionId = (int) $sharedQuestionId;
 
         return $this;
     }

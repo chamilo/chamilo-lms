@@ -155,6 +155,7 @@ class ScriptHandler
             __DIR__.'/../../../../main/inc/lib/phpmailer/test/phpmailerTest.php',
             __DIR__.'/../../../../main/inc/lib/xht.lib.php',
             __DIR__.'/../../../../main/inc/lib/xmd.lib.php',
+            __DIR__.'/../../../../main/inc/lib/surveymanager.lib.php',
             __DIR__.'/../../../../main/inc/lib/entity.class.php',
             __DIR__.'/../../../../main/inc/lib/entity_repository.class.php',
             __DIR__.'/../../../../main/inc/lib/javascript.class.php',

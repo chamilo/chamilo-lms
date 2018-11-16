@@ -78,6 +78,35 @@ class CSurveyQuestionOption
     protected $value;
 
     /**
+     * CSurveyQuestionOption constructor.
+     *
+     */
+    public function __construct()
+    {
+        $this->questionOptionId = 0;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIid(): int
+    {
+        return $this->iid;
+    }
+
+    /**
+     * @param int $iid
+     *
+     * @return CSurveyQuestionOption
+     */
+    public function setIid(int $iid): CSurveyQuestionOption
+    {
+        $this->iid = $iid;
+
+        return $this;
+    }
+
+    /**
      * Set questionId.
      *
      * @param int $questionId

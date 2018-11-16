@@ -25,6 +25,12 @@ class UserLocaleListener
     /** @var SettingsManager */
     private $settings;
 
+    /**
+     * UserLocaleListener constructor.
+     *
+     * @param SessionInterface $session
+     * @param SettingsManager  $settings
+     */
     public function __construct(SessionInterface $session, SettingsManager $settings)
     {
         $this->session = $session;
@@ -39,7 +45,6 @@ class UserLocaleListener
     public function onInteractiveLogin(InteractiveLoginEvent $event)
     {
         $user = $event->getAuthenticationToken()->getUser();
-
         if (null !== $user->getLocale()) {
             $this->session->set('_locale', $user->getLocale());
             $this->session->set('_locale_user', $user->getLocale());

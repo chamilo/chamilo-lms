@@ -2848,7 +2848,7 @@ class SurveyUtil
                 );
 
                 $actions[] = Display::url(
-                    Display::return_icon('multiplicate_survey.png', get_lang('MultiplicateSurvey')),
+                    Display::return_icon('multiplicate_survey.png', get_lang('MultiplicateQuestions')),
                     $codePath.'survey/survey_list.php?'
                     .http_build_query($params + ['action' => 'multiplicate', 'survey_id' => $survey_id])
                 );

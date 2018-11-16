@@ -1,5 +1,6 @@
+{{ 'ImsLtiDescription'|get_plugin_lang('ImsLtiPlugin') }}
+
 {% autoescape 'html' %}
-    {{ 'ImsLtiDescription'|get_plugin_lang('ImsLtiPlugin') }}
     <div class="btn-toolbar">
         <a href="{{ _p.web_plugin }}ims_lti/create.php" class="btn btn-primary">
             <span class="fa fa-plus fa-fw" aria-hidden="true"></span> {{ 'AddExternalTool'|get_plugin_lang('ImsLtiPlugin') }}

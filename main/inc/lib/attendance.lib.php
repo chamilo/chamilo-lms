@@ -154,8 +154,9 @@ class Attendance
 
         while ($attendance = Database::fetch_row($res)) {
             $student_param = '';
-            if (api_is_drh() && $_GET['student_id']) {
-                $student_param = '&student_id='.intval($_GET['student_id']);
+            $studentRequestId = isset($_GET['student_id']) ? (int) $_GET['student_id'] : 0;
+            if (api_is_drh() && !empty($studentRequestId)) {
+                $student_param = '&student_id='.$studentRequestId;
             }
 
             $session_star = '';

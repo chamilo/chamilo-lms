@@ -420,7 +420,12 @@ $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "Ten element jest nie
 $EnableIframeInclusionComment = "Zezwalając na użycie ramek Iframe wewnątrz edytora HTML ulepszysz możliwości edycji dla użytkowników, ale wiąże się to z pewnym ryzykiem. Upewnij się, że możesz zaufać swoim użytkownikom (np. Jeśli wiesz kim są) przed włączeniem tego rozszerzenia.";
 $AddedToLPCannotBeAccessed = "Ćwiczenie zostało włączone do ścieżki nauki, nie może być dostępne bezpośrednio stąd. Jeśli chcesz udostępnić to samo ćwiczenie poprzez narzędzie ćwiczeń, należy zrobić kopię obecnego zadania przy użyciu ikony kopiowania.";
 $EnableIframeInclusionTitle = "Zezwól na użycie ramek Iframe w edytorze HTML";
-$MailTemplateRegistrationMessage = "Szanowny/a ((firstname)) ((lastname)),\ n\nJesteś zarejestrowany na ((sitename)) z następującymi ustawieniami:\n\nNazwa użytkownika: ((username))\nHasło: ((password))\n\nAdres strony ((sitename)) to:. ((url))\n\nln W przypadku jakichkolwiek problemów, prosimy o kontakt.\n\nAdministrator\n((admin_name)) ((admin_surname)).";
+$MailTemplateRegistrationMessage = "Szanowny/a ((firstname)) ((lastname)),\n\n
+Jesteś zarejestrowany na ((sitename)) z następującymi ustawieniami:\n\n
+Nazwa użytkownika: ((username))\nHasło: ((password))\n\n
+Adres strony ((sitename)) to:. ((url))\n\n
+ln W przypadku jakichkolwiek problemów, prosimy o kontakt.\n\n
+Administrator\n((admin_name)) ((admin_surname)).";
 $Explanation = "Kliknięcie OK spowoduje utworzenie stron kursu z Forum, Terminarzem, Obszarem dokumentów itd. Tylko Ty, jako twórca kursu możesz te strony modyfikować";
 $CodeTaken = "Kod kursu jest już podany.
 Użyj przycisku Wstecz i spróbuj jeszcze raz";
@@ -3453,7 +3458,7 @@ $Preserved = "Chroniony";
 $ConfirmUnsubscribe = "Potwierdź usunięcie użytkownika";
 $See = "Idź do";
 $LastVisits = "Moje ostatnie logowania";
-$IfYouWantToAddManyUsers = "Jeśli chcesz dodać listę użytkowników do szkolenia \t\t\, skontaktuj się z administratorem.";
+$IfYouWantToAddManyUsers = "Jeśli chcesz dodać listę użytkowników do szkolenia, skontaktuj się z administratorem.";
 $PassTooEasy = "to hasło jest zbyt proste. Zobacz przykład poniżej";
 $AddedToCourse = "jest już zarejestrowany w kursie";
 $UserAlreadyRegistered = "Użytkownik o tej nazwie jest już zarejestrowany w tym kursie.";
@@ -5689,7 +5694,8 @@ $OnlyAccessFromYourGroup = "Dostępne tylko z grupy";
 $CreateAssignmentPage = "To utworzy specjalną stronę wiki, na której nauczyciel może opisać zadanie. Zostanie ona automatycznie połączona ze stronami Wiki, gdzie uczniowie wykonują zadanie. Zarówno strony Trenera jak i studentów są tworzone automatycznie. W tych zadaniach, studenci mogą tylko edytować i przeglądać swoje strony. Można jednak to zmienić, jeśli będzie taka potrzeba.";
 $UserFolders = "Foldery użytkowników";
 $UserFolder = "Katalog użytkownika";
-$HelpUsersFolder = "INFORMACJE WIDOCZNE tylko dla nauczyciela: \ nFolder użytkowników zawiera folder każdego użytkownika, który ma dostęp do niego przez narzędzie dokumentów, lub gdy jakiś plik został przesłany w kursie za pośrednictwem internetowego edytora. Jeśli nie doszło do żadnych okoliczności, to nie powstał żaden folder użytkownika. W przypadku grup, pliki, które są wysyłane za pośrednictwem edytora zostaną dodane w folderze każdej grupy, który jest dostępny tylko dla studentów z tej grupy.
+$HelpUsersFolder = "INFORMACJE WIDOCZNE tylko dla nauczyciela:\n
+Folder użytkowników zawiera folder każdego użytkownika, który ma dostęp do niego przez narzędzie dokumentów, lub gdy jakiś plik został przesłany w kursie za pośrednictwem internetowego edytora. Jeśli nie doszło do żadnych okoliczności, to nie powstał żaden folder użytkownika. W przypadku grup, pliki, które są wysyłane za pośrednictwem edytora zostaną dodane w folderze każdej grupy, który jest dostępny tylko dla studentów z tej grupy.
 
 Folder użytkowników i każdy z zawartych w nim folderów będą domyślnie ukryte dla wszystkich studentów, ale każdy student może zobaczyć zawartość jego/jej katalogu poprzez internetowy edytor. Jeśli jednak student zna adres pliku lub folderu innego studenta, może uzyskać do niego dostęp.
 
@@ -6684,95 +6690,4 @@ $DataTableSearch = "Szukaj";
 $HideColumn = "Ukryj kolumnę";
 $DisplayColumn = "Pokaż kolumnę";
 $LegalAgreementAccepted = "Regulamin zaakceptowany";
-$AdditionallyYouHaveObtainedTheFollowingSkills="Dodatkowo zdobyłeś następujące umiejętności";
-$AssignmentLinkstoStudentsPage="Dostęp do materiałów przygotowanych przez uczniów";
-$AssignCoach="Przydziel trenera";
-$AssignSkill="Przydziel umiejętność";
-$AssignedTo="Przydzielony do";
-$AssignUser="Przydzielony użytkownik";
-$Assign="Przydziel";
-$AssignedTo="Przydzielony do";
-$AssignSkill="Przydziel umiejętność";
-$CalendarStartDate="Data rozpoczęcia";
-$Contacts="Kontakty";
-$ContactsList="Lista kontaktów";
-$CurrentPasswordEmptyOrIncorrect="Aktualne hasło jest niepoprawne";
-$CurrentPassword="Aktualne hasło";
-$DearXComma="Drogi %=";
-$DoubleValidationMessage="Potwierd= czy naprawdę chcesz zarejestrować się do platformy";
-$FilesUpload="dokumenty";
-$FollowedStudentBosses="Nauczyciel";
-$FromDateXToDateY="Od %s do %s";
-$LastConnection="Ostatnie połączenie";
-$LegalAccepted="Prawnie zaakceptowany";
-$Map="Mapa";
-$MyGeneralCertificate="Certyfikat końcowy";
-$MyLocation="Moja lokalizacja";
-$NewPasswordRequirementsNotMatched="Nowe hasło nie spełnia podstawowych wymogów zabezpieczeń";
-$OralExpressionHelpText="Możesz przerwać nagrywanie w dowolnym momencie. Jeśli nie jesteś zadowolon= nagraj się ponownie. Poprzednia wersja zostanie nadpisana. Jesteś zadowolony? Aby przesłać nagranie kliknij \"Zapisz nagranie\".";
-$PasswordVeryWeak="Bardzo słabe";
-$PauseRecordingAudio="Zatrzymaj nagrywanie";
-$PersonalEmail="Adres e-mail";
-$PlayRecordingAudio="Wznów nagrywanie";
-$PriorityNormal="Normalny";
-$PriorityHigh="Wysoki";
-$PriorityLow="Niski";
-$Priority="Priorytet";
-$PriorityHigh="Wysoki";
-$PriorityLow="Niski";
-$PriorityNormal="Normalny";
-$ProfileIsNotCompleted="Aby kontynuować uzupełnij swój profil";
-$ReadingComprehension="Rozumienie tekstu czytanego";
-$ReadingComprehensionLevelX="%s słów na minutę";
-$ReadingComprehensionLevelX="%s słów na minutę";
-$ReadingQuestionCongratsSpeedXNotReachedForYWords="Niestet= wygląda na t= że prędkość %s słów/minutę była zbyt szybka dla tekstu o długości %s słów.";
-$ReadingQuestionCongratsSpeedXReachedForYWords="Gratulacj= osiągnąłeś prędkość %s słów na minutę i poprawnie zrozumiałeś tekst o całkowitej długości %s słów.";
-$RecordAudio="Nagrywanie";
-$RegistrationConfirmation="Potwierdzenie rejestracji";
-$RegistrationConfirmationEmailMessage="Aby ukończyć rejestrację na platformie musisz potwierdzić swoje konto klikając w następujący link";
-$RegistrationConfirmationEmailMessage="Aby ukończyć rejestrację na platformie musisz potwierdzić swoje konto klikając w następujący link";
-$RegistrationRoleFollowCourses="Zapisz się na kursy";
-$RegistrationRoleTeachCourses="Poprowadź kursy";
-$RegistrationRoleWhatDoYouWantToDo="Co chcesz zrobić?";
-$RemainingXAttempts="Pozostało %d prób";
-$ReSendConfirmationMail="Ponownie wyślij potwierdzenie";
-$SaveRecordedAudio="Zapisz nagranie";
-$ScoreNote="Notatki";
-$ScoreTest="Test";
-$SelectWeeksSpan="Wybierz tygodniowy przedział czasowy";
-$SendLegal="Wyślij umowę";
-$SendLegalDescriptionToUrlX="Zaakceptuj warunki prawne tutaj: %s";
-$SendLegalDescriptionToUrlX="Zaakceptuj warunki prawne tutaj: %s";
-$SendTermsDescriptionToUrlX="Cześ=<br/> Twój nauczyciel przesłał Ci regulamin. Możesz podpisać je tutaj URL:%s";
-$SendTermsSubject="Regulamin został już podpisany";
-$ShortName="Nazwa użytkownika";
-$SrcEmail="Adres e-mail";
-$SrcPhone="Telefon";
-$StartRecordingAudio="Rozpocznij nagrywanie";
-$StudentCourseProgressX="Postęp: %s%%";
-$StudentCourseScoreX="Wynik: %s%%";
-$StudentHadEnoughSkills="Uczeń nabył wiele dodatkowych umiejętnośc= które pozwalają ocenić znajomość języka ojczystego.";
-$StudentXIsNotSubscribedToCourse="Uczeń %s nie jest zapisany na ten kurs";
-$TemplateTitleAssigment="Opis zadania";
-$TemplateTitleFAQ="Często zadawane pytania";
-$TemplateTitleGlossary="Słowniczek";
-$TemplateTitleCertificateDescription="Pojawi się na zakończenie kursu";
-$TermYourProfileIsNotCompleted="Najpierw uzupełnij swój profi= aby móc potwierdzić regulamin.";
-$TicketEnrollment="Zapisy";
-$UserXHasBeenAssignedToBoss="Przydzielono Ci ucznia %s";
-$UserXHasBeenAssignedToBossWithUrlX="Zostałeś przydzielony jako nauczyciel uczniowi %s. %s <br/>";
-$UserXHasFilledTheDiagnosis="Użytkownik %s uzupełnił diagnozę";
-$UserXHasFilledTheDiagnosisDescription="Użytkownik %s uzupełnił diagnozę na platformie i jest ona gotowa do sprawdzenia";
-$UserXSignedTheAgreement="Użytkownik %s podpisał umowę.";
-$UserXSignedTheAgreementTheY="Użytkownik podpisał umowę z %s";
-$UseThisBadge="Użyj odznaki";
-$VideoConference="Wideokonferencja";
-$WebRTCDialogHelp="Aby włączyć wideo czat w przeglądarce (jeśli go wspiera= upewnij si= że klikasz w ikonę informacji po lewej stronie od adresu UR= a następnie zaakceptuj korzystanie z kamery internetowej oraz mikrofonu.";
-$YouNeedConfirmYourAccountViaEmailToAccessThePlatform="Musisz potwierdzić swoje konto poprzez adres e-mai= aby otrzymać dostęp do platformy";
-$YouNeedToConfirmYourAgreementCheckYourEmail="W pierwszej kolejności musisz potwierdzi= iż zaakceptowałeś nasz regulamin. Sprawdź swoją skrzynkę mailową.";
-$YourChoice="Twój wybór";
-$YourPasswordCannotBeTheSameAsYourEmail="Twoje hasło nie może być takie samo jak adres e-mail";
-$YourSessionTimeHasExpired="Jesteś już zarejestrowan= ale Twój dostęp wygasł.";
-$YourSessionTimeIsExpired="Twoja sesja wygasła";
-$YouWillReceivedASecondEmail="Otrzymasz wiadomość e-mail z Twoim hasłem";
 ?>

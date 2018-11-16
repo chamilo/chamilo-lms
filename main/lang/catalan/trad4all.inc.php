@@ -6469,7 +6469,8 @@ $CourseRequestLegalNote = "La informació d'aquesta sol·licitud de formació é
 $EnableCourseValidation = "Sol·licitud de cursos";
 $EnableCourseValidationComment = "Quan la sol·licitud de cursos està activada, un professor no podrà crear un curs per si mateix sinó que haurà d'emplenar una sol·licitud. L'administrador de la plataforma revisarà la sol·licitud i l'aprovarà o refusarà. Aquesta funcionalitat es basa en missatges de correu electrònic automàtics pel que s'ha d'assegurar que la seva instal·lació de Chamilo utilitza un servidor de correu i una adreça de correu electrònic dedicada a aquest fet.";
 $CourseRequestAskInfoEmailSubject = "%s Sol·licitud d'informació %s";
-$CourseRequestAskInfoEmailText = "Hem rebut la seva sol·licitud per a la creació d'un curs amb el codi %s. Abans de considerar la seva aprovació necessitem alguna informació addicional. \n\ nFeu una breu descripció del contingut del curs, els objectius i els estudiants o un altre tipus d'usuaris que hagin de participar. Si és el cas, esmenti el nom de la institució o òrgan en nom de la qual Vostè ha fet la sol·licitud.";
+$CourseRequestAskInfoEmailText = "Hem rebut la seva sol·licitud per a la creació d'un curs amb el codi %s. Abans de considerar la seva aprovació necessitem alguna informació addicional.\n\n
+Feu una breu descripció del contingut del curs, els objectius i els estudiants o un altre tipus d'usuaris que hagin de participar. Si és el cas, esmenti el nom de la institució o òrgan en nom de la qual Vostè ha fet la sol·licitud.";
 $CourseRequestAcceptedEmailSubject = "%s La petició del curs %s ha estat aprovada";
 $CourseRequestAcceptedEmailText = "La vostra sol·licitud del curs %s ha estat aprovada. Un curs nou %s ha estat creat i heu quedat inscrit a ell com a professor.\n\nPodreu accedir al curs creat des de: %s";
 $CourseRequestRejectedEmailSubject = "%s La sol·licitud del curs %s ha estat denegada";

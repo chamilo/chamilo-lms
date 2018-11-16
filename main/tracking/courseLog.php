@@ -35,7 +35,6 @@ $is_allowedToTrack = Tracking::isAllowToTrack($session_id);
 
 if (!$is_allowedToTrack) {
     api_not_allowed(true);
-    exit;
 }
 
 // If the user is a HR director (drh)
@@ -73,7 +72,6 @@ if (api_is_drh()) {
         $coursesFollowedList = array_keys($coursesFollowedList);
         if (!in_array($courseId, $coursesFollowedList)) {
             api_not_allowed(true);
-            exit;
         }
     }
 }
@@ -342,7 +340,7 @@ if ($showReporting) {
 
 // Show the charts part only if there are students subscribed to this course/session
 if ($nbStudents > 0) {
-    $usersTracking = TrackingCourseLog::get_user_data(null, $nbStudents, null, 'DESC');
+    $usersTracking = TrackingCourseLog::get_user_data(null, $nbStudents, null, 'DESC', false);
     $numberStudentsCompletedLP = 0;
     $averageStudentsTestScore = 0;
     $scoresDistribution = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -412,7 +410,7 @@ if ($nbStudents > 0) {
     $tpl->assign('number_students', $nbStudents);
     $tpl->assign('top_students', $userScoreList);
 
-    $trackingSummaryLayout = $tpl->get_template("tracking/tracking_course_log.tpl");
+    $trackingSummaryLayout = $tpl->get_template('tracking/tracking_course_log.tpl');
     $content = $tpl->fetch($trackingSummaryLayout);
 
     echo $content;
@@ -508,21 +506,50 @@ if (count($a_students) > 0) {
     $table->set_header(3, get_lang('Login'), false);
     $headers['login'] = get_lang('Login');
 
-    $table->set_header(4, get_lang('TrainingTime').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('CourseTimeInfo'), ['align' => 'absmiddle', 'hspace' => '3px']), false, ['style' => 'width:110px;']);
+    $table->set_header(
+        4,
+        get_lang('TrainingTime').'&nbsp;'.
+        Display::return_icon('info3.gif', get_lang('CourseTimeInfo'), ['align' => 'absmiddle', 'hspace' => '3px']),
+        false,
+        ['style' => 'width:110px;']
+    );
     $headers['training_time'] = get_lang('TrainingTime');
     $table->set_header(5, get_lang('CourseProgress').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('ScormAndLPProgressTotalAverage'), ['align' => 'absmiddle', 'hspace' => '3px']), false, ['style' => 'width:110px;']);
+        Display::return_icon(
+            'info3.gif',
+            get_lang('ScormAndLPProgressTotalAverage'),
+            ['align' => 'absmiddle', 'hspace' => '3px']
+        ),
+        false,
+        ['style' => 'width:110px;']
+    );
     $headers['course_progress'] = get_lang('CourseProgress');
 
     $table->set_header(6, get_lang('ExerciseProgress').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('ExerciseProgressInfo'), ['align' => 'absmiddle', 'hspace' => '3px']), false, ['style' => 'width:110px;']);
+        Display::return_icon(
+            'info3.gif',
+            get_lang('ExerciseProgressInfo'),
+            ['align' => 'absmiddle', 'hspace' => '3px']
+        ),
+        false,
+        ['style' => 'width:110px;']
+    );
     $headers['exercise_progress'] = get_lang('ExerciseProgress');
     $table->set_header(7, get_lang('ExerciseAverage').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('ExerciseAverageInfo'), ['align' => 'absmiddle', 'hspace' => '3px']), false, ['style' => 'width:110px;']);
+        Display::return_icon('info3.gif', get_lang('ExerciseAverageInfo'), ['align' => 'absmiddle', 'hspace' => '3px']),
+        false,
+        ['style' => 'width:110px;']
+    );
     $headers['exercise_average'] = get_lang('ExerciseAverage');
     $table->set_header(8, get_lang('Score').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), ['align' => 'absmiddle', 'hspace' => '3px']), false, ['style' => 'width:110px;']);
+        Display::return_icon(
+            'info3.gif',
+            get_lang('ScormAndLPTestTotalAverage'),
+            ['align' => 'absmiddle', 'hspace' => '3px']
+        ),
+        false,
+        ['style' => 'width:110px;']
+    );
     $headers['score'] = get_lang('Score');
     $table->set_header(9, get_lang('Student_publication'), false);
     $headers['student_publication'] = get_lang('Student_publication');
@@ -633,19 +660,21 @@ if ($export_csv) {
     }
     ob_end_clean();
 
+    $csvContentInSession = Session::read('csv_content');
+
     // Adding headers before the content.
-    array_unshift($csv_content, $csv_headers);
+    array_unshift($csvContentInSession, $csv_headers);
 
     if ($session_id) {
         $sessionData = [];
         $sessionInfo = api_get_session_info($session_id);
         $sessionDates = SessionManager::parseSessionDates($sessionInfo);
 
-        array_unshift($csv_content, [get_lang('Date'), $sessionDates['access']]);
-        array_unshift($csv_content, [get_lang('SessionName'), $sessionInfo['name']]);
+        array_unshift($csvContentInSession, [get_lang('Date'), $sessionDates['access']]);
+        array_unshift($csvContentInSession, [get_lang('SessionName'), $sessionInfo['name']]);
     }
 
-    Export::arrayToCsv($csv_content, 'reporting_student_list');
+    Export::arrayToCsv($csvContentInSession, 'reporting_student_list');
     exit;
 }
 Display::display_footer();

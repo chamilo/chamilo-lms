@@ -60,8 +60,8 @@ class FrmEdit extends FormValidator
 
         if (null === $parent) {
             $this->addUrl('launch_url', $plugin->get_lang('LaunchUrl'), true);
-            $this->addText('consumer_key', $plugin->get_lang('ConsumerKey'));
-            $this->addText('shared_secret', $plugin->get_lang('SharedSecret'));
+            $this->addText('consumer_key', $plugin->get_lang('ConsumerKey'), false);
+            $this->addText('shared_secret', $plugin->get_lang('SharedSecret'), false);
         }
 
         $this->addButtonAdvancedSettings('lti_adv');
@@ -91,8 +91,6 @@ class FrmEdit extends FormValidator
         $this->addButtonUpdate($plugin->get_lang('EditExternalTool'));
         $this->addHidden('id', $this->tool->getId());
         $this->addHidden('action', 'edit');
-        $this->applyFilter('__ALL__', 'Security::remove_XSS');
-        $this->applyFilter('__ALL__', 'htmlspecialchars_decode');
         $this->applyFilter('__ALL__', 'trim');
     }
 

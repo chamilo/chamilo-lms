@@ -154,8 +154,9 @@ class Attendance
 
         while ($attendance = Database::fetch_row($res)) {
             $student_param = '';
-            if (api_is_drh() && $_GET['student_id']) {
-                $student_param = '&student_id='.intval($_GET['student_id']);
+            $studentRequestId = isset($_GET['student_id']) ? (int) $_GET['student_id'] : 0;
+            if (api_is_drh() && !empty($studentRequestId)) {
+                $student_param = '&student_id='.$studentRequestId;
             }
 
             $session_star = '';
@@ -166,8 +167,7 @@ class Attendance
                 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
                     api_get_user_id(),
                     api_get_course_info()
-                );
-
+                ) || api_is_drh();
                 if (api_is_allowed_to_edit(null, true) || $isDrhOfCourse) {
                     // Link to edit
                     $attendance[1] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$student_param.'">'.$attendance[1].'</a>'.$session_star;

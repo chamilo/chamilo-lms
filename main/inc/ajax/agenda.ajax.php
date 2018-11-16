@@ -19,6 +19,8 @@ if ($type == 'course') {
 }
 
 $agenda = new Agenda($type);
+// get filtered type
+$type = $agenda->getType();
 
 switch ($action) {
     case 'add_event':
@@ -26,15 +28,17 @@ switch ($action) {
             break;
         }
         $add_as_announcement = isset($_REQUEST['add_as_annonuncement']) ? $_REQUEST['add_as_annonuncement'] : null;
-        $comment = isset($_REQUEST['comment']) ? $_REQUEST['comment'] : null;
+        $title = isset($_REQUEST['title']) ? Security::remove_XSS($_REQUEST['title']) : null;
+        $content = isset($_REQUEST['content']) ? Security::remove_XSS($_REQUEST['content']) : null;
+        $comment = isset($_REQUEST['comment']) ? Security::remove_XSS($_REQUEST['comment']) : null;
         $userToSend = isset($_REQUEST['users_to_send']) ? $_REQUEST['users_to_send'] : [];
 
         echo $agenda->addEvent(
             $_REQUEST['start'],
             $_REQUEST['end'],
             $_REQUEST['all_day'],
-            $_REQUEST['title'],
-            $_REQUEST['content'],
+            $title,
+            $content,
             $userToSend,
             $add_as_announcement,
             null, //$parentEventId = null,
@@ -54,8 +58,8 @@ switch ($action) {
             $_REQUEST['start'],
             $_REQUEST['end'],
             $_REQUEST['all_day'],
-            $_REQUEST['title'],
-            $_REQUEST['content']
+            $title,
+            $content
         );
         break;
     case 'delete_event':

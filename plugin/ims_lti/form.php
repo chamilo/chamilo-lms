@@ -109,22 +109,33 @@ $params['tool_consumer_instance_guid'] = $platformDomain;
 $params['tool_consumer_instance_name'] = api_get_setting('siteName');
 $params['tool_consumer_instance_url'] = api_get_path(WEB_PATH);
 $params['tool_consumer_instance_contact_email'] = api_get_setting('emailAdministrator');
+$params['oauth_callback'] = 'about:blank';
 
 $params += $tool->parseCustomParams();
 
-$oauth = new OAuthSimple(
-    $tool->getConsumerKey(),
-    $tool->getSharedSecret()
-);
-$oauth->setAction('post');
-$oauth->setSignatureMethod('HMAC-SHA1');
-$oauth->setParameters($params);
-$result = $oauth->sign(array(
-    'path' => $tool->getLaunchUrl(),
-    'parameters' => array(
-        'oauth_callback' => 'about:blank'
-    )
-));
+$imsLtiPlugin->trimParams($params);
+
+if (!empty($tool->getConsumerKey()) && !empty($tool->getSharedSecret())) {
+    $consumer = new OAuthConsumer(
+        $tool->getConsumerKey(),
+        $tool->getSharedSecret(),
+        null
+    );
+    $hmacMethod = new OAuthSignatureMethod_HMAC_SHA1();
+
+    $request = OAuthRequest::from_consumer_and_token(
+        $consumer,
+        '',
+        'POST',
+        $tool->getLaunchUrl(),
+        $params
+    );
+    $request->sign_request($hmacMethod, $consumer, '');
+
+    $params = $request->get_parameters();
+}
+
+$imsLtiPlugin->removeUrlParamsFromLaunchParams($tool, $params);
 ?>
 <!DOCTYPE html>
 <html>
@@ -134,19 +145,10 @@ $result = $oauth->sign(array(
 <body>
 <form action="<?php echo $tool->getLaunchUrl() ?>" name="ltiLaunchForm" method="post"
       encType="application/x-www-form-urlencoded">
-    <?php
-    foreach ($result["parameters"] as $key => $values) { //Dump parameters
-        echo '<input type="hidden" name="'.$key.'" value="'.htmlspecialchars($values).'" />'.PHP_EOL;
-    }
-    ?>
-    <button type="submit">
-        <?php echo $imsLtiPlugin->get_lang('PressToContinue') ?>
-    </button>
+    <?php foreach ($params as $key => $value) { ?>
+        <input type="hidden" name="<?php echo $key ?>" value="<?php echo htmlspecialchars($value) ?>">
+    <?php } ?>
 </form>
-
-<script language="javascript">
-    document.querySelector('form [type="submit"]').style.display = "none";
-    document.ltiLaunchForm.submit();
-</script>
+<script>document.ltiLaunchForm.submit();</script>
 </body>
 </html>

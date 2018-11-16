@@ -20,7 +20,7 @@
                                         {{ 'edit.png'|img(22, 'Edit'|get_lang) }}
                                     </a>
                                 </div>
-                                {{ tool.name }}
+                                {{ tool.name|e }}
                             </li>
                         {% endfor %}
                     </ul>
@@ -46,7 +46,7 @@
                                         </a>
                                     {% endif %}
                                 </div>
-                                {{ tool.name }}
+                                {{ tool.name|e }}
                             </li>
                         {% endfor %}
                     </ul>

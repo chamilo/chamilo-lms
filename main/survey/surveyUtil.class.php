@@ -1175,7 +1175,9 @@ class SurveyUtil
             foreach ($possible_options as $question_id => &$possible_option) {
                 if ($questions[$question_id]['type'] == 'open' || $questions[$question_id]['type'] == 'comment') {
                     echo '<td align="center">';
-                    echo $answers_of_user[$question_id]['0']['option_id'];
+                    if (isset($answers_of_user[$question_id]) && isset($answers_of_user[$question_id]['0'])) {
+                        echo $answers_of_user[$question_id]['0']['option_id'];
+                    }
                     echo '</td>';
                 } else {
                     foreach ($possible_option as $option_id => &$value) {

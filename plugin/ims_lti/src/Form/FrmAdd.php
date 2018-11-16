@@ -72,8 +72,6 @@ class FrmAdd extends FormValidator
         $this->addCheckBox('share_picture', null, $plugin->get_lang('ShareLauncherPicture'));
         $this->addHtml('</div>');
         $this->addButtonCreate($plugin->get_lang('AddExternalTool'));
-        $this->applyFilter('__ALL__', 'Security::remove_XSS');
-        $this->applyFilter('__ALL__', 'htmlspecialchars_decode');
         $this->applyFilter('__ALL__', 'trim');
     }
 

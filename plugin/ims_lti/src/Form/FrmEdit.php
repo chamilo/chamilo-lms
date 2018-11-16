@@ -91,8 +91,6 @@ class FrmEdit extends FormValidator
         $this->addButtonUpdate($plugin->get_lang('EditExternalTool'));
         $this->addHidden('id', $this->tool->getId());
         $this->addHidden('action', 'edit');
-        $this->applyFilter('__ALL__', 'Security::remove_XSS');
-        $this->applyFilter('__ALL__', 'htmlspecialchars_decode');
         $this->applyFilter('__ALL__', 'trim');
     }
 

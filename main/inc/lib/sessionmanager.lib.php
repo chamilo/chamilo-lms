@@ -306,7 +306,7 @@ class SessionManager
                       api_mail_html($complete_name, $user_info['email'], $subject, $message);
                      *
                      */
-                    //Adding to the correct URL
+                    // Adding to the correct URL
                     UrlManager::add_session_to_url($session_id, $accessUrlId);
 
                     // add event to system log

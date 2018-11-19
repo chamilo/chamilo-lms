@@ -45,7 +45,6 @@ switch ($action) {
                 'ms_groups' => $group_pending_invitations,
                 'ms_inbox' => $count_unread_message,
             ];
-
         }
         header('Content-type:application/json');
         echo json_encode($invitations);

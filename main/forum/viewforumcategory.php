@@ -48,6 +48,7 @@ api_protect_course_script(true);
 $nameTools = get_lang('ToolForum');
 
 $_user = api_get_user_info();
+$_course = api_get_course_info();
 
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
@@ -150,7 +151,6 @@ if ($action != 'add') {
     /* RETRIEVING ALL GROUPS AND THOSE OF THE USER */
 
     // The groups of the user.
-    $groups_of_user = [];
     $groups_of_user = GroupManager::get_group_ids($_course['real_id'], $_user['user_id']);
     // All groups in the course (and sorting them as the id of the group = the key of the array.
     $all_groups = GroupManager::get_group_list();

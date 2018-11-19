@@ -17,8 +17,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
-/* Global constants and variables */
-
 $form_sent = 0;
 $first_letter_user = '';
 $first_letter_course = '';
@@ -30,7 +28,7 @@ $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
 /* Header */
 $tool_name = get_lang('AddUsersToACourse');
-$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 
 $htmlHeadXtra[] = '<script>
 function validate_filter() {
@@ -83,8 +81,8 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
     $users = isset($_POST['UserList']) && is_array($_POST['UserList']) ? $_POST['UserList'] : [];
     $courses = isset($_POST['CourseList']) && is_array($_POST['CourseList']) ? $_POST['CourseList'] : [];
-    $first_letter_user = $_POST['firstLetterUser'];
-    $first_letter_course = $_POST['firstLetterCourse'];
+    $first_letter_user = Database::escape_string($_POST['firstLetterUser']);
+    $first_letter_course = Database::escape_string($_POST['firstLetterCourse']);
 
     foreach ($users as $key => $value) {
         $users[$key] = intval($value);

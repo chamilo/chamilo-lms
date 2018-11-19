@@ -18,6 +18,8 @@ $this_section = SECTION_PLATFORM_ADMIN;
 $toolName = get_lang('EMailTester');
 
 $form = new FormValidator('email_tester');
+$form->addText('smtp_host', get_lang('Host'), false, ['cols-size' => [2, 8, 2]]);
+$form->addText('smtp_port', get_lang('Port'), false, ['cols-size' => [2, 8, 2]]);
 $form->addText('destination', get_lang('Destination'), true, ['cols-size' => [2, 8, 2]]);
 $form->addText('subject', get_lang('Subject'), true, ['cols-size' => [2, 8, 2]]);
 $form->addHtmlEditor(

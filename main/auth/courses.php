@@ -199,7 +199,7 @@ switch ($action) {
         exit;
         break;
     case 'createcoursecategory':
-        $courseController->categoryList($action);
+        $courseController->categoryList();
         break;
     case 'deletecoursecategory':
         $courseController->courseList($action);
@@ -213,19 +213,6 @@ switch ($action) {
         }
         header('Location: '.api_get_self());
         exit;
-        /* if (!CoursesAndSessionsCatalog::is(CATALOG_SESSIONS)) {
-            $courseController->courses_categories(
-                $action,
-                $categoryCode,
-                null,
-                null,
-                null,
-                $limit
-            );
-        } else {
-            header('Location: ' . api_get_self());
-            exit;
-        }*/
         break;
     case 'display_random_courses':
         if (!$user_can_view_page) {

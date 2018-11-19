@@ -1620,7 +1620,7 @@ class AnnouncementManager
             $extraGroupCondition = " AND ip.to_group_id = $group_id ";
         }
 
-        if (api_is_allowed_to_edit(false, true) ||
+        if ((api_is_allowed_to_edit(false, true) || api_is_drh()) &&
             ($allowUserEditSetting && !api_is_anonymous())
         ) {
             // A.1. you are a course admin with a USER filter
@@ -1737,11 +1737,13 @@ class AnnouncementManager
                 } else {
                     if ($group_id == 0) {
                         $cond_user_id = " AND (
-                            (ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND (ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".implode(", ", $group_memberships)."))
+                            (ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND 
+                            (ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".implode(", ", $group_memberships)."))
                         ) ";
                     } else {
                         $cond_user_id = " AND (
-                            (ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND (ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".$group_id."))
+                            (ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND 
+                            (ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".$group_id."))
                         )";
                         $cond_user_id .= $extraGroupCondition;
                     }
@@ -1766,10 +1768,15 @@ class AnnouncementManager
                     if ($allowUserEditSetting && !api_is_anonymous()) {
                         $cond_user_id = " AND (
                             ip.lastedit_user_id = '".api_get_user_id()."' OR
-                            ((ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND (ip.to_group_id='0' OR ip.to_group_id IS NULL))
+                            (
+                                (ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND
+                                (ip.to_group_id='0' OR ip.to_group_id IS NULL)
+                            )
                         ) ";
                     } else {
-                        $cond_user_id = " AND ((ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND (ip.to_group_id='0' OR ip.to_group_id IS NULL) ) ";
+                        $cond_user_id = " AND (
+                        (ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND 
+                        (ip.to_group_id='0' OR ip.to_group_id IS NULL) ) ";
                     }
 
                     $sql = "SELECT $select
@@ -1876,20 +1883,22 @@ class AnnouncementManager
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             if (!in_array($row['id'], $displayed)) {
                 $sent_to_icon = '';
+                // the email icon
                 if ($row['email_sent'] == '1') {
                     $sent_to_icon = ' '.$emailIcon;
                 }
-                $groupReference = $row['to_group_id'] > 0 ? ' <span class="label label-info">'.get_lang(
-                        'Group'
-                    ).'</span> ' : '';
+
+                $groupReference = $row['to_group_id'] > 0 ? ' <span class="label label-info">'.get_lang('Group').'</span> ' : '';
                 $disableEdit = false;
                 $to = self::loadEditUsers('announcement', $row['id'], true);
                 $separated = CourseManager::separateUsersGroups($to);
                 if (!empty($group_id)) {
+                    // If the announcement was sent to many groups, disable edition inside a group
                     if (isset($separated['groups']) && count($separated['groups']) > 1) {
                         $disableEdit = true;
                     }
 
+                    // If the announcement was sent only to the course disable edition
                     if (empty($separated['groups']) && empty($separated['users'])) {
                         $disableEdit = true;
                     }

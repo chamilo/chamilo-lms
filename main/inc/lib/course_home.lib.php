@@ -34,7 +34,9 @@ class CourseHome
         switch ($cat) {
             case 'Basic':
                 $condition_display_tools = ' WHERE a.c_id = '.$course_id.' AND  a.link=t.link AND t.position="basic" ';
-                if ((api_is_coach() || api_is_course_tutor()) && !$studentView) {
+                if ((api_is_coach() || api_is_course_tutor() || api_is_platform_admin()) &&
+                    !$studentView
+                ) {
                     $condition_display_tools = ' WHERE 
                         a.c_id = '.$course_id.' AND 
                         a.link=t.link AND
@@ -176,7 +178,7 @@ class CourseHome
 
             // VISIBLE
             if (($tool['visibility'] ||
-                ((api_is_coach() || api_is_course_tutor()) && $tool['name'] == TOOL_TRACKING)) ||
+                ((api_is_coach() || api_is_course_tutor() || api_is_platform_admin()) && $tool['name'] == TOOL_TRACKING)) ||
                 $cat == 'courseAdmin' || $cat == 'platformAdmin'
             ) {
                 if (strpos($tool['name'], 'visio_') !== false) {
@@ -270,7 +272,9 @@ class CourseHome
         switch ($course_tool_category) {
             case TOOL_PUBLIC:
                 $condition_display_tools = ' WHERE c_id = '.$course_id.' AND visibility = 1 ';
-                if ((api_is_coach() || api_is_course_tutor()) && !$studentView) {
+                if ((api_is_coach() || api_is_course_tutor() || api_is_platform_admin()) &&
+                    !$studentView
+                ) {
                     $condition_display_tools = ' WHERE 
                         c_id = '.$course_id.' AND 
                         (visibility = 1 OR (visibility = 0 AND name = "'.TOOL_TRACKING.'")) ';
@@ -308,13 +312,15 @@ class CourseHome
             case TOOL_PUBLIC:
                 $sql_links = "SELECT tl.*, tip.visibility
                         FROM $course_link_table tl
-                        LEFT JOIN $course_item_property_table tip ON tip.tool='link' AND tl.c_id = tip.c_id AND tl.c_id = $course_id AND tip.ref=tl.id
+                        LEFT JOIN $course_item_property_table tip 
+                        ON tip.tool='link' AND tl.c_id = tip.c_id AND tl.c_id = $course_id AND tip.ref=tl.id
                         WHERE tl.on_homepage='1' AND tip.visibility = 1";
                 break;
             case TOOL_PUBLIC_BUT_HIDDEN:
                 $sql_links = "SELECT tl.*, tip.visibility
                     FROM $course_link_table tl
-                    LEFT JOIN $course_item_property_table tip ON tip.tool='link' AND tl.c_id = tip.c_id AND tl.c_id = $course_id AND tip.ref=tl.id
+                    LEFT JOIN $course_item_property_table tip 
+                    ON tip.tool='link' AND tl.c_id = tip.c_id AND tl.c_id = $course_id AND tip.ref=tl.id
                     WHERE tl.on_homepage='1' AND tip.visibility = 0";
 
                 break;
@@ -425,7 +431,8 @@ class CourseHome
                         }
                     }
                     if (isset($tool['adminlink'])) {
-                        $html .= '<a href="'.$tool['adminlink'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
+                        $html .= '<a href="'.$tool['adminlink'].'">'.
+                            Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
                     }
                 }
                 if (api_is_platform_admin() && !api_is_coach()) {
@@ -466,7 +473,6 @@ class CourseHome
                 if ($i % 2) {
                     $html .= "</tr>";
                 }
-
                 $i++;
             }
         }
@@ -519,7 +525,7 @@ class CourseHome
                 $conditions = ' WHERE visibility = 1 AND 
                                 (category = "authoring" OR category = "interaction" OR category = "plugin") AND 
                                 t.name <> "notebookteacher" ';
-                if ((api_is_coach() || api_is_course_tutor()) && !$studentView) {
+                if ((api_is_coach() || api_is_course_tutor() || api_is_platform_admin()) && !$studentView) {
                     $conditions = ' WHERE (
                         visibility = 1 AND (
                             category = "authoring" OR 
@@ -779,9 +785,9 @@ class CourseHome
             }
         }
 
-        $all_tools_list = CourseHome::filterPluginTools($all_tools_list, $course_tool_category);
+        $list = self::filterPluginTools($all_tools_list, $course_tool_category);
 
-        return $all_tools_list;
+        return $list;
     }
 
     /**
@@ -1113,15 +1119,14 @@ class CourseHome
      */
     public static function show_session_data($id_session)
     {
-        $session_category_table = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-
         $sessionInfo = api_get_session_info($id_session);
 
         if (empty($sessionInfo)) {
             return '';
         }
 
-        $sql = 'SELECT name FROM '.$session_category_table.'
+        $table = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+        $sql = 'SELECT name FROM '.$table.'
                 WHERE id = "'.intval($sessionInfo['session_category_id']).'"';
         $rs_category = Database::query($sql);
         $session_category = '';

@@ -78,7 +78,11 @@ class MessageManager
         $result = Database::query($sql);
         $result = Database::fetch_array($result);
 
-        return $result['number_messages'];
+        if ($result) {
+            return (int) $result['number_messages'];
+        }
+
+        return 0;
     }
 
     /**

@@ -197,13 +197,13 @@ if ($action == 'disable_all_except_default') {
 
 if (isset($_POST['Submit']) && $_POST['Submit']) {
     // changing the name
-    $sql = "UPDATE $tbl_admin_languages SET original_name='{$_POST['txt_name']}'
-            WHERE id='{$_POST['edit_id']}'";
+    $name = Database::escape_string($_POST['txt_name']);
+    $postId = (int) $_POST['edit_id'];
+    $sql = "UPDATE $tbl_admin_languages SET original_name='$name'
+            WHERE id='$postId'";
     $result = Database::query($sql);
     // changing the Platform language
     if ($_POST['platformlanguage'] && $_POST['platformlanguage'] != '') {
-        //$sql_update_2 = "UPDATE $tbl_settings_current SET selected_value='{$_POST['platformlanguage']}' WHERE variable='platformLanguage'";
-        //$result_2 = Database::query($sql_update_2);
         api_set_setting('platformLanguage', $_POST['platformlanguage'], null, null, $_configuration['access_url']);
     }
 } elseif (isset($_POST['action'])) {

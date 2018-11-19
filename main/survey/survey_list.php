@@ -189,7 +189,7 @@ if (!api_is_session_general_coach() || $extend_rights_for_coachs == 'true') {
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/create_new_survey.php?'.api_get_cidreq().'&amp;action=add">'.
         Display::return_icon('new_survey.png', get_lang('CreateNewSurvey'), '', ICON_SIZE_MEDIUM).'</a> ';
     $url = api_get_path(WEB_CODE_PATH).'survey/create_meeting.php?'.api_get_cidreq();
-    echo Display::url(Display::return_icon('add.png', get_lang('CreateNewSurvey'), '', ICON_SIZE_MEDIUM), $url);
+    echo Display::url(Display::return_icon('add_doodle.png', get_lang('CreateNewSurveyDoodle'), '', ICON_SIZE_MEDIUM), $url);
 }
 echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;search=advanced">'.
     Display::return_icon('search.png', get_lang('Search'), '', ICON_SIZE_MEDIUM).'</a>';

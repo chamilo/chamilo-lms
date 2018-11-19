@@ -1765,6 +1765,80 @@ EOT;
     }
 
     /**
+     * @param array $typeList
+     */
+    public function addEmailTemplate($typeList)
+    {
+        $mailManager = new MailTemplateManager();
+        foreach ($typeList as $type) {
+            $list = $mailManager->get_all(
+                ['where' => ['type = ? AND url_id = ?' => [$type, api_get_current_access_url_id()]]]
+            );
+
+            $options = [get_lang('Select')];
+            $name = $type;
+            $defaultId = '';
+            foreach ($list as $item) {
+                $options[$item['id']] = $item['name'];
+                $name = $item['name'];
+                if (empty($defaultId)) {
+                    $defaultId = $item['default_template'] == 1 ? $item['id'] : '';
+                }
+            }
+
+            $url = api_get_path(WEB_AJAX_PATH).'mail.ajax.php?a=select_option';
+            $typeNoDots = 'email_template_option_'.str_replace('.tpl', '', $type);
+            $this->addSelect(
+                'email_template_option['.$type.']',
+                $name,
+                $options,
+                ['id' => $typeNoDots]
+            );
+
+            $templateNoDots = 'email_template_'.str_replace('.tpl', '', $type);
+            $templateNoDotsBlock = 'email_template_block_'.str_replace('.tpl', '', $type);
+            $this->addHtml('<div id="'.$templateNoDotsBlock.'" style="display:none">');
+            $this->addTextarea(
+                $templateNoDots,
+                get_lang('Preview'),
+                ['disabled' => 'disabled ', 'id' => $templateNoDots, 'rows' => '5']
+            );
+            $this->addHtml('</div>');
+
+            $this->addHtml("<script>            
+            $(document).on('ready', function() {
+                var defaultValue = '$defaultId';
+                $('#$typeNoDots').val(defaultValue);
+                $('#$typeNoDots').selectpicker('render');
+                if (defaultValue != '') {
+                    var selected = $('#$typeNoDots option:selected').val();                    
+                    $.ajax({ 
+                        url: '$url' + '&id=' + selected+ '&template_name=$type',
+                        success: function (data) {
+                            $('#$templateNoDots').html(data);
+                            $('#$templateNoDotsBlock').show();
+                            return;
+                        }, 
+                    });
+                }
+                                
+                $('#$typeNoDots').on('change', function(){                    
+                    var selected = $('#$typeNoDots option:selected').val();                    
+                    $.ajax({ 
+                        url: '$url' + '&id=' + selected,
+                        success: function (data) {
+                            $('#$templateNoDots').html(data);
+                            $('#$templateNoDotsBlock').show();
+                            return;
+                        }, 
+                    });
+                });
+            });
+            </script>");
+        }
+    }
+
+    /**
      * @param string $url           page that will handle the upload
      * @param string $inputName
      * @param string $urlToRedirect

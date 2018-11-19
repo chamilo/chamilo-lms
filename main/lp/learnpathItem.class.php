@@ -2175,10 +2175,9 @@ class learnpathItem
                             break;
                         }
                     }
+
                     if (empty($this->prereq_alert) && !$andstatus) {
-                        $this->prereq_alert = get_lang(
-                            'LearnpathPrereqNotCompleted'
-                        );
+                        $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
                     }
 
                     return $andstatus;
@@ -2452,7 +2451,7 @@ class learnpathItem
                                     /** @var learnpathItem $itemToCheck */
                                     $itemToCheck = $items[$refs_list[$prereqs_string]];
 
-                                    if ($itemToCheck->type == 'quiz') {
+                                    if ($itemToCheck->type === 'quiz') {
                                         // 1. Checking the status in current items.
                                         $status = $itemToCheck->get_status(true);
                                         $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
@@ -2722,9 +2721,7 @@ class learnpathItem
                     }
                 }
                 if (!$orstatus && empty($this->prereq_alert)) {
-                    $this->prereq_alert = get_lang(
-                        'LearnpathPrereqNotCompleted'
-                    );
+                    $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
                 }
 
                 return $orstatus;

@@ -251,12 +251,13 @@ class HTML_Common
      * @access    public
      * @return    string|null   returns null if an attribute does not exist
      */
-    function getAttribute($attr)
+    public function getAttribute($attr)
     {
         $attr = strtolower($attr);
         if (isset($this->_attributes[$attr])) {
             return $this->_attributes[$attr];
         }
+
         return null;
     } //end func getAttribute
 

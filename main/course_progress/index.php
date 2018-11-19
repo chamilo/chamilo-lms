@@ -286,7 +286,6 @@ switch ($action) {
     case 'export_documents':
     case 'export_single_documents':
         $thematic_controller->thematic($action);
-
         break;
     case 'thematic_plan_add':
     case 'thematic_plan_edit':

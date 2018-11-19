@@ -7448,8 +7448,9 @@ class TrackingCourseLog
         $direction,
         $includeInvitedUsers = false
     ) {
-        global $user_ids, $course_code, $export_csv, $csv_content, $session_id;
+        global $user_ids, $course_code, $export_csv, $session_id;
 
+        $csv_content = [];
         $course_code = Database::escape_string($course_code);
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -7694,6 +7695,10 @@ class TrackingCourseLog
                 $csv_content[] = $user_row;
             }
             $users[] = array_values($user_row);
+        }
+
+        if ($export_csv) {
+            Session::write('csv_content', $csv_content);
         }
 
         Session::erase('additional_user_profile_info');

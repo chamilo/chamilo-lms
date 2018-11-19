@@ -10259,11 +10259,14 @@ class learnpath
 
         $selectedMinScore = [];
         $selectedMaxScore = [];
+        $masteryScore = [];
         while ($row = Database::fetch_array($result)) {
-            if ($row['id'] == $item_id) {
+            if ($row['iid'] == $item_id) {
                 $selectedMinScore[$row['prerequisite']] = $row['prerequisite_min_score'];
                 $selectedMaxScore[$row['prerequisite']] = $row['prerequisite_max_score'];
             }
+            $masteryScore[$row['iid']] = $row['mastery_score'];
+
             $arrLP[] = [
                 'id' => $row['iid'],
                 'item_type' => $row['item_type'],
@@ -10296,6 +10299,7 @@ class learnpath
 
             $selectedMaxScoreValue = isset($selectedMaxScore[$item['id']]) ? $selectedMaxScore[$item['id']] : $item['max_score'];
             $selectedMinScoreValue = isset($selectedMinScore[$item['id']]) ? $selectedMinScore[$item['id']] : 0;
+            $masteryScoreAsMinValue = isset($masteryScore[$item['id']]) ? $masteryScore[$item['id']] : 0;
 
             $return .= '<tr>';
             $return .= '<td '.(($item['item_type'] != TOOL_QUIZ && $item['item_type'] != TOOL_HOTPOTATOES) ? ' colspan="3"' : '').'>';
@@ -10327,6 +10331,11 @@ class learnpath
                 $lpItemObj->max_score = $exercise->get_max_score();
                 $lpItemObj->update();
                 $item['max_score'] = $lpItemObj->max_score;
+
+                if (empty($selectedMinScoreValue) && !empty($masteryScoreAsMinValue)) {
+                    // Backwards compatibility with 1.9.x use mastery_score as min value
+                    $selectedMinScoreValue = $masteryScoreAsMinValue;
+                }
 
                 $return .= '<td>';
                 $return .= '<input 

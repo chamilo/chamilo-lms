@@ -256,9 +256,11 @@ if (!empty($session_id) && $session_id != '-1' && !empty($sessionList)) {
     }
     $course_list = $sessionInfo['courses'];
 } else {
-    $course_list = CourseManager::get_course_list_of_user_as_course_admin(
-        api_get_user_id()
-    );
+    if (api_is_platform_admin()) {
+        $course_list = CourseManager::get_courses_list(0, 0, 'title');
+    } else {
+        $course_list = CourseManager::get_course_list_of_user_as_course_admin(api_get_user_id());
+    }
 
     // Admin fix, add the current course in the question pool.
     if (api_is_platform_admin()) {

@@ -643,12 +643,28 @@ if ($add_type == 'multiple') {
         '<a href="'.api_get_self().'?course_id='.$courseId.'&id_session='.$id_session.'&amp;add='.$addProcess.'&amp;add_type=multiple">'
         .Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
 }
+$link_add_group = Display::url(
+    Display::return_icon('multiple.gif', get_lang('RegistrationByUsersGroups')).get_lang('RegistrationByUsersGroups'),
+    api_get_path(WEB_CODE_PATH).'admin/usergroups.php'
+);
 
+$newLinks = Display::url(
+    Display::return_icon('teacher.png', get_lang('EnrollTrainersFromExistingSessions'), null, ICON_SIZE_TINY).
+        get_lang('EnrollTrainersFromExistingSessions'),
+    api_get_path(WEB_CODE_PATH).'session/add_teachers_to_session.php?id='.$id_session
+);
+$newLinks .= Display::url(
+    Display::return_icon('user.png', get_lang('EnrollTrainersFromExistingSessions'), null, ICON_SIZE_TINY).
+        get_lang('EnrollStudentsFromExistingSessions'),
+    api_get_path(WEB_CODE_PATH).'session/add_students_to_session.php?id='.$id_session
+);
 ?>
     <div class="actions">
         <?php
         echo $link_add_type_unique;
         echo $link_add_type_multiple;
+        echo $link_add_group;
+        echo $newLinks;
         ?>
     </div>
     <form name="formulaire" method="post"
@@ -746,6 +762,10 @@ if ($add_type == 'multiple') {
                                 } ?>
                             </select>
                         </div>
+                        <input type="checkbox" onchange="checked_in_no_session(this.checked);"
+                               name="user_with_any_session" id="user_with_any_session_id">
+                        <label
+                            for="user_with_any_session_id"><?php echo get_lang('UsersRegisteredInNoSession'); ?></label>
                         <?php
                     }
                     unset($nosessionUsersList);

@@ -275,7 +275,6 @@ class SharedSurvey
     }
 
     /**
-     *
      * @return string
      */
     public function getSurveyThanks()

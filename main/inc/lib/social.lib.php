@@ -416,7 +416,7 @@ class SocialManager extends UserManager
                 WHERE
                     user_receiver_id = '.$userId.' AND
                     msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
-        if($limit){
+        if ($limit) {
             $sql .= ' LIMIT '.$limit;
         }
         $res = Database::query($sql);

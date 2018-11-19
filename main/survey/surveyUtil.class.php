@@ -2295,7 +2295,6 @@ class SurveyUtil
             $params['answered'] = $params['answered'] ?? 0;
             $params['group_id'] = $params['group_id'] ?? 0;
 
-
             $insertId = Database::insert($table, $params);
             if ($insertId) {
                 $sql = "UPDATE $table 
@@ -2866,16 +2865,16 @@ class SurveyUtil
                 Display::return_icon('preview_view.png', get_lang('Preview')),
                 $codePath.'survey/preview.php?'.http_build_query($params + ['survey_id' => $survey_id])
             );
-            }
+        }
 
-            $actions[] = Display::url(
+        $actions[] = Display::url(
                 Display::return_icon('mail_send.png', get_lang('Publish')),
                 $codePath.'survey/survey_invite.php?'.http_build_query($params + ['survey_id' => $survey_id])
             );
 
-            if ($type != 3) {
-                $actions[] = $hideReportingButton ? null : $reportingLink;
-            }
+        if ($type != 3) {
+            $actions[] = $hideReportingButton ? null : $reportingLink;
+        }
 
         if (api_is_allowed_to_edit() ||
             api_is_element_in_the_session(TOOL_SURVEY, $survey_id)
@@ -3105,12 +3104,12 @@ class SurveyUtil
                         $survey[1],
                         api_get_path(WEB_CODE_PATH).'survey/meeting.php?survey_id='.$survey[0].'&'.api_get_cidreq()
                     );
-            } else {
-                $array[1] = Display::url(
+                } else {
+                    $array[1] = Display::url(
                     $survey[1],
                     api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey[0].'&'.api_get_cidreq()
                 );
-            }
+                }
             }
 
             // Validation when belonging to a session

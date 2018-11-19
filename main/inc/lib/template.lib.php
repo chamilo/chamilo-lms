@@ -1710,7 +1710,9 @@ class Template
 
     /**
      * Get platform meta image tag (check meta_image_path setting, then use the logo).
+     *
      * @param string $imageAlt The alt attribute for the image
+     *
      * @return string The meta image HTML tag, or empty
      */
     private function getMetaPortalImagePath($imageAlt = '')

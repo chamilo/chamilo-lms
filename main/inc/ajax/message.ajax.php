@@ -18,9 +18,9 @@ switch ($action) {
         $listInvitations = [];
         $temp = [];
         if (api_get_setting('allow_social_tool') == 'true') {
-            $list = SocialManager::get_list_invitation_of_friends_by_user_id($userId,3);
+            $list = SocialManager::get_list_invitation_of_friends_by_user_id($userId, 3);
 
-            foreach ($list as $row){
+            foreach ($list as $row) {
                 $user = api_get_user_info($row['user_sender_id']);
                 $temp['title'] = $row['title'];
                 $temp['content'] = $row['content'];
@@ -29,7 +29,7 @@ switch ($action) {
                 $temp['fullname'] = $user['complete_name'];
                 $temp['email'] = $user['email'];
                 $temp['avatar'] = $user['avatar_small'];
-                $listInvitations[]=$temp;
+                $listInvitations[] = $temp;
             }
         }
         header("Content-type:application/json");
@@ -65,9 +65,8 @@ switch ($action) {
             $invitations = [
                 'ms_friends' => intval($number_of_new_messages_of_friend),
                 'ms_groups' => $group_pending_invitations,
-                'ms_inbox' => intval($count_unread_message)
+                'ms_inbox' => intval($count_unread_message),
             ];
-
         }
         header("Content-type:application/json");
         echo json_encode($invitations);

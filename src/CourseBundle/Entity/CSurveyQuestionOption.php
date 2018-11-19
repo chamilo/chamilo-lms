@@ -79,7 +79,6 @@ class CSurveyQuestionOption
 
     /**
      * CSurveyQuestionOption constructor.
-     *
      */
     public function __construct()
     {

@@ -339,7 +339,6 @@ class SurveyManager
                 }
             }
 
-
             $from = api_get_utc_datetime($values['start_date'].'00:00:00', true, true);
             $until = api_get_utc_datetime($values['end_date'].'23:59:59', true, true);
             if ($allowSurveyAvailabilityDatetime) {
@@ -815,7 +814,7 @@ class SurveyManager
      * This function duplicates a survey (and also all the question in that survey.
      *
      * @param int $surveyId id of the survey that has to be duplicated
-     * @param int $courseId  id of the course which survey has to be duplicated
+     * @param int $courseId id of the course which survey has to be duplicated
      *
      * @return true
      *

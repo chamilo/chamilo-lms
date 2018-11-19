@@ -41,7 +41,6 @@ if (!empty($action)) {
 
             $errorMsg = Display::return_message(get_lang('Created'));
         } else {
-
             $ret = CourseCategory::editNode(
                 $_POST['code'],
                 $_POST['name'],
@@ -170,8 +169,6 @@ if ($action == 'add' || $action == 'edit') {
         $text = get_lang('Save');
         $form->setDefaults($categoryInfo);
         $form->addButtonSave($text);
-
-
     } else {
         $class = "add";
         $text = get_lang('AddCategory');

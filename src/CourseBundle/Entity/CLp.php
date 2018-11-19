@@ -164,7 +164,7 @@ class CLp
     /**
      * @var string
      *
-     * @ORM\Column(name="author", type="string", length=255, nullable=false)
+     * @ORM\Column(name="author", type="text", nullable=false)
      */
     protected $author;
 

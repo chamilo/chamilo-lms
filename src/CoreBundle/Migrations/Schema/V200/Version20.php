@@ -772,6 +772,9 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE track_e_exercises CHANGE exe_weighting max_score DOUBLE PRECISION NOT NULL');
         $this->addSql('ALTER TABLE track_e_exercises CHANGE exe_result score DOUBLE PRECISION NOT NULL');
 
+        $this->addSql('ALTER TABLE c_lp CHANGE author author LONGTEXT NOT NULL');
+
+
         // Drop unused columns
         $dropColumnsAndIndex = [
             'track_e_uploads' => ['columns' => ['upload_cours_id'], 'index' => ['upload_cours_id']],

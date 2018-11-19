@@ -13,6 +13,24 @@ require_once __DIR__.'/../global.inc.php';
 $action = $_GET['a'];
 
 switch ($action) {
+    case 'get_notifications_inbox':
+        $userId = api_get_user_id();
+        $listInbox = [];
+        if (api_get_setting('allow_message_tool') == 'true') {
+            $list = MessageManager::getNumberOfMessages(true, true);
+            foreach ($list as $row){
+                $user = api_get_user_info($row['user_sender_id']);
+                $temp['title'] = $row['title'];
+                $temp['date'] = $row['send_date'];
+                $temp['fullname'] = $user['complete_name'];
+                $temp['email'] = $user['email'];
+                $temp['url'] = api_get_path(WEB_PATH). 'main/messages/view_message.php?id='.$row['id'];
+                $listInbox[] = $temp;
+            }
+        }
+        header("Content-type:application/json");
+        echo json_encode($listInbox);
+        break;
     case 'get_notifications_friends':
         $userId = api_get_user_id();
         $listInvitations = [];

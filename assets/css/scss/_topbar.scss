@@ -253,6 +253,16 @@
     .preview-thumbnail{
       color: #ffffff;
       position: relative;
+      .preview-icon{
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 6px;
+        text-align: center;
+        border-radius: 100%;
+      }
       img {
         width: 36px;
         height: 36px;

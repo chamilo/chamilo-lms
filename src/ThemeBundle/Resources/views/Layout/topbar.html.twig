@@ -103,25 +103,23 @@
 
             $('#list_notifications').on('click', e => {
 
-                var $listFriends = $('#list_friends');
-                var $html;
+                const $listFriends = $('#list_friends .content');
+                let $html;
                 $.get(
                     '{{ url('legacy_main', { name : 'inc/ajax/message.ajax.php'}) }}',
                     {'a': 'get_notifications_friends'},
                     function (data) {
-
-                        for (var i in data){
-
-                            $html = '<a class="dropdown-item preview-item">';
+                        $listFriends.empty();
+                        for (let i in data){
+                            $html =  '<div class="dropdown-divider"></div>';
+                            $html += '<a class="dropdown-item preview-item">';
                             $html += '<div class="preview-thumbnail"><img class="rounded-circle" src="'+data[i].avatar+'"/></div>';
                             $html += '<div class="preview-item-content flex-grow">';
-                            $html += '<h6>'+data[i].fullname+'</h6>';
-                            $html += '<h6>'+data[i].title+'</h6>';
-                            $html += '<p>'+data[i].content+'</p><span class="date">'+data[i].date+'</span>';
+                            $html += '<h6 class="preview-subject">' + data[i].fullname + '<span class="date-ago float-right">'+data[i].date+'</span></h6>';
+                            $html += '<p class="preview-text">' + data[i].content + '</p>';
                             $html += '</div></a>';
                             $listFriends.append($html);
                         }
-
                     }
                 );
             });
@@ -166,9 +164,15 @@
                     </a>
 
                     <ul id="list_friends" class="dropdown-menu ">
-                        <li>
+                        <a class="dropdown-item">
+                            <p id="notifications_text" class="mb-0 font-weight-normal float-left">
+                                Your recent notifications
+                            </p>
+                            <span class="badge badge-pill badge-warning float-right">View all</span>
+                        </a>
+                        <div class="content">
 
-                        </li>
+                        </div>
                     </ul>
 
                 </li>

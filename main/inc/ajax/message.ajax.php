@@ -41,13 +41,13 @@ switch ($action) {
                 $group_pending_invitations = 0;
             }
             $invitations = [
-                'ms_friends' => intval($number_of_new_messages_of_friend),
+                'ms_friends' => $number_of_new_messages_of_friend,
                 'ms_groups' => $group_pending_invitations,
-                'ms_inbox' => intval($count_unread_message)
+                'ms_inbox' => $count_unread_message,
             ];
 
         }
-        header("Content-type:application/json");
+        header('Content-type:application/json');
         echo json_encode($invitations);
         break;
     case 'send_message':

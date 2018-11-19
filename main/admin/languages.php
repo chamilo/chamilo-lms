@@ -197,13 +197,13 @@ if ($action == 'disable_all_except_default') {
 
 if (isset($_POST['Submit']) && $_POST['Submit']) {
     // changing the name
-    $sql = "UPDATE $tbl_admin_languages SET original_name='{$_POST['txt_name']}'
-            WHERE id='{$_POST['edit_id']}'";
+    $name = Database::escape_string($_POST['txt_name']);
+    $postId = (int) $_POST['edit_id'];
+    $sql = "UPDATE $tbl_admin_languages SET original_name='$name'
+            WHERE id='$postId'";
     $result = Database::query($sql);
     // changing the Platform language
     if ($_POST['platformlanguage'] && $_POST['platformlanguage'] != '') {
-        //$sql_update_2 = "UPDATE $tbl_settings_current SET selected_value='{$_POST['platformlanguage']}' WHERE variable='platformLanguage'";
-        //$result_2 = Database::query($sql_update_2);
         api_set_setting('platformLanguage', $_POST['platformlanguage'], null, null, $_configuration['access_url']);
     }
 } elseif (isset($_POST['action'])) {
@@ -253,13 +253,16 @@ Display::addFlash(Display::return_message(get_lang('PlatformLanguagesExplanation
 // including the header file (which includes the banner itself)
 Display::display_header($tool_name);
 
-echo '<a id="disable_all_except_default" href="javascript:void(0)" class="btn btn-primary"><em class="fa fa-eye"></em> '.get_lang('LanguagesDisableAllExceptDefault').'</a><br /><br />';
+echo '<a 
+    id="disable_all_except_default" 
+    href="javascript:void(0)" class="btn btn-primary">
+    <em class="fa fa-eye"></em> '.get_lang('LanguagesDisableAllExceptDefault').'</a><br /><br />';
 
 // selecting all the languages
 $sql_select = "SELECT * FROM $tbl_admin_languages";
 $result_select = Database::query($sql_select);
 
-$sql_select_lang = "SELECT * FROM $tbl_settings_current WHERE  category='Languages'";
+$sql_select_lang = "SELECT * FROM $tbl_settings_current WHERE category='Languages'";
 $result_select_lang = Database::query($sql_select_lang);
 $row_lang = Database::fetch_array($result_select_lang);
 

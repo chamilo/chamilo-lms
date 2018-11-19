@@ -17,8 +17,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
-/* Global constants and variables */
-
 $form_sent = 0;
 $first_letter_user = '';
 $first_letter_course = '';
@@ -30,7 +28,7 @@ $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
 /* Header */
 $tool_name = get_lang('AddUsersToACourse');
-$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 
 $htmlHeadXtra[] = '<script>
 function validate_filter() {
@@ -56,7 +54,7 @@ $extra_field_list = UserManager::get_extra_fields();
 $new_field_list = [];
 if (is_array($extra_field_list)) {
     foreach ($extra_field_list as $extra_field) {
-        //if is enabled to filter and is a "<select>" field type
+        // if is enabled to filter and is a "<select>" field type
         if ($extra_field[8] == 1 && $extra_field[2] == ExtraField::FIELD_TYPE_SELECT) {
             $new_field_list[] = [
                 'name' => $extra_field[3],
@@ -83,8 +81,8 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
     $users = isset($_POST['UserList']) && is_array($_POST['UserList']) ? $_POST['UserList'] : [];
     $courses = isset($_POST['CourseList']) && is_array($_POST['CourseList']) ? $_POST['CourseList'] : [];
-    $first_letter_user = $_POST['firstLetterUser'];
-    $first_letter_course = $_POST['firstLetterCourse'];
+    $first_letter_user = Database::escape_string($_POST['firstLetterUser']);
+    $first_letter_course = Database::escape_string($_POST['firstLetterCourse']);
 
     foreach ($users as $key => $value) {
         $users[$key] = intval($value);
@@ -306,7 +304,7 @@ if (is_array($extra_field_list)) {
      <b><?php echo get_lang('CourseList'); ?> :</b>
      <br/><br/>
         <?php echo get_lang('FirstLetterCourse'); ?> :
-     <select name="firstLetterCourse" 
+     <select name="firstLetterCourse"
         onchange="javascript:document.formulaire.form_sent.value='2'; document.formulaire.submit();"
         aria-label="<?php echo get_lang('FirstLetterCourse'); ?>">
       <option value="">--</option>

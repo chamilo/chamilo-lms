@@ -54,8 +54,7 @@ class HtmlEditor extends HTML_QuickForm_textarea
      */
     public function toHtml()
     {
-        $value = $this->getValue();
-
+        $value = Security::remove_XSS($this->getValue());
         if ($this->editor) {
             if ($this->editor->getConfigAttribute('fullPage')) {
                 if (strlen(trim($value)) == 0) {
@@ -100,7 +99,7 @@ class HtmlEditor extends HTML_QuickForm_textarea
     {
         $result = '';
         if ($this->editor) {
-            $this->editor->value = $this->getValue();
+            $this->editor->value = Security::remove_XSS($this->getValue());
             $this->editor->setName($this->getName());
             if ($style == true) {
                 $result = $this->editor->createHtmlStyle();

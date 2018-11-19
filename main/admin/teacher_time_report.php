@@ -46,11 +46,11 @@ if ($form->validate()) {
     $selectedTeacher = $formValues['teacher'];
 
     if (!empty($formValues['from'])) {
-        $selectedFrom = $formValues['from'];
+        $selectedFrom = Security::remove_XSS($formValues['from']);
     }
 
     if (!empty($formValues['until'])) {
-        $selectedUntil = $formValues['until'];
+        $selectedUntil = Security::remove_XSS($formValues['until']);
     }
 }
 
@@ -96,6 +96,9 @@ $timeReport = new TeacherTimeReport();
 if (!empty($selectedCourse)) {
     $withFilter = true;
     $course = api_get_course_info($selectedCourse);
+    if (empty($course)) {
+        api_not_allowed(true);
+    }
     $reportTitle = sprintf(get_lang('TimeReportForCourseX'), $course['title']);
     $teachers = CourseManager::get_teacher_list_from_course_code($selectedCourse);
 

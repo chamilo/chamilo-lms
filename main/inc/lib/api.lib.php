@@ -3270,6 +3270,7 @@ function api_display_tool_view_option()
         $output_string .= '<a class="btn btn-default btn-sm" href="'.$sourceurl.'&isStudentView=true" target="_self">'.
             Display::returnFontAwesomeIcon('eye').' '.get_lang('SwitchToStudentView').'</a>';
     }
+    $output_string = Security::remove_XSS($output_string);
     $html = Display::tag('div', $output_string, ['class' => 'view-options']);
 
     return $html;

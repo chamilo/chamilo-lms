@@ -57,8 +57,6 @@ class LocaleListener implements EventSubscriberInterface
             return;
         }
 
-        $request = $event->getRequest();
-
         // Try to see if the locale has been set as a _locale routing parameter (from lang switcher)
         //if ($locale = $request->getSession('_locale')) {
         if (false) {
@@ -164,7 +162,7 @@ class LocaleListener implements EventSubscriberInterface
     {
         return [
             // must be registered before the default Locale listener
-            KernelEvents::REQUEST => [['onKernelRequest', 20]],
+            KernelEvents::REQUEST => [['onKernelRequest', 15]],
         ];
     }
 }

@@ -139,8 +139,8 @@ if (api_is_platform_admin()) {
     $blocks['courses']['search_form'] = $search_form;
 
     $items = [];
-    $items[] = ['url' => 'course_list.php', 'label' => get_lang('CourseList')];
-    $items[] = ['url' => 'course_add.php', 'label' => get_lang('AddCourse')];
+    $items[] = ['url' => 'course_list.php', 'label' => get_lang('Course list')];
+    $items[] = ['url' => 'course_add.php', 'label' => get_lang('Add course')];
 
     if (api_get_setting('course_validation') == 'true') {
         $items[] = ['url' => 'course_request_review.php', 'label' => get_lang('ReviewCourseRequests')];

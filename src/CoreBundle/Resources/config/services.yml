@@ -17,7 +17,7 @@ services:
     chamilo_core.translation.loader.po:
         class: Symfony\Component\Translation\Loader\PoFileLoader
         tags:
-            - { name: translation.loader, alias: po }
+            - {name: translation.loader, alias: po}
 
     # Classic entity repositories
     Chamilo\CoreBundle\Repository\:
@@ -159,7 +159,7 @@ services:
         class: Chamilo\CoreBundle\EventListener\LocaleListener
         arguments: ['%kernel.default_locale%', '@service_container']
         tags:
-            - {name: kernel.event_subscriber, priority: 20}
+            - {name: kernel.event_subscriber, priority: 15}
 
     # User locale listener
     chamilo_core.listener.user_locale_listener:

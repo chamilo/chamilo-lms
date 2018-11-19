@@ -241,7 +241,7 @@ class HTML_Common
         if (isset($attributes[$attr])) {
             unset($attributes[$attr]);
         }
-    } //end func _removeAttr
+    }
 
     /**
      * Returns the value of the given attribute
@@ -251,14 +251,15 @@ class HTML_Common
      * @access    public
      * @return    string|null   returns null if an attribute does not exist
      */
-    function getAttribute($attr)
+    public function getAttribute($attr)
     {
         $attr = strtolower($attr);
         if (isset($this->_attributes[$attr])) {
             return $this->_attributes[$attr];
         }
+
         return null;
-    } //end func getAttribute
+    }
 
     /**
      * Sets the value of the attribute

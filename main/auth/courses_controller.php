@@ -57,20 +57,12 @@ class CoursesController
     }
 
     /**
-     * It's used for listing categories,
-     * render to categories_list view.
+     * It's used for listing categories, render to categories_list view.
      *
-     * @param string $action
-     * @param string $message confirmation message(optional)
-     * @param string $error   error message(optional)
      */
-    public function categoryList($action, $message = '', $error = '')
+    public function categoryList()
     {
         api_block_anonymous_users();
-
-        $data = [];
-        $data['user_course_categories'] = CourseManager::get_user_course_categories(api_get_user_id());
-
         $stok = Security::get_token();
         $actions = Display::url(
             Display::return_icon('back.png', get_lang('Back'), '', '32'),

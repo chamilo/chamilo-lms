@@ -32,7 +32,7 @@ $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 $tbl_access_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
 // initializing variables
-$user_id = intval($_GET['user']);
+$user_id = isset($_GET['user']) ? (int) $_GET['user'] : 0;
 $user_info = api_get_user_info($user_id);
 $user_anonymous = api_get_anonymous_id();
 $current_user_id = api_get_user_id();

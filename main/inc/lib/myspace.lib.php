@@ -66,7 +66,7 @@ class MySpace
         $menu_items = [];
         $menu_items[] = Display::url(
             Display::return_icon(
-                'stats.png',
+                'statistics.png',
                 get_lang('MyStats'),
                 '',
                 ICON_SIZE_MEDIUM

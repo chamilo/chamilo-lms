@@ -1684,6 +1684,10 @@ class GroupManager
      */
     public static function get_subscribed_users($groupInfo)
     {
+        if (empty($groupInfo)) {
+            return [];
+        }
+
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $table_group_user = Database::get_course_table(TABLE_GROUP_USER);
         $order_clause = api_sort_by_first_name() ? ' ORDER BY u.firstname, u.lastname' : ' ORDER BY u.lastname, u.firstname';
@@ -1692,7 +1696,7 @@ class GroupManager
             $order_clause = ' ORDER BY u.official_code, u.firstname, u.lastname';
         }
 
-        $group_id = (int) $groupInfo['id'];
+        $group_id = (int) $groupInfo['iid'];
 
         if (empty($group_id)) {
             return [];
@@ -1740,16 +1744,20 @@ class GroupManager
      */
     public static function get_subscribed_tutors($groupInfo, $id_only = false)
     {
+        if (empty($groupInfo)) {
+            return [];
+        }
+
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $table_group_tutor = Database::get_course_table(TABLE_GROUP_TUTOR);
         $order_clause = api_sort_by_first_name() ? ' ORDER BY u.firstname, u.lastname' : ' ORDER BY u.lastname, u.firstname';
 
         $orderListByOfficialCode = api_get_setting('order_user_list_by_official_code');
         if ($orderListByOfficialCode === 'true') {
-            $order_clause = " ORDER BY u.official_code, u.firstname, u.lastname";
+            $order_clause = ' ORDER BY u.official_code, u.firstname, u.lastname';
         }
 
-        $group_id = intval($groupInfo['id']);
+        $group_id = (int) $groupInfo['iid'];
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT tg.id, u.user_id, u.lastname, u.firstname, u.email

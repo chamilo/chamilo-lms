@@ -226,6 +226,8 @@
             icon.removeClass('fa-chevron-down').addClass('fa-chevron-up');
         });
 
+        LPViewUtils.setHeightLPToc();
+
         $('.image-avatar img').load(function () {
             LPViewUtils.setHeightLPToc();
         });

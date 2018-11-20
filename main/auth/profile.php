@@ -15,10 +15,10 @@ use ChamiloSession as Session;
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (api_get_setting('allow_social_tool') == 'true') {
+$this_section = SECTION_MYPROFILE;
+$allowSocialTool = api_get_setting('allow_social_tool') == 'true';
+if ($allowSocialTool) {
     $this_section = SECTION_SOCIAL;
-} else {
-    $this_section = SECTION_MYPROFILE;
 }
 
 $_SESSION['this_section'] = $this_section;
@@ -662,7 +662,7 @@ if ($form->validate()) {
 // the header
 
 $actions = '';
-if (api_get_setting('allow_social_tool') !== 'true') {
+if ($allowSocialTool) {
     if (api_get_setting('extended_profile') === 'true') {
         if (api_get_setting('allow_message_tool') === 'true') {
             $actions .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.
@@ -695,7 +695,7 @@ if ($actions) {
 
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
 
-if (api_get_setting('allow_social_tool') === 'true') {
+if ($allowSocialTool) {
     SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'home');
     $menu = SocialManager::show_social_menu(
         'home',

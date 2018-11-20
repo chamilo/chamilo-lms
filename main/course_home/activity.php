@@ -12,7 +12,7 @@
  *
  * @package chamilo.course_home
  */
-$id = isset($_GET['id']) ? intval($_GET['id']) : null;
+$id = isset($_GET['id']) ? (int) $_GET['id'] : null;
 $course_id = api_get_course_int_id();
 $session_id = api_get_session_id();
 
@@ -29,8 +29,6 @@ if (api_is_platform_admin()) {
         /*
         * Process hiding a tools from available tools.
         */
-        //where $id is set?
-        $id = intval($id);
         Database::query("DELETE FROM $tool_table WHERE c_id = $course_id AND id='$id' AND added_tool=1");
     }
 }
@@ -45,9 +43,7 @@ if ($enabled === 'true') {
 }
 
 //	COURSE ADMIN ONLY VIEW
-
 $blocks = [];
-
 // Start of tools for CourseAdmins (teachers/tutors)
 if ($session_id === 0 && api_is_course_admin() && api_is_allowed_to_edit(null, true)) {
     $content .= '<div class="alert alert-success" style="border:0px; margin-top: 0px;padding:0px;">

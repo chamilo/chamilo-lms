@@ -117,9 +117,9 @@ class Attendance
         $course_id = api_get_course_int_id();
         $session_id = api_get_session_id();
         $condition_session = api_get_session_condition($session_id);
-        $column = intval($column);
-        $from = intval($from);
-        $number_of_items = intval($number_of_items);
+        $column = (int) $column;
+        $from = (int) $from;
+        $number_of_items = (int) $number_of_items;
 
         if (!in_array($direction, ['ASC', 'DESC'])) {
             $direction = 'ASC';
@@ -154,20 +154,21 @@ class Attendance
 
         while ($attendance = Database::fetch_row($res)) {
             $student_param = '';
-            if (api_is_drh() && $_GET['student_id']) {
-                $student_param = '&student_id='.intval($_GET['student_id']);
+            $studentRequestId = isset($_GET['student_id']) ? (int) $_GET['student_id'] : 0;
+            if (api_is_drh() && !empty($studentRequestId)) {
+                $student_param = '&student_id='.$studentRequestId;
             }
 
             $session_star = '';
             if (api_get_session_id() == $attendance[6]) {
                 $session_star = api_get_session_image(api_get_session_id(), $user_info['status']);
             }
+
             if ($attendance[5] == 1) {
                 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
                     api_get_user_id(),
                     api_get_course_info()
-                );
-
+                ) || api_is_drh();
                 if (api_is_allowed_to_edit(null, true) || $isDrhOfCourse) {
                     // Link to edit
                     $attendance[1] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$student_param.'">'.$attendance[1].'</a>'.$session_star;

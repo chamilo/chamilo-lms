@@ -21,11 +21,12 @@ if ($form->validate()) {
     $externalTool = new ImsLtiTool();
     $externalTool
         ->setName($formValues['name'])
-        ->setDescription($formValues['description'])
-        ->setLaunchUrl($formValues['launch_url'])
-        ->setConsumerKey($formValues['consumer_key'])
-        ->setSharedSecret($formValues['shared_secret'])
-        ->setCustomParams($formValues['custom_params'])
+        ->setDescription(
+            empty($formValues['description']) ? null : $formValues['description']
+        )
+        ->setCustomParams(
+            empty($formValues['custom_params']) ? null : $formValues['custom_params']
+        )
         ->setCourse(null)
         ->setActiveDeepLinking(
             isset($formValues['deep_linking'])
@@ -35,6 +36,30 @@ if ($form->validate()) {
             isset($formValues['share_email']),
             isset($formValues['share_picture'])
         );
+
+    if (empty($formValues['consumer_key']) && empty($formValues['shared_secret'])) {
+        try {
+            $launchUrl = $plugin->getLaunchUrlFromCartridge($formValues['launch_url']);
+        } catch (Exception $e) {
+            Display::addFlash(
+                Display::return_message($e->getMessage(), 'error')
+            );
+
+            header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php');
+            exit;
+        }
+
+        $externalTool->setLaunchUrl($launchUrl);
+    } else {
+        $externalTool
+            ->setLaunchUrl($formValues['launch_url'])
+            ->setConsumerKey(
+                empty($formValues['consumer_key']) ? null : $formValues['consumer_key']
+            )
+            ->setSharedSecret(
+                empty($formValues['shared_secret']) ? null : $formValues['shared_secret']
+            );
+    }
 
     $em->persist($externalTool);
     $em->flush();

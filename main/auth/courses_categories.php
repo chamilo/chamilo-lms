@@ -8,6 +8,7 @@
  *
  * @package chamilo.auth
  */
+
 if (isset($_REQUEST['action']) && Security::remove_XSS($_REQUEST['action']) !== 'subscribe') {
     $stok = Security::get_token();
 } else {
@@ -15,6 +16,9 @@ if (isset($_REQUEST['action']) && Security::remove_XSS($_REQUEST['action']) !== 
 }
 
 $action = !empty($_REQUEST['action']) ? Security::remove_XSS($_REQUEST['action']) : 'display_courses';
+global $actions;
+$action = in_array($action, $actions) ? $action : 'display_courses';
+
 $showCourses = CoursesAndSessionsCatalog::showCourses();
 $showSessions = CoursesAndSessionsCatalog::showSessions();
 $pageCurrent = isset($pageCurrent) ? $pageCurrent : isset($_GET['pageCurrent']) ? intval($_GET['pageCurrent']) : 1;

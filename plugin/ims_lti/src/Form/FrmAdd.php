@@ -43,8 +43,8 @@ class FrmAdd extends FormValidator
 
         if (null === $this->baseTool) {
             $this->addUrl('launch_url', $plugin->get_lang('LaunchUrl'), true);
-            $this->addText('consumer_key', $plugin->get_lang('ConsumerKey'));
-            $this->addText('shared_secret', $plugin->get_lang('SharedSecret'));
+            $this->addText('consumer_key', $plugin->get_lang('ConsumerKey'), false);
+            $this->addText('shared_secret', $plugin->get_lang('SharedSecret'), false);
         }
 
         $this->addButtonAdvancedSettings('lti_adv');
@@ -72,8 +72,6 @@ class FrmAdd extends FormValidator
         $this->addCheckBox('share_picture', null, $plugin->get_lang('ShareLauncherPicture'));
         $this->addHtml('</div>');
         $this->addButtonCreate($plugin->get_lang('AddExternalTool'));
-        $this->applyFilter('__ALL__', 'Security::remove_XSS');
-        $this->applyFilter('__ALL__', 'htmlspecialchars_decode');
         $this->applyFilter('__ALL__', 'trim');
     }
 

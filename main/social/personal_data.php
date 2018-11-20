@@ -51,7 +51,6 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
     $formDelete->addButtonDelete(get_lang('DeleteAccount'));
     $formToString .= $formDelete->returnForm();
 }
-
 switch ($action) {
     case 'send_legal':
         $language = api_get_interface_language();

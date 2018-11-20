@@ -320,8 +320,11 @@ class SocialManager extends UserManager
                     msg_status='.MESSAGE_STATUS_INVITATION_PENDING;
         $res = Database::query($sql);
         $row = Database::fetch_array($res, 'ASSOC');
+        if ($row) {
+            return (int) $row['count_message_in_box'];
+        }
 
-        return $row['count_message_in_box'];
+        return 0;
     }
 
     /**

@@ -2355,11 +2355,10 @@ function fixIds(EntityManager $em)
 
     // Delete group data of groups that don't exist.
     $sql = "DELETE FROM c_item_property
-            WHERE to_group_id IS NOT NULL AND to_group_id NOT IN (SELECT DISTINCT id FROM c_group_info)";
+            WHERE to_group_id <> 0 AND to_group_id IS NOT NULL AND to_group_id NOT IN (SELECT DISTINCT iid FROM c_group_info)";
     $connection->executeQuery($sql);
 
     // This updates the group_id with c_group_info.iid instead of c_group_info.id
-
     if ($debug) {
         error_log('update iids');
     }
@@ -2430,7 +2429,8 @@ function fixIds(EntityManager $em)
             $ref = $item['ref'];
 
             // Fix group id
-            if (!empty($groupId)) {
+            // Commented group id is already fixed in Version20150603181728.php
+            /*if (!empty($groupId)) {
                 $sql = "SELECT * FROM c_group_info
                         WHERE c_id = $courseId AND id = $groupId";
                 $data = $connection->fetchAssoc($sql);
@@ -2444,7 +2444,7 @@ function fixIds(EntityManager $em)
                     $sql = "DELETE FROM c_item_property WHERE iid = $iid";
                     $connection->executeQuery($sql);
                 }
-            }
+            }*/
 
             $sql = '';
             $newId = '';

@@ -209,7 +209,7 @@ if (!empty($groupId)) {
 }
 
 // Actions.
-$document_id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
+$document_id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : null;
 $currentUrl = api_get_self().'?'.api_get_cidreq().'&id='.$document_id;
 $curdirpath = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : null;
 

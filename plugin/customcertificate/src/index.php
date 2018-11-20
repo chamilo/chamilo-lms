@@ -74,15 +74,6 @@ $infoCertificate = Database::select(
     ],
     'first'
 );
-if (!is_array($infoCertificate)) {
-    $infoCertificate = [
-        'type_date_expediction' => '',
-        'year' => '',
-        'month' => '',
-        'day' => '',
-        'date_change' => '',
-    ];
-}
 
 $form = new FormValidator(
     'formEdit',
@@ -217,7 +208,13 @@ if (empty($infoCertificate)) {
     );
 
     if (!is_array($infoCertificate)) {
-        $infoCertificate = [];
+        $infoCertificate = [
+            'type_date_expediction' => '',
+            'year' => '',
+            'month' => '',
+            'day' => '',
+            'date_change' => '',
+        ];
     }
     if (!empty($infoCertificate)) {
         $useDefault = true;

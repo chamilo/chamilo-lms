@@ -463,18 +463,17 @@ class DocumentManager
         $tblItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tblDocument = Database::get_course_table(TABLE_DOCUMENT);
 
-        $userGroupFilter = '';
         if (!is_null($toUserId)) {
-            $toUserId = intval($toUserId);
+            $toUserId = (int) $toUserId;
             $userGroupFilter = "last.to_user_id = $toUserId";
             if (empty($toUserId)) {
-                $userGroupFilter = " (last.to_user_id = 0 OR last.to_user_id IS NULL) ";
+                $userGroupFilter = ' (last.to_user_id = 0 OR last.to_user_id IS NULL) ';
             }
         } else {
-            $toGroupId = intval($toGroupId);
+            $toGroupId = (int) $toGroupId;
             $userGroupFilter = "last.to_group_id = $toGroupId";
             if (empty($toGroupId)) {
-                $userGroupFilter = "( last.to_group_id = 0 OR last.to_group_id IS NULL) ";
+                $userGroupFilter = '( last.to_group_id = 0 OR last.to_group_id IS NULL) ';
             }
         }
 
@@ -537,6 +536,7 @@ class DocumentManager
                     $sharedCondition
                 ORDER BY last.iid DESC, last.session_id DESC
                 ";
+
         $result = Database::query($sql);
 
         $documentData = [];

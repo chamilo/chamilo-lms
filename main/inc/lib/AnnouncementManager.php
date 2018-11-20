@@ -1622,8 +1622,11 @@ class AnnouncementManager
             $extraGroupCondition = " AND ip.to_group_id = $group_id ";
         }
 
+        $allowDrhAccess = api_get_configuration_value('allow_drh_access_announcement');
+
         if (api_is_allowed_to_edit(false, true) ||
-            ($allowUserEditSetting && !api_is_anonymous())
+            ($allowUserEditSetting && !api_is_anonymous()) ||
+            ($allowDrhAccess && api_is_drh())
         ) {
             // A.1. you are a course admin with a USER filter
             // => see only the messages of this specific user + the messages of the group (s)he is member of.
@@ -1739,11 +1742,13 @@ class AnnouncementManager
                 } else {
                     if ($group_id == 0) {
                         $cond_user_id = " AND (
-                            (ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND (ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".implode(", ", $group_memberships)."))
+                            (ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND 
+                            (ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".implode(", ", $group_memberships)."))
                         ) ";
                     } else {
                         $cond_user_id = " AND (
-                            (ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND (ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".$group_id."))
+                            (ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND 
+                            (ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".$group_id."))
                         )";
                         $cond_user_id .= $extraGroupCondition;
                     }
@@ -1759,19 +1764,22 @@ class AnnouncementManager
                             ip.tool='announcement' 
                             $cond_user_id
                             $condition_session
-                            $searchCondition
-                            AND ip.visibility='1'
-                        $groupBy
+                            $searchCondition AND 
+                            ip.visibility='1'
+                            $groupBy
                         ORDER BY display_order DESC";
             } else {
                 if ($user_id) {
                     if ($allowUserEditSetting && !api_is_anonymous()) {
                         $cond_user_id = " AND (
-                            ip.lastedit_user_id = '".api_get_user_id()."' OR
-                            ((ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND (ip.to_group_id='0' OR ip.to_group_id IS NULL))
+                                ip.lastedit_user_id = '".api_get_user_id()."' OR
+                                ((ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND 
+                                (ip.to_group_id='0' OR ip.to_group_id IS NULL)
+                            )
                         ) ";
                     } else {
-                        $cond_user_id = " AND ((ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND (ip.to_group_id='0' OR ip.to_group_id IS NULL) ) ";
+                        $cond_user_id = " AND ((ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND 
+                        (ip.to_group_id='0' OR ip.to_group_id IS NULL) ) ";
                     }
 
                     $sql = "SELECT $select
@@ -1818,8 +1826,8 @@ class AnnouncementManager
         }
 
         if (!is_null($start) && !is_null($limit)) {
-            $start = intval($start);
-            $limit = intval($limit);
+            $start = (int) $start;
+            $limit = (int) $limit;
             $sql .= " LIMIT $start, $limit";
         }
 

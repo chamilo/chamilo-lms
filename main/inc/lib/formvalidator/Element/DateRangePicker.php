@@ -53,6 +53,7 @@ class DateRangePicker extends HTML_QuickForm_text
      */
     public function parseDateRange($dateRange)
     {
+        $dateRange = Security::remove_XSS($dateRange);
         $dates = explode('/', $dateRange);
         $dates = array_map('trim', $dates);
         $start = isset($dates[0]) ? $dates[0] : '';
@@ -82,7 +83,7 @@ class DateRangePicker extends HTML_QuickForm_text
         $d = DateTime::createFromFormat($format, $dates['end']);
         $resultEnd = $d && $d->format($format) == $dates['end'];
 
-        if (!($resultStart) || !$resultEnd) {
+        if (!$resultStart || !$resultEnd) {
             return false;
         }
 
@@ -133,7 +134,7 @@ class DateRangePicker extends HTML_QuickForm_text
         }
 
         $minDate = null;
-        $minDateValue = $this->getAttribute('minDate');
+        $minDateValue = Security::remove_XSS($this->getAttribute('minDate'));
         if (!empty($minDateValue)) {
             $minDate = "
                 minDate: '{$minDateValue}',
@@ -141,7 +142,7 @@ class DateRangePicker extends HTML_QuickForm_text
         }
 
         $maxDate = null;
-        $maxDateValue = $this->getAttribute('maxDate');
+        $maxDateValue = Security::remove_XSS($this->getAttribute('maxDate'));
         if (!empty($maxDateValue)) {
             $maxDate = "
                 maxDate: '{$maxDateValue}',
@@ -149,13 +150,13 @@ class DateRangePicker extends HTML_QuickForm_text
         }
 
         $format = 'YYYY-MM-DD HH:mm';
-        $formatValue = $this->getAttribute('format');
+        $formatValue = Security::remove_XSS($this->getAttribute('format'));
         if (!empty($formatValue)) {
             $format = $formatValue;
         }
 
         $timePicker = 'true';
-        $timePickerValue = $this->getAttribute('timePicker');
+        $timePickerValue = Security::remove_XSS($this->getAttribute('timePicker'));
         if (!empty($timePickerValue)) {
             $timePicker = $timePickerValue;
         }

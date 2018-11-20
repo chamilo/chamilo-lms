@@ -133,7 +133,6 @@
 </div>
 
 <script>
-(function () {
     var LPViewUtils = {
         setHeightLPToc: function () {
             var scormInfoHeight = $('#scorm-info').outerHeight(true);
@@ -144,7 +143,7 @@
         }
     };
 
-    $(document).on('ready', function () {
+    $(document).ready(function () {
         if (/iPhone|iPod|iPad/.test(navigator.userAgent)) {
             // Fix an issue where you cannot scroll below first screen in
             // learning paths on Apple devices
@@ -229,6 +228,10 @@
 
         LPViewUtils.setHeightLPToc();
 
+        $('.image-avatar img').load(function () {
+            LPViewUtils.setHeightLPToc();
+        });
+
         $('.scorm_item_normal a, #scorm-previous, #scorm-next').on('click', function () {
             $('.lp-view-tabs').animate({opacity: 0}, 500);
         });
@@ -305,10 +308,9 @@
                 }
             });
         {% endif %}
-    });
 
-    $(window).on('resize', function () {
-        LPViewUtils.setHeightLPToc();
+        $(window).on('resize', function () {
+            LPViewUtils.setHeightLPToc();
+        });
     });
-})();
 </script>

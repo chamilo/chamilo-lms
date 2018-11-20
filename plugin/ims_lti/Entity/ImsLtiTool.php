@@ -284,7 +284,11 @@ class ImsLtiTool
         $strings = explode("\n", $this->customParams);
 
         foreach ($strings as $string) {
-            $pairs = explode('=', $string);
+            if (empty($string)) {
+                continue;
+            }
+
+            $pairs = explode('=', $string, 2);
             $key = self::parseCustomKey($pairs[0]);
             $value = $pairs[1];
 

@@ -153,7 +153,7 @@ $survey_actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invite
 if ($survey_data['survey_type'] != 3) {
     if (!api_get_configuration_value('hide_survey_reporting_button')) {
         $survey_actions .= Display::url(
-            Display::return_icon('stats.png', get_lang('Reporting'), [], ICON_SIZE_MEDIUM),
+            Display::return_icon('statistics.png', get_lang('Reporting'), [], ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&survey_id='.$survey_id
         );
     }

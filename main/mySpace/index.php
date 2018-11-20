@@ -209,7 +209,7 @@ if (!empty($session_id) &&
 } else {
     $actionsLeft .= Display::url(
         Display::return_icon(
-            'stats.png',
+            'statistics.png',
             get_lang('MyStats'),
             null,
             ICON_SIZE_MEDIUM

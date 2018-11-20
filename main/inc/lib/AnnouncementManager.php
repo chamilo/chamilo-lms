@@ -1622,8 +1622,11 @@ class AnnouncementManager
             $extraGroupCondition = " AND ip.to_group_id = $group_id ";
         }
 
+        $allowDrhAccess = api_get_configuration_value('allow_drh_access_announcement');
+
         if (api_is_allowed_to_edit(false, true) ||
-            ($allowUserEditSetting && !api_is_anonymous())
+            ($allowUserEditSetting && !api_is_anonymous()) ||
+            ($allowDrhAccess && api_is_drh())
         ) {
             // A.1. you are a course admin with a USER filter
             // => see only the messages of this specific user + the messages of the group (s)he is member of.

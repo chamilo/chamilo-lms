@@ -33,7 +33,7 @@ Then enter the main/install/index.php and follow the UI instructions (database, 
 If you have already installed it and just want to update it from Git, do:
 ~~~~
 git pull origin master
-yarn install
+yarn upgrade
 yarn encore dev
 composer update
 ~~~~

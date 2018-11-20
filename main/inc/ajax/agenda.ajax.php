@@ -1,8 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Responses to AJAX calls.
  */
+
 $type = isset($_REQUEST['type']) && in_array($_REQUEST['type'], ['personal', 'course', 'admin']) ? $_REQUEST['type'] : 'personal';
 
 if ($type == 'personal') {
@@ -28,9 +30,9 @@ switch ($action) {
             break;
         }
         $add_as_announcement = isset($_REQUEST['add_as_annonuncement']) ? $_REQUEST['add_as_annonuncement'] : null;
-        $title = isset($_REQUEST['title']) ? Security::remove_XSS($_REQUEST['title']) : null;
-        $content = isset($_REQUEST['content']) ? Security::remove_XSS($_REQUEST['content']) : null;
-        $comment = isset($_REQUEST['comment']) ? Security::remove_XSS($_REQUEST['comment']) : null;
+        $title = isset($_REQUEST['title']) ? $_REQUEST['title'] : null;
+        $content = isset($_REQUEST['content']) ? $_REQUEST['content'] : null;
+        $comment = isset($_REQUEST['comment']) ? $_REQUEST['comment'] : null;
         $userToSend = isset($_REQUEST['users_to_send']) ? $_REQUEST['users_to_send'] : [];
 
         echo $agenda->addEvent(

@@ -253,12 +253,30 @@ class HTML_QuickForm_element extends HTML_Common
      */
     public function getValue()
     {
-        // interface
         return null;
-    } // end func getValue
+    }
 
-    // }}}
-    // {{{ freeze()
+    /**
+     * @return string
+     */
+    public function getCleanValue()
+    {
+        $value = $this->cleanValueFromParameter($this->getValue());
+
+        return $value;
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return string
+     */
+    public function cleanValueFromParameter($value)
+    {
+        $value = @htmlspecialchars($value, ENT_COMPAT, HTML_Common::charset());
+
+        return $value;
+    }
 
     /**
      * Freeze the element so that only its value is returned
@@ -302,12 +320,16 @@ class HTML_QuickForm_element extends HTML_Common
         // Modified by Ivan Tcholakov, 16-MAR-2010.
         //return ('' != $value? htmlspecialchars($value): '&nbsp;') .
         //       $this->_getPersistantData();
+        if (!empty($value)) {
+            $value = $this->getCleanValue();
+        } else {
+            $value = '&nbsp;';
+        }
 
-        $value =  ('' != $value ? @htmlspecialchars($value, ENT_COMPAT, HTML_Common::charset()): '&nbsp;') .
-               $this->_getPersistantData();
+        $value .= $this->_getPersistantData();
+
         return '<span class="freeze">'.$value.'</span>';
-        //
-    } //end func getFrozenHtml
+    }
 
    /**
     * Used by getFrozenHtml() to pass the element's value if _persistantFreeze is on

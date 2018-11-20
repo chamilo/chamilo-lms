@@ -108,7 +108,7 @@ class GroupManager
         $course_id = $course_info['real_id'];
         $table_group = Database::get_course_table(TABLE_GROUP);
 
-        $select = " g.id,
+        $select = ' g.id,
                     g.iid,
                     g.name,
                     g.description,
@@ -118,9 +118,9 @@ class GroupManager
                     g.self_registration_allowed,
                     g.self_unregistration_allowed,
                     g.session_id,
-                    g.status";
+                    g.status';
         if ($getCount) {
-            $select = " DISTINCT count(g.iid) as count ";
+            $select = ' DISTINCT count(g.iid) as count ';
         }
 
         $sql = "SELECT 
@@ -147,7 +147,7 @@ class GroupManager
         if (!empty($session_condition)) {
             $sql .= $session_condition;
         }
-        $sql .= "ORDER BY UPPER(g.name)";
+        $sql .= ' ORDER BY UPPER(g.name)';
 
         $result = Database::query($sql);
 
@@ -1689,10 +1689,10 @@ class GroupManager
         $order_clause = api_sort_by_first_name() ? ' ORDER BY u.firstname, u.lastname' : ' ORDER BY u.lastname, u.firstname';
         $orderListByOfficialCode = api_get_setting('order_user_list_by_official_code');
         if ($orderListByOfficialCode === 'true') {
-            $order_clause = " ORDER BY u.official_code, u.firstname, u.lastname";
+            $order_clause = ' ORDER BY u.official_code, u.firstname, u.lastname';
         }
 
-        $group_id = intval($groupInfo['id']);
+        $group_id = (int) $groupInfo['id'];
 
         if (empty($group_id)) {
             return [];

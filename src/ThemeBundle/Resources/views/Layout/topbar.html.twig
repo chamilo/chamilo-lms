@@ -96,32 +96,53 @@
                     }
                     if(countInbox != 0){
                         $("#notifications-inbox").removeClass('d-none');
-                        $("#notifications-inbox").append(countFriends);
+                        $("#notifications-inbox").append(countInbox);
                     }
                 }
             );
 
-            $('#list_notifications').on('click', e => {
-
-                var $listFriends = $('#list_friends');
-                var $html;
+            $('#list_notifications_friends').on('click', e => {
+                const $listFriends = $('#list_friends .content');
+                let $html;
                 $.get(
                     '{{ url('legacy_main', { name : 'inc/ajax/message.ajax.php'}) }}',
                     {'a': 'get_notifications_friends'},
                     function (data) {
-
-                        for (var i in data){
-
-                            $html = '<a class="dropdown-item preview-item">';
+                        $listFriends.empty();
+                        for (let i in data){
+                            $html =  '<div class="dropdown-divider"></div>';
+                            $html += '<a class="dropdown-item preview-item">';
                             $html += '<div class="preview-thumbnail"><img class="rounded-circle" src="'+data[i].avatar+'"/></div>';
                             $html += '<div class="preview-item-content flex-grow">';
-                            $html += '<h6>'+data[i].fullname+'</h6>';
-                            $html += '<h6>'+data[i].title+'</h6>';
-                            $html += '<p>'+data[i].content+'</p><span class="date">'+data[i].date+'</span>';
+                            $html += '<h6 class="preview-subject">' + data[i].fullname + '<span class="date-ago float-right">'+data[i].date+'</span></h6>';
+                            $html += '<p class="preview-text">' + data[i].content + '</p>';
                             $html += '</div></a>';
                             $listFriends.append($html);
                         }
+                    }
+                );
+            });
 
+            $('#list_notifications_inbox').on('click', e => {
+                const $listInbox = $('#list_inbox .content');
+                let $html;
+                $.get(
+                    '{{ url('legacy_main', { name : 'inc/ajax/message.ajax.php'}) }}',
+                    {'a': 'get_notifications_inbox'},
+                    function (data) {
+                        $listInbox.empty();
+                        for (let i in data){
+                            $html =  '<div class="dropdown-divider"></div>';
+                            $html += '<a class="dropdown-item preview-item" href="'+data[i].url+'">';
+                            $html += '<div class="preview-thumbnail"><div class="preview-icon bg-info">';
+                            $html += '<i class="far fa-envelope"></i>';
+                            $html += '</div></div>';
+                            $html += '<div class="preview-item-content flex-grow">';
+                            $html += '<h6 class="preview-subject">' + data[i].fullname + '<span class="date-ago float-right">'+data[i].date+'</span></h6>';
+                            $html += '<p class="preview-text">' + data[i].title + '</p>';
+                            $html += '</div></a>';
+                            $listInbox.append($html);
+                        }
                     }
                 );
             });
@@ -161,22 +182,39 @@
 
                 <li class="notifications dropdown">
                     <span id="notifications-social" class="counter d-none"></span>
-                    <a id="list_notifications" href="#" class="dropdown-toggle no-after" data-toggle="dropdown">
+                    <a id="list_notifications_friends" href="#" class="dropdown-toggle no-after" data-toggle="dropdown">
                         <i class="far fa-bell"></i>
                     </a>
 
                     <ul id="list_friends" class="dropdown-menu ">
-                        <li>
-
-                        </li>
+                        <a class="dropdown-item">
+                            <p id="notifications_text" class="mb-0 font-weight-normal float-left">
+                                Your recent notifications
+                            </p>
+                            <span class="badge badge-pill badge-warning float-right">View all</span>
+                        </a>
+                        <div class="content">
+                            <div class="spinner"></div>
+                        </div>
                     </ul>
 
                 </li>
                 <li class="notifications">
                     <span id="notifications-inbox" class="counter d-none"></span>
-                    <a href="{{ url('legacy_main', { 'name' : 'messages/inbox.php' }) }}" class="no-after">
+                    <a id="list_notifications_inbox" href="#" class="dropdown-toggle no-after" data-toggle="dropdown">
                         <i class="far fa-envelope"></i>
                     </a>
+                    <ul id="list_inbox" class="dropdown-menu ">
+                        <a class="dropdown-item">
+                            <p id="notifications_text" class="mb-0 font-weight-normal float-left">
+                                Recent messages
+                            </p>
+                            <span class="badge badge-pill badge-warning float-right">View all</span>
+                        </a>
+                        <div class="content">
+                            <div class="spinner"></div>
+                        </div>
+                    </ul>
                 </li>
 
                 <li class="dropdown">

@@ -51,15 +51,17 @@ class MessageManager
      *
      * @param bool $unread
      *
+     * @param bool $listRead
      * @return int
      */
-    public static function getNumberOfMessages($unread = false)
+    public static function getNumberOfMessages($unread = false, $listRead = false)
     {
         $table = Database::get_main_table(TABLE_MESSAGE);
+        $list = null;
         if ($unread) {
-            $condition_msg_status = ' msg_status = '.MESSAGE_STATUS_UNREAD.' ';
+            $condition_msg_status = ' msg_status = ' . MESSAGE_STATUS_UNREAD . ' ';
         } else {
-            $condition_msg_status = ' msg_status IN('.MESSAGE_STATUS_NEW.','.MESSAGE_STATUS_UNREAD.') ';
+            $condition_msg_status = ' msg_status IN(' . MESSAGE_STATUS_NEW . ',' . MESSAGE_STATUS_UNREAD . ') ';
         }
 
         $keyword = Session::read('message_search_keyword');
@@ -68,18 +70,27 @@ class MessageManager
             $keyword = Database::escape_string($keyword);
             $keywordCondition = " AND (title like '%$keyword%' OR content LIKE '%$keyword%') ";
         }
-
-        $sql = "SELECT COUNT(id) as number_messages
-                FROM $table
-                WHERE $condition_msg_status AND
-                    user_receiver_id=".api_get_user_id()."
+        if ($listRead) {
+            $sql = "SELECT * ";
+        } else {
+            $sql = "SELECT COUNT(id) as number_messages ";
+        }
+        $sql .= " FROM $table
+                  WHERE $condition_msg_status AND
+                    user_receiver_id=" . api_get_user_id() . "
                     $keywordCondition
                 ";
         $result = Database::query($sql);
-        $result = Database::fetch_array($result);
-
-        if ($result) {
-            return (int) $result['number_messages'];
+        if ($listRead) {
+            while ($row = Database::fetch_array($result, 'ASSOC')) {
+                $list[] = $row;
+            }
+            return $list;
+        } else {
+            $count = Database::fetch_array($result);
+            if ($result) {
+                return (int)$count['number_messages'];
+            }
         }
 
         return 0;

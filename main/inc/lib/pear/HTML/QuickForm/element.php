@@ -43,17 +43,15 @@ class HTML_QuickForm_element extends HTML_Common
     /**
      * Label of the field
      * @var       string
-     * @since     1.3
-     * @access    private
      */
-    var $_label = '';
+    public $_label = '';
 
     /**
      * Label "for" a field... (Chamilo LMS customization)
      * @var     string
      * @access  private
      */
-    var $_label_for = '';
+    public $_label_for = '';
 
     /**
      * Form element type
@@ -61,7 +59,7 @@ class HTML_QuickForm_element extends HTML_Common
      * @since     1.0
      * @access    private
      */
-    var $_type = '';
+    public $_type = '';
 
     /**
      * Flag to tell if element is frozen
@@ -69,7 +67,7 @@ class HTML_QuickForm_element extends HTML_Common
      * @since     1.0
      * @access    private
      */
-    var $_flagFrozen = false;
+    public $_flagFrozen = false;
 
     /**
      * Does the element support persistant data when frozen
@@ -77,7 +75,7 @@ class HTML_QuickForm_element extends HTML_Common
      * @since     1.3
      * @access    private
      */
-    var $_persistantFreeze = false;
+    public $_persistantFreeze = false;
 
     protected $columnsSize;
 
@@ -177,10 +175,7 @@ class HTML_QuickForm_element extends HTML_Common
     public function apiVersion()
     {
         return 3.2;
-    } // end func apiVersion
-
-    // }}}
-    // {{{ getType()
+    }
 
     /**
      * Returns element type
@@ -192,10 +187,7 @@ class HTML_QuickForm_element extends HTML_Common
     public function getType()
     {
         return $this->_type;
-    } // end func getType
-
-    // }}}
-    // {{{ setName()
+    }
 
     /**
      * Sets the input field name
@@ -207,11 +199,7 @@ class HTML_QuickForm_element extends HTML_Common
      */
     public function setName($name)
     {
-        // interface method
-    } //end func setName
-
-    // }}}
-    // {{{ getName()
+    }
 
     /**
      * Returns the element name
@@ -222,11 +210,7 @@ class HTML_QuickForm_element extends HTML_Common
      */
     public function getName()
     {
-        // interface method
-    } //end func getName
-
-    // }}}
-    // {{{ setValue()
+    }
 
     /**
      * Sets the value of the form element
@@ -238,11 +222,7 @@ class HTML_QuickForm_element extends HTML_Common
      */
     public function setValue($value)
     {
-        // interface
-    } // end func setValue
-
-    // }}}
-    // {{{ getValue()
+    }
 
     /**
      * Returns the value of the form element
@@ -287,10 +267,7 @@ class HTML_QuickForm_element extends HTML_Common
     public function freeze()
     {
         $this->_flagFrozen = true;
-    } //end func freeze
-
-    // }}}
-    // {{{ unfreeze()
+    }
 
    /**
     * Unfreezes the element so that it becomes editable
@@ -303,9 +280,6 @@ class HTML_QuickForm_element extends HTML_Common
     {
         $this->_flagFrozen = false;
     }
-
-    // }}}
-    // {{{ getFrozenHtml()
 
     /**
      * Returns the value of field without HTML tags
@@ -351,9 +325,6 @@ class HTML_QuickForm_element extends HTML_Common
         }
     }
 
-    // }}}
-    // {{{ isFrozen()
-
     /**
      * Returns whether or not the element is frozen
      *
@@ -364,10 +335,7 @@ class HTML_QuickForm_element extends HTML_Common
     public function isFrozen()
     {
         return $this->_flagFrozen;
-    } // end func isFrozen
-
-    // }}}
-    // {{{ setPersistantFreeze()
+    }
 
     /**
      * Sets wether an element value should be kept in an hidden field
@@ -381,10 +349,7 @@ class HTML_QuickForm_element extends HTML_Common
     function setPersistantFreeze($persistant=false)
     {
         $this->_persistantFreeze = $persistant;
-    } //end func setPersistantFreeze
-
-    // }}}
-    // {{{ setLabel()
+    }
 
     /**
      * Sets display text for the element
@@ -401,10 +366,7 @@ class HTML_QuickForm_element extends HTML_Common
         if (!empty($labelFor)) {
             $this->_label_for = $labelFor;
         }
-    } //end func setLabel
-
-    // }}}
-    // {{{ getLabel()
+    }
 
     /**
      * Returns display text for the element
@@ -416,7 +378,7 @@ class HTML_QuickForm_element extends HTML_Common
     function getLabel()
     {
         return $this->_label;
-    } //end func getLabel
+    }
 
     /**
      * Returns "for" attribute for the element
@@ -427,10 +389,7 @@ class HTML_QuickForm_element extends HTML_Common
     function getLabelFor()
     {
         return $this->_label_for;
-    } //end func getLabelFor
-
-    // }}}
-    // {{{ _findValue()
+    }
 
     /**
      * Tries to find the element value from the values array
@@ -471,10 +430,7 @@ class HTML_QuickForm_element extends HTML_Common
         } else {
             return null;
         }
-    } //end func _findValue
-
-    // }}}
-    // {{{ onQuickFormEvent()
+    }
 
     /**
      * Called by HTML_QuickForm whenever form event is made on this element
@@ -569,9 +525,6 @@ class HTML_QuickForm_element extends HTML_Common
         return $this->_prepareValue($value, $assoc);
     }
 
-    // }}}
-    // {{{ _prepareValue()
-
    /**
     * Used by exportValue() to prepare the value for returning
     *
@@ -631,8 +584,4 @@ class HTML_QuickForm_element extends HTML_Common
 
         return $this;
     }
-
-
-
-
 }

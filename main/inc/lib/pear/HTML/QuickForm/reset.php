@@ -2,8 +2,6 @@
 
 class HTML_QuickForm_reset extends HTML_QuickForm_button
 {
-    // {{{ constructor
-
     /**
      * Class constructor
      *
@@ -20,10 +18,7 @@ class HTML_QuickForm_reset extends HTML_QuickForm_button
         parent::__construct($elementName, null, $attributes);
         $this->setValue($value);
         $this->setType('reset');
-    } //end constructor
-
-    // }}}
-    // {{{ freeze()
+    }
 
     /**
      * Freeze the element so that only its value is returned
@@ -34,8 +29,5 @@ class HTML_QuickForm_reset extends HTML_QuickForm_button
     function freeze()
     {
         return false;
-    } //end func freeze
-
-    // }}}
-
+    }
 }

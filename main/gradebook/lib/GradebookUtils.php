@@ -229,7 +229,7 @@ class GradebookUtils
             if (!api_is_allowed_to_edit(null, true)) {
                 $modify_icons .= Display::url(
                     Display::return_icon(
-                        'stats.png',
+                        'statistics.png',
                         get_lang('FlatView'),
                         '',
                         ICON_SIZE_SMALL
@@ -298,7 +298,7 @@ class GradebookUtils
 
                 $modify_icons .= '<a href="gradebook_flatview.php?selectcat='.$cat->get_id().'&'.$courseParams.'">'.
                     Display::return_icon(
-                        'stats.png',
+                        'statistics.png',
                         get_lang('FlatView'),
                         '',
                         ICON_SIZE_SMALL

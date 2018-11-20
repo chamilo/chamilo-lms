@@ -455,11 +455,11 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
 				user.firstname 	AS col2,"
             )."
 				user.email		AS col3
-				FROM $table_user user INNER JOIN 
-				$table_group_user group_rel_user
+				FROM $table_user user 
+				INNER JOIN $table_group_user group_rel_user
 				ON (group_rel_user.user_id = user.id)
 				INNER JOIN $tableGroup g
-				ON (group_rel_user.group_id = g.id)
+				ON (group_rel_user.group_id = g.iid)
 				WHERE 
 				    group_rel_user.c_id = $course_id AND 
 				    g.iid = '".$groupInfo['iid']."'
@@ -480,7 +480,7 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
                     INNER JOIN $table_group_user gu 
                     ON (gu.user_id = u.id)
                     INNER JOIN $tableGroup g
-				    ON (gu.group_id = g.id)
+				    ON (gu.group_id = g.iid)
                     WHERE 
                         g.iid = '".$groupInfo['iid']."' AND 
                         gu.c_id = $course_id
@@ -501,7 +501,7 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
                     INNER JOIN $table_group_user group_rel_user
                     ON (group_rel_user.user_id = user.id)
                     INNER JOIN $tableGroup g
-                    ON (group_rel_user.group_id = g.id)
+                    ON (group_rel_user.group_id = g.iid)
                     WHERE 
                         g.iid = '".$groupInfo['iid']."' AND 
                         group_rel_user.c_id = $course_id AND  

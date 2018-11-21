@@ -45,7 +45,7 @@ Feature: Document tool
     And I should see "My second document"
     Then I follow "My second document"
     And wait for the page to be loaded
-    Then I should see "My first document"
+    Then I should see "My second document"
     And I should not see "<strong>"
     And I should not see "www.chamilo.org"
 

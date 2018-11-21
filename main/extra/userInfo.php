@@ -359,7 +359,7 @@ if ($displayMode == "viewDefEdit") {
         // is the user online?
         $online = '';
         if (user_is_online($userIdViewed)) {
-            $online = Display::return_icon('online.gif', get_lang('OnLine'), ['style' => 'with="8"; height="8"']);
+            $online = Display::return_icon('online.png', get_lang('OnLine'), ['style' => 'with="8"; height="8"']);
         }
 
         // DISPLAY TABLE HEADING

@@ -116,12 +116,12 @@ $s_style_error = "border-width: 1px;
          color: #000;";
 
 echo '<div style="'.$s_style.'"><div style="float:left; margin-right:10px;">
-<img src="'.Display::returnIconPath('message_normal.gif').'" alt="'.$alt_text.'" '.$attribute_list.'  /></div>
+<img src="'.Display::returnIconPath('message_normal.png').'" alt="'.$alt_text.'" '.$attribute_list.'  /></div>
 <div style="margin-left: 43px">'.$message.'</div></div>';
 
 if (!empty($errorMessage)) {
     echo '<div style="'.$s_style_error.'"><div style="float:left; margin-right:10px;">
-    <img src="'.Display::returnIconPath('message_error.gif').'" alt="'.$alt_text.'" '.$attribute_list.'  /></div>
+    <img src="'.Display::returnIconPath('message_error.png').'" alt="'.$alt_text.'" '.$attribute_list.'  /></div>
     <div style="margin-left: 43px">'.$errorMessage.'</div></div>';
 }
 

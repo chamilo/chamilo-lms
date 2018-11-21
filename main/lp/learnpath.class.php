@@ -4616,7 +4616,7 @@ class learnpath
                 WHERE
                     t.course = :course AND
                     t.link = :link1 AND
-                    t.image = 'lp_category.gif' AND
+                    t.image LIKE 'lp_category.%' AND
                     t.link LIKE :link2
                     $sessionCondition
             ")
@@ -4641,7 +4641,7 @@ class learnpath
                 ->setCourse(api_get_course_entity($courseId))
                 ->setName(strip_tags($category->getName()))
                 ->setLink($link)
-                ->setImage('lp_category.gif')
+                ->setImage('lp_category.png')
                 ->setVisibility(1)
                 ->setAdmin(0)
                 ->setAddress('pastillegris.gif')
@@ -4772,7 +4772,7 @@ class learnpath
                 SELECT t FROM ChamiloCourseBundle:CTool t
                 WHERE t.course = :course AND 
                     t.name = :name AND
-                    t.image = 'lp_category.gif' AND
+                    t.image LIKE 'lp_category.%' AND
                     t.link LIKE :link
             ")
             ->setParameters([
@@ -6259,14 +6259,10 @@ class learnpath
             if (file_exists($iconPath.'lp_'.$icon_name.'.png')) {
                 $icon = Display::return_icon('lp_'.$icon_name.'.png');
             } else {
-                if (file_exists($iconPath.'lp_'.$icon_name.'.gif')) {
-                    $icon = Display::return_icon('lp_'.$icon_name.'.gif');
+                if ($arrLP[$i]['item_type'] === TOOL_LP_FINAL_ITEM) {
+                    $icon = Display::return_icon('certificate.png');
                 } else {
-                    if ($arrLP[$i]['item_type'] === TOOL_LP_FINAL_ITEM) {
-                        $icon = Display::return_icon('certificate.png');
-                    } else {
-                        $icon = Display::return_icon('folder_document.gif');
-                    }
+                    $icon = Display::return_icon('folder_document.png');
                 }
             }
 
@@ -12517,7 +12513,7 @@ EOD;
             $link = 'lp/lp_controller.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId.'&gidReq=0&gradebook=0&origin=&action=view_category&id='.$id;
             // Delete tools
             $sql = "DELETE FROM $tbl_tool
-                    WHERE c_id = ".$courseId." AND (link LIKE '$link%' AND image='lp_category.gif')";
+                    WHERE c_id = ".$courseId." AND (link LIKE '$link%' AND image LIKE 'lp_category.%')";
             Database::query($sql);
         }
     }

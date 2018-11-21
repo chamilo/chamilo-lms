@@ -213,7 +213,7 @@ if ($session->getNbrCourses() === 0) {
         $courseItem .= '<td>'.($namesOfCoaches ? implode('<br>', $namesOfCoaches) : get_lang('None')).'</td>';
         $courseItem .= '<td>'.$numberOfUsers.'</td>';
         $courseItem .= '<td>';
-        $courseItem .= Display::url(Display::return_icon('course_home.gif', get_lang('Course')), $courseUrl);
+        $courseItem .= Display::url(Display::return_icon('course_home.png', get_lang('Course')), $courseUrl);
 
         if ($allowSkills) {
             $courseItem .= Display::url(
@@ -232,7 +232,7 @@ if ($session->getNbrCourses() === 0) {
                 <a href="'.api_get_path(WEB_CODE_PATH).'user/user_export.php?file_type=csv&course_session='.$course->getCode().':'.$sessionId.'&addcsvheader=1">'.
                 Display::return_icon('export_csv.png', get_lang('ExportUsersOfACourse'), null, ICON_SIZE_SMALL).'</a>
 				<a href="../tracking/courseLog.php?id_session='.$sessionId.'&cidReq='.$course->getCode().$orig_param.'&hide_course_breadcrumb=1">'.
-                Display::return_icon('statistics.gif', get_lang('Tracking')).'</a>&nbsp;
+                Display::return_icon('statistics.png', get_lang('Tracking'), null, ICON_SIZE_SMALL).'</a>&nbsp;
 				<a href="session_course_edit.php?id_session='.$sessionId.'&page=resume_session.php&course_code='.$course->getCode().''.$orig_param.'">'.
                 Display::return_icon('teacher.png', get_lang('ModifyCoach'), '', ICON_SIZE_SMALL).'</a>
 				<a href="'.api_get_self().'?id_session='.$sessionId.'&action=delete&idChecked[]='.$course->getCode().'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.

@@ -436,7 +436,6 @@ class CourseDescription
         $default_description_icon[5] = 'laptop.png';
         $default_description_icon[6] = 'teacher.png';
         $default_description_icon[7] = 'assessment.png';
-        //$default_description_icon[8]= 'porcent.png';
         $default_description_icon[8] = 'wizard.png';
 
         return $default_description_icon;

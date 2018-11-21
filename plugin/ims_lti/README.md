@@ -1,7 +1,7 @@
 IMS/LTI plugin
 ===
 
-Version 1.4 (beta)
+Version 1.5 (beta)
 
 This plugin is meant to be later integrated into Chamilo (in a major version
 release).
@@ -36,6 +36,12 @@ external tool.
   
 **v1.4**
 * Allow create external tools when there is no key/secret available for launch
+
+**v1.5**
+* Plugin has passed the tests from the LTI Certification suite.
+* Add support for substitution of variable.
+  See `ImsLti::getSubstitutableParams()`.
+* Outcome services has a unique URL and sourced ID.
 
 # Installation
 

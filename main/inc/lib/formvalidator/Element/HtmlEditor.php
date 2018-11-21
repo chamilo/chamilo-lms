@@ -86,7 +86,7 @@ class HtmlEditor extends HTML_QuickForm_textarea
      */
     public function getFrozenHtml()
     {
-        return $this->getCleanValue();
+        return Security::remove_XSS($this->getValue());
     }
 
     /**
@@ -98,12 +98,13 @@ class HtmlEditor extends HTML_QuickForm_textarea
     {
         $result = '';
         if ($this->editor) {
-            $this->editor->value = $this->getCleanValue();
+            $value = $this->getCleanValue();
+
             $this->editor->setName($this->getName());
             if ($style === true) {
-                $result = $this->editor->createHtmlStyle();
+                $result = $this->editor->createHtmlStyle($value);
             } else {
-                $result = $this->editor->createHtml();
+                $result = $this->editor->createHtml($value);
             }
         }
 

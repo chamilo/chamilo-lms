@@ -34,13 +34,14 @@ class CkEditor extends Editor
 
     /**
      * Return the HTML code required to run editor.
+     * @param string $value
      *
      * @return string
      */
-    public function createHtml()
+    public function createHtml($value)
     {
         $html = '<textarea id="'.$this->getName().'" name="'.$this->getName().'" class="ckeditor">
-                 '.$this->value.'
+                 '.$value.'
                  </textarea>';
         $html .= $this->editorReplace();
 
@@ -50,15 +51,18 @@ class CkEditor extends Editor
     /**
      * Return the HTML code required to run editor.
      *
+     * @param string $value
+     *
      * @return string
+     *
      */
-    public function createHtmlStyle()
+    public function createHtmlStyle($value)
     {
         $style = '';
 
-        if (trim($this->value) == '<html><head><title></title></head><body></body></html>' ||
-            trim($this->value) == '<!DOCTYPE html><html><head><title></title></head><body></body></html>' ||
-            $this->value == ''
+        if (trim($value) == '<html><head><title></title></head><body></body></html>' ||
+            trim($value) == '<!DOCTYPE html><html><head><title></title></head><body></body></html>' ||
+            $value == ''
         ) {
             $style = api_get_css_asset('bootstrap/dist/css/bootstrap.min.css');
             $style .= api_get_css_asset('fontawesome/css/font-awesome.min.css');
@@ -66,7 +70,7 @@ class CkEditor extends Editor
         }
 
         $html = '<textarea id="'.$this->getName().'" name="'.$this->getName().'" class="ckeditor">
-                 '.$style.htmlspecialchars($this->value, ENT_COMPAT).'
+                 '.$style.$value.'
                  </textarea>';
         $html .= $this->editorReplace();
 

@@ -619,21 +619,18 @@ class SessionManager
                         true
                     );
                 }
-                $url = api_get_path(WEB_CODE_PATH)."session/resume_session.php?id_session=".$session['id'];
+                $url = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session['id'];
                 if (api_is_drh()) {
-                    $url = api_get_path(WEB_CODE_PATH)."session/about.php?session_id=".$session['id'];
+                    $url = api_get_path(WEB_CODE_PATH).'session/about.php?session_id='.$session['id'];
                 }
                 if (api_is_platform_admin()) {
-                    $url = api_get_path(WEB_CODE_PATH)."session/resume_session.php?id_session=".$session['id'];
+                    $url = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session['id'];
                 }
 
                 if ($extraFieldsToLoad) {
-                    $url = api_get_path(WEB_CODE_PATH)."session/about.php?session_id=".$session['id'];
+                    $url = api_get_path(WEB_CODE_PATH).'session/about.php?session_id='.$session['id'];
                 }
-                $session['name'] = Display::url(
-                    $session['name'],
-                    $url
-                );
+                $session['name'] = Display::url($session['name'], $url);
 
                 if (!empty($extraFieldsToLoad)) {
                     foreach ($extraFieldsToLoad as $field) {
@@ -681,7 +678,6 @@ class SessionManager
                         $options = explode('::', $value);
                     }
                     $original_key = $key;
-
                     if (strpos($key, '_second') === false) {
                     } else {
                         $key = str_replace('_second', '', $key);
@@ -699,9 +695,10 @@ class SessionManager
                         }
                     }
                 }
-                $formatted_sessions[$session_id] = $session;
+
                 $categoryName = isset($orderedCategories[$session['session_category_id']]) ? $orderedCategories[$session['session_category_id']] : '';
-                $formatted_sessions[$session_id]['category_name'] = $categoryName;
+                $session['category_name'] = $categoryName;
+                $formatted_sessions[] = $session;
             }
         }
 

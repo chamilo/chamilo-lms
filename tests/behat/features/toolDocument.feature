@@ -21,7 +21,7 @@ Feature: Document tool
     And I press "Create the folder"
     Then I should see "Unable to create the folder"
 
-  Scenario: Create a HTML document
+  Scenario: Create a simple document
     Given I am on "/main/document/create_document.php?cidReq=TEMP"
     Then I should see "Create a rich media page / activity"
     Then I fill in the following:
@@ -33,6 +33,21 @@ Feature: Document tool
     Then I follow "My first document"
     And wait for the page to be loaded
     Then I should see "My first document"
+
+  Scenario: Create a HTML document
+    Given I am on "/main/document/create_document.php?cidReq=TEMP"
+    Then I should see "Create a rich media page / activity"
+    Then I fill in the following:
+      | create_document_title   | My second document                       |
+    And I fill in ckeditor field "content" with "<a href='www.chamilo.org'>Click here</a><span><strong>This is my second document!!!</strong></span>"
+    And I press "Create a rich media page / activity"
+    Then I should see "Item added"
+    And I should see "My second document"
+    Then I follow "My second document"
+    And wait for the page to be loaded
+    Then I should see "My second document"
+    And I should not see "<strong>"
+    And I should not see "www.chamilo.org"
 
   Scenario: Upload a document
     Given I am on "/main/document/upload.php?cidReq=TEMP"

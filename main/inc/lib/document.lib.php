@@ -3158,6 +3158,7 @@ class DocumentManager
      * @param bool   $showInvisibleFiles
      * @param bool   $showOnlyFolders
      * @param int    $folderId
+     * @param bool   $addCloseButton
      *
      * @return string
      */
@@ -3171,7 +3172,8 @@ class DocumentManager
         $overwrite_url = '',
         $showInvisibleFiles = false,
         $showOnlyFolders = false,
-        $folderId = false
+        $folderId = false,
+        $addCloseButton = true
     ) {
         if (empty($course_info['real_id']) || empty($course_info['code']) || !is_array($course_info)) {
             return '';
@@ -3179,12 +3181,7 @@ class DocumentManager
 
         $user_id = api_get_user_id();
         $userInfo = api_get_user_info();
-
-        $user_in_course = false;
-        if (api_is_platform_admin()) {
-            $user_in_course = true;
-        }
-
+        $user_in_course = api_is_platform_admin();
         if (!$user_in_course) {
             if (CourseManager::is_course_teacher($user_id, $course_info['code'])) {
                 $user_in_course = true;
@@ -3192,7 +3189,7 @@ class DocumentManager
         }
 
         // Condition for the session
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
 
         if (!$user_in_course) {
             if (empty($session_id)) {
@@ -3228,19 +3225,12 @@ class DocumentManager
         // If we are in LP display hidden folder https://support.chamilo.org/issues/6679
         $lp_visibility_condition = null;
         if ($lp_id) {
-            // $lp_visibility_condition = " OR filetype='folder'";
             if ($showInvisibleFiles) {
                 $lp_visibility_condition .= ' OR last.visibility = 0';
             }
         }
 
-        $showOnlyFoldersCondition = null;
-        if ($showOnlyFolders) {
-            //$showOnlyFoldersCondition = " AND docs.filetype = 'folder' ";
-        }
-
         $folderCondition = " AND docs.path LIKE '/%' ";
-
         if (!api_is_allowed_to_edit()) {
             $protectedFolders = self::getProtectedFolderFromStudent();
             foreach ($protectedFolders as $folder) {
@@ -3277,7 +3267,7 @@ class DocumentManager
             }
         }
 
-        $levelCondition = null;
+        $levelCondition = '';
         if ($folderId === false) {
             $levelCondition = " AND docs.path NOT LIKE'/%/%'";
         }
@@ -3292,8 +3282,7 @@ class DocumentManager
                     (last.visibility = '1' $lp_visibility_condition) AND
                     last.visibility <> 2 AND
                     docs.c_id = {$course_info['real_id']} AND
-                    last.c_id = {$course_info['real_id']}
-                    $showOnlyFoldersCondition
+                    last.c_id = {$course_info['real_id']}                    
                     $folderCondition
                     $levelCondition
                     $add_folder_filter
@@ -3303,25 +3292,17 @@ class DocumentManager
         $resources = Database::store_result($res_doc, 'ASSOC');
 
         $return = '';
-        if ($lp_id) {
+        if ($lp_id == false && $addCloseButton) {
             if ($folderId === false) {
-                /*$return .= '<div class="lp_resource_element">';
-                $return .= Display::return_icon('new_doc.gif', '', [], ICON_SIZE_SMALL);
-                $return .= Display::url(
-                    get_lang('CreateTheDocument'),
-                    api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_DOCUMENT.'&lp_id='.$_SESSION['oLP']->lp_id
+                $return .= Display::div(
+                    Display::url(
+                        Display::return_icon('close.png', get_lang('Close'), [], ICON_SIZE_SMALL),
+                        ' javascript:void(0);',
+                        ['id' => 'close_div_'.$course_info['real_id'].'_'.$session_id, 'class' => 'close_div']
+                    ),
+                    ['style' => 'position:absolute;right:10px']
                 );
-                $return .= '</div>';*/
             }
-        } else {
-            $return .= Display::div(
-                Display::url(
-                    Display::return_icon('close.png', get_lang('Close'), [], ICON_SIZE_SMALL),
-                    ' javascript:void(0);',
-                    ['id' => 'close_div_'.$course_info['real_id'].'_'.$session_id, 'class' => 'close_div']
-                ),
-                ['style' => 'position:absolute;right:10px']
-            );
         }
 
         // If you want to debug it, I advise you to do "echo" on the eval statements.
@@ -3362,7 +3343,7 @@ class DocumentManager
             }
         }
 
-        $write_result = self::write_resources_tree(
+        $writeResult = self::write_resources_tree(
             $userInfo,
             $course_info,
             $session_id,
@@ -3374,43 +3355,35 @@ class DocumentManager
             $folderId
         );
 
-        $return .= $write_result;
+        $return .= $writeResult;
+        $lpAjaxUrl = api_get_path(WEB_AJAX_PATH).'lp.ajax.php';
         if ($lp_id === false) {
-            $url = api_get_path(WEB_AJAX_PATH).
-                'lp.ajax.php?a=get_documents&url='.$overwrite_url.'&lp_id='.$lp_id.'&cidReq='.$course_info['code'];
+            $url = $lpAjaxUrl.'?a=get_documents&lp_id=&cidReq='.$course_info['code'];
             $return .= "<script>
-            $('.doc_folder').click(function() {
-                var realId = this.id;
-                var my_id = this.id.split('_')[2];
-                var tempId = 'temp_'+my_id;
-                $('#res_'+my_id).show();
-                var tempDiv = $('#'+realId).find('#'+tempId);
-                if (tempDiv.length == 0) {
-                    $.ajax({
-                        async: false,
-                        type: 'GET',
-                        url:  '".$url."',
-                        data: 'folder_id='+my_id,
-                        success: function(data) {
-                            $('#'+realId).append('<div id='+tempId+'>'+data+'</div>');
-                        }
-                    });
-                }
-            });
-
-            $('.close_div').click(function() {
-                var course_id = this.id.split('_')[2];
-                var session_id = this.id.split('_')[3];
-                $('#document_result_'+course_id+'_'+session_id).hide();
-                $('.lp_resource').remove();
-                $('.document_preview_container').html('');
+            $(document).ready(function () {
+                $('.close_div').click(function() {
+                    var course_id = this.id.split('_')[2];
+                    var session_id = this.id.split('_')[3];
+                    $('#document_result_'+course_id+'_'+session_id).hide();
+                    $('.lp_resource').remove();
+                    $('.document_preview_container').html('');
+                });
             });
             </script>";
         } else {
-            //For LPs
-            $url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?a=get_documents&lp_id='.$lp_id.'&'.api_get_cidreq();
-            $return .= "<script>
+            // For LPs
+            $url = $lpAjaxUrl.'?a=get_documents&lp_id='.$lp_id.'&'.api_get_cidreq();
+        }
 
+        if (!empty($overwrite_url)) {
+            $url .= '&url='.Security::remove_XSS($overwrite_url);
+        }
+
+        if ($add_move_button) {
+            $url .= '&add_move_button=1';
+        }
+
+        $return .= "<script>
             function testResources(id, img) {
                 var numericId = id.split('_')[1];
                 var parentId = 'doc_id_'+numericId;
@@ -3442,7 +3415,6 @@ class DocumentManager
                 }
             }
             </script>";
-        }
 
         if (!$user_in_course) {
             $return = '';
@@ -6496,15 +6468,14 @@ class DocumentManager
         if ($lp_id) {
             // LP URL
             $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=add_item&type='.TOOL_DOCUMENT.'&file='.$documentId.'&lp_id='.$lp_id;
-            if (!empty($overwrite_url)) {
-                $url = $overwrite_url.'&cidReq='.$course_info['code'].'&id_session='.$session_id.'&document_id='.$documentId.'';
-            }
         } else {
             // Direct document URL
             $url = $web_code_path.'document/document.php?cidReq='.$course_info['code'].'&id_session='.$session_id.'&id='.$documentId;
-            if (!empty($overwrite_url)) {
-                $url = $overwrite_url.'&cidReq='.$course_info['code'].'&id_session='.$session_id.'&document_id='.$documentId;
-            }
+        }
+
+        if (!empty($overwrite_url)) {
+            $overwrite_url = Security::remove_XSS($overwrite_url);
+            $url = $overwrite_url.'&cidReq='.$course_info['code'].'&id_session='.$session_id.'&document_id='.$documentId;
         }
 
         $img = Display::returnIconPath($icon);
@@ -6585,22 +6556,22 @@ class DocumentManager
             return null;
         }
 
-        $onclick = '';
+        //$onclick = '';
         // if in LP, hidden folder are displayed in grey
         $folder_class_hidden = '';
         if ($lp_id) {
             if (isset($resource['visible']) && $resource['visible'] == 0) {
-                $folder_class_hidden = "doc_folder_hidden"; // in base.css
+                $folder_class_hidden = ' doc_folder_hidden'; // in base.css
             }
-            $onclick = 'onclick="javascript: testResources(\'res_'.$resource['id'].'\',\'img_'.$resource['id'].'\')"';
         }
+        $onclick = 'onclick="javascript: testResources(\'res_'.$resource['id'].'\',\'img_'.$resource['id'].'\')"';
         $return = null;
 
         if (empty($path)) {
             $return = '<ul class="lp_resource">';
         }
 
-        $return .= '<li class="doc_folder '.$folder_class_hidden.'" id="doc_id_'.$resource['id'].'"  style="margin-left:'.($num * 18).'px; ">';
+        $return .= '<li class="doc_folder'.$folder_class_hidden.'" id="doc_id_'.$resource['id'].'"  style="margin-left:'.($num * 18).'px; ">';
 
         $image = Display::returnIconPath('nolines_plus.gif');
         if (empty($path)) {

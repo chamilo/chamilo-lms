@@ -13,13 +13,7 @@
     <!-- START MAIN -->
     <main id="main" dir="{{ text_direction }}" class="{{ section_name }} {{ login_class }}">
     <noscript>{{ "NoJavascript"|get_lang }}</noscript>
-            {% if show_course_shortcut is not null %}
-            <!-- TOOLS SHOW COURSE -->
-            <div id="cm-tools" class="nav-tools">
-                {{ show_course_shortcut }}
-            </div>
-            <!-- END TOOLS SHOW COURSE -->
-            {% endif %}
+
             {% if displayCookieUsageWarning == true %}
                 <!-- START DISPLAY COOKIES VALIDATION -->
                 <div class="toolbar-cookie alert-warning">
@@ -43,11 +37,18 @@
             {% endif %}
 
             {% if show_header == true %}
-            <!-- START HEADER -->
-            <header id="cm-header">
-                {% include 'layout/page_header.tpl'|get_template %}
-            </header>
-            <!-- END HEADER -->
+                <!-- START HEADER -->
+                <header id="cm-header">
+                    {% include 'layout/page_header.tpl'|get_template %}
+                </header>
+                <!-- END HEADER -->
+                {% if show_course_shortcut is not null %}
+                    <!-- TOOLS SHOW COURSE -->
+                    <div id="cm-tools" class="nav-tools">
+                        {{ show_course_shortcut }}
+                    </div>
+                    <!-- END TOOLS SHOW COURSE -->
+                {% endif %}
             {% endif %}
 
             <!-- START CONTENT -->

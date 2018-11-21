@@ -43,13 +43,7 @@
         </header>
         <!-- END HEADER -->
 
-        {% if show_course_shortcut is not null %}
-            <!-- TOOLS SHOW COURSE -->
-            <div id="cm-tools" class="nav-tools">
-                {{ show_course_shortcut }}
-            </div>
-            <!-- END TOOLS SHOW COURSE -->
-        {% endif %}
+
     {% endif %}
 
     <!-- START CONTENT -->
@@ -58,4 +52,13 @@
             {% block breadcrumb %}
                 {{ breadcrumb }}
             {% endblock %}
+
+            {% if show_course_shortcut is not null %}
+                <!-- TOOLS SHOW COURSE -->
+                <div id="cm-tools" class="nav-tools">
+                    {{ show_course_shortcut }}
+                </div>
+                <!-- END TOOLS SHOW COURSE -->
+            {% endif %}
+
             {{ flash_messages }}

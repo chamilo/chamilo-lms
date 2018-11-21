@@ -26,6 +26,7 @@ class ImsLtiServiceReplaceRequest extends ImsLtiServiceRequest
     {
         $resultRecord = $this->xmlRequest->resultRecord;
         $sourcedId = (string) $resultRecord->sourcedGUID->sourcedId;
+        $sourcedId = htmlspecialchars_decode($sourcedId);
         $resultScore = (string) $resultRecord->result->resultScore->textString;
 
         if (!is_numeric($resultScore)) {
@@ -46,13 +47,21 @@ class ImsLtiServiceReplaceRequest extends ImsLtiServiceRequest
             return;
         }
 
-        $sourcedParts = explode(':', $sourcedId);
+        $sourcedParts = json_decode($sourcedId, true);
+
+        if (empty($sourcedParts)) {
+            $this->statusInfo
+                ->setSeverity(ImsLtiServiceResponseStatus::SEVERITY_ERROR)
+                ->setCodeMajor(ImsLtiServiceResponseStatus::CODEMAJOR_FAILURE);
+
+            return;
+        }
 
         $em = Database::getManager();
         /** @var GradebookEvaluation $evaluation */
-        $evaluation = $em->find('ChamiloCoreBundle:GradebookEvaluation', $sourcedParts[0]);
+        $evaluation = $em->find('ChamiloCoreBundle:GradebookEvaluation', $sourcedParts['e']);
         /** @var User $user */
-        $user = $em->find('ChamiloUserBundle:User', $sourcedParts[1]);
+        $user = $em->find('ChamiloUserBundle:User', $sourcedParts['u']);
 
         if (empty($evaluation) || empty($user)) {
             $this->statusInfo

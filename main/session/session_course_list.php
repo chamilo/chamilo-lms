@@ -86,7 +86,7 @@ foreach ($Courses as $key => $enreg) {
     $course[] = api_htmlentities($enreg['title'], ENT_QUOTES, $charset);
     $course[] = '<a href="session_course_user_list.php?id_session='.$id_session.'&course_code='.$enreg['code'].'">'.$enreg['nbr_users'].' '.get_lang('Users').'</a>';
     $course[] = '<a href="'.api_get_path(WEB_COURSE_PATH).$enreg['code'].'/?id_session='.$id_session.'">'.
-        Display::return_icon('course_home.gif', get_lang('Course')).'</a>
+        Display::return_icon('course_home.png', get_lang('Course')).'</a>
 			<a href="session_course_edit.php?id_session='.$id_session.'&page=session_course_list.php&course_code='.$enreg['code'].'">'.
         Display::return_icon('edit.png', get_lang('Edit')).'</a>
 			<a href="'.api_get_self().'?id_session='.$id_session.'&sort='.$sort.'&action=delete&idChecked[]='.$enreg['id'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset)).'\')) return false;">'.

@@ -203,73 +203,6 @@ Display::display_header($nameTool);
     </div>
 	<?php
     /*
-    <!-- EPHORUS -->
-    <div id="main_ephorus">
-        <div id="extension_header_ephorus" class="accordion_header">
-            <a href="#"><?php echo get_lang('EphorusPlagiarismPrevention') ?></a>
-        </div>
-        <div id="extension_content_ephorus" style="display:none;padding:0;width:780px;" class="accordion_content">
-            <table width="100%" cellpadding="0" cellspacing="0">
-                <tr>
-                    <td align="center">
-                        <TABLE style="WIDTH: 750px" cellSpacing="0" cellPadding="0" align="middle" border="0">
-                        <TBODY>
-                            <TR>
-                                <TD>
-                                    <TABLE style="WIDTH: 475px" cellSpacing="0" cellPadding="0" border="0">
-                                    <TBODY>
-                                        <TR>
-                                            <TD>
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                <a title="http://www.ephorus.com/dokeos_activate.html" href="http://www.ephorus.com/dokeos_activate.html" target="_blank">
-                                                <?php Display::display_icon('ephorus.gif','Ephorus'); ?>
-                                                </a>
-                                            </TD>
-                                            <TD>
-                                                <P align=center>
-                                                    <FONT color="#669966" size="3"><?php echo get_lang('EphorusLeadersInAntiPlagiarism') ?></FONT>
-                                                </P>
-                                            </TD>
-                                        </TR>
-                                    </TBODY>
-                                    </TABLE>
-                                </TD>
-                            </TR>
-                            <TR>
-                                <TD>
-                                    <P>
-                                        <TABLE style="WIDTH: 85%" cellSpacing="0" cellPadding="0" border="0">
-                                        <TBODY>
-                                            <TR>
-                                                <TD width="50">&nbsp;
-
-                                                </TD>
-                                                <TD>
-                                                    <P>
-                                                        <?php echo get_lang('EphorusDescription') ?>
-                                                    </P>
-                                                    <P>
-                                                        <A title="http://www.ephorus.nl/demo_account_en.html" href="http://www.ephorus.nl/demo_account_en.html" target="_blank"><?php echo get_lang('EphorusClickHereForADemoAccount') ?></A>
-                                                    </P>
-                                                    <P>
-                                                        <A title="http://www.ephorus.nl:80/dokeos_activate.html" href="http://www.ephorus.nl/dokeos_activate.html" target="_blank"><?php echo get_lang('EphorusClickHereForInformationsAndPrices') ?></A>.
-                                                    </P>
-                                                </TD>
-                                            </TR>
-                                        </TBODY>
-                                        </TABLE>
-                                    </P>
-                                </TD>
-                            </TR>
-                        </TBODY>
-                        </TABLE>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
-    */
-    /*
 
     <!-- SEARCH -->
     <div id="main_search">
@@ -294,52 +227,6 @@ Display::display_header($nameTool);
         </div>
     </div>
 
-    <!-- SERVER STATS -->
-    <div id="main_serverstats">
-        <div id="extension_header_serverstats" class="accordion_header">
-            <a href="#"><?php echo get_lang('ServerStatistics') ?></a>
-        </div>
-        <div id="extension_content_serverstats" style="display:none" class="accordion_content">
-            <?php echo get_lang('ServerStatisticsDescription') ?><br /><br />
-            <table width="100%">
-                <tr>
-                    <td width="50%">
-                        <?php Display::display_icon('screenshot_serverstats.jpg', get_lang('ServerStatistics')); ?>
-                    </td>
-                    <td align="center" width="50%">
-                        <form method="POST" action="<?php echo api_get_self(); ?>">
-                        <input type="hidden" name="extension_code" value="serverstats" />
-                        <button type="submit" class="save" name="activeExtension" value="<?php echo get_lang('ActivateExtension') ?>" ><?php echo get_lang('ActivateExtension') ?></button>
-                        </form>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
-
-    <!-- BANDWIDTH STATS -->
-    <div id="main_bandwidthstats">
-        <div id="extension_header_bandwidthstats" class="accordion_header">
-            <a href="#"><?php echo get_lang('BandWidthStatistics') ?></a>
-        </div>
-        <div id="extension_content_bandwidthstats" style="display:none" class="accordion_content">
-            <?php echo get_lang('BandWidthStatisticsDescription') ?><br /><br />
-            <table width="100%">
-                <tr>
-                    <td width="50%">
-                        <?php Display::display_icon('screenshot_bandwidth.jpg', get_lang('BandWidthStatistics')); ?>
-                    </td>
-                    <td align="center" width="50%">
-                        <form method="POST" action="<?php echo api_get_self(); ?>">
-                        <input type="hidden" name="extension_code" value="bandwidthstats" />
-                        <button type="submit" class="save" name="activeExtension" value="<?php echo get_lang('ActivateExtension') ?>" ><?php echo get_lang('ActivateExtension') ?></button>
-                        </form>
-
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
      */ ?>
 </div><!-- /content -->
 

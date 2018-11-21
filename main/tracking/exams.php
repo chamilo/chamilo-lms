@@ -83,7 +83,7 @@ if (!$exportToXLS) {
     $actionsLeft = $actionsRight = '';
     if ($global) {
         $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'auth/my_progress.php">'.
-        Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM);
+        Display::return_icon('statistics.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM);
         $actionsLeft .= '</a>';
         $courseInfo = api_get_course_info();
 

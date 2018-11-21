@@ -1258,7 +1258,7 @@ class CourseHome
         if (!empty($course_id)) {
             $course_tools_table = Database::get_course_table(TABLE_TOOL_LIST);
             /* 	Link to the Course homepage */
-            $navigation_items['home']['image'] = 'home.gif';
+            $navigation_items['home']['image'] = 'home.png';
             $navigation_items['home']['link'] = $courseInfo['course_public_url'];
             $navigation_items['home']['name'] = get_lang('CourseHomepageLink');
 

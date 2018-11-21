@@ -2161,7 +2161,7 @@ switch ($action) {
 
                 if ($obj->allowTeachers()) {
                     $group['actions'] .= Display::url(
-                        Display::return_icon('stats.png'),
+                        Display::return_icon('statistics.png'),
                         $urlUserGroup.'&id='.$group['id']
                     ).'&nbsp;';
                 }

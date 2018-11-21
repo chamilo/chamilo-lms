@@ -999,7 +999,7 @@ function modify_filter($user_id, $row, $data)
     $result = '';
     if ($is_allowed_to_track) {
         $result .= '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&student='.$user_id.'&details=true&course='.$_course['id'].'&origin=user_course&id_session='.api_get_session_id().'" title="'.get_lang('Tracking').'">
-            '.Display::return_icon('stats.png', get_lang('Tracking')).'
+            '.Display::return_icon('statistics.png', get_lang('Tracking')).'
         </a>';
     }
 
@@ -1007,7 +1007,7 @@ function modify_filter($user_id, $row, $data)
     // time taken by support to test things out)
     if (api_is_platform_admin()) {
         $result .= ' <a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$user_id.'&sec_token='.Security::getTokenFromSession().'">'.
-            Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';
+            Display::return_icon('login_as.png', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';
     }
 
     if (api_is_allowed_to_edit(null, true)) {

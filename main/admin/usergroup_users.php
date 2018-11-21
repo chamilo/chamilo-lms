@@ -202,7 +202,7 @@ $urlStats = api_get_path(WEB_CODE_PATH);
 
 //$addCalendar = '<a href="'.$urlStats.'mySpace/myStudents.php?student=\'+options.rowId+\'">'.Display::return_icon('agenda.png', get_lang('Agenda'), '', ICON_SIZE_SMALL).'</a>';
 
-$reportingIcon = Display::return_icon('stats.png', get_lang('Reporting'), '', ICON_SIZE_SMALL);
+$reportingIcon = Display::return_icon('statistics.png', get_lang('Reporting'), '', ICON_SIZE_SMALL);
 $controlPoint = Display::return_icon('add.png', get_lang('ControlPoint'), '', ICON_SIZE_SMALL);
 
 //return \'<a href="session_edit.php?page=resume_session.php&id=\'+options.rowId+\'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>'.
@@ -231,7 +231,7 @@ function extra_formatter(cellvalue, options, rowObject) {
     return calendarName;
 
     return \''.
-    '&nbsp;<a href="'.$urlStats.'mySpace/myStudents.php?student=\'+options.rowId+\'">'.Display::return_icon('stats.png', get_lang('Reporting'), '', ICON_SIZE_SMALL).'</a>'.
+    '&nbsp;<a href="'.$urlStats.'mySpace/myStudents.php?student=\'+options.rowId+\'">'.Display::return_icon('statistics.png', get_lang('Reporting'), '', ICON_SIZE_SMALL).'</a>'.
     ' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;"  href="?id='.$id.'&action=delete&user_id=\'+options.rowId+\'">'.$deleteIcon.'</a>\';
 }';
 

@@ -48,8 +48,8 @@ $(document).ready(function(){
     
 	$(".make_visible_and_invisible").attr("href", "javascript:void(0);");
 	$(".make_visible_and_invisible > img").click(function () {
-		make_visible = "visible.gif";
-		make_invisible = "invisible.gif";
+		make_visible = "visible.png";
+		make_invisible = "invisible.png";
 		path_name = $(this).attr("src");
 		list_path_name = path_name.split("/");
 		image_link = list_path_name[list_path_name.length - 1];
@@ -79,7 +79,7 @@ $(document).ready(function(){
 				$("#tooldesc_" + my_tool_id).attr("class", info.tclass);
 				$("#istooldesc_" + my_tool_id).attr("class", info.tclass);
 
-				if (image_link == "visible.gif") {
+				if (image_link == "visible.png") {
 					$("#" + tool_id).attr("alt", "'.get_lang('Activate', '').'");
 					$("#" + tool_id).attr("title", "'.get_lang('Activate', '').'");
 				} else {

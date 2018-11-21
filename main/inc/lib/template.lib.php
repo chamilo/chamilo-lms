@@ -202,7 +202,7 @@ class Template
                 $help = Security::remove_XSS($help);
                 $content = '<div class="help">';
                 $content .= Display::url(
-                    Display::return_icon('help.large.png', get_lang('Help')),
+                    Display::return_icon('help.png', get_lang('Help'), null, ICON_SIZE_LARGE),
                     api_get_path(WEB_CODE_PATH).'help/help.php?open='.$help,
                     [
                         'class' => 'ajax',

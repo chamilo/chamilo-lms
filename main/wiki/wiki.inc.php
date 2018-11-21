@@ -6051,7 +6051,7 @@ class Wiki
                 urlencode($page)
             ).'"'.self::is_active_navigation_tab('more').'>'.
             Display::return_icon(
-                'stats.png',
+                'statistics.png',
                 get_lang('Statistics'),
                 '',
                 ICON_SIZE_MEDIUM

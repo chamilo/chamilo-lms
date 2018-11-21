@@ -8,52 +8,58 @@ require_once './OAuthSimple.php';
 
 header('Content-Type: application/xml');
 
-if (empty($_GET['t'])) {
+$url = api_get_path(WEB_PATH).'lti/os';
+
+$em = Database::getManager();
+$toolRepo = $em->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool');
+
+$headers = OAuthUtil::get_headers();
+
+if (empty($headers['Authorization'])) {
+    error_log('Authorization header missed');
+
     exit;
 }
 
-$em = Database::getManager();
-/** @var ImsLtiTool $tool */
-$tool = $em->find('ChamiloPluginBundle:ImsLti\ImsLtiTool', (int) $_GET['t']);
+$authParams = OAuthUtil::split_header($headers['Authorization']);
 
-if (empty($tool)) {
+if (empty($authParams) || empty($authParams['oauth_consumer_key']) || empty($authParams['oauth_signature'])) {
+    error_log('Authorization params not found');
+
+    exit;
+}
+
+$tools = $toolRepo->findBy(['consumerKey' => $authParams['oauth_consumer_key']]);
+$toolIsFound = false;
+
+/** @var ImsLtiTool $tool */
+foreach ($tools as $tool) {
+    $consumer = new OAuthConsumer($tool->getConsumerKey(), $tool->getSharedSecret());
+    $hmacMethod = new OAuthSignatureMethod_HMAC_SHA1();
+
+    $request = OAuthRequest::from_request('POST', $url);
+    $request->sign_request($hmacMethod, $consumer, '');
+    $signature = $request->get_parameter('oauth_signature');
+
+    if ($signature === $authParams['oauth_signature']) {
+        $toolIsFound = true;
+
+        break;
+    }
+}
+
+if (false === $toolIsFound) {
+    error_log('Tool not found. Signature is not valid');
+
     exit;
 }
 
 $body = file_get_contents('php://input');
-$bodyHash = OAuthSimple::generateBodyHash($body);
+$bodyHash = base64_encode(sha1($body, true));
 
-$url = api_get_path(WEB_PATH).'ims_lti/outcome_service/'.$tool->getId();
-$headers = getallheaders();
+if ($bodyHash !== $authParams['oauth_body_hash']) {
+    error_log('Authorization request not valid');
 
-$params = OAuthSimple::getAuthorizationParams($headers['Authorization']);
-
-if (empty($params)) {
-    exit;
-}
-
-$oauth = new OAuthSimple(
-    $params['oauth_consumer_key'],
-    $tool->getSharedSecret()
-);
-$oauth->setAction('POST');
-$oauth->setSignatureMethod('HMAC-SHA1');
-$result = $oauth->sign(
-    [
-        'path' => $url,
-        'parameters' => [
-            'oauth_body_hash' => $params['oauth_body_hash'],
-            'oauth_nonce' => $params['oauth_nonce'],
-            'oauth_timestamp' => $params['oauth_timestamp'],
-            'oauth_signature_method' => $params['oauth_signature_method'],
-        ],
-    ]
-);
-
-$signatureValid = urldecode($result['signature']) == $params['oauth_signature'];
-$bodyHashValid = $bodyHash === $params['oauth_body_hash'];
-
-if (!$signatureValid || !$bodyHashValid) {
     exit;
 }
 

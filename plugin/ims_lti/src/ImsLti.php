@@ -119,6 +119,7 @@ class ImsLti
             '$LineItem.dataSource' => false,
 
             '$Result.sourcedGUID' => ['lis_result_sourcedid'],
+            '$Result.sourcedId' => ['lis_result_sourcedid'],
             '$Result.createdTimestamp' => false,
             '$Result.status' => false,
             '$Result.resultScore' => false,

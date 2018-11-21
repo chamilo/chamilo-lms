@@ -1,10 +1,10 @@
 <?php
 /* For license terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\UserBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+use Chamilo\UserBundle\Entity\User;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 require './OAuthSimple.php';
@@ -60,8 +60,10 @@ if ($tool->isActiveDeepLinking()) {
     $toolEval = $tool->getGradebookEval();
 
     if (!empty($toolEval)) {
-        $params['lis_result_sourcedid'] = $toolEval->getId().':'.$user->getId();
-        $params['lis_outcome_service_url'] = api_get_path(WEB_PATH).'ims_lti/outcome_service/'.$tool->getId();
+        $params['lis_result_sourcedid'] = json_encode(
+            ['e' => $toolEval->getId(), 'u' => $user->getId(), 'l' => uniqid(), 'lt' => time()]
+        );
+        $params['lis_outcome_service_url'] = api_get_path(WEB_PATH).'lti/os';
         $params['lis_person_sourcedid'] = "$platformDomain:$toolUserId";
         $params['lis_course_section_sourcedid'] = "$platformDomain:".$course->getId();
 

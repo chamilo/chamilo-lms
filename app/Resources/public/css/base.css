@@ -1121,7 +1121,7 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 }
 
 /* Breadcrumb */
-..breadcrumb{
+.breadcrumb{
     margin-bottom: 10px;
 }
 .breadcrumb .home {

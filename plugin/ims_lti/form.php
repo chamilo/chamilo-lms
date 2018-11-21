@@ -7,7 +7,6 @@ use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
 use Chamilo\UserBundle\Entity\User;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
-require './OAuthSimple.php';
 
 api_protect_course_script(false);
 api_block_anonymous_users(false);

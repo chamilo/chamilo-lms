@@ -4,7 +4,6 @@
 use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
-require_once './OAuthSimple.php';
 
 header('Content-Type: application/xml');
 

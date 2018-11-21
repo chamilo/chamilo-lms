@@ -698,7 +698,7 @@ class SessionManager
 
                 $categoryName = isset($orderedCategories[$session['session_category_id']]) ? $orderedCategories[$session['session_category_id']] : '';
                 $session['category_name'] = $categoryName;
-                $formatted_sessions[$session_id] = $session;
+                $formatted_sessions[] = $session;
             }
         }
 

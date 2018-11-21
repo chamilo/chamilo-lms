@@ -4,7 +4,6 @@
 /**
  * Responses to AJAX calls.
  */
-
 $type = isset($_REQUEST['type']) && in_array($_REQUEST['type'], ['personal', 'course', 'admin']) ? $_REQUEST['type'] : 'personal';
 
 if ($type == 'personal') {

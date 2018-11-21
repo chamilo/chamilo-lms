@@ -772,7 +772,7 @@ if (!api_is_allowed_to_edit(null, true)) {
 if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)) {
     echo '<meta http-equiv="refresh" content="0;url='.api_get_self().'?'.api_get_cidreq().'" />';
 } else {
-	    // Tool introduction
+    // Tool introduction
     Display::display_introduction_section(
         TOOL_GRADEBOOK,
         ['ToolbarSet' => 'AssessmentsIntroduction']

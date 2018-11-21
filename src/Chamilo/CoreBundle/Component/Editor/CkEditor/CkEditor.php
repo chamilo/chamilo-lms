@@ -34,6 +34,7 @@ class CkEditor extends Editor
 
     /**
      * Return the HTML code required to run editor.
+     *
      * @param string $value
      *
      * @return string
@@ -54,7 +55,6 @@ class CkEditor extends Editor
      * @param string $value
      *
      * @return string
-     *
      */
     public function createHtmlStyle($value)
     {

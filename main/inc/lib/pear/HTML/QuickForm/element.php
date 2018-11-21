@@ -253,7 +253,7 @@ class HTML_QuickForm_element extends HTML_Common
      */
     public function cleanValueFromParameter($value)
     {
-        $value = @htmlspecialchars($value, ENT_COMPAT, HTML_Common::charset());
+        //$value = @htmlspecialchars($value, ENT_COMPAT, HTML_Common::charset());
 
         return $value;
     }

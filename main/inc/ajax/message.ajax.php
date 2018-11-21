@@ -18,13 +18,13 @@ switch ($action) {
         $listInbox = [];
         if (api_get_setting('allow_message_tool') == 'true') {
             $list = MessageManager::getNumberOfMessages(true, true);
-            foreach ($list as $row){
+            foreach ($list as $row) {
                 $user = api_get_user_info($row['user_sender_id']);
                 $temp['title'] = $row['title'];
                 $temp['date'] = $row['send_date'];
                 $temp['fullname'] = $user['complete_name'];
                 $temp['email'] = $user['email'];
-                $temp['url'] = api_get_path(WEB_PATH). 'main/messages/view_message.php?id='.$row['id'];
+                $temp['url'] = api_get_path(WEB_PATH).'main/messages/view_message.php?id='.$row['id'];
                 $listInbox[] = $temp;
             }
         }

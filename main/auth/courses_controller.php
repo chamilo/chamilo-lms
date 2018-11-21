@@ -58,7 +58,6 @@ class CoursesController
 
     /**
      * It's used for listing categories, render to categories_list view.
-     *
      */
     public function categoryList()
     {

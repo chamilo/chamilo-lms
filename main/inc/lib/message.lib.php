@@ -50,8 +50,8 @@ class MessageManager
      * Gets the total number of messages, used for the inbox sortable table.
      *
      * @param bool $unread
-     *
      * @param bool $listRead
+     *
      * @return int
      */
     public static function getNumberOfMessages($unread = false, $listRead = false)
@@ -59,9 +59,9 @@ class MessageManager
         $table = Database::get_main_table(TABLE_MESSAGE);
         $list = null;
         if ($unread) {
-            $condition_msg_status = ' msg_status = ' . MESSAGE_STATUS_UNREAD . ' ';
+            $condition_msg_status = ' msg_status = '.MESSAGE_STATUS_UNREAD.' ';
         } else {
-            $condition_msg_status = ' msg_status IN(' . MESSAGE_STATUS_NEW . ',' . MESSAGE_STATUS_UNREAD . ') ';
+            $condition_msg_status = ' msg_status IN('.MESSAGE_STATUS_NEW.','.MESSAGE_STATUS_UNREAD.') ';
         }
 
         $keyword = Session::read('message_search_keyword');
@@ -77,7 +77,7 @@ class MessageManager
         }
         $sql .= " FROM $table
                   WHERE $condition_msg_status AND
-                    user_receiver_id=" . api_get_user_id() . "
+                    user_receiver_id=".api_get_user_id()."
                     $keywordCondition
                 ";
         $result = Database::query($sql);
@@ -85,11 +85,12 @@ class MessageManager
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 $list[] = $row;
             }
+
             return $list;
         } else {
             $count = Database::fetch_array($result);
             if ($result) {
-                return (int)$count['number_messages'];
+                return (int) $count['number_messages'];
             }
         }
 

@@ -89,7 +89,7 @@ $social_menu_block = SocialManager::show_social_menu('invitations');
 $socialInvitationsBlock = '<div id="id_response" align="center"></div>';
 
 $user_id = api_get_user_id();
-$list_get_invitation = SocialManager::get_list_invitation_of_friends_by_user_id($user_id,0);
+$list_get_invitation = SocialManager::get_list_invitation_of_friends_by_user_id($user_id, 0);
 $list_get_invitation_sent = SocialManager::get_list_invitation_sent_by_user_id($user_id);
 $pending_invitations = $userGroupModel->get_groups_by_user(
     $user_id,

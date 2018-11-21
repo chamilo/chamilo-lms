@@ -399,8 +399,8 @@ class SocialManager extends UserManager
      * @author isaac flores paz
      *
      * @param int $userId
-     *
      * @param $limit
+     *
      * @return array
      */
     public static function get_list_invitation_of_friends_by_user_id($userId, $limit)

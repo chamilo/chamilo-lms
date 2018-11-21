@@ -124,25 +124,25 @@ class SessionManager
      *
      * @author Carlos Vargas <carlos.vargas@beeznest.com>, from existing code
      *
-     * @param string $name
-     * @param string $startDate                    (YYYY-MM-DD hh:mm:ss)
-     * @param string $endDate                      (YYYY-MM-DD hh:mm:ss)
-     * @param string $displayStartDate             (YYYY-MM-DD hh:mm:ss)
-     * @param string $displayEndDate               (YYYY-MM-DD hh:mm:ss)
-     * @param string $coachStartDate               (YYYY-MM-DD hh:mm:ss)
-     * @param string $coachEndDate                 (YYYY-MM-DD hh:mm:ss)
-     * @param mixed  $coachId                      If int, this is the session coach id,
-     *                                             if string, the coach ID will be looked for from the user table
+     * @param string   $name
+     * @param string   $startDate                    (YYYY-MM-DD hh:mm:ss)
+     * @param string   $endDate                      (YYYY-MM-DD hh:mm:ss)
+     * @param string   $displayStartDate             (YYYY-MM-DD hh:mm:ss)
+     * @param string   $displayEndDate               (YYYY-MM-DD hh:mm:ss)
+     * @param string   $coachStartDate               (YYYY-MM-DD hh:mm:ss)
+     * @param string   $coachEndDate                 (YYYY-MM-DD hh:mm:ss)
+     * @param mixed    $coachId                      If int, this is the session coach id,
+     *                                               if string, the coach ID will be looked for from the user table
      * @param int      $sessionCategoryId            ID of the session category in which this session is registered
-     * @param int    $visibility                   Visibility after end date (0 = read-only, 1 = invisible, 2 = accessible)
-     * @param bool   $fixSessionNameIfExists
-     * @param string $duration
-     * @param string $description                  Optional. The session description
-     * @param int    $showDescription              Optional. Whether show the session description
-     * @param array  $extraFields
-     * @param int    $sessionAdminId               Optional. If this sessions was created by a session admin, assign it to him
-     * @param bool   $sendSubscriptionNotification Optional.
-     *                                             Whether send a mail notification to users being subscribed
+     * @param int      $visibility                   Visibility after end date (0 = read-only, 1 = invisible, 2 = accessible)
+     * @param bool     $fixSessionNameIfExists
+     * @param string   $duration
+     * @param string   $description                  Optional. The session description
+     * @param int      $showDescription              Optional. Whether show the session description
+     * @param array    $extraFields
+     * @param int      $sessionAdminId               Optional. If this sessions was created by a session admin, assign it to him
+     * @param bool     $sendSubscriptionNotification Optional.
+     *                                               Whether send a mail notification to users being subscribed
      * @param int|null $accessUrlId                  Optional.
      *
      * @return mixed Session ID on success, error message otherwise

@@ -1021,6 +1021,9 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Allow DRH user to access all session course announcements
 // $_configuration['allow_drh_access_announcement'] = false;
 
+// Allow my personal files link in the homepage
+// $_configuration['allow_my_files_link_in_homepage'] = false;
+
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email

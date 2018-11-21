@@ -176,40 +176,44 @@ class MessageManager
 
             $userInfo = api_get_user_info($senderId);
             if (!empty($senderId) && !empty($userInfo)) {
-                $message[1] = '<a '.$class.' href="view_message.php?id='.$messageId.'">'.$title.'</a><br />';
+                $message[1] = '<img class="rounded-circle mr-2" src="'.$userInfo['avatar_small'].'"/>';
                 $message[1] .= $userInfo['complete_name_with_username'];
-                $message[3] =
+
+                $message[2] = '<a '.$class.' href="view_message.php?id='.$messageId.'">'.$title.'</a>';
+                $message[4] = '<div class="btn-group" role="group">'.
                     Display::url(
-                        Display::returnFontAwesomeIcon('reply', 2),
+                        Display::returnFontAwesomeIcon('reply', 'sm'),
                         $newMessageLink.'?re_id='.$messageId,
-                        ['title' => get_lang('ReplyToMessage')]
+                        ['title' => get_lang('ReplyToMessage'), 'class' => 'btn btn-outline-secondary btn-sm']
                     );
             } else {
-                $message[1] = '<a '.$class.' href="view_message.php?id='.$messageId.'">'.$title.'</a><br />';
+                $message[1] = '<img class="rounded-circle" src="'.$userInfo['avatar_small'].'"/>';
                 $message[1] .= get_lang('UnknownUser');
-                $message[3] =
+
+                $message[2] = '<a '.$class.' href="view_message.php?id='.$messageId.'">'.$title.'</a>';
+
+                $message[4] = '<div class="btn-group" role="group">'.
                     Display::url(
-                        Display::returnFontAwesomeIcon('reply', 2),
+                        Display::returnFontAwesomeIcon('reply', 'sm'),
                         '#',
-                        ['title' => get_lang('ReplyToMessage')]
+                        ['title' => get_lang('ReplyToMessage'), 'class' => 'btn btn-outline-secondary btn-sm']
                     );
             }
 
             $message[0] = $messageId;
-            $message[2] = api_convert_and_format_date($sendDate, DATE_TIME_FORMAT_LONG);
-            $message[3] .=
-                '&nbsp;&nbsp;'.
+            $message[3] = api_convert_and_format_date($sendDate, DATE_TIME_FORMAT_LONG);
+            $message[4] .=
                 Display::url(
-                    Display::returnFontAwesomeIcon('share', 2),
+                    Display::returnFontAwesomeIcon('share', 'sm'),
                     $newMessageLink.'?forward_id='.$messageId,
-                    ['title' => get_lang('ForwardMessage')]
+                    ['title' => get_lang('ForwardMessage'), 'class' => 'btn btn-outline-secondary btn-sm']
                 ).
-                '&nbsp;&nbsp;<a title="'.addslashes(
+                '<a class="btn btn-outline-secondary btn-sm" title="'.addslashes(
                     get_lang('DeleteMessage')
                 ).'" onclick="javascript:if(!confirm('."'".addslashes(
                     api_htmlentities(get_lang('ConfirmDeleteMessage'))
                 )."'".')) return false;" href="inbox.php?action=deleteone&id='.$messageId.'">'.
-                Display::returnFontAwesomeIcon('trash', 2).'</a>';
+                Display::returnFontAwesomeIcon('trash', 'sm').'</a></div>';
             foreach ($message as $key => $value) {
                 $message[$key] = api_xml_http_response_encode($value);
             }
@@ -2158,12 +2162,14 @@ class MessageManager
             ['MessageManager', 'get_message_data'],
             2,
             20,
-            'DESC'
+            'DESC',
+            null,'table-custom'
         );
         $table->set_header(0, '', false, ['style' => 'width:15px;']);
         $table->set_header(1, get_lang('Messages'), false);
-        $table->set_header(2, get_lang('Date'), true, ['style' => 'width:180px;']);
-        $table->set_header(3, get_lang('Modify'), false, ['style' => 'width:120px;']);
+        $table->set_header(2, get_lang('Subject'), false);
+        $table->set_header(3, get_lang('Date'), true, ['style' => 'width:180px;']);
+        $table->set_header(4, get_lang('Modify'), false, ['style' => 'width:120px;']);
 
         if (isset($_REQUEST['f']) && $_REQUEST['f'] == 'social') {
             $parameters['f'] = 'social';

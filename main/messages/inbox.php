@@ -26,6 +26,7 @@ if (isset($_GET['messages_page_nr'])) {
 
 $nameTools = get_lang('Messages');
 $show_message = null;
+
 if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
     $info_reply = [];
     $info_delete = [];
@@ -106,41 +107,41 @@ $interbreadcrumb[] = [
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Inbox')];
 
 $actions = '';
+$keyword = '';
 
 // Comes from normal profile
-if ($allowSocial == false && $allowMessage) {
-    $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
-        Display::return_icon('message_new.png', get_lang('ComposeMessage')).'</a>';
-    $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
-        Display::return_icon('inbox.png', get_lang('Inbox')).'</a>';
-    $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.
-        Display::return_icon('outbox.png', get_lang('Outbox')).'</a>';
+if ($allowMessage) {
+    $actionsLeft = '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
+        Display::return_icon('new-message.png', get_lang('ComposeMessage'),null,ICON_SIZE_MEDIUM).'</a>';
+    $actionsLeft .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
+        Display::return_icon('inbox.png', get_lang('Inbox'), null, ICON_SIZE_MEDIUM).'</a>';
+    $actionsLeft .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.
+        Display::return_icon('outbox.png', get_lang('Outbox'), null, ICON_SIZE_MEDIUM).'</a>';
+
+    $form = MessageManager::getSearchForm(api_get_path(WEB_PATH).'main/messages/inbox.php');
+    try {
+        if ($form->validate()) {
+            $values = $form->getSubmitValues();
+            $keyword = $values['keyword'];
+        }
+    } catch (HTML_QuickForm_Error $e) {
+        echo  $e->getMessage();
+    }
+
+    $actionsRight = $form->returnForm();
+    $actions = Display::toolbarAction('toolbar', [$actionsLeft, $actionsRight]);
 }
 
-// LEFT CONTENT
-$social_menu_block = '';
+// SOCIAL MENU
+/*$social_menu_block = '';
 if ($allowSocial) {
     // Block Social Menu
     $social_menu_block = SocialManager::show_social_menu('messages');
-}
+}*/
 
 // Right content
 $social_right_content = '';
-$keyword = '';
-if (api_get_setting('allow_social_tool') === 'true') {
-    $actionsLeft = '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
-        Display::return_icon('new-message.png', get_lang('ComposeMessage'), [], 32).'</a>';
-    $actionsLeft .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.
-        Display::return_icon('outbox.png', get_lang('Outbox'), [], 32).'</a>';
 
-    $form = MessageManager::getSearchForm(api_get_path(WEB_PATH).'main/messages/inbox.php');
-    if ($form->validate()) {
-        $values = $form->getSubmitValues();
-        $keyword = $values['keyword'];
-    }
-    $actionsRight = $form->returnForm();
-    $social_right_content .= Display::toolbarAction('toolbar', [$actionsLeft, $actionsRight]);
-}
 //MAIN CONTENT
 
 if (!isset($_GET['del_msg'])) {
@@ -159,21 +160,22 @@ if (!isset($_GET['del_msg'])) {
     $social_right_content .= MessageManager::inbox_display();
 }
 
-$tpl = new Template(null);
+$tpl = new Template($nameTools);
 
 if ($actions) {
     $tpl->assign('actions', Display::toolbarAction('toolbar', [$actions]));
 }
 // Block Social Avatar
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
-if (api_get_setting('allow_social_tool') == 'true') {
-    $tpl->assign('social_menu_block', $social_menu_block);
-    $tpl->assign('social_right_content', $social_right_content);
-    $social_layout = $tpl->get_template('social/inbox.tpl');
-    $tpl->display($social_layout);
-} else {
-    $content = $social_right_content;
-    $tpl->assign('message', $show_message);
-    $tpl->assign('content', $content);
-    $tpl->display_one_col_template();
-}
+
+$tpl->assign('content_inbox', $social_right_content);
+$social_layout = $tpl->get_template('social/inbox.tpl');
+$content = $tpl->fetch($social_layout);
+$tpl->assign('message', $show_message);
+$tpl->assign('content', $content);
+$tpl->display_one_col_template();
+
+
+    //$tpl->assign('message', $show_message);
+    //$tpl->display_one_col_template();
+

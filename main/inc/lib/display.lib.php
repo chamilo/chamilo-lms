@@ -2572,8 +2572,10 @@ class Display
         }
 
         switch ($size) {
+            case 'xs':
+            case 'sm':
             case 'lg':
-                $className .= ' fa-lg';
+                $className .= " fa-{$size}";
                 break;
             case 2:
             case 3:

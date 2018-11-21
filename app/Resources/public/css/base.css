@@ -41,20 +41,6 @@ body {
     padding-left: 15px;
 }
 
-/*!
- * IE10 viewport hack for Surface/desktop Windows 8 bug
- * Copyright 2014-2015 Twitter, Inc.
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
- */
-
-/*
- * See the Getting Started docs for more information:
- * http://getbootstrap.com/getting-started/#support-ie10-width
- */
-@-ms-viewport     { width: device-width; }
-@-o-viewport      { width: device-width; }
-@viewport         { width: device-width; }
-
 select {
     width: auto;
 }
@@ -1135,6 +1121,9 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 }
 
 /* Breadcrumb */
+..breadcrumb{
+    margin-bottom: 10px;
+}
 .breadcrumb .home {
     padding: 0;
     height: 22px;
@@ -7689,9 +7678,8 @@ footer {
 }
 
 #toolshortcuts_horizontal {
-    padding-top: 15px;
-    padding-bottom: 15px;
-    margin-bottom: 10px;
+    padding: 5px;
+    margin-bottom: 5px;
     text-align: center;
 }
 
@@ -7701,9 +7689,8 @@ footer {
 }
 
 #toolshortcuts_horizontal .items-icon img {
-    padding: 5px;
-    border-radius: 5px;
-    box-shadow: 0 1px 3px #C8C8C8;
+    padding: 3px;
+    border-radius: 4px;
     border: 1px solid #e6e6e6;
 }
 

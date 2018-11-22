@@ -348,7 +348,7 @@ if (in_array('apikeys', $profileList)) {
 }
 //    SUBMIT
 if (api_get_setting('profile.is_editable') === 'true') {
-    $form->addButtonUpdate(get_lang('SaveSettings'), 'apply_change');
+    $form->addButtonUpdate(get_lang('Save settings'), 'apply_change');
 } else {
     $form->freeze();
 }
@@ -537,27 +537,30 @@ if ($form->validate()) {
     //Only update values that are request by the "profile" setting
     //Adding missing variables
     $available_values_to_modify = [];
-    foreach ($profileList as $key => $status) {
-        if ($status == 'true') {
-            switch ($key) {
-                case 'login':
-                    $available_values_to_modify[] = 'username';
-                    break;
-                case 'name':
-                    $available_values_to_modify[] = 'firstname';
-                    $available_values_to_modify[] = 'lastname';
-                    break;
-                case 'picture':
-                    $available_values_to_modify[] = 'picture_uri';
-                    break;
-                default:
-                    $available_values_to_modify[] = $key;
-                    break;
-            }
+    foreach ($profileList as $key) {
+        switch ($key) {
+            case 'language':
+                $available_values_to_modify[] = 'language';
+                $available_values_to_modify[] = 'locale';
+                $user_data['locale'] = $user_data['language'];
+                break;
+            case 'login':
+                $available_values_to_modify[] = 'username';
+                break;
+            case 'name':
+                $available_values_to_modify[] = 'firstname';
+                $available_values_to_modify[] = 'lastname';
+                break;
+            case 'picture':
+                $available_values_to_modify[] = 'picture_uri';
+                break;
+            default:
+                $available_values_to_modify[] = $key;
+                break;
         }
     }
 
-    //Fixing missing variables
+    // Fixing missing variables
     $available_values_to_modify = array_merge(
         $available_values_to_modify,
         ['competences', 'diplomas', 'openarea', 'teach', 'openid', 'address']
@@ -612,6 +615,7 @@ if ($form->validate()) {
     }
 
     $sql .= " WHERE id  = '".api_get_user_id()."'";
+
     Database::query($sql);
 
     if (isset($user_data['language']) && !empty($user_data['language'])) {

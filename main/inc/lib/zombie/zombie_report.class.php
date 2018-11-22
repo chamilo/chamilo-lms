@@ -244,7 +244,7 @@ class ZombieReport implements Countable
         $additional_parameters = $this->get_additional_parameters();
         $parameters = array_merge($additional_parameters, $parameters);
 
-        $table = new SortableTable('users', $count, $data, 1, 50);
+        $table = new SortableTable('zombie_users', $count, $data, 1, 50);
         $table->set_additional_parameters($parameters);
 
         $col = 0;

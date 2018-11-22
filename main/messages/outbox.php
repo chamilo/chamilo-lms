@@ -15,6 +15,7 @@ if (api_get_setting('allow_message_tool') != 'true') {
 
 $allowSocial = api_get_setting('allow_social_tool') == 'true';
 $allowMessage = api_get_setting('allow_message_tool') == 'true';
+$show_message = null;
 
 if (isset($_GET['messages_page_nr'])) {
     if ($allowSocial && $allowMessage) {
@@ -39,40 +40,40 @@ $interbreadcrumb[] = [
     'name' => get_lang('Messages'),
 ];
 
-$actions = '';
+$actions = null;
 if ($allowMessage) {
-    $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
-        Display::return_icon('message_new.png', get_lang('ComposeMessage')).'</a>';
-    $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
-        Display::return_icon('inbox.png', get_lang('Inbox')).'</a>';
-    $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.
-        Display::return_icon('outbox.png', get_lang('Outbox')).'</a>';
-}
+    $actionsLeft = '<a href="' . api_get_path(WEB_PATH) . 'main/messages/inbox.php">' .
+        Display::return_icon('back.png', get_lang('Back'), null, ICON_SIZE_MEDIUM) . '</a>';
+    $actionsLeft .= '<a href="' . api_get_path(WEB_PATH) . 'main/messages/new_message.php">' .
+        Display::return_icon('new-message.png', get_lang('ComposeMessage'), null, ICON_SIZE_MEDIUM) . '</a>';
+    $actionsLeft .= '<a href="' . api_get_path(WEB_PATH) . 'main/messages/inbox.php">' .
+        Display::return_icon('inbox.png', get_lang('Inbox'), null, ICON_SIZE_MEDIUM) . '</a>';
+    $actionsLeft .= '<a href="' . api_get_path(WEB_PATH) . 'main/messages/outbox.php">' .
+        Display::return_icon('outbox.png', get_lang('Outbox'), null, ICON_SIZE_MEDIUM) . '</a>';
 
-$action = null;
-if (isset($_REQUEST['action'])) {
-    $action = $_REQUEST['action'];
-}
-
-$keyword = '';
-$social_right_content = '';
-if ($allowSocial) {
-    // Block Social Menu
-    $social_menu_block = SocialManager::show_social_menu('messages');
-    $actionsLeft = '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
-        Display::return_icon('back.png', get_lang('Back'), [], 32).'</a>';
-
-    $form = MessageManager::getSearchForm(api_get_path(WEB_PATH).'main/messages/outbox.php');
+    $form = MessageManager::getSearchForm(api_get_path(WEB_PATH) . 'main/messages/outbox.php');
     if ($form->validate()) {
         $values = $form->getSubmitValues();
         $keyword = $values['keyword'];
     }
     $actionsRight = $form->returnForm();
-    $social_right_content .= Display::toolbarAction(
-        'toolbar',
-        [$actionsLeft, $actionsRight]
-    );
 }
+
+$action = null;
+
+if (isset($_REQUEST['action'])) {
+    $action = $_REQUEST['action'];
+}
+
+$keyword = '';
+$message_content = null;
+
+
+$actions .= Display::toolbarAction(
+    'toolbar',
+    [$actionsLeft, $actionsRight]
+);
+
 //MAIN CONTENT
 if ($action == 'delete') {
     $delete_list_id = [];
@@ -83,40 +84,37 @@ if ($action == 'delete') {
         $delete_list_id = $_POST['id'];
     }
     for ($i = 0; $i < count($delete_list_id); $i++) {
-        MessageManager::delete_message_by_user_sender(
+        $show_message .= MessageManager::delete_message_by_user_sender(
             api_get_user_id(),
             $delete_list_id[$i]
         );
     }
     $delete_list_id = [];
-    $social_right_content .= MessageManager::outbox_display($keyword);
+    $message_content .= MessageManager::outbox_display($keyword);
 } elseif ($action == 'deleteone') {
     $delete_list_id = [];
     $id = Security::remove_XSS($_GET['id']);
     MessageManager::delete_message_by_user_sender(api_get_user_id(), $id);
     $delete_list_id = [];
-    $social_right_content .= MessageManager::outbox_display($keyword);
+    $message_content .= MessageManager::outbox_display($keyword);
 } else {
-    $social_right_content .= MessageManager::outbox_display($keyword);
+    $message_content .= MessageManager::outbox_display($keyword);
 }
 
 $tpl = new Template(get_lang('Outbox'));
 // Block Social Avatar
-SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
 
-if ($allowSocial) {
-    $tpl->assign('social_menu_block', $social_menu_block);
-    $tpl->assign('social_right_content', $social_right_content);
-    $social_layout = $tpl->get_template('social/inbox.tpl');
-    $tpl->display($social_layout);
-} else {
-    $content = $social_right_content;
-    if ($actions) {
-        $tpl->assign(
-            'actions',
-            Display::toolbarAction('toolbar', [$actions])
-        );
-    }
-    $tpl->assign('content', $content);
-    $tpl->display_one_col_template();
+if ($actions) {
+    $tpl->assign(
+        'actions',
+        Display::toolbarAction('toolbar', [$actions])
+    );
 }
+
+$tpl->assign('content_inbox', $message_content);
+$social_layout = $tpl->get_template('message/inbox.tpl');
+$content = $tpl->fetch($social_layout);
+$tpl->assign('message', $show_message);
+$tpl->assign('content', $content);
+$tpl->display_one_col_template();
+

@@ -49,9 +49,10 @@ function add_image_form() {
     }
 }
 </script>';
+
 $nameTools = get_lang('ComposeMessage');
 
-$tpl = new Template(get_lang('ComposeMessage'));
+$tpl = new Template($nameTools);
 
 /**
  * Shows the compose area + a list of users to select from.
@@ -338,57 +339,37 @@ $interbreadcrumb[] = [
 ];
 
 $group_id = isset($_REQUEST['group_id']) ? (int) $_REQUEST['group_id'] : 0;
-$social_right_content = null;
+$message_content = null;
+$actions = null;
 if ($group_id != 0) {
-    $social_right_content .= '<div class=actions>';
-    $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/social/group_view.php?id='.$group_id.'">'.
-        Display::return_icon('back.png', api_xml_http_response_encode(get_lang('ComposeMessage'))).'</a>';
-    $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?group_id='.$group_id.'">'.
-        Display::return_icon('message_new.png', api_xml_http_response_encode(get_lang('ComposeMessage'))).'</a>';
-    $social_right_content .= '</div>';
+    $actions .= '<a href="'.api_get_path(WEB_PATH).'main/social/group_view.php?id='.$group_id.'">'.
+        Display::return_icon('back.png', api_xml_http_response_encode(get_lang('ComposeMessage')),null, ICON_SIZE_MEDIUM).'</a>';
+    $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?group_id='.$group_id.'">'.
+        Display::return_icon('message_new.png', api_xml_http_response_encode(get_lang('ComposeMessage')), null, ICON_SIZE_MEDIUM).'</a>';
+
 } else {
-    if ($allowSocial) {
-    } else {
-        $social_right_content .= '<div class=actions>';
-        if (api_get_setting('allow_message_tool') === 'true') {
-            $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
-                Display::return_icon('message_new.png', get_lang('ComposeMessage')).'</a>';
-            $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
-                Display::return_icon('inbox.png', get_lang('Inbox')).'</a>';
-            $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.
-                Display::return_icon('outbox.png', get_lang('Outbox')).'</a>';
-        }
-        $social_right_content .= '</div>';
+    $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
+        Display::return_icon('back.png', get_lang('Back'), null, ICON_SIZE_MEDIUM).'</a>';
+    if (api_get_setting('allow_message_tool') === 'true') {
+        $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
+            Display::return_icon('inbox.png', get_lang('Inbox'), null, ICON_SIZE_MEDIUM).'</a>';
+        $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.
+            Display::return_icon('outbox.png', get_lang('Outbox'), null, ICON_SIZE_MEDIUM).'</a>';
     }
 }
-
-// LEFT COLUMN
-$social_left_content = '';
-if ($allowSocial) {
-    // Block Social Menu
-    $social_menu_block = SocialManager::show_social_menu('messages');
-    $social_right_content .= '<div class="row">';
-    $social_right_content .= '<div class="col-md-12">';
-    $social_right_content .= '<div class="actions">';
-    $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
-        Display::return_icon('back.png', get_lang('Back'), [], 32).'</a>';
-    $social_right_content .= '</div>';
-    $social_right_content .= '</div>';
-    $social_right_content .= '<div class="col-md-12">';
-}
-
+$show_message = null;
 // MAIN CONTENT
 if (!isset($_POST['compose'])) {
     if (isset($_GET['re_id'])) {
-        $social_right_content .= show_compose_reply_to_message(
+        $message_content .= show_compose_reply_to_message(
             $_GET['re_id'],
             api_get_user_id(),
             $tpl
         );
     } elseif (isset($_GET['send_to_user'])) {
-        $social_right_content .= show_compose_to_user($_GET['send_to_user'], $tpl);
+        $message_content .= show_compose_to_user($_GET['send_to_user'], $tpl);
     } else {
-        $social_right_content .= show_compose_to_any($tpl);
+        $message_content .= show_compose_to_any($tpl);
     }
 } else {
     $restrict = false;
@@ -405,7 +386,7 @@ if (!isset($_POST['compose'])) {
 
     // comes from a reply button
     if (isset($_GET['re_id']) || isset($_GET['forward_id'])) {
-        $social_right_content .= manageForm($default, null, null, $tpl);
+        $message_content .= manageForm($default, null, null, $tpl);
     } else {
         // post
         if ($restrict) {
@@ -417,29 +398,25 @@ if (!isset($_POST['compose'])) {
             if (isset($_POST['hidden_user'])) {
                 $default['users'] = [$_POST['hidden_user']];
             }
-            $social_right_content .= manageForm($default, null, null, $tpl);
+            $message_content .= manageForm($default, null, null, $tpl);
         } else {
-            $social_right_content .= Display::return_message(get_lang('ErrorSendingMessage'), 'error');
+            $show_message = Display::return_message(get_lang('ErrorSendingMessage'), 'error');
         }
     }
 }
 
-if ($allowSocial) {
-    $social_right_content .= '</div>';
-    $social_right_content .= '</div>';
-}
-
-// Block Social Avatar
-SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
-
 MessageManager::cleanAudioMessage();
-if ($allowSocial) {
-    $tpl->assign('social_menu_block', $social_menu_block);
-    $tpl->assign('social_right_content', $social_right_content);
-    $social_layout = $tpl->get_template('social/inbox.tpl');
-    $tpl->display($social_layout);
-} else {
-    $content = $social_right_content;
-    $tpl->assign('content', $content);
-    $tpl->display_one_col_template();
+
+if ($actions) {
+    $tpl->assign(
+        'actions',
+        Display::toolbarAction('toolbar', [$actions])
+    );
 }
+$tpl->assign('message', $show_message);
+$tpl->assign('content_inbox', $message_content);
+$social_layout = $tpl->get_template('message/inbox.tpl');
+$content = $tpl->fetch($social_layout);
+$tpl->assign('content', $content);
+$tpl->display_one_col_template();
+

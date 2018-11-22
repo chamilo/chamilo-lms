@@ -64,12 +64,12 @@ if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
         if (isset($user_reply) && !is_null($user_id_by_email) && strlen($info_reply[0]) > 0) {
             MessageManager::send_message($user_id_by_email, $title, $content);
             $show_message .= MessageManager::return_message($user_id_by_email, 'confirmation');
-            $social_right_content .= MessageManager::inbox_display();
+            $message_content .= MessageManager::inbox_display();
             exit;
         } elseif (is_null($user_id_by_email)) {
             $message_box = get_lang('ErrorSendingMessage');
             $show_message .= Display::return_message(api_xml_http_response_encode($message_box), 'error');
-            $social_right_content .= MessageManager::inbox_display();
+            $message_content .= MessageManager::inbox_display();
             exit;
         }
     } elseif (trim($info_delete[0]) == 'delete') {
@@ -81,7 +81,7 @@ if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
         }
         $message_box = get_lang('SelectedMessagesDeleted');
         $show_message .= Display::return_message(api_xml_http_response_encode($message_box));
-        $social_right_content .= MessageManager::inbox_display();
+        $message_content .= MessageManager::inbox_display();
         exit;
     }
 }
@@ -140,12 +140,12 @@ if ($allowSocial) {
 }*/
 
 // Right content
-$social_right_content = '';
+$message_content = '';
 
 //MAIN CONTENT
 
 if (!isset($_GET['del_msg'])) {
-    $social_right_content .= MessageManager::inbox_display($keyword);
+    $message_content .= MessageManager::inbox_display($keyword);
 } else {
     $num_msg = (int) $_POST['total'];
     for ($i = 0; $i < $num_msg; $i++) {
@@ -157,7 +157,7 @@ if (!isset($_GET['del_msg'])) {
             );
         }
     }
-    $social_right_content .= MessageManager::inbox_display();
+    $message_content .= MessageManager::inbox_display();
 }
 
 $tpl = new Template($nameTools);
@@ -166,16 +166,12 @@ if ($actions) {
     $tpl->assign('actions', Display::toolbarAction('toolbar', [$actions]));
 }
 // Block Social Avatar
-SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
+// SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
 
-$tpl->assign('content_inbox', $social_right_content);
-$social_layout = $tpl->get_template('social/inbox.tpl');
+$tpl->assign('content_inbox', $message_content);
+$social_layout = $tpl->get_template('message/inbox.tpl');
 $content = $tpl->fetch($social_layout);
 $tpl->assign('message', $show_message);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();
-
-
-    //$tpl->assign('message', $show_message);
-    //$tpl->display_one_col_template();
 

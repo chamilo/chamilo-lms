@@ -20,6 +20,8 @@ if (api_get_setting('allow_social_tool') === 'true') {
     $this_section = SECTION_SOCIAL;
 }
 
+$profileList = (array) api_get_setting('profile');
+
 $_user = api_get_user_info();
 $_SESSION['this_section'] = $this_section;
 
@@ -123,7 +125,7 @@ if (api_is_western_name_order()) {
     $form->addElement('text', 'lastname', get_lang('LastName'), ['size' => 40]);
     $form->addElement('text', 'firstname', get_lang('FirstName'), ['size' => 40]);
 }
-if (api_get_setting('profile', 'name') !== 'true') {
+if (!in_array('name', $profileList)) {
     $form->freeze(['lastname', 'firstname']);
 }
 $form->applyFilter(['lastname', 'firstname'], 'stripslashes');
@@ -143,7 +145,7 @@ $form->addElement(
         'size' => USERNAME_MAX_LENGTH,
     ]
 );
-if (api_get_setting('profile', 'login') !== 'true' || api_get_setting('login_is_email') == 'true') {
+if (!in_array('login', $profileList) || api_get_setting('login_is_email') == 'true') {
     $form->freeze('username');
 }
 $form->applyFilter('username', 'stripslashes');
@@ -153,25 +155,26 @@ $form->addRule('username', get_lang('UsernameWrong'), 'username');
 $form->addRule('username', get_lang('UserTaken'), 'username_available', $user_data['username']);
 
 $form->addElement('text', 'official_code', get_lang('OfficialCode'), ['size' => 40]);
-if (api_get_setting('profile', 'officialcode') !== 'true') {
+if (!in_array('officialcode', $profileList)) {
     $form->freeze('official_code');
 }
 $form->applyFilter('official_code', 'stripslashes');
 $form->applyFilter('official_code', 'trim');
 $form->applyFilter('official_code', 'html_filter');
 if (api_get_setting('registration', 'officialcode') === 'true' &&
-    api_get_setting('profile', 'officialcode') === 'true'
+    in_array('officialcode', $profileList)
 ) {
     $form->addRule('official_code', get_lang('ThisFieldIsRequired'), 'required');
 }
 
 //    EMAIL
 $form->addElement('email', 'email', get_lang('Email'), ['size' => 40]);
-if (api_get_setting('profile', 'email') !== 'true') {
+if (!in_array('email', $profileList)) {
     $form->freeze('email');
 }
 
-if (api_get_setting('registration', 'email') == 'true' && api_get_setting('profile', 'email') == 'true') {
+if (api_get_setting('registration', 'email') == 'true' && in_array('email', $profileList)
+) {
     $form->applyFilter('email', 'stripslashes');
     $form->applyFilter('email', 'trim');
     $form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
@@ -180,7 +183,7 @@ if (api_get_setting('registration', 'email') == 'true' && api_get_setting('profi
 
 //    PHONE
 $form->addElement('text', 'phone', get_lang('Phone'), ['size' => 20]);
-if (api_get_setting('profile', 'phone') !== 'true') {
+if (!in_array('phone', $profileList)) {
     $form->freeze('phone');
 }
 $form->applyFilter('phone', 'stripslashes');
@@ -188,8 +191,7 @@ $form->applyFilter('phone', 'trim');
 $form->applyFilter('phone', 'html_filter');
 
 //  PICTURE
-if (api_get_setting('profile.is_editable') === 'true' &&
-    api_get_setting('profile', 'picture') === 'true') {
+if (api_get_setting('profile.is_editable') === 'true' && in_array('picture', $profileList)) {
     $form->addFile(
         'picture',
         [
@@ -220,14 +222,14 @@ if (api_get_setting('profile.is_editable') === 'true' &&
 
 //    LANGUAGE
 $form->addSelectLanguage('language', get_lang('Language'));
-if (api_get_setting('profile', 'language') !== 'true') {
+if (!in_array('language', $profileList)) {
     $form->freeze('language');
 }
 
 // THEME
 if (api_get_setting('profile.is_editable') === 'true' && api_get_setting('user_selected_theme') === 'true') {
     $form->addElement('SelectTheme', 'theme', get_lang('Theme'));
-    if (api_get_setting('profile', 'theme') !== 'true') {
+    if (!in_array('theme', $profileList)) {
         $form->freeze('theme');
     }
     $form->applyFilter('theme', 'trim');
@@ -298,7 +300,7 @@ if (api_get_setting('extended_profile') === 'true') {
 //    PASSWORD, if auth_source is platform
 if ($user_data['auth_source'] == PLATFORM_AUTH_SOURCE &&
     api_get_setting('profile.is_editable') === 'true' &&
-    api_get_setting('profile', 'password') == 'true'
+    in_array('password', $profileList)
 ) {
     $form->addElement('password', 'password0', [get_lang('Pass'), get_lang('Enter2passToChange')], ['size' => 40]);
     $form->addElement('password', 'password1', get_lang('NewPass'), ['id' => 'password1', 'size' => 40]);
@@ -325,7 +327,7 @@ $(document).ready(function(){
 });
 </script>';
 
-if (api_get_setting('profile', 'apikeys') == 'true') {
+if (in_array('apikeys', $profileList)) {
     $form->addElement('html', '<div id="div_api_key">');
     $form->addElement(
         'text',
@@ -387,7 +389,8 @@ if ($form->validate()) {
         (!empty($user_data['password0']) &&
         !empty($user_data['password1'])) ||
         (!empty($user_data['password0']) &&
-        api_get_setting('profile', 'email') == 'true')
+            in_array('email', $profileList)
+        )
     ) {
         $passwordWasChecked = true;
         $validPassword = UserManager::isPasswordValid(
@@ -417,18 +420,19 @@ if ($form->validate()) {
     }
 
     // If user sending the email to be changed (input available and not frozen )
-    if (api_get_setting('profile', 'email') == 'true') {
+    if (in_array('email', $profileList)) {
+        $userFromEmail = api_get_user_info_from_email($user_data['email']);
         if ($allow_users_to_change_email_with_no_password) {
-            if (!check_user_email($user_data['email'])) {
+            if (!empty($userFromEmail)) {
                 $changeemail = $user_data['email'];
             }
         } else {
             // Normal behaviour
-            if (!check_user_email($user_data['email']) && $validPassword) {
+            if (!empty($userFromEmail) && $validPassword) {
                 $changeemail = $user_data['email'];
             }
 
-            if (!check_user_email($user_data['email']) && empty($user_data['password0'])) {
+            if (!empty($userFromEmail) && empty($user_data['password0'])) {
                 Display::addFlash(
                     Display:: return_message(
                         get_lang('ToChangeYourEmailMustTypeYourPassword'),
@@ -524,18 +528,16 @@ if ($form->validate()) {
     $extras = [];
 
     //Checking the user language
-    $languages = api_get_languages();
+    $languages = array_keys(api_get_languages());
     if (!in_array($user_data['language'], $languages)) {
         $user_data['language'] = api_get_setting('platformLanguage');
     }
     $_SESSION['_user']['language'] = $user_data['language'];
 
     //Only update values that are request by the "profile" setting
-    $profile_list = api_get_setting('profile');
     //Adding missing variables
-
     $available_values_to_modify = [];
-    foreach ($profile_list as $key => $status) {
+    foreach ($profileList as $key => $status) {
         if ($status == 'true') {
             switch ($key) {
                 case 'login':
@@ -603,7 +605,7 @@ if ($form->validate()) {
         UserManager::updatePassword(api_get_user_id(), $password);
     }
 
-    if (api_get_setting('profile', 'officialcode') === 'true' &&
+    if (!in_array('officialcode', $profileList) &&
         isset($user_data['official_code'])
     ) {
         $sql .= ", official_code = '".Database::escape_string($user_data['official_code'])."'";
@@ -611,6 +613,11 @@ if ($form->validate()) {
 
     $sql .= " WHERE id  = '".api_get_user_id()."'";
     Database::query($sql);
+
+    if (isset($user_data['language']) && !empty($user_data['language'])) {
+        // _locale_user is set in the UserLocaleListener during login
+        Session::write('_locale_user', $user_data['language']);
+    }
 
     if ($passwordWasChecked == false) {
         Display::addFlash(
@@ -644,7 +651,7 @@ if ($form->validate()) {
     }
 
     $url = api_get_self();
-    header("Location: ".$url);
+    header("Location: $url");
     exit;
 }
 

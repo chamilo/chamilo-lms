@@ -619,7 +619,7 @@ class SessionManager
             foreach ($sessions as $session) {
                 $session_id = $session['id'];
                 if ($showCountUsers) {
-                    $session['users'] = SessionManager::get_users_by_session(
+                    $session['users'] = self::get_users_by_session(
                         $session['id'],
                         null,
                         true
@@ -640,21 +640,18 @@ class SessionManager
                         $session['teachers'] = Display::return_icon('teacher.png', addslashes($teachers));
                     }
                 }
-                $url = api_get_path(WEB_CODE_PATH)."session/resume_session.php?id_session=".$session['id'];
+                $url = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session['id'];
                 if (api_is_drh()) {
-                    $url = api_get_path(WEB_CODE_PATH)."session/about.php?session_id=".$session['id'];
+                    $url = api_get_path(WEB_CODE_PATH).'session/about.php?session_id='.$session['id'];
                 }
                 if (api_is_platform_admin()) {
-                    $url = api_get_path(WEB_CODE_PATH)."session/resume_session.php?id_session=".$session['id'];
+                    $url = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session['id'];
                 }
 
                 if ($extraFieldsToLoad) {
-                    $url = api_get_path(WEB_CODE_PATH)."session/about.php?session_id=".$session['id'];
+                    $url = api_get_path(WEB_CODE_PATH).'session/about.php?session_id='.$session['id'];
                 }
-                $session['name'] = Display::url(
-                    $session['name'],
-                    $url
-                );
+                $session['name'] = Display::url($session['name'], $url);
 
                 if (!empty($extraFieldsToLoad)) {
                     foreach ($extraFieldsToLoad as $field) {
@@ -702,7 +699,6 @@ class SessionManager
                         $options = explode('::', $value);
                     }
                     $original_key = $key;
-
                     if (strpos($key, '_second') === false) {
                     } else {
                         $key = str_replace('_second', '', $key);
@@ -720,9 +716,10 @@ class SessionManager
                         }
                     }
                 }
-                $formatted_sessions[$session_id] = $session;
+
                 $categoryName = isset($orderedCategories[$session['session_category_id']]) ? $orderedCategories[$session['session_category_id']] : '';
-                $formatted_sessions[$session_id]['category_name'] = $categoryName;
+                $session['category_name'] = $categoryName;
+                $formatted_sessions[] = $session;
             }
         }
 
@@ -1790,6 +1787,8 @@ class SessionManager
             }
         }
 
+        $sessionInfo = api_get_session_info($id_checked);
+
         // Delete documents inside a session
         $courses = self::getCoursesInSession($id_checked);
         foreach ($courses as $courseId) {
@@ -1845,7 +1844,7 @@ class SessionManager
         Event::addEvent(
             LOG_SESSION_DELETE,
             LOG_SESSION_ID,
-            $id_checked,
+            $sessionInfo['name'].' - id:'.$id_checked,
             api_get_utc_datetime(),
             $userId
         );
@@ -4226,7 +4225,7 @@ class SessionManager
             $sql .= " WHERE (au.access_url_id = $urlId OR au.access_url_id is null )";
         }
 
-        $sql .= " ORDER BY su.relation_type, ";
+        $sql .= ' ORDER BY su.relation_type, ';
         $sql .= api_sort_by_first_name() ? ' u.firstname, u.lastname' : '  u.lastname, u.firstname';
 
         $result = Database::query($sql);
@@ -6663,6 +6662,14 @@ SQL;
                 $userInfo = api_get_user_info_from_username($data['Username']);
                 $sessionInfo = self::get_session_by_name($data['SessionName']);
 
+                if (empty($sessionInfo)) {
+                    Display::addFlash(Display::return_message(get_lang('NoSessionId').' - '.$data['SessionName'], 'warning'));
+                }
+
+                if (empty($userInfo)) {
+                    Display::addFlash(Display::return_message(get_lang('UserDoesNotExist').' - '.$data['Username'], 'warning'));
+                }
+
                 if (!empty($userInfo) && !empty($sessionInfo)) {
                     $userSessionList[$userInfo['user_id']]['session_list'][] = [
                         'session_id' => $sessionInfo['id'],
@@ -7710,7 +7717,7 @@ SQL;
             case 1:
                 return get_lang('ReadOnly');
             case 2:
-               return get_lang('Visible');
+                return get_lang('Visible');
             case 3:
                 return api_ucfirst(get_lang('Invisible'));
         }
@@ -7818,7 +7825,7 @@ SQL;
                 $sql = "SELECT user_id, lastname, firstname, username
                         FROM $tbl_user
                         WHERE status = '1' ".
-                        $orderClause;
+                    $orderClause;
 
                 if (api_is_multiple_url_enabled()) {
                     $userRelAccessUrlTable = Database::get_main_table(
@@ -8192,7 +8199,6 @@ SQL;
                     [
                         'name' => 'id',
                         'index' => 's.id',
-                        'width' => '160',
                         'width' => '160',
                         'hidden' => 'true',
                     ],

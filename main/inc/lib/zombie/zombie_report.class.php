@@ -34,9 +34,6 @@ class ZombieReport implements Countable
     public function get_parameters()
     {
         $result = [
-            'name' => 'zombie_report_parameters',
-            'method' => 'GET',
-            'attributes' => ['class' => 'well form-horizontal form-search'],
             'items' => [
                 [
                     'name' => 'ceiling',
@@ -44,10 +41,6 @@ class ZombieReport implements Countable
                     'type' => 'date_picker',
                     'default' => $this->get_ceiling('Y-m-d'),
                     'rules' => [
-//                        array(
-//                            'type' => 'required',
-//                            'message' => get_lang('Required')
-//                        ),
                         [
                             'type' => 'date',
                             'message' => get_lang('Date'),
@@ -68,14 +61,7 @@ class ZombieReport implements Countable
                 ],
             ],
         ];
-        $additional_parameters = $this->get_additional_parameters();
-        foreach ($additional_parameters as $key => $value) {
-            $result['items'][] = [
-                'type' => 'hidden',
-                'name' => $key,
-                'value' => $value,
-            ];
-        }
+
 
         return $result;
     }
@@ -85,31 +71,37 @@ class ZombieReport implements Countable
      */
     public function get_parameters_form()
     {
-        $parameters = $this->get_parameters();
-        if (empty($parameters)) {
-            return null;
-        }
-        if (empty($this->parameters_form)) {
-            $this->parameters_form = new FormValidator(
-                $parameters['name'],
-                $parameters['method'],
-                null,
-                null,
-                $parameters['attributes']
-            );
+        $form = new FormValidator(
+            'zombie_report_parameters',
+            'get',
+            null,
+            null,
+            ['class' => 'well form-horizontal form-search']
+        );
+
+        $form->addDatePicker('ceiling', get_lang('LastAccess'));
+        $form->addCheckBox('active_only', get_lang('ActiveOnly'));
+        $form->addButtonSearch(get_lang('Search'));
+
+        $params = [
+            'active_only' => $this->get_active_only(),
+            'ceiling' => $this->get_ceiling('Y-m-d'),
+        ];
+        $form->setDefaults($params);
+        $additional = $this->get_additional_parameters();
+        foreach ($additional as $key => $value) {
+            $value = Security::remove_XSS($value);
+            $form->addHidden($key, $value);
         }
 
-        return $this->parameters_form;
+        return $form;
     }
 
     public function display_parameters($return = false)
     {
         $form = $this->get_parameters_form();
-        if (empty($form)) {
-            return '';
-        }
-
         $result = $form->returnForm();
+
         if ($return) {
             return $result;
         } else {
@@ -219,7 +211,6 @@ class ZombieReport implements Countable
 
         $ceiling = $this->get_ceiling();
         $active_only = $this->get_active_only();
-
         $items = ZombieManager::listZombies($ceiling, $active_only, $count, $from, $column, $direction);
         $result = [];
         foreach ($items as $item) {

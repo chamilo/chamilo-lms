@@ -94,7 +94,7 @@ class ZombieManager
      */
     public static function deactivate_zombies($ceiling)
     {
-        $zombies = self::list_zombies($ceiling);
+        $zombies = self::listZombies($ceiling);
         $ids = [];
         foreach ($zombies as $zombie) {
             $ids[] = $zombie['user_id'];

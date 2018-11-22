@@ -4,8 +4,8 @@
 /**
  * Class MoodleImport.
  *
- * @author José Loguercio <jose.loguercio@beeznest.com>,
- * @author Julio Montoya <gugli100@gmail.com>
+ * @author  José Loguercio <jose.loguercio@beeznest.com>,
+ * @author  Julio Montoya <gugli100@gmail.com>
  *
  * @package chamilo.library
  */
@@ -234,7 +234,8 @@ class MoodleImport
                         // Set Question Type from Moodle XML element <qtype>
                         $qType = $moduleValues['question_instances'][$index]['qtype'];
                         // Add the matched chamilo question type to the array
-                        $moduleValues['question_instances'][$index]['chamilo_qtype'] = $this->matchMoodleChamiloQuestionTypes($qType);
+                        $moduleValues['question_instances'][$index]['chamilo_qtype'] =
+                            $this->matchMoodleChamiloQuestionTypes($qType);
                         $questionInstance = Question::getInstance(
                             $moduleValues['question_instances'][$index]['chamilo_qtype']
                         );
@@ -477,7 +478,7 @@ class MoodleImport
     /**
      * Search the current file resource in main Files XML.
      *
-     * @param resource $filesXml  XML file
+     * @param resource $filesXml XML file
      * @param int      $contextId
      *
      * @return mixed | array if is a valid xml file, false otherwise
@@ -503,7 +504,8 @@ class MoodleImport
                     $currentItem['contenthash'] = $item->nodeValue;
                 }
                 if ($item->nodeName == 'contextid' &&
-                    intval($item->nodeValue) == intval($contextId) && !$isThisItemThatIWant
+                    (int) $item->nodeValue == (int) $contextId &&
+                    !$isThisItemThatIWant
                 ) {
                     $isThisItemThatIWant = true;
                     continue;
@@ -577,9 +579,11 @@ class MoodleImport
                 $answer = $item->getElementsByTagName($this->getQuestionTypeAnswersTag($questionType));
                 $currentItem['plugin_qtype_'.$questionType.'_question'] = [];
                 for ($i = 0; $i <= $answer->length - 1; $i++) {
-                    $currentItem['plugin_qtype_'.$questionType.'_question'][$i]['answerid'] = $answer->item($i)->getAttribute('id');
+                    $currentItem['plugin_qtype_'.$questionType.'_question'][$i]['answerid'] =
+                        $answer->item($i)->getAttribute('id');
                     foreach ($answer->item($i)->childNodes as $properties) {
-                        $currentItem['plugin_qtype_'.$questionType.'_question'][$i][$properties->nodeName] = $properties->nodeValue;
+                        $currentItem['plugin_qtype_'.$questionType.'_question'][$i][$properties->nodeName] =
+                            $properties->nodeValue;
                     }
                 }
 
@@ -869,7 +873,7 @@ class MoodleImport
         &$questionWeighting,
         $importedFiles
     ) {
-        $correct = intval($answerValues['fraction']) ? intval($answerValues['fraction']) : 0;
+        $correct = (int) $answerValues['fraction'] ? (int) $answerValues['fraction'] : 0;
         $answer = $answerValues['answertext'];
         $comment = $answerValues['feedback'];
         $weighting = $answerValues['fraction'];
@@ -911,7 +915,7 @@ class MoodleImport
         &$questionWeighting,
         $importedFiles
     ) {
-        $correct = intval($answerValues['fraction']) ? intval($answerValues['fraction']) : 0;
+        $correct = (int) $answerValues['fraction'] ? (int) $answerValues['fraction'] : 0;
         $answer = $answerValues['answertext'];
         $comment = $answerValues['feedback'];
         $weighting = $answerValues['fraction'];
@@ -963,7 +967,7 @@ class MoodleImport
                 $correctAnswer = '';
                 $othersAnswer = '';
                 foreach ($answerValues as $answer) {
-                    $correct = intval($answer['fraction']);
+                    $correct = (int) $answer['fraction'];
                     if ($correct) {
                         $correctAnswer .= $answer['answertext'].'|';
                         $optionsValues['weight'] = $answer['fraction'];
@@ -981,7 +985,7 @@ class MoodleImport
                 $optionsValues = [];
                 $correctAnswer = '';
                 foreach ($answerValues as $answer) {
-                    $correct = intval($answer['fraction']);
+                    $correct = (int) $answer['fraction'];
                     if ($correct) {
                         $correctAnswer .= $answer['answertext'];
                         $optionsValues['weight'] = $answer['fraction'];

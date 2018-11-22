@@ -431,12 +431,12 @@ class SubLanguageManager
         $language_id = intval($language_id);
         $tbl_admin_languages = Database::get_main_table(TABLE_MAIN_LANGUAGE);
         $tbl_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-        $sql = "SELECT english_name FROM $tbl_admin_languages
+        $sql = "SELECT * FROM $tbl_admin_languages
                 WHERE id = $language_id";
         $result = Database::query($sql);
         $lang = Database::fetch_array($result);
-        $sql_update_2 = "UPDATE $tbl_settings_current SET selected_value = '".$lang['english_name']."'
-                         WHERE variable='platformLanguage'";
+        $sql_update_2 = "UPDATE $tbl_settings_current SET selected_value = '".$lang['isocode']."'
+                         WHERE variable = 'platform_language'";
         $result_2 = Database::query($sql_update_2);
         Event::addEvent(
             LOG_PLATFORM_LANGUAGE_CHANGE,

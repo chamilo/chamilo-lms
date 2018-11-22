@@ -53,10 +53,10 @@ class LanguageSettingsSchema extends AbstractSettingsSchema
     {
         $choices = [
             '' => '',
-            'PlatformLanguage' => 'platform_lang',  // default platform language
-            'UserLanguage' => 'user_profil_lang', // profile language of current user
-            'UserSelectedLanguage' => 'user_selected_lang', // language selected by user at login
-            'CourseLanguage' => 'course_lang', // language of the current course
+            'Platform language' => 'platform_lang',  // default platform language
+            'User profile language' => 'user_profil_lang', // profile language of current user
+            'Selected from login' => 'user_selected_lang', // language selected by user at login
+            'Course language' => 'course_lang', // language of the current course
         ];
 
         $builder

@@ -79,7 +79,7 @@ class LocaleListener implements EventSubscriberInterface
             $userLocale = $request->getSession()->get('_locale_user');
             if (!empty($userLocale)) {
                 //$locale = $userLocale;
-                $localeList['user_profile_lang'] = $userLocale;
+                $localeList['user_profil_lang'] = $userLocale;
             }
 
             // 3. Check course locale
@@ -111,7 +111,6 @@ class LocaleListener implements EventSubscriberInterface
             // 4. force locale if it was selected from the URL
             $localeFromUrl = $request->get('_locale');
             if (!empty($localeFromUrl)) {
-                //$locale = $localeFromUrl;
                 $localeList['user_selected_lang'] = $platformLocale;
             }
 
@@ -122,11 +121,13 @@ class LocaleListener implements EventSubscriberInterface
                 'language_priority_1',
             ];
 
+            //var_dump($localeList);exit;
             $locale = '';
             foreach ($priorityList as $setting) {
                 $priority = $settings->getSetting("language.$setting");
                 if (!empty($priority) && isset($localeList[$priority])) {
                     $locale = $localeList[$priority];
+                    break;
                 }
             }
 
@@ -134,12 +135,13 @@ class LocaleListener implements EventSubscriberInterface
                 // Use default order
                 $priorityList = [
                     'platform_lang',
-                    'user_profile_lang',
+                    'user_profil_lang',
                     'course_lang',
                     'user_selected_lang',
                 ];
                 foreach ($priorityList as $setting) {
                     if (isset($localeList[$setting])) {
+                        //var_dump($setting);
                         $locale = $localeList[$setting];
                     }
                 }

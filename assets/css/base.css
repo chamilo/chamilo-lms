@@ -1,13 +1,13 @@
 /*
     Theme Name: Chamilo Base
     URL Project: http://www.chamilo.org
-    Description: Styles main base of Chamilo LMS appearance, works with Bootstrap 3.0.x
+    Description: Styles main base of Chamilo LMS appearance, works with Bootstrap 4
     Author:
         alex.aragon@beeznest.com
         angel.quiroz@beeznest.com
         julio.montoya@beeznest.com
         yannick.warnier@beeznest.com
-    Version: 1.0
+    Version: 2.0
 */
 
 .admin-block-version {
@@ -3415,22 +3415,6 @@ a:active {
     width: 8em;
 }
 
-.send_msg_in_text {
-    background: url("../../public/img/mail_send.png") no-repeat scroll right center transparent;
-    height: 16px;
-    width: 17px;
-    display: inline-block;
-    margin-right: 4px;
-}
-
-.send_inv_in_text {
-    background: url("../../public/img/invitation.png") no-repeat scroll right center transparent;
-    height: 16px;
-    width: 17px;
-    display: inline-block;
-    margin-right: 4px;
-}
-
 .welcome_course li {
     float: left;
     list-style-type: none;
@@ -3922,20 +3906,6 @@ i.size-32.icon-new-note {
 
 .dataTables_wrapper .paginate_disabled_previous, .dataTables_wrapper .paginate_disabled_next {
     opacity: 0.4;
-}
-
-.dataTables_wrapper .sorting_asc {
-    background-image: url("../../public/img/sort_asc.png");
-    background-repeat: no-repeat;
-    background-attachment: scroll;
-    background-position: right center;
-}
-
-.dataTables_wrapper .sorting_desc {
-    background-image: url("../../public/img/sort_desc.png");
-    background-repeat: no-repeat;
-    background-attachment: scroll;
-    background-position: right center;
 }
 
 .nav-list img {

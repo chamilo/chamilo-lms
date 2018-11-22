@@ -305,10 +305,8 @@ class TestCategory
      *
      * @return string
      */
-    public static function getCategoryNameForQuestion(
-        $questionId,
-        $courseId = 0
-    ) {
+    public static function getCategoryNameForQuestion($questionId, $courseId = 0)
+    {
         if (empty($courseId)) {
             $courseId = api_get_course_int_id();
         }
@@ -399,9 +397,7 @@ class TestCategory
     public static function getListOfCategoriesNameForTest($exerciseId, $grouped_by_category = true)
     {
         $result = [];
-        $categories = self::getListOfCategoriesIDForTest(
-            $exerciseId
-        );
+        $categories = self::getListOfCategoriesIDForTest($exerciseId);
 
         foreach ($categories as $catInfo) {
             $categoryId = $catInfo['id'];

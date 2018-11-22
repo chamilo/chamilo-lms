@@ -68,9 +68,9 @@ $hideList = '';
 $maxEvents = 20;
 for ($i = 1; $i <= $maxEvents; $i++) {
     $name = 'time_'.$i;
-    $form->addDateTimeRangePicker($name, get_lang('Time'));
+    $form->addDateTimeRangePicker($name, get_lang('Date'));
     if ($i > 3) {
-        $hideList .= "$('#".$name."_alt').parent().parent().parent().hide();";
+        $hideList .= "$('#".$name."_date_time_wrapper').hide();";
     }
 }
 
@@ -80,12 +80,12 @@ $(function() {
     var number = 3;    
     $("#add_button").on("click", function() {
         number++;
-        $("#time_" + number + "_alt").parent().parent().parent().show();
+        $("#time_" + number + "_date_time_wrapper").show();
     });
     
     $("#remove_button").on("click", function() {
         if (number > 1) {            
-            $("#time_" + number + "_alt").parent().parent().parent().hide();
+            $("#time_" + number + "_date_time_wrapper").hide();
             number--;
         }
     });

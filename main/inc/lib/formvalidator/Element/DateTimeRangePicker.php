@@ -21,7 +21,6 @@ class DateTimeRangePicker extends DateRangePicker
 
         $id = $this->getAttribute('id');
         $value = $this->getValue();
-        $label = $this->getLabel();
 
         if (!empty($value)) {
             $value = api_format_date($value, DATE_FORMAT_LONG_NO_DAY);
@@ -41,15 +40,7 @@ class DateTimeRangePicker extends DateRangePicker
                         <span class="sr-only">'.sprintf(get_lang('ResetFieldX'), $this->_label).'</span>
                     </button>
                 </span>                
-            </div>
-            <div class="input-group">
-                <br />
-                <p id="'.$id.'_time_range">
-                    <input type="text" name="'.$id.'_time_range_start" class="time start" autocomplete="off"> 
-                    '.get_lang('To').'
-                    <input type="text" name="'.$id.'_time_range_end" class="time end " autocomplete="off">
-                </p>
-            </div>
+            </div>            
         '.$this->getElementJS();
     }
 
@@ -115,5 +106,104 @@ class DateTimeRangePicker extends DateRangePicker
         </script>";
 
         return $js;
+    }
+
+    /**
+     * @param string $layout
+     *
+     * @return string
+     */
+    public function getTemplate($layout)
+    {
+        $size = $this->getColumnsSize();
+
+        if (empty($size)) {
+            $sizeTemp = $this->getInputSize();
+            if (empty($size)) {
+                $sizeTemp = 8;
+            }
+            $size = array(2, $sizeTemp, 2);
+        } else {
+            if (is_array($size)) {
+                if (count($size) != 3) {
+                    $sizeTemp = $this->getInputSize();
+                    if (empty($size)) {
+                        $sizeTemp = 8;
+                    }
+                    $size = array(2, $sizeTemp, 2);
+                }
+                // else just keep the $size array as received
+            } else {
+                $size = array(2, intval($size), 2);
+            }
+        }
+
+        $id = $this->getAttribute('id');
+
+        switch ($layout) {
+            case FormValidator::LAYOUT_INLINE:
+                return '
+                <div class="form-group {error_class}">
+                    <label {label-for} >
+                        <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
+                        {label}
+                    </label>
+                    {element}
+                </div>';
+                break;
+            case FormValidator::LAYOUT_HORIZONTAL:
+                return '
+                <span id="'.$id.'_date_time_wrapper">
+                <div class="form-group {error_class}">
+                    <label {label-for} class="col-sm-'.$size[0].' control-label" >
+                        <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
+                        {label}
+                    </label>
+                    <div class="col-sm-'.$size[1].'">
+                        {icon}
+                        {element}
+
+                        <!-- BEGIN label_2 -->
+                        <p class="help-block">{label_2}</p>
+                        <!-- END label_2 -->
+
+                        <!-- BEGIN error -->
+                        <span class="help-inline help-block">{error}</span>
+                        <!-- END error -->
+                    </div>
+                    <div class="col-sm-'.$size[2].'">
+                        <!-- BEGIN label_3 -->
+                            {label_3}
+                        <!-- END label_3 -->
+                    </div>            
+                </div>                
+                <div class="form-group {error_class}">
+                    <label class="col-sm-'.$size[0].' control-label" >
+                        <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
+                        '.get_lang('Hour').'
+                    </label>
+                    <div class="col-sm-'.$size[1].'"> 
+                        <div class="input-group"> 
+                            <p id="'.$id.'_time_range">                    
+                                <input type="text" name="'.$id.'_time_range_start" class="time start" autocomplete="off"> 
+                                '.get_lang('To').'
+                                <input type="text" name="'.$id.'_time_range_end" class="time end " autocomplete="off">
+                            </p>
+                        </div>                   
+                    </div>
+                </div> 
+                </span>                   
+                ';
+                break;
+            case FormValidator::LAYOUT_BOX_NO_LABEL:
+                return '
+                        <label {label-for}>{label}</label>
+                        <div class="input-group">
+                            
+                            {icon}
+                            {element}
+                        </div>';
+                break;
+        }
     }
 }

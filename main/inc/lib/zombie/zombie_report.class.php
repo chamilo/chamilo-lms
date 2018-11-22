@@ -112,9 +112,6 @@ class ZombieReport implements Countable
     public function is_valid()
     {
         $form = $this->get_parameters_form();
-        if (empty($form)) {
-            return true;
-        }
 
         return $form->isSubmitted() == false || $form->validate();
     }
@@ -167,56 +164,39 @@ class ZombieReport implements Countable
         }
 
         $action = $this->get_action();
-        $f = [$this, 'action_'.$action];
-        if (is_callable($f)) {
-            return call_user_func($f, $ids);
+        switch ($action) {
+            case 'activate':
+                return UserManager::activate_users($ids);
+                break;
+            case 'deactivate':
+                return UserManager::deactivate_users($ids);
+                break;
+            case 'delete':
+                return UserManager::delete_users($ids);
         }
 
         return false;
     }
 
-    public function action_deactivate($ids)
-    {
-        return UserManager::deactivate_users($ids);
-    }
-
-    public function action_activate($ids)
-    {
-        return UserManager::activate_users($ids);
-    }
-
-    public function action_delete($ids)
-    {
-        return UserManager::delete_users($ids);
-    }
-
     public function count()
     {
-        if (!$this->is_valid()) {
-            return 0;
-        }
-
         $ceiling = $this->get_ceiling();
         $active_only = $this->get_active_only();
-        $items = ZombieManager::listZombies($ceiling, $active_only);
+        $items = ZombieManager::listZombies($ceiling, $active_only, null, null);
 
         return count($items);
     }
 
     public function get_data($from, $count, $column, $direction)
     {
-        if (!$this->is_valid()) {
-            return [];
-        }
-
         $ceiling = $this->get_ceiling();
         $active_only = $this->get_active_only();
-        $items = ZombieManager::listZombies($ceiling, $active_only, $count, $from, $column, $direction);
+        $items = ZombieManager::listZombies($ceiling, $active_only, $from, $count, $column, $direction);
         $result = [];
         foreach ($items as $item) {
             $row = [];
             $row[] = $item['user_id'];
-            $row[] = $item['code'];
+            $row[] = $item['official_code'];
             $row[] = $item['firstname'];
             $row[] = $item['lastname'];
             $row[] = $item['username'];
@@ -249,7 +229,7 @@ class ZombieReport implements Countable
 
         $col = 0;
         $table->set_header($col++, '', false);
-        $table->set_header($col++, get_lang('Code'));
+        $table->set_header($col++, get_lang('OfficialCode'));
         $table->set_header($col++, get_lang('FirstName'));
         $table->set_header($col++, get_lang('LastName'));
         $table->set_header($col++, get_lang('LoginName'));
@@ -258,7 +238,7 @@ class ZombieReport implements Countable
         $table->set_header($col++, get_lang('AuthenticationSource'));
         $table->set_header($col++, get_lang('RegisteredDate'));
         $table->set_header($col++, get_lang('LastAccess'), false);
-        $table->set_header($col++, get_lang('Active'), false);
+        $table->set_header($col, get_lang('Active'), false);
 
         $table->set_column_filter(5, [$this, 'format_email']);
         $table->set_column_filter(6, [$this, 'format_status']);
@@ -286,7 +266,7 @@ class ZombieReport implements Countable
      */
     public function format_active($active)
     {
-        $active = ($active == '1');
+        $active = $active == '1';
         if ($active) {
             $image = 'accept';
             $text = get_lang('Yes');
@@ -315,14 +295,14 @@ class ZombieReport implements Countable
     public function display($return = false)
     {
         $result = $this->display_parameters($return);
-        if ($this->perform_action()) {
-            if ($return) {
-                $result .= Display::return_message(get_lang('Done'), 'confirmation');
-            } else {
-                echo Display::return_message(get_lang('Done'), 'confirmation');
-            }
+        $valid = $this->perform_action();
+
+        if ($valid) {
+            echo Display::return_message(get_lang('Updated'), 'confirmation');
         }
+
         $result .= $this->display_data($return);
+
         if ($return) {
             return $result;
         }

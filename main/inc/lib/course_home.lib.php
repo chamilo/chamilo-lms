@@ -1564,113 +1564,6 @@ class CourseHome
     }
 
     /**
-     * Filter tool icons. Only show if $patronKey is = :teacher
-     * Example dataIcons[i]['name']: parameter titleIcons1:teacher || titleIcons2 || titleIcons3:teacher.
-     *
-     * @param array  $dataIcons          array Reference to icons
-     * @param string $courseToolCategory Current tools category
-     *
-     * @return array
-     */
-    private static function filterPluginTools($dataIcons, $courseToolCategory)
-    {
-        $patronKey = ':teacher';
-
-        if ($courseToolCategory == TOOL_STUDENT_VIEW) {
-            //Fix only coach can see external pages - see #8236 - icpna
-            if (api_is_coach()) {
-                foreach ($dataIcons as $index => $array) {
-                    if (isset($array['name'])) {
-                        $dataIcons[$index]['name'] = str_replace($patronKey, '', $array['name']);
-                    }
-                }
-
-                return $dataIcons;
-            }
-
-            $flagOrder = false;
-
-            foreach ($dataIcons as $index => $array) {
-                if (!isset($array['name'])) {
-                    continue;
-                }
-
-                $pos = strpos($array['name'], $patronKey);
-
-                if ($pos !== false) {
-                    unset($dataIcons[$index]);
-                    $flagOrder = true;
-                }
-            }
-
-            if ($flagOrder) {
-                return array_values($dataIcons);
-            }
-
-            return $dataIcons;
-        }
-
-        // clean patronKey of name icons
-        foreach ($dataIcons as $index => $array) {
-            if (isset($array['name'])) {
-                $dataIcons[$index]['name'] = str_replace($patronKey, '', $array['name']);
-            }
-        }
-
-        return $dataIcons;
-    }
-
-    /**
-     * Find the tool icon when homepage_view is activity_big.
-     *
-     * @param array $item
-     * @param int   $iconSize
-     * @param bool  $generateId
-     *
-     * @return string
-     */
-    private static function getToolIcon(array $item, $iconSize, $generateId = true)
-    {
-        $image = str_replace('.gif', '.png', $item['tool']['image']);
-        $toolIid = isset($item['tool']['iid']) ? $item['tool']['iid'] : null;
-
-        if (isset($item['tool']['custom_image'])) {
-            return Display::img(
-                $item['tool']['custom_image'],
-                $item['name'],
-                ['id' => 'toolimage_'.$toolIid]
-            );
-        }
-
-        if (isset($item['tool']['custom_icon']) && !empty($item['tool']['custom_icon'])) {
-            $customIcon = $item['tool']['custom_icon'];
-
-            if ($item['tool']['visibility'] == '0') {
-                $customIcon = self::getDisableIcon($item['tool']['custom_icon']);
-            }
-
-            return Display::img(
-                self::getCustomWebIconPath().$customIcon,
-                $item['name'],
-                ['id' => 'toolimage_'.$toolIid]
-            );
-        }
-
-        $id = '';
-        if ($generateId) {
-            $id = 'toolimage_'.$toolIid;
-        }
-
-        return Display::return_icon(
-            $image,
-            $item['name'],
-            ['id' => $id],
-            $iconSize,
-            false
-        );
-    }
-
-    /**
      * @return array
      */
     public static function getCourseAdminBlocks()
@@ -1807,5 +1700,112 @@ class CourseHome
         }
 
         return $blocks;
+    }
+
+    /**
+     * Filter tool icons. Only show if $patronKey is = :teacher
+     * Example dataIcons[i]['name']: parameter titleIcons1:teacher || titleIcons2 || titleIcons3:teacher.
+     *
+     * @param array  $dataIcons          array Reference to icons
+     * @param string $courseToolCategory Current tools category
+     *
+     * @return array
+     */
+    private static function filterPluginTools($dataIcons, $courseToolCategory)
+    {
+        $patronKey = ':teacher';
+
+        if ($courseToolCategory == TOOL_STUDENT_VIEW) {
+            //Fix only coach can see external pages - see #8236 - icpna
+            if (api_is_coach()) {
+                foreach ($dataIcons as $index => $array) {
+                    if (isset($array['name'])) {
+                        $dataIcons[$index]['name'] = str_replace($patronKey, '', $array['name']);
+                    }
+                }
+
+                return $dataIcons;
+            }
+
+            $flagOrder = false;
+
+            foreach ($dataIcons as $index => $array) {
+                if (!isset($array['name'])) {
+                    continue;
+                }
+
+                $pos = strpos($array['name'], $patronKey);
+
+                if ($pos !== false) {
+                    unset($dataIcons[$index]);
+                    $flagOrder = true;
+                }
+            }
+
+            if ($flagOrder) {
+                return array_values($dataIcons);
+            }
+
+            return $dataIcons;
+        }
+
+        // clean patronKey of name icons
+        foreach ($dataIcons as $index => $array) {
+            if (isset($array['name'])) {
+                $dataIcons[$index]['name'] = str_replace($patronKey, '', $array['name']);
+            }
+        }
+
+        return $dataIcons;
+    }
+
+    /**
+     * Find the tool icon when homepage_view is activity_big.
+     *
+     * @param array $item
+     * @param int   $iconSize
+     * @param bool  $generateId
+     *
+     * @return string
+     */
+    private static function getToolIcon(array $item, $iconSize, $generateId = true)
+    {
+        $image = str_replace('.gif', '.png', $item['tool']['image']);
+        $toolIid = isset($item['tool']['iid']) ? $item['tool']['iid'] : null;
+
+        if (isset($item['tool']['custom_image'])) {
+            return Display::img(
+                $item['tool']['custom_image'],
+                $item['name'],
+                ['id' => 'toolimage_'.$toolIid]
+            );
+        }
+
+        if (isset($item['tool']['custom_icon']) && !empty($item['tool']['custom_icon'])) {
+            $customIcon = $item['tool']['custom_icon'];
+
+            if ($item['tool']['visibility'] == '0') {
+                $customIcon = self::getDisableIcon($item['tool']['custom_icon']);
+            }
+
+            return Display::img(
+                self::getCustomWebIconPath().$customIcon,
+                $item['name'],
+                ['id' => 'toolimage_'.$toolIid]
+            );
+        }
+
+        $id = '';
+        if ($generateId) {
+            $id = 'toolimage_'.$toolIid;
+        }
+
+        return Display::return_icon(
+            $image,
+            $item['name'],
+            ['id' => $id],
+            $iconSize,
+            false
+        );
     }
 }

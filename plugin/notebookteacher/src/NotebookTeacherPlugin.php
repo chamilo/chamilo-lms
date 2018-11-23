@@ -64,7 +64,7 @@ class NotebookTeacherPlugin extends Plugin
             '/32/notebookteacher.png',
             '/32/notebookteacher_na.png',
             '/32/test2pdf_na.png',
-            '/22/notebookteacher.png'
+            '/22/notebookteacher.png',
         ];
 
         foreach ($list as $file) {

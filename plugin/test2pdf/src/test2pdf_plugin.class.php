@@ -44,7 +44,7 @@ class Test2pdfPlugin extends Plugin
             '/64/test2pdf_na.png',
             '/32/test2pdf.png',
             '/32/test2pdf_na.png',
-            '/22/test2pdf.png'
+            '/22/test2pdf.png',
         ];
 
         $res = true;

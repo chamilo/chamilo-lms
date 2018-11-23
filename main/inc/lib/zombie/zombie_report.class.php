@@ -62,7 +62,6 @@ class ZombieReport implements Countable
             ],
         ];
 
-
         return $result;
     }
 

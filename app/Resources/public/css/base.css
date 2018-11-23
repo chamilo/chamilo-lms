@@ -7736,6 +7736,10 @@ ul#toolnavbox li a.icons-text {
     width: 200px;
 }
 
+ul#toolnavbox li a.icons-text img {
+    margin-left: 5px;
+}
+
 ul#toolnavbox li a.text {
     width: 180px;
 }

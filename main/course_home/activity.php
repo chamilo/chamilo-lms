@@ -52,7 +52,6 @@ if ($session_id === 0 && api_is_course_admin() && api_is_allowed_to_edit(null, t
 		<div class="alert alert-success" id="id_confirmation_message" style="display:none"></div>
 	</div>';
     $content .= $pluginExtra;
-    $blocks = CourseHome::getCourseAdminBlocks();
 } elseif (api_is_coach()) {
     $content .= $pluginExtra;
     if (api_get_setting('show_session_data') === 'true' && $session_id > 0) {
@@ -63,11 +62,9 @@ if ($session_id === 0 && api_is_course_admin() && api_is_allowed_to_edit(null, t
         $content .= CourseHome::show_session_data($session_id);
         $content .= '</table></div></div>';
     }
-    $blocks = CourseHome::getCoachBlocks();
-} else {
-    $blocks = CourseHome::getStudentBlocks();
 }
 
+$blocks = CourseHome::getUserBlocks();
 $activityView = new Template('', false, false, false, false, false, false);
 $activityView->assign('blocks', $blocks);
 

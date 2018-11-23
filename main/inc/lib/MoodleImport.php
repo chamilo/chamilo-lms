@@ -16,48 +16,80 @@ class MoodleImport
      *
      * @param resource $uploadedFile *.* mbz file moodle course backup
      *
+     * @throws Exception
+     *
      * @return bool
      */
     public function import($uploadedFile)
     {
-        $file = $uploadedFile['tmp_name'];
-
-        if (!is_file($file) || !is_readable($file)) {
-            return false;
+        if (UPLOAD_ERR_OK !== $uploadedFile['error']) {
+            throw new Exception(get_lang('UploadError'));
         }
 
-        $package = new PclZip($file);
-        $mainFileKey = 0;
-        $packageContent = $package->listContent();
-        if (!empty($packageContent)) {
-            foreach ($packageContent as $index => $value) {
-                if ($value['filename'] == 'moodle_backup.xml') {
-                    $mainFileKey = $index;
-                    break;
-                }
-            }
+        $cachePath = api_get_path(SYS_ARCHIVE_PATH);
+        $tempPath = $uploadedFile['tmp_name'];
+        $nameParts = explode('.', $uploadedFile['name']);
+        $extension = array_pop($nameParts);
+        $name = basename($tempPath).".$extension";
+
+        if (!move_uploaded_file($tempPath, api_get_path(SYS_ARCHIVE_PATH).$name)) {
+            throw new Exception(get_lang('UploadError'));
         }
 
-        if (!$mainFileKey) {
-            Display::addFlash(
-                Display::return_message(
-                    get_lang('FailedToImportThisIsNotAMoodleFile'),
-                    'error'
-                )
-            );
+        $filePath = $cachePath.$name;
 
-            return false;
+        if (!is_readable($filePath)) {
+            throw new Exception(get_lang('UploadError'));
         }
+
+        $mimeType = mime_content_type($filePath);
 
         $folder = api_get_unique_id();
         $destinationDir = api_get_path(SYS_ARCHIVE_PATH).$folder;
+
+        mkdir($destinationDir, api_get_permissions_for_new_directories(), true);
+
+        switch ($mimeType) {
+            case 'application/x-gzip':
+                $backUpFile = new PharData($filePath);
+
+                if (false === $backUpFile->extractTo($destinationDir)) {
+                    throw new Exception(get_lang('ErrorImportingFile'));
+                }
+
+                if (!file_exists($destinationDir.'/moodle_backup.xml')) {
+                    throw new Exception(get_lang('FailedToImportThisIsNotAMoodleFile'));
+                }
+
+                break;
+            case 'application/zip':
+                $package = new PclZip($filePath);
+                $mainFileKey = 0;
+                $packageContent = $package->listContent();
+
+                if (!empty($packageContent)) {
+                    foreach ($packageContent as $index => $value) {
+                        if ($value['filename'] == 'moodle_backup.xml') {
+                            $mainFileKey = $index;
+                            break;
+                        }
+                    }
+                }
+
+                if (!$mainFileKey) {
+                    throw new Exception(get_lang('FailedToImportThisIsNotAMoodleFile'));
+                }
+
+                $package->extract(PCLZIP_OPT_PATH, $destinationDir);
+
+                break;
+        }
+
         $coursePath = api_get_course_path();
         $sessionId = api_get_session_id();
         $groupId = api_get_group_id();
         $documentPath = api_get_path(SYS_COURSE_PATH).$coursePath.'/document';
         $courseInfo = api_get_course_info();
-
-        mkdir($destinationDir, api_get_permissions_for_new_directories(), true);
 
         create_unexisting_directory(
             $courseInfo,
@@ -69,11 +101,6 @@ class MoodleImport
             '/moodle',
             'Moodle Docs',
             0
-        );
-
-        $package->extract(
-            PCLZIP_OPT_PATH,
-            $destinationDir
         );
 
         // This process will upload all question resource files
@@ -128,15 +155,9 @@ class MoodleImport
 
         if (empty($res)) {
             removeDir($destinationDir);
+            unlink($filePath);
 
-            Display::addFlash(
-                Display::return_message(
-                    get_lang('FailedToImportThisIsNotAMoodleFile'),
-                    'error'
-                )
-            );
-
-            return false;
+            throw new Exception(get_lang('FailedToImportThisIsNotAMoodleFile'));
         }
         $activities = $doc->getElementsByTagName('activity');
         foreach ($activities as $activity) {
@@ -345,8 +366,9 @@ class MoodleImport
         }
 
         removeDir($destinationDir);
+        unlink($filePath);
 
-        return $packageContent[$mainFileKey];
+        return true;
     }
 
     /**

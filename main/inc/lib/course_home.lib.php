@@ -1357,10 +1357,8 @@ class CourseHome
 
         $html = '<div id="toolnav">';
         $html .= '<ul id="toolnavbox">';
-        $count = 0;
         foreach ($navigation_items as $key => $navigation_item) {
-            //students can't see the course settings option
-            $count++;
+            // Students can't see the course settings option
             if (!api_is_allowed_to_edit() && $key == 'course_settings') {
                 continue;
             }
@@ -1449,10 +1447,9 @@ class CourseHome
         $navigation_items = self::get_navigation_items(false);
         $html = '';
         if (!empty($navigation_items)) {
+            $style_id = 'toolshortcuts_vertical';
             if ($orientation == SHORTCUTS_HORIZONTAL) {
-                $style_id = "toolshortcuts_horizontal";
-            } else {
-                $style_id = "toolshortcuts_vertical";
+                $style_id = 'toolshortcuts_horizontal';
             }
             $html .= '<div id="'.$style_id.'">';
             foreach ($navigation_items as $key => $navigation_item) {
@@ -1786,5 +1783,126 @@ class CourseHome
             ICON_SIZE_BIG,
             false
         );
+    }
+
+    /**
+     * @return array
+     */
+    public static function getCourseAdminBlocks()
+    {
+        $blocks = [];
+        $my_list = self::get_tools_category(TOOL_AUTHORING);
+
+        $blocks[] = [
+            'title' => get_lang('Authoring'),
+            'class' => 'course-tools-author',
+            'content' => self::show_tools_category($my_list),
+        ];
+
+        $list1 = self::get_tools_category(TOOL_INTERACTION);
+        $list2 = self::get_tools_category(TOOL_COURSE_PLUGIN);
+        $my_list = array_merge($list1, $list2);
+
+        $blocks[] = [
+            'title' => get_lang('Interaction'),
+            'class' => 'course-tools-interaction',
+            'content' => self::show_tools_category($my_list),
+        ];
+
+        $my_list = self::get_tools_category(TOOL_ADMIN_PLATFORM);
+
+        $blocks[] = [
+            'title' => get_lang('Administration'),
+            'class' => 'course-tools-administration',
+            'content' => self::show_tools_category($my_list),
+        ];
+
+        return $blocks;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getCoachBlocks()
+    {
+        $blocks = [];
+        $my_list = self::get_tools_category(TOOL_STUDENT_VIEW);
+
+        $blocks[] = [
+            'content' => self::show_tools_category($my_list),
+        ];
+
+        $sessionsCopy = api_get_setting('allow_session_course_copy_for_teachers');
+        if ($sessionsCopy === 'true') {
+            // Adding only maintenance for coaches.
+            $myList = self::get_tools_category(TOOL_ADMIN_PLATFORM);
+            $onlyMaintenanceList = [];
+
+            foreach ($myList as $item) {
+                if ($item['name'] === 'course_maintenance') {
+                    $item['link'] = 'course_info/maintenance_coach.php';
+
+                    $onlyMaintenanceList[] = $item;
+                }
+            }
+
+            $blocks[] = [
+                'title' => get_lang('Administration'),
+                'content' => self::show_tools_category($onlyMaintenanceList),
+            ];
+        }
+
+        return $blocks;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getStudentBlocks()
+    {
+        $blocks = [];
+        $tools = self::get_tools_category(TOOL_STUDENT_VIEW);
+        $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
+            api_get_user_id(),
+            api_get_course_info()
+        );
+
+        // Force user icon for DRH
+        if ($isDrhOfCourse) {
+            $addUserTool = true;
+            foreach ($tools as $tool) {
+                if ($tool['name'] === 'user') {
+                    $addUserTool = false;
+                    break;
+                }
+            }
+
+            if ($addUserTool) {
+                $tools[] = [
+                    'c_id' => api_get_course_int_id(),
+                    'name' => 'user',
+                    'link' => 'user/user.php',
+                    'image' => 'members.gif',
+                    'visibility' => '1',
+                    'admin' => '0',
+                    'address' => 'squaregrey.gif',
+                    'added_tool' => '0',
+                    'target' => '_self',
+                    'category' => 'interaction',
+                    'session_id' => api_get_session_id(),
+                ];
+            }
+        }
+
+        if (count($tools) > 0) {
+            $blocks[] = ['content' => self::show_tools_category($tools)];
+        }
+
+        if ($isDrhOfCourse) {
+            $drhTool = self::get_tools_category(TOOL_DRH);
+            $blocks[] = ['content' => self::show_tools_category($drhTool)];
+        }
+
+        return $blocks;
     }
 }

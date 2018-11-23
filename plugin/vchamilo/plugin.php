@@ -54,7 +54,7 @@ $form_settings = [
 
 $form->setDefaults($form_settings);
 
-$wwwroot = $_configuration['root_web'];
+$wwwroot = api_get_configuration_value('root_web');
 
 //A simple select
 $options = [0 => $plugin->get_lang('no'), 1 => $plugin->get_lang('yes')];

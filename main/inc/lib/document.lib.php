@@ -6487,9 +6487,10 @@ class DocumentManager
             $extension = pathinfo($fileName, PATHINFO_EXTENSION);
             $media->setContext('default');
 
-            $provider = 'sonata.media.provider.image';
-            if (!in_array($extension, ['jpeg', 'jpg', 'gif', 'png'])) {
-                $provider = 'sonata.media.provider.file';
+            $provider = 'sonata.media.provider.file';
+            $isImage = in_array($extension, ['jpeg', 'jpg', 'gif', 'png']);
+            if ($isImage) {
+                $provider = 'sonata.media.provider.image';
             }
 
             $media->setProviderName($provider);
@@ -6499,10 +6500,22 @@ class DocumentManager
                 $file = $content;
                 $media->setSize($file->getSize());
             } else {
-                $handle = tmpfile();
-                fwrite($handle, $content);
-                $file = new \Sonata\MediaBundle\Extra\ApiMediaFile($handle);
-                $file->setMimetype($media->getContentType());
+                // $path points to a file in the directory
+                if (file_exists($path) && !is_dir($path)) {
+                    $file = $path;
+                    $media->setSize(filesize($file));
+                    if ($isImage) {
+                        $size = getimagesize($file);
+                        $media->setWidth($size[0]);
+                        $media->setHeight($size[1]);
+                    }
+                } else {
+                    // We get the content and create a file
+                    $handle = tmpfile();
+                    fwrite($handle, $content);
+                    $file = new \Sonata\MediaBundle\Extra\ApiMediaFile($handle);
+                    $file->setMimetype($media->getContentType());
+                }
             }
 
             $media->setBinaryContent($file);

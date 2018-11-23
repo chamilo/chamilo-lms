@@ -178,9 +178,9 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
                     $media->setSize($documentData['size']);
                     $media->setContext('default');
 
-                    $provider = 'sonata.media.provider.image';
-                    if (!in_array($extension, ['jpeg', 'jpg', 'gif', 'png'])) {
-                        $provider = 'sonata.media.provider.file';
+                    $provider = 'sonata.media.provider.file';
+                    if (in_array($extension, ['jpeg', 'jpg', 'gif', 'png'])) {
+                        $provider = 'sonata.media.provider.image';
                     }
 
                     $media->setProviderName($provider);

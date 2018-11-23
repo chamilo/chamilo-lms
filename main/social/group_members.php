@@ -116,7 +116,7 @@ $social_avatar_block = SocialManager::show_social_avatar_block(
     'member_list',
     $group_id
 );
-$social_menu_block = SocialManager::show_social_menu('member_list', $group_id);
+$social_menu_block = SocialManager::getMenuSocial('member_list', $group_id);
 $social_right_content = '<h2>'.$group_info['name'].'</h2>';
 
 foreach ($users as $user) {

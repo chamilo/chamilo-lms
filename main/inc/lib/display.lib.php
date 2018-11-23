@@ -2722,4 +2722,14 @@ HTML;
             $show_learnpath
         );
     }
+
+    public static function dropdownMenu($items=[]){
+        $html = null;
+        foreach ($items as $row){
+            $icon = self::tag('img',$row['icon']);
+            $link = self::url($icon . $row['item'], $row['url']);
+            $html.= self::tag('li',$link);
+        }
+        return  $html;
+    }
 }

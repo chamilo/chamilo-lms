@@ -320,7 +320,7 @@ $tpl = new Template(null);
 // Block Social Avatar
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'groups', $group_id);
 //Block Social Menu
-$social_menu_block = SocialManager::show_social_menu('groups', $group_id);
+$social_menu_block = SocialManager::getMenuSocial('groups', $group_id);
 $tpl->setHelp('Groups');
 $tpl->assign('create_link', $create_thread_link);
 $tpl->assign('is_group_member', $is_group_member);

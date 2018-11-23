@@ -37,7 +37,7 @@ if (!empty($extra_fields)) {
 }
 
 //Block Social Menu
-$social_menu_block = SocialManager::show_social_menu('search');
+$social_menu_block = SocialManager::getMenuSocial('search');
 $block_search = '';
 $searchForm = UserManager::get_search_form($query);
 

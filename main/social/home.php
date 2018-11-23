@@ -78,7 +78,7 @@ if (api_get_setting('profile', 'picture') == 'true') {
 }
 
 //Block Menu
-$social_menu_block = SocialManager::show_social_menu('home');
+$MenuSocial = SocialManager::getMenuSocial('home');
 
 $social_search_block = Display::panel(
     UserManager::get_search_form(''),
@@ -232,11 +232,13 @@ $tpl = new Template(get_lang('SocialNetwork'));
 
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'home');
 
-$tpl->assign('social_menu_block', $social_menu_block);
+$tpl->assign('social_menu_block', $MenuSocial);
 $tpl->assign('social_friend_block', $friend_html);
 $tpl->assign('session_list', $social_session_block);
 $tpl->assign('social_search_block', $social_search_block);
 $tpl->assign('social_skill_block', SocialManager::getSkillBlock($user_id));
 $tpl->assign('social_group_block', $social_group_block);
 $social_layout = $tpl->get_template('social/home.tpl');
-$tpl->display($social_layout);
+$content = $tpl->fetch($social_layout);
+$tpl->assign('content', $content);
+$tpl->display_one_col_template();

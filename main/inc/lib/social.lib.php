@@ -207,7 +207,7 @@ class SocialManager extends UserManager
      */
     public static function get_list_web_path_user_invitation_by_user_id($user_id)
     {
-        $list_ids = self::get_list_invitation_of_friends_by_user_id($user_id);
+        $list_ids = self::get_list_invitation_of_friends_by_user_id($user_id, null);
         $list = [];
         foreach ($list_ids as $values_ids) {
             $list[] = UserManager::get_user_picture_path_by_id(
@@ -417,7 +417,7 @@ class SocialManager extends UserManager
                 WHERE
                     user_receiver_id = '.$userId.' AND
                     msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
-        if ($limit > 0) {
+        if ($limit != null && $limit > 0) {
             $sql .= ' LIMIT '.$limit;
         }
         $res = Database::query($sql);
@@ -872,7 +872,7 @@ class SocialManager extends UserManager
     /**
      * Shows the right menu of the Social Network tool.
      *
-     * @param string $show                       highlight link possible values:
+     * @param string $show highlight link possible values:
      *                                           group_add,
      *                                           home,
      *                                           messages,
@@ -883,12 +883,12 @@ class SocialManager extends UserManager
      *                                           shared_profile,
      *                                           friends,
      *                                           groups search
-     * @param int    $group_id                   group id
-     * @param int    $user_id                    user id
-     * @param bool   $show_full_profile          show profile or not (show or hide the user image/information)
-     * @param bool   $show_delete_account_button
+     * @param int $group_id group id
+     * @param int $user_id user id
+     * @param bool $show_full_profile show profile or not (show or hide the user image/information)
+     * @param bool $show_delete_account_button
      */
-    public static function show_social_menu(
+    public static function getMenuSocial(
         $show = '',
         $group_id = 0,
         $user_id = 0,
@@ -938,113 +938,95 @@ class SocialManager extends UserManager
         $portfolioIcon = Display::return_icon('wiki_task.png', get_lang('Portfolio'));
         $personalDataIcon = Display::return_icon('database.png', get_lang('PersonalDataReport'));
 
-        $html = '';
+        $html = null;
         $active = null;
+        $links = null;
+
+
         if (!in_array(
             $show,
             ['shared_profile', 'groups', 'group_edit', 'member_list', 'waiting_list', 'invite_friends']
         )) {
-            $links = '<ul class="nav navbar-nav">';
-            $active = $show == 'home' ? 'active' : null;
-            $links .= '
-                <li class="home-icon '.$active.'">
-                    <a href="'.api_get_path(WEB_CODE_PATH).'social/home.php">
-                        '.$homeIcon.' '.get_lang('Home').'
-                    </a>
-                </li>';
-            $active = $show == 'messages' ? 'active' : null;
-            $links .= '
-                <li class="messages-icon '.$active.'">
-                    <a href="'.api_get_path(WEB_CODE_PATH).'messages/inbox.php">
-                        '.$messagesIcon.' '.get_lang('Messages').$count_unread_message.'
-                    </a>
-                </li>';
 
-            //Invitations
-            $active = $show == 'invitations' ? 'active' : null;
-            $links .= '
-                <li class="invitations-icon '.$active.'">
-                    <a href="'.api_get_path(WEB_CODE_PATH).'social/invitations.php">
-                        '.$invitationsIcon.' '.get_lang('Invitations').$total_invitations.'
-                    </a>
-                </li>';
+            $itemMenu = [];
 
-            //Shared profile and groups
-            $active = $show == 'shared_profile' ? 'active' : null;
-            $links .= '
-                <li class="shared-profile-icon'.$active.'">
-                    <a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php">
-                        '.$sharedProfileIcon.' '.get_lang('ViewMySharedProfile').'
-                    </a>
-                </li>';
-            $active = $show == 'friends' ? 'active' : null;
-            $links .= '
-                <li class="friends-icon '.$active.'">
-                    <a href="'.api_get_path(WEB_CODE_PATH).'social/friends.php">
-                        '.$friendsIcon.' '.get_lang('Friends').'
-                    </a>
-                </li>';
-            $active = $show == 'browse_groups' ? 'active' : null;
-            $links .= '
-                <li class="browse-groups-icon '.$active.'">
-                    <a href="'.api_get_path(WEB_CODE_PATH).'social/groups.php">
-                        '.$groupsIcon.' '.get_lang('SocialGroups').'
-                    </a>
-                </li>';
+            $itemMenu [0]= [
+                'item' => get_lang('Home'),
+                'url' => api_get_path(WEB_CODE_PATH) . 'social/home.php',
+                'icon' => $homeIcon,
+                'active' => ($show == 'home' ? 'active' : null)
+            ];
 
-            //Search users
-            $active = $show == 'search' ? 'active' : null;
-            $links .= '
-                <li class="search-icon '.$active.'">
-                    <a href="'.api_get_path(WEB_CODE_PATH).'social/search.php">
-                        '.$searchIcon.' '.get_lang('Search').'
-                    </a>
-                </li>';
+            $itemMenu [1]= [
+                'item' => get_lang('Messages') . $count_unread_message,
+                'url' => api_get_path(WEB_CODE_PATH) . 'social/inbox.php',
+                'icon' => $messagesIcon,
+                'active' => ($show == 'messages' ? 'active' : null)
+            ];
 
-            //My files
-            $active = $show == 'myfiles' ? 'active' : null;
+            $itemMenu [2]= [
+                'item' => get_lang('Invitations') .$total_invitations,
+                'url' => api_get_path(WEB_CODE_PATH) . 'social/invitations.php',
+                'icon' => $invitationsIcon,
+                'active' => ($show == 'invitations' ? 'active' : null)
+            ];
 
-            $myFiles = '
-                <li class="myfiles-icon '.$active.'">
-                    <a href="'.api_get_path(WEB_CODE_PATH).'social/myfiles.php">
-                        '.$filesIcon.' '.get_lang('MyFiles').'
-                    </a>
-                </li>';
+            $itemMenu [3]= [
+                'item' => get_lang('ViewMySharedProfile'),
+                'url' => api_get_path(WEB_CODE_PATH) . 'social/profiles.php',
+                'icon' => $sharedProfileIcon,
+                'active' => ($show == 'shared_profile' ? 'active' : null)
+            ];
+
+            $itemMenu [4]= [
+                'item' => get_lang('Friends'),
+                'url' => api_get_path(WEB_CODE_PATH) . 'social/friends.php',
+                'icon' => $friendsIcon,
+                'active' => ($show == 'friends' ? 'active' : null)
+            ];
+
+            $itemMenu [5]= [
+                'item' => get_lang('SocialGroups'),
+                'url' => api_get_path(WEB_CODE_PATH) . 'social/groups.php',
+                'icon' => $groupsIcon,
+                'active' => ($show == 'browse_groups' ? 'active' : null)
+            ];
+
+            $itemMenu [6]= [
+                'item' => get_lang('Search'),
+                'url' => api_get_path(WEB_CODE_PATH) . 'social/search.php',
+                'icon' => $searchIcon,
+                'active' => ($show == 'search' ? 'active' : null)
+            ];
 
             if (api_get_setting('allow_my_files') === 'false') {
-                $myFiles = '';
+                $itemMenu [7]= [
+                    'item' => get_lang('MyFiles'),
+                    'url' => api_get_path(WEB_CODE_PATH) . 'social/myfiles.php',
+                    'icon' => $filesIcon,
+                    'active' => ($show == 'myfiles' ? 'active' : null)
+                ];
             }
-            $links .= $myFiles;
+
             if (api_get_configuration_value('allow_portfolio_tool')) {
-                $links .= '
-                    <li class="portoflio-icon '.($show == 'portfolio' ? 'active' : '').'">
-                        <a href="'.api_get_path(WEB_CODE_PATH).'portfolio/index.php">
-                            '.$portfolioIcon.' '.get_lang('Portfolio').'
-                        </a>
-                    </li>
-                ';
+                $itemMenu [8]= [
+                    'item' => get_lang('Portfolio'),
+                    'url' => api_get_path(WEB_CODE_PATH) . 'portfolio/index.php',
+                    'icon' => $portfolioIcon,
+                    'active' => ($show == 'portfolio' ? 'active' : null)
+                ];
             }
 
             if (!api_get_configuration_value('disable_gdpr')) {
-                $active = $show == 'personal-data' ? 'active' : null;
-                $personalData = '
-                    <li class="personal-data-icon '.$active.'">
-                        <a href="'.api_get_path(WEB_CODE_PATH).'social/personal_data.php">
-                            '.$personalDataIcon.' '.get_lang('PersonalDataReport').'
-                        </a>
-                    </li>';
-                $links .= $personalData;
-                $links .= '</ul>';
+                $itemMenu [9]= [
+                    'item' => get_lang('PersonalDataReport'),
+                    'url' => api_get_path(WEB_CODE_PATH) . 'social/personal_data.php',
+                    'icon' => $personalDataIcon,
+                    'active' => ($show == 'personal-data' ? 'active' : null)
+                ];
             }
 
-            $html .= Display::panelCollapse(
-                get_lang('SocialNetwork'),
-                $links,
-                'social-network-menu',
-                null,
-                'sn-sidebar',
-                'sn-sidebar-collapse'
-            );
+            return Display::dropdownMenu($itemMenu);
         }
 
         if (in_array($show, $show_groups) && !empty($group_id)) {

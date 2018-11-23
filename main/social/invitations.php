@@ -84,7 +84,7 @@ if (is_array($_GET) && count($_GET) > 0) {
 $content = null;
 
 // Block Menu Social
-$social_menu_block = SocialManager::show_social_menu('invitations');
+$social_menu_block = SocialManager::getMenuSocial('invitations');
 // Block Invitations
 $socialInvitationsBlock = '<div id="id_response" align="center"></div>';
 

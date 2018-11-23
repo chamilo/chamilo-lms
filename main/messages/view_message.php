@@ -28,13 +28,12 @@ $actions = null;
 
 if (api_get_setting('allow_message_tool') === 'true') {
     $actionsLeft = '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
-        Display::return_icon('new-message.png', get_lang('ComposeMessage'), null,ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('new-message.png', get_lang('ComposeMessage'), null, ICON_SIZE_MEDIUM).'</a>';
     $actionsLeft .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
         Display::return_icon('inbox.png', get_lang('Inbox'), null, ICON_SIZE_MEDIUM).'</a>';
     $actionsLeft .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.
         Display::return_icon('outbox.png', get_lang('Outbox'), null, ICON_SIZE_MEDIUM).'</a>';
 }
-
 
 $actions .= Display::toolbarAction(
     'toolbar',
@@ -50,7 +49,6 @@ if (empty($_GET['id'])) {
     $source = 'inbox';
     $show_menu = 'messages_inbox';
 }
-
 
 // MAIN CONTENT
 $message_content = MessageManager::showMessageBox($messageId, $source);
@@ -73,4 +71,3 @@ $social_layout = $tpl->get_template('message/inbox.tpl');
 $content = $tpl->fetch($social_layout);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();
-

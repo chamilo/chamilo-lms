@@ -1213,8 +1213,8 @@ class MessageManager
                     user_sender_id
                 FROM $table
                 WHERE
-                    user_sender_id = " . api_get_user_id() . " AND
-                    msg_status = " . MESSAGE_STATUS_OUTBOX . "
+                    user_sender_id = ".api_get_user_id()." AND
+                    msg_status = ".MESSAGE_STATUS_OUTBOX."
                     $keywordCondition
                 ORDER BY col$column $direction
                 LIMIT $from, $number_of_items";
@@ -1229,7 +1229,7 @@ class MessageManager
             $senderId = $row['user_sender_id'];
 
             if ($request === true) {
-                $message[0] = '<input type="checkbox" value=' . $messageId . ' name="out[]">';
+                $message[0] = '<input type="checkbox" value='.$messageId.' name="out[]">';
             } else {
                 $message[0] = $messageId;
             }
@@ -1238,29 +1238,29 @@ class MessageManager
             $title = Security::remove_XSS($title);
             $userInfo = api_get_user_info($senderId);
             if ($request === true) {
-                $message[1] = '<a onclick="show_sent_message(' . $messageId . ')" href="javascript:void(0)">' . $userInfo['complete_name_with_username'] . '</a>';
-                $message[2] = '<a onclick="show_sent_message(' . $messageId . ')" href="javascript:void(0)">' . str_replace(
+                $message[1] = '<a onclick="show_sent_message('.$messageId.')" href="javascript:void(0)">'.$userInfo['complete_name_with_username'].'</a>';
+                $message[2] = '<a onclick="show_sent_message('.$messageId.')" href="javascript:void(0)">'.str_replace(
                         "\\",
                         "",
                         $title
-                    ) . '</a>';
+                    ).'</a>';
                 //date stays the same
                 $message[3] = api_convert_and_format_date($sendDate, DATE_TIME_FORMAT_LONG);
-                $message[4] = '<a class="btn btn-outline-secondary btn-sm" title="' . addslashes(
+                $message[4] = '<a class="btn btn-outline-secondary btn-sm" title="'.addslashes(
                         get_lang('DeleteMessage')
-                    ) . '" onclick="delete_one_message_outbox(' . $messageId . ')" href="javascript:void(0)"  >' .
-                    Display::returnFontAwesomeIcon('trash', 2) . '</a>';
+                    ).'" onclick="delete_one_message_outbox('.$messageId.')" href="javascript:void(0)"  >'.
+                    Display::returnFontAwesomeIcon('trash', 2).'</a>';
             } else {
                 $message[1] = '<img class="rounded-circle mr-2" src="'.$userInfo['avatar_small'].'"/>';
-                $message[1].= $userInfo['complete_name_with_username'];
-                $message[2] = '<a ' . $class . ' onclick="show_sent_message(' . $messageId . ')" href="../messages/view_message.php?id_send=' . $messageId . '">' . $title . '</a>';
+                $message[1] .= $userInfo['complete_name_with_username'];
+                $message[2] = '<a '.$class.' onclick="show_sent_message('.$messageId.')" href="../messages/view_message.php?id_send='.$messageId.'">'.$title.'</a>';
                 $message[3] = api_convert_and_format_date($sendDate, DATE_TIME_FORMAT_LONG);
-                $message[4] = '<a class="btn btn-outline-secondary btn-sm" title="' . addslashes(
+                $message[4] = '<a class="btn btn-outline-secondary btn-sm" title="'.addslashes(
                         get_lang('DeleteMessage')
-                    ) . '" href="outbox.php?action=deleteone&id=' . $messageId . '"  onclick="javascript:if(!confirm(' . "'" . addslashes(
+                    ).'" href="outbox.php?action=deleteone&id='.$messageId.'"  onclick="javascript:if(!confirm('."'".addslashes(
                         api_htmlentities(get_lang('ConfirmDeleteMessage'))
-                    ) . "'" . ')) return false;" >' .
-                    Display::returnFontAwesomeIcon('trash', 'fa-sm') . '</a>';
+                    )."'".')) return false;" >'.
+                    Display::returnFontAwesomeIcon('trash', 'fa-sm').'</a>';
             }
 
             $message_list[] = $message;
@@ -2166,7 +2166,8 @@ class MessageManager
             2,
             20,
             'DESC',
-            null,'table-custom'
+            null,
+            'table-custom'
         );
         $table->set_header(0, '', false, ['style' => 'width:15px;']);
         $table->set_header(1, get_lang('Messages'), false);

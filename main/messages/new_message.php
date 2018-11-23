@@ -343,10 +343,9 @@ $message_content = null;
 $actions = null;
 if ($group_id != 0) {
     $actions .= '<a href="'.api_get_path(WEB_PATH).'main/social/group_view.php?id='.$group_id.'">'.
-        Display::return_icon('back.png', api_xml_http_response_encode(get_lang('ComposeMessage')),null, ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('back.png', api_xml_http_response_encode(get_lang('ComposeMessage')), null, ICON_SIZE_MEDIUM).'</a>';
     $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?group_id='.$group_id.'">'.
         Display::return_icon('message_new.png', api_xml_http_response_encode(get_lang('ComposeMessage')), null, ICON_SIZE_MEDIUM).'</a>';
-
 } else {
     $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
         Display::return_icon('back.png', get_lang('Back'), null, ICON_SIZE_MEDIUM).'</a>';
@@ -419,4 +418,3 @@ $social_layout = $tpl->get_template('message/inbox.tpl');
 $content = $tpl->fetch($social_layout);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();
-

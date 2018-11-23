@@ -222,15 +222,12 @@ class MoodleImport
                     $exercise->updateFeedbackType(0);
 
                     // Match shuffle question with chamilo
-                    switch ($moduleValues['shufflequestions']) {
-                        case '0':
-                            $exercise->setRandom(0);
-                            break;
-                        case '1':
-                            $exercise->setRandom(-1);
-                            break;
-                        default:
-                            $exercise->setRandom(0);
+                    if (isset($moduleValues['shufflequestions']) &&
+                        (int) $moduleValues['shufflequestions'] === 1
+                    ) {
+                        $exercise->setRandom(-1);
+                    } else {
+                        $exercise->setRandom(0);
                     }
                     $exercise->updateRandomAnswers($moduleValues['shuffleanswers']);
                     // @todo divide to minutes

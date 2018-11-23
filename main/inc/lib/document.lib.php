@@ -431,7 +431,7 @@ class DocumentManager
      */
     public static function getSessionFolderFilters($path, $sessionId)
     {
-        $sessionId = intval($sessionId);
+        $sessionId = (int) $sessionId;
         $condition = null;
 
         if (!empty($sessionId)) {
@@ -638,7 +638,7 @@ class DocumentManager
      * Gets the paths of all folders in a course
      * can show all folders (except for the deleted ones) or only visible ones.
      *
-     * @param array  $_course
+     * @param array  $courseInfo
      * @param int    $groupIid          iid
      * @param bool   $can_see_invisible
      * @param bool   $getInvisibleList
@@ -647,19 +647,20 @@ class DocumentManager
      * @return array with paths
      */
     public static function get_all_document_folders(
-        $_course,
+        $courseInfo,
         $groupIid = 0,
         $can_see_invisible = false,
         $getInvisibleList = false,
         $path = ''
     ) {
-        $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-        $groupIid = intval($groupIid);
-        $document_folders = [];
+        $groupIid = (int) $groupIid;
+        $courseId = $courseInfo['real_id'];
+        $sessionId = api_get_session_id();
 
+        $folders = [];
         $students = CourseManager::get_user_list_from_course_code(
-            $_course['code'],
+            $courseInfo['code'],
             api_get_session_id()
         );
 
@@ -670,9 +671,9 @@ class DocumentManager
             }
         }
 
-        $groupCondition = " l.to_group_id = $groupIid";
+        $groupCondition = " l.group_id = $groupIid";
         if (empty($groupIid)) {
-            $groupCondition = " (l.group_id = 0 OR l.group_id IS NULL)";
+            $groupCondition = ' (l.group_id = 0 OR l.group_id IS NULL)';
         }
 
         $show_users_condition = '';
@@ -681,50 +682,32 @@ class DocumentManager
         }
 
         if ($can_see_invisible) {
-            // condition for the session
-            $session_id = api_get_session_id();
-            $session_id = $session_id ?: api_get_session_id();
-            $condition_session = " AND (l.session_id = '$session_id' OR (l.session_id = '0' OR l.session_id IS NULL) )";
-            $condition_session .= self::getSessionFolderFilters($path, $session_id);
+            $sessionId = $sessionId ?: api_get_session_id();
+            $condition_session = " AND (l.session_id = '$sessionId' OR (l.session_id = '0' OR l.session_id IS NULL) )";
+            $condition_session .= self::getSessionFolderFilters($path, $sessionId);
+
+            $sql = "SELECT DISTINCT docs.id, docs.path
+                    FROM resource_node AS n
+                    INNER JOIN $TABLE_DOCUMENT  AS docs
+                    ON (docs.resource_node_id = n.id)
+                    INNER JOIN resource_link l
+                    ON (l.resource_node_id = n.id)
+                    WHERE                      
+                        docs.c_id = $courseId AND
+                        docs.filetype = 'folder' AND
+                        $groupCondition AND
+                        docs.path NOT LIKE '%shared_folder%' AND
+                        docs.path NOT LIKE '%_DELETED_%' AND
+                        l.visibility NOT IN ('".ResourceLink::VISIBILITY_DELETED."')                           
+                        $condition_session ";
 
             if ($groupIid != 0) {
-                $sql = "SELECT DISTINCT docs.id, path
-                       FROM $TABLE_ITEMPROPERTY  AS last
-                       INNER JOIN $TABLE_DOCUMENT  AS docs
-                       ON (
-                            docs.id = last.ref AND
-                            docs.c_id = last.c_id
-                       )
-                       WHERE                       
-                            last.tool = '".TOOL_DOCUMENT."' AND
-                            last.c_id = {$_course['real_id']} AND
-                            docs.c_id = {$_course['real_id']} AND
-                            docs.filetype = 'folder' AND
-                            $groupCondition AND
-                            docs.path NOT LIKE '%shared_folder%' AND
-                            docs.path NOT LIKE '%_DELETED_%' AND
-                            last.visibility <> 2                            
-                            $condition_session ";
+                $sql .= " AND docs.path NOT LIKE '%shared_folder%' ";
             } else {
-                $sql = "SELECT DISTINCT docs.id, docs.path
-                        FROM resource_node AS n
-                        INNER JOIN $TABLE_DOCUMENT  AS docs
-                        ON (docs.resource_node_id = n.id)
-                        INNER JOIN resource_link l
-                        ON (l.resource_node_id = n.id)  
-                        WHERE                            
-                            docs.c_id = {$_course['real_id']} AND
-                            docs.filetype = 'folder' AND
-                            docs.path NOT LIKE '%_DELETED_%' AND
-                            $groupCondition AND
-                            l.visibility NOT IN ('".ResourceLink::VISIBILITY_DELETED."')
-                            $show_users_condition 
-                            $condition_session 
-                        ";
+                $sql .= $show_users_condition;
             }
 
             $result = Database::query($sql);
-
             if ($result && Database::num_rows($result) != 0) {
                 while ($row = Database::fetch_array($result, 'ASSOC')) {
                     if (self::is_folder_to_avoid($row['path'])) {
@@ -737,53 +720,49 @@ class DocumentManager
                         }
                     }
 
-                    $document_folders[$row['id']] = $row['path'];
+                    $folders[$row['id']] = $row['path'];
                 }
 
-                if (!empty($document_folders)) {
-                    natsort($document_folders);
+                if (!empty($folders)) {
+                    natsort($folders);
                 }
 
-                return $document_folders;
+                return $folders;
             } else {
                 return false;
             }
         } else {
             // No invisible folders
             // Condition for the session
-            $session_id = api_get_session_id();
             $condition_session = api_get_session_condition(
-                $session_id,
+                $sessionId,
                 true,
                 false,
                 'docs.session_id'
             );
 
-            $visibilityCondition = 'last.visibility = 1';
+            $visibilityCondition = 'l.visibility = 1';
             $fileType = "docs.filetype = 'folder' AND";
             if ($getInvisibleList) {
-                $visibilityCondition = 'last.visibility = 0';
+                $visibilityCondition = 'l.visibility = 0';
                 $fileType = '';
             }
 
             //get visible folders
-            $sql = "SELECT DISTINCT docs.id, path
-                    FROM
-                    $TABLE_ITEMPROPERTY AS last 
-                    INNER JOIN $TABLE_DOCUMENT AS docs
-                    ON (docs.id = last.ref AND last.c_id = docs.c_id)
+            $sql = "SELECT DISTINCT docs.id, docs.path
+                    FROM resource_node AS n
+                    INNER JOIN $TABLE_DOCUMENT  AS docs
+                    ON (docs.resource_node_id = n.id)
+                    INNER JOIN resource_link l
+                    ON (l.resource_node_id = n.id)
                     WHERE
-                        $fileType
-                        last.tool = '".TOOL_DOCUMENT."' AND
+                        $fileType                        
                         $groupCondition AND
                         $visibilityCondition
                         $show_users_condition
-                        $condition_session AND
-                        last.c_id = {$_course['real_id']}  AND
-                        docs.c_id = {$_course['real_id']} ";
-
+                        $condition_session AND                        
+                        docs.c_id = $courseId ";
             $result = Database::query($sql);
-
             $visibleFolders = [];
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 $visibleFolders[$row['id']] = $row['path'];
@@ -793,34 +772,36 @@ class DocumentManager
                 return $visibleFolders;
             }
 
-            //get invisible folders
-            $sql = "SELECT DISTINCT docs.id, path
-                    FROM $TABLE_ITEMPROPERTY AS last 
-                    INNER JOIN $TABLE_DOCUMENT AS docs
-                    ON (docs.id = last.ref AND last.c_id = docs.c_id)
+            // get invisible folders
+            $sql = "SELECT DISTINCT docs.id, docs.path
+                    FROM resource_node AS n
+                    INNER JOIN $TABLE_DOCUMENT  AS docs
+                    ON (docs.resource_node_id = n.id)
+                    INNER JOIN resource_link l
+                    ON (l.resource_node_id = n.id)
                     WHERE                        
-                        docs.filetype = 'folder' AND
-                        last.tool = '".TOOL_DOCUMENT."' AND
-                        $groupCondition AND
-                        last.visibility = 0 $condition_session AND
-                        last.c_id = {$_course['real_id']} AND
-                        docs.c_id = {$_course['real_id']} ";
+                        docs.filetype = 'folder' AND                        
+                        $groupCondition AND                        
+                        l.visibility IN ('".ResourceLink::VISIBILITY_PENDING."') 
+                        $condition_session AND                        
+                        docs.c_id = $courseId ";
             $result = Database::query($sql);
             $invisibleFolders = [];
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 //get visible folders in the invisible ones -> they are invisible too
-                $sql = "SELECT DISTINCT docs.id, path
-                        FROM $TABLE_ITEMPROPERTY AS last 
-                        INNER JOIN $TABLE_DOCUMENT AS docs
-                        ON (docs.id = last.ref AND docs.c_id = last.c_id)
+                $sql = "SELECT DISTINCT docs.id, docs.path
+                        FROM resource_node AS n
+                        INNER JOIN $TABLE_DOCUMENT  AS docs
+                        ON (docs.resource_node_id = n.id)
+                        INNER JOIN resource_link l
+                        ON (l.resource_node_id = n.id)
                         WHERE                            
                             docs.path LIKE '".Database::escape_string($row['path'].'/%')."' AND
-                            docs.filetype = 'folder' AND
-                            last.tool = '".TOOL_DOCUMENT."' AND
+                            docs.filetype = 'folder' AND                            
                             $groupCondition AND
-                            last.visibility = 1 $condition_session AND
-                            last.c_id = {$_course['real_id']} AND
-                            docs.c_id = {$_course['real_id']}  ";
+                            l.visibility NOT IN ('".ResourceLink::VISIBILITY_DELETED."') 
+                            $condition_session AND                            
+                            docs.c_id = $courseId ";
                 $folder_in_invisible_result = Database::query($sql);
                 while ($folders_in_invisible_folder = Database::fetch_array($folder_in_invisible_result, 'ASSOC')) {
                     $invisibleFolders[$folders_in_invisible_folder['id']] = $folders_in_invisible_folder['path'];
@@ -829,18 +810,20 @@ class DocumentManager
 
             // If both results are arrays -> //calculate the difference between the 2 arrays -> only visible folders are left :)
             if (is_array($visibleFolders) && is_array($invisibleFolders)) {
-                $document_folders = array_diff($visibleFolders, $invisibleFolders);
-                natsort($document_folders);
+                $folders = array_diff($visibleFolders, $invisibleFolders);
+                natsort($folders);
 
-                return $document_folders;
-            } elseif (is_array($visibleFolders)) {
+                return $folders;
+            }
+
+            if (is_array($visibleFolders)) {
                 natsort($visibleFolders);
 
                 return $visibleFolders;
-            } else {
-                //no visible folders found
-                return false;
             }
+
+            // no visible folders found
+            return false;
         }
     }
 
@@ -851,7 +834,7 @@ class DocumentManager
      * @param array  $_course
      * @param int    $user_id     id of the current user
      * @param string $file        path stored in the database (if not defined, $documentId must be used)
-     * @param int    $document_id in case you dont have the file path ,
+     * @param int    $document_id in case you don't have the file path ,
      *                            insert the id of the file here and leave $file in blank ''
      * @param bool   $to_delete
      * @param int    $sessionId
@@ -867,16 +850,13 @@ class DocumentManager
         $sessionId = null,
         $documentId = null
     ) {
+        $sessionId = (int) $sessionId;
         if (empty($sessionId)) {
             $sessionId = api_get_session_id();
-        } else {
-            $sessionId = intval($sessionId);
         }
-
-        if (empty($document_id) || !is_numeric($document_id)) {
+        $document_id = (int) $document_id;
+        if (empty($document_id)) {
             $document_id = self::get_document_id($_course, $file, $sessionId);
-        } else {
-            $document_id = intval($document_id);
         }
 
         $TABLE_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -884,7 +864,7 @@ class DocumentManager
         $course_id = $_course['real_id'];
 
         if ($to_delete) {
-            if (self::is_folder($_course, $document_id)) {
+            if (self::isFolder($_course, $document_id)) {
                 if (!empty($file)) {
                     $path = Database::escape_string($file);
                     // Check
@@ -952,7 +932,7 @@ class DocumentManager
      *
      * @return bool true/false
      * */
-    public static function is_folder($_course, $id)
+    public static function isFolder($_course, $id)
     {
         $table = Database::get_course_table(TABLE_DOCUMENT);
         if (empty($_course)) {
@@ -964,7 +944,7 @@ class DocumentManager
                 WHERE c_id = $course_id AND id= $id";
         $result = Database::fetch_array(Database::query($sql), 'ASSOC');
 
-        return $result['filetype'] == 'folder';
+        return $result['filetype'] === 'folder';
     }
 
     /**
@@ -4380,7 +4360,7 @@ class DocumentManager
     }
 
     /**
-     * Check if the past is used in this course.
+     * Check if the path is used in this course.
      *
      * @param array  $courseInfo
      * @param string $path
@@ -6468,7 +6448,6 @@ class DocumentManager
 
         $em = Database::getManager();
         $documentRepo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
-        //$documentRepo = $em->getRepository('ChamiloCourseBundle:CDocument');
 
         $parentNode = null;
         if (!empty($parentId)) {

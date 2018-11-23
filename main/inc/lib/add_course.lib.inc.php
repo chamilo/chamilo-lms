@@ -21,7 +21,8 @@ class AddCourse
      * @param bool      Add unique prefix
      * @param bool      Use code-independent keys
      *
-     * @return array An array with the needed keys ['currentCourseCode'], ['currentCourseId'], ['currentCourseDbName'], ['currentCourseRepository']
+     * @return array An array with the needed keys ['currentCourseCode'], ['currentCourseId'], ['currentCourseDbName'],
+     *               ['currentCourseRepository']
      *
      * @todo Eliminate the global variables.
      * @assert (null) === false
@@ -443,10 +444,9 @@ class AddCourse
         $settingsManager->setCourse($course);
 
         $alert = api_get_setting('email_alert_manager_on_new_quiz');
+        $defaultEmailExerciseAlert = 0;
         if ($alert === 'true') {
             $defaultEmailExerciseAlert = 1;
-        } else {
-            $defaultEmailExerciseAlert = 0;
         }
 
         /* course_setting table (courseinfo tool)   */
@@ -479,7 +479,7 @@ class AddCourse
 
         $counter = 1;
         foreach ($settings as $variable => $setting) {
-            $title = isset($setting['title']) ? $setting['title'] : '';
+            $title = $setting['title'] ?? '';
             Database::query(
                 "INSERT INTO $TABLESETTING (id, c_id, title, variable, value, category)
                       VALUES ($counter, $course_id, '".$title."', '".$variable."', '".$setting['default']."', '".$setting['category']."')"
@@ -525,8 +525,6 @@ class AddCourse
             $counter++;
         }
 
-        $sys_course_path = api_get_path(SYS_COURSE_PATH);
-
         /*    Documents   */
         if ($fill_with_exemplary_content) {
             $files = [
@@ -543,141 +541,49 @@ class AddCourse
                 $counter++;
             }
 
-            // FILL THE COURSE DOCUMENT WITH DEFAULT COURSE PICTURES
-            $folders_to_copy_from_default_course = [
-                'images',
-                'audio',
-                'flash',
-                'video',
-                'certificates',
-            ];
-
-            $default_course_path = api_get_path(SYS_CODE_PATH).'default_course_document/';
-
-            $default_document_array = [];
-            foreach ($folders_to_copy_from_default_course as $folder) {
-                $default_course_folder_path = $default_course_path.$folder.'/';
-                $files = self::browse_folders(
-                    $default_course_folder_path,
-                    [],
-                    $folder
-                );
-
-                $sorted_array = self::sort_pictures($files, 'dir');
-                $sorted_array = array_merge(
-                    $sorted_array,
-                    self::sort_pictures($files, 'file')
-                );
-                $default_document_array[$folder] = $sorted_array;
-            }
-
-            $example_cert_id = 0;
-            if (is_array($default_document_array) && count(
-                    $default_document_array
-                ) > 0
-            ) {
-                foreach ($default_document_array as $media_type => $array_media) {
-                    $path_documents = "/$media_type/";
-                    /*
-                    //hack until feature #5242 is implemented
-                    if ($media_type == 'images') {
-                        $media_type = 'images/gallery';
-                        $images_folder = $sys_course_path.$course_repository."/document/images/";
-
-                        if (!is_dir($images_folder)) {
-                            //Creating index.html
-                            mkdir($images_folder, $perm);
-                            $fd = fopen($images_folder.'index.html', 'w');
-                            fwrite($fd, $htmlpage);
-                            @chmod($images_folder.'index.html', $perm_file);
-                        }
-                    }*/
-
-                    $course_documents_folder = $sys_course_path.$course_repository."/document/$media_type/";
-                    $default_course_path = api_get_path(SYS_CODE_PATH).'default_course_document'.$path_documents;
-                    /*
-                    if (!is_dir($course_documents_folder)) {
-                        // Creating index.html
-                        mkdir($course_documents_folder, $perm);
-                        $fd = fopen(
-                            $course_documents_folder.'index.html',
-                            'w'
-                        );
-                        fwrite($fd, $htmlpage);
-                        @chmod(
-                            $course_documents_folder.'index.html',
-                            $perm_file
-                        );
-                    }*/
-
-                    if (is_array($array_media) && count($array_media) > 0) {
-                        foreach ($array_media as $key => $value) {
-                            if (isset($value['dir']) && !empty($value['dir'])) {
-                                if (!is_dir($course_documents_folder.$value['dir'])) {
-                                    // Inserting folder in the DB
-                                    $folder_path = substr(
-                                        $value['dir'],
-                                        0,
-                                        strlen($value['dir']) - 1
-                                    );
-                                    $temp = explode('/', $folder_path);
-                                    $title = $temp[count($temp) - 1];
-
-                                    //hack until feature #5242 is implemented
-                                    if ($title == 'gallery') {
-                                        $title = get_lang('DefaultCourseImages');
-                                    }
-
-                                    if ($media_type == 'images/gallery') {
-                                        $folder_path = 'gallery/'.$folder_path;
-                                    }
-
-                                    create_unexisting_directory(
-                                        $courseInfo,
-                                        api_get_user_id(),
-                                        0,
-                                        0,
-                                        0,
-                                        $path_documents.$folder_path,
-                                        $title,
-                                        $title
-                                    );
-                                }
-                            }
-
-                            if (isset($value['file']) && !empty($value['file'])) {
-                                if (!file_exists($default_course_path.$value['file'])) {
-                                    // Copying file
-                                    /*copy(
-                                        $default_course_path.$value['file'],
-                                        $course_documents_folder.$value['file']
-                                    );*/
-                                    $temp = explode('/', $value['file']);
-
-                                    //hack until feature #5242 is implemented
-                                    if ($media_type == 'images/gallery') {
-                                        $value["file"] = 'gallery/'.$value["file"];
-                                    }
-                                    //$default_course_path.$value['file']
-                                    DocumentManager::addDocument(
-                                        $courseInfo,
-                                        $default_course_path.$value['file'],
-                                        'file',
-                                        filesize($default_course_path.$value['file']),
-                                        $temp[count($temp) - 1],
-                                        ''
-                                    );
-
-                                    // Inserting file in the DB
-                                    /*Database::query(
-                                        "INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size)
-                                        VALUES ($course_id,'$path_documents".$value["file"]."','".$temp[count($temp) - 1]."','file','$file_size')"
-                                    );
-                                    $image_id = Database:: insert_id();*/
-                                }
-                            }
-                        }
+            $finder = new Symfony\Component\Finder\Finder();
+            $defaultPath = api_get_path(SYS_CODE_PATH).'default_course_document';
+            $finder->in($defaultPath);
+            /** @var SplFileInfo $file */
+            foreach ($finder as $file) {
+                $path = str_replace($defaultPath, '', $file->getRealPath());
+                $parentName = dirname(str_replace($defaultPath, '', $file->getRealPath()));
+                $title = $file->getFilename();
+                if ($file->isDir()) {
+                    create_unexisting_directory(
+                        $courseInfo,
+                        api_get_user_id(),
+                        0,
+                        0,
+                        0,
+                        $path,
+                        $title,
+                        $title
+                    );
+                } else {
+                    $parent = DocumentManager::getDocumentByPathInCourse($courseInfo, $parentName);
+                    $parentId = 0;
+                    if (!empty($parent)) {
+                        $parent = $parent[0];
+                        $parentId = $parent['iid'];
                     }
+
+                    DocumentManager::addDocument(
+                        $courseInfo,
+                        $file->getRealPath(),
+                        'file',
+                        $file->getSize(),
+                        $title,
+                        '',
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        false,
+                        null,
+                        $parentId
+                    );
                 }
             }
 

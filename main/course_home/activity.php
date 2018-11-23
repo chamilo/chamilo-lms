@@ -51,20 +51,7 @@ if ($session_id === 0 && api_is_course_admin() && api_is_allowed_to_edit(null, t
     $content .= '</div>
 		<div class="alert alert-success" id="id_confirmation_message" style="display:none"></div>
 	</div>';
-
     $content .= $pluginExtra;
-
-    if (api_get_setting('show_session_data') == 'true' && $session_id > 0) {
-        $content .= '
-        <div class="row">
-            <div class="col-xs-12 col-md-12">
-                <span class="viewcaption">'.get_lang('SessionData').'</span>
-                <table class="course_activity_home">'.
-                    CourseHome::show_session_data($session_id).'
-                </table>
-            </div>
-        </div>';
-    }
     $blocks = CourseHome::getCourseAdminBlocks();
 } elseif (api_is_coach()) {
     $content .= $pluginExtra;

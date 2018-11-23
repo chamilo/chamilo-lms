@@ -9,7 +9,7 @@
         {{ administrator_name }}
     {% endif %}
     <a href="{{_p.web}}" target="_blank">
-        {{ "PoweredByX" |get_lang | format(_s.software_name) }}
+        {{ "PoweredByX" |trans | format(_s.software_name) }}
     </a>&copy; {{ "now"|date("Y") }}
 </footer>
 
@@ -22,7 +22,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">{{ 'Delete' | get_lang }}</h4>
+                <h4 class="modal-title" id="myModalLabel">{{ 'Delete' | trans }}</h4>
             </div>
 
             <div class="modal-body">
@@ -30,8 +30,8 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'Cancel' | get_lang }}</button>
-                <a id="delete_item" class="btn btn-danger btn-ok">{{ 'Delete' | get_lang }}</a>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'Cancel' | trans }}</button>
+                <a id="delete_item" class="btn btn-danger btn-ok">{{ 'Delete' | trans }}</a>
             </div>
         </div>
     </div>

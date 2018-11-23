@@ -25,10 +25,10 @@
             {{ url('home') }}
 
             <a title="{{ "Inbox"|trans }}" href="{{ url('legacy_main', { 'name' : 'messages/inbox.php' }) }}">
-                <em class="fa fa-envelope" aria-hidden="true"></em> {{ "Inbox"|get_lang }}
+                <em class="fa fa-envelope" aria-hidden="true"></em> {{ "Inbox"|trans }}
             </a>
             <a title="{{ "MyCertificates"|trans }}" href="{{ url('legacy_main', { 'name' : 'gradebook/my_certificates.php' })  }}">
-                <em class="fa fa-graduation-cap" aria-hidden="true"></em> {{ "MyCertificates"|get_lang }}
+                <em class="fa fa-graduation-cap" aria-hidden="true"></em> {{ "MyCertificates"|trans }}
             </a>
             <a id="logout_button" title="{{ "Logout"|trans }}" href="{{ path('legacy_main', { 'name' : '../public/logout'}) }}" >
                 <em class="fa fa-sign-out"></em> {{ "Logout"|trans }}

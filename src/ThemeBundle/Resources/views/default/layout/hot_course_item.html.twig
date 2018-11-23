@@ -28,8 +28,8 @@
                 <div class="card-author mb-2">
                     <i class="fa fa-graduation-cap" aria-hidden="true"></i>
                     {% if item.teachers | length >= 3 %}
-                        <a id="plist-{{ loop.index }}" data-trigger="focus" tabindex="0" role="button" class="list-name" data-toggle="popover" title="{{ 'CourseTeachers' | get_lang }}" data-html="true">
-                            {{ 'CourseTeachers' | get_lang }}
+                        <a id="plist-{{ loop.index }}" data-trigger="focus" tabindex="0" role="button" class="list-name" data-toggle="popover" title="{{ 'CourseTeachers' | trans }}" data-html="true">
+                            {{ 'CourseTeachers' | trans }}
                         </a>
                         <div id="popover-content-plist-{{ loop.index }}" style="display: none;">
                             {% for teacher in item.teachers %}

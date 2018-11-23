@@ -9,7 +9,7 @@
         {% endif %}
     {% endset %}
     {% set content %}
-   {{ macro.box_header("SystemAnnouncements" | get_lang, buttons) }}
+   {{ macro.box_header("SystemAnnouncements" | trans, buttons) }}
     <div id="carousel-announcement" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
             {% for announcement in announcements %}
@@ -23,7 +23,7 @@
                     {% if announcement.readMore %}
                         <div class="block-text">
                             {{ announcement.content }}
-                            <a href="{{ _p.web }}news_list.php?id={{ announcement.id }}">{{ "More" | get_lang }}</a>
+                            <a href="{{ _p.web }}news_list.php?id={{ announcement.id }}">{{ "More" | trans }}</a>
                         </div>
                     {% else %}
                         {{ announcement.content }}

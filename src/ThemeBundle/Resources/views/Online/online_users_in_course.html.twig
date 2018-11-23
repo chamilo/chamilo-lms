@@ -8,7 +8,7 @@
                     <div class="search-user">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                {{ 'SearchUsers' | get_lang}}
+                                {{ 'SearchUsers' | trans}}
                             </div>
                             <div class="panel-body">
                                 {{ social_search }}
@@ -21,7 +21,7 @@
                         {{ whoisonline }}
                     </div>
                     <div class="col-md-12">
-                        <a class="btn btn-large btn-default" id="link_load_more_items" data_link="2" >{{ 'More' | get_lang }}</a>
+                        <a class="btn btn-large btn-default" id="link_load_more_items" data_link="2" >{{ 'More' | trans }}</a>
                     </div>
                 </div>
             </div>
@@ -32,7 +32,7 @@
                     page = $("#link_load_more_items").attr("data_link");
                     $.ajax({
                         beforeSend: function() {
-                            $("#link_load_more_items").html("{{ 'Loading' | get_lang|escape('js') }} <em class='fa fa-spinner fa-pulse fa-fw'></em>");
+                            $("#link_load_more_items").html("{{ 'Loading' | trans|escape('js') }} <em class='fa fa-spinner fa-pulse fa-fw'></em>");
                         },
                         type: "GET",
                         url: "main/inc/ajax/online.ajax.php?a=load_online_user",
@@ -41,7 +41,7 @@
                             if (data != "end") {
                                 $("#link_load_more_items").attr("data_link", parseInt(page) + 1);
                                 $("#user-list").append(data);
-                                $("#link_load_more_items").html("{{ 'More' | get_lang|escape('js')}}");
+                                $("#link_load_more_items").html("{{ 'More' | trans|escape('js')}}");
                             } else {
                                 $("#link_load_more_items").remove();
                             }

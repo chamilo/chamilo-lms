@@ -42,23 +42,22 @@
             {% include 'layout/page_header.tpl'|get_template %}
         </header>
         <!-- END HEADER -->
-
-
     {% endif %}
 
     <!-- START CONTENT -->
     <section id="cm-content">
         <div class="container">
-            {% block breadcrumb %}
-                {{ breadcrumb }}
-            {% endblock %}
+            {% if show_header == true %}
+                {% block breadcrumb %}
+                    {{ breadcrumb }}
+                {% endblock %}
 
-            {% if show_course_shortcut is not null %}
-                <!-- TOOLS SHOW COURSE -->
-                <div id="cm-tools" class="nav-tools">
-                    {{ show_course_shortcut }}
-                </div>
-                <!-- END TOOLS SHOW COURSE -->
+                {% if show_course_shortcut is not null %}
+                    <!-- TOOLS SHOW COURSE -->
+                    <div id="cm-tools" class="nav-tools">
+                        {{ show_course_shortcut }}
+                    </div>
+                    <!-- END TOOLS SHOW COURSE -->
+                {% endif %}
             {% endif %}
-
             {{ flash_messages }}

@@ -926,33 +926,6 @@ class AddCourse
             $courseManager = Container::$container->get('chamilo_core.entity.manager.course_manager');
             /** @var \Chamilo\CoreBundle\Entity\Course $course */
             $course = $courseManager->create();
-
-            // Here we must add 2 fields.
-            /*$course_id = Database::insert(
-                $TABLECOURSE,
-                [
-                    'code' => $code,
-                    'directory' => $directory,
-                    'course_language' => $course_language,
-                    'title' => $title,
-                    'description' => get_lang('CourseDescription'),
-                    'category_code' => $category_code,
-                    'visibility' => $visibility,
-                    'show_score' => 1,
-                    'disk_quota' => intval($disk_quota),
-                    'creation_date' => $time,
-                    'expiration_date' => $expiration_date,
-                    'last_edit' => $time,
-                    'last_visit' => null,
-                    'tutor_name' => $tutor_name,
-                    'department_name' => $department_name,
-                    'department_url' => $department_url,
-                    'subscribe' => intval($subscribe),
-                    'unsubscribe' => intval($unsubscribe),
-                    'visual_code' => $visual_code,
-                ]
-            );*/
-
             $urlId = 1;
             if (api_get_current_access_url_id() !== -1) {
                 $urlId = api_get_current_access_url_id();

@@ -6845,10 +6845,8 @@ class CourseManager
         $authorId = empty($authorId) ? api_get_user_id() : (int) $authorId;
 
         AddCourse::prepare_course_repository($courseInfo['directory']);
-        AddCourse::fill_db_course(
-            $courseInfo['real_id'],
-            $courseInfo['directory'],
-            $courseInfo['course_language'],
+        AddCourse::fillCourse(
+            $courseInfo,
             $params['exemplary_content'],
             $authorId
         );

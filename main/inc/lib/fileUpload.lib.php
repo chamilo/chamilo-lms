@@ -1563,7 +1563,7 @@ function create_unexisting_directory(
         $title = basename($desired_dir_name);
     }
 
-    if (!is_dir($base_work_dir.$systemFolderName)) {
+    //if (!is_dir($base_work_dir.$systemFolderName)) {
         /*$result = mkdir(
             $base_work_dir.$systemFolderName,
             api_get_permissions_for_new_directories(),
@@ -1580,12 +1580,6 @@ function create_unexisting_directory(
                             path = '".Database::escape_string($systemFolderName)."'
                         )
             ";
-
-            $groupInfo = [];
-            if (!empty($to_group_id)) {
-                $groupInfo = GroupManager::get_group_properties($to_group_id);
-            }
-
             $rs = Database::query($sql);
             if (Database::num_rows($rs) == 0) {
                 $document = DocumentManager::addDocument(
@@ -1655,7 +1649,7 @@ function create_unexisting_directory(
                 return $document;
             }
         }
-    }
+    //}
 
     return false;
 }

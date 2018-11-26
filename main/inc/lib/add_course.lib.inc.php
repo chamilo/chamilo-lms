@@ -402,9 +402,7 @@ class AddCourse
     /**
      * Fills the course database with some required content and example content.
      *
-     * @param int Course (int) ID
-     * @param string Course directory name (e.g. 'ABC')
-     * @param string Language used for content (e.g. 'spanish')
+     * @param array $courseInfo
      * @param bool Whether to fill the course with example content
      * @param int $authorId
      *
@@ -415,18 +413,16 @@ class AddCourse
      * @assert (1, 'ABC', null, null) === false
      * @assert (1, 'TEST', 'spanish', true) === true
      */
-    public static function fill_db_course(
-        $course_id,
-        $course_repository,
-        $language,
+    public static function fillCourse(
+        $courseInfo,
         $fill_with_exemplary_content = null,
         $authorId = 0
     ) {
         if (is_null($fill_with_exemplary_content)) {
             $fill_with_exemplary_content = api_get_setting('example_material_course_creation') !== 'false';
         }
-        $course_id = (int) $course_id;
-        $courseInfo = api_get_course_info_by_id($course_id);
+
+        $course_id = (int) $courseInfo['real_id'];
 
         if (empty($courseInfo)) {
             return false;
@@ -488,7 +484,6 @@ class AddCourse
         }
 
         /* Course homepage tools for platform admin only */
-
         /* Group tool */
         Database::insert(
             $TABLEGROUPCATEGORIES,
@@ -525,6 +520,8 @@ class AddCourse
             $counter++;
         }
 
+        $certificateId = 'NULL';
+
         /*    Documents   */
         if ($fill_with_exemplary_content) {
             $files = [
@@ -557,7 +554,7 @@ class AddCourse
                         0,
                         0,
                         $path,
-                        $title,
+                        $path,
                         $title
                     );
                 } else {
@@ -568,9 +565,10 @@ class AddCourse
                         $parentId = $parent['iid'];
                     }
 
-                    DocumentManager::addDocument(
+                    $realPath = str_replace($defaultPath, '', $file->getRealPath());
+                    $document = DocumentManager::addDocument(
                         $courseInfo,
-                        $file->getRealPath(),
+                        $realPath,
                         'file',
                         $file->getSize(),
                         $title,
@@ -582,8 +580,13 @@ class AddCourse
                         null,
                         false,
                         null,
-                        $parentId
+                        $parentId,
+                        $file->getRealPath()
                     );
+
+                    if ($document && $document->getTitle() === 'default.html') {
+                        $certificateId = $document->getIid();
+                    }
                 }
             }
 
@@ -749,12 +752,12 @@ class AddCourse
             // father gradebook
             Database::query(
                 "INSERT INTO $TABLEGRADEBOOK (name, locked, generate_certificates, description, user_id, c_id, parent_id, weight, visible, certif_min_score, session_id, document_id)
-                VALUES ('$course_code','0',0,'',1,$course_id,0,100,0,75,NULL,$example_cert_id)"
+                VALUES ('$course_code','0',0,'',1,$course_id,0,100,0,75,NULL,$certificateId)"
             );
             $gbid = Database:: insert_id();
             Database::query(
                 "INSERT INTO $TABLEGRADEBOOK (name, locked, generate_certificates, description, user_id, c_id, parent_id, weight, visible, certif_min_score, session_id, document_id)
-                VALUES ('$course_code','0',0,'',1,$course_id,$gbid,100,1,75,NULL,$example_cert_id)"
+                VALUES ('$course_code','0',0,'',1,$course_id,$gbid,100,1,75,NULL,$certificateId)"
             );
             $gbid = Database:: insert_id();
             Database::query(

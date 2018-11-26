@@ -76,7 +76,6 @@ if (!empty($exportReport) && !empty($format)) {
                 $userId
             );
             $filename = 'survey_results_'.$survey_id.'.csv';
-
             header('Content-type: application/octet-stream');
             header('Content-Type: application/force-download');
 

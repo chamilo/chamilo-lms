@@ -5,6 +5,7 @@ use Chamilo\CoreBundle\Repository\CourseRepository;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
+use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpCategory;
@@ -3671,7 +3672,6 @@ class learnpath
                             }
 
                             $type_quiz = false;
-
                             foreach ($list as $toc) {
                                 if ($toc['id'] == $lp_item_id && ($toc['type'] == 'quiz')) {
                                     $type_quiz = true;
@@ -3705,7 +3705,6 @@ class learnpath
                     if (strpos($document_name, '_DELETED_')) {
                         $file = 'blank.php?error=document_deleted';
                     }
-
                     break;
                 case 2:
                     if ($this->debug > 2) {
@@ -6259,10 +6258,14 @@ class learnpath
             if (file_exists($iconPath.'lp_'.$icon_name.'.png')) {
                 $icon = Display::return_icon('lp_'.$icon_name.'.png');
             } else {
-                if ($arrLP[$i]['item_type'] === TOOL_LP_FINAL_ITEM) {
-                    $icon = Display::return_icon('certificate.png');
+                if (file_exists($iconPath.'lp_'.$icon_name.'.gif')) {
+                    $icon = Display::return_icon('lp_'.$icon_name.'.gif');
                 } else {
-                    $icon = Display::return_icon('folder_document.png');
+                    if ($arrLP[$i]['item_type'] === TOOL_LP_FINAL_ITEM) {
+                        $icon = Display::return_icon('certificate.png');
+                    } else {
+                        $icon = Display::return_icon('folder_document.png');
+                    }
                 }
             }
 
@@ -10216,8 +10219,10 @@ class learnpath
     public function display_item_prerequisites_form($item_id = 0)
     {
         $course_id = api_get_course_int_id();
+        $item_id = (int) $item_id;
+
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        $item_id = intval($item_id);
+
         /* Current prerequisite */
         $sql = "SELECT * FROM $tbl_lp_item
                 WHERE iid = $item_id";
@@ -12513,7 +12518,7 @@ EOD;
             $link = 'lp/lp_controller.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId.'&gidReq=0&gradebook=0&origin=&action=view_category&id='.$id;
             // Delete tools
             $sql = "DELETE FROM $tbl_tool
-                    WHERE c_id = ".$courseId." AND (link LIKE '$link%' AND image LIKE 'lp_category.%')";
+                    WHERE c_id = ".$courseId." AND (link LIKE '$link%' AND image='lp_category.gif')";
             Database::query($sql);
         }
     }

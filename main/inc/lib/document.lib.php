@@ -4628,7 +4628,7 @@ class DocumentManager
             return false;
         }
 
-        $sessionId = intval($sessionId);
+        $sessionId = (int) $sessionId;
         $folderWithSuffix = self::fixDocumentName(
             $folder,
             'folder',
@@ -4647,7 +4647,7 @@ class DocumentManager
                     filetype = 'folder' AND
                     c_id = $courseId AND
                     (path = '$folder' OR path = '$folderWithSuffix') AND
-                    (session_id = 0 OR session_id = $sessionId)
+                    (session_id = 0 OR session_id IS NULL OR session_id = $sessionId)
         ";
 
         $rs = Database::query($sql);
@@ -6398,13 +6398,14 @@ class DocumentManager
      * @param string $title
      * @param string $comment
      * @param int    $readonly
-     * @param int    $visibility       see ResourceLink constants
-     * @param int    $group_id         group.id
-     * @param int    $sessionId        Session ID, if any
-     * @param int    $userId           creator user id
+     * @param int    $visibility see ResourceLink constants
+     * @param int    $groupId    group.id
+     * @param int    $sessionId  Session ID, if any
+     * @param int    $userId     creator user id
      * @param bool   $sendNotification
      * @param string $content
      * @param int    $parentId
+     * @param string $realPath
      *
      * @return CDocument|false
      */
@@ -6417,15 +6418,15 @@ class DocumentManager
         $comment = null,
         $readonly = 0,
         $visibility = null,
-        $group_id = 0,
+        $groupId = 0,
         $sessionId = 0,
         $userId = 0,
         $sendNotification = true,
         $content = '',
-        $parentId = 0
+        $parentId = 0,
+        $realPath = ''
     ) {
         $userId = empty($userId) ? api_get_user_id() : $userId;
-
         if (empty($userId)) {
             return false;
         }
@@ -6436,17 +6437,17 @@ class DocumentManager
         }
 
         $courseEntity = api_get_course_entity($courseInfo['real_id']);
-
         if (empty($courseEntity)) {
             return false;
         }
 
         $sessionId = empty($sessionId) ? api_get_session_id() : $sessionId;
         $session = api_get_session_entity($sessionId);
-        $group = api_get_group_entity($group_id);
+        $group = api_get_group_entity($groupId);
         $readonly = (int) $readonly;
 
         $em = Database::getManager();
+
         $documentRepo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
 
         $parentNode = null;
@@ -6501,14 +6502,14 @@ class DocumentManager
                 $media->setSize($file->getSize());
             } else {
                 // $path points to a file in the directory
-                if (file_exists($path) && !is_dir($path)) {
-                    $file = $path;
-                    $media->setSize(filesize($file));
+                if (file_exists($realPath) && !is_dir($realPath)) {
+                    $media->setSize(filesize($realPath));
                     if ($isImage) {
-                        $size = getimagesize($file);
+                        $size = getimagesize($realPath);
                         $media->setWidth($size[0]);
                         $media->setHeight($size[1]);
                     }
+                    $file = $realPath;
                 } else {
                     // We get the content and create a file
                     $handle = tmpfile();
@@ -6583,7 +6584,7 @@ class DocumentManager
                 api_set_default_visibility(
                     $documentId,
                     TOOL_DOCUMENT,
-                    $group_id,
+                    $groupId,
                     $courseInfo,
                     $sessionId,
                     $userId

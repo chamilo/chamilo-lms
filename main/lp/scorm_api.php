@@ -1692,6 +1692,8 @@ function switch_item(current_item, next_item) {
             if ($("#lp_media_file").length != 0) {
                 $("#lp_media_file").html(tmp_data);
             }
+
+            LPViewUtils.setHeightLPToc();
         }
     });
 

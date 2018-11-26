@@ -259,7 +259,6 @@ class CustomCertificatePlugin extends Plugin
 
         if (api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') === 'true') {
             $infoCertificate = self::getCertificateData($certId, $userId);
-            var_dump($infoCertificate);
             if (!empty($infoCertificate)) {
                 if ($certificate->user_id == api_get_user_id() && !empty($certificate->certificate_data)) {
                     $certificateId = $certificate->certificate_data['id'];

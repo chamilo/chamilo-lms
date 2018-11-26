@@ -432,7 +432,10 @@ if ($exerciseId > 0) {
     $from = '';
     if (isset($courseCategoryId) && $courseCategoryId > 0) {
         $from = ", $TBL_COURSE_REL_CATEGORY crc ";
-        $where .= " AND crc.c_id=$selected_course AND crc.question_id=qu.id AND crc.category_id=$courseCategoryId";
+        $where .= " AND 
+                crc.c_id = $selected_course AND 
+                crc.question_id = qu.id AND 
+                crc.category_id = $courseCategoryId";
     }
     if (isset($exerciseLevel) && $exerciseLevel != -1) {
         $where .= ' AND level='.$exerciseLevel;
@@ -466,7 +469,8 @@ if ($exerciseId > 0) {
     $level_where = '';
     $from = '';
     if (isset($courseCategoryId) && $courseCategoryId > 0) {
-        $from = " INNER JOIN  $TBL_COURSE_REL_CATEGORY crc ON crc.question_id=q.id AND crc.c_id= q.c_id ";
+        $from = " INNER JOIN $TBL_COURSE_REL_CATEGORY crc 
+                  ON crc.question_id = q.id AND crc.c_id = q.c_id ";
         $level_where .= " AND
                 crc.c_id = $selected_course AND
                 crc.category_id = $courseCategoryId";
@@ -490,7 +494,8 @@ if ($exerciseId > 0) {
                 WHERE
                     ex.c_id = '$selected_course' AND
                     ex.active = '-1'
-                    $level_where $answer_where
+                    $level_where 
+                    $answer_where
              )
              UNION
              (
@@ -501,7 +506,8 @@ if ($exerciseId > 0) {
                 WHERE
                     q.c_id = '$selected_course' AND
                     r.question_id is null
-                    $level_where $answer_where
+                    $level_where 
+                    $answer_where
              )
              UNION
              (
@@ -512,7 +518,8 @@ if ($exerciseId > 0) {
                 WHERE
                     r.c_id = '$selected_course' AND
                     (r.exercice_id = '-1' OR r.exercice_id = '0')
-                    $level_where $answer_where
+                    $level_where 
+                    $answer_where
              )";
     $result = Database::query($sql);
     while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -667,14 +674,14 @@ if ($fromExercise <= 0) {
     // NOT IN A TEST - IN THE COURSE
     if ($selected_course == api_get_course_int_id()) {
         $actionLabel = get_lang('Modify');
-        $actionIcon1 = "edit";
-        $actionIcon2 = "delete";
+        $actionIcon1 = 'edit';
+        $actionIcon2 = 'delete';
         // We are in the course, question title can be a link to the question edit page
         $questionTagA = 1;
     } else { // NOT IN A TEST - NOT IN THE COURSE
         $actionLabel = get_lang('Reuse');
         $actionIcon1 = get_lang('MustBeInATest');
-        $actionIcon2 = "";
+        $actionIcon2 = '';
         // We are not in this course, to messy if we link to the question in another course
         $questionTagA = 0;
     }
@@ -682,51 +689,52 @@ if ($fromExercise <= 0) {
     // IN A TEST - IN THE COURSE
     if ($selected_course == api_get_course_int_id()) {
         $actionLabel = get_lang('Reuse');
-        $actionIcon1 = "add";
-        $actionIcon2 = "";
+        $actionIcon1 = 'add';
+        $actionIcon2 = '';
         $questionTagA = 1;
     } else {
         // IN A TEST - NOT IN THE COURSE
         $actionLabel = get_lang('Reuse');
-        $actionIcon1 = "clone";
-        $actionIcon2 = "";
+        $actionIcon1 = 'clone';
+        $actionIcon2 = '';
         $questionTagA = 0;
     }
 }
+
 // Display table
 $header = [
     [
         get_lang('QuestionUpperCaseFirstLetter'),
         false,
-        ["style" => "text-align:center"],
+        ['style' => 'text-align:center'],
         '',
     ],
     [
         get_lang('Type'),
         false,
-        ["style" => "text-align:center"],
-        ["style" => "text-align:center"],
+        ['style' => 'text-align:center'],
+        ['style' => 'text-align:center'],
         '',
     ],
     [
         get_lang('QuestionCategory'),
         false,
-        ["style" => "text-align:center"],
-        ["style" => "text-align:center"],
+        ['style' => 'text-align:center'],
+        ['style' => 'text-align:center'],
         '',
     ],
     [
         get_lang('Difficulty'),
         false,
-        ["style" => "text-align:center"],
-        ["style" => "text-align:center"],
+        ['style' => 'text-align:center'],
+        ['style' => 'text-align:center'],
         '',
     ],
     [
         $actionLabel,
         false,
-        ["style" => "text-align:center"],
-        ["style" => "text-align:center"],
+        ['style' => 'text-align:center'],
+        ['style' => 'text-align:center'],
         '',
     ],
 ];
@@ -735,20 +743,9 @@ $data = [];
 
 if (is_array($mainQuestionList)) {
     foreach ($mainQuestionList as $question) {
-        /*if ($hideDoubles) {
-            if (in_array($question['question'], $questionAdded)) {
-                continue;
-            }
-        }
-        $questionAdded[$question['question']] = $question;*/
-
         $row = [];
 
-        // This function checks if the question can be read
-        $question_type = get_question_type_for_question(
-            $selected_course,
-            $question['id']
-        );
+        $question_type = get_question_type_for_question($selected_course, $question['id']);
 
         if (empty($question_type)) {
             continue;
@@ -779,7 +776,7 @@ if (is_array($mainQuestionList)) {
             $answerType,
             $session_id,
             $exerciseId
-        )."&nbsp;".
+        ).'&nbsp;'.
         get_action_icon_for_question(
             $actionIcon2,
             $fromExercise,
@@ -900,7 +897,6 @@ function get_action_icon_for_question(
     $in_session_id,
     $in_exercise_id
 ) {
-    $res = "";
     $getParams = "&selected_course=$in_selected_course&courseCategoryId=$in_courseCategoryId&exerciseId=$in_exercise_id&exerciseLevel=$in_exerciseLevel&answerType=$in_answerType&session_id=$in_session_id";
     switch ($in_action) {
         case 'delete':
@@ -931,7 +927,8 @@ function get_action_icon_for_question(
             unset($myObjEx);
             break;
         case 'clone':
-            $url = api_get_self()."?".api_get_cidreq().$getParams."&question_copy=$in_questionid&course_id=$in_selected_course&fromExercise=$from_exercise";
+            $url = api_get_self()."?".api_get_cidreq().$getParams.
+                "&question_copy=$in_questionid&course_id=$in_selected_course&fromExercise=$from_exercise";
             $res = Display::url(
                 Display::return_icon('cd.png', get_lang('ReUseACopyInCurrentTest')),
                 $url
@@ -968,9 +965,9 @@ function get_question_type_for_question($in_selectedcourse, $in_questionid)
  *
  * @author hubert.borderiou 13-10-2011
  */
-function get_question_categorie_for_question($in_courseid, $in_questionid)
+function get_question_categorie_for_question($courseId, $questionId)
 {
-    $cat = TestCategory::getCategoryNameForQuestion($in_questionid, $in_courseid);
+    $cat = TestCategory::getCategoryNameForQuestion($questionId, $courseId);
 
     return $cat;
 }

@@ -107,7 +107,6 @@ class SurveyUtil
         if (empty($question_id)) {
             return false;
         }
-
         // Table definition
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
 
@@ -1554,8 +1553,12 @@ class SurveyUtil
                     count(options.question_option_id) as number_of_options
 				FROM $table_survey_question questions
 				LEFT JOIN $table_survey_question_option options
-                ON questions.question_id = options.question_id AND options.c_id = questions.c_id
+                ON 
+                  questions.question_id = options.question_id AND 
+                  options.c_id = questions.c_id
 				WHERE
+				    survey_question NOT LIKE '%{{%' AND
+				    questions.type <> 'pagebreak' AND
 				    questions.survey_id = $surveyId AND
 				    questions.c_id = $course_id
 				GROUP BY questions.question_id
@@ -1620,6 +1623,8 @@ class SurveyUtil
 				    survey_question.question_id = survey_question_option.question_id AND 
 				    survey_question_option.c_id = survey_question.c_id
 				WHERE 
+				    survey_question NOT LIKE '%{{%' AND
+				    survey_question.type <> 'pagebreak' AND
 				    survey_question.survey_id = $surveyId AND
 				    survey_question.c_id = $course_id
 				ORDER BY survey_question.sort ASC, survey_question_option.sort ASC";

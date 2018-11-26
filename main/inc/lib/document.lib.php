@@ -6509,6 +6509,7 @@ class DocumentManager
                         $media->setWidth($size[0]);
                         $media->setHeight($size[1]);
                     }
+                    $document->setPath();
                 } else {
                     // We get the content and create a file
                     $handle = tmpfile();

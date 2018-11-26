@@ -34,8 +34,6 @@
  */
 class HTML_QuickForm_submit extends HTML_QuickForm_input
 {
-    // {{{ constructor
-
     /**
      * Class constructor
      *
@@ -53,9 +51,6 @@ class HTML_QuickForm_submit extends HTML_QuickForm_input
         $this->setType('submit');
     } //end constructor
 
-    // }}}
-    // {{{ freeze()
-
     /**
      * Freeze the element so that only its value is returned
      *
@@ -67,9 +62,6 @@ class HTML_QuickForm_submit extends HTML_QuickForm_input
         return false;
     } //end func freeze
 
-    // }}}
-    // {{{ exportValue()
-
    /**
     * Only return the value if it is found within $submitValues (i.e. if
     * this particular submit button was clicked)
@@ -78,4 +70,5 @@ class HTML_QuickForm_submit extends HTML_QuickForm_input
     {
         return $this->_prepareValue($this->_findValue($submitValues), $assoc);
     }
+
 }

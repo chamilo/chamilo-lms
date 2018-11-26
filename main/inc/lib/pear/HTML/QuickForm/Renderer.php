@@ -155,4 +155,3 @@ class HTML_QuickForm_Renderer
         return;
     } // end func finishGroup
 } // end class HTML_QuickForm_Renderer
-?>

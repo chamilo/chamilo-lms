@@ -117,9 +117,9 @@ class Attendance
         $course_id = api_get_course_int_id();
         $session_id = api_get_session_id();
         $condition_session = api_get_session_condition($session_id);
-        $column = intval($column);
-        $from = intval($from);
-        $number_of_items = intval($number_of_items);
+        $column = (int) $column;
+        $from = (int) $from;
+        $number_of_items = (int) $number_of_items;
 
         if (!in_array($direction, ['ASC', 'DESC'])) {
             $direction = 'ASC';
@@ -163,6 +163,7 @@ class Attendance
             if (api_get_session_id() == $attendance[6]) {
                 $session_star = api_get_session_image(api_get_session_id(), $user_info['status']);
             }
+
             if ($attendance[5] == 1) {
                 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
                     api_get_user_id(),

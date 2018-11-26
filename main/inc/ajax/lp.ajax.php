@@ -26,20 +26,22 @@ switch ($action) {
         if (empty($folderId)) {
             exit;
         }
-        $lpId = isset($_GET['lp_id']) ? $_GET['lp_id'] : null;
-        $url = isset($_GET['url']) ? $_GET['url'] : null;
+        $lpId = isset($_GET['lp_id']) ? $_GET['lp_id'] : false;
+        $url = isset($_GET['url']) ? $_GET['url'] : '';
+        $addMove = isset($_GET['add_move_button']) && $_GET['add_move_button'] == 1 ? true : false;
 
         echo DocumentManager::get_document_preview(
             $courseInfo,
             $lpId,
             null,
             api_get_session_id(),
-            true,
+            $addMove,
             null,
             $url,
             true,
             false,
-            $folderId
+            $folderId,
+            false
         );
         break;
     case 'add_lp_item':

@@ -2337,10 +2337,9 @@ class Agenda
         $action = isset($params['action']) ? Security::remove_XSS($params['action']) : null;
         $id = isset($params['id']) ? (int) $params['id'] : 0;
 
+        $url = api_get_self().'?action='.$action.'&id='.$id.'&type='.$this->type;
         if ($this->type == 'course') {
             $url = api_get_self().'?'.api_get_cidreq().'&action='.$action.'&id='.$id.'&type='.$this->type;
-        } else {
-            $url = api_get_self().'?action='.$action.'&id='.$id.'&type='.$this->type;
         }
 
         $form = new FormValidator(

@@ -429,6 +429,8 @@ function write_system_config_file($path)
                 Your problems can be related on two possible causes:<br />
                 <ul>
                   <li>Permission problems.<br />Try initially with <em>chmod -R 777</em> and increase restrictions gradually.</li>
+                  <li>PHP is running in <a href="http://www.php.net/manual/en/features.safe-mode.php" target="_blank">Safe-Mode</a>. 
+                  If possible, try to switch it off.</li>
                 </ul>
                 <a href="http://forum.chamilo.org/" target="_blank">Read about this problem in Support Forum</a><br /><br />
                 Please go back to step 5.
@@ -577,6 +579,8 @@ function get_config_param($param, $updatePath = '')
  */
 function get_config_param_from_db($param = '')
 {
+    $param = Database::escape_string($param);
+
     if (($res = Database::query("SELECT * FROM settings_current WHERE variable = '$param'")) !== false) {
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res);
@@ -1960,12 +1964,17 @@ function updateDirAndFilesPermissions()
     $permissions_for_new_directories = isset($_SESSION['permissions_for_new_directories']) ? $_SESSION['permissions_for_new_directories'] : 0770;
     $permissions_for_new_files = isset($_SESSION['permissions_for_new_files']) ? $_SESSION['permissions_for_new_files'] : 0660;
     // use decoct() to store as string
-    $sql = "UPDATE $table SET selected_value = '0".decoct($permissions_for_new_directories)."'
-              WHERE variable  = 'permissions_for_new_directories'";
-    Database::query($sql);
+    Database::update(
+        $table,
+        ['selected_value' => '0'.decoct($permissions_for_new_directories)],
+        ['variable = ?' => 'permissions_for_new_directories']
+    );
 
-    $sql = "UPDATE $table SET selected_value = '0".decoct($permissions_for_new_files)."' WHERE variable  = 'permissions_for_new_files'";
-    Database::query($sql);
+    Database::update(
+        $table,
+        ['selected_value' => '0'.decoct($permissions_for_new_files)],
+        ['variable = ?' => 'permissions_for_new_files']
+    );
 
     if (isset($_SESSION['permissions_for_new_directories'])) {
         unset($_SESSION['permissions_for_new_directories']);
@@ -2324,9 +2333,8 @@ function fixIds(EntityManager $em)
 
     // Delete group data of groups that don't exist.
     $sql = "DELETE FROM c_item_property
-            WHERE to_group_id IS NOT NULL AND to_group_id NOT IN (SELECT DISTINCT id FROM c_group_info)";
+            WHERE to_group_id <> 0 AND to_group_id IS NOT NULL AND to_group_id NOT IN (SELECT DISTINCT iid FROM c_group_info)";
     $connection->executeQuery($sql);
-
     // This updates the group_id with c_group_info.iid instead of c_group_info.id
 
     if ($debug) {
@@ -2399,7 +2407,8 @@ function fixIds(EntityManager $em)
             $ref = $item['ref'];
 
             // Fix group id
-            if (!empty($groupId)) {
+            // Commented group id is already fixed in Version20150603181728.php
+            /*if (!empty($groupId)) {
                 $sql = "SELECT * FROM c_group_info
                         WHERE c_id = $courseId AND id = $groupId";
                 $data = $connection->fetchAssoc($sql);
@@ -2413,7 +2422,7 @@ function fixIds(EntityManager $em)
                     $sql = "DELETE FROM c_item_property WHERE iid = $iid";
                     $connection->executeQuery($sql);
                 }
-            }
+            }*/
 
             $sql = '';
             $newId = '';
@@ -3259,9 +3268,7 @@ function finishInstallationWithContainer(
 
     $manager = Database::getManager();
     $connection = $manager->getConnection();
-
     $sql = getVersionTable();
-
     // Add version table
     $connection->executeQuery($sql);
 
@@ -3412,8 +3419,11 @@ function finishInstallationWithContainer(
     );
 
     // Set default language
-    $sql = "UPDATE language SET available = 1 WHERE dokeos_folder = '$languageForm'";
-    Database::query($sql);
+    Database::update(
+        Database::get_main_table(TABLE_MAIN_LANGUAGE),
+        ['available' => 1],
+        ['dokeos_folder = ?' => $languageForm]
+    );
 
     // Install settings
     installSettings(
@@ -3502,14 +3512,21 @@ function installProfileSettings($installationProfile = '')
     if (!empty($params->parent)) {
         installProfileSettings($params->parent);
     }
+
+    $tblSettings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+
     foreach ($settings as $id => $param) {
-        $sql = "UPDATE settings_current
-                SET selected_value = '".$param->selected_value."'
-                WHERE variable = '".$param->variable."'";
+        $conditions = ['variable = ? ' => $param->variable];
+
         if (!empty($param->subkey)) {
-            $sql .= " AND subkey='".$param->subkey."'";
+            $conditions['AND subkey = ? '] = $param->subkey;
         }
-        Database::query($sql);
+
+        Database::update(
+            $tblSettings,
+            ['selected_value' => $param->selected_value],
+            $conditions
+        );
     }
 
     return true;
@@ -3538,6 +3555,16 @@ function rrmdir($dir)
     }
 }
 
+/**
+ * @param        $id
+ * @param string $type
+ * @param bool   $preview
+ * @param bool   $anonymous
+ *
+ * @throws \Doctrine\DBAL\DBALException
+ *
+ * @return array
+ */
 function get_group_picture_path_by_id($id, $type = 'web', $preview = false, $anonymous = false)
 {
     switch ($type) {
@@ -3595,6 +3622,8 @@ function get_group_picture_path_by_id($id, $type = 'web', $preview = false, $ano
  * @param string        $fromVersion
  * @param EntityManager $manager
  * @param bool          $processFiles
+ *
+ * @throws \Doctrine\DBAL\DBALException
  *
  * @return bool Always returns true except if the process is broken
  */
@@ -3669,7 +3698,6 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
         case '1.10.4':
         case '1.10.6':
         case '1.10.8':
-        case '1.10.8':
             $database = new Database();
             $database->setManager($manager);
             // Migrate using the migration files located in:
@@ -3735,6 +3763,8 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
 
 /**
  * @param \Doctrine\DBAL\Connection $connection
+ *
+ * @throws \Doctrine\DBAL\DBALException
  */
 function fixPostGroupIds($connection)
 {
@@ -3790,26 +3820,36 @@ function fixPostGroupIds($connection)
         $courseId = $row['c_id'];
         $sessionId = $row['session_id'];
         $workId = $row['id'];
-        $itemInfo = api_get_item_property_info(
-            $courseId,
-            'work',
-            $workId,
-            $sessionId
-        );
-        $courseInfo = api_get_course_info_by_id($courseId);
+        $sessionCondition = " session_id = $sessionId";
+        if (empty($sessionId)) {
+            $sessionCondition = ' (session_id = 0 OR session_id IS NULL) ';
+        }
+        $sql = "SELECT * FROM c_item_property
+                WHERE
+                    c_id = $courseId AND
+                    tool = 'work' AND
+                    ref = $workId AND
+                    $sessionCondition ";
+        $itemInfo = $connection->fetchAssoc($sql);
         if (empty($itemInfo)) {
-            api_item_property_update(
-                $courseInfo,
-                'work',
-                $workId,
-                'visible',
-                1,
-                $groupId,
-                null,
-                null,
-                null,
-                $sessionId
-            );
+            $params = [
+                'c_id' => $courseId,
+                'to_group_id' => $groupId,
+                //'to_user_id' => null,
+                'insert_user_id' => 1,
+                'session_id' => $sessionId,
+                'tool' => 'work',
+                'insert_date' => api_get_utc_datetime(),
+                'lastedit_date' => api_get_utc_datetime(),
+                'ref' => $workId,
+                'lastedit_type' => 'visible',
+                'lastedit_user_id' => 1,
+                'visibility' => 1,
+            ];
+            $connection->insert('c_item_property', $params);
+            $id = $connection->lastInsertId();
+            $sql = "UPDATE c_item_property SET id = iid WHERE iid = $id";
+            $connection->executeQuery($sql);
         }
     }
     error_log('End - Fix work documents');

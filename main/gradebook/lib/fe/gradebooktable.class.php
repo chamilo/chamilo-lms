@@ -739,6 +739,7 @@ class GradebookTable extends SortableTable
                             $totalRanking,
                             SCORE_DIV,
                             SCORE_BOTH,
+                            true,
                             true
                         );
 

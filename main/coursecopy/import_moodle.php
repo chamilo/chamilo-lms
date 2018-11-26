@@ -35,21 +35,18 @@ $form->addButtonImport(get_lang('Import'));
 
 if ($form->validate()) {
     $file = $_FILES['moodle_file'];
+
     $moodleImport = new MoodleImport();
-    $responseImport = $moodleImport->import($file);
 
-    Display::cleanFlashMessages();
+    try {
+        $responseImport = $moodleImport->import($file);
 
-    if ($responseImport) {
         Display::addFlash(
-            Display::return_message(
-                get_lang('MoodleFileImportedSuccessfully'),
-                'success'
-            )
+            Display::return_message(get_lang('MoodleFileImportedSuccessfully'), 'success')
         );
-    } else {
+    } catch (Exception $exception) {
         Display::addFlash(
-            Display::return_message(get_lang('ErrorImportingFile'), 'error')
+            Display::return_message($exception->getMessage(), 'error')
         );
     }
 }

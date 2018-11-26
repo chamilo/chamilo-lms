@@ -152,21 +152,21 @@ if ($action == 'thematic_list') {
                         ICON_SIZE_TINY
                     ),
                     'index.php?'.api_get_cidreq().'&action=thematic_copy&thematic_id='.$my_thematic_id.$params.$url_token,
-                    ['class' => 'btn btn-outline-secondary']
+                    ['class' => 'btn btn-default']
                 );
                 if (api_get_session_id() == 0) {
                     if ($thematic['display_order'] > 1) {
-                        $toolbarThematic .= ' <a class="btn btn-outline-secondary" href="'.api_get_self().'?action=moveup&'.api_get_cidreq().'&thematic_id='.$my_thematic_id.$params.$url_token.'">'.
+                        $toolbarThematic .= ' <a class="btn btn-default" href="'.api_get_self().'?action=moveup&'.api_get_cidreq().'&thematic_id='.$my_thematic_id.$params.$url_token.'">'.
                             Display::return_icon('up.png', get_lang('Up'), '', ICON_SIZE_TINY).'</a>';
                     } else {
-                        $toolbarThematic .= '<div class="btn btn-outline-secondary">'.
+                        $toolbarThematic .= '<div class="btn btn-default">'.
                             Display::return_icon('up_na.png', '&nbsp;', '', ICON_SIZE_TINY).'</div>';
                     }
                     if (isset($thematic['max_thematic_item']) && $thematic['display_order'] < $thematic['max_thematic_item']) {
-                        $toolbarThematic .= ' <a class="btn btn-outline-secondary" href="'.api_get_self().'?action=movedown&a'.api_get_cidreq().'&thematic_id='.$my_thematic_id.$params.$url_token.'">'.
+                        $toolbarThematic .= ' <a class="btn btn-default" href="'.api_get_self().'?action=movedown&a'.api_get_cidreq().'&thematic_id='.$my_thematic_id.$params.$url_token.'">'.
                             Display::return_icon('down.png', get_lang('Down'), '', ICON_SIZE_TINY).'</a>';
                     } else {
-                        $toolbarThematic .= '<div class="btn btn-outline-secondary">'.
+                        $toolbarThematic .= '<div class="btn btn-default">'.
                             Display::return_icon('down_na.png', '&nbsp;', '', ICON_SIZE_TINY).'</div>';
                     }
                 }
@@ -177,7 +177,7 @@ if ($action == 'thematic_list') {
                             'action' => 'export_single_thematic',
                             'thematic_id' => $my_thematic_id,
                         ]),
-                        ['class' => 'btn btn-outline-secondary']
+                        ['class' => 'btn btn-default']
                     );
                     $toolbarThematic .= Display::url(
                         Display::return_icon(
@@ -189,12 +189,12 @@ if ($action == 'thematic_list') {
                         api_get_self().'?'.api_get_cidreq().$url_token.'&'.http_build_query(
                             ['action' => 'export_single_documents', 'thematic_id' => $my_thematic_id]
                         ),
-                        ['class' => 'btn btn-outline-secondary']
+                        ['class' => 'btn btn-default']
                     );
-                    $toolbarThematic .= '<a class="btn btn-outline-secondary" href="index.php?'.api_get_cidreq().'&action=thematic_edit&thematic_id='
+                    $toolbarThematic .= '<a class="btn btn-default" href="index.php?'.api_get_cidreq().'&action=thematic_edit&thematic_id='
                         .$my_thematic_id.$params.$url_token.'">'
                         .Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_TINY).'</a>';
-                    $toolbarThematic .= '<a class="btn btn-outline-secondary" onclick="javascript:if(!confirm(\''
+                    $toolbarThematic .= '<a class="btn btn-default" onclick="javascript:if(!confirm(\''
                         .get_lang('AreYouSureToDelete')
                         .'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_delete&thematic_id='
                         .$my_thematic_id.$params.$url_token.'">'

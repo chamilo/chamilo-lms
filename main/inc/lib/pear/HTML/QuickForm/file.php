@@ -268,8 +268,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                 $image = $(\'#'.$id.'_preview_image\'),
                 $input = $(\'[name="'.$id.'_crop_result"]\'),
                 $cropButton = $(\'#'.$id.'_crop_button\'),
-                $formGroup = $(\'#'.$id.'-form-group\');
-                
+                $formGroup = $(\'#'.$id.'-form-group\');                
 
             function isValidType(file) {
                 var fileTypes = [\'image/jpg\', \'image/jpeg\', \'image/gif\', \'image/png\'];

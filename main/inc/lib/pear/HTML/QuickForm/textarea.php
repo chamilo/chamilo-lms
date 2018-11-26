@@ -40,7 +40,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
      * @since     1.0
      * @access    private
      */
-    public $_value = null;
+    public $_value;
 
     /**
      * Class constructor
@@ -62,6 +62,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
         parent::__construct($elementName, $elementLabel, $attributes);
         $this->_persistantFreeze = true;
         $this->_type = 'textarea';
+        $this->_value = null;
     }
 
     /**
@@ -77,9 +78,6 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
         $this->updateAttributes(array('name'=>$name));
     } //end func setName
 
-    // }}}
-    // {{{ getName()
-
     /**
      * Returns the element name
      *
@@ -91,9 +89,6 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
     {
         return $this->getAttribute('name');
     } //end func getName
-
-    // }}}
-    // {{{ setValue()
 
     /**
      * Sets value for textarea element
@@ -108,9 +103,6 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
         $this->_value = $value;
     } //end func setValue
 
-    // }}}
-    // {{{ getValue()
-
     /**
      * Returns the value of the form element
      *
@@ -122,9 +114,6 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
     {
         return $this->_value;
     } // end func getValue
-
-    // }}}
-    // {{{ setWrap()
 
     /**
      * Sets wrap type for textarea element
@@ -139,9 +128,6 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
         $this->updateAttributes(array('wrap' => $wrap));
     } //end func setWrap
 
-    // }}}
-    // {{{ setRows()
-
     /**
      * Sets height in rows for textarea element
      *
@@ -155,9 +141,6 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
         $this->updateAttributes(array('rows' => $rows));
     } //end func setRows
 
-    // }}}
-    // {{{ setCols()
-
     /**
      * Sets width in cols for textarea element
      *
@@ -170,9 +153,6 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
     {
         $this->updateAttributes(array('cols' => $cols));
     } //end func setCols
-
-    // }}}
-    // {{{ toHtml()
 
     /**
      * Returns the textarea element in HTML
@@ -206,10 +186,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
      */
     public function getFrozenHtml()
     {
-        // Modified by Ivan Tcholakov, 16-MAR-2010.
-        //$value = htmlspecialchars($this->getValue());
-        $value = @htmlspecialchars($this->getValue(), ENT_COMPAT, HTML_Common::charset());
-        //
+        $value = $this->getCleanValue();
         if ($this->getAttribute('wrap') == 'off') {
             $html = $this->_getTabs() . '<pre>' . $value."</pre>\n";
         } else {

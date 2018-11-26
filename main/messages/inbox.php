@@ -26,7 +26,6 @@ if (isset($_GET['messages_page_nr'])) {
 
 $nameTools = get_lang('Messages');
 $show_message = null;
-
 if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
     $info_reply = [];
     $info_delete = [];

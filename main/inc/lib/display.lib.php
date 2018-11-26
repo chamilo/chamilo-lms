@@ -2723,13 +2723,14 @@ HTML;
         );
     }
 
-    public static function dropdownMenu($items=[]){
-        $html = null;
+    public static function dropdownMenu($items=[], array $attr=[]){
+        $links = null;
+        $url = null;
         foreach ($items as $row){
-            $icon = self::tag('img',$row['icon']);
-            $link = self::url($icon . $row['item'], $row['url']);
-            $html.= self::tag('li',$link);
+            $url = self::url($row['icon'] . $row['item'], $row['url'], ['class'=>'dropdown-item']);
+            $links .= self::tag('li',$url);
         }
+        $html = self::tag('ul',$links, $attr);
         return  $html;
     }
 }

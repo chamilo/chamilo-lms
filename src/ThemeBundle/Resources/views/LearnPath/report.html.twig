@@ -2,17 +2,17 @@
     <table class="table table-hover table-striped table-bordered">
         <thead>
         <tr>
-            <th>{{ 'FirstName'|get_lang }}</th>
-            <th>{{ 'LastName'|get_lang }}</th>
+            <th>{{ 'FirstName'|trans }}</th>
+            <th>{{ 'LastName'|trans }}</th>
             {% if show_email %}
-                <th>{{ 'Email'|get_lang }}</th>
+                <th>{{ 'Email'|trans }}</th>
             {% endif %}
-            <th class="text-center">{{ 'ScormTime'|get_lang }}</th>
-            <th class="text-right">{{ 'Progress'|get_lang }}</th>
-            <th class="text-right">{{ 'ScormScore'|get_lang }}</th>
-            <th class="text-center">{{ 'LastConnection'|get_lang }}</th>
+            <th class="text-center">{{ 'ScormTime'|trans }}</th>
+            <th class="text-right">{{ 'Progress'|trans }}</th>
+            <th class="text-right">{{ 'ScormScore'|trans }}</th>
+            <th class="text-center">{{ 'LastConnection'|trans }}</th>
             {% if not export %}
-                <th>{{ 'Actions'|get_lang }}</th>
+                <th>{{ 'Actions'|trans }}</th>
             {% endif %}
         </tr>
         </thead>
@@ -30,7 +30,7 @@
                 <td class="text-center">{{ user.lp_last_connection }}</td>
                 {% if not export %}
                     <td>
-                        <button class="btn btn-primary btn-sm" data-id="{{ user.id }}">{{ 'Details'|get_lang }}</button>
+                        <button class="btn btn-primary btn-sm" data-id="{{ user.id }}">{{ 'Details'|trans }}</button>
                     </td>
                 {% endif %}
             </tr>

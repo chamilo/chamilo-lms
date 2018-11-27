@@ -2495,8 +2495,18 @@ class learnpathItem
                                                         LIMIT 0, 1';
                                                 $rs_quiz = Database::query($sql);
                                                 if ($quiz = Database::fetch_array($rs_quiz)) {
-                                                    $minScore = $items[$refs_list[$this->get_id()]]->getPrerequisiteMinScore();
-                                                    $maxScore = $items[$refs_list[$this->get_id()]]->getPrerequisiteMaxScore();
+                                                    /** @var learnpathItem $myItemToCheck */
+                                                    $myItemToCheck = $items[$refs_list[$this->get_id()]];
+                                                    $minScore = $myItemToCheck->getPrerequisiteMinScore();
+                                                    $maxScore = $myItemToCheck->getPrerequisiteMaxScore();
+
+                                                    if (empty($minScore)) {
+                                                        // Try with mastery_score
+                                                        $masteryScoreAsMin = $myItemToCheck->get_mastery_score();
+                                                        if (!empty($masteryScoreAsMin)) {
+                                                            $minScore = $masteryScoreAsMin;
+                                                        }
+                                                    }
 
                                                     if (isset($minScore) && isset($minScore)) {
                                                         // Taking min/max prerequisites values see BT#5776
@@ -2547,8 +2557,18 @@ class learnpathItem
                                             $rs_quiz = Database::query($sql);
                                             if (Database::num_rows($rs_quiz) > 0) {
                                                 while ($quiz = Database::fetch_array($rs_quiz)) {
-                                                    $minScore = $items[$refs_list[$this->get_id()]]->getPrerequisiteMinScore();
-                                                    $maxScore = $items[$refs_list[$this->get_id()]]->getPrerequisiteMaxScore();
+                                                    /** @var learnpathItem $myItemToCheck */
+                                                    $myItemToCheck = $items[$refs_list[$this->get_id()]];
+                                                    $minScore = $myItemToCheck->getPrerequisiteMinScore();
+                                                    $maxScore = $myItemToCheck->getPrerequisiteMaxScore();
+
+                                                    if (empty($minScore)) {
+                                                        // Try with mastery_score
+                                                        $masteryScoreAsMin = $myItemToCheck->get_mastery_score();
+                                                        if (!empty($masteryScoreAsMin)) {
+                                                            $minScore = $masteryScoreAsMin;
+                                                        }
+                                                    }
 
                                                     if (isset($minScore) && isset($minScore)) {
                                                         // Taking min/max prerequisites values see BT#5776

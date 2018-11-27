@@ -1,6 +1,4 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Base class for <input /> form elements
  *
@@ -35,8 +33,6 @@
  */
 class HTML_QuickForm_input extends HTML_QuickForm_element
 {
-    // {{{ constructor
-
     /**
      * Class constructor
      *
@@ -52,9 +48,6 @@ class HTML_QuickForm_input extends HTML_QuickForm_element
         parent::__construct($elementName, $elementLabel, $attributes);
     } //end constructor
 
-    // }}}
-    // {{{ setType()
-
     /**
      * Sets the element type
      *
@@ -69,9 +62,6 @@ class HTML_QuickForm_input extends HTML_QuickForm_element
         $this->updateAttributes(array('type'=>$type));
     } // end func setType
 
-    // }}}
-    // {{{ setName()
-
     /**
      * Sets the input field name
      *
@@ -85,9 +75,6 @@ class HTML_QuickForm_input extends HTML_QuickForm_element
         $this->updateAttributes(array('name'=>$name));
     } //end func setName
 
-    // }}}
-    // {{{ getName()
-
     /**
      * Returns the element name
      *
@@ -99,9 +86,6 @@ class HTML_QuickForm_input extends HTML_QuickForm_element
     {
         return $this->getAttribute('name');
     } //end func getName
-
-    // }}}
-    // {{{ setValue()
 
     /**
      * Sets the value of the form element
@@ -116,9 +100,6 @@ class HTML_QuickForm_input extends HTML_QuickForm_element
         $this->updateAttributes(array('value'=>$value));
     } // end func setValue
 
-    // }}}
-    // {{{ getValue()
-
     /**
      * Returns the value of the form element
      *
@@ -130,9 +111,6 @@ class HTML_QuickForm_input extends HTML_QuickForm_element
     {
         return $this->getAttribute('value');
     } // end func getValue
-
-    // }}}
-    // {{{ toHtml()
 
     /**
      * Returns the input field in HTML
@@ -149,9 +127,6 @@ class HTML_QuickForm_input extends HTML_QuickForm_element
             return $this->_getTabs() . '<input' . $this->_getAttrString($this->_attributes) . ' />';
         }
     } //end func toHtml
-
-    // }}}
-    // {{{ onQuickFormEvent()
 
     /**
      * Called by HTML_QuickForm whenever form event is made on this element

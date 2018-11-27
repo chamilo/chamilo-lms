@@ -7498,9 +7498,9 @@ class Exercise
                 INNER JOIN $TBL_QUESTIONS q
                 ON (e.question_id = q.id AND e.c_id = q.c_id)
                 INNER JOIN $categoryRelTable catRel
-                ON (catRel.question_id = e.question_id)
+                ON (catRel.question_id = e.question_id AND catRel.c_id = e.c_id)
                 INNER JOIN $categoryTable cat
-                ON (cat.id = catRel.category_id)
+                ON (cat.id = catRel.category_id AND cat.c_id = e.c_id)
                 WHERE
                   e.c_id = {$this->course_id} AND
                   e.exercice_id	= ".intval($this->id);

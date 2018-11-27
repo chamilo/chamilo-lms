@@ -350,19 +350,19 @@ class HTML_QuickForm extends HTML_Common
                 if (is_array($filter) && (2 != count($filter) || !is_callable($filter))) {
                     foreach ($filter as $val) {
                         if (!is_callable($val)) {
-                            throw new \Exception("Callback function does not exist in QuickForm::setDefaults()");
+                            throw new \Exception('Callback function does not exist in QuickForm::setDefaults()');
                         } else {
                             $defaultValues = $this->_recursiveFilter($val, $defaultValues);
                         }
                     }
                 } elseif (!is_callable($filter)) {
-                    throw new \Exception("Callback function does not exist in QuickForm::setDefaults()");
+                    throw new \Exception('Callback function does not exist in QuickForm::setDefaults()');
                 } else {
                     $defaultValues = $this->_recursiveFilter($filter, $defaultValues);
                 }
             }
 
-            $this->_defaultValues = HTML_QuickForm::arrayMerge($this->_defaultValues, $defaultValues);
+            $this->_defaultValues = self::arrayMerge($this->_defaultValues, $defaultValues);
             $this->_constantValues = $this->_defaultValues;
             foreach (array_keys($this->_elements) as $key) {
                 $this->_elements[$key]->onQuickFormEvent('updateValue', null, $this);

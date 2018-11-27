@@ -139,7 +139,7 @@ if (count($languages) === 1) {
 } else {
     $form->addSelectLanguage(
         'course_language',
-        get_lang('Ln'),
+        get_lang('Language'),
         [],
         ['style' => 'width:150px']
     );

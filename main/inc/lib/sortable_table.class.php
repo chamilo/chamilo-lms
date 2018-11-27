@@ -104,16 +104,16 @@ class SortableTable extends HTML_Table
     /**
      * Create a new SortableTable.
      *
-     * @param string $table_name A name for the table (default = 'table')
+     * @param string $table_name                A name for the table (default = 'table')
      * @param string $get_total_number_function A user defined function to get
      *                                          the total number of items in the table
-     * @param string $get_data_function A function to get the data to display on
+     * @param string $get_data_function         A function to get the data to display on
      *                                          the current page
-     * @param int $default_column The default column on which the data should be
+     * @param int    $default_column            The default column on which the data should be
      *                                          sorted
-     * @param int $default_items_per_page The default number of items to show
+     * @param int    $default_items_per_page    The default number of items to show
      *                                          on one page
-     * @param string $default_order_direction The default order direction;
+     * @param string $default_order_direction   The default order direction;
      *                                          either the constant 'ASC' or 'DESC'
      * @param string $table_id
      * @param string $style

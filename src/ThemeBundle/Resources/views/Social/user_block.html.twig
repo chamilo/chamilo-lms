@@ -12,21 +12,21 @@
         {% if is_granted('ROLE_ADMIN') %}
             <li class="item">
                 <a href="{{ _p.web }}main/admin/user_edit.php?user_id={{ user.id }}">
-                    <img src="{{ "edit.png" | icon }}" alt="{{ "Edit" | get_lang }}">
+                    <img src="{{ "edit.png" | icon }}" alt="{{ "Edit" | trans }}">
                 </a>
             </li>
         {% endif %}
         {% if show_full_profile %}
             <li class="item">
                 <a href="{{ _p.web }}main/messages/new_message.php">
-                    <img src="{{ "instant_message.png" | icon }}" alt="{{ "Email" | get_lang }}">
+                    <img src="{{ "instant_message.png" | icon }}" alt="{{ "Email" | trans }}">
                     {{ user.email}}
                 </a>
             </li>
             <li class="item">
                 <a href="{{ vcard_user_link }}">
-                    <img src="{{ "vcard.png" | icon(16) }}" alt="{{ "BusinessCard" | get_lang }}" width="16" height="16">
-                    {{ "BusinessCard" | get_lang }}
+                    <img src="{{ "vcard.png" | icon(16) }}" alt="{{ "BusinessCard" | trans }}" width="16" height="16">
+                    {{ "BusinessCard" | trans }}
                 </a>
             </li>
 
@@ -45,7 +45,7 @@
             {% if 'allow_show_skype_account'|api_get_setting == 'true' and not skype_account is empty %}
                 <li class="item">
                     <a href="skype:{{ skype_account }}?chat">
-                        <span class="fa fa-skype fa-fw" aria-hidden="true"></span> {{ 'Skype'|get_lang }}
+                        <span class="fa fa-skype fa-fw" aria-hidden="true"></span> {{ 'Skype'|trans }}
                     </a>
                 </li>
             {% endif %}
@@ -53,7 +53,7 @@
             {% if 'allow_show_linkedin_url'|api_get_setting == 'true' and not linkedin_url is empty %}
                 <li class="item">
                     <a href="{{ linkedin_url }}" target="_blank">
-                        <span class="fa fa-linkedin fa-fw" aria-hidden="true"></span> {{ 'LinkedIn'|get_lang }}
+                        <span class="fa fa-linkedin fa-fw" aria-hidden="true"></span> {{ 'LinkedIn'|trans }}
                     </a>
                 </li>
             {% endif %}
@@ -63,13 +63,13 @@
                 {% if user_relation == user_relation_type_friend %}
                     <li class="item">
                         <a onclick="javascript:chatWith('{{ user.id }}', '{{ user.complete_name }}', '{{ user.user_is_online }}','{{ user.avatar_small }}')" href="javascript:void(0);">
-                            <img src="{{ "online.png" | icon }}" alt="{{ "Online" | get_lang }}">
-                            {{ "Chat" | get_lang }} ({{ "Online" | get_lang }})
+                            <img src="{{ "online.png" | icon }}" alt="{{ "Online" | trans }}">
+                            {{ "Chat" | trans }} ({{ "Online" | trans }})
                         </a>
                     </li>
                     {# else #}
-                    {# <img src="{{ "offline.png" | icon }}" alt="{{ "Online" | get_lang }}"> #}
-                    {# {{ "Chat" | get_lang }} ({{ "Offline" | get_lang }}) #}
+                    {# <img src="{{ "offline.png" | icon }}" alt="{{ "Online" | trans }}"> #}
+                    {# {{ "Chat" | trans }} ({{ "Offline" | trans }}) #}
                 {% endif %}
             {% endif %}
         {% endif %}
@@ -77,12 +77,12 @@
         {% if not profile_edition_link is empty %}
             <li class="item">
                 <a class="btn btn-link btn-sm btn-block" href="{{ profile_edition_link }}">
-                    <em class="fa fa-edit"></em>{{ "EditProfile" | get_lang }}
+                    <em class="fa fa-edit"></em>{{ "EditProfile" | trans }}
                 </a>
             </li>
         {% endif %}
     </ul>
 {% endset %}
-{{ macro.panel("Profile" | get_lang, profile_body ) }}
+{{ macro.panel("Profile" | trans, profile_body ) }}
 </div>
 {% endautoescape %}

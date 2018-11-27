@@ -42,16 +42,16 @@ $interbreadcrumb[] = [
 
 $actions = null;
 if ($allowMessage) {
-    $actionsLeft = '<a href="' . api_get_path(WEB_PATH) . 'main/messages/inbox.php">' .
-        Display::return_icon('back.png', get_lang('Back'), null, ICON_SIZE_MEDIUM) . '</a>';
-    $actionsLeft .= '<a href="' . api_get_path(WEB_PATH) . 'main/messages/new_message.php">' .
-        Display::return_icon('new-message.png', get_lang('ComposeMessage'), null, ICON_SIZE_MEDIUM) . '</a>';
-    $actionsLeft .= '<a href="' . api_get_path(WEB_PATH) . 'main/messages/inbox.php">' .
-        Display::return_icon('inbox.png', get_lang('Inbox'), null, ICON_SIZE_MEDIUM) . '</a>';
-    $actionsLeft .= '<a href="' . api_get_path(WEB_PATH) . 'main/messages/outbox.php">' .
-        Display::return_icon('outbox.png', get_lang('Outbox'), null, ICON_SIZE_MEDIUM) . '</a>';
+    $actionsLeft = '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
+        Display::return_icon('back.png', get_lang('Back'), null, ICON_SIZE_MEDIUM).'</a>';
+    $actionsLeft .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
+        Display::return_icon('new-message.png', get_lang('ComposeMessage'), null, ICON_SIZE_MEDIUM).'</a>';
+    $actionsLeft .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
+        Display::return_icon('inbox.png', get_lang('Inbox'), null, ICON_SIZE_MEDIUM).'</a>';
+    $actionsLeft .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.
+        Display::return_icon('outbox.png', get_lang('Outbox'), null, ICON_SIZE_MEDIUM).'</a>';
 
-    $form = MessageManager::getSearchForm(api_get_path(WEB_PATH) . 'main/messages/outbox.php');
+    $form = MessageManager::getSearchForm(api_get_path(WEB_PATH).'main/messages/outbox.php');
     if ($form->validate()) {
         $values = $form->getSubmitValues();
         $keyword = $values['keyword'];
@@ -67,7 +67,6 @@ if (isset($_REQUEST['action'])) {
 
 $keyword = '';
 $message_content = null;
-
 
 $actions .= Display::toolbarAction(
     'toolbar',
@@ -117,4 +116,3 @@ $content = $tpl->fetch($social_layout);
 $tpl->assign('message', $show_message);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();
-

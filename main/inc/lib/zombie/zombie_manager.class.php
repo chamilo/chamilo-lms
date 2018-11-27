@@ -28,8 +28,14 @@ class ZombieManager
      *
      * @return ResultSet
      */
-    public static function listZombies($ceiling, $active_only = true, $count = 0, $from = 10, $column = 'user.firstname', $direction = 'desc')
-    {
+    public static function listZombies(
+        $ceiling,
+        $active_only = true,
+        $from = 0,
+        $count = 10,
+        $column = 'user.firstname',
+        $direction = 'desc'
+    ) {
         if (empty($column)) {
             $column = 'user.firstname';
         }
@@ -41,6 +47,7 @@ class ZombieManager
 
         $sql = 'SELECT
                     user.user_id,
+                    user.official_code,
                     user.firstname,
                     user.lastname,
                     user.username,
@@ -74,15 +81,17 @@ class ZombieManager
                         access.login_date <= '$ceiling' AND
                         user.user_id = access.login_user_id";
         }
+
         if ($active_only) {
             $sql .= ' AND user.active = 1';
         }
 
+        $sql .= " ORDER BY $column $direction";
+        if (!is_null($from) && !is_null($count)) {
         $count = intval($count);
         $from = intval($from);
-
-        $sql .= " ORDER BY $column $direction";
-        $sql .= " LIMIT $count, $from ";
+            $sql .= " LIMIT $from, $count ";
+        }
 
         $result = Database::query($sql);
 
@@ -94,7 +103,7 @@ class ZombieManager
      */
     public static function deactivate_zombies($ceiling)
     {
-        $zombies = self::list_zombies($ceiling);
+        $zombies = self::listZombies($ceiling);
         $ids = [];
         foreach ($zombies as $zombie) {
             $ids[] = $zombie['user_id'];

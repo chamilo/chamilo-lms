@@ -3,7 +3,7 @@
 {% block content %}
     {% autoescape false %}
         <div class="page-header">
-            <h4>{{ "SystemAnnouncements" | get_lang }}</h4>
+            <h4>{{ "SystemAnnouncements" | trans }}</h4>
         </div>
 
         {% if not announcement is empty %}
@@ -15,7 +15,7 @@
             </article>
         {% else %}
             <div class="alert alert-danger" role="alert">
-                {{ "NoResults" | get_lang }}
+                {{ "NoResults" | trans }}
             </div>
         {% endif %}
     {% endautoescape %}

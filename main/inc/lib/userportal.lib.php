@@ -827,6 +827,7 @@ class IndexManager
                 'link' => api_get_path(WEB_PATH).'main/messages/inbox.php',
                 'title' => get_lang('Inbox').$cant_msg,
             ];
+
             $items[] = [
                 'class' => 'new-message-social',
                 'icon' => Display::return_icon('new-message.png', get_lang('Compose')),
@@ -841,6 +842,13 @@ class IndexManager
                     'icon' => Display::return_icon('invitations.png', get_lang('PendingInvitations')),
                     'link' => api_get_path(WEB_PATH).'main/social/invitations.php',
                     'title' => get_lang('PendingInvitations').$total_invitations,
+                ];
+            } else {
+                $items[] = [
+                    'class' => 'personal-data',
+                    'icon' => Display::return_icon('database.png', get_lang('PersonalDataReport')),
+                    'link' => api_get_path(WEB_CODE_PATH).'social/personal_data.php',
+                    'title' => get_lang('PersonalDataReport'),
                 ];
             }
 
@@ -889,7 +897,6 @@ class IndexManager
         }
 
         if (true === api_get_configuration_value('whispeak_auth_enabled')) {
-            //if (!WhispeakAuthPlugin::checkUserIsEnrolled($userId)) {
             $itemTitle = WhispeakAuthPlugin::create()->get_title();
 
             $items[] = [
@@ -898,7 +905,6 @@ class IndexManager
                 'link' => WhispeakAuthPlugin::getEnrollmentUrl(),
                 'title' => $itemTitle,
             ];
-            //}
         }
 
         return $items;

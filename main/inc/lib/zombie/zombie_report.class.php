@@ -34,9 +34,6 @@ class ZombieReport implements Countable
     public function get_parameters()
     {
         $result = [
-            'name' => 'zombie_report_parameters',
-            'method' => 'GET',
-            'attributes' => ['class' => 'well form-horizontal form-search'],
             'items' => [
                 [
                     'name' => 'ceiling',
@@ -44,10 +41,6 @@ class ZombieReport implements Countable
                     'type' => 'date_picker',
                     'default' => $this->get_ceiling('Y-m-d'),
                     'rules' => [
-//                        array(
-//                            'type' => 'required',
-//                            'message' => get_lang('Required')
-//                        ),
                         [
                             'type' => 'date',
                             'message' => get_lang('Date'),
@@ -68,14 +61,6 @@ class ZombieReport implements Countable
                 ],
             ],
         ];
-        $additional_parameters = $this->get_additional_parameters();
-        foreach ($additional_parameters as $key => $value) {
-            $result['items'][] = [
-                'type' => 'hidden',
-                'name' => $key,
-                'value' => $value,
-            ];
-        }
 
         return $result;
     }
@@ -85,31 +70,37 @@ class ZombieReport implements Countable
      */
     public function get_parameters_form()
     {
-        $parameters = $this->get_parameters();
-        if (empty($parameters)) {
-            return null;
-        }
-        if (empty($this->parameters_form)) {
-            $this->parameters_form = new FormValidator(
-                $parameters['name'],
-                $parameters['method'],
+        $form = new FormValidator(
+            'zombie_report_parameters',
+            'get',
                 null,
                 null,
-                $parameters['attributes']
+            ['class' => 'well form-horizontal form-search']
             );
+
+        $form->addDatePicker('ceiling', get_lang('LastAccess'));
+        $form->addCheckBox('active_only', get_lang('ActiveOnly'));
+        $form->addButtonSearch(get_lang('Search'));
+
+        $params = [
+            'active_only' => $this->get_active_only(),
+            'ceiling' => $this->get_ceiling('Y-m-d'),
+        ];
+        $form->setDefaults($params);
+        $additional = $this->get_additional_parameters();
+        foreach ($additional as $key => $value) {
+            $value = Security::remove_XSS($value);
+            $form->addHidden($key, $value);
         }
 
-        return $this->parameters_form;
+        return $form;
     }
 
     public function display_parameters($return = false)
     {
         $form = $this->get_parameters_form();
-        if (empty($form)) {
-            return '';
-        }
-
         $result = $form->returnForm();
+
         if ($return) {
             return $result;
         } else {
@@ -120,9 +111,6 @@ class ZombieReport implements Countable
     public function is_valid()
     {
         $form = $this->get_parameters_form();
-        if (empty($form)) {
-            return true;
-        }
 
         return $form->isSubmitted() == false || $form->validate();
     }
@@ -175,57 +163,39 @@ class ZombieReport implements Countable
         }
 
         $action = $this->get_action();
-        $f = [$this, 'action_'.$action];
-        if (is_callable($f)) {
-            return call_user_func($f, $ids);
+        switch ($action) {
+            case 'activate':
+                return UserManager::activate_users($ids);
+                break;
+            case 'deactivate':
+                return UserManager::deactivate_users($ids);
+                break;
+            case 'delete':
+                return UserManager::delete_users($ids);
         }
 
         return false;
     }
 
-    public function action_deactivate($ids)
-    {
-        return UserManager::deactivate_users($ids);
-    }
-
-    public function action_activate($ids)
-    {
-        return UserManager::activate_users($ids);
-    }
-
-    public function action_delete($ids)
-    {
-        return UserManager::delete_users($ids);
-    }
-
     public function count()
     {
-        if (!$this->is_valid()) {
-            return 0;
-        }
-
         $ceiling = $this->get_ceiling();
         $active_only = $this->get_active_only();
-        $items = ZombieManager::listZombies($ceiling, $active_only);
+        $items = ZombieManager::listZombies($ceiling, $active_only, null, null);
 
         return count($items);
     }
 
     public function get_data($from, $count, $column, $direction)
     {
-        if (!$this->is_valid()) {
-            return [];
-        }
-
         $ceiling = $this->get_ceiling();
         $active_only = $this->get_active_only();
-
-        $items = ZombieManager::listZombies($ceiling, $active_only, $count, $from, $column, $direction);
+        $items = ZombieManager::listZombies($ceiling, $active_only, $from, $count, $column, $direction);
         $result = [];
         foreach ($items as $item) {
             $row = [];
             $row[] = $item['user_id'];
-            $row[] = $item['code'];
+            $row[] = $item['official_code'];
             $row[] = $item['firstname'];
             $row[] = $item['lastname'];
             $row[] = $item['username'];
@@ -253,12 +223,12 @@ class ZombieReport implements Countable
         $additional_parameters = $this->get_additional_parameters();
         $parameters = array_merge($additional_parameters, $parameters);
 
-        $table = new SortableTable('users', $count, $data, 1, 50);
+        $table = new SortableTable('zombie_users', $count, $data, 1, 50);
         $table->set_additional_parameters($parameters);
 
         $col = 0;
         $table->set_header($col++, '', false);
-        $table->set_header($col++, get_lang('Code'));
+        $table->set_header($col++, get_lang('OfficialCode'));
         $table->set_header($col++, get_lang('FirstName'));
         $table->set_header($col++, get_lang('LastName'));
         $table->set_header($col++, get_lang('LoginName'));
@@ -267,7 +237,7 @@ class ZombieReport implements Countable
         $table->set_header($col++, get_lang('AuthenticationSource'));
         $table->set_header($col++, get_lang('RegisteredDate'));
         $table->set_header($col++, get_lang('LastAccess'), false);
-        $table->set_header($col++, get_lang('Active'), false);
+        $table->set_header($col, get_lang('Active'), false);
 
         $table->set_column_filter(5, [$this, 'format_email']);
         $table->set_column_filter(6, [$this, 'format_status']);
@@ -295,7 +265,7 @@ class ZombieReport implements Countable
      */
     public function format_active($active)
     {
-        $active = ($active == '1');
+        $active = $active == '1';
         if ($active) {
             $image = 'accept';
             $text = get_lang('Yes');
@@ -324,14 +294,14 @@ class ZombieReport implements Countable
     public function display($return = false)
     {
         $result = $this->display_parameters($return);
-        if ($this->perform_action()) {
-            if ($return) {
-                $result .= Display::return_message(get_lang('Done'), 'confirmation');
-            } else {
-                echo Display::return_message(get_lang('Done'), 'confirmation');
-            }
+        $valid = $this->perform_action();
+
+        if ($valid) {
+            echo Display::return_message(get_lang('Updated'), 'confirmation');
         }
+
         $result .= $this->display_data($return);
+
         if ($return) {
             return $result;
         }

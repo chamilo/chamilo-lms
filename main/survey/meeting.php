@@ -213,7 +213,10 @@ foreach ($students as $studentId) {
                     $checked = $notAvailableIcon;
                 }
                 if ($action === 'edit') {
-                    $checked = 'checked';
+                    $checked = '';
+                    if ($answerList[$item['question_id']][$studentId] == 1) {
+                        $checked = 'checked';
+                    }
                 }
             }
 

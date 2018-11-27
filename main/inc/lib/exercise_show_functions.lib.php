@@ -187,7 +187,9 @@ class ExerciseShowFunctions
 
         if (empty($id)) {
             echo '<tr>';
-            echo Display::tag('td', Security::remove_XSS($answer), ['width' => '55%']);
+            if (!empty($answer)) {
+                echo Display::tag('td', Security::remove_XSS($answer), ['width' => '55%']);
+            }
             echo '</tr>';
             if (!$questionScore && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
                 echo '<tr>';

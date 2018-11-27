@@ -12,7 +12,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
 
 if (api_get_setting('allow_social_tool') !== 'true') {
-    api_not_allowed();
+    api_not_allowed(true);
 }
 
 $this_section = SECTION_SOCIAL;
@@ -95,23 +95,22 @@ $pending_invitations = $userGroupModel->get_groups_by_user(
     $user_id,
     GROUP_USER_PERMISSION_PENDING_INVITATION
 );
-$number_loop = count($list_get_invitation);
+$numberLoop = count($list_get_invitation);
 
-$total_invitations = $number_loop + count($list_get_invitation_sent) + count($pending_invitations);
+$total_invitations = $numberLoop + count($list_get_invitation_sent) + count($pending_invitations);
 
-if ($total_invitations == 0 && count($_GET) <= 0) {
+if (count($_GET) <= 0) {
     $socialInvitationsBlock .= '<div class="row">
         <div class="col-md-12">
             <a class="btn btn-success" href="search.php"><em class="fa fa-search"></em> '.
                 get_lang('TryAndFindSomeFriends').'
             </a>
             </div>
-        </div>';
+        </div><br />';
 }
 
-if ($number_loop != 0) {
+if ($numberLoop != 0) {
     $invitationHtml = '';
-
     foreach ($list_get_invitation as $invitation) {
         $sender_user_id = $invitation['user_sender_id'];
         $user_info = api_get_user_info($sender_user_id);
@@ -178,10 +177,12 @@ if (count($list_get_invitation_sent) > 0) {
 
         $invitationSentHtml .= '<div class="row">';
         $invitationSentHtml .= '<div class="col-md-3">';
-        $invitationSentHtml .= '<a href="profile.php?u='.$sender_user_id.'"><img src="'.$user_info['avatar'].'"  /></a>';
+        $invitationSentHtml .= '<a href="profile.php?u='.$sender_user_id.'">';
+        $invitationSentHtml .= '<img class="img-responsive img-rounded" src="'.$user_info['avatar'].'" /></a>';
         $invitationSentHtml .= '</div>';
         $invitationSentHtml .= '<div class="col-md-9">';
-        $invitationSentHtml .= '<h4 class="title-profile"><a class="profile_link" href="profile.php?u='.$sender_user_id.'">'.$user_info['complete_name'].'</a></h4>';
+        $invitationSentHtml .= '<h4 class="title-profile">
+            <a class="profile_link" href="profile.php?u='.$sender_user_id.'">'.$user_info['complete_name'].'</a></h4>';
         $invitationSentHtml .= '<div class="content-invitation">'.$title.' : '.$content.'</div>';
         $invitationSentHtml .= '<div class="date-invitation">'.get_lang('DateSend').' : '.$date.'</div>';
         $invitationSentHtml .= '</div>';

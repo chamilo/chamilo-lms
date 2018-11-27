@@ -229,9 +229,9 @@ class MoodleImport
                     } else {
                         $exercise->setRandom(0);
                     }
-                    $exercise->updateRandomAnswers($moduleValues['shuffleanswers']);
+                    $exercise->updateRandomAnswers(!empty($moduleValues['shuffleanswers']));
                     // @todo divide to minutes
-                    $exercise->updateExpiredTime($moduleValues['timelimit']);
+                    $exercise->updateExpiredTime((int) $moduleValues['timelimit']);
 
                     if ($moduleValues['questionsperpage'] == 1) {
                         $exercise->updateType(2);

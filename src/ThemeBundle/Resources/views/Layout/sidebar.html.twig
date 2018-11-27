@@ -6,13 +6,18 @@
     <ul class="navbar-nav">
         {% for item in menu.children %}
             {% set children = item.children|length %}
-            <li class="nav-item {{ children > 0 ? 'dropdown' : '' }}">
-                <a class='sidebar-link' href="{{ item.uri }}">
-                    <i class="fa fa-{{ item.extras.icon }}"></i>
-                    {{ item.label }}
+            {% set current = item.isCurrent ? 'active': '' %}
+            <li class="nav-item {{ current }} {{ children > 0 ? 'dropdown' : '' }}">
+                <a id="menu_{{ item.name }}" class='sidebar-link' href="{{ item.uri }}">
+                    <span class="icon-holder">
+                        <i class="fa fa-{{ item.extras.icon }}"></i>
+                    </span>
+                    <span class="title">
+                        {{ item.label }}
+                    </span>
                 </a>
                 {% if children > 0 %}
-                    <ul class="dropdown-menu">
+                    <ul id="submenu_{{ item.name }}" class="dropdown-menu">
                         {% for item in item.children %}
                         <li>
                             <a href="{{ item.uri }}" class="sidebar-link">

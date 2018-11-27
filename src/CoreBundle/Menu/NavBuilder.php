@@ -74,6 +74,7 @@ class NavBuilder implements ContainerAwareInterface
                 'icon' => 'home',
             ]
         );
+        $menu['home']->setCurrent(true);
 
         if ($checker && $checker->isGranted('IS_AUTHENTICATED_FULLY')) {
             $menu->addChild(

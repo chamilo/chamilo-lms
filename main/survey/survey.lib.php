@@ -280,10 +280,11 @@ class SurveyManager
                 $extraParams['form_fields'] = '';
             }
 
+            $extraParams['one_question_per_page'] = isset($values['one_question_per_page']) ? $values['one_question_per_page'] : 0;
+            $extraParams['shuffle'] = isset($values['shuffle']) ? $values['shuffle'] : 0;
+
             if ($values['survey_type'] == 1) {
                 $extraParams['survey_type'] = 1;
-                $extraParams['shuffle'] = $values['shuffle'];
-                $extraParams['one_question_per_page'] = $values['one_question_per_page'];
                 $extraParams['parent_id'] = $values['parent_id'];
 
                 // Logic for versioning surveys
@@ -415,14 +416,13 @@ class SurveyManager
                 $values['anonymous'] = 0;
             }
 
-            $values['shuffle'] = isset($values['shuffle']) ? $values['shuffle'] : null;
-            $values['one_question_per_page'] = isset($values['one_question_per_page']) ? $values['one_question_per_page'] : null;
+            //$values['shuffle'] = isset($values['shuffle']) ? $values['shuffle'] : null;
+            //$values['one_question_per_page'] = isset($values['one_question_per_page']) ? $values['one_question_per_page'] : null;
             $values['show_form_profile'] = isset($values['show_form_profile']) ? $values['show_form_profile'] : null;
 
             $extraParams = [];
-            $extraParams['shuffle'] = $values['shuffle'];
-            $extraParams['one_question_per_page'] = $values['one_question_per_page'];
-            $extraParams['shuffle'] = $values['shuffle'];
+            //$extraParams['shuffle'] = $values['shuffle'];
+            //$extraParams['one_question_per_page'] = $values['one_question_per_page'];
 
             if ($values['anonymous'] == 0) {
                 $extraParams['show_form_profile'] = $values['show_form_profile'];
@@ -2210,5 +2210,57 @@ class SurveyManager
                 }
             }
         }
+    }
+
+    /**
+     * @param array $survey
+     *
+     * @return int
+     */
+    public static function getCountPages($survey)
+    {
+        if (empty($survey) || !isset($survey['iid'])) {
+            return 0;
+        }
+
+        $courseId = $survey['c_id'];
+        $surveyId = $survey['survey_id'];
+
+        $table = Database::get_course_table(TABLE_SURVEY_QUESTION);
+
+        // One question per page
+        $sql = "SELECT * FROM $table
+                WHERE
+                    survey_question NOT LIKE '%{{%' AND
+                    type = 'pagebreak' AND
+                    c_id = $courseId AND
+                    survey_id = '".$surveyId."'";
+        $result = Database::query($sql);
+        $numberPageBreaks = Database::num_rows($result);
+
+        // One question per page
+        $sql = "SELECT * FROM $table
+                    WHERE
+                        survey_question NOT LIKE '%{{%' AND
+                        type != 'pagebreak' AND
+                        c_id = $courseId AND
+                        survey_id = '".$surveyId."'";
+        $result = Database::query($sql);
+        $countOfQuestions = Database::num_rows($result);
+
+        $count = 1;
+        if (!empty($numberPageBreaks) && !empty($countOfQuestions)) {
+            // One question per page
+            $count = $countOfQuestions;
+        }
+
+        if ($survey['one_question_per_page'] == 1) {
+            $count = 1;
+            if (!empty($countOfQuestions)) {
+                $count = $countOfQuestions;
+            }
+        }
+
+        return $count;
     }
 }

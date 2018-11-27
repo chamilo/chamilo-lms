@@ -75,9 +75,6 @@ switch ($action) {
 $tpl = new Template($plugin->get_lang('plugin_title'));
 $tpl->assign('terms', $terms);
 $tpl->assign('form', $form->returnForm());
-
-//$url = api_get_path(WEB_PLUGIN_PATH).'studentfollowup/posts.php?';
-//$tpl->assign('post_url', $url);
 $content = $tpl->fetch('/'.$plugin->get_name().'/view/terms.html.twig');
 // Assign into content
 $tpl->assign('content', $content);

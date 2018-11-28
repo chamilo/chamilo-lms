@@ -416,13 +416,9 @@ class SurveyManager
                 $values['anonymous'] = 0;
             }
 
-            //$values['shuffle'] = isset($values['shuffle']) ? $values['shuffle'] : null;
-            //$values['one_question_per_page'] = isset($values['one_question_per_page']) ? $values['one_question_per_page'] : null;
-            $values['show_form_profile'] = isset($values['show_form_profile']) ? $values['show_form_profile'] : null;
-
             $extraParams = [];
-            //$extraParams['shuffle'] = $values['shuffle'];
-            //$extraParams['one_question_per_page'] = $values['one_question_per_page'];
+            $extraParams['one_question_per_page'] = isset($values['one_question_per_page']) ? $values['one_question_per_page'] : null;
+            $extraParams['shuffle'] = isset($values['shuffle']) ? $values['shuffle'] : null;
 
             if ($values['anonymous'] == 0) {
                 $extraParams['show_form_profile'] = $values['show_form_profile'];

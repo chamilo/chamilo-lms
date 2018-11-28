@@ -1144,7 +1144,9 @@ class CourseBuilder
                 $obj->invited,
                 $obj->answered,
                 $obj->invite_mail,
-                $obj->reminder_mail
+                $obj->reminder_mail,
+                $obj->one_question_per_page,
+                $obj->shuffle
             );
             $sql = 'SELECT * FROM '.$table_question.'
                     WHERE c_id = '.$courseId.' AND survey_id = '.$obj->survey_id;

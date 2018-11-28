@@ -54,7 +54,7 @@ if ($form->validate()) {
     exit();
 }
 
-$social_left_content = SocialManager::show_social_menu('group_edit', $group_id);
+$social_left_content = SocialManager::getMenuSocial('group_edit', $group_id);
 $social_right_content = $form->returnForm();
 
 $tpl = new Template(get_lang('Edit'));

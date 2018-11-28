@@ -70,7 +70,7 @@ $interbreadcrumb[] = ['url' => 'profile.php', 'name' => get_lang('SocialNetwork'
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Friends')];
 
 //Block Social Menu
-$social_menu_block = SocialManager::show_social_menu('friends');
+$social_menu_block = SocialManager::getMenuSocial('friends');
 $user_id = api_get_user_id();
 $name_search = isset($_POST['search_name_q']) ? $_POST['search_name_q'] : null;
 $number_friends = 0;

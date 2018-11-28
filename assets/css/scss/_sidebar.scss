@@ -189,70 +189,23 @@
     border-bottom: 1px solid #3c5cab;
   }
 
-  .dropdown-toggle::after {
-    display: none;
-  }
-
-  .sidebar-link {
-    &.active::before {
-      background: $default-yellow;
-      content: '';
-      display: block;
-      height: 100%;
-      left: -4px;
-      position: absolute;
-      top: 0;
-      width: 8px;
-    }
-  }
 
   li {
     position: relative;
-
-    &.dropdown {
-      .arrow {
-        font-size: 10px;
-        line-height: 40px;
-        position: absolute;
-        right: 30px;
-        transition: all 0.05s ease-in;
-
-        @include to($breakpoint-md) {
-          right: 25px;
-        }
-      }
-
-      &.open {
-        > a {
-          color: $default-white;
-
-          &.dropdown-toggle {
-            background: $default-link;
-          }
-
-          .icon-holder {
-            color: $default-info;
-          }
-
-          > .arrow {
-            transform: rotate(90deg);
-          }
-        }
-
-        > .dropdown-menu {
-          display: block;
-
-          .dropdown-menu {
-            padding-left: 20px;
-          }
-
-          .arrow {
-            line-height: 25px;
+    border-radius: 0;
+    &.dropdown{
+      ul{
+        &.dropdown-menu{
+          background-color: #3D66CA;
+          padding: 0;
+          border: none;
+          border-radius: 0;
+          .sidebar-link{
+            padding: 8px 15px;
           }
         }
       }
     }
-
     a {
       color: $sidebar-link;
       transition: all 0.3s ease;
@@ -286,46 +239,8 @@
         color: $sidebar-link;
         text-decoration: none;
         background: $sidebar-focus;
-
         .icon-holder {
           color: $default-info;
-        }
-      }
-    }
-  }
-
-  > li {
-    &.dropdown {
-      ul {
-        &.dropdown-menu {
-          background-color: #0099ca;
-          border-radius: 0;
-          border: 0;
-          box-shadow: none;
-          float: none;
-          padding-left: 10px;
-          padding-top: 0;
-          position: relative;
-          width: 100%;
-
-          > li {
-            > a {
-              display: block;
-              padding: 10px 15px;
-
-              &:hover,
-              &:focus {
-                background-color: transparent;
-                color: $default-dark;
-              }
-            }
-
-            &.active {
-              a {
-                color: $default-dark;
-              }
-            }
-          }
         }
       }
     }

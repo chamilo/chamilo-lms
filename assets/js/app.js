@@ -25,6 +25,10 @@ var disconnect_lang = '{{ "ChatDisconnected"|get_lang }}';*/
 var connect_lang = 'ChatConnected';
 var disconnect_lang = 'ChatDisconnected';
 
+$( document ).ready(function() {
+    console.log( "ready!" );
+    $("#menu_courses").prop("href", "#");
+});
 $(function() {
     var isInCourse = $("body").data("in-course");
     if (isInCourse == true) {

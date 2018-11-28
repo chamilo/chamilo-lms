@@ -143,7 +143,7 @@ if (is_array($Users) && count($Users) > 0) {
     }
 }
 
-$social_left_content = SocialManager::show_social_menu('invite_friends', $group_id);
+$social_left_content = SocialManager::getMenuSocial('invite_friends', $group_id);
 $social_right_content = '<h3 class="group-title">'.Security::remove_XSS($group_info['name'], STUDENT, true).'</h3>';
 
 if (count($nosessionUsersList) == 0) {
@@ -201,7 +201,7 @@ if (is_array($members) && count($members) > 0) {
 
 $tpl = new Template(null);
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'groups', $group_id);
-$social_menu_block = SocialManager::show_social_menu('member_list', $group_id);
+$social_menu_block = SocialManager::getMenuSocial('member_list', $group_id);
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->setHelp('Groups');
 $tpl->assign('social_right_content', $social_right_content);

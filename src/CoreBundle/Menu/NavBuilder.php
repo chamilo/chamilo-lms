@@ -10,6 +10,7 @@ use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Chamilo\CoreBundle\Menu\LeftMenuBuilder;
 
 /**
  * Class NavBuilder.
@@ -80,6 +81,14 @@ class NavBuilder implements ContainerAwareInterface
             $menu->addChild(
                 'courses',
                 [
+                    'label' => $translator->trans('Courses'),
+                    'icon' => 'book'
+                ]
+            );
+
+            $menu['courses']->addChild(
+                'courses',
+                [
                     'label' => $translator->trans('My courses'),
                     'route' => 'legacy_main',
                     'icon' => 'book',
@@ -90,21 +99,23 @@ class NavBuilder implements ContainerAwareInterface
             );
 
 
-            $lang = $translator->trans('CreateCourse');
-            if ($settingsManager->getSetting('course.course_validation') == 'true') {
-                $lang = $translator->trans('CreateCourseRequest');
-            }
+            if (api_is_allowed_to_create_course()) {
+                $lang = $translator->trans('CreateCourse');
+                if ($settingsManager->getSetting('course.course_validation') == 'true') {
+                    $lang = $translator->trans('CreateCourseRequest');
+                }
 
-            $menu['courses']->addChild(
-                'create-course',
-                [
-                    'label' => $lang,
-                    'route' => 'legacy_main',
-                    'routeParameters' => [
-                        'name' => 'create_course/add_course.php',
-                    ],
-                ]
-            );
+                $menu['courses']->addChild(
+                    'create-course',
+                    [
+                        'label' => $lang,
+                        'route' => 'legacy_main',
+                        'routeParameters' => [
+                            'name' => 'create_course/add_course.php',
+                        ],
+                    ]
+                );
+            }
 
             $browse = $settingsManager->getSetting('display.allow_students_to_browse_courses');
 
@@ -124,6 +135,7 @@ class NavBuilder implements ContainerAwareInterface
                     );
                 }
             }
+
 
             $menu->addChild(
                 'calendar',
@@ -284,6 +296,92 @@ class NavBuilder implements ContainerAwareInterface
             $child
                 ->setLinkAttribute('class', 'sidebar-link')
                 ->setAttribute('class', 'nav-item');
+        }
+
+        return $menu;
+    }
+
+    /**
+     * Course menu.
+     *
+     * @param FactoryInterface $factory
+     * @param array            $options
+     *
+     * @return ItemInterface
+     */
+    public function courseMenu(FactoryInterface $factory, array $options)
+    {
+        $checker = $this->container->get('security.authorization_checker');
+        $menu = $factory->createItem('root');
+        $translator = $this->container->get('translator');
+        $checked = $this->container->get('session')->get('IS_AUTHENTICATED_FULLY');
+        $settingsManager = $this->container->get('chamilo.settings.manager');
+
+        if ($checked) {
+            $menu->setChildrenAttribute('class', 'nav nav-pills nav-stacked');
+            $menu->addChild(
+                $translator->trans('MyCourses'),
+                [
+                    'route' => 'userportal',
+                    'routeParameters' => ['type' => 'courses'],
+                ]
+            );
+
+            return $menu;
+
+            if (api_is_allowed_to_create_course()) {
+                $lang = $translator->trans('CreateCourse');
+                if ($settingsManager->getSetting('course.course_validation') == 'true') {
+                    $lang = $translator->trans('CreateCourseRequest');
+                }
+                $menu->addChild(
+                    $lang,
+                    ['route' => 'add_course']
+                );
+            }
+
+            $link = $this->container->get('router')->generate('web.main');
+
+            $menu->addChild(
+                $translator->trans('ManageCourses'),
+                [
+                    'uri' => $link.'auth/courses.php?action=sortmycourses',
+                ]
+            );
+
+            $browse = $settingsManager->getSetting('display.allow_students_to_browse_courses');
+
+            if ($browse == 'true') {
+                if ($checker->isGranted('ROLE_STUDENT') && !api_is_drh(
+                    ) && !api_is_session_admin()
+                ) {
+                    $menu->addChild(
+                        $translator->trans('CourseCatalog'),
+                        [
+                            'uri' => $link.'auth/courses.php',
+                        ]
+                    );
+                } else {
+                    $menu->addChild(
+                        $translator->trans('Dashboard'),
+                        [
+                            'uri' => $link.'dashboard/index.php',
+                        ]
+                    );
+                }
+            }
+
+            /** @var \Knp\Menu\MenuItem $menu */
+            $menu->addChild(
+                $translator->trans('History'),
+                [
+                    'route' => 'userportal',
+                    'routeParameters' => [
+                        'type' => 'sessions',
+                        'filter' => 'history',
+                    ],
+                ]
+            );
         }
 
         return $menu;

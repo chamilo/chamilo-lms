@@ -27,7 +27,7 @@ var disconnect_lang = 'ChatDisconnected';
 
 $( document ).ready(function() {
     console.log( "ready!" );
-    $("#menu_courses").prop("href", "#");
+    $("#menu_courses").prop("href", "javascript:void(0);");
 });
 $(function() {
     var isInCourse = $("body").data("in-course");

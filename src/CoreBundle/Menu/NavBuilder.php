@@ -279,7 +279,7 @@ class NavBuilder implements ContainerAwareInterface
                     'settings',
                     [
                         'label' => $translator->trans('Advanced settings'),
-                        'uri' => '../public/admin/settings/platform'
+                        'uri' => $urlPortal . 'public/admin/settings/platform'
                     ]
                 );
             }

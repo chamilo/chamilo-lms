@@ -7,6 +7,8 @@ Chamilo LMS is an LAMP-based e-learning web platform that focuses on providing a
 environment for teachers to improve both the quality and availability of their
 educational material, and on providing students with an awesome learning platform.
 
+Before you report an issue, please check the [official Chamilo documentation](https://docs.chamilo.org) (not always up to date)
+
 We are a relatively small development team and greatly welcome any contribution
 from the outside world, although we will thoroughly review them before integration,
 to make sure they do not introduce security vulnerabilities or degrade the ease

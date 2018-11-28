@@ -2,8 +2,8 @@
 var ajax_url = _p.web_ajax + 'chat.ajax.php';
 var online_button = '<img src="' + _p.web_img + 'statusonline.png">';
 var offline_button = '<img src="' + _p.web_img + 'statusoffline.png">';
-var connect_lang = '{{ "ChatConnected"|get_lang }}';
-var disconnect_lang = '{{ "ChatDisconnected"|get_lang }}';
+var connect_lang = '{{ "ChatConnected"|get_lang | escape('js')}}';
+var disconnect_lang = '{{ "ChatDisconnected"|get_lang | escape('js')}}';
 
 $(function() {
     addMainEvent(window, 'unload', courseLogout ,false);
@@ -101,7 +101,7 @@ $(function() {
     // Delete modal
     $('#confirm-delete').on('show.bs.modal', function(e) {
         $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
-        var message = '{{ 'AreYouSureToDeleteJS' | get_lang }}: <strong>' + $(e.relatedTarget).data('item-title') + '</strong>';
+        var message = '{{ 'AreYouSureToDeleteJS' | get_lang | escape('js')}}: <strong>' + $(e.relatedTarget).data('item-title') + '</strong>';
 
         if ($(e.relatedTarget).data('item-question')) {
             message = $(e.relatedTarget).data('item-question');
@@ -298,16 +298,16 @@ $(function() {
 
     $('.star-rating li a').on('click', function(event) {
         var id = $(this).parents('ul').attr('id');
-        $('#vote_label2_' + id).html("{{'Loading'|get_lang}}");
+        $('#vote_label2_' + id).html("{{'Loading'|get_lang| escape('js')}}");
         $.ajax({
             url: $(this).attr('data-link'),
             success: function(data) {
                 $("#rating_wrapper_"+id).html(data);
                 if (data == 'added') {
-                    //$('#vote_label2_' + id).html("{{'Saved'|get_lang}}");
+                    //$('#vote_label2_' + id).html("{{'Saved'|get_lang | escape('js')}}");
                 }
                 if (data == 'updated') {
-                    //$('#vote_label2_' + id).html("{{'Saved'|get_lang}}");
+                    //$('#vote_label2_' + id).html("{{'Saved'|get_lang| escape('js')}}");
                 }
             }
         });
@@ -420,7 +420,7 @@ function setCheckbox(value, table_id) {
 
 function action_click(element, table_id) {
     d = $("#"+table_id);
-    if (!confirm('{{ "ConfirmYourChoice"|get_lang }}')) {
+    if (!confirm('{{ "ConfirmYourChoice"|get_lang | escape('js')}}')) {
         return false;
     } else {
         var action =$(element).attr("data-action");

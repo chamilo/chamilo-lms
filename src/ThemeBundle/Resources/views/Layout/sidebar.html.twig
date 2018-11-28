@@ -1,7 +1,36 @@
 {% autoescape false %}
 <ul class="sidebar-menu scrollable pos-r">
 
-    {{ mopa_bootstrap_menu('ChamiloCoreBundle:NavBuilder:leftMenu', {'automenu': 'navbar', 'stacked' : true}) }}
+    {% set menu = knp_menu_get('ChamiloCoreBundle:NavBuilder:menuApp') %}
+
+    <ul class="navbar-nav">
+        {% for item in menu.children %}
+            {% set children = item.children|length %}
+            {% set current = item.isCurrent ? 'active': '' %}
+            <li class="nav-item {{ current }} {{ children > 0 ? 'dropdown' : '' }}">
+                <a id="menu_{{ item.name }}" class='sidebar-link' href="{{ item.uri }}">
+                    <span class="icon-holder">
+                        <i class="fa fa-{{ item.extras.icon }}"></i>
+                    </span>
+                    <span class="title">
+                        {{ item.label }}
+                    </span>
+                </a>
+                {% if children > 0 %}
+                    <ul id="submenu_{{ item.name }}" class="dropdown-menu">
+                        {% for item in item.children %}
+                        <li>
+                            <a href="{{ item.uri }}" class="sidebar-link">
+                                {{ item.label }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+
 
     <li class="sidebar-divider"></li>
 

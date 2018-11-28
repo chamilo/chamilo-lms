@@ -240,7 +240,7 @@ if (is_array($personal_course_list)) {
 }
 
 //Social Block Menu
-$social_menu_block = SocialManager::show_social_menu(
+$social_menu_block = SocialManager::getMenuSocial(
     'shared_profile',
     null,
     $user_id,
@@ -601,7 +601,7 @@ if ($show_full_profile) {
     if (!isset($_GET['u']) ||
         (isset($_GET['u']) && $_GET['u'] == api_get_user_id())
     ) {
-        $pending_invitations = SocialManager::get_list_invitation_of_friends_by_user_id(api_get_user_id());
+        $pending_invitations = SocialManager::get_list_invitation_of_friends_by_user_id(api_get_user_id(), null);
         $list_get_path_web = SocialManager::get_list_web_path_user_invitation_by_user_id(api_get_user_id());
         $count_pending_invitations = count($pending_invitations);
     }
@@ -729,4 +729,6 @@ $formModals = $formModalTpl->fetch($template);
 
 $tpl->assign('form_modals', $formModals);
 $social_layout = $tpl->get_template('social/profile.tpl');
-$tpl->display($social_layout);
+$content = $tpl->fetch($social_layout);
+$tpl->assign('content', $content);
+$tpl->display_one_col_template();

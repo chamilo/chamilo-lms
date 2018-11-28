@@ -1018,7 +1018,7 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Activate the view with ViewerJS for PDF files within the lessons for IPad and IPhone
 // $_configuration['allow_pdf_viewerjs_in_lp'] = false;
 
-// Allow DRH user to access all session course announcements
+// Allow DRH user to access all visible session course announcements
 // $_configuration['allow_drh_access_announcement'] = false;
 
 // Allow my personal files link in the homepage

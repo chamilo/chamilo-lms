@@ -1624,6 +1624,11 @@ class AnnouncementManager
 
         $allowDrhAccess = api_get_configuration_value('allow_drh_access_announcement');
 
+        if ($allowDrhAccess && api_is_drh()) {
+            // DRH only can see visible
+            $searchCondition .= ' AND (ip.visibility = 1)';
+        }
+
         if (api_is_allowed_to_edit(false, true) ||
             ($allowUserEditSetting && !api_is_anonymous()) ||
             ($allowDrhAccess && api_is_drh())
@@ -1819,7 +1824,7 @@ class AnnouncementManager
                                 $searchCondition  AND
                                 ip.visibility='1' AND
                                 announcement.session_id IN ( 0,".api_get_session_id().")
-                            $groupBy
+                                $groupBy
                             ";
                 }
             }

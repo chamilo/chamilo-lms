@@ -48,6 +48,18 @@ abstract class BaseController extends Controller
      */
     public function getCourse()
     {
-        return $this->getRequest()->getSession()->get('course');
+        $courseId = $this->getRequest()->getSession()->get('_real_cid', 0);
+
+        return $this->getDoctrine()->getManager()->find('ChamiloCoreBundle:Course', $courseId);
+    }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\Request|null
+     */
+    public function getRequest()
+    {
+        $request = $this->container->get('request_stack')->getCurrentRequest();
+
+        return $request;
     }
 }

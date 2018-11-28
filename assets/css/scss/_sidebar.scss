@@ -194,14 +194,39 @@
     position: relative;
     border-radius: 0;
     &.dropdown{
+      &.open{
+        a{
+          .arrow{
+            transform: rotate(90deg);
+          }
+        }
+      }
+      .arrow{
+        line-height: 35px;
+        position: absolute;
+        right: 15px;
+        transition: all .05s ease-in;
+        i{
+          font-size: 12px;
+        }
+      }
       ul{
         &.dropdown-menu{
           background-color: #3D66CA;
           padding: 0;
           border: none;
           border-radius: 0;
-          .sidebar-link{
-            padding: 8px 15px;
+          .sub-link{
+            i{
+              height: 35px;
+              left: 0;
+              line-height: 35px;
+              margin-right: 14px;
+              position: relative;
+              text-align: center;
+              transition: all 0.3s ease;
+              width: 40px;
+            }
           }
         }
       }
@@ -215,19 +240,20 @@
       padding: 5px 15px;
       position: relative;
       white-space: nowrap;
-
-      i {
-        border-radius: 6px;
-        display: inline-block;
-        font-size: 17px;
-        height: 35px;
-        left: 0;
-        line-height: 35px;
-        margin-right: 14px;
-        position: relative;
-        text-align: center;
-        transition: all 0.3s ease;
-        width: 40px;
+      .icon-holder{
+        i {
+          border-radius: 6px;
+          display: inline-block;
+          font-size: 17px;
+          height: 35px;
+          left: 0;
+          line-height: 35px;
+          margin-right: 14px;
+          position: relative;
+          text-align: center;
+          transition: all 0.3s ease;
+          width: 40px;
+        }
       }
 
       &.active {

@@ -15,12 +15,16 @@
                     <span class="title">
                         {{ item.label }}
                     </span>
+                    {% if children > 0 %}
+                        <span class="arrow"><i class="fas fa-angle-right"></i></span>
+                    {% endif %}
                 </a>
                 {% if children > 0 %}
                     <ul id="submenu_{{ item.name }}" class="dropdown-menu">
                         {% for item in item.children %}
                         <li>
-                            <a href="{{ item.uri }}" class="sidebar-link">
+                            <a href="{{ item.uri }}" class="sub-link">
+                                <i class="far fa-circle"></i>
                                 {{ item.label }}
                             </a>
                         </li>
@@ -36,19 +40,25 @@
 
     <li class="nav-item">
         <a class='sidebar-link' href="https://docs.chamilo.org/">
-            <i class="far fa-file-alt"></i>
+            <span class="icon-holder">
+                <i class="far fa-file-alt"></i>
+            </span>
             {{ "Documentation"|trans }}
         </a>
     </li>
     <li class="nav-item">
         <a class='sidebar-link' href="https://forum.chamilo.org/">
-            <i class="fa fa-users"></i>
+            <span class="icon-holder">
+                <i class="fa fa-users"></i>
+            </span>
             {{ "Forums"|trans }}
         </a>
     </li>
     <li class="nav-item">
         <a class='sidebar-link' href="https://github.com/chamilo/chamilo-lms">
-            <i class="fab fa-github"></i>
+            <span class="icon-holder">
+                <i class="fab fa-github"></i>
+            </span>
             {{ "GithubRepository"|trans }}
         </a>
     </li>

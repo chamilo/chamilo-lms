@@ -162,24 +162,26 @@ foreach ($questions as $item) {
 
 $row = 1;
 $column = 0;
+
 // Total counter
 $table->setHeaderContents(
     $row,
     0,
     get_lang('NumberOfUsers').': '.count($students)
 );
+
 foreach ($questions as $item) {
+    $questionId = $item['question_id'];
     $count = 0;
-    if (isset($answerList[$item['question_id']])) {
-        $questionsWithAnswer = 0;
-        foreach ($answerList[$item['question_id']] as $value) {
-            if ($value == 1) {
+    $questionsWithAnswer = 0;
+    if (isset($answerList[$questionId])) {
+        foreach ($answerList[$questionId] as $userAnswer) {
+            if ((int) $userAnswer === 1) {
                 $questionsWithAnswer++;
             }
         }
-
         $count = '<p style="color:cornflowerblue" >
-            <span class="fa fa-check fa-2x"></span>'.$questionsWithAnswer.'</p>';
+                  <span class="fa fa-check fa-2x"></span>'.$questionsWithAnswer.'</p>';
     }
     $table->setHeaderContents(
         $row,
@@ -247,7 +249,6 @@ foreach ($students as $studentId) {
                 if (empty($answerList[$item['question_id']][$studentId])) {
                     $checked = $notAvailableIcon;
                 }
-
             }
             $table->setHeaderContents(
                 $row,

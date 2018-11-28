@@ -82,14 +82,6 @@ class NavBuilder implements ContainerAwareInterface
                 'courses',
                 [
                     'label' => $translator->trans('Courses'),
-                    'icon' => 'book'
-                ]
-            );
-
-            $menu['courses']->addChild(
-                'courses',
-                [
-                    'label' => $translator->trans('My courses'),
                     'route' => 'legacy_main',
                     'icon' => 'book',
                     'routeParameters' => [
@@ -98,11 +90,41 @@ class NavBuilder implements ContainerAwareInterface
                 ]
             );
 
+            $menu['courses']->addChild(
+                'courses',
+                [
+                    'label' => $translator->trans('All my courses'),
+                    'route' => 'legacy_main',
+                    'icon' => 'book',
+                    'routeParameters' => [
+                        'name' => '../user_portal.php',
+                    ],
+                ]
+            );
+
+            $browse = $settingsManager->getSetting('display.allow_students_to_browse_courses');
+
+            if ($browse == 'true') {
+                if ($checker->isGranted('ROLE_STUDENT') && !api_is_drh(
+                    ) && !api_is_session_admin()
+                ) {
+                    $menu['courses']->addChild(
+                        'catalog',
+                        [
+                            'label' => $translator->trans('Course catalog'),
+                            'route' => 'legacy_main',
+                            'routeParameters' => [
+                                'name' => 'auth/courses.php'
+                            ],
+                        ]
+                    );
+                }
+            }
 
             if (api_is_allowed_to_create_course()) {
-                $lang = $translator->trans('CreateCourse');
+                $lang = $translator->trans('Create course');
                 if ($settingsManager->getSetting('course.course_validation') == 'true') {
-                    $lang = $translator->trans('CreateCourseRequest');
+                    $lang = $translator->trans('Create course request');
                 }
 
                 $menu['courses']->addChild(
@@ -117,25 +139,26 @@ class NavBuilder implements ContainerAwareInterface
                 );
             }
 
-            $browse = $settingsManager->getSetting('display.allow_students_to_browse_courses');
+            $menu['courses']->addChild(
+                $translator->trans('Course history'),
+                [
+                    'route' => 'userportal',
+                    'routeParameters' => [
+                        'type' => 'sessions',
+                        'filter' => 'history',
+                    ],
+                ]
+            );
 
-            if ($browse == 'true') {
-                if ($checker->isGranted('ROLE_STUDENT') && !api_is_drh(
-                    ) && !api_is_session_admin()
-                ) {
-                    $menu['courses']->addChild(
-                        'catalog',
-                        [
-                            'label' => $translator->trans('CourseCatalog'),
-                            'route' => 'legacy_main',
-                            'routeParameters' => [
-                                'name' => 'auth/courses.php'
-                            ],
-                        ]
-                    );
-                }
+            if ($checker->isGranted('ROLE_ADMIN')) {
+                $menu['courses']->addChild(
+                    $translator->trans('Add Session'),
+                    [
+                        'route' => 'legacy_main',
+                        'routeParameters' => ['name' => 'session/session_add.php'],
+                    ]
+                );
             }
-
 
             $menu->addChild(
                 'calendar',
@@ -173,6 +196,9 @@ class NavBuilder implements ContainerAwareInterface
                         ],
                     ]
                 );
+
+
+
             }
 
             if ($checker->isGranted('ROLE_ADMIN')) {

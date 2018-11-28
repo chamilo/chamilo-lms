@@ -268,6 +268,77 @@ class NavBuilder implements ContainerAwareInterface
                         ],
                     ]
                 );
+                $menu['administrator']->addChild(
+                    'options',
+                    [
+                        'label' => $translator->trans('All options'),
+                        'route' => 'legacy_main',
+                        'routeParameters' => [
+                            'name' => 'admin/index.php',
+                        ],
+                    ]
+                );
+
+                $menu['administrator']->addChild(
+                    'userlist',
+                    [
+                        'label' => $translator->trans('User list'),
+                        'route' => 'legacy_main',
+                        'routeParameters' => [
+                            'name' => 'admin/user_list.php',
+                        ],
+                    ]
+                );
+                $menu['administrator']->addChild(
+                    'courselist',
+                    [
+                        'label' => $translator->trans('Course list'),
+                        'route' => 'legacy_main',
+                        'routeParameters' => [
+                            'name' => 'admin/course_list.php',
+                        ],
+                    ]
+                );
+                $menu['administrator']->addChild(
+                    'sessionlist',
+                    [
+                        'label' => $translator->trans('Session list'),
+                        'route' => 'legacy_main',
+                        'routeParameters' => [
+                            'name' => 'admin/session_list.php',
+                        ],
+                    ]
+                );
+                $menu['administrator']->addChild(
+                    'languages',
+                    [
+                        'label' => $translator->trans('Languages'),
+                        'route' => 'legacy_main',
+                        'routeParameters' => [
+                            'name' => 'admin/languages.php',
+                        ],
+                    ]
+                );
+                $menu['administrator']->addChild(
+                    'plugins',
+                    [
+                        'label' => $translator->trans('Plugins'),
+                        'route' => 'legacy_main',
+                        'routeParameters' => [
+                            'name' => 'admin/settings.php?category=Plugins',
+                        ],
+                    ]
+                );
+                $menu['administrator']->addChild(
+                    'settings',
+                    [
+                        'label' => $translator->trans('Advanced settings'),
+                        'route' => 'legacy_main',
+                        'routeParameters' => [
+                            'name' => '../public/admin/settings/platform',
+                        ],
+                    ]
+                );
             }
         }
 

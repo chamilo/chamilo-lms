@@ -32,6 +32,9 @@ $( document ).ready(function() {
     $("#menu_social").click(function(){
         return false;
     });
+    $("#menu_administrator").click(function(){
+        return false;
+    });
 });
 $(function() {
     var isInCourse = $("body").data("in-course");

@@ -26,8 +26,10 @@ var connect_lang = 'ChatConnected';
 var disconnect_lang = 'ChatDisconnected';
 
 $( document ).ready(function() {
-    //$("#menu_courses").prop("onClick", "javascript:return(false);");
     $("#menu_courses").click(function(){
+        return false;
+    });
+    $("#menu_social").click(function(){
         return false;
     });
 });

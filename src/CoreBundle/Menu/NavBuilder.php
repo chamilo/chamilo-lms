@@ -121,6 +121,17 @@ class NavBuilder implements ContainerAwareInterface
                 }
             }
 
+            $menu['courses']->addChild(
+                $translator->trans('Course history'),
+                [
+                    'route' => 'userportal',
+                    'routeParameters' => [
+                        'type' => 'sessions',
+                        'filter' => 'history',
+                    ],
+                ]
+            );
+
             if (api_is_allowed_to_create_course()) {
                 $lang = $translator->trans('Create course');
                 if ($settingsManager->getSetting('course.course_validation') == 'true') {
@@ -139,16 +150,6 @@ class NavBuilder implements ContainerAwareInterface
                 );
             }
 
-            $menu['courses']->addChild(
-                $translator->trans('Course history'),
-                [
-                    'route' => 'userportal',
-                    'routeParameters' => [
-                        'type' => 'sessions',
-                        'filter' => 'history',
-                    ],
-                ]
-            );
 
             if ($checker->isGranted('ROLE_ADMIN')) {
                 $menu['courses']->addChild(
@@ -197,8 +198,51 @@ class NavBuilder implements ContainerAwareInterface
                     ]
                 );
 
-
-
+                $menu['social']->addChild(
+                    $translator->trans('My profile'),
+                    [
+                        'route' => 'legacy_main',
+                        'routeParameters' => [
+                            'name' => 'social/home.php',
+                        ],
+                    ]
+                );
+                $menu['social']->addChild(
+                    $translator->trans('My shared profile'),
+                    [
+                        'route' => 'legacy_main',
+                        'routeParameters' => [
+                            'name' => 'social/profile.php',
+                        ],
+                    ]
+                );
+                $menu['social']->addChild(
+                    $translator->trans('Friends'),
+                    [
+                        'route' => 'legacy_main',
+                        'routeParameters' => [
+                            'name' => 'social/friends.php',
+                        ],
+                    ]
+                );
+                $menu['social']->addChild(
+                    $translator->trans('Social Groups'),
+                    [
+                        'route' => 'legacy_main',
+                        'routeParameters' => [
+                            'name' => 'social/groups.php',
+                        ],
+                    ]
+                );
+                $menu['social']->addChild(
+                    $translator->trans('My Files'),
+                    [
+                        'route' => 'legacy_main',
+                        'routeParameters' => [
+                            'name' => 'social/myfiles.php',
+                        ],
+                    ]
+                );
             }
 
             if ($checker->isGranted('ROLE_ADMIN')) {

@@ -359,7 +359,11 @@ if ($nbStudents > 0) {
     );
 
     foreach ($usersTracking as $userTracking) {
-        $userId = UserManager::get_user_id_from_username($userTracking[3]);
+        $userInfo = api_get_user_info_from_username($userTracking[3]);
+        if (empty($userInfo)) {
+            continue;
+        }
+        $userId = $userInfo['user_id'];
         if ($userTracking[5] === '100%') {
             $numberStudentsCompletedLP++;
         }
@@ -386,10 +390,10 @@ if ($nbStudents > 0) {
 
         $listStudent = [
             'id' => $userId,
-            'fullname' => $userTracking[2].', '.$userTracking[1],
+            'fullname' => $userInfo['complete_name'],
             'score' => floor($scoreStudent / 2),
             'total_time' => $minutes,
-            'avatar' => UserManager::getUserPicture($userId),
+            'avatar' => $userInfo['avatar'],
             'certicate' => $certificate,
         ];
         $listStudentIds[] = $userId;

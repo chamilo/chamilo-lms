@@ -34,6 +34,7 @@ class Container
     public static $environment;
     public static $urlGenerator;
     public static $checker;
+    /** @var TranslatorInterface */
     public static $translator;
     public static $mailer;
     public static $template;

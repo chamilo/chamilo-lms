@@ -35,7 +35,7 @@ $(document).ready( function() {
         var value = option.id;        
         var selectedDate = $("#start_date").datepicker({ dateFormat: \'dd,MM,yyyy\' }).val();        
         window.location.replace("'.$currentUrl.'?start_date="+selectedDate+"&course_id="+value);
-    });	
+    });
 });
 </script>';
 
@@ -94,7 +94,11 @@ if ($form->validate() && !empty($courseInfo)) {
     $exerciseId = isset($values['exercise_id']) ? $values['exercise_id'] : 0;
     $startDate = Security::remove_XSS($values['start_date']);
     $exportFilename = 'exercise_results_report_'.$exerciseId.'_'.$courseInfo['code'];
-    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_exercise_results_report&exercise_id='.$exerciseId.'&start_date='.$startDate.'&cidReq='.$courseInfo['code'].'&export_filename='.$exportFilename;
+    $url = api_get_path(WEB_AJAX_PATH).
+        'model.ajax.php?a=get_exercise_results_report&exercise_id='.$exerciseId.
+        '&start_date='.$startDate.'&cidReq='.$courseInfo['code'].
+        '&course_id='.$courseId.
+        '&export_filename='.$exportFilename;
 
     $categoryList = TestCategory::getListOfCategoriesIDForTest($exerciseId, $courseId);
     $columns = [

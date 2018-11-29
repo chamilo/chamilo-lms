@@ -12,7 +12,7 @@
             <div class="offset2 col-md-4 course-tool">
                 {{ item.extra }}
                 {{ item.visibility }}
-                {{ item.icon }}
+                {{ item.only_icon_small }}
                 {{ item.link }}
             </div>
             {% endfor %}

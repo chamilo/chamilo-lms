@@ -90,7 +90,7 @@ $actions[] = Display::url(
 );
 $actions[] = Display::url(
     Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM),
-    'window.print();'
+    'javascript:window.print();'
 );
 $actions[] = Display::url(
     Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_MEDIUM),

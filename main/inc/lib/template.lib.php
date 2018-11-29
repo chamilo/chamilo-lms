@@ -468,17 +468,16 @@ class Template
 
         $this->assign('show_toolbar', $show_toolbar);
 
-        //Only if course is available
-        $show_course_shortcut = null;
-        $show_course_navigation_menu = null;
-
+        // Only if course is available
+        $show_course_shortcut = '';
+        $show_course_navigation_menu = '';
         if (!empty($this->course_id) && $this->user_is_logged_in) {
             if (api_get_setting('show_toolshortcuts') != 'false') {
-                //Course toolbar
+                // Course toolbar
                 $show_course_shortcut = CourseHome::show_navigation_tool_shortcuts();
             }
             if (api_get_setting('show_navigation_menu') != 'false') {
-                //Course toolbar
+                // Course toolbar
                 $show_course_navigation_menu = CourseHome::show_navigation_menu();
             }
         }

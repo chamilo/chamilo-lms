@@ -511,6 +511,17 @@ $form->addElement('checkbox', 'sendMail', null, get_lang('SendMailToUsers'));
 $form->addButtonImport(get_lang('ImportSession'));
 
 $defaults = ['sendMail' => 'true', 'file_type' => 'csv'];
+
+$options = api_get_configuration_value('session_import_settings');
+if (!empty($options) && isset($options['options'])) {
+    if (isset($options['options']['session_exists_default_option'])) {
+        $defaults['overwrite'] = $options['options']['session_exists_default_option'];
+    }
+    if (isset($options['options']['send_mail_default_option'])) {
+        $defaults['sendMail'] = $options['options']['send_mail_default_option'];
+    }
+}
+
 $form->setDefaults($defaults);
 
 Display::return_message(get_lang('TheXMLImportLetYouAddMoreInfoAndCreateResources'));

@@ -4252,7 +4252,6 @@ class DocumentManager
             file_exists($documentData['absolute_path'])
         ) {
             $mp3FilePath = self::convertWavToMp3($documentData['absolute_path']);
-            error_log($mp3FilePath);
 
             if (!empty($mp3FilePath) && file_exists($mp3FilePath)) {
                 $documentId = self::addFileToDocumentTool(

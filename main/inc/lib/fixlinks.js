@@ -109,6 +109,7 @@ $(document).ready(function() {
             src = url+'&type=link&src='+src;
             src = src.replace('https', 'http');
             $(this).attr('href', src);
+            $(this).attr('target', '_blank');
             var myAnchor = $('<a><img width="16px" src="'+iconPath+'link-external.png "/></a>').attr("href", src).attr('target', '_blank').attr('class', 'generated');
             $(this).after(myAnchor);
             $(this).after('-');

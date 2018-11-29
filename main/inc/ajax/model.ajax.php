@@ -1332,7 +1332,6 @@ switch ($action) {
             $overwriteColumnHeaderExport['only_score'] = get_lang('Score').' - '.get_lang('ScoreNote');
             $overwriteColumnHeaderExport['total'] = get_lang('Score').' - '.get_lang('ScoreTest');
         }
-
         $categoryList = TestCategory::getListOfCategoriesIDForTest($exerciseId, $courseId);
 
         if (!empty($categoryList)) {

@@ -26,29 +26,17 @@ if (!$ltiTool) {
     api_not_allowed();
 }
 
-$oauth = new OAuthSimple(
+$consumer = new OAuthConsumer(
     $_POST['oauth_consumer_key'],
     $ltiTool->getSharedSecret()
 );
-$oauth->setAction('POST');
-$oauth->setSignatureMethod($_POST['oauth_signature_method']);
-$result = $oauth->sign(
-    [
-        'path' => api_get_path(WEB_PLUGIN_PATH).'ims_lti/item_return.php',
-        'parameters' => [
-            'content_items' => $_POST['content_items'],
-            'data' => $_POST['data'],
-            'lti_version' => $_POST['lti_version'],
-            'lti_message_type' => $_POST['lti_message_type'],
-            'oauth_nonce' => $_POST['oauth_nonce'],
-            'oauth_timestamp' => $_POST['oauth_timestamp'],
-            'oauth_signature_method' => $_POST['oauth_signature_method'],
-            'oauth_callback' => $_POST['oauth_callback'],
-        ],
-    ]
-);
+$hmacMethod = new OAuthSignatureMethod_HMAC_SHA1();
 
-if ($result['parameters']['oauth_signature'] !== $_POST['oauth_signature']) {
+$request = OAuthRequest::from_request('POST', api_get_path(WEB_PLUGIN_PATH).'ims_lti/item_return.php');
+$request->sign_request($hmacMethod, $consumer, '');
+$signature = $request->get_parameter('oauth_signature');
+
+if ($signature !== $_POST['oauth_signature']) {
     api_not_allowed();
 }
 

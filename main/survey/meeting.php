@@ -94,16 +94,37 @@ if (isset($_POST) && !empty($_POST)) {
     }
 
     $status = 1;
-    foreach ($options as $selectedQuestionId) {
-        SurveyUtil::store_answer(
-            $userId,
-            $surveyId,
-            $selectedQuestionId,
-            1,
-            $status,
-            $surveyData
-        );
+    if (!empty($options)) {
+        foreach ($options as $selectedQuestionId) {
+            SurveyUtil::store_answer(
+                $userId,
+                $surveyId,
+                $selectedQuestionId,
+                1,
+                $status,
+                $surveyData
+            );
+        }
+    } else {
+        foreach ($questions as $item) {
+            $questionId = $item['question_id'];
+            SurveyUtil::store_answer(
+                $userId,
+                $surveyId,
+                $questionId,
+                1,
+                0,
+                $surveyData
+            );
+        }
     }
+
+    SurveyManager::update_survey_answered(
+        $surveyData,
+        $survey_invitation['user'],
+        $survey_invitation['survey_code']
+    );
+
     Display::addFlash(Display::return_message(get_lang('Saved')));
     header('Location: '.$url);
     exit;
@@ -141,17 +162,26 @@ foreach ($questions as $item) {
 
 $row = 1;
 $column = 0;
+
 // Total counter
 $table->setHeaderContents(
     $row,
     0,
     get_lang('NumberOfUsers').': '.count($students)
 );
+
 foreach ($questions as $item) {
+    $questionId = $item['question_id'];
     $count = 0;
-    if (isset($answerList[$item['question_id']])) {
+    $questionsWithAnswer = 0;
+    if (isset($answerList[$questionId])) {
+        foreach ($answerList[$questionId] as $userAnswer) {
+            if ((int) $userAnswer === 1) {
+                $questionsWithAnswer++;
+            }
+        }
         $count = '<p style="color:cornflowerblue" >
-            <span class="fa fa-check fa-2x"></span>'.count($answerList[$item['question_id']]).'</p>';
+                  <span class="fa fa-check fa-2x"></span>'.$questionsWithAnswer.'</p>';
     }
     $table->setHeaderContents(
         $row,
@@ -162,6 +192,9 @@ foreach ($questions as $item) {
 
 $row = 2;
 $column = 0;
+$availableIcon = Display::return_icon('bullet_green.png', get_lang('Available'));
+$notAvailableIcon = Display::return_icon('bullet_red.png', get_lang('NotAvailable'));
+
 foreach ($students as $studentId) {
     $userInfo = api_get_user_info($studentId);
     $name = $userInfo['complete_name'];
@@ -177,9 +210,15 @@ foreach ($students as $studentId) {
             $checked = '';
             $html = '';
             if (isset($answerList[$item['question_id']][$studentId])) {
-                $checked = Display::return_icon('check-circle.png');
+                $checked = $availableIcon;
+                if (empty($answerList[$item['question_id']][$studentId])) {
+                    $checked = $notAvailableIcon;
+                }
                 if ($action === 'edit') {
-                    $checked = 'checked';
+                    $checked = '';
+                    if ($answerList[$item['question_id']][$studentId] == 1) {
+                        $checked = 'checked';
+                    }
                 }
             }
 
@@ -206,7 +245,10 @@ foreach ($students as $studentId) {
         foreach ($questions as $item) {
             $checked = '';
             if (isset($answerList[$item['question_id']][$studentId])) {
-                $checked = Display::return_icon('check-circle.png');
+                $checked = $availableIcon;
+                if (empty($answerList[$item['question_id']][$studentId])) {
+                    $checked = $notAvailableIcon;
+                }
             }
             $table->setHeaderContents(
                 $row,

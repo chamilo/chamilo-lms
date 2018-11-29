@@ -42,8 +42,6 @@ if ($enabled === 'true') {
     $pluginExtra = $plugin->getTeacherLink();
 }
 
-//	COURSE ADMIN ONLY VIEW
-$blocks = [];
 // Start of tools for CourseAdmins (teachers/tutors)
 if ($session_id === 0 && api_is_course_admin() && api_is_allowed_to_edit(null, true)) {
     $content .= '<div class="alert alert-success" style="border:0px; margin-top: 0px;padding:0px;">
@@ -53,46 +51,7 @@ if ($session_id === 0 && api_is_course_admin() && api_is_allowed_to_edit(null, t
     $content .= '</div>
 		<div class="alert alert-success" id="id_confirmation_message" style="display:none"></div>
 	</div>';
-
     $content .= $pluginExtra;
-
-    if (api_get_setting('show_session_data') == 'true' && $session_id > 0) {
-        $content .= '
-        <div class="row">
-            <div class="col-xs-12 col-md-12">
-                <span class="viewcaption">'.get_lang('SessionData').'</span>
-                <table class="course_activity_home">'.
-                    CourseHome::show_session_data($session_id).'
-                </table>
-            </div>
-        </div>';
-    }
-
-    $my_list = CourseHome::get_tools_category(TOOL_AUTHORING);
-
-    $blocks[] = [
-        'title' => get_lang('Authoring'),
-        'class' => 'course-tools-author',
-        'content' => CourseHome::show_tools_category($my_list),
-    ];
-
-    $list1 = CourseHome::get_tools_category(TOOL_INTERACTION);
-    $list2 = CourseHome::get_tools_category(TOOL_COURSE_PLUGIN);
-    $my_list = array_merge($list1, $list2);
-
-    $blocks[] = [
-        'title' => get_lang('Interaction'),
-        'class' => 'course-tools-interaction',
-        'content' => CourseHome::show_tools_category($my_list),
-    ];
-
-    $my_list = CourseHome::get_tools_category(TOOL_ADMIN_PLATFORM);
-
-    $blocks[] = [
-        'title' => get_lang('Administration'),
-        'class' => 'course-tools-administration',
-        'content' => CourseHome::show_tools_category($my_list),
-    ];
 } elseif (api_is_coach()) {
     $content .= $pluginExtra;
     if (api_get_setting('show_session_data') === 'true' && $session_id > 0) {
@@ -103,76 +62,9 @@ if ($session_id === 0 && api_is_course_admin() && api_is_allowed_to_edit(null, t
         $content .= CourseHome::show_session_data($session_id);
         $content .= '</table></div></div>';
     }
-
-    $my_list = CourseHome::get_tools_category(TOOL_STUDENT_VIEW);
-
-    $blocks[] = [
-        'content' => CourseHome::show_tools_category($my_list),
-    ];
-
-    $sessionsCopy = api_get_setting('allow_session_course_copy_for_teachers');
-    if ($sessionsCopy === 'true') {
-        // Adding only maintenance for coaches.
-        $myList = CourseHome::get_tools_category(TOOL_ADMIN_PLATFORM);
-        $onlyMaintenanceList = [];
-
-        foreach ($myList as $item) {
-            if ($item['name'] === 'course_maintenance') {
-                $item['link'] = 'course_info/maintenance_coach.php';
-
-                $onlyMaintenanceList[] = $item;
-            }
-        }
-
-        $blocks[] = [
-            'title' => get_lang('Administration'),
-            'content' => CourseHome::show_tools_category($onlyMaintenanceList),
-        ];
-    }
-} else {
-    $tools = CourseHome::get_tools_category(TOOL_STUDENT_VIEW);
-    $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
-        api_get_user_id(),
-        api_get_course_info()
-    );
-
-    // Force user icon for DRH
-    if ($isDrhOfCourse) {
-        $addUserTool = true;
-        foreach ($tools as $tool) {
-            if ($tool['name'] === 'user') {
-                $addUserTool = false;
-                break;
-            }
-        }
-
-        if ($addUserTool) {
-            $tools[] = [
-                'c_id' => api_get_course_int_id(),
-                'name' => 'user',
-                'link' => 'user/user.php',
-                'image' => 'members.gif',
-                'visibility' => '1',
-                'admin' => '0',
-                'address' => 'squaregrey.gif',
-                'added_tool' => '0',
-                'target' => '_self',
-                'category' => 'interaction',
-                'session_id' => api_get_session_id(),
-            ];
-        }
-    }
-
-    if (count($tools) > 0) {
-        $blocks[] = ['content' => CourseHome::show_tools_category($tools)];
-    }
-
-    if ($isDrhOfCourse) {
-        $drhTool = CourseHome::get_tools_category(TOOL_DRH);
-        $blocks[] = ['content' => CourseHome::show_tools_category($drhTool)];
-    }
 }
 
+$blocks = CourseHome::getUserBlocks();
 $activityView = new Template('', false, false, false, false, false, false);
 $activityView->assign('blocks', $blocks);
 

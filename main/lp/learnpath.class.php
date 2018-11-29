@@ -3721,7 +3721,6 @@ class learnpath
                             }
 
                             $type_quiz = false;
-
                             foreach ($list as $toc) {
                                 if ($toc['id'] == $lp_item_id && ($toc['type'] == 'quiz')) {
                                     $type_quiz = true;
@@ -3755,7 +3754,6 @@ class learnpath
                     if (strpos($document_name, '_DELETED_')) {
                         $file = 'blank.php?error=document_deleted';
                     }
-
                     break;
                 case 2:
                     if ($this->debug > 2) {

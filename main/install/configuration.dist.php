@@ -1018,11 +1018,29 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Activate the view with ViewerJS for PDF files within the lessons for IPad and IPhone
 // $_configuration['allow_pdf_viewerjs_in_lp'] = false;
 
-// Allow DRH user to access all session course announcements
+// Allow DRH user to access all visible session course announcements
 // $_configuration['allow_drh_access_announcement'] = false;
 
 // Allow my personal files link in the homepage
 // $_configuration['allow_my_files_link_in_homepage'] = false;
+
+// This option sets default parameters in the main/session/session_import.php
+/*$_configuration['session_import_settings'] = [
+    'options' =>  [
+        'session_exists_default_option' => '1',
+        'send_mail_default_option' => '1',
+    ]
+];*/
+
+// This option sets default parameters in the main/admin/user_import.php
+/*$_configuration['user_import_settings'] = [
+    'options' =>  [
+        'send_mail_default_option' => '1',
+    ]
+];*/
+
+// Disable all new exercise attempts in all the platform
+// $_configuration['exercises_disable_new_attempts'] = false;
 
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email

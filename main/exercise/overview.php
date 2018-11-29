@@ -106,7 +106,7 @@ if (api_get_configuration_value('save_titles_as_html')) {
     );
 }
 
-//Exercise description
+// Exercise description
 if (!empty($objExercise->description)) {
     $html .= Display::div($objExercise->description, ['class' => 'exercise_description']);
 }
@@ -344,6 +344,12 @@ if ($time_control) {
 }
 
 $html .= $message;
+
+$disable = api_get_configuration_value('exercises_disable_new_attempts');
+
+if ($disable && empty($exercise_stat_info)) {
+    $exercise_url_button = Display::return_message(get_lang('NewExerciseAttemptDisabled'));
+}
 
 if (!empty($exercise_url_button)) {
     $html .= Display::div(

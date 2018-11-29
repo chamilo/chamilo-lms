@@ -2354,14 +2354,16 @@ class CourseRestorer
                     'avail_till' => self::DBUTF8($survey->avail_till),
                     'is_shared' => self::DBUTF8($survey->is_shared),
                     'template' => self::DBUTF8($survey->template),
-                    'intro' => ($survey->intro === false ? '' : self::DBUTF8($survey->intro)),
-                    'surveythanks' => ($survey->surveythanks === false ? '' : self::DBUTF8($survey->surveythanks)),
+                    'intro' => $survey->intro === false ? '' : self::DBUTF8($survey->intro),
+                    'surveythanks' => $survey->surveythanks === false ? '' : self::DBUTF8($survey->surveythanks),
                     'creation_date' => self::DBUTF8($survey->creation_date),
                     'invited' => '0',
                     'answered' => '0',
                     'invite_mail' => self::DBUTF8($survey->invite_mail),
                     'reminder_mail' => self::DBUTF8($survey->reminder_mail),
                     'session_id' => $sessionId,
+                    'one_question_per_page' => isset($survey->one_question_per_page) ? $survey->one_question_per_page : 0,
+                    'shuffle' => isset($survey->suffle) ? $survey->suffle : 0,
                 ];
 
                 // An existing survey exists with the same code and the same language

@@ -62,9 +62,10 @@ class NavBuilder implements ContainerAwareInterface
         $container = $this->container;
         $checker = $container->get('security.authorization_checker');
         $translator = $container->get('translator');
+        $router = $container->get('router');
         $menu = $factory->createItem('root');
         $settingsManager = $container->get('chamilo.settings.manager');
-        //$router = $this->container->get('router');
+        $rootWeb = $router->generate('legacy_index');
 
         $menu->addChild(
             'home',
@@ -286,8 +287,7 @@ class NavBuilder implements ContainerAwareInterface
                     'settings',
                     [
                         'label' => $translator->trans('Advanced settings'),
-                        'route' => 'chamilo_platform_settings',
-                        'routeParameters' => ['namespace' => 'platform'],
+                        'uri' => $rootWeb.'public/admin/settings/platform',
                     ]
                 );
             }
@@ -321,6 +321,7 @@ class NavBuilder implements ContainerAwareInterface
             'enabled' => true,
         ]);
 
+        // Needed when loading legacy pages (inside main)
         $isLegacy = $container->get('request_stack')->getCurrentRequest()->get('load_legacy');
         $urlAppend = $container->getParameter('url_append');
         $legacyIndex = '';

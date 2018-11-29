@@ -960,7 +960,7 @@ class SocialManager extends UserManager
 
             $itemMenu[1] = [
                 'item' => get_lang('Messages').$count_unread_message,
-                'url' => api_get_path(WEB_CODE_PATH).'social/inbox.php',
+                'url' => api_get_path(WEB_CODE_PATH).'messages/inbox.php',
                 'icon' => $messagesIcon,
                 'active' => ($show == 'messages' ? 'active' : null),
             ];
@@ -1049,7 +1049,7 @@ class SocialManager extends UserManager
 
                 $itemMenu[1] = [
                     'item' => get_lang('Messages').$count_unread_message,
-                    'url' => api_get_path(WEB_CODE_PATH).'social/inbox.php',
+                    'url' => api_get_path(WEB_CODE_PATH).'messages/inbox.php',
                     'icon' => $messagesIcon,
                     'active' => ($show == 'messages' ? 'active' : null),
                 ];

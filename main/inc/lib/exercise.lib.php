@@ -598,7 +598,9 @@ class ExerciseLib
                             if (!empty($userChoiceList)) {
                                 foreach ($userChoiceList as $item) {
                                     $item = explode(':', $item);
-                                    $myChoice[$item[0]] = $item[1];
+                                    if (!empty($item)) {
+                                        $myChoice[$item[0]] = isset($item[1]) ? $item[1] : '';
+                                    }
                                 }
                             }
 

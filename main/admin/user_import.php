@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * This tool allows platform admins to add users by uploading a CSV or XML file.
  *
@@ -548,6 +549,14 @@ $form->addButtonImport(get_lang('Import'));
 $defaults['formSent'] = 1;
 $defaults['sendMail'] = 0;
 $defaults['file_type'] = 'csv';
+
+$extraSettings = api_get_configuration_value('user_import_settings');
+if (!empty($extraSettings) && isset($extraSettings['options']) &&
+    isset($extraSettings['options']['send_mail_default_option'])
+) {
+    $defaults['sendMail'] = $extraSettings['options']['send_mail_default_option'];
+}
+
 $form->setDefaults($defaults);
 $form->display();
 

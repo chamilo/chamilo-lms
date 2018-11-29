@@ -6398,10 +6398,10 @@ class DocumentManager
      * @param string $title
      * @param string $comment
      * @param int    $readonly
-     * @param int    $visibility see ResourceLink constants
-     * @param int    $groupId    group.id
-     * @param int    $sessionId  Session ID, if any
-     * @param int    $userId     creator user id
+     * @param int    $visibility       see ResourceLink constants
+     * @param int    $groupId          group.id
+     * @param int    $sessionId        Session ID, if any
+     * @param int    $userId           creator user id
      * @param bool   $sendNotification
      * @param string $content
      * @param int    $parentId

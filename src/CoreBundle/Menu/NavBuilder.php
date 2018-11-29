@@ -8,12 +8,8 @@ use Chamilo\PageBundle\Entity\Page;
 use Chamilo\PageBundle\Entity\Site;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
-use Knp\Menu\Matcher\Matcher;
-use Knp\Menu\Matcher\Voter\UriVoter;
-use Knp\Menu\Renderer\ListRenderer;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Chamilo\CoreBundle\Menu\LeftMenuBuilder;
 
 /**
  * Class NavBuilder.
@@ -25,8 +21,8 @@ class NavBuilder implements ContainerAwareInterface
     use ContainerAwareTrait;
 
     /**
-     * @param array $itemOptions The options given to the created menuItem
-     * @param string $currentUri The current URI
+     * @param array  $itemOptions The options given to the created menuItem
+     * @param string $currentUri  The current URI
      *
      * @return ItemInterface
      */
@@ -41,9 +37,9 @@ class NavBuilder implements ContainerAwareInterface
     }
 
     /**
-     * @param ItemInterface $menu The item to fill with $routes
-     * @param array $options The item options
-     * @param string $currentUri The current URI
+     * @param ItemInterface $menu       The item to fill with $routes
+     * @param array         $options    The item options
+     * @param string        $currentUri The current URI
      */
     public function buildCategoryMenu(ItemInterface $menu, array $options = [], $currentUri = null)
     {
@@ -57,7 +53,7 @@ class NavBuilder implements ContainerAwareInterface
      * Top menu left.
      *
      * @param FactoryInterface $factory
-     * @param array $options
+     * @param array            $options
      *
      * @return ItemInterface
      */
@@ -93,8 +89,8 @@ class NavBuilder implements ContainerAwareInterface
                 'courses',
                 [
                     'label' => $translator->trans('Courses'),
-                    'uri' => $urlPortal . 'user_portal.php',
-                    'icon' => 'book'
+                    'uri' => $urlPortal.'user_portal.php',
+                    'icon' => 'book',
                 ]
             );
 
@@ -102,7 +98,7 @@ class NavBuilder implements ContainerAwareInterface
                 'courses',
                 [
                     'label' => $translator->trans('All my courses'),
-                    'uri' => $urlPortal . 'user_portal.php'
+                    'uri' => $urlPortal.'user_portal.php',
                 ]
             );
 
@@ -115,7 +111,7 @@ class NavBuilder implements ContainerAwareInterface
                         'catalog',
                         [
                             'label' => $translator->trans('Course catalog'),
-                            'uri' => $mainURL . 'auth/courses.php'
+                            'uri' => $mainURL.'auth/courses.php',
                         ]
                     );
                 }
@@ -124,7 +120,7 @@ class NavBuilder implements ContainerAwareInterface
             $menu['courses']->addChild(
                 $translator->trans('Course history'),
                 [
-                    'uri' => 'userportal'
+                    'uri' => 'userportal',
                 ]
             );
 
@@ -138,17 +134,16 @@ class NavBuilder implements ContainerAwareInterface
                     'create-course',
                     [
                         'label' => $lang,
-                        'uri' => $mainURL . 'create_course/add_course.php'
+                        'uri' => $mainURL.'create_course/add_course.php',
                     ]
                 );
             }
-
 
             if ($checker->isGranted('ROLE_ADMIN')) {
                 $menu['courses']->addChild(
                     $translator->trans('Add Session'),
                     [
-                        'uri' => $mainURL . 'session/session_add.php'
+                        'uri' => $mainURL.'session/session_add.php',
                     ]
                 );
             }
@@ -157,8 +152,8 @@ class NavBuilder implements ContainerAwareInterface
                 'calendar',
                 [
                     'label' => $translator->trans('Calendar'),
-                    'uri' => $mainURL . 'calendar/agenda_js.php',
-                    'icon' => 'calendar-alt'
+                    'uri' => $mainURL.'calendar/agenda_js.php',
+                    'icon' => 'calendar-alt',
                 ]
             );
 
@@ -166,8 +161,8 @@ class NavBuilder implements ContainerAwareInterface
                 'reports',
                 [
                     'label' => $translator->trans('Reporting'),
-                    'uri' => $mainURL . 'mySpace/index.php',
-                    'icon' => 'chart-bar'
+                    'uri' => $mainURL.'mySpace/index.php',
+                    'icon' => 'chart-bar',
                 ]
             );
 
@@ -176,39 +171,39 @@ class NavBuilder implements ContainerAwareInterface
                     'social',
                     [
                         'label' => $translator->trans('Social'),
-                        'uri' => $mainURL . 'social/home.php',
-                        'icon' => 'heart'
+                        'uri' => $mainURL.'social/home.php',
+                        'icon' => 'heart',
                     ]
                 );
 
                 $menu['social']->addChild(
                     $translator->trans('My profile'),
                     [
-                        'uri' => $mainURL . 'social/home.php'
+                        'uri' => $mainURL.'social/home.php',
                     ]
                 );
                 $menu['social']->addChild(
                     $translator->trans('My shared profile'),
                     [
-                        'uri' => $mainURL . 'social/profile.php'
+                        'uri' => $mainURL.'social/profile.php',
                     ]
                 );
                 $menu['social']->addChild(
                     $translator->trans('Friends'),
                     [
-                        'uri' => $mainURL . 'social/friends.php'
+                        'uri' => $mainURL.'social/friends.php',
                     ]
                 );
                 $menu['social']->addChild(
                     $translator->trans('Social Groups'),
                     [
-                        'uri' => $mainURL . 'social/groups.php',
+                        'uri' => $mainURL.'social/groups.php',
                     ]
                 );
                 $menu['social']->addChild(
                     $translator->trans('My Files'),
                     [
-                        'uri' => $mainURL . 'social/myfiles.php'
+                        'uri' => $mainURL.'social/myfiles.php',
                     ]
                 );
             }
@@ -218,8 +213,8 @@ class NavBuilder implements ContainerAwareInterface
                     'dashboard',
                     [
                         'label' => $translator->trans('Dashboard'),
-                        'uri' => $mainURL . 'dashboard/index.php',
-                        'icon' => 'cube'
+                        'uri' => $mainURL.'dashboard/index.php',
+                        'icon' => 'cube',
                     ]
                 );
 
@@ -227,8 +222,8 @@ class NavBuilder implements ContainerAwareInterface
                     'administrator',
                     [
                         'label' => $translator->trans('Administration'),
-                        'uri' => $mainURL . 'admin/index.php',
-                        'icon' => 'cogs'
+                        'uri' => $mainURL.'admin/index.php',
+                        'icon' => 'cogs',
                     ]
                 );
 
@@ -236,7 +231,7 @@ class NavBuilder implements ContainerAwareInterface
                     'options',
                     [
                         'label' => $translator->trans('All options'),
-                        'uri' => $mainURL . 'admin/index.php'
+                        'uri' => $mainURL.'admin/index.php',
                     ]
                 );
 
@@ -244,42 +239,42 @@ class NavBuilder implements ContainerAwareInterface
                     'userlist',
                     [
                         'label' => $translator->trans('User list'),
-                        'uri' => $mainURL . 'admin/user_list.php'
+                        'uri' => $mainURL.'admin/user_list.php',
                     ]
                 );
                 $menu['administrator']->addChild(
                     'courselist',
                     [
                         'label' => $translator->trans('Course list'),
-                        'uri' => $mainURL . 'admin/course_list.php'
+                        'uri' => $mainURL.'admin/course_list.php',
                     ]
                 );
                 $menu['administrator']->addChild(
                     'sessionlist',
                     [
                         'label' => $translator->trans('Session list'),
-                        'uri' => $mainURL . 'session/session_list.php'
+                        'uri' => $mainURL.'session/session_list.php',
                     ]
                 );
                 $menu['administrator']->addChild(
                     'languages',
                     [
                         'label' => $translator->trans('Languages'),
-                        'uri' => $mainURL . 'admin/languages.php'
+                        'uri' => $mainURL.'admin/languages.php',
                     ]
                 );
                 $menu['administrator']->addChild(
                     'plugins',
                     [
                         'label' => $translator->trans('Plugins'),
-                        'uri' => $mainURL . 'admin/settings.php?category=Plugins'
+                        'uri' => $mainURL.'admin/settings.php?category=Plugins',
                     ]
                 );
                 $menu['administrator']->addChild(
                     'settings',
                     [
                         'label' => $translator->trans('Advanced settings'),
-                        'uri' => $urlPortal . 'public/admin/settings/platform'
+                        'uri' => $urlPortal.'public/admin/settings/platform',
                     ]
                 );
             }
@@ -322,7 +317,7 @@ class NavBuilder implements ContainerAwareInterface
         $urlAppend = $container->getParameter('url_append');
         $legacyIndex = '';
         if ($isLegacy) {
-            $legacyIndex = $urlAppend . '/public';
+            $legacyIndex = $urlAppend.'/public';
         }
 
         if ($site) {
@@ -347,7 +342,7 @@ class NavBuilder implements ContainerAwareInterface
                     continue;
                 }
 
-                $url = $legacyIndex . $page->getUrl();
+                $url = $legacyIndex.$page->getUrl();
 
                 $subMenu = $menu->addChild(
                     $page->getName(),
@@ -361,7 +356,7 @@ class NavBuilder implements ContainerAwareInterface
 
                 /** @var Page $child */
                 foreach ($page->getChildren() as $child) {
-                    $url = $legacyIndex . $child->getUrl();
+                    $url = $legacyIndex.$child->getUrl();
                     $subMenu->addChild(
                         $child->getName(),
                         [
@@ -389,7 +384,7 @@ class NavBuilder implements ContainerAwareInterface
      * Course menu.
      *
      * @param FactoryInterface $factory
-     * @param array $options
+     * @param array            $options
      *
      * @return ItemInterface
      */
@@ -429,7 +424,7 @@ class NavBuilder implements ContainerAwareInterface
             $menu->addChild(
                 $translator->trans('ManageCourses'),
                 [
-                    'uri' => $link . 'auth/courses.php?action=sortmycourses',
+                    'uri' => $link.'auth/courses.php?action=sortmycourses',
                 ]
             );
 
@@ -441,14 +436,14 @@ class NavBuilder implements ContainerAwareInterface
                     $menu->addChild(
                         $translator->trans('CourseCatalog'),
                         [
-                            'uri' => $link . 'auth/courses.php',
+                            'uri' => $link.'auth/courses.php',
                         ]
                     );
                 } else {
                     $menu->addChild(
                         $translator->trans('Dashboard'),
                         [
-                            'uri' => $link . 'dashboard/index.php',
+                            'uri' => $link.'dashboard/index.php',
                         ]
                     );
                 }

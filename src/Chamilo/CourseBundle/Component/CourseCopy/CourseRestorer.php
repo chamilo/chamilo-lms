@@ -2363,7 +2363,7 @@ class CourseRestorer
                     'reminder_mail' => self::DBUTF8($survey->reminder_mail),
                     'session_id' => $sessionId,
                     'one_question_per_page' => isset($survey->one_question_per_page) ? $survey->one_question_per_page : 0,
-                    'shuffle' => isset($survey->suffle) ? $survey->suffle : 0
+                    'shuffle' => isset($survey->suffle) ? $survey->suffle : 0,
                 ];
 
                 // An existing survey exists with the same code and the same language

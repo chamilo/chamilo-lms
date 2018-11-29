@@ -2379,18 +2379,19 @@ div.admin_section h4 {
     top: 0;
     color: #cfcfcf;
     margin: 0;
-    padding: 2px 10px;
+    padding: 0 10px;
     position: relative;
     background: #333;
     border-radius: 4px 0 0 0;
+    float: left;
 }
 
 .ribbon .rib h3 {
     color: white;
-    font-size: 16px;
+    font-size: 15px;
     float: left;
-    line-height: 16px;
-    padding-top: 5px;
+    line-height: 40px;
+    font-weight: bold;
     margin: 0;
 }
 
@@ -2434,9 +2435,11 @@ div.admin_section h4 {
 
 .ribbon h4 {
     margin: 0;
-    padding: 8px 10px;
+    padding-left: 8px;
     color: #444;
     float: left;
+    line-height: 40px;
+    font-size: 15px;
 }
 
 .ribbon-total h4 {
@@ -2452,18 +2455,6 @@ div.admin_section h4 {
     position: absolute;
     right: 0;
     top: 0;
-}
-
-.ribbon .rib::before {
-    content: '';
-    display: block;
-    width: 0;
-    height: 0;
-    position: absolute;
-    bottom: -11px;
-    z-index: -10;
-    border: 5px solid;
-    border-color: #242424 transparent transparent transparent;
 }
 
 .ribbon .rib-error::before {

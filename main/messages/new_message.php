@@ -181,11 +181,11 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
 
         // Adding reply mail
         $user_reply_info = api_get_user_info($message_reply_info['user_sender_id']);
-        $default['content'] = '<p><br/></p>'.sprintf(
+        $default['content'] = '<div style="font-family: Verdana, Arial, sans-serif; font-size: 12px;">'.sprintf(
             get_lang('XWroteY'),
             $user_reply_info['complete_name'],
             Security::filter_terms($message_reply_info['content'])
-        );
+        ).'</div>';
     }
 
     if (isset($_GET['forward_id'])) {
@@ -205,7 +205,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
         $forwardMessage .= get_lang('Date').': '.api_get_local_time($message_reply_info['send_date']).'<br />';
         $forwardMessage .= get_lang('Subject').': '.$message_reply_info['title'].'<br />';
         $forwardMessage .= get_lang('To').': '.$receiverInfo['complete_name'].' - '.$receiverInfo['email'].' <br />';
-        $default['content'] = '<p><br/></p>'.$forwardMessage.'<br />'.Security::filter_terms($message_reply_info['content']);
+        $default['content'] = '<div style="font-family: Verdana, Arial, sans-serif; font-size: 12px;">'.$forwardMessage.'<br />'.Security::filter_terms($message_reply_info['content']);
     }
 
     if (empty($group_id)) {

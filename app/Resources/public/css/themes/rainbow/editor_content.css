@@ -36,7 +36,7 @@ body{
 
 .ck-article:before {
     content: "\f15c";
-    font-family: FontAwesome;
+    font-family: FontAwesome, serif;
     font-weight: normal;
     margin-right: 5px;
 }

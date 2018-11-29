@@ -46,7 +46,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
             return $menu;
 
             if (api_is_allowed_to_create_course()) {
-                $lang = $translator->trans('CreateCourse');
+                $lang = $translator->trans('Create course');
                 if ($settingsManager->getSetting('course.course_validation') == 'true') {
                     $lang = $translator->trans('CreateCourseRequest');
                 }
@@ -122,7 +122,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
             $menu->setChildrenAttribute('class', 'nav nav-pills nav-stacked');
 
             $menu->addChild(
-                $translator->trans('MySessions'),
+                $translator->trans('My sessions'),
                 [
                     'route' => 'userportal',
                     'routeParameters' => ['type' => 'sessions'],
@@ -131,7 +131,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
 
             if ($checker->isGranted('ROLE_ADMIN')) {
                 $menu->addChild(
-                    $translator->trans('AddSession'),
+                    $translator->trans('Add a training session'),
                     [
                         'route' => 'legacy_main',
                         'routeParameters' => ['name' => 'session/session_add.php'],
@@ -179,7 +179,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
             );
 
             $menu->addChild(
-                $translator->trans('PendingInvitations'),
+                $translator->trans('Pending invitations'),
                 [
                     'route' => 'legacy_main',
                     'routeParameters' => [
@@ -189,7 +189,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
             );
 
             $menu->addChild(
-                $translator->trans('MyFiles'),
+                $translator->trans('My files'),
                 [
                     'route' => 'legacy_main',
                     'routeParameters' => [
@@ -199,7 +199,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
             );
 
             $menu->addChild(
-                $translator->trans('EditProfile'),
+                $translator->trans('Edit profile'),
                 [
                     'route' => 'legacy_main',
                     'routeParameters' => [
@@ -277,7 +277,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
             );
 
             $menu->addChild(
-                $translator->trans('ViewMySharedProfile'),
+                $translator->trans('My shared profile'),
                 [
                     'route' => 'legacy_main',
                     'routeParameters' => [
@@ -297,7 +297,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
             );
 
             $menu->addChild(
-                $translator->trans('SocialGroups'),
+                $translator->trans('Social groups'),
                 [
                     'route' => 'legacy_main',
                     'routeParameters' => [
@@ -317,7 +317,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
             );
 
             $menu->addChild(
-                $translator->trans('MyFiles'),
+                $translator->trans('My files'),
                 [
                     'route' => 'legacy_main',
                     'routeParameters' => [
@@ -344,14 +344,14 @@ class LeftMenuBuilder implements ContainerAwareInterface
         $translator = $this->container->get('translator');
         $settingsManager = $this->container->get('chamilo.settings.manager');
         $allow = $settingsManager->getSetting('certificate.hide_my_certificate_link');
-
         $menu = $factory->createItem('root');
+
         if ($checker->isGranted('IS_AUTHENTICATED_FULLY')) {
             $menu->setChildrenAttribute('class', 'nav nav-pills nav-stacked');
 
-            if ($allow == false) {
+            if ('false' === $allow) {
                 $menu->addChild(
-                    $translator->trans('MyCertificates'),
+                    $translator->trans('My certificates'),
                     [
                         'route' => 'legacy_main',
                         'routeParameters' => ['name' => 'gradebook/my_certificates.php'],
@@ -359,10 +359,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
                 );
             }
 
-            if ($settingsManager->getSetting(
-                    'allow_public_certificates'
-                ) === 'true'
-            ) {
+            if ($settingsManager->getSetting('allow_public_certificates') === 'true') {
                 $menu->addChild(
                     $translator->trans('Search'),
                     [
@@ -433,7 +430,6 @@ class LeftMenuBuilder implements ContainerAwareInterface
                     'FOSUserBundle'
                 ),
                 [
-                    //'route' => 'fos_user_resetting_request',
                     'route' => 'legacy_main',
                     'routeParameters' => ['name' => 'auth/lostPassword.php'],
                     ['attributes' => ['id' => 'nav']],

@@ -4976,7 +4976,7 @@ EOT;
         ];
 
         return Container::getTwig()->render(
-            'ChamiloCoreBundle:Mailer:Exercise/result_alert_body.html.twig',
+            '@ChamiloTheme/Mailer/Exercise/result_alert_body.html.twig',
             $params
         );
     }

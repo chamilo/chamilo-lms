@@ -1564,25 +1564,25 @@ function create_unexisting_directory(
     }
 
     //if (!is_dir($base_work_dir.$systemFolderName)) {
-        /*$result = mkdir(
-            $base_work_dir.$systemFolderName,
-            api_get_permissions_for_new_directories(),
-            true
-        );*/
-        $result = true;
-        if ($result) {
-            // Check if pathname already exists inside document table
-            $tbl_document = Database::get_course_table(TABLE_DOCUMENT);
-            $sql = "SELECT id, path FROM $tbl_document
+    /*$result = mkdir(
+        $base_work_dir.$systemFolderName,
+        api_get_permissions_for_new_directories(),
+        true
+    );*/
+    $result = true;
+    if ($result) {
+        // Check if pathname already exists inside document table
+        $tbl_document = Database::get_course_table(TABLE_DOCUMENT);
+        $sql = "SELECT id, path FROM $tbl_document
                     WHERE
                         c_id = $course_id AND
                         (
                             path = '".Database::escape_string($systemFolderName)."'
                         )
             ";
-            $rs = Database::query($sql);
-            if (Database::num_rows($rs) == 0) {
-                $document = DocumentManager::addDocument(
+        $rs = Database::query($sql);
+        if (Database::num_rows($rs) == 0) {
+            $document = DocumentManager::addDocument(
                     $_course,
                     $systemFolderName,
                     'folder',
@@ -1597,58 +1597,58 @@ function create_unexisting_directory(
                     $sendNotification
                 );
 
-                if ($document) {
-                    // Update document item_property
-                    /*if (!empty($visibility)) {
-                        $visibilities = [
-                            0 => 'invisible',
-                            1 => 'visible',
-                            2 => 'delete',
-                        ];
-                        api_item_property_update(
-                            $_course,
-                            TOOL_DOCUMENT,
-                            $document_id,
-                            $visibilities[$visibility],
-                            $user_id,
-                            $groupInfo,
-                            $to_user_id,
-                            null,
-                            null,
-                            $session_id
-                        );
-                    } else {
-                        api_item_property_update(
-                            $_course,
-                            TOOL_DOCUMENT,
-                            $document_id,
-                            'FolderCreated',
-                            $user_id,
-                            $groupInfo,
-                            $to_user_id,
-                            null,
-                            null,
-                            $session_id
-                        );
-                    }*/
+            if ($document) {
+                // Update document item_property
+                /*if (!empty($visibility)) {
+                    $visibilities = [
+                        0 => 'invisible',
+                        1 => 'visible',
+                        2 => 'delete',
+                    ];
+                    api_item_property_update(
+                        $_course,
+                        TOOL_DOCUMENT,
+                        $document_id,
+                        $visibilities[$visibility],
+                        $user_id,
+                        $groupInfo,
+                        $to_user_id,
+                        null,
+                        null,
+                        $session_id
+                    );
+                } else {
+                    api_item_property_update(
+                        $_course,
+                        TOOL_DOCUMENT,
+                        $document_id,
+                        'FolderCreated',
+                        $user_id,
+                        $groupInfo,
+                        $to_user_id,
+                        null,
+                        null,
+                        $session_id
+                    );
+                }*/
 
-                    return $document;
-                }
-            } else {
-                $document = Database::fetch_array($rs);
-                $documentData = DocumentManager::get_document_data_by_id(
+                return $document;
+            }
+        } else {
+            $document = Database::fetch_array($rs);
+            $documentData = DocumentManager::get_document_data_by_id(
                     $document['id'],
                     $_course['code'],
                     false,
                     $session_id
                 );
 
-                $em = Database::getManager();
-                $document = $em->getRepository('ChamiloCourseBundle:CDocument')->find($documentData['iid']);
+            $em = Database::getManager();
+            $document = $em->getRepository('ChamiloCourseBundle:CDocument')->find($documentData['iid']);
 
-                return $document;
-            }
+            return $document;
         }
+    }
     //}
 
     return false;

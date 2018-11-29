@@ -3,6 +3,8 @@
 
     {% set menu = knp_menu_get('ChamiloCoreBundle:NavBuilder:menuApp') %}
 
+    <li class="sidebar-divider"></li>
+
     <ul class="navbar-nav">
         {% for item in menu.children %}
             {% set children = item.children|length %}
@@ -22,7 +24,8 @@
                 {% if children > 0 %}
                     <ul id="submenu_{{ item.name }}" class="dropdown-menu">
                         {% for item in item.children %}
-                        <li>
+                        {% set current = item.isCurrent ? 'active': '' %}
+                        <li class="{{ current }}">
                             <a href="{{ item.uri }}" class="sub-link">
                                 <i class="far fa-circle"></i>
                                 {{ item.label }}

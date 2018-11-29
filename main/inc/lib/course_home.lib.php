@@ -1274,17 +1274,17 @@ class CourseHome
 
         $html = '<div id="toolnav">';
         $html .= '<ul id="toolnavbox">';
-            //students can't see the course settings option
+        //students can't see the course settings option
         $showOnlyText = api_get_setting('show_navigation_menu') === 'text';
         $showOnlyIcons = api_get_setting('show_navigation_menu') === 'icons';
 
         foreach ($blocks as $block) {
             $blockItems = $block['content'];
             foreach ($blockItems as $item) {
-            $html .= '<li>';
+                $html .= '<li>';
                 if ($showOnlyText) {
-                $class = 'text';
-                $marginLeft = 170;
+                    $class = 'text';
+                    $marginLeft = 170;
                     $show = $item['name'];
                 } elseif ($showOnlyIcons) {
                     $class = 'icons';
@@ -1292,7 +1292,7 @@ class CourseHome
                     $show = $item['tool']['only_icon_small'];
                 } else {
                     $class = 'icons-text';
-                        $show = $item['name'].$item['tool']['only_icon_small'];
+                    $show = $item['name'].$item['tool']['only_icon_small'];
                 }
 
                 $item['url_params']['class'] = 'btn btn-default text-left '.$class;
@@ -1301,7 +1301,7 @@ class CourseHome
                     $item['only_href'],
                     $item['url_params']
                 );
-            $html .= '</li>';
+                $html .= '</li>';
             }
         }
 

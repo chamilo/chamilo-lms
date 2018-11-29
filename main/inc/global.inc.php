@@ -124,9 +124,9 @@ try {
     $packages->setDefaultPackage($newDefault);
     $container->get('chamilo_core.menu.nav_builder')->setContainer($container);*/
 
-    if (!is_dir(_MPDF_TEMP_PATH)) {
+    /*if (!is_dir(_MPDF_TEMP_PATH)) {
         mkdir(_MPDF_TEMP_PATH, api_get_permissions_for_new_directories(), true);
-    }
+    }*/
 
     /* RETRIEVING ALL THE CHAMILO CONFIG SETTINGS FOR MULTIPLE URLs FEATURE*/
     /*if (!empty($_configuration['multiple_access_urls'])) {

@@ -11,10 +11,10 @@ var legacyIndex = Routing.generate('legacy_index');
 var mainUrl = Routing.generate('web.main');
 var webAjax = Routing.generate('web.ajax');
 
-/*console.log(homePublicUrl);
+console.log(homePublicUrl);
 console.log(legacyIndex);
 console.log(mainUrl);
-console.log(webAjax);*/
+console.log(webAjax);
 
 var ajax_url = webAjax + 'chat.ajax.php';
 var online_button = '<img src="' + homePublicUrl + 'img/statusonline.png">';
@@ -26,8 +26,15 @@ var connect_lang = 'ChatConnected';
 var disconnect_lang = 'ChatDisconnected';
 
 $( document ).ready(function() {
-    console.log( "ready!" );
-    $("#menu_courses").prop("href", "javascript:void(0);");
+    $("#menu_courses").click(function(){
+        return false;
+    });
+    $("#menu_social").click(function(){
+        return false;
+    });
+    $("#menu_administrator").click(function(){
+        return false;
+    });
 });
 $(function() {
     var isInCourse = $("body").data("in-course");

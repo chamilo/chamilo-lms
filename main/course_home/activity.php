@@ -62,7 +62,7 @@ if ($session_id === 0 && api_is_course_admin() && api_is_allowed_to_edit(null, t
         $content .= CourseHome::show_session_data($session_id);
         $content .= '</table></div></div>';
     }
-        }
+}
 
 $blocks = CourseHome::getUserBlocks();
 $activityView = new Template('', false, false, false, false, false, false);

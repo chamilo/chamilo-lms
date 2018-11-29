@@ -88,8 +88,8 @@ class ZombieManager
 
         $sql .= " ORDER BY $column $direction";
         if (!is_null($from) && !is_null($count)) {
-        $count = intval($count);
-        $from = intval($from);
+            $count = intval($count);
+            $from = intval($from);
             $sql .= " LIMIT $from, $count ";
         }
 

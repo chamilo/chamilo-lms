@@ -10,7 +10,6 @@ use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Chamilo\CoreBundle\Menu\LeftMenuBuilder;
 
 /**
  * Class NavBuilder.
@@ -63,46 +62,67 @@ class NavBuilder implements ContainerAwareInterface
         $container = $this->container;
         $checker = $container->get('security.authorization_checker');
         $translator = $container->get('translator');
-
+        $router = $container->get('router');
         $menu = $factory->createItem('root');
-
         $settingsManager = $container->get('chamilo.settings.manager');
+        $rootWeb = $router->generate('legacy_index');
 
         $menu->addChild(
             'home',
-            [   'label' => $translator->trans('Home'),
+            [
+                'label' => $translator->trans('Home'),
                 'route' => 'legacy_index',
                 'icon' => 'home',
             ]
         );
-        $menu['home']->setCurrent(true);
 
         if ($checker && $checker->isGranted('IS_AUTHENTICATED_FULLY')) {
             $menu->addChild(
                 'courses',
                 [
                     'label' => $translator->trans('Courses'),
-                    'icon' => 'book'
+                    'route' => 'legacy_main',
+                    'routeParameters' => ['name' => '../user_portal.php'],
+                    'icon' => 'book',
                 ]
             );
 
             $menu['courses']->addChild(
                 'courses',
                 [
-                    'label' => $translator->trans('My courses'),
+                    'label' => $translator->trans('All my courses'),
                     'route' => 'legacy_main',
-                    'icon' => 'book',
-                    'routeParameters' => [
-                        'name' => '../user_portal.php',
-                    ],
+                    'routeParameters' => ['name' => '../user_portal.php'],
                 ]
             );
 
+            $browse = $settingsManager->getSetting('display.allow_students_to_browse_courses');
+
+            if ('true' === $browse) {
+                if ($checker->isGranted('ROLE_STUDENT') && !api_is_drh() && !api_is_session_admin()) {
+                    $menu['courses']->addChild(
+                        'catalog',
+                        [
+                            'label' => $translator->trans('Course catalog'),
+                            'route' => 'legacy_main',
+                            'routeParameters' => ['name' => 'auth/courses.php'],
+                        ]
+                    );
+                }
+            }
+
+            $menu['courses']->addChild(
+                $translator->trans('Course history'),
+                [
+                    'route' => 'legacy_main',
+                    'routeParameters' => ['name' => '../user_portal.php'],
+                ]
+            );
 
             if (api_is_allowed_to_create_course()) {
-                $lang = $translator->trans('CreateCourse');
+                $lang = $translator->trans('Create course');
                 if ($settingsManager->getSetting('course.course_validation') == 'true') {
-                    $lang = $translator->trans('CreateCourseRequest');
+                    $lang = $translator->trans('Create course request');
                 }
 
                 $menu['courses']->addChild(
@@ -110,42 +130,28 @@ class NavBuilder implements ContainerAwareInterface
                     [
                         'label' => $lang,
                         'route' => 'legacy_main',
-                        'routeParameters' => [
-                            'name' => 'create_course/add_course.php',
-                        ],
+                        'routeParameters' => ['name' => 'create_course/add_course.php'],
                     ]
                 );
             }
 
-            $browse = $settingsManager->getSetting('display.allow_students_to_browse_courses');
-
-            if ($browse == 'true') {
-                if ($checker->isGranted('ROLE_STUDENT') && !api_is_drh(
-                    ) && !api_is_session_admin()
-                ) {
-                    $menu['courses']->addChild(
-                        'catalog',
-                        [
-                            'label' => $translator->trans('CourseCatalog'),
-                            'route' => 'legacy_main',
-                            'routeParameters' => [
-                                'name' => 'auth/courses.php'
-                            ],
-                        ]
-                    );
-                }
+            if ($checker->isGranted('ROLE_ADMIN')) {
+                $menu['courses']->addChild(
+                    $translator->trans('Add Session'),
+                    [
+                        'route' => 'legacy_main',
+                        'routeParameters' => ['name' => 'session/session_add.php'],
+                    ]
+                );
             }
-
 
             $menu->addChild(
                 'calendar',
                 [
                     'label' => $translator->trans('Calendar'),
                     'route' => 'legacy_main',
+                    'routeParameters' => ['name' => 'calendar/agenda_js.php'],
                     'icon' => 'calendar-alt',
-                    'routeParameters' => [
-                        'name' => 'calendar/agenda_js.php',
-                    ],
                 ]
             );
 
@@ -154,10 +160,8 @@ class NavBuilder implements ContainerAwareInterface
                 [
                     'label' => $translator->trans('Reporting'),
                     'route' => 'legacy_main',
+                    'routeParameters' => ['name' => 'mySpace/index.php'],
                     'icon' => 'chart-bar',
-                    'routeParameters' => [
-                        'name' => 'mySpace/index.php',
-                    ],
                 ]
             );
 
@@ -167,10 +171,44 @@ class NavBuilder implements ContainerAwareInterface
                     [
                         'label' => $translator->trans('Social'),
                         'route' => 'legacy_main',
+                        'routeParameters' => ['name' => 'social/home.php'],
                         'icon' => 'heart',
-                        'routeParameters' => [
-                            'name' => 'social/home.php',
-                        ],
+                    ]
+                );
+
+                $menu['social']->addChild(
+                    $translator->trans('My profile'),
+                    [
+                        'route' => 'legacy_main',
+                        'routeParameters' => ['name' => 'social/home.php'],
+                    ]
+                );
+                $menu['social']->addChild(
+                    $translator->trans('My shared profile'),
+                    [
+                        'route' => 'legacy_main',
+                        'routeParameters' => ['name' => 'social/profile.php'],
+                    ]
+                );
+                $menu['social']->addChild(
+                    $translator->trans('Friends'),
+                    [
+                        'route' => 'legacy_main',
+                        'routeParameters' => ['name' => 'social/friends.php'],
+                    ]
+                );
+                $menu['social']->addChild(
+                    $translator->trans('Social Groups'),
+                    [
+                        'route' => 'legacy_main',
+                        'routeParameters' => ['name' => 'social/groups.php'],
+                    ]
+                );
+                $menu['social']->addChild(
+                    $translator->trans('My Files'),
+                    [
+                        'route' => 'legacy_main',
+                        'routeParameters' => ['name' => 'social/myfiles.php'],
                     ]
                 );
             }
@@ -181,21 +219,75 @@ class NavBuilder implements ContainerAwareInterface
                     [
                         'label' => $translator->trans('Dashboard'),
                         'route' => 'legacy_main',
+                        'routeParameters' => ['name' => 'dashboard/index.php'],
                         'icon' => 'cube',
-                        'routeParameters' => [
-                            'name' => 'dashboard/index.php',
-                        ],
                     ]
                 );
+
                 $menu->addChild(
                     'administrator',
                     [
                         'label' => $translator->trans('Administration'),
                         'route' => 'legacy_main',
+                        'routeParameters' => ['name' => 'admin/index.php'],
                         'icon' => 'cogs',
-                        'routeParameters' => [
-                            'name' => 'admin/index.php',
-                        ],
+                    ]
+                );
+
+                $menu['administrator']->addChild(
+                    'options',
+                    [
+                        'label' => $translator->trans('All options'),
+                        'route' => 'legacy_main',
+                        'routeParameters' => ['name' => 'admin/index.php'],
+                    ]
+                );
+
+                $menu['administrator']->addChild(
+                    'userlist',
+                    [
+                        'label' => $translator->trans('User list'),
+                        'route' => 'legacy_main',
+                        'routeParameters' => ['name' => 'admin/user_list.php'],
+                    ]
+                );
+                $menu['administrator']->addChild(
+                    'courselist',
+                    [
+                        'label' => $translator->trans('Course list'),
+                        'route' => 'legacy_main',
+                        'routeParameters' => ['name' => 'admin/course_list.php'],
+                    ]
+                );
+                $menu['administrator']->addChild(
+                    'sessionlist',
+                    [
+                        'label' => $translator->trans('Session list'),
+                        'route' => 'legacy_main',
+                        'routeParameters' => ['name' => 'session/session_list.php'],
+                    ]
+                );
+                $menu['administrator']->addChild(
+                    'languages',
+                    [
+                        'label' => $translator->trans('Languages'),
+                        'route' => 'legacy_main',
+                        'routeParameters' => ['name' => 'admin/languages.php'],
+                    ]
+                );
+                $menu['administrator']->addChild(
+                    'plugins',
+                    [
+                        'label' => $translator->trans('Plugins'),
+                        'route' => 'legacy_main',
+                        'routeParameters' => ['name' => 'admin/settings.php?category=Plugins'],
+                    ]
+                );
+                $menu['administrator']->addChild(
+                    'settings',
+                    [
+                        'label' => $translator->trans('Advanced settings'),
+                        'uri' => $rootWeb.'public/admin/settings/platform',
                     ]
                 );
             }
@@ -203,12 +295,7 @@ class NavBuilder implements ContainerAwareInterface
 
         $categories = $container->get('doctrine')->getRepository('ChamiloFaqBundle:Category')->retrieveActive();
         if ($categories) {
-            $faq = $menu->addChild(
-                'FAQ',
-                [
-                    'route' => 'faq_index',
-                ]
-            );
+            $faq = $menu->addChild('FAQ', ['route' => 'faq_index']);
             /** @var Category $category */
             foreach ($categories as $category) {
                 $faq->addChild(
@@ -234,6 +321,7 @@ class NavBuilder implements ContainerAwareInterface
             'enabled' => true,
         ]);
 
+        // Needed when loading legacy pages (inside main)
         $isLegacy = $container->get('request_stack')->getCurrentRequest()->get('load_legacy');
         $urlAppend = $container->getParameter('url_append');
         $legacyIndex = '';
@@ -352,8 +440,7 @@ class NavBuilder implements ContainerAwareInterface
             $browse = $settingsManager->getSetting('display.allow_students_to_browse_courses');
 
             if ($browse == 'true') {
-                if ($checker->isGranted('ROLE_STUDENT') && !api_is_drh(
-                    ) && !api_is_session_admin()
+                if ($checker->isGranted('ROLE_STUDENT') && !api_is_drh() && !api_is_session_admin()
                 ) {
                     $menu->addChild(
                         $translator->trans('CourseCatalog'),

@@ -27,7 +27,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
      */
     public function courseMenu(FactoryInterface $factory, array $options)
     {
-        $checker = $this->container->get('security.authorization_checker');
+        //$checker = $this->container->get('security.authorization_checker');
         $menu = $factory->createItem('root');
         $translator = $this->container->get('translator');
         $checked = $this->container->get('session')->get('IS_AUTHENTICATED_FULLY');

@@ -1032,6 +1032,9 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
     ]
 ];*/
 
+// Disable all new exercise attempts in all the platform
+// $_configuration['exercises_disable_new_attempts'] = false;
+
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email

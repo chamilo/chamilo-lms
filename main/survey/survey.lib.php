@@ -2259,4 +2259,42 @@ class SurveyManager
 
         return $count;
     }
+
+    /**
+     * Check whether this survey has ended. If so, display message and exit rhis script.
+     *
+     * @param array $surveyData Survey data
+     */
+    public static function checkTimeAvailability($surveyData)
+    {
+        $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
+        $utcZone = new DateTimeZone('UTC');
+        $startDate = new DateTime($surveyData['start_date'], $utcZone);
+        $endDate = new DateTime($surveyData['end_date'], $utcZone);
+        $currentDate = new DateTime('now', $utcZone);
+        if (!$allowSurveyAvailabilityDatetime) {
+            $currentDate->modify('today');
+        }
+        if ($currentDate < $startDate) {
+            api_not_allowed(
+                true,
+                Display:: return_message(
+                    get_lang('SurveyNotAvailableYet'),
+                    'warning',
+                    false
+                )
+            );
+        }
+
+        if ($currentDate > $endDate) {
+            api_not_allowed(
+                true,
+                Display:: return_message(
+                    get_lang('SurveyNotAvailableAnymore'),
+                    'warning',
+                    false
+                )
+            );
+        }
+    }
 }

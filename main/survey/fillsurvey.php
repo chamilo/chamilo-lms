@@ -109,9 +109,9 @@ if ($invitationcode == 'auto' && isset($_GET['scode'])) {
     $result = Database::query($sql);
     if (Database :: num_rows($result) > 0) {
         // Check availability
-        $row = Database :: fetch_array($result, 'ASSOC');
-        $tempdata = SurveyManager :: get_survey($row['survey_id']);
-        check_time_availability($tempdata);
+        $row = Database::fetch_array($result, 'ASSOC');
+        $tempdata = SurveyManager::get_survey($row['survey_id']);
+        SurveyManager::checkTimeAvailability($tempdata);
         // Check for double invitation records (insert should be done once)
         $sql = "SELECT user
                 FROM $table_survey_invitation
@@ -204,7 +204,7 @@ if (empty($survey_data)) {
 }
 
 // Checking time availability
-check_time_availability($survey_data);
+SurveyManager::checkTimeAvailability($survey_data);
 
 $survey_data['survey_id'] = $survey_invitation['survey_id'];
 
@@ -1401,41 +1401,3 @@ if ($survey_data['survey_type'] == '0') {
 $form->addHtml('</div>');
 $form->display();
 Display::display_footer();
-
-/**
- * Check whether this survey has ended. If so, display message and exit rhis script.
- *
- * @param array $surveyData Survey data
- */
-function check_time_availability($surveyData)
-{
-    $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
-    $utcZone = new DateTimeZone('UTC');
-    $startDate = new DateTime($surveyData['start_date'], $utcZone);
-    $endDate = new DateTime($surveyData['end_date'], $utcZone);
-    $currentDate = new DateTime('now', $utcZone);
-    if (!$allowSurveyAvailabilityDatetime) {
-        $currentDate->modify('today');
-    }
-    if ($currentDate < $startDate) {
-        api_not_allowed(
-            true,
-            Display:: return_message(
-                get_lang('SurveyNotAvailableYet'),
-                'warning',
-                false
-            )
-        );
-    }
-
-    if ($currentDate > $endDate) {
-        api_not_allowed(
-            true,
-            Display:: return_message(
-                get_lang('SurveyNotAvailableAnymore'),
-                'warning',
-                false
-            )
-        );
-    }
-}

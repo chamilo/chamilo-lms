@@ -4631,8 +4631,8 @@ class UserManager
     /**
      * Deletes a contact.
      *
-     * @param bool   $friend_id true will delete ALL friends relationship from $friend_id
-     * @param bool   $real_removed
+     * @param bool   $friend_id
+     * @param bool   $real_removed true will delete ALL friends relationship
      * @param string $with_status_condition
      *
      * @author isaac flores paz <isaac.flores@dokeos.com>

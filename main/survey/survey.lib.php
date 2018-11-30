@@ -2212,4 +2212,97 @@ class SurveyManager
             }
         }
     }
+
+    /**
+     * @param array $survey
+     *
+     * @return int
+     */
+    public static function getCountPages($survey)
+    {
+        if (empty($survey) || !isset($survey['iid'])) {
+            return 0;
+        }
+
+        $courseId = $survey['c_id'];
+        $surveyId = $survey['survey_id'];
+
+        $table = Database::get_course_table(TABLE_SURVEY_QUESTION);
+
+        // One question per page
+        $sql = "SELECT * FROM $table
+                WHERE
+                    survey_question NOT LIKE '%{{%' AND
+                    type = 'pagebreak' AND
+                    c_id = $courseId AND
+                    survey_id = '".$surveyId."'";
+        $result = Database::query($sql);
+        $numberPageBreaks = Database::num_rows($result);
+
+        // One question per page
+        $sql = "SELECT * FROM $table
+                    WHERE
+                        survey_question NOT LIKE '%{{%' AND
+                        type != 'pagebreak' AND
+                        c_id = $courseId AND
+                        survey_id = '".$surveyId."'";
+        $result = Database::query($sql);
+        $countOfQuestions = Database::num_rows($result);
+
+        $count = 1;
+        if (!empty($numberPageBreaks) && !empty($countOfQuestions)) {
+            // One question per page
+            $count = $countOfQuestions;
+        }
+
+        if ($survey['one_question_per_page'] == 1) {
+            $count = 1;
+            if (!empty($countOfQuestions)) {
+                $count = $countOfQuestions;
+            }
+        }
+
+        return $count;
+    }
+
+    /**
+     * Check whether this survey has ended. If so, display message and exit rhis script.
+     *
+     * @param array $surveyData Survey data
+     */
+    public static function checkTimeAvailability($surveyData)
+    {
+        if (empty($surveyData)) {
+            api_not_allowed(true);
+        }
+        $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
+        $utcZone = new DateTimeZone('UTC');
+        $startDate = new DateTime($surveyData['start_date'], $utcZone);
+        $endDate = new DateTime($surveyData['end_date'], $utcZone);
+        $currentDate = new DateTime('now', $utcZone);
+        if (!$allowSurveyAvailabilityDatetime) {
+            $currentDate->modify('today');
+        }
+        if ($currentDate < $startDate) {
+            api_not_allowed(
+                true,
+                Display:: return_message(
+                    get_lang('SurveyNotAvailableYet'),
+                    'warning',
+                    false
+                )
+            );
+        }
+
+        if ($currentDate > $endDate) {
+            api_not_allowed(
+                true,
+                Display:: return_message(
+                    get_lang('SurveyNotAvailableAnymore'),
+                    'warning',
+                    false
+                )
+            );
+        }
+    }
 }

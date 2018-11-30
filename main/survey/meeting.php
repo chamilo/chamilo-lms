@@ -64,6 +64,8 @@ if (empty($surveyData)) {
     api_not_allowed(true);
 }
 
+check_time_availability($surveyData);
+
 $invitations = SurveyUtil::get_invited_users($surveyData['code']);
 $students = isset($invitations['course_users']) ? $invitations['course_users'] : [];
 

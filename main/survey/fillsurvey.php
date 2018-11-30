@@ -202,6 +202,10 @@ $survey_data = SurveyManager::get_survey($survey_invitation['survey_id']);
 if (empty($survey_data)) {
     api_not_allowed(true);
 }
+
+// Checking time availability
+check_time_availability($survey_data);
+
 $survey_data['survey_id'] = $survey_invitation['survey_id'];
 
 if ($survey_data['survey_type'] == '3') {
@@ -523,9 +527,6 @@ if ($survey_data['form_fields'] != '' &&
     $form->addButtonNext(get_lang('Next'));
     $form->setDefaults($user_data);
 }
-
-// Checking time availability
-check_time_availability($survey_data);
 
 // Header
 Display::display_header(get_lang('ToolSurvey'));

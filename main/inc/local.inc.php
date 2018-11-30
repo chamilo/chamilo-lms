@@ -1350,6 +1350,7 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
             // User has not access to the course
             // This will check if the course was added in one of his sessions
             // Then it will be redirected to that course-session
+
             if ($is_courseMember == false) {
                 // Search session
                 $courseSession = SessionManager::searchCourseInSessionsFromUser(
@@ -1361,7 +1362,17 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
                     $courseSessionItem = $courseSession[0];
                     if (isset($courseSessionItem['session_id'])) {
                         $customSessionId = $courseSessionItem['session_id'];
-                        $url = $_course['course_public_url'].'?id_session='.$customSessionId;
+                        $currentUrl = htmlentities($_SERVER['REQUEST_URI']);
+                        $currentUrl = str_replace('id_session=0', '', $currentUrl);
+                        $currentUrl = str_replace('&amp;', '&', $currentUrl);
+
+                        if (strpos($currentUrl, '?') !== false) {
+                            $currentUrl = rtrim($currentUrl, '&');
+                            $url = $currentUrl.'&id_session='.$customSessionId;
+                        } else {
+                            $url = $currentUrl.'?id_session='.$customSessionId;
+                        }
+                        //$url = $_course['course_public_url'].'?id_session='.$customSessionId;
 
                         Session::erase('_real_cid');
                         Session::erase('_cid');

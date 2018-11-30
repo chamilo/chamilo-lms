@@ -179,6 +179,9 @@ class SocialManager extends UserManager
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             if ($load_extra_info) {
                 $my_user_info = api_get_user_info($row['friend_user_id']);
+                if (empty($my_user_info)) {
+                    continue;
+                }
                 $list_ids_friends[] = [
                     'friend_user_id' => $row['friend_user_id'],
                     'firstName' => $my_user_info['firstName'],

@@ -944,12 +944,12 @@ if (!isset($_SESSION['login_as'])) {
     }
 }
 
-$sessionIdFromGet = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
+$sessionIdFromGet = isset($_GET['id_session']) ? (int) $_GET['id_session'] : false;
 // if a session id has been given in url, we store the session if course was set:
 $sessionIdFromSession = api_get_session_id();
 $checkFromDatabase = false;
 // User change from session id
-if (!empty($sessionIdFromGet) && $sessionIdFromGet != $sessionIdFromSession) {
+if (($sessionIdFromGet !== false && $sessionIdFromGet !== $sessionIdFromSession) || $cidReset) {
     $cidReset = true;
     $checkFromDatabase = true;
     Session::erase('session_name');
@@ -969,6 +969,7 @@ if ($checkFromDatabase && !empty($sessionIdFromGet)) {
         Session::write('id_session', $sessionInfo['id']);
     } else {
         $cidReset = true;
+        $gidReset = true;
         Session::erase('session_name');
         Session::erase('id_session');
 
@@ -1349,6 +1350,7 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
             // User has not access to the course
             // This will check if the course was added in one of his sessions
             // Then it will be redirected to that course-session
+
             if ($is_courseMember == false) {
                 // Search session
                 $courseSession = SessionManager::searchCourseInSessionsFromUser(
@@ -1356,18 +1358,59 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
                     $_course['real_id']
                 );
 
-                if (!empty($courseSession) && isset($courseSession[0])) {
-                    $courseSessionItem = $courseSession[0];
-                    if (isset($courseSessionItem['session_id'])) {
-                        $customSessionId = $courseSessionItem['session_id'];
-                        $url = $_course['course_public_url'].'?id_session='.$customSessionId;
+                $priorityList = [];
+                if (!empty($courseSession)) {
+                    foreach ($courseSession as $courseSessionItem) {
+                        if (isset($courseSessionItem['session_id'])) {
+                            $customSessionId = $courseSessionItem['session_id'];
+                            $visibility = api_get_session_visibility($customSessionId, $_course['real_id']);
 
-                        Session::erase('_real_cid');
-                        Session::erase('_cid');
-                        Session::erase('_course');
+                            if ($visibility == SESSION_INVISIBLE) {
+                                continue;
+                            }
 
-                        header('Location: '.$url);
-                        exit;
+                            switch ($visibility) {
+                                case SESSION_AVAILABLE:
+                                    $priorityList[1][] = $customSessionId;
+                                    break;
+                                case SESSION_VISIBLE:
+                                    $priorityList[2][] = $customSessionId;
+                                    break;
+                                case SESSION_VISIBLE_READ_ONLY:
+                                    $priorityList[3][] = $customSessionId;
+                                    break;
+                            }
+                        }
+                    }
+                }
+
+                if (!empty($priorityList)) {
+                    ksort($priorityList);
+                    foreach ($priorityList as $sessionList) {
+                        if (empty($sessionList)) {
+                            continue;
+                        }
+                        foreach ($sessionList as $customSessionId) {
+                            $currentUrl = htmlentities($_SERVER['REQUEST_URI']);
+                            $currentUrl = str_replace('id_session=0', '', $currentUrl);
+                            $currentUrl = str_replace('&amp;', '&', $currentUrl);
+
+                            if (strpos($currentUrl, '?') !== false) {
+                                $currentUrl = rtrim($currentUrl, '&');
+                                $url = $currentUrl.'&id_session='.$customSessionId;
+                            } else {
+                                $url = $currentUrl.'?id_session='.$customSessionId;
+                            }
+                            $url = str_replace('&&', '&', $url);
+                            //$url = $_course['course_public_url'].'?id_session='.$customSessionId;
+
+                            Session::erase('_real_cid');
+                            Session::erase('_cid');
+                            Session::erase('_course');
+
+                            header('Location: '.$url);
+                            exit;
+                        }
                     }
                 }
             }

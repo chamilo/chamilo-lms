@@ -1372,6 +1372,7 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
                         } else {
                             $url = $currentUrl.'?id_session='.$customSessionId;
                         }
+                        $url = str_replace('&&', '&', $url);
                         //$url = $_course['course_public_url'].'?id_session='.$customSessionId;
 
                         Session::erase('_real_cid');

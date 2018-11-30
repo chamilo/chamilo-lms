@@ -4840,6 +4840,9 @@ class DocumentManager
             $attributes = ['onchange' => 'javascript: document.selector.submit();'];
         }
         $form->addElement('hidden', 'cidReq', api_get_course_id());
+        $form->addElement('hidden', 'id_session', api_get_session_id());
+        $form->addElement('hidden', 'gidReq', api_get_group_id());
+
         $parent_select = $form->addSelect(
             $selectName,
             get_lang('CurrentDirectory'),
@@ -5524,10 +5527,8 @@ class DocumentManager
                         ($folder != $move_file) &&
                         (substr($folder, 0, strlen($move_file) + 1) != $move_file.'/')
                     ) {
-                        $path_displayed = $folder;
                         // If document title is used, we have to display titles instead of real paths...
                         $path_displayed = self::get_titles_of_path($folder);
-
                         if (empty($path_displayed)) {
                             $path_displayed = get_lang('Untitled');
                         }
@@ -5544,8 +5545,7 @@ class DocumentManager
                     // Cannot copy dir into his own subdir
                     $path_displayed = self::get_titles_of_path($folder);
                     $display_folder = substr($path_displayed, strlen($group_dir));
-                    $display_folder = ($display_folder == '') ? get_lang('Documents') : $display_folder;
-                    //$form .= '<option value="'.$folder.'">'.$display_folder.'</option>';
+                    $display_folder = $display_folder == '' ? get_lang('Documents') : $display_folder;
                     $options[$folder] = $display_folder;
                 }
             }

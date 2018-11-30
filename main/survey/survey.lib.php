@@ -2267,6 +2267,10 @@ class SurveyManager
      */
     public static function checkTimeAvailability($surveyData)
     {
+        if (empty($surveyData)) {
+            api_not_allowed(true);
+        }
+
         $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
         $utcZone = new DateTimeZone('UTC');
         $startDate = new DateTime($surveyData['start_date'], $utcZone);

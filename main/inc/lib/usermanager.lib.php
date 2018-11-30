@@ -4632,8 +4632,8 @@ class UserManager
      * Deletes a contact.
      *
      * @param int user friend id
-     * @param bool true will delete ALL friends relationship from $friend_id
-     * @param string                                              $with_status_condition
+     * @param bool   $friend_id true will delete ALL friends relationship from $friend_id
+     * @param string $with_status_condition
      *
      * @author isaac flores paz <isaac.flores@dokeos.com>
      * @author Julio Montoya <gugli100@gmail.com> Cleaning code
@@ -4694,6 +4694,21 @@ class UserManager
                 Database::query($sql_ji);
             }
         }
+
+        // Delete accepted invitations
+        $sql = "DELETE FROM $tbl_my_message 
+                WHERE
+                    msg_status = ".MESSAGE_STATUS_INVITATION_ACCEPTED." AND
+                    (
+                        user_receiver_id = $user_id AND 
+                        user_sender_id = $friend_id
+                    ) OR 
+                    (
+                        user_sender_id = $user_id AND 
+                        user_receiver_id = $friend_id
+                    )
+        ";
+        Database::query($sql);
     }
 
     /**

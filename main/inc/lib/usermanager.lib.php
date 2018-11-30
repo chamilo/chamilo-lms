@@ -4631,8 +4631,8 @@ class UserManager
     /**
      * Deletes a contact.
      *
-     * @param int user friend id
      * @param bool   $friend_id true will delete ALL friends relationship from $friend_id
+     * @param bool   $real_removed
      * @param string $with_status_condition
      *
      * @author isaac flores paz <isaac.flores@dokeos.com>
@@ -4646,6 +4646,7 @@ class UserManager
         $tbl_my_friend = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
         $tbl_my_message = Database::get_main_table(TABLE_MESSAGE);
         $friend_id = (int) $friend_id;
+        $user_id = api_get_user_id();
 
         if ($real_removed) {
             $extra_condition = '';
@@ -4663,7 +4664,6 @@ class UserManager
                     user_id='.$friend_id.' '.$extra_condition;
             Database::query($sql);
         } else {
-            $user_id = api_get_user_id();
             $sql = 'SELECT COUNT(*) as count FROM '.$tbl_my_friend.'
                     WHERE
                         user_id='.$user_id.' AND

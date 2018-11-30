@@ -32,6 +32,7 @@ $document_data = DocumentManager::get_document_data_by_id(
     true,
     $session_id
 );
+
 if ($session_id != 0 && !$document_data) {
     $document_data = DocumentManager::get_document_data_by_id(
         $document_id,

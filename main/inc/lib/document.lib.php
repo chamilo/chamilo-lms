@@ -1358,6 +1358,10 @@ class DocumentManager
                 $row['parent_id'] = '0';
             } else {
                 $row['parent_id'] = self::get_document_id($course_info, dirname($row['path']), $session_id);
+                if (empty($row['parent_id'])) {
+                    // Try one more with session id = 0
+                    $row['parent_id'] = self::get_document_id($course_info, dirname($row['path']), 0);
+                }
             }
             $parents = [];
 

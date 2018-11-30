@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
 
 /**
  * This is a plugin for the documents tool. It looks for .jpg, .jpeg, .gif, .png
@@ -29,12 +28,6 @@ use ChamiloSession as Session;
  * too much things in one file , I decided to put the code for document.php here and to include this
  * file into document.php
  */
-
-// Resetting the images of the slideshow = destroying the slideshow
-if (isset($_GET['action']) && $_GET['action'] == 'exit_slideshow') {
-    Session::write('image_files_only', null);
-    unset($image_files_only);
-}
 
 // We check if there are images in this folder by searching the extensions for .jpg, .gif, .png
 // grabbing the list of all the documents of this folder
@@ -68,7 +61,6 @@ if ($tablename_column == 0) {
 }
 
 $image_files_only = sort_files($array_to_search);
-Session::write('image_files_only', $image_files_only);
 
 function sort_files($table)
 {

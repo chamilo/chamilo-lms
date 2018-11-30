@@ -822,8 +822,7 @@ if (!$isAllowedToEdit && api_is_coach()) {
 
 /* Create shared folders */
 DocumentManager::createUserSharedFolder(api_get_user_id(), $courseInfo, $sessionId);
-Session::write('image_files_only', '');
-$image_files_only = '';
+
 if ($is_certificate_mode) {
     $interbreadcrumb[] = [
         'url' => '../gradebook/index.php?'.api_get_cidreq(),
@@ -1771,11 +1770,10 @@ if ($isAllowedToEdit ||
         );
     }
 }
-require 'document_slideshow.inc.php';
 if (!isset($_GET['keyword']) && !$is_certificate_mode) {
     $actionsLeft .= Display::url(
         Display::return_icon('slideshow.png', get_lang('ViewSlideshow'), '', ICON_SIZE_MEDIUM),
-        api_get_path(WEB_CODE_PATH).'document/slideshow.php?'.api_get_cidreq().'&curdirpath='.$curdirpathurl
+        api_get_path(WEB_CODE_PATH).'document/slideshow.php?'.api_get_cidreq().'&curdirpath='.$curdirpathurl.'&id='.$document_id
     );
 }
 
@@ -2231,4 +2229,5 @@ echo '
     </div>
 ';
 
+Session::erase('slideshow_'.api_get_course_id().api_get_session_id());
 Display::display_footer();

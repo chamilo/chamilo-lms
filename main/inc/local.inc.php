@@ -1385,6 +1385,7 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
                 }
 
                 if (!empty($priorityList)) {
+                    ksort($priorityList);
                     foreach ($priorityList as $sessionList) {
                         if (empty($sessionList)) {
                             continue;

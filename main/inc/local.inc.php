@@ -1358,14 +1358,38 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
                     $_course['real_id']
                 );
 
+                $priorityList = [];
                 if (!empty($courseSession)) {
                     foreach ($courseSession as $courseSessionItem) {
                         if (isset($courseSessionItem['session_id'])) {
                             $customSessionId = $courseSessionItem['session_id'];
                             $visibility = api_get_session_visibility($customSessionId, $_course['real_id']);
+
                             if ($visibility == SESSION_INVISIBLE) {
                                 continue;
                             }
+
+                            switch ($visibility) {
+                                case SESSION_AVAILABLE:
+                                    $priorityList[1][] = $customSessionId;
+                                    break;
+                                case SESSION_VISIBLE:
+                                    $priorityList[2][] = $customSessionId;
+                                    break;
+                                case SESSION_VISIBLE_READ_ONLY:
+                                    $priorityList[3][] = $customSessionId;
+                                    break;
+                            }
+                        }
+                    }
+                }
+
+                if (!empty($priorityList)) {
+                    foreach ($priorityList as $sessionList) {
+                        if (empty($sessionList)) {
+                            continue;
+                        }
+                        foreach ($sessionList as $customSessionId) {
                             $currentUrl = htmlentities($_SERVER['REQUEST_URI']);
                             $currentUrl = str_replace('id_session=0', '', $currentUrl);
                             $currentUrl = str_replace('&amp;', '&', $currentUrl);

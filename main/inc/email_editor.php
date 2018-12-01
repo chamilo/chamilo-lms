@@ -77,8 +77,7 @@ if ($form->validate()) {
             $email_administrator,
             $title,
             $text,
-            api_get_person_name($_user['firstname'], $_user['lastname']),
-            $_user['mail']
+            api_get_person_name($_user['firstname'], $_user['lastname'])
         );
     } else {
         api_mail_html(

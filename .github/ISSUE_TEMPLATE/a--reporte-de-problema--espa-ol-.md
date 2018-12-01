@@ -1,32 +1,14 @@
 ---
 name: a. Reporte de problema (Español)
-about: Crea un reporte para ayudarnos a mejorar
+about: Contribuez une nouvelle idée pour Chamilo
 
 ---
 
-**Describe el problema**
-Una descipción concisa y clara del problema.
+**Votre demande est liée à un problème en particulier? Décrivez-le nous...**
+Une description claire et concise du problème. Par exemple: Ça me frustre quand j'essaie de [...]
 
-**Cómo reproducir**
-Pasos para reproducir el problema:
-1. Ir a '...'
-2. Dar clic en '....'
-3. Bajar hasta '....'
-4. Ver el error que dice '...'
+**Décrivez la solution que vous aimeriez trouver dans Chamilo**
+Une description claire et concise de ce que vous aimeriez retrouver dans Chamilo.
 
-**Comportamiento esperado**
-Una descripción concisa y clara de lo que esperabas que ocurriera.
-
-**Capturas de pantalla**
-Si aplicable, agrega capturas de pantalla para ayudar a ubicar el problema.
-
-**Escritorio (por favor completa la información siguiente lo mejor posible):**
- - Sistema operativo : [ej. Linux Ubuntu 18.04/Windows 10]
- - Navegador [ej. chrome, firefox, safari] y su versión
-
-**Servidor
- - Versión de Chamilo:  [ej. 1.11.8, 1.11.x of 2018-12-01, ...]
- - Versión de PHP: [ej. 5.6, 7.2, ...]
-
-**Contexto adicional**
-Añade cualquier elemento adicional de contexto aquí.
+**Contexte additionnel**
+Donnez-nous (si vous en avez) des éléments additionnels qui pourraient nous aider dans l'implémentation ou l'identification d'une solution.

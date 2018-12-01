@@ -1,33 +1,33 @@
 ---
-name: "[en] Bug report"
-about: Create a report to help us make Chamilo better.
+name: "[fr] Rapport d'erreur"
+about: Créer un nouveau rapport d'erreur pour nous aider à améliorer Chamilo
 
 ---
 
-**Describe**
-A clear and concise description of what the bug is.
+**Décrivez le problème**
+Une description claire et concise du problème.
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+**Comment le reproduire**
+Pour le reproduire, il faut:
+1. Aller sur '...'
+2. Cliquer sur '....'
+3. Scroller jusque '....'
+4. Visualiser l'erreur qui dit '...'
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+**Comportement attendu**
+Une description claire et concise de ce que vous vous attendiez à voir.
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+**Captures d'écran**
+Si applicable, ajoutez des captures d'écran pour nous aider à situer le problème.
 
-**Desktop (please complete the following information):**
- - OS: [e.g. Linux Ubuntu 18.04/Windows 10]
- - Browser [e.g. chrome, firefox, safari] and version
+**Bureau (à compléter au mieux):**
+ - Système d'exploitation : [ex. Linux Ubuntu 18.04/Windows 10]
+ - Navigateur [ex. chrome, firefox, safari] et sa version
 
-**Server
- - OS: [e.g. Linux Ubuntu 18.04/Windows 10]
- - Version of Chamilo:  [e.g. 1.11.8, 1.11.x of 2018-12-01, ...]
- - Version of PHP: [e.g. 5.6, 7.2, ...]
+**Serveur
+ - Système d'exploitation : [ex. Linux Ubuntu 18.04/Windows 10]
+ - Version de Chamilo:  [ex. 1.11.8, 1.11.x du 2018-12-01, ...]
+ - Version de PHP: [ex. 5.6, 7.2, ...]
 
-**Additional context**
-Add any other context about the problem here.
+**Contexte additionnel**
+Ajoutez des informations additionnelles si vous considérez qu'elles sont pertinentes.

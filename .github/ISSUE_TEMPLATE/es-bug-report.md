@@ -1,33 +1,33 @@
 ---
-name: "[fr] Rapport d'erreur"
-about: Créer un nouveau rapport d'erreur pour nous aider à améliorer Chamilo
+name: "[es] Reporte de error"
+about: Crea un reporte para ayudarnos a mejorar Chamilo
 
 ---
 
-**Décrivez le problème**
-Une description claire et concise du problème.
+**Describe el problema**
+Una descipción concisa y clara del problema.
 
-**Comment le reproduire**
-Pour le reproduire, il faut:
-1. Aller sur '...'
-2. Cliquer sur '....'
-3. Scroller jusque '....'
-4. Visualiser l'erreur qui dit '...'
+**Cómo reproducir**
+Pasos para reproducir el problema:
+1. Ir a '...'
+2. Dar clic en '....'
+3. Bajar hasta '....'
+4. Ver el error que dice '...'
 
-**Comportement attendu**
-Une description claire et concise de ce que vous vous attendiez à voir.
+**Comportamiento esperado**
+Una descripción concisa y clara de lo que esperabas que ocurriera.
 
-**Captures d'écran**
-Si applicable, ajoutez des captures d'écran pour nous aider à situer le problème.
+**Capturas de pantalla**
+Si aplicable, agrega capturas de pantalla para ayudar a ubicar el problema.
 
-**Bureau (à compléter au mieux):**
- - Système d'exploitation : [ex. Linux Ubuntu 18.04/Windows 10]
- - Navigateur [ex. chrome, firefox, safari] et sa version
+**Escritorio (por favor completa la información siguiente lo mejor posible):**
+ - Sistema operativo : [ej. Linux Ubuntu 18.04/Windows 10]
+ - Navegador [ej. chrome, firefox, safari] y su versión
 
-**Serveur
- - Système d'exploitation : [ex. Linux Ubuntu 18.04/Windows 10]
- - Version de Chamilo:  [ex. 1.11.8, 1.11.x du 2018-12-01, ...]
- - Version de PHP: [ex. 5.6, 7.2, ...]
+**Servidor
+ - Sistema operativo : [ej. Linux Ubuntu 18.04/Windows 10]
+ - Versión de Chamilo:  [ej. 1.11.8, 1.11.x of 2018-12-01, ...]
+ - Versión de PHP: [ej. 5.6, 7.2, ...]
 
-**Contexte additionnel**
-Ajoutez des informations additionnelles si vous considérez qu'elles sont pertinentes.
+**Contexto adicional**
+Añade cualquier elemento adicional de contexto aquí.

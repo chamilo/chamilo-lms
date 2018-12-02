@@ -97,7 +97,7 @@ if ($invitationcode == 'auto' && isset($_GET['scode'])) {
     // Survey_code of the survey
     $surveyCode = $_GET['scode'];
     if ($isAnonymous) {
-        $autoInvitationcode = "auto-ANONY_".md5(time())."-$surveyCode";
+        $autoInvitationcode = 'auto-ANONY_'.md5(time())."-$surveyCode";
     } else {
         // New invitation code from userid
         $autoInvitationcode = "auto-$userid-$surveyCode";
@@ -109,9 +109,9 @@ if ($invitationcode == 'auto' && isset($_GET['scode'])) {
     $result = Database::query($sql);
     if (Database :: num_rows($result) > 0) {
         // Check availability
-        $row = Database :: fetch_array($result, 'ASSOC');
-        $tempdata = SurveyManager :: get_survey($row['survey_id']);
-        check_time_availability($tempdata);
+        $row = Database::fetch_array($result, 'ASSOC');
+        $tempdata = SurveyManager::get_survey($row['survey_id']);
+        SurveyManager::checkTimeAvailability($tempdata);
         // Check for double invitation records (insert should be done once)
         $sql = "SELECT user
                 FROM $table_survey_invitation
@@ -202,7 +202,19 @@ $survey_data = SurveyManager::get_survey($survey_invitation['survey_id']);
 if (empty($survey_data)) {
     api_not_allowed(true);
 }
+
+// Checking time availability
+SurveyManager::checkTimeAvailability($survey_data);
+
 $survey_data['survey_id'] = $survey_invitation['survey_id'];
+
+if ($survey_data['survey_type'] == '3') {
+    header('Location: '.
+        api_get_path(WEB_CODE_PATH).
+        'survey/meeting.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId.'&invitationcode='.Security::remove_XSS($invitationcode)
+    );
+    exit;
+}
 
 // Storing the answers
 if (count($_POST) > 0) {
@@ -516,9 +528,6 @@ if ($survey_data['form_fields'] != '' &&
     $form->setDefaults($user_data);
 }
 
-// Checking time availability
-check_time_availability($survey_data);
-
 // Header
 Display::display_header(get_lang('ToolSurvey'));
 
@@ -655,6 +664,7 @@ if (
         if (empty($paged_questions)) {
             $sql = "SELECT * FROM $table_survey_question
                     WHERE
+                        survey_question NOT LIKE '%{{%' AND 
                         c_id = $course_id AND 
                         survey_id = '".intval($survey_invitation['survey_id'])."'
                     ORDER BY sort ASC";
@@ -734,7 +744,8 @@ if (
                         LEFT JOIN $table_survey_question_option survey_question_option
                             ON survey_question.question_id = survey_question_option.question_id AND
                             survey_question_option.c_id = $course_id
-                        WHERE
+                        WHERE                        
+                            survey_question NOT LIKE '%{{%' AND
                             survey_question.survey_id = '".intval($survey_invitation['survey_id'])."' AND
                             survey_question.question_id IN (".implode(',', $paged_questions[$_GET['show']]).") AND
                             survey_question.c_id =  $course_id
@@ -766,7 +777,7 @@ if (
             }
         }
     } elseif ($survey_data['survey_type'] === '1') {
-        $my_survey_id = intval($survey_invitation['survey_id']);
+        $my_survey_id = (int) $survey_invitation['survey_id'];
         $current_user = Database::escape_string($survey_invitation['user']);
 
         if (isset($_POST['personality'])) {
@@ -779,7 +790,10 @@ if (
             $answer_list = [];
             // Get current user results
             $results = [];
-            $sql = "SELECT survey_group_pri, user, SUM(value) as value
+            $sql = "SELECT 
+                      survey_group_pri, 
+                      user, 
+                      SUM(value) as value
                     FROM $table_survey_answer as survey_answer
                     INNER JOIN $table_survey_question as survey_question
                     ON (survey_question.question_id = survey_answer.question_id)
@@ -799,7 +813,6 @@ if (
                 $results[] = $answer_list;
             }
 
-            //echo '<br />'; print_r($results); echo '<br />';
             // Get the total score for each group of questions
             $totals = [];
             $sql = "SELECT SUM(temp.value) as value, temp.survey_group_pri FROM
@@ -1016,6 +1029,7 @@ if (
                                 ON survey_question.question_id = survey_question_option.question_id AND
                                 survey_question_option.c_id = $course_id
                                 WHERE
+                                    survey_question NOT LIKE '%{{%' AND 
                                     survey_question.survey_id = '".$my_survey_id."' AND
                                     survey_question.c_id = $course_id AND
                                     survey_question.question_id IN (".implode(',', $paged_questions_sec[$val]).")
@@ -1126,6 +1140,7 @@ if (
                             ON survey_question.question_id = survey_question_option.question_id AND
                             survey_question_option.c_id = $course_id
                             WHERE
+                                survey_question NOT LIKE '%{{%' AND 
                                 survey_question.survey_id = '".intval($survey_invitation['survey_id'])."' AND
                                 survey_question.c_id = $course_id  AND
                                 survey_question.question_id IN (".$imploded.")
@@ -1170,9 +1185,9 @@ if (
 
 // Selecting the maximum number of pages
 $sql = "SELECT * FROM $table_survey_question
-        WHERE
+        WHERE        
             c_id = $course_id AND
-            type = '".Database::escape_string('pagebreak')."' AND
+            type = 'pagebreak' AND
             survey_id='".intval($survey_invitation['survey_id'])."'";
 $result = Database::query($sql);
 $numberofpages = Database::num_rows($result) + 1;
@@ -1224,12 +1239,27 @@ $form = new FormValidator(
 $form->addHidden('language', $p_l);
 
 if (isset($questions) && is_array($questions)) {
+    $originalShow = isset($_GET['show']) ? (int) $_GET['show'] : 0;
+
+    $questionCounter = 1;
+    if (!empty($originalShow)) {
+        $before = 0;
+        foreach ($paged_questions as $keyQuestion => $list) {
+            if ($originalShow > $keyQuestion) {
+                $before += count($list);
+            }
+        }
+        $questionCounter = $before + 1;
+    }
+
     foreach ($questions as $key => &$question) {
         $ch_type = 'ch_'.$question['type'];
+        //$questionNumber = $question['sort'];
+        $questionNumber = $questionCounter;
         $display = new $ch_type();
         // @todo move this in a function.
         $form->addHtml('<div class="survey_question '.$ch_type.'">');
-        $form->addHtml('<h5 class="title">'.$question['sort'].'. '.strip_tags($question['survey_question']).'</h5>');
+        $form->addHtml('<h5 class="title">'.$questionNumber.'. '.strip_tags($question['survey_question']).'</h5>');
         $userAnswerData = SurveyUtil::get_answers_of_question_by_user($question['survey_id'], $question['question_id']);
         $finalAnswer = null;
 
@@ -1256,6 +1286,7 @@ if (isset($questions) && is_array($questions)) {
         }
         $display->render($form, $question, $finalAnswer);
         $form->addHtml('</div>');
+        $questionCounter++;
     }
 }
 
@@ -1378,41 +1409,3 @@ if ($survey_data['survey_type'] === '0') {
 $form->addHtml('</div>');
 $form->display();
 Display::display_footer();
-
-/**
- * Check whether this survey has ended. If so, display message and exit rhis script.
- *
- * @param array $surveyData Survey data
- */
-function check_time_availability($surveyData)
-{
-    $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
-    $utcZone = new DateTimeZone('UTC');
-    $startDate = new DateTime($surveyData['start_date'], $utcZone);
-    $endDate = new DateTime($surveyData['end_date'], $utcZone);
-    $currentDate = new DateTime('now', $utcZone);
-    if (!$allowSurveyAvailabilityDatetime) {
-        $currentDate->modify('today');
-    }
-    if ($currentDate < $startDate) {
-        api_not_allowed(
-            true,
-            Display:: return_message(
-                get_lang('SurveyNotAvailableYet'),
-                'warning',
-                false
-            )
-        );
-    }
-
-    if ($currentDate > $endDate) {
-        api_not_allowed(
-            true,
-            Display:: return_message(
-                get_lang('SurveyNotAvailableAnymore'),
-                'warning',
-                false
-            )
-        );
-    }
-}

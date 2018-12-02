@@ -16,7 +16,8 @@ class FormValidator extends HTML_QuickForm
     private $layout;
 
     /**
-     * Constructor
+     * Constructor.
+     *
      * @param string $name Name of the form
      * @param string $method (optional) Method ('post' (default) or 'get')
      * @param string $action (optional) Action (default is $PHP_SELF)
@@ -126,6 +127,7 @@ EOT;
 
     /**
      * @todo this function should be added in the element class
+     *
      * @return string
      */
     public function getDefaultElementTemplate()
@@ -244,6 +246,7 @@ EOT;
      * @param string $label
      * @param array $options
      * @param array $attributes
+     *
      * @throws
      */
     public function addSelectAjax($name, $label, $options = [], $attributes = [])
@@ -274,17 +277,31 @@ EOT;
 
     /**
      * @param string $name
-     * @param string $value
+     * @param string $label
+     * @param array  $attributes
+     *
+     * @return HTML_QuickForm_element
      */
-    public function addHidden($name, $value)
+    public function addDateTimeRangePicker($name, $label, $attributes = [])
     {
-        $this->addElement('hidden', $name, $value);
+        return $this->addElement('DateTimeRangePicker', $name, $label, $attributes);
+    }
+
+    /**
+     * @param string $name
+     * @param string $value
+     * @param array  $attributes
+     */
+    public function addHidden($name, $value, $attributes = [])
+    {
+        $this->addElement('hidden', $name, $value, $attributes);
     }
 
     /**
      * @param string $name
      * @param string $label
      * @param array  $attributes
+     * @param bool   $required
      *
      * @return HTML_QuickForm_textarea
      */

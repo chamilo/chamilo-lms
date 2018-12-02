@@ -45,7 +45,6 @@ if (!api_is_allowed_to_edit(false, true) || $isDrhOfCourse) {
     // Show error message if the survey can be seen only by tutors
     if ($survey_data['visible_results'] == SURVEY_VISIBLE_TUTOR) {
         api_not_allowed(true);
-        exit;
     }
 
     Display::display_header(get_lang('ToolSurvey'));
@@ -125,7 +124,7 @@ if ($action == 'overview') {
     ];
     switch ($action) {
         case 'questionreport':
-            $singlePage = isset($_GET['single_page']) ? intval($_GET['single_page']) : 0;
+            $singlePage = isset($_GET['single_page']) ? (int) $_GET['single_page'] : 0;
             $tool_name = $singlePage ? get_lang('QuestionsOverallReport') : get_lang('DetailedReportByQuestion');
             break;
         case 'userreport':

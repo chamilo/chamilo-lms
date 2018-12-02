@@ -45,7 +45,7 @@ class DateTimePicker extends HTML_QuickForm_text
         $resetFieldX = sprintf(get_lang('ResetFieldX'), $label);
 
         return '
-            <div class="input-group">
+            <div class="input-group" id="date_time_wrapper_'.$id.'">
                 <span class="input-group-addon cursor-pointer">
                     <input '.$this->_getAttrString($this->_attributes).'>
                 </span>

@@ -17,7 +17,7 @@ api_protect_course_script();
 $curdirpath = $path = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : null;
 $courseInfo = api_get_course_info();
 $pathurl = urlencode($path);
-$slide_id = isset($_GET['slide_id']) ? (int) $_GET['slide_id'] : null;
+$slide_id = isset($_GET['slide_id']) ? Security::remove_XSS($_GET['slide_id']) : null;
 $document_id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : null;
 $isAllowedToEdit = api_is_allowed_to_edit(null, true);
 
@@ -264,13 +264,19 @@ if ($slide_id == 'all') {
                             //GIF89a for transparent and anim (first clip), either GIF87a
                             if ($transindex >= 0 && $transindex < $palletsize) {
                                 $transcol = imagecolorsforindex($source_img, $transindex);
-                                $transindex = imagecolorallocatealpha($crop, $transcol['red'], $transcol['green'], $transcol['blue'], 127);
+                                $transindex = imagecolorallocatealpha(
+                                    $crop,
+                                    $transcol['red'],
+                                    $transcol['green'],
+                                    $transcol['blue'],
+                                    127
+                                );
                                 imagefill($crop, 0, 0, $transindex);
                                 imagecolortransparent($crop, $transindex);
                             }
                         }
 
-                        //resampled image
+                        // Resampled image
                         imagecopyresampled(
                             $crop,
                             $source_img,
@@ -309,10 +315,20 @@ if ($slide_id == 'all') {
                 } else {
                     // If images aren't support by gd (not gif, jpg, jpeg, png)
                     if ($imagetype == 'bmp') {
-                        // use getimagesize instead api_getimagesize($image); becasuse api_getimagesize doesn't support bmp files. Put here for each show, only for a few bmp files isn't heavy
+                        // use getimagesize instead api_getimagesize($image);
+                        // because api_getimagesize doesn't support bmp files.
+                        // Put here for each show, only for a few bmp files isn't heavy
                         $original_image_size = getimagesize($image);
-                        if ($max_thumbnail_width < $original_image_size[0] || $max_thumbnail_height < $original_image_size[1]) {
-                            $thumbnail_size = api_calculate_image_size($original_image_size[0], $original_image_size[1], $max_thumbnail_width, $max_thumbnail_height); //don't use resize_image because doesn't run with bmp files
+                        if ($max_thumbnail_width < $original_image_size[0] ||
+                            $max_thumbnail_height < $original_image_size[1]
+                        ) {
+                            //don't use resize_image because doesn't run with bmp files
+                            $thumbnail_size = api_calculate_image_size(
+                                $original_image_size[0],
+                                $original_image_size[1],
+                                $max_thumbnail_width,
+                                $max_thumbnail_height
+                            );
                             $image_height = $thumbnail_size['height'];
                             $image_width = $thumbnail_size['width'];
                         } else {
@@ -326,7 +342,10 @@ if ($slide_id == 'all') {
                     }
 
                     $doc_url = ($path && $path !== '/') ? $path.'/'.$one_image_file : $path.$one_image_file;
-                    $image_tag[] = '<img src ="download.php?doc_url='.$doc_url.'" border="0" width="'.$image_width.'" height="'.$image_height.'" title="'.$one_image_file.'">';
+                    $image_tag[] = '<img 
+                            src="download.php?doc_url='.$doc_url.'"
+                            border="0" 
+                            width="'.$image_width.'" height="'.$image_height.'" title="'.$one_image_file.'">';
                 }
             }
         }
@@ -360,7 +379,9 @@ if ($slide_id == 'all') {
     }
     $html .= '</div>';
 }
+
 echo $html;
+
 /*	ONE AT A TIME VIEW */
 $course_id = api_get_course_int_id();
 

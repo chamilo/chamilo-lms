@@ -17,8 +17,8 @@ api_protect_course_script();
 $curdirpath = $path = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : null;
 $courseInfo = api_get_course_info();
 $pathurl = urlencode($path);
-$slide_id = isset($_GET['slide_id']) ? Security::remove_XSS($_GET['slide_id']) : null;
-$parent_id = null;
+$slide_id = isset($_GET['slide_id']) ? (int) $_GET['slide_id'] : null;
+$document_id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : null;
 $isAllowedToEdit = api_is_allowed_to_edit(null, true);
 
 if (empty($slide_id)) {
@@ -50,8 +50,6 @@ if (!empty($groupId)) {
     $groupIid = isset($group_properties['iid']) ? $group_properties['iid'] : 0;
 }
 
-$document_id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : null;
-
 Display::display_header($originaltoolname, 'Doc');
 
 $slideshowKey = 'slideshow_'.api_get_course_id().api_get_session_id().$curdirpath;
@@ -78,14 +76,8 @@ if ($slide_id != 'all') {
     $next_slide = $slide + 1;
 }
 $total_slides = count($image_files_only);
-?>
-<script>
-function MM_openBrWindow(theURL,winName,features) { //v2.0
-  window.open(theURL,winName,features);
-}
-</script>
-<div class="actions">
-<?php
+
+echo '<div class="actions">';
 
 if ($slide_id != 'all') {
     $image = null;
@@ -114,6 +106,7 @@ if ($slide_id != 'all') {
         }
 
         echo Display::return_icon($imgp, get_lang('Previous'));
+
         if ($slide > 0) {
             echo '</a>';
         }

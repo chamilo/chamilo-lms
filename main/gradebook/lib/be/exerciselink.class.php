@@ -186,14 +186,29 @@ class ExerciseLink extends AbstractLink
         $courseId = $this->getCourseId();
         $exerciseData = $this->get_exercise_data();
         $exerciseId = isset($exerciseData['id']) ? $exerciseData['id'] : 0;
+        $stud_id = (int) $stud_id;
 
         if (empty($exerciseId)) {
             return null;
         }
+
+        $key = 'exercise_link_id:'.
+            $this->get_id().
+            'exerciseId:'.$exerciseId.'student:'.$stud_id.'session:'.$sessionId.'courseId:'.$courseId.'type:'.$type;
+
+        $useCache = api_get_configuration_value('gradebook_use_apcu_cache');
+        $cacheAvailable = api_get_configuration_value('apc') && $useCache;
+        $cacheDriver = null;
+        if ($cacheAvailable) {
+            $cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
+            if ($cacheDriver->contains($key)) {
+                error_log($key);
+                return $cacheDriver->fetch($key);
+            }
+        }
+
         $exercise = new Exercise($courseId);
         $exercise->read($exerciseData['id']);
-
-        $stud_id = (int) $stud_id;
 
         if (!$this->is_hp) {
             if ($exercise->exercise_was_added_in_lp == false) {
@@ -246,8 +261,14 @@ class ExerciseLink extends AbstractLink
         if (isset($stud_id) && empty($type)) {
             // for 1 student
             if ($data = Database::fetch_array($scores)) {
+                if ($cacheAvailable) {
+                    $cacheDriver->save($key, [$data['exe_result'], $data['exe_weighting']]);
+                }
                 return [$data['exe_result'], $data['exe_weighting']];
             } else {
+                if ($cacheAvailable) {
+                    $cacheDriver->save($key, null);
+                }
                 return null;
             }
         } else {
@@ -290,25 +311,50 @@ class ExerciseLink extends AbstractLink
             }
 
             if ($student_count == 0) {
+                if ($cacheAvailable) {
+                    $cacheDriver->save($key, null);
+                }
                 return null;
             } else {
                 switch ($type) {
                     case 'best':
-                        return [$bestResult, $weight];
+                        $result = [$bestResult, $weight];
+                        if ($cacheAvailable) {
+                            $cacheDriver->save($key, $result);
+                        }
+                        return $result;
                         break;
                     case 'average':
                         $count = count($this->getStudentList());
                         if (empty($count)) {
-                            return [0, $weight];
+                            $result = [0, $weight];
+                            if ($cacheAvailable) {
+                                $cacheDriver->save($key, $result);
+                            }
+                            return $result;
                         }
 
-                        return [$sumResult / $count, $weight];
+                        $result = [$sumResult / $count, $weight];
+
+                        if ($cacheAvailable) {
+                            $cacheDriver->save($key, $result);
+                        }
+
+                        return $result;
                         break;
                     case 'ranking':
-                        return AbstractLink::getCurrentUserRanking($stud_id, $students);
+                        $ranking = AbstractLink::getCurrentUserRanking($stud_id, $students);
+                        if ($cacheAvailable) {
+                            $cacheDriver->save($key, $ranking);
+                        }
+                        return $ranking;
                         break;
                     default:
-                        return [$sum, $student_count];
+                        $result = [$sum, $student_count];
+                        if ($cacheAvailable) {
+                            $cacheDriver->save($key, $result);
+                        }
+                        return $result;
                         break;
                 }
             }

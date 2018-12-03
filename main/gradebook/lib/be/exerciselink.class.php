@@ -202,7 +202,6 @@ class ExerciseLink extends AbstractLink
         if ($cacheAvailable) {
             $cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
             if ($cacheDriver->contains($key)) {
-                error_log($key);
                 return $cacheDriver->fetch($key);
             }
         }

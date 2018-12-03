@@ -81,7 +81,12 @@ $nameTools = get_lang('Agenda');
 Event::event_access_tool(TOOL_CALENDAR_EVENT);
 
 if ($type === 'fromjs') {
-    $id_list = explode('_', $eventId);
+    // split the "id" parameter only if string and there are _ separators
+    if (preg_match('/_/', $eventId)) {
+        $id_list = explode('_', $eventId);
+    } else {
+        $id_list = $eventId;
+    }
     $eventId = $id_list[1];
     $event_type = $id_list[0];
     $event_type = $event_type === 'platform' ? 'admin' : $event_type;
@@ -306,6 +311,8 @@ if (!empty($actionName)) {
         "url" => $url,
         "name" => get_lang('Agenda'),
     ];
+} else {
+    $actionName = '';
 }
 
 // Tool introduction

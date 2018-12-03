@@ -16,7 +16,7 @@
                 {% for item in gradebook_list %}
                     <tr>
                         <td>
-                            {{ item.name }}
+                            {{ item.name | e }}
                         </td>
                         <td>
                             {{ item.courseCode }}

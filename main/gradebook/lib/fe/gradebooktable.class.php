@@ -983,7 +983,7 @@ class GradebookTable extends SortableTable
             $imgWebPath = api_get_path(WEB_ARCHIVE_PATH).$chartHash;
 
             if (file_exists($imgSysPath)) {
-                $result = '<div id="contentArea" style="text-align: center;" >';
+                $result = '<br /><div id="contentArea" style="text-align: center;" >';
                 $result .= '<img src="'.$imgWebPath.'" >';
                 $result .= '</div>';
 

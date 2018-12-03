@@ -142,6 +142,7 @@ class GradebookDataGenerator
 
                 // Best
                 $best = $this->buildBestResultColumn($item);
+
                 $row['best'] = $best['display'];
                 $row['best_score'] = $best['score'];
 

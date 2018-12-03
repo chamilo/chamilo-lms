@@ -905,8 +905,7 @@ class GradebookTable extends SortableTable
             // $data['average'] = array(rand(0,50), rand(0,50));
             $dataSet->addPoints($data['average'], get_lang('Average'));
             $dataSet->addPoints($data['categories'], 'categories');
-
-            $dataSet->setAbscissa("categories");
+            $dataSet->setAbscissa('categories');
             $xSize = 600;
             $ySize = 400;
             $pChart = new pImage($xSize, $ySize, $dataSet);
@@ -922,7 +921,7 @@ class GradebookTable extends SortableTable
                 ["R" => 0, "G" => 0, "B" => 0]
             );
             $pChart->drawText(
-                10,
+                80,
                 16,
                 get_lang('Results'),
                 ["FontSize" => 11, "Align" => TEXT_ALIGN_BOTTOMMIDDLE]

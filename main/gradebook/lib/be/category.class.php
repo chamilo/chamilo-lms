@@ -388,7 +388,7 @@ class Category implements GradebookItem
 
         $courseInfo = api_get_course_info_by_id(api_get_course_int_id());
         $courseCode = $courseInfo['code'];
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
 
         if (!empty($session_id)) {
             $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
@@ -940,6 +940,17 @@ class Category implements GradebookItem
         $course_code = '',
         $session_id = null
     ) {
+        $key = 'category:'.$this->id.'student:'.(int) $stud_id.'type:'.$type.'course:'.$course_code.'session:'.(int) $session_id;
+        $useCache = api_get_configuration_value('gradebook_use_apcu_cache');
+        $cacheAvailable = api_get_configuration_value('apc') && $useCache;
+
+        if ($cacheAvailable) {
+            $cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
+            if ($cacheDriver->contains($key)) {
+                return $cacheDriver->fetch($key);
+            }
+        }
+
         // Classic
         if (!empty($stud_id) && $type == '') {
             if (!empty($course_code)) {
@@ -1144,14 +1155,27 @@ class Category implements GradebookItem
         switch ($type) {
             case 'best':
                 if (empty($bestResult)) {
+                    if ($cacheAvailable) {
+                        $cacheDriver->save($key, null);
+                    }
                     return null;
+                }
+                if ($cacheAvailable) {
+                    $cacheDriver->save($key, [$bestResult, $weightsum]);
                 }
 
                 return [$bestResult, $weightsum];
                 break;
             case 'average':
                 if (empty($ressum)) {
+                    if ($cacheAvailable) {
+                        $cacheDriver->save($key, null);
+                    }
                     return null;
+                }
+
+                if ($cacheAvailable) {
+                    $cacheDriver->save($key, [$ressum, $weightsum]);
                 }
 
                 return [$ressum, $weightsum];
@@ -1164,6 +1188,9 @@ class Category implements GradebookItem
                 return AbstractLink::getCurrentUserRanking($stud_id, []);
                 break;
             default:
+                if ($cacheAvailable) {
+                    $cacheDriver->save($key, [$ressum, $weightsum]);
+                }
                 return [$ressum, $weightsum];
                 break;
         }

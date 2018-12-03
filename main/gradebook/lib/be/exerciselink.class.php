@@ -260,10 +260,11 @@ class ExerciseLink extends AbstractLink
         if (isset($stud_id) && empty($type)) {
             // for 1 student
             if ($data = Database::fetch_array($scores)) {
+                $result = [$data['exe_result'], $data['exe_weighting']];
                 if ($cacheAvailable) {
-                    $cacheDriver->save($key, [$data['exe_result'], $data['exe_weighting']]);
+                    $cacheDriver->save($key, $result);
                 }
-                return [$data['exe_result'], $data['exe_weighting']];
+                return $result;
             } else {
                 if ($cacheAvailable) {
                     $cacheDriver->save($key, null);

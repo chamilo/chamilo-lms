@@ -403,7 +403,7 @@ if ($slide_id != 'all' && !empty($image_files_only)) {
         list($width, $height) = getimagesize($image);
         // Auto resize
         if ($imageResize == 'resizing') {
-        ?>
+            ?>
         <script>
             var initial_width='<?php echo $width; ?>';
             var initial_height='<?php echo $height; ?>';

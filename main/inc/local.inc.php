@@ -1358,7 +1358,6 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
                     $_course['real_id']
                 );
 
-
                 $priorityList = [];
                 if (!empty($courseSession)) {
                     foreach ($courseSession as $courseSessionItem) {

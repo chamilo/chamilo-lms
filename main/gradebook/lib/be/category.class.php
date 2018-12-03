@@ -1158,6 +1158,7 @@ class Category implements GradebookItem
                     if ($cacheAvailable) {
                         $cacheDriver->save($key, null);
                     }
+
                     return null;
                 }
                 if ($cacheAvailable) {
@@ -1171,6 +1172,7 @@ class Category implements GradebookItem
                     if ($cacheAvailable) {
                         $cacheDriver->save($key, null);
                     }
+
                     return null;
                 }
 
@@ -1191,6 +1193,7 @@ class Category implements GradebookItem
                 if ($cacheAvailable) {
                     $cacheDriver->save($key, [$ressum, $weightsum]);
                 }
+
                 return [$ressum, $weightsum];
                 break;
         }

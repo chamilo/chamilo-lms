@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-
 /**
  * This is a plugin for the documents tool. It looks for .jpg, .jpeg, .gif, .png
  * files (since these are the files that can be viewed in a browser) and creates

@@ -1577,7 +1577,7 @@ switch ($action) {
             $result = SessionManager::get_sessions_admin(
                 [
                     'where' => $whereCondition,
-                    'order' => "$sidx $sord",
+                    'order' => "$sidx $sord, s.name",
                     'extra' => $extra_fields,
                     'limit' => "$start , $limit",
                 ],
@@ -1591,7 +1591,7 @@ switch ($action) {
             $result = SessionManager::get_sessions_admin_complete(
                 [
                     'where' => $whereCondition,
-                    'order' => "$sidx $sord",
+                    'order' => "$sidx $sord, s.name",
                     'extra' => $extra_fields,
                     'limit' => "$start , $limit",
                 ]

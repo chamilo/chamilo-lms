@@ -243,9 +243,8 @@ if (!$playerSupported && $execute_iframe) {
         var updateContentHeight = function() {
             my_iframe = document.getElementById("mainFrame");
             if (my_iframe) {
-                //this doesnt seem to work in IE 7,8,9
-                new_height = my_iframe.contentWindow.document.body.scrollHeight;
-                my_iframe.height = my_iframe.contentWindow.document.body.scrollHeight + "px";
+                //this doesnt seem to work in IE 7,8,9         
+                my_iframe.height = my_iframe.contentWindow.document.body.scrollHeight + 50 + "px";
             }
         };
 
@@ -358,7 +357,15 @@ if ($execute_iframe) {
         $content = Security::remove_XSS(file_get_contents($file_url_sys));
         echo $content;
     } else {
-        echo '<iframe id="mainFrame" name="mainFrame" border="0" frameborder="0" scrolling="no" style="width:100%;" height="600" src="'.$file_url_web.'&rand='.mt_rand(1, 10000).'" height="500" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>';
+        echo '<iframe 
+            id="mainFrame" 
+            name="mainFrame" 
+            border="0" 
+            frameborder="0" 
+            scrolling="no" 
+            style="width:100%;" height="600" 
+            src="'.$file_url_web.'&rand='.mt_rand(1, 10000).'" 
+            height="500" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>';
     }
 }
 Display::display_footer();

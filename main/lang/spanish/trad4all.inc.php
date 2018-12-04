@@ -6687,7 +6687,7 @@ $NoJavascript = "Su navegador no tiene activado JavaScript.\nChamilo se sirve de
 $NoFlash = "Su navegador no tiene activado el soporte de Flash.\nChamilo sólo se apoya en Flash para algunas de sus funciones por lo que su ausencia no le impedirá continuar. Pero si quiere beneficiarse del conjunto de las herramientas de Chamilo, le recomendamos que instale-active el plugin de Flash y reinicialice su navegador.";
 $ThereAreNoQuestionsForThisExercise = "En este ejercicio no hay preguntas disponibles";
 $Attempt = "Intento";
-$SaveForNow = "Guardar y continuar más tarde";
+$SaveForNow = "Guardar y continuar";
 $ContinueTest = "Continuar el ejercicio";
 $NoQuicktime = "No tiene instalado el plugin de QuickTime en su navegador. Puede seguir utilizando la plataforma, pero para conseguir reproducir un mayor número de tipos de archivos multimedia le recomendamos su instalación.";
 $NoJavaSun = "No tiene instalado el plugin de Java de Sun en su navegador. Puede seguir utilizando la plataforma, pero perderá algunas de sus prestaciones.";
@@ -8078,7 +8078,7 @@ $FieldTypeSelectWithTextField = "Lista desplegable con campo de texto";
 $FieldTypeTripleSelect = "Campo de tipo selección triple";
 $DoubleValidationMessage = "Confirma que realmente deseas suscribirte a esta plataforma.";
 $AddText = "Añadir texto";
-$OralExpressionHelpText = "Cuando lanza la grabación, puede pausar cuando lo desee. Si no está satisfecho, grabese de nuevo. Esto sobrescribirá la versión anterior. Satisfecho? Para transmitir la grabación haga clic en \"Guardar el audio grabado\".";
+$OralExpressionHelpText = "Cuando lanza la grabación, puede pausar cuando lo desee. Si no está satisfecho, grabese de nuevo. Esto sobrescribirá la versión anterior. Satisfecho? El archivo esta automaticamente enviado al servidor, se puede seguir con el ejercicio.";
 $BestScoreInLearningPath = "Mejor nota en las lecciones";
 $BestScoreNotInLearningPath = "Mejor nota fuera de lecciones";
 $ReSendConfirmationMail = "Volver a enviar el correo electrónico de confirmación";
@@ -8336,4 +8336,14 @@ $CreateReadOutText = "Crear texto leído";
 $OutstandingStudents = "Estudiantes destacados";
 $PercentileScoresDistribution = "Distribución porcentual de notas";
 $ProgressObtainedFromLPProgressAndTestsAverage = "Nota: Este progreso es obtenido a través de una combinación del progreso en las lecciones y de las notas promedias en los ejercicios";
+$CreateNewSurveyDoodle = "Crear una nueva encuesta de tipo Doodle";
+$RemoveMultiplicateQuestions = "Eliminar las preguntas demultiplicadas";
+$MultiplicateQuestions = "Demultiplicar las preguntas";
+$QuestionTags = "Puedes usar las etiquetas {{class_name}} y {{student_full_name}} en la pregunta para poder multiplicar las preguntas.
+En la página de la lista de encuestas en la columna de acción, hay un botón para multiplicar las preguntas que buscará la etiqueta {{class_name}} y duplicará la pregunta para todas las clases inscritas al curso y le cambiará el nombre con el nombre de la clase.
+También agregará un separador de página para hacer una nueva página para cada clase.
+Luego buscará la etiqueta {{student_full_name}} y duplicará la pregunta para todos los estudiantes de la clase (para cada clase) y le cambiará el nombre con el nombre completo del estudiante.";
+$CreateMeeting = "Crear encuesta de reunión";
+$QuestionForNextClass = "Preguntas para la siguiente clase";
+$NewExerciseAttemptDisabled = "El portal no permite de iniciar ejercicios por le momento, favor de regresar un poquito mas tarde.";
 ?>

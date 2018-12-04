@@ -6683,7 +6683,7 @@ $NoJavascript = "Your do not have JavaScript support enabled in your browser. Ch
 $NoFlash = "You do not seem to have Flash support enabled in your browser. Chamilo only relies on Flash for a few features and will not lock you out in any way if you don't have it, but if you want to benefit from the complete set of tools from Chamilo, we recommend you install the Flash Plugin and restart your browser.";
 $ThereAreNoQuestionsForThisExercise = "There are no questions for this exercise";
 $Attempt = "Attempt";
-$SaveForNow = "Save and continue later";
+$SaveForNow = "Save and continue";
 $ContinueTest = "Proceed with the test";
 $NoQuicktime = "Your browser does not have the QuickTime plugin installed. You can still use the platform, but to run a larger number of media file types, we suggest you might want to install it.";
 $NoJavaSun = "Your browser doesn't seem to have the Sun Java plugin installed. You can still use the platform, but you will lose a few of its capabilities.";
@@ -8053,7 +8053,7 @@ $FieldTypeSelectWithTextField = "Select with text field";
 $FieldTypeTripleSelect = "Triple select";
 $DoubleValidationMessage = "You confirm that you really want to subscribe to this plateform.";
 $AddText = "Add text";
-$OralExpressionHelpText = "When you start recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied? To transmit the recording click on \"Save recorded audio\".";
+$OralExpressionHelpText = "When you start recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied? the file is automatically sent to the server so you can just continue your exercise.";
 $BestScoreInLearningPath = "Best score in learning path";
 $BestScoreNotInLearningPath = "Best score not in learning path";
 $ReSendConfirmationMail = "Send confirmation mail again";
@@ -8310,4 +8310,14 @@ $CreateReadOutText = "Create read-out text";
 $OutstandingStudents = "Outstanding students";
 $PercentileScoresDistribution = "Percentile scores distribution";
 $ProgressObtainedFromLPProgressAndTestsAverage = "Note: This progress is obtained through a combination of progress in the learning paths and average scores in the tests";
+$CreateNewSurveyDoodle = "Create a new Doodle type survey";
+$RemoveMultiplicateQuestions = "Remove multiplicated questions";
+$MultiplicateQuestions = "Multiplicate questions";
+$QuestionTags = "You can use the tags {{class_name}} and {{student_full_name}} in the question to be able to multiplicate questions.
+On the survey's list page in the action field you have a button to multiplicate question that will look for the {{class_name}} tag and duplicate the question for all the class subscribed to the course and rename it with the name of the class.
+It will also add a page ending to make a new page for each class.
+Then it will look for the {{student_full_name}} tag and duplicate the question for all the student in the class (for each class) and rename it with the student's full name.";
+$CreateMeeting = "Create meeting poll";
+$QuestionForNextClass = "Question for next class";
+$NewExerciseAttemptDisabled = "The portal do not allowed to start new test for the moment, please come back later.";
 ?>

@@ -6671,7 +6671,7 @@ $NoJavascript = "Votre navigateur n'autorise pas le JavaScript. Chamilo dépend 
 $NoFlash = "Votre navigateur ne semble pas autoriser l'utilisation de Flash. Chamilo dépend de Flash pour quelques uns de ses fonctionnalités et ne vous empêchera pas de vous connectez si votre navigateur ne le supporte pas, mais si vous désirez bénéficier du groupe complet d'outils de Chamilo, nous vous recommandons l'installation du plugin Flash et le rédémarrage de votre navigateur avant de continuer.";
 $ThereAreNoQuestionsForThisExercise = "Il n'y a aucune question dans cet exercice";
 $Attempt = "Tentative";
-$SaveForNow = "Enregistrer et continuer plus tard";
+$SaveForNow = "Enregistrer et continuer";
 $ContinueTest = "Continuer l'exercice";
 $NoQuicktime = "Votre navigateur ne dispose pas du plugin QuickTime. Vous pourrez tout de même utiliser la plateforme, mais nous vous suggérons de considérer l'installation du plugin pour supporter plus de types de fichiers multimédia.";
 $NoJavaSun = "Votre navigateur ne semble pas disposer du plugin Java de Sun. Vous pouvez tout de même utiliser la plateforme, mais vous perdrez certaines de ses fonctionnalités.";
@@ -7990,7 +7990,7 @@ $FieldTypeSelectWithTextField = "Sélecteur avec des champs texte";
 $FieldTypeTripleSelect = "Triple sélecteur";
 $DoubleValidationMessage = "Vous confirmez que vous souhaitez vraiment vous inscrire à cette plateforme.";
 $AddText = "Ajouter un texte";
-$OralExpressionHelpText = "Lors de l’enregistrement, tu peux faire une pause dès que tu le souhaites. Si tu n’es pas satisfait, enregistre-toi à nouveau. Cela écrasera la version précédente. Satisfait ? Pour transmettre l’enregistrement clique sur « Sauvegarder l’audio enregistré ».";
+$OralExpressionHelpText = "Lors de l’enregistrement, tu peux faire une pause dès que tu le souhaites. Si tu n’es pas satisfait, enregistre-toi à nouveau. Cela écrasera la version précédente. Satisfait ? Le fichier est automatiquement envoyé au serveur donc il suffit de continuer l'exercice..";
 $BestScoreInLearningPath = "Meilleur score parcours";
 $BestScoreNotInLearningPath = "Meilleur score hors-parcours";
 $ReSendConfirmationMail = "Envoyer un nouveau mail de confirmation";
@@ -8243,4 +8243,14 @@ $CreateReadOutText = "Créer texte lu";
 $OutstandingStudents = "Apprenants distingués";
 $PercentileScoresDistribution = "Distribution des scores en pourcents";
 $ProgressObtainedFromLPProgressAndTestsAverage = "Note: Le progrès ci-dessus est obtenu par une combinaison du progrès dans les parcours et du score dans les exercices";
+$CreateNewSurveyDoodle = "Créer une nouvelle enquête de type Doodle";
+$RemoveMultiplicateQuestions = "Supprimer les questions démultipliées";
+$MultiplicateQuestions = "Multiplier les questions";
+$QuestionTags = "Vous pouvez utiliser les balises {{class_name}} et {{student_full_name}} dans la question afin de multiplier les questions.
+Sur la page de liste d'enquêtes dans la colonne d'action, vous avez un bouton pour multiplier les questions qui recherchera la balise {{class_name}} et dupliquera la question pour toutes les classes inscrites au cours et la renommera avec le nom de la classe.
+Il ajoutera également un séparateur de page pour créer une nouvelle page pour chaque classe.
+Ensuite, il recherchera la balise {{student_full_name}} et dupliquera la question pour tous les étudiants de la classe (pour chaque classe) et la renommera avec le nom complet de l'étudiant.";
+$CreateMeeting = "Créer un sondage de réunion";
+$QuestionForNextClass = "Questions pour la classe suivante";
+$NewExerciseAttemptDisabled = "Le portail ne permet pas le démarrage d'exercice pour le moment, revenez un peu plus tard pour essayer à nouveau";
 ?>

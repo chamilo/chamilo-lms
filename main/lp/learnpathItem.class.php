@@ -1889,14 +1889,64 @@ class learnpathItem
             $sessionLifetime = 3600;
         }
 
-        $fixedAddedMinute = 5 * 60; // Add only 5 minutes
-        if ($time > $sessionLifetime) {
-            error_log("fixAbusiveTime: Total time is too big: $time replaced with: $fixedAddedMinute");
-            error_log("item_id : ".$this->db_id." lp_item_view.iid: ".$this->db_item_view_id);
-            $time = $fixedAddedMinute;
-        }
+        if (!api_get_configuration_value('lp_minimum_time')) {
+            $fixedAddedMinute = 5 * 60; // Add only 5 minutes
+            if ($time > $sessionLifetime) {
+                error_log("fixAbusiveTime: Total time is too big: $time replaced with: $fixedAddedMinute");
+                error_log("item_id : ".$this->db_id." lp_item_view.iid: ".$this->db_item_view_id);
+                $time = $fixedAddedMinute;
+            }
 
-        return $time;
+            return $time;
+        } else {
+            /* ## NSR - calculo de tiempo minimo y acumulado */
+            $user_id = api_get_user_id();
+            $myLP = learnpath::getLpFromSession(api_get_course_id(), $this->lp_id, $user_id);
+            $timeLp = $myLP->getAccumulateWorkTime();
+            $timeTotalCourse = $myLP->getAccumulateWorkTimeTotalCourse();
+            /*
+            $timeLp = $_SESSION['oLP']->getAccumulateWorkTime();
+            $timeTotalCourse = $_SESSION['oLP']->getAccumulateWorkTimeTotalCourse();
+            */
+            $perc = 100;
+            $tc = $timeTotalCourse;
+            /*if (!empty($sessionId) && $sessionId != 0) {
+                $sql = "SELECT hours, perc FROM plugin_licences_course_session WHERE session_id = $sessionId";
+                $res = Database::query($sql);
+                if (Database::num_rows($res) > 0) {
+                    $aux = Database::fetch_assoc($res);
+                    $perc = $aux['perc'];
+                    $tc = $aux['hours'] * 60;
+                }
+            }*/
+            // PL --- Porcentaje lección (tiempo leccion / tiempo total curso)
+            $pl = $timeLp / $timeTotalCourse;
+            /*
+             * TL: Tiempo que pone en una lección
+             * TT : tiempo total que pone Teresa (suma tiempos lecciones curso)
+             * PL: Fracción que supone una lección sobre el tiempo total = TL/TT
+             * TC: Tiempo que dice el cliente que tiene el curso
+             * P: porcentaje mínimo conexión que indica el cliente
+             *
+             * el tiempo mínimo de cada lección sería: PL x TC x P /100
+             */
+            // Aplicamos el porcentaje si no hubiese definido un porcentaje por defecto es 100%
+            $time_seg = intval(($pl * $tc * $perc / 100) * 60);
+
+            if ($time_seg < $sessionLifetime){
+                $sessionLifetime = $time_seg;
+            }
+
+            if ($time > $sessionLifetime) {
+                $fixedAddedMinute = $time_seg + mt_rand(0, 300);
+                if (self::DEBUG > 2) {
+                    error_log("Total time is too big: $time replaced with: $fixedAddedMinute");
+                }
+                $time = $fixedAddedMinute;
+            }
+
+            return $time;
+        }
     }
 
     /**

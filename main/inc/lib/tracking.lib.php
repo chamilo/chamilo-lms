@@ -435,6 +435,16 @@ class Tracking
                         $lesson_status = $row['mystatus'];
                         $score = $row['myscore'];
                         $time_for_total = $row['mytime'];
+
+                        // ## NSR sistema de tiempos nuevo
+                        if (api_get_configuration_value('lp_minimum_time')) {
+                            $timeCourse = self::getCalculateTime($user_id, $session_id);
+                            $_SESSION['trackTimeCourse'] = $timeCourse;
+                            $lp_time = $timeCourse[TOOL_LEARNPATH];
+                            $lpTime = (int) $lp_time[$lp_id];
+                            $time_for_total = $lpTime;
+                        }
+
                         $time = learnpathItem::getScormTimeFromParameter('js', $row['mytime']);
 
                         if ($score == 0) {
@@ -1649,6 +1659,28 @@ class Tracking
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs);
 
+        if (api_get_configuration_value('lp_minimum_time')) {
+            $courseInfo = api_get_course_info_by_id($courseId);
+            $course_code = $courseInfo['code'];
+            $sql = "SELECT * FROM c_lp WHERE c_id = $courseId";
+            $rs = Database::query($sql);
+            $dataLp = array();
+            while ($aux = Database::fetch_assoc($rs)) {
+                $dataLp[] = $aux['id'];
+            }
+            $lpTime = Tracking::get_time_spent_in_lp(
+                $user_id,
+                $course_code,
+                $dataLp, //array($_SESSION['oLP']->lp_id),
+                $session_id
+            );
+            if ($row['nb_seconds'] > $lpTime) {
+                return $row['nb_seconds'];
+            } else {
+                return $lpTime;
+            }
+        }
+
         return $row['nb_seconds'];
     }
 
@@ -1791,29 +1823,54 @@ class Tracking
         $session_id = 0,
         $convert_date = true
     ) {
-        $student_id = intval($student_id);
-        $courseId = intval($courseId);
-        $session_id = intval($session_id);
+        $student_id = (int) $student_id;
+        $courseId = (int) $courseId;
+        $session_id = (int) $session_id;
 
-        $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $sql = 'SELECT login_course_date
-                FROM '.$tbl_track_login.'
-                WHERE
-                    user_id = '.$student_id.' AND
-                    c_id = '.$courseId.' AND
-                    session_id = '.$session_id.'
-                ORDER BY login_course_date ASC 
-                LIMIT 0,1';
-        $rs = Database::query($sql);
-        if (Database::num_rows($rs) > 0) {
-            if ($first_login_date = Database::result($rs, 0, 0)) {
-                if ($convert_date) {
-                    return api_convert_and_format_date(
-                        $first_login_date,
-                        DATE_FORMAT_SHORT
-                    );
-                } else {
-                    return $first_login_date;
+        if (api_get_configuration_value('lp_minimum_time')) {
+            $tbl_track_e_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+            $sql = 'SELECT access_date
+                    FROM '.$tbl_track_e_access.'
+                    WHERE   access_user_id = '.$student_id.' AND
+                            c_id = "'.$courseId.'" AND
+                            access_session_id = '.$session_id.'
+                    ORDER BY access_date ASC
+                    LIMIT 0,1';
+
+            $rs = Database::query($sql);
+            if (Database::num_rows($rs) > 0) {
+                if ($last_login_date = Database::result($rs, 0, 0)) {
+                    if (empty($last_login_date)) {
+                        return false;
+                    }
+                    if ($convert_date) {
+                        return api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
+                    } else {
+                        return $last_login_date;
+                    }
+                }
+            }
+        } else {
+            $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+            $sql = 'SELECT login_course_date
+                    FROM '.$tbl_track_login.'
+                    WHERE
+                        user_id = '.$student_id.' AND
+                        c_id = '.$courseId.' AND
+                        session_id = '.$session_id.'
+                    ORDER BY login_course_date ASC 
+                    LIMIT 0,1';
+            $rs = Database::query($sql);
+            if (Database::num_rows($rs) > 0) {
+                if ($first_login_date = Database::result($rs, 0, 0)) {
+                    if ($convert_date) {
+                        return api_convert_and_format_date(
+                            $first_login_date,
+                            DATE_FORMAT_SHORT
+                        );
+                    } else {
+                        return $first_login_date;
+                    }
                 }
             }
         }
@@ -1841,44 +1898,105 @@ class Tracking
         $student_id = (int) $student_id;
         $session_id = (int) $session_id;
         $courseId = $courseInfo['real_id'];
-        $tbl_track_e_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
-        $sql = 'SELECT access_date
+
+        if (api_get_configuration_value('lp_minimum_time')) {
+            // ## NSR - Muestra la última fecha que accedió a la sesión cuando estaba activa
+            $where_condition = '';
+            $userInfo = api_get_user_info($student_id);
+            if ($userInfo['status'] == 5 && $session_id > 0) {
+                // fin de acceso a la sesión
+                $sessionInfo = SessionManager::fetch($session_id);
+                $last_access = $sessionInfo['access_end_date'];
+                $where_condition = ' AND access_date < "'.$last_access.'" ';
+            }
+
+            $tbl_track_e_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+            $sql = 'SELECT access_date
                 FROM '.$tbl_track_e_access.'
                 WHERE   access_user_id = '.$student_id.' AND
                         c_id = "'.$courseId.'" AND
-                        access_session_id = '.$session_id.'
+                        access_session_id = '.$session_id.$where_condition.'
                 ORDER BY access_date DESC
                 LIMIT 0,1';
 
-        $rs = Database::query($sql);
-        if (Database::num_rows($rs) > 0) {
-            if ($last_login_date = Database::result($rs, 0, 0)) {
-                if (empty($last_login_date)) {
-                    return false;
-                }
-                //see #5736
-                $last_login_date_timestamp = api_strtotime($last_login_date);
-                $now = time();
-                //If the last connection is > than 7 days, the text is red
-                //345600 = 7 days in seconds
-                if ($now - $last_login_date_timestamp > 604800) {
-                    if ($convert_date) {
-                        $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
-                        $icon = api_is_allowed_to_edit() ?
-                            '<a href="'.api_get_path(WEB_CODE_PATH).'announcements/announcements.php?action=add&remind_inactive='.$student_id.'&cidReq='.$courseInfo['code'].'" title="'.get_lang('RemindInactiveUser').'">
-                              '.Display::return_icon('messagebox_warning.gif').'
-                             </a>'
-                            : null;
-
-                        return $icon.Display::label($last_login_date, 'warning');
-                    } else {
-                        return $last_login_date;
+            $rs = Database::query($sql);
+            if (Database::num_rows($rs) > 0) {
+                if ($last_login_date = Database::result($rs, 0, 0)) {
+                    if (empty($last_login_date)) {
+                        return false;
                     }
-                } else {
+                    //see #5736
+                    $last_login_date_timestamp = api_strtotime($last_login_date);
+                    $now = time();
+                    //If the last connection is > than 7 days, the text is red
+                    //345600 = 7 days in seconds
+                    /*
+                    if ($now - $last_login_date_timestamp > 604800) {
+                        if ($convert_date) {
+                            $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
+                            $icon = api_is_allowed_to_edit() ?
+                                '<a href="'.api_get_path(WEB_CODE_PATH).'announcements/announcements.php?action=add&remind_inactive='.$student_id.'&cidReq='.$courseInfo['code'].'" title="'.get_lang('RemindInactiveUser').'">
+                                  '.Display::return_icon('messagebox_warning.gif').'
+                                 </a>'
+                                : null;
+                            return $icon.Display::label($last_login_date, 'warning');
+                        } else {
+                            return $last_login_date;
+                        }
+                    } else {
+                    */
                     if ($convert_date) {
                         return api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
                     } else {
                         return $last_login_date;
+                    }
+                    //}
+                }
+            }
+        } else {
+            $tbl_track_e_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+            $sql = 'SELECT access_date
+                    FROM '.$tbl_track_e_access.'
+                    WHERE   access_user_id = '.$student_id.' AND
+                            c_id = "'.$courseId.'" AND
+                            access_session_id = '.$session_id.'
+                    ORDER BY access_date DESC
+                    LIMIT 0,1';
+
+            $rs = Database::query($sql);
+            if (Database::num_rows($rs) > 0) {
+                if ($last_login_date = Database::result($rs, 0, 0)) {
+                    if (empty($last_login_date)) {
+                        return false;
+                    }
+                    //see #5736
+                    $last_login_date_timestamp = api_strtotime($last_login_date);
+                    $now = time();
+                    //If the last connection is > than 7 days, the text is red
+                    //345600 = 7 days in seconds
+                    if ($now - $last_login_date_timestamp > 604800) {
+                        if ($convert_date) {
+                            $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
+                            $icon = api_is_allowed_to_edit() ?
+                                '<a href="'.api_get_path(
+                                    WEB_CODE_PATH
+                                ).'announcements/announcements.php?action=add&remind_inactive='.$student_id.'&cidReq='.$courseInfo['code'].'" title="'.get_lang(
+                                    'RemindInactiveUser'
+                                ).'">
+                                  '.Display::return_icon('messagebox_warning.gif').'
+                                 </a>'
+                                : null;
+
+                            return $icon.Display::label($last_login_date, 'warning');
+                        } else {
+                            return $last_login_date;
+                        }
+                    } else {
+                        if ($convert_date) {
+                            return api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
+                        } else {
+                            return $last_login_date;
+                        }
                     }
                 }
             }
@@ -6679,21 +6797,30 @@ class Tracking
         return $html;
     }
 
-    public static function getCalculateTime($userId, $sessionId, $debug = false) {
-
-        $sql = "SELECT session_lifetime
+    /**
+     * @param int  $userId
+     * @param int  $sessionId
+     * @param bool $debug
+     *
+     * @return array
+     */
+    public static function getCalculateTime($userId, $sessionId, $debug = false)
+    {
+     /*   $sql = "SELECT session_lifetime
         FROM plugin_licences_course_session
         WHERE session_id = $sessionId";
         $res = Database::query($sql);
-        $lifeTime = intval(Database::fetch_assoc($res)['session_lifetime']);
+        $lifeTime = intval(Database::fetch_assoc($res)['session_lifetime']);*/
         //error_log("sessionId: $sessionId: $lifeTime");
-        if ($lifeTime > 0) {
+        /*if ($lifeTime > 0) {
             $sessionLifetime = $lifeTime;
             $sessionFixTime = $lifeTime;
         } else {
             $sessionLifetime = 28800; //intval(api_get_configuration_value('session_lifetime'));
             $sessionFixTime = 2700;
-        }
+        }*/
+        $sessionLifetime = 28800; //intval(api_get_configuration_value('session_lifetime'));
+        $sessionFixTime = 2700;
 
         $total_time = 0;
         $course_time = 0;
@@ -6717,9 +6844,10 @@ class Tracking
 
         $sql = 'SELECT date_reg
                 FROM track_e_access_complete
-                WHERE   user_id = '.$userId.' AND
-                        session_id = '.$sessionId.' AND
-                        login_as = 0
+                WHERE   
+                    user_id = '.$userId.' AND
+                    session_id = '.$sessionId.' AND
+                    login_as = 0
                 ORDER BY date_reg ASC
                 LIMIT 0,1';
         $rs = Database::query($sql);
@@ -6735,9 +6863,10 @@ class Tracking
 
         $sql = 'SELECT date_reg
                 FROM track_e_access_complete
-                WHERE   user_id = '.$userId.' AND
-                        session_id = '.$sessionId.' AND
-                        login_as = 0
+                WHERE   
+                    user_id = '.$userId.' AND
+                    session_id = '.$sessionId.' AND
+                    login_as = 0
                 ORDER BY date_reg DESC
                 LIMIT 0,1';
         $rs = Database::query($sql);
@@ -6746,7 +6875,7 @@ class Tracking
                 if (empty($last_login_date)) {
                     $lastConection = '';
                 } else {
-                    $lastConection = date("d/m/Y H:i:s", strtotime($last_login_date));
+                    $lastConection = date('d/m/Y H:i:s', strtotime($last_login_date));
                 }
             } else { $lastConection = ''; }
         } else { $lastConection = ''; }
@@ -7057,7 +7186,6 @@ class Tracking
         );
 
         return $result;
-
     }
 
     /**

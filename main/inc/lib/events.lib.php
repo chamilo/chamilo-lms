@@ -2458,18 +2458,23 @@ class Event
     /**
      * Register the logout of the course (usually when logging out of the platform)
      * from the track_e_access_complete table
+     *
      * @param array $logInfo Information stored by local.inc.php
+     *
      * @return bool
      */
     public static function registerLog($logInfo)
     {
+        if (!api_get_configuration_value('lp_minimum_time')) {
+            return false;
+        }
         $loginAs = (int) (Session::read('login_as') === true);
 
         $logInfo['user_id'] = api_get_user_id();
         $logInfo['c_id'] = api_get_course_int_id();
         $logInfo['session_id'] = api_get_session_id();
         $logInfo['url'] = $_SERVER['REQUEST_URI'];
-        $logInfo['ch_sid'] = $_REQUEST['ch_sid'];
+        $logInfo['ch_sid'] = session_id();
         $logInfo['ip_user'] = api_get_real_ip();
         $logInfo['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
         $logInfo['login_as'] = $loginAs;

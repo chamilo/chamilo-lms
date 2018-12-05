@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Script needed in order to avoid mixed content in links inside a learning path
  * In order to use this file you have to:
@@ -104,7 +105,9 @@ switch ($type) {
         break;
     case 'flash':
         $result =  '
-        <object codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0" id="'.$id.'" width="'.$width.'" height="'.$height.'" align="center">
+        <object 
+            id="'.$id.'" width="'.$width.'" height="'.$height.'" align="center"
+            codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0">
             <param name="id" value="'.$id.'">
             <param name="width" value="'.$width.'">
             <param name="height" value="'.$height.'">
@@ -116,7 +119,12 @@ switch ($type) {
             <param name="wmode" value="transparent">
             <param name="flashvars" value="'.$vars.'">
             <param name="src" value="'.$src.'">
-            <embed type="application/x-shockwave-flash" id="'.$id.'" width="'.$width.'" height="'.$height.'" bgcolor="#ffffff" align="center" allowfullscreen="true" allowscriptaccess="always" quality="high" wmode="transparent" flashvars="'.$vars.'" src="'.$src.'">
+            <embed 
+                id="'.$id.'" width="'.$width.'" height="'.$height.'" bgcolor="#ffffff" align="center" 
+                allowfullscreen="true" allowscriptaccess="always" quality="high" wmode="transparent" 
+                flashvars="'.$vars.'" src="'.$src.'"
+                type="application/x-shockwave-flash" 
+            >
         </object>';
 }
 

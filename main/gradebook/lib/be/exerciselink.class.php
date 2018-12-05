@@ -264,11 +264,13 @@ class ExerciseLink extends AbstractLink
                 if ($cacheAvailable) {
                     $cacheDriver->save($key, $result);
                 }
+
                 return $result;
             } else {
                 if ($cacheAvailable) {
                     $cacheDriver->save($key, null);
                 }
+
                 return null;
             }
         } else {
@@ -314,6 +316,7 @@ class ExerciseLink extends AbstractLink
                 if ($cacheAvailable) {
                     $cacheDriver->save($key, null);
                 }
+
                 return null;
             } else {
                 switch ($type) {
@@ -322,6 +325,7 @@ class ExerciseLink extends AbstractLink
                         if ($cacheAvailable) {
                             $cacheDriver->save($key, $result);
                         }
+
                         return $result;
                         break;
                     case 'average':
@@ -331,6 +335,7 @@ class ExerciseLink extends AbstractLink
                             if ($cacheAvailable) {
                                 $cacheDriver->save($key, $result);
                             }
+
                             return $result;
                         }
 
@@ -347,6 +352,7 @@ class ExerciseLink extends AbstractLink
                         if ($cacheAvailable) {
                             $cacheDriver->save($key, $ranking);
                         }
+
                         return $ranking;
                         break;
                     default:
@@ -354,6 +360,7 @@ class ExerciseLink extends AbstractLink
                         if ($cacheAvailable) {
                             $cacheDriver->save($key, $result);
                         }
+
                         return $result;
                         break;
                 }

@@ -76,17 +76,6 @@ abstract class OutcomeRequest
         $this->translator = $translator;
     }
 
-    protected function processHeader()
-    {
-        $info = $this->xmlHeaderInfo;
-
-        $this->statusInfo->setMessageRefIdentifier($info->imsx_messageIdentifier);
-
-        error_log("Service Request: tool version {$info->imsx_version} message ID {$info->imsx_messageIdentifier}");
-    }
-
-    abstract protected function processBody();
-
     /**
      * @return OutcomeResponse|null
      */
@@ -106,4 +95,15 @@ abstract class OutcomeRequest
                 return new OutcomeUnsupportedResponse($this->statusInfo, $this->responseBodyParam);
         }
     }
+
+    protected function processHeader()
+    {
+        $info = $this->xmlHeaderInfo;
+
+        $this->statusInfo->setMessageRefIdentifier($info->imsx_messageIdentifier);
+
+        error_log("Service Request: tool version {$info->imsx_version} message ID {$info->imsx_messageIdentifier}");
+    }
+
+    abstract protected function processBody();
 }

@@ -7,9 +7,11 @@
  *
  * 1. Modify configuration.php and add this setting: $_configuration['lp_fix_embed_content'] = true;
  * 2. Copy this file in app/courses/proxy.php
- * 3. Change your .htacces in order to let the proxy.php to be read inside app/courses
+ * 3. Change your .htaccess in order to let the proxy.php to be read inside app/courses
  *
  */
+
+require_once '../config/configuration.php';
 
 /**
  * Returns "%" or "px"
@@ -38,8 +40,10 @@ function addPixelOrPercentage($value)
     return $addCharacter;
 }
 
-function get_http_response_code($theURL) {
+function get_http_response_code($theURL)
+{
     $headers = get_headers($theURL);
+
     return substr($headers[0], 9, 3);
 }
 
@@ -60,7 +64,7 @@ if (strpos($src, 'download.php') !== false) {
 
 $result = get_http_response_code($src);
 $urlToTest = parse_url($src, PHP_URL_HOST);
-$g = stream_context_create (array("ssl" => array("capture_peer_cert" => true)));
+$g = stream_context_create (array('ssl' => array('capture_peer_cert' => true)));
 $r = @stream_socket_client("ssl://$urlToTest:443", $errno, $errstr, 30, STREAM_CLIENT_CONNECT, $g);
 $cont = stream_context_get_params($r);
 $convertToSecure = false;
@@ -76,6 +80,7 @@ if (isset($certinfo) && isset($certinfo['subject']) && isset($certinfo['subject'
     if ($urlToTest == $certUrl || $parsedUrl == $urlToTest) {
         $convertToSecure = true;
     }
+
     if ($urlToTest != $certUrl) {
         // url and cert url are different this will show a warning in browsers
         // use normal "http" version
@@ -94,6 +99,15 @@ if ($convertToSecure) {
 $result = '';
 switch ($type) {
     case 'link':
+        // Check if links comes from a course
+        $srcParts = explode('/', $src);
+        $srcParts = array_filter($srcParts);
+        $srcParts = array_values($srcParts);
+
+        if (isset($srcParts[0], $srcParts[2]) && $srcParts[0] === 'courses' && $srcParts[2] === 'document') {
+            $src = $_configuration['root_web'].$src;
+        }
+
         if (strpos($src, 'http') === false) {
             $src = "http://$src";
         }

@@ -28,7 +28,6 @@ class ContactController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $type = new ContactType();
         /** @var User $user */
         $user = $this->getUser();
         $data = [];
@@ -41,7 +40,7 @@ class ContactController extends Controller
             ];
         }
 
-        $form = $this->createForm($type, $data);
+        $form = $this->createForm(ContactType::class, $data);
 
         if ($request->isMethod('POST')) {
             $form->bind($request);

@@ -1,24 +1,28 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+namespace Chamilo\IntegrationBundle\Component;
+
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Chamilo\UserBundle\Entity\User;
 
 /**
- * Class ImsLtiReplaceServiceRequest.
+ * Class OutcomeReplaceRequest.
+ *
+ * @package Chamilo\IntegrationBundle\Component
  */
-class ImsLtiServiceReplaceRequest extends ImsLtiServiceRequest
+class OutcomeReplaceRequest extends OutcomeRequest
 {
     /**
-     * ImsLtiReplaceServiceRequest constructor.
+     * OutcomeReplaceRequest constructor.
      *
-     * @param SimpleXMLElement $xml
+     * @param \SimpleXMLElement $xml
      */
-    public function __construct(SimpleXMLElement $xml)
+    public function __construct(\SimpleXMLElement $xml)
     {
         parent::__construct($xml);
 
-        $this->responseType = ImsLtiServiceResponse::TYPE_REPLACE;
+        $this->responseType = OutcomeResponse::TYPE_REPLACE;
         $this->xmlRequest = $this->xmlRequest->replaceResultRequest;
     }
 
@@ -31,8 +35,8 @@ class ImsLtiServiceReplaceRequest extends ImsLtiServiceRequest
 
         if (!is_numeric($resultScore)) {
             $this->statusInfo
-                ->setSeverity(ImsLtiServiceResponseStatus::SEVERITY_ERROR)
-                ->setCodeMajor(ImsLtiServiceResponseStatus::CODEMAJOR_FAILURE);
+                ->setSeverity(OutcomeResponseStatus::SEVERITY_ERROR)
+                ->setCodeMajor(OutcomeResponseStatus::CODEMAJOR_FAILURE);
 
             return;
         }
@@ -41,8 +45,8 @@ class ImsLtiServiceReplaceRequest extends ImsLtiServiceRequest
 
         if (0 > $resultScore || 1 < $resultScore) {
             $this->statusInfo
-                ->setSeverity(ImsLtiServiceResponseStatus::SEVERITY_WARNING)
-                ->setCodeMajor(ImsLtiServiceResponseStatus::CODEMAJOR_FAILURE);
+                ->setSeverity(OutcomeResponseStatus::SEVERITY_WARNING)
+                ->setCodeMajor(OutcomeResponseStatus::CODEMAJOR_FAILURE);
 
             return;
         }
@@ -51,38 +55,37 @@ class ImsLtiServiceReplaceRequest extends ImsLtiServiceRequest
 
         if (empty($sourcedParts)) {
             $this->statusInfo
-                ->setSeverity(ImsLtiServiceResponseStatus::SEVERITY_ERROR)
-                ->setCodeMajor(ImsLtiServiceResponseStatus::CODEMAJOR_FAILURE);
+                ->setSeverity(OutcomeResponseStatus::SEVERITY_ERROR)
+                ->setCodeMajor(OutcomeResponseStatus::CODEMAJOR_FAILURE);
 
             return;
         }
 
-        $em = Database::getManager();
         /** @var GradebookEvaluation $evaluation */
-        $evaluation = $em->find('ChamiloCoreBundle:GradebookEvaluation', $sourcedParts['e']);
+        $evaluation = $this->entityManager->find('ChamiloCoreBundle:GradebookEvaluation', $sourcedParts['e']);
         /** @var User $user */
-        $user = $em->find('ChamiloUserBundle:User', $sourcedParts['u']);
+        $user = $this->entityManager->find('ChamiloUserBundle:User', $sourcedParts['u']);
 
         if (empty($evaluation) || empty($user)) {
             $this->statusInfo
-                ->setSeverity(ImsLtiServiceResponseStatus::SEVERITY_STATUS)
-                ->setCodeMajor(ImsLtiServiceResponseStatus::CODEMAJOR_FAILURE);
+                ->setSeverity(OutcomeResponseStatus::SEVERITY_STATUS)
+                ->setCodeMajor(OutcomeResponseStatus::CODEMAJOR_FAILURE);
 
             return;
         }
 
         $score = $evaluation->getMax() * $resultScore;
 
-        $results = Result::load(null, $user->getId(), $evaluation->getId());
+        $results = \Result::load(null, $user->getId(), $evaluation->getId());
 
         if (empty($results)) {
-            $result = new Result();
+            $result = new \Result();
             $result->set_evaluation_id($evaluation->getId());
             $result->set_user_id($user->getId());
             $result->set_score($score);
             $result->add();
         } else {
-            /** @var Result $result */
+            /** @var \Result $result */
             $result = $results[0];
             $result->addResultLog($user->getId(), $evaluation->getId());
             $result->set_score($score);
@@ -90,11 +93,11 @@ class ImsLtiServiceReplaceRequest extends ImsLtiServiceRequest
         }
 
         $this->statusInfo
-            ->setSeverity(ImsLtiServiceResponseStatus::SEVERITY_STATUS)
-            ->setCodeMajor(ImsLtiServiceResponseStatus::CODEMAJOR_SUCCESS)
+            ->setSeverity(OutcomeResponseStatus::SEVERITY_STATUS)
+            ->setCodeMajor(OutcomeResponseStatus::CODEMAJOR_SUCCESS)
             ->setDescription(
                 sprintf(
-                    get_plugin_lang('ScoreForXUserIsYScore', 'ImsLtiPlugin'),
+                    $this->translator->trans('Score for user %d is %s'),
                     $user->getId(),
                     $resultScore
                 )

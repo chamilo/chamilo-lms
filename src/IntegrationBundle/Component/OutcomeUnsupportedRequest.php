@@ -1,18 +1,22 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+namespace Chamilo\IntegrationBundle\Component;
+
 /**
- * Class ImsLtiServiceUnsupportedRequest.
+ * Class OutcomeUnsupportedRequest.
+ *
+ * @package Chamilo\IntegrationBundle\Component
  */
-class ImsLtiServiceUnsupportedRequest extends ImsLtiServiceRequest
+class OutcomeUnsupportedRequest extends OutcomeRequest
 {
     /**
-     * ImsLtiDeleteServiceRequest constructor.
+     * OutcomeUnsupportedRequest constructor.
      *
-     * @param SimpleXMLElement $xml
-     * @param string           $name
+     * @param \SimpleXMLElement $xml
+     * @param string            $name
      */
-    public function __construct(SimpleXMLElement $xml, $name)
+    public function __construct(\SimpleXMLElement $xml, $name)
     {
         parent::__construct($xml);
 
@@ -22,8 +26,8 @@ class ImsLtiServiceUnsupportedRequest extends ImsLtiServiceRequest
     protected function processBody()
     {
         $this->statusInfo
-            ->setSeverity(ImsLtiServiceResponseStatus::SEVERITY_STATUS)
-            ->setCodeMajor(ImsLtiServiceResponseStatus::CODEMAJOR_UNSUPPORTED)
+            ->setSeverity(OutcomeResponseStatus::SEVERITY_STATUS)
+            ->setCodeMajor(OutcomeResponseStatus::CODEMAJOR_UNSUPPORTED)
             ->setDescription(
                 $this->responseType.' is not supported'
             );

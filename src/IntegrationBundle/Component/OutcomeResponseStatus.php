@@ -1,10 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+namespace Chamilo\IntegrationBundle\Component;
+
 /**
- * Class ImsLtiResponseStatus.
+ * Class OutcomeResponseStatus.
+ *
+ * @package Chamilo\IntegrationBundle\Component
  */
-class ImsLtiServiceResponseStatus
+class OutcomeResponseStatus
 {
     const SEVERITY_STATUS = 'status';
     const SEVERITY_WARNING = 'warning';
@@ -55,7 +59,7 @@ class ImsLtiServiceResponseStatus
      *
      * @param string $codeMajor
      *
-     * @return ImsLtiServiceResponseStatus
+     * @return OutcomeResponseStatus
      */
     public function setCodeMajor($codeMajor)
     {
@@ -79,7 +83,7 @@ class ImsLtiServiceResponseStatus
      *
      * @param string $severity
      *
-     * @return ImsLtiServiceResponseStatus
+     * @return OutcomeResponseStatus
      */
     public function setSeverity($severity)
     {
@@ -103,7 +107,7 @@ class ImsLtiServiceResponseStatus
      *
      * @param int $messageRefIdentifier
      *
-     * @return ImsLtiServiceResponseStatus
+     * @return OutcomeResponseStatus
      */
     public function setMessageRefIdentifier($messageRefIdentifier)
     {
@@ -127,7 +131,7 @@ class ImsLtiServiceResponseStatus
      *
      * @param int $operationRefIdentifier
      *
-     * @return ImsLtiServiceResponseStatus
+     * @return OutcomeResponseStatus
      */
     public function setOperationRefIdentifier($operationRefIdentifier)
     {
@@ -151,7 +155,7 @@ class ImsLtiServiceResponseStatus
      *
      * @param string $description
      *
-     * @return ImsLtiServiceResponseStatus
+     * @return OutcomeResponseStatus
      */
     public function setDescription($description)
     {

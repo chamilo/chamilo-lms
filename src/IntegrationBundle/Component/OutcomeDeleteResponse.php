@@ -1,18 +1,22 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+namespace Chamilo\IntegrationBundle\Component;
+
 /**
- * Class ImsLtiServiceDeleteResponse.
+ * Class OutcomeDeleteResponse.
+ *
+ * @package Chamilo\IntegrationBundle\Component
  */
-class ImsLtiServiceDeleteResponse extends ImsLtiServiceResponse
+class OutcomeDeleteResponse extends OutcomeResponse
 {
     /**
-     * ImsLtiServiceDeleteResponse constructor.
+     * OutcomeDeleteResponse constructor.
      *
-     * @param ImsLtiServiceResponseStatus $statusInfo
-     * @param mixed|null                  $bodyParam
+     * @param OutcomeResponseStatus $statusInfo
+     * @param mixed|null            $bodyParam
      */
-    public function __construct(ImsLtiServiceResponseStatus $statusInfo, $bodyParam = null)
+    public function __construct(OutcomeResponseStatus $statusInfo, $bodyParam = null)
     {
         $statusInfo->setOperationRefIdentifier('deleteResult');
 
@@ -20,9 +24,9 @@ class ImsLtiServiceDeleteResponse extends ImsLtiServiceResponse
     }
 
     /**
-     * @param SimpleXMLElement $xmlBody
+     * @param \SimpleXMLElement $xmlBody
      */
-    protected function generateBody(SimpleXMLElement $xmlBody)
+    protected function generateBody(\SimpleXMLElement $xmlBody)
     {
         $xmlBody->addChild('deleteResultResponse');
     }

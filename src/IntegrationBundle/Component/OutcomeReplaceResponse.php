@@ -1,18 +1,22 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+namespace Chamilo\IntegrationBundle\Component;
+
 /**
- * Class ImsLtiReplaceServiceResponse.
+ * Class OutcomeReplaceResponse.
+ *
+ * @package Chamilo\IntegrationBundle\Component
  */
-class ImsLtiServiceReplaceResponse extends ImsLtiServiceResponse
+class OutcomeReplaceResponse extends OutcomeResponse
 {
     /**
-     * ImsLtiServiceReplaceResponse constructor.
+     * OutcomeReplaceResponse constructor.
      *
-     * @param ImsLtiServiceResponseStatus $statusInfo
+     * @param OutcomeResponseStatus $statusInfo
      * @param mixed|null                  $bodyParam
      */
-    public function __construct(ImsLtiServiceResponseStatus $statusInfo, $bodyParam = null)
+    public function __construct(OutcomeResponseStatus $statusInfo, $bodyParam = null)
     {
         $statusInfo->setOperationRefIdentifier('replaceResult');
 
@@ -20,9 +24,9 @@ class ImsLtiServiceReplaceResponse extends ImsLtiServiceResponse
     }
 
     /**
-     * @param SimpleXMLElement $xmlBody
+     * @param \SimpleXMLElement $xmlBody
      */
-    protected function generateBody(SimpleXMLElement $xmlBody)
+    protected function generateBody(\SimpleXMLElement $xmlBody)
     {
         $xmlBody->addChild('replaceResultResponse');
     }

@@ -1,18 +1,22 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+namespace Chamilo\IntegrationBundle\Component;
+
 /**
- * Class ImsLtiServiceUnsupportedResponse.
+ * Class OutcomeUnsupportedResponse.
+ *
+ * @package Chamilo\IntegrationBundle\Component
  */
-class ImsLtiServiceUnsupportedResponse extends ImsLtiServiceResponse
+class OutcomeUnsupportedResponse extends OutcomeResponse
 {
     /**
-     * ImsLtiServiceUnsupportedResponse constructor.
+     * OutcomeUnsupportedResponse constructor.
      *
-     * @param ImsLtiServiceResponseStatus $statusInfo
+     * @param OutcomeResponseStatus $statusInfo
      * @param string                      $type
      */
-    public function __construct(ImsLtiServiceResponseStatus $statusInfo, $type)
+    public function __construct(OutcomeResponseStatus $statusInfo, $type)
     {
         $statusInfo->setOperationRefIdentifier($type);
 
@@ -20,9 +24,9 @@ class ImsLtiServiceUnsupportedResponse extends ImsLtiServiceResponse
     }
 
     /**
-     * @param SimpleXMLElement $xmlBody
+     * @param \SimpleXMLElement $xmlBody
      */
-    protected function generateBody(SimpleXMLElement $xmlBody)
+    protected function generateBody(\SimpleXMLElement $xmlBody)
     {
     }
 }

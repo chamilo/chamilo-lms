@@ -156,18 +156,17 @@ $form->addElement('html', '<div class="col-md-8">');
 $form->addElement('html', $items);
 $form->addElement('html', '<div class="help-block">'.get_lang('LpPrerequisiteDescription').'</div>');
 $form->addElement('html', '</div>');
+$form->addElement('html', '<div class="col-md-2"></div>');
+$form->addElement('html', '</div>');
 
 // Time Control
-$accumulateTime = $_SESSION['oLP']->getAccumulateWorkTime();
-$items = '<input size="10" class="form-control" name="accumulate_work_time" type="text" value="'.$accumulateTime.'">';
-$form->addElement('html', '<div class="form-group">');
-$form->addElement('html', '<label class="col-md-2 control-label" style="margin-top:-10px">'.get_lang('LearnpathTimeIn').'</label>');
-$form->addElement('html', '<div class="col-md-2">');
-$form->addElement('html', $items);
-$form->addElement('html', '</div><div class="col-md-8">');
-$form->addElement('html', '<div class="help-block">'.get_lang('LpAccumulateTimeDescription').'</div></div></div>');
+if (api_get_configuration_value('lp_minimum_time')) {
+    $accumulateTime = $_SESSION['oLP']->getAccumulateWorkTime();
+    $form->addText('accumulate_work_time', [get_lang('LearnpathTimeIn'), get_lang('LpAccumulateTimeDescription')]);
+    $defaults['accumulate_work_time'] = $accumulateTime;
+}
 
-//Start date
+// Start date
 $form->addElement(
     'checkbox',
     'activate_start_date_check',

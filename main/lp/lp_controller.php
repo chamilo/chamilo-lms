@@ -369,6 +369,26 @@ if ($debug) {
     error_log('Entered lp_controller.php -+- (action: '.$action.')');
 }
 
+// ## NSR - log
+$lp_id = (!empty($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : 0);
+switch ($action) {
+    case 'view':
+    case 'content':
+        $lp_detail_id = $_SESSION['oLP']->get_current_item_id();
+        break;
+    default:
+        $lp_detail_id = (!empty($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0);
+}
+
+$logInfo = [
+    'tool' => TOOL_LEARNPATH,
+    'tool_id' => $lp_id,
+    'tool_id_detail' => $lp_detail_id,
+    'action' => !empty($action) ? $action : 'list',
+    'info' => '',
+];
+Event::registerLog($logInfo);
+
 // format title to be displayed correctly if QUIZ
 $post_title = '';
 if (isset($_POST['title'])) {
@@ -1030,7 +1050,7 @@ switch ($action) {
             }
             $_SESSION['oLP']->set_hide_toc_frame($hide_toc_frame);
             $_SESSION['oLP']->set_prerequisite(isset($_POST['prerequisites']) ? (int) $_POST['prerequisites'] : 0);
-            $_SESSION['oLP']->setAccumulateWorkTime($_REQUEST['accumulate_work_time']);
+            $_SESSION['oLP']->setAccumulateWorkTime(isset($_REQUEST['accumulate_work_time']) ? $_REQUEST['accumulate_work_time'] : 0);
             $_SESSION['oLP']->set_use_max_score(isset($_POST['use_max_score']) ? 1 : 0);
 
             $subscribeUsers = isset($_REQUEST['subscribe_users']) ? 1 : 0;

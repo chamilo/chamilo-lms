@@ -280,7 +280,7 @@ class NavBuilder implements ContainerAwareInterface
                     [
                         'label' => $translator->trans('Plugins'),
                         'route' => 'legacy_main',
-                        'routeParameters' => ['name' => 'admin/settings.php?category=Plugins'],
+                        'routeParameters' => ['name' => 'admin/settings.php', 'category' => 'Plugins'],
                     ]
                 );
                 $menu['administrator']->addChild(

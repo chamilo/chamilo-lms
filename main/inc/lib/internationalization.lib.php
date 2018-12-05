@@ -72,7 +72,6 @@ function get_lang($variable)
         return $variable;
     }
 
-    //return $variable;
     // Using symfony
     $defaultDomain = 'messages';
     $translated = Container::getTranslator()->trans(
@@ -95,85 +94,6 @@ function get_lang($variable)
     }
 
     return $translated;
-
-    // For serving some old hacks:
-    // By manipulating this global variable the translation may
-    // be done in different languages too (not the elegant way).
-    global $language_interface;
-    // Because of possibility for manipulations of the global
-    // variable $language_interface, we need its initial value.
-    global $language_interface_initial_value;
-    global $used_lang_vars, $_configuration;
-    // add language_measure_frequency to your main/inc/conf/configuration.php in order to generate language
-    // variables frequency measurements (you can then see them trhough main/cron/lang/langstats.php)
-    // The $langstats object is instanciated at the end of main/inc/global.inc.php
-    if (isset($_configuration['language_measure_frequency']) &&
-        $_configuration['language_measure_frequency'] == 1
-    ) {
-        require_once api_get_path(SYS_CODE_PATH).'/cron/lang/langstats.class.php';
-        global $langstats;
-        $langstats->add_use($variable, '');
-    }
-
-    if (!isset($used_lang_vars)) {
-        $used_lang_vars = [];
-    }
-
-    // Caching results from some API functions, for speed.
-    static $initialized, $show_special_markup;
-    if (!isset($initialized)) {
-        $test_server_mode = api_get_setting('server_type') === 'test';
-        $show_special_markup = api_get_setting('hide_dltt_markup') != 'true' || $test_server_mode;
-        $initialized = true;
-    }
-
-    // Combining both ways for requesting specific language.
-    if (empty($language)) {
-        $language = $language_interface;
-    }
-    $lang_postfix = isset($is_interface_language) && $is_interface_language ? '' : '('.$language.')';
-
-    $is_interface_language = $language == $language_interface_initial_value;
-
-    // This is a cache for already translated language variables. By using it, we avoid repetitive translations, gaining speed.
-    static $cache;
-
-    // Looking up into the cache for existing translation.
-    if (isset($cache[$language][$variable])) {
-        // There is a previously saved translation, returning it.
-        //return $cache[$language][$variable];
-        $ret = $cache[$language][$variable];
-        $used_lang_vars[$variable.$lang_postfix] = $ret;
-
-        return $ret;
-    }
-
-    // There is no cached translation, we have to retrieve it:
-    // - from a global variable (the faster way) - on production server mode;
-    // - from a local variable after reloading the language files - on test server mode or when requested language
-    // is different than the genuine interface language.
-    $read_global_variables = $is_interface_language;
-
-    if ($read_global_variables) {
-        if (isset($GLOBALS[$variable])) {
-            $langvar = $GLOBALS[$variable];
-        } elseif (isset($GLOBALS["lang$variable"])) {
-            $langvar = $GLOBALS["lang$variable"];
-        } else {
-            if (!$returnEmptyIfNotFound) {
-                $langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
-            } else {
-                return '';
-            }
-        }
-    }
-    if (empty($langvar) || !is_string($langvar)) {
-        $langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
-    }
-    $ret = $cache[$language][$variable] = $langvar;
-    $used_lang_vars[$variable.$lang_postfix] = $ret;
-
-    return $ret;
 }
 
 /**

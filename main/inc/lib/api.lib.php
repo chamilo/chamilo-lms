@@ -3303,8 +3303,10 @@ function api_is_allowed_to_edit(
     $session_coach = false,
     $check_student_view = true
 ) {
+    $allowSessionAdminEdit = api_get_configuration_value('session_admins_edit_courses_content') === true;
+
     // Admins can edit anything.
-    if (api_is_platform_admin(false)) {
+    if (api_is_platform_admin($allowSessionAdminEdit)) {
         //The student preview was on
         if ($check_student_view && api_is_student_view_active()) {
             return false;

@@ -61,6 +61,7 @@ class learnpath
     public $theme; // The current theme of the learning path.
     public $preview_image; // The current image of the learning path.
     public $accumulateScormTime; // Flag to decide whether to accumulate SCORM time or not
+    public $accumulateWorkTime; // The min time of learnpath
 
     // Tells if all the items of the learnpath can be tried again. Defaults to "no" (=1).
     public $prevent_reinit = 1;
@@ -164,6 +165,7 @@ class learnpath
                 $this->ref = $row['ref'];
                 $this->categoryId = $row['category_id'];
                 $this->accumulateScormTime = isset($row['accumulate_scorm_time']) ? $row['accumulate_scorm_time'] : 'true';
+                $this->accumulateWorkTime = isset($row['accumulate_work_time']) ? $row['accumulate_work_time'] : 0;
 
                 if (!empty($row['publicated_on'])) {
                     $this->publicated_on = $row['publicated_on'];
@@ -2404,6 +2406,55 @@ class learnpath
             if ($progress < 100) {
                 $isBlocked = true;
             }
+
+            // ## NSR - bloquear si no supera tiempo minimo
+            // TL --- Tiempo minimo para superar la lección ( en minutos )
+            $accumulateWorkTime = self::getAccumulateWorkTimePrerequisite($prerequisite, $courseInfo['real_id']);
+
+            if ($accumulateWorkTime > 0) {
+                // TT --- Tiempo total del curso
+                $accumulateWorkTimeTotal = self::getAccumulateWorkTimeTotal($courseInfo['real_id']);
+
+                // P y TC --- Conectamos con la tabla plugin_licences_course_session en la que se indica que porcentaje del tiempo se aplica
+                $perc = 100;
+                $tc = $accumulateWorkTimeTotal;
+                if (!empty($sessionId) && $sessionId != 0) {
+                    $sql = "SELECT hours, perc FROM plugin_licences_course_session WHERE session_id = $sessionId";
+                    $res = Database::query($sql);
+                    if (Database::num_rows($res) > 0) {
+                        $aux = Database::fetch_assoc($res);
+                        $perc = $aux['perc'];
+                        $tc = $aux['hours'] * 60;
+                    }
+                }
+
+                // PL --- Porcentaje lección (tiempo leccion / tiempo total curso)
+                $pl = $accumulateWorkTime / $accumulateWorkTimeTotal;
+                /*
+                 * TL: Tiempo que pone en una lección
+                 * TT : tiempo total que pone Teresa (suma tiempos lecciones curso)
+                 * PL: Fracción que supone una lección sobre el tiempo total = TL/TT
+                 * TC: Tiempo que dice el cliente que tiene el curso
+                 * P: porcentaje mínimo conexión que indica el cliente
+                 *
+                 * el tiempo mínimo de cada lección sería: PL x TC x P /100
+                 */
+                $accumulateWorkTime = ($pl * $tc * $perc / 100);
+
+                // Tiempo empleado hasta el momento en la leccion ( en segundos )
+                $lpTime = Tracking::get_time_spent_in_lp(
+                    $studentId,
+                    $courseInfo['code'],
+                    array($prerequisite),
+                    $sessionId
+                );
+
+                if ($lpTime < ($accumulateWorkTime * 60)) {
+                    $isBlocked = true;
+                }
+            }
+
+
         }
 
         return $isBlocked;
@@ -13938,5 +13989,73 @@ EOD;
         }
 
         return '';
+    }
+
+    /**
+     * Get whether this is a learning path with the accumulated work time or not
+     * @return int
+     */
+    public function getAccumulateWorkTime()
+    {
+        return $this->accumulateWorkTime;
+    }
+
+    /**
+     * Get whether this is a learning path with the accumulated work time or not
+     * @return int
+     */
+    public function getAccumulateWorkTimeTotalCourse()
+    {
+        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
+        $lp_id = $this->get_id();
+        $sql = "SELECT SUM(accumulate_work_time) AS tt FROM $lp_table WHERE c_id = ".$this->course_int_id;
+        $result = Database::query($sql);
+        $myrow = Database::fetch_array($result);
+        return $myrow['tt'];
+    }
+
+    /**
+     * Set whether this is a learning path with the accumulated work time or not
+     * @param int $value (0 = false, 1 = true)
+     * @return bool Always returns true
+     */
+    public function setAccumulateWorkTime($value)
+    {
+        if ($this->debug > 0) {
+            error_log('New LP - In learnpath::setAccumulateScormTime()', 0);
+        }
+        $this->accumulateWorkTime = intval($value);
+        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
+        $lp_id = $this->get_id();
+        $sql = "UPDATE $lp_table SET accumulate_work_time = ".$this->accumulateWorkTime."
+                WHERE c_id = ".$this->course_int_id." AND id = $lp_id";
+        Database::query($sql);
+
+        return true;
+    }
+
+    public function getAccumulateWorkTimePrerequisite($lp_id, $c_id)
+    {
+        $lp_id = intval($lp_id);
+        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
+        $sql = "SELECT accumulate_work_time
+        FROM $lp_table
+        WHERE c_id = ".$c_id." AND id = $lp_id";
+        $result = Database::query($sql);
+        $myrow = Database::fetch_array($result);
+
+        return $myrow['accumulate_work_time'];
+    }
+
+    public function getAccumulateWorkTimeTotal($c_id)
+    {
+        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
+        $sql = "SELECT SUM(accumulate_work_time) AS tt
+        FROM $lp_table
+        WHERE c_id = ".$c_id;
+        $result = Database::query($sql);
+        $myrow = Database::fetch_array($result);
+
+        return $myrow['tt'];
     }
 }

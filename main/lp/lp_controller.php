@@ -1029,12 +1029,9 @@ switch ($action) {
                 $hide_toc_frame = null;
             }
             $_SESSION['oLP']->set_hide_toc_frame($hide_toc_frame);
-            $_SESSION['oLP']->set_prerequisite(
-                isset($_POST['prerequisites']) ? (int) $_POST['prerequisites'] : 0
-            );
-            $_SESSION['oLP']->set_use_max_score(
-                isset($_POST['use_max_score']) ? 1 : 0
-            );
+            $_SESSION['oLP']->set_prerequisite(isset($_POST['prerequisites']) ? (int) $_POST['prerequisites'] : 0);
+            $_SESSION['oLP']->setAccumulateWorkTime($_REQUEST['accumulate_work_time']);
+            $_SESSION['oLP']->set_use_max_score(isset($_POST['use_max_score']) ? 1 : 0);
 
             $subscribeUsers = isset($_REQUEST['subscribe_users']) ? 1 : 0;
             $_SESSION['oLP']->setSubscribeUsers($subscribeUsers);

@@ -1,0 +1,30 @@
+{
+    "name": "jtsternberg/oauth1-php",
+    "description": "Andy Smith's basic php library for OAuth.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Andy Smith",
+            "homepage": "http://term.ie/",
+            "role": "Developer"
+        },
+        {
+            "name": "Justin Sternberg",
+            "email": "justin@dsgnwrks.pro",
+            "homepage": "https://dsgnwrks.pro",
+            "role": "Developer"
+        }
+    ],
+    "keywords": ["oauth", "oauth1", "php"],
+    "homepage": "https://github.com/jtsternberg/oauth1-php",
+    "support": {
+        "issues": "https://github.com/jtsternberg/oauth1-php/issues",
+        "source": "https://github.com/jtsternberg/oauth1-php"
+    },
+    "require": {
+        "php": ">5.3"
+    },
+    "autoload": {
+        "classmap": ["code"]
+    }
+}

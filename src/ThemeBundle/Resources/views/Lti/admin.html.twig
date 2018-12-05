@@ -1,0 +1,62 @@
+{% extends '@ChamiloTheme/Layout/layout_one_col.html.twig' %}
+
+{% block content %}
+    <section class="bg-white p-4">
+        <div class="row">
+            <div class="col-12">
+                <h2>{{ 'External tools'|trans }}</h2>
+                <p>
+                    {{ 'LTI intro tool'|trans }}
+                </p>
+
+                <div class="btn-toolbar" role="toolbar" aria-label="{{ 'LTI Toolbar'|trans }}">
+                    <a href="{{ url('chamilo_lti_admin_add') }}" foo="{{ _p.web_plugin }}ims_lti/create.php"
+                       class="btn btn-primary">
+                        <span class="fa fa-plus fa-fw" aria-hidden="true"></span> {{ 'Add external tool'|trans }}
+                    </a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                        <tr>
+                            <th>{{ 'Name'|trans }}</th>
+                            <th>{{ 'Launch URL'|trans }}</th>
+                            <th class="text-center">{{ 'Is global'|trans }}</th>
+                            <th class="text-right">{{ 'Actions'|trans }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for tool in tools %}
+                            <tr>
+                                <td>{{ tool.name }}</td>
+                                <td>{{ tool.launchUrl }}</td>
+                                <td class="text-center">
+                                    {% if tool.isGlobal() %}
+                                        <span class="fa fa-check-square" aria-hidden="true"></span>
+                                        <span class="sr-only">{{ 'Yes'|trans }}</span>
+                                    {% else %}
+                                        <span class="fa fa-square" aria-hidden="true"></span>
+                                        <span class="sr-only">{{ 'No'|trans }}</span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-right">
+                                    <a href="{{ url('chamilo_lti_admin_edit', {'toolId': tool.id}) }}"
+                                       class="btn btn-success mb-1 mb-lg-0">
+                                        <span class="fa fa-edit fa-fw" aria-hidden="true"></span>
+                                        <span class="sr-only">{{ 'Edit'|trans }}</span>
+                                    </a>
+                                    <a href="{{ url('chamilo_lti_admin_delete', {'toolId': tool.id}) }}"
+                                       class="btn btn-danger">
+                                        <span class="fa fa-times fa-fw" aria-hidden="true"></span>
+                                        <span class="sr-only">{{ 'Delete'|trans }}</span>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

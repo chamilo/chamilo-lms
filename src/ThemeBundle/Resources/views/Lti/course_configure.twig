@@ -1,0 +1,70 @@
+{% extends 'ChamiloThemeBundle:Layout:layout_one_col.html.twig' %}
+
+{% block content %}
+    <section class="bg-white p-4">
+        <div class="row">
+            <div class="col-md-4">
+                {% if not added_tools is empty %}
+                    <div class="card bg-light mb-4">
+                        <h5 class="card-header">{{ 'Tools added'|trans }}</h5>
+                        <ul class="list-group list-group-flush">
+                            {% for tool in added_tools %}
+                                <li class="list-group-item">
+                                    <div class="float-right">
+                                        {% if tool.isActiveDeepLinking %}
+                                            <a href="{{ url('chamilo_lti_show', {"id": tool.id, "code": course.code}) }}"
+                                               class="btn btn-light btn-sm">
+                                                <span class="fa fa-rocket" aria-hidden="true"></span>
+                                                <span class="sr-only">{{ 'Configure'|trans }}</span>
+                                            </a>
+                                        {% endif %}
+
+                                        <a href="{{ url('chamilo_lti_edit', {"id": tool.id, "code": course.code}) }}"
+                                           class="btn btn-light btn-sm">
+                                            <span class="fa fa-edit" aria-hidden="true"></span>
+                                            <span class="sr-only">{{ 'Edit'|trans }}</span>
+                                        </a>
+                                    </div>
+                                    {{ tool.name }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+
+                {% if not global_tools is empty %}
+                    <div class="card bg-light">
+                        <h5 class="card-header">{{ 'Available tools'|trans }}</h5>
+                        <ul class="list-group list-group-flush">
+                            {% for tool in global_tools %}
+                                <li class="list-group-item">
+                                    <div class="float-right">
+                                        {% if tool.isActiveDeepLinking %}
+                                            <a href="{{ url('chamilo_lti_launch', {id: tool.id}) }}">
+                                                <span class="fa fa-rocket" aria-hidden="true"></span>
+                                                <span class="sr-only">{{ 'Configure'|trans }}</span>
+                                            </a>
+                                        {% else %}
+                                            <a href="{{ url('chamilo_lti_configure_global', {"code": course.code, "id": tool.id}) }}"
+                                               class="btn btn-light btn-sm">
+                                                <span class="fa fa-plus" aria-hidden="true"></span>
+                                                <span class="sr-only">{{ 'Add'|trans }}</span>
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                    {{ tool.name }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-8">
+                <h3>{{ title }}</h3>
+
+                {{ form(form) }}
+            </div>
+        </div>
+    </section>
+{% endblock %}

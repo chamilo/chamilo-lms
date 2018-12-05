@@ -4,6 +4,7 @@
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 use Knp\Menu\FactoryInterface as MenuFactoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -51,6 +52,20 @@ abstract class BaseController extends Controller
         $courseId = $this->getRequest()->getSession()->get('_real_cid', 0);
 
         return $this->getDoctrine()->getManager()->find('ChamiloCoreBundle:Course', $courseId);
+    }
+
+    /**
+     * @return Session|null
+     */
+    public function getSession()
+    {
+        $sessionId = $this->getRequest()->getSession()->get('id_session', 0);
+
+        if (empty($sessionId)) {
+            return null;
+        }
+
+        return $this->getDoctrine()->getManager()->find('ChamiloCoreBundle:Session', $sessionId);
     }
 
     /**

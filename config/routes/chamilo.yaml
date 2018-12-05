@@ -28,3 +28,6 @@ chamilo_faq:
 
 chamilo_graphql:
     resource: "@ChamiloApiBundle/GraphQL/Resources/config/routing.yaml"
+
+chamilo_lti:
+    resource: "@ChamiloIntegrationBundle/Resources/config/routing.yml"

@@ -15,6 +15,9 @@
  *
  * @package chamilo.course_info
  */
+
+use Chamilo\CoreBundle\Framework\Container;
+
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_SETTING;
 $this_section = SECTION_COURSES;
@@ -31,6 +34,9 @@ $isEditable = true;
 if (!$isAllowToEdit) {
     api_not_allowed(true);
 }
+
+$router = Container::getRouter();
+$translator = Container::getTranslator();
 
 $show_delete_watermark_text_message = false;
 if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
@@ -881,6 +887,25 @@ $form->addPanelOption(
     get_lang('StudentPublications'),
     $globalGroup,
     'work.png',
+    false,
+    'accordionSettings'
+);
+
+$button = Display::toolbarButton(
+    $translator->trans('Configure external tool'),
+    $router->generate('chamilo_lti_configure', ['code' => $course_code]),
+    'cog',
+    'primary'
+);
+$html = [
+    $form->createElement('html', '<p>'.get_lang('LTI intro tool').'</p>'.$button),
+];
+
+$form->addPanelOption(
+    'lti_tool',
+    $translator->trans('External tools'),
+    $html,
+    'plugin.png',
     false,
     'accordionSettings'
 );

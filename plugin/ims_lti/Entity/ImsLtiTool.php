@@ -45,13 +45,13 @@ class ImsLtiTool
     /**
      * @var string
      *
-     * @ORM\Column(name="consumer_key", type="string")
+     * @ORM\Column(name="consumer_key", type="string", nullable=true)
      */
     private $consumerKey = '';
     /**
      * @var string
      *
-     * @ORM\Column(name="shared_secret", type="string")
+     * @ORM\Column(name="shared_secret", type="string", nullable=true)
      */
     private $sharedSecret = '';
     /**
@@ -117,6 +117,8 @@ class ImsLtiTool
         $this->gradebookEval =null;
         $this->privacy = null;
         $this->children = new ArrayCollection();
+        $this->consumerKey = null;
+        $this->sharedSecret = null;
     }
 
     /**
@@ -250,20 +252,78 @@ class ImsLtiTool
     }
 
     /**
+     * @param array $params
+     *
+     * @return null|string
+     */
+    public function encodeCustomParams(array $params)
+    {
+        if (empty($params)) {
+            return null;
+        }
+
+        $pairs = [];
+
+        foreach ($params as $key => $value) {
+            $pairs[] = "$key=$value";
+        }
+
+        return implode("\n", $pairs);
+    }
+
+    /**
      * @return array
      */
     public function parseCustomParams()
     {
+        if (empty($this->customParams)) {
+            return [];
+        }
+
         $params = [];
         $strings = explode("\n", $this->customParams);
 
         foreach ($strings as $string) {
-            $pairs = explode('=', $string);
+            if (empty($string)) {
+                continue;
+            }
 
-            $params['custom_'.$pairs[0]] = $pairs[1];
+            $pairs = explode('=', $string, 2);
+            $key = self::parseCustomKey($pairs[0]);
+            $value = $pairs[1];
+
+            $params['custom_'.$key] = $value;
         }
 
         return $params;
+    }
+
+    /**
+     * Map the key from custom param.
+     *
+     * @param string $key
+     *
+     * @return string
+     */
+    private static function parseCustomKey($key)
+    {
+        $newKey = '';
+        $key = strtolower($key);
+        $split = str_split($key);
+
+        foreach ($split as $char) {
+            if (
+                ($char >= 'a' && $char <= 'z') || ($char >= '0' && $char <= '9')
+            ) {
+                $newKey .= $char;
+
+                continue;
+            }
+
+            $newKey .= '_';
+        }
+
+        return $newKey;
     }
 
     /**

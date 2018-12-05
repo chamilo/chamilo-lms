@@ -29,7 +29,7 @@ class ImsLtiPlugin extends Plugin
      */
     protected function __construct()
     {
-        $version = '1.1 (beta)';
+        $version = '1.5 (beta)';
         $author = 'Angel Fernando Quiroz Campos';
 
         parent::__construct($version, $author, ['enabled' => 'boolean']);
@@ -125,8 +125,8 @@ class ImsLtiPlugin extends Plugin
                 name VARCHAR(255) NOT NULL,
                 description LONGTEXT DEFAULT NULL,
                 launch_url VARCHAR(255) NOT NULL,
-                consumer_key VARCHAR(255) NOT NULL,
-                shared_secret VARCHAR(255) NOT NULL,
+                consumer_key VARCHAR(255) DEFAULT NULL,
+                shared_secret VARCHAR(255) DEFAULT NULL,
                 custom_params LONGTEXT DEFAULT NULL,
                 active_deep_linking TINYINT(1) DEFAULT \'0\' NOT NULL,
                 privacy LONGTEXT DEFAULT NULL,
@@ -298,18 +298,22 @@ class ImsLtiPlugin extends Plugin
      */
     public static function getUserRoles(User $user)
     {
+        if (DRH === $user->getStatus()) {
+            return 'urn:lti:role:ims/lis/Mentor';
+        }
+
         if ($user->getStatus() === INVITEE) {
-            return 'Learner/GuestLearner,Learner';
+            return 'Learner,urn:lti:role:ims/lis/Learner/GuestLearner';
         }
 
         if (!api_is_allowed_to_edit(false, true)) {
-            return 'Learner,Learner/Learner';
+            return 'Learner';
         }
 
         $roles = ['Instructor'];
 
         if (api_is_platform_admin_by_id($user->getId())) {
-            $roles[] = 'Administrator/SystemAdministrator';
+            $roles[] = 'urn:lti:role:ims/lis/Administrator';
         }
 
         return implode(',', $roles);
@@ -331,24 +335,22 @@ class ImsLtiPlugin extends Plugin
     }
 
     /**
-     * @param Course       $course
-     * @param Session|null $session
+     * @param User $currentUser
      *
      * @return string
      */
-    public static function getRoleScopeMentor(Course $course, Session $session = null)
+    public static function getRoleScopeMentor(User $currentUser)
     {
-        $scope = [];
-
-        if ($session) {
-            $students = $session->getUserCourseSubscriptionsByStatus($course, Session::STUDENT);
-        } else {
-            $students = $course->getStudents();
+        if (DRH !== $currentUser->getStatus()) {
+            return '';
         }
 
-        /** @var SessionRelCourseRelUser|CourseRelUser $subscription */
-        foreach ($students as $subscription) {
-            $scope[] = self::generateToolUserId($subscription->getUser()->getId());
+        $followedUsers = UserManager::get_users_followed_by_drh($currentUser->getId());
+
+        $scope = [];
+
+        foreach ($followedUsers as $userInfo) {
+            $scope[] = self::generateToolUserId($userInfo['user_id']);
         }
 
         return implode(',', $scope);
@@ -393,6 +395,13 @@ class ImsLtiPlugin extends Plugin
             ->setDescription(
                 !empty($contentItem['text']) ? $contentItem['text'] : null
             );
+
+        if (!empty($contentItem['custom'])) {
+            $newLtiTool
+                ->setCustomParams(
+                    $newLtiTool->encodeCustomParams($contentItem['custom'])
+                );
+        }
 
         $em->persist($newLtiTool);
         $em->flush();
@@ -456,5 +465,82 @@ class ImsLtiPlugin extends Plugin
         $tool = $toolRepo->findOneBy(['id' => $toolId, 'course' => $course]);
 
         return !empty($tool);
+    }
+
+    /**
+     * @param string $configUrl
+     *
+     * @return string
+     * @throws Exception
+     */
+    public function getLaunchUrlFromCartridge($configUrl)
+    {
+        $options = [
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_POST => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER => false,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_SSL_VERIFYPEER => false,
+        ];
+
+        $ch = curl_init($configUrl);
+        curl_setopt_array($ch, $options);
+        $content = curl_exec($ch);
+        $errno = curl_errno($ch);
+        curl_close($ch);
+
+        if ($errno !== 0) {
+            throw new Exception($this->get_lang('NoAccessToUrl'));
+        }
+
+        $xml = new SimpleXMLElement($content);
+        $result = $xml->xpath('blti:launch_url');
+
+        if (empty($result)) {
+            throw new Exception($this->get_lang('LaunchUrlNotFound'));
+        }
+
+        $launchUrl = $result[0];
+
+        return (string) $launchUrl;
+    }
+
+    /**
+     * @param array $params
+     */
+    public function trimParams(array &$params)
+    {
+        foreach ($params as $key => $value) {
+            $newValue = preg_replace('/\s+/', ' ', $value);
+
+            $params[$key] = trim($newValue);
+        }
+    }
+
+    /**
+     * @param ImsLtiTool $tool
+     * @param array      $params
+     *
+     * @return array
+     */
+    public function removeUrlParamsFromLaunchParams(ImsLtiTool $tool, array &$params)
+    {
+        $urlQuery = parse_url($tool->getLaunchUrl(), PHP_URL_QUERY);
+
+        if (empty($urlQuery)) {
+            return $params;
+        }
+
+        $queryParams = [];
+        parse_str($urlQuery, $queryParams);
+        $queryKeys = array_keys($queryParams);
+
+        foreach ($queryKeys as $key) {
+            if (isset($params[$key])) {
+                unset($params[$key]);
+            }
+        }
     }
 }

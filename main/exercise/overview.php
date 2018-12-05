@@ -39,9 +39,21 @@ $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['l
 $learnpathItemViewId = isset($_REQUEST['learnpath_item_view_id']) ? intval($_REQUEST['learnpath_item_view_id']) : null;
 $origin = api_get_origin();
 
+// ## NSR - log
+$logInfo = [
+    'tool' => TOOL_QUIZ,
+    'tool_id' => $exercise_id,
+    'tool_id_detail' => 0,
+    'action' => isset($_REQUEST['learnpath_id']) ? 'learnpath_id' : '',
+    'action_details' => isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : '',
+    'current_id' => 0,
+    'info' => '',
+];
+Event::registerLog($logInfo);
+
 $interbreadcrumb[] = [
-    "url" => "exercise.php?".api_get_cidreq(),
-    "name" => get_lang('Exercises'),
+    'url' => 'exercise.php?'.api_get_cidreq(),
+    'name' => get_lang('Exercises'),
 ];
 $interbreadcrumb[] = ["url" => "#", "name" => $objExercise->selectTitle(true)];
 

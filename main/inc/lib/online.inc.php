@@ -132,6 +132,16 @@ function online_logout($user_id = null, $logout_redirect = false)
         Database::query($sql);
     }
 
+    // ## NSR - log
+    $logInfo = [
+        'tool' => 'logout',
+        'tool_id' => 0,
+        'tool_id_detail' => 0,
+        'action' => '',
+        'info' => '',
+    ];
+    Event::registerLog($logInfo);
+
     UserManager::loginDelete($user_id);
 
     //the following code enables the use of an external logout function.

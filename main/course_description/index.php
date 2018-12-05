@@ -18,6 +18,16 @@ define('ADD_BLOCK', 8);
 // current section
 $this_section = SECTION_COURSES;
 
+// ## NSR
+$logInfo = [
+    'tool' => TOOL_COURSE_DESCRIPTION,
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => !empty($_GET['action']) ? $_GET['action'] : 'listing',
+    'info' => ''
+];
+Event::registerLog($logInfo);
+
 // protect a course script
 api_protect_course_script(true);
 

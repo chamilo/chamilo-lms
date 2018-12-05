@@ -155,6 +155,17 @@ $my_action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : ''
 $my_post = isset($_GET['post']) ? Security::remove_XSS($_GET['post']) : '';
 $my_elements = isset($_SESSION['formelements']) ? $_SESSION['formelements'] : '';
 
+// ## NSR - log
+$logInfo = [
+    'tool' => TOOL_FORUM,
+    'tool_id' => $forumId,
+    'tool_id_detail' => $threadId,
+    'action' => !empty($my_action) ? $my_action : 'reply',
+    'action_details' => '',
+    'current_id' => $my_post,
+];
+Event::registerLog($logInfo);
+
 $form = show_add_post_form(
     $current_forum,
     $forum_setting,

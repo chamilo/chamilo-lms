@@ -44,6 +44,18 @@ if ($form->validate()) {
     }
     $eval->set_visible($visible);
     $eval->save();
+
+    $logInfo = [
+        'tool' => TOOL_GRADEBOOK,
+        'tool_id' => 0,
+        'tool_id_detail' => 0,
+        'action' => 'edit-eval',
+        'action_details' => '',
+        'current_id' => $eval->get_category_id(),
+        'info' => ''
+    ];
+    Event::registerLog($logInfo);
+
     header('Location: '.Category::getUrl().'editeval=&selectcat='.$eval->get_category_id());
     exit;
 }

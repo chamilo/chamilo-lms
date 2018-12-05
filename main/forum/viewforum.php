@@ -103,6 +103,17 @@ if (!empty($groupId)) {
 $my_search = isset($_GET['search']) ? $_GET['search'] : '';
 $my_action = isset($_GET['action']) ? $_GET['action'] : '';
 
+// ## NSR - log
+$logInfo = [
+    'tool' => TOOL_FORUM,
+    'tool_id' => $my_forum,
+    'tool_id_detail' => 0,
+    'action' => !empty($my_action) ? $my_action : 'list-threads',
+    'action_details' => $_GET['content'],
+    'current_id' => !empty($my_action) ? (int) $_GET['id'] : 0
+];
+Event::registerLog($logInfo);
+
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),

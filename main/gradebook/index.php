@@ -66,6 +66,67 @@ $(document).ready(function() {
 });
 </script>';
 
+
+
+// ## NSR - log
+$list_actions = [];
+$list_values = [];
+if (isset($_GET['movecat'])) {
+    $list_actions[] = 'movecat';
+    $list_values[] = $_GET['movecat'];
+}
+if (isset($_GET['moveeval'])) {
+    $list_actions[] = 'moveeval';
+    $list_values[] = $_GET['moveeval'];
+}
+if (isset($_GET['movelink'])) {
+    $list_actions[] = 'movelink';
+    $list_values[] = $_GET['movelink'];
+}
+if (isset($_GET['visiblecat'])) {
+    $list_actions[] = 'visiblecat';
+    $list_values[] = $_GET['visiblecat'];
+}
+if (isset($_GET['deletecat'])) {
+    $list_actions[] = 'deletecat';
+    $list_values[] = $_GET['deletecat'];
+}
+if (isset($_GET['visibleeval'])) {
+    $list_actions[] = 'visibleeval';
+    $list_values[] = $_GET['visibleeval'];
+}
+if (isset($_GET['lockedeval'])) {
+    $list_actions[] = 'lockedeval';
+    $list_values[] = $_GET['lockedeval'];
+}
+if (isset($_GET['deleteeval'])) {
+    $list_actions[] = 'deleteeval';
+    $list_values[] = $_GET['deleteeval'];
+}
+if (isset($_GET['visiblelink'])) {
+    $list_actions[] = 'visiblelink';
+    $list_values[] = $_GET['visiblelink'];
+}
+if (isset($_GET['deletelink'])) {
+    $list_actions[] = 'deletelink';
+    $list_values[] = $_GET['deletelink'];
+}
+if (isset($_GET['action'])) {
+    $list_actions[] = $_GET['action'];
+}
+$my_actions = implode(';', $list_actions);
+$my_actions_values = implode(';', $list_values);
+$logInfo = [
+    'tool' => TOOL_GRADEBOOK,
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => $my_actions,
+    'action_details' => $my_actions_values,
+    'current_id' => 0,
+    'info' => ''
+];
+Event::registerLog($logInfo);
+
 $tbl_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD);
 $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
 $tbl_grade_links = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);

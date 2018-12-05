@@ -166,6 +166,16 @@ if (!isset($coursesAlreadyVisited[$course_code])) {
     Session::write('coursesAlreadyVisited', $coursesAlreadyVisited);
 }
 
+
+$logInfo = [
+    'tool' => 'course-main',
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => isset($_GET['action']) ? $_GET['action'] : '',
+    'info' => '',
+];
+Event::registerLog($logInfo);
+
 /*Auto launch code */
 $autoLaunchWarning = '';
 $showAutoLaunchLpWarning = false;

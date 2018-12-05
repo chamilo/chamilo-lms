@@ -71,6 +71,17 @@ $table_evaluated[LINK_SURVEY] = [
     get_lang('Survey'),
 ];
 
+$logInfo = [
+    'tool' => TOOL_GRADEBOOK,
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => 'edit-weight',
+    'action_details' => $my_selectcat,
+    'current_id' => $current_id,
+    'info' => ''
+];
+Event::registerLog($logInfo);
+
 $submitted = isset($_POST['submitted']) ? $_POST['submitted'] : '';
 if ($submitted == 1) {
     Display::addFlash(Display::return_message(get_lang('GradebookWeightUpdated')));

@@ -365,6 +365,17 @@ switch ($action) {
             'sid' => api_get_session_id(),
         ];
 
+        $logInfo = [
+            'tool' => 'close-window',
+            'tool_id' => 0,
+            'tool_id_detail' => 0,
+            'action' => 'exit',
+            'action_details' => '',
+            'current_id' => $_GET['last_id'],
+            'info' => '',
+        ];
+        Event::registerLog($logInfo);
+
         $result = (int) Event::courseLogout($logoutInfo);
         echo $result;
         break;

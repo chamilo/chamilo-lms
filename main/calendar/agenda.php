@@ -29,6 +29,17 @@ if (empty($action)) {
     exit;
 }
 
+
+// ## NSR
+$logInfo = [
+    'tool' => TOOL_CALENDAR_EVENT,
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => $action,
+    'info' => ''
+];
+Event::registerLog($logInfo);
+
 $group_id = api_get_group_id();
 $groupInfo = GroupManager::get_group_properties($group_id);
 $eventId = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;

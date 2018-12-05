@@ -128,7 +128,7 @@ function handle_forum_and_forumcategories($lp_id = null)
 
     // Edit a forum category
     if (($action_forum_cat == 'edit' && $get_content == 'forumcategory') ||
-        (isset($_POST['SubmitEditForumCategory'])) ? true : false
+    (isset($_POST['SubmitEditForumCategory'])) ? true : false
     ) {
         $forum_category = get_forum_categories($get_id);
         $content = show_edit_forumcategory_form($forum_category);
@@ -614,6 +614,17 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
             api_get_user_id()
         );
         $return_message = get_lang('ForumCategoryEdited');
+        // ## NSR - log
+        $logInfo = [
+            'tool' => TOOL_FORUM,
+            'tool_id' => 0,
+            'tool_id_detail' => 0,
+            'action' => 'update-forumcategory',
+            'action_details' => 'forumcategory',
+            'current_id' => $values['forum_category_id'],
+            'info' => $clean_cat_title
+        ];
+        Event::registerLog($logInfo);
     } else {
         $params = [
             'c_id' => $course_id,
@@ -645,6 +656,18 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
             );
         }
         $return_message = get_lang('ForumCategoryAdded');
+
+        // ## NSR - log
+        $logInfo = [
+            'tool' => TOOL_FORUM,
+            'tool_id' => 0,
+            'tool_id_detail' => 0,
+            'action' => 'new-forumcategory',
+            'action_details' => 'forumcategory',
+            'current_id' => $last_id,
+            'info' => $clean_cat_title
+        ];
+        Event::registerLog($logInfo);
     }
 
     if ($showMessage) {
@@ -839,6 +862,18 @@ function store_forum($values, $courseInfo = [], $returnId = false)
 
         $return_message = get_lang('ForumEdited');
         $forumId = $values['forum_id'];
+
+        // ## NSR - log
+        $logInfo = [
+            'tool' => TOOL_FORUM,
+            'tool_id' => $values['forum_id'],
+            'tool_id_detail' => 0,
+            'action' => 'update-forum',
+            'action_details' => 'forum',
+            'current_id' => $values['forum_id'],
+            'info' => $values['forum_title'],
+        ];
+        Event::registerLog($logInfo);
     } else {
         if ($image_moved) {
             $new_file_name = isset($new_file_name) ? $new_file_name : '';
@@ -887,6 +922,18 @@ function store_forum($values, $courseInfo = [], $returnId = false)
                 $group_id,
                 $courseInfo
             );
+
+            // ## NSR - log
+            $logInfo = [
+                'tool' => TOOL_FORUM,
+                'tool_id' => $forumId,
+                'tool_id_detail' => 0,
+                'action' => 'new-forum',
+                'action_details' => 'forum',
+                'current_id' => $forumId,
+                'info' => $values['forum_title']
+            ];
+            Event::registerLog($logInfo);
         }
         $return_message = get_lang('ForumAdded');
     }
@@ -2610,6 +2657,18 @@ function updateThread($values)
         return '';
     }
 
+    // ## NSR - log
+    $logInfo = [
+        'tool' => TOOL_FORUM,
+        'tool_id' => $values['forum_id'],
+        'tool_id_detail' => $values['thread_id'],
+        'action' => 'edit-thread',
+        'action_details' => 'thread',
+        'current_id' => $values['thread_id'],
+        'info' => $values['thread_title'],
+    ];
+    Event::registerLog($logInfo);
+
     $threadTable = Database::get_course_table(TABLE_FORUM_THREAD);
     $courseId = api_get_course_int_id();
     $courseCode = api_get_course_id();
@@ -2854,6 +2913,18 @@ function store_thread(
             );
             $visible = 1;
         }
+
+        // ## NSR - log
+        $logInfo = [
+            'tool' => TOOL_FORUM,
+            'tool_id' => $values['forum_id'],
+            'tool_id_detail' => $lastThread->getIid(),
+            'action' => 'new-thread',
+            'action_details' => '',
+            'current_id' => $lastThread->getIid(),
+            'info' => $clean_post_title
+        ];
+        Event::registerLog($logInfo);
     }
 
     // We now store the content in the table_post table.
@@ -2883,6 +2954,18 @@ function store_thread(
     $em->flush();
 
     $lastPostId = $lastPost->getIid();
+
+    // ## NSR - log
+    $logInfo = [
+        'tool' => TOOL_FORUM,
+        'tool_id' => $values['forum_id'],
+        'tool_id_detail' => $lastThread->getIid(),
+        'action' => 'new-post',
+        'action_details' => '',
+        'current_id' => $lastPostId,
+        'info' => $clean_post_title
+    ];
+    Event::registerLog($logInfo);
 
     if ($lastPostId) {
         $lastPost->setPostId($lastPostId);
@@ -3014,11 +3097,11 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
     $my_post = isset($_GET['post']) ? (int) $_GET['post'] : '';
 
     $url = api_get_self().'?'.http_build_query([
-        'action' => $action,
-        'forum' => $forumId,
-        'thread' => $myThread,
-        'post' => $my_post,
-    ]).'&'.api_get_cidreq();
+            'action' => $action,
+            'forum' => $forumId,
+            'thread' => $myThread,
+            'post' => $my_post,
+        ]).'&'.api_get_cidreq();
 
     $form = new FormValidator(
         'thread',
@@ -3182,9 +3265,9 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
             $defaults['post_text'] = '<div>&nbsp;</div>
                 <div style="margin: 5px;">
                     <div style="font-size: 90%; font-style: italic;">'.
-                        get_lang('Quoting').' '.$posterName.':</div>
+                get_lang('Quoting').' '.$posterName.':</div>
                         <div style="color: #006600; font-size: 90%;  font-style: italic; background-color: #FAFAFA; border: #D1D7DC 1px solid; padding: 3px;">'.
-                            prepare4display($values['post_text']).'
+                prepare4display($values['post_text']).'
                         </div>
                     </div>
                 <div>&nbsp;</div>
@@ -3239,11 +3322,11 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
             }
 
             $url = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&'.http_build_query(
-                [
-                    'forum' => $forumId,
-                    'thread' => $myThread,
-                ]
-            );
+                    [
+                        'forum' => $forumId,
+                        'thread' => $myThread,
+                    ]
+                );
 
             Security::clear_token();
             header('Location: '.$url);
@@ -3681,6 +3764,18 @@ function store_reply($current_forum, $values, $courseId = 0, $userId = 0)
                 $values
             );
             add_forum_attachment_file('', $new_post_id);
+
+            // ## NSR - log
+            $logInfo = [
+                'tool' => TOOL_FORUM,
+                'tool_id' => $values['forum_id'],
+                'tool_id_detail' => $values['thread_id'],
+                'action' => 'new-post',
+                'action_details' => $values['action'],
+                'current_id' => $new_post_id,
+                'info' => $values['post_title']
+            ];
+            Event::registerLog($logInfo);
         }
 
         Session::erase('formelements');
@@ -3868,6 +3963,18 @@ function show_edit_post_form(
  */
 function store_edit_post($forumInfo, $values)
 {
+    // ## NSR - log
+    $logInfo = [
+        'tool' => TOOL_FORUM,
+        'tool_id' => $_GET['forum'],
+        'tool_id_detail' => $values['thread_id'],
+        'action' => 'edit-post',
+        'action_details' => 'post',
+        'current_id' => $values['post_id'],
+        'info' => $values['post_title'],
+    ];
+    Event::registerLog($logInfo);
+
     $threadTable = Database::get_course_table(TABLE_FORUM_THREAD);
     $table_posts = Database::get_course_table(TABLE_FORUM_POST);
     $course_id = api_get_course_int_id();
@@ -5810,7 +5917,7 @@ function get_all_post_from_user($user_id, $course_code)
                     Display::return_icon('forum.gif', get_lang('Forum')).'&nbsp;'.Security::remove_XSS($forum['forum_title'], STUDENT).
                     '<div style="float:right;margin-top:-35px">
                         <a href="../forum/viewforum.php?'.api_get_cidreq_params($course_code).'&forum='.$forum['forum_id'].' " >'.
-                            get_lang('SeeForum').'    
+                    get_lang('SeeForum').'    
                         </a>
                      </div></div>';
                 $forum_results .= '<br / >';

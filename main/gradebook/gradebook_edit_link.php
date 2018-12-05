@@ -105,6 +105,17 @@ if ($form->validate()) {
             'type' => LINK_STUDENTPUBLICATION,
         ]);
 
+    $logInfo = [
+        'tool' => TOOL_GRADEBOOK,
+        'tool_id' => 0,
+        'tool_id_detail' => 0,
+        'action' => 'edit-link',
+        'action_details' => '',
+        'current_id' => $_GET['editlink'],
+        'info' => ''
+    ];
+    Event::registerLog($logInfo);
+
     header('Location: '.Category::getUrl().'linkedited=&selectcat='.$link->get_category_id());
     exit;
 }

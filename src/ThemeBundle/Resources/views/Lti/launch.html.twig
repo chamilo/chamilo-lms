@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>LTI Launch</title>
+</head>
+<body>
+<form action="{{ launch_url }}" name="ltiLaunchForm" method="post" encType="application/x-www-form-urlencoded">
+    {% for key, value in params %}
+        <input type="hidden" name="{{ key }}" value="{{ value }}">
+    {% endfor %}
+</form>
+<script>document.ltiLaunchForm.submit();</script>
+</body>
+</html>

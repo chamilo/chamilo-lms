@@ -231,6 +231,16 @@
     color: #666;
 }
 
+/* @todo WIP show selected option in menu */
+.sidebar .current_ancestor .sidebar-link {
+    background-color: red;
+}
+
+.sidebar .sidebar-menu .current {
+    background-color: green;
+}
+
+
 /* notifications help and bug */
 #touch-button.btn-touch {
     background-color: #C2C2C2;

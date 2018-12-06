@@ -8782,10 +8782,10 @@ class learnpath
         $item_description = '';
         //If action==edit document
         //We don't display the document form if it's not an editable document (html or txt file)
-        if ($action == 'edit') {
+        if ($action === 'edit') {
             if (is_array($extra_info)) {
                 $path_parts = pathinfo($extra_info['dir']);
-                if ($path_parts['extension'] != "txt" && $path_parts['extension'] != "html") {
+                if ($path_parts['extension'] != 'txt' && $path_parts['extension'] != 'html') {
                     $no_display_edit_textarea = true;
                 }
             }
@@ -8794,7 +8794,7 @@ class learnpath
 
         // If action==add an existing document
         // We don't display the document form if it's not an editable document (html or txt file).
-        if ($action == 'add') {
+        if ($action === 'add') {
             if (is_numeric($extra_info)) {
                 $extra_info = (int) $extra_info;
                 $sql_doc = "SELECT path FROM $tbl_doc 

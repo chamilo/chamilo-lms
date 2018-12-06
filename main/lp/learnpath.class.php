@@ -7452,15 +7452,8 @@ class learnpath
                             lp.iid = ".$item_id;
                 $res_step = Database::query($sql);
                 $row_step = Database::fetch_array($res_step, 'ASSOC');
-                $return .= $this->display_manipulate(
-                    $item_id,
-                    $row['item_type']
-                );
-                $return .= $this->display_document_form(
-                    'edit',
-                    $item_id,
-                    $row_step
-                );
+                $return .= $this->display_manipulate($item_id, $row['item_type']);
+                $return .= $this->display_document_form('edit', $item_id, $row_step);
                 break;
             case TOOL_READOUT_TEXT:
                 $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
@@ -7473,15 +7466,8 @@ class learnpath
                             lp.iid = ".$item_id;
                 $res_step = Database::query($sql);
                 $row_step = Database::fetch_array($res_step, 'ASSOC');
-                $return .= $this->display_manipulate(
-                    $item_id,
-                    $row['item_type']
-                );
-                $return .= $this->displayFrmReadOutText(
-                    'edit',
-                    $item_id,
-                    $row_step
-                );
+                $return .= $this->display_manipulate($item_id, $row['item_type']);
+                $return .= $this->displayFrmReadOutText('edit', $item_id, $row_step);
                 break;
             case TOOL_LINK:
                 $link_id = (string) $row['path'];
@@ -7495,10 +7481,7 @@ class learnpath
                         $row['url'] = $row_link['url'];
                     }
                 }
-                $return .= $this->display_manipulate(
-                    $item_id,
-                    $row['item_type']
-                );
+                $return .= $this->display_manipulate($item_id, $row['item_type']);
                 $return .= $this->display_link_form('edit', $item_id, $row);
                 break;
             case TOOL_LP_FINAL_ITEM:
@@ -7513,15 +7496,8 @@ class learnpath
                             lp.iid = ".$item_id;
                 $res_step = Database::query($sql);
                 $row_step = Database::fetch_array($res_step, 'ASSOC');
-                $return .= $this->display_manipulate(
-                    $item_id,
-                    $row['item_type']
-                );
-                $return .= $this->display_document_form(
-                    'edit',
-                    $item_id,
-                    $row_step
-                );
+                $return .= $this->display_manipulate($item_id, $row['item_type']);
+                $return .= $this->display_document_form('edit', $item_id, $row_step);
                 break;
             case TOOL_QUIZ:
                 $return .= $this->display_manipulate($item_id, $row['item_type']);

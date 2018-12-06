@@ -34,6 +34,16 @@ $this_section = SECTION_COURSES;
 
 api_block_anonymous_users(); // Only users who are logged in can proceed.
 
+// ## NSR - log
+$logInfo = [
+    'tool' => SECTION_COURSES,
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => '',
+    'info' => '',
+];
+Event::registerLog($logInfo);
+
 $userId = api_get_user_id();
 
 /* Constants and CONFIGURATION parameters */

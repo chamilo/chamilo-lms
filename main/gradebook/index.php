@@ -66,8 +66,6 @@ $(document).ready(function() {
 });
 </script>';
 
-
-
 // ## NSR - log
 $list_actions = [];
 $list_values = [];
@@ -123,7 +121,7 @@ $logInfo = [
     'action' => $my_actions,
     'action_details' => $my_actions_values,
     'current_id' => 0,
-    'info' => ''
+    'info' => '',
 ];
 Event::registerLog($logInfo);
 

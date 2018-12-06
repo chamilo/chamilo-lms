@@ -29,14 +29,13 @@ if (empty($action)) {
     exit;
 }
 
-
 // ## NSR
 $logInfo = [
     'tool' => TOOL_CALENDAR_EVENT,
     'tool_id' => 0,
     'tool_id_detail' => 0,
     'action' => $action,
-    'info' => ''
+    'info' => '',
 ];
 Event::registerLog($logInfo);
 

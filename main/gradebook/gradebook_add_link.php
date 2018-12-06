@@ -140,7 +140,7 @@ if (isset($typeSelected) && $typeSelected != '0') {
             'action' => 'new-link',
             'action_details' => 'selectcat='.$selectCat,
             'current_id' => $link->get_id(),
-            'info' => ''
+            'info' => '',
         ];
         Event::registerLog($logInfo);
 
@@ -162,7 +162,7 @@ $logInfo = [
     'action' => 'add-link',
     'action_details' => 'selectcat='.$selectCat,
     'current_id' => $current_id,
-    'info' => ''
+    'info' => '',
 ];
 Event::registerLog($logInfo);
 

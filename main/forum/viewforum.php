@@ -110,7 +110,7 @@ $logInfo = [
     'tool_id_detail' => 0,
     'action' => !empty($my_action) ? $my_action : 'list-threads',
     'action_details' => $_GET['content'],
-    'current_id' => !empty($my_action) ? (int) $_GET['id'] : 0
+    'current_id' => !empty($my_action) ? (int) $_GET['id'] : 0,
 ];
 Event::registerLog($logInfo);
 

@@ -412,7 +412,7 @@ foreach ($categories as $item) {
                     $lpTime = Tracking::get_time_spent_in_lp(
                         $userId,
                         api_get_course_id(),
-                        array($id),
+                        [$id],
                         api_get_session_id()
                     );
 
@@ -453,7 +453,7 @@ foreach ($categories as $item) {
                                 $accumulateWorkTime * 60
                             )
                         );
-                        $linkMinTime .='<b>'.api_time_to_hms($lpTime).' / '.api_time_to_hms($accumulateWorkTime * 60).'</b>';
+                        $linkMinTime .= '<b>'.api_time_to_hms($lpTime).' / '.api_time_to_hms($accumulateWorkTime * 60).'</b>';
                     } else {
                         $linkMinTime = sprintf(get_lang('YouHaveSpentXTime'), api_time_to_hms($lpTime));
                     }

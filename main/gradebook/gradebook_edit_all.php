@@ -78,7 +78,7 @@ $logInfo = [
     'action' => 'edit-weight',
     'action_details' => $my_selectcat,
     'current_id' => $current_id,
-    'info' => ''
+    'info' => '',
 ];
 Event::registerLog($logInfo);
 

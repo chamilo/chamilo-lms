@@ -254,7 +254,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
         $lpTime = Tracking::get_time_spent_in_lp(
             $user_id,
             api_get_course_id(),
-            array($lp_id),
+            [$lp_id],
             api_get_session_id()
         );
 

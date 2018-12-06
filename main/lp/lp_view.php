@@ -600,7 +600,7 @@ if (api_get_configuration_value('lp_minimum_time')) {
     $lpTime = Tracking::get_time_spent_in_lp(
         $user_id,
         $course_code,
-        array($_SESSION['oLP']->lp_id),
+        [$_SESSION['oLP']->lp_id],
         $sessionId
     );
 

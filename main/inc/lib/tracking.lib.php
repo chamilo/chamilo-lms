@@ -1664,7 +1664,7 @@ class Tracking
             $course_code = $courseInfo['code'];
             $sql = "SELECT * FROM c_lp WHERE c_id = $courseId";
             $rs = Database::query($sql);
-            $dataLp = array();
+            $dataLp = [];
             while ($aux = Database::fetch_assoc($rs)) {
                 $dataLp[] = $aux['id'];
             }
@@ -6806,11 +6806,11 @@ class Tracking
      */
     public static function getCalculateTime($userId, $sessionId, $debug = false)
     {
-     /*   $sql = "SELECT session_lifetime
-        FROM plugin_licences_course_session
-        WHERE session_id = $sessionId";
-        $res = Database::query($sql);
-        $lifeTime = intval(Database::fetch_assoc($res)['session_lifetime']);*/
+        /*   $sql = "SELECT session_lifetime
+           FROM plugin_licences_course_session
+           WHERE session_id = $sessionId";
+           $res = Database::query($sql);
+           $lifeTime = intval(Database::fetch_assoc($res)['session_lifetime']);*/
         //error_log("sessionId: $sessionId: $lifeTime");
         /*if ($lifeTime > 0) {
             $sessionLifetime = $lifeTime;
@@ -6837,9 +6837,9 @@ class Tracking
         $report_time = 0;
         $videoconference_time = 0;
         $link_time = 0;
-        $lp_time = array();
-        $reg = array();
-        $regUse = array();
+        $lp_time = [];
+        $reg = [];
+        $regUse = [];
         $count_login = 0;
 
         $sql = 'SELECT date_reg
@@ -6858,8 +6858,12 @@ class Tracking
                 } else {
                     $fistConection = date("d/m/Y H:i:s", strtotime($last_login_date));
                 }
-            } else { $fistConection = ''; }
-        } else { $fistConection = ''; }
+            } else {
+                $fistConection = '';
+            }
+        } else {
+            $fistConection = '';
+        }
 
         $sql = 'SELECT date_reg
                 FROM track_e_access_complete
@@ -6877,13 +6881,16 @@ class Tracking
                 } else {
                     $lastConection = date('d/m/Y H:i:s', strtotime($last_login_date));
                 }
-            } else { $lastConection = ''; }
-        } else { $lastConection = ''; }
-
+            } else {
+                $lastConection = '';
+            }
+        } else {
+            $lastConection = '';
+        }
 
         $sql = "SELECT * FROM track_e_access_complete WHERE user_id = $userId"; //AND session_id = $sessionId";
         $res = Database::query($sql);
-        while($row = Database::fetch_assoc($res)) {
+        while ($row = Database::fetch_assoc($res)) {
             if ($row['login_as'] == 1 && !$debug) {
                 continue;
             }
@@ -7080,7 +7087,7 @@ class Tracking
                 if ($partialTime >= 0 && $partialTime < $sessionLifetime) {
                     $total_time += $partialTime;
                 } else {
-                    $partialTime = $sessionFixTime;// 1200 // Fix 20 min
+                    $partialTime = $sessionFixTime; // 1200 // Fix 20 min
                     $total_time += $partialTime;
                 }
                 $tool = $aux_reg['tool'];
@@ -7138,7 +7145,7 @@ class Tracking
                 $tmp_active = false;
             }
 
-            if ($value['use'] == 0 ) {
+            if ($value['use'] == 0) {
                 if ($value['tool'] != 'chat' && $value['action'] != 'return_to_course_homepage') {
                     $aux_reg['id'] = $key;
                     $aux_reg['date_reg'] = $value['date_reg'];
@@ -7152,8 +7159,8 @@ class Tracking
         }
 
         $horas = intval($total_time / 3600);
-        $minutos = str_pad(intval(($total_time % 3600)/60),2,'0',STR_PAD_LEFT);
-        $segundos = str_pad(intval(($total_time % 3600) % 60),2,'0',STR_PAD_LEFT);
+        $minutos = str_pad(intval(($total_time % 3600) / 60), 2, '0', STR_PAD_LEFT);
+        $segundos = str_pad(intval(($total_time % 3600) % 60), 2, '0', STR_PAD_LEFT);
 
         $total_lp = 0;
         foreach ($lp_time as $key => $value) {
@@ -7162,7 +7169,7 @@ class Tracking
             }
         }
         //echo "Tiempo total en lecciones: $total_lp seg<br>";
-        $result = array(
+        $result = [
             'course-main' => $course_time,
             TOOL_LEARNPATH => $lp_time,
             'total_learnpath' => $total_lp,
@@ -7182,8 +7189,8 @@ class Tracking
             'total_time' => $total_time,
             'num_conection' => $count_login,
             'first' => $fistConection,
-            'last' => $lastConection
-        );
+            'last' => $lastConection,
+        ];
 
         return $result;
     }

@@ -24,7 +24,7 @@ $logInfo = [
     'tool_id' => 0,
     'tool_id_detail' => 0,
     'action' => !empty($_GET['action']) ? $_GET['action'] : 'listing',
-    'info' => ''
+    'info' => '',
 ];
 Event::registerLog($logInfo);
 

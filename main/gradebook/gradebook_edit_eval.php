@@ -52,7 +52,7 @@ if ($form->validate()) {
         'action' => 'edit-eval',
         'action_details' => '',
         'current_id' => $eval->get_category_id(),
-        'info' => ''
+        'info' => '',
     ];
     Event::registerLog($logInfo);
 

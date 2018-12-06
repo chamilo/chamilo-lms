@@ -130,7 +130,7 @@ $logInfo = [
     'action' => !empty($actions) ? $actions : 'list-category',
     'action_details' => $_GET['content'],
     'current_id' => !empty($actions) ? (int) $_GET['id'] : 0,
-    'info' => ''
+    'info' => '',
 ];
 Event::registerLog($logInfo);
 

@@ -20,7 +20,7 @@ $logInfo = [
     'action' => '',
     'action_details' => '',
     'current_id' => 0,
-    'info' => ''
+    'info' => '',
 ];
 Event::registerLog($logInfo);
 

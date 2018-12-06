@@ -34,7 +34,7 @@ $logInfo = [
     'action' => $action,
     'action_details' => '',
     'current_id' => isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0,
-    'info' => ''
+    'info' => '',
 ];
 Event::registerLog($logInfo);
 

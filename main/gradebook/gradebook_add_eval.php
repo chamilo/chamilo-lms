@@ -72,7 +72,7 @@ if ($form->validate()) {
         'action' => 'new-eval',
         'action_details' => 'selectcat='.$eval->get_category_id(),
         'current_id' => $eval->get_id(),
-        'info' => ''
+        'info' => '',
     ];
     Event::registerLog($logInfo);
 
@@ -104,7 +104,7 @@ $logInfo = [
     'action' => 'add-eval',
     'action_details' => 'selectcat='.$eval->get_category_id(),
     'current_id' => $current_id,
-    'info' => ''
+    'info' => '',
 ];
 Event::registerLog($logInfo);
 

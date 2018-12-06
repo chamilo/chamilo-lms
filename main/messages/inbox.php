@@ -14,7 +14,6 @@ if (api_get_setting('allow_message_tool') != 'true') {
     api_not_allowed(true);
 }
 
-
 // ## NSR - log
 $logInfo = [
     'tool' => 'Messages',
@@ -23,7 +22,7 @@ $logInfo = [
     'action' => isset($_GET['action']) ? $_GET['action'] : 'inbox',
     'action_details' => '',
     'current_id' => isset($_GET['id']) ? (int) $_GET['id'] : 0,
-    'info' => ''
+    'info' => '',
 ];
 Event::registerLog($logInfo);
 

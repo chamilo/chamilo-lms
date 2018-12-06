@@ -2454,10 +2454,9 @@ class Event
         return $res;
     }
 
-
     /**
      * Register the logout of the course (usually when logging out of the platform)
-     * from the track_e_access_complete table
+     * from the track_e_access_complete table.
      *
      * @param array $logInfo Information stored by local.inc.php
      *

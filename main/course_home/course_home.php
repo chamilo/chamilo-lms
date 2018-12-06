@@ -166,7 +166,6 @@ if (!isset($coursesAlreadyVisited[$course_code])) {
     Session::write('coursesAlreadyVisited', $coursesAlreadyVisited);
 }
 
-
 $logInfo = [
     'tool' => 'course-main',
     'tool_id' => 0,

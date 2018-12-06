@@ -27,7 +27,7 @@ switch ($_REQUEST['action']) {
             'action' => 'exit',
             'action_details' => 'exit-chat',
             'current_id' => 0,
-            'info' => ''
+            'info' => '',
         ];
         Event::registerLog($logInfo);
         break;

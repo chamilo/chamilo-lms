@@ -98,7 +98,7 @@ if ($form->validate()) {
         'action' => 'new-cat',
         'action_details' => 'parent_id='.$cat->get_parent_id(),
         'current_id' => $cat->get_id(),
-        'info' => ''
+        'info' => '',
     ];
     Event::registerLog($logInfo);
 
@@ -113,7 +113,7 @@ $logInfo = [
     'action' => 'add-cat',
     'action_details' => Category::getUrl().'selectcat='.$get_select_cat,
     'current_id' => $current_id,
-    'info' => ''
+    'info' => '',
 ];
 Event::registerLog($logInfo);
 

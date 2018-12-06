@@ -1933,7 +1933,7 @@ class learnpathItem
             // Aplicamos el porcentaje si no hubiese definido un porcentaje por defecto es 100%
             $time_seg = intval(($pl * $tc * $perc / 100) * 60);
 
-            if ($time_seg < $sessionLifetime){
+            if ($time_seg < $sessionLifetime) {
                 $sessionLifetime = $time_seg;
             }
 

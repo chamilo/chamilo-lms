@@ -131,10 +131,9 @@ $logInfo = [
     'tool_id' => 0,
     'tool_id_detail' => 0,
     'action' => $action,
-    'info' => $_GET['content']
+    'info' => $_GET['content'],
 ];
 Event::registerLog($logInfo);
-
 
 if (api_is_allowed_to_edit(false, true)) {
     handle_forum_and_forumcategories();

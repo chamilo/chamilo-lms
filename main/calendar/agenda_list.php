@@ -12,7 +12,7 @@ $logInfo = [
     'tool_id' => 0,
     'tool_id_detail' => 0,
     'action' => isset($_GET['action']) ? $_GET['action'] : 'calendar_list',
-    'info' => ''
+    'info' => '',
 ];
 Event::registerLog($logInfo);
 

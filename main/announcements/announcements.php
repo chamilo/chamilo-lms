@@ -101,7 +101,7 @@ $logInfo = [
     'action' => $action,
     'action_details' => '',
     'current_id' => (int) $announcement_id,
-    'info' => ''
+    'info' => '',
 ];
 Event::registerLog($logInfo);
 

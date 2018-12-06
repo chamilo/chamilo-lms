@@ -2446,7 +2446,7 @@ class learnpath
                     $lpTime = Tracking::get_time_spent_in_lp(
                         $studentId,
                         $courseInfo['code'],
-                        array($prerequisite),
+                        [$prerequisite],
                         $sessionId
                     );
 
@@ -13887,6 +13887,95 @@ EOD;
     }
 
     /**
+     * Get whether this is a learning path with the accumulated work time or not.
+     *
+     * @return int
+     */
+    public function getAccumulateWorkTime()
+    {
+        return $this->accumulateWorkTime;
+    }
+
+    /**
+     * Get whether this is a learning path with the accumulated work time or not.
+     *
+     * @return int
+     */
+    public function getAccumulateWorkTimeTotalCourse()
+    {
+        $table = Database::get_course_table(TABLE_LP_MAIN);
+        $sql = "SELECT SUM(accumulate_work_time) AS total 
+                FROM $table 
+                WHERE c_id = ".$this->course_int_id;
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result);
+
+        return (int) $row['total'];
+    }
+
+    /**
+     * Set whether this is a learning path with the accumulated work time or not.
+     *
+     * @param int $value (0 = false, 1 = true)
+     *
+     * @return bool
+     */
+    public function setAccumulateWorkTime($value)
+    {
+        if (!api_get_configuration_value('lp_minimum_time')) {
+            return false;
+        }
+
+        $this->accumulateWorkTime = (int) $value;
+        $table = Database::get_course_table(TABLE_LP_MAIN);
+        $lp_id = $this->get_id();
+        $sql = "UPDATE $table SET accumulate_work_time = ".$this->accumulateWorkTime."
+                WHERE c_id = ".$this->course_int_id." AND id = $lp_id";
+        Database::query($sql);
+
+        return true;
+    }
+
+    /**
+     * @param int $lpId
+     * @param int $courseId
+     *
+     * @return mixed
+     */
+    public static function getAccumulateWorkTimePrerequisite($lpId, $courseId)
+    {
+        $lpId = (int) $lpId;
+        $courseId = (int) $courseId;
+
+        $table = Database::get_course_table(TABLE_LP_MAIN);
+        $sql = "SELECT accumulate_work_time 
+                FROM $table 
+                WHERE c_id = $courseId AND id = $lpId";
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result);
+
+        return $row['accumulate_work_time'];
+    }
+
+    /**
+     * @param int $courseId
+     *
+     * @return int
+     */
+    public static function getAccumulateWorkTimeTotal($courseId)
+    {
+        $table = Database::get_course_table(TABLE_LP_MAIN);
+        $courseId = (int) $courseId;
+        $sql = "SELECT SUM(accumulate_work_time) AS total
+                FROM $table
+                WHERE c_id = $courseId";
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result);
+
+        return (int) $row['total'];
+    }
+
+    /**
      * Get the depth level of LP item.
      *
      * @param array $items
@@ -13989,92 +14078,5 @@ EOD;
         }
 
         return '';
-    }
-
-    /**
-     * Get whether this is a learning path with the accumulated work time or not
-     * @return int
-     */
-    public function getAccumulateWorkTime()
-    {
-        return $this->accumulateWorkTime;
-    }
-
-    /**
-     * Get whether this is a learning path with the accumulated work time or not
-     * @return int
-     */
-    public function getAccumulateWorkTimeTotalCourse()
-    {
-        $table = Database::get_course_table(TABLE_LP_MAIN);
-        $sql = "SELECT SUM(accumulate_work_time) AS total 
-                FROM $table 
-                WHERE c_id = ".$this->course_int_id;
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result);
-
-        return (int) $row['total'];
-    }
-
-    /**
-     * Set whether this is a learning path with the accumulated work time or not
-     *
-     * @param int $value (0 = false, 1 = true)
-     *
-     * @return bool
-     */
-    public function setAccumulateWorkTime($value)
-    {
-        if (!api_get_configuration_value('lp_minimum_time')) {
-            return false;
-        }
-
-        $this->accumulateWorkTime = (int) $value;
-        $table = Database::get_course_table(TABLE_LP_MAIN);
-        $lp_id = $this->get_id();
-        $sql = "UPDATE $table SET accumulate_work_time = ".$this->accumulateWorkTime."
-                WHERE c_id = ".$this->course_int_id." AND id = $lp_id";
-        Database::query($sql);
-
-        return true;
-    }
-
-    /**
-     * @param int $lpId
-     * @param int $courseId
-     *
-     * @return mixed
-     */
-    public static function getAccumulateWorkTimePrerequisite($lpId, $courseId)
-    {
-        $lpId = (int) $lpId;
-        $courseId = (int) $courseId;
-
-        $table = Database::get_course_table(TABLE_LP_MAIN);
-        $sql = "SELECT accumulate_work_time 
-                FROM $table 
-                WHERE c_id = $courseId AND id = $lpId";
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result);
-
-        return $row['accumulate_work_time'];
-    }
-
-    /**
-     * @param int $courseId
-     *
-     * @return int
-     */
-    public static function getAccumulateWorkTimeTotal($courseId)
-    {
-        $table = Database::get_course_table(TABLE_LP_MAIN);
-        $courseId = (int) $courseId;
-        $sql = "SELECT SUM(accumulate_work_time) AS total
-                FROM $table
-                WHERE c_id = $courseId";
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result);
-
-        return (int) $row['total'];
     }
 }

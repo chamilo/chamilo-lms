@@ -622,7 +622,7 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
             'action' => 'update-forumcategory',
             'action_details' => 'forumcategory',
             'current_id' => $values['forum_category_id'],
-            'info' => $clean_cat_title
+            'info' => $clean_cat_title,
         ];
         Event::registerLog($logInfo);
     } else {
@@ -665,7 +665,7 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
             'action' => 'new-forumcategory',
             'action_details' => 'forumcategory',
             'current_id' => $last_id,
-            'info' => $clean_cat_title
+            'info' => $clean_cat_title,
         ];
         Event::registerLog($logInfo);
     }
@@ -931,7 +931,7 @@ function store_forum($values, $courseInfo = [], $returnId = false)
                 'action' => 'new-forum',
                 'action_details' => 'forum',
                 'current_id' => $forumId,
-                'info' => $values['forum_title']
+                'info' => $values['forum_title'],
             ];
             Event::registerLog($logInfo);
         }
@@ -2922,7 +2922,7 @@ function store_thread(
             'action' => 'new-thread',
             'action_details' => '',
             'current_id' => $lastThread->getIid(),
-            'info' => $clean_post_title
+            'info' => $clean_post_title,
         ];
         Event::registerLog($logInfo);
     }
@@ -2963,7 +2963,7 @@ function store_thread(
         'action' => 'new-post',
         'action_details' => '',
         'current_id' => $lastPostId,
-        'info' => $clean_post_title
+        'info' => $clean_post_title,
     ];
     Event::registerLog($logInfo);
 
@@ -3773,7 +3773,7 @@ function store_reply($current_forum, $values, $courseId = 0, $userId = 0)
                 'action' => 'new-post',
                 'action_details' => $values['action'],
                 'current_id' => $new_post_id,
-                'info' => $values['post_title']
+                'info' => $values['post_title'],
             ];
             Event::registerLog($logInfo);
         }

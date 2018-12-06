@@ -2284,7 +2284,6 @@ function fixIds(EntityManager $em)
         $sql = null;
 
         $newId = '';
-
         switch ($item['item_type']) {
             case TOOL_LINK:
                 $sql = "SELECT * FROM c_link WHERE c_id = $courseId AND id = $ref";
@@ -2447,9 +2446,13 @@ function fixIds(EntityManager $em)
             }*/
 
             $sql = '';
-            $newId = '';
+            //$newId = '';
             switch ($item['tool']) {
-                case TOOL_LINK:
+                case TOOL_LEARNPATH:
+                    $sql = "SELECT * FROM c_lp WHERE c_id = $courseId AND id = $ref ";
+                    break;
+                // already fixed in c_lp_item
+                /*case TOOL_LINK:
                     $sql = "SELECT * FROM c_link WHERE c_id = $courseId AND id = $ref ";
                     break;
                 case TOOL_STUDENTPUBLICATION:
@@ -2466,17 +2469,16 @@ function fixIds(EntityManager $em)
                     break;
                 case 'thread':
                     $sql = "SELECT * FROM c_forum_thread WHERE c_id = $courseId AND id = $ref";
-                    break;
+                    break;*/
             }
 
-            if (!empty($sql) && !empty($newId)) {
+            if (!empty($sql)) {
                 $data = $connection->fetchAssoc($sql);
-                if (isset($data['iid'])) {
+                if (isset($data['iid']) && !empty($data['iid'])) {
                     $newId = $data['iid'];
+                    $sql = "UPDATE c_item_property SET ref = $newId WHERE iid = $iid";
+                    $connection->executeQuery($sql);
                 }
-                $sql = "UPDATE c_item_property SET ref = $newId WHERE iid = $iid";
-                error_log($sql);
-                $connection->executeQuery($sql);
             }
         }
 

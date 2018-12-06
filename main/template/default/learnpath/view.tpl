@@ -74,7 +74,9 @@
                                 }, 1000);
                             })
                         </script>
-                        <b>Superación del tiempo mínimo {{ lp_accumulate_work_time }}</b>
+                        <b>
+                            {{ "ExceedingMinimumTime"|get_lang|format(lp_accumulate_work_time) }}
+                        </b>
                         <div id="progress_bar">
                             <div class="progress">
                                 <div id="progress_bar_value2"

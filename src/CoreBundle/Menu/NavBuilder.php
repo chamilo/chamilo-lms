@@ -399,7 +399,16 @@ class NavBuilder implements ContainerAwareInterface
 
             $child
                 ->setLinkAttribute('class', 'sidebar-link')
-                ->setAttribute('class', 'nav-item '.$childClass);
+                ->setAttribute('class', 'nav-item '.$childClass)
+            ;
+
+            $children = $child->getChildren();
+            foreach ($children as $subChild) {
+                $subChild
+                    ->setLinkAttribute('class', 'sub-link')
+                    ->setAttribute('class', 'nav-item ');
+            }
+
 
         }
 

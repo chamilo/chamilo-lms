@@ -10085,14 +10085,25 @@ class learnpath
             $url.'&action=delete_item'
         );
 
-        if ($item_type == TOOL_HOTPOTATOES) {
-            $document_data = DocumentManager::get_document_data_by_id($row['path'], $course_code);
-            $return .= get_lang('File').': '.$document_data['absolute_path_from_document'];
-        }
-
-        if ($item_type == TOOL_DOCUMENT || $item_type == TOOL_LP_FINAL_ITEM) {
-            $document_data = DocumentManager::get_document_data_by_id($row['path'], $course_code);
-            $return .= get_lang('File').': '.$document_data['absolute_path_from_document'];
+        if (in_array($item_type, [TOOL_DOCUMENT, TOOL_LP_FINAL_ITEM, TOOL_HOTPOTATOES])) {
+            $documentData = DocumentManager::get_document_data_by_id($row['path'], $course_code);
+            if (empty($documentData)) {
+                // Try with iid
+                $table = Database::get_course_table(TABLE_DOCUMENT);
+                $sql = "SELECT path FROM $table
+                        WHERE 
+                              c_id = ".api_get_course_int_id()." AND 
+                              iid = ".$row['path']." AND 
+                              path NOT LIKE '%_DELETED_%'";
+                $result = Database::query($sql);
+                $documentData = Database::fetch_array($result);
+                if ($documentData) {
+                    $documentData['absolute_path_from_document'] = '/document'.$documentData['path'];
+                }
+            }
+            if (isset($documentData['absolute_path_from_document'])) {
+                $return .= get_lang('File').': '.$documentData['absolute_path_from_document'];
+            }
         }
 
         $return .= '</div>';

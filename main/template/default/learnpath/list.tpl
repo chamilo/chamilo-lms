@@ -103,7 +103,9 @@
                         <table class="table table-hover table-striped">
                             <thead>
                             <tr>
-                                <th>{{ "Title"|get_lang }}</th>
+                                <th>
+                                    {{ "Title"|get_lang }}
+                                </th>
                                 {% if is_allowed_to_edit %}
                                     <th>{{ "PublicationDate"|get_lang }}</th>
                                     <th>{{ "ExpirationDate"|get_lang }}</th>
@@ -148,10 +150,9 @@
                                         {% endif %}
                                     {% endif %}
                                     <td>
-                                        {% if not is_allowed_to_edit and row.info_time_prerequisite %}
+                                        {% if row.info_time_prerequisite %}
                                             {{ row.info_time_prerequisite }}
                                         {% endif %}
-
                                         {{ row.action_build }}
                                         {{ row.action_edit }}
                                         {{ row.action_visible }}

@@ -448,11 +448,14 @@ foreach ($categories as $item) {
                     // Si el tiempo empleado es menor que lo necesario mostramos un icono en la columna de acción indicando la advertencia
                     if ($lpTime < ($accumulateWorkTime * 60)) {
                         $linkMinTime = Display::return_icon(
-                                'warning.png',
-                                get_lang('LpMessageTimeMin').' - '.api_time_to_hms($lpTime).' / '.api_time_to_hms(
-                                    $accumulateWorkTime * 60
-                                )
-                            ).'<b>'.api_time_to_hms($lpTime).' / '.api_time_to_hms($accumulateWorkTime * 60).'</b>';
+                            'warning.png',
+                            get_lang('LpMessageTimeMin').' - '.api_time_to_hms($lpTime).' / '.api_time_to_hms(
+                                $accumulateWorkTime * 60
+                            )
+                        );
+                        $linkMinTime .='<b>'.api_time_to_hms($lpTime).' / '.api_time_to_hms($accumulateWorkTime * 60).'</b>';
+                    } else {
+                        $linkMinTime = sprintf(get_lang('YouHaveSpentXTime'), api_time_to_hms($lpTime));
                     }
 
                     // Calculamos el porcentaje superado del tiempo para la barra de "superacion de tiempo mínimo"
@@ -483,7 +486,7 @@ foreach ($categories as $item) {
             $actionUpdateScormFile = '';
             $actionExportToCourseBuild = '';
             // Only for "Chamilo" packages
-            $allowExportCourseFormat = $allowLpChamiloExport && $details['lp_maker'] == 'Chamilo';
+            $allowExportCourseFormat = $allowLpChamiloExport && $details['lp_maker'] === 'Chamilo';
 
             if ($is_allowed_to_edit) {
                 // EDIT LP

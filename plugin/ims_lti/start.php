@@ -18,7 +18,9 @@ if (!$tool) {
 
 $imsLtiPlugin = ImsLtiPlugin::create();
 
-$template = new Template($tool->getName());
+$pageTitle = Security::remove_XSS($tool->getName());
+
+$template = new Template($pageTitle);
 $template->assign('tool', $tool);
 $template->assign(
     'launch_url',
@@ -27,6 +29,6 @@ $template->assign(
 
 $content = $template->fetch('ims_lti/view/start.tpl');
 
-$template->assign('header', $tool->getName());
+$template->assign('header', $pageTitle);
 $template->assign('content', $content);
 $template->display_one_col_template();

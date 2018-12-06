@@ -1,10 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+namespace Chamilo\IntegrationBundle\Component;
+
 /**
- * Class ImsLtiServiceResponse.
+ * Class OutcomeResponse.
+ *
+ * @package Chamilo\IntegrationBundle\Component
  */
-abstract class ImsLtiServiceResponse
+abstract class OutcomeResponse
 {
     const TYPE_REPLACE = 'replace';
     const TYPE_READ = 'read';
@@ -15,17 +19,17 @@ abstract class ImsLtiServiceResponse
      */
     protected $bodyParams;
     /**
-     * @var ImsLtiServiceResponseStatus
+     * @var OutcomeResponseStatus
      */
     private $statusInfo;
 
     /**
-     * ImsLtiServiceResponse constructor.
+     * OutcomeResponse constructor.
      *
-     * @param ImsLtiServiceResponseStatus $statusInfo
-     * @param mixed|null                  $bodyParam
+     * @param OutcomeResponseStatus $statusInfo
+     * @param mixed|null            $bodyParam
      */
-    public function __construct(ImsLtiServiceResponseStatus $statusInfo, $bodyParam = null)
+    public function __construct(OutcomeResponseStatus $statusInfo, $bodyParam = null)
     {
         $this->statusInfo = $statusInfo;
         $this->bodyParams = $bodyParam;
@@ -36,7 +40,7 @@ abstract class ImsLtiServiceResponse
      */
     public function __toString()
     {
-        $xml = new SimpleXMLElement('<imsx_POXEnvelopeResponse></imsx_POXEnvelopeResponse>');
+        $xml = new \SimpleXMLElement('<imsx_POXEnvelopeResponse></imsx_POXEnvelopeResponse>');
         $xml->addAttribute('xmlns', 'http://www.imsglobal.org/services/ltiv1p1/xsd/imsoms_v1p0');
 
         $headerInfo = $xml->addChild('imsx_POXHeader')->addChild('imsx_POXResponseHeaderInfo');
@@ -58,7 +62,7 @@ abstract class ImsLtiServiceResponse
     }
 
     /**
-     * @param SimpleXMLElement $xmlBody
+     * @param \SimpleXMLElement $xmlBody
      */
-    abstract protected function generateBody(SimpleXMLElement $xmlBody);
+    abstract protected function generateBody(\SimpleXMLElement $xmlBody);
 }

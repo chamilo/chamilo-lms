@@ -1,18 +1,22 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+namespace Chamilo\IntegrationBundle\Component;
+
 /**
- * Class ImsLtiReadServiceResponse
+ * Class OutcomeReadResponse.
+ *
+ * @package Chamilo\IntegrationBundle\Component
  */
-class ImsLtiServiceReadResponse extends ImsLtiServiceResponse
+class OutcomeReadResponse extends OutcomeResponse
 {
     /**
-     * ImsLtiServiceReadResponse constructor.
+     * OutcomeReadResponse constructor.
      *
-     * @param ImsLtiServiceResponseStatus $statusInfo
-     * @param mixed|null                  $bodyParam
+     * @param OutcomeResponseStatus $statusInfo
+     * @param mixed|null            $bodyParam
      */
-    public function __construct(ImsLtiServiceResponseStatus $statusInfo, $bodyParam = null)
+    public function __construct(OutcomeResponseStatus $statusInfo, $bodyParam = null)
     {
         $statusInfo->setOperationRefIdentifier('readResult');
 
@@ -20,9 +24,9 @@ class ImsLtiServiceReadResponse extends ImsLtiServiceResponse
     }
 
     /**
-     * @param SimpleXMLElement $xmlBody
+     * @param \SimpleXMLElement $xmlBody
      */
-    protected function generateBody(SimpleXMLElement $xmlBody)
+    protected function generateBody(\SimpleXMLElement $xmlBody)
     {
         $resultResponse = $xmlBody->addChild('readResultResponse');
 

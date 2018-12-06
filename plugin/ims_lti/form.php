@@ -1,13 +1,12 @@
 <?php
 /* For license terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\UserBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+use Chamilo\UserBundle\Entity\User;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
-require './OAuthSimple.php';
 
 api_protect_course_script(false);
 api_block_anonymous_users(false);
@@ -60,13 +59,15 @@ if ($tool->isActiveDeepLinking()) {
     $toolEval = $tool->getGradebookEval();
 
     if (!empty($toolEval)) {
-        $params['lis_result_sourcedid'] = $toolEval->getId().':'.$user->getId();
-        $params['lis_outcome_service_url'] = api_get_path(WEB_PATH).'ims_lti/outcome_service/'.$tool->getId();
+        $params['lis_result_sourcedid'] = json_encode(
+            ['e' => $toolEval->getId(), 'u' => $user->getId(), 'l' => uniqid(), 'lt' => time()]
+        );
+        $params['lis_outcome_service_url'] = api_get_path(WEB_PATH).'lti/os';
         $params['lis_person_sourcedid'] = "$platformDomain:$toolUserId";
-        $params['lis_course_offering_sourcedid'] = "$platformDomain:".$course->getId();
+        $params['lis_course_section_sourcedid'] = "$platformDomain:".$course->getId();
 
         if ($session) {
-            $params['lis_course_offering_sourcedid'] .= ':'.$session->getId();
+            $params['lis_course_section_sourcedid'] .= ':'.$session->getId();
         }
     }
 }
@@ -82,15 +83,19 @@ $params['roles'] = ImsLtiPlugin::getUserRoles($user);
 if ($tool->isSharingName()) {
     $params['lis_person_name_given'] = $user->getFirstname();
     $params['lis_person_name_family'] = $user->getLastname();
-    $params['lis_person_name_full'] = $user->getCompleteName();
+    $params['lis_person_name_full'] = $user->getFirstname().' '.$user->getLastname();
 }
 
 if ($tool->isSharingEmail()) {
     $params['lis_person_contact_email_primary'] = $user->getEmail();
 }
 
-if (api_is_allowed_to_edit(false, true)) {
-    $params['role_scope_mentor'] = ImsLtiPlugin::getRoleScopeMentor($course, $session);
+if (DRH === $user->getStatus()) {
+    $scopeMentor = ImsLtiPlugin::getRoleScopeMentor($user);
+
+    if (!empty($scopeMentor)) {
+        $params['role_scope_mentor'] = $scopeMentor;
+    }
 }
 
 $params['context_id'] = $course->getId();
@@ -105,22 +110,65 @@ $params['tool_consumer_instance_guid'] = $platformDomain;
 $params['tool_consumer_instance_name'] = api_get_setting('siteName');
 $params['tool_consumer_instance_url'] = api_get_path(WEB_PATH);
 $params['tool_consumer_instance_contact_email'] = api_get_setting('emailAdministrator');
+$params['oauth_callback'] = 'about:blank';
 
-$params += $tool->parseCustomParams();
+$customParams = $tool->parseCustomParams();
+$imsLtiPlugin->trimParams($customParams);
 
-$oauth = new OAuthSimple(
-    $tool->getConsumerKey(),
-    $tool->getSharedSecret()
-);
-$oauth->setAction('post');
-$oauth->setSignatureMethod('HMAC-SHA1');
-$oauth->setParameters($params);
-$result = $oauth->sign(array(
-    'path' => $tool->getLaunchUrl(),
-    'parameters' => array(
-        'oauth_callback' => 'about:blank'
-    )
-));
+$substitutables = ImsLti::getSubstitutableParams($user, $course, $session);
+$variables = array_keys($substitutables);
+
+foreach ($customParams as $customKey => $customValue) {
+    if (in_array($customValue, $variables)) {
+        $val = $substitutables[$customValue];
+
+        if (is_array($val)) {
+            $val = current($val);
+
+            if (array_key_exists($val, $params)) {
+                $customParams[$customKey] = $params[$val];
+
+                continue;
+            } else {
+                $val = false;
+            }
+        }
+
+        if (false === $val) {
+            $customParams[$customKey] = $customValue;
+
+            continue;
+        }
+
+        $customParams[$customKey] = $substitutables[$customValue];
+    }
+}
+
+$params += $customParams;
+
+$imsLtiPlugin->trimParams($params);
+
+if (!empty($tool->getConsumerKey()) && !empty($tool->getSharedSecret())) {
+    $consumer = new OAuthConsumer(
+        $tool->getConsumerKey(),
+        $tool->getSharedSecret(),
+        null
+    );
+    $hmacMethod = new OAuthSignatureMethod_HMAC_SHA1();
+
+    $request = OAuthRequest::from_consumer_and_token(
+        $consumer,
+        '',
+        'POST',
+        $tool->getLaunchUrl(),
+        $params
+    );
+    $request->sign_request($hmacMethod, $consumer, '');
+
+    $params = $request->get_parameters();
+}
+
+$imsLtiPlugin->removeUrlParamsFromLaunchParams($tool, $params);
 ?>
 <!DOCTYPE html>
 <html>
@@ -130,19 +178,10 @@ $result = $oauth->sign(array(
 <body>
 <form action="<?php echo $tool->getLaunchUrl() ?>" name="ltiLaunchForm" method="post"
       encType="application/x-www-form-urlencoded">
-    <?php
-    foreach ($result["parameters"] as $key => $values) { //Dump parameters
-        echo '<input type="hidden" name="'.$key.'" value="'.$values.'" />';
-    }
-    ?>
-    <button type="submit">
-        <?php echo $imsLtiPlugin->get_lang('PressToContinue') ?>
-    </button>
+    <?php foreach ($params as $key => $value) { ?>
+        <input type="hidden" name="<?php echo $key ?>" value="<?php echo htmlspecialchars($value) ?>">
+    <?php } ?>
 </form>
-
-<script language="javascript">
-    document.querySelector('form [type="submit"]').style.display = "none";
-    document.ltiLaunchForm.submit();
-</script>
+<script>document.ltiLaunchForm.submit();</script>
 </body>
 </html>

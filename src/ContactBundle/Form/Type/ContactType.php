@@ -6,6 +6,7 @@ namespace Chamilo\ContactBundle\Form\Type;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\Collection;
@@ -36,7 +37,7 @@ class ContactType extends AbstractType
             ->add('lastname')
             ->add('email')
             ->add('subject')
-            ->add('message', 'textarea')
+            ->add('message', TextareaType::class)
             ->add('send', SubmitType::class, ['attr' => ['class' => 'btn btn-primary']])
         ;
     }

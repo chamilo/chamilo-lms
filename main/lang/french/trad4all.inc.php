@@ -8253,4 +8253,5 @@ Ensuite, il recherchera la balise {{student_full_name}} et dupliquera la questio
 $CreateMeeting = "Créer un sondage de réunion";
 $QuestionForNextClass = "Questions pour la classe suivante";
 $NewExerciseAttemptDisabled = "Le portail ne permet pas le démarrage d'exercice pour le moment, revenez un peu plus tard pour essayer à nouveau";
+$PersonalDataOfficer = "Délégué à la protection des données personnelles";
 ?>

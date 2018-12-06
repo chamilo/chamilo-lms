@@ -7,16 +7,16 @@
         {% set legacy_breadcrumb = '' %}
     {% endif %}
 
-    {{
-        sonata_block_render_event(
-            'breadcrumb',
-            {
-                'context': 'chamilo_core.block.breadcrumb',
-                'course': course,
-                'legacy_breadcrumb': legacy_breadcrumb,
-                'current_uri': app.request.requestUri
-            }
-        )
-    }}
+    {#{{#}
+        {#sonata_block_render_event(#}
+            {#'breadcrumb',#}
+            {#{#}
+                {#'context': 'chamilo_core.block.breadcrumb',#}
+                {#'course': course,#}
+                {#'legacy_breadcrumb': legacy_breadcrumb,#}
+                {#'current_uri': app.request.requestUri#}
+            {#}#}
+        {#)#}
+    {#}}#}
 {% endautoescape %}
 

@@ -20,6 +20,15 @@ class NavBuilder implements ContainerAwareInterface
 {
     use ContainerAwareTrait;
 
+    private $regexVoter;
+    private $factory;
+
+    public function __construct(MenuVoter $regexVoter, FactoryInterface $factory)
+    {
+        $this->regexVoter = $regexVoter;
+        $this->factory = $factory;
+    }
+
     /**
      * @param array  $itemOptions The options given to the created menuItem
      * @param string $currentUri  The current URI
@@ -52,18 +61,19 @@ class NavBuilder implements ContainerAwareInterface
     /**
      * Top menu left.
      *
-     * @param FactoryInterface $factory
-     * @param array            $options
+     * @param array $options
      *
      * @return ItemInterface
      */
-    public function menuApp(FactoryInterface $factory, array $options): ItemInterface
+    public function menuApp(array $options): ItemInterface
     {
         $container = $this->container;
         $checker = $container->get('security.authorization_checker');
         $translator = $container->get('translator');
         $router = $container->get('router');
-        $menu = $factory->createItem('root');
+        $factory = $this->factory;
+
+        $menu = $factory->createItem('root', ['childrenAttributes' => ['class' => 'navbar-nav']]);
         $settingsManager = $container->get('chamilo.settings.manager');
         $rootWeb = $router->generate('legacy_index');
 
@@ -85,7 +95,7 @@ class NavBuilder implements ContainerAwareInterface
                     'routeParameters' => ['name' => '../user_portal.php'],
                     'icon' => 'book',
                 ]
-            );
+            )->setLinkAttribute('class', 'jui');
 
             $menu['courses']->addChild(
                 'courses',
@@ -381,9 +391,16 @@ class NavBuilder implements ContainerAwareInterface
 
         // Set CSS classes for the items
         foreach ($menu->getChildren() as $child) {
+            $childClass = '';
+            if ($child->hasChildren()) {
+                $childClass = 'dropdown';
+                $child->setChildrenAttribute('class', 'dropdown-menu');
+            }
+
             $child
                 ->setLinkAttribute('class', 'sidebar-link')
-                ->setAttribute('class', 'nav-item');
+                ->setAttribute('class', 'nav-item '.$childClass);
+
         }
 
         return $menu;

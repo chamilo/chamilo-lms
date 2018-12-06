@@ -1,46 +1,44 @@
 {% autoescape false %}
 <ul class="sidebar-menu scrollable pos-r">
-
-    {% set menu = knp_menu_get('ChamiloCoreBundle:NavBuilder:menuApp') %}
-
+    {% set menu = knp_menu_get('menuApp') %}
     <li class="sidebar-divider"></li>
 
-    <ul class="navbar-nav">
-        {% for item in menu.children %}
-            {% set children = item.children|length %}
-            {% set current = item.isCurrent ? 'active': '' %}
-            <li class="nav-item {{ current }} {{ children > 0 ? 'dropdown' : '' }}">
-                <a id="menu_{{ item.name }}" class='sidebar-link' href="{{ item.uri }}">
-                    <span class="icon-holder">
-                        <i class="fa fa-{{ item.extras.icon }}"></i>
-                    </span>
-                    <span class="title">
-                        {{ item.label }}
-                    </span>
-                    {% if children > 0 %}
-                        <span class="arrow"><i class="fas fa-angle-right"></i></span>
-                    {% endif %}
-                </a>
-                {% if children > 0 %}
-                    <ul id="submenu_{{ item.name }}" class="dropdown-menu">
-                        {% for item in item.children %}
-                        {% set current = item.isCurrent ? 'active': '' %}
-                        <li class="{{ current }}">
-                            <a href="{{ item.uri }}" class="sub-link">
-                                <i class="far fa-circle"></i>
-                                {{ item.label }}
-                            </a>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-            </li>
-        {% endfor %}
-    </ul>
+    {{ knp_menu_render(menu, {'template': '@ChamiloTheme/Menu/left_menu.html.twig'}) }}
 
+    {#<ul class="navbar-nav">#}
+        {#{% for item in menu.children %}#}
+            {#{% set children = item.children|length %}#}
+            {#{% set current = item.isCurrent ? 'active': '' %}#}
+            {#<li class="nav-item {{ current }} {{ children > 0 ? 'dropdown' : '' }}">#}
+                {#<a id="menu_{{ item.name }}" class='sidebar-link' href="{{ item.uri }}">#}
+                    {#<span class="icon-holder">#}
+                        {#<i class="fa fa-{{ item.extras.icon }}"></i>#}
+                    {#</span>#}
+                    {#<span class="title">#}
+                        {#{{ item.label }}#}
+                    {#</span>#}
+                    {#{% if children > 0 %}#}
+                        {#<span class="arrow"><i class="fas fa-angle-right"></i></span>#}
+                    {#{% endif %}#}
+                {#</a>#}
+                {#{% if children > 0 %}#}
+                    {#<ul id="submenu_{{ item.name }}" class="dropdown-menu">#}
+                        {#{% for item in item.children %}#}
+                        {#{% set current = item.isCurrent ? 'active': '' %}#}
+                        {#<li class="{{ current }}">#}
+                            {#<a href="{{ item.uri }}" class="sub-link">#}
+                                {#<i class="far fa-circle"></i>#}
+                                {#{{ item.label }}#}
+                            {#</a>#}
+                        {#</li>#}
+                        {#{% endfor %}#}
+                    {#</ul>#}
+                {#{% endif %}#}
+            {#</li>#}
+        {#{% endfor %}#}
+    {#</ul>#}
 
     <li class="sidebar-divider"></li>
-
     <li class="nav-item">
         <a class='sidebar-link' href="https://docs.chamilo.org/">
             <span class="icon-holder">

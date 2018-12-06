@@ -25,6 +25,12 @@ services:
         exclude: '../../Repository/{BranchSyncRepository.php,CourseRepository.php}'
         tags: ['doctrine.repository_service']
 
+    menu.voter.regex:
+        class: Chamilo\CoreBundle\Menu\MenuVoter
+        arguments: [ '@request_stack' ]
+        tags:
+            - { name: knp_menu.voter }
+
     # Entity managers
     chamilo_core.entity.manager.course_manager:
         class: '%chamilo_core.entity.manager.course_manager.class%'
@@ -210,10 +216,12 @@ services:
 
     chamilo_core.menu.nav_builder:
         class: Chamilo\CoreBundle\Menu\NavBuilder
+        arguments: ['@menu.voter.regex']
         calls:
             - [setContainer, ['@service_container']]
         tags:
-            - {name: mopa_bootstrap.menu, alias: chamilo_core.menu.nav}
+#            - {name: mopa_bootstrap.menu, alias: chamilo_core.menu.nav}
+            - {name: knp_menu.menu_builder, method: menuApp, alias: menuApp }
 
     chamilo_core.menu.course_menu_builder:
         class: Chamilo\CoreBundle\Menu\LeftMenuBuilder

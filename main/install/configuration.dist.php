@@ -1048,9 +1048,13 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Add a minimum time limit to be in the learning path
 // in order to get the last item completed
 // Requires a DB change:
-// CREATE TABLE track_e_access_complete (id int(11) NOT NULL AUTO_INCREMENT, user_id int(11) NOT NULL, date_reg datetime NOT NULL, tool varchar(255) NOT NULL,  tool_id int(11) NOT NULL,   tool_id_detail int(11) NOT NULL,  action varchar(255) NOT NULL,   action_details varchar(255) NOT NULL, current_id int(11) NOT NULL,  ip_user varchar(255) NOT NULL,  user_agent varchar(255) NOT NULL,   session_id int(11) NOT NULL,   c_id int(11) NOT NULL,   ch_sid varchar(255) NOT NULL,   login_as int(11) NOT NULL,   info longtext NOT NULL,   url text NOT NULL,   PRIMARY KEY (id) ) ENGINE=InnoDB AUTO_INCREMENT=13989 DEFAULT CHARSET=utf8;
+
 // ALTER TABLE c_lp ADD accumulate_work_time INT NOT NULL;
 //$_configuration['lp_minimum_time'] = false;
+
+// Allow detail user activity
+// CREATE TABLE track_e_access_complete (id int(11) NOT NULL AUTO_INCREMENT, user_id int(11) NOT NULL, date_reg datetime NOT NULL, tool varchar(255) NOT NULL,  tool_id int(11) NOT NULL,   tool_id_detail int(11) NOT NULL,  action varchar(255) NOT NULL,   action_details varchar(255) NOT NULL, current_id int(11) NOT NULL,  ip_user varchar(255) NOT NULL,  user_agent varchar(255) NOT NULL,   session_id int(11) NOT NULL,   c_id int(11) NOT NULL,   ch_sid varchar(255) NOT NULL,   login_as int(11) NOT NULL,   info longtext NOT NULL,   url text NOT NULL,   PRIMARY KEY (id) ) ENGINE=InnoDB AUTO_INCREMENT=13989 DEFAULT CHARSET=utf8;
+//$_configuration['allow_track_complete'] = false;
 
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email

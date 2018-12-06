@@ -437,9 +437,9 @@ class Tracking
                         $time_for_total = $row['mytime'];
 
                         // ## NSR sistema de tiempos nuevo
-                        if (api_get_configuration_value('lp_minimum_time')) {
+                        if (api_get_configuration_value('allow_track_complete')) {
                             $timeCourse = self::getCalculateTime($user_id, $session_id);
-                            $_SESSION['trackTimeCourse'] = $timeCourse;
+                            Session::write('trackTimeCourse', $timeCourse);
                             $lp_time = $timeCourse[TOOL_LEARNPATH];
                             $lpTime = (int) $lp_time[$lp_id];
                             $time_for_total = $lpTime;

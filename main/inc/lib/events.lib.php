@@ -2465,7 +2465,7 @@ class Event
      */
     public static function registerLog($logInfo)
     {
-        if (!api_get_configuration_value('lp_minimum_time')) {
+        if (!api_get_configuration_value('allow_track_complete')) {
             return false;
         }
         $loginAs = (int) (Session::read('login_as') === true);

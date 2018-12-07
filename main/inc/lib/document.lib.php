@@ -4543,7 +4543,7 @@ class DocumentManager
             return '';
         }
 
-        return '__'.intval($sessionId).'__'.intval($groupId);
+        return '__'.(int) $sessionId.'__'.(int) $groupId;
     }
 
     /**
@@ -4680,7 +4680,7 @@ class DocumentManager
             return false;
         }
 
-        $sessionId = intval($sessionId);
+        $sessionId = (int) $sessionId;
         $fileNameEscape = Database::escape_string($fileName);
 
         $fileNameWithSuffix = self::fixDocumentName(
@@ -6388,6 +6388,155 @@ class DocumentManager
         return $list;
     }
 
+
+    /**
+     * @param CDocument $document
+     * @param           $path
+     * @param           $realPath
+     * @param           $content
+     * @param           $visibility
+     * @param           $group
+     *
+     * @return bool|CDocument
+     */
+    public static function addFileToDocument(CDocument $document, $path, $realPath, $content, $visibility, $group)
+    {
+        $fileType = $document->getFiletype();
+        $resourceNode = $document->getResourceNode();
+
+        if (!$resourceNode) {
+            return false;
+        }
+
+        $em = Database::getManager();
+        $title = $document->getTitle();
+
+        // Only create a ResourceFile and Media if there's a file involved
+        if ($fileType === 'file') {
+            $mediaManager = Container::$container->get('sonata.media.manager.media');
+
+            $resourceFile = $resourceNode->getResourceFile();
+            if (empty($resourceFile)) {
+                /** @var \Chamilo\MediaBundle\Entity\Media $media */
+                $media = $mediaManager->create();
+            } else {
+                // If file already exists then we updated it
+                $media = $resourceFile->getMedia();
+            }
+
+            $media->setName($title);
+
+            $fileName = basename($path);
+            $extension = pathinfo($fileName, PATHINFO_EXTENSION);
+            $media->setContext('default');
+
+            $provider = 'sonata.media.provider.file';
+            $isImage = in_array($extension, ['jpeg', 'jpg', 'gif', 'png']);
+            if ($isImage) {
+                $provider = 'sonata.media.provider.image';
+            }
+            error_log($provider);
+
+            $media->setProviderName($provider);
+            $media->setEnabled(true);
+
+            if ($content instanceof UploadedFile) {
+                $file = $content;
+                error_log('1');
+                $media->setSize($file->getSize());
+            } else {
+                // $path points to a file in the directory
+                if (file_exists($realPath) && !is_dir($realPath)) {
+                    $media->setSize(filesize($realPath));
+                    if ($isImage) {
+                        $size = getimagesize($realPath);
+                        $media->setWidth($size[0]);
+                        $media->setHeight($size[1]);
+                    }
+                    $file = $realPath;
+                    error_log('2');
+                } else {
+                    // We get the content and create a file
+                    $handle = tmpfile();
+                    fwrite($handle, $content);
+                    $file = new \Sonata\MediaBundle\Extra\ApiMediaFile($handle);
+                    $file->setMimetype($media->getContentType());
+                    error_log($file->getSize());
+                    error_log('3');
+                }
+            }
+
+            $media->setBinaryContent($file);
+            $mediaManager->save($media, true);
+
+            $resourceFile = $resourceNode->getResourceFile();
+            if (empty($resourceFile)) {
+                $resourceFile = new ResourceFile();
+                $resourceFile->setMedia($media);
+            } else {
+                $resourceFile->setMedia($media);
+            }
+            $resourceFile->setName($title);
+            $em->persist($resourceFile);
+            $resourceNode->setResourceFile($resourceFile);
+            $em->persist($resourceNode);
+        }
+
+        // By default visibility is published
+        // @todo change visibility
+        //$newVisibility = ResourceLink::VISIBILITY_PUBLISHED;
+        $visibility = (int) $visibility;
+        if (empty($visibility)) {
+            $visibility = ResourceLink::VISIBILITY_PUBLISHED;
+        }
+
+        $link = new ResourceLink();
+        $link
+            ->setCourse($document->getCourse())
+            ->setSession($document->getSession())
+            ->setGroup($group)
+            //->setUser($toUser)
+            ->setResourceNode($resourceNode)
+            ->setVisibility($visibility)
+        ;
+
+        $rights = [];
+        switch ($visibility) {
+            case ResourceLink::VISIBILITY_PENDING:
+            case ResourceLink::VISIBILITY_DRAFT:
+                $editorMask = ResourceNodeVoter::getEditorMask();
+                $resourceRight = new ResourceRight();
+                $resourceRight
+                    ->setMask($editorMask)
+                    ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
+                ;
+                $rights[] = $resourceRight;
+
+                break;
+        }
+
+        if (!empty($rights)) {
+            foreach ($rights as $right) {
+                $link->addResourceRight($right);
+            }
+        }
+
+        $em->persist($link);
+        $em->persist($document);
+        $em->flush();
+
+        $documentId = $document->getIid();
+        if ($documentId) {
+            $table = Database::get_course_table(TABLE_DOCUMENT);
+            $sql = "UPDATE $table SET id = iid WHERE iid = $documentId";
+            Database::query($sql);
+
+            return $document;
+        }
+
+        return false;
+    }
+
     /**
      * Adds a new document to the database.
      *
@@ -6447,7 +6596,6 @@ class DocumentManager
         $readonly = (int) $readonly;
 
         $em = Database::getManager();
-
         $documentRepo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
 
         $parentNode = null;
@@ -6456,6 +6604,14 @@ class DocumentManager
             if ($parent) {
                 $parentNode = $parent->getResourceNode();
             }
+        }
+
+        $criteria = ['path' => $path, 'course' => $courseEntity];
+        $document = $documentRepo->findOneBy($criteria);
+
+        // Document already exists
+        if ($document) {
+            return false;
         }
 
         $document = new CDocument();
@@ -6477,120 +6633,9 @@ class DocumentManager
         $resourceNode->setParent($parentNode);
         $document->setResourceNode($resourceNode);
 
-        // Only create a ResourseFile and Media if there's a file involved
-        if ($fileType === 'file') {
-            $mediaManager = Container::$container->get('sonata.media.manager.media');
-            /** @var \Chamilo\MediaBundle\Entity\Media $media */
-            $media = $mediaManager->create();
-            $media->setName($title);
+        $document = self::addFileToDocument($document, $path, $realPath, $content, $visibility, $group);
 
-            $fileName = basename($path);
-            $extension = pathinfo($fileName, PATHINFO_EXTENSION);
-            $media->setContext('default');
-
-            $provider = 'sonata.media.provider.file';
-            $isImage = in_array($extension, ['jpeg', 'jpg', 'gif', 'png']);
-            if ($isImage) {
-                $provider = 'sonata.media.provider.image';
-            }
-
-            $media->setProviderName($provider);
-            $media->setEnabled(true);
-
-            if ($content instanceof UploadedFile) {
-                $file = $content;
-                $media->setSize($file->getSize());
-            } else {
-                // $path points to a file in the directory
-                if (file_exists($realPath) && !is_dir($realPath)) {
-                    $media->setSize(filesize($realPath));
-                    if ($isImage) {
-                        $size = getimagesize($realPath);
-                        $media->setWidth($size[0]);
-                        $media->setHeight($size[1]);
-                    }
-                    $file = $realPath;
-                } else {
-                    // We get the content and create a file
-                    $handle = tmpfile();
-                    fwrite($handle, $content);
-                    $file = new \Sonata\MediaBundle\Extra\ApiMediaFile($handle);
-                    $file->setMimetype($media->getContentType());
-                }
-            }
-
-            $media->setBinaryContent($file);
-            $mediaManager->save($media, true);
-
-            $resourceFile = new ResourceFile();
-            $resourceFile->setMedia($media);
-            $resourceFile->setName($title);
-            $em->persist($resourceFile);
-
-            $resourceNode->setResourceFile($resourceFile);
-            $em->persist($resourceNode);
-        }
-
-        // By default visibility is published
-        // @todo change visibility
-        //$newVisibility = ResourceLink::VISIBILITY_PUBLISHED;
-
-        if (is_null($visibility)) {
-            $visibility = ResourceLink::VISIBILITY_PUBLISHED;
-        }
-
-        $link = new ResourceLink();
-        $link
-            ->setCourse($courseEntity)
-            ->setSession($session)
-            ->setGroup($group)
-            //->setUser($toUser)
-            ->setResourceNode($resourceNode)
-            ->setVisibility($visibility)
-        ;
-
-        $rights = [];
-        switch ($visibility) {
-            case ResourceLink::VISIBILITY_PENDING:
-            case ResourceLink::VISIBILITY_DRAFT:
-                $editorMask = ResourceNodeVoter::getEditorMask();
-                $resourceRight = new ResourceRight();
-                $resourceRight
-                    ->setMask($editorMask)
-                    ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
-                ;
-                $rights[] = $resourceRight;
-
-                break;
-        }
-
-        if (!empty($rights)) {
-            foreach ($rights as $right) {
-                $link->addResourceRight($right);
-            }
-        }
-
-        $em->persist($link);
-        $em->persist($document);
-        $em->flush();
-
-        $documentId = $document->getIid();
-        if ($documentId) {
-            $table = Database::get_course_table(TABLE_DOCUMENT);
-            $sql = "UPDATE $table SET id = iid WHERE iid = $documentId";
-            Database::query($sql);
-
-            /*if ($saveVisibility) {
-                api_set_default_visibility(
-                    $documentId,
-                    TOOL_DOCUMENT,
-                    $groupId,
-                    $courseInfo,
-                    $sessionId,
-                    $userId
-                );
-            }*/
-
+        if ($document) {
             $allowNotification = api_get_configuration_value('send_notification_when_document_added');
             if ($sendNotification && $allowNotification) {
                 $courseTitle = $courseInfo['title'];
@@ -6616,6 +6661,7 @@ class DocumentManager
 
             return $document;
         }
+
 
         return false;
     }

@@ -259,6 +259,8 @@ function handle_uploaded_document(
         $groupInfo = GroupManager::get_group_properties($groupId);
     }
 
+    $group = api_get_group_entity($groupId);
+
     // Just in case process_uploaded_file is not called
     $maxSpace = DocumentManager::get_course_quota();
 
@@ -364,9 +366,6 @@ function handle_uploaded_document(
             // Size of the uploaded file (in bytes)
             $fileSize = $uploadedFile['size'];
 
-            // File permissions
-            $filePermissions = api_get_permissions_for_new_files();
-
             // Example: /var/www/chamilo/courses/xxx/document/folder/picture.jpg
             $fullPath = $whereToSave.$fileSystemName;
 
@@ -379,171 +378,80 @@ function handle_uploaded_document(
                 $sessionId
             );
 
+            $documentRepo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
+            $document = $documentRepo->find($docId);
+
+            $request = Container::getRequest();
+            $content = $request->files->get($uploadKey);
+            if (is_array($content)) {
+                $content = $content[0];
+            }
+
             // What to do if the target file exists
             switch ($whatIfFileExists) {
                 // Overwrite the file if it exists
                 case 'overwrite':
-                    // Check if the target file exists, so we can give another message
-                    $fileExists = file_exists($fullPath);
+                    if ($document) {
+                        // Update file size
+                        update_existing_document(
+                            $courseInfo,
+                            $document->getIid(),
+                            $uploadedFile['size']
+                        );
 
-                    if (moveUploadedFile($uploadedFile, $fullPath)) {
-                        chmod($fullPath, $filePermissions);
+                        $document = DocumentManager::addFileToDocument(
+                            $document,
+                            $filePath,
+                            null,
+                            $content,
+                            null,
+                            null,
+                            $group
+                        );
 
-                        if ($fileExists && $docId) {
-                            // UPDATE DATABASE
-                            $documentId = DocumentManager::get_document_id(
-                                $courseInfo,
-                                $filePath
-                            );
-                            if (is_numeric($documentId)) {
-                                // Update file size
-                                update_existing_document(
-                                    $courseInfo,
-                                    $documentId,
-                                    $uploadedFile['size']
-                                );
-
-                                // Update document item_property
-                                api_item_property_update(
-                                    $courseInfo,
-                                    TOOL_DOCUMENT,
-                                    $documentId,
-                                    'DocumentUpdated',
-                                    $userId,
-                                    $groupInfo,
-                                    $toUserId,
-                                    null,
-                                    null,
-                                    $sessionId
-                                );
-
-                                // Redo visibility
-                                api_set_default_visibility(
-                                    $documentId,
-                                    TOOL_DOCUMENT,
-                                    null,
-                                    $courseInfo
-                                );
-                            } else {
-                                // There might be cases where the file exists on disk but there is no registration of
-                                // that in the database
-                                // In this case, and if we are in overwrite mode, overwrite and create the db record
-                                $documentId = DocumentManager::addDocument(
-                                    $courseInfo,
-                                    $filePath,
-                                    'file',
-                                    $fileSize,
-                                    $documentTitle,
-                                    $comment,
-                                    0,
-                                    true,
-                                    $groupId,
-                                    $sessionId
-                                );
-
-                                if ($documentId) {
-                                    // Put the document in item_property update
-                                    api_item_property_update(
-                                        $courseInfo,
-                                        TOOL_DOCUMENT,
-                                        $documentId,
-                                        'DocumentAdded',
-                                        $userId,
-                                        $groupInfo,
-                                        $toUserId,
-                                        null,
-                                        null,
-                                        $sessionId
-                                    );
-
-                                    // Redo visibility
-                                    api_set_default_visibility(
-                                        $documentId,
-                                        TOOL_DOCUMENT,
-                                        null,
-                                        $courseInfo
-                                    );
-                                }
-                            }
-
-                            // If the file is in a folder, we need to update all parent folders
-                            item_property_update_on_folder($courseInfo, $uploadPath, $userId);
-
-                            // Display success message with extra info to user
-                            if ($output) {
-                                Display::addFlash(
-                                    Display::return_message(
-                                        get_lang('UplUploadSucceeded').'<br /> '.
-                                        $documentTitle.' '.get_lang('UplFileOverwritten'),
-                                        'confirmation',
-                                        false
-                                    )
-                                );
-                            }
-
-                            return $filePath;
-                        } else {
-                            // Put the document data in the database
-                            $documentId = DocumentManager::addDocument(
-                                $courseInfo,
-                                $filePath,
-                                'file',
-                                $fileSize,
-                                $documentTitle,
-                                $comment,
-                                0,
-                                true,
-                                $groupId,
-                                $sessionId
-                            );
-
-                            if ($documentId) {
-                                // Put the document in item_property update
-                                api_item_property_update(
-                                    $courseInfo,
-                                    TOOL_DOCUMENT,
-                                    $documentId,
-                                    'DocumentAdded',
-                                    $userId,
-                                    $groupInfo,
-                                    $toUserId,
-                                    null,
-                                    null,
-                                    $sessionId
-                                );
-
-                                // Redo visibility
-                                api_set_default_visibility($documentId, TOOL_DOCUMENT, null, $courseInfo);
-                            }
-
-                            // If the file is in a folder, we need to update all parent folders
-                            item_property_update_on_folder($courseInfo, $uploadPath, $userId);
-
-                            // Display success message to user
-                            if ($output) {
-                                Display::addFlash(
-                                    Display::return_message(
-                                        get_lang('UplUploadSucceeded').'<br /> '.$documentTitle,
-                                        'confirmation',
-                                        false
-                                    )
-                                );
-                            }
-
-                            return $filePath;
-                        }
-                    } else {
-                        if ($output) {
+                        // Display success message with extra info to user
+                        if ($document && $output) {
                             Display::addFlash(
                                 Display::return_message(
-                                    get_lang('UplUnableToSaveFile'),
-                                    'error',
+                                    get_lang('UplUploadSucceeded').'<br /> '.
+                                    $document->getTitle().' '.get_lang('UplFileOverwritten'),
+                                    'confirmation',
                                     false
                                 )
                             );
                         }
 
-                        return false;
+                        return $document;
+                    } else {
+                        // Put the document data in the database
+                        $document = DocumentManager::addDocument(
+                            $courseInfo,
+                            $filePath,
+                            'file',
+                            $fileSize,
+                            $documentTitle,
+                            $comment,
+                            0,
+                            null,
+                            $groupId,
+                            $sessionId,
+                            0,
+                            true,
+                            $content
+                        );
+
+                        // Display success message to user
+                        if ($document) {
+                            Display::addFlash(
+                                Display::return_message(
+                                    get_lang('UplUploadSucceeded').'<br /> '.$documentTitle,
+                                    'confirmation',
+                                    false
+                                )
+                            );
+                        }
+
+                        return $document;
                     }
                     break;
                 case 'rename':
@@ -567,63 +475,40 @@ function handle_uploaded_document(
                     $documentTitle = disable_dangerous_file($cleanName);
                     $filePath = $uploadPath.$fileSystemName;
 
-                    $request = Container::getRequest();
-                    $content = $request->files->get($uploadKey);
-                    if (is_array($content)) {
-                        $content = $content[0];
-                    }
+                    // Put the document data in the database
+                    $document = DocumentManager::addDocument(
+                        $courseInfo,
+                        $filePath,
+                        'file',
+                        $fileSize,
+                        $documentTitle,
+                        $comment, // comment
+                        0, // read only
+                        true, // save visibility
+                        $groupId,
+                        $sessionId,
+                        0,
+                        true,
+                        $content,
+                        $parentId
+                    );
 
-                    //if (moveUploadedFile($uploadedFile, $fullPath)) {
-                    if (true) {
-                        ///chmod($fullPath, $filePermissions);
-                        // Put the document data in the database
-                        $document = DocumentManager::addDocument(
-                            $courseInfo,
-                            $filePath,
-                            'file',
-                            $fileSize,
-                            $documentTitle,
-                            $comment, // comment
-                            0, // read only
-                            true, // save visibility
-                            $groupId,
-                            $sessionId,
-                            0,
-                            true,
-                            $content,
-                            $parentId
+                    // Display success message to user
+                    if ($output) {
+                        Display::addFlash(
+                            Display::return_message(
+                                get_lang('UplUploadSucceeded').'<br />'.
+                                get_lang('UplFileSavedAs').' '.$document->getTitle(),
+                                'success',
+                                false
+                            )
                         );
-
-                        // Display success message to user
-                        if ($output) {
-                            Display::addFlash(
-                                Display::return_message(
-                                    get_lang('UplUploadSucceeded').'<br />'.
-                                    get_lang('UplFileSavedAs').' '.$document->getTitle(),
-                                    'success',
-                                    false
-                                )
-                            );
-                        }
-
-                        return $document;
-                    } else {
-                        /*if ($output) {
-                            Display::addFlash(
-                                Display::return_message(
-                                    get_lang('UplUnableToSaveFile'),
-                                    'error',
-                                    false
-                                )
-                            );
-                        }
-
-                        return false;*/
                     }
+
+                    return $document;
                     break;
                 case 'nothing':
-                    $fileExists = file_exists($fullPath);
-                    if ($fileExists) {
+                    if ($document) {
                         if ($output) {
                             Display::addFlash(
                                 Display::return_message(
@@ -638,55 +523,31 @@ function handle_uploaded_document(
                     // no break
                 default:
                     // Only save the file if it doesn't exist or warn user if it does exist
-                    if (file_exists($fullPath) && $docId) {
+                    if ($document) {
                         if ($output) {
                             Display::addFlash(
                                 Display::return_message($cleanName.' '.get_lang('UplAlreadyExists'), 'warning', false)
                             );
                         }
                     } else {
-                        if (moveUploadedFile($uploadedFile, $fullPath)) {
-                            //chmod($fullPath, $filePermissions);
+                        // Put the document data in the database
+                        $document = DocumentManager::addDocument(
+                            $courseInfo,
+                            $filePath,
+                            'file',
+                            $fileSize,
+                            $documentTitle,
+                            $comment,
+                            0,
+                            true,
+                            $groupId,
+                            $sessionId,
+                            0,
+                            true,
+                            $content
+                        );
 
-                            // Put the document data in the database
-                            $documentId = DocumentManager::addDocument(
-                                $courseInfo,
-                                $filePath,
-                                'file',
-                                $fileSize,
-                                $documentTitle,
-                                $comment,
-                                0,
-                                true,
-                                $groupId,
-                                $sessionId
-                            );
-
-                            if ($documentId) {
-                                // Update document item_property
-                                api_item_property_update(
-                                    $courseInfo,
-                                    TOOL_DOCUMENT,
-                                    $documentId,
-                                    'DocumentAdded',
-                                    $userId,
-                                    $groupInfo,
-                                    $toUserId,
-                                    null,
-                                    null,
-                                    $sessionId
-                                );
-                                // Redo visibility
-                                api_set_default_visibility($documentId, TOOL_DOCUMENT, null, $courseInfo);
-                            }
-
-                            // If the file is in a folder, we need to update all parent folders
-                            item_property_update_on_folder(
-                                $courseInfo,
-                                $uploadPath,
-                                $userId
-                            );
-
+                        if ($document) {
                             // Display success message to user
                             if ($output) {
                                 Display::addFlash(
@@ -698,7 +559,7 @@ function handle_uploaded_document(
                                 );
                             }
 
-                            return $filePath;
+                            return $document;
                         } else {
                             if ($output) {
                                 Display::addFlash(
@@ -709,8 +570,6 @@ function handle_uploaded_document(
                                     )
                                 );
                             }
-
-                            return false;
                         }
                     }
                     break;

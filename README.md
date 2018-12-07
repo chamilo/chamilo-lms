@@ -11,7 +11,6 @@ Chamilo is an e-learning platform, also called "LMS" or "LCMS" published under G
 
 ## Quick install
 
-If you want a detail and explanation of all of the steps please read the "Installation Guide".
 We assume you have already installed "yarn" and "composer" and you're installing the portal in a domain,
 not in a sub folder inside a domain.
 

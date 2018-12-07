@@ -631,10 +631,11 @@ class Statistics
      *
      * @param bool $distinct        Whether to only give distinct users stats, or *all* logins
      * @param int  $sessionDuration
+     * @param bool $completeMissingDays Whether to fill the daily gaps (if any) when getting a list of logins
      *
      * @return array
      */
-    public static function getRecentLoginStats($distinct = false, $sessionDuration = 0)
+    public static function getRecentLoginStats($distinct = false, $sessionDuration = 0, $completeMissingDays = true)
     {
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -650,6 +651,7 @@ class Statistics
         $date = new DateTime($now);
         $date->sub(new DateInterval('P15D'));
         $newDate = $date->format('Y-m-d h:i:s');
+        $totalLogin = self::buildDatesArray($newDate, $now, true);
 
         $field = 'login_id';
         if ($distinct) {
@@ -665,9 +667,9 @@ class Statistics
                 GROUP BY date(login_date)";
 
         $res = Database::query($sql);
-        $totalLogin = [];
         while ($row = Database::fetch_array($res, 'ASSOC')) {
-            $totalLogin[$row['login_date']] = $row['number'];
+            $monthAndDay = substr($row['login_date'], 5, 5);
+            $totalLogin[$monthAndDay] = $row['number'];
         }
 
         return $totalLogin;
@@ -1072,5 +1074,42 @@ class Statistics
             $totalLogin,
             false
         );
+    }
+    /**
+     * Returns an array with indexes as the 'yyyy-mm-dd' format of each date
+     * within the provided range (including limits). Dates are assumed to be
+     * given in UTC
+     * @param string $startDate Start date, in Y-m-d or Y-m-d h:i:s format
+     * @param string $endDate End date, in Y-m-d or Y-m-d h:i:s format
+     * @param bool   $removeYear Whether to remove the year in the results (for easier reading)
+     * @return array|bool False on error in the params, array of [date1 => 0, date2 => 0, ...] otherwise
+     */
+    public static function buildDatesArray($startDate, $endDate, $removeYear = false)
+    {
+        if (strlen($startDate) > 10) {
+            $startDate = substr($startDate, 0, 10);
+        }
+        if (strlen($endDate) > 10) {
+            $endDate = substr($endDate, 0, 10);
+        }
+        if (!preg_match('/\d\d\d\d-\d\d-\d\d/', $startDate)) {
+            return false;
+        }
+        if (!preg_match('/\d\d\d\d-\d\d-\d\d/', $startDate)) {
+            return false;
+        }
+        $startTimestamp = strtotime($startDate);
+        $endTimestamp = strtotime($endDate);
+        $list = [];
+        for ($time = $startTimestamp; $time < $endTimestamp; $time += 86400) {
+            $datetime = api_get_utc_datetime($time);
+            if ($removeYear) {
+                $datetime = substr($datetime, 5, 5);
+            } else {
+                $dateTime = substr($datetime, 0, 10);
+            }
+            $list[$datetime] = 0;
+        }
+        return $list;
     }
 }

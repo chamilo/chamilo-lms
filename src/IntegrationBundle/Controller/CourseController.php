@@ -143,7 +143,7 @@ class CourseController extends BaseController
         /** @var User $user */
         $user = $this->getUser();
         $course = $this->getCourse();
-        $session = $this->getSession();
+        $session = $this->getCourseSession();
 
         if (empty($tool->getCourse()) || $tool->getCourse()->getId() !== $course->getId()) {
             throw $this->createAccessDeniedException('');

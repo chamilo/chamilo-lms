@@ -57,7 +57,7 @@ abstract class BaseController extends Controller
     /**
      * @return Session|null
      */
-    public function getSession()
+    public function getCourseSession()
     {
         $sessionId = $this->getRequest()->getSession()->get('id_session', 0);
 

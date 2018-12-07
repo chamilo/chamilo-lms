@@ -47,7 +47,7 @@ $charset = 'utf-8';
 
 if ($allowDownloadDocumentsByApiKey) {
     try {
-        if ($action != 'download') {
+        if ($action !== 'download') {
             throw new Exception(get_lang('SelectAnAction'));
         }
 

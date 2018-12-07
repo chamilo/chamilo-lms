@@ -79,7 +79,7 @@ $groupId = api_get_group_id();
 $document_data = [];
 
 if (isset($_REQUEST['id'])) {
-    $document_data = DocumentManager::get_document_data_by_id(
+    $documentData = DocumentManager::get_document_data_by_id(
         $_REQUEST['id'],
         $courseCode,
         true,
@@ -87,8 +87,8 @@ if (isset($_REQUEST['id'])) {
     );
 }
 
-if (!empty($sessionId) && empty($document_data)) {
-    $document_data = DocumentManager::get_document_data_by_id(
+if (!empty($sessionId) && empty($documentData)) {
+    $documentData = DocumentManager::get_document_data_by_id(
         $_REQUEST['id'],
         $courseCode,
         true,
@@ -102,19 +102,19 @@ if (!empty($groupId)) {
     $groupIid = $group_properties['iid'];
 }
 
-if (empty($document_data)) {
+if (empty($documentData)) {
     if (api_is_in_group()) {
         $document_id = DocumentManager::get_document_id($_course, $group_properties['directory']);
-        $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
-        $dir = $document_data['path'];
-        $folder_id = $document_data['id'];
+        $documentData = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
+        $dir = $documentData['path'];
+        $folder_id = $documentData['id'];
     } else {
         $dir = '/';
         $folder_id = 0;
     }
 } else {
-    $folder_id = $document_data['id'];
-    $dir = $document_data['path'];
+    $folder_id = $documentData['id'];
+    $dir = $documentData['path'];
 }
 
 // Please, do not modify this dirname formatting
@@ -139,12 +139,12 @@ if ($is_certificate_mode) {
         api_get_course_info(),
         '/certificates'
     );
-    $document_data = DocumentManager::get_document_data_by_id(
+    $documentData = DocumentManager::get_document_data_by_id(
         $document_id,
         api_get_course_id(),
         true
     );
-    $folder_id = $document_data['id'];
+    $folder_id = $documentData['id'];
     $dir = '/certificates/';
 }
 
@@ -510,55 +510,41 @@ if ($form->validate()) {
     $extension = 'html';
     $content = Security::remove_XSS($values['content'], COURSEMANAGERLOWSECURITY);
 
-    // Don't create file with the same name.
-    /*if (file_exists($filepath.$filename.'.'.$extension)) {
-        Display::addFlash(Display::return_message(get_lang('FileExists').' '.$title, 'error', false));
-        Display:: display_header($nameTools, 'Doc');
-        Display:: display_footer();
-        exit;
-    }*/
+    $content = str_replace(
+        api_get_path(WEB_COURSE_PATH),
+        api_get_configuration_value('url_append').api_get_path(REL_COURSE_PATH),
+        $content
+    );
+    $save_file_path = $dir.$filename.'.'.$extension;
 
-    if (true) {
-        $content = str_replace(
-            api_get_path(WEB_COURSE_PATH),
-            api_get_configuration_value('url_append').api_get_path(REL_COURSE_PATH),
-            $content
-        );
-        $save_file_path = $dir.$filename.'.'.$extension;
+    $document = DocumentManager::addDocument(
+        $_course,
+        $save_file_path,
+        'file',
+        '',
+        $title,
+        $_POST['comment'] ?? '',
+        $readonly,
+        null,
+        0,
+        0,
+        0,
+        true,
+        $content
+    );
 
-        $document = DocumentManager::addDocument(
-            $_course,
-            $save_file_path,
-            'file',
-            '',
-            $title,
-            $_POST['comment'] ?? '',
-            $readonly,
-            null,
-            0,
-            0,
-            0,
-            true,
-            $content
-        );
-
-        if ($document) {
-            $certificate_condition = '';
-            if ($is_certificate_mode) {
-                $df = DocumentManager::get_default_certificate_id($_course['real_id']);
-                if (!isset($df)) {
-                    DocumentManager::attach_gradebook_certificate($_course['real_id'], $document_id);
-                }
-                $certificate_condition = '&certificate=true&curdirpath=/certificates';
+    if ($document) {
+        $certificate_condition = '';
+        if ($is_certificate_mode) {
+            $df = DocumentManager::get_default_certificate_id($_course['real_id']);
+            if (!isset($df)) {
+                DocumentManager::attach_gradebook_certificate($_course['real_id'], $document_id);
             }
-            Display::addFlash(Display::return_message(get_lang('ItemAdded')));
-            header('Location: document.php?'.api_get_cidreq().'&id='.$folder_id.$certificate_condition);
-            exit();
-        } else {
-            Display::addFlash(Display::return_message(get_lang('Impossible'), 'error'));
-            header('Location: document.php?'.api_get_cidreq().'&id='.$folder_id);
-            exit();
+            $certificate_condition = '&certificate=true&curdirpath=/certificates';
         }
+        Display::addFlash(Display::return_message(get_lang('ItemAdded')));
+        header('Location: document.php?'.api_get_cidreq().'&id='.$folder_id.$certificate_condition);
+        exit();
     } else {
         Display::addFlash(Display::return_message(get_lang('Impossible'), 'error'));
         header('Location: document.php?'.api_get_cidreq().'&id='.$folder_id);
@@ -570,14 +556,14 @@ if ($form->validate()) {
     $array_len = count($dir_array);
 
     // Breadcrumb for the current directory root path
-    if (!empty($document_data)) {
-        if (empty($document_data['parents'])) {
+    if (!empty($documentData)) {
+        if (empty($documentData['parents'])) {
             $interbreadcrumb[] = [
                 'url' => '#',
-                'name' => $document_data['title'],
+                'name' => $documentData['title'],
             ];
         } else {
-            foreach ($document_data['parents'] as $document_sub_data) {
+            foreach ($documentData['parents'] as $document_sub_data) {
                 $interbreadcrumb[] = [
                     'url' => $document_sub_data['document_url'],
                     'name' => $document_sub_data['title'],

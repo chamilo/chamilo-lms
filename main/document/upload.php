@@ -57,14 +57,10 @@ $group_properties = [];
 
 $htmlHeadXtra[] = '<script>
 function check_unzip() {
-    if (document.upload.unzip.checked){
-        //document.upload.if_exists[0].disabled=true;
-        document.upload.if_exists[1].checked=true;
-        //document.upload.if_exists[2].disabled=true;
+    if (document.upload.unzip.checked) {
+        document.upload.if_exists[1].checked=true;        
     } else {
         document.upload.if_exists[2].checked=true;
-        //document.upload.if_exists[0].disabled=false;
-        //document.upload.if_exists[2].disabled=false;
     }
 }
 
@@ -137,7 +133,7 @@ if ($is_certificate_mode) {
     ];
 } else {
     $interbreadcrumb[] = [
-        'url' => './document.php?id='.$document_id.'&'.api_get_cidreq().$certificateLink,
+        'url' => './document.php?id='.$parent_id.'&'.api_get_cidreq().$certificateLink,
         'name' => get_lang('Documents'),
     ];
 }

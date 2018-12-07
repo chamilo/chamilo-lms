@@ -412,6 +412,78 @@ if ($debug > 0) {
 }
 
 switch ($action) {
+    // ## NSR
+    case 'send_notify_teacher':
+        // Enviar correo al profesor
+        $studentInfo = api_get_user_info();
+        $course_info = api_get_course_info();
+
+        global $_configuration;
+        $root_web = $_configuration['root_web'];
+
+        if (api_get_session_id() > 0) {
+            $session_info = api_get_session_info(api_get_session_id());
+            $course_name = $session_info['name'];
+            $course_url = $root_web.'courses/'.$course_info['code'].'/index.php?id_session='.api_get_session_id();
+        } else {
+            $course_name = $course_info['title'];
+            $course_url = $root_web.'courses/'.$course_info['code'].'/index.php?';
+        }
+        $url = '<a href="'.$course_url.'" title="Ir al curso">'.$course_name.'</a>';
+
+        /*$sql = "SELECT c.* FROM plugin_licences_customers c
+                INNER JOIN plugin_licences_student_rel_customer s
+                ON s.user_id = c.user_id
+                WHERE s.student_id = ".$studentInfo['user_id'];
+        $res = Database::query($sql);
+        if (Database::num_rows($res) > 0) {
+            $row = Database::fetch_assoc($res);
+            if (!empty($row['telefono'])) {
+                $telefono = htmlspecialchars($row['telefono']);
+            } else {
+                $telefono = '';
+            }
+            if (!empty($row['prefix'])) {
+                $prefix = htmlspecialchars($row['prefix']);
+            } else {
+                $prefix = '';
+            }
+        } else {
+            $telefono = '';
+            $prefix = '';
+        }*/
+
+        $coachList = CourseManager::get_coachs_from_course(api_get_session_id(), api_get_course_int_id());
+        foreach ($coachList as $coach_course) {
+            $recipient_name = $coach_course['full_name'];
+
+            $coachInfo = api_get_user_info($coach_course['user_id']);
+            $email = $coachInfo['email'];
+
+            $tplContent = new Template(null, false, false, false, false, false);
+            // variables for the default template
+            $tplContent->assign('name_teacher', $recipient_name);
+            $tplContent->assign('name_student', $studentInfo['firstname'].' '.$studentInfo['lastname']);
+            $tplContent->assign('course_name', $course_name);;
+            $tplContent->assign('course_url', $url);
+            $tplContent->assign('telefono', $telefono);
+            $tplContent->assign('prefix', $prefix);
+            $layoutContent = $tplContent->get_template('mail/content_ending_learnpath.tpl');
+            $emailBody = $tplContent->fetch($layoutContent);
+
+            api_mail_html(
+                $recipient_name,
+                $email,
+                'Alumno con lecciones finalizadas',
+                $emailBody,
+                $studentInfo['firstname'].' '.$studentInfo['lastname'],
+                $studentInfo['email'],
+                true
+            );
+        }
+        Display::addFlash(Display::return_message('Notificación enviada al profesor'));
+        require 'lp_list.php';
+        break;
     case 'add_item':
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);

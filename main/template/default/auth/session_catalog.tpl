@@ -100,7 +100,7 @@
                                     	</a>
                                 	</h4>
                             	</div>
-                            	{% if show_tutor %}
+                            	{% if show_tutor and item.coach_id %}
                             	<div class="block-author">
                                 	<div class="author-card">
                                     	<a href="{{ item.coach_url }}" class="ajax" data-title="{{ item.coach_name }}">

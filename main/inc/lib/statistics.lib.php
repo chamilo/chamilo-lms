@@ -766,7 +766,7 @@ class Statistics
         while ($obj = Database::fetch_object($res)) {
             $result[$obj->course_language] = $obj->number_of_courses;
         }
-        self::printStats(get_lang('CountCourseByLanguage'), $result, true);
+        return $result;
     }
 
     /**
@@ -1111,5 +1111,34 @@ class Statistics
             $list[$datetime] = 0;
         }
         return $list;
+    }
+    /**
+     * Prepare the JS code to load a chart
+     * @param string $url URL for AJAX data generator
+     * @param string $type bar, line, pie, etc
+     * @param string $options Additional options to the chart (see chart-specific library)
+     * @param string A JS code for loading the chart together with a call to AJAX data generator
+     */
+    public static function getJSChartTemplate($url, $type = 'pie', $options = '', $elementId = 'canvas')
+    { 
+        $chartCode = '
+        <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: "'.$url.'",
+                type: "POST",
+                success: function(data) {
+                    Chart.defaults.global.responsive = true;
+                    var ctx = document.getElementById("'.$elementId.'").getContext("2d");
+                    var myLoginChart = new Chart(ctx, {
+                        type: "'.$type.'",
+                        data: data,
+                        options: {'.$options.'}
+                    });
+                }
+            });
+        });
+        </script>';
+        return $chartCode;
     }
 }

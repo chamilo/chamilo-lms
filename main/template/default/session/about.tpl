@@ -14,7 +14,7 @@
                 <div class="row">
                     <div class="col-md-8">
                         <h2 class="session-title">{{ session.name }}</h2>
-                        {% if show_tutor %}
+                        {% if show_tutor and session.generalCoach %}
                             <div class="session-tutor">
                                 <em class="fa fa-user"></em> {{ 'SessionGeneralCoach'|get_lang }}:
                                 <em>{{ session.generalCoach.getCompleteName() }}</em>

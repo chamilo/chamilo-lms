@@ -4,3 +4,5 @@ liip_theme:
     path_patterns:
         bundle_resource:
             - '%kernel.root_dir%/../templates/themes/%%current_theme%%/%%bundle_name%%/%%template%%'
+            # %%current_theme%% is the variable representing active_theme defined above
+            # %%bundle_name%% and %%template%% are managed by liip depending on the page loaded

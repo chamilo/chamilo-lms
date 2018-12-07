@@ -48,6 +48,10 @@ services:
         # but if a service is unused, it's removed anyway
         exclude: '../../src/UserBundle/{Admin,ChamiloUserBundle.php,Security/FOSUBUserProvider.php,DependencyInjection,Form,EventListener,Entity,Repository}'
 
+    chamilo_lti_utils:
+        class: Chamilo\LtiBundle\Util\Utils
+        arguments: ['@chamilo.settings.manager']
+
 # Doctrine audit
 sonata_doctrine_orm_admin:
     audit:

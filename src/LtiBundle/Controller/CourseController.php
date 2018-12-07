@@ -10,6 +10,7 @@ use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\LtiBundle\Component\ServiceRequestFactory;
 use Chamilo\LtiBundle\Entity\ExternalTool;
 use Chamilo\LtiBundle\Form\ExternalToolType;
+use Chamilo\LtiBundle\Util\Utils;
 use Chamilo\UserBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -149,8 +150,10 @@ class CourseController extends BaseController
             throw $this->createAccessDeniedException('');
         }
 
-        $institutionDomain = $this->getInstitutionDomain();
-        $toolUserId = $this->getToolUserId($user->getId());
+        $ltiUtil = $this->get('chamilo_lti_utils');
+
+        $institutionDomain = $ltiUtil->getInstitutionDomain();
+        $toolUserId = $ltiUtil->generateToolUserId($user->getId());
 
         $params = [];
         $params['lti_version'] = 'LTI-1p0';
@@ -200,7 +203,7 @@ class CourseController extends BaseController
             $params['user_image'] = \UserManager::getUserPicture($user->getId());
         }
 
-        $params['roles'] = $this->getUserRoles($user);
+        $params['roles'] = Utils::generateUserRoles($user);
 
         if ($tool->isSharingName()) {
             $params['lis_person_name_given'] = $user->getFirstname();
@@ -213,7 +216,7 @@ class CourseController extends BaseController
         }
 
         if ($user->hasRole('ROLE_RRHH')) {
-            $scopeMentor = $this->getRoleScopeMentor($user);
+            $scopeMentor = $ltiUtil->generateRoleScopeMentor($user);
 
             if (!empty($scopeMentor)) {
                 $params['role_scope_mentor'] = $scopeMentor;
@@ -240,11 +243,11 @@ class CourseController extends BaseController
         $params['oauth_callback'] = 'about:blank';
 
         $customParams = $tool->parseCustomParams();
-        $this->trimParams($customParams);
+        Utils::trimParams($customParams);
         $this->variableSubstitution($params, $customParams, $user, $course, $session);
 
         $params += $customParams;
-        $this->trimParams($params);
+        Utils::trimParams($params);
 
         if (!empty($tool->getConsumerKey()) && !empty($tool->getSharedSecret())) {
             $consumer = new \OAuthConsumer(
@@ -266,7 +269,7 @@ class CourseController extends BaseController
             $params = $request->get_parameters();
         }
 
-        $this->removeQueryParamsFromLaunchUrl($tool, $params);
+        Utils::removeQueryParamsFromLaunchUrl($tool, $params);
 
         return $this->render(
             '@ChamiloTheme/Lti/launch.html.twig',
@@ -275,94 +278,6 @@ class CourseController extends BaseController
                 'launch_url' => $tool->getLaunchUrl(),
             ]
         );
-    }
-
-    /**
-     * @return string
-     */
-    private function getInstitutionDomain()
-    {
-        $institutionUrl = $this->get('chamilo.settings.manager')->getSetting('platform.institution_url');
-
-        return str_replace(['https://', 'http://'], '', $institutionUrl);
-    }
-
-    /**
-     * @param int $userId
-     *
-     * @return string
-     */
-    private function getToolUserId($userId)
-    {
-        $manager = $this->get('chamilo.settings.manager');
-
-        $siteName = $manager->getSetting('platform.site_name');
-        $institution = $manager->getSetting('platform.institution');
-
-        $userString = "$siteName - $institution - $userId";
-
-        return \URLify::filter($userString, 255, '', true, true, false, false, true);
-    }
-
-    /**
-     * @param User $user
-     *
-     * @return string
-     */
-    private function getUserRoles(User $user)
-    {
-        if ($user->hasRole('ROLE_RRHH')) {
-            return 'urn:lti:role:ims/lis/Mentor';
-        }
-
-        //if ($user->hasRole('ROLE_INVITEE')) {
-        //    return 'Learner,urn:lti:role:ims/lis/Learner/GuestLearner';
-        //}
-
-        if ($user->hasRole('ROLE_CURRENT_COURSE_STUDENT') || $user->hasRole('ROLE_CURRENT_SESSION_COURSE_STUDENT')) {
-            return 'Learner';
-        }
-
-        $roles = ['Instructor'];
-
-        if ($user->hasRole('ROLE_ADMIN')) {
-            $roles[] = 'urn:lti:role:ims/lis/Administrator';
-        }
-
-        return implode(',', $roles);
-    }
-
-    /**
-     * @param User $currentUser
-     *
-     * @return string
-     */
-    private function getRoleScopeMentor(User $currentUser)
-    {
-        if (DRH !== $currentUser->getStatus()) {
-            return '';
-        }
-
-        $followedUsers = \UserManager::get_users_followed_by_drh($currentUser->getId());
-        $scope = [];
-
-        foreach ($followedUsers as $userInfo) {
-            $scope[] = $this->getToolUserId($userInfo['user_id']);
-        }
-
-        return implode(',', $scope);
-    }
-
-    /**
-     * @param array $params
-     */
-    private function trimParams(array &$params)
-    {
-        foreach ($params as $key => $value) {
-            $newValue = preg_replace('/\s+/', ' ', $value);
-
-            $params[$key] = trim($newValue);
-        }
     }
 
     /**
@@ -532,31 +447,6 @@ class CourseController extends BaseController
     }
 
     /**
-     * @param ExternalTool $tool
-     * @param array        $params
-     *
-     * @return array
-     */
-    private function removeQueryParamsFromLaunchUrl(ExternalTool $tool, array &$params)
-    {
-        $urlQuery = parse_url($tool->getLaunchUrl(), PHP_URL_QUERY);
-
-        if (empty($urlQuery)) {
-            return $params;
-        }
-
-        $queryParams = [];
-        parse_str($urlQuery, $queryParams);
-        $queryKeys = array_keys($queryParams);
-
-        foreach ($queryKeys as $key) {
-            if (isset($params[$key])) {
-                unset($params[$key]);
-            }
-        }
-    }
-
-    /**
      * @Route("/item_return", name="chamilo_lti_return_item")
      *
      * @param Request $request
@@ -588,7 +478,7 @@ class CourseController extends BaseController
             UrlGeneratorInterface::ABSOLUTE_URL
         );
 
-        $signatureIsValid = $this->compareRequestSignature(
+        $signatureIsValid = Utils::checkRequestSignature(
             $url,
             $request->get('oauth_consumer_key'),
             $request->get('oauth_signature'),
@@ -625,33 +515,6 @@ class CourseController extends BaseController
             '@ChamiloTheme/Lti/item_return.html.twig',
             ['course' => $course]
         );
-    }
-
-    /**
-     * @param string       $url
-     * @param string       $originConsumerKey
-     * @param string       $originSignature
-     * @param ExternalTool $tool
-     *
-     * @return bool
-     */
-    private function compareRequestSignature(
-        $url,
-        $originConsumerKey,
-        $originSignature,
-        ExternalTool $tool
-    )
-    {
-        $consumer = new \OAuthConsumer(
-            $originConsumerKey,
-            $tool->getSharedSecret()
-        );
-        $hmacMethod = new \OAuthSignatureMethod_HMAC_SHA1();
-        $oAuthRequest = \OAuthRequest::from_request('POST', $url);
-        $oAuthRequest->sign_request($hmacMethod, $consumer, '');
-        $signature = $oAuthRequest->get_parameter('oauth_signature');
-
-        return $signature !== $originSignature;
     }
 
     /**

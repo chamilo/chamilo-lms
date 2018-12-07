@@ -11,6 +11,8 @@ Chamilo is an e-learning platform, also called "LMS" or "LCMS" published under G
 
 ## Quick install
 
+**Chamilo 2.0 is still in development stage. This install procedure is for reference only. For a stable Chamilo, please install Chamilo 1.11.x. See the 1.11.x branch README.md for details.**
+
 We assume you have already installed "yarn" and "composer" and you're installing the portal in a domain,
 not in a sub folder inside a domain.
 
@@ -22,10 +24,16 @@ php bin/console assets:install
 php bin/console fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json
 yarn install
 yarn run encore dev
-chmod -R 777 .env app var public main/default_course_document/images/	
+chmod -R 777 .
 ~~~~
 
 Then enter the main/install/index.php and follow the UI instructions (database, admin user settings, etc).
+
+After the web install process, change the permissions back to a reasonnably safe state:
+~~~~
+chmod -R 755 .
+chmod -R 775 public/ var/
+~~~~
 
 ### Quick update
 

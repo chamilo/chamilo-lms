@@ -7497,7 +7497,6 @@ class TrackingCourseLog
 
         if (!in_array($direction, ['ASC', 'DESC'])) {
             $direction = 'ASC';
-            var_dump($direction);
         }
 
         $column = intval($column);

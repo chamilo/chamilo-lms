@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\IntegrationBundle\Entity;
+namespace Chamilo\LtiBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Class ExternalTool.
  *
- * @package Chamilo\IntegrationBundle\Entity
+ * @package Chamilo\LtiBundle\Entity
  *
  * @ORM\Table(name="lti_external_tool")
  * @ORM\Entity()
@@ -90,14 +90,14 @@ class ExternalTool
     /**
      * @var ExternalTool|null
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\IntegrationBundle\Entity\ExternalTool", inversedBy="children")
+     * @ORM\ManyToOne(targetEntity="Chamilo\LtiBundle\Entity\ExternalTool", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
     private $parent;
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\IntegrationBundle\Entity\ExternalTool", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="Chamilo\LtiBundle\Entity\ExternalTool", mappedBy="parent")
      */
     private $children;
 

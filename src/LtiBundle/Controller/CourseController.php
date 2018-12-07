@@ -1,15 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\IntegrationBundle\Controller;
+namespace Chamilo\LtiBundle\Controller;
 
 use Chamilo\CoreBundle\Controller\BaseController;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CTool;
-use Chamilo\IntegrationBundle\Component\ServiceRequestFactory;
-use Chamilo\IntegrationBundle\Entity\ExternalTool;
-use Chamilo\IntegrationBundle\Form\ExternalToolType;
+use Chamilo\LtiBundle\Component\ServiceRequestFactory;
+use Chamilo\LtiBundle\Entity\ExternalTool;
+use Chamilo\LtiBundle\Form\ExternalToolType;
 use Chamilo\UserBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +20,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * Class CourseController.
  *
- * @package Chamilo\IntegrationBundle\Controller
+ * @package Chamilo\LtiBundle\Controller
  */
 class CourseController extends BaseController
 {
@@ -36,7 +36,7 @@ class CourseController extends BaseController
     {
         $em = $this->getDoctrine()->getManager();
         /** @var ExternalTool $tool */
-        $tool = $em->find('ChamiloIntegrationBundle:ExternalTool', $id);
+        $tool = $em->find('ChamiloLtiBundle:ExternalTool', $id);
 
         if (empty($tool)) {
             throw $this->createNotFoundException('External tool not found');
@@ -132,7 +132,7 @@ class CourseController extends BaseController
     {
         $em = $this->getDoctrine()->getManager();
         /** @var ExternalTool|null $tool */
-        $tool = $em->find('ChamiloIntegrationBundle:ExternalTool', $id);
+        $tool = $em->find('ChamiloLtiBundle:ExternalTool', $id);
 
         if (empty($tool)) {
             throw $this->createNotFoundException();
@@ -575,7 +575,7 @@ class CourseController extends BaseController
         $em = $this->getDoctrine()->getManager();
 
         /** @var ExternalTool $tool */
-        $tool = $em->find('ChamiloIntegrationBundle:ExternalTool', str_replace('tool:', '', $data));
+        $tool = $em->find('ChamiloLtiBundle:ExternalTool', str_replace('tool:', '', $data));
 
         if (empty($tool)) {
             throw $this->createNotFoundException('External tool not found');
@@ -726,7 +726,7 @@ class CourseController extends BaseController
         $em = $this->getDoctrine()->getManager();
 
         /** @var ExternalTool|null $externalTool */
-        $externalTool = $em->find('ChamiloIntegrationBundle:ExternalTool', $id);
+        $externalTool = $em->find('ChamiloLtiBundle:ExternalTool', $id);
 
         if (empty($externalTool)) {
             throw $this->createNotFoundException();
@@ -770,7 +770,7 @@ class CourseController extends BaseController
     public function courseConfigureAction($id = '', Request $request): Response
     {
         $em = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository('ChamiloIntegrationBundle:ExternalTool');
+        $repo = $em->getRepository('ChamiloLtiBundle:ExternalTool');
 
         $tool = new ExternalTool();
         $parentTool = null;

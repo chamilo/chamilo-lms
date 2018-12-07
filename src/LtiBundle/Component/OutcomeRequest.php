@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\IntegrationBundle\Component;
+namespace Chamilo\LtiBundle\Component;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 /**
  * Class OutcomeRequest.
  *
- * @package Chamilo\IntegrationBundle\Component
+ * @package Chamilo\LtiBundle\Component
  */
 abstract class OutcomeRequest
 {

@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\IntegrationBundle\Component;
+namespace Chamilo\LtiBundle\Component;
 
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Chamilo\UserBundle\Entity\User;
@@ -9,7 +9,7 @@ use Chamilo\UserBundle\Entity\User;
 /**
  * Class OutcomeReadRequest.
  *
- * @package Chamilo\IntegrationBundle\Component
+ * @package Chamilo\LtiBundle\Component
  */
 class OutcomeReadRequest extends OutcomeRequest
 {

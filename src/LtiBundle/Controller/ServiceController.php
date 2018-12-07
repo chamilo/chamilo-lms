@@ -1,14 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\IntegrationBundle\Controller;
+namespace Chamilo\LtiBundle\Controller;
 
 use Chamilo\CoreBundle\Controller\BaseController;
-use Chamilo\IntegrationBundle\Component\OutcomeDeleteRequest;
-use Chamilo\IntegrationBundle\Component\OutcomeReadRequest;
-use Chamilo\IntegrationBundle\Component\OutcomeReplaceRequest;
-use Chamilo\IntegrationBundle\Component\OutcomeUnsupportedRequest;
-use Chamilo\IntegrationBundle\Entity\ExternalTool;
+use Chamilo\LtiBundle\Component\OutcomeDeleteRequest;
+use Chamilo\LtiBundle\Component\OutcomeReadRequest;
+use Chamilo\LtiBundle\Component\OutcomeReplaceRequest;
+use Chamilo\LtiBundle\Component\OutcomeUnsupportedRequest;
+use Chamilo\LtiBundle\Entity\ExternalTool;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class ServicesController.
  *
- * @package Chamilo\IntegrationBundle\Controller
+ * @package Chamilo\LtiBundle\Controller
  */
 class ServiceController extends BaseController
 {
@@ -30,7 +30,7 @@ class ServiceController extends BaseController
     public function outcomeServiceAction(Request $request): Response
     {
         $em = $this->getDoctrine()->getManager();
-        $toolRepo = $em->getRepository('ChamiloIntegrationBundle:ExternalTool');
+        $toolRepo = $em->getRepository('ChamiloLtiBundle:ExternalTool');
 
         $headers = \OAuthUtil::get_headers();
 
@@ -86,7 +86,7 @@ class ServiceController extends BaseController
     }
 
     /**
-     * @return \Chamilo\IntegrationBundle\Component\OutcomeResponse|null
+     * @return \Chamilo\LtiBundle\Component\OutcomeResponse|null
      */
     private function processServiceRequest()
     {

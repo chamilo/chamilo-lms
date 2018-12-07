@@ -1,11 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\IntegrationBundle\Controller;
+namespace Chamilo\LtiBundle\Controller;
 
 use Chamilo\CoreBundle\Controller\BaseController;
-use Chamilo\IntegrationBundle\Entity\ExternalTool;
-use Chamilo\IntegrationBundle\Form\ExternalToolType;
+use Chamilo\LtiBundle\Entity\ExternalTool;
+use Chamilo\LtiBundle\Form\ExternalToolType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class AdminController.
  *
- * @package Chamilo\IntegrationBundle\Controller
+ * @package Chamilo\LtiBundle\Controller
  */
 class AdminController extends BaseController
 {
@@ -27,7 +27,7 @@ class AdminController extends BaseController
      */
     public function adminAction(): Response
     {
-        $repo = $this->getDoctrine()->getRepository('ChamiloIntegrationBundle:ExternalTool');
+        $repo = $this->getDoctrine()->getRepository('ChamiloLtiBundle:ExternalTool');
         $tools = $repo->findAll();
 
         return $this->render('@ChamiloTheme/Lti/admin.html.twig', ['tools' => $tools]);
@@ -91,7 +91,7 @@ class AdminController extends BaseController
     {
         $em = $this->getDoctrine()->getManager();
         /** @var ExternalTool $tool */
-        $tool = $em->find('ChamiloIntegrationBundle:ExternalTool', $toolId);
+        $tool = $em->find('ChamiloLtiBundle:ExternalTool', $toolId);
 
         if (empty($tool)) {
             throw $this->createNotFoundException();
@@ -145,7 +145,7 @@ class AdminController extends BaseController
     {
         $em = $this->getDoctrine()->getManager();
         /** @var ExternalTool $tool */
-        $tool = $em->find('ChamiloIntegrationBundle:ExternalTool', $toolId);
+        $tool = $em->find('ChamiloLtiBundle:ExternalTool', $toolId);
 
         if (empty($tool)) {
             throw $this->createNotFoundException();

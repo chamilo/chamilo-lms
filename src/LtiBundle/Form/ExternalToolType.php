@@ -1,9 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\IntegrationBundle\Form;
+namespace Chamilo\LtiBundle\Form;
 
-use Chamilo\IntegrationBundle\Entity\ExternalTool;
+use Chamilo\LtiBundle\Entity\ExternalTool;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -18,7 +18,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Class ExternalToolType.
  *
- * @package Chamilo\IntegrationBundle\Form
+ * @package Chamilo\LtiBundle\Form
  */
 class ExternalToolType extends AbstractType
 {

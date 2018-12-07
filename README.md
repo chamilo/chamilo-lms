@@ -32,7 +32,7 @@ Then enter the main/install/index.php and follow the UI instructions (database, 
 After the web install process, change the permissions back to a reasonnably safe state:
 ~~~~
 chmod -R 755 .
-chmod -R 775 public/ var/
+chown -R www-data: public/ var/
 ~~~~
 
 ### Quick update
@@ -49,7 +49,6 @@ This will update the JS (yarn) and PHP (composer) dependencies.
 
 ## Installation guide (Dev environment, stable environment not yet available)
 
-The instructions above are meant only for stable versions. 
 If you are a developer and want to contribute to Chamilo in the current development branch (not stable yet), 
 then please follow the instructions below. Please bear in mind that the development version is NOT COMPLETE at this time, 
 and many features are just not working yet. This is because we are working on root components that require massive changes to the structure of the code, files and database. As such, to get a working version, you might need to completely uninstall and re-install from time to time. You've been warned.
@@ -58,24 +57,14 @@ First, apply the procedure described here: [Managing CSS and JavaScript in Chami
 
 Then make sure your database supports large prefixes (see [this Stack Overflow thread](https://stackoverflow.com/questions/43379717/how-to-enable-large-index-in-mariadb-10/43403017#43403017) if you use MySQL < 5.7 or MariaDB < 10.2.2).
 
-Load the (your-domain)/main/install/ URL to start the installer (which is very similar to the installer in previous versions). 
+Load the (your-domain)/main/install/index.php URL to start the installer (which is very similar to the installer in previous versions). 
 If the installer is pure-HTML and doesn't appear with a clean layout, that's because you didn't follow these instructions carefully. 
 Go back to the beginning of this section and try again.
 
-Finally, if you are installing this development version in a subdirectory, you will need to add "folder" in configuration.php 
-once the installation process finished:
-```
-$_configuration['url_append'] = 'the-folder';
-```
-and in the ".env" file in the root folder:
+Finally, if you are installing this development version in a subdirectory, you will need to add "the folder" in the ".env" file in the root folder:
 ```
 APP_URL_APPEND=the-folder
 ```
-
-## Upgrade
-The upgrade instructions are located in the documentation here:
- [Upgrade](app/Resources/docs/upgrade.md)
- 
  
 ## Changes from 1.x
 
@@ -92,19 +81,17 @@ The upgrade instructions are located in the documentation here:
 
 
 ## Todo
-* Auth (CAS, Shibboleth, Oath2)
-* URL course changes "cidReq" to "c", "session_id" to "s"
-* Fix plugins that use api_get_setting directly in the code
-* Fix plugins render using tpl or PHP files
+
+See https://github.com/chamilo/chamilo-lms/projects/3
 
 ## Contributing
 
-If you want to submit new features or patches to Chamilo, please follow the
+If you want to submit new features or patches to Chamilo 2, please follow the
 Github contribution guide https://guides.github.com/activities/contributing-to-open-source/
-and our CONTRIBUTING.md file.
+and our [CONTRIBUTING.md](CONTRIBUTING.md) file.
 In short, we ask you to send us Pull Requests based on a branch that you create
 with this purpose into your repository forked from the original Chamilo repository.
 
 ## Documentation
 
-For more information on Chamilo, visit https://1.11.chamilo.org/documentation/index.html
+For more information on Chamilo, visit https://campus.chamilo.org/documentation/index.html

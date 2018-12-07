@@ -1631,7 +1631,12 @@ function api_get_user_info(
         $userFromSession = Session::read('_user');
 
         if (isset($userFromSession)) {
-            if ($cacheAvailable === true) {
+            if ($cacheAvailable === true &&
+                (
+                    empty($userFromSession['is_anonymous']) &&
+                    (isset($userFromSession['status']) && $userFromSession['status'] != ANONYMOUS)
+                )
+            ) {
                 $apcVar = api_get_configuration_value('apc_prefix').'userinfo_'.$userFromSession['user_id'];
                 if (apcu_exists($apcVar)) {
                     if ($updateCache) {

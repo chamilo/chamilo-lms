@@ -331,10 +331,13 @@ if ($showReporting) {
         $html .= '</ul>';
     }
 }
+//Load Orden
+$trackingColumn = isset($_GET['users_tracking_column']) ? $_GET['users_tracking_column'] : null;
+$trackingDirection = isset($_GET['users_tracking_direction']) ? $_GET['users_tracking_direction'] : null;
 
 // Show the charts part only if there are students subscribed to this course/session
 if ($nbStudents > 0) {
-    $usersTracking = TrackingCourseLog::get_user_data(null, $nbStudents, null, 'DESC', false);
+    $usersTracking = TrackingCourseLog::get_user_data(null, $nbStudents, $trackingColumn, $trackingDirection, false);
     $numberStudentsCompletedLP = 0;
     $averageStudentsTestScore = 0;
     $scoresDistribution = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];

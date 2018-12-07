@@ -131,7 +131,7 @@ class NavBuilder implements ContainerAwareInterface
 
             if (api_is_allowed_to_create_course()) {
                 $lang = $translator->trans('Create course');
-                if ($settingsManager->getSetting('course.course_validation') == 'true') {
+                if ($settingsManager->getSetting('course.course_validation') === 'true') {
                     $lang = $translator->trans('Create course request');
                 }
 
@@ -389,12 +389,18 @@ class NavBuilder implements ContainerAwareInterface
             }
         }
 
+        //$menu->setLinkAttribute('ancestorClass', 'julio');
+
         // Set CSS classes for the items
         foreach ($menu->getChildren() as $child) {
             $childClass = '';
-            if ($child->hasChildren()) {
+            $hasChildren = $child->hasChildren();
+            if ($hasChildren) {
                 $childClass = 'dropdown';
                 $child->setChildrenAttribute('class', 'dropdown-menu');
+                if ($child->isCurrent()) {
+                    $child->setChildrenAttribute('style', 'display:block');
+                }
             }
 
             $child
@@ -402,14 +408,26 @@ class NavBuilder implements ContainerAwareInterface
                 ->setAttribute('class', 'nav-item '.$childClass)
             ;
 
-            $children = $child->getChildren();
-            foreach ($children as $subChild) {
-                $subChild
-                    ->setLinkAttribute('class', 'sub-link')
-                    ->setAttribute('class', 'nav-item ');
+            if ($child->isCurrent()) {
+                $child->setAttribute('class', 'nav-item open '.$childClass);
             }
 
+            if ($hasChildren) {
+                $child
+                    ->setLinkAttribute('class', 'sidebar-link ') //dropdown-toggle
+                    //->setLinkAttribute('data-toggle', 'dropdown')
+                    //->setLinkAttribute('role', 'button')
+                    //->setLinkAttribute('aria-haspopup', 'true')
+                    //->setLinkAttribute('aria-expanded', 'false')
+                ;
 
+                $children = $child->getChildren();
+                foreach ($children as $subChild) {
+                    $subChild
+                        ->setLinkAttribute('class', 'sub-link ')
+                        ->setAttribute('class', 'nav-item ');
+                }
+            }
         }
 
         return $menu;

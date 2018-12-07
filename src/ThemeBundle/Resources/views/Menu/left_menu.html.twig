@@ -18,36 +18,22 @@
     {% else %}
         <i class="far fa-circle"></i>
     {% endif %}
+    <span class="title">
     {{ parent() }}
-{% endblock %}
-
-{% block children %}
-    {# save current variables #}
-    {% set currentOptions = options %}
-    {% set currentItem = item %}
-    {# update the depth for children #}
-    {% if options.depth is not none %}
-        {% set options = options|merge({'depth': currentOptions.depth - 1}) %}
+    </span>
+    {% set childrenCount = item.children|length %}
+    {% if childrenCount > 0 %}
+        <span class="arrow"><i class="fas fa-angle-right"></i></span>
     {% endif %}
-    {# update the matchingDepth for children #}
-    {% if options.matchingDepth is not none and options.matchingDepth > 0 %}
-        {% set options = options|merge({'matchingDepth': currentOptions.matchingDepth - 1}) %}
-    {% endif %}
-    {% for item in currentItem.children %}
-        {{ block('item') }}
-    {% endfor %}
-    {# restore current variables #}
-    {% set item = currentItem %}
-    {% set options = currentOptions %}
 {% endblock %}
 
 {% block linkElement %}
     {% import _self as knp_menu %}
+
     {% set link = item.uri %}
     {% if item.hasChildren %}
         {% set link = '#' %}
     {% endif %}
-
     <a href="{{ link }}"{{ knp_menu.attributes(item.linkAttributes) }}>
         {{ block('label') }}
     </a>

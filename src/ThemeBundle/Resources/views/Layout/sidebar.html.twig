@@ -3,7 +3,7 @@
     {% set menu = knp_menu_get('menuApp') %}
     <li class="sidebar-divider"></li>
 
-    {{ knp_menu_render(menu, {'template': '@ChamiloTheme/Menu/left_menu.html.twig'}) }}
+    {{ knp_menu_render(menu, {'ancestorClass': 'current_open open', 'template': '@ChamiloTheme/Menu/left_menu.html.twig'}) }}
 
     {#<ul class="navbar-nav">#}
         {#{% for item in menu.children %}#}

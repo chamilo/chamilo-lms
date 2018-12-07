@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use League\Flysystem\Filesystem;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Index page of the admin tools.
@@ -254,6 +255,8 @@ if (api_is_platform_admin()) {
     if (api_get_setting('allow_terms_conditions') == 'true') {
         $items[] = ['url' => 'legal_add.php', 'label' => get_lang('TermsAndConditions')];
     }
+
+    $items[] = ['url' => api_get_path(WEB_PUBLIC_PATH).'admin/lti/', 'label' => get_lang('External tools')];
 
     $blocks['platform']['items'] = $items;
     $blocks['platform']['extra'] = null;

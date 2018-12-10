@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
  * Code to display the course settings form (for the course admin)
  * and activate the changes.
@@ -15,7 +17,6 @@
  *
  * @package chamilo.course_info
  */
-use Chamilo\CoreBundle\Framework\Container;
 
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_SETTING;

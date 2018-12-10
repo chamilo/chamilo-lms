@@ -8,7 +8,7 @@ use Chamilo\CoreBundle\Component\Editor\Connector;
 use Chamilo\CoreBundle\Component\Editor\Finder;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use FM\ElfinderBundle\Connector\ElFinderConnector;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,7 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @package Chamilo\CoreBundle\Controller
  */
-class EditorController extends Controller
+class EditorController extends AbstractController
 {
     /**
      * Get templates (left column when creating a document).

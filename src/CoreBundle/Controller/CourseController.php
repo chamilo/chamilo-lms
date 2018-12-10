@@ -8,7 +8,7 @@ use Chamilo\CoreBundle\Form\Type\CourseType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,7 +20,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @package Chamilo\CoreBundle\Controller
  */
-class CourseController extends Controller
+class CourseController extends AbstractController
 {
     /**
      * @Route("/add")

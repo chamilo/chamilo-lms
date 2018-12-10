@@ -4,7 +4,7 @@
 namespace Chamilo\UserBundle\Controller;
 
 use Chamilo\UserBundle\Form\LoginType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @package Chamilo\UserBundle\Controller
  */
-class SecurityController extends Controller
+class SecurityController extends AbstractController
 {
     /**
      * @Route("/login", name="login")

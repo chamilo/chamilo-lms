@@ -15,20 +15,17 @@
 api_block_anonymous_users();
 $stok = Security::get_token();
 $courses_without_category = isset($courses_in_category[0]) ? $courses_in_category[0] : null;
-?>
-<!-- Actions: The menu with the different options in cathe course management -->
-<div id="actions" class="actions">
-    <?php if ($action != 'createcoursecategory') {
-    ?>
-	<a href="<?php echo api_get_self(); ?>?action=createcoursecategory">
-        <?php echo Display::return_icon('new_folder.png', get_lang('CreateCourseCategory'), '', '32'); ?></a>
-    <?php
-} ?>
-</div>
-<?php
+echo '<div id="actions" class="actions">';
+if ($action != 'createcoursecategory') {
+	echo '<a href="'.api_get_self().'?action=createcoursecategory">';
+    echo Display::return_icon('new_folder.png', get_lang('CreateCourseCategory'), '', '32');
+    echo '</a>';
+}
+echo '</div>';
+
 if (!empty($message)) {
-        echo Display::return_message($message, 'confirm', false);
-    }
+    echo Display::return_message($message, 'confirm', false);
+}
 
 // COURSES WITH CATEGORIES
 if (!empty($user_course_categories)) {
@@ -48,7 +45,6 @@ if (!empty($user_course_categories)) {
         </form>
         <?php
         }
-        $max_category_key = count($user_course_categories);
         if ($action != 'unsubscribe') {
             ?>
             <a href="courses.php?action=sortmycourses&amp;categoryid=<?php echo $row['id']; ?>&amp;sec_token=<?php echo $stok; ?>#category<?php echo $row['id']; ?>">
@@ -78,7 +74,12 @@ if (!empty($user_course_categories)) {
             <?php
             } ?>
             <a href="courses.php?action=deletecoursecategory&amp;id=<?php echo $row['id']; ?>&amp;sec_token=<?php echo $stok; ?>">
-            <?php echo Display::display_icon('delete.png', get_lang('Delete'), ['onclick' => "javascript: if (!confirm('".addslashes(api_htmlentities(get_lang("CourseCategoryAbout2bedeleted"), ENT_QUOTES, api_get_system_encoding()))."')) return false;"], 22); ?>
+            <?php echo Display::display_icon(
+                    'delete.png',
+                    get_lang('Delete'),
+                    ['onclick' => "javascript: if (!confirm('".addslashes(api_htmlentities(get_lang('CourseCategoryAbout2bedeleted'), ENT_QUOTES, api_get_system_encoding()))."')) return false;"],
+                    22
+            ); ?>
             </a>
         <?php
         }
@@ -103,7 +104,7 @@ if (!empty($user_course_categories)) {
                 if (api_get_setting('display_coursecode_in_courselist') === 'true' &&
                     api_get_setting('display_teacher_in_courselist') === 'true'
                 ) {
-                    echo " - ";
+                    echo ' - ';
                 }
 
                 if (api_get_setting('display_teacher_in_courselist') === 'true') {
@@ -120,7 +121,7 @@ if (!empty($user_course_categories)) {
                     <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
                     <input type="hidden" name="course_2_edit_category" value="<?php echo $edit_course; ?>" />
                     <select name="course_categories">
-                    <option value="0"><?php echo get_lang("NoCourseCategory"); ?></option>
+                    <option value="0"><?php echo get_lang('NoCourseCategory'); ?></option>
                     <?php foreach ($user_course_categories as $row) {
                         ?>
                         <option value="<?php echo $row['id']; ?>"><?php echo $row['title']; ?></option>
@@ -221,7 +222,7 @@ if (!empty($courses_without_category)) {
         if (api_get_setting('display_coursecode_in_courselist') === 'true' &&
                 api_get_setting('display_teacher_in_courselist') === 'true'
             ) {
-            echo " - ";
+            echo ' - ';
         }
         if (api_get_setting('display_teacher_in_courselist') === 'true') {
             echo $course['tutor'];

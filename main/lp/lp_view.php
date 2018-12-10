@@ -460,10 +460,6 @@ if ($is_allowed_to_edit) {
         'url' => '#',
         'name' => get_lang('Preview'),
     ];
-}
-
-// Return to course home.
-if ($is_allowed_to_edit) {
     $buttonHomeUrl = 'lp_controller.php?'.api_get_cidreq(true, true, 'course').'&'.http_build_query([
         'isStudentView' => 'false',
         'action' => 'return_to_course_homepage',

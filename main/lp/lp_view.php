@@ -244,7 +244,7 @@ if (!isset($src)) {
                 }
 
                 if (isset($file_info['extension']) &&
-                    api_strtolower(substr($file_info['extension'], 0, 3) == 'pdf')
+                    api_strtolower(substr($file_info['extension'], 0, 3)) == 'pdf'
                 ) {
                     $src = api_get_path(WEB_CODE_PATH).'lp/lp_view_item.php?lp_item_id='.$lp_item_id.'&'.api_get_cidreq();
                 }

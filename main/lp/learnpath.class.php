@@ -13356,7 +13356,7 @@ EOD;
                     // Try with normal id
                     $document = $em
                         ->getRepository('ChamiloCourseBundle:CDocument')
-                        ->findOneBy(['cId' => $course_id, 'id' => $id]);
+                        ->findOneBy(['course' => $course_id, 'id' => $id]);
 
                     if (empty($document)) {
                         return '';

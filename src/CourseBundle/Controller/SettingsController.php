@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Controller;
 use Chamilo\CourseBundle\Manager\SettingsManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactoryInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -17,7 +17,7 @@ use Symfony\Component\Validator\Exception\ValidatorException;
  *
  * @author Paweł Jędrzejewski <pawel@sylius.org>
  */
-class SettingsController extends Controller
+class SettingsController extends AbstractController
 {
     /**
      * Edit configuration with given namespace.

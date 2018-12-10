@@ -565,7 +565,6 @@ $template->assign(
         ICON_SIZE_BIG
     )
 );
-
 $template->displayTemplate('@ChamiloTheme/LearnPath/view.html.twig');
 
 // Restore a global setting.

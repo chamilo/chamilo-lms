@@ -1,20 +1,20 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\IntegrationBundle\Component;
+namespace Chamilo\LtiBundle\Component;
 
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Chamilo\UserBundle\Entity\User;
 
 /**
- * Class OutcomeReplaceRequest.
+ * Class OutcomeReadRequest.
  *
- * @package Chamilo\IntegrationBundle\Component
+ * @package Chamilo\LtiBundle\Component
  */
-class OutcomeReplaceRequest extends OutcomeRequest
+class OutcomeReadRequest extends OutcomeRequest
 {
     /**
-     * OutcomeReplaceRequest constructor.
+     * OutcomeReadRequest constructor.
      *
      * @param \SimpleXMLElement $xml
      */
@@ -22,8 +22,8 @@ class OutcomeReplaceRequest extends OutcomeRequest
     {
         parent::__construct($xml);
 
-        $this->responseType = OutcomeResponse::TYPE_REPLACE;
-        $this->xmlRequest = $this->xmlRequest->replaceResultRequest;
+        $this->responseType = OutcomeResponse::TYPE_READ;
+        $this->xmlRequest = $this->xmlRequest->readResultRequest;
     }
 
     protected function processBody()
@@ -31,25 +31,6 @@ class OutcomeReplaceRequest extends OutcomeRequest
         $resultRecord = $this->xmlRequest->resultRecord;
         $sourcedId = (string) $resultRecord->sourcedGUID->sourcedId;
         $sourcedId = htmlspecialchars_decode($sourcedId);
-        $resultScore = (string) $resultRecord->result->resultScore->textString;
-
-        if (!is_numeric($resultScore)) {
-            $this->statusInfo
-                ->setSeverity(OutcomeResponseStatus::SEVERITY_ERROR)
-                ->setCodeMajor(OutcomeResponseStatus::CODEMAJOR_FAILURE);
-
-            return;
-        }
-
-        $resultScore = (float) $resultScore;
-
-        if (0 > $resultScore || 1 < $resultScore) {
-            $this->statusInfo
-                ->setSeverity(OutcomeResponseStatus::SEVERITY_WARNING)
-                ->setCodeMajor(OutcomeResponseStatus::CODEMAJOR_FAILURE);
-
-            return;
-        }
 
         $sourcedParts = json_decode($sourcedId, true);
 
@@ -74,33 +55,32 @@ class OutcomeReplaceRequest extends OutcomeRequest
             return;
         }
 
-        $score = $evaluation->getMax() * $resultScore;
-
         $results = \Result::load(null, $user->getId(), $evaluation->getId());
 
-        if (empty($results)) {
-            $result = new \Result();
-            $result->set_evaluation_id($evaluation->getId());
-            $result->set_user_id($user->getId());
-            $result->set_score($score);
-            $result->add();
-        } else {
+        $ltiScore = '';
+        $responseDescription = $this->translator->trans('Score not set');
+
+        if (!empty($results)) {
             /** @var \Result $result */
             $result = $results[0];
-            $result->addResultLog($user->getId(), $evaluation->getId());
-            $result->set_score($score);
-            $result->save();
+            $ltiScore = 0;
+
+            if (!empty($result->get_score())) {
+                $ltiScore = $result->get_score() / $evaluation->getMax();
+            }
+
+            $responseDescription = sprintf(
+                $this->translator->trans('Score for user %d is %s'),
+                $user->getId(),
+                $ltiScore
+            );
         }
 
         $this->statusInfo
             ->setSeverity(OutcomeResponseStatus::SEVERITY_STATUS)
             ->setCodeMajor(OutcomeResponseStatus::CODEMAJOR_SUCCESS)
-            ->setDescription(
-                sprintf(
-                    $this->translator->trans('Score for user %d is %s'),
-                    $user->getId(),
-                    $resultScore
-                )
-            );
+            ->setDescription($responseDescription);
+
+        $this->responseBodyParam = (string) $ltiScore;
     }
 }

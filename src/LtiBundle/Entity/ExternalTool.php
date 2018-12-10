@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\IntegrationBundle\Entity;
+namespace Chamilo\LtiBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Class ExternalTool.
  *
- * @package Chamilo\IntegrationBundle\Entity
+ * @package Chamilo\LtiBundle\Entity
  *
  * @ORM\Table(name="lti_external_tool")
  * @ORM\Entity()
@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
 class ExternalTool
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -90,14 +90,14 @@ class ExternalTool
     /**
      * @var ExternalTool|null
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\IntegrationBundle\Entity\ExternalTool", inversedBy="children")
+     * @ORM\ManyToOne(targetEntity="Chamilo\LtiBundle\Entity\ExternalTool", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
     private $parent;
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\IntegrationBundle\Entity\ExternalTool", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="Chamilo\LtiBundle\Entity\ExternalTool", mappedBy="parent")
      */
     private $children;
 
@@ -116,6 +116,11 @@ class ExternalTool
         $this->sharedSecret = null;
         $this->parent = null;
         $this->children = new ArrayCollection();
+    }
+
+    public function __clone()
+    {
+        $this->id = 0;
     }
 
     /**
@@ -308,31 +313,6 @@ class ExternalTool
     }
 
     /**
-     * Map the key from custom param.
-     *
-     * @param string $key
-     *
-     * @return string
-     */
-    private static function parseCustomKey($key)
-    {
-        $newKey = '';
-        $key = strtolower($key);
-        $split = str_split($key);
-        foreach ($split as $char) {
-            if (
-                ($char >= 'a' && $char <= 'z') || ($char >= '0' && $char <= '9')
-            ) {
-                $newKey .= $char;
-                continue;
-            }
-            $newKey .= '_';
-        }
-
-        return $newKey;
-    }
-
-    /**
      * Get activeDeepLinking.
      *
      * @return bool
@@ -497,8 +477,28 @@ class ExternalTool
         return $this;
     }
 
-    public function __clone()
+    /**
+     * Map the key from custom param.
+     *
+     * @param string $key
+     *
+     * @return string
+     */
+    private static function parseCustomKey($key)
     {
-        $this->id = 0;
+        $newKey = '';
+        $key = strtolower($key);
+        $split = str_split($key);
+        foreach ($split as $char) {
+            if (
+                ($char >= 'a' && $char <= 'z') || ($char >= '0' && $char <= '9')
+            ) {
+                $newKey .= $char;
+                continue;
+            }
+            $newKey .= '_';
+        }
+
+        return $newKey;
     }
 }

@@ -8,7 +8,7 @@ use Chamilo\ThemeBundle\Event\NotificationListEvent;
 use Chamilo\ThemeBundle\Event\ShowUserEvent;
 use Chamilo\ThemeBundle\Event\TaskListEvent;
 use Chamilo\ThemeBundle\Event\ThemeEvents;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @package Chamilo\ThemeBundle\Controller
  */
-class NavbarController extends Controller
+class NavbarController extends AbstractController
 {
     /**
      * @deprecated

@@ -1,20 +1,20 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\IntegrationBundle\Component;
+namespace Chamilo\LtiBundle\Component;
 
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Chamilo\UserBundle\Entity\User;
 
 /**
- * Class OutcomeReadRequest.
+ * Class OutcomeDeleteRequest.
  *
- * @package Chamilo\IntegrationBundle\Component
+ * @package Chamilo\LtiBundle\Component
  */
-class OutcomeReadRequest extends OutcomeRequest
+class OutcomeDeleteRequest extends OutcomeRequest
 {
     /**
-     * OutcomeReadRequest constructor.
+     * OutcomeDeleteRequest constructor.
      *
      * @param \SimpleXMLElement $xml
      */
@@ -22,8 +22,8 @@ class OutcomeReadRequest extends OutcomeRequest
     {
         parent::__construct($xml);
 
-        $this->responseType = OutcomeResponse::TYPE_READ;
-        $this->xmlRequest = $this->xmlRequest->readResultRequest;
+        $this->responseType = OutcomeResponse::TYPE_DELETE;
+        $this->xmlRequest = $this->xmlRequest->deleteResultRequest;
     }
 
     protected function processBody()
@@ -57,30 +57,21 @@ class OutcomeReadRequest extends OutcomeRequest
 
         $results = \Result::load(null, $user->getId(), $evaluation->getId());
 
-        $ltiScore = '';
-        $responseDescription = $this->translator->trans('Score not set');
+        if (empty($results)) {
+            $this->statusInfo
+                ->setSeverity(OutcomeResponseStatus::SEVERITY_STATUS)
+                ->setCodeMajor(OutcomeResponseStatus::CODEMAJOR_FAILURE);
 
-        if (!empty($results)) {
-            /** @var \Result $result */
-            $result = $results[0];
-            $ltiScore = 0;
-
-            if (!empty($result->get_score())) {
-                $ltiScore = $result->get_score() / $evaluation->getMax();
-            }
-
-            $responseDescription = sprintf(
-                $this->translator->trans('Score for user %d is %s'),
-                $user->getId(),
-                $ltiScore
-            );
+            return;
         }
+
+        /** @var \Result $result */
+        $result = $results[0];
+        $result->addResultLog($user->getId(), $evaluation->getId());
+        $result->delete();
 
         $this->statusInfo
             ->setSeverity(OutcomeResponseStatus::SEVERITY_STATUS)
-            ->setCodeMajor(OutcomeResponseStatus::CODEMAJOR_SUCCESS)
-            ->setDescription($responseDescription);
-
-        $this->responseBodyParam = (string) $ltiScore;
+            ->setCodeMajor(OutcomeResponseStatus::CODEMAJOR_SUCCESS);
     }
 }

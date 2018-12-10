@@ -1,9 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\IntegrationBundle\Form;
+namespace Chamilo\LtiBundle\Form;
 
-use Chamilo\IntegrationBundle\Entity\ExternalTool;
+use Chamilo\LtiBundle\Entity\ExternalTool;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -18,7 +18,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Class ExternalToolType.
  *
- * @package Chamilo\IntegrationBundle\Form
+ * @package Chamilo\LtiBundle\Form
  */
 class ExternalToolType extends AbstractType
 {
@@ -59,8 +59,8 @@ class ExternalToolType extends AbstractType
                 'activeDeepLinking',
                 CheckboxType::class,
                 [
-                    'label'    => 'Support Deep-Linking',
-                    'help'     => 'Contact your Tool Provider to verify if Deep Linking support is mandatory',
+                    'label' => 'Support Deep-Linking',
+                    'help' => 'Contact your Tool Provider to verify if Deep Linking support is mandatory',
                     'required' => false,
                 ]
             );
@@ -137,12 +137,12 @@ class ExternalToolType extends AbstractType
     private function getLaunchUrlFromCartridge($launchUrl)
     {
         $options = [
-            CURLOPT_CUSTOMREQUEST  => 'GET',
-            CURLOPT_POST           => false,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_POST => false,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER         => false,
+            CURLOPT_HEADER => false,
             CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_ENCODING       => '',
+            CURLOPT_ENCODING => '',
             CURLOPT_SSL_VERIFYPEER => false,
         ];
         $ch = curl_init($launchUrl);
@@ -171,6 +171,6 @@ class ExternalToolType extends AbstractType
 
         $launchUrl = $result[0];
 
-        return (string)$launchUrl;
+        return (string) $launchUrl;
     }
 }

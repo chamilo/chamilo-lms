@@ -7,14 +7,14 @@ use Chamilo\FaqBundle\Entity\Category;
 use Chamilo\FaqBundle\Entity\CategoryRepository;
 use Chamilo\FaqBundle\Entity\Question;
 use Chamilo\FaqBundle\Entity\QuestionRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * Class FaqController.
  *
  * @package Chamilo\FaqBundle\Controller
  */
-class FaqController extends Controller
+class FaqController extends AbstractController
 {
     /**
      * Default index. Shows one category/question at a time. If you want to just show everything at once, use the

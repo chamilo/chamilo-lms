@@ -255,6 +255,8 @@ if (api_is_platform_admin()) {
         $items[] = ['url' => 'legal_add.php', 'label' => get_lang('TermsAndConditions')];
     }
 
+    $items[] = ['url' => api_get_path(WEB_PUBLIC_PATH).'admin/lti/', 'label' => get_lang('External tools')];
+
     $blocks['platform']['items'] = $items;
     $blocks['platform']['extra'] = null;
 }

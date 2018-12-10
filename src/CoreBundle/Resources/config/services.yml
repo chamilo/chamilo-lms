@@ -27,9 +27,9 @@ services:
 
     menu.voter.regex:
         class: Chamilo\CoreBundle\Menu\MenuVoter
-        arguments: [ '@request_stack' ]
+        arguments: ['@request_stack']
         tags:
-            - { name: knp_menu.voter }
+            - {name: knp_menu.voter}
 
     # Entity managers
     chamilo_core.entity.manager.course_manager:
@@ -221,7 +221,7 @@ services:
             - [setContainer, ['@service_container']]
         tags:
 #            - {name: mopa_bootstrap.menu, alias: chamilo_core.menu.nav}
-            - {name: knp_menu.menu_builder, method: menuApp, alias: menuApp }
+            - {name: knp_menu.menu_builder, method: menuApp, alias: menuApp}
 
     chamilo_core.menu.course_menu_builder:
         class: Chamilo\CoreBundle\Menu\LeftMenuBuilder

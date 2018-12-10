@@ -1,0 +1,14 @@
+chamilo_lti_admin_controller:
+  resource: '@ChamiloLtiBundle/Controller/AdminController.php'
+  type: annotation
+  prefix: '/admin/lti'
+
+chamilo_lti_teacher_controller:
+  resource: '@ChamiloLtiBundle/Controller/CourseController.php'
+  type: annotation
+  prefix: '/courses/{code}/lti'
+
+chamilo_lti_service_controller:
+  path: /lti/os
+  defaults:
+    _controller: 'ChamiloLtiBundle:Service:outcomeService'

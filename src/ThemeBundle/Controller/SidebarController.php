@@ -6,7 +6,7 @@ namespace Chamilo\ThemeBundle\Controller;
 use Chamilo\ThemeBundle\Event\ShowUserEvent;
 use Chamilo\ThemeBundle\Event\SidebarMenuKnpEvent;
 use Chamilo\ThemeBundle\Event\ThemeEvents;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @package Chamilo\ThemeBundle\Controller
  */
-class SidebarController extends Controller
+class SidebarController extends AbstractController
 {
     /**
      * @return Response

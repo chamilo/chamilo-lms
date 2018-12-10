@@ -126,7 +126,7 @@ if ($lpReporting) {
             Display::return_icon(
                 'scorms.gif',
                 get_lang('AverageProgressInLearnpath')
-            ).get_lang('AverageProgressInLearnpath')
+            ).' '.get_lang('AverageProgressInLearnpath')
         );
         echo '<table class="data_table">';
         if ($export_csv) {
@@ -180,7 +180,7 @@ if ($exerciseReporting) {
         Display::return_icon(
             'quiz.png',
             get_lang('AverageResultsToTheExercices')
-        ).get_lang('AverageResultsToTheExercices')
+        ).' '.get_lang('AverageResultsToTheExercices')
     );
     echo '<table class="data_table">';
     $course_id = api_get_course_int_id();
@@ -269,7 +269,7 @@ if ($export_csv) {
 // Forums tracking.
 echo '<div class="report_section">';
 echo Display::page_subheader(
-    Display::return_icon('forum.gif', get_lang('Forum')).
+    Display::return_icon('forum.gif', get_lang('Forum')).' '.
     get_lang('Forum').'&nbsp;-&nbsp;<a href="../forum/index.php?'.api_get_cidreq().'">'.
     get_lang('SeeDetail').'</a>'
 );
@@ -284,7 +284,7 @@ echo '<div class="clear"></div>';
 if ($showChatReporting) {
     echo '<div class="report_section">';
     echo Display::page_subheader(
-        Display::return_icon('chat.gif', get_lang('Chat')).get_lang('Chat')
+        Display::return_icon('chat.gif', get_lang('Chat')).' '.get_lang('Chat')
     );
 
     echo '<table class="data_table">';
@@ -321,7 +321,7 @@ if ($showTrackingReporting) {
         Display::return_icon(
             'acces_tool.gif',
             get_lang('ToolsMostUsed')
-        ).get_lang('ToolsMostUsed')
+        ).' '.get_lang('ToolsMostUsed')
     );
     echo '<table class="data_table">';
 

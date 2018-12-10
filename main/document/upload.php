@@ -178,7 +178,7 @@ if (!empty($_FILES)) {
     if ($document) {
         $redirectUrl .= '&'.http_build_query(
             [
-                'id' => $document->getId(),
+                'id' => $parent_id,
             ]
         );
     }

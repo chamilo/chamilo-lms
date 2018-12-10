@@ -6388,7 +6388,6 @@ class DocumentManager
         return $list;
     }
 
-
     /**
      * @param CDocument $document
      * @param           $path
@@ -6662,7 +6661,6 @@ class DocumentManager
             return $document;
         }
 
-
         return false;
     }
 
@@ -6731,7 +6729,7 @@ class DocumentManager
 
         $img = Display::returnIconPath($icon);
         if (!file_exists($img_sys_path.$icon)) {
-            $img = Display::returnIconPath('default_small.gif');
+            $img = Display::returnIconPath('default_small.png');
         }
 
         $link = Display::url(
@@ -6829,7 +6827,7 @@ class DocumentManager
             $image = Display::returnIconPath('nolines_minus.gif');
         }
         $return .= '<img style="cursor: pointer;" src="'.$image.'" align="absmiddle" id="img_'.$resource['id'].'" '.$onclick.'>';
-        $return .= Display::return_icon('lp_folder.gif').'&nbsp;';
+        $return .= Display::return_icon('lp_folder.png').'&nbsp;';
         $return .= '<span '.$onclick.' style="cursor: pointer;" >'.$title.'</span>';
         $return .= '</li>';
 

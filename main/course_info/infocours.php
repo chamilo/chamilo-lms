@@ -15,7 +15,6 @@
  *
  * @package chamilo.course_info
  */
-
 use Chamilo\CoreBundle\Framework\Container;
 
 require_once __DIR__.'/../inc/global.inc.php';

@@ -629,7 +629,7 @@ class Statistics
     /**
      * get the number of recent logins.
      *
-     * @param bool $distinct        Whether to only give distinct users stats, or *all* logins
+     * @param bool $distinct            Whether to only give distinct users stats, or *all* logins
      * @param int  $sessionDuration
      * @param bool $completeMissingDays Whether to fill the daily gaps (if any) when getting a list of logins
      *
@@ -766,6 +766,7 @@ class Statistics
         while ($obj = Database::fetch_object($res)) {
             $result[$obj->course_language] = $obj->number_of_courses;
         }
+
         return $result;
     }
 
@@ -1075,13 +1076,16 @@ class Statistics
             false
         );
     }
+
     /**
      * Returns an array with indexes as the 'yyyy-mm-dd' format of each date
      * within the provided range (including limits). Dates are assumed to be
-     * given in UTC
-     * @param string $startDate Start date, in Y-m-d or Y-m-d h:i:s format
-     * @param string $endDate End date, in Y-m-d or Y-m-d h:i:s format
+     * given in UTC.
+     *
+     * @param string $startDate  Start date, in Y-m-d or Y-m-d h:i:s format
+     * @param string $endDate    End date, in Y-m-d or Y-m-d h:i:s format
      * @param bool   $removeYear Whether to remove the year in the results (for easier reading)
+     *
      * @return array|bool False on error in the params, array of [date1 => 0, date2 => 0, ...] otherwise
      */
     public static function buildDatesArray($startDate, $endDate, $removeYear = false)
@@ -1110,17 +1114,20 @@ class Statistics
             }
             $list[$datetime] = 0;
         }
+
         return $list;
     }
+
     /**
-     * Prepare the JS code to load a chart
-     * @param string $url URL for AJAX data generator
-     * @param string $type bar, line, pie, etc
+     * Prepare the JS code to load a chart.
+     *
+     * @param string $url     URL for AJAX data generator
+     * @param string $type    bar, line, pie, etc
      * @param string $options Additional options to the chart (see chart-specific library)
      * @param string A JS code for loading the chart together with a call to AJAX data generator
      */
     public static function getJSChartTemplate($url, $type = 'pie', $options = '', $elementId = 'canvas')
-    { 
+    {
         $chartCode = '
         <script>
         $(document).ready(function() {
@@ -1139,6 +1146,7 @@ class Statistics
             });
         });
         </script>';
+
         return $chartCode;
     }
 }

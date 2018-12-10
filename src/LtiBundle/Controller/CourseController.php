@@ -7,7 +7,6 @@ use Chamilo\CoreBundle\Controller\BaseController;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CTool;
-use Chamilo\LtiBundle\Component\ServiceRequestFactory;
 use Chamilo\LtiBundle\Entity\ExternalTool;
 use Chamilo\LtiBundle\Form\ExternalToolType;
 use Chamilo\LtiBundle\Util\Utils;
@@ -99,26 +98,6 @@ class CourseController extends BaseController
         return $this->redirectToRoute(
             'chamilo_lti_edit',
             ['id' => $tool->getId(), 'code' => $course->getCode()]
-        );
-    }
-
-    /**
-     * @param Course $course
-     */
-    private function setConfigureBreadcrumb(Course $course)
-    {
-        $breadcrumb = $this->get('chamilo_core.block.breadcrumb');
-        $breadcrumb->addChild(
-            $course->getTitle(),
-            [
-                'uri' => $this->generateUrl(
-                    'chamilo_course_home_home_index',
-                    ['course' => $course->getCode()]
-                ),
-            ]
-        );
-        $breadcrumb->addChild(
-            $this->trans('Configure external tool')
         );
     }
 
@@ -277,6 +256,234 @@ class CourseController extends BaseController
                 'params' => $params,
                 'launch_url' => $tool->getLaunchUrl(),
             ]
+        );
+    }
+
+    /**
+     * @Route("/item_return", name="chamilo_lti_return_item")
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function returnItemAction(Request $request): Response
+    {
+        $contentItems = $request->get('content_items');
+        $data = $request->get('data');
+
+        if (empty($contentItems) || empty($data)) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $em = $this->getDoctrine()->getManager();
+
+        /** @var ExternalTool $tool */
+        $tool = $em->find('ChamiloLtiBundle:ExternalTool', str_replace('tool:', '', $data));
+
+        if (empty($tool)) {
+            throw $this->createNotFoundException('External tool not found');
+        }
+
+        $course = $this->getCourse();
+        $url = $this->generateUrl(
+            'chamilo_lti_return_item',
+            ['code' => $course->getCode()],
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
+
+        $signatureIsValid = Utils::checkRequestSignature(
+            $url,
+            $request->get('oauth_consumer_key'),
+            $request->get('oauth_signature'),
+            $tool
+        );
+
+        if (!$signatureIsValid) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $contentItems = json_decode($contentItems, true)['@graph'];
+
+        $supportedItemTypes = ['LtiLinkItem'];
+
+        foreach ($contentItems as $contentItem) {
+            if (!in_array($contentItem['@type'], $supportedItemTypes)) {
+                continue;
+            }
+
+            if ('LtiLinkItem' === $contentItem['@type']) {
+                $newTool = $this->createLtiLink($contentItem, $tool);
+
+                $this->addFlash(
+                    'success',
+                    sprintf(
+                        $this->trans('External tool added: %s'),
+                        $newTool->getName()
+                    )
+                );
+            }
+        }
+
+        return $this->render(
+            '@ChamiloTheme/Lti/item_return.html.twig',
+            ['course' => $course]
+        );
+    }
+
+    /**
+     * @Route("/{id}", name="chamilo_lti_show", requirements={"id"="\d+"})
+     *
+     * @param string $id
+     *
+     * @return Response
+     */
+    public function showAction($id): Response
+    {
+        $course = $this->getCourse();
+
+        $em = $this->getDoctrine()->getManager();
+
+        /** @var ExternalTool|null $externalTool */
+        $externalTool = $em->find('ChamiloLtiBundle:ExternalTool', $id);
+
+        if (empty($externalTool)) {
+            throw $this->createNotFoundException();
+        }
+
+        if (empty($externalTool->getCourse()) || $externalTool->getCourse()->getId() !== $course->getId()) {
+            throw $this->createAccessDeniedException('');
+        }
+
+        $breadcrumb = $this->get('chamilo_core.block.breadcrumb');
+        $breadcrumb->addChild(
+            $course->getTitle(),
+            [
+                'uri' => $this->generateUrl(
+                    'chamilo_course_home_home_index',
+                    ['course' => $course->getCode()]
+                ),
+            ]
+        );
+        $breadcrumb->addChild(
+            $this->trans($externalTool->getName())
+        );
+
+        return $this->render(
+            'ChamiloThemeBundle:Lti:iframe.html.twig',
+            ['tool' => $externalTool, 'course' => $course]
+        );
+    }
+
+    /**
+     * @Route("/", name="chamilo_lti_configure")
+     * @Route("/add/{id}", name="chamilo_lti_configure_global", requirements={"id"="\d+"})
+     *
+     * @Security("has_role('ROLE_TEACHER')")
+     *
+     * @param string  $id
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function courseConfigureAction($id = '', Request $request): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository('ChamiloLtiBundle:ExternalTool');
+
+        $tool = new ExternalTool();
+        $parentTool = null;
+
+        if (!empty($id)) {
+            $parentTool = $repo->findOneBy(['id' => $id, 'course' => null]);
+
+            if (empty($parentTool)) {
+                throw $this->createNotFoundException('External tool not found');
+            }
+
+            $tool = clone $parentTool;
+            $tool->setParent($parentTool);
+        }
+
+        $course = $this->getCourse();
+
+        $form = $this->createForm(ExternalToolType::class, $tool);
+        $form->get('shareName')->setData($tool->isSharingName());
+        $form->get('shareEmail')->setData($tool->isSharingEmail());
+        $form->get('sharePicture')->setData($tool->isSharingPicture());
+        $form->handleRequest($request);
+
+        if (!$form->isSubmitted() || !$form->isValid()) {
+            $this->setConfigureBreadcrumb($course);
+
+            return $this->render(
+                '@ChamiloTheme/Lti/course_configure.twig',
+                [
+                    'title' => $this->trans('Add external tool'),
+                    'added_tools' => $repo->findBy(['course' => $course]),
+                    'global_tools' => $repo->findBy(['parent' => null, 'course' => null]),
+                    'form' => $form->createView(),
+                    'course' => $course,
+                ]
+            );
+        }
+
+        /** @var ExternalTool $tool */
+        $tool = $form->getData();
+        $tool->setCourse($course);
+
+        $em->persist($tool);
+        $em->flush();
+
+        $this->addFlash('success', $this->trans('External tool added'));
+
+        if (!$tool->isActiveDeepLinking()) {
+            $courseTool = new CTool();
+            $courseTool
+                ->setCourse($course)
+                ->setImage('plugin.png')
+                ->setName($tool->getName())
+                ->setVisibility(true)
+                ->setTarget('_self')
+                ->setCategory('interaction')
+                ->setLink(
+                    $this->generateUrl(
+                        'chamilo_lti_show',
+                        ['code' => $course->getCode(), 'id' => $tool->getId()]
+                    )
+                );
+
+            $em->persist($courseTool);
+            $em->flush();
+
+            return $this->redirectToRoute(
+                'chamilo_course_home_home_index',
+                ['course' => $course->getCode()]
+            );
+        }
+
+        return $this->redirectToRoute(
+            'chamilo_lti_configure',
+            ['course' => $course->getCode()]
+        );
+    }
+
+    /**
+     * @param Course $course
+     */
+    private function setConfigureBreadcrumb(Course $course)
+    {
+        $breadcrumb = $this->get('chamilo_core.block.breadcrumb');
+        $breadcrumb->addChild(
+            $course->getTitle(),
+            [
+                'uri' => $this->generateUrl(
+                    'chamilo_course_home_home_index',
+                    ['course' => $course->getCode()]
+                ),
+            ]
+        );
+        $breadcrumb->addChild(
+            $this->trans('Configure external tool')
         );
     }
 
@@ -447,77 +654,6 @@ class CourseController extends BaseController
     }
 
     /**
-     * @Route("/item_return", name="chamilo_lti_return_item")
-     *
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function returnItemAction(Request $request): Response
-    {
-        $contentItems = $request->get('content_items');
-        $data = $request->get('data');
-
-        if (empty($contentItems) || empty($data)) {
-            throw $this->createAccessDeniedException();
-        }
-
-        $em = $this->getDoctrine()->getManager();
-
-        /** @var ExternalTool $tool */
-        $tool = $em->find('ChamiloLtiBundle:ExternalTool', str_replace('tool:', '', $data));
-
-        if (empty($tool)) {
-            throw $this->createNotFoundException('External tool not found');
-        }
-
-        $course = $this->getCourse();
-        $url = $this->generateUrl(
-            'chamilo_lti_return_item',
-            ['code' => $course->getCode()],
-            UrlGeneratorInterface::ABSOLUTE_URL
-        );
-
-        $signatureIsValid = Utils::checkRequestSignature(
-            $url,
-            $request->get('oauth_consumer_key'),
-            $request->get('oauth_signature'),
-            $tool
-        );
-
-        if (!$signatureIsValid) {
-            throw $this->createAccessDeniedException();
-        }
-
-        $contentItems = json_decode($contentItems, true)['@graph'];
-
-        $supportedItemTypes = ['LtiLinkItem'];
-
-        foreach ($contentItems as $contentItem) {
-            if (!in_array($contentItem['@type'], $supportedItemTypes)) {
-                continue;
-            }
-
-            if ('LtiLinkItem' === $contentItem['@type']) {
-                $newTool = $this->createLtiLink($contentItem, $tool);
-
-                $this->addFlash(
-                    'success',
-                    sprintf(
-                        $this->trans('External tool added: %s'),
-                        $newTool->getName()
-                    )
-                );
-            }
-        }
-
-        return $this->render(
-            '@ChamiloTheme/Lti/item_return.html.twig',
-            ['course' => $course]
-        );
-    }
-
-    /**
      * @param array        $contentItem
      * @param ExternalTool $baseTool
      *
@@ -573,142 +709,5 @@ class CourseController extends BaseController
         $em->flush();
 
         return $newTool;
-    }
-
-    /**
-     * @Route("/{id}", name="chamilo_lti_show", requirements={"id"="\d+"})
-     *
-     * @param string $id
-     *
-     * @return Response
-     */
-    public function showAction($id): Response
-    {
-        $course = $this->getCourse();
-
-        $em = $this->getDoctrine()->getManager();
-
-        /** @var ExternalTool|null $externalTool */
-        $externalTool = $em->find('ChamiloLtiBundle:ExternalTool', $id);
-
-        if (empty($externalTool)) {
-            throw $this->createNotFoundException();
-        }
-
-        if (empty($externalTool->getCourse()) || $externalTool->getCourse()->getId() !== $course->getId()) {
-            throw $this->createAccessDeniedException('');
-        }
-
-        $breadcrumb = $this->get('chamilo_core.block.breadcrumb');
-        $breadcrumb->addChild(
-            $course->getTitle(),
-            [
-                'uri' => $this->generateUrl(
-                    'chamilo_course_home_home_index',
-                    ['course' => $course->getCode()]
-                ),
-            ]
-        );
-        $breadcrumb->addChild(
-            $this->trans($externalTool->getName())
-        );
-
-        return $this->render(
-            'ChamiloThemeBundle:Lti:iframe.html.twig',
-            ['tool' => $externalTool, 'course' => $course]
-        );
-    }
-
-    /**
-     * @Route("/", name="chamilo_lti_configure")
-     * @Route("/add/{id}", name="chamilo_lti_configure_global", requirements={"id"="\d+"})
-     *
-     * @Security("has_role('ROLE_TEACHER')")
-     *
-     * @param string  $id
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function courseConfigureAction($id = '', Request $request): Response
-    {
-        $em = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository('ChamiloLtiBundle:ExternalTool');
-
-        $tool = new ExternalTool();
-        $parentTool = null;
-
-        if (!empty($id)) {
-            $parentTool = $repo->findOneBy(['id' => $id, 'course' => null]);
-
-            if (empty($parentTool)) {
-                throw $this->createNotFoundException('External tool not found');
-            }
-
-            $tool = clone $parentTool;
-            $tool->setParent($parentTool);
-        }
-
-        $course = $this->getCourse();
-
-        $form = $this->createForm(ExternalToolType::class, $tool);
-        $form->get('shareName')->setData($tool->isSharingName());
-        $form->get('shareEmail')->setData($tool->isSharingEmail());
-        $form->get('sharePicture')->setData($tool->isSharingPicture());
-        $form->handleRequest($request);
-
-        if (!$form->isSubmitted() || !$form->isValid()) {
-            $this->setConfigureBreadcrumb($course);
-
-            return $this->render(
-                '@ChamiloTheme/Lti/course_configure.twig',
-                [
-                    'title' => $this->trans('Add external tool'),
-                    'added_tools' => $repo->findBy(['course' => $course]),
-                    'global_tools' => $repo->findBy(['parent' => null, 'course' => null]),
-                    'form' => $form->createView(),
-                    'course' => $course,
-                ]
-            );
-        }
-
-        /** @var ExternalTool $tool */
-        $tool = $form->getData();
-        $tool->setCourse($course);
-
-        $em->persist($tool);
-        $em->flush();
-
-        $this->addFlash('success', $this->trans('External tool added'));
-
-        if (!$tool->isActiveDeepLinking()) {
-            $courseTool = new CTool();
-            $courseTool
-                ->setCourse($course)
-                ->setImage('plugin.png')
-                ->setName($tool->getName())
-                ->setVisibility(true)
-                ->setTarget('_self')
-                ->setCategory('interaction')
-                ->setLink(
-                    $this->generateUrl(
-                        'chamilo_lti_show',
-                        ['code' => $course->getCode(), 'id' => $tool->getId()]
-                    )
-                );
-
-            $em->persist($courseTool);
-            $em->flush();
-
-            return $this->redirectToRoute(
-                'chamilo_course_home_home_index',
-                ['course' => $course->getCode()]
-            );
-        }
-
-        return $this->redirectToRoute(
-            'chamilo_lti_configure',
-            ['course' => $course->getCode()]
-        );
     }
 }

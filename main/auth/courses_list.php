@@ -17,7 +17,7 @@ $stok = Security::get_token();
 $courses_without_category = isset($courses_in_category[0]) ? $courses_in_category[0] : null;
 echo '<div id="actions" class="actions">';
 if ($action != 'createcoursecategory') {
-	echo '<a href="'.api_get_self().'?action=createcoursecategory">';
+    echo '<a href="'.api_get_self().'?action=createcoursecategory">';
     echo Display::return_icon('new_folder.png', get_lang('CreateCourseCategory'), '', '32');
     echo '</a>';
 }
@@ -49,7 +49,6 @@ if (!empty($user_course_categories)) {
         <?php
         }
         if ($action != 'unsubscribe') {
-
             if ($allowCollapsable) {
                 if ($row['collapsed'] == 0) {
                     echo Display::url(
@@ -62,9 +61,7 @@ if (!empty($user_course_categories)) {
                         $url.'&action=set_collapsable&option=0'
                     );
                 }
-            }
-
-            ?>
+            } ?>
             <a href="courses.php?action=sortmycourses&amp;categoryid=<?php echo $row['id']; ?>&amp;sec_token=<?php echo $stok; ?>#category<?php echo $row['id']; ?>">
             <?php echo Display::display_icon('edit.png', get_lang('Edit'), '', 22); ?>
             </a>

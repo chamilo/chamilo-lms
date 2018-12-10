@@ -56,6 +56,7 @@ $actions = [
     'subscribe_to_session',
     'search_tag',
     'search_session',
+    'set_collapsable',
 ];
 
 $action = CoursesAndSessionsCatalog::is(CATALOG_SESSIONS) ? 'display_sessions' : 'display_courses';
@@ -329,5 +330,30 @@ switch ($action) {
         }
 
         $courseController->sessionListBySearch($limit);
+        break;
+    case 'set_collapsable':
+        api_block_anonymous_users();
+
+        if (!api_get_configuration_value('allow_user_course_category_collapsable')) {
+            api_not_allowed(true);
+        }
+
+        $userId = api_get_user_id();
+        $categoryId = isset($_REQUEST['categoryid']) ? (int) $_REQUEST['categoryid'] : 0;
+        $option = isset($_REQUEST['option']) ? (int) $_REQUEST['option'] : 0;
+
+        if (empty($userId) || empty($categoryId)) {
+            api_not_allowed(true);
+        }
+
+        $table = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
+        $sql = "UPDATE $table 
+                SET collapsed = $option
+                WHERE user_id = $userId AND id = $categoryId";
+        Database::query($sql);
+        Display::addFlash(Display::return_message(get_lang('Updated')));
+        $url = api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses';
+        header('Location: '.$url);
+        exit;
         break;
 }

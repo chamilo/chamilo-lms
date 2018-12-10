@@ -27,6 +27,8 @@ if (!empty($message)) {
     echo Display::return_message($message, 'confirm', false);
 }
 
+$allowCollapsable = api_get_configuration_value('allow_user_course_category_collapsable');
+
 // COURSES WITH CATEGORIES
 if (!empty($user_course_categories)) {
     $counter = 0;
@@ -34,6 +36,7 @@ if (!empty($user_course_categories)) {
     foreach ($user_course_categories as $row) {
         echo Display::page_subheader($row['title']);
         echo '<a name="category'.$row['id'].'"></a>';
+        $url = api_get_path(WEB_CODE_PATH).'auth/courses.php?categoryid='.$row['id'].'&sec_token='.$stok;
         if (isset($_GET['categoryid']) && $_GET['categoryid'] == $row['id']) {
             ?>
         <!-- We display the edit form for the category -->
@@ -46,6 +49,21 @@ if (!empty($user_course_categories)) {
         <?php
         }
         if ($action != 'unsubscribe') {
+
+            if ($allowCollapsable) {
+                if ($row['collapsed'] == 0) {
+                    echo Display::url(
+                        '<i class="fa fa-folder-open"></i>',
+                        $url.'&action=set_collapsable&option=1'
+                    );
+                } else {
+                    echo Display::url(
+                        '<i class="fa fa-folder"></i>',
+                        $url.'&action=set_collapsable&option=0'
+                    );
+                }
+            }
+
             ?>
             <a href="courses.php?action=sortmycourses&amp;categoryid=<?php echo $row['id']; ?>&amp;sec_token=<?php echo $stok; ?>#category<?php echo $row['id']; ?>">
             <?php echo Display::display_icon('edit.png', get_lang('Edit'), '', 22); ?>
@@ -83,6 +101,7 @@ if (!empty($user_course_categories)) {
             </a>
         <?php
         }
+
         $counter++;
         echo '<br /><br />';
         // Show the courses inside this category

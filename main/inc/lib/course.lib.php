@@ -3802,7 +3802,7 @@ class CourseManager
         }
         // Step 1: We get all the categories of the user
         $table = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
-        $sql = "SELECT id, title FROM $table
+        $sql = "SELECT * FROM $table
                 WHERE user_id = '".$user_id."'
                 ORDER BY sort ASC";
 
@@ -3811,6 +3811,7 @@ class CourseManager
             'in_category' => [],
             'not_category' => [],
         ];
+        $collapsable = api_get_configuration_value('allow_user_course_category_collapsable');
         while ($row = Database::fetch_array($result)) {
             // We simply display the title of the category.
             $courseInCategory = self::returnCoursesCategories(
@@ -3820,9 +3821,14 @@ class CourseManager
                 $useUserLanguageFilterIfAvailable
             );
 
+            $collapsed = 0;
+            if ($collapsable) {
+                $collapsed = isset($row['collapsed']) && $row['collapsed'] ? 1 : 0;
+            }
             $params = [
                 'id_category' => $row['id'],
                 'title_category' => $row['title'],
+                'collapsed' => $collapsed,
                 'courses' => $courseInCategory,
             ];
             $listItems['in_category'][] = $params;

@@ -59,8 +59,8 @@ class ExternalToolType extends AbstractType
                 'activeDeepLinking',
                 CheckboxType::class,
                 [
-                    'label'    => 'Support Deep-Linking',
-                    'help'     => 'Contact your Tool Provider to verify if Deep Linking support is mandatory',
+                    'label' => 'Support Deep-Linking',
+                    'help' => 'Contact your Tool Provider to verify if Deep Linking support is mandatory',
                     'required' => false,
                 ]
             );
@@ -137,12 +137,12 @@ class ExternalToolType extends AbstractType
     private function getLaunchUrlFromCartridge($launchUrl)
     {
         $options = [
-            CURLOPT_CUSTOMREQUEST  => 'GET',
-            CURLOPT_POST           => false,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_POST => false,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER         => false,
+            CURLOPT_HEADER => false,
             CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_ENCODING       => '',
+            CURLOPT_ENCODING => '',
             CURLOPT_SSL_VERIFYPEER => false,
         ];
         $ch = curl_init($launchUrl);
@@ -171,6 +171,6 @@ class ExternalToolType extends AbstractType
 
         $launchUrl = $result[0];
 
-        return (string)$launchUrl;
+        return (string) $launchUrl;
     }
 }

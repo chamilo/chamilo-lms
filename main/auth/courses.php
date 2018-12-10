@@ -249,7 +249,7 @@ switch ($action) {
 
         $userId = api_get_user_id();
         $confirmed = isset($_GET['confirm']);
-        $sessionId = intval($_GET['session_id']);
+        $sessionId = (int) $_GET['session_id'];
 
         if (empty($userId)) {
             api_not_allowed();
@@ -290,13 +290,13 @@ switch ($action) {
             }
 
             SessionManager::subscribeUsersToSession(
-                $_GET['session_id'],
+                $sessionId,
                 [$userId],
                 SESSION_VISIBLE_READ_ONLY,
                 false
             );
 
-            $coursesList = SessionManager::get_course_list_by_session_id($_GET['session_id']);
+            $coursesList = SessionManager::get_course_list_by_session_id($sessionId);
             $count = count($coursesList);
             $url = '';
 
@@ -306,10 +306,10 @@ switch ($action) {
             } elseif ($count == 1) {
                 // only one course, so redirect directly to this course
                 foreach ($coursesList as $course) {
-                    $url = api_get_path(WEB_COURSE_PATH).$course['directory'].'/index.php?id_session='.intval($_GET['session_id']);
+                    $url = api_get_path(WEB_COURSE_PATH).$course['directory'].'/index.php?id_session='.$sessionId;
                 }
             } else {
-                $url = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.intval($_GET['session_id']);
+                $url = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$sessionId;
             }
             header('Location: '.$url);
             exit;

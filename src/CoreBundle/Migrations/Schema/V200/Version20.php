@@ -771,8 +771,13 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE track_e_hotpotatoes CHANGE exe_weighting max_score SMALLINT NOT NULL');
         $this->addSql('ALTER TABLE track_e_exercises CHANGE exe_weighting max_score DOUBLE PRECISION NOT NULL');
         $this->addSql('ALTER TABLE track_e_exercises CHANGE exe_result score DOUBLE PRECISION NOT NULL');
-
         $this->addSql('ALTER TABLE c_lp CHANGE author author LONGTEXT NOT NULL');
+
+
+        $table = $schema->getTable('user_course_category');
+        if (!$table->hasColumn('collapsed')) {
+            $this->addSql('ALTER TABLE user_course_category ADD collapsed TINYINT(1) DEFAULT NULL');
+        }
 
         // Drop unused columns
         $dropColumnsAndIndex = [

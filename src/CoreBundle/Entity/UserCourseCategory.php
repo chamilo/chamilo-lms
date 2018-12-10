@@ -44,6 +44,14 @@ class UserCourseCategory
     protected $sort;
 
     /**
+     *
+     * @var boolean
+     *
+     * @ORM\Column(name="collapsed", type="boolean", nullable=true)
+     */
+    protected $isCollapsed;
+
+    /**
      * Set userId.
      *
      * @param int $userId
@@ -124,4 +132,5 @@ class UserCourseCategory
     {
         return $this->id;
     }
+
 }

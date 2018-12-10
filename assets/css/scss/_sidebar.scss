@@ -14,6 +14,18 @@
 
   ul {
     list-style-type: none;
+    .sidebar-search{
+
+    }
+    .muted-title{
+      padding: 12px 20px;
+      letter-spacing: .05em;
+      pointer-events: none;
+      cursor: default;
+      font-size: 11px;
+      text-transform: uppercase;
+      color: #98a6ad;
+    }
   }
 
   @include between($breakpoint-md, $breakpoint-xl) {

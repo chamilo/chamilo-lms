@@ -2,12 +2,6 @@
 {% autoescape false %}
     <script type="text/javascript">
         $(document).ready(function() {
-            $('.search-toggle').on('click', e => {
-                $('.search-box, .search-input').toggleClass('active');
-                $('.search-input input').focus();
-                e.preventDefault();
-            });
-
             // Sidebar links
             $('.sidebar .sidebar-menu li a').on('click', function () {
                 const $this = $(this);
@@ -67,6 +61,7 @@
             $('.sidebar-toggle').on('click', e => {
                 $('.app').toggleClass('is-collapsed');
                 e.preventDefault();
+                $('.sidebar-search').toggleClass('d-none');
             });
 
             /**

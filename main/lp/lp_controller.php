@@ -426,9 +426,10 @@ switch ($action) {
                     $description = isset($_POST['description']) ? $_POST['description'] : '';
                     $prerequisites = isset($_POST['prerequisites']) ? $_POST['prerequisites'] : '';
                     $maxTimeAllowed = isset($_POST['maxTimeAllowed']) ? $_POST['maxTimeAllowed'] : '';
+                    $edit = isset($_GET['edit']) ? $_GET['edit'] : '';
 
                     if ($_POST['type'] == TOOL_DOCUMENT) {
-                        if (isset($_POST['path']) && $_GET['edit'] != 'true') {
+                        if (isset($_POST['path']) && $edit != 'true') {
                             $document_id = $_POST['path'];
                         } else {
                             if ($_POST['content_lp']) {
@@ -452,7 +453,7 @@ switch ($action) {
                             $prerequisites
                         );
                     } elseif ($_POST['type'] == TOOL_READOUT_TEXT) {
-                        if (isset($_POST['path']) && $_GET['edit'] != 'true') {
+                        if (isset($_POST['path']) && $edit != 'true') {
                             $document_id = $_POST['path'];
                         } else {
                             $document_id = $_SESSION['oLP']->createReadOutText(

@@ -9,6 +9,6 @@ chamilo_lti_teacher_controller:
   prefix: '/courses/{code}/lti'
 
 chamilo_lti_service_controller:
-    path: /lti/os
-    defaults:
-      _controller: 'ChamiloLtiBundle:Service:outcomeService'
+  path: /lti/os
+  defaults:
+    _controller: 'ChamiloLtiBundle:Service:outcomeService'

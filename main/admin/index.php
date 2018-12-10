@@ -3,7 +3,6 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use League\Flysystem\Filesystem;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Index page of the admin tools.

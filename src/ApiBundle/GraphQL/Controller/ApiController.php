@@ -5,7 +5,7 @@ namespace Chamilo\ApiBundle\GraphQL\Controller;
 
 use Chamilo\UserBundle\Entity\User;
 use Firebase\JWT\JWT;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
  *
  * @package Chamilo\ApiBundle\GraphQL\Controller
  */
-class ApiController extends Controller
+class ApiController extends AbstractController
 {
     /**
      * @Route("/learnpath/view", name="chamilo_graphql_learnpath")

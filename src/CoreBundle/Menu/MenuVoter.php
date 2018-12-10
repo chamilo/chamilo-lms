@@ -3,10 +3,6 @@
 
 namespace Chamilo\CoreBundle\Menu;
 
-use Chamilo\FaqBundle\Entity\Category;
-use Chamilo\PageBundle\Entity\Page;
-use Chamilo\PageBundle\Entity\Site;
-use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
 use Knp\Menu\Matcher\Voter\VoterInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -50,7 +46,7 @@ class MenuVoter implements VoterInterface
 
         if (strpos($currentUri, 'user_portal.php') !== false &&
             strpos($currentUrl, 'user_portal.php') !== false
-        ){
+        ) {
             return true;
         }
 

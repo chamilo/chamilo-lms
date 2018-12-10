@@ -111,7 +111,6 @@ switch ($action) {
                     );
                     $json['url'] = '#';
                     $json['size'] = format_file_size($document->getSize());
-                    //$json['type'] = api_htmlentities($file['type']);
                     $json['type'] = '';
                     $json['result'] = Display::return_icon(
                         'accept.png',

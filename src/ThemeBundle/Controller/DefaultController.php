@@ -5,14 +5,14 @@ namespace Chamilo\ThemeBundle\Controller;
 
 use Chamilo\ThemeBundle\Form\FormDemoModelType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * Class DefaultController.
  *
  * @package Chamilo\ThemeBundle\Controller
  */
-class DefaultController extends Controller
+class DefaultController extends AbstractController
 {
     /**
      * @Template()

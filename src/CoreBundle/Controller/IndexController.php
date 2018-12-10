@@ -13,7 +13,6 @@ use Symfony\Component\Routing\Annotation\Route;
  * author Julio Montoya <gugli100@gmail.com>.
  *
  * @package Chamilo\CoreBundle\Controller
- *
  */
 class IndexController extends BaseController
 {

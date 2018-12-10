@@ -6,14 +6,14 @@ namespace Chamilo\ThemeBundle\Controller;
 use Chamilo\ThemeBundle\Event\SidebarMenuKnpEvent;
 use Chamilo\ThemeBundle\Event\ThemeEvents;
 use Chamilo\ThemeBundle\Model\MenuItemInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Controller to handle breadcrumb display inside the layout.
  */
-class BreadcrumbController extends Controller
+class BreadcrumbController extends AbstractController
 {
     /**
      * Controller Reference action to be called inside the layout.

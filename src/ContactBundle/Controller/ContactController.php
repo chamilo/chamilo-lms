@@ -6,7 +6,7 @@ namespace Chamilo\ContactBundle\Controller;
 use Chamilo\ContactBundle\Entity\Category;
 use Chamilo\ContactBundle\Form\Type\ContactType;
 use Chamilo\UserBundle\Entity\User;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -16,8 +16,9 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/")
  *
  * @package Chamilo\ContactBundle\Controller
+ *
  */
-class ContactController extends Controller
+class ContactController extends AbstractController
 {
     /**
      * @Route("/", name="contact")

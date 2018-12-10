@@ -20,7 +20,6 @@
                             </div>
                         {% endif %}
                     </div>
-
                     {% if show_audio_player %}
                         <div id="lp_media_file" class="audio-scorm">
                             {{ media_player }}
@@ -64,11 +63,11 @@
                     {{ teacher_toc_buttons }}
                 </div>
             </div>
-        {# TOC layout #}
-        <div id="toc_id" class="scorm-body" name="toc_name">
+            {# TOC layout #}
+            <div id="toc_id" class="scorm-body" name="toc_name">
                 {% include 'learnpath/scorm_list.tpl'|get_template %}
             </div>
-        {# end TOC layout #}
+            {# end TOC layout #}
         </div>
     </div>
     {# end left zone #}
@@ -87,13 +86,17 @@
         </a>
         {% endif %}
 
-        <a id="home-course" title = "{{ 'Home'|get_lang }}" href="{{ button_home_url }}" class="icon-toolbar" target="_self" onclick="javascript: window.parent.API.save_asset();">
+        <a id="home-course"
+            title = "{{ 'Home'|get_lang }}"
+            href="{{ button_home_url }}"
+            class="icon-toolbar" target="_self"
+           onclick="javascript: window.parent.API.save_asset();">
             <em class="fa fa-home"></em> <span class="hidden-xs hidden-sm"></span>
         </a>
         {{ navigation_bar }}
     </div>
 
-    {# right zone #}
+    {# Right zone #}
     <div id="learning_path_right_zone" class="{{ show_left_column == 1 ? 'content-scorm' : 'no-right-col' }}">
         <div class="lp-view-zone-container">
             <div class="lp-view-tabs">
@@ -117,9 +120,25 @@
                     <div role="tabpanel" class="tab-pane active" id="lp-view-content">
                         <div id="wrapper-iframe">
                         {% if lp_mode == 'fullscreen' %}
-                            <iframe id="content_id_blank" name="content_name_blank" src="blank.php" style="width:100%; height:100%" border="0" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+                            <iframe
+                                id="content_id_blank"
+                                name="content_name_blank"
+                                src="blank.php"
+                                style="width:100%; height:100%"
+                                border="0"
+                                frameborder="0"
+                                allowfullscreen="true"
+                                webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
                         {% else %}
-                            <iframe id="content_id" name="content_name" src="{{ iframe_src }}" style="width:100%; height:100%" border="0" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+                            <iframe
+                                id="content_id"
+                                name="content_name"
+                                src="{{ iframe_src }}"
+                                style="width:100%; height:100%"
+                                border="0"
+                                frameborder="0"
+                                allowfullscreen="true"
+                                webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
                         {% endif %}
                         </div>
                     </div>
@@ -136,7 +155,6 @@
     var LPViewUtils = {
         setHeightLPToc: function () {
             var scormInfoHeight = $('#scorm-info').outerHeight(true);
-
             $('#learning_path_toc').css({
                 top: scormInfoHeight
             });
@@ -147,65 +165,56 @@
         if (/iPhone|iPod|iPad/.test(navigator.userAgent)) {
             // Fix an issue where you cannot scroll below first screen in
             // learning paths on Apple devices
-            document.getElementById('wrapper-iframe')
-                .setAttribute(
-                    'style',
-                    'width:100%; overflow:auto; position:auto; -webkit-overflow-scrolling:touch !important;'
-                );
+            document.getElementById('wrapper-iframe').setAttribute(
+                'style',
+                'width:100%; overflow:auto; position:auto; -webkit-overflow-scrolling:touch !important;'
+            );
             // Fix another issue whereby buttons do not react to click below
             // second screen in learning paths on Apple devices
-            document.getElementById('content_id')
-                .setAttribute(
-                    'style',
-                    'overflow: auto;'
-                );
-
+            document.getElementById('content_id').setAttribute('style', 'overflow: auto;');
         }
 
         {% if lp_mode == 'embedframe' %}
             //$('#learning_path_main').addClass('lp-view-collapsed');
             $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
-            e.preventDefault();
+                e.preventDefault();
+                $('#learning_path_main').toggleClass('lp-view-collapsed');
+                $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
+                $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
+                var className = $('#lp-view-expand-toggle span.fa').attr('class');
+                if (className == 'fa fa-expand') {
+                    $(this).attr('title', '{{ "Expand" | get_lang }}');
+                } else {
+                    $(this).attr('title', '{{ "Collapse" | get_lang }}');
+                }
 
-            $('#learning_path_main').toggleClass('lp-view-collapsed');
-            $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
-            $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
-            var className = $('#lp-view-expand-toggle span.fa').attr('class');
-            if (className == 'fa fa-expand') {
-                $(this).attr('title', '{{ "Expand" | get_lang }}');
-            } else {
-                $(this).attr('title', '{{ "Collapse" | get_lang }}');
-            }
-
-            if($('#navTabsbar').is(':hidden')){
-                $('#navTabsbar').show();
-            } else {
-                $('#navTabsbar').hide();
-            }
-
-        });
+                if($('#navTabsbar').is(':hidden')) {
+                    $('#navTabsbar').show();
+                } else {
+                    $('#navTabsbar').hide();
+                }
+            });
         {% else %}
-        $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
-            e.preventDefault();
+            $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
+                e.preventDefault();
 
-            $('#learning_path_main').toggleClass('lp-view-collapsed');
+                $('#learning_path_main').toggleClass('lp-view-collapsed');
+                $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
+                $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
 
-            $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
-            $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
+                var className = $('#lp-view-expand-toggle span.fa').attr('class');
+                if (className == 'fa fa-expand') {
+                    $(this).attr('title', '{{ "Expand" | get_lang }}');
+                } else {
+                    $(this).attr('title', '{{ "Collapse" | get_lang }}');
+                }
 
-            var className = $('#lp-view-expand-toggle span.fa').attr('class');
-            if (className == 'fa fa-expand') {
-                $(this).attr('title', '{{ "Expand" | get_lang }}');
-            } else {
-                $(this).attr('title', '{{ "Collapse" | get_lang }}');
-            }
-
-            if($('#navTabsbar').is(':hidden')){
-                $('#navTabsbar').show();
-            } else {
-                $('#navTabsbar').hide();
-            }
-        });
+                if($('#navTabsbar').is(':hidden')){
+                    $('#navTabsbar').show();
+                } else {
+                    $('#navTabsbar').hide();
+                }
+            });
         {% endif %}
 
         $('.lp-view-tabs').on('click', '.disabled', function (e) {
@@ -214,9 +223,7 @@
 
         $('a#ui-option').on('click', function (e) {
             e.preventDefault();
-
             var icon = $(this).children('.fa');
-
             if (icon.is('.fa-chevron-up')) {
                 icon.removeClass('fa-chevron-up').addClass('fa-chevron-down');
 
@@ -238,7 +245,6 @@
 
         $('#learning_path_right_zone #lp-view-content iframe').on('load', function () {
             $('.lp-view-tabs a[href="#lp-view-content"]').tab('show');
-
             $('.lp-view-tabs').animate({opacity: 1}, 500);
         });
 

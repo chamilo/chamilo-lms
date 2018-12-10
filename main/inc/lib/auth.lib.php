@@ -35,7 +35,7 @@ class Auth
 
         // Secondly we select the courses that are in a category (user_course_cat<>0) and
         // sort these according to the sort of the category
-        $user_id = intval($user_id);
+        $user_id = (int) $user_id;
         $sql = "SELECT
                     course.code k,
                     course.visual_code vc,
@@ -51,7 +51,7 @@ class Auth
                 FROM $TABLECOURS course, $TABLECOURSUSER  course_rel_user
                 WHERE
                     course.id = course_rel_user.c_id AND
-                    course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND
+                    course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
                     course_rel_user.user_id = '".$user_id."' 
                     $avoidCoursesCondition
                 ORDER BY course_rel_user.sort ASC";

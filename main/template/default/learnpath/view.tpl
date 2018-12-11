@@ -54,7 +54,7 @@
                                 </div>
                             </div>
                         </div>
-                       <!--- end gamification -->
+                        <!--- end gamification -->
                     {% else %}
                         <div id="progress_bar">
                             {{ progress_bar }}
@@ -308,7 +308,6 @@
         {% if disable_js_in_lp_view == 0 %}
             $('iframe#content_id').on('load', function () {
                 var arr = ['link', 'sco'];
-
                 if (!$.inArray(olms.lms_item_type, arr)) {
                     setFrameReady('content_name');
                 }

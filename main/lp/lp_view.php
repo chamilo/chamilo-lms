@@ -531,6 +531,7 @@ $template->assign('glossary_tool_available_list', ['true', 'lp', 'exercise_and_l
 $gamificationMode = api_get_setting('gamification_mode');
 // ...AND this learning path is set in gamification mode, then change the display
 $gamificationMode = $gamificationMode && $lp->seriousgame_mode;
+
 $template->assign('gamification_mode', $gamificationMode);
 $template->assign('glossary_extra_tools', api_get_setting('show_glossary_in_extra_tools'));
 $template->assign('show_glossary_in_documents', api_get_setting('show_glossary_in_documents'));

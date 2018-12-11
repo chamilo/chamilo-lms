@@ -3666,10 +3666,18 @@ class learnpath
 
                     switch ($lp_item_type) {
                         case 'document':
-                            if (api_get_configuration_value('allow_pdf_viewerjs_in_lp')) {
-                                if (Link::isPdfLink($file)) {
-                                    $pdfUrl = api_get_path(WEB_LIBRARY_PATH).'javascript/ViewerJS/index.html#'.$file;
-                                    $file = $pdfUrl;
+                            // Shows a button to download the file instead of just downloading the file directly.
+                            $documentPathInfo = pathinfo($file);
+                            if (isset($documentPathInfo['extension'])) {
+                                $parsed = parse_url($documentPathInfo['extension']);
+                                if (isset($parsed['path'])) {
+                                    $extension = $parsed['path'];
+                                    $extensionsToDownload = ['zip', 'ppt', 'pptx', 'ods', 'xlsx', 'xls', 'csv'];
+
+                                    if (in_array($extension, $extensionsToDownload)) {
+                                        $file = api_get_path(WEB_CODE_PATH).
+                                            'lp/embed.php?type=download&source=file&lp_item_id='.$item_id.'&'.api_get_cidreq();
+                                    }
                                 }
                             }
                             break;
@@ -3722,14 +3730,14 @@ class learnpath
 
                             $type_quiz = false;
                             foreach ($list as $toc) {
-                                if ($toc['id'] == $lp_item_id && ($toc['type'] == 'quiz')) {
+                                if ($toc['id'] == $lp_item_id && $toc['type'] == 'quiz') {
                                     $type_quiz = true;
                                 }
                             }
 
                             if ($type_quiz) {
-                                $lp_item_id = intval($lp_item_id);
-                                $lp_view_id = intval($lp_view_id);
+                                $lp_item_id = (int) $lp_item_id;
+                                $lp_view_id = (int) $lp_view_id;
                                 $sql = "SELECT count(*) FROM $lp_item_view_table
                                         WHERE
                                             c_id = $course_id AND
@@ -3749,7 +3757,6 @@ class learnpath
                     }
 
                     $tmp_array = explode('/', $file);
-
                     $document_name = $tmp_array[count($tmp_array) - 1];
                     if (strpos($document_name, '_DELETED_')) {
                         $file = 'blank.php?error=document_deleted';
@@ -13402,18 +13409,15 @@ EOD;
                 return $main_dir_path.'forum/viewthread.php?post='.$id.'&thread='.$myrow['thread_id'].'&forum='
                     .$myrow['forum_id'].'&lp=true&'.$extraParams;
             case TOOL_READOUT_TEXT:
-                return api_get_path(WEB_CODE_PATH).'lp/readout_text.php?&id='.$id.'&lp_id='.$learningPathId.'&'
-                    .$extraParams;
+                return api_get_path(WEB_CODE_PATH).
+                    'lp/readout_text.php?&id='.$id.'&lp_id='.$learningPathId.'&'.$extraParams;
             case TOOL_DOCUMENT:
-                $document = $em
-                    ->getRepository('ChamiloCourseBundle:CDocument')
-                    ->findOneBy(['cId' => $course_id, 'iid' => $id]);
+                $repo = $em->getRepository('ChamiloCourseBundle:CDocument');
+                $document = $repo->findOneBy(['cId' => $course_id, 'iid' => $id]);
 
                 if (empty($document)) {
                     // Try with normal id
-                    $document = $em
-                        ->getRepository('ChamiloCourseBundle:CDocument')
-                        ->findOneBy(['cId' => $course_id, 'id' => $id]);
+                    $document = $repo->findOneBy(['cId' => $course_id, 'id' => $id]);
 
                     if (empty($document)) {
                         return '';
@@ -13421,9 +13425,9 @@ EOD;
                 }
 
                 $documentPathInfo = pathinfo($document->getPath());
-                $jplayer_supported_files = ['mp4', 'ogv', 'flv', 'm4v'];
+                $jplayerSupportedFiles = ['mp4', 'ogv', 'flv', 'm4v'];
                 $extension = isset($documentPathInfo['extension']) ? $documentPathInfo['extension'] : '';
-                $showDirectUrl = !in_array($extension, $jplayer_supported_files);
+                $showDirectUrl = !in_array($extension, $jplayerSupportedFiles);
 
                 $openmethod = 2;
                 $officedoc = false;
@@ -13431,7 +13435,16 @@ EOD;
                 Session::write('officedoc', $officedoc);
 
                 if ($showDirectUrl) {
-                    return $main_course_path.'document'.$document->getPath().'?'.$extraParams;
+                    $file = $main_course_path.'document'.$document->getPath().'?'.$extraParams;
+                    if (api_get_configuration_value('allow_pdf_viewerjs_in_lp')) {
+                        if (Link::isPdfLink($file)) {
+                            $pdfUrl = api_get_path(WEB_LIBRARY_PATH).'javascript/ViewerJS/index.html#'.$file;
+
+                            return $pdfUrl;
+                        }
+                    }
+
+                    return $file;
                 }
 
                 return api_get_path(WEB_CODE_PATH).'document/showinframes.php?id='.$id.'&'.$extraParams;
@@ -13456,7 +13469,7 @@ EOD;
                 }
 
                 return $main_dir_path.'work/work.php?'.api_get_cidreq().'&id='.$rowItem->getPath().'&'.$extraParams;
-        } //end switch
+        }
 
         return $link;
     }

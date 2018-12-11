@@ -9,6 +9,7 @@ use Chamilo\PageBundle\Entity\Snapshot;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sonata\PageBundle\Entity\PageManager;
+use Sonata\PageBundle\Entity\SiteManager;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -281,22 +282,22 @@ class PageController extends BaseController
      */
     public function renderPageAction(string $slug, Request $request, $showEditPageLink = true): Response
     {
-        $container = $this->container;
-        $siteManager = $container->get('sonata.page.manager.site');
+        $manager = $this->getDoctrine()->getManager();
+        $siteRepo = $manager->getRepository('ChamiloPageBundle:Site');
         $host = $request->getHost();
         $criteria = [
             'locale' => $request->getLocale(),
             'host' => $host,
         ];
-        $site = $siteManager->findOneBy($criteria);
+        $site = $siteRepo->findOneBy($criteria);
 
         $page = null;
         if ($site) {
-            $pageManager = $this->get('sonata.page.manager.page');
+            $pageRepo = $manager->getRepository('ChamiloPageBundle:Page');
             // Parents only of homepage
             $criteria = ['site' => $site, 'enabled' => true, 'slug' => $slug];
             /** @var Page $page */
-            $page = $pageManager->findOneBy($criteria);
+            $page = $pageRepo->findOneBy($criteria);
         }
 
         return $this->render(

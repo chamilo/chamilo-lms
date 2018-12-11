@@ -162,11 +162,11 @@ class CourseController extends BaseController
                     ['e' => $toolEval->getId(), 'u' => $user->getId(), 'l' => uniqid(), 'lt' => time()]
                 );
                 $params['lis_outcome_service_url'] = api_get_path(WEB_PATH).'lti/os';
-                $params['lis_outcome_service_url'] = $this->generateUrl(
+                /* $params['lis_outcome_service_url'] = $this->generateUrl(
                     'chamilo_lti_os',
                     [],
                     UrlGeneratorInterface::ABSOLUTE_URL
-                );
+                ); */
                 $params['lis_person_sourcedid'] = "$institutionDomain:$toolUserId";
                 $params['lis_course_section_sourcedid'] = "$institutionDomain:".$course->getId();
 

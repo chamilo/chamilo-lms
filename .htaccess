@@ -67,6 +67,8 @@ RewriteRule ^main/newscorm/(.*)$ main/lp/$1 [QSA,L]
 # service Information
 RewriteRule ^service/(\d{1,})$ plugin/buycourses/src/service_information.php?service_id=$1 [L]
 
+RewriteRule ^lti/os$ public/lti/os [L]
+
 # Deny access
 RewriteRule ^(tests|.git|.env|.env.dist|config) - [F,L,NC]
 

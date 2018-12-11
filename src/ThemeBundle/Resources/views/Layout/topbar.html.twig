@@ -2,12 +2,6 @@
 {% autoescape false %}
     <script type="text/javascript">
         $(document).ready(function() {
-            $('.search-toggle').on('click', e => {
-                $('.search-box, .search-input').toggleClass('active');
-                $('.search-input input').focus();
-                e.preventDefault();
-            });
-
             // Sidebar links
             $('.sidebar .sidebar-menu li a').on('click', function () {
                 const $this = $(this);
@@ -67,6 +61,7 @@
             $('.sidebar-toggle').on('click', e => {
                 $('.app').toggleClass('is-collapsed');
                 e.preventDefault();
+                $('.sidebar-search').toggleClass('d-none');
             });
 
             /**
@@ -158,14 +153,8 @@
                         <i class="fas fa-bars"></i>
                     </a>
                 </li>
-                <li class="search-box">
-                    <a class="search-toggle no-pdd-right" href="javascript:void(0);">
-                        <i class="search-icon fas fa-search pdd-right-10"></i>
-                        <i class="search-icon-close fas fa-times pdd-right-10"></i>
-                    </a>
-                </li>
-                <li class="search-input">
-                    <input class="form-control" type="text" placeholder="Buscar curso...">
+                <li>
+
                 </li>
             </ul>
             <!-- END NAVBAR LEFT -->

@@ -7,6 +7,7 @@ use Chamilo\UserBundle\Form\LoginType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 /**
  * Class SecurityController.
@@ -16,13 +17,28 @@ use Symfony\Component\Routing\Annotation\Route;
 class SecurityController extends AbstractController
 {
     /**
+     * @var AuthenticationUtils
+     */
+    private $authenticationUtils;
+
+    /**
+     * SecurityController constructor.
+     *
+     * @param AuthenticationUtils $authenticationUtils
+     */
+    public function __construct(AuthenticationUtils $authenticationUtils)
+    {
+        $this->authenticationUtils = $authenticationUtils;
+    }
+
+    /**
      * @Route("/login", name="login")
      *
      * @return Response
      */
     public function loginAction()
     {
-        $helper = $this->get('security.authentication_utils');
+        $helper = $this->authenticationUtils;
         $error = $helper->getLastAuthenticationError();
 
         $form = $this->createForm(LoginType::class, ['_username' => $helper->getLastUsername()]);

@@ -3174,7 +3174,6 @@ class UserManager
                 'date_end' => $categoryEnd,
             ];
 
-
             $visibility = api_get_session_visibility(
                 $session_id,
                 null,
@@ -3197,10 +3196,7 @@ class UserManager
                         $ignore_visibility_for_admins
                     );
 
-                    $courseIsVisible = !in_array(
-                        $course['visibility'],
-                        $closedVisibilityList
-                    );
+                    $courseIsVisible = !in_array($course['visibility'], $closedVisibilityList);
                     if ($courseIsVisible === false || $sessionCourseVisibility == SESSION_INVISIBLE) {
                         $blockedCourseCount++;
                     }

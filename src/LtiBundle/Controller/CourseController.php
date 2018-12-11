@@ -415,6 +415,20 @@ class CourseController extends BaseController
         if (!$form->isSubmitted() || !$form->isValid()) {
             $this->setConfigureBreadcrumb($course);
 
+            $categories = \Category::load(null, null, $course->getCode());
+            $actions = '';
+
+            if (!empty($categories)) {
+                $actions .= \Display::url(
+                    \Display::return_icon('gradebook.png', get_lang('MakeQualifiable'), [], ICON_SIZE_MEDIUM),
+                    $this->generateUrl(
+                        'chamilo_lti_grade',
+                        ['catId' => $categories[0]->get_id(), 'code' => $course->getCode()]
+                    )
+                    //'./gradebook/add_eval.php?selectcat='.$categories[0]->get_id().'&'.api_get_cidreq()
+                );
+            }
+
             return $this->render(
                 '@ChamiloTheme/Lti/course_configure.twig',
                 [
@@ -423,6 +437,7 @@ class CourseController extends BaseController
                     'global_tools' => $repo->findBy(['parent' => null, 'course' => null]),
                     'form' => $form->createView(),
                     'course' => $course,
+                    'actions' => $actions,
                 ]
             );
         }
@@ -709,5 +724,115 @@ class CourseController extends BaseController
         $em->flush();
 
         return $newTool;
+    }
+
+    /**
+     * @Route("/grade/{catId}", name="chamilo_lti_grade", requirements={"catId"="\d+"})
+     *
+     * @Security("has_role('ROLE_TEACHER')")
+     *
+     * @param string $catId
+     *
+     * @return void
+     * @throws \Exception
+     */
+    public function gradeAction($catId)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $toolRepo = $em->getRepository('ChamiloLtiBundle:ExternalTool');
+        $course = $this->getCourse();
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $categories = \Category::load(null, null, $course->getCode());
+
+        if (empty($categories)) {
+            throw $this->createNotFoundException();
+        }
+
+        $evaladd = new \Evaluation();
+        $evaladd->set_user_id($user->getId());
+
+        if (!empty($catId)) {
+            $evaladd->set_category_id($catId);
+            $cat = \Category::load($catId);
+            $evaladd->set_course_code($course->getCode());
+        } else {
+            $evaladd->set_category_id(0);
+        }
+
+        $form = new \EvalForm(
+            \EvalForm::TYPE_ADD,
+            $evaladd,
+            null,
+            'add_eval_form',
+            null,
+            $this->generateUrl(
+                'chamilo_lti_grade',
+                ['catId' => $catId, 'code' => $course->getCode()]
+            ).'?'.api_get_cidreq()
+        );
+        $form->removeElement('name');
+        $form->removeElement('addresult');
+        /** @var \HTML_QuickForm_select $slcLtiTools */
+        $slcLtiTools = $form->createElement('select', 'name', get_lang('Tool'));
+        $form->insertElementBefore($slcLtiTools, 'hid_category_id');
+        $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
+
+        $tools = $toolRepo->findBy(['course' => $course, 'gradebookEval' => null]);
+
+        /** @var ExternalTool $tool */
+        foreach ($tools as $tool) {
+            $slcLtiTools->addOption($tool->getName(), $tool->getId());
+        }
+
+        if (!$form->validate()) {
+            $this->setConfigureBreadcrumb($course);
+
+            return $this->render(
+                '@ChamiloTheme/Lti/gradebook.html.twig',
+                [
+                    'form' => $form->returnForm()
+                ]
+            );
+        }
+
+        $values = $form->exportValues();
+
+        $tool = $toolRepo->find($values['name']);
+
+        if (empty($tool)) {
+            throw $this->createNotFoundException();
+        }
+
+        $eval = new \Evaluation();
+        $eval->set_name($tool->getName());
+        $eval->set_description($values['description']);
+        $eval->set_user_id($values['hid_user_id']);
+
+        if (!empty($values['hid_course_code'])) {
+            $eval->set_course_code($values['hid_course_code']);
+        }
+
+        $eval->set_course_code($course->getCode());
+        $eval->set_category_id($values['hid_category_id']);
+
+        $values['weight'] = $values['weight_mask'];
+
+        $eval->set_weight($values['weight']);
+        $eval->set_max($values['max']);
+        $eval->set_visible(empty($values['visible']) ? 0 : 1);
+        $eval->add();
+
+        $gradebookEval = $em->find('ChamiloCoreBundle:GradebookEvaluation', $eval->get_id());
+
+        $tool->setGradebookEval($gradebookEval);
+
+        $em->persist($tool);
+        $em->flush();
+
+        $this->addFlash('success', $this->trans('Evaluation for external tool added'));
+
+        return $this->redirect(api_get_course_url());
     }
 }

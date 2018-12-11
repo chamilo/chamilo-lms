@@ -417,6 +417,11 @@ class DisplayGradebook
                 if ($show_add_link && !$message_resource) {
                     $actionsLeft .= '<a href="gradebook_add_eval.php?'.$my_api_cidreq.'&selectcat='.$catobj->get_id().'" >'.
                         Display::return_icon('new_evaluation.png', get_lang('NewEvaluation'), '', ICON_SIZE_MEDIUM).'</a>';
+                    $actionsLeft .= Display::url(
+                        Display::return_icon('new_evaluation.png', get_lang('New evaluation for external tool'), [], ICON_SIZE_MEDIUM),
+                        api_get_path(WEB_PUBLIC_PATH)
+                            .'courses/'.$catobj->get_course_code().'/lti/grade/'.$catobj->get_id()
+                    );
                     $cats = Category::load($selectcat);
 
                     if ($cats[0]->get_course_code() != null && !$message_resource) {

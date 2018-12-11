@@ -1049,7 +1049,12 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 
 // Add collapsable option for user course categories
 // ALTER TABLE user_course_category ADD collapsed TINYINT(1) DEFAULT NULL;
-// $_configuration['allow_user_course_category_collapsable'] = true;
+// $_configuration['allow_user_course_category_collapsable'] = false;
+
+// Add collapsable option when showing the course list inside a session in userportal.php
+// ALTER TABLE session_rel_user ADD collapsed TINYINT(1) DEFAULT NULL;
+// Create a new session extra field called "collapsed" (checkbox yes/no - option)
+// $_configuration['allow_user_session_collapsable'] = false;
 
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email

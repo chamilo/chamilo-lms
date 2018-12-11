@@ -6851,8 +6851,8 @@ SQL;
      */
     public static function getUserSession($userId, $sessionId)
     {
-        $userId = intval($userId);
-        $sessionId = intval($sessionId);
+        $userId = (int) $userId;
+        $sessionId = (int) $sessionId;
 
         if (empty($userId) || empty($sessionId)) {
             return false;
@@ -9121,6 +9121,48 @@ SQL;
         }
 
         return $courseIds;
+    }
+
+    /**
+     * @param int             $userId
+     * @param int             $sessionId
+     * @param ExtraFieldValue $extraFieldValue
+     * @param string          $collapsableLink
+     *
+     * @return array
+     */
+    public static function getCollapsableData($userId, $sessionId, $extraFieldValue, $collapsableLink)
+    {
+        $collapsed = 0;
+
+        // Get default collapsed value in extra field
+        $value = $extraFieldValue->get_values_by_handler_and_field_variable($sessionId, 'collapsed');
+        if (!empty($value) && isset($value['value'])) {
+            $collapsed = $value['value'];
+        }
+
+        $userRelSession = Sessionmanager::getUserSession($userId, $sessionId);
+        if ($userRelSession) {
+            if (isset($userRelSession['collapsed']) && $userRelSession['collapsed'] != '') {
+                $collapsed = $userRelSession['collapsed'];
+            }
+        } else {
+            return ['collapsed' => '', 'collapsable_link' => ''];
+        }
+
+        $link = $collapsableLink.'&session_id='.$sessionId.'&value=1';
+        $image = '<i class="fa fa-folder-open"></i>';
+        if ($collapsed == 1) {
+            $link = $collapsableLink.'&session_id='.$sessionId.'&value=0';
+            $image = '<i class="fa fa-folder"></i>';
+        }
+
+        $link = Display::url(
+            $image,
+            $link
+        );
+
+        return ['collapsed' => $collapsed, 'collapsable_link' => $link];
     }
 
     /**

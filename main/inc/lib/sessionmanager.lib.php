@@ -9147,7 +9147,7 @@ SQL;
                 $collapsed = $userRelSession['collapsed'];
             }
         } else {
-            return ['collapsed' => '', 'collapsable_link' => ''];
+            return ['collapsed' => $collapsed, 'collapsable_link' => '&nbsp;'];
         }
 
         $link = $collapsableLink.'&session_id='.$sessionId.'&value=1';

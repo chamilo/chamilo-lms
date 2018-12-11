@@ -3772,7 +3772,8 @@ class Exercise
                         $str = $answerFromDatabase = Database::result($result, 0, 'answer');
                     }
 
-                    if ($saved_results == false && strpos($answerFromDatabase, 'font color') !== false) {
+                    // if ($saved_results == false && strpos($answerFromDatabase, 'font color') !== false) {
+                    if (false) {
                         // the question is encoded like this
                         // [A] B [C] D [E] F::10,10,10@1
                         // number 1 before the "@" means that is a switchable fill in blank question

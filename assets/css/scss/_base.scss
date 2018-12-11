@@ -429,8 +429,8 @@ footer {
 }
 
 .card{
-  border: 0;
-  border-radius: 2px;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0.25rem;
   .card-body{
     padding: 1.88rem 1.81rem;
     .tools{
@@ -474,7 +474,7 @@ footer {
         bottom: 0;
         left: 0;
         width: 100%;
-        z-index: 999;
+        z-index: 2;
         .name{
           padding-top: 5px;
           padding-bottom: 5px;
@@ -693,14 +693,13 @@ footer {
   .card-title a {
     display: block;
     position: relative;
-    background: $breadcrumb-color;
     color: $grey-900;
     font-size: 16px;
-    font-weight: normal;
+    font-weight: bold;
     margin-bottom: 15px;
-    padding: 10px 20px;
+    padding: 10px 5px;
     border: none;
-    border-radius: 50px;
+    border-bottom: 1px solid #cdcdcd;
     transition: all 0.10s linear 0s;
     cursor: pointer;
     &.collapsed {
@@ -719,8 +718,6 @@ footer {
       position: absolute;
       bottom: -15px;
       left: 36px;
-      /* border: 7px solid transparent;
-      border-top: 7px solid $menu-background; */
     }
     &.collapsed {
       &:before {
@@ -743,7 +740,7 @@ footer {
       line-height: 20px;
       position: absolute;
       top: 18px;
-      right: 25px;
+      right: 10px;
     }
     &.collapsed:after {
       font-family: "Font Awesome 5 Free", serif;

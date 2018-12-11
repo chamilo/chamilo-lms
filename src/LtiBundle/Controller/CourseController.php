@@ -775,7 +775,7 @@ class CourseController extends BaseController
         $form->removeElement('name');
         $form->removeElement('addresult');
         /** @var \HTML_QuickForm_select $slcLtiTools */
-        $slcLtiTools = $form->createElement('select', 'name', get_lang('Tool'));
+        $slcLtiTools = $form->createElement('select', 'name', $this->trans('External tool'));
         $form->insertElementBefore($slcLtiTools, 'hid_category_id');
         $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 

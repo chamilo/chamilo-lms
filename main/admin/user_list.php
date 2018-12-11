@@ -590,7 +590,7 @@ function modify_filter($user_id, $url_params, $row)
 
     if (api_is_platform_admin() || $sessionAdminCanLoginAs) {
         if (!$user_is_anonymous) {
-            if (api_global_admin_can_edit_admin($user_id)) {
+            if (api_global_admin_can_edit_admin($user_id, null, $sessionAdminCanLoginAs)) {
                 $result .= '<a href="user_list.php?action=login_as&user_id='.$user_id.'&sec_token='.Security::getTokenFromSession().'">'.
                     Display::return_icon('login_as.png', get_lang('LoginAs')).'</a>&nbsp;';
             } else {

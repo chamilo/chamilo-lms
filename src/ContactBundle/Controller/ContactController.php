@@ -16,7 +16,6 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/")
  *
  * @package Chamilo\ContactBundle\Controller
- *
  */
 class ContactController extends AbstractController
 {

@@ -44,8 +44,7 @@ class UserCourseCategory
     protected $sort;
 
     /**
-     *
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="collapsed", type="boolean", nullable=true)
      */
@@ -132,5 +131,4 @@ class UserCourseCategory
     {
         return $this->id;
     }
-
 }

@@ -9,7 +9,6 @@ use Chamilo\LtiBundle\Component\OutcomeReadRequest;
 use Chamilo\LtiBundle\Component\OutcomeReplaceRequest;
 use Chamilo\LtiBundle\Component\OutcomeUnsupportedRequest;
 use Chamilo\LtiBundle\Entity\ExternalTool;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 

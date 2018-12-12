@@ -8,7 +8,8 @@ use Chamilo\SettingsBundle\Manager\SettingsManager;
 use Chamilo\UserBundle\Entity\User;
 
 /**
- * Class Utils
+ * Class Utils.
+ *
  * @package Chamilo\LtiBundle\Util
  */
 class Utils

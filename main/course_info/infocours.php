@@ -17,7 +17,6 @@ use Chamilo\CoreBundle\Framework\Container;
  *
  * @package chamilo.course_info
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_SETTING;
 $this_section = SECTION_COURSES;

@@ -89,4 +89,5 @@ gregwar_captcha:
 
 imports:
     - {resource: ../../src/CoreBundle/Resources/config/services.yml}
+    - {resource: ../../src/PageBundle/Resources/config/services.yml}
     - {resource: ../../vendor/knplabs/doctrine-behaviors/config/orm-services.yml}

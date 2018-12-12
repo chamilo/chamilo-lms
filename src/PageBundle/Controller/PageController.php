@@ -10,10 +10,14 @@ use Chamilo\PageBundle\Entity\Snapshot;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sonata\PageBundle\Entity\PageManager;
+use Sonata\PageBundle\Entity\SiteManager;
+use Sonata\PageBundle\Model\SiteManagerInterface;
+use Sonata\PageBundle\Page\TemplateManager;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class PageController.
@@ -29,14 +33,14 @@ class PageController extends BaseController
      *
      * @return Response
      */
-    public function getLatestPages($number): Response
+    public function getLatestPages($number, PageManager $pageManager): Response
     {
-        $site = $this->container->get('sonata.page.site.selector')->retrieve();
+        $site = $this->get('sonata.page.site.selector')->retrieve();
 
         $criteria = ['enabled' => 1, 'site' => $site, 'decorate' => 1, 'routeName' => 'page_slug'];
         $order = ['createdAt' => 'desc'];
         // Get latest pages
-        $pages = $this->container->get('sonata.page.manager.page')->findBy($criteria, $order, $number);
+        $pages = $pageManager->findBy($criteria, $order, $number);
         $pagesToShow = [];
         /** @var Page $page */
         foreach ($pages as $page) {
@@ -47,7 +51,7 @@ class PageController extends BaseController
             $criteria = ['pageId' => $page];
             /** @var Snapshot $snapshot */
             // Check if page has a valid snapshot
-            $snapshot = $this->container->get('sonata.page.manager.snapshot')->findEnableSnapshot($criteria);
+            $snapshot = $this->get('sonata.page.manager.snapshot')->findEnableSnapshot($criteria);
             if ($snapshot) {
                 $pagesToShow[] = $page;
             }
@@ -71,11 +75,15 @@ class PageController extends BaseController
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
-    public function createPage($pageSlug, $redirect, Request $request)
-    {
-        $container = $this->container;
-
-        $siteManager = $container->get('sonata.page.manager.site');
+    public function createPage(
+        $pageSlug,
+        $redirect,
+        Request $request,
+        SiteManager $siteManager,
+        PageManager $pageManager,
+        TemplateManager $templateManager,
+        TranslatorInterface $translator
+    ) {
         $host = $request->getHost();
         $criteria = [
             'locale' => $request->getLocale(),
@@ -98,8 +106,6 @@ class PageController extends BaseController
             $site = $siteManager->save($site);
 
             // Create first root page
-            /** @var PageManager $pageManager */
-            $pageManager = $container->get('sonata.page.manager.page');
             /** @var \Sonata\PageBundle\Model\Page $page */
             $page = $pageManager->create();
             $page->setSlug('homepage');
@@ -126,8 +132,6 @@ class PageController extends BaseController
 
         $blockToEdit = null;
         if ($site) {
-            $pageManager = $this->get('sonata.page.manager.page');
-
             // Getting parent
             $criteria = ['site' => $site, 'enabled' => true, 'parent' => null];
             /** @var Page $page */
@@ -157,8 +161,6 @@ class PageController extends BaseController
                     }
                 }
             } else {
-                $pageManager = $this->get('sonata.page.manager.page');
-
                 $page = $pageManager->create();
                 $page->setSlug($pageSlug);
                 $page->setUrl('/'.$pageSlug);
@@ -174,7 +176,6 @@ class PageController extends BaseController
 
                 $pageManager->save($page);
 
-                $templateManager = $this->get('sonata.page.template_manager');
                 $template = $templateManager->get('default');
                 $templateContainers = $template->getContainers();
 
@@ -235,7 +236,7 @@ class PageController extends BaseController
             $em->merge($blockToEdit);
             $em->flush();
 
-            $this->addFlash('success', $this->trans('Updated'));
+            $this->addFlash('success', $translator->trans('Updated'));
 
             if (!empty($redirect)) {
                 return $this->redirect($redirect);
@@ -281,24 +282,26 @@ class PageController extends BaseController
      *
      * @return Response
      */
-    public function renderPageAction(string $slug, Request $request, $showEditPageLink = true): Response
-    {
-        $manager = $this->getDoctrine()->getManager();
-        $siteRepo = $manager->getRepository('ChamiloPageBundle:Site');
+    public function renderPageAction(
+        string $slug,
+        Request $request,
+        $showEditPageLink = true,
+        SiteManager $siteManager,
+        PageManager $pageManager
+    ) {
         $host = $request->getHost();
         $criteria = [
             'locale' => $request->getLocale(),
             'host' => $host,
         ];
-        $site = $siteRepo->findOneBy($criteria);
+        $site = $siteManager->findOneBy($criteria);
 
         $page = null;
         if ($site) {
-            $pageRepo = $manager->getRepository('ChamiloPageBundle:Page');
             // Parents only of homepage
             $criteria = ['site' => $site, 'enabled' => true, 'slug' => $slug];
             /** @var Page $page */
-            $page = $pageRepo->findOneBy($criteria);
+            $page = $pageManager->findOneBy($criteria);
         }
 
         return $this->render(

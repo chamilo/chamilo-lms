@@ -1,0 +1,13 @@
+services:
+    _defaults:
+        autowire: true
+        public: true
+
+    Sonata\PageBundle\Entity\SiteManager:
+        alias: 'sonata.page.manager.site'
+
+    Sonata\PageBundle\Entity\PageManager:
+        alias: 'sonata.page.manager.page'
+
+    Sonata\PageBundle\Page\TemplateManager:
+        alias: 'sonata.page.template_manager'

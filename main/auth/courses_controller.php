@@ -166,7 +166,6 @@ class CoursesController
             $data['catalogShowCoursesSessions'] = $showCoursesSessions;
         }
 
-        // render to the view
         $this->view->set_data($data);
         $this->view->set_layout('layout');
         $this->view->set_template('courses_categories');

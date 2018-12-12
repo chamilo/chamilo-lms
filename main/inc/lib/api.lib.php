@@ -8263,7 +8263,7 @@ function api_can_login_as($loginAsUserId, $userId = null)
 
     $loginAsStatusForSessionAdmins = [STUDENT];
 
-    if (api_get_configuration_value('allow_session_admin_login_as_teacher')) {
+    if (api_get_setting('session.allow_session_admin_login_as_teacher')) {
         $loginAsStatusForSessionAdmins[] = COURSEMANAGER;
     }
 

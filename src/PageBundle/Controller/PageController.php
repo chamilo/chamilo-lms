@@ -4,12 +4,12 @@
 namespace Chamilo\PageBundle\Controller;
 
 use Chamilo\CoreBundle\Controller\BaseController;
+use Chamilo\PageBundle\Entity\Block;
 use Chamilo\PageBundle\Entity\Page;
 use Chamilo\PageBundle\Entity\Snapshot;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sonata\PageBundle\Entity\PageManager;
-use Sonata\PageBundle\Entity\SiteManager;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -142,13 +142,13 @@ class PageController extends BaseController
                 $blocks = $page->getBlocks();
                 /** @var Block $block */
                 foreach ($blocks as $block) {
-                    if ($block->getName() == 'Main content') {
+                    if ($block->getName() === 'Main content') {
                         $code = $block->getSetting('code');
-                        if ($code == 'content') {
+                        if ($code === 'content') {
                             $children = $block->getChildren();
                             /** @var Block $child */
                             foreach ($children as $child) {
-                                if ($child->getType() == 'sonata.formatter.block.formatter') {
+                                if ($child->getType() === 'sonata.formatter.block.formatter') {
                                     $blockToEdit = $child;
                                     break 2;
                                 }
@@ -199,7 +199,7 @@ class PageController extends BaseController
                             ]
                         );
 
-                        if ($id === 'content' && $templateContainers[$id]['name'] == 'Main content') {
+                        if ($id === 'content' && $templateContainers[$id]['name'] === 'Main content') {
                             $parentBlock = $block;
                         }
                     }
@@ -277,6 +277,7 @@ class PageController extends BaseController
      *
      * @param string  $slug
      * @param Request $request
+     * @param bool    $showEditPageLink
      *
      * @return Response
      */

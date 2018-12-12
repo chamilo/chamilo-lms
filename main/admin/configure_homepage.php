@@ -1070,14 +1070,13 @@ switch ($action) {
                     </div>
                     <!-- insert link block -->
 
-
                     <div class="panel-group" id="links-block" role="tablist" aria-multiselectable="true">
                         <div class="panel panel-default">
                             <div class="panel-heading" role="tab" id="headingOne">
                                 <h4 class="panel-title">
                                     <a role="button" data-toggle="collapse" data-parent="#links-block"
                                        href="#links-list" aria-expanded="true" aria-controls="links-list">
-                                        <?php echo api_ucfirst(get_lang('General')); ?>
+                                        <?php echo api_ucfirst(get_lang('MenuGeneral')); ?>
                                     </a>
                                 </h4>
                             </div>

@@ -47,6 +47,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                     'show_session_description' => 'false',
                     'remove_session_url' => 'false',
                     'hide_tab_list' => '',
+                    'session_admins_edit_courses_content' => 'false',
                 ]
             )
         ;
@@ -100,7 +101,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
             ->add('show_session_description', YesNoType::class)
             ->add('remove_session_url', YesNoType::class)
             ->add('hide_tab_list')
-
+            ->add('session_admins_edit_courses_content', YesNoType::class)
         ;
     }
 }

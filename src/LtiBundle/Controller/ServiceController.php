@@ -23,11 +23,9 @@ class ServiceController extends BaseController
     /**
      * @Route("/lti/os", name="chamilo_lti_os")
      *
-     * @param Request $request
-     *
      * @return Response
      */
-    public function outcomeServiceAction(Request $request): Response
+    public function outcomeServiceAction(): Response
     {
         $em = $this->getDoctrine()->getManager();
         $toolRepo = $em->getRepository('ChamiloLtiBundle:ExternalTool');
@@ -67,7 +65,7 @@ class ServiceController extends BaseController
         }
 
         if (!$toolIsFound) {
-            throw $this->createNotFoundException('External tool not found');
+            throw $this->createNotFoundException('External tool not found. Signature is not valid');
         }
 
         $body = file_get_contents('php://input');

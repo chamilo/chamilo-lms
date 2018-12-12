@@ -322,10 +322,8 @@ class Evaluation implements GradebookItem
                 .','.intval($this->get_user_id())
                 .','.api_float_val($this->get_weight())
                 .','.intval($this->get_max())
-                .','.intval($this->is_visible())
-                .','.intval(0)
+                .','.intval($this->is_visible());
 
-            ;
             if (isset($this->description)) {
                 $sql .= ",'".Database::escape_string($this->get_description())."'";
             }

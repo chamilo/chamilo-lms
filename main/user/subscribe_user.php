@@ -168,10 +168,9 @@ if (!empty($_POST['keyword'])) {
     echo '<br/>'.get_lang('SearchResultsFor').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';
 }
 
-Display :: display_header($tool_name, "User");
+Display :: display_header($tool_name, 'User');
 
 // Build search-form
-
 switch ($type) {
     case STUDENT:
         $url = api_get_path(WEB_CODE_PATH).'user/user.php?'.api_get_cidreq().'';
@@ -180,7 +179,7 @@ switch ($type) {
         $url = api_get_path(WEB_CODE_PATH).'user/user.php?'.api_get_cidreq().'&type='.COURSEMANAGER;
         break;
 }
-$actionsLeft = '';
+
 $actionsLeft = Display::url(
     Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM),
     $url

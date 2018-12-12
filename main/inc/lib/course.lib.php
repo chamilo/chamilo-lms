@@ -576,14 +576,19 @@ class CourseManager
             return false; //detected possible SQL injection
         }
 
-        $courseInfo = api_get_course_info($course_code);
-        $courseId = $courseInfo['real_id'];
-        $courseCode = $courseInfo['code'];
-        $userCourseCategoryId = intval($userCourseCategoryId);
-
-        if (empty($user_id) || empty($courseCode)) {
+        if (empty($user_id) || empty($course_code)) {
             return false;
         }
+
+        $courseInfo = api_get_course_info($course_code);
+
+        if (empty($courseInfo)) {
+            return false;
+        }
+
+        $courseId = $courseInfo['real_id'];
+        $courseCode = $courseInfo['code'];
+        $userCourseCategoryId = (int) $userCourseCategoryId;
 
         if (!empty($session_id)) {
             $session_id = intval($session_id);
@@ -620,6 +625,7 @@ class CourseManager
                 $session_id,
                 $courseCode
             );
+
             // Add event to the system log
             Event::addEvent(
                 LOG_SUBSCRIBE_USER_TO_COURSE,
@@ -630,11 +636,11 @@ class CourseManager
                 $courseId,
                 $session_id
             );
-            $user_info = api_get_user_info($user_id);
+            $userInfo = api_get_user_info($user_id);
             Event::addEvent(
                 LOG_SUBSCRIBE_USER_TO_COURSE,
                 LOG_USER_OBJECT,
-                $user_info,
+                $userInfo,
                 api_get_utc_datetime(),
                 api_get_user_id(),
                 $courseId,
@@ -658,11 +664,11 @@ class CourseManager
                 $courseId
             );
 
-            $user_info = api_get_user_info($user_id);
+            $userInfo = api_get_user_info($user_id);
             Event::addEvent(
                 LOG_SUBSCRIBE_USER_TO_COURSE,
                 LOG_USER_OBJECT,
-                $user_info,
+                $userInfo,
                 api_get_utc_datetime(),
                 api_get_user_id(),
                 $courseId

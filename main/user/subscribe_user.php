@@ -30,25 +30,25 @@ if (!api_is_allowed_to_edit()) {
     api_not_allowed(true);
 }
 
-$tool_name = get_lang("SubscribeUserToCourse");
+$tool_name = get_lang('SubscribeUserToCourse');
 $type = isset($_REQUEST['type']) ? intval($_REQUEST['type']) : STUDENT;
 $keyword = isset($_REQUEST['keyword']) ? Security::remove_XSS($_REQUEST['keyword']) : null;
 
 $courseInfo = api_get_course_info();
 
 if ($type == COURSEMANAGER) {
-    $tool_name = get_lang("SubscribeUserToCourseAsTeacher");
+    $tool_name = get_lang('SubscribeUserToCourseAsTeacher');
 }
 
 //extra entries in breadcrumb
 $interbreadcrumb[] = [
-    "url" => "user.php?".api_get_cidreq(),
-    "name" => get_lang("ToolUser"),
+    'url' => 'user.php?'.api_get_cidreq(),
+    'name' => get_lang('ToolUser'),
 ];
 if ($keyword) {
     $interbreadcrumb[] = [
-        "url" => "subscribe_user.php?type=".$type.'&'.api_get_cidreq(),
-        "name" => $tool_name,
+        'url' => 'subscribe_user.php?type='.$type.'&'.api_get_cidreq(),
+        'name' => $tool_name,
     ];
     $tool_name = get_lang('SearchResults');
 }
@@ -59,30 +59,32 @@ $list_not_register_user = '';
 
 if (isset($_REQUEST['register'])) {
     $userInfo = api_get_user_info($_REQUEST['user_id']);
-    $message = $userInfo['complete_name_with_username'].' '.get_lang('AddedToCourse');
+    if ($userInfo) {
+        $message = $userInfo['complete_name_with_username'].' '.get_lang('AddedToCourse');
 
-    if ($type === COURSEMANAGER) {
-        if (!empty($sessionId)) {
-            SessionManager::set_coach_to_course_session(
-                $_REQUEST['user_id'],
-                $sessionId,
-                $courseInfo['real_id']
-            );
-            Display::addFlash(Display::return_message($message));
+        if ($type === COURSEMANAGER) {
+            if (!empty($sessionId)) {
+                SessionManager::set_coach_to_course_session(
+                    $_REQUEST['user_id'],
+                    $sessionId,
+                    $courseInfo['real_id']
+                );
+                Display::addFlash(Display::return_message($message));
+            } else {
+                CourseManager::subscribe_user(
+                    $_REQUEST['user_id'],
+                    $courseInfo['code'],
+                    COURSEMANAGER
+                );
+                Display::addFlash(Display::return_message($message));
+            }
         } else {
             CourseManager::subscribe_user(
                 $_REQUEST['user_id'],
-                $courseInfo['code'],
-                COURSEMANAGER
+                $courseInfo['code']
             );
             Display::addFlash(Display::return_message($message));
         }
-    } else {
-        CourseManager::subscribe_user(
-            $_REQUEST['user_id'],
-            $courseInfo['code']
-        );
-        Display::addFlash(Display::return_message($message));
     }
     header('Location:'.api_get_path(WEB_CODE_PATH).'user/user.php?'.api_get_cidreq().'&type='.$type);
     exit;
@@ -94,28 +96,30 @@ if (isset($_POST['action'])) {
             if (is_array($_POST['user'])) {
                 foreach ($_POST['user'] as $index => $user_id) {
                     $userInfo = api_get_user_info($user_id);
-                    if ($type === COURSEMANAGER) {
-                        if (!empty($sessionId)) {
-                            $is_suscribe[] = SessionManager::set_coach_to_course_session(
-                                $user_id,
-                                $sessionId,
-                                $courseInfo['real_id']
-                            );
+                    if ($userInfo) {
+                        if ($type === COURSEMANAGER) {
+                            if (!empty($sessionId)) {
+                                $is_suscribe[] = SessionManager::set_coach_to_course_session(
+                                    $user_id,
+                                    $sessionId,
+                                    $courseInfo['real_id']
+                                );
+                            } else {
+                                $is_suscribe[] = CourseManager::subscribe_user(
+                                    $user_id,
+                                    $courseInfo['code'],
+                                    COURSEMANAGER
+                                );
+                            }
                         } else {
                             $is_suscribe[] = CourseManager::subscribe_user(
                                 $user_id,
-                                $courseInfo['code'],
-                                COURSEMANAGER
+                                $courseInfo['code']
                             );
                         }
-                    } else {
-                        $is_suscribe[] = CourseManager::subscribe_user(
-                            $user_id,
-                            $courseInfo['code']
-                        );
+                        $message = $userInfo['complete_name_with_username'].' '.get_lang('AddedToCourse');
+                        Display::addFlash(Display::return_message($message));
                     }
-                    $message = $userInfo['complete_name_with_username'].' '.get_lang('AddedToCourse');
-                    Display::addFlash(Display::return_message($message));
                 }
             }
 

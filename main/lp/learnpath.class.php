@@ -9622,7 +9622,7 @@ class learnpath
             $extra_info = (int) $extra_info;
             $sql = "SELECT title, description, url 
                     FROM $tbl_link
-                    WHERE c_id = $course_id AND id = $extra_info";
+                    WHERE c_id = $course_id AND iid = $extra_info";
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
             $item_title = $row['title'];

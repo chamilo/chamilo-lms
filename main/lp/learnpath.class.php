@@ -7449,19 +7449,6 @@ class learnpath
                 }
                 break;
             case TOOL_DOCUMENT:
-                $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
-                $sql = "SELECT lp.*, doc.path as dir
-                        FROM $tbl_lp_item as lp
-                        LEFT JOIN $tbl_doc as doc
-                        ON (doc.iid = lp.path AND lp.c_id = doc.c_id)
-                        WHERE
-                            doc.c_id = $course_id AND
-                            lp.iid = ".$item_id;
-                $res_step = Database::query($sql);
-                $row_step = Database::fetch_array($res_step, 'ASSOC');
-                $return .= $this->display_manipulate($item_id, $row['item_type']);
-                $return .= $this->display_document_form('edit', $item_id, $row_step);
-                break;
             case TOOL_READOUT_TEXT:
                 $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
                 $sql = "SELECT lp.*, doc.path as dir
@@ -7474,7 +7461,14 @@ class learnpath
                 $res_step = Database::query($sql);
                 $row_step = Database::fetch_array($res_step, 'ASSOC');
                 $return .= $this->display_manipulate($item_id, $row['item_type']);
-                $return .= $this->displayFrmReadOutText('edit', $item_id, $row_step);
+
+                if ($row['item_type'] === TOOL_DOCUMENT) {
+                    $return .= $this->display_document_form('edit', $item_id, $row_step);
+                }
+
+                if ($row['item_type'] === TOOL_READOUT_TEXT) {
+                    $return .= $this->displayFrmReadOutText('edit', $item_id, $row_step);
+                }
                 break;
             case TOOL_LINK:
                 $link_id = (string) $row['path'];
@@ -9616,23 +9610,24 @@ class learnpath
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $tbl_link = Database::get_course_table(TABLE_LINK);
 
+        $item_title = '';
+        $item_description = '';
+        $item_url = '';
+
         if ($id != 0 && is_array($extra_info)) {
             $item_title = stripslashes($extra_info['title']);
             $item_description = stripslashes($extra_info['description']);
             $item_url = stripslashes($extra_info['url']);
         } elseif (is_numeric($extra_info)) {
-            $extra_info = intval($extra_info);
-            $sql = "SELECT title, description, url FROM ".$tbl_link."
-                    WHERE c_id = ".$course_id." AND id = ".$extra_info;
+            $extra_info = (int) $extra_info;
+            $sql = "SELECT title, description, url 
+                    FROM $tbl_link
+                    WHERE c_id = $course_id AND id = $extra_info";
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
             $item_title = $row['title'];
             $item_description = $row['description'];
             $item_url = $row['url'];
-        } else {
-            $item_title = '';
-            $item_description = '';
-            $item_url = '';
         }
 
         $form = new FormValidator(
@@ -9641,10 +9636,9 @@ class learnpath
             $this->getCurrentBuildingModeURL()
         );
         $defaults = [];
+        $parent = 0;
         if ($id != 0 && is_array($extra_info)) {
             $parent = $extra_info['parent_item_id'];
-        } else {
-            $parent = 0;
         }
 
         $sql = "SELECT * FROM $tbl_lp_item

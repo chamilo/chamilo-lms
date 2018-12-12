@@ -229,9 +229,9 @@ class MoodleImport
                     } else {
                         $exercise->setRandom(0);
                     }
-                    $exercise->updateRandomAnswers($moduleValues['shuffleanswers']);
+                    $exercise->updateRandomAnswers(!empty($moduleValues['shuffleanswers']));
                     // @todo divide to minutes
-                    $exercise->updateExpiredTime($moduleValues['timelimit']);
+                    $exercise->updateExpiredTime((int) $moduleValues['timelimit']);
 
                     if ($moduleValues['questionsperpage'] == 1) {
                         $exercise->updateType(2);
@@ -497,7 +497,7 @@ class MoodleImport
     /**
      * Search the current file resource in main Files XML.
      *
-     * @param resource $filesXml  XML file
+     * @param resource $filesXml XML file
      * @param int      $contextId
      *
      * @return mixed | array if is a valid xml file, false otherwise

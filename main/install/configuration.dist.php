@@ -333,8 +333,10 @@ ALTER TABLE portfolio_category CHANGE title title LONGTEXT NOT NULL;
 //$_configuration['session_list_show_count_users'] = false;
 // Session admin access to all course content
 //$_configuration['session_admins_access_all_content'] = false;
-// Limits the features that a session admin has access to from the main admin panel (removes users import and usergroups)
-//$_configuration['limit_session_admin_role'] = false;
+// Adds roles to the system announcements (requires DB change BT#12476)
+//$_configuration['system_announce_extra_roles'] = false;
+// Limits that a session admin has access to list users
+//$_configuration['limit_session_admin_list_users'] = false;
 // Course tools visibility edition in sessions
 //$_configuration['allow_edit_tool_visibility_in_session'] = false;
 // Enable the support to ODF files
@@ -876,6 +878,42 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 
 // Activate the view with ViewerJS for PDF files within the lessons for IPad and IPhone
 // $_configuration['allow_pdf_viewerjs_in_lp'] = false;
+
+// Allow DRH user to access all visible session course announcements
+// $_configuration['allow_drh_access_announcement'] = false;
+
+// Allow my personal files link in the homepage
+// $_configuration['allow_my_files_link_in_homepage'] = false;
+
+// This option sets default parameters in the main/session/session_import.php
+/*$_configuration['session_import_settings'] = [
+    'options' =>  [
+        'session_exists_default_option' => '1',
+        'send_mail_default_option' => '1',
+    ]
+];*/
+
+// This option sets default parameters in the main/admin/user_import.php
+/*$_configuration['user_import_settings'] = [
+    'options' =>  [
+        'send_mail_default_option' => '1',
+    ]
+];*/
+
+// Disable all new exercise attempts in all the platform
+// $_configuration['exercises_disable_new_attempts'] = false;
+
+// Improve speed when rendering gradebook student reports using Doctrine APCU cache
+// $_configuration['gradebook_use_apcu_cache'] = true;
+
+// Add collapsable option for user course categories
+// ALTER TABLE user_course_category ADD collapsed TINYINT(1) DEFAULT NULL;
+// $_configuration['allow_user_course_category_collapsable'] = false;
+
+// Add collapsable option when showing the course list inside a session in userportal.php
+// ALTER TABLE session_rel_user ADD collapsed TINYINT(1) DEFAULT NULL;
+// Create a new session extra field called "collapsed" (checkbox yes/no - option)
+// $_configuration['allow_user_session_collapsable'] = false;
 
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email

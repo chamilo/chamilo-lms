@@ -9,7 +9,7 @@
                     <em>{{ session_date.display }}</em>
                 {% endif %}
             </p>
-            {% if show_tutor %}
+            {% if show_tutor and session.generalCoach %}
                 <p>
                     <em class="fa fa-user"></em> {{ 'SessionGeneralCoach'|get_lang }}: <em>{{ session.generalCoach|format_user_full_name }}</em>
                 </p>

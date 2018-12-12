@@ -1633,7 +1633,12 @@ function api_get_user_info(
         $userFromSession = Session::read('_user');
 
         if (isset($userFromSession)) {
-            if ($cacheAvailable === true) {
+            if ($cacheAvailable === true &&
+                (
+                    empty($userFromSession['is_anonymous']) &&
+                    (isset($userFromSession['status']) && $userFromSession['status'] != ANONYMOUS)
+                )
+            ) {
                 $apcVar = api_get_configuration_value('apc_prefix').'userinfo_'.$userFromSession['user_id'];
                 if (apcu_exists($apcVar)) {
                     if ($updateCache) {
@@ -3395,8 +3400,10 @@ function api_is_allowed_to_edit(
     $session_coach = false,
     $check_student_view = true
 ) {
+    $allowSessionAdminEdit = api_get_setting('session.session_admins_edit_courses_content') === true;
+
     // Admins can edit anything.
-    if (api_is_platform_admin(false)) {
+    if (api_is_platform_admin($allowSessionAdminEdit)) {
         //The student preview was on
         if ($check_student_view && api_is_student_view_active()) {
             return false;
@@ -8230,7 +8237,7 @@ function api_can_login_as($loginAsUserId, $userId = null)
         }
     }
 
-    $userInfo = api_get_user_info($userId);
+    $userInfo = api_get_user_info($loginAsUserId);
     $isDrh = function () use ($loginAsUserId) {
         if (api_is_drh()) {
             if (api_drh_can_access_all_session_content()) {
@@ -8259,7 +8266,15 @@ function api_can_login_as($loginAsUserId, $userId = null)
         return false;
     };
 
-    return api_is_platform_admin() || (api_is_session_admin() && $userInfo['status'] == 5) || $isDrh();
+    $loginAsStatusForSessionAdmins = [STUDENT];
+
+    if (api_get_setting('session.allow_session_admin_login_as_teacher')) {
+        $loginAsStatusForSessionAdmins[] = COURSEMANAGER;
+    }
+
+    return api_is_platform_admin() ||
+        (api_is_session_admin() && in_array($userInfo['status'], $loginAsStatusForSessionAdmins)) ||
+        $isDrh();
 }
 
 /**

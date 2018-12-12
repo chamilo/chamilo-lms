@@ -590,12 +590,7 @@ class CourseManager
         $courseCode = $courseInfo['code'];
         $userCourseCategoryId = (int) $userCourseCategoryId;
 
-        if (!empty($session_id)) {
-            $session_id = intval($session_id);
-        } else {
-            $session_id = api_get_session_id();
-        }
-
+        $session_id = empty($session_id) ? api_get_session_id() : (int) $session_id;
         $status = ($status == STUDENT || $status == COURSEMANAGER) ? $status : STUDENT;
 
         // A preliminary check whether the user has been already registered on the platform.
@@ -831,7 +826,7 @@ class CourseManager
                         0,
                         null,
                         null,
-                        null,
+                        STUDENT,
                         true,
                         false
                     );

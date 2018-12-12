@@ -88,7 +88,7 @@ if (isset($_REQUEST['register'])) {
             if ($result) {
                 Display::addFlash(Display::return_message($message));
             } else {
-                Display::addFlash(Display::return_message(get_lang('ErrorContactPlatformAdmin'), 'warning'));
+                Display::addFlash(Display::return_message(get_lang('MaxNumberSubscribedStudentsReached'), 'warning'));
             }
         }
     }
@@ -134,7 +134,7 @@ if (isset($_POST['action'])) {
                             if ($result) {
                                 $isSuscribe[] = $message;
                             } else {
-                                $isSuscribe[] = get_lang('ErrorContactPlatformAdmin').' '.$userInfo['complete_name_with_username'];
+                                $isSuscribe[] = get_lang('MaxNumberSubscribedStudentsReached').' '.$userInfo['complete_name_with_username'];
                             }
                         }
                     }

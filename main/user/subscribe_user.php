@@ -71,19 +71,25 @@ if (isset($_REQUEST['register'])) {
                 );
                 Display::addFlash(Display::return_message($message));
             } else {
-                CourseManager::subscribe_user(
+                $result = CourseManager::subscribe_user(
                     $_REQUEST['user_id'],
                     $courseInfo['code'],
                     COURSEMANAGER
                 );
-                Display::addFlash(Display::return_message($message));
+                if ($result) {
+                    Display::addFlash(Display::return_message($message));
+                }
             }
         } else {
-            CourseManager::subscribe_user(
+            $result = CourseManager::subscribe_user(
                 $_REQUEST['user_id'],
                 $courseInfo['code']
             );
-            Display::addFlash(Display::return_message($message));
+            if ($result) {
+                Display::addFlash(Display::return_message($message));
+            } else {
+                Display::addFlash(Display::return_message(get_lang('ErrorContactPlatformAdmin'), 'warning'));
+            }
         }
     }
     header('Location:'.api_get_path(WEB_CODE_PATH).'user/user.php?'.api_get_cidreq().'&type='.$type);
@@ -94,31 +100,49 @@ if (isset($_POST['action'])) {
     switch ($_POST['action']) {
         case 'subscribe':
             if (is_array($_POST['user'])) {
+                $isSuscribe = [];
                 foreach ($_POST['user'] as $index => $user_id) {
                     $userInfo = api_get_user_info($user_id);
                     if ($userInfo) {
+                        $message = $userInfo['complete_name_with_username'].' '.get_lang('AddedToCourse');
                         if ($type === COURSEMANAGER) {
                             if (!empty($sessionId)) {
-                                $is_suscribe[] = SessionManager::set_coach_to_course_session(
+                                $result = SessionManager::set_coach_to_course_session(
                                     $user_id,
                                     $sessionId,
                                     $courseInfo['real_id']
                                 );
+                                if ($result) {
+                                    $isSuscribe[] = $message;
+                                }
                             } else {
-                                $is_suscribe[] = CourseManager::subscribe_user(
+                                $result = CourseManager::subscribe_user(
                                     $user_id,
                                     $courseInfo['code'],
                                     COURSEMANAGER
                                 );
+
+                                if ($result) {
+                                    $isSuscribe[] = $message;
+                                }
                             }
                         } else {
-                            $is_suscribe[] = CourseManager::subscribe_user(
+                            $result = CourseManager::subscribe_user(
                                 $user_id,
                                 $courseInfo['code']
                             );
+                            if ($result) {
+                                $isSuscribe[] = $message;
+                            } else {
+                                $isSuscribe[] = get_lang('ErrorContactPlatformAdmin').' '.$userInfo['complete_name_with_username'];
+                            }
                         }
-                        $message = $userInfo['complete_name_with_username'].' '.get_lang('AddedToCourse');
-                        Display::addFlash(Display::return_message($message));
+                    }
+                }
+
+                if (!empty($isSuscribe)) {
+                    foreach ($isSuscribe as $info) {
+                        Display::addFlash(Display::return_message($info));
                     }
                 }
             }

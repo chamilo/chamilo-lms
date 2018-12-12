@@ -598,7 +598,7 @@ class CourseManager
 
         $status = ($status == STUDENT || $status == COURSEMANAGER) ? $status : STUDENT;
 
-        // A preliminary check whether the user has bben already registered on the platform.
+        // A preliminary check whether the user has been already registered on the platform.
         $sql = "SELECT status FROM ".Database::get_main_table(TABLE_MAIN_USER)."
                 WHERE user_id = $user_id";
         if (Database::num_rows(Database::query($sql)) == 0) {
@@ -646,36 +646,42 @@ class CourseManager
                 $courseId,
                 $session_id
             );
+
+            return true;
         } else {
-            self::add_user_to_course(
+            $userAdded = self::add_user_to_course(
                 $user_id,
                 $courseCode,
                 $status,
                 $userCourseCategoryId
             );
 
-            // Add event to the system log
-            Event::addEvent(
-                LOG_SUBSCRIBE_USER_TO_COURSE,
-                LOG_COURSE_CODE,
-                $courseCode,
-                api_get_utc_datetime(),
-                api_get_user_id(),
-                $courseId
-            );
+            if ($userAdded) {
+                // Add event to the system log
+                Event::addEvent(
+                    LOG_SUBSCRIBE_USER_TO_COURSE,
+                    LOG_COURSE_CODE,
+                    $courseCode,
+                    api_get_utc_datetime(),
+                    api_get_user_id(),
+                    $courseId
+                );
 
-            $userInfo = api_get_user_info($user_id);
-            Event::addEvent(
-                LOG_SUBSCRIBE_USER_TO_COURSE,
-                LOG_USER_OBJECT,
-                $userInfo,
-                api_get_utc_datetime(),
-                api_get_user_id(),
-                $courseId
-            );
+                $userInfo = api_get_user_info($user_id);
+                Event::addEvent(
+                    LOG_SUBSCRIBE_USER_TO_COURSE,
+                    LOG_USER_OBJECT,
+                    $userInfo,
+                    api_get_utc_datetime(),
+                    api_get_user_id(),
+                    $courseId
+                );
+
+                return true;
+            }
+
+            return false;
         }
-
-        return true;
     }
 
     /**
@@ -809,6 +815,31 @@ class CourseManager
                 }
 
                 return false; // Subscription is not allowed for this course.
+            }
+        }
+
+        if ($status === STUDENT) {
+            // Check if max students per course extra field is set
+            $extraFieldValue = new ExtraFieldValue('course');
+            $value = $extraFieldValue->get_values_by_handler_and_field_variable($courseId, 'max_subscribed_students');
+            if (!empty($value) && isset($value['value'])) {
+                $maxStudents = $value['value'];
+                if ($maxStudents !== '') {
+                    $maxStudents = (int) $maxStudents;
+                    $count = self::get_user_list_from_course_code(
+                        $courseCode,
+                        0,
+                        null,
+                        null,
+                        null,
+                        true,
+                        false
+                    );
+
+                    if ($count >= $maxStudents) {
+                        return false;
+                    }
+                }
             }
         }
 

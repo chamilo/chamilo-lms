@@ -411,8 +411,6 @@ ALTER TABLE portfolio_category CHANGE title title LONGTEXT NOT NULL;
 //$_configuration['session_admins_edit_courses_content'] = false;
 // Adds roles to the system announcements (requires DB change BT#12476)
 //$_configuration['system_announce_extra_roles'] = false;
-// Limits the features that a session admin has access to from the main admin panel (removes users import and usergroups)
-//$_configuration['limit_session_admin_role'] = false;
 // Limits that a session admin has access to list users
 //$_configuration['limit_session_admin_list_users'] = false;
 // Course tools visibility edition in sessions

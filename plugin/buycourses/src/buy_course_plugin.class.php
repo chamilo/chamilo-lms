@@ -52,6 +52,8 @@ class BuyCoursesPlugin extends Plugin
     const CULQI_INTEGRATION_TYPE = 'INTEG';
     const CULQI_PRODUCTION_TYPE = 'PRODUC';
 
+    public $isAdminPlugin = true;
+
     /**
      * BuyCoursesPlugin constructor.
      */

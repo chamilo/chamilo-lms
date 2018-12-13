@@ -772,24 +772,24 @@ class Category implements GradebookItem
     /**
      * Delete the gradebook categories from a course, including course sessions.
      *
-     * @param string $courseCode
+     * @param \Chamilo\CoreBundle\Entity\Course $course
      */
-    public static function deleteFromCourse($courseCode)
+    public static function deleteFromCourse($course)
     {
         $em = Database::getManager();
         $categories = $em
             ->createQuery(
                 'SELECT DISTINCT gc.sessionId
-                FROM ChamiloCoreBundle:GradebookCategory gc WHERE gc.courseCode = :code'
+                FROM ChamiloCoreBundle:GradebookCategory gc WHERE gc.course = :course'
             )
-            ->setParameter('code', $courseCode)
+            ->setParameter('course', $course)
             ->getResult();
 
         foreach ($categories as $category) {
             $cats = self::load(
                 null,
                 null,
-                $courseCode,
+                $course->getCode(),
                 null,
                 null,
                 (int) $category['sessionId']

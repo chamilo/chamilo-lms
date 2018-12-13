@@ -2303,6 +2303,7 @@ class CourseManager
 
         $codeFiltered = $course['code'];
         $courseId = $course['real_id']; // int
+        $courseEntity = api_get_course_entity($courseId);
 
         $count = 0;
         if (api_is_multiple_url_enabled()) {
@@ -2350,7 +2351,7 @@ class CourseManager
                 rename($course_dir, $archive_dir);
             }
 
-            Category::deleteCategoryFromCourse($courseId);
+            Category::deleteFromCourse($courseEntity);
 
             // Unsubscribe all users from the course
             $sql = "DELETE FROM $table_course_user WHERE c_id = $courseId";
@@ -2433,7 +2434,6 @@ class CourseManager
             /*$sql = "DELETE FROM $table_course WHERE id = $courseId";
             Database::query($sql);*/
 
-            $courseEntity = api_get_course_entity($courseId);
             Database::getManager()->remove($courseEntity);
             Database::getManager()->flush();
 

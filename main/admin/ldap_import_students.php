@@ -140,9 +140,10 @@ if (empty($annee) && empty($course)) {
     }
     if (!empty($_POST['course'])) {
         foreach ($UserList as $user_id) {
-            CourseManager::add_user_to_course($user_id, $_POST['course']);
+            CourseManager::subscribeUser($user_id, $_POST['course']);
         }
         header('Location: course_information.php?code='.Security::remove_XSS($_POST['course']));
+        exit;
     } else {
         $message = get_lang('NoUserAdded');
         Display::addFlash(Display::return_message($message, 'normal', false));

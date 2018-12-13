@@ -60,10 +60,9 @@ $list_not_register_user = '';
 if (isset($_REQUEST['register'])) {
     $userInfo = api_get_user_info($_REQUEST['user_id']);
     if ($userInfo) {
-        $message = $userInfo['complete_name_with_username'].' '.get_lang('AddedToCourse');
-
         if ($type === COURSEMANAGER) {
             if (!empty($sessionId)) {
+                $message = $userInfo['complete_name_with_username'].' '.get_lang('AddedToCourse');
                 SessionManager::set_coach_to_course_session(
                     $_REQUEST['user_id'],
                     $sessionId,
@@ -71,25 +70,17 @@ if (isset($_REQUEST['register'])) {
                 );
                 Display::addFlash(Display::return_message($message));
             } else {
-                $result = CourseManager::subscribe_user(
+                CourseManager::subscribeUser(
                     $_REQUEST['user_id'],
                     $courseInfo['code'],
                     COURSEMANAGER
                 );
-                if ($result) {
-                    Display::addFlash(Display::return_message($message));
-                }
             }
         } else {
-            $result = CourseManager::subscribe_user(
+            CourseManager::subscribeUser(
                 $_REQUEST['user_id'],
                 $courseInfo['code']
             );
-            if ($result) {
-                Display::addFlash(Display::return_message($message));
-            } else {
-                Display::addFlash(Display::return_message(get_lang('MaxNumberSubscribedStudentsReached'), 'warning'));
-            }
         }
     }
     header('Location:'.api_get_path(WEB_CODE_PATH).'user/user.php?'.api_get_cidreq().'&type='.$type);
@@ -116,7 +107,7 @@ if (isset($_POST['action'])) {
                                     $isSuscribe[] = $message;
                                 }
                             } else {
-                                $result = CourseManager::subscribe_user(
+                                $result = CourseManager::subscribeUser(
                                     $user_id,
                                     $courseInfo['code'],
                                     COURSEMANAGER
@@ -127,7 +118,7 @@ if (isset($_POST['action'])) {
                                 }
                             }
                         } else {
-                            $result = CourseManager::subscribe_user(
+                            $result = CourseManager::subscribeUser(
                                 $user_id,
                                 $courseInfo['code']
                             );

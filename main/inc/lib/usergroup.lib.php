@@ -881,7 +881,7 @@ class UserGroup extends Model
                 if ($course_info) {
                     if (!empty($user_list)) {
                         foreach ($user_list as $user_id) {
-                            CourseManager::subscribe_user(
+                            CourseManager::subscribeUser(
                                 $user_id,
                                 $course_info['code']
                             );
@@ -1031,7 +1031,7 @@ class UserGroup extends Model
                 if (!empty($course_list)) {
                     foreach ($course_list as $course_id) {
                         $course_info = api_get_course_info_by_id($course_id);
-                        CourseManager::subscribe_user($user_id, $course_info['code']);
+                        CourseManager::subscribeUser($user_id, $course_info['code']);
                     }
                 }
                 $params = [

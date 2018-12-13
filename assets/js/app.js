@@ -5,6 +5,7 @@ Routing.setRoutingData(routes);
 
 require('./vendor');
 
+
 // @todo rework url naming
 var homePublicUrl = Routing.generate('home') + 'public/';
 var legacyIndex = Routing.generate('legacy_index');
@@ -15,6 +16,7 @@ console.log(homePublicUrl);
 console.log(legacyIndex);
 console.log(mainUrl);
 console.log(webAjax);
+
 
 var ajax_url = webAjax + 'chat.ajax.php';
 var online_button = '<img src="' + homePublicUrl + 'img/statusonline.png">';
@@ -556,7 +558,7 @@ if (typeof CKEDITOR !== 'undefined') {
     plugins.forEach(function (plugin) {
         CKEDITOR.plugins.addExternal(
             plugin,
-            mainUrl + 'inc/lib/javascript/ckeditor/plugins/' + plugin + '/'
+            mainUrl.substring(1) + 'inc/lib/javascript/ckeditor/plugins/' + plugin + '/'
         );
     });
 

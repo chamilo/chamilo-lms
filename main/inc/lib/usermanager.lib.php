@@ -917,6 +917,9 @@ class UserManager
             Database::query($sql);
         }
 
+        $app_plugin = new AppPlugin();
+        $app_plugin->performActionsWhenDeletingItem('user', $user_id);
+
         // Delete user from database
         $sql = "DELETE FROM $table_user WHERE id = '".$user_id."'";
         Database::query($sql);

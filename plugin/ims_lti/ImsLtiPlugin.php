@@ -543,4 +543,17 @@ class ImsLtiPlugin extends Plugin
             }
         }
     }
+
+    /**
+     * Avoid conflict with foreign key when deleting a course
+     *
+     * @param int $courseId
+     */
+    public function doWhenDeletingCourse($courseId)
+    {
+        $em = Database::getManager();
+
+        $em->createQuery('DELETE FROM ChamiloPluginBundle:ImsLti\ImsLtiTool tool WHERE tool.course = :c_id')
+            ->execute(['c_id' => (int) $courseId]);
+    }
 }

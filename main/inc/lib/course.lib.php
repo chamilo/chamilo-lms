@@ -2408,6 +2408,9 @@ class CourseManager
             // To prevent fK mix up on some tables
             GroupManager::deleteAllGroupsFromCourse($courseId);
 
+            $app_plugin = new AppPlugin();
+            $app_plugin->performActionsWhenDeletingItem('course', $courseId);
+
             // Delete the course from the database
             $sql = "DELETE FROM $table_course WHERE id = $courseId";
             Database::query($sql);

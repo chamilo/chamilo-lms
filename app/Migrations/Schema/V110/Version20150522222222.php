@@ -663,7 +663,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Session',
-            ($value?$value:'false'),
+            ($value?'true':'false'),
             'SessionAdminPermissionsLimitTitle',
             'SessionAdminPermissionsLimitComment',
             null,

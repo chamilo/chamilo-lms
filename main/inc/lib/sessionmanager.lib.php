@@ -1808,6 +1808,9 @@ class SessionManager
         $sql = "UPDATE $ticket SET session_id = NULL WHERE session_id IN ($id_checked)";
         Database::query($sql);
 
+        $app_plugin = new AppPlugin();
+        $app_plugin->performActionsWhenDeletingItem('session', $id_checked);
+
         $sql = "DELETE FROM $tbl_session WHERE id IN ($id_checked)";
         Database::query($sql);
 

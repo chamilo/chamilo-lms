@@ -166,16 +166,10 @@ $tpl = new Template($nameTools);
 // getting all the students of the course
 if (empty($session_id)) {
     // Registered students in a course outside session.
-    $a_students = CourseManager::get_student_list_from_course_code(
-        $courseId
-    );
+    $a_students = CourseManager::get_student_list_from_course_code($courseId);
 } else {
     // Registered students in session.
-    $a_students = CourseManager::get_student_list_from_course_code(
-        $courseId,
-        true,
-        $sessionId
-    );
+    $a_students = CourseManager::get_student_list_from_course_code($courseId, true, $sessionId);
 }
 
 $nbStudents = count($a_students);

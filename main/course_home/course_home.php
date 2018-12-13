@@ -132,7 +132,7 @@ $isSpecialCourse = CourseManager::isSpecialCourse($courseId);
 
 if ($isSpecialCourse) {
     if (isset($_GET['autoreg']) && $_GET['autoreg'] == 1) {
-        if (CourseManager::subscribe_user($user_id, $course_code, STUDENT)) {
+        if (CourseManager::subscribeUser($user_id, $course_code, STUDENT)) {
             Session::write('is_allowed_in_course', true);
         }
     }
@@ -141,18 +141,14 @@ if ($isSpecialCourse) {
 if (isset($_GET['action']) && $_GET['action'] == 'subscribe') {
     if (Security::check_token('get')) {
         Security::clear_token();
-        $auth = new Auth();
-        $msg = $auth->subscribe_user($course_code);
-        if (CourseManager::is_user_subscribed_in_course($user_id, $course_code)) {
-            Session::write('is_allowed_in_course', true);
+        $result = CourseManager::autoSubscribeToCourse($course_code);
+        if ($result) {
+            if (CourseManager::is_user_subscribed_in_course($user_id, $course_code)) {
+                Session::write('is_allowed_in_course', true);
+            }
         }
-        if (!empty($msg)) {
-            $show_message .= Display::return_message(
-                get_lang($msg['message']),
-                'info',
-                false
-            );
-        }
+        header('Location: '.api_get_self());
+        exit;
     }
 }
 

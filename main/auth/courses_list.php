@@ -15,20 +15,19 @@
 api_block_anonymous_users();
 $stok = Security::get_token();
 $courses_without_category = isset($courses_in_category[0]) ? $courses_in_category[0] : null;
-?>
-<!-- Actions: The menu with the different options in cathe course management -->
-<div id="actions" class="actions">
-    <?php if ($action != 'createcoursecategory') {
-    ?>
-	<a href="<?php echo api_get_self(); ?>?action=createcoursecategory">
-        <?php echo Display::return_icon('new_folder.png', get_lang('CreateCourseCategory'), '', '32'); ?></a>
-    <?php
-} ?>
-</div>
-<?php
+echo '<div id="actions" class="actions">';
+if ($action != 'createcoursecategory') {
+    echo '<a href="'.api_get_self().'?action=createcoursecategory">';
+    echo Display::return_icon('new_folder.png', get_lang('CreateCourseCategory'), '', '32');
+    echo '</a>';
+}
+echo '</div>';
+
 if (!empty($message)) {
         echo Display::return_message($message, 'confirm', false);
     }
+
+$allowCollapsable = api_get_configuration_value('allow_user_course_category_collapsable');
 
 // COURSES WITH CATEGORIES
 if (!empty($user_course_categories)) {
@@ -37,6 +36,7 @@ if (!empty($user_course_categories)) {
     foreach ($user_course_categories as $row) {
         echo Display::page_subheader($row['title']);
         echo '<a name="category'.$row['id'].'"></a>';
+        $url = api_get_path(WEB_CODE_PATH).'auth/courses.php?categoryid='.$row['id'].'&sec_token='.$stok;
         if (isset($_GET['categoryid']) && $_GET['categoryid'] == $row['id']) {
             ?>
         <!-- We display the edit form for the category -->
@@ -48,9 +48,20 @@ if (!empty($user_course_categories)) {
         </form>
         <?php
         }
-        $max_category_key = count($user_course_categories);
         if ($action != 'unsubscribe') {
-            ?>
+            if ($allowCollapsable) {
+                if ($row['collapsed'] == 0) {
+                    echo Display::url(
+                        '<i class="fa fa-folder-open"></i>',
+                        $url.'&action=set_collapsable&option=1'
+                    );
+                } else {
+                    echo Display::url(
+                        '<i class="fa fa-folder"></i>',
+                        $url.'&action=set_collapsable&option=0'
+                    );
+                }
+            } ?>
             <a href="courses.php?action=sortmycourses&amp;categoryid=<?php echo $row['id']; ?>&amp;sec_token=<?php echo $stok; ?>#category<?php echo $row['id']; ?>">
             <?php echo Display::display_icon('edit.png', get_lang('Edit'), '', 22); ?>
             </a>
@@ -78,10 +89,16 @@ if (!empty($user_course_categories)) {
             <?php
             } ?>
             <a href="courses.php?action=deletecoursecategory&amp;id=<?php echo $row['id']; ?>&amp;sec_token=<?php echo $stok; ?>">
-            <?php echo Display::display_icon('delete.png', get_lang('Delete'), ['onclick' => "javascript: if (!confirm('".addslashes(api_htmlentities(get_lang("CourseCategoryAbout2bedeleted"), ENT_QUOTES, api_get_system_encoding()))."')) return false;"], 22); ?>
+            <?php echo Display::display_icon(
+                    'delete.png',
+                    get_lang('Delete'),
+                    ['onclick' => "javascript: if (!confirm('".addslashes(api_htmlentities(get_lang('CourseCategoryAbout2bedeleted'), ENT_QUOTES, api_get_system_encoding()))."')) return false;"],
+                    22
+            ); ?>
             </a>
         <?php
         }
+
         $counter++;
         echo '<br /><br />';
         // Show the courses inside this category
@@ -103,7 +120,7 @@ if (!empty($user_course_categories)) {
                 if (api_get_setting('display_coursecode_in_courselist') === 'true' &&
                     api_get_setting('display_teacher_in_courselist') === 'true'
                 ) {
-                    echo " - ";
+                    echo ' - ';
                 }
 
                 if (api_get_setting('display_teacher_in_courselist') === 'true') {
@@ -120,7 +137,7 @@ if (!empty($user_course_categories)) {
                     <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
                     <input type="hidden" name="course_2_edit_category" value="<?php echo $edit_course; ?>" />
                     <select name="course_categories">
-                    <option value="0"><?php echo get_lang("NoCourseCategory"); ?></option>
+                    <option value="0"><?php echo get_lang('NoCourseCategory'); ?></option>
                     <?php foreach ($user_course_categories as $row) {
                         ?>
                         <option value="<?php echo $row['id']; ?>"><?php echo $row['title']; ?></option>
@@ -221,7 +238,7 @@ if (!empty($courses_without_category)) {
         if (api_get_setting('display_coursecode_in_courselist') === 'true' &&
                 api_get_setting('display_teacher_in_courselist') === 'true'
             ) {
-            echo " - ";
+            echo ' - ';
         }
         if (api_get_setting('display_teacher_in_courselist') === 'true') {
             echo $course['tutor'];

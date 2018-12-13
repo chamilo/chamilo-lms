@@ -1324,7 +1324,6 @@ switch ($action) {
             $overwriteColumnHeaderExport['only_score'] = get_lang('Score').' - '.get_lang('ScoreNote');
             $overwriteColumnHeaderExport['total'] = get_lang('Score').' - '.get_lang('ScoreTest');
         }
-
         $categoryList = TestCategory::getListOfCategoriesIDForTest($exerciseId, $courseId);
 
         if (!empty($categoryList)) {
@@ -1520,7 +1519,7 @@ switch ($action) {
             $result = SessionManager::get_sessions_admin(
                 [
                     'where' => $whereCondition,
-                    'order' => "$sidx $sord",
+                    'order' => "$sidx $sord, s.name",
                     'extra' => $extra_fields,
                     'limit' => "$start , $limit",
                 ],
@@ -1531,7 +1530,7 @@ switch ($action) {
             $result = SessionManager::get_sessions_admin_complete(
                 [
                     'where' => $whereCondition,
-                    'order' => "$sidx $sord",
+                    'order' => "$sidx $sord, s.name",
                     'extra' => $extra_fields,
                     'limit' => "$start , $limit",
                 ]

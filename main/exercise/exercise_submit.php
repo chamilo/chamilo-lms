@@ -331,6 +331,11 @@ $questionListUncompressed = $objExercise->getQuestionListWithMediasUncompressed(
 Session::write('question_list_uncompressed', $questionListUncompressed);
 $clock_expired_time = null;
 if (empty($exercise_stat_info)) {
+    $disable = api_get_configuration_value('exercises_disable_new_attempts');
+    if ($disable) {
+        api_not_allowed(true);
+    }
+
     if ($debug) {
         error_log('5  $exercise_stat_info is empty ');
     }

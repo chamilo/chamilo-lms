@@ -179,6 +179,9 @@ class SocialManager extends UserManager
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             if ($load_extra_info) {
                 $my_user_info = api_get_user_info($row['friend_user_id']);
+                if (empty($my_user_info)) {
+                    continue;
+                }
                 $list_ids_friends[] = [
                     'friend_user_id' => $row['friend_user_id'],
                     'firstName' => $my_user_info['firstName'],
@@ -207,7 +210,7 @@ class SocialManager extends UserManager
      */
     public static function get_list_web_path_user_invitation_by_user_id($user_id)
     {
-        $list_ids = self::get_list_invitation_of_friends_by_user_id($user_id, null);
+        $list_ids = self::get_list_invitation_of_friends_by_user_id($user_id);
         $list = [];
         foreach ($list_ids as $values_ids) {
             $list[] = UserManager::get_user_picture_path_by_id(

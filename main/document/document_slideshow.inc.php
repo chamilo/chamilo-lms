@@ -31,12 +31,6 @@ use ChamiloSession as Session;
  */
 
 // Resetting the images of the slideshow = destroying the slideshow
-if (isset($_GET['action']) && $_GET['action'] == 'exit_slideshow') {
-    Session::write('image_files_only', null);
-    unset($image_files_only);
-}
-
-// We check if there are images in this folder by searching the extensions for .jpg, .gif, .png
 // grabbing the list of all the documents of this folder
 $array_to_search = !empty($documentAndFolders) && is_array($documentAndFolders) ? $documentAndFolders : [];
 
@@ -68,7 +62,6 @@ if ($tablename_column == 0) {
 }
 
 $image_files_only = sort_files($array_to_search);
-Session::write('image_files_only', $image_files_only);
 
 function sort_files($table)
 {

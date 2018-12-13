@@ -196,10 +196,13 @@ if ($survey_data['survey_type'] == 0) {
         Display::return_icon('commentquestion.png', get_lang('Comment'), null, ICON_SIZE_BIG),
         $urlQuestion.'&type=comment&survey_id='.$survey_id
     );
-    echo Display::url(
-        Display::return_icon('page_end.png', get_lang('Pagebreak'), null, ICON_SIZE_BIG),
-        $urlQuestion.'&type=pagebreak&survey_id='.$survey_id
-    );
+
+    if ($survey_data['one_question_per_page'] == 0) {
+        echo Display::url(
+            Display::return_icon('page_end.png', get_lang('Pagebreak'), null, ICON_SIZE_BIG),
+            $urlQuestion.'&type=pagebreak&survey_id='.$survey_id
+        );
+    }
     echo '</div>';
 } else {
     if ($survey_data['survey_type'] != 3) {

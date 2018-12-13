@@ -12,7 +12,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
 
 if (api_get_setting('allow_social_tool') !== 'true') {
-    api_not_allowed();
+    api_not_allowed(true);
 }
 
 $this_section = SECTION_SOCIAL;
@@ -120,7 +120,7 @@ if ($number_loop != 0) {
 
         $title = Security::remove_XSS($invitation['title'], STUDENT, true);
         $content = Security::remove_XSS($invitation['content'], STUDENT, true);
-        $date = api_convert_and_format_date($invitation['send_date'], DATE_TIME_FORMAT_LONG);
+        $date = Display::dateToStringAgoAndLongDate($invitation['send_date']);
         $invitationHtml .= '<div class="row">';
         $invitationHtml .= '<div class="col-md-2">';
         $invitationHtml .= '<a href="profile.php?u='.$sender_user_id.'">';
@@ -138,7 +138,7 @@ if ($number_loop != 0) {
                 'is_my_friend' => 'friend',
             ]),
             'check',
-            'default',
+            'primary',
             ['id' => 'btn-accept-'.$sender_user_id]
         );
         $invitationHtml .= Display::toolbarButton(
@@ -148,7 +148,7 @@ if ($number_loop != 0) {
                 'denied_friend_id' => $sender_user_id,
             ]),
             'times',
-            'default',
+            'danger',
             ['id' => 'btn-deny-'.$sender_user_id]
         );
         $invitationHtml .= '</div>';
@@ -158,7 +158,7 @@ if ($number_loop != 0) {
                             '.$user_info['complete_name'].'</a>:
                             </h5>';
         $invitationHtml .= '<div class="content-invitation">'.$content.'</div>';
-        $invitationHtml .= '<div class="date-invitation">'.get_lang('DateSend').' : '.$date.'</div>';
+        $invitationHtml .= '<div class="date-invitation">'.get_lang('Sent').' : '.$date.'</div>';
 
         $invitationHtml .= '</div>';
         $invitationHtml .= '</div></div>';
@@ -174,16 +174,18 @@ if (count($list_get_invitation_sent) > 0) {
         $invitationSentHtml .= '<div id="id_'.$sender_user_id.'" class="well">';
         $title = Security::remove_XSS($invitation['title'], STUDENT, true);
         $content = Security::remove_XSS($invitation['content'], STUDENT, true);
-        $date = api_convert_and_format_date($invitation['send_date'], DATE_TIME_FORMAT_LONG);
 
         $invitationSentHtml .= '<div class="row">';
         $invitationSentHtml .= '<div class="col-md-3">';
-        $invitationSentHtml .= '<a href="profile.php?u='.$sender_user_id.'"><img src="'.$user_info['avatar'].'"  /></a>';
+        $invitationSentHtml .= '<a href="profile.php?u='.$sender_user_id.'">';
+        $invitationSentHtml .= '<img class="img-responsive img-rounded" src="'.$user_info['avatar'].'" /></a>';
         $invitationSentHtml .= '</div>';
         $invitationSentHtml .= '<div class="col-md-9">';
-        $invitationSentHtml .= '<h4 class="title-profile"><a class="profile_link" href="profile.php?u='.$sender_user_id.'">'.$user_info['complete_name'].'</a></h4>';
+        $invitationSentHtml .= '<h4 class="title-profile">
+            <a class="profile_link" href="profile.php?u='.$sender_user_id.'">'.$user_info['complete_name'].'</a></h4>';
         $invitationSentHtml .= '<div class="content-invitation">'.$title.' : '.$content.'</div>';
-        $invitationSentHtml .= '<div class="date-invitation">'.get_lang('DateSend').' : '.$date.'</div>';
+        $invitationSentHtml .= '<div class="date-invitation">'.
+            get_lang('Sent').' : '.Display::dateToStringAgoAndLongDate($invitation['send_date']).'</div>';
         $invitationSentHtml .= '</div>';
         $invitationSentHtml .= '</div></div>';
     }

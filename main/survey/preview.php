@@ -83,6 +83,7 @@ if ($surveyAnonymous == 0 && api_is_anonymous()) {
         api_not_allowed(true);
     }
 }
+$show = 0;
 // Header
 Display::display_header(get_lang('SurveyPreview'));
 
@@ -105,7 +106,6 @@ if (api_is_course_admin() ||
         if (!empty($survey_data['survey_introduction'])) {
             echo '<div class="survey_content">'.$survey_data['survey_introduction'].'</div>';
         }
-        $limit = 0;
     }
 
     // Displaying the survey thanks message
@@ -134,25 +134,23 @@ if (api_is_course_admin() ||
         $questions_exists = true;
         if (Database::num_rows($result)) {
             while ($row = Database::fetch_array($result)) {
-                if ($row['type'] == 'pagebreak') {
-                    $counter++;
+                if ($survey_data['one_question_per_page'] == 1) {
+                    if ($row['type'] != 'pagebreak') {
+                        $paged_questions[$counter][] = $row['question_id'];
+                        $counter++;
+                        continue;
+                    }
                 } else {
-                    $paged_questions[$counter][] = $row['question_id'];
+                    if ($row['type'] == 'pagebreak') {
+                        $counter++;
+                    } else {
+                        $paged_questions[$counter][] = $row['question_id'];
+                    }
                 }
             }
         } else {
             $questions_exists = false;
         }
-
-        $sql = "SELECT count(survey_question.question_id) as count                        
-                FROM $table_survey_question survey_question
-                WHERE 
-                  survey_question.survey_id = '".$surveyId."' AND
-                  survey_question.c_id = $course_id AND 
-                  survey_question LIKE '%{{%' ";
-        $result = Database::query($sql);
-        $sourceQuestions = Database::fetch_array($result, 'ASSOC');
-        $sourceQuestions = $sourceQuestions['count'];
 
         if (array_key_exists($_GET['show'], $paged_questions)) {
             $sql = "SELECT
@@ -179,9 +177,6 @@ if (api_is_course_admin() ||
                     ORDER BY survey_question.sort, survey_question_option.sort ASC";
 
             $result = Database::query($sql);
-            $question_counter_max = Database::num_rows($result);
-            $limit = 0;
-
             while ($row = Database::fetch_array($result)) {
                 // If the type is not a pagebreak we store it in the $questions array
                 if ($row['type'] != 'pagebreak') {
@@ -191,11 +186,12 @@ if (api_is_course_admin() ||
                     $questions[$sort]['survey_question'] = $row['survey_question'];
                     $questions[$sort]['display'] = $row['display'];
                     $questions[$sort]['type'] = $row['type'];
-                    $questions[$sort]['options'][intval($row['option_sort'])] = $row['option_text'];
+                    //$questions[$sort]['options'][intval($row['option_sort'])] = $row['option_text'];
+                    $questions[$sort]['options'][$row['question_option_id']] = $row['option_text'];
                     $questions[$sort]['maximum_score'] = $row['max_value'];
                 } else {
                     // If the type is a pagebreak we are finished loading the questions for this page
-                    break;
+                    //break;
                 }
                 $counter_question++;
             }
@@ -207,18 +203,9 @@ if (api_is_course_admin() ||
         $before = count($paged_questions[$_GET['show'] - 1]);
     }
 
+    $numberOfPages = SurveyManager::getCountPages($survey_data);
     // Selecting the maximum number of pages
-    $sql = "SELECT * FROM $table_survey_question
-            WHERE
-                survey_question NOT LIKE '%{{%' AND 
-                c_id = $course_id AND
-                type = 'pagebreak' AND
-                survey_id = '".$surveyId."'";
-    $result = Database::query($sql);
-    $numberofpages = Database::num_rows($result) + 1;
 
-    // Displaying the form with the questions
-    $show = 0;
     if (isset($_GET['show'])) {
         $show = (int) $_GET['show'] + 1;
     }
@@ -257,7 +244,8 @@ if (api_is_course_admin() ||
         }
     }
     $form->addHtml('<div class="start-survey">');
-    if (($show < $numberofpages) || (!$_GET['show'] && count($questions) > 0)) {
+
+    if (($show < $numberOfPages)) {
         if ($show == 0) {
             $form->addButton(
                 'next_survey_page',
@@ -274,7 +262,8 @@ if (api_is_course_admin() ||
             );
         }
     }
-    if ($show >= $numberofpages && $_GET['show'] ||
+
+    if ($show >= $numberOfPages && isset($_GET['show']) ||
         (isset($_GET['show']) && count($questions) == 0)
     ) {
         if ($questions_exists == false) {

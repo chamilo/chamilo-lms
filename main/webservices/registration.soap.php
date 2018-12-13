@@ -4653,7 +4653,7 @@ function WSSubscribeUserToCourse($params)
                 if ($debug) {
                     error_log('WSSubscribeUserToCourse courseCode: '.$courseCode);
                 }
-                $result = CourseManager::add_user_to_course($user_id, $courseCode, $status, false, false);
+                $result = CourseManager::subscribeUser($user_id, $courseCode, $status, 0, 0, false);
                 if ($result) {
                     $resultValue = 1;
                     if ($debug) {

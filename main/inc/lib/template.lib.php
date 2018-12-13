@@ -279,6 +279,10 @@ class Template
      */
     public function displayTemplate($template)
     {
+        global $htmlHeadXtra;
+        //var_dump($htmlHeadXtra);exit;
+        $params['legacy_javascript'] = $htmlHeadXtra;
+
         $this->returnResponse($this->params, $template);
     }
 

@@ -1623,6 +1623,11 @@ class AnnouncementManager
 
         $allowDrhAccess = api_get_configuration_value('allow_drh_access_announcement');
 
+        if ($allowDrhAccess && api_is_drh()) {
+            // DRH only can see visible
+            $searchCondition .= ' AND (ip.visibility = 1)';
+        }
+
         if (api_is_allowed_to_edit(false, true) ||
             ($allowUserEditSetting && !api_is_anonymous()) ||
             ($allowDrhAccess && api_is_drh())

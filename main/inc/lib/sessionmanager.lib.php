@@ -628,21 +628,18 @@ class SessionManager
                         true
                     );
                 }
-                $url = api_get_path(WEB_CODE_PATH)."session/resume_session.php?id_session=".$session['id'];
+                $url = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session['id'];
                 if (api_is_drh()) {
-                    $url = api_get_path(WEB_CODE_PATH)."session/about.php?session_id=".$session['id'];
+                    $url = api_get_path(WEB_CODE_PATH).'session/about.php?session_id='.$session['id'];
                 }
                 if (api_is_platform_admin()) {
-                    $url = api_get_path(WEB_CODE_PATH)."session/resume_session.php?id_session=".$session['id'];
+                    $url = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session['id'];
                 }
 
                 if ($extraFieldsToLoad) {
-                    $url = api_get_path(WEB_CODE_PATH)."session/about.php?session_id=".$session['id'];
+                    $url = api_get_path(WEB_CODE_PATH).'session/about.php?session_id='.$session['id'];
                 }
-                $session['name'] = Display::url(
-                    $session['name'],
-                    $url
-                );
+                $session['name'] = Display::url($session['name'], $url);
 
                 if (!empty($extraFieldsToLoad)) {
                     foreach ($extraFieldsToLoad as $field) {
@@ -690,7 +687,6 @@ class SessionManager
                         $options = explode('::', $value);
                     }
                     $original_key = $key;
-
                     if (strpos($key, '_second') === false) {
                     } else {
                         $key = str_replace('_second', '', $key);
@@ -708,9 +704,10 @@ class SessionManager
                         }
                     }
                 }
-                $formatted_sessions[$session_id] = $session;
+
                 $categoryName = isset($orderedCategories[$session['session_category_id']]) ? $orderedCategories[$session['session_category_id']] : '';
-                $formatted_sessions[$session_id]['category_name'] = $categoryName;
+                $session['category_name'] = $categoryName;
+                $formatted_sessions[] = $session;
             }
         }
 
@@ -2332,11 +2329,11 @@ class SessionManager
             return false;
         }
 
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
+        $session_visibility = (int) $session_visibility;
         $course_code = Database::escape_string($course_code);
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['real_id'];
-        $session_visibility = intval($session_visibility);
 
         if ($removeUsersNotInList) {
             $currentUsers = self::getUsersByCourseSession($session_id, $courseInfo, 0);
@@ -2360,7 +2357,7 @@ class SessionManager
 
         $nbr_users = 0;
         foreach ($user_list as $enreg_user) {
-            $enreg_user = intval($enreg_user);
+            $enreg_user = (int) $enreg_user;
             // Checking if user exists in session - course - user table.
             $sql = "SELECT count(user_id) as count
                     FROM $tbl_session_rel_course_rel_user
@@ -5521,7 +5518,7 @@ SQL;
                                         $userCourseCategory = $courseUserData['user_course_cat'];
                                     }
 
-                                    CourseManager::subscribe_user(
+                                    CourseManager::subscribeUser(
                                         $teacherToAdd,
                                         $course_code,
                                         COURSEMANAGER,
@@ -5644,7 +5641,7 @@ SQL;
                                             $userCourseCategory = $courseUserData['user_course_cat'];
                                         }
 
-                                        CourseManager::subscribe_user(
+                                        CourseManager::subscribeUser(
                                             $teacherId,
                                             $course_code,
                                             COURSEMANAGER,
@@ -6867,8 +6864,8 @@ SQL;
      */
     public static function getUserSession($userId, $sessionId)
     {
-        $userId = intval($userId);
-        $sessionId = intval($sessionId);
+        $userId = (int) $userId;
+        $sessionId = (int) $sessionId;
 
         if (empty($userId) || empty($sessionId)) {
             return false;

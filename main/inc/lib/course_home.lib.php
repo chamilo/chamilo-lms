@@ -1002,8 +1002,7 @@ class CourseHome
                     $tool['link'] = $tool['link'].$qm_or_amp.api_get_cidreq();
                 }
 
-                $tool_link_params = [];
-                $toolIid = isset($tool["iid"]) ? $tool["iid"] : null;
+                $toolIid = isset($tool['iid']) ? $tool['iid'] : null;
 
                 //@todo this visio stuff should be removed
                 if (strpos($tool['name'], 'visio_') !== false) {

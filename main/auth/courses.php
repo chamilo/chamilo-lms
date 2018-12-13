@@ -29,8 +29,6 @@ if (api_get_setting('course_catalog_published') !== 'true') {
     api_block_anonymous_users();
 }
 
-$user_can_view_page = false;
-
 //For students
 if (api_get_setting('allow_students_to_browse_courses') === 'false') {
     $user_can_view_page = false;
@@ -56,6 +54,9 @@ $actions = [
     'subscribe_to_session',
     'search_tag',
     'search_session',
+    'set_collapsable',
+    'subscribe_course_validation',
+    'subscribe_course',
 ];
 
 $action = CoursesAndSessionsCatalog::is(CATALOG_SESSIONS) ? 'display_sessions' : 'display_courses';
@@ -127,14 +128,6 @@ if (isset($_POST['submit_edit_course_category']) &&
 }
 
 // we are deleting a course category
-if ($action == 'deletecoursecategory' && isset($_GET['id'])) {
-    if (!empty($_GET['sec_token']) && $ctok == $_GET['sec_token']) {
-        $get_id_cat = intval($_GET['id']);
-        $courseController->delete_course_category($get_id_cat);
-    }
-}
-
-// We are creating a new user defined course category (= Create Course Category).
 if (isset($_POST['create_course_category']) &&
     isset($_POST['title_course_category']) &&
     strlen(trim($_POST['title_course_category'])) > 0
@@ -160,17 +153,6 @@ if (isset($_REQUEST['search_course'])) {
 }
 
 // Subscribe user to course
-if (isset($_REQUEST['subscribe_course'])) {
-    if (!empty($_GET['sec_token']) && $ctok == $_GET['sec_token']) {
-        $courseController->subscribe_user(
-            $_GET['subscribe_course'],
-            $searchTerm,
-            $categoryCode
-        );
-    }
-}
-
-// We are unsubscribing from a course (=Unsubscribe from course).
 if (isset($_GET['unsubscribe'])) {
     if (!empty($_GET['sec_token']) && $ctok == $_GET['sec_token']) {
         $courseController->unsubscribe_user_from_course(
@@ -189,14 +171,67 @@ if (isset($_POST['unsubscribe'])) {
 }
 
 switch ($action) {
-    case 'subscribe_user_with_password':
-        $courseController->subscribe_user(
-            isset($_POST['subscribe_user_with_password']) ? $_POST['subscribe_user_with_password'] : '',
-            $searchTerm,
-            isset($_POST['category_code']) ? $_POST['category_code'] : ''
+    case 'deletecoursecategory':
+        // we are deleting a course category
+        if (isset($_GET['id'])) {
+            if (Security::check_token('get')) {
+                $courseController->delete_course_category($_GET['id']);
+                header('Location: '.api_get_self());
+                exit;
+            }
+        }
+        break;
+    case 'subscribe_course':
+        if (api_is_anonymous()) {
+            header('Location: '.api_get_path(WEB_CODE_PATH).'auth/inscription.php?c='.$courseCodeToSubscribe);
+            exit;
+        }
+        $courseCodeToSubscribe = isset($_GET['subscribe_course']) ? Security::remove_XSS($_GET['subscribe_course']) : '';
+        if (Security::check_token('get')) {
+            CourseManager::autoSubscribeToCourse($courseCodeToSubscribe);
+            header('Location: '.api_get_self());
+            exit;
+        }
+        break;
+    case 'subscribe_course_validation':
+        $courseCodeToSubscribe = isset($_GET['subscribe_course']) ? Security::remove_XSS($_GET['subscribe_course']) : '';
+        $courseInfo = api_get_course_info($courseCodeToSubscribe);
+        if (empty($courseInfo)) {
+            header('Location: '.api_get_self());
+            exit;
+        }
+        $message = get_lang('CourseRequiresPassword').' ';
+        $message .= $courseInfo['title'].' ('.$courseInfo['visual_code'].') ';
+
+        $action = api_get_self().
+            '?action=subscribe_course_validation&sec_token='.Security::getTokenFromSession().'&subscribe_course='.$courseCodeToSubscribe;
+        $form = new FormValidator(
+            'subscribe_user_with_password',
+            'post',
+            $action
         );
+        $form->addHeader($message);
+        $form->addElement('hidden', 'sec_token', Security::getTokenFromSession());
+        $form->addElement('hidden', 'subscribe_user_with_password', $courseInfo['code']);
+        $form->addElement('text', 'course_registration_code');
+        $form->addButtonSave(get_lang('SubmitRegistrationCode'));
+        $content = $form->returnForm();
+
+        if ($form->validate()) {
+            if (sha1($_POST['course_registration_code']) === $courseInfo['registration_code']) {
+                CourseManager::autoSubscribeToCourse($_POST['subscribe_user_with_password']);
         header('Location: '.api_get_self());
         exit;
+            } else {
+                Display::addFlash(Display::return_message(get_lang('CourseRegistrationCodeIncorrect')), 'warning');
+                header('Location: '.$action);
+                exit;
+            }
+        }
+
+        $template = new Template(get_lang('Subscribe'), true, true, false, false, false);
+        $template->assign('content', $content);
+        $template->display_one_col_template();
         break;
     case 'createcoursecategory':
         $courseController->categoryList();
@@ -249,7 +284,7 @@ switch ($action) {
 
         $userId = api_get_user_id();
         $confirmed = isset($_GET['confirm']);
-        $sessionId = intval($_GET['session_id']);
+        $sessionId = (int) $_GET['session_id'];
 
         if (empty($userId)) {
             api_not_allowed();
@@ -290,13 +325,13 @@ switch ($action) {
             }
 
             SessionManager::subscribeUsersToSession(
-                $_GET['session_id'],
+                $sessionId,
                 [$userId],
                 SESSION_VISIBLE_READ_ONLY,
                 false
             );
 
-            $coursesList = SessionManager::get_course_list_by_session_id($_GET['session_id']);
+            $coursesList = SessionManager::get_course_list_by_session_id($sessionId);
             $count = count($coursesList);
             $url = '';
 
@@ -306,10 +341,10 @@ switch ($action) {
             } elseif ($count == 1) {
                 // only one course, so redirect directly to this course
                 foreach ($coursesList as $course) {
-                    $url = api_get_path(WEB_COURSE_PATH).$course['directory'].'/index.php?id_session='.intval($_GET['session_id']);
+                    $url = api_get_path(WEB_COURSE_PATH).$course['directory'].'/index.php?id_session='.$sessionId;
                 }
             } else {
-                $url = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.intval($_GET['session_id']);
+                $url = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$sessionId;
             }
             header('Location: '.$url);
             exit;
@@ -329,5 +364,30 @@ switch ($action) {
         }
 
         $courseController->sessionListBySearch($limit);
+        break;
+    case 'set_collapsable':
+        api_block_anonymous_users();
+
+        if (!api_get_configuration_value('allow_user_course_category_collapsable')) {
+            api_not_allowed(true);
+        }
+
+        $userId = api_get_user_id();
+        $categoryId = isset($_REQUEST['categoryid']) ? (int) $_REQUEST['categoryid'] : 0;
+        $option = isset($_REQUEST['option']) ? (int) $_REQUEST['option'] : 0;
+
+        if (empty($userId) || empty($categoryId)) {
+            api_not_allowed(true);
+        }
+
+        $table = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
+        $sql = "UPDATE $table 
+                SET collapsed = $option
+                WHERE user_id = $userId AND id = $categoryId";
+        Database::query($sql);
+        Display::addFlash(Display::return_message(get_lang('Updated')));
+        $url = api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses';
+        header('Location: '.$url);
+        exit;
         break;
 }

@@ -62,10 +62,6 @@ class CoursesController
     public function categoryList()
     {
         api_block_anonymous_users();
-
-        $data = [];
-        $data['user_course_categories'] = CourseManager::get_user_course_categories(api_get_user_id());
-
         $stok = Security::get_token();
         $actions = Display::url(
             Display::return_icon('back.png', get_lang('Back'), '', '32'),
@@ -227,58 +223,6 @@ class CoursesController
         $this->view->set_layout('catalog_layout');
         $this->view->set_template('courses_categories');
         $this->view->render();
-    }
-
-    /**
-     * Auto user subscription to a course.
-     */
-    public function subscribe_user($course_code, $search_term, $category_code)
-    {
-        $courseInfo = api_get_course_info($course_code);
-
-        if (empty($courseInfo)) {
-            return false;
-        }
-
-        // The course must be open in order to access the auto subscription
-        if (in_array(
-            $courseInfo['visibility'],
-            [
-                COURSE_VISIBILITY_CLOSED,
-                COURSE_VISIBILITY_REGISTERED,
-                COURSE_VISIBILITY_HIDDEN,
-            ]
-        )
-        ) {
-            Display::addFlash(
-                Display::return_message(
-                    get_lang('SubscribingNotAllowed'),
-                    'warning'
-                )
-            );
-        } else {
-            // Redirect to subscription
-            if (api_is_anonymous()) {
-                header('Location: '.api_get_path(WEB_CODE_PATH).'auth/inscription.php?c='.$course_code);
-                exit;
-            }
-            $result = $this->model->subscribe_user($course_code);
-            if (!$result) {
-                Display::addFlash(
-                    Display::return_message(
-                        get_lang('CourseRegistrationCodeIncorrect'),
-                        'warning'
-                    )
-                );
-            } else {
-                Display::addFlash(
-                    Display::return_message($result['message'], 'normal', false)
-                );
-                if (isset($result['content'])) {
-                    Display::addFlash($result['content']);
-                }
-            }
-        }
     }
 
     /**

@@ -809,7 +809,7 @@ foreach ($questionList as $questionId) {
                 $formMark->addSelect('marks', get_lang('AssignMarks'), $options);
                 $formMark->display();*/
                 echo '<form name="marksform_'.$questionId.'" method="post" action="">';
-                echo get_lang("AssignMarks");
+                echo get_lang('AssignMarks');
                 echo "&nbsp;<select name='marks' id='select_marks_".$questionId."' class='selectpicker exercise_mark_select'>";
                 $model = ExerciseLib::getCourseScoreModel();
                 if (empty($model)) {

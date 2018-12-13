@@ -8259,7 +8259,15 @@ function api_can_login_as($loginAsUserId, $userId = null)
         return false;
     };
 
-    return api_is_platform_admin() || (api_is_session_admin() && $userInfo['status'] == 5) || $isDrh();
+    $loginAsStatusForSessionAdmins = [STUDENT];
+
+    if (api_get_configuration_value('allow_session_admin_login_as_teacher')) {
+        $loginAsStatusForSessionAdmins[] = COURSEMANAGER;
+    }
+
+    return api_is_platform_admin() ||
+        (api_is_session_admin() && in_array($userInfo['status'], $loginAsStatusForSessionAdmins)) ||
+        $isDrh();
 }
 
 /**

@@ -1435,7 +1435,8 @@ function reinit_updatable_vars_list() {
  * @param	string		This parameter can be a string specifying the next
  *						item (like 'next', 'previous', 'first' or 'last') or the id to the next item
  */
-function switch_item(current_item, next_item) {
+function switch_item(current_item, next_item)
+{
     if (olms.lms_initialized == 0) {
         // Fix error when flash is not loaded and SCO is not started BT#14944
         olms.G_LastError 		= G_NotInitialized;
@@ -2372,6 +2373,7 @@ function attach_glossary_into_scorm(type) {
                         src = url+'&type=link&src='+src;
                         src = src.replace('https', 'http');
                         $(this).attr('href', src);
+                        $(this).attr('target', '_blank');
                         var myAnchor = $('<a><img width="16px" src="<?php echo Display::returnIconPath('link-external.png'); ?>"/></a>').attr("href", src).attr('target', '_blank').attr('class', 'generated');
                         $(this).after(myAnchor);
                         $(this).after('-');

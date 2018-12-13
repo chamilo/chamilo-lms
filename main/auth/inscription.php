@@ -798,7 +798,7 @@ if ($form->validate()) {
                         ]
                     )
                     ) {
-                        CourseManager::subscribe_user(
+                        CourseManager::subscribeUser(
                             $user_id,
                             $course_info['code']
                         );
@@ -1102,7 +1102,7 @@ if ($form->validate()) {
                         ]
                     )
                     ) {
-                        CourseManager::subscribe_user(
+                        CourseManager::subscribeUser(
                             $user_id,
                             $course_info['code']
                         );

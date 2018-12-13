@@ -50,7 +50,7 @@ class Event
             $autoSubscribe = explode('|', $autoSubscribe);
             foreach ($autoSubscribe as $code) {
                 if (CourseManager::course_exists($code)) {
-                    CourseManager::subscribe_user($userId, $code);
+                    CourseManager::subscribeUser($userId, $code);
                 }
             }
         }

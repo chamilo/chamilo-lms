@@ -346,6 +346,12 @@ if ($time_control) {
 
 $html .= $message;
 
+$disable = api_get_configuration_value('exercises_disable_new_attempts');
+
+if ($disable && empty($exercise_stat_info)) {
+    $exercise_url_button = Display::return_message(get_lang('NewExerciseAttemptDisabled'));
+}
+
 if (!empty($exercise_url_button)) {
     $html .= Display::div(
         Display::div(

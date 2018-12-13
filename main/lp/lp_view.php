@@ -230,7 +230,7 @@ if (!isset($src)) {
                 }
 
                 if (isset($file_info['extension']) &&
-                    api_strtolower(substr($file_info['extension'], 0, 3) == 'pdf')
+                    api_strtolower(substr($file_info['extension'], 0, 3)) == 'pdf'
                 ) {
                     $src = api_get_path(WEB_CODE_PATH).'lp/lp_view_item.php?lp_item_id='.$lp_item_id.'&'.api_get_cidreq();
                 }
@@ -446,10 +446,6 @@ if ($is_allowed_to_edit) {
         'url' => '#',
         'name' => get_lang('Preview'),
     ];
-}
-
-// Return to course home.
-if ($is_allowed_to_edit) {
     $buttonHomeUrl = 'lp_controller.php?'.api_get_cidreq(true, true, 'course').'&'.http_build_query([
         'isStudentView' => 'false',
         'action' => 'return_to_course_homepage',

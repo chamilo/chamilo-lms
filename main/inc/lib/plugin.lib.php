@@ -537,7 +537,7 @@ class AppPlugin
     }
 
     /**
-     * Trigger for Plugin::doWhenDeleting[Item] functions
+     * Trigger for Plugin::doWhenDeleting[Item] functions.
      *
      * @param string $itemType
      * @param int    $itemId

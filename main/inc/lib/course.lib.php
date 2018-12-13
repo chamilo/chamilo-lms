@@ -597,7 +597,7 @@ class CourseManager
      *
      * @param int    $userId
      * @param string $courseCode
-     * @param int    $status               (STUDENT, COURSEMANAGER, COURSE_ADMIN, NORMAL_COURSE_MEMBER)
+     * @param int    $status                 (STUDENT, COURSEMANAGER, COURSE_ADMIN, NORMAL_COURSE_MEMBER)
      * @param int    $sessionId
      * @param int    $userCourseCategoryId
      * @param bool   $checkTeacherPermission

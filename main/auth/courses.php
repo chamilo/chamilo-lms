@@ -152,7 +152,6 @@ if (isset($_REQUEST['search_course'])) {
     }
 }
 
-
 // We are unsubscribing from a course (=Unsubscribe from course).
 if (isset($_GET['unsubscribe'])) {
     if (!empty($_GET['sec_token']) && $ctok == $_GET['sec_token']) {

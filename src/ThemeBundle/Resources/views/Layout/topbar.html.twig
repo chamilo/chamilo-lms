@@ -210,7 +210,7 @@
                     <a href="" class="dropdown-toggle" data-toggle="dropdown">
 
                         {% set avatar %}
-                            {% if app.user.pictureUri is null %}
+                            {% if app.user.pictureUri is empty %}
                                 <img
                                     class="rounded-circle"
                                     src="{{ url('legacy_public') ~ app.user.avatarOrAnonymous(32) }}"

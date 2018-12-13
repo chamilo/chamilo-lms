@@ -7,11 +7,14 @@ use Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor;
 use Chamilo\CoreBundle\Component\Editor\Connector;
 use Chamilo\CoreBundle\Component\Editor\Finder;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\SettingsBundle\Manager\SettingsManager;
 use FM\ElfinderBundle\Connector\ElFinderConnector;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\RouterInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class EditorController.
@@ -31,11 +34,11 @@ class EditorController extends AbstractController
      *
      * @return Response
      */
-    public function editorTemplatesAction()
+    public function editorTemplatesAction(TranslatorInterface $translator, RouterInterface $router)
     {
         $editor = new CkEditor(
-            $this->get('translator'),
-            $this->get('router')
+            $translator,
+            $router
         );
         $templates = $editor->simpleFormatTemplates();
 
@@ -113,12 +116,14 @@ class EditorController extends AbstractController
     /**
      * @Route("/config", methods={"GET"}, name="config_editor")
      *
+     * @param SettingsManager $settingsManager
+     *
      * @return Response
      */
-    public function configEditorAction()
+    public function configEditorAction(SettingsManager $settingsManager)
     {
         $moreButtonsInMaximizedMode = false;
-        $settingsManager = $this->get('chamilo.settings.manager');
+        //$settingsManager = $this->get('chamilo.settings.manager');
 
         if ($settingsManager->getSetting('editor.more_buttons_maximized_mode') === 'true') {
             $moreButtonsInMaximizedMode = true;

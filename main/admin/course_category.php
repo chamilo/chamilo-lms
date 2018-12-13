@@ -36,7 +36,7 @@ if (!empty($action)) {
                 $_POST['code'],
                 $_POST['name'],
                 $_POST['auth_course_child'],
-                $category
+                $categoryId
             );
 
             $errorMsg = Display::return_message(get_lang('Created'));

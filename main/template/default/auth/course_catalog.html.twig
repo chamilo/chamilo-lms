@@ -1,0 +1,38 @@
+
+{% autoescape false %}
+
+<div class="catalog" style="width: 100%;">
+    <h2>{{ 'Course Management'|get_lang }}</h2>
+    <div class="search">
+        <div class="row">
+            <div class="col-md-6">
+                {{ select }}
+            </div>
+            <div class="col-md-6">
+                {{ search }}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        {% for item in courses %}
+            <div class="col-md-3">
+                <div id="course_{{ item.real_id }}" class="card mb-4 shadow-sm">
+                    <a href="{{ item.url }}">
+                    <img class="card-img-top"  alt="{{ item.title }}" src="{{ item.image }}" data-holder-rendered="true" style="width: 100%; display: block;">
+                    </a>
+                    <div class="card-body">
+                        <h4><a href="{{ item.url }}">{{  item.title }}</a></h4>
+                        {{ item.ranking }}
+                        {{ item.teacher }}
+                        <div class="d-flex justify-content-between align-items-center">
+                            {{ item.subscribe }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    {{ pagination }}
+</div>
+
+{% endautoescape %}

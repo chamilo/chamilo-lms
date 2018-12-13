@@ -107,7 +107,7 @@ if (api_is_platform_admin()) {
     ];
 
     if (api_is_session_admin()) {
-        if (true === api_get_configuration_value('limit_session_admin_role')) {
+        if ('true' === api_get_setting('limit_session_admin_role')) {
             $items = array_filter($items, function (array $item) {
                 $urls = ['user_list.php', 'user_add.php'];
 

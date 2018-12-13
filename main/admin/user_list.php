@@ -580,8 +580,8 @@ function modify_filter($user_id, $url_params, $row)
     //only allow platform admins to login_as, or session admins only for students (not teachers nor other admins)
     $loginAsStatusForSessionAdmins = [$statusname[STUDENT]];
 
-    //except when allow_session_admin_login_as_teacher is enabled, then can login_as teachers also
-    if (api_get_configuration_value('allow_session_admin_login_as_teacher')) {
+    //except when session.allow_session_admin_login_as_teacher is enabled, then can login_as teachers also
+    if (api_get_configuration_value('session.allow_session_admin_login_as_teacher')) {
         $loginAsStatusForSessionAdmins[] = $statusname[COURSEMANAGER];
     }
 

@@ -1971,15 +1971,16 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     }
 
     /**
-     * @return string|false
+     * @return string
      */
     public function getPictureLegacy(): string
     {
         $id = $this->id;
-        if($this->getPictureUri()){
-            return 'users/'.substr((string) $id, 0, 1).'/'.$id.'/'.'small_'.$this->getPictureUri();
+        $uri = $this->getPictureUri();
+        if ($uri) {
+            return 'users/'.substr((string) $id, 0, 1).'/'.$id.'/'.'small_'.$uri;
         }
-        return false;
+        return '';
     }
 
     /**

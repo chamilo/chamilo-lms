@@ -369,7 +369,6 @@ if ($debug) {
     error_log('Entered lp_controller.php -+- (action: '.$action.')');
 }
 
-// ## NSR - log
 $lp_id = (!empty($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : 0);
 switch ($action) {
     case 'view':
@@ -463,25 +462,25 @@ switch ($action) {
             $tplContent = new Template(null, false, false, false, false, false);
             // variables for the default template
             $tplContent->assign('name_teacher', $recipient_name);
-            $tplContent->assign('name_student', $studentInfo['firstname'].' '.$studentInfo['lastname']);
-            $tplContent->assign('course_name', $course_name);;
+            $tplContent->assign('name_student', $studentInfo['complete_name']);
+            $tplContent->assign('course_name', $course_name);
             $tplContent->assign('course_url', $url);
-            $tplContent->assign('telefono', $telefono);
-            $tplContent->assign('prefix', $prefix);
+            //$tplContent->assign('telefono', $telefono);
+            //$tplContent->assign('prefix', $prefix);
             $layoutContent = $tplContent->get_template('mail/content_ending_learnpath.tpl');
             $emailBody = $tplContent->fetch($layoutContent);
 
             api_mail_html(
                 $recipient_name,
                 $email,
-                'Alumno con lecciones finalizadas',
+                sprintf(get_lang('StudentXFinishedLp'), $studentInfo['complete_name']),
                 $emailBody,
-                $studentInfo['firstname'].' '.$studentInfo['lastname'],
+                $studentInfo['complete_name'],
                 $studentInfo['email'],
                 true
             );
         }
-        Display::addFlash(Display::return_message('Notificación enviada al profesor'));
+        Display::addFlash(Display::return_message('MessageSent'));
         require 'lp_list.php';
         break;
     case 'add_item':

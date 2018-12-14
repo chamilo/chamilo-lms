@@ -3,5 +3,4 @@
 <p>{{ course_url }} </p>
 <p>{{ 'SignatureFormula'|get_lang }}</p>
 <p> {{ prefix ? prefix }}<br>
-    {{ telefono ? 'Tlfno. ' ~ telefono }}
 </p>

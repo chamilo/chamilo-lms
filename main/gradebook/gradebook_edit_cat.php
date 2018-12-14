@@ -10,7 +10,6 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 GradebookUtils::block_students();
-
 $edit_cat = isset($_REQUEST['editcat']) ? intval($_REQUEST['editcat']) : '';
 
 $catedit = Category::load($edit_cat);
@@ -85,6 +84,18 @@ if ($form->validate()) {
     exit;
 }
 $selectcat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : '';
+
+$logInfo = [
+    'tool' => TOOL_GRADEBOOK,
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => 'edit-cat',
+    'action_details' => $selectcat,
+    'current_id' => $current_id,
+    'info' => '',
+];
+Event::registerLog($logInfo);
+
 $interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat='.$selectcat,
     'name' => get_lang('Gradebook'),

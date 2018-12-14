@@ -28,6 +28,18 @@ $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
 // Tracking
 Event::event_access_tool(TOOL_SURVEY);
 
+// ## NSR - log
+$logInfo = [
+    'tool' => TOOL_SURVEY,
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => '',
+    'action_details' => '',
+    'current_id' => 0,
+    'info' => '',
+];
+Event::registerLog($logInfo);
+
 /** @todo
  * This has to be moved to a more appropriate place (after the display_header
  * of the code)

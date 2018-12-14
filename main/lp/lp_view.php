@@ -557,6 +557,69 @@ if ($gamificationMode == 1) {
 }
 
 $template->assign('lp_author', $lp->get_author());
+
+$lpMinTime = '';
+if (api_get_configuration_value('lp_minimum_time')) {
+    /* ## NSR - calculo de tiempo minimo y acumulado */
+    $timeLp = $_SESSION['oLP']->getAccumulateWorkTime();
+    $timeTotalCourse = $_SESSION['oLP']->getAccumulateWorkTimeTotalCourse();
+    $perc = 100;
+    $tc = $timeTotalCourse;
+    if (!empty($sessionId) && $sessionId != 0) {
+        /*$sql = "SELECT hours, perc FROM plugin_licences_course_session WHERE session_id = $sessionId";
+        $res = Database::query($sql);
+        if (Database::num_rows($res) > 0) {
+            $aux = Database::fetch_assoc($res);
+            $perc = $aux['perc'];
+            $tc = $aux['hours'] * 60;
+        }*/
+    }
+
+    // PL --- Porcentaje lección (tiempo leccion / tiempo total curso)
+    $pl = $timeLp / $timeTotalCourse;
+
+    /*
+     * TL: Tiempo que pone en una lección
+     * TT : tiempo total que pone Teresa (suma tiempos lecciones curso)
+     * PL: Fracción que supone una lección sobre el tiempo total = TL/TT
+     * TC: Tiempo que dice el cliente que tiene el curso
+     * P: porcentaje mínimo conexión que indica el cliente
+     *
+     * el tiempo mínimo de cada lección sería: PL x TC x P /100
+     */
+    // Aplicamos el porcentaje si no hubiese definido un porcentaje por defecto es 100%
+    $time_min = intval($pl * $tc * $perc / 100);
+
+    if ($_SESSION['oLP']->getAccumulateWorkTime() > 0) {
+        $lpMinTime = '('.$time_min.' min)';
+    }
+
+    $lpTime = Tracking::get_time_spent_in_lp(
+        $user_id,
+        $course_code,
+        [$_SESSION['oLP']->lp_id],
+        $sessionId
+    );
+
+    if ($lpTime >= ($time_min * 60)) {
+        $time_progress_perc = '100%';
+        $time_progress_value = 100;
+    } else {
+        $time_progress_value = intval(($lpTime * 100) / ($time_min * 60));
+        $time_progress_perc = $time_progress_value.'%';
+    }
+
+    $template->assign('time_progress_perc', $time_progress_perc);
+    $template->assign('time_progress_value', $time_progress_value);
+    // Cronometro
+    $hour = (intval($lpTime / 3600)) < 10 ? '0'.intval($lpTime / 3600) : intval($lpTime / 3600);
+    $template->assign('hour', $hour);
+    $template->assign('minute', date('i', $lpTime));
+    $template->assign('second', date('s', $lpTime));
+    /* ## NSR fin modificacion */
+}
+
+$template->assign('lp_accumulate_work_time', $lpMinTime);
 $template->assign('lp_mode', $lp->mode);
 $template->assign('lp_title_scorm', $lp->name);
 if (api_get_configuration_value('lp_view_accordion') === true && $lpType == 1) {

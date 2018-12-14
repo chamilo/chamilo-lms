@@ -2383,3 +2383,96 @@ function attach_glossary_into_scorm(type) {
         }
     }
 }
+
+// ## NSR ##
+/**
+ * Updates the time bar with the new status. Prevents the need of a page refresh and flickering
+ * @param	integer	Number of completed items
+ * @param	integer	Number of items in total
+ * @param	string  Display mode (absolute 'abs' or percentage '%').Defaults to %
+ */
+function update_time_bar(nbr_complete, nbr_total, mode)
+{
+    logit_lms('update_progress_bar('+nbr_complete+', '+nbr_total+', '+mode+')',3);
+    logit_lms(
+        'update_progress_bar with params: lms_lp_id= ' + olms.lms_lp_id +
+        ', lms_view_id= '+ olms.lms_view_id + ' lms_user_id= '+ olms.lms_user_id,
+        3
+    );
+
+    if (mode == '') {
+        mode='%';
+    }
+
+    if (nbr_total == 0) {
+        nbr_total=1;
+    }
+
+    var percentage = (nbr_complete/nbr_total)*100;
+    percentage = Math.round(percentage);
+
+    var progress_bar = $("#progress_bar_value2");
+    progress_bar.css('width', percentage + "%");
+
+    var mytext = '';
+    switch(mode){
+        case 'abs':
+            mytext = nbr_complete + '/' + nbr_total;
+            break;
+        case '%':
+        default:
+            mytext = percentage + '%';
+            break;
+    }
+    progress_bar.html(mytext);
+    return true;
+}
+
+/**
+ * Update cronometro
+ */
+function update_cronometro(text_hour, text_minute, text_second)
+{
+    $("#hour").text(text_hour);
+    $("#minute").text(text_minute);
+    $("#second").text(text_second);
+
+    var tiempo = {
+        hora: parseInt($("#hour").text()),
+        minuto: parseInt($("#minute").text()),
+        segundo:  parseInt($("#second").text())
+    };
+    /*
+    var tiempo = {
+       hora: text_hour,
+       minuto: text_minute,
+       segundo: text_second
+   };
+   */
+
+    //window.tiempo_corriendo = null;
+    clearInterval(window.tiempo_corriendo);
+    window.tiempo_corriendo = setInterval(function(){
+        // Segundos
+        tiempo.segundo++;
+        if(tiempo.segundo >= 60) {
+            tiempo.segundo = 0;
+            tiempo.minuto++;
+        }
+
+        // Minutos
+        if(tiempo.minuto >= 60) {
+            tiempo.minuto = 0;
+            tiempo.hora++;
+        }
+
+        $("#hour").text(tiempo.hora < 10 ? '0' + tiempo.hora : tiempo.hora);
+        //$("#hour").text(tiempo.hora);
+        $("#minute").text(tiempo.minuto < 10 ? '0' + tiempo.minuto : tiempo.minuto);
+        //$("#minute").text(tiempo.minuto);
+        $("#second").text(tiempo.segundo < 10 ? '0' + tiempo.segundo : tiempo.segundo);
+        //$("#second").text(tiempo.segundo);
+    }, 1000);
+
+    return true;
+}

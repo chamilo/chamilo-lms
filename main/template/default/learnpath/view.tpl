@@ -25,6 +25,88 @@
                             {{ media_player }}
                         </div>
                     {% endif %}
+
+                    {% if lp_accumulate_work_time != '' %}
+                        {% set lp_progress %}
+                        <style>
+                            #timer .container{display:table;background:#777;color:#eee;font-weight:bold;width:100%;text-align:center;text-shadow:1px 1px 4px #999;}
+                            #timer .container div{display:table-cell;font-size:24px;padding:0px;width:20px;}
+                            #timer .container .divider{width:10px;color:#ddd;}
+                            #btn-comenzar{box-sizing:border-box;background:#eee;border:none;margin:0 auto;padding:20px;width:100%;font-size:30px;color:#777;}
+                            #btn-comenzar:hover{background:#fff;}
+                        </style>
+                        <script>
+                            $(document).ready(function() {
+                                var tiempo = {
+                                    hora: parseInt($("#hour").text()),
+                                    minuto: parseInt($("#minute").text()),
+                                    segundo:  parseInt($("#second").text())
+                                };
+                                //window.tiempo_corriendo = null;
+                                clearInterval(window.tiempo_corriendo);
+                                window.tiempo_corriendo = setInterval(function(){
+                                    // Segundos
+                                    tiempo.segundo++;
+                                    if(tiempo.segundo >= 60) {
+                                        tiempo.segundo = 0;
+                                        tiempo.minuto++;
+                                    }
+
+                                    if (tiempo.segundo%10 == 0) {
+                                        //console.log({{lp_current_item_id}});
+                                        /*time_save({{lp_current_item_id}});*/
+                                    }
+
+                                    // Minutos
+                                    if(tiempo.minuto >= 60)
+                                    {
+                                        tiempo.minuto = 0;
+                                        tiempo.hora++;
+                                    }
+
+                                    $("#hour").text(tiempo.hora < 10 ? '0' + tiempo.hora : tiempo.hora);
+                                    //$("#hour").text(tiempo.hora);
+                                    $("#minute").text(tiempo.minuto < 10 ? '0' + tiempo.minuto : tiempo.minuto);
+                                    //$("#minute").text(tiempo.minuto);
+                                    $("#second").text(tiempo.segundo < 10 ? '0' + tiempo.segundo : tiempo.segundo);
+                                    //$("#second").text(tiempo.segundo);
+                                }, 1000);
+                            })
+                        </script>
+                        <b>
+                            {{ "TimeSpentInLp"|get_lang|format(lp_accumulate_work_time) }}
+                        </b>
+                        <div id="progress_bar">
+                            <div class="progress">
+                                <div id="progress_bar_value2"
+                                     class="progress-bar progress-bar-success"
+                                     role="progressbar" aria-valuenow="50"
+                                     aria-valuemin="0"
+                                     aria-valuemax="{{ time_progress_value }}"
+                                     style="width: {{ time_progress_perc }};"
+                                >
+                                    {{ time_progress_perc }}
+                                </div>
+                            </div>
+                        </div>
+                        <div id="timer">
+                            <div class="container">
+                                <div id="hour">{{ hour }}</div>
+                                <div class="divider">:</div>
+                                <div id="minute">{{ minute }}</div>
+                                <div class="divider">:</div>
+                                <div id="second">{{ second }}</div>
+                            </div>
+                        </div>
+                        {% endset %}
+                    {% else %}
+                        {% set lp_progress %}
+                            <div id="progress_bar">
+                                {{ progress_bar }}
+                            </div>
+                        {% endset %}
+                    {% endif %}
+
                     {% if gamification_mode == 1 %}
                         <!--- gamification -->
                         <div id="scorm-gamification">
@@ -48,18 +130,15 @@
                             </div>
                             <div class="row">
                                 <div class="col-xs-12 navegation-bar">
-                                    <div id="progress_bar">
-                                        {{ progress_bar }}
-                                    </div>
+                                   {{ lp_progress }}
                                 </div>
                             </div>
                         </div>
                         <!--- end gamification -->
                     {% else %}
-                        <div id="progress_bar">
-                            {{ progress_bar }}
-                        </div>
+                       {{ lp_progress }}
                     {% endif %}
+
                     {{ teacher_toc_buttons }}
                 </div>
             </div>

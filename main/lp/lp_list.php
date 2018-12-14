@@ -392,6 +392,88 @@ foreach ($categories as $item) {
                 }
             }
 
+            // ## NSR
+            if ($progress < 100) {
+                $ending = false;
+            }
+
+            $dsp_time = '';
+            $linkMinTime = '';
+            if (api_get_configuration_value('lp_minimum_time')) {
+                // ## NSR
+                // Time info
+                // TL --- Tiempo minimo para superar la lección ( en minutos )
+                $accumulateWorkTime = learnpath::getAccumulateWorkTimePrerequisite($id, api_get_course_int_id());
+                if ($accumulateWorkTime > 0) {
+                    // TT --- Tiempo total del curso
+                    $accumulateWorkTimeTotal = learnpath::getAccumulateWorkTimeTotal(api_get_course_int_id());
+
+                    // Tiempo empleado hasta el momento en la leccion ( en segundos )
+                    $lpTime = Tracking::get_time_spent_in_lp(
+                        $userId,
+                        api_get_course_id(),
+                        [$id],
+                        api_get_session_id()
+                    );
+
+                    // Conectamos con la tabla plugin_licences_course_session en la que se indica que porcentaje del tiempo se aplica
+                    $perc = 100;
+                    $tc = $accumulateWorkTimeTotal;
+                    /*if (!empty($current_session) && $current_session != 0) {
+                        $sql = "SELECT hours, perc FROM plugin_licences_course_session WHERE session_id = $current_session";
+                        $res = Database::query($sql);
+                        if (Database::num_rows($res) > 0) {
+                            $aux = Database::fetch_assoc($res);
+                            $perc = $aux['perc'];
+                            $tc = ($aux['hours'] * 60);
+                        }
+                    }*/
+
+                    // PL --- Porcentaje lección (tiempo leccion / tiempo total curso)
+                    $pl = $accumulateWorkTime / $accumulateWorkTimeTotal;
+
+                    /*
+                     * TL: Tiempo que pone en una lección
+                     * TT : tiempo total que pone Teresa (suma tiempos lecciones curso)
+                     * PL: Fracción que supone una lección sobre el tiempo total = TL/TT
+                     * TC: Tiempo que dice el cliente que tiene el curso
+                     * P: porcentaje mínimo conexión que indica el cliente
+                     *
+                     * el tiempo mínimo de cada lección sería: PL x TC x P /100
+                     */
+
+                    // Aplicamos el porcentaje si no hubiese definido un porcentaje por defecto es 100%
+                    $accumulateWorkTime = ($pl * $tc * $perc / 100);
+
+                    // Si el tiempo empleado es menor que lo necesario mostramos un icono en la columna de acción indicando la advertencia
+                    if ($lpTime < ($accumulateWorkTime * 60)) {
+                        $linkMinTime = Display::return_icon(
+                            'warning.png',
+                            get_lang('LpMinTimeWarning').' - '.api_time_to_hms($lpTime).' / '.api_time_to_hms(
+                                $accumulateWorkTime * 60
+                            )
+                        );
+                        $linkMinTime .= '<b>'.api_time_to_hms($lpTime).' / '.api_time_to_hms($accumulateWorkTime * 60).'</b>';
+                    } else {
+                        $linkMinTime = sprintf(get_lang('YouHaveSpentXTime'), api_time_to_hms($lpTime));
+                    }
+
+                    // Calculamos el porcentaje superado del tiempo para la barra de "superacion de tiempo mínimo"
+                    if ($lpTime >= ($accumulateWorkTime * 60)) {
+                        $time_progress_perc = '100%';
+                        $time_progress_value = 100;
+                    } else {
+                        $time_progress_value = intval(($lpTime * 100) / ($accumulateWorkTime * 60));
+                    }
+
+                    // ## NSR
+                    if ($time_progress_value < 100) {
+                        $ending = false;
+                    }
+                    $dsp_time = learnpath::get_progress_bar($time_progress_value, '%');
+                }
+            }
+
             $token_parameter = "&sec_token=$token";
             $dsp_edit_lp = null;
             $dsp_publish = null;
@@ -404,7 +486,7 @@ foreach ($categories as $item) {
             $actionUpdateScormFile = '';
             $actionExportToCourseBuild = '';
             // Only for "Chamilo" packages
-            $allowExportCourseFormat = $allowLpChamiloExport && $details['lp_maker'] == 'Chamilo';
+            $allowExportCourseFormat = $allowLpChamiloExport && $details['lp_maker'] === 'Chamilo';
 
             if ($is_allowed_to_edit) {
                 // EDIT LP
@@ -893,6 +975,7 @@ foreach ($categories as $item) {
                 'action_subscribe_users' => $subscribeUsers,
                 'action_update_scorm' => $actionUpdateScormFile,
                 'action_export_to_course_build' => $actionExportToCourseBuild,
+                'info_time_prerequisite' => $linkMinTime,
             ];
 
             $lpIsShown = true;
@@ -933,6 +1016,7 @@ $template = new Template($nameTools);
 $template->assign('subscription_settings', $subscriptionSettings);
 $template->assign('is_allowed_to_edit', $is_allowed_to_edit);
 $template->assign('is_invitee', api_is_invitee());
+$template->assign('is_ending', $ending);
 $template->assign('actions', $actions);
 $template->assign('categories', $categories);
 $template->assign('message', $message);

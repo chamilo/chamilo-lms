@@ -21,6 +21,18 @@ if ($allowSocialTool) {
     $this_section = SECTION_SOCIAL;
 }
 
+// ## NSR - log
+$logInfo = [
+    'tool' => 'profile',
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => $this_section,
+    'action_details' => '',
+    'current_id' => 0,
+    'info' => '',
+];
+Event::registerLog($logInfo);
+
 $_SESSION['this_section'] = $this_section;
 
 if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'], true)) {

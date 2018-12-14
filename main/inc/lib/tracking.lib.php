@@ -435,6 +435,16 @@ class Tracking
                         $lesson_status = $row['mystatus'];
                         $score = $row['myscore'];
                         $time_for_total = $row['mytime'];
+
+                        // ## NSR sistema de tiempos nuevo
+                        if (api_get_configuration_value('allow_track_complete')) {
+                            $timeCourse = self::getCalculateTime($user_id, $session_id);
+                            Session::write('trackTimeCourse', $timeCourse);
+                            $lp_time = $timeCourse[TOOL_LEARNPATH];
+                            $lpTime = (int) $lp_time[$lp_id];
+                            $time_for_total = $lpTime;
+                        }
+
                         $time = learnpathItem::getScormTimeFromParameter('js', $row['mytime']);
 
                         if ($score == 0) {
@@ -1649,6 +1659,28 @@ class Tracking
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs);
 
+        if (api_get_configuration_value('lp_minimum_time')) {
+            $courseInfo = api_get_course_info_by_id($courseId);
+            $course_code = $courseInfo['code'];
+            $sql = "SELECT * FROM c_lp WHERE c_id = $courseId";
+            $rs = Database::query($sql);
+            $dataLp = [];
+            while ($aux = Database::fetch_assoc($rs)) {
+                $dataLp[] = $aux['id'];
+            }
+            $lpTime = Tracking::get_time_spent_in_lp(
+                $user_id,
+                $course_code,
+                $dataLp, //array($_SESSION['oLP']->lp_id),
+                $session_id
+            );
+            if ($row['nb_seconds'] > $lpTime) {
+                return $row['nb_seconds'];
+            } else {
+                return $lpTime;
+            }
+        }
+
         return $row['nb_seconds'];
     }
 
@@ -1791,29 +1823,54 @@ class Tracking
         $session_id = 0,
         $convert_date = true
     ) {
-        $student_id = intval($student_id);
-        $courseId = intval($courseId);
-        $session_id = intval($session_id);
+        $student_id = (int) $student_id;
+        $courseId = (int) $courseId;
+        $session_id = (int) $session_id;
 
-        $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $sql = 'SELECT login_course_date
-                FROM '.$tbl_track_login.'
-                WHERE
-                    user_id = '.$student_id.' AND
-                    c_id = '.$courseId.' AND
-                    session_id = '.$session_id.'
-                ORDER BY login_course_date ASC 
-                LIMIT 0,1';
-        $rs = Database::query($sql);
-        if (Database::num_rows($rs) > 0) {
-            if ($first_login_date = Database::result($rs, 0, 0)) {
-                if ($convert_date) {
-                    return api_convert_and_format_date(
-                        $first_login_date,
-                        DATE_FORMAT_SHORT
-                    );
-                } else {
-                    return $first_login_date;
+        if (api_get_configuration_value('lp_minimum_time')) {
+            $tbl_track_e_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+            $sql = 'SELECT access_date
+                    FROM '.$tbl_track_e_access.'
+                    WHERE   access_user_id = '.$student_id.' AND
+                            c_id = "'.$courseId.'" AND
+                            access_session_id = '.$session_id.'
+                    ORDER BY access_date ASC
+                    LIMIT 0,1';
+
+            $rs = Database::query($sql);
+            if (Database::num_rows($rs) > 0) {
+                if ($last_login_date = Database::result($rs, 0, 0)) {
+                    if (empty($last_login_date)) {
+                        return false;
+                    }
+                    if ($convert_date) {
+                        return api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
+                    } else {
+                        return $last_login_date;
+                    }
+                }
+            }
+        } else {
+            $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+            $sql = 'SELECT login_course_date
+                    FROM '.$tbl_track_login.'
+                    WHERE
+                        user_id = '.$student_id.' AND
+                        c_id = '.$courseId.' AND
+                        session_id = '.$session_id.'
+                    ORDER BY login_course_date ASC 
+                    LIMIT 0,1';
+            $rs = Database::query($sql);
+            if (Database::num_rows($rs) > 0) {
+                if ($first_login_date = Database::result($rs, 0, 0)) {
+                    if ($convert_date) {
+                        return api_convert_and_format_date(
+                            $first_login_date,
+                            DATE_FORMAT_SHORT
+                        );
+                    } else {
+                        return $first_login_date;
+                    }
                 }
             }
         }
@@ -1841,44 +1898,105 @@ class Tracking
         $student_id = (int) $student_id;
         $session_id = (int) $session_id;
         $courseId = $courseInfo['real_id'];
-        $tbl_track_e_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
-        $sql = 'SELECT access_date
+
+        if (api_get_configuration_value('lp_minimum_time')) {
+            // ## NSR - Muestra la última fecha que accedió a la sesión cuando estaba activa
+            $where_condition = '';
+            $userInfo = api_get_user_info($student_id);
+            if ($userInfo['status'] == 5 && $session_id > 0) {
+                // fin de acceso a la sesión
+                $sessionInfo = SessionManager::fetch($session_id);
+                $last_access = $sessionInfo['access_end_date'];
+                $where_condition = ' AND access_date < "'.$last_access.'" ';
+            }
+
+            $tbl_track_e_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+            $sql = 'SELECT access_date
                 FROM '.$tbl_track_e_access.'
                 WHERE   access_user_id = '.$student_id.' AND
                         c_id = "'.$courseId.'" AND
-                        access_session_id = '.$session_id.'
+                        access_session_id = '.$session_id.$where_condition.'
                 ORDER BY access_date DESC
                 LIMIT 0,1';
 
-        $rs = Database::query($sql);
-        if (Database::num_rows($rs) > 0) {
-            if ($last_login_date = Database::result($rs, 0, 0)) {
-                if (empty($last_login_date)) {
-                    return false;
-                }
-                //see #5736
-                $last_login_date_timestamp = api_strtotime($last_login_date);
-                $now = time();
-                //If the last connection is > than 7 days, the text is red
-                //345600 = 7 days in seconds
-                if ($now - $last_login_date_timestamp > 604800) {
-                    if ($convert_date) {
-                        $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
-                        $icon = api_is_allowed_to_edit() ?
-                            '<a href="'.api_get_path(WEB_CODE_PATH).'announcements/announcements.php?action=add&remind_inactive='.$student_id.'&cidReq='.$courseInfo['code'].'" title="'.get_lang('RemindInactiveUser').'">
-                              '.Display::return_icon('messagebox_warning.gif').'
-                             </a>'
-                            : null;
-
-                        return $icon.Display::label($last_login_date, 'warning');
-                    } else {
-                        return $last_login_date;
+            $rs = Database::query($sql);
+            if (Database::num_rows($rs) > 0) {
+                if ($last_login_date = Database::result($rs, 0, 0)) {
+                    if (empty($last_login_date)) {
+                        return false;
                     }
-                } else {
+                    //see #5736
+                    $last_login_date_timestamp = api_strtotime($last_login_date);
+                    $now = time();
+                    //If the last connection is > than 7 days, the text is red
+                    //345600 = 7 days in seconds
+                    /*
+                    if ($now - $last_login_date_timestamp > 604800) {
+                        if ($convert_date) {
+                            $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
+                            $icon = api_is_allowed_to_edit() ?
+                                '<a href="'.api_get_path(WEB_CODE_PATH).'announcements/announcements.php?action=add&remind_inactive='.$student_id.'&cidReq='.$courseInfo['code'].'" title="'.get_lang('RemindInactiveUser').'">
+                                  '.Display::return_icon('messagebox_warning.gif').'
+                                 </a>'
+                                : null;
+                            return $icon.Display::label($last_login_date, 'warning');
+                        } else {
+                            return $last_login_date;
+                        }
+                    } else {
+                    */
                     if ($convert_date) {
                         return api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
                     } else {
                         return $last_login_date;
+                    }
+                    //}
+                }
+            }
+        } else {
+            $tbl_track_e_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+            $sql = 'SELECT access_date
+                    FROM '.$tbl_track_e_access.'
+                    WHERE   access_user_id = '.$student_id.' AND
+                            c_id = "'.$courseId.'" AND
+                            access_session_id = '.$session_id.'
+                    ORDER BY access_date DESC
+                    LIMIT 0,1';
+
+            $rs = Database::query($sql);
+            if (Database::num_rows($rs) > 0) {
+                if ($last_login_date = Database::result($rs, 0, 0)) {
+                    if (empty($last_login_date)) {
+                        return false;
+                    }
+                    //see #5736
+                    $last_login_date_timestamp = api_strtotime($last_login_date);
+                    $now = time();
+                    //If the last connection is > than 7 days, the text is red
+                    //345600 = 7 days in seconds
+                    if ($now - $last_login_date_timestamp > 604800) {
+                        if ($convert_date) {
+                            $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
+                            $icon = api_is_allowed_to_edit() ?
+                                '<a href="'.api_get_path(
+                                    WEB_CODE_PATH
+                                ).'announcements/announcements.php?action=add&remind_inactive='.$student_id.'&cidReq='.$courseInfo['code'].'" title="'.get_lang(
+                                    'RemindInactiveUser'
+                                ).'">
+                                  '.Display::return_icon('messagebox_warning.gif').'
+                                 </a>'
+                                : null;
+
+                            return $icon.Display::label($last_login_date, 'warning');
+                        } else {
+                            return $last_login_date;
+                        }
+                    } else {
+                        if ($convert_date) {
+                            return api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
+                        } else {
+                            return $last_login_date;
+                        }
                     }
                 }
             }
@@ -6677,6 +6795,404 @@ class Tracking
         $html = $skillManager->getUserSkillsTable($userId, $courseId, $sessionId)['table'];
 
         return $html;
+    }
+
+    /**
+     * @param int  $userId
+     * @param int  $sessionId
+     * @param bool $debug
+     *
+     * @return array
+     */
+    public static function getCalculateTime($userId, $sessionId, $debug = false)
+    {
+        /*   $sql = "SELECT session_lifetime
+           FROM plugin_licences_course_session
+           WHERE session_id = $sessionId";
+           $res = Database::query($sql);
+           $lifeTime = intval(Database::fetch_assoc($res)['session_lifetime']);*/
+        //error_log("sessionId: $sessionId: $lifeTime");
+        /*if ($lifeTime > 0) {
+            $sessionLifetime = $lifeTime;
+            $sessionFixTime = $lifeTime;
+        } else {
+            $sessionLifetime = 28800; //intval(api_get_configuration_value('session_lifetime'));
+            $sessionFixTime = 2700;
+        }*/
+        $sessionLifetime = 28800; //intval(api_get_configuration_value('session_lifetime'));
+        $sessionFixTime = 2700;
+
+        $total_time = 0;
+        $course_time = 0;
+        $quiz_time = 0;
+        $chat_time = 0;
+        $agenda_time = 0;
+        $forum_time = 0;
+        $announcement_time = 0;
+        $description_time = 0;
+        $survey_time = 0;
+        $notebook_time = 0;
+        $gradebook_time = 0;
+        $dropbox_time = 0;
+        $report_time = 0;
+        $videoconference_time = 0;
+        $link_time = 0;
+        $lp_time = [];
+        $reg = [];
+        $regUse = [];
+        $count_login = 0;
+
+        $sql = 'SELECT date_reg
+                FROM track_e_access_complete
+                WHERE   
+                    user_id = '.$userId.' AND
+                    session_id = '.$sessionId.' AND
+                    login_as = 0
+                ORDER BY date_reg ASC
+                LIMIT 0,1';
+        $rs = Database::query($sql);
+        if (Database::num_rows($rs) > 0) {
+            if ($last_login_date = Database::result($rs, 0, 0)) {
+                if (empty($last_login_date)) {
+                    $fistConection = '';
+                } else {
+                    $fistConection = date("d/m/Y H:i:s", strtotime($last_login_date));
+                }
+            } else {
+                $fistConection = '';
+            }
+        } else {
+            $fistConection = '';
+        }
+
+        $sql = 'SELECT date_reg
+                FROM track_e_access_complete
+                WHERE   
+                    user_id = '.$userId.' AND
+                    session_id = '.$sessionId.' AND
+                    login_as = 0
+                ORDER BY date_reg DESC
+                LIMIT 0,1';
+        $rs = Database::query($sql);
+        if (Database::num_rows($rs) > 0) {
+            if ($last_login_date = Database::result($rs, 0, 0)) {
+                if (empty($last_login_date)) {
+                    $lastConection = '';
+                } else {
+                    $lastConection = date('d/m/Y H:i:s', strtotime($last_login_date));
+                }
+            } else {
+                $lastConection = '';
+            }
+        } else {
+            $lastConection = '';
+        }
+
+        $sql = "SELECT * FROM track_e_access_complete WHERE user_id = $userId"; //AND session_id = $sessionId";
+        $res = Database::query($sql);
+        while ($row = Database::fetch_assoc($res)) {
+            if ($row['login_as'] == 1 && !$debug) {
+                continue;
+            }
+            if ($row['session_id'] == $sessionId) {
+                if ($login) {
+                    $count_login++;
+                    $login = false;
+                }
+                if ($row['tool'] == 'close-window' && $row['current_id'] > 0) {
+                    $id = $row['current_id'];
+                    if (!in_array($id, $regUse)) {
+                        $reg[$row['id']]['date_reg'] = strtotime($row['date_reg']);
+                        $reg[$row['id']]['tool'] = $row['tool'];
+                        $reg[$row['id']]['tool_id'] = $row['tool_id'];
+                        $reg[$row['id']]['action'] = $row['action'];
+                        $reg[$row['id']]['action_details'] = $row['action_details'];
+                        $reg[$row['id']]['use'] = 1;
+                        continue;
+                    }
+                    $partialTime = intval(strtotime($row['date_reg']) - $reg[$id]['date_reg']);
+                    if ($partialTime > 0) {
+                        $total_time += $partialTime;
+                    }
+                    $tool = $reg[$id]['tool'];
+                    if ($tool == 'close-window') {
+                        $tool = $last_tool_active;
+                    } else {
+                        $last_tool_active = $tool;
+                    }
+                    switch ($tool) {
+                        case 'course-main':
+                            $course_time += $partialTime;
+                            break;
+                        case TOOL_LEARNPATH:
+                            $lp_time[$reg[$id]['tool_id']] += $partialTime;
+                            break;
+                        case TOOL_QUIZ:
+                            if ($reg[$id]['action'] == 'learnpath_id') {
+                                $lp_time[$reg[$id]['action_details']] += $partialTime;
+                            } else {
+                                $quiz_time += $partialTime;
+                            }
+                            break;
+                        case TOOL_CHAT:
+                            $chat_time += $partialTime;
+                            break;
+                        case TOOL_AGENDA:
+                            $agenda_time += $partialTime;
+                            break;
+                        case TOOL_FORUM:
+                            $forum_time += $partialTime;
+                            break;
+                        case TOOL_ANNOUNCEMENT:
+                            $announcement_time += $partialTime;
+                            break;
+                        case TOOL_COURSE_DESCRIPTION:
+                            $description_time += $partialTime;
+                            break;
+                        case TOOL_SURVEY:
+                            $survey_time += $partialTime;
+                            break;
+                        case TOOL_NOTEBOOK:
+                            $notebook_time += $partialTime;
+                            break;
+                        case TOOL_GRADEBOOK:
+                            $gradebook_time += $partialTime;
+                            break;
+                        case TOOL_DROPBOX:
+                            $dropbox_time += $partialTime;
+                            break;
+                        case 'Reports':
+                            $report_time += $partialTime;
+                            break;
+                        case 'Videoconference':
+                            $videoconference_time += $partialTime;
+                            break;
+                        case TOOL_LINK:
+                            $link_time += $partialTime;
+                            break;
+                    }
+                    $reg[$row['id']]['date_reg'] = strtotime($row['date_reg']);
+                    $reg[$row['id']]['tool'] = $row['tool'];
+                    $reg[$row['id']]['tool_id'] = $row['tool_id'];
+                    $reg[$row['id']]['action'] = $row['action'];
+                    $reg[$row['id']]['action_details'] = $row['action_details'];
+                    $reg[$row['id']]['use'] = 1;
+                    $reg[$id]['use'] = 1;
+                } else {
+                    $reg[$row['id']]['date_reg'] = strtotime($row['date_reg']);
+                    $reg[$row['id']]['tool'] = $row['tool'];
+                    $reg[$row['id']]['tool_id'] = $row['tool_id'];
+                    $reg[$row['id']]['action'] = $row['action'];
+                    $reg[$row['id']]['action_details'] = $row['action_details'];
+                    $reg[$row['id']]['use'] = 0;
+                    $regUse[] = $row['id'];
+                }
+            } else {
+                if ($row['tool'] == 'close-window' && $row['current_id'] > 0) {
+                    $id = $row['current_id'];
+                    if (!in_array($id, $regUse)) {
+                        $reg[$row['id']]['date_reg'] = strtotime($row['date_reg']);
+                        $reg[$row['id']]['tool'] = $row['tool'];
+                        $reg[$row['id']]['tool_id'] = $row['tool_id'];
+                        $reg[$row['id']]['action'] = $row['action'];
+                        $reg[$row['id']]['action_details'] = $row['action_details'];
+                        $reg[$row['id']]['use'] = 1;
+                        continue;
+                    }
+                    $partialTime = intval(strtotime($row['date_reg']) - $reg[$id]['date_reg']);
+                    if ($partialTime > 0) {
+                        $total_time += $partialTime;
+                    }
+                    $tool = $reg[$id]['tool'];
+                    if ($tool == 'close-window') {
+                        $tool = $last_tool_active;
+                    } else {
+                        $last_tool_active = $tool;
+                    }
+                    switch ($tool) {
+                        case 'course-main':
+                            $course_time += $partialTime;
+                            break;
+                        case TOOL_LEARNPATH:
+                            $lp_time[$reg[$id]['tool_id']] += $partialTime;
+                            break;
+                        case TOOL_QUIZ:
+                            if ($reg[$id]['action'] == 'learnpath_id') {
+                                $lp_time[$reg[$id]['action_details']] += $partialTime;
+                            } else {
+                                $quiz_time += $partialTime;
+                            }
+                            break;
+                        case TOOL_CHAT:
+                            $chat_time += $partialTime;
+                            break;
+                        case TOOL_AGENDA:
+                            $agenda_time += $partialTime;
+                            break;
+                        case TOOL_FORUM:
+                            $forum_time += $partialTime;
+                            break;
+                        case TOOL_ANNOUNCEMENT:
+                            $announcement_time += $partialTime;
+                            break;
+                        case TOOL_COURSE_DESCRIPTION:
+                            $description_time += $partialTime;
+                            break;
+                        case TOOL_SURVEY:
+                            $survey_time += $partialTime;
+                            break;
+                        case TOOL_NOTEBOOK:
+                            $notebook_time += $partialTime;
+                            break;
+                        case TOOL_GRADEBOOK:
+                            $gradebook_time += $partialTime;
+                            break;
+                        case TOOL_DROPBOX:
+                            $dropbox_time += $partialTime;
+                            break;
+                        case 'Reports':
+                            $report_time += $partialTime;
+                            break;
+                        case 'Videoconference':
+                            $videoconference_time += $partialTime;
+                            break;
+                        case TOOL_LINK:
+                            $link_time += $partialTime;
+                            break;
+                    }
+                    $reg[$row['id']]['date_reg'] = strtotime($row['date_reg']);
+                    $reg[$row['id']]['tool'] = $row['tool'];
+                    $reg[$row['id']]['tool_id'] = $row['tool_id'];
+                    $reg[$row['id']]['action'] = $row['action'];
+                    $reg[$row['id']]['action_details'] = $row['action_details'];
+                    $reg[$row['id']]['use'] = 1;
+                    $reg[$id]['use'] = 1;
+                } else {
+                    $reg[$row['id']]['date_reg'] = strtotime($row['date_reg']);
+                    $reg[$row['id']]['tool'] = $row['tool'];
+                    $reg[$row['id']]['tool_id'] = $row['tool_id'];
+                    $reg[$row['id']]['action'] = $row['action'];
+                    $reg[$row['id']]['action_details'] = $row['action_details'];
+                    $reg[$row['id']]['use'] = 1;
+                    if ($row['tool'] == 'login') {
+                        $login = true;
+                    }
+                }
+            }
+        }
+        $tmp_active = false;
+        foreach ($reg as $key => $value) {
+            if ($tmp_active) {
+                $partialTime = intval($value['date_reg'] - $aux_reg['date_reg']);
+                if ($partialTime >= 0 && $partialTime < $sessionLifetime) {
+                    $total_time += $partialTime;
+                } else {
+                    $partialTime = $sessionFixTime; // 1200 // Fix 20 min
+                    $total_time += $partialTime;
+                }
+                $tool = $aux_reg['tool'];
+                switch ($tool) {
+                    case 'course-main':
+                        $course_time += $partialTime;
+                        break;
+                    case TOOL_LEARNPATH:
+                        $lp_time[$aux_reg['tool_id']] += $partialTime;
+                        break;
+                    case TOOL_QUIZ:
+                        if ($aux_reg['action'] == 'learnpath_id') {
+                            $lp_time[$aux_reg['action_details']] += $partialTime;
+                        } else {
+                            $quiz_time += $partialTime;
+                        }
+                        break;
+                    case TOOL_CHAT:
+                        $chat_time += $partialTime;
+                        break;
+                    case TOOL_AGENDA:
+                        $agenda_time += $partialTime;
+                        break;
+                    case TOOL_FORUM:
+                        $forum_time += $partialTime;
+                        break;
+                    case TOOL_ANNOUNCEMENT:
+                        $announcement_time += $partialTime;
+                        break;
+                    case TOOL_COURSE_DESCRIPTION:
+                        $description_time += $partialTime;
+                        break;
+                    case TOOL_SURVEY:
+                        $survey_time += $partialTime;
+                        break;
+                    case TOOL_NOTEBOOK:
+                        $notebook_time += $partialTime;
+                        break;
+                    case TOOL_GRADEBOOK:
+                        $gradebook_time += $partialTime;
+                        break;
+                    case TOOL_DROPBOX:
+                        $dropbox_time += $partialTime;
+                        break;
+                    case 'Reports':
+                        $report_time += $partialTime;
+                        break;
+                    case 'Videoconference':
+                        $videoconference_time += $partialTime;
+                        break;
+                    case TOOL_LINK:
+                        $link_time += $partialTime;
+                        break;
+                }
+                $tmp_active = false;
+            }
+
+            if ($value['use'] == 0) {
+                if ($value['tool'] != 'chat' && $value['action'] != 'return_to_course_homepage') {
+                    $aux_reg['id'] = $key;
+                    $aux_reg['date_reg'] = $value['date_reg'];
+                    $aux_reg['tool'] = $value['tool'];
+                    $aux_reg['tool_id'] = $value['tool_id'];
+                    $aux_reg['action'] = $value['action'];
+                    $aux_reg['action_details'] = $value['action_details'];
+                    $tmp_active = true;
+                }
+            }
+        }
+
+        $horas = intval($total_time / 3600);
+        $minutos = str_pad(intval(($total_time % 3600) / 60), 2, '0', STR_PAD_LEFT);
+        $segundos = str_pad(intval(($total_time % 3600) % 60), 2, '0', STR_PAD_LEFT);
+
+        $total_lp = 0;
+        foreach ($lp_time as $key => $value) {
+            if ($key != 0) {
+                $total_lp += $value;
+            }
+        }
+        //echo "Tiempo total en lecciones: $total_lp seg<br>";
+        $result = [
+            'course-main' => $course_time,
+            TOOL_LEARNPATH => $lp_time,
+            'total_learnpath' => $total_lp,
+            TOOL_QUIZ => $quiz_time,
+            TOOL_CHAT => $chat_time,
+            TOOL_AGENDA => $agenda_time,
+            TOOL_FORUM => $forum_time,
+            TOOL_ANNOUNCEMENT => $announcement_time,
+            TOOL_COURSE_DESCRIPTION => $description_time,
+            TOOL_SURVEY => $survey_time,
+            TOOL_NOTEBOOK => $notebook_time,
+            TOOL_GRADEBOOK => $gradebook_time,
+            TOOL_DROPBOX => $dropbox_time,
+            'Reports' => $report_time,
+            'Videoconference' => $videoconference_time,
+            TOOL_LINK => $link_time,
+            'total_time' => $total_time,
+            'num_conection' => $count_login,
+            'first' => $fistConection,
+            'last' => $lastConection,
+        ];
+
+        return $result;
     }
 
     /**

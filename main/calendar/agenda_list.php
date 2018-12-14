@@ -6,6 +6,16 @@
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
+// ## NSR
+$logInfo = [
+    'tool' => TOOL_CALENDAR_EVENT,
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => isset($_GET['action']) ? $_GET['action'] : 'calendar_list',
+    'info' => '',
+];
+Event::registerLog($logInfo);
+
 $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
 
 $interbreadcrumb[] = [

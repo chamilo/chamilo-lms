@@ -125,6 +125,18 @@ if (!api_is_allowed_to_edit(false, true) &&
 
 /* Actions */
 $my_action = isset($_GET['action']) ? $_GET['action'] : '';
+
+// ## NSR - log
+$logInfo = [
+    'tool' => TOOL_FORUM,
+    'tool_id' => $_GET['forum'],
+    'tool_id_detail' => $_GET['thread'],
+    'action' => !empty($my_action) ? $my_action : 'view-thread',
+    'action_details' => $_GET['content'],
+    'current_id' => !empty($my_action) ? (int) $_GET['id'] : 0,
+];
+Event::registerLog($logInfo);
+
 if ($my_action == 'delete' &&
     isset($_GET['content']) &&
     isset($_GET['id']) &&

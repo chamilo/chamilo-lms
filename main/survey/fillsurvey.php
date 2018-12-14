@@ -160,6 +160,18 @@ if (!isset($_POST['finish_survey']) &&
     api_not_allowed(true, get_lang('YouAlreadyFilledThisSurvey'));
 }
 
+// ## NSR - log
+$logInfo = [
+    'tool' => TOOL_SURVEY,
+    'tool_id' => $survey_invitation['survey_invitation_id'],
+    'tool_id_detail' => 0,
+    'action' => 'invitationcode',
+    'action_details' => $invitationcode,
+    'current_id' => 0,
+    'info' => '',
+];
+Event::registerLog($logInfo);
+
 // Checking if there is another survey with this code.
 // If this is the case there will be a language choice
 $sql = "SELECT * FROM $table_survey

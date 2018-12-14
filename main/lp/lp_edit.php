@@ -158,7 +158,15 @@ $form->addElement('html', '<div class="help-block">'.get_lang('LpPrerequisiteDes
 $form->addElement('html', '</div>');
 $form->addElement('html', '<div class="col-md-2"></div>');
 $form->addElement('html', '</div>');
-//Start date
+
+// Time Control
+if (api_get_configuration_value('lp_minimum_time')) {
+    $accumulateTime = $_SESSION['oLP']->getAccumulateWorkTime();
+    $form->addText('accumulate_work_time', [get_lang('LpMinTime'), get_lang('LpMinTimeDescription')]);
+    $defaults['accumulate_work_time'] = $accumulateTime;
+}
+
+// Start date
 $form->addElement(
     'checkbox',
     'activate_start_date_check',

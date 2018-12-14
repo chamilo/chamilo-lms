@@ -217,10 +217,68 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
         "olms.lms_item_core_exit = '".$mycore_exit."';".
         "olms.asset_timer = 0;";
 
-    $return .= "update_toc('unhighlight','".$current_item."');".
+    $timeLp = $mylp->getAccumulateWorkTime();
+    $timeTotalCourse = $mylp->getAccumulateWorkTimeTotalCourse();
+
+    $updateMinTime = '';
+    if (api_get_configuration_value('lp_minimum_time')) {
+        $perc = 100;
+        $tc = $timeTotalCourse;
+        $sessionId = api_get_session_id();
+        if (!empty($sessionId) && $sessionId != 0) {
+            /*$sql = "SELECT hours, perc FROM plugin_licences_course_session WHERE session_id = $sessionId";
+            $res = Database::query($sql);
+            if (Database::num_rows($res) > 0) {
+                $aux = Database::fetch_assoc($res);
+                $perc = $aux['perc'];
+                $tc = $aux['hours'] * 60;
+            }*/
+        }
+
+        // PL --- Porcentaje lección (tiempo leccion / tiempo total curso)
+        $pl = $timeLp / $timeTotalCourse;
+
+        /*
+         * TL: Tiempo que pone en una lección
+         * TT : tiempo total que pone Teresa (suma tiempos lecciones curso)
+         * PL: Fracción que supone una lección sobre el tiempo total = TL/TT
+         * TC: Tiempo que dice el cliente que tiene el curso
+         * P: porcentaje mínimo conexión que indica el cliente
+         *
+         * el tiempo mínimo de cada lección sería: PL x TC x P /100
+         */
+        // Aplicamos el porcentaje si no hubiese definido un porcentaje por defecto es 100%
+        $time_total = intval($pl * $tc * $perc / 100) * 60;
+
+        //$time_total = $mylp->getAccumulateWorkTime() * 60;
+        $lpTime = Tracking::get_time_spent_in_lp(
+            $user_id,
+            api_get_course_id(),
+            [$lp_id],
+            api_get_session_id()
+        );
+
+        if ($lpTime >= $time_total) {
+            $time_spent = $time_total;
+        } else {
+            $time_spent = $lpTime;
+        }
+
+        $hour = (intval($lpTime / 3600)) < 10 ? '0'.intval($lpTime / 3600) : intval($lpTime / 3600);
+        $minute = date('i', $lpTime);
+        $second = date('s', $lpTime);
+        $updateMinTime = "update_time_bar('$time_spent','$time_total','%');".
+                         "update_cronometro('$hour','$minute','$second');";
+    }
+
+    $return .=
+        "update_toc('unhighlight','".$current_item."');".
         "update_toc('highlight','".$new_item_id."');".
         "update_toc('$mylesson_status','".$new_item_id."');".
-        "update_progress_bar('$mycomplete','$mytotal','$myprogress_mode');";
+        "update_progress_bar('$mycomplete','$mytotal','$myprogress_mode');".
+        $updateMinTime
+    ;
+
     $return .= 'updateGamificationValues(); ';
 
     $mylp->set_error_msg('');

@@ -103,7 +103,9 @@
                         <table class="table table-hover table-striped">
                             <thead>
                             <tr>
-                                <th>{{ "Title"|get_lang }}</th>
+                                <th>
+                                    {{ "Title"|get_lang }}
+                                </th>
                                 {% if is_allowed_to_edit %}
                                     <th>{{ "PublicationDate"|get_lang }}</th>
                                     <th>{{ "ExpirationDate"|get_lang }}</th>
@@ -148,6 +150,9 @@
                                         {% endif %}
                                     {% endif %}
                                     <td>
+                                        {% if row.info_time_prerequisite %}
+                                            {{ row.info_time_prerequisite }}
+                                        {% endif %}
                                         {{ row.action_build }}
                                         {{ row.action_edit }}
                                         {{ row.action_visible }}
@@ -485,6 +490,21 @@
         {% endif %}
     {% endfor %}
 </div>
+
+{% if not is_invitee %}
+    <div class="controls text-center">
+        {% if not is_ending %}
+            <a href="{{ web_self ~ "?" ~ _p.web_cid_query ~ "&action=send_notify_teacher" }}" class="btn btn-primary disabled">
+                He finalizado las lecciones, notificar al profesor
+            </a>
+        {% else %}
+            <a href="{{ web_self ~ "?" ~ _p.web_cid_query ~ "&action=send_notify_teacher" }}" class="btn btn-primary">
+                He finalizado las lecciones, notificar al profesor
+            </a>
+        {% endif %}
+    </div>
+{% endif %}
+
 {% if is_allowed_to_edit and not lp_is_shown %}
     <div id="no-data-view">
         <h2>{{ "LearningPaths"|get_lang }}</h2>

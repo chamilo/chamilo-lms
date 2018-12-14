@@ -13,6 +13,18 @@ if (api_get_setting('allow_message_tool') != 'true') {
     api_not_allowed(true);
 }
 
+// ## NSR - log
+$logInfo = [
+    'tool' => 'Messages',
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => isset($_GET['action']) ? $_GET['action'] : 'outbox',
+    'action_details' => '',
+    'current_id' => isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0,
+    'info' => '',
+];
+Event::registerLog($logInfo);
+
 $allowSocial = api_get_setting('allow_social_tool') == 'true';
 $allowMessage = api_get_setting('allow_message_tool') == 'true';
 

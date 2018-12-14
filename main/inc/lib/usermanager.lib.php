@@ -5970,6 +5970,16 @@ SQL;
         }
 
         if ($userId) {
+            // ## NSR - log
+            $logInfo = [
+                'tool' => 'logout',
+                'tool_id' => 0,
+                'tool_id_detail' => 0,
+                'action' => '',
+                'info' => 'Cambia de usuario (login as)',
+            ];
+            Event::registerLog($logInfo);
+
             // Logout the current user
             self::loginDelete(api_get_user_id());
 
@@ -5995,6 +6005,15 @@ SQL;
             Session::write('is_allowedCreateCourse', $userInfo['status'] == 1);
             // will be useful later to know if the user is actually an admin or not (example reporting)
             Session::write('login_as', true);
+
+            $logInfo = [
+                'tool' => 'login',
+                'tool_id' => 0,
+                'tool_id_detail' => 0,
+                'action' => '',
+                'info' => $userId,
+            ];
+            Event::registerLog($logInfo);
 
             return true;
         }

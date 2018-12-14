@@ -369,7 +369,7 @@ if ($debug) {
     error_log('Entered lp_controller.php -+- (action: '.$action.')');
 }
 
-$lp_id = (!empty($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : 0);
+$lp_id = !empty($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : 0;
 switch ($action) {
     case 'view':
     case 'content':
@@ -377,6 +377,7 @@ switch ($action) {
         break;
     default:
         $lp_detail_id = (!empty($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0);
+        break;
 }
 
 $logInfo = [

@@ -437,8 +437,8 @@ class Tracking
                         $time_for_total = $row['mytime'];
 
                         // ## NSR sistema de tiempos nuevo
-                        if (api_get_configuration_value('allow_track_complete')) {
-                            $timeCourse = self::getCalculateTime($user_id, $session_id);
+                        if (api_get_configuration_value('lp_minimum_time')) {
+                            $timeCourse = self::getCalculateTime($user_id, $course_id, $session_id);
                             Session::write('trackTimeCourse', $timeCourse);
                             $lp_time = $timeCourse[TOOL_LEARNPATH];
                             $lpTime = (int) $lp_time[$lp_id];
@@ -2859,10 +2859,6 @@ class Tracking
                             $condition_user1 AND
                             session_id = $session_id
                         GROUP BY lp_id, user_id";
-                if ($debug) {
-                    echo 'get LP results';
-                    var_dump($sql);
-                }
 
                 $rs_last_lp_view_id = Database::query($sql);
                 $global_result = 0;
@@ -6799,28 +6795,24 @@ class Tracking
 
     /**
      * @param int  $userId
+     * @param int  $courseId
      * @param int  $sessionId
-     * @param bool $debug
+     * @param int  $toolId
      *
      * @return array
      */
-    public static function getCalculateTime($userId, $sessionId, $debug = false)
+    public static function getCalculateTime($userId, $courseId, $sessionId)
     {
-        /*   $sql = "SELECT session_lifetime
-           FROM plugin_licences_course_session
-           WHERE session_id = $sessionId";
-           $res = Database::query($sql);
-           $lifeTime = intval(Database::fetch_assoc($res)['session_lifetime']);*/
-        //error_log("sessionId: $sessionId: $lifeTime");
-        /*if ($lifeTime > 0) {
-            $sessionLifetime = $lifeTime;
-            $sessionFixTime = $lifeTime;
-        } else {
-            $sessionLifetime = 28800; //intval(api_get_configuration_value('session_lifetime'));
-            $sessionFixTime = 2700;
-        }*/
         $sessionLifetime = 28800; //intval(api_get_configuration_value('session_lifetime'));
         $sessionFixTime = 2700;
+
+        $userId = (int) $userId;
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+
+        if (empty($userId) || empty($courseId)) {
+            return 0;
+        }
 
         $total_time = 0;
         $course_time = 0;
@@ -6842,63 +6834,58 @@ class Tracking
         $regUse = [];
         $count_login = 0;
 
-        $sql = 'SELECT date_reg
+        $sql = "SELECT date_reg
                 FROM track_e_access_complete
-                WHERE   
-                    user_id = '.$userId.' AND
-                    session_id = '.$sessionId.' AND
+                WHERE
+                    user_id = $userId AND
+                    session_id = $sessionId AND
+                    c_id = $courseId AND
                     login_as = 0
                 ORDER BY date_reg ASC
-                LIMIT 0,1';
+                LIMIT 0,1";
         $rs = Database::query($sql);
+
+        $firstConnection = '';
         if (Database::num_rows($rs) > 0) {
-            if ($last_login_date = Database::result($rs, 0, 0)) {
-                if (empty($last_login_date)) {
-                    $fistConection = '';
-                } else {
-                    $fistConection = date("d/m/Y H:i:s", strtotime($last_login_date));
+            if ($value = Database::result($rs, 0, 0)) {
+                if (!empty($value)) {
+                    $firstConnection = date('d/m/Y H:i:s', strtotime($value));
                 }
-            } else {
-                $fistConection = '';
             }
-        } else {
-            $fistConection = '';
         }
 
-        $sql = 'SELECT date_reg
+        $sql = "SELECT date_reg
                 FROM track_e_access_complete
                 WHERE   
-                    user_id = '.$userId.' AND
-                    session_id = '.$sessionId.' AND
+                    user_id = $userId AND
+                    session_id = $sessionId AND
+                    c_id = $courseId AND
                     login_as = 0
                 ORDER BY date_reg DESC
-                LIMIT 0,1';
+                LIMIT 0,1";
         $rs = Database::query($sql);
+        $lastConnection = '';
         if (Database::num_rows($rs) > 0) {
-            if ($last_login_date = Database::result($rs, 0, 0)) {
-                if (empty($last_login_date)) {
-                    $lastConection = '';
-                } else {
-                    $lastConection = date('d/m/Y H:i:s', strtotime($last_login_date));
+            if ($value = Database::result($rs, 0, 0)) {
+                if (!empty($value)) {
+                    $lastConnection = date('d/m/Y H:i:s', strtotime($value));
                 }
-            } else {
-                $lastConection = '';
             }
-        } else {
-            $lastConection = '';
         }
 
         $sql = "SELECT * FROM track_e_access_complete WHERE user_id = $userId"; //AND session_id = $sessionId";
         $res = Database::query($sql);
         while ($row = Database::fetch_assoc($res)) {
-            if ($row['login_as'] == 1 && !$debug) {
+            if ($row['login_as'] == 1) {
                 continue;
             }
+
             if ($row['session_id'] == $sessionId) {
-                if ($login) {
+                // comment unknown code
+                /*if ($login) {
                     $count_login++;
                     $login = false;
-                }
+                }*/
                 if ($row['tool'] == 'close-window' && $row['current_id'] > 0) {
                     $id = $row['current_id'];
                     if (!in_array($id, $regUse)) {
@@ -7017,7 +7004,7 @@ class Tracking
                             $lp_time[$reg[$id]['tool_id']] += $partialTime;
                             break;
                         case TOOL_QUIZ:
-                            if ($reg[$id]['action'] == 'learnpath_id') {
+                            if ($reg[$id]['action'] === 'learnpath_id') {
                                 $lp_time[$reg[$id]['action_details']] += $partialTime;
                             } else {
                                 $quiz_time += $partialTime;
@@ -7096,6 +7083,9 @@ class Tracking
                         $course_time += $partialTime;
                         break;
                     case TOOL_LEARNPATH:
+                        if (!isset($lp_time[$aux_reg['tool_id']])) {
+                            $lp_time[$aux_reg['tool_id']] = 0;
+                        }
                         $lp_time[$aux_reg['tool_id']] += $partialTime;
                         break;
                     case TOOL_QUIZ:
@@ -7158,17 +7148,13 @@ class Tracking
             }
         }
 
-        $horas = intval($total_time / 3600);
-        $minutos = str_pad(intval(($total_time % 3600) / 60), 2, '0', STR_PAD_LEFT);
-        $segundos = str_pad(intval(($total_time % 3600) % 60), 2, '0', STR_PAD_LEFT);
-
         $total_lp = 0;
         foreach ($lp_time as $key => $value) {
             if ($key != 0) {
                 $total_lp += $value;
             }
         }
-        //echo "Tiempo total en lecciones: $total_lp seg<br>";
+
         $result = [
             'course-main' => $course_time,
             TOOL_LEARNPATH => $lp_time,
@@ -7188,8 +7174,8 @@ class Tracking
             TOOL_LINK => $link_time,
             'total_time' => $total_time,
             'num_conection' => $count_login,
-            'first' => $fistConection,
-            'last' => $lastConection,
+            'first' => $firstConnection,
+            'last' => $lastConnection,
         ];
 
         return $result;

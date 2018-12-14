@@ -251,12 +251,15 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
         $time_total = intval($pl * $tc * $perc / 100) * 60;
 
         //$time_total = $mylp->getAccumulateWorkTime() * 60;
-        $lpTime = Tracking::get_time_spent_in_lp(
+        /*$lpTime = Tracking::get_time_spent_in_lp(
             $user_id,
             api_get_course_id(),
             [$lp_id],
             api_get_session_id()
-        );
+        );*/
+
+        $lpTimeList = Tracking::getCalculateTime($user_id, api_get_course_int_id(), api_get_session_id());
+        $lpTime = isset($lpTimeList[TOOL_LEARNPATH][$lp_id]) ? $lpTimeList[TOOL_LEARNPATH][$lp_id] : 0;
 
         if ($lpTime >= $time_total) {
             $time_spent = $time_total;

@@ -52,11 +52,6 @@
                                         tiempo.minuto++;
                                     }
 
-                                    if (tiempo.segundo%10 == 0) {
-                                        //console.log({{lp_current_item_id}});
-                                        /*time_save({{lp_current_item_id}});*/
-                                    }
-
                                     // Minutos
                                     if (tiempo.minuto >= 60) {
                                         tiempo.minuto = 0;
@@ -64,11 +59,8 @@
                                     }
 
                                     $("#hour").text(tiempo.hora < 10 ? '0' + tiempo.hora : tiempo.hora);
-                                    //$("#hour").text(tiempo.hora);
                                     $("#minute").text(tiempo.minuto < 10 ? '0' + tiempo.minuto : tiempo.minuto);
-                                    //$("#minute").text(tiempo.minuto);
                                     $("#second").text(tiempo.segundo < 10 ? '0' + tiempo.segundo : tiempo.segundo);
-                                    //$("#second").text(tiempo.segundo);
                                 }, 1000);
                             })
                         </script>

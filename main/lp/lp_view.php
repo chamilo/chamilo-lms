@@ -594,12 +594,14 @@ if (api_get_configuration_value('lp_minimum_time')) {
         $lpMinTime = '('.$time_min.' min)';
     }
 
-    $lpTime = Tracking::get_time_spent_in_lp(
+    /*$lpTime = Tracking::get_time_spent_in_lp(
         $user_id,
         $course_code,
         [$_SESSION['oLP']->lp_id],
         $sessionId
-    );
+    );*/
+    $lpTimeList = Tracking::getCalculateTime($user_id, api_get_course_int_id(), api_get_session_id());
+    $lpTime = isset($lpTimeList[TOOL_LEARNPATH][$lp_id]) ? (int) $lpTimeList[TOOL_LEARNPATH][$lp_id] : 0;
 
     if ($lpTime >= ($time_min * 60)) {
         $time_progress_perc = '100%';

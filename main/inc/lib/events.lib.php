@@ -2464,9 +2464,10 @@ class Event
      */
     public static function registerLog($logInfo)
     {
-        if (!api_get_configuration_value('allow_track_complete')) {
+        if (!api_get_configuration_value('lp_minimum_time')) {
             return false;
         }
+
         $loginAs = (int) (Session::read('login_as') === true);
 
         $logInfo['user_id'] = api_get_user_id();
@@ -2477,6 +2478,7 @@ class Event
         $logInfo['ip_user'] = api_get_real_ip();
         $logInfo['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
         $logInfo['login_as'] = $loginAs;
+        $logInfo['date_reg'] = api_get_utc_datetime();
 
         $id = Database::insert('track_e_access_complete', $logInfo);
         Session::write('last_id', $id);

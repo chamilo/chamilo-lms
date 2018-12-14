@@ -215,6 +215,10 @@ foreach ($categories as $item) {
     $showBlockedPrerequisite = api_get_configuration_value('show_prerequisite_as_blocked');
     $allowLpChamiloExport = api_get_configuration_value('allow_lp_chamilo_export');
     $listData = [];
+    $lpTimeList = [];
+    if (api_get_configuration_value('lp_minimum_time')) {
+        $lpTimeList = Tracking::getCalculateTime($userId, api_get_course_int_id(), api_get_session_id());
+    }
 
     if (!empty($flat_list)) {
         $max = count($flat_list);
@@ -409,12 +413,14 @@ foreach ($categories as $item) {
                     $accumulateWorkTimeTotal = learnpath::getAccumulateWorkTimeTotal(api_get_course_int_id());
 
                     // Tiempo empleado hasta el momento en la leccion ( en segundos )
-                    $lpTime = Tracking::get_time_spent_in_lp(
+                    /*$lpTime = Tracking::get_time_spent_in_lp(
                         $userId,
                         api_get_course_id(),
                         [$id],
                         api_get_session_id()
-                    );
+                    );*/
+
+                    $lpTime = isset($lpTimeList[TOOL_LEARNPATH][$id]) ? $lpTimeList[TOOL_LEARNPATH][$id] : 0;
 
                     // Conectamos con la tabla plugin_licences_course_session en la que se indica que porcentaje del tiempo se aplica
                     $perc = 100;

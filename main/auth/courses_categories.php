@@ -83,7 +83,6 @@ $message = null;
         $formSearch->addHidden('search_course', 1);
         $formSearch->addText('search_term', get_lang('Search'), false,['value'=>$term]);
         $formSearch->addButtonSearch(get_lang('Search'), 'submit');
-        //var_dump($formSearch->getLayout());
         //$formSearch->defaultRenderer()->setElementTemplate($formSearch->getDefaultElementTemplate(),'search_term');
         $search = $formSearch->returnForm();
 
@@ -202,7 +201,7 @@ if ($showCourses && $action != 'display_sessions') {
                 }
 
                 if ($showTeacher) {
-                    $teacher = return_teacher($course);
+                    $teachers = CourseManager::getTeachersFromCourse($course['real_id']);
                 }
 
                 $separator = null;
@@ -259,7 +258,7 @@ if ($showCourses && $action != 'display_sessions') {
                     'category' => $course['category_title'],
                     'image' => $courseMediumImage,
                     'url' => $linkCourse = api_get_path(WEB_PATH).'course/'.$course['real_id'].'/about',
-                    'teacher' => $teacher,
+                    'teachers' => $teachers,
                     'ranking' => $rating,
                     'description_ajax' => CourseManager::returnDescriptionButton($course),
                     'subscribe' => $subscribeButton
@@ -293,64 +292,6 @@ echo $content;
 
 
 
-/**
- * @param array $courseInfo
- *
- * @return string
- */
-function return_teacher($courseInfo)
-{
-    $teachers = CourseManager::getTeachersFromCourse($courseInfo['real_id']);
-    $length = count($teachers);
-
-    if (!$length) {
-        return '';
-    }
-
-    $html = '<div class="block-author">';
-    if ($length > 6) {
-        $html .= '<a 
-            id="plist" 
-            data-trigger="focus" 
-            tabindex="0" role="button" 
-            class="btn btn-default panel_popover" 
-            data-toggle="popover" 
-            title="'.addslashes(get_lang('CourseTeachers')).'" 
-            data-html="true"
-        >
-            <i class="fa fa-graduation-cap" aria-hidden="true"></i>
-        </a>';
-        $html .= '<div id="popover-content-plist" class="hide">';
-        foreach ($teachers as $value) {
-            $name = $value['firstname'].' '.$value['lastname'];
-            $html .= '<div class="popover-teacher">';
-            $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'" title="'.$name.'">
-                        <img src="'.$value['avatar'].'" alt="'.get_lang('UserPicture').'"/></a>';
-            $html .= '<div class="teachers-details"><h5>
-                        <a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">'
-                        .$name.'</a></h5></div>';
-            $html .= '</div>';
-        }
-        $html .= '</div>';
-    } else {
-        foreach ($teachers as $value) {
-            $name = $value['firstname'].' '.$value['lastname'];
-            if ($length > 2) {
-                $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'" title="'.$name.'">
-                        <img src="'.$value['avatar'].'" alt="'.get_lang('UserPicture').'"/></a>';
-            } else {
-                $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'" title="'.$name.'">
-                        <img src="'.$value['avatar'].'" alt="'.get_lang('UserPicture').'"/></a>';
-                $html .= '<div class="teachers-details"><h5>
-                        <a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">'
-                        .$name.'</a></h5><p>'.get_lang('Teacher').'</p></div>';
-            }
-        }
-    }
-    $html .= '</div>';
-
-    return $html;
-}
 
 
 /**

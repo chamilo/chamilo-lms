@@ -139,6 +139,8 @@ if ($checker) {
     );
 }
 
+
+
 $courseItem = [
     'code' => $course->getCode(),
     'title' => $course->getTitle(),
@@ -164,7 +166,8 @@ $metaInfo .= '<meta property="og:image" content="'.$courseItem['image'].'" />';
 $htmlHeadXtra[] = $metaInfo;
 $htmlHeadXtra[] = api_get_asset('readmore-js/readmore.js');
 
-$template = new Template($course->getTitle(), true, true, false, true, false);
+$template = new Template(null);
+//$template->assign('course', $course);
 $template->assign('course', $courseItem);
 $essence = new Essence\Essence();
 $template->assign('essence', $essence);
@@ -172,7 +175,7 @@ $template->assign('is_premium', $courseIsPremium);
 $template->assign('allow_subscribe', $allowSubscribe);
 $template->assign('token', $token);
 $template->assign('url', $urlCourse);
-$layout = $template->get_template('course_home/about.tpl');
+$layout = $template->get_template('course_home/about.html.twig');
 $content = $template->fetch($layout);
 $template->assign('content', $content);
 $template->display_one_col_template();

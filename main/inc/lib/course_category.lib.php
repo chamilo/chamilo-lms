@@ -789,9 +789,9 @@ class CourseCategory
         // For each page add its page button to html
         for ($i = $pageBottom; $i <= $pageTop; $i++) {
             if ($i === $pageCurrent) {
-                $pageItemAttributes = ['class' => 'active'];
+                $pageItemAttributes = ['class' => 'page-item active'];
             } else {
-                $pageItemAttributes = [];
+                $pageItemAttributes = ['class' => 'page-item'];
             }
             $pageDiv .= self::getPageNumberItem(
                 $i,
@@ -910,7 +910,8 @@ class CourseCategory
             'li',
             Display::url(
                 $content,
-                $url
+                $url,
+                ['class' => 'page-link']
             ),
             $liAttributes
         );

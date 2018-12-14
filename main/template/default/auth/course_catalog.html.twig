@@ -1,8 +1,9 @@
+{% import "@ChamiloTheme/Macros/box.html.twig" as macro %}
 
 {% autoescape false %}
 
 <div class="catalog" style="width: 100%;">
-    <h2>{{ 'Course Management'|get_lang }}</h2>
+    <h2>{{ 'Course Catalog'|get_lang }}</h2>
     <div class="search">
         <div class="row">
             <div class="col-md-6">
@@ -16,19 +17,52 @@
     <div class="row">
         {% for item in courses %}
             <div class="col-md-3">
-                <div id="course_{{ item.real_id }}" class="card mb-4 shadow-sm">
-                    <a href="{{ item.url }}">
-                    <img class="card-img-top"  alt="{{ item.title }}" src="{{ item.image }}" data-holder-rendered="true" style="width: 100%; display: block;">
-                    </a>
-                    <div class="card-body">
-                        <h4><a href="{{ item.url }}">{{  item.title }}</a></h4>
-                        {{ item.ranking }}
-                        {{ item.teacher }}
-                        <div class="d-flex justify-content-between align-items-center">
-                            {{ item.subscribe }}
+                {% set image %}
+                    {% if item.category != '' %}
+                        <div class="category">
+                            {{ item.category }}
                         </div>
+                    {% endif %}
+                    <a href="{{ item.url }}" title="{{ item.title }}">
+                        <img class="card-img-top"  alt="{{ item.title }}" src="{{ item.image }}" data-holder-rendered="true" style="width: 100%; display: block;">
+                    </a>
+                {% endset %}
+                {% set content %}
+                    <div class="card-title">
+                        <h5 class="title">
+                            <a title="{{ item.title }}" href="{{ item.url }}">{{ item.title}}</a>
+                        </h5>
                     </div>
-                </div>
+                    <div class="card-author mb-2">
+                        <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                        {% if item.teachers | length >= 3 %}
+                            <a id="plist-{{ loop.index }}" data-trigger="focus" tabindex="0" role="button" class="list-name" data-toggle="popover" title="{{ 'CourseTeachers' | trans }}" data-html="true">
+                                {{ 'Course Teachers' | trans }}
+                            </a>
+                            <div id="popover-content-plist-{{ loop.index }}" style="display: none;">
+                                {% for teacher in item.teachers %}
+                                    <div class="popover-teacher">
+                                        <a href="{{ teacher.url }}" class="ajax name" data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
+                                            {{ teacher.firstname }} {{ teacher.lastname }}
+                                        </a>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {% for teacher in item.teachers %}
+                                <a href="{{ teacher.url }}" class="ajax name" data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
+                                    {{ teacher.firstname }} {{ teacher.lastname }}
+                                </a>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    {% if item.ranking %}
+                    <div class="ranking">
+                        {{ item.ranking }}
+                    </div>
+                    {% endif %}
+                {% endset %}
+                {{ macro.panel_course(item.real_id, '', content, '', '', '', image) }}
             </div>
         {% endfor %}
     </div>

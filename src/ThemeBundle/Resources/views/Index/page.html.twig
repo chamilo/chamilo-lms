@@ -10,9 +10,9 @@
 
 {% set content %}
 
-    {{ macro.box_header("IntroductionOfPlatform" | trans, buttons) }}
+    {{ macro.box_header("Introduction of platform" | trans, buttons) }}
     {{ sonata_page_render_container('content', page) }}
 
 {% endset %}
 
-{{ macro.panel('', '', content, '', '', '', '') }}
+{{ macro.panel('', content, '', '', '', '', '') }}

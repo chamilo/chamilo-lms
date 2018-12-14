@@ -32,6 +32,8 @@ switch ($action) {
     case 'get_course_image':
         $courseId = ChamiloApi::getCourseIdByDirectory($_REQUEST['code']);
         $courseInfo = api_get_course_info_by_id($courseId);
+        var_dump($courseInfo);
+        die;
         $image = isset($_REQUEST['image']) && in_array($_REQUEST['image'], ['course_image_large_source', 'course_image_source']) ? $_REQUEST['image'] : '';
         if ($courseInfo && $image) {
             DocumentManager::file_send_for_download($courseInfo[$image]);

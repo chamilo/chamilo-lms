@@ -1,3 +1,4 @@
+{% autoescape false %}
 <div id="about-course">
     <div id="course-info-top">
         <h2 class="session-title">{{ course.title }}</h2>
@@ -8,7 +9,6 @@
                     <li>{{ teacher.complete_name }} | </li>
                 {% endfor %}
             </ul>
-
         </div>
     </div>
 
@@ -186,3 +186,4 @@
         });
     });
 </script>
+{% endautoescape %}

@@ -7471,13 +7471,21 @@ class learnpath
                 }
                 break;
             case TOOL_LINK:
-                $link_id = (string) $row['path'];
-                if (ctype_digit($link_id)) {
-                    $tbl_link = Database::get_course_table(TABLE_LINK);
-                    $sql_select = 'SELECT url FROM '.$tbl_link.'
-                                   WHERE c_id = '.$course_id.' AND iid = '.intval($link_id);
-                    $res_link = Database::query($sql_select);
+                $linkId = (int) $row['path'];
+                if (!empty($linkId)) {
+                    $table = Database::get_course_table(TABLE_LINK);
+                    $sql = 'SELECT url FROM '.$table.'
+                            WHERE c_id = '.$course_id.' AND iid = '.$linkId;
+                    $res_link = Database::query($sql);
                     $row_link = Database::fetch_array($res_link);
+                    if (empty($row_link)) {
+                        // Try with id
+                        $sql = 'SELECT url FROM '.$table.'
+                                WHERE c_id = '.$course_id.' AND id = '.$linkId;
+                        $res_link = Database::query($sql);
+                        $row_link = Database::fetch_array($res_link);
+                    }
+
                     if (is_array($row_link)) {
                         $row['url'] = $row_link['url'];
                     }

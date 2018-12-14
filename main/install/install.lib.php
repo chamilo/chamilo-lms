@@ -2279,8 +2279,8 @@ function fixIds(EntityManager $em)
     $result = $connection->fetchAll($sql);
     foreach ($result as $item) {
         $courseId = $item['c_id'];
-        $iid = isset($item['iid']) ? intval($item['iid']) : 0;
-        $ref = isset($item['ref']) ? intval($item['ref']) : 0;
+        $iid = isset($item['iid']) ? (int) $item['iid'] : 0;
+        $ref = isset($item['ref']) ? (int) $item['ref'] : 0;
         $sql = null;
 
         $newId = '';
@@ -2913,7 +2913,7 @@ function fixLpId($connection, $debug)
                         }
                     }
 
-                    if ($item['item_type'] == 'document' && !empty($item['path'])) {
+                    if ($item['item_type'] === 'document' && !empty($item['path'])) {
                         $oldDocumentId = $item['path'];
                         $sql = "SELECT * FROM c_document WHERE c_id = $courseId AND id = $oldDocumentId";
                         $result = $connection->query($sql);
@@ -2922,12 +2922,23 @@ function fixLpId($connection, $debug)
                             $newDocumentId = $document['iid'];
                             if (!empty($newDocumentId)) {
                                 $sql = "UPDATE $tblCLpItem SET path = $newDocumentId 
-                                    WHERE iid = $itemIid AND c_id = $courseId";
+                                        WHERE iid = $itemIid AND c_id = $courseId";
                                 $connection->query($sql);
-                                if ($debug) {
-                                    //error_log("Fix document: ");
-                                    //error_log($sql);
-                                }
+                            }
+                        }
+                    }
+
+                    if ($item['item_type'] === 'link' && !empty($item['path'])) {
+                        $oldLinkId = $item['path'];
+                        $sql = "SELECT * FROM c_link WHERE c_id = $courseId AND id = $oldLinkId";
+                        $result = $connection->query($sql);
+                        $document = $result->fetch();
+                        if (!empty($document)) {
+                            $newLinkId = $document['iid'];
+                            if (!empty($newLinkId)) {
+                                $sql = "UPDATE $tblCLpItem SET path = $newLinkId 
+                                        WHERE iid = $itemIid AND c_id = $courseId";
+                                $connection->query($sql);
                             }
                         }
                     }

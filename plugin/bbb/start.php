@@ -11,7 +11,6 @@ require_once __DIR__.'/../../vendor/autoload.php';
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
 require_once __DIR__.'/config.php';
 
-// ## NSR - log
 $logInfo = [
     'tool' => 'Videoconference',
     'tool_id' => 0,

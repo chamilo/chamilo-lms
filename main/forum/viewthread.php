@@ -126,7 +126,6 @@ if (!api_is_allowed_to_edit(false, true) &&
 /* Actions */
 $my_action = isset($_GET['action']) ? $_GET['action'] : '';
 
-// ## NSR - log
 $logInfo = [
     'tool' => TOOL_FORUM,
     'tool_id' => $_GET['forum'],

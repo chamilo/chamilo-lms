@@ -9,7 +9,6 @@ api_protect_course_script(true);
 
 Event::event_access_tool(TOOL_CHAT);
 
-// ## NSR - log
 $logInfo = [
     'tool' => TOOL_CHAT,
     'tool_id' => 0,

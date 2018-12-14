@@ -155,7 +155,6 @@ $my_action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : ''
 $my_post = isset($_GET['post']) ? Security::remove_XSS($_GET['post']) : '';
 $my_elements = isset($_SESSION['formelements']) ? $_SESSION['formelements'] : '';
 
-// ## NSR - log
 $logInfo = [
     'tool' => TOOL_FORUM,
     'tool_id' => $forumId,

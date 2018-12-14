@@ -132,7 +132,6 @@ if (isset($typeSelected) && $typeSelected != '0') {
 
         $link->add();
 
-        // ## NSR - log
         $logInfo = [
             'tool' => TOOL_GRADEBOOK,
             'tool_id' => 0,

@@ -44,7 +44,6 @@ $origin = api_get_origin();
 $current_forum = get_forum_information($_GET['forum']);
 $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
 
-// ## NSR - log
 $logInfo = [
     'tool' => TOOL_FORUM,
     'tool_id' => (int) $_GET['forum'],

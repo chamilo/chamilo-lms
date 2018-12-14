@@ -122,7 +122,6 @@ $whatsnew_post_info = Session::read('whatsnew_post_info');
 /* TRACKING */
 Event::event_access_tool(TOOL_FORUM);
 
-// ## NSR - log
 $logInfo = [
     'tool' => TOOL_FORUM,
     'tool_id' => 0,

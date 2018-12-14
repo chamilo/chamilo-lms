@@ -18,7 +18,6 @@ define('ADD_BLOCK', 8);
 // current section
 $this_section = SECTION_COURSES;
 
-// ## NSR
 $logInfo = [
     'tool' => TOOL_COURSE_DESCRIPTION,
     'tool_id' => 0,

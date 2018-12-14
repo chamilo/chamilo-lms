@@ -34,7 +34,6 @@ $this_section = SECTION_COURSES;
 
 api_block_anonymous_users(); // Only users who are logged in can proceed.
 
-// ## NSR - log
 $logInfo = [
     'tool' => SECTION_COURSES,
     'tool_id' => 0,

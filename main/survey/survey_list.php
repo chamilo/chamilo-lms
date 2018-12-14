@@ -28,7 +28,6 @@ $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
 // Tracking
 Event::event_access_tool(TOOL_SURVEY);
 
-// ## NSR - log
 $logInfo = [
     'tool' => TOOL_SURVEY,
     'tool_id' => 0,

@@ -90,7 +90,6 @@ if ($form->validate()) {
     $cat->set_visible($visible);
     $result = $cat->add();
 
-    // ## NSR - log
     $logInfo = [
         'tool' => TOOL_GRADEBOOK,
         'tool_id' => 0,

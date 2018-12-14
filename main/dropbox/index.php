@@ -26,7 +26,6 @@ $showSentReceivedTabs = true;
 // Do the tracking
 Event::event_access_tool(TOOL_DROPBOX);
 
-// ## NSR - log
 $logInfo = [
     'tool' => TOOL_DROPBOX,
     'tool_id' => 0,

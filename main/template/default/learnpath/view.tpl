@@ -47,7 +47,7 @@
                                 window.tiempo_corriendo = setInterval(function(){
                                     // Segundos
                                     tiempo.segundo++;
-                                    if(tiempo.segundo >= 60) {
+                                    if (tiempo.segundo >= 60) {
                                         tiempo.segundo = 0;
                                         tiempo.minuto++;
                                     }
@@ -58,8 +58,7 @@
                                     }
 
                                     // Minutos
-                                    if(tiempo.minuto >= 60)
-                                    {
+                                    if (tiempo.minuto >= 60) {
                                         tiempo.minuto = 0;
                                         tiempo.hora++;
                                     }

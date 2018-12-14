@@ -64,7 +64,7 @@ if ($form->validate()) {
     }
     $eval->set_visible($visible);
     $eval->add();
-    // ## NSR - log
+
     $logInfo = [
         'tool' => TOOL_GRADEBOOK,
         'tool_id' => 0,

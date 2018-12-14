@@ -5970,7 +5970,6 @@ SQL;
         }
 
         if ($userId) {
-            // ## NSR - log
             $logInfo = [
                 'tool' => 'logout',
                 'tool_id' => 0,

@@ -122,10 +122,8 @@ if (api_is_allowed_to_edit(false, true)) {
 $html .= search_link();
 $html .= '</div>';
 
-/* ACTIONS */
 echo $html;
 
-// ## NSR - log
 $logInfo = [
     'tool' => TOOL_FORUM,
     'tool_id' => 0,

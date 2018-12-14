@@ -160,7 +160,6 @@ if (!isset($_POST['finish_survey']) &&
     api_not_allowed(true, get_lang('YouAlreadyFilledThisSurvey'));
 }
 
-// ## NSR - log
 $logInfo = [
     'tool' => TOOL_SURVEY,
     'tool_id' => $survey_invitation['survey_invitation_id'],

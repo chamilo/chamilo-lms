@@ -93,7 +93,6 @@ $current_question = isset($_REQUEST['num']) ? intval($_REQUEST['num']) : null;
 $currentAnswer = isset($_REQUEST['num_answer']) ? intval($_REQUEST['num_answer']) : null;
 $endExercise = isset($_REQUEST['end_exercise']) && $_REQUEST['end_exercise'] == 1 ? true : false;
 
-// ## NSR - log
 $logInfo = [
     'tool' => TOOL_QUIZ,
     'tool_id' => $exerciseId,

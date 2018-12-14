@@ -19,7 +19,6 @@ $courseChatUtils = new CourseChatUtils($courseId, $userId, $sessionId, $groupId)
 
 switch ($_REQUEST['action']) {
     case 'chat_logout':
-        // ## NSR - log
         $logInfo = [
             'tool' => TOOL_CHAT,
             'tool_id' => 0,

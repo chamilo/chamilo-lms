@@ -39,7 +39,6 @@ $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['l
 $learnpathItemViewId = isset($_REQUEST['learnpath_item_view_id']) ? intval($_REQUEST['learnpath_item_view_id']) : null;
 $origin = api_get_origin();
 
-// ## NSR - log
 $logInfo = [
     'tool' => TOOL_QUIZ,
     'tool_id' => $exercise_id,

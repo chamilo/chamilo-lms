@@ -12,7 +12,6 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-// ## NSR - log
 $logInfo = [
     'tool' => 'MyCertificates',
     'tool_id' => 0,

@@ -131,8 +131,6 @@ function online_logout($user_id = null, $logout_redirect = false)
         		WHERE login_id='$i_id_last_connection'";
         Database::query($sql);
     }
-
-    // ## NSR - log
     $logInfo = [
         'tool' => 'logout',
         'tool_id' => 0,

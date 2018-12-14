@@ -450,7 +450,7 @@ class Tracking
                         if ($score == 0) {
                             $maxscore = $row['mymaxscore'];
                         } else {
-                            if ($row['item_type'] == 'sco') {
+                            if ($row['item_type'] === 'sco') {
                                 if (!empty($row['myviewmaxscore']) && $row['myviewmaxscore'] > 0) {
                                     $maxscore = $row['myviewmaxscore'];
                                 } elseif ($row['myviewmaxscore'] === '') {

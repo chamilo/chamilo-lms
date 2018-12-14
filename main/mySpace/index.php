@@ -37,7 +37,6 @@ $skipData = api_get_configuration_value('tracking_skip_generic_data');
 // Access control
 api_block_anonymous_users();
 
-// ## NSR - log
 $logInfo = [
     'tool' => SECTION_TRACKING,
     'tool_id' => 0,

@@ -19,7 +19,6 @@ if ($type == 'course') {
     api_protect_course_script(true);
 }
 
-// ## NSR
 $logInfo = [
     'tool' => TOOL_CALENDAR_EVENT,
     'tool_id' => 0,

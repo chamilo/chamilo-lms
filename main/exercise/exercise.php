@@ -153,7 +153,6 @@ if ($origin != 'learnpath') {
 
 Event::event_access_tool(TOOL_QUIZ);
 
-// ## NSR - log
 $logInfo = [
     'tool' => TOOL_QUIZ,
     'tool_id' => (int) $exerciseId,

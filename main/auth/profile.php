@@ -21,7 +21,6 @@ if ($allowSocialTool) {
     $this_section = SECTION_SOCIAL;
 }
 
-// ## NSR - log
 $logInfo = [
     'tool' => 'profile',
     'tool_id' => 0,

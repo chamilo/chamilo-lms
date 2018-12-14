@@ -120,7 +120,6 @@ if (!empty($groupId)) {
 // Stats
 Event::event_access_tool(TOOL_STUDENTPUBLICATION);
 
-// ## NSR - log
 $logInfo = [
     'tool' => TOOL_STUDENTPUBLICATION,
     'tool_id' => 0,

@@ -93,7 +93,6 @@ $homeUrl = api_get_self().'?action=list&'.api_get_cidreq();
 $content = '';
 $searchFormToString = '';
 
-// ## NSR - log
 $logInfo = [
     'tool' => TOOL_ANNOUNCEMENT,
     'tool_id' => 0,

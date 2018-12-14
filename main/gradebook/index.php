@@ -66,7 +66,6 @@ $(document).ready(function() {
 });
 </script>';
 
-// ## NSR - log
 $list_actions = [];
 $list_values = [];
 if (isset($_GET['movecat'])) {

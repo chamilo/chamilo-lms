@@ -37,7 +37,6 @@ $tool = TOOL_NOTEBOOK;
 // Tracking
 Event::event_access_tool(TOOL_NOTEBOOK);
 
-// ## NSR - log
 $logInfo = [
     'tool' => TOOL_NOTEBOOK,
     'tool_id' => 0,

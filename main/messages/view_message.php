@@ -47,7 +47,6 @@ if (empty($_GET['id'])) {
 
 $message = '';
 
-// ## NSR - log
 $logInfo = [
     'tool' => 'Messages',
     'tool_id' => 0,

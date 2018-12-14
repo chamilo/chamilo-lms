@@ -6,7 +6,6 @@
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
-// ## NSR
 $logInfo = [
     'tool' => TOOL_CALENDAR_EVENT,
     'tool_id' => 0,

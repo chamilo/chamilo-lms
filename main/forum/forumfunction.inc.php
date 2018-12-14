@@ -614,7 +614,7 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
             api_get_user_id()
         );
         $return_message = get_lang('ForumCategoryEdited');
-        // ## NSR - log
+
         $logInfo = [
             'tool' => TOOL_FORUM,
             'tool_id' => 0,
@@ -657,7 +657,7 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
         }
         $return_message = get_lang('ForumCategoryAdded');
 
-        // ## NSR - log
+
         $logInfo = [
             'tool' => TOOL_FORUM,
             'tool_id' => 0,
@@ -863,7 +863,7 @@ function store_forum($values, $courseInfo = [], $returnId = false)
         $return_message = get_lang('ForumEdited');
         $forumId = $values['forum_id'];
 
-        // ## NSR - log
+
         $logInfo = [
             'tool' => TOOL_FORUM,
             'tool_id' => $values['forum_id'],
@@ -923,7 +923,7 @@ function store_forum($values, $courseInfo = [], $returnId = false)
                 $courseInfo
             );
 
-            // ## NSR - log
+
             $logInfo = [
                 'tool' => TOOL_FORUM,
                 'tool_id' => $forumId,
@@ -2657,7 +2657,7 @@ function updateThread($values)
         return '';
     }
 
-    // ## NSR - log
+
     $logInfo = [
         'tool' => TOOL_FORUM,
         'tool_id' => $values['forum_id'],
@@ -2914,7 +2914,7 @@ function store_thread(
             $visible = 1;
         }
 
-        // ## NSR - log
+
         $logInfo = [
             'tool' => TOOL_FORUM,
             'tool_id' => $values['forum_id'],
@@ -2955,7 +2955,7 @@ function store_thread(
 
     $lastPostId = $lastPost->getIid();
 
-    // ## NSR - log
+
     $logInfo = [
         'tool' => TOOL_FORUM,
         'tool_id' => $values['forum_id'],
@@ -3765,7 +3765,7 @@ function store_reply($current_forum, $values, $courseId = 0, $userId = 0)
             );
             add_forum_attachment_file('', $new_post_id);
 
-            // ## NSR - log
+
             $logInfo = [
                 'tool' => TOOL_FORUM,
                 'tool_id' => $values['forum_id'],
@@ -3963,7 +3963,6 @@ function show_edit_post_form(
  */
 function store_edit_post($forumInfo, $values)
 {
-    // ## NSR - log
     $logInfo = [
         'tool' => TOOL_FORUM,
         'tool_id' => $_GET['forum'],

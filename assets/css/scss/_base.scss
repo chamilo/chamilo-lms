@@ -629,6 +629,15 @@ footer {
       font-size: 12px;
     }
   }
+  .card-image{
+    position: relative;
+    .card-tools{
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
+  }
+
   .category{
     position: absolute;
     border-radius: 10px;

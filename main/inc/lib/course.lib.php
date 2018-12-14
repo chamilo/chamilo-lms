@@ -6733,10 +6733,10 @@ class CourseManager
             $title = $course['title'];
             $url = api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&code='.$course['code'];
             $html = Display::url(
-                Display::returnFontAwesomeIcon('info-circle', 'lg'),
+                Display::returnFontAwesomeIcon('info-circle'),
                 $url,
                 [
-                    'class' => 'ajax btn btn-default btn-sm',
+                    'class' => 'ajax btn btn-light btn-sm',
                     'data-title' => $title,
                     'title' => get_lang('Description'),
                     'aria-label' => get_lang('Description'),

@@ -187,12 +187,14 @@
 
 {% macro panel_course(id, header, content, title, footer, subtitle, top_image) %}
     {% autoescape false %}
-        <div class="card-course course-{{ id }} mt-3 mb-3">
+        <div class="card card-course course-{{ id }} mt-3 mb-3">
             {% if header %}
                 <div class="card-header"> {{ header }} </div>
             {% endif %}
             {% if top_image %}
-                {{ top_image }}
+                <div class="card-image">
+                    {{ top_image }}
+                </div>
             {% endif %}
             <div class="card-body p-3">
                 {% if title %}

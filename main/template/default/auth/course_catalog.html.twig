@@ -26,6 +26,10 @@
                     <a href="{{ item.url }}" title="{{ item.title }}">
                         <img class="card-img-top"  alt="{{ item.title }}" src="{{ item.image }}" data-holder-rendered="true" style="width: 100%; display: block;">
                     </a>
+
+                    <div class="card-tools">
+                        {{ item.description_ajax }}
+                    </div>
                 {% endset %}
                 {% set content %}
                     <div class="card-title">
@@ -62,7 +66,7 @@
                     </div>
                     {% endif %}
                 {% endset %}
-                {{ macro.panel_course(item.real_id, '', content, '', '', '', image) }}
+                {{ macro.panel_course(item.id, '', content, '', '', '', image) }}
             </div>
         {% endfor %}
     </div>

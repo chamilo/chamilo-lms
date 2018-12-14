@@ -253,7 +253,7 @@ if ($showCourses && $action != 'display_sessions') {
                 }
 
                 $courseList[] = [
-                    'real_id' => $course['real_id'],
+                    'id' => $course['real_id'],
                     'title' => $course['title'],
                     'category' => $course['category_title'],
                     'image' => $courseMediumImage,

@@ -569,6 +569,10 @@ class CourseManager
             return false;
         }
 
+        if (api_is_anonymous()) {
+            return false;
+        }
+
         if (in_array(
             $courseInfo['visibility'],
             [
@@ -684,7 +688,7 @@ class CourseManager
             if (Database::num_rows(Database::query($sql)) > 0) {
                 Display::addFlash(Display::return_message(get_lang('AlreadyRegisteredToCourse'), 'warning'));
 
-                return false; // The user has been subscribed to the course.
+                return false;
             }
 
             if ($checkTeacherPermission && !api_is_course_admin()) {
@@ -692,7 +696,7 @@ class CourseManager
                 if ((int) $courseInfo['subscribe'] === SUBSCRIBE_NOT_ALLOWED) {
                     Display::addFlash(Display::return_message(get_lang('SubscriptionNotAllowed'), 'warning'));
 
-                    return false; // Subscription is not allowed for this course.
+                    return false;
                 }
             }
 

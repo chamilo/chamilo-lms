@@ -657,7 +657,6 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
         }
         $return_message = get_lang('ForumCategoryAdded');
 
-
         $logInfo = [
             'tool' => TOOL_FORUM,
             'tool_id' => 0,
@@ -863,7 +862,6 @@ function store_forum($values, $courseInfo = [], $returnId = false)
         $return_message = get_lang('ForumEdited');
         $forumId = $values['forum_id'];
 
-
         $logInfo = [
             'tool' => TOOL_FORUM,
             'tool_id' => $values['forum_id'],
@@ -922,7 +920,6 @@ function store_forum($values, $courseInfo = [], $returnId = false)
                 $group_id,
                 $courseInfo
             );
-
 
             $logInfo = [
                 'tool' => TOOL_FORUM,
@@ -2657,7 +2654,6 @@ function updateThread($values)
         return '';
     }
 
-
     $logInfo = [
         'tool' => TOOL_FORUM,
         'tool_id' => $values['forum_id'],
@@ -2914,7 +2910,6 @@ function store_thread(
             $visible = 1;
         }
 
-
         $logInfo = [
             'tool' => TOOL_FORUM,
             'tool_id' => $values['forum_id'],
@@ -2954,7 +2949,6 @@ function store_thread(
     $em->flush();
 
     $lastPostId = $lastPost->getIid();
-
 
     $logInfo = [
         'tool' => TOOL_FORUM,
@@ -3764,7 +3758,6 @@ function store_reply($current_forum, $values, $courseId = 0, $userId = 0)
                 $values
             );
             add_forum_attachment_file('', $new_post_id);
-
 
             $logInfo = [
                 'tool' => TOOL_FORUM,

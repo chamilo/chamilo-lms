@@ -1,0 +1,22 @@
+{% autoescape false %}
+    <div class="popup-course">
+        {% set video = '' %}
+        {% for item in data.extrafield %}
+            {% if item.text == 'VideoUrl' %}
+                {% set video = item.value %}
+            {% endif %}
+        {% endfor %}
+
+        {% if video %}
+        <div class="popup-video">
+            <div class="embed-responsive embed-responsive-16by9">
+                {{ essence.replace(video) }}
+            </div>
+        </div>
+            {% endif %}
+        <div class="popup-content">
+            <h2 class="title">{{ data.description.title }}</h2>
+            {{ data.description.content }}
+        </div>
+    </div>
+{% endautoescape %}

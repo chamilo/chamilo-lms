@@ -157,11 +157,13 @@ switch ($action) {
             while ($description = Database::fetch_object($result)) {
                 $descriptions[$description->id] = $description;
             }
+            $extraField = new ExtraField('course');
+            $fieldValues = $extraField->getDataAndFormattedValues($course_info['real_id']);
+
             // Function that displays the details of the course description in html.
             echo CourseManager::get_details_course_description_html(
                 $descriptions,
-                api_get_system_encoding(),
-                false
+                $fieldValues
             );
         } else {
             echo get_lang('NoDescription');

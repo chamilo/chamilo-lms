@@ -449,7 +449,7 @@ foreach ($categories as $item) {
                     if ($lpTime < ($accumulateWorkTime * 60)) {
                         $linkMinTime = Display::return_icon(
                             'warning.png',
-                            get_lang('LpMessageTimeMin').' - '.api_time_to_hms($lpTime).' / '.api_time_to_hms(
+                            get_lang('LpMinTimeWarning').' - '.api_time_to_hms($lpTime).' / '.api_time_to_hms(
                                 $accumulateWorkTime * 60
                             )
                         );

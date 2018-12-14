@@ -75,7 +75,7 @@
                             })
                         </script>
                         <b>
-                            {{ "ExceedingMinimumTime"|get_lang|format(lp_accumulate_work_time) }}
+                            {{ "TimeSpentInLp"|get_lang|format(lp_accumulate_work_time) }}
                         </b>
                         <div id="progress_bar">
                             <div class="progress">

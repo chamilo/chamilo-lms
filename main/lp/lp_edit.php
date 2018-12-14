@@ -162,7 +162,7 @@ $form->addElement('html', '</div>');
 // Time Control
 if (api_get_configuration_value('lp_minimum_time')) {
     $accumulateTime = $_SESSION['oLP']->getAccumulateWorkTime();
-    $form->addText('accumulate_work_time', [get_lang('LearnpathTimeIn'), get_lang('LpAccumulateTimeDescription')]);
+    $form->addText('accumulate_work_time', [get_lang('LpMinTime'), get_lang('LpMinTimeDescription')]);
     $defaults['accumulate_work_time'] = $accumulateTime;
 }
 

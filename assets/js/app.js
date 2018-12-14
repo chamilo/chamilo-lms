@@ -117,6 +117,10 @@ $(function() {
         });
     });
 
+    $('#global-modal').on('hidden.bs.modal', function () {
+        jQuery(".embed-responsive").find('iframe').remove();
+    });
+
     // Expands an image modal
     $('a.expand-image').on('click', function(e) {
         e.preventDefault();
@@ -558,7 +562,7 @@ if (typeof CKEDITOR !== 'undefined') {
     plugins.forEach(function (plugin) {
         CKEDITOR.plugins.addExternal(
             plugin,
-            mainUrl.substring(1) + 'inc/lib/javascript/ckeditor/plugins/' + plugin + '/'
+            mainUrl + 'inc/lib/javascript/ckeditor/plugins/' + plugin + '/'
         );
     });
 

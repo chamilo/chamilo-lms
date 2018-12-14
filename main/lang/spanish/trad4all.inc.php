@@ -8346,5 +8346,12 @@ Luego buscará la etiqueta {{student_full_name}} y duplicará la pregunta para t
 $CreateMeeting = "Crear encuesta de reunión";
 $QuestionForNextClass = "Preguntas para la siguiente clase";
 $NewExerciseAttemptDisabled = "El portal no permite de iniciar ejercicios por le momento, favor de regresar un poquito mas tarde.";
+$PersonalDataOfficer = "Responsable de la protección de datos";
 $MaxNumberSubscribedStudentsReached = "Se ha llegado al numero maximo de alumno inscrito en el curso, no se puede inscribir mas.";
+$UserXAddedToCourseX = "El usuario %s ha sido registrado al curso %s";
+$LpMinTime = "Tiempo mínimo (min)";
+$LpMinTimeDescription = "Tiempo mínimo (en minutos) que el estudiante debe permanecer en la lección para poder acceder a la siguiente.";
+$LpMinTimeWarning = "No ha alcanzado el tiempo mínimo en la lección.";
+$YouHaveSpentXTime = "Has invertido %s tiempo";
+$TimeSpentInLp = "Tiempo en la lección";
 ?>

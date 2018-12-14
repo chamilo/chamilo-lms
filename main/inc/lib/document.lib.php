@@ -65,7 +65,7 @@ class DocumentManager
     {
         // All MIME types in an array (from 1.6, this is the authorative source)
         // Please, keep this alphabetical if you add something to this list!
-        $mime_types = [
+        $mimeTypes = [
             'ai' => 'application/postscript',
             'aif' => 'audio/x-aiff',
             'aifc' => 'audio/x-aiff',
@@ -173,7 +173,6 @@ class DocumentManager
             'pptx' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
             'ppm' => 'image/x-portable-pixmap',
             'ppt' => 'application/vnd.ms-powerpoint',
-            'pps' => 'application/vnd.ms-powerpoint',
             'ps' => 'application/postscript',
             'qt' => 'video/quicktime',
             'ra' => 'audio/x-realaudio',
@@ -230,6 +229,7 @@ class DocumentManager
             'wav' => 'audio/x-wav',
             'wbmp' => 'image/vnd.wap.wbmp',
             'wbxml' => 'application/vnd.wap.wbxml',
+            'webp' => 'image/webp',
             'wml' => 'text/vnd.wap.wml',
             'wmlc' => 'application/vnd.wap.wmlc',
             'wmls' => 'text/vnd.wap.wmlscript',
@@ -255,7 +255,7 @@ class DocumentManager
         ];
 
         if ($filename === true) {
-            return $mime_types;
+            return $mimeTypes;
         }
 
         // Get the extension of the file
@@ -270,11 +270,10 @@ class DocumentManager
         }
 
         //if the extension is found, return the content type
-        if (isset($mime_types[$extension])) {
-            return $mime_types[$extension];
+        if (isset($mimeTypes[$extension])) {
+            return $mimeTypes[$extension];
         }
 
-        //else return octet-stream
         return 'application/octet-stream';
     }
 

@@ -46,6 +46,28 @@ Event::registerLog($logInfo);
 
 $userId = api_get_user_id();
 
+$collapsable = api_get_configuration_value('allow_user_session_collapsable');
+if ($collapsable) {
+    $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
+    $sessionId = isset($_REQUEST['session_id']) ? $_REQUEST['session_id'] : '';
+    $value = isset($_REQUEST['value']) ? (int) $_REQUEST['value'] : '';
+    switch ($action) {
+        case 'collapse_session':
+            if (!empty($sessionId)) {
+                $userRelSession = SessionManager::getUserSession($userId, $sessionId);
+                if ($userRelSession) {
+                    $table = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+                    $sql = "UPDATE $table SET collapsed = $value WHERE id = ".$userRelSession['id'];
+                    Database::query($sql);
+                    Display::addFlash(Display::return_message(get_lang('Updated')));
+                }
+                header('Location: user_portal.php');
+                exit;
+            }
+            break;
+    }
+}
+
 /* Constants and CONFIGURATION parameters */
 $load_dirs = api_get_setting('show_documents_preview');
 $displayMyCourseViewBySessionLink = api_get_setting('my_courses_view_by_session') === 'true';

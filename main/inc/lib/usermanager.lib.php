@@ -917,6 +917,9 @@ class UserManager
             Database::query($sql);
         }
 
+        $app_plugin = new AppPlugin();
+        $app_plugin->performActionsWhenDeletingItem('user', $user_id);
+
         // Delete user from database
         $sql = "DELETE FROM $table_user WHERE id = '".$user_id."'";
         Database::query($sql);
@@ -3040,8 +3043,8 @@ class UserManager
         // sessions, BT#14115) but executing a similar query twice and grouping
         // the results afterwards in PHP takes about 1/1000th of the time
         // (0.1s + 0.0s) for the same set of data, so we do it this way...
-        $dqlStudent = $dql." WHERE scu.user = :user AND url.accessUrlId = :url ";
-        $dqlCoach = $dql." WHERE s.generalCoach = :user AND url.accessUrlId = :url ";
+        $dqlStudent = $dql.' WHERE scu.user = :user AND url.accessUrlId = :url ';
+        $dqlCoach = $dql.' WHERE s.generalCoach = :user AND url.accessUrlId = :url ';
 
         // Default order
         $order = 'ORDER BY sc.name, s.name';
@@ -3071,7 +3074,7 @@ class UserManager
                     if ($orderSetting == 'asc') {
                         // Put null values at the end
                         // https://stackoverflow.com/questions/12652034/how-can-i-order-by-null-in-dql
-                        $order = " ORDER BY _isFieldNull asc, s.accessEndDate asc";
+                        $order = ' ORDER BY _isFieldNull asc, s.accessEndDate asc';
                     }
                     break;
             }
@@ -3108,6 +3111,10 @@ class UserManager
         foreach ($sessionDataCoach as $row) {
             $sessionData[$row['id']] = $row;
         }
+
+        $collapsable = api_get_configuration_value('allow_user_session_collapsable');
+        $extraField = new ExtraFieldValue('session');
+        $collapsableLink = api_get_path(WEB_PATH).'user_portal.php?action=collapse_session';
 
         $categories = [];
         foreach ($sessionData as $row) {
@@ -3192,10 +3199,7 @@ class UserManager
                         $ignore_visibility_for_admins
                     );
 
-                    $courseIsVisible = !in_array(
-                        $course['visibility'],
-                        $closedVisibilityList
-                    );
+                    $courseIsVisible = !in_array($course['visibility'], $closedVisibilityList);
                     if ($courseIsVisible === false || $sessionCourseVisibility == SESSION_INVISIBLE) {
                         $blockedCourseCount++;
                     }
@@ -3220,6 +3224,19 @@ class UserManager
                     }
             }
 
+            $collapsed = '';
+            $collapsedAction = '';
+            if ($collapsable) {
+                $collapsableData = Sessionmanager::getCollapsableData(
+                    $user_id,
+                    $session_id,
+                    $extraField,
+                    $collapsableLink
+                );
+                $collapsed = $collapsableData['collapsed'];
+                $collapsedAction = $collapsableData['collapsable_link'];
+            }
+
             $categories[$row['session_category_id']]['sessions'][] = [
                 'session_name' => $row['name'],
                 'session_id' => $row['id'],
@@ -3228,6 +3245,8 @@ class UserManager
                 'coach_access_start_date' => $row['coach_access_start_date'] ? $row['coach_access_start_date']->format('Y-m-d H:i:s') : null,
                 'coach_access_end_date' => $row['coach_access_end_date'] ? $row['coach_access_end_date']->format('Y-m-d H:i:s') : null,
                 'courses' => $courseList,
+                'collapsed' => $collapsed,
+                'collapsable_link' => $collapsedAction,
             ];
         }
 

@@ -442,12 +442,12 @@ if ($showWarningMessage) {
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
 if (api_get_setting('allow_social_tool') === 'true') {
     $tpl->assign('social_menu_block', $socialMenuBlock);
-    $tpl->assign('personal_data', $personalData);
 } else {
     $tpl->assign('social_menu_block', '');
     $tpl->assign('personal_data_block', $personalDataContent);
 }
 
+$tpl->assign('personal_data', $personalData);
 $tpl->assign('permission', $permissionBlock);
 $tpl->assign('term_link', $termLink);
 $socialLayout = $tpl->get_template('social/personal_data.tpl');

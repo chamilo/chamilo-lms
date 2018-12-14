@@ -1808,6 +1808,9 @@ class SessionManager
         $sql = "UPDATE $ticket SET session_id = NULL WHERE session_id IN ($id_checked)";
         Database::query($sql);
 
+        $app_plugin = new AppPlugin();
+        $app_plugin->performActionsWhenDeletingItem('session', $id_checked);
+
         $sql = "DELETE FROM $tbl_session WHERE id IN ($id_checked)";
         Database::query($sql);
 
@@ -2316,11 +2319,11 @@ class SessionManager
             return false;
         }
 
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
+        $session_visibility = (int) $session_visibility;
         $course_code = Database::escape_string($course_code);
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['real_id'];
-        $session_visibility = intval($session_visibility);
 
         if ($removeUsersNotInList) {
             $currentUsers = self::getUsersByCourseSession($session_id, $courseInfo, 0);
@@ -2344,7 +2347,7 @@ class SessionManager
 
         $nbr_users = 0;
         foreach ($user_list as $enreg_user) {
-            $enreg_user = intval($enreg_user);
+            $enreg_user = (int) $enreg_user;
             // Checking if user exists in session - course - user table.
             $sql = "SELECT count(user_id) as count
                     FROM $tbl_session_rel_course_rel_user
@@ -3404,7 +3407,7 @@ class SessionManager
         $noCoach = false
     ) {
         // Definition of variables
-        $userId = intval($userId);
+        $userId = (int) $userId;
 
         $sessionId = !empty($sessionId) ? intval($sessionId) : api_get_session_id();
         $courseId = !empty($courseId) ? intval($courseId) : api_get_course_id();
@@ -5505,7 +5508,7 @@ SQL;
                                         $userCourseCategory = $courseUserData['user_course_cat'];
                                     }
 
-                                    CourseManager::subscribe_user(
+                                    CourseManager::subscribeUser(
                                         $teacherToAdd,
                                         $course_code,
                                         COURSEMANAGER,
@@ -5628,7 +5631,7 @@ SQL;
                                             $userCourseCategory = $courseUserData['user_course_cat'];
                                         }
 
-                                        CourseManager::subscribe_user(
+                                        CourseManager::subscribeUser(
                                             $teacherId,
                                             $course_code,
                                             COURSEMANAGER,
@@ -6851,8 +6854,8 @@ SQL;
      */
     public static function getUserSession($userId, $sessionId)
     {
-        $userId = intval($userId);
-        $sessionId = intval($sessionId);
+        $userId = (int) $userId;
+        $sessionId = (int) $sessionId;
 
         if (empty($userId) || empty($sessionId)) {
             return false;
@@ -9121,6 +9124,48 @@ SQL;
         }
 
         return $courseIds;
+    }
+
+    /**
+     * @param int             $userId
+     * @param int             $sessionId
+     * @param ExtraFieldValue $extraFieldValue
+     * @param string          $collapsableLink
+     *
+     * @return array
+     */
+    public static function getCollapsableData($userId, $sessionId, $extraFieldValue, $collapsableLink)
+    {
+        $collapsed = 0;
+
+        // Get default collapsed value in extra field
+        $value = $extraFieldValue->get_values_by_handler_and_field_variable($sessionId, 'collapsed');
+        if (!empty($value) && isset($value['value'])) {
+            $collapsed = $value['value'];
+        }
+
+        $userRelSession = Sessionmanager::getUserSession($userId, $sessionId);
+        if ($userRelSession) {
+            if (isset($userRelSession['collapsed']) && $userRelSession['collapsed'] != '') {
+                $collapsed = $userRelSession['collapsed'];
+            }
+        } else {
+            return ['collapsed' => $collapsed, 'collapsable_link' => '&nbsp;'];
+        }
+
+        $link = $collapsableLink.'&session_id='.$sessionId.'&value=1';
+        $image = '<i class="fa fa-folder-open"></i>';
+        if ($collapsed == 1) {
+            $link = $collapsableLink.'&session_id='.$sessionId.'&value=0';
+            $image = '<i class="fa fa-folder"></i>';
+        }
+
+        $link = Display::url(
+            $image,
+            $link
+        );
+
+        return ['collapsed' => $collapsed, 'collapsable_link' => $link];
     }
 
     /**

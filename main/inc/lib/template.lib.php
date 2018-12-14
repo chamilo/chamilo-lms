@@ -139,6 +139,7 @@ class Template
 
         // Twig filters setup
         $filters = [
+            'var_dump',
             'get_plugin_lang',
             'get_lang',
             'api_get_path',

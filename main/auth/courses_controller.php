@@ -226,58 +226,6 @@ class CoursesController
     }
 
     /**
-     * Auto user subscription to a course.
-     */
-    public function subscribe_user($course_code, $search_term, $category_code)
-    {
-        $courseInfo = api_get_course_info($course_code);
-
-        if (empty($courseInfo)) {
-            return false;
-        }
-
-        // The course must be open in order to access the auto subscription
-        if (in_array(
-            $courseInfo['visibility'],
-            [
-                COURSE_VISIBILITY_CLOSED,
-                COURSE_VISIBILITY_REGISTERED,
-                COURSE_VISIBILITY_HIDDEN,
-            ]
-        )
-        ) {
-            Display::addFlash(
-                Display::return_message(
-                    get_lang('SubscribingNotAllowed'),
-                    'warning'
-                )
-            );
-        } else {
-            // Redirect to subscription
-            if (api_is_anonymous()) {
-                header('Location: '.api_get_path(WEB_CODE_PATH).'auth/inscription.php?c='.$course_code);
-                exit;
-            }
-            $result = $this->model->subscribe_user($course_code);
-            if (!$result) {
-                Display::addFlash(
-                    Display::return_message(
-                        get_lang('CourseRegistrationCodeIncorrect'),
-                        'warning'
-                    )
-                );
-            } else {
-                Display::addFlash(
-                    Display::return_message($result['message'], 'normal', false)
-                );
-                if (isset($result['content'])) {
-                    Display::addFlash($result['content']);
-                }
-            }
-        }
-    }
-
-    /**
      * Create a category
      * render to listing view.
      *
@@ -914,8 +862,10 @@ class CoursesController
                 $catName = $cat->getName();
             }
 
-            $coachId = $session->getGeneralCoach()->getId();
-            $coachName = $session->getGeneralCoach()->getCompleteName();
+            $generalCoach = $session->getGeneralCoach();
+            $coachId = $generalCoach ? $generalCoach->getId() : 0;
+            $coachName = $generalCoach ? $session->getGeneralCoach()->getCompleteName() : '';
+
             $actions = null;
             if (api_is_platform_admin()) {
                 $actions = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session->getId();
@@ -931,7 +881,9 @@ class CoursesController
                 'nbr_courses' => $session->getNbrCourses(),
                 'nbr_users' => $session->getNbrUsers(),
                 'coach_id' => $coachId,
-                'coach_url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='.$coachId,
+                'coach_url' => $generalCoach
+                    ? api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='.$coachId
+                    : '',
                 'coach_name' => $coachName,
                 'coach_avatar' => UserManager::getUserPicture(
                     $coachId,

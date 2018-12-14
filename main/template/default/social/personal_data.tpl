@@ -38,6 +38,7 @@
         </div>
         {% endif %}
         {% if personal_data.officer_name %}
+            {% set officer_data %}
             <div class="panel personal-data-responsible">
                 <div class="panel-title">{{ 'PersonalDataOfficerName' | get_lang }}</div>
                 <div class="personal-data-responsible-description">
@@ -48,6 +49,8 @@
                     {{ personal_data.officer_role }}
                 </div>
             </div>
+            {% endset %}
+            {{ display.panel('PersonalDataOfficer' | get_lang , officer_data ) }}
         {% endif %}
 
         {% if term_link %}

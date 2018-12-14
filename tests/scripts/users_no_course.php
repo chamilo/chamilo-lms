@@ -27,7 +27,7 @@ $students = Database::store_result($result);
 if (!empty($students)) {
     foreach ($students as $student) {
         var_dump($student['username'].'- '.$student['user_id']);
-        $result = CourseManager::add_user_to_course($student['user_id'], $courseCode);
+        $result = CourseManager::subscribeUser($student['user_id'], $courseCode);
         var_dump($result);
         echo '<br />';
     }

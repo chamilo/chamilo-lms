@@ -3717,10 +3717,18 @@ class learnpath
 
                     switch ($lp_item_type) {
                         case 'document':
-                            if (api_get_configuration_value('allow_pdf_viewerjs_in_lp')) {
-                                if (Link::isPdfLink($file)) {
-                                    $pdfUrl = api_get_path(WEB_LIBRARY_PATH).'javascript/ViewerJS/index.html#'.$file;
-                                    $file = $pdfUrl;
+                            // Shows a button to download the file instead of just downloading the file directly.
+                            $documentPathInfo = pathinfo($file);
+                            if (isset($documentPathInfo['extension'])) {
+                                $parsed = parse_url($documentPathInfo['extension']);
+                                if (isset($parsed['path'])) {
+                                    $extension = $parsed['path'];
+                                    $extensionsToDownload = ['zip', 'ppt', 'pptx', 'ods', 'xlsx', 'xls', 'csv'];
+
+                                    if (in_array($extension, $extensionsToDownload)) {
+                                        $file = api_get_path(WEB_CODE_PATH).
+                                            'lp/embed.php?type=download&source=file&lp_item_id='.$item_id.'&'.api_get_cidreq();
+                                    }
                                 }
                             }
                             break;
@@ -3773,14 +3781,14 @@ class learnpath
 
                             $type_quiz = false;
                             foreach ($list as $toc) {
-                                if ($toc['id'] == $lp_item_id && ($toc['type'] == 'quiz')) {
+                                if ($toc['id'] == $lp_item_id && $toc['type'] == 'quiz') {
                                     $type_quiz = true;
                                 }
                             }
 
                             if ($type_quiz) {
-                                $lp_item_id = intval($lp_item_id);
-                                $lp_view_id = intval($lp_view_id);
+                                $lp_item_id = (int) $lp_item_id;
+                                $lp_view_id = (int) $lp_view_id;
                                 $sql = "SELECT count(*) FROM $lp_item_view_table
                                         WHERE
                                             c_id = $course_id AND
@@ -3800,7 +3808,6 @@ class learnpath
                     }
 
                     $tmp_array = explode('/', $file);
-
                     $document_name = $tmp_array[count($tmp_array) - 1];
                     if (strpos($document_name, '_DELETED_')) {
                         $file = 'blank.php?error=document_deleted';
@@ -7493,26 +7500,6 @@ class learnpath
                 }
                 break;
             case TOOL_DOCUMENT:
-                $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
-                $sql = "SELECT lp.*, doc.path as dir
-                        FROM $tbl_lp_item as lp
-                        LEFT JOIN $tbl_doc as doc
-                        ON (doc.iid = lp.path AND lp.c_id = doc.c_id)
-                        WHERE
-                            doc.c_id = $course_id AND
-                            lp.iid = ".$item_id;
-                $res_step = Database::query($sql);
-                $row_step = Database::fetch_array($res_step, 'ASSOC');
-                $return .= $this->display_manipulate(
-                    $item_id,
-                    $row['item_type']
-                );
-                $return .= $this->display_document_form(
-                    'edit',
-                    $item_id,
-                    $row_step
-                );
-                break;
             case TOOL_READOUT_TEXT:
                 $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
                 $sql = "SELECT lp.*, doc.path as dir
@@ -7524,32 +7511,37 @@ class learnpath
                             lp.iid = ".$item_id;
                 $res_step = Database::query($sql);
                 $row_step = Database::fetch_array($res_step, 'ASSOC');
-                $return .= $this->display_manipulate(
-                    $item_id,
-                    $row['item_type']
-                );
-                $return .= $this->displayFrmReadOutText(
-                    'edit',
-                    $item_id,
-                    $row_step
-                );
+                $return .= $this->display_manipulate($item_id, $row['item_type']);
+
+                if ($row['item_type'] === TOOL_DOCUMENT) {
+                    $return .= $this->display_document_form('edit', $item_id, $row_step);
+                }
+
+                if ($row['item_type'] === TOOL_READOUT_TEXT) {
+                    $return .= $this->displayFrmReadOutText('edit', $item_id, $row_step);
+                }
                 break;
             case TOOL_LINK:
-                $link_id = (string) $row['path'];
-                if (ctype_digit($link_id)) {
-                    $tbl_link = Database::get_course_table(TABLE_LINK);
-                    $sql_select = 'SELECT url FROM '.$tbl_link.'
-                                   WHERE c_id = '.$course_id.' AND iid = '.intval($link_id);
-                    $res_link = Database::query($sql_select);
+                $linkId = (int) $row['path'];
+                if (!empty($linkId)) {
+                    $table = Database::get_course_table(TABLE_LINK);
+                    $sql = 'SELECT url FROM '.$table.'
+                            WHERE c_id = '.$course_id.' AND iid = '.$linkId;
+                    $res_link = Database::query($sql);
                     $row_link = Database::fetch_array($res_link);
+                    if (empty($row_link)) {
+                        // Try with id
+                        $sql = 'SELECT url FROM '.$table.'
+                                WHERE c_id = '.$course_id.' AND id = '.$linkId;
+                        $res_link = Database::query($sql);
+                        $row_link = Database::fetch_array($res_link);
+                    }
+
                     if (is_array($row_link)) {
                         $row['url'] = $row_link['url'];
                     }
                 }
-                $return .= $this->display_manipulate(
-                    $item_id,
-                    $row['item_type']
-                );
+                $return .= $this->display_manipulate($item_id, $row['item_type']);
                 $return .= $this->display_link_form('edit', $item_id, $row);
                 break;
             case TOOL_LP_FINAL_ITEM:
@@ -7564,15 +7556,8 @@ class learnpath
                             lp.iid = ".$item_id;
                 $res_step = Database::query($sql);
                 $row_step = Database::fetch_array($res_step, 'ASSOC');
-                $return .= $this->display_manipulate(
-                    $item_id,
-                    $row['item_type']
-                );
-                $return .= $this->display_document_form(
-                    'edit',
-                    $item_id,
-                    $row_step
-                );
+                $return .= $this->display_manipulate($item_id, $row['item_type']);
+                $return .= $this->display_document_form('edit', $item_id, $row_step);
                 break;
             case TOOL_QUIZ:
                 $return .= $this->display_manipulate($item_id, $row['item_type']);
@@ -8833,10 +8818,10 @@ class learnpath
         $item_description = '';
         //If action==edit document
         //We don't display the document form if it's not an editable document (html or txt file)
-        if ($action == 'edit') {
+        if ($action === 'edit') {
             if (is_array($extra_info)) {
                 $path_parts = pathinfo($extra_info['dir']);
-                if ($path_parts['extension'] != "txt" && $path_parts['extension'] != "html") {
+                if ($path_parts['extension'] != 'txt' && $path_parts['extension'] != 'html') {
                     $no_display_edit_textarea = true;
                 }
             }
@@ -8845,7 +8830,7 @@ class learnpath
 
         // If action==add an existing document
         // We don't display the document form if it's not an editable document (html or txt file).
-        if ($action == 'add') {
+        if ($action === 'add') {
             if (is_numeric($extra_info)) {
                 $extra_info = (int) $extra_info;
                 $sql_doc = "SELECT path FROM $tbl_doc 
@@ -9684,23 +9669,24 @@ class learnpath
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $tbl_link = Database::get_course_table(TABLE_LINK);
 
+        $item_title = '';
+        $item_description = '';
+        $item_url = '';
+
         if ($id != 0 && is_array($extra_info)) {
             $item_title = stripslashes($extra_info['title']);
             $item_description = stripslashes($extra_info['description']);
             $item_url = stripslashes($extra_info['url']);
         } elseif (is_numeric($extra_info)) {
-            $extra_info = intval($extra_info);
-            $sql = "SELECT title, description, url FROM ".$tbl_link."
-                    WHERE c_id = ".$course_id." AND id = ".$extra_info;
+            $extra_info = (int) $extra_info;
+            $sql = "SELECT title, description, url 
+                    FROM $tbl_link
+                    WHERE c_id = $course_id AND iid = $extra_info";
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
             $item_title = $row['title'];
             $item_description = $row['description'];
             $item_url = $row['url'];
-        } else {
-            $item_title = '';
-            $item_description = '';
-            $item_url = '';
         }
 
         $form = new FormValidator(
@@ -9709,10 +9695,9 @@ class learnpath
             $this->getCurrentBuildingModeURL()
         );
         $defaults = [];
+        $parent = 0;
         if ($id != 0 && is_array($extra_info)) {
             $parent = $extra_info['parent_item_id'];
-        } else {
-            $parent = 0;
         }
 
         $sql = "SELECT * FROM $tbl_lp_item
@@ -10160,14 +10145,25 @@ class learnpath
             $url.'&action=delete_item'
         );
 
-        if ($item_type == TOOL_HOTPOTATOES) {
-            $document_data = DocumentManager::get_document_data_by_id($row['path'], $course_code);
-            $return .= get_lang('File').': '.$document_data['absolute_path_from_document'];
-        }
-
-        if ($item_type == TOOL_DOCUMENT || $item_type == TOOL_LP_FINAL_ITEM) {
-            $document_data = DocumentManager::get_document_data_by_id($row['path'], $course_code);
-            $return .= get_lang('File').': '.$document_data['absolute_path_from_document'];
+        if (in_array($item_type, [TOOL_DOCUMENT, TOOL_LP_FINAL_ITEM, TOOL_HOTPOTATOES])) {
+            $documentData = DocumentManager::get_document_data_by_id($row['path'], $course_code);
+            if (empty($documentData)) {
+                // Try with iid
+                $table = Database::get_course_table(TABLE_DOCUMENT);
+                $sql = "SELECT path FROM $table
+                        WHERE 
+                              c_id = ".api_get_course_int_id()." AND 
+                              iid = ".$row['path']." AND 
+                              path NOT LIKE '%_DELETED_%'";
+                $result = Database::query($sql);
+                $documentData = Database::fetch_array($result);
+                if ($documentData) {
+                    $documentData['absolute_path_from_document'] = '/document'.$documentData['path'];
+                }
+            }
+            if (isset($documentData['absolute_path_from_document'])) {
+                $return .= get_lang('File').': '.$documentData['absolute_path_from_document'];
+            }
         }
 
         $return .= '</div>';
@@ -13466,18 +13462,15 @@ EOD;
                 return $main_dir_path.'forum/viewthread.php?post='.$id.'&thread='.$myrow['thread_id'].'&forum='
                     .$myrow['forum_id'].'&lp=true&'.$extraParams;
             case TOOL_READOUT_TEXT:
-                return api_get_path(WEB_CODE_PATH).'lp/readout_text.php?&id='.$id.'&lp_id='.$learningPathId.'&'
-                    .$extraParams;
+                return api_get_path(WEB_CODE_PATH).
+                    'lp/readout_text.php?&id='.$id.'&lp_id='.$learningPathId.'&'.$extraParams;
             case TOOL_DOCUMENT:
-                $document = $em
-                    ->getRepository('ChamiloCourseBundle:CDocument')
-                    ->findOneBy(['cId' => $course_id, 'iid' => $id]);
+                $repo = $em->getRepository('ChamiloCourseBundle:CDocument');
+                $document = $repo->findOneBy(['cId' => $course_id, 'iid' => $id]);
 
                 if (empty($document)) {
                     // Try with normal id
-                    $document = $em
-                        ->getRepository('ChamiloCourseBundle:CDocument')
-                        ->findOneBy(['cId' => $course_id, 'id' => $id]);
+                    $document = $repo->findOneBy(['cId' => $course_id, 'id' => $id]);
 
                     if (empty($document)) {
                         return '';
@@ -13485,9 +13478,9 @@ EOD;
                 }
 
                 $documentPathInfo = pathinfo($document->getPath());
-                $jplayer_supported_files = ['mp4', 'ogv', 'flv', 'm4v'];
+                $jplayerSupportedFiles = ['mp4', 'ogv', 'flv', 'm4v'];
                 $extension = isset($documentPathInfo['extension']) ? $documentPathInfo['extension'] : '';
-                $showDirectUrl = !in_array($extension, $jplayer_supported_files);
+                $showDirectUrl = !in_array($extension, $jplayerSupportedFiles);
 
                 $openmethod = 2;
                 $officedoc = false;
@@ -13495,7 +13488,16 @@ EOD;
                 Session::write('officedoc', $officedoc);
 
                 if ($showDirectUrl) {
-                    return $main_course_path.'document'.$document->getPath().'?'.$extraParams;
+                    $file = $main_course_path.'document'.$document->getPath().'?'.$extraParams;
+                    if (api_get_configuration_value('allow_pdf_viewerjs_in_lp')) {
+                        if (Link::isPdfLink($file)) {
+                            $pdfUrl = api_get_path(WEB_LIBRARY_PATH).'javascript/ViewerJS/index.html#'.$file;
+
+                            return $pdfUrl;
+                        }
+                    }
+
+                    return $file;
                 }
 
                 return api_get_path(WEB_CODE_PATH).'document/showinframes.php?id='.$id.'&'.$extraParams;
@@ -13520,7 +13522,7 @@ EOD;
                 }
 
                 return $main_dir_path.'work/work.php?'.api_get_cidreq().'&id='.$rowItem->getPath().'&'.$extraParams;
-        } //end switch
+        }
 
         return $link;
     }

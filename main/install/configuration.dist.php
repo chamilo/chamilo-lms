@@ -407,10 +407,10 @@ ALTER TABLE portfolio_category CHANGE title title LONGTEXT NOT NULL;
 //$_configuration['session_list_show_count_users'] = false;
 // Session admin access to all course content
 //$_configuration['session_admins_access_all_content'] = false;
+// Session admin allowed to edit all courses content
+//$_configuration['session_admins_edit_courses_content'] = false;
 // Adds roles to the system announcements (requires DB change BT#12476)
 //$_configuration['system_announce_extra_roles'] = false;
-// Limits the features that a session admin has access to from the main admin panel (removes users import and usergroups)
-//$_configuration['limit_session_admin_role'] = false;
 // Limits that a session admin has access to list users
 //$_configuration['limit_session_admin_list_users'] = false;
 // Course tools visibility edition in sessions
@@ -912,6 +912,19 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Show pending survey link in user menu
 // $_configuration['show_pending_survey_in_menu'] = false;
 
+// GDPR: European's General Data Protection Rules activation option
+// Set to true to disable the new personal data page inside the social network menu
+// $_configuration['disable_gdpr'] = true;
+
+// GDPR requires users to be informed of the Data Protection Officer name and contact point
+// These can only be defined here for now, but will be moved to web settings in the future.
+// Name of the person or organization that is responsible for the treatment of personal info
+//$_configuration['data_protection_officer_name'] = '';
+// A description of the role of the DP Officer in this context
+//$_configuration['data_protection_officer_role'] = '';
+// An e-mail address where to contact the data protection officer for queries
+//$_configuration['data_protection_officer_email'] = '';
+
 // Show multiple conditions to user during sign up process
 // Example with a GDPR condition
 /*$_configuration['show_conditions_to_user'] = [
@@ -942,19 +955,6 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Teachers can CRUD classes
 // ALTER TABLE usergroup ADD author_id INT DEFAULT NULL;
 //$_configuration['allow_teachers_to_classes'] = false;
-
-// GDPR: European's General Data Protection Rules activation option
-// Set to true to disable the new personal data page inside the social network menu
-// $_configuration['disable_gdpr'] = true;
-
-// GDPR requires users to be informed of the Data Protection Officer name and contact point
-// These can only be defined here for now, but will be moved to web settings in the future.
-// Name of the person or organization that is responsible for the treatment of personal info
-//$_configuration['data_protection_officer_name'] = '';
-// A description of the role of the DP Officer in this context
-//$_configuration['data_protection_officer_role'] = '';
-// An e-mail address where to contact the data protection officer for queries
-//$_configuration['data_protection_officer_email'] = '';
 
 // Validate user login via a webservice, Chamilo will send a "login" and "password" parameters
 // to the "myWebServiceFunctionToLogin" function, the result should be "1" if the user have access.
@@ -1055,6 +1055,18 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Allow detail user activity
 // CREATE TABLE track_e_access_complete (id int(11) NOT NULL AUTO_INCREMENT, user_id int(11) NOT NULL, date_reg datetime NOT NULL, tool varchar(255) NOT NULL,  tool_id int(11) NOT NULL,   tool_id_detail int(11) NOT NULL,  action varchar(255) NOT NULL,   action_details varchar(255) NOT NULL, current_id int(11) NOT NULL,  ip_user varchar(255) NOT NULL,  user_agent varchar(255) NOT NULL,   session_id int(11) NOT NULL,   c_id int(11) NOT NULL,   ch_sid varchar(255) NOT NULL,   login_as int(11) NOT NULL,   info longtext NOT NULL,   url text NOT NULL,   PRIMARY KEY (id) ) ENGINE=InnoDB AUTO_INCREMENT=13989 DEFAULT CHARSET=utf8;
 //$_configuration['allow_track_complete'] = false;
+
+// Add collapsable option for user course categories
+// ALTER TABLE user_course_category ADD collapsed TINYINT(1) DEFAULT NULL;
+// $_configuration['allow_user_course_category_collapsable'] = false;
+
+// Add collapsable option when showing the course list inside a session in userportal.php
+// ALTER TABLE session_rel_user ADD collapsed TINYINT(1) DEFAULT NULL;
+// Create a new session extra field called "collapsed" (checkbox yes/no - option)
+// $_configuration['allow_user_session_collapsable'] = false;
+
+// Allow to session admins login as teachers
+//$_configuration['allow_session_admin_login_as_teacher'] = false;
 
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email

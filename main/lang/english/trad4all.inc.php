@@ -8320,4 +8320,7 @@ Then it will look for the {{student_full_name}} tag and duplicate the question f
 $CreateMeeting = "Create meeting poll";
 $QuestionForNextClass = "Question for next class";
 $NewExerciseAttemptDisabled = "The portal do not allowed to start new test for the moment, please come back later.";
+$PersonalDataOfficer = "Personal data officer";
+$MaxNumberSubscribedStudentsReached = "The maximum number of student has already been reached, it is not possible to subscribe more student.";
+$UserXAddedToCourseX = "User %s has been registered to course %s";
 ?>

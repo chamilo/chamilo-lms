@@ -2419,7 +2419,7 @@ class ImportCsv
                     $userCourseCategory = $courseUserData['user_course_cat'];
                 }
 
-                CourseManager::subscribe_user(
+                $result = CourseManager::subscribeUser(
                     $userId,
                     $courseInfo['code'],
                     $status,
@@ -2427,9 +2427,15 @@ class ImportCsv
                     $userCourseCategory
                 );
 
-                $this->logger->addInfo(
-                    "User $userId added to course ".$courseInfo['code']." with status '$status' with course category: '$userCourseCategory'"
-                );
+                if ($result) {
+                    $this->logger->addInfo(
+                        "User $userId added to course ".$courseInfo['code']." with status '$status' with course category: '$userCourseCategory'"
+                    );
+                } else {
+                    $this->logger->addInfo(
+                        "User $userId was NOT ADDED to course ".$courseInfo['code']." with status '$status' with course category: '$userCourseCategory'"
+                    );
+                }
             }
         }
 

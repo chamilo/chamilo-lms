@@ -166,16 +166,10 @@ $tpl = new Template($nameTools);
 // getting all the students of the course
 if (empty($session_id)) {
     // Registered students in a course outside session.
-    $a_students = CourseManager::get_student_list_from_course_code(
-        $courseId
-    );
+    $a_students = CourseManager::get_student_list_from_course_code($courseId);
 } else {
     // Registered students in session.
-    $a_students = CourseManager::get_student_list_from_course_code(
-        $courseId,
-        true,
-        $sessionId
-    );
+    $a_students = CourseManager::get_student_list_from_course_code($courseId, true, $sessionId);
 }
 
 $nbStudents = count($a_students);
@@ -337,10 +331,13 @@ if ($showReporting) {
         $html .= '</ul>';
     }
 }
+//Load Orden
+$trackingColumn = isset($_GET['users_tracking_column']) ? $_GET['users_tracking_column'] : null;
+$trackingDirection = isset($_GET['users_tracking_direction']) ? $_GET['users_tracking_direction'] : null;
 
 // Show the charts part only if there are students subscribed to this course/session
 if ($nbStudents > 0) {
-    $usersTracking = TrackingCourseLog::get_user_data(null, $nbStudents, null, 'DESC', false);
+    $usersTracking = TrackingCourseLog::get_user_data(null, $nbStudents, $trackingColumn, $trackingDirection, false);
     $numberStudentsCompletedLP = 0;
     $averageStudentsTestScore = 0;
     $scoresDistribution = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];

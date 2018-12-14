@@ -3275,7 +3275,7 @@ class CourseManager
 
                 if($description->description_type === '1'){
                     $data['description'] = [
-                        'title' => $description->title,
+                        'title' => Security::remove_XSS($description->title),
                         'content' => Security::remove_XSS($description->content)
                     ];
                 }

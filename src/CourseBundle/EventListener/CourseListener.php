@@ -84,14 +84,19 @@ class CourseListener
         /** @var EntityManager $em */
         $em = $container->get('doctrine')->getManager();
         $checker = $container->get('security.authorization_checker');
-        $alreadyVisited = $sessionHandler->get('course_already_visited');
+        //$alreadyVisited = $sessionHandler->get('course_already_visited');
 
         $course = null;
         if (!empty($courseCode)) {
+            // Try with the course code
             /** @var Course $course */
-            $course = $em->getRepository('ChamiloCoreBundle:Course')->findOneBy(['directory' => $courseCode]);
+            $course = $em->getRepository('ChamiloCoreBundle:Course')->findOneBy(['code' => $courseCode]);
             if ($course === null) {
-                throw new NotFoundHttpException($translator->trans('Course does not exist'));
+                $course = $em->getRepository('ChamiloCoreBundle:Course')->findOneBy(['directory' => $courseCode]);
+                if ($course === null) {
+                    throw new NotFoundHttpException($translator->trans('Course does not exist'));
+                }
+                //throw new NotFoundHttpException($translator->trans('Course does not exist'));
             }
         }
 

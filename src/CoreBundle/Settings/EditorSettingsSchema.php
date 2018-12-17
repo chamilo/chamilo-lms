@@ -29,7 +29,7 @@ class EditorSettingsSchema extends AbstractSettingsSchema
                     'include_asciimathml_script' => '',
                     'youtube_for_students' => '',
                     'block_copy_paste_for_students' => '',
-                    'more_buttons_maximized_mode' => '',
+                    'more_buttons_maximized_mode' => 'true',
                     'enabled_wiris' => '',
                     'allow_spellcheck' => '',
                     'force_wiki_paste_as_plain_text' => '',

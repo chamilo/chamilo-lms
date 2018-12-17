@@ -23,7 +23,7 @@
         var winheight = document.documentElement.clientHeight;
         var funcNum = getUrlParam('CKEditorFuncNum');
         var elf = $('#elfinder').elfinder({
-            url : '{{ url('editor_connector')  }}{{ course_condition }}',  // connector URL (REQUIRED)
+            url : '{{ url('editor_connector') }}{{ course_condition }}',  // connector URL (REQUIRED)
             getFileCallback : function(file) {
                 window.opener.CKEDITOR.tools.callFunction(funcNum, file.url);
                 window.close();

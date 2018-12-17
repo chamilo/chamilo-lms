@@ -51,7 +51,14 @@ abstract class BaseController extends AbstractController
      */
     public function getCourse()
     {
-        $courseId = $this->getRequest()->getSession()->get('_real_cid', 0);
+        $request = $this->getRequest();
+        if ($request) {
+            $courseId = $request->getSession()->get('_real_cid', 0);
+        }
+
+        if (empty($courseId)) {
+            return null;
+        }
 
         return $this->getDoctrine()->getManager()->find('ChamiloCoreBundle:Course', $courseId);
     }
@@ -63,13 +70,38 @@ abstract class BaseController extends AbstractController
      */
     public function getCourseSession()
     {
-        $sessionId = $this->getRequest()->getSession()->get('id_session', 0);
+        $request = $this->getRequest();
+
+        if ($request) {
+            $sessionId = $request->getSession()->get('id_session', 0);
+        }
 
         if (empty($sessionId)) {
             return null;
         }
 
         return $this->getDoctrine()->getManager()->find('ChamiloCoreBundle:Session', $sessionId);
+    }
+
+    /**
+     * @return string
+     */
+    public function getCourseUrlQuery(): string
+    {
+        $url = '';
+        $course = $this->getCourse();
+        if ($course) {
+            $url = 'cidReq='.$course->getCode();
+        }
+        $session = $this->getCourseSession();
+
+        if ($session) {
+            $url .= '&id_session='.$session->getId();
+        } else {
+            $url .= '&id_session=0';
+        }
+
+        return $url;
     }
 
     /**

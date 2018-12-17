@@ -129,7 +129,7 @@ class CkEditor extends Editor
      *
      * @return array
      */
-    private function getPlatformTemplates()
+    private function getPlatformTemplates(): array
     {
         $entityManager = \Database::getManager();
         $systemTemplates = $entityManager->getRepository('ChamiloCoreBundle:SystemTemplate')->findAll();

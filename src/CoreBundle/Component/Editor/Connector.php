@@ -4,6 +4,9 @@
 namespace Chamilo\CoreBundle\Component\Editor;
 
 use Chamilo\CoreBundle\Component\Editor\Driver\Driver;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\Routing\RouterInterface;
@@ -19,17 +22,21 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class Connector
 {
-    /** @var array */
+    /** @var Course */
     public $course;
 
-    /** @var array */
+    /** @var User */
     public $user;
+
+    /** @var Session */
+    public $session;
 
     /** @var Translator */
     public $translator;
 
     /** @var Router */
     public $urlGenerator;
+
     /** @var SecurityContext */
     public $security;
 
@@ -45,9 +52,10 @@ class Connector
         array $paths,
         RouterInterface $urlGenerator,
         TranslatorInterface $translator,
-        $security
-        //$user,
-        //$course = null
+        $security,
+        $user,
+        $course,
+        $session
     ) {
         $this->paths = [
             //'root_sys' => api_get_path(SYS_PATH),
@@ -62,15 +70,16 @@ class Connector
         $this->urlGenerator = $urlGenerator;
         $this->translator = $translator;
         $this->security = $security;
-        $this->user = api_get_user_info();
-        $this->course = api_get_course_info();
+        $this->user = $user;
+        $this->course = $course;
+        $this->session = $session;
         $this->driverList = $this->getDefaultDriverList();
     }
 
     /**
      * @return array
      */
-    public function getDriverList()
+    public function getDriverList(): array
     {
         return $this->driverList;
     }
@@ -98,7 +107,7 @@ class Connector
     /**
      * @return array
      */
-    public function getDrivers()
+    public function getDrivers(): array
     {
         return $this->drivers;
     }

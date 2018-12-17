@@ -79,13 +79,13 @@ class Documents extends Basic
                 'BulletedList',
                 '-',
                 api_get_setting('allow_spellcheck') === 'true' ? 'Scayt' : '',
-                'Source',
             ],
             '/',
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['Bold', 'Italic', 'Underline'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight'],
             api_get_setting('enabled_wiris') === 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
+            ['Source'],
         ];
     }
 

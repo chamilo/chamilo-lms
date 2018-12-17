@@ -130,16 +130,11 @@ $tableLink = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 $htmlHeadXtra[] = <<<JS
     <script>
     $(document).on('ready', function() {
-        if ($('#thread_qualify_gradebook').is(':checked') == true) {
-            document.getElementById('options_field').style.display = 'block';
-        } else {
-            document.getElementById('options_field').style.display = 'none';
-        }
-        $('#thread_qualify_gradebook').click(function() {
-            if ($('#thread_qualify_gradebook').is(':checked') == true) {
-                document.getElementById('options_field').style.display = 'block';
+        $('[name="thread_qualify_gradebook"]:checkbox').change(function () {
+            if (this.checked) {
+                $('#options_field').show();
             } else {
-                document.getElementById('options_field').style.display = 'none';
+                $('#options_field').hide();
                 $("[name='numeric_calification']").val(0);
                 $("[name='calification_notebook_title']").val('');
                 $("[name='weight_calification']").val(0);
@@ -160,6 +155,8 @@ $actions = [
 ];
 
 $threadData = getThreadInfo($threadId, $cId);
+
+$gradeThisThread = empty($_POST) && ($threadData['threadQualifyMax'] > 0 || $threadData['threadWeight'] > 0);
 
 $form = new FormValidator(
     'thread',
@@ -188,14 +185,13 @@ if ((api_is_course_admin() || api_is_session_general_coach() || api_is_course_tu
             'checkbox',
             'thread_qualify_gradebook',
             '',
-            get_lang('QualifyThreadGradebook'),
-            ['id' => 'thread_qualify_gradebook']
+            get_lang('QualifyThreadGradebook')
         );
     } else {
         $form->addElement('hidden', 'thread_qualify_gradebook', false);
     }
 
-    $form->addElement('html', '<div id="options_field" style="display:none">');
+    $form->addElement('html', '<div id="options_field" style="'.($gradeThisThread ? '' : 'display:none;').'">');
     $form->addElement('text', 'numeric_calification', get_lang('QualificationNumeric'));
     $form->applyFilter('numeric_calification', 'html_filter');
     $form->addElement('text', 'calification_notebook_title', get_lang('TitleColumnGradebook'));
@@ -227,7 +223,7 @@ $form->addElement('html', '</div>');
 $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_FORUM_THREAD, $threadId);
 
 if (!empty($threadData)) {
-    $defaults['thread_qualify_gradebook'] = ($threadData['threadQualifyMax'] > 0 && empty($_POST)) ? 1 : 0;
+    $defaults['thread_qualify_gradebook'] = $gradeThisThread;
     $defaults['thread_title'] = prepare4display($threadData['threadTitle']);
     $defaults['thread_sticky'] = strval(intval($threadData['threadSticky']));
     $defaults['thread_peer_qualify'] = intval($threadData['threadPeerQualify']);

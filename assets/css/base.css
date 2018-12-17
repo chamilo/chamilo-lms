@@ -5756,13 +5756,6 @@ div#chat-remote-video video {
     width: 100%;
 }
 
-.title-session,
-.title-courses {
-    text-align: center;
-    font-weight: bold;
-    margin-bottom: 25px;
-}
-
 /*************** SCROLLBAR BASE CSS ***************/
 
 .scroll-wrapper {

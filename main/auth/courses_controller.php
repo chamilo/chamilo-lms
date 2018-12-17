@@ -683,9 +683,10 @@ class CoursesController
         $tpl->assign('sessions', $sessionsBlocks);
         $tpl->assign('already_subscribed_label', $this->getAlreadyRegisteredInSessionLabel());
 
-        $contentTemplate = $tpl->get_template('auth/session_catalog.tpl');
-
-        $tpl->display($contentTemplate);
+        $layout = $tpl->get_template('auth/session_catalog.html.twig');
+        $content = $tpl->fetch($layout);
+        $tpl->assign('content', $content);
+        $tpl->display_one_col_template();
     }
 
     /**

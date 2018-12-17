@@ -500,6 +500,7 @@
         {% else %}
             <a href="{{ web_self ~ "?" ~ _p.web_cid_query ~ "&action=send_notify_teacher" }}" class="btn btn-primary">
                 He finalizado las lecciones, notificar al profesor
+                {{ 'IHaveFinishedTheLessonsNotifyTheTeacher'|get_lang }}
             </a>
         {% endif %}
     </div>

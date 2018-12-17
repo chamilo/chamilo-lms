@@ -491,15 +491,14 @@
     {% endfor %}
 </div>
 
-{% if not is_invitee %}
+{% if not is_invitee and lp_is_shown %}
     <div class="controls text-center">
         {% if not is_ending %}
-            <a href="{{ web_self ~ "?" ~ _p.web_cid_query ~ "&action=send_notify_teacher" }}" class="btn btn-primary disabled">
-                He finalizado las lecciones, notificar al profesor
-            </a>
+            <button class="btn btn-primary" type="button" disabled>
+                {{ 'IHaveFinishedTheLessonsNotifyTheTeacher'|get_lang }}
+            </button>
         {% else %}
             <a href="{{ web_self ~ "?" ~ _p.web_cid_query ~ "&action=send_notify_teacher" }}" class="btn btn-primary">
-                He finalizado las lecciones, notificar al profesor
                 {{ 'IHaveFinishedTheLessonsNotifyTheTeacher'|get_lang }}
             </a>
         {% endif %}

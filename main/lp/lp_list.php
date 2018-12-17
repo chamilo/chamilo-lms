@@ -170,6 +170,7 @@ if ($filteredCategoryId) {
 
 $test_mode = api_get_setting('server_type');
 $user = api_get_user_entity($userId);
+$ending = false;
 
 $data = [];
 /** @var CLpCategory $item */

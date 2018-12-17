@@ -2890,6 +2890,7 @@ class CourseRestorer
                     }
 
                     foreach ($parent_item_ids as $new_item_id => $parent_item_old_id) {
+                        $new_item_id = (int) $new_item_id;
                         $parent_new_id = 0;
                         if ($parent_item_old_id != 0) {
                             $parent_new_id = isset($new_item_ids[$parent_item_old_id]) ? $new_item_ids[$parent_item_old_id] : 0;
@@ -2900,9 +2901,10 @@ class CourseRestorer
                     }
 
                     foreach ($previous_item_ids as $new_item_id => $previous_item_old_id) {
+                        $new_item_id = (int) $new_item_id;
                         $previous_new_id = 0;
                         if ($previous_item_old_id != 0) {
-                            $previous_new_id = isset($new_item_ids[$previous_item_old_id]) ? $new_item_ids[$previous_item_old_id] : '';
+                            $previous_new_id = isset($new_item_ids[$previous_item_old_id]) ? $new_item_ids[$previous_item_old_id] : 0;
                         }
                         $sql = "UPDATE $table_item SET previous_item_id = $previous_new_id
                                 WHERE c_id = ".$this->destination_course_id." AND id = '".$new_item_id."'";
@@ -2910,6 +2912,7 @@ class CourseRestorer
                     }
 
                     foreach ($next_item_ids as $new_item_id => $next_item_old_id) {
+                        $new_item_id = (int) $new_item_id;
                         $next_new_id = 0;
                         if ($next_item_old_id != 0) {
                             $next_new_id = isset($new_item_ids[$next_item_old_id]) ? $new_item_ids[$next_item_old_id] : 0;
@@ -2920,6 +2923,7 @@ class CourseRestorer
                     }
 
                     foreach ($prerequisite_ids as $new_item_id => $prerequisite_old_id) {
+                        $new_item_id = (int) $new_item_id;
                         $prerequisite_new_id = 0;
                         if ($prerequisite_old_id != 0) {
                             $prerequisite_new_id = $new_item_ids[$prerequisite_old_id];

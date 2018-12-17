@@ -576,7 +576,10 @@ if (api_get_configuration_value('lp_minimum_time')) {
     }
 
     // PL --- Porcentaje lección (tiempo leccion / tiempo total curso)
-    $pl = $timeLp / $timeTotalCourse;
+    $pl = 0;
+    if (!empty($timeTotalCourse)) {
+        $pl = $timeLp / $timeTotalCourse;
+    }
 
     /*
      * TL: Tiempo que pone en una lección

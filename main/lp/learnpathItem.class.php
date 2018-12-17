@@ -1920,7 +1920,11 @@ class learnpathItem
                 }
             }*/
             // PL --- Porcentaje lección (tiempo leccion / tiempo total curso)
-            $pl = $timeLp / $timeTotalCourse;
+            $pl = 0;
+            if (!empty($timeTotalCourse)) {
+                $pl = $timeLp / $timeTotalCourse;
+            }
+
             /*
              * TL: Tiempo que pone en una lección
              * TT : tiempo total que pone Teresa (suma tiempos lecciones curso)

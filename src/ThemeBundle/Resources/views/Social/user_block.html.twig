@@ -1,36 +1,23 @@
 {% import '@ChamiloTheme/Macros/box.html.twig' as macro %}
 
 {% autoescape false %}
-<div class="sidebar-avatar">
-
-
+<div class="profile">
     {{ social_avatar_block }}
-
-    <ul class="list-user-data">
-        <li class="item">
-            {{ user.complete_name }}
-        </li>
+    <div class="btn-toolbar justify-content-center">
+        <a href="{{ _p.web }}main/messages/new_message.php" title="{{ "Message" | trans }}" class="btn btn-primary btn-sm">
+            <i class="fas fa-envelope"></i>
+        </a>
+        <a href="{{ vcard_user_link }}" title="{{ "BusinessCard" | trans }}" class="btn btn-success btn-sm">
+            <i class="fas fa-address-card"></i>
+        </a>
         {% if is_granted('ROLE_ADMIN') %}
-            <li class="item">
-                <a href="{{ _p.web }}main/admin/user_edit.php?user_id={{ user.id }}">
-                    <img src="{{ "edit.png" | icon }}" alt="{{ "Edit" | trans }}">
-                </a>
-            </li>
+            <a href="{{ _p.web }}main/admin/user_edit.php?user_id={{ user.id }}" title="{{ "Edit" | trans }}" class="btn btn-light btn-sm">
+                <i class="fas fa-pencil-alt"></i>
+            </a>
         {% endif %}
+    </div>
+    <ul class="list-user-data">
         {% if show_full_profile %}
-            <li class="item">
-                <a href="{{ _p.web }}main/messages/new_message.php">
-                    <img src="{{ "instant_message.png" | icon }}" alt="{{ "Email" | trans }}">
-                    {{ user.email}}
-                </a>
-            </li>
-            <li class="item">
-                <a href="{{ vcard_user_link }}">
-                    <img src="{{ "vcard.png" | icon(16) }}" alt="{{ "BusinessCard" | trans }}" width="16" height="16">
-                    {{ "BusinessCard" | trans }}
-                </a>
-            </li>
-
             {% set skype_account = '' %}
             {% set linkedin_url = '' %}
             {% for extra in user.extra %}
@@ -74,16 +61,13 @@
                 {% endif %}
             {% endif %}
         {% endif %}
-
-        {% if not profile_edition_link is empty %}
+        {#{% if not profile_edition_link is empty %}
             <li class="item">
                 <a class="btn btn-link btn-sm btn-block" href="{{ profile_edition_link }}">
                     <em class="fa fa-edit"></em>{{ "EditProfile" | trans }}
                 </a>
             </li>
-        {% endif %}
+        {% endif %}#}
     </ul>
-
-
 </div>
 {% endautoescape %}

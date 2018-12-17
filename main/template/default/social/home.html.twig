@@ -5,10 +5,19 @@
 {% autoescape false %}
     <div class="row">
         <div class="col-md-4">
-            {% include '@ChamiloTheme/Social/user_block.html.twig' %}
+            <div class="card">
+                <div class="card-body">
+                    {% include '@ChamiloTheme/Social/user_block.html.twig' %}
+                </div>
+            </div>
+
+            {{ macro.panel("Search Users" | trans, social_search ) }}
+
+
+
         </div>
         <div class="col-md-8">
-            {{ social_search_block }}
+
             {{ social_skill_block }}
             {{ social_group_block }}
             {{ social_right_content }}

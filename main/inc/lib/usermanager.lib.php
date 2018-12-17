@@ -4460,7 +4460,7 @@ class UserManager
      *
      * @return string HTML form
      */
-    public static function get_search_form($query, $defaultParams = [])
+    public static function getSearchForm($query, $defaultParams = [])
     {
         $searchType = isset($_GET['search_type']) ? $_GET['search_type'] : null;
         $form = new FormValidator(
@@ -4469,7 +4469,7 @@ class UserManager
             api_get_path(WEB_PATH).'main/social/search.php',
             '',
             [],
-            FormValidator::LAYOUT_HORIZONTAL
+            'box-no-label'
         );
 
         $form->addText('q', get_lang('UsersGroups'), false, [

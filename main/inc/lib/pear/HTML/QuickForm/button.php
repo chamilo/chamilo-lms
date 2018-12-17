@@ -260,9 +260,12 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
                 </div>';
                 break;
             case FormValidator::LAYOUT_BOX:
+                return '{element}';
+                break;
             case FormValidator::LAYOUT_BOX_NO_LABEL:
-                return '
+                return '<div class="input-group mt-3">
                         {element}
+                        </div>
                 ';
                 break;
         }

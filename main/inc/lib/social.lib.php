@@ -806,13 +806,23 @@ class SocialManager extends UserManager
      *                         friends,
      *                         groups search
      * @param int    $group_id
-     * @param int    $user_id
+     * @param int    $userId
      */
-    public static function show_social_avatar_block($show = '', $group_id = 0, $user_id = 0)
+    public static function getAvatarBlock($show = '', $group_id = 0, $userId = 0)
     {
-        if (empty($user_id)) {
-            $user_id = api_get_user_id();
+        if (empty($userId)) {
+            $userId = api_get_user_id();
         }
+
+        $userInfo = api_get_user_info($userId, true, false, true, true);
+
+        $user = [
+            'id' => $userInfo['user_id'],
+            'complete_name' => $userInfo['complete_name'],
+            'username' => $userInfo['username'],
+            'email' => $userInfo['email'],
+            'status' => $userInfo['status']
+        ];
 
         $show_groups = [
             'groups',
@@ -834,17 +844,24 @@ class SocialManager extends UserManager
             $userGroup = new UserGroup();
             $group_info = $userGroup->get($group_id);
 
-            $userGroupImage = $userGroup->get_picture_group(
-                $group_id,
-                $group_info['picture'],
-                128,
-                GROUP_IMAGE_SIZE_BIG
-            );
+            $userGroupImage = [
+                'big' => $userGroup->get_picture_group(
+                    $group_id,
+                    $group_info['picture'],
+                    128,
+                    GROUP_IMAGE_SIZE_BIG
+                ),
+                'normal' => $userGroup->get_picture_group(
+                    $group_id,
+                    $group_info['picture'],
+                    128,
+                    GROUP_IMAGE_SIZE_MEDIUM
+                )
+            ];
 
             $template->assign('show_group', true);
             $template->assign('group_id', $group_id);
-            $template->assign('user_group_image', $userGroupImage);
-            //$template->assign('user_group', $group_info);
+            $template->assign('avatar', $userGroupImage);
             $template->assign(
                 'user_is_group_admin',
                 $userGroup->is_group_admin(
@@ -855,15 +872,16 @@ class SocialManager extends UserManager
         } else {
             $template->assign('show_group', false);
             $template->assign('show_user', true);
+            $template->assign('user', $user);
             $template->assign(
-                'user_image',
+                'avatar',
                 [
                     'big' => UserManager::getUserPicture(
-                        $user_id,
+                        $userId,
                         USER_IMAGE_SIZE_BIG
                     ),
                     'normal' => UserManager::getUserPicture(
-                        $user_id,
+                        $userId,
                         USER_IMAGE_SIZE_MEDIUM
                     ),
                 ]
@@ -1840,7 +1858,7 @@ class SocialManager extends UserManager
         $userId = (int) $userId;
         $userRelationType = 0;
 
-        $socialAvatarBlock = self::show_social_avatar_block(
+        $socialAvatarBlock = self::getAvatarBlock(
             $groupBlock,
             $groupId,
             $userId

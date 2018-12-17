@@ -1691,10 +1691,10 @@ class UserGroup extends Model
         $size_picture = GROUP_IMAGE_SIZE_MEDIUM,
         $style = ''
     ) {
-        $picture = [];
+        $picture = null;
         //$picture['style'] = $style;
         if ($picture_file === 'unknown.jpg') {
-            $picture['file'] = Display::returnIconPath($picture_file);
+            $picture = Display::returnIconPath($picture_file);
 
             return $picture;
         }
@@ -1720,19 +1720,19 @@ class UserGroup extends Model
         $image_array = $this->get_group_picture_path_by_id($id, 'web', false, true);
         $file = $image_array_sys['dir'].$size_picture.$picture_file;
         if (file_exists($file)) {
-            $picture['file'] = $image_array['dir'].$size_picture.$picture_file;
+            $picture = $image_array['dir'].$size_picture.$picture_file;
             //$picture['style'] = '';
             if ($height > 0) {
-                $dimension = api_getimagesize($picture['file']);
+                $dimension = api_getimagesize($picture);
                 $margin = ($height - $dimension['width']) / 2;
                 //@ todo the padding-top should not be here
             }
         } else {
             $file = $image_array_sys['dir'].$picture_file;
             if (file_exists($file) && !is_dir($file)) {
-                $picture['file'] = $image_array['dir'].$picture_file;
+                $picture = $image_array['dir'].$picture_file;
             } else {
-                $picture['file'] = Display::returnIconPath('group_na.png', 64);
+                $picture = Display::returnIconPath('group_na.png', 64);
             }
         }
 

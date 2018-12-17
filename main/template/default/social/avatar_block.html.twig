@@ -1,8 +1,14 @@
 {% autoescape false %}
-<div class="sm-groups">
-    <div class="social-profile text-center">
-        {% if show_group %}
-            <img src="{{ user_group_image.file }}" class="img-responsive">
+<div class="profile-bg profile-bg-blur">
+    <img src="{{ avatar.big }}">
+</div>
+<div class="user-panel user-panel-column">
+    <div class="user-panel-image">
+        <div class="avatar avatar-lg avatar-bordered">
+            {% if show_group %}
+            <a href="{{ avatar.big }}" class="expand-image">
+                <img src="{{ avatar.normal }}" class="img-fluid rounded-circle">
+            </a>
             <div class="caption">
                 <h4 class="group-title">
                     <a href="{{ _p.web_main ~ 'social/group_view.php?id=' ~ group_id }}">{{ user_group.name }}</a>
@@ -18,10 +24,15 @@
                 {% endif %}
             </div>
         {% elseif show_user %}
-            <a href="{{ user_image.big }}" class="expand-image">
-                <img class="img-fluid rounded-circle" src="{{ user_image.big }}" alt="{{ 'UserPicture'|get_lang }}">
+            <a href="{{ avatar.big }}" class="expand-image">
+                <img class="img-fluid rounded-circle" src="{{ avatar.normal }}" alt="{{ 'UserPicture'|get_lang }}">
             </a>
+            <div class="user-panel-info mb-10">
+                <p class="text-black">{{ user.complete_name }}</p>
+                <small class="text-secondary">{{ user.email }} ({{ user.username }})</small>
+            </div>
         {% endif %}
+        </div>
     </div>
 </div>
 {% endautoescape %}

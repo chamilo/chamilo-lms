@@ -76,7 +76,7 @@ $template = new Template($nameTools);
 $template->assign('user', $user);
 $template->assign(
     'user_avatar',
-    SocialManager::show_social_avatar_block('home', 0, $user->getId())
+    SocialManager::getAvatarBlock('home', 0, $user->getId())
 );
 $template->assign(
     'gamification_stars',

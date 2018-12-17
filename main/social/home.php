@@ -80,10 +80,7 @@ if (api_get_setting('profile', 'picture') == 'true') {
 //Block Menu
 //$MenuSocial = SocialManager::getMenuSocial('home');
 
-$social_search_block = Display::panel(
-    UserManager::get_search_form(''),
-    get_lang('SearchUsers')
-);
+$socialSearch = UserManager::getSearchForm('');
 
 $results = $userGroup->get_groups_by_age(1, false);
 
@@ -118,7 +115,7 @@ if (!empty($results)) {
             GROUP_IMAGE_SIZE_BIG
         );
 
-        $result['picture'] = '<img class="img-responsive" src="'.$picture['file'].'" />';
+        $result['picture'] = '<img class="img-responsive" src="'.$picture.'" />';
         $group_actions = '<div class="group-more"><a class="btn btn-default" href="groups.php?#tab_browse-2">'.
             get_lang('SeeMore').'</a></div>';
         $group_info = '<div class="description"><p>'.cut($result['description'], 120, true)."</p></div>";
@@ -166,7 +163,7 @@ foreach ($results as $result) {
         null,
         GROUP_IMAGE_SIZE_BIG
     );
-    $result['picture_uri'] = '<img class="img-responsive" src="'.$picture['file'].'" />';
+    $result['picture_uri'] = '<img class="img-responsive" src="'.$picture.'" />';
     $group_actions = '<div class="group-more"><a class="btn btn-default" href="groups.php?#tab_browse-3">'.
         get_lang('SeeMore').'</a></div>';
     $group_info = '<div class="description"><p>'.cut($result['description'], 120, true)."</p></div>";
@@ -232,10 +229,10 @@ $tpl = new Template(get_lang('SocialNetwork'));
 
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'home');
 
-/*$tpl->assign('social_menu_block', $MenuSocial);*/
+
 $tpl->assign('social_friend_block', $friend_html);
 $tpl->assign('session_list', $social_session_block);
-$tpl->assign('social_search_block', $social_search_block);
+$tpl->assign('social_search', $socialSearch);
 $tpl->assign('social_skill_block', SocialManager::getSkillBlock($user_id));
 $tpl->assign('social_group_block', $social_group_block);
 $social_layout = $tpl->get_template('social/home.tpl');

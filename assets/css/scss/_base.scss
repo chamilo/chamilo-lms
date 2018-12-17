@@ -769,3 +769,60 @@ footer {
   }
 }
 
+/************* SOCIAL *************/
+.profile {
+  .profile-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100px;
+    width: 100%;
+    text-align: left;
+    overflow: hidden;
+    &.profile-bg-blur {
+      img {
+        filter: blur(10px) brightness(.85);
+      }
+    }
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+  .btn-toolbar{
+    margin-left: 17px;
+    a{
+      margin-right: 5px;
+    }
+  }
+}
+.user-panel{
+  position: relative;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  font-weight: 500;
+  z-index: 3;
+  &.user-panel-column{
+    flex-direction: column;
+    text-align: center;
+    .user-panel-image{
+      margin-right: 0;
+      margin-bottom: 8px;
+    }
+    .user-panel-info{
+      line-height: 23px;
+      p{
+        margin: 0;
+      }
+      small{
+        font-size: 14px;
+        display: block;
+        font-weight: 400;
+        line-height: 14px;
+      }
+    }
+  }
+
+}

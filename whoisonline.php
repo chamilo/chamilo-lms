@@ -42,7 +42,7 @@ if ($user_list) {
         if (api_get_setting('allow_social_tool') == 'true') {
             if (!api_is_anonymous()) {
                 $query = isset($_GET['q']) ? $_GET['q'] : null;
-                $social_search = UserManager::get_search_form($query);
+                $social_search = UserManager::getSearchForm($query);
             }
         }
         $social_right_content .= SocialManager::display_user_list($user_list);

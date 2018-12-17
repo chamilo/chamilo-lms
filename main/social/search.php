@@ -39,7 +39,7 @@ if (!empty($extra_fields)) {
 //Block Social Menu
 $social_menu_block = SocialManager::getMenuSocial('search');
 $block_search = '';
-$searchForm = UserManager::get_search_form($query);
+$searchForm = UserManager::getSearchForm($query);
 
 $groups = [];
 $totalGroups = [];

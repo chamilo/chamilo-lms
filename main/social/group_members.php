@@ -112,7 +112,7 @@ $users = $userGroup->get_users_by_group(
 );
 $new_member_list = [];
 
-$social_avatar_block = SocialManager::show_social_avatar_block(
+$social_avatar_block = SocialManager::getAvatarBlock(
     'member_list',
     $group_id
 );

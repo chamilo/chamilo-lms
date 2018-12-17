@@ -38,6 +38,7 @@ class HTML_QuickForm_element extends HTML_Common
     private $layout;
     private $icon;
     private $template;
+    private $button;
     private $customFrozenTemplate = '';
 
     /**
@@ -108,6 +109,23 @@ class HTML_QuickForm_element extends HTML_Common
             $this->setLabel($elementLabel, $labelFor);
         }
     }
+
+    /**
+     * @return boolean
+     */
+    public function getButton()
+    {
+        return $this->button;
+    }
+
+    /**
+     * @param boolean $button
+     */
+    public function setButton($button): void
+    {
+        $this->button = $button;
+    }
+
 
      /**
      * @return null

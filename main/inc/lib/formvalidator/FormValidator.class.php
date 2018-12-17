@@ -11,6 +11,7 @@ class FormValidator extends HTML_QuickForm
     public const LAYOUT_INLINE = 'inline';
     public const LAYOUT_BOX = 'box';
     public const LAYOUT_BOX_NO_LABEL = 'box-no-label';
+    public const LAYOUT_BOX_SEARCH = 'box-search';
 
     public $with_progress_bar = false;
     private $layout;

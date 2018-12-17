@@ -84,13 +84,21 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
     public function getIconToHtml()
     {
         $icon = $this->getIcon();
+        $isButton = $this->getButton();
 
         if (empty($icon)) {
             return '';
         }
+        $element = '<span class="input-group-text"><em class="fa fa-' . $icon . '"></em></span>';
 
-        return '<div class="input-group-addon">
-                <em class="fa fa-'.$icon.'"></em>
+        if ($isButton) {
+            $element = '<button class="btn btn-outline-secondary" type="submit">
+                            <em class="fa fa-' . $icon . '"></em>
+                        </button>';
+        }
+
+        return '<div class="input-group-append">
+                    ' . $element . '
                 </div>';
     }
 
@@ -164,10 +172,22 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
             case FormValidator::LAYOUT_BOX_NO_LABEL:
                 return '
                         <label {label-for}>{label}</label>
-                        <div class="input-group">
-                            
+                        <div class="input-group mb-3">
                             {icon}
                             {element}
+                        </div>';
+                break;
+            case FormValidator::LAYOUT_BOX_SEARCH:
+                return '
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label" {label-for}>{label}</label>
+                            <div class="col-sm-8">
+                                <div class="input-group mb-3">
+                                    {element}
+                                    {icon}
+                                </div>
+                            </div>
+                            <div class="col-sm-2"></div>
                         </div>';
                 break;
         }

@@ -95,6 +95,11 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
         }
         $columnsSize = isset($attributes['cols-size']) ? $attributes['cols-size'] : null;
         $this->setColumnsSize($columnsSize);
+        $icon = isset($attributes['icon']) ? $attributes['icon'] : null;
+        $this->setIcon($icon);
+        if (!empty($icon)) {
+            unset($attributes['icon']);
+        }
         parent::__construct($elementName, $elementLabel, $attributes);
         $this->_persistantFreeze = true;
         $this->_type = 'select';
@@ -582,6 +587,31 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
     }
 
     /**
+     * Show an icon at the left side of an input
+     * @return string
+     */
+    public function getIconToHtml()
+    {
+        $icon = $this->getIcon();
+        $isButton = $this->getButton();
+
+        if (empty($icon)) {
+            return '';
+        }
+        $element = '<span class="input-group-text"><em class="fa fa-' . $icon . '"></em></span>';
+
+        if ($isButton) {
+            $element = '<button class="btn btn-outline-secondary" type="reset">
+                            <em class="fa fa-' . $icon . '"></em>
+                        </button>';
+        }
+
+        return '<div class="input-group-append">
+                    ' . $element . '
+                </div>';
+    }
+
+    /**
      * @param string $layout
      *
      * @return string
@@ -646,6 +676,18 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
                         <div class="input-group">
                             {icon}
                             {element}
+                        </div>';
+            case FormValidator::LAYOUT_BOX_SEARCH:
+                return '
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label" {label-for}>{label}</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    {element}
+                                    {icon}
+                                </div>
+                            </div>
+                            <div class="col-sm-2"></div>
                         </div>';
                 break;
         }

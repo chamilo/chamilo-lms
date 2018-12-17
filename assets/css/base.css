@@ -460,15 +460,9 @@
     margin: 6px;
     padding: 0;
 }
-
-.actions form {
+.actions .form-group{
     margin-bottom: 0;
 }
-
-.actions fieldset {
-    margin-top: 0;
-}
-
 .muted {
     color: #999999 !important;
 }
@@ -519,15 +513,6 @@
 .actions .btn-toolbar img {
     background: none;
     border: none;
-}
-
-.actions form {
-    margin-right: 10px;
-    vertical-align: middle;
-}
-
-.actions fieldset {
-    margin-top: 0;
 }
 
 .separate-action {
@@ -4657,15 +4642,6 @@ i.size-32.icon-new-work {
     display: inline-block;
 }
 
-.actions .form-inline {
-    display: block;
-    width: 100%;
-}
-
-.actions #groups .bootstrap-select {
-    width: 300px;
-}
-
 ul.holder {
     list-style: none;
     margin: 0;
@@ -6921,10 +6897,6 @@ a.sessionView {
 #course-list.data_table .title {
     width: 390px;
     padding-left: 0;
-}
-
-.actions label {
-    display: none;
 }
 
 #my_timeline {

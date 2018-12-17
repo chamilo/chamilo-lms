@@ -3031,7 +3031,7 @@ class Agenda
                         api_get_self().'?type=personal&',
                         '',
                         [],
-                        FormValidator::LAYOUT_INLINE
+                        'box-search'
                     );
 
                     if (api_is_drh()) {
@@ -3055,16 +3055,14 @@ class Agenda
                         );
                     }
                     $form->addHidden('type', 'personal');
-                    $sessions = ['0' => get_lang('SelectAnOption')] + $sessions;
+                    $sessions = ['0' => get_lang('Select An Option')] + $sessions;
 
                     $form->addSelect(
                         'session_id',
                         get_lang('Session'),
                         $sessions,
-                        ['id' => 'session_id', 'onchange' => 'submit();']
-                    );
-
-                    $form->addButtonReset(get_lang('Reset'));
+                        ['id' => 'session_id', 'onchange' => 'submit();', 'icon' => 'broom']
+                    )->setButton(true);
                     $form = $form->returnForm();
                 }
             }

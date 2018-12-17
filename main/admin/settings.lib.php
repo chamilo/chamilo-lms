@@ -1096,7 +1096,6 @@ function searchImageFilter($image)
 function addEditTemplate()
 {
     $em = Database::getManager();
-    // Initialize the object.
     $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
     /** @var SystemTemplate $template */

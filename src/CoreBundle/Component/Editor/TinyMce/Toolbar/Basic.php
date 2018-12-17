@@ -12,19 +12,22 @@ use Chamilo\CoreBundle\Component\Editor\Toolbar;
  */
 class Basic extends Toolbar
 {
+    /**
+     * @return array
+     */
     public function getConfig()
     {
         $config = [
-            'theme' => "modern",
+            'theme' => 'modern',
             'width' => 300,
             'height' => 300,
             'plugins' => [
-                "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
-                "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
-                "save table contextmenu directionality emoticons template paste textcolor",
+                'advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker',
+                'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+                'save table contextmenu directionality emoticons template paste textcolor',
             ],
-            'content_css' => "css/content.css",
-            'toolbar' => "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | l      ink image | print preview media fullpage | forecolor backcolor emoticons",
+            'content_css' => 'css/content.css',
+            'toolbar' => 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | l      ink image | print preview media fullpage | forecolor backcolor emoticons',
             'file_browser_callback' => 'elFinderBrowser',
         ];
 

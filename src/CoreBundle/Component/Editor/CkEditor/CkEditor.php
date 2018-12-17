@@ -6,8 +6,6 @@ namespace Chamilo\CoreBundle\Component\Editor\CkEditor;
 use Chamilo\CoreBundle\Component\Editor\Editor;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
-//use Symfony\Component\Routing\Generator\UrlGenerator;
-
 /**
  * Class CkEditor.
  *
@@ -15,23 +13,6 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
  */
 class CkEditor extends Editor
 {
-    /**
-     * @return string
-     */
-    public function getEditorTemplate()
-    {
-        return 'javascript/editor/ckeditor/elfinder.tpl';
-    }
-
-    /**
-     * Set js to be include in the template.
-     */
-    public function setJavascriptToInclude()
-    {
-        //$jsFolder = api_get_path(WEB_LIBRARY_JS_PATH);
-        //$this->template->addResource($jsFolder.'ckeditor/ckeditor.js', 'js');
-    }
-
     /**
      * Return the HTML code required to run editor.
      *
@@ -55,7 +36,7 @@ class CkEditor extends Editor
     public function createHtmlStyle()
     {
         $style = '';
-        if (trim($this->value) == '<html><head><title></title></head><body></body></html>' || $this->value == '') {
+        if (trim($this->value) === '<html><head><title></title></head><body></body></html>' || $this->value === '') {
             $style = api_get_bootstrap_and_font_awesome();
             $style .= api_get_css(ChamiloApi::getEditorDocStylePath());
         }
@@ -94,56 +75,11 @@ class CkEditor extends Editor
     }
 
     /**
-     * @param array $templates
+     * Get the templates in JSON format.
      *
      * @return string
      */
-    public function formatTemplates($templates)
-    {
-        if (empty($templates)) {
-            return null;
-        }
-        /** @var \Chamilo\CoreBundle\Entity\SystemTemplate $template */
-        $templateList = [];
-        $cssTheme = api_get_path(WEB_CSS_PATH).'themes/'.api_get_visual_theme().'/';
-        $search = ['{CSS_THEME}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}', '{CSS}'];
-        $replace = [
-            $cssTheme,
-            api_get_path(REL_CODE_PATH).'img/',
-            api_get_path(REL_PATH),
-            api_get_path(REL_DEFAULT_COURSE_DOCUMENT_PATH),
-            '',
-        ];
-
-        foreach ($templates as $template) {
-            $image = $template->getImage();
-            $image = !empty($image) ? $image : 'empty.gif';
-
-            /*$image = $this->urlGenerator->generate(
-                'get_document_template_action',
-                array('file' => $image),
-                UrlGenerator::ABSOLUTE_URL
-            );*/
-
-            $content = str_replace($search, $replace, $template->getContent());
-
-            $templateList[] = [
-                'title' => $this->translator->trans($template->getTitle()),
-                'description' => $this->translator->trans($template->getComment()),
-                'image' => $image,
-                'html' => $content,
-            ];
-        }
-
-        return json_encode($templateList);
-    }
-
-    /**
-     * Get the templates in JSON format.
-     *
-     * @return string|
-     */
-    public function simpleFormatTemplates()
+    public function simpleFormatTemplates(): string
     {
         $templates = $this->getEmptyTemplate();
 
@@ -163,13 +99,14 @@ class CkEditor extends Editor
      *
      * @return array
      */
-    private function getEmptyTemplate()
+    private function getEmptyTemplate(): array
     {
-        return [[
-            'title' => get_lang('EmptyTemplate'),
-            'description' => null,
-            'image' => api_get_path(WEB_PUBLIC_PATH).'img/template_thumb/empty.gif',
-            'html' => '
+        return [
+            [
+                'title' => get_lang('EmptyTemplate'),
+                'description' => null,
+                'image' => api_get_path(WEB_PUBLIC_PATH).'img/template_thumb/empty.gif',
+                'html' => '
                 <!DOCYTPE html>
                 <html>
                     <head>
@@ -183,7 +120,8 @@ class CkEditor extends Editor
                     </html>
                 </html>
             ',
-        ]];
+            ],
+        ];
     }
 
     /**
@@ -199,9 +137,9 @@ class CkEditor extends Editor
         $search = ['{CSS_THEME}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}', '{CSS}'];
         $replace = [
             $cssTheme,
-            api_get_path(REL_CODE_PATH).'img/',
+            api_get_path(REL_PATH).'public/img/',
             api_get_path(REL_PATH),
-            api_get_path(REL_DEFAULT_COURSE_DOCUMENT_PATH),
+            api_get_path(REL_PATH).'public/img/document/',
             '',
         ];
 
@@ -211,13 +149,6 @@ class CkEditor extends Editor
             $image = $template->getImage();
             $image = !empty($image) ? $image : 'empty.gif';
             $image = api_get_path(WEB_PUBLIC_PATH).'img/template_thumb/'.$image;
-
-            /*$image = $this->urlGenerator->generate(
-                'get_document_template_action',
-                array('file' => $image),
-                UrlGenerator::ABSOLUTE_URL
-            );*/
-
             $templateContent = $template->getContent();
             $content = str_replace($search, $replace, $templateContent);
 

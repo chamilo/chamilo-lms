@@ -44,7 +44,6 @@ class Toolbar
                     $basicClass = __NAMESPACE__."\\".$prefix."\\Toolbar\\Basic";
                     $basicObj = new $basicClass($urlGenerator, $toolbar, $config);
                     $basicConfig = $basicObj->getConfig();
-
                     if (api_get_setting('more_buttons_maximized_mode') === 'true') {
                         if (isset($config['toolbar'])) {
                             unset($config['toolbar']);
@@ -89,9 +88,7 @@ class Toolbar
             )
         );
 
-        return
-            $this->getConfigAttribute('extraPlugins').
-            implode(',', $plugins);
+        return $this->getConfigAttribute('extraPlugins').implode(',', $plugins);
     }
 
     /**
@@ -99,7 +96,7 @@ class Toolbar
      *
      * @return array
      */
-    public function getDefaultPlugins()
+    public function getDefaultPlugins(): array
     {
         return $this->defaultPlugins;
     }
@@ -109,7 +106,7 @@ class Toolbar
      *
      * @return array
      */
-    public function getPlugins()
+    public function getPlugins(): array
     {
         return $this->plugins;
     }

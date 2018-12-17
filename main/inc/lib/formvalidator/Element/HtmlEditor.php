@@ -57,7 +57,7 @@ class HtmlEditor extends HTML_QuickForm_textarea
         $value = Security::remove_XSS($this->getValue());
         if ($this->editor) {
             if ($this->editor->getConfigAttribute('fullPage')) {
-                if (strlen(trim($value)) == 0) {
+                if (strlen(trim($value)) === 0) {
                     // TODO: To be considered whether here to be added DOCTYPE,
                     // language and character set declarations.
                     $value = '<html><head><title></title></head><body></body></html>';
@@ -68,16 +68,16 @@ class HtmlEditor extends HTML_QuickForm_textarea
 
         if ($this->isFrozen()) {
             return $this->getFrozenHtml();
-        } else {
-            $styleCss = $this->editor->getConfigAttribute('style');
-            if ($styleCss) {
-                $style = true;
-            } else {
-                $style = false;
-            }
-
-            return $this->buildEditor($style);
         }
+
+        $styleCss = $this->editor->getConfigAttribute('style');
+
+        $style = false;
+        if ($styleCss) {
+            $style = true;
+        }
+
+        return $this->buildEditor($style);
     }
 
     /**

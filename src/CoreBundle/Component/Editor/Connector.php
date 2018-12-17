@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Translation\Translator;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 //use Symfony\Component\Security\Core\SecurityContext;
 
@@ -78,7 +78,7 @@ class Connector
     /**
      * Available driver list.
      *
-     * @param array
+     * @param array $list
      */
     public function setDriverList($list)
     {

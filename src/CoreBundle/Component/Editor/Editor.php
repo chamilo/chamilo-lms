@@ -4,8 +4,7 @@
 namespace Chamilo\CoreBundle\Component\Editor;
 
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Translation\Translator;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class Editor.
@@ -40,7 +39,7 @@ class Editor
      */
     public $config;
 
-    /** @var Translator */
+    /** @var TranslatorInterface */
     public $translator;
 
     /** @var RouterInterface */
@@ -97,25 +96,6 @@ class Editor
 
         return $html;
     }
-
-    /**
-     * @return string
-     */
-    /*public function editorReplace()
-    {
-        $toolbar = new Toolbar($this->urlGenerator, $this->toolbarSet, $this->config);
-        $toolbar->setLanguage($this->getLocale());
-        $config = $toolbar->getConfig();
-        $javascript = $this->toJavascript($config);
-
-        $html = "<script>
-           CKEDITOR.replace('".$this->name."',
-               $javascript
-           );
-
-           </script>";
-        return $html;
-    }*/
 
     /**
      * @param string $key

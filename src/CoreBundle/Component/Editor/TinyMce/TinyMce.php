@@ -13,23 +13,6 @@ use Chamilo\CoreBundle\Component\Editor\Editor;
 class TinyMce extends Editor
 {
     /**
-     * Set js to be include in the template.
-     */
-    public function setJavascriptToInclude()
-    {
-        $jsFolder = api_get_path(WEB_LIBRARY_JS_PATH);
-        $this->template->addResource($jsFolder.'tinymce/tinymce.min.js', 'js');
-    }
-
-    /**
-     * @return string
-     */
-    public function getEditorTemplate()
-    {
-        return 'javascript/editor/tinymce/elfinder.tpl';
-    }
-
-    /**
      * Return the HTML code required to run editor.
      *
      * @return string

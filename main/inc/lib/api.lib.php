@@ -348,10 +348,6 @@ define('WEB_HOME_PATH', 'WEB_HOME_PATH');
 define('WEB_FONTS_PATH', 'WEB_FONTS_PATH');
 define('SYS_FONTS_PATH', 'SYS_FONTS_PATH');
 
-define('SYS_DEFAULT_COURSE_DOCUMENT_PATH', 'SYS_DEFAULT_COURSE_DOCUMENT_PATH');
-define('REL_DEFAULT_COURSE_DOCUMENT_PATH', 'REL_DEFAULT_COURSE_DOCUMENT_PATH');
-define('WEB_DEFAULT_COURSE_DOCUMENT_PATH', 'WEB_DEFAULT_COURSE_DOCUMENT_PATH');
-
 // Relations type with Course manager
 define('COURSE_RELATION_TYPE_COURSE_MANAGER', 1);
 define('SESSION_RELATION_TYPE_COURSE_MANAGER', 1);
@@ -855,6 +851,14 @@ function api_get_path($path = '', $configuration = [])
     //$root_rel = $configuration['url_append'] ?? '';
     $root_rel = $_SERVER['APP_URL_APPEND'] ?? '';
 
+    if (!empty($root_rel)) {
+        // Adds "/" to the root_rel
+        $hasSlash = substr($root_rel, 0, 1);
+        if ($hasSlash !== '/') {
+            $root_rel = '/'.$root_rel;
+        }
+    }
+
     // Web server base and system server base.
     if (!array_key_exists($root_web, $isInitialized)) {
         // process absolute global roots
@@ -876,8 +880,6 @@ function api_get_path($path = '', $configuration = [])
         $paths[$root_web][REL_PATH] = $root_rel;
         $paths[$root_web][REL_COURSE_PATH] = $root_rel.$course_folder;
         $paths[$root_web][REL_CODE_PATH] = $root_rel.$code_folder;
-        $paths[$root_web][REL_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[$root_web][REL_PATH].'main/default_course_document/';
-
         $paths[$root_web][WEB_PATH] = $rootWebWithSlash;
         $paths[$root_web][WEB_CODE_PATH] = $rootWebWithSlash.$code_folder;
         $paths[$root_web][WEB_COURSE_PATH] = $rootWebWithSlash.$course_folder;
@@ -890,7 +892,6 @@ function api_get_path($path = '', $configuration = [])
         $paths[$root_web][WEB_PUBLIC_PATH] = $rootWebWithSlash.$paths[$root_web][WEB_PUBLIC_PATH];
         $paths[$root_web][WEB_HOME_PATH] = $rootWebWithSlash.$paths[$root_web][REL_HOME_PATH];
 
-        $paths[$root_web][WEB_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[$root_web][WEB_CODE_PATH].'default_course_document/';
         $paths[$root_web][WEB_IMG_PATH] = $paths[$root_web][WEB_CODE_PATH].$paths[$root_web][WEB_IMG_PATH];
         $paths[$root_web][WEB_LIBRARY_PATH] = $paths[$root_web][WEB_CODE_PATH].$paths[$root_web][WEB_LIBRARY_PATH];
         $paths[$root_web][WEB_LIBRARY_JS_PATH] = $paths[$root_web][WEB_CODE_PATH].$paths[$root_web][WEB_LIBRARY_JS_PATH];

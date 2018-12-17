@@ -1462,7 +1462,7 @@ class CourseBuilder
                         WHERE c_id = '$courseId' AND lp_id = ".$obj->id;
                 $resultItem = Database::query($sql);
                 while ($obj_item = Database::fetch_object($resultItem)) {
-                    $item['id'] = $obj_item->id;
+                    $item['id'] = $obj_item->iid;
                     $item['item_type'] = $obj_item->item_type;
                     $item['ref'] = $obj_item->ref;
                     $item['title'] = $obj_item->title;

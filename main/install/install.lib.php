@@ -1076,12 +1076,6 @@ function display_requirements(
             @chmod($checked_writable, $perm);
         }
 
-        $checked_writable = api_get_path(SYS_CODE_PATH).'default_course_document/images/';
-        if (!is_writable($checked_writable)) {
-            $notWritable[] = $checked_writable;
-            @chmod($checked_writable, $perm);
-        }
-
         if ($course_test_was_created == false) {
             $error = true;
         }
@@ -1699,10 +1693,8 @@ function display_configuration_settings_form(
         $languageForm = $_SESSION['install_language'];
     }
     echo '<div class="RequirementHeading">';
-    echo "<h2>".display_step_sequence().get_lang("CfgSetting")."</h2>";
+    echo "<h2>".display_step_sequence().get_lang("Configuration settings")."</h2>";
     echo '</div>';
-
-    echo '<p>'.get_lang('ConfigSettingsInfo').' <strong>app/config/configuration.php</strong></p>';
 
     // Parameter 1: administrator's login
     $html = '';

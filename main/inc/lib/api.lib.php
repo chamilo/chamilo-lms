@@ -848,7 +848,6 @@ function api_get_path($path = '', $configuration = [])
     }
 
     $isInitialized = [];
-    //$root_rel = $configuration['url_append'] ?? '';
     $root_rel = $_SERVER['APP_URL_APPEND'] ?? '';
 
     if (!empty($root_rel)) {

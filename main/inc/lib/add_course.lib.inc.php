@@ -320,65 +320,6 @@ class AddCourse
     }
 
     /**
-     * Returns a list of all files in the given course directory. The requested
-     * directory will be checked against a "checker" directory to avoid access to
-     * protected/unauthorized files.
-     *
-     * @param string Complete path to directory we want to list
-     * @param array A list of files to which we want to add the files found
-     * @param string Type of base directory from which we want to recover the files
-     * @param string $path
-     * @param string $media
-     *
-     * @return array
-     * @assert (null,null,null) === false
-     * @assert ('abc',array(),'') === array()
-     */
-    public static function browse_folders($path, $files, $media)
-    {
-        if ($media == 'images') {
-            $code_path = api_get_path(SYS_CODE_PATH).'default_course_document/images/';
-        }
-        if ($media == 'audio') {
-            $code_path = api_get_path(SYS_CODE_PATH).'default_course_document/audio/';
-        }
-        if ($media == 'flash') {
-            $code_path = api_get_path(SYS_CODE_PATH).'default_course_document/flash/';
-        }
-        if ($media == 'video') {
-            $code_path = api_get_path(SYS_CODE_PATH).'default_course_document/video/';
-        }
-        if ($media == 'certificates') {
-            $code_path = api_get_path(SYS_CODE_PATH).'default_course_document/certificates/';
-        }
-        if (is_dir($path)) {
-            $handle = opendir($path);
-            while (false !== ($file = readdir($handle))) {
-                if (is_dir($path.$file) && strpos($file, '.') !== 0) {
-                    $files[]['dir'] = str_replace(
-                        $code_path,
-                        '',
-                        $path.$file.'/'
-                    );
-                    $files = self::browse_folders(
-                        $path.$file.'/',
-                        $files,
-                        $media
-                    );
-                } elseif (is_file($path.$file) && strpos($file, '.') !== 0) {
-                    $files[]['file'] = str_replace(
-                        $code_path,
-                        '',
-                        $path.$file
-                    );
-                }
-            }
-        }
-
-        return $files;
-    }
-
-    /**
      * Sorts pictures by type (used?).
      *
      * @param array List of files (sthg like array(0=>array('png'=>1)))
@@ -539,7 +480,7 @@ class AddCourse
             }
 
             $finder = new Symfony\Component\Finder\Finder();
-            $defaultPath = api_get_path(SYS_CODE_PATH).'default_course_document';
+            $defaultPath = api_get_path(SYS_PUBLIC_PATH).'img/document';
             $finder->in($defaultPath);
             /** @var SplFileInfo $file */
             foreach ($finder as $file) {
@@ -682,7 +623,7 @@ class AddCourse
             $html = '<table width="100%" border="0" cellpadding="0" cellspacing="0">
                         <tr>
                         <td width="220" valign="top" align="left">
-                            <img src="'.api_get_path(WEB_CODE_PATH).'default_course_document/images/mr_chamilo/doubts.png">
+                            <img src="'.api_get_path(WEB_PUBLIC_PATH).'img/document/images/mr_chamilo/doubts.png">
                         </td>
                         <td valign="top" align="left">'.get_lang('Antique').'</td></tr>
                     </table>';

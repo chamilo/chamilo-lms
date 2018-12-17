@@ -704,7 +704,7 @@ INSERT INTO system_template (title, comment, image, content) VALUES
                     <div id="player810625">
                         <div id="player810625-config"
                              style="overflow: hidden; display: none; visibility: hidden; width: 0px; height: 0px;">
-                            url={REL_PATH}main/default_course_document/video/flv/example.flv width=320 height=240
+                            url={COURSE_DIR}video/flv/example.flv width=320 height=240
                             loop=false play=false downloadable=false fullscreen=true displayNavigation=true
                             displayDigits=true align=left dispPlaylist=none playlistThumbs=false
                         </div>
@@ -718,7 +718,7 @@ INSERT INTO system_template (title, comment, image, content) VALUES
                             name="single"
                             quality="high"
                             allowfullscreen="true"
-                            flashvars="width=320&height=240&autostart=false&file={REL_PATH}main/default_course_document/video/flv/example.flv&repeat=false&image=&showdownload=false&link={REL_PATH}main/default_course_document/video/flv/example.flv&showdigits=true&shownavigation=true&logo="
+                            flashvars="width=320&height=240&autostart=false&file={COURSE_DIR}video/flv/example.flv&repeat=false&image=&showdownload=false&link={COURSE_DIR}video/flv/example.flv&showdigits=true&shownavigation=true&logo="
                     />
                 </div>
             </div>

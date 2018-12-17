@@ -562,7 +562,7 @@ class Version20160804174600 extends AbstractMigrationChamilo
                                 <div id="player810625">
                                     <div id="player810625-config"
                                          style="overflow: hidden; display: none; visibility: hidden; width: 0px; height: 0px;">
-                                        url={REL_PATH}main/default_course_document/video/flv/example.flv width=320 height=240
+                                        url={COURSE_DIR}video/flv/example.flv width=320 height=240
                                         loop=false play=false downloadable=false fullscreen=true displayNavigation=true
                                         displayDigits=true align=left dispPlaylist=none playlistThumbs=false
                                     </div>
@@ -576,7 +576,7 @@ class Version20160804174600 extends AbstractMigrationChamilo
                                         name="single"
                                         quality="high"
                                         allowfullscreen="true"
-                                        flashvars="width=320&height=240&autostart=false&file={REL_PATH}main/default_course_document/video/flv/example.flv&repeat=false&image=&showdownload=false&link={REL_PATH}main/default_course_document/video/flv/example.flv&showdigits=true&shownavigation=true&logo="
+                                        flashvars="width=320&height=240&autostart=false&file={COURSE_DIR}video/flv/example.flv&repeat=false&image=&showdownload=false&link={COURSE_DIR}video/flv/example.flv&showdigits=true&shownavigation=true&logo="
                                 />
                             </div>
                         </div>
@@ -1130,7 +1130,7 @@ class Version20160804174600 extends AbstractMigrationChamilo
                  <div style="text-align: center;" id="player810625-parent">
                     <div style="border-style: none; overflow: hidden; width: 320px; height: 240px; background-color: rgb(220, 220, 220);">
                         <div id="player810625">
-                            <div id="player810625-config" style="overflow: hidden; display: none; visibility: hidden; width: 0px; height: 0px;">url={REL_PATH}main/default_course_document/video/flv/example.flv width=320 height=240 loop=false play=false downloadable=false fullscreen=true displayNavigation=true displayDigits=true align=left dispPlaylist=none playlistThumbs=false</div>
+                            <div id="player810625-config" style="overflow: hidden; display: none; visibility: hidden; width: 0px; height: 0px;">url={COURSE_DIR}video/flv/example.flv width=320 height=240 loop=false play=false downloadable=false fullscreen=true displayNavigation=true displayDigits=true align=left dispPlaylist=none playlistThumbs=false</div>
                         </div>
                         <embed
                             type="application/x-shockwave-flash"
@@ -1141,7 +1141,7 @@ class Version20160804174600 extends AbstractMigrationChamilo
                             name="single"
                             quality="high"
                             allowfullscreen="true"
-                            flashvars="width=320&height=240&autostart=false&file={REL_PATH}main/default_course_document/video/flv/example.flv&repeat=false&image=&showdownload=false&link={REL_PATH}main/default_course_document/video/flv/example.flv&showdigits=true&shownavigation=true&logo="
+                            flashvars="width=320&height=240&autostart=false&file={COURSE_DIR}video/flv/example.flv&repeat=false&image=&showdownload=false&link={COURSE_DIR}video/flv/example.flv&showdigits=true&shownavigation=true&logo="
                         />
                     </div>
                 </div>

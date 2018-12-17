@@ -371,7 +371,7 @@ switch ($action) {
             'tool_id_detail' => 0,
             'action' => 'exit',
             'action_details' => '',
-            'current_id' => $_GET['last_id'],
+            'current_id' => isset($_GET['last_id']) ? $_GET['last_id'] : 0,
             'info' => '',
         ];
         Event::registerLog($logInfo);

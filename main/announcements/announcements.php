@@ -348,7 +348,7 @@ switch ($action) {
         }
         break;
     case 'delete_attachment':
-        $id = $_GET['id_attach'];
+        $id = (int) $_GET['id_attach'];
 
         if (api_is_allowed_to_edit()) {
             AnnouncementManager::delete_announcement_attachment_file($id);
@@ -371,11 +371,11 @@ switch ($action) {
                 }
 
                 if (!api_is_session_general_coach() ||
-                    api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $_GET['id'])
+                    api_is_element_in_the_session(TOOL_ANNOUNCEMENT, (int) $_GET['id'])
                 ) {
                     AnnouncementManager::change_visibility_announcement(
                         $_course,
-                        $_GET['id']
+                        (int) $_GET['id']
                     );
                     Display::addFlash(Display::return_message(get_lang('VisibilityChanged')));
                     header('Location: '.$homeUrl);

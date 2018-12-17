@@ -15,7 +15,7 @@ if (!empty($course_info)) {
     api_protect_course_script(true);
 }
 
-$action = isset($_GET['action']) ? $_GET['action'] : null;
+$action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
 
 $this_section = SECTION_COURSES;
 $url = null;

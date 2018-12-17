@@ -138,7 +138,9 @@ if ($isSpecialCourse) {
     }
 }
 
-if (isset($_GET['action']) && $_GET['action'] == 'subscribe') {
+$action = !empty($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
+
+if ($action == 'subscribe') {
     if (Security::check_token('get')) {
         Security::clear_token();
         $result = CourseManager::autoSubscribeToCourse($course_code);
@@ -166,7 +168,7 @@ $logInfo = [
     'tool' => 'course-main',
     'tool_id' => 0,
     'tool_id_detail' => 0,
-    'action' => isset($_GET['action']) ? $_GET['action'] : '',
+    'action' => $action,
     'info' => '',
 ];
 Event::registerLog($logInfo);

@@ -18,6 +18,7 @@ if (isset($_SESSION[$_course['id']]) &&
 }
 
 $postAction = isset($_POST['action']) ? $_POST['action'] : null;
+$action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
 $view = isset($_GET['view']) ? Security::remove_XSS($_GET['view']) : null;
 $viewReceivedCategory = isset($_GET['view_received_category']) ? Security::remove_XSS($_GET['view_received_category']) : null;
 $viewSentCategory = isset($_GET['view_sent_category']) ? Security::remove_XSS($_GET['view_sent_category']) : null;
@@ -56,7 +57,6 @@ if (isset($_GET['dropbox_direction']) && in_array($_GET['dropbox_direction'], ['
 }
 
 $sort_params = Security::remove_XSS(implode('&', $sort_params));
-$action = isset($_GET['action']) ? $_GET['action'] : null;
 
 // Display the form for adding a new dropbox item.
 if ($action == 'add') {

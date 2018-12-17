@@ -142,10 +142,8 @@ if ($is_allowedToEdit && !empty($choice) && $choice == 'exportqti2') {
 if ($origin != 'learnpath') {
     //so we are not in learnpath tool
     Display :: display_header($nameTools, get_lang('Exercise'));
-    if (isset($_GET['message'])) {
-        if (in_array($_GET['message'], ['ExerciseEdited'])) {
-            echo Display::return_message(get_lang($_GET['message']), 'confirmation');
-        }
+    if (isset($_GET['message']) && in_array($_GET['message'], ['ExerciseEdited'])) {
+        echo Display::return_message(get_lang('ExerciseEdited'), 'confirmation');
     }
 } else {
     Display::display_reduced_header();

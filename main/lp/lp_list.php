@@ -169,6 +169,9 @@ if ($filteredCategoryId) {
 }
 
 $test_mode = api_get_setting('server_type');
+$showBlockedPrerequisite = api_get_configuration_value('show_prerequisite_as_blocked');
+$allowLpChamiloExport = api_get_configuration_value('allow_lp_chamilo_export');
+
 $user = api_get_user_entity($userId);
 $ending = false;
 
@@ -213,8 +216,6 @@ foreach ($categories as $item) {
         continue;
     }
 
-    $showBlockedPrerequisite = api_get_configuration_value('show_prerequisite_as_blocked');
-    $allowLpChamiloExport = api_get_configuration_value('allow_lp_chamilo_export');
     $listData = [];
     $lpTimeList = [];
     if (api_get_configuration_value('lp_minimum_time')) {

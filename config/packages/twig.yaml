@@ -4,6 +4,8 @@ twig:
     form_themes:
         - 'bootstrap_4_layout.html.twig'
         - '@SonataFormatter/Form/formatter.html.twig'
+        - '@SonataCore/Form/datepicker.html.twig'
+        - '@SonataCore/Form/color.html.twig'
     exception_controller: 'Chamilo\ThemeBundle\Controller\ExceptionController::showAction'
     globals:
         show_toolbar: true

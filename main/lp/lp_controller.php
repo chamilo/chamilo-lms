@@ -480,7 +480,7 @@ switch ($action) {
                 true
             );
         }
-        Display::addFlash(Display::return_message('MessageSent'));
+        Display::addFlash(Display::return_message(get_lang('MessageSent')));
         require 'lp_list.php';
         break;
     case 'add_item':

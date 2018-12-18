@@ -6204,7 +6204,6 @@ function api_is_course_visible_for_user($userid = null, $cid = null)
  * @param string the tool of the element
  * @param int the element id in database
  * @param int the session_id to compare with element session id
- * @param string $tool
  *
  * @return bool true if the element is in the session, false else
  */
@@ -6212,6 +6211,12 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null)
 {
     if (is_null($session_id)) {
         $session_id = api_get_session_id();
+    }
+
+    $element_id = (int) $element_id;
+
+    if (empty($element_id)) {
+        return false;
     }
 
     // Get information to build query depending of the tool.
@@ -6238,7 +6243,7 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null)
     $course_id = api_get_course_int_id();
 
     $sql = "SELECT session_id FROM $table_tool 
-            WHERE c_id = $course_id AND $key_field =  ".intval($element_id);
+            WHERE c_id = $course_id AND $key_field =  ".$element_id;
     $rs = Database::query($sql);
     if ($element_session_id = Database::result($rs, 0, 0)) {
         if ($element_session_id == intval($session_id)) {

@@ -371,11 +371,11 @@ switch ($action) {
                 }
 
                 if (!api_is_session_general_coach() ||
-                    api_is_element_in_the_session(TOOL_ANNOUNCEMENT, (int) $_GET['id'])
+                    api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $_GET['id'])
                 ) {
                     AnnouncementManager::change_visibility_announcement(
                         $_course,
-                        (int) $_GET['id']
+                        $_GET['id']
                     );
                     Display::addFlash(Display::return_message(get_lang('VisibilityChanged')));
                     header('Location: '.$homeUrl);

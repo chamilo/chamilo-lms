@@ -1618,6 +1618,7 @@ class GradebookUtils
                 $loadStats = [2];
             }
         }
+
         $gradebooktable = new GradebookTable(
             $cat,
             $allcat,

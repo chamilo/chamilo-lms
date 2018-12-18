@@ -406,13 +406,13 @@ foreach ($categories as $item) {
             $linkMinTime = '';
             if (api_get_configuration_value('lp_minimum_time')) {
                 // Time info
-                // TL --- Tiempo minimo para superar la lección ( en minutos )
+                // Minimum time (in minutes) to pass the learning path
                 $accumulateWorkTime = learnpath::getAccumulateWorkTimePrerequisite($id, api_get_course_int_id());
                 if ($accumulateWorkTime > 0) {
                     // TT --- Tiempo total del curso
                     $accumulateWorkTimeTotal = learnpath::getAccumulateWorkTimeTotal(api_get_course_int_id());
 
-                    // Tiempo empleado hasta el momento en la leccion ( en segundos )
+                    // Spent time (in seconds) so far in the learning path
                     /*$lpTime = Tracking::get_time_spent_in_lp(
                         $userId,
                         api_get_course_id(),
@@ -422,7 +422,8 @@ foreach ($categories as $item) {
 
                     $lpTime = isset($lpTimeList[TOOL_LEARNPATH][$id]) ? $lpTimeList[TOOL_LEARNPATH][$id] : 0;
 
-                    // Conectamos con la tabla plugin_licences_course_session en la que se indica que porcentaje del tiempo se aplica
+                    // Connect with the plugin_licences_course_session table
+                    // which indicates what percentage of the time applies
                     $perc = 100;
                     $tc = $accumulateWorkTimeTotal;
                     /*if (!empty($current_session) && $current_session != 0) {
@@ -435,26 +436,16 @@ foreach ($categories as $item) {
                         }
                     }*/
 
-                    // PL --- Porcentaje lección (tiempo leccion / tiempo total curso)
+                    // Percentage of the learning paths
                     $pl = 0;
                     if (!empty($accumulateWorkTimeTotal)) {
                         $pl = $accumulateWorkTime / $accumulateWorkTimeTotal;
                     }
 
-                    /*
-                     * TL: Tiempo que pone en una lección
-                     * TT : tiempo total que pone Teresa (suma tiempos lecciones curso)
-                     * PL: Fracción que supone una lección sobre el tiempo total = TL/TT
-                     * TC: Tiempo que dice el cliente que tiene el curso
-                     * P: porcentaje mínimo conexión que indica el cliente
-                     *
-                     * el tiempo mínimo de cada lección sería: PL x TC x P /100
-                     */
-
-                    // Aplicamos el porcentaje si no hubiese definido un porcentaje por defecto es 100%
+                    // Minimum time for each learning path
                     $accumulateWorkTime = ($pl * $tc * $perc / 100);
 
-                    // Si el tiempo empleado es menor que lo necesario mostramos un icono en la columna de acción indicando la advertencia
+                    // If the time spent is less than necessary, then we show an icon in the actions column indicating the warning
                     if ($lpTime < ($accumulateWorkTime * 60)) {
                         $linkMinTime = Display::return_icon(
                             'warning.png',
@@ -467,7 +458,7 @@ foreach ($categories as $item) {
                         $linkMinTime = sprintf(get_lang('YouHaveSpentXTime'), api_time_to_hms($lpTime));
                     }
 
-                    // Calculamos el porcentaje superado del tiempo para la barra de "superacion de tiempo mínimo"
+                    // Calculate the percentage exceeded of the time for the "exceeding the minimum time" bar
                     if ($lpTime >= ($accumulateWorkTime * 60)) {
                         $time_progress_perc = '100%';
                         $time_progress_value = 100;

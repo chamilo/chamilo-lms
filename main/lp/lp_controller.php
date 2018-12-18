@@ -428,7 +428,7 @@ switch ($action) {
             $course_name = $course_info['title'];
             $course_url = $root_web.'courses/'.$course_info['code'].'/index.php?';
         }
-        $url = '<a href="'.$course_url.'" title="Ir al curso">'.$course_name.'</a>';
+        $url = Display::url($course_name, $course_url, ['title' => get_lang('GoToCourse')]);
 
         /*$sql = "SELECT c.* FROM plugin_licences_customers c
                 INNER JOIN plugin_licences_student_rel_customer s

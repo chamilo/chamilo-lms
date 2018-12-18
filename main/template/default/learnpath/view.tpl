@@ -37,30 +37,30 @@
                         </style>
                         <script>
                             $(document).ready(function() {
-                                var tiempo = {
-                                    hora: parseInt($("#hour").text()),
-                                    minuto: parseInt($("#minute").text()),
-                                    segundo:  parseInt($("#second").text())
+                                var timerData = {
+                                    hour: parseInt($("#hour").text()),
+                                    minute: parseInt($("#minute").text()),
+                                    second:  parseInt($("#second").text())
                                 };
-                                //window.tiempo_corriendo = null;
-                                clearInterval(window.tiempo_corriendo);
-                                window.tiempo_corriendo = setInterval(function(){
-                                    // Segundos
-                                    tiempo.segundo++;
-                                    if (tiempo.segundo >= 60) {
-                                        tiempo.segundo = 0;
-                                        tiempo.minuto++;
+                                //window.timerInterval = null;
+                                clearInterval(window.timerInterval);
+                                window.timerInterval = setInterval(function(){
+                                    // Seconds
+                                    timerData.second++;
+                                    if (timerData.second >= 60) {
+                                        timerData.second = 0;
+                                        timerData.minute++;
                                     }
 
-                                    // Minutos
-                                    if (tiempo.minuto >= 60) {
-                                        tiempo.minuto = 0;
-                                        tiempo.hora++;
+                                    // Minutes
+                                    if (timerData.minute >= 60) {
+                                        timerData.minute = 0;
+                                        timerData.hour++;
                                     }
 
-                                    $("#hour").text(tiempo.hora < 10 ? '0' + tiempo.hora : tiempo.hora);
-                                    $("#minute").text(tiempo.minuto < 10 ? '0' + tiempo.minuto : tiempo.minuto);
-                                    $("#second").text(tiempo.segundo < 10 ? '0' + tiempo.segundo : tiempo.segundo);
+                                    $("#hour").text(timerData.hour < 10 ? '0' + timerData.hour : timerData.hour);
+                                    $("#minute").text(timerData.minute < 10 ? '0' + timerData.minute : timerData.minute);
+                                    $("#second").text(timerData.second < 10 ? '0' + timerData.second : timerData.second);
                                 }, 1000);
                             })
                         </script>

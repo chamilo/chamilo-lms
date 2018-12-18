@@ -1296,11 +1296,12 @@ class UserGroup extends Model
         $values['updated_on'] = api_get_utc_datetime();
         $values['group_type'] = isset($values['group_type']) ? self::SOCIAL_CLASS : self::NORMAL_CLASS;
         $values['allow_members_leave_group'] = isset($values['allow_members_leave_group']) ? 1 : 0;
+        $values['corp_image'] = isset($values['picture_crop_result']) ? $values['picture_crop_result'] : null;
 
         if (isset($values['id'])) {
             $picture = isset($_FILES['picture']) ? $_FILES['picture'] : null;
             if (!empty($picture)) {
-                $picture = $this->manageFileUpload($values['id'], $picture);
+                $picture = $this->manageFileUpload($values['id'], $picture, $values['corp_image']);
                 if ($picture) {
                     $values['picture'] = $picture;
                 }
@@ -1321,18 +1322,20 @@ class UserGroup extends Model
     }
 
     /**
-     * @param int    $groupId
+     * @param int $groupId
      * @param string $picture
      *
+     * @param string $cropParameters
      * @return bool|string
      */
-    public function manageFileUpload($groupId, $picture)
+    public function manageFileUpload($groupId, $picture, $cropParameters)
     {
         if (!empty($picture['name'])) {
             return $this->update_group_picture(
                 $groupId,
                 $picture['name'],
-                $picture['tmp_name']
+                $picture['tmp_name'],
+                $cropParameters
             );
         }
 
@@ -1353,20 +1356,21 @@ class UserGroup extends Model
      * Creates new group pictures in various sizes of a user, or deletes user pfotos.
      * Note: This method relies on configuration setting from main/inc/conf/profile.conf.php.
      *
-     * @param    int    The group id
+     * @param $group_id
      * @param string $file The common file name for the newly created photos.
      *                     It will be checked and modified for compatibility with the file system.
      *                     If full name is provided, path component is ignored.
      *                     If an empty name is provided, then old user photos are deleted only,
      *
-     * @see UserManager::delete_user_picture() as the prefered way for deletion.
-     *
      * @param string $source_file the full system name of the image from which user photos will be created
      *
+     * @param string $cropParameters
      * @return mixed Returns the resulting common file name of created images which usually should be stored in database.
      *               When an image is removed the function returns an empty string. In case of internal error or negative validation it returns FALSE.
+     * @see UserManager::delete_user_picture() as the prefered way for deletion.
+     *
      */
-    public function update_group_picture($group_id, $file = null, $source_file = null)
+    public function update_group_picture($group_id, $file = null, $source_file = null, $cropParameters = null)
     {
         // Validation 1.
         if (empty($group_id)) {
@@ -1379,7 +1383,6 @@ class UserGroup extends Model
 
         // User-reserved directory where photos have to be placed.
         $path_info = self::get_group_picture_path_by_id($group_id, 'system', true);
-
         $path = $path_info['dir'];
 
         // If this directory does not exist - we create it.
@@ -1387,24 +1390,6 @@ class UserGroup extends Model
             @mkdir($path, api_get_permissions_for_new_directories(), true);
         }
 
-        // The old photos (if any).
-        $old_file = $path_info['file'];
-
-        // Let us delete them.
-        if (!empty($old_file)) {
-            if (api_get_setting('platform.keep_old_images_after_delete') == 'true') {
-                $prefix = 'saved_'.date('Y_m_d_H_i_s').'_'.uniqid('').'_';
-                @rename($path.'small_'.$old_file, $path.$prefix.'small_'.$old_file);
-                @rename($path.'medium_'.$old_file, $path.$prefix.'medium_'.$old_file);
-                @rename($path.'big_'.$old_file, $path.$prefix.'big_'.$old_file);
-                @rename($path.$old_file, $path.$prefix.$old_file);
-            } else {
-                @unlink($path.'small_'.$old_file);
-                @unlink($path.'medium_'.$old_file);
-                @unlink($path.'big_'.$old_file);
-                @unlink($path.$old_file);
-            }
-        }
 
         // Exit if only deletion has been requested. Return an empty picture name.
         if ($delete) {
@@ -1419,58 +1404,30 @@ class UserGroup extends Model
         if (!in_array($extension, $allowed_types)) {
             return false;
         }
+        $avatar = 'group_avatar.jpg';
+        $filename = $group_id.'_'.$filename;
+        $groupImageBig = $path.'big_'.$filename;
+        $groupImage = $path.'medium_'.$filename;
 
-        // This is the common name for the new photos.
-        if (!empty($old_file)) {
-            $old_extension = strtolower(substr(strrchr($old_file, '.'), 1));
-            $filename = in_array($old_extension, $allowed_types) ? substr($old_file, 0, -strlen($old_extension)) : $old_file;
-            $filename = (substr($filename, -1) == '.') ? $filename.$extension : $filename.'.'.$extension;
-        } else {
-            $filename = api_replace_dangerous_char($filename);
-            $filename = uniqid('').'_'.$filename;
-
-            // We always prefix user photos with user ids, so on setting
-            // api_get_setting('split_users_upload_directory') === 'true'
-            // the correspondent directories to be found successfully.
-            $filename = $group_id.'_'.$filename;
+        if (file_exists($groupImageBig)) {
+            unlink($groupImageBig);
+        }
+        if (file_exists($groupImage)) {
+            unlink($groupImage);
         }
 
-        // Storing the new photos in 4 versions with various sizes.
+        $image = new Image($source_file);
+        $image->crop($cropParameters);
 
-        /*$image->resize(
-        // get original size and set width (widen) or height (heighten).
-        // width or height will be set maintaining aspect ratio.
-            $image->getSize()->widen( 700 )
-        );*/
+        //Resize the images in two formats
+        $medium = new Image($source_file);
+        $medium->resize(128);
+        $medium->send_image($groupImage, -1, 'jpg');
+        $normal = new Image($source_file);
+        $normal->resize(450);
+        $normal->send_image($groupImageBig, -1, 'jpg');
 
-        // Usign the Imagine service
-        $imagine = new Imagine\Gd\Imagine();
-        $image = $imagine->open($source_file);
 
-        $options = [
-            'quality' => 90,
-        ];
-
-        //$image->resize(new Imagine\Image\Box(200, 200))->save($path.'big_'.$filename);
-        $image->resize($image->getSize()->widen(200))->save($path.'big_'.$filename, $options);
-
-        $image = $imagine->open($source_file);
-        $image->resize(new Imagine\Image\Box(85, 85))->save($path.'medium_'.$filename, $options);
-
-        $image = $imagine->open($source_file);
-        $image->resize(new Imagine\Image\Box(22, 22))->save($path.'small_'.$filename);
-
-        /*
-        $small  = self::resize_picture($source_file, 22);
-        $medium = self::resize_picture($source_file, 85);
-        $normal = self::resize_picture($source_file, 200);
-
-        $big = new Image($source_file); // This is the original picture.
-        $ok = $small && $small->send_image($path.'small_'.$filename)
-            && $medium && $medium->send_image($path.'medium_'.$filename)
-            && $normal && $normal->send_image($path.'big_'.$filename)
-            && $big && $big->send_image($path.$filename);
-        return $ok ? $filename : false;*/
         return $filename;
     }
 
@@ -1652,14 +1609,14 @@ class UserGroup extends Model
         $form->applyFilter('url', 'trim');
 
         // Picture
-        $allowed_picture_types = $this->getAllowedPictureExtensions();
+        //$allowed_picture_types = $this->getAllowedPictureExtensions();
 
 
         // Picture
         $form->addFile(
             'picture',
             get_lang('AddPicture'),
-            ['id' => 'picture', 'class' => 'picture-form', 'crop_image' => true]
+            ['id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '1 / 1']
         );
 
         if (isset($data['picture']) && strlen($data['picture']) > 0) {
@@ -2160,8 +2117,8 @@ class UserGroup extends Model
             $num = intval($num);
         }
         // only show admins and readers
-        $where_relation_condition = " WHERE g.group_type = ".self::SOCIAL_CLASS." AND
-                                      gu.relation_type IN ('".GROUP_USER_PERMISSION_ADMIN."' , '".GROUP_USER_PERMISSION_READER."', '".GROUP_USER_PERMISSION_HRM."') ";
+        $where_relation_condition = " WHERE g.group_type = " . self::SOCIAL_CLASS . " AND
+                                      gu.relation_type IN ('" . GROUP_USER_PERMISSION_ADMIN . "' , '" . GROUP_USER_PERMISSION_READER . "', '" . GROUP_USER_PERMISSION_HRM . "') ";
         $sql = "SELECT DISTINCT count(user_id) as count, g.picture, g.name, g.description, g.id
 				FROM $tbl_group g
 				INNER JOIN $table_group_rel_user gu
@@ -2176,13 +2133,13 @@ class UserGroup extends Model
             $description = Security::remove_XSS($row['description'], STUDENT, true);
             $row['description'] = cut($description, 250, true);
             $row['name'] = Security::remove_XSS($row['name'], STUDENT, true);
-            $row['url'] = "group_view.php?id=".$row['id'];
+            $row['url'] = "group_view.php?id=" . $row['id'];
             if ($with_image) {
                 $picture = self::get_picture_group(
                     $row['id'],
                     $row['picture'],
                     null,
-                    GROUP_IMAGE_SIZE_BIG
+                    GROUP_IMAGE_SIZE_MEDIUM
                 );
                 $row['picture'] = $picture;
             }
@@ -2215,12 +2172,12 @@ class UserGroup extends Model
         }
 
         $where = " WHERE 
-                        g.group_type = ".self::SOCIAL_CLASS." AND
+                        g.group_type = " . self::SOCIAL_CLASS . " AND
                         gu.relation_type IN 
-                        ('".GROUP_USER_PERMISSION_ADMIN."' , 
-                        '".GROUP_USER_PERMISSION_READER."',
-                        '".GROUP_USER_PERMISSION_MODERATOR."',  
-                        '".GROUP_USER_PERMISSION_HRM."') 
+                        ('" . GROUP_USER_PERMISSION_ADMIN . "' , 
+                        '" . GROUP_USER_PERMISSION_READER . "',
+                        '" . GROUP_USER_PERMISSION_MODERATOR . "',  
+                        '" . GROUP_USER_PERMISSION_HRM . "') 
                     ";
         $sql = "SELECT DISTINCT
                   count(user_id) as count,
@@ -2243,9 +2200,14 @@ class UserGroup extends Model
             $description = Security::remove_XSS($row['description'], STUDENT, true);
             $row['description'] = cut($description, 250, true);
             $row['name'] = Security::remove_XSS($row['name'], STUDENT, true);
-            $row['url'] = "group_view.php?id=".$row['id'];
+            $row['url'] = "group_view.php?id=" . $row['id'];
             if ($with_image) {
-                $picture = self::get_picture_group($row['id'], $row['picture'], null,GROUP_IMAGE_SIZE_BIG);
+                $picture = self::get_picture_group(
+                    $row['id'],
+                    $row['picture'],
+                    null,
+                    GROUP_IMAGE_SIZE_MEDIUM
+                );
                 $row['picture'] = $picture;
             }
             if (empty($row['id'])) {

@@ -438,7 +438,10 @@ foreach ($categories as $item) {
                     }*/
 
                     // PL --- Porcentaje lección (tiempo leccion / tiempo total curso)
-                    $pl = $accumulateWorkTime / $accumulateWorkTimeTotal;
+                    $pl = 0;
+                    if (!empty($accumulateWorkTimeTotal)) {
+                        $pl = $accumulateWorkTime / $accumulateWorkTimeTotal;
+                    }
 
                     /*
                      * TL: Tiempo que pone en una lección

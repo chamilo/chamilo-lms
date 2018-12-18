@@ -13895,7 +13895,7 @@ EOD;
      */
     public function getAccumulateWorkTime()
     {
-        return $this->accumulateWorkTime;
+        return (int) $this->accumulateWorkTime;
     }
 
     /**

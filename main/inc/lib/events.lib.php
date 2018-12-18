@@ -2481,7 +2481,9 @@ class Event
         $logInfo['date_reg'] = api_get_utc_datetime();
 
         $id = Database::insert('track_e_access_complete', $logInfo);
-        Session::write('last_id', $id);
+        if ($id) {
+            Session::write('last_id', $id);
+        }
 
         return true;
     }

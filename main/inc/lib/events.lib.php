@@ -2479,6 +2479,8 @@ class Event
         $logInfo['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
         $logInfo['login_as'] = $loginAs;
         $logInfo['date_reg'] = api_get_utc_datetime();
+        $logInfo['current_id'] = isset($logInfo['current_id']) ? (int) $logInfo['current_id'] : 0;
+
 
         $id = Database::insert('track_e_access_complete', $logInfo);
         if ($id) {

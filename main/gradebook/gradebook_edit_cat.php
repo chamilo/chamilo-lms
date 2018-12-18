@@ -83,14 +83,22 @@ if ($form->validate()) {
     header('Location: '.Category::getUrl().'editcat=&selectcat='.$cat->get_parent_id());
     exit;
 }
-$selectcat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : '';
+$selectcat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
+
+
+$action_details = '';
+$current_id = 0;
+if (isset($_GET['editcat'])) {
+    $action_details = 'editcat';
+    $current_id = (int) $_GET['editcat'];
+}
 
 $logInfo = [
     'tool' => TOOL_GRADEBOOK,
     'tool_id' => 0,
     'tool_id_detail' => 0,
     'action' => 'edit-cat',
-    'action_details' => $selectcat,
+    'action_details' => $action_details,
     'current_id' => $current_id,
     'info' => '',
 ];

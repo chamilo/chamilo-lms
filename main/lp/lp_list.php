@@ -173,7 +173,7 @@ $showBlockedPrerequisite = api_get_configuration_value('show_prerequisite_as_blo
 $allowLpChamiloExport = api_get_configuration_value('allow_lp_chamilo_export');
 
 $user = api_get_user_entity($userId);
-$ending = false;
+$ending = true;
 
 $data = [];
 /** @var CLpCategory $item */

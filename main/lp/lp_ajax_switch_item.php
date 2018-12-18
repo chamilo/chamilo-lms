@@ -217,11 +217,10 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
         "olms.lms_item_core_exit = '".$mycore_exit."';".
         "olms.asset_timer = 0;";
 
-    $timeLp = $mylp->getAccumulateWorkTime();
-    $timeTotalCourse = $mylp->getAccumulateWorkTimeTotalCourse();
-
     $updateMinTime = '';
     if (api_get_configuration_value('lp_minimum_time')) {
+        $timeLp = $mylp->getAccumulateWorkTime();
+        $timeTotalCourse = $mylp->getAccumulateWorkTimeTotalCourse();
         // Minimum connection percentage
         $perc = 100;
         // Time from the course

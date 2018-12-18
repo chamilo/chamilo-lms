@@ -10,16 +10,53 @@
                     {% include '@ChamiloTheme/Social/user_block.html.twig' %}
                 </div>
             </div>
-
             {{ macro.panel("Search Users" | trans, social_search ) }}
 
-
-
+            {{ macro.panel("SocialFriend" | get_lang, social_friend_block ) }}
         </div>
         <div class="col-md-8">
 
             {{ social_skill_block }}
-            {{ social_group_block }}
+
+            {% set group %}
+                <div class="group-title">
+                    {{ 'The last'|get_lang }}
+                </div>
+                <ul class="list-unstyled">
+                {% for item in groups.newest %}
+                    <li class="media item-{{ item.id }}">
+                        <a href="{{ item.url }}" title="{{ item.name }}">
+                            <img class="mr-3" src="{{ item.picture }}" alt="{{ item.name }}">
+                        </a>
+                        <div class="media-body">
+                            <h5 class="mt-0 mb-1"><a href="{{ item.url }}" title="{{ item.name }}">{{ item.name }}</a></h5>
+                            <div class="details"><i class="fas fa-users"></i> {{ 'Members'|get_lang }} {{ item.count }}</div>
+                            {{ item.description }}
+                        </div>
+                    </li>
+                {% endfor %}
+                </ul>
+                <div class="group-title">
+                    {{ 'Popular'|get_lang }}
+                </div>
+                <ul class="list-unstyled">
+                    {% for item in groups.popular %}
+                        <li class="media item-{{ item.id }}">
+                            <a href="{{ item.url }}" title="{{ item.name }}">
+                                <img class="mr-3" src="{{ item.picture }}" alt="{{ item.name }}">
+                            </a>
+                            <div class="media-body">
+                                <h5 class="mt-0 mb-1"><a href="{{ item.url }}" title="{{ item.name }}">{{ item.name }}</a></h5>
+                                <div class="details"><i class="fas fa-users"></i> {{ 'Members'|get_lang }} {{ item.count }}</div>
+                                {{ item.description }}
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endset %}
+
+            {{ macro.panel("Groups" | trans, group ) }}
+
             {{ social_right_content }}
             <div id="message_ajax_reponse" class=""></div>
             <div id="display_response_id"></div>

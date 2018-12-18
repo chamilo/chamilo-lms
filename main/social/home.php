@@ -30,7 +30,7 @@ if (api_get_setting('allow_social_tool') !== 'true') {
 $userGroup = new UserGroup();
 
 //fast upload image
-if (api_get_setting('profile', 'picture') == 'true') {
+/*if (api_get_setting('profile', 'picture') == 'true') {
     $form = new FormValidator('profile', 'post', 'home.php', null, []);
 
     //	PICTURE
@@ -75,132 +75,16 @@ if (api_get_setting('profile', 'picture') == 'true') {
             }
         }
     }
-}
+}*/
 
-//Block Menu
-//$MenuSocial = SocialManager::getMenuSocial('home');
 
 $socialSearch = UserManager::getSearchForm('');
 
-$results = $userGroup->get_groups_by_age(1, false);
-
-$groups_newest = [];
-
-if (!empty($results)) {
-    foreach ($results as $result) {
-        $id = $result['id'];
-        $result['description'] = Security::remove_XSS($result['description'], STUDENT, true);
-        $result['name'] = Security::remove_XSS($result['name'], STUDENT, true);
-
-        if ($result['count'] == 1) {
-            $result['count'] = '1 '.get_lang('Member');
-        } else {
-            $result['count'] = $result['count'].' '.get_lang('Members');
-        }
-
-        $group_url = "group_view.php?id=$id";
-
-        $link = Display::url(
-            api_ucwords(cut($result['name'], 40, true)),
-            $group_url
-        );
-
-        $result['name'] = '<div class="group-name">'.$link.'</div><div class="count-username">'.
-                            Display::returnFontAwesomeIcon('user').$result['count'].'</div>';
-
-        $picture = $userGroup->get_picture_group(
-            $id,
-            $result['picture'],
-            null,
-            GROUP_IMAGE_SIZE_BIG
-        );
-
-        $result['picture'] = '<img class="img-responsive" src="'.$picture.'" />';
-        $group_actions = '<div class="group-more"><a class="btn btn-default" href="groups.php?#tab_browse-2">'.
-            get_lang('SeeMore').'</a></div>';
-        $group_info = '<div class="description"><p>'.cut($result['description'], 120, true)."</p></div>";
-        $groups_newest[] = [
-            Display::url(
-                $result['picture'],
-                $group_url
-            ),
-            $result['name'],
-            $group_info.$group_actions,
-        ];
-    }
-}
-
+// Top Last
+$results['newest'] = $userGroup->get_groups_by_age(2, true);
 // Top popular
-$results = $userGroup->get_groups_by_popularity(1, false);
+$results['popular'] = $userGroup->get_groups_by_popularity(2, true);
 
-$groups_pop = [];
-foreach ($results as $result) {
-    $result['description'] = Security::remove_XSS(
-        $result['description'],
-        STUDENT,
-        true
-    );
-    $result['name'] = Security::remove_XSS($result['name'], STUDENT, true);
-    $id = $result['id'];
-    $group_url = "group_view.php?id=$id";
-
-    if ($result['count'] == 1) {
-        $result['count'] = '1 '.get_lang('Member');
-    } else {
-        $result['count'] = $result['count'].' '.get_lang('Members');
-    }
-    $result['name'] = '<div class="group-name">'.
-        Display::url(
-            api_ucwords(cut($result['name'], 40, true)),
-            $group_url
-        )
-        .'</div><div class="count-username">'.
-        Display::returnFontAwesomeIcon('user').$result['count'].'</div>';
-
-    $picture = $userGroup->get_picture_group(
-        $id,
-        $result['picture'],
-        null,
-        GROUP_IMAGE_SIZE_BIG
-    );
-    $result['picture_uri'] = '<img class="img-responsive" src="'.$picture.'" />';
-    $group_actions = '<div class="group-more"><a class="btn btn-default" href="groups.php?#tab_browse-3">'.
-        get_lang('SeeMore').'</a></div>';
-    $group_info = '<div class="description"><p>'.cut($result['description'], 120, true)."</p></div>";
-    $groups_pop[] = [
-        Display::url($result['picture_uri'], $group_url),
-        $result['name'], $group_info.$group_actions,
-    ];
-}
-
-$list = count($groups_newest);
-$social_group_block = null;
-if ($list > 0) {
-    $social_group_block .= '<div class="list-group-newest">';
-    $social_group_block .= '<div class="group-title">'.get_lang('Newest').'</div>';
-    for ($i = 0; $i < $list; $i++) {
-        $social_group_block .= '<div class="row">';
-        $social_group_block .= '<div class="col-md-3">'.$groups_newest[$i][0].'</div>';
-        $social_group_block .= '<div class="col-md-9">'.$groups_newest[$i][1];
-        $social_group_block .= $groups_newest[$i][2].'</div>';
-        $social_group_block .= "</div>";
-    }
-    $social_group_block .= "</div>";
-}
-$list = count($groups_pop);
-if ($list > 0) {
-    $social_group_block .= '<div class="list-group-newest">';
-    $social_group_block .= '<div class="group-title">'.get_lang('Popular').'</div>';
-
-    for ($i = 0; $i < $list; $i++) {
-        $social_group_block .= '<div class="row">';
-        $social_group_block .= '<div class="col-md-3">'.$groups_pop[$i][0].'</div>';
-        $social_group_block .= '<div class="col-md-9">'.$groups_pop[$i][1];
-        $social_group_block .= $groups_pop[$i][2].'</div>';
-        $social_group_block .= "</div>";
-    }
-    $social_group_block .= "</div>";
-}
 // My friends
 $friend_html = SocialManager::listMyFriendsBlock(
     $user_id,
@@ -216,15 +100,6 @@ if (count($sessionList) > 0) {
     $social_session_block = $sessionList;
 }
 
-$social_group_block = Display::panelCollapse(
-    get_lang('Group'),
-    $social_group_block,
-    'sm-groups',
-    null,
-    'grups-acordion',
-    'groups-collapse'
-);
-
 $tpl = new Template(get_lang('SocialNetwork'));
 
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'home');
@@ -234,7 +109,7 @@ $tpl->assign('social_friend_block', $friend_html);
 $tpl->assign('session_list', $social_session_block);
 $tpl->assign('social_search', $socialSearch);
 $tpl->assign('social_skill_block', SocialManager::getSkillBlock($user_id));
-$tpl->assign('social_group_block', $social_group_block);
+$tpl->assign('groups', $results);
 $social_layout = $tpl->get_template('social/home.tpl');
 $content = $tpl->fetch($social_layout);
 $tpl->assign('content', $content);

@@ -1627,7 +1627,15 @@ class UserGroup extends Model
         $form->addRule('name', '', 'maxlength', 255);
 
         // Description
-        $form->addTextarea('description', get_lang('Description'), ['cols' => 58]);
+        $form->addHtmlEditor(
+            'description',
+            get_lang('Description'),
+            true,
+            false,
+            [
+            'ToolbarSet' => 'Minimal',
+            ]
+        );
         $form->applyFilter('description', 'trim');
 
         if ($this->showGroupTypeSetting) {
@@ -1646,17 +1654,17 @@ class UserGroup extends Model
         // Picture
         $allowed_picture_types = $this->getAllowedPictureExtensions();
 
-        $form->addElement('file', 'picture', get_lang('AddPicture'));
-        $form->addRule(
+
+        // Picture
+        $form->addFile(
             'picture',
-            get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')',
-            'filetype',
-            $allowed_picture_types
+            get_lang('AddPicture'),
+            ['id' => 'picture', 'class' => 'picture-form', 'crop_image' => true]
         );
 
         if (isset($data['picture']) && strlen($data['picture']) > 0) {
             $picture = $this->get_picture_group($data['id'], $data['picture'], 80);
-            $img = '<img src="'.$picture['file'].'" />';
+            $img = '<img src="'.$picture.'" />';
             $form->addElement('label', null, $img);
             $form->addElement('checkbox', 'delete_picture', '', get_lang('DelImage'));
         }
@@ -2165,10 +2173,18 @@ class UserGroup extends Model
         $result = Database::query($sql);
         $array = [];
         while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $description = Security::remove_XSS($row['description'], STUDENT, true);
+            $row['description'] = cut($description, 250, true);
+            $row['name'] = Security::remove_XSS($row['name'], STUDENT, true);
+            $row['url'] = "group_view.php?id=".$row['id'];
             if ($with_image) {
-                $picture = self::get_picture_group($row['id'], $row['picture'], 80);
-                $img = '<img src="'.$picture['file'].'" />';
-                $row['picture'] = $img;
+                $picture = self::get_picture_group(
+                    $row['id'],
+                    $row['picture'],
+                    null,
+                    GROUP_IMAGE_SIZE_BIG
+                );
+                $row['picture'] = $picture;
             }
             if (empty($row['id'])) {
                 continue;
@@ -2223,10 +2239,14 @@ class UserGroup extends Model
         $result = Database::query($sql);
         $array = [];
         while ($row = Database::fetch_array($result, 'ASSOC')) {
+
+            $description = Security::remove_XSS($row['description'], STUDENT, true);
+            $row['description'] = cut($description, 250, true);
+            $row['name'] = Security::remove_XSS($row['name'], STUDENT, true);
+            $row['url'] = "group_view.php?id=".$row['id'];
             if ($with_image) {
-                $picture = self::get_picture_group($row['id'], $row['picture'], 80);
-                $img = '<img src="'.$picture['file'].'" />';
-                $row['picture'] = $img;
+                $picture = self::get_picture_group($row['id'], $row['picture'], null,GROUP_IMAGE_SIZE_BIG);
+                $row['picture'] = $picture;
             }
             if (empty($row['id'])) {
                 continue;

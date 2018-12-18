@@ -866,6 +866,7 @@ class PDF
      */
     private static function fixImagesPaths($documentHtml, array $courseInfo, $dirName = '')
     {
+        $documentHtml = '<?xml encoding="utf-8" ?>'.$documentHtml;
         $doc = new DOMDocument();
         @$doc->loadHTML($documentHtml);
 

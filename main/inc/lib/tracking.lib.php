@@ -436,7 +436,6 @@ class Tracking
                         $score = $row['myscore'];
                         $time_for_total = $row['mytime'];
 
-                        // ## NSR sistema de tiempos nuevo
                         if (api_get_configuration_value('lp_minimum_time')) {
                             $timeCourse = self::getCalculateTime($user_id, $course_id, $session_id);
                             Session::write('trackTimeCourse', $timeCourse);
@@ -1900,7 +1899,7 @@ class Tracking
         $courseId = $courseInfo['real_id'];
 
         if (api_get_configuration_value('lp_minimum_time')) {
-            // ## NSR - Muestra la última fecha que accedió a la sesión cuando estaba activa
+            // Show the last date on which the user acceed the session when it was active
             $where_condition = '';
             $userInfo = api_get_user_info($student_id);
             if ($userInfo['status'] == 5 && $session_id > 0) {

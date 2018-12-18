@@ -398,7 +398,6 @@ foreach ($categories as $item) {
                 }
             }
 
-            // ## NSR
             if ($progress < 100) {
                 $ending = false;
             }
@@ -406,7 +405,6 @@ foreach ($categories as $item) {
             $dsp_time = '';
             $linkMinTime = '';
             if (api_get_configuration_value('lp_minimum_time')) {
-                // ## NSR
                 // Time info
                 // TL --- Tiempo minimo para superar la lección ( en minutos )
                 $accumulateWorkTime = learnpath::getAccumulateWorkTimePrerequisite($id, api_get_course_int_id());
@@ -477,7 +475,6 @@ foreach ($categories as $item) {
                         $time_progress_value = intval(($lpTime * 100) / ($accumulateWorkTime * 60));
                     }
 
-                    // ## NSR
                     if ($time_progress_value < 100) {
                         $ending = false;
                     }

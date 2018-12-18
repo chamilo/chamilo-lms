@@ -1899,7 +1899,7 @@ class learnpathItem
 
             return $time;
         } else {
-            /* ## NSR - calculo de tiempo minimo y acumulado */
+            // Calulate minimum and accumulated time
             $user_id = api_get_user_id();
             $myLP = learnpath::getLpFromSession(api_get_course_id(), $this->lp_id, $user_id);
             $timeLp = $myLP->getAccumulateWorkTime();

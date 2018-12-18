@@ -5975,7 +5975,7 @@ SQL;
                 'tool_id' => 0,
                 'tool_id_detail' => 0,
                 'action' => '',
-                'info' => 'Cambia de usuario (login as)',
+                'info' => 'Change user (login as)',
             ];
             Event::registerLog($logInfo);
 

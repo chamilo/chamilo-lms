@@ -412,7 +412,6 @@ if ($debug > 0) {
 }
 
 switch ($action) {
-    // ## NSR
     case 'send_notify_teacher':
         // Enviar correo al profesor
         $studentInfo = api_get_user_info();

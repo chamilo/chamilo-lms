@@ -16,11 +16,27 @@ api_protect_course_script(true);
 api_block_anonymous_users();
 GradebookUtils::block_students();
 
-$my_selectcat = isset($_GET['selectcat']) ? intval($_GET['selectcat']) : 0;
+$my_selectcat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
 
 if (empty($my_selectcat)) {
     api_not_allowed(true);
 }
+
+$action_details = '';
+if (isset($_GET['selectcat'])) {
+    $action_details = 'selectcat';
+}
+
+$logInfo = [
+    'tool' => TOOL_GRADEBOOK,
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => 'edit-weight',
+    'action_details' => $action_details,
+    'current_id' => $my_selectcat,
+    'info' => '',
+];
+Event::registerLog($logInfo);
 
 $course_id = GradebookUtils::get_course_id_by_link_id($my_selectcat);
 $table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
@@ -70,17 +86,6 @@ $table_evaluated[LINK_SURVEY] = [
     'survey_id',
     get_lang('Survey'),
 ];
-
-$logInfo = [
-    'tool' => TOOL_GRADEBOOK,
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
-    'action' => 'edit-weight',
-    'action_details' => $my_selectcat,
-    'current_id' => $current_id,
-    'info' => '',
-];
-Event::registerLog($logInfo);
 
 $submitted = isset($_POST['submitted']) ? $_POST['submitted'] : '';
 if ($submitted == 1) {

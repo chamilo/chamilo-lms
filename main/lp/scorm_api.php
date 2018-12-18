@@ -2384,7 +2384,6 @@ function attach_glossary_into_scorm(type) {
     }
 }
 
-// ## NSR ##
 /**
  * Updates the time bar with the new status. Prevents the need of a page refresh and flickering
  * @param	integer	Number of completed items

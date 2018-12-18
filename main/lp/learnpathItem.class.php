@@ -1908,7 +1908,9 @@ class learnpathItem
             $timeLp = $_SESSION['oLP']->getAccumulateWorkTime();
             $timeTotalCourse = $_SESSION['oLP']->getAccumulateWorkTimeTotalCourse();
             */
+            // Minimum connection percentage
             $perc = 100;
+            // Time from the course
             $tc = $timeTotalCourse;
             /*if (!empty($sessionId) && $sessionId != 0) {
                 $sql = "SELECT hours, perc FROM plugin_licences_course_session WHERE session_id = $sessionId";
@@ -1919,23 +1921,15 @@ class learnpathItem
                     $tc = $aux['hours'] * 60;
                 }
             }*/
-            // PL --- Porcentaje lección (tiempo leccion / tiempo total curso)
+            // Percentage of the learning paths
             $pl = 0;
             if (!empty($timeTotalCourse)) {
                 $pl = $timeLp / $timeTotalCourse;
             }
 
-            /*
-             * TL: Tiempo que pone en una lección
-             * TT : tiempo total que pone Teresa (suma tiempos lecciones curso)
-             * PL: Fracción que supone una lección sobre el tiempo total = TL/TT
-             * TC: Tiempo que dice el cliente que tiene el curso
-             * P: porcentaje mínimo conexión que indica el cliente
-             *
-             * el tiempo mínimo de cada lección sería: PL x TC x P /100
-             */
-            // Aplicamos el porcentaje si no hubiese definido un porcentaje por defecto es 100%
-            $time_seg = intval(($pl * $tc * $perc / 100) * 60);
+            // Minimum time for each learning path
+            $accumulateWorkTime = ($pl * $tc * $perc / 100);
+            $time_seg = intval($accumulateWorkTime * 60);
 
             if ($time_seg < $sessionLifetime) {
                 $sessionLifetime = $time_seg;

@@ -208,6 +208,9 @@ ALTER TABLE c_lp_item_view ADD INDEX idx_clpiv_c_i_v (c_id, id, view_count);
     If you have lots of gradebook stuff, add this
     <pre>
         ALTER TABLE gradebook_result ADD INDEX idx_gb_uid_eid (user_id, evaluation_id);
+        ALTER TABLE gradebook_category ADD INDEX idx_gb_cat_parent (parent_id);
+        ALTER TABLE gradebook_evaluation ADD INDEX idx_ge_cat (category_id);
+        ALTER TABLE gradebook_link ADD INDEX idx_gl_cat (category_id);
     </pre>
     If you have to delete a lot of users, you'll realize deleting users is a slow operation.
     Using the following queries might help:

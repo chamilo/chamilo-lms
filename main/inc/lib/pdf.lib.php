@@ -269,7 +269,7 @@ class PDF
                 $this->pdf->WriteHTML($css, 1);
             }
 
-            //it's not a chapter but the file exists, print its title
+            // it's not a chapter but the file exists, print its title
             if ($print_title) {
                 $this->pdf->WriteHTML(
                     '<html><body><h3>'.$html_title.'</h3></body></html>'
@@ -329,7 +329,6 @@ class PDF
                 $this->pdf->WriteHTML('<html><body>'.$image.'</body></html>'.$page_break);
             }
         }
-
         if (empty($pdf_name)) {
             $output_file = 'pdf_'.date('Y-m-d-his').'.pdf';
         } else {
@@ -892,12 +891,16 @@ class PDF
                 continue;
             }
 
+            // It's a reference to a file in the system, do not change it
+            if (file_exists($src)) {
+                continue;
+            }
+
             if (strpos($src, '/main/default_course_document') === 0) {
                 $element->setAttribute(
                     'src',
                     str_replace('/main/default_course_document', $sysCodePath.'default_course_document', $src)
                 );
-
                 continue;
             }
 
@@ -906,7 +909,6 @@ class PDF
                     'src',
                     str_replace('/main/img/', $sysCodePath.'img/', $src)
                 );
-
                 continue;
             }
 
@@ -915,7 +917,6 @@ class PDF
                     'src',
                     str_replace('/app/upload/', $sysUploadPath, $src)
                 );
-
                 continue;
             }
 

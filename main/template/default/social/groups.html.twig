@@ -1,15 +1,15 @@
-{% extends "@ChamiloTheme/Layout/layout_one_col.html.twig" %}
+{% import '@ChamiloTheme/Macros/box.html.twig' as macro %}
 
 {% block content %}
 {% autoescape false %}
 <div class="row">
-    <div class="col-md-3">
-        <div class="social-network-menu">
+    <div class="col-md-4">
+        {% set avatar %}
             {% include '@ChamiloTheme/Social/user_block.html.twig' %}
-            {{ social_menu_block }}
-        </div>
+        {% endset %}
+        {{ macro.panel('', avatar ) }}
     </div>
-    <div class="col-md-9">
+    <div class="col-md-8">
         {{ social_right_content }}
     </div>
 </div>

@@ -53,4 +53,6 @@ $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $social_right_content);
 
 $social_layout = $tpl->get_template('social/add_groups.tpl');
-$tpl->display($social_layout);
+$content = $tpl->fetch($social_layout);
+$tpl->assign('content', $content);
+$tpl->display_one_col_template();

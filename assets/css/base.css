@@ -4385,56 +4385,6 @@ i.size-32.icon-new-work {
     top: 30px;
 }
 
-#sm-groups .list-group-newest .items {
-    display: block;
-}
-
-#sm-groups .list-group-newest .items .group-image {
-    vertical-align: top;
-    padding-left: 10px;
-    padding-right: 10px;
-}
-
-#sm-groups .list-group-newest .items .group-image,
-#sm-groups .list-group-newest .items .group-info {
-    display: inline-block;
-}
-
-#sm-groups .list-group-newest .items .group-info {
-    width: auto;
-}
-
-#sm-groups .items {
-    border-bottom: 1px dotted #B1DDE0;
-    padding-bottom: 5px;
-    margin-bottom: 5px;
-}
-
-#sm-groups .group-name a {
-    font-size: 18px;
-    font-weight: bold;
-}
-
-#sm-groups .count-username {
-    font-size: 12px;
-    color: #4D4D4D;
-}
-
-#sm-groups .description p {
-    color: #4D4D4D;
-    padding-top: 5px;
-    padding-bottom: 0;
-    line-height: 22px;
-}
-
-.sm-groups .social-profile .img-responsive {
-    display: inline-block;
-}
-
-.sm-groups-content .groups-messages {
-    padding: 20px;
-}
-
 .social-post .mediaPost {
     padding-top: 10px;
     padding-bottom: 5px;

@@ -842,33 +842,27 @@ class SocialManager extends UserManager
         if (in_array($show, $show_groups) && !empty($group_id)) {
             // Group image
             $userGroup = new UserGroup();
-            $group_info = $userGroup->get($group_id);
+            $groupInfo = $userGroup->get($group_id);
 
             $userGroupImage = [
                 'big' => $userGroup->get_picture_group(
                     $group_id,
-                    $group_info['picture'],
+                    $groupInfo['picture'],
                     128,
                     GROUP_IMAGE_SIZE_BIG
                 ),
                 'normal' => $userGroup->get_picture_group(
                     $group_id,
-                    $group_info['picture'],
+                    $groupInfo['picture'],
                     128,
                     GROUP_IMAGE_SIZE_MEDIUM
                 )
             ];
 
             $template->assign('show_group', true);
-            $template->assign('group_id', $group_id);
+            $template->assign('group', $groupInfo);
             $template->assign('avatar', $userGroupImage);
-            $template->assign(
-                'user_is_group_admin',
-                $userGroup->is_group_admin(
-                    $group_id,
-                    api_get_user_id()
-                )
-            );
+
         } else {
             $template->assign('show_group', false);
             $template->assign('show_user', true);
@@ -888,7 +882,7 @@ class SocialManager extends UserManager
             );
         }
 
-        $skillBlock = $template->get_template('social/avatar_block.tpl');
+        $skillBlock = $template->get_template('social/avatar_block.html.twig');
 
         return $template->fetch($skillBlock);
     }
@@ -1875,7 +1869,20 @@ class SocialManager extends UserManager
 
         $userInfo = api_get_user_info($userId, true, false, true, true);
 
+
+        $userGroup = new UserGroup();
+        $groupInfo = $userGroup->get($groupId);
+
+        $template->assign(
+            'user_is_group_admin',
+            $userGroup->is_group_admin(
+                $groupId,
+                api_get_user_id()
+            )
+        );
+
         $template->assign('user', $userInfo);
+        $template->assign('group', $groupInfo);
         $template->assign('social_avatar_block', $socialAvatarBlock);
         $template->assign('profile_edition_link', $profileEditionLink);
         // Added the link to export the vCard to the Template

@@ -5,11 +5,13 @@
 {% autoescape false %}
     <div class="row">
         <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    {% include '@ChamiloTheme/Social/user_block.html.twig' %}
-                </div>
-            </div>
+
+            {% set avatar %}
+                {% include '@ChamiloTheme/Social/user_block.html.twig' %}
+            {% endset %}
+
+            {{ macro.panel('', avatar ) }}
+
             {{ macro.panel("Search Users" | trans, social_search ) }}
 
             {{ macro.panel("SocialFriend" | get_lang, social_friend_block ) }}

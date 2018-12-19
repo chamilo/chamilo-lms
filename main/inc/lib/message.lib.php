@@ -1560,7 +1560,7 @@ class MessageManager
                             api_get_path(
                                 WEB_CODE_PATH
                             ).'social/group_topics.php?action=delete&id='.$group_id.'&topic_id='.$topic['id'],
-                            ['class' => 'btn btn-default']
+                            ['class' => 'btn btn-primary']
                         );
                 }
 
@@ -1581,7 +1581,7 @@ class MessageManager
 
                 $image = $user_sender_info['avatar'];
 
-                $user_info = '<div class="author"><img class="img-responsive img-circle" src="'.$image.'" alt="'.$name.'"  width="64" height="64" title="'.$name.'" /></div>';
+                $user_info = '<div class="author"><img class="img-fluid rounded-circle" src="'.$image.'" alt="'.$name.'"  width="64" height="64" title="'.$name.'" /></div>';
                 $user_info .= '<div class="name"><a href="'.api_get_path(
                         WEB_PATH
                     ).'main/social/profile.php?u='.$topic['user_sender_id'].'">'.$name.'&nbsp;</a></div>';

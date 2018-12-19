@@ -114,4 +114,4 @@ if (api_get_setting('allow_message_tool') === 'true') {
     $tpl->assign('content', $form->returnForm());
 }
 
-$tpl->displayBlankTemplateNoHeader();
+$tpl->display_one_col_template();

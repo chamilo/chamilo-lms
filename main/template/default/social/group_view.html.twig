@@ -1,44 +1,68 @@
-{% extends "@ChamiloTheme/Layout/layout_one_col.html.twig" %}
-
+{% import '@ChamiloTheme/Macros/box.html.twig' as macro %}
 {% block content %}
 {% autoescape false %}
+
 <div class="row" xmlns="http://www.w3.org/1999/html">
-    <div class="col-md-3">
-        <div class="sm-groups">
+    <div class="col-md-4">
+
+        {% set avatar %}
             {% include '@ChamiloTheme/Social/user_block.html.twig' %}
-            {{ social_menu_block }}
-            {{ macro.panel("SocialFriend" | get_lang, social_friend_block) }}
-        </div>
+        {% endset %}
+
+        {{ macro.panel('', avatar ) }}
+
     </div>
-    <div class="col-md-9">
+    <div class="col-md-8">
         <div class="sm-groups-content">
-        {{ create_link }}
 
-        {% if is_group_member == false %}
-            <div class="social-group-details-info">
-                {{ 'Privacy' | get_lang }}
+            {{ create_link }}
 
-                {% if group_info.visibility == 1 %}
-                    {{ 'ThisIsAnOpenGroup' | get_lang }}
-                {% else %}
-                    {{ 'ThisIsACloseGroup' | get_lang }}
-                {% endif %}
-            </div>
-        {% endif %}
+            {% if is_group_member == false %}
+                <div class="social-group-details-info">
+                    {{ 'Privacy' | get_lang }}
+
+                    {% if group_info.visibility == 1 %}
+                        {{ 'ThisIsAnOpenGroup' | get_lang }}
+                    {% else %}
+                        {{ 'ThisIsACloseGroup' | get_lang }}
+                    {% endif %}
+                </div>
+            {% endif %}
 
         <div class="group-info">
             <h2 class="title">{{ group_info.name }}</h2>
             <p class="description">{{ group_info.description }}</p>
         </div>
+
         <div class="group-list">
-            {{ social_forum }}
+            <ul class="nav nav-tabs" id="topics" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="discussions-tab" data-toggle="tab" href="#discussions" role="tab" aria-controls="discussions" aria-selected="true">
+                        {{ 'Discussions' | get_lang }}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="members-tab" data-toggle="tab" href="#members" role="tab" aria-controls="members" aria-selected="false">
+                        {{ 'Members' | get_lang }}
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content" id="topics-content">
+                <div class="tab-pane fade show active" id="discussions" role="tabpanel" aria-labelledby="discussions-tab">
+                    {{ list_topic }}
+                </div>
+                <div class="tab-pane fade" id="members" role="tabpanel" aria-labelledby="members-tab">
+                    {{ list_members }}
+                </div>
+            </div>
         </div>
 
         {{ social_right_content }}
 
-        <div id="display_response_id" class="col-md-5"></div>
+        <div id="display_response_id" class="col-md-12"></div>
         {{ social_auto_extend_link }}
         </div>
+
     </div>
 </div>
 {% endautoescape %}

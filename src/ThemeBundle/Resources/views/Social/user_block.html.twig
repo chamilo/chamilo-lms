@@ -2,20 +2,38 @@
 
 {% autoescape false %}
 <div class="profile">
+
+
     {{ social_avatar_block }}
+
+
     <div class="btn-toolbar justify-content-center">
-        <a href="{{ _p.web }}main/messages/new_message.php" title="{{ "Message" | trans }}" class="btn btn-primary btn-sm">
-            <i class="fas fa-envelope"></i>
-        </a>
-        <a href="{{ vcard_user_link }}" title="{{ "BusinessCard" | trans }}" class="btn btn-success btn-sm">
-            <i class="fas fa-address-card"></i>
-        </a>
-        {% if is_granted('ROLE_ADMIN') %}
-            <a href="{{ _p.web }}main/admin/user_edit.php?user_id={{ user.id }}" title="{{ "Edit" | trans }}" class="btn btn-light btn-sm">
-                <i class="fas fa-pencil-alt"></i>
+        {% if group is empty %}
+            <a href="{{ _p.web }}main/messages/new_message.php" title="{{ "Message" | trans }}" class="btn btn-primary btn-sm">
+                <i class="fas fa-envelope"></i>
+            </a>
+            <a href="{{ vcard_user_link }}" title="{{ "BusinessCard" | trans }}" class="btn btn-success btn-sm">
+                <i class="fas fa-address-card"></i>
+            </a>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ _p.web }}main/admin/user_edit.php?user_id={{ user.id }}" title="{{ "Edit" | trans }}" class="btn btn-light btn-sm">
+                    <i class="fas fa-pencil-alt"></i>
+                </a>
+            {% endif %}
+        {% endif %}
+        {% if user_is_group_admin %}
+            <a class="btn btn-light btn-sm" title="{{ 'EditGroup'|get_lang }}" href="{{ _p.web_main ~ 'social/group_edit.php?id=' ~ group.id }}">
+               <i class="fas fa-pencil-alt"></i>
             </a>
         {% endif %}
     </div>
+    <hr>
+    <div class="group-info">
+        {{ group.description }}
+    </div>
+
+
+
     <ul class="list-user-data">
         {% if show_full_profile %}
             {% set skype_account = '' %}

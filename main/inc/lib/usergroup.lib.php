@@ -1296,12 +1296,12 @@ class UserGroup extends Model
         $values['updated_on'] = api_get_utc_datetime();
         $values['group_type'] = isset($values['group_type']) ? self::SOCIAL_CLASS : self::NORMAL_CLASS;
         $values['allow_members_leave_group'] = isset($values['allow_members_leave_group']) ? 1 : 0;
-        $values['corp_image'] = isset($values['picture_crop_result']) ? $values['picture_crop_result'] : null;
+        $values['crop_image'] = isset($values['picture_crop_result']) ? $values['picture_crop_result'] : null;
 
         if (isset($values['id'])) {
             $picture = isset($_FILES['picture']) ? $_FILES['picture'] : null;
             if (!empty($picture)) {
-                $picture = $this->manageFileUpload($values['id'], $picture, $values['corp_image']);
+                $picture = $this->manageFileUpload($values['id'], $picture, $values['crop_image']);
                 if ($picture) {
                     $values['picture'] = $picture;
                 }

@@ -1581,8 +1581,8 @@ class MessageManager
 
                 $image = $user_sender_info['avatar'];
 
-                $user_info = '<div class="author"><img class="img-fluid rounded-circle" src="'.$image.'" alt="'.$name.'"  width="64" height="64" title="'.$name.'" /></div>';
-                $user_info .= '<div class="name"><a href="'.api_get_path(
+                $user_info = '<div class="author text-center"><img class="img-fluid rounded-circle" src="'.$image.'" alt="'.$name.'"  width="64" height="64" title="'.$name.'" /></div>';
+                $user_info .= '<div class="name text-center"><a href="'.api_get_path(
                         WEB_PATH
                     ).'main/social/profile.php?u='.$topic['user_sender_id'].'">'.$name.'&nbsp;</a></div>';
 

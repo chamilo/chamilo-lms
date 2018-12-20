@@ -78,7 +78,7 @@ $message = null;
 
         $term = empty($_POST['search_term']) ? '': api_htmlentities($searchTerm);
         $urlAction = CourseCategory::getCourseCategoryUrl(1, $pageLength, 'ALL', 0, 'subscribe');
-        $formSearch = new FormValidator('search_catalog', 'post', $urlAction, null, [], 'box-search');
+        $formSearch = new FormValidator('search_catalog', 'post', $urlAction, null, [], FormValidator::LAYOUT_BOX_SEARCH);
         $formSearch->addHidden('sec_token', $stok);
         $formSearch->addHidden('search_course', 1);
         $formSearch->addText('search_term', get_lang('Search'), false,['value'=>$term, 'icon' => 'search'])->setButton(true);

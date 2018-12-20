@@ -125,6 +125,9 @@ if ($is_allowedToEdit) {
         // Adds the question ID represented by $recup into the list of questions for the current exercise
         $objExercise->addToList($recup);
         Session::write('objExercise', $objExercise);
+        Display::addFlash(
+            Display::return_message(get_lang('ItemAdded'), 'success')
+        );
     } elseif (isset($_POST['recup']) && is_array($_POST['recup']) && $fromExercise) {
         $list_recup = $_POST['recup'];
         foreach ($list_recup as $course_id => $question_data) {

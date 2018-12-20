@@ -3031,7 +3031,7 @@ class Agenda
                         api_get_self().'?type=personal&',
                         '',
                         [],
-                        'box-search'
+                        FormValidator::LAYOUT_BOX_SEARCH
                     );
 
                     if (api_is_drh()) {

@@ -8147,26 +8147,6 @@ input.form-control[type="color"] {
 
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) {
-    .grid-courses .items .toolbar .col-sm-4 {
-        text-align: left;
-    }
-
-    .grid-courses .items .toolbar .col-sm-8 {
-        text-align: right;
-    }
-
-    .actions div.text-right {
-        text-align: right;
-    }
-
-    .actions .row .text-right a {
-        margin-left: 10px;
-        margin-right: 0;
-    }
-
-    .grid-courses .col-sm-6:nth-child(2n+1) {
-        clear: left;
-    }
 
     .survey_question.ch_yesno .input-group .radio-vertical {
         margin-left: 10px;

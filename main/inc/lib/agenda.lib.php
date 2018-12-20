@@ -3002,7 +3002,7 @@ class Agenda
                         '',
                         '',
                         [],
-                        FormValidator::LAYOUT_INLINE
+                        FormValidator::LAYOUT_BOX_SEARCH
                     );
                     $attributes = [
                         'multiple' => false,

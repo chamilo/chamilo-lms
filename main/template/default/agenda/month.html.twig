@@ -39,6 +39,8 @@ $(document).ready(function() {
         $("#session_id").find('option').removeAttr("selected");
     });
 
+
+
 	$("#dialog-form").dialog({
 		autoOpen : false,
 		modal : false,
@@ -47,13 +49,13 @@ $(document).ready(function() {
         zIndex : 20000 // added because of qtip2
    	});
 
-    $("#simple-dialog-form").dialog({
+    /*$("#simple-dialog-form").dialog({
 		autoOpen : false,
 		modal : false,
 		width : 580,
 		height : 480,
         zIndex : 20000 // added because of qtip2
-   	});
+   	});*/
 
 	var title = $("#title"),
 	content = $("#content"),
@@ -240,7 +242,7 @@ $(document).ready(function() {
                 calendar.fullCalendar("rerenderEvents");
 			}
 		},
-		eventRender: function(event, element) {
+		/*eventRender: function(event, element) {
             if (event.attachment) {
                 /*element.qtip({
                     hide: {
@@ -249,22 +251,22 @@ $(document).ready(function() {
 		            content: event.attachment,
 		            position: { at:'top right' , my:'bottom right'}
 		        }).removeData('qtip'); // this is an special hack to add multiple qtip in the same target
-		        */
+
             }
 
             var onHoverInfo = '';
 
-            {% if on_hover_info.description %}
+            {#{% if on_hover_info.description %}#}
                 if (event.description) {
                     onHoverInfo = event.description;
                 }
-            {% endif %}
+            {#{% endif %}
 
-            {% if on_hover_info.comment %}
+            {% if on_hover_info.comment %}#}
                 if (event.comment) {
                     onHoverInfo = onHoverInfo + event.comment;
                 }
-            {% endif %}
+            {#{% endif %}#}
 
             if (onHoverInfo) {
                 element.qtip({
@@ -275,26 +277,32 @@ $(document).ready(function() {
                     }
                 });
 			}
-	    },
+	    },*/
 		eventClick: function(calEvent, jsEvent, view) {
             var start = calEvent.start;
             var end = calEvent.end;
             var diffDays = moment(end).diff(start, 'days');
             var endDateMinusOne = '';
 
+
+
+            //$('#modalBody').html(calEvent.description);
+
+
+
             // If event is not editable then just return the qtip
-            if (!calEvent.editable) {
+            /*if (!calEvent.editable) {
                 var onHoverInfo = '';
-                {% if calEvent.description %}
+                {#{% if calEvent.description %}#}
                 if (calEvent.description) {
                     onHoverInfo = calEvent.description;
                 }
-                {% endif %}
-                {% if on_hover_info.comment %}
+                {#{% endif %}
+                {% if on_hover_info.comment %}#}
                 if (calEvent.comment) {
                     onHoverInfo = onHoverInfo + calEvent.comment;
                 }
-                {% endif %}
+                {#{% endif %}#}
 
                 if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
                     $(this).qtip({
@@ -309,7 +317,7 @@ $(document).ready(function() {
 
                     return;
                 }
-            }
+            }*/
 
             if (end) {
                 var clone = end.clone();
@@ -325,6 +333,7 @@ $(document).ready(function() {
                 {% if type != 'admin' %}
                     $('#visible_to_read_only').show();
                     $("#visible_to_read_only_users").html(calEvent.sent_to);
+                    $(".user-sender").show();
 				{% endif %}
 
                 $('#color_calendar').html('{{ type_label | escape('js') }}');
@@ -333,83 +342,136 @@ $(document).ready(function() {
                 $('#color_calendar').removeClass('personal_event');
                 $('#color_calendar').removeClass('group_event');
                 $('#color_calendar').addClass(calEvent.type+'_event');
-
+                $('.type-agenda').show();
                 // It hides the CKEDITOR while clicking an existing Event
                 $('#cke_content').hide();
-                $('#start_date').html(startDateToString);
+
+                $('#simple_start_date').html(startDateToString);
                 if (diffDays > 1) {
-                    $('#end_date').html(' - ' + endDateMinusOne);
+                    $('#simple_end_date').html(' - ' + endDateMinusOne);
                 } else if (diffDays == 0) {
                     var start_date_value = start.format('ll');
                     var startTime = start.format('LT');
                     var endTime = end.format('LT');
-                    $('#start_date').html('');
-                    $('#end_date').html(start_date_value + " (" + startTime + " - " + endTime+") ");
+                    $('#simple_start_date').html('');
+                    $('#simple_end_date').html(start_date_value + " (" + startTime + " - " + endTime+") ");
                 } else {
-                    $('#end_date').html('');
+                    $('#simple_end_date').html('');
                 }
 
-                if ($("#title").parent().find('#title_edit').length == 0) {
-                    $("#title").parent().append('<div id="title_edit"></div>');
-                }
-
-                $("#title_edit").html(calEvent.title);
-
-                if ($("#content").parent().find('#content_edit').length == 0) {
-                    $("#content").parent().append('<div id="content_edit"></div>');
-                }
-                $("#content_edit").html(calEvent.description);
-
-                if ($("#comment").parent().find('#comment_edit').length == 0) {
-                    $("#comment").parent().append('<div id="comment_edit"></div>');
-                }
+                $("#simple_title").html(calEvent.title);
+                $("#simple_content").html(calEvent.description);
+                $("#simple_comment").html(calEvent.comment);
 
                 if (calEvent.course_name) {
-                    $("#calendar_course_info").html(
-                        '<div class="form-group"><label class="col-sm-2 control-label">{{ 'Course' | get_lang }}</label>' +
-                        '<div class="class="col-sm-8">' + calEvent.course_name+"</div></div>"
-                    );
+                    $('#type_course').html({{ 'Course' | get_lang }})
+                    $("#calendar_course_info_simple").html(calEvent.course_name);
                 } else {
-                    $("#calendar_course_info").html('');
+                    $("#calendar_course_info_simple").html('');
                 }
 
                 if (calEvent.session_name) {
-                    $("#calendar_session_info").html(
-                        '<div class="form-group"><label class="col-sm-2 control-label">{{ 'Session' | get_lang }}</label>'+
-                        '<div class="class="col-sm-8">' + calEvent.session_name+"</div></div>"
-                    );
+                    $('#type_course').html({{ 'Session' | get_lang }})
+                    $("#calendar_course_info_simple").html(calEvent.session_name);
                 } else {
-                    $("#calendar_session_info").html('');
+                    $("#calendar_course_info_simple").html('');
                 }
-
-                $("#comment_edit").html(calEvent.comment);
-                $("#title_edit").show();
-                $("#content_edit").show();
-                $("#comment_edit").show();
-                $("#title").hide();
-                $("#content").hide();
-                $("#comment").hide();
 
 				allFields.removeClass( "ui-state-error" );
 				$("#dialog-form").dialog("open");
 
+                $('#modalTitle').html(calEvent.title);
+                $('#calendarModal').modal();
+
+
 				var url = '{{ web_agenda_ajax_url }}&a=edit_event&id='+calEvent.id+'&view='+view.name;
 				var delete_url = '{{ web_agenda_ajax_url }}&a=delete_event&id='+calEvent.id;
 
+                var urlOne =  "{{ _p.web_main }}calendar/ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=confidential";
+                var urlTwo =  "{{ _p.web_main }}calendar/ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=private";
+                var urlThree =  "{{ _p.web_main }}calendar/ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=public";
+                var urlEdit =  "{{ _p.web_main }}calendar/agenda.php?action=edit&type=fromjs&id="+calEvent.id+'&course_id='+calEvent.course_id+"";
+
+                var exportCalConfidential = '<a href="'+urlOne+'" class="btn btn-light">{{"ExportiCalConfidential"|get_lang}}</a>';
+                var exportCalPrivate = '<a href="'+urlTwo+'" class="btn btn-light">{{"ExportiCalPrivate"|get_lang}}</a>';
+                var exportCalPublic = '<a href="'+urlThree+'" class="btn btn-light">{{"ExportiCalPrivate"|get_lang}}</a>';
+                var btnEdit = '<a href="'+urlEdit+'" id="btnEdit" class="btn btn-primary">{{ "Edit" | get_lang }}</a>';
+                var btnDelete = '<button type="button" id="btnDelete" class="btn btn-danger">{{ "Delete" | get_lang }}</button>';
+
+
+                $('#modalFooter').html(exportCalConfidential+exportCalPrivate+exportCalPublic+btnEdit+btnDelete);
+
+                $('#btnDelete').click(function() {
+                    if (calEvent.parent_event_id || calEvent.has_children != '') {
+                        var newDiv = $('<div>');
+                        newDiv.dialog({
+                            modal: true,
+                            title: "{{ 'DeleteThisItem' | get_lang }}",
+                            buttons: []
+                        });
+
+                        var buttons = newDiv.dialog("option", "buttons");
+
+                        if (calEvent.has_children == '0') {
+                            buttons.push({
+                                text: '{{ "DeleteThisItem" | get_lang }}',
+                                click: function() {
+                                    $.ajax({
+                                        url: delete_url,
+                                        success:function() {
+                                            calendar.fullCalendar('removeEvents',
+                                                calEvent
+                                            );
+                                            calendar.fullCalendar("refetchEvents");
+                                            calendar.fullCalendar("rerenderEvents");
+                                            $("#dialog-form").dialog("close");
+                                            newDiv.dialog( "destroy" );
+                                        }
+                                    });
+                                }
+                            });
+                            newDiv.dialog("option", "buttons", buttons);
+                        }
+
+                        var buttons = newDiv.dialog("option", "buttons");
+                        buttons.push({
+                            text: '{{ "DeleteAllItems" | get_lang }}',
+                            click: function() {
+                                $.ajax({
+                                    url: delete_url+'&delete_all_events=1',
+                                    success:function() {
+                                        calendar.fullCalendar('removeEvents',
+                                            calEvent
+                                        );
+                                        calendar.fullCalendar('refetchEvents');
+                                        calendar.fullCalendar('rerenderEvents');
+                                        $("#dialog-form").dialog('close');
+                                        newDiv.dialog( "destroy" );
+                                    }
+                                });
+                            }
+                        });
+                        newDiv.dialog("option", "buttons", buttons);
+
+                        return true;
+                    }
+
+                    $.ajax({
+                        url: delete_url,
+                        success:function() {
+                            calendar.fullCalendar('removeEvents',
+                                calEvent
+                            );
+                            calendar.fullCalendar('refetchEvents');
+                            calendar.fullCalendar('rerenderEvents');
+                            $("#dialog-form").dialog('close');
+                        }
+                    });
+                });
+
 				$("#dialog-form").dialog({
 					buttons: {
-                        '{{ "ExportiCalConfidential"|get_lang }}' : function() {
-                            url =  "{{ _p.web_main }}calendar/ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=confidential";
-                            window.location.href = url;
-						},
-						'{{ "ExportiCalPrivate"|get_lang }}': function() {
-                            url =  "{{ _p.web_main }}calendar/ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=private";
-                            window.location.href = url;
-						},
-                        '{{ "ExportiCalPublic"|get_lang }}': function() {
-                            url =  "{{ _p.web_main }}calendar/ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=public";
-                            window.location.href = url;
-						},
+
                         {% if type == 'not_available' %}
 						'{{ "Edit" | get_lang }}' : function() {
 							var bValid = true;
@@ -433,78 +495,8 @@ $(document).ready(function() {
 							});
 						},
                         {% endif %}
-                        '{{ "Edit"|get_lang }}' : function() {
-                            url =  "{{ _p.web_main }}calendar/agenda.php?action=edit&type=fromjs&id="+calEvent.id+'&course_id='+calEvent.course_id+"";
-                            window.location.href = url;
-                            $("#dialog-form").dialog( "close" );
-                        },
-						'{{ "Delete"|get_lang }}': function() {
-                            if (calEvent.parent_event_id || calEvent.has_children != '') {
-                                var newDiv = $('<div>');
-                                newDiv.dialog({
-                                    modal: true,
-                                    title: "{{ 'DeleteThisItem' | get_lang }}",
-                                    buttons: []
-                                });
 
-                                var buttons = newDiv.dialog("option", "buttons");
 
-                                if (calEvent.has_children == '0') {
-                                    buttons.push({
-                                        text: '{{ "DeleteThisItem" | get_lang }}',
-                                        click: function() {
-                                            $.ajax({
-                                                url: delete_url,
-                                                success:function() {
-                                                    calendar.fullCalendar('removeEvents',
-                                                        calEvent
-                                                    );
-                                                    calendar.fullCalendar("refetchEvents");
-                                                    calendar.fullCalendar("rerenderEvents");
-                                                    $("#dialog-form").dialog("close");
-                                                    newDiv.dialog( "destroy" );
-                                                }
-                                            });
-                                        }
-                                    });
-                                    newDiv.dialog("option", "buttons", buttons);
-                                }
-
-                                var buttons = newDiv.dialog("option", "buttons");
-                                buttons.push({
-                                    text: '{{ "DeleteAllItems" | get_lang }}',
-                                    click: function() {
-                                        $.ajax({
-                                            url: delete_url+'&delete_all_events=1',
-                                            success:function() {
-                                                calendar.fullCalendar('removeEvents',
-                                                    calEvent
-                                                );
-                                                calendar.fullCalendar('refetchEvents');
-                                                calendar.fullCalendar('rerenderEvents');
-                                                $("#dialog-form").dialog('close');
-                                                newDiv.dialog( "destroy" );
-                                            }
-                                        });
-                                    }
-                                });
-                                newDiv.dialog("option", "buttons", buttons);
-
-                                return true;
-                            }
-
-							$.ajax({
-								url: delete_url,
-								success:function() {
-									calendar.fullCalendar('removeEvents',
-										calEvent
-									);
-									calendar.fullCalendar('refetchEvents');
-									calendar.fullCalendar('rerenderEvents');
-									$("#dialog-form").dialog('close');
-								}
-							});
-						}
 					},
 					close: function() {
                         $("#title_edit").hide();
@@ -540,19 +532,15 @@ $(document).ready(function() {
                 }
 
                 if (calEvent.course_name) {
-                    $("#calendar_course_info_simple").html(
-                        '<div class="form-group"><label class="col-sm-3 control-label">{{ 'Course' | get_lang }}</label>' +
-                        '<div class="col-sm-9">' + calEvent.course_name+"</div></div>"
-                    );
+                    $("#calendar_course_info_simple").html(calEvent.course_name);
+                    $("#type_course").html("{{ 'Course' | get_lang }}");
                 } else {
                     $("#calendar_course_info_simple").html('');
                 }
 
                 if (calEvent.session_name) {
-                    $("#calendar_session_info").html(
-                        '<div class="form-group"><label class="col-sm-3 control-label">{{ 'Session' | get_lang }}</label>' +
-                        '<div class="col-sm-9">' + calEvent.session_name+"</div></div>"
-                    );
+                    $("#type_course").append("{{ 'Session' | get_lang }}");
+                    $("#calendar_session_info").html(calEvent.session_name);
                 } else {
                     $("#calendar_session_info").html('');
                 }
@@ -560,23 +548,19 @@ $(document).ready(function() {
                 $("#simple_title").html(calEvent.title);
                 $("#simple_content").html(calEvent.description);
                 $("#simple_comment").html(calEvent.comment);
-                $("#simple-dialog-form").dialog("open");
-                $("#simple-dialog-form").dialog({
-					buttons: {
-						'{{"ExportiCalConfidential"|get_lang}}' : function() {
-                            url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=confidential";
-                            window.location.href = url;
-						},
-						'{{"ExportiCalPrivate"|get_lang}}': function() {
-                            url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=private";
-                            window.location.href = url;
-						},
-                        '{{"ExportiCalPublic"|get_lang}}': function() {
-                            url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=public";
-                            window.location.href = url;
-						}
-					}
-				});
+                $('#modalTitle').html(calEvent.title);
+                $('#calendarModal').modal();
+
+
+                var urlOne =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=confidential";
+                var exportCalConfidential = '<a href="'+urlOne+'" class="btn btn-light">{{"ExportiCalConfidential"|get_lang}}</a>';
+                var urlTwo =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=private";
+                var exportCalPrivate = '<a href="'+urlTwo+'" class="btn btn-light">{{"ExportiCalPrivate"|get_lang}}</a>';
+                var urlThree =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=public";
+                var exportCalPublic = '<a href="'+urlThree+'" class="btn btn-light">{{"ExportiCalPrivate"|get_lang}}</a>';
+
+                $('#modalFooter').html(exportCalConfidential+exportCalPrivate+exportCalPublic);
+
             }
 		},
 		editable: true,
@@ -619,48 +603,6 @@ $(document).ready(function() {
 {{ actions_div }}
 {{ toolbar }}
 
-<div id="simple-dialog-form" style="display:none;">
-    <div style="width:500px">
-        <form name="form-simple" class="form-horizontal">
-            <span id="calendar_course_info_simple"></span>
-            <span id="calendar_session_info"></span>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">
-                    <b>{{ "Date" |get_lang}}</b>
-                </label>
-                <div class="col-sm-9">
-                    <span id="simple_start_date"></span>
-                    <span id="simple_end_date"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">
-                    <b>{{ "Title" |get_lang}}</b>
-                </label>
-                <div class="col-sm-9">
-                    <div id="simple_title"></div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">
-                    <b>{{ "Description" |get_lang}}</b>
-                </label>
-                <div class="col-sm-9">
-                    <div id="simple_content"></div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">
-                    <b>{{ "Comment" |get_lang}}</b>
-                </label>
-                <div class="col-sm-9">
-                    <div id="simple_comment"></div>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-
 <div id="dialog-form" style="display:none;">
 	<div class="dialog-form-content">
         {{ form_add }}
@@ -677,5 +619,66 @@ $(document).ready(function() {
     {{ "Loading" | get_lang }}...
 </div>
 <div id="calendar"></div>
+
+    <div id="calendarModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="modalTitle" class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div id="modalBody" class="modal-body">
+                    <dl class="row">
+                        <!---  type event course o session -->
+                        <dt id="type_course" class="col-sm-3"></dt>
+                        <dd class="col-sm-9">
+                            <span id="calendar_course_info_simple"></span>
+                        </dd>
+                        <!--- user sender -->
+                        <dt class="user-sender col-sm-3" style="display: none;">
+                            {{ "To" |get_lang }}
+                        </dt>
+                        <dd class="user-sender col-sm-9" style="display: none">
+                            <span id="visible_to_read_only_users"></span>
+                        </dd>
+                        <!--- type agenda -->
+
+                        <dt class="type-agenda col-sm-3" style="display: none">
+                            {{ "Agenda" |get_lang }}
+                        </dt>
+                        <dd class="type-agenda col-sm-9" style="display: none">
+                            <div id="color_calendar"></div>
+                        </dd>
+
+                        <dt class="col-sm-3">{{ "Title" |get_lang }}</dt>
+                        <dd class="col-sm-9">
+                            <div id="simple_title"></div>
+                        </dd>
+
+                        <dt class="col-sm-3">{{ "Date" |get_lang }}</dt>
+                        <dd class="col-sm-9">
+                            <span id="simple_start_date"></span>
+                            <span id="simple_end_date"></span>
+                        </dd>
+
+                        <dt class="col-sm-3">{{ "Description" |get_lang }}</dt>
+                        <dd class="col-sm-9">
+                            <div id="simple_content"></div>
+                        </dd>
+
+                        <dt class="col-sm-3">{{ "Comment" |get_lang }}</dt>
+                        <dd class="col-sm-9">
+                            <div id="simple_comment"></div>
+                        </dd>
+                    </dl>
+                </div>
+                <div id="modalFooter" class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endautoescape %}

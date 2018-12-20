@@ -90,6 +90,7 @@
     $(document).on('ready', function () {
         var index = 0,
             $questionTexts = $('#question-{{ id }}-text .text-highlight'),
+            $btnFinish = $('#question_div_{{ id }} .form-actions button.question-validate-btn'),
             total = $questionTexts.length,
             timeOuId = null;
 
@@ -100,7 +101,7 @@
             if (index == total - 1) {
                 $('#question_div_{{ id }} .radio, #question_div_{{ id }} .question_title').removeClass('hide-reading-answers');
 
-                $('#question_div_{{ id }} .form-actions').show();
+                $btnFinish.show();
             }
 
             if (index >= total) {
@@ -132,7 +133,7 @@
             timeOuId = window.setInterval(updateView, {{ refresh_time }} * 1000);
         }
 
-        $('#question_div_{{ id }} .form-actions').hide();
+        $btnFinish.hide();
 
         {% if exercise_type == 1 %}
         $('#question-{{ id }}-start').on('click', function (e) {

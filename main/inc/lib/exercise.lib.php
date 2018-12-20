@@ -447,6 +447,7 @@ class ExerciseLib
 
             $hidingClass = '';
             if ($answerType == READING_COMPREHENSION) {
+                $objQuestionTmp->setExerciseType($exercise->selectType());
                 $objQuestionTmp->processText($objQuestionTmp->selectDescription());
                 $hidingClass = 'hide-reading-answers';
                 $s .= Display::div(

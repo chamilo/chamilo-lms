@@ -84,6 +84,8 @@
 
             if (index == total - 1) {
                 $('#question_div_{{ id }} .radio, #question_div_{{ id }} .question_title').removeClass('hide-reading-answers');
+
+                $('#question_div_{{ id }} .form-actions').show();
             }
 
             if (index >= total) {
@@ -112,5 +114,7 @@
         updateView();
 
         var timeOuId = window.setInterval(updateView, {{ refresh_time }} * 1000);
+
+        $('#question_div_{{ id }} .form-actions').hide();
     });
 </script>

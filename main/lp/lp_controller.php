@@ -412,7 +412,6 @@ if ($debug > 0) {
 }
 
 switch ($action) {
-    // ## NSR
     case 'send_notify_teacher':
         // Enviar correo al profesor
         $studentInfo = api_get_user_info();
@@ -429,7 +428,7 @@ switch ($action) {
             $course_name = $course_info['title'];
             $course_url = $root_web.'courses/'.$course_info['code'].'/index.php?';
         }
-        $url = '<a href="'.$course_url.'" title="Ir al curso">'.$course_name.'</a>';
+        $url = Display::url($course_name, $course_url, ['title' => get_lang('GoToCourse')]);
 
         /*$sql = "SELECT c.* FROM plugin_licences_customers c
                 INNER JOIN plugin_licences_student_rel_customer s
@@ -481,7 +480,7 @@ switch ($action) {
                 true
             );
         }
-        Display::addFlash(Display::return_message('MessageSent'));
+        Display::addFlash(Display::return_message(get_lang('MessageSent')));
         require 'lp_list.php';
         break;
     case 'add_item':

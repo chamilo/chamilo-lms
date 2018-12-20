@@ -24,7 +24,7 @@ window.onload = function() {
                 backgroundColor: "#3ba557",
                 borderWidth: 1,
                 fill: false,
-                label: '{{ "Minutes"|get_lang }}',
+                label: '{{ "Minutes"|get_lang|e('js') }}',
             }]
         },
         options: {
@@ -36,7 +36,7 @@ window.onload = function() {
                     position: "bottom",
                     scaleLabel: {
                         display: true,
-                        labelString: '{{ "Students"|get_lang }}',
+                        labelString: '{{ "Students"|get_lang|e('js') }}',
                     },
                     ticks: {
                         display: false
@@ -46,7 +46,7 @@ window.onload = function() {
                     position: "left",
                     scaleLabel: {
                         display: true,
-                        labelString: '{{ "Minutes"|get_lang }}',
+                        labelString: '{{ "Minutes"|get_lang|e('js') }}',
                     }
                 }]
             }
@@ -58,7 +58,7 @@ window.onload = function() {
         data: {
             labels: ["0-9%", "10-19%", "20-29%", "30-39%", "40-49%", "50-59%", "60-69%", "70-79%", "80-89%", "90-100%"],
             datasets: [{
-                label: '{{ "NumberOfUsers"|get_lang }}',
+                label: '{{ "NumberOfUsers"|get_lang|e('js') }}',
                 data: {{ score_distribution }},
                 backgroundColor: {{ chart_colors }},
                 borderColor: {{ chart_colors }},
@@ -75,7 +75,7 @@ window.onload = function() {
                     position: "left",
                     scaleLabel: {
                         display: true,
-                        labelString: '{{ "NumberOfUsers"|get_lang }}',
+                        labelString: '{{ "NumberOfUsers"|get_lang|e('js') }}',
                     },
                     ticks: {
                         display: true,
@@ -87,7 +87,7 @@ window.onload = function() {
                     position: "bottom",
                     scaleLabel: {
                         display: true,
-                        labelString: "{{ 'PercentileScoresDistribution'|get_lang }}",
+                        labelString: "{{ 'PercentileScoresDistribution'|get_lang|e('js') }}",
                     },
                     gridLines: {
                       display: true

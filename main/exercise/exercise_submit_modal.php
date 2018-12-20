@@ -13,7 +13,7 @@ api_protect_course_script(false);
 
 require_once api_get_path(LIBRARY_PATH).'geometry.lib.php';
 
-Display::display_reduced_header();
+//Display::display_reduced_header();
 
 echo '<div id="delineation-container">';
 
@@ -80,7 +80,7 @@ if (isset($_GET['choice'])) {
 if (empty($choice_value)) {
     echo "<script>
         // this works for only radio buttons
-        var f = self.parent.window.document.frm_exercise;
+        var f = window.document.frm_exercise;
         var choice_js='';
         var hotspot = new Array();
         var hotspotcoord = new Array();
@@ -92,7 +92,7 @@ if (empty($choice_value)) {
             }
 
             if (f.elements[i].type=='hidden' ) {
-                name = f.elements[i].name;
+                var name = f.elements[i].name;
                 if (name.substr(0,7)=='hotspot')
                     hotspot.push(f.elements[i].value);
 
@@ -304,6 +304,11 @@ if (!empty($choice_value)) {
                         $missing_color = true; //echo 'c';
                     }
 
+                    $try_hotspot = null;
+                    $lp_hotspot = null;
+                    $url_hotspot = null;
+                    $select_question_hotspot = null;
+
                     // if pass
                     //if ($final_overlap>=$threadhold1 && $final_missing<=$threadhold2 && $final_excess<=$threadhold3) {
                     if ($final_overlap >= $threadhold1 && $final_missing <= $threadhold3 && $final_excess <= $threadhold2) {
@@ -313,14 +318,15 @@ if (!empty($choice_value)) {
                         $next = 1; //Go to the oars. If $next =  0 we will show this message: "One (or more) area at risk has been hit" instead of the table resume with the results
                         $wrong_results = true;
                         $result_comment = get_lang('Unacceptable');
-                        $special_comment = $comment = $answerDestination = $objAnswerTmp->selectComment(1);
-                        $answerDestination = $objAnswerTmp->selectDestination(1);
-                        $destination_items = explode('@@', $answerDestination);
-                        $try_hotspot = $destination_items[1];
-                        $lp_hotspot = $destination_items[2];
-                        $select_question_hotspot = $destination_items[3];
-                        $url_hotspot = $destination_items[4];
                     }
+
+                    $special_comment = $comment = $answerDestination = $objAnswerTmp->selectComment(1);
+                    $answerDestination = $objAnswerTmp->selectDestination(1);
+                    $destination_items = explode('@@', $answerDestination);
+                    $try_hotspot = $destination_items[1];
+                    $lp_hotspot = $destination_items[2];
+                    $select_question_hotspot = $destination_items[3];
+                    $url_hotspot = $destination_items[4];
                 } elseif ($answerId > 1) {
                     if ($objAnswerTmp->selectHotspotType($answerId) == 'noerror') {
                         if ($dbg_local > 0) {
@@ -464,7 +470,7 @@ Session::write('newquestionList', $newquestionList);
 $links = '';
 if (isset($choice_value) && $choice_value == -1) {
     if ($answerType != HOT_SPOT_DELINEATION) {
-        $links .= '<a href="#" onclick="self.parent.tb_remove();">'.get_lang('ChooseAnAnswer').'</a><br />';
+        $links .= '<a href="#" onclick="tb_remove();">'.get_lang('ChooseAnAnswer').'</a><br />';
     }
 }
 
@@ -561,13 +567,15 @@ if ($destinationid == -1) {
 echo '<script>
 function SendEx(num) {
     if (num == -1) {
-        self.parent.window.location.href = "exercise_result.php?take_session=1&exerciseId='.$exerciseId.'&num="+num+"&exerciseType='.$exerciseType.'&origin='.$origin.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_id='.$learnpath_id.'";
-        self.parent.tb_remove();
+        window.location.href = "exercise_result.php?take_session=1&exerciseId='.$exerciseId.'&num="+num+"&exerciseType='.$exerciseType.'&origin='.$origin.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_id='.$learnpath_id.'";
+        //tb_remove();
     } else {
         num -= 1;
-        self.parent.window.location.href = "exercise_submit.php?tryagain=1&exerciseId='.$exerciseId.'&num="+num+"&exerciseType='.$exerciseType.'&origin='.$origin.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_id='.$learnpath_id.'";
-        self.parent.tb_remove();
+        window.location.href = "exercise_submit.php?tryagain=1&exerciseId='.$exerciseId.'&num="+num+"&exerciseType='.$exerciseType.'&origin='.$origin.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_id='.$learnpath_id.'";
+        //tb_remove();
     }
+    
+    return false;
 }
 </script>';
 
@@ -606,11 +614,11 @@ if ($links != '') {
 } else {
     $questionNum++;
     echo '<script>
-            self.parent.window.location.href = "exercise_submit.php?exerciseId='.$exerciseId.'&num='.$questionNum.'&exerciseType='.$exerciseType.'&'.api_get_cidreq().'";
-            //self.parent.tb_remove();
+            window.location.href = "exercise_submit.php?exerciseId='.$exerciseId.'&num='.$questionNum.'&exerciseType='.$exerciseType.'&'.api_get_cidreq().'";
+            //tb_remove();
         </script>';
 }
 
 echo '</div>';
 
-Display::display_footer();
+//Display::display_footer();

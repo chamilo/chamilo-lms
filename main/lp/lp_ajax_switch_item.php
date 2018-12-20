@@ -217,12 +217,13 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
         "olms.lms_item_core_exit = '".$mycore_exit."';".
         "olms.asset_timer = 0;";
 
-    $timeLp = $mylp->getAccumulateWorkTime();
-    $timeTotalCourse = $mylp->getAccumulateWorkTimeTotalCourse();
-
     $updateMinTime = '';
     if (api_get_configuration_value('lp_minimum_time')) {
+        $timeLp = $mylp->getAccumulateWorkTime();
+        $timeTotalCourse = $mylp->getAccumulateWorkTimeTotalCourse();
+        // Minimum connection percentage
         $perc = 100;
+        // Time from the course
         $tc = $timeTotalCourse;
         $sessionId = api_get_session_id();
         if (!empty($sessionId) && $sessionId != 0) {
@@ -235,19 +236,10 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
             }*/
         }
 
-        // PL --- Porcentaje lección (tiempo leccion / tiempo total curso)
+        // Percentage of the learning paths
         $pl = $timeLp / $timeTotalCourse;
 
-        /*
-         * TL: Tiempo que pone en una lección
-         * TT : tiempo total que pone Teresa (suma tiempos lecciones curso)
-         * PL: Fracción que supone una lección sobre el tiempo total = TL/TT
-         * TC: Tiempo que dice el cliente que tiene el curso
-         * P: porcentaje mínimo conexión que indica el cliente
-         *
-         * el tiempo mínimo de cada lección sería: PL x TC x P /100
-         */
-        // Aplicamos el porcentaje si no hubiese definido un porcentaje por defecto es 100%
+        // Minimum time for each learning path
         $time_total = intval($pl * $tc * $perc / 100) * 60;
 
         //$time_total = $mylp->getAccumulateWorkTime() * 60;
@@ -271,7 +263,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
         $minute = date('i', $lpTime);
         $second = date('s', $lpTime);
         $updateMinTime = "update_time_bar('$time_spent','$time_total','%');".
-                         "update_cronometro('$hour','$minute','$second');";
+                         "update_chronometer('$hour','$minute','$second');";
     }
 
     $return .=

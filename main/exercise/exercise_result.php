@@ -51,7 +51,7 @@ if (empty($objExercise)) {
         header("Location: overview.php?exerciseId=".$exercise_stat_info['exe_exo_id'].'&'.api_get_cidreq());
         exit;
     }
-    api_not_allowed();
+    api_not_allowed(true);
 }
 
 if (api_is_in_gradebook()) {

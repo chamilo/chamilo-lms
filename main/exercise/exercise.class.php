@@ -4901,7 +4901,7 @@ class Exercise
                                     if ($debug > 0) {
                                         error_log(__LINE__.' - answerId is >1 so we\'re probably in OAR', 0);
                                     }
-                                    $inter = $result['success'];
+                                    //$inter = $result['success'];
                                     $delineation_cord = $objAnswerTmp->selectHotspotCoordinates($answerId);
                                     $poly_answer = convert_coordinates($delineation_cord, '|');
                                     $max_coord = poly_get_max($poly_user, $poly_answer);
@@ -5274,7 +5274,7 @@ class Exercise
                                     //echo 'user';	print_r($x_user_list);		print_r($y_user_list);
                                     //echo 'official';print_r($x_list);print_r($y_list);
                                     //$result = get_intersection_data($x_list,$y_list,$x_user_list,$y_user_list);
-                                    $inter = $result['success'];
+                                    //$inter = $result['success'];
                                     $delineation_cord = $objAnswerTmp->selectHotspotCoordinates($answerId);
                                     $poly_answer = convert_coordinates($delineation_cord, '|');
                                     $max_coord = poly_get_max($poly_user, $poly_answer);

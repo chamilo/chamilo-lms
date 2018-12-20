@@ -2471,6 +2471,16 @@ class Event
         $loginAs = (int) (Session::read('login_as') === true);
 
         $logInfo['user_id'] = api_get_user_id();
+        $logInfo['date_reg'] = api_get_utc_datetime();
+        $logInfo['tool'] = !empty($logInfo['tool']) ? $logInfo['tool'] : '';
+        $logInfo['tool_id'] = !empty($logInfo['tool_id']) ? (int) $logInfo['tool_id'] : 0;
+        $logInfo['tool_id_detail'] = !empty($logInfo['tool_id_detail']) ? (int) $logInfo['tool_id_detail'] : 0;
+        $logInfo['action'] = !empty($logInfo['action']) ? $logInfo['action'] : '';
+        $logInfo['action_details'] = !empty($logInfo['action_details']) ? $logInfo['action_details'] : '';
+        $logInfo['current_id'] = !empty($logInfo['current_id']) ? (int) $logInfo['current_id'] : 0;
+        $logInfo['ip_user'] = api_get_real_ip();
+        $logInfo['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
+        $logInfo['session_id'] = api_get_session_id();
         $logInfo['c_id'] = api_get_course_int_id();
         $logInfo['session_id'] = api_get_session_id();
         $logInfo['url'] = $_SERVER['REQUEST_URI'];
@@ -2480,6 +2490,8 @@ class Event
         $logInfo['login_as'] = $loginAs;
         $logInfo['date_reg'] = api_get_utc_datetime();
         $logInfo['current_id'] = isset($logInfo['current_id']) ? (int) $logInfo['current_id'] : 0;
+        $logInfo['info'] = !empty($logInfo['info']) ? $logInfo['info'] : '';
+        $logInfo['url'] = $_SERVER['REQUEST_URI'];
 
 
         $id = Database::insert('track_e_access_complete', $logInfo);

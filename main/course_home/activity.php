@@ -69,5 +69,5 @@ $activityView = new Template('', false, false, false, false, false, false);
 $activityView->assign('blocks', $blocks);
 
 $content .= $activityView->fetch(
-    $activityView->get_template('course_home/activity.tpl')
+    $activityView->get_template('course_home/activity.html.twig')
 );

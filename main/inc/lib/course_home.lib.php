@@ -1573,7 +1573,6 @@ class CourseHome
     {
         $blocks = [];
         $my_list = self::get_tools_category(TOOL_AUTHORING);
-
         $blocks[] = [
             'title' => get_lang('Authoring'),
             'class' => 'course-tools-author',
@@ -1804,7 +1803,7 @@ class CourseHome
         }
 
         return Display::return_icon(
-            $image,
+            'tool_'.$image,
             $item['name'],
             ['id' => $id],
             $iconSize,

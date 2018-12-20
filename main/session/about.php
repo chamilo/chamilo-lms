@@ -230,7 +230,7 @@ $redirectToSession = $coursesCount == 1 && $redirectToSession
 
 $template->assign('redirect_to_session', $redirectToSession);
 $template->assign('courses', $courses);
-$essence = Essence\Essence::instance();
+$essence = new Essence\Essence();
 $template->assign('essence', $essence);
 $template->assign(
     'session_extra_fields',

@@ -3,7 +3,6 @@
 
 namespace Chamilo\CoreBundle\Repository;
 
-use Chamilo\CoreBundle\Entity\Sequence;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -25,7 +24,7 @@ class SequenceRepository extends ServiceEntityRepository
      */
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Sequence::class);
+        parent::__construct($registry, SequenceResource::class);
     }
 
     /**

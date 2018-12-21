@@ -149,18 +149,18 @@ function save_ticket()
     if ($_POST['phone'] != '') {
         $content .= '<p style="color:red">&nbsp;'.get_lang('Phone').': '.$_POST['phone'].'</p>';
     }
-    $course_id = isset($_POST['course_id']) ? $_POST['course_id'] : '';
-    $sessionId = isset($_POST['session_id']) ? $_POST['session_id'] : '';
-    $category_id = isset($_POST['category_id']) ? $_POST['category_id'] : '';
+    $course_id = isset($_POST['course_id']) ? (int) $_POST['course_id'] : '';
+    $sessionId = isset($_POST['session_id']) ? (int) $_POST['session_id'] : '';
+    $category_id = isset($_POST['category_id']) ? (int) $_POST['category_id'] : '';
 
-    $project_id = $_POST['project_id'];
+    $project_id = (int) $_POST['project_id'];
     $subject = $_POST['subject'];
     $other_area = (int) $_POST['other_area'];
     $personal_email = $_POST['personal_email'];
-    $source = $_POST['source_id'];
-    $user_id = isset($_POST['user_id']) ? $_POST['user_id'] : 0;
-    $priority = isset($_POST['priority_id']) ? $_POST['priority_id'] : '';
-    $status = isset($_POST['status_id']) ? $_POST['status_id'] : '';
+    $source = (int) $_POST['source_id'];
+    $user_id = isset($_POST['user_id']) ? (int) $_POST['user_id'] : 0;
+    $priority = isset($_POST['priority_id']) ? (int) $_POST['priority_id'] : '';
+    $status = isset($_POST['status_id']) ? (int) $_POST['status_id'] : '';
     $file_attachments = $_FILES;
 
     if (TicketManager::add(

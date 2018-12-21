@@ -12,7 +12,7 @@ if (!isset($_POST['ticket_id'])) {
     exit;
 }
 
-$ticket_id = intval($_POST['ticket_id']);
+$ticket_id = (int) $_POST['ticket_id'];
 $history = TicketManager::get_assign_log($ticket_id);
 ?>
 <table width="200px" border="0" cellspacing="2" cellpadding="2">

@@ -37,7 +37,7 @@ if ($table->per_page == 0) {
 }
 
 $formToString = '';
-$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+$id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 $projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : 0;
 
 $project = TicketManager::getProject($projectId);
@@ -129,8 +129,8 @@ switch ($action) {
             $values = $form->getSubmitValues();
 
             $params = [
-                'name' => $values['name'],
-                'description' => $values['description'],
+                'name' => Database::escape_string($values['name']),
+                'description' => Database::escape_string($values['description']),
                 'sys_lastedit_datetime' => api_get_utc_datetime(),
                 'sys_lastedit_user_id' => api_get_user_id(),
             ];

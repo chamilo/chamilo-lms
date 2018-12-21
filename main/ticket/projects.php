@@ -30,7 +30,7 @@ if ($table->per_page == 0) {
 }
 
 $formToString = '';
-$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+$id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 $interbreadcrumb[] = [
@@ -82,7 +82,7 @@ switch ($action) {
         }
         break;
     case 'edit':
-        $item = TicketManager::getProject($_GET['id']);
+        $item = TicketManager::getProject($id);
         if (empty($item)) {
             api_not_allowed(true);
         }
@@ -105,7 +105,7 @@ switch ($action) {
                 'sys_lastedit_datetime' => api_get_utc_datetime(),
                 'sys_lastedit_user_id' => api_get_user_id(),
             ];
-            TicketManager::updateProject($_GET['id'], $params);
+            TicketManager::updateProject($id, $params);
             Display::addFlash(Display::return_message(get_lang('Updated')));
             header("Location: ".api_get_self());
             exit;

@@ -307,66 +307,6 @@ function parse_csv_data($file)
 
     return $users;
 }
-/**
- * XML-parser: handle start of element.
- *
- * @param string $parser Deprecated?
- * @param string $data   The data to be parsed
- */
-function element_start($parser, $data)
-{
-    $data = api_utf8_decode($data);
-    global $user;
-    global $current_tag;
-    switch ($data) {
-        case 'Contact':
-            $user = [];
-            break;
-        default:
-            $current_tag = $data;
-    }
-}
-
-/**
- * XML-parser: handle end of element.
- *
- * @param string $parser Deprecated?
- * @param string $data   The data to be parsed
- */
-function element_end($parser, $data)
-{
-    $data = api_utf8_decode($data);
-    global $user;
-    global $users;
-    global $current_value;
-    switch ($data) {
-        case 'Contact':
-            if ($user['Status'] == '5') {
-                $user['Status'] = STUDENT;
-            }
-            if ($user['Status'] == '1') {
-                $user['Status'] = COURSEMANAGER;
-            }
-            $users[] = $user;
-            break;
-        default:
-            $user[$data] = $current_value;
-            break;
-    }
-}
-
-/**
- * XML-parser: handle character data.
- *
- * @param string $parser Parser (deprecated?)
- * @param string $data   The data to be parsed
- */
-function character_data($parser, $data)
-{
-    $data = trim(api_utf8_decode($data));
-    global $current_value;
-    $current_value = $data;
-}
 
 /**
  * Read the XML-file.

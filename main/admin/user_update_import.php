@@ -254,86 +254,26 @@ function parse_csv_data($file)
 
     return $users;
 }
-/**
- * XML-parser: handle start of element.
- *
- * @param string $parser Deprecated?
- * @param string $data   The data to be parsed
- */
-function element_start($parser, $data)
-{
-    $data = api_utf8_decode($data);
-    global $user;
-    global $current_tag;
-    switch ($data) {
-        case 'Contact':
-            $user = [];
-            break;
-        default:
-            $current_tag = $data;
-    }
-}
 
-/**
- * XML-parser: handle end of element.
- *
- * @param string $parser Deprecated?
- * @param string $data   The data to be parsed
- */
-function element_end($parser, $data)
-{
-    $data = api_utf8_decode($data);
-    global $user;
-    global $users;
-    global $current_value;
-    switch ($data) {
-        case 'Contact':
-            if ($user['Status'] == '5') {
-                $user['Status'] = STUDENT;
-            }
-            if ($user['Status'] == '1') {
-                $user['Status'] = COURSEMANAGER;
-            }
-            $users[] = $user;
-            break;
-        default:
-            $user[$data] = $current_value;
-            break;
-    }
-}
-
-/**
- * XML-parser: handle character data.
- *
- * @param string $parser Parser (deprecated?)
- * @param string $data   The data to be parsed
- */
-function character_data($parser, $data)
-{
-    $data = trim(api_utf8_decode($data));
-    global $current_value;
-    $current_value = $data;
-}
-
-/**
- * Read the XML-file.
- *
- * @param string $file Path to the XML-file
- *
- * @return array All user information read from the file
- */
 function parse_xml_data($file)
 {
-    global $users;
-    $users = [];
-    $parser = xml_parser_create('UTF-8');
-    xml_set_element_handler($parser, 'element_start', 'element_end');
-    xml_set_character_data_handler($parser, 'character_data');
-    xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
-    xml_parse($parser, api_utf8_encode_xml(file_get_contents($file)));
-    xml_parser_free($parser);
+    $crawler = new \Symfony\Component\DomCrawler\Crawler();
+    $crawler->addXmlContent(file_get_contents($file));
+    $crawler = $crawler->filter('Contacts > Contact ');
+    $array = [];
+    foreach ($crawler as $domElement) {
+        $row = [];
+        foreach ($domElement->childNodes as $node) {
+            if ($node->nodeName != '#text') {
+                $row[$node->nodeName] = $node->nodeValue;
+            }
+        }
+        if (!empty($row)) {
+            $array[] = $row;
+        }
+    }
 
-    return $users;
+    return $array;
 }
 
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -429,7 +369,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
         exit;
     }
 }
-Display :: display_header($tool_name);
+Display::display_header($tool_name);
 
 if (!empty($error_message)) {
     echo Display::return_message($error_message, 'error');

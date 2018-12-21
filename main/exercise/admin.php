@@ -366,6 +366,16 @@ if ($inATest) {
     if ($objExercise->added_in_lp()) {
         echo Display::return_message(get_lang('AddedToLPCannotBeAccessed'), 'warning');
     }
+
+    if ($editQuestion && $objQuestion->existsInAnotherExercises()) {
+        echo Display::return_message(
+            Display::returnFontAwesomeIcon('exclamation-triangle"')
+                .get_lang('ThisQuestionExistsInAnotherExercisesWarning'),
+            'warning',
+            false
+        );
+    }
+
     echo '<div class="alert alert-info">';
     echo sprintf(
         get_lang('XQuestionsWithTotalScoreY'),

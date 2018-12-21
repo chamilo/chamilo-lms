@@ -1,5 +1,6 @@
 {% import '@ChamiloTheme/Macros/box.html.twig' as macro %}
 
+{% autoescape false %}
 {% set buttons %}
     {% if is_granted('ROLE_ADMIN') and show_edit_page_link %}
         <a title="{{ "header.edit_page"|trans({}, 'SonataPageBundle') }}" href="{{ _p.web_public ~ 'internal_page/edit/' ~ slug }}" class="btn btn-light btn-sm" >
@@ -8,11 +9,26 @@
     {% endif %}
 {% endset %}
 
-{% set content %}
+{% set welcome %}
 
     {{ macro.box_header("Introduction of platform" | trans, buttons) }}
-    {{ sonata_page_render_container('content', page) }}
+
+    {% if content %}
+        {{ content }}
+    {% else %}
+        <div class="row">
+            <div class="col-md-4">
+                <img class="img-fluid" src="{{ asset('img/developer.svg') }}">
+            </div>
+            <div class="col-md-8">
+                <h2>{{ "Congratulations, you have successfully installed your Chamilo e-learning portal!"|trans }}</h2>
+                <p>{{ "You can always find more information about this software on our website:"|trans }} <a href="http://www.chamilo.org" target="_blank"> http://www.chamilo.org</a>.</p>
+                <p>{{ "Have fun, do not hesitate to join the community and give us your opinion through our forum:"|trans }} <a href="https://forum.chamilo.org/" target="_blank">https://forum.chamilo.org/</a></p>
+            </div>
+        </div>
+    {% endif %}
 
 {% endset %}
 
-{{ macro.panel('', content, '', '', '', '', '') }}
+{{ macro.panel('', welcome, '', '', '', '', '') }}
+{% endautoescape %}

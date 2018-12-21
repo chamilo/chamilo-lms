@@ -304,13 +304,34 @@ class PageController extends BaseController
             $page = $pageManager->findOneBy($criteria);
         }
 
+        $blocks = $page->getBlocks();
+        $blockToEdit = null;
+
+        foreach ($blocks as $block) {
+            if ($block->getName() === 'Main content') {
+                $code = $block->getSetting('code');
+                if ($code === 'content') {
+                    $children = $block->getChildren();
+                    /** @var Block $child */
+                    foreach ($children as $child) {
+                        if ($child->getType() === 'sonata.formatter.block.formatter') {
+                            $blockToEdit = $child;
+                            break 2;
+                        }
+                    }
+                }
+            }
+        }
+
+        $contentText = $blockToEdit->getSetting('content');
+
         return $this->render(
             '@ChamiloTheme/Index/page.html.twig',
             [
                 'page' => $page,
                 'slug' => $slug,
                 'show_edit_page_link' => $showEditPageLink,
-                'content' => 'welcome',
+                'content' => $contentText,
             ]
         );
     }

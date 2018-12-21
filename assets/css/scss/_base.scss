@@ -480,9 +480,9 @@ footer {
         }
       }
     }
-    @include landscape($breakpoint-sm) {
+    /*@include landscape($breakpoint-sm) {
       padding: 0;
-    }
+    }*/
   }
 }
 /* CATEGORY CLASSIC */

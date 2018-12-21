@@ -435,7 +435,6 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
             $error_kind_file = false;
         } elseif (strcmp($file_type, 'xml') === 0 && $ext_import_file == $allowed_file_mimetype[1]) {
             $users = parse_xml_data($_FILES['import_file']['tmp_name']);
-            var_dump($users);exit;
             $errors = validate_data($users, $checkUniqueEmail);
             $error_kind_file = false;
         } else {

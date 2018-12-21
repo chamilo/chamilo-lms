@@ -360,8 +360,8 @@ class TicketManager
             'sys_lastedit_datetime' => $now,
             'source' => $source,
             'assigned_last_user' => $assignedUserId,
-            'subject' => Database::escape_string($subject),
-            'message' => Database::escape_string($content),
+            'subject' => $subject,
+            'message' => $content,
         ];
 
         if (!empty($course_id)) {
@@ -653,14 +653,14 @@ class TicketManager
 
         $params = [
             'ticket_id' => $ticketId,
-            'subject' => Database::escape_string($subject),
-            'message' => Database::escape_string($content),
-            'ip_address' => Database::escape_string(api_get_real_ip()),
+            'subject' => $subject,
+            'message' => $content,
+            'ip_address' => api_get_real_ip(),
             'sys_insert_user_id' => $userId,
             'sys_insert_datetime' => $now,
             'sys_lastedit_user_id' => $userId,
             'sys_lastedit_datetime' => $now,
-            'status' => Database::escape_string($status),
+            'status' => $status,
         ];
         $messageId = Database::insert($table_support_messages, $params);
         if ($messageId) {

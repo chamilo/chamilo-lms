@@ -414,7 +414,7 @@ $select_answer_html = Display::select(
 );
 
 echo Display::form_row(get_lang('AnswerType'), $select_answer_html);
-$button = '<button class="save" type="submit" name="name" value="'.get_lang('Filter').'">'.get_lang('Filter').'</button>';
+$button = '<button class="btn btn-primary save" type="submit" name="name" value="'.get_lang('Filter').'">'.get_lang('Filter').'</button>';
 echo Display::form_row('', $button);
 echo "<input type='hidden' id='course_id_changed' name='course_id_changed' value='0' />";
 echo "<input type='hidden' id='exercise_id_changed' name='exercise_id_changed' value='0' />";

@@ -1063,6 +1063,7 @@ class Display
         $html = '';
         $extra = '';
         $default_id = 'id="'.$name.'" ';
+        $extra_attributes = array_merge(['class' => 'form-control'], $extra_attributes);
         foreach ($extra_attributes as $key => $parameter) {
             if ($key == 'id') {
                 $default_id = '';
@@ -1264,10 +1265,10 @@ class Display
      */
     public static function form_row($label, $form_item)
     {
-        $label = self::span($label, ['class' => 'control-label']);
-        $form_item = self::div($form_item, ['class' => 'controls']);
+        $label = self::tag('label', $label, ['class' => 'col-sm-2 control-label']);
+        $form_item = self::div($form_item, ['class' => 'col-sm-10']);
 
-        return self::div($label.$form_item, ['class' => 'control-group']);
+        return self::div($label.$form_item, ['class' => 'form-group']);
     }
 
     /**

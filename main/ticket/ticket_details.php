@@ -318,7 +318,7 @@ if ($ticket['ticket']['status_id'] != TicketManager::STATUS_FORWARDED &&
                 $file_attachments,
                 $user_id,
                 'NOL',
-                Database::escape_string($message)
+                $message
             );
 
             TicketManager::sendNotification(

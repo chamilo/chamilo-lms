@@ -377,16 +377,23 @@ function character_data($parser, $data)
  */
 function parse_xml_data($file)
 {
-    global $users;
-    $users = [];
-    $parser = xml_parser_create('UTF-8');
-    xml_set_element_handler($parser, 'element_start', 'element_end');
-    xml_set_character_data_handler($parser, 'character_data');
-    xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
-    xml_parse($parser, api_utf8_encode_xml(file_get_contents($file)));
-    xml_parser_free($parser);
+    $crawler = new \Symfony\Component\DomCrawler\Crawler();
+    $crawler->addXmlContent(file_get_contents($file));
+    $crawler = $crawler->filter('Contacts > Contact ');
+    $array = [];
+    foreach ($crawler as $domElement) {
+        $row = [];
+        foreach ($domElement->childNodes as $node) {
+            if ($node->nodeName != '#text') {
+                $row[$node->nodeName] = $node->nodeValue;
+            }
+        }
+        if (!empty($row)) {
+            $array[] = $row;
+        }
+    }
 
-    return $users;
+    return $array;
 }
 
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -428,6 +435,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
             $error_kind_file = false;
         } elseif (strcmp($file_type, 'xml') === 0 && $ext_import_file == $allowed_file_mimetype[1]) {
             $users = parse_xml_data($_FILES['import_file']['tmp_name']);
+            var_dump($users);exit;
             $errors = validate_data($users, $checkUniqueEmail);
             $error_kind_file = false;
         } else {

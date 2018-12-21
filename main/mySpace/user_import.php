@@ -46,8 +46,8 @@ if (api_get_setting('add_users_by_coach') === 'true') {
 }
 
 set_time_limit(0);
-
-if ($_POST['formSent'] && $_FILES['import_file']['size'] !== 0) {
+$errors = [];
+if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['size'] !== 0) {
     $file_type = $_POST['file_type'];
     $id_session = intval($_POST['id_session']);
     if ($file_type == 'csv') {
@@ -76,19 +76,21 @@ if ($_POST['formSent'] && $_FILES['import_file']['size'] !== 0) {
                     MySpace::save_data($users, $course_list, $id_session);
                 }
             } else {
-                header('Location: course.php?id_session='.$id_session.'&action=error_message&message='.urlencode(get_lang('NoSessionId')));
+                Display::addFlash(Display::return_message(get_lang('NoSessionId'), 'warning'));
+                header('Location: course.php?id_session='.$id_session);
                 exit;
             }
         }
     } else {
-        header('Location: course.php?id_session='.$id_session.'&action=error_message&message='.urlencode(get_lang('NoUsersRead')));
+        Display::addFlash(Display::return_message(get_lang('NoUsersRead'), 'warning'));
+        header('Location: course.php?id_session='.$id_session);
         exit;
     }
 }
 
 Display :: display_header($tool_name);
 
-if ($_FILES['import_file']['size'] == 0 && $_POST) {
+if (isset($_FILES['import_file']) && $_FILES['import_file']['size'] == 0 && $_POST) {
     echo Display::return_message(get_lang('ThisFieldIsRequired'), 'error');
 }
 

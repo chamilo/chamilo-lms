@@ -18,10 +18,6 @@ function checkLength( o, n, min, max ) {
 function clean_user_select() {
     //Cleans the selected attr
     $("#users_to_send").val('').trigger("chosen:updated");
-    /*$('#users_to_send')
-        .find('option')
-        .removeAttr('selected')
-        .end();*/
 }
 
 var region_value = '{{ region_value }}';
@@ -88,14 +84,6 @@ $(document).ready(function() {
         firstDay: 1,
 		selectable	: true,
 		selectHelper: true,
-        viewDisplay: function(view) {
-            /* When changing the view update the qtips */
-            /*var api = $('.qtip').qtip('api'); // Access the API of the first tooltip on the page
-            if (api) {
-                api.destroy();
-                //api.render();
-            }*/
-        },
         viewRender: function(view, element) {
             var data = {
                 'view': view.name,
@@ -158,8 +146,6 @@ $(document).ready(function() {
 
                 //It shows the CKEDITOR while Adding an Event
                 $('#cke_content').show();
-                //It Fixing a minor bug with textarea ckeditor.remplace
-                // $('#content').css('display','none');
                 //Reset the CKEditor content that persist in memory
                 CKEDITOR.instances['content'].setData('');
 				allFields.removeClass("ui-state-error");
@@ -207,10 +193,6 @@ $(document).ready(function() {
                                     window.location.replace(url);
                                 }*/
                             }
-
-                            /*$("#title").val('');
-                            $("#content").val('');
-                            $("#comment").val('');*/
 
                             calendar.fullCalendar('refetchEvents');
                             calendar.fullCalendar('rerenderEvents');
@@ -287,7 +269,6 @@ $(document).ready(function() {
                 $('#modalTitle').html(calEvent.title);
                 $('#calendarModal').modal();
 
-
 				var url = '{{ web_agenda_ajax_url }}&a=edit_event&id='+calEvent.id+'&view='+view.name;
 				var delete_url = '{{ web_agenda_ajax_url }}&a=delete_event&id='+calEvent.id;
 
@@ -301,7 +282,6 @@ $(document).ready(function() {
                 var exportCalPublic = '<a href="'+urlThree+'" class="btn btn-light">{{"ExportiCalPrivate"|get_lang}}</a>';
                 var btnEdit = '<a href="'+urlEdit+'" id="btnEdit" class="btn btn-primary">{{ "Edit" | get_lang }}</a>';
                 var btnDelete = '<button type="button" id="btnDelete" class="btn btn-danger">{{ "Delete" | get_lang }}</button>';
-
 
                 $('#modalFooter').html(exportCalConfidential+exportCalPrivate+exportCalPublic+btnEdit+btnDelete);
 
@@ -381,7 +361,6 @@ $(document).ready(function() {
                             }
                         });
                         newDiv.dialog("option", "buttons", buttons);
-
                         return true;
                     }
 
@@ -488,6 +467,19 @@ $(document).ready(function() {
 {{ actions_div }}
 {{ toolbar }}
 
+{% if legend_list %}
+    {% for color, text in legend_list %}
+        <span style="background-color: {{ color }}" class="label label-default">&nbsp;</span> {{ text }} &nbsp;&nbsp;
+    {% endfor %}
+    <br /><br />
+{% endif %}
+
+<div id="loading" style="margin-left:150px;position:absolute;display:none">
+    {{ "Loading" | get_lang }}...
+</div>
+
+<div id="calendar"></div>
+
 <div id="modalDialogForm" class="modal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -507,19 +499,6 @@ $(document).ready(function() {
         </div>
     </div>
 </div>
-
-{% if legend_list %}
-    {% for color, text in legend_list %}
-        <span style="background-color: {{ color }}" class="label label-default">&nbsp;</span> {{ text }} &nbsp;&nbsp;
-    {% endfor %}
-    <br /><br />
-{% endif %}
-
-<div id="loading" style="margin-left:150px;position:absolute;display:none">
-    {{ "Loading" | get_lang }}...
-</div>
-
-<div id="calendar"></div>
 
 <div id="calendarModal" class="modal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">

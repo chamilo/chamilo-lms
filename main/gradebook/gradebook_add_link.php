@@ -154,17 +154,6 @@ if (isset($typeSelected) && $typeSelected != '0') {
     }
 }
 
-$logInfo = [
-    'tool' => TOOL_GRADEBOOK,
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
-    'action' => 'add-link',
-    'action_details' => 'selectcat='.$selectCat,
-    'current_id' => $current_id,
-    'info' => '',
-];
-Event::registerLog($logInfo);
-
 $interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat='.$selectCat,
     'name' => get_lang('Gradebook'),

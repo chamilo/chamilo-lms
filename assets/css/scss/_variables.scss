@@ -35,9 +35,10 @@ $default-primary      : #7774e7;
 $default-success      : #37c936;
 $default-text-color   : #72777a;
 $default-yellow       : #FFCC00;
+$default-link         : rgb(0, 153, 255);
+
 $default-white        : #FFFFFF;
 $default-black        : #000000;
-$default-link         : rgb(0, 153, 255);
 
 
 // ---------------------------------------------------------
@@ -48,9 +49,16 @@ $default-link         : rgb(0, 153, 255);
 $page-background      : #FFFFFF;
 $menu-background      : #FFFFFF;
 $menu-secondary       : #ff3c7e;
+
+// SIDEBAR
+$sidebar-background   : #0BADFE;
+$sidebar-focus        : #42BEFF;
 $sidebar-link         : #FFFFFF;
-$sidebar-bg           : #4a71d0;
-$sidebar-focus        : rgba(0, 0, 0, 0.07);
+$sidebar-div-top      : #19D3FF;
+$sidebar-div-down     : #0caffe;
+$sidebar-current      : #0aa4f1;
+$sidebar-dropdown     : $sidebar-current;
+
 $header-link          : #54667a;
 $header-hover         : #ff3c7e;
 $breadcrumb-color     : #d2f1ff;

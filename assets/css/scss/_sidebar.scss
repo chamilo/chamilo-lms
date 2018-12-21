@@ -210,7 +210,7 @@
   overflow: auto;
   padding: 0;
   position: relative;
-  background: $sidebar-bg;
+  background: $sidebar-background;
 
   .nav-header {
     margin-top: 10px;
@@ -225,12 +225,12 @@
     height: 0;
     margin: 0;
     overflow: hidden;
-    border-top: 1px solid #5477cc;
-    border-bottom: 1px solid #3c5cab;
+    border-top: 1px solid $sidebar-div-top;
+    border-bottom: 1px solid $sidebar-div-down;
   }
 
   .current{
-    background-color: #4569C1;
+    background-color: $sidebar-current;
   }
 
   li {
@@ -255,7 +255,7 @@
       }
       ul{
         &.dropdown-menu{
-          background-color: #3D66CA;
+          background-color: $sidebar-dropdown;
           padding: 0;
           border: none;
           border-radius: 0;
@@ -310,7 +310,7 @@
         text-decoration: none;
         background: $sidebar-focus;
         .icon-holder {
-          color: $default-info;
+          color: $sidebar-link;
         }
       }
     }

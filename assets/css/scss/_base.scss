@@ -829,3 +829,12 @@ footer {
     font-size: 12px;
   }
 }
+/***** CALENDAR ******/
+.fc-day-grid-event{
+  border: none;
+  padding: 6px 12px 6px 22px;
+  font-weight: 500;
+  color: #ffffff !important;
+  cursor: pointer;
+  border-radius: 4px;
+}

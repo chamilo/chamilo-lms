@@ -22,18 +22,6 @@ $cidReq = Security::remove_XSS($_GET['cidReq']);
 $type = Security::remove_XSS($_GET['type']);
 $doExerciseUrl = '';
 
-if (isset($_GET['doexercise'])) {
-    $doExerciseUrl = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.http_build_query([
-        'session_id' => $session_id,
-        'cidReq' => $cidReq,
-        'gradebook' => $gradebook,
-        'origin' => '',
-        'learnpath_id' => '',
-        'learnpath_item_id' => '',
-        'exerciseId' => intval($_GET['doexercise']),
-    ]);
-}
-
 // no support for hot potatoes
 if ($type == LINK_HOTPOTATOES) {
     $exerciseId = $_GET['exerciseId'];
@@ -49,7 +37,7 @@ if ($type == LINK_HOTPOTATOES) {
     exit;
 }
 
-if (isset($_GET['doexercise'])) {
+if (!empty($doExerciseUrl)) {
     header('Location: '.$doExerciseUrl);
     exit;
 } else {
@@ -76,6 +64,16 @@ if (isset($_GET['doexercise'])) {
                         $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=list';
                     }
                 }
+            } else {
+                $url = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.http_build_query([
+                    'session_id' => $session_id,
+                    'cidReq' => $cidReq,
+                    'gradebook' => $gradebook,
+                    'origin' => '',
+                    'learnpath_id' => '',
+                    'learnpath_item_id' => '',
+                    'exerciseId' => (int) $_GET['exerciseId'],
+                ]);
             }
         }
     }

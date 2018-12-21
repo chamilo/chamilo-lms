@@ -112,8 +112,8 @@ class Agenda
         $this->events = [];
         $agendaColors = array_merge(
             [
-                'platform' => 'red', //red
-                'course' => '#458B00', //green
+                'platform' => '#EB4E36', //red
+                'course' => '#43D29E', //green
                 'group' => '#A0522D', //siena
                 'session' => '#00496D', // kind of green
                 'other_session' => '#999', // kind of green

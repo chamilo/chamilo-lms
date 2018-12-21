@@ -180,7 +180,7 @@ if ($type == 'course' && !empty($session_id)) {
 
 $agendaColors = array_merge(
     [
-        'platform' => 'red', //red
+        'platform' => '#ff6258', //red
         'course' => '#458B00', //green
         'group' => '#A0522D', //siena
         'session' => '#00496D', // kind of green

@@ -85,7 +85,6 @@ if ($form->validate()) {
 }
 $selectcat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
 
-
 $action_details = '';
 $current_id = 0;
 if (isset($_GET['editcat'])) {

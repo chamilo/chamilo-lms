@@ -146,7 +146,7 @@ function js_array($array, $name, $key)
 function save_ticket()
 {
     $content = $_POST['content'];
-    if ($_POST['phone'] != '') {
+    if (!empty($_POST['phone'])) {
         $content .= '<p style="color:red">&nbsp;'.get_lang('Phone').': '.$_POST['phone'].'</p>';
     }
     $course_id = isset($_POST['course_id']) ? (int) $_POST['course_id'] : '';

@@ -457,11 +457,11 @@ class TicketManager
                         </tr>
                         <tr>
                             <td width="100px"><b>'.get_lang('Title').'</b></td>
-                            <td width="400px">'.$subject.'</td>
+                            <td width="400px">'.Security::remove_XSS($subject).'</td>
                         </tr>
                         <tr>
                             <td width="100px"><b>'.get_lang('Description').'</b></td>
-                            <td width="400px">'.$content.'</td>
+                            <td width="400px">'.Security::remove_XSS($content).'</td>
                         </tr>
                     </table>';
 

@@ -28,8 +28,6 @@ var region_value = '{{ region_value }}';
 
 $(document).ready(function() {
 
-    console.log('{{ _p.web_main }}');
-    console.log('{{ _p.web_plugin }}');
     var cookieData = Cookies.getJSON('agenda_cookies');
     var defaultView = (cookieData && cookieData.view) || '{{ default_view }}';
     var defaultStartDate = (cookieData && cookieData.start) || moment.now();
@@ -39,23 +37,13 @@ $(document).ready(function() {
         $("#session_id").find('option').removeAttr("selected");
     });
 
-
-
-	$("#dialog-form").dialog({
-		autoOpen : false,
-		modal : false,
-		width : 580,
-		height : 480,
-        zIndex : 20000 // added because of qtip2
-   	});
-
-    /*$("#simple-dialog-form").dialog({
-		autoOpen : false,
-		modal : false,
-		width : 580,
-		height : 480,
-        zIndex : 20000 // added because of qtip2
-   	});*/
+    function loadColors(calEvent){
+        $('#color_calendar').removeClass();
+        $('#color_calendar').html('{{ type_label | escape('js') }}');
+        $('#color_calendar').addClass('label_tag');
+        $('#color_calendar').addClass(calEvent.type+'_event');
+        $('.type-agenda').show();
+    }
 
 	var title = $("#title"),
 	content = $("#content"),
@@ -171,70 +159,66 @@ $(document).ready(function() {
                 //It shows the CKEDITOR while Adding an Event
                 $('#cke_content').show();
                 //It Fixing a minor bug with textarea ckeditor.remplace
-                $('#content').css('display','none');
+                // $('#content').css('display','none');
                 //Reset the CKEditor content that persist in memory
                 CKEDITOR.instances['content'].setData('');
 				allFields.removeClass("ui-state-error");
-				$("#dialog-form").dialog("open");
-				$("#dialog-form").dialog({
-					buttons: {
-						'{{ "Add" | get_lang }}' : function() {
-							var bValid = true;
-							bValid = bValid && checkLength(title, "title", 1, 255);
 
-                            //Update the CKEditor Instance to the remplaced textarea, ready to be serializable
-                            for ( instance in CKEDITOR.instances ) {
-                                CKEDITOR.instances[instance].updateElement();
+				$("#modalDialogForm").modal();
+
+				var btnSave = '<button id="btnSave" type="button" class="btn btn-primary">{{ "Add" | get_lang }}</button>';
+                $("#modalDialogForm #modalFooter").html(btnSave);
+
+                $("#btnSave").click( function() {
+                    var bValid = true;
+                    bValid = bValid && checkLength(title, "title", 1, 255);
+
+                    //Update the CKEditor Instance to the remplaced textarea, ready to be serializable
+                    for ( instance in CKEDITOR.instances ) {
+                        CKEDITOR.instances[instance].updateElement();
+                    }
+
+                    var params = $("#add_event_form").serialize();
+
+                    $.ajax({
+                        url: url+'&'+params,
+                        success:function(data) {
+                            var user = $('#users_to_send').val();
+                            if (user) {
+                                if (user.length > 1) {
+                                    user = 0;
+                                } else {
+                                    user = user[0];
+                                }
+                                var user_length = String(user).length;
+                                if (String(user).substring(0,1) == 'G') {
+                                    var user_id = String(user).substring(6,user_length);
+                                    var user_id = "G:"+user_id;
+                                } else {
+                                    var user_id = String(user).substring(5,user_length);
+                                }
+                                var temp = "&user_id="+user_id;
+                                var position = String(window.location).indexOf("&user");
+                                var url = String(window.location).substring(0, position)+temp;
+                                /*if (position > 0) {
+                                    window.location.replace(url);
+                                } else {
+                                    url = String(window.location)+temp;
+                                    window.location.replace(url);
+                                }*/
                             }
 
-							var params = $("#add_event_form").serialize();
+                            /*$("#title").val('');
+                            $("#content").val('');
+                            $("#comment").val('');*/
 
-							$.ajax({
-								url: url+'&'+params,
-								success:function(data) {
-									var user = $('#users_to_send').val();
-                                    if (user) {
-                                        if (user.length > 1) {
-                                            user = 0;
-                                        } else {
-                                            user = user[0];
-                                        }
-                                        var user_length = String(user).length;
-                                        if (String(user).substring(0,1) == 'G') {
-                                            var user_id = String(user).substring(6,user_length);
-                                            var user_id = "G:"+user_id;
-                                        } else {
-                                            var user_id = String(user).substring(5,user_length);
-                                        }
-                                        var temp = "&user_id="+user_id;
-                                        var position = String(window.location).indexOf("&user");
-                                        var url = String(window.location).substring(0, position)+temp;
-                                        /*if (position > 0) {
-                                            window.location.replace(url);
-                                        } else {
-                                            url = String(window.location)+temp;
-                                            window.location.replace(url);
-                                        }*/
-                                    }
+                            calendar.fullCalendar('refetchEvents');
+                            calendar.fullCalendar('rerenderEvents');
 
-                                    $("#title").val('');
-                                    $("#content").val('');
-                                    $("#comment").val('');
-
-                                    calendar.fullCalendar('refetchEvents');
-                                    calendar.fullCalendar('rerenderEvents');
-
-									$("#dialog-form").dialog('close');
-								}
-							});
-						}
-					},
-					close: function() {
-                        $("#title").val('');
-                        $("#content").val('');
-                        $("#comment").val('');
-					}
-				});
+                            $('#modalDialogForm').modal('toggle');
+                        }
+                    });
+                });
 
 				calendar.fullCalendar('unselect');
                 //Reload events
@@ -242,82 +226,11 @@ $(document).ready(function() {
                 calendar.fullCalendar("rerenderEvents");
 			}
 		},
-		/*eventRender: function(event, element) {
-            if (event.attachment) {
-                /*element.qtip({
-                    hide: {
-                        delay: 2000
-                    },
-		            content: event.attachment,
-		            position: { at:'top right' , my:'bottom right'}
-		        }).removeData('qtip'); // this is an special hack to add multiple qtip in the same target
-
-            }
-
-            var onHoverInfo = '';
-
-            {#{% if on_hover_info.description %}#}
-                if (event.description) {
-                    onHoverInfo = event.description;
-                }
-            {#{% endif %}
-
-            {% if on_hover_info.comment %}#}
-                if (event.comment) {
-                    onHoverInfo = onHoverInfo + event.comment;
-                }
-            {#{% endif %}#}
-
-            if (onHoverInfo) {
-                element.qtip({
-                    content: onHoverInfo,
-                    position: {
-                        at: 'top center',
-                        my: 'bottom center'
-                    }
-                });
-			}
-	    },*/
 		eventClick: function(calEvent, jsEvent, view) {
             var start = calEvent.start;
             var end = calEvent.end;
             var diffDays = moment(end).diff(start, 'days');
             var endDateMinusOne = '';
-
-
-
-            //$('#modalBody').html(calEvent.description);
-
-
-
-            // If event is not editable then just return the qtip
-            /*if (!calEvent.editable) {
-                var onHoverInfo = '';
-                {#{% if calEvent.description %}#}
-                if (calEvent.description) {
-                    onHoverInfo = calEvent.description;
-                }
-                {#{% endif %}
-                {% if on_hover_info.comment %}#}
-                if (calEvent.comment) {
-                    onHoverInfo = onHoverInfo + calEvent.comment;
-                }
-                {#{% endif %}#}
-
-                if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-                    $(this).qtip({
-                        overwrite: false,
-                        show: {ready: true},
-                        content: onHoverInfo,
-                        position: {
-                            at: 'top center',
-                            my: 'bottom center'
-                        }
-                    });
-
-                    return;
-                }
-            }*/
 
             if (end) {
                 var clone = end.clone();
@@ -336,15 +249,7 @@ $(document).ready(function() {
                     $(".user-sender").show();
 				{% endif %}
 
-                $('#color_calendar').html('{{ type_label | escape('js') }}');
-                $('#color_calendar').addClass('label_tag');
-                $('#color_calendar').removeClass('course_event');
-                $('#color_calendar').removeClass('personal_event');
-                $('#color_calendar').removeClass('group_event');
-                $('#color_calendar').addClass(calEvent.type+'_event');
-                $('.type-agenda').show();
-                // It hides the CKEDITOR while clicking an existing Event
-                $('#cke_content').hide();
+                loadColors(calEvent);
 
                 $('#simple_start_date').html(startDateToString);
                 if (diffDays > 1) {
@@ -364,21 +269,20 @@ $(document).ready(function() {
                 $("#simple_comment").html(calEvent.comment);
 
                 if (calEvent.course_name) {
-                    $('#type_course').html({{ 'Course' | get_lang }})
                     $("#calendar_course_info_simple").html(calEvent.course_name);
+                    $("#type_course").html("{{ 'Course' | get_lang }}");
                 } else {
                     $("#calendar_course_info_simple").html('');
                 }
 
                 if (calEvent.session_name) {
-                    $('#type_course').html({{ 'Session' | get_lang }})
                     $("#calendar_course_info_simple").html(calEvent.session_name);
+                    $('#type_course').html("{{ 'Session' | get_lang }}");
                 } else {
                     $("#calendar_course_info_simple").html('');
                 }
 
 				allFields.removeClass( "ui-state-error" );
-				$("#dialog-form").dialog("open");
 
                 $('#modalTitle').html(calEvent.title);
                 $('#calendarModal').modal();
@@ -400,6 +304,31 @@ $(document).ready(function() {
 
 
                 $('#modalFooter').html(exportCalConfidential+exportCalPrivate+exportCalPublic+btnEdit+btnDelete);
+
+                {% if type == 'not_available' %}
+                $('#btnEdit').click(function() {
+                    var bValid = true;
+                    bValid = bValid && checkLength( title, "title", 1, 255 );
+
+                    var params = $("#add_event_form").serialize();
+                    $.ajax({
+                        url: url+'&'+params,
+                        success:function() {
+                            calEvent.title = $("#title").val();
+                            calEvent.start = calEvent.start;
+                            calEvent.end = calEvent.end;
+                            calEvent.allDay = calEvent.allDay;
+                            calEvent.description = $("#content").val();
+                            calendar.fullCalendar('updateEvent',
+                                calEvent,
+                                true // make the event "stick"
+                            );
+                            //close modal
+                            $('#calendarModal').modal('toggle');
+                        }
+                    });
+                });
+                {% endif %}
 
                 $('#btnDelete').click(function() {
                     if (calEvent.parent_event_id || calEvent.has_children != '') {
@@ -464,58 +393,12 @@ $(document).ready(function() {
                             );
                             calendar.fullCalendar('refetchEvents');
                             calendar.fullCalendar('rerenderEvents');
-                            $("#dialog-form").dialog('close');
+                            //close modal
+                            $('#calendarModal').modal('toggle');
                         }
                     });
                 });
 
-				$("#dialog-form").dialog({
-					buttons: {
-
-                        {% if type == 'not_available' %}
-						'{{ "Edit" | get_lang }}' : function() {
-							var bValid = true;
-							bValid = bValid && checkLength( title, "title", 1, 255 );
-
-							var params = $("#add_event_form").serialize();
-							$.ajax({
-								url: url+'&'+params,
-								success:function() {
-									calEvent.title = $("#title").val();
-									calEvent.start = calEvent.start;
-									calEvent.end = calEvent.end;
-									calEvent.allDay = calEvent.allDay;
-									calEvent.description = $("#content").val();
-									calendar.fullCalendar('updateEvent',
-                                        calEvent,
-                                        true // make the event "stick"
-									);
-									$("#dialog-form").dialog("close");
-								}
-							});
-						},
-                        {% endif %}
-
-
-					},
-					close: function() {
-                        $("#title_edit").hide();
-                        $("#content_edit").hide();
-                        $("#comment_edit").hide();
-
-                        $("#title").show();
-                        $("#content").show();
-                        $("#comment").show();
-
-						$("#title_edit").html('');
-						$("#content_edit").html('');
-                        $("#comment_edit").html('');
-
-                        $("#title").val('');
-                        $("#content").val('');
-                        $("#comment").val('');
-					}
-				});
 			} else {
 			    // Simple form
                 $('#simple_start_date').html(startDateToString);
@@ -530,6 +413,8 @@ $(document).ready(function() {
                 } else {
                     $('#simple_end_date').html('');
                 }
+
+                loadColors(calEvent);
 
                 if (calEvent.course_name) {
                     $("#calendar_course_info_simple").html(calEvent.course_name);
@@ -603,10 +488,24 @@ $(document).ready(function() {
 {{ actions_div }}
 {{ toolbar }}
 
-<div id="dialog-form" style="display:none;">
-	<div class="dialog-form-content">
-        {{ form_add }}
-	</div>
+<div id="modalDialogForm" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ "Add event" | get_lang }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {{ form_add }}
+            </div>
+            <div id="modalFooter" class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 {% if legend_list %}
@@ -615,70 +514,72 @@ $(document).ready(function() {
     {% endfor %}
     <br /><br />
 {% endif %}
+
 <div id="loading" style="margin-left:150px;position:absolute;display:none">
     {{ "Loading" | get_lang }}...
 </div>
+
 <div id="calendar"></div>
 
-    <div id="calendarModal" class="modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 id="modalTitle" class="modal-title"></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div id="modalBody" class="modal-body">
-                    <dl class="row">
-                        <!---  type event course o session -->
-                        <dt id="type_course" class="col-sm-3"></dt>
-                        <dd class="col-sm-9">
-                            <span id="calendar_course_info_simple"></span>
-                        </dd>
-                        <!--- user sender -->
-                        <dt class="user-sender col-sm-3" style="display: none;">
-                            {{ "To" |get_lang }}
-                        </dt>
-                        <dd class="user-sender col-sm-9" style="display: none">
-                            <span id="visible_to_read_only_users"></span>
-                        </dd>
-                        <!--- type agenda -->
+<div id="calendarModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="modalTitle" class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="modalBody" class="modal-body">
+                <dl class="row">
+                    <!---  type event course o session -->
+                    <dt id="type_course" class="col-sm-2"></dt>
+                    <dd class="col-sm-10">
+                        <span id="calendar_course_info_simple"></span>
+                    </dd>
+                    <!--- user sender -->
+                    <dt class="user-sender col-sm-2" style="display: none;">
+                        {{ "To" |get_lang }}
+                    </dt>
+                    <dd class="user-sender col-sm-10" style="display: none">
+                        <span id="visible_to_read_only_users"></span>
+                    </dd>
+                    <!--- type agenda -->
 
-                        <dt class="type-agenda col-sm-3" style="display: none">
-                            {{ "Agenda" |get_lang }}
-                        </dt>
-                        <dd class="type-agenda col-sm-9" style="display: none">
-                            <div id="color_calendar"></div>
-                        </dd>
+                    <dt class="type-agenda col-sm-2" style="display: none">
+                        {{ "Agenda" |get_lang }}
+                    </dt>
+                    <dd class="type-agenda col-sm-10" style="display: none">
+                        <div id="color_calendar"></div>
+                    </dd>
 
-                        <dt class="col-sm-3">{{ "Title" |get_lang }}</dt>
-                        <dd class="col-sm-9">
-                            <div id="simple_title"></div>
-                        </dd>
+                    <dt class="col-sm-2">{{ "Title" |get_lang }}</dt>
+                    <dd class="col-sm-10">
+                        <div id="simple_title"></div>
+                    </dd>
 
-                        <dt class="col-sm-3">{{ "Date" |get_lang }}</dt>
-                        <dd class="col-sm-9">
-                            <span id="simple_start_date"></span>
-                            <span id="simple_end_date"></span>
-                        </dd>
+                    <dt class="col-sm-2">{{ "Date" |get_lang }}</dt>
+                    <dd class="col-sm-10">
+                        <span id="simple_start_date"></span>
+                        <span id="simple_end_date"></span>
+                    </dd>
 
-                        <dt class="col-sm-3">{{ "Description" |get_lang }}</dt>
-                        <dd class="col-sm-9">
-                            <div id="simple_content"></div>
-                        </dd>
+                    <dt class="col-sm-2">{{ "Description" |get_lang }}</dt>
+                    <dd class="col-sm-10">
+                        <div id="simple_content"></div>
+                    </dd>
 
-                        <dt class="col-sm-3">{{ "Comment" |get_lang }}</dt>
-                        <dd class="col-sm-9">
-                            <div id="simple_comment"></div>
-                        </dd>
-                    </dl>
-                </div>
-                <div id="modalFooter" class="modal-footer">
+                    <dt class="col-sm-2">{{ "Comment" |get_lang }}</dt>
+                    <dd class="col-sm-10">
+                        <div id="simple_comment"></div>
+                    </dd>
+                </dl>
+            </div>
+            <div id="modalFooter" class="modal-footer">
 
-                </div>
             </div>
         </div>
     </div>
+</div>
 
 {% endautoescape %}

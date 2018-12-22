@@ -98,76 +98,6 @@ function parse_csv_data($file)
     return $skills;
 }
 
-/**
- * XML-parser: handle start of element.
- */
-function element_start($parser, $data)
-{
-    $data = api_utf8_decode($data);
-    global $skill;
-    global $current_tag;
-    switch ($data) {
-        case 'Skill':
-            $skill = [];
-            break;
-        default:
-            $current_tag = $data;
-    }
-}
-
-/**
- * XML-parser: handle end of element.
- */
-function element_end($parser, $data)
-{
-    $data = api_utf8_decode($data);
-    global $skill;
-    global $skills;
-    global $current_value;
-    switch ($data) {
-        case 'Skill':
-            $skills[] = $skill;
-            break;
-        default:
-            $skill[$data] = $current_value;
-            break;
-    }
-}
-
-/**
- * XML-parser: handle character data.
- */
-function character_data($parser, $data)
-{
-    $data = trim(api_utf8_decode($data));
-    global $current_value;
-    $current_value = $data;
-}
-
-/**
- * Read the XML-file.
- *
- * @param string $file Path to the XML-file
- *
- * @return array All userinformation read from the file
- */
-function parse_xml_data($file)
-{
-    global $current_tag;
-    global $current_value;
-    global $skill;
-    global $skills;
-    $skills = [];
-    $parser = xml_parser_create('UTF-8');
-    xml_set_element_handler($parser, 'element_start', 'element_end');
-    xml_set_character_data_handler($parser, 'character_data');
-    xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
-    xml_parse($parser, api_utf8_encode_xml(file_get_contents($file)));
-    xml_parser_free($parser);
-
-    return $skills;
-}
-
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
@@ -183,7 +113,7 @@ if (!empty($_POST['formSent']) && $_FILES['import_file']['size'] !== 0) {
     $file_type = $_POST['file_type'];
     Security::clear_token();
     $tok = Security::get_token();
-    $allowed_file_mimetype = ['csv', 'xml'];
+    $allowed_file_mimetype = ['csv'];
     $error_kind_file = false;
     $error_message = '';
 
@@ -192,10 +122,6 @@ if (!empty($_POST['formSent']) && $_FILES['import_file']['size'] !== 0) {
     if (in_array($ext_import_file, $allowed_file_mimetype)) {
         if (strcmp($file_type, 'csv') === 0 && $ext_import_file == $allowed_file_mimetype[0]) {
             $skills = parse_csv_data($_FILES['import_file']['tmp_name']);
-            $errors = validate_data($skills);
-            $error_kind_file = false;
-        } elseif (strcmp($file_type, 'xml') === 0 && $ext_import_file == $allowed_file_mimetype[1]) {
-            $skills = parse_xml_data($_FILES['import_file']['tmp_name']);
             $errors = validate_data($skills);
             $error_kind_file = false;
         } else {
@@ -221,8 +147,6 @@ if (!empty($_POST['formSent']) && $_FILES['import_file']['size'] !== 0) {
     }
 
     if (strcmp($file_type, 'csv') === 0) {
-        save_data($skills_to_insert);
-    } elseif (strcmp($file_type, 'xml') === 0) {
         save_data($skills_to_insert);
     } else {
         $error_message = get_lang('YouMustImportAFileAccordingToSelectedOption');
@@ -283,23 +207,6 @@ $defaults['file_type'] = 'csv';
 $form->setDefaults($defaults);
 $form->display();
 
-$list = [];
-$list_reponse = [];
-$result_xml = '';
-$i = 0;
-$count_fields = count($extra_fields);
-if ($count_fields > 0) {
-    foreach ($extra_fields as $extra) {
-        $list[] = $extra[1];
-        $list_reponse[] = 'xxx';
-        $spaces = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-        $result_xml .= $spaces.'&lt;'.$extra[1].'&gt;xxx&lt;/'.$extra[1].'&gt;';
-        if ($i != $count_fields - 1) {
-            $result_xml .= '<br/>';
-        }
-        $i++;
-    }
-}
 ?>
 <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
 

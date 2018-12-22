@@ -247,12 +247,7 @@ if (isset($_GET['import'])) {
             $values = $import_result_form->exportValues();
             $file_type = $_POST['file_type'];
             $file_name = $_FILES['import_file']['tmp_name'];
-            if ($file_type == 'csv') {
-                $results = Import :: csvToArray($file_name);
-            } else {
-                $results = parse_xml_data($file_name);
-            }
-
+            $results = Import :: csvToArray($file_name);
             $nr_results_added = 0;
             foreach ($results as $index => $importedresult) {
                 //check username & score

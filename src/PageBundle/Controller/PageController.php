@@ -11,7 +11,6 @@ use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sonata\PageBundle\Entity\PageManager;
 use Sonata\PageBundle\Entity\SiteManager;
-use Sonata\PageBundle\Model\SiteManagerInterface;
 use Sonata\PageBundle\Page\TemplateManager;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
@@ -297,33 +296,40 @@ class PageController extends BaseController
         $site = $siteManager->findOneBy($criteria);
 
         $page = null;
+        $blockToEdit = null;
+        $contentText = null;
+
         if ($site) {
             // Parents only of homepage
             $criteria = ['site' => $site, 'enabled' => true, 'slug' => $slug];
             /** @var Page $page */
             $page = $pageManager->findOneBy($criteria);
-        }
+            $blocks = $page->getBlocks();
 
-        $blocks = $page->getBlocks();
-        $blockToEdit = null;
+            foreach ($blocks as $block) {
+                if ($block->getName() !== 'Main content') {
+                    continue;
+                }
 
-        foreach ($blocks as $block) {
-            if ($block->getName() === 'Main content') {
                 $code = $block->getSetting('code');
-                if ($code === 'content') {
-                    $children = $block->getChildren();
-                    /** @var Block $child */
-                    foreach ($children as $child) {
-                        if ($child->getType() === 'sonata.formatter.block.formatter') {
-                            $blockToEdit = $child;
-                            break 2;
-                        }
+
+                if ($code !== 'content') {
+                    continue;
+                }
+
+                $children = $block->getChildren();
+
+                /** @var Block $child */
+                foreach ($children as $child) {
+                    if ($child->getType() !== 'sonata.formatter.block.formatter') {
+                        continue;
                     }
+
+                    $contentText = $child->getSetting('content');
+                    break 2;
                 }
             }
         }
-
-        $contentText = $blockToEdit->getSetting('content');
 
         return $this->render(
             '@ChamiloTheme/Index/page.html.twig',

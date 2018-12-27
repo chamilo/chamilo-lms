@@ -87,6 +87,10 @@
                                 <div id="minute">{{ minute }}</div>
                                 <div class="divider">:</div>
                                 <div id="second">{{ second }}</div>
+
+                                <div id="slash"> / </div>
+                                <div class="divider"></div>
+                                <div>{{ hour_min }}</div>
                             </div>
                         </div>
                         {% endset %}

@@ -64,33 +64,48 @@
                                 }, 1000);
                             })
                         </script>
-                        <b>
-                            {{ "TimeSpentInLp"|get_lang|format(lp_accumulate_work_time) }}
-                        </b>
-                        <div id="progress_bar">
-                            <div class="progress">
-                                <div id="progress_bar_value2"
-                                     class="progress-bar progress-bar-success"
-                                     role="progressbar" aria-valuenow="50"
-                                     aria-valuemin="0"
-                                     aria-valuemax="{{ time_progress_value }}"
-                                     style="width: {{ time_progress_perc }};"
-                                >
-                                    {{ time_progress_perc }}
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <b>
+                                    {{ "ProgressSpentInLp"|get_lang|format(lp_accumulate_work_time) }}
+                                </b>
+                            </div>
+                            <div class="col-xs-8">
+                                <div id="progress_bar">
+                                    <div class="progress">
+                                        <div id="progress_bar_value2"
+                                             class="progress-bar progress-bar-success"
+                                             role="progressbar" aria-valuenow="50"
+                                             aria-valuemin="0"
+                                             aria-valuemax="{{ time_progress_value }}"
+                                             style="width: {{ time_progress_perc }};"
+                                        >
+                                            {{ time_progress_perc }}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div id="timer">
-                            <div class="container">
-                                <div id="hour">{{ hour }}</div>
-                                <div class="divider">:</div>
-                                <div id="minute">{{ minute }}</div>
-                                <div class="divider">:</div>
-                                <div id="second">{{ second }}</div>
 
-                                <div id="slash"> / </div>
-                                <div class="divider"></div>
-                                <div>{{ hour_min }}</div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <b>
+                                    {{ "TimeSpentInLp"|get_lang|format(lp_accumulate_work_time) }}
+                                </b>
+                            </div>
+                            <div class="col-xs-8">
+                                <div id="timer">
+                                    <div class="container">
+                                        <div id="hour">{{ hour }}</div>
+                                        <div class="divider">:</div>
+                                        <div id="minute">{{ minute }}</div>
+                                        <div class="divider">:</div>
+                                        <div id="second">{{ second }}</div>
+
+                                        <div id="slash"> / </div>
+                                        <div>{{ hour_min }}</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         {% endset %}

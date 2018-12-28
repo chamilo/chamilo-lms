@@ -8330,4 +8330,5 @@ $TheStudentXHasFinishedTheCourseYLearningPaths = "The student <b>%s</b> has fini
 $ThisQuestionExistsInAnotherExercisesWarning = "This question is used in another exercises. If you continue its edition, the changes will affect all exercises that contain this question.";
 $TimeSpentTimeRequired = "Time spent / Time required";
 $ProgressSpentInLp = "Progress";
+$InSessionXYouHadTheFollowingResults = "In session %s, you had the following results";
 ?>

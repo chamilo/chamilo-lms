@@ -357,8 +357,11 @@ switch ($action) {
             $courseTable .= '</tbody></table>';
         }
 
+        $studentInfo = api_get_user_info($student_id);
+
         $content =
-            '<center>'.Display::page_subheader2(get_lang('Resume')).'</center>'.
+            '<div style="text-align: center"><h3>'.($sessionInfo['name']).'</h3></div>'.
+            '<center>'.Display::page_subheader3($studentInfo['complete_name']).'</center>'.
             $table->toHtml().
             sprintf(
                 get_lang('InSessionXYouHadTheFollowingResults'),
@@ -372,7 +375,7 @@ switch ($action) {
             'session_info' => $sessionInfo,
             'course_info' => '',
             'pdf_date' => '',
-            'student_info' => api_get_user_info($student_id),
+            'student_info' => $studentInfo,
             'show_grade_generated_date' => true,
             'show_real_course_teachers' => false,
             'show_teacher_as_myself' => false,

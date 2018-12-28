@@ -8255,4 +8255,6 @@ $QuestionForNextClass = "Questions pour la classe suivante";
 $NewExerciseAttemptDisabled = "Le portail ne permet pas le démarrage d'exercice pour le moment, revenez un peu plus tard pour essayer à nouveau";
 $PersonalDataOfficer = "Délégué à la protection des données personnelles";
 $MaxNumberSubscribedStudentsReached = "Le nombre maximum d'apprenants a déjà été atteint, il n'est pas possible d'en inscrire de nouveau";
+$UserXAddedToCourseX = "L'utilisateur %s a été inscrit au cours %s";
+$InSessionXYouHadTheFollowingResults = "Dans la formation %s, vous avez obtenu les résultats suivants:";
 ?>

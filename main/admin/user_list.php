@@ -984,7 +984,7 @@ $form->addButtonSearch(get_lang('Search'));
 
 $searchAdvanced = '
 <a id="advanced_params" href="javascript://" 
-    class="btn btn-default advanced_options" onclick="display_advanced_search_form();">
+    class="btn btn-light advanced_options" onclick="display_advanced_search_form();">
     <span id="img_plus_and_minus">&nbsp;
     '.Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch').'
     </span>

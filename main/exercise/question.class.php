@@ -1781,9 +1781,9 @@ abstract class Question
             unset($question_type_custom_list[HOT_SPOT_DELINEATION]);
         }
 
-        echo '<div class="panel panel-default">';
-        echo '<div class="panel-body">';
-        echo '<ul class="question_menu">';
+        echo '<div class="card card-exercise">';
+        echo '<div class="card-body">';
+        echo '<ul class="list-exercise">';
         foreach ($question_type_custom_list as $i => $a_type) {
             // @todo remove require_once classes are already loaded using composer
             // include the class of the type
@@ -1793,7 +1793,7 @@ abstract class Question
             eval('$img = '.$a_type[1].'::$typePicture;');
             eval('$explanation = get_lang('.$a_type[1].'::$explanationLangVar);');
             echo '<li>';
-            echo '<div class="icon-image">';
+            echo '<div class="icon">';
             $icon = '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'">'.
                 Display::return_icon($img, $explanation, null, ICON_SIZE_BIG).'</a>';
 
@@ -1811,7 +1811,7 @@ abstract class Question
         }
 
         echo '<li>';
-        echo '<div class="icon_image_content">';
+        echo '<div class="content">';
         if ($objExercise->exercise_was_added_in_lp == true) {
             echo Display::return_icon(
                 'database_na.png',

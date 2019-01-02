@@ -562,7 +562,7 @@ if (typeof CKEDITOR !== 'undefined') {
     plugins.forEach(function (plugin) {
         CKEDITOR.plugins.addExternal(
             plugin,
-            mainUrl + 'inc/lib/javascript/ckeditor/plugins/' + plugin + '/'
+            mainUrl.substr(1) + 'inc/lib/javascript/ckeditor/plugins/' + plugin + '/'
         );
     });
 

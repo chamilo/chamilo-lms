@@ -2527,7 +2527,7 @@ class Display
             });
         }
 
-        $html = '<div id="'.$id.'" >';
+        $html = '<div id="'.$id.'" class="actions" >';
         $html .= '<div class="row">';
 
         for ($i = 0; $i < $col; $i++) {

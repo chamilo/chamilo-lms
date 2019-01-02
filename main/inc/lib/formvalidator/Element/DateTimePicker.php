@@ -45,19 +45,19 @@ class DateTimePicker extends HTML_QuickForm_text
         $resetFieldX = sprintf(get_lang('ResetFieldX'), $label);
 
         return '
-            <div class="input-group" id="date_time_wrapper_'.$id.'">
-                <span class="input-group-addon cursor-pointer">
+            <div class="input-group mb-3" id="date_time_wrapper_'.$id.'">
+                <span class="input-group-prepend">
                     <input '.$this->_getAttrString($this->_attributes).'>
                 </span>
                 <p class="form-control disabled" id="'.$id.'_alt_text">'.$value.'</p>
                 <input class="form-control" type="hidden" id="'.$id.'_alt" value="'.$value.'">
-                <span class="input-group-btn">
-                    <button class="btn btn-default" type="button"
+                <div class="input-group-append">
+                    <button class="btn btn-light" type="button"
                             title="'.$resetFieldX.'">
                         <span class="fa fa-trash text-danger" aria-hidden="true"></span>
                         <span class="sr-only">'.$resetFieldX.'</span>
                     </button>
-                </span>
+                </div>
             </div>
         '.$this->getElementJS();
     }

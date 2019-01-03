@@ -343,17 +343,17 @@ class PDF
     /**
      * Converts an html string to PDF.
      *
-     * @param string $document_html  valid html
-     * @param string $css            CSS content of a CSS file
-     * @param string $pdf_name       pdf name
-     * @param string $course_code    course code
+     * @param string $document_html valid html
+     * @param string $css CSS content of a CSS file
+     * @param string $pdf_name pdf name
+     * @param string $course_code course code
      *                               (if you are using html that are located in the document tool you must provide this)
-     * @param string $outputMode     the MPDF output mode can be:
-     * @param bool   $saveInFile
+     * @param string $outputMode the MPDF output mode can be:
+     * @param bool $saveInFile
      * @param string $fileToSave
-     * @param bool   $returnHtml
-     * @param bool   $addDefaultCss
-     * @param bool   $completeHeader
+     * @param bool $returnHtml
+     * @param bool $addDefaultCss
+     * @param bool $completeHeader
      *
      * 'I' (print on standard output),
      * 'D' (download file) (this is the default value),
@@ -361,6 +361,7 @@ class PDF
      * 'S' (return as a string)
      *
      * @return string Web path
+     * @throws MpdfException
      */
     public function content_to_pdf(
         $document_html,
@@ -461,7 +462,11 @@ class PDF
         }
 
         if (!empty($css)) {
-            $this->pdf->WriteHTML($css, 1);
+            try {
+                $this->pdf->WriteHTML($css, 1);
+            } catch (MpdfException $e) {
+                error_log($e);
+            }
         }
 
         if ($addDefaultCss) {
@@ -472,11 +477,19 @@ class PDF
             ];
             foreach ($basicStyles as $style) {
                 $cssContent = file_get_contents($style);
-                $this->pdf->WriteHTML($cssContent, 1);
+                try {
+                    $this->pdf->WriteHTML($cssContent, 1);
+                } catch (MpdfException $e) {
+                    error_log($e);
+                }
             }
         }
 
-        $this->pdf->WriteHTML($document_html);
+        try {
+            $this->pdf->WriteHTML($document_html);
+        } catch (MpdfException $e) {
+            error_log($e);
+        }
 
         if (empty($pdf_name)) {
             $output_file = 'pdf_'.date('Y-m-d-his').'.pdf';

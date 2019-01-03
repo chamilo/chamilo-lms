@@ -263,8 +263,10 @@ switch ($action) {
         $table->setCellContents(1, 2, $average);
 
         $courseTable = '';
+
+
         if (!empty($courses)) {
-            $courseTable = '<table class="data_table">';
+            $courseTable .= '<table class="data_table">';
             $courseTable .= '<thead>';
             $courseTable .= '<tr>
                     <th>'.get_lang('Course').'</th>
@@ -359,15 +361,19 @@ switch ($action) {
 
         $studentInfo = api_get_user_info($student_id);
 
-        $content =
-            '<div style="text-align: center"><h3>'.($sessionInfo['name']).'</h3></div>'.
-            '<center>'.Display::page_subheader3($studentInfo['complete_name']).'</center>'.
-            $table->toHtml().
-            sprintf(
-                get_lang('InSessionXYouHadTheFollowingResults'),
-                $sessionInfo['name']
-            ).
-            $courseTable;
+        $tpl = new Template('', false, false, false, true, false, false);
+        $tpl->assign('title', $sessionInfo['name']);
+        $tpl->assign('student', $studentInfo['complete_name']);
+        $tpl->assign('table_progress', $table->toHtml());
+        $tpl->assign('subtitle', sprintf(
+            get_lang('InSessionXYouHadTheFollowingResults'),
+            $sessionInfo['name']
+        ));
+        $tpl->assign('table_course', $courseTable);
+        $template = $tpl->fetch($tpl->get_template('my_space/pdf_export_student.tpl'));
+
+        $content = ''.$template;
+
 
         $params = [
             'pdf_title' => get_lang('Resume'),
@@ -383,17 +389,42 @@ switch ($action) {
         ];
 
         $pdf = new PDF('A4', $params['orientation'], $params);
-        $pdf->content_to_pdf($content,
-            $css = '',
-            $pdf_name = '',
-            $course_code = null,
-            $outputMode = 'D',
-            $saveInFile = false,
-            $fileToSave = null,
-            $returnHtml = false,
-            $addDefaultCss = true,
-            $completeHeader = true
-        );
+        try {
+            $theme = $tpl->theme;
+            $themeName = empty($theme) ? api_get_visual_theme() : $theme;
+            $themeDir = \Template::getThemeDir($theme);
+            $customLetterhead = $themeDir."images/letterhead.png";
+            $urlPathLetterhead = api_get_path(SYS_CSS_PATH)."$customLetterhead";
+
+            $urlWebLetterhead = '#FFFFFF';
+            $fullPage = false;
+            if (file_exists($urlPathLetterhead)) {
+                $fullPage = true;
+                $urlWebLetterhead = 'url('.api_get_path(WEB_CSS_PATH).$customLetterhead.')';
+            }
+
+            if($fullPage){
+                $pdf->pdf->SetDisplayMode('fullpage');
+                $pdf->pdf->SetDefaultBodyCSS('background',$urlWebLetterhead);
+                $pdf->pdf->SetDefaultBodyCSS('background-image-resize','6');
+            }
+
+            @$pdf->content_to_pdf($content,
+                $css = '',
+                $pdf_name = '',
+                $course_code = null,
+                $outputMode = 'D',
+                $saveInFile = false,
+                $fileToSave = null,
+                $returnHtml = false,
+                $addDefaultCss = true,
+                $completeHeader = false
+            );
+
+
+        } catch (MpdfException $e) {
+            error_log($e);
+        }
         exit;
         break;
     case 'export_one_session_row':

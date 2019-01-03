@@ -1192,48 +1192,68 @@ class Link extends Model
 
         // DISPLAY MOVE UP COMMAND only if it is not the top link.
         if ($currentCategory != 0) {
-            $tools .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&sec_token='.$token.'&action=up&up='.$categoryId.'&category_id='.$categoryId.'" title="'.get_lang('Up').'">'.
-                Display:: return_icon(
-                    'up.png',
-                    get_lang('Up'),
-                    [],
-                    ICON_SIZE_SMALL
-                ).'</a>';
+            $url = api_get_self().'?'.api_get_cidreq().'&sec_token='.$token.'&action=up&up='.$categoryId.'&category_id='.$categoryId;
+            $tools .= Display::toolbarButton(
+                null,
+                $url,
+                'level-up-alt',
+                'outline-secondary',
+                [
+                    'title' => get_lang("Up")
+                ]
+                );
+
         } else {
-            $tools .= Display:: return_icon(
-                'up_na.png',
-                get_lang('Up'),
-                [],
-                ICON_SIZE_SMALL
-            ).'</a>';
+            $tools .= Display::toolbarButton(
+                null,
+                null,
+                'level-up-alt',
+                'outline-secondary',
+                [
+                    'title' => get_lang("Up"),
+                    'class' => 'disabled'
+                ]
+            );
         }
 
         // DISPLAY MOVE DOWN COMMAND only if it is not the bottom link.
         if ($currentCategory < $countCategories - 1) {
-            $tools .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&sec_token='.$token.'&action=down&down='.$categoryId.'&category_id='.$categoryId.'">'.
-                Display:: return_icon(
-                    'down.png',
-                    get_lang('Down'),
-                    [],
-                    ICON_SIZE_SMALL
-                ).'</a>';
-        } else {
-            $tools .= Display:: return_icon(
-                'down_na.png',
-                get_lang('Down'),
-                [],
-                ICON_SIZE_SMALL
-            ).'</a>';
-        }
+            $url = api_get_self().'?'.api_get_cidreq().'&sec_token='.$token.'&action=down&down='.$categoryId.'&category_id='.$categoryId;
+            $tools .= Display::toolbarButton(
+                null,
+                $url,
+                'level-down-alt',
+                'outline-secondary',
+                [
+                    'title' => get_lang("Down")
+                ]
+            );
 
-        $tools .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&sec_token='.$token.'&action=deletecategory&id='.$categoryId."&category_id=$categoryId\"
-            onclick=\"javascript: if(!confirm('".get_lang('CategoryDelconfirm')."')) return false;\">".
-            Display:: return_icon(
-                'delete.png',
-                get_lang('Delete'),
-                [],
-                ICON_SIZE_SMALL
-            ).'</a>';
+        } else {
+            $tools .= Display::toolbarButton(
+                null,
+                null,
+                'level-down-alt',
+                'outline-secondary',
+                [
+                    'title' => get_lang("Down"),
+                    'class' => 'disabled'
+                ]
+            );
+        }
+        $urlDelete = api_get_self().'?'.api_get_cidreq().'&sec_token='.$token.'&action=deletecategory&id='.$categoryId."&category_id=$categoryId";
+        $tools .= Display::toolbarButton(
+            null,
+            $urlDelete,
+            'trash',
+            'outline-secondary',
+            [
+                'title' => get_lang("Delete"),
+                'onclick' => "javascript: if(!confirm('".get_lang('CategoryDelconfirm')."')) return false;"
+            ]
+        );
+
+
 
         return $tools;
     }

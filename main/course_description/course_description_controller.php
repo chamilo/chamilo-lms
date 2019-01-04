@@ -120,8 +120,11 @@ class CourseDescriptionController
         $tpl->assign('actions', $actions);
         $tpl->assign('session_id', $session_id);
         $tpl->assign('c_id', api_get_course_int_id());
-        $templateName = $tpl->get_template('course_description/index.tpl');
+        $templateName = $tpl->get_template('course_description/index.html.twig');
+
         $content = $tpl->fetch($templateName);
+
+
         $tpl->assign('content', $content);
         $tpl->display_one_col_template();
     }

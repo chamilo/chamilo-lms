@@ -907,3 +907,82 @@ footer {
     }
   }
 }
+
+.main-question{
+  margin-bottom: 20px;
+  margin-top: 20px;
+  .title{
+    margin-bottom: 10px;
+    margin-top: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #cdcdcd;
+  }
+  .description{
+    margin-bottom: 10px;
+  }
+  .options{
+    padding: 1.8em;
+    label{
+      display: block;
+      margin-bottom: 18px;
+      font-weight: bold;
+      &.radio, &.checkbox{
+        min-height: 18px;
+        margin-left: 25px;
+      }
+      input[type="radio"]{
+        margin-left: -25px;
+        &.checkradios{
+          border-radius: 50px;
+        }
+      }
+      input[type="checkbox"]{
+        margin-left: -25px;
+        &.checkradios{
+          border-radius: 5px;
+        }
+      }
+
+      .checkradios
+      {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        display: inline-block;
+        position: relative;
+        background-color: #ffffff;
+        color: #666;
+        top: 10px;
+        height: 30px;
+        width: 30px;
+        border: 1px solid #cdcdcd;
+
+        cursor: pointer;
+        margin-right: 7px;
+        outline: none;
+        &:checked::before
+        {
+          position: absolute;
+          font: 13px/1 'Open Sans', sans-serif;
+          left: 11px;
+          top: 7px;
+          content: '\02143';
+          transform: rotate(40deg);
+        }
+        &:hover
+        {
+          background-color: #f7f7f7;
+        }
+        &:checked
+        {
+          background-color: #f1f1f1;
+        }
+      }
+
+    }
+    p{
+      line-height: 1em;
+      display: contents;
+    }
+  }
+}

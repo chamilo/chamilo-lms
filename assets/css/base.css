@@ -83,10 +83,6 @@
     margin-bottom: 10px;
 }
 
-#form-login label {
-    display: none;
-}
-
 #login-block #formLogin .form-group {
     display: none;
 }
@@ -1799,32 +1795,6 @@ div.admin_section h4 {
 }
 
 /* MAIN QUESTION */
-.main-question {
-    padding: 10px 20px;
-    box-sizing: border-box;
-    border: 1px solid #dddddd;
-    border-radius: 4px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-    margin-bottom: 35px;
-}
-
-.main-question .question_title {
-    font-size: 20px;
-    margin: 15px 0;
-    color: #666666;
-}
-
-.main-question .question_description {
-    color: #666666;
-}
-
-.main-question .form-actions {
-    clear: both;
-    width: 100%;
-    display: block;
-    border-top: 1px solid #dddddd;
-    padding-top: 10px;
-}
 
 #questions {
     width: 40%;
@@ -2139,14 +2109,6 @@ div.admin_section h4 {
     color: green;
 }
 
-.exercise_save_now_button img {
-    position: relative;
-    top: 4px;
-}
-
-.exercise_save_now_button {
-    padding-left: 25px;
-}
 
 .exercise_save_now_button .checkbox input[type="checkbox"] {
     margin-left: -25px;
@@ -2165,10 +2127,6 @@ div.admin_section h4 {
     margin-left: -25px;
 }
 
-.form-actions {
-    margin-top: 20px;
-    margin-bottom: 25px;
-}
 /* EXERCISE MATFDC */
 
 .certaintyQuizBox {
@@ -2926,18 +2884,6 @@ table#skill_holder {
 /*****************************************************
  *  LOGIN AND LANGUAGE FORM                          *
  *****************************************************/
-
-#lang_form {
-    text-align: left;
-}
-
-.form_login {
-    padding: 3px 15px;
-}
-
-#formLogin label {
-    color: #666666;
-}
 
 #login_fail {
     margin-left: 20px;

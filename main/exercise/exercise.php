@@ -1332,7 +1332,7 @@ if (empty($exerciseList) && $hotpotatoes_exist == false) {
     }
 
     echo '<div class="table-responsive">';
-    echo '<table class="table table-striped table-hover">';
+    echo '<table class="table table-hover">';
     echo Display::tag(
         'thead',
         Display::tag('tr', $headerList)

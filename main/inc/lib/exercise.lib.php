@@ -80,7 +80,7 @@ class ExerciseLib
                         // shown at the end of the given time, so hide for now
                         $titleToDisplay = Display::div(
                             $current_item.'. '.get_lang('ReadingComprehension'),
-                            ['class' => 'question_title']
+                            ['class' => 'title']
                         );
                     }
                     echo $titleToDisplay;
@@ -88,7 +88,7 @@ class ExerciseLib
                 if (!empty($questionDescription) && $answerType != READING_COMPREHENSION) {
                     echo Display::div(
                         $questionDescription,
-                        ['class' => 'question_description']
+                        ['class' => 'description']
                     );
                 }
             }
@@ -97,7 +97,7 @@ class ExerciseLib
                 return '';
             }
 
-            echo '<div class="question_options">';
+            echo '<div class="options">';
             // construction of the Answer object (also gets all answers details)
             $objAnswerTmp = new Answer($questionId, api_get_course_int_id(), $exercise);
             $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
@@ -452,7 +452,7 @@ class ExerciseLib
                 $hidingClass = 'hide-reading-answers';
                 $s .= Display::div(
                     $objQuestionTmp->selectTitle(),
-                    ['class' => 'question_title '.$hidingClass]
+                    ['class' => 'title '.$hidingClass]
                 );
             }
 
@@ -516,12 +516,14 @@ class ExerciseLib
 
                         $answer_input = null;
                         $attributes['class'] = 'checkradios';
+
                         if ($answerType == UNIQUE_ANSWER_IMAGE) {
                             $attributes['class'] = '';
                             $attributes['style'] = 'display: none;';
                             $answer = '<div class="thumbnail">'.$answer.'</div>';
                         }
 
+                        $answer_input .= '<div class="input-item">';
                         $answer_input .= '<label class="radio '.$hidingClass.'">';
                         $answer_input .= Display::input(
                             'radio',
@@ -530,7 +532,7 @@ class ExerciseLib
                             $attributes
                         );
                         $answer_input .= $answer;
-                        $answer_input .= '</label>';
+                        $answer_input .= '</label></div>';
 
                         if ($answerType == UNIQUE_ANSWER_IMAGE) {
                             $answer_input .= "</div>";
@@ -574,7 +576,8 @@ class ExerciseLib
                         if ($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {
                             $s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
                             $attributes['class'] = 'checkradios';
-                            $answer_input = '<label class="checkbox">';
+                            $answer_input = '<div class="input-item">';
+                            $answer_input .= '<label class="checkbox">';
                             $answer_input .= Display::input(
                                 'checkbox',
                                 'choice['.$questionId.']['.$numAnswer.']',
@@ -582,7 +585,7 @@ class ExerciseLib
                                 $attributes
                             );
                             $answer_input .= $answer;
-                            $answer_input .= '</label>';
+                            $answer_input .= '</label></div>';
 
                             if ($show_comment) {
                                 $s .= '<tr><td>';

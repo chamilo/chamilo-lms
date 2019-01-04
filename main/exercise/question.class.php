@@ -230,13 +230,13 @@ abstract class Question
     {
         $showQuestionTitleHtml = api_get_configuration_value('save_titles_as_html');
 
-        $title = $showQuestionTitleHtml ? '' : '<strong>';
+        $title = $showQuestionTitleHtml ? '' : '<h4>';
         $title .= $itemNumber.'. '.$this->selectTitle();
-        $title .= $showQuestionTitleHtml ? '' : '</strong>';
+        $title .= $showQuestionTitleHtml ? '' : '</h4>';
 
         return Display::div(
             $title,
-            ['class' => 'question_title']
+            ['class' => 'title']
         );
     }
 

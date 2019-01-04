@@ -245,7 +245,7 @@ if (api_is_course_admin() ||
     }
     $form->addHtml('<div class="start-survey">');
 
-    if (($show < $numberOfPages)) {
+    if ($show < $numberOfPages) {
         if ($show == 0) {
             $form->addButton(
                 'next_survey_page',

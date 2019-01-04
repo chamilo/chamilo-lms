@@ -184,8 +184,7 @@ if (Database::num_rows($result) > 1) {
     if ($_POST['language']) {
         $survey_invitation['survey_id'] = $_POST['language'];
     } else {
-        // Header
-        Display :: display_header(get_lang('ToolSurvey'));
+        Display::display_header(get_lang('ToolSurvey'));
         $frmLangUrl = api_get_self().'?'.api_get_cidreq().'&'
             .http_build_query([
                 'course' => Security::remove_XSS($_GET['course']),
@@ -708,7 +707,7 @@ if (
         if (array_key_exists($_GET['show'], $paged_questions)) {
             if (isset($_GET['user_id'])) {
                 // Get the user into survey answer table (user or anonymus)
-                $my_user_id = ($survey_data['anonymous'] == 1) ? $surveyUserFromSession : api_get_user_id();
+                $my_user_id = $survey_data['anonymous'] == 1 ? $surveyUserFromSession : api_get_user_id();
 
                 $sql = "SELECT
                             survey_question.survey_group_sec1,
@@ -783,10 +782,6 @@ if (
                     $questions[$row['sort']]['sort'] = $row['sort'];
                     $questions[$row['sort']]['is_required'] = $allowRequiredSurveyQuestions && $row['is_required'];
                 }
-                /*} else {
-                    // If the type is a pagebreak we are finished loading the questions for this page
-                    break;
-                }*/
                 $counter++;
             }
         }
@@ -1296,8 +1291,9 @@ if (isset($questions) && is_array($questions)) {
 $form->addHtml('<div class="start-survey">');
 if ($survey_data['survey_type'] == '0') {
     if ($survey_data['show_form_profile'] == 0) {
+
         // The normal survey as always
-        if (($show < $numberOfPages)) {
+        if ($show < $numberOfPages) {
             if ($show == 0) {
                 $form->addButton(
                     'next_survey_page',
@@ -1326,7 +1322,7 @@ if ($survey_data['survey_type'] == '0') {
         // The normal survey as always but with the form profile
         if (isset($_GET['show'])) {
             $numberOfPages = count($paged_questions);
-            if (($show < $numberOfPages)) { //$show = $_GET['show'] + 1
+            if ($show < $numberOfPages) {
                 if ($show == 0) {
                     $form->addButton(
                         'next_survey_page',

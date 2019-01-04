@@ -264,7 +264,6 @@ switch ($action) {
 
         $courseTable = '';
 
-
         if (!empty($courses)) {
             $courseTable .= '<table class="data_table">';
             $courseTable .= '<thead>';
@@ -374,7 +373,6 @@ switch ($action) {
 
         $content = ''.$template;
 
-
         $params = [
             'pdf_title' => get_lang('Resume'),
             //'course_code' => api_get_course_id(),
@@ -403,10 +401,10 @@ switch ($action) {
                 $urlWebLetterhead = 'url('.api_get_path(WEB_CSS_PATH).$customLetterhead.')';
             }
 
-            if($fullPage){
+            if ($fullPage) {
                 $pdf->pdf->SetDisplayMode('fullpage');
-                $pdf->pdf->SetDefaultBodyCSS('background',$urlWebLetterhead);
-                $pdf->pdf->SetDefaultBodyCSS('background-image-resize','6');
+                $pdf->pdf->SetDefaultBodyCSS('background', $urlWebLetterhead);
+                $pdf->pdf->SetDefaultBodyCSS('background-image-resize', '6');
             }
 
             @$pdf->content_to_pdf($content,
@@ -420,8 +418,6 @@ switch ($action) {
                 $addDefaultCss = true,
                 $completeHeader = false
             );
-
-
         } catch (MpdfException $e) {
             error_log($e);
         }

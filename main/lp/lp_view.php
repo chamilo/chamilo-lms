@@ -599,7 +599,7 @@ if (api_get_configuration_value('lp_minimum_time')) {
     $template->assign('minute', date('i', $lpTime));
     $template->assign('second', date('s', $lpTime));
 
-    $template->assign('hour_min', api_time_to_hms($timeLp*60, '</div><div class="divider">:</div><div>'));
+    $template->assign('hour_min', api_time_to_hms($timeLp * 60, '</div><div class="divider">:</div><div>'));
 }
 
 $template->assign('lp_accumulate_work_time', $lpMinTime);

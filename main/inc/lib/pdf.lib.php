@@ -343,25 +343,26 @@ class PDF
     /**
      * Converts an html string to PDF.
      *
-     * @param string $document_html valid html
-     * @param string $css CSS content of a CSS file
-     * @param string $pdf_name pdf name
-     * @param string $course_code course code
+     * @param string $document_html  valid html
+     * @param string $css            CSS content of a CSS file
+     * @param string $pdf_name       pdf name
+     * @param string $course_code    course code
      *                               (if you are using html that are located in the document tool you must provide this)
-     * @param string $outputMode the MPDF output mode can be:
-     * @param bool $saveInFile
+     * @param string $outputMode     the MPDF output mode can be:
+     * @param bool   $saveInFile
      * @param string $fileToSave
-     * @param bool $returnHtml
-     * @param bool $addDefaultCss
-     * @param bool $completeHeader
+     * @param bool   $returnHtml
+     * @param bool   $addDefaultCss
+     * @param bool   $completeHeader
      *
      * 'I' (print on standard output),
      * 'D' (download file) (this is the default value),
      * 'F' (save to local file) or
      * 'S' (return as a string)
      *
-     * @return string Web path
      * @throws MpdfException
+     *
+     * @return string Web path
      */
     public function content_to_pdf(
         $document_html,

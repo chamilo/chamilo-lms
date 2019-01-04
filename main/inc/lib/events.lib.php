@@ -1146,7 +1146,6 @@ class Event
      * @param int   $session_id
      *
      * @return bool
-     *
      */
     public static function delete_student_lp_events(
         $user_id,

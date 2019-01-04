@@ -8323,4 +8323,12 @@ $NewExerciseAttemptDisabled = "The portal do not allowed to start new test for t
 $PersonalDataOfficer = "Personal data officer";
 $MaxNumberSubscribedStudentsReached = "The maximum number of student has already been reached, it is not possible to subscribe more student.";
 $UserXAddedToCourseX = "User %s has been registered to course %s";
+$LpMinTime = "Minimum time (minutes)";
+$TimeSpentInLp = "Time spent in the learning path";
+$IHaveFinishedTheLessonsNotifyTheTeacher = "I have finished the lessons, notify the teacher";
+$TheStudentXHasFinishedTheCourseYLearningPaths = "The student <b>%s</b> has finished the learning paths from the course <b>%s</b>";
+$ThisQuestionExistsInAnotherExercisesWarning = "This question is used in another exercises. If you continue its edition, the changes will affect all exercises that contain this question.";
+$TimeSpentTimeRequired = "Time spent / Time required";
+$ProgressSpentInLp = "Progress";
+$InSessionXYouHadTheFollowingResults = "In session %s, you had the following results";
 ?>

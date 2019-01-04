@@ -567,16 +567,6 @@ if (api_get_configuration_value('lp_minimum_time')) {
     $perc = 100;
     // Time from the course
     $tc = $timeTotalCourse;
-    if (!empty($sessionId) && $sessionId != 0) {
-        /*$sql = "SELECT hours, perc FROM plugin_licences_course_session WHERE session_id = $sessionId";
-        $res = Database::query($sql);
-        if (Database::num_rows($res) > 0) {
-            $aux = Database::fetch_assoc($res);
-            $perc = $aux['perc'];
-            $tc = $aux['hours'] * 60;
-        }*/
-    }
-
     // Percentage of the learning paths
     $pl = 0;
     if (!empty($timeTotalCourse)) {
@@ -590,12 +580,6 @@ if (api_get_configuration_value('lp_minimum_time')) {
         $lpMinTime = '('.$time_min.' min)';
     }
 
-    /*$lpTime = Tracking::get_time_spent_in_lp(
-        $user_id,
-        $course_code,
-        [$_SESSION['oLP']->lp_id],
-        $sessionId
-    );*/
     $lpTimeList = Tracking::getCalculateTime($user_id, api_get_course_int_id(), api_get_session_id());
     $lpTime = isset($lpTimeList[TOOL_LEARNPATH][$lp_id]) ? (int) $lpTimeList[TOOL_LEARNPATH][$lp_id] : 0;
 
@@ -614,6 +598,8 @@ if (api_get_configuration_value('lp_minimum_time')) {
     $template->assign('hour', $hour);
     $template->assign('minute', date('i', $lpTime));
     $template->assign('second', date('s', $lpTime));
+
+    $template->assign('hour_min', api_time_to_hms($timeLp*60, '</div><div class="divider">:</div><div>'));
 }
 
 $template->assign('lp_accumulate_work_time', $lpMinTime);

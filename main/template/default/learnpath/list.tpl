@@ -110,10 +110,16 @@
                                     <th>{{ "PublicationDate"|get_lang }}</th>
                                     <th>{{ "ExpirationDate"|get_lang }}</th>
                                     <th>{{ "Progress"|get_lang }}</th>
+                                    {% if allow_min_time %}
+                                        <th>{{ "TimeSpentTimeRequired"|get_lang }}</th>
+                                    {% endif %}
                                     <th>{{ "AuthoringOptions"|get_lang }}</th>
                                 {% else %}
                                     {% if not is_invitee %}
                                         <th>{{ "Progress"|get_lang }}</th>
+                                    {% endif %}
+                                    {% if allow_min_time %}
+                                        <th>{{ "TimeSpentTimeRequired"|get_lang }}</th>
                                     {% endif %}
                                     <th>{{ "Actions"|get_lang }}</th>
                                 {% endif %}
@@ -142,17 +148,28 @@
                                         <td>
                                             {{ row.dsp_progress }}
                                         </td>
+                                        {% if allow_min_time %}
+                                            <td>
+                                            {% if row.info_time_prerequisite %}
+                                                {{ row.info_time_prerequisite }}
+                                            {% endif %}
+                                            </td>
+                                        {% endif %}
                                     {% else %}
                                         {% if not is_invitee %}
                                             <td>
                                                 {{ row.dsp_progress }}
                                             </td>
                                         {% endif %}
+                                        {% if allow_min_time %}
+                                            <td>
+                                                {% if row.info_time_prerequisite %}
+                                                    {{ row.info_time_prerequisite }}
+                                                {% endif %}
+                                            </td>
+                                        {% endif %}
                                     {% endif %}
                                     <td>
-                                        {% if row.info_time_prerequisite %}
-                                            {{ row.info_time_prerequisite }}
-                                        {% endif %}
                                         {{ row.action_build }}
                                         {{ row.action_edit }}
                                         {{ row.action_visible }}

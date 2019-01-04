@@ -171,7 +171,7 @@ if ($filteredCategoryId) {
 $test_mode = api_get_setting('server_type');
 $showBlockedPrerequisite = api_get_configuration_value('show_prerequisite_as_blocked');
 $allowLpChamiloExport = api_get_configuration_value('allow_lp_chamilo_export');
-
+$allowMinTime = api_get_configuration_value('lp_minimum_time');
 $user = api_get_user_entity($userId);
 $ending = true;
 
@@ -218,7 +218,7 @@ foreach ($categories as $item) {
 
     $listData = [];
     $lpTimeList = [];
-    if (api_get_configuration_value('lp_minimum_time')) {
+    if ($allowMinTime) {
         $lpTimeList = Tracking::getCalculateTime($userId, api_get_course_int_id(), api_get_session_id());
     }
 
@@ -404,7 +404,7 @@ foreach ($categories as $item) {
 
             $dsp_time = '';
             $linkMinTime = '';
-            if (api_get_configuration_value('lp_minimum_time')) {
+            if ($allowMinTime) {
                 // Time info
                 // Minimum time (in minutes) to pass the learning path
                 $accumulateWorkTime = learnpath::getAccumulateWorkTimePrerequisite($id, api_get_course_int_id());
@@ -412,29 +412,12 @@ foreach ($categories as $item) {
                     // TT --- Tiempo total del curso
                     $accumulateWorkTimeTotal = learnpath::getAccumulateWorkTimeTotal(api_get_course_int_id());
 
-                    // Spent time (in seconds) so far in the learning path
-                    /*$lpTime = Tracking::get_time_spent_in_lp(
-                        $userId,
-                        api_get_course_id(),
-                        [$id],
-                        api_get_session_id()
-                    );*/
-
                     $lpTime = isset($lpTimeList[TOOL_LEARNPATH][$id]) ? $lpTimeList[TOOL_LEARNPATH][$id] : 0;
 
                     // Connect with the plugin_licences_course_session table
                     // which indicates what percentage of the time applies
                     $perc = 100;
                     $tc = $accumulateWorkTimeTotal;
-                    /*if (!empty($current_session) && $current_session != 0) {
-                        $sql = "SELECT hours, perc FROM plugin_licences_course_session WHERE session_id = $current_session";
-                        $res = Database::query($sql);
-                        if (Database::num_rows($res) > 0) {
-                            $aux = Database::fetch_assoc($res);
-                            $perc = $aux['perc'];
-                            $tc = ($aux['hours'] * 60);
-                        }
-                    }*/
 
                     // Percentage of the learning paths
                     $pl = 0;
@@ -453,9 +436,16 @@ foreach ($categories as $item) {
                                 $accumulateWorkTime * 60
                             )
                         );
-                        $linkMinTime .= '<b>'.api_time_to_hms($lpTime).' / '.api_time_to_hms($accumulateWorkTime * 60).'</b>';
+                        $linkMinTime .= '&nbsp;<b>'.api_time_to_hms($lpTime).' / '.api_time_to_hms($accumulateWorkTime * 60).'</b>';
                     } else {
-                        $linkMinTime = sprintf(get_lang('YouHaveSpentXTime'), api_time_to_hms($lpTime));
+                        $linkMinTime = Display::return_icon(
+                            'check.png',
+                            get_lang('LpMinTimeWarning').' - '.api_time_to_hms($lpTime).' / '.api_time_to_hms(
+                                $accumulateWorkTime * 60
+                            )
+                        );
+                        $linkMinTime .= '&nbsp;<b>'.api_time_to_hms($lpTime).' / '.api_time_to_hms($accumulateWorkTime * 60).'</b>';
+                        //$linkMinTime = sprintf(get_lang('YouHaveSpentXTime'), api_time_to_hms($lpTime));
                     }
 
                     // Calculate the percentage exceeded of the time for the "exceeding the minimum time" bar
@@ -1023,6 +1013,7 @@ $template->assign('introduction', $introduction);
 $template->assign('data', $data);
 $template->assign('lp_is_shown', $lpIsShown);
 $template->assign('filtered_category', $filteredCategoryId);
+$template->assign('allow_min_time', $allowMinTime);
 $templateName = $template->get_template('learnpath/list.tpl');
 $content = $template->fetch($templateName);
 $template->assign('content', $content);

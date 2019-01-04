@@ -212,6 +212,221 @@ $user_id = isset($_GET['user_id']) && !empty($_GET['user_id']) ? (int) $_GET['us
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 switch ($action) {
+    case 'export_to_pdf':
+        $sessionToExport = $sId = isset($_GET['session_to_export']) ? (int) $_GET['session_to_export'] : 0;
+        $sessionInfo = api_get_session_info($sessionToExport);
+        if (empty($sessionInfo)) {
+            api_not_allowed(true);
+        }
+        $courses = Tracking::get_courses_list_from_session($sessionToExport);
+        $timeSpent = 0;
+        $numberVisits = 0;
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $progress = 0;
+        foreach ($courses as $course) {
+            $courseId = $course['c_id'];
+            $timeSpent += Tracking::get_time_spent_on_the_course($student_id, $courseId, $sessionToExport);
+
+            $sql = 'SELECT DISTINCT count(course_access_id) as count
+                    FROM '.$table.'
+                    WHERE
+                        user_id = '.$student_id.' AND
+                        c_id = '.$courseId.' AND
+                        session_id = '.$sessionToExport.'
+                    ORDER BY login_course_date ASC';
+            $result = Database::query($sql);
+            $row = Database::fetch_array($result);
+            $numberVisits += $row['count'];
+            $progress += Tracking::get_avg_student_progress($student_id, $course['code'], [], $sessionToExport);
+        }
+
+        $average = round($progress / count($courses), 1);
+        $average = empty($average) ? '0%' : $average.'%';
+
+        $attendance = new Attendance();
+
+        $table = new HTML_Table(['class' => 'data_table']);
+        $column = 0;
+        $row = 0;
+        $headers = [
+            get_lang('TimeSpent'),
+            get_lang('NumberOfVisits'),
+            get_lang('Progress'),
+        ];
+
+        foreach ($headers as $header) {
+            $table->setHeaderContents($row, $column, $header);
+            $column++;
+        }
+        $table->setCellContents(1, 0, api_time_to_hms($timeSpent));
+        $table->setCellContents(1, 1, $numberVisits);
+        $table->setCellContents(1, 2, $average);
+
+        $courseTable = '';
+
+
+        if (!empty($courses)) {
+            $courseTable .= '<table class="data_table">';
+            $courseTable .= '<thead>';
+            $courseTable .= '<tr>
+                    <th>'.get_lang('Course').'</th>
+                    <th>'.get_lang('Time').'</th>
+                    <th>'.get_lang('Progress').'</th>
+                    <th>'.get_lang('Score').'</th>
+                </tr>';
+            $courseTable .= '</thead>';
+            $courseTable .= '<tbody>';
+
+            $totalCourseTime = 0;
+            $totalAttendance = [0, 0];
+            $totalScore = 0;
+            $totalProgress = 0;
+            $gradeBookTotal = [0, 0];
+            $totalEvaluations = '0/0 (0%)';
+            $totalCourses = count($courses);
+            $scoreDisplay = ScoreDisplay::instance();
+
+            foreach ($courses as $course) {
+                $courseId = $course['c_id'];
+                $courseInfoItem = api_get_course_info_by_id($courseId);
+                $courseId = $courseInfoItem['real_id'];
+                $courseCodeItem = $courseInfoItem['code'];
+
+                $isSubscribed = CourseManager::is_user_subscribed_in_course(
+                    $student_id,
+                    $courseCodeItem,
+                    true,
+                    $sId
+                );
+
+                if ($isSubscribed) {
+                    $timeInSeconds = Tracking::get_time_spent_on_the_course(
+                        $user_info['user_id'],
+                        $courseId,
+                        $sessionToExport
+                    );
+                    $totalCourseTime += $timeInSeconds;
+                    $time_spent_on_course = api_time_to_hms($timeInSeconds);
+
+                    $progress = Tracking::get_avg_student_progress(
+                        $user_info['user_id'],
+                        $courseCodeItem,
+                        [],
+                        $sId
+                    );
+
+                    $totalProgress += $progress;
+
+                    $score = Tracking::get_avg_student_score(
+                        $user_info['user_id'],
+                        $courseCodeItem,
+                        [],
+                        $sId
+                    );
+
+                    if (is_numeric($score)) {
+                        $totalScore += $score;
+                    }
+
+                    $progress = empty($progress) ? '0%' : $progress.'%';
+                    $score = empty($score) ? '0%' : $score.'%';
+
+                    $courseTable .= '<tr>
+                        <td ><a href="'.$courseInfoItem['course_public_url'].'?id_session='.$sId.'">'.
+                            $courseInfoItem['title'].'</a></td>
+                        <td >'.$time_spent_on_course.'</td>
+                        <td >'.$progress.'</td>
+                        <td >'.$score.'</td>';
+                    $courseTable .= '</tr>';
+                }
+            }
+
+            $totalAttendanceFormatted = $scoreDisplay->display_score($totalAttendance);
+            $totalScoreFormatted = $scoreDisplay->display_score([$totalScore / $totalCourses, 100], SCORE_AVERAGE);
+            $totalProgressFormatted = $scoreDisplay->display_score(
+                [$totalProgress / $totalCourses, 100],
+                SCORE_AVERAGE
+            );
+            $totalEvaluations = $scoreDisplay->display_score($gradeBookTotal);
+            $totalTimeFormatted = api_time_to_hms($totalCourseTime);
+            $courseTable .= '
+            <tr>
+                <th>'.get_lang('Total').'</th>
+                <th>'.$totalTimeFormatted.'</th>
+                <th>'.$totalProgressFormatted.'</th>
+                <th>'.$totalScoreFormatted.'</th>
+            </tr>';
+            $courseTable .= '</tbody></table>';
+        }
+
+        $studentInfo = api_get_user_info($student_id);
+
+        $tpl = new Template('', false, false, false, true, false, false);
+        $tpl->assign('title', $sessionInfo['name']);
+        $tpl->assign('student', $studentInfo['complete_name']);
+        $tpl->assign('table_progress', $table->toHtml());
+        $tpl->assign('subtitle', sprintf(
+            get_lang('InSessionXYouHadTheFollowingResults'),
+            $sessionInfo['name']
+        ));
+        $tpl->assign('table_course', $courseTable);
+        $template = $tpl->fetch($tpl->get_template('my_space/pdf_export_student.tpl'));
+
+        $content = ''.$template;
+
+
+        $params = [
+            'pdf_title' => get_lang('Resume'),
+            //'course_code' => api_get_course_id(),
+            'session_info' => $sessionInfo,
+            'course_info' => '',
+            'pdf_date' => '',
+            'student_info' => $studentInfo,
+            'show_grade_generated_date' => true,
+            'show_real_course_teachers' => false,
+            'show_teacher_as_myself' => false,
+            'orientation' => 'P',
+        ];
+
+        $pdf = new PDF('A4', $params['orientation'], $params);
+        try {
+            $theme = $tpl->theme;
+            $themeName = empty($theme) ? api_get_visual_theme() : $theme;
+            $themeDir = \Template::getThemeDir($theme);
+            $customLetterhead = $themeDir."images/letterhead.png";
+            $urlPathLetterhead = api_get_path(SYS_CSS_PATH)."$customLetterhead";
+
+            $urlWebLetterhead = '#FFFFFF';
+            $fullPage = false;
+            if (file_exists($urlPathLetterhead)) {
+                $fullPage = true;
+                $urlWebLetterhead = 'url('.api_get_path(WEB_CSS_PATH).$customLetterhead.')';
+            }
+
+            if($fullPage){
+                $pdf->pdf->SetDisplayMode('fullpage');
+                $pdf->pdf->SetDefaultBodyCSS('background',$urlWebLetterhead);
+                $pdf->pdf->SetDefaultBodyCSS('background-image-resize','6');
+            }
+
+            @$pdf->content_to_pdf($content,
+                $css = '',
+                $pdf_name = '',
+                $course_code = null,
+                $outputMode = 'D',
+                $saveInFile = false,
+                $fileToSave = null,
+                $returnHtml = false,
+                $addDefaultCss = true,
+                $completeHeader = false
+            );
+
+
+        } catch (MpdfException $e) {
+            error_log($e);
+        }
+        exit;
+        break;
     case 'export_one_session_row':
         $sessionToExport = isset($_GET['session_to_export']) ? (int) $_GET['session_to_export'] : 0;
         $exportList = Session::read('export_course_list');
@@ -1107,6 +1322,17 @@ if (empty($details)) {
                         ['action' => 'export_one_session_row', 'export' => 'xls', 'session_to_export' => $sId]
                     )
             );
+
+            if (!empty($sId)) {
+                $sessionAction .= Display::url(
+                    Display::return_icon('pdf.png', get_lang('ExportToPDF'), [], ICON_SIZE_MEDIUM),
+                    $currentUrl
+                    .'&'
+                    .http_build_query(
+                        ['action' => 'export_to_pdf', 'session_to_export' => $sId]
+                    )
+                );
+            }
             echo $sessionAction;
         } else {
             echo "<tr><td colspan='5'>".get_lang('NoCourse')."</td></tr>";

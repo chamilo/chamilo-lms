@@ -8354,4 +8354,10 @@ $LpMinTimeDescription = "Tiempo mínimo (en minutos) que el estudiante debe perm
 $LpMinTimeWarning = "No ha alcanzado el tiempo mínimo en la lección.";
 $YouHaveSpentXTime = "Has invertido %s tiempo";
 $TimeSpentInLp = "Tiempo en la lección";
+$StudentXFinishedLp = "El estudiante %s ha finalizado sus lecciones.";
+$IHaveFinishedTheLessonsNotifyTheTeacher = "He finalizado las lecciones del curso. Notificar al profesor.";
+$TheStudentXHasFinishedTheCourseYLearningPaths = "El estudiante <strong>%s</strong> ha finalizado las lecciones del curso <strong>%s</strong>";
+$ThisQuestionExistsInAnotherExercisesWarning = "Esta pregunta se usa en otros ejercicios. Si continúa con su edición, los cambios afectarán a todos los ejercicios que contienen esta pregunta.";
+$TimeSpentTimeRequired = "Tiempo invertido / tiempo requerido";
+$ProgressSpentInLp = "Progreso contenidos";
 ?>

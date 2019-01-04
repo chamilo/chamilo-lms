@@ -101,7 +101,6 @@ switch ($action) {
         $descriptionController->destroy($id);
         break;
     case 'listing':
-        //no break
     default:
         $descriptionController->listing();
 }

@@ -6793,10 +6793,10 @@ class Tracking
     }
 
     /**
-     * @param int  $userId
-     * @param int  $courseId
-     * @param int  $sessionId
-     * @param int  $toolId
+     * @param int $userId
+     * @param int $courseId
+     * @param int $sessionId
+     * @param int $toolId
      *
      * @return array
      */
@@ -6841,7 +6841,7 @@ class Tracking
                     c_id = $courseId AND
                     login_as = 0
                 ORDER BY date_reg ASC
-                LIMIT 0,1";
+                LIMIT 1";
         $rs = Database::query($sql);
 
         $firstConnection = '';
@@ -6861,7 +6861,7 @@ class Tracking
                     c_id = $courseId AND
                     login_as = 0
                 ORDER BY date_reg DESC
-                LIMIT 0,1";
+                LIMIT 1";
         $rs = Database::query($sql);
         $lastConnection = '';
         if (Database::num_rows($rs) > 0) {

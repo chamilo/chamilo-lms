@@ -1144,6 +1144,9 @@ class Event
      * @param int   $lp_id
      * @param array $course
      * @param int   $session_id
+     *
+     * @return bool
+     *
      */
     public static function delete_student_lp_events(
         $user_id,
@@ -1156,7 +1159,14 @@ class Event
         $lpInteraction = Database::get_course_table(TABLE_LP_IV_INTERACTION);
         $lpObjective = Database::get_course_table(TABLE_LP_IV_OBJECTIVE);
 
+        if (empty($course)) {
+            return false;
+        }
+
         $course_id = $course['real_id'];
+        $user_id = (int) $user_id;
+        $lp_id = (int) $lp_id;
+        $session_id = (int) $session_id;
 
         if (empty($course_id)) {
             $course_id = api_get_course_int_id();
@@ -1171,10 +1181,6 @@ class Event
         $recording_table = Database::get_main_table(
             TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING
         );
-
-        $user_id = (int) $user_id;
-        $lp_id = (int) $lp_id;
-        $session_id = (int) $session_id;
 
         //Make sure we have the exact lp_view_id
         $sql = "SELECT id FROM $lp_view_table
@@ -1199,6 +1205,18 @@ class Event
 
             $sql = "DELETE FROM $lpObjective
                     WHERE c_id = $course_id AND lp_iv_id = $lp_view_id";
+            Database::query($sql);
+        }
+
+        if (api_get_configuration_value('lp_minimum_time')) {
+            $sql = "DELETE FROM track_e_access_complete
+                    WHERE 
+                        tool = 'learnpath' AND 
+                        c_id = $course_id AND 
+                        tool_id = $lp_id AND
+                        user_id = $user_id AND
+                        session_id = $session_id
+                    ";
             Database::query($sql);
         }
 
@@ -1247,6 +1265,8 @@ class Event
             $course_id,
             $session_id
         );
+
+        return true;
     }
 
     /**

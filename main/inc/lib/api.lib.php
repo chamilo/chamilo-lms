@@ -5086,7 +5086,7 @@ function api_max_sort_value($user_course_category, $user_id)
  *
  * @return string the formated time
  */
-function api_time_to_hms($seconds)
+function api_time_to_hms($seconds, $space = ':')
 {
     // $seconds = -1 means that we have wrong data in the db.
     if ($seconds == -1) {
@@ -5108,6 +5108,10 @@ function api_time_to_hms($seconds)
     // How many seconds
     $sec = floor($seconds - ($hours * 3600) - ($min * 60));
 
+    if ($hours < 10) {
+        $hours = "0$hours";
+    }
+
     if ($sec < 10) {
         $sec = "0$sec";
     }
@@ -5116,7 +5120,7 @@ function api_time_to_hms($seconds)
         $min = "0$min";
     }
 
-    return "$hours:$min:$sec";
+    return $hours.$space.$min.$space.$sec;
 }
 
 /* FILE SYSTEM RELATED FUNCTIONS */
@@ -6242,7 +6246,7 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null)
     }
     $course_id = api_get_course_int_id();
 
-    $sql = "SELECT session_id FROM $table_tool 
+    $sql = "SELECT session_id FROM $table_tool
             WHERE c_id = $course_id AND $key_field =  ".$element_id;
     $rs = Database::query($sql);
     if ($element_session_id = Database::result($rs, 0, 0)) {
@@ -8067,7 +8071,7 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
     ];
 
     $js = api_get_asset('pwstrength-bootstrap/dist/pwstrength-bootstrap.min.js');
-    $js .= "<script>    
+    $js .= "<script>
     var errorMessages = {
         password_to_short : \"".get_lang('PasswordIsTooShort')."\",
         same_as_username : \"".get_lang('YourPasswordCannotBeTheSameAsYourUsername')."\"

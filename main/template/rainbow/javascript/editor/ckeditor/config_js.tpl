@@ -145,7 +145,7 @@ CKEDITOR.editorConfig = function (config) {
         '{{ font_awesome_css }}',
         '{{ css_editor }}',
     ];
-    config.language_list = [ 'en:English', 'fr:French', 'es:Spanish', 'de:German', 'pl:Polish', 'it:Italian' ];
+    config.language_list = ['{{ language_list }}'];
 };
 
 // Sets default target to "_blank" in link plugin

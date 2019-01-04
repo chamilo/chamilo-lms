@@ -509,6 +509,7 @@ class CourseHome
         // Condition for the session
         $sessionId = $sessionId ?: api_get_session_id();
         $course_id = $courseId ?: api_get_course_int_id();
+        $courseInfo = api_get_course_info_by_id($course_id);
         $userId = api_get_user_id();
         $user = api_get_user_entity($userId);
         $condition_session = api_get_session_condition(
@@ -651,7 +652,7 @@ class CourseHome
                 case 'scormbuilder.gif':
                     $lpId = self::getPublishedLpIdFromLink($temp_row['link']);
                     $lp = new learnpath(
-                        api_get_course_id(),
+                        $courseInfo['code'],
                         $lpId,
                         $userId
                     );
@@ -663,8 +664,8 @@ class CourseHome
                         $add = learnpath::is_lp_visible_for_student(
                             $lpId,
                             $userId,
-                            api_get_course_id(),
-                            api_get_session_id()
+                            $courseInfo['code'],
+                            $sessionId
                         );
                     }
                     if ($path) {

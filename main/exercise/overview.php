@@ -265,7 +265,7 @@ if (!empty($attempts)) {
     }
 
     $header_names = [];
-    $table = new HTML_Table(['class' => 'table table-striped table-hover']);
+    $table = new HTML_Table(['class' => 'table table-hover']);
 
     // Hiding score and answer
     switch ($objExercise->results_disabled) {

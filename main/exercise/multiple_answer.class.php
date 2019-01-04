@@ -47,7 +47,7 @@ class MultipleAnswer extends Question
 
         $form->addHeader(get_lang('Answers'));
 
-        $html = '<table class="table table-striped table-hover">
+        $html = '<table class="table table-hover">
             <thead>
                 <tr>
                     <th width="10">'.get_lang('Number').'</th>

@@ -54,7 +54,7 @@ class UniqueAnswerImage extends UniqueAnswer
 
         $html = '<div class="alert alert-success" role="alert">'.
                 get_lang('UniqueAnswerImagePreferredSize200x150').'</div>';
-        $html .= '<table class="table table-striped table-hover">
+        $html .= '<table class="table table-hover">
             <thead>
                 <tr style="text-align: center;">
                     <th width="10">'.get_lang('Number').'</th>

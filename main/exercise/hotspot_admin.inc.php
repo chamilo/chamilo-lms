@@ -608,7 +608,7 @@ if ($modifyAnswers) {
         <input type="hidden" name="formSent" value="1"/>
         <input type="hidden" name="nbrAnswers" value="<?php echo $nbrAnswers; ?>"/>
         <div class="table-responsive">
-            <table class="table table-striped table-hover">
+            <table class="table table-hover">
                 <thead>
                 <tr>
                     <th width="5">&nbsp;</th>

@@ -391,8 +391,8 @@ switch ($action) {
             $theme = $tpl->theme;
             $themeName = empty($theme) ? api_get_visual_theme() : $theme;
             $themeDir = \Template::getThemeDir($theme);
-            $customLetterhead = $themeDir."images/letterhead.png";
-            $urlPathLetterhead = api_get_path(SYS_CSS_PATH)."$customLetterhead";
+            $customLetterhead = $themeDir.'images/letterhead.png';
+            $urlPathLetterhead = api_get_path(SYS_CSS_PATH).$customLetterhead;
 
             $urlWebLetterhead = '#FFFFFF';
             $fullPage = false;

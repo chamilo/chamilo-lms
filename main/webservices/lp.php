@@ -592,7 +592,7 @@ $server->register(
 /**
  * @param array $params
  *
- * @return null|soap_fault
+ * @return soap_fault|null
  */
 function WSCreateLp($params)
 {

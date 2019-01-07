@@ -2512,7 +2512,6 @@ class Event
         $logInfo['info'] = !empty($logInfo['info']) ? $logInfo['info'] : '';
         $logInfo['url'] = $_SERVER['REQUEST_URI'];
 
-
         $id = Database::insert('track_e_access_complete', $logInfo);
         if ($id) {
             Session::write('last_id', $id);

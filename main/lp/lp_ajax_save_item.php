@@ -38,7 +38,7 @@ require_once __DIR__.'/../inc/global.inc.php';
  * @param int    $userNavigatesAway    Whether the user is moving to another item
  * @param int    $statusSignalReceived Whether the SCO called SetValue(lesson_status)
  *
- * @return bool|null|string The resulting JS string
+ * @return bool|string|null The resulting JS string
  */
 function save_item(
     $lp_id,

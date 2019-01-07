@@ -1164,7 +1164,7 @@ class GradebookTable extends SortableTable
     /**
      * @param AbstractLink $item
      *
-     * @return null|string
+     * @return string|null
      */
     private function build_edit_column($item)
     {

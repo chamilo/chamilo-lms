@@ -89,7 +89,7 @@ class learnpathItem
      * @param int        $id           Learning path item ID
      * @param int        $user_id      User ID
      * @param int        $course_id    Course int id
-     * @param null|array $item_content An array with the contents of the item
+     * @param array|null $item_content An array with the contents of the item
      */
     public function __construct(
         $id,
@@ -4326,7 +4326,7 @@ class learnpathItem
     /**
      * Adds an audio file attached to the current item (store on disk and in db).
      *
-     * @return bool|null|string
+     * @return bool|string|null
      */
     public function add_audio()
     {

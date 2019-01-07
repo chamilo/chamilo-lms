@@ -3819,7 +3819,7 @@ function checkExistingWorkFileName($filename, $workId)
  * @param bool  $checkDuplicated
  * @param bool  $showFlashMessage
  *
- * @return null|string
+ * @return string|null
  */
 function processWorkForm(
     $workInfo,

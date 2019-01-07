@@ -2,7 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Message;
-use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use ChamiloSession as Session;
 
@@ -1633,7 +1632,6 @@ if (empty($details)) {
             }
             echo '</tbody></table></div>';
         }
-
     }
 
     if ($user_info['status'] != INVITEE) {

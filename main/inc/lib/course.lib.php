@@ -6722,7 +6722,7 @@ class CourseManager
      * @param Course $course
      * @param bool   $fullSize
      *
-     * @return null|string
+     * @return string|null
      */
     public static function getPicturePath(Course $course, $fullSize = false)
     {

@@ -721,7 +721,7 @@ class ExtraFieldOption extends Model
     /**
      * @param $priority
      *
-     * @return null|string
+     * @return string|null
      */
     public function getPriorityMessageType($priority)
     {

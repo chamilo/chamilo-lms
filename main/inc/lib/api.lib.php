@@ -4633,7 +4633,7 @@ function api_get_languages_combo($name = 'language')
  * @param  bool Hide form if only one language available (defaults to false = show the box anyway)
  * @param bool $showAsButton
  *
- * @return null|string Display the box directly
+ * @return string|null Display the box directly
  */
 function api_display_language_form($hide_if_no_choice = false, $showAsButton = false)
 {
@@ -8043,7 +8043,7 @@ function api_get_user_info_from_official_code($officialCode)
  * @param string $usernameInputId
  * @param string $passwordInputId
  *
- * @return null|string
+ * @return string|null
  */
 function api_get_password_checker_js($usernameInputId, $passwordInputId)
 {

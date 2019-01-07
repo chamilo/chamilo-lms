@@ -1874,7 +1874,7 @@ class Display
     /**
      * @param array $list
      *
-     * @return null|string
+     * @return string|null
      */
     public static function description($list)
     {
@@ -1926,7 +1926,7 @@ class Display
      * @param string $count
      * @param string $type
      *
-     * @return null|string
+     * @return string|null
      */
     public static function badge($count, $type = "warning")
     {
@@ -2017,7 +2017,7 @@ class Display
      * @param array  $items
      * @param string $class
      *
-     * @return null|string
+     * @return string|null
      */
     public static function actions($items, $class = 'new_actions')
     {
@@ -2070,7 +2070,7 @@ class Display
      * @param string $type
      * @param null   $id
      *
-     * @return null|string
+     * @return string|null
      */
     public static function generate_accordion($items, $type = 'jquery', $id = null)
     {
@@ -2151,7 +2151,7 @@ class Display
      * @param string $file
      * @param array  $params
      *
-     * @return null|string
+     * @return string|null
      */
     public static function getMediaPlayer($file, $params = [])
     {
@@ -2628,7 +2628,7 @@ class Display
      * @param bool|true  $open
      * @param bool|false $fullClickable
      *
-     * @return null|string
+     * @return string|null
      *
      * @todo rework function to easy use
      */

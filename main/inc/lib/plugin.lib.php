@@ -258,7 +258,7 @@ class AppPlugin
      * @param Template $template
      * @param bool     $forced
      *
-     * @return null|string
+     * @return string|null
      */
     public function load_region($region, $template, $forced = false)
     {

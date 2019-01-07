@@ -2244,7 +2244,6 @@ class SurveyManager
         $result = Database::query($sql);
         $countOfQuestions = Database::num_rows($result);
         $count = 1;
-
         if (!empty($numberPageBreaks) && !empty($countOfQuestions)) {
             $count = $countOfQuestions;
         }
@@ -2253,6 +2252,11 @@ class SurveyManager
             $count = 1;
             if (!empty($countOfQuestions)) {
                 $count = $countOfQuestions;
+            }
+        } else {
+            $count = $numberPageBreaks * 2;
+            if (empty($numberPageBreaks)) {
+                $count = 1;
             }
         }
 

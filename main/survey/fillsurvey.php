@@ -157,7 +157,7 @@ if (!isset($_POST['finish_survey']) &&
     ) ||
     ($survey_invitation['answered'] == 1 && !isset($_GET['user_id']))
 ) {
-    api_not_allowed(true, get_lang('YouAlreadyFilledThisSurvey'));
+    api_not_allowed(true, Display::return_message(get_lang('YouAlreadyFilledThisSurvey')));
 }
 
 $logInfo = [
@@ -215,7 +215,6 @@ if (empty($survey_data)) {
 
 // Checking time availability
 SurveyManager::checkTimeAvailability($survey_data);
-
 $survey_data['survey_id'] = $survey_invitation['survey_id'];
 
 if ($survey_data['survey_type'] == '3') {
@@ -538,7 +537,6 @@ if ($survey_data['form_fields'] != '' &&
     $form->setDefaults($user_data);
 }
 
-// Header
 Display::display_header(get_lang('ToolSurvey'));
 
 // Displaying the survey title and subtitle (appears on every page)
@@ -659,8 +657,7 @@ if ($survey_data['shuffle'] == 1) {
     $shuffle = ' BY RAND() ';
 }
 
-if (
-    (isset($_GET['show']) && $_GET['show'] != '') ||
+if ((isset($_GET['show']) && $_GET['show'] != '') ||
     isset($_POST['personality'])
 ) {
     // Getting all the questions for this page and add them to a
@@ -1291,7 +1288,6 @@ if (isset($questions) && is_array($questions)) {
 $form->addHtml('<div class="start-survey">');
 if ($survey_data['survey_type'] == '0') {
     if ($survey_data['show_form_profile'] == 0) {
-
         // The normal survey as always
         if ($show < $numberOfPages) {
             if ($show == 0) {

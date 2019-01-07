@@ -1038,7 +1038,7 @@ function modify_filter($user_id, $row, $data)
                 $result .= Display::url(
                     $text,
                     'user.php?'.api_get_cidreq().'&action=set_tutor&is_tutor='.$isTutor.'&user_id='.$user_id.'&type='.$type,
-                    ['class' => 'btn btn-default '.$disabled]
+                    ['class' => 'btn btn-primary '.$disabled]
                 ).'&nbsp;';
             }
         }

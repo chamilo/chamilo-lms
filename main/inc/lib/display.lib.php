@@ -1241,9 +1241,13 @@ class Display
             $item = self::tag(
                 'a',
                 $item['content'],
-                ['id' => $id.'-'.$i, 'href' => $item['url']]
+                [
+                    'id' => $id.'-'.$i,
+                    'href' => $item['url'],
+                    'class' => 'nav-link '.$class
+                ]
             );
-            $lis .= self::tag('li', $item, ['class' => $class]);
+            $lis .= self::tag('li', $item, ['class' => 'nav-item']);
             $i++;
         }
 

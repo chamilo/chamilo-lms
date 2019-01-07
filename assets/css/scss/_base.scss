@@ -223,6 +223,15 @@ hr {
   background-color: $default-white;
   border-top: 1px solid #dee2e6;
 }
+
+/*** TABS ***/
+.nav-tabs{
+  margin-bottom: 10px;
+}
+.tab-content{
+  margin-top: 10px;
+}
+
 /** SELECT */
 
 .btn-select{

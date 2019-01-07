@@ -493,11 +493,11 @@
         <h2>{{ "LearningPaths"|trans }}</h2>
         <img src="{{ "scorms.png"|icon(64) }}" width="64" height="64">
         <div class="controls">
-            <a href="{{ web_self ~ "?" ~ _p.web_cid_query ~ "&action=add_lp" }}" class="btn btn-default">
+            <a href="{{ web_self ~ "?" ~ _p.web_cid_query ~ "&action=add_lp" }}" class="btn btn-outline-primary">
                 {{ "LearnpathAddLearnpath"|trans }}
             </a>
         </div>
     </div>
-{% endif %}
+{% endif %}ul_resource_tab
 {% endautoescape %}
 {% endblock %}

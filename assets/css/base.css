@@ -1309,11 +1309,7 @@ a.unread {
 table.lp_build td.tree {
     border: none;
 }
-
-#resource_tab {
-    min-height: 380px;
-}
-
+g
 div.system_announcement {
     background-color: #EEEEEE;
 }
@@ -6595,10 +6591,6 @@ a.sessionView {
     margin-top: 20px;
 }
 
-#resource_tab li a {
-    padding: 5px;
-}
-
 /* Gravatar */
 #user_image_block img,
 #sn-avatar-one a.expand-image img {
@@ -7018,10 +7010,6 @@ ul#toolnavbox-two li a.btn {
     display: inline-block;
     width: 100%;
     padding-top: 15px;
-}
-
-#resource_tab #subtab #ul_subtab li a {
-    padding: 10px 15px;
 }
 
 .feeback-form .form-group .form-control {

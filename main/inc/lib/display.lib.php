@@ -1161,6 +1161,7 @@ class Display
                 $active = ' active';
                 $selected = 'true';
             }
+
             $item = self::tag(
                 'a',
                 $item,
@@ -1170,7 +1171,7 @@ class Display
                     'id' => $id.$i.'-tab',
                     'data-toggle' => 'tab',
                     'role' => 'tab',
-                    'aria-controls' => 'aria_'.$id.$i,
+                    'aria-controls' => $id.'-'.$i,
                     'aria-selected' => $selected,
                 ]
             );
@@ -1202,7 +1203,7 @@ class Display
                     'id' => $id.'-'.$i,
                     'class' => 'tab-pane fade '.$active,
                     'role' => 'tabpanel',
-                    'aria-labelledby' => $id.'-'.$i,
+                    'aria-labelledby' => $id.$i.'-tab',
                 ]
             );
             $i++;

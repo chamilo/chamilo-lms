@@ -10715,7 +10715,7 @@ class learnpath
                     document.getElementById(tool+"_"+id+"_opener").src = "'.Display::returnIconPath('remove.gif').'";
                 } else {
                     document.getElementById(tool+"_"+id+"_content").style.display = "none";
-                    document.getElementById(tool+"_"+id+"_opener").src = "'.Display::returnIconPath('add.gif').'";
+                    document.getElementById(tool+"_"+id+"_opener").src = "'.Display::returnIconPath('add.png').'";
                 }
             }
         </script>
@@ -10758,7 +10758,7 @@ class learnpath
             $linksHtmlCode .=
                 '<li>
                 <a style="cursor:hand" onclick="javascript: toggle_tool(\''.TOOL_LINK.'\','.$categoryId.')" style="vertical-align:middle">
-                    <img src="'.Display::returnIconPath('add.gif').'" id="'.TOOL_LINK.'_'.$categoryId.'_opener"
+                    <img src="'.Display::returnIconPath('add.png').'" id="'.TOOL_LINK.'_'.$categoryId.'_opener"
                     align="absbottom" />
                 </a>
                 <span style="vertical-align:middle">'.Security::remove_XSS($categories[$categoryId]).'</span>
@@ -10883,7 +10883,7 @@ class learnpath
                     document.getElementById("forum_"+forum_id+"_opener").src = "'.Display::returnIconPath('remove.gif').'";
                 } else {
                     document.getElementById("forum_"+forum_id+"_content").style.display = "none";
-                    document.getElementById("forum_"+forum_id+"_opener").src = "'.Display::returnIconPath('add.gif').'";
+                    document.getElementById("forum_"+forum_id+"_opener").src = "'.Display::returnIconPath('add.png').'";
                 }
             }
         </script>';
@@ -10902,7 +10902,7 @@ class learnpath
                 $return .= ' </a>';
                 $return .= Display::return_icon('forum.png', '', [], ICON_SIZE_TINY);
                 $return .= '<a onclick="javascript:toggle_forum('.$forum['forum_id'].');" style="cursor:hand; vertical-align:middle">
-                                <img src="'.Display::returnIconPath('add.gif').'" id="forum_'.$forum['forum_id'].'_opener" align="absbottom" />
+                                <img src="'.Display::returnIconPath('add.png').'" id="forum_'.$forum['forum_id'].'_opener" align="absbottom" />
                             </a>
                             <a class="moved" href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_FORUM.'&forum_id='.$forum['forum_id'].'&lp_id='.$this->lp_id.'" style="vertical-align:middle">'.
                     Security::remove_XSS($forum['forum_title']).' '.$link.'</a>';

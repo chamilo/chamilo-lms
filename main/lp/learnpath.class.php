@@ -2435,12 +2435,14 @@ class learnpath
                     $accumulateWorkTime = ($pl * $tc * $perc / 100);
 
                     // Spent time (in seconds) so far in the learning path
-                    $lpTime = Tracking::get_time_spent_in_lp(
+                    /*$lpTime = Tracking::get_time_spent_in_lp(
                         $studentId,
                         $courseInfo['code'],
                         [$prerequisite],
                         $sessionId
-                    );
+                    );*/
+                    $lpTimeList = Tracking::getCalculateTime($studentId, $courseId, $sessionId);
+                    $lpTime = isset($lpTimeList[TOOL_LEARNPATH][$prerequisite]) ? $lpTimeList[TOOL_LEARNPATH][$prerequisite] : 0;
 
                     if ($lpTime < ($accumulateWorkTime * 60)) {
                         $isBlocked = true;

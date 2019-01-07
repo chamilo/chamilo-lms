@@ -3033,7 +3033,7 @@ class SurveyUtil
             $search_restriction = "WHERE c_id = $course_id";
         }
         $sql = "SELECT count(survey_id) AS total_number_of_items
-		        FROM ".$table_survey.' '.$search_restriction;
+		        FROM $table_survey $search_restriction";
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
 
@@ -3078,7 +3078,6 @@ class SurveyUtil
         $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $mandatoryAllowed = api_get_configuration_value('allow_mandatory_survey');
         $_user = api_get_user_info();
-
         $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
 
         // Searching
@@ -3216,7 +3215,6 @@ class SurveyUtil
         $mandatoryAllowed = api_get_configuration_value('allow_mandatory_survey');
         $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
         $survey_tree = new SurveyTree();
-        //$last_version_surveys = $survey_tree->get_last_children_from_branch($survey_tree->surveylist);
         $last_version_surveys = $survey_tree->surveylist;
         $list = [];
         foreach ($last_version_surveys as &$survey) {
@@ -3228,9 +3226,9 @@ class SurveyUtil
             $list_condition = '';
         }
 
-        $from = intval($from);
-        $number_of_items = intval($number_of_items);
-        $column = intval($column);
+        $from = (int) $from;
+        $number_of_items = (int) $number_of_items;
+        $column = (int) $column;
         if (!in_array(strtolower($direction), ['asc', 'desc'])) {
             $direction = 'asc';
         }
@@ -3263,7 +3261,7 @@ class SurveyUtil
             $table_user user
             WHERE survey.author = user.user_id AND survey.c_id = $course_id $list_condition
         ";
-        $sql .= " GROUP BY survey.survey_id";
+        $sql .= ' GROUP BY survey.survey_id';
         $sql .= " ORDER BY col$column $direction ";
         $sql .= " LIMIT $from,$number_of_items";
 
@@ -3312,7 +3310,6 @@ class SurveyUtil
         $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
 
         // Database table definitions
-        $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
         $table_survey = Database::get_course_table(TABLE_SURVEY);
 
@@ -3581,7 +3578,7 @@ class SurveyUtil
         $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
 
         $survey_code = Database::escape_string($survey_code);
-        $user_id = intval($user_id);
+        $user_id = (int) $user_id;
         $user_answer = Database::escape_string($user_answer);
         $course_id = api_get_course_int_id();
 
@@ -3596,10 +3593,11 @@ class SurveyUtil
         $sql2 = 'SELECT COUNT(*) as count 
                  FROM '.$table_survey.' s 
                  INNER JOIN '.$table_survey_question.' q 
-                 ON s.survey_id=q.survey_id
+                 ON s.survey_id=q.survey_id AND s.c_id = q.c_id
 				 WHERE 
 				    s.code="'.$survey_code.'" AND 
-				    q.type NOT IN("pagebreak","comment") AND s.c_id = '.$course_id.' AND q.c_id = '.$course_id.' ';
+				    q.type NOT IN("pagebreak","comment") AND 
+				    s.c_id = '.$course_id.' AND q.c_id = '.$course_id.' ';
 
         $sql3 = 'SELECT COUNT(DISTINCT question_id) as count 
                  FROM '.$table_survey_answer.'
@@ -3706,7 +3704,7 @@ class SurveyUtil
     public static function flagSurveyAsAnswered($surveyCode, $courseId)
     {
         $currentUserId = api_get_user_id();
-        $flag = sprintf("%s-%s-%d", $courseId, $surveyCode, $currentUserId);
+        $flag = sprintf('%s-%s-%d', $courseId, $surveyCode, $currentUserId);
 
         if (!isset($_SESSION['filled_surveys'])) {
             $_SESSION['filled_surveys'] = [];
@@ -3726,7 +3724,7 @@ class SurveyUtil
     public static function isSurveyAnsweredFlagged($surveyCode, $courseId)
     {
         $currentUserId = api_get_user_id();
-        $flagToCheck = sprintf("%s-%s-%d", $courseId, $surveyCode, $currentUserId);
+        $flagToCheck = sprintf('%s-%s-%d', $courseId, $surveyCode, $currentUserId);
 
         if (!isset($_SESSION['filled_surveys'])) {
             return false;

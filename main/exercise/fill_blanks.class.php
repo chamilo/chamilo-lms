@@ -570,6 +570,7 @@ class FillBlanks extends Question
             case self::FILL_THE_BLANK_STANDARD:
             default:
                 $attributes['id'] = $labelId;
+                $attributes['class'] = 'form-control';
                 $result = Display::input(
                     'text',
                     "choice[$questionId][]",

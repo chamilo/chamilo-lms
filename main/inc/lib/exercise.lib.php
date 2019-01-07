@@ -898,7 +898,7 @@ class ExerciseLib
                             // display the last common word
                             $answer .= $listAnswerInfo['common_words'][$i];
                         }
-                        $s .= $answer;
+                        $s .= '<div class="fill-blank">'.$answer.'</div>';
                         break;
                     case CALCULATED_ANSWER:
                         /*
@@ -1055,13 +1055,13 @@ class ExerciseLib
                             $s .= '<tr><td width="45%" valign="top">';
                             $parsed_answer = $answer;
                             // Left part questions
-                            $s .= '<p class="indent">'.$lines_count.'.&nbsp;'.$parsed_answer.'</p></td>';
+                            $s .= '<div class="indent"><span class="round number">'.$lines_count.'</span>'.$parsed_answer.'</div></td>';
                             // Middle part (matches selects)
                             // Id of select is # question + # of option
                             $s .= '<td width="10%" valign="top" align="center">
                                 <div class="select-matching">
                                 <select 
-                                    id="choice_id_'.$current_item.'_'.$lines_count.'" 
+                                   class="selectpicker" id="choice_id_'.$current_item.'_'.$lines_count.'" 
                                     name="choice['.$questionId.']['.$numAnswer.']">';
 
                             // fills the list-box
@@ -1086,11 +1086,11 @@ class ExerciseLib
                             $s .= '</select></div></td><td width="5%" class="separate">&nbsp;</td>';
                             $s .= '<td width="40%" valign="top" >';
                             if (isset($select_items[$lines_count])) {
-                                $s .= '<div class="text-right">
-                                        <p class="indent">'.
-                                            $select_items[$lines_count]['letter'].'.&nbsp; '.
+                                $s .= '<div class="text-left">
+                                        <div class="indent"><span class="round letter">'.
+                                            $select_items[$lines_count]['letter'].'</span> '.
                                             $select_items[$lines_count]['answer'].'
-                                        </p>
+                                        </div>
                                         </div>';
                             } else {
                                 $s .= '&nbsp;';

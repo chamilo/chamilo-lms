@@ -87,7 +87,8 @@ class TestMatching extends Basic
                 'Subscript',
                 'Superscript',
                 'ShowBlocks',
-            ],
+            ],['JustifyLeft', 'JustifyCenter', 'JustifyRight'],
+            ['Source']
         ];
     }
 

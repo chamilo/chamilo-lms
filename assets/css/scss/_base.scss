@@ -921,7 +921,7 @@ footer {
     margin-bottom: 10px;
   }
   .options{
-    padding: 1.8em;
+    padding: 0.8em;
     label{
       display: block;
       margin-bottom: 18px;
@@ -983,6 +983,46 @@ footer {
     p{
       line-height: 1em;
       display: contents;
+    }
+  }
+  //Drag Question
+  .drag_question{
+    .indent{
+      padding-top: 10px;
+      padding-bottom: 10px;
+      font-size: 14px;
+    }
+    .round{
+      border-radius: 0.8em;
+      color: #666666;
+      display: inline-block;
+      font-weight: bold;
+      line-height: 1.6em;
+      margin-right: 5px;
+      text-align: center;
+      width: 1.6em;
+    }
+    .number{
+      background: #ffffff;
+      border: 1px solid #cdcdcd;
+    }
+    .letter{
+      background: #ffffff;
+      border: 1px solid #cdcdcd;
+    }
+    .bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn){
+      width: 100px;
+    }
+    .hidden{
+      display: none;
+    }
+
+  }
+  .fill-blank{
+    .form-control{
+      display: inline-block;
+      margin-top: 10px;
+      margin-bottom: 10px;
     }
   }
 }

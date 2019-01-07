@@ -9,7 +9,7 @@
 {% if data is not empty %}
     {% for item in data %}
         <div class="category-forum" id="category_{{ item.id }}">
-            <div class="pull-right">
+            <div class="float-right">
                 {{ item.tools }}
             </div>
             <h3>
@@ -22,8 +22,8 @@
         </div>
             {% for subitem in item.forums %}
                 <div class="forum_display">
-                    <div class="panel panel-default forum">
-                        <div class="panel-body">
+                    <div class="card forum">
+                        <div class="card-body">
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="number-post">
@@ -42,7 +42,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-9">
-                                    <div class="pull-right">
+                                    <div class="float-right">
                                         <div class="toolbar">
                                             {{ subitem.tools }}
                                         </div>

@@ -4625,62 +4625,7 @@ ul.exercise-draggable-answer .touch-items:hover {
     cursor: pointer;
 }
 
-/***    Matching Draggable answer ***/
-.drag_question {
-    min-height: 4em;
-    width: 100%;
-    padding: 20px;
-    position: relative;
-    box-sizing: border-box;
-}
 
-.drag_question .window {
-    border: 1px solid #dddddd;
-    border-radius: 10px;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
-    cursor: pointer;
-    min-height: 65px;
-    padding: 25px;
-    margin-left: 5px;
-    margin-right: 5px;
-
-}
-
-.window_left_question {
-    padding: 10px 25px 10px 10px;
-    text-align: right;
-    background: #f2f9fe; /* Old browsers */
-    background: -moz-linear-gradient(top, #f2f9fe 0%, #d6f0fd 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f2f9fe), color-stop(100%, #d6f0fd)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, #f2f9fe 0%, #d6f0fd 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, #f2f9fe 0%, #d6f0fd 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top, #f2f9fe 0%, #d6f0fd 100%); /* IE10+ */
-    background: linear-gradient(to bottom, #f2f9fe 0%, #d6f0fd 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f2f9fe', endColorstr='#d6f0fd', GradientType=0); /* IE6-9 */
-}
-
-.window_right_question {
-    padding: 10px 10px 10px 25px;
-    background: #ffffff; /* Old browsers */
-    background: -moz-linear-gradient(top, #ffffff 0%, #e5e5e5 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(100%, #e5e5e5)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, #ffffff 0%, #e5e5e5 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, #ffffff 0%, #e5e5e5 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top, #ffffff 0%, #e5e5e5 100%); /* IE10+ */
-    background: linear-gradient(to bottom, #ffffff 0%, #e5e5e5 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e5e5e5', GradientType=0); /* IE6-9 */
-}
-
-.drag_question .data_table, .drag_question .data_table th, .drag_question .data_table td {
-    border: none !important;
-}
-
-._jsPlumb_endpoint {
-    z-index: 50;
-}
-
-/*** Video chat ***/
 video#chat-local-video,
 div#chat-remote-video video {
     display: block;

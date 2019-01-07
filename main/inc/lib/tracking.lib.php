@@ -7088,6 +7088,9 @@ class Tracking
                         $lp_time[$aux_reg['tool_id']] += $partialTime;
                         break;
                     case TOOL_QUIZ:
+                        if (!isset($lp_time[$aux_reg['action_details']])) {
+                            $lp_time[$aux_reg['action_details']] = 0;
+                        }
                         if ($aux_reg['action'] == 'learnpath_id') {
                             $lp_time[$aux_reg['action_details']] += $partialTime;
                         } else {

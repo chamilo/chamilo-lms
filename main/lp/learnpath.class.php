@@ -2383,12 +2383,18 @@ class learnpath
         $courseInfo,
         $sessionId
     ) {
+        if (empty($courseInfo)) {
+            return false;
+        }
+
+        $courseId = $courseInfo['real_id'];
+
         $allow = api_get_configuration_value('allow_teachers_to_access_blocked_lp_by_prerequisite');
         if ($allow) {
             if (api_is_allowed_to_edit() ||
                 api_is_platform_admin(true) ||
                 api_is_drh() ||
-                api_is_coach($sessionId, $courseInfo['real_id'], false)
+                api_is_coach($sessionId, $courseId, false)
             ) {
                 return false;
             }
@@ -2400,7 +2406,7 @@ class learnpath
             $progress = self::getProgress(
                 $prerequisite,
                 $studentId,
-                $courseInfo['real_id'],
+                $courseId,
                 $sessionId
             );
             if ($progress < 100) {
@@ -2410,11 +2416,11 @@ class learnpath
             if (api_get_configuration_value('lp_minimum_time')) {
                 // Block if it does not exceed minimum time
                 // Minimum time (in minutes) to pass the learning path
-                $accumulateWorkTime = self::getAccumulateWorkTimePrerequisite($prerequisite, $courseInfo['real_id']);
+                $accumulateWorkTime = self::getAccumulateWorkTimePrerequisite($prerequisite, $courseId);
 
                 if ($accumulateWorkTime > 0) {
                     // Total time in course (sum of times in learning paths from course)
-                    $accumulateWorkTimeTotal = self::getAccumulateWorkTimeTotal($courseInfo['real_id']);
+                    $accumulateWorkTimeTotal = self::getAccumulateWorkTimeTotal($courseId);
 
                     // Connect with the plugin_licences_course_session table
                     // which indicates what percentage of the time applies
@@ -2422,15 +2428,6 @@ class learnpath
                     $perc = 100;
                     // Time from the course
                     $tc = $accumulateWorkTimeTotal;
-                    if (!empty($sessionId) && $sessionId != 0) {
-                        /*$sql = "SELECT hours, perc FROM plugin_licences_course_session WHERE session_id = $sessionId";
-                        $res = Database::query($sql);
-                        if (Database::num_rows($res) > 0) {
-                            $aux = Database::fetch_assoc($res);
-                            $perc = $aux['perc'];
-                            $tc = $aux['hours'] * 60;
-                        }*/
-                    }
 
                     // Percentage of the learning paths
                     $pl = $accumulateWorkTime / $accumulateWorkTimeTotal;

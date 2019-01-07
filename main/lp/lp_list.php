@@ -73,22 +73,6 @@ $message = '';
 $actions = '';
 
 if ($is_allowed_to_edit) {
-    if (!empty($dialog_box)) {
-        switch ($_GET['dialogtype']) {
-            case 'confirmation':
-                $message = Display::return_message($dialog_box, 'success');
-                break;
-            case 'error':
-                $message = Display::return_message($dialog_box, 'danger');
-                break;
-            case 'warning':
-                $message = Display::return_message($dialog_box, 'warning');
-                break;
-            default:
-                $message = Display::return_message($dialog_box);
-                break;
-        }
-    }
     $actionLeft = '';
     if (!$sessionId) {
         $actionLeft .= Display::url(

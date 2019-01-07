@@ -72,17 +72,7 @@
                             </div>
                             <div class="col-xs-8">
                                 <div id="progress_bar">
-                                    <div class="progress">
-                                        <div id="progress_bar_value2"
-                                             class="progress-bar progress-bar-success"
-                                             role="progressbar" aria-valuenow="50"
-                                             aria-valuemin="0"
-                                             aria-valuemax="{{ time_progress_value }}"
-                                             style="width: {{ time_progress_perc }};"
-                                        >
-                                            {{ time_progress_perc }}
-                                        </div>
-                                    </div>
+                                    {{ progress_bar }}
                                 </div>
                             </div>
                         </div>

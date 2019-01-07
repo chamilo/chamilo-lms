@@ -1659,20 +1659,16 @@ class Tracking
         $row = Database::fetch_array($rs);
 
         if (api_get_configuration_value('lp_minimum_time')) {
-            $courseInfo = api_get_course_info_by_id($courseId);
-            $course_code = $courseInfo['code'];
-            $sql = "SELECT * FROM c_lp WHERE c_id = $courseId";
-            $rs = Database::query($sql);
-            $dataLp = [];
-            while ($aux = Database::fetch_assoc($rs)) {
-                $dataLp[] = $aux['id'];
-            }
+            $lpTimeList = self::getCalculateTime($user_id, $courseId, $session_id);
+            $lpTime = isset($lpTimeList['total_time']) ? $lpTimeList['total_time'] : 0;
+            /*
             $lpTime = Tracking::get_time_spent_in_lp(
                 $user_id,
                 $course_code,
                 $dataLp, //array($_SESSION['oLP']->lp_id),
                 $session_id
-            );
+            );*/
+
             if ($row['nb_seconds'] > $lpTime) {
                 return $row['nb_seconds'];
             } else {

@@ -104,14 +104,11 @@ $tpl = new Template(get_lang('Outbox'));
 // Block Social Avatar
 
 if ($actions) {
-    $tpl->assign(
-        'actions',
-        Display::toolbarAction('toolbar', [$actions])
-    );
+    $tpl->assign('actions', $actions);
 }
 
 $tpl->assign('content_inbox', $message_content);
-$social_layout = $tpl->get_template('message/inbox.tpl');
+$social_layout = $tpl->get_template('message/inbox.html.twig');
 $content = $tpl->fetch($social_layout);
 $tpl->assign('message', $show_message);
 $tpl->assign('content', $content);

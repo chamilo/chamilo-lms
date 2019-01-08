@@ -414,7 +414,7 @@ if ($actions) {
 }
 $tpl->assign('message', $show_message);
 $tpl->assign('content_inbox', $message_content);
-$social_layout = $tpl->get_template('message/inbox.tpl');
+$social_layout = $tpl->get_template('message/inbox.html.twig');
 $content = $tpl->fetch($social_layout);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

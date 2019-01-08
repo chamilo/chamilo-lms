@@ -162,13 +162,13 @@ if (!isset($_GET['del_msg'])) {
 $tpl = new Template($nameTools);
 
 if ($actions) {
-    $tpl->assign('actions', Display::toolbarAction('toolbar', [$actions]));
+    $tpl->assign('actions', $actions);
 }
 // Block Social Avatar
 // SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
 
 $tpl->assign('content_inbox', $message_content);
-$social_layout = $tpl->get_template('message/inbox.tpl');
+$social_layout = $tpl->get_template('message/inbox.html.twig');
 $content = $tpl->fetch($social_layout);
 $tpl->assign('message', $show_message);
 $tpl->assign('content', $content);

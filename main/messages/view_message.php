@@ -60,14 +60,10 @@ if (empty($message_content)) {
 $tpl = new Template(get_lang('View'));
 
 if ($actions) {
-    $tpl->assign(
-        'actions',
-        Display::toolbarAction('toolbar', [$actions])
-    );
+    $tpl->assign('actions', $actions);
 }
-
 $tpl->assign('content_inbox', $message_content);
-$social_layout = $tpl->get_template('message/inbox.tpl');
+$social_layout = $tpl->get_template('message/inbox.html.twig');
 $content = $tpl->fetch($social_layout);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

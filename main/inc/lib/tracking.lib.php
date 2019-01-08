@@ -6838,6 +6838,9 @@ class Tracking
         $totalTime = 0;
 
         foreach ($sessions as $listPerTool) {
+            $min = 0;
+            $max = 0;
+            $sessionDiff = 0;
             foreach ($listPerTool as $tool => $results) {
                 $beforeItem = [];
                 foreach ($results as $item) {
@@ -6847,9 +6850,19 @@ class Tracking
                     }
 
                     $partialTime = $item['date_reg'] - $beforeItem['date_reg'];
-                    if ($partialTime >= 0) {
-                        $totalTime += $partialTime;
+
+                    if ($item['date_reg'] > $max) {
+                        $max = $item['date_reg'];
                     }
+
+                    if (empty($min)) {
+                        $min = $item['date_reg'];
+                    }
+
+                    if ($item['date_reg'] < $min) {
+                        $min = $item['date_reg'];
+                    }
+
                     switch ($tool) {
                         case TOOL_AGENDA:
                         case TOOL_FORUM:
@@ -6902,7 +6915,11 @@ class Tracking
                     }
                     $beforeItem = $item;
                 }
+            }
 
+            $sessionDiff += $max - $min;
+            if ($sessionDiff > 0) {
+                $totalTime += $sessionDiff;
             }
         }
 

@@ -2501,14 +2501,8 @@ class Event
         $logInfo['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
         $logInfo['session_id'] = api_get_session_id();
         $logInfo['c_id'] = api_get_course_int_id();
-        $logInfo['session_id'] = api_get_session_id();
-        $logInfo['url'] = $_SERVER['REQUEST_URI'];
         $logInfo['ch_sid'] = session_id();
-        $logInfo['ip_user'] = api_get_real_ip();
-        $logInfo['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
         $logInfo['login_as'] = $loginAs;
-        $logInfo['date_reg'] = api_get_utc_datetime();
-        $logInfo['current_id'] = isset($logInfo['current_id']) ? (int) $logInfo['current_id'] : 0;
         $logInfo['info'] = !empty($logInfo['info']) ? $logInfo['info'] : '';
         $logInfo['url'] = $_SERVER['REQUEST_URI'];
 

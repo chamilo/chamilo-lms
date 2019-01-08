@@ -2450,20 +2450,21 @@ class Display
             $rightAction = '<span class="float-right">'.$rightAction.'</span>';
         }
 
-        $title = !empty($title) ? '<h3 class="card-header">'.$title.' '.$rightAction.'</h3>'.$extra : '';
-        $footer = !empty($footer) ? '<div class="card-footer">'.$footer.'</div>' : '';
+        $title = !empty($title) ? '<h5 class="card-title">'.$title.' '.$rightAction.'</h5>'.$extra : '';
+        $footer = !empty($footer) ? '<p class="card-text"><small class="text-muted">'.$footer.'</small></p>' : '';
         $typeList = ['primary', 'success', 'info', 'warning', 'danger'];
         $style = !in_array($type, $typeList) ? 'default' : $type;
 
         if (!empty($id)) {
             $id = " id='$id'";
         }
+        $cardBody = $title.' '.self::contentPanel($content).' '.$footer;
+
+        $panel = Display::tag('div',$cardBody,['id' => 'card-'.$id ,'class'=>'card-body']);
 
         return '
             <div '.$id.' class="card">
-                '.$title.'
-                '.self::contentPanel($content).'
-                '.$footer.'
+                '.$panel.'
             </div>'
         ;
     }

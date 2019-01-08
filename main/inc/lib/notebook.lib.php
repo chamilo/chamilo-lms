@@ -302,7 +302,7 @@ class NotebookManager
 
             echo Display::panel(
                 $row['description'],
-                $row['title'].$session_img.' <div class="pull-right">'.$actions.'</div>',
+                $row['title'].$session_img.' <div class="float-right">'.$actions.'</div>',
                 get_lang('CreationDate').': '.Display::dateToStringAgoAndLongDate($row['creation_date']).$updateValue
             );
         }

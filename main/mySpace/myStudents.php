@@ -242,6 +242,9 @@ switch ($action) {
         $average = round($progress / count($courses), 1);
         $average = empty($average) ? '0%' : $average.'%';
 
+        $first = Tracking::get_first_connection_date($student_id);
+        $last = Tracking::get_last_connection_date($student_id);
+
         $attendance = new Attendance();
 
         $table = new HTML_Table(['class' => 'data_table']);
@@ -250,7 +253,9 @@ switch ($action) {
         $headers = [
             get_lang('TimeSpent'),
             get_lang('NumberOfVisits'),
-            get_lang('Progress'),
+            get_lang('GlobalProgress'),
+            get_lang('FirstLogin'),
+            get_lang('LastConnexionDate'),
         ];
 
         foreach ($headers as $header) {
@@ -260,6 +265,8 @@ switch ($action) {
         $table->setCellContents(1, 0, api_time_to_hms($timeSpent));
         $table->setCellContents(1, 1, $numberVisits);
         $table->setCellContents(1, 2, $average);
+        $table->setCellContents(1, 3, $first);
+        $table->setCellContents(1, 4, $last);
 
         $courseTable = '';
 
@@ -267,8 +274,8 @@ switch ($action) {
             $courseTable .= '<table class="data_table">';
             $courseTable .= '<thead>';
             $courseTable .= '<tr>
-                    <th>'.get_lang('Course').'</th>
-                    <th>'.get_lang('Time').'</th>
+                    <th>'.get_lang('FormationUnit').'</th>
+                    <th>'.get_lang('ConnectionTime').'</th>
                     <th>'.get_lang('Progress').'</th>
                     <th>'.get_lang('Score').'</th>
                 </tr>';
@@ -315,19 +322,29 @@ switch ($action) {
 
                     $totalProgress += $progress;
 
-                    $score = Tracking::get_avg_student_score(
+                    $bestScore = Tracking::get_avg_student_score(
+                        $user_info['user_id'],
+                        $courseCodeItem,
+                        [],
+                        $sId,
+                        false,
+                        false,
+                        true
+                    );
+
+                    if (is_numeric($bestScore)) {
+                        $totalScore += $bestScore;
+                    }
+
+                    /*$score = Tracking::get_avg_student_score(
                         $user_info['user_id'],
                         $courseCodeItem,
                         [],
                         $sId
-                    );
-
-                    if (is_numeric($score)) {
-                        $totalScore += $score;
-                    }
+                    );*/
 
                     $progress = empty($progress) ? '0%' : $progress.'%';
-                    $score = empty($score) ? '0%' : $score.'%';
+                    $score = empty($bestScore) ? '0%' : $bestScore.'%';
 
                     $courseTable .= '<tr>
                         <td ><a href="'.$courseInfoItem['course_public_url'].'?id_session='.$sId.'">'.

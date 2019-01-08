@@ -151,7 +151,7 @@ function handlePlugins()
     // Plugins NOT installed
     echo Display::page_subheader(get_lang('Plugins'));
     echo '<form class="form-horizontal" name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'&sec_token='.$token.'">';
-    echo '<table class="data_table">';
+    echo '<table class="table table-hover">';
     echo '<tr>';
     echo '<th width="20px">';
     echo get_lang('Action');
@@ -192,17 +192,17 @@ function handlePlugins()
             $pluginRow .= '<p>'.$plugin_info['comment'].'</p>';
             $pluginRow .= '<p>'.get_lang('Author').': '.$plugin_info['author'].'</p>';
 
-            $pluginRow .= '<div class="btn-group">';
+            $pluginRow .= '<div class="btn-group btn-group-sm">';
             if (in_array($pluginName, $installed_plugins)) {
                 $pluginRow .= Display::url(
                     '<em class="fa fa-cogs"></em> '.get_lang('Configure'),
                     'configure_plugin.php?name='.$pluginName,
-                    ['class' => 'btn btn-default']
+                    ['class' => 'btn btn-primary']
                 );
                 $pluginRow .= Display::url(
                     '<em class="fa fa-th-large"></em> '.get_lang('Regions'),
                     'settings.php?category=Regions&name='.$pluginName,
-                    ['class' => 'btn btn-default']
+                    ['class' => 'btn btn-primary']
                 );
             }
 
@@ -211,7 +211,7 @@ function handlePlugins()
                     "<em class='fa fa-file-text-o'></em> readme.txt",
                     api_get_path(WEB_PLUGIN_PATH).$pluginName."/readme.txt",
                     [
-                        'class' => 'btn btn-default ajax',
+                        'class' => 'btn btn-primary ajax',
                         'data-title' => $plugin_info['title'],
                         'data-size' => 'lg',
                         '_target' => '_blank',
@@ -225,7 +225,7 @@ function handlePlugins()
                     "<em class='fa fa-file-text-o'></em> README.md",
                     api_get_path(WEB_AJAX_PATH).'plugin.ajax.php?a=md_to_html&plugin='.$pluginName,
                     [
-                        'class' => 'btn btn-default ajax',
+                        'class' => 'btn btn-primary ajax',
                         'data-title' => $plugin_info['title'],
                         'data-size' => 'lg',
                         '_target' => '_blank',

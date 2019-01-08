@@ -20,7 +20,7 @@ $from = isset($_GET['from']) ? $_GET['from'] : null;
 
 // Starting the output buffering when we are exporting the information.
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
-
+$_course = api_get_course_info();
 $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
 $htmlHeadXtra[] = ' ';
 
@@ -404,7 +404,7 @@ if ($nbStudents > 0) {
     $tpl->assign('number_students', $nbStudents);
     $tpl->assign('top_students', $userScoreList);
 
-    $trackingSummaryLayout = $tpl->get_template('tracking/tracking_course_log.tpl');
+    $trackingSummaryLayout = $tpl->get_template('tracking/tracking_course_log.html.twig');
     $content = $tpl->fetch($trackingSummaryLayout);
 
     echo $content;

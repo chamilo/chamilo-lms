@@ -31,7 +31,7 @@ class DashboardManager
         $table_cols = ['name', 'version', 'description'];
         echo Display::page_subheader(get_lang('DashboardPlugins'));
         echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).$tokenCondition.'">';
-        echo '<table class="data_table">';
+        echo '<table class="table table-hover">';
         echo '<tr>';
         echo '<th width="50px">'.get_lang('Enabled').'</th>';
         echo '<th width="250px">'.get_lang('Name').'</th>';

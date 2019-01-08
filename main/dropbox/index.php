@@ -312,19 +312,28 @@ if ($action != 'add') {
     /*	THE MENU TABS */
     if ($showSentReceivedTabs) {
         ?>
+
 <ul class="nav nav-tabs">
-    <li <?php if (!$view || $view == 'sent') {
-            echo 'class="active"';
-        } ?> >
-        <a href="<?php echo api_get_path(WEB_CODE_PATH).'dropbox/'; ?>index.php?<?php echo api_get_cidreq(); ?>&view=sent" >
+    <?php
+        $activeSend = $activeReceived = '';
+        if (!$view || $view == 'sent') {
+            $activeSend =  'active';
+        }
+    ?>
+    <li class="nav-item">
+        <a class="nav-link <?php echo $activeSend ?>" href="<?php echo api_get_path(WEB_CODE_PATH).'dropbox/'; ?>index.php?<?php echo api_get_cidreq(); ?>&view=sent" >
             <?php echo get_lang('SentFiles'); ?>
         </a>
     </li>
-    <li <?php if ($view == 'received') {
-            echo 'class="active"';
-        } ?> >
-        <a href="<?php echo api_get_path(WEB_CODE_PATH).'dropbox/'; ?>index.php?<?php echo api_get_cidreq(); ?>&view=received"  >
-            <?php echo get_lang('ReceivedFiles'); ?></a>
+    <?php
+        if ($view == 'received') {
+            $activeReceived = 'active';
+        }
+    ?>
+    <li class="nav-item">
+        <a class="nav-link <?php echo $activeReceived ?>"  href="<?php echo api_get_path(WEB_CODE_PATH).'dropbox/'; ?>index.php?<?php echo api_get_cidreq(); ?>&view=received"  >
+            <?php echo get_lang('ReceivedFiles'); ?>
+        </a>
     </li>
 </ul>
 <?php

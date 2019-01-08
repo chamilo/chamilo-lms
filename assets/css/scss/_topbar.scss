@@ -79,8 +79,7 @@
           .rounded-circle{
             margin-right: 10px;
             width: 40px;
-            border: 2px solid #fff;
-            box-shadow: 0 5px 10px 0 rgba(43,43,43,0.2);
+            border: 2px solid $default-primary;
           }
 
           @include to($breakpoint-md) {

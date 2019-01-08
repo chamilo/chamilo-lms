@@ -2667,17 +2667,6 @@ input.liteoption {
     border: 1px solid #E1E1E0;
 }
 
-.row_selected {
-    border-color: #478ced #1f6fe2 #1f6fe2;
-    background-color: #FFFFCC;
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#FFFFCC), to(#FFFFCC));
-    background-image: -webkit-linear-gradient(top, #FFFFCC, #FFFFCC);
-    background-image: -moz-linear-gradient(top, #FFFFCC, #FFFFCC);
-    background-image: -ms-linear-gradient(top, #FFFFCC, #FFFFCC);
-    background-image: -o-linear-gradient(top, #FFFFCC, #FFFFCC);
-    background-image: linear-gradient(top, #FFFFCC, #FFFFCC);
-    box-shadow: 0 1px 0 transparent;
-}
 
 .data_table_exercise_result, .data_table_exercise_result_left {
     border-collapse: collapse;
@@ -5599,29 +5588,6 @@ div#chat-remote-video video {
 
 .ui-jqgrid .ui-widget-content .ui-state-default {
     background: #EEEEEE;
-}
-
-.ui-tabs .ui-widget-header {
-    background: none;
-    border: none;
-    border-radius: 0;
-    border-bottom-color: #dedede;
-}
-
-.ui-tabs.ui-widget-content {
-    border: none;
-}
-
-.ui-tabs .ui-state-default, .ui-tabs .ui-widget-content .ui-state-default, .ui-tabs .ui-widget-header .ui-state-default {
-    background: #fff;
-}
-
-.ui-tabs .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active {
-    border-color: #dedede;
-}
-
-.ui-tabs .ui-widget-content a.btn-success {
-    color: #fff;
 }
 
 .ui-priority-secondary,

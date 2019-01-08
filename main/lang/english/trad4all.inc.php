@@ -8331,4 +8331,9 @@ $ThisQuestionExistsInAnotherExercisesWarning = "This question is used in another
 $TimeSpentTimeRequired = "Time spent / Time required";
 $ProgressSpentInLp = "Progress";
 $InSessionXYouHadTheFollowingResults = "In session %s, you had the following results";
+$TimeSpent = "Time spent";
+$NumberOfVisits = "Number of visits";
+$FormationUnit = "Formation unit";
+$GlobalProgress = "Global progress";
+$AttestationOfAttendance = "Attestation of attendance";
 ?>

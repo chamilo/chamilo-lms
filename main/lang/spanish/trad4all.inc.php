@@ -8360,4 +8360,7 @@ $TheStudentXHasFinishedTheCourseYLearningPaths = "El estudiante <strong>%s</stro
 $ThisQuestionExistsInAnotherExercisesWarning = "Esta pregunta se usa en otros ejercicios. Si continúa con su edición, los cambios afectarán a todos los ejercicios que contienen esta pregunta.";
 $TimeSpentTimeRequired = "Tiempo invertido / tiempo requerido";
 $ProgressSpentInLp = "Progreso contenidos";
+$FormationUnit = "Unidad de capacitacion";
+$GlobalProgress = "Progresion global";
+$AttestationOfAttendance = "Atestación de asistencia";
 ?>

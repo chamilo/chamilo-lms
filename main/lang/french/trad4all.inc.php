@@ -8257,4 +8257,9 @@ $PersonalDataOfficer = "Délégué à la protection des données personnelles";
 $MaxNumberSubscribedStudentsReached = "Le nombre maximum d'apprenants a déjà été atteint, il n'est pas possible d'en inscrire de nouveau";
 $UserXAddedToCourseX = "L'utilisateur %s a été inscrit au cours %s";
 $InSessionXYouHadTheFollowingResults = "Dans la formation %s, vous avez obtenu les résultats suivants:";
+$TimeSpent = "Temps de connexion global";
+$NumberOfVisits = "Nombre de passages";
+$FormationUnit = "Unité de formation";
+$GlobalProgress = "Progression Globale";
+$AttestationOfAttendance = "Attestation d'assiduité";
 ?>

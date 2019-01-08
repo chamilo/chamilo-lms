@@ -1488,7 +1488,6 @@ class Template
         $this->assign('prefetch', $prefetch);
         $this->assign('text_direction', api_get_text_direction());
         $this->assign('section_name', 'section-'.$this_section);
-
         $this->assignFavIcon(); //Set a 'favico' var for the template
         $this->setHelp();
 

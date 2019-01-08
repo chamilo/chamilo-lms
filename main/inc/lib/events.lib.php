@@ -2496,7 +2496,6 @@ class Event
         $logInfo['tool_id_detail'] = !empty($logInfo['tool_id_detail']) ? (int) $logInfo['tool_id_detail'] : 0;
         $logInfo['action'] = !empty($logInfo['action']) ? $logInfo['action'] : '';
         $logInfo['action_details'] = !empty($logInfo['action_details']) ? $logInfo['action_details'] : '';
-        $logInfo['current_id'] = !empty($logInfo['current_id']) ? (int) $logInfo['current_id'] : 0;
         $logInfo['ip_user'] = api_get_real_ip();
         $logInfo['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
         $logInfo['session_id'] = api_get_session_id();
@@ -2505,9 +2504,10 @@ class Event
         $logInfo['login_as'] = $loginAs;
         $logInfo['info'] = !empty($logInfo['info']) ? $logInfo['info'] : '';
         $logInfo['url'] = $_SERVER['REQUEST_URI'];
+        $logInfo['current_id'] = Session::read('last_id', 0);
 
         $id = Database::insert('track_e_access_complete', $logInfo);
-        if ($id) {
+        if ($id && empty($logInfo['current_id'])) {
             Session::write('last_id', $id);
         }
 

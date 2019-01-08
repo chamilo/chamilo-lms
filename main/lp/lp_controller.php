@@ -263,13 +263,14 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
         // Select the lp in the database and check which type it is (scorm/chamilo/aicc) to generate the
         // right object.
         if (!empty($_REQUEST['lp_id'])) {
-            $lp_id = intval($_REQUEST['lp_id']);
+            $lp_id = $_REQUEST['lp_id'];
         } else {
-            $lp_id = intval($myrefresh_id);
+            $lp_id = $myrefresh_id;
         }
+        $lp_id = (int) $lp_id;
 
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
-        if (is_numeric($lp_id)) {
+        if (!empty($lp_id)) {
             $sel = "SELECT iid, lp_type FROM $lp_table WHERE c_id = $course_id AND id = $lp_id";
             if ($debug > 0) {
                 error_log(' querying '.$sel);
@@ -283,6 +284,14 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
                     error_log('Found row type '.$type);
                     error_log('Calling constructor: '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id());
                 }
+                $logInfo = [
+                    'tool' => TOOL_LEARNPATH,
+                    'tool_id' => 0,
+                    'tool_id_detail' => 0,
+                    'action' => 'lp_load',
+                ];
+                Event::registerLog($logInfo);
+
                 switch ($type) {
                     case 1:
                         $oLP = new learnpath(api_get_course_id(), $lpIid, api_get_user_id());
@@ -369,8 +378,20 @@ if ($debug) {
     error_log('Entered lp_controller.php -+- (action: '.$action.')');
 }
 
-$lp_id = !empty($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : 0;
+$eventLpId = $lp_id = !empty($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : 0;
+if (empty($lp_id)) {
+    if (isset($_SESSION['oLP'])) {
+        $eventLpId = $_SESSION['oLP']->get_id();
+
+    }
+}
+
+$lp_detail_id = 0;
 switch ($action) {
+    case '':
+    case 'list':
+        $eventLpId = 0;
+        break;
     case 'view':
     case 'content':
         $lp_detail_id = $_SESSION['oLP']->get_current_item_id();
@@ -382,10 +403,9 @@ switch ($action) {
 
 $logInfo = [
     'tool' => TOOL_LEARNPATH,
-    'tool_id' => $lp_id,
+    'tool_id' => $eventLpId,
     'tool_id_detail' => $lp_detail_id,
     'action' => !empty($action) ? $action : 'list',
-    'info' => '',
 ];
 Event::registerLog($logInfo);
 
@@ -429,29 +449,6 @@ switch ($action) {
             $course_url = $root_web.'courses/'.$course_info['code'].'/index.php?';
         }
         $url = Display::url($course_name, $course_url, ['title' => get_lang('GoToCourse')]);
-
-        /*$sql = "SELECT c.* FROM plugin_licences_customers c
-                INNER JOIN plugin_licences_student_rel_customer s
-                ON s.user_id = c.user_id
-                WHERE s.student_id = ".$studentInfo['user_id'];
-        $res = Database::query($sql);
-        if (Database::num_rows($res) > 0) {
-            $row = Database::fetch_assoc($res);
-            if (!empty($row['telefono'])) {
-                $telefono = htmlspecialchars($row['telefono']);
-            } else {
-                $telefono = '';
-            }
-            if (!empty($row['prefix'])) {
-                $prefix = htmlspecialchars($row['prefix']);
-            } else {
-                $prefix = '';
-            }
-        } else {
-            $telefono = '';
-            $prefix = '';
-        }*/
-
         $coachList = CourseManager::get_coachs_from_course(api_get_session_id(), api_get_course_int_id());
         foreach ($coachList as $coach_course) {
             $recipient_name = $coach_course['full_name'];

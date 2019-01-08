@@ -369,10 +369,7 @@ switch ($action) {
             'tool' => 'close-window',
             'tool_id' => 0,
             'tool_id_detail' => 0,
-            'action' => 'exit',
-            'action_details' => '',
-            'current_id' => isset($_GET['last_id']) ? $_GET['last_id'] : 0,
-            'info' => '',
+            'action' => 'exit'
         ];
         Event::registerLog($logInfo);
 

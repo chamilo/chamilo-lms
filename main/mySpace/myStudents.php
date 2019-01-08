@@ -377,7 +377,8 @@ switch ($action) {
         $studentInfo = api_get_user_info($student_id);
 
         $tpl = new Template('', false, false, false, true, false, false);
-        $tpl->assign('title', $sessionInfo['name']);
+        $tpl->assign('title', get_lang('AttestationOfAttendance'));
+        $tpl->assign('session_title', $sessionInfo['name']);
         $tpl->assign('student', $studentInfo['complete_name']);
         $tpl->assign('table_progress', $table->toHtml());
         $tpl->assign('subtitle', sprintf(

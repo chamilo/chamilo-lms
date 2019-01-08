@@ -70,13 +70,13 @@ $blocks['users']['class'] = 'block-admin-users';
 
 $search_form = '
     <form method="get" class="form-inline" action="user_list.php">
-        <div class="form-group">
+        <div class="form-group mb-2">
             <input class="form-control" type="text" name="keyword" value=""
              aria-label="'.get_lang('Search').'">
-            <button class="btn btn-default" type="submit">
-                <em class="fa fa-search"></em> '.get_lang('Search').'
-            </button>
         </div>
+        <button class="btn btn-primary mb-2" type="submit">
+            <em class="fa fa-search"></em> '.get_lang('Search').'
+        </button>
     </form>';
 $blocks['users']['search_form'] = $search_form;
 
@@ -141,13 +141,13 @@ if (api_is_platform_admin()) {
     $blocks['courses']['class'] = 'block-admin-courses';
     $blocks['courses']['editable'] = true;
     $search_form = ' <form method="get" class="form-inline" action="course_list.php">
-            <div class="form-group">
+            <div class="form-group mb-2">
                 <input class="form-control" type="text" name="keyword" value=""
                  aria-label="'.get_lang('Search').'">
-                <button class="btn btn-default" type="submit">
-                    <em class="fa fa-search"></em> '.get_lang('Search').'
-                </button>
             </div>
+            <button class="btn btn-primary mb-2" type="submit">
+                <em class="fa fa-search"></em> '.get_lang('Search').'
+            </button>
         </form>';
     $blocks['courses']['search_form'] = $search_form;
 
@@ -192,15 +192,15 @@ if (api_is_platform_admin()) {
     $blocks['platform']['class'] = 'block-admin-platform';
     $blocks['platform']['editable'] = true;
     $search_form = ' <form method="get" action="'.api_get_path(WEB_PUBLIC_PATH).'admin/settings/search_settings'.'" class="form-inline">
-            <div class="form-group">
+            <div class="form-group mb-2">
                 <input class="form-control"
                 type="text"
                 name="keyword" value=""
                 aria-label="'.get_lang('Search').'" >
-                <button class="btn btn-default" type="submit">
+            </div>
+            <button class="btn btn-primary mb-2" type="submit">
                     <em class="fa fa-search"></em> '.get_lang('Search').'
                 </button>
-            </div>
         </form>';
     $blocks['platform']['search_form'] = $search_form;
 
@@ -278,16 +278,17 @@ if (api_is_platform_admin()) {
 $sessionPath = api_get_path(WEB_CODE_PATH).'session/';
 
 $search_form = ' <form method="GET" class="form-inline" action="'.$sessionPath.'session_list.php">
-                    <div class="form-group">
+                    <div class="form-group mb-2">
                         <input class="form-control"
                         type="text"
                         name="keyword"
                         value=""
                         aria-label="'.get_lang('Search').'">
-                        <button class="btn btn-default" type="submit">
+                        
+                    </div>
+                    <button class="btn btn-primary mb-2" type="submit">
                             <em class="fa fa-search"></em> '.get_lang('Search').'
                         </button>
-                    </div>
                 </form>';
 $blocks['sessions']['search_form'] = $search_form;
 $items = [];
@@ -632,7 +633,7 @@ if ($useCookieValidation === 'true') {
 
 $tpl->assign('web_admin_ajax_url', $admin_ajax_url);
 $tpl->assign('web_public', api_get_path(WEB_PUBLIC_PATH));
-$tpl->assign('blocks', $blocks);
+$tpl->assign('blocks_admin', $blocks);
 
 if (api_is_platform_admin()) {
     $extraContentForm = new FormValidator(
@@ -686,5 +687,9 @@ if (api_is_platform_admin()) {
 }
 
 // The template contains the call to the AJAX version checker
-$template = $tpl->get_template('admin/settings_index.tpl');
-$tpl->display($template);
+$template = $tpl->get_template('admin/index.html.twig');
+$content = $tpl->fetch($template);
+$tpl->assign('content',$content);
+$tpl->display_one_col_template();
+
+//$tpl->display($template);

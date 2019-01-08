@@ -1079,10 +1079,6 @@ a.unread {
 table.lp_build td.tree {
     border: none;
 }
-g
-div.system_announcement {
-    background-color: #EEEEEE;
-}
 
 .RequirementHeading, .RequirementText, .RequirementContent {
     margin-top: 12px;
@@ -2931,24 +2927,6 @@ a:active {
     width: 8em;
 }
 
-.welcome_course li {
-    float: left;
-    list-style-type: none;
-    width: 175px
-}
-
-.welcome_course li p {
-    margin-left: auto;
-    margin-right: auto;
-    width: 88px;
-}
-
-.welcome_course li a {
-    margin-left: auto;
-    margin-right: auto;
-    width: 120px;
-}
-
 /* Nanogong - exercise player*/
 
 .nanogong_player_container {
@@ -4137,27 +4115,6 @@ ul.holder li.bit-box {
     padding-bottom: 2em;
 }
 
-.code-course {
-    padding-left: 10px;
-    padding-right: 10px;
-}
-
-.control-course {
-    text-align: center;
-}
-
-#settings .form-inline {
-    margin-bottom: 15px;
-}
-
-#search_settings {
-    margin-bottom: 15px;
-}
-
-.src-image {
-    display: none;
-}
-
 /* thematic progress */
 #thematic .title-topics {
     font-size: 15px;
@@ -4496,7 +4453,6 @@ div#chat-remote-video video {
     display: inline-block;
     width: 125px;
     padding: 5px;
-    /* background: url("../../public/img/icons/48/sequence-arrow.png") no-repeat center bottom; */
 }
 
 #parents .sequence-plus-icon {
@@ -4629,10 +4585,6 @@ div#chat-remote-video video {
 
 #children .parent .big-icon .sequence-deleted {
     font-size: 12px;
-}
-
-.form-search {
-    padding-bottom: 50px;
 }
 
 /**** SOCIAL MEDIA ****/
@@ -6410,14 +6362,6 @@ footer {
 .everybodyview {
     padding-top: 20px;
     margin-top: 10px;
-}
-
-.btn-options {
-    padding-right: 20px;
-}
-
-.btn-tool {
-    margin-bottom: 2px;
 }
 
 ul#toolnavbox {

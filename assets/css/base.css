@@ -358,49 +358,10 @@
     text-align: center;
 }
 
-.easypiechart {
-    position: relative;
-    text-align: center;
-    width: 120px;
-    height: 120px;
-    margin: 20px auto 10px auto;
-}
 
-#easypiechart-blue .percent {
-    color: #30a5ff;
-}
 
-#easypiechart-teal .percent {
-    color: #1ebfae;
-}
 
-#easypiechart-orange .percent {
-    color: #ffb53e;
-}
 
-#easypiechart-red .percent {
-    color: #ef4040;
-}
-
-.easypiechart .percent {
-    display: block;
-    position: absolute;
-    font-size: 26px;
-    top: 38px;
-    width: 120px;
-}
-
-.easypiechart-link {
-    padding-bottom: 5px;
-    padding-top: 5px;
-    display: inline-block;
-    width: 100%;
-}
-
-.item-report {
-    text-align: center;
-    min-height: 200px;
-}
 
 .item-report .panel-default {
     background-color: #ededed;

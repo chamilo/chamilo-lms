@@ -391,7 +391,7 @@ $view->assign('form', $form->returnForm());
 $view->assign('actions', Display::toolbarAction('toolbar', [$actionsLeft, $actionsRight]));
 $view->assign('title', get_lang('Students').' ('.$numberStudents.')');
 
-$template = $view->get_template('my_space/index.tpl');
+$template = $view->get_template('my_space/index.html.twig');
 $content = $view->fetch($template);
 $view->assign('content', $content);
 $view->display_one_col_template();

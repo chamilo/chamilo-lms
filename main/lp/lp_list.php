@@ -211,6 +211,12 @@ foreach ($categories as $item) {
         $counter = 0;
         $current = 0;
         $autolaunch_exists = false;
+        $accumulateWorkTimeTotal = 0;
+        if ($allowMinTime) {
+            // TT --- Tiempo total del curso
+            $accumulateWorkTimeTotal = learnpath::getAccumulateWorkTimeTotal(api_get_course_int_id());
+        }
+
         foreach ($flat_list as $id => $details) {
             $id = $details['lp_old_id'];
             // Validation when belongs to a session.
@@ -393,15 +399,11 @@ foreach ($categories as $item) {
                 // Minimum time (in minutes) to pass the learning path
                 $accumulateWorkTime = learnpath::getAccumulateWorkTimePrerequisite($id, api_get_course_int_id());
                 if ($accumulateWorkTime > 0) {
-                    // TT --- Tiempo total del curso
-                    $accumulateWorkTimeTotal = learnpath::getAccumulateWorkTimeTotal(api_get_course_int_id());
-
                     $lpTime = isset($lpTimeList[TOOL_LEARNPATH][$id]) ? $lpTimeList[TOOL_LEARNPATH][$id] : 0;
 
                     // Connect with the plugin_licences_course_session table
                     // which indicates what percentage of the time applies
                     $perc = 100;
-                    $tc = $accumulateWorkTimeTotal;
 
                     // Percentage of the learning paths
                     $pl = 0;
@@ -410,7 +412,7 @@ foreach ($categories as $item) {
                     }
 
                     // Minimum time for each learning path
-                    $accumulateWorkTime = ($pl * $tc * $perc / 100);
+                    $accumulateWorkTime = ($pl * $accumulateWorkTimeTotal * $perc / 100);
 
                     // If the time spent is less than necessary, then we show an icon in the actions column indicating the warning
                     if ($lpTime < ($accumulateWorkTime * 60)) {
@@ -420,7 +422,6 @@ foreach ($categories as $item) {
                                 $accumulateWorkTime * 60
                             )
                         );
-                        $linkMinTime .= '&nbsp;<b>'.api_time_to_hms($lpTime).' / '.api_time_to_hms($accumulateWorkTime * 60).'</b>';
                     } else {
                         $linkMinTime = Display::return_icon(
                             'check.png',
@@ -428,9 +429,8 @@ foreach ($categories as $item) {
                                 $accumulateWorkTime * 60
                             )
                         );
-                        $linkMinTime .= '&nbsp;<b>'.api_time_to_hms($lpTime).' / '.api_time_to_hms($accumulateWorkTime * 60).'</b>';
-                        //$linkMinTime = sprintf(get_lang('YouHaveSpentXTime'), api_time_to_hms($lpTime));
                     }
+                    $linkMinTime .= '&nbsp;<b>'.api_time_to_hms($lpTime).' / '.api_time_to_hms($accumulateWorkTime * 60).'</b>';
 
                     // Calculate the percentage exceeded of the time for the "exceeding the minimum time" bar
                     if ($lpTime >= ($accumulateWorkTime * 60)) {

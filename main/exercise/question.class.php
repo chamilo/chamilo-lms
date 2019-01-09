@@ -1959,7 +1959,7 @@ abstract class Question
         }
         $score_label = get_lang('Wrong');
         $class = 'error';
-        if ($score['pass'] == true) {
+        if (isset($score['pass']) && $score['pass'] == true) {
             $score_label = get_lang('Correct');
             $class = 'success';
         }
@@ -1972,8 +1972,10 @@ abstract class Question
             } else {
                 $score_label = get_lang('NotRevised');
                 $class = 'warning';
-                $weight = float_format($score['weight'], 1);
-                $score['result'] = " ? / ".$weight;
+                if (isset($score['weight'])) {
+                    $weight = float_format($score['weight'], 1);
+                    $score['result'] = ' ? / '.$weight;
+                }
                 $model = ExerciseLib::getCourseScoreModel();
                 if (!empty($model)) {
                     $score['result'] = ' ? ';
@@ -1996,13 +1998,16 @@ abstract class Question
             $header .= $this->show_media_content();
         }
         $scoreCurrent = [
-            'used' => $score['score'],
-            'missing' => $score['weight'],
+            'used' => isset($score['score']) ? $score['score'] : '',
+            'missing' => isset($score['weight']) ? $score['weight'] : '',
         ];
         $header .= Display::page_subheader2($counterLabel.'. '.$this->question);
+
         // dont display score for certainty degree questions
         if ($this->type != MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
-            $header .= $exercise->getQuestionRibbon($class, $score_label, $score['result'], $scoreCurrent);
+            if (isset($score['result'])) {
+                $header .= $exercise->getQuestionRibbon($class, $score_label, $score['result'], $scoreCurrent);
+            }
         }
 
         if ($this->type != READING_COMPREHENSION) {

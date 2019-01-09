@@ -13,8 +13,7 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
-$htmlHeadXtra[] = '<script type="text/javascript" src="'
-    .api_get_path(WEB_PUBLIC_PATH).'assets/jquery.easy-pie-chart/dist/jquery.easypiechart.js"></script>';
+
 // the section (for the tabs)
 $this_section = SECTION_TRACKING;
 //for HTML editor repository

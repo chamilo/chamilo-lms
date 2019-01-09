@@ -27,6 +27,7 @@ require("bootstrap-daterangepicker");
 require("fullcalendar/dist/fullcalendar.js");
 require("fullcalendar/dist/gcal.js");
 require("fullcalendar/dist/locale-all.js");
+require("easy-pie-chart/dist/jquery.easypiechart.min");
 
 //require("readmore-js");
 

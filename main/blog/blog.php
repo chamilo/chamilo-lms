@@ -422,11 +422,11 @@ switch ($action) {
             $titleSearch = get_lang('PostsOf').' '.$dateSearch;
             $tpl->assign('search', $titleSearch);
             $tpl->assign('articles', $listArticles);
-            $blogLayout = $tpl->get_template('blog/blog.tpl');
+            $blogLayout = $tpl->get_template('blog/blog.html.twig');
         } else {
             $listArticles = Blog::getPosts($blog_id);
             $tpl->assign('articles', $listArticles);
-            $blogLayout = $tpl->get_template('blog/blog.tpl');
+            $blogLayout = $tpl->get_template('blog/blog.html.twig');
         }
         break;
 }

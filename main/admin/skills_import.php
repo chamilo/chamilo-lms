@@ -74,6 +74,9 @@ function save_data($skills)
             $skill['a'] = 'add';
             $saved_id = $skill['id'];
             $skill['id'] = null;
+            $skill['short_code'] = '';
+            $skill['icon'] = '';
+            $skill['updated_at'] = api_get_utc_datetime();
             $oskill = new Skill();
             $skill_id = $oskill->add($skill);
             $parents[$saved_id] = $skill_id;

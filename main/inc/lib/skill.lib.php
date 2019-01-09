@@ -674,6 +674,7 @@ class Skill extends Model
         'name',
         'description',
         'access_url_id',
+        'updated_at',
         'short_code',
         'icon',
         'criteria',
@@ -1121,8 +1122,8 @@ class Skill extends Model
                     $attributes = [
                         'skill_id' => $skill_id,
                         'parent_id' => $parent_id,
-                        'relation_type' => (isset($params['relation_type']) ? $params['relation_type'] : 0),
-                        //'level'         => $params['level'],
+                        'relation_type' => isset($params['relation_type']) ? $params['relation_type'] : 0,
+                        'level' => isset($params['level']) ? $params['level'] : 0,
                     ];
                     $skillRelSkill->save($attributes);
                 }

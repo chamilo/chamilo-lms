@@ -52,7 +52,7 @@ class Import
         $reader = Reader::createFromPath($filename, 'r');
         if ($reader) {
             $reader->setDelimiter(';');
-            $reader->stripBom(true);
+            //$reader->stripBom(true);
             /*$contents = $reader->__toString();
             if (!Utf8::isUtf8($contents)) {
                 // If file is not in utf8 try converting to ISO-8859-15
@@ -60,8 +60,8 @@ class Import
                     $reader->appendStreamFilter('convert.iconv.ISO-8859-15/UTF-8');
                 }
             }*/
-
-            $iterator = $reader->fetchAssoc(0);
+            $reader->setHeaderOffset(0);
+            $iterator = $reader->getRecords();
 
             return iterator_to_array($iterator);
         }

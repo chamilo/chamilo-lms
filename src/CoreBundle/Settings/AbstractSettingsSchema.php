@@ -6,6 +6,11 @@ namespace Chamilo\CoreBundle\Settings;
 use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 
+/**
+ * Class AbstractSettingsSchema
+ *
+ * @package Chamilo\CoreBundle\Settings
+ */
 abstract class AbstractSettingsSchema implements SchemaInterface
 {
     /**

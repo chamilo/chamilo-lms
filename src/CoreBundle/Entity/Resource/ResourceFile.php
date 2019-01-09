@@ -104,7 +104,7 @@ class ResourceFile
      *
      * @ORM\Column(name="enabled", type="boolean")
      */
-    protected $enabled;
+    //protected $enabled;
 
     /**
      * @ORM\Column(name="created_at", type="datetime")

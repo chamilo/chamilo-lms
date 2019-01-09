@@ -22,19 +22,24 @@ class CourseDriver extends Driver implements DriverInterface
         $userId = api_get_user_id();
         $userInfo = api_get_user_info();
         $sessionId = api_get_session_id();
-        $courseInfo = $this->connector->course;
+        $course = $this->connector->course;
 
-        if (!empty($courseInfo)) {
+        if (!empty($course)) {
             $coursePath = api_get_path(SYS_COURSE_PATH);
-            $courseDir = $courseInfo['directory'].'/document';
+            $courseDir = $course->getDirectory().'/document';
             $baseDir = $coursePath.$courseDir;
             $this->coursePath = $baseDir;
+
+            $courseInfo = [
+                'real_id' => $this->connector->course->getId(),
+                'code' => $this->connector->course->getCode(),
+            ];
 
             // Creates shared folder
             if (!file_exists($baseDir.'/shared_folder')) {
                 $title = get_lang('UserFolders');
                 $folderName = '/shared_folder';
-                //$groupId = 0;
+
                 $visibility = 0;
                 create_unexisting_directory(
                     $courseInfo,
@@ -74,13 +79,11 @@ class CourseDriver extends Driver implements DriverInterface
      */
     public function getConfiguration()
     {
-        if ($this->allow()) {
-            //$translator = $this->connector->translator;
-            //$code = $this->connector->course->getCode();
-            $courseCode = $this->connector->course['code'];
+        if ($this->connector->course && $this->allow()) {
+            $courseCode = $this->connector->course->getCode();
             $alias = $courseCode.' '.get_lang('Documents');
-            $userId = api_get_user_id();
-
+            $userId = $this->connector->user->getId();
+            // var_dump($this->getCourseDocumentSysPath());exit;
             $config = [
                 'driver' => 'CourseDriver',
                 'path' => $this->getCourseDocumentSysPath(),
@@ -108,8 +111,13 @@ class CourseDriver extends Driver implements DriverInterface
                 $config['disabled'] = $defaultDisabled;
             }
 
+            $courseInfo = [
+                'real_id' => $this->connector->course->getId(),
+                'code' => $this->connector->course->getCode(),
+            ];
+
             $foldersToHide = \DocumentManager::get_all_document_folders(
-                $this->connector->course,
+                $courseInfo,
                 null,
                 false,
                 true
@@ -179,8 +187,8 @@ class CourseDriver extends Driver implements DriverInterface
         $url = '';
         if ($this->allow()) {
             $directory = $this->getCourseDirectory();
-            //$coursePath = $this->connector->paths['sys_course_path'];
-            //$url = $coursePath.$directory.'/document/';
+            $coursePath = $this->connector->paths['sys_course_path'];
+            $url = $coursePath.$directory.'/document/';
         }
 
         return $url;
@@ -217,9 +225,9 @@ class CourseDriver extends Driver implements DriverInterface
     /**
      * @return string
      */
-    public function getCourseDirectory()
+    public function getCourseDirectory(): string
     {
-        return $this->connector->course['directory'];
+        return $this->connector->course->getDirectory();
     }
 
     /**
@@ -232,36 +240,68 @@ class CourseDriver extends Driver implements DriverInterface
 
         if ($this->allowToEdit()) {
             // upload file by elfinder.
-            $result = parent::upload($fp, $dst, $name, $tmpname);
-            $name = $result['name'];
-            $filtered = \URLify::filter($result['name'], 80, '', true);
-
-            if (strcmp($name, $filtered) != 0) {
+            //$result = parent::upload($fp, $dst, $name, $tmpname);
+//            var_dump($tmpname);exit;
+            //$name = $result['name'];
+            //$filtered = \URLify::filter($result['name'], 80, '', true);
+            /*if (strcmp($name, $filtered) != 0) {
                 $result = $this->customRename($result['hash'], $filtered);
+            }*/
+            //var_dump($fp, $dst, $name);exit;
+            //$realPath = $this->realpath($result['hash']);
+            //if (!empty($realPath)) {
+            // Removing course path
+
+            $directoryParentId = isset($_REQUEST['directory_parent_id']) ? $_REQUEST['directory_parent_id'] : 0;
+            $currentDirectory = '';
+            if (empty($directoryParentId)) {
+                $currentDirectory = isset($_REQUEST['curdirpath']) ? $_REQUEST['curdirpath'] : '';
+            } else {
+                $documentData = \DocumentManager::get_document_data_by_id($directoryParentId, api_get_course_id());
+                if ($documentData) {
+                    $currentDirectory = $documentData['path'];
+                }
             }
 
-            $realPath = $this->realpath($result['hash']);
-            if (!empty($realPath)) {
-                // Getting file info
-                //$info = $elFinder->exec('file', array('target' => $file['hash']));
-                /** @var elFinderVolumeLocalFileSystem $volume */
-                //$volume = $info['volume'];
-                //$root = $volume->root();
-                //var/www/chamilogits/data/courses/NEWONE/document
-                $realPathRoot = $this->getCourseDocumentSysPath();
+            if (!empty($_FILES)) {
+                $files = $_FILES['upload'];
+                $fileList = [];
+                foreach ($files as $tempName => $array) {
+                    $counter = 0;
+                    foreach ($array as $data) {
+                        $fileList[$counter][$tempName] = $data;
+                        $counter++;
+                    }
+                }
 
-                // Removing course path
-                $realPath = str_replace($realPathRoot, '/', $realPath);
-                \DocumentManager::addDocument(
+                $resultList = [];
+                foreach ($fileList as $file) {
+                    $globalFile = [];
+                    $globalFile['files'] = $file;
+                    $document = \DocumentManager::upload_document(
+                        $globalFile,
+                        $currentDirectory,
+                        '',
+                        '', // comment
+                        false,
+                        'rename',
+                        false,
+                        false,
+                        'files',
+                        true,
+                        0
+                    );
+                }
+                exit;
+
+                /*\DocumentManager::addDocument(
                     $this->connector->course,
                     $realPath,
                     'file',
                     (int) $result['size'],
                     $result['name']
-                );
+                );*/
             }
-
-            return $result;
         }
 
         return false;

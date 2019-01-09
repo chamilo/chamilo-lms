@@ -143,6 +143,11 @@ class LegacyListener
             }
 
             $isoFixed = languageToCountryIsoCode($request->getLocale());
+
+            if (!isset($languageList[$isoFixed])) {
+                $isoFixed = 'en';
+            }
+
             $twig->addGlobal(
                 'current_locale_info',
                 [

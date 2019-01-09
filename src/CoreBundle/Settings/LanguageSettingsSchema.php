@@ -4,7 +4,6 @@
 namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
-use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\LanguageType;
@@ -20,7 +19,7 @@ class LanguageSettingsSchema extends AbstractSettingsSchema
     /**
      * {@inheritdoc}
      */
-    public function buildSettings(AbstractSettingsBuilder $builder)
+    public function buildSettings(SettingsBuilderInterface $builder)
     {
         $builder
             ->setDefaults(

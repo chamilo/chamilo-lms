@@ -4,7 +4,7 @@
 namespace Chamilo\CourseBundle\Settings;
 
 use Chamilo\CoreBundle\Settings\AbstractSettingsSchema;
-use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
+use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
@@ -17,7 +17,7 @@ class LearningPathCourseSettingsSchema extends AbstractSettingsSchema
     /**
      * {@inheritdoc}
      */
-    public function buildSettings(AbstractSettingsBuilder $builder)
+    public function buildSettings(SettingsBuilderInterface $builder)
     {
         $builder
             ->setDefaults([

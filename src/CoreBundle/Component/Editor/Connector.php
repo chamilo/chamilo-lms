@@ -60,13 +60,13 @@ class Connector
         $this->paths = [
             //'root_sys' => api_get_path(SYS_PATH),
             //'sys_root' => api_get_path(SYS_PATH), // just an alias
-            //'sys_course_path' => api_get_path(SYS_COURSE_PATH),
+            'sys_course_path' => api_get_path(SYS_COURSE_PATH),
             //   'sys_config_path' => $app['path.config'],
             'path.temp' => api_get_path(SYS_ARCHIVE_PATH),
             //'sys_log_path' => $app['path.logs']
         ];
         $this->entityManager = $entityManager;
-        $this->paths = $paths;
+        //$this->paths = $paths;
         $this->urlGenerator = $urlGenerator;
         $this->translator = $translator;
         $this->security = $security;
@@ -188,10 +188,11 @@ class Connector
      *
      * @return array
      */
-    public function getDefaultDriverSettings()
+    public function getDefaultDriverSettings(): array
     {
         // for more options: https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
         return [
+            'tmbPath' => '/var/www/html/chamilo2/public/cache/',
             'uploadOverwrite' => false, // Replace files on upload or give them new name if the same file was uploaded
             //'acceptedName' =>
             'uploadAllow' => [
@@ -273,7 +274,7 @@ class Connector
     /**
      * @return array
      */
-    public function getOperations()
+    public function getOperations(): array
     {
         //https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options-2.1
         $opts = [

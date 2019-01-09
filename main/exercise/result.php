@@ -10,8 +10,8 @@ use ChamiloSession as Session;
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
-$id = isset($_REQUEST['id']) ? intval($_GET['id']) : null; //exe id
-$show_headers = isset($_REQUEST['show_headers']) ? intval($_REQUEST['show_headers']) : null; //exe id
+$id = isset($_REQUEST['id']) ? (int) $_GET['id'] : null; //exe id
+$show_headers = isset($_REQUEST['show_headers']) ? (int) $_REQUEST['show_headers'] : null;
 $origin = api_get_origin();
 
 if ($origin == 'learnpath') {
@@ -57,10 +57,10 @@ $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'annotation/
 
 if ($show_headers) {
     $interbreadcrumb[] = [
-        "url" => "exercise.php?".api_get_cidreq(),
-        "name" => get_lang('Exercises'),
+        'url' => "exercise.php?".api_get_cidreq(),
+        'name' => get_lang('Exercises'),
     ];
-    $interbreadcrumb[] = ["url" => "#", "name" => get_lang('Result')];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Result')];
     $this_section = SECTION_COURSES;
     Display::display_header();
 } else {
@@ -72,7 +72,6 @@ if ($show_headers) {
 
 $message = Session::read('attempt_remaining');
 Session::erase('attempt_remaining');
-
 ExerciseLib::displayQuestionListByAttempt(
     $objExercise,
     $id,

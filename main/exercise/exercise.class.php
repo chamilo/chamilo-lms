@@ -1500,18 +1500,18 @@ class Exercise
         $propagate_neg = (int) $this->propagate_neg;
         $saveCorrectAnswers = isset($this->saveCorrectAnswers) && $this->saveCorrectAnswers ? 1 : 0;
         $review_answers = isset($this->review_answers) && $this->review_answers ? 1 : 0;
-        $randomByCat = intval($this->randomByCat);
+        $randomByCat = (int) $this->randomByCat;
         $text_when_finished = $this->text_when_finished;
-        $display_category_name = intval($this->display_category_name);
-        $pass_percentage = intval($this->pass_percentage);
+        $display_category_name = (int) $this->display_category_name;
+        $pass_percentage = (int) $this->pass_percentage;
         $session_id = $this->sessionId;
 
         // If direct we do not show results
-        $results_disabled = intval($this->results_disabled);
+        $results_disabled = (int) $this->results_disabled;
         if ($feedback_type == EXERCISE_FEEDBACK_TYPE_DIRECT) {
             $results_disabled = 0;
         }
-        $expired_time = intval($this->expired_time);
+        $expired_time = (int) $this->expired_time;
 
         // Exercise already exists
         if ($id) {
@@ -1947,7 +1947,6 @@ class Exercise
                     '2',
                     ['id' => 'result_disabled_2']
                 );
-
                 $radios_results_disabled[] = $form->createElement(
                     'radio',
                     'results_disabled',
@@ -1955,6 +1954,14 @@ class Exercise
                     get_lang('ShowScoreEveryAttemptShowAnswersLastAttempt'),
                     '4',
                     ['id' => 'result_disabled_4']
+                );
+                $radios_results_disabled[] = $form->createElement(
+                    'radio',
+                    'results_disabled',
+                    null,
+                    get_lang('DontShowScoreOnlyWhenUserFinishesAllAttemptsButShowFeedbackEachAttempt'),
+                    '5',
+                    ['id' => 'result_disabled_5', 'onclick' => 'check_results_disabled()']
                 );
 
                 $form->addGroup(
@@ -2026,6 +2033,7 @@ class Exercise
                         null,
                         [get_lang('FeedbackType'), get_lang('FeedbackDisplayOptions')]
                     );
+
                     $radios_results_disabled = [];
                     $radios_results_disabled[] = $form->createElement(
                         'radio',
@@ -2051,6 +2059,7 @@ class Exercise
                         '2',
                         ['id' => 'result_disabled_2', 'onclick' => 'check_results_disabled()']
                     );
+
                     $form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'), '');
 
                     // Type of questions disposition on page
@@ -2090,6 +2099,9 @@ class Exercise
                         '2',
                         ['id' => 'result_disabled_2', 'onclick' => 'check_results_disabled()']
                     );
+
+                    $form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'), '');
+
                     $result_disable_group = $form->addGroup(
                         $radios_results_disabled,
                         null,
@@ -3494,7 +3506,6 @@ class Exercise
         if ($debug) {
             error_log('Start answer loop ');
         }
-
         for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
             $answer = $objAnswerTmp->selectAnswer($answerId);
             $answerComment = $objAnswerTmp->selectComment($answerId);
@@ -4630,7 +4641,7 @@ class Exercise
                 if ($debug) {
                     error_log('Showing questions $from '.$from);
                 }
-                if ($from == 'exercise_result') {
+                if ($from === 'exercise_result') {
                     //display answers (if not matching type, or if the answer is correct)
                     if (!in_array($answerType, [MATCHING, DRAGGABLE, MATCHING_DRAGGABLE]) ||
                         $answerCorrect
@@ -4761,7 +4772,6 @@ class Exercise
 
                             // force to show whether the choice is correct or not
                             $showTotalScoreAndUserChoicesInLastAttempt = true;
-
                             ExerciseShowFunctions::display_hotspot_answer(
                                 $feedback_type,
                                 ++$correctAnswerId,
@@ -4961,7 +4971,6 @@ class Exercise
                     if ($debug) {
                         error_log('Showing questions $from '.$from);
                     }
-
                     switch ($answerType) {
                         case UNIQUE_ANSWER:
                         case UNIQUE_ANSWER_IMAGE:

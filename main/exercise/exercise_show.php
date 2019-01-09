@@ -88,21 +88,28 @@ $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 
 $courseInfo = api_get_course_info();
 $sessionId = api_get_session_id();
-$is_allowedToEdit = api_is_allowed_to_edit(null, true) ||
+
+$is_allowedToEdit =
+    api_is_allowed_to_edit(null, true) ||
     api_is_course_tutor() ||
     api_is_session_admin() ||
     api_is_drh() ||
     api_is_student_boss();
+
+
 if (!empty($sessionId) && !$is_allowedToEdit) {
     if (api_is_course_session_coach(
         $currentUserId,
         api_get_course_int_id(),
         $sessionId
     )) {
-        if (!api_coach_can_edit_view_results(api_get_course_int_id(), $sessionId)
-        ) {
+        if (!api_coach_can_edit_view_results(api_get_course_int_id(), $sessionId)) {
             api_not_allowed($printHeaders);
         }
+    }
+} else {
+    if (!$is_allowedToEdit) {
+        api_not_allowed($printHeaders);
     }
 }
 
@@ -122,7 +129,8 @@ if (empty($objExercise)) {
     $objExercise->read($exercise_id);
 }
 $feedback_type = $objExercise->feedback_type;
-//Only users can see their own results
+
+// Only users can see their own results
 if (!$is_allowedToEdit) {
     if ($student_id != $currentUserId) {
         api_not_allowed($printHeaders);
@@ -230,43 +238,47 @@ $showTotalScoreAndUserChoicesInLastAttempt = true;
 if (!empty($track_exercise_info)) {
     // if the results_disabled of the Quiz is 1 when block the script
     $result_disabled = $track_exercise_info['results_disabled'];
-
-    if ($result_disabled == RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS) {
-        $show_results = false;
-    } elseif ($result_disabled == RESULT_DISABLE_SHOW_SCORE_ONLY) {
-        $show_results = false;
-        $show_only_total_score = true;
-        if ($origin != 'learnpath') {
-            if ($currentUserId == $student_id) {
-                echo Display::return_message(
-                    get_lang('ThankYouForPassingTheTest'),
-                    'warning',
-                    false
-                );
+    switch ($result_disabled) {
+        case RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS:
+            $show_results = false;
+            break;
+        case RESULT_DISABLE_SHOW_SCORE_ONLY:
+            $show_results = false;
+            $show_only_total_score = true;
+            if ($origin != 'learnpath') {
+                if ($currentUserId == $student_id) {
+                    echo Display::return_message(
+                        get_lang('ThankYouForPassingTheTest'),
+                        'warning',
+                        false
+                    );
+                }
             }
-        }
-    } elseif ($result_disabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
-        $attempts = Event::getExerciseResultsByUser(
-            $currentUserId,
-            $objExercise->id,
-            api_get_course_int_id(),
-            api_get_session_id(),
-            $track_exercise_info['orig_lp_id'],
-            $track_exercise_info['orig_lp_item_id'],
-            'desc'
-        );
-        $numberAttempts = count($attempts);
-        if ($numberAttempts >= $track_exercise_info['max_attempt']) {
-            $show_results = true;
-            $show_only_total_score = true;
-            // Attempt reach max so show score/feedback now
-            $showTotalScoreAndUserChoicesInLastAttempt = true;
-        } else {
-            $show_results = true;
-            $show_only_total_score = true;
-            // Last attempt not reach don't show score/feedback
-            $showTotalScoreAndUserChoicesInLastAttempt = false;
-        }
+            break;
+        case RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK:
+        case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT:
+            $attempts = Event::getExerciseResultsByUser(
+                $currentUserId,
+                $objExercise->id,
+                api_get_course_int_id(),
+                api_get_session_id(),
+                $track_exercise_info['orig_lp_id'],
+                $track_exercise_info['orig_lp_item_id'],
+                'desc'
+            );
+            $numberAttempts = count($attempts);
+            if ($numberAttempts >= $track_exercise_info['max_attempt']) {
+                $show_results = true;
+                $show_only_total_score = true;
+                // Attempt reach max so show score/feedback now
+                $showTotalScoreAndUserChoicesInLastAttempt = true;
+            } else {
+                $show_results = true;
+                $show_only_total_score = true;
+                // Last attempt not reach don't show score/feedback
+                $showTotalScoreAndUserChoicesInLastAttempt = false;
+            }
+            break;
     }
 } else {
     echo Display::return_message(get_lang('CantViewResults'), 'warning');
@@ -369,6 +381,10 @@ if (!empty($maxEditors) && count($questionList) > $maxEditors) {
 }
 
 $objExercise->export = $action === 'export';
+$arrid = [];
+$arrmarks = [];
+$strids = '';
+$marksid = '';
 
 $countPendingQuestions = 0;
 foreach ($questionList as $questionId) {
@@ -388,7 +404,6 @@ foreach ($questionList as $questionId) {
 
     // Start buffer
     ob_start();
-
     if ($answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
         $choice = [];
     }

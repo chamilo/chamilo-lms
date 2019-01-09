@@ -732,7 +732,7 @@ if ($formSent && isset($_POST)) {
                 exit;
             } else {
                 if ($debug) {
-                    error_log('10. Redirecting to exercise_show.php');
+                    error_log('10. Redirecting to exercise_result.php');
                 }
                 header("Location: exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
                 exit;

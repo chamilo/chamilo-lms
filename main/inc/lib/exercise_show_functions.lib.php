@@ -80,7 +80,7 @@ class ExerciseShowFunctions
         $answer,
         $id,
         $questionId,
-        $results_disabled,
+        $resultsDisabled,
         $showTotalScoreAndUserChoices,
         $expectedChoice = '',
         $choice = '',
@@ -139,7 +139,7 @@ class ExerciseShowFunctions
         $exe_id,
         $questionId,
         $questionScore = null,
-        $results_disabled = 0
+        $resultsDisabled = 0
     ) {
         $comments = Event::get_comments($exe_id, $questionId);
 
@@ -165,7 +165,7 @@ class ExerciseShowFunctions
      * @param $id
      * @param $questionId
      * @param null $fileUrl
-     * @param int  $results_disabled
+     * @param int  $resultsDisabled
      * @param int  $questionScore
      */
     public static function display_oral_expression_answer(
@@ -174,7 +174,7 @@ class ExerciseShowFunctions
         $id,
         $questionId,
         $fileUrl = null,
-        $results_disabled = 0,
+        $resultsDisabled = 0,
         $questionScore = 0
     ) {
         if (isset($fileUrl)) {
@@ -238,16 +238,21 @@ class ExerciseShowFunctions
         $showTotalScoreAndUserChoices
     ) {
         $hide_expected_answer = false;
-        if ($feedback_type == 0 && $resultsDisabled == 2) {
-            $hide_expected_answer = true;
+        switch ($resultsDisabled) {
+            case RESULT_DISABLE_SHOW_SCORE_ONLY:
+                if ($feedback_type == 0) {
+                    $hide_expected_answer = true;
+                }
+                break;
+            case RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK:
+            case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT:
+                $hide_expected_answer = true;
+                if ($showTotalScoreAndUserChoices) {
+                    $hide_expected_answer = false;
+                }
+                break;
         }
 
-        if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
-            $hide_expected_answer = true;
-            if ($showTotalScoreAndUserChoices) {
-                $hide_expected_answer = false;
-            }
-        }
 
         $hotspot_colors = [
             "", // $i starts from 1 on next loop (ugly fix)
@@ -339,15 +344,19 @@ class ExerciseShowFunctions
         }
 
         $hide_expected_answer = false;
-        if ($feedback_type == 0 && ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ONLY)) {
-            $hide_expected_answer = true;
-        }
-
-        if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
-            $hide_expected_answer = true;
-            if ($showTotalScoreAndUserChoices) {
-                $hide_expected_answer = false;
-            }
+        switch ($resultsDisabled) {
+            case RESULT_DISABLE_SHOW_SCORE_ONLY:
+                if ($feedback_type == 0) {
+                    $hide_expected_answer = true;
+                }
+                break;
+            case RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK:
+            case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT:
+                $hide_expected_answer = true;
+                if ($showTotalScoreAndUserChoices) {
+                    $hide_expected_answer = false;
+                }
+                break;
         }
 
         $icon = in_array($answerType, [UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION]) ? 'radio' : 'checkbox';
@@ -433,15 +442,19 @@ class ExerciseShowFunctions
         $showTotalScoreAndUserChoices
     ) {
         $hide_expected_answer = false;
-        if ($feedback_type == 0 && ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ONLY)) {
-            $hide_expected_answer = true;
-        }
-
-        if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
-            $hide_expected_answer = true;
-            if ($showTotalScoreAndUserChoices) {
-                $hide_expected_answer = false;
-            }
+        switch ($resultsDisabled) {
+            case RESULT_DISABLE_SHOW_SCORE_ONLY:
+                if ($feedback_type == 0) {
+                    $hide_expected_answer = true;
+                }
+                break;
+            case RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK:
+            case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT:
+                $hide_expected_answer = true;
+                if ($showTotalScoreAndUserChoices) {
+                    $hide_expected_answer = false;
+                }
+                break;
         }
         echo '<tr><td width="5%">';
         $course_id = api_get_course_int_id();
@@ -613,15 +626,19 @@ class ExerciseShowFunctions
         $showTotalScoreAndUserChoices
     ) {
         $hide_expected_answer = false;
-        if ($feedback_type == 0 && ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ONLY)) {
-            $hide_expected_answer = true;
-        }
-
-        if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
-            $hide_expected_answer = true;
-            if ($showTotalScoreAndUserChoices) {
-                $hide_expected_answer = false;
-            }
+        switch ($resultsDisabled) {
+            case RESULT_DISABLE_SHOW_SCORE_ONLY:
+                if ($feedback_type == 0) {
+                    $hide_expected_answer = true;
+                }
+                break;
+            case RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK:
+            case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT:
+                $hide_expected_answer = true;
+                if ($showTotalScoreAndUserChoices) {
+                    $hide_expected_answer = false;
+                }
+                break;
         }
 
         echo '<tr><td width="5%">';
@@ -690,14 +707,14 @@ class ExerciseShowFunctions
      * @param $exe_id
      * @param $questionId
      * @param null $questionScore
-     * @param int  $results_disabled
+     * @param int  $resultsDisabled
      */
     public static function displayAnnotationAnswer(
         $feedback_type,
         $exe_id,
         $questionId,
         $questionScore = null,
-        $results_disabled = 0
+        $resultsDisabled = 0
     ) {
         $comments = Event::get_comments($exe_id, $questionId);
         if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {

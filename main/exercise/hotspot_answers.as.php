@@ -27,12 +27,13 @@ if ($debug) {
     error_log("Call to hotspot_answers.as.php");
 }
 
+$trackExerciseInfo = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
+
 // Check if student has access to the hotspot answers
 if (!api_is_allowed_to_edit(null, true)) {
     if (empty($exeId)) {
         api_not_allowed();
     }
-    $trackExerciseInfo = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
 
     if (empty($trackExerciseInfo)) {
         api_not_allowed();
@@ -92,7 +93,13 @@ $data['courseCode'] = $_course['path'];
 $data['hotspots'] = [];
 
 $showTotalScoreAndUserChoicesInLastAttempt = true;
-if ($objExercise->selectResultsDisabled() == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
+if (in_array(
+    $objExercise->selectResultsDisabled(), [
+        RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
+        RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK
+    ]
+)
+) {
     $showOnlyScore = true;
     $showResults = true;
     if ($objExercise->attempts > 0) {
@@ -117,11 +124,19 @@ if ($objExercise->selectResultsDisabled() == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_S
 }
 
 $hideExpectedAnswer = false;
-if ($objExercise->selectFeedbackType() == 0 && $objExercise->selectResultsDisabled() == 2) {
+if ($objExercise->selectFeedbackType() == 0 &&
+    $objExercise->selectResultsDisabled() == RESULT_DISABLE_SHOW_SCORE_ONLY
+) {
     $hideExpectedAnswer = true;
 }
 
-if ($objExercise->selectResultsDisabled() == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
+if (in_array(
+    $objExercise->selectResultsDisabled(), [
+        RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
+        RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK
+    ]
+)
+) {
     $hideExpectedAnswer = $showTotalScoreAndUserChoicesInLastAttempt ? false : true;
 }
 

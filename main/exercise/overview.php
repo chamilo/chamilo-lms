@@ -197,11 +197,18 @@ if ($current_browser == 'Internet Explorer') {
 }
 
 $blockShowAnswers = false;
-if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
+if (in_array(
+    $objExercise->results_disabled,
+    [
+        RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
+        RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK
+    ])
+) {
     if (count($attempts) < $objExercise->attempts) {
         $blockShowAnswers = true;
     }
 }
+
 if (!empty($attempts)) {
     $i = $counter;
     foreach ($attempts as $attempt_result) {
@@ -238,7 +245,7 @@ if (!empty($attempts)) {
             ),
             'userIp' => $attempt_result['user_ip'],
         ];
-        $attempt_link .= "&nbsp;&nbsp;&nbsp;".$teacher_revised;
+        $attempt_link .= '&nbsp;&nbsp;&nbsp;'.$teacher_revised;
 
         if (in_array(
             $objExercise->results_disabled,
@@ -247,6 +254,7 @@ if (!empty($attempts)) {
                 RESULT_DISABLE_SHOW_SCORE_ONLY,
                 RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES,
                 RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
+                RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK
             ]
         )) {
             $row['result'] = $score;
@@ -258,16 +266,25 @@ if (!empty($attempts)) {
                 RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS,
                 RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES,
                 RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
+                RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK
             ]
         ) || (
             $objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ONLY &&
             $objExercise->feedback_type == EXERCISE_FEEDBACK_TYPE_END
         )
         ) {
-            if ($blockShowAnswers) {
+            if ($blockShowAnswers &&
+                $objExercise->results_disabled != RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK
+            ) {
                 $attempt_link = '';
             }
-
+            if ($blockShowAnswers == true &&
+                $objExercise->results_disabled == RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK
+            ) {
+                if (isset($row['result'])) {
+                    unset($row['result']);
+                }
+            }
             $row['attempt_link'] = $attempt_link;
         }
         $my_attempt_array[] = $row;
@@ -279,6 +296,19 @@ if (!empty($attempts)) {
 
     // Hiding score and answer
     switch ($objExercise->results_disabled) {
+        case RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK:
+            if ($blockShowAnswers) {
+                $header_names = [get_lang('Attempt'), get_lang('StartDate'), get_lang('IP'), get_lang('Details')];
+            } else {
+                $header_names = [
+                    get_lang('Attempt'),
+                    get_lang('StartDate'),
+                    get_lang('IP'),
+                    get_lang('Score'),
+                    get_lang('Details'),
+                ];
+            }
+            break;
         case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT:
             if ($blockShowAnswers) {
                 $header_names = [get_lang('Attempt'), get_lang('StartDate'), get_lang('IP'), get_lang('Score')];

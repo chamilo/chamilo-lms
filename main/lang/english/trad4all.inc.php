@@ -8336,4 +8336,5 @@ $NumberOfVisits = "Number of visits";
 $FormationUnit = "Formation unit";
 $GlobalProgress = "Global progress";
 $AttestationOfAttendance = "Attestation of attendance";
+$DontShowScoreOnlyWhenUserFinishesAllAttemptsButShowFeedbackEachAttempt = "Do not show the score (only when user finishes all attempts) but show feedback for each attempt.";
 ?>

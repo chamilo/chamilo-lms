@@ -4467,7 +4467,7 @@ EOT;
             $objExercise->results_disabled,
             [
                 RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
-                RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK
+                RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
             ])
         ) {
             $show_only_score = true;
@@ -4702,7 +4702,6 @@ EOT;
                         $counter,
                         $score
                     );
-
                 }
                 $counter++;
                 $question_content .= $contents;

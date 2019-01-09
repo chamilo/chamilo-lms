@@ -382,7 +382,6 @@ $eventLpId = $lp_id = !empty($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : 0;
 if (empty($lp_id)) {
     if (isset($_SESSION['oLP'])) {
         $eventLpId = $_SESSION['oLP']->get_id();
-
     }
 }
 

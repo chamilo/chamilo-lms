@@ -253,7 +253,6 @@ class ExerciseShowFunctions
                 break;
         }
 
-
         $hotspot_colors = [
             "", // $i starts from 1 on next loop (ugly fix)
             "#4271B5",

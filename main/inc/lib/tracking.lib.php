@@ -1640,7 +1640,6 @@ class Tracking
             return $time;
         }
 
-
         $session_id = (int) $session_id;
         if (is_array($user_id)) {
             $user_id = array_map('intval', $user_id);

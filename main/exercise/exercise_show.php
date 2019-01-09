@@ -96,7 +96,6 @@ $is_allowedToEdit =
     api_is_drh() ||
     api_is_student_boss();
 
-
 if (!empty($sessionId) && !$is_allowedToEdit) {
     if (api_is_course_session_coach(
         $currentUserId,

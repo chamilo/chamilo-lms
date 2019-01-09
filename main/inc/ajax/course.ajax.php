@@ -369,7 +369,7 @@ switch ($action) {
             'tool' => 'close-window',
             'tool_id' => 0,
             'tool_id_detail' => 0,
-            'action' => 'exit'
+            'action' => 'exit',
         ];
         Event::registerLog($logInfo);
 

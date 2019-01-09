@@ -30,6 +30,7 @@ $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 
 $cidreq = api_get_cidreq();
+$_user = api_get_user_info();
 
 $nameTools = get_lang('ToolForum');
 

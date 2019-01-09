@@ -5,7 +5,7 @@ namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Chamilo\SettingsBundle\Transformer\ArrayToIdentifierTransformer;
-use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
+use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
@@ -21,7 +21,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
     /**
      * {@inheritdoc}
      */
-    public function buildSettings(SettingsBuilderInterface $builder)
+    public function buildSettings(AbstractSettingsBuilder $builder)
     {
         $builder
             ->setDefaults(

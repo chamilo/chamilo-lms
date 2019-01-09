@@ -10,7 +10,7 @@ use Chamilo\CourseBundle\Tool\BaseTool;
 use Chamilo\CourseBundle\ToolChain;
 use Chamilo\SettingsBundle\Transformer\ArrayToIdentifierTransformer;
 use Sylius\Bundle\ResourceBundle\Form\DataTransformer\ResourceToIdentifierTransformer;
-use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
+use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
@@ -67,7 +67,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
     /**
      * {@inheritdoc}
      */
-    public function buildSettings(SettingsBuilderInterface $builder)
+    public function buildSettings(AbstractSettingsBuilder $builder)
     {
         $tools = $this->getProcessedToolChain();
         $em = $this->courseManager->getEntityManager();

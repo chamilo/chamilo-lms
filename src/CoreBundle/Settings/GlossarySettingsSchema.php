@@ -3,7 +3,7 @@
 
 namespace Chamilo\CoreBundle\Settings;
 
-use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
+use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -17,7 +17,7 @@ class GlossarySettingsSchema extends AbstractSettingsSchema
     /**
      * {@inheritdoc}
      */
-    public function buildSettings(SettingsBuilderInterface $builder)
+    public function buildSettings(AbstractSettingsBuilder $builder)
     {
         $builder
             ->setDefaults(

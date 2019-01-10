@@ -16,13 +16,14 @@
     <div class="col-md-6">
         <form class="form-inline" method="post" action="{{ _p.web_self }}">
             <label for="course">{{ 'Courses' | get_lang }}</label>
-            <select name="course" id="course">
+            <select name="course" id="course" class="form-control">
                 <option value="0">{{ 'Select' | get_lang }}</option>
                 {% for course in courses %}
                     <option value="{{ course.id }}" {{ (course.id == selected_course) ? 'selected' : '' }}>{{ course.title }}</option>
                 {% endfor %}
             </select>
             <button type="submit" class="btn btn-default">
+                <span class="fa fa-filter" aria-hidden="true"></span>
                 {{ 'Filter' | get_lang }}
             </button>
         </form>
@@ -30,7 +31,7 @@
     <div class="col-md-6">
         <form class="form-inline" method="post" action="{{ _p.web_self }}">
             <label for="skill">{{ 'Skills' | get_lang }}</label>
-            <select name="skill" id="skill">
+            <select name="skill" id="skill" class="form-control">
                 <option value="0">{{ 'Select' | get_lang }}</option>
                 {% for skill in skills %}
                     <option value="{{ skill.id }}" {{ (skill.id == selected_skill) ? 'selected' : '' }}>
@@ -38,7 +39,8 @@
                     </option>
                 {% endfor %}
             </select>
-            <button type="submit" class="btn btn-default"><em class="fa fa-filter"></em>
+            <button type="submit" class="btn btn-default">
+                <span class="fa fa-filter" aria-hidden="true"></span>
                 {{ 'Filter' | get_lang }}
             </button>
         </form>

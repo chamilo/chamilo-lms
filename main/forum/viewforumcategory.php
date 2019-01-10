@@ -217,7 +217,7 @@ if ($action != 'add') {
         $html .= Display::tag(
             'div',
             $iconsEdit,
-            ['class' => 'pull-right']
+            ['class' => 'float-right']
         );
     }
 

@@ -1189,7 +1189,7 @@ function feedback_form($url)
         $return .= '<textarea name="feedback" class="form-control" rows="4"></textarea>';
         $return .= '</div>';
         $return .= '<div class="col-sm-3">';
-        $return .= '<div class="pull-right"><a class="btn btn-default btn-sm" href="'.$url.'"><i class="fa fa-times" aria-hidden="true"></i></a></div>';
+        $return .= '<div class="float-right"><a class="btn btn-default btn-sm" href="'.$url.'"><i class="fa fa-times" aria-hidden="true"></i></a></div>';
         $return .= '<button type="submit" class="btn btn-primary btn-sm" name="store_feedback" value="'.get_lang('Ok').'"
                     onclick="javascript: document.form_dropbox.attributes.action.value = document.location;">'.get_lang('AddComment').'</button>';
         $return .= '</div>';

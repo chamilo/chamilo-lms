@@ -3741,7 +3741,7 @@ class Agenda
                 '',
                 [
                     'onclick' => "load_calendar('".$user_id."','".$prev_month."', '".$prev_year."'); ",
-                    'class' => 'pull-right btn ui-button ui-widget ui-state-default',
+                    'class' => 'float-right btn ui-button ui-widget ui-state-default',
                 ]
             );
         }

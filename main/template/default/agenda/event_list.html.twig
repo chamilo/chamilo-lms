@@ -7,7 +7,7 @@
         <div class="panel panel-default">
             <div class="panel-heading" role="tab" id="heading-{{ event.id }}">
                 {% if is_allowed_to_edit and show_action %}
-                    <div class="pull-right">
+                    <div class="float-right">
                         {% if event.visibility == 1 %}
                             <a class="btn btn-default btn-xs"
                                href="{% if url %}{{ url }}{% else %}{{ event.url }}{% endif %}&action=change_visibility&visibility=0&id={{ event.real_id }}&type={{ event.type }}">

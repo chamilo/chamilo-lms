@@ -78,7 +78,7 @@ if (!empty($items)) {
             ['class' => 'btn btn-danger btn-sm']
         );
         echo '<li class="list-group-item">'.
-                $userInfo['complete_name_with_username'].'<div class="pull-right">'.$link.'</div></li>';
+                $userInfo['complete_name_with_username'].'<div class="float-right">'.$link.'</div></li>';
     }
     echo '</ul>';
 }
@@ -115,7 +115,7 @@ if (!empty($userToAddList)) {
             $url,
             ['class' => 'btn btn-primary btn-sm']
         );
-        echo '<li class="list-group-item">'.$userName.'<div class="pull-right"> '.$link.'</div></li>';
+        echo '<li class="list-group-item">'.$userName.'<div class="float-right"> '.$link.'</div></li>';
     }
     echo '</ul>';
 } else {

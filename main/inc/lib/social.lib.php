@@ -1639,7 +1639,7 @@ class SocialManager extends UserManager
             $media = '';
             $media .= '<div class="rep-post">';
             $media .= '<div class="col-md-2 col-xs-2 social-post-answers">';
-            $media .= '<div class="user-image pull-right">';
+            $media .= '<div class="user-image float-right">';
             $media .= '<a href="'.$url.'" ><img src="'.$users[$userIdLoop]['avatar'].
                        '" alt="'.$users[$userIdLoop]['complete_name'].'" class="avatar-thumb"></a>';
             $media .= '</div>';
@@ -1656,7 +1656,7 @@ class SocialManager extends UserManager
             $media .= '</div>';
             if ($isOwnWall) {
                 $media .= '<div class="col-md-1 col-xs-1 social-post-answers">';
-                $media .= '<div class="pull-right deleted-mgs">';
+                $media .= '<div class="float-right deleted-mgs">';
                 $url = api_get_path(WEB_CODE_PATH).'social/profile.php?messageId='.$message['id'];
                 $media .= Display::url(
                     Display::returnFontAwesomeIcon('trash'),
@@ -1679,7 +1679,7 @@ class SocialManager extends UserManager
                 <textarea placeholder="'.get_lang('SocialWriteNewComment').
                 '" name="social_wall_new_msg" rows="1" style="width:80%;" ></textarea>
                 <button type="submit" name="social_wall_new_msg_submit"
-                class="pull-right btn btn-default" /><em class="fa fa-pencil"></em> '.get_lang('Post').'</button>
+                class="float-right btn btn-default" /><em class="fa fa-pencil"></em> '.get_lang('Post').'</button>
                 </form>';
         $formattedList .= '</div>';
 
@@ -2195,7 +2195,7 @@ class SocialManager extends UserManager
         $html = '';
         $html .= '<div class="top-mediapost" >';
         if ($isOwnWall) {
-            $html .= '<div class="pull-right deleted-mgs">';
+            $html .= '<div class="float-right deleted-mgs">';
             $html .= $htmlDelete;
             $html .= '</div>';
         }

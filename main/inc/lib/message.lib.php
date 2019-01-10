@@ -1650,7 +1650,7 @@ class MessageManager
 
         $topic_page_nr = isset($_GET['topics_page_nr']) ? intval($_GET['topics_page_nr']) : null;
 
-        $links .= '<div class="pull-right">';
+        $links .= '<div class="float-right">';
         $links .= '<div class="btn-group btn-group-sm">';
 
         if (($my_group_role == GROUP_USER_PERMISSION_ADMIN ||
@@ -1782,7 +1782,7 @@ class MessageManager
                     $_GET['items_'.$topic['id'].'_page_nr']
                 ) : null;
                 $links = '';
-                $links .= '<div class="pull-right">';
+                $links .= '<div class="float-right">';
                 $html_items = '';
                 $user_sender_info = api_get_user_info($topic['user_sender_id']);
                 $files_attachments = self::getAttachmentLinkList($topic['id']);

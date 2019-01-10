@@ -992,7 +992,7 @@ switch ($action) {
                                     <a role="button" data-toggle="collapse" data-parent="#notice-block"
                                        href="#notice-list" aria-expanded="true" aria-controls="notice-list">
                                         <?php echo get_lang('Notice'); ?>
-                                        <a class="pull-right"
+                                        <a class="float-right"
                                            href="<?php echo $selfUrl; ?>?action=edit_notice"><?php Display::display_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL); ?></a>
                                     </a>
                                 </h4>

@@ -537,7 +537,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
 
         // View as student/teacher link
         if (!empty($view_as_student_link)) {
-            $html .= Display::tag('div', $view_as_student_link, ['id' => 'view_as_link', 'class' => 'pull-right']);
+            $html .= Display::tag('div', $view_as_student_link, ['id' => 'view_as_link', 'class' => 'float-right']);
         }
 
         if (!empty($navigation_right)) {
@@ -546,7 +546,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
                 $lis .= Display::tag(
                     'li',
                     $item['title'],
-                    ['class' => $extra_class.' pull-right']
+                    ['class' => $extra_class.' float-right']
                 );
             }
         }

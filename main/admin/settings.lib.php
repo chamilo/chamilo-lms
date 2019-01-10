@@ -1404,13 +1404,13 @@ function generateSettingsForm($settings, $settings_by_access_list)
                         if ($row['access_url_changeable'] == '1') {
                             $form->addElement(
                                 'html',
-                                '<div class="pull-right"><a class="share_this_setting" data_status = "0"  data_to_send = "'.$row['variable'].'" href="javascript:void(0);">'.
+                                '<div class="float-right"><a class="share_this_setting" data_status = "0"  data_to_send = "'.$row['variable'].'" href="javascript:void(0);">'.
                                 Display::return_icon('shared_setting.png', get_lang('ChangeSharedSetting'), null, ICON_SIZE_MEDIUM).'</a></div>'
                             );
                         } else {
                             $form->addElement(
                                 'html',
-                                '<div class="pull-right"><a class="share_this_setting" data_status = "1" data_to_send = "'.$row['variable'].'" href="javascript:void(0);">'.
+                                '<div class="float-right"><a class="share_this_setting" data_status = "1" data_to_send = "'.$row['variable'].'" href="javascript:void(0);">'.
                                 Display::return_icon('shared_setting_na.png', get_lang('ChangeSharedSetting'), null, ICON_SIZE_MEDIUM).'</a></div>'
                             );
                         }
@@ -1418,13 +1418,13 @@ function generateSettingsForm($settings, $settings_by_access_list)
                         if ($row['access_url_changeable'] == '1') {
                             $form->addElement(
                                 'html',
-                                '<div class="pull-right">'.
+                                '<div class="float-right">'.
                                 Display::return_icon('shared_setting.png', get_lang('ChangeSharedSetting'), null, ICON_SIZE_MEDIUM).'</div>'
                             );
                         } else {
                             $form->addElement(
                                 'html',
-                                '<div class="pull-right">'.
+                                '<div class="float-right">'.
                                 Display::return_icon('shared_setting_na.png', get_lang('ChangeSharedSetting'), null, ICON_SIZE_MEDIUM).'</div>'
                             );
                         }

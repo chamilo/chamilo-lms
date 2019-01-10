@@ -2363,7 +2363,7 @@ HOTSPOT;
                             $roundValues
                         );
 
-                        $actions = '<div class="pull-right">';
+                        $actions = '<div class="float-right">';
                         if ($is_allowedToEdit) {
                             if (isset($teacher_id_list)) {
                                 if (in_array(

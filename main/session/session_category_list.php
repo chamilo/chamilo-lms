@@ -109,7 +109,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
                         Display::return_icon('session.png', get_lang('ListSession'), '', ICON_SIZE_MEDIUM).'</a>'; ?>
             </div>
             <div class="col-md-6">
-                <div class="pull-right">
+                <div class="float-right">
                 <form method="POST" action="session_category_list.php" class="form-inline">
                     <div class="form-group">
                     <input class="form-control" type="text" name="keyword" value="<?php echo $keyword; ?>"

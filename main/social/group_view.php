@@ -180,14 +180,14 @@ if ($is_group_member || $groupInfo['visibility'] == GROUP_PERMISSION_OPEN) {
             [GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER, GROUP_USER_PERMISSION_PENDING_INVITATION]
         )) {
             $social_right_content .= '<div class="group-tool">';
-            $social_right_content .= '<div class="pull-right">';
+            $social_right_content .= '<div class="float-right">';
             $social_right_content .= '<a class="btn btn-default btn-sm" href="group_view.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.
                 get_lang('JoinGroup').'</a>';
             $social_right_content .= '</div>';
             $social_right_content .= '</div>';
         } elseif ($role == GROUP_USER_PERMISSION_PENDING_INVITATION) {
             $social_right_content .= '<div class="group-tool">';
-            $social_right_content .= '<div class="pull-right">';
+            $social_right_content .= '<div class="float-right">';
             $social_right_content .= '<a class="btn btn-default btn-sm" href="group_view.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.
                     Display::returnFontAwesomeIcon('envelope').' '.
                 get_lang('YouHaveBeenInvitedJoinNow').'</a>';
@@ -246,7 +246,7 @@ if ($is_group_member || $groupInfo['visibility'] == GROUP_PERMISSION_OPEN) {
     if (count($members) > 0) {
         if ($role == GROUP_USER_PERMISSION_ADMIN) {
             $member_content .= '<div class="group-tool">';
-            $member_content .= '<div class="pull-right">';
+            $member_content .= '<div class="float-right">';
             $member_content .= Display::url(
                 Display::returnFontAwesomeIcon('pencil').' '.get_lang('EditMembersList'),
                 'group_members.php?id='.$group_id,
@@ -293,7 +293,7 @@ if ($is_group_member || $groupInfo['visibility'] == GROUP_PERMISSION_OPEN) {
     }
 
     if (!empty($create_thread_link)) {
-        $create_thread_link = Display::div($create_thread_link, ['class' => 'pull-right']);
+        $create_thread_link = Display::div($create_thread_link, ['class' => 'float-right']);
     }
 
     $listTopic = $content;

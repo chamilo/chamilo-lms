@@ -838,8 +838,8 @@ class Career extends Model
             if (!empty($vertex->getAttribute('DefinedColor'))) {
                 $color = $vertex->getAttribute('DefinedColor');
             }
-            $content = '<div class="pull-left">'.$vertex->getAttribute('Notes').'</div>';
-            $content .= '<div class="pull-right">['.$id.']</div>';
+            $content = '<div class="float-left">'.$vertex->getAttribute('Notes').'</div>';
+            $content .= '<div class="float-right">['.$id.']</div>';
 
             $title = $vertex->getAttribute('graphviz.label');
             if (!empty($vertex->getAttribute('LinkedElement'))) {
@@ -1123,7 +1123,7 @@ class Career extends Model
                                 $color = $vertex->getAttribute('DefinedColor');
                             }
                             $content = $vertex->getAttribute('Notes');
-                            $content .= '<div class="pull-right">['.$id.']</div>';
+                            $content .= '<div class="float-right">['.$id.']</div>';
 
                             $title = $vertex->getAttribute('graphviz.label');
                             if (!empty($vertex->getAttribute('LinkedElement'))) {

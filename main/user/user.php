@@ -614,7 +614,7 @@ if (api_is_allowed_to_edit(null, true)) {
 
     echo '</div>';
     echo '<div class="col-md-6">';
-    echo '<div class="pull-right">';
+    echo '<div class="float-right">';
     // Build search-form
     $form = new FormValidator(
         'search_user',

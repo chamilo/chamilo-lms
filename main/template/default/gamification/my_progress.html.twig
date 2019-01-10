@@ -6,7 +6,7 @@
                     {{ user_avatar }}
                     <div class="username">{{ user|format_user_full_name }}</div>
                     <div class="star-progress">
-                        <span class="pull-right">{{ 'XPoints'|get_lang|format(gamification_points) }}</span>
+                        <span class="float-right">{{ 'XPoints'|get_lang|format(gamification_points) }}</span>
 
                         {% if gamification_stars > 0 %}
                             {% for i in 1..gamification_stars %}

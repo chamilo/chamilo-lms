@@ -54,7 +54,7 @@ class HTML_QuickForm_advanced_settings extends HTML_QuickForm_static
 
         $html .= '  
             <div class="col-sm-10">         
-            <button id="'.$name.'" type="button" class="btn btn-default advanced_options"
+            <button id="'.$name.'" type="button" class="btn btn-outline-secondary advanced_options"
                     data-toggle="button" aria-pressed="false" autocomplete="off">
                 <em class="fa fa-bars"></em> '.$label.'
             </button>

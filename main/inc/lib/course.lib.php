@@ -3672,7 +3672,7 @@ class CourseManager
 
         $html .= '</div>';
         $params['right_actions'] = isset($params['right_actions']) ? $params['right_actions'] : null;
-        $html .= '<div class="pull-right course-box-actions">'.$params['right_actions'].'</div>';
+        $html .= '<div class="float-right course-box-actions">'.$params['right_actions'].'</div>';
         $html .= '</div>';
         $html .= '</div>';
 

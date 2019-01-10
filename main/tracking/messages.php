@@ -82,7 +82,7 @@ foreach ($messages as $message) {
     $message['title'].
     $subText = get_lang('From').': '.$usersData[$message['user_sender_id']]['complete_name'];
     $title = empty($message['title']) ? get_lang('Untitled') : $message['title'];
-    $title = $title.' - '.$subText.'<span class="pull-right">'.Display::dateToStringAgoAndLongDate($message['send_date']).'</span>';
+    $title = $title.' - '.$subText.'<span class="float-right">'.Display::dateToStringAgoAndLongDate($message['send_date']).'</span>';
     $messageId = $message['id'];
 
     $hash = sha1($message['title'].$message['content'].$message['send_date']);

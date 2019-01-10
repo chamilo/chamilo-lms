@@ -333,7 +333,7 @@ class DisplayGradebook
             if ((!$catobj->get_id() == '0') && (!isset($_GET['studentoverview'])) && (!isset($_GET['search']))) {
                 $additionalButtons = null;
                 if (!empty($certificateLinkInfo)) {
-                    $additionalButtons .= '<div class="btn-group pull-right">';
+                    $additionalButtons .= '<div class="btn-group float-right">';
                     $additionalButtons .= isset($certificateLinkInfo['certificate_link']) ? $certificateLinkInfo['certificate_link'] : '';
                     $additionalButtons .= isset($certificateLinkInfo['badge_link']) ? $certificateLinkInfo['badge_link'] : '';
                     $additionalButtons .= '</div>';

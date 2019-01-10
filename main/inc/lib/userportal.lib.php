@@ -2308,7 +2308,7 @@ class IndexManager
 
         // notification
         if (!empty($courseParams['right_actions'])) {
-            $rightActions = '<div class="pull-right">'.$courseParams['right_actions'].'</div>';
+            $rightActions = '<div class="float-right">'.$courseParams['right_actions'].'</div>';
         }
 
         $notifications = isset($courseParams['notifications']) ? $courseParams['notifications'] : '';

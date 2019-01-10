@@ -1580,7 +1580,7 @@ function display_database_settings_form(
 
    <div class="btn-group" role="group">
        <button type="submit" name="step2"
-               class="btn btn-secondary pull-right" value="&lt; <?php echo get_lang('Previous'); ?>" >
+               class="btn btn-secondary float-right" value="&lt; <?php echo get_lang('Previous'); ?>" >
            <em class="fa fa-backward"> </em> <?php echo get_lang('Previous'); ?>
        </button>
        <input type="hidden" name="is_executable" id="is_executable" value="-" />

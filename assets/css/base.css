@@ -11,43 +11,6 @@
 */
 
 
-.gallery .img-gallery {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    left: 0;
-    top: 0;
-    border-radius: 5px;
-}
-
-.gallery .photo {
-    display: block;
-    padding-bottom: 100%;
-    overflow: hidden;
-}
-
-.gallery .frame {
-    background-color: #eeeeee;
-    display: block;
-    width: 100%;
-}
-
-.gallery .canvas-one {
-    margin-bottom: 30px;
-}
-
-.gallery .canvas-two {
-    margin-right: 30px;
-    flex-shrink: 1;
-    -webkit-flex-shrink: 1;
-    -ms-flex-negative: 1;
-    display: block;
-    position: relative;
-}
-
-.popover.bottom {
-    width: 320px;
-}
 
 .blackboard_show {
     float: left;
@@ -63,16 +26,6 @@
 
 .blackboard_hide {
     display: none;
-}
-
-.section-page h3.page-header {
-    font-size: 22px;
-    margin-top: 5px;
-}
-
-.form-group .freeze {
-    display: inline-block;
-    padding-top: 8px;
 }
 
 /* notifications help and bug */
@@ -134,18 +87,6 @@
     background: #F4D364;
 }
 
-.work-action, .work-date, .work-title {
-    text-align: center;
-}
-
-.work-name {
-    padding-left: 10px;
-}
-
-.file_upload {
-    position: relative;
-}
-
 .work_correction_file_upload .button-load {
     position: relative;
     font-size: 10px;
@@ -172,9 +113,6 @@
     background: lawngreen;
 }
 
-.file_upload input {
-    position: absolute;
-}
 
 #results .jqgrid_whitespace .date-time {
     font-size: 12px;
@@ -742,9 +680,6 @@ div.admin_section h4 {
 }
 
 /* pagination grid sortable */
-.sub_header {
-    width: 100%
-}
 
 .grid_selectbox {
     float: left;
@@ -991,9 +926,6 @@ div.admin_section h4 {
 }
 
 /*SEARCH USER*/
-.search_user_grid_container {
-    width: 100%;
-}
 
 .search_user_grid_item {
     width: 100px;
@@ -1077,15 +1009,6 @@ div.admin_section h4 {
 
 #lp_item_list .item_data span {
     margin-left: 5px;
-}
-
-.item_data .button_actions {
-    display: none;
-    margin: 5px 0;
-}
-
-.item_data:hover .button_actions {
-    display: block;
 }
 
 #lp_item_list .item {
@@ -1303,100 +1226,6 @@ div.admin_section h4 {
 .question_row_answer img {
     max-width: 80%;
     height: auto !important;
-}
-
-.ribbon {
-    float: left;
-    width: 100%;
-    margin-bottom: 20px;
-    border: 1px solid #dddddd;
-    border-radius: 3px;
-    position: relative;
-    background: #FAFAFA;
-}
-
-.ribbon .rib {
-    height: 40px;
-    width: 180px;
-    display: block;
-    line-height: 1.3;
-    left: -2px;
-    top: 0;
-    color: #cfcfcf;
-    margin: 0;
-    padding: 2px 10px;
-    position: relative;
-    background: #333;
-    border-radius: 4px 0 0 0;
-}
-
-.ribbon .rib h3 {
-    color: white;
-    font-size: 16px;
-    float: left;
-    line-height: 16px;
-    padding-top: 5px;
-    margin: 0;
-}
-
-.ribbon .rib-total {
-    width: 275px !important;
-}
-
-.ribbon .rib-error, .ribbon .ribbon-total-error {
-    background: #ff3019;
-    border-top: none;
-    border-bottom: none;
-    float: left;
-}
-
-.ribbon .rib-warning {
-    background: orange;
-    border-top: none;
-    border-bottom: none;
-    float: left;
-}
-
-.ribbon .rib-gray {
-    background: #cccccc;
-    background-image: -ms-linear-gradient(top, #bbbbbb, #cccccc);
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#bbbbbb), to(#cccccc));
-    background-image: -webkit-linear-gradient(top, #bbbbbb, #cccccc);
-    background-image: -o-linear-gradient(top, #bbbbbb, #cccccc);
-    background-image: -moz-linear-gradient(top, #bbbbbb, #cccccc);
-    background-image: linear-gradient(top, #bbbbbb, #cccccc);
-    border-top: 1px solid #bbbbbb;
-    border-bottom: 1px solid #bbbbbb;
-    float: left;
-}
-
-.ribbon .rib-success, .ribbon .ribbon-total-success {
-    background: #86B404;
-    border-top: none;
-    border-bottom: none;
-    float: left;
-}
-
-.ribbon h4 {
-    margin: 0;
-    padding: 8px 10px;
-    color: #444;
-    float: left;
-}
-
-.ribbon-total h4 {
-    left: 290px;
-}
-
-.ribbon h5 {
-    display: block;
-    height: 30px;
-    width: 150px;
-    margin: 0;
-    padding: 15px 0;
-    position: absolute;
-    right: 0;
-    top: 0;
 }
 
 .ribbon .rib::before {

@@ -275,7 +275,7 @@ if ($action === 'edit') {
 $content .= $table->toHtml();
 
 if ($action === 'edit') {
-    $content .= '<div class="pull-right">
+    $content .= '<div class="float-right">
         <button name="submit" type="submit" class="btn btn-primary btn-lg">'.get_lang('Save').'</button></div>';
     $content .= '</form>';
 }

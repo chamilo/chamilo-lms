@@ -460,7 +460,7 @@ class CourseHome
                     }
                 }
                 if (is_array($lnk)) {
-                    $html .= '<div class="pull-right">';
+                    $html .= '<div class="float-right">';
                     $html .= '<div class="btn-options">';
                     $html .= '<div class="btn-group btn-group-sm" role="group">';
                     foreach ($lnk as &$this_link) {

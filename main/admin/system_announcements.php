@@ -167,6 +167,43 @@ if ($action_todo) {
             'Height' => '300',
         ]
     );
+
+    // Add Picture Announcements
+    try {
+        $form->addFile(
+            'picture',
+            get_lang('Add Picture'),
+            ['id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => 'NaN']
+        );
+
+        $allowed_picture_types = api_get_supported_image_extensions(false);
+
+        $form->addRule(
+            'picture',
+            get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')',
+            'filetype',
+            $allowed_picture_types
+        );
+
+
+        $image = '';
+        // Display announcements picture
+        $store_path = api_get_path(SYS_UPLOAD_PATH).'announcements'; // course path
+        if (file_exists($store_path.'/announcement_'.$announcement->id.'.png')) {
+            $announcementsPath = api_get_path(WEB_UPLOAD_PATH).'announcements'; // announcement web path
+            $announcementsImage = $announcementsPath.'/announcement_'.$announcement->id.'_100x100.png?'.rand(1, 1000); // redimensioned image 85x85
+            $image = '<div class="row"><label class="col-md-2 control-label">'.get_lang('Image').'</label> 
+                    <div class="col-md-8"><img class="img-thumbnail" src="'.$announcementsImage.'" /></div></div>';
+
+            $form->addHtml($image);
+            $form->addElement('checkbox', 'delete_picture', null, get_lang('DeletePicture'));
+        }
+
+    } catch (Exception $e) {
+    } catch (HTML_QuickForm_Error $e) {
+        error_log($e);
+    }
+
     $form->addDateRangePicker(
         'range',
         get_lang('StartTimeWindow'),
@@ -248,6 +285,17 @@ if ($action_todo) {
                 );
 
                 if ($announcement_id !== false) {
+
+                    // ADD Picture
+                    $picture = $_FILES['picture'];
+                    if (!empty($picture['name'])) {
+                        $picture_uri = SystemAnnouncementManager::update_announcements_picture(
+                            $announcement_id,
+                            $picture['tmp_name'],
+                            $values['picture_crop_result']
+                        );
+                    }
+
                     if (isset($values['group'])) {
                         SystemAnnouncementManager::announcement_for_groups(
                             $announcement_id,
@@ -277,6 +325,22 @@ if ($action_todo) {
                     $sendMail,
                     $sendMailTest
                 )) {
+
+                    $deletePicture = isset($values['delete_picture']) ? $values['delete_picture'] : '';
+
+                    if ($deletePicture) {
+                        SystemAnnouncementManager::deleteAnnouncementPicture($values['id']);
+                    } else {
+                        $picture = $_FILES['picture'];
+                        if (!empty($picture['name'])) {
+                            $picture_uri = SystemAnnouncementManager::update_announcements_picture(
+                                $values['id'],
+                                $picture['tmp_name'],
+                                $values['picture_crop_result']
+                            );
+                        }
+                    }
+
                     if (isset($values['group'])) {
                         SystemAnnouncementManager::announcement_for_groups(
                             $values['id'],

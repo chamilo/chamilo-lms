@@ -256,6 +256,59 @@ class SystemAnnouncementManager
     }
 
     /**
+     * Update announcements picture.
+     *
+     * @param int $announcement_id
+     * @param   string  the full system name of the image
+     * from which course picture will be created
+     * @param string $cropParameters Optional string that contents "x,y,width,height" of a cropped image format
+     *
+     * @return bool Returns the resulting. In case of internal error or negative validation returns FALSE.
+     */
+    public static function update_announcements_picture(
+        $announcement_id,
+        $source_file = null,
+        $cropParameters = null
+    ) {
+        if (empty($announcement_id)) {
+            return false;
+        }
+
+        // course path
+        $store_path = api_get_path(SYS_UPLOAD_PATH).'announcements';
+
+        if (!file_exists($store_path)) {
+            mkdir($store_path);
+        }
+        // image name
+        $announcementPicture = $store_path.'/announcement_'.$announcement_id.'.png';
+        $announcementPictureSmall = $store_path.'/announcement_'.$announcement_id.'_100x100.png';
+
+        if (file_exists($announcementPicture)) {
+            unlink($announcementPicture);
+        }
+        if (file_exists($announcementPictureSmall)) {
+            unlink($announcementPictureSmall);
+        }
+
+        //Crop the image to adjust 4:3 ratio
+        $image = new Image($source_file);
+        $image->crop($cropParameters);
+
+        $medium = new Image($source_file);
+        $medium->resize(100);
+        $medium->send_image($announcementPictureSmall, -1, 'png');
+
+        $normal = new Image($source_file);
+        $normal->send_image($announcementPicture, -1, 'png');
+
+        $result = $normal;
+
+        return $result ? $result : false;
+    }
+
+
+    /**
      * @param int    $start
      * @param string $user_id
      *
@@ -669,6 +722,7 @@ class SystemAnnouncementManager
         if ($res === false) {
             return false;
         }
+        self::deleteAnnouncementPicture($id);
 
         return true;
     }
@@ -856,6 +910,7 @@ class SystemAnnouncementManager
                     'id' => $announcement->id,
                     'title' => $announcement->title,
                     'content' => $announcement->content,
+                    'picture' => self::getPictureAnnouncement($announcement->id),
                     'readMore' => null,
                 ];
 
@@ -944,5 +999,44 @@ class SystemAnnouncementManager
         } else {
             return self::VISIBLE_STUDENT;
         }
+    }
+
+    /**
+     * Deletes the Announcement picture.
+     *
+     * @param int $announcementId
+     */
+    public static function deleteAnnouncementPicture($announcementId)
+    {
+        $store_path = api_get_path(SYS_UPLOAD_PATH).'announcements';
+
+        // image name
+        $announcementPicture = $store_path.'/announcement_'.$announcementId.'.png';
+        $announcementPictureSmall = $store_path.'/announcement_'.$announcementId.'_100x100.png';
+
+        if (file_exists($announcementPicture)) {
+            unlink($announcementPicture);
+        }
+        if (file_exists($announcementPictureSmall)) {
+            unlink($announcementPictureSmall);
+        }
+    }
+
+    /**
+     * get announcement picture.
+     *
+     * @param int $announcementId
+     * @return null|string
+     */
+    private static function getPictureAnnouncement($announcementId)
+    {
+        $store_path = api_get_path(SYS_UPLOAD_PATH) . 'announcements';
+        $announcementPicture = $store_path . '/announcement_' . $announcementId . '.png';
+        if (file_exists($announcementPicture)) {
+            $web_path = api_get_path(WEB_UPLOAD_PATH) . 'announcements';
+            $urlPicture = $web_path . '/announcement_' . $announcementId . '.png';
+            return $urlPicture;
+        }
+        return null;
     }
 }

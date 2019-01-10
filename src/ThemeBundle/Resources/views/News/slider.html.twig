@@ -20,16 +20,17 @@
         <div class="carousel-inner">
             {% for announcement in announcements %}
                 <div class="carousel-item {% if loop.index0 == 0 %} active {% endif %}">
-                    {% if announcement.readMore %}
-                        <div class="block-text">
-                            {{ announcement.content }}
-                            <a href="{{ _p.web }}news_list.php?id={{ announcement.id }}">{{ "More" | trans }}</a>
-                        </div>
-                    {% else %}
-                        {{ announcement.content }}
-                    {% endif %}
+                    <img src="{{ announcement.picture }}" class="d-block w-100" alt="...">
                     <div class="carousel-caption d-none d-md-block">
                         <h5>{{ announcement.title }}</h5>
+                        {% if announcement.readMore %}
+                            <div class="block-text">
+                                {{ announcement.content }}
+                                <a href="{{ _p.web }}news_list.php?id={{ announcement.id }}">{{ "More" | trans }}</a>
+                            </div>
+                        {% else %}
+                            {{ announcement.content }}
+                        {% endif %}
                     </div>
                 </div>
             {% endfor %}

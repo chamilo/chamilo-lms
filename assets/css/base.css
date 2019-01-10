@@ -10,27 +10,6 @@
     Version: 2.0
 */
 
-.admin-block-version {
-    font-size: 12px;
-    padding: 5%;
-    background-color: #FCF8E3;
-    border: 1px solid #FAEBCC;
-    color: #8A6D3B;
-    border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    text-align: justify;
-}
-
-.version-checking {
-    padding: 10px;
-    width: 100%;
-}
-
-.version-checking .checkbox {
-    margin-left: 20px;
-    text-align: left;
-}
 
 .gallery .img-gallery {
     height: 100%;
@@ -291,46 +270,6 @@
 }
 /* end chamilo forms fixes */
 
-.muted {
-    color: #999999 !important;
-}
-
-.separate-action {
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-
-.control-course {
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-
-.select-list-ajax {
-    padding: 10px;
-}
-
-.resize_font {
-    display: inline-block;
-    width: 100%;
-    text-align: right;
-}
-
-.resize_font .btn {
-    padding: 5px 8px;
-}
-
-.decrease_font .fa {
-    font-size: 9px;
-}
-
-.reset_font .fa {
-    font-size: 12px;
-}
-
-.increase_font .fa {
-    font-size: 16px;
-}
-
 #exercise-description.panel-default {
     border: 1px solid #DDD;
 }
@@ -378,73 +317,11 @@
     width: 70%;
 }
 
-/* input values to crop the image: top, right, bottom, left */
-
-.social-thumbnail {
-    padding: 0;
-}
-
-.social-title {
-    font-size: 18px;
-    font-family: helvetica, arial, sans-serif;
-    color: #000;
-}
-
-.social-description {
-    padding: 8px;
-    color: #000;
-}
-
-.social-image {
-    max-height: 300px;
-}
-
-.social-post-answers {
-    padding-right: 0;
-    padding-left: 0;
-}
-
-.social-host p {
-    padding: 10px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    line-height: 22px;
-    color: #999;
-}
-
-.menulist {
-    margin: 0;
-    padding: 0;
-}
-
-.menulist li {
-    display: inline-block;
-    width: 100%;
-    list-style: none;
-    border-bottom: 1px solid #DDDDDD;
-    padding-bottom: 5px;
-    padding-top: 5px;
-}
-
-.menulist li:last-child {
-    border-bottom: none;
-}
-
 #profile .control-group .controls .files-production {
     padding: 5px 25px;
     border-radius: 10px;
     background-color: #F1F3F5;
     border: 1px solid #EAEBED;
-}
-
-#productions {
-    list-style: none;
-}
-
-#productions li {
-    list-style: none;
-    padding-top: 3px;
-    padding-bottom: 3px;
 }
 
 #sn-extra-information .list-group-item {
@@ -502,26 +379,6 @@ div.attendance-calendar-add div.row div.formw, div.attendance-calendar-edit div.
 /**********************************************
  *  MESSAGE TOOL                           *
  **********************************************/
-
-#inbox-wrapper {
-    width: 100%;
-}
-
-#inbox-menu {
-    width: 150px;
-    float: left;
-    margin-right: 10px;
-}
-
-#inbox-menu ul {
-    margin: 0;
-    padding: 0;
-}
-
-#inbox-menu ul li {
-    padding: 2px 0;
-}
-
 .message-topic {
     padding: 15px;
     border-radius: 5px;
@@ -706,11 +563,6 @@ a.unread {
     font-weight: bold;
 }
 
-.cropCanvas > img {
-    max-width: 300px;
-    max-height: 200px;
-}
-
 /*SOCIAL TOOL*/
 
 .clip-wrapper {
@@ -780,22 +632,6 @@ a.unread {
     text-align: right;
 }
 
-/* Fixes the administration block section */
-.admin_section div {
-    margin: 5px 0 14px 25px;
-}
-
-.rounded_div {
-    background: none repeat scroll 0 0 #FFFFFF;
-    border: 1px solid #E5E5E5;
-    border-radius: 11px;
-    box-shadow: 0 4px 18px #C8C8C8;
-    float: left;
-    height: auto;
-    margin: 10px 8px 15px 15px;
-    padding: 18px;
-}
-
 /* Makes the course elements more readable */
 .session_course_item {
     padding: 6px 0 6px 5px;
@@ -829,14 +665,6 @@ a.unread {
 
 .lp_resource_element_new a {
     font-size: 14px;
-}
-
-.doc_resource {
-    margin: 6px;
-}
-
-table.lp_build td.tree {
-    border: none;
 }
 
 .RequirementHeading, .RequirementText, .RequirementContent {
@@ -936,9 +764,6 @@ div.admin_section h4 {
 }
 
 /* Groups boxes */
-.toolbar-groups {
-    margin-bottom: 30px;
-}
 
 .group_invitation_grid_container {
     width: 100%;
@@ -1236,7 +1061,6 @@ div.admin_section h4 {
 
 #lp_item_list, #lp_item_list li {
     list-style-type: none;
-    /* float:left;*/
 }
 
 #lp_item_list .active {
@@ -1249,7 +1073,6 @@ div.admin_section h4 {
 
 #lp_item_list .item_data {
     padding: 0;
-    /* float:left;*/
 }
 
 #lp_item_list .item_data span {
@@ -1295,16 +1118,6 @@ div.admin_section h4 {
     top: 0;
     right: 0;
 }
-
-.view-options {
-    padding-top: 3px;
-    padding-right: 5px;
-}
-
-#course_settings h3 img {
-    margin-left: 25px;
-}
-
 /* Exercise comment*/
 #comments {
     position: absolute;
@@ -1630,7 +1443,6 @@ div.admin_section h4 {
     color: green;
 }
 
-
 .exercise_save_now_button .checkbox input[type="checkbox"] {
     margin-left: -25px;
 }
@@ -1650,16 +1462,6 @@ div.admin_section h4 {
 
 /* EXERCISE MATFDC */
 
-.certaintyQuizBox {
-    border : 1px solid black;
-    margin : auto;
-}
-
-.certaintyQuizColumn {
-    float : left;
-}
-
-/* text at the top of the column */
 .certaint-score {
     height : 20px;
     margin-bottom: 10px;
@@ -1864,17 +1666,6 @@ table.certaintyTable td.globalChart {
     padding: 5px;
 }
 
-.userportal-order-courses-link {
-    background-color: #F9F9F9;
-    border-radius: 10px 10px 10px 10px;
-    height: 40px;
-    margin: 5px;
-    padding: 15px;
-}
-
-.userportal-order-courses-link a {
-    float: right;
-}
 
 .course_social_content {
     background: #EFEFEF;
@@ -1918,20 +1709,6 @@ form .formw .freeze {
     padding-top: 8px;
 }
 
-.course_activity_home {
-    width: 100%;
-}
-
-.course_activity_home td {
-    line-height: normal;
-    padding: 4px;
-    text-align: left;
-    vertical-align: middle;
-}
-
-.show_element {
-    display: block !important;
-}
 
 .tag {
     background-color: #D3E6EF;
@@ -2016,14 +1793,9 @@ form .formw .freeze {
     border: 1px solid #DDDDDD;
 }
 
-.data_table td {
-    font-size: 12px;
-}
-
 .data_table th, .data_table td {
     border-top: 1px solid #DDDDDD;
     line-height: 18px;
-    /* padding: 10px;*/
 }
 
 .data_table th {
@@ -2065,14 +1837,6 @@ form .formw .freeze {
 
 .attendance-users-table .data_table tr.row_even {
     height: 60px;
-}
-
-.data_table tr.row_odd:hover, .data_table tr.row_even:hover {
-    background-color: #E5EDF9;
-}
-
-.data_table tr.row_even {
-    background-color: #fff;
 }
 
 .attendance-calendar-table .data_table tr.row_odd {
@@ -2766,20 +2530,7 @@ tr.forum_category_header a {
 }
 
 /* **** POST **** */
-.quote {
-    background-color: #a0e5fc;
-}
 
-a.forum-goto {
-    font-size: 12px;
-}
-
-.structure {
-    /*border-bottom: 1px solid #666666;*/
-    font-weight: bold;
-    background-color: #F7F7F7;
-    height: 20px;
-}
 
 .forum_description {
     color: #000;

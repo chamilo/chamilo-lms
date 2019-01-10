@@ -9,7 +9,9 @@
         {% endif %}
     {% endset %}
     {% set content %}
+
     {{ macro.box_header("System announcements" | trans, buttons) }}
+
     <div id="carousel-announcement" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
             {% for announcement in announcements %}
@@ -45,5 +47,5 @@
         </a>
     </div>
     {% endset %}
-    {{ macro.panel('', '', content, '', '', '', '') }}
+    {{ content }}
 {% endautoescape %}

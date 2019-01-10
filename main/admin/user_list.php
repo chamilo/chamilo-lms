@@ -693,7 +693,7 @@ function modify_filter($user_id, $url_params, $row)
             if ($current_user_status_label == $statusname[DRH] || UserManager::is_admin($user_id)) {
                 $result .= Display::url(
                     Display::return_icon(
-                        'course_add.gif',
+                        'add.png',
                         get_lang('AssignCourses')
                     ),
                     "dashboard_add_courses_to_user.php?user={$user_id}"

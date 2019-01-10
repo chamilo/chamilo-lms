@@ -56,7 +56,7 @@ class ResourceLink implements ResourceInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroupInfo")
-     * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=true)
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=true, onDelete="CASCADE")
      */
     protected $group;
 

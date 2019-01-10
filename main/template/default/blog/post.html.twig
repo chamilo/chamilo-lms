@@ -1,3 +1,4 @@
+{% autoescape false %}
 {% macro comment_template(item) %}
     <div class="media {{ item.iid }}">
         <div class="media-left">
@@ -55,46 +56,9 @@
 {% import _self as nested %}
 
 <div class="row">
-    <div class="col-md-3">
-        <div class="sidebar">
-            <div id="calendar-blog" class="panel panel-default">
-                <div class="panel-heading">
-                    {{ 'Calendar'|get_lang }}
-                </div>
-                <div class="panel-body">
-                    {{ calendar }}
-                </div>
-            </div>
-            <div id="search-blog" class="panel panel-default">
-                <div class="panel-heading">
-                    {{ 'Search'|get_lang }}
-                </div>
-                <div class="panel-body">
-                    <form action="blog.php" method="get" enctype="multipart/form-data">
-                        <div class="form-group">
-                            <input type="hidden" name="blog_id" value="{{ id_blog }}"/>
-                            <input type="hidden" name="action" value="view_search_result"/>
-                            <input type="text" class="form-control" size="20" name="q" value="{{ search }}"/>
-                        </div>
-                        <button class="btn btn-default btn-block" type="submit">
-                            <em class="fa fa-search"></em> {{ 'Search'|get_lang }}
-                        </button>
-                    </form>
-                </div>
-            </div>
-            <div id="task-blog" class="panel panel-default">
-                <div class="panel-heading">
-                    {{ 'MyTasks'|get_lang }}
-                </div>
-                <div class="panel-body">
-                    {{ task }}
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-9">
+    <div class="col-md-8">
         <div class="blog" id="post-{{ post.id_post }}">
-            <div class="panel panel-default" id="blog-header">
+            <div class="card" id="blog-header">
                 <div class="panel-heading">
                     <div id="post-action" class="text-right">
                         <div class="btn-group btn-group-sm" role="group" aria-label="{{ 'Actions'|get_lang }}">
@@ -102,7 +66,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     <article>
                         <div class="article-header">
                             <div class="title">
@@ -153,6 +117,37 @@
 
         </div>
     </div>
+    <div class="col-md-4">
+        <div class="sidebar-blog">
+            <div id="calendar-blog" class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ 'Calendar'|get_lang }}</h5>
+                    {{ calendar }}
+                </div>
+            </div>
+            <div id="search-blog" class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ 'Search'|get_lang }}</h5>
+                    <form action="blog.php" method="get" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <input type="hidden" name="blog_id" value="{{ id_blog }}"/>
+                            <input type="hidden" name="action" value="view_search_result"/>
+                            <input type="text" class="form-control" size="20" name="q" value="{{ search }}"/>
+                        </div>
+                        <button class="btn btn-primary btn-block" type="submit">
+                            <em class="fa fa-search"></em> {{ 'Search'|get_lang }}
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div id="task-blog" class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ 'MyTasks'|get_lang }}</h5>
+                    {{ task }}
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -176,3 +171,4 @@
         });
     });
 </script>
+{% endautoescape %}

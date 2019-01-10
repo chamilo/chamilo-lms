@@ -1091,3 +1091,99 @@ footer {
 .row_selected {
   background-color: #FFFFCC;
 }
+
+/*** REPORTS ***/
+.item-report {
+  text-align: center;
+  .item-report-number {
+    font-size: 35px;
+    font-weight: bold;
+    color: #666666;
+  }
+}
+.card-box{
+  .icon-big{
+    font-size: 2.5em;
+    min-height: 64px;
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    text-align: center;
+    vertical-align: middle;
+    margin-left: 25px;
+    i{
+      line-height: 66px;
+      color: #fff;
+    }
+  }
+  .icon-student {
+    background: #f1c435;
+  }
+  .icon-studentboss {
+    background: #4b73eb;
+  }
+  .icon-teachers {
+    background: #50bbc1;
+  }
+  .icon-humanresources {
+    background: #68ceeb;
+  }
+  .numbers{
+    text-align: left;
+    h2 {
+      font-size: 3.2em;
+      margin: 0;
+      padding: 0;
+      color: #666666;
+    }
+  }
+}
+
+.easy-donut{
+  .easypiechart {
+    position: relative;
+    text-align: center;
+    width: 120px;
+    height: 120px;
+    margin: 20px auto 10px auto;
+    .percent {
+      display: block;
+      position: absolute;
+      font-size: 26px;
+      top: 38px;
+      width: 120px;
+    }
+  }
+  .easypiechart-link {
+    padding-bottom: 5px;
+    padding-top: 5px;
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+  }
+}
+
+#easypiechart-blue {
+  .percent {
+    color: #30a5ff;
+  }
+}
+
+#easypiechart-teal {
+  .percent {
+    color: #1ebfae;
+  }
+}
+
+#easypiechart-orange {
+  .percent {
+    color: #ffb53e;
+  }
+}
+
+#easypiechart-red{
+  .percent {
+    color: #ef4040;
+  }
+}
+

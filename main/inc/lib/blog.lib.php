@@ -2800,7 +2800,7 @@ class Blog
             }
         }
 
-        $html .= '<table id="smallcalendar" class="table table-responsive">
+        $html .= '<table id="smallcalendar" class="table">
                 <tr id="title">
                 <th width="10%"><a href="'.$backwardsURL.'">&laquo;</a></th>
                 <th align="center" width="80%" colspan="5" class="month">'.$monthName.' '.$year.'</th>
@@ -2879,8 +2879,18 @@ class Blog
             'blog_admin.php?action=add'
         );
         $form->addElement('header', get_lang('AddBlog'));
-        $form->addElement('text', 'blog_name', get_lang('Title'));
-        $form->addElement('textarea', 'blog_subtitle', get_lang('SubTitle'));
+        $form->addText('blog_name',get_lang('Title'));
+        $form->addHtmlEditor(
+            'blog_subtitle',
+            get_lang('SubTitle'),
+            false,
+            false,
+            [
+                'ToolbarSet' => 'Profile',
+                'Width' => '100%',
+                'Height' => '130'
+            ]
+        );
         $form->addElement('hidden', 'new_blog_submit', 'true');
         $form->addButtonSave(get_lang('SaveProject'));
 

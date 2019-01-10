@@ -5,11 +5,7 @@
     {{ form }}
 </div>
 
-<div class="page-header">
-    <h4>
-        {{ 'Overview' | get_lang  }}
-    </h4>
-</div>
+<h4>{{ 'Overview' | get_lang  }}</h4>
 
 <div class="view-global-followed">
     <div class="row">
@@ -19,20 +15,19 @@
             {% endset %}
             {% set content %}
                 <div class="row">
-                    <div class="col-xs-5">
+                    <div class="col-sm-5">
                         <div class="icon-big icon-student text-center">
                             <i class="fa fa-graduation-cap" aria-hidden="true"></i>
                         </div>
                     </div>
-                    <div class="col-xs-7">
+                    <div class="col-sm-7">
                         <div class="numbers">
-
                             <h2>{{ students }}</h2>
                         </div>
                     </div>
                 </div>
             {% endset %}
-            {{ macro.panel(title, content) }}
+            {{ macro.panel_box(title, content) }}
         </div>
         <div class="col-lg-3 col-sm-3">
             {% set title %}
@@ -42,20 +37,19 @@
             {% endset %}
             {% set content %}
                 <div class="row">
-                    <div class="col-xs-5">
+                    <div class="col-sm-5">
                         <div class="icon-big icon-studentboss text-center">
                             <i class="fa fa-address-book" aria-hidden="true"></i>
                         </div>
                     </div>
-                    <div class="col-xs-7">
+                    <div class="col-sm-7">
                         <div class="numbers">
-
                             <h2>{{ studentbosses }}</h2>
                         </div>
                     </div>
                 </div>
             {% endset %}
-            {{ macro.panel(title, content) }}
+            {{ macro.panel_box(title, content) }}
         </div>
         <div class="col-lg-3 col-sm-3">
             {% set title %}
@@ -63,20 +57,19 @@
             {% endset %}
             {% set content %}
                 <div class="row">
-                    <div class="col-xs-5">
+                    <div class="col-sm-5">
                         <div class="icon-big icon-teachers text-center">
                             <i class="fa fa-book" aria-hidden="true"></i>
                         </div>
                     </div>
-                    <div class="col-xs-7">
+                    <div class="col-sm-7">
                         <div class="numbers">
-
                             <h2>{{ numberTeachers }}</h2>
                         </div>
                     </div>
                 </div>
             {% endset %}
-            {{ macro.panel(title, content) }}
+            {{ macro.panel_box(title, content) }}
         </div>
         <div class="col-lg-3 col-sm-3">
             {% set title %}
@@ -86,19 +79,19 @@
             {% endset %}
             {% set content %}
                 <div class="row">
-                    <div class="col-xs-5">
+                    <div class="col-sm-5">
                         <div class="icon-big icon-humanresources text-center">
                             <i class="fa fa-user" aria-hidden="true"></i>
                         </div>
                     </div>
-                    <div class="col-xs-7">
+                    <div class="col-sm-7">
                         <div class="numbers">
                             <h2>{{ humanresources }}</h2>
                         </div>
                     </div>
                 </div>
             {% endset %}
-            {{ macro.panel(title, content) }}
+            {{ macro.panel_box(title, content) }}
         </div>
     </div>
 </div>
@@ -112,16 +105,18 @@
                         <span class="percent">{{ total_user }}</span>
                     </div>
                     <div class="easypiechart-link">
-                        <a class="btn btn-default" href="{{ _p.web_main }}mySpace/users.php">
+                        <a class="btn btn-outline-secondary" href="{{ _p.web_main }}mySpace/users.php">
                             {{ 'FollowedUsers' | get_lang }}
                         </a>
                     </div>
                 </div>
 
-                {% if _u.status == 1 %}
-                    <a href="{{ _p.web_main }}admin/dashboard_add_users_to_user.php?user={{ _u.id }}" class="btn btn-default btn-sm">
-                        <i class="fa fa-plus" aria-hidden="true"></i>
-                    </a>
+                {% if app.user is not null and is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <div class="text-center">
+                        <a href="{{ _p.web_main }}admin/dashboard_add_users_to_user.php?user={{ _u.id }}" class="btn btn-outline-secondary btn-sm">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                        </a>
+                    </div>
                 {% endif %}
             </div>
             <div class="col-lg-3 col-sm-3">
@@ -130,15 +125,17 @@
                         <span class="percent">{{ stats.courses }}</span>
                     </div>
                     <div class="easypiechart-link">
-                        <a class="btn btn-default" href="{{ _p.web_main }}mySpace/course.php">
+                        <a class="btn btn-outline-secondary" href="{{ _p.web_main }}mySpace/course.php">
                             {{ 'AssignedCourses' | get_lang }}
                         </a>
                     </div>
                 </div>
-                {% if _u.status == 1 %}
-                    <a href="{{ _p.web_main }}mySpace/course.php" class="btn btn-default btn-sm">
-                        <i class="fa fa-plus" aria-hidden="true"></i>
-                    </a>
+                {% if app.user is not null and is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <div class="text-center">
+                        <a href="{{ _p.web_main }}mySpace/course.php" class="btn btn-outline-secondary btn-sm">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                        </a>
+                    </div>
                 {% endif %}
             </div>
             <div class="col-lg-3 col-sm-3">
@@ -147,13 +144,15 @@
                         <span class="percent">{{ stats.assigned_courses }}</span>
                     </div>
                     <div class="easypiechart-link">
-                        <a class="btn btn-default" href="{{ _p.web_main }}mySpace/course.php?follow">{{ 'FollowedCourses' | get_lang }}</a>
+                        <a class="btn btn-outline-secondary" href="{{ _p.web_main }}mySpace/course.php?follow">{{ 'FollowedCourses' | get_lang }}</a>
                     </div>
                 </div>
-                {% if _u.status == 1 %}
-                    <a href="{{ _p.web_main }}mySpace/course.php?follow" class="btn btn-default btn-sm">
-                        <i class="fa fa-plus" aria-hidden="true"></i>
-                    </a>
+                {% if app.user is not null and is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <div class="text-center">
+                        <a href="{{ _p.web_main }}mySpace/course.php?follow" class="btn btn-outline-secondary btn-sm">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                        </a>
+                    </div>
                 {% endif %}
             </div>
             <div class="col-lg-3 col-sm-3">
@@ -162,115 +161,117 @@
                         <span class="percent">{{ stats.session_list |length }}</span>
                     </div>
                     <div class="easypiechart-link">
-                        <a class="btn btn-default" href="{{ _p.web_main }}mySpace/session.php">{{ 'FollowedSessions' | get_lang }}</a>
+                        <a class="btn btn-outline-secondary" href="{{ _p.web_main }}mySpace/session.php">{{ 'FollowedSessions' | get_lang }}</a>
                     </div>
                 </div>
-                {% if _u.status == 1 %}
-                    <a href="{{ _p.web_main }}admin/dashboard_add_sessions_to_user.php?user={{ _u.id }}" class="btn btn-default btn-sm">
-                        <i class="fa fa-plus" aria-hidden="true"></i>
-                    </a>
+                {% if app.user is not null and is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <div class="text-center">
+                        <a href="{{ _p.web_main }}admin/dashboard_add_sessions_to_user.php?user={{ _u.id }}" class="btn btn-outline-secondary btn-sm">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                        </a>
+                    </div>
                 {% endif %}
             </div>
         </div>
     {% endset %}
     {{ macro.panel('', content) }}
 </div>
-<div class="page-header">
-    <h4>
-        {{ title }}
-    </h4>
-</div>
+
+<h4>{{ title }}</h4>
+
 <div class="report-section">
     <div class="row">
         <div class="col-lg-3 col-sm-3">
             <div class="item-report">
-                {% set title %}
+                {% set subtitle %}
+                    {{ 'AverageCoursePerStudent' | get_lang }}
                 {% endset %}
                 {% set content %}
                     <div class="item-report-number">
                         {{ report.AverageCoursePerStudent }}
                     </div>
                 {% endset %}
-                {{ macro.panel(title, content) }}
-                <p>{{ 'AverageCoursePerStudent' | get_lang }}</p>
+                {{ macro.panel_box('', content, subtitle) }}
+
             </div>
         </div>
         <div class="col-lg-3 col-sm-3">
             <div class="item-report">
-                {% set title %}
+                {% set subtitle %}
+                    {{ 'InactivesStudents' | get_lang }}
                 {% endset %}
                 {% set content %}
                     <div class="item-report-number">
                         {{ report.InactivesStudents }}
                     </div>
                 {% endset %}
-                {{ macro.panel(title, content) }}
-                <p>{{ 'InactivesStudents' | get_lang }}</p>
+                {{ macro.panel_box('', content, subtitle) }}
             </div>
         </div>
         <div class="col-lg-3 col-sm-3">
             <div class="item-report">
-                {% set title %}
+                {% set subtitle %}
+                    {{ 'AverageTimeSpentOnThePlatform' | get_lang }}
                 {% endset %}
                 {% set content %}
                     <div class="item-report-number">
                         {{ report.AverageTimeSpentOnThePlatform }}
                     </div>
                 {% endset %}
-                {{ macro.panel(title, content) }}
-                <p>{{ 'AverageTimeSpentOnThePlatform' | get_lang }}</p>
+                {{ macro.panel_box('', content, subtitle) }}
             </div>
         </div>
         <div class="col-lg-3 col-sm-3">
             <div class="item-report">
-                {% set title %}
+                {% set subtitle %}
+                    {{ 'AverageProgressInLearnpath' | get_lang }}
                 {% endset %}
                 {% set content %}
                     <div class="item-report-number">
                         {{ report.AverageProgressInLearnpath }}
                     </div>
                 {% endset %}
-                {{ macro.panel(title, content) }}
-                <p>{{ 'AverageProgressInLearnpath' | get_lang }}</p>
+                {{ macro.panel_box('', content, subtitle) }}
+
             </div>
         </div>
         <div class="col-lg-3 col-sm-3">
             <div class="item-report">
-                {% set title %}
+                {% set subtitle %}
+                    {{ 'AvgCourseScore' | get_lang }}
                 {% endset %}
                 {% set content %}
                     <div class="item-report-number">
                         {{ report.AvgCourseScore }}
                     </div>
                 {% endset %}
-                {{ macro.panel(title, content) }}
-                <p>{{ 'AvgCourseScore' | get_lang }}</p>
+                {{ macro.panel_box('', content, subtitle) }}
             </div>
         </div>
         <div class="col-lg-3 col-sm-3">
             <div class="item-report">
-                {% set title %}
+                {% set subtitle %}
+                    {{ 'AveragePostsInForum' | get_lang }}
                 {% endset %}
                 {% set content %}
                     <div class="item-report-number">
                         {{ report.AveragePostsInForum }}
                     </div>
                 {% endset %}
-                {{ macro.panel(title, content) }}
-                <p> {{ 'AveragePostsInForum' | get_lang }}</p>
+                {{ macro.panel_box('', content, subtitle) }}
             </div>
         </div>
         <div class="col-lg-3 col-sm-3">
             <div class="item-report">
-                {% set title %}
+                {% set subtitle %}
+                    {{ 'AverageAssignments' | get_lang }}
                 {% endset %}
                 {% set content %}
                     <div class="item-report-number">
                         {{ report.AverageAssignments }}
                     </div>
                 {% endset %}
-                {{ macro.panel(title, content) }}
-                <p> {{ 'AverageAssignments' | get_lang }}</p>
+                {{ macro.panel_box('', content, subtitle) }}
             </div>
         </div>
     </div>

@@ -13,8 +13,7 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
-$htmlHeadXtra[] = '<script type="text/javascript" src="'
-    .api_get_path(WEB_PUBLIC_PATH).'assets/jquery.easy-pie-chart/dist/jquery.easypiechart.js"></script>';
+
 // the section (for the tabs)
 $this_section = SECTION_TRACKING;
 //for HTML editor repository
@@ -392,7 +391,7 @@ $view->assign('form', $form->returnForm());
 $view->assign('actions', Display::toolbarAction('toolbar', [$actionsLeft, $actionsRight]));
 $view->assign('title', get_lang('Students').' ('.$numberStudents.')');
 
-$template = $view->get_template('my_space/index.tpl');
+$template = $view->get_template('my_space/index.html.twig');
 $content = $view->fetch($template);
 $view->assign('content', $content);
 $view->display_one_col_template();

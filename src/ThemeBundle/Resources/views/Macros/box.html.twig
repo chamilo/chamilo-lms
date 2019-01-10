@@ -156,6 +156,27 @@
     {% endautoescape %}
 {% endmacro %}
 
+{% macro panel_box(title, content, subtitle) %}
+    {% autoescape false %}
+        <div class="card card-box">
+            <div class="card-body">
+                {% if subtitle is empty %}
+                    <h6 class="card-title">{{ title }}</h6>
+                {% endif %}
+
+                {{ content }}
+
+                {% if subtitle %}
+                    <div class="card-text">
+                        {{ subtitle }}
+                    </div>
+                {% endif %}
+
+            </div>
+        </div>
+    {% endautoescape %}
+{% endmacro %}
+
 {% macro panel(header, content, title, footer, subtitle, top_image) %}
     {% autoescape false %}
         <div class="card mt-3 mb-3">

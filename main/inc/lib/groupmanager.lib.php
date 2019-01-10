@@ -274,7 +274,7 @@ class GroupManager
                 1
             );
 
-            $unique_name = $newFolderData['path'];
+            $unique_name = $newFolderData->getPath();
 
             /* Stores the directory path into the group table */
             $sql = "UPDATE $table_group SET

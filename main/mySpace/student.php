@@ -28,6 +28,8 @@ $active = isset($_GET['active']) ? intval($_GET['active']) : 1;
 $sleepingDays = isset($_GET['sleeping_days']) ? intval($_GET['sleeping_days']) : null;
 $this_section = SECTION_TRACKING;
 
+$webCodePath = api_get_path(WEB_CODE_PATH);
+
 $interbreadcrumb[] = [
     "url" => api_is_student_boss() ? "#" : "index.php",
     "name" => get_lang('MySpace'),
@@ -72,6 +74,8 @@ function get_users($from, $limit, $column, $direction)
     $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
     $sleepingDays = isset($_GET['sleeping_days']) ? (int) $_GET['sleeping_days'] : null;
     $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
+
+    $webCodePath = api_get_path(WEB_CODE_PATH);
 
     $lastConnectionDate = null;
     if (!empty($sleepingDays)) {
@@ -121,7 +125,7 @@ function get_users($from, $limit, $column, $direction)
         );
     }
 
-    $url = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php';
+    $url = $webCodePath.'mySpace/myStudents.php';
 
     $all_datas = [];
     foreach ($students as $student_data) {
@@ -200,7 +204,7 @@ function get_users($from, $limit, $column, $direction)
         if (api_is_drh() || api_is_platform_admin()) {
             $lostPasswordLink = '&nbsp;'.Display::url(
                 Display::return_icon('edit.png', get_lang('Edit')),
-                api_get_path(WEB_CODE_PATH).'mySpace/user_edit.php?user_id='.$student_id
+                    $webCodePath.'mySpace/user_edit.php?user_id='.$student_id
             );
         }
 
@@ -224,7 +228,7 @@ if (api_is_drh()) {
     $menu_items = [
         Display::url(
             Display::return_icon('statistics.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),
-            api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
+            $webCodePath."auth/my_progress.php"
         ),
         Display::url(
             Display::return_icon('user_na.png', get_lang('Students'), [], ICON_SIZE_MEDIUM),
@@ -244,7 +248,7 @@ if (api_is_drh()) {
         ),
         Display::url(
             Display::return_icon('skills.png', get_lang('Skills'), [], ICON_SIZE_MEDIUM),
-            'skills.php'
+            $webCodePath.'social/my_skills_report.php'
         ),
     ];
 
@@ -257,15 +261,19 @@ if (api_is_drh()) {
 } elseif (api_is_student_boss()) {
     $actionsLeft .= Display::url(
         Display::return_icon('statistics.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),
-        api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
+        $webCodePath."auth/my_progress.php"
     );
     $actionsLeft .= Display::url(
         Display::return_icon('user_na.png', get_lang('Students'), [], ICON_SIZE_MEDIUM),
         '#'
     );
+    $actions .= Display::url(
+        Display::return_icon('skills.png', get_lang('Skills'), array(), ICON_SIZE_MEDIUM),
+        $webCodePath.'social/my_skills_report.php'
+    );
     $actionsLeft .= Display::url(
         Display::return_icon("statistics.png", get_lang('CompanyReport'), [], ICON_SIZE_MEDIUM),
-        api_get_path(WEB_CODE_PATH)."mySpace/company_reports.php"
+        $webCodePath."mySpace/company_reports.php"
     );
     $actionsLeft .= Display::url(
         Display::return_icon(
@@ -274,7 +282,7 @@ if (api_is_drh()) {
             [],
             ICON_SIZE_MEDIUM
         ),
-        api_get_path(WEB_CODE_PATH)."gradebook/certificate_report.php"
+        $webCodePath."gradebook/certificate_report.php"
     );
 }
 
@@ -338,7 +346,7 @@ if ($export_csv) {
 $form = new FormValidator(
     'search_user',
     'get',
-    api_get_path(WEB_CODE_PATH).'mySpace/student.php'
+    $webCodePath.'mySpace/student.php'
 );
 $form = Tracking::setUserSearchForm($form);
 $form->setDefaults($params);

@@ -548,7 +548,7 @@ EOT;
             $label = get_lang('Search');
         }
 
-        return $this->addButton($name, $label, 'search', 'default');
+        return $this->addButton($name, $label, 'search', 'primary');
     }
 
     /**

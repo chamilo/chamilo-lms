@@ -102,8 +102,8 @@ $logInfo = [
     'tool_id' => 0,
     'tool_id_detail' => 0,
     'action' => 'add-eval',
-    'action_details' => 'selectcat='.$eval->get_category_id(),
-    'current_id' => $current_id,
+    'action_details' => 'selectcat='.$select_cat,
+    'current_id' => 0,
     'info' => '',
 ];
 Event::registerLog($logInfo);

@@ -467,14 +467,14 @@ $group = [
         'radio',
         'file_type',
         '',
-        'CSV (<a href="example.csv" target="_blank">'.get_lang('ExampleCSVFile').'</a>)',
+        'CSV (<a href="example.csv" target="_blank" download>'.get_lang('ExampleCSVFile').'</a>)',
         'csv'
     ),
     $form->createElement(
         'radio',
         'file_type',
         null,
-        'XML (<a href="example.xml" target="_blank">'.get_lang('ExampleXMLFile').'</a>)',
+        'XML (<a href="example.xml" target="_blank" download>'.get_lang('ExampleXMLFile').'</a>)',
         'xml'
     ),
 ];

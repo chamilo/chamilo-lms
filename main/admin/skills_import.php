@@ -196,7 +196,7 @@ $group[] = $form->createElement(
     'radio',
     'file_type',
     '',
-    'CSV (<a href="skill_example.csv" target="_blank">'.get_lang('ExampleCSVFile').'</a>)',
+    'CSV (<a href="skill_example.csv" target="_blank" download>'.get_lang('ExampleCSVFile').'</a>)',
     'csv'
 );
 $form->addGroup($group, '', get_lang('FileType'));

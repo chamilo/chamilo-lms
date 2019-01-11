@@ -5503,18 +5503,6 @@ ul#toolnavbox-two li a.btn {
 }
 
 /* CSS BACKUP *****/
-.elfinder-cwd-filename {
-    color: black !important;
-}
-
-.skill-badge-img {
-    width: 150px;
-    overflow: hidden;
-}
-
-.text-light {
-    color: #00CCFF;
-}
 
 #dropzone {
     position: relative;
@@ -5607,34 +5595,6 @@ ul#toolnavbox-two li a.btn {
     font-weight: bold;
 }
 
-#session-table .ui-jqdialog .ui-jqdialog-title {
-    margin: 0;
-    padding-left: 10px;
-}
-
-#session-table .ui-jqdialog .ui-jqdialog-titlebar {
-    padding: 0;
-}
-
-#session-table .fm-button {
-    padding-top: 0;
-    padding-bottom: 0;
-}
-
-#session-table input {
-    line-height: 20px;
-}
-
-#session-table .table {
-    margin-bottom: 5px;
-}
-
-
-
-.page-blank {
-    padding: 20px 30px;
-}
-
 /* groups social */
 .group-tool {
     padding: 10px;
@@ -5651,14 +5611,6 @@ ul#toolnavbox-two li a.btn {
 
 .panel-invitations {
     padding: 10px;
-}
-
-.navbar .container .navbar-brand {
-    display: none;
-}
-
-.username-movil {
-    display: none;
 }
 
 /** BLOG **/
@@ -5735,10 +5687,6 @@ ul#toolnavbox-two li a.btn {
     margin-right: 10px;
 }
 
-#smallcalendar .month {
-    text-align: center;
-}
-
 .list-message {
     padding: 0;
     margin: 0;
@@ -5751,31 +5699,9 @@ ul#toolnavbox-two li a.btn {
     vertical-align: middle;
 }
 
-#home-welcome {
-    display: block;
-    width: 100%;
-    margin-bottom: 20px;
-}
-
 .label-subscribed {
     font-size: 12px;
     width: 100px;
-}
-
-.panel-image:hover {
-    background-color: #f5f5f5;
-}
-
-.panel-image {
-    display: inline-block;
-    width: 100%;
-    border: 1px solid #DDD;
-    padding: 15px;
-    border-radius: 5px;
-}
-
-.files .panel-image .row {
-    margin-bottom: 0;
 }
 
 .file_name a {
@@ -5796,86 +5722,6 @@ ul#toolnavbox-two li a.btn {
 .feeback-form .form-group .form-control {
     width: 100%;
 }
-
-.sub-footer .teachers,
-.sub-footer .session-teachers {
-    width: 100%;
-    padding: 0;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-}
-
-.sub-footer .teachers:hover,
-.sub-footer .session-teachers:hover {
-    width: 100%;
-    text-overflow: inherit;
-    overflow: visible;
-    white-space: inherit;
-}
-
-/**** LP COLLAPSE CATEGORY ****/
-#lp-accordion .panel-default {
-    border-radius: 10px;
-}
-
-#lp-accordion .panel-default .panel-heading {
-    background: url(../../public/img/icons/svg/arrow-down.svg) #FFF right center no-repeat;
-    border-radius: 10px;
-}
-
-#lp-accordion .panel-default .panel-heading .tools-actions {
-    padding-right: 20px;
-}
-
-#lp-accordion .panel {
-    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
-}
-
-#lp-accordion .panel .panel-title {
-    font-weight: bold;
-    width: 100%;
-    display: block;
-    padding-top: 5px;
-    padding-bottom: 5px;
-}
-
-#lp-accordion .panel .panel-title a {
-    width: 100%;
-    display: block;
-}
-
-#lp-accordion .lp-item {
-    border-bottom: 1px solid #dddddd;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    margin-bottom: 5px;
-    display: inline-block;
-    width: 100%;
-}
-
-#lp-accordion .lp-item:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-}
-
-#lp-accordion .lp-item .fa {
-    color: #686f7a;
-    opacity: .5;
-    margin-right: 5px;
-}
-
-#lp-accordion .lp-item .progress {
-    border: none;
-    background: #D7E3E6;
-    margin-bottom: 10px;
-}
-
-#lp-accordion #not-category .lp-item {
-    margin-bottom: 0;
-}
-
-/**** END LP COLLAPSE CATEGORY ****/
 
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {
@@ -5935,9 +5781,6 @@ ul#toolnavbox-two li a.btn {
 
 /* Landscape phones and down */
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
-
-    #learning_path_breadcrumb_zone {
-    }
 
     #learning_path_main {
         margin-top: 5px;
@@ -6037,17 +5880,8 @@ ul#toolnavbox-two li a.btn {
         width: 100%;
     }
 
-    .items-course {
-        padding: 15px;
-    }
-
     #control-bottom.well {
         padding: 10px;
-    }
-
-    .total {
-        width: 100%;
-        visibility: visible;
     }
 
     #learning_path_left_zone {
@@ -6072,83 +5906,9 @@ ul#toolnavbox-two li a.btn {
         font-size: 20px;
     }
 
-    .navbar-nav .open .dropdown-menu .user-header {
-        width: 100%;
-    }
-
-    .navbar-nav .open .dropdown-menu {
-        background-color: #FFF;
-    }
-
-    .navbar-nav {
-        margin: -2.5px -15px;
-    }
-
-    .grid-courses .items.my-courses {
-        width: 310px;
-    }
 }
 
 @media (min-width: 320px) and (max-width: 479px) {
-    footer {
-
-        padding-top: 15px;
-    }
-
-    footer #footer_right {
-        text-align: center;
-    }
-
-    .items-course {
-        padding: 5px;
-        min-height: 300px;
-    }
-
-    .gallery .canvas-two {
-        width: 100%;
-    }
-
-    .grid-courses .items {
-    }
-
-    .navbar .container .navbar-brand {
-        display: block;
-        font-size: 16px;
-    }
-
-    .navbar-nav .open .dropdown-menu .user-header {
-        width: 100%;
-    }
-
-    .navbar-nav .open .dropdown-menu {
-        background-color: #FFF;
-    }
-
-    .navbar-nav {
-        margin: -2.5px -15px;
-    }
-
-    .installer {
-        display: inline-table;
-    }
-
-    .header-movil {
-        display: none;
-    }
-
-    .username-movil {
-        display: inline-block;
-        padding-right: 10px;
-        padding-left: 10px;
-    }
-
-    #user_image_block {
-        display: none;
-    }
-
-    .navbar-default {
-        border: none;
-    }
 
     .question_options .radio {
         min-height: 18px;
@@ -6165,23 +5925,6 @@ ul#toolnavbox-two li a.btn {
         margin: 15px 0;
         color: #666666;
         line-height: 20px;
-    }
-
-    .grid-courses .items.items-courses {
-        width: auto;
-    }
-
-    .grid-courses .items .title {
-        font-size: 14px;
-    }
-
-    .grid-courses {
-        margin-top: 10px;
-        padding-top: 10px;
-    }
-
-    .title-session {
-        font-size: 25px;
     }
 
     .survey_question .checkbox-inline + .checkbox-inline, .survey_question .radio-inline + .radio-inline {

@@ -141,7 +141,7 @@ $url = Display::url(
 );
 $courseListToShow = Display::page_subheader(get_lang('CourseList').$url);
 
-$courseListToShow .= '<table id="session-list-course" class="data_table">
+$courseListToShow .= '<table id="session-list-course" class="table table-bordered">
 <tr>
   <th width="35%">'.get_lang('CourseTitle').'</th>
   <th width="30%">'.get_lang('CourseCoach').'</th>
@@ -263,7 +263,7 @@ $userList = SessionManager::get_users_by_session($sessionId);
 
 if (!empty($userList)) {
     $table = new HTML_Table(
-        ['class' => 'data_table', 'id' => 'session-user-list']
+        ['class' => 'table table-bordered', 'id' => 'session-user-list']
     );
     $table->setHeaderContents(0, 0, get_lang('User'));
     $table->setHeaderContents(0, 1, get_lang('Status'));
@@ -392,5 +392,5 @@ $tpl->assign('user_list', $userListToShow);
 $tpl->assign('dependencies', $dependencies);
 $tpl->assign('requirements', $requirements);
 
-$layout = $tpl->get_template('session/resume_session.tpl');
+$layout = $tpl->get_template('session/resume_session.html.twig');
 $tpl->display($layout);

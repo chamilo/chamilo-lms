@@ -3372,27 +3372,6 @@ i.size-32.icon-new-work {
     margin-bottom: 10px;
 }
 
-.sessions-items {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.sessions-items li {
-    padding-top: 5px;
-    padding-bottom: 5px;
-}
-
-.sessions-items li img {
-    margin-right: 5px;
-}
-
-.sessions .subtitle-session {
-    font-size: 12px;
-    color: #666666;
-    padding: 5px;
-    margin-bottom: 10px;
-}
 
 /**
  * Modal for user avatar preview
@@ -3438,10 +3417,6 @@ ul.holder li.bit-box {
     -moz-border-radius: 4px;
 }
 
-.session-course-edit .control {
-    padding-top: 2em;
-    padding-bottom: 2em;
-}
 
 /* thematic progress */
 #thematic .title-topics {
@@ -4614,130 +4589,6 @@ div#chat-remote-video video {
     top: 5px;
 }
 
-/* GRID CATALOG */
-.section-course-wrapper {
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: row;
-    flex-direction: row;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    margin: auto;
-    align-items: center;
-}
-
-.section-course-wrapper.show-section {
-    display: flex !important;
-}
-
-/* Catalog session */
-.return-catalog {
-    margin-top: 23px;
-}
-
-.search-session, .search-courses {
-    margin-bottom: 15px;
-    margin-top: 25px;
-}
-
-.search-session .form-inline label {
-    font-weight: normal;
-    padding-right: 10px;
-    margin-right: 5px;
-}
-
-.search-session .btn-catalog {
-    margin-top: 25px;
-}
-
-#session-list .col-md-4:nth-child(3n+1) {
-    clear: left;
-}
-
-#session-list .title-session {
-    font-size: 14px;
-    line-height: 1.2;
-    margin-top: 5px;
-    min-height: 32px;
-}
-
-#session-list .session-col:nth-child(4n+1) {
-    clear: left;
-}
-
-#session-list .item {
-    display: block;
-    padding: 0;
-    border: 1px solid #dddddd;
-    margin-bottom: 20px;
-    border-radius: 5px;
-}
-
-#session-list .item img {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-#session-list .information-item {
-    padding: 10px;
-    min-height: 185px;
-}
-
-#session-list .information-item .requirements .fa-book {
-    margin-right: 10px;
-    color: #00829C;
-}
-
-#session-list .information-item .requirements {
-    color: #666666;
-    font-size: 12px;
-}
-
-#session-list .information-item .options .info-catalog {
-    background-color: #35A8C9;
-    color: #ffffff;
-    padding: 5px;
-    text-align: center;
-    border-radius: 5px;
-    font-size: 12px;
-}
-
-#session-list .author-session,
-#session-list .date-session {
-    font-size: 12px;
-    color: #666666;
-}
-
-#session-list .author-session .fa-user,
-#session-list .date-session .fa-calendar-o {
-    color: #00829C;
-    margin-right: 10px;
-}
-
-#session-list .options :last-child {
-    margin: 0;
-}
-
-#session-list .dependent .tool-book .fa.fa-book {
-    color: #00829C;
-    margin-right: 10px;
-}
-
-#session-list .dependent {
-    font-size: 12px;
-    padding-bottom: 10px;
-}
-
-#session-list .dependent a {
-    color: #666666;
-}
-
 #custom-icons .items-tools {
     padding: 10px;
     border: 1px solid #CCCCCC;
@@ -5262,95 +5113,6 @@ div#chat-remote-video video {
 
 .promotions .promo h4 a {
     color: #666;
-}
-
-/* CSS for the view by session My Course tab */
-.session-view-block {
-    font-size: 14px;
-    font-weight: normal;
-}
-
-.session-view-row {
-    padding: 8px 0;
-}
-
-.session-view-lvl-2 {
-    margin-left: 66px;
-}
-
-.session-view-lvl-3 {
-    padding-left: 92px;
-}
-
-.session-view-lvl-4 {
-    padding-left: 102px;
-}
-
-.session-view-lvl-5 {
-    padding-left: 128px;
-    font-weight: normal;
-}
-
-.session-view-lvl-6 {
-    padding-left: 20px;
-}
-
-.session-view-lvl-7 {
-    padding-left: 48px;
-}
-
-img.sessionView {
-    margin-right: 10px;
-}
-
-a.sessionView {
-    font-weight: bold;
-}
-
-.session-view-user-category {
-    font-weight: bold;
-    padding-bottom: 10px;
-}
-
-.session-view-session-category {
-    font-weight: bold;
-    padding-bottom: 10px;
-}
-
-.session-view-session {
-    font-weight: bold;
-}
-
-/* Like the well class */
-.session-view-well {
-    min-height: 20px;
-    padding: 19px;
-    margin-bottom: 20px;
-    background-color: #F5F5F5;
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    border-radius: 4px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
-}
-
-.session-view-button {
-    border: none;
-    min-width: 28px;
-}
-
-.view-by-session-link {
-    min-height: 38px;
-}
-
-.view-by-session-teachers {
-    display: none; /* change this if you want to display teachers name in this view */
-    font-size: 10px;
-    overflow-x: auto;
-    overflow-y: auto;
-    max-height: 50px;
-}
-
-.session-view-session-go-to-course-in-session {
-    font-size: 12px;
 }
 
 #gradebook_list .centered {

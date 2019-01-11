@@ -3717,7 +3717,18 @@ class learnpath
                                 $parsed = parse_url($documentPathInfo['extension']);
                                 if (isset($parsed['path'])) {
                                     $extension = $parsed['path'];
-                                    $extensionsToDownload = ['zip', 'ppt', 'pptx', 'ods', 'xlsx', 'xls', 'csv'];
+                                    $extensionsToDownload = [
+                                        'zip',
+                                        'ppt',
+                                        'pptx',
+                                        'ods',
+                                        'xlsx',
+                                        'xls',
+                                        'csv',
+                                        'doc',
+                                        'docx',
+                                        'dot',
+                                    ];
 
                                     if (in_array($extension, $extensionsToDownload)) {
                                         $file = api_get_path(WEB_CODE_PATH).

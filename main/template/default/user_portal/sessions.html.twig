@@ -1,0 +1,41 @@
+{% import '@ChamiloTheme/Macros/box.html.twig' as macro %}
+
+{% autoescape false %}
+    {% for item in session %}
+        {% set image %}
+            <img src="{{ item.image }}" class="img-fluid">
+        {% endset %}
+        {% set title %}
+            <h5 class="card-title">
+                <a href="{{ item.url }}" class="" title="{{ item.title }}">{{ item.title }}</a>
+            </h5>
+            <div class="card-date">{{ item.date }}</div>
+            {% if item.description %}
+                <div class="card-description">
+                    {{ item.description }}
+                </div>
+            {% endif %}
+            {% if item.coach_name %}
+                <div class="card-coach">
+                    {{ item.coach_name }}
+                </div>
+            {% endif %}
+        {% endset %}
+        {% set content %}
+            <div class="card-courses">
+                <ul class="list-group list-group-flush">
+                    {% for row in item.courses %}
+                        <li class="list-group-item">
+                            <img src="{{ row.icon }}" width="32px">
+                            <a href="{{ row.link }}">{{ row.name }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endset %}
+        <div class="col-md-6">
+            {{ macro.box_session(item.id, title, content, image) }}
+        </div>
+
+    {% endfor %}
+{% endautoescape %}

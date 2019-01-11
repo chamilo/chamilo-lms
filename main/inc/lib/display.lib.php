@@ -1731,14 +1731,12 @@ class Display
             $session_info = $session_info[0];
 
             $session = [];
-            $session['category_id'] = $session_info['session_category_id'];
+            $session['category'] = SessionManager::get_session_category($session_info['session_category_id']);
             $session['title'] = $session_info['name'];
-            $session['id_coach'] = $session_info['id_coach'];
-            $session['coach'] = '';
-            $session['dates'] = '';
+            $session['coach_id'] = $session_info['id_coach'];
 
             if (api_get_setting('show_session_coach') === 'true') {
-                $session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($session_info['firstname'], $session_info['lastname']);
+                $session['coach_name'] = api_get_person_name($session_info['firstname'], $session_info['lastname']);
             }
 
             if (($session_info['access_end_date'] == '0000-00-00 00:00:00' &&
@@ -1755,21 +1753,16 @@ class Display
             } else {
                 $dates = SessionManager::parseSessionDates($session_info, true);
                 $session['dates'] = $dates['access'];
-                if (api_get_setting('show_session_coach') === 'true') {
-                    $session['coach'] = api_get_person_name(
-                        $session_info['firstname'],
-                        $session_info['lastname']
-                    );
-                }
                 $active = $date_start <= $now && $date_end >= $now;
             }
             $session['active'] = $active;
-            $session['session_category_id'] = $session_info['session_category_id'];
             $session['visibility'] = $session_info['visibility'];
             $session['num_users'] = $session_info['nbr_users'];
             $session['num_courses'] = $session_info['nbr_courses'];
             $session['description'] = $session_info['description'];
             $session['show_description'] = $session_info['show_description'];
+            $session['image'] = SessionManager::getSessionImage($session_info['id']);
+            $session['url'] = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_info['id'];
 
             $entityManager = Database::getManager();
             $fieldValuesRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraFieldValues');

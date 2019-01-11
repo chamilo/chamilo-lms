@@ -279,3 +279,25 @@
         </div>
     {% endautoescape %}
 {% endmacro %}
+
+{% macro box_session(id, title, content, image) %}
+    {% autoescape false %}
+        <div id="session-{{ id }}" class="card card-session">
+            <div class="card-body">
+                <div class="card-info">
+                    <div class="row">
+                        <div class="col-md-5">
+                            {{ image }}
+                        </div>
+                        <div class="col-md-7">
+                            {{ title }}
+                        </div>
+                    </div>
+                </div>
+                <div class="card-list">
+                    {{ content }}
+                </div>
+            </div>
+        </div>
+    {% endautoescape %}
+{% endmacro %}

@@ -3306,7 +3306,7 @@ class SessionManager
 
             return $sessionImage;
         } else {
-            $sessionImage = api_get_path(WEB_IMG_PATH)."session_default.png";
+            $sessionImage = api_get_path(WEB_PUBLIC_PATH)."img/session_default.png";
 
             return $sessionImage;
         }

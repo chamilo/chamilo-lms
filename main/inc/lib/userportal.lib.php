@@ -1678,9 +1678,12 @@ class IndexManager
                                     $sessionParams[0]['show_actions'] = SessionManager::cantEditSession($session_id);
                                     $sessionParams[0]['courses'] = $html_courses_session;
                                     $sessionParams[0]['show_simple_session_info'] = $showSimpleSessionInfo;
-                                    $sessionParams[0]['coach_name'] = !empty($session_box['coach']) ? $session_box['coach'] : null;
+                                    $sessionParams[0]['coach_name'] = !empty($session_box['coach_name']) ? $session_box['coach_name'] : null;
                                     $sessionParams[0]['is_old'] = $markAsOld;
                                     $sessionParams[0]['is_future'] = $markAsFuture;
+                                    $sessionParams[0]['image'] = $session_box['image'];
+                                    $sessionParams[0]['description'] = $session_box['description'];
+                                    $sessionParams[0]['url'] = $session_box['url'];
 
                                     if ($collapsable) {
                                         $collapsableData = Sessionmanager::getCollapsableData(
@@ -1701,19 +1704,16 @@ class IndexManager
                                         );
                                     }
 
-                                    $this->tpl->assign('session', $sessionParams);
 
-                                    if ($viewGridCourses) {
-                                        $html_sessions .= $this->tpl->fetch(
-                                            $this->tpl->get_template('/user_portal/grid_session.tpl')
-                                        );
-                                    } else {
-                                        $html_sessions .= $this->tpl->fetch(
-                                            $this->tpl->get_template('user_portal/classic_session.tpl')
-                                        );
-                                    }
+                                    $this->tpl->assign('session', $sessionParams);
+                                    $html_sessions .= $this->tpl->fetch(
+                                        $this->tpl->get_template('/user_portal/sessions.html.twig')
+                                    );
+
                                     $sessionCount++;
                                 }
+
+
                             }
                         }
 

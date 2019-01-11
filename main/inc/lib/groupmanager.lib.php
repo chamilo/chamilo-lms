@@ -442,6 +442,7 @@ class GroupManager
         $course_id = $course_info['real_id'];
 
         // Database table definitions
+        $em = Database::getManager();
         $group_table = Database::get_course_table(TABLE_GROUP);
         $forum_table = Database::get_course_table(TABLE_FORUM);
         $groupInfo = self::get_group_properties($groupInfo['iid'], true);
@@ -476,21 +477,26 @@ class GroupManager
                 }
             }
 
-            $sql = "DELETE FROM $forum_table
-                    WHERE c_id = $course_id AND forum_of_group = $groupId ";
-            Database::query($sql);
+            $em
+                ->createQuery(
+                    'DELETE FROM ChamiloCourseBundle:CForumForum f WHERE f.cId = :course AND f.forumOfGroup = :group'
+                )
+                ->execute(['course' => $course_id, 'group' => $groupId]);
 
             // Delete item properties of this group.
             // to_group_id is related to c_group_info.iid
-            $itemPropertyTable = Database::get_course_table(TABLE_ITEM_PROPERTY);
-            $sql = "DELETE FROM $itemPropertyTable
-                    WHERE c_id = $course_id AND to_group_id = $groupIid ";
-            Database::query($sql);
+            $em
+                ->createQuery(
+                    'DELETE FROM ChamiloCourseBundle:CItemProperty ci WHERE ci.course = :course AND ci.group = :group'
+                )
+                ->execute(['course' => $course_id, 'group' => $groupId]);
 
             // delete the groups
-            $sql = "DELETE FROM $group_table
-                    WHERE c_id = $course_id AND iid = $groupIid ";
-            Database::query($sql);
+            $em
+                ->createQuery(
+                    'DELETE FROM ChamiloCourseBundle:CGroupInfo g WHERE g.course = :course AND g.iid = :id'
+                )
+                ->execute(['course' => $course_id, 'id' => $groupIid]);
         }
 
         return true;

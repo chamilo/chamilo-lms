@@ -1192,6 +1192,16 @@ class Template
             $html .= '<div>'.openid_form().'</div>';
         }
 
+        $pluginKeycloak = api_get_plugin_setting('keycloak', 'tool_enable') === 'true';
+        $plugin = null;
+        if ($pluginKeycloak) {
+            $pluginUrl = api_get_path(WEB_PLUGIN_PATH).'keycloak/start.php?sso';
+            $pluginUrl = Display::url('Keycloak', $pluginUrl, ['class' => 'btn btn-primary']);
+            $html .= '<div>'.$pluginUrl.'</div>';
+        }
+
+        $html .= '<div></div>';
+
         return $html;
     }
 

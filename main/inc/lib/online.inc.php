@@ -176,8 +176,15 @@ function online_logout($user_id = null, $logout_redirect = false)
     session_regenerate_id();
     Session::destroy();
 
+    $pluginKeycloak = api_get_plugin_setting('keycloak', 'tool_enable') === 'true';
+    if ($pluginKeycloak) {
+        $pluginUrl = api_get_path(WEB_PLUGIN_PATH).'keycloak/start.php?slo';
+        header('Location: '.$pluginUrl);
+        exit;
+    }
+
     if ($logout_redirect) {
-        header("Location: ".$url);
+        header("Location: $url");
         exit;
     }
 }

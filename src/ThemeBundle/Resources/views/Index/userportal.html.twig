@@ -2,21 +2,30 @@
 
 {% block chamilo_right_column %}
     {% autoescape false %}
-        <ul class="nav nav-tabs">
-            <li class="nav-item">
-                <a class="nav-link active" href="#">{{ "Session"|trans }}</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">{{ "Course"|trans }}</a>
-            </li>
-        </ul>
 
-        <div class="grid-session">
-            {{ html_sessions }}
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-courses-tab" data-toggle="tab" href="#nav-courses" role="tab" aria-controls="nav-courses" aria-selected="true">
+                    {{ "My Courses"|trans }}
+                </a>
+                <a class="nav-item nav-link" id="nav-sessions-tab" data-toggle="tab" href="#nav-sessions" role="tab" aria-controls="nav-sessions" aria-selected="false">
+                    {{ "My Sessions"|trans }}
+                </a>
+            </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-courses" role="tabpanel" aria-labelledby="nav-courses-tab">
+                {{ html_courses }}
+            </div>
+            <div class="tab-pane fade" id="nav-sessions" role="tabpanel" aria-labelledby="nav-sessions-tab">
+
+                <div class="grid-session">
+                    {{ html_sessions }}
+                </div>
+
+            </div>
         </div>
 
-
-        {{ html_courses }}
 
         {#{% if show_welcome_course %}
             {% include '@ChamiloTheme/Layout/welcome_to_course.html.twig' %}

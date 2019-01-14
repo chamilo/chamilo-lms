@@ -202,7 +202,7 @@ if (api_is_drh()) {
     $menu_items = [
         Display::url(
             Display::return_icon('statistics.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),
-            $webCodePath."auth/my_progress.php"
+            $webCodePath.'auth/my_progress.php'
         ),
         Display::url(
             Display::return_icon('user_na.png', get_lang('Students'), [], ICON_SIZE_MEDIUM),
@@ -235,28 +235,28 @@ if (api_is_drh()) {
 } elseif (api_is_student_boss()) {
     $actionsLeft .= Display::url(
         Display::return_icon('statistics.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),
-        $webCodePath."auth/my_progress.php"
+        $webCodePath.'auth/my_progress.php'
     );
     $actionsLeft .= Display::url(
         Display::return_icon('user_na.png', get_lang('Students'), [], ICON_SIZE_MEDIUM),
         '#'
     );
     $actions .= Display::url(
-        Display::return_icon('skills.png', get_lang('Skills'), array(), ICON_SIZE_MEDIUM),
+        Display::return_icon('skills.png', get_lang('Skills'), [], ICON_SIZE_MEDIUM),
         $webCodePath.'social/my_skills_report.php'
     );
     $actionsLeft .= Display::url(
-        Display::return_icon("statistics.png", get_lang("CompanyReport"), [], ICON_SIZE_MEDIUM),
-        $webCodePath."mySpace/company_reports.php"
+        Display::return_icon('statistics.png', get_lang("CompanyReport"), [], ICON_SIZE_MEDIUM),
+        $webCodePath.'mySpace/company_reports.php'
     );
     $actionsLeft .= Display::url(
         Display::return_icon(
-            "certificate_list.png",
-            get_lang("GradebookSeeListOfStudentsCertificates"),
+            'certificate_list.png',
+            get_lang('GradebookSeeListOfStudentsCertificates'),
             [],
             ICON_SIZE_MEDIUM
         ),
-        $webCodePath."gradebook/certificate_report.php"
+        $webCodePath.'gradebook/certificate_report.php'
     );
 }
 

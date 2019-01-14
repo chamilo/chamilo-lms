@@ -2738,4 +2738,8 @@ HTML;
             $show_learnpath
         );
     }
+    public static function randomColor($id){
+        $color = substr(md5(time()*$id), 0, 6);
+        return '#'.$color; // example: #fc443a
+    }
 }

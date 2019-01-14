@@ -2,8 +2,16 @@
 
 {% block chamilo_right_column %}
     {% autoescape false %}
-        {{ content }}
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" href="#">{{ "Session"|trans }}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">{{ "Course"|trans }}</a>
+            </li>
+        </ul>
 
+        {{ content }}
         {% if show_welcome_course %}
             {% include '@ChamiloTheme/Layout/welcome_to_course.html.twig' %}
         {% endif %}

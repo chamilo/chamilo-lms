@@ -3083,6 +3083,7 @@ class UserManager
         $collapsableLink = api_get_path(WEB_PATH).'user_portal.php?action=collapse_session';
 
         $categories = [];
+
         foreach ($sessionData as $row) {
             $session_id = $row['id'];
             $coachList = SessionManager::getCoachesBySession($session_id);

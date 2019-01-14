@@ -182,6 +182,7 @@ if (!$myCourseListAsCategory) {
             true,
             $loadHistory
         );
+        
         $getCategory = CourseCategory::getCategory($categoryCode);
         $controller->tpl->assign('category', $getCategory);
     }

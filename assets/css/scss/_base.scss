@@ -621,6 +621,19 @@ footer {
 }
 
 /* COURSE GRID */
+.card-session{
+  .category{
+    position: absolute;
+    border-radius: 10px;
+    background-color: $default-yellow;
+    color: $default-black;
+    font-weight: bold;
+    padding: 0.2rem 0.8rem;
+    top: -0.8rem;
+    left: 0.5rem;
+    font-size: 12px;
+  }
+}
 .card-course{
   transform: perspective(1px) translateZ(0);
   transition-property: box-shadow;

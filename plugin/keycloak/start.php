@@ -92,20 +92,18 @@ if (isset($_GET['sso'])) {
         exit;
     }
 
-    // Set chamilo sessions
-    Session::write('samlUserdata', $auth->getAttributes());
-    Session::write('samlNameId', $auth->getNameId());
-    Session::write('samlNameIdFormat', $auth->getNameIdFormat());
-    Session::write('samlSessionIndex', $auth->getSessionIndex());
-    Session::erase('AuthNRequestID');
-
     $keyCloackUserName = Session::read('samlNameId');
     $userInfo = api_get_user_info_from_username($keyCloackUserName);
+    $attributes = $auth->getAttributes();
 
-    if (empty($userInfo)) {
+    if (!empty($attributes) && empty($userInfo)) {
         $firstName = reset($attributes['FirstName']);
         $lastName = reset($attributes['LastName']);
         $email = reset($attributes['Email']);
+
+        if (empty($email)) {
+            api_not_allowed(true);
+        }
 
         $userId = UserManager::create_user(
             $firstName,
@@ -125,6 +123,13 @@ if (isset($_GET['sso'])) {
     }
 
     if (!empty($userId)) {
+        // Set chamilo sessions
+        Session::write('samlUserdata', $auth->getAttributes());
+        Session::write('samlNameId', $auth->getNameId());
+        Session::write('samlNameIdFormat', $auth->getNameIdFormat());
+        Session::write('samlSessionIndex', $auth->getSessionIndex());
+        Session::erase('AuthNRequestID');
+
         // Filling session variables with new data
         Session::write('_uid', $userId);
         Session::write('_user', $userInfo);

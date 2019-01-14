@@ -4911,7 +4911,6 @@ class Exercise
                                     if ($debug > 0) {
                                         error_log(__LINE__.' - answerId is >1 so we\'re probably in OAR', 0);
                                     }
-                                    //$inter = $result['success'];
                                     $delineation_cord = $objAnswerTmp->selectHotspotCoordinates($answerId);
                                     $poly_answer = convert_coordinates($delineation_cord, '|');
                                     $max_coord = poly_get_max($poly_user, $poly_answer);
@@ -5279,11 +5278,6 @@ class Exercise
                                     if ($debug > 0) {
                                         error_log(__LINE__.' - answerId is >1 so we\'re probably in OAR', 0);
                                     }
-                                    //check the intersection between the oar and the user
-                                    //echo 'user';	print_r($x_user_list);		print_r($y_user_list);
-                                    //echo 'official';print_r($x_list);print_r($y_list);
-                                    //$result = get_intersection_data($x_list,$y_list,$x_user_list,$y_user_list);
-                                    //$inter = $result['success'];
                                     $delineation_cord = $objAnswerTmp->selectHotspotCoordinates($answerId);
                                     $poly_answer = convert_coordinates($delineation_cord, '|');
                                     $max_coord = poly_get_max($poly_user, $poly_answer);
@@ -5804,7 +5798,7 @@ class Exercise
                     }
                 } else {
                     if ($debug) {
-                        error_log("Empty: exerciseResultCoordinates");
+                        error_log('Empty: exerciseResultCoordinates');
                     }
                 }
                 Event::saveQuestionAttempt($questionScore, implode('|', $answer), $quesId, $exeId, 0, $this->id);
@@ -7376,15 +7370,9 @@ class Exercise
             }
 
             $attributes = ['id' => 'remind_list['.$questionId.']'];
-            if (is_array($remindList) && in_array($questionId, $remindList)) {
-                //$attributes['checked'] = 1;
-                //$remind_highlight = ' remind_highlight ';
-            }
 
             // Showing the question
-
             $exercise_actions = null;
-
             echo '<a id="questionanchor'.$questionId.'"></a><br />';
             echo '<div id="question_div_'.$questionId.'" class="main_question '.$remind_highlight.'" >';
 
@@ -7642,8 +7630,8 @@ class Exercise
      */
     public function getExercisesByCourseSession($courseId, $sessionId)
     {
-        $courseId = intval($courseId);
-        $sessionId = intval($sessionId);
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
 
         $tbl_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
         $sql = "SELECT * FROM $tbl_quiz cq
@@ -7677,7 +7665,9 @@ class Exercise
             return [];
         }
 
-        $sessionId = intval($sessionId);
+        $sessionId = (int) $sessionId;
+        $courseId = (int) $courseId;
+
         $ids = is_array($quizId) ? $quizId : [$quizId];
         $ids = array_map('intval', $ids);
         $ids = implode(',', $ids);
@@ -7844,7 +7834,6 @@ class Exercise
         );
 
         $corrects = [];
-
         foreach ($attempts as $attempt) {
             foreach ($attempt['question_list'] as $answers) {
                 foreach ($answers as $answer) {

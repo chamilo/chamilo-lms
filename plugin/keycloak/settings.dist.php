@@ -3,31 +3,30 @@
 
 $spBaseUrl = api_get_path(WEB_PATH).'plugin/keycloak/';
 
-$settingsInfo = array(
+$settingsInfo = [
     'strict' => false,
     'debug' => true,
-    'sp' => array (
+    'sp' => [
         'entityId' => $spBaseUrl.'metadata.php',
-        'assertionConsumerService' => array(
+        'assertionConsumerService' => [
             'url' => $spBaseUrl.'start.php?acs',
-        ),
-        'singleLogoutService' => array (
+        ],
+        'singleLogoutService' => [
             'url' => $spBaseUrl.'start.php?sls',
-        ),
+        ],
         'NameIDFormat' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
-    ),
-    'idp' => array(
+    ],
+    'idp' => [
         'entityId' => '', // Example http://localhost:8080/auth/realms/master
-        'singleSignOnService' => array (
+        'singleSignOnService' => [
             'url' => '', // example http://localhost:8080/auth/realms/master/protocol/saml
-        ),
-        'singleLogoutService' => array (
+        ],
+        'singleLogoutService' => [
             'url' => '', // example http://localhost:8080/auth/realms/master/protocol/saml
-        ),
+        ],
         'x509cert' => '',
-    ),
-);
-
+    ],
+];
 
 // advanced settings
 //

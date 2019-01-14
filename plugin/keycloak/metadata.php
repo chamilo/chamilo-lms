@@ -10,7 +10,7 @@ if (!$pluginKeycloak) {
 }
 
 /**
- *  SAML Metadata view
+ *  SAML Metadata view.
  */
 require_once 'settings.php';
 

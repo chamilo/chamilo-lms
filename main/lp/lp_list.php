@@ -345,7 +345,6 @@ foreach ($categories as $item) {
                 );
             }
 
-
             if (!empty($options)) {
                 $icon = learnpath::getSelectedIconHtml($id);
                 if (!empty($icon)) {

@@ -3,8 +3,8 @@
 
 use ChamiloSession as Session;
 use OneLogin\Saml2\Auth;
-use OneLogin\Saml2\Settings;
 use OneLogin\Saml2\AuthnRequest;
+use OneLogin\Saml2\Settings;
 
 require_once '../../main/inc/global.inc.php';
 
@@ -40,14 +40,14 @@ $idpData = $settings->getIdPData();
 
 if (isset($_GET['sso'])) {
     $auth->login();
-    # If AuthNRequest ID need to be saved in order to later validate it, do instead
+// If AuthNRequest ID need to be saved in order to later validate it, do instead
     /*$ssoBuiltUrl = $auth->login(null, [], false, false, true);
     $_SESSION['AuthNRequestID'] = $auth->getLastRequestID();
     header('Pragma: no-cache');
     header('Cache-Control: no-cache, must-revalidate');
     header('Location: ' . $ssoBuiltUrl);
     exit();*/
-} else if (isset($_GET['slo'])) {
+} elseif (isset($_GET['slo'])) {
     /*
     if (isset($idpData['singleLogoutService']) && isset($idpData['singleLogoutService']['url'])) {
         $sloUrl = $idpData['singleLogoutService']['url'];
@@ -72,14 +72,14 @@ if (isset($_GET['sso'])) {
     $nameIdFormat = Session::read('samlNameIdFormat');
     $auth->logout($returnTo, $parameters, $nameId, $sessionIndex, false, $nameIdFormat);
 
-    # If LogoutRequest ID need to be saved in order to later validate it, do instead
+// If LogoutRequest ID need to be saved in order to later validate it, do instead
     // $sloBuiltUrl = $auth->logout(null, [], $nameId, $sessionIndex, true);
     /*$_SESSION['LogoutRequestID'] = $auth->getLastRequestID();
     header('Pragma: no-cache');
     header('Cache-Control: no-cache, must-revalidate');
     header('Location: ' . $sloBuiltUrl);
     exit();*/
-} else if (isset($_GET['acs'])) {
+} elseif (isset($_GET['acs'])) {
     $requestID = Session::read('AuthNRequestID');
     $auth->processResponse($requestID);
     $errors = $auth->getErrors();
@@ -98,7 +98,6 @@ if (isset($_GET['sso'])) {
     Session::write('samlNameIdFormat', $auth->getNameIdFormat());
     Session::write('samlSessionIndex', $auth->getSessionIndex());
     Session::erase('AuthNRequestID');
-
 
     $keyCloackUserName = Session::read('samlNameId');
     $userInfo = api_get_user_info_from_username($keyCloackUserName);
@@ -138,7 +137,7 @@ if (isset($_GET['sso'])) {
     }
     header('Location: '.api_get_path(WEB_PATH));
     exit;
-} else if (isset($_GET['sls'])) {
+} elseif (isset($_GET['sls'])) {
     $requestID = Session::read('LogoutRequestID');
     $auth->processSLO(false, $requestID);
     $errors = $auth->getErrors();
@@ -170,9 +169,9 @@ if (isset($_SESSION['samlUserdata'])) {
         $content .= 'You have the following attributes:<br>';
         $content .= '<table class="table"><thead><th>Name</th><th>Values</th></thead><tbody>';
         foreach ($attributes as $attributeName => $attributeValues) {
-            $content .= '<tr><td>' . htmlentities($attributeName) . '</td><td><ul>';
+            $content .= '<tr><td>'.htmlentities($attributeName).'</td><td><ul>';
             foreach ($attributeValues as $attributeValue) {
-                $content .= '<li>' . htmlentities($attributeValue) . '</li>';
+                $content .= '<li>'.htmlentities($attributeValue).'</li>';
             }
             $content .= '</ul></td></tr>';
         }
@@ -180,7 +179,6 @@ if (isset($_SESSION['samlUserdata'])) {
     } else {
         $content .= "<p>You don't have any attribute</p>";
     }
-
 
     $content .= '<p><a href="?slo" >Logout</a></p>';
 } else {

@@ -13983,6 +13983,64 @@ EOD;
     }
 
     /**
+     * In order to use the lp icon option you need to create the "lp_icon" LP extra field
+     * and put the images in.
+     *
+     * @return array
+     */
+    public static function getIconSelect()
+    {
+        $theme = api_get_visual_theme();
+        $path = api_get_path(SYS_PUBLIC_PATH).'css/themes/'.$theme.'/lp_icons/';
+        $icons = ['' => get_lang('SelectAnOption')];
+
+        if (is_dir($path)) {
+            $finder = new Finder();
+            $finder->files()->in($path);
+            $allowedExtensions = ['jpeg', 'jpg', 'png'];
+            /** @var SplFileInfo $file */
+            foreach ($finder as $file) {
+                if (in_array(strtolower($file->getExtension()), $allowedExtensions)) {
+                    $icons[$file->getFilename()] = $file->getFilename();
+                }
+            }
+        }
+
+        return $icons;
+    }
+
+    /**
+     * @param int $lpId
+     *
+     * @return string
+     */
+    public static function getSelectedIcon($lpId)
+    {
+        $extraFieldValue = new ExtraFieldValue('lp');
+        $lpIcon = $extraFieldValue->get_values_by_handler_and_field_variable($lpId, 'lp_icon');
+        $icon = '';
+        if (!empty($lpIcon) && isset($lpIcon['value'])) {
+            $icon = $lpIcon['value'];
+        }
+
+        return $icon;
+    }
+
+    public static function getSelectedIconHtml($lpId)
+    {
+        $icon = self::getSelectedIcon($lpId);
+
+        if (empty($icon)) {
+            return '';
+        }
+
+        $theme = api_get_visual_theme();
+        $path = api_get_path(WEB_PUBLIC_PATH).'css/themes/'.$theme.'/lp_icons/'.$icon;
+
+        return Display::img($path);
+    }
+
+    /**
      * Get the depth level of LP item.
      *
      * @param array $items
@@ -14085,64 +14143,5 @@ EOD;
         }
 
         return '';
-    }
-
-    /**
-     * In order to use the lp icon option you need to create the "lp_icon" LP extra field
-     * and put the images in
-     *
-     * @return array
-     */
-    public static function getIconSelect()
-    {
-        $theme = api_get_visual_theme();
-        $path = api_get_path(SYS_PUBLIC_PATH).'css/themes/'.$theme.'/lp_icons/';
-        $icons = ['' => get_lang('SelectAnOption')];
-
-        if (is_dir($path)) {
-            $finder = new Finder();
-            $finder->files()->in($path);
-            $allowedExtensions =  ['jpeg', 'jpg', 'png'];
-            /** @var SplFileInfo $file */
-            foreach ($finder as $file) {
-                if (in_array(strtolower($file->getExtension()), $allowedExtensions)) {
-                    $icons[$file->getFilename()] = $file->getFilename();
-                }
-            }
-        }
-
-        return $icons;
-    }
-
-    /**
-     * @param int $lpId
-     *
-     * @return string
-     */
-    public static function getSelectedIcon($lpId)
-    {
-        $extraFieldValue = new ExtraFieldValue('lp');
-        $lpIcon = $extraFieldValue->get_values_by_handler_and_field_variable($lpId, 'lp_icon');
-        $icon = '';
-        if (!empty($lpIcon) && isset($lpIcon['value'])) {
-            $icon = $lpIcon['value'];
-        }
-
-        return $icon;
-    }
-
-    public static function getSelectedIconHtml($lpId)
-    {
-        $icon = self::getSelectedIcon($lpId);
-
-        if (empty($icon)) {
-            return '';
-        }
-
-        $theme = api_get_visual_theme();
-        $path = api_get_path(WEB_PUBLIC_PATH).'css/themes/'.$theme.'/lp_icons/'.$icon;
-
-        return Display::img($path);
-
     }
 }

@@ -206,6 +206,8 @@ foreach ($categories as $item) {
         $lpTimeList = Tracking::getCalculateTime($userId, api_get_course_int_id(), api_get_session_id());
     }
 
+    $options = learnpath::getIconSelect();
+
     if (!empty($flat_list)) {
         $max = count($flat_list);
         $counter = 0;
@@ -341,6 +343,14 @@ foreach ($categories as $item) {
                     'learnpath_na.png',
                     get_lang('LPName')
                 );
+            }
+
+
+            if (!empty($options)) {
+                $icon = learnpath::getSelectedIconHtml($id);
+                if (!empty($icon)) {
+                    $icon_learnpath = $icon;
+                }
             }
 
             // Students can see the lp but is inactive

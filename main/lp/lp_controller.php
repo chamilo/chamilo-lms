@@ -1147,9 +1147,7 @@ switch ($action) {
             }
 
             $extraFieldValue = new ExtraFieldValue('lp');
-            $params = [
-                'lp_id' => $_SESSION['oLP']->lp_id,
-            ];
+            $_REQUEST['item_id'] = $_SESSION['oLP']->lp_id;
             $extraFieldValue->saveFieldValues($_REQUEST);
 
             if ($_FILES['lp_preview_image']['size'] > 0) {

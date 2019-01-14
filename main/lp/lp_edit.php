@@ -226,6 +226,17 @@ $form->addElement(
     get_lang('AccumulateScormTime')
 );
 
+$options = learnpath::getIconSelect();
+
+if (!empty($options)) {
+    $form->addSelect(
+        'extra_lp_icon',
+        get_lang('Icon'),
+        $options
+    );
+    $defaults['extra_lp_icon'] = learnpath::getSelectedIcon($lpId);
+}
+
 $enableLpExtraFields = false;
 if ($enableLpExtraFields) {
     $extraField = new ExtraField('lp');

@@ -5956,7 +5956,7 @@ SQL;
      */
     public static function loginAsUser($userId, $checkIfUserCanLoginAs = true)
     {
-        $userId = intval($userId);
+        $userId = (int) $userId;
         $userInfo = api_get_user_info($userId);
 
         // Check if the user is allowed to 'login_as'
@@ -6029,8 +6029,8 @@ SQL;
     public static function loginDelete($userId)
     {
         $online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-        $userId = intval($userId);
-        $query = "DELETE FROM ".$online_table." WHERE login_user_id = $userId";
+        $userId = (int) $userId;
+        $query = "DELETE FROM $online_table WHERE login_user_id = $userId";
         Database::query($query);
     }
 

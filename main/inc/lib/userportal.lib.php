@@ -1060,7 +1060,7 @@ class IndexManager
         $gameModeIsActive = api_get_setting('gamification_mode');
         $viewGridCourses = api_get_configuration_value('view_grid_courses') === true;
         $showSimpleSessionInfo = api_get_configuration_value('show_simple_session_info');
-        $coursesWithoutCategoryTemplate = '/user_portal/classic_courses_without_category.tpl';
+        $coursesWithoutCategoryTemplate = '/user_portal/classic_courses.html.twig';
         $coursesWithCategoryTemplate = '/user_portal/classic_courses_with_category.tpl';
         $showAllSessions = api_get_configuration_value('show_all_sessions_on_my_course_page') === true;
 
@@ -1155,7 +1155,7 @@ class IndexManager
                     }
                 }
 
-                if (isset($courses['in_category'])) {
+                /*if (isset($courses['in_category'])) {
                     foreach ($courses['in_category'] as $key1 => $value) {
                         if (isset($courses['in_category'][$key1]['courses'])) {
                             foreach ($courses['in_category'][$key1]['courses'] as $key2 => $courseInCatInfo) {
@@ -1216,7 +1216,7 @@ class IndexManager
                             }
                         }
                     }
-                }
+                }*/
 
                 if (isset($courses['not_category'])) {
                     foreach ($courses['not_category'] as $key => $courseNotInCatInfo) {
@@ -1276,7 +1276,7 @@ class IndexManager
             }
 
             if ($viewGridCourses) {
-                $coursesWithoutCategoryTemplate = '/user_portal/grid_courses_without_category.tpl';
+                $coursesWithoutCategoryTemplate = '/user_portal/grid_courses.html.twig';
                 $coursesWithCategoryTemplate = '/user_portal/grid_courses_with_category.tpl';
             }
 

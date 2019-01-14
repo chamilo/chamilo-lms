@@ -244,7 +244,8 @@ if (empty($courseAndSessions['html']) && !isset($_GET['history'])) {
 }
 
 $controller->tpl->assign('show_welcome_course', $showWelcomeCourse);
-$controller->tpl->assign('content', $courseAndSessions['html']);
+$controller->tpl->assign('html_sessions', $courseAndSessions['html_sessions']);
+$controller->tpl->assign('html_courses', $courseAndSessions['html_courses']);
 
 // Display the Site Use Cookie Warning Validation
 $useCookieValidation = api_get_setting('cookie_warning');

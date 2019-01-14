@@ -1105,6 +1105,7 @@ class IndexManager
                 $useUserLanguageFilterIfAvailable
             );
 
+
             // Course option (show student progress)
             // This code will add new variables (Progress, Score, Certificate)
             if ($studentInfoProgress || $studentInfoScore || $studentInfoCertificate) {
@@ -1601,7 +1602,9 @@ class IndexManager
         return [
             'courses' => $courseCompleteList,
             'sessions' => $session_categories,
-            'html' => trim($specialCourseList.$sessionsList.$listCourse),
+            'html_special' => trim($specialCourseList),
+            'html_courses' => trim($listCourse),
+            'html_sessions' => trim($sessionsList),
             'session_count' => $sessionCount,
             'course_count' => $courseCount,
         ];

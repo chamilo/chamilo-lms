@@ -11,10 +11,16 @@
             </li>
         </ul>
 
-        {{ content }}
-        {% if show_welcome_course %}
+        <div class="grid-session">
+            {{ html_sessions }}
+        </div>
+
+
+        {{ html_courses }}
+
+        {#{% if show_welcome_course %}
             {% include '@ChamiloTheme/Layout/welcome_to_course.html.twig' %}
-        {% endif %}
+        {% endif %}#}
 
     {% endautoescape %}
 {% endblock %}

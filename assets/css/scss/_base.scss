@@ -580,6 +580,19 @@ footer {
     }
   }
 }
+/** GRID SESSION **/
+
+.grid-session{
+  column-count: 3;
+  .item-session{
+    flex: auto;
+    overflow: hidden;
+    break-inside: avoid;
+  }
+}
+
+
+
 /* COURSE CLASSIC */
 .course-list{
   display: grid;

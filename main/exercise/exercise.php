@@ -454,20 +454,21 @@ if ($is_allowedToEdit) {
     $sql = "SELECT * FROM $TBL_DOCUMENT
             WHERE
                 c_id = $courseId AND
-                path LIKE '".Database :: escape_string($uploadPath.'/%/%')."'";
+                path LIKE '".Database::escape_string($uploadPath.'/%/%')."'";
     $res = Database::query($sql);
     $hp_count = Database :: num_rows($res);
 } else {
-    $sql = "SELECT * FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
-            WHERE
-                d.id = ip.ref AND
+    $sql = "SELECT * FROM $TBL_DOCUMENT d 
+            INNER JOIN $TBL_ITEM_PROPERTY ip
+            ON (d.id = ip.ref AND d.c_id = ip.c_id) 
+            WHERE                
                 ip.tool = '".TOOL_DOCUMENT."' AND
-                d.path LIKE '".Database :: escape_string($uploadPath.'/%/%')."' AND
+                d.path LIKE '".Database::escape_string($uploadPath.'/%/%')."' AND
                 ip.visibility ='1' AND
-                d.c_id      = ".$courseId." AND
-                ip.c_id     = ".$courseId;
+                d.c_id = $courseId AND
+                ip.c_id  = $courseId";
     $res = Database::query($sql);
-    $hp_count = Database :: num_rows($res);
+    $hp_count = Database::num_rows($res);
 }
 
 $total = $total_exercises + $hp_count;

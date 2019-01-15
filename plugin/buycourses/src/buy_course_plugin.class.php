@@ -51,6 +51,10 @@ class BuyCoursesPlugin extends Plugin
     const SERVICE_TYPE_LP_FINAL_ITEM = 4;
     const CULQI_INTEGRATION_TYPE = 'INTEG';
     const CULQI_PRODUCTION_TYPE = 'PRODUC';
+    const TAX_APPLIES_TO_ALL = 1;
+    const TAX_APPLIES_TO_ONLY_COURSE = 2;
+    const TAX_APPLIES_TO_ONLY_SESSION = 3;
+    const TAX_APPLIES_TO_ONLY_SERVICES = 4;
 
     public $isAdminPlugin = true;
 
@@ -81,6 +85,8 @@ class BuyCoursesPlugin extends Plugin
                 'commissions_enable' => 'boolean',
                 'unregistered_users_enable' => 'boolean',
                 'hide_free_text' => 'boolean',
+                'invoicing_enable' => 'boolean',
+                'tax_enable' => 'boolean',
             ]
         );
     }
@@ -162,6 +168,81 @@ class BuyCoursesPlugin extends Plugin
             Database::query($sql);
         }
         $this->manageTab(false);
+    }
+    
+    public function update()
+    {
+        $table = self::TABLE_GLOBAL_CONFIG;
+        $sql = "SHOW COLUMNS FROM $table WHERE Field = 'global_tax_perc'";
+        $res = Database::query($sql);
+        
+        if (Database::num_rows($res) === 0) {
+            $sql = "ALTER TABLE $table ADD (
+                global_tax_perc int(11) unsigned NOT NULL,
+                tax_applies_to int(11) unsigned NOT NULL,
+                tax_name varchar(255) NOT NULL
+            )";
+            $res = Database::query($sql);
+            if (!$res) {
+                echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
+            }
+        }
+
+        $table = self::TABLE_ITEM;
+        $sql = "SHOW COLUMNS FROM $table WHERE Field = 'tax_perc'";
+        $res = Database::query($sql);
+        
+        if (Database::num_rows($res) === 0) {
+            $sql = "ALTER TABLE $table ADD tax_perc int(11) unsigned NULL";
+            $res = Database::query($sql);
+            if (!$res) {
+                echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
+            }
+        }
+
+        $table = self::TABLE_SERVICES;
+        $sql = "SHOW COLUMNS FROM $table WHERE Field = 'tax_perc'";
+        $res = Database::query($sql);
+        
+        if (Database::num_rows($res) === 0) {
+            $sql = "ALTER TABLE $table ADD tax_perc int(11) unsigned NULL";
+            $res = Database::query($sql);
+            if (!$res) {
+                echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
+            }
+        }
+
+        $table = self::TABLE_SALE;
+        $sql = "SHOW COLUMNS FROM $table WHERE Field = 'tax_perc'";
+        $res = Database::query($sql);
+        
+        if (Database::num_rows($res) === 0) {
+            $sql = "ALTER TABLE $table ADD (
+                price_without_tax decimal(10,2) NULL,
+                tax_perc int(11) unsigned NULL,
+                tax_amount decimal(10,2) NULL
+            )";
+            $res = Database::query($sql);
+            if (!$res) {
+                echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
+            }
+        }
+        
+        $table = self::TABLE_SERVICES_SALE;
+        $sql = "SHOW COLUMNS FROM $table WHERE Field = 'tax_perc'";
+        $res = Database::query($sql);
+        
+        if (Database::num_rows($res) === 0) {
+            $sql = "ALTER TABLE $table ADD (
+                price_without_tax decimal(10,2) NULL,
+                tax_perc int(11) unsigned NULL,
+                tax_amount decimal(10,2) NULL
+            )";
+            $res = Database::query($sql);
+            if (!$res) {
+                echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
+            }
+        }
     }
 
     /**
@@ -525,12 +606,29 @@ class BuyCoursesPlugin extends Plugin
                 continue;
             }
 
+            $price = $item['price'];
+            $taxPerc = null;
+            $priceWithoutTax = $item['price'];
+
+            $taxEnable = $this->get('tax_enable') === 'true';
+            $globalParameters = $this->getGlobalParameters();
+            $taxAppliesTo = $globalParameters['tax_applies_to'];
+            if ($taxEnable &&
+                ($taxAppliesTo == self::TAX_APPLIES_TO_ALL || $taxAppliesTo == self::TAX_APPLIES_TO_ONLY_COURSE)
+            ) {
+                $globalTaxPerc = $globalParameters['global_tax_perc'];
+                $precision = 2;
+                $taxPerc = is_null($item['tax_perc']) ? $globalTaxPerc : $item['tax_perc'];
+                $taxAmount = round($priceWithoutTax * $taxPerc / 100, $precision);
+                $price = $priceWithoutTax + $taxAmount;
+            }
+
             $courseItem = [
                 'id' => $course->getId(),
                 'title' => $course->getTitle(),
                 'code' => $course->getCode(),
                 'course_img' => null,
-                'price' => $item['price'],
+                'price' => $price,
                 'currency' => $item['iso_code'],
                 'teachers' => [],
                 'enrolled' => $this->getUserStatusForCourse(api_get_user_id(), $course),
@@ -592,6 +690,24 @@ class BuyCoursesPlugin extends Plugin
                 ]
             );
 
+        $price = $item['price'];
+        $taxPerc = null;
+        $priceWithoutTax = $item['price'];
+        $precision = 2;
+
+        $taxEnable = $this->get('tax_enable') === 'true';
+        $globalParameters = $this->getGlobalParameters();
+        $taxAppliesTo = $globalParameters['tax_applies_to'];
+        if ($taxEnable && 
+            ($taxAppliesTo == self::TAX_APPLIES_TO_ALL || $taxAppliesTo == self::TAX_APPLIES_TO_ONLY_COURSE)
+        ) {
+            $globalTaxPerc = $globalParameters['global_tax_perc'];
+            $precision = 2;
+            $taxPerc = is_null($item['tax_perc']) ? $globalTaxPerc : $item['tax_perc'];
+            $taxAmount = round($priceWithoutTax * $taxPerc / 100, $precision);
+            $price = $priceWithoutTax + $taxAmount;
+        }
+
         $courseInfo = [
             'id' => $course->getId(),
             'title' => $course->getTitle(),
@@ -599,7 +715,13 @@ class BuyCoursesPlugin extends Plugin
             'code' => $course->getCode(),
             'visual_code' => $course->getVisualCode(),
             'teachers' => [],
-            'price' => $item['price'],
+            'price' => number_format($price, $precision),
+            'price_without_tax' => number_format($priceWithoutTax, $precision),
+            'tax_amount' => number_format($taxAmount, $precision),
+            'tax_perc' => $taxPerc,
+            'tax_name' => $globalParameters['tax_name'],
+            'tax_enable' => $taxEnable && 
+                ($taxAppliesTo == self::TAX_APPLIES_TO_ALL || $taxAppliesTo == self::TAX_APPLIES_TO_ONLY_COURSE),
             'currency' => $item['iso_code'],
             'course_img' => null,
         ];
@@ -658,13 +780,36 @@ class BuyCoursesPlugin extends Plugin
             'coach_access_end_date' => $session->getCoachAccessEndDate(),
         ]);
 
+        $price = $item['price'];
+        $taxPerc = null;
+        $priceWithoutTax = $item['price'];
+        $precision = 2;
+
+        $taxEnable = $this->get('tax_enable') === 'true';
+        $globalParameters = $this->getGlobalParameters();
+        $taxAppliesTo = $globalParameters['tax_applies_to'];
+        if ($taxEnable &&
+            ($taxAppliesTo == self::TAX_APPLIES_TO_ALL || $taxAppliesTo == self::TAX_APPLIES_TO_ONLY_SESSION)
+        ) {
+            $globalTaxPerc = $globalParameters['global_tax_perc'];
+            $taxPerc = is_null($item['tax_perc']) ? $globalTaxPerc : $item['tax_perc'];
+            $taxAmount = round($priceWithoutTax * $taxPerc / 100, $precision);
+            $price = $priceWithoutTax + $taxAmount;
+        }
+
         $sessionInfo = [
             'id' => $session->getId(),
             'name' => $session->getName(),
             'description' => $session->getDescription(),
             'dates' => $sessionDates,
             'courses' => [],
-            'price' => $item['price'],
+            'price' => number_format($price, $precision),
+            'price_without_tax' => number_format($priceWithoutTax, $precision),
+            'tax_amount' => number_format($taxAmount, $precision),
+            'tax_perc' => $taxPerc,
+            'tax_name' => $globalParameters['tax_name'],
+            'tax_enable' => $taxEnable &&
+                ($taxAppliesTo == self::TAX_APPLIES_TO_ALL || $taxAppliesTo == self::TAX_APPLIES_TO_ONLY_SESSION),
             'currency' => $item['iso_code'],
             'image' => null,
             'nbrCourses' => $session->getNbrCourses(),
@@ -771,6 +916,26 @@ class BuyCoursesPlugin extends Plugin
             $productName = $session->getName();
         }
 
+        $price = $item['price'];
+        $priceWithoutTax = null;
+        $taxPerc = null;
+
+        $taxEnable = $this->get('tax_enable') === 'true';
+        $globalParameters = $this->getGlobalParameters();
+        $taxAppliesTo = $globalParameters['tax_applies_to'];
+        if ($taxEnable &&
+            ($taxAppliesTo == self::TAX_APPLIES_TO_ALL ||
+            ($taxAppliesTo == TAX_APPLIES_TO_ONLY_COURSE && $item['product_type'] == self::PRODUCT_TYPE_COURSE) ||
+            ($taxAppliesTo == TAX_APPLIES_TO_ONLY_SESSION && $item['product_type'] == self::PRODUCT_TYPE_SESSION))
+        ) {
+            $priceWithoutTax = $item['price'];
+            $globalTaxPerc = $globalParameters['global_tax_perc'];
+            $precision = 2;
+            $taxPerc = is_null($item['tax_perc']) ? $globalTaxPerc : $item['tax_perc'];
+            $taxAmount = round($priceWithoutTax * $taxPerc / 100, $precision);
+            $price = $priceWithoutTax + $taxAmount;
+        }
+
         $values = [
             'reference' => $this->generateReference(
                 api_get_user_id(),
@@ -783,7 +948,10 @@ class BuyCoursesPlugin extends Plugin
             'product_type' => $item['product_type'],
             'product_name' => $productName,
             'product_id' => $item['product_id'],
-            'price' => $item['price'],
+            'price' => $price,
+            'price_without_tax' => $priceWithoutTax,
+            'tax_perc' => $taxPerc,
+            'tax_amount' => $taxAmount,
             'status' => self::SALE_STATUS_PENDING,
             'payment_type' => intval($paymentType),
         ];
@@ -923,6 +1091,21 @@ class BuyCoursesPlugin extends Plugin
             self::PAYMENT_TYPE_PAYPAL => 'PayPal',
             self::PAYMENT_TYPE_TRANSFER => $this->get_lang('BankTransfer'),
             self::PAYMENT_TYPE_CULQI => 'Culqi',
+        ];
+    }
+
+    /**
+     * Get Tax's types
+     * 
+     * @return array
+     */
+    public function getTaxAppliesTo()
+    {
+        return [
+            self::TAX_APPLIES_TO_ALL => $this->get_lang('AllCoursesSessionsAndServices'),
+            self::TAX_APPLIES_TO_ONLY_COURSE => $this->get_lang('OnlyCourses'),
+            self::TAX_APPLIES_TO_ONLY_SESSION => $this->get_lang('OnlySessions'),
+            self::TAX_APPLIES_TO_ONLY_SERVICES=> $this->get_lang('OnlyServices'),
         ];
     }
 
@@ -1155,6 +1338,7 @@ class BuyCoursesPlugin extends Plugin
             'visible' => false,
             'currency' => empty($defaultCurrency) ? null : $defaultCurrency['iso_code'],
             'price' => 0.00,
+            'tax_perc' => null,
         ];
 
         $item = $this->getItemByProduct($course->getId(), self::PRODUCT_TYPE_COURSE);
@@ -1164,6 +1348,7 @@ class BuyCoursesPlugin extends Plugin
             $courseItem['visible'] = true;
             $courseItem['currency'] = $item['iso_code'];
             $courseItem['price'] = $item['price'];
+            $courseItem['tax_perc'] = $item['tax_perc'];
         }
 
         return $courseItem;
@@ -1197,6 +1382,7 @@ class BuyCoursesPlugin extends Plugin
             'visible' => false,
             'currency' => empty($defaultCurrency) ? null : $defaultCurrency['iso_code'],
             'price' => 0.00,
+            'tax_perc' => null,
         ];
 
         $displayStartDate = $session->getDisplayStartDate();
@@ -1233,6 +1419,7 @@ class BuyCoursesPlugin extends Plugin
             $sessionItem['visible'] = true;
             $sessionItem['currency'] = $item['iso_code'];
             $sessionItem['price'] = $item['price'];
+            $sessionItem['tax_perc'] = $item['tax_perc'];
         }
 
         return $sessionItem;
@@ -1604,6 +1791,7 @@ class BuyCoursesPlugin extends Plugin
                 'name' => Security::remove_XSS($service['name']),
                 'description' => Security::remove_XSS($service['description']),
                 'price' => $service['price'],
+                'tax_perc' => $service['tax_perc'] != '' ? (int) $service['tax_perc'] : null,
                 'duration_days' => intval($service['duration_days']),
                 'applies_to' => intval($service['applies_to']),
                 'owner_id' => intval($service['owner_id']),
@@ -1658,15 +1846,16 @@ class BuyCoursesPlugin extends Plugin
                 'name' => Security::remove_XSS($service['name']),
                 'description' => Security::remove_XSS($service['description']),
                 'price' => $service['price'],
-                'duration_days' => intval($service['duration_days']),
-                'applies_to' => intval($service['applies_to']),
-                'owner_id' => intval($service['owner_id']),
-                'visibility' => intval($service['visibility']),
+                'tax_perc' => $service['tax_perc'] != '' ? (int) $service['tax_perc'] : null,
+                'duration_days' => (int) $service['duration_days'],
+                'applies_to' => (int) $service['applies_to'],
+                'owner_id' => (int) $service['owner_id'],
+                'visibility' => (int) $service['visibility'],
                 'image' => 'simg-'.$id.'.png',
                 'video_url' => $service['video_url'],
                 'service_information' => $service['service_information'],
             ],
-            ['id = ?' => intval($id)]
+            ['id = ?' => (int) $id]
         );
     }
 
@@ -1723,10 +1912,36 @@ class BuyCoursesPlugin extends Plugin
         $services = [];
 
         if ($id) {
+            $price = $return['price'];
+            $taxPerc = null;
+            $priceWithoutTax = $priceWithTax = $return['price'];
+            $precision = 2;
+            
+            $taxEnable = $this->get('tax_enable') === 'true';
+            $globalParameters = $this->getGlobalParameters();
+            $taxAppliesTo = $globalParameters['tax_applies_to'];
+            if ($taxEnable &&
+                ($taxAppliesTo == self::TAX_APPLIES_TO_ALL || $taxAppliesTo == self::TAX_APPLIES_TO_ONLY_SERVICES)
+            ) {
+                $globalTaxPerc = $globalParameters['global_tax_perc'];
+                $precision = 2;
+                $taxPerc = is_null($return['tax_perc']) ? $globalTaxPerc : $return['tax_perc'];
+                $taxAmount = round($priceWithoutTax * $taxPerc / 100, $precision);
+                $priceWithTax = $priceWithoutTax + $taxAmount;
+            }
+            
             $services['id'] = $return['id'];
             $services['name'] = $return['name'];
             $services['description'] = $return['description'];
-            $services['price'] = $return['price'];
+            $services['price'] = $price;
+            $services['tax_perc'] = $return['tax_perc'];
+            $services['price_with_tax'] = number_format($priceWithTax, $precision);
+            $services['price_without_tax'] = number_format($priceWithoutTax, $precision);
+            $services['tax_amount'] = number_format($taxAmount, $precision);
+            $services['tax_perc_show'] = $taxPerc;
+            $services['tax_name'] = $globalParameters['tax_name'];
+            $services['tax_enable'] = $taxEnable &&
+            ($taxAppliesTo == self::TAX_APPLIES_TO_ALL || $taxAppliesTo == self::TAX_APPLIES_TO_ONLY_SERVICES);
             $services['currency'] = $return['currency'];
             $services['duration_days'] = $return['duration_days'];
             $services['applies_to'] = $return['applies_to'];
@@ -1747,6 +1962,7 @@ class BuyCoursesPlugin extends Plugin
             $services[$index]['name'] = $service['name'];
             $services[$index]['description'] = $service['description'];
             $services[$index]['price'] = $service['price'];
+            $services[$index]['tax_perc'] = $service['tax_perc'];
             $services[$index]['currency'] = $service['currency'];
             $services[$index]['duration_days'] = $service['duration_days'];
             $services[$index]['applies_to'] = $service['applies_to'];
@@ -2022,10 +2238,27 @@ class BuyCoursesPlugin extends Plugin
         $services = [];
 
         foreach ($return as $index => $service) {
+            $price = $service['price'];
+            $taxPerc = null;
+            $priceWithoutTax = $service['price'];
+            
+            $taxEnable = $this->get('tax_enable') === 'true';
+            $globalParameters = $this->getGlobalParameters();
+            $taxAppliesTo = $globalParameters['tax_applies_to'];
+            if ($taxEnable &&
+                ($taxAppliesTo == self::TAX_APPLIES_TO_ALL || $taxAppliesTo == self::TAX_APPLIES_TO_ONLY_SERVICES)
+            ) {
+                $globalTaxPerc = $globalParameters['global_tax_perc'];
+                $precision = 2;
+                $taxPerc = is_null($service['tax_perc']) ? $globalTaxPerc : $service['tax_perc'];
+                $taxAmount = round($priceWithoutTax * $taxPerc / 100, $precision);
+                $price = $priceWithoutTax + $taxAmount;
+            }
+
             $services[$index]['id'] = $service['id'];
             $services[$index]['name'] = $service['name'];
             $services[$index]['description'] = $service['description'];
-            $services[$index]['price'] = $service['price'];
+            $services[$index]['price'] = number_format($price, $precision);
             $services[$index]['currency'] = $service['currency'];
             $services[$index]['duration_days'] = $service['duration_days'];
             $services[$index]['applies_to'] = $service['applies_to'];
@@ -2070,7 +2303,24 @@ class BuyCoursesPlugin extends Plugin
         }
 
         $currency = $this->getSelectedCurrency();
-
+        $price = $service['price'];
+        $priceWithoutTax = null;
+        $taxPerc = null;
+        
+        $taxEnable = $this->get('tax_enable') === 'true';
+        $globalParameters = $this->getGlobalParameters();
+        $taxAppliesTo = $globalParameters['tax_applies_to'];
+        if ($taxEnable &&
+            ($taxAppliesTo == self::TAX_APPLIES_TO_ALL || $taxAppliesTo == TAX_APPLIES_TO_ONLY_SERVICES)
+        ) {
+            $priceWithoutTax = $service['price'];
+            $globalTaxPerc = $globalParameters['global_tax_perc'];
+            $precision = 2;
+            $taxPerc = is_null($service['tax_perc']) ? $globalTaxPerc : $service['tax_perc'];
+            $taxAmount = round($priceWithoutTax * $taxPerc / 100, $precision);
+            $price = $priceWithoutTax + $taxAmount;
+        }
+        
         $values = [
             'service_id' => $serviceId,
             'reference' => $this->generateReference(
@@ -2079,7 +2329,10 @@ class BuyCoursesPlugin extends Plugin
                 $infoSelect
             ),
             'currency_id' => $currency['id'],
-            'price' => $service['price'],
+            'price' => $price,
+            'price_without_tax' => $priceWithoutTax,
+            'tax_perc' => $taxPerc,
+            'tax_amount' => $taxAmount,
             'node_type' => $service['applies_to'],
             'node_id' => intval($infoSelect),
             'buyer_id' => $userId,
@@ -2145,11 +2398,19 @@ class BuyCoursesPlugin extends Plugin
      */
     public function saveGlobalParameters($params)
     {
+        $sqlParams = [
+            'terms_and_conditions' => $params['terms_and_conditions'],
+        ];
+
+        if ($this->get('tax_enable') === 'true') {
+            $sqlParams['global_tax_perc'] = $params['global_tax_perc'];
+            $sqlParams['tax_applies_to'] = $params['tax_applies_to'];
+            $sqlParams['tax_name'] = $params['tax_name'];
+        }
+
         return Database::update(
             Database::get_main_table(self::TABLE_GLOBAL_CONFIG),
-            [
-                'terms_and_conditions' => $params['terms_and_conditions'],
-            ],
+            $sqlParams,
             ['id = ?' => 1]
         );
     }

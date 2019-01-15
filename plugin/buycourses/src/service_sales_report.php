@@ -21,13 +21,25 @@ $includeServices = $plugin->get('include_services');
 $saleStatuses = $plugin->getServiceSaleStatuses();
 $paymentTypes = $plugin->getPaymentTypes();
 
+$selectedStatus = isset($_GET['status']) ? $_GET['status'] : BuyCoursesPlugin::SALE_STATUS_PENDING;
+$searchTerm = '';
+
 $form = new FormValidator('search', 'get');
+
+if ($form->validate()) {
+    $selectedStatus = $form->getSubmitValue('status');
+    $searchTerm = $form->getSubmitValue('user');
+    
+    if ($selectedStatus === false) {
+        $selectedStatus = BuyCoursesPlugin::SALE_STATUS_PENDING;
+    }
+}
 
 $form->addSelect('status', $plugin->get_lang('OrderStatus'), $saleStatuses, ['cols-size' => [0, 0, 0]]);
 $form->addText('user', get_lang('User'), false, ['cols-size' => [0, 0, 0]]);
 $form->addButtonSearch(get_lang('Search'), 'search');
 
-$servicesSales = $plugin->getServiceSale();
+$servicesSales = $plugin->getServiceSale(null, null, $selectedStatus);
 $serviceSaleList = [];
 
 foreach ($servicesSales as $sale) {

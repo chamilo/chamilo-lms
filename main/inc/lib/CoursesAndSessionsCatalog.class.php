@@ -477,7 +477,7 @@ class CoursesAndSessionsCatalog
     {
         $em = Database::getManager();
         $urlId = api_get_current_access_url_id();
-        $date = Database::escape_string($date);
+        
         $sql = "SELECT s.id FROM session s ";
         $sql .= "
             INNER JOIN access_url_rel_session ars
@@ -490,6 +490,7 @@ class CoursesAndSessionsCatalog
         ";
 
         if (!is_null($date)) {
+            $date = Database::escape_string($date);
             $sql .= "
                 AND (
                     ('$date' BETWEEN DATE(s.access_start_date) AND DATE(s.access_end_date))

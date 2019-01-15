@@ -90,6 +90,11 @@ $itemTable->addColumn(
     \Doctrine\DBAL\Types\Type::INTEGER,
     ['unsigned' => true]
 );
+$itemTable->addColumn(
+    'tax_perc',
+    \Doctrine\DBAL\Types\Type::INTEGER,
+    ['unsigned' => true, 'notnull' => false]
+);
 $itemTable->setPrimaryKey(['id']);
 $itemTable->addForeignKeyConstraint(
     $currencyTable,
@@ -196,6 +201,21 @@ $saleTable->addColumn(
     ['scale' => 2]
 );
 $saleTable->addColumn(
+    'price_without_tax',
+    \Doctrine\DBAL\Types\Type::DECIMAL,
+    ['scale' => 2, 'notnull' => false]
+);
+$saleTable->addColumn(
+    'tax_perc',
+    \Doctrine\DBAL\Types\Type::INTEGER,
+    ['unsigned' => true, 'notnull' => false]
+);
+$saleTable->addColumn(
+    'tax_amount',
+    \Doctrine\DBAL\Types\Type::DECIMAL,
+        ['scale' => 2, 'notnull' => false]
+);
+$saleTable->addColumn(
     'currency_id',
     \Doctrine\DBAL\Types\Type::INTEGER,
     ['unsigned' => true]
@@ -250,6 +270,21 @@ $servicesNodeTable->addColumn(
     \Doctrine\DBAL\Types\Type::DECIMAL,
     ['scale' => 2]
 );
+$servicesNodeTable->addColumn(
+    'price_without_tax',
+    \Doctrine\DBAL\Types\Type::DECIMAL,
+    ['scale' => 2, 'notnull' => false]
+);
+$servicesNodeTable->addColumn(
+    'tax_perc',
+    \Doctrine\DBAL\Types\Type::INTEGER,
+    ['unsigned' => true, 'notnull' => false]
+);
+$servicesNodeTable->addColumn(
+    'tax_amount',
+    \Doctrine\DBAL\Types\Type::DECIMAL,
+    ['scale' => 2, 'notnull' => false]
+);
 $servicesNodeTable->addColumn('node_type', \Doctrine\DBAL\Types\Type::INTEGER);
 $servicesNodeTable->addColumn('node_id', \Doctrine\DBAL\Types\Type::INTEGER);
 $servicesNodeTable->addColumn('buyer_id', \Doctrine\DBAL\Types\Type::INTEGER);
@@ -291,6 +326,10 @@ $globalTable->addColumn(
     ['autoincrement' => true, 'unsigned' => true]
 );
 $globalTable->addColumn('terms_and_conditions', \Doctrine\DBAL\Types\Type::TEXT);
+$globalTable->addColumn('global_tax_perc', \Doctrine\DBAL\Types\Type::INTEGER);
+$globalTable->addColumn('tax_applies_to', \Doctrine\DBAL\Types\Type::INTEGER);
+$globalTable->addColumn('tax_name', \Doctrine\DBAL\Types\Type::STRING);
+
 $globalTable->setPrimaryKey(['id']);
 
 $queries = $pluginSchema->toSql($platform);

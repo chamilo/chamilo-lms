@@ -1,0 +1,111 @@
+{% import '@ChamiloTheme/Macros/box.html.twig' as macro %}
+
+{% autoescape false %}
+
+{% if not courses is empty %}
+    <div class="course-list">
+    {% for item in courses %}
+        {% set image %}
+            {% if item.category %}
+                <div class="category" style="background: {{ item.color.color }}; color:{{ item.color.luminosity }}">
+                    {{ item.category }}
+                </div>
+            {% endif %}
+            {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') and not item.current_user_is_teacher %}
+                {% if item.image != '' %}
+                    <img src="{{ item.image }}" title="{{ item.title }}"
+                         alt="{{ item.title }}" class="img-fluid"/>
+                {% else %}
+                    {{ 'blackboard.png' | img(48, item.title ) }}
+                {% endif %}
+            {% else %}
+                <a href="{{ item.link }}">
+                    {% if item.image != '' %}
+                        <img src="{{ item.image }}" title="{{ item.title }}"
+                             alt="{{ item.title }}" class="img-fluid"/>
+                    {% else %}
+                        {{ 'blackboard.png' | img(48, item.title ) }}
+                    {% endif %}
+                </a>
+            {% endif %}
+
+        {% endset %}
+
+        {% set title %}
+            {% if item.edit_actions != '' %}
+                <div class="float-right">
+                    {% if item.document == '' %}
+                        <a class="btn btn-outline-secondary btn-sm" href="{{ item.edit_actions }}">
+                            <i class="fas fa-pencil-alt"></i>
+                        </a>
+                    {% else %}
+                        <div class="btn-group" role="group">
+                            <a class="btn btn-outline-secondary btn-sm" href="{{ item.edit_actions }}">
+                                <i class="fas fa-pencil-alt"></i>
+                            </a>
+                            {{ item.document }}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+
+            <h5 class="title">
+                {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') and not item.current_user_is_teacher %}
+                    {{ item.title }} {{ item.code_course }}
+                {% else %}
+                    <a href="{{ item.link }}">
+                        {{ item.title }} {{ item.code_course }}
+                    </a>
+                    {{ item.notifications }}
+                    {% if item.is_special_course %}
+                        {{ 'klipper.png' | img(22, 'CourseAutoRegister'|get_lang ) }}
+                    {% endif %}
+                {% endif %}
+            </h5>
+        {% endset %}
+
+        {% set content %}
+            <div class="list-teachers">
+                {% if item.teachers|length > 0 %}
+                    {{ 'teacher.png' | img(16, 'Professor'|get_lang ) }}
+                    {% for teacher in item.teachers %}
+                        {% set counter = counter + 1 %}
+                        {% if counter > 1 %} | {% endif %}
+                        <a href="{{ teacher.url }}" class="ajax"
+                           data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
+                            {{ teacher.firstname }} {{ teacher.lastname }}
+                        </a>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class="student-progress">
+                {% if item.student_info %}
+                    {% if (item.student_info.progress is not null) and (item.student_info.score is not null) %}
+                        <div class="course-student-info">
+                            <div class="student-info">
+                                {% if (item.student_info.progress is not null) %}
+                                    {{ "StudentCourseProgressX" | get_lang | format(item.student_info.progress) }}
+                                {% endif %}
+
+                                {% if (item.student_info.score is not null) %}
+                                    {{ "StudentCourseScoreX" | get_lang | format(item.student_info.score) }}
+                                {% endif %}
+
+                                {% if (item.student_info.certificate is not null) %}
+                                    {{ "StudentCourseCertificateX" | get_lang | format(item.student_info.certificate) }}
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+
+        {% endset %}
+
+        {{ macro.box_course_classic(item.course_id, title, content, image, item.is_special_course) }}
+
+
+    {% endfor %}
+    </div>
+{% endif %}
+{% endautoescape %}

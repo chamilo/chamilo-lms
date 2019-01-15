@@ -1060,7 +1060,7 @@ class IndexManager
         $gameModeIsActive = api_get_setting('gamification_mode');
         //$viewGridCourses = api_get_configuration_value('view_grid_courses') === true;
         $showSimpleSessionInfo = api_get_configuration_value('show_simple_session_info');
-        $coursesWithoutCategoryTemplate = '/user_portal/classic_courses.html.twig';
+        $coursesWithoutCategoryTemplate = '/user_portal/list_courses.html.twig';
         $showAllSessions = api_get_configuration_value('show_all_sessions_on_my_course_page') === true;
 
         if ($loadHistory) {
@@ -1215,7 +1215,7 @@ class IndexManager
             $courseCompleteList = array_merge($courseCompleteList, $specialCourses);
             $courseCompleteList = array_merge($courseCompleteList, $courses['not_category']);
 
-            
+
             $this->tpl->assign('courses', $courseCompleteList);
             $listCourse = $this->tpl->fetch($this->tpl->get_template($coursesWithoutCategoryTemplate));
             $courseCount = count($specialCourses) + $coursesInCategoryCount + $coursesNotInCategoryCount;
@@ -1489,7 +1489,7 @@ class IndexManager
                 $this->tpl->assign('remove_session_url', api_get_setting('session.remove_session_url'));
 
                 $sessionsList = $this->tpl->fetch(
-                    $this->tpl->get_template('/user_portal/sessions.html.twig')
+                    $this->tpl->get_template('/user_portal/list_sessions.html.twig')
                 );
             }
         }

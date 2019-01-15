@@ -626,6 +626,9 @@ footer {
   grid-template-columns: auto;
   grid-gap: 10px;
   align-items: center;
+  &.card-special{
+    background-color: #f6fcff;
+  }
   .category{
     position: absolute;
     border-radius: 10px;

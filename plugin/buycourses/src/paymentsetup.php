@@ -101,7 +101,7 @@ if ($taxEnable) {
 
         $taxTypeSelect->addOption($optionText, $optionyValue);
     }
-    
+
     $globalSettingForm->addElement(
         'text',
         'tax_name',

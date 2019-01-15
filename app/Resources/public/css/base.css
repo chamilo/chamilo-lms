@@ -7683,6 +7683,8 @@ footer {
     padding: 3px;
     border-radius: 4px;
     border: 1px solid #e6e6e6;
+    max-height: 40px;
+    max-width: 40px;
 }
 
 .everybodyview {

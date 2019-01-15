@@ -265,12 +265,10 @@
         <div id="course-{{ id }}" class="card card-course-classic" style="border-bottom-color: {{ '#' ~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)~'50'  }}">
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-3">
-                        <div class="card-icon">
-                            {{ image }}
-                        </div>
+                    <div class="col-md-5">
+                        {{ image }}
                     </div>
-                    <div class="col-md-9">
+                    <div class="col-md-7">
                         {{ title }}
                         {{ content }}
                     </div>
@@ -282,7 +280,8 @@
 
 {% macro box_session(id, title, content, image) %}
     {% autoescape false %}
-        <div id="session-{{ id }}" class="card card-session">
+        {% set values = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f']%}
+        <div id="session-{{ id }}" class="card card-session" style="border-bottom-color: {{ '#' ~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)~'50'  }}">
             <div class="card-body">
                 <div class="card-info">
                     <div class="row">
@@ -301,3 +300,4 @@
         </div>
     {% endautoescape %}
 {% endmacro %}
+

@@ -5,21 +5,24 @@
 {% if not courses is empty %}
     <div class="course-list">
     {% for item in courses %}
-
         {% set image %}
-
+            {% if item.category %}
+                <div class="category" style="background: {{ item.color.color }}; color:{{ item.color.luminosity }}">
+                    {{ item.category }}
+                </div>
+            {% endif %}
             {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') and not item.current_user_is_teacher %}
-                {% if item.thumbnails != '' %}
-                    <img src="{{ item.thumbnails }}" title="{{ item.title }}"
-                         alt="{{ item.title }}"/>
+                {% if item.image != '' %}
+                    <img src="{{ item.image }}" title="{{ item.title }}"
+                         alt="{{ item.title }}" class="img-fluid"/>
                 {% else %}
                     {{ 'blackboard.png' | img(48, item.title ) }}
                 {% endif %}
             {% else %}
                 <a href="{{ item.link }}">
-                    {% if item.thumbnails != '' %}
-                        <img src="{{ item.thumbnails }}" title="{{ item.title }}"
-                             alt="{{ item.title }}"/>
+                    {% if item.image != '' %}
+                        <img src="{{ item.image }}" title="{{ item.title }}"
+                             alt="{{ item.title }}" class="img-fluid"/>
                     {% else %}
                         {{ 'blackboard.png' | img(48, item.title ) }}
                     {% endif %}
@@ -100,7 +103,6 @@
         {% endset %}
 
         {{ macro.box_course_classic(item.course_id, title, content, image) }}
-
 
 
     {% endfor %}

@@ -2168,7 +2168,8 @@ function api_get_course_info_by_id($id = 0)
     $sql = "SELECT
                 course.*,
                 course_category.code faCode,
-                course_category.name faName
+                course_category.name faName,
+                course_category.id faId
             FROM $course_table
             LEFT JOIN $course_cat_table
             ON course.category_code = course_category.code
@@ -2223,6 +2224,7 @@ function api_format_course_array($course_data)
     $_course['extLink']['name'] = $course_data['department_name'];
     $_course['categoryCode'] = $course_data['faCode'];
     $_course['categoryName'] = $course_data['faName'];
+    $_course['categoryId'] = !empty($course_data['faId']) ? $course_data['faId'] : null;
     $_course['visibility'] = $course_data['visibility'];
     $_course['subscribe_allowed'] = $course_data['subscribe'];
     $_course['subscribe'] = $course_data['subscribe'];

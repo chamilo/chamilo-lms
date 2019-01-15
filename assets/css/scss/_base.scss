@@ -590,12 +590,16 @@ footer {
     break-inside: avoid;
     display: inline-table;
     .card-session{
+      border-bottom-width: 5px;
       .card-title{
         font-size: 16px;
         a{
           color: $grey-800;
         }
       }
+    }
+    .card-list{
+      margin-top: 10px;
     }
   }
 }
@@ -622,11 +626,19 @@ footer {
   grid-template-columns: auto;
   grid-gap: 10px;
   align-items: center;
+  .category{
+    position: absolute;
+    border-radius: 10px;
+    background-color: $default-yellow;
+    color: $default-black;
+    font-weight: bold;
+    padding: 0.2rem 0.8rem;
+    top: -0.8rem;
+    left: 0.5rem;
+    font-size: 12px;
+  }
   .card-body{
     padding: 1rem 1.2rem;
-    .card-icon{
-      text-align: center;
-    }
     @include portrait($breakpoint-sm, $breakpoint-md){
       padding: 0.8rem;
     }

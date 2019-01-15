@@ -37,16 +37,16 @@
             {% endif %}
         {% endset %}
         {% set content %}
-            <div class="card-courses">
-                <ul class="list-group list-group-flush">
-                    {% for row in item.courses %}
-                        <li class="list-group-item">
-                            <img src="{{ row.icon }}" width="32px">
-                            <a href="{{ row.link }}">{{ row.name }}</a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
+
+            <ul class="list-group list-group-flush">
+                {% for row in item.courses %}
+                    <li class="list-group-item">
+                        <img src="{{ row.icon }}" width="32px">
+                        <a href="{{ row.link }}">{{ row.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+
 
             {% if item.student_info %}
                 {% if (item.student_info.progress is not null) and (item.student_info.score is not null) %}

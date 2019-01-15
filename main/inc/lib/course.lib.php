@@ -4095,8 +4095,11 @@ class CourseManager
             $params['image'] = $image;
             $params['title'] = $course_info['title'];
             $params['title_cut'] = $params['title'];
+
             $params['category'] = $course_info['categoryName'];
             $params['category_code'] = $course_info['categoryCode'];
+            $params['category_id'] = $course_info['categoryId'];
+            $params['color'] = Display::randomColor($params['category_id']);
             $params['teachers'] = $teachers;
 
             if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {

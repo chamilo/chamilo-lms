@@ -1254,7 +1254,9 @@ if (isset($questions) && is_array($questions)) {
         $display = new $ch_type();
         // @todo move this in a function.
         $form->addHtml('<div class="survey_question '.$ch_type.'">');
-        $form->addHtml('<h5 class="title">'.$questionNumber.'. '.strip_tags($question['survey_question']).'</h5>');
+        $form->addHtml('<div style="float:left; font-weight: bold; margin-right: 5px;"> '.$questionNumber.'. </div>');
+        $form->addHtml('<div>'.Security::remove_XSS($question['survey_question']).'</div> ');
+
         $userAnswerData = SurveyUtil::get_answers_of_question_by_user($question['survey_id'], $question['question_id']);
         $finalAnswer = null;
 

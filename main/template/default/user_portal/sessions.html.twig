@@ -4,7 +4,7 @@
     {% for item in session %}
         {% set image %}
             {% if item.category %}
-                <div class="category" style="background: {{ item.color }}">
+                <div class="category" style="background: {{ item.color.color }}; color:{{ item.color.luminosity }}">
                     {{ item.category.name }}
                 </div>
             {% endif %}

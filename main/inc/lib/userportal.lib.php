@@ -1061,7 +1061,6 @@ class IndexManager
         $viewGridCourses = api_get_configuration_value('view_grid_courses') === true;
         $showSimpleSessionInfo = api_get_configuration_value('show_simple_session_info');
         $coursesWithoutCategoryTemplate = '/user_portal/classic_courses.html.twig';
-        $coursesWithCategoryTemplate = '/user_portal/classic_courses_with_category.tpl';
         $showAllSessions = api_get_configuration_value('show_all_sessions_on_my_course_page') === true;
 
         if ($loadHistory) {
@@ -1277,7 +1276,6 @@ class IndexManager
 
             if ($viewGridCourses) {
                 $coursesWithoutCategoryTemplate = '/user_portal/grid_courses.html.twig';
-                $coursesWithCategoryTemplate = '/user_portal/grid_courses_with_category.tpl';
             }
 
             if ($specialCourses) {
@@ -1319,8 +1317,8 @@ class IndexManager
                 $this->tpl->assign('courses', $courses['not_category']);
                 $this->tpl->assign('categories', $courses['in_category']);
 
-                $listCourse = $this->tpl->fetch($this->tpl->get_template($coursesWithCategoryTemplate));
-                $listCourse .= $this->tpl->fetch($this->tpl->get_template($coursesWithoutCategoryTemplate));
+                
+                $listCourse = $this->tpl->fetch($this->tpl->get_template($coursesWithoutCategoryTemplate));
             }
 
             $courseCount = count($specialCourses) + $coursesInCategoryCount + $coursesNotInCategoryCount;

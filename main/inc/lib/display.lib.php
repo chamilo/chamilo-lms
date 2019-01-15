@@ -2738,8 +2738,33 @@ HTML;
             $show_learnpath
         );
     }
-    public static function randomColor($id){
-        $color = substr(md5(time()*$id), 0, 6);
-        return '#'.$color; // example: #fc443a
+
+    public static function randomColor($id)
+    {
+        static $colors = [];
+
+        if (!empty($colors[$id])) {
+            return $colors[$id];
+        } else {
+            $color = substr(md5(time() * $id), 0, 6);
+            $c1 = hexdec(substr($color, 0, 2));
+            $c2 = hexdec(substr($color, 2, 2));
+            $c3 = hexdec(substr($color, 4, 2));
+            $luminosity = $c1 + $c2 + $c3;
+
+            $type = "#000000";
+            if ($luminosity < (255 + 255 + 255) / 2) {
+                $type = "#FFFFFF";
+            }
+
+            $result = [
+                'color' => '#' . $color,
+                'luminosity' => $type
+            ];
+            $colors[$id] = $result;
+
+            return $result; // example: #fc443a
+        }
+
     }
 }

@@ -588,6 +588,15 @@ footer {
     flex: auto;
     overflow: hidden;
     break-inside: avoid;
+    display: inline-table;
+    .card-session{
+      .card-title{
+        font-size: 16px;
+        a{
+          color: $grey-800;
+        }
+      }
+    }
   }
 }
 

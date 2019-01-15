@@ -119,7 +119,8 @@ class bbb
                 $this->url = str_replace($this->protocol, '', $this->url);
                 $urlWithProtocol = $bbb_host;
             } else {
-                $urlWithProtocol = '://'.$bbb_host;
+                // We asume it's an http, if user wants to use https host must include the protocol.
+                $urlWithProtocol = 'http://'.$bbb_host;
             }
 
             // Setting BBB api
@@ -605,6 +606,7 @@ class bbb
             $url = $this->api->getJoinMeetingURL($joinParams);
             $url = $this->protocol.$url;
         }
+
         if ($this->debug) {
             error_log("return url :".$url);
         }

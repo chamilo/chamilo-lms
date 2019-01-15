@@ -1097,6 +1097,7 @@ class IndexManager
                 $useUserLanguageFilterIfAvailable
             );
 
+
             // Display courses.
             $courses = CourseManager::returnCourses(
                 $user_id,
@@ -1211,50 +1212,12 @@ class IndexManager
                 }
             }
 
+            $courseCompleteList = array_merge($courseCompleteList, $specialCourses);
+            $courseCompleteList = array_merge($courseCompleteList, $courses['not_category']);
 
-            if ($specialCourses) {
-                if ($categoryCodeFilter) {
-                    $specialCourses = self::filterByCategory(
-                        $specialCourses,
-                        $categoryCodeFilter
-                    );
-                }
-                $this->tpl->assign('courses', $specialCourses);
-                $specialCourseList = $this->tpl->fetch(
-                    $this->tpl->get_template($coursesWithoutCategoryTemplate)
-                );
-                $courseCompleteList = array_merge($courseCompleteList, $specialCourses);
-            }
-
-            if ($courses['in_category'] || $courses['not_category']) {
-                foreach ($courses['in_category'] as $courseData) {
-                    if (!empty($courseData['courses'])) {
-                        $coursesInCategoryCount += count($courseData['courses']);
-                        $courseCompleteList = array_merge($courseCompleteList, $courseData['courses']);
-                    }
-                }
-
-                $coursesNotInCategoryCount += count($courses['not_category']);
-                $courseCompleteList = array_merge($courseCompleteList, $courses['not_category']);
-
-                if ($categoryCodeFilter) {
-                    $courses['in_category'] = self::filterByCategory(
-                        $courses['in_category'],
-                        $categoryCodeFilter
-                    );
-                    $courses['not_category'] = self::filterByCategory(
-                        $courses['not_category'],
-                        $categoryCodeFilter
-                    );
-                }
-
-                $this->tpl->assign('courses', $courses['not_category']);
-                $this->tpl->assign('categories', $courses['in_category']);
-
-                
-                $listCourse = $this->tpl->fetch($this->tpl->get_template($coursesWithoutCategoryTemplate));
-            }
-
+            
+            $this->tpl->assign('courses', $courseCompleteList);
+            $listCourse = $this->tpl->fetch($this->tpl->get_template($coursesWithoutCategoryTemplate));
             $courseCount = count($specialCourses) + $coursesInCategoryCount + $coursesNotInCategoryCount;
         }
 

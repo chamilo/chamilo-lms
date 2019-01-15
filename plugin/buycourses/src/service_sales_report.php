@@ -29,7 +29,7 @@ $form = new FormValidator('search', 'get');
 if ($form->validate()) {
     $selectedStatus = $form->getSubmitValue('status');
     $searchTerm = $form->getSubmitValue('user');
-    
+
     if ($selectedStatus === false) {
         $selectedStatus = BuyCoursesPlugin::SALE_STATUS_PENDING;
     }

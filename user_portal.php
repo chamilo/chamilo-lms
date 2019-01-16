@@ -237,15 +237,15 @@ if (api_get_setting('go_to_course_after_login') === 'true') {
     }
 }
 
-/*$showWelcomeCourse = false;
+$showWelcomeCourse = false;
 // Show the chamilo mascot
-if (empty($courseAndSessions['html']) && !isset($_GET['history'])) {
+if (empty($courseAndSessions['html_courses']) && !isset($_GET['history'])) {
     $controller->setWelComeCourse();
     $showWelcomeCourse = true;
 }
 
 
-$controller->tpl->assign('show_welcome_course', $showWelcomeCourse);*/
+$controller->tpl->assign('show_welcome_course', $showWelcomeCourse);
 $controller->tpl->assign('html_sessions', $courseAndSessions['html_sessions']);
 $controller->tpl->assign('html_courses', $courseAndSessions['html_courses']);
 

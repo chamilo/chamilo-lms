@@ -3,7 +3,11 @@
 {% block page_content %}
     {% autoescape false %}
 
-       <nav>
+        {% if show_welcome_course %}
+            {% include '@ChamiloTheme/Layout/welcome_to_course.html.twig' %}
+        {% endif %}
+
+        <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
                 <a class="nav-item nav-link active" id="nav-courses-tab" data-toggle="tab" href="#nav-courses" role="tab" aria-controls="nav-courses" aria-selected="true">
                     {{ "My Courses"|trans }}
@@ -23,9 +27,7 @@
         </div>
 
 
-        {#{% if show_welcome_course %}
-            {% include '@ChamiloTheme/Layout/welcome_to_course.html.twig' %}
-        {% endif %}#}
+
 
     {% endautoescape %}
 {% endblock %}

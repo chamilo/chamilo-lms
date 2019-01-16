@@ -1,6 +1,8 @@
 {% import '@ChamiloTheme/Macros/box.html.twig' as macro %}
 
 {% autoescape false %}
+    {% if not session is empty %}
+        <div class="grid-session">
     {% for item in session %}
         {% set image %}
             {% if item.category %}
@@ -89,4 +91,6 @@
         </div>
 
     {% endfor %}
+        </div>
+        {% endif %}
 {% endautoescape %}

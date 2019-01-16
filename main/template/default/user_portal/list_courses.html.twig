@@ -3,7 +3,7 @@
 {% autoescape false %}
 
 {% if not courses is empty %}
-    <div class="course-list">
+    <div class="grid-course">
     {% for item in courses %}
         {% set image %}
             {% if item.category %}
@@ -67,7 +67,7 @@
         {% set content %}
             <div class="list-teachers">
                 {% if item.teachers|length > 0 %}
-                    {{ 'teacher.png' | img(16, 'Professor'|get_lang ) }}
+                    <i class="fas fa-user-tie"></i>
                     {% for teacher in item.teachers %}
                         {% set counter = counter + 1 %}
                         {% if counter > 1 %} | {% endif %}
@@ -101,10 +101,9 @@
             </div>
 
         {% endset %}
-
-        {{ macro.box_course_classic(item.course_id, title, content, image, item.is_special_course) }}
-
-
+        <div class="item-course">
+            {{ macro.box_course_classic(item.course_id, title, content, image, item.is_special_course) }}
+        </div>
     {% endfor %}
     </div>
 {% endif %}

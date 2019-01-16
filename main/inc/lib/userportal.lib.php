@@ -1058,17 +1058,17 @@ class IndexManager
         $loadHistory = false
     ) {
         $gameModeIsActive = api_get_setting('gamification_mode');
-        //$viewGridCourses = api_get_configuration_value('view_grid_courses') === true;
+
         $showSimpleSessionInfo = api_get_configuration_value('show_simple_session_info');
-        $coursesWithoutCategoryTemplate = '/user_portal/list_courses.html.twig';
+        $coursesTemplate = '/user_portal/list_courses.html.twig';
         $showAllSessions = api_get_configuration_value('show_all_sessions_on_my_course_page') === true;
 
         if ($loadHistory) {
             // Load sessions in category in *history*
-            $session_categories = UserManager::get_sessions_by_category($user_id, true);
+            $sessionCategories = UserManager::get_sessions_by_category($user_id, true);
         } else {
             // Load sessions in category
-            $session_categories = UserManager::get_sessions_by_category($user_id, false);
+            $sessionCategories = UserManager::get_sessions_by_category($user_id, false);
         }
 
         $sessionCount = 0;
@@ -1083,8 +1083,6 @@ class IndexManager
         $studentInfoScore = !empty($studentInfo['score']) && $studentInfo['score'] === true;
         $studentInfoCertificate = !empty($studentInfo['certificate']) && $studentInfo['certificate'] === true;
         $courseCompleteList = [];
-        $coursesInCategoryCount = 0;
-        $coursesNotInCategoryCount = 0;
         $listCourse = '';
         $specialCourseList = '';
 
@@ -1215,22 +1213,21 @@ class IndexManager
             $courseCompleteList = array_merge($courseCompleteList, $specialCourses);
             $courseCompleteList = array_merge($courseCompleteList, $courses['not_category']);
 
-
             $this->tpl->assign('courses', $courseCompleteList);
-            $listCourse = $this->tpl->fetch($this->tpl->get_template($coursesWithoutCategoryTemplate));
-            $courseCount = count($specialCourses) + $coursesInCategoryCount + $coursesNotInCategoryCount;
+            $listCourse = $this->tpl->fetch($this->tpl->get_template($coursesTemplate));
+            $courseCount = count($courseCompleteList);
         }
 
 
-        $sessionsList = '';
+        $listSessions = null;
 
-        $collapsable = api_get_configuration_value('allow_user_session_collapsable');
+        /*$collapsable = api_get_configuration_value('allow_user_session_collapsable');
         $collapsableLink = '';
         if ($collapsable) {
             $collapsableLink = api_get_path(WEB_PATH).'user_portal.php?action=collapse_session';
-        }
+        }*/
 
-        $extraFieldValue = new ExtraFieldValue('session');
+        //$extraFieldValue = new ExtraFieldValue('session');
         if ($showSessions) {
             $coursesListSessionStyle = api_get_configuration_value('courses_list_session_title_link');
             $coursesListSessionStyle = $coursesListSessionStyle === false ? 1 : $coursesListSessionStyle;
@@ -1245,8 +1242,8 @@ class IndexManager
             // Get timestamp in UTC to compare to DB values (in UTC by convention)
             $session_now = strtotime(api_get_utc_datetime(time()));
 
-            if (is_array($session_categories)) {
-                foreach ($session_categories as $session_category) {
+            if (is_array($sessionCategories)) {
+                foreach ($sessionCategories as $session_category) {
                         // Independent sessions
                         foreach ($session_category['sessions'] as $session) {
                             $session_id = $session['session_id'];
@@ -1264,7 +1261,7 @@ class IndexManager
                             $count_courses_session = 0;
 
                             // Loop course content
-                            $html_courses_session = [];
+                            $list_courses_session = [];
                             $atLeastOneCourseIsVisible = false;
                             $markAsOld = false;
                             $markAsFuture = false;
@@ -1380,7 +1377,7 @@ class IndexManager
                                                     }
                                                 }
                                             }
-                                            $html_courses_session[] = $course_session;
+                                            $list_courses_session[] = $course_session;
                                         }
                                     }
                                     $count_courses_session++;
@@ -1389,7 +1386,7 @@ class IndexManager
 
                             // No courses to show.
                             if ($atLeastOneCourseIsVisible === false) {
-                                if (empty($html_courses_session)) {
+                                if (empty($list_courses_session)) {
                                     continue;
                                 }
                             }
@@ -1413,7 +1410,7 @@ class IndexManager
                                 $params['date'] = $session_box['dates'];
                                 $params['duration'] = isset($session_box['duration']) ? ' '.$session_box['duration'] : null;
                                 $params['show_actions'] = SessionManager::cantEditSession($session_id);
-
+/*
                                 if ($collapsable) {
                                     $collapsableData = Sessionmanager::getCollapsableData(
                                         $user_id,
@@ -1423,7 +1420,7 @@ class IndexManager
                                     );
                                     $params['collapsed'] = $collapsableData['collapsed'];
                                     $params['collapsable_link'] = $collapsableData['collapsable_link'];
-                                }
+                                }*/
                                 $params['image'] = $session_box['image'];
                                 $params['url'] = $session_box['url'];
                                 $params['show_description'] = $session_box['show_description'] == 1 && $portalShowDescription;
@@ -1434,9 +1431,9 @@ class IndexManager
                                 $params['num_users'] = $session_box['num_users'];
                                 $params['num_courses'] = $session_box['num_courses'];
                                 $params['course_categories'] = CourseManager::getCourseCategoriesFromCourseList(
-                                    $html_courses_session
+                                    $list_courses_session
                                 );
-                                $params['courses'] = $html_courses_session;
+                                $params['courses'] = $list_courses_session;
                                 $params['is_old'] = $markAsOld;
                                 $params['is_future'] = $markAsFuture;
                                 $params['category'] = $session_box['category'];
@@ -1445,7 +1442,7 @@ class IndexManager
 
                                 if ($showSimpleSessionInfo) {
                                     $params['subtitle'] = self::getSimpleSessionDetails(
-                                        $session_box['coach'],
+                                        $session_box['coach_name'],
                                         $session_box['dates'],
                                         isset($session_box['duration']) ? $session_box['duration'] : null
                                     );
@@ -1484,11 +1481,11 @@ class IndexManager
 
                 $this->tpl->assign('all_courses', $allCoursesInSessions);
                 $this->tpl->assign('session', $listSession);
-                $this->tpl->assign('show_tutor', (api_get_setting('show_session_coach') === 'true' ? true : false));
+                //$this->tpl->assign('show_tutor', (api_get_setting('show_session_coach') === 'true' ? true : false));
                 $this->tpl->assign('gamification_mode', $gameModeIsActive);
-                $this->tpl->assign('remove_session_url', api_get_setting('session.remove_session_url'));
+                //$this->tpl->assign('remove_session_url', api_get_setting('session.remove_session_url'));
 
-                $sessionsList = $this->tpl->fetch(
+                $listSessions = $this->tpl->fetch(
                     $this->tpl->get_template('/user_portal/list_sessions.html.twig')
                 );
             }
@@ -1496,10 +1493,10 @@ class IndexManager
 
         return [
             'courses' => $courseCompleteList,
-            'sessions' => $session_categories,
-            'html_special' => trim($specialCourseList),
+            'sessions' => $listSession,
+            'session_category' => $sessionCategories,
             'html_courses' => trim($listCourse),
-            'html_sessions' => trim($sessionsList),
+            'html_sessions' => trim($listSessions),
             'session_count' => $sessionCount,
             'course_count' => $courseCount,
         ];
@@ -1544,10 +1541,10 @@ class IndexManager
 
         if ($load_history) {
             // Load sessions in category in *history*
-            $session_categories = UserManager::get_sessions_by_category($user_id, true);
+            $sessionCategories = UserManager::get_sessions_by_category($user_id, true);
         } else {
             // Load sessions in category
-            $session_categories = UserManager::get_sessions_by_category($user_id, false);
+            $sessionCategories = UserManager::get_sessions_by_category($user_id, false);
         }
 
         $html = '';
@@ -1608,7 +1605,7 @@ class IndexManager
         }
 
         $listCoursesInSession = [];
-        if (is_array($session_categories)) {
+        if (is_array($sessionCategories)) {
             // all courses that are in a session
             $listCoursesInSession = SessionManager::getNamedSessionCourseForCoach($user_id);
         }
@@ -1700,7 +1697,7 @@ class IndexManager
 
         return [
             'html' => $html,
-            'sessions' => $session_categories,
+            'sessions' => $sessionCategories,
             'courses' => $listCoursesInfo,
             'session_count' => $sessionCount,
             'course_count' => $courseCount,

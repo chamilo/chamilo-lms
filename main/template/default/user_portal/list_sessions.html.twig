@@ -24,7 +24,22 @@
                 <a href="{{ item.url }}" class="" title="{{ item.title }}">{{ item.title }}</a>
             </h5>
 
-            <div class="card-date">{{ item.date }}</div>
+            <div class="card-date d-flex flex-row bd-highlight">
+                <span class="date px-2 bd-highlight">
+                    <i class="far fa-calendar"></i>
+                    {{ item.date }}
+                </span>
+            </div>
+            <div class="card-details d-flex flex-row bd-highlight mb-3">
+                <span class="num-users px-2 bd-highlight">
+                    <i class="fas fa-user"></i>
+                    {{ item.num_users }}
+                </span>
+                <span class="num-courses px-2 bd-highlight">
+                    <i class="fas fa-book"></i>
+                    {{ item.num_courses }}
+                </span>
+            </div>
             {#{% if item.description %}
                 <div class="card-description">
                     {{ item.description }}

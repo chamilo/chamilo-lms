@@ -770,7 +770,7 @@ footer {
   }
 }
 
-/******************* Accordion B4 *****************/
+/******************* ACCORDION B4 *****************/
 
 .accordion-b4 {
   .card {
@@ -852,7 +852,7 @@ footer {
   }
 }
 
-/************* SOCIAL *************/
+/****** SOCIAL ******/
 .profile {
   .profile-bg {
     position: absolute;
@@ -913,7 +913,9 @@ footer {
     font-size: 12px;
   }
 }
-/***** CALENDAR ******/
+
+/****** CALENDAR ******/
+
 .fc-day-grid-event{
   border: none;
   padding: 6px 12px 6px 22px;
@@ -922,7 +924,9 @@ footer {
   cursor: pointer;
   border-radius: 4px;
 }
-/********* ACTIONS **********/
+
+/****** ACTIONS ******/
+
 .actions {
   background: #ffffff;
   border: 1px solid #dddddd;
@@ -980,7 +984,8 @@ footer {
     }
   }
 }
-/****** EXERCISE *********/
+/****** EXERCISE ******/
+
 .card-exercise{
   margin-bottom: 20px;
   .list-exercise{
@@ -1027,7 +1032,6 @@ footer {
           border-radius: 5px;
         }
       }
-
       .checkradios
       {
         -webkit-appearance: none;
@@ -1041,7 +1045,6 @@ footer {
         height: 30px;
         width: 30px;
         border: 1px solid #cdcdcd;
-
         cursor: pointer;
         margin-right: 7px;
         outline: none;
@@ -1268,7 +1271,8 @@ footer {
   }
 }
 
-/*** GALERY ***/
+/****** GALERY ******/
+
 .gallery{
   .img-gallery {
     height: 100%;
@@ -1301,7 +1305,7 @@ footer {
   }
 }
 
-/*** EXERCISE RESULTS ***/
+/****** EXERCISE RESULTS ******/
 
 .ribbon {
   display: inline-block;
@@ -1465,7 +1469,7 @@ footer {
 .career p {
   padding-left: 10px;
 }
-/*** WHOISONLINE ***/
+/****** WHOISONLINE ******/
 
 #whoisonline {
   .items-user {
@@ -1485,7 +1489,8 @@ footer {
   }
 }
 
-/***** FORM REGISTER *****/
+/****** FORM REGISTER ******/
+
 .terms-conditions {
   padding: 15px 10px;
   background-color: #DDD;
@@ -1658,7 +1663,8 @@ footer {
   }
 }
 
-/***** BLOG *****/
+/****** BLOG ******/
+
 .blog {
   padding: 0;
   .title-post {
@@ -1716,7 +1722,8 @@ footer {
   }
 }
 
-/***** SOCIAL MEDIA *****/
+/****** SOCIAL MEDIA ******/
+
 .share-social-media {
   background-color: #FFF;
   margin-bottom: 5px;
@@ -1771,7 +1778,7 @@ footer {
   }
 }
 
-/**** FORUM CSS ****/
+/****** FORUM CSS ******/
 
 .forum{
   .number-post {
@@ -1836,3 +1843,86 @@ footer {
     }
   }
 }
+
+/****** ABOUT COURSE AND SESSION ******/
+.about{
+  .share-social-media {
+    padding: 10px 0 0 0;
+    .sharing-buttons {
+      list-style: none;
+      margin: 0 0 10px 0;
+      padding: 0;
+      li{
+        padding-left: 0;
+      }
+    }
+  }
+  .topics{
+    .title-info {
+      margin: 30px 0 20px 0;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 15px;
+    }
+  }
+  .course-tags{
+    width: 100%;
+    margin-top: 10px;
+    li{
+      span{
+        position: relative;
+        display: inline-block;
+        padding: 0 3px;
+        height: 20px;
+        line-height: 20px;
+        font-weight: 600 !important;
+        background: #D7E3E6 !important;
+        border-radius: 0 3px 3px 0 !important;
+        -webkit-transition: none 0.15s ease-in-out;
+        -o-transition: none 0.15s ease-in-out;
+        transition: none 0.15s ease-in-out;
+        &:before{
+          display: inline-block;
+          content: "";
+          top: 0;
+          left: -8px;
+          position: absolute;
+          width: 0;
+          height: 0;
+          border-right: 8px solid #D7E3E6;
+          border-bottom: 10px solid transparent;
+          border-top: 10px solid transparent;
+        }
+        &:after{
+          z-index: 1;
+          content: "";
+          top: 8px;
+          left: -3px;
+          position: absolute;
+          width: 4px;
+          height: 4px;
+          background-color: #F2F2F2;
+          border-radius: 10px;
+        }
+      }
+    }
+  }
+  .course-short{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    ul{
+      display: inline-block;
+      width: 100%;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      li{
+        display: inline-block;
+        &.author{
+          font-weight: bold;
+          margin-right: 5px;
+        }
+      }
+    }
+  }
+}
+

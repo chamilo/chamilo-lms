@@ -670,6 +670,23 @@ footer {
     left: 0.5rem;
     font-size: 12px;
   }
+  .card-body{
+    .card-date{
+      font-size: 12px;
+      color: $grey-600;
+    }
+    .card-details{
+      font-size: 12px;
+      color: $grey-600;
+    }
+    .card-list{
+      .list-group{
+        .list-group-item{
+          padding: 0.75rem;
+        }
+      }
+    }
+  }
 }
 .card-course{
   transform: perspective(1px) translateZ(0);
@@ -1630,6 +1647,185 @@ footer {
       width: 100%;
       height: 100%;
       border: none;
+    }
+  }
+}
+
+/***** BLOG *****/
+.blog {
+  padding: 0;
+  .title-post {
+    font-size: 30px;
+    margin-bottom: 10px;
+    letter-spacing: 0;
+    margin-top: 5px;
+  }
+  .media{
+    .avatar {
+      width: 70px;
+    }
+  }
+  .comments-post {
+    margin-top: 50px;
+    margin-bottom: 20px;
+    .title {
+      padding-bottom: 20px;
+    }
+    .media {
+      border-top: 1px solid #eaeaea;
+      padding-bottom: 10px;
+      padding-top: 10px;
+      margin-bottom: 10px;
+      overflow: visible;
+      .media-body {
+        overflow: visible;
+      }
+    }
+  }
+  .content-post {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    p {
+      font-size: 15px;
+    }
+  }
+  .info-post {
+    display: block;
+    border-bottom: #eaeaea 1px dotted;
+    padding-bottom: 10px;
+    span {
+      margin-right: 20px;
+      color: #888;
+    }
+  }
+  .article-post {
+    margin-bottom: 20px;
+    margin-top: 10px;
+  }
+  article{
+    header{
+      padding-top: 0;
+    }
+  }
+}
+
+/***** SOCIAL MEDIA *****/
+.share-social-media {
+  background-color: #FFF;
+  margin-bottom: 5px;
+  padding: 10px 5px 5px 5px;
+  font-size: 12px;
+  .sharing-buttons {
+    list-style: none;
+    margin: 0 0 10px 0;
+    padding: 0;
+    li {
+      display: inline-block;
+      padding-right: 5px;
+      padding-left: 5px;
+    }
+  }
+}
+
+.btn-facebook{
+  &.btn-inverse {
+    color: #3B5998;
+    background-color: transparent;
+    border-color: rgba(59, 89, 152, 0.3);
+    &:hover{
+      color: #FFF;
+      background-color: #3B5998;
+      border-color: #3B5998;
+    }
+  }
+}
+.btn-twitter{
+  &.btn-inverse {
+    color: #00ACED;
+    background-color: transparent;
+    border-color: rgba(0, 172, 237, 0.3);
+    &:hover {
+      color: #FFF;
+      background-color: #00ACED;
+      border-color: #00ACED;
+    }
+  }
+}
+.btn-linkedin{
+  &.btn-inverse {
+    color: #0077b5;
+    background-color: transparent;
+    border-color: rgba(7, 119, 181, 0.3);
+    &:hover{
+      color: #FFF;
+      background-color: #0077b5;
+      border-color: #0077b5;
+    }
+  }
+}
+
+/**** FORUM CSS ****/
+
+.forum{
+  .number-post {
+    background-color: #F7F7F9;
+    border: 1px solid #E1E1E1;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+    p {
+      padding: 0;
+      margin: 0;
+    }
+  }
+  .title {
+    margin: 0;
+    padding: 0;
+    font-size: 18px;
+  }
+  .description {
+    font-size: 14px;
+    color: #666666;
+  }
+}
+
+.forum-post {
+  border-color: #dddddd !important;
+  .title-username {
+    text-align: center;
+    font-size: 16px;
+    margin-bottom: 5px;
+    margin-top: 0;
+  }
+  .post-date {
+    font-size: 12px;
+    text-align: center;
+    color: #666666;
+  }
+  .post-closed {
+    padding: 5px;
+    text-align: center;
+  }
+  .post-header {
+    border-bottom: 1px solid #dddddd;
+    margin-bottom: 20px;
+  }
+  .post-body {
+    color: #666666;
+    img {
+      display: block;
+      max-width: 100%;
+    }
+  }
+  .tools-icons {
+    text-align: center;
+    border: 1px solid #dddddd;
+    padding: 5px;
+    a {
+      padding: 2px;
+      white-space: normal;
     }
   }
 }

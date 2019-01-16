@@ -1999,16 +1999,6 @@ table#skill_holder {
  *  LOGIN AND LANGUAGE FORM                          *
  *****************************************************/
 
-#login_fail {
-    margin-left: 20px;
-    padding: 4px;
-    border: 1px solid #f00;
-    background-color: #fff;
-    font-size: 12px;
-    color: #f00;
-    width: 185px;
-}
-
 input.mainoption {
     font-weight: bold;
     border: 1px solid #E1E1E0;
@@ -2153,10 +2143,6 @@ div#no-data-view div.controls {
     display: block;
     text-indent: -9000px;
     z-index: 1;
-}
-
-a:active {
-    outline: none;
 }
 
 .skills-profiles, .skills-users, .skills-skills {
@@ -2584,10 +2570,6 @@ tr.forum_category_header a {
     background: #ECF0F1;
 }
 
-.subnav .nav > li > .logout {
-    padding-top: 8px;
-}
-
 .subnav-fixed {
     position: fixed;
     top: 0;
@@ -2596,8 +2578,6 @@ tr.forum_category_header a {
     z-index: 1030;
     border-color: #d5d5d5;
     border-width: 0 0 1px; /* drop the border on the fixed edges */
-    -webkit-border-radius: 0;
-    -moz-border-radius: 0;
     border-radius: 0;
 }
 
@@ -2639,35 +2619,6 @@ tr.forum_category_header a {
     display: inline-block;
 }
 
-.boot-tooltip {
-    cursor: pointer;
-}
-
-/*
-    link
-*/
-
-.link_category {
-    background-color: #FFFFFF;
-    margin-bottom: 5px;
-}
-
-.link {
-    margin-top: 15px;
-}
-
-.link .list-group-item-heading a {
-    text-decoration: none;
-}
-
-.link .list-group-item-text {
-    font-size: 12px;
-}
-
-.link .check-link {
-    margin-left: 5px;
-}
-
 /*
   Glossary
 */
@@ -2678,60 +2629,6 @@ i.size-32.icon-new-glossary-term {
 
 i.size-32.icon-new-note {
     background-image: url('../../public/img/icons/32/new_note.png');
-}
-
-/* Data table */
-
-.dataTables_wrapper {
-    clear: both;
-}
-
-.dataTables_length {
-    float: left;
-    width: 40%;
-}
-
-.dataTables_filter {
-    text-align: right;
-}
-
-.dataTables_info {
-    float: left;
-    width: 60%;
-}
-
-.dataTables_paginate {
-    float: right;
-    text-align: right;
-}
-
-.dataTables_wrapper label input, .dataTables_wrapper label textarea, .dataTables_wrapper label select {
-    display: inline-block;
-}
-
-.dataTables.display {
-    clear: both;
-    margin: 0 auto;
-    width: 100%;
-}
-
-.dataTables_wrapper .paginate_disabled_previous, .dataTables_wrapper .paginate_enabled_previous {
-    padding-left: 23px;
-    background: url("../../public/img/action_prev.png") no-repeat scroll left top;
-}
-
-.dataTables_wrapper .paginate_disabled_next, .dataTables_wrapper .paginate_enabled_next {
-    margin-left: 10px;
-    padding-right: 23px;
-    background: url("../../public/img/action_next.png") no-repeat scroll left top;
-}
-
-.dataTables_wrapper .paginate_disabled_previous, .dataTables_wrapper .paginate_disabled_next {
-    opacity: 0.4;
-}
-
-.nav-list img {
-    margin-right: 6px;
 }
 
 /* Only for Firefox */
@@ -2787,13 +2684,6 @@ i.size-32.icon-new-note {
     }
 }
 
-/*
- * work
- */
-i.size-32.icon-new-work {
-    background-image: url('../../public/img/icons/32/new_work.png');
-}
-
 /* Default skill partition colors */
 
 #filepaths input {
@@ -2817,42 +2707,28 @@ i.size-32.icon-new-work {
     border: 0;
 }
 
-.btn-invitations {
-    margin-left: 110px;
-}
-
 .btn-msg {
-    background-position: 3px;
-    padding: 2px 4px;
-    padding-left: 22px;
+    padding: 2px 4px 2px 22px;
     margin-bottom: 10px;
     font-size: 11px;
     line-height: 14px;
-    background-color: #e6e6e6;
+    background: #e6e6e6 3px;
 }
 
 .btn-inv {
-    background-position: 3px;
-    padding: 2px 4px;
-    padding-left: 22px;
+    padding: 2px 4px 2px 22px;
     margin-bottom: 10px;
     font-size: 11px;
     line-height: 14px;
-    background-color: #e6e6e6;
+    background: #e6e6e6 3px;
 }
 
 .btn-inv-off {
-    background-position: 3px;
-    padding: 2px 4px;
-    padding-left: 22px;
+    padding: 2px 4px 2px 22px;
     margin-bottom: 10px;
     font-size: 11px;
     line-height: 14px;
-    background-color: #e6e6e6;
-}
-
-.password-verdict {
-    font-size: 12px;
+    background: #e6e6e6 3px;
 }
 
 #password_progress {
@@ -2861,16 +2737,6 @@ i.size-32.icon-new-work {
 
 .jqgrid_whitespace {
     white-space: normal !important;
-}
-
-/* display the cookie usage warning validation */
-
-#settings .panel .admin-edit-block {
-    display: none;
-}
-
-#settings .panel:hover .admin-edit-block {
-    display: block;
 }
 
 /***** Survey *****/
@@ -2947,7 +2813,6 @@ i.size-32.icon-new-work {
 }
 
 .survey_question_options {
-    /* 264269 4271b5 E5EDF9 */
     background-color: #FFF;
     color: #000;
     padding: 5px; /*border: 1px solid #264269;*/
@@ -3073,10 +2938,7 @@ i.size-32.icon-new-work {
 
 .openbadges-tablet .table thead {
     background-color: #E2ECEB;
-    border-top: 1px solid #677F8F;
-    border-bottom: 1px solid #677F8F;
-    border-left: 1px solid #677F8F;
-    border-right: 1px solid #677F8F;
+    border: 1px solid #677F8F;
     font-size: 16px;
     color: #456176;
 }
@@ -3137,10 +2999,6 @@ i.size-32.icon-new-work {
 
 .name-badge {
     font-size: 16px;
-}
-
-.issued .thumbnail {
-    border: none;
 }
 
 /* Social Profile */
@@ -3209,10 +3067,6 @@ i.size-32.icon-new-work {
     white-space: initial;
     overflow: visible;
     cursor: pointer;
-}
-
-#skillList .dropdown-menu {
-    top: 30px;
 }
 
 .social-post .mediaPost {
@@ -3363,15 +3217,6 @@ i.size-32.icon-new-work {
     height: 20px;
     width: 70%;
 }
-
-.bottom_actions {
-    display: block;
-}
-
-.bottom_actions .form-group {
-    margin-bottom: 10px;
-}
-
 
 /**
  * Modal for user avatar preview
@@ -3600,8 +3445,6 @@ ul.exercise-draggable-answer .touch-items:hover {
     border: dotted #dddddd 2px;
     border-radius: 4px;
     color: #666666;
-
-    /* Extra */
     display: inline-block;
     width: 85%;
     margin-bottom: 0;
@@ -3610,14 +3453,12 @@ ul.exercise-draggable-answer .touch-items:hover {
 .question_options .droppable-item {
     background-color: #84bd00;
     color: #FFF;
-    /* padding: 10px;*/
     padding: 3px 0 3px 5px;
 }
 
 .question_options .droppable-item .number {
     font-size: 16px;
     font-weight: bold;
-    /*width: 30px;*/
     display: inline-block;
 }
 
@@ -3657,89 +3498,6 @@ div#chat-remote-video video {
     display: block;
     height: auto;
     width: 100%;
-}
-
-/* CSS Forum */
-.forum .number-post {
-    background-color: #F7F7F9;
-    border: 1px solid #E1E1E1;
-    border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    padding: 10px;
-    text-align: center;
-}
-
-.forum .number-post p {
-    padding: 0;
-    margin: 0;
-}
-
-.forum .title {
-    margin: 0;
-    padding: 0;
-    font-size: 18px;
-}
-
-.forum .description {
-    font-size: 14px;
-    color: #666666;
-}
-
-.forum_display .sticky {
-    background: #FCF8E3;
-    border-color: #FAEBCC !important;
-}
-
-.forum-post {
-    border-color: #dddddd !important;
-}
-
-.forum-post .thumbnail {
-    margin-bottom: 5px;
-}
-
-.forum-post .title-username {
-    text-align: center;
-    font-size: 16px;
-    margin-bottom: 5px;
-    margin-top: 0;
-}
-
-.forum-post .post-date {
-    font-size: 12px;
-    text-align: center;
-    color: #666666;
-}
-
-.forum-post .post-closed {
-    padding: 5px;
-    text-align: center;
-}
-
-.forum-post .post-header {
-    border-bottom: 1px solid #dddddd;
-    margin-bottom: 20px;
-}
-
-.forum-post .post-body {
-    color: #666666;
-}
-
-.forum-post .post-body img {
-    display: block;
-    max-width: 100%;
-}
-
-.forum-post .tools-icons {
-    text-align: center;
-    border: 1px solid #dddddd;
-    padding: 5px;
-}
-
-.forum-post .tools-icons a {
-    padding: 2px;
-    white-space: normal;
 }
 
 /* Sequence */
@@ -3844,14 +3602,6 @@ div#chat-remote-video video {
     font-size: 12px;
 }
 
-.section-title-sequence {
-    font-size: 22px;
-    color: #333333;
-    margin-bottom: 30px;
-    padding: 0;
-    border-bottom: 1px solid #E5e5e5;
-}
-
 #children {
     text-align: center;
 }
@@ -3890,63 +3640,7 @@ div#chat-remote-video video {
     font-size: 12px;
 }
 
-/**** SOCIAL MEDIA ****/
-.share-social-media {
-    background-color: #FFF;
-    margin-bottom: 5px;
-    padding: 10px 5px 5px 5px;
-    font-size: 12px;
-}
 
-.share-social-media .sharing-buttons {
-    list-style: none;
-    margin: 0 0 10px 0;
-    padding: 0;
-}
-
-.share-social-media .sharing-buttons li {
-    display: inline-block;
-    padding-right: 5px;
-    padding-left: 5px;
-}
-
-.btn-facebook.btn-inverse {
-    color: #3B5998;
-    background-color: transparent;
-    border-color: rgba(59, 89, 152, 0.3);
-}
-
-.btn-facebook.btn-inverse:hover {
-    color: #FFF;
-    background-color: #3B5998;
-    border-color: #3B5998;
-}
-
-.btn-twitter.btn-inverse {
-    color: #00ACED;
-    background-color: transparent;
-    border-color: rgba(0, 172, 237, 0.3);
-}
-
-.btn-twitter.btn-inverse:hover {
-    color: #FFF;
-    background-color: #00ACED;
-    border-color: #00ACED;
-}
-
-.btn-linkedin.btn-inverse {
-    color: #0077b5;
-    background-color: transparent;
-    border-color: rgba(7, 119, 181, 0.3);
-}
-
-.btn-linkedin.btn-inverse:hover {
-    color: #FFF;
-    background-color: #0077b5;
-    border-color: #0077b5;
-}
-
-/**** END SOCIAL MEDIA ****/
 
 /**** ABOUT SESSION ****/
 
@@ -3960,25 +3654,6 @@ div#chat-remote-video video {
     position: relative;
     width: 100%;
     min-height: 284px;
-}
-
-.label-price, .label-free {
-    background-color: transparent;
-    font-size: 18px;
-    font-weight: 600;
-    margin-top: 10px;
-    padding: 0;
-    display: block;
-    width: 100%;
-    text-align: left;
-}
-
-.label-price {
-    color: #29303b;
-}
-
-.label-free {
-    color: #5cb85c;
 }
 
 #about-course .panel-information ul {
@@ -5046,79 +4721,7 @@ ul#toolnavbox-two li a.btn {
     padding: 10px;
 }
 
-/** BLOG **/
-.blog {
-    padding: 0;
-}
 
-.blog .title-post {
-    font-size: 30px;
-    margin-bottom: 10px;
-    letter-spacing: 0;
-    margin-top: 5px;
-}
-
-.blog .info-post {
-    display: block;
-    border-bottom: #eaeaea 1px dotted;
-    padding-bottom: 10px;
-}
-
-.blog .info-post span {
-    margin-right: 20px;
-    color: #888;
-}
-
-.blog .content-post {
-    margin-top: 15px;
-    margin-bottom: 15px;
-}
-
-.blog .content-post p {
-    font-size: 15px;
-}
-
-.blog .article-post {
-    margin-bottom: 20px;
-    margin-top: 10px;
-}
-
-.blog .media .avatar {
-    width: 70px;
-}
-
-.blog .comments-post {
-    margin-top: 50px;
-    margin-bottom: 20px;
-}
-
-.blog .comments-post .title {
-    padding-bottom: 20px;
-}
-
-.blog .comments-post .media {
-    border-top: 1px solid #eaeaea;
-    padding-bottom: 10px;
-    padding-top: 10px;
-    margin-bottom: 10px;
-    overflow: visible;
-}
-
-.blog .comments-post .media .media-body {
-    overflow: visible;
-}
-
-.blog article header {
-    padding-top: 0;
-}
-
-.blog .form-inline .form-group label {
-    padding-right: 10px;
-}
-
-.blog .form-inline .form-group .bootstrap-select {
-    margin-right: 10px;
-}
 
 .list-message {
     padding: 0;

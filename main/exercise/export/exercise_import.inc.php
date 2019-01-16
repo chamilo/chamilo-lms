@@ -386,11 +386,9 @@ function qti_parse_file($exercisePath, $file, $questionFile)
     if (!$question_format_supported) {
         Display::addFlash(
             Display::return_message(
-                get_lang(
-                    'Unknown question format in file %file',
-                    [
-                        '%file' => $questionFile,
-                    ]
+                vsprintf(
+                    'Unknown question format in file %s',
+                    [$questionFile]
                 ),
                 'error'
             )

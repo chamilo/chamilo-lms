@@ -95,7 +95,7 @@ if (isset($_GET['sso'])) {
     $keyCloackUserName = $auth->getNameId();
     $userInfo = api_get_user_info_from_username($keyCloackUserName);
     $attributes = $auth->getAttributes();
-
+    $userId = 0;
     if (!empty($attributes) && empty($userInfo)) {
         $firstName = reset($attributes['FirstName']);
         $lastName = reset($attributes['LastName']);
@@ -119,7 +119,10 @@ if (isset($_GET['sso'])) {
             'keycloak'
         );
     } else {
-        $userId = $userInfo['user_id'];
+        // Only load users that were created using this method.
+        if ($userInfo['auth_source'] === 'keycloak') {
+            $userId = $userInfo['user_id'];
+        }
     }
 
     if (!empty($userId)) {
@@ -135,6 +138,8 @@ if (isset($_GET['sso'])) {
         Session::write('_user', $userInfo);
         Session::write('is_platformAdmin', false);
         Session::write('is_allowedCreateCourse', false);
+    } else {
+        Display::addFlash(Display::return_message(get_lang('InvalidId')));
     }
 
     if (isset($_POST['RelayState']) && \OneLogin\Saml2\Utils::getSelfURL() != $_POST['RelayState']) {
@@ -167,9 +172,7 @@ $template = new Template('');
 
 if (isset($_SESSION['samlUserdata'])) {
     $attributes = Session::read('samlUserdata');
-
     $params = [];
-
     if (!empty($attributes)) {
         $content .= 'You have the following attributes:<br>';
         $content .= '<table class="table"><thead><th>Name</th><th>Values</th></thead><tbody>';

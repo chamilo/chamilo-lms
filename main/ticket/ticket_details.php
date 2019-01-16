@@ -121,7 +121,12 @@ $htmlHeadXtra[] = '<style>
 
 $ticket_id = $_GET['ticket_id'];
 $ticket = TicketManager::get_ticket_detail_by_id($ticket_id);
-if (!isset($ticket['ticket'])) {
+if (!isset($ticket['ticket']) ||
+    // make sure it's either a user assigned to this ticket, or the reporter, or and admin
+    !($ticket['ticket']['assigned_last_user'] == $user_id ||
+      $ticket['ticket']['sys_insert_user_id'] == $user_id ||
+      $isAdmin)
+    ) {
     api_not_allowed(true);
 }
 if (!isset($_GET['ticket_id'])) {
@@ -349,11 +354,12 @@ if ($ticket['ticket']['status_id'] == TicketManager::STATUS_CLOSE) {
 }
 $senderData = get_lang('AddedBy').' '.$ticket['usuario']['complete_name_with_message_link'];
 
+
 echo '<table width="100%" >
         <tr>
           <td colspan="3">
           <h1>'.$title.'</h1>
-          <h2>'.$ticket['ticket']['subject'].'</h2>
+          <h2>'.Security::remove_XSS($ticket['ticket']['subject']).'</h2>
           <p>
             '.$senderData.' '.
             get_lang('Created').' '.
@@ -407,11 +413,12 @@ if ($ticket['ticket']['course_url'] != null) {
             <td colspan="2"></td>
           </tr>';
 }
+
 echo '<tr>
         <td>
         <hr />
         <b>'.get_lang('Description').':</b> <br />
-        '.$ticket['ticket']['message'].'
+        '.Security::remove_XSS($ticket['ticket']['message']).'
         <hr />
         </td>            
      </tr>

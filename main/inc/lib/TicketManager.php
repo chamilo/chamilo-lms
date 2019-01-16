@@ -966,7 +966,7 @@ class TicketManager
 
             if ($isAdmin) {
                 $ticket = [
-                    $icon.' '.$row['subject'],
+                    $icon.' '.Security::remove_XSS($row['subject']),
                     $row['status_name'],
                     $row['start_date'],
                     $row['sys_lastedit_datetime'],
@@ -977,7 +977,7 @@ class TicketManager
                 ];
             } else {
                 $ticket = [
-                    $icon.' '.$row['subject'],
+                    $icon.' '.Security::remove_XSS($row['subject']),
                     $row['status_name'],
                     $row['start_date'],
                     $row['sys_lastedit_datetime'],

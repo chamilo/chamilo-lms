@@ -92,7 +92,7 @@ if (isset($_GET['sso'])) {
         exit;
     }
 
-    $keyCloackUserName = Session::read('samlNameId');
+    $keyCloackUserName = $auth->getNameId();
     $userInfo = api_get_user_info_from_username($keyCloackUserName);
     $attributes = $auth->getAttributes();
 

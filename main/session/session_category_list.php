@@ -149,7 +149,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
             } ?>
         </div>
 
-        <table class="data_table" width="100%">
+        <table class="table" width="100%">
             <tr>
                 <th>&nbsp;</th>
                 <th><a href="<?php echo api_get_self(); ?>?sort=name&order=<?php echo ($sort == 'name') ? $order : 'ASC'; ?>"><?php echo get_lang('SessionCategoryName'); ?></a></th>
@@ -231,8 +231,8 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
         } ?>
         </div>
         <div class="btn-group">
-            <a class="btn btn-default" href="#" onclick="selectAll('idChecked',<?php echo $x; ?>,'true');return false;"><?php echo get_lang('SelectAll'); ?></a>
-            <a class="btn btn-default" href="#" onclick="selectAll('idChecked',<?php echo $x; ?>,'false');return false;"><?php echo get_lang('UnSelectAll'); ?></a>
+            <a class="btn btn-outline-secondary" href="#" onclick="selectAll('idChecked',<?php echo $x; ?>,'true');return false;"><?php echo get_lang('SelectAll'); ?></a>
+            <a class="btn btn-outline-secondary" href="#" onclick="selectAll('idChecked',<?php echo $x; ?>,'false');return false;"><?php echo get_lang('UnSelectAll'); ?></a>
         </div>
         <div class="list-category">
             <select class="selectpicker show-tick form-control" name="action">

@@ -118,6 +118,7 @@ if (isset($_GET['sso'])) {
             '',
             'keycloak'
         );
+        $userInfo = api_get_user_info($userId);
     } else {
         // Only load users that were created using this method.
         if ($userInfo['auth_source'] === 'keycloak') {

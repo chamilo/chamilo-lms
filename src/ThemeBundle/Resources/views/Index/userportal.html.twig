@@ -1,9 +1,9 @@
-{% extends "@ChamiloTheme/Layout/layout_content.html.twig" %}
+{% extends '@ChamiloTheme/Layout/base-layout.html.twig' %}
 
-{% block chamilo_right_column %}
+{% block page_content %}
     {% autoescape false %}
 
-        <nav>
+       <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
                 <a class="nav-item nav-link active" id="nav-courses-tab" data-toggle="tab" href="#nav-courses" role="tab" aria-controls="nav-courses" aria-selected="true">
                     {{ "My Courses"|trans }}
@@ -18,11 +18,7 @@
                 {{ html_courses }}
             </div>
             <div class="tab-pane fade" id="nav-sessions" role="tabpanel" aria-labelledby="nav-sessions-tab">
-
-                <div class="grid-session">
-                    {{ html_sessions }}
-                </div>
-
+                {{ html_sessions }}
             </div>
         </div>
 

@@ -3787,13 +3787,13 @@ class CourseManager
                 if (api_is_platform_admin()) {
                     $params['edit_actions'] .= api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'];
                     if ($load_dirs) {
-                        $params['document'] = '<a id="document_preview_'.$courseId.'_0" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'
+                        $params['document'] = '<a id="document_preview_'.$courseId.'_0" class="document_preview btn btn-outline-secondary btn-sm" href="javascript:void(0);">'
                            .Display::returnFontAwesomeIcon('folder-open').'</a>';
                         $params['document'] .= Display::div('', ['id' => 'document_result_'.$courseId.'_0', 'class' => 'document_preview_container']);
                     }
                 } else {
                     if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED && $load_dirs) {
-                        $params['document'] = '<a id="document_preview_'.$courseId.'_0" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'
+                        $params['document'] = '<a id="document_preview_'.$courseId.'_0" class="document_preview btn btn-outline-secondary btn-sm" href="javascript:void(0);">'
                            .Display::returnFontAwesomeIcon('folder-open').'</a>';
                         $params['document'] .= Display::div('', ['id' => 'document_result_'.$courseId.'_0', 'class' => 'document_preview_container']);
                     }
@@ -4043,7 +4043,7 @@ class CourseManager
             if (api_is_platform_admin()) {
                 $params['edit_actions'] .= api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course_info['code'];
                 if ($load_dirs) {
-                    $params['document'] = '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'
+                    $params['document'] = '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview btn btn-outline-secondary btn-sm" href="javascript:void(0);">'
                                .Display::returnFontAwesomeIcon('folder-open').'</a>';
                     $params['document'] .= Display::div(
                         '',
@@ -4055,7 +4055,7 @@ class CourseManager
                 }
             }
             if ($load_dirs) {
-                $params['document'] = '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'
+                $params['document'] = '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview btn btn-outline-secondary btn-sm" href="javascript:void(0);">'
                     .Display::returnFontAwesomeIcon('folder-open').'</a>';
                 $params['document'] .= Display::div(
                     '',
@@ -4212,13 +4212,13 @@ class CourseManager
             if (api_is_platform_admin()) {
                 $params['edit_actions'] .= api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course_info['code'];
                 if ($load_dirs) {
-                    $params['document'] = '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'
+                    $params['document'] = '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview btn btn-outline-secondary btn-sm" href="javascript:void(0);">'
                                .Display::returnFontAwesomeIcon('folder-open').'</a>';
                     $params['document'] .= Display::div('', ['id' => 'document_result_'.$course_info['real_id'].'_0', 'class' => 'document_preview_container']);
                 }
             }
             if ($load_dirs) {
-                $params['document'] = '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'
+                $params['document'] = '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview btn btn-outline-secondary btn-sm" href="javascript:void(0);">'
                     .Display::returnFontAwesomeIcon('folder-open').'</a>';
                 $params['document'] .= Display::div('', ['id' => 'document_result_'.$course_info['real_id'].'_0', 'class' => 'document_preview_container']);
             }
@@ -4483,7 +4483,7 @@ class CourseManager
                 if ($load_dirs) {
                     $params['document'] .= '<a 
                         id="document_preview_'.$course_info['real_id'].'_'.$course_info['id_session'].'" 
-                        class="document_preview btn btn-default btn-sm" 
+                        class="document_preview btn btn-outline-secondary btn-sm" 
                         href="javascript:void(0);">'.
                         Display::returnFontAwesomeIcon('folder-open').'</a>';
                     $params['document'] .= Display::div('', [

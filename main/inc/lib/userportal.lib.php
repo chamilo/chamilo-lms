@@ -1756,7 +1756,8 @@ class IndexManager
 
         return [
             'courses' => $courseList,
-            'html' => $template->fetch($layout),
+            'html_courses' => $template->fetch($layout),
+            'html_sessions' => null,
             'course_count' => count($courseList),
             'session_count' => $sessionCount,
         ];

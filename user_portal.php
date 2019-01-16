@@ -243,6 +243,7 @@ if (empty($courseAndSessions['html']) && !isset($_GET['history'])) {
     $showWelcomeCourse = true;
 }
 
+
 $controller->tpl->assign('show_welcome_course', $showWelcomeCourse);
 $controller->tpl->assign('html_sessions', $courseAndSessions['html_sessions']);
 $controller->tpl->assign('html_courses', $courseAndSessions['html_courses']);

@@ -94,7 +94,8 @@ $is_visible = DocumentManager::check_visibility_tree(
     api_get_course_info(),
     api_get_session_id(),
     api_get_user_id(),
-    api_get_group_id()
+    api_get_group_id(),
+    false
 );
 
 if (!$is_allowed_to_edit && !$is_visible) {

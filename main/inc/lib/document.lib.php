@@ -3507,11 +3507,12 @@ class DocumentManager
     }
 
     /**
-     * @param int    $doc_id
-     * @param array  $courseInfo
-     * @param int    $sessionId
-     * @param int    $user_id
-     * @param int    $groupId     iid
+     * @param int   $doc_id
+     * @param array $courseInfo
+     * @param int   $sessionId
+     * @param int   $user_id
+     * @param int   $groupId iid
+     * @param bool  $checkParentVisibility
      *
      * @return bool
      */
@@ -3520,7 +3521,8 @@ class DocumentManager
         $courseInfo,
         $sessionId,
         $user_id,
-        $groupId = 0
+        $groupId = 0,
+        $checkParentVisibility = true
     ) {
         if (empty($courseInfo)) {
             return false;
@@ -3567,13 +3569,17 @@ class DocumentManager
                 if (!$visible) {
                     return false;
                 } else {
-                    return self::check_visibility_tree(
-                        $document_data['parent_id'],
-                        $courseInfo,
-                        $sessionId,
-                        $user_id,
-                        $groupId
-                    );
+                    if ($checkParentVisibility) {
+                        return self::check_visibility_tree(
+                            $document_data['parent_id'],
+                            $courseInfo,
+                            $sessionId,
+                            $user_id,
+                            $groupId
+                        );
+                    }
+
+                    return true;
                 }
             }
         } else {

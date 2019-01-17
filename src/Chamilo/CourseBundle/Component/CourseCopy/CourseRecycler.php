@@ -312,7 +312,7 @@ class CourseRecycler
     {
         $table_forum = Database::get_course_table(TABLE_FORUM);
         $table_forumcat = Database::get_course_table(TABLE_FORUM_CATEGORY);
-        $sql = "SELECT fc.cat_id FROM ".$table_forumcat." fc
+        $sql = "SELECT fc.iid FROM ".$table_forumcat." fc
                 LEFT JOIN ".$table_forum." f
                 ON
                     fc.cat_id=f.forum_category AND
@@ -322,7 +322,7 @@ class CourseRecycler
         $res = Database::query($sql);
         while ($obj = Database::fetch_object($res)) {
             $sql = "DELETE FROM ".$table_forumcat."
-                    WHERE c_id = ".$this->course_id." AND cat_id = ".$obj->cat_id;
+                    WHERE iid = ".$obj->iid;
             Database::query($sql);
         }
     }
@@ -335,7 +335,7 @@ class CourseRecycler
     {
         $link_cat_table = Database::get_course_table(TABLE_LINK_CATEGORY);
         $link_table = Database::get_course_table(TABLE_LINK);
-        $sql = "SELECT lc.id FROM $link_cat_table lc
+        $sql = "SELECT lc.iid FROM $link_cat_table lc
                 LEFT JOIN ".$link_table." l
                 ON
                     lc.id=l.category_id AND
@@ -345,7 +345,7 @@ class CourseRecycler
         $res = Database::query($sql);
         while ($obj = Database::fetch_object($res)) {
             $sql = "DELETE FROM ".$link_cat_table."
-                    WHERE c_id = ".$this->course_id." AND id = ".$obj->id;
+                    WHERE iid = ".$obj->iid;
             Database::query($sql);
         }
     }

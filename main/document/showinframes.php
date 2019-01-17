@@ -175,7 +175,7 @@ if (api_is_course_admin()) {
 }
 
 $js_glossary_in_documents = '
-    setFrameReady("mainFrame");
+    setFrameReady("mainFrame", _p);
 ';
 
 $web_odf_supported_files = DocumentManager::get_web_odf_extension_list();

@@ -456,20 +456,18 @@ if ($form->validate()) {
             $address
         );
 
-        if (isset($user['student_boss'])) {
-            UserManager::subscribeUserToBossList(
-                $user_id,
-                $user['student_boss'],
-                true
-            );
-        }
-
         if (api_get_setting('openid_authentication') == 'true' && !empty($user['openid'])) {
             $up = UserManager::update_openid($user_id, $user['openid']);
         }
         $currentUserId = api_get_user_id();
-
         $userObj = api_get_user_entity($user_id);
+
+        $studentBossListSent = isset($user['student_boss']) ? $user['student_boss'] : [];
+        UserManager::subscribeUserToBossList(
+            $user_id,
+            $studentBossListSent,
+            true
+        );
 
         UserManager::add_user_as_admin($userObj);
 

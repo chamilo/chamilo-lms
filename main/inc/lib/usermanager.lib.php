@@ -5550,7 +5550,7 @@ class UserManager
     }
 
     /**
-     * Subscribe boss to students, if $bossList is empty then the boss list will be empty too
+     * Subscribe boss to students, if $bossList is empty then the boss list will be empty too.
      *
      * @param int   $studentId
      * @param array $bossList
@@ -5579,7 +5579,6 @@ class UserManager
 
             // Boss list is the same, nothing changed.
             if ($bossList == $previousBossList) {
-
                 return false;
             }
 

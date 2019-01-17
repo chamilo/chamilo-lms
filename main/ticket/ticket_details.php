@@ -352,7 +352,6 @@ if ($ticket['ticket']['status_id'] == TicketManager::STATUS_CLOSE) {
 }
 $senderData = get_lang('AddedBy').' '.$ticket['usuario']['complete_name_with_message_link'];
 
-
 echo '<table width="100%" >
         <tr>
           <td colspan="3">

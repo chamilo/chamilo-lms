@@ -3511,7 +3511,7 @@ class DocumentManager
      * @param array $courseInfo
      * @param int   $sessionId
      * @param int   $user_id
-     * @param int   $groupId iid
+     * @param int   $groupId               iid
      * @param bool  $checkParentVisibility
      *
      * @return bool

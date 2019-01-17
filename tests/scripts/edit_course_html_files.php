@@ -10,6 +10,7 @@
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
 require __DIR__.'/../../main/inc/global.inc.php';
+api_protect_admin_script();
 
 // Search string
 $search = 'be:8181';

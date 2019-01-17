@@ -15,13 +15,21 @@ if (!$pluginKeycloak) {
 }
 
 // Create a settings.dist.php
-require_once 'settings.php';
+if (file_exists('settings.php')) {
+    require_once 'settings.php';
+} else {
+    $message = '';
+    if (api_is_platform_admin()) {
+        $message = 'Create a settings.php file in plugin/keycloak/';
+    }
+    api_not_allowed(true, $message);
+}
+
 
 $content = '';
-
 $auth = new Auth($settingsInfo);
 
-if (isset($_REQUEST['delete'])) {
+/*if (isset($_REQUEST['delete'])) {
     Session::erase('samlNameId');
     Session::erase('samlSessionIndex');
     Session::erase('samlNameIdFormat');
@@ -30,7 +38,7 @@ if (isset($_REQUEST['delete'])) {
     Session::erase('LogoutRequestID');
     echo 'delete all';
     exit;
-}
+}*/
 
 $settings = new Settings($settingsInfo);
 $authRequest = new AuthnRequest($settings);
@@ -118,7 +126,10 @@ if (isset($_GET['sso'])) {
             '',
             'keycloak'
         );
-        $userInfo = api_get_user_info($userId);
+
+        if ($userId) {
+            $userInfo = api_get_user_info($userId);
+        }
     } else {
         // Only load users that were created using this method.
         if ($userInfo['auth_source'] === 'keycloak') {
@@ -143,9 +154,9 @@ if (isset($_GET['sso'])) {
         Display::addFlash(Display::return_message(get_lang('InvalidId')));
     }
 
-    if (isset($_POST['RelayState']) && \OneLogin\Saml2\Utils::getSelfURL() != $_POST['RelayState']) {
-        //$auth->redirectTo($_POST['RelayState']);
-    }
+    /*if (isset($_POST['RelayState']) && \OneLogin\Saml2\Utils::getSelfURL() != $_POST['RelayState']) {
+        $auth->redirectTo($_POST['RelayState']);
+    }*/
     header('Location: '.api_get_path(WEB_PATH));
     exit;
 } elseif (isset($_GET['sls'])) {

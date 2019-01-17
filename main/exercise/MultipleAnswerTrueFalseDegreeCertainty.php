@@ -304,7 +304,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
      * @param int      $counter
      * @param float    $score
      *
-     * @return null|string
+     * @return string|null
      */
     public function return_header($exercise, $counter = null, $score = null)
     {

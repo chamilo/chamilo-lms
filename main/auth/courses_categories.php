@@ -75,25 +75,23 @@ $message = null;
 <?php
 
     if (!isset($_GET['hidden_links']) || intval($_GET['hidden_links']) != 1) {
-
-        $term = empty($_POST['search_term']) ? '': api_htmlentities($searchTerm);
+        $term = empty($_POST['search_term']) ? '' : api_htmlentities($searchTerm);
         $urlAction = CourseCategory::getCourseCategoryUrl(1, $pageLength, 'ALL', 0, 'subscribe');
         $formSearch = new FormValidator('search_catalog', 'post', $urlAction, null, [], FormValidator::LAYOUT_BOX_SEARCH);
         $formSearch->addHidden('sec_token', $stok);
         $formSearch->addHidden('search_course', 1);
-        $formSearch->addText('search_term', get_lang('Search'), false,['value'=>$term, 'icon' => 'search'])->setButton(true);
+        $formSearch->addText('search_term', get_lang('Search'), false, ['value' => $term, 'icon' => 'search'])->setButton(true);
         //$formSearch->defaultRenderer()->setElementTemplate($formSearch->getDefaultElementTemplate(),'search_term');
         $search = $formSearch->returnForm();
 
         $webAction = api_get_path(WEB_CODE_PATH).'auth/courses.php';
-        $formSelect = new FormValidator('select_category', 'get',$webAction,null,[]);
-        $formSelect->addHidden('action',$action);
-        $formSelect->addHidden('pageCurrent',$pageCurrent);
+        $formSelect = new FormValidator('select_category', 'get', $webAction, null, []);
+        $formSelect->addHidden('action', $action);
+        $formSelect->addHidden('pageCurrent', $pageCurrent);
         $formSelect->addHidden('pageLength', $pageLength);
         $options = [];
 
-        foreach ($browse_course_categories[0] as $category){
-
+        foreach ($browse_course_categories[0] as $category) {
             $categoryCode = $category['code'];
             $countCourse = $category['count_courses'];
             if (empty($countCourse)) {
@@ -101,96 +99,91 @@ $message = null;
             }
 
             $options[$categoryCode] = $category['name'].' ('.$countCourse.')';
-
         }
 
-        if(empty($codeType)){
+        if (empty($codeType)) {
             $codeType = 'ALL';
         }
-        $formSelect->addSelect('category_code',get_lang('Categories'),$options,['onchange' =>'submit();'])->setSelected($codeType);
+        $formSelect->addSelect('category_code', get_lang('Categories'), $options, ['onchange' => 'submit();'])->setSelected($codeType);
         $select = $formSelect->returnForm();
     }
 
-
-
 if ($showCourses && $action != 'display_sessions') {
-        if (!empty($message)) {
-            $message = Display::return_message($message, 'confirmation', false);
-        }
-        if (!empty($error)) {
-            $message = Display::return_message($error, 'error', false);
-        }
+    if (!empty($message)) {
+        $message = Display::return_message($message, 'confirmation', false);
+    }
+    if (!empty($error)) {
+        $message = Display::return_message($error, 'error', false);
+    }
 
-        if (!empty($content)) {
-            $message = $content;
+    if (!empty($content)) {
+        $message = $content;
+    }
+
+    if (!empty($searchTerm)) {
+        $message = "<p><strong>".get_lang('SearchResultsFor')." ".$searchTerm."</strong><br />";
+    }
+
+    $showTeacher = api_get_setting('display_teacher_in_courselist') === 'true';
+    $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
+    $user_id = api_get_user_id();
+    $categoryListFromDatabase = CourseCategory::getCategories();
+
+    $courseList = [];
+    $categoryList = [];
+    if (!empty($categoryListFromDatabase)) {
+        foreach ($categoryListFromDatabase as $categoryItem) {
+            $categoryList[$categoryItem['code']] = $categoryItem['name'];
         }
+    }
 
-        if (!empty($searchTerm)) {
-            $message = "<p><strong>".get_lang('SearchResultsFor')." ".$searchTerm."</strong><br />";
-        }
+    if (!empty($browse_courses_in_category)) {
+        foreach ($browse_courses_in_category as $course) {
+            $course_hidden = $course['visibility'] == COURSE_VISIBILITY_HIDDEN;
 
-        $showTeacher = api_get_setting('display_teacher_in_courselist') === 'true';
-        $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
-        $user_id = api_get_user_id();
-        $categoryListFromDatabase = CourseCategory::getCategories();
-
-        $courseList = [];
-        $categoryList = [];
-        if (!empty($categoryListFromDatabase)) {
-            foreach ($categoryListFromDatabase as $categoryItem) {
-                $categoryList[$categoryItem['code']] = $categoryItem['name'];
+            if ($course_hidden) {
+                continue;
             }
-        }
 
-        if (!empty($browse_courses_in_category)) {
+            $userRegisteredInCourse = CourseManager::is_user_subscribed_in_course($user_id, $course['code']);
+            $userRegisteredInCourseAsTeacher = CourseManager::is_course_teacher($user_id, $course['code']);
+            $userRegistered = $userRegisteredInCourse && $userRegisteredInCourseAsTeacher;
 
-            foreach ($browse_courses_in_category as $course) {
-                $course_hidden = $course['visibility'] == COURSE_VISIBILITY_HIDDEN;
+            $course_public = $course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD;
+            $course_open = $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM;
+            $course_private = $course['visibility'] == COURSE_VISIBILITY_REGISTERED;
+            $course_closed = $course['visibility'] == COURSE_VISIBILITY_CLOSED;
 
-                if ($course_hidden) {
-                    continue;
-                }
+            $course_subscribe_allowed = $course['subscribe'] == 1;
+            $course_unsubscribe_allowed = $course['unsubscribe'] == 1;
+            $count_connections = $course['count_connections'];
+            $creation_date = substr($course['creation_date'], 0, 10);
 
-                $userRegisteredInCourse = CourseManager::is_user_subscribed_in_course($user_id, $course['code']);
-                $userRegisteredInCourseAsTeacher = CourseManager::is_course_teacher($user_id, $course['code']);
-                $userRegistered = $userRegisteredInCourse && $userRegisteredInCourseAsTeacher;
+            // display the course bloc
 
-                $course_public = $course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD;
-                $course_open = $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM;
-                $course_private = $course['visibility'] == COURSE_VISIBILITY_REGISTERED;
-                $course_closed = $course['visibility'] == COURSE_VISIBILITY_CLOSED;
+            $course['category_title'] = '';
+            if (isset($course['category'])) {
+                $course['category_title'] = isset($categoryList[$course['category']]) ? $categoryList[$course['category']] : '';
+            }
 
-                $course_subscribe_allowed = $course['subscribe'] == 1;
-                $course_unsubscribe_allowed = $course['unsubscribe'] == 1;
-                $count_connections = $course['count_connections'];
-                $creation_date = substr($course['creation_date'], 0, 10);
-
-                // display the course bloc
-
-
-                $course['category_title'] = '';
-                if (isset($course['category'])) {
-                    $course['category_title'] = isset($categoryList[$course['category']]) ? $categoryList[$course['category']] : '';
-                }
-
-                if (api_get_configuration_value('hide_course_rating') === false) {
-                    $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
-                    $rating = Display::return_rating_system(
+            if (api_get_configuration_value('hide_course_rating') === false) {
+                $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
+                $rating = Display::return_rating_system(
                         'star_'.$course['real_id'],
                         $ajax_url.'&course_id='.$course['real_id'],
                         $course['point_info']
                     );
-                }
+            }
 
-                //course return image
+            //course return image
 
-                $course_path = api_get_path(SYS_COURSE_PATH).$course['directory'];
+            $course_path = api_get_path(SYS_COURSE_PATH).$course['directory'];
 
-                if (file_exists($course_path.'/course-pic.png')) {
-                    $courseMediumImage = api_get_path(WEB_COURSE_PATH).$course['directory'].'/course-pic.png';
-                } else {
-                    // without picture
-                    $courseMediumImage = Display::return_icon(
+            if (file_exists($course_path.'/course-pic.png')) {
+                $courseMediumImage = api_get_path(WEB_COURSE_PATH).$course['directory'].'/course-pic.png';
+            } else {
+                // without picture
+                $courseMediumImage = Display::return_icon(
                         'session_default.png',
                         null,
                         null,
@@ -198,61 +191,61 @@ if ($showCourses && $action != 'display_sessions') {
                         null,
                         true
                     );
-                }
+            }
 
-                if ($showTeacher) {
-                    $teachers = CourseManager::getTeachersFromCourse($course['real_id']);
-                }
+            if ($showTeacher) {
+                $teachers = CourseManager::getTeachersFromCourse($course['real_id']);
+            }
 
-                $separator = null;
-                $subscribeBuy = return_register_button($course, $stok, $code, $searchTerm);
-                // Start buy course validation
+            $separator = null;
+            $subscribeBuy = return_register_button($course, $stok, $code, $searchTerm);
+            // Start buy course validation
 
-                // display the course price and buy button if the buycourses plugin is enabled and this course is configured
-                $plugin = BuyCoursesPlugin::create();
-                $isThisCourseInSale = $plugin->buyCoursesForGridCatalogValidator(
+            // display the course price and buy button if the buycourses plugin is enabled and this course is configured
+            $plugin = BuyCoursesPlugin::create();
+            $isThisCourseInSale = $plugin->buyCoursesForGridCatalogValidator(
                 $course['real_id'],
                 BuyCoursesPlugin::PRODUCT_TYPE_COURSE
             );
 
-                if ($isThisCourseInSale) {
-                    // set the Price label
-                    $separator = $isThisCourseInSale['html'];
-                    // set the Buy button instead register.
-                    if ($isThisCourseInSale['verificator']) {
-                        $subscribeBuy = $plugin->returnBuyCourseButton(
+            if ($isThisCourseInSale) {
+                // set the Price label
+                $separator = $isThisCourseInSale['html'];
+                // set the Buy button instead register.
+                if ($isThisCourseInSale['verificator']) {
+                    $subscribeBuy = $plugin->returnBuyCourseButton(
                         $course['real_id'],
                         BuyCoursesPlugin::PRODUCT_TYPE_COURSE
                     );
-                    }
                 }
-                // end buy course validation
+            }
+            // end buy course validation
 
-                // if user registered as student
-                if ($userRegisteredInCourse) {
-                    $subscribeButton = return_already_registered_label('student');
-                    if (!$course_closed) {
-                        if ($course_unsubscribe_allowed) {
-                            $subscribeButton = return_unregister_button($course, $stok, $searchTerm, $code);
-                        }
-                    }
-                } elseif ($userRegisteredInCourseAsTeacher) {
-                    // if user registered as teacher
+            // if user registered as student
+            if ($userRegisteredInCourse) {
+                $subscribeButton = return_already_registered_label('student');
+                if (!$course_closed) {
                     if ($course_unsubscribe_allowed) {
                         $subscribeButton = return_unregister_button($course, $stok, $searchTerm, $code);
                     }
-                } else {
-                    // if user not registered in the course
-                    if (!$course_closed) {
-                        if (!$course_private) {
-                            if ($course_subscribe_allowed) {
-                                $subscribeButton = $subscribeBuy;
-                            }
+                }
+            } elseif ($userRegisteredInCourseAsTeacher) {
+                // if user registered as teacher
+                if ($course_unsubscribe_allowed) {
+                    $subscribeButton = return_unregister_button($course, $stok, $searchTerm, $code);
+                }
+            } else {
+                // if user not registered in the course
+                if (!$course_closed) {
+                    if (!$course_private) {
+                        if ($course_subscribe_allowed) {
+                            $subscribeButton = $subscribeBuy;
                         }
                     }
                 }
+            }
 
-                $courseList[] = [
+            $courseList[] = [
                     'id' => $course['real_id'],
                     'title' => $course['title'],
                     'category' => $course['category_title'],
@@ -261,23 +254,20 @@ if ($showCourses && $action != 'display_sessions') {
                     'teachers' => $teachers,
                     'ranking' => $rating,
                     'description_ajax' => CourseManager::returnDescriptionButton($course),
-                    'subscribe' => $subscribeButton
+                    'subscribe' => $subscribeButton,
                 ];
-
-            }
-
-        } else {
-            if (!isset($_REQUEST['subscribe_user_with_password']) &&
+        }
+    } else {
+        if (!isset($_REQUEST['subscribe_user_with_password']) &&
             !isset($_REQUEST['subscribe_course'])
         ) {
-                $message = Display::return_message(
+            $message = Display::return_message(
                 get_lang('ThereAreNoCoursesInThisCategory'),
                 'warning'
             );
-            }
         }
     }
-
+}
 
 $template = new Template(get_lang('Course Catalog'));
 $template->assign('search', $search);
@@ -289,10 +279,6 @@ $layout = $template->get_template('auth/course_catalog.html.twig');
 $content = $template->fetch($layout);
 
 echo $content;
-
-
-
-
 
 /**
  * Display the goto course button of a course in the course catalog.

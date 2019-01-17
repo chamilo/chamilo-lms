@@ -409,7 +409,7 @@ class CourseCategory
     /**
      * @param string $categoryCode
      *
-     * @return null|string
+     * @return string|null
      */
     public static function getParentsToString($categoryCode)
     {

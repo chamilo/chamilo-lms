@@ -124,7 +124,6 @@ class CourseDescriptionController
 
         $content = $tpl->fetch($templateName);
 
-
         $tpl->assign('content', $content);
         $tpl->display_one_col_template();
     }

@@ -427,7 +427,7 @@ class DocumentManager
      * @param string $path
      * @param int    $sessionId
      *
-     * @return null|string
+     * @return string|null
      */
     public static function getSessionFolderFilters($path, $sessionId)
     {
@@ -6676,7 +6676,7 @@ class DocumentManager
      * @param string $target
      * @param string $overwrite_url
      *
-     * @return null|string
+     * @return string|null
      */
     private static function parseFile(
         $userInfo,
@@ -6777,7 +6777,7 @@ class DocumentManager
      * @param array $resource
      * @param int   $lp_id
      *
-     * @return null|string
+     * @return string|null
      */
     private static function parseFolder($folderId, $resource, $lp_id)
     {
@@ -6980,7 +6980,7 @@ class DocumentManager
      * @param bool  $isCertificateMode
      * @param int   $parentId
      *
-     * @return null|string
+     * @return string|null
      */
     private static function getButtonVisibility(
         $isReadOnly,

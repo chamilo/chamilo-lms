@@ -307,7 +307,6 @@ class SystemAnnouncementManager
         return $result ? $result : false;
     }
 
-
     /**
      * @param int    $start
      * @param string $user_id
@@ -1026,17 +1025,20 @@ class SystemAnnouncementManager
      * get announcement picture.
      *
      * @param int $announcementId
-     * @return null|string
+     *
+     * @return string|null
      */
     private static function getPictureAnnouncement($announcementId)
     {
-        $store_path = api_get_path(SYS_UPLOAD_PATH) . 'announcements';
-        $announcementPicture = $store_path . '/announcement_' . $announcementId . '.png';
+        $store_path = api_get_path(SYS_UPLOAD_PATH).'announcements';
+        $announcementPicture = $store_path.'/announcement_'.$announcementId.'.png';
         if (file_exists($announcementPicture)) {
-            $web_path = api_get_path(WEB_UPLOAD_PATH) . 'announcements';
-            $urlPicture = $web_path . '/announcement_' . $announcementId . '.png';
+            $web_path = api_get_path(WEB_UPLOAD_PATH).'announcements';
+            $urlPicture = $web_path.'/announcement_'.$announcementId.'.png';
+
             return $urlPicture;
         }
+
         return null;
     }
 }

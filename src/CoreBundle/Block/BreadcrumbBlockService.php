@@ -61,10 +61,7 @@ class BreadcrumbBlockService extends BaseBreadcrumbMenuBlockService
         // Add course
         /** @var Course $course */
         if ($course = $blockContext->getBlock()->getSetting('course')) {
-
-
-
-            if(is_array($course)){
+            if (is_array($course)) {
                 $title = $course['title'];
                 $code = $course['code'];
             } else {

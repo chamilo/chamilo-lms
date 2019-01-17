@@ -153,7 +153,7 @@ class ResourceController extends BaseController implements CourseControllerInter
      * @param Request $request
      * @param string  $fileType
      *
-     * @return null|\Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response|null
      */
     public function createResource(Request $request, $fileType = 'file')
     {

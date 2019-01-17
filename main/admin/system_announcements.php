@@ -185,7 +185,6 @@ if ($action_todo) {
             $allowed_picture_types
         );
 
-
         $image = '';
         // Display announcements picture
         $store_path = api_get_path(SYS_UPLOAD_PATH).'announcements'; // course path
@@ -198,7 +197,6 @@ if ($action_todo) {
             $form->addHtml($image);
             $form->addElement('checkbox', 'delete_picture', null, get_lang('DeletePicture'));
         }
-
     } catch (Exception $e) {
     } catch (HTML_QuickForm_Error $e) {
         error_log($e);
@@ -285,7 +283,6 @@ if ($action_todo) {
                 );
 
                 if ($announcement_id !== false) {
-
                     // ADD Picture
                     $picture = $_FILES['picture'];
                     if (!empty($picture['name'])) {
@@ -325,7 +322,6 @@ if ($action_todo) {
                     $sendMail,
                     $sendMailTest
                 )) {
-
                     $deletePicture = isset($values['delete_picture']) ? $values['delete_picture'] : '';
 
                     if ($deletePicture) {

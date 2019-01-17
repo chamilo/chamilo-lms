@@ -45,7 +45,7 @@ class LoginSuccessHandler
      * @param Request        $request
      * @param TokenInterface $token
      *
-     * @return null|RedirectResponse|Response
+     * @return RedirectResponse|Response|null
      */
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
     {

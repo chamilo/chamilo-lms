@@ -68,7 +68,7 @@ class ExternalTool
      */
     private $activeDeepLinking = false;
     /**
-     * @var null|string
+     * @var string|null
      *
      * @ORM\Column(name="privacy", type="text", nullable=true, options={"default": null})
      */
@@ -164,7 +164,7 @@ class ExternalTool
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getDescription()
     {
@@ -172,7 +172,7 @@ class ExternalTool
     }
 
     /**
-     * @param null|string $description
+     * @param string|null $description
      *
      * @return ExternalTool
      */
@@ -244,7 +244,7 @@ class ExternalTool
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getCustomParams()
     {
@@ -252,7 +252,7 @@ class ExternalTool
     }
 
     /**
-     * @param null|string $customParams
+     * @param string|null $customParams
      *
      * @return ExternalTool
      */
@@ -274,7 +274,7 @@ class ExternalTool
     /**
      * @param array $params
      *
-     * @return null|string
+     * @return string|null
      */
     public function encodeCustomParams(array $params)
     {
@@ -387,7 +387,7 @@ class ExternalTool
     /**
      * Get privacy.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getPrivacy()
     {

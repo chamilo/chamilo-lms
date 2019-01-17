@@ -689,7 +689,7 @@ if (api_is_platform_admin()) {
 // The template contains the call to the AJAX version checker
 $template = $tpl->get_template('admin/index.html.twig');
 $content = $tpl->fetch($template);
-$tpl->assign('content',$content);
+$tpl->assign('content', $content);
 $tpl->display_one_col_template();
 
 //$tpl->display($template);

@@ -155,7 +155,7 @@ class HomeController extends ToolBaseController
      *
      * @param $iconId
      *
-     * @return null|string
+     * @return string|null
      */
     public function showIconAction($iconId)
     {
@@ -177,7 +177,7 @@ class HomeController extends ToolBaseController
      *
      * @param $iconId
      *
-     * @return null|string
+     * @return string|null
      */
     public function hideIconAction($iconId)
     {
@@ -203,7 +203,7 @@ class HomeController extends ToolBaseController
      *
      * @param $iconId
      *
-     * @return null|string
+     * @return string|null
      */
     public function deleteIcon($iconId)
     {

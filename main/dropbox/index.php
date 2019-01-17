@@ -317,21 +317,19 @@ if ($action != 'add') {
     <?php
         $activeSend = $activeReceived = '';
         if (!$view || $view == 'sent') {
-            $activeSend =  'active';
-        }
-    ?>
+            $activeSend = 'active';
+        } ?>
     <li class="nav-item">
-        <a class="nav-link <?php echo $activeSend ?>" href="<?php echo api_get_path(WEB_CODE_PATH).'dropbox/'; ?>index.php?<?php echo api_get_cidreq(); ?>&view=sent" >
+        <a class="nav-link <?php echo $activeSend; ?>" href="<?php echo api_get_path(WEB_CODE_PATH).'dropbox/'; ?>index.php?<?php echo api_get_cidreq(); ?>&view=sent" >
             <?php echo get_lang('SentFiles'); ?>
         </a>
     </li>
     <?php
         if ($view == 'received') {
             $activeReceived = 'active';
-        }
-    ?>
+        } ?>
     <li class="nav-item">
-        <a class="nav-link <?php echo $activeReceived ?>"  href="<?php echo api_get_path(WEB_CODE_PATH).'dropbox/'; ?>index.php?<?php echo api_get_cidreq(); ?>&view=received"  >
+        <a class="nav-link <?php echo $activeReceived; ?>"  href="<?php echo api_get_path(WEB_CODE_PATH).'dropbox/'; ?>index.php?<?php echo api_get_cidreq(); ?>&view=received"  >
             <?php echo get_lang('ReceivedFiles'); ?>
         </a>
     </li>

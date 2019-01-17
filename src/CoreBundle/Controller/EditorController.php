@@ -59,7 +59,7 @@ class EditorController extends BaseController
     {
         \Chat::setDisableChat();
         $params = [
-            'course_condition' => '?'.$this->getCourseUrlQuery()
+            'course_condition' => '?'.$this->getCourseUrlQuery(),
         ];
 
         return $this->render('@ChamiloTheme/Editor/elfinder.html.twig', $params);

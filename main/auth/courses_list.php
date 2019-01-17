@@ -24,8 +24,8 @@ if ($action != 'createcoursecategory') {
 echo '</div>';
 
 if (!empty($message)) {
-        echo Display::return_message($message, 'confirm', false);
-    }
+    echo Display::return_message($message, 'confirm', false);
+}
 
 $allowCollapsable = api_get_configuration_value('allow_user_course_category_collapsable');
 

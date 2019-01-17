@@ -1322,10 +1322,10 @@ class UserGroup extends Model
     }
 
     /**
-     * @param int $groupId
+     * @param int    $groupId
      * @param string $picture
-     *
      * @param string $cropParameters
+     *
      * @return bool|string
      */
     public function manageFileUpload($groupId, $picture, $cropParameters)
@@ -1357,18 +1357,17 @@ class UserGroup extends Model
      * Note: This method relies on configuration setting from main/inc/conf/profile.conf.php.
      *
      * @param $group_id
-     * @param string $file The common file name for the newly created photos.
-     *                     It will be checked and modified for compatibility with the file system.
-     *                     If full name is provided, path component is ignored.
-     *                     If an empty name is provided, then old user photos are deleted only,
-     *
-     * @param string $source_file the full system name of the image from which user photos will be created
-     *
+     * @param string $file           The common file name for the newly created photos.
+     *                               It will be checked and modified for compatibility with the file system.
+     *                               If full name is provided, path component is ignored.
+     *                               If an empty name is provided, then old user photos are deleted only,
+     * @param string $source_file    the full system name of the image from which user photos will be created
      * @param string $cropParameters
+     *
      * @return mixed Returns the resulting common file name of created images which usually should be stored in database.
      *               When an image is removed the function returns an empty string. In case of internal error or negative validation it returns FALSE.
-     * @see UserManager::delete_user_picture() as the prefered way for deletion.
      *
+     * @see UserManager::delete_user_picture() as the prefered way for deletion.
      */
     public function update_group_picture($group_id, $file = null, $source_file = null, $cropParameters = null)
     {
@@ -1389,7 +1388,6 @@ class UserGroup extends Model
         if (!file_exists($path)) {
             @mkdir($path, api_get_permissions_for_new_directories(), true);
         }
-
 
         // Exit if only deletion has been requested. Return an empty picture name.
         if ($delete) {
@@ -1426,7 +1424,6 @@ class UserGroup extends Model
         $normal = new Image($source_file);
         $normal->resize(450);
         $normal->send_image($groupImageBig, -1, 'jpg');
-
 
         return $filename;
     }
@@ -1610,7 +1607,6 @@ class UserGroup extends Model
 
         // Picture
         //$allowed_picture_types = $this->getAllowedPictureExtensions();
-
 
         // Picture
         $form->addFile(
@@ -2117,8 +2113,8 @@ class UserGroup extends Model
             $num = intval($num);
         }
         // only show admins and readers
-        $where_relation_condition = " WHERE g.group_type = " . self::SOCIAL_CLASS . " AND
-                                      gu.relation_type IN ('" . GROUP_USER_PERMISSION_ADMIN . "' , '" . GROUP_USER_PERMISSION_READER . "', '" . GROUP_USER_PERMISSION_HRM . "') ";
+        $where_relation_condition = " WHERE g.group_type = ".self::SOCIAL_CLASS." AND
+                                      gu.relation_type IN ('".GROUP_USER_PERMISSION_ADMIN."' , '".GROUP_USER_PERMISSION_READER."', '".GROUP_USER_PERMISSION_HRM."') ";
         $sql = "SELECT DISTINCT count(user_id) as count, g.picture, g.name, g.description, g.id
 				FROM $tbl_group g
 				INNER JOIN $table_group_rel_user gu
@@ -2133,7 +2129,7 @@ class UserGroup extends Model
             $description = Security::remove_XSS($row['description'], STUDENT, true);
             $row['description'] = cut($description, 250, true);
             $row['name'] = Security::remove_XSS($row['name'], STUDENT, true);
-            $row['url'] = "group_view.php?id=" . $row['id'];
+            $row['url'] = "group_view.php?id=".$row['id'];
             if ($with_image) {
                 $picture = self::get_picture_group(
                     $row['id'],
@@ -2172,12 +2168,12 @@ class UserGroup extends Model
         }
 
         $where = " WHERE 
-                        g.group_type = " . self::SOCIAL_CLASS . " AND
+                        g.group_type = ".self::SOCIAL_CLASS." AND
                         gu.relation_type IN 
-                        ('" . GROUP_USER_PERMISSION_ADMIN . "' , 
-                        '" . GROUP_USER_PERMISSION_READER . "',
-                        '" . GROUP_USER_PERMISSION_MODERATOR . "',  
-                        '" . GROUP_USER_PERMISSION_HRM . "') 
+                        ('".GROUP_USER_PERMISSION_ADMIN."' , 
+                        '".GROUP_USER_PERMISSION_READER."',
+                        '".GROUP_USER_PERMISSION_MODERATOR."',  
+                        '".GROUP_USER_PERMISSION_HRM."') 
                     ";
         $sql = "SELECT DISTINCT
                   count(user_id) as count,
@@ -2196,11 +2192,10 @@ class UserGroup extends Model
         $result = Database::query($sql);
         $array = [];
         while ($row = Database::fetch_array($result, 'ASSOC')) {
-
             $description = Security::remove_XSS($row['description'], STUDENT, true);
             $row['description'] = cut($description, 250, true);
             $row['name'] = Security::remove_XSS($row['name'], STUDENT, true);
-            $row['url'] = "group_view.php?id=" . $row['id'];
+            $row['url'] = "group_view.php?id=".$row['id'];
             if ($with_image) {
                 $picture = self::get_picture_group(
                     $row['id'],

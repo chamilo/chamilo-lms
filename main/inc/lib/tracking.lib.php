@@ -3734,12 +3734,14 @@ class Tracking
     /**
      * Get sessions coached by user.
      *
-     * @param $coach_id
+     * @param        $coach_id
      * @param int    $start
      * @param int    $limit
      * @param bool   $getCount
      * @param string $keyword
      * @param string $description
+     * @param string $orderByName
+     * @param string $orderByDirection
      *
      * @return mixed
      */
@@ -3749,12 +3751,14 @@ class Tracking
         $limit = 0,
         $getCount = false,
         $keyword = '',
-        $description = ''
+        $description = '',
+        $orderByName = '',
+        $orderByDirection = ''
     ) {
         // table definition
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $coach_id = intval($coach_id);
+        $coach_id = (int) $coach_id;
 
         $select = " SELECT * FROM ";
         if ($getCount) {
@@ -3780,6 +3784,15 @@ class Tracking
 
         $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $access_url_id = api_get_current_access_url_id();
+
+        $orderBy = '';
+        if (!empty($orderByName)) {
+            if (in_array($orderByName, ['name', 'access_start_date'])) {
+                $orderByDirection = in_array(strtolower($orderByDirection), ['asc', 'desc']) ? $orderByDirection : 'asc';
+                $orderByName = Database::escape_string($orderByName);
+                $orderBy .= " ORDER BY $orderByName $orderByDirection";
+            }
+        }
 
         $sql = "
             $select
@@ -3813,7 +3826,7 @@ class Tracking
                 WHERE
                     access_url_id = $access_url_id
                     $keywordCondition
-            ) as sessions $limitCondition
+            ) as sessions $limitCondition $orderBy
             ";
 
         $rs = Database::query($sql);
@@ -3825,7 +3838,7 @@ class Tracking
 
         $sessions = [];
         while ($row = Database::fetch_array($rs)) {
-            if ($row['access_start_date'] == '0000-00-00 00:00:00') {
+            if ($row['access_start_date'] === '0000-00-00 00:00:00') {
                 $row['access_start_date'] = null;
             }
 
@@ -3834,8 +3847,7 @@ class Tracking
 
         if (!empty($sessions)) {
             foreach ($sessions as &$session) {
-                if (empty($session['access_start_date'])
-                ) {
+                if (empty($session['access_start_date'])) {
                     $session['status'] = get_lang('SessionActive');
                 } else {
                     $time_start = api_strtotime($session['access_start_date'], 'UTC');

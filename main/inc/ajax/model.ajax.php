@@ -850,7 +850,7 @@ switch ($action) {
             '*',
             $object->table,
             [
-                'where' => ["session_id = ? " => $sessionId],
+                'where' => ['session_id = ? ' => $sessionId],
                 'order' => "$sidx $sord",
                 'LIMIT' => "$start , $limit", ]
         );
@@ -1433,6 +1433,9 @@ switch ($action) {
         break;
     case 'get_sessions_tracking':
         if (api_is_drh() || api_is_session_admin()) {
+            $orderByName = Database::escape_string($sidx);
+            $orderByName = in_array($orderByName, ['name', 'access_start_date']) ? $orderByName : 'name';
+            $orderBy = " ORDER BY $orderByName $sord";
             $sessions = SessionManager::get_sessions_followed_by_drh(
                 api_get_user_id(),
                 $start,
@@ -1440,7 +1443,7 @@ switch ($action) {
                 false,
                 false,
                 false,
-                null,
+                $orderBy,
                 $keyword,
                 $description
             );
@@ -1452,7 +1455,9 @@ switch ($action) {
                 $limit,
                 false,
                 $keyword,
-                $description
+                $description,
+                $sidx,
+                $sord
             );
         }
 

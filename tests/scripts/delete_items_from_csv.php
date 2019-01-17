@@ -16,7 +16,6 @@ echo 'Number of lines '.count($data).PHP_EOL;
 $counter = 1;
 foreach ($data as $row) {
     if (isset($row['SessionID'])) {
-        echo 'Processing a session file'.PHP_EOL;
         $sessionId = SessionManager::getSessionIdFromOriginalId($row['SessionID'], 'external_session_id');
         if (!empty($sessionId)) {
             $sessionInfo = api_get_session_info($sessionId);
@@ -24,7 +23,7 @@ foreach ($data as $row) {
                 $sessionId = $sessionInfo['id'];
                 $sessionName = $sessionInfo['name'];
                 echo "Line: $counter. Session will be deleted: $sessionName #$sessionId ".PHP_EOL;
-                //SessionManager::delete($sessionId);
+                //SessionManager::delete($sessionId, true);
             } else {
                 echo "Line: $counter. Session not found: $sessionName".PHP_EOL;
             }
@@ -34,14 +33,12 @@ foreach ($data as $row) {
     // Course
     $courseId = isset($row['CourseID']) ? $row['CourseID'] : '';
     if (!empty($courseId)) {
-        echo 'Processing a course file'.PHP_EOL;
         $courseInfo = CourseManager::getCourseInfoFromOriginalId($courseId, 'external_course_id');
         if (!empty($courseInfo) && isset($courseInfo['id'])) {
             $courseCode = $courseInfo['code'];
             $courseId = $courseInfo['id'];
-            //CourseManager::delete_course($courseCode);
+            CourseManager::delete_course($courseCode);
             echo "Line: $counter. Course will be deleted: $courseCode #$courseId".PHP_EOL;
-            //SessionManager::delete($sessionId);
         } else {
             echo "Line: $counter. Course not found: $courseCode".PHP_EOL;
         }
@@ -50,13 +47,11 @@ foreach ($data as $row) {
     // User
     $userName = isset($row['UserName']) ? $row['UserName'] : '';
     if (!empty($userName)) {
-        echo 'Processing a user file'.PHP_EOL;
         $userInfo = api_get_user_info_from_username($userName);
         if (!empty($userInfo) && isset($userInfo['id'])) {
             $userId = $userInfo['id'];
             //UserManager::delete_user($userId);
             echo "Line: $counter. User will be deleted: $userId".PHP_EOL;
-            //SessionManager::delete($sessionId);
         } else {
             echo "Line: $counter. User not found: $userName".PHP_EOL;
         }

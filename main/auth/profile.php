@@ -661,6 +661,10 @@ if ($form->validate()) {
     Session::write('_user', $userInfo);
 
     if ($hook) {
+        Database::getManager()->clear(User::class); //Avoid cache issue (user entity is used before)
+
+        $user = api_get_user_entity(api_get_user_id()); //Get updated user info for hook event
+
         $hook->setEventData(['user' => $user]);
         $hook->notifyUpdateUser(HOOK_EVENT_TYPE_POST);
     }

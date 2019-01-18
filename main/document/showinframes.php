@@ -174,9 +174,7 @@ if (api_is_course_admin()) {
     $frameheight = 165;
 }
 
-$js_glossary_in_documents = '
-    setFrameReady("mainFrame", _p);
-';
+$frameReady = Display::getFrameReadyBlock('top.mainFrame');
 
 $web_odf_supported_files = DocumentManager::get_web_odf_extension_list();
 // PDF should be displayed with viewerJS
@@ -252,8 +250,7 @@ if (!$playerSupported && $execute_iframe) {
         // Fixes the content height of the frame
         window.onload = function() {
             updateContentHeight();
-            '.$js_glossary_in_documents.'
-
+            '.$frameReady.'
         }
     </script>';
 }

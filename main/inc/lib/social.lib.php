@@ -1623,7 +1623,7 @@ class SocialManager extends UserManager
      * Gets all messages from someone's wall (within specific limits).
      *
      * @param int        $userId        id of wall shown
-     * @param string     $messageStatus status wall message
+     * @param int        $messageStatus status wall message
      * @param int|string $parentId      id message (Post main)
      * @param string     $start         Date from which we want to show the messages, in UTC time
      * @param int        $limit         Limit for the number of parent messages we want to show
@@ -1651,6 +1651,7 @@ class SocialManager extends UserManager
         $userId = intval($userId);
         $start = Database::escape_string($start);
         $limit = intval($limit);
+        $messageStatus = (int) $messageStatus;
 
         $sql = "SELECT
                     id,

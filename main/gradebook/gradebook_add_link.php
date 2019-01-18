@@ -154,7 +154,6 @@ if (isset($typeSelected) && $typeSelected != '0') {
     }
 }
 
-<<<<<<< HEAD
 $action_details = '';
 $current_id = 0;
 if (isset($_GET['selectcat'])) {
@@ -173,8 +172,6 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
-=======
->>>>>>> de59e9d72409ccb3dda93caa5fe09c8fba7dfe75
 $interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat='.$selectCat,
     'name' => get_lang('Gradebook'),

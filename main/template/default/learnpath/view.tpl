@@ -387,7 +387,7 @@
             $(document).ready(function () {
                 $('iframe#content_id').on('load', function () {
                     var arr = ['link', 'sco'];
-                    if (!$.inArray(olms.lms_item_type, arr)) {
+                    if ($.inArray(olms.lms_item_type, arr) == -1) {
                         {{ frame_ready }}
                     }
                 });

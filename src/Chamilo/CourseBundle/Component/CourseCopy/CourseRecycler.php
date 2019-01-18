@@ -613,26 +613,22 @@ class CourseRecycler
     }
 
     /**
-     * Recycle empty learning path categories
+     * Recycle selected learning path categories and dissociate learning paths
+     * that are associated with it.
      */
     public function recycle_learnpath_categories()
     {
         $learningPathTable = Database::get_course_table(TABLE_LP_MAIN);
         $learningPathCategoryTable = Database::get_course_table(TABLE_LP_CATEGORY);
-        $itemPropertyTable = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $courseId = $this->course_id;
-        // c_lp.category_id points to c_lp_category.iid
-        $subQuery = "SELECT distinct(l.category_id) as categoryId
-              FROM $learningPathTable l, $itemPropertyTable i
-              WHERE
-                  l.c_id = $courseId AND
-                  i.c_id = l.c_id AND
-                  i.tool = 'learnpath' AND
-        	      l.iid = i.ref AND 
-                  i.visibility = 1";
-        $sql = "DELETE FROM $learningPathCategoryTable
-                    WHERE c_id = $courseId AND iid NOT IN ($subQuery)";
-        Database::query($sql);
+        foreach ($this->course->resources[RESOURCE_LEARNPATH_CATEGORY] as $id => $learnpathCategory) {
+            $categoryId = $learnpathCategory->object->getId();
+            // Dissociate learning paths from categories that will be deleted
+            $sql = "UPDATE $learningPathTable SET category_id = 0 WHERE category_id = ".$categoryId;
+            Database::query($sql);
+            $sql = "DELETE FROM $learningPathCategoryTable WHERE iid = ".$categoryId;
+            error_log($sql);
+            Database::query($sql);
+        }
 
     }
 

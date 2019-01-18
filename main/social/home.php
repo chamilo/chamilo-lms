@@ -110,28 +110,59 @@ if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp
 // Post comment
 if (!empty($_POST['social_wall_new_msg']) && !empty($_POST['messageId'])) {
     $messageId = (int) $_POST['messageId'];
-    $messageContent = $_POST['social_wall_new_msg'];
+    $messageInfo = MessageManager::get_message_by_id($messageId);
 
-    $res = SocialManager::sendWallMessage(
-        api_get_user_id(),
-        api_get_user_id(),
-        $messageContent,
-        $messageId,
-        MESSAGE_STATUS_WALL
-    );
-    Display::addFlash(Display::return_message(get_lang('MessageSent')));
+    if (!empty($messageInfo)) {
+        $res = SocialManager::sendWallMessage(
+            api_get_user_id(),
+            $messageInfo['user_receiver_id'],
+            $_POST['social_wall_new_msg'],
+            $messageId,
+            MESSAGE_STATUS_WALL
+        );
+        Display::addFlash(Display::return_message(get_lang('MessageSent')));
+    }
 
     $url = api_get_self();
     header('Location: '.$url);
     exit;
 }
 
+$locale = api_get_language_isocode();
+$javascriptDir = api_get_path(LIBRARY_PATH).'javascript/';
+// Add Jquery scroll pagination plugin
+$htmlHeadXtra[] = api_get_js('jscroll/jquery.jscroll.js');
+// Add Jquery Time ago plugin
+$htmlHeadXtra[] = api_get_asset('jquery-timeago/jquery.timeago.js');
+$timeAgoLocaleDir = $javascriptDir.'jquery-timeago/locales/jquery.timeago.'.$locale.'.js';
+if (file_exists($timeAgoLocaleDir)) {
+    $htmlHeadXtra[] = api_get_js('jquery-timeago/locales/jquery.timeago.'.$locale.'.js');
+}
+
+$htmlHeadXtra[] = '<script>
+$(document).ready(function(){
+    var container = $("#wallMessages");
+    container.jscroll({
+        loadingHtml: "<div class=\"well_border\">'.get_lang('Loading').' </div>",
+        nextSelector: "a.nextPage:last",
+        contentSelector: "",
+        callback: timeAgo
+    });
+    timeAgo();
+});
+
+function timeAgo() {
+    $(".timeago").timeago();
+}
+</script>';
+
+
 //Block Menu
 $social_menu_block = SocialManager::show_social_menu('home');
 
 $social_search_block = Display::panel(
     UserManager::get_search_form(''),
-    get_lang("SearchUsers")
+    get_lang('SearchUsers')
 );
 
 $results = $userGroup->get_groups_by_age(1, false);
@@ -280,7 +311,6 @@ $social_group_block = Display::panelCollapse(
 $socialAjaxUrl = api_get_path(WEB_AJAX_PATH).'social.ajax.php';
 $wallSocialAddPost = SocialManager::getWallForm($show_full_profile, api_get_self());
 // Social Post Wall
-//$posts = SocialManager::getWallMessagesByUser($user_id, $user_id);
 $posts = SocialManager::getMyWallMessages($user_id);
 $social_post_wall_block = empty($posts) ? '<p>'.get_lang('NoPosts').'</p>' : $posts;
 
@@ -297,6 +327,8 @@ SocialManager::setSocialUserBlock($tpl, $user_id, 'home');
 $tpl->assign('social_wall_block', $wallSocialAddPost);
 $tpl->assign('social_post_wall_block', $social_post_wall_block);
 $tpl->assign('social_menu_block', $social_menu_block);
+$tpl->assign('social_auto_extend_link', $socialAutoExtendLink);
+
 
 $tpl->assign('social_friend_block', $friend_html);
 $tpl->assign('session_list', $social_session_block);

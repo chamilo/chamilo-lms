@@ -1109,19 +1109,23 @@ class MessageManager
      */
     public static function get_messages_by_parent($parent_id, $group_id = 0, $offset = 0, $limit = 0)
     {
-        if ($parent_id != strval(intval($parent_id))) {
-            return false;
-        }
         $table = Database::get_main_table(TABLE_MESSAGE);
-        $parent_id = intval($parent_id);
+        $parent_id = (int) $parent_id;
+
+        if (empty($parent_id)) {
+            return [];
+        }
+
         $condition_group_id = '';
         if (!empty($group_id)) {
-            $group_id = intval($group_id);
+            $group_id = (int) $group_id;
             $condition_group_id = " AND group_id = '$group_id' ";
         }
 
         $condition_limit = '';
         if ($offset && $limit) {
+            $offset = (int) $offset;
+            $limit = (int) $limit;
             $offset = ($offset - 1) * $limit;
             $condition_limit = " LIMIT $offset,$limit ";
         }
@@ -2003,7 +2007,7 @@ class MessageManager
     public static function get_message_by_id($messageId)
     {
         $table = Database::get_main_table(TABLE_MESSAGE);
-        $messageId = intval($messageId);
+        $messageId = (int) $messageId;
         $sql = "SELECT * FROM $table
                 WHERE 
                     id = '$messageId' AND 

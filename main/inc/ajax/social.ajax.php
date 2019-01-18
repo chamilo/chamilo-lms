@@ -198,17 +198,28 @@ switch ($action) {
         }
         break;
     case 'list_wall_message':
-        $start = isset($_REQUEST['start']) ? intval($_REQUEST['start']) - 1 : 0;
-        $length = isset($_REQUEST['length']) ? intval($_REQUEST['length']) : 10;
-        $userId = isset($_REQUEST['u']) ? intval($_REQUEST['u']) : api_get_user_id();
-        $friendId = $userId;
-        $array = SocialManager::getWallMessagesPostHTML($userId, $friendId, null, $length, $start);
+        $start = isset($_REQUEST['start']) ? (int) $_REQUEST['start'] - 1 : 0;
+        $length = isset($_REQUEST['length']) ? (int) $_REQUEST['length'] : 10;
+        $userId = isset($_REQUEST['u']) ? (int) $_REQUEST['u'] : api_get_user_id();
+
+        $array = SocialManager::getWallMessages(
+            $userId,
+            null,
+            0,
+            0,
+            '',
+            $start,
+            $length
+        );
+
+        $array = SocialManager::formatWallMessages($array);
+
         if (!empty($array)) {
             ksort($array);
             $html = '';
-            for ($i = 0; $i < count($array); $i++) {
-                $post = $array[$i]['html'];
-                $comment = SocialManager::getWallMessagesHTML($userId, $friendId, $array[$i]['id']);
+            foreach ($array as $item) {
+                $post = $item['html'];
+                $comment = SocialManager::getWallPostComments($userId, $item);
                 $html .= '<div class="panel panel-info"><div class="panel-body">'.$post.$comment.'</div></div>';
             }
             $html .= Display::div(

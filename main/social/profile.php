@@ -158,6 +158,7 @@ $socialAjaxUrl = api_get_path(WEB_AJAX_PATH).'social.ajax.php';
 $javascriptDir = api_get_path(LIBRARY_PATH).'javascript/';
 api_block_anonymous_users();
 $locale = api_get_language_isocode();
+
 // Add Jquery scroll pagination plugin
 $htmlHeadXtra[] = api_get_js('jscroll/jquery.jscroll.js');
 // Add Jquery Time ago plugin
@@ -265,7 +266,7 @@ $wallSocialAddPost = SocialManager::getWallForm($show_full_profile, api_get_self
 $social_wall_block = $wallSocialAddPost;
 
 // Social Post Wall
-$posts = SocialManager::getWallMessagesByUser($my_user_id, $friendId);
+$posts = SocialManager::getWallMessagesByUser($my_user_id);
 $social_post_wall_block = empty($posts) ? '<p>'.get_lang('NoPosts').'</p>' : $posts;
 
 $socialAutoExtendLink = Display::url(

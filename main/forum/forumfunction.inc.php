@@ -2634,9 +2634,10 @@ function count_number_of_forums_in_category($cat_id)
 {
     $table_forums = Database::get_course_table(TABLE_FORUM);
     $course_id = api_get_course_int_id();
+    $cat_id = (int) $cat_id;
     $sql = "SELECT count(*) AS number_of_forums
-            FROM ".$table_forums."
-            WHERE c_id = $course_id AND forum_category='".Database::escape_string($cat_id)."'";
+            FROM $table_forums
+            WHERE c_id = $course_id AND forum_category = $cat_id";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
 
@@ -4344,10 +4345,8 @@ function send_notification_mails($forumId, $thread_id, $reply_info)
  * be new posts and the user might have indicated that (s)he wanted to be
  * informed about the new posts by mail.
  *
- * @param string  Content type (post, thread, forum, forum_category)
- * @param int     Item DB ID
- * @param string $content
- * @param int    $id
+ * @param string    $content    Content type (post, thread, forum, forum_category)
+ * @param int       $id         Item DB ID of the corresponding content type
  *
  * @return string language variable
  *
@@ -4364,13 +4363,14 @@ function handle_mail_cue($content, $id)
     $table_users = Database::get_main_table(TABLE_MAIN_USER);
 
     $course_id = api_get_course_int_id();
+    $id = (int) $id;
 
     /* If the post is made visible we only have to send mails to the people
      who indicated that they wanted to be informed for that thread.*/
     if ($content == 'post') {
         // Getting the information about the post (need the thread_id).
         $post_info = get_post_information($id);
-        $thread_id = intval($post_info['thread_id']);
+        $thread_id = (int) $post_info['thread_id'];
 
         // Sending the mail to all the users that wanted to be informed for replies on this thread.
         $sql = "SELECT users.firstname, users.lastname, users.user_id, users.email
@@ -4378,11 +4378,11 @@ function handle_mail_cue($content, $id)
                 WHERE
                     posts.c_id = $course_id AND
                     mailcue.c_id = $course_id AND
-                    posts.thread_id='$thread_id'
-                    AND posts.post_notification='1'
-                    AND mailcue.thread_id='$thread_id'
-                    AND users.user_id=posts.poster_id
-                    AND users.active=1
+                    posts.thread_id = $thread_id AND
+                    posts.post_notification = '1' AND
+                    mailcue.thread_id = $thread_id AND
+                    users.user_id = posts.poster_id AND
+                    users.active = 1
                 GROUP BY users.email";
 
         $result = Database::query($sql);
@@ -4396,11 +4396,11 @@ function handle_mail_cue($content, $id)
                 WHERE
                     posts.c_id = $course_id AND
                     mailcue.c_id = $course_id AND
-                    posts.thread_id = ".intval($id)."
-                    AND posts.post_notification='1'
-                    AND mailcue.thread_id = ".intval($id)."
-                    AND users.user_id=posts.poster_id
-                    AND users.active=1
+                    posts.thread_id = $id AND
+                    posts.post_notification = '1' AND
+                    mailcue.thread_id = $id AND
+                    users.user_id = posts.poster_id
+                    users.active = 1
                 GROUP BY users.email";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
@@ -4409,18 +4409,18 @@ function handle_mail_cue($content, $id)
 
         // Deleting the relevant entries from the mailcue.
         $sql = "DELETE FROM $table_mailcue
-                WHERE c_id = $course_id AND thread_id='".Database::escape_string($id)."'";
+                WHERE c_id = $course_id AND thread_id = $id";
         Database::query($sql);
     } elseif ($content == 'forum') {
         $sql = "SELECT thread_id FROM $table_threads
-                WHERE c_id = $course_id AND forum_id='".Database::escape_string($id)."'";
+                WHERE c_id = $course_id AND forum_id = $id";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             handle_mail_cue('thread', $row['thread_id']);
         }
     } elseif ($content == 'forum_category') {
         $sql = "SELECT forum_id FROM $table_forums
-                WHERE c_id = $course_id AND forum_category ='".Database::escape_string($id)."'";
+                WHERE c_id = $course_id AND forum_category = $id";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             handle_mail_cue('forum', $row['forum_id']);

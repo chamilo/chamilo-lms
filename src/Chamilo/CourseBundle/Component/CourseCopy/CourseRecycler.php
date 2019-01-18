@@ -305,49 +305,57 @@ class CourseRecycler
     }
 
     /**
-     * Delete forum-categories
-     * Deletes all forum-categories from current course without forums.
+     * Deletes all forum-categories without forum from the current course.
+     * Categories with forums in it are dealt with by recycle_forums()
+     * This requires a check on the status of the forum item in c_item_property
      */
     public function recycle_forum_categories()
     {
-        $table_forum = Database::get_course_table(TABLE_FORUM);
-        $table_forumcat = Database::get_course_table(TABLE_FORUM_CATEGORY);
-        $sql = "SELECT fc.iid FROM ".$table_forumcat." fc
-                LEFT JOIN ".$table_forum." f
-                ON
-                    fc.cat_id=f.forum_category AND
-                    fc.c_id = ".$this->course_id." AND
-                    f.c_id = ".$this->course_id."
-        		WHERE f.forum_id IS NULL";
-        $res = Database::query($sql);
-        while ($obj = Database::fetch_object($res)) {
-            $sql = "DELETE FROM ".$table_forumcat."
-                    WHERE iid = ".$obj->iid;
-            Database::query($sql);
-        }
+        $forumTable = Database::get_course_table(TABLE_FORUM);
+        $forumCategoryTable = Database::get_course_table(TABLE_FORUM_CATEGORY);
+        $itemPropertyTable = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        $courseId = $this->course_id;
+        // c_forum_forum.forum_category points to c_forum_category.cat_id and
+        // has to be queried *with* the c_id to ensure a match
+        $subQuery = "SELECT distinct(f.forum_category) as categoryId
+              FROM $forumTable f, $itemPropertyTable i
+              WHERE
+                  f.c_id = $courseId AND
+                  i.c_id = f.c_id AND
+                  i.tool = 'forum' AND
+        	      f.iid = i.ref AND 
+                  i.visibility = 1";
+        $sql = "DELETE FROM $forumCategoryTable
+                    WHERE c_id = $courseId AND cat_id NOT IN ($subQuery)";
+        Database::query($sql);
     }
 
     /**
-     * Delete link-categories
      * Deletes all empty link-categories (=without links) from current course.
+     * Links are already dealt with by recycle_links() but if recycle is called
+     * on categories and not on link, then non-empty categories will survive
+     * the recycling.
      */
     public function recycle_link_categories()
     {
-        $link_cat_table = Database::get_course_table(TABLE_LINK_CATEGORY);
-        $link_table = Database::get_course_table(TABLE_LINK);
-        $sql = "SELECT lc.iid FROM $link_cat_table lc
-                LEFT JOIN ".$link_table." l
-                ON
-                    lc.id=l.category_id AND
-                    lc.c_id = ".$this->course_id." AND
-                    l.c_id = ".$this->course_id."
-        		WHERE l.id IS NULL";
-        $res = Database::query($sql);
-        while ($obj = Database::fetch_object($res)) {
-            $sql = "DELETE FROM ".$link_cat_table."
-                    WHERE iid = ".$obj->iid;
-            Database::query($sql);
-        }
+        $linkCategoryTable = Database::get_course_table(TABLE_LINK_CATEGORY);
+        $linkTable = Database::get_course_table(TABLE_LINK);
+        $itemPropertyTable = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        $courseId = $this->course_id;
+        // c_link.category_id points to c_link_category.id and
+        // has to be queried *with* the c_id to ensure a match
+        $subQuery = "SELECT distinct(l.category_id) as categoryId
+              FROM $linkTable l, $itemPropertyTable i
+              WHERE
+                  l.c_id = $courseId AND
+                  i.c_id = l.c_id AND
+                  i.tool = 'link' AND
+        	      l.iid = i.ref AND 
+                  i.visibility = 1";
+        $sql = "DELETE FROM $linkCategoryTable
+                    WHERE c_id = $courseId AND id NOT IN ($subQuery)";
+        Database::query($sql);
+
     }
 
     /**

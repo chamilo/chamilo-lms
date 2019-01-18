@@ -626,7 +626,6 @@ class CourseRecycler
             $sql = "UPDATE $learningPathTable SET category_id = 0 WHERE category_id = ".$categoryId;
             Database::query($sql);
             $sql = "DELETE FROM $learningPathCategoryTable WHERE iid = ".$categoryId;
-            error_log($sql);
             Database::query($sql);
         }
 

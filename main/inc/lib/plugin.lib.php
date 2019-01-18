@@ -259,7 +259,7 @@ class AppPlugin
      * @param Twig_Environment $template
      * @param bool             $forced
      *
-     * @return null|string
+     * @return string|null
      */
     public function loadRegion($pluginName, $region, $template, $forced = false)
     {

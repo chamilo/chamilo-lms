@@ -2879,7 +2879,7 @@ class Blog
             'blog_admin.php?action=add'
         );
         $form->addElement('header', get_lang('AddBlog'));
-        $form->addText('blog_name',get_lang('Title'));
+        $form->addText('blog_name', get_lang('Title'));
         $form->addHtmlEditor(
             'blog_subtitle',
             get_lang('SubTitle'),
@@ -2888,7 +2888,7 @@ class Blog
             [
                 'ToolbarSet' => 'Profile',
                 'Width' => '100%',
-                'Height' => '130'
+                'Height' => '130',
             ]
         );
         $form->addElement('hidden', 'new_blog_submit', 'true');
@@ -3222,7 +3222,7 @@ class Blog
      * @param string $fullText
      * @param int    $length
      *
-     * @return null|string
+     * @return string|null
      */
     private static function getPostExtract($fullText, $length = BLOG_MAX_PREVIEW_CHARS)
     {

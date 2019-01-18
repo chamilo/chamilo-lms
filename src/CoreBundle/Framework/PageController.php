@@ -882,7 +882,7 @@ class PageController
      * @param string $filter  current|history
      * @param int    $page
      *
-     * @return bool|null|string
+     * @return bool|string|null
      */
     public function returnSessions($user_id, $filter, $page)
     {

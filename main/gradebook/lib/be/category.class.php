@@ -298,7 +298,7 @@ class Category implements GradebookItem
     }
 
     /**
-     * @return null|int
+     * @return int|null
      */
     public function get_grade_model_id()
     {
@@ -2709,7 +2709,7 @@ class Category implements GradebookItem
      * Internal function used by get_tree().
      *
      * @param int      $level
-     * @param null|int $visible
+     * @param int|null $visible
      *
      * @return array
      */

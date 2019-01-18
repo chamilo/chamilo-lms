@@ -497,7 +497,7 @@ class MoodleImport
     /**
      * Search the current file resource in main Files XML.
      *
-     * @param resource $filesXml XML file
+     * @param resource $filesXml  XML file
      * @param int      $contextId
      *
      * @return mixed | array if is a valid xml file, false otherwise

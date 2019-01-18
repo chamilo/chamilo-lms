@@ -1244,7 +1244,7 @@ class Display
                 [
                     'id' => $id.'-'.$i,
                     'href' => $item['url'],
-                    'class' => 'nav-link '.$class
+                    'class' => 'nav-link '.$class,
                 ]
             );
             $lis .= self::tag('li', $item, ['class' => 'nav-item']);
@@ -1904,7 +1904,7 @@ class Display
     /**
      * @param array $list
      *
-     * @return null|string
+     * @return string|null
      */
     public static function description($list)
     {
@@ -1956,7 +1956,7 @@ class Display
      * @param string $count
      * @param string $type
      *
-     * @return null|string
+     * @return string|null
      */
     public static function badge($count, $type = "warning")
     {
@@ -2047,7 +2047,7 @@ class Display
      * @param array  $items
      * @param string $class
      *
-     * @return null|string
+     * @return string|null
      */
     public static function actions($items, $class = 'new_actions')
     {
@@ -2141,7 +2141,7 @@ class Display
      * @param string $file
      * @param array  $params
      *
-     * @return null|string
+     * @return string|null
      */
     public static function getMediaPlayer($file, $params = [])
     {
@@ -2453,7 +2453,7 @@ class Display
         }
         $cardBody = $title.' '.self::contentPanel($content).' '.$footer;
 
-        $panel = Display::tag('div',$cardBody,['id' => 'card-'.$id ,'class'=>'card-body']);
+        $panel = Display::tag('div', $cardBody, ['id' => 'card-'.$id, 'class' => 'card-body']);
 
         return '
             <div '.$id.' class="card">
@@ -2497,7 +2497,7 @@ class Display
         $includeText = true
     ) {
         $buttonClass = "btn btn-outline-secondary";
-        if(!empty($type)){
+        if (!empty($type)) {
             $buttonClass = "btn btn-$type";
         }
         $icon = self::tag('i', null, ['class' => "fa fa-$icon fa-fw", 'aria-hidden' => 'true']);
@@ -2607,7 +2607,7 @@ class Display
      * @param bool|true  $open
      * @param bool|false $fullClickable
      *
-     * @return null|string
+     * @return string|null
      *
      * @todo rework function to easy use
      */
@@ -2725,20 +2725,6 @@ HTML;
         return  $html;
     }
 
-    /**
-     * Displays the reduced page header (without banner).
-     */
-    private static function set_header()
-    {
-        global $show_learnpath, $tool_name;
-        self::$global_template = new Template(
-            $tool_name,
-            false,
-            false,
-            $show_learnpath
-        );
-    }
-
     public static function randomColor($id)
     {
         static $colors = [];
@@ -2758,13 +2744,26 @@ HTML;
             }
 
             $result = [
-                'color' => '#' . $color,
-                'luminosity' => $type
+                'color' => '#'.$color,
+                'luminosity' => $type,
             ];
             $colors[$id] = $result;
 
             return $result; // example: #fc443a
         }
+    }
 
+    /**
+     * Displays the reduced page header (without banner).
+     */
+    private static function set_header()
+    {
+        global $show_learnpath, $tool_name;
+        self::$global_template = new Template(
+            $tool_name,
+            false,
+            false,
+            $show_learnpath
+        );
     }
 }

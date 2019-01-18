@@ -1738,7 +1738,7 @@ function api_get_user_entity($userId)
 }
 
 /**
- * @return null|User
+ * @return User|null
  */
 function api_get_current_user()
 {
@@ -7997,7 +7997,7 @@ function api_get_user_info_from_official_code($officialCode)
  * @param string $usernameInputId
  * @param string $passwordInputId
  *
- * @return null|string
+ * @return string|null
  */
 function api_get_password_checker_js($usernameInputId, $passwordInputId)
 {

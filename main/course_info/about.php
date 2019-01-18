@@ -139,8 +139,6 @@ if ($checker) {
     );
 }
 
-
-
 $courseItem = [
     'code' => $course->getCode(),
     'title' => $course->getTitle(),

@@ -182,7 +182,7 @@ if (!$myCourseListAsCategory) {
             true,
             $loadHistory
         );
-        
+
         $getCategory = CourseCategory::getCategory($categoryCode);
         $controller->tpl->assign('category', $getCategory);
     }
@@ -238,7 +238,7 @@ if (api_get_setting('go_to_course_after_login') === 'true') {
 
 $showWelcomeCourse = false;
 // Show the chamilo mascot
-if (empty($courseAndSessions['html']) && !isset($_GET['history'])) {
+if (empty($courseAndSessions['html_courses']) && !isset($_GET['history'])) {
     $controller->setWelComeCourse();
     $showWelcomeCourse = true;
 }
@@ -263,15 +263,6 @@ if ($useCookieValidation === 'true') {
         }
     }
 }
-
-$controller->tpl->assign('profile_block', $controller->return_profile_block());
-$controller->tpl->assign('user_image_block', $controller->return_user_image_block());
-$controller->tpl->assign('course_block', $controller->return_course_block());
-$controller->tpl->assign('navigation_course_links', $controller->return_navigation_links());
-$controller->tpl->assign('search_block', $controller->return_search_block());
-$controller->tpl->assign('notice_block', $controller->return_notice());
-$controller->tpl->assign('classes_block', $controller->returnClassesBlock());
-$controller->tpl->assign('skills_block', $controller->returnSkillLinks());
 
 $historyClass = '';
 if (!empty($_GET['history'])) {

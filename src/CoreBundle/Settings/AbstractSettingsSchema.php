@@ -3,18 +3,18 @@
 
 namespace Chamilo\CoreBundle\Settings;
 
-use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
+use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 
 /**
- * Class AbstractSettingsSchema
+ * Class AbstractSettingsSchema.
  *
  * @package Chamilo\CoreBundle\Settings
  */
 abstract class AbstractSettingsSchema implements SchemaInterface
 {
     /**
-     * @param array                    $allowedTypes
+     * @param array                   $allowedTypes
      * @param AbstractSettingsBuilder $builder
      */
     public function setMultipleAllowedTypes($allowedTypes, $builder)

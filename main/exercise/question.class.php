@@ -2310,6 +2310,28 @@ abstract class Question
     }
 
     /**
+     * Check if this question exists in another exercise.
+     *
+     * @throws \Doctrine\ORM\Query\QueryException
+     *
+     * @return mixed
+     */
+    public function existsInAnotherExercises()
+    {
+        $em = Database::getManager();
+
+        $count = $em
+            ->createQuery('
+                SELECT COUNT(qq.iid) FROM ChamiloCourseBundle:CQuizRelQuestion qq
+                WHERE qq.questionId = :id
+            ')
+            ->setParameters(['id' => (int) $this->id])
+            ->getSingleScalarResult();
+
+        return $count > 1;
+    }
+
+    /**
      * Resizes a picture || Warning!: can only be called after uploadPicture,
      * or if picture is already available in object.
      *
@@ -2372,27 +2394,5 @@ abstract class Question
         }
 
         return false;
-    }
-
-    /**
-     * Check if this question exists in another exercise.
-     *
-     * @throws \Doctrine\ORM\Query\QueryException
-     *
-     * @return mixed
-     */
-    public function existsInAnotherExercises()
-    {
-        $em = Database::getManager();
-
-        $count = $em
-            ->createQuery('
-                SELECT COUNT(qq.iid) FROM ChamiloCourseBundle:CQuizRelQuestion qq
-                WHERE qq.questionId = :id
-            ')
-            ->setParameters(['id' => (int) $this->id])
-            ->getSingleScalarResult();
-
-        return $count > 1;
     }
 }

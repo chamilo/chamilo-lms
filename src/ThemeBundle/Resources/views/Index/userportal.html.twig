@@ -1,7 +1,11 @@
-{% extends "@ChamiloTheme/Layout/layout_content.html.twig" %}
+{% extends '@ChamiloTheme/Layout/base-layout.html.twig' %}
 
-{% block chamilo_right_column %}
+{% block page_content %}
     {% autoescape false %}
+
+        {% if show_welcome_course %}
+            {% include '@ChamiloTheme/Layout/welcome_to_course.html.twig' %}
+        {% endif %}
 
         <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -18,18 +22,12 @@
                 {{ html_courses }}
             </div>
             <div class="tab-pane fade" id="nav-sessions" role="tabpanel" aria-labelledby="nav-sessions-tab">
-
-                <div class="grid-session">
-                    {{ html_sessions }}
-                </div>
-
+                {{ html_sessions }}
             </div>
         </div>
 
 
-        {#{% if show_welcome_course %}
-            {% include '@ChamiloTheme/Layout/welcome_to_course.html.twig' %}
-        {% endif %}#}
+
 
     {% endautoescape %}
 {% endblock %}

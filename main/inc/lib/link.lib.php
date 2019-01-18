@@ -1187,7 +1187,7 @@ class Link extends Model
             'pencil-alt',
             null,
             [
-                'title' => get_lang('Modify')
+                'title' => get_lang('Modify'),
             ]);
 
         // DISPLAY MOVE UP COMMAND only if it is not the top link.
@@ -1199,10 +1199,9 @@ class Link extends Model
                 'level-up-alt',
                 'outline-secondary',
                 [
-                    'title' => get_lang("Up")
+                    'title' => get_lang("Up"),
                 ]
                 );
-
         } else {
             $tools .= Display::toolbarButton(
                 null,
@@ -1211,7 +1210,7 @@ class Link extends Model
                 'outline-secondary',
                 [
                     'title' => get_lang("Up"),
-                    'class' => 'disabled'
+                    'class' => 'disabled',
                 ]
             );
         }
@@ -1225,10 +1224,9 @@ class Link extends Model
                 'level-down-alt',
                 'outline-secondary',
                 [
-                    'title' => get_lang("Down")
+                    'title' => get_lang("Down"),
                 ]
             );
-
         } else {
             $tools .= Display::toolbarButton(
                 null,
@@ -1237,7 +1235,7 @@ class Link extends Model
                 'outline-secondary',
                 [
                     'title' => get_lang("Down"),
-                    'class' => 'disabled'
+                    'class' => 'disabled',
                 ]
             );
         }
@@ -1249,11 +1247,9 @@ class Link extends Model
             'outline-secondary',
             [
                 'title' => get_lang("Delete"),
-                'onclick' => "javascript: if(!confirm('".get_lang('CategoryDelconfirm')."')) return false;"
+                'onclick' => "javascript: if(!confirm('".get_lang('CategoryDelconfirm')."')) return false;",
             ]
         );
-
-
 
         return $tools;
     }
@@ -1690,7 +1686,6 @@ class Link extends Model
         echo '</div>';
         $linksPerCategory = self::showLinksPerCategory(0, $course_id, $session_id);
 
-
         if (empty($countCategories)) {
             echo $linksPerCategory;
         } else {
@@ -1701,7 +1696,7 @@ class Link extends Model
 
         $counter = 0;
         $category = [];
-        $list=[];
+        $list = [];
         foreach ($categories as $myrow) {
             // Student don't see invisible categories.
             if (!api_is_allowed_to_edit(null, true)) {
@@ -1719,16 +1714,14 @@ class Link extends Model
             $visibilityClass = null;
 
             if ($myrow['visibility'] == '1') {
-
                 $url = 'link.php?'.api_get_cidreq().'&sec_token='.$token.'&action=invisible&id='.$myrow['id'].'&scope='.TOOL_LINK_CATEGORY;
                 $title = get_lang('Hide');
-                $strVisibility = Display::toolbarButton(null,$url,'eye',null,['title'=>$title]);
-
+                $strVisibility = Display::toolbarButton(null, $url, 'eye', null, ['title' => $title]);
             } elseif ($myrow['visibility'] == '0') {
                 $visibilityClass = 'text-muted';
                 $url = 'link.php?'.api_get_cidreq().'&sec_token='.$token.'&action=visible&id='.$myrow['id'].'&scope='.TOOL_LINK_CATEGORY;
                 $title = get_lang('Show');
-                $strVisibility = Display::toolbarButton(null,$url,'eye-slash',null,['title'=>$title]);
+                $strVisibility = Display::toolbarButton(null, $url, 'eye-slash', null, ['title' => $title]);
             }
 
             $iconTree = '';
@@ -1766,7 +1759,6 @@ class Link extends Model
             }
             $category['children'] = $childrenContent;
             $list[] = $category;
-
         }
         $tpl = new Template(null);
         $tpl->assign('data', $list);
@@ -1774,7 +1766,6 @@ class Link extends Model
         $content = $tpl->fetch($courseInfoLayout);
 
         echo $content;
-
     }
 
     /**
@@ -1928,7 +1919,7 @@ class Link extends Model
         }
         $form->addHidden('id', $id);
         $form->addText('category_title', get_lang('CategoryName'));
-        $form->addHtmlEditor('description', get_lang('Description'),true,false, ['ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130']);
+        $form->addHtmlEditor('description', get_lang('Description'), true, false, ['ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130']);
         $form->addButtonSave($my_cat_title, 'submitCategory');
         $form->setDefaults($defaults);
 

@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * @copyright (c) 2001-2006 Universite catholique de Louvain (UCL)
@@ -148,6 +149,8 @@ function import_exercise($file)
             }
         }
     }
+
+    var_dump($exercise_info['question']);die;
 
     if (!$file_found) {
         return 'NoXMLFileFoundInTheZip';
@@ -355,6 +358,8 @@ function qti_parse_file($exercisePath, $file, $questionFile)
         );
         xml_set_character_data_handler($xml_parser, 'elementDataQti1');
     } else {
+        parseQti2($data);
+die;
         xml_set_element_handler(
             $xml_parser,
             'startElementQti2',
@@ -398,6 +403,189 @@ function qti_parse_file($exercisePath, $file, $questionFile)
     }
 
     return true;
+}
+
+function parseQti2($xmlData) {
+    $exercise_info = [];
+    //global $questionTempDir;
+    //
+    $crawler = new Crawler($xmlData);
+
+    $crawler
+        ->filter('*')
+        ->each(function (Crawler $node) use ($exercise_info) {
+            $nodeName = strtoupper($node->nodeName());
+
+            switch ($nodeName) {
+                case 'ASSESSMENTITEM':
+                    $current_question_ident = $node->attr('identifier');
+
+                    $exercise_info['question'][$current_question_ident] = [
+                        'answer' => [],
+                        'correct_answers' => [],
+                        'title' => $node->attr('title'),
+                        'category' => $node->attr('category'),
+                        'type' => '',
+                        'tempdir' => $questionTempDir,
+                    ];
+                    break;
+                case 'SECTION':
+                    $title = $node->attr('title');
+
+                    if (!empty($title)) {
+                        $exercise_info['name'] = $title;
+                    }
+                    break;
+                case 'RESPONSEDECLARATION':
+                    if ('multiple' === $node->attr('cardinality')) {
+                        $exercise_info['question'][$current_question_ident]['type'] = MCMA;
+                        $cardinality = 'multiple';
+                    }
+
+                    if ('single' === $node->attr('cardinality')) {
+                        $exercise_info['question'][$current_question_ident]['type'] = MCUA;
+                        $cardinality = 'single';
+                    }
+
+                    $current_answer_id = $node->attr('identifier');
+                    break;
+
+                case 'INLINECHOICEINTERACTION':
+                    $exercise_info['question'][$current_question_ident]['type'] = FIB;
+                    $exercise_info['question'][$current_question_ident]['subtype'] = 'LISTBOX_FILL';
+                    $current_answer_id = $node->attr('responseIdentifier');
+                    break;
+
+                case 'INLINECHOICE':
+                    $current_inlinechoice_id = $node->attr('identifier');
+                    break;
+
+                case 'TEXTENTRYINTERACTION':
+                    $exercise_info['question'][$current_question_ident]['type'] = FIB;
+                    $exercise_info['question'][$current_question_ident]['subtype'] = 'TEXTFIELD_FILL';
+                    $exercise_info['question'][$current_question_ident]['response_text'] = $current_question_item_body;
+                    break;
+
+                case 'MATCHINTERACTION':
+                    $exercise_info['question'][$current_question_ident]['type'] = MATCHING;
+                    break;
+
+                case 'EXTENDEDTEXTINTERACTION':
+                    $exercise_info['question'][$current_question_ident]['type'] = FREE_ANSWER;
+                    $exercise_info['question'][$current_question_ident]['description'] = '';
+                    break;
+
+                case 'SIMPLEMATCHSET':
+                    if (!isset($current_match_set)) {
+                        $current_match_set = 1;
+                    } else {
+                        $current_match_set++;
+                    }
+                    $exercise_info['question'][$current_question_ident]['answer'][$current_match_set] = [];
+                    break;
+
+                case 'SIMPLEASSOCIABLECHOICE':
+                    $currentAssociableChoice = $node->attr('identifier');
+                    break;
+
+                case 'SIMPLECHOICE':
+                    $current_answer_id = $node->attr('identifier');
+                    if (!isset($exercise_info['question'][$current_question_ident]['answer'][$current_answer_id])) {
+                        $exercise_info['question'][$current_question_ident]['answer'][$current_answer_id] = [];
+                    }
+                    break;
+
+                case 'MAPENTRY':
+                    $parent = $node->parents()->first();
+
+                    if ($parent->count() && in_array($parent->nodeName(), ['mapping', 'mapEntry'])) {
+                        $answer_id = $node->attr('mapkey');
+                        if (!isset($exercise_info['question'][$current_question_ident]['weighting'])) {
+                            $exercise_info['question'][$current_question_ident]['weighting'] = [];
+                        }
+                        $exercise_info['question'][$current_question_ident]['weighting'][$answer_id] = $node->attr('mappedValue']);
+                    }
+                    break;
+
+                case 'MAPPING':
+                    $defaultValue = $node->attr('defaultValue');
+
+                    if (!empty($defaultValue)) {
+                        $exercise_info['question'][$current_question_ident]['default_weighting'] = $defaultValue;
+                    }
+                    break;
+
+                case 'ITEMBODY':
+                    $record_item_body = true;
+                    $current_question_item_body = '';
+                    break;
+
+                case 'IMG':
+                    $exercise_info['question'][$current_question_ident]['attached_file_url'] = $node->attr('src');
+                    break;
+
+                case 'ORDER':
+                    $orderType = $node->attr('order_type');
+
+                    if (!empty($orderType)) {
+                        $exercise_info['order_type'] = $orderType;
+                    }
+                    break;
+            }
+        });
+
+    //$section = $crawler->filter('questestinterop > section')->eq(0);
+    //
+    //$exercise_info['name'] = $section->attr('title');
+    //
+    //$section
+    //    ->children()
+    //    ->each(function (Crawler $child) use (&$exercise_info, $questionTempDir) {
+    //        switch ($child->nodeName()) {
+    //            case 'assessmentItem':
+    //                $questionId = $child->attr('identifier');
+    //                $questionTitle = $child->attr('title');
+    //                $questionCategory = $child->attr('category');
+    //
+    //                $questionInfo = [
+    //                    'answer' => [],
+    //                    'correct_answers' => [],
+    //                    'title' => $child->attr('title'),
+    //                    'category' => !empty($questionCategory) ? $questionCategory : '',
+    //                    'type' => '',
+    //                    'tempdir' => $questionTempDir,
+    //                ];
+    //
+    //                $child
+    //                    ->children()
+    //                    ->each(function (Crawler $child2) use (&$questionInfo) {
+    //                        $child2Name = $child2->nodeName();
+    //
+    //                        if ('responseDeclaration' === $child2Name) {
+    //                            $questionCardinality = $child2->attr('cardinality');
+    //
+    //                            if ('multiple' === $questionCardinality) {
+    //                                $questionInfo['type'] = MCMA;
+    //                            } elseif ('single' === $questionCardinality) {
+    //                                $questionInfo['type'] = MCUA;
+    //                            }
+    //
+    //                            $child2
+    //                                ->children()
+    //                                ->children()
+    //                                ->each(function (Crawler $child3) use (&$questionInfo) {
+    //                                    if ('correctResponse' === $child3->nodeName()) {
+    //                                    }
+    //                                });
+    //                        }
+    //                    });
+    //
+    //                $exercise_info['question'][$questionId] = $questionInfo;
+    //                break;
+    //        }
+    //    });
+    //
+    //var_dump($exercise_info['question']);
 }
 
 /**

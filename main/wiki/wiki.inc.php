@@ -6033,7 +6033,7 @@ class Wiki
                     'addnew'
                 ).'>'
                 .Display::return_icon(
-                    'add.png',
+                    'new_document.png',
                     get_lang('AddNew'),
                     '',
                     ICON_SIZE_MEDIUM
@@ -6069,7 +6069,7 @@ class Wiki
                 get_lang('SearchPages'),
                 '',
                 ICON_SIZE_MEDIUM
-            ).'</a></li>';
+            ).'</a>';
         ///menu more
         $actionsLeft .= '<a href="index.php?cidReq='.$_course['id'].'&action=searchpages&session_id='.$session_id.'&group_id='.$groupId.'&action=more&title='.api_htmlentities(
                 urlencode($page)
@@ -6079,18 +6079,28 @@ class Wiki
                 get_lang('Statistics'),
                 '',
                 ICON_SIZE_MEDIUM
-            ).'</a></li>';
+            ).'</a>';
 
         // menu all pages
-        $actionsLeft .= '<a class="btn btn-default" href="index.php?cidReq='.$_course['id'].'&action=allpages&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab(
+        $actionsLeft .= '<a href="index.php?cidReq='.$_course['id'].'&action=allpages&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab(
                 'allpages'
             ).'>'.
-            get_lang('AllPages').'</a>';
+            Display::return_icon(
+                'list_badges.png',
+                get_lang('AllPages'),
+                '',
+                ICON_SIZE_MEDIUM
+            ).'</a>';
         // menu recent changes
-        $actionsLeft .= '<a class="btn btn-default" href="index.php?cidReq='.$_course['id'].'&action=recentchanges&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab(
+        $actionsLeft .= '<a href="index.php?cidReq='.$_course['id'].'&action=recentchanges&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab(
                 'recentchanges'
             ).'>'.
-            get_lang('RecentChanges').'</a>';
+            Display::return_icon(
+                'history.png',
+                get_lang('RecentChanges'),
+                '',
+                ICON_SIZE_MEDIUM
+            )   .'</a>';
         echo Display::toolbarAction('toolbar-wiki', [$actionsLeft]);
     }
 

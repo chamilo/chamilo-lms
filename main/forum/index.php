@@ -182,21 +182,8 @@ if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])) {
         $url
     );
 }
-if (!empty($allCourseForums)) {
-    $actionLeft .= search_link();
-}
 
 if (api_is_allowed_to_edit(false, true)) {
-    $actionLeft .= Display::url(
-        Display::return_icon(
-            'new_folder.png',
-            get_lang('AddForumCategory'),
-            null,
-            ICON_SIZE_MEDIUM
-        ),
-        api_get_self().'?'.api_get_cidreq().'&action=add&content=forumcategory&lp_id='.$lp_id
-    );
-
     if (is_array($forumCategories) && !empty($forumCategories)) {
         $actionLeft .= Display::url(
             Display::return_icon(
@@ -208,6 +195,20 @@ if (api_is_allowed_to_edit(false, true)) {
             api_get_self().'?'.api_get_cidreq().'&action=add&content=forum&lp_id='.$lp_id
         );
     }
+
+    $actionLeft .= Display::url(
+        Display::return_icon(
+            'new_folder.png',
+            get_lang('AddForumCategory'),
+            null,
+            ICON_SIZE_MEDIUM
+        ),
+        api_get_self().'?'.api_get_cidreq().'&action=add&content=forumcategory&lp_id='.$lp_id
+    );
+}
+
+if (!empty($allCourseForums)) {
+    $actionLeft .= search_link();
 }
 
 $actions = Display::toolbarAction('toolbar-forum', [$actionLeft]);

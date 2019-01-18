@@ -74,18 +74,6 @@ $actions = '';
 
 if ($is_allowed_to_edit) {
     $actionLeft = '';
-    if (!$sessionId) {
-        $actionLeft .= Display::url(
-            Display::return_icon(
-                'new_folder.png',
-                get_lang('AddCategory'),
-                [],
-                ICON_SIZE_MEDIUM
-            ),
-            api_get_self().'?'.api_get_cidreq().'&action=add_lp_category'
-        );
-    }
-
     $actionLeft .= Display::url(
         Display::return_icon(
             'new_learnpath.png',
@@ -114,6 +102,18 @@ if ($is_allowed_to_edit) {
                 ICON_SIZE_MEDIUM
             ),
             '../upload/upload_ppt.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH
+        );
+    }
+
+    if (!$sessionId) {
+        $actionLeft .= Display::url(
+            Display::return_icon(
+                'new_folder.png',
+                get_lang('AddCategory'),
+                [],
+                ICON_SIZE_MEDIUM
+            ),
+            api_get_self().'?'.api_get_cidreq().'&action=add_lp_category'
         );
     }
     $actions = Display::toolbarAction('actions-lp', [$actionLeft]);

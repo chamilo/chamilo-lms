@@ -6753,6 +6753,15 @@ class learnpath
         $actionsRight = '';
         $actionsLeft .= Display::url(
             Display::return_icon(
+                'back.png',
+                get_lang('ReturnToLearningPaths'),
+                '',
+                ICON_SIZE_MEDIUM
+            ),
+            'lp_controller.php?'.api_get_cidreq()
+        );
+        $actionsLeft .= Display::url(
+            Display::return_icon(
                 'preview_view.png',
                 get_lang('Preview'),
                 '',

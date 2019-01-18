@@ -1647,11 +1647,12 @@ class SocialManager extends UserManager
 
         $tblMessage = Database::get_main_table(TABLE_MESSAGE);
         $tblMessageAttachment = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
-
-        $userId = intval($userId);
+        $parentId = (int) $parentId;
+        $userId = (int) $userId;
         $start = Database::escape_string($start);
-        $limit = intval($limit);
+        $offset = (int) $offset;
         $messageStatus = (int) $messageStatus;
+        $parentId = (int) $parentId;
 
         $sql = "SELECT
                     id,

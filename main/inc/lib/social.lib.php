@@ -152,14 +152,16 @@ class SocialManager extends UserManager
         $search_name = null,
         $load_extra_info = true
     ) {
+        $user_id = (int) $user_id;
+
         $list_ids_friends = [];
         $tbl_my_friend = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
         $tbl_my_user = Database::get_main_table(TABLE_MAIN_USER);
         $sql = 'SELECT friend_user_id FROM '.$tbl_my_friend.'
                 WHERE
                     relation_type NOT IN ('.USER_RELATION_TYPE_DELETED.', '.USER_RELATION_TYPE_RRHH.') AND
-                    friend_user_id<>'.((int) $user_id).' AND
-                    user_id='.((int) $user_id);
+                    friend_user_id<>'.$user_id.' AND
+                    user_id='.$user_id;
         if (isset($id_group) && $id_group > 0) {
             $sql .= ' AND relation_type='.$id_group;
         }
@@ -309,17 +311,17 @@ class SocialManager extends UserManager
      *
      * @author isaac flores paz
      *
-     * @param int user receiver id
+     * @param int $userId user receiver id
      *
      * @return int
      */
-    public static function get_message_number_invitation_by_user_id($user_receiver_id)
+    public static function get_message_number_invitation_by_user_id($userId)
     {
         $table = Database::get_main_table(TABLE_MESSAGE);
-        $user_receiver_id = (int) $user_receiver_id;
+        $userId = (int) $userId;
         $sql = 'SELECT COUNT(*) as count_message_in_box FROM '.$table.'
                 WHERE
-                    user_receiver_id='.$user_receiver_id.' AND
+                    user_receiver_id='.$userId.' AND
                     msg_status='.MESSAGE_STATUS_INVITATION_PENDING;
         $res = Database::query($sql);
         $row = Database::fetch_array($res, 'ASSOC');
@@ -333,16 +335,17 @@ class SocialManager extends UserManager
     /**
      * Get number of messages sent to other users.
      *
-     * @param int $sender_id
+     * @param int $userId
      *
      * @return int
      */
-    public static function getCountMessagesSent($sender_id)
+    public static function getCountMessagesSent($userId)
     {
+        $userId = (int) $userId;
         $table = Database::get_main_table(TABLE_MESSAGE);
         $sql = 'SELECT COUNT(*) FROM '.$table.'
                 WHERE
-                    user_sender_id='.intval($sender_id).' AND
+                    user_sender_id='.$userId.' AND
                     msg_status < 5';
         $res = Database::query($sql);
         $row = Database::fetch_row($res);
@@ -474,6 +477,8 @@ class SocialManager extends UserManager
      */
     public static function getCountInvitationSent($userId)
     {
+        $userId = (int) $userId;
+
         if (empty($userId)) {
             return 0;
         }
@@ -482,7 +487,7 @@ class SocialManager extends UserManager
         $sql = 'SELECT count(user_receiver_id) count
                 FROM '.$table.'
                 WHERE
-                    user_sender_id = '.intval($userId).' AND
+                    user_sender_id = '.$userId.' AND
                     msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
         $res = Database::query($sql);
         if (Database::num_rows($res)) {
@@ -697,6 +702,8 @@ class SocialManager extends UserManager
     public static function get_logged_user_course_html($my_course, $count)
     {
         $result = '';
+        $count = (int) $count;
+
         // Table definitions
         $main_user_table = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -806,6 +813,9 @@ class SocialManager extends UserManager
      */
     public static function show_social_avatar_block($show = '', $group_id = 0, $user_id = 0)
     {
+        $user_id = (int) $user_id;
+        $group_id = (int) $group_id;
+
         if (empty($user_id)) {
             $user_id = api_get_user_id();
         }
@@ -897,6 +907,9 @@ class SocialManager extends UserManager
         $show_full_profile = false,
         $show_delete_account_button = false
     ) {
+        $user_id = (int) $user_id;
+        $group_id = (int) $group_id;
+
         if (empty($user_id)) {
             $user_id = api_get_user_id();
         }
@@ -1277,7 +1290,7 @@ class SocialManager extends UserManager
      */
     public static function display_user_list($user_list, $wrap = true)
     {
-        $html = null;
+        $html = '';
 
         if (isset($_GET['id']) || count($user_list) < 1) {
             return false;
@@ -1354,7 +1367,7 @@ class SocialManager extends UserManager
     public static function display_individual_user($user_id)
     {
         global $interbreadcrumb;
-        $safe_user_id = intval($user_id);
+        $safe_user_id = (int) $user_id;
         $currentUserId = api_get_user_id();
 
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
@@ -2237,6 +2250,9 @@ class SocialManager extends UserManager
      */
     private static function headerMessagePost($authorId, $receiverId, $users, $message, $isOwnWall = false)
     {
+        $authorId = (int) $authorId;
+        $receiverId = (int) $receiverId;
+
         $date = api_get_local_time($message['send_date']);
         $avatarAuthor = $users[$authorId]['avatar'];
         $urlAuthor = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$authorId;
@@ -2260,7 +2276,6 @@ class SocialManager extends UserManager
         if (!empty($message['path'])) {
             $imageBig = UserManager::getUserPicture($authorId, USER_IMAGE_SIZE_BIG);
             $imageSmall = UserManager::getUserPicture($authorId, USER_IMAGE_SIZE_SMALL);
-
             $wallImage = '<a class="thumbnail ajax" href="'.$imageBig.'"><img src="'.$imageSmall.'"></a>';
         }
 

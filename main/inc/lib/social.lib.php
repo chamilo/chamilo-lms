@@ -1652,7 +1652,6 @@ class SocialManager extends UserManager
         $start = Database::escape_string($start);
         $offset = (int) $offset;
         $messageStatus = (int) $messageStatus;
-        $parentId = (int) $parentId;
 
         $sql = "SELECT
                     id,
@@ -1694,7 +1693,7 @@ class SocialManager extends UserManager
      *
      * @param int    $userId    USER ID of the person's wall
      * @param int    $friendId  id person
-     * @param int    $idMessage id message
+     * @param int    $messageId id message
      * @param string $start     Start date (from when we want the messages until today)
      * @param int    $limit     Limit to the number of messages we want
      * @param int    $offset    Wall messages offset
@@ -1704,7 +1703,7 @@ class SocialManager extends UserManager
     public static function getWallMessagesHTML(
         $userId,
         $friendId,
-        $idMessage,
+        $messageId,
         $start = null,
         $limit = 10,
         $offset = 0
@@ -1717,7 +1716,7 @@ class SocialManager extends UserManager
         $messages = self::getWallMessages(
             $userId,
             MESSAGE_STATUS_WALL,
-            $idMessage,
+            $messageId,
             $start,
             $limit,
             $offset
@@ -1763,7 +1762,7 @@ class SocialManager extends UserManager
                 $media .= Display::url(
                     Display::returnFontAwesomeIcon('trash'),
                     $url,
-                    ['title' => get_lang("SocialMessageDelete")]
+                    ['title' => get_lang('SocialMessageDelete')]
                 );
                 $media .= '</div>';
                 $media .= '</div>';
@@ -1777,7 +1776,7 @@ class SocialManager extends UserManager
         $formattedList .= '<div class="mediapost-form">';
         $formattedList .= '<form name="social_wall_message" method="POST">
                 <label for="social_wall_new_msg" class="hide">'.get_lang('SocialWriteNewComment').'</label>
-                <input type="hidden" name = "messageId" value="'.$idMessage.'" />
+                <input type="hidden" name = "messageId" value="'.$messageId.'" />
                 <textarea placeholder="'.get_lang('SocialWriteNewComment').
                 '" name="social_wall_new_msg" rows="1" style="width:80%;" ></textarea>
                 <button type="submit" name="social_wall_new_msg_submit"

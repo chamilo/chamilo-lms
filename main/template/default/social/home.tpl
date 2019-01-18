@@ -9,9 +9,24 @@
             </div>
         </div>
         <div class="col-md-6">
-            {{ social_search_block }}
-            {{ social_skill_block }}
-            {{ social_group_block }}
+            {#{{ social_search_block }}#}
+
+            <div id="wallMessages">
+                {{ social_wall_block }}
+                <div class="spinner"></div>
+                <div class="panel panel-preview panel-default" hidden="true">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">{{ "Url" | get_lang }} - {{ "Preview" | get_lang }}</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="url_preview"></div>
+                    </div>
+                </div>
+                {{ social_post_wall_block }}
+                {{ social_auto_extend_link }}
+            </div>
+
+            {#{{ social_skill_block }}#}
             {{ social_right_content }}
             <div id="message_ajax_reponse" class=""></div>
             <div id="display_response_id"></div>
@@ -37,6 +52,9 @@
                     </div>
                 </div>
             </div>
+
+
+            {{ social_group_block }}
 
             <!-- Block session list -->
             {% if session_list != null %}

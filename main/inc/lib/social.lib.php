@@ -1597,8 +1597,10 @@ class SocialManager extends UserManager
      * Gets all messages from someone's wall (within specific limits).
      *
      * @param int        $userId        id of wall shown
-     * @param string     $messageStatus status wall message
+     * @param int|array  $messageStatus status wall message
      * @param int|string $parentId      id message (Post main)
+     * @param int|array  $groupId
+     * @param int|array  $friendId
      * @param string     $start         Date from which we want to show the messages, in UTC time
      * @param int        $limit         Limit for the number of parent messages we want to show
      * @param int        $offset        Wall message query offset
@@ -1610,10 +1612,13 @@ class SocialManager extends UserManager
     public static function getWallMessages(
         $userId,
         $messageStatus,
-        $parentId = '',
+        $parentId = 0,
+        $groupId = 0,
+        $friendId = 0,
         $start = null,
         $limit = 10,
-        $offset = 0
+        $offset = 0,
+        $ignoreReceiverId = false
     ) {
         if (empty($start)) {
             $start = '0000-00-00';
@@ -1621,10 +1626,15 @@ class SocialManager extends UserManager
 
         $tblMessage = Database::get_main_table(TABLE_MESSAGE);
         $tblMessageAttachment = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
-
-        $userId = intval($userId);
+        $parentId = (int) $parentId;
+        $userId = (int) $userId;
         $start = Database::escape_string($start);
-        $limit = intval($limit);
+        $offset = (int) $offset;
+
+        $userReceiverCondition = "user_receiver_id = $userId AND ";
+        if ($ignoreReceiverId) {
+            $userReceiverCondition = '';
+        }
 
         $sql = "SELECT
                     id,
@@ -1633,6 +1643,7 @@ class SocialManager extends UserManager
                     send_date,
                     content,
                     parent_id,
+                    msg_status,
                     (
                         SELECT ma.path FROM $tblMessageAttachment ma
                         WHERE  ma.message_id = tm.id 
@@ -1643,17 +1654,61 @@ class SocialManager extends UserManager
                     ) as filename
                     FROM $tblMessage tm
                 WHERE
-                    user_receiver_id = $userId AND 
+                    $userReceiverCondition 
                     send_date > '$start'
         ";
 
-        $sql .= (empty($messageStatus) || is_null($messageStatus)) ? '' : " AND msg_status = '$messageStatus' ";
+        $messageStatusCondition = '';
+        if (!empty($messageStatus)) {
+            if (is_array($messageStatus)) {
+                $messageStatus = array_map('intval', $messageStatus);
+                $messageStatus = implode("','", $messageStatus);
+                $messageStatusCondition = " AND msg_status IN ('$messageStatus') ";
+            } else {
+                $messageStatus = (int) $messageStatus;
+                $messageStatusCondition = " AND msg_status = '$messageStatus' ";
+            }
+        }
+
+        $groupCondition = '';
+        if (!empty($groupId)) {
+            if (is_array($groupId)) {
+                $groupId = array_map('intval', $groupId);
+                $groupId = implode("','", $groupId);
+                $groupCondition = " OR ( group_id IN ('$groupId') ";
+            } else {
+                $groupId = (int) $groupId;
+                $groupCondition = " OR ( group_id = '$groupId' ";
+            }
+
+            $groupCondition .= ' AND msg_status IN ('.MESSAGE_STATUS_NEW.', '.MESSAGE_STATUS_UNREAD.')) ';
+        }
+
+        $friendCondition = '';
+        // Only get wall from friends
+        if (!empty($friendId)) {
+            if (is_array($friendId)) {
+                $friendId = array_map('intval', $friendId);
+                $friendId = implode("','", $friendId);
+                $friendCondition = " OR ( user_receiver_id IN ('$friendId') ";
+            } else {
+                $friendId = (int) $friendId;
+                $friendCondition = " OR ( user_receiver_id = '$friendId' ";
+            }
+            $friendCondition .= ' AND msg_status IN ('.MESSAGE_STATUS_WALL_POST.')) ';
+        }
+
+        $sql .= $messageStatusCondition;
+        $sql .= $groupCondition;
+        $sql .= $friendCondition;
+
         $sql .= (empty($parentId) || is_null($parentId)) ? '' : " AND parent_id = '$parentId' ";
         $sql .= " ORDER BY send_date DESC LIMIT $offset, $limit ";
+
         $messages = [];
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
-            while ($row = Database::fetch_array($res)) {
+            while ($row = Database::fetch_array($res, 'ASSOC')) {
                 $messages[] = $row;
             }
         }
@@ -1664,9 +1719,113 @@ class SocialManager extends UserManager
     /**
      * Gets all messages from someone's wall (within specific limits), formatted.
      *
+     * @param int    $userId USER ID of the person's wall
+     * @param array  $message
+     * @param string $start  Start date (from when we want the messages until today)
+     * @param int    $limit  Limit to the number of messages we want
+     * @param int    $offset Wall messages offset
+     *
+     * @return string HTML formatted string to show messages
+     */
+    public static function getWallPostComments(
+        $userId,
+        $message,
+        $start = null,
+        $limit = 10,
+        $offset = 0
+    ) {
+        if (empty($start)) {
+            $start = '0000-00-00';
+        }
+
+        $messageId = $message['id'];
+
+        $messages = self::getWallMessages(
+            $userId,
+            MESSAGE_STATUS_WALL,
+            $message['id'],
+            0,
+            0,
+            $start,
+            $limit,
+            $offset,
+            true
+        );
+
+        $formattedList = '<div class="sub-mediapost">';
+        $users = [];
+
+        // The messages are ordered by date descendant, for comments we need ascendant
+        krsort($messages);
+        foreach ($messages as $message) {
+            $date = api_get_local_time($message['send_date']);
+            $userIdLoop = $message['user_sender_id'];
+            if (!isset($users[$userIdLoop])) {
+                $users[$userIdLoop] = api_get_user_info($userIdLoop);
+            }
+
+            $nameComplete = api_is_western_name_order()
+                ? $users[$userIdLoop]['firstname'].' '.$users[$userIdLoop]['lastname']
+                : $users[$userIdLoop]['lastname'].' '.$users[$userIdLoop]['firstname'];
+            $url = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$userIdLoop;
+            $media = '';
+            $media .= '<div class="rep-post">';
+            $media .= '<div class="col-md-2 col-xs-2 social-post-answers">';
+            $media .= '<div class="user-image pull-right">';
+            $media .= '<a href="'.$url.'" ><img src="'.$users[$userIdLoop]['avatar'].
+                '" alt="'.$users[$userIdLoop]['complete_name'].'" class="avatar-thumb"></a>';
+            $media .= '</div>';
+            $media .= '</div>';
+            $media .= '<div class="col-md-9 col-xs-9 social-post-answers">';
+            $media .= '<div class="user-data">';
+            $media .= '<div class="username">'.'<a href="'.$url.'">'.$nameComplete.'</a> 
+                        <span>'.Security::remove_XSS($message['content']).'</span>
+                       </div>';
+            $media .= '<div class="time timeago" title="'.$date.'">'.$date.'</div>';
+            $media .= '<br />';
+            $media .= '</div>';
+            $media .= '</div>';
+            $media .= '</div>';
+
+            $isOwnWall = api_get_user_id() == $userIdLoop;
+            if ($isOwnWall) {
+                $media .= '<div class="col-md-1 col-xs-1 social-post-answers">';
+                $media .= '<div class="pull-right deleted-mgs">';
+                $url = api_get_path(WEB_CODE_PATH).'social/profile.php?messageId='.$message['id'];
+                $media .= Display::url(
+                    Display::returnFontAwesomeIcon('trash'),
+                    $url,
+                    ['title' => get_lang('SocialMessageDelete')]
+                );
+                $media .= '</div>';
+                $media .= '</div>';
+            }
+
+            $formattedList .= $media;
+        }
+
+        $formattedList .= '</div>';
+
+        $formattedList .= '<div class="mediapost-form">';
+        $formattedList .= '<form name="social_wall_message" method="POST">
+                <label for="social_wall_new_msg" class="hide">'.get_lang('SocialWriteNewComment').'</label>
+                <input type="hidden" name = "messageId" value="'.$messageId.'" />
+                <textarea placeholder="'.get_lang('SocialWriteNewComment').
+            '" name="social_wall_new_msg" rows="1" style="width:80%;" ></textarea>
+                <button type="submit" name="social_wall_new_msg_submit"
+                class="pull-right btn btn-default" /><em class="fa fa-pencil"></em> '.get_lang('Post').'</button>
+                </form>';
+        $formattedList .= '</div>';
+
+        return $formattedList;
+    }
+
+    /**
+     * Gets all messages from someone's wall (within specific limits), formatted.
+     *
      * @param int    $userId    USER ID of the person's wall
      * @param int    $friendId  id person
-     * @param int    $idMessage id message
+     * @param int    $messageId
      * @param string $start     Start date (from when we want the messages until today)
      * @param int    $limit     Limit to the number of messages we want
      * @param int    $offset    Wall messages offset
@@ -1676,7 +1835,7 @@ class SocialManager extends UserManager
     public static function getWallMessagesHTML(
         $userId,
         $friendId,
-        $idMessage,
+        $messageId,
         $start = null,
         $limit = 10,
         $offset = 0
@@ -1689,11 +1848,14 @@ class SocialManager extends UserManager
         $messages = self::getWallMessages(
             $userId,
             MESSAGE_STATUS_WALL,
-            $idMessage,
+            $messageId,
+            0,
+            0,
             $start,
             $limit,
             $offset
         );
+
         $formattedList = '<div class="sub-mediapost">';
         $users = [];
 
@@ -1735,7 +1897,7 @@ class SocialManager extends UserManager
                 $media .= Display::url(
                     Display::returnFontAwesomeIcon('trash'),
                     $url,
-                    ['title' => get_lang("SocialMessageDelete")]
+                    ['title' => get_lang('SocialMessageDelete')]
                 );
                 $media .= '</div>';
                 $media .= '</div>';
@@ -1749,7 +1911,7 @@ class SocialManager extends UserManager
         $formattedList .= '<div class="mediapost-form">';
         $formattedList .= '<form name="social_wall_message" method="POST">
                 <label for="social_wall_new_msg" class="hide">'.get_lang('SocialWriteNewComment').'</label>
-                <input type="hidden" name = "messageId" value="'.$idMessage.'" />
+                <input type="hidden" name = "messageId" value="'.$messageId.'" />
                 <textarea placeholder="'.get_lang('SocialWriteNewComment').
                 '" name="social_wall_new_msg" rows="1" style="width:80%;" ></textarea>
                 <button type="submit" name="social_wall_new_msg_submit"
@@ -1758,6 +1920,46 @@ class SocialManager extends UserManager
         $formattedList .= '</div>';
 
         return $formattedList;
+    }
+
+    /**
+     * @param $messages
+     * @param $isOwnWall
+     *
+     * @return array
+     */
+    public static function formatWallMessages($messages)
+    {
+        $data = [];
+        $users = [];
+        $currentUserId = api_get_user_id();
+        foreach ($messages as $key => $message) {
+            $userIdLoop = $message['user_sender_id'];
+            $userFriendIdLoop = $message['user_receiver_id'];
+            $isOwnWall = $currentUserId == $userIdLoop && $userIdLoop == $userFriendIdLoop;
+
+            if (!isset($users[$userIdLoop])) {
+                $users[$userIdLoop] = api_get_user_info($userIdLoop);
+            }
+
+            if (!isset($users[$userFriendIdLoop])) {
+                $users[$userFriendIdLoop] = api_get_user_info($userFriendIdLoop);
+            }
+
+            $html = '';
+            $html .= self::headerMessagePost(
+                $message['user_sender_id'],
+                $message['user_receiver_id'],
+                $users,
+                $message,
+                $isOwnWall
+            );
+
+            $data[$key] = $message;
+            $data[$key]['html'] = $html;
+        }
+
+        return $data;
     }
 
     /**
@@ -1781,43 +1983,21 @@ class SocialManager extends UserManager
         if (empty($start)) {
             $start = '0000-00-00';
         }
-        $isOwnWall = api_get_user_id() == $userId && $userId == $friendId;
+
         $messages = self::getWallMessages(
             $userId,
             MESSAGE_STATUS_WALL_POST,
             null,
+            0,
+            0,
             $start,
             $limit,
             $offset
         );
-        $users = [];
-        $data = [];
-        foreach ($messages as $key => $message) {
-            $userIdLoop = $message['user_sender_id'];
-            $userFriendIdLoop = $message['user_receiver_id'];
 
-            if (!isset($users[$userIdLoop])) {
-                $users[$userIdLoop] = api_get_user_info($userIdLoop);
-            }
+        $messages = self::formatWallMessages($messages);
 
-            if (!isset($users[$userFriendIdLoop])) {
-                $users[$userFriendIdLoop] = api_get_user_info($userFriendIdLoop);
-            }
-
-            $html = '';
-            $html .= self::headerMessagePost(
-                $message['user_sender_id'],
-                $message['user_receiver_id'],
-                $users,
-                $message,
-                $isOwnWall
-            );
-
-            $data[$key]['id'] = $message['id'];
-            $data[$key]['html'] = $html;
-        }
-
-        return $data;
+        return $messages;
     }
 
     /**
@@ -2124,14 +2304,14 @@ class SocialManager extends UserManager
     /**
      * @return string
      */
-    public static function getWallForm($show_full_profile = true)
+    public static function getWallForm($show_full_profile = true, $urlForm)
     {
         if ($show_full_profile) {
             $userId = isset($_GET['u']) ? '?u='.intval($_GET['u']) : '';
             $form = new FormValidator(
                 'social_wall_main',
                 'post',
-                api_get_path(WEB_CODE_PATH).'social/profile.php'.$userId,
+                $urlForm.$userId,
                 null,
                 ['enctype' => 'multipart/form-data'],
                 FormValidator::LAYOUT_HORIZONTAL
@@ -2161,6 +2341,56 @@ class SocialManager extends UserManager
         }
     }
 
+    public static function processWallMessage(
+        $userId,
+        $message
+    ) {
+        $comments = '';
+        if ($message['msg_status'] == MESSAGE_STATUS_WALL_POST) {
+            $comments = self::getWallPostComments($userId, $message);
+        }
+
+        return $comments;
+    }
+
+    public static function getMyWallMessages($userId, $start = 0, $limit = 10, $offset = 0)
+    {
+        $userGroup = new UserGroup();
+        $groups = $userGroup->get_groups_by_user($userId);
+        $groupList = [];
+        if (!empty($groups)) {
+            $groupList = array_column($groups, 'id');
+        }
+
+        $friends = self::get_friends($userId, USER_RELATION_TYPE_FRIEND);
+        $friendList = [];
+        if (!empty($friends)) {
+            $friendList = array_column($friends, 'friend_user_id');
+        }
+
+        $messages = self::getWallMessages(
+            $userId,
+            [MESSAGE_STATUS_WALL_POST, MESSAGE_STATUS_WALL],
+            null,
+            $groupList,
+            $friendList,
+            $start,
+            $limit,
+            $offset
+        );
+
+        $messages = self::formatWallMessages($messages, true);
+
+        $html = '';
+        foreach ($messages as $message) {
+            $post = $message['html'];
+            $comment = self::processWallMessage($userId, $message);
+            $html .= Display::panel($post.$comment);
+        }
+
+        return $html;
+    }
+
     /**
      * @param int $userId
      * @param int $friendId
@@ -2175,7 +2405,7 @@ class SocialManager extends UserManager
         foreach ($messages as $message) {
             $post = $message['html'];
             $comment = self::getWallMessagesHTML($userId, $friendId, $message['id']);
-            $html .= Display::panel($post.$comment, '');
+            $html .= Display::panel($post.$comment);
         }
 
         return $html;
@@ -2224,6 +2454,9 @@ class SocialManager extends UserManager
      */
     private static function headerMessagePost($authorId, $receiverId, $users, $message, $isOwnWall = false)
     {
+        $authorId = (int) $authorId;
+        $receiverId = (int) $receiverId;
+
         $date = api_get_local_time($message['send_date']);
         $avatarAuthor = $users[$authorId]['avatar'];
         $urlAuthor = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$authorId;

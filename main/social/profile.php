@@ -261,12 +261,12 @@ $friend_html = SocialManager::listMyFriendsBlock(
     $show_full_profile
 );
 
-$wallSocialAddPost = SocialManager::getWallForm($show_full_profile);
+$wallSocialAddPost = SocialManager::getWallForm($show_full_profile, api_get_self());
 $social_wall_block = $wallSocialAddPost;
 
 // Social Post Wall
 $posts = SocialManager::getWallMessagesByUser($my_user_id, $friendId);
-$social_post_wall_block = empty($posts) ? '<p>'.get_lang("NoPosts").'</p>' : $posts;
+$social_post_wall_block = empty($posts) ? '<p>'.get_lang('NoPosts').'</p>' : $posts;
 
 $socialAutoExtendLink = Display::url(
     get_lang('SeeMore'),

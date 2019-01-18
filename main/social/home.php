@@ -77,6 +77,55 @@ if (api_get_setting('profile', 'picture') == 'true') {
     }
 }
 
+// Main post
+if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp_name'])) {
+    $messageId = 0;
+    $messageContent = $_POST['social_wall_new_msg_main'];
+    if (!empty($_POST['url_content'])) {
+        $messageContent = $_POST['social_wall_new_msg_main'].'<br /><br />'.$_POST['url_content'];
+    }
+    $idMessage = SocialManager::sendWallMessage(
+        api_get_user_id(),
+        api_get_user_id(),
+        $messageContent,
+        $messageId,
+        MESSAGE_STATUS_WALL_POST
+    );
+    if (!empty($_FILES['picture']['tmp_name']) && $idMessage > 0) {
+        $error = SocialManager::sendWallMessageAttachmentFile(
+            api_get_user_id(),
+            $_FILES['picture'],
+            $idMessage,
+            $fileComment = ''
+        );
+    }
+
+    Display::addFlash(Display::return_message(get_lang('MessageSent')));
+
+    $url = api_get_self();
+    header('Location: '.$url);
+    exit;
+}
+
+// Post comment
+if (!empty($_POST['social_wall_new_msg']) && !empty($_POST['messageId'])) {
+    $messageId = (int) $_POST['messageId'];
+    $messageContent = $_POST['social_wall_new_msg'];
+
+    $res = SocialManager::sendWallMessage(
+        api_get_user_id(),
+        api_get_user_id(),
+        $messageContent,
+        $messageId,
+        MESSAGE_STATUS_WALL
+    );
+    Display::addFlash(Display::return_message(get_lang('MessageSent')));
+
+    $url = api_get_self();
+    header('Location: '.$url);
+    exit;
+}
+
 //Block Menu
 $social_menu_block = SocialManager::show_social_menu('home');
 
@@ -228,11 +277,27 @@ $social_group_block = Display::panelCollapse(
     'groups-collapse'
 );
 
+$socialAjaxUrl = api_get_path(WEB_AJAX_PATH).'social.ajax.php';
+$wallSocialAddPost = SocialManager::getWallForm($show_full_profile, api_get_self());
+// Social Post Wall
+//$posts = SocialManager::getWallMessagesByUser($user_id, $user_id);
+$posts = SocialManager::getMyWallMessages($user_id);
+$social_post_wall_block = empty($posts) ? '<p>'.get_lang('NoPosts').'</p>' : $posts;
+
+$socialAutoExtendLink = Display::url(
+    get_lang('SeeMore'),
+    $socialAjaxUrl.'?u='.$user_id.'&a=list_wall_message&start=10&length=5',
+    [
+        'class' => 'nextPage next',
+    ]
+);
+
 $tpl = new Template(get_lang('SocialNetwork'));
-
-SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'home');
-
+SocialManager::setSocialUserBlock($tpl, $user_id, 'home');
+$tpl->assign('social_wall_block', $wallSocialAddPost);
+$tpl->assign('social_post_wall_block', $social_post_wall_block);
 $tpl->assign('social_menu_block', $social_menu_block);
+
 $tpl->assign('social_friend_block', $friend_html);
 $tpl->assign('session_list', $social_session_block);
 $tpl->assign('social_search_block', $social_search_block);

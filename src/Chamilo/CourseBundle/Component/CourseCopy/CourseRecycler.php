@@ -66,6 +66,7 @@ class CourseRecycler
         $this->recycle_test_category();
         $this->recycle_surveys();
         $this->recycle_learnpaths();
+        $this->recycle_learnpath_categories();
         $this->recycle_cours_description();
         $this->recycle_wiki();
         $this->recycle_glossary();
@@ -609,6 +610,30 @@ class CourseRecycler
                 Database::query($sql_del);
             }
         }
+    }
+
+    /**
+     * Recycle empty learning path categories
+     */
+    public function recycle_learnpath_categories()
+    {
+        $learningPathTable = Database::get_course_table(TABLE_LP_MAIN);
+        $learningPathCategoryTable = Database::get_course_table(TABLE_LP_CATEGORY);
+        $itemPropertyTable = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        $courseId = $this->course_id;
+        // c_lp.category_id points to c_lp_category.iid
+        $subQuery = "SELECT distinct(l.category_id) as categoryId
+              FROM $learningPathTable l, $itemPropertyTable i
+              WHERE
+                  l.c_id = $courseId AND
+                  i.c_id = l.c_id AND
+                  i.tool = 'learnpath' AND
+        	      l.iid = i.ref AND 
+                  i.visibility = 1";
+        $sql = "DELETE FROM $learningPathCategoryTable
+                    WHERE c_id = $courseId AND iid NOT IN ($subQuery)";
+        Database::query($sql);
+
     }
 
     /**

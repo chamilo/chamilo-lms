@@ -1597,13 +1597,12 @@ class SocialManager extends UserManager
      * Gets all messages from someone's wall (within specific limits).
      *
      * @param int        $userId        id of wall shown
-     * @param int|array  $messageStatus status wall message
      * @param int|string $parentId      id message (Post main)
      * @param int|array  $groupId
      * @param int|array  $friendId
-     * @param string     $start         Date from which we want to show the messages, in UTC time
-     * @param int        $limit         Limit for the number of parent messages we want to show
-     * @param int        $offset        Wall message query offset
+     * @param string     $startDate         Date from which we want to show the messages, in UTC time
+     * @param int        $start         Limit for the number of parent messages we want to show
+     * @param int        $length        Wall message query offset
      * @return array
      *
      * @author Yannick Warnier
@@ -1614,15 +1613,17 @@ class SocialManager extends UserManager
         $groupId = 0,
         $friendId = 0,
         $startDate = '',
-        $limit = 10,
-        $offset = 0
+        $start = 0,
+        $length = 10
     ) {
         $tblMessage = Database::get_main_table(TABLE_MESSAGE);
         $tblMessageAttachment = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
         $parentId = (int) $parentId;
         $userId = (int) $userId;
         $startDate = Database::escape_string($startDate);
-        $offset = (int) $offset;
+
+        $start = (int) $start;
+        $length = (int) $length;
 
         $sql = "SELECT
                     id,
@@ -1705,7 +1706,7 @@ class SocialManager extends UserManager
         }
 
 
-        $sql .= " ORDER BY send_date DESC LIMIT $offset, $limit ";
+        $sql .= " ORDER BY send_date DESC LIMIT $start, $length ";
         //echo $sql;exit;
         $messages = [];
         $res = Database::query($sql);
@@ -2187,7 +2188,7 @@ class SocialManager extends UserManager
         }
     }
 
-    public static function getMyWallMessages($userId, $start = 0, $limit = 10, $offset = 0)
+    public static function getMyWallMessages($userId, $start = 0, $length = 10)
     {
         $userGroup = new UserGroup();
         $groups = $userGroup->get_groups_by_user($userId);
@@ -2207,9 +2208,9 @@ class SocialManager extends UserManager
             0,
             $groupList,
             $friendList,
+            '',
             $start,
-            $limit,
-            $offset
+            $length
         );
 
         $messages = self::formatWallMessages($messages, true);

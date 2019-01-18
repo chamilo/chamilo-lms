@@ -42,6 +42,7 @@
         "ext-xml": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
+        "ext-libxml": "*",
         "twig/twig": "1.*",
         "twig/extensions": "~1.0",
         "doctrine/orm": "~2.4",

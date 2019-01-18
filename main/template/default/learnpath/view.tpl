@@ -384,11 +384,13 @@
             })();
         {% endif %}
         {% if disable_js_in_lp_view == 0 %}
-            $('iframe#content_id').on('load', function () {
-                var arr = ['link', 'sco'];
-                if (!$.inArray(olms.lms_item_type, arr)) {
-                    setFrameReady('content_name', _p);
-                }
+            $(document).ready(function () {
+                $('iframe#content_id').on('load', function () {
+                    var arr = ['link', 'sco'];
+                    if (!$.inArray(olms.lms_item_type, arr)) {
+                        {{ frame_ready }}
+                    }
+                });
             });
         {% endif %}
 

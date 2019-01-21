@@ -234,12 +234,20 @@ hr {
 
 /** SELECT */
 
+/*
 .btn-select{
   color: #495057;
   background-color: white;
   border-color: $select-color;
   &.bs-placeholder{
     color: $select-color !important;
+  }
+}*/
+.bootstrap-select{
+  .dropdown-toggle{
+    &:after{
+      display: none;
+    }
   }
 }
 

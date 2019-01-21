@@ -67,8 +67,8 @@ $userGroup = new UserGroup();
             )) {
                 $table_user = Database::get_main_table(TABLE_MAIN_USER);
                 $sql = "UPDATE $table_user
-                        SET 
-                            picture_uri = '$new_picture' 
+                        SET
+                            picture_uri = '$new_picture'
                         WHERE user_id =  ".api_get_user_id();
 
                 $result = Database::query($sql);
@@ -76,7 +76,6 @@ $userGroup = new UserGroup();
         }
     }
 }*/
-
 
 $socialSearch = UserManager::getSearchForm('');
 
@@ -103,7 +102,6 @@ if (count($sessionList) > 0) {
 $tpl = new Template(get_lang('SocialNetwork'));
 
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'home');
-
 
 $tpl->assign('social_friend_block', $friend_html);
 $tpl->assign('session_list', $social_session_block);

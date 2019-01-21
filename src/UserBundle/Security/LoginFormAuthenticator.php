@@ -64,7 +64,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      * @param array                 $credentials
      * @param UserProviderInterface $userProvider
      *
-     * @return null|UserInterface
+     * @return UserInterface|null
      */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {

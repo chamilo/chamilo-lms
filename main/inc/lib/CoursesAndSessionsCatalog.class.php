@@ -469,8 +469,9 @@ class CoursesAndSessionsCatalog
      * @param string $date  (optional) The date of sessions
      * @param array  $limit
      *
-     * @return array The session list
      * @throws Exception
+     *
+     * @return array The session list
      */
     public static function browseSessions($date = null, $limit = [])
     {

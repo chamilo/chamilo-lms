@@ -38,7 +38,7 @@ class LogoutSuccessHandler implements LogoutSuccessHandlerInterface
     /**
      * @param Request $request
      *
-     * @return null|RedirectResponse
+     * @return RedirectResponse|null
      */
     public function onLogoutSuccess(Request $request)
     {

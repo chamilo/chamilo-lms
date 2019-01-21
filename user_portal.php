@@ -131,7 +131,6 @@ $myCourseListAsCategory = api_get_configuration_value('my_courses_list_as_catego
 $controller = new IndexManager(get_lang('MyCourses'));
 
 if (!$myCourseListAsCategory) {
-
     // Main courses and session list
     if (isset($_COOKIE['defaultMyCourseView'.$userId]) &&
         $_COOKIE['defaultMyCourseView'.$userId] == IndexManager::VIEW_BY_SESSION &&
@@ -183,7 +182,7 @@ if (!$myCourseListAsCategory) {
             true,
             $loadHistory
         );
-        
+
         $getCategory = CourseCategory::getCategory($categoryCode);
         $controller->tpl->assign('category', $getCategory);
     }
@@ -243,7 +242,6 @@ if (empty($courseAndSessions['html_courses']) && !isset($_GET['history'])) {
     $controller->setWelComeCourse();
     $showWelcomeCourse = true;
 }
-
 
 $controller->tpl->assign('show_welcome_course', $showWelcomeCourse);
 $controller->tpl->assign('html_sessions', $courseAndSessions['html_sessions']);

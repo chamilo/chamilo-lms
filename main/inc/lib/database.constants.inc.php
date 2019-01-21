@@ -203,6 +203,7 @@ define('TABLE_LP_VIEW', 'lp_view');
 define('TABLE_LP_ITEM_VIEW', 'lp_item_view');
 define('TABLE_LP_IV_INTERACTION', 'lp_iv_interaction'); // IV = Item View
 define('TABLE_LP_IV_OBJECTIVE', 'lp_iv_objective'); // IV = Item View
+define('TABLE_LP_CATEGORY', 'lp_category');
 
 // Smartblogs (Kevin Van Den Haute::kevin@develop-it.be)
 // Permission tables

@@ -655,7 +655,7 @@ class CourseManager
      *
      * @param int    $userId
      * @param string $courseCode
-     * @param int    $status               (STUDENT, COURSEMANAGER, COURSE_ADMIN, NORMAL_COURSE_MEMBER)
+     * @param int    $status                 (STUDENT, COURSEMANAGER, COURSE_ADMIN, NORMAL_COURSE_MEMBER)
      * @param int    $sessionId
      * @param int    $userCourseCategoryId
      * @param bool   $checkTeacherPermission
@@ -702,7 +702,7 @@ class CourseManager
         $sessionId = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
         $status = $status === STUDENT || $status === COURSEMANAGER ? $status : STUDENT;
         $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-                // The user has been already subscribed to the course.
+        // The user has been already subscribed to the course.
         if (!empty($sessionId)) {
             SessionManager::subscribe_users_to_session_course(
                 [$userId],
@@ -819,8 +819,8 @@ class CourseManager
                     );
                 }
 
-            // Add event to the system log
-            Event::addEvent(
+                // Add event to the system log
+                Event::addEvent(
                 LOG_SUBSCRIBE_USER_TO_COURSE,
                 LOG_COURSE_CODE,
                 $courseCode,
@@ -829,7 +829,7 @@ class CourseManager
                 $courseId
             );
 
-            Event::addEvent(
+                Event::addEvent(
                 LOG_SUBSCRIBE_USER_TO_COURSE,
                 LOG_USER_OBJECT,
                     $userInfo,
@@ -838,7 +838,7 @@ class CourseManager
                 $courseId
             );
 
-        return true;
+                return true;
             }
 
             return false;
@@ -3272,11 +3272,10 @@ class CourseManager
         $data['extrafield'] = $fieldValues;
         if (isset($descriptions) && count($descriptions) > 0) {
             foreach ($descriptions as $description) {
-
-                if($description->description_type === '1'){
+                if ($description->description_type === '1') {
                     $data['description'] = [
                         'title' => Security::remove_XSS($description->title),
-                        'content' => Security::remove_XSS($description->content)
+                        'content' => Security::remove_XSS($description->content),
                     ];
                 }
             }
@@ -6752,7 +6751,7 @@ class CourseManager
      * @param Course $course
      * @param bool   $fullSize
      *
-     * @return null|string
+     * @return string|null
      */
     public static function getPicturePath(Course $course, $fullSize = false)
     {

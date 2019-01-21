@@ -648,7 +648,7 @@ class TestCategory
      * @param int $questionId
      * @param int $in_display_category_name
      *
-     * @return null|string
+     * @return string|null
      */
     public static function returnCategoryAndTitle($questionId, $in_display_category_name = 1)
     {

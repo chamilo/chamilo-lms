@@ -80,8 +80,8 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
             if (empty($attributes)) {
                 $attributes = []; // Initialize variable to avoid warning in PHP 7.1
             }
-            $attributes['class'] = $oldClass . ' selectpicker show-tick form-control';
-            $attributes['data-style'] = 'btn-select';
+            $attributes['class'] = $oldClass . 'form-control selectpicker show-tick ';
+            $attributes['data-style'] = 'custom-select';
             $attributes['data-live-search'] = 'true';
 
             if (isset($attributes['disable_js']) && $attributes['disable_js']) {

@@ -144,6 +144,9 @@ class Course
                             $title = $resource->name;
                             $description = $resource->description;
                             break;
+                        case RESOURCE_LEARNPATH_CATEGORY:
+                            $title = $resource->name;
+                            break;
                         case RESOURCE_LINK:
                             $title = $resource->title;
                             $description = $resource->description;

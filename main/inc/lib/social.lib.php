@@ -821,7 +821,7 @@ class SocialManager extends UserManager
             'complete_name' => $userInfo['complete_name'],
             'username' => $userInfo['username'],
             'email' => $userInfo['email'],
-            'status' => $userInfo['status']
+            'status' => $userInfo['status'],
         ];
 
         $show_groups = [
@@ -856,13 +856,12 @@ class SocialManager extends UserManager
                     $groupInfo['picture'],
                     128,
                     GROUP_IMAGE_SIZE_MEDIUM
-                )
+                ),
             ];
 
             $template->assign('show_group', true);
             $template->assign('group', $groupInfo);
             $template->assign('avatar', $userGroupImage);
-
         } else {
             $template->assign('show_group', false);
             $template->assign('show_user', true);
@@ -1868,7 +1867,6 @@ class SocialManager extends UserManager
         $vCardUserLink = Display::getVCardUserLink($userId);
 
         $userInfo = api_get_user_info($userId, true, false, true, true);
-
 
         $userGroup = new UserGroup();
         $groupInfo = $userGroup->get($groupId);

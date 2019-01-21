@@ -19,7 +19,7 @@ define('DEFAULT_ADMIN_USER_ID', 1);
 /**
  * @param string $code
  *
- * @return null|soap_fault
+ * @return soap_fault|null
  */
 function returnError($code)
 {
@@ -1119,7 +1119,7 @@ $server->register(
  *
  * @param array $params - WSFunction parameters (include VerifyKey)
  *
- * @return bool|null|soap_fault A simple boolean (true if teacher successful subscribed, false otherwise)
+ * @return bool|soap_fault|null A simple boolean (true if teacher successful subscribed, false otherwise)
  */
 function WSSubscribeTeacherToSessionCourse($params)
 {
@@ -1178,7 +1178,7 @@ $server->register(
  *
  *  @param array $params - WSFunction parameters (include VerifyKey)
  *
- *  @return bool|null|soap_fault A simple boolean (true if teacher successful unsubscribed, false otherwise)
+ *  @return bool|soap_fault|null A simple boolean (true if teacher successful unsubscribed, false otherwise)
  */
 function WSUnsubscribeTeacherFromSessionCourse($params)
 {
@@ -1609,7 +1609,7 @@ $server->register(
  *
  * @throws \Doctrine\DBAL\DBALException
  *
- * @return bool|int|null|soap_fault
+ * @return bool|int|soap_fault|null
  */
 function WSEditUserCredentials($params)
 {
@@ -4720,7 +4720,7 @@ $server->register(
  *
  * @param array $params
  *
- * @return array|int|null|soap_fault|string
+ * @return array|int|soap_fault|string|null
  */
 function WSSubscribeUserToCourseSimple($params)
 {
@@ -5241,7 +5241,7 @@ $server->register(
 /**
  * @param array $params
  *
- * @return array|null|soap_fault
+ * @return array|soap_fault|null
  */
 function WSUnSubscribeUserFromCourseSimple($params)
 {
@@ -5540,7 +5540,7 @@ $server->register(
 /**
  * @param array $params
  *
- * @return int|null|soap_fault|string
+ * @return int|soap_fault|string|null
  */
 function WSSubscribeUserToSessionSimple($params)
 {
@@ -6298,7 +6298,7 @@ $server->register(
 /**
  * @param array $params
  *
- * @return int|null|soap_fault
+ * @return int|soap_fault|null
  */
 function WSUpdateUserApiKey($params)
 {
@@ -6481,7 +6481,7 @@ $server->register(
  *
  * @param array $params Array of parameters (course and user_id)
  *
- * @return bool|null|soap_fault A simple boolean (true if user is subscribed, false otherwise)
+ * @return bool|soap_fault|null A simple boolean (true if user is subscribed, false otherwise)
  */
 function WSUserSubscribedInCourse($params)
 {

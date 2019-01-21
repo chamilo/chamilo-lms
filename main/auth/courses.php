@@ -220,8 +220,8 @@ switch ($action) {
         if ($form->validate()) {
             if (sha1($_POST['course_registration_code']) === $courseInfo['registration_code']) {
                 CourseManager::autoSubscribeToCourse($_POST['subscribe_user_with_password']);
-        header('Location: '.api_get_self());
-        exit;
+                header('Location: '.api_get_self());
+                exit;
             } else {
                 Display::addFlash(Display::return_message(get_lang('CourseRegistrationCodeIncorrect')), 'warning');
                 header('Location: '.$action);

@@ -5,7 +5,6 @@ use Chamilo\CoreBundle\Repository\CourseRepository;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
-use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpCategory;
@@ -6754,6 +6753,15 @@ class learnpath
         $actionsRight = '';
         $actionsLeft .= Display::url(
             Display::return_icon(
+                'back.png',
+                get_lang('ReturnToLearningPaths'),
+                '',
+                ICON_SIZE_MEDIUM
+            ),
+            'lp_controller.php?'.api_get_cidreq()
+        );
+        $actionsLeft .= Display::url(
+            Display::return_icon(
                 'preview_view.png',
                 get_lang('Preview'),
                 '',
@@ -10020,7 +10028,6 @@ class learnpath
         if (in_array($item_type, [TOOL_DOCUMENT, TOOL_LP_FINAL_ITEM, TOOL_HOTPOTATOES])) {
             $documentData = DocumentManager::get_document_data_by_id($row['path'], $course_code);
             if (empty($documentData)) {
-
                 $table = Database::get_course_table(TABLE_DOCUMENT);
                 $sql = "SELECT path FROM $table
                         WHERE 

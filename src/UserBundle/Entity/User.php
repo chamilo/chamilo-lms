@@ -1980,6 +1980,7 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
         if ($uri) {
             return 'users/'.substr((string) $id, 0, 1).'/'.$id.'/'.'small_'.$uri;
         }
+
         return '';
     }
 

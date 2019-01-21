@@ -182,7 +182,7 @@ foreach ($results as $result) {
     $grid_item_2 = $html;
     $grid_newest_groups[] = [$grid_item_2];
 }
-$html.= '</ul>';
+$html .= '</ul>';
 
 // Pop groups
 $results = $usergroup->get_groups_by_popularity(4, false);
@@ -219,7 +219,6 @@ if (is_array($results) && count($results) > 0) {
 
         $picture = $usergroup->get_picture_group($result['id'], $result['picture'], 80);
         $result['picture'] = '<img class="mr-3" src="'.$picture.'" />';
-
 
         $html .= '<li class="media item-3">';
         $html .= $result['picture'];
@@ -374,7 +373,6 @@ $show_menu = 'browse_groups';
 if (isset($_GET['view']) && $_GET['view'] == 'mygroups') {
     $show_menu = $_GET['view'];
 }
-
 
 $tpl->setHelp('Groups');
 $tpl->assign('social_right_content', $social_right_content);

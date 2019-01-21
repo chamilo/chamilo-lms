@@ -17,6 +17,7 @@ $plugin = BuyCoursesPlugin::create();
 $paypalEnable = $plugin->get('paypal_enable');
 $commissionsEnable = $plugin->get('commissions_enable');
 $includeServices = $plugin->get('include_services');
+$invoicingEnable = $plugin->get('invoicing_enable') === 'true';
 
 $saleStatuses = $plugin->getServiceSaleStatuses();
 $paymentTypes = $plugin->getPaymentTypes();
@@ -29,7 +30,7 @@ $form = new FormValidator('search', 'get');
 if ($form->validate()) {
     $selectedStatus = $form->getSubmitValue('status');
     $searchTerm = $form->getSubmitValue('user');
-    
+
     if ($selectedStatus === false) {
         $selectedStatus = BuyCoursesPlugin::SALE_STATUS_PENDING;
     }
@@ -53,6 +54,7 @@ foreach ($servicesSales as $sale) {
         'service_type' => $sale['service']['applies_to'],
         'service_name' => $sale['service']['name'],
         'complete_user_name' => $sale['buyer']['name'],
+        'invoice' => $sale['invoice'],
     ];
 }
 
@@ -99,6 +101,7 @@ $template->assign('sale_list', $serviceSaleList);
 $template->assign('sale_status_cancelled', BuyCoursesPlugin::SERVICE_STATUS_CANCELLED);
 $template->assign('sale_status_pending', BuyCoursesPlugin::SERVICE_STATUS_PENDING);
 $template->assign('sale_status_completed', BuyCoursesPlugin::SERVICE_STATUS_COMPLETED);
+$template->assign('invoicing_enable', $invoicingEnable);
 $content = $template->fetch('buycourses/view/service_sales_report.tpl');
 $template->assign('content', $content);
 $template->display_one_col_template();

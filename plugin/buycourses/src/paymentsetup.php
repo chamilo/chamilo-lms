@@ -77,9 +77,19 @@ foreach ($currencies as $currency) {
     }
 }
 
+$globalSettingForm->addTextarea(
+    'terms_and_conditions',
+    [get_lang('TermsAndConditions'),
+            $plugin->get_lang('WriteHereTheTermsAndConditionsOfYourECommerce'), ],
+    []
+);
+
 $taxEnable = $plugin->get('tax_enable') === 'true';
+$invoicingEnable = $plugin->get('invoicing_enable') === 'true';
 
 if ($taxEnable) {
+    $globalSettingForm->addHtml('<hr/>');
+    
     $globalSettingForm->addElement(
         'number',
         'global_tax_perc',
@@ -101,7 +111,7 @@ if ($taxEnable) {
 
         $taxTypeSelect->addOption($optionText, $optionyValue);
     }
-    
+
     $globalSettingForm->addElement(
         'text',
         'tax_name',
@@ -110,12 +120,47 @@ if ($taxEnable) {
     );
 }
 
-$globalSettingForm->addTextarea(
-    'terms_and_conditions',
-    [get_lang('TermsAndConditions'),
-     $plugin->get_lang('WriteHereTheTermsAndConditionsOfYourECommerce'), ],
-    []
-);
+if ($invoicingEnable) {
+    $globalSettingForm->addHtml('<hr/>');
+    
+    $globalSettingForm->addElement(
+        'text',
+        'seller_name',
+        $plugin->get_lang('SellerName')
+    );
+    
+    $globalSettingForm->addElement(
+        'text',
+        'seller_id',
+        $plugin->get_lang('SellerId')
+    );
+    
+    $globalSettingForm->addElement(
+        'text',
+        'seller_address',
+        $plugin->get_lang('SellerAddress')
+    );
+    
+    $globalSettingForm->addElement(
+        'text',
+        'seller_email',
+        $plugin->get_lang('SellerEmail')
+    );
+    
+    $globalSettingForm->addElement(
+        'number',
+        'next_number_invoice',
+        [$plugin->get_lang('NextNumberInvoice'), $plugin->get_lang('NextNumberInvoiceDescription')],
+        ['step' => 1]
+    );
+    
+    $globalSettingForm->addElement(
+        'text',
+        'invoice_series',
+        [$plugin->get_lang('InvoiceSeries'), $plugin->get_lang('InvoiceSeriesDescription')]
+    );
+}
+
 $globalSettingForm->addButtonSave(get_lang('Save'));
 $globalSettingForm->setDefaults($plugin->getGlobalParameters());
 

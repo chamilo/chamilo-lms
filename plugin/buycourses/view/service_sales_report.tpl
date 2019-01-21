@@ -50,6 +50,11 @@
                         <td class="text-center">
                             <a id="service_sale_info" tag="{{ sale.id }}" name="s_{{ sale.id }}"
                                class="btn btn-info btn-sm">{{ 'Info'|get_lang }}</a>
+                            {% if sale.invoice == 1 and invoicing_enable %}
+                                <a href="{{ _p.web_plugin ~ 'buycourses/src/invoice.php?' ~ {'invoice': sale.id, 'is_service': 1}|url_encode() }}" title="{{ 'InvoiceView'|get_plugin_lang('BuyCoursesPlugin') }}" >
+                                    <img src="{{ _p.web_img }}/icons/32/default.png" alt="{{ 'InvoiceView'|get_plugin_lang('BuyCoursesPlugin') }}" />
+                                </a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}

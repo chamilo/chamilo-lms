@@ -18,6 +18,7 @@ $plugin = BuyCoursesPlugin::create();
 $paypalEnable = $plugin->get('paypal_enable');
 $commissionsEnable = $plugin->get('commissions_enable');
 $includeServices = $plugin->get('include_services');
+$invoicingEnable = $plugin->get('invoicing_enable') === 'true';
 
 if (isset($_GET['order'])) {
     $sale = $plugin->getSale($_GET['order']);
@@ -127,6 +128,7 @@ foreach ($sales as $sale) {
         'product_type' => $productTypes[$sale['product_type']],
         'complete_user_name' => api_get_person_name($sale['firstname'], $sale['lastname']),
         'payment_type' => $paymentTypes[$sale['payment_type']],
+        'invoice' => $sale['invoice'],
     ];
 }
 
@@ -176,6 +178,7 @@ $template->assign('sale_list', $saleList);
 $template->assign('sale_status_canceled', BuyCoursesPlugin::SALE_STATUS_CANCELED);
 $template->assign('sale_status_pending', BuyCoursesPlugin::SALE_STATUS_PENDING);
 $template->assign('sale_status_completed', BuyCoursesPlugin::SALE_STATUS_COMPLETED);
+$template->assign('invoicing_enable', $invoicingEnable);
 
 $content = $template->fetch('buycourses/view/sales_report.tpl');
 

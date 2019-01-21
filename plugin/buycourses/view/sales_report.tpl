@@ -60,6 +60,11 @@
                             <em class="fa fa-times fa-fw"></em> {{ 'DeleteOrder'|get_plugin_lang('BuyCoursesPlugin') }}
                         </a>
                     {% endif %}
+                    {% if sale.invoice == 1 and invoicing_enable %}
+                        <a href="{{ _p.web_plugin ~ 'buycourses/src/invoice.php?' ~ {'invoice': sale.id, 'is_service': 0}|url_encode() }}" title="{{ 'InvoiceView'|get_plugin_lang('BuyCoursesPlugin') }}" >
+                            <img src="{{ _p.web_img }}/icons/32/default.png" alt="{{ 'InvoiceView'|get_plugin_lang('BuyCoursesPlugin') }}" />
+                        </a>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}

@@ -477,7 +477,7 @@ class CoursesAndSessionsCatalog
     {
         $em = Database::getManager();
         $urlId = api_get_current_access_url_id();
-        
+
         $sql = "SELECT s.id FROM session s ";
         $sql .= "
             INNER JOIN access_url_rel_session ars

@@ -31,6 +31,7 @@ class BuyCoursesPlugin extends Plugin
     const TABLE_SERVICES_SALE = 'plugin_buycourses_service_sale';
     const TABLE_CULQI = 'plugin_buycourses_culqi';
     const TABLE_GLOBAL_CONFIG = 'plugin_buycourses_global_config';
+    const TABLE_INVOICE = 'plugin_buycourses_invoices';
     const PRODUCT_TYPE_COURSE = 1;
     const PRODUCT_TYPE_SESSION = 2;
     const PAYMENT_TYPE_PAYPAL = 1;
@@ -169,18 +170,24 @@ class BuyCoursesPlugin extends Plugin
         }
         $this->manageTab(false);
     }
-    
+
     public function update()
     {
         $table = self::TABLE_GLOBAL_CONFIG;
         $sql = "SHOW COLUMNS FROM $table WHERE Field = 'global_tax_perc'";
         $res = Database::query($sql);
-        
+
         if (Database::num_rows($res) === 0) {
             $sql = "ALTER TABLE $table ADD (
                 global_tax_perc int(11) unsigned NOT NULL,
                 tax_applies_to int(11) unsigned NOT NULL,
-                tax_name varchar(255) NOT NULL
+                tax_name varchar(255) NOT NULL,
+                seller_name varchar(255) NOT NULL,
+                seller_id varchar(255) NOT NULL,
+                seller_address varchar(255) NOT NULL,
+                seller_email varchar(255) NOT NULL,
+                next_number_invoice int(11) unsigned NOT NULL,
+                invoice_series varchar(255) NOT NULL
             )";
             $res = Database::query($sql);
             if (!$res) {
@@ -191,7 +198,7 @@ class BuyCoursesPlugin extends Plugin
         $table = self::TABLE_ITEM;
         $sql = "SHOW COLUMNS FROM $table WHERE Field = 'tax_perc'";
         $res = Database::query($sql);
-        
+
         if (Database::num_rows($res) === 0) {
             $sql = "ALTER TABLE $table ADD tax_perc int(11) unsigned NULL";
             $res = Database::query($sql);
@@ -203,7 +210,7 @@ class BuyCoursesPlugin extends Plugin
         $table = self::TABLE_SERVICES;
         $sql = "SHOW COLUMNS FROM $table WHERE Field = 'tax_perc'";
         $res = Database::query($sql);
-        
+
         if (Database::num_rows($res) === 0) {
             $sql = "ALTER TABLE $table ADD tax_perc int(11) unsigned NULL";
             $res = Database::query($sql);
@@ -215,34 +222,77 @@ class BuyCoursesPlugin extends Plugin
         $table = self::TABLE_SALE;
         $sql = "SHOW COLUMNS FROM $table WHERE Field = 'tax_perc'";
         $res = Database::query($sql);
-        
+
         if (Database::num_rows($res) === 0) {
             $sql = "ALTER TABLE $table ADD (
                 price_without_tax decimal(10,2) NULL,
                 tax_perc int(11) unsigned NULL,
-                tax_amount decimal(10,2) NULL
+                tax_amount decimal(10,2) NULL,
+                invoice int(11) unsigned NULL
             )";
             $res = Database::query($sql);
             if (!$res) {
                 echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
             }
         }
-        
+
         $table = self::TABLE_SERVICES_SALE;
         $sql = "SHOW COLUMNS FROM $table WHERE Field = 'tax_perc'";
         $res = Database::query($sql);
-        
+
         if (Database::num_rows($res) === 0) {
             $sql = "ALTER TABLE $table ADD (
                 price_without_tax decimal(10,2) NULL,
                 tax_perc int(11) unsigned NULL,
-                tax_amount decimal(10,2) NULL
+                tax_amount decimal(10,2) NULL,
+                invoice int(11) unsigned NULL
             )";
             $res = Database::query($sql);
             if (!$res) {
                 echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
             }
         }
+
+        $table = self::TABLE_INVOICE;
+        $sql = "CREATE TABLE IF NOT EXISTS $table (
+            id int(11) unsigned NOT NULL AUTO_INCREMENT,
+            sale_id int(11) unsigned NOT NULL,
+            is_service int(11) unsigned NOT NULL,
+            num_invoice int(11) unsigned NOT NULL,
+            year int(4) unsigned NOT NULL,
+            serie varchar(255) NOT NULL,
+            date_invoice datetime NOT NULL,
+            PRIMARY KEY (id)
+        )";
+        $res = Database::query($sql);
+
+        Display::addFlash(
+            Display::return_message(
+                $this->get_lang('Updated'),
+                'info',
+                false
+            )
+        );
+        
+        $fieldlabel = 'buycourses_company';
+        $fieldtype = '1';
+        $fieldtitle = $this->get_lang('Company');
+        $fielddefault = '';
+        $field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
+        
+        $fieldlabel = 'buycourses_vat';
+        $fieldtype = '1';
+        $fieldtitle = $this->get_lang('VAT');
+        $fielddefault = '';
+        $field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
+        
+        $fieldlabel = 'buycourses_address';
+        $fieldtype = '1';
+        $fieldtitle = $this->get_lang('Address');
+        $fielddefault = '';
+        $field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
+
+        header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses');
     }
 
     /**
@@ -698,7 +748,7 @@ class BuyCoursesPlugin extends Plugin
         $taxEnable = $this->get('tax_enable') === 'true';
         $globalParameters = $this->getGlobalParameters();
         $taxAppliesTo = $globalParameters['tax_applies_to'];
-        if ($taxEnable && 
+        if ($taxEnable &&
             ($taxAppliesTo == self::TAX_APPLIES_TO_ALL || $taxAppliesTo == self::TAX_APPLIES_TO_ONLY_COURSE)
         ) {
             $globalTaxPerc = $globalParameters['global_tax_perc'];
@@ -720,7 +770,7 @@ class BuyCoursesPlugin extends Plugin
             'tax_amount' => number_format($taxAmount, $precision),
             'tax_perc' => $taxPerc,
             'tax_name' => $globalParameters['tax_name'],
-            'tax_enable' => $taxEnable && 
+            'tax_enable' => $taxEnable &&
                 ($taxAppliesTo == self::TAX_APPLIES_TO_ALL || $taxAppliesTo == self::TAX_APPLIES_TO_ONLY_COURSE),
             'currency' => $item['iso_code'],
             'course_img' => null,
@@ -1012,6 +1062,69 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
+     * Get data of sales.
+     *
+     * @param int $saleId The sale id
+     * @param int $isService Check if a service
+     *
+     * @return array The sale data
+     */
+    public function getDataSaleInvoice($saleId, $isService)
+    {
+        $data = [];
+        if ($isService) {
+            $sale = $this->getServiceSale($saleId);
+            $data['reference'] = $sale['reference'];
+            $data['product_name'] = $sale['service']['name'];
+            $data['payment_type'] = $sale['payment_type'];
+            $data['user_id'] = $sale['buyer']['id'];
+            $data['price'] = $sale['price'];
+            $data['price_without_tax'] = $sale['price_without_tax'];
+            $data['tax_perc'] = $sale['tax_perc'];
+            $data['tax_amount'] = $sale['tax_amount'];
+            $data['currency_id'] = $sale['currency_id'];
+            $data['date'] = $sale['buy_date'];
+        } else {
+            $sale = $this->getSale($saleId);
+            $data['reference'] = $sale['reference'];
+            $data['product_name'] = $sale['product_name'];
+            $data['payment_type'] = $sale['payment_type'];
+            $data['user_id'] = $sale['user_id'];
+            $data['price'] = $sale['price'];
+            $data['price_without_tax'] = $sale['price_without_tax'];
+            $data['tax_perc'] = $sale['tax_perc'];
+            $data['tax_amount'] = $sale['tax_amount'];
+            $data['currency_id'] = $sale['currency_id'];
+            $data['date'] = $sale['date'];
+        }
+
+        return $data;
+    }
+
+    /**
+     * Get data of invoice.
+     *
+     * @param int $saleId The sale id
+     * @param int $isService Check if a service
+     *
+     * @return array The invoice data
+     */
+    public function getDataInvoice($saleId, $isService)
+    {
+        return Database::select(
+            '*',
+            Database::get_main_table(self::TABLE_INVOICE),
+            [
+                'where' => [
+                    'sale_id = ? AND ' => intval($saleId),
+                    'is_service = ?' => intval($isService),
+                ],
+            ],
+            'first'
+        );
+    }
+
+    /**
      * Get currency data by ID.
      *
      * @param int $currencyId The currency ID
@@ -1065,6 +1178,9 @@ class BuyCoursesPlugin extends Plugin
 
         if ($saleIsCompleted) {
             $this->updateSaleStatus($sale['id'], self::SALE_STATUS_COMPLETED);
+            if ($this->get('invoicing_enable') === 'true') {
+                $this->setInvoice($sale['id']);
+            }
         }
 
         return $saleIsCompleted;
@@ -1095,8 +1211,69 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
-     * Get Tax's types
-     * 
+     * Register a invoice.
+     *
+     * @param int $saleId The sale ID
+     * @param int $isService The service type to filter (default : 0)
+     */
+    public function setInvoice($saleId, $isService = 0)
+    {
+        $invoiceTable = Database::get_main_table(self::TABLE_INVOICE);
+        $year = date("Y");
+
+        $globalParameters = $this->getGlobalParameters();
+        $numInvoice = $globalParameters['next_number_invoice'];
+        $serie = $globalParameters['invoice_series'];
+
+        if (empty($numInvoice)) {
+            $item = Database::select(
+                ['MAX(num_invoice) AS num_invoice'],
+                $invoiceTable,
+                [
+                    'where' => ['year = ?' => $year],
+                ],
+                'first'
+            );
+
+            $numInvoice = 1;
+            if ($item !== false) {
+                $numInvoice = (int) ($item['num_invoice'] + 1);
+            }
+        } else {
+            Database::update(
+                Database::get_main_table(self::TABLE_GLOBAL_CONFIG),
+                ['next_number_invoice' => 0],
+                ['id = ?' => 1]
+            );
+        }
+
+        Database::insert(
+            $invoiceTable,
+            [
+                'sale_id' => $saleId,
+                'is_service' => $isService,
+                'num_invoice' => $numInvoice,
+                'year' => $year,
+                'serie' => $serie,
+                'date_invoice' => api_get_utc_datetime(),
+            ]
+        );
+
+        // Record invoice in the sales table
+        $table = Database::get_main_table(self::TABLE_SALE);
+        if (empty($isService)) {
+            $table = Database::get_main_table(self::TABLE_SERVICES_SALE);
+        }
+        Database::update(
+            $table,
+            ['invoice' => 1],
+            ['id = ?' => $saleId]
+        );
+    }
+
+    /**
+     * Get Tax's types.
+     *
      * @return array
      */
     public function getTaxAppliesTo()
@@ -1105,7 +1282,7 @@ class BuyCoursesPlugin extends Plugin
             self::TAX_APPLIES_TO_ALL => $this->get_lang('AllCoursesSessionsAndServices'),
             self::TAX_APPLIES_TO_ONLY_COURSE => $this->get_lang('OnlyCourses'),
             self::TAX_APPLIES_TO_ONLY_SESSION => $this->get_lang('OnlySessions'),
-            self::TAX_APPLIES_TO_ONLY_SERVICES=> $this->get_lang('OnlyServices'),
+            self::TAX_APPLIES_TO_ONLY_SERVICES => $this->get_lang('OnlyServices'),
         ];
     }
 
@@ -1916,7 +2093,7 @@ class BuyCoursesPlugin extends Plugin
             $taxPerc = null;
             $priceWithoutTax = $priceWithTax = $return['price'];
             $precision = 2;
-            
+
             $taxEnable = $this->get('tax_enable') === 'true';
             $globalParameters = $this->getGlobalParameters();
             $taxAppliesTo = $globalParameters['tax_applies_to'];
@@ -1929,7 +2106,7 @@ class BuyCoursesPlugin extends Plugin
                 $taxAmount = round($priceWithoutTax * $taxPerc / 100, $precision);
                 $priceWithTax = $priceWithoutTax + $taxAmount;
             }
-            
+
             $services['id'] = $return['id'];
             $services['name'] = $return['name'];
             $services['description'] = $return['description'];
@@ -2034,7 +2211,7 @@ class BuyCoursesPlugin extends Plugin
             $conditions = ['WHERE' => ['ss.buyer_id = ?' => $buyerId], 'ORDER' => 'id ASC'];
         }
 
-        if (is_numeric($status)) {
+        if (is_numeric($status) && empty($id)) {
             $conditions = ['WHERE' => ['ss.status = ?' => $status], 'ORDER' => 'id ASC'];
         }
 
@@ -2078,7 +2255,6 @@ class BuyCoursesPlugin extends Plugin
             $conditions,
             $showData
         );
-
         $servicesSale = [];
 
         if ($id) {
@@ -2101,6 +2277,9 @@ class BuyCoursesPlugin extends Plugin
             $servicesSale['currency_id'] = $return['currency_id'];
             $servicesSale['currency'] = $return['currency'];
             $servicesSale['price'] = $return['price'];
+            $servicesSale['price_without_tax'] = $return['price_without_tax'];
+            $servicesSale['tax_perc'] = $return['tax_perc'];
+            $servicesSale['tax_amount'] = $return['tax_amount'];
             $servicesSale['node_type'] = $return['node_type'];
             $servicesSale['node_id'] = $return['node_id'];
             $servicesSale['buyer']['id'] = $buyer['user_id'];
@@ -2111,6 +2290,7 @@ class BuyCoursesPlugin extends Plugin
             $servicesSale['date_end'] = $return['date_end'];
             $servicesSale['status'] = $return['status'];
             $servicesSale['payment_type'] = $return['payment_type'];
+            $servicesSale['invoice'] = $return['invoice'];
 
             return $servicesSale;
         }
@@ -2147,6 +2327,7 @@ class BuyCoursesPlugin extends Plugin
             $servicesSale[$index]['date_end'] = $service['date_end'];
             $servicesSale[$index]['status'] = $service['status'];
             $servicesSale[$index]['payment_type'] = $service['payment_type'];
+            $servicesSale[$index]['invoice'] = $service['invoice'];
         }
 
         return $servicesSale;
@@ -2187,6 +2368,10 @@ class BuyCoursesPlugin extends Plugin
             $serviceSaleId,
             self::SERVICE_STATUS_COMPLETED
         );
+
+        if ($this->get('invoicing_enable') === 'true') {
+            $this->setInvoice($serviceSaleId, 1);
+        }
 
         return true;
     }
@@ -2241,7 +2426,7 @@ class BuyCoursesPlugin extends Plugin
             $price = $service['price'];
             $taxPerc = null;
             $priceWithoutTax = $service['price'];
-            
+
             $taxEnable = $this->get('tax_enable') === 'true';
             $globalParameters = $this->getGlobalParameters();
             $taxAppliesTo = $globalParameters['tax_applies_to'];
@@ -2306,7 +2491,7 @@ class BuyCoursesPlugin extends Plugin
         $price = $service['price'];
         $priceWithoutTax = null;
         $taxPerc = null;
-        
+
         $taxEnable = $this->get('tax_enable') === 'true';
         $globalParameters = $this->getGlobalParameters();
         $taxAppliesTo = $globalParameters['tax_applies_to'];
@@ -2320,7 +2505,7 @@ class BuyCoursesPlugin extends Plugin
             $taxAmount = round($priceWithoutTax * $taxPerc / 100, $precision);
             $price = $priceWithoutTax + $taxAmount;
         }
-        
+
         $values = [
             'service_id' => $serviceId,
             'reference' => $this->generateReference(
@@ -2406,6 +2591,15 @@ class BuyCoursesPlugin extends Plugin
             $sqlParams['global_tax_perc'] = $params['global_tax_perc'];
             $sqlParams['tax_applies_to'] = $params['tax_applies_to'];
             $sqlParams['tax_name'] = $params['tax_name'];
+        }
+        
+        if ($this->get('invoicing_enable') === 'true') {
+            $sqlParams['seller_name'] = $params['seller_name'];
+            $sqlParams['seller_id'] = $params['seller_id'];
+            $sqlParams['seller_address'] = $params['seller_address'];
+            $sqlParams['seller_email'] = $params['seller_email'];
+            $sqlParams['next_number_invoice'] = $params['next_number_invoice'];
+            $sqlParams['invoice_series'] = $params['invoice_series'];
         }
 
         return Database::update(

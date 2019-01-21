@@ -2151,3 +2151,85 @@ footer {
     }
   }
 }
+/****** ISSUES ******/
+#issues {
+  width: 800px;
+  height: 350px;
+  overflow: hidden;
+  li{
+    width: 800px;
+    height: 350px;
+    list-style: none;
+    float: left;
+    &.selected{
+      img{
+        transform: scale(1.1, 1.1);
+      }
+    }
+    img{
+      float: left;
+      margin: 10px 30px 10px 50px;
+      background: transparent;
+      -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF)"; /* IE 8 */
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF, endColorstr=#00FFFFFF); /* IE 6 & 7 */
+      zoom: 1;
+      transition: all 2s ease-in-out;
+      transform: scale(0.7, 0.7);
+    }
+    h1{
+      color: #ffcc00;
+      font-size: 48px;
+      margin: 20px 0;
+      text-shadow: #000 1px 1px 2px;
+    }
+    p{
+      font-size: 16px;
+      margin-right: 70px;
+      font-weight: normal;
+      line-height: 22px;
+    }
+    }
+  #grad_left,
+  #grad_right {
+    width: 100px;
+    height: 350px;
+    position: absolute;
+    top: 0;
+    #next {
+      right: 0;
+      background-image: url('../../public/img/timeline/next.png');
+    }
+  }
+}
+#my_timeline {
+  width: 900px;
+  height: 350px;
+  overflow: hidden;
+  margin: 20px auto;
+  position: relative;
+  background: url('../../public/img/timeline/dot.gif') left 45px repeat-x;
+  #dates {
+    width: 800px;
+    height: 60px;
+    overflow: hidden;
+    li {
+      list-style: none;
+      float: left;
+      width: 120px;
+      height: 50px;
+      font-size: 16px;
+      text-align: center;
+      background: url('../../public/img/timeline/biggerdot.png') center bottom no-repeat;
+    }
+    a {
+      line-height: 38px;
+      padding-bottom: 10px;
+      color: #cecece;
+    }
+    .selected {
+      font-size: 20px;
+      color: #666666;
+    }
+  }
+}
+

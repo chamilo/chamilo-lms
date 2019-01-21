@@ -25,6 +25,8 @@
                                 {{ session.getDescription() }}
                             </div>
                         {% endif %}
+
+                        {% if not 'hide_social_media_links'|api_get_configuration_value %}
                         <div class="share-social-media">
                             <ul class="sharing-buttons">
                                 <li>
@@ -50,6 +52,7 @@
                                 </li>
                             </ul>
                         </div>
+                        {% endif %}
                     </div>
                     <div class="col-md-4">
                         <div class="session-info">

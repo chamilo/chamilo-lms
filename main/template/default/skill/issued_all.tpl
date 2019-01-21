@@ -38,6 +38,7 @@
                         <em class="fa fa-external-link-square fa-fw"></em> {{ 'ExportBadge'|get_lang }}
                     </a>
                 </p>
+                {% if not 'hide_social_media_links'|api_get_configuration_value %}
                 <div class='col-md-12 text-center'>
                     <h5><b> {{ 'ShareWithYourFriends' | get_lang }} </b></h5>
                     <a href="http://www.facebook.com/sharer.php?u={{ _p.web }}badge/{{ badge.issue_info.id }}" target="_new">
@@ -47,6 +48,7 @@
                         <em class='fa fa-twitter-square fa-3x text-light' aria-hidden='true'></em>
                     </a>
                 </div>
+                {% endif %}
             {% endif %}
         </div>
         <div class="col-md-7">

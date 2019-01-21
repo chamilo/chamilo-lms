@@ -33,6 +33,7 @@
                         <img src="{{ course.image }}" class="img-responsive" />
                     </div>
                     {% endif %}
+                    {% if not 'hide_social_media_links'|api_get_configuration_value %}
                     <div class="share-social-media">
                         <ul class="sharing-buttons">
                             <li>
@@ -58,6 +59,7 @@
                             </li>
                         </ul>
                     </div>
+                    {% endif %}
                 </div>
                 <div class="col-sm-7">
                     <div class="course-description">

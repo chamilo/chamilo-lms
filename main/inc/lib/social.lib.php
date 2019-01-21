@@ -1568,14 +1568,14 @@ class SocialManager extends UserManager
                 @copy($fileAttach['tmp_name'], $newPath);
             }
 
-            $small = self::resize_picture($newPath, IMAGE_WALL_SMALL_SIZE);
+            /*$small = self::resize_picture($newPath, IMAGE_WALL_SMALL_SIZE);
             $medium = self::resize_picture($newPath, IMAGE_WALL_MEDIUM_SIZE);
 
             $big = new Image($newPath);
             $ok = $small && $small->send_image($pathMessageAttach.IMAGE_WALL_SMALL.'_'.$newFileName) &&
                 $medium && $medium->send_image($pathMessageAttach.IMAGE_WALL_MEDIUM.'_'.$newFileName) &&
                 $big && $big->send_image($pathMessageAttach.IMAGE_WALL_BIG.'_'.$newFileName);
-
+            */
             // Insert
             $newFileName = $social.$newFileName;
 
@@ -2159,43 +2159,45 @@ class SocialManager extends UserManager
     }
 
     /**
+     * @param string $urlForm
+     *
      * @return string
      */
-    public static function getWallForm($show_full_profile = true, $urlForm)
+    public static function getWallForm($urlForm)
     {
-        if ($show_full_profile) {
-            $userId = isset($_GET['u']) ? '?u='.intval($_GET['u']) : '';
-            $form = new FormValidator(
-                'social_wall_main',
-                'post',
-                $urlForm.$userId,
-                null,
-                ['enctype' => 'multipart/form-data'],
-                FormValidator::LAYOUT_HORIZONTAL
-            );
+        $userId = isset($_GET['u']) ? '?u='.intval($_GET['u']) : '';
+        $form = new FormValidator(
+            'social_wall_main',
+            'post',
+            $urlForm.$userId,
+            null,
+            ['enctype' => 'multipart/form-data'],
+            FormValidator::LAYOUT_HORIZONTAL
+        );
 
-            $socialWallPlaceholder = isset($_GET['u']) ? get_lang('SocialWallWriteNewPostToFriend') : get_lang('SocialWallWhatAreYouThinkingAbout');
+        $socialWallPlaceholder = isset($_GET['u']) ? get_lang('SocialWallWriteNewPostToFriend') : get_lang('SocialWallWhatAreYouThinkingAbout');
 
-            $form->addTextarea(
-                'social_wall_new_msg_main',
-                null,
-                [
-                    'placeholder' => $socialWallPlaceholder,
-                    'cols-size' => [1, 10, 1],
-                    'aria-label' => $socialWallPlaceholder,
-                ]
-            );
-            $form->addHidden('url_content', '');
-            $form->addButtonSend(
-                get_lang('Post'),
-                'wall_post_button',
-                false,
-                ['cols-size' => [1, 10, 1]]
-            );
-            $html = Display::panel($form->returnForm(), get_lang('SocialWall'));
+        $form->addTextarea(
+            'social_wall_new_msg_main',
+            null,
+            [
+                'placeholder' => $socialWallPlaceholder,
+                'cols-size' => [1, 10, 1],
+                'aria-label' => $socialWallPlaceholder,
+            ]
+        );
 
-            return $html;
-        }
+        $form->addFile('picture', get_lang('UploadFile'));
+        $form->addHidden('url_content', '');
+        $form->addButtonSend(
+            get_lang('Post'),
+            'wall_post_button',
+            false,
+            ['cols-size' => [1, 10, 1]]
+        );
+        $html = Display::panel($form->returnForm(), get_lang('SocialWall'));
+
+        return $html;
     }
 
     /**
@@ -2331,9 +2333,12 @@ class SocialManager extends UserManager
 
         $wallImage = '';
         if (!empty($message['path'])) {
-            $imageBig = UserManager::getUserPicture($authorId, USER_IMAGE_SIZE_BIG);
-            $imageSmall = UserManager::getUserPicture($authorId, USER_IMAGE_SIZE_SMALL);
-            $wallImage = '<a class="thumbnail ajax" href="'.$imageBig.'"><img src="'.$imageSmall.'"></a>';
+            $pathMessageAttach = UserManager::getUserPathById($authorId, 'system').'message_attachments';
+            if (file_exists($pathMessageAttach.$message['path'])) {
+                $attachmentUrl = UserManager::getUserPathById($authorId, 'web');
+                $attachmentUrl = $attachmentUrl.'message_attachments'.$message['path'];
+                $wallImage = '<a class="thumbnail ajax" href="'.$attachmentUrl.'">'.$message['path'].'</a>';
+            }
         }
 
         $canEdit = $currentUserId == $receiverInfo['user_id'] && empty($message['group_info']);

@@ -79,23 +79,24 @@ if (api_get_setting('profile', 'picture') == 'true') {
 
 // Main post
 if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp_name'])) {
-    $messageId = 0;
     $messageContent = $_POST['social_wall_new_msg_main'];
     if (!empty($_POST['url_content'])) {
         $messageContent = $_POST['social_wall_new_msg_main'].'<br /><br />'.$_POST['url_content'];
     }
-    $idMessage = SocialManager::sendWallMessage(
+
+    $messageId = SocialManager::sendWallMessage(
         api_get_user_id(),
         api_get_user_id(),
         $messageContent,
-        $messageId,
+        0,
         MESSAGE_STATUS_WALL_POST
     );
-    if (!empty($_FILES['picture']['tmp_name']) && $idMessage > 0) {
+
+    if ($messageId && !empty($_FILES['picture']['tmp_name'])) {
         $error = SocialManager::sendWallMessageAttachmentFile(
             api_get_user_id(),
             $_FILES['picture'],
-            $idMessage,
+            $messageId,
             $fileComment = ''
         );
     }
@@ -321,7 +322,7 @@ $social_group_block = Display::panelCollapse(
     'groups-collapse'
 );
 
-$wallSocialAddPost = SocialManager::getWallForm($show_full_profile, api_get_self());
+$wallSocialAddPost = SocialManager::getWallForm(api_get_self());
 // Social Post Wall
 $posts = SocialManager::getMyWallMessages($user_id);
 $social_post_wall_block = empty($posts) ? '<p>'.get_lang('NoPosts').'</p>' : $posts;

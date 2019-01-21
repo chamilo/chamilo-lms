@@ -277,7 +277,11 @@ $friend_html = SocialManager::listMyFriendsBlock(
     $show_full_profile
 );
 
-$wallSocialAddPost = SocialManager::getWallForm($show_full_profile, api_get_self());
+$wallSocialAddPost = '';
+if ($show_full_profile) {
+    $wallSocialAddPost = SocialManager::getWallForm(api_get_self());
+}
+
 $social_wall_block = $wallSocialAddPost;
 
 // Social Post Wall

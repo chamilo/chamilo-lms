@@ -290,14 +290,16 @@ $wallSocialAddPost = SocialManager::getWallForm($show_full_profile, api_get_self
 // Social Post Wall
 $posts = SocialManager::getMyWallMessages($user_id);
 $social_post_wall_block = empty($posts) ? '<p>'.get_lang('NoPosts').'</p>' : $posts;
-
-$socialAutoExtendLink = Display::url(
-    get_lang('SeeMore'),
-    $socialAjaxUrl.'?u='.$user_id.'&a=list_wall_message&start=10&length=5',
-    [
-        'class' => 'nextPage next',
-    ]
-);
+$socialAutoExtendLink = '';
+if ($posts >= 10) {
+    $socialAutoExtendLink = Display::url(
+        get_lang('SeeMore'),
+        $socialAjaxUrl.'?u='.$user_id.'&a=list_wall_message&start=10&length=5',
+        [
+            'class' => 'nextPage next',
+        ]
+    );
+}
 
 $form = new FormValidator(
     'find_friends_form',

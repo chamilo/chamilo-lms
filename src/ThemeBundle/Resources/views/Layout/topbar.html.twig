@@ -232,6 +232,12 @@
                     <ul class="dropdown-menu">
                         <li>
                             <a title="{{ "Inbox"|trans }}" class="dropdown-item"
+                               href="{{ url('legacy_main', { 'name' : 'auth/profile.php' }) }}">
+                                <em class="fa fa-envelope" aria-hidden="true"></em> {{ "Edit profile"|trans }}
+                            </a>
+                        </li>
+                        <li>
+                            <a title="{{ "Inbox"|trans }}" class="dropdown-item"
                                href="{{ url('legacy_main', { 'name' : 'messages/inbox.php' }) }}">
                                 <em class="fa fa-envelope" aria-hidden="true"></em> {{ "Inbox"|trans }}
                             </a>

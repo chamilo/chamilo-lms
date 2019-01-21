@@ -82,8 +82,8 @@
     <section id="course-info-bottom" class="course">
         <div class="row">
             <div class="col-sm-8">
-                <div class="panel panel-default">
-                    <div class="panel-body">
+                <div class="card">
+                    <div class="card-body">
                         <h3 class="sub-title">{{ "CourseInformation"|get_lang }}</h3>
                         <div class="course-information">
                             {% for topic in course.syllabus %}
@@ -139,16 +139,17 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="panel-teachers">
-                            <h3 class="sub-title">{{ "Coaches"|get_lang }}</h3>
+                            <h5 class="sub-title">{{ "Coaches"|get_lang }}</h5>
                         </div>
                         {%  for teacher in course.teachers %}
+
                         <div class="coach-information">
                             <div class="coach-header">
                                 <div class="coach-avatar">
-                                    <img class="img-circle img-responsive" src="{{ teacher.image }}" alt="{{ teacher.complete_name }}">
+                                    <img class="img-fluid rounded-circle" src="{{ teacher.image }}" alt="{{ teacher.complete_name }}">
                                 </div>
                                 <div class="coach-title">
-                                    <h4>{{ teacher.complete_name }}</h4>
+                                    <h6>{{ teacher.complete_name }}</h6>
                                     <p> {{ teacher.diploma }}</p>
                                 </div>
                             </div>

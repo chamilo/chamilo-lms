@@ -10,24 +10,6 @@
     Version: 2.0
 */
 
-
-
-.blackboard_show {
-    float: left;
-    position: absolute;
-    border: 1px solid #000;
-    width: 200px;
-    border-radius: 5px;
-    background-color: #000;
-    z-index: 99;
-    display: inline;
-    color: #fff;
-}
-
-.blackboard_hide {
-    display: none;
-}
-
 /* notifications help and bug */
 
 .cookieUsageValidation {
@@ -138,9 +120,6 @@
     width: 100%;
 }
 
-.impress-title h1 {
-    font-size: 35px;
-}
 
 /* SESSION CATALOG*/
 .session-group .padding-clear {
@@ -2294,34 +2273,6 @@ div#no-data-view div.controls {
     width: 450px !important;
 }
 
-/* **** FORUM CATEGORY **** */
-.forum_category {
-    background-color: #0066CC;
-    color: #fff;
-}
-
-.forum_category a {
-    color: #fff;
-}
-
-.forum_category_header {
-    background-color: #0066CC;
-    color: #fff;
-}
-
-tr.forum_category_header a {
-    color: #fff;
-}
-
-.forum-description {
-    display: inline-block;
-}
-
-/* **** FORUM **** */
-.forum_header {
-    background-color: #EEF;
-}
-
 /* **** THREAD **** */
 .forum_threadheader {
     color: #aaa;
@@ -2338,10 +2289,6 @@ tr.forum_category_header a {
     color: #000000;
     background-color: #FFFFFF;
     border: 1px solid #aaa;
-}
-
-.forum-date {
-    font-size: 12px;
 }
 
 /* **** POST **** */
@@ -2468,15 +2415,9 @@ tr.forum_category_header a {
 .forum_table td {
     padding: 5px;
     vertical-align: top;
-    border-bottom: 1px solid #ccc;
-    border-right: 1px dotted #e1e1e1;
-    border-left: 1px dotted #e1e1e1;
-    border-top: 1px solid #ccc;
-}
-
-.post {
     border: 1px solid #ccc;
-    margin-bottom: 5px;
+    border-right: dotted #e1e1e1;
+    border-left: dotted #e1e1e1;
 }
 
 .timeline-example {
@@ -2494,10 +2435,6 @@ tr.forum_category_header a {
     height: 600px !important;
     position: relative !important;
     z-index: 100;
-}
-
-#main_content .course_item {
-    padding: 5px 0 5px 0;
 }
 
 /* actions */
@@ -2707,34 +2644,6 @@ i.size-32.icon-new-note {
     border: 0;
 }
 
-.btn-msg {
-    padding: 2px 4px 2px 22px;
-    margin-bottom: 10px;
-    font-size: 11px;
-    line-height: 14px;
-    background: #e6e6e6 3px;
-}
-
-.btn-inv {
-    padding: 2px 4px 2px 22px;
-    margin-bottom: 10px;
-    font-size: 11px;
-    line-height: 14px;
-    background: #e6e6e6 3px;
-}
-
-.btn-inv-off {
-    padding: 2px 4px 2px 22px;
-    margin-bottom: 10px;
-    font-size: 11px;
-    line-height: 14px;
-    background: #e6e6e6 3px;
-}
-
-#password_progress {
-    width: 220px;
-}
-
 .jqgrid_whitespace {
     white-space: normal !important;
 }
@@ -2852,14 +2761,6 @@ i.size-32.icon-new-note {
 #display-survey .total {
     background-color: #EBF3F5;
     text-align: center;
-}
-
-#display-survey .center {
-    text-align: center;
-}
-
-#display-survey {
-    border: 1px solid #ddd;
 }
 
 #display-survey.table tbody tr:hover td, #display-survey.table tbody tr:hover th {
@@ -3500,147 +3401,6 @@ div#chat-remote-video video {
     width: 100%;
 }
 
-/* Sequence */
-.title-sequence {
-    font-size: 12px;
-    text-align: center;
-}
-
-#parents {
-    text-align: center;
-}
-
-#parents .parent {
-    display: inline-block;
-    width: 125px;
-    padding: 5px;
-}
-
-#parents .sequence-plus-icon {
-    color: #CCCCCC;
-    padding: 0 10px;
-}
-
-.border-sequence {
-    background: url("../../public/img/line.png") repeat-x 0 35px;
-}
-
-.arrow-sequence {
-    height: 68px;
-    background: url("../../public/img/icons/48/sequence-arrow.png") no-repeat center 15px;
-    margin-top: 10px;
-    padding-top: 10px;
-}
-
-#parents .parent .big-icon {
-    background-color: #ECF0F1;
-    padding: 10px;
-    text-align: center;
-    border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    position: relative;
-}
-
-#parents .parent.parent-deleted .sequence-course {
-    text-decoration: line-through;
-}
-
-#parents .parent .big-icon .sequence-course {
-    font-size: 12px;
-}
-
-#parents .parent .big-icon .sequence-id {
-    border-radius: 50%;
-    background-color: #E74C3C;
-    width: 20%;
-    color: #ffffff;
-    position: absolute;
-    right: 5px;
-    top: 5px;
-}
-
-#parents .parent .big-icon .sequence-deleted {
-    font-size: 12px;
-}
-
-#resource {
-    text-align: center;
-}
-
-#resource .parent {
-    display: inline-block;
-    padding: 5px;
-    width: 15%;
-}
-
-#resource .parent .big-icon {
-    background-color: #eeffaa;
-    padding: 10px;
-    text-align: center;
-    border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    position: relative;
-}
-
-#resource .parent .big-icon .sequence-course {
-    font-size: 12px;
-}
-
-#resource .parent .big-icon .sequence-id {
-    border-radius: 50%;
-    background-color: #E74C3C;
-    width: 20%;
-    color: #ffffff;
-    position: absolute;
-    right: 5px;
-    top: 5px;
-}
-
-#resource .parent .big-icon .sequence-deleted {
-    font-size: 12px;
-}
-
-#children {
-    text-align: center;
-}
-
-#children .parent {
-    display: inline-block;
-    padding: 5px;
-    width: 15%;
-}
-
-#children .parent .big-icon {
-    background-color: #feffd6;
-    padding: 10px;
-    text-align: center;
-    border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    position: relative;
-}
-
-#children .parent .big-icon .sequence-course {
-    font-size: 12px;
-}
-
-#children .parent .big-icon .sequence-id {
-    border-radius: 50%;
-    background-color: #E74C3C;
-    width: 20%;
-    color: #ffffff;
-    position: absolute;
-    right: 5px;
-    top: 5px;
-}
-
-#children .parent .big-icon .sequence-deleted {
-    font-size: 12px;
-}
-
-
 
 /**** ABOUT SESSION ****/
 
@@ -4149,14 +3909,6 @@ div#chat-remote-video video {
     top: 0;
 }
 
-#grad_left {
-    left: 0;
-}
-
-#grad_right {
-    right: 0;
-}
-
 #next,
 #prev {
     position: absolute;
@@ -4471,10 +4223,6 @@ ul#toolnavbox-two li a.btn {
 @media (min-width: 1024px) {
     .sidebar-scorm {
         width: 25.66666667%;
-    }
-
-    .total {
-        width: 100%;
     }
 
     #learning_path_right_zone {
@@ -4955,15 +4703,6 @@ input.form-control[type="color"] {
     color: #666;
     margin-bottom: 20px;
     margin-top: 20px;
-}
-
-.col-xs-6.course-tool:nth-child(2n+1) {
-    clear: left;
-}
-
-.btn-orange {
-    background-color: #EF5F00;
-    border: none;
 }
 
 .exercise_mark_select .dropdown-menu > .active > a.btn-danger,

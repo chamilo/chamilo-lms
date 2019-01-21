@@ -239,7 +239,7 @@ $template->assign(
 $template->assign('has_requirements', $hasRequirements);
 $template->assign('sequences', $sessionRequirements);
 $template->assign('is_premium', $sessionIsPremium);
-$layout = $template->get_template('session/about.tpl');
+$layout = $template->get_template('session/about.html.twig');
 $content = $template->fetch($layout);
 //$template->assign('header', $session->getName());
 $template->assign('content', $content);

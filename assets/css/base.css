@@ -1071,15 +1071,6 @@ div.admin_section h4 {
     margin: 10px;
 }
 
-.ui-jqgrid tr.jqgrow td {
-    height: 38px !important;
-    white-space: inherit;
-}
-
-.ui-search-table .ui-search-input input {
-    height: 25px;
-}
-
 .exercise_overview_options {
     background-color: #F9F9F9;
     border-radius: 10px;
@@ -1517,7 +1508,6 @@ form .formw .freeze {
     padding-top: 8px;
 }
 
-
 .tag {
     background-color: #D3E6EF;
     border-radius: 3px 3px 3px 3px;
@@ -1583,15 +1573,6 @@ form .formw .freeze {
 
 .label_tag.course {
     background-color: #62cffc;
-}
-
-.label {
-    font-weight: normal;
-    font-size: 90%;
-}
-
-.requirements td {
-    padding: 5px;
 }
 
 /* header cell in data table in tools */
@@ -1665,18 +1646,6 @@ form .formw .freeze {
     margin-bottom: 5px;
 }
 
-.table-well {
-    background: #ffffff;
-    border: 1px solid #dddddd;
-    padding: 10px 20px;
-    border-radius: 4px;
-    -moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-    margin-bottom: 20px;
-    margin-top: 10px;
-}
-
 .tabs-margin, .btn-toolbar {
     margin-bottom: 15px;
     margin-top: 15px;
@@ -1698,14 +1667,6 @@ form .formw .freeze {
 
 .form-stacked .row {
     margin-bottom: 9px;
-}
-
-#install_form blockquote {
-    line-height: 16px;
-}
-
-#install_form .data_table_no_border td {
-    width: 30%;
 }
 
 .lp_content_type_label {

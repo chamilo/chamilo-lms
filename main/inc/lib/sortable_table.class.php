@@ -291,8 +291,8 @@ class SortableTable extends HTML_Table
 
             // Only show pagination info when there are items to paginate
             if ($this->get_total_number_of_items() > $this->default_items_per_page) {
-                $html = '<div class="table-well">';
-                $html .= '<table class="data_table_pagination">';
+                $html = '<div class="table-responsive">';
+                $html .= '<table class="table">';
                 $html .= '<tr>';
                 $html .= '<td style="width:25%;">';
                 $html .= $form;
@@ -688,7 +688,7 @@ class SortableTable extends HTML_Table
         foreach ($param as $key => &$value) {
             $result[] = '<input type="hidden" name="'.$key.'" value="'.$value.'"/>';
         }
-        $result[] = '<select name="'.$this->param_prefix.'per_page" onchange="javascript: this.form.submit();">';
+        $result[] = '<select class="custom-select" name="'.$this->param_prefix.'per_page" onchange="javascript: this.form.submit();">';
         $list = [10, 20, 50, 100, 500, 1000];
         foreach ($list as $nr) {
             if ($total_number_of_items <= $nr) {

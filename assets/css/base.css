@@ -2645,10 +2645,6 @@ i.size-32.icon-new-note {
     color: #666;
 }
 
-.title-question {
-    font-size: 22px;
-}
-
 #display-survey.table tbody tr th, #display-survey.table tbody tr:hover th {
     background-color: #666;
     text-align: center;
@@ -2678,58 +2674,7 @@ i.size-32.icon-new-note {
 }
 
 /* CSS BASE BOOSTRAP 3 */
-.openbadges-introduction {
-    line-height: 30px;
-    margin-bottom: 30px;
-}
 
-.openbadges-introduction .title {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #456176;
-    font-size: 35px;
-}
-
-.openbadges-introduction .lead {
-    font-size: 15px;
-}
-
-.openbadges-introduction .sub-title {
-    color: #456176;
-    text-align: center;
-    font-size: 20px;
-}
-
-.openbadges-introduction .badges-tablet {
-    padding-top: 15px;
-}
-
-.openbadges-introduction .block-content {
-    padding-top: 30px;
-    padding-bottom: 30px;
-}
-
-.openbadges-introduction .block-edit {
-    padding-top: 15px;
-    padding-bottom: 30px;
-}
-
-.openbadges-introduction .block-content .block-title,
-.openbadges-introduction .block-edit .block-title {
-    background-color: #e2eceb;
-    border: 1px solid #456176;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    font-size: 16px;
-    color: #456176;
-}
-
-.openbadges-introduction .block-content p {
-    padding-left: 5%;
-    font-size: 14px;
-}
 
 .openbadges-tablet {
     margin-top: 15px;
@@ -2814,10 +2759,6 @@ i.size-32.icon-new-note {
     text-align: center;
 }
 
-.social-search form {
-    margin-bottom: 0;
-}
-
 .social-group .group-title {
     color: #456176;
     font-weight: bold;
@@ -2833,40 +2774,6 @@ i.size-32.icon-new-note {
     margin-top: 10px;
 }
 
-.list-badges {
-    padding: 0;
-    margin: 0;
-    list-style: none;
-}
-
-.list-badges .thumbnail {
-    border-color: #bce8f1;
-    display: inline-block;
-    margin-right: 15px;
-    padding: 0;
-    vertical-align: top;
-    width: 95px;
-}
-
-.list-badges .thumbnail a img {
-    margin-bottom: 4px;
-    margin-top: 4px;
-}
-
-.list-badges .thumbnail a .caption {
-    background: #D9EDF7;
-    font-size: 12px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-}
-
-.list-badges .thumbnail a .caption:hover {
-    width: auto;
-    white-space: initial;
-    overflow: visible;
-    cursor: pointer;
-}
 
 .social-post .mediaPost {
     padding-top: 10px;

@@ -39,20 +39,38 @@
                     <div class="panel panel-default">
                         <div class="panel-heading" role="tab" id="headingOne">
                             <h4 class="panel-title">
-                                <a role="button" data-toggle="collapse" data-parent="#blocklistFriends" href="#listFriends" aria-expanded="true" aria-controls="listFriends">
+                                <a role="button"
+                                   data-toggle="collapse"
+                                   data-parent="#blocklistFriends"
+                                   href="#listFriends"
+                                   aria-expanded="true"
+                                   aria-controls="listFriends">
                                     {{ "SocialFriend" | get_lang }}
                                 </a>
                             </h4>
                         </div>
-                        <div id="listFriends" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                        <div id="listFriends"
+                             class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
                             <div class="panel-body">
                                 {{ social_friend_block }}
+                            </div>
+
+                            <div id="find_friends">
+                                <h4>{{ 'FindFriends' | get_lang }}</h4>
+                                <ul class="nav nav-tabs">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" href="#">{{ 'ByName' | get_lang }}</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="profile-tab" href="http://" >{{ 'ByLink' | get_lang }}</a>
+                                    </li>
+                                </ul>
+                                {{ search_friends_form }}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
 
             {{ social_group_block }}
 

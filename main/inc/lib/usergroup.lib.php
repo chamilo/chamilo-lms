@@ -2093,10 +2093,11 @@ class UserGroup extends Model
      *
      * @author Julio Montoya
      * */
-    public function get_groups_by_user($user_id = '', $relation_type = GROUP_USER_PERMISSION_READER, $with_image = false)
+    public function get_groups_by_user($user_id, $relation_type = GROUP_USER_PERMISSION_READER, $with_image = false)
     {
         $table_group_rel_user = $this->usergroup_rel_user_table;
         $tbl_group = $this->table;
+        $user_id = (int) $user_id;
 
         if ($relation_type == 0) {
             $relationCondition = '';
@@ -2120,6 +2121,7 @@ class UserGroup extends Model
                     $relationCondition
                 ORDER BY created_at DESC ";
         $result = Database::query($sql);
+
         $array = [];
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {

@@ -152,6 +152,7 @@ if ($group_id != 0) {
 $create_thread_link = '';
 $social_right_content = null;
 $socialForum = '';
+$friend_html = '';
 
 $group_info = $usergroup->get($group_id);
 

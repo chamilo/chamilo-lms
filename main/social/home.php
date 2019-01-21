@@ -195,8 +195,14 @@ $social_search_block = Display::panel(
     get_lang('SearchUsers')
 );
 
-$results = $userGroup->get_groups_by_user($user_id, 0);
-//$results = $userGroup->get_groups_by_age(1, false);
+$results = $userGroup->get_groups_by_user($user_id,
+    [
+        GROUP_USER_PERMISSION_ADMIN,
+        GROUP_USER_PERMISSION_READER,
+        GROUP_USER_PERMISSION_MODERATOR,
+        GROUP_USER_PERMISSION_HRM,
+    ]
+);
 
 $myGroups = [];
 if (!empty($results)) {

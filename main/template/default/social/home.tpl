@@ -67,7 +67,7 @@
                                         <a class="nav-link active" href="#">{{ 'ByName' | get_lang }}</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" id="profile-tab" href="http://" >{{ 'ByLink' | get_lang }}</a>
+                                        <a class="nav-link" id="profile-tab" href="http://" >{{ 'ByGeolocalization' | get_lang }}</a>
                                     </li>
                                 </ul>
                                 {{ search_friends_form }}

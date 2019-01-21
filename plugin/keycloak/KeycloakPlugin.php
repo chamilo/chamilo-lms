@@ -48,6 +48,9 @@ class KeycloakPlugin extends Plugin
         return $this->get('content');
     }
 
+    /**
+     * Deletes all keycloak chamilo session data
+     */
     public function logout()
     {
         Session::erase('samlUserdata');

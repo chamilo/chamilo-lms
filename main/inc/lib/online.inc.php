@@ -177,7 +177,7 @@ function online_logout($user_id = null, $logout_redirect = false)
     Session::destroy();
 
     $pluginKeycloak = api_get_plugin_setting('keycloak', 'tool_enable') === 'true';
-    if ($pluginKeycloak) {
+    if ($pluginKeycloak && $uinfo['auth_source'] === 'keycloack') {
         $pluginUrl = api_get_path(WEB_PLUGIN_PATH).'keycloak/start.php?slo';
         header('Location: '.$pluginUrl);
         exit;

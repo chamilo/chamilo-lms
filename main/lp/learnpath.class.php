@@ -3704,11 +3704,9 @@ class learnpath
                         $item_id,
                         $this->get_view_id()
                     );
-
                     if ($this->debug > 0) {
                         error_log('rl_get_resource_link_for_learnpath - file: '.$file, 0);
                     }
-
                     switch ($lp_item_type) {
                         case 'document':
                             // Shows a button to download the file instead of just downloading the file directly.
@@ -6853,6 +6851,15 @@ class learnpath
     ) {
         $actionsLeft = '';
         $actionsRight = '';
+        $actionsLeft .= Display::url(
+            Display::return_icon(
+                'back.png',
+                get_lang('ReturnToLearningPaths'),
+                '',
+                ICON_SIZE_MEDIUM
+            ),
+            'lp_controller.php?'.api_get_cidreq()
+        );
         $actionsLeft .= Display::url(
             Display::return_icon(
                 'preview_view.png',

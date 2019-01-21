@@ -601,7 +601,7 @@ class DocumentManager
                 foreach ($documentData as $row) {
                     $isVisible = self::check_visibility_tree(
                         $row['id'],
-                        $courseInfo['code'],
+                        $courseInfo,
                         $sessionId,
                         api_get_user_id(),
                         $toGroupId
@@ -3507,31 +3507,44 @@ class DocumentManager
     }
 
     /**
-     * @param int    $doc_id
-     * @param string $course_code
-     * @param int    $session_id
-     * @param int    $user_id
-     * @param int    $groupId     iid
+     * @param int   $doc_id
+     * @param array $courseInfo
+     * @param int   $sessionId
+     * @param int   $user_id
+     * @param int   $groupId               iid
+     * @param bool  $checkParentVisibility
      *
      * @return bool
      */
     public static function check_visibility_tree(
         $doc_id,
-        $course_code,
-        $session_id,
+        $courseInfo,
+        $sessionId,
         $user_id,
-        $groupId = 0
+        $groupId = 0,
+        $checkParentVisibility = true
     ) {
+        if (empty($courseInfo)) {
+            return false;
+        }
+
+        $courseCode = $courseInfo['code'];
+
+        if (empty($courseCode)) {
+            return false;
+        }
+
         $document_data = self::get_document_data_by_id(
             $doc_id,
-            $course_code,
+            $courseCode,
             null,
-            $session_id
+            $sessionId
         );
-        if ($session_id != 0 && !$document_data) {
+
+        if ($sessionId != 0 && !$document_data) {
             $document_data = self::get_document_data_by_id(
                 $doc_id,
-                $course_code,
+                $courseCode,
                 null,
                 0
             );
@@ -3539,30 +3552,34 @@ class DocumentManager
 
         if (!empty($document_data)) {
             // If admin or course teacher, allow anyway
-            if (api_is_platform_admin() || CourseManager::is_course_teacher($user_id, $course_code)) {
+            if (api_is_platform_admin() || CourseManager::is_course_teacher($user_id, $courseCode)) {
                 return true;
             }
-            $course_info = api_get_course_info($course_code);
+
             if ($document_data['parent_id'] == false || empty($document_data['parent_id'])) {
                 if (!empty($groupId)) {
                     return true;
                 }
-                $visible = self::is_visible_by_id($doc_id, $course_info, $session_id, $user_id);
+                $visible = self::is_visible_by_id($doc_id, $courseInfo, $sessionId, $user_id);
 
                 return $visible;
             } else {
-                $visible = self::is_visible_by_id($doc_id, $course_info, $session_id, $user_id);
+                $visible = self::is_visible_by_id($doc_id, $courseInfo, $sessionId, $user_id);
 
                 if (!$visible) {
                     return false;
                 } else {
-                    return self::check_visibility_tree(
-                        $document_data['parent_id'],
-                        $course_code,
-                        $session_id,
-                        $user_id,
-                        $groupId
-                    );
+                    if ($checkParentVisibility) {
+                        return self::check_visibility_tree(
+                            $document_data['parent_id'],
+                            $courseInfo,
+                            $sessionId,
+                            $user_id,
+                            $groupId
+                        );
+                    }
+
+                    return true;
                 }
             }
         } else {

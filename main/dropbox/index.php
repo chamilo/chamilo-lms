@@ -282,6 +282,11 @@ if ($action != 'add') {
         /* Menu Sent */
         if (api_get_session_id() == 0) {
             echo '<div class="actions">';
+            if (empty($viewSentCategory)) {
+                echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$view."&action=add\">".
+                    Display::return_icon('upload_file.png', get_lang('UploadNewFile'), '', ICON_SIZE_MEDIUM).
+                    "</a>";
+            }
             if ($view_dropbox_category_sent != 0) {
                 echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category=0&view='.$view.'">'.
                     Display::return_icon('folder_up.png', get_lang('Up').' '.get_lang('Root'), '', ICON_SIZE_MEDIUM).
@@ -291,15 +296,15 @@ if ($action != 'add') {
                 echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$view."&action=addsentcategory\">".
                     Display::return_icon('new_folder.png', get_lang('AddNewCategory'), '', ICON_SIZE_MEDIUM)."</a>\n";
             }
-            if (empty($viewSentCategory)) {
-                echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$view."&action=add\">".
-                    Display::return_icon('upload_file.png', get_lang('UploadNewFile'), '', ICON_SIZE_MEDIUM).
-                    "</a>";
-            }
             echo '</div>';
         } else {
             if (api_is_allowed_to_session_edit(false, true)) {
                 echo '<div class="actions">';
+                if (empty($viewSentCategory)) {
+                    echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$view."&action=add\">".
+                        Display::return_icon('upload_file.png', get_lang('UploadNewFile'), '', ICON_SIZE_MEDIUM).
+                    "</a>";
+                }
                 if ($view_dropbox_category_sent != 0) {
                     echo get_lang('CurrentlySeeing').': <strong>'.Security::remove_XSS($dropbox_categories[$view_dropbox_category_sent]['cat_name']).'</strong> ';
                     echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category=0&view='.$view.'">'.
@@ -308,11 +313,6 @@ if ($action != 'add') {
                 } else {
                     echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$view."&action=addsentcategory\">".
                         Display::return_icon('new_folder.png', get_lang('AddNewCategory'), '', ICON_SIZE_MEDIUM)."</a>\n";
-                }
-                if (empty($viewSentCategory)) {
-                    echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$view."&action=add\">".
-                        Display::return_icon('upload_file.png', get_lang('UploadNewFile'), '', ICON_SIZE_MEDIUM).
-                    "</a>";
                 }
                 echo '</div>';
             }

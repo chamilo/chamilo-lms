@@ -623,6 +623,8 @@ $template->assign(
     )
 );
 
+$frameReady = Display::getFrameReadyBlock('top.content_name');
+$template->assign('frame_ready', $frameReady);
 $view = $template->get_template('learnpath/view.tpl');
 $content = $template->fetch($view);
 

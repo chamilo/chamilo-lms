@@ -30,7 +30,7 @@ $strings['ServerIsNotConfigured'] = "Videokonferenzserver ist nicht konfiguriert
 $strings['XUsersOnLine'] = "%s Benutzer online";
 
 $strings['host'] = 'BigBlueButton host';
-$strings['host_help'] = 'This is the name of the server where your BigBlueButton server is running. Might be localhost, an IP address (e.g. 192.168.13.54) or a domain name (e.g. my.video.com).';
+$strings['host_help'] = 'This is the name of the server where your BigBlueButton server is running. Might be localhost, an IP address (e.g. http://192.168.13.54) or a domain name (e.g. http://my.video.com).';
 
 $strings['salt'] = 'BigBlueButton salt';
 $strings['salt_help'] = 'This is the security key of your BigBlueButton server, which will allow your server to authentify the Chamilo installation. Refer to the BigBlueButton documentation to locate it. Try bbb-conf --salt';

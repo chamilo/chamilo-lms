@@ -612,7 +612,7 @@ if (isset($document_id) && empty($action)) {
 
         $visibility = DocumentManager::check_visibility_tree(
             $document_id,
-            api_get_course_id(),
+            $courseInfo,
             $sessionId,
             api_get_user_id(),
             $groupIid

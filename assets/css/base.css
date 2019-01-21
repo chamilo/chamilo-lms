@@ -2684,11 +2684,6 @@ i.size-32.icon-new-note {
     color: #1ABC9C;
 }
 
-.social-network-menu .nav li a img {
-    vertical-align: bottom;
-    margin-right: 5px;
-}
-
 .ui-state-highlight_lp {
     border: 1px solid #FEAA18;
     background: #FFB738;
@@ -2706,12 +2701,6 @@ i.size-32.icon-new-note {
     height: auto;
     margin: auto;
     max-width: 100%;
-}
-
-ul.holder {
-    list-style: none;
-    margin: 0;
-    padding: 0;
 }
 
 ul.holder li.bit-input input {
@@ -2847,10 +2836,6 @@ ul.holder li.bit-box {
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ffffe2', GradientType=0); /* IE6-9 */
 }
 
-.question_options div.thumbnail p {
-    margin: 0;
-}
-
 .question_options div.thumbnail img {
     height: 150px !important;
     width: 190px !important;
@@ -2913,16 +2898,6 @@ ul.exercise-draggable-answer .touch-items:hover {
     text-decoration: none;
 }
 
-
-
-video#chat-local-video,
-div#chat-remote-video video {
-    display: block;
-    height: auto;
-    width: 100%;
-}
-
-
 /*************** SCROLLBAR BASE CSS ***************/
 
 .scroll-wrapper {
@@ -2950,10 +2925,6 @@ div#chat-remote-video video {
 .scroll-wrapper > .scroll-content::-webkit-scrollbar {
     height: 0;
     width: 0;
-}
-
-.scroll-element {
-    display: none;
 }
 
 .scroll-element, .scroll-element div {
@@ -3091,14 +3062,6 @@ div#chat-remote-video video {
     margin-bottom: 10px;
 }
 
-.list-category {
-    display: inline-block;
-}
-
-.list-category .chosen-container {
-    width: 450px !important;
-}
-
 #student-list-work {
     background-color: #ffffff;
     position: absolute;
@@ -3134,18 +3097,8 @@ div#chat-remote-video video {
     margin-left: 10px;
 }
 
-.filler-report h3 {
-    margin-top: 10px;
-}
-
 .filler-report .filler-report-data-init {
     width: 60%;
-}
-
-.hot-course-head {
-    padding-top: 10px;
-    margin-bottom: 10px;
-    padding-bottom: 10px;
 }
 
 .create-groups .separate td {
@@ -3185,9 +3138,6 @@ div#chat-remote-video video {
 }
 
 /* video chat */
-#chat-video-panel .thumbnail .caption p {
-    margin-bottom: 0;
-}
 
 #chat-video-panel .thumbnail video {
     background-color: #FFF;
@@ -3199,32 +3149,7 @@ div#chat-remote-video video {
     width: 100%;
 }
 
-#listFriends .list-group-item {
-    border: none;
-    padding: 0;
-    font-size: 12px;
-}
 
-#listFriends .help {
-    font-size: 12px;
-}
-
-#listFriends a {
-    display: block;
-    text-overflow: ellipsis;
-}
-
-#listFriends a:hover {
-    background: none;
-}
-
-#listFriends a .username {
-    display: inline-block;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-    width: 120px;
-}
 
 #chat-video-panel #listFriends a .username {
     display: inline-block;
@@ -3278,8 +3203,6 @@ div#chat-remote-video video {
     background-position: 0 -76px;
 }
 
-
-
 #prev {
     left: 0;
     background-image: url('../../public/img/timeline/prev.png');
@@ -3326,11 +3249,6 @@ div#chat-remote-video video {
     border-radius: 5px;
     box-shadow: 0 1px 3px #C8C8C8;
     border: 1px solid #e6e6e6;
-}
-
-.everybodyview {
-    padding-top: 20px;
-    margin-top: 10px;
 }
 
 ul#toolnavbox {
@@ -3440,28 +3358,10 @@ ul#toolnavbox-two li a.btn {
     padding-top: 15px;
 }
 
-.description-upload {
-    margin-bottom: 15px;
-}
-
 .item-backup {
     padding-top: 5px;
     padding-bottom: 5px;
     cursor: pointer;
-}
-
-.item-backup .title {
-    margin-left: 10px;
-    font-weight: bold;
-}
-
-.tool-backups-options {
-    padding-left: 5%;
-    padding-right: 5%;
-}
-
-.list-backups-options {
-    list-style: none;
 }
 
 #invitations-acordion .list-group {
@@ -3491,74 +3391,6 @@ ul#toolnavbox-two li a.btn {
 
 .block-invitation .title-profile {
     font-weight: bold;
-}
-
-.file_name a {
-    color: #333;
-    font-size: 12px;
-    font-weight: bold;
-    display: inline-block;
-    padding-top: 15px;
-}
-
-/* CSS Responsive */
-@media (min-width: 1025px) and (max-width: 1200px) {
-    .sidebar-scorm {
-        width: 16.66666667%;
-    }
-
-    #learning_path_right_zone {
-        width: 68%;
-    }
-}
-
-@media (min-width: 1024px) {
-    .sidebar-scorm {
-        width: 25.66666667%;
-    }
-
-    #learning_path_right_zone {
-        width: 68%;
-        display: block;
-        padding-left: 0;
-        padding-right: 0;
-    }
-
-    #learning_path_right_zone.total {
-        width: 100%;
-        visibility: visible;
-        padding-left: 15px;
-        padding-right: 15px;
-    }
-}
-
-/* Portrait tablet to landscape and desktop */
-@media (min-width: 768px) and (max-width: 979px) {
-    #learning_path_right_zone {
-        width: 58%;
-        display: block;
-        padding-left: 0;
-        padding-right: 0;
-    }
-
-    #learning_path_right_zone.total {
-        width: 100%;
-        padding-left: 15px;
-        padding-right: 15px;
-        visibility: visible;
-    }
-
-    .items-course {
-        padding: 15px 20px;
-    }
-}
-
-
-
-
-
-input.form-control[type="color"] {
-    padding: 2px;
 }
 
 .form-separator {

@@ -2286,3 +2286,27 @@ footer {
   }
 }
 
+#listFriends{
+  .list-group-item {
+    border: none;
+    padding: 0;
+    font-size: 12px;
+  }
+  .help{
+    font-size: 12px;
+  }
+  a{
+    display: block;
+    text-overflow: ellipsis;
+    &.username{
+      display: inline-block;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 120px;
+    }
+  }
+  &:hover{
+    background: none;
+  }
+}

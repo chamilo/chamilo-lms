@@ -2153,9 +2153,9 @@ class SocialManager extends UserManager
             }
             $friendHtml .= '</div>';
         } else {
-            $friendHtml .= '<div class="help">'.get_lang('NoFriendsInYourContactList').' 
+            /*$friendHtml .= '<div class="help">'.get_lang('NoFriendsInYourContactList').'
                     <a href="'.api_get_path(WEB_PATH).'whoisonline.php">
-                    <em class="fa fa-search"></em> '.get_lang('TryAndFindSomeFriends').'</a></div>';
+                    <em class="fa fa-search"></em> '.get_lang('TryAndFindSomeFriends').'</a></div>';*/
         }
 
         return $friendHtml;

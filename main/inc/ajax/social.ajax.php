@@ -198,45 +198,52 @@ switch ($action) {
         }
         break;
     case 'list_wall_message':
-        $start = isset($_REQUEST['start']) ? (int) $_REQUEST['start'] - 1 : 0;
+        if (api_is_anonymous()) {
+            break;
+        }
+        $start = isset($_REQUEST['start']) ? (int) $_REQUEST['start'] : 0;
         $length = isset($_REQUEST['length']) ? (int) $_REQUEST['length'] : 10;
         $userId = isset($_REQUEST['u']) ? (int) $_REQUEST['u'] : api_get_user_id();
-
-        $array = SocialManager::getWallMessages(
-            $userId,
-            null,
-            0,
-            0,
-            '',
-            $start,
-            $length
-        );
-
-        $array = SocialManager::formatWallMessages($array);
-
-        if (!empty($array)) {
-            ksort($array);
-            $html = '';
-            foreach ($array as $item) {
-                $post = $item['html'];
-                $comment = SocialManager::getWallPostComments($userId, $item);
-                $html .= '<div class="panel panel-info"><div class="panel-body">'.$post.$comment.'</div></div>';
-            }
-            $html .= Display::div(
-                Display::url(
-                    get_lang('SeeMore'),
-                    api_get_self().'?u='.$userId.'&a=list_wall_message&start='.
-                    ($start + $length + 1).'&length='.$length,
-                    [
-                        'class' => 'nextPage',
-                    ]
-                ),
-                [
-                    'class' => 'next',
-                ]
+        $html = '';
+        if ($userId == api_get_user_id()) {
+            $html = SocialManager::getMyWallMessages($userId, $start, $length);
+        } else {
+            $array = SocialManager::getWallMessages(
+                $userId,
+                null,
+                0,
+                0,
+                '',
+                $start,
+                $length
             );
-            echo $html;
+            $array = SocialManager::formatWallMessages($array);
+
+            if (!empty($array)) {
+                ksort($array);
+                foreach ($array as $item) {
+                    $post = $item['html'];
+                    $comment = SocialManager::getWallPostComments($userId, $item);
+                    $html .= '<div class="panel panel-info"><div class="panel-body">'.$post.$comment.'</div></div>';
+                }
+            }
         }
+
+        $html .= Display::div(
+            Display::url(
+                get_lang('SeeMore'),
+                api_get_self().'?u='.$userId.'&a=list_wall_message&start='.
+                ($start + $length + 1).'&length='.$length,
+                [
+                    'class' => 'nextPage',
+                ]
+            ),
+            [
+                'class' => 'next',
+            ]
+        );
+        echo $html;
+
         break;
         // Read the Url using OpenGraph and returns the hyperlinks content
     case 'read_url_with_open_graph':

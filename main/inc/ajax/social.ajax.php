@@ -60,7 +60,7 @@ switch ($action) {
             echo '';
             break;
         }
-        $my_delete_friend = intval($_POST['delete_friend_id']);
+        $my_delete_friend = (int) $_POST['delete_friend_id'];
         if (isset($_POST['delete_friend_id'])) {
             SocialManager::remove_user_rel_user($my_delete_friend);
         }
@@ -195,6 +195,32 @@ switch ($action) {
                 break;
             default:
                 break;
+        }
+        break;
+    case 'delete_message':
+        if (api_is_anonymous()) {
+            exit;
+        }
+
+        if (api_get_setting('allow_social_tool') !== 'true') {
+            break;
+        }
+
+        $messageId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+
+        if (empty($messageId)) {
+            break;
+        }
+
+        $user_id = api_get_user_id();
+        $messageInfo = MessageManager::get_message_by_id($messageId);
+        if (!empty($messageInfo)) {
+            // I can only delete messages of my own wall
+            if ($messageInfo['user_receiver_id'] == $user_id && empty($messageInfo['group_id'])) {
+                SocialManager::deleteMessage($messageId);
+                echo Display::return_message(get_lang('MessageDeleted'));
+                break;
+            }
         }
         break;
     case 'list_wall_message':

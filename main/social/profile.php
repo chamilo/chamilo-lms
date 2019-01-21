@@ -82,20 +82,6 @@ if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp
     $url .= empty($_SERVER['QUERY_STRING']) ? '' : '?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
     header('Location: '.$url);
     exit;
-} elseif (isset($_GET['messageId'])) {
-    $messageId = intval($_GET['messageId']);
-    $messageInfo = MessageManager::get_message_by_id($messageId);
-    if (!empty($messageInfo)) {
-        // I can only delete messages of my own wall
-        if ($messageInfo['user_receiver_id'] == $user_id) {
-            $status = SocialManager::deleteMessage($messageId);
-
-            Display::addFlash(Display::return_message(get_lang('MessageDeleted')));
-            header('Location: '.api_get_path(WEB_CODE_PATH).'social/profile.php');
-            exit;
-        }
-    }
-    api_not_allowed(true);
 } elseif (isset($_GET['u'])) {
     //I'm your friend? I can see your profile?
     $user_id = intval($_GET['u']);
@@ -177,7 +163,36 @@ $(document).ready(function(){
         contentSelector: "",
         callback: timeAgo
     });
-    timeAgo();
+    timeAgo();    
+     
+    $(".delete_message").on("click", function() {
+        var id = $(this).attr("id");
+        id = id.split("_")[1]; 
+        
+        $.ajax({
+            url: "'.$socialAjaxUrl.'?a=delete_message" + "&id=" + id,
+            success: function (result) {
+                if (result) {
+                    $("#message_" + id).parent().parent().parent().parent().html(result);
+                }
+            }
+        });        
+    });
+    
+    $(".delete_comment").on("click", function() {
+        var id = $(this).attr("id");
+        id = id.split("_")[1]; 
+        
+        $.ajax({
+            url: "'.$socialAjaxUrl.'?a=delete_message" + "&id=" + id,
+            success: function (result) {
+                if (result) {
+                    $("#message_" + id).parent().parent().parent().html(result);
+                }
+            }
+        });        
+    });
+    
 });
 
 function timeAgo() {
@@ -312,7 +327,7 @@ $(document).ready(function() {
                 }
             }
         });
-    });
+    });   
 });
 </script>';
 

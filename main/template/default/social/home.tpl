@@ -30,7 +30,6 @@
             {{ social_right_content }}
             <div id="message_ajax_reponse" class=""></div>
             <div id="display_response_id"></div>
-            {{ social_auto_extend_link }}
         </div>
         <div class="col-md-3">
             <!-- Block chat list -->

@@ -1767,12 +1767,11 @@ class SocialManager extends UserManager
                 $users[$userIdLoop] = api_get_user_info($userIdLoop);
             }
 
-            $nameComplete = api_is_western_name_order()
-                ? $users[$userIdLoop]['firstname'].' '.$users[$userIdLoop]['lastname']
-                : $users[$userIdLoop]['lastname'].' '.$users[$userIdLoop]['firstname'];
+            $nameComplete = $users[$userIdLoop]['complete_name'];
+
             $url = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$userIdLoop;
-            $media = '';
-            $media .= '<div class="rep-post">';
+
+            $media = '<div class="rep-post col-md-12">';
             $media .= '<div class="col-md-2 col-xs-2 social-post-answers">';
             $media .= '<div class="user-image pull-right">';
             $media .= '<a href="'.$url.'" ><img src="'.$users[$userIdLoop]['avatar'].
@@ -1788,22 +1787,23 @@ class SocialManager extends UserManager
             $media .= '<br />';
             $media .= '</div>';
             $media .= '</div>';
-            $media .= '</div>';
 
             $isOwnWall = api_get_user_id() == $userIdLoop;
             if ($isOwnWall) {
                 $media .= '<div class="col-md-1 col-xs-1 social-post-answers">';
                 $media .= '<div class="pull-right deleted-mgs">';
-                $url = api_get_path(WEB_CODE_PATH).'social/profile.php?messageId='.$message['id'];
                 $media .= Display::url(
                     Display::returnFontAwesomeIcon('trash'),
-                    $url,
-                    ['title' => get_lang('SocialMessageDelete')]
+                    'javascript:void(0)',
+                    [
+                        'id' => 'message_'.$message['id'],
+                        'title' => get_lang('SocialMessageDelete'), 'class' => 'delete_comment'
+                    ]
                 );
                 $media .= '</div>';
                 $media .= '</div>';
             }
-
+            $media .= '</div>';
             $formattedList .= $media;
         }
 
@@ -1836,8 +1836,6 @@ class SocialManager extends UserManager
         foreach ($messages as $key => $message) {
             $userIdLoop = $message['user_sender_id'];
             $userFriendIdLoop = $message['user_receiver_id'];
-            $isOwnWall = $currentUserId == $userIdLoop && $userIdLoop == $userFriendIdLoop;
-
             if (!isset($users[$userIdLoop])) {
                 $users[$userIdLoop] = api_get_user_info($userIdLoop);
             }
@@ -1849,8 +1847,7 @@ class SocialManager extends UserManager
             $html = self::headerMessagePost(
                 $users[$userIdLoop],
                 $users[$userFriendIdLoop],
-                $message,
-                $isOwnWall
+                $message
             );
 
             $data[$key] = $message;
@@ -2305,12 +2302,13 @@ class SocialManager extends UserManager
      * @param int   $authorInfo
      * @param int   $receiverInfo
      * @param array $message    Message data
-     * @param bool  $isOwnWall  Determines if the author is in its own social wall or not
      *
      * @return string $html       The formatted header message post
      */
-    private static function headerMessagePost($authorInfo, $receiverInfo, $message, $isOwnWall = false)
+    private static function headerMessagePost($authorInfo, $receiverInfo, $message)
     {
+        $currentUserId = api_get_user_id();
+
         $authorId = (int) $authorInfo['user_id'];
         $receiverId = (int) $receiverInfo['user_id'];
 
@@ -2329,7 +2327,6 @@ class SocialManager extends UserManager
 
         if (!empty($message['group_info'])) {
             $htmlReceiver = ' > <a href="'.$message['group_info']['url'].'">'.$message['group_info']['name'].'</a> ';
-
         }
 
         $wallImage = '';
@@ -2339,19 +2336,18 @@ class SocialManager extends UserManager
             $wallImage = '<a class="thumbnail ajax" href="'.$imageBig.'"><img src="'.$imageSmall.'"></a>';
         }
 
-        $htmlDelete = '';
-        if ($isOwnWall) {
-            $url = api_get_path(WEB_CODE_PATH).'social/profile.php?messageId='.$message['id'];
-            $htmlDelete .= Display::url(
-                Display::returnFontAwesomeIcon('trash'),
-                $url,
-                ['title' => get_lang('SocialMessageDelete')]
-            );
-        }
-
+        $canEdit = $currentUserId == $receiverInfo['user_id'] && empty($message['group_info']);
         $html = '';
-        $html .= '<div class="top-mediapost" >';
-        if ($isOwnWall) {
+        $html .= '<div class="top-mediapost">';
+        if ($canEdit) {
+            $htmlDelete = Display::url(
+                Display::returnFontAwesomeIcon('trash'),
+                'javascript:void(0)',
+                [
+                    'id' => 'message_'.$message['id'],
+                    'title' => get_lang('SocialMessageDelete'), 'class' => 'delete_message'
+                ]
+            );
             $html .= '<div class="pull-right deleted-mgs">';
             $html .= $htmlDelete;
             $html .= '</div>';

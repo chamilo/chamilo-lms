@@ -138,6 +138,7 @@ $timeAgoLocaleDir = $javascriptDir.'jquery-timeago/locales/jquery.timeago.'.$loc
 if (file_exists($timeAgoLocaleDir)) {
     $htmlHeadXtra[] = api_get_js('jquery-timeago/locales/jquery.timeago.'.$locale.'.js');
 }
+$socialAjaxUrl = api_get_path(WEB_AJAX_PATH).'social.ajax.php';
 
 $htmlHeadXtra[] = '<script>
 $(document).ready(function(){
@@ -149,6 +150,35 @@ $(document).ready(function(){
         callback: timeAgo
     });
     timeAgo();
+    
+    $(".delete_message").on("click", function() {
+        var id = $(this).attr("id");
+        id = id.split("_")[1]; 
+        
+        $.ajax({
+            url: "'.$socialAjaxUrl.'?a=delete_message" + "&id=" + id,
+            success: function (result) {
+                if (result) {
+                    $("#message_" + id).parent().parent().parent().parent().html(result);
+                }
+            }
+        });        
+    });
+    
+    $(".delete_comment").on("click", function() {
+        var id = $(this).attr("id");
+        id = id.split("_")[1]; 
+        
+        $.ajax({
+            url: "'.$socialAjaxUrl.'?a=delete_message" + "&id=" + id,
+            success: function (result) {
+                if (result) {
+                    $("#message_" + id).parent().parent().parent().html(result);
+                }
+            }
+        });        
+    });
+    
 });
 
 function timeAgo() {
@@ -285,13 +315,12 @@ $social_group_block = Display::panelCollapse(
     'groups-collapse'
 );
 
-$socialAjaxUrl = api_get_path(WEB_AJAX_PATH).'social.ajax.php';
 $wallSocialAddPost = SocialManager::getWallForm($show_full_profile, api_get_self());
 // Social Post Wall
 $posts = SocialManager::getMyWallMessages($user_id);
 $social_post_wall_block = empty($posts) ? '<p>'.get_lang('NoPosts').'</p>' : $posts;
 $socialAutoExtendLink = '';
-if ($posts >= 10) {
+if (!empty($posts)) {
     $socialAutoExtendLink = Display::url(
         get_lang('SeeMore'),
         $socialAjaxUrl.'?u='.$user_id.'&a=list_wall_message&start=10&length=5',

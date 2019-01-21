@@ -42,7 +42,7 @@
                 </div>
             </div>
         </div>
-        {{ social_skill_block }}
+        {#{{ social_skill_block }}#}
         {{ social_group_info_block }}
         <!-- Block course list -->
         {% if social_course_block != null %}

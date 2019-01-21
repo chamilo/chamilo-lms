@@ -17,13 +17,6 @@
     text-align: center;
 }
 
-.toolbar-cookie {
-    bottom: 0;
-    position: fixed;
-    z-index: 100;
-    width: 100%;
-}
-
 /* notifications help and bug */
 #touch-button.btn-touch {
     background-color: #C2C2C2;
@@ -35,10 +28,6 @@
 
 #touch-button.btn-touch {
     background-color: #EFEFEF;
-    -webkit-border-top-right-radius: 5px;
-    -webkit-border-bottom-right-radius: 5px;
-    -moz-border-radius-topright: 5px;
-    -moz-border-radius-bottomright: 5px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
 }
@@ -59,10 +48,6 @@
 .button-load {
     background: url("../../public/img/icons/64/file_upload.png") no-repeat center 20px;
     padding-top: 70px;
-}
-
-.radio.learnpath img {
-    margin-right: 5px;
 }
 
 #results .file_upload_highlight {
@@ -112,47 +97,7 @@
     height: 600px;
 }
 
-.impress-title {
-    position: absolute;
-    top: 40%;
-    left: 0;
-    text-align: center;
-    width: 100%;
-}
-
-
 /* SESSION CATALOG*/
-.session-group .padding-clear {
-    padding-top: 5px;
-    padding-bottom: 10px;
-}
-
-.session-group .border-info {
-    /*border-bottom: 1px solid #ccc;*/
-    padding-bottom: 5px;
-}
-
-.session-group .buttom-subscribed {
-    padding-top: .5em;
-    padding-bottom: .5em;
-}
-
-.session-group .time {
-    font-size: 12px;
-}
-
-.session-group .accordion-heading {
-    background-color: #D2E7F3;
-}
-
-.session-group .accordion-group {
-    border: 1px solid #B7D7EF;
-}
-
-.session-group .accordion-inner {
-    border-top: 1px solid #B7D7EF;
-    background-color: #FFFFFF;
-}
 
 .buttom-subscribed .btn {
     font-size: 12px;
@@ -319,11 +264,6 @@ div.attendance-calendar-add div.row div.formw, div.attendance-calendar-edit div.
     font-weight: bold;
 }
 
-.thread-body {
-    padding-bottom: 20px;
-    padding-top: 20px;
-}
-
 .message-post {
     border: 1px solid #ECF0F1;
     margin-bottom: 15px;
@@ -362,9 +302,6 @@ div.attendance-calendar-add div.row div.formw, div.attendance-calendar-edit div.
     font-weight: bold;
 }
 
-.message-content .message {
-    line-height: 22px;
-}
 
 /* styles from the my.profile.php file */
 .message-content .message-delete {
@@ -384,16 +321,6 @@ div.attendance-calendar-add div.row div.formw, div.attendance-calendar-edit div.
     position: relative;
     margin-top: 150px;
     margin-right: -100px;
-}
-
-.message-body {
-    padding: 0 0 11px;
-    color: #333;
-    font-size: 100%;
-}
-
-.message-link {
-    color: #ff8400;
 }
 
 .message-view {
@@ -475,11 +402,6 @@ div.attendance-calendar-add div.row div.formw, div.attendance-calendar-edit div.
     outline-style: none;
     background: #ffffff;
 }
-
-a.unread {
-    font-weight: bold;
-}
-
 /*SOCIAL TOOL*/
 
 .clip-wrapper {
@@ -608,29 +530,6 @@ a.unread {
     width: 40px;
 }
 
-div.admin_section {
-    min-height: 260px;
-}
-
-.admin_section li {
-    padding: 2px 0 2px;
-}
-
-div.admin_section h4 {
-    font-size: 16px;
-    letter-spacing: -1px;
-}
-
-#courseintro_empty {
-    float: right;
-    margin: 2px auto;
-    padding: 0;
-}
-
-.profile_grid_container {
-    width: 100%;
-}
-
 .profile_grid_item {
     border: 1px dotted #CCCCCC;
     float: left;
@@ -652,10 +551,6 @@ div.admin_section h4 {
     float: left;
     text-align: left;
     margin-bottom: 1px;
-}
-
-#profile .picture-form {
-    width: 350px;
 }
 
 /* pagination grid sortable */
@@ -1251,10 +1146,6 @@ div.admin_section h4 {
     margin-bottom: 35px;
 }
 
-.question-check-test label {
-    font-weight: normal;
-}
-
 .question-check-test .checkbox input[type="checkbox"] {
     margin-left: -25px;
 }
@@ -1308,19 +1199,6 @@ div.admin_section h4 {
 }
 .certaint-list-two li:last-child{
     margin-right: 0;
-}
-.answers-title{
-    text-align: center;
-    margin-bottom: 20px;
-    font-weight: bold;
-}
-.panel-certaint{
-    margin-bottom: 20px;
-    background-color: #FFF;
-    border: 1px solid #e4e4e4;;
-    box-shadow: 0 2px 2px rgba(204, 197, 185, 0.5);
-    padding: 10px;
-    border-radius: 6px;
 }
 
 .certaint-text{
@@ -1449,10 +1327,7 @@ table.certaintyTable td.globalChart {
     border: 1px solid #FB3A35;
     color: #FFF;
 }
-.question_row{
-    display: inline-block;
-    width: 100%;
-}
+
 #question_feedback {
     border-radius: 10px;
     background-color: #FCF7BA;
@@ -1463,13 +1338,6 @@ table.certaintyTable td.globalChart {
     list-style-type: none;
     margin-top: 5px;
     padding: 5px;
-}
-
-
-.course_social_content {
-    background: #EFEFEF;
-    margin: 10px 21px;
-    padding: 10px;
 }
 
 .topics_grid_item {
@@ -1601,10 +1469,6 @@ form .formw .freeze {
     width: auto;
 }
 
-.form-stacked .row div.formw {
-    margin-left: 0;
-}
-
 .form-stacked .row {
     margin-bottom: 9px;
 }
@@ -1721,28 +1585,6 @@ form .formw .freeze {
     margin-bottom: 10px;
 }
 
-.items-user p {
-    font-size: 12px;
-    margin-bottom: 5px;
-}
-
-.items-user .list-group {
-    font-size: 12px;
-}
-
-table#skill_holder {
-    margin-top: 15px;
-}
-
-.badges-sidebar {
-    height: 250px;
-}
-
-.panel figure figcaption {
-    background: none;
-    text-align: center;
-}
-
 .skill_root {
     box-shadow: 2px 2px 19px #aaa;
     border-radius: 6px;
@@ -1820,10 +1662,6 @@ table#skill_holder {
     height: 750px;
 }
 
-.editor-lp {
-    margin-bottom: 20px;
-}
-
 /* end list template document */
 .done_window {
     background-color: #73982C;
@@ -1866,10 +1704,6 @@ table#skill_holder {
 
 .dragActive {
     border: 2px dotted orange;
-}
-
-.edit_block {
-    z-index: 200;
 }
 
 /*****************************************************
@@ -2147,10 +1981,6 @@ div#no-data-view div.controls {
     width: 120px;
 }
 
-.audio_preview_container {
-    margin-left: 50px;
-}
-
 /* ie fixes */
 
 /* Disabling help/bug notifications */
@@ -2353,10 +2183,6 @@ div#no-data-view div.controls {
     vertical-align: middle;
 }
 
-.exercise_overview_options {
-    text-align: center;
-}
-
 .new_actions {
     background: #ffffff;
     min-height: 50px;
@@ -2449,11 +2275,6 @@ div#no-data-view div.controls {
     margin-bottom: 10px;
 }
 
-.control-text {
-    padding-top: 5px;
-    display: inline-block;
-}
-
 /*
   Glossary
 */
@@ -2542,15 +2363,8 @@ i.size-32.icon-new-note {
     border: 0;
 }
 
-.jqgrid_whitespace {
-    white-space: normal !important;
-}
 
 /***** Survey *****/
-#list-survey p {
-    display: inline-block;
-    margin-left: 10px;
-}
 
 .survey-block {
     width: 100%;
@@ -2625,11 +2439,6 @@ i.size-32.icon-new-note {
     padding: 5px; /*border: 1px solid #264269;*/
 }
 
-.survey_subtitle {
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
 .survey_question .radio-inline input[type="radio"],
 .survey_question .checkbox-inline input[type="checkbox"] {
     margin-top: 2px;
@@ -2687,10 +2496,6 @@ i.size-32.icon-new-note {
     color: #456176;
 }
 
-.openbadges-tablet .table thead tr th {
-    font-weight: normal;
-}
-
 .openbadges-tablet .table td {
     border-top: 1px solid #677F8F;
     vertical-align: middle;
@@ -2732,33 +2537,7 @@ i.size-32.icon-new-note {
     text-align: center;
 }
 
-.title-badge {
-    font-weight: bold;
-    color: #2C3E50;
-}
-
-.code-badge {
-    font-size: 12px;
-}
-
-.name-badge {
-    font-size: 16px;
-}
-
 /* Social Profile */
-
-
-.list-user-data {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-.list-user-data .item {
-    padding-top: 5px;
-    text-align: center;
-}
-
 .social-group .group-title {
     color: #456176;
     font-weight: bold;
@@ -2773,7 +2552,6 @@ i.size-32.icon-new-note {
     margin-bottom: 10px;
     margin-top: 10px;
 }
-
 
 .social-post .mediaPost {
     padding-top: 10px;
@@ -2842,11 +2620,6 @@ i.size-32.icon-new-note {
     line-height: 22px;
     padding-right: 10px;
     color: #666666;
-}
-
-.mediapost-form {
-    margin-bottom: 10px;
-    padding-bottom: 5px;
 }
 
 .top-mediapost .user-image, .top-mediapost .user-data,
@@ -3140,63 +2913,6 @@ ul.exercise-draggable-answer .touch-items:hover {
     text-decoration: none;
 }
 
-.question_options .ui-widget {
-    padding: 10px 20px;
-}
-
-.question_options .droppable {
-    padding: 5px;
-    text-align: center;
-    background-color: #ECF0F1;
-    border: dotted #dddddd 2px;
-    border-radius: 4px;
-    color: #666666;
-    display: inline-block;
-    width: 85%;
-    margin-bottom: 0;
-}
-
-.question_options .droppable-item {
-    background-color: #84bd00;
-    color: #FFF;
-    padding: 3px 0 3px 5px;
-}
-
-.question_options .droppable-item .number {
-    font-size: 16px;
-    font-weight: bold;
-    display: inline-block;
-}
-
-.question_options .ui-helper-reset {
-    margin-top: -25px;
-}
-
-.question_options .droppable .gallery .btn-default {
-    background: #D9534F;
-    color: #ffffff;
-    border-color: #D43F3A;
-}
-
-.question_options .droppable .gallery .btn-default:hover {
-    background: #C9302C;
-    color: #ffffff;
-    border-color: #AC2925;
-}
-
-.question_options .droppable .gallery .exercise-draggable-answer-option {
-    margin-bottom: 0;
-    background: #feffff;
-    background: -moz-linear-gradient(top, #feffff 0%, #d2ebf9 100%);
-    background: -webkit-linear-gradient(top, #feffff 0%, #d2ebf9 100%);
-    background: linear-gradient(to bottom, #feffff 0%, #d2ebf9 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#feffff', endColorstr='#d2ebf9', GradientType=0);
-    border: 1px solid #DDDDDD;
-    padding: 5px;
-    border-radius: 5px;
-    font-size: 12px;
-    cursor: pointer;
-}
 
 
 video#chat-local-video,
@@ -3204,21 +2920,6 @@ div#chat-remote-video video {
     display: block;
     height: auto;
     width: 100%;
-}
-
-
-/**** ABOUT SESSION ****/
-
-.read-more, .hide-content {
-    padding: 10px 0;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.read-more-area {
-    position: relative;
-    width: 100%;
-    min-height: 284px;
 }
 
 
@@ -3384,21 +3085,9 @@ div#chat-remote-video video {
     top: -12px;
 }
 
-.section-status h2.page-header {
-    font-size: 22px;
-    margin-top: 5px;
-}
-
-#student-list-work {
-    padding: 10px;
-}
-
 #work-list, #session-table {
     padding: 10px;
     border: 1px solid #dddddd;
-    border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
     margin-bottom: 10px;
 }
 
@@ -3410,20 +3099,6 @@ div#chat-remote-video video {
     width: 450px !important;
 }
 
-#dialog-form .dialog-form-content {
-    font-size: 12px;
-}
-
-#dialog-form .dialog-form-content .control-label {
-    font-size: 12px;
-    font-weight: normal;
-    padding-top: 0;
-}
-
-#dialog-form .dialog-form-content .multiple-select {
-    font-size: 12px;
-}
-
 #student-list-work {
     background-color: #ffffff;
     position: absolute;
@@ -3433,8 +3108,6 @@ div#chat-remote-video video {
     width: auto;
     z-index: 3;
     border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
 }
 
@@ -3483,22 +3156,6 @@ div#chat-remote-video video {
 
 .create-groups .separate .btn-primary {
     margin-top: 20px;
-}
-
-#session-properties td, #session-user-list td, #session-user-list th {
-    text-align: left;
-    padding-left: 15px;
-}
-
-.user-list {
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-
-.search-user label {
-    font-weight: normal;
-    padding-left: 10px;
-    padding-right: 10px;
 }
 
 .course-items .course-items-session {
@@ -3575,17 +3232,6 @@ div#chat-remote-video video {
     white-space: nowrap;
     overflow: hidden;
     width: 180px;
-}
-
-#listFriends .status {
-    float: right;
-}
-
-#listFriends .user-image {
-    width: 32px;
-    height: 32px;
-    margin-right: 5px;
-    vertical-align: baseline;
 }
 
 #course-block .list-group .list-group-item,
@@ -4196,15 +3842,6 @@ input.form-control[type="color"] {
     width: 400px;
 }
 
-.popover-title {
-    text-align: left;
-}
-
-.popover-content {
-    max-width: 400px;
-    display: inline-block;
-}
-
 .popover-content .popover-teacher {
     display: block;
     width: 50%;
@@ -4280,7 +3917,3 @@ input.form-control[type="color"] {
 .preview .mejs__button > button {
     margin: 16px 6px;
 }
-
-/* end document mp3 preview */
-
-/*-------------------------------------------------------------------------------------*/

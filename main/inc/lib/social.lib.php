@@ -1537,7 +1537,7 @@ class SocialManager extends UserManager
      * @param int    $messageId   id message (relation with main message)
      * @param string $fileComment description attachment file
      *
-     * @return bool
+     * @return bool|int
      */
     public static function sendWallMessageAttachmentFile(
         $userId,
@@ -1555,9 +1555,15 @@ class SocialManager extends UserManager
 
         $extension = strtolower(substr(strrchr($safeFileName, '.'), 1));
         $allowedTypes = api_get_supported_image_extensions();
-        if (!in_array($extension, $allowedTypes)) {
-            $flag = false;
-        } else {
+        // Adding videos
+        $allowedTypes[] = 'mp4';
+        $allowedTypes[] = 'webm';
+        $allowedTypes[] = 'avi';
+        $allowedTypes[] = 'mov';
+        $allowedTypes[] = 'wmv';
+        $allowedTypes[] = 'mpeg';
+
+        if (in_array($extension, $allowedTypes)) {
             $newFileName = uniqid('').'.'.$extension;
             if (!file_exists($pathMessageAttach)) {
                 @mkdir($pathMessageAttach, api_get_permissions_for_new_directories(), true);
@@ -1586,11 +1592,12 @@ class SocialManager extends UserManager
                 'message_id' => $messageId,
                 'size' => $fileAttach['size'],
             ];
-            Database::insert($table, $params);
-            $flag = true;
+            $id = Database::insert($table, $params);
+
+            return $id;
         }
 
-        return $flag;
+        return false;
     }
 
     /**

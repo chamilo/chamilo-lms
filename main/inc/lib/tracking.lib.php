@@ -5796,6 +5796,10 @@ class Tracking
 
             if (!empty($lp_list) > 0) {
                 foreach ($lp_list as $lp_id => $learnpath) {
+                    if (!$learnpath['lp_visibility']) {
+                        continue;
+                    }
+                    
                     $progress = self::get_avg_student_progress(
                         $user_id,
                         $course,

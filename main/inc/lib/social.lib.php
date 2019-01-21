@@ -1633,6 +1633,7 @@ class SocialManager extends UserManager
                     content,
                     parent_id,
                     msg_status,
+                    group_id,
                     (
                         SELECT ma.path FROM $tblMessageAttachment ma
                         WHERE  ma.message_id = tm.id 
@@ -1711,7 +1712,22 @@ class SocialManager extends UserManager
         $messages = [];
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
+            $groups = [];
+            $userGroup = new UserGroup();
+            $urlGroup = api_get_path(WEB_CODE_PATH).'social/group_view.php?id=';
             while ($row = Database::fetch_array($res, 'ASSOC')) {
+                $row['group_info'] = [];
+                if (!empty($row['group_id'])) {
+                    if (!in_array($row['group_id'], $groups)) {
+                        $group = $userGroup->get($row['group_id']);
+                        $group['url'] = $urlGroup.$group['id'];
+                        $groups[$row['group_id']] = $group;
+                        $row['group_info'] = $group;
+                    } else {
+                        $row['group_info'] = $groups[$row['group_id']];
+
+                    }
+                }
                 $messages[] = $row;
             }
         }
@@ -1808,8 +1824,7 @@ class SocialManager extends UserManager
     }
 
     /**
-     * @param $messages
-     * @param $isOwnWall
+     * @param array $messages
      *
      * @return array
      */
@@ -1831,11 +1846,9 @@ class SocialManager extends UserManager
                 $users[$userFriendIdLoop] = api_get_user_info($userFriendIdLoop);
             }
 
-            $html = '';
-            $html .= self::headerMessagePost(
-                $message['user_sender_id'],
-                $message['user_receiver_id'],
-                $users,
+            $html = self::headerMessagePost(
+                $users[$userIdLoop],
+                $users[$userFriendIdLoop],
                 $message,
                 $isOwnWall
             );
@@ -2188,6 +2201,13 @@ class SocialManager extends UserManager
         }
     }
 
+    /**
+     * @param int $userId
+     * @param int $start
+     * @param int $length
+     *
+     * @return string
+     */
     public static function getMyWallMessages($userId, $start = 0, $length = 10)
     {
         $userGroup = new UserGroup();
@@ -2213,7 +2233,7 @@ class SocialManager extends UserManager
             $length
         );
 
-        $messages = self::formatWallMessages($messages, true);
+        $messages = self::formatWallMessages($messages);
 
         $html = '';
         foreach ($messages as $message) {
@@ -2282,43 +2302,40 @@ class SocialManager extends UserManager
     /**
      * Returns the formatted header message post.
      *
-     * @param int   $authorId   Author's id
-     * @param int   $receiverId Receiver's id
-     * @param array $users      Author's and receiver's data
+     * @param int   $authorInfo
+     * @param int   $receiverInfo
      * @param array $message    Message data
      * @param bool  $isOwnWall  Determines if the author is in its own social wall or not
      *
      * @return string $html       The formatted header message post
      */
-    private static function headerMessagePost($authorId, $receiverId, $users, $message, $isOwnWall = false)
+    private static function headerMessagePost($authorInfo, $receiverInfo, $message, $isOwnWall = false)
     {
-        $authorId = (int) $authorId;
-        $receiverId = (int) $receiverId;
+        $authorId = (int) $authorInfo['user_id'];
+        $receiverId = (int) $receiverInfo['user_id'];
 
         $date = api_get_local_time($message['send_date']);
-        $avatarAuthor = $users[$authorId]['avatar'];
+        $avatarAuthor = $authorInfo['avatar'];
         $urlAuthor = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$authorId;
-        $nameCompleteAuthor = api_get_person_name(
-            $users[$authorId]['firstname'],
-            $users[$authorId]['lastname']
-        );
+        $nameCompleteAuthor = $authorInfo['complete_name'];
 
         $urlReceiver = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$receiverId;
-        $nameCompleteReceiver = api_get_person_name(
-            $users[$receiverId]['firstname'],
-            $users[$receiverId]['lastname']
-        );
+        $nameCompleteReceiver = $receiverInfo['complete_name'];
 
         $htmlReceiver = '';
-        if ($authorId != $receiverId) {
+        if ($authorId !== $receiverId) {
             $htmlReceiver = ' > <a href="'.$urlReceiver.'">'.$nameCompleteReceiver.'</a> ';
+        }
+
+        if (!empty($message['group_info'])) {
+            $htmlReceiver = ' > <a href="'.$message['group_info']['url'].'">'.$message['group_info']['name'].'</a> ';
+
         }
 
         $wallImage = '';
         if (!empty($message['path'])) {
             $imageBig = UserManager::getUserPicture($authorId, USER_IMAGE_SIZE_BIG);
             $imageSmall = UserManager::getUserPicture($authorId, USER_IMAGE_SIZE_SMALL);
-
             $wallImage = '<a class="thumbnail ajax" href="'.$imageBig.'"><img src="'.$imageSmall.'"></a>';
         }
 
@@ -2339,10 +2356,12 @@ class SocialManager extends UserManager
             $html .= $htmlDelete;
             $html .= '</div>';
         }
+
         $html .= '<div class="user-image" >';
         $html .= '<a href="'.$urlAuthor.'">
                     <img class="avatar-thumb" src="'.$avatarAuthor.'" alt="'.$nameCompleteAuthor.'"></a>';
         $html .= '</div>';
+
         $html .= '<div class="user-data">';
         $html .= '<div class="username"><a href="'.$urlAuthor.'">'.$nameCompleteAuthor.'</a>'.$htmlReceiver.'</div>';
         $html .= '<div class="time timeago" title="'.$date.'">'.$date.'</div>';

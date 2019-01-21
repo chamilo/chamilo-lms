@@ -2086,11 +2086,10 @@ class SocialManager extends UserManager
     /**
      * @param int $user_id
      * @param $link_shared
-     * @param $show_full_profile
      *
      * @return string
      */
-    public static function listMyFriendsBlock($user_id, $link_shared = '', $show_full_profile = '')
+    public static function listMyFriendsBlock($user_id, $link_shared = '')
     {
         //SOCIALGOODFRIEND , USER_RELATION_TYPE_FRIEND, USER_RELATION_TYPE_PARENT
         $friends = self::get_friends($user_id, USER_RELATION_TYPE_FRIEND);
@@ -2099,7 +2098,7 @@ class SocialManager extends UserManager
         $friendHtml = '';
 
         if ($number_friends != 0) {
-            $friendHtml .= '<div class="list-group">';
+            $friendHtml .= '<div class="list-group" >';
             $j = 1;
             for ($k = 0; $k < $number_friends; $k++) {
                 if ($j > $number_of_images) {
@@ -2132,8 +2131,8 @@ class SocialManager extends UserManager
                         $friend['friend_user_id'],
                         api_get_user_id()
                     );
-                    $showLinkToChat = api_is_global_chat_enabled() && $friend['friend_user_id'] != api_get_user_id() && $relation == USER_RELATION_TYPE_FRIEND;
-
+                    //$showLinkToChat = api_is_global_chat_enabled() && $friend['friend_user_id'] != api_get_user_id() && $relation == USER_RELATION_TYPE_FRIEND;
+                    $showLinkToChat = false;
                     if ($showLinkToChat) {
                         $friendHtml .= '<a onclick="javascript:chatWith(\''.$friend['friend_user_id'].'\', \''.$name_user.'\', \''.$status.'\',\''.$friendAvatarSmall.'\')" href="javascript:void(0);" class="list-group-item">';
                         $friendHtml .= $friend_avatar.' <span class="username">'.$name_user.'</span>';
@@ -2141,7 +2140,8 @@ class SocialManager extends UserManager
                     } else {
                         $link_shared = empty($link_shared) ? '' : '&'.$link_shared;
                         $friendHtml .= '<a href="profile.php?'.'u='.$friend['friend_user_id'].$link_shared.'" class="list-group-item">';
-                        $friendHtml .= $friend_avatar.' <span class="username-all">'.$name_user.'</span>';
+                        $friendHtml .= $friend_avatar.' <span class="username">'.$name_user.'</span>';
+                        $friendHtml .= '<span class="status">'.$statusIcon.'</span>';
                     }
 
                     $friendHtml .= '</a>';

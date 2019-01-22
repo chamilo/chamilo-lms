@@ -308,9 +308,12 @@ function qti_parse_file($exercisePath, $file, $questionFile)
         Display::addFlash(Display::return_message(get_lang('Error opening question\'s XML file'), 'error'));
 
         return false;
-    } else {
-        $data = fread($fp, filesize($questionFilePath));
     }
+
+    $data = fread($fp, filesize($questionFilePath));
+
+    //close file
+    fclose($fp);
 
     //parse XML question file
     //$data = str_replace(array('<p>', '</p>', '<front>', '</front>'), '', $data);
@@ -340,38 +343,25 @@ function qti_parse_file($exercisePath, $file, $questionFile)
         "img",
     ];
 
-    if ($qtiMainVersion == 1) {
-        parseQti1($data);
-    } else {
-        parseQti2($data);
+    if ($qtiMainVersion != 2) {
+        Display::addFlash(
+            Display::return_message(
+                get_lang('UnsupportedQtiVersion'),
+                'error'
+            )
+        );
+
+        return false;
     }
 
-
-    //if (!xml_parse($xml_parser, $data, feof($fp))) {
-        // if reading of the xml file in not successful :
-        // set errorFound, set error msg, break while statement
-        //Display::addFlash(
-        //    Display::return_message(
-        //        get_lang('Error reading XML file').
-        //        sprintf(
-        //            '[%d:%d]',
-        //            xml_get_current_line_number($xml_parser),
-        //            xml_get_current_column_number($xml_parser)
-        //        ),
-        //        'error'
-        //    )
-        //);
-        //
-        //return false;
-    //}
-
-    //close file
-    fclose($fp);
+    parseQti2($data);
 
     return true;
 }
 
 /**
+ * Function used to parser a QTI2 xml file
+ *
  * @param string $xmlData
  */
 function parseQti2($xmlData) {
@@ -656,200 +646,6 @@ function parseQti2($xmlData) {
                         $exercise_info['description'] = $node->nodeValue;
                     }
                 }
-                break;
-        }
-    }
-}
-
-/**
- * Function used to parser a QTI1 xml file
- *
- * @param string $xmlData
- */
-function parseQti1($xmlData) {
-    global $exercise_info;
-    global $current_question_ident;
-    global $current_answer_id;
-    global $current_question_item_body;
-    global $cardinality;
-    global $questionTempDir;
-    global $lastLabelFieldName;
-    global $lastLabelFieldValue;
-    global $resourcesLinks;
-
-    $crawler = new Crawler($xmlData);
-    $nodes = $crawler->filter('*');
-
-    foreach ($nodes as $node) {
-        if ('#text' === $node->nodeName) {
-            continue;
-        }
-
-        switch ($node->nodeName) {
-            case 'assessment':
-                // This is the assessment element: we don't care, we just want questions
-                if ($node->hasAttribute('title')) {
-                    $exercise_info['name'] = $node->getAttribute('title');
-                }
-                break;
-
-            case 'item':
-                //retrieve current question
-                $current_question_ident = $node->getAttribute('ident');
-                $exercise_info['question'][$current_question_ident] = [];
-                $exercise_info['question'][$current_question_ident]['answer'] = [];
-                $exercise_info['question'][$current_question_ident]['correct_answers'] = [];
-                $exercise_info['question'][$current_question_ident]['tempdir'] = $questionTempDir;
-                break;
-
-            case 'section':
-                break;
-
-            case 'response_lid':
-                // Retrieve question type
-                if ('multiple' === strtolower($node->getAttribute('rcardinality'))) {
-                    $cardinality = 'multiple';
-                }
-
-                if ('single' === strtolower($node->getAttribute('rcardinality'))) {
-                    $cardinality = 'single';
-                }
-
-                if (!isset($exercise_info['question'][$current_question_ident]['type'])) {
-                    if ('multiple' === strtolower($node->getAttribute('rcardinality'))) {
-                        $exercise_info['question'][$current_question_ident]['type'] = MCMA;
-                    }
-                    if ('single' === strtolower($node->getAttribute('rcardinality'))) {
-                        $exercise_info['question'][$current_question_ident]['type'] = MCUA;
-                    }
-                }
-                $current_question_item_body = '';
-                //needed for FIB
-                $current_answer_id = $node->getAttribute('dent');
-                break;
-
-            case 'render_choice':
-                break;
-
-            case 'response_label':
-                if ($node->hasAttribute('ident')) {
-                    $current_answer_id = $node->getAttribute('ident');
-                    //set the placeholder for the answer to come (in endElementQti1)
-                    $exercise_info['question'][$current_question_ident]['answer'][$current_answer_id] = '';
-                }
-                break;
-
-            case 'decvar':
-                if ('outcomes' === $node->parentNode->nodeName &&
-                    'resprocessing' === $node->parentNode->parentNode->nodeName
-                ) {
-                    // The following attributes are available: vartype, defaultval, minvalue, maxvalue
-                }
-                break;
-
-            case 'varequal':
-                if ('conditionvar' === $node->parentNode->nodeName &&
-                    'respcondition' === $node->parentNode->parentNode->nodeName
-                ) {
-                    // The following attributes are available: respident
-                }
-
-                $lastLabelFieldName = $node->nodeName;
-                $lastLabelFieldValue = $node->nodeValue;
-                break;
-
-            case 'setvar':
-                if ('respcondition' === $node->parentNode->nodeName) {
-                    // The following attributes are available: action
-                    $exercise_info['question'][$current_question_ident]['correct_answers'][] = $lastLabelFieldValue;
-                    $exercise_info['question'][$current_question_ident]['weighting'][$lastLabelFieldValue] = $node->nodeValue;
-                }
-                break;
-
-            case 'img':
-                break;
-
-            case 'mattext':
-                if ('material' === $node->parentNode->nodeName) {
-                    if ('presentation' === $node->parentNode->parentNode->nodeName) {
-                        $exercise_info['question'][$current_question_ident]['title'] = $current_question_item_body;
-                    }
-                }
-                // Replace relative links by links to the documents in the course
-                // $resourcesLinks is only defined by qtiProcessManifest()
-                if (isset($resourcesLinks) && isset($resourcesLinks['manifest']) && isset($resourcesLinks['web'])) {
-                    foreach ($resourcesLinks['manifest'] as $key => $value) {
-                        $node->nodeValue = preg_replace('|'.$value.'|', $resourcesLinks['web'][$key], $node->nodeValue);
-                    }
-                }
-
-                if (!empty($current_question_item_body)) {
-                    $current_question_item_body .= $node->nodeValue;
-                } else {
-                    $current_question_item_body = $node->nodeValue;
-                }
-
-                if ('material' === $node->parentNode->nodeName) {
-                    // For some reason an item in a hierarchy <item><presentation><material><mattext> doesn't seem to
-                    // catch the grandfather 'presentation', so we check for 'item' as a patch (great-grand-father)
-                    if ('presentation' === $node->parentNode->parentNode->nodeName ||
-                        'item' === $node->parentNode->parentNode->nodeName
-                    ) {
-                        $exercise_info['question'][$current_question_ident]['title'] = $current_question_item_body;
-                        $current_question_item_body = '';
-                    } elseif ('response_label' === $node->parentNode->nodeName) {
-                        $last = '';
-
-                        foreach ($exercise_info['question'][$current_question_ident]['answer'] as $key => $value) {
-                            $last = $key;
-                        }
-
-                        $exercise_info['question'][$current_question_ident]['answer'][$last]['value'] = $current_question_item_body;
-                        $current_question_item_body = '';
-                    }
-                }
-                break;
-
-            case 'fieldlabel':
-                if (!empty($node->nodeValue)) {
-                    $lastLabelFieldName = $node->nodeName;
-                    $lastLabelFieldValue = $node->nodeValue;
-                }
-                // no break ?
-            case 'fieldentry':
-                $current_question_item_body = $node->nodeValue;
-
-                switch ($lastLabelFieldValue) {
-                    case 'cc_profile':
-                        // The following values might be proprietary in MATRIX software. No specific reference
-                        // in QTI doc: http://www.imsglobal.org/question/qtiv1p2/imsqti_asi_infov1p2.html#1415855
-                        switch ($node->nodeValue) {
-                            case 'cc.true_false.v0p1':
-                                //this is a true-false question (translated to multiple choice in Chamilo because true-false comes with "I don't know")
-                                $exercise_info['question'][$current_question_ident]['type'] = MCUA;
-                                break;
-                            case 'cc.multiple_choice.v0p1':
-                                //this is a multiple choice (unique answer) question
-                                $exercise_info['question'][$current_question_ident]['type'] = MCUA;
-                                break;
-                            case 'cc.multiple_response.v0p1':
-                                //this is a multiple choice (unique answer) question
-                                $exercise_info['question'][$current_question_ident]['type'] = MCMA;
-                                break;
-                        }
-                        break;
-                    case 'cc_weighting':
-                        //defines the total weight of the question
-                        $exercise_info['question'][$current_question_ident]['default_weighting'] = $lastLabelFieldValue;
-                        break;
-                    case 'assessment_question_identifierref':
-                        //placeholder - not used yet
-                        // Possible values are not defined by qti v1.2
-                        break;
-                }
-                break;
-            case 'itemmetadata':
-                $current_question_item_body = '';
                 break;
         }
     }

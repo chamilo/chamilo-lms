@@ -2614,3 +2614,133 @@ footer {
 .scrollbar-inner > .scroll-element.scroll-y.scroll-scrollx_visible .scroll-element_size {
   top: -12px;
 }
+
+
+
+.date-attendance {
+  color: #666;
+  text-align: center;
+  font-size: 12px;
+  width: 150px;
+  margin: auto;
+  .blue {
+    color: #2E75A3;
+  }
+  .grey {
+    color: #666;
+  }
+}
+#student-list-work {
+  background-color: #ffffff;
+  position: absolute;
+  top: 0;
+  right: 10px;
+  border: 1px solid #ccc;
+  width: auto;
+  z-index: 3;
+  border-radius: 5px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  #student-list-work {
+    background-color: #ffffff;
+    position: absolute;
+    top: 0;
+    right: 10px;
+    border: 1px solid #ccc;
+    width: auto;
+    z-index: 3;
+    border-radius: 5px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  }
+  #student-list-work .toolbar {
+    text-align: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+
+}
+/****** RATING STAR ******/
+
+.star-rating {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 125px;
+  height: 25px;
+  position: relative;
+  overflow: hidden;
+  background: url(../../public/img/alt_star.png) top left repeat-x;
+  li{
+    padding: 0;
+    margin: 0;
+    width: 25px;
+    height: 25px;
+    float: left;
+    a{
+      display: block;
+      width: 25px;
+      height: 25px;
+      line-height: 25px;
+      text-decoration: none;
+      text-indent: -9000px;
+      z-index: 20;
+      position: absolute;
+      padding: 0;
+      overflow: hidden;
+      &:hover{
+        background: url(../../public/img/alt_star.png) left bottom;
+        z-index: 2;
+        left: 0;
+        border: none;
+      }
+    }
+    .current-rating {
+      background: url(../../public/img/alt_star.png) left center;
+      position: absolute;
+      height: 25px;
+      display: block;
+      text-indent: -9000px;
+      z-index: 1;
+    }
+  }
+}
+
+
+.star-rating a.one-star {
+  left: 0;
+}
+
+.star-rating a.one-star:hover {
+  width: 25px;
+}
+
+.star-rating a.two-stars {
+  left: 25px;
+}
+
+.star-rating a.two-stars:hover {
+  width: 50px;
+}
+
+.star-rating a.three-stars {
+  left: 50px;
+}
+
+.star-rating a.three-stars:hover {
+  width: 75px;
+}
+
+.star-rating a.four-stars {
+  left: 75px;
+}
+
+.star-rating a.four-stars:hover {
+  width: 100px;
+}
+
+.star-rating a.five-stars {
+  left: 100px;
+}
+
+.star-rating a.five-stars:hover {
+  width: 125px;
+}

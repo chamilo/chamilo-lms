@@ -1989,9 +1989,32 @@ class SocialManager extends UserManager
             $userRelationType = self::get_relation_between_contacts($currentUserId, $userId);
         }
 
+        $options = api_get_configuration_value('profile_fields_visibility');
+        if (isset($options['options'])) {
+            $options = $options['options'];
+        }
+
         $vCardUserLink = Display::getVCardUserLink($userId);
+        if (isset($options['vcard']) && $options['vcard'] === false) {
+            $vCardUserLink = '';
+        }
 
         $userInfo = api_get_user_info($userId, true, false, true, true);
+
+        if (isset($options['firstname']) && $options['firstname'] === false) {
+            $userInfo['firstname'] = '';
+        }
+        if (isset($options['lastname']) && $options['lastname'] === false) {
+            $userInfo['lastname'] = '';
+        }
+
+        if (isset($options['email']) && $options['email'] === false) {
+            $userInfo['email'] = '';
+        }
+
+        if (isset($options['photo']) && $options['photo'] === false) {
+            $socialAvatarBlock = '';
+        }
 
         $template->assign('user', $userInfo);
         $template->assign('social_avatar_block', $socialAvatarBlock);
@@ -2012,10 +2035,16 @@ class SocialManager extends UserManager
             $template->assign('gamification_points', $gamificationPoints);
         }
         $chatEnabled = api_is_global_chat_enabled();
+
+        if (isset($options['chat']) && $options['chat'] === false) {
+            $chatEnabled = '';
+        }
+
         $template->assign('chat_enabled', $chatEnabled);
         $template->assign('user_relation', $userRelationType);
         $template->assign('user_relation_type_friend', USER_RELATION_TYPE_FRIEND);
         $template->assign('show_full_profile', $show_full_profile);
+
         $templateName = $template->get_template('social/user_block.tpl');
 
         if (in_array($groupBlock, ['groups', 'group_edit', 'member_list'])) {

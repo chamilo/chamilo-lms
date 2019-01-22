@@ -282,8 +282,6 @@ if ($show_full_profile) {
     $wallSocialAddPost = SocialManager::getWallForm(api_get_self());
 }
 
-$social_wall_block = $wallSocialAddPost;
-
 // Social Post Wall
 $posts = SocialManager::getWallMessagesByUser($my_user_id);
 $social_post_wall_block = empty($posts) ? '<p>'.get_lang('NoPosts').'</p>' : $posts;
@@ -339,6 +337,12 @@ $socialRightInformation = '';
 $social_right_content = '';
 $listInvitations = '';
 
+$fieldVisibility = api_get_configuration_value('profile_fields_visibility');
+$fieldVisibilityKeys = [];
+if (isset($fieldVisibility['options'])) {
+    $fieldVisibility = $fieldVisibility['options'];
+    $fieldVisibilityKeys = array_keys($fieldVisibility);
+}
 if ($show_full_profile) {
     $t_ufo = Database::get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
     $extra_user_data = UserManager::get_extra_user_data($user_id, false, true);
@@ -351,6 +355,11 @@ if ($show_full_profile) {
             if (empty($data)) {
                 continue;
             }
+
+            if (in_array($key, $fieldVisibilityKeys) && $fieldVisibility[$key] === false) {
+                continue;
+            }
+
             // Avoiding parameters
             if (in_array(
                 $key,
@@ -465,6 +474,17 @@ if ($show_full_profile) {
                             .implode(' ', $optionValues).'</li>';
                         break;
                     default:
+                        // Ofaj
+                        // Converts "Date of birth" into "age"
+                        if ($key === 'terms_datedenaissance') {
+                            $dataArray = date_to_str_ago($data, 'UTC', true);
+                            $dataToString = isset($dataArray['years']) && !empty($dataArray['years']) ? $dataArray['years'] : 0;
+                            if (!empty($dataToString)) {
+                                $data = $dataToString;
+                                $extraFieldInfo['display_text'] = get_lang('Age');
+                            }
+                        }
+
                         $extra_information_value .= '<li class="list-group-item">'.ucfirst($extraFieldInfo['display_text']).': '.$data.'</li>';
                         break;
                 }
@@ -734,7 +754,7 @@ SocialManager::setSocialUserBlock(
 
 $tpl->assign('social_friend_block', $friend_html);
 $tpl->assign('social_menu_block', $social_menu_block);
-$tpl->assign('social_wall_block', $social_wall_block);
+$tpl->assign('social_wall_block', $wallSocialAddPost);
 $tpl->assign('social_post_wall_block', $social_post_wall_block);
 $tpl->assign('social_extra_info_block', $social_extra_info_block);
 $tpl->assign('social_course_block', $social_course_block);

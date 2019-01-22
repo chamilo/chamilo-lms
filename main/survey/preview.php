@@ -237,7 +237,8 @@ if (api_is_course_admin() ||
             /** @var survey_question $display */
             $display = new $ch_type();
             $form->addHtml('<div class="survey_question '.$ch_type.'">');
-            $form->addHtml('<h5 class="title">'.$counter.'. '.strip_tags($question['survey_question']).'</h5>');
+            $form->addHtml('<div style="float:left; font-weight: bold; margin-right: 5px;"> '.$counter.'. </div>');
+            $form->addHtml('<div>'.Security::remove_XSS($question['survey_question']).'</div> ');
             $display->render($form, $question);
             $form->addHtml('</div>');
             $counter++;
@@ -245,7 +246,7 @@ if (api_is_course_admin() ||
     }
     $form->addHtml('<div class="start-survey">');
 
-    if (($show < $numberOfPages)) {
+    if ($show < $numberOfPages) {
         if ($show == 0) {
             $form->addButton(
                 'next_survey_page',

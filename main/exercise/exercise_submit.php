@@ -93,6 +93,17 @@ $current_question = isset($_REQUEST['num']) ? intval($_REQUEST['num']) : null;
 $currentAnswer = isset($_REQUEST['num_answer']) ? intval($_REQUEST['num_answer']) : null;
 $endExercise = isset($_REQUEST['end_exercise']) && $_REQUEST['end_exercise'] == 1 ? true : false;
 
+$logInfo = [
+    'tool' => TOOL_QUIZ,
+    'tool_id' => $exerciseId,
+    'tool_id_detail' => 0,
+    'action' => ((int) $_REQUEST['learnpath_id'] > 0) ? 'learnpath_id' : '',
+    'action_details' => ((int) $_REQUEST['learnpath_id'] > 0) ? (int) $_REQUEST['learnpath_id'] : '',
+    'current_id' => $current_question,
+    'info' => '',
+];
+Event::registerLog($logInfo);
+
 // Error message
 $error = '';
 
@@ -721,7 +732,7 @@ if ($formSent && isset($_POST)) {
                 exit;
             } else {
                 if ($debug) {
-                    error_log('10. Redirecting to exercise_show.php');
+                    error_log('10. Redirecting to exercise_result.php');
                 }
                 header("Location: exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
                 exit;

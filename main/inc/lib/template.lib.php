@@ -390,20 +390,19 @@ class Template
         $this->assign('show_toolbar', $show_toolbar);
 
         //Only if course is available
-        $show_course_shortcut = null;
-        $show_course_navigation_menu = null;
-
+        $courseToolBar = '';
+        $show_course_navigation_menu = '';
         if (!empty($this->course_id) && $this->user_is_logged_in) {
             if (api_get_setting('show_toolshortcuts') !== 'false') {
-                //Course toolbar
-                $show_course_shortcut = CourseHome::getCourseToolBar();
+                // Course toolbar
+                $courseToolBar = CourseHome::show_navigation_tool_shortcuts();
             }
             if (api_get_setting('show_navigation_menu') !== 'false') {
                 //Course toolbar
                 $show_course_navigation_menu = CourseHome::show_navigation_menu();
             }
         }
-        $this->assign('show_course_shortcut', $show_course_shortcut);
+        $this->assign('show_course_shortcut', $courseToolBar);
         $this->assign('show_course_navigation_menu', $show_course_navigation_menu);
     }
 
@@ -686,7 +685,9 @@ class Template
 
         // Logo
         $logo = return_logo($this->theme);
+        $logoPdf = return_logo($this->theme, false);
         $this->assign('logo', $logo);
+        $this->assign('logo_pdf', $logoPdf);
         $this->assign('show_media_element', 1);
     }
 
@@ -1362,7 +1363,6 @@ class Template
         $this->assign('prefetch', $prefetch);
         $this->assign('text_direction', api_get_text_direction());
         $this->assign('section_name', 'section-'.$this_section);
-
         $this->assignFavIcon(); //Set a 'favico' var for the template
         $this->setHelp();
         $this->assignBugNotification(); //Prepare the 'bug_notification' var for the template
@@ -1608,6 +1608,28 @@ class Template
         }
 
         $this->assign('favico', $favico);
+
+        return true;
+    }
+
+    /**
+     * Assign HTML code to the 'accessibility' template variable (usually shown above top menu).
+     *
+     * @return bool Always return true (even if empty string)
+     */
+    private function assignAccessibilityBlock()
+    {
+        $resize = '';
+        if (api_get_setting('accessibility_font_resize') == 'true') {
+            $resize .= '<div class="resize_font">';
+            $resize .= '<div class="btn-group">';
+            $resize .= '<a title="'.get_lang('DecreaseFontSize').'" href="#" class="decrease_font btn btn-default"><em class="fa fa-font"></em></a>';
+            $resize .= '<a title="'.get_lang('ResetFontSize').'" href="#" class="reset_font btn btn-default"><em class="fa fa-font"></em></a>';
+            $resize .= '<a title="'.get_lang('IncreaseFontSize').'" href="#" class="increase_font btn btn-default"><em class="fa fa-font"></em></a>';
+            $resize .= '</div>';
+            $resize .= '</div>';
+        }
+        $this->assign('accessibility', $resize);
 
         return true;
     }

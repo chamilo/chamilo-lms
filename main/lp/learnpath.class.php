@@ -59,6 +59,7 @@ class learnpath
     public $theme; // The current theme of the learning path.
     public $preview_image; // The current image of the learning path.
     public $accumulateScormTime; // Flag to decide whether to accumulate SCORM time or not
+    public $accumulateWorkTime; // The min time of learnpath
 
     // Tells if all the items of the learnpath can be tried again. Defaults to "no" (=1).
     public $prevent_reinit = 1;
@@ -162,6 +163,7 @@ class learnpath
                 $this->ref = $row['ref'];
                 $this->categoryId = $row['category_id'];
                 $this->accumulateScormTime = isset($row['accumulate_scorm_time']) ? $row['accumulate_scorm_time'] : 'true';
+                $this->accumulateWorkTime = isset($row['accumulate_work_time']) ? $row['accumulate_work_time'] : 0;
 
                 if (!empty($row['publicated_on'])) {
                     $this->publicated_on = $row['publicated_on'];
@@ -2331,12 +2333,18 @@ class learnpath
         $courseInfo,
         $sessionId
     ) {
+        if (empty($courseInfo)) {
+            return false;
+        }
+
+        $courseId = $courseInfo['real_id'];
+
         $allow = api_get_configuration_value('allow_teachers_to_access_blocked_lp_by_prerequisite');
         if ($allow) {
             if (api_is_allowed_to_edit() ||
                 api_is_platform_admin(true) ||
                 api_is_drh() ||
-                api_is_coach($sessionId, $courseInfo['real_id'], false)
+                api_is_coach($sessionId, $courseId, false)
             ) {
                 return false;
             }
@@ -2348,11 +2356,48 @@ class learnpath
             $progress = self::getProgress(
                 $prerequisite,
                 $studentId,
-                $courseInfo['real_id'],
+                $courseId,
                 $sessionId
             );
             if ($progress < 100) {
                 $isBlocked = true;
+            }
+
+            if (api_get_configuration_value('lp_minimum_time')) {
+                // Block if it does not exceed minimum time
+                // Minimum time (in minutes) to pass the learning path
+                $accumulateWorkTime = self::getAccumulateWorkTimePrerequisite($prerequisite, $courseId);
+
+                if ($accumulateWorkTime > 0) {
+                    // Total time in course (sum of times in learning paths from course)
+                    $accumulateWorkTimeTotal = self::getAccumulateWorkTimeTotal($courseId);
+
+                    // Connect with the plugin_licences_course_session table
+                    // which indicates what percentage of the time applies
+                    // Minimum connection percentage
+                    $perc = 100;
+                    // Time from the course
+                    $tc = $accumulateWorkTimeTotal;
+
+                    // Percentage of the learning paths
+                    $pl = $accumulateWorkTime / $accumulateWorkTimeTotal;
+                    // Minimum time for each learning path
+                    $accumulateWorkTime = ($pl * $tc * $perc / 100);
+
+                    // Spent time (in seconds) so far in the learning path
+                    /*$lpTime = Tracking::get_time_spent_in_lp(
+                        $studentId,
+                        $courseInfo['code'],
+                        [$prerequisite],
+                        $sessionId
+                    );*/
+                    $lpTimeList = Tracking::getCalculateTime($studentId, $courseId, $sessionId);
+                    $lpTime = isset($lpTimeList[TOOL_LEARNPATH][$prerequisite]) ? $lpTimeList[TOOL_LEARNPATH][$prerequisite] : 0;
+
+                    if ($lpTime < ($accumulateWorkTime * 60)) {
+                        $isBlocked = true;
+                    }
+                }
             }
         }
 
@@ -3609,11 +3654,9 @@ class learnpath
                         $item_id,
                         $this->get_view_id()
                     );
-
                     if ($this->debug > 0) {
                         error_log('rl_get_resource_link_for_learnpath - file: '.$file, 0);
                     }
-
                     switch ($lp_item_type) {
                         case 'document':
                             // Shows a button to download the file instead of just downloading the file directly.
@@ -3622,7 +3665,18 @@ class learnpath
                                 $parsed = parse_url($documentPathInfo['extension']);
                                 if (isset($parsed['path'])) {
                                     $extension = $parsed['path'];
-                                    $extensionsToDownload = ['zip', 'ppt', 'pptx', 'ods', 'xlsx', 'xls', 'csv'];
+                                    $extensionsToDownload = [
+                                        'zip',
+                                        'ppt',
+                                        'pptx',
+                                        'ods',
+                                        'xlsx',
+                                        'xls',
+                                        'csv',
+                                        'doc',
+                                        'docx',
+                                        'dot',
+                                    ];
 
                                     if (in_array($extension, $extensionsToDownload)) {
                                         $file = api_get_path(WEB_CODE_PATH).
@@ -7424,13 +7478,21 @@ class learnpath
                 }
                 break;
             case TOOL_LINK:
-                $link_id = (string) $row['path'];
-                if (ctype_digit($link_id)) {
-                    $tbl_link = Database::get_course_table(TABLE_LINK);
-                    $sql_select = 'SELECT url FROM '.$tbl_link.'
-                                   WHERE c_id = '.$course_id.' AND iid = '.intval($link_id);
-                    $res_link = Database::query($sql_select);
+                $linkId = (int) $row['path'];
+                if (!empty($linkId)) {
+                    $table = Database::get_course_table(TABLE_LINK);
+                    $sql = 'SELECT url FROM '.$table.'
+                            WHERE c_id = '.$course_id.' AND iid = '.$linkId;
+                    $res_link = Database::query($sql);
                     $row_link = Database::fetch_array($res_link);
+                    if (empty($row_link)) {
+                        // Try with id
+                        $sql = 'SELECT url FROM '.$table.'
+                                WHERE c_id = '.$course_id.' AND id = '.$linkId;
+                        $res_link = Database::query($sql);
+                        $row_link = Database::fetch_array($res_link);
+                    }
+
                     if (is_array($row_link)) {
                         $row['url'] = $row_link['url'];
                     }
@@ -10028,6 +10090,7 @@ class learnpath
         if (in_array($item_type, [TOOL_DOCUMENT, TOOL_LP_FINAL_ITEM, TOOL_HOTPOTATOES])) {
             $documentData = DocumentManager::get_document_data_by_id($row['path'], $course_code);
             if (empty($documentData)) {
+                // Try with iid
                 $table = Database::get_course_table(TABLE_DOCUMENT);
                 $sql = "SELECT path FROM $table
                         WHERE 
@@ -13768,6 +13831,153 @@ EOD;
         }
 
         return true;
+    }
+
+    /**
+     * Get whether this is a learning path with the accumulated work time or not.
+     *
+     * @return int
+     */
+    public function getAccumulateWorkTime()
+    {
+        return (int) $this->accumulateWorkTime;
+    }
+
+    /**
+     * Get whether this is a learning path with the accumulated work time or not.
+     *
+     * @return int
+     */
+    public function getAccumulateWorkTimeTotalCourse()
+    {
+        $table = Database::get_course_table(TABLE_LP_MAIN);
+        $sql = "SELECT SUM(accumulate_work_time) AS total 
+                FROM $table 
+                WHERE c_id = ".$this->course_int_id;
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result);
+
+        return (int) $row['total'];
+    }
+
+    /**
+     * Set whether this is a learning path with the accumulated work time or not.
+     *
+     * @param int $value (0 = false, 1 = true)
+     *
+     * @return bool
+     */
+    public function setAccumulateWorkTime($value)
+    {
+        if (!api_get_configuration_value('lp_minimum_time')) {
+            return false;
+        }
+
+        $this->accumulateWorkTime = (int) $value;
+        $table = Database::get_course_table(TABLE_LP_MAIN);
+        $lp_id = $this->get_id();
+        $sql = "UPDATE $table SET accumulate_work_time = ".$this->accumulateWorkTime."
+                WHERE c_id = ".$this->course_int_id." AND id = $lp_id";
+        Database::query($sql);
+
+        return true;
+    }
+
+    /**
+     * @param int $lpId
+     * @param int $courseId
+     *
+     * @return mixed
+     */
+    public static function getAccumulateWorkTimePrerequisite($lpId, $courseId)
+    {
+        $lpId = (int) $lpId;
+        $courseId = (int) $courseId;
+
+        $table = Database::get_course_table(TABLE_LP_MAIN);
+        $sql = "SELECT accumulate_work_time 
+                FROM $table 
+                WHERE c_id = $courseId AND id = $lpId";
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result);
+
+        return $row['accumulate_work_time'];
+    }
+
+    /**
+     * @param int $courseId
+     *
+     * @return int
+     */
+    public static function getAccumulateWorkTimeTotal($courseId)
+    {
+        $table = Database::get_course_table(TABLE_LP_MAIN);
+        $courseId = (int) $courseId;
+        $sql = "SELECT SUM(accumulate_work_time) AS total
+                FROM $table
+                WHERE c_id = $courseId";
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result);
+
+        return (int) $row['total'];
+    }
+
+    /**
+     * In order to use the lp icon option you need to create the "lp_icon" LP extra field
+     * and put the images in.
+     *
+     * @return array
+     */
+    public static function getIconSelect()
+    {
+        $theme = api_get_visual_theme();
+        $path = api_get_path(SYS_PUBLIC_PATH).'css/themes/'.$theme.'/lp_icons/';
+        $icons = ['' => get_lang('SelectAnOption')];
+
+        if (is_dir($path)) {
+            $finder = new Finder();
+            $finder->files()->in($path);
+            $allowedExtensions = ['jpeg', 'jpg', 'png'];
+            /** @var SplFileInfo $file */
+            foreach ($finder as $file) {
+                if (in_array(strtolower($file->getExtension()), $allowedExtensions)) {
+                    $icons[$file->getFilename()] = $file->getFilename();
+                }
+            }
+        }
+
+        return $icons;
+    }
+
+    /**
+     * @param int $lpId
+     *
+     * @return string
+     */
+    public static function getSelectedIcon($lpId)
+    {
+        $extraFieldValue = new ExtraFieldValue('lp');
+        $lpIcon = $extraFieldValue->get_values_by_handler_and_field_variable($lpId, 'lp_icon');
+        $icon = '';
+        if (!empty($lpIcon) && isset($lpIcon['value'])) {
+            $icon = $lpIcon['value'];
+        }
+
+        return $icon;
+    }
+
+    public static function getSelectedIconHtml($lpId)
+    {
+        $icon = self::getSelectedIcon($lpId);
+
+        if (empty($icon)) {
+            return '';
+        }
+
+        $theme = api_get_visual_theme();
+        $path = api_get_path(WEB_PUBLIC_PATH).'css/themes/'.$theme.'/lp_icons/'.$icon;
+
+        return Display::img($path);
     }
 
     /**

@@ -73,7 +73,7 @@ class DocumentManager
     {
         // All MIME types in an array (from 1.6, this is the authorative source)
         // Please, keep this alphabetical if you add something to this list!
-        $mime_types = [
+        $mimeTypes = [
             'ai' => 'application/postscript',
             'aif' => 'audio/x-aiff',
             'aifc' => 'audio/x-aiff',
@@ -238,6 +238,7 @@ class DocumentManager
             'wav' => 'audio/x-wav',
             'wbmp' => 'image/vnd.wap.wbmp',
             'wbxml' => 'application/vnd.wap.wbxml',
+            'webp' => 'image/webp',
             'wml' => 'text/vnd.wap.wml',
             'wmlc' => 'application/vnd.wap.wmlc',
             'wmls' => 'text/vnd.wap.wmlscript',
@@ -263,7 +264,7 @@ class DocumentManager
         ];
 
         if ($filename === true) {
-            return $mime_types;
+            return $mimeTypes;
         }
 
         //get the extension of the file
@@ -278,11 +279,10 @@ class DocumentManager
         }
 
         //if the extension is found, return the content type
-        if (isset($mime_types[$extension])) {
-            return $mime_types[$extension];
+        if (isset($mimeTypes[$extension])) {
+            return $mimeTypes[$extension];
         }
 
-        //else return octet-stream
         return 'application/octet-stream';
     }
 
@@ -475,13 +475,13 @@ class DocumentManager
 
         $userGroupFilter = '';
         if (!is_null($toUserId)) {
-            $toUserId = intval($toUserId);
+            $toUserId = (int) $toUserId;
             $userGroupFilter = "last.to_user_id = $toUserId";
             if (empty($toUserId)) {
                 $userGroupFilter = " (last.to_user_id = 0 OR last.to_user_id IS NULL) ";
             }
         } else {
-            $toGroupId = intval($toGroupId);
+            $toGroupId = (int) $toGroupId;
             $userGroupFilter = "last.to_group_id = $toGroupId";
             if (empty($toGroupId)) {
                 $userGroupFilter = "( last.to_group_id = 0 OR last.to_group_id IS NULL) ";
@@ -1349,6 +1349,10 @@ class DocumentManager
                 $row['parent_id'] = '0';
             } else {
                 $row['parent_id'] = self::get_document_id($course_info, dirname($row['path']), $session_id);
+                if (empty($row['parent_id'])) {
+                    // Try one more with session id = 0
+                    $row['parent_id'] = self::get_document_id($course_info, dirname($row['path']), 0);
+                }
             }
             $parents = [];
 
@@ -3143,6 +3147,7 @@ class DocumentManager
      * @param bool   $showInvisibleFiles
      * @param bool   $showOnlyFolders
      * @param int    $folderId
+     * @param bool   $addCloseButton
      *
      * @return string
      */
@@ -3156,7 +3161,8 @@ class DocumentManager
         $overwrite_url = '',
         $showInvisibleFiles = false,
         $showOnlyFolders = false,
-        $folderId = false
+        $folderId = false,
+        $addCloseButton = true
     ) {
         if (empty($course_info['real_id']) || empty($course_info['code']) || !is_array($course_info)) {
             return '';
@@ -3177,7 +3183,7 @@ class DocumentManager
         }
 
         // Condition for the session
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
 
         if (!$user_in_course) {
             if (empty($session_id)) {
@@ -3225,7 +3231,6 @@ class DocumentManager
         }
 
         $folderCondition = " AND docs.path LIKE '/%' ";
-
         if (!api_is_allowed_to_edit()) {
             $protectedFolders = self::getProtectedFolderFromStudent();
             foreach ($protectedFolders as $folder) {
@@ -3514,30 +3519,43 @@ class DocumentManager
 
     /**
      * @param int    $doc_id
-     * @param string $course_code
-     * @param int    $session_id
+     * @param array $courseInfo
+     * @param int   $sessionId
      * @param int    $user_id
      * @param int    $groupId     iid
+     * @param bool  $checkParentVisibility
      *
      * @return bool
      */
     public static function check_visibility_tree(
         $doc_id,
-        $course_code,
-        $session_id,
+        $courseInfo,
+        $sessionId,
         $user_id,
-        $groupId = 0
+        $groupId = 0,
+        $checkParentVisibility = true
     ) {
+        if (empty($courseInfo)) {
+            return false;
+        }
+
+        $courseCode = $courseInfo['code'];
+
+        if (empty($courseCode)) {
+            return false;
+        }
+
         $document_data = self::get_document_data_by_id(
             $doc_id,
-            $course_code,
+            $courseCode,
             null,
-            $session_id
+            $sessionId
         );
-        if ($session_id != 0 && !$document_data) {
+
+        if ($sessionId != 0 && !$document_data) {
             $document_data = self::get_document_data_by_id(
                 $doc_id,
-                $course_code,
+                $courseCode,
                 null,
                 0
             );
@@ -3545,30 +3563,34 @@ class DocumentManager
 
         if (!empty($document_data)) {
             // If admin or course teacher, allow anyway
-            if (api_is_platform_admin() || CourseManager::is_course_teacher($user_id, $course_code)) {
+            if (api_is_platform_admin() || CourseManager::is_course_teacher($user_id, $courseCode)) {
                 return true;
             }
-            $course_info = api_get_course_info($course_code);
+
             if ($document_data['parent_id'] == false || empty($document_data['parent_id'])) {
                 if (!empty($groupId)) {
                     return true;
                 }
-                $visible = self::is_visible_by_id($doc_id, $course_info, $session_id, $user_id);
+                $visible = self::is_visible_by_id($doc_id, $courseInfo, $sessionId, $user_id);
 
                 return $visible;
             } else {
-                $visible = self::is_visible_by_id($doc_id, $course_info, $session_id, $user_id);
+                $visible = self::is_visible_by_id($doc_id, $courseInfo, $sessionId, $user_id);
 
                 if (!$visible) {
                     return false;
                 } else {
-                    return self::check_visibility_tree(
-                        $document_data['parent_id'],
-                        $course_code,
-                        $session_id,
-                        $user_id,
-                        $groupId
-                    );
+                    if ($checkParentVisibility) {
+                        return self::check_visibility_tree(
+                            $document_data['parent_id'],
+                                $courseInfo,
+                                $sessionId,
+                            $user_id,
+                            $groupId
+                        );
+                    }
+
+                    return true;
                 }
             }
         } else {
@@ -4264,7 +4286,6 @@ class DocumentManager
             file_exists($documentData['absolute_path'])
         ) {
             $mp3FilePath = self::convertWavToMp3($documentData['absolute_path']);
-            error_log($mp3FilePath);
 
             if (!empty($mp3FilePath) && file_exists($mp3FilePath)) {
                 $documentId = self::addFileToDocumentTool(
@@ -4824,6 +4845,9 @@ class DocumentManager
             $attributes = ['onchange' => 'javascript: document.selector.submit();'];
         }
         $form->addElement('hidden', 'cidReq', api_get_course_id());
+        $form->addElement('hidden', 'id_session', api_get_session_id());
+        $form->addElement('hidden', 'gidReq', api_get_group_id());
+
         $parent_select = $form->addSelect(
             $selectName,
             get_lang('CurrentDirectory'),
@@ -5508,10 +5532,8 @@ class DocumentManager
                         ($folder != $move_file) &&
                         (substr($folder, 0, strlen($move_file) + 1) != $move_file.'/')
                     ) {
-                        $path_displayed = $folder;
                         // If document title is used, we have to display titles instead of real paths...
                         $path_displayed = self::get_titles_of_path($folder);
-
                         if (empty($path_displayed)) {
                             $path_displayed = get_lang('Untitled');
                         }
@@ -5528,8 +5550,7 @@ class DocumentManager
                     // Cannot copy dir into his own subdir
                     $path_displayed = self::get_titles_of_path($folder);
                     $display_folder = substr($path_displayed, strlen($group_dir));
-                    $display_folder = ($display_folder == '') ? get_lang('Documents') : $display_folder;
-                    //$form .= '<option value="'.$folder.'">'.$display_folder.'</option>';
+                    $display_folder = ($display_folder == '') ? get_lang('Documents') : $display_folder;                    
                     $options[$folder] = $display_folder;
                 }
             }

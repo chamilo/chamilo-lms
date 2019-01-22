@@ -4767,7 +4767,7 @@ function WSSubscribeUserToCourseSimple($params)
             if ($debug) {
                 error_log('Try to register: user_id= '.$user_id.' to course: '.$course_data['code']);
             }
-            if (!CourseManager::add_user_to_course($user_id, $course_data['code'], $status, false, false)) {
+            if (!CourseManager::subscribeUser($user_id, $course_data['code'], $status, 0, false, false)) {
                 $result = 'User was not registered possible reasons: User already registered to the course, 
                            Course visibility doesnt allow user subscriptions ';
                 if ($debug) {

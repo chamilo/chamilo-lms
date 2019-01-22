@@ -80,7 +80,7 @@ class ExerciseLib
                         // shown at the end of the given time, so hide for now
                         $titleToDisplay = Display::div(
                             $current_item.'. '.get_lang('ReadingComprehension'),
-                            ['class' => 'title']
+                            ['class' => 'question_title']
                         );
                     }
                     echo $titleToDisplay;
@@ -88,7 +88,7 @@ class ExerciseLib
                 if (!empty($questionDescription) && $answerType != READING_COMPREHENSION) {
                     echo Display::div(
                         $questionDescription,
-                        ['class' => 'description']
+                        ['class' => 'question_description']
                     );
                 }
             }
@@ -97,7 +97,7 @@ class ExerciseLib
                 return '';
             }
 
-            echo '<div class="options">';
+            echo '<div class="question_options">';
             // construction of the Answer object (also gets all answers details)
             $objAnswerTmp = new Answer($questionId, api_get_course_int_id(), $exercise);
             $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
@@ -243,7 +243,7 @@ class ExerciseLib
                 if ($show_comment) {
                     $header .= Display::tag('th', get_lang('Feedback'));
                 }
-                $s .= '<table class="table table-hover">';
+                $s .= '<table class="table table-hover table-striped">';
                 $s .= Display::tag(
                     'tr',
                     $header,
@@ -428,7 +428,7 @@ class ExerciseLib
                     if ($exercise->feedback_type == EXERCISE_FEEDBACK_TYPE_END) {
                         $header .= Display::tag('th', get_lang('Feedback'));
                     }
-                    $s .= '<table class="table">';
+                    $s .= '<table class="table table-hover table-striped">';
                     $s .= Display::tag(
                         'tr',
                         $header,
@@ -452,7 +452,7 @@ class ExerciseLib
                 $hidingClass = 'hide-reading-answers';
                 $s .= Display::div(
                     $objQuestionTmp->selectTitle(),
-                    ['class' => 'title '.$hidingClass]
+                    ['class' => 'question_title '.$hidingClass]
                 );
             }
 
@@ -516,7 +516,6 @@ class ExerciseLib
 
                         $answer_input = null;
                         $attributes['class'] = 'checkradios';
-
                         if ($answerType == UNIQUE_ANSWER_IMAGE) {
                             $attributes['class'] = '';
                             $attributes['style'] = 'display: none;';
@@ -4429,7 +4428,6 @@ EOT;
         // Hide results
         $show_results = false;
         $show_only_score = false;
-
         if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS) {
             $show_results = true;
         }
@@ -4456,9 +4454,19 @@ EOT;
         }
 
         $showTotalScoreAndUserChoicesInLastAttempt = true;
-        if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
+        $showTotalScore = true;
+        $showQuestionScore = true;
+
+        if (in_array(
+            $objExercise->results_disabled,
+            [
+                RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
+                RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
+            ])
+        ) {
             $show_only_score = true;
             $show_results = true;
+            $numberAttempts = 0;
             if ($objExercise->attempts > 0) {
                 $attempts = Event::getExerciseResultsByUser(
                     api_get_user_id(),
@@ -4469,22 +4477,32 @@ EOT;
                     $exercise_stat_info['orig_lp_item_id'],
                     'desc'
                 );
-
                 if ($attempts) {
                     $numberAttempts = count($attempts);
-                } else {
-                    $numberAttempts = 0;
                 }
 
                 if ($save_user_result) {
                     $numberAttempts++;
                 }
+                $showTotalScore = false;
+                $showTotalScoreAndUserChoicesInLastAttempt = false;
                 if ($numberAttempts >= $objExercise->attempts) {
+                    $showTotalScore = true;
                     $show_results = true;
                     $show_only_score = false;
                     $showTotalScoreAndUserChoicesInLastAttempt = true;
-                } else {
-                    $showTotalScoreAndUserChoicesInLastAttempt = false;
+                }
+            }
+
+            if ($objExercise->results_disabled == RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK) {
+                $show_only_score = false;
+                $show_results = true;
+                $show_all_but_expected_answer = false;
+                $showTotalScore = false;
+                $showQuestionScore = false;
+                if ($numberAttempts >= $objExercise->attempts) {
+                    $showTotalScore = true;
+                    $showQuestionScore = true;
                 }
             }
         }
@@ -4667,6 +4685,11 @@ EOT;
                 $question_content = '';
                 if ($show_results) {
                     $question_content = '<div class="question_row_answer">';
+
+                    if ($showQuestionScore == false) {
+                        $score = [];
+                    }
+
                     // Shows question title an description
                     $question_content .= $objQuestionTmp->return_header(
                         $objExercise,
@@ -4698,7 +4721,7 @@ EOT;
         }
 
         $totalScoreText = null;
-        if ($show_results || $show_only_score) {
+        if (($show_results || $show_only_score) && $showTotalScore) {
             if ($result['answer_type'] == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
                 echo '<h1 style="text-align : center; margin : 20px 0;">'.get_lang('YourResults').'</h1><br />';
             }

@@ -1196,7 +1196,12 @@ class FillBlanks extends Question
         $result = '';
         $listStudentAnswerInfo = self::getAnswerInfo($answer, true);
 
-        if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
+        if (in_array($resultsDisabled, [
+            RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
+            RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
+            ]
+        )
+        ) {
             $resultsDisabled = true;
             if ($showTotalScoreAndUserChoices) {
                 $resultsDisabled = false;
@@ -1258,15 +1263,19 @@ class FillBlanks extends Question
         $showTotalScoreAndUserChoices = false
     ) {
         $hideExpectedAnswer = false;
-        if ($feedbackType == 0 && $resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ONLY) {
-            $hideExpectedAnswer = true;
-        }
-
-        if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
-            $hideExpectedAnswer = true;
-            if ($showTotalScoreAndUserChoices) {
-                $hideExpectedAnswer = false;
-            }
+        switch ($resultsDisabled) {
+            case RESULT_DISABLE_SHOW_SCORE_ONLY:
+                if ($feedbackType == 0) {
+                    $hideExpectedAnswer = true;
+                }
+                break;
+            case RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK:
+            case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT:
+                $hideExpectedAnswer = true;
+                if ($showTotalScoreAndUserChoices) {
+                    $hideExpectedAnswer = false;
+                }
+                break;
         }
 
         $style = 'feedback-green';

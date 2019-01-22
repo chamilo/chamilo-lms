@@ -2800,7 +2800,7 @@ class Blog
             }
         }
 
-        $html .= '<table id="smallcalendar" class="table">
+        $html .= '<table id="smallcalendar" class="table table-responsive">
                 <tr id="title">
                 <th width="10%"><a href="'.$backwardsURL.'">&laquo;</a></th>
                 <th align="center" width="80%" colspan="5" class="month">'.$monthName.' '.$year.'</th>

@@ -112,7 +112,7 @@ class Agenda
         $this->events = [];
         $agendaColors = array_merge(
             [
-                'platform' => '#EB4E36', //red
+                'platform' => 'red', //red
                 'course' => '#43D29E', //green
                 'group' => '#A0522D', //siena
                 'session' => '#00496D', // kind of green
@@ -3002,7 +3002,7 @@ class Agenda
                         '',
                         '',
                         [],
-                        FormValidator::LAYOUT_BOX_SEARCH
+                        FormValidator::LAYOUT_INLINE
                     );
                     $attributes = [
                         'multiple' => false,
@@ -3031,7 +3031,7 @@ class Agenda
                         api_get_self().'?type=personal&',
                         '',
                         [],
-                        FormValidator::LAYOUT_BOX_SEARCH
+                        FormValidator::LAYOUT_INLINE
                     );
 
                     if (api_is_drh()) {

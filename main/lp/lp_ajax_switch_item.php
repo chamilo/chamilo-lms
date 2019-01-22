@@ -217,10 +217,63 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
         "olms.lms_item_core_exit = '".$mycore_exit."';".
         "olms.asset_timer = 0;";
 
-    $return .= "update_toc('unhighlight','".$current_item."');".
+    $updateMinTime = '';
+    if (api_get_configuration_value('lp_minimum_time')) {
+        $timeLp = $mylp->getAccumulateWorkTime();
+        $timeTotalCourse = $mylp->getAccumulateWorkTimeTotalCourse();
+        // Minimum connection percentage
+        $perc = 100;
+        // Time from the course
+        $tc = $timeTotalCourse;
+        $sessionId = api_get_session_id();
+        if (!empty($sessionId) && $sessionId != 0) {
+            /*$sql = "SELECT hours, perc FROM plugin_licences_course_session WHERE session_id = $sessionId";
+            $res = Database::query($sql);
+            if (Database::num_rows($res) > 0) {
+                $aux = Database::fetch_assoc($res);
+                $perc = $aux['perc'];
+                $tc = $aux['hours'] * 60;
+            }*/
+        }
+
+        // Percentage of the learning paths
+        $pl = $timeLp / $timeTotalCourse;
+
+        // Minimum time for each learning path
+        $time_total = intval($pl * $tc * $perc / 100) * 60;
+
+        //$time_total = $mylp->getAccumulateWorkTime() * 60;
+        /*$lpTime = Tracking::get_time_spent_in_lp(
+            $user_id,
+            api_get_course_id(),
+            [$lp_id],
+            api_get_session_id()
+        );*/
+
+        $lpTimeList = Tracking::getCalculateTime($user_id, api_get_course_int_id(), api_get_session_id());
+        $lpTime = isset($lpTimeList[TOOL_LEARNPATH][$lp_id]) ? $lpTimeList[TOOL_LEARNPATH][$lp_id] : 0;
+
+        if ($lpTime >= $time_total) {
+            $time_spent = $time_total;
+        } else {
+            $time_spent = $lpTime;
+        }
+
+        $hour = (intval($lpTime / 3600)) < 10 ? '0'.intval($lpTime / 3600) : intval($lpTime / 3600);
+        $minute = date('i', $lpTime);
+        $second = date('s', $lpTime);
+        $updateMinTime = "update_time_bar('$time_spent','$time_total','%');".
+                         "update_chronometer('$hour','$minute','$second');";
+    }
+
+    $return .=
+        "update_toc('unhighlight','".$current_item."');".
         "update_toc('highlight','".$new_item_id."');".
         "update_toc('$mylesson_status','".$new_item_id."');".
-        "update_progress_bar('$mycomplete','$mytotal','$myprogress_mode');";
+        "update_progress_bar('$mycomplete','$mytotal','$myprogress_mode');".
+        $updateMinTime
+    ;
+
     $return .= 'updateGamificationValues(); ';
 
     $mylp->set_error_msg('');

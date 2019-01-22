@@ -93,6 +93,17 @@ $homeUrl = api_get_self().'?action=list&'.api_get_cidreq();
 $content = '';
 $searchFormToString = '';
 
+$logInfo = [
+    'tool' => TOOL_ANNOUNCEMENT,
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => $action,
+    'action_details' => '',
+    'current_id' => (int) $announcement_id,
+    'info' => '',
+];
+Event::registerLog($logInfo);
+
 switch ($action) {
     case 'move':
         if (!$allowToEdit) {
@@ -337,7 +348,7 @@ switch ($action) {
         }
         break;
     case 'delete_attachment':
-        $id = $_GET['id_attach'];
+        $id = (int) $_GET['id_attach'];
 
         if (api_is_allowed_to_edit()) {
             AnnouncementManager::delete_announcement_attachment_file($id);

@@ -32,7 +32,6 @@ switch ($action) {
     case 'get_course_image':
         $courseId = ChamiloApi::getCourseIdByDirectory($_REQUEST['code']);
         $courseInfo = api_get_course_info_by_id($courseId);
-
         $image = isset($_REQUEST['image']) && in_array($_REQUEST['image'], ['course_image_large_source', 'course_image_source']) ? $_REQUEST['image'] : '';
         if ($courseInfo && $image) {
             DocumentManager::file_send_for_download($courseInfo[$image]);
@@ -365,6 +364,14 @@ switch ($action) {
             'cid' => api_get_course_int_id(),
             'sid' => api_get_session_id(),
         ];
+
+        $logInfo = [
+            'tool' => 'close-window',
+            'tool_id' => 0,
+            'tool_id_detail' => 0,
+            'action' => 'exit',
+        ];
+        Event::registerLog($logInfo);
 
         $result = (int) Event::courseLogout($logoutInfo);
         echo $result;

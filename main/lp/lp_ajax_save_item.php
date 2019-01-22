@@ -491,6 +491,15 @@ function save_item(
         $return .= "update_stats();";
     }
 
+    $logInfo = [
+        'tool' => TOOL_LEARNPATH,
+        'tool_id' => $myLP->get_id(),
+        'tool_id_detail' => $myLP->get_current_item_id(),
+        'action' => 'save_item',
+        'info' => '',
+    ];
+    Event::registerLog($logInfo);
+
     // To be sure progress is updated.
     $myLP->save_last();
 

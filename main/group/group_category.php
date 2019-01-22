@@ -79,6 +79,7 @@ if (isset($_GET['id'])) {
         'announcements_state' => GroupManager::TOOL_PRIVATE,
         'forum_state' => GroupManager::TOOL_PRIVATE,
         'max_student' => 0,
+        'document_access' => 0,
     ];
 }
 

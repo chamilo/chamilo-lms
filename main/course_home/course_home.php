@@ -138,7 +138,9 @@ if ($isSpecialCourse) {
     }
 }
 
-if (isset($_GET['action']) && $_GET['action'] == 'subscribe') {
+$action = !empty($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
+
+if ($action == 'subscribe') {
     if (Security::check_token('get')) {
         Security::clear_token();
         $result = CourseManager::autoSubscribeToCourse($course_code);
@@ -161,6 +163,15 @@ if (!isset($coursesAlreadyVisited[$course_code])) {
     $coursesAlreadyVisited[$course_code] = 1;
     Session::write('coursesAlreadyVisited', $coursesAlreadyVisited);
 }
+
+$logInfo = [
+    'tool' => 'course-main',
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => $action,
+    'info' => '',
+];
+Event::registerLog($logInfo);
 
 /*Auto launch code */
 $autoLaunchWarning = '';

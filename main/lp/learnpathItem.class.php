@@ -1889,14 +1889,62 @@ class learnpathItem
             $sessionLifetime = 3600;
         }
 
-        $fixedAddedMinute = 5 * 60; // Add only 5 minutes
-        if ($time > $sessionLifetime) {
-            error_log("fixAbusiveTime: Total time is too big: $time replaced with: $fixedAddedMinute");
-            error_log("item_id : ".$this->db_id." lp_item_view.iid: ".$this->db_item_view_id);
-            $time = $fixedAddedMinute;
-        }
+        if (!api_get_configuration_value('lp_minimum_time')) {
+            $fixedAddedMinute = 5 * 60; // Add only 5 minutes
+            if ($time > $sessionLifetime) {
+                error_log("fixAbusiveTime: Total time is too big: $time replaced with: $fixedAddedMinute");
+                error_log("item_id : ".$this->db_id." lp_item_view.iid: ".$this->db_item_view_id);
+                $time = $fixedAddedMinute;
+            }
 
-        return $time;
+            return $time;
+        } else {
+            // Calulate minimum and accumulated time
+            $user_id = api_get_user_id();
+            $myLP = learnpath::getLpFromSession(api_get_course_id(), $this->lp_id, $user_id);
+            $timeLp = $myLP->getAccumulateWorkTime();
+            $timeTotalCourse = $myLP->getAccumulateWorkTimeTotalCourse();
+            /*
+            $timeLp = $_SESSION['oLP']->getAccumulateWorkTime();
+            $timeTotalCourse = $_SESSION['oLP']->getAccumulateWorkTimeTotalCourse();
+            */
+            // Minimum connection percentage
+            $perc = 100;
+            // Time from the course
+            $tc = $timeTotalCourse;
+            /*if (!empty($sessionId) && $sessionId != 0) {
+                $sql = "SELECT hours, perc FROM plugin_licences_course_session WHERE session_id = $sessionId";
+                $res = Database::query($sql);
+                if (Database::num_rows($res) > 0) {
+                    $aux = Database::fetch_assoc($res);
+                    $perc = $aux['perc'];
+                    $tc = $aux['hours'] * 60;
+                }
+            }*/
+            // Percentage of the learning paths
+            $pl = 0;
+            if (!empty($timeTotalCourse)) {
+                $pl = $timeLp / $timeTotalCourse;
+            }
+
+            // Minimum time for each learning path
+            $accumulateWorkTime = ($pl * $tc * $perc / 100);
+            $time_seg = intval($accumulateWorkTime * 60);
+
+            if ($time_seg < $sessionLifetime) {
+                $sessionLifetime = $time_seg;
+            }
+
+            if ($time > $sessionLifetime) {
+                $fixedAddedMinute = $time_seg + mt_rand(0, 300);
+                if (self::DEBUG > 2) {
+                    error_log("Total time is too big: $time replaced with: $fixedAddedMinute");
+                }
+                $time = $fixedAddedMinute;
+            }
+
+            return $time;
+        }
     }
 
     /**

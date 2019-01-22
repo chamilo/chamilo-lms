@@ -50,6 +50,17 @@ if (empty($_GET['id'])) {
     $show_menu = 'messages_inbox';
 }
 
+$logInfo = [
+    'tool' => 'Messages',
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => $source,
+    'action_details' => 'view-message',
+    'current_id' => $messageId,
+    'info' => '',
+];
+Event::registerLog($logInfo);
+
 // MAIN CONTENT
 $message_content = MessageManager::showMessageBox($messageId, $source);
 

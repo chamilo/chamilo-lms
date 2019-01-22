@@ -73,22 +73,6 @@ $message = '';
 $actions = '';
 
 if ($is_allowed_to_edit) {
-    if (!empty($dialog_box)) {
-        switch ($_GET['dialogtype']) {
-            case 'confirmation':
-                $message = Display::return_message($dialog_box, 'success');
-                break;
-            case 'error':
-                $message = Display::return_message($dialog_box, 'danger');
-                break;
-            case 'warning':
-                $message = Display::return_message($dialog_box, 'warning');
-                break;
-            default:
-                $message = Display::return_message($dialog_box);
-                break;
-        }
-    }
     $actionLeft = '';
     $actionLeft .= Display::url(
         Display::return_icon(
@@ -169,7 +153,11 @@ if ($filteredCategoryId) {
 }
 
 $test_mode = api_get_setting('server_type');
+$showBlockedPrerequisite = api_get_configuration_value('show_prerequisite_as_blocked');
+$allowLpChamiloExport = api_get_configuration_value('allow_lp_chamilo_export');
+$allowMinTime = api_get_configuration_value('lp_minimum_time');
 $user = api_get_user_entity($userId);
+$ending = true;
 
 $data = [];
 /** @var CLpCategory $item */
@@ -215,12 +203,24 @@ foreach ($categories as $item) {
     $showBlockedPrerequisite = api_get_configuration_value('show_prerequisite_as_blocked');
     $allowLpChamiloExport = api_get_configuration_value('allow_lp_chamilo_export');
     $listData = [];
+    $lpTimeList = [];
+    if ($allowMinTime) {
+        $lpTimeList = Tracking::getCalculateTime($userId, api_get_course_int_id(), api_get_session_id());
+    }
+
+    $options = learnpath::getIconSelect();
 
     if (!empty($flat_list)) {
         $max = count($flat_list);
         $counter = 0;
         $current = 0;
         $autolaunch_exists = false;
+        $accumulateWorkTimeTotal = 0;
+        if ($allowMinTime) {
+            // TT --- Tiempo total del curso
+            $accumulateWorkTimeTotal = learnpath::getAccumulateWorkTimeTotal(api_get_course_int_id());
+        }
+
         foreach ($flat_list as $id => $details) {
             $id = $details['lp_old_id'];
             // Validation when belongs to a session.
@@ -347,6 +347,13 @@ foreach ($categories as $item) {
                 );
             }
 
+            if (!empty($options)) {
+                $icon = learnpath::getSelectedIconHtml($id);
+                if (!empty($icon)) {
+                    $icon_learnpath = $icon;
+                }
+            }
+
             // Students can see the lp but is inactive
             if (!$is_allowed_to_edit && $lpVisibility == false &&
                 $showBlockedPrerequisite == true
@@ -389,6 +396,65 @@ foreach ($categories as $item) {
                 $dsp_progress = '';
                 if (!api_is_invitee()) {
                     $dsp_progress = learnpath::get_progress_bar($progress, '%');
+                }
+            }
+
+            if ($progress < 100) {
+                $ending = false;
+            }
+
+            $dsp_time = '';
+            $linkMinTime = '';
+            if ($allowMinTime) {
+                // Time info
+                // Minimum time (in minutes) to pass the learning path
+                $accumulateWorkTime = learnpath::getAccumulateWorkTimePrerequisite($id, api_get_course_int_id());
+                if ($accumulateWorkTime > 0) {
+                    $lpTime = isset($lpTimeList[TOOL_LEARNPATH][$id]) ? $lpTimeList[TOOL_LEARNPATH][$id] : 0;
+
+                    // Connect with the plugin_licences_course_session table
+                    // which indicates what percentage of the time applies
+                    $perc = 100;
+
+                    // Percentage of the learning paths
+                    $pl = 0;
+                    if (!empty($accumulateWorkTimeTotal)) {
+                        $pl = $accumulateWorkTime / $accumulateWorkTimeTotal;
+                    }
+
+                    // Minimum time for each learning path
+                    $accumulateWorkTime = ($pl * $accumulateWorkTimeTotal * $perc / 100);
+
+                    // If the time spent is less than necessary, then we show an icon in the actions column indicating the warning
+                    if ($lpTime < ($accumulateWorkTime * 60)) {
+                        $linkMinTime = Display::return_icon(
+                            'warning.png',
+                            get_lang('LpMinTimeWarning').' - '.api_time_to_hms($lpTime).' / '.api_time_to_hms(
+                                $accumulateWorkTime * 60
+                            )
+                        );
+                    } else {
+                        $linkMinTime = Display::return_icon(
+                            'check.png',
+                            get_lang('LpMinTimeWarning').' - '.api_time_to_hms($lpTime).' / '.api_time_to_hms(
+                                $accumulateWorkTime * 60
+                            )
+                        );
+                    }
+                    $linkMinTime .= '&nbsp;<b>'.api_time_to_hms($lpTime).' / '.api_time_to_hms($accumulateWorkTime * 60).'</b>';
+
+                    // Calculate the percentage exceeded of the time for the "exceeding the minimum time" bar
+                    if ($lpTime >= ($accumulateWorkTime * 60)) {
+                        $time_progress_perc = '100%';
+                        $time_progress_value = 100;
+                    } else {
+                        $time_progress_value = intval(($lpTime * 100) / ($accumulateWorkTime * 60));
+                    }
+
+                    if ($time_progress_value < 100) {
+                        $ending = false;
+                    }
+                    $dsp_time = learnpath::get_progress_bar($time_progress_value, '%');
                 }
             }
 
@@ -893,6 +959,7 @@ foreach ($categories as $item) {
                 'action_subscribe_users' => $subscribeUsers,
                 'action_update_scorm' => $actionUpdateScormFile,
                 'action_export_to_course_build' => $actionExportToCourseBuild,
+                'info_time_prerequisite' => $linkMinTime,
             ];
 
             $lpIsShown = true;
@@ -933,6 +1000,7 @@ $template = new Template($nameTools);
 $template->assign('subscription_settings', $subscriptionSettings);
 $template->assign('is_allowed_to_edit', $is_allowed_to_edit);
 $template->assign('is_invitee', api_is_invitee());
+$template->assign('is_ending', $ending);
 $template->assign('actions', $actions);
 $template->assign('categories', $categories);
 $template->assign('message', $message);
@@ -940,5 +1008,6 @@ $template->assign('introduction', $introduction);
 $template->assign('data', $data);
 $template->assign('lp_is_shown', $lpIsShown);
 $template->assign('filtered_category', $filteredCategoryId);
+$template->assign('allow_min_time', $allowMinTime);
 
 $template->displayTemplate('@ChamiloTheme/LearnPath/list.html.twig');

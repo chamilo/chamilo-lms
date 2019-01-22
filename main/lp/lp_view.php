@@ -542,6 +542,52 @@ if ($gamificationMode == 1) {
 }
 
 $template->assign('lp_author', $lp->get_author());
+
+$lpMinTime = '';
+if (api_get_configuration_value('lp_minimum_time')) {
+    // Calulate minimum and accumulated time
+    $timeLp = $_SESSION['oLP']->getAccumulateWorkTime();
+    $timeTotalCourse = $_SESSION['oLP']->getAccumulateWorkTimeTotalCourse();
+    // Minimum connection percentage
+    $perc = 100;
+    // Time from the course
+    $tc = $timeTotalCourse;
+    // Percentage of the learning paths
+    $pl = 0;
+    if (!empty($timeTotalCourse)) {
+        $pl = $timeLp / $timeTotalCourse;
+    }
+
+    // Minimum time for each learning path
+    $time_min = intval($pl * $tc * $perc / 100);
+
+    if ($_SESSION['oLP']->getAccumulateWorkTime() > 0) {
+        $lpMinTime = '('.$time_min.' min)';
+    }
+
+    $lpTimeList = Tracking::getCalculateTime($user_id, api_get_course_int_id(), api_get_session_id());
+    $lpTime = isset($lpTimeList[TOOL_LEARNPATH][$lp_id]) ? (int) $lpTimeList[TOOL_LEARNPATH][$lp_id] : 0;
+
+    if ($lpTime >= ($time_min * 60)) {
+        $time_progress_perc = '100%';
+        $time_progress_value = 100;
+    } else {
+        $time_progress_value = intval(($lpTime * 100) / ($time_min * 60));
+        $time_progress_perc = $time_progress_value.'%';
+    }
+
+    $template->assign('time_progress_perc', $time_progress_perc);
+    $template->assign('time_progress_value', $time_progress_value);
+    // Cronometro
+    $hour = (intval($lpTime / 3600)) < 10 ? '0'.intval($lpTime / 3600) : intval($lpTime / 3600);
+    $template->assign('hour', $hour);
+    $template->assign('minute', date('i', $lpTime));
+    $template->assign('second', date('s', $lpTime));
+
+    $template->assign('hour_min', api_time_to_hms($timeLp * 60, '</div><div class="divider">:</div><div>'));
+}
+
+$template->assign('lp_accumulate_work_time', $lpMinTime);
 $template->assign('lp_mode', $lp->mode);
 $template->assign('lp_title_scorm', $lp->name);
 if (api_get_configuration_value('lp_view_accordion') === true && $lpType == 1) {
@@ -561,6 +607,9 @@ $template->assign(
         ICON_SIZE_BIG
     )
 );
+
+$frameReady = Display::getFrameReadyBlock('top.content_name');
+$template->assign('frame_ready', $frameReady);
 $template->displayTemplate('@ChamiloTheme/LearnPath/view.html.twig');
 
 // Restore a global setting.

@@ -4094,7 +4094,6 @@ class CourseManager
             $params['image'] = $image;
             $params['title'] = $course_info['title'];
             $params['title_cut'] = $params['title'];
-
             $params['category'] = $course_info['categoryName'];
             $params['category_code'] = $course_info['categoryCode'];
             $params['category_id'] = $course_info['categoryId'];
@@ -6718,7 +6717,7 @@ class CourseManager
             $title = $course['title'];
             $url = api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&code='.$course['code'];
             $html = Display::url(
-                Display::returnFontAwesomeIcon('info-circle'),
+                Display::returnFontAwesomeIcon('info-circle', 'lg'),
                 $url,
                 [
                     'class' => 'ajax btn btn-light btn-sm',

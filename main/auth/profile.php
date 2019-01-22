@@ -20,6 +20,17 @@ if (api_get_setting('allow_social_tool') === 'true') {
     $this_section = SECTION_SOCIAL;
 }
 
+$logInfo = [
+    'tool' => 'profile',
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => $this_section,
+    'action_details' => '',
+    'current_id' => 0,
+    'info' => '',
+];
+Event::registerLog($logInfo);
+
 $profileList = (array) api_get_setting('profile');
 
 $_user = api_get_user_info();

@@ -3083,7 +3083,6 @@ class UserManager
         $collapsableLink = api_get_path(WEB_PATH).'user_portal.php?action=collapse_session';
 
         $categories = [];
-
         foreach ($sessionData as $row) {
             $session_id = $row['id'];
             $coachList = SessionManager::getCoachesBySession($session_id);
@@ -5499,7 +5498,28 @@ class UserManager
     }
 
     /**
-     * Subscribe boss to students.
+     * @param int $userId
+     *
+     * @return bool
+     */
+    public static function removeAllBossFromStudent($userId)
+    {
+        $userId = (int) $userId;
+
+        if (empty($userId)) {
+            return false;
+        }
+
+        $userRelUserTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
+        $sql = "DELETE FROM $userRelUserTable 
+                WHERE user_id = $userId AND relation_type = ".USER_RELATION_TYPE_BOSS;
+        Database::query($sql);
+
+        return true;
+    }
+
+    /**
+     * Subscribe boss to students, if $bossList is empty then the boss list will be empty too.
      *
      * @param int   $studentId
      * @param array $bossList
@@ -5513,7 +5533,8 @@ class UserManager
         $sendNotification = false
     ) {
         $inserted = 0;
-        if ($bossList) {
+        if (!empty($bossList)) {
+            sort($bossList);
             $studentId = (int) $studentId;
             $studentInfo = api_get_user_info($studentId);
 
@@ -5521,10 +5542,17 @@ class UserManager
                 return false;
             }
 
+            $previousBossList = self::getStudentBossList($studentId);
+            $previousBossList = !empty($previousBossList) ? array_column($previousBossList, 'boss_id') : [];
+            sort($previousBossList);
+
+            // Boss list is the same, nothing changed.
+            if ($bossList == $previousBossList) {
+                return false;
+            }
+
             $userRelUserTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-            $sql = "DELETE FROM $userRelUserTable 
-                    WHERE user_id = $studentId AND relation_type = ".USER_RELATION_TYPE_BOSS;
-            Database::query($sql);
+            self::removeAllBossFromStudent($studentId);
 
             foreach ($bossList as $bossId) {
                 $bossId = (int) $bossId;
@@ -5548,6 +5576,8 @@ class UserManager
                     $inserted++;
                 }
             }
+        } else {
+            self::removeAllBossFromStudent($studentId);
         }
 
         return $inserted;
@@ -5926,7 +5956,7 @@ SQL;
      */
     public static function loginAsUser($userId, $checkIfUserCanLoginAs = true)
     {
-        $userId = intval($userId);
+        $userId = (int) $userId;
         $userInfo = api_get_user_info($userId);
 
         // Check if the user is allowed to 'login_as'
@@ -5940,6 +5970,15 @@ SQL;
         }
 
         if ($userId) {
+            $logInfo = [
+                'tool' => 'logout',
+                'tool_id' => 0,
+                'tool_id_detail' => 0,
+                'action' => '',
+                'info' => 'Change user (login as)',
+            ];
+            Event::registerLog($logInfo);
+
             // Logout the current user
             self::loginDelete(api_get_user_id());
 
@@ -5966,6 +6005,15 @@ SQL;
             // will be useful later to know if the user is actually an admin or not (example reporting)
             Session::write('login_as', true);
 
+            $logInfo = [
+                'tool' => 'login',
+                'tool_id' => 0,
+                'tool_id_detail' => 0,
+                'action' => '',
+                'info' => $userId,
+            ];
+            Event::registerLog($logInfo);
+
             return true;
         }
 
@@ -5981,8 +6029,8 @@ SQL;
     public static function loginDelete($userId)
     {
         $online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-        $userId = intval($userId);
-        $query = "DELETE FROM ".$online_table." WHERE login_user_id = $userId";
+        $userId = (int) $userId;
+        $query = "DELETE FROM $online_table WHERE login_user_id = $userId";
         Database::query($query);
     }
 

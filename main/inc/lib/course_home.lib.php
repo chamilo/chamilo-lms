@@ -1339,14 +1339,13 @@ class CourseHome
         }
 
         $blocks = self::getUserBlocks();
-
         $html = '';
         if (!empty($blocks)) {
-            $style_id = 'toolshortcuts_vertical';
+            $styleId = 'toolshortcuts_vertical';
             if ($orientation == SHORTCUTS_HORIZONTAL) {
-                $style_id = 'toolshortcuts_horizontal';
+                $styleId = 'toolshortcuts_horizontal';
             }
-            $html .= '<div id="'.$style_id.'">';
+            $html .= '<div id="'.$styleId.'">';
 
             $html .= Display::url(
                 Display::return_icon('home.png', get_lang('CourseHomepageLink'), '', ICON_SIZE_MEDIUM),
@@ -1573,6 +1572,7 @@ class CourseHome
     {
         $blocks = [];
         $my_list = self::get_tools_category(TOOL_AUTHORING);
+
         $blocks[] = [
             'title' => get_lang('Authoring'),
             'class' => 'course-tools-author',

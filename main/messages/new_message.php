@@ -22,6 +22,17 @@ if (api_get_setting('allow_message_tool') !== 'true') {
     api_not_allowed(true);
 }
 
+$logInfo = [
+    'tool' => 'Messages',
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => 'new_message',
+    'action_details' => isset($_GET['re_id']) ? 're_id' : '',
+    'current_id' => isset($_GET['re_id']) ? (int) $_GET['re_id'] : 0,
+    'info' => '',
+];
+Event::registerLog($logInfo);
+
 $allowSocial = api_get_setting('allow_social_tool') == 'true';
 $nameTools = api_xml_http_response_encode(get_lang('Messages'));
 
@@ -49,10 +60,9 @@ function add_image_form() {
     }
 }
 </script>';
-
 $nameTools = get_lang('ComposeMessage');
 
-$tpl = new Template($nameTools);
+$tpl = new Template(get_lang('ComposeMessage'));
 
 /**
  * Shows the compose area + a list of users to select from.

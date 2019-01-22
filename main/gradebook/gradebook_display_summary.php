@@ -30,10 +30,6 @@ $userList = CourseManager::get_user_list_from_course_code(
 
 switch ($action) {
     case 'export_all':
-        $params = [];
-        $pdf = new PDF('A4', 'P', $params);
-
-        $pdfList = [];
         $cats = Category::load($cat_id, null, null, null, null, null, false);
         $studentList = CourseManager::get_user_list_from_course_code(
             api_get_course_id(),
@@ -44,7 +40,6 @@ switch ($action) {
         );
 
         $tpl = new Template('', false, false, false);
-
         $courseInfo = api_get_course_info();
         $params = [
             'pdf_title' => sprintf(get_lang('GradeFromX'), $courseInfo['name']),
@@ -56,22 +51,22 @@ switch ($action) {
             'show_grade_generated_date' => true,
             'show_real_course_teachers' => false,
             'show_teacher_as_myself' => false,
+            'orientation' => 'P',
         ];
-
         $pdf = new PDF('A4', $params['orientation'], $params, $tpl);
-
+        $htmlList = [];
         foreach ($userList as $index => $value) {
-            $pdfList[] = GradebookUtils::generateTable(
+            $htmlList[] = GradebookUtils::generateTable(
                 $value['user_id'],
                 $cats,
-                false,
+                true,
                 true,
                 $studentList,
                 $pdf
             );
         }
 
-        if (!empty($pdfList)) {
+        if (!empty($htmlList)) {
             // Print certificates (without the common header/footer/watermark
             //  stuff) and return as one multiple-pages PDF
             /*$address = api_get_setting('institution_address');
@@ -80,7 +75,7 @@ switch ($action) {
             $pdf->custom_header = array('html' => "<h5 align='right'>$address <br />$phone</h5>");*/
             //  stuff) and return as one multiple-pages PDF
             $pdf->html_to_pdf(
-                $pdfList,
+                $htmlList,
                 null,
                 null,
                 false,

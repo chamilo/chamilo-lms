@@ -152,14 +152,16 @@ class SocialManager extends UserManager
         $search_name = null,
         $load_extra_info = true
     ) {
+        $user_id = (int) $user_id;
+
         $list_ids_friends = [];
         $tbl_my_friend = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
         $tbl_my_user = Database::get_main_table(TABLE_MAIN_USER);
         $sql = 'SELECT friend_user_id FROM '.$tbl_my_friend.'
                 WHERE
                     relation_type NOT IN ('.USER_RELATION_TYPE_DELETED.', '.USER_RELATION_TYPE_RRHH.') AND
-                    friend_user_id<>'.((int) $user_id).' AND
-                    user_id='.((int) $user_id);
+                    friend_user_id<>'.$user_id.' AND
+                    user_id='.$user_id;
         if (isset($id_group) && $id_group > 0) {
             $sql .= ' AND relation_type='.$id_group;
         }
@@ -309,17 +311,17 @@ class SocialManager extends UserManager
      *
      * @author isaac flores paz
      *
-     * @param int user receiver id
+     * @param int $userId user receiver id
      *
      * @return int
      */
-    public static function get_message_number_invitation_by_user_id($user_receiver_id)
+    public static function get_message_number_invitation_by_user_id($userId)
     {
         $table = Database::get_main_table(TABLE_MESSAGE);
-        $user_receiver_id = (int) $user_receiver_id;
+        $userId = (int) $userId;
         $sql = 'SELECT COUNT(*) as count_message_in_box FROM '.$table.'
                 WHERE
-                    user_receiver_id='.$user_receiver_id.' AND
+                    user_receiver_id='.$userId.' AND
                     msg_status='.MESSAGE_STATUS_INVITATION_PENDING;
         $res = Database::query($sql);
         $row = Database::fetch_array($res, 'ASSOC');
@@ -333,16 +335,17 @@ class SocialManager extends UserManager
     /**
      * Get number of messages sent to other users.
      *
-     * @param int $sender_id
+     * @param int $userId
      *
      * @return int
      */
-    public static function getCountMessagesSent($sender_id)
+    public static function getCountMessagesSent($userId)
     {
+        $userId = (int) $userId;
         $table = Database::get_main_table(TABLE_MESSAGE);
         $sql = 'SELECT COUNT(*) FROM '.$table.'
                 WHERE
-                    user_sender_id='.intval($sender_id).' AND
+                    user_sender_id='.$userId.' AND
                     msg_status < 5';
         $res = Database::query($sql);
         $row = Database::fetch_row($res);
@@ -405,13 +408,14 @@ class SocialManager extends UserManager
      * @author isaac flores paz
      *
      * @param int $userId
-     * @param $limit
+     * @param int $limit
      *
      * @return array
      */
     public static function get_list_invitation_of_friends_by_user_id($userId, $limit)
     {
         $userId = (int) $userId;
+        $limit = (int) $limit;
 
         if (empty($userId)) {
             return [];
@@ -478,6 +482,8 @@ class SocialManager extends UserManager
      */
     public static function getCountInvitationSent($userId)
     {
+        $userId = (int) $userId;
+
         if (empty($userId)) {
             return 0;
         }
@@ -486,7 +492,7 @@ class SocialManager extends UserManager
         $sql = 'SELECT count(user_receiver_id) count
                 FROM '.$table.'
                 WHERE
-                    user_sender_id = '.intval($userId).' AND
+                    user_sender_id = '.$userId.' AND
                     msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
         $res = Database::query($sql);
         if (Database::num_rows($res)) {
@@ -701,6 +707,8 @@ class SocialManager extends UserManager
     public static function get_logged_user_course_html($my_course, $count)
     {
         $result = '';
+        $count = (int) $count;
+
         // Table definitions
         $main_user_table = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -1253,7 +1261,7 @@ class SocialManager extends UserManager
      */
     public static function display_user_list($user_list, $wrap = true)
     {
-        $html = null;
+        $html = '';
 
         if (isset($_GET['id']) || count($user_list) < 1) {
             return false;
@@ -1522,7 +1530,7 @@ class SocialManager extends UserManager
      * Gets all messages from someone's wall (within specific limits).
      *
      * @param int        $userId        id of wall shown
-     * @param string     $messageStatus status wall message
+     * @param int        $messageStatus status wall message
      * @param int|string $parentId      id message (Post main)
      * @param string     $start         Date from which we want to show the messages, in UTC time
      * @param int        $limit         Limit for the number of parent messages we want to show
@@ -1546,10 +1554,11 @@ class SocialManager extends UserManager
 
         $tblMessage = Database::get_main_table(TABLE_MESSAGE);
         $tblMessageAttachment = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
-
-        $userId = intval($userId);
+        $parentId = (int) $parentId;
+        $userId = (int) $userId;
         $start = Database::escape_string($start);
-        $limit = intval($limit);
+        $offset = (int) $offset;
+        $messageStatus = (int) $messageStatus;
 
         $sql = "SELECT
                     id,
@@ -1591,7 +1600,7 @@ class SocialManager extends UserManager
      *
      * @param int    $userId    USER ID of the person's wall
      * @param int    $friendId  id person
-     * @param int    $idMessage id message
+     * @param int    $messageId id message
      * @param string $start     Start date (from when we want the messages until today)
      * @param int    $limit     Limit to the number of messages we want
      * @param int    $offset    Wall messages offset
@@ -1601,7 +1610,7 @@ class SocialManager extends UserManager
     public static function getWallMessagesHTML(
         $userId,
         $friendId,
-        $idMessage,
+        $messageId,
         $start = null,
         $limit = 10,
         $offset = 0
@@ -1614,7 +1623,7 @@ class SocialManager extends UserManager
         $messages = self::getWallMessages(
             $userId,
             MESSAGE_STATUS_WALL,
-            $idMessage,
+            $messageId,
             $start,
             $limit,
             $offset
@@ -1660,7 +1669,7 @@ class SocialManager extends UserManager
                 $media .= Display::url(
                     Display::returnFontAwesomeIcon('trash'),
                     $url,
-                    ['title' => get_lang("SocialMessageDelete")]
+                    ['title' => get_lang('SocialMessageDelete')]
                 );
                 $media .= '</div>';
                 $media .= '</div>';
@@ -1674,7 +1683,7 @@ class SocialManager extends UserManager
         $formattedList .= '<div class="mediapost-form">';
         $formattedList .= '<form name="social_wall_message" method="POST">
                 <label for="social_wall_new_msg" class="hide">'.get_lang('SocialWriteNewComment').'</label>
-                <input type="hidden" name = "messageId" value="'.$idMessage.'" />
+                <input type="hidden" name = "messageId" value="'.$messageId.'" />
                 <textarea placeholder="'.get_lang('SocialWriteNewComment').
                 '" name="social_wall_new_msg" rows="1" style="width:80%;" ></textarea>
                 <button type="submit" name="social_wall_new_msg_submit"
@@ -2153,6 +2162,9 @@ class SocialManager extends UserManager
      */
     private static function headerMessagePost($authorId, $receiverId, $users, $message, $isOwnWall = false)
     {
+        $authorId = (int) $authorId;
+        $receiverId = (int) $receiverId;
+
         $date = api_get_local_time($message['send_date']);
         $avatarAuthor = $users[$authorId]['avatar'];
         $urlAuthor = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$authorId;
@@ -2176,7 +2188,6 @@ class SocialManager extends UserManager
         if (!empty($message['path'])) {
             $imageBig = UserManager::getUserPicture($authorId, USER_IMAGE_SIZE_BIG);
             $imageSmall = UserManager::getUserPicture($authorId, USER_IMAGE_SIZE_SMALL);
-
             $wallImage = '<a class="thumbnail ajax" href="'.$imageBig.'"><img src="'.$imageSmall.'"></a>';
         }
 

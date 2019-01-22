@@ -121,6 +121,18 @@ $whatsnew_post_info = Session::read('whatsnew_post_info');
 
 /* TRACKING */
 Event::event_access_tool(TOOL_FORUM);
+
+$logInfo = [
+    'tool' => TOOL_FORUM,
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => !empty($actions) ? $actions : 'list-category',
+    'action_details' => $_GET['content'],
+    'current_id' => !empty($actions) ? (int) $_GET['id'] : 0,
+    'info' => '',
+];
+Event::registerLog($logInfo);
+
 /*
     RETRIEVING ALL THE FORUM CATEGORIES AND FORUMS
     note: we do this here just after het handling of the actions to be

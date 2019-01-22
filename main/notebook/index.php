@@ -37,6 +37,17 @@ $tool = TOOL_NOTEBOOK;
 // Tracking
 Event::event_access_tool(TOOL_NOTEBOOK);
 
+$logInfo = [
+    'tool' => TOOL_NOTEBOOK,
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => $action,
+    'action_details' => '',
+    'current_id' => isset($_REQUEST['notebook_id']) ? (int) $_REQUEST['notebook_id'] : 0,
+    'info' => '',
+];
+Event::registerLog($logInfo);
+
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 // Tool name

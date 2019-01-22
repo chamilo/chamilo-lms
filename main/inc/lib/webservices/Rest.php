@@ -1289,7 +1289,7 @@ class Rest extends WebService
         if (!$course_code) {
             $course_code = CourseManager::get_course_code_from_course_id($course_id);
         }
-        if (CourseManager::subscribe_user($user_id, $course_code)) {
+        if (CourseManager::subscribeUser($user_id, $course_code)) {
             return [true];
         } else {
             return [false];

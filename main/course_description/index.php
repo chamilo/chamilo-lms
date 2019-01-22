@@ -18,15 +18,19 @@ define('ADD_BLOCK', 8);
 // current section
 $this_section = SECTION_COURSES;
 
+$action = !empty($_GET['action']) ? Security::remove_XSS($_GET['action']) : 'listing';
 // protect a course script
-api_protect_course_script(true);
+$logInfo = [
+    'tool' => TOOL_COURSE_DESCRIPTION,
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => $action,
+    'info' => '',
+];
+Event::registerLog($logInfo);
 
 // get actions
-$actions = ['listing', 'add', 'edit', 'delete', 'history'];
-$action = 'listing';
-if (isset($_GET['action']) && in_array($_GET['action'], $actions)) {
-    $action = $_GET['action'];
-}
+api_protect_course_script(true);
 
 $description_type = '';
 if (isset($_GET['description_type'])) {
@@ -84,9 +88,6 @@ if (in_array($action, ['add', 'edit', 'delete']) &&
 
 // Actions to controller
 switch ($action) {
-    case 'listing':
-        $descriptionController->listing();
-        break;
     case 'history':
         $descriptionController->listing(true);
         break;
@@ -99,6 +100,7 @@ switch ($action) {
     case 'delete':
         $descriptionController->destroy($id);
         break;
+    case 'listing':
     default:
         $descriptionController->listing();
 }

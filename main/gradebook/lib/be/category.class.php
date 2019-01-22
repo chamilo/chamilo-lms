@@ -445,8 +445,8 @@ class Category implements GradebookItem
             return $cats;
         }
 
-        $tbl_grade_categories = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $sql = 'SELECT * FROM '.$tbl_grade_categories;
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $sql = 'SELECT * FROM '.$table;
         $paramcount = 0;
         if (isset($id)) {
             $sql .= ' WHERE id = '.intval($id);

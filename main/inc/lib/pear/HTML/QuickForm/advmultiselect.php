@@ -731,6 +731,9 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
             $strHtmlSelected = "<select$attrSelected>";
             if ($selected_count > 0) {
                 foreach ($arrHtmlSelected as $data) {
+                    if (!is_array($data)) {
+                        continue;
+                    }
                     $attribute  = null;
                     if (isset($data['attr'])) {
                         $attribute = $this->_getAttrString($data['attr']);

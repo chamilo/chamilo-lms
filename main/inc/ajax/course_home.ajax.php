@@ -586,7 +586,6 @@ switch ($action) {
         $courseInfo = api_get_course_info_by_id($courseId);
         $courseInfo['id_session'] = $sessionId;
         $courseInfo['status'] = $status;
-
         $id = 'notification_'.$courseId.'_'.$sessionId.'_'.$status;
 
         $notificationId = Session::read($id);

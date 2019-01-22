@@ -614,6 +614,17 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
             api_get_user_id()
         );
         $return_message = get_lang('ForumCategoryEdited');
+
+        $logInfo = [
+            'tool' => TOOL_FORUM,
+            'tool_id' => 0,
+            'tool_id_detail' => 0,
+            'action' => 'update-forumcategory',
+            'action_details' => 'forumcategory',
+            'current_id' => $values['forum_category_id'],
+            'info' => $clean_cat_title,
+        ];
+        Event::registerLog($logInfo);
     } else {
         $params = [
             'c_id' => $course_id,
@@ -645,6 +656,17 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
             );
         }
         $return_message = get_lang('ForumCategoryAdded');
+
+        $logInfo = [
+            'tool' => TOOL_FORUM,
+            'tool_id' => 0,
+            'tool_id_detail' => 0,
+            'action' => 'new-forumcategory',
+            'action_details' => 'forumcategory',
+            'current_id' => $last_id,
+            'info' => $clean_cat_title,
+        ];
+        Event::registerLog($logInfo);
     }
 
     if ($showMessage) {
@@ -839,6 +861,17 @@ function store_forum($values, $courseInfo = [], $returnId = false)
 
         $return_message = get_lang('ForumEdited');
         $forumId = $values['forum_id'];
+
+        $logInfo = [
+            'tool' => TOOL_FORUM,
+            'tool_id' => $values['forum_id'],
+            'tool_id_detail' => 0,
+            'action' => 'update-forum',
+            'action_details' => 'forum',
+            'current_id' => $values['forum_id'],
+            'info' => $values['forum_title'],
+        ];
+        Event::registerLog($logInfo);
     } else {
         if ($image_moved) {
             $new_file_name = isset($new_file_name) ? $new_file_name : '';
@@ -887,6 +920,17 @@ function store_forum($values, $courseInfo = [], $returnId = false)
                 $group_id,
                 $courseInfo
             );
+
+            $logInfo = [
+                'tool' => TOOL_FORUM,
+                'tool_id' => $forumId,
+                'tool_id_detail' => 0,
+                'action' => 'new-forum',
+                'action_details' => 'forum',
+                'current_id' => $forumId,
+                'info' => $values['forum_title'],
+            ];
+            Event::registerLog($logInfo);
         }
         $return_message = get_lang('ForumAdded');
     }
@@ -2590,9 +2634,10 @@ function count_number_of_forums_in_category($cat_id)
 {
     $table_forums = Database::get_course_table(TABLE_FORUM);
     $course_id = api_get_course_int_id();
+    $cat_id = (int) $cat_id;
     $sql = "SELECT count(*) AS number_of_forums
-            FROM ".$table_forums."
-            WHERE c_id = $course_id AND forum_category='".Database::escape_string($cat_id)."'";
+            FROM $table_forums
+            WHERE c_id = $course_id AND forum_category = $cat_id";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
 
@@ -2609,6 +2654,17 @@ function updateThread($values)
     if (!api_is_allowed_to_edit()) {
         return '';
     }
+
+    $logInfo = [
+        'tool' => TOOL_FORUM,
+        'tool_id' => $values['forum_id'],
+        'tool_id_detail' => $values['thread_id'],
+        'action' => 'edit-thread',
+        'action_details' => 'thread',
+        'current_id' => $values['thread_id'],
+        'info' => $values['thread_title'],
+    ];
+    Event::registerLog($logInfo);
 
     $threadTable = Database::get_course_table(TABLE_FORUM_THREAD);
     $courseId = api_get_course_int_id();
@@ -2856,6 +2912,17 @@ function store_thread(
             );
             $visible = 1;
         }
+
+        $logInfo = [
+            'tool' => TOOL_FORUM,
+            'tool_id' => $values['forum_id'],
+            'tool_id_detail' => $lastThread->getIid(),
+            'action' => 'new-thread',
+            'action_details' => '',
+            'current_id' => $lastThread->getIid(),
+            'info' => $clean_post_title,
+        ];
+        Event::registerLog($logInfo);
     }
 
     // We now store the content in the table_post table.
@@ -2885,6 +2952,17 @@ function store_thread(
     $em->flush();
 
     $lastPostId = $lastPost->getIid();
+
+    $logInfo = [
+        'tool' => TOOL_FORUM,
+        'tool_id' => $values['forum_id'],
+        'tool_id_detail' => $lastThread->getIid(),
+        'action' => 'new-post',
+        'action_details' => '',
+        'current_id' => $lastPostId,
+        'info' => $clean_post_title,
+    ];
+    Event::registerLog($logInfo);
 
     if ($lastPostId) {
         $lastPost->setPostId($lastPostId);
@@ -3683,6 +3761,17 @@ function store_reply($current_forum, $values, $courseId = 0, $userId = 0)
                 $values
             );
             add_forum_attachment_file('', $new_post_id);
+
+            $logInfo = [
+                'tool' => TOOL_FORUM,
+                'tool_id' => $values['forum_id'],
+                'tool_id_detail' => $values['thread_id'],
+                'action' => 'new-post',
+                'action_details' => $values['action'],
+                'current_id' => $new_post_id,
+                'info' => $values['post_title'],
+            ];
+            Event::registerLog($logInfo);
         }
 
         Session::erase('formelements');
@@ -3870,6 +3959,17 @@ function show_edit_post_form(
  */
 function store_edit_post($forumInfo, $values)
 {
+    $logInfo = [
+        'tool' => TOOL_FORUM,
+        'tool_id' => $_GET['forum'],
+        'tool_id_detail' => $values['thread_id'],
+        'action' => 'edit-post',
+        'action_details' => 'post',
+        'current_id' => $values['post_id'],
+        'info' => $values['post_title'],
+    ];
+    Event::registerLog($logInfo);
+
     $threadTable = Database::get_course_table(TABLE_FORUM_THREAD);
     $table_posts = Database::get_course_table(TABLE_FORUM_POST);
     $course_id = api_get_course_int_id();
@@ -4247,10 +4347,8 @@ function send_notification_mails($forumId, $thread_id, $reply_info)
  * be new posts and the user might have indicated that (s)he wanted to be
  * informed about the new posts by mail.
  *
- * @param string  Content type (post, thread, forum, forum_category)
- * @param int     Item DB ID
- * @param string $content
- * @param int    $id
+ * @param string    $content    Content type (post, thread, forum, forum_category)
+ * @param int       $id         Item DB ID of the corresponding content type
  *
  * @return string language variable
  *
@@ -4267,13 +4365,14 @@ function handle_mail_cue($content, $id)
     $table_users = Database::get_main_table(TABLE_MAIN_USER);
 
     $course_id = api_get_course_int_id();
+    $id = (int) $id;
 
     /* If the post is made visible we only have to send mails to the people
      who indicated that they wanted to be informed for that thread.*/
     if ($content == 'post') {
         // Getting the information about the post (need the thread_id).
         $post_info = get_post_information($id);
-        $thread_id = intval($post_info['thread_id']);
+        $thread_id = (int) $post_info['thread_id'];
 
         // Sending the mail to all the users that wanted to be informed for replies on this thread.
         $sql = "SELECT users.firstname, users.lastname, users.user_id, users.email
@@ -4281,11 +4380,11 @@ function handle_mail_cue($content, $id)
                 WHERE
                     posts.c_id = $course_id AND
                     mailcue.c_id = $course_id AND
-                    posts.thread_id='$thread_id'
-                    AND posts.post_notification='1'
-                    AND mailcue.thread_id='$thread_id'
-                    AND users.user_id=posts.poster_id
-                    AND users.active=1
+                    posts.thread_id = $thread_id AND
+                    posts.post_notification = '1' AND
+                    mailcue.thread_id = $thread_id AND
+                    users.user_id = posts.poster_id AND
+                    users.active = 1
                 GROUP BY users.email";
 
         $result = Database::query($sql);
@@ -4299,11 +4398,11 @@ function handle_mail_cue($content, $id)
                 WHERE
                     posts.c_id = $course_id AND
                     mailcue.c_id = $course_id AND
-                    posts.thread_id = ".intval($id)."
-                    AND posts.post_notification='1'
-                    AND mailcue.thread_id = ".intval($id)."
-                    AND users.user_id=posts.poster_id
-                    AND users.active=1
+                    posts.thread_id = $id AND
+                    posts.post_notification = '1' AND
+                    mailcue.thread_id = $id AND
+                    users.user_id = posts.poster_id
+                    users.active = 1
                 GROUP BY users.email";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
@@ -4312,18 +4411,18 @@ function handle_mail_cue($content, $id)
 
         // Deleting the relevant entries from the mailcue.
         $sql = "DELETE FROM $table_mailcue
-                WHERE c_id = $course_id AND thread_id='".Database::escape_string($id)."'";
+                WHERE c_id = $course_id AND thread_id = $id";
         Database::query($sql);
     } elseif ($content == 'forum') {
         $sql = "SELECT thread_id FROM $table_threads
-                WHERE c_id = $course_id AND forum_id='".Database::escape_string($id)."'";
+                WHERE c_id = $course_id AND forum_id = $id";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             handle_mail_cue('thread', $row['thread_id']);
         }
     } elseif ($content == 'forum_category') {
         $sql = "SELECT forum_id FROM $table_forums
-                WHERE c_id = $course_id AND forum_category ='".Database::escape_string($id)."'";
+                WHERE c_id = $course_id AND forum_category = $id";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             handle_mail_cue('forum', $row['forum_id']);

@@ -113,7 +113,7 @@ class Evaluation implements GradebookItem
      */
     public function setSessionId($sessionId)
     {
-        $this->sessionId = intval($sessionId);
+        $this->sessionId = (int) $sessionId;
     }
 
     public function get_date()
@@ -153,7 +153,7 @@ class Evaluation implements GradebookItem
 
     public function set_id($id)
     {
-        $this->id = $id;
+        $this->id = (int) $id;
     }
 
     public function set_name($name)

@@ -323,7 +323,7 @@ if ($submitAnswers || $buttonBack) {
 
             // sets the total weighting of the question
             $objQuestion->updateWeighting($questionWeighting);
-            $objQuestion->save($exerciseId);
+            $objQuestion->save($objExercise);
 
             $editQuestion = $questionId;
             unset($modifyAnswers);
@@ -333,7 +333,7 @@ if ($submitAnswers || $buttonBack) {
     }
 }
 
-if ($modifyAnswers) {
+if (isset($modifyAnswers)) {
     if ($debug > 0) {
         echo str_repeat('&nbsp;', 0).'$modifyAnswers is set'."<br />\n";
     }

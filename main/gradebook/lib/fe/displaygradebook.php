@@ -322,7 +322,7 @@ class DisplayGradebook
                 if (!empty($score)) {
                     $divide = $score[1] == 0 ? 1 : $score[1];
                     $item_value = $score[0] / $divide * $item->get_weight();
-                    $item_value_total += $scoredisplay->format_score($item_value);
+                    $item_value_total += $item_value;
                 }
             }
 

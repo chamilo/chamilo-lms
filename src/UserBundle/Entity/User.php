@@ -1096,7 +1096,7 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     /**
      * Get pictureUri.
      *
-     * @return Media
+     * @return string
      */
     public function getPictureUri()
     {

@@ -332,9 +332,12 @@ if ($showReporting) {
     }
 }
 
+$trackingColumn = isset($_GET['users_tracking_column']) ? $_GET['users_tracking_column'] : null;
+$trackingDirection = isset($_GET['users_tracking_direction']) ? $_GET['users_tracking_direction'] : null;
+
 // Show the charts part only if there are students subscribed to this course/session
 if ($nbStudents > 0) {
-    $usersTracking = TrackingCourseLog::get_user_data(null, $nbStudents, null, 'DESC', false);
+    $usersTracking = TrackingCourseLog::get_user_data(null, $nbStudents, $trackingColumn, $trackingDirection, false);
     $numberStudentsCompletedLP = 0;
     $averageStudentsTestScore = 0;
     $scoresDistribution = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -353,7 +356,11 @@ if ($nbStudents > 0) {
     );
 
     foreach ($usersTracking as $userTracking) {
-        $userId = UserManager::get_user_id_from_username($userTracking[3]);
+        $userInfo = api_get_user_info_from_username($userTracking[3]);
+        if (empty($userInfo)) {
+            continue;
+        }
+        $userId = $userInfo['user_id'];
         if ($userTracking[5] === '100%') {
             $numberStudentsCompletedLP++;
         }
@@ -380,10 +387,10 @@ if ($nbStudents > 0) {
 
         $listStudent = [
             'id' => $userId,
-            'fullname' => $userTracking[2].', '.$userTracking[1],
+            'fullname' => $userInfo['complete_name'],
             'score' => floor($scoreStudent / 2),
             'total_time' => $minutes,
-            'avatar' => UserManager::getUserPicture($userId),
+            'avatar' => $userInfo['avatar'],
             'certicate' => $certificate,
         ];
         $listStudentIds[] = $userId;

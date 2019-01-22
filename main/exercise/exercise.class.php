@@ -1935,7 +1935,6 @@ class Exercise
                     '2',
                     ['id' => 'result_disabled_2']
                 );
-
                 $radios_results_disabled[] = $form->createElement(
                     'radio',
                     'results_disabled',
@@ -1943,6 +1942,14 @@ class Exercise
                     get_lang('ShowScoreEveryAttemptShowAnswersLastAttempt'),
                     '4',
                     ['id' => 'result_disabled_4']
+                );
+                $radios_results_disabled[] = $form->createElement(
+                    'radio',
+                    'results_disabled',
+                    null,
+                    get_lang('DontShowScoreOnlyWhenUserFinishesAllAttemptsButShowFeedbackEachAttempt'),
+                    '5',
+                    ['id' => 'result_disabled_5', 'onclick' => 'check_results_disabled()']
                 );
 
                 $form->addGroup(
@@ -2014,6 +2021,7 @@ class Exercise
                         null,
                         [get_lang('FeedbackType'), get_lang('FeedbackDisplayOptions')]
                     );
+
                     $radios_results_disabled = [];
                     $radios_results_disabled[] = $form->createElement(
                         'radio',
@@ -2039,6 +2047,7 @@ class Exercise
                         '2',
                         ['id' => 'result_disabled_2', 'onclick' => 'check_results_disabled()']
                     );
+
                     $form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'), '');
 
                     // Type of questions disposition on page
@@ -2078,6 +2087,9 @@ class Exercise
                         '2',
                         ['id' => 'result_disabled_2', 'onclick' => 'check_results_disabled()']
                     );
+
+                    $form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'), '');
+
                     $result_disable_group = $form->addGroup(
                         $radios_results_disabled,
                         null,
@@ -3482,7 +3494,6 @@ class Exercise
         if ($debug) {
             error_log('Start answer loop ');
         }
-
         for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
             $answer = $objAnswerTmp->selectAnswer($answerId);
             $answerComment = $objAnswerTmp->selectComment($answerId);
@@ -3760,7 +3771,8 @@ class Exercise
                         $str = $answerFromDatabase = Database::result($result, 0, 'answer');
                     }
 
-                    if ($saved_results == false && strpos($answerFromDatabase, 'font color') !== false) {
+                    // if ($saved_results == false && strpos($answerFromDatabase, 'font color') !== false) {
+                    if (false) {
                         // the question is encoded like this
                         // [A] B [C] D [E] F::10,10,10@1
                         // number 1 before the "@" means that is a switchable fill in blank question
@@ -4617,7 +4629,7 @@ class Exercise
                 if ($debug) {
                     error_log('Showing questions $from '.$from);
                 }
-                if ($from == 'exercise_result') {
+                if ($from === 'exercise_result') {
                     //display answers (if not matching type, or if the answer is correct)
                     if (!in_array($answerType, [MATCHING, DRAGGABLE, MATCHING_DRAGGABLE]) ||
                         $answerCorrect
@@ -4748,7 +4760,6 @@ class Exercise
 
                             // force to show whether the choice is correct or not
                             $showTotalScoreAndUserChoicesInLastAttempt = true;
-
                             ExerciseShowFunctions::display_hotspot_answer(
                                 $feedback_type,
                                 ++$correctAnswerId,
@@ -4888,7 +4899,6 @@ class Exercise
                                     if ($debug > 0) {
                                         error_log(__LINE__.' - answerId is >1 so we\'re probably in OAR', 0);
                                     }
-                                    $inter = $result['success'];
                                     $delineation_cord = $objAnswerTmp->selectHotspotCoordinates($answerId);
                                     $poly_answer = convert_coordinates($delineation_cord, '|');
                                     $max_coord = poly_get_max($poly_user, $poly_answer);
@@ -4948,7 +4958,6 @@ class Exercise
                     if ($debug) {
                         error_log('Showing questions $from '.$from);
                     }
-
                     switch ($answerType) {
                         case UNIQUE_ANSWER:
                         case UNIQUE_ANSWER_IMAGE:
@@ -5256,12 +5265,7 @@ class Exercise
                                     }
                                     if ($debug > 0) {
                                         error_log(__LINE__.' - answerId is >1 so we\'re probably in OAR', 0);
-                                    }
-                                    //check the intersection between the oar and the user
-                                    //echo 'user';	print_r($x_user_list);		print_r($y_user_list);
-                                    //echo 'official';print_r($x_list);print_r($y_list);
-                                    //$result = get_intersection_data($x_list,$y_list,$x_user_list,$y_user_list);
-                                    $inter = $result['success'];
+                                    }                                 
                                     $delineation_cord = $objAnswerTmp->selectHotspotCoordinates($answerId);
                                     $poly_answer = convert_coordinates($delineation_cord, '|');
                                     $max_coord = poly_get_max($poly_user, $poly_answer);
@@ -5782,7 +5786,7 @@ class Exercise
                     }
                 } else {
                     if ($debug) {
-                        error_log("Empty: exerciseResultCoordinates");
+                        error_log('Empty: exerciseResultCoordinates');
                     }
                 }
                 Event::saveQuestionAttempt($questionScore, implode('|', $answer), $quesId, $exeId, 0, $this->id);
@@ -7354,15 +7358,9 @@ class Exercise
             }
 
             $attributes = ['id' => 'remind_list['.$questionId.']'];
-            if (is_array($remindList) && in_array($questionId, $remindList)) {
-                //$attributes['checked'] = 1;
-                //$remind_highlight = ' remind_highlight ';
-            }
-
             // Showing the question
 
             $exercise_actions = null;
-
             echo '<a id="questionanchor'.$questionId.'"></a><br />';
             echo '<div id="question_div_'.$questionId.'" class="main_question '.$remind_highlight.'" >';
 
@@ -7620,8 +7618,8 @@ class Exercise
      */
     public function getExercisesByCourseSession($courseId, $sessionId)
     {
-        $courseId = intval($courseId);
-        $sessionId = intval($sessionId);
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
 
         $tbl_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
         $sql = "SELECT * FROM $tbl_quiz cq
@@ -7655,7 +7653,9 @@ class Exercise
             return [];
         }
 
-        $sessionId = intval($sessionId);
+        $sessionId = (int) $sessionId;
+        $courseId = (int) $courseId;
+
         $ids = is_array($quizId) ? $quizId : [$quizId];
         $ids = array_map('intval', $ids);
         $ids = implode(',', $ids);
@@ -7822,7 +7822,6 @@ class Exercise
         );
 
         $corrects = [];
-
         foreach ($attempts as $attempt) {
             foreach ($attempt['question_list'] as $answers) {
                 foreach ($answers as $answer) {

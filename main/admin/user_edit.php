@@ -457,10 +457,15 @@ if ($form->validate()) {
             $template
         );
 
-        if (isset($user['student_boss'])) {
-            UserManager::subscribeUserToBossList($user_id, $user['student_boss']);
-        }
+       $studentBossListSent = isset($user['student_boss']) ? $user['student_boss'] : [];
+        UserManager::subscribeUserToBossList(
+            $user_id,
+            $studentBossListSent,
+            true
+        );
+
         $currentUserId = api_get_user_id();
+
         $userObj = api_get_user_entity($user_id);
 
         UserManager::add_user_as_admin($userObj);

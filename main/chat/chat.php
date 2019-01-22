@@ -9,6 +9,17 @@ api_protect_course_script(true);
 
 Event::event_access_tool(TOOL_CHAT);
 
+$logInfo = [
+    'tool' => TOOL_CHAT,
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => 'start',
+    'action_details' => 'start-chat',
+    'current_id' => 0,
+    'info' => '',
+];
+Event::registerLog($logInfo);
+
 // View
 $externalCSS = [
     'jquery-emojiarea/jquery.emojiarea.css',

@@ -4370,7 +4370,7 @@ class DocumentManager
     }
 
     /**
-     * Check if the past is used in this course.
+     * Check if the path is used in this course.
      *
      * @param array  $courseInfo
      * @param string $path

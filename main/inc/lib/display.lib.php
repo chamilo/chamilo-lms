@@ -2754,4 +2754,36 @@ HTML;
                     <hr />
               </div>';
     }
+
+    /**
+     * @param string $fileUrl
+     *
+     * @return string
+     */
+    public static function fileHtmlGuesser($fileUrl)
+    {
+        $data = pathinfo($fileUrl);
+
+        $content = self::url($data['basename'], $fileUrl);
+        switch ($data['extension']) {
+            case 'webm':
+            case 'mp4':
+            case 'ogg':
+                $content = '<video style="width: 400px; height:100%;" src="'.$fileUrl.'"></video>';
+                break;
+            case 'jpg':
+            case 'jpeg':
+            case 'gif':
+            case 'png':
+                $content = '<img width="400px" src="'.$fileUrl.'" />';
+                break;
+            default:
+                //$html = self::url($data['basename'], $fileUrl);
+                break;
+
+        }
+        //$html = self::url($content, $fileUrl, ['ajax']);
+
+        return $content;
+    }
 }

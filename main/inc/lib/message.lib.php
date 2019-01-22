@@ -1936,7 +1936,7 @@ class MessageManager
             return [];
         }
 
-        $messageInfo = MessageManager::get_message_by_id($messageId);
+        $messageInfo = self::get_message_by_id($messageId);
 
         if (empty($messageInfo)) {
             return [];

@@ -1558,10 +1558,7 @@ class SocialManager extends UserManager
         // Adding videos
         $allowedTypes[] = 'mp4';
         $allowedTypes[] = 'webm';
-        $allowedTypes[] = 'avi';
-        $allowedTypes[] = 'mov';
-        $allowedTypes[] = 'wmv';
-        $allowedTypes[] = 'mpeg';
+        $allowedTypes[] = 'ogg';
 
         if (in_array($extension, $allowedTypes)) {
             $newFileName = uniqid('').'.'.$extension;
@@ -1573,15 +1570,6 @@ class SocialManager extends UserManager
             if (is_uploaded_file($fileAttach['tmp_name'])) {
                 @copy($fileAttach['tmp_name'], $newPath);
             }
-
-            /*$small = self::resize_picture($newPath, IMAGE_WALL_SMALL_SIZE);
-            $medium = self::resize_picture($newPath, IMAGE_WALL_MEDIUM_SIZE);
-
-            $big = new Image($newPath);
-            $ok = $small && $small->send_image($pathMessageAttach.IMAGE_WALL_SMALL.'_'.$newFileName) &&
-                $medium && $medium->send_image($pathMessageAttach.IMAGE_WALL_MEDIUM.'_'.$newFileName) &&
-                $big && $big->send_image($pathMessageAttach.IMAGE_WALL_BIG.'_'.$newFileName);
-            */
             // Insert
             $newFileName = $social.$newFileName;
 
@@ -1830,6 +1818,25 @@ class SocialManager extends UserManager
         return $formattedList;
     }
 
+    public static function getPostAttachment($message)
+    {
+        if (isset($message['path']) && !empty($message['path'])) {
+            $userId = $message['user_receiver_id'];
+            $pathMessageAttach = UserManager::getUserPathById($userId, 'system').'message_attachments';
+            if (file_exists($pathMessageAttach.$message['path'])) {
+                $attachmentUrl = UserManager::getUserPathById($userId, 'web');
+                $attachmentUrl = $attachmentUrl.'message_attachments'.$message['path'];
+
+                $display = Display::fileHtmlGuesser($attachmentUrl);
+
+                return $display;
+            }
+        }
+
+        return '';
+
+    }
+
     /**
      * @param array $messages
      *
@@ -1839,7 +1846,6 @@ class SocialManager extends UserManager
     {
         $data = [];
         $users = [];
-        $currentUserId = api_get_user_id();
         foreach ($messages as $key => $message) {
             $userIdLoop = $message['user_sender_id'];
             $userFriendIdLoop = $message['user_receiver_id'];
@@ -2338,15 +2344,7 @@ class SocialManager extends UserManager
             $htmlReceiver = ' > <a href="'.$message['group_info']['url'].'">'.$message['group_info']['name'].'</a> ';
         }
 
-        $wallImage = '';
-        if (!empty($message['path'])) {
-            $pathMessageAttach = UserManager::getUserPathById($authorId, 'system').'message_attachments';
-            if (file_exists($pathMessageAttach.$message['path'])) {
-                $attachmentUrl = UserManager::getUserPathById($authorId, 'web');
-                $attachmentUrl = $attachmentUrl.'message_attachments'.$message['path'];
-                $wallImage = '<a class="thumbnail ajax" href="'.$attachmentUrl.'">'.$message['path'].'</a>';
-            }
-        }
+        $postAttachment = self::getPostAttachment($message);
 
         $canEdit = $currentUserId == $receiverInfo['user_id'] && empty($message['group_info']);
         $html = '';
@@ -2375,8 +2373,8 @@ class SocialManager extends UserManager
         $html .= '<div class="time timeago" title="'.$date.'">'.$date.'</div>';
         $html .= '</div>';
         $html .= '<div class="msg-content">';
-        $html .= '<div class="img-post">';
-        $html .= $wallImage;
+        $html .= '<div class="post-attachment" >';
+        $html .= $postAttachment;
         $html .= '</div>';
         $html .= '<p>'.Security::remove_XSS($message['content']).'</p>';
         $html .= '</div>';

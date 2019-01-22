@@ -4,84 +4,7 @@
     height: 600px;
 }
 
-/**********************************************
- *  MESSAGE TOOL                           *
- **********************************************/
-.message-topic {
-    padding: 15px;
-    border-radius: 5px;
-    display: inline-block;
-    border: 1px solid #ECF0F1;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-    width: 100%;
-}
-
-.message-topic .avatar-author,
-.message-post .avatar-author {
-    text-align: center;
-}
-
-.message-topic .avatar-author .img-responsive,
-.message-post .avatar-author .img-responsive {
-    display: initial;
-}
-
-.message-post {
-    border: 1px solid #ECF0F1;
-    margin-bottom: 15px;
-    border-radius: 5px;
-    padding: 15px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-}
-
-.message-select-box {
-    float: left;
-    display: inline;
-    position: absolute;
-    margin-top: 23px;
-    margin-left: 20px;
-}
-
-.message-view {
-    float: right;
-    background: #F5E38E;
-    border: 2px solid #EBCA4F;
-    padding: 10px;
-    width: 100px;
-    position: relative;
-    margin-top: 115px;
-    margin-right: -100px;
-}
-
 /*SOCIAL TOOL*/
-
-.clip-wrapper {
-    position: relative;
-    width: 100px;
-    height: 100px;
-    top: -1px;
-    left: -1px;
-}
-
-.clip_vertical {
-    position: absolute;
-    clip: rect(0px 218px 185px 0px);
-    top: -50px;
-    left: -32px;
-    -webkit-transform: scale(0.6);
-    -moz-transform: scale(0.6);
-    -o-transform: scale(0.6);
-}
-
-.clip_horizontal {
-    position: absolute;
-    clip: rect(0px 218px 155px 0px);
-    top: -25px;
-    left: -48px;
-    -webkit-transform: scale(0.6);
-    -moz-transform: scale(0.6);
-    -o-transform: scale(0.6);
-}
 
 .box_shared_profile_group_title {
     border-bottom: 1pt dotted #000;
@@ -112,7 +35,7 @@
     width: 100%;
 }
 
-.lp_resource_element, .lp_resource_element_no_link {
+.lp_resource_element {
     border: 1px solid #DDDDDD;
     color: #444444;
     cursor: pointer;
@@ -125,10 +48,6 @@
 
 .lp_resource_element:hover {
     background-color: #E6E6E6;
-}
-
-.lp_resource_element_new a {
-    font-size: 14px;
 }
 
 .RequirementHeading, .RequirementText, .RequirementContent {
@@ -492,12 +411,6 @@ form .form .freeze {
     padding-top: 8px;
 }
 
-.lp_content_type_label {
-    font-style: italic;
-    color: #999;
-    font-size: 11px;
-}
-
 .second_window {
     border: 1px solid blue;
     margin-left: 0;
@@ -506,18 +419,6 @@ form .form .freeze {
 .third_window {
     border: 1px solid blue;
     cursor: pointer;
-}
-
-.drag-locked {
-    border: 1px solid red;
-}
-
-.dropHover {
-    border: 1px dotted red;
-}
-
-.dragActive {
-    border: 2px dotted orange;
 }
 
 /* **** POST **** */

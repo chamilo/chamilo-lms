@@ -3269,3 +3269,38 @@ table.certaintyTable {
   }
 }
 
+/****** MESSAGE ******/
+.message-topic {
+  padding: 15px;
+  border-radius: 5px;
+  display: inline-block;
+  border: 1px solid #ECF0F1;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  width: 100%;
+}
+.message-post {
+  border: 1px solid #ECF0F1;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  padding: 15px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+.message-select-box {
+  float: left;
+  display: inline;
+  position: absolute;
+  margin-top: 23px;
+  margin-left: 20px;
+}
+.message-view {
+  float: right;
+  background: #F5E38E;
+  border: 2px solid #EBCA4F;
+  padding: 10px;
+  width: 100px;
+  position: relative;
+  margin-top: 115px;
+  margin-right: -100px;
+}
+
+

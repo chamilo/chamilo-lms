@@ -104,6 +104,7 @@ define('SURVEY_VISIBLE_PUBLIC', 2);
 /* When you add a new tool you must add it into function api_get_tools_lists() too */
 define('TOOL_DOCUMENT', 'document');
 define('TOOL_LP_FINAL_ITEM', 'final_item');
+define('TOOL_READOUT_TEXT', 'readout_text');
 define('TOOL_THUMBNAIL', 'thumbnail');
 define('TOOL_HOTPOTATOES', 'hotpotatoes');
 define('TOOL_CALENDAR_EVENT', 'calendar_event');
@@ -468,6 +469,7 @@ define('RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS', 1); //Do not show score n
 define('RESULT_DISABLE_SHOW_SCORE_ONLY', 2); //Show score only
 define('RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES', 3); //Show final score only with categories
 define('RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT', 4);
+define('RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK', 5);
 // 4: Show final score only with categories and show expected answers only on the last attempt
 
 define('EXERCISE_MAX_NAME_SIZE', 80);
@@ -1630,7 +1632,12 @@ function api_get_user_info(
         $userFromSession = Session::read('_user');
 
         if (isset($userFromSession)) {
-            if ($cacheAvailable === true) {
+            if ($cacheAvailable === true &&
+                (
+                    empty($userFromSession['is_anonymous']) &&
+                    (isset($userFromSession['status']) && $userFromSession['status'] != ANONYMOUS)
+                )
+            ) {
                 $apcVar = api_get_configuration_value('apc_prefix').'userinfo_'.$userFromSession['user_id'];
                 if (apcu_exists($apcVar)) {
                     if ($updateCache) {
@@ -3269,6 +3276,7 @@ function api_display_tool_view_option()
         $output_string .= '<a class="btn btn-default btn-sm" href="'.$sourceurl.'&isStudentView=true" target="_self">'.
             Display::returnFontAwesomeIcon('eye').' '.get_lang('SwitchToStudentView').'</a>';
     }
+    $output_string = Security::remove_XSS($output_string);
     $html = Display::tag('div', $output_string, ['class' => 'view-options']);
 
     return $html;
@@ -3301,8 +3309,10 @@ function api_is_allowed_to_edit(
     $session_coach = false,
     $check_student_view = true
 ) {
+    $allowSessionAdminEdit = api_get_configuration_value('session_admins_edit_courses_content') === true;
+
     // Admins can edit anything.
-    if (api_is_platform_admin(false)) {
+    if (api_is_platform_admin($allowSessionAdminEdit)) {
         //The student preview was on
         if ($check_student_view && api_is_student_view_active()) {
             return false;
@@ -4624,7 +4634,7 @@ function api_get_languages_combo($name = 'language')
  * @param  bool Hide form if only one language available (defaults to false = show the box anyway)
  * @param bool $showAsButton
  *
- * @return null|string Display the box directly
+ * @return string|null Display the box directly
  */
 function api_display_language_form($hide_if_no_choice = false, $showAsButton = false)
 {
@@ -5077,7 +5087,7 @@ function api_max_sort_value($user_course_category, $user_id)
  *
  * @return string the formated time
  */
-function api_time_to_hms($seconds)
+function api_time_to_hms($seconds, $space = ':')
 {
     // $seconds = -1 means that we have wrong data in the db.
     if ($seconds == -1) {
@@ -5099,6 +5109,10 @@ function api_time_to_hms($seconds)
     // How many seconds
     $sec = floor($seconds - ($hours * 3600) - ($min * 60));
 
+    if ($hours < 10) {
+        $hours = "0$hours";
+    }
+
     if ($sec < 10) {
         $sec = "0$sec";
     }
@@ -5107,7 +5121,7 @@ function api_time_to_hms($seconds)
         $min = "0$min";
     }
 
-    return "$hours:$min:$sec";
+    return $hours.$space.$min.$space.$sec;
 }
 
 /* FILE SYSTEM RELATED FUNCTIONS */
@@ -6195,7 +6209,6 @@ function api_is_course_visible_for_user($userid = null, $cid = null)
  * @param string the tool of the element
  * @param int the element id in database
  * @param int the session_id to compare with element session id
- * @param string $tool
  *
  * @return bool true if the element is in the session, false else
  */
@@ -6203,6 +6216,12 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null)
 {
     if (is_null($session_id)) {
         $session_id = api_get_session_id();
+    }
+
+    $element_id = (int) $element_id;
+
+    if (empty($element_id)) {
+        return false;
     }
 
     // Get information to build query depending of the tool.
@@ -6228,8 +6247,8 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null)
     }
     $course_id = api_get_course_int_id();
 
-    $sql = "SELECT session_id FROM $table_tool 
-            WHERE c_id = $course_id AND $key_field =  ".intval($element_id);
+    $sql = "SELECT session_id FROM $table_tool
+            WHERE c_id = $course_id AND $key_field =  ".$element_id;
     $rs = Database::query($sql);
     if ($element_session_id = Database::result($rs, 0, 0)) {
         if ($element_session_id == intval($session_id)) {
@@ -6258,8 +6277,21 @@ function api_replace_dangerous_char($filename, $treat_spaces_as_hyphens = true)
     $encoding = api_detect_encoding($filename);
     if (empty($encoding)) {
         $encoding = 'ASCII';
+        if (!api_is_valid_ascii($filename)) {
+            // try iconv and try non standard ASCII a.k.a CP437
+            // see BT#15022
+            if (function_exists('iconv')) {
+                $result = iconv('CP437', 'UTF-8', $filename);
+                if (api_is_valid_utf8($result)) {
+                    $filename = $result;
+                    $encoding = 'UTF-8';
+                }
+            }
+        }
     }
+
     $filename = api_to_system_encoding($filename, $encoding);
+
     $url = URLify::filter(
         $filename,
         250,
@@ -6310,7 +6342,7 @@ function api_get_current_access_url_id()
             return -1;
         }
 
-        return $access_url_id;
+        return (int) $access_url_id;
     }
 
     //if the url in WEB_PATH was not found, it can only mean that there is
@@ -8012,7 +8044,7 @@ function api_get_user_info_from_official_code($officialCode)
  * @param string $usernameInputId
  * @param string $passwordInputId
  *
- * @return null|string
+ * @return string|null
  */
 function api_get_password_checker_js($usernameInputId, $passwordInputId)
 {
@@ -8040,7 +8072,7 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
     ];
 
     $js = api_get_asset('pwstrength-bootstrap/dist/pwstrength-bootstrap.min.js');
-    $js .= "<script>    
+    $js .= "<script>
     var errorMessages = {
         password_to_short : \"".get_lang('PasswordIsTooShort')."\",
         same_as_username : \"".get_lang('YourPasswordCannotBeTheSameAsYourUsername')."\"
@@ -8254,7 +8286,7 @@ function api_can_login_as($loginAsUserId, $userId = null)
         }
     }
 
-    $userInfo = api_get_user_info($userId);
+    $userInfo = api_get_user_info($loginAsUserId);
     $isDrh = function () use ($loginAsUserId) {
         if (api_is_drh()) {
             if (api_drh_can_access_all_session_content()) {
@@ -8283,7 +8315,15 @@ function api_can_login_as($loginAsUserId, $userId = null)
         return false;
     };
 
-    return api_is_platform_admin() || (api_is_session_admin() && $userInfo['status'] == 5) || $isDrh();
+    $loginAsStatusForSessionAdmins = [STUDENT];
+
+    if (api_get_configuration_value('allow_session_admin_login_as_teacher')) {
+        $loginAsStatusForSessionAdmins[] = COURSEMANAGER;
+    }
+
+    return api_is_platform_admin() ||
+        (api_is_session_admin() && in_array($userInfo['status'], $loginAsStatusForSessionAdmins)) ||
+        $isDrh();
 }
 
 /**
@@ -8706,7 +8746,7 @@ function api_mail_html(
     $mail->Mailer = $platform_email['SMTP_MAILER'];
     $mail->Host = $platform_email['SMTP_HOST'];
     $mail->Port = $platform_email['SMTP_PORT'];
-    $mail->CharSet = $platform_email['SMTP_CHARSET'];
+    $mail->CharSet = isset($platform_email['SMTP_CHARSET']) ? $platform_email['SMTP_CHARSET'] : 'UTF-8';
     // Stay far below SMTP protocol 980 chars limit.
     $mail->WordWrap = 200;
 
@@ -8735,14 +8775,16 @@ function api_mail_html(
 
     // Reply to first
     if (isset($extra_headers['reply_to']) && empty($platform_email['SMTP_UNIQUE_REPLY_TO'])) {
-        $mail->AddReplyTo(
-            $extra_headers['reply_to']['mail'],
-            $extra_headers['reply_to']['name']
-        );
-        // Errors to sender
-        $mail->AddCustomHeader('Errors-To: '.$extra_headers['reply_to']['mail']);
-        $mail->Sender = $extra_headers['reply_to']['mail'];
-        unset($extra_headers['reply_to']);
+        if (PHPMailer::validateAddress($extra_headers['reply_to']['mail'])) {
+            $mail->AddReplyTo(
+                $extra_headers['reply_to']['mail'],
+                $extra_headers['reply_to']['name']
+            );
+            // Errors to sender
+            $mail->AddCustomHeader('Errors-To: '.$extra_headers['reply_to']['mail']);
+            $mail->Sender = $extra_headers['reply_to']['mail'];
+            unset($extra_headers['reply_to']);
+        }
     } else {
         $mail->AddCustomHeader('Errors-To: '.$defaultEmail);
     }
@@ -8988,6 +9030,19 @@ function api_protect_limit_for_session_admin()
 {
     $limitAdmin = api_get_setting('limit_session_admin_role');
     if (api_is_session_admin() && $limitAdmin === 'true') {
+        api_not_allowed(true);
+    }
+}
+
+/**
+ * Limits that a session admin has access to list users.
+ * When limit_session_admin_list_users configuration variable is set to true.
+ */
+function api_protect_session_admin_list_users()
+{
+    $limitAdmin = api_get_configuration_value('limit_session_admin_list_users');
+
+    if (api_is_session_admin() && true === $limitAdmin) {
         api_not_allowed(true);
     }
 }

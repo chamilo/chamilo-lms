@@ -120,6 +120,7 @@
 {% set session_image = 'window_list.png'|img(32, row.title) %}
 
 {% for row in session %}
+    {% set collapsable = '' %}
     <div id="session-{{ item.id }}" class="session panel panel-default">
         {% if row.course_list_session_style %} {# If not style then no show header #}
             <div class="panel-heading">
@@ -155,8 +156,20 @@
                         </a>
                     </div>
                 {% endif %}
+                {% if row.collapsable_link %}
+                    <div class="pull-right">
+                       {{ row.collapsable_link }}
+                    </div>
+                {% endif %}
             </div>
         {% endif %}
+
+        {% if row.collapsable_link %}
+            {% if row.collapsed == 1 %}
+                {% set collapsable = 'collapse' %}
+            {% endif %}
+        {% endif %}
+
         <div class="session panel-body {{ collapsable }}" id="collapse_{{ row.id }}">
             {% if row.show_description %}
                 {{ row.description }}

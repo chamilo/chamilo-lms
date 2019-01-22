@@ -51,7 +51,6 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
     $formDelete->addButtonDelete(get_lang('DeleteAccount'));
     $formToString .= $formDelete->returnForm();
 }
-
 switch ($action) {
     case 'send_legal':
         $language = api_get_interface_language();
@@ -257,7 +256,7 @@ foreach ($properties as $key => $value) {
                         $personalDataContent .= '<li>'.get_lang('NoData').'</li>';
                     } else {
                         foreach ($subValue as $subSubValue) {
-                            $personalDataContent .= '<li>'.$subSubValue.'</li>';
+                            $personalDataContent .= '<li>'.Security::remove_XSS($subSubValue).'</li>';
                         }
                     }
                     $personalDataContent .= '</ul>';
@@ -269,7 +268,7 @@ foreach ($properties as $key => $value) {
                     $personalDataContent .= '<li>'.get_lang('NoData').'</li>';
                 } else {
                     foreach ($value as $subValue) {
-                        $personalDataContent .= '<li>'.$subValue->variable.': '.$subValue->value.'</li>';
+                        $personalDataContent .= '<li>'.$subValue->variable.': '.Security::remove_XSS($subValue->value).'</li>';
                     }
                 }
                 $personalDataContent .= '</ul>';
@@ -293,7 +292,7 @@ foreach ($properties as $key => $value) {
                                 );
                                 $personalDataContent .= '<li>'.$documentLink.'</li>';
                             } else {
-                                $personalDataContent .= '<li>'.$subSubValue.'</li>';
+                                $personalDataContent .= '<li>'.Security::remove_XSS($subSubValue).'</li>';
                             }
                         }
                     }
@@ -313,7 +312,7 @@ foreach ($properties as $key => $value) {
                     $personalDataContent .= '<li>'.get_lang('NoData').'</li>';
                 } else {
                     foreach ($value as $subValue) {
-                        $personalDataContent .= '<li>'.$subValue.'</li>';
+                        $personalDataContent .= '<li>'.Security::remove_XSS($subValue).'</li>';
                     }
                 }
                 $personalDataContent .= '</ul>';
@@ -351,7 +350,7 @@ foreach ($properties as $key => $value) {
             $personalDataContent .= '<li>'.$key.': '.get_lang('ComplexDataNotShown').'</li>';
         }*/
     } else {
-        $personalDataContent .= '<li>'.$key.': '.$value.'</li>';
+        $personalDataContent .= '<li>'.$key.': '.Security::remove_XSS($value).'</li>';
     }
 }
 $personalDataContent .= '</ul>';
@@ -443,12 +442,12 @@ if ($showWarningMessage) {
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
 if (api_get_setting('allow_social_tool') === 'true') {
     $tpl->assign('social_menu_block', $socialMenuBlock);
-    $tpl->assign('personal_data', $personalData);
 } else {
     $tpl->assign('social_menu_block', '');
     $tpl->assign('personal_data_block', $personalDataContent);
 }
 
+$tpl->assign('personal_data', $personalData);
 $tpl->assign('permission', $permissionBlock);
 $tpl->assign('term_link', $termLink);
 $socialLayout = $tpl->get_template('social/personal_data.tpl');

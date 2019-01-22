@@ -117,30 +117,31 @@ class SessionManager
      *
      * @author Carlos Vargas <carlos.vargas@beeznest.com>, from existing code
      *
-     * @param string $name
-     * @param string $startDate                    (YYYY-MM-DD hh:mm:ss)
-     * @param string $endDate                      (YYYY-MM-DD hh:mm:ss)
-     * @param string $displayStartDate             (YYYY-MM-DD hh:mm:ss)
-     * @param string $displayEndDate               (YYYY-MM-DD hh:mm:ss)
-     * @param string $coachStartDate               (YYYY-MM-DD hh:mm:ss)
-     * @param string $coachEndDate                 (YYYY-MM-DD hh:mm:ss)
-     * @param int    $sessionCategoryId            ID of the session category in which this session is registered
-     * @param mixed  $coachId                      If int, this is the session coach id,
-     *                                             if string, the coach ID will be looked for from the user table
-     * @param int    $visibility                   Visibility after end date (0 = read-only, 1 = invisible, 2 = accessible)
-     * @param bool   $fixSessionNameIfExists
-     * @param string $duration
-     * @param string $description                  Optional. The session description
-     * @param int    $showDescription              Optional. Whether show the session description
-     * @param array  $extraFields
-     * @param int    $sessionAdminId               Optional. If this sessions was created by a session admin, assign it to him
-     * @param bool   $sendSubscriptionNotification Optional.
-     *                                             Whether send a mail notification to users being subscribed
-     *
-     * @todo use an array to replace all this parameters or use the model.lib.php ...
+     * @param string   $name
+     * @param string   $startDate                    (YYYY-MM-DD hh:mm:ss)
+     * @param string   $endDate                      (YYYY-MM-DD hh:mm:ss)
+     * @param string   $displayStartDate             (YYYY-MM-DD hh:mm:ss)
+     * @param string   $displayEndDate               (YYYY-MM-DD hh:mm:ss)
+     * @param string   $coachStartDate               (YYYY-MM-DD hh:mm:ss)
+     * @param string   $coachEndDate                 (YYYY-MM-DD hh:mm:ss)
+     * @param mixed    $coachId                      If int, this is the session coach id,
+     *                                               if string, the coach ID will be looked for from the user table
+     * @param int      $sessionCategoryId            ID of the session category in which this session is registered
+     * @param int      $visibility                   Visibility after end date (0 = read-only, 1 = invisible, 2 = accessible)
+     * @param bool     $fixSessionNameIfExists
+     * @param string   $duration
+     * @param string   $description                  Optional. The session description
+     * @param int      $showDescription              Optional. Whether show the session description
+     * @param array    $extraFields
+     * @param int      $sessionAdminId               Optional. If this sessions was created by a session admin, assign it to him
+     * @param bool     $sendSubscriptionNotification Optional.
+     *                                               Whether send a mail notification to users being subscribed
+     * @param int|null $accessUrlId                  Optional.
      *
      * @return mixed Session ID on success, error message otherwise
-     * */
+     *
+     * @todo   use an array to replace all this parameters or use the model.lib.php ...
+     */
     public static function create_session(
         $name,
         $startDate,
@@ -158,23 +159,22 @@ class SessionManager
         $showDescription = 0,
         $extraFields = [],
         $sessionAdminId = 0,
-        $sendSubscriptionNotification = false
+        $sendSubscriptionNotification = false,
+        $accessUrlId = null
     ) {
         global $_configuration;
 
         // Check portal limits
-        $access_url_id = 1;
+        $accessUrlId = empty($accessUrlId) && api_get_multiple_access_url()
+            ? api_get_current_access_url_id()
+            : 1;
 
-        if (api_get_multiple_access_url()) {
-            $access_url_id = api_get_current_access_url_id();
-        }
-
-        if (is_array($_configuration[$access_url_id]) &&
-            isset($_configuration[$access_url_id]['hosting_limit_sessions']) &&
-            $_configuration[$access_url_id]['hosting_limit_sessions'] > 0
+        if (is_array($_configuration[$accessUrlId]) &&
+            isset($_configuration[$accessUrlId]['hosting_limit_sessions']) &&
+            $_configuration[$accessUrlId]['hosting_limit_sessions'] > 0
         ) {
             $num = self::count_sessions();
-            if ($num >= $_configuration[$access_url_id]['hosting_limit_sessions']) {
+            if ($num >= $_configuration[$accessUrlId]['hosting_limit_sessions']) {
                 api_warn_hosting_contact('hosting_limit_sessions');
 
                 return get_lang('PortalSessionsLimitReached');
@@ -306,9 +306,8 @@ class SessionManager
                       api_mail_html($complete_name, $user_info['email'], $subject, $message);
                      *
                      */
-                    //Adding to the correct URL
-                    $access_url_id = api_get_current_access_url_id();
-                    UrlManager::add_session_to_url($session_id, $access_url_id);
+                    // Adding to the correct URL
+                    UrlManager::add_session_to_url($session_id, $accessUrlId);
 
                     // add event to system log
                     $user_id = api_get_user_id();
@@ -614,27 +613,24 @@ class SessionManager
             foreach ($sessions as $session) {
                 $session_id = $session['id'];
                 if ($showCountUsers) {
-                    $session['users'] = SessionManager::get_users_by_session(
+                    $session['users'] = self::get_users_by_session(
                         $session['id'],
-                        null,
+                        0,
                         true
                     );
                 }
-                $url = api_get_path(WEB_CODE_PATH)."session/resume_session.php?id_session=".$session['id'];
+                $url = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session['id'];
                 if (api_is_drh()) {
-                    $url = api_get_path(WEB_CODE_PATH)."session/about.php?session_id=".$session['id'];
+                    $url = api_get_path(WEB_CODE_PATH).'session/about.php?session_id='.$session['id'];
                 }
                 if (api_is_platform_admin()) {
-                    $url = api_get_path(WEB_CODE_PATH)."session/resume_session.php?id_session=".$session['id'];
+                    $url = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session['id'];
                 }
 
                 if ($extraFieldsToLoad) {
-                    $url = api_get_path(WEB_CODE_PATH)."session/about.php?session_id=".$session['id'];
+                    $url = api_get_path(WEB_CODE_PATH).'session/about.php?session_id='.$session['id'];
                 }
-                $session['name'] = Display::url(
-                    $session['name'],
-                    $url
-                );
+                $session['name'] = Display::url($session['name'], $url);
 
                 if (!empty($extraFieldsToLoad)) {
                     foreach ($extraFieldsToLoad as $field) {
@@ -682,7 +678,6 @@ class SessionManager
                         $options = explode('::', $value);
                     }
                     $original_key = $key;
-
                     if (strpos($key, '_second') === false) {
                     } else {
                         $key = str_replace('_second', '', $key);
@@ -700,9 +695,10 @@ class SessionManager
                         }
                     }
                 }
-                $formatted_sessions[$session_id] = $session;
+
                 $categoryName = isset($orderedCategories[$session['session_category_id']]) ? $orderedCategories[$session['session_category_id']] : '';
-                $formatted_sessions[$session_id]['category_name'] = $categoryName;
+                $session['category_name'] = $categoryName;
+                $formatted_sessions[] = $session;
             }
         }
 
@@ -1812,6 +1808,9 @@ class SessionManager
         $sql = "UPDATE $ticket SET session_id = NULL WHERE session_id IN ($id_checked)";
         Database::query($sql);
 
+        $app_plugin = new AppPlugin();
+        $app_plugin->performActionsWhenDeletingItem('session', $id_checked);
+
         $sql = "DELETE FROM $tbl_session WHERE id IN ($id_checked)";
         Database::query($sql);
 
@@ -2320,11 +2319,11 @@ class SessionManager
             return false;
         }
 
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
+        $session_visibility = (int) $session_visibility;
         $course_code = Database::escape_string($course_code);
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['real_id'];
-        $session_visibility = intval($session_visibility);
 
         if ($removeUsersNotInList) {
             $currentUsers = self::getUsersByCourseSession($session_id, $courseInfo, 0);
@@ -2348,7 +2347,7 @@ class SessionManager
 
         $nbr_users = 0;
         foreach ($user_list as $enreg_user) {
-            $enreg_user = intval($enreg_user);
+            $enreg_user = (int) $enreg_user;
             // Checking if user exists in session - course - user table.
             $sql = "SELECT count(user_id) as count
                     FROM $tbl_session_rel_course_rel_user
@@ -3408,7 +3407,7 @@ class SessionManager
         $noCoach = false
     ) {
         // Definition of variables
-        $userId = intval($userId);
+        $userId = (int) $userId;
 
         $sessionId = !empty($sessionId) ? intval($sessionId) : api_get_session_id();
         $courseId = !empty($courseId) ? intval($courseId) : api_get_course_id();
@@ -4173,7 +4172,9 @@ class SessionManager
         if (empty($id)) {
             return [];
         }
-        $id = intval($id);
+        $id = (int) $id;
+        $urlId = empty($urlId) ? api_get_current_access_url_id() : (int) $urlId;
+
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $table_access_url_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -4196,8 +4197,6 @@ class SessionManager
                 ON (au.user_id = u.user_id)
                 ";
 
-        $urlId = empty($urlId) ? api_get_current_access_url_id() : (int) $urlId;
-
         if (is_numeric($status)) {
             $status = (int) $status;
             $sql .= " WHERE su.relation_type = $status AND (au.access_url_id = $urlId OR au.access_url_id is null)";
@@ -4205,7 +4204,7 @@ class SessionManager
             $sql .= " WHERE (au.access_url_id = $urlId OR au.access_url_id is null )";
         }
 
-        $sql .= " ORDER BY su.relation_type, ";
+        $sql .= ' ORDER BY su.relation_type, ';
         $sql .= api_sort_by_first_name() ? ' u.firstname, u.lastname' : '  u.lastname, u.firstname';
 
         $result = Database::query($sql);
@@ -5509,7 +5508,7 @@ SQL;
                                         $userCourseCategory = $courseUserData['user_course_cat'];
                                     }
 
-                                    CourseManager::subscribe_user(
+                                    CourseManager::subscribeUser(
                                         $teacherToAdd,
                                         $course_code,
                                         COURSEMANAGER,
@@ -5632,7 +5631,7 @@ SQL;
                                             $userCourseCategory = $courseUserData['user_course_cat'];
                                         }
 
-                                        CourseManager::subscribe_user(
+                                        CourseManager::subscribeUser(
                                             $teacherId,
                                             $course_code,
                                             COURSEMANAGER,
@@ -6855,8 +6854,8 @@ SQL;
      */
     public static function getUserSession($userId, $sessionId)
     {
-        $userId = intval($userId);
-        $sessionId = intval($sessionId);
+        $userId = (int) $userId;
+        $sessionId = (int) $sessionId;
 
         if (empty($userId) || empty($sessionId)) {
             return false;
@@ -8189,7 +8188,6 @@ SQL;
                         'name' => 'id',
                         'index' => 's.id',
                         'width' => '160',
-                        'width' => '160',
                         'hidden' => 'true',
                     ],
                     [
@@ -9126,6 +9124,48 @@ SQL;
         }
 
         return $courseIds;
+    }
+
+    /**
+     * @param int             $userId
+     * @param int             $sessionId
+     * @param ExtraFieldValue $extraFieldValue
+     * @param string          $collapsableLink
+     *
+     * @return array
+     */
+    public static function getCollapsableData($userId, $sessionId, $extraFieldValue, $collapsableLink)
+    {
+        $collapsed = 0;
+
+        // Get default collapsed value in extra field
+        $value = $extraFieldValue->get_values_by_handler_and_field_variable($sessionId, 'collapsed');
+        if (!empty($value) && isset($value['value'])) {
+            $collapsed = $value['value'];
+        }
+
+        $userRelSession = Sessionmanager::getUserSession($userId, $sessionId);
+        if ($userRelSession) {
+            if (isset($userRelSession['collapsed']) && $userRelSession['collapsed'] != '') {
+                $collapsed = $userRelSession['collapsed'];
+            }
+        } else {
+            return ['collapsed' => $collapsed, 'collapsable_link' => '&nbsp;'];
+        }
+
+        $link = $collapsableLink.'&session_id='.$sessionId.'&value=1';
+        $image = '<i class="fa fa-folder-open"></i>';
+        if ($collapsed == 1) {
+            $link = $collapsableLink.'&session_id='.$sessionId.'&value=0';
+            $image = '<i class="fa fa-folder"></i>';
+        }
+
+        $link = Display::url(
+            $image,
+            $link
+        );
+
+        return ['collapsed' => $collapsed, 'collapsable_link' => $link];
     }
 
     /**

@@ -75,14 +75,17 @@ if (!empty($group_list)) {
             $group_data['name'] = $group_data['name'].' * ';
         }
         $used_quota_bytes += $quota_bytes;
-        $session[] = [addslashes(get_lang('Group').': '.$group_data['name']).' ('.format_file_size($quota_bytes).')', $quota_percentage];
+        $session[] = [
+            addslashes(get_lang('Group').': '.$group_data['name']).' ('.format_file_size($quota_bytes).')',
+            $quota_percentage,
+        ];
     }
 }
 // Showing weight of documents uploaded by user
-$document_list = DocumentManager::getAllDocumentData($_course);
+$document_list = DocumentManager::getAllDocumentData(api_get_course_info());
 if (!empty($document_list)) {
     foreach ($document_list as $document_data) {
-        if ($document_data['insert_user_id'] == api_get_user_id() && $document_data['filetype'] == 'file') {
+        if ($document_data['insert_user_id'] == api_get_user_id() && $document_data['filetype'] === 'file') {
             $quota_bytes += $document_data['size'];
         }
     }
@@ -90,7 +93,10 @@ if (!empty($document_list)) {
         $quota_percentage = round($quota_bytes / $total_quota_bytes, 2) * 100;
     }
 
-    $session[] = [addslashes(get_lang('Teacher').': '.$user_name).' ('.format_file_size($quota_bytes).')', $quota_percentage];
+    $session[] = [
+        addslashes(get_lang('Teacher').': '.$user_name).' ('.format_file_size($quota_bytes).')',
+        $quota_percentage,
+    ];
     //if a sesson is active
     if ($session_id != 0) {
         if (!empty($course_list)) {
@@ -110,26 +116,29 @@ if (!empty($document_list)) {
 }
 
 $quota_percentage = round(($total_quota_bytes - $used_quota_bytes) / $total_quota_bytes, 2) * 100;
-$session[] = [addslashes(get_lang('ShowCourseQuotaUse')).' ('.format_file_size($total_quota_bytes - $used_quota_bytes).') ', $quota_percentage];
+$session[] = [
+    addslashes(get_lang('ShowCourseQuotaUse')).' ('.format_file_size(
+        $total_quota_bytes - $used_quota_bytes
+    ).') ',
+    $quota_percentage,
+];
 $quota_data = json_encode($session);
 
-$htmlHeadXtra[] = "
-<script>
-$(document).ready(function(){
-  var data = ".$quota_data.";
-  var plot1 = jQuery.jqplot ('chart1', [data], {
-      seriesDefaults: {
-        // Make this a pie chart
-        renderer: jQuery.jqplot.PieRenderer,
-        rendererOptions: {
-          // Put data labels on the pie slices.
-          // By default, labels show the percentage of the slice.
-          showDataLabels: true
-        }
-      },
-      legend: { show:true, location: 'e' }
-    }
-  );
+$htmlHeadXtra[] = "<script>
+$(document).ready(function() {
+    var data = ".$quota_data.";
+    var plot1 = jQuery.jqplot('chart1', [data], {
+        seriesDefaults: {
+            // Make this a pie chart
+            renderer: jQuery.jqplot.PieRenderer,
+            rendererOptions: {
+                // Put data labels on the pie slices.
+                // By default, labels show the percentage of the slice.
+                showDataLabels: true
+            }
+        },
+        legend: { show:true, location: 'e' }
+    });
 });
 </script>";
 

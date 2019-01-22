@@ -13,15 +13,15 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_block_anonymous_users();
+
 $user_id = api_get_user_id();
 $show_full_profile = true;
 // social tab
-$this_section = SECTION_SOCIAL;
 Session::erase('this_section');
+$this_section = SECTION_SOCIAL;
 
-api_block_anonymous_users();
-
-if (api_get_setting('allow_social_tool') != 'true') {
+if (api_get_setting('allow_social_tool') !== 'true') {
     $url = api_get_path(WEB_CODE_PATH).'auth/profile.php';
     header('Location: '.$url);
     exit;

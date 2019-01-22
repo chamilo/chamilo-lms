@@ -13,19 +13,14 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
 
 $this_section = SECTION_TRACKING;
-
-api_block_anonymous_users();
-
 $export_csv = false;
-
 if (isset($_GET['export']) && $_GET['export'] == 'csv') {
     $export_csv = true;
 }
 
+$id_coach = api_get_user_id();
 if (isset($_GET['id_coach']) && $_GET['id_coach'] != '') {
-    $id_coach = intval($_GET['id_coach']);
-} else {
-    $id_coach = api_get_user_id();
+    $id_coach = (int) $_GET['id_coach'];
 }
 
 $allowToTrack = api_is_platform_admin(true, true) || api_is_teacher();
@@ -35,7 +30,7 @@ if (!$allowToTrack) {
 }
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
-$interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('MySpace')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('MySpace')];
 Display::display_header(get_lang('Sessions'));
 
 if (api_is_platform_admin(true, true)) {
@@ -43,12 +38,12 @@ if (api_is_platform_admin(true, true)) {
 
     if (!api_is_session_admin()) {
         $menu_items[] = Display::url(
-            Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),
-            api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
+            Display::return_icon('statistics.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'auth/my_progress.php'
         );
         $menu_items[] = Display::url(
             Display::return_icon('user.png', get_lang('Students'), [], ICON_SIZE_MEDIUM),
-            "index.php?view=drh_students&amp;display=yourstudents"
+            'index.php?view=drh_students&amp;display=yourstudents'
         );
         $menu_items[] = Display::url(
             Display::return_icon('teacher.png', get_lang('Trainers'), [], ICON_SIZE_MEDIUM),
@@ -143,7 +138,7 @@ $columns = [
 // Column config
 $columnModel = [
     ['name' => 'name', 'index' => 'name', 'width' => '255', 'align' => 'left'],
-    ['name' => 'date', 'index' => 'date', 'width' => '150', 'align' => 'left', 'sortable' => 'false'],
+    ['name' => 'date', 'index' => 'access_start_date', 'width' => '150', 'align' => 'left'],
     ['name' => 'course_per_session', 'index' => 'course_per_session', 'width' => '150', 'sortable' => 'false'],
     ['name' => 'student_per_session', 'index' => 'student_per_session', 'width' => '100', 'sortable' => 'false'],
     ['name' => 'details', 'index' => 'details', 'width' => '100', 'sortable' => 'false'],

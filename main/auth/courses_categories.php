@@ -15,6 +15,9 @@ if (isset($_REQUEST['action']) && Security::remove_XSS($_REQUEST['action']) !== 
 }
 
 $action = !empty($_REQUEST['action']) ? Security::remove_XSS($_REQUEST['action']) : 'display_courses';
+global $actions;
+$action = in_array($action, $actions) ? $action : 'display_courses';
+
 $showCourses = CoursesAndSessionsCatalog::showCourses();
 $showSessions = CoursesAndSessionsCatalog::showSessions();
 $pageCurrent = isset($pageCurrent) ? $pageCurrent : isset($_GET['pageCurrent']) ? intval($_GET['pageCurrent']) : 1;
@@ -500,9 +503,14 @@ function return_already_registered_label($in_status)
 function return_register_button($course, $stok, $code, $search_term)
 {
     $title = get_lang('Subscribe');
+    $action = 'subscribe_course';
+    if (!empty($course['registration_code'])) {
+        $action = 'subscribe_course_validation';
+    }
+
     $html = Display::url(
         Display::returnFontAwesomeIcon('check').' '.$title,
-        api_get_self().'?action=subscribe_course&sec_token='.$stok.
+        api_get_self().'?action='.$action.'&sec_token='.$stok.
         '&subscribe_course='.$course['code'].'&search_term='.$search_term.'&category_code='.$code,
         ['class' => 'btn btn-success btn-sm', 'title' => $title, 'aria-label' => $title]
     );

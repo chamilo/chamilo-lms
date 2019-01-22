@@ -30,7 +30,8 @@ $strings['ServerIsNotConfigured'] = "Videoconference server is not configured";
 $strings['XUsersOnLine'] = "%s user(s) online";
 
 $strings['host'] = 'BigBlueButton host';
-$strings['host_help'] = 'This is the name of the server where your BigBlueButton server is running. Might be localhost, an IP address (e.g. 192.168.13.54) or a domain name (e.g. my.video.com).';
+$strings['host_help'] = 'This is the name of the server where your BigBlueButton server is running. 
+Might be localhost, an IP address (e.g. http://192.168.13.54) or a domain name (e.g. http://my.video.com).';
 
 $strings['salt'] = 'BigBlueButton salt';
 $strings['salt_help'] = 'This is the security key of your BigBlueButton server, which will allow your server to authentify the Chamilo installation. Refer to the BigBlueButton documentation to locate it. Try bbb-conf --salt';
@@ -44,6 +45,8 @@ $strings['enable_global_conference'] = 'Enable global conference';
 $strings['enable_global_conference_per_user'] = 'Enable global conference per user';
 $strings['enable_conference_in_course_groups'] = 'Enable conference in course groups';
 $strings['enable_global_conference_link'] = 'Enable the link to the global conference in the homepage';
+
+$strings['disable_download_conference_link'] = 'Disable download conference';
 
 $strings['big_blue_button_record_and_store'] = 'Record and store sessions';
 $strings['bbb_enable_conference_in_groups'] = 'Allow conference in groups';

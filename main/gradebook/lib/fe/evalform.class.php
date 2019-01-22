@@ -20,7 +20,7 @@ class EvalForm extends FormValidator
     const TYPE_ALL_RESULTS_EDIT = 6;
     const TYPE_ADD_USERS_TO_EVAL = 7;
 
-    private $evaluation_object;
+    protected $evaluation_object;
     private $result_object;
     private $extra;
 

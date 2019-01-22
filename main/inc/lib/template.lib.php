@@ -139,6 +139,7 @@ class Template
 
         // Twig filters setup
         $filters = [
+            'var_dump',
             'get_plugin_lang',
             'get_lang',
             'api_get_path',
@@ -468,21 +469,20 @@ class Template
 
         $this->assign('show_toolbar', $show_toolbar);
 
-        //Only if course is available
-        $show_course_shortcut = null;
-        $show_course_navigation_menu = null;
-
+        // Only if course is available
+        $courseToolBar = '';
+        $show_course_navigation_menu = '';
         if (!empty($this->course_id) && $this->user_is_logged_in) {
             if (api_get_setting('show_toolshortcuts') != 'false') {
-                //Course toolbar
-                $show_course_shortcut = CourseHome::show_navigation_tool_shortcuts();
+                // Course toolbar
+                $courseToolBar = CourseHome::show_navigation_tool_shortcuts();
             }
             if (api_get_setting('show_navigation_menu') != 'false') {
-                //Course toolbar
+                // Course toolbar
                 $show_course_navigation_menu = CourseHome::show_navigation_menu();
             }
         }
-        $this->assign('show_course_shortcut', $show_course_shortcut);
+        $this->assign('show_course_shortcut', $courseToolBar);
         $this->assign('show_course_navigation_menu', $show_course_navigation_menu);
     }
 
@@ -716,7 +716,9 @@ class Template
 
         // Logo
         $logo = return_logo($this->theme);
+        $logoPdf = return_logo($this->theme, false);
         $this->assign('logo', $logo);
+        $this->assign('logo_pdf', $logoPdf);
         $this->assign('show_media_element', 1);
     }
 
@@ -1190,6 +1192,16 @@ class Template
             $html .= '<div>'.openid_form().'</div>';
         }
 
+        $pluginKeycloak = api_get_plugin_setting('keycloak', 'tool_enable') === 'true';
+        $plugin = null;
+        if ($pluginKeycloak) {
+            $pluginUrl = api_get_path(WEB_PLUGIN_PATH).'keycloak/start.php?sso';
+            $pluginUrl = Display::url('Keycloak', $pluginUrl, ['class' => 'btn btn-primary']);
+            $html .= '<div>'.$pluginUrl.'</div>';
+        }
+
+        $html .= '<div></div>';
+
         return $html;
     }
 
@@ -1486,7 +1498,6 @@ class Template
         $this->assign('prefetch', $prefetch);
         $this->assign('text_direction', api_get_text_direction());
         $this->assign('section_name', 'section-'.$this_section);
-
         $this->assignFavIcon(); //Set a 'favico' var for the template
         $this->setHelp();
 
@@ -1852,20 +1863,25 @@ class Template
                     $course = api_get_course_entity($courseId);
                     // @TODO: support right-to-left in title
                     $socialMeta .= '<meta property="og:title" content="'.$course->getTitle().' - '.$metaTitle.'" />'."\n";
+                    $socialMeta .= '<meta property="twitter:title" content="'.$course->getTitle().' - '.$metaTitle.'" />'."\n";
                     $socialMeta .= '<meta property="og:url" content="'.api_get_course_url($course->getCode()).'" />'."\n";
 
                     $metaDescription = api_get_setting('meta_description');
                     if (!empty($course->getDescription())) {
                         $socialMeta .= '<meta property="og:description" content="'.strip_tags($course->getDescription()).'" />'."\n";
+                        $socialMeta .= '<meta property="twitter:description" content="'.strip_tags($course->getDescription()).'" />'."\n";
                     } elseif (!empty($metaDescription)) {
                         $socialMeta .= '<meta property="og:description" content="'.$metaDescription.'" />'."\n";
+                        $socialMeta .= '<meta property="twitter:description" content="'.$metaDescription.'" />'."\n";
                     }
 
                     $picture = CourseManager::getPicturePath($course, true);
                     if (!empty($picture)) {
                         $socialMeta .= '<meta property="og:image" content="'.$picture.'" />'."\n";
+                        $socialMeta .= '<meta property="twitter:image" content="'.$picture.'" />'."\n";
+                        $socialMeta .= '<meta property="twitter:image:alt" content="'.$course->getTitle().' - '.$metaTitle.'" />'."\n";
                     } else {
-                        $socialMeta .= $this->getMetaPortalImagePath();
+                        $socialMeta .= $this->getMetaPortalImagePath($metaTitle);
                     }
                 } elseif ($sessionId !== 0) {
                     // If we are on a session "about" screen, publish info about the session
@@ -1873,6 +1889,7 @@ class Template
                     $session = $em->find('ChamiloCoreBundle:Session', $sessionId);
 
                     $socialMeta .= '<meta property="og:title" content="'.$session->getName().' - '.$metaTitle.'" />'."\n";
+                    $socialMeta .= '<meta property="twitter:title" content="'.$session->getName().' - '.$metaTitle.'" />'."\n";
                     $socialMeta .= '<meta property="og:url" content="'.api_get_path(WEB_PATH)."session/{$session->getId()}/about/".'" />'."\n";
 
                     $sessionValues = new ExtraFieldValue('session');
@@ -1882,19 +1899,23 @@ class Template
                     if (!empty($sessionImage) && is_file($sessionImageSysPath)) {
                         $sessionImagePath = api_get_path(WEB_UPLOAD_PATH).$sessionImage;
                         $socialMeta .= '<meta property="og:image" content="'.$sessionImagePath.'" />'."\n";
+                        $socialMeta .= '<meta property="twitter:image" content="'.$sessionImagePath.'" />'."\n";
+                        $socialMeta .= '<meta property="twitter:image:alt" content="'.$session->getName().' - '.$metaTitle.'" />'."\n";
                     } else {
-                        $socialMeta .= $this->getMetaPortalImagePath();
+                        $socialMeta .= $this->getMetaPortalImagePath($metaTitle);
                     }
                 } else {
                     // Otherwise (not a course nor a session, nor a user, nor a badge), publish portal info
                     $socialMeta .= '<meta property="og:title" content="'.$metaTitle.'" />'."\n";
+                    $socialMeta .= '<meta property="twitter:title" content="'.$metaTitle.'" />'."\n";
                     $socialMeta .= '<meta property="og:url" content="'.api_get_path(WEB_PATH).'" />'."\n";
 
                     $metaDescription = api_get_setting('meta_description');
                     if (!empty($metaDescription)) {
                         $socialMeta .= '<meta property="og:description" content="'.$metaDescription.'" />'."\n";
+                        $socialMeta .= '<meta property="twitter:description" content="'.$metaDescription.'" />'."\n";
                     }
-                    $socialMeta .= $this->getMetaPortalImagePath();
+                    $socialMeta .= $this->getMetaPortalImagePath($metaTitle);
                 }
             }
         }
@@ -1907,9 +1928,11 @@ class Template
     /**
      * Get platform meta image tag (check meta_image_path setting, then use the logo).
      *
+     * @param string $imageAlt The alt attribute for the image
+     *
      * @return string The meta image HTML tag, or empty
      */
-    private function getMetaPortalImagePath()
+    private function getMetaPortalImagePath($imageAlt = '')
     {
         // Load portal meta image if defined
         $metaImage = api_get_setting('meta_image_path');
@@ -1919,11 +1942,15 @@ class Template
         if (!empty($metaImage)) {
             if (is_file($metaImageSysPath)) {
                 $portalImageMeta = '<meta property="og:image" content="'.$metaImageWebPath.'" />'."\n";
+                $portalImageMeta .= '<meta property="twitter:image" content="'.$metaImageWebPath.'" />'."\n";
+                $portalImageMeta .= '<meta property="twitter:image:alt" content="'.$imageAlt.'" />'."\n";
             }
         } else {
             $logo = ChamiloApi::getPlatformLogoPath($this->theme);
             if (!empty($logo)) {
                 $portalImageMeta = '<meta property="og:image" content="'.$logo.'" />'."\n";
+                $portalImageMeta .= '<meta property="twitter:image" content="'.$logo.'" />'."\n";
+                $portalImageMeta .= '<meta property="twitter:image:alt" content="'.$imageAlt.'" />'."\n";
             }
         }
 

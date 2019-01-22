@@ -130,7 +130,7 @@ class SortableTable extends HTML_Table
             $table_id = $table_name.uniqid();
         }
         $this->table_id = $table_id;
-        parent::__construct(['class' => 'data_table table', 'id' => $table_id]);
+        parent::__construct(['class' => 'table table-bordered data_table', 'id' => $table_id]);
         $this->table_name = $table_name;
         $this->additional_parameters = [];
         $this->param_prefix = $table_name.'_';
@@ -1083,7 +1083,11 @@ class SortableTableFromArray extends SortableTable
         if (isset($this->total_number_of_items) && !empty($this->total_number_of_items)) {
             return $this->total_number_of_items;
         } else {
-            return count($this->table_data);
+            if (!empty($this->table_data)) {
+                return count($this->table_data);
+            }
+
+            return 0;
         }
     }
 }

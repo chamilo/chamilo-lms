@@ -153,6 +153,5 @@ class HTML_QuickForm_Renderer
     function finishGroup(&$group)
     {
         return;
-    } // end func finishGroup
-} // end class HTML_QuickForm_Renderer
-?>
+    }
+}

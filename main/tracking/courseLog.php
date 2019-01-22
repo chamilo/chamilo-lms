@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use ChamiloSession as Session;
 
 /**
@@ -8,15 +9,20 @@ use ChamiloSession as Session;
  */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_TRACKING;
+$courseId = api_get_course_id();
+$courseInfo = api_get_course_info($courseId);
+//keep course_code form as it is loaded (global) by the table's get_user_data
+$course_code = $courseCode = $courseInfo['code'];
+$session_id = $sessionId = api_get_session_id();
 
-$courseInfo = api_get_course_info(api_get_course_id());
-$courseCode = $courseInfo['code'];
 $from_myspace = false;
 $from = isset($_GET['from']) ? $_GET['from'] : null;
 
 // Starting the output buffering when we are exporting the information.
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
-$session_id = isset($_REQUEST['id_session']) ? (int) $_REQUEST['id_session'] : 0;
+
+$htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
+$htmlHeadXtra[] = ' ';
 
 $this_section = SECTION_COURSES;
 if ($from == 'myspace') {
@@ -29,7 +35,6 @@ $is_allowedToTrack = Tracking::isAllowToTrack($session_id);
 
 if (!$is_allowedToTrack) {
     api_not_allowed(true);
-    exit;
 }
 
 // If the user is a HR director (drh)
@@ -65,9 +70,8 @@ if (api_is_drh()) {
         // then check if he has also been given access to the corresponding courses
         $coursesFollowedList = CourseManager::get_courses_followed_by_drh(api_get_user_id());
         $coursesFollowedList = array_keys($coursesFollowedList);
-        if (!in_array(api_get_course_id(), $coursesFollowedList)) {
+        if (!in_array($courseId, $coursesFollowedList)) {
             api_not_allowed(true);
-            exit;
         }
     }
 }
@@ -86,6 +90,7 @@ if (!empty($columnsToHideFromSetting) && isset($columnsToHideFromSetting['column
 $columnsToHide = json_encode($columnsToHide);
 
 $csv_content = [];
+
 // Scripts for reporting array hide/show columns
 $js = "<script>
     // hide column and display the button to unhide it
@@ -136,8 +141,6 @@ $TABLECOURSE = Database::get_main_table(TABLE_MAIN_COURSE);
 $table_user = Database::get_main_table(TABLE_MAIN_USER);
 $TABLEQUIZ = Database::get_course_table(TABLE_QUIZ_TEST);
 
-$sessionId = api_get_session_id();
-
 // Breadcrumbs.
 if (isset($_GET['origin']) && $_GET['origin'] == 'resume_session') {
     $interbreadcrumb[] = [
@@ -157,22 +160,20 @@ if (isset($_GET['origin']) && $_GET['origin'] == 'resume_session') {
 $view = isset($_REQUEST['view']) ? $_REQUEST['view'] : '';
 $nameTools = get_lang('Tracking');
 
+//Template Tracking
+$tpl = new Template($nameTools);
+
 // getting all the students of the course
 if (empty($session_id)) {
     // Registered students in a course outside session.
-    $a_students = CourseManager::get_student_list_from_course_code(
-        api_get_course_id()
-    );
+    $a_students = CourseManager::get_student_list_from_course_code($courseId);
 } else {
     // Registered students in session.
-    $a_students = CourseManager::get_student_list_from_course_code(
-        api_get_course_id(),
-        true,
-        $sessionId
-    );
+    $a_students = CourseManager::get_student_list_from_course_code($courseId, true, $sessionId);
 }
 
 $nbStudents = count($a_students);
+$user_ids = array_keys($a_students);
 $extra_info = [];
 $userProfileInfo = [];
 // Getting all the additional information of an additional profile field.
@@ -243,6 +244,7 @@ echo Display::toolbarAction(
 );
 
 $course_name = get_lang('Course').' '.$courseInfo['name'];
+
 if ($session_id) {
     $titleSession = Display::return_icon(
         'session.png',
@@ -329,6 +331,91 @@ if ($showReporting) {
         $html .= '</ul>';
     }
 }
+//Load Orden
+$trackingColumn = isset($_GET['users_tracking_column']) ? $_GET['users_tracking_column'] : null;
+$trackingDirection = isset($_GET['users_tracking_direction']) ? $_GET['users_tracking_direction'] : null;
+
+// Show the charts part only if there are students subscribed to this course/session
+if ($nbStudents > 0) {
+    $usersTracking = TrackingCourseLog::get_user_data(null, $nbStudents, $trackingColumn, $trackingDirection, false);
+    $numberStudentsCompletedLP = 0;
+    $averageStudentsTestScore = 0;
+    $scoresDistribution = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+    $userScoreList = [];
+    $listStudentIds = [];
+    $timeStudent = [];
+    $certificateCount = 0;
+    $category = Category::load(
+        null,
+        null,
+        $course_code,
+        null,
+        null,
+        $session_id
+    );
+
+    foreach ($usersTracking as $userTracking) {
+        $userInfo = api_get_user_info_from_username($userTracking[3]);
+        if (empty($userInfo)) {
+            continue;
+        }
+        $userId = $userInfo['user_id'];
+        if ($userTracking[5] === '100%') {
+            $numberStudentsCompletedLP++;
+        }
+        $averageStudentTestScore = substr($userTracking[7], 0, -1);
+        $averageStudentsTestScore += $averageStudentTestScore;
+
+        if ($averageStudentTestScore === '100') {
+            $reducedAverage = 9;
+        } else {
+            $reducedAverage = floor($averageStudentTestScore / 10);
+        }
+        if (isset($scoresDistribution[$reducedAverage])) {
+            $scoresDistribution[$reducedAverage]++;
+        }
+        $scoreStudent = substr($userTracking[5], 0, -1) + substr($userTracking[7], 0, -1);
+        list($hours, $minutes, $seconds) = preg_split('/:/', $userTracking[4]);
+        $minutes = round((3600 * $hours + 60 * $minutes + $seconds) / 60);
+
+        $certificate = false;
+        if (isset($category[0]) && $category[0]->is_certificate_available($userId)) {
+            $certificate = true;
+            $certificateCount++;
+        }
+
+        $listStudent = [
+            'id' => $userId,
+            'fullname' => $userInfo['complete_name'],
+            'score' => floor($scoreStudent / 2),
+            'total_time' => $minutes,
+            'avatar' => $userInfo['avatar'],
+            'certicate' => $certificate,
+        ];
+        $listStudentIds[] = $userId;
+        $userScoreList[] = $listStudent;
+    }
+
+    uasort($userScoreList, 'sort_by_order');
+    $averageStudentsTestScore = round($averageStudentsTestScore / $nbStudents);
+
+    $colors = ChamiloApi::getColorPalette(true, true, 10);
+
+    $tpl->assign('chart_colors', json_encode($colors));
+    $tpl->assign('certificate_count', $certificateCount);
+    $tpl->assign('score_distribution', json_encode($scoresDistribution));
+    $tpl->assign('json_time_student', json_encode($userScoreList));
+    $tpl->assign('students_test_score', $averageStudentsTestScore);
+    $tpl->assign('students_completed_lp', $numberStudentsCompletedLP);
+    $tpl->assign('number_students', $nbStudents);
+    $tpl->assign('top_students', $userScoreList);
+
+    $trackingSummaryLayout = $tpl->get_template('tracking/tracking_course_log.tpl');
+    $content = $tpl->fetch($trackingSummaryLayout);
+
+    echo $content;
+}
 
 $html .= Display::page_subheader2(get_lang('StudentList'));
 
@@ -386,12 +473,13 @@ if (count($a_students) > 0) {
 
     $all_datas = [];
     $course_code = $_course['id'];
-    $user_ids = array_keys($a_students);
 
     $table = new SortableTable(
         'users_tracking',
         ['TrackingCourseLog', 'get_number_of_users'],
-        ['TrackingCourseLog', 'get_user_data'],
+        function () use ($usersTracking) {
+            return $usersTracking;
+        },
         1
     );
 
@@ -400,6 +488,7 @@ if (count($a_students) > 0) {
     $parameters['from'] = isset($_GET['myspace']) ? Security::remove_XSS($_GET['myspace']) : null;
 
     $table->set_additional_parameters($parameters);
+
     $headers = [];
     // tab of header texts
     $table->set_header(0, get_lang('OfficialCode'), true);
@@ -418,21 +507,50 @@ if (count($a_students) > 0) {
     $table->set_header(3, get_lang('Login'), false);
     $headers['login'] = get_lang('Login');
 
-    $table->set_header(4, get_lang('TrainingTime').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('CourseTimeInfo'), ['align' => 'absmiddle', 'hspace' => '3px']), false, ['style' => 'width:110px;']);
+    $table->set_header(
+        4,
+        get_lang('TrainingTime').'&nbsp;'.
+        Display::return_icon('info3.gif', get_lang('CourseTimeInfo'), ['align' => 'absmiddle', 'hspace' => '3px']),
+        false,
+        ['style' => 'width:110px;']
+    );
     $headers['training_time'] = get_lang('TrainingTime');
     $table->set_header(5, get_lang('CourseProgress').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('ScormAndLPProgressTotalAverage'), ['align' => 'absmiddle', 'hspace' => '3px']), false, ['style' => 'width:110px;']);
+        Display::return_icon(
+            'info3.gif',
+            get_lang('ScormAndLPProgressTotalAverage'),
+            ['align' => 'absmiddle', 'hspace' => '3px']
+        ),
+        false,
+        ['style' => 'width:110px;']
+    );
     $headers['course_progress'] = get_lang('CourseProgress');
 
     $table->set_header(6, get_lang('ExerciseProgress').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('ExerciseProgressInfo'), ['align' => 'absmiddle', 'hspace' => '3px']), false, ['style' => 'width:110px;']);
+        Display::return_icon(
+            'info3.gif',
+            get_lang('ExerciseProgressInfo'),
+            ['align' => 'absmiddle', 'hspace' => '3px']
+        ),
+        false,
+        ['style' => 'width:110px;']
+    );
     $headers['exercise_progress'] = get_lang('ExerciseProgress');
     $table->set_header(7, get_lang('ExerciseAverage').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('ExerciseAverageInfo'), ['align' => 'absmiddle', 'hspace' => '3px']), false, ['style' => 'width:110px;']);
+        Display::return_icon('info3.gif', get_lang('ExerciseAverageInfo'), ['align' => 'absmiddle', 'hspace' => '3px']),
+        false,
+        ['style' => 'width:110px;']
+    );
     $headers['exercise_average'] = get_lang('ExerciseAverage');
     $table->set_header(8, get_lang('Score').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), ['align' => 'absmiddle', 'hspace' => '3px']), false, ['style' => 'width:110px;']);
+        Display::return_icon(
+            'info3.gif',
+            get_lang('ScormAndLPTestTotalAverage'),
+            ['align' => 'absmiddle', 'hspace' => '3px']
+        ),
+        false,
+        ['style' => 'width:110px;']
+    );
     $headers['score'] = get_lang('Score');
     $table->set_header(9, get_lang('Student_publication'), false);
     $headers['student_publication'] = get_lang('Student_publication');
@@ -543,19 +661,26 @@ if ($export_csv) {
     }
     ob_end_clean();
 
+    $csvContentInSession = Session::read('csv_content');
+
     // Adding headers before the content.
-    array_unshift($csv_content, $csv_headers);
+    array_unshift($csvContentInSession, $csv_headers);
 
     if ($session_id) {
         $sessionData = [];
         $sessionInfo = api_get_session_info($session_id);
         $sessionDates = SessionManager::parseSessionDates($sessionInfo);
 
-        array_unshift($csv_content, [get_lang('Date'), $sessionDates['access']]);
-        array_unshift($csv_content, [get_lang('SessionName'), $sessionInfo['name']]);
+        array_unshift($csvContentInSession, [get_lang('Date'), $sessionDates['access']]);
+        array_unshift($csvContentInSession, [get_lang('SessionName'), $sessionInfo['name']]);
     }
 
-    Export::arrayToCsv($csv_content, 'reporting_student_list');
+    Export::arrayToCsv($csvContentInSession, 'reporting_student_list');
     exit;
 }
 Display::display_footer();
+
+function sort_by_order($a, $b)
+{
+    return $a['score'] <= $b['score'];
+}

@@ -45,7 +45,6 @@ if (!api_is_allowed_to_edit(false, true) || $isDrhOfCourse) {
     // Show error message if the survey can be seen only by tutors
     if ($survey_data['visible_results'] == SURVEY_VISIBLE_TUTOR) {
         api_not_allowed(true);
-        exit;
     }
 
     Display::display_header(get_lang('ToolSurvey'));
@@ -63,21 +62,13 @@ if (!empty($exportReport) && !empty($format)) {
     switch ($format) {
         case 'xls':
             $filename = 'survey_results_'.$survey_id.'.xlsx';
-            $data = SurveyUtil::export_complete_report_xls(
-                $survey_data,
-                $filename,
-                $userId
-            );
+            $data = SurveyUtil::export_complete_report_xls($survey_data, $filename, $userId);
             exit;
             break;
         case 'csv':
         default:
-            $data = SurveyUtil::export_complete_report(
-                $survey_data,
-                $userId
-            );
+            $data = SurveyUtil::export_complete_report($survey_data, $userId);
             $filename = 'survey_results_'.$survey_id.'.csv';
-
             header('Content-type: application/octet-stream');
             header('Content-Type: application/force-download');
 
@@ -125,7 +116,7 @@ if ($action == 'overview') {
     ];
     switch ($action) {
         case 'questionreport':
-            $singlePage = isset($_GET['single_page']) ? intval($_GET['single_page']) : 0;
+            $singlePage = isset($_GET['single_page']) ? (int) $_GET['single_page'] : 0;
             $tool_name = $singlePage ? get_lang('QuestionsOverallReport') : get_lang('DetailedReportByQuestion');
             break;
         case 'userreport':

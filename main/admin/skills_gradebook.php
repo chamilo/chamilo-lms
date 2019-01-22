@@ -95,13 +95,19 @@ $extra_params['autowidth'] = 'true';
 //height auto
 $extra_params['height'] = 'auto';
 
+$iconAdd = Display::return_icon('add.png', addslashes(get_lang('AddSkill')));
+$iconAddNa = Display::return_icon(
+    'add_na.png',
+    addslashes(get_lang('YourGradebookFirstNeedsACertificateInOrderToBeLinkedToASkill'))
+);
+
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
     //certificates
     if (rowObject[4] == 1) {
-        return \'<a href="?action=add_skill&id=\'+options.rowId+\'">'.Display::return_icon('add.png', get_lang('AddSkill'), '', ICON_SIZE_SMALL).'</a>'.'\';
+        return \'<a href="?action=add_skill&id=\'+options.rowId+\'">'.$iconAdd.'</a>'.'\';
     } else {
-        return \''.Display::return_icon('add_na.png', get_lang('YourGradebookFirstNeedsACertificateInOrderToBeLinkedToASkill'), '', ICON_SIZE_SMALL).''.'\';
+        return \''.$iconAddNa.'\';
     }
 }';
 ?>

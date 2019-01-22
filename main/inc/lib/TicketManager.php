@@ -113,7 +113,7 @@ class TicketManager
     public static function getCategory($id)
     {
         $table = Database::get_main_table(TABLE_TICKET_CATEGORY);
-        $id = intval($id);
+        $id = (int) $id;
         $sql = "SELECT id, name, description, total_tickets
                 FROM $table WHERE id = $id";
 
@@ -146,7 +146,7 @@ class TicketManager
     public static function updateCategory($id, $params)
     {
         $table = Database::get_main_table(TABLE_TICKET_CATEGORY);
-        $id = intval($id);
+        $id = (int) $id;
         Database::update($table, $params, ['id = ?' => $id]);
     }
 
@@ -314,10 +314,10 @@ class TicketManager
         $currentUserId = api_get_user_id();
         $currentUserInfo = api_get_user_info();
         $now = api_get_utc_datetime();
-        $course_id = intval($course_id);
-        $category_id = intval($category_id);
-        $project_id = intval($project_id);
-        $priority = empty($priority) ? self::PRIORITY_NORMAL : $priority;
+        $course_id = (int) $course_id;
+        $category_id = (int) $category_id;
+        $project_id = (int) $project_id;
+        $priority = empty($priority) ? self::PRIORITY_NORMAL : (int) $priority;
 
         if ($status === '') {
             $status = self::STATUS_NEW;
@@ -457,11 +457,11 @@ class TicketManager
                         </tr>
                         <tr>
                             <td width="100px"><b>'.get_lang('Title').'</b></td>
-                            <td width="400px">'.$subject.'</td>
+                            <td width="400px">'.Security::remove_XSS($subject).'</td>
                         </tr>
                         <tr>
                             <td width="100px"><b>'.get_lang('Description').'</b></td>
-                            <td width="400px">'.$content.'</td>
+                            <td width="400px">'.Security::remove_XSS($content).'</td>
                         </tr>
                     </table>';
 
@@ -655,7 +655,7 @@ class TicketManager
             'ticket_id' => $ticketId,
             'subject' => $subject,
             'message' => $content,
-            'ip_address' => $_SERVER['REMOTE_ADDR'],
+            'ip_address' => api_get_real_ip(),
             'sys_insert_user_id' => $userId,
             'sys_insert_datetime' => $now,
             'sys_lastedit_user_id' => $userId,
@@ -667,12 +667,12 @@ class TicketManager
             // update_total_message
             $sql = "UPDATE $table_support_tickets
                     SET 
-                        sys_lastedit_user_id ='$userId',
-                        sys_lastedit_datetime ='$now',
+                        sys_lastedit_user_id = $userId,
+                        sys_lastedit_datetime = '$now',
                         total_messages = (
                             SELECT COUNT(*) as total_messages
                             FROM $table_support_messages
-                            WHERE ticket_id ='$ticketId'
+                            WHERE ticket_id = $ticketId
                         )
                     WHERE id = $ticketId ";
             Database::query($sql);
@@ -966,7 +966,7 @@ class TicketManager
 
             if ($isAdmin) {
                 $ticket = [
-                    $icon.' '.$row['subject'],
+                    $icon.' '.Security::remove_XSS($row['subject']),
                     $row['status_name'],
                     $row['start_date'],
                     $row['sys_lastedit_datetime'],
@@ -977,7 +977,7 @@ class TicketManager
                 ];
             } else {
                 $ticket = [
-                    $icon.' '.$row['subject'],
+                    $icon.' '.Security::remove_XSS($row['subject']),
                     $row['status_name'],
                     $row['start_date'],
                     $row['sys_lastedit_datetime'],
@@ -1409,9 +1409,9 @@ class TicketManager
         $now = api_get_utc_datetime();
         $table = Database::get_main_table(TABLE_TICKET_TICKET);
         $newParams = [
-            'priority_id' => isset($params['priority_id']) ? $params['priority_id'] : '',
-            'status_id' => isset($params['status_id']) ? $params['status_id'] : '',
-            'sys_lastedit_user_id' => $userId,
+            'priority_id' => isset($params['priority_id']) ? (int) $params['priority_id'] : '',
+            'status_id' => isset($params['status_id']) ? (int) $params['status_id'] : '',
+            'sys_lastedit_user_id' => (int) $userId,
             'sys_lastedit_datetime' => $now,
         ];
         Database::update($table, $newParams, ['id = ? ' => $ticketId]);
@@ -1503,14 +1503,14 @@ class TicketManager
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $now = api_get_utc_datetime();
 
-        $ticketId = intval($ticketId);
-        $userId = intval($userId);
+        $ticketId = (int) $ticketId;
+        $userId = (int) $userId;
 
         $sql = "UPDATE $table_support_tickets SET
                   priority_id = '".self::PRIORITY_HIGH."',
-                  sys_lastedit_user_id ='$userId',
-                  sys_lastedit_datetime ='$now'
-                WHERE id = '$ticketId'";
+                  sys_lastedit_user_id = $userId,
+                  sys_lastedit_datetime = '$now'
+                WHERE id = $ticketId";
         Database::query($sql);
     }
 

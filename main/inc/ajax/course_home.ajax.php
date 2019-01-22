@@ -139,33 +139,33 @@ switch ($action) {
         require_once __DIR__.'/../global.inc.php';
 
         // Get the name of the database course.
-        $tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
         $course_info = api_get_course_info($_GET['code']);
-
-        if (api_get_setting('course_catalog_hide_private') === 'true' &&
-            $course_info['visibility'] == COURSE_VISIBILITY_REGISTERED
-        ) {
-            echo get_lang('PrivateAccess');
-            break;
-        }
-
-        $sql = "SELECT * FROM $tbl_course_description
-                WHERE c_id = ".$course_info['real_id']." AND session_id = 0
-                ORDER BY id";
-        $result = Database::query($sql);
-        if (Database::num_rows($result) > 0) {
-            while ($description = Database::fetch_object($result)) {
-                $descriptions[$description->id] = $description;
+        $content = get_lang('NoDescription');
+        if (!empty($course_info)) {
+            if (api_get_setting('course_catalog_hide_private') === 'true' &&
+                $course_info['visibility'] == COURSE_VISIBILITY_REGISTERED
+            ) {
+                echo get_lang('PrivateAccess');
+                break;
             }
-            // Function that displays the details of the course description in html.
-            echo CourseManager::get_details_course_description_html(
-                $descriptions,
-                api_get_system_encoding(),
-                false
-            );
-        } else {
-            echo get_lang('NoDescription');
+            $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
+            $sql = "SELECT * FROM $table
+                    WHERE c_id = ".$course_info['real_id']." AND session_id = 0
+                    ORDER BY id";
+            $result = Database::query($sql);
+            if (Database::num_rows($result) > 0) {
+                while ($description = Database::fetch_object($result)) {
+                    $descriptions[$description->id] = $description;
+                }
+                // Function that displays the details of the course description in html.
+                $content = CourseManager::get_details_course_description_html(
+                    $descriptions,
+                    api_get_system_encoding(),
+                    false
+                );
+            }
         }
+        echo $content;
         break;
     case 'session_courses_lp_default':
         /**
@@ -584,7 +584,6 @@ switch ($action) {
         $courseInfo = api_get_course_info_by_id($courseId);
         $courseInfo['id_session'] = $sessionId;
         $courseInfo['status'] = $status;
-
         $id = 'notification_'.$courseId.'_'.$sessionId.'_'.$status;
 
         $notificationId = Session::read($id);

@@ -50,7 +50,7 @@ $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
 $TBL_TRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
 // document path
-$documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path']."/document";
+$documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
 // picture path
 $picturePath = $documentPath.'/images';
 // audio path
@@ -62,10 +62,9 @@ $exercisePath = api_get_self();
 $exfile = explode('/', $exercisePath);
 $exfile = strtolower($exfile[sizeof($exfile) - 1]);
 $exercisePath = substr($exercisePath, 0, strpos($exercisePath, $exfile));
-$exercisePath = $exercisePath."exercise.php";
+$exercisePath = $exercisePath.'exercise.php';
 
 // Clear the exercise session
-
 Session::erase('objExercise');
 Session::erase('objQuestion');
 Session::erase('objAnswer');
@@ -82,9 +81,9 @@ $choice = isset($_REQUEST['choice']) ? Security::remove_XSS($_REQUEST['choice'])
 $hpchoice = isset($_REQUEST['hpchoice']) ? Security::remove_XSS($_REQUEST['hpchoice']) : null;
 $exerciseId = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : null;
 $file = isset($_REQUEST['file']) ? Database::escape_string($_REQUEST['file']) : null;
-$learnpath_id = isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpath_id']) : null;
-$learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : null;
-$page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : null;
+$learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : null;
+$learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : null;
+$page = isset($_REQUEST['page']) ? (int) $_REQUEST['page'] : null;
 
 if ($page < 0) {
     $page = 1;
@@ -106,7 +105,7 @@ if (api_get_course_setting('enable_exercise_auto_launch') == 1 &&
 
 $nameTools = get_lang('Exercises');
 $errorXmlExport = null;
-if ($is_allowedToEdit && !empty($choice) && $choice == 'exportqti2') {
+if ($is_allowedToEdit && !empty($choice) && $choice === 'exportqti2') {
     require_once api_get_path(SYS_CODE_PATH).'exercise/export/qti2/qti2_export.php';
 
     $export = export_exercise_to_qti($exerciseId, true);
@@ -142,16 +141,24 @@ if ($is_allowedToEdit && !empty($choice) && $choice == 'exportqti2') {
 if ($origin != 'learnpath') {
     //so we are not in learnpath tool
     Display :: display_header($nameTools, get_lang('Exercise'));
-    if (isset($_GET['message'])) {
-        if (in_array($_GET['message'], ['ExerciseEdited'])) {
-            echo Display::return_message(get_lang($_GET['message']), 'confirmation');
-        }
+    if (isset($_GET['message']) && in_array($_GET['message'], ['ExerciseEdited'])) {
+        echo Display::return_message(get_lang('ExerciseEdited'), 'confirmation');
     }
 } else {
     Display::display_reduced_header();
 }
 
 Event::event_access_tool(TOOL_QUIZ);
+
+$logInfo = [
+    'tool' => TOOL_QUIZ,
+    'tool_id' => (int) $exerciseId,
+    'tool_id_detail' => 0,
+    'action' => isset($_REQUEST['learnpath_id']) ? 'learnpath_id' : '',
+    'action_details' => isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : '',
+    'current_id' => 0,
+];
+Event::registerLog($logInfo);
 
 // Tool introduction
 Display::display_introduction_section(TOOL_QUIZ);
@@ -300,7 +307,7 @@ if ($is_allowedToEdit) {
                         );
                         break;
                     case 'clean_results':
-                        //clean student results
+                        // Clean student results
                         if ($exercise_action_locked == false) {
                             $quantity_results_deleted = $objExerciseTmp->cleanResults(true);
                             $title = $objExerciseTmp->selectTitle();
@@ -362,7 +369,7 @@ if ($is_allowedToEdit) {
             case 'enable': // enables an exercise
                 $newVisibilityStatus = "1"; //"visible"
                 $query = "SELECT id FROM $TBL_DOCUMENT
-                          WHERE c_id = $courseId AND path='".Database :: escape_string($file)."'";
+                          WHERE c_id = $courseId AND path='".Database::escape_string($file)."'";
                 $res = Database::query($query);
                 $row = Database :: fetch_array($res, 'ASSOC');
                 api_item_property_update(
@@ -376,9 +383,9 @@ if ($is_allowedToEdit) {
 
                 break;
             case 'disable': // disables an exercise
-                $newVisibilityStatus = "0"; //"invisible"
+                $newVisibilityStatus = '0'; //"invisible"
                 $query = "SELECT id FROM $TBL_DOCUMENT
-                          WHERE c_id = $courseId AND path='".Database :: escape_string($file)."'";
+                          WHERE c_id = $courseId AND path='".Database::escape_string($file)."'";
                 $res = Database::query($query);
                 $row = Database :: fetch_array($res, 'ASSOC');
                 api_item_property_update(
@@ -447,20 +454,21 @@ if ($is_allowedToEdit) {
     $sql = "SELECT * FROM $TBL_DOCUMENT
             WHERE
                 c_id = $courseId AND
-                path LIKE '".Database :: escape_string($uploadPath.'/%/%')."'";
+                path LIKE '".Database::escape_string($uploadPath.'/%/%')."'";
     $res = Database::query($sql);
     $hp_count = Database :: num_rows($res);
 } else {
-    $sql = "SELECT * FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
-            WHERE
-                d.id = ip.ref AND
+    $sql = "SELECT * FROM $TBL_DOCUMENT d 
+            INNER JOIN $TBL_ITEM_PROPERTY ip
+            ON (d.id = ip.ref AND d.c_id = ip.c_id) 
+            WHERE                
                 ip.tool = '".TOOL_DOCUMENT."' AND
-                d.path LIKE '".Database :: escape_string($uploadPath.'/%/%')."' AND
+                d.path LIKE '".Database::escape_string($uploadPath.'/%/%')."' AND
                 ip.visibility ='1' AND
-                d.c_id      = ".$courseId." AND
-                ip.c_id     = ".$courseId;
+                d.c_id = $courseId AND
+                ip.c_id  = $courseId";
     $res = Database::query($sql);
-    $hp_count = Database :: num_rows($res);
+    $hp_count = Database::num_rows($res);
 }
 
 $total = $total_exercises + $hp_count;
@@ -527,7 +535,6 @@ if ($total > $limit) {
 }
 
 $i = 1;
-
 $online_icon = Display::return_icon(
     'online.png',
     get_lang('Visible'),
@@ -541,8 +548,7 @@ $offline_icon = Display::return_icon(
 
 $exerciseList = [];
 $list_ordered = null;
-
-while ($row = Database :: fetch_array($result, 'ASSOC')) {
+while ($row = Database::fetch_array($result, 'ASSOC')) {
     $exerciseList[$row['iid']] = $row;
 }
 
@@ -966,9 +972,9 @@ if (!empty($exerciseList)) {
                             $my_exercise_id,
                             $random_number_of_question
                         );
-                        $number_of_questions = $nbQuestionsTotal." ";
-                        $number_of_questions .= ($nbQuestionsTotal > 1) ? get_lang("QuestionsLowerCase") : get_lang("QuestionLowerCase");
-                        $number_of_questions .= " - ";
+                        $number_of_questions = $nbQuestionsTotal.' ';
+                        $number_of_questions .= ($nbQuestionsTotal > 1) ? get_lang('QuestionsLowerCase') : get_lang('QuestionLowerCase');
+                        $number_of_questions .= ' - ';
                         $number_of_questions .= min(TestCategory::getNumberMaxQuestionByCat($my_exercise_id), $random_number_of_question).' '.get_lang('QuestionByCategory');
                     } else {
                         $random_label = ' ('.get_lang('Random').') ';
@@ -981,10 +987,6 @@ if (!empty($exerciseList)) {
                 } else {
                     $number_of_questions = $rowi;
                 }
-
-                //Attempts
-                //$attempts = ExerciseLib::get_count_exam_results($row['id']).' '.get_lang('Attempts');
-                //$item .=  Display::tag('td',$attempts);
                 $item .= Display::tag('td', $number_of_questions);
             } else {
                 // Student only.
@@ -1064,10 +1066,18 @@ if (!empty($exerciseList)) {
                             $start_time = api_strtotime($row['start_time'], 'UTC');
                             $end_time = api_strtotime($row['end_time'], 'UTC');
                             if ($today < $start_time) {
-                                $attempt_text = sprintf(get_lang('ExerciseWillBeActivatedFromXToY'), api_convert_and_format_date($row['start_time']), api_convert_and_format_date($row['end_time']));
+                                $attempt_text = sprintf(
+                                    get_lang('ExerciseWillBeActivatedFromXToY'),
+                                    api_convert_and_format_date($row['start_time']),
+                                    api_convert_and_format_date($row['end_time'])
+                                );
                             } else {
                                 if ($today > $end_time) {
-                                    $attempt_text = sprintf(get_lang('ExerciseWasActivatedFromXToY'), api_convert_and_format_date($row['start_time']), api_convert_and_format_date($row['end_time']));
+                                    $attempt_text = sprintf(
+                                        get_lang('ExerciseWasActivatedFromXToY'),
+                                        api_convert_and_format_date($row['start_time']),
+                                        api_convert_and_format_date($row['end_time'])
+                                    );
                                 }
                             }
                         } else {
@@ -1101,7 +1111,6 @@ if (!empty($exerciseList)) {
                             $attempt_text = get_lang('NotAttempted');
                         }
                     } else {
-                        //$attempt_text = get_lang('CantShowResults');
                         $attempt_text = '-';
                     }
                 }
@@ -1177,7 +1186,6 @@ if ($is_allowedToEdit) {
 }
 
 $result = Database::query($sql);
-
 while ($row = Database :: fetch_array($result, 'ASSOC')) {
     $attribute['path'][] = $row['path'];
     $attribute['visibility'][] = $row['visibility'];
@@ -1212,6 +1220,7 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
                     ),
                 ])
             );
+
             $item .= Display::tag('td', '-');
 
             $actions = Display::url(
@@ -1349,5 +1358,5 @@ if (empty($exerciseList) && $hotpotatoes_exist == false) {
 }
 
 if ($origin != 'learnpath') { //so we are not in learnpath tool
-    Display :: display_footer();
+    Display::display_footer();
 }

@@ -22,6 +22,17 @@ if (api_get_setting('allow_message_tool') !== 'true') {
     api_not_allowed(true);
 }
 
+$logInfo = [
+    'tool' => 'Messages',
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => 'new_message',
+    'action_details' => isset($_GET['re_id']) ? 're_id' : '',
+    'current_id' => isset($_GET['re_id']) ? (int) $_GET['re_id'] : 0,
+    'info' => '',
+];
+Event::registerLog($logInfo);
+
 $allowSocial = api_get_setting('allow_social_tool') == 'true';
 $nameTools = api_xml_http_response_encode(get_lang('Messages'));
 
@@ -175,7 +186,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
 
     if (isset($_GET['re_id'])) {
         $message_reply_info = MessageManager::get_message_by_id($_GET['re_id']);
-        $default['title'] = get_lang('MailSubjectReplyShort').' '.$message_reply_info['title'];
+        $default['title'] = get_lang('MailSubjectReplyShort').' '.Security::remove_XSS($message_reply_info['title']);
         $form->addHidden('re_id', (int) $_GET['re_id']);
         $form->addHidden('save_form', 'save_form');
 
@@ -196,14 +207,14 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
             $fileListToString = !empty($attachments) ? implode('<br />', $attachments) : '';
             $form->addLabel('', $fileListToString);
         }
-        $default['title'] = '['.get_lang('MailSubjectForwardShort').": ".$message_reply_info['title'].']';
+        $default['title'] = '['.get_lang('MailSubjectForwardShort').": ".Security::remove_XSS($message_reply_info['title']).']';
         $form->addHidden('forward_id', $forwardId);
         $form->addHidden('save_form', 'save_form');
         $receiverInfo = api_get_user_info($message_reply_info['user_receiver_id']);
 
         $forwardMessage = '---------- '.get_lang('ForwardedMessage').' ---------'.'<br />';
         $forwardMessage .= get_lang('Date').': '.api_get_local_time($message_reply_info['send_date']).'<br />';
-        $forwardMessage .= get_lang('Subject').': '.$message_reply_info['title'].'<br />';
+        $forwardMessage .= get_lang('Subject').': '.Security::remove_XSS($message_reply_info['title']).'<br />';
         $forwardMessage .= get_lang('To').': '.$receiverInfo['complete_name'].' - '.$receiverInfo['email'].' <br />';
         $default['content'] = '<p><br/></p>'.$forwardMessage.'<br />'.Security::filter_terms($message_reply_info['content']);
     }

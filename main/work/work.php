@@ -120,6 +120,17 @@ if (!empty($groupId)) {
 // Stats
 Event::event_access_tool(TOOL_STUDENTPUBLICATION);
 
+$logInfo = [
+    'tool' => TOOL_STUDENTPUBLICATION,
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => $action,
+    'action_details' => '',
+    'current_id' => isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0,
+    'info' => '',
+];
+Event::registerLog($logInfo);
+
 $groupId = api_get_group_id();
 $isTutor = false;
 if (!empty($groupId)) {

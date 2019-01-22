@@ -427,6 +427,7 @@ $defaults['extra_mail_notify_invitation'] = 1;
 $defaults['extra_mail_notify_message'] = 1;
 $defaults['extra_mail_notify_group_message'] = 1;
 
+$form->applyFilter('__ALL__', 'Security::remove_XSS');
 $form->setDefaults($defaults);
 $content = null;
 
@@ -811,7 +812,7 @@ if ($form->validate()) {
                         ]
                     )
                     ) {
-                        CourseManager::subscribe_user(
+                        CourseManager::subscribeUser(
                             $user_id,
                             $course_info['code']
                         );
@@ -1005,7 +1006,7 @@ if ($form->validate()) {
 
         if ($is_allowedCreateCourse) {
             if ($usersCanCreateCourse) {
-                $form_data['message'] = '<p>'.get_lang('NowGoCreateYourCourse')."</p>";
+                $form_data['message'] = '<p>'.get_lang('NowGoCreateYourCourse').'</p>';
             }
             $form_data['action'] = api_get_path(WEB_CODE_PATH).'create_course/add_course.php';
 
@@ -1043,9 +1044,9 @@ if ($form->validate()) {
     }
 
     if ($sessionPremiumChecker && $sessionId) {
-        header('Location:'.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/process.php?i='.$sessionId.'&t=2');
         Session::erase('SessionIsPremium');
         Session::erase('sessionId');
+        header('Location:'.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/process.php?i='.$sessionId.'&t=2');
         exit;
     }
 
@@ -1058,7 +1059,6 @@ if ($form->validate()) {
     }
 
     $form_data = CourseManager::redirectToCourse($form_data);
-
     $form_register = new FormValidator('form_register', 'post', $form_data['action']);
     if (!empty($form_data['message'])) {
         $form_register->addElement('html', $form_data['message'].'<br /><br />');
@@ -1116,7 +1116,7 @@ if ($form->validate()) {
                         ]
                     )
                     ) {
-                        CourseManager::subscribe_user(
+                        CourseManager::subscribeUser(
                             $user_id,
                             $course_info['code']
                         );

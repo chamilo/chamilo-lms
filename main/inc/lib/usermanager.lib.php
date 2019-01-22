@@ -183,6 +183,7 @@ class UserManager
      * @param bool          $sendEmailToAllAdmins
      * @param FormValidator $form
      * @param int           $creatorId
+     * @param array         $emailTemplate
      *
      * @return mixed new user id - if the new user creation succeeds, false otherwise
      * @desc The function tries to retrieve user id from the session.
@@ -212,7 +213,8 @@ class UserManager
         $address = '',
         $sendEmailToAllAdmins = false,
         $form = null,
-        $creatorId = 0
+        $creatorId = 0,
+        $emailTemplate = []
     ) {
         $creatorId = empty($creatorId) ? api_get_user_id() : 0;
         $hook = HookCreateUser::create();
@@ -432,9 +434,7 @@ class UserManager
                     false,
                     false
                 );
-                $layoutSubject = $tplSubject->get_template(
-                    'mail/subject_registration_platform.tpl'
-                );
+                $layoutSubject = $tplSubject->get_template('mail/subject_registration_platform.tpl');
                 $emailSubject = $tplSubject->fetch($layoutSubject);
                 $sender_name = api_get_person_name(
                     api_get_setting('administratorName'),
@@ -473,6 +473,9 @@ class UserManager
                 $layoutContent = $tplContent->get_template('mail/content_registration_platform.tpl');
                 $emailBody = $tplContent->fetch($layoutContent);
 
+                $userInfo = api_get_user_info($userId);
+                $mailTemplateManager = new MailTemplateManager();
+
                 /* MANAGE EVENT WITH MAIL */
                 if (EventsMail::check_if_using_class('user_registration')) {
                     $values["about_user"] = $return;
@@ -490,10 +493,32 @@ class UserManager
                         'password' => $original_password,
                     ];
 
+                    $emailBodyTemplate = '';
+                    if (!empty($emailTemplate)) {
+                        if (isset($emailTemplate['content_registration_platform.tpl']) &&
+                            !empty($emailTemplate['content_registration_platform.tpl'])
+                        ) {
+                            $emailBodyTemplate = $mailTemplateManager->parseTemplate(
+                                $emailTemplate['content_registration_platform.tpl'],
+                                $userInfo
+                            );
+                        }
+                    }
+
                     $twoEmail = api_get_configuration_value('send_two_inscription_confirmation_mail');
                     if ($twoEmail === true) {
                         $layoutContent = $tplContent->get_template('mail/new_user_first_email_confirmation.tpl');
                         $emailBody = $tplContent->fetch($layoutContent);
+
+                        if (!empty($emailBodyTemplate) &&
+                            isset($emailTemplate['new_user_first_email_confirmation.tpl']) &&
+                            !empty($emailTemplate['new_user_first_email_confirmation.tpl'])
+                        ) {
+                            $emailBody = $mailTemplateManager->parseTemplate(
+                                $emailTemplate['new_user_first_email_confirmation.tpl'],
+                                $userInfo
+                            );
+                        }
 
                         api_mail_html(
                             $recipient_name,
@@ -511,6 +536,16 @@ class UserManager
                         $layoutContent = $tplContent->get_template('mail/new_user_second_email_confirmation.tpl');
                         $emailBody = $tplContent->fetch($layoutContent);
 
+                        if (!empty($emailBodyTemplate) &&
+                            isset($emailTemplate['new_user_second_email_confirmation.tpl']) &&
+                            !empty($emailTemplate['new_user_second_email_confirmation.tpl'])
+                        ) {
+                            $emailBody = $mailTemplateManager->parseTemplate(
+                                $emailTemplate['new_user_second_email_confirmation.tpl'],
+                                $userInfo
+                            );
+                        }
+
                         api_mail_html(
                             $recipient_name,
                             $email,
@@ -524,6 +559,9 @@ class UserManager
                             $additionalParameters
                         );
                     } else {
+                        if (!empty($emailBodyTemplate)) {
+                            $emailBody = $emailBodyTemplate;
+                        }
                         $sendToInbox = api_get_configuration_value('send_inscription_msg_to_inbox');
                         if ($sendToInbox) {
                             $adminList = self::get_all_administrators();
@@ -592,6 +630,17 @@ class UserManager
 
                     $layoutContent = $tplContent->get_template('mail/content_registration_platform_to_admin.tpl');
                     $emailBody = $tplContent->fetch($layoutContent);
+
+                    if (!empty($emailBodyTemplate) &&
+                        isset($emailTemplate['content_registration_platform_to_admin.tpl']) &&
+                        !empty($emailTemplate['content_registration_platform_to_admin.tpl'])
+                    ) {
+                        $emailBody = $mailTemplateManager->parseTemplate(
+                            $emailTemplate['content_registration_platform_to_admin.tpl'],
+                            $userInfo
+                        );
+                    }
+
                     $subject = get_lang('UserAdded');
 
                     foreach ($adminList as $adminId => $data) {
@@ -868,6 +917,9 @@ class UserManager
             Database::query($sql);
         }
 
+        $app_plugin = new AppPlugin();
+        $app_plugin->performActionsWhenDeletingItem('user', $user_id);
+
         // Delete user from database
         $sql = "DELETE FROM $table_user WHERE id = '".$user_id."'";
         Database::query($sql);
@@ -1062,6 +1114,7 @@ class UserManager
      * @param bool   $send_email      Whether to send an e-mail to the user after the update is complete
      * @param int    $reset_password  Method used to reset password (0, 1, 2 or 3 - see usage examples for details)
      * @param string $address
+     * @param array  $emailTemplate
      *
      * @return bool|int False on error, or the user ID if the user information was updated
      * @assert (false, false, false, false, false, false, false, false, false, false, false, false, false) === false
@@ -1087,7 +1140,8 @@ class UserManager
         $encrypt_method = '',
         $send_email = false,
         $reset_password = 0,
-        $address = null
+        $address = null,
+        $emailTemplate = []
     ) {
         $hook = HookUpdateUser::create();
         if (!empty($hook)) {
@@ -1209,47 +1263,51 @@ class UserManager
                 PERSON_NAME_EMAIL_ADDRESS
             );
             $email_admin = api_get_setting('emailAdministrator');
-
+            $url = api_get_path(WEB_PATH);
             if (api_is_multiple_url_enabled()) {
                 $access_url_id = api_get_current_access_url_id();
                 if ($access_url_id != -1) {
                     $url = api_get_access_url($access_url_id);
-                    $emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".
-                        get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".
-                        get_lang('Username')." : ".$username.(($reset_password > 0) ? "\n".
-                        get_lang('Pass')." : ".stripslashes($original_password) : "")."\n\n".
-                        get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".$url['url']."\n\n".
-                        get_lang('Problem')."\n\n".
-                        get_lang('SignatureFormula').",\n\n".
-                        api_get_person_name(
-                            api_get_setting('administratorName'),
-                            api_get_setting('administratorSurname')
-                        )."\n".
-                        get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".
-                        get_lang('Email')." : ".api_get_setting('emailAdministrator');
+                    $url = $url['url'];
                 }
-            } else {
-                $emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".
-                    get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".
-                    get_lang('Username')." : ".$username.(($reset_password > 0) ? "\n".
-                    get_lang('Pass')." : ".stripslashes($original_password) : "")."\n\n".
-                    get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".api_get_path(WEB_PATH)."\n\n".
-                    get_lang('Problem')."\n\n".
-                    get_lang('SignatureFormula').",\n\n".
-                    api_get_person_name(
-                        api_get_setting('administratorName'),
-                        api_get_setting('administratorSurname')
-                    )."\n".
-                    get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".
-                    get_lang('Email')." : ".api_get_setting('emailAdministrator');
             }
 
-            $emailbody = nl2br($emailbody);
+            $tplContent = new Template(
+                null,
+                false,
+                false,
+                false,
+                false,
+                false
+            );
+            // variables for the default template
+            $tplContent->assign('complete_name', stripslashes(api_get_person_name($firstname, $lastname)));
+            $tplContent->assign('login_name', $username);
+
+            $originalPassword = '';
+            if ($reset_password > 0) {
+                $originalPassword = stripslashes($original_password);
+            }
+            $tplContent->assign('original_password', $originalPassword);
+            $tplContent->assign('portal_url', $url);
+
+            $layoutContent = $tplContent->get_template('mail/user_edit_content.tpl');
+            $emailBody = $tplContent->fetch($layoutContent);
+
+            $mailTemplateManager = new MailTemplateManager();
+
+            if (!empty($emailTemplate) &&
+                isset($emailTemplate['user_edit_content.tpl']) &&
+                !empty($emailTemplate['user_edit_content.tpl'])
+            ) {
+                $userInfo = api_get_user_info($user_id);
+                $emailBody = $mailTemplateManager->parseTemplate($emailTemplate['user_edit_content.tpl'], $userInfo);
+            }
             api_mail_html(
                 $recipient_name,
                 $email,
                 $emailsubject,
-                $emailbody,
+                $emailBody,
                 $sender_name,
                 $email_admin
             );
@@ -2985,8 +3043,8 @@ class UserManager
         // sessions, BT#14115) but executing a similar query twice and grouping
         // the results afterwards in PHP takes about 1/1000th of the time
         // (0.1s + 0.0s) for the same set of data, so we do it this way...
-        $dqlStudent = $dql." WHERE scu.user = :user AND url.accessUrlId = :url ";
-        $dqlCoach = $dql." WHERE s.generalCoach = :user AND url.accessUrlId = :url ";
+        $dqlStudent = $dql.' WHERE scu.user = :user AND url.accessUrlId = :url ';
+        $dqlCoach = $dql.' WHERE s.generalCoach = :user AND url.accessUrlId = :url ';
 
         // Default order
         $order = 'ORDER BY sc.name, s.name';
@@ -3016,7 +3074,7 @@ class UserManager
                     if ($orderSetting == 'asc') {
                         // Put null values at the end
                         // https://stackoverflow.com/questions/12652034/how-can-i-order-by-null-in-dql
-                        $order = " ORDER BY _isFieldNull asc, s.accessEndDate asc";
+                        $order = ' ORDER BY _isFieldNull asc, s.accessEndDate asc';
                     }
                     break;
             }
@@ -3053,6 +3111,10 @@ class UserManager
         foreach ($sessionDataCoach as $row) {
             $sessionData[$row['id']] = $row;
         }
+
+        $collapsable = api_get_configuration_value('allow_user_session_collapsable');
+        $extraField = new ExtraFieldValue('session');
+        $collapsableLink = api_get_path(WEB_PATH).'user_portal.php?action=collapse_session';
 
         $categories = [];
         foreach ($sessionData as $row) {
@@ -3137,10 +3199,7 @@ class UserManager
                         $ignore_visibility_for_admins
                     );
 
-                    $courseIsVisible = !in_array(
-                        $course['visibility'],
-                        $closedVisibilityList
-                    );
+                    $courseIsVisible = !in_array($course['visibility'], $closedVisibilityList);
                     if ($courseIsVisible === false || $sessionCourseVisibility == SESSION_INVISIBLE) {
                         $blockedCourseCount++;
                     }
@@ -3165,6 +3224,19 @@ class UserManager
                     }
             }
 
+            $collapsed = '';
+            $collapsedAction = '';
+            if ($collapsable) {
+                $collapsableData = Sessionmanager::getCollapsableData(
+                    $user_id,
+                    $session_id,
+                    $extraField,
+                    $collapsableLink
+                );
+                $collapsed = $collapsableData['collapsed'];
+                $collapsedAction = $collapsableData['collapsable_link'];
+            }
+
             $categories[$row['session_category_id']]['sessions'][] = [
                 'session_name' => $row['name'],
                 'session_id' => $row['id'],
@@ -3173,6 +3245,8 @@ class UserManager
                 'coach_access_start_date' => $row['coach_access_start_date'] ? $row['coach_access_start_date']->format('Y-m-d H:i:s') : null,
                 'coach_access_end_date' => $row['coach_access_end_date'] ? $row['coach_access_end_date']->format('Y-m-d H:i:s') : null,
                 'courses' => $courseList,
+                'collapsed' => $collapsed,
+                'collapsable_link' => $collapsedAction,
             ];
         }
 
@@ -4576,9 +4650,9 @@ class UserManager
     /**
      * Deletes a contact.
      *
-     * @param int user friend id
-     * @param bool true will delete ALL friends relationship from $friend_id
-     * @param string                                              $with_status_condition
+     * @param bool   $friend_id
+     * @param bool   $real_removed          true will delete ALL friends relationship
+     * @param string $with_status_condition
      *
      * @author isaac flores paz <isaac.flores@dokeos.com>
      * @author Julio Montoya <gugli100@gmail.com> Cleaning code
@@ -4591,6 +4665,7 @@ class UserManager
         $tbl_my_friend = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
         $tbl_my_message = Database::get_main_table(TABLE_MESSAGE);
         $friend_id = (int) $friend_id;
+        $user_id = api_get_user_id();
 
         if ($real_removed) {
             $extra_condition = '';
@@ -4608,7 +4683,6 @@ class UserManager
                     user_id='.$friend_id.' '.$extra_condition;
             Database::query($sql);
         } else {
-            $user_id = api_get_user_id();
             $sql = 'SELECT COUNT(*) as count FROM '.$tbl_my_friend.'
                     WHERE
                         user_id='.$user_id.' AND
@@ -4639,6 +4713,21 @@ class UserManager
                 Database::query($sql_ji);
             }
         }
+
+        // Delete accepted invitations
+        $sql = "DELETE FROM $tbl_my_message 
+                WHERE
+                    msg_status = ".MESSAGE_STATUS_INVITATION_ACCEPTED." AND
+                    (
+                        user_receiver_id = $user_id AND 
+                        user_sender_id = $friend_id
+                    ) OR 
+                    (
+                        user_sender_id = $user_id AND 
+                        user_receiver_id = $friend_id
+                    )
+        ";
+        Database::query($sql);
     }
 
     /**
@@ -5440,7 +5529,28 @@ class UserManager
     }
 
     /**
-     * Subscribe boss to students.
+     * @param int $userId
+     *
+     * @return bool
+     */
+    public static function removeAllBossFromStudent($userId)
+    {
+        $userId = (int) $userId;
+
+        if (empty($userId)) {
+            return false;
+        }
+
+        $userRelUserTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
+        $sql = "DELETE FROM $userRelUserTable 
+                WHERE user_id = $userId AND relation_type = ".USER_RELATION_TYPE_BOSS;
+        Database::query($sql);
+
+        return true;
+    }
+
+    /**
+     * Subscribe boss to students, if $bossList is empty then the boss list will be empty too.
      *
      * @param int   $studentId
      * @param array $bossList
@@ -5454,7 +5564,8 @@ class UserManager
         $sendNotification = false
     ) {
         $inserted = 0;
-        if ($bossList) {
+        if (!empty($bossList)) {
+            sort($bossList);
             $studentId = (int) $studentId;
             $studentInfo = api_get_user_info($studentId);
 
@@ -5462,10 +5573,17 @@ class UserManager
                 return false;
             }
 
+            $previousBossList = self::getStudentBossList($studentId);
+            $previousBossList = !empty($previousBossList) ? array_column($previousBossList, 'boss_id') : [];
+            sort($previousBossList);
+
+            // Boss list is the same, nothing changed.
+            if ($bossList == $previousBossList) {
+                return false;
+            }
+
             $userRelUserTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-            $sql = "DELETE FROM $userRelUserTable 
-                    WHERE user_id = $studentId AND relation_type = ".USER_RELATION_TYPE_BOSS;
-            Database::query($sql);
+            self::removeAllBossFromStudent($studentId);
 
             foreach ($bossList as $bossId) {
                 $bossId = (int) $bossId;
@@ -5489,6 +5607,8 @@ class UserManager
                     $inserted++;
                 }
             }
+        } else {
+            self::removeAllBossFromStudent($studentId);
         }
 
         return $inserted;
@@ -5867,7 +5987,7 @@ SQL;
      */
     public static function loginAsUser($userId, $checkIfUserCanLoginAs = true)
     {
-        $userId = intval($userId);
+        $userId = (int) $userId;
         $userInfo = api_get_user_info($userId);
 
         // Check if the user is allowed to 'login_as'
@@ -5881,6 +6001,15 @@ SQL;
         }
 
         if ($userId) {
+            $logInfo = [
+                'tool' => 'logout',
+                'tool_id' => 0,
+                'tool_id_detail' => 0,
+                'action' => '',
+                'info' => 'Change user (login as)',
+            ];
+            Event::registerLog($logInfo);
+
             // Logout the current user
             self::loginDelete(api_get_user_id());
 
@@ -5907,6 +6036,15 @@ SQL;
             // will be useful later to know if the user is actually an admin or not (example reporting)
             Session::write('login_as', true);
 
+            $logInfo = [
+                'tool' => 'login',
+                'tool_id' => 0,
+                'tool_id_detail' => 0,
+                'action' => '',
+                'info' => $userId,
+            ];
+            Event::registerLog($logInfo);
+
             return true;
         }
 
@@ -5922,8 +6060,8 @@ SQL;
     public static function loginDelete($userId)
     {
         $online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-        $userId = intval($userId);
-        $query = "DELETE FROM ".$online_table." WHERE login_user_id = $userId";
+        $userId = (int) $userId;
+        $query = "DELETE FROM $online_table WHERE login_user_id = $userId";
         Database::query($query);
     }
 

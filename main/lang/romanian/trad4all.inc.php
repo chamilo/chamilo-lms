@@ -23,7 +23,9 @@ $AssignUsersToBoss = "Atribuirea utilizatorilor la superior";
 $RoleStudentBoss = "Superior de elev(i)";
 $CosecantCsc = "Cosecant:\t\t\t\tcsc(x)";
 $HyperbolicCosecantCsch = "Cosecant hiperbolic:\t\tcsch(x)";
-$HelpCookieUsageValidation = "Pentru buna funcționare a acestui site și măsurare utilizarii sale, această platformă foloseste cookie-uri.<br /><br />\nDacă consideră necesar, secțiunea de ajutor a browser-ului dumneavoastră vă va spune despre prcedimientos pentru a seta cookie-uri.<br /><br />\ nPentru mai multe informații cu privire la cookie-uri, puteți vizita site-ul <a href=\"http://www.aboutcookies.org/\">Despre cookie-urile</a> (în limba engleză) sau echivalent  in spaniolă.";
+$HelpCookieUsageValidation = "Pentru buna funcționare a acestui site și măsurare utilizarii sale, această platformă foloseste cookie-uri.<br /><br />\n
+Dacă consideră necesar, secțiunea de ajutor a browser-ului dumneavoastră vă va spune despre prcedimientos pentru a seta cookie-uri.<br /><br />\n
+Pentru mai multe informații cu privire la cookie-uri, puteți vizita site-ul <a href=\"http://www.aboutcookies.org/\">Despre cookie-urile</a> (în limba engleză) sau echivalent in spaniolă.";
 $YouAcceptCookies = "Prin utilizarea acestui site, acceptă utilizarea cookie-urilor.";
 $TemplateCertificateComment = "Exemplu de certificat";
 $TemplateCertificateTitle = " Certificat";

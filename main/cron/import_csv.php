@@ -127,6 +127,8 @@ class ImportCsv
         $teacherBackup = [];
         $groupBackup = [];
 
+        $this->prepareImport();
+
         if (!empty($files)) {
             foreach ($files as $file) {
                 $fileInfo = pathinfo($file);
@@ -154,6 +156,10 @@ class ImportCsv
 
                     if ($method == 'importCareersdiagram') {
                         $method = 'importCareersDiagram';
+                    }
+
+                    if ($method == 'importOpensessions') {
+                        $method = 'importOpenSessions';
                     }
 
                     if ($method == 'importSubsessionsextidStatic') {
@@ -193,13 +199,12 @@ class ImportCsv
                 return 0;
             }
 
-            $this->prepareImport();
-
             $sections = [
                 'students',
                 'teachers',
                 'courses',
                 'sessions',
+                'opensessions',
                 'subscribe-static',
                 'courseinsert-static',
                 'unsubscribe-static',
@@ -220,7 +225,7 @@ class ImportCsv
                         echo PHP_EOL;
                         $this->logger->addInfo("Reading file: $file");
                         $this->logger->addInfo("Loading method $method ");
-                        if ($method == 'importSessions') {
+                        if ($method == 'importSessions' || $method == 'importOpenSessions') {
                             $this->$method(
                                 $file,
                                 true,
@@ -450,6 +455,13 @@ class ImportCsv
             $this->extraFieldIdNameList['course'],
             1,
             'External course id',
+            ''
+        );
+
+        CourseManager::create_course_extra_field(
+            'disable_import_calendar',
+            13,
+            'Disable import calendar',
             ''
         );
 
@@ -1015,6 +1027,8 @@ class ImportCsv
             $eventsToCreate = [];
             $errorFound = false;
 
+            $courseExtraFieldValue = new ExtraFieldValue('course');
+
             foreach ($data as $row) {
                 $sessionId = null;
                 $externalSessionId = null;
@@ -1031,6 +1045,18 @@ class ImportCsv
                     $courseCode = $row['coursecode'];
                 }
                 $courseInfo = api_get_course_info($courseCode);
+
+                $item = $courseExtraFieldValue->get_values_by_handler_and_field_variable(
+                    $courseInfo['real_id'],
+                    'disable_import_calendar'
+                );
+
+                if (!empty($item) && isset($item['value']) && $item['value'] == 1) {
+                    $this->logger->addInfo(
+                        "Course '".$courseInfo['code']."' has 'disable_import_calendar' turn on. Skip"
+                    );
+                    $errorFound = true;
+                }
 
                 if (empty($courseInfo)) {
                     $this->logger->addInfo("Course '$courseCode' does not exists");
@@ -2218,6 +2244,21 @@ class ImportCsv
     }
 
     /**
+     * @param $file
+     * @param bool  $moveFile
+     * @param array $teacherBackup
+     * @param array $groupBackup
+     */
+    private function importOpenSessions(
+        $file,
+        $moveFile = true,
+        &$teacherBackup = [],
+        &$groupBackup = []
+    ) {
+        $this->importSessions($file, $moveFile, $teacherBackup, $groupBackup);
+    }
+
+    /**
      * @param string $file
      * @param bool   $moveFile
      * @param array  $teacherBackup
@@ -2378,7 +2419,7 @@ class ImportCsv
                     $userCourseCategory = $courseUserData['user_course_cat'];
                 }
 
-                CourseManager::subscribe_user(
+                $result = CourseManager::subscribeUser(
                     $userId,
                     $courseInfo['code'],
                     $status,
@@ -2386,9 +2427,15 @@ class ImportCsv
                     $userCourseCategory
                 );
 
-                $this->logger->addInfo(
-                    "User $userId added to course ".$courseInfo['code']." with status '$status' with course category: '$userCourseCategory'"
-                );
+                if ($result) {
+                    $this->logger->addInfo(
+                        "User $userId added to course ".$courseInfo['code']." with status '$status' with course category: '$userCourseCategory'"
+                    );
+                } else {
+                    $this->logger->addInfo(
+                        "User $userId was NOT ADDED to course ".$courseInfo['code']." with status '$status' with course category: '$userCourseCategory'"
+                    );
+                }
             }
         }
 

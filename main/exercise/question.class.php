@@ -1959,7 +1959,7 @@ abstract class Question
         }
         $score_label = get_lang('Wrong');
         $class = 'error';
-        if ($score['pass'] == true) {
+        if (isset($score['pass']) && $score['pass'] == true) {
             $score_label = get_lang('Correct');
             $class = 'success';
         }
@@ -1972,8 +1972,10 @@ abstract class Question
             } else {
                 $score_label = get_lang('NotRevised');
                 $class = 'warning';
-                $weight = float_format($score['weight'], 1);
-                $score['result'] = " ? / ".$weight;
+                if (isset($score['weight'])) {
+                    $weight = float_format($score['weight'], 1);
+                    $score['result'] = ' ? / '.$weight;
+                }
                 $model = ExerciseLib::getCourseScoreModel();
                 if (!empty($model)) {
                     $score['result'] = ' ? ';
@@ -1996,13 +1998,16 @@ abstract class Question
             $header .= $this->show_media_content();
         }
         $scoreCurrent = [
-            'used' => $score['score'],
-            'missing' => $score['weight'],
+            'used' => isset($score['score']) ? $score['score'] : '',
+            'missing' => isset($score['weight']) ? $score['weight'] : '',
         ];
         $header .= Display::page_subheader2($counterLabel.'. '.$this->question);
+
         // dont display score for certainty degree questions
         if ($this->type != MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
-            $header .= $exercise->getQuestionRibbon($class, $score_label, $score['result'], $scoreCurrent);
+            if (isset($score['result'])) {
+                $header .= $exercise->getQuestionRibbon($class, $score_label, $score['result'], $scoreCurrent);
+            }
         }
 
         if ($this->type != READING_COMPREHENSION) {
@@ -2322,6 +2327,28 @@ abstract class Question
     public function returnFormatFeedback()
     {
         return '<br />'.Display::return_message($this->feedback, 'normal', false);
+    }
+
+    /**
+     * Check if this question exists in another exercise.
+     *
+     * @throws \Doctrine\ORM\Query\QueryException
+     *
+     * @return mixed
+     */
+    public function existsInAnotherExercises()
+    {
+        $em = Database::getManager();
+
+        $count = $em
+            ->createQuery('
+                SELECT COUNT(qq.iid) FROM ChamiloCourseBundle:CQuizRelQuestion qq
+                WHERE qq.questionId = :id
+            ')
+            ->setParameters(['id' => (int) $this->id])
+            ->getSingleScalarResult();
+
+        return $count > 1;
     }
 
     /**

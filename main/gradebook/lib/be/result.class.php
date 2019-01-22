@@ -290,4 +290,27 @@ class Result
             Database::query($sql);
         }
     }
+
+    /**
+     * Check if exists a result with its user and evaluation.
+     *
+     * @throws \Doctrine\ORM\Query\QueryException
+     *
+     * @return bool
+     */
+    public function exists()
+    {
+        $em = Database::getManager();
+
+        $result = $em
+            ->createQuery(
+                'SELECT COUNT(gr) FROM ChamiloCoreBundle:GradebookResult gr
+                WHERE gr.evaluationId = :eval_id AND gr.userId = :user_id'
+            )
+            ->setParameters(['eval_id' => $this->evaluation, 'user_id' => $this->user_id])
+            ->getSingleScalarResult();
+        $count = (int) $result;
+
+        return $count > 0;
+    }
 }

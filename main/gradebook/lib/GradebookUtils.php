@@ -228,7 +228,7 @@ class GradebookUtils
             if (!api_is_allowed_to_edit(null, true)) {
                 $modify_icons .= Display::url(
                     Display::return_icon(
-                        'stats.png',
+                        'statistics.png',
                         get_lang('FlatView'),
                         '',
                         ICON_SIZE_SMALL
@@ -297,7 +297,7 @@ class GradebookUtils
 
                 $modify_icons .= '<a href="gradebook_flatview.php?selectcat='.$cat->get_id().'&'.$courseParams.'">'.
                     Display::return_icon(
-                        'stats.png',
+                        'statistics.png',
                         get_lang('FlatView'),
                         '',
                         ICON_SIZE_SMALL
@@ -1602,7 +1602,6 @@ class GradebookUtils
         $userInfo = api_get_user_info($userId);
 
         $cat = $cats[0];
-
         $allcat = $cats[0]->get_subcategories(
             $userId,
             api_get_course_id(),
@@ -1676,7 +1675,7 @@ class GradebookUtils
             $table.
             $graph.
             '<br />'.get_lang('Feedback').'<br />
-            <textarea rows="5" cols="100" ></textarea>';
+            <textarea rows="5" cols="100">&nbsp;</textarea>';
 
         $result = $pdf->html_to_pdf_with_template(
             $content,

@@ -48,10 +48,10 @@ if (empty($objExercise)) {
     $objExercise = new Exercise();
     $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
     if (!empty($exercise_stat_info) && isset($exercise_stat_info['exe_exo_id'])) {
-        header("Location: overview.php?exerciseId=".$exercise_stat_info['exe_exo_id'].'&'.api_get_cidreq());
+        header('Location: overview.php?exerciseId='.$exercise_stat_info['exe_exo_id'].'&'.api_get_cidreq());
         exit;
     }
-    api_not_allowed();
+    api_not_allowed(true);
 }
 
 if (api_is_in_gradebook()) {
@@ -64,8 +64,8 @@ if (api_is_in_gradebook()) {
 $nameTools = get_lang('Exercises');
 
 $interbreadcrumb[] = [
-    "url" => "exercise.php?".api_get_cidreq(),
-    "name" => get_lang('Exercises'),
+    'url' => 'exercise.php?'.api_get_cidreq(),
+    'name' => get_lang('Exercises'),
 ];
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
@@ -218,7 +218,6 @@ if ($origin != 'learnpath') {
         Session::erase('duration_time_previous');
         Session::erase('duration_time');
     }
-
     Session::write('attempt_remaining', $remainingMessage);
 
     // Record the results in the learning path, using the SCORM interface (API)

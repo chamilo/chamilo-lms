@@ -407,10 +407,12 @@ ALTER TABLE portfolio_category CHANGE title title LONGTEXT NOT NULL;
 //$_configuration['session_list_show_count_users'] = false;
 // Session admin access to all course content
 //$_configuration['session_admins_access_all_content'] = false;
+// Session admin allowed to edit all courses content
+//$_configuration['session_admins_edit_courses_content'] = false;
 // Adds roles to the system announcements (requires DB change BT#12476)
 //$_configuration['system_announce_extra_roles'] = false;
-// Limits the features that a session admin has access to from the main admin panel (removes users import and usergroups)
-//$_configuration['limit_session_admin_role'] = false;
+// Limits that a session admin has access to list users
+//$_configuration['limit_session_admin_list_users'] = false;
 // Course tools visibility edition in sessions
 //$_configuration['allow_edit_tool_visibility_in_session'] = false;
 // Enable the support to ODF files
@@ -817,7 +819,12 @@ ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA613FECDF FOREIGN KEY (ses
 //$_configuration['send_two_inscription_confirmation_mail'] = false;
 
 // LP view custom settings
-// $_configuration['lp_view_settings'] = ['display' => ['show_reporting_icon' => true]];
+/*$_configuration['lp_view_settings'] = [
+    'display' => [
+        'show_reporting_icon' => true,
+        'hide_lp_arrow_navigation' => false,
+    ],
+];*/
 
 // Force to hide the invisible course documents in sessions
 //$_configuration['hide_invisible_course_documents_in_sessions'] = false;
@@ -905,6 +912,19 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Show pending survey link in user menu
 // $_configuration['show_pending_survey_in_menu'] = false;
 
+// GDPR: European's General Data Protection Rules activation option
+// Set to true to disable the new personal data page inside the social network menu
+// $_configuration['disable_gdpr'] = true;
+
+// GDPR requires users to be informed of the Data Protection Officer name and contact point
+// These can only be defined here for now, but will be moved to web settings in the future.
+// Name of the person or organization that is responsible for the treatment of personal info
+//$_configuration['data_protection_officer_name'] = '';
+// A description of the role of the DP Officer in this context
+//$_configuration['data_protection_officer_role'] = '';
+// An e-mail address where to contact the data protection officer for queries
+//$_configuration['data_protection_officer_email'] = '';
+
 // Show multiple conditions to user during sign up process
 // Example with a GDPR condition
 /*$_configuration['show_conditions_to_user'] = [
@@ -936,19 +956,6 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // ALTER TABLE usergroup ADD author_id INT DEFAULT NULL;
 //$_configuration['allow_teachers_to_classes'] = false;
 
-// GDPR: European's General Data Protection Rules activation option
-// Set to true to disable the new personal data page inside the social network menu
-// $_configuration['disable_gdpr'] = true;
-
-// GDPR requires users to be informed of the Data Protection Officer name and contact point
-// These can only be defined here for now, but will be moved to web settings in the future.
-// Name of the person or organization that is responsible for the treatment of personal info
-//$_configuration['data_protection_officer_name'] = '';
-// A description of the role of the DP Officer in this context
-//$_configuration['data_protection_officer_role'] = '';
-// An e-mail address where to contact the data protection officer for queries
-//$_configuration['data_protection_officer_email'] = '';
-
 // Validate user login via a webservice, Chamilo will send a "login" and "password" parameters
 // to the "myWebServiceFunctionToLogin" function, the result should be "1" if the user have access.
 /*$_configuration['webservice_validation'] = [
@@ -971,6 +978,94 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 
 // Hide country flags in the language switcher
 // $_configuration['hide_flag_language_switcher'] = false;
+
+// Hide complete name in who is online page
+// $_configuration['hide_complete_name_in_whoisonline'] = false;
+
+// Block student publication edition BT#14985
+// $_configuration['block_student_publication_edition'] = false;
+
+// Block student publication add documents BT#14986
+//$_configuration['block_student_publication_add_documents'] = false;
+
+// Block student publication score edition BT#14987
+// $_configuration['block_student_publication_score_edition'] = false;
+
+// Enable system to manage e-mail templates in users registration forms
+/*CREATE TABLE mail_template(
+  id int not null primary key auto_increment,
+  name varchar(255) not null, -- a friendly name for the template, to remember what it is like
+  template text, -- the template content (in Twig format)
+  type varchar(255) not null, -- the type of the mail (we can use current template names to fill that)
+  created_at DATETIME NOT NULL,
+  updated_at DATETIME NOT NULL,
+  author_id INT NOT NULL,
+  url_id INT NOT NULL,
+  default_template TINYINT not null,
+  system int not null default 0 -- whether it can be deleted or not (system = 1 means it's initially from Chamilo, any other template can be created/deleted/edited, but the ones with system=1 cannot)
+);*/
+// $_configuration['mail_template_system'] = false;
+
+// Students can only upload one publication
+// $_configuration['allow_only_one_student_publication_per_user'] = false;
+
+// Hide percentage in best/average gradebook results
+//$_configuration['hide_gradebook_percentage_user_result'] = true;
+
+// Use exercise platform score settings in the gradebook graph
+// $_configuration['gradebook_use_exercise_score_settings_in_categories'] = true;
+
+// Activate the view with ViewerJS for PDF files within the lessons for IPad and IPhone
+// $_configuration['allow_pdf_viewerjs_in_lp'] = false;
+
+// Allow DRH user to access all visible session course announcements
+// $_configuration['allow_drh_access_announcement'] = false;
+
+// Allow my personal files link in the homepage
+// $_configuration['allow_my_files_link_in_homepage'] = false;
+
+// This option sets default parameters in the main/session/session_import.php
+/*$_configuration['session_import_settings'] = [
+    'options' =>  [
+        'session_exists_default_option' => '1',
+        'send_mail_default_option' => '1',
+    ]
+];*/
+
+// This option sets default parameters in the main/admin/user_import.php
+/*$_configuration['user_import_settings'] = [
+    'options' =>  [
+        'send_mail_default_option' => '1',
+    ]
+];*/
+
+// Disable all new exercise attempts in all the platform
+// $_configuration['exercises_disable_new_attempts'] = false;
+
+// Improve speed when rendering gradebook student reports using Doctrine APCU cache
+// $_configuration['gradebook_use_apcu_cache'] = true;
+
+// Add a minimum time limit to be in the learning path
+// in order to get the last item completed
+// Requires a DB change:
+// ALTER TABLE c_lp ADD accumulate_work_time INT NOT NULL;
+// CREATE TABLE track_e_access_complete (id int(11) NOT NULL AUTO_INCREMENT, user_id int(11) NOT NULL, date_reg datetime NOT NULL, tool varchar(255) NOT NULL,  tool_id int(11) NOT NULL,   tool_id_detail int(11) NOT NULL,  action varchar(255) NOT NULL,   action_details varchar(255) NOT NULL, current_id int(11) NOT NULL,  ip_user varchar(255) NOT NULL,  user_agent varchar(255) NOT NULL,   session_id int(11) NOT NULL,   c_id int(11) NOT NULL,   ch_sid varchar(255) NOT NULL,   login_as int(11) NOT NULL,   info longtext NOT NULL,   url text NOT NULL,   PRIMARY KEY (id) ) ENGINE=InnoDB AUTO_INCREMENT=13989 DEFAULT CHARSET=utf8;
+//$_configuration['lp_minimum_time'] = false;
+
+// Add collapsable option for user course categories
+// ALTER TABLE user_course_category ADD collapsed TINYINT(1) DEFAULT NULL;
+// $_configuration['allow_user_course_category_collapsable'] = false;
+
+// Add collapsable option when showing the course list inside a session in userportal.php
+// ALTER TABLE session_rel_user ADD collapsed TINYINT(1) DEFAULT NULL;
+// Create a new session extra field called "collapsed" (checkbox yes/no - option)
+// $_configuration['allow_user_session_collapsable'] = false;
+
+// Allow to session admins login as teachers
+//$_configuration['allow_session_admin_login_as_teacher'] = false;
+
+// Hide social media links
+//$_configuration['hide_social_media_links'] = false;
 
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email

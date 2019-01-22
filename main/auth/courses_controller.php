@@ -57,20 +57,11 @@ class CoursesController
     }
 
     /**
-     * It's used for listing categories,
-     * render to categories_list view.
-     *
-     * @param string $action
-     * @param string $message confirmation message(optional)
-     * @param string $error   error message(optional)
+     * It's used for listing categories, render to categories_list view.
      */
-    public function categoryList($action, $message = '', $error = '')
+    public function categoryList()
     {
         api_block_anonymous_users();
-
-        $data = [];
-        $data['user_course_categories'] = CourseManager::get_user_course_categories(api_get_user_id());
-
         $stok = Security::get_token();
         $actions = Display::url(
             Display::return_icon('back.png', get_lang('Back'), '', '32'),
@@ -232,58 +223,6 @@ class CoursesController
         $this->view->set_layout('catalog_layout');
         $this->view->set_template('courses_categories');
         $this->view->render();
-    }
-
-    /**
-     * Auto user subscription to a course.
-     */
-    public function subscribe_user($course_code, $search_term, $category_code)
-    {
-        $courseInfo = api_get_course_info($course_code);
-
-        if (empty($courseInfo)) {
-            return false;
-        }
-
-        // The course must be open in order to access the auto subscription
-        if (in_array(
-            $courseInfo['visibility'],
-            [
-                COURSE_VISIBILITY_CLOSED,
-                COURSE_VISIBILITY_REGISTERED,
-                COURSE_VISIBILITY_HIDDEN,
-            ]
-        )
-        ) {
-            Display::addFlash(
-                Display::return_message(
-                    get_lang('SubscribingNotAllowed'),
-                    'warning'
-                )
-            );
-        } else {
-            // Redirect to subscription
-            if (api_is_anonymous()) {
-                header('Location: '.api_get_path(WEB_CODE_PATH).'auth/inscription.php?c='.$course_code);
-                exit;
-            }
-            $result = $this->model->subscribe_user($course_code);
-            if (!$result) {
-                Display::addFlash(
-                    Display::return_message(
-                        get_lang('CourseRegistrationCodeIncorrect'),
-                        'warning'
-                    )
-                );
-            } else {
-                Display::addFlash(
-                    Display::return_message($result['message'], 'normal', false)
-                );
-                if (isset($result['content'])) {
-                    Display::addFlash($result['content']);
-                }
-            }
-        }
     }
 
     /**
@@ -796,7 +735,7 @@ class CoursesController
     public function sessionListBySearch(array $limit)
     {
         $q = isset($_REQUEST['q']) ? Security::remove_XSS($_REQUEST['q']) : null;
-        $hiddenLinks = isset($_GET['hidden_links']) ? intval($_GET['hidden_links']) == 1 : false;
+        $hiddenLinks = isset($_GET['hidden_links']) ? (int) $_GET['hidden_links'] == 1 : false;
         $courseUrl = CourseCategory::getCourseCategoryUrl(
             1,
             $limit['length'],
@@ -812,7 +751,7 @@ class CoursesController
         $tpl = new Template();
         $tpl->assign('show_courses', CoursesAndSessionsCatalog::showCourses());
         $tpl->assign('show_sessions', CoursesAndSessionsCatalog::showSessions());
-        $tpl->assign('show_tutor', (api_get_setting('show_session_coach') === 'true' ? true : false));
+        $tpl->assign('show_tutor', api_get_setting('show_session_coach') === 'true' ? true : false);
         $tpl->assign('course_url', $courseUrl);
         $tpl->assign('already_subscribed_label', $this->getAlreadyRegisteredInSessionLabel());
         $tpl->assign('hidden_links', $hiddenLinks);
@@ -831,8 +770,8 @@ class CoursesController
      */
     public static function getLimitArray()
     {
-        $pageCurrent = isset($_REQUEST['pageCurrent']) ? intval($_GET['pageCurrent']) : 1;
-        $pageLength = isset($_REQUEST['pageLength']) ? intval($_GET['pageLength']) : CoursesAndSessionsCatalog::PAGE_LENGTH;
+        $pageCurrent = isset($_REQUEST['pageCurrent']) ? (int) $_GET['pageCurrent'] : 1;
+        $pageLength = isset($_REQUEST['pageLength']) ? (int) $_GET['pageLength'] : CoursesAndSessionsCatalog::PAGE_LENGTH;
 
         return [
             'start' => ($pageCurrent - 1) * $pageLength,
@@ -923,8 +862,10 @@ class CoursesController
                 $catName = $cat->getName();
             }
 
-            $coachId = $session->getGeneralCoach()->getId();
-            $coachName = $session->getGeneralCoach()->getCompleteName();
+            $generalCoach = $session->getGeneralCoach();
+            $coachId = $generalCoach ? $generalCoach->getId() : 0;
+            $coachName = $generalCoach ? $session->getGeneralCoach()->getCompleteName() : '';
+
             $actions = null;
             if (api_is_platform_admin()) {
                 $actions = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session->getId();
@@ -940,7 +881,9 @@ class CoursesController
                 'nbr_courses' => $session->getNbrCourses(),
                 'nbr_users' => $session->getNbrUsers(),
                 'coach_id' => $coachId,
-                'coach_url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='.$coachId,
+                'coach_url' => $generalCoach
+                    ? api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='.$coachId
+                    : '',
                 'coach_name' => $coachName,
                 'coach_avatar' => UserManager::getUserPicture(
                     $coachId,

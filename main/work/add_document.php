@@ -14,6 +14,11 @@ if (empty($workId)) {
     api_not_allowed(true);
 }
 
+$blockAddDocuments = api_get_configuration_value('block_student_publication_add_documents');
+if ($blockAddDocuments) {
+    api_not_allowed(true);
+}
+
 $my_folder_data = get_work_data_by_id($workId);
 if (empty($my_folder_data)) {
     api_not_allowed(true);
@@ -55,11 +60,12 @@ if (empty($docId)) {
     if (!empty($documents)) {
         echo Display::page_subheader(get_lang('DocumentsAdded'));
         echo '<div class="well">';
+        $urlDocument = api_get_path(WEB_CODE_PATH).'work/add_document.php';
         foreach ($documents as $doc) {
             $documentId = $doc['document_id'];
             $docData = DocumentManager::get_document_data_by_id($documentId, $courseInfo['code']);
             if ($docData) {
-                $url = api_get_path(WEB_CODE_PATH).'work/add_document.php?action=delete&id='.$workId.'&document_id='.$documentId.'&'.api_get_cidreq();
+                $url = $urlDocument.'?action=delete&id='.$workId.'&document_id='.$documentId.'&'.api_get_cidreq();
                 $link = Display::url(get_lang('Remove'), $url, ['class' => 'btn btn-danger']);
                 echo $docData['title'].' '.$link.'<br />';
             }
@@ -69,12 +75,16 @@ if (empty($docId)) {
 
     $documentTree = DocumentManager::get_document_preview(
         $courseInfo,
-        null,
+        false,
         null,
         api_get_session_id(),
         false,
         '/',
-        api_get_path(WEB_CODE_PATH).'work/add_document.php?id='.$workId.'&'.api_get_cidreq()
+        api_get_path(WEB_CODE_PATH).'work/add_document.php?id='.$workId.'&'.api_get_cidreq(),
+        false,
+        false,
+        false,
+        false
     );
     echo Display::page_subheader(get_lang('Documents'));
     echo $documentTree;

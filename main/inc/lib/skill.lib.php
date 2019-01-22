@@ -2194,8 +2194,10 @@ class Skill extends Model
      */
     public static function isAllowed($studentId = 0, $blockPage = true)
     {
+        $allowHR = api_get_setting('allow_hr_skills_management') === 'true';
+
         if (self::isToolAvailable()) {
-            if (api_is_platform_admin()) {
+            if (api_is_platform_admin(false, $allowHR)) {
                 return true;
             }
 

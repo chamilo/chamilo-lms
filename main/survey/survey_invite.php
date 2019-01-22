@@ -23,6 +23,7 @@ if (!api_is_allowed_to_edit(false, true)) {
 }
 
 $course_id = api_get_course_int_id();
+$_course = api_get_course_info();
 
 // Getting the survey information
 $survey_id = Security::remove_XSS($_GET['survey_id']);
@@ -237,11 +238,12 @@ if ($form->validate()) {
     // Counting the number of people that are invited
     $total_invited = SurveyUtil::update_count_invited($survey_data['code']);
     $total_count = $count_course_users + $counter_additional_users;
+    $invitationUrl = api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?survey_id='.$survey_data['survey_id'].'&'.api_get_cidreq();
     if ($total_invited > 0) {
-        $message = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=answered&survey_id='.$survey_data['survey_id'].'">'.
+        $message = '<a href="'.$invitationUrl.'&view=answered">'.
             $survey_data['answered'].'</a> ';
         $message .= get_lang('HaveAnswered').' ';
-        $message .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=invited&survey_id='.$survey_data['survey_id'].'">'.
+        $message .= '<a href="'.$invitationUrl.'&view=invited">'.
             $total_invited.'</a> ';
         $message .= get_lang('WereInvited');
         echo Display::return_message($message, 'normal', false);

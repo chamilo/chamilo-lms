@@ -1063,6 +1063,7 @@ class Display
         $html = '';
         $extra = '';
         $default_id = 'id="'.$name.'" ';
+        $extra_attributes = array_merge(['class' => 'form-control'], $extra_attributes);
         foreach ($extra_attributes as $key => $parameter) {
             if ($key == 'id') {
                 $default_id = '';
@@ -1264,10 +1265,10 @@ class Display
      */
     public static function form_row($label, $form_item)
     {
-        $label = self::span($label, ['class' => 'control-label']);
-        $form_item = self::div($form_item, ['class' => 'controls']);
+        $label = self::tag('label', $label, ['class' => 'col-sm-2 control-label']);
+        $form_item = self::div($form_item, ['class' => 'col-sm-10']);
 
-        return self::div($label.$form_item, ['class' => 'control-group']);
+        return self::div($label.$form_item, ['class' => 'form-group']);
     }
 
     /**
@@ -1691,27 +1692,20 @@ class Display
         }
         $output = [];
         if (!$nosession) {
-            $main_user_table = Database::get_main_table(TABLE_MAIN_USER);
-            $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-            // Request for the name of the general coach
-            $sql = 'SELECT tu.lastname, tu.firstname, ts.*
-                    FROM '.$tbl_session.' ts
-                    LEFT JOIN '.$main_user_table.' tu
-                    ON ts.id_coach = tu.user_id
-                    WHERE ts.id = '.intval($session_id);
-            $rs = Database::query($sql);
-            $session_info = Database::store_result($rs, 'ASSOC');
-            $session_info = $session_info[0];
+            $session_info = api_get_session_info($session_id);
+            $coachInfo = [];
+            if (!empty($session['id_coach'])) {
+                $coachInfo = api_get_user_info($session['id_coach']);
+            }
 
             $session = [];
             $session['category_id'] = $session_info['session_category_id'];
             $session['title'] = $session_info['name'];
             $session['id_coach'] = $session_info['id_coach'];
-            $session['coach'] = '';
             $session['dates'] = '';
-
-            if (api_get_setting('show_session_coach') === 'true') {
-                $session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($session_info['firstname'], $session_info['lastname']);
+            $session['coach'] = '';
+            if (api_get_setting('show_session_coach') === 'true' && isset($coachInfo['complete_name'])) {
+                $session['coach'] = get_lang('GeneralCoach').': '.$coachInfo['complete_name'];
             }
 
             if (($session_info['access_end_date'] == '0000-00-00 00:00:00' &&
@@ -1728,11 +1722,8 @@ class Display
             } else {
                 $dates = SessionManager::parseSessionDates($session_info, true);
                 $session['dates'] = $dates['access'];
-                if (api_get_setting('show_session_coach') === 'true') {
-                    $session['coach'] = api_get_person_name(
-                        $session_info['firstname'],
-                        $session_info['lastname']
-                    );
+                if (api_get_setting('show_session_coach') === 'true' && isset($coachInfo['complete_name'])) {
+                    $session['coach'] = $coachInfo['complete_name'];
                 }
                 $active = $date_start <= $now && $date_end >= $now;
             }
@@ -1883,7 +1874,7 @@ class Display
     /**
      * @param array $list
      *
-     * @return null|string
+     * @return string|null
      */
     public static function description($list)
     {
@@ -1935,7 +1926,7 @@ class Display
      * @param string $count
      * @param string $type
      *
-     * @return null|string
+     * @return string|null
      */
     public static function badge($count, $type = "warning")
     {
@@ -2026,7 +2017,7 @@ class Display
      * @param array  $items
      * @param string $class
      *
-     * @return null|string
+     * @return string|null
      */
     public static function actions($items, $class = 'new_actions')
     {
@@ -2079,7 +2070,7 @@ class Display
      * @param string $type
      * @param null   $id
      *
-     * @return null|string
+     * @return string|null
      */
     public static function generate_accordion($items, $type = 'jquery', $id = null)
     {
@@ -2160,7 +2151,7 @@ class Display
      * @param string $file
      * @param array  $params
      *
-     * @return null|string
+     * @return string|null
      */
     public static function getMediaPlayer($file, $params = [])
     {
@@ -2637,7 +2628,7 @@ class Display
      * @param bool|true  $open
      * @param bool|false $fullClickable
      *
-     * @return null|string
+     * @return string|null
      *
      * @todo rework function to easy use
      */
@@ -2753,5 +2744,57 @@ HTML;
                     </div>
                     <hr />
               </div>';
+    }
+
+    /**
+     * @param string $frameName
+     *
+     * @return string
+     */
+    public static function getFrameReadyBlock($frameName)
+    {
+        $defaultFeatures = ['playpause', 'current', 'progress', 'duration', 'tracks', 'volume', 'fullscreen', 'vrview'];
+        $features = api_get_configuration_value('video_features');
+        if (!empty($features) && isset($features['features'])) {
+            foreach ($features['features'] as $feature) {
+                if ($feature === 'vrview') {
+                    continue;
+                }
+                $defaultFeatures[] = $feature;
+            }
+        }
+
+        $defaultFeatures = implode("','", $defaultFeatures);
+        $frameReady = '
+          $.frameReady(function() {
+            $(document).ready(function () {
+                $("video:not(.skip), audio:not(.skip)").mediaelementplayer({
+                    pluginPath: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/build/",            
+                    features: ["'.$defaultFeatures.'"],
+                    success: function(mediaElement, originalNode, instance) {
+                    },
+                    vrPath: "'.api_get_path(WEB_PUBLIC_PATH).'assets/vrview/build/vrview.js"
+                });
+            });
+          }, "'.$frameName.'",
+          {
+            load: [
+                { type:"script", id:"_fr1", src:"'.api_get_jquery_web_path().'"},
+                { type:"script", id:"_fr7", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/MathJax/MathJax.js?config=AM_HTMLorMML"},
+                { type:"script", id:"_fr4", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery-ui/jquery-ui.min.js"},
+                { type:"stylesheet", id:"_fr5", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery-ui/themes/smoothness/jquery-ui.min.css"},
+                { type:"stylesheet", id:"_fr6", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery-ui/themes/smoothness/theme.css"},
+                { type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
+                { type:"script", id:"_fr3", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?'.api_get_cidreq().'"},
+                {type: "script", id: "_media1", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/build/mediaelement-and-player.min.js"},
+                {type: "stylesheet", id: "_media2", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/build/mediaelementplayer.min.css"},                
+                {type: "stylesheet", id: "_media4", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/plugins/vrview/vrview.css"},
+                {type: "script", id: "_media4", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/plugins/vrview/vrview.js"},
+            ]
+          });';
+
+        return $frameReady;
+
+
     }
 }

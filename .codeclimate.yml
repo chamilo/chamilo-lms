@@ -45,7 +45,6 @@ plugins:
         enabled: false
       Squiz Strings ConcatenationSpacing PaddingFound:
         enabled: false
-
   phpmd:
     enabled: true
     config:
@@ -95,12 +94,15 @@ exclude_patterns:
 - main/inc/lib/phpseclib/
 - main/inc/lib/svg-edit/
 - main/inc/lib/swfobject/
+- main/inc/lib/mediaplayer
+- main/inc/lib/mxgraph/
 - main/inc/lib/wami-recorder/
 - main/inc/lib/xajax/
 - main/lp/packaging/
 - main/template/
 - main/img/
 - main/lang/
+- plugin/buycourses/resources/js/
 - plugin/buycourses/src/Culqi/
 - plugin/buycourses/src/Requests/
 - plugin/buycourses/src/Requests.php
@@ -108,6 +110,7 @@ exclude_patterns:
 - plugin/vchamilo/cli/
 - plugin/kannelsms/vendor/
 - plugin/clockworksms/vendor/
+- plugin/tour/intro.js
 - plugin/pens/lib
 - plugin/bbb/lib/bbb_api.php
 - plugin/ims_lti/OAuthSimple.php

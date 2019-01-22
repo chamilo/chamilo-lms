@@ -12,6 +12,17 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+$logInfo = [
+    'tool' => 'MyCertificates',
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => '',
+    'action_details' => '',
+    'current_id' => 0,
+    'info' => '',
+];
+Event::registerLog($logInfo);
+
 if (api_is_anonymous()) {
     api_not_allowed(true);
 }

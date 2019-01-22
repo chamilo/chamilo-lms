@@ -215,8 +215,8 @@ class CoursesAndSessionsCatalog
     {
         $limitFilter = '';
         if (!empty($limit) && is_array($limit)) {
-            $limitStart = isset($limit['start']) ? $limit['start'] : 0;
-            $limitLength = isset($limit['length']) ? $limit['length'] : 12;
+            $limitStart = isset($limit['start']) ? (int) $limit['start'] : 0;
+            $limitLength = isset($limit['length']) ? (int) $limit['length'] : 12;
             $limitFilter = 'LIMIT '.$limitStart.', '.$limitLength;
         }
 
@@ -469,12 +469,15 @@ class CoursesAndSessionsCatalog
      * @param string $date  (optional) The date of sessions
      * @param array  $limit
      *
+     * @throws Exception
+     *
      * @return array The session list
      */
     public static function browseSessions($date = null, $limit = [])
     {
         $em = Database::getManager();
         $urlId = api_get_current_access_url_id();
+        $date = Database::escape_string($date);
         $sql = "SELECT s.id FROM session s ";
         $sql .= "
             INNER JOIN access_url_rel_session ars
@@ -501,6 +504,8 @@ class CoursesAndSessionsCatalog
         }
 
         if (!empty($limit)) {
+            $limit['start'] = (int) $limit['start'];
+            $limit['length'] = (int) $limit['length'];
             $sql .= "LIMIT {$limit['start']}, {$limit['length']} ";
         }
 

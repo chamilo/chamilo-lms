@@ -305,7 +305,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
      * @param int      $counter
      * @param float    $score
      *
-     * @return null|string
+     * @return string|null
      */
     public function return_header($exercise, $counter = null, $score = null)
     {
@@ -1098,10 +1098,14 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         }
 
         // get student answer option id
-        $studentAnswerOptionId = $splitAnswer[1];
+        $studentAnswerOptionId = isset($splitAnswer[1]) ? $splitAnswer[1] : null;
 
         // we got the correct answer option id, let's compare ti with the student answer
-        $percentage = self::getPercentagePosition($splitAnswer[2]);
+        $percentage = null;
+        if (isset($splitAnswer[2])) {
+            $percentage = self::getPercentagePosition($splitAnswer[2]);
+        }
+
         if ($studentAnswerOptionId == $correctAnswerOptionId) {
             // yeah, student got correct answer
             switch ($percentage) {
@@ -1200,6 +1204,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $and = '';
         $questionId = (int) $questionId;
         $position = (int) $position;
+        $exeId = (int) $exeId;
 
         if ($questionId >= 0) {
             $and .= " AND question_id = $questionId";

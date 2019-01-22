@@ -129,7 +129,7 @@ $form->applyFilter('department_url', 'html_filter');
 $extra_field = new ExtraField('course');
 
 $extraFieldAdminPermissions = false;
-$showOnlyTheseFields = ['tags', 'video_url', 'course_hours_duration'];
+$showOnlyTheseFields = ['tags', 'video_url', 'course_hours_duration', 'max_subscribed_students'];
 $extra = $extra_field->addElements(
     $form,
     $courseId,

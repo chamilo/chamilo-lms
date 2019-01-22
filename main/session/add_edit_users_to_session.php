@@ -413,10 +413,6 @@ if ($ajax_search) {
         if (!array_key_exists($sessionUser['id'], $sessionUsersList)) {
             continue;
         }
-
-        /*if ($sessionUser['count'] != $countSessionCoursesList) {
-            unset($sessionUsersList[$sessionUser['id']]);
-        }*/
     }
 
     unset($users); //clean to free memory
@@ -532,7 +528,6 @@ if ($ajax_search) {
 
     $result = Database::query($sql);
     $users = Database::store_result($result, 'ASSOC');
-
     foreach ($users as $uid => $user) {
         if ($user['session_id'] != $id_session) {
             $nosessionUsersList[$user['id']] = [

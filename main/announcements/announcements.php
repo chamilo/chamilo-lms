@@ -41,7 +41,6 @@ $allowToEdit = (
 
 $sessionId = api_get_session_id();
 $drhHasAccessToSessionContent = api_drh_can_access_all_session_content();
-
 if (!empty($sessionId) && $drhHasAccessToSessionContent) {
     $allowToEdit = $allowToEdit || api_is_drh();
 }
@@ -66,12 +65,12 @@ $isTutor = false;
 if (!empty($group_id)) {
     $groupProperties = GroupManager:: get_group_properties($group_id);
     $interbreadcrumb[] = [
-        "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
-        "name" => get_lang('Groups'),
+        'url' => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
+        'name' => get_lang('Groups'),
     ];
     $interbreadcrumb[] = [
-        "url" => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
-        "name" => get_lang('GroupSpace').' '.$groupProperties['name'],
+        'url' => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
+        'name' => get_lang('GroupSpace').' '.$groupProperties['name'],
     ];
 
     if ($allowToEdit === false) {
@@ -86,13 +85,24 @@ if (!empty($group_id)) {
 /* Tracking */
 Event::event_access_tool(TOOL_ANNOUNCEMENT);
 
-$announcement_id = isset($_GET['id']) ? intval($_GET['id']) : null;
+$announcement_id = isset($_GET['id']) ? (int) $_GET['id'] : null;
 $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : 'list';
 $announcement_number = AnnouncementManager::getNumberAnnouncements();
 
 $homeUrl = api_get_self().'?action=list&'.api_get_cidreq();
 $content = '';
 $searchFormToString = '';
+
+$logInfo = [
+    'tool' => TOOL_ANNOUNCEMENT,
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => $action,
+    'action_details' => '',
+    'current_id' => (int) $announcement_id,
+    'info' => '',
+];
+Event::registerLog($logInfo);
 
 switch ($action) {
     case 'move':
@@ -118,8 +128,9 @@ switch ($action) {
 
             $announcementInfo = AnnouncementManager::get_by_id($courseId, $thisAnnouncementId);
             $sql = "SELECT DISTINCT announcement.id, announcement.display_order
-                    FROM $tbl_announcement announcement,
-                    $tbl_item_property itemproperty
+                    FROM $tbl_announcement announcement 
+                    INNER JOIN $tbl_item_property itemproperty
+                    ON (announcement.c_id = itemproperty.c_id)
                     WHERE
                         announcement.c_id = $courseId AND
                         itemproperty.c_id = $courseId AND
@@ -337,7 +348,7 @@ switch ($action) {
         }
         break;
     case 'delete_attachment':
-        $id = $_GET['id_attach'];
+        $id = (int) $_GET['id_attach'];
 
         if (api_is_allowed_to_edit()) {
             AnnouncementManager::delete_announcement_attachment_file($id);
@@ -555,7 +566,8 @@ switch ($action) {
                 if (!isset($parts[1]) || empty($parts[1])) {
                     continue;
                 }
-                $form->addHtml("
+                $form->addHtml(
+                    "
                     <script>
                         $(document).on('ready', function () {
                             $('#choose_recipients').click();

@@ -80,7 +80,7 @@ class SepePlugin extends Plugin
         $sm = $cn->getSchemaManager();
         $tables = $sm->tablesExist($tablesToBeCompared);
 
-        if ($tables) {
+        if (empty($tables)) {
             return false;
         }
 

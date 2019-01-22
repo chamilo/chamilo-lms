@@ -1194,14 +1194,15 @@ class AddCourse
     /**
      * Function register_course to create a record in the course table of the main database.
      *
-     * @param array Course details (see code for details)
+     * @param array $params      Course details (see code for details).
+     * @param int   $accessUrlId Optional.
      *
      * @return int Created course ID
      *
      * @todo use an array called $params instead of lots of params
      * @assert (null) === false
      */
-    public static function register_course($params)
+    public static function register_course($params, $accessUrlId = 1)
     {
         global $error_msg, $firstExpirationDelay;
         $title = $params['title'];
@@ -1372,15 +1373,7 @@ class AddCourse
                 }
 
                 // Adding the course to an URL.
-                if (api_is_multiple_url_enabled()) {
-                    $url_id = 1;
-                    if (api_get_current_access_url_id() != -1) {
-                        $url_id = api_get_current_access_url_id();
-                    }
-                    UrlManager::add_course_to_url($course_id, $url_id);
-                } else {
-                    UrlManager::add_course_to_url($course_id, 1);
-                }
+                UrlManager::add_course_to_url($course_id, $accessUrlId);
 
                 // Add event to the system log.
                 $user_id = api_get_user_id();

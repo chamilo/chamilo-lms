@@ -446,6 +446,7 @@ class ExerciseLib
 
             $hidingClass = '';
             if ($answerType == READING_COMPREHENSION) {
+                $objQuestionTmp->setExerciseType($exercise->selectType());
                 $objQuestionTmp->processText($objQuestionTmp->selectDescription());
                 $hidingClass = 'hide-reading-answers';
                 $s .= Display::div(
@@ -598,7 +599,9 @@ class ExerciseLib
                             if (!empty($userChoiceList)) {
                                 foreach ($userChoiceList as $item) {
                                     $item = explode(':', $item);
-                                    $myChoice[$item[0]] = $item[1];
+                                    if (!empty($item)) {
+                                        $myChoice[$item[0]] = isset($item[1]) ? $item[1] : '';
+                                    }
                                 }
                             }
 
@@ -2747,6 +2750,31 @@ HOTSPOT;
     }
 
     /**
+     * @param $score
+     * @param $weight
+     *
+     * @return array
+     */
+    public static function convertScoreToPlatformSetting($score, $weight)
+    {
+        $result = ['score' => $score, 'weight' => $weight];
+
+        $maxNote = api_get_setting('exercise_max_score');
+        $minNote = api_get_setting('exercise_min_score');
+
+        if ($maxNote != '' && $minNote != '') {
+            if (!empty($weight) && intval($weight) != 0) {
+                $score = $minNote + ($maxNote - $minNote) * $score / $weight;
+            } else {
+                $score = $minNote;
+            }
+            $weight = $maxNote;
+        }
+
+        return ['score' => $score, 'weight' => $weight];
+    }
+
+    /**
      * Converts the score with the exercise_max_note and exercise_min_score
      * the platform settings + formats the results using the float_format function.
      *
@@ -2777,18 +2805,10 @@ HOTSPOT;
             return '-';
         }
 
-        $maxNote = api_get_setting('exercise_max_score');
-        $minNote = api_get_setting('exercise_min_score');
-
         if ($use_platform_settings) {
-            if ($maxNote != '' && $minNote != '') {
-                if (!empty($weight) && intval($weight) != 0) {
-                    $score = $minNote + ($maxNote - $minNote) * $score / $weight;
-                } else {
-                    $score = $minNote;
-                }
-                $weight = $maxNote;
-            }
+            $result = self::convertScoreToPlatformSetting($score, $weight);
+            $score = $result['score'];
+            $weight = $result['weight'];
         }
         $percentage = (100 * $score) / ($weight != 0 ? $weight : 1);
         // Formats values
@@ -3187,7 +3207,7 @@ EOT;
             // only end is set
             $time_conditions .= " (start_time IS NULL AND end_time <> '' AND end_time > '$now') OR ";
             // nothing is set
-            $time_conditions .= " (start_time IS NULL AND end_time IS NULL))  ";
+            $time_conditions .= ' (start_time IS NULL AND end_time IS NULL)) ';
         }
 
         $needle_where = !empty($search) ? " AND title LIKE '?' " : '';
@@ -4414,7 +4434,6 @@ EOT;
         // Hide results
         $show_results = false;
         $show_only_score = false;
-
         if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS) {
             $show_results = true;
         }
@@ -4441,9 +4460,19 @@ EOT;
         }
 
         $showTotalScoreAndUserChoicesInLastAttempt = true;
-        if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
+        $showTotalScore = true;
+        $showQuestionScore = true;
+
+        if (in_array(
+            $objExercise->results_disabled,
+            [
+                RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
+                RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
+            ])
+        ) {
             $show_only_score = true;
             $show_results = true;
+            $numberAttempts = 0;
             if ($objExercise->attempts > 0) {
                 $attempts = Event::getExerciseResultsByUser(
                     api_get_user_id(),
@@ -4454,22 +4483,32 @@ EOT;
                     $exercise_stat_info['orig_lp_item_id'],
                     'desc'
                 );
-
                 if ($attempts) {
                     $numberAttempts = count($attempts);
-                } else {
-                    $numberAttempts = 0;
                 }
 
                 if ($save_user_result) {
                     $numberAttempts++;
                 }
+                $showTotalScore = false;
+                $showTotalScoreAndUserChoicesInLastAttempt = false;
                 if ($numberAttempts >= $objExercise->attempts) {
+                    $showTotalScore = true;
                     $show_results = true;
                     $show_only_score = false;
                     $showTotalScoreAndUserChoicesInLastAttempt = true;
-                } else {
-                    $showTotalScoreAndUserChoicesInLastAttempt = false;
+                }
+            }
+
+            if ($objExercise->results_disabled == RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK) {
+                $show_only_score = false;
+                $show_results = true;
+                $show_all_but_expected_answer = false;
+                $showTotalScore = false;
+                $showQuestionScore = false;
+                if ($numberAttempts >= $objExercise->attempts) {
+                    $showTotalScore = true;
+                    $showQuestionScore = true;
                 }
             }
         }
@@ -4652,6 +4691,11 @@ EOT;
                 $question_content = '';
                 if ($show_results) {
                     $question_content = '<div class="question_row_answer">';
+
+                    if ($showQuestionScore == false) {
+                        $score = [];
+                    }
+
                     // Shows question title an description
                     $question_content .= $objQuestionTmp->return_header(
                         $objExercise,
@@ -4683,7 +4727,7 @@ EOT;
         }
 
         $totalScoreText = null;
-        if ($show_results || $show_only_score) {
+        if (($show_results || $show_only_score) && $showTotalScore) {
             if ($result['answer_type'] == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
                 echo '<h1 style="text-align : center; margin : 20px 0;">'.get_lang('YourResults').'</h1><br />';
             }
@@ -4773,9 +4817,7 @@ EOT;
                         $learnpath_item_id,
                         $learnpath_item_view_id,
                         $exercise_stat_info['exe_duration'],
-                        $question_list,
-                        '',
-                        []
+                        $question_list
                     );
                 }
             }

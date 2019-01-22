@@ -50,8 +50,6 @@ class CourseBlockPlugin extends Plugin
         return $result ? $result : $result = new self();
     }
 
-    ///public function
-
     public function install()
     {
         // Installing course settings

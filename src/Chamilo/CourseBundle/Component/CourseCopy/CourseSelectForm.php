@@ -37,6 +37,7 @@ class CourseSelectForm
         $list[RESOURCE_QUIZ] = get_lang('Tests');
         $list[RESOURCE_TEST_CATEGORY] = get_lang('QuestionCategory');
         $list[RESOURCE_LEARNPATH] = get_lang('ToolLearnpath');
+        $list[RESOURCE_LEARNPATH_CATEGORY] = get_lang('LearnpathCategory');
         $list[RESOURCE_SCORM] = 'SCORM';
         $list[RESOURCE_TOOL_INTRO] = get_lang('ToolIntro');
         $list[RESOURCE_SURVEY] = get_lang('Survey');

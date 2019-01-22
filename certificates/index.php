@@ -8,9 +8,11 @@
 require_once '../main/inc/global.inc.php';
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
-$certificate = new Certificate($_GET['id']);
+$userId = isset($_GET['user_id']) ? $_GET['user_id'] : 0;
 
-CustomCertificatePlugin::redirectCheck($certificate, $_GET['id']);
+$certificate = new Certificate($_GET['id'], $userId);
+
+CustomCertificatePlugin::redirectCheck($certificate, $_GET['id'], $userId);
 
 switch ($action) {
     case 'export':

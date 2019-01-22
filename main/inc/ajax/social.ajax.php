@@ -198,10 +198,14 @@ switch ($action) {
         }
         break;
     case 'list_wall_message':
-        $start = isset($_REQUEST['start']) ? intval($_REQUEST['start']) - 1 : 0;
-        $length = isset($_REQUEST['length']) ? intval($_REQUEST['length']) : 10;
-        $userId = isset($_REQUEST['u']) ? intval($_REQUEST['u']) : api_get_user_id();
+        if (api_is_anonymous()) {
+            break;
+        }
+        $start = isset($_REQUEST['start']) ? (int) $_REQUEST['start'] - 1 : 0;
+        $length = isset($_REQUEST['length']) ? (int) $_REQUEST['length'] : 10;
+        $userId = isset($_REQUEST['u']) ? (int) $_REQUEST['u'] : api_get_user_id();
         $friendId = $userId;
+
         $array = SocialManager::getWallMessagesPostHTML($userId, $friendId, null, $length, $start);
         if (!empty($array)) {
             ksort($array);

@@ -161,6 +161,18 @@ class Agenda
     }
 
     /**
+     * Returns the type previously set (and filtered) through setType
+     * If setType() was not called, then type defaults to "personal" as
+     * set in the class definition.
+     */
+    public function getType()
+    {
+        if (isset($this->type)) {
+            return $this->type;
+        }
+    }
+
+    /**
      * @param int $id
      */
     public function setSessionId($id)
@@ -1319,6 +1331,8 @@ class Agenda
                 break;
         }
 
+        $this->cleanEvents();
+
         switch ($format) {
             case 'json':
                 if (empty($this->events)) {
@@ -1335,6 +1349,25 @@ class Agenda
                 return $this->events;
                 break;
         }
+    }
+
+    /**
+     * Clean events.
+     *
+     * @return bool
+     */
+    public function cleanEvents()
+    {
+        if (empty($this->events)) {
+            return false;
+        }
+
+        foreach ($this->events as &$event) {
+            $event['description'] = Security::remove_XSS($event['description']);
+            $event['title'] = Security::remove_XSS($event['title']);
+        }
+
+        return true;
     }
 
     /**
@@ -2304,10 +2337,9 @@ class Agenda
         $action = isset($params['action']) ? Security::remove_XSS($params['action']) : null;
         $id = isset($params['id']) ? (int) $params['id'] : 0;
 
+        $url = api_get_self().'?action='.$action.'&id='.$id.'&type='.$this->type;
         if ($this->type == 'course') {
             $url = api_get_self().'?'.api_get_cidreq().'&action='.$action.'&id='.$id.'&type='.$this->type;
-        } else {
-            $url = api_get_self().'?action='.$action.'&id='.$id.'&type='.$this->type;
         }
 
         $form = new FormValidator(
@@ -3350,12 +3382,12 @@ class Agenda
 
         // sorting by hour for every day
         $agendaitems = [];
-        while (list($agendaday, $tmpitems) = each($items)) {
+        foreach ($items as $agendaday => $tmpitems) {
             if (!isset($agendaitems[$agendaday])) {
                 $agendaitems[$agendaday] = '';
             }
             sort($tmpitems);
-            while (list($key, $val) = each($tmpitems)) {
+            foreach ($tmpitems as $val) {
                 $agendaitems[$agendaday] .= $val;
             }
         }

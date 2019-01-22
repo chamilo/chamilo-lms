@@ -30,6 +30,7 @@ $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 
 $cidreq = api_get_cidreq();
+$_user = api_get_user_info();
 
 $nameTools = get_lang('ToolForum');
 
@@ -43,6 +44,16 @@ $origin = api_get_origin();
 /* MAIN DISPLAY SECTION */
 $current_forum = get_forum_information($_GET['forum']);
 $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
+
+$logInfo = [
+    'tool' => TOOL_FORUM,
+    'tool_id' => (int) $_GET['forum'],
+    'tool_id_detail' => 0,
+    'action' => 'add-thread',
+    'action_details' => '',
+    'current_id' => 0,
+];
+Event::registerLog($logInfo);
 
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [

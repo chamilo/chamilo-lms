@@ -23,12 +23,13 @@ class survey_question
     public function createForm($surveyData, $formData)
     {
         $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
-        $questionId = isset($_GET['question_id']) ? intval($_GET['question_id']) : null;
-        $surveyId = isset($_GET['survey_id']) ? intval($_GET['survey_id']) : null;
+        $questionId = isset($_GET['question_id']) ? (int) $_GET['question_id'] : null;
+        $surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : null;
+        $type = isset($_GET['type']) ? Security::remove_XSS($_GET['type']) : null;
 
         $toolName = Display::return_icon(
-            SurveyManager::icon_question(Security::remove_XSS($_GET['type'])),
-            get_lang(ucfirst(Security::remove_XSS($_GET['type']))),
+            SurveyManager::icon_question($type),
+            get_lang(ucfirst($type)),
             ['align' => 'middle', 'height' => '22px']
         ).' ';
 
@@ -49,19 +50,18 @@ class survey_question
                 $toolName .= get_lang('MultipleResponse');
                 break;
             default:
-                $toolName .= get_lang(api_ucfirst(Security::remove_XSS($_GET['type'])));
+                $toolName .= get_lang(api_ucfirst($type));
         }
 
         $sharedQuestionId = isset($formData['shared_question_id']) ? $formData['shared_question_id'] : null;
 
-        $url = api_get_self().'?action='.$action.'&type='.Security::remove_XSS($_GET['type']).'&survey_id='.$surveyId.'&question_id='.$questionId.'&'.api_get_cidreq();
-
+        $url = api_get_self().'?action='.$action.'&type='.$type.'&survey_id='.$surveyId.'&question_id='.$questionId.'&'.api_get_cidreq();
         $form = new FormValidator('question_form', 'post', $url);
         $form->addHeader($toolName);
         $form->addHidden('survey_id', $surveyId);
         $form->addHidden('question_id', $questionId);
         $form->addHidden('shared_question_id', Security::remove_XSS($sharedQuestionId));
-        $form->addHidden('type', Security::remove_XSS($_GET['type']));
+        $form->addHidden('type', $type);
 
         $config = [
             'ToolbarSet' => 'SurveyQuestion',
@@ -95,15 +95,27 @@ class survey_question
 
             $grouplist = $grouplist1 = $grouplist2 = $glist;
             if (!empty($formData['assigned'])) {
-                $grouplist = str_replace('<option value="'.$formData['assigned'].'"', '<option value="'.$formData['assigned'].'" selected', $glist);
+                $grouplist = str_replace(
+                    '<option value="'.$formData['assigned'].'"',
+                    '<option value="'.$formData['assigned'].'" selected',
+                    $glist
+                );
             }
 
             if (!empty($formData['assigned1'])) {
-                $grouplist1 = str_replace('<option value="'.$formData['assigned1'].'"', '<option value="'.$formData['assigned1'].'" selected', $glist);
+                $grouplist1 = str_replace(
+                    '<option value="'.$formData['assigned1'].'"',
+                    '<option value="'.$formData['assigned1'].'" selected',
+                    $glist
+                );
             }
 
             if (!empty($formData['assigned2'])) {
-                $grouplist2 = str_replace('<option value="'.$formData['assigned2'].'"', '<option value="'.$formData['assigned2'].'" selected', $glist);
+                $grouplist2 = str_replace(
+                    '<option value="'.$formData['assigned2'].'"',
+                    '<option value="'.$formData['assigned2'].'" selected',
+                    $glist
+                );
             }
 
             $this->html .= '	<tr><td colspan="">
@@ -131,14 +143,13 @@ class survey_question
      */
     public function renderForm()
     {
-        if (isset($_GET['question_id']) and !empty($_GET['question_id'])) {
+        if (isset($_GET['question_id']) && !empty($_GET['question_id'])) {
             /**
              * Check if survey has answers first before update it, this is because if you update it, the question
              * options will delete and re-insert in database loosing the iid and question_id to verify the correct answers.
              */
-            $surveyId = isset($_GET['survey_id']) ? intval($_GET['survey_id']) : 0;
+            $surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : 0;
             $answersChecker = SurveyUtil::checkIfSurveyHasAnswers($surveyId);
-
             if (!$answersChecker) {
                 $this->buttonList[] = $this->getForm()->addButtonUpdate(get_lang('ModifyQuestionSurvey'), 'save', true);
             } else {

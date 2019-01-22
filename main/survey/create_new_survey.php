@@ -16,6 +16,8 @@
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
+$_course = api_get_course_info();
+
 $this_section = SECTION_COURSES;
 
 $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
@@ -252,10 +254,9 @@ if ($_GET['action'] == 'add') {
     $defaults['parent_id'] = 0;
 }
 
-if (isset($survey_data['survey_type']) && $survey_data['survey_type'] == 1 || $_GET['action'] == 'add') {
-    $form->addElement('checkbox', 'one_question_per_page', null, get_lang('OneQuestionPerPage'));
-    $form->addElement('checkbox', 'shuffle', null, get_lang('ActivateShuffle'));
-}
+$form->addElement('checkbox', 'one_question_per_page', null, get_lang('OneQuestionPerPage'));
+$form->addElement('checkbox', 'shuffle', null, get_lang('ActivateShuffle'));
+
 $input_name_list = null;
 
 if (isset($_GET['action']) && $_GET['action'] == 'edit' && !empty($survey_id)) {

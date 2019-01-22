@@ -27,7 +27,7 @@ if (empty($documentInfo)) {
 //Check user visibility
 $is_visible = DocumentManager::check_visibility_tree(
     $documentId,
-    api_get_course_id(),
+    api_get_course_info(),
     api_get_session_id(),
     api_get_user_id(),
     api_get_group_id()

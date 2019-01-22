@@ -67,13 +67,14 @@
                 plyrPreviewId: '#record-preview',
                 directory: '{{ directory }}',
                 reload_page: 1,
-                type : 'document'
+                type: 'document'
             },
             {
                 blockId: '#record-audio-wami',
                 containerId: 'record-audio-wami-container',
                 directory: '{{ directory }}',
-                userId: {{ user_id }}
+                userId: {{ user_id }},
+                type: 'document'
             },
             null
         );

@@ -119,7 +119,8 @@ class bbb
                 $this->url = str_replace($this->protocol, '', $this->url);
                 $urlWithProtocol = $bbb_host;
             } else {
-                $urlWithProtocol = '://'.$bbb_host;
+                // We asume it's an http, if user wants to use https host must include the protocol.
+                $urlWithProtocol = 'http://'.$bbb_host;
             }
 
             // Setting BBB api
@@ -605,6 +606,7 @@ class bbb
             $url = $this->api->getJoinMeetingURL($joinParams);
             $url = $this->protocol.$url;
         }
+
         if ($this->debug) {
             error_log("return url :".$url);
         }
@@ -1544,22 +1546,26 @@ class bbb
             );
         }
 
-        if ($meetingInfo['has_video_m4v']) {
-            $links[] = Display::url(
-                Display::return_icon('save.png', get_lang('DownloadFile')),
-                $recordInfo['playbackFormatUrl'].'/capture.m4v',
-                ['target' => '_blank']
-            );
-        } else {
-            $links[] = Display::url(
-                Display::return_icon('save.png', get_lang('DownloadFile')),
-                '#',
-                [
-                    'id' => "btn-check-meeting-video-{$meetingInfo['id']}",
-                    'class' => 'check-meeting-video',
-                    'data-id' => $meetingInfo['id']
-                ]
-            );
+        $hide = $this->plugin->get('disable_download_conference_link') === 'true' ? true : false;
+
+        if ($hide == false) {
+            if ($meetingInfo['has_video_m4v']) {
+                $links[] = Display::url(
+                    Display::return_icon('save.png', get_lang('DownloadFile')),
+                    $recordInfo['playbackFormatUrl'].'/capture.m4v',
+                    ['target' => '_blank']
+                );
+            } else {
+                $links[] = Display::url(
+                    Display::return_icon('save.png', get_lang('DownloadFile')),
+                    '#',
+                    [
+                        'id' => "btn-check-meeting-video-{$meetingInfo['id']}",
+                        'class' => 'check-meeting-video',
+                        'data-id' => $meetingInfo['id']
+                    ]
+                );
+            }
         }
 
         if (!$isAdminReport) {

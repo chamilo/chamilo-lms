@@ -52,6 +52,7 @@ class BBBPlugin extends Plugin
                 'enable_global_conference_per_user' => 'boolean',
                 'enable_conference_in_course_groups' => 'boolean',
                 'enable_global_conference_link' => 'boolean',
+                'disable_download_conference_link' => 'boolean',
                 'max_users_limit' => 'text',
                 'global_conference_allow_roles' => [
                     'type' => 'select',
@@ -209,7 +210,9 @@ class BBBPlugin extends Plugin
             'bbb_host',
             'bbb_tool_enable',
             'enable_global_conference',
+            'enable_global_conference_per_user',
             'enable_global_conference_link',
+            'disable_download_conference_link',
             'enable_conference_in_course_groups',
             'bbb_plugin',
             'bbb_plugin_host',

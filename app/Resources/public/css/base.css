@@ -41,20 +41,6 @@ body {
     padding-left: 15px;
 }
 
-/*!
- * IE10 viewport hack for Surface/desktop Windows 8 bug
- * Copyright 2014-2015 Twitter, Inc.
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
- */
-
-/*
- * See the Getting Started docs for more information:
- * http://getbootstrap.com/getting-started/#support-ie10-width
- */
-@-ms-viewport     { width: device-width; }
-@-o-viewport      { width: device-width; }
-@viewport         { width: device-width; }
-
 select {
     width: auto;
 }
@@ -1135,6 +1121,9 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 }
 
 /* Breadcrumb */
+.breadcrumb{
+    margin-bottom: 10px;
+}
 .breadcrumb .home {
     padding: 0;
     height: 22px;
@@ -2390,18 +2379,19 @@ div.admin_section h4 {
     top: 0;
     color: #cfcfcf;
     margin: 0;
-    padding: 2px 10px;
+    padding: 0 10px;
     position: relative;
     background: #333;
     border-radius: 4px 0 0 0;
+    float: left;
 }
 
 .ribbon .rib h3 {
     color: white;
-    font-size: 16px;
+    font-size: 15px;
     float: left;
-    line-height: 16px;
-    padding-top: 5px;
+    line-height: 40px;
+    font-weight: bold;
     margin: 0;
 }
 
@@ -2445,9 +2435,11 @@ div.admin_section h4 {
 
 .ribbon h4 {
     margin: 0;
-    padding: 8px 10px;
+    padding-left: 8px;
     color: #444;
     float: left;
+    line-height: 40px;
+    font-size: 15px;
 }
 
 .ribbon-total h4 {
@@ -2463,18 +2455,6 @@ div.admin_section h4 {
     position: absolute;
     right: 0;
     top: 0;
-}
-
-.ribbon .rib::before {
-    content: '';
-    display: block;
-    width: 0;
-    height: 0;
-    position: absolute;
-    bottom: -11px;
-    z-index: -10;
-    border: 5px solid;
-    border-color: #242424 transparent transparent transparent;
 }
 
 .ribbon .rib-error::before {
@@ -2910,17 +2890,14 @@ form .formw .freeze {
     width: 100%;
     border: 1px solid #DDDDDD;
 }
-
 .data_table td {
     font-size: 12px;
 }
-
 .data_table th, .data_table td {
     border-top: 1px solid #DDDDDD;
     line-height: 18px;
     padding: 10px;
 }
-
 .data_table th {
     padding: 8px 10px;
     font-weight: normal;
@@ -2928,11 +2905,9 @@ form .formw .freeze {
     border-bottom: 1px solid #DDDDDD;
     color: #333;
 }
-
 .data_table th a {
     color: #333;
 }
-
 .data_table_no_border {
     border-collapse: collapse;
     border-spacing: 0;
@@ -2942,14 +2917,12 @@ form .formw .freeze {
     text-align: left;
     width: 100%;
 }
-
 .data_table_no_border td {
     line-height: normal;
     padding: 6px;
     text-align: left;
     vertical-align: middle;
 }
-
 .data_table tr.row_odd {
     background-color: #F9F9F9;
 }
@@ -7490,14 +7463,8 @@ a.sessionView {
     display: block;
 }
 
-.data_table .title {
-    text-align: left;
-    padding-left: 10px;
-}
-
 #course-list.data_table .title {
     width: 390px;
-    padding-left: 0;
 }
 
 .actions label {
@@ -7702,9 +7669,8 @@ footer {
 }
 
 #toolshortcuts_horizontal {
-    padding-top: 15px;
-    padding-bottom: 15px;
-    margin-bottom: 10px;
+    padding: 5px;
+    margin-bottom: 5px;
     text-align: center;
 }
 
@@ -7714,10 +7680,11 @@ footer {
 }
 
 #toolshortcuts_horizontal .items-icon img {
-    padding: 5px;
-    border-radius: 5px;
-    box-shadow: 0 1px 3px #C8C8C8;
+    padding: 3px;
+    border-radius: 4px;
     border: 1px solid #e6e6e6;
+    max-height: 40px;
+    max-width: 40px;
 }
 
 .everybodyview {
@@ -7760,6 +7727,10 @@ ul#toolnavbox li a.icons {
 
 ul#toolnavbox li a.icons-text {
     width: 200px;
+}
+
+ul#toolnavbox li a.icons-text img {
+    margin-left: 5px;
 }
 
 ul#toolnavbox li a.text {
@@ -8207,6 +8178,116 @@ ul#toolnavbox-two li a.btn {
 
 /**** END LP COLLAPSE CATEGORY ****/
 
+/****  TRACKING ****/
+.tracking .panel-body{
+    padding: 5px;
+}
+.tracking .tracking-icon{
+    display: block;
+    float: left;
+    height: 70px;
+    width: 50px;
+    text-align: center;
+    line-height: 70px;
+    font-size: 35px;
+}
+.tracking-box-title{
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+.tracking .tracking-info{
+    padding: 5px 10px;
+    margin-left: 50px;
+}
+.tracking .tracking-info .tracking-text{
+    display: block;
+    font-size: 14px;
+}
+.tracking .tracking-info .tracking-number{
+    display: block;
+    font-weight: bold;
+    font-size: 2em;
+}
+.tracking-top-student .list-top{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.tracking-top-student .list-top li{
+    display: inline-block;
+    width: 100%;
+}
+.tracking-top-student .list-top .avatar{
+    display: block;
+    float: left;
+    height: 55px;
+    width: 50px;
+    text-align: center;
+    line-height: 60px;
+}
+.tracking-top-student .list-top .info{
+    padding: 5px 10px;
+    margin-left: 60px;
+}
+.tracking-top-student .list-top .info .name{
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+}
+.tracking-top-student .list-top .info .progress{
+    height: 15px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border: 1px solid #1e88e5;
+    background: #ffffff;
+    text-shadow: none;
+}
+.tracking-top-student .list-top .info .progress-bar{
+    line-height: 14px;
+    background-color: #1e88e5;
+}
+.tracking-top-student .list-top .avatar .round {
+    line-height: 39px;
+    color: #ffffff;
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    border-radius: 100%;
+    background: transparent;
+    font-size: 25px;
+}
+.tracking-top-student .list-top .avatar .round.trophy{
+    background: #ffb22b;
+}
+.tracking-top-student .list-top .avatar .round img{
+    border-radius: 100%;
+}
+.tracking-box-legend{
+    font-size: 10px;
+    color: #828282;
+}
+.tracking-student{
+    background-color: #725890;
+    border-color: #725890;
+    color: #ffffff;
+}
+.tracking-lessons{
+    background-color: #4199b0;
+    border-color: #4199b0;
+    color: #ffffff;
+}
+.tracking-exercise{
+    background-color: #ab4643;
+    border-color: #ab4643;
+    color: #ffffff;
+}
+.tracking-certificate{
+    background-color: #dd853d;
+    border-color: #dd853d;
+    color: #ffffff;
+}
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {
     .sidebar-scorm {

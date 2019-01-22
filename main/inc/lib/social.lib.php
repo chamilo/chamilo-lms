@@ -152,14 +152,16 @@ class SocialManager extends UserManager
         $search_name = null,
         $load_extra_info = true
     ) {
+        $user_id = (int) $user_id;
+
         $list_ids_friends = [];
         $tbl_my_friend = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
         $tbl_my_user = Database::get_main_table(TABLE_MAIN_USER);
         $sql = 'SELECT friend_user_id FROM '.$tbl_my_friend.'
                 WHERE
                     relation_type NOT IN ('.USER_RELATION_TYPE_DELETED.', '.USER_RELATION_TYPE_RRHH.') AND
-                    friend_user_id<>'.((int) $user_id).' AND
-                    user_id='.((int) $user_id);
+                    friend_user_id<>'.$user_id.' AND
+                    user_id='.$user_id;
         if (isset($id_group) && $id_group > 0) {
             $sql .= ' AND relation_type='.$id_group;
         }
@@ -179,6 +181,9 @@ class SocialManager extends UserManager
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             if ($load_extra_info) {
                 $my_user_info = api_get_user_info($row['friend_user_id']);
+                if (empty($my_user_info)) {
+                    continue;
+                }
                 $list_ids_friends[] = [
                     'friend_user_id' => $row['friend_user_id'],
                     'firstName' => $my_user_info['firstName'],
@@ -306,37 +311,41 @@ class SocialManager extends UserManager
      *
      * @author isaac flores paz
      *
-     * @param int user receiver id
+     * @param int $userId user receiver id
      *
      * @return int
      */
-    public static function get_message_number_invitation_by_user_id($user_receiver_id)
+    public static function get_message_number_invitation_by_user_id($userId)
     {
         $table = Database::get_main_table(TABLE_MESSAGE);
-        $user_receiver_id = (int) $user_receiver_id;
+        $userId = (int) $userId;
         $sql = 'SELECT COUNT(*) as count_message_in_box FROM '.$table.'
                 WHERE
-                    user_receiver_id='.$user_receiver_id.' AND
+                    user_receiver_id='.$userId.' AND
                     msg_status='.MESSAGE_STATUS_INVITATION_PENDING;
         $res = Database::query($sql);
         $row = Database::fetch_array($res, 'ASSOC');
+        if ($row) {
+            return (int) $row['count_message_in_box'];
+        }
 
-        return $row['count_message_in_box'];
+        return 0;
     }
 
     /**
      * Get number of messages sent to other users.
      *
-     * @param int $sender_id
+     * @param int $userId
      *
      * @return int
      */
-    public static function getCountMessagesSent($sender_id)
+    public static function getCountMessagesSent($userId)
     {
+        $userId = (int) $userId;
         $table = Database::get_main_table(TABLE_MESSAGE);
         $sql = 'SELECT COUNT(*) FROM '.$table.'
                 WHERE
-                    user_sender_id='.intval($sender_id).' AND
+                    user_sender_id='.$userId.' AND
                     msg_status < 5';
         $res = Database::query($sql);
         $row = Database::fetch_row($res);
@@ -468,6 +477,8 @@ class SocialManager extends UserManager
      */
     public static function getCountInvitationSent($userId)
     {
+        $userId = (int) $userId;
+
         if (empty($userId)) {
             return 0;
         }
@@ -476,7 +487,7 @@ class SocialManager extends UserManager
         $sql = 'SELECT count(user_receiver_id) count
                 FROM '.$table.'
                 WHERE
-                    user_sender_id = '.intval($userId).' AND
+                    user_sender_id = '.$userId.' AND
                     msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
         $res = Database::query($sql);
         if (Database::num_rows($res)) {
@@ -691,6 +702,8 @@ class SocialManager extends UserManager
     public static function get_logged_user_course_html($my_course, $count)
     {
         $result = '';
+        $count = (int) $count;
+
         // Table definitions
         $main_user_table = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -800,6 +813,9 @@ class SocialManager extends UserManager
      */
     public static function show_social_avatar_block($show = '', $group_id = 0, $user_id = 0)
     {
+        $user_id = (int) $user_id;
+        $group_id = (int) $group_id;
+
         if (empty($user_id)) {
             $user_id = api_get_user_id();
         }
@@ -891,6 +907,9 @@ class SocialManager extends UserManager
         $show_full_profile = false,
         $show_delete_account_button = false
     ) {
+        $user_id = (int) $user_id;
+        $group_id = (int) $group_id;
+
         if (empty($user_id)) {
             $user_id = api_get_user_id();
         }
@@ -1271,7 +1290,7 @@ class SocialManager extends UserManager
      */
     public static function display_user_list($user_list, $wrap = true)
     {
-        $html = null;
+        $html = '';
 
         if (isset($_GET['id']) || count($user_list) < 1) {
             return false;
@@ -1282,12 +1301,12 @@ class SocialManager extends UserManager
             $course_url = '&amp;cidReq='.Security::remove_XSS($_GET['cidReq']);
         }
 
+        $hide = api_get_configuration_value('hide_complete_name_in_whoisonline');
         foreach ($user_list as $uid) {
             $user_info = api_get_user_info($uid, true);
             $lastname = $user_info['lastname'];
             $firstname = $user_info['firstname'];
             $completeName = $firstname.', '.$lastname;
-
             $user_rol = $user_info['status'] == 1 ? Display::return_icon('teacher.png', get_lang('Teacher'), null, ICON_SIZE_TINY) : Display::return_icon('user.png', get_lang('Student'), null, ICON_SIZE_TINY);
             $status_icon_chat = null;
             if (isset($user_info['user_is_online_in_chat']) && $user_info['user_is_online_in_chat'] == 1) {
@@ -1301,6 +1320,13 @@ class SocialManager extends UserManager
             if (api_get_setting('show_official_code_whoisonline') == 'true') {
                 $officialCode .= '<div class="items-user-official-code"><p style="min-height: 30px;" title="'.get_lang('OfficialCode').'">'.$user_info['official_code'].'</p></div>';
             }
+
+            if ($hide === true) {
+                $completeName = '';
+                $firstname = '';
+                $lastname = '';
+            }
+
             $img = '<img class="img-responsive img-circle" title="'.$completeName.'" alt="'.$completeName.'" src="'.$userPicture.'">';
 
             $url = null;
@@ -1341,7 +1367,7 @@ class SocialManager extends UserManager
     public static function display_individual_user($user_id)
     {
         global $interbreadcrumb;
-        $safe_user_id = intval($user_id);
+        $safe_user_id = (int) $user_id;
         $currentUserId = api_get_user_id();
 
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
@@ -1597,7 +1623,7 @@ class SocialManager extends UserManager
      * Gets all messages from someone's wall (within specific limits).
      *
      * @param int        $userId        id of wall shown
-     * @param string     $messageStatus status wall message
+     * @param int        $messageStatus status wall message
      * @param int|string $parentId      id message (Post main)
      * @param string     $start         Date from which we want to show the messages, in UTC time
      * @param int        $limit         Limit for the number of parent messages we want to show
@@ -1621,10 +1647,11 @@ class SocialManager extends UserManager
 
         $tblMessage = Database::get_main_table(TABLE_MESSAGE);
         $tblMessageAttachment = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
-
-        $userId = intval($userId);
+        $parentId = (int) $parentId;
+        $userId = (int) $userId;
         $start = Database::escape_string($start);
-        $limit = intval($limit);
+        $offset = (int) $offset;
+        $messageStatus = (int) $messageStatus;
 
         $sql = "SELECT
                     id,
@@ -1666,7 +1693,7 @@ class SocialManager extends UserManager
      *
      * @param int    $userId    USER ID of the person's wall
      * @param int    $friendId  id person
-     * @param int    $idMessage id message
+     * @param int    $messageId id message
      * @param string $start     Start date (from when we want the messages until today)
      * @param int    $limit     Limit to the number of messages we want
      * @param int    $offset    Wall messages offset
@@ -1676,7 +1703,7 @@ class SocialManager extends UserManager
     public static function getWallMessagesHTML(
         $userId,
         $friendId,
-        $idMessage,
+        $messageId,
         $start = null,
         $limit = 10,
         $offset = 0
@@ -1689,7 +1716,7 @@ class SocialManager extends UserManager
         $messages = self::getWallMessages(
             $userId,
             MESSAGE_STATUS_WALL,
-            $idMessage,
+            $messageId,
             $start,
             $limit,
             $offset
@@ -1735,7 +1762,7 @@ class SocialManager extends UserManager
                 $media .= Display::url(
                     Display::returnFontAwesomeIcon('trash'),
                     $url,
-                    ['title' => get_lang("SocialMessageDelete")]
+                    ['title' => get_lang('SocialMessageDelete')]
                 );
                 $media .= '</div>';
                 $media .= '</div>';
@@ -1749,7 +1776,7 @@ class SocialManager extends UserManager
         $formattedList .= '<div class="mediapost-form">';
         $formattedList .= '<form name="social_wall_message" method="POST">
                 <label for="social_wall_new_msg" class="hide">'.get_lang('SocialWriteNewComment').'</label>
-                <input type="hidden" name = "messageId" value="'.$idMessage.'" />
+                <input type="hidden" name = "messageId" value="'.$messageId.'" />
                 <textarea placeholder="'.get_lang('SocialWriteNewComment').
                 '" name="social_wall_new_msg" rows="1" style="width:80%;" ></textarea>
                 <button type="submit" name="social_wall_new_msg_submit"
@@ -2224,6 +2251,9 @@ class SocialManager extends UserManager
      */
     private static function headerMessagePost($authorId, $receiverId, $users, $message, $isOwnWall = false)
     {
+        $authorId = (int) $authorId;
+        $receiverId = (int) $receiverId;
+
         $date = api_get_local_time($message['send_date']);
         $avatarAuthor = $users[$authorId]['avatar'];
         $urlAuthor = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$authorId;
@@ -2247,7 +2277,6 @@ class SocialManager extends UserManager
         if (!empty($message['path'])) {
             $imageBig = UserManager::getUserPicture($authorId, USER_IMAGE_SIZE_BIG);
             $imageSmall = UserManager::getUserPicture($authorId, USER_IMAGE_SIZE_SMALL);
-
             $wallImage = '<a class="thumbnail ajax" href="'.$imageBig.'"><img src="'.$imageSmall.'"></a>';
         }
 

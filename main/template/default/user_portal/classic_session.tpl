@@ -2,8 +2,8 @@
 
 {% for row in session %}
     <div class="panel panel-default">
+        {% set collapsable = '' %}
         {% if not row.show_simple_session_info %}
-            {% set collapsable = '' %}
             {% if row.course_list_session_style %} {# If not style then no show header #}
                 <div class="panel-heading">
                     {% if row.course_list_session_style == 1 or row.course_list_session_style == 2 %} {# Session link #}
@@ -38,8 +38,20 @@
                             </a>
                         </div>
                     {% endif %}
+                    {% if row.collapsable_link %}
+                        <div class="pull-right">
+                            {{ row.collapsable_link }}
+                        </div>
+                    {% endif %}
                 </div>
             {% endif %}
+
+            {% if row.collapsable_link %}
+                {% if row.collapsed == 1 %}
+                    {% set collapsable = 'collapse' %}
+                {% endif %}
+            {% endif %}
+
             <div class="session panel-body {{ collapsable }}" id="collapse_{{ row.id }}">
                 <div class="row">
                     <div class="col-md-12">

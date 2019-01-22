@@ -52,18 +52,16 @@ class Version20150603181728 extends AbstractMigrationChamilo
         // Remove inconsistencies about non-existing courses
         $this->addSql("DELETE FROM c_item_property WHERE session_id IS NOT NULL and session_id <> 0 AND session_id NOT IN (SELECT id FROM session)");
         $this->addSql("DELETE FROM c_item_property WHERE to_user_id IS NOT NULL and to_user_id <> 0 AND to_user_id NOT IN (SELECT id FROM user)");
-        $this->addSql("DELETE FROM c_item_property WHERE to_user_id IS NOT NULL AND to_user_id <> 0 AND to_user_id NOT IN (SELECT id FROM user)");
 
         // Sometimes the user was deleted but we need to keep the document.
         // Taking first admin
         $this->addSql("UPDATE c_item_property SET insert_user_id = (SELECT u.user_id FROM admin a INNER JOIN user u ON (u.user_id = a.user_id AND u.active = 1) LIMIT 1) WHERE insert_user_id IS NOT NULL AND insert_user_id <> 0 AND insert_user_id NOT IN (SELECT id FROM user)");
 
-        // Remove inconsistencies about non-existing users
+        // Remove inconsistencies about non-existing courses
         $this->addSql("DELETE FROM c_item_property WHERE c_id NOT IN (SELECT id FROM course)");
         // Remove inconsistencies about non-existing users
         $this->addSql("DELETE FROM course_rel_user WHERE user_id NOT IN (SELECT id FROM user)");
-        // Remove inconsistencies about non-existing courses
-        $this->addSql("DELETE FROM c_item_property WHERE c_id NOT IN (SELECT id FROM course)");
+
         // Fix to_group_id
         $this->addSql("UPDATE c_item_property SET to_group_id = NULL WHERE to_group_id = 0");
         $this->addSql('UPDATE c_item_property SET to_user_id = NULL WHERE to_user_id = 0');

@@ -696,7 +696,7 @@ class WSCMCourse extends WSCM
                     return true;
                 } else {
                     // Subscribe user
-                    if (CourseManager::subscribe_user($user_id, $course_code, $status)) {
+                    if (CourseManager::subscribeUser($user_id, $course_code, $status)) {
                         return true;
                     } else {
                         return new WSError(203, 'An error occured subscribing to this course');

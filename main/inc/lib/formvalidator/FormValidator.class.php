@@ -284,6 +284,18 @@ EOT;
 
     /**
      * @param string $name
+     * @param string $label
+     * @param array  $attributes
+     *
+     * @return HTML_QuickForm_element
+     */
+    public function addDateTimeRangePicker($name, $label, $attributes = [])
+    {
+        return $this->addElement('DateTimeRangePicker', $name, $label, $attributes);
+    }
+
+    /**
+     * @param string $name
      * @param string $value
      * @param array  $attributes
      */
@@ -1275,92 +1287,6 @@ EOT;
     }
 
     /**
-     * Create a form validator based on an array of form data:.
-     *
-     *         array(
-     *             'name' => 'zombie_report_parameters',    //optional
-     *             'method' => 'GET',                       //optional
-     *             'items' => array(
-     *                 array(
-     *                     'name' => 'ceiling',
-     *                     'label' => 'Ceiling',            //optional
-     *                     'type' => 'date',
-     *                     'default' => date()              //optional
-     *                 ),
-     *                 array(
-     *                     'name' => 'active_only',
-     *                     'label' => 'ActiveOnly',
-     *                     'type' => 'checkbox',
-     *                     'default' => true
-     *                 ),
-     *                 array(
-     *                     'name' => 'submit_button',
-     *                     'type' => 'style_submit_button',
-     *                     'value' => get_lang('Search'),
-     *                     'attributes' => array('class' => 'search')
-     *                 )
-     *             )
-     *         );
-     *
-     * @param array $form_data
-     *
-     * @deprecated use normal FormValidator construct
-     *
-     * @return FormValidator
-     */
-    public static function create($form_data)
-    {
-        if (empty($form_data)) {
-            return null;
-        }
-        $form_name = isset($form_data['name']) ? $form_data['name'] : 'form';
-        $form_method = isset($form_data['method']) ? $form_data['method'] : 'POST';
-        $form_action = isset($form_data['action']) ? $form_data['action'] : '';
-        $form_target = isset($form_data['target']) ? $form_data['target'] : '';
-        $form_attributes = isset($form_data['attributes']) ? $form_data['attributes'] : null;
-        $form_track_submit = isset($form_data['track_submit']) ? $form_data['track_submit'] : true;
-        $reset = null;
-        $result = new FormValidator($form_name, $form_method, $form_action, $form_target, $form_attributes, $form_track_submit);
-
-        $defaults = [];
-        foreach ($form_data['items'] as $item) {
-            $name = $item['name'];
-            $type = isset($item['type']) ? $item['type'] : 'text';
-            $label = isset($item['label']) ? $item['label'] : '';
-            if ($type == 'wysiwyg') {
-                $element = $result->addHtmlEditor($name, $label);
-            } else {
-                $element = $result->addElement($type, $name, $label);
-            }
-            if (isset($item['attributes'])) {
-                $attributes = $item['attributes'];
-                $element->setAttributes($attributes);
-            }
-            if (isset($item['value'])) {
-                $value = $item['value'];
-                $element->setValue($value);
-            }
-            if (isset($item['default'])) {
-                $defaults[$name] = $item['default'];
-            }
-            if (isset($item['rules'])) {
-                $rules = $item['rules'];
-                foreach ($rules as $rule) {
-                    $message = $rule['message'];
-                    $type = $rule['type'];
-                    $format = isset($rule['format']) ? $rule['format'] : null;
-                    $validation = isset($rule['validation']) ? $rule['validation'] : 'server';
-                    $force = isset($rule['force']) ? $rule['force'] : false;
-                    $result->addRule($name, $message, $type, $format, $validation, $reset, $force);
-                }
-            }
-        }
-        $result->setDefaults($defaults);
-
-        return $result;
-    }
-
-    /**
      * @return HTML_QuickForm_Renderer_Default
      */
     public static function getDefaultRenderer()
@@ -1747,6 +1673,80 @@ EOT;
     public function addUserAvatar($name, $label, $imageSize = 'small', $subtitle = '')
     {
         return $this->addElement('UserAvatar', $name, $label, ['image_size' => $imageSize, 'sub_title' => $subtitle]);
+    }
+
+    /**
+     * @param array $typeList
+     */
+    public function addEmailTemplate($typeList)
+    {
+        $mailManager = new MailTemplateManager();
+        foreach ($typeList as $type) {
+            $list = $mailManager->get_all(
+                ['where' => ['type = ? AND url_id = ?' => [$type, api_get_current_access_url_id()]]]
+            );
+
+            $options = [get_lang('Select')];
+            $name = $type;
+            $defaultId = '';
+            foreach ($list as $item) {
+                $options[$item['id']] = $item['name'];
+                $name = $item['name'];
+                if (empty($defaultId)) {
+                    $defaultId = $item['default_template'] == 1 ? $item['id'] : '';
+                }
+            }
+
+            $url = api_get_path(WEB_AJAX_PATH).'mail.ajax.php?a=select_option';
+            $typeNoDots = 'email_template_option_'.str_replace('.tpl', '', $type);
+            $this->addSelect(
+                'email_template_option['.$type.']',
+                $name,
+                $options,
+                ['id' => $typeNoDots]
+            );
+
+            $templateNoDots = 'email_template_'.str_replace('.tpl', '', $type);
+            $templateNoDotsBlock = 'email_template_block_'.str_replace('.tpl', '', $type);
+            $this->addHtml('<div id="'.$templateNoDotsBlock.'" style="display:none">');
+            $this->addTextarea(
+                $templateNoDots,
+                get_lang('Preview'),
+                ['disabled' => 'disabled ', 'id' => $templateNoDots, 'rows' => '5']
+            );
+            $this->addHtml('</div>');
+
+            $this->addHtml("<script>            
+            $(document).on('ready', function() {
+                var defaultValue = '$defaultId';
+                $('#$typeNoDots').val(defaultValue);
+                $('#$typeNoDots').selectpicker('render');
+                if (defaultValue != '') {
+                    var selected = $('#$typeNoDots option:selected').val();                    
+                    $.ajax({ 
+                        url: '$url' + '&id=' + selected+ '&template_name=$type',
+                        success: function (data) {
+                            $('#$templateNoDots').html(data);
+                            $('#$templateNoDotsBlock').show();
+                            return;
+                        }, 
+                    });
+                }
+                                
+                $('#$typeNoDots').on('change', function(){                    
+                    var selected = $('#$typeNoDots option:selected').val();                    
+                    $.ajax({ 
+                        url: '$url' + '&id=' + selected,
+                        success: function (data) {
+                            $('#$templateNoDots').html(data);
+                            $('#$templateNoDotsBlock').show();
+                            return;
+                        }, 
+                    });
+                });
+            });
+            </script>");
+        }
     }
 
     /**

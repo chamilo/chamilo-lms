@@ -91,10 +91,11 @@ if ($is_allowed_in_course == false) {
 // Check user visibility.
 $is_visible = DocumentManager::check_visibility_tree(
     $document_id,
-    api_get_course_id(),
+    api_get_course_info(),
     api_get_session_id(),
     api_get_user_id(),
-    api_get_group_id()
+    api_get_group_id(),
+    false
 );
 
 if (!$is_allowed_to_edit && !$is_visible) {
@@ -173,9 +174,7 @@ if (api_is_course_admin()) {
     $frameheight = 165;
 }
 
-$js_glossary_in_documents = '
-    setFrameReady("mainFrame");
-';
+$frameReady = Display::getFrameReadyBlock('top.mainFrame');
 
 $web_odf_supported_files = DocumentManager::get_web_odf_extension_list();
 // PDF should be displayed with viewerJS
@@ -243,17 +242,15 @@ if (!$playerSupported && $execute_iframe) {
         var updateContentHeight = function() {
             my_iframe = document.getElementById("mainFrame");
             if (my_iframe) {
-                //this doesnt seem to work in IE 7,8,9
-                new_height = my_iframe.contentWindow.document.body.scrollHeight;
-                my_iframe.height = my_iframe.contentWindow.document.body.scrollHeight + "px";
+                //this doesnt seem to work in IE 7,8,9         
+                my_iframe.height = my_iframe.contentWindow.document.body.scrollHeight + 50 + "px";
             }
         };
 
         // Fixes the content height of the frame
         window.onload = function() {
             updateContentHeight();
-            '.$js_glossary_in_documents.'
-
+            '.$frameReady.'
         }
     </script>';
 }
@@ -358,7 +355,15 @@ if ($execute_iframe) {
         $content = Security::remove_XSS(file_get_contents($file_url_sys));
         echo $content;
     } else {
-        echo '<iframe id="mainFrame" name="mainFrame" border="0" frameborder="0" scrolling="no" style="width:100%;" height="600" src="'.$file_url_web.'&rand='.mt_rand(1, 10000).'" height="500" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>';
+        echo '<iframe 
+            id="mainFrame" 
+            name="mainFrame" 
+            border="0" 
+            frameborder="0" 
+            scrolling="no" 
+            style="width:100%;" height="600" 
+            src="'.$file_url_web.'&rand='.mt_rand(1, 10000).'" 
+            height="500" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>';
     }
 }
 Display::display_footer();

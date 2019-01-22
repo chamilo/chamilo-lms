@@ -37,6 +37,17 @@ $skipData = api_get_configuration_value('tracking_skip_generic_data');
 // Access control
 api_block_anonymous_users();
 
+$logInfo = [
+    'tool' => SECTION_TRACKING,
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => '',
+    'action_details' => '',
+    'current_id' => 0,
+    'info' => '',
+];
+Event::registerLog($logInfo);
+
 $allowToTrack = api_is_platform_admin(true, true) || api_is_teacher();
 
 if (!$allowToTrack) {
@@ -209,7 +220,7 @@ if (!empty($session_id) &&
 } else {
     $actionsLeft .= Display::url(
         Display::return_icon(
-            'stats.png',
+            'statistics.png',
             get_lang('MyStats'),
             null,
             ICON_SIZE_MEDIUM

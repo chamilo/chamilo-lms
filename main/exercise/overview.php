@@ -39,9 +39,20 @@ $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['l
 $learnpathItemViewId = isset($_REQUEST['learnpath_item_view_id']) ? intval($_REQUEST['learnpath_item_view_id']) : null;
 $origin = api_get_origin();
 
+$logInfo = [
+    'tool' => TOOL_QUIZ,
+    'tool_id' => $exercise_id,
+    'tool_id_detail' => 0,
+    'action' => isset($_REQUEST['learnpath_id']) ? 'learnpath_id' : '',
+    'action_details' => isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : '',
+    'current_id' => 0,
+    'info' => '',
+];
+Event::registerLog($logInfo);
+
 $interbreadcrumb[] = [
-    "url" => "exercise.php?".api_get_cidreq(),
-    "name" => get_lang('Exercises'),
+    'url' => 'exercise.php?'.api_get_cidreq(),
+    'name' => get_lang('Exercises'),
 ];
 $interbreadcrumb[] = ["url" => "#", "name" => $objExercise->selectTitle(true)];
 
@@ -106,7 +117,7 @@ if (api_get_configuration_value('save_titles_as_html')) {
     );
 }
 
-//Exercise description
+// Exercise description
 if (!empty($objExercise->description)) {
     $html .= Display::div($objExercise->description, ['class' => 'exercise_description']);
 }
@@ -186,11 +197,18 @@ if ($current_browser == 'Internet Explorer') {
 }
 
 $blockShowAnswers = false;
-if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
+if (in_array(
+    $objExercise->results_disabled,
+    [
+        RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
+        RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
+    ])
+) {
     if (count($attempts) < $objExercise->attempts) {
         $blockShowAnswers = true;
     }
 }
+
 if (!empty($attempts)) {
     $i = $counter;
     foreach ($attempts as $attempt_result) {
@@ -227,7 +245,7 @@ if (!empty($attempts)) {
             ),
             'userIp' => $attempt_result['user_ip'],
         ];
-        $attempt_link .= "&nbsp;&nbsp;&nbsp;".$teacher_revised;
+        $attempt_link .= '&nbsp;&nbsp;&nbsp;'.$teacher_revised;
 
         if (in_array(
             $objExercise->results_disabled,
@@ -236,6 +254,7 @@ if (!empty($attempts)) {
                 RESULT_DISABLE_SHOW_SCORE_ONLY,
                 RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES,
                 RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
+                RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
             ]
         )) {
             $row['result'] = $score;
@@ -247,16 +266,25 @@ if (!empty($attempts)) {
                 RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS,
                 RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES,
                 RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
+                RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
             ]
         ) || (
             $objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ONLY &&
             $objExercise->feedback_type == EXERCISE_FEEDBACK_TYPE_END
         )
         ) {
-            if ($blockShowAnswers) {
+            if ($blockShowAnswers &&
+                $objExercise->results_disabled != RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK
+            ) {
                 $attempt_link = '';
             }
-
+            if ($blockShowAnswers == true &&
+                $objExercise->results_disabled == RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK
+            ) {
+                if (isset($row['result'])) {
+                    unset($row['result']);
+                }
+            }
             $row['attempt_link'] = $attempt_link;
         }
         $my_attempt_array[] = $row;
@@ -268,6 +296,19 @@ if (!empty($attempts)) {
 
     // Hiding score and answer
     switch ($objExercise->results_disabled) {
+        case RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK:
+            if ($blockShowAnswers) {
+                $header_names = [get_lang('Attempt'), get_lang('StartDate'), get_lang('IP'), get_lang('Details')];
+            } else {
+                $header_names = [
+                    get_lang('Attempt'),
+                    get_lang('StartDate'),
+                    get_lang('IP'),
+                    get_lang('Score'),
+                    get_lang('Details'),
+                ];
+            }
+            break;
         case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT:
             if ($blockShowAnswers) {
                 $header_names = [get_lang('Attempt'), get_lang('StartDate'), get_lang('IP'), get_lang('Score')];
@@ -344,6 +385,12 @@ if ($time_control) {
 }
 
 $html .= $message;
+
+$disable = api_get_configuration_value('exercises_disable_new_attempts');
+
+if ($disable && empty($exercise_stat_info)) {
+    $exercise_url_button = Display::return_message(get_lang('NewExerciseAttemptDisabled'));
+}
 
 if (!empty($exercise_url_button)) {
     $html .= Display::div(

@@ -303,7 +303,7 @@ class AttendanceController
         $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
             api_get_user_id(),
             api_get_course_info()
-        );
+        ) || api_is_drh();
 
         if ($edit == true) {
             if (api_is_allowed_to_edit(null, true) || $isDrhOfCourse) {

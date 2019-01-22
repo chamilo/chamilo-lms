@@ -8,15 +8,14 @@
                     <li>{{ teacher.complete_name }} | </li>
                 {% endfor %}
             </ul>
-
         </div>
     </div>
 
     {% set course_video = '' %}
-    {% for extra_field in course.extra_fields %}
-    {% if extra_field.value.getField().getVariable() == 'video_url' %}
-    {% set course_video = extra_field.value.getValue() %}
-    {% endif %}
+        {% for extra_field in course.extra_fields %}
+        {% if extra_field.value.getField().getVariable() == 'video_url' %}
+            {% set course_video = extra_field.value.getValue() %}
+        {% endif %}
     {% endfor %}
 
     <div class="panel panel-default">
@@ -34,7 +33,7 @@
                         <img src="{{ course.image }}" class="img-responsive" />
                     </div>
                     {% endif %}
-
+                    {% if not 'hide_social_media_links'|api_get_configuration_value %}
                     <div class="share-social-media">
                         <ul class="sharing-buttons">
                             <li>
@@ -60,6 +59,7 @@
                             </li>
                         </ul>
                     </div>
+                    {% endif %}
                 </div>
                 <div class="col-sm-7">
                     <div class="course-description">
@@ -69,7 +69,6 @@
             </div>
             {% if course.tags %}
                 <div class="panel-tags">
-
                     <ul class="list-inline course-tags">
                         <li>{{ 'Tags'|get_lang }} :</li>
                         {% for tag in course.tags %}
@@ -105,23 +104,32 @@
                     </div>
                 </div>
             </div>
-
             <div class="col-sm-4">
+                {% if allow_subscribe == true %}
                 <div class="panel panel-default">
                     <div class="panel-body">
                         {% if is_premium == false %}
-                            <h5>{{ 'CourseSubscription'|get_lang }}</h5>
                             <div class="session-subscribe">
                                 {% if _u.logged == 0 %}
                                     {% if 'allow_registration'|api_get_setting != 'false' %}
-                                        <a href="{{ _p.web_main ~ 'auth/inscription.php' ~ redirect_to_session }}" class="btn btn-success btn-block btn-lg">
-                                            <i class="fa fa-pencil" aria-hidden="true"></i> {{ 'SignUp'|get_lang }}
+                                        <a
+                                            href="{{ _p.web_main ~ 'auth/inscription.php' ~ redirect_to_session }}"
+                                            class="btn btn-success btn-block btn-lg">
+                                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                                            {{ 'SignUp'|get_lang }}
                                         </a>
                                     {% endif %}
                                 {% elseif course.subscription %}
-                                    <a href="{{ _p.web }}courses/{{ course.code }}/index.php?id_session=0" class="btn btn-lg btn-success btn-block">{{ 'CourseHomepage'|get_lang }}</a>
+                                    <a href="{{ _p.web }}courses/{{ course.code }}/index.php?id_session=0"
+                                       class="btn btn-lg btn-success btn-block">
+                                        {{ 'CourseHomepage'|get_lang }}
+                                    </a>
                                 {% else %}
-                                    <a href="{{ _p.web }}courses/{{ course.code }}/index.php?action=subscribe&sec_token={{ token }}" class="btn btn-lg btn-success btn-block">{{ 'Subscribe'|get_lang }}</a>
+                                    <a
+                                        href="{{ _p.web }}courses/{{ course.code }}/index.php?action=subscribe&sec_token={{ token }}"
+                                       class="btn btn-lg btn-success btn-block">
+                                        {{ 'Subscribe'|get_lang }}
+                                    </a>
                                 {% endif %}
                             </div>
                         {% else %}
@@ -133,42 +141,46 @@
                                     {{ is_premium.iso_code }} {{ is_premium.price }}
                                 </div>
                                 <div class="buy-box">
-                                    <a href="{{ _p.web }}plugin/buycourses/src/process.php?i={{ is_premium.product_id }}&t={{ is_premium.product_type }}" class="btn btn-lg btn-primary btn-block">{{ 'BuyNow'|get_lang }}</a>
+                                    <a
+                                        href="{{ _p.web }}plugin/buycourses/src/process.php?i={{ is_premium.product_id }}&t={{ is_premium.product_type }}"
+                                        class="btn btn-lg btn-primary btn-block">{{ 'BuyNow'|get_lang }}</a>
                                 </div>
                             </div>
                         {% endif %}
                     </div>
                 </div>
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <div class="panel-teachers">
-                            <h3 class="sub-title">{{ "Coaches"|get_lang }}</h3>
-                        </div>
-                        {%  for teacher in course.teachers %}
-                        <div class="coach-information">
-                            <div class="coach-header">
-                                <div class="coach-avatar">
-                                    <img class="img-circle img-responsive" src="{{ teacher.image }}" alt="{{ teacher.complete_name }}">
+                {% endif %}
+                {% if course.teachers %}
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="panel-teachers">
+                                <h3 class="sub-title">{{ "Coaches"|get_lang }}</h3>
+                            </div>
+                            {%  for teacher in course.teachers %}
+                            <div class="coach-information">
+                                <div class="coach-header">
+                                    <div class="coach-avatar">
+                                        <img class="img-circle img-responsive" src="{{ teacher.image }}" alt="{{ teacher.complete_name }}">
+                                    </div>
+                                    <div class="coach-title">
+                                        <h4>{{ teacher.complete_name }}</h4>
+                                        <p> {{ teacher.diploma }}</p>
+                                    </div>
                                 </div>
-                                <div class="coach-title">
-                                    <h4>{{ teacher.complete_name }}</h4>
-                                    <p> {{ teacher.diploma }}</p>
+                                <div class="open-area  {{ course.teachers | length >= 2 ? 'open-more' : ' ' }}">
+                                    {{ teacher.openarea }}
                                 </div>
                             </div>
-                            <div class="open-area  {{ course.teachers | length >= 2 ? 'open-more' : ' ' }}">
-                                {{ teacher.openarea }}
-                            </div>
+                            {% endfor %}
                         </div>
-                        {% endfor %}
-
                     </div>
-                </div>
+                {% endif %}
             </div>
         </div>
     </section>
 </div>
 
-<script type="text/javascript">
+<script>
     $(document).ready(function() {
         $('.course-information').readmore({
             speed: 100,

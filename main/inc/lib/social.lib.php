@@ -1638,7 +1638,8 @@ class SocialManager extends UserManager
                         WHERE ma.message_id = tm.id 
                     ) as filename
                     FROM $tblMessage tm
-                WHERE
+                WHERE 
+                  msg_status <> ".MESSAGE_STATUS_WALL_DELETE." AND
         ";
 
         // Date filter
@@ -1749,7 +1750,7 @@ class SocialManager extends UserManager
         $offset = 0
     ) {
         $messageId = $message['id'];
-        $messages = MessageManager::get_messages_by_parent($message['id'], 0, $offset, $limit);
+        $messages = MessageManager::getMessagesByParent($message['id'], 0, $offset, $limit);
         $formattedList = '<div class="sub-mediapost">';
         $users = [];
 

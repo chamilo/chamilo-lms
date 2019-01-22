@@ -3129,3 +3129,28 @@ table.certaintyTable {
   margin-top: 10px;
   border: 1px solid #b2b2b2;
 }
+/****** DROPZONE ******/
+#dropzone {
+  position: relative;
+  overflow: hidden;
+  direction: ltr;
+  cursor: pointer;
+  text-align: center;
+  color: #333;
+  font-weight: bold;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  width: auto;
+  margin-left: auto;
+  margin-right: auto;
+  height: auto;
+  line-height: 50px;
+  background-color: #D4E6F0;
+  border: 2px dashed #bbbbbb;
+  font-size: 120%;
+  margin-bottom: 0;
+  &:hover{
+    background: lawngreen;
+  }
+}

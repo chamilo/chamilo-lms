@@ -62,8 +62,8 @@ if (count($output) > 0) {
     echo Display::return_message($result, 'normal', false);
 }
 ?>
-<div id="datafiller" class="panel panel-default">
-    <div class="panel-body">
+<div id="datafiller" class="card">
+    <div class="card-body">
     <h4><?php
         echo Display::return_icon('bug.png', get_lang('DataFiller'), null, ICON_SIZE_MEDIUM).' '.get_lang('DataFiller');
         ?>

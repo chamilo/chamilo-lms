@@ -2262,19 +2262,6 @@ div#no-data-view div.controls {
 .lp_resource_element_new {
     border: 2px dotted green;
 }
-
-#course_thing_to_do .thumbnail {
-    text-align: center;
-    margin-bottom: 5px;
-}
-
-.section-parameters {
-    padding-top: 20px;
-    padding-bottom: 20px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
 /*
   Glossary
 */
@@ -2340,30 +2327,6 @@ i.size-32.icon-new-note {
     }
 }
 
-/* Default skill partition colors */
-
-#filepaths input {
-    margin-bottom: 5px;
-}
-
-.xdebug-error {
-    margin-top: 20px;
-}
-
-.multiple_select_header {
-    height: 35px;
-    margin-bottom: 15px;
-}
-
-.exercise_save_mini_message {
-    margin-left: 5px;
-}
-
-#learning_path_left_zone .no-border {
-    border: 0;
-}
-
-
 /***** Survey *****/
 
 .survey-block {
@@ -2414,10 +2377,6 @@ i.size-32.icon-new-note {
     margin-left: 10px;
 }
 
-#question-survey .start-survey .col-sm-8 {
-    text-align: center;
-}
-
 .survey_content {
     color: #666;
     padding: 5px;
@@ -2466,28 +2425,8 @@ i.size-32.icon-new-note {
     text-align: center;
 }
 
-#display-survey.table tbody tr:hover td, #display-survey.table tbody tr:hover th {
-    background-color: transparent;
-}
-
-.answered-people {
-    padding: 10px;
-    border: 1px solid #ddd;
-    margin-bottom: 20px;
-}
-
-.answered-people h4 {
-    margin-bottom: 10px;
-    font-size: 16px;
-    font-weight: normal;
-}
 
 /* CSS BASE BOOSTRAP 3 */
-
-
-.openbadges-tablet {
-    margin-top: 15px;
-}
 
 .openbadges-tablet .table thead {
     background-color: #E2ECEB;
@@ -2533,9 +2472,6 @@ i.size-32.icon-new-note {
     border: 1px solid #b2b2b2;
 }
 
-.openbadges-text {
-    text-align: center;
-}
 
 /* Social Profile */
 .social-group .group-title {
@@ -2570,10 +2506,6 @@ i.size-32.icon-new-note {
     height: 50px;
     max-width: 50px;
     max-height: 50px;
-}
-
-.top-mediapost {
-    border-bottom: 1px solid #ECF0F1;
 }
 
 .popularity-mediapost {
@@ -2663,34 +2595,6 @@ i.size-32.icon-new-note {
     color: #666;
 }
 
-/* Items menus sidebar */
-.sidebar .list-group-item {
-    border: none;
-    margin-left: 2.14285714em;
-    padding: 10px 5px;
-}
-
-.sidebar .list-group-item .item-icon {
-    margin-right: 5px;
-    text-align: center;
-    position: absolute;
-    left: -2.14285714em;
-    width: 2.14285714em;
-}
-
-.social-network-menu .nav-pills li.active a,
-#groups-acordeon .nav li.active a {
-    background: none;
-    color: #1ABC9C;
-}
-
-.ui-state-highlight_lp {
-    border: 1px solid #FEAA18;
-    background: #FFB738;
-    color: #363636;
-    height: 20px;
-    width: 70%;
-}
 
 /**
  * Modal for user avatar preview
@@ -3080,63 +2984,6 @@ ul.exercise-draggable-answer .touch-items:hover {
     padding-bottom: 5px;
 }
 
-#datafiller .fillers {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-#datafiller .description {
-    padding: 10px;
-    margin-bottom: 10px;
-}
-
-#datafiller .fillers li {
-    padding-top: 5px;
-    padding-bottom: 5px;
-    margin-left: 10px;
-}
-
-.filler-report .filler-report-data-init {
-    width: 60%;
-}
-
-.create-groups .separate td {
-    padding-left: 15px;
-    padding-right: 15px;
-    margin-right: 10px;
-}
-
-.create-groups .separate .btn-primary {
-    margin-top: 20px;
-}
-
-.course-items .course-items-session {
-    font-size: 12px;
-}
-
-.course-items .course-items-title {
-    font-size: 16px;
-}
-
-.report_section .table {
-    font-size: 12px;
-}
-
-#gradebook_list .centered {
-    text-align: center;
-    vertical-align: middle;
-}
-
-#gradebook_list .score {
-    font-weight: bold;
-    color: #8A6E4E;
-}
-
-#gradebook_list .centered .badge-group {
-    width: auto;
-}
-
 /* video chat */
 
 #chat-video-panel .thumbnail video {
@@ -3158,33 +3005,6 @@ ul.exercise-draggable-answer .touch-items:hover {
     overflow: hidden;
     width: 180px;
 }
-
-#course-block .list-group .list-group-item,
-#session-block .list-group .list-group-item {
-    padding: 5px;
-    border: none;
-    font-size: 12px;
-    line-height: 17px;
-    color: #666666;
-}
-
-#course-block .list-group .img-default {
-    float: left;
-    margin-right: 5px;
-}
-
-#course-block .list-group .list-group-item .img-course,
-#session-block .list-group .list-group-item .img-session {
-    width: 70px;
-    float: left;
-    margin-right: 5px;
-}
-
-#course-block .list-group .list-group-item .title,
-#session-block .list-group .list-group-item .title {
-    display: block;
-}
-
 
 #next,
 #prev {
@@ -3350,34 +3170,6 @@ ul#toolnavbox-two li a.btn {
     background: lawngreen;
 }
 
-#upload_form .fa-plus-square-o, #upload_form .fa-minus-square-o {
-    cursor: pointer;
-}
-
-#upload, .description-upload {
-    padding-top: 15px;
-}
-
-.item-backup {
-    padding-top: 5px;
-    padding-bottom: 5px;
-    cursor: pointer;
-}
-
-#invitations-acordion .list-group {
-    margin-bottom: 10px;
-}
-
-#invitations-acordion .list-group .list-group-item {
-    padding: 0;
-    border: none;
-    margin-top: 5px;
-}
-
-#invitations-acordion .list-group .list-group-item img {
-    margin-right: 5px;
-}
-
 .block-invitation {
     padding: 10px;
     border-radius: 5px;
@@ -3429,23 +3221,17 @@ ul#toolnavbox-two li a.btn {
     background-color: #5cb85c !important;
     opacity: 0.8 !important;
 }
-
-
-
 .popover {
     width: 400px;
 }
-
 .popover-content .popover-teacher {
     display: block;
     width: 50%;
     float: left;
 }
-
 .popover-content .popover-teacher .ajax {
     float: left;
 }
-
 .popover-content .popover-teacher .teachers-details {
     text-align: left;
 }

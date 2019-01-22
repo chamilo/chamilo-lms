@@ -1,15 +1,8 @@
-#results .jqgrid_whitespace .date-time {
-    font-size: 12px;
-    color: #666666;
-    text-align: center;
-}
-
 .impress-content {
     position: relative;
     width: 100%;
     height: 600px;
 }
-
 
 /* ATTENDANCE */
 div.attendance-calendar-add div.row div.formw, div.attendance-calendar-edit div.row div.formw {
@@ -65,10 +58,6 @@ div.attendance-calendar-add div.row div.formw, div.attendance-calendar-edit div.
     display: initial;
 }
 
-.message-topic h4 {
-    font-weight: bold;
-}
-
 .message-post {
     border: 1px solid #ECF0F1;
     margin-bottom: 15px;
@@ -83,22 +72,6 @@ div.attendance-calendar-add div.row div.formw, div.attendance-calendar-edit div.
     position: absolute;
     margin-top: 23px;
     margin-left: 20px;
-}
-
-.message-content .date {
-    font-size: 12px;
-}
-
-.message-content .username {
-    font-size: 14px;
-    font-weight: bold;
-}
-
-.message-content .message-delete {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    cursor: pointer;
 }
 
 .message-view {
@@ -142,21 +115,6 @@ div.attendance-calendar-add div.row div.formw, div.attendance-calendar-edit div.
     -o-transform: scale(0.6);
 }
 
-.social-plugin-item {
-    float: left;
-    width: 50%;
-    background-color: #ccc;
-    margin: 0;
-}
-
-#social-plugins {
-    float: left;
-    background-color: #f00;
-    width: 100%;
-    margin: 0;
-    padding: 2px;
-}
-
 .box_shared_profile_group_title {
     border-bottom: 1pt dotted #000;
     padding: 5px;
@@ -175,10 +133,6 @@ div.attendance-calendar-add div.row div.formw, div.attendance-calendar-edit div.
     height: 80px;
     width: 60px;
     float: left;
-}
-
-.box_shared_profile_group_actions {
-    text-align: right;
 }
 
 /* Makes the course elements more readable */
@@ -323,10 +277,6 @@ div.attendance-calendar-add div.row div.formw, div.attendance-calendar-edit div.
     margin: 12px 5px;
     text-align: right;
     font-size: 14px;
-}
-
-.remind_highlight {
-    background-color: #FFF7C0;
 }
 
 .exercise_header {
@@ -604,36 +554,6 @@ div.attendance-calendar-add div.row div.formw, div.attendance-calendar-edit div.
 
 /* Exercise clock*/
 
-
-#question_feedback {
-    border-radius: 10px;
-    background-color: #FCF7BA;
-    border: 1px solid #EADC31;
-    color: #555;
-    font-size: 12px;
-    font-weight: bold;
-    list-style-type: none;
-    margin-top: 5px;
-    padding: 5px;
-}
-
-.topics_grid_item {
-    border-bottom: 1px solid #DDD;
-    margin-bottom: 10px;
-}
-
-#div_content_table {
-    border-bottom: 1px solid #EAEAEA;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-}
-
-span.form_error {
-    color: #f00;
-    font-size: x-small;
-    margin: 2px;
-}
-
 form .form .freeze {
     display: block;
     padding-top: 8px;
@@ -752,26 +672,6 @@ form .form .freeze {
     width: 120px;
 }
 
-/* ie fixes */
-
-/* Disabling help/bug notifications */
-.lt-ie7 #navigation {
-    display: none;
-}
-
-/* Disabling top bar */
-.lt-ie7 #topbar {
-    display: none
-}
-
-.lt-ie7 .subnav .nav > li {
-    float: left !important;
-}
-
-.lt-ie7 #announcements_page {
-    width: 450px !important;
-}
-
 /* **** THREAD **** */
 .forum_threadheader {
     color: #aaa;
@@ -861,41 +761,6 @@ form .form .freeze {
     color: #999;
     margin-bottom: 10px;
     vertical-align: top;
-}
-
-/*  New forum table */
-
-.forum_table {
-    border-collapse: collapse;
-    width: 100%;
-    padding: 5px;
-    border: 1px solid #ccc;
-    margin-bottom: 15px;
-}
-
-.forum_table th {
-    padding-right: 12px;
-    background-color: #E5EDF9;
-}
-
-.forum_table tr.row_odd {
-    background-color: #F2F2F2;
-}
-
-.forum_table tr.row_odd:hover, .data_table tr.row_even:hover {
-    background-color: #E5EDF9;
-}
-
-.forum_table tr.row_even {
-    background-color: #fff;
-}
-
-.forum_table td {
-    padding: 5px;
-    vertical-align: top;
-    border: 1px solid #ccc;
-    border-right: dotted #e1e1e1;
-    border-left: dotted #e1e1e1;
 }
 
 /* actions */

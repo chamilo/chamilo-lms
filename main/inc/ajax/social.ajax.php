@@ -216,7 +216,9 @@ switch ($action) {
         $messageInfo = MessageManager::get_message_by_id($messageId);
         if (!empty($messageInfo)) {
             // I can only delete messages of my own wall
-            if ($messageInfo['user_receiver_id'] == $user_id && empty($messageInfo['group_id'])) {
+            if (($messageInfo['user_receiver_id'] == $user_id || $messageInfo['user_sender_id'] == $user_id)
+                && empty($messageInfo['group_id'])
+            ) {
                 SocialManager::deleteMessage($messageId);
                 echo Display::return_message(get_lang('MessageDeleted'));
                 break;

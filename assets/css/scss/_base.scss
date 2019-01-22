@@ -1365,7 +1365,7 @@ footer {
 }
 
 #lp-accordion .panel-default .panel-heading {
-  background: url(../../public/img/icons/svg/arrow-down.svg) #FFF right center no-repeat;
+  background: url(#{$svg-path}/arrow-down.svg) #FFF right center no-repeat;
   border-radius: 10px;
 }
 
@@ -1520,7 +1520,7 @@ footer {
     top: 0;
     display: block;
     content: ' ';
-    background: url(../../public/img/icons/svg/coursestudent_na.svg);
+    background: url(#{$svg-path}/coursestudent_na.svg);
     width: 132px;
     height: 132px;
     border-radius: 0;
@@ -1531,7 +1531,7 @@ footer {
   input.register-profile[value='5']:checked:after {
     -webkit-box-shadow: 2px 2px 14px rgba(0, 0, 0, 0.4);
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-    background: url(../../public/img/icons/svg/coursestudent.svg);
+    background: url(#{$svg-path}/coursestudent.svg);
     border-color: #E4CE80;
     transition: all 250ms ease;
     will-change: transition;
@@ -1542,7 +1542,7 @@ footer {
     top: 0;
     display: block;
     content: ' ';
-    background: url(../../public/img/icons/svg/coursemanager_na.svg);
+    background: url(#{$svg-path}/coursemanager_na.svg);
     width: 132px;
     height: 132px;
     border-radius: 0;
@@ -1553,7 +1553,7 @@ footer {
   input.register-profile[value='1']:checked:after {
     -webkit-box-shadow: 2px 2px 14px rgba(0, 0, 0, 0.4);
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-    background: url(../../public/img/icons/svg/coursemanager.svg);
+    background: url(#{$svg-path}/coursemanager.svg);
     border-color: #76CDE4;
     transition: all 250ms ease;
     will-change: transition;
@@ -2827,7 +2827,78 @@ footer {
   top: -12px;
 }
 
+/****** SCROLL WRAPPER ******/
 
+.scroll-wrapper {
+  overflow: hidden !important;
+  padding: 0;
+  position: relative;
+  height: 300px;
+  .scroll-content {
+    border: none !important;
+    box-sizing: content-box;
+    height: auto;
+    left: 0;
+    margin: 0;
+    max-height: none;
+    max-width: none;
+    overflow: scroll !important;
+    padding: 0;
+    position: relative !important;
+    top: 0;
+    width: auto;
+  }
+  .scroll-element{
+    div {
+      box-sizing: content-box;
+    }
+  }
+}
+
+.scroll-wrapper > .scroll-content::-webkit-scrollbar {
+  height: 0;
+  width: 0;
+}
+
+.scroll-element.scroll-x.scroll-scrollx_visible,
+.scroll-element.scroll-y.scroll-scrolly_visible {
+  display: block;
+}
+
+.scroll-element .scroll-bar,
+.scroll-element .scroll-arrow {
+  cursor: default;
+}
+
+.scroll-textarea {
+  border: 1px solid #cccccc;
+  border-top-color: #999999;
+}
+
+.scroll-textarea > .scroll-content {
+  overflow: hidden !important;
+}
+
+.scroll-textarea > .scroll-content > textarea {
+  border: none !important;
+  box-sizing: border-box;
+  height: 100% !important;
+  margin: 0;
+  max-height: none !important;
+  max-width: none !important;
+  overflow: scroll !important;
+  outline: none;
+  padding: 2px;
+  position: relative !important;
+  top: 0;
+  width: 100% !important;
+}
+
+.scroll-textarea > .scroll-content > textarea::-webkit-scrollbar {
+  height: 0;
+  width: 0;
+}
+/****************************/
 
 .date-attendance {
   color: #666;
@@ -3154,3 +3225,47 @@ table.certaintyTable {
     background: lawngreen;
   }
 }
+/****** SOCIAL PROFILE ******/
+
+.social-post{
+  .mediaPost {
+    padding-top: 10px;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+  }
+  .sub-mediapost {
+    padding-left: 20px;
+    margin-left: 20px;
+    .user-image{
+      vertical-align: top;
+      .avatar-thumb{
+        border: 1px solid #dddddd;
+        margin-bottom: 5px;
+        margin-right: 5px;
+      }
+      img {
+        width: 50px;
+        height: 50px;
+        max-width: 50px;
+        max-height: 50px;
+      }
+    }
+  }
+  .top-mediapost{
+    .user-image{
+      vertical-align: top;
+      .avatar-thumb{
+        border: 1px solid #dddddd;
+        margin-bottom: 5px;
+        margin-right: 5px;
+      }
+      img {
+        width: 50px;
+        height: 50px;
+        max-width: 50px;
+        max-height: 50px;
+      }
+    }
+  }
+}
+

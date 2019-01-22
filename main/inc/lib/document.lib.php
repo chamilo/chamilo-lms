@@ -3049,7 +3049,7 @@ class DocumentManager
         $message = get_lang('YouAreCurrentlyUsingXOfYourX');
         $message = sprintf($message, $already_consumed_space_m, $percentage.'%', $course_quota_m.' ');
 
-        return Display::div($message, ['id' => 'document_quota']);
+        return Display::div($message, ['id' => 'document_quota', 'class' => 'card-quota']);
     }
 
     /**

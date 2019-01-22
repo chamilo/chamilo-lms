@@ -2310,3 +2310,142 @@ footer {
     background: none;
   }
 }
+.card-quota {
+  margin: 15px;
+  font-weight: bold;
+  color: #006633;
+  text-align: center;
+}
+
+/****** SKILLS ******/
+.skill-options{
+  .legend {
+    border: 1px dashed #cccccc;
+    padding: 1em;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    margin-bottom: 1em;
+    margin-top: 1em;
+    background-color: #FFFFFF;
+  }
+  .skill-home {
+    margin-top: 1em;
+    margin-bottom: 1em;
+  }
+  .btn-block {
+    box-sizing: border-box;
+    display: block;
+    padding-left: 0;
+    padding-right: 0;
+    width: 100%;
+  }
+  .accordion-inner {
+    padding: 9px 15px;
+    background-color: #FFFFFF;
+  }
+  .skill-winner {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    li {
+      float: left;
+      margin-right: 1em;
+      padding-bottom: 1em;
+      a {
+        background: url("../../public/img/icons/16/winner.png") no-repeat;
+        padding-left: 1.5em;
+        padding-bottom: 1em;
+      }
+    }
+  }
+}
+.search-skill ul.holder li.bit-input input {
+  width: 100%;
+}
+
+.skill-legend-basic {
+  color: #3A87AD;
+}
+
+.skill-legend-add {
+  color: #F89406;
+}
+
+.skill-legend-search {
+  color: #B94A48;
+}
+
+.skill-legend-badges {
+  color: #31A354;
+}
+.skill_partition {
+  cursor: pointer;
+  stroke: #000000;
+  stroke-width: 0.5px;
+}
+
+.skill_root {
+  box-shadow: 2px 2px 19px #aaa;
+  border-radius: 6px;
+  background-color: #ccc;
+  border: 0.1em dotted #D4E06B;
+  color: black;
+  font-size: 0.9em;
+  height: 4em;
+  opacity: 0.8;
+  padding-top: 0.9em;
+  text-align: center;
+  width: 120px;
+  z-index: 40;
+  position: relative;
+}
+
+.skill_child {
+  box-shadow: 2px 2px 19px #aaa;
+  border-radius: 6px;
+  background-color: white;
+  border: 0.1em dotted #D4E06B;
+  color: black;
+  font-size: 0.9em;
+  height: 4em;
+  opacity: 0.8;
+  padding-top: 0.9em;
+  text-align: center;
+  width: 120px;
+  z-index: 40;
+  float: left;
+  margin-left: 20px;
+  margin-bottom: 20px;
+  margin-top: 10px;
+  position: relative;
+}
+
+/****** LIST TEMPLATE DOCUMENT ******/
+
+#frmModel{
+  display: block;
+  height: 750px;
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0 .5em 0 1em;
+    li{
+      text-align: center;
+      padding-top: 1em;
+      padding-bottom: 1em;
+      .title, .description{
+        padding-top: .5em;
+        padding-bottom: .5em;
+        width: auto;
+        font-size: 12px;
+        line-height: 16px;
+      }
+      &:hover{
+        background-color: #FAFAFA;
+        border: 1px solid #F2F2F2;
+      }
+    }
+  }
+}
+

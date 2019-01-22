@@ -1,15 +1,3 @@
-/*
-    Theme Name: Chamilo Base
-    URL Project: http://www.chamilo.org
-    Description: Styles main base of Chamilo LMS appearance, works with Bootstrap 4
-    Author:
-        alex.aragon@beeznest.com
-        angel.quiroz@beeznest.com
-        julio.montoya@beeznest.com
-        yannick.warnier@beeznest.com
-    Version: 2.0
-*/
-
 /* notifications help and bug */
 
 .cookieUsageValidation {
@@ -146,14 +134,6 @@
 
 #exercise-description .panel-heading a.collapsed {
     background: url("../../public/img/icons/22/arrow-down-collapse.png") no-repeat left center;
-}
-
-/* -------------- DOCUMENT --------------*/
-#document_quota {
-    margin: 15px;
-    font-weight: bold;
-    color: #006633;
-    text-align: center;
 }
 
 /* Message and Social  */
@@ -472,13 +452,6 @@ div.attendance-calendar-add div.row div.formw, div.attendance-calendar-edit div.
 }
 
 /* Makes the course elements more readable */
-.session_course_item {
-    padding: 6px 0 6px 5px;
-}
-
-#lp_overview .thumbnail {
-    text-align: center;
-}
 
 .lp_resource {
     list-style: none;
@@ -860,45 +833,7 @@ div.attendance-calendar-add div.row div.formw, div.attendance-calendar-edit div.
     overflow: hidden;
 }
 
-#lp_item_list {
-    margin: 0;
-    padding: 0;
-}
 
-#lp_item_list, #lp_item_list li {
-    list-style-type: none;
-}
-
-#lp_item_list .active {
-    border: 2px dotted #BDB76B;
-}
-
-#lp_item_list ul, #lp_item_list li {
-    width: 100%;
-}
-
-#lp_item_list .item_data {
-    padding: 0;
-}
-
-#lp_item_list .item_data span {
-    margin-left: 5px;
-}
-
-#lp_item_list .item {
-    border: none;
-}
-
-#lp_item_list .empty {
-    height: 5px;
-}
-
-#lp_item_list .ui-state-highlight {
-    height: 25px;
-    background: #EEEEEE;
-    border-radius: 5px;
-    border: 1px dashed #B0B0B0
-}
 
 .document_preview_container {
     border-radius: 5px;
@@ -1443,22 +1378,6 @@ form .formw .freeze {
     background-color: #62cffc;
 }
 
-.attendance-users-table .data_table tr.row_odd {
-    height: 64px;
-}
-
-.attendance-users-table .data_table tr.row_even {
-    height: 60px;
-}
-
-.attendance-calendar-table .data_table tr.row_odd {
-    height: 64px;
-}
-
-.attendance-calendar-table .data_table tr.row_even {
-    height: 60px;
-}
-
 .form-stacked .label {
     display: block;
     float: none;
@@ -1479,188 +1398,6 @@ form .formw .freeze {
     font-size: 11px;
 }
 
-/* ****************************************************
-                     CSS SKILL
- **************************************************** */
-.skill-options .legend {
-    border: 1px dashed #cccccc;
-    padding: 1em;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
-    margin-bottom: 1em;
-    margin-top: 1em;
-    background-color: #FFFFFF;
-}
-
-.skill-options .skill-home {
-    margin-top: 1em;
-    margin-bottom: 1em;
-}
-
-.skill-options .btn-block {
-    box-sizing: border-box;
-    display: block;
-    padding-left: 0;
-    padding-right: 0;
-    width: 100%;
-}
-
-.skill-options .accordion-inner {
-    padding: 9px 15px;
-    /*border: 1px solid #dadada;*/
-    background-color: #FFFFFF;
-}
-
-.skill-options .skill-winner {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-.skill-options .skill-winner li {
-    float: left;
-    margin-right: 1em;
-    padding-bottom: 1em;
-}
-
-.skill-options .skill-winner li a {
-    background: url("../../public/img/icons/16/winner.png") no-repeat;
-    padding-left: 1.5em;
-    padding-bottom: 1em;
-}
-
-.search-skill ul.holder li.bit-input input {
-    width: 100%;
-}
-
-.skill-legend-basic {
-    color: #3A87AD;
-}
-
-.skill-legend-add {
-    color: #F89406;
-}
-
-.skill-legend-search {
-    color: #B94A48;
-}
-
-.skill-legend-badges {
-    color: #31A354;
-}
-
-.page-skill .panel-default {
-    border-color: #DDDDDD;
-}
-
-.page-skill .btn-default {
-    background-color: #F6F6F6;
-}
-
-.page-skill .btn-default:hover {
-    background-color: #E6E6E6;
-}
-
-.page-skill #skill_info {
-    font-size: 12px;
-}
-
-.page-skill #skill_wheel tspan {
-    font-size: 12px;
-}
-
-.page-skill .holder_simple li.bit-box a {
-    color: #8A6D3B;
-}
-
-.skill_partition {
-    cursor: pointer;
-    stroke: #000000;
-    stroke-width: 0.5px;
-}
-
-.items-user .avatar-user {
-    text-align: center;
-    margin-bottom: 10px;
-}
-
-.skill_root {
-    box-shadow: 2px 2px 19px #aaa;
-    border-radius: 6px;
-    background-color: #ccc;
-    border: 0.1em dotted #D4E06B;
-    color: black;
-    font-size: 0.9em;
-    height: 4em;
-    opacity: 0.8;
-    padding-top: 0.9em;
-    text-align: center;
-    width: 120px;
-    z-index: 40;
-    position: relative;
-}
-
-.skill_child {
-    box-shadow: 2px 2px 19px #aaa;
-    border-radius: 6px;
-    background-color: white;
-    border: 0.1em dotted #D4E06B;
-    color: black;
-    font-size: 0.9em;
-    height: 4em;
-    opacity: 0.8;
-    padding-top: 0.9em;
-    text-align: center;
-    width: 120px;
-    z-index: 40;
-    float: left;
-    margin-left: 20px;
-    margin-bottom: 20px;
-    margin-top: 10px;
-    position: relative;
-}
-
-/* ****************************************************
-                     END SKILL
- **************************************************** */
-
-/* list template document */
-#frmModel ul {
-    list-style: none;
-    margin: 0;
-    padding: 0 .5em 0 1em;
-}
-
-#frmModel ul li:hover {
-    background-color: #FAFAFA;
-    border: 1px solid #F2F2F2;
-}
-
-#frmModel ul li {
-    text-align: center;
-    padding-top: 1em;
-    padding-bottom: 1em;
-}
-
-#frmModel ul li .title, #frmModel ul li .description {
-    padding-top: .5em;
-    padding-bottom: .5em;
-    width: auto;
-    font-size: 12px;
-    line-height: 16px;
-}
-
-.lp-add-item {
-    display: block;
-    height: 550px;
-    position: relative;
-}
-
-.items-templates {
-    display: block;
-    height: 750px;
-}
 
 /* end list template document */
 .done_window {

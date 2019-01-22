@@ -497,8 +497,8 @@
                         <em class="fa fa-home"></em> {{ "ReturnToCourseList"|get_lang }}
                     </a>
                 </div>
-                <div class="panel panel-default">
-                    <div class="panel-body">
+                <div class="card">
+                    <div class="card-body">
                         <div id="saved_profiles"></div>
                         <h4 class="page-header">{{ 'WhatSkillsAreYouLookingFor'|get_lang }}</h4>
                         <div class="search-skill">
@@ -523,23 +523,23 @@
                         </div>
                         <hr>
                         <p>
-                            <a class="btn btn-block btn-default load_root" rel="0" href="#">
+                            <a class="btn btn-block btn-primary load_root" rel="0" href="#">
                                 <em class="fa fa-eye"></em> {{ "ViewSkillsWheel"|get_lang }}
                             </a>
                         </p>
                     </div>
                 </div>
-                <div class="panel-group" id="wheel-second-accordion" role="tablist" aria-multiselectable="true">
-                    <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="wheel-legend-heading">
-                            <h4 class="panel-title">
+                <div class="accordion" id="wheel-second-accordion" role="tablist" aria-multiselectable="true">
+                    <div class="card">
+                        <div class="card-header" role="tab" id="wheel-legend-heading">
+                            <h4 class="card-title">
                                 <a role="button" data-toggle="collapse" data-parent="#wheel-second-accordion" href="#wheel-legend-collapse" aria-expanded="true" aria-controls="wheel-legend-collapse">
                                     {{ "Legend"|get_lang }}
                                 </a>
                             </h4>
                         </div>
-                        <div id="wheel-legend-collapse" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="wheel-legend-heading">
-                            <div class="panel-body">
+                        <div id="wheel-legend-collapse" class="collapse in" role="tabpanel" aria-labelledby="wheel-legend-heading">
+                            <div class="card-body">
                                 <ul class="fa-ul">
                                     <li>
                                         <em class="fa fa-li fa-square skill-legend-basic"></em> {{ "BasicSkills"|get_lang }}
@@ -554,16 +554,16 @@
                             </div>
                         </div>
                     </div>
-                    <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="wheel-display-heading">
-                            <h4 class="panel-title">
+                    <div class="card">
+                        <div class="card-header" role="tab" id="wheel-display-heading">
+                            <h4 class="card-title">
                                 <a class="collapsed" role="button" data-toggle="collapse" data-parent="#wheel-second-accordion" href="#wheel-display-collapse" aria-expanded="false" aria-controls="wheel-display-collapse">
                                     {{ 'DisplayOptions' | get_lang }}
                                 </a>
                             </h4>
                         </div>
-                        <div id="wheel-display-collapse" class="panel-collapse collapse" role="tabpanel" aria-labelledby="wheel-display-heading">
-                            <div class="panel-body">
+                        <div id="wheel-display-collapse" class="collapse" role="tabpanel" aria-labelledby="wheel-display-heading">
+                            <div class="card-body">
                                 <p>{{ 'ChooseABackgroundColor' | get_lang }}</p>
                                 <ul class="list-unstyled" id="skill-change-background-options">
                                     <li><a href="#" data-color="#FFFFFF">{{ 'White' | get_lang }}</a></li>

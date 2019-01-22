@@ -1,67 +1,3 @@
-/* notifications help and bug */
-#touch-button.btn-touch {
-    background-color: #C2C2C2;
-}
-
-#touch-button.btn-touch:hover {
-    background-color: #E9E9F0;
-}
-
-#touch-button.btn-touch {
-    background-color: #EFEFEF;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-}
-
-#gradebook_list .centered {
-    text-align: center;
-    vertical-align: middle;
-}
-
-.prerequisites input[type=radio] {
-    height: 12px;
-}
-
-#gradebook_list .centered .badge-group {
-    width: auto;
-}
-
-.button-load {
-    background: url("../../public/img/icons/64/file_upload.png") no-repeat center 20px;
-    padding-top: 70px;
-}
-
-#results .file_upload_highlight {
-    background: #F4D364;
-}
-
-.work_correction_file_upload .button-load {
-    position: relative;
-    font-size: 10px;
-    font-weight: normal;
-    width: 100%;
-    padding-top: 5px;
-    background: none;
-}
-
-.file_upload_small {
-    border: 1px solid #AFDDE9;
-    background: #D4E6F0;
-    width: 100%;
-    border-radius: 5px;
-    padding-bottom: 5px;
-}
-
-.work_correction_file_upload {
-    margin-bottom: 5px;
-    margin-top: 5px;
-}
-
-.work_correction_file_upload.hover {
-    background: lawngreen;
-}
-
-
 #results .jqgrid_whitespace .date-time {
     font-size: 12px;
     color: #666666;
@@ -74,49 +10,6 @@
     height: 600px;
 }
 
-/* SESSION CATALOG*/
-
-.formw input[type="checkbox"], .formw input[type="radio"] {
-    margin-right: 5px;
-    margin-top: 2px;
-}
-.checkbox_send_notification{
-    margin-bottom: 10px;
-}
-/* Message and Social  */
-
-.online_grid_item {
-    float: left;
-    margin: 10px;
-    width: 100%;
-}
-
-.online_grid_element_0 {
-    display: inline;
-    float: left;
-    height: 100px;
-    overflow: hidden;
-    width: 100px;
-}
-
-.online_grid_element_1, .online_grid_element_2 {
-    font-size: 13px;
-    float: left;
-    margin: 25px 0 0 10px;
-    width: 70%;
-}
-
-#profile .control-group .controls .files-production {
-    padding: 5px 25px;
-    border-radius: 10px;
-    background-color: #F1F3F5;
-    border: 1px solid #EAEBED;
-}
-
-#sn-extra-information .list-group-item {
-    padding: 5px 10px;
-    border: none;
-}
 
 /* ATTENDANCE */
 div.attendance-calendar-add div.row div.formw, div.attendance-calendar-edit div.row div.formw {
@@ -709,64 +602,8 @@ div.attendance-calendar-add div.row div.formw, div.attendance-calendar-edit div.
     border: 1px solid #ed4040;
 }
 
-table.certaintyTable {
-    margin : auto;
-    border: 1px solid #7FC5FF;
-}
-
-table.certaintyTable th {
-    text-align: center;
-    border-bottom: 1px solid #7FC5FF;
-    background-color: #c9e0ff;
-}
-
-table.certaintyTable td {
-    padding : 10px;
-}
-
-table.certaintyTable td.borderRight {
-    border-right: 1px dotted #7FC5FF;
-}
-
-table.certaintyTable td.firstLine {
-    vertical-align: top;
-    text-align: center;
-}
-
-table.certaintyTable th.globalChart {
-    font-size : 18pt;
-    line-height : 120%;
-    padding : 20px;
-}
-
-table.certaintyTable td.globalChart {
-    font-weight : bold;
-}
-
 /* Exercise clock*/
-.count_down {
-    font-size: 20px;
-    font-weight: bold;
-    color: #2E75A3;
-    padding: 5px;
-    text-align: center;
-    margin-bottom: 10px;
-    background: url(../../public/img/clock-exercise.png) no-repeat center center #FFF;
-    border: 1px solid #DDD;
-    border-radius: 5px;
-}
 
-.time_warning_two {
-    background: url(../../public/img/clock-exercise.png) no-repeat center center #FFD700;
-    border: 1px solid #FFCC00;
-    color: #C00;
-}
-
-.time_warning_one {
-    background: url(../../public/img/clock-exercise.png) no-repeat center center #FB3A35;
-    border: 1px solid #FB3A35;
-    color: #FFF;
-}
 
 #question_feedback {
     border-radius: 10px;
@@ -791,27 +628,13 @@ table.certaintyTable td.globalChart {
     padding-bottom: 10px;
 }
 
-/* Forms */
-div.row div.form_header {
-    white-space: nowrap;
-    padding: 2px;
-    margin: 0 0 10px 0;
-    background-color: #E5EDF9;
-    border: 1px solid #E5EDF9;
-    font-size: 20px;
-}
-
-span.form_required {
-    color: #f00;
-}
-
 span.form_error {
     color: #f00;
     font-size: x-small;
     margin: 2px;
 }
 
-form .formw .freeze {
+form .form .freeze {
     display: block;
     padding-top: 8px;
 }
@@ -827,75 +650,6 @@ form .formw .freeze {
     padding: 0.4em 0.6em;
 }
 
-.label_tag {
-    padding: 1px 3px 2px;
-    margin: 2px 3px 2px 0;
-    background-color: #bfbfbf;
-    font-size: 10px;
-    font-weight: bold;
-    color: #ffffff;
-    border-radius: 3px;
-    text-align: center;
-    width: 155px;
-}
-
-.label_tag.personal_event {
-    background: #3366CC;
-}
-
-.label_tag.admin_event {
-    background: red;
-}
-
-.label_tag.course_event {
-    background: #458B00;
-}
-
-.label_tag.group_event {
-    background: #A0522D;
-}
-
-.label_tag.session_event {
-    background: #00496D;
-}
-
-.label_tag.important {
-    background-color: #c43c35;
-}
-
-.label_tag.warning {
-    background-color: #f89406;
-}
-
-.label_tag.success {
-    background-color: #46a546;
-}
-
-.label_tag.notice {
-    background-color: #62cffc;
-}
-
-.label_tag.skill {
-    background-color: #46a546;
-}
-
-.label_tag.course {
-    background-color: #62cffc;
-}
-
-.form-stacked .label {
-    display: block;
-    float: none;
-    font-weight: bold;
-    line-height: 20px;
-    padding-top: 0;
-    text-align: left;
-    width: auto;
-}
-
-.form-stacked .row {
-    margin-bottom: 9px;
-}
 
 .lp_content_type_label {
     font-style: italic;
@@ -941,17 +695,6 @@ form .formw .freeze {
  *  LOGIN AND LANGUAGE FORM                          *
  *****************************************************/
 
-input.mainoption {
-    font-weight: bold;
-    border: 1px solid #E1E1E0;
-}
-
-input.liteoption {
-    font-weight: normal;
-    border: 1px solid #E1E1E0;
-}
-
-
 .data_table_exercise_result, .data_table_exercise_result_left {
     border-collapse: collapse;
     border-spacing: 0;
@@ -976,28 +719,6 @@ input.liteoption {
     vertical-align: middle;
 }
 
-#no-data-view {
-    padding: 20px 0 0;
-    text-align: center;
-}
-
-div#no-data-view img {
-    margin-bottom: 25px;
-}
-
-div#no-data-view h2 {
-    border: 0 none;
-    color: #212121;
-    font-size: 18px;
-    font-weight: bold;
-    margin: 0 0 6px;
-    padding: 0;
-}
-
-div#no-data-view div.controls {
-    padding-top: 1px;
-}
-
 /* styles for the star rater */
 
 
@@ -1013,101 +734,6 @@ div#no-data-view div.controls {
 .skills-profiles ul.holder {
     margin-bottom: 8px;
     border: 0;
-}
-
-.skills_chart * {
-    margin: 0;
-    padding: 0;
-}
-
-.skills_chart ul {
-    padding-top: 20px;
-    position: relative;
-}
-
-.skills_chart li {
-    float: left;
-    text-align: center;
-    list-style-type: none;
-    padding: 20px 5px 0 5px;
-    position: relative;
-}
-
-.skills_chart li::before, .skills_chart li::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 50%;
-    border-top: 1px solid #f80;
-    width: 50%;
-    height: 20px;
-}
-
-.skills_chart li::after {
-    right: auto;
-    left: 50%;
-    border-left: 1px solid #f80;
-}
-
-.skills_chart li:only-child::before, .skills_chart li:only-child::after {
-    display: none;
-}
-
-.skills_chart li:only-child {
-    padding-top: 0;
-}
-
-.skills_chart li:first-child::before, .skills_chart li:last-child::after {
-    border: 0 none;
-}
-
-.skills_chart li:last-child::before {
-    border-right: 1px solid #f80;
-    border-radius: 0 5px 0 0;
-}
-
-.skills_chart li:first-child::after {
-    border-radius: 5px 0 0 0;
-    -webkit-border-radius: 5px 0 0 0;
-    -moz-border-radius: 5px 0 0 0;
-}
-
-.skills_chart ul ul::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 50%;
-    border-left: 1px solid #f80;
-    width: 0;
-    height: 20px;
-}
-
-.skills_chart li a {
-    border: 1px solid #f80;
-    padding: 1em 0.75em;
-    text-decoration: none;
-    color: #333;
-    background-color: rgba(255, 255, 255, 0.5);
-    font-size: 0.85em;
-    display: inline-block;
-    border-radius: 5px;
-    transition: all 500ms;
-}
-
-.skills_chart li a:hover {
-    border: 1px solid #fff;
-    color: #ddd;
-    background-color: rgba(255, 128, 0, 0.7);
-    display: inline-block;
-}
-
-.skills_chart > ul > li > a {
-    font-size: 1em;
-    font-weight: bold;
-}
-
-.skills_chart > ul > li > ul > li > a {
-    width: 8em;
 }
 
 /* Nanogong - exercise player*/
@@ -1540,7 +1166,7 @@ i.size-32.icon-new-note {
 .survey_question_options {
     background-color: #FFF;
     color: #000;
-    padding: 5px; /*border: 1px solid #264269;*/
+    padding: 5px;
 }
 
 .survey_question .radio-inline input[type="radio"],
@@ -1616,14 +1242,7 @@ i.size-32.icon-new-note {
     margin-top: 10px;
     border: 1px solid #b2b2b2;
 }
-
-
 /* Social Profile */
-.social-group .group-title {
-    color: #456176;
-    font-weight: bold;
-    font-size: 14px;
-}
 
 .social-profile .group-description {
     font-size: 12px;
@@ -1740,11 +1359,6 @@ i.size-32.icon-new-note {
     color: #666;
 }
 
-
-/**
- * Modal for user avatar preview
- * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- */
 #expand-image-modal img {
     display: block;
     height: auto;
@@ -2204,7 +1818,6 @@ ul.exercise-draggable-answer .touch-items:hover {
     height: auto !important;
 }
 
-/* start document mp3 preview */
 .preview .mejs__container {
     background: #aaa;
 }

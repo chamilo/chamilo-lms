@@ -2421,6 +2421,99 @@ footer {
   position: relative;
 }
 
+.skills_chart{
+  * {
+    margin: 0;
+    padding: 0;
+  }
+  ul {
+    padding-top: 20px;
+    position: relative;
+    li {
+      float: left;
+      text-align: center;
+      list-style-type: none;
+      padding: 20px 5px 0 5px;
+      position: relative;
+      &:before, &:after{
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 50%;
+        border-top: 1px solid #f80;
+        width: 50%;
+        height: 20px;
+      }
+      &:after{
+        right: auto;
+        left: 50%;
+        border-left: 1px solid #f80;
+      }
+    }
+  }
+}
+
+.skills_chart li:only-child::before, .skills_chart li:only-child::after {
+  display: none;
+}
+
+.skills_chart li:only-child {
+  padding-top: 0;
+}
+
+.skills_chart li:first-child::before, .skills_chart li:last-child::after {
+  border: 0 none;
+}
+
+.skills_chart li:last-child::before {
+  border-right: 1px solid #f80;
+  border-radius: 0 5px 0 0;
+}
+
+.skills_chart li:first-child::after {
+  border-radius: 5px 0 0 0;
+  -webkit-border-radius: 5px 0 0 0;
+  -moz-border-radius: 5px 0 0 0;
+}
+
+.skills_chart ul ul::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  border-left: 1px solid #f80;
+  width: 0;
+  height: 20px;
+}
+
+.skills_chart li a {
+  border: 1px solid #f80;
+  padding: 1em 0.75em;
+  text-decoration: none;
+  color: #333;
+  background-color: rgba(255, 255, 255, 0.5);
+  font-size: 0.85em;
+  display: inline-block;
+  border-radius: 5px;
+  transition: all 500ms;
+}
+
+.skills_chart li a:hover {
+  border: 1px solid #fff;
+  color: #ddd;
+  background-color: rgba(255, 128, 0, 0.7);
+  display: inline-block;
+}
+
+.skills_chart > ul > li > a {
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.skills_chart > ul > li > ul > li > a {
+  width: 8em;
+}
+
 /****** LIST TEMPLATE DOCUMENT ******/
 
 #frmModel{
@@ -2692,6 +2785,36 @@ footer {
         left: 0;
         border: none;
       }
+      .one-star {
+        left: 0;
+        &:hover {
+          width: 25px;
+        }
+      }
+      .two-stars {
+        left: 25px;
+        &:hover {
+          width: 50px;
+        }
+      }
+      .three-stars {
+        left: 50px;
+        &:hover {
+          width: 75px;
+        }
+      }
+      .four-stars {
+        left: 75px;
+        &:hover {
+          width: 100px;
+        }
+      }
+      .five-stars {
+        left: 100px;
+        &:hover {
+          width: 125px;
+        }
+      }
     }
     .current-rating {
       background: url(../../public/img/alt_star.png) left center;
@@ -2704,43 +2827,117 @@ footer {
   }
 }
 
-
-.star-rating a.one-star {
-  left: 0;
+.work_correction_file_upload{
+  margin-bottom: 5px;
+  margin-top: 5px;
+  .button-load {
+    position: relative;
+    font-size: 10px;
+    font-weight: normal;
+    width: 100%;
+    background: url("../../public/img/icons/64/file_upload.png") no-repeat center 20px;
+    padding-top: 70px;
+  }
+  .file_upload_small {
+    border: 1px solid #AFDDE9;
+    background: #D4E6F0;
+    width: 100%;
+    border-radius: 5px;
+    padding-bottom: 5px;
+  }
 }
 
-.star-rating a.one-star:hover {
-  width: 25px;
+table.certaintyTable {
+  margin : auto;
+  border: 1px solid #7FC5FF;
+  th {
+    text-align: center;
+    border-bottom: 1px solid #7FC5FF;
+    background-color: #c9e0ff;
+  }
+  td {
+    padding : 10px;
+    .borderRight {
+      border-right: 1px dotted #7FC5FF;
+    }
+    .firstLine {
+      vertical-align: top;
+      text-align: center;
+    }
+  }
+  th{
+    .globalChart {
+      font-size : 18pt;
+      line-height : 120%;
+      padding : 20px;
+    }
+  }
+}
+/******  ******/
+.count_down {
+  font-size: 20px;
+  font-weight: bold;
+  color: #2E75A3;
+  padding: 5px;
+  text-align: center;
+  margin-bottom: 10px;
+  background: url(../../public/img/clock-exercise.png) no-repeat center center #FFF;
+  border: 1px solid #DDD;
+  border-radius: 5px;
 }
 
-.star-rating a.two-stars {
-  left: 25px;
+.time_warning_two {
+  background: url(../../public/img/clock-exercise.png) no-repeat center center #FFD700;
+  border: 1px solid #FFCC00;
+  color: #C00;
 }
 
-.star-rating a.two-stars:hover {
-  width: 50px;
+.time_warning_one {
+  background: url(../../public/img/clock-exercise.png) no-repeat center center #FB3A35;
+  border: 1px solid #FB3A35;
+  color: #FFF;
 }
 
-.star-rating a.three-stars {
-  left: 50px;
-}
+/****** ******/
 
-.star-rating a.three-stars:hover {
-  width: 75px;
-}
-
-.star-rating a.four-stars {
-  left: 75px;
-}
-
-.star-rating a.four-stars:hover {
-  width: 100px;
-}
-
-.star-rating a.five-stars {
-  left: 100px;
-}
-
-.star-rating a.five-stars:hover {
-  width: 125px;
+.label_tag {
+  padding: 1px 3px 2px;
+  margin: 2px 3px 2px 0;
+  background-color: #bfbfbf;
+  font-size: 10px;
+  font-weight: bold;
+  color: #ffffff;
+  border-radius: 3px;
+  text-align: center;
+  width: 155px;
+  &.personal_event {
+    background: #3366CC;
+  }
+  &.admin_event {
+    background: red;
+  }
+  &.course_event {
+    background: #458B00;
+  }
+  .group_event {
+    background: #A0522D;
+  }
+  .session_event {
+    background: #00496D;
+  }
+  .important {
+    background-color: #c43c35;
+  }
+  .warning {
+    background-color: #f89406;
+  }
+  .success {
+    background-color: #46a546;
+  }
+  .skill {
+    background-color: #46a546;
+  }
+  .course {
+    background-color: #62cffc;
+  }
 }

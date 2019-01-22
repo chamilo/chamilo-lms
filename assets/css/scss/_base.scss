@@ -2196,11 +2196,36 @@ footer {
     position: absolute;
     top: 0;
     #next {
+      position: absolute;
+      font-size: 70px;
+      top: 170px;
+      width: 22px;
+      height: 38px;
+      text-indent: -9999px;
+      overflow: hidden;
       right: 0;
-      background-image: url('../../public/img/timeline/next.png');
+      background: url('../img/timeline/next.png') no-repeat 0 0;
+      &:hover{
+        background-position: 0 -76px;
+      }
+    }
+    #prev {
+      left: 0;
+      position: absolute;
+      font-size: 70px;
+      top: 170px;
+      width: 22px;
+      height: 38px;
+      text-indent: -9999px;
+      overflow: hidden;
+      background: url('../img/timeline/prev.png') no-repeat 0 0;
+      &:hover{
+        background-position: 0 -76px;
+      }
     }
   }
 }
+
 #my_timeline {
   width: 900px;
   height: 350px;
@@ -2513,6 +2538,52 @@ footer {
 .skills_chart > ul > li > ul > li > a {
   width: 8em;
 }
+
+
+.survey-block {
+  width: 100%;
+  margin: auto;
+  padding: 10px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
+.start-survey {
+  margin-top: 20px;
+  padding-top: 20px;
+  margin-bottom: 20px;
+}
+
+.survey-reports .list-group{
+ .list-group-item{
+   img {
+     float: left;
+     margin-right: 5px;
+   }
+   h4{
+     font-weight: bold;
+     font-size: 14px;
+   }
+ }
+}
+
+.survey-block{
+  .title-survey-block {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    h3 {
+      display: inline-block;
+      margin-left: 10px;
+    }
+  }
+ .table{
+   .center {
+     text-align: center;
+   }
+ }
+}
+
 
 /****** LIST TEMPLATE DOCUMENT ******/
 
@@ -2939,5 +3010,59 @@ table.certaintyTable {
   }
   .course {
     background-color: #62cffc;
+  }
+}
+/****** THEMATIC ******/
+#thematic{
+  .title-topics {
+    font-size: 15px;
+    color: #00829C;
+    font-weight: bold;
+  }
+  .thematic-cont {
+    padding: 15px;
+    border: 1px solid #EEEEEE;
+    border-radius: 5px;
+  }
+  .thematic-avatar {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .img-fluid {
+    display: inline-block;
+  }
+  .current {
+    background-color: #EEEEEE;
+    border: 1px dashed #B0B0B0;
+    border-radius: 5px;
+  }
+  .toolbar-actions {
+    height: 30px;
+    display: block;
+  }
+  .arrow {
+    background: url("../img/icons/22/arrow-up-collapse.png") no-repeat 99% center;
+    &.collapsed{
+      background: url("../img/icons/22/arrow-down-collapse.png") no-repeat 99% center;
+    }
+  }
+  .thematic-advance {
+    margin-top: 10px;
+    display: inline-block;
+  }
+}
+/****** MEDIA PLAYER ******/
+.preview{
+  .mejs__container {
+    background: #aaa;
+  }
+  .mejs__controls {
+    padding: 0 0 0 0;
+    background: none;
+  }
+  .mejs__button{
+    button {
+      margin: 16px 6px;
+    }
   }
 }

@@ -1,11 +1,4 @@
 /* notifications help and bug */
-
-.cookieUsageValidation {
-    padding: 5px;
-    text-align: center;
-}
-
-/* notifications help and bug */
 #touch-button.btn-touch {
     background-color: #C2C2C2;
 }
@@ -87,30 +80,6 @@
 
 /* SESSION CATALOG*/
 
-.buttom-subscribed .btn {
-    font-size: 12px;
-    padding: 5px 10px;
-}
-
-.buttom-subscribed .btn.btn-primary {
-    background-color: #EF3E3E;
-    border: none;
-}
-
-.buttom-subscribed .btn.btn-primary:hover {
-    background-color: #CE2121;
-}
-
-.session-group .items-session {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.session-group .items-session li {
-    padding-bottom: 5px;
-}
-
 .formw input[type="checkbox"], .formw input[type="radio"] {
     margin-right: 5px;
     margin-top: 2px;
@@ -118,7 +87,6 @@
 .checkbox_send_notification{
     margin-bottom: 10px;
 }
-/* end chamilo forms fixes */
 
 #exercise-description.panel-default {
     border: 1px solid #DDD;
@@ -305,7 +273,6 @@ div.attendance-calendar-add div.row div.formw, div.attendance-calendar-edit div.
 
 .message-view {
     float: right;
-    margin: 20px auto;
     background: #F5E38E;
     border: 2px solid #EBCA4F;
     padding: 10px;
@@ -502,338 +469,6 @@ div.attendance-calendar-add div.row div.formw, div.attendance-calendar-edit div.
     text-align: right;
     width: 40px;
 }
-
-.profile_grid_item {
-    border: 1px dotted #CCCCCC;
-    float: left;
-    height: 90px;
-    margin: 5px;
-    padding: 5px;
-    width: 270px;
-}
-
-.profile_grid_element_0 {
-    width: 100px;
-    float: left;
-    text-align: center;
-    margin-bottom: 5px;
-}
-
-.profile_grid_element_1 {
-    width: 170px;
-    float: left;
-    text-align: left;
-    margin-bottom: 1px;
-}
-
-/* pagination grid sortable */
-
-.grid_selectbox {
-    float: left;
-    width: 35%
-}
-
-.grid_title {
-    float: left;
-    width: 30%;
-    text-align: center
-}
-
-.grid_nav {
-    float: left;
-    width: 35%;
-    text-align: right
-}
-
-/* Groups boxes */
-
-.group_invitation_grid_container {
-    width: 100%;
-}
-
-.group_invitation_grid_item {
-    border: 1px dotted #CCCCCC;
-    float: left;
-    height: 85px;
-    margin: 8px;
-    padding: 5px;
-    width: 300px;
-}
-
-.group_invitation_grid_element_0 {
-    width: 100px;
-    float: left;
-    text-align: center;
-    margin-bottom: 5px;
-}
-
-.group_invitation_grid_element_1 {
-    width: 100px;
-    float: left;
-    text-align: left;
-    margin-bottom: 5px;
-}
-
-.group_invitation_grid_element_2 {
-    width: 150px;
-    float: left;
-}
-
-/* home group boxes */
-
-.home_group_grid_container {
-    margin-bottom: 70px;
-    height: 65px;
-}
-
-.home_group_grid_element_1 {
-    font-family: Verdana, Geneva, sans-serif;
-    font-size: 12px;
-    color: #686868;
-    font-weight: bold;
-    margin: 2px;
-    padding: 2px;
-}
-
-.home_group_grid_element_2 {
-    float: right;
-    width: 80%;
-    height: 45px;
-    font-family: Verdana, Geneva, sans-serif;
-    font-size: 12px;
-    color: #666666;
-}
-
-/*INVITATION IN PROFILE*/
-
-.invitation_profile_grid_container {
-    width: 100%;
-}
-
-.invitation_profile_grid_item {
-    float: left;
-    height: 110px;
-    margin: 5px;
-    padding: 5px;
-    width: 100px;
-}
-
-.invitation_profile_grid_element_0 {
-    width: 100px;
-    float: left;
-    text-align: center;
-    margin-bottom: 5px;
-}
-
-.invitation_profile_grid_element_2 {
-    width: 100px;
-    float: left;
-    text-align: center;
-    font-size: 12px;
-}
-
-/* User boxes */
-.search_users_grid_container {
-    width: 100%;
-}
-
-.search_users_grid_item {
-    width: 400px;
-    height: 90px;
-    border: 1px dotted #ccc;
-    float: left;
-    padding: 5px;
-    margin: 8px;
-}
-
-.search_users_grid_element_0 {
-    width: 100px;
-    float: left;
-    text-align: center;
-    margin-bottom: 5px;
-}
-
-.search_users_grid_element_1 {
-    width: 100px;
-    float: left;
-    text-align: center;
-    margin-bottom: 5px;
-}
-
-.search_users_grid_element_2 {
-    width: 150px;
-    float: left;
-}
-
-.search_users_grid_selectbox {
-    width: 50%;
-    float: left;
-}
-
-.search_users_grid_title {
-    width: 30%;
-    float: left;
-}
-
-.search_users_grid_nav {
-    float: right;
-}
-
-/*WAITING USER*/
-.waiting_user_grid_container {
-    width: 100%;
-}
-
-.waiting_user_grid_item {
-    width: 500px;
-    height: 120px;
-    border: 1px dotted #ccc;
-    float: left;
-    padding: 5px;
-    margin: 5px;
-}
-
-.waiting_user_grid_element_0 {
-    width: 100px;
-    height: 90px;
-    float: left;
-    text-align: center;
-    margin-bottom: 5px;
-    padding-top: 15px;
-}
-
-.waiting_user_grid_element_1 {
-    width: 400px;
-    float: left;
-    text-align: left;
-    margin-bottom: 5px
-}
-
-.waiting_user_grid_element_2 {
-    width: 400px;
-    float: left;
-    text-align: justify;
-    margin-bottom: 5px
-}
-
-.waiting_user_grid_element_5 {
-    width: 100%;
-    text-align: left;
-}
-
-.waiting_user_grid_element_6 {
-    width: 100%;
-    text-align: left;
-}
-
-/*LIST MEMBERS*/
-.list_members_grid_container {
-    width: 100%;
-}
-
-.list_members_grid_item {
-    width: 110px;
-    height: 165px;
-    border: 1px dotted #ccc;
-    float: left;
-    padding: 5px;
-    margin: 8px;
-}
-
-.list_members_grid_element_0 {
-    width: 100px;
-    float: left;
-    text-align: center;
-    margin-bottom: 5px;
-}
-
-.list_members_grid_element_0 img {
-    width: 50px;
-    height: 50px;
-    border: 3px solid #E6E6E6;
-}
-
-.list_members_grid_element_2 {
-    width: 100px;
-    float: left;
-    text-align: center;
-    margin-bottom: 5px;
-}
-
-.list_members_grid_element_3 {
-    width: 100px;
-    float: left;
-    text-align: center;
-    margin-bottom: 5px;
-}
-
-.list_members_grid_element_5 {
-    width: 100%;
-    text-align: center;
-}
-
-/*SEARCH USER*/
-
-.search_user_grid_item {
-    width: 100px;
-    height: 100px;
-    border: 1px dotted #ccc;
-    float: left;
-    padding: 5px;
-    margin: 5px;
-    overflow: hidden;
-}
-
-.search_user_grid_element_0 {
-    width: 100px;
-    float: left;
-    text-align: center;
-    margin-bottom: 5px;
-}
-
-.search_user_grid_element_0 img {
-    width: 50px;
-    height: 50px;
-    border: 2px solid #E6E6E6;
-}
-
-.search_user_grid_element_1 {
-    width: 100%;
-    text-align: center;
-}
-
-.search_user_grid_element_2 {
-    width: 100%;
-    text-align: center;
-}
-
-.search_user_grid_element_3 {
-    width: 100%;
-    text-align: center;
-}
-
-/*SEARCH GROUP*/
-.search_group_grid_item {
-    float: left;
-    width: 345px;
-    height: 165px;
-    margin-top: 20px;
-}
-
-.search_group_grid_container {
-    margin-top: 0;
-}
-
-.search_group_grid_element_1 {
-    width: 330px;
-    height: 165px;
-    padding-left: 10px;
-    padding-right: 10px;
-    background-repeat: repeat-y;
-    overflow: hidden;
-}
-
-
 
 .document_preview_container {
     border-radius: 5px;
@@ -1396,17 +1031,6 @@ form .formw .freeze {
     font-style: italic;
     color: #999;
     font-size: 11px;
-}
-
-
-/* end list template document */
-.done_window {
-    background-color: #73982C;
-}
-
-.first_window {
-    border: 1px solid red;
-    cursor: pointer;
 }
 
 .second_window {
@@ -2611,92 +2235,6 @@ ul.exercise-draggable-answer .touch-items:hover {
     width: 0;
 }
 
-/*************** SIMPLE INNER SCROLLBAR ***************/
-
-.scrollbar-inner > .scroll-element,
-.scrollbar-inner > .scroll-element div {
-    border: none;
-    margin: 0;
-    padding: 0;
-    position: absolute;
-    z-index: 10;
-}
-
-.scrollbar-inner > .scroll-element div {
-    display: block;
-    height: 100%;
-    left: 0;
-    top: 0;
-    width: 100%;
-}
-
-.scrollbar-inner > .scroll-element.scroll-x {
-    bottom: 2px;
-    height: 8px;
-    left: 0;
-    width: 100%;
-}
-
-.scrollbar-inner > .scroll-element.scroll-y {
-    height: 100%;
-    right: 2px;
-    top: 0;
-    width: 8px;
-}
-
-.scrollbar-inner > .scroll-element .scroll-element_outer {
-    overflow: hidden;
-}
-
-.scrollbar-inner > .scroll-element .scroll-element_outer,
-.scrollbar-inner > .scroll-element .scroll-element_track,
-.scrollbar-inner > .scroll-element .scroll-bar {
-    -webkit-border-radius: 8px;
-    -moz-border-radius: 8px;
-    border-radius: 8px;
-}
-
-.scrollbar-inner > .scroll-element .scroll-element_track,
-.scrollbar-inner > .scroll-element .scroll-bar {
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=40)";
-    filter: alpha(opacity=40);
-    opacity: 0.4;
-}
-
-.scrollbar-inner > .scroll-element .scroll-element_track {
-    background-color: #e0e0e0;
-}
-
-.scrollbar-inner > .scroll-element .scroll-bar {
-    background-color: #c2c2c2;
-}
-
-.scrollbar-inner > .scroll-element:hover .scroll-bar {
-    background-color: #919191;
-}
-
-.scrollbar-inner > .scroll-element.scroll-draggable .scroll-bar {
-    background-color: #919191;
-}
-
-/* update scrollbar offset if both scrolls are visible */
-
-.scrollbar-inner > .scroll-element.scroll-x.scroll-scrolly_visible .scroll-element_track {
-    left: -12px;
-}
-
-.scrollbar-inner > .scroll-element.scroll-y.scroll-scrollx_visible .scroll-element_track {
-    top: -12px;
-}
-
-.scrollbar-inner > .scroll-element.scroll-x.scroll-scrolly_visible .scroll-element_size {
-    left: -12px;
-}
-
-.scrollbar-inner > .scroll-element.scroll-y.scroll-scrollx_visible .scroll-element_size {
-    top: -12px;
-}
-
 #work-list, #session-table {
     padding: 10px;
     border: 1px solid #dddddd;
@@ -2724,16 +2262,11 @@ ul.exercise-draggable-answer .touch-items:hover {
 /* video chat */
 
 #chat-video-panel .thumbnail video {
-    background-color: #FFF;
-    background-image: url("../../public/img/icons/128/camera-webrtc.png");
-    background-position: center center;
-    background-repeat: no-repeat;
+    background: #FFF url("../../public/img/icons/128/camera-webrtc.png") no-repeat center center;
     display: block;
     min-width: 100%;
     width: 100%;
 }
-
-
 
 #chat-video-panel #listFriends a .username {
     display: inline-block;
@@ -2779,104 +2312,6 @@ ul.exercise-draggable-answer .touch-items:hover {
 .wami-container {
     height: 144px;
     position: relative;
-}
-
-/*
-* Lesson scorm
-*/
-#subtab.tab-wrapper,
-#resource_tab.tab-wrapper .tab-content .tab-pane {
-    margin-top: 20px;
-}
-
-#toolshortcuts_horizontal {
-    padding-top: 15px;
-    padding-bottom: 15px;
-    margin-bottom: 10px;
-    text-align: center;
-}
-
-#toolshortcuts_horizontal .items-icon {
-    padding: 0;
-    display: inline-block;
-}
-
-#toolshortcuts_horizontal .items-icon img {
-    padding: 5px;
-    border-radius: 5px;
-    box-shadow: 0 1px 3px #C8C8C8;
-    border: 1px solid #e6e6e6;
-}
-
-ul#toolnavbox {
-    position: fixed;
-    margin: 0;
-    padding: 0;
-    top: 10px;
-    left: 0;
-    list-style: none;
-    z-index: 9999;
-}
-
-ul#toolnavbox li {
-    width: 100%;
-}
-
-ul#toolnavbox li a {
-    display: block;
-    font-size: 12px;
-    height: 35px;
-    margin-left: -160px;
-}
-
-ul#toolnavbox li a.icons {
-    width: 70px;
-}
-
-ul#toolnavbox li a.icons-text {
-    width: 200px;
-}
-
-ul#toolnavbox li a.text {
-    width: 180px;
-}
-
-ul#toolnavbox .tool-img {
-    margin-left: 5px;
-}
-
-ul#toolnavbox li a.btn {
-    text-align: right !important;
-}
-
-ul#toolnavbox-two {
-    position: fixed;
-    margin: 0;
-    padding: 0;
-    top: 10px;
-    left: 0;
-    list-style: none;
-    z-index: 9999;
-}
-
-ul#toolnavbox-two li {
-    width: 50px;
-}
-
-ul#toolnavbox-two li a {
-    display: block;
-    margin-left: -2px;
-    font-size: 12px;
-    width: 50px;
-}
-
-ul#toolnavbox-two .tool-img {
-    float: left;
-    margin-right: 5px;
-}
-
-ul#toolnavbox-two li a.btn {
-    text-align: left !important;
 }
 
 /* CSS BACKUP *****/
@@ -3025,12 +2460,10 @@ ul#toolnavbox-two li a.btn {
 .preview .mejs__container {
     background: #aaa;
 }
-
 .preview .mejs__controls {
     padding: 0 0 0 0;
     background: none;
 }
-
 .preview .mejs__button > button {
     margin: 16px 6px;
 }

@@ -340,54 +340,33 @@ function qti_parse_file($exercisePath, $file, $questionFile)
         "img",
     ];
 
-    $question_format_supported = true;
-    $xml_parser = xml_parser_create();
-    xml_parser_set_option($xml_parser, XML_OPTION_SKIP_WHITE, false);
-
     if ($qtiMainVersion == 1) {
-        xml_set_element_handler(
-            $xml_parser,
-            'startElementQti1',
-            'endElementQti1'
-        );
-        xml_set_character_data_handler($xml_parser, 'elementDataQti1');
+        parseQti1($data);
     } else {
         parseQti2($data);
     }
 
-    if (!xml_parse($xml_parser, $data, feof($fp))) {
+
+    //if (!xml_parse($xml_parser, $data, feof($fp))) {
         // if reading of the xml file in not successful :
         // set errorFound, set error msg, break while statement
-        Display::addFlash(
-            Display::return_message(
-                get_lang('Error reading XML file').
-                sprintf(
-                    '[%d:%d]',
-                    xml_get_current_line_number($xml_parser),
-                    xml_get_current_column_number($xml_parser)
-                ),
-                'error'
-            )
-        );
-
-        return false;
-    }
+        //Display::addFlash(
+        //    Display::return_message(
+        //        get_lang('Error reading XML file').
+        //        sprintf(
+        //            '[%d:%d]',
+        //            xml_get_current_line_number($xml_parser),
+        //            xml_get_current_column_number($xml_parser)
+        //        ),
+        //        'error'
+        //    )
+        //);
+        //
+        //return false;
+    //}
 
     //close file
     fclose($fp);
-    if (!$question_format_supported) {
-        Display::addFlash(
-            Display::return_message(
-                vsprintf(
-                    'Unknown question format in file %s',
-                    [$questionFile]
-                ),
-                'error'
-            )
-        );
-
-        return false;
-    }
 
     return true;
 }
@@ -683,321 +662,196 @@ function parseQti2($xmlData) {
 }
 
 /**
- * Function used by the SAX xml parser when the parser meets a opening tag for QTI1.
+ * Function used to parser a QTI1 xml file
  *
- * @param object $parser     xml parser created with "xml_parser_create()"
- * @param string $name       name of the element
- * @param array  $attributes
+ * @param string $xmlData
  */
-function startElementQti1($parser, $name, $attributes)
-{
-    global $element_pile;
+function parseQti1($xmlData) {
     global $exercise_info;
     global $current_question_ident;
     global $current_answer_id;
-    global $current_match_set;
-    global $currentAssociableChoice;
     global $current_question_item_body;
-    global $record_item_body;
-    global $non_HTML_tag_to_avoid;
-    global $current_inlinechoice_id;
     global $cardinality;
     global $questionTempDir;
     global $lastLabelFieldName;
     global $lastLabelFieldValue;
+    global $resourcesLinks;
 
-    array_push($element_pile, $name);
-    $current_element = end($element_pile);
-    if (sizeof($element_pile) >= 2) {
-        $parent_element = $element_pile[sizeof($element_pile) - 2];
-    } else {
-        $parent_element = '';
-    }
-    if (sizeof($element_pile) >= 3) {
-        $grand_parent_element = $element_pile[sizeof($element_pile) - 3];
-    } else {
-        $grand_parent_element = "";
-    }
-    if (sizeof($element_pile) >= 4) {
-        $great_grand_parent_element = $element_pile[sizeof($element_pile) - 4];
-    } else {
-        $great_grand_parent_element = "";
-    }
+    $crawler = new Crawler($xmlData);
+    $nodes = $crawler->filter('*');
 
-    if ($record_item_body) {
-        if ((!in_array($current_element, $non_HTML_tag_to_avoid))) {
-            $current_question_item_body .= "<".$name;
-            foreach ($attributes as $attribute_name => $attribute_value) {
-                $current_question_item_body .= " ".$attribute_name."=\"".$attribute_value."\"";
-            }
-            $current_question_item_body .= ">";
-        } else {
-            //in case of FIB question, we replace the IMS-QTI tag b y the correct answer between "[" "]",
-            //we first save with claroline tags ,then when the answer will be parsed, the claroline tags will be replaced
-            if ($current_element == 'INLINECHOICEINTERACTION') {
-                $current_question_item_body .= "**claroline_start**".$attributes['RESPONSEIDENTIFIER']."**claroline_end**";
-            }
-            if ($current_element == 'TEXTENTRYINTERACTION') {
-                $correct_answer_value = $exercise_info['question'][$current_question_ident]['correct_answers'][$current_answer_id];
-                $current_question_item_body .= "[".$correct_answer_value."]";
-            }
-            if ($current_element == 'BR') {
-                $current_question_item_body .= "<br />";
-            }
+    foreach ($nodes as $node) {
+        if ('#text' === $node->nodeName) {
+            continue;
         }
-    }
 
-    switch ($current_element) {
-        case 'ASSESSMENT':
-            // This is the assessment element: we don't care, we just want questions
-            if (!empty($attributes['TITLE'])) {
-                $exercise_info['name'] = $attributes['TITLE'];
-            }
-            break;
-        case 'ITEM':
-            //retrieve current question
-            $current_question_ident = $attributes['IDENT'];
-            $exercise_info['question'][$current_question_ident] = [];
-            $exercise_info['question'][$current_question_ident]['answer'] = [];
-            $exercise_info['question'][$current_question_ident]['correct_answers'] = [];
-            $exercise_info['question'][$current_question_ident]['tempdir'] = $questionTempDir;
-            break;
-        case 'SECTION':
-            break;
-        case 'RESPONSE_LID':
-            // Retrieve question type
-            if ("multiple" == strtolower($attributes['RCARDINALITY'])) {
-                $cardinality = 'multiple';
-            }
-            if ("single" == strtolower($attributes['RCARDINALITY'])) {
-                $cardinality = 'single';
-            }
-            //needed for FIB
-            $current_answer_id = $attributes['IDENT'];
-            $current_question_item_body = '';
-            break;
-        case 'RENDER_CHOICE':
-            break;
-        case 'RESPONSE_LABEL':
-            if (!empty($attributes['IDENT'])) {
-                $current_answer_id = $attributes['IDENT'];
-                //set the placeholder for the answer to come (in endElementQti1)
-                $exercise_info['question'][$current_question_ident]['answer'][$current_answer_id] = '';
-            }
-            break;
-        case 'DECVAR':
-            if ($parent_element == 'OUTCOMES' && $grand_parent_element == 'RESPROCESSING') {
-                // The following attributes are available
-                //$attributes['VARTYPE'];
-                //$attributes['DEFAULTVAL'];
-                //$attributes['MINVALUE'];
-                //$attributes['MAXVALUE'];
-            }
-            break;
-        case 'VAREQUAL':
-            if ($parent_element == 'CONDITIONVAR' && $grand_parent_element == 'RESPCONDITION') {
-                // The following attributes are available
-                //$attributes['RESPIDENT']
-            }
-            break;
-        case 'SETVAR':
-            if ($parent_element == 'RESPCONDITION') {
-                // The following attributes are available
-                //$attributes['ACTION']
-            }
-            break;
-        case 'IMG':
-            break;
-        case 'MATTEXT':
-            if ($parent_element == 'MATERIAL') {
-                if ($grand_parent_element == 'PRESENTATION') {
-                    $exercise_info['question'][$current_question_ident]['title'] = $current_question_item_body;
+        switch ($node->nodeName) {
+            case 'assessment':
+                // This is the assessment element: we don't care, we just want questions
+                if ($node->hasAttribute('title')) {
+                    $exercise_info['name'] = $node->getAttribute('title');
                 }
-            }
-            break;
-    }
-}
+                break;
 
-/**
- * Function used by the SAX xml parser when the parser meets a closing tag for QTI1.
- *
- * @param object $parser     xml parser created with "xml_parser_create()"
- * @param string $name       name of the element
- * @param array  $attributes The element attributes
- */
-function endElementQti1($parser, $name, $attributes)
-{
-    global $element_pile;
-    global $exercise_info;
-    global $current_question_ident;
-    global $record_item_body;
-    global $current_question_item_body;
-    global $non_HTML_tag_to_avoid;
-    global $cardinality;
-    global $lastLabelFieldName;
-    global $lastLabelFieldValue;
-    global $resourcesLinks;
+            case 'item':
+                //retrieve current question
+                $current_question_ident = $node->getAttribute('ident');
+                $exercise_info['question'][$current_question_ident] = [];
+                $exercise_info['question'][$current_question_ident]['answer'] = [];
+                $exercise_info['question'][$current_question_ident]['correct_answers'] = [];
+                $exercise_info['question'][$current_question_ident]['tempdir'] = $questionTempDir;
+                break;
 
-    $current_element = end($element_pile);
-    if (sizeof($element_pile) >= 2) {
-        $parent_element = $element_pile[sizeof($element_pile) - 2];
-    } else {
-        $parent_element = "";
-    }
-    if (sizeof($element_pile) >= 3) {
-        $grand_parent_element = $element_pile[sizeof($element_pile) - 3];
-    } else {
-        $grand_parent_element = "";
-    }
-    if (sizeof($element_pile) >= 4) {
-        $great_grand_parent_element = $element_pile[sizeof($element_pile) - 4];
-    } else {
-        $great_grand_parent_element = "";
-    }
+            case 'section':
+                break;
 
-    //treat the record of the full content of itembody tag :
-    if ($record_item_body && (!in_array($current_element, $non_HTML_tag_to_avoid))) {
-        $current_question_item_body .= "</".$name.">";
-    }
+            case 'response_lid':
+                // Retrieve question type
+                if ('multiple' === strtolower($node->getAttribute('rcardinality'))) {
+                    $cardinality = 'multiple';
+                }
 
-    switch ($name) {
-        case 'MATTEXT':
-            if ($parent_element == 'MATERIAL') {
-                // For some reason an item in a hierarchy <item><presentation><material><mattext> doesn't seem to
-                // catch the grandfather 'presentation', so we check for 'item' as a patch (great-grand-father)
-                if ($grand_parent_element == 'PRESENTATION' || $grand_parent_element == 'ITEM') {
-                    $exercise_info['question'][$current_question_ident]['title'] = $current_question_item_body;
-                    $current_question_item_body = '';
-                } elseif ($grand_parent_element == 'RESPONSE_LABEL') {
-                    $last = '';
-                    foreach ($exercise_info['question'][$current_question_ident]['answer'] as $key => $value) {
-                        $last = $key;
+                if ('single' === strtolower($node->getAttribute('rcardinality'))) {
+                    $cardinality = 'single';
+                }
+
+                if (!isset($exercise_info['question'][$current_question_ident]['type'])) {
+                    if ('multiple' === strtolower($node->getAttribute('rcardinality'))) {
+                        $exercise_info['question'][$current_question_ident]['type'] = MCMA;
                     }
-                    $exercise_info['question'][$current_question_ident]['answer'][$last]['value'] = $current_question_item_body;
-                    $current_question_item_body = '';
-                }
-            }
-            // no break ?
-        case 'RESPONSE_LID':
-            // Retrieve question type
-            if (!isset($exercise_info['question'][$current_question_ident]['type'])) {
-                if ("multiple" == strtolower($attributes['RCARDINALITY'])) {
-                    $exercise_info['question'][$current_question_ident]['type'] = MCMA;
-                }
-                if ("single" == strtolower($attributes['RCARDINALITY'])) {
-                    $exercise_info['question'][$current_question_ident]['type'] = MCUA;
-                }
-            }
-            $current_question_item_body = '';
-            //needed for FIB
-            $current_answer_id = $attributes['IDENT'];
-            break;
-        case 'ITEMMETADATA':
-            $current_question_item_body = '';
-            break;
-    }
-    array_pop($element_pile);
-}
-
-/**
- * QTI1 element parser.
- *
- * @param $parser
- * @param $data
- */
-function elementDataQti1($parser, $data)
-{
-    global $element_pile;
-    global $exercise_info;
-    global $current_question_ident;
-    global $current_answer_id;
-    global $current_match_set;
-    global $currentAssociableChoice;
-    global $current_question_item_body;
-    global $record_item_body;
-    global $non_HTML_tag_to_avoid;
-    global $current_inlinechoice_id;
-    global $cardinality;
-    global $lastLabelFieldName;
-    global $lastLabelFieldValue;
-    global $resourcesLinks;
-
-    $current_element = end($element_pile);
-    if (sizeof($element_pile) >= 2) {
-        $parent_element = $element_pile[sizeof($element_pile) - 2];
-    } else {
-        $parent_element = "";
-    }
-    //treat the record of the full content of itembody tag (needed for question statment and/or FIB text:
-
-    if ($record_item_body && (!in_array($current_element, $non_HTML_tag_to_avoid))) {
-        $current_question_item_body .= $data;
-    }
-
-    switch ($current_element) {
-        case 'FIELDLABEL':
-            if (!empty($data)) {
-                $lastLabelFieldName = $current_element;
-                $lastLabelFieldValue = $data;
-            }
-            // no break ?
-        case 'FIELDENTRY':
-            $current_question_item_body = $data;
-            switch ($lastLabelFieldValue) {
-                case 'cc_profile':
-                    // The following values might be proprietary in MATRIX software. No specific reference
-                    // in QTI doc: http://www.imsglobal.org/question/qtiv1p2/imsqti_asi_infov1p2.html#1415855
-                    switch ($data) {
-                        case 'cc.true_false.v0p1':
-                            //this is a true-false question (translated to multiple choice in Chamilo because true-false comes with "I don't know")
-                            $exercise_info['question'][$current_question_ident]['type'] = MCUA;
-                            break;
-                        case 'cc.multiple_choice.v0p1':
-                            //this is a multiple choice (unique answer) question
-                            $exercise_info['question'][$current_question_ident]['type'] = MCUA;
-                            break;
-                        case 'cc.multiple_response.v0p1':
-                            //this is a multiple choice (unique answer) question
-                            $exercise_info['question'][$current_question_ident]['type'] = MCMA;
-                            break;
+                    if ('single' === strtolower($node->getAttribute('rcardinality'))) {
+                        $exercise_info['question'][$current_question_ident]['type'] = MCUA;
                     }
-                    break;
-                case 'cc_weighting':
-                    //defines the total weight of the question
-                    $exercise_info['question'][$current_question_ident]['default_weighting'] = $lastLabelFieldValue;
-                    break;
-                case 'assessment_question_identifierref':
-                    //placeholder - not used yet
-                    // Possible values are not defined by qti v1.2
-                    break;
-            }
-            break;
-        case 'MATTEXT':
-            // Replace relative links by links to the documents in the course
-            // $resourcesLinks is only defined by qtiProcessManifest()
-            if (isset($resourcesLinks) && isset($resourcesLinks['manifest']) && isset($resourcesLinks['web'])) {
-                foreach ($resourcesLinks['manifest'] as $key => $value) {
-                    $data = preg_replace('|'.$value.'|', $resourcesLinks['web'][$key], $data);
                 }
-            }
-            if (!empty($current_question_item_body)) {
-                $current_question_item_body .= $data;
-            } else {
-                $current_question_item_body = $data;
-            }
-            break;
-        case 'VAREQUAL':
-            $lastLabelFieldName = 'VAREQUAL';
-            $lastLabelFieldValue = $data;
-            break;
-        case 'SETVAR':
-            if ($parent_element == 'RESPCONDITION') {
-                // The following attributes are available
-                //$attributes['ACTION']
-                $exercise_info['question'][$current_question_ident]['correct_answers'][] = $lastLabelFieldValue;
-                $exercise_info['question'][$current_question_ident]['weighting'][$lastLabelFieldValue] = $data;
-            }
-            break;
+                $current_question_item_body = '';
+                //needed for FIB
+                $current_answer_id = $node->getAttribute('dent');
+                break;
+
+            case 'render_choice':
+                break;
+
+            case 'response_label':
+                if ($node->hasAttribute('ident')) {
+                    $current_answer_id = $node->getAttribute('ident');
+                    //set the placeholder for the answer to come (in endElementQti1)
+                    $exercise_info['question'][$current_question_ident]['answer'][$current_answer_id] = '';
+                }
+                break;
+
+            case 'decvar':
+                if ('outcomes' === $node->parentNode->nodeName &&
+                    'resprocessing' === $node->parentNode->parentNode->nodeName
+                ) {
+                    // The following attributes are available: vartype, defaultval, minvalue, maxvalue
+                }
+                break;
+
+            case 'varequal':
+                if ('conditionvar' === $node->parentNode->nodeName &&
+                    'respcondition' === $node->parentNode->parentNode->nodeName
+                ) {
+                    // The following attributes are available: respident
+                }
+
+                $lastLabelFieldName = $node->nodeName;
+                $lastLabelFieldValue = $node->nodeValue;
+                break;
+
+            case 'setvar':
+                if ('respcondition' === $node->parentNode->nodeName) {
+                    // The following attributes are available: action
+                    $exercise_info['question'][$current_question_ident]['correct_answers'][] = $lastLabelFieldValue;
+                    $exercise_info['question'][$current_question_ident]['weighting'][$lastLabelFieldValue] = $node->nodeValue;
+                }
+                break;
+
+            case 'img':
+                break;
+
+            case 'mattext':
+                if ('material' === $node->parentNode->nodeName) {
+                    if ('presentation' === $node->parentNode->parentNode->nodeName) {
+                        $exercise_info['question'][$current_question_ident]['title'] = $current_question_item_body;
+                    }
+                }
+                // Replace relative links by links to the documents in the course
+                // $resourcesLinks is only defined by qtiProcessManifest()
+                if (isset($resourcesLinks) && isset($resourcesLinks['manifest']) && isset($resourcesLinks['web'])) {
+                    foreach ($resourcesLinks['manifest'] as $key => $value) {
+                        $node->nodeValue = preg_replace('|'.$value.'|', $resourcesLinks['web'][$key], $node->nodeValue);
+                    }
+                }
+
+                if (!empty($current_question_item_body)) {
+                    $current_question_item_body .= $node->nodeValue;
+                } else {
+                    $current_question_item_body = $node->nodeValue;
+                }
+
+                if ('material' === $node->parentNode->nodeName) {
+                    // For some reason an item in a hierarchy <item><presentation><material><mattext> doesn't seem to
+                    // catch the grandfather 'presentation', so we check for 'item' as a patch (great-grand-father)
+                    if ('presentation' === $node->parentNode->parentNode->nodeName ||
+                        'item' === $node->parentNode->parentNode->nodeName
+                    ) {
+                        $exercise_info['question'][$current_question_ident]['title'] = $current_question_item_body;
+                        $current_question_item_body = '';
+                    } elseif ('response_label' === $node->parentNode->nodeName) {
+                        $last = '';
+
+                        foreach ($exercise_info['question'][$current_question_ident]['answer'] as $key => $value) {
+                            $last = $key;
+                        }
+
+                        $exercise_info['question'][$current_question_ident]['answer'][$last]['value'] = $current_question_item_body;
+                        $current_question_item_body = '';
+                    }
+                }
+                break;
+
+            case 'fieldlabel':
+                if (!empty($node->nodeValue)) {
+                    $lastLabelFieldName = $node->nodeName;
+                    $lastLabelFieldValue = $node->nodeValue;
+                }
+                // no break ?
+            case 'fieldentry':
+                $current_question_item_body = $node->nodeValue;
+
+                switch ($lastLabelFieldValue) {
+                    case 'cc_profile':
+                        // The following values might be proprietary in MATRIX software. No specific reference
+                        // in QTI doc: http://www.imsglobal.org/question/qtiv1p2/imsqti_asi_infov1p2.html#1415855
+                        switch ($node->nodeValue) {
+                            case 'cc.true_false.v0p1':
+                                //this is a true-false question (translated to multiple choice in Chamilo because true-false comes with "I don't know")
+                                $exercise_info['question'][$current_question_ident]['type'] = MCUA;
+                                break;
+                            case 'cc.multiple_choice.v0p1':
+                                //this is a multiple choice (unique answer) question
+                                $exercise_info['question'][$current_question_ident]['type'] = MCUA;
+                                break;
+                            case 'cc.multiple_response.v0p1':
+                                //this is a multiple choice (unique answer) question
+                                $exercise_info['question'][$current_question_ident]['type'] = MCMA;
+                                break;
+                        }
+                        break;
+                    case 'cc_weighting':
+                        //defines the total weight of the question
+                        $exercise_info['question'][$current_question_ident]['default_weighting'] = $lastLabelFieldValue;
+                        break;
+                    case 'assessment_question_identifierref':
+                        //placeholder - not used yet
+                        // Possible values are not defined by qti v1.2
+                        break;
+                }
+                break;
+            case 'itemmetadata':
+                $current_question_item_body = '';
+                break;
+        }
     }
 }
 

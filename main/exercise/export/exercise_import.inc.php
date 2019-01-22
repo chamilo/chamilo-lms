@@ -341,7 +341,8 @@ function qti_parse_file($exercisePath, $file, $questionFile)
  *
  * @param string $xmlData
  */
-function parseQti2($xmlData) {
+function parseQti2($xmlData)
+{
     global $exerciseInfo;
     global $questionTempDir;
     global $resourcesLinks;
@@ -389,7 +390,6 @@ function parseQti2($xmlData) {
                     'tempdir' => $questionTempDir,
                 ];
                 break;
-
             case 'section':
                 $title = $node->getAttribute('title');
 
@@ -397,7 +397,6 @@ function parseQti2($xmlData) {
                     $exerciseInfo['name'] = $title;
                 }
                 break;
-
             case 'responseDeclaration':
                 if ('multiple' === $node->getAttribute('cardinality')) {
                     $exerciseInfo['question'][$currentQuestionIdent]['type'] = MCMA;
@@ -411,13 +410,11 @@ function parseQti2($xmlData) {
 
                 $currentAnswerId = $node->getAttribute('identifier');
                 break;
-
             case 'inlineChoiceInteraction':
                 $exerciseInfo['question'][$currentQuestionIdent]['type'] = FIB;
                 $exerciseInfo['question'][$currentQuestionIdent]['subtype'] = 'LISTBOX_FILL';
                 $currentAnswerId = $node->getAttribute('responseIdentifier');
                 break;
-
             case 'inlineChoice':
                 $answerIdentifier = $exerciseInfo['question'][$currentQuestionIdent]['correct_answers'][$currentAnswerId];
 
@@ -435,22 +432,18 @@ function parseQti2($xmlData) {
                     $exerciseInfo['question'][$currentQuestionIdent]['wrong_answers'][] = $node->nodeValue;
                 }
                 break;
-
             case 'textEntryInteraction':
                 $exerciseInfo['question'][$currentQuestionIdent]['type'] = FIB;
                 $exerciseInfo['question'][$currentQuestionIdent]['subtype'] = 'TEXTFIELD_FILL';
                 $exerciseInfo['question'][$currentQuestionIdent]['response_text'] = $currentQuestionItemBody;
                 break;
-
             case 'matchInteraction':
                 $exerciseInfo['question'][$currentQuestionIdent]['type'] = MATCHING;
                 break;
-
             case 'extendedTextInteraction':
                 $exerciseInfo['question'][$currentQuestionIdent]['type'] = FREE_ANSWER;
                 $exerciseInfo['question'][$currentQuestionIdent]['description'] = $node->nodeValue;
                 break;
-
             case 'simpleMatchSet':
                 if (!isset($currentMatchSet)) {
                     $currentMatchSet = 1;
@@ -459,15 +452,11 @@ function parseQti2($xmlData) {
                 }
                 $exerciseInfo['question'][$currentQuestionIdent]['answer'][$currentMatchSet] = [];
                 break;
-
             case 'simpleAssociableChoice':
                 $currentAssociableChoice = $node->getAttribute('identifier');
 
-                $exerciseInfo['question'][$currentQuestionIdent]['answer'][$currentMatchSet][$currentAssociableChoice] = trim(
-                    $node->nodeValue
-                );
+                $exerciseInfo['question'][$currentQuestionIdent]['answer'][$currentMatchSet][$currentAssociableChoice] = trim($node->nodeValue);
                 break;
-
             case 'simpleChoice':
                 $currentAnswerId = $node->getAttribute('identifier');
                 if (!isset($exerciseInfo['question'][$currentQuestionIdent]['answer'][$currentAnswerId])) {
@@ -483,7 +472,6 @@ function parseQti2($xmlData) {
                         .trim($node->nodeValue);
                 }
                 break;
-
             case 'mapEntry':
                 if (in_array($node->parentNode->nodeName, ['mapping', 'mapEntry'])) {
                     $answer_id = $node->getAttribute('mapKey');
@@ -492,10 +480,11 @@ function parseQti2($xmlData) {
                         $exerciseInfo['question'][$currentQuestionIdent]['weighting'] = [];
                     }
 
-                    $exerciseInfo['question'][$currentQuestionIdent]['weighting'][$answer_id] = $node->getAttribute('mappedValue');
+                    $exerciseInfo['question'][$currentQuestionIdent]['weighting'][$answer_id] = $node->getAttribute(
+                        'mappedValue'
+                    );
                 }
                 break;
-
             case 'mapping':
                 $defaultValue = $node->getAttribute('defaultValue');
 
@@ -503,7 +492,6 @@ function parseQti2($xmlData) {
                     $exerciseInfo['question'][$currentQuestionIdent]['default_weighting'] = $defaultValue;
                 }
                 // no break ?
-
             case 'itemBody':
                 $nodeValue = $node->nodeValue;
 
@@ -575,11 +563,9 @@ function parseQti2($xmlData) {
                     }
                 }
                 break;
-
             case 'img':
                 $exerciseInfo['question'][$currentQuestionIdent]['attached_file_url'] = $node->getAttribute('src');
                 break;
-
             case 'order':
                 $orderType = $node->getAttribute('order_type');
 
@@ -587,7 +573,6 @@ function parseQti2($xmlData) {
                     $exerciseInfo['order_type'] = $orderType;
                 }
                 break;
-
             case 'feedbackInline':
                 if (!isset($exerciseInfo['question'][$currentQuestionIdent]['answer'][$currentAnswerId]['feedback'])) {
                     $exerciseInfo['question'][$currentQuestionIdent]['answer'][$currentAnswerId] = trim(
@@ -600,7 +585,6 @@ function parseQti2($xmlData) {
                         );
                 }
                 break;
-
             case 'value':
                 if ('correctResponse' === $node->parentNode->nodeName) {
                     $nodeValue = trim($node->nodeValue);
@@ -620,11 +604,11 @@ function parseQti2($xmlData) {
                     }
                 }
                 break;
-
             case 'mattext':
                 if ('flow_mat' === $node->parentNode->parentNode->nodeName &&
                     ('presentation_material' === $node->parentNode->parentNode->parentNode->nodeName ||
-                        'section' === $node->parentNode->parentNode->parentNode->nodeName)
+                        'section' === $node->parentNode->parentNode->parentNode->nodeName
+                    )
                 ) {
                     $nodeValue = trim($node->nodeValue);
 

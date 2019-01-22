@@ -52,6 +52,7 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
                     'show_link_ticket_notification' => 'false',
                     'icons_mode_svg' => 'false',
                     'default_template' => 'default',
+                    'hide_social_media_links' => 'false',
                 ]
             );
 
@@ -116,6 +117,7 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
             ->add('show_link_ticket_notification', YesNoType::class)
             ->add('icons_mode_svg', YesNoType::class)
             ->add('default_template')
+            ->add('hide_social_media_links', YesNoType::class)
         ;
     }
 }

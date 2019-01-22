@@ -35,6 +35,7 @@
                     </div>
                     {% endif %}
 
+                    {% if "display.hide_social_media_links" | api_get_setting == 'false' %}
                     <div class="share-social-media">
                         <ul class="sharing-buttons">
                             <li>
@@ -60,6 +61,7 @@
                             </li>
                         </ul>
                     </div>
+                    {% endif %}
                 </div>
                 <div class="col-sm-7">
                     <div class="course-description">

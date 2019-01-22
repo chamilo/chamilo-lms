@@ -154,9 +154,6 @@ function import_exercise($file)
         return false;
     }
 
-    $doc = new DOMDocument();
-    $doc->load($filePath);
-
     // 1. Create exercise.
     $exercise = new Exercise();
     $exercise->exercise = $exercise_info['name'];

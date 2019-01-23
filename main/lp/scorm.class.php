@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Symfony\Component\DomCrawler\Crawler;
+
 /**
  * Defines the scorm class, which is meant to contain the scorm items (nuclear elements).
  *
@@ -94,9 +96,11 @@ class scorm extends learnpath
 
             // UTF-8 is supported by DOMDocument class, this is for sure.
             $xml = api_utf8_encode_xml($xml, $this->manifest_encoding);
-            $doc = new DOMDocument();
-            $res = @$doc->loadXML($xml);
-            if ($res === false) {
+
+            $crawler = new Crawler();
+            $crawler->addXmlContent($xml);
+
+            if (!empty($xmlErrors)) {
                 if ($this->debug > 0) {
                     error_log('New LP - In scorm::parse_manifest() - Exception thrown when loading '.$file.' in DOMDocument');
                 }
@@ -105,10 +109,11 @@ class scorm extends learnpath
             }
 
             if ($this->debug > 1) {
-                error_log('New LP - Called  (encoding:'.$doc->xmlEncoding.' - saved: '.$this->manifest_encoding.')', 0);
+                error_log('New LP - Called  (encoding:'.$this->manifest_encoding.' - saved: '.$this->manifest_encoding.')', 0);
             }
 
-            $root = $doc->documentElement;
+            $root = $crawler->getNode(0);
+
             if ($root->hasAttributes()) {
                 $attributes = $root->attributes;
                 if ($attributes->length !== 0) {
@@ -220,7 +225,6 @@ class scorm extends learnpath
                     }
                 }
             }
-            unset($doc);
         // End parsing using PHP5 DOMXML methods.
         } else {
             if ($this->debug > 1) {

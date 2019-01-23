@@ -60,10 +60,15 @@ class CkEditor extends Editor
     {
         $style = '';
 
-        if (trim($value) == '<html><head><title></title></head><body></body></html>' ||
-            trim($value) == '<!DOCTYPE html><html><head><title></title></head><body></body></html>' ||
-            $value == ''
-        ) {
+        $value = trim($value);
+
+        $defaultValues = [0 => ''];
+        $defaultValues[1] = '<html><head><title></title></head><body></body></html>';
+        $defaultValues[2] = '<!DOCTYPE html>'.$defaultValues[1];
+        $defaultValues[3] = htmlentities($defaultValues[1]);
+        $defaultValues[4] = htmlentities($defaultValues[2]);
+
+        if (in_array($value, $defaultValues)) {
             $style = api_get_css_asset('bootstrap/dist/css/bootstrap.min.css');
             $style .= api_get_css_asset('fontawesome/css/font-awesome.min.css');
             $style .= api_get_css(ChamiloApi::getEditorDocStylePath());

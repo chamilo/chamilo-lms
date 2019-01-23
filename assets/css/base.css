@@ -98,47 +98,7 @@
     height: 75px;
     z-index: 1;
 }
-
 /* MAIN QUESTION */
-
-#questions {
-    width: 40%;
-    height: 50px;
-    float: left;
-    padding: 5px;
-}
-
-.exercise {
-    padding: 10px 20px;
-    box-sizing: border-box;
-    border: 1px solid #dddddd;
-    border-radius: 4px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-    margin-bottom: 35px;
-}
-
-.question_row_score {
-    margin-bottom: 20px;
-    display: block;
-}
-
-.question_item {
-    height: 50px;
-    padding: 5px;
-    margin: 10px 0 10px 0;
-}
-
-.question-return {
-    padding: 10px;
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.option_item {
-    width: 150px;
-    padding: 3px;
-    margin: 10px;
-}
 
 .exercise_overview_options {
     background-color: #F9F9F9;
@@ -166,58 +126,7 @@
     font-size: 14px;
 }
 
-.exercise_header {
-    border-bottom: 1px dotted #ccc;
-    margin-bottom: 20px;
-}
 /* Fixes questions list */
-
-.exercise_description {
-    padding: 0 0 10px 0;
-    border-bottom: 1px solid #dddddd;
-    margin-bottom: 10px;
-}
-
-.exercise_title {
-    font-size: 1.6em;
-    font-weight: bold;
-    padding: 10px 0 10px 0;
-}
-
-.question_no_answer {
-    background-color: #FFF7C0;
-    margin: 10px 0 5px 0;
-}
-
-.question_answer {
-    display: block;
-    float: left;
-    margin: 0;
-    width: 100%;
-    padding: 0 0 5px 0;
-}
-
-.question_answer label {
-    float: left;
-    margin: 0 0 0 8px;
-}
-
-.question_answer input {
-    float: left;
-    margin: 0;
-}
-
-#question_description {
-    padding-left: 5px;
-    padding-top: 10px;
-}
-
-#question_score {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    font-weight: bold;
-    font-size: 130%;
-}
 
 .question_row_score .title-score .total {
     border: 1px solid #ddd;
@@ -270,19 +179,6 @@
 
 .ribbon .success {
     color: green;
-}
-
-.exercise_save_now_button .checkbox input[type="checkbox"] {
-    margin-left: -25px;
-}
-
-.question-check-test {
-    padding-left: 35px;
-    margin-bottom: 35px;
-}
-
-.question-check-test .checkbox input[type="checkbox"] {
-    margin-left: -25px;
 }
 
 /* EXERCISE MATFDC */
@@ -610,11 +506,6 @@ form .form .freeze {
     select#question_type_hidden option[value="16"] {
         background-image: url(../../public/img/icons/32/calculated_answer.png);
     }
-}
-
-#question_report_questionnumbers.pagination .disabled a {
-    background-color: #F5F5F5;
-    color: #666;
 }
 
 /* video chat */

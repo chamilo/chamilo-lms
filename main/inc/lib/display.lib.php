@@ -2764,12 +2764,15 @@ HTML;
     {
         $data = pathinfo($fileUrl);
 
-        $content = self::url($data['basename'], $fileUrl);
+        //$content = self::url($data['basename'], $fileUrl);
+        $content = '';
         switch ($data['extension']) {
             case 'webm':
             case 'mp4':
             case 'ogg':
                 $content = '<video style="width: 400px; height:100%;" src="'.$fileUrl.'"></video>';
+                // Allows video to play when loading during an ajax call
+                $content .= "<script>jQuery('video:not(.skip), audio:not(.skip)').mediaelementplayer();</script>";
                 break;
             case 'jpg':
             case 'jpeg':

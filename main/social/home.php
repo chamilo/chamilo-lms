@@ -18,7 +18,6 @@ $show_full_profile = true;
 // social tab
 Session::erase('this_section');
 $this_section = SECTION_SOCIAL;
-
 api_block_anonymous_users();
 
 if (api_get_setting('allow_social_tool') != 'true') {
@@ -77,118 +76,17 @@ if (api_get_setting('profile', 'picture') == 'true') {
     }
 }
 
-// Main post
-if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp_name'])) {
-    $messageContent = $_POST['social_wall_new_msg_main'];
-    if (!empty($_POST['url_content'])) {
-        $messageContent = $_POST['social_wall_new_msg_main'].'<br /><br />'.$_POST['url_content'];
-    }
+SocialManager::handlePosts(api_get_self());
 
-    $messageId = SocialManager::sendWallMessage(
-        api_get_user_id(),
-        api_get_user_id(),
-        $messageContent,
-        0,
-        MESSAGE_STATUS_WALL_POST
-    );
+// Social Post Wall
+$posts = SocialManager::getMyWallMessages($user_id);
+$countPost = $posts['count'];
+$posts = $posts['posts'];
 
-    if ($messageId && !empty($_FILES['picture']['tmp_name'])) {
-        $error = SocialManager::sendWallMessageAttachmentFile(
-            api_get_user_id(),
-            $_FILES['picture'],
-            $messageId,
-            $fileComment = ''
-        );
-    }
+$extraFieldBlock = SocialManager::getExtraFieldBlock($user_id);
+SocialManager::getScrollJs($countPost, $htmlHeadXtra);
 
-    Display::addFlash(Display::return_message(get_lang('MessageSent')));
-
-    $url = api_get_self();
-    header('Location: '.$url);
-    exit;
-}
-
-// Post comment
-if (!empty($_POST['social_wall_new_msg']) && !empty($_POST['messageId'])) {
-    $messageId = (int) $_POST['messageId'];
-    $messageInfo = MessageManager::get_message_by_id($messageId);
-
-    if (!empty($messageInfo)) {
-        $res = SocialManager::sendWallMessage(
-            api_get_user_id(),
-            $messageInfo['user_receiver_id'],
-            $_POST['social_wall_new_msg'],
-            $messageId,
-            MESSAGE_STATUS_WALL
-        );
-        Display::addFlash(Display::return_message(get_lang('MessageSent')));
-    }
-
-    $url = api_get_self();
-    header('Location: '.$url);
-    exit;
-}
-
-$locale = api_get_language_isocode();
-$javascriptDir = api_get_path(LIBRARY_PATH).'javascript/';
-// Add Jquery scroll pagination plugin
-$htmlHeadXtra[] = api_get_js('jscroll/jquery.jscroll.js');
-// Add Jquery Time ago plugin
-$htmlHeadXtra[] = api_get_asset('jquery-timeago/jquery.timeago.js');
-$timeAgoLocaleDir = $javascriptDir.'jquery-timeago/locales/jquery.timeago.'.$locale.'.js';
-if (file_exists($timeAgoLocaleDir)) {
-    $htmlHeadXtra[] = api_get_js('jquery-timeago/locales/jquery.timeago.'.$locale.'.js');
-}
-$socialAjaxUrl = api_get_path(WEB_AJAX_PATH).'social.ajax.php';
-
-$htmlHeadXtra[] = '<script>
-$(document).ready(function(){
-    var container = $("#wallMessages");
-    container.jscroll({
-        loadingHtml: "<div class=\"well_border\">'.get_lang('Loading').' </div>",
-        nextSelector: "a.nextPage:last",
-        contentSelector: "",
-        callback: timeAgo
-    });
-    timeAgo();
-    
-    $(".delete_message").on("click", function() {
-        var id = $(this).attr("id");
-        id = id.split("_")[1]; 
-        
-        $.ajax({
-            url: "'.$socialAjaxUrl.'?a=delete_message" + "&id=" + id,
-            success: function (result) {
-                if (result) {
-                    $("#message_" + id).parent().parent().parent().parent().html(result);
-                }
-            }
-        });        
-    });
-    
-    $(".delete_comment").on("click", function() {
-        var id = $(this).attr("id");
-        id = id.split("_")[1]; 
-        
-        $.ajax({
-            url: "'.$socialAjaxUrl.'?a=delete_message" + "&id=" + id,
-            success: function (result) {
-                if (result) {
-                    $("#message_" + id).parent().parent().parent().html(result);
-                }
-            }
-        });        
-    });
-    
-});
-
-function timeAgo() {
-    $(".timeago").timeago();
-}
-</script>';
-
-
-//Block Menu
+// Block Menu
 $social_menu_block = SocialManager::show_social_menu('home');
 
 $social_search_block = Display::panel(
@@ -255,10 +153,9 @@ if (count($myGroups) > 0) {
     foreach ($myGroups as $group) {
         $social_group_block .= ' <li class="list-group-item">';
         $social_group_block .= $group['name'];
-        //$social_group_block .= '<div class="col-md-9">'.$groups_newest[$i][1];
         $social_group_block .= '</li>';
     }
-    $social_group_block .= "</div>";
+    $social_group_block .= '</div>';
 }
 
 $form = new FormValidator(
@@ -283,20 +180,6 @@ $form->addButtonSearch(get_lang('Search'));
 
 $social_group_block .= $form->returnForm();
 
-/*$list = count($groups_pop);
-if ($list > 0) {
-    $social_group_block .= '<div class="list-group-newest">';
-    $social_group_block .= '<div class="group-title">'.get_lang('Popular').'</div>';
-
-    for ($i = 0; $i < $list; $i++) {
-        $social_group_block .= '<div class="row">';
-        $social_group_block .= '<div class="col-md-3">'.$groups_pop[$i][0].'</div>';
-        $social_group_block .= '<div class="col-md-9">'.$groups_pop[$i][1];
-        $social_group_block .= $groups_pop[$i][2].'</div>';
-        $social_group_block .= "</div>";
-    }
-    $social_group_block .= "</div>";
-}*/
 // My friends
 $friend_html = SocialManager::listMyFriendsBlock(
     $user_id,
@@ -323,19 +206,7 @@ $social_group_block = Display::panelCollapse(
 );
 
 $wallSocialAddPost = SocialManager::getWallForm(api_get_self());
-// Social Post Wall
-$posts = SocialManager::getMyWallMessages($user_id);
-$social_post_wall_block = empty($posts) ? '<p>'.get_lang('NoPosts').'</p>' : $posts;
-$socialAutoExtendLink = '';
-if (!empty($posts)) {
-    $socialAutoExtendLink = Display::url(
-        get_lang('SeeMore'),
-        $socialAjaxUrl.'?u='.$user_id.'&a=list_wall_message&start=10&length=5',
-        [
-            'class' => 'nextPage next',
-        ]
-    );
-}
+$socialAutoExtendLink = SocialManager::getAutoExtendLink($user_id, $countPost);
 
 $form = new FormValidator(
     'find_friends_form',
@@ -359,13 +230,11 @@ $form->addButtonSearch(get_lang('Search'));
 $tpl = new Template(get_lang('SocialNetwork'));
 SocialManager::setSocialUserBlock($tpl, $user_id, 'home');
 $tpl->assign('social_wall_block', $wallSocialAddPost);
-$tpl->assign('social_post_wall_block', $social_post_wall_block);
+$tpl->assign('social_post_wall_block', $posts);
+$tpl->assign('social_extra_info_block', $extraFieldBlock);
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_auto_extend_link', $socialAutoExtendLink);
-
-
 $tpl->assign('search_friends_form', $form->returnForm());
-
 $tpl->assign('social_friend_block', $friend_html);
 //$tpl->assign('session_list', $social_session_block);
 $tpl->assign('social_search_block', $social_search_block);

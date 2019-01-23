@@ -235,6 +235,7 @@ switch ($action) {
         $html = '';
         if ($userId == api_get_user_id()) {
             $html = SocialManager::getMyWallMessages($userId, $start, $length);
+            $html = $html['posts'];
         } else {
             $array = SocialManager::getWallMessages(
                 $userId,

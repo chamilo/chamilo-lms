@@ -100,6 +100,8 @@ class scorm extends learnpath
             $crawler = new Crawler();
             $crawler->addXmlContent($xml);
 
+            $xmlErrors = libxml_get_errors();
+
             if (!empty($xmlErrors)) {
                 if ($this->debug > 0) {
                     error_log('New LP - In scorm::parse_manifest() - Exception thrown when loading '.$file.' in DOMDocument');

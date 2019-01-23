@@ -5,6 +5,27 @@ See https://support.chamilo.org/issues/6976
 */
 /* LP SCORM */
 /* Default LP left column values */
+.lp_resource {
+    list-style: none;
+    margin: 0;
+    float: left;
+    width: 100%;
+}
+
+.lp_resource_element {
+    border: 1px solid #DDDDDD;
+    color: #444444;
+    cursor: pointer;
+    text-decoration: none;
+    margin: 5px;
+    padding: 5px 10px;
+    list-style: none;
+    border-radius: 5px;
+}
+
+.lp_resource_element:hover {
+    background-color: #E6E6E6;
+}
 
 #lp_item_list {
     margin: 0;

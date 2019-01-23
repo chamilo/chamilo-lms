@@ -257,21 +257,22 @@ switch ($action) {
             }
         }
 
-        $html .= Display::div(
-            Display::url(
-                get_lang('SeeMore'),
-                api_get_self().'?u='.$userId.'&a=list_wall_message&start='.
-                ($start + $length + 1).'&length='.$length,
+        if (!empty($html)) {
+            $html .= Display::div(
+                Display::url(
+                    get_lang('SeeMore'),
+                    api_get_self().'?u='.$userId.'&a=list_wall_message&start='.
+                    ($start + $length + 1).'&length='.$length,
+                    [
+                        'class' => 'nextPage',
+                    ]
+                ),
                 [
-                    'class' => 'nextPage',
+                    'class' => 'next',
                 ]
-            ),
-            [
-                'class' => 'next',
-            ]
-        );
+            );
+        }
         echo $html;
-
         break;
         // Read the Url using OpenGraph and returns the hyperlinks content
     case 'read_url_with_open_graph':

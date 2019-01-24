@@ -42,12 +42,18 @@ switch ($action) {
                     $graphviz = new GraphViz();
                     $graphImage = '';
                     try {
-                        $graphImage = $graphviz->createImageHtml($graph);
+                        $graphImage = $graphviz->createImageSrc($graph);
+
+                        echo Display::img(
+                            $graphImage,
+                            get_lang('GraphDependencyTree'),
+                            ['class' => 'center-block'],
+                            false
+                        );
                     } catch (UnexpectedValueException $e) {
                         error_log($e->getMessage().' - Graph could not be rendered in resources sequence because GraphViz command "dot" could not be executed - Make sure graphviz is installed.');
-                        $graphImage = '<p class="text-center"><small>'.get_lang('MissingChartLibraryPleaseCheckLog').'</small></p>';
+                        echo '<p class="text-center"><small>'.get_lang('MissingChartLibraryPleaseCheckLog').'</small></p>';
                     }
-                    echo $graphImage;
                 }
                 break;
         }

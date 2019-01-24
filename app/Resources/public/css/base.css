@@ -5425,16 +5425,6 @@ div#chat-remote-video video {
     font-size: 12px;
 }
 
-#parents .parent .big-icon .sequence-id {
-    border-radius: 50%;
-    background-color: #E74C3C;
-    width: 20%;
-    color: #ffffff;
-    position: absolute;
-    right: 5px;
-    top: 5px;
-}
-
 #parents .parent .big-icon .sequence-deleted {
     font-size: 12px;
 }
@@ -5461,16 +5451,6 @@ div#chat-remote-video video {
 
 #resource .parent .big-icon .sequence-course {
     font-size: 12px;
-}
-
-#resource .parent .big-icon .sequence-id {
-    border-radius: 50%;
-    background-color: #E74C3C;
-    width: 20%;
-    color: #ffffff;
-    position: absolute;
-    right: 5px;
-    top: 5px;
 }
 
 #resource .parent .big-icon .sequence-deleted {
@@ -5509,7 +5489,10 @@ div#chat-remote-video video {
     font-size: 12px;
 }
 
+#parents .parent .big-icon .sequence-id,
+#resource .parent .big-icon .sequence-id,
 #children .parent .big-icon .sequence-id {
+    border: 0 none;
     border-radius: 50%;
     background-color: #E74C3C;
     width: 20%;

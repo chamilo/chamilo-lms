@@ -33,6 +33,7 @@ switch ($action) {
             );
 
             header('Location: '.api_get_path(WEB_CODE_PATH).'social/invitations.php');
+            exit;
         }
         break;
     case 'deny_friend':
@@ -53,6 +54,7 @@ switch ($action) {
             );
 
             header('Location: '.api_get_path(WEB_CODE_PATH).'social/invitations.php');
+            exit;
         }
         break;
     case 'delete_friend':
@@ -197,13 +199,55 @@ switch ($action) {
                 break;
         }
         break;
+    case 'send_comment':
+        if (api_is_anonymous()) {
+            exit;
+        }
+
+        if (api_get_setting('allow_social_tool') !== 'true') {
+            exit;
+        }
+
+        $messageId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+
+        if (empty($messageId)) {
+            exit;
+        }
+
+        $userId = api_get_user_id();
+
+        $messageInfo = MessageManager::get_message_by_id($messageId);
+        if (!empty($messageInfo)) {
+            $comment = isset($_REQUEST['comment']) ? $_REQUEST['comment'] : '';
+            if (!empty($comment)) {
+                $messageId = SocialManager::sendWallMessage(
+                    api_get_user_id(),
+                    $messageInfo['user_receiver_id'],
+                    $comment,
+                    $messageId,
+                    MESSAGE_STATUS_WALL
+                );
+                /*if ($messageId && !empty($_FILES['picture']['tmp_name'])) {
+                    self::sendWallMessageAttachmentFile(
+                        $friendId,
+                        $_FILES['picture'],
+                        $messageId
+                    );
+                }*/
+                if ($messageId) {
+                    $messageInfo = MessageManager::get_message_by_id($messageId);
+                    echo SocialManager::processPostComment($messageInfo);
+                }
+            }
+        }
+        break;
     case 'delete_message':
         if (api_is_anonymous()) {
             exit;
         }
 
         if (api_get_setting('allow_social_tool') !== 'true') {
-            break;
+            exit;
         }
 
         $messageId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
@@ -236,7 +280,7 @@ switch ($action) {
             $html = SocialManager::getMyWallMessages($userId, $start, $length);
             $html = $html['posts'];
         } else {
-            $array = SocialManager::getWallMessages(
+            $messages = SocialManager::getWallMessages(
                 $userId,
                 null,
                 0,
@@ -245,14 +289,14 @@ switch ($action) {
                 $start,
                 $length
             );
-            $array = SocialManager::formatWallMessages($array);
+            $messages = SocialManager::formatWallMessages($messages);
 
-            if (!empty($array)) {
-                ksort($array);
-                foreach ($array as $item) {
-                    $post = $item['html'];
-                    $comment = SocialManager::getWallPostComments($userId, $item);
-                    $html .= '<div class="panel panel-info"><div class="panel-body">'.$post.$comment.'</div></div>';
+            if (!empty($messages)) {
+                ksort($messages);
+                foreach ($messages as $message) {
+                    $post = $message['html'];
+                    $comments = SocialManager::getWallPostComments($userId, $message);
+                    $html .= SocialManager::wrapPost($message, $post.$comments);
                 }
             }
         }

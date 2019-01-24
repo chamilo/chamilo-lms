@@ -1742,69 +1742,83 @@ class SocialManager extends UserManager
         $messages = MessageManager::getMessagesByParent($messageInfo['id'], 0, $offset, $limit);
         $formattedList = '<div class="sub-mediapost">';
         $users = [];
-        $currentUserId = api_get_user_id();
 
         // The messages are ordered by date descendant, for comments we need ascendant
         krsort($messages);
         foreach ($messages as $message) {
-            $date = api_get_local_time($message['send_date']);
             $userIdLoop = $message['user_sender_id'];
-            $receiverId = $message['user_receiver_id'];
             if (!isset($users[$userIdLoop])) {
                 $users[$userIdLoop] = api_get_user_info($userIdLoop);
             }
+            $media = self::processPostComment($message, $users);
 
-            $nameComplete = $users[$userIdLoop]['complete_name'];
-            $url = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$userIdLoop;
-
-            $media = '<div class="rep-post col-md-12">';
-            $media .= '<div class="col-md-2 col-xs-2 social-post-answers">';
-            $media .= '<div class="user-image pull-right">';
-            $media .= '<a href="'.$url.'" ><img src="'.$users[$userIdLoop]['avatar'].
-                '" alt="'.$users[$userIdLoop]['complete_name'].'" class="avatar-thumb"></a>';
-            $media .= '</div>';
-            $media .= '</div>';
-            $media .= '<div class="col-md-9 col-xs-9 social-post-answers">';
-            $media .= '<div class="user-data">';
-            $media .= '<div class="username">'.'<a href="'.$url.'">'.$nameComplete.'</a> 
-                        <span>'.Security::remove_XSS($message['content']).'</span>
-                       </div>';
-            $media .= '<div class="time timeago" title="'.$date.'">'.$date.'</div>';
-            $media .= '<br />';
-            $media .= '</div>';
-            $media .= '</div>';
-
-            $isOwnWall = $currentUserId == $userIdLoop || $currentUserId == $receiverId;
-            if ($isOwnWall) {
-                $media .= '<div class="col-md-1 col-xs-1 social-post-answers">';
-                $media .= '<div class="pull-right deleted-mgs">';
-                $media .= Display::url(
-                    Display::returnFontAwesomeIcon('trash'),
-                    'javascript:void(0)',
-                    [
-                        'id' => 'message_'.$message['id'],
-                        'title' => get_lang('SocialMessageDelete'), 'onclick' => 'deleteComment('.$message['id'].')'
-                    ]
-                );
-                $media .= '</div>';
-                $media .= '</div>';
-            }
-            $media .= '</div>';
             $formattedList .= $media;
         }
         $formattedList .= '</div>';
         $formattedList .= '<div class="mediapost-form">';
-        $formattedList .= '<form name="social_wall_message" method="POST">
-                <label for="social_wall_new_msg" class="hide">'.get_lang('SocialWriteNewComment').'</label>
+        $formattedList .= '<form id = "form_comment_'.$messageId.'" name="post_comment" method="POST">
+                <label for="comment" class="hide">'.get_lang('SocialWriteNewComment').'</label>
                 <input type="hidden" name = "messageId" value="'.$messageId.'" />
-                <textarea placeholder="'.get_lang('SocialWriteNewComment').'" name="social_wall_new_msg" rows="1" style="width:80%;" ></textarea>
-                <button type="submit" name="social_wall_new_msg_submit" class="pull-right btn btn-default">
+                <textarea placeholder="'.get_lang('SocialWriteNewComment').'" name="comment" rows="1" style="width:80%;" ></textarea>
+                <a onclick="submitComment('.$messageId.');" href="javascript:void(0);" name="social_wall_new_msg_submit" class="pull-right btn btn-default">
                     <em class="fa fa-pencil"></em> '.get_lang('Post').'
-                </button>
+                </a>
                 </form>';
         $formattedList .= '</div>';
 
         return $formattedList;
+    }
+
+    public static function processPostComment($message, $users = [])
+    {
+        $date = Display::dateToStringAgoAndLongDate($message['send_date']);
+        $currentUserId = api_get_user_id();
+        $userIdLoop = $message['user_sender_id'];
+        $receiverId = $message['user_receiver_id'];
+
+        if (!isset($users[$userIdLoop])) {
+            $users[$userIdLoop] = api_get_user_info($userIdLoop);
+        }
+
+        $nameComplete = $users[$userIdLoop]['complete_name'];
+        $url = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$userIdLoop;
+
+        $comment = '<div class="rep-post col-md-12">';
+        $comment .= '<div class="col-md-2 col-xs-2 social-post-answers">';
+        $comment .= '<div class="user-image pull-right">';
+        $comment .= '<a href="'.$url.'" ><img src="'.$users[$userIdLoop]['avatar'].
+            '" alt="'.$users[$userIdLoop]['complete_name'].'" class="avatar-thumb"></a>';
+        $comment .= '</div>';
+        $comment .= '</div>';
+        $comment .= '<div class="col-md-9 col-xs-9 social-post-answers">';
+        $comment .= '<div class="user-data">';
+        $comment .= '<div class="username">'.'<a href="'.$url.'">'.$nameComplete.'</a> 
+                        <span>'.Security::remove_XSS($message['content']).'</span>
+                       </div>';
+        $comment .= '<div>'.$date.'</div>';
+        $comment .= '<br />';
+        $comment .= '</div>';
+        $comment .= '</div>';
+
+        $isOwnWall = $currentUserId == $userIdLoop || $currentUserId == $receiverId;
+        if ($isOwnWall) {
+            $comment .= '<div class="col-md-1 col-xs-1 social-post-answers">';
+            $comment .= '<div class="pull-right deleted-mgs">';
+            $comment .= Display::url(
+                Display::returnFontAwesomeIcon('trash'),
+                'javascript:void(0)',
+                [
+                    'id' => 'message_'.$message['id'],
+                    'title' => get_lang('SocialMessageDelete'), 'onclick' => 'deleteComment('.$message['id'].')'
+                ]
+            );
+            $comment .= '</div>';
+            $comment .= '</div>';
+        }
+
+        $comment .= '</div>';
+
+        return $comment;
     }
 
     /**
@@ -2327,13 +2341,23 @@ class SocialManager extends UserManager
                 $comments = self::getWallPostComments($userId, $message);
             }
 
-            $html .= Display::panel($post.$comments);
+            $html .= self::wrapPost($message, $post.$comments);
         }
 
         return [
             'posts' => $html,
             'count' => $countPost,
         ];
+    }
+
+    public static function wrapPost($message, $content)
+    {
+        return Display::panel($content,  '',
+            '',
+            'default',
+            '',
+            'post_'.$message['id']
+        );
     }
 
     /**
@@ -2370,8 +2394,8 @@ class SocialManager extends UserManager
         $html = '';
         foreach ($messages as $message) {
             $post = $message['html'];
-            $comment = self::getWallPostComments($userId, $message);
-            $html .= Display::panel($post.$comment);
+            $comments = self::getWallPostComments($userId, $message);
+            $html .= self::wrapPost($message, $post.$comments);
         }
 
         return $html;
@@ -2423,7 +2447,7 @@ class SocialManager extends UserManager
         $authorId = (int) $authorInfo['user_id'];
         $receiverId = (int) $receiverInfo['user_id'];
 
-        $date = api_get_local_time($message['send_date']);
+        $date = Display::dateToStringAgoAndLongDate($message['send_date']);
         $avatarAuthor = $authorInfo['avatar'];
         $urlAuthor = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$authorId;
         $nameCompleteAuthor = $authorInfo['complete_name'];
@@ -2466,7 +2490,7 @@ class SocialManager extends UserManager
 
         $html .= '<div class="user-data">';
         $html .= '<div class="username"><a href="'.$urlAuthor.'">'.$nameCompleteAuthor.'</a>'.$htmlReceiver.'</div>';
-        $html .= '<div class="time timeago" title="'.$date.'">'.$date.'</div>';
+        $html .= '<div>'.$date.'</div>';
         $html .= '</div>';
         $html .= '<div class="msg-content">';
         $html .= '<div class="post-attachment" >';
@@ -2695,34 +2719,6 @@ class SocialManager extends UserManager
             header('Location: '.$url);
             exit;
         }
-
-        // Post comment
-        if (!empty($_POST['social_wall_new_msg']) && !empty($_POST['messageId'])) {
-            $messageId = (int) $_POST['messageId'];
-            $messageInfo = MessageManager::get_message_by_id($messageId);
-
-            if (!empty($messageInfo)) {
-                $messageId = self::sendWallMessage(
-                    api_get_user_id(),
-                    $friendId,
-                    $_POST['social_wall_new_msg'],
-                    $messageId,
-                    MESSAGE_STATUS_WALL
-                );
-
-                if ($messageId && !empty($_FILES['picture']['tmp_name'])) {
-                    self::sendWallMessageAttachmentFile(
-                        $friendId,
-                        $_FILES['picture'],
-                        $messageId
-                    );
-                }
-                Display::addFlash(Display::return_message(get_lang('MessageSent')));
-            }
-
-            header('Location: '.$url);
-            exit;
-        }
     }
 
     /**
@@ -2774,7 +2770,7 @@ class SocialManager extends UserManager
             
             function deleteComment(id) 
             {                      
-                 $.ajax({
+                $.ajax({
                     url: "'.$socialAjaxUrl.'?a=delete_message" + "&id=" + id,
                     success: function (result) {
                         if (result) {
@@ -2782,7 +2778,32 @@ class SocialManager extends UserManager
                         }
                     }
                 });                     
-            }            
+            }           
+            
+            function submitComment(messageId) 
+            {
+                var data = $("#form_comment_"+messageId).serializeArray();                                
+                $.ajax({
+                    type : "POST",
+                    url: "'.$socialAjaxUrl.'?a=send_comment" + "&id=" + messageId,
+                    data: data,
+                    success: function (result) {                        
+                        if (result) {
+                            $("#post_" + messageId + " textarea").val("");
+                            $("#post_" + messageId + " .sub-mediapost").prepend(result);
+                            $("#post_" + messageId + " .sub-mediapost").append(
+                                $(\'<div id=result_\' + messageId +\'>'.addslashes(get_lang('Saved')).'</div>\')
+                            ); 
+                                                        
+                            $("#result_" + messageId + "").fadeIn("fast", function() {
+                                $("#result_" + messageId + "").delay(1000).fadeOut("fast", function() {
+                                    $(this).remove();
+                                }); 
+                            });
+                        }
+                    }
+                });  
+            } 
             
             $(document).ready(function() {
                 timeAgo();  

@@ -191,9 +191,15 @@ function aiken_import_exercise($file)
             if (isset($question_array['description'])) {
                 $question->updateDescription($question_array['description']);
             }
+
             $type = $question->selectType();
             $question->type = constant($type);
             $question->save($exercise);
+
+            if (isset($question_array['code'])) {
+                $question->addCode($question_array['code']);
+            }
+
             $last_question_id = $question->selectId();
             //3. Create answer
             $answer = new Answer($last_question_id);
@@ -297,11 +303,9 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
             //weight for correct answer
             $exercise_info['question'][$question_index]['weighting'][$correct_answer_index] = 1;
         } elseif (preg_match('/^SCORE:\s?(.*)/', $info, $matches)) {
-            //the correct answers
-            $correct_answer_index = array_search($matches[1], $answers_array);
             $exercise_info['question'][$question_index]['score'] = (float) $matches[1];
-            //weight for correct answer
-            //$exercise_info['question'][$question_index]['weighting'][$correct_answer_index] = 1;
+        } elseif (preg_match('/^CODE:\s?(.*)/', $info, $matches)) {
+            $exercise_info['question'][$question_index]['code'] = $matches[1];
         } elseif (preg_match('/^ANSWER_EXPLANATION:\s?(.*)/', $info, $matches)) {
             //Comment of correct answer
             $correct_answer_index = array_search($matches[1], $answers_array);

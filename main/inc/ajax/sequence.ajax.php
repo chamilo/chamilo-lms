@@ -51,8 +51,14 @@ switch ($action) {
                             false
                         );
                     } catch (UnexpectedValueException $e) {
-                        error_log($e->getMessage().' - Graph could not be rendered in resources sequence because GraphViz command "dot" could not be executed - Make sure graphviz is installed.');
-                        echo '<p class="text-center"><small>'.get_lang('MissingChartLibraryPleaseCheckLog').'</small></p>';
+                        error_log(
+                            $e->getMessage()
+                            .' - Graph could not be rendered in resources sequence'
+                            .' because GraphViz command "dot" could not be executed '
+                            .'- Make sure graphviz is installed.'
+                        );
+                        echo '<p class="text-center"><small>'.get_lang('MissingChartLibraryPleaseCheckLog')
+                            .'</small></p>';
                     }
                 }
                 break;

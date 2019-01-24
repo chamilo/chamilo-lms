@@ -165,8 +165,8 @@ class SessionManager
         global $_configuration;
 
         // Check portal limits
-        $accessUrlId = empty($accessUrlId) && api_get_multiple_access_url()
-            ? api_get_current_access_url_id()
+        $accessUrlId = api_is_multiple_url_enabled()
+            ? (empty($accessUrlId) ? api_get_current_access_url_id() : (int) $accessUrlId)
             : 1;
 
         if (is_array($_configuration[$accessUrlId]) &&

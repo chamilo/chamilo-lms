@@ -1067,6 +1067,10 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Hide social media links
 //$_configuration['hide_social_media_links'] = false;
 
+// Allow code field in exercise questions
+//ALTER TABLE c_quiz_question ADD COLUMN code VARCHAR(255) NULL DEFAULT NULL;
+// $_configuration['allow_question_code'] = false;
+
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email

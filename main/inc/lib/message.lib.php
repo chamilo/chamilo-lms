@@ -907,9 +907,11 @@ class MessageManager
                     'message_id' => $message_id,
                     'size' => $file_attach['size'],
                 ];
-                Database::insert($table, $params);
+                return Database::insert($table, $params);
             }
         }
+
+        return false;
     }
 
     /**
@@ -924,8 +926,8 @@ class MessageManager
         $message_uid,
         $group_id = 0
     ) {
-        $message_id = intval($message_id);
-        $message_uid = intval($message_uid);
+        $message_id = (int) $message_id;
+        $message_uid = (int) $message_uid;
         $table_message_attach = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
 
         $sql = "SELECT * FROM $table_message_attach 
@@ -2309,7 +2311,7 @@ class MessageManager
      */
     public static function hasAttachments($messageId)
     {
-        $messageId = intval($messageId);
+        $messageId = (int) $messageId;
 
         if (empty($messageId)) {
             return false;
@@ -2334,6 +2336,41 @@ class MessageManager
             if ($result['qty'] > 0) {
                 return true;
             }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param int $messageId
+     *
+     * @return array|bool
+     */
+    public static function getAttachment($messageId)
+    {
+        $messageId = (int) $messageId;
+
+        if (empty($messageId)) {
+            return false;
+        }
+
+        $table = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
+
+        $conditions = [
+            'where' => [
+                'id = ?' => $messageId,
+            ],
+        ];
+
+        $result = Database::select(
+            '*',
+            $table,
+            $conditions,
+            'first'
+        );
+
+        if (!empty($result)) {
+           return $result;
         }
 
         return false;

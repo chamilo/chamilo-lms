@@ -2756,13 +2756,14 @@ HTML;
     }
 
     /**
+     * @param string $fileName
      * @param string $fileUrl
      *
      * @return string
      */
-    public static function fileHtmlGuesser($fileUrl)
+    public static function fileHtmlGuesser($fileName, $fileUrl)
     {
-        $data = pathinfo($fileUrl);
+        $data = pathinfo($fileName);
 
         //$content = self::url($data['basename'], $fileUrl);
         $content = '';

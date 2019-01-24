@@ -1547,12 +1547,6 @@ class SocialManager extends UserManager
         $messageId,
         $fileComment = ''
     ) {
-        $table = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
-
-        // create directory
-        $social = '/social/';
-        $pathMessageAttach = UserManager::getUserPathById($userId, 'system').'message_attachments'.$social;
-        $safeFileComment = Database::escape_string($fileComment);
         $safeFileName = Database::escape_string($fileAttach['name']);
 
         $extension = strtolower(substr(strrchr($safeFileName, '.'), 1));
@@ -1563,28 +1557,7 @@ class SocialManager extends UserManager
         $allowedTypes[] = 'ogg';
 
         if (in_array($extension, $allowedTypes)) {
-            $newFileName = uniqid('').'.'.$extension;
-            if (!file_exists($pathMessageAttach)) {
-                @mkdir($pathMessageAttach, api_get_permissions_for_new_directories(), true);
-            }
-
-            $newPath = $pathMessageAttach.$newFileName;
-            if (is_uploaded_file($fileAttach['tmp_name'])) {
-                @copy($fileAttach['tmp_name'], $newPath);
-            }
-            // Insert
-            $newFileName = $social.$newFileName;
-
-            $params = [
-                'filename' => $safeFileName,
-                'comment' => $safeFileComment,
-                'path' => $newFileName,
-                'message_id' => $messageId,
-                'size' => $fileAttach['size'],
-            ];
-            $id = Database::insert($table, $params);
-
-            return $id;
+            return MessageManager::saveMessageAttachmentFile($fileAttach, $fileComment, $messageId, $userId);
         }
 
         return false;
@@ -1769,12 +1742,14 @@ class SocialManager extends UserManager
         $messages = MessageManager::getMessagesByParent($messageInfo['id'], 0, $offset, $limit);
         $formattedList = '<div class="sub-mediapost">';
         $users = [];
+        $currentUserId = api_get_user_id();
 
         // The messages are ordered by date descendant, for comments we need ascendant
         krsort($messages);
         foreach ($messages as $message) {
             $date = api_get_local_time($message['send_date']);
             $userIdLoop = $message['user_sender_id'];
+            $receiverId = $message['user_receiver_id'];
             if (!isset($users[$userIdLoop])) {
                 $users[$userIdLoop] = api_get_user_info($userIdLoop);
             }
@@ -1799,7 +1774,7 @@ class SocialManager extends UserManager
             $media .= '</div>';
             $media .= '</div>';
 
-            $isOwnWall = api_get_user_id() == $userIdLoop;
+            $isOwnWall = $currentUserId == $userIdLoop || $currentUserId == $receiverId;
             if ($isOwnWall) {
                 $media .= '<div class="col-md-1 col-xs-1 social-post-answers">';
                 $media .= '<div class="pull-right deleted-mgs">';
@@ -1835,21 +1810,41 @@ class SocialManager extends UserManager
     /**
      * @param array $message
      *
+     * @return array
+     */
+    public static function getAttachmentPreviewList($message)
+    {
+        $messageId = $message['id'];
+        $files = MessageManager::getAttachmentList($messageId);
+
+        $list = [];
+        if ($files) {
+            $downloadUrl = api_get_path(WEB_CODE_PATH).'social/download.php?message_id='.$messageId;
+            foreach ($files as $row_file) {
+                $url = $downloadUrl.'&attachment_id='.$row_file['id'];
+                $display = Display::fileHtmlGuesser($row_file['filename'], $url);
+                $list[] = $display;
+            }
+        }
+
+        return $list;
+    }
+
+    /**
+     * @param array $message
+     *
      * @return string
      */
     public static function getPostAttachment($message)
     {
         if (isset($message['path']) && !empty($message['path'])) {
-            $userId = $message['user_receiver_id'];
-            $pathMessageAttach = UserManager::getUserPathById($userId, 'system').'message_attachments';
-            if (file_exists($pathMessageAttach.$message['path'])) {
-                $attachmentUrl = UserManager::getUserPathById($userId, 'web');
-                $attachmentUrl = $attachmentUrl.'message_attachments'.$message['path'];
+            $previews = self::getAttachmentPreviewList($message);
 
-                $display = Display::fileHtmlGuesser($attachmentUrl);
-
-                return $display;
+            if (empty($previews)) {
+                return '';
             }
+
+            return implode('', $previews);
         }
 
         return '';
@@ -1963,14 +1958,20 @@ class SocialManager extends UserManager
         if (!empty($messageInfo)) {
             // Delete comments too
             $messages = MessageManager::getMessagesByParent($id);
-            foreach ($messages as $message) {
-                self::deleteMessage($message['id']);
+            if (!empty($messages)) {
+                foreach ($messages as $message) {
+                    self::deleteMessage($message['id']);
+                }
             }
 
+            // Soft delete message
             $tblMessage = Database::get_main_table(TABLE_MESSAGE);
             $statusMessage = MESSAGE_STATUS_WALL_DELETE;
             $sql = "UPDATE $tblMessage SET msg_status = '$statusMessage' WHERE id = '{$id}' ";
             Database::query($sql);
+
+            MessageManager::delete_message_attachment_file($id, $messageInfo['user_sender_id']);
+            MessageManager::delete_message_attachment_file($id, $messageInfo['user_receiver_id']);
 
             return true;
         }
@@ -2430,7 +2431,7 @@ class SocialManager extends UserManager
 
         $postAttachment = self::getPostAttachment($message);
 
-        $canEdit = $currentUserId == $receiverInfo['user_id'] && empty($message['group_info']);
+        $canEdit = ($currentUserId == $authorInfo['user_id'] || $currentUserId == $receiverInfo['user_id']) && empty($message['group_info']);
         $html = '';
         $html .= '<div class="top-mediapost">';
         if ($canEdit) {
@@ -2673,7 +2674,7 @@ class SocialManager extends UserManager
 
             if ($messageId && !empty($_FILES['picture']['tmp_name'])) {
                 self::sendWallMessageAttachmentFile(
-                    $friendId,
+                    api_get_user_id(),
                     $_FILES['picture'],
                     $messageId
                 );

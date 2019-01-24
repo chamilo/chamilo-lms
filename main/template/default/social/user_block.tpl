@@ -23,6 +23,11 @@
                             </li>
                         {% endif %}
                         {% if show_full_profile %}
+                            {% if user.language %}
+                                <li class="item">
+                                    <i class="fa fa-language"></i> {{ user.language }}
+                                </li>
+                            {% endif %}
                             {% if user.email %}
                             <li class="item">
                                 <a href="{{ _p.web }}main/messages/new_message.php">

@@ -2043,6 +2043,17 @@ class SocialManager extends UserManager
             $userInfo['email'] = '';
         }
 
+        $languageId = api_get_language_id($userInfo['language']);
+        $languageInfo = api_get_language_info($languageId);
+        if ($languageInfo) {
+            $userInfo['language'] = $languageInfo['original_name'];
+        }
+
+        if (isset($options['language']) && $options['language'] === false) {
+
+            $userInfo['language'] = '';
+        }
+
         if (isset($options['photo']) && $options['photo'] === false) {
             $socialAvatarBlock = '';
         }

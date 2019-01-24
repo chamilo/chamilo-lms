@@ -1783,7 +1783,7 @@ class SocialManager extends UserManager
                     'javascript:void(0)',
                     [
                         'id' => 'message_'.$message['id'],
-                        'title' => get_lang('SocialMessageDelete'), 'class' => 'delete_comment'
+                        'title' => get_lang('SocialMessageDelete'), 'onclick' => 'deleteComment('.$message['id'].')'
                     ]
                 );
                 $media .= '</div>';
@@ -2440,7 +2440,7 @@ class SocialManager extends UserManager
                 'javascript:void(0)',
                 [
                     'id' => 'message_'.$message['id'],
-                    'title' => get_lang('SocialMessageDelete'), 'class' => 'delete_message'
+                    'title' => get_lang('SocialMessageDelete'), 'onclick' => 'deleteMessage('.$message['id'].')'
                 ]
             );
             $html .= '<div class="pull-right deleted-mgs">';
@@ -2749,9 +2749,34 @@ class SocialManager extends UserManager
         }
 
         $htmlHeadXtra[] = '<script>
+            function deleteMessage(id) 
+            {                      
+                $.ajax({
+                    url: "'.$socialAjaxUrl.'?a=delete_message" + "&id=" + id,
+                    success: function (result) {
+                        if (result) {
+                            $("#message_" + id).parent().parent().parent().parent().html(result);
+                        }
+                    }
+                });                        
+            }
+            
+            function deleteComment(id) 
+            {                      
+                 $.ajax({
+                    url: "'.$socialAjaxUrl.'?a=delete_message" + "&id=" + id,
+                    success: function (result) {
+                        if (result) {
+                            $("#message_" + id).parent().parent().parent().html(result);
+                        }
+                    }
+                });                     
+            }            
+            
             $(document).ready(function() {
-                timeAgo();                     
-                $(".delete_message").on("click", function() {
+                timeAgo();  
+                
+                /*$(".delete_message").on("click", function() {
                     var id = $(this).attr("id");
                     id = id.split("_")[1];          
                     $.ajax({
@@ -2762,7 +2787,8 @@ class SocialManager extends UserManager
                             }
                         }
                     });        
-                });
+                });                  
+                
                 
                 $(".delete_comment").on("click", function() {
                     var id = $(this).attr("id");
@@ -2775,7 +2801,8 @@ class SocialManager extends UserManager
                             }
                         }
                     });
-                });                
+                });          
+                */
             });
             
             function timeAgo() {

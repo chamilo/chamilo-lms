@@ -100,7 +100,15 @@ switch ($action) {
                     $link .= '<div class="big-icon">';
                     $link .= $image;
                     $link .= '<div class="sequence-course">'.$sessionInfo['name'].'</div>';
-                    $link .= '<button type="button" class="sequence-id">'.$id.'</button>';
+                    $link .= Display::tag(
+                        'button',
+                        $id,
+                        [
+                            'class' => 'sequence-id',
+                            'title' => get_lang('UseAsReference'),
+                            'type' => 'button',
+                        ]
+                    );
                     $link .= $linkDelete;
                     $link .= $linkUndo;
                     $link .= '</div></div>';

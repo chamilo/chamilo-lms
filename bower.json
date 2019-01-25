@@ -38,8 +38,8 @@
     "multiselect-two-sides": "2.5.*",
     "bootstrap-year-calendar": "1.1.*",
     "datepair": "*",
-    "jt.timepicker": "*"
-
+    "jt.timepicker": "*",
+    "keyboard": "^1.28.7"
   },
   "resolutions": {
     "jquery": "2.1.4"

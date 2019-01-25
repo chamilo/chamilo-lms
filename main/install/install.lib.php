@@ -683,19 +683,14 @@ function display_language_selection_box(
     }
 
     // Displaying the box.
-    $html = '';
-    $html .= "\t\t<select class='selectpicker show-tick form-control' data-style=\"btn-select\" name=\"$name\">\n";
-    foreach ($language_list as $key => $value) {
-        if ($key == $default_language) {
-            $option_end = ' selected="selected">';
-        } else {
-            $option_end = '>';
-        }
-        $html .= "\t\t\t<option value=\"$key\"$option_end";
-        $html .= $value;
-        $html .= "</option>\n";
-    }
-    $html .= "\t\t</select>\n";
+
+    $html = Display::select(
+        'language_list',
+        $language_list,
+        $default_language,
+        ['class' => 'form-control selectpicker show-tick form-control'],
+        false
+    );
 
     return $html;
 }
@@ -714,17 +709,15 @@ function display_language_selection()
             <?php echo display_step_sequence(); ?>
             <?php echo get_lang('InstallationLanguage'); ?>
         </h2>
-        <form id="lang_form" method="post" action="<?php echo api_get_self(); ?>">
-            <p><?php echo get_lang('PleaseSelectInstallationProcessLanguage'); ?>:</p>
-            <div class="form-group">
-                <?php echo display_language_selection_box('language_list', api_get_interface_language()); ?>
-            </div>
-            <button type="submit" name="step1" class="btn btn-success" value="<?php echo get_lang('Next'); ?>">
-                <em class="fa fa-forward"> </em>
-                <?php echo get_lang('Next'); ?>
-            </button>
-            <input type="hidden" name="is_executable" id="is_executable" value="-" />
-        </form>
+        <label for="language_list"><?php echo get_lang('PleaseSelectInstallationProcessLanguage'); ?></label>
+        <div class="form-group">
+            <?php echo display_language_selection_box('language_list', api_get_interface_language()); ?>
+        </div>
+        <button type="submit" name="step1" class="btn btn-success" value="<?php echo get_lang('Next'); ?>">
+            <em class="fa fa-forward"> </em>
+            <?php echo get_lang('Next'); ?>
+        </button>
+        <input type="hidden" name="is_executable" id="is_executable" value="-" />
         <div class="RequirementHeading">
             <?php echo get_lang('YourLanguageNotThereContactUs'); ?>
         </div>

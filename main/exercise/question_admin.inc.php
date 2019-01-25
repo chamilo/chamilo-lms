@@ -35,8 +35,13 @@ if (is_object($objQuestion)) {
     $typesInformation = Question::get_question_type_list();
     $form_title_extra = isset($typesInformation[$type][1]) ? get_lang($typesInformation[$type][1]) : null;
 
+    $code = '';
+    if (isset($objQuestion->code) && !empty($objQuestion->code)) {
+        $code = ' ('.$objQuestion->code.')';
+    }
+
     // form title
-    $form->addHeader($text.': '.$form_title_extra);
+    $form->addHeader($text.': '.$form_title_extra.$code);
 
     // question form elements
     $objQuestion->createForm($form, $objExercise);

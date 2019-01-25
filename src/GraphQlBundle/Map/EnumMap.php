@@ -1,21 +1,21 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\ApiBundle\GraphQL\Map;
+namespace Chamilo\GraphQlBundle\Map;
 
-use Chamilo\ApiBundle\GraphQL\ApiGraphQLTrait;
+use Chamilo\GraphQlBundle\Traits\GraphQLTrait;
 use Chamilo\UserBundle\Entity\User;
 use Overblog\GraphQLBundle\Resolver\ResolverMap;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
- * Class EnumResolverMap.
+ * Class EnumMap.
  *
- * @package Chamilo\ApiBundle\GraphQL\Map
+ * @package Chamilo\GraphQlBundle\Map
  */
 class EnumMap extends ResolverMap implements ContainerAwareInterface
 {
-    use ApiGraphQLTrait;
+    use GraphQLTrait;
 
     /**
      * @return array

@@ -1,9 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\ApiBundle\GraphQL\Resolver;
+namespace Chamilo\GraphQlBundle\Resolver;
 
-use Chamilo\ApiBundle\GraphQL\ApiGraphQLTrait;
+use Chamilo\GraphQlBundle\Traits\GraphQLTrait;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -13,11 +13,11 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 /**
  * Class UserResolver.
  *
- * @package Chamilo\ApiBundle\GraphQL\Resolver
+ * @package Chamilo\GraphQlBundle\Resolver
  */
 class UserResolver implements ContainerAwareInterface
 {
-    use ApiGraphQLTrait;
+    use GraphQLTrait;
 
     /**
      * @param User $user

@@ -1,9 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\ApiBundle\GraphQL\Map;
+namespace Chamilo\GraphQlBundle\Map;
 
-use Chamilo\ApiBundle\GraphQL\ApiGraphQLTrait;
+use Chamilo\GraphQlBundle\Traits\GraphQLTrait;
 use GraphQL\Error\Error;
 use GraphQL\Language\AST\Node;
 use GraphQL\Language\AST\StringValueNode;
@@ -11,13 +11,13 @@ use Overblog\GraphQLBundle\Resolver\ResolverMap;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
- * Class ScalarResolverMap.
+ * Class ScalarMap.
  *
- * @package Chamilo\ApiBundle\GraphQL\Map
+ * @package Chamilo\GraphQlBundle\Map
  */
 class ScalarMap extends ResolverMap implements ContainerAwareInterface
 {
-    use ApiGraphQLTrait;
+    use GraphQLTrait;
 
     /**
      * @return array

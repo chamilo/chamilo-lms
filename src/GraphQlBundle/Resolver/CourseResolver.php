@@ -1,9 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\ApiBundle\GraphQL\Resolver;
+namespace Chamilo\GraphQlBundle\Resolver;
 
-use Chamilo\ApiBundle\GraphQL\ApiGraphQLTrait;
+use Chamilo\GraphQlBundle\Traits\GraphQLTrait;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
@@ -25,11 +25,11 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 /**
  * Class CourseResolver.
  *
- * @package Chamilo\ApiBundle\GraphQL\Resolver
+ * @package Chamilo\GraphQlBundle\Resolver
  */
 class CourseResolver implements ContainerAwareInterface
 {
-    use ApiGraphQLTrait;
+    use GraphQLTrait;
 
     /**
      * @param Course   $course

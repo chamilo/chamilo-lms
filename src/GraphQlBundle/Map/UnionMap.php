@@ -1,9 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\ApiBundle\GraphQL\Map;
+namespace Chamilo\GraphQlBundle\Map;
 
-use Chamilo\ApiBundle\GraphQL\ApiGraphQLTrait;
+use Chamilo\GraphQlBundle\Traits\GraphQLTrait;
 use Chamilo\CourseBundle\Entity\CTool;
 use Overblog\GraphQLBundle\Resolver\ResolverMap;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -11,11 +11,11 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 /**
  * Class UnionMap.
  *
- * @package Chamilo\ApiBundle\GraphQL\Map
+ * @package Chamilo\GraphQlBundle\Map
  */
 class UnionMap extends ResolverMap implements ContainerAwareInterface
 {
-    use ApiGraphQLTrait;
+    use GraphQLTrait;
 
     /**
      * @return array

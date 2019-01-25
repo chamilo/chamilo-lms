@@ -1,9 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\ApiBundle\GraphQL\Resolver;
+namespace Chamilo\GraphQlBundle\Resolver;
 
-use Chamilo\ApiBundle\GraphQL\ApiGraphQLTrait;
+use Chamilo\GraphQlBundle\Traits\GraphQLTrait;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
@@ -12,11 +12,11 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 /**
  * Class SessionResolver.
  *
- * @package Chamilo\ApiBundle\GraphQL\Resolver
+ * @package Chamilo\GraphQlBundle\Resolver
  */
 class SessionResolver implements ContainerAwareInterface
 {
-    use ApiGraphQLTrait;
+    use GraphQLTrait;
 
     /**
      * @param Session $session

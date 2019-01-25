@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\ApiBundle\GraphQL;
+namespace Chamilo\GraphQlBundle\Traits;
 
 use Chamilo\SettingsBundle\Manager\SettingsManager;
 use Chamilo\UserBundle\Entity\User;
@@ -14,11 +14,11 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
- * Trait ApiGraphQLTrait.
+ * Trait GraphQLTrait.
  *
- * @package Chamilo\ApiBundle\GraphQL
+ * @package Chamilo\GraphQlBundle\Traits
  */
-trait ApiGraphQLTrait
+trait GraphQLTrait
 {
     use ContainerAwareTrait;
 

@@ -1,9 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\ApiBundle\GraphQL\Map;
+namespace Chamilo\GraphQlBundle\Map;
 
-use Chamilo\ApiBundle\GraphQL\ApiGraphQLTrait;
+use Chamilo\GraphQlBundle\Traits\GraphQLTrait;
 use Chamilo\UserBundle\Entity\User;
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
@@ -12,13 +12,13 @@ use Overblog\GraphQLBundle\Resolver\ResolverMap;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
- * Class MutationResolverMap.
+ * Class MutationMap.
  *
- * @package Chamilo\ApiBundle\GraphQL\Map
+ * @package Chamilo\GraphQlBundle\Map
  */
 class MutationMap extends ResolverMap implements ContainerAwareInterface
 {
-    use ApiGraphQLTrait;
+    use GraphQLTrait;
 
     /**
      * @return array

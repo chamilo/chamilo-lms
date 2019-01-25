@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\ApiBundle\GraphQL\Controller;
+namespace Chamilo\GraphQlBundle\Controller;
 
 use Chamilo\UserBundle\Entity\User;
 use Firebase\JWT\JWT;
@@ -12,11 +12,11 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 /**
- * Class ApiController.
+ * Class GraphQlController.
  *
- * @package Chamilo\ApiBundle\GraphQL\Controller
+ * @package Chamilo\GraphQlBundle\Controller
  */
-class ApiController extends AbstractController
+class GraphQlController extends AbstractController
 {
     /**
      * @Route("/learnpath/view", name="chamilo_graphql_learnpath")

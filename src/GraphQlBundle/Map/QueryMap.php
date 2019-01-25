@@ -1,9 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\ApiBundle\GraphQL\Map;
+namespace Chamilo\GraphQlBundle\Map;
 
-use Chamilo\ApiBundle\GraphQL\ApiGraphQLTrait;
+use Chamilo\GraphQlBundle\Traits\GraphQLTrait;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\Session;
@@ -26,11 +26,11 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 /**
  * Class QueryMap.
  *
- * @package Chamilo\ApiBundle\GraphQL\Map
+ * @package Chamilo\GraphQlBundle\Map
  */
 class QueryMap extends ResolverMap implements ContainerAwareInterface
 {
-    use ApiGraphQLTrait;
+    use GraphQLTrait;
 
     /**
      * @return array
@@ -56,7 +56,7 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
                     ResolveInfo $info
                 ) {
                     $context->offsetSet('user', $user);
-                    $resolver = $this->container->get('chamilo_api.graphql.resolver.user');
+                    $resolver = $this->container->get('chamilo_graphql.resolver.user');
 
                     return $this->resolveField($info->fieldName, $user, $resolver, $args, $context);
                 },
@@ -87,7 +87,7 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
                     ResolveInfo $info
                 ) {
                     $context->offsetSet('course', $course);
-                    $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
+                    $resolver = $this->container->get('chamilo_graphql.resolver.course');
 
                     return $this->resolveField($info->fieldName, $course, $resolver, $args, $context);
                 },
@@ -100,7 +100,7 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
                     ResolveInfo $info
                 ) {
                     if ('descriptions' === $info->fieldName) {
-                        $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
+                        $resolver = $this->container->get('chamilo_graphql.resolver.course');
 
                         return $resolver->getDescriptions($tool, $context);
                     }
@@ -116,7 +116,7 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
                     \ArrayObject $context,
                     ResolveInfo $info
                 ) {
-                    $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
+                    $resolver = $this->container->get('chamilo_graphql.resolver.course');
 
                     if ('announcements' === $info->fieldName) {
                         return $resolver->getAnnouncements($tool, $context);
@@ -154,7 +154,7 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
                     ResolveInfo $info
                 ) {
                     if ('notes' === $info->fieldName) {
-                        $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
+                        $resolver = $this->container->get('chamilo_graphql.resolver.course');
 
                         return $resolver->getNotes($context);
                     }
@@ -174,7 +174,7 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
                     \ArrayObject $context,
                     ResolveInfo $info
                 ) {
-                    $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
+                    $resolver = $this->container->get('chamilo_graphql.resolver.course');
 
                     if ('categories' === $info->fieldName) {
                         return $resolver->getForumCategories($context);
@@ -202,7 +202,7 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
                     return $category->getCatComment();
                 },
                 'forums' => function (CForumCategory $category, Argument $args, \ArrayObject $context) {
-                    $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
+                    $resolver = $this->container->get('chamilo_graphql.resolver.course');
 
                     return $resolver->getForums($category, $context);
                 },
@@ -224,7 +224,7 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
                     return (int) $forum->getForumPosts();
                 },
                 'threads' => function (CForumForum $forum, Argument $args, \ArrayObject $context) {
-                    $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
+                    $resolver = $this->container->get('chamilo_graphql.resolver.course');
 
                     return $resolver->getThreads($forum, $context);
                 },
@@ -258,7 +258,7 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
                     return $thread->getThreadCloseDate();
                 },
                 'posts' => function (CForumThread $thread, Argument $args, \ArrayObject $context) {
-                    $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
+                    $resolver = $this->container->get('chamilo_graphql.resolver.course');
 
                     return $resolver->getPosts($thread, $context);
                 },
@@ -297,7 +297,7 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
                     ResolveInfo $info
                 ) {
                     if ('events' === $info->fieldName) {
-                        $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
+                        $resolver = $this->container->get('chamilo_graphql.resolver.course');
 
                         return $resolver->getAgenda($context);
                     }
@@ -321,7 +321,7 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
             ],
             'ToolDocuments' => [
                 'documents' => function (CTool $tool, Argument $args, \ArrayObject $context) {
-                    $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
+                    $resolver = $this->container->get('chamilo_graphql.resolver.course');
 
                     $dirId = !empty($args['dirId']) ? $args['dirId'] : null;
 
@@ -331,14 +331,14 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
             //'CourseDocument' => [],
             'ToolLearningPath' => [
                 'categories' => function (CTool $tool, Argument $args, \ArrayObject $context) {
-                    $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
+                    $resolver = $this->container->get('chamilo_graphql.resolver.course');
 
                     return $resolver->getLearnpathCategories($context);
                 },
             ],
             'CourseLearnpathCategory' => [
                 'learnpaths' => function (CLpCategory $category, Argument $args, \ArrayObject $context) {
-                    $resolver = $this->container->get('chamilo_api.graphql.resolver.course');
+                    $resolver = $this->container->get('chamilo_graphql.resolver.course');
 
                     return $resolver->getLearnpathsByCategory($category, $context);
                 },
@@ -352,7 +352,7 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
                     ResolveInfo $info
                 ) {
                     $context->offsetSet('session', $session);
-                    $resolver = $this->container->get('chamilo_api.graphql.resolver.session');
+                    $resolver = $this->container->get('chamilo_graphql.resolver.session');
 
                     return $this->resolveField($info->fieldName, $session, $resolver, $args, $context);
                 },

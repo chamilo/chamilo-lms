@@ -1,15 +1,16 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\ApiBundle;
+namespace Chamilo\GraphQlBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
- * Class ChamiloApiBundle.
+ * Class ChamiloGraphQlBundle.
  *
  * @package Chamilo\ApiBundle
  */
-class ChamiloApiBundle extends Bundle
+class ChamiloGraphQlBundle extends Bundle
 {
+
 }

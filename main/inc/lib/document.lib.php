@@ -615,7 +615,7 @@ class DocumentManager
                 foreach ($documentData as $row) {
                     $isVisible = self::check_visibility_tree(
                         $row['id'],
-                        $courseInfo['code'],
+                        $courseInfo,
                         $sessionId,
                         $currentUser->getId(),
                         $toGroupId
@@ -3583,8 +3583,8 @@ class DocumentManager
                     if ($checkParentVisibility) {
                         return self::check_visibility_tree(
                             $document_data['parent_id'],
-                                $courseInfo,
-                                $sessionId,
+                            $courseInfo,
+                            $sessionId,
                             $user_id,
                             $groupId
                         );

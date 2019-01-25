@@ -83,7 +83,7 @@ if ($is_allowed_in_course == false) {
 // Check user visibility.
 $is_visible = DocumentManager::check_visibility_tree(
     $document_id,
-    api_get_course_id(),
+    api_get_course_info(),
     api_get_session_id(),
     api_get_user_id(),
     api_get_group_id()

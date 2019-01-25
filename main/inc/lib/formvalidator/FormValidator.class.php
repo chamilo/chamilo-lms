@@ -914,6 +914,8 @@ EOT;
      * @param string $label
      * @param array  $attributes
      *
+     * @return HTML_QuickForm_file
+     *
      * @throws Exception if the file doesn't have an id
      */
     public function addFile($name, $label, $attributes = [])
@@ -940,6 +942,8 @@ EOT;
             $this->addHidden($id.'_crop_result', '');
             $this->addHidden($id.'_crop_image_base_64', '');
         }
+
+        return $element;
     }
 
     /**

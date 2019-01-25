@@ -32,26 +32,6 @@ class Aiken2Question extends Question
         return $answer;
     }
 
-    /**
-     * @param string $code
-     *
-     * @return bool
-     */
-    public function addCode($code)
-    {
-        if (api_get_configuration_value('allow_question_code') && !empty($this->id)) {
-            $code = Database::escape_string($code);
-            $table = Database::get_course_table(TABLE_QUIZ_QUESTION);
-            $sql = "UPDATE $table SET code = '$code' 
-                    WHERE iid = {$this->id} AND c_id = {$this->course['real_id']}";
-            Database::query($sql);
-
-            return true;
-        }
-
-        return false;
-    }
-
     public function createAnswersForm($form)
     {
         return true;

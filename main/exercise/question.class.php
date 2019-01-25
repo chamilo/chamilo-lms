@@ -38,6 +38,7 @@ abstract class Question
     public $questionTypeWithFeedback;
     public $extra;
     public $export = false;
+    public $code;
     public static $questionTypes = [
         UNIQUE_ANSWER => ['unique_answer.class.php', 'UniqueAnswer'],
         MULTIPLE_ANSWER => ['multiple_answer.class.php', 'MultipleAnswer'],
@@ -165,6 +166,7 @@ abstract class Question
                 $objQuestion->course = $course_info;
                 $objQuestion->feedback = isset($object->feedback) ? $object->feedback : '';
                 $objQuestion->category = TestCategory::getCategoryForQuestion($id, $course_id);
+                $objQuestion->code = isset($object->code) ? $object->code : '';
 
                 $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
                 $sql = "SELECT DISTINCT q.exercice_id
@@ -229,10 +231,15 @@ abstract class Question
     public function getTitleToDisplay($itemNumber)
     {
         $showQuestionTitleHtml = api_get_configuration_value('save_titles_as_html');
+        $title = '';
+        if (!empty($this->code) && api_get_configuration_value('allow_question_code')) {
+            $title .= '<h4>'.$this->code.'</h4>';
+        }
 
-        $title = $showQuestionTitleHtml ? '' : '<strong>';
+        $title .= $showQuestionTitleHtml ? '' : '<strong>';
         $title .= $itemNumber.'. '.$this->selectTitle();
         $title .= $showQuestionTitleHtml ? '' : '</strong>';
+
 
         return Display::div(
             $title,
@@ -403,7 +410,7 @@ abstract class Question
      */
     public function selectNbrExercises()
     {
-        return sizeof($this->exerciseList);
+        return count($this->exerciseList);
     }
 
     /**
@@ -423,7 +430,7 @@ abstract class Question
      */
     public function updateParentId($id)
     {
-        $this->parent_id = intval($id);
+        $this->parent_id = (int) $id;
     }
 
     /**
@@ -1677,6 +1684,10 @@ abstract class Question
             //$form->addElement('select', 'parent_id', get_lang('AttachToMedia'), $course_medias);
         }
 
+        if (api_get_configuration_value('allow_question_code') && api_is_platform_admin()) {
+            $form->addText('code', get_lang('QuestionCode'));
+        }
+
         $form->addElement('html', '</div>');
 
         if (!isset($_GET['fromExercise'])) {
@@ -1716,6 +1727,10 @@ abstract class Question
         $defaults['questionCategory'] = $this->category;
         $defaults['feedback'] = $this->feedback;
 
+        if (api_get_configuration_value('allow_question_code') && api_is_platform_admin()) {
+            $defaults['code'] = $this->code;
+        }
+
         // Came from he question pool
         if (isset($_GET['fromExercise'])) {
             $form->setDefaults($defaults);
@@ -1747,6 +1762,10 @@ abstract class Question
         //Save normal question if NOT media
         if ($this->type != MEDIA_QUESTION) {
             $this->save($exercise);
+
+            if (api_is_platform_admin()) {
+                $this->addCode($form->getSubmitValue('code'));
+            }
 
             // modify the exercise
             $exercise->addToList($this->id);
@@ -2415,4 +2434,26 @@ abstract class Question
 
         return false;
     }
+
+
+    /**
+     * @param string $code
+     *
+     * @return bool
+     */
+    public function addCode($code)
+    {
+        if (api_get_configuration_value('allow_question_code') && !empty($this->id)) {
+            $code = Database::escape_string($code);
+            $table = Database::get_course_table(TABLE_QUIZ_QUESTION);
+            $sql = "UPDATE $table SET code = '$code' 
+                    WHERE iid = {$this->id} AND c_id = {$this->course['real_id']}";
+            Database::query($sql);
+
+            return true;
+        }
+
+        return false;
+    }
+
 }

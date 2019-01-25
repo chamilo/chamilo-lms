@@ -38,6 +38,7 @@ abstract class Question
     public $questionTypeWithFeedback;
     public $extra;
     public $export = false;
+    public $code;
     public static $questionTypes = [
         UNIQUE_ANSWER => ['unique_answer.class.php', 'UniqueAnswer'],
         MULTIPLE_ANSWER => ['multiple_answer.class.php', 'MultipleAnswer'],
@@ -165,6 +166,7 @@ abstract class Question
                 $objQuestion->course = $course_info;
                 $objQuestion->feedback = isset($object->feedback) ? $object->feedback : '';
                 $objQuestion->category = TestCategory::getCategoryForQuestion($id, $course_id);
+                $objQuestion->code = isset($object->code) ? $object->code : '';
 
                 $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
                 $sql = "SELECT DISTINCT q.exercice_id
@@ -229,10 +231,15 @@ abstract class Question
     public function getTitleToDisplay($itemNumber)
     {
         $showQuestionTitleHtml = api_get_configuration_value('save_titles_as_html');
+        $title = '';
+        if (!empty($this->code) && api_get_configuration_value('allow_question_code')) {
+            $title .= '<h4>'.$this->code.'</h4>';
+        }
 
-        $title = $showQuestionTitleHtml ? '' : '<strong>';
+        $title .= $showQuestionTitleHtml ? '' : '<strong>';
         $title .= $itemNumber.'. '.$this->selectTitle();
         $title .= $showQuestionTitleHtml ? '' : '</strong>';
+
 
         return Display::div(
             $title,
@@ -403,7 +410,7 @@ abstract class Question
      */
     public function selectNbrExercises()
     {
-        return sizeof($this->exerciseList);
+        return count($this->exerciseList);
     }
 
     /**
@@ -423,7 +430,7 @@ abstract class Question
      */
     public function updateParentId($id)
     {
-        $this->parent_id = intval($id);
+        $this->parent_id = (int) $id;
     }
 
     /**

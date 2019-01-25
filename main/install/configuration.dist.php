@@ -953,7 +953,7 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
         'check_login_function' => 'myWebServiceFunctionToLogin'
     ]
 ];*/
-
+/*
 $_configuration['profile_fields_visibility'] = [
     'options' => [
         'vcard' => false,
@@ -964,7 +964,16 @@ $_configuration['profile_fields_visibility'] = [
         'chat' => true,
         'terms_ville' => false, // extra field value
     ]
-];
+];*/
+
+/*
+Set extra fields as required in the inscription.php page
+$_configuration['required_extra_fields_in_inscription'] = [
+    'options' => [
+        'terms_ville',
+        'terms_paysresidence',
+    ],
+];*/
 
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email
@@ -972,3 +981,4 @@ $_configuration['profile_fields_visibility'] = [
 // You need add a new option called "confirmation" to the registration settings
 //INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_registration', 'confirmation', 'MailConfirmation');
 // ------ (End) Custom DB changes
+

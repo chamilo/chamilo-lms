@@ -32,6 +32,22 @@ class CourseResolver implements ContainerAwareInterface
     use GraphQLTrait;
 
     /**
+     * @return array
+     */
+    public static function getAvailableTools()
+    {
+        return [
+            TOOL_COURSE_DESCRIPTION => 'ToolDescription',
+            TOOL_ANNOUNCEMENT => 'ToolAnnouncements',
+            TOOL_NOTEBOOK => 'ToolNotebook',
+            TOOL_FORUM => 'ToolForums',
+            TOOL_CALENDAR_EVENT => 'ToolAgenda',
+            TOOL_DOCUMENT => 'ToolDocuments',
+            TOOL_LEARNPATH => 'ToolLearningPath',
+        ];
+    }
+
+    /**
      * @param Course   $course
      * @param Argument $args
      *
@@ -94,7 +110,11 @@ class CourseResolver implements ContainerAwareInterface
         }
 
         if (empty($args['type'])) {
-            return $course->getTools($session);
+            return $course
+                ->getTools($session)
+                ->filter(function (CTool $tool) {
+                    return array_key_exists($tool->getName(), self::getAvailableTools());
+                });
         }
 
         $criteria = Criteria::create()

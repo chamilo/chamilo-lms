@@ -100,7 +100,7 @@ type Course {
 }
 
 "Global summary of the course."
-type ToolDescription {
+type ToolDescription implements CourseTool {
     name: String
     category: String
     image: String
@@ -117,7 +117,7 @@ type CourseDescription {
 }
 
 "Personal notes relevant to student or coursework."
-type ToolNotebook {
+type ToolNotebook implements CourseTool {
     name: String
     category: String
     image: String
@@ -136,7 +136,7 @@ type CourseNote {
 }
 
 "Announcements related to the course."
-type ToolAnnouncements {
+type ToolAnnouncements implements CourseTool {
     name: String
     category: String
     image: String
@@ -155,7 +155,7 @@ type CourseAnnouncement {
 }
 
 "Course forum tool."
-type ToolForums {
+type ToolForums implements CourseTool {
     name: String
     category: String
     image: String
@@ -208,7 +208,7 @@ type CourseForumPost {
 }
 
 "A comprehensive diary/calendar tool"
-type ToolAgenda {
+type ToolAgenda implements CourseTool {
     name: String
     category: String
     image: String
@@ -228,7 +228,7 @@ type CourseAgendaEvent {
     backgroundColor: String
 }
 
-type ToolDocuments {
+type ToolDocuments implements CourseTool {
     name: String
     category: String
     image: String
@@ -248,7 +248,7 @@ type CourseDocument {
 }
 
 "A specific sequence of learning objects/experiences."
-type ToolLearningPath {
+type ToolLearningPath implements CourseTool {
     name: String
     category: String
     image: String
@@ -298,9 +298,14 @@ type SessionCategory {
     endDate: DateTime
 }
 
-# Unions
+# Interfaces
 
-union CourseTool = ToolDescription | ToolAnnouncements | ToolNotebook | ToolForums | ToolAgenda | ToolDocuments | ToolLearningPath
+interface CourseTool {
+  name: String
+  category: String
+  image: String
+  customIcon: String
+}
 
 # Enums
 

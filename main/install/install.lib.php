@@ -779,9 +779,9 @@ function display_requirements(
                 <td class="requirements-item">'.get_lang('PHPVersion').' >= '.REQUIRED_PHP_VERSION.'</td>
                 <td class="requirements-value">';
     if (version_compare(phpversion(), REQUIRED_PHP_VERSION, '>=') > 1) {
-        echo '<strong><font color="red">'.get_lang('PHPVersionError').'</font></strong>';
+        echo '<strong class="text-danger">'.get_lang('PHPVersionError').'</strong>';
     } else {
-        echo '<strong><font color="green">'.get_lang('PHPVersionOK').' '.phpversion().'</font></strong>';
+        echo '<strong class="text-success">'.get_lang('PHPVersionOK').' '.phpversion().'</strong>';
     }
     echo '</td>
             </tr>
@@ -1164,18 +1164,14 @@ function display_license_agreement()
     echo '<p>'.get_lang('LMSLicenseInfo').'</p>';
     echo '<p><a href="../../documentation/license.html" target="_blank">'.get_lang('PrintVers').'</a></p>';
     echo '</div>'; ?>
-    <div class="row">
-        <div class="col-md-12">
-            <pre style="overflow: auto; height: 200px; margin-top: 5px;">
-                <?php echo api_htmlentities(@file_get_contents(api_get_path(SYS_PATH).'documentation/license.txt')); ?>
-            </pre>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" name="accept" id="accept_licence" value="1" />
-                    <?php echo get_lang('IAccept'); ?>
-                </label>
-            </div>
-        </div>
+    <div class="form-group">
+        <pre style="overflow: auto; height: 200px; margin-top: 5px;">
+            <?php echo api_htmlentities(@file_get_contents(api_get_path(SYS_PATH).'documentation/license.txt')); ?>
+        </pre>
+    </div>
+    <div class="form-group form-check">
+        <input type="checkbox" name="accept" id="accept_licence" value="1">
+        <label for="accept_licence"><?php echo get_lang('IAccept'); ?></label>
     </div>
     <div class="row">
         <div class="col-md-12">
@@ -1218,19 +1214,19 @@ function get_contact_registration_form()
     <div class="panel panel-default">
     <div class="panel-body">
     <div id="div_sent_information"></div>
-    <div class="form-group">
+    <div class="form-group row">
             <label class="col-sm-3"><span class="form_required">*</span>'.get_lang('Name').'</label>
             <div class="col-sm-9"><input id="person_name" class="form-control" type="text" name="person_name" size="30" /></div>
     </div>
-    <div class="form-group">
+    <div class="form-group row">
             <label class="col-sm-3"><span class="form_required">*</span>'.get_lang('Email').'</label>
             <div class="col-sm-9"><input id="person_email" class="form-control" type="text" name="person_email" size="30" /></div>
     </div>
-    <div class="form-group">
+    <div class="form-group row">
             <label class="col-sm-3"><span class="form_required">*</span>'.get_lang('CompanyName').'</label>
             <div class="col-sm-9"><input id="company_name" class="form-control" type="text" name="company_name" size="30" /></div>
     </div>
-    <div class="form-group">
+    <div class="form-group row">
         <label class="col-sm-3"><span class="form_required">*</span>'.get_lang('CompanyActivity').'</label>
         <div class="col-sm-9">
             <select class="selectpicker show-tick" name="company_activity" id="company_activity" >
@@ -1254,7 +1250,7 @@ function get_contact_registration_form()
         </div>
     </div>
 
-    <div class="form-group">
+    <div class="form-group row">
         <label class="col-sm-3"><span class="form_required">*</span>'.get_lang('PersonRole').'</label>
         <div class="col-sm-9">
             <select class="selectpicker show-tick" name="person_role" id="person_role" >
@@ -1274,17 +1270,17 @@ function get_contact_registration_form()
         </div>
     </div>
 
-    <div class="form-group">
+    <div class="form-group row">
         <label class="col-sm-3"><span class="form_required">*</span>'.get_lang('CompanyCountry').'</label>
         <div class="col-sm-9">'.get_countries_list_from_array(true).'</div>
     </div>
-    <div class="form-group">
+    <div class="form-group row">
         <label class="col-sm-3">'.get_lang('CompanyCity').'</label>
         <div class="col-sm-9">
                 <input type="text" class="form-control" id="company_city" name="company_city" size="30" />
         </div>
     </div>
-    <div class="form-group">
+    <div class="form-group row">
         <label class="col-sm-3">'.get_lang('WhichLanguageWouldYouLikeToUseWhenContactingYou').'</label>
         <div class="col-sm-9">
             <select class="selectpicker show-tick" id="language" name="language">
@@ -1305,7 +1301,7 @@ function get_contact_registration_form()
         </div>
     </div>
 
-    <div class="form-group">
+    <div class="form-group row">
         <label class="col-sm-3">'.get_lang('HaveYouThePowerToTakeFinancialDecisions').'</label>
         <div class="col-sm-9">
             <div class="radio">
@@ -1321,11 +1317,11 @@ function get_contact_registration_form()
         </div>
     </div>
     <div class="clear"></div>
-    <div class="form-group">
+    <div class="form-group row">
             <div class="col-sm-3">&nbsp;</div>
             <div class="col-sm-9"><button type="button" class="btn btn-default" onclick="javascript:send_contact_information();" value="'.get_lang('SendInformation').'" ><em class="fa fa-floppy-o"></em> '.get_lang('SendInformation').'</button> <span id="loader-button"></span></div>
     </div>
-    <div class="form-group">
+    <div class="form-group row">
             <div class="col-sm-3">&nbsp;</div>
             <div class="col-sm-9"><span class="form_required">*</span><small>'.get_lang('FieldRequired').'</small></div>
     </div></div></div>
@@ -1417,7 +1413,7 @@ function display_database_settings_form(
     } ?>
     <div class="panel panel-default">
         <div class="panel-body">
-        <div class="form-group">
+        <div class="form-group row">
             <label class="col-sm-4"><?php echo get_lang('DBHost'); ?> </label>
             <?php if ($installType == 'update') {
         ?>
@@ -1435,7 +1431,7 @@ function display_database_settings_form(
             <?php
     } ?>
         </div>
-        <div class="form-group">
+        <div class="form-group row">
             <label class="col-sm-4"><?php echo get_lang('DBPort'); ?> </label>
             <?php if ($installType == 'update') {
         ?>
@@ -1453,19 +1449,19 @@ function display_database_settings_form(
             <?php
     } ?>
         </div>
-        <div class="form-group">
+        <div class="form-group row">
             <?php
                 //database user username
                 $example_login = get_lang('EG').' root';
     displayDatabaseParameter($installType, get_lang('DBLogin'), 'dbUsernameForm', $dbUsernameForm, $example_login); ?>
         </div>
-        <div class="form-group">
+        <div class="form-group row">
             <?php
             //database user password
             $example_password = get_lang('EG').' '.api_generate_password();
     displayDatabaseParameter($installType, get_lang('DBPassword'), 'dbPassForm', $dbPassForm, $example_password); ?>
         </div>
-        <div class="form-group">
+        <div class="form-group row">
             <?php
             //Database Name fix replace weird chars
             if ($installType != INSTALL_TYPE_UPDATE) {
@@ -1484,9 +1480,9 @@ function display_database_settings_form(
         </div>
        <?php if ($installType != INSTALL_TYPE_UPDATE) {
                     ?>
-        <div class="form-group">
-            <div class="col-sm-3"></div>
-            <div class="col-sm-9">
+        <div class="form-group row">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-8">
             <button type="submit" class="btn btn-primary" name="step3" value="step3">
                 <em class="fa fa-refresh"> </em>
                 <?php echo get_lang('CheckDatabaseConnection'); ?>
@@ -1634,7 +1630,7 @@ function display_configuration_parameter(
     $parameterValue,
     $displayWhenUpdate = 'true'
 ) {
-    $html = '<div class="form-group">';
+    $html = '<div class="form-group row">';
     $html .= '<label class="col-sm-6 control-label">'.$parameterName.'</label>';
     if ($installType == INSTALL_TYPE_UPDATE && $displayWhenUpdate) {
         $html .= '<input type="hidden" name="'.$formFieldName.'" value="'.api_htmlentities($parameterValue, ENT_QUOTES).'" />'.$parameterValue;
@@ -1686,7 +1682,7 @@ function display_configuration_settings_form(
         $languageForm = $_SESSION['install_language'];
     }
     echo '<div class="RequirementHeading">';
-    echo "<h2>".display_step_sequence().get_lang("Configuration settings")."</h2>";
+    echo "<h2>".display_step_sequence().get_lang("ConfigurationSettings")."</h2>";
     echo '</div>';
 
     // Parameter 1: administrator's login
@@ -1722,7 +1718,7 @@ function display_configuration_settings_form(
     echo panel($html, get_lang('Administrator'), 'administrator');
 
     //First parameter: language
-    $html = '<div class="form-group">';
+    $html = '<div class="form-group row">';
     $html .= '<label class="col-sm-6 control-label">'.get_lang('MainLang')."</label>";
     if ($installType == 'update') {
         $html .= '<input type="hidden" name="languageForm" value="'.api_htmlentities($languageForm, ENT_QUOTES).'" />'.$languageForm;
@@ -1734,7 +1730,7 @@ function display_configuration_settings_form(
     $html .= "</div>";
 
     //Second parameter: Chamilo URL
-    $html .= '<div class="form-group">';
+    $html .= '<div class="form-group row">';
     $html .= '<label class="col-sm-6 control-label">'.get_lang('ChamiloURL').get_lang('ThisFieldIsRequired').'</label>';
 
     if ($installType == 'update') {
@@ -1770,7 +1766,7 @@ function display_configuration_settings_form(
         $institutionUrlForm
     );
 
-    $html .= '<div class="form-group">
+    $html .= '<div class="form-group row">
             <label class="col-sm-6 control-label">'.get_lang("EncryptMethodUserPass").'</label>
         <div class="col-sm-6">';
     if ($installType == 'update') {
@@ -1796,7 +1792,7 @@ function display_configuration_settings_form(
     }
     $html .= '</div></div>';
 
-    $html .= '<div class="form-group">
+    $html .= '<div class="form-group row">
             <label class="col-sm-6 control-label">'.get_lang('AllowSelfReg').'</label>
             <div class="col-sm-6">';
     if ($installType == 'update') {
@@ -1824,7 +1820,7 @@ function display_configuration_settings_form(
     $html .= '</div>';
     $html .= '</div>';
 
-    $html .= '<div class="form-group">';
+    $html .= '<div class="form-group row">';
     $html .= '<label class="col-sm-6 control-label">'.get_lang('AllowSelfRegProf').'</label>
         <div class="col-sm-6">';
     if ($installType == 'update') {

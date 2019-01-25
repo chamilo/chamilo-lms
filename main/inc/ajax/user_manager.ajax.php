@@ -14,6 +14,8 @@ $action = $_GET['a'];
 
 switch ($action) {
     case 'get_user_like':
+        api_block_anonymous_users(false);
+
         $query = $_REQUEST['q'];
         $conditions = [
             'username' => $query,

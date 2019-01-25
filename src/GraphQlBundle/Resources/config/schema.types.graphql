@@ -2,11 +2,11 @@ type Query {
     "The current user logged in the API."
     viewer: User!
     "Get the data from a course on the platform."
-    course(id: Int!): Course!
+    course(id: Int!): Course
     "Get the data from a session on the platform."
-    session(id: Int!): Session!
+    session(id: Int!): Session
     "Get the data from a session category."
-    sessionCategory(id: Int!): SessionCategory!
+    sessionCategory(id: Int!): SessionCategory
 }
 
 type Mutation {

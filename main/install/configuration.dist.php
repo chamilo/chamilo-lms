@@ -973,7 +973,16 @@ $_configuration['required_extra_fields_in_inscription'] = [
         'terms_ville',
         'terms_paysresidence',
     ],
-];*/
+];
+Set extra fields as required in the profile.php page
+$_configuration['required_extra_fields_in_profile'] = [
+    'options' => [
+        'terms_villedustage'
+    ],
+];
+
+
+*/
 
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email

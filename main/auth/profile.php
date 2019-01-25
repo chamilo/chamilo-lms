@@ -201,7 +201,7 @@ $form->applyFilter('phone', 'html_filter');
 
 //  PICTURE
 if (is_profile_editable() && api_get_setting('profile', 'picture') == 'true') {
-    $form->addFile(
+    $pictureElement = $form->addFile(
         'picture',
         [
             $user_data['picture_uri'] != '' ? get_lang('UpdateImage') : get_lang('AddImage'),
@@ -215,6 +215,11 @@ if (is_profile_editable() && api_get_setting('profile', 'picture') == 'true') {
             'accept' => 'image/*',
         ]
     );
+
+    // ofaj
+    if (empty($user_data['picture_uri'])) {
+        $form->setRequired($pictureElement);
+    }
 
     $form->addProgress();
     if (!empty($user_data['picture_uri'])) {
@@ -324,10 +329,30 @@ if (is_platform_authentication() &&
     $form->addPasswordRule('password1');
 }
 
+$requiredFields = api_get_configuration_value('required_extra_fields_in_profile');
+if (!empty($requiredFields) && $requiredFields['options']) {
+    $requiredFields = $requiredFields['options'];
+}
+
 $extraField = new ExtraField('user');
 $return = $extraField->addElements(
     $form,
-    api_get_user_id()
+    api_get_user_id(),
+    [],
+    false,
+    false,
+    [],
+    [],
+    [],
+    false,
+    false,
+    [],
+    [],
+    [],
+    false,
+    [],
+    [],
+    $requiredFields
 );
 
 $jquery_ready_content = $return['jquery_ready_content'];

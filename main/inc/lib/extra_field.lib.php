@@ -474,11 +474,13 @@ class ExtraField extends Model
      * @param FormValidator $form                The form object to which to attach this element
      * @param int           $itemId              The item (course, user, session, etc) this extra_field is linked to
      * @param array         $exclude             Variables of extra field to exclude
-     * @param bool          $filter              Whether to get only the fields with the "filter" flag set to 1 (true) or not (false)
+     * @param bool          $filter              Whether to get only the fields with the "filter" flag set to 1 (true)
+     *                                           or not (false)
      * @param bool          $useTagAsSelect      Whether to show tag fields as select drop-down or not
      * @param array         $showOnlyTheseFields Limit the extra fields shown to just the list given here
      * @param array         $orderFields         An array containing the names of the fields shown, in the right order
-     * @param bool          $adminPermissions    Whether the display is considered without edition limits (true) or not (false)
+     * @param bool          $adminPermissions    Whether the display is considered without edition limits (true) or not
+     *                                           (false)
      *
      * @return array|bool
      */
@@ -498,7 +500,8 @@ class ExtraField extends Model
         $customLabelsExtraMultipleSelect = [],
         $fieldsToFreeze = [],
         $addEmptyOptionSelects = false,
-        $introductionTextList = []
+        $introductionTextList = [],
+        $requiredFields = []
     ) {
         if (empty($form)) {
             return false;
@@ -551,6 +554,16 @@ class ExtraField extends Model
             $addEmptyOptionSelects,
             $introductionTextList
         );
+
+        if (!empty($requiredFields)) {
+            /** @var HTML_QuickForm_input $element */
+            foreach ($form->getElements() as $element) {
+                $name = str_replace('extra_', '', $element->getName());
+                if (in_array($name, $requiredFields)) {
+                    $form->setRequired($element);
+                }
+            }
+        }
 
         return $extra;
     }
@@ -988,7 +1001,8 @@ class ExtraField extends Model
      *
      * @param FormValidator $form                The form these fields are to be attached to
      * @param array         $extraData
-     * @param bool          $adminPermissions    Whether the display is considered without edition limits (true) or not (false)
+     * @param bool          $adminPermissions    Whether the display is considered without edition limits (true) or not
+     *                                           (false)
      * @param array         $extra
      * @param int           $itemId              The item (course, user, session, etc) this extra_field is attached to
      * @param array         $exclude             Extra fields to be skipped, by textual ID

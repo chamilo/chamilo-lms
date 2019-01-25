@@ -836,7 +836,6 @@ class SocialManager extends UserManager
             $template->assign('show_group', true);
             $template->assign('group_id', $group_id);
             $template->assign('user_group_image', $userGroupImage);
-            //$template->assign('user_group', $group_info);
             $template->assign(
                 'user_is_group_admin',
                 $userGroup->is_group_admin(
@@ -2057,6 +2056,15 @@ class SocialManager extends UserManager
             $userInfo['email'] = '';
         }
 
+        // Ofaj
+        $hasCertificates = Certificate::getCertificateByUser($userId);
+        $userInfo['has_certificates'] = 0;
+        if (!empty($hasCertificates)) {
+            $userInfo['has_certificates'] = 1;
+        }
+
+        $userInfo['is_admin'] = Usermanager::is_admin($userId);
+
         $languageId = api_get_language_id($userInfo['language']);
         $languageInfo = api_get_language_info($languageId);
         if ($languageInfo) {
@@ -2064,7 +2072,6 @@ class SocialManager extends UserManager
         }
 
         if (isset($options['language']) && $options['language'] === false) {
-
             $userInfo['language'] = '';
         }
 

@@ -11,6 +11,20 @@
             <div id="sn-avatar-one" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading-sn">
                 <div class="panel-body">
                     {{ social_avatar_block }}
+                    {# Ofaj #}
+                    {% if user.status == 5 %}
+                        {% if user.has_certificates %}
+                            old student
+                        {% else %}
+                            student
+                        {% endif %}
+                    {% elseif user.status == 1 %}
+                        {% if user.is_admin %}
+                            Admin
+                        {% else %}
+                            teacher
+                        {% endif %}
+                    {% endif %}
                     <ul class="list-user-data">
                         <li class="item">
                             {{ user.firstname }} {{ user.lastname }}

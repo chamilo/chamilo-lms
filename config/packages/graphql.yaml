@@ -23,6 +23,9 @@ parameters:
     chamilo_graphql.resolver_map.mutation.class: Chamilo\GraphQlBundle\Map\MutationMap
 
 services:
+    _defaults:
+        public: true
+
     chamilo_graphql.resolver.user:
         class: Chamilo\GraphQlBundle\Resolver\UserResolver
         arguments: ['@service_container']

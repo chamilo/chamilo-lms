@@ -557,6 +557,9 @@ $_configuration['send_all_emails_to'] = [
 //$_configuration['allow_quiz_show_previous_button_setting'] = false;
 // Allow to teachers review exercises question with audio notes
 //$_configuration["allow_teacher_comment_audio"] = false;
+// Block copy/paste/save/print keys and right-clicks in exercises
+//$_configuration['quiz_prevent_copy_paste'] = false;
+
 // Hide search form in session list
 //$_configuration['hide_search_form_in_session_list'] = false;
 // Allow exchange of messages from teachers/bosses about a user.

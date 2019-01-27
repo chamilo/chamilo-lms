@@ -4785,7 +4785,9 @@ EOT;
         echo $totalScoreText;
 
         // Ofaj change BT#11784
-        if (!empty($objExercise->description)) {
+        if (api_get_configuration_value('quiz_show_description_on_results_page')
+            && (!empty($objExercise->description)))
+        {
             echo Display::div($objExercise->description, ['class' => 'exercise_description']);
         }
 

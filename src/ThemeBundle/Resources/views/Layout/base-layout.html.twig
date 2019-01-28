@@ -17,108 +17,53 @@
 {% endblock %}
 
 <body
-    class="{{ section_name }} app"
+    class="{{ section_name }} app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show"
     {{ sonata_seo_html_attributes() }}
     data-in-course="{{ course ? 'true' : 'false' }}"
     data-course-code="{{ course ? course.code : '' }}"
 >
-<noscript>{{ "NoJavascript" | trans }}</noscript>
+<noscript> {{ "NoJavascript" | trans }} </noscript>
 
-<!-- SPINNER LOADER -->
-<div id='loader'>
-    <div class="spinner"></div>
-</div>
-<!-- END SPINNER -->
-
-<script>
-    window.addEventListener('load', () => {
-        const loader = document.getElementById('loader');
-        setTimeout(() => {
-            loader.classList.add('fadeOut');
-        }, 100);
-    });
-</script>
-
+<!-- PAGE -->
 {% block chamilo_wrap %}
-<div>
-    {% block chamilo_sidebar %}
-    <!-- APP SIDEBAR -->
-    <div class="sidebar">
-        <div class="sidebar-inner">
-            <!-- SIDEBAR LOGO -->
-            <div class="sidebar-logo">
-                <div class="peers ai-c fxw-nw">
-                    <div class="peer peer-greed">
-                        <a class="sidebar-link td-n" href="{{ url('legacy_index') }}">
-                            <div class="peers ai-c fxw-nw">
-                                <div class="peer">
-                                    <div class="logo">
-                                        <img src="{{ url('legacy_public') ~ 'build/css/themes/'~ theme ~'/images/logo_chamilo.svg' }}"/>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="peer">
-                        <div class="mobile-toggle sidebar-toggle">
-                            <a href="" class="td-n">
-                                <i class="ti-arrow-circle-left"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- END SIDEBAR LOGO -->
-            <!-- SIDEBAR MENU -->
-            {# SIDEBAR MENU #}
-            {% block chamilo_menu %}
-                <div id="menu-bar">
-                    {# creatable variable is set by the sonata page #}
-                    {% if not creatable %}
-                        {# course navigation links/shortcuts need to be activated by the admin #}
-                        {% include "@ChamiloTheme/Layout/sidebar.html.twig" %}
-                    {% endif %}
-                </div>
-            {% endblock %}
-            <!-- END SIDEBAR MENU -->
-        </div>
-    </div>
-    <!-- END APP SIDEBAR -->
-    {% endblock %}
 
-    <!-- PAGE CONTAINER -->
-    <div class="page-container">
-        {% block chamilo_header %}
-            <!-- TOOLBAR USER -->
-            {% include '@ChamiloTheme/Layout/topbar.html.twig' %}
-            <!-- END TOOLBAR USER -->
+<!-- HEADER -->
+    {% block page_header %}
+        {% include '@ChamiloTheme/Layout/_header.html.twig' %}
+    {% endblock %}
+<!-- END HEADER -->
+
+<div class="app-body">
+
+    <!-- SIDEBAR -->
+    {% block page_sidebar %}
+        {% include '@ChamiloTheme/Layout/_sidebar.html.twig' %}
+    {% endblock %}
+    <!-- END SIDEBAR -->
+
+    <div class="main">
+        <!-- BREADCRUMB -->
+        {% block chamilo_breadcrumb %}
+            {% include '@ChamiloTheme/Layout/breadcrumb.html.twig' %}
         {% endblock %}
+        <!-- END BREADCRUMB -->
+        <!-- CONTENT -->
+        {% block page_content %}
 
-        {% autoescape false %}
-            <!-- MAIN CONTENT -->
-            <main class='main-content bg-content'>
-                <div class="container-fluid box-body">
-                    <div class="pt-1 pb-1">
-                    {% block page_content %}
-
-                    {% endblock %}
-                    </div>
-                </div>
-            </main>
-            <!-- END MAIN CONTENT -->
-        {% endautoescape %}
+        {% endblock %}
+        <!-- END CONTENT -->
     </div>
-    <!-- END PAGE CONTAINER -->
 
-    {% block chamilo_footer %}
-        <!-- FOOTER -->
-        {% include '@ChamiloTheme/Layout/footer.html.twig' %}
-        <!-- END FOOTER -->
-    {% endblock %}
 
 </div>
-<!-- END APP CONTENT -->
 {% endblock %}
+<!-- END PAGE -->
+
+<!-- FOOTER -->
+{% block page_footer %}
+    {% include '@ChamiloTheme/Layout/_footer.html.twig' %}
+{% endblock %}
+<!-- END FOOTER -->
 
 <div class="modal fade" id="expand-image-modal" tabindex="-1" role="dialog" aria-labelledby="expand-image-modal-title" aria-hidden="true">
     <div class="modal-dialog modal-lg">

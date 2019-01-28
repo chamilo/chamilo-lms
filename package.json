@@ -14,6 +14,7 @@
     "webpack": "^3.0"
   },
   "dependencies": {
+    "@coreui/coreui": "2.1.6",
     "@fortawesome/fontawesome-free": "^5.4.0",
     "blueimp-file-upload": "^9.19.2",
     "bootstrap-daterangepicker": "^3.0",
@@ -40,6 +41,7 @@
     "multiselect-two-sides": "^2.5.5",
     "mxgraph": "^3.9.3",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
+    "perfect-scrollbar": "^1.4.0",
     "qtip2": "^3.0.3",
     "select2": "^4.0.6-rc.1",
     "simplewebrtc": "^3.0.2",

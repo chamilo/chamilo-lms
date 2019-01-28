@@ -1033,9 +1033,9 @@ class Exercise
     /**
      * returns the array with the question ID list.
      *
-     * @param bool $fromDatabase   Whether the results should be fetched in the database or just from memory
-     * @param bool $adminView Whether we should return all questions (admin view) or
-     *                        just a list limited by the max number of random questions
+     * @param bool $fromDatabase Whether the results should be fetched in the database or just from memory
+     * @param bool $adminView    Whether we should return all questions (admin view) or
+     *                           just a list limited by the max number of random questions
      *
      * @author Olivier Brouckaert
      *
@@ -8037,6 +8037,7 @@ class Exercise
         while ($object = Database::fetch_object($result)) {
             $questionList[$object->question_order] = $object->question_id;
         }
+
         return $questionList;
     }
 

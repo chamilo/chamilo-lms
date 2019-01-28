@@ -25,7 +25,6 @@ if (file_exists('settings.php')) {
     api_not_allowed(true, $message);
 }
 
-
 $content = '';
 $auth = new Auth($settingsInfo);
 

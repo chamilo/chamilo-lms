@@ -179,10 +179,10 @@ if (!$inATest) {
             $pagination->setTotalItemCount($nbrQuestions);
             $pagination->setItemNumberPerPage($lenght);
             $pagination->setCurrentPageNumber($page);
-            $pagination->renderer = function($data) use ($url) {
+            $pagination->renderer = function ($data) use ($url) {
                 $render = '<ul class="pagination">';
                 for ($i = 1; $i <= $data['pageCount']; $i++) {
-                //foreach ($data['pagesInRange'] as $page) {
+                    //foreach ($data['pagesInRange'] as $page) {
                     $page = (int) $i;
                     $pageContent = '<li><a href="'.$url.'&page='.$page.'">'.$page.'</a></li>';
                     if ($data['current'] == $page) {
@@ -212,8 +212,7 @@ if (!$inATest) {
             <div id="question_list">
         ';
 
-
-        $category_list = TestCategory::getListOfCategoriesNameForTest($objExercise->id,false);
+        $category_list = TestCategory::getListOfCategoriesNameForTest($objExercise->id, false);
 
         if (is_array($questionList)) {
             foreach ($questionList as $id) {

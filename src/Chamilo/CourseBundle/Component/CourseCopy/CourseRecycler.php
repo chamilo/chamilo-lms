@@ -308,7 +308,7 @@ class CourseRecycler
     /**
      * Deletes all forum-categories without forum from the current course.
      * Categories with forums in it are dealt with by recycle_forums()
-     * This requires a check on the status of the forum item in c_item_property
+     * This requires a check on the status of the forum item in c_item_property.
      */
     public function recycle_forum_categories()
     {
@@ -356,7 +356,6 @@ class CourseRecycler
         $sql = "DELETE FROM $linkCategoryTable
                     WHERE c_id = $courseId AND id NOT IN ($subQuery)";
         Database::query($sql);
-
     }
 
     /**
@@ -628,7 +627,6 @@ class CourseRecycler
             $sql = "DELETE FROM $learningPathCategoryTable WHERE iid = ".$categoryId;
             Database::query($sql);
         }
-
     }
 
     /**

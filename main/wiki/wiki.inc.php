@@ -6100,7 +6100,7 @@ class Wiki
                 get_lang('RecentChanges'),
                 '',
                 ICON_SIZE_MEDIUM
-            )   .'</a>';
+            ).'</a>';
         echo Display::toolbarAction('toolbar-wiki', [$actionsLeft]);
     }
 

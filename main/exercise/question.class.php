@@ -240,7 +240,6 @@ abstract class Question
         $title .= $itemNumber.'. '.$this->selectTitle();
         $title .= $showQuestionTitleHtml ? '' : '</strong>';
 
-
         return Display::div(
             $title,
             ['class' => 'question_title']
@@ -2371,6 +2370,26 @@ abstract class Question
     }
 
     /**
+     * @param string $code
+     *
+     * @return bool
+     */
+    public function addCode($code)
+    {
+        if (api_get_configuration_value('allow_question_code') && !empty($this->id)) {
+            $code = Database::escape_string($code);
+            $table = Database::get_course_table(TABLE_QUIZ_QUESTION);
+            $sql = "UPDATE $table SET code = '$code' 
+                    WHERE iid = {$this->id} AND c_id = {$this->course['real_id']}";
+            Database::query($sql);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Resizes a picture || Warning!: can only be called after uploadPicture,
      * or if picture is already available in object.
      *
@@ -2434,26 +2453,4 @@ abstract class Question
 
         return false;
     }
-
-
-    /**
-     * @param string $code
-     *
-     * @return bool
-     */
-    public function addCode($code)
-    {
-        if (api_get_configuration_value('allow_question_code') && !empty($this->id)) {
-            $code = Database::escape_string($code);
-            $table = Database::get_course_table(TABLE_QUIZ_QUESTION);
-            $sql = "UPDATE $table SET code = '$code' 
-                    WHERE iid = {$this->id} AND c_id = {$this->course['real_id']}";
-            Database::query($sql);
-
-            return true;
-        }
-
-        return false;
-    }
-
 }

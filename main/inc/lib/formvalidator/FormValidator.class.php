@@ -914,9 +914,9 @@ EOT;
      * @param string $label
      * @param array  $attributes
      *
-     * @return HTML_QuickForm_file
-     *
      * @throws Exception if the file doesn't have an id
+     *
+     * @return HTML_QuickForm_file
      */
     public function addFile($name, $label, $attributes = [])
     {

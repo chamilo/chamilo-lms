@@ -39,7 +39,7 @@ Add user mappers for "Firstname" "LastName" and "Email" so Chamilo can get those
 Clients -> (select the client previously created) -> mappers -> create
 
 Name: Email
-Mapper Type = User Attribute. 
+Mapper Type = User Property. 
 User Attribute: Email
 Friendly Name: Email
 SAML Attribute Name: Email

@@ -763,7 +763,7 @@ class Exercise
         $count = 0;
         if (Database::num_rows($result)) {
             $row = Database::fetch_array($result);
-            $count = $row['count'];
+            $count = (int) $row['count'];
         }
 
         return $count;
@@ -1033,7 +1033,7 @@ class Exercise
     /**
      * returns the array with the question ID list.
      *
-     * @param bool $from_db   Whether the results should be fetched in the database or just from memory
+     * @param bool $fromDatabase   Whether the results should be fetched in the database or just from memory
      * @param bool $adminView Whether we should return all questions (admin view) or
      *                        just a list limited by the max number of random questions
      *
@@ -1041,9 +1041,9 @@ class Exercise
      *
      * @return array - question ID list
      */
-    public function selectQuestionList($from_db = false, $adminView = false)
+    public function selectQuestionList($fromDatabase = false, $adminView = false)
     {
-        if ($from_db && !empty($this->id)) {
+        if ($fromDatabase && !empty($this->id)) {
             $nbQuestions = $this->getQuestionCount();
             $questionSelectionType = $this->getQuestionSelectionType();
 
@@ -1085,7 +1085,7 @@ class Exercise
      */
     public function selectNbrQuestions()
     {
-        return sizeof($this->questionList);
+        return count($this->questionList);
     }
 
     /**
@@ -1123,11 +1123,11 @@ class Exercise
         $random = isset($this->random) && !empty($this->random) ? $this->random : 0;
 
         // Random with limit
-        $randomLimit = "ORDER BY RAND() LIMIT $random";
+        $randomLimit = " ORDER BY RAND() LIMIT $random";
 
         // Random with no limit
         if ($random == -1) {
-            $randomLimit = "ORDER BY RAND() ";
+            $randomLimit = ' ORDER BY RAND() ';
         }
 
         // Admin see the list in default order
@@ -8007,6 +8007,37 @@ class Exercise
     public function getUnformattedTitle()
     {
         return strip_tags(api_html_entity_decode($this->title));
+    }
+
+    /**
+     * @param int $start
+     * @param int $lenght
+     *
+     * @return array
+     */
+    public function getQuestionForTeacher($start = 0, $lenght = 10)
+    {
+        $start = (int) $start;
+        $lenght = (int) $lenght;
+
+        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $sql = "SELECT DISTINCT e.question_id, e.question_order
+                FROM $TBL_EXERCICE_QUESTION e
+                INNER JOIN $TBL_QUESTIONS q
+                ON (e.question_id = q.id AND e.c_id = q.c_id)
+                WHERE
+                    e.c_id = {$this->course_id} AND
+                    e.exercice_id = '".$this->id."'
+                ORDER BY question_order
+                LIMIT $start, $lenght
+            ";
+        $result = Database::query($sql);
+        $questionList = [];
+        while ($object = Database::fetch_object($result)) {
+            $questionList[$object->question_order] = $object->question_id;
+        }
+        return $questionList;
     }
 
     /**

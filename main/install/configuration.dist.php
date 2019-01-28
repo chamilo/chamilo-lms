@@ -1076,6 +1076,14 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 //ALTER TABLE c_quiz_question ADD COLUMN code VARCHAR(255) NULL DEFAULT NULL;
 // $_configuration['allow_question_code'] = false;
 
+// Show pagination if question list is bigger than "x" value, if 0 pagination will not appear.
+// Option only when building an exercise as a teacher
+// $_configuration['show_question_pagination'] = 100;
+
+// Number of questions to show in every page
+// Option only when building an exercise as a teacher
+// $_configuration['question_pagination_lenght'] = 20;
+
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email

@@ -100,10 +100,7 @@ class ExerciseLib
             // construction of the Answer object (also gets all answers details)
             $objAnswerTmp = new Answer($questionId, api_get_course_int_id(), $exercise);
             $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
-            $quizQuestionOptions = Question::readQuestionOption(
-                $questionId,
-                $course_id
-            );
+            $quizQuestionOptions = Question::readQuestionOption($questionId, $course_id);
 
             // For "matching" type here, we need something a little bit special
             // because the match between the suggestions and the answers cannot be
@@ -211,7 +208,7 @@ class ExerciseLib
 
                 $form->addHtml('<div id="'.'hide_description_'.$questionId.'_options" style="display: none;">');
                 $form->addHtmlEditor(
-                    "choice[".$questionId."]",
+                    "choice[$questionId]",
                     null,
                     false,
                     false,
@@ -674,7 +671,7 @@ class ExerciseLib
                                     // radio button selection
                                     if (isset($myChoiceDegreeCertainty[$numAnswer]) &&
                                         $id == $myChoiceDegreeCertainty[$numAnswer]
-                                       ) {
+                                    ) {
                                         $attributes1 = ['checked' => 1, 'selected' => 1];
                                     } else {
                                         $attributes1 = [];
@@ -698,8 +695,8 @@ class ExerciseLib
                                             ),
                                             ['style' => 'text-align:center; background-color:#F7E1D7;',
                                                 'onclick' => 'handleRadioRow(event, '.
-                                                $questionId.', '.
-                                                $numAnswer.')',
+                                                    $questionId.', '.
+                                                    $numAnswer.')',
                                             ]
                                         );
                                     } else {
@@ -711,8 +708,8 @@ class ExerciseLib
                                             ),
                                             ['style' => 'text-align:center; background-color:#EFEFFC;',
                                                 'onclick' => 'handleRadioRow(event, '.
-                                                $questionId.', '.
-                                                $numAnswer.')',
+                                                    $questionId.', '.
+                                                    $numAnswer.')',
                                             ]
                                         );
                                     }
@@ -1084,8 +1081,8 @@ class ExerciseLib
                             if (isset($select_items[$lines_count])) {
                                 $s .= '<div class="text-right">
                                         <p class="indent">'.
-                                            $select_items[$lines_count]['letter'].'.&nbsp; '.
-                                            $select_items[$lines_count]['answer'].'
+                                    $select_items[$lines_count]['letter'].'.&nbsp; '.
+                                    $select_items[$lines_count]['answer'].'
                                         </p>
                                         </div>';
                             } else {
@@ -1103,7 +1100,7 @@ class ExerciseLib
                                       <td colspan="2"></td>
                                       <td valign="top">';
                                     $s .= '<b>'.$select_items[$lines_count]['letter'].'.</b> '.
-                                                $select_items[$lines_count]['answer'];
+                                        $select_items[$lines_count]['answer'];
                                     $s .= "</td>
                                 </tr>";
                                     $lines_count++;
@@ -2472,14 +2469,14 @@ HOTSPOT;
                                 $filterByUser = isset($_GET['filter_by_user']) ? (int) $_GET['filter_by_user'] : 0;
                                 $delete_link = '<a href="exercise_report.php?'.api_get_cidreq().'&filter_by_user='.$filterByUser.'&filter='.$filter.'&exerciseId='.$exercise_id.'&delete=delete&did='.$id.'"
                                 onclick="javascript:if(!confirm(\''.sprintf(
-                                    addslashes(get_lang('DeleteAttempt')),
-                                    $results[$i]['username'],
-                                    $dt
-                                ).'\')) return false;">';
+                                        addslashes(get_lang('DeleteAttempt')),
+                                        $results[$i]['username'],
+                                        $dt
+                                    ).'\')) return false;">';
                                 $delete_link .= Display::return_icon(
-                                    'delete.png',
+                                        'delete.png',
                                         addslashes(get_lang('Delete'))
-                                ).'</a>';
+                                    ).'</a>';
 
                                 if (api_is_drh() && !api_is_platform_admin()) {
                                     $delete_link = null;

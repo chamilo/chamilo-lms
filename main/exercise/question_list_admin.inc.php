@@ -32,10 +32,10 @@ if ($deleteQuestion) {
 $ajax_url = api_get_path(WEB_AJAX_PATH)."exercise.ajax.php?".api_get_cidreq()."&exercise_id=".intval($exerciseId);
 ?>
 <div id="dialog-confirm"
-     title="<?php echo get_lang("ConfirmYourChoice"); ?>"
+     title="<?php echo get_lang('ConfirmYourChoice'); ?>"
      style="display:none;">
     <p>
-        <?php echo get_lang("AreYouSureToDelete"); ?>
+        <?php echo get_lang('AreYouSureToDelete'); ?>
     </p>
 </div>
 
@@ -156,9 +156,7 @@ Session::erase('less_answer');
 // If we are in a test
 $inATest = isset($exerciseId) && $exerciseId > 0;
 if (!$inATest) {
-    echo "<div class='alert alert-warning'>"
-        .get_lang("ChoiceQuestionType")
-        ."</div>";
+    echo "<div class='alert alert-warning'>".get_lang('ChoiceQuestionType')."</div>";
 } else {
     echo '
         <div class="row hidden-xs">
@@ -173,25 +171,47 @@ if (!$inATest) {
     ';
 
     if ($nbrQuestions) {
-        // Always getting list from DB
-        //$questionList = $objExercise->selectQuestionList(true);
-
         // In the building exercise mode show question list ordered as is.
         $objExercise->setCategoriesGrouping(false);
 
-        // Show exercises as in category settings
-        //$questionList = $objExercise->getQuestionListWithMediasUncompressed();
-
         // In building mode show all questions not render by teacher order.
         $objExercise->questionSelectionType = EX_Q_SELECTION_ORDERED;
+        $alloQuestionOrdering = true;
+        $showPagination = api_get_configuration_value('show_question_pagination');
+        if (!empty($showPagination) && $nbrQuestions > $showPagination) {
+            $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+            $lenght = api_get_configuration_value('question_pagination_lenght');
+            $url = api_get_self().'?'.api_get_cidreq();
+            // Use pagination for exercise with more than 200 questions.
+            $alloQuestionOrdering = false;
+            $start = ($page - 1) * $lenght;
+            $questionList = $objExercise->getQuestionForTeacher($start, $lenght);
+            $paginator = new Knp\Component\Pager\Paginator();
+            $pagination = $paginator->paginate([]);
+            $pagination->setTotalItemCount($nbrQuestions);
+            $pagination->setItemNumberPerPage($lenght);
+            $pagination->setCurrentPageNumber($page);
+            $pagination->renderer = function($data) use ($url) {
+                $render = '<ul class="pagination">';
+                foreach ($data['pagesInRange'] as $page) {
+                    $page = (int) $page;
+                    $pageContent = '<li><a href="'.$url.'&page='.$page.'">'.$page.'</a></li>';
+                    if ($data['current'] == $page) {
+                        $pageContent = '<li class="active"><a href="#" >'.$page.'</a></li>';
+                    }
+                    $render .= $pageContent;
+                }
+                $render .= '</ul>';
 
-        // Get question list
-        $questionList = $objExercise->selectQuestionList(true, true);
+                return $render;
+            };
+            echo $pagination;
+        } else {
+            // Classic order
+            $questionList = $objExercise->selectQuestionList(true, true);
+        }
 
-        $category_list = TestCategory::getListOfCategoriesNameForTest(
-            $objExercise->id,
-            false
-        );
+        $category_list = TestCategory::getListOfCategoriesNameForTest($objExercise->id,false);
 
         if (is_array($questionList)) {
             foreach ($questionList as $id) {
@@ -238,7 +258,6 @@ if (!$inATest) {
                         ['class' => 'btn btn-default btn-sm']
                     );
                 $delete_link = null;
-
                 if ($objExercise->edit_exercise_in_lp == true) {
                     $delete_link = Display::url(
                         Display::return_icon(
@@ -266,7 +285,10 @@ if (!$inATest) {
 
                 $title = Security::remove_XSS($objQuestionTmp->selectTitle());
                 $title = strip_tags($title);
-                $move = Display::returnFontAwesomeIcon("arrows moved", 1, true);
+                $move = '&nbsp;';
+                if ($alloQuestionOrdering) {
+                    $move = Display::returnFontAwesomeIcon('arrows moved', 1, true);
+                }
 
                 // Question name
                 $questionName =
@@ -332,9 +354,7 @@ if (!$inATest) {
                 unset($objQuestionTmp);
             }
         }
-    }
-
-    if (!$nbrQuestions) {
+    } else {
         echo Display::return_message(get_lang('NoQuestion'), 'warning');
     }
     echo '</div>'; //question list div

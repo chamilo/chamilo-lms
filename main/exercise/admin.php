@@ -167,7 +167,8 @@ if (!is_object($objExercise)) {
 
     // creation of a new exercise if wrong or not specified exercise ID
     if ($exerciseId) {
-        $objExercise->read($exerciseId);
+        $showPagination = api_get_configuration_value('show_question_pagination');
+        $objExercise->read($exerciseId, $showPagination > 0 ? false : true);
     }
     // saves the object into the session
     Session::write('objExercise', $objExercise);
@@ -186,7 +187,7 @@ if (!$fromExercise) {
     }
 }
 
-$nbrQuestions = $objExercise->selectNbrQuestions();
+$nbrQuestions = $objExercise->getQuestionCount();
 
 // Question object creation.
 if ($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
@@ -379,7 +380,7 @@ if ($inATest) {
     echo '<div class="alert alert-info">';
     echo sprintf(
         get_lang('XQuestionsWithTotalScoreY'),
-        $objExercise->selectNbrQuestions(),
+        $nbrQuestions,
         $maxScoreAllQuestions
     );
 

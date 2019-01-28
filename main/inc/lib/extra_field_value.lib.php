@@ -372,6 +372,13 @@ class ExtraFieldValue extends Model
                 }
 
                 $userId = $params['item_id'];
+
+                // Check if user has a photo
+                $userInfo = api_get_user_info($userId);
+                if (empty($userInfo['picture_uri'])) {
+                    $profileCompleted = 0;
+                }
+
                 $table = Database::get_main_table(TABLE_MAIN_USER);
                 $sql = "UPDATE $table SET profile_completed = $profileCompleted WHERE user_id = $userId";
                 Database::query($sql);

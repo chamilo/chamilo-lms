@@ -216,11 +216,6 @@ if (is_profile_editable() && api_get_setting('profile', 'picture') == 'true') {
         ]
     );
 
-    // ofaj
-    if (empty($user_data['picture_uri'])) {
-        $form->setRequired($pictureElement);
-    }
-
     $form->addProgress();
     if (!empty($user_data['picture_uri'])) {
         $form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage'));
@@ -329,10 +324,6 @@ if (is_platform_authentication() &&
     $form->addPasswordRule('password1');
 }
 
-$requiredFields = api_get_configuration_value('required_extra_fields_in_profile');
-if (!empty($requiredFields) && $requiredFields['options']) {
-    $requiredFields = $requiredFields['options'];
-}
 
 $extraField = new ExtraField('user');
 $return = $extraField->addElements(
@@ -351,8 +342,7 @@ $return = $extraField->addElements(
     [],
     false,
     [],
-    [],
-    $requiredFields
+    []
 );
 
 $jquery_ready_content = $return['jquery_ready_content'];

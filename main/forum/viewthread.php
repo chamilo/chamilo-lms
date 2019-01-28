@@ -131,8 +131,8 @@ $logInfo = [
     'tool_id' => $_GET['forum'],
     'tool_id_detail' => $_GET['thread'],
     'action' => !empty($my_action) ? $my_action : 'view-thread',
-    'action_details' => $_GET['content'],
-    'current_id' => !empty($my_action) ? (int) $_GET['id'] : 0,
+    'action_details' => isset($_GET['content']) ? $_GET['content'] : '',
+    'current_id' => isset($_GET['id']) ? $_GET['id'] : 0,
 ];
 Event::registerLog($logInfo);
 

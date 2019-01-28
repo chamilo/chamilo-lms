@@ -108,8 +108,8 @@ $logInfo = [
     'tool_id' => $my_forum,
     'tool_id_detail' => 0,
     'action' => !empty($my_action) ? $my_action : 'list-threads',
-    'action_details' => $_GET['content'],
-    'current_id' => !empty($my_action) ? (int) $_GET['id'] : 0,
+    'action_details' => isset($_GET['content']) ? $_GET['content'] : '',
+    'current_id' => isset($_GET['id']) ? $_GET['id'] : 0,
 ];
 Event::registerLog($logInfo);
 
@@ -155,7 +155,7 @@ if ($origin == 'learnpath') {
     Display::display_reduced_header();
 } else {
     // The last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string.
-    Display::display_header('');
+    Display::display_header();
 }
 
 /* Actions */

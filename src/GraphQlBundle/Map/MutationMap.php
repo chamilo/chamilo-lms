@@ -149,24 +149,7 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
         $courseInfo = \CourseManager::getCourseInfoFromOriginalId($originalCourseIdValue, $originalCourseIdName);
 
         if (!empty($courseInfo)) {
-            if (0 !== (int) $courseInfo['visibility']) {
-                /** @var Course $course */
-                $course = $this->em->find('ChamiloCoreBundle:Course', $courseInfo['real_id']);
-                $course
-                    ->setCourseLanguage($language)
-                    ->setTitle($title)
-                    ->setCategoryCode($categoryCode)
-                    //->setTutorName('')
-                    ->setVisualCode($wantedCode ?: $courseInfo['code'])
-                    ->setVisibility($visibility);
-
-                $this->em->persist($course);
-                $this->em->flush();
-
-                return $course;
-            }
-
-            return null;
+            throw new UserError($this->translator->trans('Course already exists'));
         }
 
         $currentUser = $this->getCurrentUser();
@@ -187,7 +170,7 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
         $courseInfo = \CourseManager::create_course($params, $currentUser->getId());
 
         if (empty($courseInfo)) {
-            return null;
+            throw new UserError($this->translator->trans('Course not created'));
         }
 
         \CourseManager::create_course_extra_field(

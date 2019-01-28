@@ -19,6 +19,11 @@ type Mutation {
         subject: String!,
         content: String!
     ): [ViewerSendMessagePayload!]
+    createCourse(
+        course: CreateCourseInput!,
+        originalCourseIdName: String!,
+        originalCourseIdValue: String!
+    ): Course
 }
 
 # Objects
@@ -346,6 +351,28 @@ enum CourseToolType {
     TOOL_CALENDAR_EVENT
     TOOL_DOCUMENT
     TOOL_LEARNPATH
+}
+
+"One of visibility of thhe course"
+enum CourseVisibility {
+    COURSE_VISIBILITY_OPEN_WORLD
+    COURSE_VISIBILITY_OPEN_PLATFORM
+    COURSE_VISIBILITY_REGISTERED
+    COURSE_VISIBILITY_CLOSED
+    COURSE_VISIBILITY_HIDDEN
+}
+
+# Inputs
+
+input CreateCourseInput {
+    title: String!,
+    categoryCode: String,
+    wantedCode: String,
+    language: String = "en",
+    diskQuota: Int = 100,
+    visibility: CourseVisibility,
+    allowSubscription: Boolean = true,
+    allowUnsubscription: Boolean = false
 }
 
 # Scalars

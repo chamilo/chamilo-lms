@@ -3,6 +3,7 @@
 
 namespace Chamilo\GraphQlBundle\Map;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\GraphQlBundle\Traits\GraphQLTrait;
 use Chamilo\UserBundle\Entity\User;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -111,5 +112,96 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
         }
 
         return $result;
+    }
+
+    /**
+     * @param Argument $args
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     *
+     * @return Course
+     */
+    protected function resolveCreateCourse(Argument $args): ?Course
+    {
+        $this->checkAuthorization();
+
+        $checker = $this->container->get('security.authorization_checker');
+
+        if (false === $checker->isGranted('ROLE_ADMIN')) {
+            throw new UserError($this->translator->trans('Not allowed'));
+        }
+
+        $course = $args['course'];
+        $originalCourseIdName = $args['originalCourseIdName'];
+        $originalCourseIdValue = $args['originalCourseIdValue'];
+
+        $title = $course['title'];
+        $categoryCode = !empty($course['categoryCode']) ? $course['categoryCode'] : null;
+        $wantedCode = isset($course['wantedCode']) ? $course['wantedCode'] : null;
+        $language = $course['language'];
+        $visibility = isset($course['visibility']) ? $course['visibility'] : COURSE_VISIBILITY_OPEN_PLATFORM;
+        $diskQuota = $course['diskQuota'] * 1024 * 1024;
+        $allowSubscription = $course['allowSubscription'];
+        $allowUnsubscription = $course['allowUnsubscription'];
+
+        $courseInfo = \CourseManager::getCourseInfoFromOriginalId($originalCourseIdValue, $originalCourseIdName);
+
+        if (!empty($courseInfo)) {
+            if (0 !== (int) $courseInfo['visibility']) {
+                /** @var Course $course */
+                $course = $this->em->find('ChamiloCoreBundle:Course', $courseInfo['real_id']);
+                $course
+                    ->setCourseLanguage($language)
+                    ->setTitle($title)
+                    ->setCategoryCode($categoryCode)
+                    //->setTutorName('')
+                    ->setVisualCode($wantedCode ?: $courseInfo['code'])
+                    ->setVisibility($visibility);
+
+                $this->em->persist($course);
+                $this->em->flush();
+
+                return $course;
+            }
+
+            return null;
+        }
+
+        $currentUser = $this->getCurrentUser();
+
+        $params = [
+            'title' => $title,
+            'wanted_code' => $wantedCode,
+            'category_code' => $categoryCode,
+            //'tutor_name',
+            'course_language' => $language,
+            'user_id' => $currentUser->getId(),
+            'visibility' => $visibility,
+            'disk_quota' => $diskQuota,
+            'subscribe' => !empty($allowSubscription),
+            'unsubscribe' => !empty($allowUnsubscription),
+        ];
+
+        $courseInfo = \CourseManager::create_course($params, $currentUser->getId());
+
+        if (empty($courseInfo)) {
+            return null;
+        }
+
+        \CourseManager::create_course_extra_field(
+            $originalCourseIdName,
+            \ExtraField::FIELD_TYPE_TEXT,
+            $originalCourseIdName
+        );
+
+        \CourseManager::update_course_extra_field_value(
+            $courseInfo['code'],
+            $originalCourseIdName,
+            $originalCourseIdValue
+        );
+
+        return $this->em->find('ChamiloCoreBundle:Course', $courseInfo['real_id']);
     }
 }

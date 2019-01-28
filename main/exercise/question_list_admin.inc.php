@@ -158,18 +158,6 @@ $inATest = isset($exerciseId) && $exerciseId > 0;
 if (!$inATest) {
     echo "<div class='alert alert-warning'>".get_lang('ChoiceQuestionType')."</div>";
 } else {
-    echo '
-        <div class="row hidden-xs">
-            <div class="col-sm-5"><strong>'.get_lang('Questions').'</strong></div>
-            <div class="col-sm-1 text-center"><strong>'.get_lang('Type').'</strong></div>
-            <div class="col-sm-2"><strong>'.get_lang('Category').'</strong></div>
-            <div class="col-sm-1 text-right"><strong>'.get_lang('Difficulty').'</strong></div>
-            <div class="col-sm-1 text-right"><strong>'.get_lang('MaximumScore').'</strong></div>
-            <div class="col-sm-2 text-right"><strong>'.get_lang('Actions').'</strong></div>
-        </div>
-        <div id="question_list">
-    ';
-
     if ($nbrQuestions) {
         // In the building exercise mode show question list ordered as is.
         $objExercise->setCategoriesGrouping(false);
@@ -193,8 +181,9 @@ if (!$inATest) {
             $pagination->setCurrentPageNumber($page);
             $pagination->renderer = function($data) use ($url) {
                 $render = '<ul class="pagination">';
-                foreach ($data['pagesInRange'] as $page) {
-                    $page = (int) $page;
+                for ($i = 1; $i <= $data['pageCount']; $i++) {
+                //foreach ($data['pagesInRange'] as $page) {
+                    $page = (int) $i;
                     $pageContent = '<li><a href="'.$url.'&page='.$page.'">'.$page.'</a></li>';
                     if ($data['current'] == $page) {
                         $pageContent = '<li class="active"><a href="#" >'.$page.'</a></li>';
@@ -210,6 +199,19 @@ if (!$inATest) {
             // Classic order
             $questionList = $objExercise->selectQuestionList(true, true);
         }
+
+        echo '
+            <div class="row hidden-xs">
+                <div class="col-sm-5"><strong>'.get_lang('Questions').'</strong></div>
+                <div class="col-sm-1 text-center"><strong>'.get_lang('Type').'</strong></div>
+                <div class="col-sm-2"><strong>'.get_lang('Category').'</strong></div>
+                <div class="col-sm-1 text-right"><strong>'.get_lang('Difficulty').'</strong></div>
+                <div class="col-sm-1 text-right"><strong>'.get_lang('MaximumScore').'</strong></div>
+                <div class="col-sm-2 text-right"><strong>'.get_lang('Actions').'</strong></div>
+            </div>
+            <div id="question_list">
+        ';
+
 
         $category_list = TestCategory::getListOfCategoriesNameForTest($objExercise->id,false);
 

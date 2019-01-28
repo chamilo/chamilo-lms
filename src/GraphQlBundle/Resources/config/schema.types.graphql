@@ -24,6 +24,11 @@ type Mutation {
         originalCourseIdName: String!,
         originalCourseIdValue: String!
     ): Course
+    createUser(
+        user: CreateUserInput!,
+        originalUserIdName: String!,
+        originalUserIdValue: String!
+    ): User
 }
 
 # Objects
@@ -373,6 +378,19 @@ input CreateCourseInput {
     visibility: CourseVisibility,
     allowSubscription: Boolean = true,
     allowUnsubscription: Boolean = false
+}
+
+input CreateUserInput {
+    firstname: String!,
+    lastname: String!,
+    status: UserStatus!,
+    email: String!,
+    username: String!,
+    password: String!,
+    isActive: Boolean = true,
+    language: String,
+    phone: String,
+    expirationDate: DateTime
 }
 
 # Scalars

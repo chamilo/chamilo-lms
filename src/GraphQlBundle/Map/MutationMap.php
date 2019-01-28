@@ -204,4 +204,70 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
 
         return $this->em->find('ChamiloCoreBundle:Course', $courseInfo['real_id']);
     }
+
+    /**
+     * @param Argument $args
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     *
+     * @return User|null
+     */
+    protected function resolveCreateUser(Argument $args): ?User
+    {
+        $this->checkAuthorization();
+
+        $checker = $this->container->get('security.authorization_checker');
+
+        if (false === $checker->isGranted('ROLE_ADMIN')) {
+            throw new UserError($this->translator->trans('Not allowed'));
+        }
+
+        $userInput = $args['user'];
+        $originalUserIdName = $args['originalUserIdName'];
+        $originalUserIdValue = $args['originalUserIdValue'];
+
+        $userId = \UserManager::get_user_id_from_original_id($originalUserIdValue, $originalUserIdName);
+
+        if (!empty($userId)) {
+            throw new UserError($this->translator->trans('User already exists'));
+        }
+
+        if (!\UserManager::is_username_available($userInput['username'])) {
+            throw new UserError($this->translator->trans('Username already exists'));
+        }
+
+        $language = !empty($userInput['language']) ? $userInput['language'] : null;
+        $phone = !empty($userInput['phone']) ? $userInput['phone'] : null;
+        $expirationDate = !empty($userInput['expirationDate'])
+            ? $userInput['expirationDate']->format('Y-m-d h:i:s')
+            : null;
+
+        $userId = \UserManager::create_user(
+            $userInput['firstname'],
+            $userInput['lastname'],
+            $userInput['status'],
+            $userInput['email'],
+            $userInput['username'],
+            $userInput['password'],
+            null,
+            $language,
+            $phone,
+            null,
+            PLATFORM_AUTH_SOURCE,
+            $expirationDate,
+            $userInput['isActive']
+        );
+
+        if (empty($userId)) {
+            throw new UserError($this->translator->trans('User not created'));
+        }
+
+        \UrlManager::add_user_to_url($userId);
+        \UserManager::create_extra_field($originalUserIdName, \ExtraField::FIELD_TYPE_TEXT, $originalUserIdName, '');
+        \UserManager::update_extra_field_value($userId, $originalUserIdName, $originalUserIdValue);
+
+        return $this->em->find('ChamiloUserBundle:User', $userId);
+    }
 }

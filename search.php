@@ -59,9 +59,28 @@ if ($hide === false) {
 $url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?a=order&user_id='.$userId;
 
 // Theme fix
-$lang = api_get_interface_language();
+$targetLanguage = api_get_interface_language();
+
+$targetLanguageInfo = $extraFieldValue->get_values_by_handler_and_field_variable(
+    api_get_user_id(),
+    'langue_cible'
+);
+
+if (!empty($targetLanguageInfo)) {
+    $targetLanguage = strtolower($targetLanguageInfo['value']);
+}
+
 $theme = 'theme_fr';
-switch ($lang) {
+switch ($targetLanguage) {
+    case 'italian':
+        $theme = 'theme_it';
+        break;
+    case 'polish':
+        $theme = 'theme_pl';
+        break;
+    case 'spanish':
+        $theme = 'theme_es';
+        break;
     case 'french2':
     case 'french':
         $theme = 'theme_fr';
@@ -85,15 +104,7 @@ $(document).ready(function() {
             extraFiliere.hide();
         }
     });
-        
-    /*$("#extra_domaine").parent().append(
-        $("<a>", {
-            "class": "btn ajax btn-default",
-            "href": "'.$url.'&field_variable=extra_domaine",
-            "text": "'.get_lang('Order').'"             
-        })
-    );*/    
-    
+
     $("#extra_theme").parent().append(
         $("<a>", {
             "class": "btn ajax btn-default",
@@ -116,7 +127,32 @@ $(document).ready(function() {
             "href": "'.$url.'&field_variable=extra_theme_de",
             "text": "'.get_lang('Order').'"             
         })
-    );    
+    );
+    
+    $("#extra_theme_it").parent().append(
+        $("<a>", {
+            "class": "btn ajax btn-default",
+            "href": "'.$url.'&field_variable=extra_theme_it",
+            "text": "'.get_lang('Order').'"             
+        })
+    );
+    
+    $("#extra_theme_es").parent().append(
+        $("<a>", {
+            "class": "btn ajax btn-default",
+            "href": "'.$url.'&field_variable=extra_theme_es",
+            "text": "'.get_lang('Order').'"             
+        })
+    );
+    
+     $("#extra_theme_pl").parent().append(
+        $("<a>", {
+            "class": "btn ajax btn-default",
+            "href": "'.$url.'&field_variable=extra_theme_pl",
+            "text": "'.get_lang('Order').'"             
+        })
+    );
+        
     
     $("#extra_domaine_0, #extra_domaine_1, #extra_domaine_2").on("change", function() {
         var domainList = [];

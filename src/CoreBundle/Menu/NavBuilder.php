@@ -396,15 +396,15 @@ class NavBuilder implements ContainerAwareInterface
             $childClass = '';
             $hasChildren = $child->hasChildren();
             if ($hasChildren) {
-                $childClass = 'dropdown';
-                $child->setChildrenAttribute('class', 'dropdown-menu');
+                $childClass = 'nav-dropdown';
+                $child->setChildrenAttribute('class', 'nav-dropdown-items');
                 if ($child->isCurrent()) {
                     $child->setChildrenAttribute('style', 'display:block');
                 }
             }
 
             $child
-                ->setLinkAttribute('class', 'sidebar-link')
+                ->setLinkAttribute('class', 'nav-link')
                 ->setAttribute('class', 'nav-item '.$childClass)
             ;
 
@@ -414,7 +414,7 @@ class NavBuilder implements ContainerAwareInterface
 
             if ($hasChildren) {
                 $child
-                    ->setLinkAttribute('class', 'sidebar-link ') //dropdown-toggle
+                    ->setLinkAttribute('class', 'nav-link nav-dropdown-toggle ') //dropdown-toggle
                     //->setLinkAttribute('data-toggle', 'dropdown')
                     //->setLinkAttribute('role', 'button')
                     //->setLinkAttribute('aria-haspopup', 'true')

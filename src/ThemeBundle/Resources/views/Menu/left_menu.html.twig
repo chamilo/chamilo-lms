@@ -12,9 +12,9 @@
 
 {% block label %}
     {% if item.extras.icon is not null %}
-        <span class="icon-holder">
+
             <i class="fa fa-{{ item.extras.icon }}"></i>
-        </span>
+
     {% else %}
         <i class="far fa-circle"></i>
     {% endif %}
@@ -22,9 +22,7 @@
     {{ parent() }}
     </span>
     {% set childrenCount = item.children|length %}
-    {% if childrenCount > 0 %}
-        <span class="arrow"><i class="fas fa-angle-right"></i></span>
-    {% endif %}
+
 {% endblock %}
 
 {% block linkElement %}

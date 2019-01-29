@@ -182,7 +182,7 @@ function aiken_import_exercise($file)
     if (!empty($last_exercise_id)) {
         // For each question found...
         foreach ($exercise_info['question'] as $key => $question_array) {
-            //2.create question
+            // 2.create question
             $question = new Aiken2Question();
             $question->type = $question_array['type'];
             $question->setAnswer();
@@ -197,7 +197,10 @@ function aiken_import_exercise($file)
             $question->save($exercise);
 
             if (isset($question_array['code'])) {
-                $question->addCode($question_array['code']);
+                $result = $question->addCode($question_array['code']);
+                if (empty($result)) {
+                    Display::addFlash(Display::return_message(get_lang('QuestionCodeNotSaved')));
+                }
             }
 
             $last_question_id = $question->selectId();

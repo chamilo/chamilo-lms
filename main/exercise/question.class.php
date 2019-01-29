@@ -1761,14 +1761,16 @@ abstract class Question
         //Save normal question if NOT media
         if ($this->type != MEDIA_QUESTION) {
             $this->save($exercise);
-
-            if (api_is_platform_admin()) {
-                $this->addCode($form->getSubmitValue('code'));
-            }
-
             // modify the exercise
             $exercise->addToList($this->id);
             $exercise->update_question_positions();
+
+            if (api_is_platform_admin()) {
+                $result = $this->addCode($form->getSubmitValue('code'));
+                if (empty($result)) {
+                    Display::addFlash(Display::return_message(get_lang('QuestionCodeNotSaved')));
+                }
+            }
         }
     }
 
@@ -2379,11 +2381,18 @@ abstract class Question
         if (api_get_configuration_value('allow_question_code') && !empty($this->id)) {
             $code = Database::escape_string($code);
             $table = Database::get_course_table(TABLE_QUIZ_QUESTION);
-            $sql = "UPDATE $table SET code = '$code' 
-                    WHERE iid = {$this->id} AND c_id = {$this->course['real_id']}";
-            Database::query($sql);
 
-            return true;
+            $sql = "SELECT * FROM $table WHERE code = '$code' AND iid <> {$this->id}  ";
+            $result = Database::query($sql);
+            $rows = Database::num_rows($result);
+
+            if (empty($rows)) {
+                $sql = "UPDATE $table SET code = '$code' 
+                        WHERE iid = {$this->id} AND c_id = {$this->course['real_id']}";
+                Database::query($sql);
+
+                return true;
+            }
         }
 
         return false;

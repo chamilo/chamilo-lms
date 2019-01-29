@@ -168,24 +168,24 @@ trait GraphQLTrait
     }
 
     /**
-     * @return AccessUrl|null
+     * @return AccessUrl
      */
-    private function getAccessUrl(): ?AccessUrl
+    private function getAccessUrl(): AccessUrl
     {
         if (null === $this->currentAccessUrl) {
-            $host = $this->container->get('request_stack')->getCurrentRequest()->getSchemeAndHttpHost();
-
             $urlRepo = $this->em->getRepository('ChamiloCoreBundle:AccessUrl');
 
             if (!api_is_multiple_url_enabled()) {
                 $this->currentAccessUrl = $urlRepo->find(1);
             } else {
+                $host = $this->container->get('request_stack')->getCurrentRequest()->getSchemeAndHttpHost();
+
                 $this->currentAccessUrl = $urlRepo->findOneBy(['url' => "$host/"]);
             }
         }
 
         if (null === $this->currentAccessUrl) {
-            throw new UserError($this->translator->trans('Access url not allowed'));
+            throw new UserError($this->translator->trans('Access URL not allowed'));
         }
 
         return $this->currentAccessUrl;

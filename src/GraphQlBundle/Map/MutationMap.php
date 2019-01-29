@@ -249,7 +249,10 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
             throw new UserError($this->translator->trans('User not created'));
         }
 
-        \UrlManager::add_user_to_url($userId);
+        \UrlManager::add_user_to_url(
+            $userId,
+            $this->currentAccessUrl->getId()
+        );
         \UserManager::create_extra_field($originalUserIdName, \ExtraField::FIELD_TYPE_TEXT, $originalUserIdName, '');
         \UserManager::update_extra_field_value($userId, $originalUserIdName, $originalUserIdValue);
 

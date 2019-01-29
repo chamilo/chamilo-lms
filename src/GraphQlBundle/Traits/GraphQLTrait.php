@@ -3,6 +3,7 @@
 
 namespace Chamilo\GraphQlBundle\Traits;
 
+use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
@@ -21,6 +22,15 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 trait GraphQLTrait
 {
     use ContainerAwareTrait;
+
+    /**
+     * @var User
+     */
+    protected $currentUser;
+    /**
+     * @var AccessUrl
+     */
+    protected $currentAccessUrl;
 
     /**
      * @var EntityManager
@@ -47,6 +57,8 @@ trait GraphQLTrait
         $this->em = $container->get('doctrine.orm.entity_manager');
         $this->translator = $container->get('translator');
         $this->settingsManager = $container->get('chamilo.settings.manager');
+
+        $this->getAccessUrl();
     }
 
     /**
@@ -78,6 +90,8 @@ trait GraphQLTrait
         $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
         $this->container->get('security.token_storage')->setToken($token);
         $this->container->get('session')->set('_security_main', serialize($token));
+
+        $this->currentUser = $user;
     }
 
     /**
@@ -144,8 +158,36 @@ trait GraphQLTrait
      */
     private function getCurrentUser(): User
     {
-        $token = $this->container->get('security.token_storage')->getToken();
+        if (null === $this->currentUser) {
+            $token = $this->container->get('security.token_storage')->getToken();
 
-        return $token->getUser();
+            $this->currentUser = $token->getUser();
+        }
+
+        return $this->currentUser;
+    }
+
+    /**
+     * @return AccessUrl|null
+     */
+    private function getAccessUrl(): ?AccessUrl
+    {
+        if (null === $this->currentAccessUrl) {
+            $host = $this->container->get('request_stack')->getCurrentRequest()->getSchemeAndHttpHost();
+
+            $urlRepo = $this->em->getRepository('ChamiloCoreBundle:AccessUrl');
+
+            if (!api_is_multiple_url_enabled()) {
+                $this->currentAccessUrl = $urlRepo->find(1);
+            } else {
+                $this->currentAccessUrl = $urlRepo->findOneBy(['url' => "$host/"]);
+            }
+        }
+
+        if (null === $this->currentAccessUrl) {
+            throw new UserError($this->translator->trans('Access url not allowed'));
+        }
+
+        return $this->currentAccessUrl;
     }
 }

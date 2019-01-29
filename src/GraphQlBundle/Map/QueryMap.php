@@ -385,7 +385,7 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
     {
         $this->checkAuthorization();
 
-        return $this->getCurrentUser();
+        return $this->currentUser;
     }
 
     /**

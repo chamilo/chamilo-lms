@@ -36,6 +36,8 @@ type Mutation {
 type AuthenticatePayload {
     "Authorization token."
     token: String!
+    "ID for the URL"
+    urlId: Int!
 }
 
 "The status for each message in queue."

@@ -59,6 +59,7 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
         }
 
         return [
+            'urlId' => $this->currentAccessUrl->getId(),
             'token' => $this->encodeToken($user),
         ];
     }
@@ -72,9 +73,8 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
     {
         $this->checkAuthorization();
 
-        $currentUser = $this->getCurrentUser();
         $usersRepo = $this->em->getRepository('ChamiloUserBundle:User');
-        $users = $usersRepo->findUsersToSendMessage($currentUser->getId());
+        $users = $usersRepo->findUsersToSendMessage($this->currentUser->getId());
         $receivers = array_filter(
             $args['receivers'],
             function ($receiverId) use ($users) {
@@ -102,7 +102,7 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
                 0,
                 0,
                 0,
-                $currentUser->getId()
+                $this->currentUser->getId()
             );
 
             $result[] = [
@@ -152,22 +152,24 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
             throw new UserError($this->translator->trans('Course already exists'));
         }
 
-        $currentUser = $this->getCurrentUser();
-
         $params = [
             'title' => $title,
             'wanted_code' => $wantedCode,
             'category_code' => $categoryCode,
             //'tutor_name',
             'course_language' => $language,
-            'user_id' => $currentUser->getId(),
+            'user_id' => $this->currentUser->getId(),
             'visibility' => $visibility,
             'disk_quota' => $diskQuota,
             'subscribe' => !empty($allowSubscription),
             'unsubscribe' => !empty($allowUnsubscription),
         ];
 
-        $courseInfo = \CourseManager::create_course($params, $currentUser->getId());
+        $courseInfo = \CourseManager::create_course(
+            $params,
+            $this->currentUser->getId(),
+            $this->currentAccessUrl->getId()
+        );
 
         if (empty($courseInfo)) {
             throw new UserError($this->translator->trans('Course not created'));

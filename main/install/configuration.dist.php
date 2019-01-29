@@ -1084,6 +1084,9 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Option only when building an exercise as a teacher
 // $_configuration['question_pagination_lenght'] = 20;
 
+// Teachers cannot delete an exercise/questions, change exercise visibility, download to qti, clean results
+// $_configuration['limit_exercise_teacher_access'] = false;
+
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email

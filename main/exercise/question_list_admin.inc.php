@@ -15,8 +15,15 @@ use ChamiloSession as Session;
  *    It is included from the script admin.php
  */
 
+
+$limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
+
 // deletes a question from the exercise (not from the data base)
 if ($deleteQuestion) {
+    if ($limitTeacherAccess && !api_is_platform_admin()) {
+        exit;
+    }
+
     // if the question exists
     if ($objQuestionTmp = Question::read($deleteQuestion)) {
         $objQuestionTmp->delete($exerciseId);
@@ -277,6 +284,10 @@ if (!$inATest) {
                             'class' => 'opener btn btn-default btn-sm',
                         ]
                     );
+                }
+
+                if ($limitTeacherAccess && !api_is_platform_admin()) {
+                    $delete_link = '';
                 }
 
                 $btnActions = implode(

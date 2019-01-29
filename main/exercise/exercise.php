@@ -27,6 +27,9 @@ $htmlHeadXtra[] = api_get_css_asset('qtip2/jquery.qtip.min.css');
 
 // Access control
 api_protect_course_script(true);
+
+$limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
+
 require_once 'hotpotatoes.lib.php';
 
 /*  Constants and variables */
@@ -106,6 +109,9 @@ if (api_get_course_setting('enable_exercise_auto_launch') == 1 &&
 $nameTools = get_lang('Exercises');
 $errorXmlExport = null;
 if ($is_allowedToEdit && !empty($choice) && $choice === 'exportqti2') {
+    if ($limitTeacherAccess && !api_is_platform_admin()) {
+       api_not_allowed(true);
+    }
     require_once api_get_path(SYS_CODE_PATH).'exercise/export/qti2/qti2_export.php';
 
     $export = export_exercise_to_qti($exerciseId, true);
@@ -228,6 +234,10 @@ if ($is_allowedToEdit) {
                     case 'delete':
                         // deletes an exercise
                         if ($exercise_action_locked == false) {
+                            if ($limitTeacherAccess && !api_is_platform_admin()) {
+                                // Teacher cannot delete an exercise
+                                break;
+                            }
                             $objExerciseTmp->delete();
                             $link_info = GradebookUtils::isResourceInCourseGradebook(
                                 api_get_course_id(),
@@ -239,9 +249,15 @@ if ($is_allowedToEdit) {
                                 GradebookUtils::remove_resource_from_course_gradebook($link_info['id']);
                             }
                             echo Display::return_message(get_lang('ExerciseDeleted'), 'confirmation');
+
                         }
                         break;
                     case 'enable':
+                        if ($limitTeacherAccess && !api_is_platform_admin()) {
+                            // Teacher change exercise
+                            break;
+                        }
+
                         // enables an exercise
                         if (empty($sessionId)) {
                             $objExerciseTmp->enable();
@@ -264,6 +280,10 @@ if ($is_allowedToEdit) {
                         echo Display::return_message(get_lang('VisibilityChanged'), 'confirmation');
                         break;
                     case 'disable':
+                        if ($limitTeacherAccess && !api_is_platform_admin()) {
+                            // Teacher change exercise
+                            break;
+                        }
                         // disables an exercise
                         if (empty($sessionId)) {
                             $objExerciseTmp->disable();
@@ -307,6 +327,11 @@ if ($is_allowedToEdit) {
                         );
                         break;
                     case 'clean_results':
+                        if ($limitTeacherAccess && !api_is_platform_admin()) {
+                            // Teacher change exercise
+                            break;
+                        }
+
                         // Clean student results
                         if ($exercise_action_locked == false) {
                             $quantity_results_deleted = $objExerciseTmp->cleanResults(true);
@@ -338,6 +363,10 @@ if ($is_allowedToEdit) {
     if (!empty($hpchoice)) {
         switch ($hpchoice) {
             case 'delete':
+                if ($limitTeacherAccess && !api_is_platform_admin()) {
+                    // Teacher change exercise
+                    break;
+                }
                 // deletes an exercise
                 $imgparams = [];
                 $imgcount = 0;
@@ -367,7 +396,12 @@ if ($is_allowedToEdit) {
                 }
                 break;
             case 'enable': // enables an exercise
-                $newVisibilityStatus = "1"; //"visible"
+                if ($limitTeacherAccess && !api_is_platform_admin()) {
+                    // Teacher change exercise
+                    break;
+                }
+
+                $newVisibilityStatus = '1'; //"visible"
                 $query = "SELECT id FROM $TBL_DOCUMENT
                           WHERE c_id = $courseId AND path='".Database::escape_string($file)."'";
                 $res = Database::query($query);
@@ -383,6 +417,10 @@ if ($is_allowedToEdit) {
 
                 break;
             case 'disable': // disables an exercise
+                if ($limitTeacherAccess && !api_is_platform_admin()) {
+                    // Teacher change exercise
+                    break;
+                }
                 $newVisibilityStatus = '0'; //"invisible"
                 $query = "SELECT id FROM $TBL_DOCUMENT
                           WHERE c_id = $courseId AND path='".Database::escape_string($file)."'";
@@ -769,10 +807,15 @@ if (!empty($exerciseList)) {
                     );
 
                     // Test settings
-                    $actions .= Display::url(
+                    $settings = Display::url(
                         Display::return_icon('settings.png', get_lang('Configure'), '', ICON_SIZE_SMALL),
                         'exercise_admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']
                     );
+
+                    if ($limitTeacherAccess && !api_is_platform_admin()) {
+                        $settings = '';
+                    }
+                    $actions .= $settings;
 
                     // Exercise results
                     $actions .= '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.
@@ -816,7 +859,7 @@ if (!empty($exerciseList)) {
 
                     // Clean exercise
                     if ($locked == false) {
-                        $actions .= Display::url(
+                        $clean = Display::url(
                             Display::return_icon(
                                 'clean.png',
                                 get_lang('CleanStudentResults'),
@@ -830,7 +873,7 @@ if (!empty($exerciseList)) {
                             ]
                         );
                     } else {
-                        $actions .= Display::return_icon(
+                        $clean = Display::return_icon(
                             'clean_na.png',
                             get_lang('ResourceLockedByGradebook'),
                             '',
@@ -838,10 +881,16 @@ if (!empty($exerciseList)) {
                         );
                     }
 
+                    if ($limitTeacherAccess && !api_is_platform_admin()) {
+                        $clean = '';
+                    }
+
+                    $actions .= $clean;
+
                     // Visible / invisible
                     // Check if this exercise was added in a LP
                     if ($exercise->exercise_was_added_in_lp == true) {
-                        $actions .= Display::return_icon(
+                        $visibility = Display::return_icon(
                             'invisible.png',
                             get_lang('AddedToLPCannotBeAccessed'),
                             '',
@@ -849,7 +898,7 @@ if (!empty($exerciseList)) {
                         );
                     } else {
                         if ($row['active'] == 0 || $visibility == 0) {
-                            $actions .= Display::url(
+                            $visibility = Display::url(
                                 Display::return_icon(
                                     'invisible.png',
                                     get_lang('Activate'),
@@ -860,7 +909,7 @@ if (!empty($exerciseList)) {
                             );
                         } else {
                             // else if not active
-                            $actions .= Display::url(
+                            $visibility = Display::url(
                                 Display::return_icon(
                                     'visible.png',
                                     get_lang('Deactivate'),
@@ -871,8 +920,15 @@ if (!empty($exerciseList)) {
                             );
                         }
                     }
+
+                    if ($limitTeacherAccess && !api_is_platform_admin()) {
+                        $visibility = '';
+                    }
+
+                    $actions .= $visibility;
+
                     // Export qti ...
-                    $actions .= Display::url(
+                    $export = Display::url(
                         Display::return_icon(
                             'export_qti2.png',
                             'IMS/QTI',
@@ -881,6 +937,12 @@ if (!empty($exerciseList)) {
                         ),
                         'exercise.php?choice=exportqti2&exerciseId='.$row['id'].'&'.api_get_cidreq()
                     );
+
+                    if ($limitTeacherAccess && !api_is_platform_admin()) {
+                        $export = '';
+                    }
+
+                    $actions .= $export;
                 } else {
                     // not session
                     $actions = Display::return_icon(
@@ -890,7 +952,7 @@ if (!empty($exerciseList)) {
 
                     // Check if this exercise was added in a LP
                     if ($exercise->exercise_was_added_in_lp == true) {
-                        $actions .= Display::return_icon(
+                        $visiblity = Display::return_icon(
                             'invisible.png',
                             get_lang('AddedToLPCannotBeAccessed'),
                             '',
@@ -898,7 +960,7 @@ if (!empty($exerciseList)) {
                         );
                     } else {
                         if ($row['active'] == 0 || $visibility == 0) {
-                            $actions .= Display::url(
+                            $visiblity = Display::url(
                                 Display::return_icon(
                                     'invisible.png',
                                     get_lang('Activate'),
@@ -909,7 +971,7 @@ if (!empty($exerciseList)) {
                             );
                         } else {
                             // else if not active
-                            $actions .= Display::url(
+                            $visiblity = Display::url(
                                 Display::return_icon(
                                     'visible.png',
                                     get_lang('Deactivate'),
@@ -920,6 +982,12 @@ if (!empty($exerciseList)) {
                             );
                         }
                     }
+
+                    if ($limitTeacherAccess && !api_is_platform_admin()) {
+                        $visiblity = '';
+                    }
+
+                    $actions .= $visiblity;
 
                     $actions .= '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.
                         Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
@@ -934,9 +1002,10 @@ if (!empty($exerciseList)) {
                 }
 
                 // Delete
+                $delete = '';
                 if ($session_id == $row['session_id']) {
                     if ($locked == false) {
-                        $actions .= Display::url(
+                        $delete = Display::url(
                             Display::return_icon(
                                 'delete.png',
                                 get_lang('Delete'),
@@ -950,7 +1019,7 @@ if (!empty($exerciseList)) {
                             ]
                         );
                     } else {
-                        $actions .= Display::return_icon(
+                        $delete = Display::return_icon(
                             'delete_na.png',
                             get_lang('ResourceLockedByGradebook'),
                             '',
@@ -958,6 +1027,12 @@ if (!empty($exerciseList)) {
                         );
                     }
                 }
+
+                if ($limitTeacherAccess && !api_is_platform_admin()) {
+                    $delete = '';
+                }
+
+                $actions .= $delete;
 
                 // Number of questions
                 $random_label = null;

@@ -12,15 +12,13 @@
 
 {% block label %}
     {% if item.extras.icon is not null %}
-
             <i class="fa fa-{{ item.extras.icon }}"></i>
-
     {% else %}
         <i class="far fa-circle"></i>
     {% endif %}
-    <span class="title">
+
     {{ parent() }}
-    </span>
+
     {% set childrenCount = item.children|length %}
 
 {% endblock %}

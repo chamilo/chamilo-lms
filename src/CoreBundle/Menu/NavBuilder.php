@@ -409,7 +409,7 @@ class NavBuilder implements ContainerAwareInterface
             ;
 
             if ($child->isCurrent()) {
-                $child->setAttribute('class', 'nav-item open '.$childClass);
+                $child->setAttribute('class', 'nav-item '.$childClass);
             }
 
             if ($hasChildren) {
@@ -424,7 +424,7 @@ class NavBuilder implements ContainerAwareInterface
                 $children = $child->getChildren();
                 foreach ($children as $subChild) {
                     $subChild
-                        ->setLinkAttribute('class', 'sub-link ')
+                        ->setLinkAttribute('class', 'nav-link ')
                         ->setAttribute('class', 'nav-item ');
                 }
             }

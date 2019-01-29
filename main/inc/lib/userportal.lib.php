@@ -901,24 +901,24 @@ class IndexManager
                     'link' => api_get_path(WEB_PATH).'main/social/invitations.php',
                     'title' => get_lang('PendingInvitations').$total_invitations,
                 ];
-            } else {
-                $items[] = [
-                    'class' => 'personal-data',
-                    'icon' => Display::return_icon('database.png', get_lang('PersonalDataReport')),
-                    'link' => api_get_path(WEB_CODE_PATH).'social/personal_data.php',
-                    'title' => get_lang('PersonalDataReport'),
-                ];
             }
+        }
 
-            if (api_get_configuration_value('allow_my_files_link_in_homepage')) {
-                if (api_get_setting('allow_my_files') !== 'false') {
-                    $items[] = [
-                        'class' => 'myfiles-social',
-                        'icon' => Display::return_icon('sn-files.png', get_lang('Files')),
-                        'link' => api_get_path(WEB_PATH).'main/social/myfiles.php',
-                        'title' => get_lang('MyFiles'),
-                    ];
-                }
+        $items[] = [
+            'class' => 'personal-data',
+            'icon' => Display::return_icon('database.png', get_lang('PersonalDataReport')),
+            'link' => api_get_path(WEB_CODE_PATH).'social/personal_data.php',
+            'title' => get_lang('PersonalDataReport'),
+        ];
+
+        if (api_get_configuration_value('allow_my_files_link_in_homepage')) {
+            if (api_get_setting('allow_my_files') !== 'false') {
+                $items[] = [
+                    'class' => 'myfiles-social',
+                    'icon' => Display::return_icon('sn-files.png', get_lang('Files')),
+                    'link' => api_get_path(WEB_PATH).'main/social/myfiles.php',
+                    'title' => get_lang('MyFiles'),
+                ];
             }
         }
 

@@ -1,4 +1,72 @@
 {% autoescape false %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            /**
+             * Notifications Systems
+             */
+            $.get(
+                '{{ url('legacy_main', { name : 'inc/ajax/message.ajax.php'}) }}',
+                {'a': 'get_count_message'},
+                function (data) {
+                    var countFriends = data.ms_friends;
+                    var countInbox = data.ms_inbox
+                    if (countFriends != 0) {
+                        $("#notifications-social").removeClass('d-none');
+                        $("#notifications-social").append(countFriends);
+                    }
+                    if(countInbox != 0){
+                        $("#notifications-inbox").removeClass('d-none');
+                        $("#notifications-inbox").append(countInbox);
+                    }
+                }
+            );
+
+            $('#list_notifications_friends').on('click', e => {
+                const $listFriends = $('#list_friends .content');
+                let $html;
+                $.get(
+                    '{{ url('legacy_main', { name : 'inc/ajax/message.ajax.php'}) }}',
+                    {'a': 'get_notifications_friends'},
+                    function (data) {
+                        $listFriends.empty();
+                        for (let i in data){
+                            $html = '<a class="dropdown-item preview-item">';
+                            $html += '<div class="preview-thumbnail"><img class="rounded-circle" src="'+data[i].avatar+'"/></div>';
+                            $html += '<div class="preview-item-content flex-grow">';
+                            $html += '<h6 class="preview-subject">' + data[i].fullname + '<span class="date-ago float-right">'+data[i].date+'</span></h6>';
+                            $html += '<p class="preview-text">' + data[i].content + '</p>';
+                            $html += '</div></a>';
+                            $listFriends.append($html);
+                        }
+                    }
+                );
+            });
+
+            $('#list_notifications_inbox').on('click', e => {
+                const $listInbox = $('#list_inbox .content');
+                let $html;
+                $.get(
+                    '{{ url('legacy_main', { name : 'inc/ajax/message.ajax.php'}) }}',
+                    {'a': 'get_notifications_inbox'},
+                    function (data) {
+                        $listInbox.empty();
+                        for (let i in data){
+                            $html = '<a class="dropdown-item preview-item" href="'+data[i].url+'">';
+                            $html += '<div class="preview-thumbnail"><div class="preview-icon bg-info">';
+                            $html += '<i class="far fa-envelope"></i>';
+                            $html += '</div></div>';
+                            $html += '<div class="preview-item-content flex-grow">';
+                            $html += '<h6 class="preview-subject">' + data[i].fullname + '<span class="date-ago float-right">'+data[i].date+'</span></h6>';
+                            $html += '<p class="preview-text">' + data[i].title + '</p>';
+                            $html += '</div></a>';
+                            $listInbox.append($html);
+                        }
+                    }
+                );
+            });
+
+        });
+    </script>
 <header class="app-header navbar">
     <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
         <span class="navbar-toggler-icon"></span>
@@ -26,30 +94,54 @@
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
     </ul>
-    {% if app.user is not null and is_granted('IS_AUTHENTICATED_FULLY') %}
+
     <ul class="nav navbar-nav ml-auto">
+        {% if app.user is not null and is_granted('IS_AUTHENTICATED_FULLY') %}
         <li class="nav-item d-md-down-none">
             <a class="nav-link" href="#">
                 Mis cursos
             </a>
         </li>
-        <li class="nav-item d-md-down-none">
+        {#<li class="nav-item d-md-down-none">
             <a class="nav-link" href="#">
                 <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                 <span class="badge badge-pill badge-success">1</span>
             </a>
+        </li>#}
+        {% if language_form %}
+            <li class="nav-item d-md-down-none">
+                {{ language_form }}
+            </li>
+        {% endif %}
+        <li class="nav-item dropdown">
+            <a id="list_notifications_friends" class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                <i class="far fa-bell"></i>
+                <span id="notifications-social" class="badge badge-pill badge-danger"></span>
+            </a>
+            <ul id="list_friends" class="dropdown-menu dropdown-menu-right">
+                <a class="dropdown-item">
+                    {{ "Your recent notifications"|trans }}
+                    <span class="badge badge-pill badge-warning float-right">{{ "View all"|trans }}</span>
+                </a>
+                <div class="content">
+                    <div class="spinner"></div>
+                </div>
+            </ul>
         </li>
         <li class="nav-item d-md-down-none">
-            <a class="nav-link" href="#">
-                <i class="icon-bell"></i>
-                <span class="badge badge-pill badge-danger">5</span>
+            <a id="list_notifications_inbox" class="nav-link" href="#" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                <i class="far fa-envelope"></i>
+                <span id="notifications-inbox" class="badge badge-pill badge-info"></span>
             </a>
-        </li>
-        <li class="nav-item d-md-down-none">
-            <a class="nav-link" href="#">
-                <i class="fa fa-envelope-o"></i>
-                <span class="badge badge-pill badge-info">20</span>
-            </a>
+            <ul id="list_inbox" class="dropdown-menu dropdown-menu-right">
+                <a class="dropdown-item">
+                    {{ "Recent messages"|trans }}
+                    <span class="badge badge-pill badge-warning float-right">{{ "View all"|trans }}</span>
+                </a>
+                <div class="content">
+                    <div class="spinner"></div>
+                </div>
+            </ul>
         </li>
         <li class="nav-item dropdown">
 
@@ -77,24 +169,54 @@
                 <div class="dropdown-header text-center">
                     <strong>Settings</strong>
                 </div>
-                <a class="dropdown-item" href="#">
-                    <i class="fa fa-bell-o"></i> Notificaciones
-                    <span class="badge badge-info">42</span>
+                <a class="dropdown-item" href="{{ url('legacy_main', { 'name' : 'survey/pending.php' }) }}">
+                    <i class="fa fa-chart-pie"></i> {{ 'PendingSurveys'|trans }}
+                </a>
+                <a class="dropdown-item" title="{{ "MyCertificates"|trans }}"
+                   href="{{ url('legacy_main', { 'name' : 'gradebook/my_certificates.php' }) }}">
+                    <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                     {{ "MyCertificates"|trans }}
                 </a>
                 <a class="dropdown-item" href="{{ url('legacy_main', { 'name' : 'messages/inbox.php' }) }}">
-                    <i class="fa fa-envelope-o"></i> {{ "Inbox"|trans }}
+                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                     {{ "Inbox"|trans }}
                     <span class="badge badge-success">42</span>
                 </a>
                 <a class="dropdown-item" href="{{ url('legacy_main', { 'name' : 'auth/profile.php' }) }}">
-                    <i class="fa fa-user"></i> {{ "Edit profile"|trans }} </a>
+                    <i class="fa fa-user"></i>
+                     {{ "Edit profile"|trans }}
+                </a>
                 <a class="dropdown-item" href="#">
-                    <i class="fa fa-wrench"></i> Configuración</a>
+                    <i class="fa fa-wrench"></i> {{ "Configuration"|trans }}
+                </a>
 
-                <a class="dropdown-item" href="#">
-                    <i class="fa fa-lock"></i> Salir</a>
+                <a class="dropdown-item" id="logout_button" title="{{ "Logout"|trans }}"
+                   href="{{ path('legacy_main', { 'name' : '../public/logout'}) }}">
+                    <i class="fa fa-sign-out-alt"></i>
+                    {{ "Logout"|trans }}
+                </a>
+
             </div>
         </li>
-    </ul>
+    {% else %}
+
+        <li class="nav-item d-md-down-none">
+            <a class="btn btn-light btn-sm mr-2" href="{{ url('legacy_main', { 'name' : 'auth/inscription.php' }) }}">
+                <i class="fas fa-pencil-alt"></i>
+                {{ "Register"|trans }}
+            </a>
+        </li>
+        <li class="nav-item d-md-down-none">
+            <a class="btn btn-light btn-sm mr-2" href="{{ url('legacy_main', { 'name' : '../public/login' }) }}">
+                <i class="fas fa-sign-in-alt"></i>
+                {{ "Sign in"|trans }}
+            </a>
+        </li>
+
     {% endif %}
+    </ul>
+
+
+
 </header>
 {% endautoescape %}

@@ -3,14 +3,14 @@
 {% block content %}
     {% autoescape false %}
 
-    <section class="section-slider">
+    <section class="section-slider pb-5 pt-5">
         <div class="container">
             {% if chamilo_settings_get('announcement.hide_global_announcements_when_not_connected') == 'false' %}
                 {{ render(controller('ChamiloCoreBundle:News:news')) }}
             {% endif %}
         </div>
     </section>
-    <section class="section-welcome">
+    <section class="section-welcome pb-5 pt-5">
         <div class="container">
             {{ render(controller('ChamiloPageBundle:Page:renderPage', {'slug': 'welcome'} )) }}
         </div>

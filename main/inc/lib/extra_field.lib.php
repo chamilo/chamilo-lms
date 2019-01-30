@@ -2079,11 +2079,20 @@ class ExtraField extends Model
                             $field_details['display_text'],
                             ['id' => 'extra_'.$field_details['variable']]
                         );
+
+                        $form->addHidden(
+                            'extra_'.$field_details['variable'].'_coordinates',
+                            '',
+                            ['id' => 'extra_'.$field_details['variable'].'_coordinates']
+                        );
+
                         $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
                         $form->applyFilter('extra_'.$field_details['variable'], 'trim');
                         if ($freezeElement) {
                             $form->freeze('extra_'.$field_details['variable']);
                         }
+
+                        $dataValue = addslashes($dataValue);
 
                         $form->addHtml("
                             <script>
@@ -2166,9 +2175,11 @@ class ExtraField extends Model
                                             if (status == google.maps.GeocoderStatus.OK) {
                                                 if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {
                                                     map_{$field_details['variable']}.setCenter(results[0].geometry.location);
-                                                    if (!address) {
-                                                        $('#extra_{$field_details['variable']}').val(results[0].formatted_address);
-                                                    }
+                                                    //if (!address) {
+                                                        $('#extra_{$field_details['variable']}').val(results[0].formatted_address);                                                        
+                                                        $('#extra_{$field_details['variable']}_coordinates').val(
+                                                            results[0].geometry.location.lat()+','+results[0].geometry.location.lng());
+                                                    //}
                                                     var infowindow = new google.maps.InfoWindow({
                                                         content: '<b>' + $('#extra_{$field_details['variable']}').val() + '</b>',
                                                         size: new google.maps.Size(150, 50)
@@ -2203,7 +2214,7 @@ class ExtraField extends Model
                                         id="geolocalization_extra_'.$field_details['variable'].'"
                                         name="geolocalization_extra_'.$field_details['variable'].'"
                                         type="submit">
-                                        <em class="fa fa-map-marker"></em> '.get_lang('Geolocalization').'
+                                        <em class="fa fa-map-marker"></em> '.get_lang('SearchGeolocalization').'
                                     </button>
                                     <button class="null btn btn-default" id="myLocation_extra_'.$field_details['variable'].'"
                                         name="myLocation_extra_'.$field_details['variable'].'"

@@ -2580,6 +2580,11 @@ class SocialManager extends UserManager
                         .' '.implode(',', $data).'</li>';
                 } else {
                     switch ($extraFieldInfo['field_type']) {
+                        case ExtraField::FIELD_TYPE_GEOLOCALIZATION:
+                            $data = explode('::', $data);
+                            $data = $data[0];
+                            $extra_information_value .= '<li class="list-group-item">'.ucfirst($extraFieldInfo['display_text']).': '.$data.'</li>';
+                            break;
                         case ExtraField::FIELD_TYPE_DOUBLE_SELECT:
                             $id_options = explode('::', $data);
                             $value_options = [];

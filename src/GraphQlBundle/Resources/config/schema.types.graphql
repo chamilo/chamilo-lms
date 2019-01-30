@@ -19,6 +19,16 @@ type Mutation {
         subject: String!,
         content: String!
     ): [ViewerSendMessagePayload!]
+    createCourse(
+        course: CreateCourseInput!,
+        originalCourseIdName: String!,
+        originalCourseIdValue: String!
+    ): Course
+    createUser(
+        user: CreateUserInput!,
+        originalUserIdName: String!,
+        originalUserIdValue: String!
+    ): User
 }
 
 # Objects
@@ -26,6 +36,8 @@ type Mutation {
 type AuthenticatePayload {
     "Authorization token."
     token: String!
+    "ID for the URL"
+    urlId: Int!
 }
 
 "The status for each message in queue."
@@ -346,6 +358,41 @@ enum CourseToolType {
     TOOL_CALENDAR_EVENT
     TOOL_DOCUMENT
     TOOL_LEARNPATH
+}
+
+"One of visibility of thhe course"
+enum CourseVisibility {
+    COURSE_VISIBILITY_OPEN_WORLD
+    COURSE_VISIBILITY_OPEN_PLATFORM
+    COURSE_VISIBILITY_REGISTERED
+    COURSE_VISIBILITY_CLOSED
+    COURSE_VISIBILITY_HIDDEN
+}
+
+# Inputs
+
+input CreateCourseInput {
+    title: String!,
+    categoryCode: String,
+    wantedCode: String,
+    language: String = "en",
+    diskQuota: Int = 100,
+    visibility: CourseVisibility,
+    allowSubscription: Boolean = true,
+    allowUnsubscription: Boolean = false
+}
+
+input CreateUserInput {
+    firstname: String!,
+    lastname: String!,
+    status: UserStatus!,
+    email: String!,
+    username: String!,
+    password: String!,
+    isActive: Boolean = true,
+    language: String,
+    phone: String,
+    expirationDate: DateTime
 }
 
 # Scalars

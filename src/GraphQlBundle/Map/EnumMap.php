@@ -46,6 +46,13 @@ class EnumMap extends ResolverMap implements ContainerAwareInterface
                 'TOOL_DOCUMENT' => TOOL_DOCUMENT,
                 'TOOL_LEARNPATH' => TOOL_LEARNPATH,
             ],
+            'CourseVisibility' => [
+                'COURSE_VISIBILITY_OPEN_WORLD' => COURSE_VISIBILITY_OPEN_WORLD,
+                'COURSE_VISIBILITY_OPEN_PLATFORM' => COURSE_VISIBILITY_OPEN_PLATFORM,
+                'COURSE_VISIBILITY_REGISTERED' => COURSE_VISIBILITY_REGISTERED,
+                'COURSE_VISIBILITY_CLOSED' => COURSE_VISIBILITY_CLOSED,
+                'COURSE_VISIBILITY_HIDDEN' => COURSE_VISIBILITY_HIDDEN,
+            ],
         ];
     }
 }

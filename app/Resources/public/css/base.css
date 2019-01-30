@@ -24,8 +24,10 @@ body {
     bottom: 0;
     width: 100%;
     /* Set the fixed height of the footer here */
-    height: 60px;
+    height: auto;
     background-color: #f5f5f5;
+    display: inline-flex;
+    padding-bottom: 15px;
 }
 /* Custom page CSS
 -------------------------------------------------- */

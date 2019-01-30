@@ -82,6 +82,6 @@ function start()
     }
 }
 </script>
-<script async defer type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyCDtuO5HrqpXlxcSYEN9R0y7sG_vEh6UH8&callback=start"></script>
+<script async defer type="text/javascript" src="https://maps.google.com/maps/api/js?key={{ api_key }}&callback=start"></script>
 
 {% endblock %}

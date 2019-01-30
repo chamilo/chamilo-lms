@@ -53,8 +53,8 @@ if (!empty($users)) {
 }
 
 $apiKey = api_get_configuration_value('google_api_key');
-$htmlHeadXtra[] = '<script type="text/javascript" src="https://cdn.rawgit.com/googlemaps/js-marker-clusterer/gh-pages/src/markerclusterer.js"></script>';
-$htmlHeadXtra[] = '<script type="text/javascript" src="https://jawj.github.com/OverlappingMarkerSpiderfier/bin/oms.min.js"></script>';
+$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_JS_PATH).'map/markerclusterer.js"></script>';
+$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_JS_PATH).'map/oms.min.js"></script>';
 
 $tpl = new Template(null);
 $tpl->assign('url', api_get_path(WEB_CODE_PATH).'social/profile.php');
@@ -82,6 +82,8 @@ $tpl->assign(
 );
 
 $tpl->assign('places', json_encode($data));
+$tpl->assign('api_key', $apiKey);
+
 
 $layout = $tpl->get_template('social/map.tpl');
 $tpl->display($layout);

@@ -17,7 +17,7 @@
 {% endblock %}
 
 <body
-    class="{{ section_name }} app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show"
+    class="{{ section_name }} app header-fixed sidebar-fixed aside-menu-fixed"
     {{ sonata_seo_html_attributes() }}
     data-in-course="{{ course ? 'true' : 'false' }}"
     data-course-code="{{ course ? course.code : '' }}"
@@ -29,7 +29,7 @@
 
 <!-- HEADER -->
     {% block page_header %}
-        {% include '@ChamiloTheme/Layout/_header.html.twig' %}
+        {% include '@ChamiloTheme/Layout/header.html.twig' %}
     {% endblock %}
 <!-- END HEADER -->
 
@@ -37,7 +37,7 @@
 
     <!-- SIDEBAR -->
     {% block page_sidebar %}
-        {% include '@ChamiloTheme/Layout/_sidebar.html.twig' %}
+        {% include '@ChamiloTheme/Layout/sidebar.html.twig' %}
     {% endblock %}
     <!-- END SIDEBAR -->
 
@@ -54,14 +54,13 @@
         <!-- END CONTENT -->
     </div>
 
-
 </div>
 {% endblock %}
 <!-- END PAGE -->
 
 <!-- FOOTER -->
 {% block page_footer %}
-    {% include '@ChamiloTheme/Layout/_footer.html.twig' %}
+    {% include '@ChamiloTheme/Layout/footer.html.twig' %}
 {% endblock %}
 <!-- END FOOTER -->
 

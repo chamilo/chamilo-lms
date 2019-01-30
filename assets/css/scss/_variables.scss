@@ -12,6 +12,7 @@ $breakpoint-xs : 480px;
 // GREYSCALE COLORS
 // ---------------------------------------------------------
 
+$grey-0               : #ffffff;
 $grey-100             : #f9fafb;
 $grey-200             : #f2f3f5;
 $grey-300             : #e6eaf0;
@@ -52,12 +53,6 @@ $menu-secondary       : #ff3c7e;
 
 // SIDEBAR
 $sidebar-background   : #0BADFE;
-$sidebar-focus        : #42BEFF;
-$sidebar-link         : #FFFFFF;
-$sidebar-div-top      : #19D3FF;
-$sidebar-div-down     : #0caffe;
-$sidebar-current      : #0aa4f1;
-$sidebar-dropdown     : $sidebar-current;
 
 $header-link          : #54667a;
 $header-hover         : #ff3c7e;

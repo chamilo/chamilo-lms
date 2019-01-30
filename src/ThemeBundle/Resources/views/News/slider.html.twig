@@ -1,17 +1,8 @@
 {% import '@ChamiloTheme/Macros/box.html.twig' as macro %}
 
 {% autoescape false %}
-    {% set buttons %}
-        {% if is_granted('ROLE_ADMIN') %}
-            <a  href="{{ url('legacy_index') }}main/admin/system_announcements.php" class="btn btn-light btn-sm" >
-                <i class="fas fa-pencil-alt"></i>
-            </a>
-        {% endif %}
-    {% endset %}
-    {% set content %}
-
-    {{ macro.box_header("System announcements" | trans, buttons) }}
-
+{% set content %}
+    {% if announcements %}
     <div id="carousel-announcement" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
             {% for announcement in announcements %}
@@ -46,6 +37,22 @@
             <span class="sr-only">Next</span>
         </a>
     </div>
-    {% endset %}
+    {% else %}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="block-platform d-none d-block">
+                    <h1>{{ "Accelerate your future. Learn where you want and when you want"|trans }}</h1>
+                    <h5>{{ "Develop your skills with Chamilo 2.0"|trans }}</h5>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <img class="d-block w-100" data-src="slide" alt="" src="{{ asset('img/intro_chamilo.svg') }}"
+                     data-holder-rendered="true">
+            </div>
+        </div>
+    {% endif %}
+{% endset %}
+
     {{ content }}
+
 {% endautoescape %}

@@ -11,17 +11,21 @@
 
 {% set welcome %}
 
-    {{ macro.box_header("Introduction of platform" | trans, buttons) }}
+    {{ buttons }}
 
     {% if content %}
         {{ content }}
     {% else %}
         <div class="row">
-            <div class="col-md-4">
-                <img class="img-fluid" src="{{ asset('img/developer.svg') }}">
+            <div class="col-md-6">
+                <div class="text-center">
+                    <img class="img-fluid" src="{{ asset('img/developer.svg') }}">
+                </div>
             </div>
-            <div class="col-md-8">
-                <h2>{{ "Congratulations, you have successfully installed your Chamilo e-learning portal!"|trans }}</h2>
+            <div class="col-md-6">
+                <h4>{{ "Community"|trans }}</h4>
+                <h1>{{ "Hello and welcome to the new Chamilo 2.0"|trans }}</h1>
+                <p>{{ "We create the easiest to use online learning environment, we involve educators to improve our world ..."|trans }}</p>
                 <p>{{ "You can always find more information about this software on our website:"|trans }} <a href="http://www.chamilo.org" target="_blank"> http://www.chamilo.org</a>.</p>
                 <p>{{ "Have fun, do not hesitate to join the community and give us your opinion through our forum:"|trans }} <a href="https://forum.chamilo.org/" target="_blank">https://forum.chamilo.org/</a></p>
             </div>

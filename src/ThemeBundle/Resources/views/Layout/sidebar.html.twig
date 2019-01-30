@@ -1,47 +1,32 @@
 {% autoescape false %}
-<ul class="sidebar-menu scrollable pos-r">
+<div class="sidebar">
+    <nav class="sidebar-nav">
 
-    <form class="form-inline sidebar-search mt-2">
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-search">
-                    <i class="fa fa-search"></i>
-                </span>
-            </div>
-            <input type="text" class="form-control" placeholder="{{ 'Search'|trans }}" aria-label="{{ 'Search'|trans }}" aria-describedby="basic-search">
-        </div>
-    </form>
+        {% set menu = knp_menu_get('menuApp') %}
+        {{ knp_menu_render(menu, {'ancestorClass': 'current_open open', 'template': '@ChamiloTheme/Menu/left_menu.html.twig'}) }}
 
-    {% set menu = knp_menu_get('menuApp') %}
 
-    <li class="sidebar-divider"></li>
-
-    {{ knp_menu_render(menu, {'ancestorClass': 'current_open open', 'template': '@ChamiloTheme/Menu/left_menu.html.twig'}) }}
-
-    <li class="sidebar-divider"></li>
-    <li class="nav-item">
-        <a class='sidebar-link' href="https://docs.chamilo.org/">
-            <span class="icon-holder">
-                <i class="far fa-file-alt"></i>
-            </span>
-            {{ "Documentation"|trans }}
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class='sidebar-link' href="https://forum.chamilo.org/">
-            <span class="icon-holder">
-                <i class="fa fa-users"></i>
-            </span>
-            {{ "Forums"|trans }}
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class='sidebar-link' href="https://github.com/chamilo/chamilo-lms">
-            <span class="icon-holder">
-                <i class="fab fa-github"></i>
-            </span>
-            {{ "GithubRepository"|trans }}
-        </a>
-    </li>
-</ul>
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class='nav-link' href="https://docs.chamilo.org/">
+                    <i class="far fa-file-alt"></i>
+                    {{ "Documentation"|trans }}
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class='nav-link' href="https://forum.chamilo.org/">
+                    <i class="fa fa-users"></i>
+                    {{ "Forums"|trans }}
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class='nav-link' href="https://github.com/chamilo/chamilo-lms">
+                    <i class="fab fa-github"></i>
+                    {{ "GithubRepository"|trans }}
+                </a>
+            </li>
+        </ul>
+    </nav>
+    {#<button class="sidebar-minimizer brand-minimizer" type="button"></button>#}
+</div>
 {% endautoescape %}

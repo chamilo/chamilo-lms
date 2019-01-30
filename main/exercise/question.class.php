@@ -18,6 +18,7 @@ use Chamilo\CourseBundle\Entity\CQuizAnswer;
 abstract class Question
 {
     public $id;
+    public $iid;
     public $question;
     public $description;
     public $weighting;
@@ -77,6 +78,7 @@ abstract class Question
     public function __construct()
     {
         $this->id = 0;
+        $this->iid = 0;
         $this->question = '';
         $this->description = '';
         $this->weighting = 0;
@@ -155,6 +157,7 @@ abstract class Question
             $objQuestion = self::getInstance($object->type);
             if (!empty($objQuestion)) {
                 $objQuestion->id = (int) $id;
+                $objQuestion->iid = (int) $object->iid;
                 $objQuestion->question = $object->question;
                 $objQuestion->description = $object->description;
                 $objQuestion->weighting = $object->ponderation;
@@ -232,8 +235,8 @@ abstract class Question
     {
         $showQuestionTitleHtml = api_get_configuration_value('save_titles_as_html');
         $title = '';
-        if (!empty($this->code) && api_get_configuration_value('allow_question_code')) {
-            $title .= '<h4>'.$this->code.'</h4>';
+        if (api_get_configuration_value('show_question_id')) {
+            $title .= '<h4>#'.$this->iid.'</h4>';
         }
 
         $title .= $showQuestionTitleHtml ? '' : '<strong>';
@@ -1683,10 +1686,6 @@ abstract class Question
             //$form->addElement('select', 'parent_id', get_lang('AttachToMedia'), $course_medias);
         }
 
-        if (api_get_configuration_value('allow_question_code') && api_is_platform_admin()) {
-            $form->addText('code', get_lang('QuestionCode'));
-        }
-
         $form->addElement('html', '</div>');
 
         if (!isset($_GET['fromExercise'])) {
@@ -1726,10 +1725,6 @@ abstract class Question
         $defaults['questionCategory'] = $this->category;
         $defaults['feedback'] = $this->feedback;
 
-        if (api_get_configuration_value('allow_question_code') && api_is_platform_admin()) {
-            $defaults['code'] = $this->code;
-        }
-
         // Came from he question pool
         if (isset($_GET['fromExercise'])) {
             $form->setDefaults($defaults);
@@ -1764,13 +1759,6 @@ abstract class Question
             // modify the exercise
             $exercise->addToList($this->id);
             $exercise->update_question_positions();
-
-            if (api_is_platform_admin()) {
-                $result = $this->addCode($form->getSubmitValue('code'));
-                if (empty($result)) {
-                    Display::addFlash(Display::return_message(get_lang('QuestionCodeNotSaved')));
-                }
-            }
         }
     }
 
@@ -2369,33 +2357,6 @@ abstract class Question
             ->getSingleScalarResult();
 
         return $count > 1;
-    }
-
-    /**
-     * @param string $code
-     *
-     * @return bool
-     */
-    public function addCode($code)
-    {
-        if (api_get_configuration_value('allow_question_code') && !empty($this->id)) {
-            $code = Database::escape_string($code);
-            $table = Database::get_course_table(TABLE_QUIZ_QUESTION);
-
-            $sql = "SELECT * FROM $table WHERE code = '$code' AND iid <> {$this->id}  ";
-            $result = Database::query($sql);
-            $rows = Database::num_rows($result);
-
-            if (empty($rows)) {
-                $sql = "UPDATE $table SET code = '$code' 
-                        WHERE iid = {$this->id} AND c_id = {$this->course['real_id']}";
-                Database::query($sql);
-
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**

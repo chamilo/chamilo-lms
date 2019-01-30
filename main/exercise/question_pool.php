@@ -35,6 +35,8 @@ $selected_course = isset($_GET['selected_course']) ? intval($_GET['selected_cour
 $course_id_changed = isset($_GET['course_id_changed']) ? intval($_GET['course_id_changed']) : null;
 // save the id of the previous exercise selected by user to reset menu if we detect that user change course hub 13-10-2011
 $exercise_id_changed = isset($_GET['exercise_id_changed']) ? intval($_GET['exercise_id_changed']) : null;
+$questionId = isset($_GET['question_id']) && !empty($_GET['question_id']) ? (int) $_GET['question_id'] : '';
+$description = isset($_GET['description']) ? Database::escape_string($_GET['description']) : '';
 
 // by default when we go to the page for the first time, we select the current course
 if (!isset($_GET['selected_course']) && !isset($_GET['exerciseId'])) {
@@ -49,12 +51,12 @@ if (empty($objExercise) && !empty($fromExercise)) {
 }
 
 $nameTools = get_lang('QuestionPool');
-$interbreadcrumb[] = ["url" => "exercise.php?".api_get_cidreq(), "name" => get_lang('Exercises')];
+$interbreadcrumb[] = ['url' => 'exercise.php?'.api_get_cidreq(), 'name' => get_lang('Exercises')];
 
 if (!empty($objExercise)) {
     $interbreadcrumb[] = [
-        "url" => "admin.php?exerciseId=".$objExercise->id."&".api_get_cidreq(),
-        "name" => $objExercise->selectTitle(true),
+        'url' => 'admin.php?exerciseId='.$objExercise->id.'&'.api_get_cidreq(),
+        'name' => $objExercise->selectTitle(true),
     ];
 }
 
@@ -71,9 +73,7 @@ if ($is_allowedToEdit) {
         $old_question_obj = Question::read($old_question_id, $origin_course_id);
         $courseId = $current_course['real_id'];
         if ($old_question_obj) {
-            $old_question_obj->updateTitle(
-                $old_question_obj->selectTitle().' - '.get_lang('Copy')
-            );
+            $old_question_obj->updateTitle($old_question_obj->selectTitle().' - '.get_lang('Copy'));
             //Duplicating the source question, in the current course
             $new_id = $old_question_obj->duplicate($current_course);
             //Reading new question
@@ -97,6 +97,10 @@ if ($is_allowedToEdit) {
 
     // Deletes a question from the database and all exercises
     if ($delete) {
+        $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
+        if ($limitTeacherAccess && !api_is_platform_admin()) {
+            api_not_allowed(true);
+        }
         // Construction of the Question object
         $objQuestionTmp = Question::read($delete);
         // if the question exists
@@ -207,10 +211,9 @@ Display::display_header($nameTools, 'Exercise');
 
 // Menu
 echo '<div class="actions">';
+$url = api_get_self();
 if (isset($type)) {
     $url = api_get_self().'?type=1';
-} else {
-    $url = api_get_self();
 }
 if (isset($fromExercise) && $fromExercise > 0) {
     echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$fromExercise.'">'.
@@ -224,9 +227,9 @@ if (isset($fromExercise) && $fromExercise > 0) {
 }
 echo '</div>';
 
-if ($displayMessage != "") {
+if ($displayMessage != '') {
     echo Display::return_message($displayMessage, 'confirm');
-    $displayMessage = "";
+    $displayMessage = '';
 }
 
 // Form
@@ -417,6 +420,12 @@ $select_answer_html = Display::select(
 );
 
 echo Display::form_row(get_lang('AnswerType'), $select_answer_html);
+echo Display::form_row(get_lang('Id'), Display::input('text', 'question_id', $questionId));
+echo Display::form_row(
+    get_lang('Description'),
+    Display::input('text', 'description', Security::remove_XSS($description))
+);
+
 $button = '<button class="btn btn-primary save" type="submit" name="name" value="'.get_lang('Filter').'">'.get_lang('Filter').'</button>';
 echo Display::form_row('', $button);
 echo "<input type='hidden' id='course_id_changed' name='course_id_changed' value='0' />";
@@ -446,6 +455,15 @@ if ($exerciseId > 0) {
     if (isset($answerType) && $answerType > 0) {
         $where .= ' AND type='.$answerType;
     }
+
+    if (!empty($questionId)) {
+        $where .= ' AND qu.iid='.$questionId;
+    }
+
+    if (!empty($description)) {
+        $where .= " AND qu.description LIKE '%$description%'";
+    }
+
     $sql = "SELECT DISTINCT
                 id,
                 question,
@@ -484,6 +502,14 @@ if ($exerciseId > 0) {
     $answer_where = '';
     if (isset($answerType) && $answerType > 0 - 1) {
         $answer_where = ' AND type='.$answerType;
+    }
+
+    if (!empty($questionId)) {
+        $answer_where .= ' AND q.iid='.$questionId;
+    }
+
+    if (!empty($description)) {
+        $answer_where .= " AND q.description LIKE '%$description%'";
     }
 
     // @todo fix this query with the new id field
@@ -546,6 +572,14 @@ if ($exerciseId > 0) {
     }
     if (isset($answerType) && $answerType > 0) {
         $filter .= ' AND qu.type='.$answerType.' ';
+    }
+
+    if (!empty($questionId)) {
+        $filter .= ' AND qu.iid='.$questionId;
+    }
+
+    if (!empty($description)) {
+        $filter .= " AND qu.description LIKE '%$description%'";
     }
 
     if (!empty($session_id) && $session_id != '-1') {
@@ -900,11 +934,16 @@ function get_action_icon_for_question(
     $in_session_id,
     $in_exercise_id
 ) {
+    $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
     $getParams = "&selected_course=$in_selected_course&courseCategoryId=$in_courseCategoryId&exerciseId=$in_exercise_id&exerciseLevel=$in_exerciseLevel&answerType=$in_answerType&session_id=$in_session_id";
+    $res = '';
     switch ($in_action) {
         case 'delete':
+            if ($limitTeacherAccess && !api_is_platform_admin()) {
+                break;
+            }
             $res = "<a href='".api_get_self()."?".api_get_cidreq().$getParams."&delete=$in_questionid' onclick='return confirm_your_choice()'>";
-            $res .= Display::return_icon("delete.png", get_lang('Delete'));
+            $res .= Display::return_icon('delete.png', get_lang('Delete'));
             $res .= "</a>";
             break;
         case 'edit':
@@ -913,7 +952,7 @@ function get_action_icon_for_question(
                 $from_exercise,
                 $in_questionid,
                 $in_questiontype,
-                Display::return_icon("edit.png", get_lang('Modify')),
+                Display::return_icon('edit.png', get_lang('Modify')),
                 $in_session_id
             );
             break;

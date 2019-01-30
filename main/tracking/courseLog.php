@@ -221,6 +221,7 @@ $users_tracking_per_page = '';
 if (isset($_GET['users_tracking_per_page'])) {
     $users_tracking_per_page = '&users_tracking_per_page='.intval($_GET['users_tracking_per_page']);
 }
+
 $actionsRight .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&'.$addional_param.$users_tracking_per_page.'">
      '.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_MEDIUM).'</a>';
 $actionsRight .= '</div>';
@@ -338,6 +339,7 @@ $trackingDirection = isset($_GET['users_tracking_direction']) ? $_GET['users_tra
 // Show the charts part only if there are students subscribed to this course/session
 if ($nbStudents > 0) {
     $usersTracking = TrackingCourseLog::get_user_data(null, $nbStudents, $trackingColumn, $trackingDirection, false);
+
     $numberStudentsCompletedLP = 0;
     $averageStudentsTestScore = 0;
     $scoresDistribution = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -477,9 +479,7 @@ if (count($a_students) > 0) {
     $table = new SortableTable(
         'users_tracking',
         ['TrackingCourseLog', 'get_number_of_users'],
-        function () use ($usersTracking) {
-            return $usersTracking;
-        },
+        ['TrackingCourseLog', 'get_user_data'],
         1
     );
 

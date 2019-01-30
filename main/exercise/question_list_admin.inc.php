@@ -15,7 +15,6 @@ use ChamiloSession as Session;
  *    It is included from the script admin.php
  */
 
-
 $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
 
 // deletes a question from the exercise (not from the data base)
@@ -240,7 +239,7 @@ if (!$inATest) {
                     api_get_self().'?'.api_get_cidreq().'&clone_question='.$id,
                     ['class' => 'btn btn-default btn-sm']
                 );
-                $edit_link = ($objQuestionTmp->type == CALCULATED_ANSWER && $objQuestionTmp->isAnswered())
+                $edit_link = $objQuestionTmp->type == CALCULATED_ANSWER && $objQuestionTmp->isAnswered()
                     ? Display::span(
                         Display::return_icon(
                             'edit_na.png',

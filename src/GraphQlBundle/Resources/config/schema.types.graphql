@@ -29,6 +29,10 @@ type Mutation {
         originalUserIdName: String!,
         originalUserIdValue: String!
     ): User
+    subscribeUserToCourse(
+        user: Int!
+        course: Int!
+    ): Boolean
 }
 
 # Objects

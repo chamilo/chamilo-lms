@@ -4,6 +4,7 @@
 namespace Chamilo\GraphQlBundle\Map;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Manager\AccessUrlManager;
 use Chamilo\GraphQlBundle\Traits\GraphQLTrait;
 use Chamilo\UserBundle\Entity\User;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -257,5 +258,50 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
         \UserManager::update_extra_field_value($userId, $originalUserIdName, $originalUserIdValue);
 
         return $this->em->find('ChamiloUserBundle:User', $userId);
+    }
+
+    /**
+     * @param Argument $args
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     *
+     * @return bool
+     */
+    protected function resolveSubscribeUserToCourse(Argument $args): bool
+    {
+        $this->checkAuthorization();
+
+        $checker = $this->container->get('security.authorization_checker');
+
+        if (false === $checker->isGranted('ROLE_ADMIN')) {
+            throw new UserError($this->translator->trans('Not allowed'));
+        }
+
+        /** @var User $user */
+        $user = $this->em->find('ChamiloUserBundle:User', $args['user']);
+        /** @var Course $course */
+        $course = $this->em->find('ChamiloCoreBundle:Course', $args['course']);
+
+        if (null === $user) {
+            throw new UserError($this->translator->trans('User not found'));
+        }
+
+        if (null === $course) {
+            throw new UserError($this->translator->trans('Course not found'));
+        }
+
+        if (!\UrlManager::relation_url_user_exist($user->getId(), $this->currentAccessUrl->getId())) {
+            throw new UserError($this->translator->trans('User not registered in this URL'));
+        }
+
+        if (!\UrlManager::relation_url_course_exist($course->getId(), $this->currentAccessUrl->getId())) {
+            throw new UserError($this->translator->trans('Course not registered in this URL'));
+        }
+
+        $isSubscribed = \CourseManager::subscribeUser($user->getId(), $course->getCode());
+
+        return $isSubscribed;
     }
 }

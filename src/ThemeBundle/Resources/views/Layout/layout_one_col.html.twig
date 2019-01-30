@@ -27,28 +27,26 @@
         </div>
     {% endif %}
 
-    <section id="content-section">
-        <div class="row">
-            <div class="col-xs-12 col-md-12">
-                {% autoescape false %}
+    <section class="section-content">
 
-                {% if actions != '' %}
-                    {{ actions }}
-                {% endif %}
+        {% autoescape false %}
 
-                {% block chamilo_messages %}
-                {% include '@ChamiloTheme/FlashMessage/render.html.twig' %}
-                {% endblock %}
+        {% if actions != '' %}
+            {{ actions }}
+        {% endif %}
 
-                {# Content #}
-                {% block content %}
-                <section id="main_content">
-                    {{ content }}
-                </section>
-                {% endblock %}
-                {% endautoescape %}
-            </div>
-        </div>
+        {% block chamilo_messages %}
+        {% include '@ChamiloTheme/FlashMessage/render.html.twig' %}
+        {% endblock %}
+
+        {# Content #}
+        {% block content %}
+        <section class="container">
+            {{ content }}
+        </section>
+        {% endblock %}
+        {% endautoescape %}
+
     </section>
 
      {% if plugin_content_bottom %}

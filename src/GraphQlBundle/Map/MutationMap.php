@@ -5,6 +5,7 @@ namespace Chamilo\GraphQlBundle\Map;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Manager\AccessUrlManager;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\GraphQlBundle\Traits\GraphQLTrait;
 use Chamilo\UserBundle\Entity\User;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -303,5 +304,62 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
         $isSubscribed = \CourseManager::subscribeUser($user->getId(), $course->getCode());
 
         return $isSubscribed;
+    }
+
+    /**
+     * @param Argument $args
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     *
+     * @return int
+     */
+    protected function resolveAddForumThread(Argument $args): int
+    {
+        $this->checkAuthorization();
+
+        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
+
+        /** @var Course $course */
+        $course = $this->em->find('ChamiloCoreBundle:Course', $args['course']);
+        /** @var Session|null $session */
+        $session = null;
+
+        if (null === $course) {
+            throw new UserError($this->translator->trans('Course not found'));
+        }
+
+        if (!empty($args['session'])) {
+            $session = $this->em->find('ChamiloCoreBundle:Session', $args['session']);
+
+            if (null === $session) {
+                throw new UserError($this->translator->trans('Session not found'));
+            }
+        }
+
+        $forumInfo = get_forums(
+            $args['thread']['forum'],
+            $course->getCode(),
+            true,
+            $session ? $session->getId() : 0
+        );
+        $courseInfo = api_get_course_info($course->getCode());
+
+        $threadId = store_thread(
+            $forumInfo,
+            [
+                'post_title' => $args['thread']['title'],
+                'forum_id' => $args['thread']['forum'],
+                'post_text' => nl2br($args['thread']['text']),
+                'post_notification' => $args['notify'],
+            ],
+            $courseInfo,
+            false,
+            $this->currentUser->getId(),
+            $session ? $session->getId() : 0
+        );
+
+        return $threadId;
     }
 }

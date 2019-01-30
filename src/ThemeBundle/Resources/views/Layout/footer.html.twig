@@ -1,20 +1,17 @@
 {% autoescape false %}
-<footer class="footer bdT ta-c lh-0 fsz-sm c-grey-600 text-right">
-    {% if plugin_pre_footer %}
-        <div id="plugin_pre_footer">
-            {{ plugin_pre_footer }}
-        </div>
-    {% endif %}
-    {% if administrator_name is not null %}
-        {{ administrator_name }}
-    {% endif %}
-    <a href="{{_p.web}}" target="_blank">
-        {{ "PoweredByX" |trans | format(_s.software_name) }}
-    </a>&copy; {{ "now"|date("Y") }}
+<footer class="app-footer">
+    <div>
+        <a href="{{_p.web}}" target="_blank">
+            {{ "PoweredByX" |trans | format(_s.software_name) }}
+            {{ "Chamilo"| trans }}
+        </a>&copy; {{ "now"|date("Y") }}
+    </div>
+    <div class="ml-auto">
+        {% if administrator_name is not null %}
+            {{ administrator_name }}
+        {% endif %}
+    </div>
 </footer>
-
-{#<footer {% block footer_open_attributes %}{% endblock footer_open_attributes %}>#}
-{% endautoescape %}
 
 {# Delete modal #}
 <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="confirm-delete-title" aria-hidden="true">
@@ -37,7 +34,7 @@
     </div>
 </div>
 
+{% endautoescape %}
+
 {{ execution_stats }}
-
-
 {{ footer_extra_content }}

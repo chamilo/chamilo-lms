@@ -1072,9 +1072,8 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Hide social media links
 //$_configuration['hide_social_media_links'] = false;
 
-// Allow code field in exercise questions
-//ALTER TABLE c_quiz_question ADD COLUMN code VARCHAR(255) NULL DEFAULT NULL;
-// $_configuration['allow_question_code'] = false;
+// Show chamilo unique question id in exercises
+// $_configuration['show_question_id'] = false;
 
 // Show pagination if question list is bigger than "x" value, if 0 pagination will not appear.
 // Option only when building an exercise as a teacher

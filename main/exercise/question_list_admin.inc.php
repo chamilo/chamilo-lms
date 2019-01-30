@@ -15,7 +15,6 @@ use ChamiloSession as Session;
  *    It is included from the script admin.php
  */
 
-
 $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
 
 // deletes a question from the exercise (not from the data base)

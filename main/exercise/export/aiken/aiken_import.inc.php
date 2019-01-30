@@ -196,13 +196,6 @@ function aiken_import_exercise($file)
             $question->type = constant($type);
             $question->save($exercise);
 
-            if (isset($question_array['code'])) {
-                $result = $question->addCode($question_array['code']);
-                if (empty($result)) {
-                    Display::addFlash(Display::return_message(get_lang('QuestionCodeNotSaved')));
-                }
-            }
-
             $last_question_id = $question->selectId();
             //3. Create answer
             $answer = new Answer($last_question_id);
@@ -307,8 +300,8 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
             $exercise_info['question'][$question_index]['weighting'][$correct_answer_index] = 1;
         } elseif (preg_match('/^SCORE:\s?(.*)/', $info, $matches)) {
             $exercise_info['question'][$question_index]['score'] = (float) $matches[1];
-        } elseif (preg_match('/^CODE:\s?(.*)/', $info, $matches)) {
-            $exercise_info['question'][$question_index]['code'] = $matches[1];
+        } elseif (preg_match('/^DESCRIPTION:\s?(.*)/', $info, $matches)) {
+            $exercise_info['question'][$question_index]['description'] = $matches[1];
         } elseif (preg_match('/^ANSWER_EXPLANATION:\s?(.*)/', $info, $matches)) {
             //Comment of correct answer
             $correct_answer_index = array_search($matches[1], $answers_array);
@@ -350,10 +343,10 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
                 } else {
                     //Question itself (use a 100-chars long title and a larger description)
                     $exercise_info['question'][$question_index]['title'] = trim(substr($info, 0, 100)).'...';
-                    $exercise_info['question'][$question_index]['description'] = $info;
+                    //$exercise_info['question'][$question_index]['description'] = $info;
                 }
             } else {
-                $exercise_info['question'][$question_index]['description'] = $info;
+                //$exercise_info['question'][$question_index]['description'] = $info;
             }
         }
     }

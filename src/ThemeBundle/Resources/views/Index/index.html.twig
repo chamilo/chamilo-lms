@@ -1,17 +1,33 @@
 {% extends "@ChamiloTheme/Layout/layout_content.html.twig" %}
 
-{% block chamilo_right_column %}
+{% block content %}
     {% autoescape false %}
-        {{ render(controller('ChamiloPageBundle:Page:renderPage', {'slug': 'welcome'} )) }}
 
-        {% if chamilo_settings_get('announcement.hide_global_announcements_when_not_connected') == 'false' %}
-            {{ render(controller('ChamiloCoreBundle:News:news')) }}
-        {% endif %}
+    <section class="section-slider">
+        <div class="container">
+            {% if chamilo_settings_get('announcement.hide_global_announcements_when_not_connected') == 'false' %}
+                {{ render(controller('ChamiloCoreBundle:News:news')) }}
+            {% endif %}
+        </div>
+    </section>
+    <section class="section-welcome">
+        <div class="container">
+            {{ render(controller('ChamiloPageBundle:Page:renderPage', {'slug': 'welcome'} )) }}
+        </div>
+    </section>
+    <section class="section-content">
+        <div class="container">
+            {{ content }}
+        </div>
+    </section>
+    <section class="section-courses">
+        <div class="container">
+            {% if chamilo_settings_get('display.show_hot_courses') == 'true' %}
+                {# See CourseBlockService.php #}
+                {{ sonata_block_render({'type': 'chamilo_core.block.course'}) }}
+            {% endif %}
+        </div>
+    </section>
 
-        {{ content }}
-        {% if chamilo_settings_get('display.show_hot_courses') == 'true' %}
-            {# See CourseBlockService.php #}
-            {{ sonata_block_render({'type': 'chamilo_core.block.course'}) }}
-        {% endif %}
     {% endautoescape %}
 {% endblock %}

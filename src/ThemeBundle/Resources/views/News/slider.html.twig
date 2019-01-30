@@ -38,8 +38,16 @@
         </a>
     </div>
     {% else %}
+        {% if is_granted('ROLE_ADMIN') %}
+            <div class="d-block text-right">
+                <a  href="{{ url('legacy_index') }}main/admin/system_announcements.php" class="btn btn-primary btn-sm" >
+                    <i class="fas fa-pencil-alt"></i> {{ "Edit this section"|trans }}
+                </a>
+            </div>
+        {% endif %}
         <div class="row">
             <div class="col-md-6">
+
                 <div class="block-platform d-none d-block">
                     <h1>{{ "Accelerate your future. Learn where you want and when you want"|trans }}</h1>
                     <h5>{{ "Develop your skills with Chamilo 2.0"|trans }}</h5>

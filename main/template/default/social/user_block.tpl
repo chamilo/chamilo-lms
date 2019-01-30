@@ -14,15 +14,15 @@
                     {# Ofaj #}
                     {% if user.status == 5 %}
                         {% if user.has_certificates %}
-                            old student
+                            <img src="{{ _p.web_img }}icons/svg/ofaj_graduated.svg" width="32px" height="32px">
                         {% else %}
-                            student
+                            <img src="{{ _p.web_img }}icons/svg/ofaj_student.svg" width="32px" height="32px">
                         {% endif %}
                     {% elseif user.status == 1 %}
                         {% if user.is_admin %}
-                            Admin
+                            <img src="{{ _p.web_img }}icons/svg/ofaj_admin.svg" width="32px" height="32px">
                         {% else %}
-                            teacher
+                            <img src="{{ _p.web_img }}icons/svg/ofaj_teacher.svg" width="32px" height="32px">
                         {% endif %}
                     {% endif %}
                     <ul class="list-user-data">

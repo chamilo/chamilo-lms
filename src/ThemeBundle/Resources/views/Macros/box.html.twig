@@ -285,8 +285,7 @@
 
 {% macro box_session(id, title, content, image) %}
     {% autoescape false %}
-        {% set values = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f']%}
-        <div id="session-{{ id }}" class="card card-session" style="border-bottom-color: {{ '#' ~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)~'50'  }}; ">
+        <div id="session-{{ id }}" class="card card-session">
             <div class="card-body">
                 <div class="card-info">
                     <div class="row">
@@ -294,7 +293,9 @@
                             {{ image }}
                         </div>
                         <div class="col-md-7">
-                            {{ title }}
+                            <div class="card-inside">
+                                {{ title }}
+                            </div>
                         </div>
                     </div>
                 </div>

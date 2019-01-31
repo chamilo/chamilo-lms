@@ -4,7 +4,6 @@
 namespace Chamilo\GraphQlBundle\Map;
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Manager\AccessUrlManager;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\GraphQlBundle\Traits\GraphQLTrait;
 use Chamilo\UserBundle\Entity\User;
@@ -326,17 +325,19 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
         /** @var Session|null $session */
         $session = null;
 
-        if (null === $course) {
+        if (!$course) {
             throw new UserError($this->translator->trans('Course not found'));
         }
 
         if (!empty($args['session'])) {
             $session = $this->em->find('ChamiloCoreBundle:Session', $args['session']);
 
-            if (null === $session) {
+            if (!$session) {
                 throw new UserError($this->translator->trans('Session not found'));
             }
         }
+
+        $this->checkCourseAccess($course, $session);
 
         $forumInfo = get_forums(
             $args['thread']['forum'],
@@ -344,6 +345,38 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
             true,
             $session ? $session->getId() : 0
         );
+        $forumCategoryInfo = get_forumcategory_information($forumInfo['forum_category']);
+
+        if (
+            ($forumCategoryInfo['visibility'] && 0 == $forumCategoryInfo) ||
+            0 == $forumInfo['visibility']
+        ) {
+            throw new UserError('Not allowed');
+        }
+
+        if (
+            ($forumCategoryInfo['visibility'] && 0 != $forumCategoryInfo) ||
+            0 != $forumInfo['locked']
+        ) {
+            throw new UserError('Not allowed');
+        }
+
+        if (1 != $forumInfo['allow_new_threads']) {
+            throw new UserError('Not allowed');
+        }
+
+        if (0 != $forumInfo['forum_of_group']) {
+            $showForum = \GroupManager::user_has_access(
+                $this->currentUser->getId(),
+                $forumInfo['forum_of_group'],
+                \GroupManager::GROUP_TOOL_FORUM
+            );
+
+            if (!$showForum) {
+                throw new UserError('Not allowed');
+            }
+        }
+
         $courseInfo = api_get_course_info($course->getCode());
 
         $threadId = store_thread(

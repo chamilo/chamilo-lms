@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
+use Chamilo\CourseBundle\Entity\CNotebook;
 use Chamilo\GraphQlBundle\Traits\GraphQLTrait;
 use Chamilo\UserBundle\Entity\User;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -492,5 +493,50 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
         );
 
         return $this->em->find('ChamiloCourseBundle:CForumPost', $postId);
+    }
+
+    /**
+     * @param Argument $args
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     *
+     * @return CNotebook
+     */
+    protected function addCourseNote(Argument $args): CNotebook
+    {
+        $this->checkAuthorization();
+
+        /** @var Course $course */
+        $course = $this->em->find('ChamiloCoreBundle:Course', $args['course']);
+        /** @var Session|null $session */
+        $session = null;
+
+        if (!$course) {
+            throw new UserError($this->translator->trans('Course not found'));
+        }
+
+        if (!empty($args['session'])) {
+            $session = $this->em->find('ChamiloCoreBundle:Session', $args['session']);
+
+            if (!$session) {
+                throw new UserError($this->translator->trans('Session not found'));
+            }
+        }
+
+        $this->checkCourseAccess($course, $session);
+
+        $noteId = \NotebookManager::save_note(
+            [
+                'note_title' => $args['title'],
+                'note_comment' => $args['text'],
+            ],
+            $this->currentUser->getId(),
+            $course->getId(),
+            $session ? $session->getId() : 0
+        );
+
+        return $this->em->find('ChamiloCourseBundle:CNotebook', $noteId);
     }
 }

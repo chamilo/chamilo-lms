@@ -393,6 +393,9 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
             $session ? $session->getId() : 0
         );
 
-        return $threadId;
+        $threadRepo = $this->em->getRepository('ChamiloCourseBundle:CForumThread');
+        $thread = $threadRepo->findOneInCourse($threadId, $course, $session);
+
+        return $thread;
     }
 }

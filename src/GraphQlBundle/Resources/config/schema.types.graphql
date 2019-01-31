@@ -23,7 +23,8 @@ type Mutation {
         thread: AddForumThreadInput!,
         course: Int!,
         session: Int! = 0
-    ): Int!
+    ): CourseForumThread!
+    addForumPost(): Int!
     createCourse(
         course: CreateCourseInput!,
         originalCourseIdName: String!,

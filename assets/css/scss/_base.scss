@@ -4,6 +4,7 @@
 
 html, html a, body {
   -webkit-font-smoothing: antialiased;
+  height: auto;
 }
 
 a {
@@ -209,16 +210,6 @@ hr {
   border-color: #8862e0;
 }
 
-.footer p{
-  margin: 0;
-  padding: 0;
-}
-.footer{
-  padding: 18px;
-  background-color: $default-white;
-  border-top: 1px solid #dee2e6;
-}
-
 /*** TABS ***/
 .nav-tabs{
   margin-bottom: 10px;
@@ -352,15 +343,6 @@ hr {
       padding-left: 0;
     }
   }
-}
-
-// ---------------------------------------------------------
-// FOOTER
-// ---------------------------------------------------------
-
-footer {
-  z-index: 1;
-  position: relative;
 }
 
 // ---------------------------------------------------------

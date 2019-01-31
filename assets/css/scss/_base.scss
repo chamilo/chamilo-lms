@@ -454,14 +454,20 @@ hr {
   }
 }
 
-
+.tab-content{
+  border: none;
+  margin-top: 2rem;
+  .tab-pane{
+    padding: 0;
+  }
+}
 
 /* COURSE CLASSIC */
 .grid-course{
   display: grid;
   grid-gap: 1rem;
   grid-row-gap: 16px;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   @include portrait($breakpoint-sm, $breakpoint-md){
     grid-template-columns: repeat(2, 1fr);
   }
@@ -470,7 +476,6 @@ hr {
   }
   .card-course-classic{
     border: 1px solid #dee2e6;
-    border-bottom-width: 5px;
     display: grid;
     grid-template-columns: auto;
     grid-gap: 10px;
@@ -490,15 +495,15 @@ hr {
       font-size: 12px;
     }
     .card-body{
-      padding: 1rem 1.2rem;
+      padding: 0;
+      .card-inside{
+        padding: 0.8rem;
+      }
       @include portrait($breakpoint-sm, $breakpoint-md){
         padding: 0.8rem;
       }
       .title{
-        font-size: 16px;
-        a{
-          color: $grey-800;
-        }
+        font-size: 14px;
       }
     }
   }

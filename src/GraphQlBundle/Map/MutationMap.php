@@ -5,6 +5,8 @@ namespace Chamilo\GraphQlBundle\Map;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CourseBundle\Entity\CForumPost;
+use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\GraphQlBundle\Traits\GraphQLTrait;
 use Chamilo\UserBundle\Entity\User;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -312,9 +314,9 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
      *
-     * @return int
+     * @return CForumThread
      */
-    protected function resolveAddForumThread(Argument $args): int
+    protected function resolveAddForumThread(Argument $args): CForumThread
     {
         $this->checkAuthorization();
 
@@ -397,5 +399,98 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
         $thread = $threadRepo->findOneInCourse($threadId, $course, $session);
 
         return $thread;
+    }
+
+    /**
+     * @param Argument $args
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     *
+     * @return CForumPost
+     */
+    protected function resolveAddForumPost(Argument $args): CForumPost
+    {
+        $this->checkAuthorization();
+
+        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
+
+        /** @var Course $course */
+        $course = $this->em->find('ChamiloCoreBundle:Course', $args['course']);
+        /** @var Session|null $session */
+        $session = null;
+
+        if (!$course) {
+            throw new UserError($this->translator->trans('Course not found'));
+        }
+
+        if (!empty($args['session'])) {
+            $session = $this->em->find('ChamiloCoreBundle:Session', $args['session']);
+
+            if (!$session) {
+                throw new UserError($this->translator->trans('Session not found'));
+            }
+        }
+
+        $this->checkCourseAccess($course, $session);
+
+        $threadInfo = get_thread_information(
+            $args['post']['forum'],
+            $args['post']['thread'],
+            $session ? $session->getId() : 0
+        );
+        $forumInfo = get_forums(
+            $args['post']['forum'],
+            $course->getCode(),
+            true,
+            $session ? $session->getId() : 0
+        );
+        $forumCategoryInfo = get_forumcategory_information($forumInfo['forum_category']);
+
+        if (
+            ($forumCategoryInfo && 0 == $forumCategoryInfo['visibility']) ||
+            0 == $forumInfo['visibility']
+        ) {
+            throw new UserError('Not allowed');
+        }
+
+        if (
+            ($forumCategoryInfo && 0 != $forumCategoryInfo['locked']) ||
+            0 != $forumInfo['locked'] || 0 != $threadInfo['locked']
+        ) {
+            throw new UserError('Not allowed');
+        }
+
+        if (1 != $forumInfo['allow_new_threads']) {
+            throw new UserError('Not allowed');
+        }
+
+        if (0 != $forumInfo['forum_of_group']) {
+            $showForum = \GroupManager::user_has_access(
+                $this->currentUser->getId(),
+                $forumInfo['forum_of_group'],
+                \GroupManager::GROUP_TOOL_FORUM
+            );
+
+            if (!$showForum) {
+                throw new UserError('Not allowed');
+            }
+        }
+
+        $postId = store_reply(
+            $forumInfo,
+            [
+                'post_title' => $args['post']['title'],
+                'post_text' => nl2br($args['post']['text']),
+                'thread_id' => $args['post']['thread'],
+                'post_notification' => $args['post']['notify'],
+                'post_parent_id' => $args['post']['parent'],
+            ],
+            $course->getId(),
+            $this->currentUser->getId()
+        );
+
+        return $this->em->find('ChamiloCourseBundle:CForumPost', $postId);
     }
 }

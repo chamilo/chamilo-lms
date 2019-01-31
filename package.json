@@ -41,6 +41,7 @@
     "multiselect-two-sides": "^2.5.5",
     "mxgraph": "^3.9.3",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
+    "pace-js-amd-fix": "^1.0.5",
     "perfect-scrollbar": "^1.4.0",
     "qtip2": "^3.0.3",
     "select2": "^4.0.6-rc.1",

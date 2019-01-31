@@ -24,6 +24,20 @@ type Mutation {
         course: Int!,
         session: Int! = 0
     ): CourseForumThread!
+    addForumPost(
+        post: AddForumPostInput!,
+        "Course ID"
+        course: Int!,
+        "Session ID"
+        session: Int! = 0
+    ): CourseForumPost!
+    addCourseNote(
+        note: AddCourseNoteInput!,
+        "Course ID"
+        course: Int!,
+        "Session ID"
+        session: Int! = 0
+    ): CourseNote!
     createCourse(
         course: CreateCourseInput!,
         originalCourseIdName: String!,
@@ -409,8 +423,26 @@ input AddForumThreadInput {
     forum: Int = 0,
     title: String!,
     text: String!,
-    "Send a notification when adding "
-    notify: Boolean! = true,
+    "Send a notification when adding"
+    notify: Boolean! = true
+}
+
+input AddForumPostInput {
+    "Forum ID in which the post will be created"
+    forum: Int = 0,
+    "Thread ID in which the post will be created"
+    thread: Int = 0,
+    "Post parent ID that is answered"
+    parent: Int = 0,
+    title: String!,
+    text: String!,
+    "Send a notification when adding"
+    notify: Boolean! = true
+}
+
+input AddCourseNoteInput {
+    title: String!,
+    text: String!
 }
 
 # Scalars

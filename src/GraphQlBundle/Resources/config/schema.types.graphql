@@ -24,7 +24,6 @@ type Mutation {
         course: Int!,
         session: Int! = 0
     ): CourseForumThread!
-    addForumPost(): Int!
     createCourse(
         course: CreateCourseInput!,
         originalCourseIdName: String!,

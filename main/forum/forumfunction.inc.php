@@ -3676,7 +3676,6 @@ function store_reply($current_forum, $values, $courseId = 0, $userId = 0)
     }
 
     $upload_ok = 1;
-    $return = [];
 
     if ($upload_ok) {
         // We first store an entry in the forum_post table.
@@ -3781,6 +3780,8 @@ function store_reply($current_forum, $values, $courseId = 0, $userId = 0)
         Session::erase('addedresourceid');
 
         Display::addFlash(Display::return_message($message, 'confirmation', false));
+
+        return $new_post_id;
     } else {
         Display::addFlash(
             Display::return_message(
@@ -3790,7 +3791,7 @@ function store_reply($current_forum, $values, $courseId = 0, $userId = 0)
         );
     }
 
-    return $return;
+    return false;
 }
 
 /**

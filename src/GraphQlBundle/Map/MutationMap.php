@@ -350,14 +350,14 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
         $forumCategoryInfo = get_forumcategory_information($forumInfo['forum_category']);
 
         if (
-            ($forumCategoryInfo['visibility'] && 0 == $forumCategoryInfo) ||
+            ($forumCategoryInfo && 0 == $forumCategoryInfo['visibility']) ||
             0 == $forumInfo['visibility']
         ) {
             throw new UserError('Not allowed');
         }
 
         if (
-            ($forumCategoryInfo['visibility'] && 0 != $forumCategoryInfo) ||
+            ($forumCategoryInfo['visibility'] && 0 != $forumCategoryInfo['locked']) ||
             0 != $forumInfo['locked']
         ) {
             throw new UserError('Not allowed');

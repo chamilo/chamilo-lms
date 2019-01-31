@@ -4,6 +4,8 @@
 namespace Chamilo\GraphQlBundle\Traits;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
@@ -12,6 +14,7 @@ use Overblog\GraphQLBundle\Error\UserError;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -47,6 +50,11 @@ trait GraphQLTrait
     protected $settingsManager;
 
     /**
+     * @var AuthorizationCheckerInterface
+     */
+    protected $secChecker;
+
+    /**
      * ApiGraphQLTrait constructor.
      *
      * @param ContainerInterface $container
@@ -57,6 +65,7 @@ trait GraphQLTrait
         $this->em = $container->get('doctrine.orm.entity_manager');
         $this->translator = $container->get('translator');
         $this->settingsManager = $container->get('chamilo.settings.manager');
+        $this->secChecker = $container->get('security.authorization_checker');
 
         $this->getAccessUrl();
     }
@@ -189,5 +198,28 @@ trait GraphQLTrait
         }
 
         return $this->currentAccessUrl;
+    }
+
+    /**
+     * Check if the current user has access to course.
+     *
+     * @param Course       $course
+     * @param Session|null $session
+     */
+    private function checkCourseAccess(Course $course, Session $session = null)
+    {
+        if (!empty($session)) {
+            $session->setCurrentCourse($course);
+
+            if (!$this->secChecker->isGranted(SessionVoter::VIEW, $session)) {
+                throw new UserError('Unauthorised access to session!');
+            }
+
+            return;
+        }
+
+        if (!$this->secChecker->isGranted(CourseVoter::VIEW, $course)) {
+            throw new UserError('Unauthorised access to course!');
+        }
     }
 }

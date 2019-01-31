@@ -19,6 +19,12 @@ type Mutation {
         subject: String!,
         content: String!
     ): [ViewerSendMessagePayload!]
+    addForumThread(
+        thread: AddForumThreadInput!,
+        course: Int!,
+        session: Int! = 0
+    ): CourseForumThread!
+    addForumPost(): Int!
     createCourse(
         course: CreateCourseInput!,
         originalCourseIdName: String!,
@@ -29,6 +35,10 @@ type Mutation {
         originalUserIdName: String!,
         originalUserIdValue: String!
     ): User
+    subscribeUserToCourse(
+        user: Int!
+        course: Int!
+    ): Boolean
 }
 
 # Objects
@@ -393,6 +403,15 @@ input CreateUserInput {
     language: String,
     phone: String,
     expirationDate: DateTime
+}
+
+input AddForumThreadInput {
+    "Forum ID in which the tread will be created"
+    forum: Int = 0,
+    title: String!,
+    text: String!,
+    "Send a notification when adding "
+    notify: Boolean! = true,
 }
 
 # Scalars

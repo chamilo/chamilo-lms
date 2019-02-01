@@ -16,42 +16,43 @@ $extraField = new ExtraField('user');
 $infoStage = $extraField->get_handler_field_info_by_field_variable('terms_villedustage');
 $infoVille = $extraField->get_handler_field_info_by_field_variable('terms_ville');
 
-$users = who_is_online(0, 500);
+$tableUser = Database::get_main_table(TABLE_MAIN_USER);
+$sql = "SELECT u.id, firstname, lastname, ev.value ville, ev2.value stage
+        FROM $tableUser u 
+        INNER JOIN extra_field_values ev
+        ON ev.item_id = u.id
+        INNER JOIN extra_field_values ev2
+        ON ev2.item_id = u.id
+        WHERE 
+            ev.field_id = ".$infoStage['id']." AND 
+            ev2.field_id = ".$infoVille['id']." AND 
+            u.status = ".STUDENT." AND
+            u.active = 1 AND
+            (ev.value <> '' OR ev2.value <> '') AND 
+            (ev.value LIKE '%::%' OR ev2.value LIKE '%::%') 
+            
+";
+//2643 or u.id = 2692 or u.id = 2656
+$result = Database::query($sql);
+$data = Database::store_result($result, 'ASSOC');
+foreach ($data as &$result) {
+    $result['complete_name'] = addslashes(api_get_person_name($result['firstname'], $result['lastname']));
+    $parts = explode('::', $result['ville']);
+    if (isset($parts[1]) && !empty($parts[1])) {
+        $parts2 = explode(',', $parts[1]);
 
-if (!empty($users)) {
-    $tableUser = Database::get_main_table(TABLE_MAIN_USER);
-    $sql = "SELECT u.id, firstname, lastname, ev.value ville, ev2.value stage
-            FROM $tableUser u 
-            INNER JOIN extra_field_values ev
-            ON ev.item_id = u.id
-            INNER JOIN extra_field_values ev2
-            ON ev2.item_id = u.id
-            WHERE 
-                ev.field_id = ".$infoStage['id']." AND 
-                ev2.field_id = ".$infoVille['id']." AND 
-                (u.id in ('".implode("','", $users)."') )
-    ";
-    //2643 or u.id = 2692 or u.id = 2656
-    $result = Database::query($sql);
-    $data = Database::store_result($result, 'ASSOC');
-    foreach ($data as &$result) {
-        $result['complete_name'] = addslashes(api_get_person_name($result['firstname'], $result['lastname']));
-        $parts = explode('::', $result['ville']);
-        if (isset($parts[1])) {
-            $parts2 = explode(',', $parts[1]);
-            $result['ville_lat'] = $parts2[0];
-            $result['ville_long'] = $parts2[1];
+        $result['ville_lat'] = $parts2[0];
+        $result['ville_long'] = $parts2[1];
 
-            unset($result['ville']);
-        }
+        unset($result['ville']);
+    }
 
-        $parts = explode('::', $result['stage']);
-        if (isset($parts[1])) {
-            $parts2 = explode(',', $parts[1]);
-            $result['stage_lat'] = $parts2[0];
-            $result['stage_long'] = $parts2[1];
-            unset($result['stage']);
-        }
+    $parts = explode('::', $result['stage']);
+    if (isset($parts[1]) && !empty($parts[1])) {
+        $parts2 = explode(',', $parts[1]);
+        $result['stage_lat'] = $parts2[0];
+        $result['stage_long'] = $parts2[1];
+        unset($result['stage']);
     }
 }
 

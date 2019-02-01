@@ -59,7 +59,6 @@ class SessionResolver implements ContainerAwareInterface
      */
     public function getCourses(Session $session): array
     {
-        $authChecker = $this->container->get('security.authorization_checker');
         $courses = [];
 
         /** @var SessionRelCourse $sessionCourse */
@@ -68,7 +67,7 @@ class SessionResolver implements ContainerAwareInterface
 
             $session->setCurrentCourse($course);
 
-            if (false !== $authChecker->isGranted(SessionVoter::VIEW, $session)) {
+            if (false !== $this->secChecker->isGranted(SessionVoter::VIEW, $session)) {
                 $courses[] = $course;
             }
         }

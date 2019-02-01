@@ -3,6 +3,7 @@
 
 namespace Chamilo\GraphQlBundle\Map;
 
+use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
 use Chamilo\GraphQlBundle\Traits\GraphQLTrait;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Message;
@@ -406,9 +407,7 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
             throw new UserError($this->translator->trans('Course not found.'));
         }
 
-        $checker = $this->container->get('security.authorization_checker');
-
-        if (false === $checker->isGranted(CourseVoter::VIEW, $course)) {
+        if (false === $this->secChecker->isGranted(CourseVoter::VIEW, $course)) {
             throw new UserError($this->translator->trans('Not allowed'));
         }
 
@@ -430,6 +429,10 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
 
         if (!$session) {
             throw new UserError($this->translator->trans('Session not found.'));
+        }
+
+        if (false === $this->secChecker->isGranted(SessionVoter::VIEW, $session)) {
+            throw new UserError($this->translator->trans('Not allowed'));
         }
 
         return $session;

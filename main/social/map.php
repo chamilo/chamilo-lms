@@ -38,17 +38,21 @@ if (!empty($users)) {
     foreach ($data as &$result) {
         $result['complete_name'] = addslashes(api_get_person_name($result['firstname'], $result['lastname']));
         $parts = explode('::', $result['ville']);
-        $parts2 = explode(',', $parts[1]);
-        $result['ville_lat'] = $parts2[0];
-        $result['ville_long'] = $parts2[1];
+        if (isset($parts[1])) {
+            $parts2 = explode(',', $parts[1]);
+            $result['ville_lat'] = $parts2[0];
+            $result['ville_long'] = $parts2[1];
 
-        unset($result['ville']);
+            unset($result['ville']);
+        }
 
         $parts = explode('::', $result['stage']);
-        $parts2 = explode(',', $parts[1]);
-        $result['stage_lat'] = $parts2[0];
-        $result['stage_long'] = $parts2[1];
-        unset($result['stage']);
+        if (isset($parts[1])) {
+            $parts2 = explode(',', $parts[1]);
+            $result['stage_lat'] = $parts2[0];
+            $result['stage_long'] = $parts2[1];
+            unset($result['stage']);
+        }
     }
 }
 

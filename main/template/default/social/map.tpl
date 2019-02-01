@@ -29,28 +29,30 @@ function start()
     if (cities.length) {
         for (var i = 0; i < cities.length; i++) {
             // Add ville
-            //cities[i]['type'] = 'ville';
-            var markerOptions = {
-                position: new google.maps.LatLng(cities[i]['ville_lat'], cities[i]['ville_long']),
-                title: cities[i]['complete_name'],
-                city: cities[i],
-                icon: imageCity,
-            };
-            var marker = new google.maps.Marker(markerOptions);
-            markers.push(marker);
-            oms.addMarker(marker);
+            if ('ville_lat' in cities[i]) {
+                var markerOptions = {
+                    position: new google.maps.LatLng(cities[i]['ville_lat'], cities[i]['ville_long']),
+                    title: cities[i]['complete_name'],
+                    city: cities[i],
+                    icon: imageCity,
+                };
+                var marker = new google.maps.Marker(markerOptions);
+                markers.push(marker);
+                oms.addMarker(marker);
+            }
 
             // Add stage
-            //cities[i]['type'] = 'stage';
-            var markerOptions = {
-                position: new google.maps.LatLng(cities[i]['stage_lat'], cities[i]['stage_long']),
-                title: cities[i]['complete_name'],
-                city: cities[i],
-                icon: stageCity,
-            };
-            var marker = new google.maps.Marker(markerOptions);
-            markers.push(marker);
-            oms.addMarker(marker);
+            if ('stage_lat' in cities[i]) {
+                var markerOptions = {
+                    position: new google.maps.LatLng(cities[i]['stage_lat'], cities[i]['stage_long']),
+                    title: cities[i]['complete_name'],
+                    city: cities[i],
+                    icon: stageCity,
+                };
+                var marker = new google.maps.Marker(markerOptions);
+                markers.push(marker);
+                oms.addMarker(marker);
+            }
         }
 
         // Enable cluster

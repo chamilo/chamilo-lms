@@ -290,7 +290,7 @@ class DocumentManager
 	if (!file_exists($full_file_name))
 	{
 		header ("HTTP/1.1 404 Not Found");
-		return;
+		return false;
 	}
 	
 	$size	= filesize($full_file_name);
@@ -300,7 +300,7 @@ class DocumentManager
 	if (!$fm)
 	{
 		header ("HTTP/1.1 505 Internal server error");
-		return;
+		return false;
 	}
 	
 	$begin	= 0;
@@ -454,7 +454,7 @@ class DocumentManager
 				case 'video/ogg':
 				case 'video/webm':		
 					self::smartReadFile($full_file_name,$filename,$contentType);
-					break;
+					exit;
                 case 'application/vnd.dwg':
                 case 'application/vnd.dwf':
                     header('Content-type: application/octet-stream');

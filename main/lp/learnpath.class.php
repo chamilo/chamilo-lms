@@ -2413,7 +2413,7 @@ class learnpath
                 $isBlocked = true;
             }
 
-            if (api_get_configuration_value('lp_minimum_time')) {
+            if (Tracking::minimunTimeAvailable($courseId)) {
                 // Block if it does not exceed minimum time
                 // Minimum time (in minutes) to pass the learning path
                 $accumulateWorkTime = self::getAccumulateWorkTimePrerequisite($prerequisite, $courseId);

@@ -218,7 +218,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
         "olms.asset_timer = 0;";
 
     $updateMinTime = '';
-    if (api_get_configuration_value('lp_minimum_time')) {
+    if (Tracking::minimunTimeAvailable(api_get_course_int_id())) {
         $timeLp = $mylp->getAccumulateWorkTime();
         $timeTotalCourse = $mylp->getAccumulateWorkTimeTotalCourse();
         // Minimum connection percentage

@@ -1387,7 +1387,7 @@ if (empty($details)) {
     ];
 
     $timeCourse = null;
-    if (api_get_configuration_value('lp_minimum_time')) {
+    if (Tracking::minimunTimeAvailable($courseInfo['real_id'])) {
         $timeCourse = Tracking::getCalculateTime($student_id, $courseInfo['real_id'], $session_id);
     }
 

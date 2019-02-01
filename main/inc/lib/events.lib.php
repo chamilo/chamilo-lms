@@ -2483,7 +2483,7 @@ class Event
      */
     public static function registerLog($logInfo)
     {
-        if (!api_get_configuration_value('lp_minimum_time')) {
+        if (!Tracking::minimunTimeAvailable(api_get_course_int_id())) {
             return false;
         }
 

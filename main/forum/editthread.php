@@ -130,16 +130,11 @@ $tableLink = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 $htmlHeadXtra[] = <<<JS
     <script>
     $(document).on('ready', function() {
-        if ($('#thread_qualify_gradebook').is(':checked') == true) {
-            document.getElementById('options_field').style.display = 'block';
-        } else {
-            document.getElementById('options_field').style.display = 'none';
-        }
-        $('#thread_qualify_gradebook').click(function() {
-            if ($('#thread_qualify_gradebook').is(':checked') == true) {
-                document.getElementById('options_field').style.display = 'block';
+        $('[name="thread_qualify_gradebook"]:checkbox').change(function () {
+            if (this.checked) {
+                $('#options_field').show();
             } else {
-                document.getElementById('options_field').style.display = 'none';
+                $('#options_field').hide();
                 $("[name='numeric_calification']").val(0);
                 $("[name='calification_notebook_title']").val('');
                 $("[name='weight_calification']").val(0);

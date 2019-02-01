@@ -62,11 +62,13 @@ function start()
         });
 
         // Auto-boxing
-        var bounds = new google.maps.LatLngBounds();
-        for (var i = 0; i < markers.length; ++i) {
-            bounds.extend(markers[i].position);
+        if (markers.length) {
+            var bounds = new google.maps.LatLngBounds();
+            for (var i = 0; i < markers.length; ++i) {
+                bounds.extend(markers[i].position);
+            }
+            map.fitBounds(bounds);
         }
-        map.fitBounds(bounds);
 
         // window when clicking
         var infoWindow = new google.maps.InfoWindow();

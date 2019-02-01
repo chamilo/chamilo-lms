@@ -18,7 +18,6 @@ $infoVille = $extraField->get_handler_field_info_by_field_variable('terms_ville'
 
 $users = who_is_online(0, 500);
 
-$data = [];
 if (!empty($users)) {
     $tableUser = Database::get_main_table(TABLE_MAIN_USER);
     $sql = "SELECT u.id, firstname, lastname, ev.value ville, ev2.value stage
@@ -55,6 +54,7 @@ if (!empty($users)) {
         }
     }
 }
+
 
 $apiKey = api_get_configuration_value('google_api_key');
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_JS_PATH).'map/markerclusterer.js"></script>';

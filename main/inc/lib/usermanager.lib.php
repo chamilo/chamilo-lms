@@ -749,6 +749,8 @@ class UserManager
         $table_group = Database::get_course_table(TABLE_GROUP_USER);
         $table_work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
+        $user = api_get_user_entity($user_id);
+
         // Unsubscribe the user from all groups in all his courses
         $sql = "SELECT c.id 
                 FROM $table_course c 
@@ -916,8 +918,9 @@ class UserManager
         $app_plugin->performActionsWhenDeletingItem('user', $user_id);
 
         // Delete user from database
-        $sql = "DELETE FROM $table_user WHERE id = '".$user_id."'";
-        Database::query($sql);
+        $em->remove($user);
+
+        $em->flush();
 
         // Add event to system log
         $user_id_manager = api_get_user_id();

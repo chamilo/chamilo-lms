@@ -66,6 +66,8 @@ if ($variables) {
     }
 }
 
+$currentUser = api_get_current_user();
+
 Session::write('variables_to_show', $variablesToShow);
 
 $htmlHeadXtra[] = '<script>
@@ -796,7 +798,7 @@ function modify_filter($user_id, $url_params, $row)
  */
 function active_filter($active, $params, $row)
 {
-    $_user = api_get_user_info();
+    $currentUser = api_get_current_user();
 
     if ($active == '1') {
         $action = 'Lock';
@@ -818,7 +820,7 @@ function active_filter($active, $params, $row)
             [],
             16
         );
-    } elseif ($row['0'] != $_user['user_id']) {
+    } elseif ($row['0'] != $currentUser->getId()) {
         // you cannot lock yourself out otherwise you could disable all the
         // accounts including your own => everybody is locked out and nobody
         // can change it anymore.
@@ -887,7 +889,7 @@ if (!empty($action)) {
                     $number_of_affected_users = 0;
                     if (is_array($_POST['id'])) {
                         foreach ($_POST['id'] as $index => $user_id) {
-                            if ($user_id != $_user['user_id']) {
+                            if ($user_id != $currentUser->getId()) {
                                 if (UserManager::delete_user($user_id)) {
                                     $number_of_affected_users++;
                                 }
@@ -913,7 +915,7 @@ if (!empty($action)) {
                     $number_of_affected_users = 0;
                     if (is_array($_POST['id'])) {
                         foreach ($_POST['id'] as $index => $user_id) {
-                            if ($user_id != $_user['user_id']) {
+                            if ($user_id != $currentUser->getId()) {
                                 if (UserManager::disable($user_id)) {
                                     $number_of_affected_users++;
                                 }
@@ -939,7 +941,7 @@ if (!empty($action)) {
                     $number_of_affected_users = 0;
                     if (is_array($_POST['id'])) {
                         foreach ($_POST['id'] as $index => $user_id) {
-                            if ($user_id != $_user['user_id']) {
+                            if ($user_id != $currentUser->getId()) {
                                 if (UserManager::enable($user_id)) {
                                     $number_of_affected_users++;
                                 }

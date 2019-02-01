@@ -422,7 +422,7 @@ class CourseResolver implements ContainerAwareInterface
         }
 
         $documents = \DocumentManager::getAllDocumentData(
-            ['code' => $course->getCode(), 'real_id' => $course->getId()],
+            api_get_course_info_by_id($course->getId()),
             $path,
             0,
             null,

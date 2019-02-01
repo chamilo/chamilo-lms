@@ -2450,9 +2450,27 @@ class SocialManager extends UserManager
     private static function headerMessagePost($authorInfo, $receiverInfo, $message)
     {
         $currentUserId = api_get_user_id();
-
+        $iconStatus = null;
         $authorId = (int) $authorInfo['user_id'];
         $receiverId = (int) $receiverInfo['user_id'];
+        $userStatus = $authorInfo['status'];
+        $urlImg = api_get_path(WEB_IMG_PATH);
+        $isAdmin = self::is_admin($authorId);
+
+        if($userStatus==5) {
+            if($authorInfo['has_certificates']){
+                $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/ofaj_graduated.svg" width="22px" height="22px">';
+            }else{
+                $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/ofaj_student.svg" width="22px" height="22px">';
+            }
+        }else if($userStatus == 1){
+            if($isAdmin){
+                $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/ofaj_admin.svg" width="22px" height="22px">';
+            }else{
+                $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/ofaj_teacher.svg" width="22px" height="22px">';
+            }
+        }
+
 
         $date = Display::dateToStringAgoAndLongDate($message['send_date']);
         $avatarAuthor = $authorInfo['avatar'];
@@ -2491,11 +2509,14 @@ class SocialManager extends UserManager
         }
 
         $html .= '<div class="user-image" >';
+
+
         $html .= '<a href="'.$urlAuthor.'">
                     <img class="avatar-thumb" src="'.$avatarAuthor.'" alt="'.$nameCompleteAuthor.'"></a>';
         $html .= '</div>';
 
         $html .= '<div class="user-data">';
+        $html .= $iconStatus;
         $html .= '<div class="username"><a href="'.$urlAuthor.'">'.$nameCompleteAuthor.'</a>'.$htmlReceiver.'</div>';
         $html .= '<div>'.$date.'</div>';
         $html .= '</div>';

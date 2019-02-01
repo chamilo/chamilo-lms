@@ -134,6 +134,24 @@ if (isset($current_thread['thread_id'])) {
                     display_user_link($posterId, $name),
                     ['class' => 'title-username']
                 );
+                $urlImg = api_get_path(WEB_IMG_PATH);
+                $iconStatus = null;
+                $isAdmin = UserManager::is_admin($userId);
+
+                if($_user['status']==5) {
+                    if($_user['has_certificates']){
+                        $iconStatus = '<img src="'.$urlImg.'icons/svg/ofaj_graduated.svg" width="22px" height="22px">';
+                    }else{
+                        $iconStatus = '<img src="'.$urlImg.'icons/svg/ofaj_student.svg" width="22px" height="22px">';
+                    }
+                }else if($_user['status'] == 1){
+                    if($isAdmin){
+                        $iconStatus = '<img src="'.$urlImg.'icons/svg/ofaj_admin.svg" width="22px" height="22px">';
+                    }else{
+                        $iconStatus = '<img src="'.$urlImg.'icons/svg/ofaj_teacher.svg" width="22px" height="22px">';
+                    }
+                }
+                $html .= '<div class="text-center">'.$iconStatus.'</div>';
             } else {
                 if (api_get_course_setting('allow_user_image_forum')) {
                     $html .= '<div class="thumbnail">'.display_user_image($posterId, $name, $origin).'</div>';

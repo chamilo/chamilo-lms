@@ -32,6 +32,11 @@ a:focus {
 hr{
     border-top: 1px solid #96bd0d;
 }
+.avatar-icon{
+    text-align: center;
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
 .logo-ofaj{
     padding: 5px;
     margin-bottom: 0;

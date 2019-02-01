@@ -415,7 +415,7 @@ class CourseResolver implements ContainerAwareInterface
             }
 
             if ($directory->getCourse()->getId() !== $course->getId()) {
-                throw new UserError('The directory has not been assgined to this course.');
+                throw new UserError('The directory has not been assidned to this course.');
             }
 
             $path = $directory->getPath();

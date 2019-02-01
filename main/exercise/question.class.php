@@ -957,6 +957,12 @@ abstract class Question
                 $params,
                 ['c_id = ? AND id = ?' => [$c_id, $id]]
             );
+
+            Event::addEvent(
+                LOG_QUESTION_UPDATED,
+                LOG_QUESTION_ID,
+                $this->iid
+            );
             $this->saveCategory($categoryId);
 
             if (!empty($exerciseId)) {
@@ -1013,6 +1019,12 @@ abstract class Question
             if ($this->id) {
                 $sql = "UPDATE $TBL_QUESTIONS SET id = iid WHERE iid = {$this->id}";
                 Database::query($sql);
+
+                Event::addEvent(
+                    LOG_QUESTION_CREATED,
+                    LOG_QUESTION_ID,
+                    $this->id
+                );
 
                 api_item_property_update(
                     $this->course,

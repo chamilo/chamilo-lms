@@ -440,7 +440,12 @@ hr {
     break-inside: avoid;
     display: inline-table;
     .card-session{
-      border-bottom-width: 5px;
+      .card-body{
+        padding: 0;
+        .card-inside{
+          padding: 0.8rem;
+        }
+      }
       .card-title{
         font-size: 16px;
         a{
@@ -468,6 +473,9 @@ hr {
   grid-gap: 1rem;
   grid-row-gap: 16px;
   grid-template-columns: repeat(2, 1fr);
+  @include large($breakpoint-xl){
+    grid-template-columns: repeat(3, 1fr);
+  }
   @include portrait($breakpoint-sm, $breakpoint-md){
     grid-template-columns: repeat(2, 1fr);
   }

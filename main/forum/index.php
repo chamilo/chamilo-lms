@@ -461,6 +461,7 @@ if (is_array($forumCategories)) {
                         if (!empty($forum['last_poster_id'])) {
                             $forumInfo['last_poster_date'] = api_convert_and_format_date($forum['last_post_date']);
                             $forumInfo['last_poster_user'] = display_user_link($poster_id, $name, null, $username);
+                            $forumInfo['last_post_title'] = cut($forum['last_post_title'], 140);
                         }
 
                         if (api_is_allowed_to_edit(false, true)
@@ -538,5 +539,12 @@ $tpl->assign('introduction', $introduction);
 $tpl->assign('actions', $actions);
 $tpl->assign('data', $listForumCategory);
 $tpl->assign('form_content', $formContent);
-$layout = $tpl->get_template('forum/list.tpl');
+
+$extraFieldValue = new ExtraFieldValue('course');
+$value = $extraFieldValue->get_values_by_handler_and_field_variable(api_get_course_int_id(), 'global_forum');
+if ($value && isset($value['value']) && $value['value'] == 1) {
+    $layout = $tpl->get_template('forum/global_list.tpl');
+} else {
+    $layout = $tpl->get_template('forum/list.tpl');
+}
 $tpl->display($layout);

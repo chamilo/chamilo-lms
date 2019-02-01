@@ -1827,6 +1827,7 @@ function get_forums(
                     $forum_list[$key]['last_poster_name'] = $last_post_info_of_forum['last_poster_name'];
                     $forum_list[$key]['last_poster_lastname'] = $last_post_info_of_forum['last_poster_lastname'];
                     $forum_list[$key]['last_poster_firstname'] = $last_post_info_of_forum['last_poster_firstname'];
+                    $forum_list[$key]['last_post_title'] = $last_post_info_of_forum['last_post_title'];
                 }
             }
         } else {
@@ -1845,6 +1846,7 @@ function get_forums(
             $forum_list['last_poster_name'] = $last_post_info_of_forum['last_poster_name'];
             $forum_list['last_poster_lastname'] = $last_post_info_of_forum['last_poster_lastname'];
             $forum_list['last_poster_firstname'] = $last_post_info_of_forum['last_poster_firstname'];
+            $forum_list['last_post_title'] = $last_post_info_of_forum['last_post_title'];
         }
     }
 
@@ -1949,7 +1951,8 @@ function get_last_post_information($forum_id, $show_invisibles = false, $course_
                 users.firstname,
                 post.visible,
                 thread_properties.visibility AS thread_visibility,
-                forum_properties.visibility AS forum_visibility
+                forum_properties.visibility AS forum_visibility,
+                post.post_title
             FROM
                 $table_posts post,
                 $table_users users,
@@ -1977,6 +1980,7 @@ function get_last_post_information($forum_id, $show_invisibles = false, $course_
         $return_array['last_poster_name'] = $row['poster_name'];
         $return_array['last_poster_lastname'] = $row['lastname'];
         $return_array['last_poster_firstname'] = $row['firstname'];
+        $return_array['last_post_title'] = $row['post_title'];
 
         return $return_array;
     } else {
@@ -1990,6 +1994,7 @@ function get_last_post_information($forum_id, $show_invisibles = false, $course_
                 $return_array['last_poster_name'] = $row['poster_name'];
                 $return_array['last_poster_lastname'] = $row['lastname'];
                 $return_array['last_poster_firstname'] = $row['firstname'];
+                $return_array['last_post_title'] = $row['post_title'];
 
                 return $return_array;
             }

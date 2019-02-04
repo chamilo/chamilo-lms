@@ -80,6 +80,11 @@ function getCoordinates($address)
         return false;
     }
 
+    // ignore one letter fields
+    if (strlen($address) == 1) {
+        return false;
+    }
+
     if (isset($list[$address])) {
         return $list[$address];
     }

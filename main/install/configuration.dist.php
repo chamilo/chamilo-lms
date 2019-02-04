@@ -980,9 +980,12 @@ $_configuration['required_extra_fields_in_profile'] = [
         'terms_villedustage'
     ],
 ];
-
-
 */
+
+// Community manager users
+//$_configuration['community_managers_user_list'] = ['users' => [1]];
+
+
 
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email

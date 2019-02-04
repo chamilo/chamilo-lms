@@ -215,12 +215,17 @@ foreach ($posts as $post) {
         }
     }
 
+    $reportButton = '';
+    if ($allowReport) {
+        $reportButton = getReportButton($post['post_id'], $current_thread);
+    }
+
     $statusIcon = getPostStatus($current_forum, $post);
     if (!empty($iconEdit)) {
-        $html .= '<div class="tools-icons">'.$iconEdit.' '.$statusIcon.'</div>';
+        $html .= "<div class='tools-icons'>$reportButton $iconEdit $statusIcon </div>";
     } else {
         if (!empty(strip_tags($statusIcon))) {
-            $html .= '<div class="tools-icons">'.$statusIcon.'</div>';
+            $html .= "<div class='tools-icons'> $reportButton $statusIcon </div>";
         }
     }
 
@@ -349,7 +354,7 @@ foreach ($posts as $post) {
 
     $html .= '</div>';
     $html .= '<div class="col-md-6 text-right">';
-    $html .= "$editButton $buttonReply $buttonQuote $waitingValidation";
+    $html .= "$reportButton $editButton $buttonReply $buttonQuote $waitingValidation";
     $html .= '</div>';
     $html .= '</div>';
 

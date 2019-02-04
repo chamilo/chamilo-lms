@@ -6527,3 +6527,116 @@ function postIsEditableByStudent($forum, $post)
         return true;
     }
 }
+
+/**
+ * @param int   $postId
+ * @param array $threadInfo
+ * @return string
+ */
+function getReportButton($postId, $threadInfo)
+{
+    return Display::url(
+        get_lang('Report'),
+        api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.
+        api_get_cidreq().'&action=report&post_id='.$postId.'&forum='.$threadInfo['forum_id'].'&thread='.$threadInfo['thread_id']
+    );
+
+}
+
+/**
+ * @return bool
+ */
+function reportAvailable()
+{
+    $extraFieldValue = new ExtraFieldValue('course');
+    $value = $extraFieldValue->get_values_by_handler_and_field_variable(
+        api_get_course_int_id(),
+        'allow_forum_report_button'
+    );
+    $allowReport = false;
+    if ($value && isset($value['value']) && $value['value'] == 1) {
+        $allowReport = true;
+    }
+
+    return $allowReport;
+}
+
+/**
+ * @return array
+ */
+function getReportRecepients()
+{
+    $extraFieldValue = new ExtraFieldValue('course');
+    $value = $extraFieldValue->get_values_by_handler_and_field_variable(
+        api_get_course_int_id(),
+        'forum_report_recipients'
+    );
+    $users = [];
+    if ($value && isset($value['value'])) {
+        $usersType = explode(';', $value['value']);
+
+        foreach ($usersType as $type) {
+            switch ($type) {
+                case 'teachers':
+                    $teachers = CourseManager::get_teacher_list_from_course_code(api_get_course_id());
+                    if (!empty($teachers)) {
+                        $users = array_merge($users, array_column($teachers, 'user_id'));
+                    }
+                break;
+                case 'admins':
+                    $admins = UserManager::get_all_administrators();
+                    if (!empty($admins)) {
+                        $users = array_merge($users, array_column($admins, 'user_id'));
+                    }
+                    break;
+                case 'community_managers':
+                    $managers = api_get_configuration_value('community_managers_user_list');
+                    if (!empty($managers) && isset($managers['users'])) {
+
+                        $users = array_merge($users, $managers['users']);
+                    }
+                    break;
+            }
+        }
+
+        $users = array_unique(array_filter($users));var_dump($users);
+    }
+
+    return $users;
+
+}
+
+/**
+ * @param int   $postId
+ * @param array $threadInfo
+ *
+ * @return bool
+ */
+function reportPost($postId, $threadInfo)
+{
+    if (!reportAvailable()) {
+        return false;
+    }
+
+    $postId = (int) $postId;
+
+    $postData = get_post_information($postId);
+
+    if (!empty($postData)) {
+        $users = getReportRecepients();
+        if (!empty($users)) {
+            $url = api_get_path(WEB_CODE_PATH).
+                'forum/viewthread.php?forum='.$threadInfo['forum_id'].'&thread='.$threadInfo['thread_id'].'&post_id='.$postId;
+            $postLink = Display::url(
+                get_lang('Link'),
+                $url
+            );
+            $subject = sprintf(get_lang('PostXReported'), $postData['post_title']);
+            $content = sprintf(get_lang('PostXReportedVisitLinkX'), $postData['post_title'], $postLink);
+            foreach ($users as $userId) {
+                MessageManager::send_message_simple($userId, $subject, $content);
+            }
+            exit;
+        }
+    }
+}

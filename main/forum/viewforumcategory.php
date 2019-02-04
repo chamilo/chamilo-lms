@@ -129,7 +129,7 @@ $logInfo = [
     'tool_id' => 0,
     'tool_id_detail' => 0,
     'action' => $action,
-    'info' => $_GET['content'],
+    'info' => isset($_GET['content']) ? $_GET['content'] : '',
 ];
 Event::registerLog($logInfo);
 

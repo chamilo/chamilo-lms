@@ -43,11 +43,7 @@ type Mutation {
         originalCourseIdName: String!,
         originalCourseIdValue: String!
     ): Course
-    createUser(
-        user: CreateUserInput!,
-        originalUserIdName: String!,
-        originalUserIdValue: String!
-    ): User
+    createUser(user: CreateUserInput!, userId: UserIdInput!): User
     subscribeUserToCourse(
         user: Int!
         course: Int!

@@ -210,10 +210,8 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
         }
 
         $userInput = $args['user'];
-        $originalUserIdName = $args['originalUserIdName'];
-        $originalUserIdValue = $args['originalUserIdValue'];
 
-        $userId = \UserManager::get_user_id_from_original_id($originalUserIdValue, $originalUserIdName);
+        $userId = \UserManager::get_user_id_from_original_id($args['userId']['value'], $args['userId']['name']);
 
         if (!empty($userId)) {
             throw new UserError($this->translator->trans('User already exists'));
@@ -253,8 +251,8 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
             $userId,
             $this->currentAccessUrl->getId()
         );
-        \UserManager::create_extra_field($originalUserIdName, \ExtraField::FIELD_TYPE_TEXT, $originalUserIdName, '');
-        \UserManager::update_extra_field_value($userId, $originalUserIdName, $originalUserIdValue);
+        \UserManager::create_extra_field($args['userId']['name'], \ExtraField::FIELD_TYPE_TEXT, $args['userId']['name'], '');
+        \UserManager::update_extra_field_value($userId, $args['userId']['name'], $args['userId']['value']);
 
         return $this->em->find('ChamiloUserBundle:User', $userId);
     }

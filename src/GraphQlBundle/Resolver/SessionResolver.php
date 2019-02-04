@@ -67,7 +67,7 @@ class SessionResolver implements ContainerAwareInterface
 
             $session->setCurrentCourse($course);
 
-            if (false !== $this->secChecker->isGranted(SessionVoter::VIEW, $session)) {
+            if (false !== $this->securityChecker->isGranted(SessionVoter::VIEW, $session)) {
                 $courses[] = $course;
             }
         }

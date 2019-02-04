@@ -407,7 +407,7 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
             throw new UserError($this->translator->trans('Course not found.'));
         }
 
-        if (false === $this->secChecker->isGranted(CourseVoter::VIEW, $course)) {
+        if (false === $this->securityChecker->isGranted(CourseVoter::VIEW, $course)) {
             throw new UserError($this->translator->trans('Not allowed'));
         }
 
@@ -431,7 +431,7 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
             throw new UserError($this->translator->trans('Session not found.'));
         }
 
-        if (false === $this->secChecker->isGranted(SessionVoter::VIEW, $session)) {
+        if (false === $this->securityChecker->isGranted(SessionVoter::VIEW, $session)) {
             throw new UserError($this->translator->trans('Not allowed'));
         }
 

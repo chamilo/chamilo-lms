@@ -52,7 +52,7 @@ trait GraphQLTrait
     /**
      * @var AuthorizationCheckerInterface
      */
-    protected $secChecker;
+    protected $securityChecker;
 
     /**
      * ApiGraphQLTrait constructor.
@@ -65,7 +65,7 @@ trait GraphQLTrait
         $this->em = $container->get('doctrine.orm.entity_manager');
         $this->translator = $container->get('translator');
         $this->settingsManager = $container->get('chamilo.settings.manager');
-        $this->secChecker = $container->get('security.authorization_checker');
+        $this->securityChecker = $container->get('security.authorization_checker');
 
         $this->getAccessUrl();
     }
@@ -211,14 +211,14 @@ trait GraphQLTrait
         if (!empty($session)) {
             $session->setCurrentCourse($course);
 
-            if (!$this->secChecker->isGranted(SessionVoter::VIEW, $session)) {
+            if (!$this->securityChecker->isGranted(SessionVoter::VIEW, $session)) {
                 throw new UserError('Unauthorised access to session!');
             }
 
             return;
         }
 
-        if (!$this->secChecker->isGranted(CourseVoter::VIEW, $course)) {
+        if (!$this->securityChecker->isGranted(CourseVoter::VIEW, $course)) {
             throw new UserError('Unauthorised access to course!');
         }
     }

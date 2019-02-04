@@ -131,7 +131,7 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
     {
         $this->checkAuthorization();
 
-        if (false === $this->secChecker->isGranted('ROLE_ADMIN')) {
+        if (false === $this->securityChecker->isGranted('ROLE_ADMIN')) {
             throw new UserError($this->translator->trans('Not allowed'));
         }
 
@@ -205,7 +205,7 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
     {
         $this->checkAuthorization();
 
-        if (false === $this->secChecker->isGranted('ROLE_ADMIN')) {
+        if (false === $this->securityChecker->isGranted('ROLE_ADMIN')) {
             throw new UserError($this->translator->trans('Not allowed'));
         }
 
@@ -272,7 +272,7 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
     {
         $this->checkAuthorization();
 
-        if (false === $this->secChecker->isGranted('ROLE_ADMIN')) {
+        if (false === $this->securityChecker->isGranted('ROLE_ADMIN')) {
             throw new UserError($this->translator->trans('Not allowed'));
         }
 

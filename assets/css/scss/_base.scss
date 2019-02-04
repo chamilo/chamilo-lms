@@ -427,16 +427,18 @@ hr {
 /** GRID SESSION **/
 
 .grid-session{
-  column-count: 3;
+  display: grid;
+  grid-gap: 1rem;
+  grid-row-gap: 16px;
+  grid-template-columns: repeat(3, 1fr);
   @include portrait($breakpoint-sm, $breakpoint-md){
-    column-count: 2;
+    grid-template-columns: repeat(2, 1fr);
   }
   @include landscape($breakpoint-sm) {
-    column-count: 1;
+    grid-template-columns: repeat(1, 1fr);
   }
   .item-session{
     flex: auto;
-    overflow: hidden;
     break-inside: avoid;
     display: inline-table;
     .card-session{

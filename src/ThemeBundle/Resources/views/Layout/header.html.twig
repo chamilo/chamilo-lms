@@ -80,15 +80,10 @@
     </a>
 
     <ul class="nav navbar-nav d-md-down-none">
-        <li class="nav-item px-3 dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <li class="nav-item px-3">
+            <a class="nav-link " href="{{ url('legacy_main', { 'name' : 'auth/courses.php' }) }}" id="btncatalog" role="button" >
                 {{ "Course catalog"|trans }}
             </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <a class="dropdown-item" href="#">Something else here</a>
-            </div>
         </li>
         <form class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
@@ -99,8 +94,8 @@
     <ul class="nav navbar-nav ml-auto">
         {% if app.user is not null and is_granted('IS_AUTHENTICATED_FULLY') %}
         <li class="nav-item d-md-down-none">
-            <a class="nav-link" href="#">
-                Mis cursos
+            <a class="nav-link" href="{{ url('legacy_main', { 'name' : '../user_portal.php' }) }}">
+                {{ 'My courses'|trans }}
             </a>
         </li>
         {#<li class="nav-item d-md-down-none">

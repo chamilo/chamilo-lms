@@ -121,13 +121,13 @@ class NavBuilder implements ContainerAwareInterface
                 }
             }
 
-            $menu['courses']->addChild(
+            /*$menu['courses']->addChild(
                 $translator->trans('Course history'),
                 [
                     'route' => 'legacy_main',
                     'routeParameters' => ['name' => '../user_portal.php'],
                 ]
-            );
+            );*/
 
             if (api_is_allowed_to_create_course()) {
                 $lang = $translator->trans('Create course');

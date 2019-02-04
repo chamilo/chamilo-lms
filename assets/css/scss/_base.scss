@@ -77,7 +77,9 @@ a {
 hr {
   border-top: 1px solid $border-color;
 }
-
+.container-fluid{
+  width: 95%;
+}
 /*** TABS ***/
 .nav-tabs{
   margin-bottom: 10px;
@@ -337,6 +339,20 @@ hr {
     }*/
   }
 }
+/*** GRID CATALOG ***/
+.list-course{
+  display: grid;
+  grid-gap: 1rem;
+  grid-row-gap: 16px;
+  grid-template-columns: repeat(5, 1fr);
+  @include portrait($breakpoint-sm, $breakpoint-md){
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @include landscape($breakpoint-sm) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
 /* CATEGORY CLASSIC */
 .category-list{
   display: grid;
@@ -424,6 +440,7 @@ hr {
     }
   }
 }
+
 /** GRID SESSION **/
 
 .grid-session{

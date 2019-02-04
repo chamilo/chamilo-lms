@@ -581,6 +581,51 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
     }
 
     /**
+     * @param Argument $args
+     *
+     * @return User
+     */
+    protected function resolveEditUser(Argument $args): User
+    {
+        $this->checkAuthorization();
+
+        if (false === $this->securityChecker->isGranted('ROLE_ADMIN')) {
+            throw new UserError($this->translator->trans('Not allowed'));
+        }
+
+        $userInput = $args['user'];
+
+        $userId = \UserManager::get_user_id_from_original_id($args['userId']['value'], $args['userId']['name']);
+
+        if (!empty($userId)) {
+            throw new UserError($this->translator->trans('User already exists'));
+        }
+
+        /** @var User $user */
+        $user = $this->em->find('ChamiloUserBundle:User', $userId);
+
+        \UserManager::update_user(
+            $userId,
+            !empty($userInput['firstname']) ? $userInput['firstname'] : $user->getFirstname(),
+            !empty($userInput['lastname']) ? $userInput['lastname'] : $user->getLastname(),
+            !empty($userInput['username']) ? $userInput['username'] : $user->getUsername(),
+            null,
+            PLATFORM_AUTH_SOURCE,
+            !empty($userInput['email']) ? $userInput['email'] : $user->getEmail(),
+            !empty($userInput['status']) ? $userInput['status'] : $user->getStatus(),
+            !empty($userInput['officialCode']) ? $userInput['officialCode'] : $user->getOfficialCode(),
+            !empty($userInput['phone']) ? $userInput['phone'] : $user->getPhone(),
+            $user->getPictureUri(),
+            !empty($userInput['expirationDate']) ? $userInput['expirationDate'] : $user->getExpirationDate(),
+            !empty($userInput['isActive']) ? $userInput['isActive'] : $user->isActive()
+        );
+
+        $this->em->clear($user);
+
+        return $this->em->find('ChamiloUserBundle:User', $userId);
+    }
+
+    /**
      * @param string $userIdName
      * @param string $userIdValue
      * @param bool   $setActive

@@ -51,6 +51,7 @@ type Mutation {
     disableUser(userId: UserIdInput!): Boolean
     enableUser(userId: UserIdInput!): Boolean
     deleteUser(userId: UserIdInput!): Boolean
+    editUser(user: EditUserInput!, userId: UserIdInput!): User
 }
 
 # Objects
@@ -447,6 +448,19 @@ input AddCourseNoteInput {
 input UserIdInput {
     name: String!
     value: String!
+}
+
+input EditUserInput {
+    firstname: String,
+    lastname: String,
+    status: UserStatus,
+    email: String,
+    username: String,
+    officialCode: String,
+    isActive: Boolean,
+    language: String,
+    phone: String,
+    expirationDate: DateTime
 }
 
 # Scalars

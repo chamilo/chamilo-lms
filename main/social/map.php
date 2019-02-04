@@ -29,12 +29,42 @@ $sql = "SELECT u.id, firstname, lastname, ev.value ville, ev2.value stage
             u.status = ".STUDENT." AND
             u.active = 1 AND
             (ev.value <> '' OR ev2.value <> '') AND 
-            (ev.value LIKE '%::%' OR ev2.value LIKE '%::%') 
-            
+            (ev.value LIKE '%::%' OR ev2.value LIKE '%::%')            
 ";
-//2643 or u.id = 2692 or u.id = 2656
-$result = Database::query($sql);
-$data = Database::store_result($result, 'ASSOC');
+
+
+$cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
+$keyDate = 'map_cache_date';
+$keyData = 'map_cache_data';
+
+$now = time();
+
+// Refresh cache every day
+$tomorrow = strtotime('+1 day', $now);
+$tomorrow = strtotime('+5 minute', $now);
+
+$loadFromDatabase = true;
+if ($cacheDriver->contains($keyData) && $cacheDriver->contains($keyDate)) {
+    $savedDate = $cacheDriver->fetch($keyDate);
+    if ($savedDate < $now) {
+        $loadFromDatabase = true;
+    } else {
+        $loadFromDatabase = false;
+    }
+}
+
+$loadFromDatabase = true;
+
+if ($loadFromDatabase) {
+    $result = Database::query($sql);
+    $data = Database::store_result($result, 'ASSOC');
+
+    $cacheDriver->save($keyData, $data);
+    $cacheDriver->save($keyDate, $tomorrow);
+} else {
+    $data = $cacheDriver->fetch($keyData);
+}
+
 foreach ($data as &$result) {
     $result['complete_name'] = addslashes(api_get_person_name($result['firstname'], $result['lastname']));
     $parts = explode('::', $result['ville']);

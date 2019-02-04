@@ -1774,10 +1774,29 @@ class SocialManager extends UserManager
         $currentUserId = api_get_user_id();
         $userIdLoop = $message['user_sender_id'];
         $receiverId = $message['user_receiver_id'];
+        $iconStatus = null;
+        $userStatus = $users[$userIdLoop]['status'];
+        $urlImg = api_get_path(WEB_IMG_PATH);
+        $isAdmin = self::is_admin($users[$userIdLoop]['id']);
 
         if (!isset($users[$userIdLoop])) {
             $users[$userIdLoop] = api_get_user_info($userIdLoop);
         }
+
+        if($userStatus==5) {
+            if($users[$userIdLoop]['has_certificates']){
+                $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/ofaj_graduated.svg" width="22px" height="22px">';
+            }else{
+                $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/ofaj_student.svg" width="22px" height="22px">';
+            }
+        }else if($userStatus == 1){
+            if($isAdmin){
+                $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/ofaj_admin.svg" width="22px" height="22px">';
+            }else{
+                $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/ofaj_teacher.svg" width="22px" height="22px">';
+            }
+        }
+
 
         $nameComplete = $users[$userIdLoop]['complete_name'];
         $url = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$userIdLoop;
@@ -1791,6 +1810,7 @@ class SocialManager extends UserManager
         $comment .= '</div>';
         $comment .= '<div class="col-md-9 col-xs-9 social-post-answers">';
         $comment .= '<div class="user-data">';
+        $comment .= $iconStatus;
         $comment .= '<div class="username">'.'<a href="'.$url.'">'.$nameComplete.'</a> 
                         <span>'.Security::remove_XSS($message['content']).'</span>
                        </div>';
@@ -2509,12 +2529,9 @@ class SocialManager extends UserManager
         }
 
         $html .= '<div class="user-image" >';
-
-
         $html .= '<a href="'.$urlAuthor.'">
                     <img class="avatar-thumb" src="'.$avatarAuthor.'" alt="'.$nameCompleteAuthor.'"></a>';
         $html .= '</div>';
-
         $html .= '<div class="user-data">';
         $html .= $iconStatus;
         $html .= '<div class="username"><a href="'.$urlAuthor.'">'.$nameCompleteAuthor.'</a>'.$htmlReceiver.'</div>';

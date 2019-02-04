@@ -498,7 +498,7 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
      *
      * @return CNotebook
      */
-    protected function addCourseNote(Argument $args): CNotebook
+    protected function resolveAddCourseNote(Argument $args): CNotebook
     {
         $this->checkAuthorization();
 

@@ -77,7 +77,9 @@ a {
 hr {
   border-top: 1px solid $border-color;
 }
-
+.container-fluid{
+  width: 95%;
+}
 /*** TABS ***/
 .nav-tabs{
   margin-bottom: 10px;

@@ -4,6 +4,59 @@
 
 .sidebar {
   background-color: $sidebar-background;
+  border-right: 1px solid #cdcdcd;
+  .nav-dropdown-items{
+    background: #ffffff;
+    .nav-item{
+      border-right: 1px solid #cdcdcd;
+      .nav-link{
+        i{
+          color: #2d3b48 !important;
+        }
+        color: #2d3b48 !important;
+      }
+    }
+  }
+  .nav-dropdown{
+    &.open{
+      .nav-link{
+        color: #2d3b48;
+      }
+    }
+  }
+  .nav-item{
+    i{
+      color: $sidebar-icon;
+      display: inline-block;
+      font-size: 18px;
+      line-height: 17px;
+      margin-left: 3px;
+      margin-right: 10px;
+      text-align: center;
+      vertical-align: middle;
+      width: 20px;
+    }
+    &.current{
+      i{
+        color: $sidebar-link-hover;
+      }
+      .nav-link{
+        color: $sidebar-link-hover;
+      }
+      background-color: $sidebar-current;
+    }
+  }
+  .nav-link{
+    color: $sidebar-link;
+    padding: 16px 25px;
+    &:hover{
+      color: $sidebar-link-hover;
+      background: transparent;
+      i{
+        color: $sidebar-link-hover;
+      }
+    }
+  }
 }
 .section-slider{
   background: #9d7bd7; /* Old browsers */ /* FF3.6-15 */ /* Chrome10-25,Safari5.1-6 */

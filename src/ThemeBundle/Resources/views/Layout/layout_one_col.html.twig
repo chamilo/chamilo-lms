@@ -31,9 +31,11 @@
 
         {% autoescape false %}
 
-        {% if actions != '' %}
-            {{ actions }}
-        {% endif %}
+        <section class="container-fluid">
+            {% if actions != '' %}
+                {{ actions }}
+            {% endif %}
+        </section>
 
         {% block chamilo_messages %}
         {% include '@ChamiloTheme/FlashMessage/render.html.twig' %}

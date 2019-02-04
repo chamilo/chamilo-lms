@@ -593,7 +593,7 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
             throw new UserError($this->translator->trans('Not allowed'));
         }
 
-        $userId = \UserManager::get_user_id_from_original_id($userIdName, $userIdValue);
+        $userId = \UserManager::get_user_id_from_original_id($userIdValue, $userIdName);
 
         if (empty($userId)) {
             throw new UserError($this->translator->trans('User not found'));

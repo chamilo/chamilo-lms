@@ -12,68 +12,6 @@ require_once __DIR__.'/webservice.php';
 class WSUser extends WS
 {
     /**
-     * Deletes a user.
-     *
-     * @param string API secret key
-     * @param string User id field name. Use "chamilo_user_id" as the field name if you want to use the internal user_id
-     * @param string User id value
-     */
-    public function DeleteUser($secret_key, $user_id_field_name, $user_id_value)
-    {
-        $verifKey = $this->verifyKey($secret_key);
-        if ($verifKey instanceof WSError) {
-            $this->handleError($verifKey);
-        } else {
-            $result = $this->deleteUserHelper(
-                $user_id_field_name,
-                $user_id_value
-            );
-            if ($result instanceof WSError) {
-                $this->handleError($result);
-            }
-        }
-    }
-
-    /**
-     * Deletes multiple users.
-     *
-     * @param string API secret key
-     * @param array Array of users with elements of the form
-     * array('user_id_field_name' => 'name_of_field', 'user_id_value' => 'value')
-     *
-     * @return array Array with elements like
-     *               array('user_id_value' => 'value', 'result' => array('code' => 0, 'message' => 'Operation was successful')).
-     *               Note that if the result array contains a code different
-     *               than 0, an error occured
-     */
-    public function DeleteUsers($secret_key, $users)
-    {
-        $verifKey = $this->verifyKey($secret_key);
-        if ($verifKey instanceof WSError) {
-            $this->handleError($verifKey);
-        } else {
-            $results = [];
-            foreach ($users as $user) {
-                $result_tmp = [];
-                $result_op = $this->deleteUserHelper(
-                    $user['user_id_field_name'],
-                    $user['user_id_value']
-                );
-                $result_tmp['user_id_value'] = $user['user_id_value'];
-                if ($result_op instanceof WSError) {
-                    // Return the error in the results
-                    $result_tmp['result'] = $result_op->toArray();
-                } else {
-                    $result_tmp['result'] = $this->getSuccessfulResult();
-                }
-                $results[] = $result_tmp;
-            }
-
-            return $results;
-        }
-    }
-
-    /**
      * Edits user info.
      *
      * @param string API secret key
@@ -190,31 +128,6 @@ class WSUser extends WS
             }
 
             return $results;
-        }
-    }
-
-    /**
-     * Deletes a user (helper method).
-     *
-     * @param string User id field name. Use "chamilo_user_id" as the field name if you want to use the internal user_id
-     * @param string User id value
-     *
-     * @return mixed True if user was successfully deleted, WSError otherwise
-     */
-    protected function deleteUserHelper($user_id_field_name, $user_id_value)
-    {
-        $user_id = $this->getUserId($user_id_field_name, $user_id_value);
-        if ($user_id instanceof WSError) {
-            return $user_id;
-        } else {
-            if (!UserManager::delete_user($user_id)) {
-                return new WSError(
-                    101,
-                    "There was a problem while deleting this user"
-                );
-            } else {
-                return true;
-            }
         }
     }
 

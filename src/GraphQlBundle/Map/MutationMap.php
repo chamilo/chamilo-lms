@@ -557,6 +557,30 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
     }
 
     /**
+     * @param Argument $args
+     *
+     * @throws \Exception
+     *
+     * @return bool
+     */
+    protected function resolveDeleteUser(Argument $args): bool
+    {
+        $this->checkAuthorization();
+
+        if (false === $this->securityChecker->isGranted('ROLE_ADMIN')) {
+            throw new UserError($this->translator->trans('Not allowed'));
+        }
+
+        $userId = \UserManager::get_user_id_from_original_id($args['userId']['value'], $args['userId']['name']);
+
+        if (empty($userId)) {
+            throw new UserError($this->translator->trans('User not found'));
+        }
+
+        return \UserManager::delete_user($userId);
+    }
+
+    /**
      * @param string $userIdName
      * @param string $userIdValue
      * @param bool   $setActive

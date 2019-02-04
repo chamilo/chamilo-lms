@@ -65,36 +65,6 @@ $s->wsdl->addComplexType(
 );
 
 $s->register(
-    'WSUser.DisableUser',
-    [
-        'secret_key' => 'xsd:string',
-        'user_id_field_name' => 'xsd:string',
-        'user_id_value' => 'xsd:string',
-    ]
-);
-
-$s->register(
-    'WSUser.DisableUsers',
-    ['secret_key' => 'xsd:string', 'users' => 'tns:user_id[]'],
-    ['return' => 'tns:user_result_array']
-);
-
-$s->register(
-    'WSUser.EnableUser',
-    [
-        'secret_key' => 'xsd:string',
-        'user_id_field_name' => 'xsd:string',
-        'user_id_value' => 'xsd:string',
-    ]
-);
-
-$s->register(
-    'WSUser.EnableUsers',
-    ['secret_key' => 'xsd:string', 'users' => 'tns:user_id[]'],
-    ['return' => 'tns:user_result_array']
-);
-
-$s->register(
     'WSUser.DeleteUser',
     [
         'secret_key' => 'xsd:string',

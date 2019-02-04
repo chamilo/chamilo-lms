@@ -533,4 +533,54 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
 
         return $this->em->find('ChamiloCourseBundle:CNotebook', $noteId);
     }
+
+    /**
+     * @param Argument $args
+     *
+     * @return bool
+     */
+    protected function resolveDisableUser(Argument $args): bool
+    {
+        $this->changeUserActiveState($args['userId']['name'], $args['userId']['value'], false);
+
+        return true;
+    }
+
+    /**
+     * @param Argument $args
+     *
+     * @return bool
+     */
+    protected function resolveEnableUser(Argument $args): bool
+    {
+        $this->changeUserActiveState($args['userId']['name'], $args['userId']['value'], true);
+
+        return true;
+    }
+
+    /**
+     * @param string $userIdName
+     * @param string $userIdValue
+     * @param bool   $setActive
+     */
+    private function changeUserActiveState($userIdName, $userIdValue, $setActive)
+    {
+        $this->checkAuthorization();
+
+        if (false === $this->securityChecker->isGranted('ROLE_ADMIN')) {
+            throw new UserError($this->translator->trans('Not allowed'));
+        }
+
+        $userId = \UserManager::get_user_id_from_original_id($userIdName, $userIdValue);
+
+        if (empty($userId)) {
+            throw new UserError($this->translator->trans('User not found'));
+        }
+
+        if ($setActive) {
+            \UserManager::enable($userId);
+        } else {
+            \UserManager::disable($userId);
+        }
+    }
 }

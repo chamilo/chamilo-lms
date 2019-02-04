@@ -52,6 +52,10 @@ type Mutation {
         user: Int!
         course: Int!
     ): Boolean
+
+    disableUser(userId: UserIdInput!): Boolean
+
+    enableUser(userId: UserIdInput!): Boolean
 }
 
 # Objects
@@ -443,6 +447,11 @@ input AddForumPostInput {
 input AddCourseNoteInput {
     title: String!,
     text: String!
+}
+
+input UserIdInput {
+    name: String!
+    value: String!
 }
 
 # Scalars

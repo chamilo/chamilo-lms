@@ -96,7 +96,7 @@ $tpl->assign('url', api_get_path(WEB_CODE_PATH).'social/profile.php');
 $tpl->assign(
     'image_city',
     Display::return_icon(
-        'accept.png',
+        'red-dot.png',
         '',
         [],
         ICON_SIZE_SMALL,
@@ -107,7 +107,7 @@ $tpl->assign(
 $tpl->assign(
     'image_stage',
     Display::return_icon(
-        'delete.png',
+        'blue-dot.png',
         '',
         [],
         ICON_SIZE_SMALL,

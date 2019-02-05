@@ -2,9 +2,9 @@ type Query {
     "The current user logged in the API."
     viewer: User!
     "Get the data from a course on the platform."
-    course(id: Int!): Course
+    course(itemId: ItemIdInput!): Course
     "Get the data from a session on the platform."
-    session(id: Int!): Session
+    session(itemId: ItemIdInput!): Session
     "Get the data from a session category."
     sessionCategory(id: Int!): SessionCategory
 }

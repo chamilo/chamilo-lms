@@ -398,13 +398,18 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
     {
         $this->checkAuthorization();
 
-        $id = (int) $args['id'];
+        $itemIdInput = array_map('trim', $args['itemId']);
 
+        if (empty($itemIdInput['name']) || empty($itemIdInput['value'])) {
+            throw new UserError($this->translator->trans('Missing parameters'));
+        }
+
+        $courseId = \CourseManager::get_course_id_from_original_id($itemIdInput['value'], $itemIdInput['name']);
         $courseRepo = $this->em->getRepository('ChamiloCoreBundle:Course');
-        $course = $courseRepo->find($id);
+        $course = $courseRepo->find($courseId);
 
-        if (!$course) {
-            throw new UserError($this->translator->trans('Course not found.'));
+        if (empty($courseId)) {
+            throw new UserError($this->translator->trans("Course not found"));
         }
 
         if (false === $this->securityChecker->isGranted(CourseVoter::VIEW, $course)) {
@@ -423,9 +428,16 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
     {
         $this->checkAuthorization();
 
+        $itemIdInput = array_map('trim', $args['itemId']);
+
+        if (empty($itemIdInput['name']) || empty($itemIdInput['value'])) {
+            throw new UserError($this->translator->trans('Missing parameters'));
+        }
+
+        $sessionId = \SessionManager::getSessionIdFromOriginalId($itemIdInput['value'], $itemIdInput['name']);
         $sessionRepo = $this->em->getRepository('ChamiloCoreBundle:Session');
         /** @var Session $session */
-        $session = $sessionRepo->find($args['id']);
+        $session = $sessionRepo->find($sessionId);
 
         if (!$session) {
             throw new UserError($this->translator->trans('Session not found.'));

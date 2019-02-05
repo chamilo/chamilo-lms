@@ -120,7 +120,7 @@ switch ($my_action) {
     case 'report':
         $postId = isset($_GET['post_id']) ? $_GET['post_id'] : 0;
 
-        $result = reportPost($postId, $current_thread);
+        $result = reportPost($postId, $current_forum, $current_thread);
         Display::addFlash(Display::return_message(get_lang('Reported')));
         header('Location: '.$currentUrl);
         exit;

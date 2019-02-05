@@ -318,12 +318,12 @@ if (api_is_platform_admin()) {
 
     $blocks['platform']['icon'] = Display::return_icon(
         'platform.png',
-        get_lang('Platform'),
+        get_lang('Platform management'),
         [],
         ICON_SIZE_MEDIUM,
         false
     );
-    $blocks['platform']['label'] = api_ucfirst(get_lang('Platform'));
+    $blocks['platform']['label'] = api_ucfirst(get_lang('Platform management'));
     $blocks['platform']['description'] = get_lang('Configure your platform, view reports, publish and send announcements globally');
     $blocks['platform']['class'] = 'block-admin-platform';
     $blocks['platform']['editable'] = true;
@@ -516,6 +516,7 @@ if (api_is_platform_admin()) {
         false
     );
     $blocks['chamilo']['label'] = 'Chamilo.org';
+    $blocks['chamilo']['description'] = get_lang('Learn more about Chamilo and its use, official references links');
     $blocks['chamilo']['class'] = 'block-admin-chamilo';
 
     $items = [];
@@ -545,7 +546,7 @@ if (api_is_platform_admin()) {
         ICON_SIZE_MEDIUM,
         false
     );
-    $blocks['version_check']['label'] = get_lang('VersionCheck');
+    $blocks['version_check']['label'] = get_lang('Version Check');
     $blocks['version_check']['extra'] = '<div class="admin-block-version"></div>';
     $blocks['version_check']['search_form'] = null;
     $blocks['version_check']['items'] = '<div class="block-admin-version_check"></div>';

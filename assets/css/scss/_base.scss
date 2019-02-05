@@ -80,7 +80,15 @@ hr {
   border-top: 1px solid $border-color;
 }
 .container-fluid{
-  width: 95%;
+  @include large($breakpoint-xl){
+    width: 95%;
+  }
+  @include portrait($breakpoint-sm, $breakpoint-md){
+    width: 100%;
+  }
+  @include landscape($breakpoint-sm) {
+    width: 100%;
+  }
 }
 /*** TABS ***/
 .nav-tabs{
@@ -123,23 +131,6 @@ hr {
 .help-block{
   font-size: 12px;
   margin-bottom: 0;
-}
-// ---------------------------------------------------------
-// PAGE CONTAINER
-// ---------------------------------------------------------
-
-.page-container {
-  min-height: 100vh;
-  padding-left: $offscreen-size;
-  transition: all 0.2s ease;
-
-  @include between($breakpoint-md, $breakpoint-xl) {
-    padding-left: $collapsed-size;
-  }
-
-  @include to($breakpoint-md) {
-    padding-left: 0;
-  }
 }
 
 // ---------------------------------------------------------

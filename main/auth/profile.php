@@ -342,7 +342,9 @@ $return = $extraField->addElements(
     [],
     false,
     [],
-    []
+    [],
+    [],
+    true
 );
 
 $jquery_ready_content = $return['jquery_ready_content'];

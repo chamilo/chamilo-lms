@@ -210,10 +210,8 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
         }
 
         $userInput = $args['user'];
-        $originalUserIdName = $args['originalUserIdName'];
-        $originalUserIdValue = $args['originalUserIdValue'];
 
-        $userId = \UserManager::get_user_id_from_original_id($originalUserIdValue, $originalUserIdName);
+        $userId = \UserManager::get_user_id_from_original_id($args['userId']['value'], $args['userId']['name']);
 
         if (!empty($userId)) {
             throw new UserError($this->translator->trans('User already exists'));
@@ -253,8 +251,8 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
             $userId,
             $this->currentAccessUrl->getId()
         );
-        \UserManager::create_extra_field($originalUserIdName, \ExtraField::FIELD_TYPE_TEXT, $originalUserIdName, '');
-        \UserManager::update_extra_field_value($userId, $originalUserIdName, $originalUserIdValue);
+        \UserManager::create_extra_field($args['userId']['name'], \ExtraField::FIELD_TYPE_TEXT, $args['userId']['name'], '');
+        \UserManager::update_extra_field_value($userId, $args['userId']['name'], $args['userId']['value']);
 
         return $this->em->find('ChamiloUserBundle:User', $userId);
     }
@@ -498,7 +496,7 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
      *
      * @return CNotebook
      */
-    protected function addCourseNote(Argument $args): CNotebook
+    protected function resolveAddCourseNote(Argument $args): CNotebook
     {
         $this->checkAuthorization();
 
@@ -532,5 +530,124 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
         );
 
         return $this->em->find('ChamiloCourseBundle:CNotebook', $noteId);
+    }
+
+    /**
+     * @param Argument $args
+     *
+     * @return bool
+     */
+    protected function resolveDisableUser(Argument $args): bool
+    {
+        $this->changeUserActiveState($args['userId']['name'], $args['userId']['value'], false);
+
+        return true;
+    }
+
+    /**
+     * @param Argument $args
+     *
+     * @return bool
+     */
+    protected function resolveEnableUser(Argument $args): bool
+    {
+        $this->changeUserActiveState($args['userId']['name'], $args['userId']['value'], true);
+
+        return true;
+    }
+
+    /**
+     * @param Argument $args
+     *
+     * @throws \Exception
+     *
+     * @return bool
+     */
+    protected function resolveDeleteUser(Argument $args): bool
+    {
+        $this->checkAuthorization();
+
+        if (false === $this->securityChecker->isGranted('ROLE_ADMIN')) {
+            throw new UserError($this->translator->trans('Not allowed'));
+        }
+
+        $userId = \UserManager::get_user_id_from_original_id($args['userId']['value'], $args['userId']['name']);
+
+        if (empty($userId)) {
+            throw new UserError($this->translator->trans('User not found'));
+        }
+
+        return \UserManager::delete_user($userId);
+    }
+
+    /**
+     * @param Argument $args
+     *
+     * @return User
+     */
+    protected function resolveEditUser(Argument $args): User
+    {
+        $this->checkAuthorization();
+
+        if (false === $this->securityChecker->isGranted('ROLE_ADMIN')) {
+            throw new UserError($this->translator->trans('Not allowed'));
+        }
+
+        $userInput = $args['user'];
+
+        $userId = \UserManager::get_user_id_from_original_id($args['userId']['value'], $args['userId']['name']);
+
+        if (!empty($userId)) {
+            throw new UserError($this->translator->trans('User already exists'));
+        }
+
+        /** @var User $user */
+        $user = $this->em->find('ChamiloUserBundle:User', $userId);
+
+        \UserManager::update_user(
+            $userId,
+            !empty($userInput['firstname']) ? $userInput['firstname'] : $user->getFirstname(),
+            !empty($userInput['lastname']) ? $userInput['lastname'] : $user->getLastname(),
+            !empty($userInput['username']) ? $userInput['username'] : $user->getUsername(),
+            null,
+            PLATFORM_AUTH_SOURCE,
+            !empty($userInput['email']) ? $userInput['email'] : $user->getEmail(),
+            !empty($userInput['status']) ? $userInput['status'] : $user->getStatus(),
+            !empty($userInput['officialCode']) ? $userInput['officialCode'] : $user->getOfficialCode(),
+            !empty($userInput['phone']) ? $userInput['phone'] : $user->getPhone(),
+            $user->getPictureUri(),
+            !empty($userInput['expirationDate']) ? $userInput['expirationDate'] : $user->getExpirationDate(),
+            !empty($userInput['isActive']) ? $userInput['isActive'] : $user->isActive()
+        );
+
+        $this->em->clear($user);
+
+        return $this->em->find('ChamiloUserBundle:User', $userId);
+    }
+
+    /**
+     * @param string $userIdName
+     * @param string $userIdValue
+     * @param bool   $setActive
+     */
+    private function changeUserActiveState($userIdName, $userIdValue, $setActive)
+    {
+        $this->checkAuthorization();
+
+        if (false === $this->securityChecker->isGranted('ROLE_ADMIN')) {
+            throw new UserError($this->translator->trans('Not allowed'));
+        }
+
+        $userId = \UserManager::get_user_id_from_original_id($userIdValue, $userIdName);
+
+        if (empty($userId)) {
+            throw new UserError($this->translator->trans('User not found'));
+        }
+
+        if ($setActive) {
+            \UserManager::enable($userId);
+        } else {
+            \UserManager::disable($userId);
+        }
     }
 }

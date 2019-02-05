@@ -43,15 +43,15 @@ type Mutation {
         originalCourseIdName: String!,
         originalCourseIdValue: String!
     ): Course
-    createUser(
-        user: CreateUserInput!,
-        originalUserIdName: String!,
-        originalUserIdValue: String!
-    ): User
+    createUser(user: CreateUserInput!, userId: UserIdInput!): User
     subscribeUserToCourse(
         user: Int!
         course: Int!
     ): Boolean
+    disableUser(userId: UserIdInput!): Boolean
+    enableUser(userId: UserIdInput!): Boolean
+    deleteUser(userId: UserIdInput!): Boolean
+    editUser(user: EditUserInput!, userId: UserIdInput!): User
 }
 
 # Objects
@@ -443,6 +443,24 @@ input AddForumPostInput {
 input AddCourseNoteInput {
     title: String!,
     text: String!
+}
+
+input UserIdInput {
+    name: String!
+    value: String!
+}
+
+input EditUserInput {
+    firstname: String,
+    lastname: String,
+    status: UserStatus,
+    email: String,
+    username: String,
+    officialCode: String,
+    isActive: Boolean,
+    language: String,
+    phone: String,
+    expirationDate: DateTime
 }
 
 # Scalars

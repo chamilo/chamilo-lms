@@ -5,11 +5,16 @@
             <div class="list-settings">
             {% for block_item in blocks_admin %}
                 <div id="tabs-{{ loop.index }}" class="item-setting">
-                    <div class="card">
-                        <div class="card-body">
+                    <div class="card mb-3">
+                        <div class="card-header">
                             <h5 class="card-title">{{ block_item.icon }} {{ block_item.label }}</h5>
+                        </div>
+                        <div class="card-body">
                             <div class="card-search">
                                 {{ block_item.search_form }}
+                            </div>
+                            <div class="card-description mp-3 mb-3">
+                                {{ block_item.description }}
                             </div>
                             {% if block_item.items is not empty %}
                                 <ul class="list-group">

@@ -2,20 +2,25 @@
 {% block content %}
     {% autoescape false %}
         <div id="settings">
-            <div class="row">
+            <div class="list-settings">
             {% for block_item in blocks_admin %}
-                <div id="tabs-{{ loop.index }}" class="col-md-6">
-                    <div class="card">
-                        <div class="card-body">
+                <div id="tabs-{{ loop.index }}" class="item-setting">
+                    <div class="card mb-3">
+                        <div class="card-header">
                             <h5 class="card-title">{{ block_item.icon }} {{ block_item.label }}</h5>
+                        </div>
+                        <div class="card-body">
                             <div class="card-search">
                                 {{ block_item.search_form }}
                             </div>
+                            <div class="card-description mp-3 mb-3">
+                                {{ block_item.description }}
+                            </div>
                             {% if block_item.items is not empty %}
-                                <ul class="list-settings">
+                                <ul class="list-group">
                                     {% for url in block_item.items %}
                                         {% if url.url is not empty %}
-                                            <li>
+                                            <li class="list-group-item">
                                                 <a href="{{ url.url }}">
                                                     {{ url.label }}
                                                 </a>
@@ -31,8 +36,6 @@
                                 </div>
                             {% endif %}
                         </div>
-
-
                     </div>
                 </div>
             {% endfor %}
@@ -41,7 +44,6 @@
             <div class="row">
                 {% for role in app.user.roles %}
                     {% set role = role | lower | replace ({ 'role_' : ''}) %}
-
                     {% if role in ['global_admin'] %}
                         {% include '@ChamiloTheme/Admin/' ~ role ~ '/role_index.html.twig' %}
                     {% endif %}
@@ -60,15 +62,7 @@
                     });
                 });
             </script>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="well_border">
-                        <h3>{{ 'VersionCheck' | trans }} </h3>
 
-                        <div class="admin-block-version"></div>
-                    </div>
-                </div>
-            </div>
         {% endif %}
     {% endautoescape %}
 {% endblock %}

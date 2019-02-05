@@ -479,6 +479,25 @@ if (is_array($threads)) {
                 );
             }
 
+            $_user = api_get_user_info($row['user_id']);
+            $urlImg = api_get_path(WEB_IMG_PATH);
+            $iconStatus = null;
+            $isAdmin = UserManager::is_admin($row['user_id']);
+
+            if($_user['status']==5) {
+                if($_user['has_certificates']){
+                    $iconStatus = '<img src="'.$urlImg.'icons/svg/ofaj_graduated.svg" width="22px" height="22px">';
+                }else{
+                    $iconStatus = '<img src="'.$urlImg.'icons/svg/ofaj_student.svg" width="22px" height="22px">';
+                }
+            }else if($_user['status'] == 1){
+                if($isAdmin){
+                    $iconStatus = '<img src="'.$urlImg.'icons/svg/ofaj_admin.svg" width="22px" height="22px">';
+                }else{
+                    $iconStatus = '<img src="'.$urlImg.'icons/svg/ofaj_teacher.svg" width="22px" height="22px">';
+                }
+            }
+
             $html .= '<div class="thumbnail">'.display_user_image($row['user_id'], $name, $origin).'</div>';
             $html .= '</div>';
             $html .= '<div class="col-md-10">';
@@ -489,7 +508,7 @@ if (is_array($threads)) {
                     'class' => 'title',
                 ]
             );
-            $html .= '<p>'.get_lang('By').' '.$authorName.'</p>';
+            $html .= '<p>'.get_lang('By').' '.$iconStatus.' '.$authorName.'</p>';
             $html .= '<p>'.api_convert_and_format_date($row['insert_date']).'</p>';
 
             if ($current_forum['moderated'] == 1 && api_is_allowed_to_edit(false, true)) {

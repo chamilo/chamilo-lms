@@ -2139,3 +2139,9 @@ blockquote p {
 #personal_data .panel-default .panel-heading a {
     color: #666;
 }
+.user-data .username{
+    display: inline-block;
+}
+.user-data img.pull-left{
+    margin-right: 0.5em;
+}

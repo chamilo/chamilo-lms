@@ -1324,6 +1324,12 @@ class Display
         // Default row quantity
         if (!isset($extra_params['rowList'])) {
             $extra_params['rowList'] = [20, 50, 100, 500, 1000, $all_value];
+            $rowList = api_get_configuration_value('jq_grid_row_list');
+            if (!empty($rowList) && isset($rowList['options'])) {
+                $rowList = $rowList['options'];
+                $rowList[] = $all_value;
+            }
+            $extra_params['rowList'] = $rowList;
         }
 
         $json = '';

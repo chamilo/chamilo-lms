@@ -1087,6 +1087,9 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Teachers cannot delete an exercise/questions, change exercise visibility, download to qti, clean results
 // $_configuration['limit_exercise_teacher_access'] = false;
 
+// Changes the row list when using jqgrid
+//$_configuration['jq_grid_row_list'] = ['options' => [50, 100, 200, 500]];
+
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email

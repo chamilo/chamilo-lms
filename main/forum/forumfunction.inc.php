@@ -6536,9 +6536,10 @@ function postIsEditableByStudent($forum, $post)
 function getReportButton($postId, $threadInfo)
 {
     return Display::url(
-        get_lang('Report'),
+        Display::returnFontAwesomeIcon('flag'),
         api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.
-        api_get_cidreq().'&action=report&post_id='.$postId.'&forum='.$threadInfo['forum_id'].'&thread='.$threadInfo['thread_id']
+        api_get_cidreq().'&action=report&post_id='.$postId.'&forum='.$threadInfo['forum_id'].'&thread='.$threadInfo['thread_id'],
+        ['class' => 'btn btn-danger', 'title' => get_lang('Report')]
     );
 
 }

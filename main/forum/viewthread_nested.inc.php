@@ -222,10 +222,10 @@ foreach ($posts as $post) {
 
     $statusIcon = getPostStatus($current_forum, $post);
     if (!empty($iconEdit)) {
-        $html .= "<div class='tools-icons'>$reportButton $iconEdit $statusIcon </div>";
+        $html .= "<div class='tools-icons'> $iconEdit $statusIcon </div>";
     } else {
         if (!empty(strip_tags($statusIcon))) {
-            $html .= "<div class='tools-icons'> $reportButton $statusIcon </div>";
+            $html .= "<div class='tools-icons'> $statusIcon </div>";
         }
     }
 
@@ -359,7 +359,7 @@ foreach ($posts as $post) {
 
     $html .= '</div>';
     $html .= '<div class="col-md-6 text-right">';
-    $html .= "$editButton $buttonReply $buttonQuote $waitingValidation";
+    $html .= "$editButton $reportButton $buttonReply $buttonQuote $waitingValidation";
     $html .= '</div>';
     $html .= '</div>';
 

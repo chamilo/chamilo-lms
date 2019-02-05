@@ -339,11 +339,16 @@ foreach ($posts as $post) {
         );
     }
 
-    $html .= '<div class="col-md-10">';
-    // The post title
+    $highLightClass = '';
+    if (isset($_GET['post_id']) && $_GET['post_id'] == $post['post_id']) {
+        $highLightClass = 'alert alert-danger';
+    }
 
+    $html .= '<div class="col-md-10 '.$highLightClass.'">';
+    // The post title
     $titlePost = Display::tag('h3', $post['post_title'], ['class' => 'forum_post_title']);
     $html .= Display::tag('div', $titlePost, ['class' => 'post-header']);
+    $html .= '<a name="post_id_'.$post['post_id'].'"></a>';
 
     // the post body
     $html .= Display::tag('div', $post['post_text'], ['class' => 'post-body']);
@@ -376,7 +381,7 @@ foreach ($posts as $post) {
 
     $html .= '</div>';
     $html .= '<div class="col-md-6 text-right">';
-    $html .= "$reportButton $editButton $buttonReply $buttonQuote $waitingValidation";
+    $html .= "$editButton $buttonReply $buttonQuote $waitingValidation";
     $html .= '</div>';
     $html .= '</div>';
 

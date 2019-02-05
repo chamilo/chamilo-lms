@@ -501,7 +501,8 @@ class ExtraField extends Model
         $fieldsToFreeze = [],
         $addEmptyOptionSelects = false,
         $introductionTextList = [],
-        $requiredFields = []
+        $requiredFields = [],
+        $hideGeoLocalizationDetails = false
     ) {
         if (empty($form)) {
             return false;
@@ -552,7 +553,8 @@ class ExtraField extends Model
             $customLabelsExtraMultipleSelect,
             $fieldsToFreeze,
             $addEmptyOptionSelects,
-            $introductionTextList
+            $introductionTextList,
+            $hideGeoLocalizationDetails
         );
 
         if (!empty($requiredFields)) {
@@ -1030,7 +1032,8 @@ class ExtraField extends Model
         $customLabelsExtraMultipleSelect = [],
         $fieldsToFreeze = [],
         $addEmptyOptionSelects = false,
-        $introductionTextList = []
+        $introductionTextList = [],
+        $hideGeoLocalizationDetails = false
     ) {
         $type = $this->type;
         $jquery_ready_content = '';
@@ -2205,6 +2208,9 @@ class ExtraField extends Model
                                 }
                             </script>
                         ");
+                        if ($hideGeoLocalizationDetails) {
+                            $form->addHtml('<div style="display:none">');
+                        }
                         $form->addHtml('
                             <div class="form-group">
                                 <label for="geolocalization_extra_'.$field_details['variable'].'"
@@ -2237,6 +2243,9 @@ class ExtraField extends Model
                                 </div>
                             </div>
                         ');
+                        if ($hideGeoLocalizationDetails) {
+                            $form->addHtml('</div>');
+                        }
                         break;
                     case self::FIELD_TYPE_GEOLOCALIZATION_COORDINATES:
                         $dataValue = isset($extraData['extra_'.$field_details['variable']])

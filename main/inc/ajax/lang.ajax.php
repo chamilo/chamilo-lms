@@ -26,17 +26,21 @@ switch ($action) {
             $(document).ready(function() {
                 '.$hideAll.'
                 var defaultLanguageFromUser = "'.$languageInfo['isocode'].'";
+                
                 $("span:lang('.$languageInfo['isocode'].')").show();
                 
                 var defaultLanguage = "";
+                var langFromUserFound = false;
                 $(this).find("span").each(function() {
                     defaultLanguage = $(this).attr("lang");
-                    if (defaultLanguage != "") {
-                        return false;
+                    $(this).before().next("br").remove();                
+                    if (defaultLanguageFromUser == defaultLanguage) {
+                        langFromUserFound = true;
                     }
-                });      
+                });
                 
-                if (defaultLanguageFromUser != defaultLanguage) {
+                // Show default language
+                if (langFromUserFound == false) {
                     $("span:lang("+defaultLanguage+")").show();
                 }                   
             });

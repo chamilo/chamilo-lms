@@ -287,16 +287,28 @@ if (isset($current_thread['thread_id'])) {
                 }
             }
 
+            $reportButton = '';
+            if ($allowReport) {
+                $reportButton = getReportButton($row['post_id'], $current_thread);
+            }
+
             if (!empty($iconEdit)) {
-                $html .= '<div class="tools-icons">'.$iconEdit.' '.$statusIcon.'</div>';
+                $html .= "<div class='tools-icons'>$reportButton $iconEdit $statusIcon </div>";
             } else {
                 if (!empty(strip_tags($statusIcon))) {
-                    $html .= '<div class="tools-icons">'.$statusIcon.'</div>';
+                    $html .= "<div class='tools-icons'> $reportButton $statusIcon </div>";
                 }
             }
+
             $html .= $closedPost;
             $html .= '</div>';
-            $html .= '<div class="col-md-10">';
+
+            $highLightClass = '';
+            if (isset($_GET['post_id']) && $_GET['post_id'] == $row['post_id']) {
+                $highLightClass = 'alert alert-danger';
+            }
+
+            $html .= '<div class="col-md-10 '.$highLightClass.'">';
 
             $titlePost = Display::tag(
                 'h3',
@@ -368,6 +380,8 @@ if (isset($current_thread['thread_id'])) {
             $html .= $buttonReply.' '.$buttonQuote;
             $html .= '</div>';
             $html .= '</div>';
+
+
 
             // The post has been displayed => it can be removed from the what's new array
             unset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]);

@@ -6599,7 +6599,7 @@ function getReportRecepients()
             }
         }
 
-        $users = array_unique(array_filter($users));var_dump($users);
+        $users = array_unique(array_filter($users));
     }
 
     return $users;
@@ -6608,35 +6608,45 @@ function getReportRecepients()
 
 /**
  * @param int   $postId
+ * @param array $forumInfo
  * @param array $threadInfo
  *
  * @return bool
  */
-function reportPost($postId, $threadInfo)
+function reportPost($postId, $forumInfo, $threadInfo)
 {
     if (!reportAvailable()) {
+        return false;
+    }
+
+    if (empty($forumInfo) || empty($threadInfo)) {
         return false;
     }
 
     $postId = (int) $postId;
 
     $postData = get_post_information($postId);
+    $currentUser = api_get_user_info();
 
     if (!empty($postData)) {
         $users = getReportRecepients();
         if (!empty($users)) {
             $url = api_get_path(WEB_CODE_PATH).
-                'forum/viewthread.php?forum='.$threadInfo['forum_id'].'&thread='.$threadInfo['thread_id'].'&post_id='.$postId;
+                'forum/viewthread.php?forum='.$threadInfo['forum_id'].'&thread='.$threadInfo['thread_id'].'&'.api_get_cidreq().'&post_id='.$postId.'#post_id_'.$postId;
             $postLink = Display::url(
-                get_lang('Link'),
+                $postData['post_title'],
                 $url
             );
-            $subject = sprintf(get_lang('PostXReported'), $postData['post_title']);
-            $content = sprintf(get_lang('PostXReportedVisitLinkX'), $postData['post_title'], $postLink);
+            $subject = get_lang('ForumPostReported');
+            $content = sprintf(
+                get_lang('UserXReportedPostXInForumX'),
+                $currentUser['complete_name'],
+                $postLink,
+                $forumInfo['forum_title']
+            );
             foreach ($users as $userId) {
                 MessageManager::send_message_simple($userId, $subject, $content);
             }
-            exit;
         }
     }
 }

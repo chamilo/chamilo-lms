@@ -462,18 +462,15 @@ hr {
       .card-body{
         padding: 0;
         .card-inside{
-          padding: 0.8rem;
+          padding: 0.8rem 0.8rem 0.8rem 0;
         }
       }
       .card-title{
-        font-size: 16px;
-        a{
-          color: $grey-800;
-        }
+        font-size: 14px;
       }
     }
     .card-list{
-      margin-top: 10px;
+      margin-top: 0;
     }
   }
 }
@@ -483,6 +480,35 @@ hr {
   margin-top: 2rem;
   .tab-pane{
     padding: 0;
+  }
+}
+/** LIST SETTINGS **/
+.list-settings{
+  display: grid;
+  grid-gap: 1rem;
+  grid-row-gap: 16px;
+  grid-template-columns: repeat(3, 1fr);
+  @include large($breakpoint-xl){
+    grid-template-columns: repeat(4, 1fr);
+  }
+  @include portrait($breakpoint-sm, $breakpoint-md){
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @include landscape($breakpoint-sm) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  .item-setting{
+    display: -webkit-flex;
+    display: flex;
+    .card{
+      display: inline-block;
+      width: 100%;
+    }
+    .list-group{
+      .list-group-item{
+        padding: 0.45rem 0.75rem;
+      }
+    }
   }
 }
 
@@ -524,7 +550,7 @@ hr {
     .card-body{
       padding: 0;
       .card-inside{
-        padding: 0.8rem;
+        padding: 0.8rem 0.8rem 0.8rem 0;
       }
       @include portrait($breakpoint-sm, $breakpoint-md){
         padding: 0.8rem;

@@ -48,6 +48,7 @@ type Mutation {
     enableUser(itemId: ItemIdInput!): Boolean
     deleteUser(itemId: ItemIdInput!): Boolean
     editUser(user: EditUserInput!, itemId: ItemIdInput!): User
+    editCourse(course: EditCourseInput!, itemId: ItemIdInput!): Course
 }
 
 # Objects
@@ -394,6 +395,17 @@ input CreateCourseInput {
     title: String!,
     categoryCode: String,
     wantedCode: String,
+    language: String = "en",
+    diskQuota: Int = 100,
+    visibility: CourseVisibility,
+    allowSubscription: Boolean = true,
+    allowUnsubscription: Boolean = false
+}
+
+input EditCourseInput {
+    title: String,
+    categoryCode: String,
+    visualCode: String,
     language: String = "en",
     diskQuota: Int = 100,
     visibility: CourseVisibility,

@@ -65,25 +65,6 @@ $s->register(
     ['return' => 'tns:course_result_array']
 );
 
-$s->register(
-    'WSCourse.EditCourse',
-    [
-        'secret_key' => 'xsd:string',
-        'course_id_field_name' => 'xsd:string',
-        'course_id_value' => 'xsd:string',
-        'title' => 'xsd:string',
-        'category_code' => 'xsd:string',
-        'department_name' => 'xsd:string',
-        'department_url' => 'xsd:string',
-        'language' => 'xsd:string',
-        'visibility' => 'xsd:int',
-        'subscribe' => 'xsd:int',
-        'unsubscribe' => 'xsd:int',
-        'visual_code' => 'xsd:string',
-        'extras' => 'tns:extra_field',
-    ]
-);
-
 $s->wsdl->addComplexType(
     'course',
     'complexType',

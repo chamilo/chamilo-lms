@@ -197,6 +197,79 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
      *
+     * @return Course
+     */
+    protected function resolveEditCourse(Argument $args): Course
+    {
+        $this->checkAuthorization();
+
+        if (false === $this->securityChecker->isGranted('ROLE_ADMIN')) {
+            throw new UserError($this->translator->trans('Not allowed'));
+        }
+
+        $courseInput = array_map('trim', $args['course']);
+        $itemIdInput = array_map('trim', $args['itemId']);
+
+        if (empty($itemIdInput['name']) || empty($itemIdInput['value'])) {
+            throw new UserError($this->translator->trans('Missing parameters'));
+        }
+
+        $courseId = \CourseManager::get_course_id_from_original_id($itemIdInput['value'], $itemIdInput['name']);
+
+        if (empty($courseId)) {
+            throw new UserError($this->translator->trans("Course doesn't exists"));
+        }
+
+        /** @var Course $course */
+        $course = $this->em->find('ChamiloCoreBundle:Course', $courseId);
+
+        if (!empty($courseInput['title'])) {
+            $course->setTitle($courseInput['title']);
+        }
+
+        if (isset($courseInput['categoryCode'])) {
+            $course->setCategoryCode($courseInput['categoryCode']);
+        }
+
+        if (!empty($courseInput['visualCode'])) {
+            $course->setVisualCode($courseInput['visualCode']);
+        }
+
+        if (!empty($courseInput['language'])) {
+            $course->setCourseLanguage($courseInput['language']);
+        }
+
+        if (!empty($courseInput['diskQuota'])) {
+            $course->setDiskQuota($courseInput['diskQuota'] * 1024 * 1024);
+        }
+
+        if (isset($courseInput['visibility'])) {
+            $course->setVisibility($courseInput['visibility']);
+        }
+
+        if ($course->getSubscribe() !== $courseInput['allowSubscription']) {
+            $course->setSubscribe($courseInput['allowSubscription']);
+        }
+
+        if ($course->getUnsubscribe() !== $courseInput['allowUnsubscription']) {
+            $course->setUnsubscribe($courseInput['allowUnsubscription']);
+        }
+
+        $course->setCurrentUrl($this->currentAccessUrl);
+
+        $this->em->persist($course);
+        $this->em->flush();
+
+        return $course;
+    }
+
+    /**
+     * @param Argument $args
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     *
      * @return User
      */
     protected function resolveCreateUser(Argument $args): User

@@ -127,7 +127,7 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
      *
      * @return Course
      */
-    protected function resolveCreateCourse(Argument $args): ?Course
+    protected function resolveCreateCourse(Argument $args): Course
     {
         $this->checkAuthorization();
 
@@ -136,8 +136,6 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
         }
 
         $course = $args['course'];
-        $originalCourseIdName = $args['originalCourseIdName'];
-        $originalCourseIdValue = $args['originalCourseIdValue'];
 
         $title = $course['title'];
         $categoryCode = !empty($course['categoryCode']) ? $course['categoryCode'] : null;
@@ -148,7 +146,7 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
         $allowSubscription = $course['allowSubscription'];
         $allowUnsubscription = $course['allowUnsubscription'];
 
-        $courseInfo = \CourseManager::getCourseInfoFromOriginalId($originalCourseIdValue, $originalCourseIdName);
+        $courseInfo = \CourseManager::getCourseInfoFromOriginalId($args['itemId']['value'], $args['itemId']['name']);
 
         if (!empty($courseInfo)) {
             throw new UserError($this->translator->trans('Course already exists'));
@@ -178,15 +176,15 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
         }
 
         \CourseManager::create_course_extra_field(
-            $originalCourseIdName,
+            $args['itemId']['name'],
             \ExtraField::FIELD_TYPE_TEXT,
-            $originalCourseIdName
+            $args['itemId']['name']
         );
 
         \CourseManager::update_course_extra_field_value(
             $courseInfo['code'],
-            $originalCourseIdName,
-            $originalCourseIdValue
+            $args['itemId']['name'],
+            $args['itemId']['value']
         );
 
         return $this->em->find('ChamiloCoreBundle:Course', $courseInfo['real_id']);
@@ -199,9 +197,9 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
      *
-     * @return User|null
+     * @return User
      */
-    protected function resolveCreateUser(Argument $args): ?User
+    protected function resolveCreateUser(Argument $args): User
     {
         $this->checkAuthorization();
 
@@ -211,7 +209,7 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
 
         $userInput = $args['user'];
 
-        $userId = \UserManager::get_user_id_from_original_id($args['userId']['value'], $args['userId']['name']);
+        $userId = \UserManager::get_user_id_from_original_id($args['itemId']['value'], $args['itemId']['name']);
 
         if (!empty($userId)) {
             throw new UserError($this->translator->trans('User already exists'));
@@ -251,8 +249,8 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
             $userId,
             $this->currentAccessUrl->getId()
         );
-        \UserManager::create_extra_field($args['userId']['name'], \ExtraField::FIELD_TYPE_TEXT, $args['userId']['name'], '');
-        \UserManager::update_extra_field_value($userId, $args['userId']['name'], $args['userId']['value']);
+        \UserManager::create_extra_field($args['itemId']['name'], \ExtraField::FIELD_TYPE_TEXT, $args['itemId']['name'], '');
+        \UserManager::update_extra_field_value($userId, $args['itemId']['name'], $args['itemId']['value']);
 
         return $this->em->find('ChamiloUserBundle:User', $userId);
     }
@@ -539,7 +537,7 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
      */
     protected function resolveDisableUser(Argument $args): bool
     {
-        $this->changeUserActiveState($args['userId']['name'], $args['userId']['value'], false);
+        $this->changeUserActiveState($args['itemId']['name'], $args['itemId']['value'], false);
 
         return true;
     }
@@ -551,7 +549,7 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
      */
     protected function resolveEnableUser(Argument $args): bool
     {
-        $this->changeUserActiveState($args['userId']['name'], $args['userId']['value'], true);
+        $this->changeUserActiveState($args['itemId']['name'], $args['itemId']['value'], true);
 
         return true;
     }
@@ -571,7 +569,7 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
             throw new UserError($this->translator->trans('Not allowed'));
         }
 
-        $userId = \UserManager::get_user_id_from_original_id($args['userId']['value'], $args['userId']['name']);
+        $userId = \UserManager::get_user_id_from_original_id($args['itemId']['value'], $args['itemId']['name']);
 
         if (empty($userId)) {
             throw new UserError($this->translator->trans('User not found'));
@@ -595,7 +593,7 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
 
         $userInput = $args['user'];
 
-        $userId = \UserManager::get_user_id_from_original_id($args['userId']['value'], $args['userId']['name']);
+        $userId = \UserManager::get_user_id_from_original_id($args['itemId']['value'], $args['itemId']['name']);
 
         if (!empty($userId)) {
             throw new UserError($this->translator->trans('User already exists'));

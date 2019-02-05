@@ -38,20 +38,16 @@ type Mutation {
         "Session ID"
         session: Int! = 0
     ): CourseNote!
-    createCourse(
-        course: CreateCourseInput!,
-        originalCourseIdName: String!,
-        originalCourseIdValue: String!
-    ): Course
-    createUser(user: CreateUserInput!, userId: UserIdInput!): User
+    createCourse(course: CreateCourseInput!, itemId: ItemIdInput!): Course
+    createUser(user: CreateUserInput!, itemId: ItemIdInput!): User
     subscribeUserToCourse(
         user: Int!
         course: Int!
     ): Boolean
-    disableUser(userId: UserIdInput!): Boolean
-    enableUser(userId: UserIdInput!): Boolean
-    deleteUser(userId: UserIdInput!): Boolean
-    editUser(user: EditUserInput!, userId: UserIdInput!): User
+    disableUser(itemId: ItemIdInput!): Boolean
+    enableUser(itemId: ItemIdInput!): Boolean
+    deleteUser(itemId: ItemIdInput!): Boolean
+    editUser(user: EditUserInput!, itemId: ItemIdInput!): User
 }
 
 # Objects
@@ -445,7 +441,7 @@ input AddCourseNoteInput {
     text: String!
 }
 
-input UserIdInput {
+input ItemIdInput {
     name: String!
     value: String!
 }

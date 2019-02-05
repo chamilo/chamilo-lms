@@ -134,9 +134,10 @@ if (isset($current_thread['thread_id'])) {
                     display_user_link($posterId, $name),
                     ['class' => 'title-username']
                 );
+                $_user = api_get_user_info($posterId);
                 $urlImg = api_get_path(WEB_IMG_PATH);
                 $iconStatus = null;
-                $isAdmin = UserManager::is_admin($userId);
+                $isAdmin = UserManager::is_admin($posterId);
 
                 if($_user['status']==5) {
                     if($_user['has_certificates']){

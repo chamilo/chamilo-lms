@@ -697,6 +697,36 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
     }
 
     /**
+     * @param Argument $args
+     *
+     * @return bool
+     */
+    protected function resolveDeleteCourse(Argument $args): bool
+    {
+        $this->checkAuthorization();
+
+        if (false === $this->securityChecker->isGranted('ROLE_ADMIN')) {
+            throw new UserError($this->translator->trans('Not allowed'));
+        }
+
+        $itemIdInput = array_map('trim', $args['itemId']);
+
+        if (empty($itemIdInput['name']) || empty($itemIdInput['value'])) {
+            throw new UserError($this->translator->trans('Missing parameters'));
+        }
+
+        $courseInfo = \CourseManager::getCourseInfoFromOriginalId($itemIdInput['value'], $itemIdInput['name']);
+
+        if (empty($courseInfo)) {
+            throw new UserError($this->translator->trans("Course doesn't exists"));
+        }
+
+        \CourseManager::delete_course($courseInfo['code']);
+
+        return true;
+    }
+
+    /**
      * @param string $userIdName
      * @param string $userIdValue
      * @param bool   $setActive

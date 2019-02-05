@@ -49,6 +49,7 @@ type Mutation {
     deleteUser(itemId: ItemIdInput!): Boolean
     editUser(user: EditUserInput!, itemId: ItemIdInput!): User
     editCourse(course: EditCourseInput!, itemId: ItemIdInput!): Course
+    deleteCourse(itemId: ItemIdInput!): Boolean
 }
 
 # Objects

@@ -13,68 +13,6 @@ require_once __DIR__.'/cm_webservice.php';
 class WSCMCourse extends WSCM
 {
     /**
-     * Deletes a course.
-     *
-     * @param string API secret key
-     * @param string Course id field name
-     * @param string Course id value
-     */
-    public function DeleteCourse(
-        $secret_key,
-        $course_id_field_name,
-        $course_id_value
-    ) {
-        $verifKey = $this->verifyKey($secret_key);
-        if ($verifKey instanceof WSError) {
-            $this->handleError($verifKey);
-        } else {
-            $result = $this->deleteCourseHelper(
-                $course_id_field_name,
-                $course_id_value
-            );
-            if ($result instanceof WSError) {
-                $this->handleError($result);
-            }
-        }
-    }
-
-    /**
-     * Deletes multiple courses.
-     *
-     * @param string API secret key
-     * @param array Array of courses with elements of the form
-     * array('course_id_field_name' => 'name_of_field', 'course_id_value' => 'value')
-     *
-     * @return array Array with elements like
-     *               array('course_id_value' => 'value', 'result' => array('code' => 0, 'message' => 'Operation was successful')).
-     *               Note that if the result array contains a code different
-     *               than 0, an error occured
-     */
-    public function DeleteCourses($secret_key, $courses)
-    {
-        $verifKey = $this->verifyKey($secret_key);
-        if ($verifKey instanceof WSError) {
-            $this->handleError($verifKey);
-        } else {
-            $results = [];
-            foreach ($courses as $course) {
-                $result_tmp = [];
-                $result_op = $this->deleteCourseHelper($course['course_id_field_name'], $course['course_id_value']);
-                $result_tmp['course_id_value'] = $course['course_id_value'];
-                if ($result_op instanceof WSCMError) {
-                    // Return the error in the results
-                    $result_tmp['result'] = $result_op->toArray();
-                } else {
-                    $result_tmp['result'] = $this->getSuccessfulResult();
-                }
-                $results[] = $result_tmp;
-            }
-
-            return $results;
-        }
-    }
-
-    /**
      * List courses.
      *
      * @param string API secret key
@@ -320,34 +258,6 @@ class WSCMCourse extends WSCM
         }
 
         return $username;
-    }
-
-    /**
-     * Deletes a course (helper method).
-     *
-     * @param string Course id field name
-     * @param string Course id value
-     *
-     * @return mixed True if the course was successfully deleted, WSError otherwise
-     */
-    protected function deleteCourseHelper(
-        $course_id_field_name,
-        $course_id_value
-    ) {
-        $course_id = $this->getCourseId(
-            $course_id_field_name,
-            $course_id_value
-        );
-        if ($course_id instanceof WSCMError) {
-            return $course_id;
-        } else {
-            $course_code = CourseManager::get_course_code_from_course_id(
-                $course_id
-            );
-            CourseManager::delete_course($course_code);
-
-            return true;
-        }
     }
 
     /**

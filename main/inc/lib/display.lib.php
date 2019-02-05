@@ -1321,6 +1321,9 @@ class Display
         $obj->viewrecords = 'true';
         $all_value = 10000000;
 
+        // Sets how many records we want to view in the grid
+        $obj->rowNum = 20;
+
         // Default row quantity
         if (!isset($extra_params['rowList'])) {
             $extra_params['rowList'] = [20, 50, 100, 500, 1000, $all_value];
@@ -1330,6 +1333,11 @@ class Display
                 $rowList[] = $all_value;
             }
             $extra_params['rowList'] = $rowList;
+        }
+
+        $defaultRow = api_get_configuration_value('jq_grid_default_row');
+        if (!empty($defaultRow)) {
+            $obj->rowNum = (int) $defaultRow;
         }
 
         $json = '';
@@ -1355,8 +1363,6 @@ class Display
             $obj->rowList = $extra_params['rowList'];
         }
 
-        // Sets how many records we want to view in the grid
-        $obj->rowNum = 20;
         if (!empty($extra_params['rowNum'])) {
             $obj->rowNum = $extra_params['rowNum'];
         } else {

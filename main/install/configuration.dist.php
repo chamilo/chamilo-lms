@@ -1090,6 +1090,9 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Changes the row list when using jqgrid
 //$_configuration['jq_grid_row_list'] = ['options' => [50, 100, 200, 500]];
 
+// Default selected row in jqgrid
+//$_configuration['jq_grid_default_row'] = 50;
+
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email

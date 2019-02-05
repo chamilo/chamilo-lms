@@ -1614,7 +1614,8 @@ class Tracking
     }
 
     /**
-     * Checks if the "lp_minimum_time" feature is available for the course
+     * Checks if the "lp_minimum_time" feature is available for the course.
+     *
      * @param int $courseId
      *
      * @return bool
@@ -1625,8 +1626,7 @@ class Tracking
             $extraFieldValue = new ExtraFieldValue('course');
             $value = $extraFieldValue->get_values_by_handler_and_field_variable($courseId, 'new_tracking_system');
             if ($value && isset($value['value']) && $value['value'] == 1) {
-
-               return true;
+                return true;
             }
         }
 

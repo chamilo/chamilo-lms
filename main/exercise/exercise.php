@@ -110,7 +110,7 @@ $nameTools = get_lang('Exercises');
 $errorXmlExport = null;
 if ($is_allowedToEdit && !empty($choice) && $choice === 'exportqti2') {
     if ($limitTeacherAccess && !api_is_platform_admin()) {
-       api_not_allowed(true);
+        api_not_allowed(true);
     }
     require_once api_get_path(SYS_CODE_PATH).'exercise/export/qti2/qti2_export.php';
 
@@ -249,7 +249,6 @@ if ($is_allowedToEdit) {
                                 GradebookUtils::remove_resource_from_course_gradebook($link_info['id']);
                             }
                             echo Display::return_message(get_lang('ExerciseDeleted'), 'confirmation');
-
                         }
                         break;
                     case 'enable':

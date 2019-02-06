@@ -65,7 +65,7 @@ class BuyCoursesPlugin extends Plugin
     public function __construct()
     {
         parent::__construct(
-            '1.0',
+            '5.0',
             "
                 Jose Angel Ruiz - NoSoloRed (original author) <br/>
                 Francis Gonzales and Yannick Warnier - BeezNest (integration) <br/>

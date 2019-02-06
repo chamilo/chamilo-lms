@@ -39,7 +39,7 @@
     });
 </script>
 
-<section id="settings">
+<section id="settings" class="row">
     {% set columns = 2 %}
     {% for block_item in blocks %}
         {% if block_item.items %}

@@ -274,19 +274,19 @@ class BuyCoursesPlugin extends Plugin
                 false
             )
         );
-        
+
         $fieldlabel = 'buycourses_company';
         $fieldtype = '1';
         $fieldtitle = $this->get_lang('Company');
         $fielddefault = '';
         $field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
-        
+
         $fieldlabel = 'buycourses_vat';
         $fieldtype = '1';
         $fieldtitle = $this->get_lang('VAT');
         $fielddefault = '';
         $field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
-        
+
         $fieldlabel = 'buycourses_address';
         $fieldtype = '1';
         $fieldtitle = $this->get_lang('Address');
@@ -1065,7 +1065,7 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get data of sales.
      *
-     * @param int $saleId The sale id
+     * @param int $saleId    The sale id
      * @param int $isService Check if a service
      *
      * @return array The sale data
@@ -1105,7 +1105,7 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get data of invoice.
      *
-     * @param int $saleId The sale id
+     * @param int $saleId    The sale id
      * @param int $isService Check if a service
      *
      * @return array The invoice data
@@ -1128,12 +1128,13 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get numeration of invoice.
      *
-     * @param int $saleId The sale id
+     * @param int $saleId    The sale id
      * @param int $isService Check if a service
      *
      * @return array The numeration invoice
      */
-    public function getNumInvoice($saleId, $isService) {
+    public function getNumInvoice($saleId, $isService)
+    {
         $dataInvoice = $this->getDataInvoice($saleId, $isService);
 
         return $dataInvoice['serie'].$dataInvoice['year'].'/'.$dataInvoice['num_invoice'];
@@ -1228,7 +1229,7 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Register a invoice.
      *
-     * @param int $saleId The sale ID
+     * @param int $saleId    The sale ID
      * @param int $isService The service type to filter (default : 0)
      */
     public function setInvoice($saleId, $isService = 0)
@@ -2608,7 +2609,7 @@ class BuyCoursesPlugin extends Plugin
             $sqlParams['tax_applies_to'] = $params['tax_applies_to'];
             $sqlParams['tax_name'] = $params['tax_name'];
         }
-        
+
         if ($this->get('invoicing_enable') === 'true') {
             $sqlParams['seller_name'] = $params['seller_name'];
             $sqlParams['seller_id'] = $params['seller_id'];

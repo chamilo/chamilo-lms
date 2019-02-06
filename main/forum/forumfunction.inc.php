@@ -4345,8 +4345,8 @@ function send_notification_mails($forumId, $thread_id, $reply_info)
  * be new posts and the user might have indicated that (s)he wanted to be
  * informed about the new posts by mail.
  *
- * @param string    $content    Content type (post, thread, forum, forum_category)
- * @param int       $id         Item DB ID of the corresponding content type
+ * @param string $content Content type (post, thread, forum, forum_category)
+ * @param int    $id      Item DB ID of the corresponding content type
  *
  * @return string language variable
  *

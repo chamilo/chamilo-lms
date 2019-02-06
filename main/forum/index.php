@@ -211,6 +211,16 @@ if (!empty($allCourseForums)) {
 
 $actions = Display::toolbarAction('toolbar-forum', [$actionLeft]);
 
+$languages = api_get_languages();
+$languages = array_column($languages['all'], 'english_name', 'isocode');
+
+$defaultUserLanguage = ucfirst($_user['language']);
+$extraFieldValues = new ExtraFieldValue('user');
+$value = $extraFieldValues->get_values_by_handler_and_field_variable(api_get_user_id(), 'langue_cible');
+
+if ($value && isset($value['value'])) {
+    $defaultUserLanguage = ucfirst($value['value']);
+}
 
 // Create a search-box
 $form = new FormValidator('search_simple', 'get', api_get_self().'?'.api_get_cidreq(), null, null, 'inline');
@@ -228,7 +238,7 @@ $returnParams = $extraField->addElements(
     [], // order fields
     [] // extra data
 );
-$form->setDefaults(['extra_language' => ucfirst($_user['language'])]);
+$form->setDefaults(['extra_language' => $defaultUserLanguage]);
 
 // Fixes error if there forums with no category.
 $forumsInNoCategory = get_forums_in_category(0);
@@ -561,12 +571,8 @@ $tpl->assign('actions', $actions);
 $tpl->assign('data', $listForumCategory);
 $tpl->assign('form_content', $formContent);
 $tpl->assign('search_filter', $form->returnForm());
-$languages = api_get_languages();
-$languages = array_column($languages['all'], 'english_name', 'isocode');
 
-
-$tpl->assign('default_user_language', ucfirst($_user['language']));
-
+$tpl->assign('default_user_language', $defaultUserLanguage);
 $tpl->assign('languages', array_flip($languages));
 $extraFieldValue = new ExtraFieldValue('course');
 $value = $extraFieldValue->get_values_by_handler_and_field_variable(api_get_course_int_id(), 'global_forum');

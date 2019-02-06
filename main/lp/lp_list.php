@@ -155,7 +155,7 @@ if ($filteredCategoryId) {
 $test_mode = api_get_setting('server_type');
 $showBlockedPrerequisite = api_get_configuration_value('show_prerequisite_as_blocked');
 $allowLpChamiloExport = api_get_configuration_value('allow_lp_chamilo_export');
-$allowMinTime = Tracking::minimunTimeAvailable(api_get_course_int_id());
+$allowMinTime = Tracking::minimunTimeAvailable(api_get_session_id(), api_get_course_int_id());
 $user = api_get_user_entity($userId);
 $ending = true;
 

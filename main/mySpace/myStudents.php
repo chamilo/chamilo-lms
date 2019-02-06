@@ -1387,7 +1387,7 @@ if (empty($details)) {
     ];
 
     $timeCourse = null;
-    if (Tracking::minimunTimeAvailable($courseInfo['real_id'])) {
+    if (Tracking::minimunTimeAvailable($session_id, $courseInfo['real_id'])) {
         $timeCourse = Tracking::getCalculateTime($student_id, $courseInfo['real_id'], $session_id);
     }
 

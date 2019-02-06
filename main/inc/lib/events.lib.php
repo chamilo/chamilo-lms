@@ -2483,11 +2483,11 @@ class Event
      */
     public static function registerLog($logInfo)
     {
-        if (!Tracking::minimunTimeAvailable(api_get_course_int_id())) {
+        if (!Tracking::minimunTimeAvailable(api_get_session_id(), api_get_course_int_id())) {
             return false;
         }
 
-        $loginAs = (int) (Session::read('login_as') === true);
+        $loginAs = (int) Session::read('login_as') === true;
 
         $logInfo['user_id'] = api_get_user_id();
         $logInfo['date_reg'] = api_get_utc_datetime();

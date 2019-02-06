@@ -179,6 +179,7 @@ class BuyCoursesPlugin extends Plugin
 
         if (Database::num_rows($res) === 0) {
             $sql = "ALTER TABLE $table ADD (
+                sale_email varchar(255) NOT NULL,
                 global_tax_perc int(11) unsigned NOT NULL,
                 tax_applies_to int(11) unsigned NOT NULL,
                 tax_name varchar(255) NOT NULL,
@@ -1122,6 +1123,20 @@ class BuyCoursesPlugin extends Plugin
             ],
             'first'
         );
+    }
+
+    /**
+     * Get numeration of invoice.
+     *
+     * @param int $saleId The sale id
+     * @param int $isService Check if a service
+     *
+     * @return array The numeration invoice
+     */
+    public function getNumInvoice($saleId, $isService) {
+        $dataInvoice = $this->getDataInvoice($saleId, $isService);
+
+        return $dataInvoice['serie'].$dataInvoice['year'].'/'.$dataInvoice['num_invoice'];
     }
 
     /**
@@ -2585,6 +2600,7 @@ class BuyCoursesPlugin extends Plugin
     {
         $sqlParams = [
             'terms_and_conditions' => $params['terms_and_conditions'],
+            'sale_email' => $params['sale_email'],
         ];
 
         if ($this->get('tax_enable') === 'true') {

@@ -84,6 +84,12 @@ $globalSettingForm->addTextarea(
     []
 );
 
+$globalSettingForm->addElement(
+    'text',
+    'sale_email',
+    $plugin->get_lang('SaleEmail')
+);
+
 $taxEnable = $plugin->get('tax_enable') === 'true';
 $invoicingEnable = $plugin->get('invoicing_enable') === 'true';
 

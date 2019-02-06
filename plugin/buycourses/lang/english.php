@@ -177,3 +177,10 @@ $strings['VAT'] = "VAT";
 $strings['Address'] = "Address";
 $strings['InvoiceNumber'] = "Invoice number";
 $strings['InvoiceDate'] = "Invoice date";
+$strings['Invoice'] = "Invoice";
+$strings['SaleEmail'] = "Sales e-mail";
+$strings['PurchaseDetailsIntro'] = "Purchase details";
+$strings['PurchaseDetailsEnd'] = "Regards";
+$strings['ProductName'] = "Product name";
+$strings['BankAccountIntro'] = "Bank Account Info";
+

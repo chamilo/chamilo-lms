@@ -25,7 +25,7 @@ if (empty($serviceSale)) {
 }
 
 $currency = $plugin->getCurrency($serviceSale['currency_id']);
-$terms = $plugin->getGlobalParameters();
+$globalParameters = $plugin->getGlobalParameters();
 
 switch ($serviceSale['payment_type']) {
     case BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL:
@@ -78,6 +78,28 @@ switch ($serviceSale['payment_type']) {
             exit;
         }
 
+        if (!empty($globalParameters['sale_email'])) {
+            $messageConfirmTemplate = new Template();
+            $messageConfirmTemplate->assign('user', $userInfo);
+            $messageConfirmTemplate->assign(
+                'sale',
+                [
+                    'date' => api_format_date($serviceSale['buy_date'], DATE_TIME_FORMAT_LONG_24H),
+                    'product' => $serviceSale['service']['name'],
+                    'currency' => $currency['currency'],
+                    'price' => $serviceSale['price'],
+                    'reference' => $serviceSale['reference'],
+                ]
+            );
+
+            api_mail_html(
+                '',
+                $globalParameters['sale_email'],
+                $plugin->get_lang('bc_subject'),
+                $messageConfirmTemplate->fetch('buycourses/view/message_confirm.tpl')
+            );
+        }
+
         RedirectToPayPal($expressCheckout['TOKEN']);
         break;
     case BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER:
@@ -126,8 +148,30 @@ switch ($serviceSale['payment_type']) {
                 $buyer['complete_name'],
                 $buyer['email'],
                 $plugin->get_lang('bc_subject'),
-                $messageTemplate->fetch('buycourses/view/message_transfer.tpl')
+                $messageTemplate->fetch('buycourses/view/service_message_transfer.tpl')
             );
+
+            if (!empty($globalParameters['sale_email'])) {
+                $messageConfirmTemplate = new Template();
+                $messageConfirmTemplate->assign('user', $userInfo);
+                $messageConfirmTemplate->assign(
+                    'sale',
+                    [
+                        'date' => api_format_date($serviceSale['buy_date'], DATE_TIME_FORMAT_LONG_24H),
+                        'product' => $serviceSale['service']['name'],
+                        'currency' => $currency['currency'],
+                        'price' => $serviceSale['price'],
+                        'reference' => $serviceSale['reference'],
+                    ]
+                );
+
+                api_mail_html(
+                    '',
+                    $globalParameters['sale_email'],
+                    $plugin->get_lang('bc_subject'),
+                    $messageConfirmTemplate->fetch('buycourses/view/message_confirm.tpl')
+                );
+            }
 
             Display::addFlash(
                 Display::return_message(
@@ -166,7 +210,7 @@ switch ($serviceSale['payment_type']) {
 
         $template = new Template();
 
-        $template->assign('terms', $terms['terms_and_conditions']);
+        $template->assign('terms', $globalParameters['terms_and_conditions']);
         $template->assign('title', $serviceSale['service']['name']);
         $template->assign('price', $serviceSale['price']);
         $template->assign('currency', $serviceSale['currency_id']);
@@ -235,7 +279,7 @@ switch ($serviceSale['payment_type']) {
         );
 
         $template = new Template();
-        $template->assign('terms', $terms['terms_and_conditions']);
+        $template->assign('terms', $globalParameters['terms_and_conditions']);
         $template->assign('title', $serviceSale['service']['name']);
         $template->assign('price', floatval($serviceSale['price']));
         $template->assign('currency', $plugin->getSelectedCurrency());

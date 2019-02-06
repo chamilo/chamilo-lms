@@ -55,6 +55,7 @@ foreach ($servicesSales as $sale) {
         'service_name' => $sale['service']['name'],
         'complete_user_name' => $sale['buyer']['name'],
         'invoice' => $sale['invoice'],
+        'num_invoice' => $plugin->getNumInvoice($sale['id'], 1),
     ];
 }
 

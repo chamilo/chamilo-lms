@@ -146,6 +146,9 @@ class ExtraField extends Model
             case 'terms_and_condition':
                 $this->extraFieldType = EntityExtraField::TERMS_AND_CONDITION_TYPE;
                 break;
+            case 'forum_category':
+                $this->extraFieldType = EntityExtraField::FORUM_CATEGORY_TYPE;
+                break;
         }
 
         $this->pageUrl = 'extra_fields.php?type='.$this->type;
@@ -180,6 +183,7 @@ class ExtraField extends Model
             'user_certificate',
             'survey',
             'terms_and_condition',
+            'forum_category',
         ];
 
         if (api_get_configuration_value('allow_scheduled_announcements')) {
@@ -510,6 +514,7 @@ class ExtraField extends Model
 
         $itemId = (int) $itemId;
         $form->addHidden('item_id', $itemId);
+
         if (empty($extraData)) {
             if (!empty($itemId)) {
                 $extraData = self::get_handler_extra_data($itemId);

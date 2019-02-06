@@ -211,6 +211,35 @@ if (!empty($allCourseForums)) {
 
 $actions = Display::toolbarAction('toolbar-forum', [$actionLeft]);
 
+$languages = api_get_languages();
+$languages = array_column($languages['all'], 'english_name', 'isocode');
+
+$defaultUserLanguage = ucfirst($_user['language']);
+$extraFieldValues = new ExtraFieldValue('user');
+$value = $extraFieldValues->get_values_by_handler_and_field_variable(api_get_user_id(), 'langue_cible');
+
+if ($value && isset($value['value'])) {
+    $defaultUserLanguage = ucfirst($value['value']);
+}
+
+// Create a search-box
+$form = new FormValidator('search_simple', 'get', api_get_self().'?'.api_get_cidreq(), null, null, 'inline');
+$form->addHidden('cidReq', api_get_course_id());
+$form->addHidden('id_session', api_get_session_id());
+
+$extraField = new ExtraField('forum_category');
+$returnParams = $extraField->addElements(
+    $form,
+    null,
+    [], //exclude
+    false, // filter
+    false, // tag as select
+    ['language'], //show only fields
+    [], // order fields
+    [] // extra data
+);
+$form->setDefaults(['extra_language' => $defaultUserLanguage]);
+
 // Fixes error if there forums with no category.
 $forumsInNoCategory = get_forums_in_category(0);
 if (!empty($forumsInNoCategory)) {
@@ -239,6 +268,7 @@ if (is_array($forumCategories)) {
         } else {
             $forumCategoryInfo['title'] = $forumCategory['cat_title'];
         }
+        $forumCategoryInfo['extra_fields'] = $forumCategory['extra_fields'];
         $forumCategoryInfo['icon_session'] = api_get_session_image($forumCategory['session_id'], $_user['status']);
 
         // Validation when belongs to a session
@@ -461,7 +491,8 @@ if (is_array($forumCategories)) {
                         if (!empty($forum['last_poster_id'])) {
                             $forumInfo['last_poster_date'] = api_convert_and_format_date($forum['last_post_date']);
                             $forumInfo['last_poster_user'] = display_user_link($poster_id, $name, null, $username);
-                            $forumInfo['last_post_title'] = cut($forum['last_post_title'], 140);
+                            $forumInfo['last_post_title'] = Security::remove_XSS(cut($forum['last_post_title'], 140));
+                            $forumInfo['last_post_text'] = Security::remove_XSS(cut($forum['last_post_text'], 140));
                         }
 
                         if (api_is_allowed_to_edit(false, true)
@@ -539,7 +570,10 @@ $tpl->assign('introduction', $introduction);
 $tpl->assign('actions', $actions);
 $tpl->assign('data', $listForumCategory);
 $tpl->assign('form_content', $formContent);
+$tpl->assign('search_filter', $form->returnForm());
 
+$tpl->assign('default_user_language', $defaultUserLanguage);
+$tpl->assign('languages', array_flip($languages));
 $extraFieldValue = new ExtraFieldValue('course');
 $value = $extraFieldValue->get_values_by_handler_and_field_variable(api_get_course_int_id(), 'global_forum');
 if ($value && isset($value['value']) && $value['value'] == 1) {

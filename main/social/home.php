@@ -82,8 +82,6 @@ SocialManager::handlePosts(api_get_self());
 $posts = SocialManager::getMyWallMessages($user_id);
 $countPost = $posts['count'];
 $posts = $posts['posts'];
-
-$extraFieldBlock = SocialManager::getExtraFieldBlock($user_id);
 SocialManager::getScrollJs($countPost, $htmlHeadXtra);
 
 // Block Menu
@@ -231,7 +229,6 @@ $tpl = new Template(get_lang('SocialNetwork'));
 SocialManager::setSocialUserBlock($tpl, $user_id, 'home');
 $tpl->assign('social_wall_block', $wallSocialAddPost);
 $tpl->assign('social_post_wall_block', $posts);
-$tpl->assign('social_extra_info_block', $extraFieldBlock);
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_auto_extend_link', $socialAutoExtendLink);
 $tpl->assign('search_friends_form', $form->returnForm());

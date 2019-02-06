@@ -448,6 +448,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
     if (!in_array($direction, ['ASC', 'DESC'])) {
         $direction = 'ASC';
     }
+    $_admins_list = Session::read('admin_list', []);
     $column = intval($column);
     $from = intval($from);
     $number_of_items = intval($number_of_items);
@@ -463,6 +464,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
             $user[0],
             USER_IMAGE_SIZE_SMALL
         );
+        $is_admin = in_array($user[0], $_admins_list);
         $photo = '<img 
             src="'.$userPicture.'" class="rounded-circle avatar" 
             alt="'.api_get_person_name($user[2], $user[3]).'" 
@@ -476,11 +478,20 @@ function get_user_data($from, $number_of_items, $column, $direction)
                 $user[7] = '-1';
             }
         }
+        $iconAdmin = '';
+        if ($is_admin) {
+            $iconAdmin .= Display::return_icon(
+                'admin_star.png',
+                get_lang('IsAdministrator'),
+                null,
+                ICON_SIZE_SMALL
+            );
+        }
 
         // forget about the expiration date field
         $users[] = [
             $user[0],
-            $photo,
+            $photo.$iconAdmin,
             $user[1],
             $user[2],
             $user[3],
@@ -535,8 +546,7 @@ function user_filter($name, $params, $row)
  */
 function modify_filter($user_id, $url_params, $row)
 {
-    $_admins_list = Session::read('admin_list', []);
-    $is_admin = in_array($user_id, $_admins_list);
+
     $statusname = api_get_status_langvars();
     $user_is_anonymous = false;
     $current_user_status_label = $row['7'];
@@ -650,19 +660,6 @@ function modify_filter($user_id, $url_params, $row)
                 ICON_SIZE_SMALL
             ),
             api_get_path(WEB_CODE_PATH).'badge/assign.php?'.http_build_query(['user' => $user_id])
-        );
-    }
-
-    if ($is_admin) {
-        $result .= Display::return_icon(
-            'admin_star.png',
-            get_lang('IsAdministrator'),
-            ['width' => ICON_SIZE_SMALL, 'heigth' => ICON_SIZE_SMALL]
-        );
-    } else {
-        $result .= Display::return_icon(
-            'admin_star_na.png',
-            get_lang('IsNotAdministrator')
         );
     }
 

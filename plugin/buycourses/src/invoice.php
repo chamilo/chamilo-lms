@@ -48,30 +48,30 @@ if ($pdfLogo === 'true') {
 $htmlText .= $organization;
 
 // Seller and customer info
-$htmlText.= '<table width="100%">';
-$htmlText.= '<tr>';
-$htmlText.= '<td>';
-    $htmlText.= '<b>'.$globalParameters['seller_name'].'</b><br/>';
-    $htmlText.= $globalParameters['seller_id'].'<br/>';
-    $htmlText.= $globalParameters['seller_address'].'<br/>';
-    $htmlText.= $globalParameters['seller_email'].'<br/>';
-$htmlText.= '</td>';
-$htmlText.= '<td style="text-align:right;">';
-    $htmlText.= '<b>'.$buyer['complete_name'].'</b><br/>';
-    $htmlText.= ($extraUserInfoData['buycourses_company'] ? $extraUserInfoData['buycourses_company'].'<br>' : '');
-    $htmlText.= ($extraUserInfoData['buycourses_vat'] ? $extraUserInfoData['buycourses_vat'].'<br>' : '');
-    $htmlText.= ($extraUserInfoData['buycourses_address'] ? $extraUserInfoData['buycourses_address'].'<br/>' : '');
-    $htmlText.= ($buyer['phone'] ? $buyer['phone'].'<br/>' : '');
-    $htmlText.= ($buyer['email'] ? $buyer['email'].'<br>' : '');
-$htmlText.= '</td>';
-$htmlText.= '</tr>';
-$htmlText.= '</table>';
+$htmlText .= '<table width="100%">';
+$htmlText .= '<tr>';
+$htmlText .= '<td>';
+    $htmlText .= '<b>'.$globalParameters['seller_name'].'</b><br/>';
+    $htmlText .= $globalParameters['seller_id'].'<br/>';
+    $htmlText .= $globalParameters['seller_address'].'<br/>';
+    $htmlText .= $globalParameters['seller_email'].'<br/>';
+$htmlText .= '</td>';
+$htmlText .= '<td style="text-align:right;">';
+    $htmlText .= '<b>'.$buyer['complete_name'].'</b><br/>';
+    $htmlText .= ($extraUserInfoData['buycourses_company'] ? $extraUserInfoData['buycourses_company'].'<br>' : '');
+    $htmlText .= ($extraUserInfoData['buycourses_vat'] ? $extraUserInfoData['buycourses_vat'].'<br>' : '');
+    $htmlText .= ($extraUserInfoData['buycourses_address'] ? $extraUserInfoData['buycourses_address'].'<br/>' : '');
+    $htmlText .= ($buyer['phone'] ? $buyer['phone'].'<br/>' : '');
+    $htmlText .= ($buyer['email'] ? $buyer['email'].'<br>' : '');
+$htmlText .= '</td>';
+$htmlText .= '</tr>';
+$htmlText .= '</table>';
 
-$htmlText.= '<br><br>';
-$htmlText.= '<p>';
-$htmlText.= $plugin->get_lang('InvoiceDate').': <span style="font-weight:bold;">'.api_format_date($infoInvoice['date_invoice'], DATE_TIME_FORMAT_LONG_24H).'</span><br>';
-$htmlText.= $plugin->get_lang('InvoiceNumber').': <span style="font-weight:bold;">'.$infoInvoice['serie'].$infoInvoice['year'].'/'.$infoInvoice['num_invoice'].'</span><br>';
-$htmlText.= '</p><br><br>';
+$htmlText .= '<br><br>';
+$htmlText .= '<p>';
+$htmlText .= $plugin->get_lang('InvoiceDate').': <span style="font-weight:bold;">'.api_format_date($infoInvoice['date_invoice'], DATE_TIME_FORMAT_LONG_24H).'</span><br>';
+$htmlText .= $plugin->get_lang('InvoiceNumber').': <span style="font-weight:bold;">'.$infoInvoice['serie'].$infoInvoice['year'].'/'.$infoInvoice['num_invoice'].'</span><br>';
+$htmlText .= '</p><br><br>';
 
 $header = [
         $plugin->get_lang('OrderReference'),
@@ -82,7 +82,7 @@ $header = [
 ];
 
 $data = [];
-$row= [
+$row = [
     $infoSale['reference'],
     $infoSale['product_name'],
     $plugin->getCurrency($infoSale['currency_id'])['iso_code'].
@@ -91,7 +91,7 @@ $row= [
         ' '.$infoSale['tax_amount'].
         ' ('.(int) $infoSale['tax_perc'].'%)',
     $plugin->getCurrency($infoSale['currency_id'])['iso_code'].
-        ' '.$infoSale['price']
+        ' '.$infoSale['price'],
 ];
 $data[] = $row;
 
@@ -100,7 +100,7 @@ $row = [
     '',
     '',
     $plugin->get_lang('TotalPayout'),
-    $plugin->getCurrency($infoSale['currency_id'])['iso_code'].' '.$infoSale['price']
+    $plugin->getCurrency($infoSale['currency_id'])['iso_code'].' '.$infoSale['price'],
 ];
 $data[] = $row;
 $attr = [];

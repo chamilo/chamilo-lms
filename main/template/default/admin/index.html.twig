@@ -1,6 +1,16 @@
+{% set admin_chamilo_announcements_disable = 'admin_chamilo_announcements_disable'|api_get_configuration_value %}
 
 {% block content %}
     {% autoescape false %}
+        {% if not admin_chamilo_announcements_disable %}
+            <div class="alert alert-info alert-dismissible fade show d-none" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="{{ 'Close'|trans }}">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <div id="chamilo-news-content"></div>
+            </div>
+        {% endif %}
+
         <div id="settings">
             <div class="list-settings">
             {% for block_item in blocks_admin %}
@@ -60,6 +70,19 @@
                             $(".admin-block-version").html(version);
                         }
                     });
+
+                    {% if not admin_chamilo_announcements_disable %}
+                        $('#chamilo-news-content').load(
+                            '{{ web_admin_ajax_url }}?a=get_latest_news',
+                            function (response) {
+                                if (!response.length) {
+                                    return;
+                                }
+
+                                $(this).parent().removeClass('d-none');
+                            }
+                        );
+                    {% endif %}
                 });
             </script>
 

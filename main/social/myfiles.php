@@ -123,5 +123,5 @@ if (api_get_setting('allow_social_tool') == 'true') {
     $tpl->assign('profile_block', $controller->return_profile_block());
     $tpl->assign('user_image_block', $controller->return_user_image_block());
     $tpl->assign('course_block', $controller->return_course_block());
-    $tpl->display_two_col_template();
+    $tpl->display_one_col_template();
 }

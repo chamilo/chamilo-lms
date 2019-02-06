@@ -464,7 +464,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
             USER_IMAGE_SIZE_SMALL
         );
         $photo = '<img 
-            src="'.$userPicture.'" width="22" height="22" 
+            src="'.$userPicture.'" class="rounded-circle avatar" 
             alt="'.api_get_person_name($user[2], $user[3]).'" 
             title="'.api_get_person_name($user[2], $user[3]).'" />';
 
@@ -544,7 +544,7 @@ function modify_filter($user_id, $url_params, $row)
     if ($current_user_status_label == $statusname[ANONYMOUS]) {
         $user_is_anonymous = true;
     }
-    $result = '';
+    $result = '<div class="actions-btn">';
     if (!$user_is_anonymous) {
         $icon = Display::return_icon(
             'course.png',
@@ -779,6 +779,7 @@ function modify_filter($user_id, $url_params, $row)
                 );
             }
         }
+        $result.='</div>';
     }
 
     return $result;
@@ -1098,9 +1099,9 @@ if (api_is_western_name_order()) {
 $table->set_header(5, get_lang('LoginName'));
 $table->set_header(6, get_lang('Email'));
 $table->set_header(7, get_lang('Profile'));
-$table->set_header(8, get_lang('Active'), true, 'width="15px"');
-$table->set_header(9, get_lang('RegistrationDate'), true, 'width="90px"');
-$table->set_header(10, get_lang('Action'), false, 'width="220px"');
+$table->set_header(8, get_lang('Active'), true);
+$table->set_header(9, get_lang('RegistrationDate'), true);
+$table->set_header(10, get_lang('Action'), false);
 
 $table->set_column_filter(3, 'user_filter');
 $table->set_column_filter(4, 'user_filter');
@@ -1202,5 +1203,7 @@ $toolbarActions = Display::toolbarAction(
 $tpl = new Template($tool_name);
 $tpl->assign('actions', $toolbarActions);
 $tpl->assign('message', $message);
-$tpl->assign('content', $form.$table_result.$extra_search_options);
-$tpl->display_one_col_template();
+$tpl->assign('form_search', $form);
+$tpl->assign('table', $table_result);
+$tpl->assign('extra', $extra_search_options);
+$tpl->display_table_template();

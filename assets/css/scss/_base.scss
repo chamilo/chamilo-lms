@@ -99,7 +99,15 @@ hr {
 }
 
 /****** BOOTSTRAP SELECT ******/
-
+.custom-select::-ms-expand {
+  display: none;
+}
+.custom-select{
+  /* for Firefox */
+  -moz-appearance: none;
+  /* for Chrome */
+  -webkit-appearance: none;
+}
 .bootstrap-select{
   .dropdown-toggle{
     &:after{
@@ -134,25 +142,23 @@ hr {
 }
 
 // ---------------------------------------------------------
-// MAIN CONTAINER
+// TABLES
 // ---------------------------------------------------------
 
-.main-content {
-  padding: 75px 20px 20px;
-  min-height: calc(100vh - 61px);
-  &.bg-content{
-    background-color: $page-background;
+.table{
+  .avatar{
+    border: 1px solid #cdcdcd;
   }
-  .box-body{
-    background-color: transparent;
+  .actions-btn{
+    img{
+      border: 1px solid #cdcdcd;
+      padding: 4px;
+      border-radius: 5px;
+    }
+    .blackboard_hide{
+      display: none;
+    }
   }
-  @include to($breakpoint-md) {
-    padding: 85px 5px 5px;
-  }
-}
-
-.remain-height {
-  height: calc(100vh - 126px);
 }
 
 // ---------------------------------------------------------

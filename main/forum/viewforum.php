@@ -484,6 +484,24 @@ if (is_array($threads)) {
             $iconStatus = null;
             $isAdmin = UserManager::is_admin($row['user_id']);
 
+            $last_post_info = get_last_post_by_thread(
+                $row['c_id'],
+                $row['thread_id'],
+                $row['forum_id'],
+                api_is_allowed_to_edit()
+            );
+            $last_post = null;
+            if ($last_post_info) {
+                $poster_info = api_get_user_info($last_post_info['poster_id']);
+                $post_date = api_convert_and_format_date($last_post_info['post_date']);
+                $last_post = $post_date.'<br>'.get_lang('By').' '.display_user_link(
+                    $last_post_info['poster_id'],
+                    $poster_info['complete_name'],
+                    '',
+                    $poster_info['username']
+                );
+            }
+
             if($_user['status']==5) {
                 if($_user['has_certificates']){
                     $iconStatus = '<img src="'.$urlImg.'icons/svg/ofaj_graduated.svg" width="22px" height="22px">';
@@ -509,6 +527,11 @@ if (is_array($threads)) {
                 ]
             );
             $html .= '<p>'.get_lang('By').' '.$iconStatus.' '.$authorName.'</p>';
+
+            if ($last_post_info) {
+                $html .= '<p>'.Security::remove_XSS(cut($last_post_info['post_text'], 140)).'</p>';
+            }
+
             $html .= '<p>'.api_convert_and_format_date($row['insert_date']).'</p>';
 
             if ($current_forum['moderated'] == 1 && api_is_allowed_to_edit(false, true)) {
@@ -529,6 +552,7 @@ if (is_array($threads)) {
             $html .= '</div>';
 
             $html .= '</div>';
+
             $html .= '<div class="col-md-6">';
             $html .= '<div class="row">';
             $html .= '<div class="col-md-4">'
@@ -541,25 +565,6 @@ if (is_array($threads)) {
                 ICON_SIZE_SMALL
             ).' '.$row['thread_views'].' '.get_lang('Views').'<br>'.$newPost;
             $html .= '</div>';
-
-            $last_post_info = get_last_post_by_thread(
-                $row['c_id'],
-                $row['thread_id'],
-                $row['forum_id'],
-                api_is_allowed_to_edit()
-            );
-            $last_post = null;
-
-            if ($last_post_info) {
-                $poster_info = api_get_user_info($last_post_info['poster_id']);
-                $post_date = api_convert_and_format_date($last_post_info['post_date']);
-                $last_post = $post_date.'<br>'.get_lang('By').' '.display_user_link(
-                    $last_post_info['poster_id'],
-                    $poster_info['complete_name'],
-                    '',
-                    $poster_info['username']
-                );
-            }
 
             $html .= '<div class="col-md-5">'
                 .Display::return_icon('post-item.png', null, null, ICON_SIZE_TINY)

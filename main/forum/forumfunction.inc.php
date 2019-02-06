@@ -211,6 +211,19 @@ function show_add_forumcategory_form($inputvalues = [], $lp_id)
         null,
         ['ToolbarSet' => 'Forum', 'Width' => '98%', 'Height' => '200']
     );
+
+    $extraField = new ExtraField('forum_category');
+    $returnParams = $extraField->addElements(
+        $form,
+        null,
+        [], //exclude
+        false, // filter
+        false, // tag as select
+        [], //show only fields
+        [], // order fields
+        [] // extra data
+    );
+
     $form->addButtonCreate(get_lang('CreateCategory'), 'SubmitForumCategory');
 
     // Setting the rules.
@@ -531,6 +544,18 @@ function show_edit_forumcategory_form($inputvalues = [])
         ['ToolbarSet' => 'Forum', 'Width' => '98%', 'Height' => '200']
     );
 
+    $extraField = new ExtraField('forum_category');
+    $returnParams = $extraField->addElements(
+        $form,
+        $categoryId,
+        [], //exclude
+        false, // filter
+        false, // tag as select
+        [], //show only fields
+        [], // order fields
+        [] // extra data
+    );
+
     $form->addButtonUpdate(get_lang('ModifyCategory'), 'SubmitEditForumCategory');
 
     // Setting the default values.
@@ -625,6 +650,8 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
             'info' => $clean_cat_title,
         ];
         Event::registerLog($logInfo);
+
+        $values['item_id'] = $values['forum_category_id'];
     } else {
         $params = [
             'c_id' => $course_id,
@@ -667,7 +694,12 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
             'info' => $clean_cat_title,
         ];
         Event::registerLog($logInfo);
+
+        $values['item_id'] = $last_id;
     }
+
+    $extraFieldValue = new ExtraFieldValue('forum_category');
+    $extraFieldValue->saveFieldValues($values);
 
     if ($showMessage) {
         Display::addFlash(Display::return_message($return_message, 'confirmation'));
@@ -1579,7 +1611,10 @@ function get_forum_categories($id = '', $courseId = 0, $sessionId = 0)
 
     $result = Database::query($sql);
     $forum_categories_list = [];
+    $extraFieldValue = new ExtraFieldValue('forum_category');
     while ($row = Database::fetch_assoc($result)) {
+        $row['extra_fields'] = $extraFieldValue->getAllValuesByItem($row['cat_id']);
+
         if (empty($id)) {
             $forum_categories_list[$row['cat_id']] = $row;
         } else {
@@ -1828,6 +1863,7 @@ function get_forums(
                     $forum_list[$key]['last_poster_lastname'] = $last_post_info_of_forum['last_poster_lastname'];
                     $forum_list[$key]['last_poster_firstname'] = $last_post_info_of_forum['last_poster_firstname'];
                     $forum_list[$key]['last_post_title'] = $last_post_info_of_forum['last_post_title'];
+                    $forum_list[$key]['last_post_text'] = $last_post_info_of_forum['last_post_text'];
                 }
             }
         } else {
@@ -1847,6 +1883,7 @@ function get_forums(
             $forum_list['last_poster_lastname'] = $last_post_info_of_forum['last_poster_lastname'];
             $forum_list['last_poster_firstname'] = $last_post_info_of_forum['last_poster_firstname'];
             $forum_list['last_post_title'] = $last_post_info_of_forum['last_post_title'];
+            $forum_list['last_post_text'] = $last_post_info_of_forum['last_post_text'];
         }
     }
 
@@ -1952,7 +1989,8 @@ function get_last_post_information($forum_id, $show_invisibles = false, $course_
                 post.visible,
                 thread_properties.visibility AS thread_visibility,
                 forum_properties.visibility AS forum_visibility,
-                post.post_title
+                post.post_title,
+                post.post_text
             FROM
                 $table_posts post,
                 $table_users users,
@@ -1981,6 +2019,7 @@ function get_last_post_information($forum_id, $show_invisibles = false, $course_
         $return_array['last_poster_lastname'] = $row['lastname'];
         $return_array['last_poster_firstname'] = $row['firstname'];
         $return_array['last_post_title'] = $row['post_title'];
+        $return_array['last_post_text'] = $row['post_text'];
 
         return $return_array;
     } else {
@@ -1995,6 +2034,7 @@ function get_last_post_information($forum_id, $show_invisibles = false, $course_
                 $return_array['last_poster_lastname'] = $row['lastname'];
                 $return_array['last_poster_firstname'] = $row['firstname'];
                 $return_array['last_post_title'] = $row['post_title'];
+                $return_array['last_post_text'] = $row['post_text'];
 
                 return $return_array;
             }

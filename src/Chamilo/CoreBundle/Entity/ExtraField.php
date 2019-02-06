@@ -31,6 +31,7 @@ class ExtraField extends BaseAttribute
     const SURVEY_FIELD_TYPE = 12;
     const SCHEDULED_ANNOUNCEMENT = 13;
     const TERMS_AND_CONDITION_TYPE = 14;
+    const FORUM_CATEGORY_TYPE = 15;
 
     /**
      * @var int

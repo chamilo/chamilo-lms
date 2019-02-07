@@ -2635,7 +2635,7 @@ class MySpace
                     Security::remove_XSS($userInfo['complete_user_name'])."</a> - ".$addedto.'<br />';
             }
         }
-        Display::addFlash(Display::return_message($registered_users, 'normal',false));
+        Display::addFlash(Display::return_message($registered_users, 'normal', false));
         header('Location: course.php?id_session='.$id_session);
         exit;
     }

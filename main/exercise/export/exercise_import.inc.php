@@ -337,7 +337,7 @@ function qti_parse_file($exercisePath, $file, $questionFile)
 }
 
 /**
- * Function used to parser a QTI2 xml file
+ * Function used to parser a QTI2 xml file.
  *
  * @param string $xmlData
  */

@@ -227,7 +227,7 @@ class scorm extends learnpath
                     }
                 }
             }
-        // End parsing using PHP5 DOMXML methods.
+            // End parsing using PHP5 DOMXML methods.
         } else {
             if ($this->debug > 1) {
                 error_log('New LP - Could not open/read file '.$file);
@@ -592,7 +592,7 @@ class scorm extends learnpath
     /**
      * Imports a zip file into the Chamilo structure.
      *
-     * @param string    $zipFileInfo Zip file info as given by $_FILES['userFile']
+     * @param string    $zipFileInfo       Zip file info as given by $_FILES['userFile']
      * @param string    $currentDir
      * @param array     $courseInfo
      * @param bool      $updateDirContents

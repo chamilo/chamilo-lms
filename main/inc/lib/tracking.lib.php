@@ -1630,6 +1630,7 @@ class Tracking
         if (!empty($sessionId)) {
             $extraFieldValue = new ExtraFieldValue('session');
             $value = $extraFieldValue->get_values_by_handler_and_field_variable($sessionId, 'new_tracking_system');
+
             if ($value && isset($value['value']) && $value['value'] == 1) {
                 return true;
             }

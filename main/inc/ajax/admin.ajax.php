@@ -238,7 +238,7 @@ function check_system_version()
 }
 
 /**
- * Display the latest news from the Chamilo Association for admins
+ * Display the latest news from the Chamilo Association for admins.
  *
  * @throws \GuzzleHttp\Exception\GuzzleException
  *

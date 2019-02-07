@@ -1118,7 +1118,16 @@ if (!empty($exerciseList)) {
                     // Exam is ready to be taken
                     if ($is_actived_time) {
                         // Show results 	697 	$attempt_text = get_lang('LatestAttempt').' : ';
-                        if ($my_result_disabled == 0 || $my_result_disabled == 2) {
+                        if (
+                            in_array(
+                                $my_result_disabled,
+                                [
+                                    RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS,
+                                    RESULT_DISABLE_SHOW_SCORE_ONLY,
+                                    RESULT_DISABLE_RANKING,
+                                ]
+                            )
+                        ) {
                             //More than one attempt
                             if ($num > 0) {
                                 $row_track = Database :: fetch_array($qryres);
@@ -1173,7 +1182,16 @@ if (!empty($exerciseList)) {
                 } else {
                     // Normal behaviour.
                     // Show results.
-                    if ($my_result_disabled == 0 || $my_result_disabled == 2) {
+                    if (
+                        in_array(
+                            $my_result_disabled,
+                            [
+                                RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS,
+                                RESULT_DISABLE_SHOW_SCORE_ONLY,
+                                RESULT_DISABLE_RANKING,
+                            ]
+                        )
+                    ) {
                         if ($num > 0) {
                             $row_track = Database :: fetch_array($qryres);
                             $attempt_text = get_lang('LatestAttempt').' : ';

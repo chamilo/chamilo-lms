@@ -1239,7 +1239,7 @@ class BuyCoursesPlugin extends Plugin
     public function setInvoice($saleId, $isService = 0)
     {
         $invoiceTable = Database::get_main_table(self::TABLE_INVOICE);
-        $year = date("Y");
+        $year = date('Y');
 
         $globalParameters = $this->getGlobalParameters();
         $numInvoice = $globalParameters['next_number_invoice'];

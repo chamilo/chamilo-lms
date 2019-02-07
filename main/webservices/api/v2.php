@@ -131,6 +131,18 @@ try {
             $data = $restApi->subscribeUserToCourse($_POST);
             $restResponse->setData($data);
             break;
+        case Rest::CREATE_CAMPUS;
+            $data = $restApi->createCampusURL($_POST);
+            $restResponse->setData($data);
+            break;
+        case Rest::EDIT_CAMPUS;
+            $data = $restApi->editCampusURL($_POST);
+            $restResponse->setData($data);
+            break;
+        case Rest::DELETE_CAMPUS;
+            $data = $restApi->deleteCampusURL($_POST);
+            $restResponse->setData($data);
+            break;
         case Rest::SAVE_FORUM_POST:
             if (
                 empty($_POST['title']) || empty($_POST['text']) || empty($_POST['thread']) || empty($_POST['forum'])

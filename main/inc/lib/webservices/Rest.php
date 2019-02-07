@@ -44,6 +44,9 @@ class Rest extends WebService
     const SAVE_USER = 'save_user';
     const SUBSCRIBE_USER_TO_COURSE = 'subscribe_user_to_course';
     const EXTRAFIELD_GCM_ID = 'gcm_registration_id';
+    const CREATE_CAMPUS = 'add_campus';
+    const EDIT_CAMPUS = 'edit_campus';
+    const DELETE_CAMPUS = 'delete_campus';
 
     /**
      * @var Session
@@ -275,7 +278,7 @@ class Rest extends WebService
             $results[] = [
                 'id' => $description->get_description_type(),
                 'title' => $description->get_title(),
-                'content' => str_replace('src="/', 'src="'.api_get_path(WEB_PATH), $description->get_content()),
+                'content' => str_replace('src="/', 'src="' . api_get_path(WEB_PATH), $description->get_content()),
             ];
         }
 
@@ -323,7 +326,7 @@ class Rest extends WebService
         $results = [];
 
         if (!empty($documents)) {
-            $webPath = api_get_path(WEB_CODE_PATH).'document/document.php?';
+            $webPath = api_get_path(WEB_CODE_PATH) . 'document/document.php?';
 
             /** @var array $document */
             foreach ($documents as $document) {
@@ -340,17 +343,17 @@ class Rest extends WebService
                     'type' => $document['filetype'],
                     'title' => $document['title'],
                     'path' => $document['path'],
-                    'url' => $webPath.http_build_query([
-                        'username' => $this->user->getUsername(),
-                        'api_key' => $this->apiKey,
-                        'cidReq' => $this->course->getCode(),
-                        'id_session' => $sessionId,
-                        'gidReq' => 0,
-                        'gradebook' => 0,
-                        'origin' => '',
-                        'action' => 'download',
-                        'id' => $document['id'],
-                    ]),
+                    'url' => $webPath . http_build_query([
+                            'username' => $this->user->getUsername(),
+                            'api_key' => $this->apiKey,
+                            'cidReq' => $this->course->getCode(),
+                            'id_session' => $sessionId,
+                            'gidReq' => 0,
+                            'gradebook' => 0,
+                            'origin' => '',
+                            'action' => 'download',
+                            'id' => $document['id'],
+                        ]),
                     'icon' => $icon,
                     'size' => format_file_size($document['size']),
                 ];
@@ -483,7 +486,7 @@ class Rest extends WebService
                 return [
                     'id' => intval($event['unique_id']),
                     'title' => $event['title'],
-                    'content' => str_replace('src="/', 'src="'.$webPath, $event['description']),
+                    'content' => str_replace('src="/', 'src="' . $webPath, $event['description']),
                     'startDate' => $event['start_date_localtime'],
                     'endDate' => $event['end_date_localtime'],
                     'isAllDay' => $event['allDay'] ? true : false,
@@ -531,9 +534,9 @@ class Rest extends WebService
     public function getCourseForumCategories()
     {
         $sessionId = $this->session ? $this->session->getId() : 0;
-        $webCoursePath = api_get_path(WEB_COURSE_PATH).$this->course->getDirectory().'/upload/forum/images/';
+        $webCoursePath = api_get_path(WEB_COURSE_PATH) . $this->course->getDirectory() . '/upload/forum/images/';
 
-        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
+        require_once api_get_path(SYS_CODE_PATH) . 'forum/forumfunction.inc.php';
 
         $categoriesFullData = get_forum_categories('', $this->course->getId(), $sessionId);
         $categories = [];
@@ -547,7 +550,7 @@ class Rest extends WebService
                 'catId' => intval($forumInfo['forum_category']),
                 'title' => $forumInfo['forum_title'],
                 'description' => $forumInfo['forum_comment'],
-                'image' => $forumInfo['forum_image'] ? ($webCoursePath.$forumInfo['forum_image']) : '',
+                'image' => $forumInfo['forum_image'] ? ($webCoursePath . $forumInfo['forum_image']) : '',
                 'numberOfThreads' => isset($forumInfo['number_of_threads']) ? intval($forumInfo['number_of_threads']) : 0,
                 'lastPost' => null,
             ];
@@ -601,7 +604,7 @@ class Rest extends WebService
      */
     public function getCourseForum($forumId)
     {
-        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
+        require_once api_get_path(SYS_CODE_PATH) . 'forum/forumfunction.inc.php';
 
         $sessionId = $this->session ? $this->session->getId() : 0;
         $forumInfo = get_forums($forumId, $this->course->getCode(), true, $sessionId);
@@ -610,12 +613,12 @@ class Rest extends WebService
             throw new Exception(get_lang('NoForum'));
         }
 
-        $webCoursePath = api_get_path(WEB_COURSE_PATH).$this->course->getDirectory().'/upload/forum/images/';
+        $webCoursePath = api_get_path(WEB_COURSE_PATH) . $this->course->getDirectory() . '/upload/forum/images/';
         $forum = [
             'id' => $forumInfo['iid'],
             'title' => $forumInfo['forum_title'],
             'description' => $forumInfo['forum_comment'],
-            'image' => $forumInfo['forum_image'] ? ($webCoursePath.$forumInfo['forum_image']) : '',
+            'image' => $forumInfo['forum_image'] ? ($webCoursePath . $forumInfo['forum_image']) : '',
             'threads' => [],
         ];
 
@@ -643,7 +646,7 @@ class Rest extends WebService
      */
     public function getCourseForumThread($forumId, $threadId)
     {
-        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
+        require_once api_get_path(SYS_CODE_PATH) . 'forum/forumfunction.inc.php';
 
         $sessionId = $this->session ? $this->session->getId() : 0;
         $threadInfo = get_thread_information($forumId, $threadId, $sessionId);
@@ -681,7 +684,7 @@ class Rest extends WebService
         $pictureInfo = UserManager::get_user_picture_path_by_id($this->user->getId(), 'web');
 
         $result = [
-            'pictureUri' => $pictureInfo['dir'].$pictureInfo['file'],
+            'pictureUri' => $pictureInfo['dir'] . $pictureInfo['file'],
             'fullName' => $this->user->getCompleteName(),
             'username' => $this->user->getUsername(),
             'officialCode' => $this->user->getOfficialCode(),
@@ -791,14 +794,14 @@ class Rest extends WebService
                     'id' => $lpId,
                     'title' => Security::remove_XSS($lpDetails['lp_name']),
                     'progress' => intval($progress),
-                    'url' => api_get_path(WEB_CODE_PATH).'webservices/api/v2.php?'.http_build_query([
-                        'hash' => $this->encodeParams([
-                            'action' => 'course_learnpath',
-                            'lp_id' => $lpId,
-                            'course' => $this->course->getId(),
-                            'session' => $sessionId,
+                    'url' => api_get_path(WEB_CODE_PATH) . 'webservices/api/v2.php?' . http_build_query([
+                            'hash' => $this->encodeParams([
+                                'action' => 'course_learnpath',
+                                'lp_id' => $lpId,
+                                'course' => $this->course->getId(),
+                                'session' => $sessionId,
+                            ]),
                         ]),
-                    ]),
                 ];
             }
 
@@ -843,16 +846,16 @@ class Rest extends WebService
         ChamiloSession::write('_user', $loggedUser);
         Login::init_user($this->user->getId(), true);
 
-        $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.http_build_query([
-            'cidReq' => $this->course->getCode(),
-            'id_session' => $sessionId,
-            'gidReq' => 0,
-            'gradebook' => 0,
-            'origin' => '',
-            'action' => 'view',
-            'lp_id' => intval($lpId),
-            'isStudentView' => 'true',
-        ]);
+        $url = api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?' . http_build_query([
+                'cidReq' => $this->course->getCode(),
+                'id_session' => $sessionId,
+                'gidReq' => 0,
+                'gradebook' => 0,
+                'origin' => '',
+                'action' => 'view',
+                'lp_id' => intval($lpId),
+                'isStudentView' => 'true',
+            ]);
 
         header("Location: $url");
         exit;
@@ -860,13 +863,13 @@ class Rest extends WebService
 
     /**
      * @param array $postValues
-     * @param int   $forumId
+     * @param int $forumId
      *
      * @return array
      */
     public function saveForumPost(array $postValues, $forumId)
     {
-        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
+        require_once api_get_path(SYS_CODE_PATH) . 'forum/forumfunction.inc.php';
 
         $forum = get_forums($forumId, $this->course->getCode());
         store_reply($forum, $postValues, $this->course->getId(), $this->user->getId());
@@ -933,7 +936,7 @@ class Rest extends WebService
     /**
      * @param string $subject
      * @param string $text
-     * @param array  $receivers
+     * @param array $receivers
      *
      * @return array
      */
@@ -1004,13 +1007,13 @@ class Rest extends WebService
 
     /**
      * @param array $values
-     * @param int   $forumId
+     * @param int $forumId
      *
      * @return array
      */
     public function saveForumThread(array $values, $forumId)
     {
-        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
+        require_once api_get_path(SYS_CODE_PATH) . 'forum/forumfunction.inc.php';
 
         $sessionId = $this->session ? $this->session->getId() : 0;
         $forum = get_forums($forumId, $this->course->getCode(), true, $sessionId);
@@ -1045,14 +1048,14 @@ class Rest extends WebService
             ? $courseParam['original_course_id_value']
             : null;
         $diskQuota = isset($courseParam['disk_quota']) ? $courseParam['disk_quota'] : '100';
-        $visibility = isset($courseParam['visibility']) ? (int) $courseParam['visibility'] : null;
+        $visibility = isset($courseParam['visibility']) ? (int)$courseParam['visibility'] : null;
 
         if (isset($courseParam['visibility'])) {
             if ($courseParam['visibility'] &&
                 $courseParam['visibility'] >= 0 &&
                 $courseParam['visibility'] <= 3
             ) {
-                $visibility = (int) $courseParam['visibility'];
+                $visibility = (int)$courseParam['visibility'];
             }
         }
 
@@ -1065,15 +1068,15 @@ class Rest extends WebService
         if (!empty($courseInfo)) {
             if ($courseInfo['visibility'] != 0) {
                 $sql = "UPDATE $tableCourse SET
-                            course_language = '".Database::escape_string($courseLanguage)."',
-                            title = '".Database::escape_string($title)."',
-                            category_code = '".Database::escape_string($categoryCode)."',
-                            tutor_name = '".Database::escape_string($tutorName)."',
-                            visual_code = '".Database::escape_string($wantedCode)."'";
+                            course_language = '" . Database::escape_string($courseLanguage) . "',
+                            title = '" . Database::escape_string($title) . "',
+                            category_code = '" . Database::escape_string($categoryCode) . "',
+                            tutor_name = '" . Database::escape_string($tutorName) . "',
+                            visual_code = '" . Database::escape_string($wantedCode) . "'";
                 if ($visibility !== null) {
                     $sql .= ", visibility = $visibility ";
                 }
-                $sql .= " WHERE id = ".$courseInfo['real_id'];
+                $sql .= " WHERE id = " . $courseInfo['real_id'];
                 Database::query($sql);
                 if (is_array($extraList) && count($extraList) > 0) {
                     foreach ($extraList as $extra) {
@@ -1313,4 +1316,102 @@ class Rest extends WebService
 
         return $encoded;
     }
+
+    /**
+     * Add Campus Virtual
+     *
+     * @param  array Params Campus
+     * @return array
+     *
+     */
+
+    public function createCampusURL($params)
+    {
+        $urlCampus = Security::remove_XSS($params['url']);
+        $description = Security::remove_XSS($params['description']);
+
+        $active = isset($params['active']) ? intval($params['active']) : 0;
+        //$url_id = isset($params['id']) ? intval($params['id']) : 0;
+
+        $num = UrlManager::url_exist($urlCampus);
+        if ($num == 0) {
+            // checking url
+            if (substr($urlCampus, strlen($urlCampus) - 1, strlen($urlCampus)) == '/') {
+                $idCampus = UrlManager::add($urlCampus, $description, $active, true);
+            } else {
+                //create
+                $idCampus = UrlManager::add($urlCampus . '/', $description, $active, true);
+            }
+            return [
+                'status' => true,
+                'id_campus' => $idCampus
+            ];
+        }
+
+        return [
+            'status' => false,
+            'id_campus' => 0
+        ];
+    }
+
+    /**
+     * Edit Campus Virtual
+     *
+     * @param  array Params Campus
+     * @return array
+     *
+     */
+
+    public function editCampusURL($params)
+    {
+        $urlCampus = Security::remove_XSS($params['url']);
+        $description = Security::remove_XSS($params['description']);
+
+        $active = isset($params['active']) ? intval($params['active']) : 0;
+        $url_id = isset($params['id']) ? intval($params['id']) : 0;
+
+        if (!empty($url_id)) {
+            //we can't change the status of the url with id=1
+            if ($url_id == 1) {
+                $active = 1;
+            }
+            //checking url
+            if (substr($urlCampus, strlen($urlCampus) - 1, strlen($urlCampus)) == '/') {
+                UrlManager::update($url_id, $urlCampus, $description, $active);
+            } else {
+                UrlManager::update($url_id, $urlCampus . '/', $description, $active);
+            }
+            return [true];
+        }
+
+        return [false];
+    }
+
+    /**
+     * Delete Campus Virtual
+     *
+     * @param  array Params Campus
+     * @return array
+     *
+     */
+
+    public function deleteCampusURL($params)
+    {
+        $url_id = isset($params['id']) ? intval($params['id']) : 0;
+
+        $result = UrlManager::delete($url_id);
+        if ($result) {
+            return [
+                'status' => true,
+                'message' => get_lang('URLDeleted')
+            ];
+
+        } else {
+            return [
+                'status' => false,
+                'message' => get_lang('Error')
+            ];
+        }
+    }
 }
+

@@ -2094,7 +2094,11 @@ class SocialManager extends UserManager
         $languageId = api_get_language_id($userInfo['language']);
         $languageInfo = api_get_language_info($languageId);
         if ($languageInfo) {
-            $userInfo['language'] = $languageInfo['original_name'];
+            $userInfo['language'] = [
+                'label' => $languageInfo['original_name'],
+                'value' => $languageInfo['english_name'],
+                'code' => $languageInfo['isocode']
+            ];
         }
 
         if (isset($options['language']) && $options['language'] === false) {

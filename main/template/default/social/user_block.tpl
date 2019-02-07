@@ -36,15 +36,15 @@
                         <div class="avatar-lm">
                             <h5>LM</h5>
                             {% if user.language %}
-                                {% if user.language == 'Français' %}
+                                {% if user.language.code == 'fr' %}
                                     <img src="{{ _p.web_css_theme }}flags/france.svg" width="36px">
-                                {% elseif user.language == 'Deutsch' %}
+                                {% elseif user.language.code == 'de' %}
                                     <img src="{{ _p.web_css_theme }}flags/germany.svg" width="36px">
-                                {% elseif user.language == 'Español' %}
+                                {% elseif user.language.code == 'es' %}
                                     <img src="{{ _p.web_css_theme }}flags/spain.svg" width="36px">
-                                {% elseif user.language == 'Italiano' %}
+                                {% elseif user.language.code == 'it' %}
                                     <img src="{{ _p.web_css_theme }}flags/italy.svg" width="36px">
-                                {% elseif user.language == 'Polski' %}
+                                {% elseif user.language.code == 'pl' %}
                                     <img src="{{ _p.web_css_theme }}flags/poland.svg" width="36px">
                                 {% endif %}
                             {% endif %}

@@ -141,11 +141,11 @@ function active_user(element_div) {
 }
 
 function clear_course_list(div_course) {
-    $("div#"+div_course).html("&nbsp;");
+    $("div#"+div_course).html("");
     $("div#"+div_course).hide("");
 }
 function clear_session_list(div_session) {
-    $("div#"+div_session).html("&nbsp;");
+    $("div#"+div_session).html("");
     $("div#"+div_session).hide("");
 }
 
@@ -460,6 +460,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
     $users = [];
     $t = time();
     while ($user = Database::fetch_row($res)) {
+        $currentUser = api_get_current_user();
         $userPicture = UserManager::getUserPicture(
             $user[0],
             USER_IMAGE_SIZE_SMALL
@@ -478,6 +479,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                 $user[7] = '-1';
             }
         }
+
         $iconAdmin = '';
         if ($is_admin) {
             $iconAdmin .= Display::return_icon(
@@ -488,17 +490,53 @@ function get_user_data($from, $number_of_items, $column, $direction)
             );
         }
 
+        $iconActive = null;
+        $action = null;
+        $image = null;
+
+        if ($user[7] == '1') {
+            $action = 'Lock';
+            $image = 'accept';
+        } elseif ($user[7] == '-1') {
+            $action = 'edit';
+            $image = 'warning';
+        } elseif ($user[7] == '0') {
+            $action = 'Unlock';
+            $image = 'error';
+        }
+
+        if ($action === 'edit') {
+            $iconActive = Display::return_icon(
+                $image.'.png',
+                get_lang('AccountExpired'),
+                [],
+                16
+            );
+        } elseif ($user['0'] != $currentUser->getId()) {
+            // you cannot lock yourself out otherwise you could disable all the
+            // accounts including your own => everybody is locked out and nobody
+            // can change it anymore.
+            $iconActive = Display::return_icon(
+                $image.'.png',
+                get_lang(ucfirst($action)),
+                ['onclick' => 'active_user(this);', 'id' => 'img_'.$user['0']],
+                16
+            );
+        }
+
+        $profile = '<div class="avatar-user">'.$photo.'<span class="is-admin">'
+            .$iconAdmin.'</span><span class="is-active">'.$iconActive.'</span></div>';
+
         // forget about the expiration date field
         $users[] = [
             $user[0],
-            $photo.$iconAdmin,
+            $profile,
             $user[1],
             $user[2],
             $user[3],
             $user[4],
             $user[5],
             $user[6],
-            $user[7],
             api_get_local_time($user[9]),
             $user[0],
         ];
@@ -506,6 +544,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
     return $users;
 }
+
 
 /**
  * Returns a mailto-link.
@@ -516,7 +555,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
  */
 function email_filter($email)
 {
-    return Display :: encrypted_mailto_link($email, $email);
+    return Display :: encrypted_mailto_link($email, $email, null, true);
 }
 
 /**
@@ -554,7 +593,7 @@ function modify_filter($user_id, $url_params, $row)
     if ($current_user_status_label == $statusname[ANONYMOUS]) {
         $user_is_anonymous = true;
     }
-    $result = '<div class="actions-btn">';
+    $result = '<div class="toolbar-table">';
     if (!$user_is_anonymous) {
         $icon = Display::return_icon(
             'course.png',
@@ -563,7 +602,7 @@ function modify_filter($user_id, $url_params, $row)
         );
         $result .= '<a href="javascript:void(0)" onclick="load_course_list(\'div_'.$user_id.'\','.$user_id.')" >
                     '.$icon.'
-                    <div class="blackboard_hide" id="div_'.$user_id.'">&nbsp;&nbsp;</div>
+                    <div class="blackboard_hide" id="div_'.$user_id.'"></div>
                     </a>';
 
         $icon = Display::return_icon(
@@ -573,19 +612,19 @@ function modify_filter($user_id, $url_params, $row)
         );
         $result .= '<a href="javascript:void(0)" onclick="load_session_list(\'div_s_'.$user_id.'\','.$user_id.')" >
                     '.$icon.'
-                    <div class="blackboard_hide" id="div_s_'.$user_id.'">&nbsp;&nbsp;</div>
+                    <div class="blackboard_hide" id="div_s_'.$user_id.'"></div>
                     </a>';
     } else {
-        $result .= Display::return_icon('course_na.png', get_lang('Courses')).'&nbsp;&nbsp;';
-        $result .= Display::return_icon('course_na.png', get_lang('Sessions')).'&nbsp;&nbsp;';
+        $result .= Display::return_icon('course_na.png', get_lang('Courses'));
+        $result .= Display::return_icon('course_na.png', get_lang('Sessions'));
     }
 
     if (api_is_platform_admin()) {
         if (!$user_is_anonymous) {
             $result .= '<a href="user_information.php?user_id='.$user_id.'">'.
-                        Display::return_icon('info2.png', get_lang('Info')).'</a>&nbsp;&nbsp;';
+                        Display::return_icon('info2.png', get_lang('Info')).'</a>';
         } else {
-            $result .= Display::return_icon('info2_na.png', get_lang('Info')).'&nbsp;&nbsp;';
+            $result .= Display::return_icon('info2_na.png', get_lang('Info'));
         }
     }
 
@@ -604,26 +643,26 @@ function modify_filter($user_id, $url_params, $row)
         if (!$user_is_anonymous) {
             if (api_global_admin_can_edit_admin($user_id, null, $sessionAdminCanLoginAs)) {
                 $result .= '<a href="user_list.php?action=login_as&user_id='.$user_id.'&sec_token='.Security::getTokenFromSession().'">'.
-                    Display::return_icon('login_as.png', get_lang('LoginAs')).'</a>&nbsp;';
+                    Display::return_icon('login_as.png', get_lang('LoginAs')).'</a>';
             } else {
-                $result .= Display::return_icon('login_as_na.png', get_lang('LoginAs')).'&nbsp;';
+                $result .= Display::return_icon('login_as_na.png', get_lang('LoginAs'));
             }
         } else {
-            $result .= Display::return_icon('login_as_na.png', get_lang('LoginAs')).'&nbsp;';
+            $result .= Display::return_icon('login_as_na.png', get_lang('LoginAs'));
         }
     } else {
-        $result .= Display::return_icon('login_as_na.png', get_lang('LoginAs')).'&nbsp;';
+        $result .= Display::return_icon('login_as_na.png', get_lang('LoginAs'));
     }
 
     if ($current_user_status_label != $statusname[STUDENT]) {
         $result .= Display::return_icon(
             'statistics_na.png',
             get_lang('Reporting')
-        ).'&nbsp;';
+        );
     } else {
         $result .= '<a href="../mySpace/myStudents.php?student='.$user_id.'">'.
             Display::return_icon('statistics.png', get_lang('Reporting')).
-            '</a>&nbsp;';
+            '</a>';
     }
 
     if (api_is_platform_admin(true)) {
@@ -638,14 +677,14 @@ function modify_filter($user_id, $url_params, $row)
                     [],
                     ICON_SIZE_SMALL
                 ).
-                '</a>&nbsp;';
+                '</a>';
         } else {
             $result .= Display::return_icon(
                 'edit_na.png',
                 get_lang('Edit'),
                 [],
                 ICON_SIZE_SMALL
-            ).'</a>&nbsp;';
+            ).'</a>';
         }
     }
 
@@ -1096,16 +1135,16 @@ if (api_is_western_name_order()) {
 $table->set_header(5, get_lang('LoginName'));
 $table->set_header(6, get_lang('Email'));
 $table->set_header(7, get_lang('Profile'));
-$table->set_header(8, get_lang('Active'), true);
-$table->set_header(9, get_lang('RegistrationDate'), true);
-$table->set_header(10, get_lang('Action'), false);
+//$table->set_header(8, get_lang('Active'), true);
+$table->set_header(8, get_lang('RegistrationDate'), true);
+$table->set_header(9, get_lang('Action'), false);
 
 $table->set_column_filter(3, 'user_filter');
 $table->set_column_filter(4, 'user_filter');
 $table->set_column_filter(6, 'email_filter');
 $table->set_column_filter(7, 'status_filter');
-$table->set_column_filter(8, 'active_filter');
-$table->set_column_filter(10, 'modify_filter');
+//$table->set_column_filter(8, 'active_filter');
+$table->set_column_filter(9, 'modify_filter');
 
 // Only show empty actions bar if delete users has been blocked
 $actionsList = [];

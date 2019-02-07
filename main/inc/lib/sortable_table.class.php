@@ -132,7 +132,7 @@ class SortableTable extends HTML_Table
             $table_id = $table_name.uniqid();
         }
         $this->table_id = $table_id;
-        parent::__construct(['class' => 'table '.$style, 'id' => $table_id]);
+        parent::__construct(['class' => 'table table-hover mt-4 mb-4'.$style, 'id' => $table_id]);
         $this->table_name = $table_name;
         $this->additional_parameters = [];
         $this->param_prefix = $table_name.'_';
@@ -957,11 +957,11 @@ class SortableTable extends HTML_Table
         }
         if (count($this->form_actions) > 0) {
             if (strlen($row[0]) > 0) {
-                $row[0] = '<input type="checkbox" name="'.$this->checkbox_name.'[]" value="'.$row[0].'"';
+                $row[0] = '<div class="checkbox" ><label><input type="checkbox" name="'.$this->checkbox_name.'[]" value="'.$row[0].'"';
                 if (isset($_GET[$this->param_prefix.'selectall'])) {
                     $row[0] .= ' checked="checked"';
                 }
-                $row[0] .= '/>';
+                $row[0] .= '/><span class="checkbox-material"><span class="check"></span></span></label></div>';
             }
         }
         if (is_array($row)) {

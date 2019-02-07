@@ -624,7 +624,8 @@ class Display
     public static function encrypted_mailto_link(
         $email,
         $clickable_text = null,
-        $style_class = ''
+        $style_class = '',
+        $cut = false
     ) {
         if (is_null($clickable_text)) {
             $clickable_text = $email;
@@ -658,7 +659,11 @@ class Display
             );
         }
         // Return encrypted mailto hyperlink
-        return '<a href="'.$hmail.'"'.$style_class.' class="clickable_email_link">'.$hclickable_text.'</a>';
+        $classCut = '';
+        if($cut){
+            $classCut = 'cut-email';
+        }
+        return '<a href="'.$hmail.'"'.$style_class.' class="clickable_email_link '.$classCut.'">'.$hclickable_text.'</a>';
     }
 
     /**

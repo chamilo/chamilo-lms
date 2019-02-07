@@ -31,26 +31,25 @@
                             </div>
                         {% endif %}
                         <!-- END TYPE PROFILE -->
-
                         <!-- LM -->
                         <div class="avatar-lm">
                             <h5>LM</h5>
+
                             {% if user.language %}
                                 {% if user.language.code == 'fr' %}
-                                    <img src="{{ _p.web_css_theme }}flags/france.svg" width="36px">
+                                    <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/fr.svg" width="36px">
                                 {% elseif user.language.code == 'de' %}
-                                    <img src="{{ _p.web_css_theme }}flags/germany.svg" width="36px">
+                                    <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/de.svg" width="36px">
                                 {% elseif user.language.code == 'es' %}
-                                    <img src="{{ _p.web_css_theme }}flags/spain.svg" width="36px">
+                                    <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/es.svg" width="36px">
                                 {% elseif user.language.code == 'it' %}
-                                    <img src="{{ _p.web_css_theme }}flags/italy.svg" width="36px">
+                                    <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/it.svg" width="36px">
                                 {% elseif user.language.code == 'pl' %}
-                                    <img src="{{ _p.web_css_theme }}flags/poland.svg" width="36px">
+                                    <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/pl.svg" width="36px">
                                 {% endif %}
                             {% endif %}
                         </div>
                         <!-- END LM -->
-
                         <!-- LC -->
                         <div class="avatar-lc">
                             <h5>LC</h5>
@@ -58,17 +57,17 @@
                                 {% if item.variable == 'langue_cible' %}
 
                                     {% if item.value == 'French2' %}
-                                        <img src="{{ _p.web_css_theme }}flags/france.svg" width="36px">
+                                        <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/fr.svg" width="36px">
                                     {% elseif item.value == 'German2' %}
-                                        <img src="{{ _p.web_css_theme }}flags/germany.svg" width="36px">
+                                        <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/de.svg" width="36px">
                                     {% elseif item.value == 'Spanish' %}
-                                        <img src="{{ _p.web_css_theme }}flags/spain.svg" width="36px">
+                                        <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/es.svg" width="36px">
                                     {% elseif item.value == 'Italian' %}
-                                        <img src="{{ _p.web_css_theme }}flags/italy.svg" width="36px">
+                                        <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/it.svg" width="36px">
                                     {% elseif item.value == 'Polish' %}
-                                        <img src="{{ _p.web_css_theme }}flags/poland.svg" width="36px">
+                                        <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/pl.svg" width="36px">
                                     {% elseif item.value == 'English' %}
-                                        <img src="{{ _p.web_css_theme }}flags/united-kingdom.svg" width="36px">
+                                        <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/gb.svg" width="36px">
                                     {% endif %}
 
                                 {% endif %}

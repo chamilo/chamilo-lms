@@ -22,7 +22,7 @@
                             </h3>
                             <ul class="list-unstyled">
                                 {% for teacher in course.teachers %}
-                                    <li><em class="fa fa-user"></em> {{ teacher }}</li>
+                                    <li><em class="fa fa-user"></em> {{ teacher.name }}</li>
                                 {% endfor %}
                             </ul>
                             <p id="n-price" class="lead text-right" style="color: white;">

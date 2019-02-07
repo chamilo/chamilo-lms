@@ -5960,156 +5960,54 @@ class Tracking
      */
     public static function generate_session_exercise_graph($names, $my_results, $average)
     {
-        /* Create and populate the pData object */
-        $myData = new pData();
-        $myData->addPoints($names, 'Labels');
-        $myData->addPoints($my_results, 'Serie1');
-        $myData->addPoints($average, 'Serie2');
-        $myData->setSerieWeight('Serie1', 1);
-        $myData->setSerieTicks('Serie2', 4);
-        $myData->setSerieDescription('Labels', 'Months');
-        $myData->setAbscissa('Labels');
-        $myData->setSerieDescription('Serie1', get_lang('MyResults'));
-        $myData->setSerieDescription('Serie2', get_lang('AverageScore'));
-        $myData->setAxisUnit(0, '%');
-        $myData->loadPalette(api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color', true);
-        // Cache definition
-        $cachePath = api_get_path(SYS_ARCHIVE_PATH);
-        $myCache = new pCache(['CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)]);
-        $chartHash = $myCache->getHash($myData);
-
-        if ($myCache->isInCache($chartHash)) {
-            //if we already created the img
-            $imgPath = api_get_path(SYS_ARCHIVE_PATH).$chartHash;
-            $myCache->saveFromCache($chartHash, $imgPath);
-            $imgPath = api_get_path(WEB_ARCHIVE_PATH).$chartHash;
-        } else {
-            /* Define width, height and angle */
-            $mainWidth = 860;
-            $mainHeight = 500;
-            $angle = 50;
-
-            /* Create the pChart object */
-            $myPicture = new pImage($mainWidth, $mainHeight, $myData);
-
-            /* Turn of Antialiasing */
-            $myPicture->Antialias = false;
-
-            /* Draw the background */
-            $settings = ['R' => 255, 'G' => 255, 'B' => 255];
-            $myPicture->drawFilledRectangle(0, 0, $mainWidth, $mainHeight, $settings);
-
-            /* Add a border to the picture */
-            $myPicture->drawRectangle(
-                0,
-                0,
-                $mainWidth - 1,
-                $mainHeight - 1,
-                ['R' => 0, 'G' => 0, 'B' => 0]
-            );
-
-            /* Set the default font */
-            $myPicture->setFontProperties(
-                [
-                    'FontName' => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf',
-                    'FontSize' => 10, ]
-            );
-            /* Write the chart title */
-            $myPicture->drawText(
-                $mainWidth / 2,
-                30,
-                get_lang('ExercisesInTimeProgressChart'),
-                [
-                    'FontSize' => 12,
-                    'Align' => TEXT_ALIGN_BOTTOMMIDDLE,
-                ]
-            );
-
-            /* Set the default font */
-            $myPicture->setFontProperties(
-                [
-                    'FontName' => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf',
-                    'FontSize' => 6,
-                ]
-            );
-
-            /* Define the chart area */
-            $myPicture->setGraphArea(60, 60, $mainWidth - 60, $mainHeight - 150);
-
-            /* Draw the scale */
-            $scaleSettings = [
-                'XMargin' => 10,
-                'YMargin' => 10,
-                'Floating' => true,
-                'GridR' => 200,
-                'GridG' => 200,
-                'GridB' => 200,
-                'DrawSubTicks' => true,
-                'CycleBackground' => true,
-                'LabelRotation' => $angle,
-                'Mode' => SCALE_MODE_ADDALL_START0,
-            ];
-            $myPicture->drawScale($scaleSettings);
-
-            /* Turn on Antialiasing */
-            $myPicture->Antialias = true;
-
-            /* Enable shadow computing */
-            $myPicture->setShadow(
-                true,
-                [
-                    'X' => 1,
-                    'Y' => 1,
-                    'R' => 0,
-                    'G' => 0,
-                    'B' => 0,
-                    'Alpha' => 10,
-                ]
-            );
-
-            /* Draw the line chart */
-            $myPicture->setFontProperties(
-                [
-                    'FontName' => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf',
-                    'FontSize' => 10,
-                ]
-            );
-            $myPicture->drawSplineChart();
-            $myPicture->drawPlotChart(
-                [
-                    'DisplayValues' => true,
-                    'PlotBorder' => true,
-                    'BorderSize' => 1,
-                    'Surrounding' => -60,
-                    'BorderAlpha' => 80,
-                ]
-            );
-
-            /* Write the chart legend */
-            $myPicture->drawLegend(
-                $mainWidth / 2 + 50,
-                50,
-                [
-                    'Style' => LEGEND_BOX,
-                    'Mode' => LEGEND_HORIZONTAL,
-                    'FontR' => 0,
-                    'FontG' => 0,
-                    'FontB' => 0,
-                    'R' => 220,
-                    'G' => 220,
-                    'B' => 220,
-                    'Alpha' => 100,
-                ]
-            );
-
-            $myCache->writeToCache($chartHash, $myPicture);
-            $imgPath = api_get_path(SYS_ARCHIVE_PATH).$chartHash;
-            $myCache->saveFromCache($chartHash, $imgPath);
-            $imgPath = api_get_path(WEB_ARCHIVE_PATH).$chartHash;
-        }
-
-        $html = '<img src="'.$imgPath.'">';
-
+        $cdnChartJs = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js';
+        $html .= Display::tag('script', '', array('src' => $cdnChartJs));
+        $canvas = Display::tag('canvas', '', array('id' => 'session_graph_chart'));
+        $html .=  Display::tag('div',$canvas, array('style' => 'width:100%'));
+        $jsStr = " var data = {
+                       labels:".  json_encode($names).",
+                       datasets: [
+                       {
+                         label: '".get_lang('MyResults')."',
+                         backgroundColor: 'rgb(255, 99, 132)',
+                         stack: 'Stack1',
+                         data: ".  json_encode($my_results).",
+                        },
+                        {
+                         label: '".get_lang('AverageScore')."',
+                         backgroundColor: 'rgb(75, 192, 192)',
+                         stack: 'Stack2',
+                         data: ".  json_encode($average).",
+                        },
+                        ],  
+                    };
+                    var ctx = document.getElementById('session_graph_chart').getContext('2d');
+                    var myBarChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: data,
+                    options: {
+                            title: {
+                                    display: true,
+                                    text: '".get_lang('ExercisesInTimeProgressChart')."'
+                            },
+                            tooltips: {
+                                    mode: 'index',
+                                    intersect: false
+                            },
+                            responsive: true,
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        // Include a dollar sign in the ticks
+                                        callback: function(value, index, values) {
+                                            return value + '%';
+                                        }
+                                    }
+                                }]
+                            }
+                    }
+                });";
+        $html .= Display::tag('script', $jsStr);
         return $html;
     }
 
@@ -6482,7 +6380,7 @@ class Tracking
             $myCache->saveFromCache($chartHash, $imgPath);
             $imgPath = api_get_path(WEB_ARCHIVE_PATH).$chartHash;
         }
-
+        
         return $imgPath;
     }
 

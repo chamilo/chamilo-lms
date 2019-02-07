@@ -1135,6 +1135,9 @@ class BuyCoursesPlugin extends Plugin
      */
     public function getNumInvoice($saleId, $isService) {
         $dataInvoice = $this->getDataInvoice($saleId, $isService);
+        if (empty($dataInvoice)) {
+            return '-';
+        }
 
         return $dataInvoice['serie'].$dataInvoice['year'].'/'.$dataInvoice['num_invoice'];
     }

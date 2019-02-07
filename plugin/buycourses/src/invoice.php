@@ -1,13 +1,11 @@
 <?php
 /* For license terms, see /license.txt */
-
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 /**
  * Print invoice of the Buy Courses plugin.
  *
  * @package chamilo.plugin.buycourses
  */
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
-
 $cidReset = true;
 
 require_once '../config.php';

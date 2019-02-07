@@ -236,7 +236,14 @@ $returnParams = $extraField->addElements(
     false, // tag as select
     ['language'], //show only fields
     [], // order fields
-    [] // extra data
+    [], // extra data
+    [],
+    false,
+    false,
+    [],
+    [],
+    [],
+    true //$addEmptyOptionSelects = false,
 );
 $form->setDefaults(['extra_language' => $defaultUserLanguage]);
 

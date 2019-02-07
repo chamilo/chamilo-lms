@@ -180,14 +180,14 @@ class BuyCoursesPlugin extends Plugin
         if (Database::num_rows($res) === 0) {
             $sql = "ALTER TABLE $table ADD (
                 sale_email varchar(255) NOT NULL,
-                global_tax_perc int(11) unsigned NOT NULL,
-                tax_applies_to int(11) unsigned NOT NULL,
+                global_tax_perc int unsigned NOT NULL,
+                tax_applies_to int unsigned NOT NULL,
                 tax_name varchar(255) NOT NULL,
                 seller_name varchar(255) NOT NULL,
                 seller_id varchar(255) NOT NULL,
                 seller_address varchar(255) NOT NULL,
                 seller_email varchar(255) NOT NULL,
-                next_number_invoice int(11) unsigned NOT NULL,
+                next_number_invoice int unsigned NOT NULL,
                 invoice_series varchar(255) NOT NULL
             )";
             $res = Database::query($sql);
@@ -201,7 +201,7 @@ class BuyCoursesPlugin extends Plugin
         $res = Database::query($sql);
 
         if (Database::num_rows($res) === 0) {
-            $sql = "ALTER TABLE $table ADD tax_perc int(11) unsigned NULL";
+            $sql = "ALTER TABLE $table ADD tax_perc int unsigned NULL";
             $res = Database::query($sql);
             if (!$res) {
                 echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
@@ -213,7 +213,7 @@ class BuyCoursesPlugin extends Plugin
         $res = Database::query($sql);
 
         if (Database::num_rows($res) === 0) {
-            $sql = "ALTER TABLE $table ADD tax_perc int(11) unsigned NULL";
+            $sql = "ALTER TABLE $table ADD tax_perc int unsigned NULL";
             $res = Database::query($sql);
             if (!$res) {
                 echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
@@ -227,9 +227,9 @@ class BuyCoursesPlugin extends Plugin
         if (Database::num_rows($res) === 0) {
             $sql = "ALTER TABLE $table ADD (
                 price_without_tax decimal(10,2) NULL,
-                tax_perc int(11) unsigned NULL,
+                tax_perc int unsigned NULL,
                 tax_amount decimal(10,2) NULL,
-                invoice int(11) unsigned NULL
+                invoice int unsigned NULL
             )";
             $res = Database::query($sql);
             if (!$res) {
@@ -244,9 +244,9 @@ class BuyCoursesPlugin extends Plugin
         if (Database::num_rows($res) === 0) {
             $sql = "ALTER TABLE $table ADD (
                 price_without_tax decimal(10,2) NULL,
-                tax_perc int(11) unsigned NULL,
+                tax_perc int unsigned NULL,
                 tax_amount decimal(10,2) NULL,
-                invoice int(11) unsigned NULL
+                invoice int unsigned NULL
             )";
             $res = Database::query($sql);
             if (!$res) {
@@ -256,10 +256,10 @@ class BuyCoursesPlugin extends Plugin
 
         $table = self::TABLE_INVOICE;
         $sql = "CREATE TABLE IF NOT EXISTS $table (
-            id int(11) unsigned NOT NULL AUTO_INCREMENT,
-            sale_id int(11) unsigned NOT NULL,
-            is_service int(11) unsigned NOT NULL,
-            num_invoice int(11) unsigned NOT NULL,
+            id int unsigned NOT NULL AUTO_INCREMENT,
+            sale_id int unsigned NOT NULL,
+            is_service int unsigned NOT NULL,
+            num_invoice int unsigned NOT NULL,
             year int(4) unsigned NOT NULL,
             serie varchar(255) NOT NULL,
             date_invoice datetime NOT NULL,

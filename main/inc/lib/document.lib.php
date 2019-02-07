@@ -277,78 +277,68 @@ class DocumentManager
         return 'application/octet-stream';
     }
 	 /**
-     * This function smart streams a file to the client.
+     * This function smart streams a file to the client using HTTP headers
      *
-     * @param string $full_file_name
-     * @param string $filename
-     * @param string $contentType
+     * @param string $fullFilename The full path of the file to be sent
+     * @param string $filename     The name of the file as shown to the client
+     * @param string $contentType  The MIME type of the file
      *
-     * @return false if file doesn't exist, true if stream succeeded
+     * @return bool false if file doesn't exist, true if stream succeeded
      */
-	public static function smartReadFile($full_file_name, $filename, $contentType = 'application/octet-stream')
+	public static function smartReadFile($fullFilename, $filename, $contentType = 'application/octet-stream')
 	{
-	if (!file_exists($full_file_name))
-	{
-		header ("HTTP/1.1 404 Not Found");
-		return false;
-	}
-	
-	$size	= filesize($full_file_name);
-	$time	= date('r', filemtime($full_file_name));
-	
-	$fm		= @fopen($full_file_name, 'rb');
-	if (!$fm)
-	{
-		header ("HTTP/1.1 505 Internal server error");
-		return false;
-	}
-	
-	$begin	= 0;
-	$end	= $size - 1;
-	
-	if (isset($_SERVER['HTTP_RANGE']))
-	{
-		if (preg_match('/bytes=\h*(\d+)-(\d*)[\D.*]?/i', $_SERVER['HTTP_RANGE'], $matches))
-		{
-			$begin	= intval($matches[1]);
-			if (!empty($matches[2]))
-			{
-				$end	= intval($matches[2]);
-			}
-		}
-	}
+        if (!file_exists($fullFilename)) {
+            header ("HTTP/1.1 404 Not Found");
+            return false;
+        }
 
-	if (isset($_SERVER['HTTP_RANGE']))
-	{
-		header('HTTP/1.1 206 Partial Content');
-	}
-	else
-	{
-		header('HTTP/1.1 200 OK');
-	}
-	
-	header("Content-Type: $contentType"); 
-	header('Cache-Control: public, must-revalidate, max-age=0');
-	header('Pragma: no-cache');  
-	header('Accept-Ranges: bytes');
-	header('Content-Length:' . (($end - $begin) + 1));
-	if (isset($_SERVER['HTTP_RANGE']))
-	{
-		header("Content-Range: bytes $begin-$end/$size");
-	}
-	header("Content-Disposition: inline; filename=$filename");
-	header("Content-Transfer-Encoding: binary");
-	header("Last-Modified: $time");
-	
-	$cur	= $begin;
-	fseek($fm, $begin, 0);
-	
-	while(!feof($fm) && $cur <= $end && (connection_status() == 0))
-	{
-		print fread($fm, min(1024 * 16, ($end - $cur) + 1));
-		$cur += 1024 * 16;
-	}
-}
+        $size = filesize($fullFilename);
+        $time = date('r', filemtime($fullFilename));
+        
+        $fm = @fopen($fullFilename, 'rb');
+        if (!$fm) {
+            header ("HTTP/1.1 505 Internal server error");
+            return false;
+        }
+        
+        $begin = 0;
+        $end = $size - 1;
+        
+        if (isset($_SERVER['HTTP_RANGE'])) {
+            if (preg_match('/bytes=\h*(\d+)-(\d*)[\D.*]?/i', $_SERVER['HTTP_RANGE'], $matches)) {
+                $begin = intval($matches[1]);
+                if (!empty($matches[2])) {
+                    $end = intval($matches[2]);
+                }
+            }
+        }
+    
+        if (isset($_SERVER['HTTP_RANGE'])) {
+            header('HTTP/1.1 206 Partial Content');
+        } else {
+            header('HTTP/1.1 200 OK');
+        }
+        
+        header("Content-Type: $contentType"); 
+        header('Cache-Control: public, must-revalidate, max-age=0');
+        header('Pragma: no-cache');  
+        header('Accept-Ranges: bytes');
+        header('Content-Length:' . (($end - $begin) + 1));
+        if (isset($_SERVER['HTTP_RANGE'])) {
+            header("Content-Range: bytes $begin-$end/$size");
+        }
+        header("Content-Disposition: inline; filename=$filename");
+        header("Content-Transfer-Encoding: binary");
+        header("Last-Modified: $time");
+        
+        $cur = $begin;
+        fseek($fm, $begin, 0);
+        
+        while(!feof($fm) && $cur <= $end && (connection_status() == 0)) {
+            print fread($fm, min(1024 * 16, ($end - $cur) + 1));
+            $cur += 1024 * 16;
+        }
+    }
     /**
      * This function streams a file to the client.
      *

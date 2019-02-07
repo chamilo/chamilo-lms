@@ -1951,6 +1951,14 @@ class Exercise
                     '5',
                     ['id' => 'result_disabled_5', 'onclick' => 'check_results_disabled()']
                 );
+                $radios_results_disabled[] = $form->createElement(
+                    'radio',
+                    'results_disabled',
+                    null,
+                    get_lang('ExerciseRankingMode'),
+                    '6',
+                    ['id' => 'result_disabled_6']
+                );
 
                 $form->addGroup(
                     $radios_results_disabled,

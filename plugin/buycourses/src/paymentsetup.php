@@ -95,7 +95,7 @@ $invoicingEnable = $plugin->get('invoicing_enable') === 'true';
 
 if ($taxEnable) {
     $globalSettingForm->addHtml('<hr/>');
-    
+
     $globalSettingForm->addElement(
         'number',
         'global_tax_perc',
@@ -128,38 +128,38 @@ if ($taxEnable) {
 
 if ($invoicingEnable) {
     $globalSettingForm->addHtml('<hr/>');
-    
+
     $globalSettingForm->addElement(
         'text',
         'seller_name',
         $plugin->get_lang('SellerName')
     );
-    
+
     $globalSettingForm->addElement(
         'text',
         'seller_id',
         $plugin->get_lang('SellerId')
     );
-    
+
     $globalSettingForm->addElement(
         'text',
         'seller_address',
         $plugin->get_lang('SellerAddress')
     );
-    
+
     $globalSettingForm->addElement(
         'text',
         'seller_email',
         $plugin->get_lang('SellerEmail')
     );
-    
+
     $globalSettingForm->addElement(
         'number',
         'next_number_invoice',
         [$plugin->get_lang('NextNumberInvoice'), $plugin->get_lang('NextNumberInvoiceDescription')],
         ['step' => 1]
     );
-    
+
     $globalSettingForm->addElement(
         'text',
         'invoice_series',

@@ -49,7 +49,7 @@ class KeycloakPlugin extends Plugin
     }
 
     /**
-     * Deletes all keycloak chamilo session data
+     * Deletes all keycloak chamilo session data.
      */
     public function logout()
     {

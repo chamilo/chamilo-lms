@@ -2794,7 +2794,5 @@ HTML;
           });';
 
         return $frameReady;
-
-
     }
 }

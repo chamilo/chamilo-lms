@@ -1127,12 +1127,12 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
-     * Get numeration of invoice.
+     * Get invoice numbering
      *
      * @param int $saleId    The sale id
      * @param int $isService Check if a service
      *
-     * @return array The numeration invoice
+     * @return array The invoice numbers
      */
     public function getNumInvoice($saleId, $isService)
     {

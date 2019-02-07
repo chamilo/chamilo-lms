@@ -84,9 +84,9 @@ switch ($serviceSale['payment_type']) {
             $messageConfirmTemplate->assign(
                 'sale',
                 [
-                    'date' => api_format_date($serviceSale['buy_date'], DATE_TIME_FORMAT_LONG_24H),
+                    'date' => $serviceSale['buy_date'],
                     'product' => $serviceSale['service']['name'],
-                    'currency' => $currency['currency'],
+                    'currency' => $currency['iso_code'],
                     'price' => $serviceSale['price'],
                     'reference' => $serviceSale['reference'],
                 ]
@@ -134,10 +134,10 @@ switch ($serviceSale['payment_type']) {
                 [
                     'name' => $serviceSale['service']['name'],
                     'buyer' => $serviceSale['buyer']['name'],
-                    'buy_date' => api_format_date($serviceSale['buy_date'], DATE_TIME_FORMAT_LONG_24H),
-                    'start_date' => api_format_date($serviceSale['start_date'], DATE_TIME_FORMAT_LONG_24H),
-                    'end_date' => api_format_date($serviceSale['end_date'], DATE_TIME_FORMAT_LONG_24H),
-                    'currency' => $currency['currency'],
+                    'buy_date' => $serviceSale['buy_date'],
+                    'start_date' => $serviceSale['start_date'],
+                    'end_date' => $serviceSale['end_date'],
+                    'currency' => $currency['iso_code'],
                     'price' => $serviceSale['price'],
                     'reference' => $serviceSale['reference'],
                 ]
@@ -157,9 +157,9 @@ switch ($serviceSale['payment_type']) {
                 $messageConfirmTemplate->assign(
                     'sale',
                     [
-                        'date' => api_format_date($serviceSale['buy_date'], DATE_TIME_FORMAT_LONG_24H),
+                        'date' => $serviceSale['buy_date'],
                         'product' => $serviceSale['service']['name'],
-                        'currency' => $currency['currency'],
+                        'currency' => $currency['iso_code'],
                         'price' => $serviceSale['price'],
                         'reference' => $serviceSale['reference'],
                     ]

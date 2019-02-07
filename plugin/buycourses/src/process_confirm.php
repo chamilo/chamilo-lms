@@ -70,11 +70,11 @@ switch ($sale['payment_type']) {
             $messageConfirmTemplate->assign(
                 'sale',
                 [
-                        'date' => api_format_date($sale['date'], DATE_FORMAT_LONG_NO_DAY),
-                        'product' => $sale['product_name'],
-                        'currency' => $currency['iso_code'],
-                        'price' => $sale['price'],
-                        'reference' => $sale['reference'],
+                    'date' => $sale['date'],
+                    'product' => $sale['product_name'],
+                    'currency' => $currency['iso_code'],
+                    'price' => $sale['price'],
+                    'reference' => $sale['reference'],
                 ]
             );
 
@@ -131,7 +131,7 @@ switch ($sale['payment_type']) {
             $messageTemplate->assign(
                 'sale',
                 [
-                    'date' => api_format_date($sale['date'], DATE_FORMAT_LONG_NO_DAY),
+                    'date' => $sale['date'],
                     'product' => $sale['product_name'],
                     'currency' => $currency['iso_code'],
                     'price' => $sale['price'],
@@ -153,7 +153,7 @@ switch ($sale['payment_type']) {
                 $messageConfirmTemplate->assign(
                     'sale',
                     [
-                        'date' => api_format_date($sale['date'], DATE_FORMAT_LONG_NO_DAY),
+                        'date' => $sale['date'],
                         'product' => $sale['product_name'],
                         'currency' => $currency['iso_code'],
                         'price' => $sale['price'],

@@ -344,7 +344,8 @@ class BuyCoursesPlugin extends Plugin
      */
     public function returnBuyCourseButton($productId, $productType)
     {
-        $url = api_get_path(WEB_PLUGIN_PATH).'buycourses/src/process.php?i='.intval($productId).'&t='.$productType;
+        $productId = (int) $productId;
+        $url = api_get_path(WEB_PLUGIN_PATH).'buycourses/src/process.php?i='.$productId.'&t='.Security::remove_XSS($productType);
         $html = '<a class="btn btn-success btn-sm" title="'.$this->get_lang('Buy').'" href="'.$url.'">'.
             Display::returnFontAwesomeIcon('shopping-cart').'</a>';
 
@@ -399,7 +400,7 @@ class BuyCoursesPlugin extends Plugin
         Database::update(
             $currencyTable,
             ['status' => 1],
-            ['id = ?' => intval($selectedId)]
+            ['id = ?' => (int) $selectedId]
         );
     }
 
@@ -482,7 +483,7 @@ class BuyCoursesPlugin extends Plugin
     {
         return Database::delete(
             Database::get_main_table(self::TABLE_TRANSFER),
-            ['id = ?' => intval($id)]
+            ['id = ?' => (int) $id]
         );
     }
 
@@ -511,8 +512,8 @@ class BuyCoursesPlugin extends Plugin
             [
                 'where' => [
                     'i.product_id = ? AND i.product_type = ?' => [
-                        intval($productId),
-                        intval($itemType),
+                        (int) $productId,
+                        (int) $itemType,
                     ],
                 ],
             ],
@@ -918,7 +919,7 @@ class BuyCoursesPlugin extends Plugin
             '*',
             Database::get_main_table(self::TABLE_ITEM),
             [
-                'where' => ['id = ?' => intval($itemId)],
+                'where' => ['id = ?' => (int) $itemId],
             ],
             'first'
         );
@@ -1004,7 +1005,7 @@ class BuyCoursesPlugin extends Plugin
             'tax_perc' => $taxPerc,
             'tax_amount' => $taxAmount,
             'status' => self::SALE_STATUS_PENDING,
-            'payment_type' => intval($paymentType),
+            'payment_type' => (int) $paymentType,
         ];
 
         return Database::insert(self::TABLE_SALE, $values);
@@ -1023,7 +1024,7 @@ class BuyCoursesPlugin extends Plugin
             '*',
             Database::get_main_table(self::TABLE_SALE),
             [
-                'where' => ['id = ?' => intval($saleId)],
+                'where' => ['id = ?' => (int) $saleId],
             ],
             'first'
         );
@@ -1053,7 +1054,7 @@ class BuyCoursesPlugin extends Plugin
             [
                 'where' => [
                     's.payment_type = ? AND s.status = ?' => [
-                        intval($paymentType),
+                        (int) $paymentType,
                         self::SALE_STATUS_COMPLETED,
                     ],
                 ],
@@ -1117,8 +1118,8 @@ class BuyCoursesPlugin extends Plugin
             Database::get_main_table(self::TABLE_INVOICE),
             [
                 'where' => [
-                    'sale_id = ? AND ' => intval($saleId),
-                    'is_service = ?' => intval($isService),
+                    'sale_id = ? AND ' => (int) $saleId,
+                    'is_service = ?' => (int) $isService,
                 ],
             ],
             'first'
@@ -1156,7 +1157,7 @@ class BuyCoursesPlugin extends Plugin
             '*',
             Database::get_main_table(self::TABLE_CURRENCY),
             [
-                'where' => ['id = ?' => intval($currencyId)],
+                'where' => ['id = ?' => (int) $currencyId],
             ],
             'first'
         );
@@ -1327,7 +1328,7 @@ class BuyCoursesPlugin extends Plugin
             ['c.iso_code', 'u.firstname', 'u.lastname', 's.*'],
             "$saleTable s $innerJoins",
             [
-                'where' => ['s.status = ?' => intval($status)],
+                'where' => ['s.status = ?' => (int) $status],
                 'order' => 'id DESC',
             ]
         );
@@ -1506,7 +1507,7 @@ class BuyCoursesPlugin extends Plugin
             "$saleTable s $innerJoins",
             [
                 'where' => [
-                    'u.id = ? AND s.status = ?' => [intval($id), self::SALE_STATUS_COMPLETED],
+                    'u.id = ? AND s.status = ?' => [(int) $id, self::SALE_STATUS_COMPLETED],
                 ],
                 'order' => 'id DESC',
             ]
@@ -1637,7 +1638,7 @@ class BuyCoursesPlugin extends Plugin
             $beneficiaryTable,
             [
                 'where' => [
-                    'item_id = ?' => intval($itemId),
+                    'item_id = ?' => (int) $itemId,
                 ],
             ]
         );
@@ -1655,7 +1656,7 @@ class BuyCoursesPlugin extends Plugin
         $itemTable = Database::get_main_table(self::TABLE_ITEM);
         $affectedRows = Database::delete(
             $itemTable,
-            ['id = ?' => intval($itemId)]
+            ['id = ?' => (int) $itemId]
         );
 
         if (!$affectedRows) {
@@ -1696,7 +1697,7 @@ class BuyCoursesPlugin extends Plugin
             $itemTable,
             $itemData,
             [
-                'product_id = ? AND ' => intval($productId),
+                'product_id = ? AND ' => (int) $productId,
                 'product_type' => $productType,
             ]
         );
@@ -1715,7 +1716,7 @@ class BuyCoursesPlugin extends Plugin
 
         return Database::delete(
             $beneficiaryTable,
-            ['item_id = ?' => intval($itemId)]
+            ['item_id = ?' => (int) $itemId]
         );
     }
 
@@ -1735,9 +1736,9 @@ class BuyCoursesPlugin extends Plugin
             Database::insert(
                 $beneficiaryTable,
                 [
-                    'item_id' => intval($itemId),
-                    'user_id' => intval($userId),
-                    'commissions' => intval($commissions),
+                    'item_id' => (int) $itemId,
+                    'user_id' => (int) $userId,
+                    'commissions' => (int) $commissions,
                 ]
             );
         }
@@ -1793,8 +1794,8 @@ class BuyCoursesPlugin extends Plugin
         $payoutId = false,
         $userId = false
     ) {
-        $condition = ($payoutId) ? 'AND p.id = '.intval($payoutId) : '';
-        $condition2 = ($userId) ? ' AND p.user_id = '.intval($userId) : '';
+        $condition = ($payoutId) ? 'AND p.id = '.((int) $payoutId) : '';
+        $condition2 = ($userId) ? ' AND p.user_id = '.((int) $userId) : '';
         $typeResult = ($condition) ? 'first' : 'all';
         $payoutsTable = Database::get_main_table(self::TABLE_PAYPAL_PAYOUTS);
         $saleTable = Database::get_main_table(self::TABLE_SALE);
@@ -1821,7 +1822,7 @@ class BuyCoursesPlugin extends Plugin
             INNER JOIN $saleTable s ON s.id = p.sale_id
             INNER JOIN $currencyTable c ON s.currency_id = c.id
             LEFT JOIN  $extraFieldValues efv ON p.user_id = efv.item_id 
-            AND field_id = ".intval($paypalExtraField['id'])."
+            AND field_id = ".((int) $paypalExtraField['id'])."
         ";
 
         $payouts = Database::select(
@@ -1866,7 +1867,7 @@ class BuyCoursesPlugin extends Plugin
             "value",
             $extraFieldValues,
             [
-                'where' => ['field_id = ? AND item_id = ?' => [intval($paypalFieldId), intval($userId)]],
+                'where' => ['field_id = ? AND item_id = ?' => [(int) $paypalFieldId, (int) $userId]],
             ],
             'first'
         );
@@ -1895,22 +1896,24 @@ class BuyCoursesPlugin extends Plugin
         $platformCommission = $this->getPlatformCommission();
 
         $sale = $this->getSale($saleId);
+        $commission = (int) $platformCommission['commission'];
         $teachersCommission = number_format(
-            (floatval($sale['price']) * intval($platformCommission['commission'])) / 100,
+            (floatval($sale['price']) * $commission) / 100,
             2
         );
 
         $beneficiaries = $this->getBeneficiariesBySale($saleId);
         foreach ($beneficiaries as $beneficiary) {
+            $beneficiaryCommission = (int) $beneficiary['commissions'];
             Database::insert(
                 $payoutsTable,
                 [
                     'date' => $sale['date'],
                     'payout_date' => getdate(),
-                    'sale_id' => intval($saleId),
+                    'sale_id' => (int) $saleId,
                     'user_id' => $beneficiary['user_id'],
                     'commission' => number_format(
-                        (floatval($teachersCommission) * intval($beneficiary['commissions'])) / 100,
+                        (floatval($teachersCommission) * $beneficiaryCommission) / 100,
                         2
                     ),
                     'status' => self::PAYOUT_STATUS_PENDING,
@@ -1933,8 +1936,8 @@ class BuyCoursesPlugin extends Plugin
 
         Database::update(
             $payoutsTable,
-            ['status' => intval($status)],
-            ['id = ?' => intval($payoutId)]
+            ['status' => (int) $status],
+            ['id = ?' => (int) $payoutId]
         );
     }
 
@@ -1966,7 +1969,7 @@ class BuyCoursesPlugin extends Plugin
 
         return Database::update(
             $commissionTable,
-            ['commission' => intval($params['commission'])]
+            ['commission' => (int) $params['commission']]
         );
     }
 
@@ -1988,10 +1991,10 @@ class BuyCoursesPlugin extends Plugin
                 'description' => Security::remove_XSS($service['description']),
                 'price' => $service['price'],
                 'tax_perc' => $service['tax_perc'] != '' ? (int) $service['tax_perc'] : null,
-                'duration_days' => intval($service['duration_days']),
-                'applies_to' => intval($service['applies_to']),
-                'owner_id' => intval($service['owner_id']),
-                'visibility' => intval($service['visibility']),
+                'duration_days' => (int) $service['duration_days'],
+                'applies_to' => (int) $service['applies_to'],
+                'owner_id' => (int) $service['owner_id'],
+                'visibility' => (int) $service['visibility'],
                 'image' => '',
                 'video_url' => $service['video_url'],
                 'service_information' => $service['service_information'],
@@ -2010,7 +2013,7 @@ class BuyCoursesPlugin extends Plugin
             Database::update(
                 $servicesTable,
                 ['image' => 'simg-'.$return.'.png'],
-                ['id = ?' => intval($return)]
+                ['id = ?' => (int) $return]
             );
         }
 
@@ -2066,12 +2069,12 @@ class BuyCoursesPlugin extends Plugin
     {
         Database::delete(
             Database::get_main_table(self::TABLE_SERVICES_SALE),
-            ['service_id = ?' => intval($id)]
+            ['service_id = ?' => (int) $id]
         );
 
         return Database::delete(
             Database::get_main_table(self::TABLE_SERVICES),
-            ['id = ?' => intval($id)]
+            ['id = ?' => (int) $id]
         );
     }
 
@@ -2538,7 +2541,7 @@ class BuyCoursesPlugin extends Plugin
             'tax_perc' => $taxPerc,
             'tax_amount' => $taxAmount,
             'node_type' => $service['applies_to'],
-            'node_id' => intval($infoSelect),
+            'node_id' => (int) $infoSelect,
             'buyer_id' => $userId,
             'buy_date' => api_get_utc_datetime(),
             'date_start' => api_get_utc_datetime(),
@@ -2550,7 +2553,7 @@ class BuyCoursesPlugin extends Plugin
                 'Y-m-d H:i:s'
             ),
             'status' => self::SERVICE_STATUS_PENDING,
-            'payment_type' => intval($paymentType),
+            'payment_type' => (int) $paymentType,
         ];
 
         $returnedServiceSaleId = Database::insert(self::TABLE_SERVICES_SALE, $values);
@@ -2897,8 +2900,8 @@ class BuyCoursesPlugin extends Plugin
 
         return Database::update(
             $saleTable,
-            ['status' => intval($newStatus)],
-            ['id = ?' => intval($saleId)]
+            ['status' => (int) $newStatus],
+            ['id = ?' => (int) $saleId]
         );
     }
 

@@ -235,6 +235,9 @@ switch ($action) {
                     $payout['id'],
                     BuyCoursesPlugin::PAYOUT_STATUS_COMPLETED
                 );
+                if ($plugin->get('invoicing_enable') === 'true') {
+                    $plugin->setInvoice($payout['id']);
+                }
             }
 
             echo Display::return_message(

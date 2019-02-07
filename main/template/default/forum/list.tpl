@@ -8,15 +8,21 @@
         // default
         $('.category-forum ').hide();
         $('.{{ default_user_language }}').show();
-
+        $('#extra_language').attr('data-width', '200px');
+        $('#extra_language option[value=""]').text('{{ 'Any' | get_lang }}');
         $('#extra_language').on('change', function() {
             var selectedLanguage = $(this).val();
             $('.category-forum ').hide();
-            $('.'+ selectedLanguage).show();
+            if (selectedLanguage == '') {
+                $('.category-forum ').show();
+            } else {
+                $('.'+ selectedLanguage).show();
+            }
         });
     });
 </script>
 
+{{ form_content }}
 {{ search_filter }}
 
 {% if data is not empty %}

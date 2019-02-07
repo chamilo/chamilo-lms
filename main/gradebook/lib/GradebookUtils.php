@@ -651,40 +651,6 @@ class GradebookUtils
         $current_value = $data;
     }
 
-    /**
-     * XML-parser: handle end of element.
-     */
-    public static function element_end($parser, $data)
-    {
-        global $user;
-        global $users;
-        global $current_value;
-        switch ($data) {
-            case 'Result':
-                $users[] = $user;
-                break;
-            default:
-                $user[$data] = $current_value;
-                break;
-        }
-    }
-
-    /**
-     * XML-parser: handle start of element.
-     */
-    public static function element_start($parser, $data)
-    {
-        global $user;
-        global $current_tag;
-        switch ($data) {
-            case 'Result':
-                $user = [];
-                break;
-            default:
-                $current_tag = $data;
-        }
-    }
-
     public static function overwritescore($resid, $importscore, $eval_max)
     {
         $result = Result::load($resid);
@@ -695,30 +661,6 @@ class GradebookUtils
         $result[0]->set_score($importscore);
         $result[0]->save();
         unset($result);
-    }
-
-    /**
-     * Read the XML-file.
-     *
-     * @param string $file Path to the XML-file
-     *
-     * @return array All user information read from the file
-     */
-    public static function parse_xml_data($file)
-    {
-        global $current_tag;
-        global $current_value;
-        global $user;
-        global $users;
-        $users = [];
-        $parser = xml_parser_create();
-        xml_set_element_handler($parser, 'element_start', 'element_end');
-        xml_set_character_data_handler($parser, "character_data");
-        xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
-        xml_parse($parser, file_get_contents($file));
-        xml_parser_free($parser);
-
-        return $users;
     }
 
     /**

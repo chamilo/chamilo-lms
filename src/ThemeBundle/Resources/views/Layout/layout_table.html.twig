@@ -19,9 +19,11 @@
                     {% endif %}
                 </section>
 
-                {% block chamilo_messages %}
-                    {% include '@ChamiloTheme/FlashMessage/render.html.twig' %}
-                {% endblock %}
+                <section class="container-fluid">
+                    {% block chamilo_messages %}
+                        {% include '@ChamiloTheme/FlashMessage/render.html.twig' %}
+                    {% endblock %}
+                </section>
 
                 {# Content #}
                 {% block content %}
@@ -29,7 +31,7 @@
                         {{ form_search }}
                         <div class="card mb-4">
                             <div class="card-body">
-                                {{ table }}
+                                {{ content }}
                             </div>
                         </div>
                         {{ extra }}

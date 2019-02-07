@@ -81,7 +81,7 @@ hr {
 }
 .main{
   .container-fluid{
-    padding: 10px;
+    padding: 0 10px;
     @include large($breakpoint-xl){
       width: 95%;
     }

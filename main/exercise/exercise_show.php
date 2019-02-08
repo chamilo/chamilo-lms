@@ -1002,6 +1002,16 @@ if (!empty($category_list) && ($show_results || $show_only_total_score || $showT
     );
 }
 
+if (RESULT_DISABLE_RANKING == $track_exercise_info['results_disabled']) {
+    echo Display::page_header(get_lang('Ranking'), null, 'h4');
+    echo ExerciseLib::displayResultsInRanking(
+        $objExercise->iId,
+        $student_id,
+        $courseInfo['real_id'],
+        $sessionId
+    );
+}
+
 echo $totalScoreText;
 echo $exercise_content;
 

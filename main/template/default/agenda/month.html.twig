@@ -53,14 +53,17 @@ $(document).ready(function() {
     });
 
     var calendar = $('#calendar').fullCalendar({
+        themeSystem: 'bootstrap4',
+        contentHeight: 650,
+        handleWindowResize: true,
 		header: {
-			left: 'today,prev,next',
+			left: 'prev,next today',
 			center: 'title',
-			right: 'month,agendaWeek,agendaDay,listDay,listWeek,listMonth'
+			right: 'month,agendaWeek,agendaDay,listMonth'
 		},
         views: {
-            listDay: { buttonText: 'list day' },
-            listWeek: { buttonText: 'list week' },
+            /*listDay: { buttonText: 'list day' },
+            listWeek: { buttonText: 'list week' },*/
             listMonth: { buttonText: 'list month' },
         },
         locale: region_value,

@@ -38,13 +38,21 @@
         </section>
 
         {% block chamilo_messages %}
-        {% include '@ChamiloTheme/FlashMessage/render.html.twig' %}
+            <section class="container-fluid">
+                {% include '@ChamiloTheme/FlashMessage/render.html.twig' %}
+            </section>
         {% endblock %}
 
         {# Content #}
         {% block content %}
         <section class="container-fluid">
-            {{ content }}
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    {{ content }}
+                </div>
+            </div>
+
         </section>
         {% endblock %}
         {% endautoescape %}

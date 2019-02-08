@@ -69,8 +69,8 @@
   color: $grey-0;
 }
 .app-footer{
-  background: #3094DC;
-  border-top: 1px solid #3094DC;
+  background: $background-footer;
+  border-top: 1px solid $border-footer;
   color: #ffffff;
 }
 .app-footer a{

@@ -58,7 +58,11 @@ if ($hide === false) {
 
 $url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?a=order&user_id='.$userId;
 
+// Use current user language
+$targetLanguage = $userInfo['language'];
+
 // Theme fix
+/*
 $targetLanguage = api_get_interface_language();
 
 $targetLanguageInfo = $extraFieldValue->get_values_by_handler_and_field_variable(
@@ -68,7 +72,7 @@ $targetLanguageInfo = $extraFieldValue->get_values_by_handler_and_field_variable
 
 if (!empty($targetLanguageInfo)) {
     $targetLanguage = strtolower($targetLanguageInfo['value']);
-}
+}*/
 
 $theme = 'theme_fr';
 switch ($targetLanguage) {

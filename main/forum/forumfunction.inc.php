@@ -3185,7 +3185,7 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
     $iframe = null;
     $myThread = Security::remove_XSS($myThread);
     if ($forum_setting['show_thread_iframe_on_reply'] && $action != 'newthread' && !empty($myThread)) {
-        $iframe = "<iframe style=\"border: 1px solid black\" src=\"iframe_thread.php?".api_get_cidreq()."&forum=".intval($forumId)."&thread=".$myThread."#".Security::remove_XSS($my_post)."\" width=\"100%\"></iframe>";
+        $iframe = "<iframe style=\"border: 1px solid black\" src=\"iframe_thread.php?".api_get_cidreq()."&forum=".$forumId."&thread=".$myThread."#".$my_post."\" width=\"100%\"></iframe>";
     }
     if (!empty($iframe)) {
         $form->addElement('label', get_lang('Thread'), $iframe);
@@ -3301,10 +3301,11 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
 
     // If we are quoting a message we have to retrieve the information of the post we are quoting so that
     // we can add this as default to the textarea.
-    if (($action == 'quote' || $action == 'replymessage') && isset($my_post)) {
+
+    if (($action == 'quote' || $action == 'replymessage' || $giveRevision) && !empty($my_post)) {
         // We also need to put the parent_id of the post in a hidden form when
         // we are quoting or replying to a message (<> reply to a thread !!!)
-        $form->addHidden('post_parent_id', intval($my_post));
+        $form->addHidden('post_parent_id', $my_post);
 
         // If we are replying or are quoting then we display a default title.
         $values = get_post_information($my_post);
@@ -3328,6 +3329,9 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
                 <div>&nbsp;</div>
                 <div>&nbsp;</div>
             ';
+        }
+        if ($giveRevision) {
+            $defaults['post_text'] = prepare4display($values['post_text']);
         }
     }
 

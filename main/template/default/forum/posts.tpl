@@ -23,8 +23,17 @@
                     {% set highlight = 'alert alert-danger' %}
                 {% endif %}
 
-                <div class="col-md-10 {{ highlight }}">
-                    {{ post.post_data }}
+                {% set highlight_revision = '' %}
+                {% if post.is_a_revision %}
+                    {% set highlight_revision = 'forum_revision' %}
+                {% endif %}
+
+                <div class="col-md-10 {{ highlight }} ">
+                    {{ post.post_title }}
+
+                    <div class="{{ highlight_revision }} ">
+                        {{ post.post_data }}
+                    </div>
 
                     {{ post.post_attachments }}
                 </div>

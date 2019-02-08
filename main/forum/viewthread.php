@@ -479,6 +479,8 @@ foreach ($posts as $post) {
         $userCanQualify = true;
     }
 
+    $postIsARevision = false;
+
     if ($post['poster_id'] == $userId) {
         $revision = getPostRevision($post['post_id']);
         if (empty($revision)) {
@@ -488,13 +490,26 @@ foreach ($posts as $post) {
             $languageInfo = api_get_language_info($languageId);
             if ($languageInfo) {
                 $askForRevision = '<span class="flag-icon flag-icon-'.$languageInfo['isocode'].'"></span> ';
+                $postIsARevision = true;
             }
         }
     } else {
         if (postNeedsRevision($post['post_id'])) {
             $askForRevision = giveRevisionButton($post['post_id'], $current_thread);
+        } else {
+            $revision = getPostRevision($post['post_id']);
+            if (!empty($revision)) {
+                $languageId = api_get_language_id(strtolower($revision));
+                $languageInfo = api_get_language_info($languageId);
+                if ($languageInfo) {
+                    $askForRevision = '<span class="flag-icon flag-icon-'.$languageInfo['isocode'].'"></span> ';
+                    $postIsARevision = true;
+                }
+            }
         }
     }
+
+    $post['is_a_revision'] = $postIsARevision;
 
     if (empty($currentThread['thread_qualify_max'])) {
         $userCanQualify = false;
@@ -625,11 +640,11 @@ foreach ($posts as $post) {
 
     // The post title
     $titlePost = Display::tag('h3', $post['post_title'], ['class' => 'forum_post_title']);
-    $post['post_data'] = Display::tag('div', $titlePost, ['class' => 'post-header']);
-    $post['post_data'] .= '<a name="post_id_'.$post['post_id'].'"></a>';
+    $post['post_title'] = Display::tag('div', $titlePost, ['class' => 'post-header']);
+    $post['post_title'] .= '<a name="post_id_'.$post['post_id'].'"></a>';
 
     // the post body
-    $post['post_data'] .= Display::tag('div', $post['post_text'], ['class' => 'post-body']);
+    $post['post_data'] = Display::tag('div', $post['post_text'], ['class' => 'post-body']);
 
     // The check if there is an attachment
     $post['post_attachments'] = '';

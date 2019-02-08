@@ -291,20 +291,18 @@ class SortableTable extends HTML_Table
 
             // Only show pagination info when there are items to paginate
             if ($this->get_total_number_of_items() > $this->default_items_per_page) {
-                $html = '<div class="table-responsive">';
-                $html .= '<table class="table">';
-                $html .= '<tr>';
-                $html .= '<td style="width:25%;">';
-                $html .= $form;
-                $html .= '</td>';
-                $html .= '<td style="text-align:center;">';
-                $html .= $this->get_table_title();
-                $html .= '</td>';
-                $html .= '<td style="text-align:right;width:25%;">';
-                $html .= $nav;
-                $html .= '</td>';
-                $html .= '</tr>';
-                $html .= '</table>';
+                $html = '<div class="card-action">';
+                $html .= '<div class="row">';
+                $html .= '<div class="col-12 col-md-4">';
+                $html .= '<div class="page-select pb-2 pt-2">'.$form.'</div>';
+                $html .= '</div>';
+                $html .= '<div class="col-12 col-md-4">';
+                $html .= '<div class="page-number pb-2 pt-2">'.$this->get_table_title().'</div>';
+                $html .= '</div>';
+                $html .= '<div class="col-12 col-md-4">';
+                $html .= '<div class="page-nav pb-2 pt-2">'.$nav.'</div>';
+                $html .= '</div>';
+                $html .= '</div>';
                 $html .= '</div>';
             }
 
@@ -323,25 +321,26 @@ class SortableTable extends HTML_Table
                 }
             }
             $html .= '<input type="hidden" name="action">';
-            $html .= '<table style="width:100%;">';
-            $html .= '<tr>';
-            $html .= '<td>';
+            $html .= '<div class="card-action">';
+            $html .= '<div class="row">';
+            $html .= '<div class="col-12 col-md-6">';
+            $html .= '<div class="page-action pb-2 pt-2">';
 
             if (count($this->form_actions) > 0) {
                 $html .= '<div class="btn-group" role="group">';
                 $html .= '<a 
-                    class="btn btn-outline-secondary" 
+                    class="btn btn-outline-primary" 
                     href="?'.$params.'&amp;'.$this->param_prefix.'selectall=1" 
                     onclick="javascript: setCheckbox(true, \''.$table_id.'\'); return false;">'.get_lang('SelectAll').'</a>';
                 $html .= '<a 
-                    class="btn btn-outline-secondary" 
+                    class="btn btn-outline-primary" 
                     href="?'.$params.'" 
                     onclick="javascript: setCheckbox(false, \''.$table_id.'\'); return false;">'.get_lang('UnSelectAll').'</a> ';
                 $html .= '<div class="btn-group" role="group">
                             <button 
                                 id="'.$table_id.'_actions" 
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                class="btn btn-outline-secondary dropdown-toggle" 
+                                class="btn btn-outline-primary dropdown-toggle" 
                                 onclick="javascript:return false;">'.
                                 get_lang('Actions').'
                             </button>
@@ -361,19 +360,17 @@ class SortableTable extends HTML_Table
                 $html .= $form;
             }
 
-            $html .= '</td>';
+            $html .= '</div>';
+            $html .= '</div>';
             // Pagination
             if ($this->get_total_number_of_items() > $this->default_items_per_page) {
-                $html .= '<td style="text-align:right;">';
-                $html .= $nav;
-                $html .= '</td>';
-            } else {
-                $html .= '<td> ';
-                $html .= '</td>';
+                $html .= '<div class="col-12 col-md-6">';
+                $html .= '<div class="page-nav pb-2 pt-2">'.$nav.'</div>';
+                $html .= '</div>';
             }
 
-            $html .= '</tr>';
-            $html .= '</table>';
+            $html .= '</div>';
+            $html .= '</div>';
             if (count($this->form_actions) > 0) {
                 $html .= '</form>';
             }
@@ -578,10 +575,11 @@ class SortableTable extends HTML_Table
         $pager = $this->get_pager();
         $pager_links = $pager->getLinks();
         $nav = $pager_links['first'].' '.$pager_links['back'];
-        $nav .= ' '.$pager->getCurrentPageId().' / '.$pager->numPages().' ';
+        $nav .= '<div class="btn btn-outline-secondary">'.$pager->getCurrentPageId().' / '.$pager->numPages().' </div>';
         $nav .= $pager_links['next'].' '.$pager_links['last'];
+        $html = Display::tag('div',$nav,['class'=>'btn-group btn-group-sm', 'role' => 'group']);
 
-        return $nav;
+        return $html;
     }
 
     /**

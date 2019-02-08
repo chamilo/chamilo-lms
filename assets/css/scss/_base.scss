@@ -148,6 +148,60 @@ hr {
 // ---------------------------------------------------------
 // TABLES
 // ---------------------------------------------------------
+.card-action{
+  .page-select{
+    width: 30%;
+    @include large($breakpoint-xl){
+      width: 30%;
+    }
+    @include portrait($breakpoint-sm, $breakpoint-md){
+      width: 100%;
+    }
+    @include landscape($breakpoint-sm) {
+      width: 100%;
+    }
+  }
+  .page-number{
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+    @include large($breakpoint-xl){
+      display: inline-block;
+      text-align: center;
+    }
+    @include portrait($breakpoint-sm, $breakpoint-md){
+      display: inline-block;
+      text-align: center;
+    }
+    @include landscape($breakpoint-sm) {
+      display: none;
+    }
+  }
+  .page-nav{
+    text-align: right;
+    @include large($breakpoint-xl){
+      text-align: right;
+    }
+    @include portrait($breakpoint-sm, $breakpoint-md){
+      text-align: center;
+    }
+    @include landscape($breakpoint-sm) {
+      text-align: center;
+    }
+  }
+  .page-action {
+    text-align: left;
+    @include large($breakpoint-xl){
+      text-align: left;
+    }
+    @include portrait($breakpoint-sm, $breakpoint-md){
+      text-align: center;
+    }
+    @include landscape($breakpoint-sm) {
+      text-align: center;
+    }
+  }
+}
 .table-hover{
   tbody{
     tr:hover{

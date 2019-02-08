@@ -218,7 +218,7 @@ $defaultUserLanguage = ucfirst($_user['language']);
 $extraFieldValues = new ExtraFieldValue('user');
 $value = $extraFieldValues->get_values_by_handler_and_field_variable(api_get_user_id(), 'langue_cible');
 
-if ($value && isset($value['value'])) {
+if ($value && isset($value['value']) && !empty($value['value'])) {
     $defaultUserLanguage = ucfirst($value['value']);
 }
 

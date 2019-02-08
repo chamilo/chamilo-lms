@@ -32,6 +32,7 @@ class ExtraField extends BaseAttribute
     const SCHEDULED_ANNOUNCEMENT = 13;
     const TERMS_AND_CONDITION_TYPE = 14;
     const FORUM_CATEGORY_TYPE = 15;
+    const FORUM_POST_TYPE = 16;
 
     /**
      * @var int

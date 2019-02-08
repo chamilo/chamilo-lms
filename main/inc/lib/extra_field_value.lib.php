@@ -116,6 +116,8 @@ class ExtraFieldValue extends Model
         $extraField = new ExtraField($this->type);
         $extraFields = $extraField->get_all(null, 'option_order');
         $resultsExist = [];
+
+        $dirPermissions = api_get_permissions_for_new_directories();
         // Parse params
         foreach ($extraFields as $fieldDetails) {
             if ($forceSave === false) {
@@ -152,7 +154,6 @@ class ExtraFieldValue extends Model
 
             $commentVariable = 'extra_'.$field_variable.'_comment';
             $comment = isset($params[$commentVariable]) ? $params[$commentVariable] : null;
-            $dirPermissions = api_get_permissions_for_new_directories();
 
             switch ($extraFieldInfo['field_type']) {
                 case ExtraField::FIELD_TYPE_GEOLOCALIZATION:
@@ -351,7 +352,6 @@ class ExtraFieldValue extends Model
                         'value' => $fieldToSave,
                         'comment' => $comment,
                     ];
-
                     $this->save($newParams);
 
                     break;

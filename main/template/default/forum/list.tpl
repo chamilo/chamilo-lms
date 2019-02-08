@@ -1,8 +1,6 @@
 {% extends 'layout/layout_1_col.tpl'|get_template %}
 {% block content %}
 
-{{ form_content }}
-
 <script>
     $(document).ready(function () {
         // default
@@ -89,6 +87,7 @@
                                         <div class="forum-date">
                                             <i class="fa fa-comments" aria-hidden="true"></i>
                                             {{ subitem.last_poster_date }}
+                                            « {{ subitem.last_post_title }} »
                                             {{ "By"|get_lang }}
                                             {{ subitem.last_poster_user }}
                                         </div>

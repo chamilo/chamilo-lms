@@ -3135,13 +3135,14 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
     $myThread = isset($_GET['thread']) ? (int) $_GET['thread'] : '';
     $forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : '';
     $my_post = isset($_GET['post']) ? (int) $_GET['post'] : '';
+    $giveRevision = isset($_GET['give_revision']) && $_GET['give_revision'] == 1 ? true : false;
 
     $url = api_get_self().'?'.http_build_query([
-            'action' => $action,
-            'forum' => $forumId,
-            'thread' => $myThread,
-            'post' => $my_post,
-        ]).'&'.api_get_cidreq();
+        'action' => $action,
+        'forum' => $forumId,
+        'thread' => $myThread,
+        'post' => $my_post,
+    ]).'&'.api_get_cidreq();
 
     $form = new FormValidator(
         'thread',
@@ -3263,6 +3264,21 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
         $form->addFile('user_upload', get_lang('Attachment'));
     }
 
+    if ($giveRevision) {
+        $form->addHidden('give_revision', 1);
+        $extraField = new ExtraField('forum_post');
+        $returnParams = $extraField->addElements(
+            $form,
+            null,
+            [], //exclude
+            false, // filter
+            false, // tag as select
+            ['revision_language'], //show only fields
+            [], // order fields
+            [] // extra data
+        );
+    }
+
     // Setting the class and text of the form title and submit button.
     if ($action == 'quote') {
         $form->addButtonCreate(get_lang('QuoteMessage'), 'SubmitPost');
@@ -3274,14 +3290,13 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
         $form->addButtonCreate(get_lang('CreateThread'), 'SubmitPost');
     }
 
+    $defaults['thread_peer_qualify'] = 0;
     if (!empty($form_values)) {
         $defaults['post_title'] = prepare4display($form_values['post_title']);
         $defaults['post_text'] = prepare4display($form_values['post_text']);
         $defaults['post_notification'] = (int) $form_values['post_notification'];
         $defaults['thread_sticky'] = (int) $form_values['thread_sticky'];
         $defaults['thread_peer_qualify'] = (int) $form_values['thread_peer_qualify'];
-    } else {
-        $defaults['thread_peer_qualify'] = 0;
     }
 
     // If we are quoting a message we have to retrieve the information of the post we are quoting so that
@@ -3332,7 +3347,7 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
     if ($form->validate()) {
         $check = Security::check_token('post');
         if ($check) {
-            $values = $form->exportValues();
+            $values = $form->getSubmitValues();
             if (isset($values['thread_qualify_gradebook']) &&
                 $values['thread_qualify_gradebook'] == '1' &&
                 empty($values['weight_calification'])
@@ -3347,7 +3362,6 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
 
                 return false;
             }
-
             switch ($action) {
                 case 'newthread':
                     $myThread = store_thread($current_forum, $values);
@@ -3356,8 +3370,21 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
                 case 'quote':
                 case 'replythread':
                 case 'replymessage':
-                    store_reply($current_forum, $values);
+                    $postId = store_reply($current_forum, $values);
 
+                    if ($postId && isset($values['give_revision']) && $values['give_revision'] == 1) {
+                        $extraFieldValues = new ExtraFieldValue('forum_post');
+                        $params = [
+                            'item_id' => $postId,
+                            'extra_revision_language' => $values['extra_revision_language'],
+                        ];
+                        $extraFieldValues->saveFieldValues(
+                            $params,
+                            false,
+                            false,
+                            ['revision_language']
+                        );
+                    }
                     break;
             }
 
@@ -3507,8 +3534,8 @@ function showQualify($option, $user_id, $thread_id)
     $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
 
     $course_id = api_get_course_int_id();
-    $user_id = intval($user_id);
-    $thread_id = intval($thread_id);
+    $user_id = (int) $user_id;
+    $thread_id = (int) $thread_id;
 
     if (empty($user_id) || empty($thread_id)) {
         return false;
@@ -3555,6 +3582,9 @@ function showQualify($option, $user_id, $thread_id)
  */
 function getThreadScoreHistory($user_id, $thread_id, $opt)
 {
+    $user_id = (int) $user_id;
+    $thread_id = (int) $thread_id;
+
     $table_threads_qualify_log = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY_LOG);
     $course_id = api_get_course_int_id();
 
@@ -3562,15 +3592,15 @@ function getThreadScoreHistory($user_id, $thread_id, $opt)
         $sql = "SELECT * FROM $table_threads_qualify_log
                 WHERE
                     c_id = $course_id AND
-                    thread_id='".Database::escape_string($thread_id)."' AND
-                    user_id='".Database::escape_string($user_id)."'
+                    thread_id='".$thread_id."' AND
+                    user_id='".$user_id."'
                 ORDER BY qualify_time";
     } else {
         $sql = "SELECT * FROM $table_threads_qualify_log
                 WHERE
                     c_id = $course_id AND
-                    thread_id='".Database::escape_string($thread_id)."' AND
-                    user_id='".Database::escape_string($user_id)."'
+                    thread_id='".$thread_id."' AND
+                    user_id='".$user_id."'
                 ORDER BY qualify_time DESC";
     }
     $rs = Database::query($sql);
@@ -3686,7 +3716,7 @@ function current_qualify_of_thread($threadId, $sessionId, $userId)
  * @param int   $courseId      Optional
  * @param int   $userId        Optional
  *
- * @return array
+ * @return int post id
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  *
@@ -3710,16 +3740,15 @@ function store_reply($current_forum, $values, $courseId = 0, $userId = 0)
         return false;
     }
 
+    $visible = 1;
     if ($current_forum['approval_direct_post'] == '1' &&
         !api_is_allowed_to_edit(null, true)
     ) {
         $visible = 0;
-    } else {
-        $visible = 1;
     }
 
     $upload_ok = 1;
-    $return = [];
+    $new_post_id = 0;
 
     if ($upload_ok) {
         // We first store an entry in the forum_post table.
@@ -3833,7 +3862,7 @@ function store_reply($current_forum, $values, $courseId = 0, $userId = 0)
         );
     }
 
-    return $return;
+    return $new_post_id;
 }
 
 /**
@@ -6569,19 +6598,122 @@ function postIsEditableByStudent($forum, $post)
 }
 
 /**
+ * @param int  $postId
+ *
+ * @return bool
+ */
+function savePostRevision($postId)
+{
+    $postData = get_post_information($postId);
+
+    if (empty($postData)) {
+        return false;
+    }
+
+    $userId = api_get_user_id();
+
+    if ($postData['poster_id'] != $userId) {
+        return false;
+    }
+
+    $status = (int) !postNeedsRevision($postId);
+    $extraFieldValue = new ExtraFieldValue('forum_post');
+    $params = [
+        'item_id' => $postId,
+        'extra_ask_for_revision' => ['extra_ask_for_revision' => $status],
+    ];
+    if (empty($status)) {
+        unset($params['extra_ask_for_revision']);
+    }
+    $extraFieldValue->saveFieldValues(
+        $params,
+        true,
+        false,
+        ['ask_for_revision']
+    );
+}
+
+function getPostRevision($postId)
+{
+    $extraFieldValue = new ExtraFieldValue('forum_post');
+    $value = $extraFieldValue->get_values_by_handler_and_field_variable(
+        $postId,
+        'revision_language'
+    );
+    $revision = '';
+    if ($value && isset($value['value'])) {
+        $revision =  $value['value'];
+    }
+
+    return $revision;
+}
+
+function postNeedsRevision($postId)
+{
+    $extraFieldValue = new ExtraFieldValue('forum_post');
+    $value = $extraFieldValue->get_values_by_handler_and_field_variable(
+        $postId,
+        'ask_for_revision'
+    );
+    $hasRevision = false;
+    if ($value && isset($value['value'])) {
+        return $value['value'] == 1;
+    }
+
+    return $hasRevision;
+}
+
+function getAskRevisionButton($postId, $threadInfo)
+{
+    $postId = (int) $postId;
+
+    $status = 'btn-default';
+    if (postNeedsRevision($postId)) {
+        $status = 'btn-success';
+    }
+
+    return Display::url(
+        get_lang('AskRevision'),
+        api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.
+        api_get_cidreq().'&action=ask_revision&post_id='.$postId.'&forum='.$threadInfo['forum_id'].'&thread='.$threadInfo['thread_id'],
+        ['class' => "btn $status", 'title' => get_lang('AskRevision')]
+    );
+}
+
+function giveRevisionButton($postId, $threadInfo)
+{
+    $postId = (int) $postId;
+
+    return Display::toolbarButton(
+        get_lang('GiveRevision'),
+       api_get_path(WEB_CODE_PATH).'forum/reply.php?'.api_get_cidreq().'&'.http_build_query([
+            'forum' => $threadInfo['forum_id'],
+            'thread' => $threadInfo['thread_id'],
+            'post' => $postId = (int) $postId,
+            'action' => 'replymessage',
+            'give_revision' => 1,
+        ]),
+        'reply',
+        'primary',
+        ['id' => "reply-to-post-{$postId}"]
+    );
+}
+
+/**
  * @param int   $postId
  * @param array $threadInfo
  * @return string
  */
 function getReportButton($postId, $threadInfo)
 {
+    $postId = (int) $postId;
+
     return Display::url(
         Display::returnFontAwesomeIcon('flag'),
         api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.
         api_get_cidreq().'&action=report&post_id='.$postId.'&forum='.$threadInfo['forum_id'].'&thread='.$threadInfo['thread_id'],
         ['class' => 'btn btn-danger', 'title' => get_lang('Report')]
     );
-
 }
 
 /**
@@ -6644,7 +6776,6 @@ function getReportRecepients()
     }
 
     return $users;
-
 }
 
 /**

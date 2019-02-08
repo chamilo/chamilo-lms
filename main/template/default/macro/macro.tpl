@@ -89,10 +89,14 @@
 
 {% macro panel(name, content, footer = '') %}
 <div class="panel panel-default">
-    <div class="panel-heading"> {{ name }}</div>
+    {% if name %}
+        <div class="panel-heading"> {{ name }}</div>
+    {% endif %}
+
     <div class="panel-body">
         {{ content }}
     </div>
+
     {% if footer %}
         <div class="panel-footer">{{ footer }}</div>
     {% endif %}

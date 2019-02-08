@@ -149,6 +149,9 @@ class ExtraField extends Model
             case 'forum_category':
                 $this->extraFieldType = EntityExtraField::FORUM_CATEGORY_TYPE;
                 break;
+            case 'forum_post':
+                $this->extraFieldType = EntityExtraField::FORUM_POST_TYPE;
+                break;
         }
 
         $this->pageUrl = 'extra_fields.php?type='.$this->type;
@@ -184,6 +187,7 @@ class ExtraField extends Model
             'survey',
             'terms_and_condition',
             'forum_category',
+            'forum_post',
         ];
 
         if (api_get_configuration_value('allow_scheduled_announcements')) {

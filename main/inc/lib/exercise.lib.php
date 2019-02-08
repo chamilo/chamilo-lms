@@ -4796,10 +4796,6 @@ EOT;
             echo $totalScoreText;
         }
 
-        if (!empty($remainingMessage)) {
-            echo Display::return_message($remainingMessage, 'normal', false);
-        }
-
         if ($save_user_result) {
             // Tracking of results
             if ($exercise_stat_info) {
@@ -4846,6 +4842,10 @@ EOT;
                 api_get_course_int_id(),
                 api_get_session_id()
             );
+        }
+
+        if (!empty($remainingMessage)) {
+            echo Display::return_message($remainingMessage, 'normal', false);
         }
     }
 

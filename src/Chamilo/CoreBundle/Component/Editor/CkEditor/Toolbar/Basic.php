@@ -64,6 +64,7 @@ class Basic extends Toolbar
         'inserthtml',
         'xml',
         'qmarkersrolls',
+        'codesnippet',
     ];
 
     /**

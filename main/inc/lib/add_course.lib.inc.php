@@ -744,7 +744,6 @@ class AddCourse
                 'audio',
                 'flash',
                 'video',
-                'certificates',
             ];
 
             $default_course_path = api_get_path(SYS_CODE_PATH).'default_course_document/';

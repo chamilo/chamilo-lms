@@ -4930,7 +4930,7 @@ EOT;
                 }
 
                 if ($a['exe_date'] != $b['exe_date']) {
-                    return $a['exe_date'] > $b['exe_date'] ? -1 : 1;
+                    return $a['exe_date'] < $b['exe_date'] ? -1 : 1;
                 }
 
                 return 0;

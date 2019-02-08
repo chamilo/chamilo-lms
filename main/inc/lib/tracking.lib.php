@@ -5964,8 +5964,7 @@ class Tracking
      */
     public static function generate_session_exercise_graph($names, $my_results, $average)
     {
-        $cdnChartJs = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js';
-        $html .= Display::tag('script', '', array('src' => $cdnChartJs));
+        $html = api_get_js('chartjs/Chart.js');
         $canvas = Display::tag('canvas', '', array('id' => 'session_graph_chart'));
         $html .=  Display::tag('div',$canvas, array('style' => 'width:100%'));
         $jsStr = " var data = {

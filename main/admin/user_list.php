@@ -1241,7 +1241,5 @@ $toolbarActions = Display::toolbarAction(
 $tpl = new Template($tool_name);
 $tpl->assign('actions', $toolbarActions);
 $tpl->assign('message', $message);
-$tpl->assign('form_search', $form);
-$tpl->assign('content', $table_result);
-$tpl->assign('extra', $extra_search_options);
-$tpl->display_table_template();
+$tpl->assign('content', $form.$table_result.$extra_search_options);
+$tpl->display_one_col_template();

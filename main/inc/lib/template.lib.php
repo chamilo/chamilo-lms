@@ -296,15 +296,6 @@ class Template
     }
 
     /**
-     * Shortcut to display a 2 col layout (userportal.php).
-     */
-    public function display_table_template()
-    {
-        $template = '@ChamiloTheme/Layout/layout_table.html.twig';
-        $this->returnResponse($this->params, $template);
-    }
-
-    /**
      * Displays an empty template.
      */
     public function display_blank_template()

@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Entity\TrackEExercises;
 use ChamiloSession as Session;
 
 /**
@@ -4437,6 +4438,7 @@ EOT;
             [
                 RESULT_DISABLE_SHOW_SCORE_ONLY,
                 RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES,
+                RESULT_DISABLE_RANKING,
             ]
         )
         ) {
@@ -4789,10 +4791,6 @@ EOT;
             echo $totalScoreText;
         }
 
-        if (!empty($remainingMessage)) {
-            echo Display::return_message($remainingMessage, 'normal', false);
-        }
-
         if ($save_user_result) {
             // Tracking of results
             if ($exercise_stat_info) {
@@ -4832,6 +4830,136 @@ EOT;
                 );
             }
         }
+
+        if (RESULT_DISABLE_RANKING == $objExercise->selectResultsDisabled()) {
+            echo Display::page_header(get_lang('Ranking'), null, 'h4');
+            echo self::displayResultsInRanking(
+                $objExercise->iId,
+                api_get_user_id(),
+                api_get_course_int_id(),
+                api_get_session_id()
+            );
+        }
+
+        if (!empty($remainingMessage)) {
+            echo Display::return_message($remainingMessage, 'normal', false);
+        }
+    }
+
+    /**
+     * Display the ranking of results in a exercise
+     *
+     * @param int $exerciseId
+     * @param int $currentUserId
+     * @param int $courseId
+     * @param int $sessionId
+     *
+     * @return string
+     */
+    public static function displayResultsInRanking($exerciseId, $currentUserId, $courseId, $sessionId = 0)
+    {
+        $data = self::exerciseResultsInRanking($exerciseId, $courseId, $sessionId);
+
+        $table = new HTML_Table(['class' => 'table table-hover table-bordered']);
+        $table->setHeaderContents(0, 0, get_lang('Position'), ['class' => 'text-right']);
+        $table->setHeaderContents(0, 1, get_lang('Username'));
+        $table->setHeaderContents(0, 2, get_lang('Score'), ['class' => 'text-right']);
+        $table->setHeaderContents(0, 3, get_lang('Date'), ['class' => 'text-center']);
+
+        foreach ($data as $r => $item) {
+            $selected = $item[1]->getId() == $currentUserId;
+
+            foreach ($item as $c => $value) {
+                $table->setCellContents($r + 1, $c, $value);
+
+                $attrClass = '';
+
+                if (in_array($c, [0, 2])) {
+                    $attrClass = 'text-right';
+                } elseif (3 == $c) {
+                    $attrClass = 'text-center';
+                }
+
+                if ($selected) {
+                    $attrClass .= ' warning';
+                }
+
+                $table->setCellAttributes($r + 1, $c, ['class' => $attrClass]);
+            }
+        }
+
+        return $table->toHtml();
+    }
+
+    /**
+     * Get the ranking for results in a exercise.
+     * Function used internally by ExerciseLib::displayResultsInRanking
+     *
+     * @param int $exerciseId
+     * @param int $courseId
+     * @param int $sessionId
+     *
+     * @return array
+     */
+    public static function exerciseResultsInRanking($exerciseId, $courseId, $sessionId = 0)
+    {
+        $em = Database::getManager();
+
+        $dql = 'SELECT DISTINCT te.exeUserId FROM ChamiloCoreBundle:TrackEExercises te WHERE te.exeExoId = :id AND te.cId = :cId';
+        $dql .= api_get_session_condition($sessionId, true, false, 'te.sessionId');
+
+        $result = $em
+            ->createQuery($dql)
+            ->setParameters(['id' => $exerciseId, 'cId' => $courseId])
+            ->getScalarResult();
+
+        $data = [];
+
+        /** @var TrackEExercises $item */
+        foreach ($result as $item) {
+            $bestAttemp = self::get_best_attempt_by_user($item['exeUserId'], $exerciseId, $courseId, $sessionId = 0);
+
+            $data[] = $bestAttemp;
+        }
+
+        usort(
+            $data,
+            function ($a, $b) {
+                if ($a['exe_result'] != $b['exe_result']) {
+                    return $a['exe_result'] > $b['exe_result'] ? -1 : 1;
+                }
+
+                if ($a['exe_date'] != $b['exe_date']) {
+                    return $a['exe_date'] < $b['exe_date'] ? -1 : 1;
+                }
+
+                return 0;
+            }
+        );
+
+        // flags to display the same position in case of tie
+        $lastScore = $data[0]['exe_result'];
+        $position = 1;
+
+        $data = array_map(
+            function ($item) use (&$lastScore, &$position) {
+                if ($item['exe_result'] < $lastScore) {
+                    ++$position;
+                }
+
+                $lastScore = $item['exe_result'];
+
+                return [
+                    $position,
+                    api_get_user_entity($item['exe_user_id']),
+                    self::show_score($item['exe_result'], $item['exe_weighting'], true, true, true),
+                    api_convert_and_format_date($item['exe_date'], DATE_TIME_FORMAT_SHORT),
+                ];
+            },
+            $data
+        );
+
+        return $data;
     }
 
     /**

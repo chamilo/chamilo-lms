@@ -13,18 +13,33 @@
         <div class="carousel-inner">
             {% for announcement in announcements %}
                 <div class="carousel-item {% if loop.index0 == 0 %} active {% endif %}">
-                    <img src="{{ announcement.picture }}" class="d-block w-100" alt="...">
-                    <div class="carousel-caption d-none d-md-block">
-                        <h5>{{ announcement.title }}</h5>
-                        {% if announcement.readMore %}
-                            <div class="block-text">
-                                {{ announcement.content }}
-                                <a href="{{ _p.web }}news_list.php?id={{ announcement.id }}">{{ "More" | trans }}</a>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="announcement-text">
+                                <div class="d-md-block">
+                                    <h5>{{ announcement.title }}</h5>
+                                    {% if announcement.readMore %}
+                                        <div class="block-text">
+                                            {{ announcement.content }}
+                                            <a href="{{ _p.web }}news_list.php?id={{ announcement.id }}">{{ "More" | trans }}</a>
+                                        </div>
+                                    {% else %}
+                                        {{ announcement.content }}
+                                    {% endif %}
+                                </div>
                             </div>
-                        {% else %}
-                            {{ announcement.content }}
-                        {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <div class="announcement-image">
+                                <img src="{{ announcement.picture }}" class="d-block" alt="...">
+                                <div class="dotted-bg-block lines">
+                                    <div></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
+
                 </div>
             {% endfor %}
         </div>

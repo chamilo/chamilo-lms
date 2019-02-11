@@ -172,8 +172,11 @@ if ($action_todo) {
     try {
         $form->addFile(
             'picture',
-            get_lang('Add Picture'),
-            ['id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => 'NaN']
+            [
+                get_lang('Add Picture'),
+                get_lang('The image must have a maximum dimension of 950 x 712 pixelss')
+            ],
+            ['id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '4/3']
         );
 
         $allowed_picture_types = api_get_supported_image_extensions(false);

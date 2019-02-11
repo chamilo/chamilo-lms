@@ -1688,7 +1688,7 @@ function api_get_user_info(
             $use_status_in_platform = user_is_online($user_id);
             $result_array['user_is_online'] = $use_status_in_platform;
             $user_online_in_chat = 0;
-
+            $result_array['user_is_online_in_chat'] = 0;
             if ($use_status_in_platform) {
                 $user_status = UserManager::get_extra_user_data_by_field(
                     $user_id,

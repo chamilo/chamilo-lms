@@ -985,7 +985,8 @@ $_configuration['required_extra_fields_in_profile'] = [
 // Community manager users
 //$_configuration['community_managers_user_list'] = ['users' => [1]];
 
-
+// Hide global chat video
+//$_configuration['hide_chat_video'] = false;
 
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email

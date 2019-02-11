@@ -155,13 +155,12 @@ class SocialManager extends UserManager
         $search_name = null,
         $load_extra_info = true
     ) {
-        $list_ids_friends = [];
         $tbl_my_friend = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
         $tbl_my_user = Database::get_main_table(TABLE_MAIN_USER);
         $sql = 'SELECT friend_user_id FROM ' . $tbl_my_friend . '
                 WHERE
                     relation_type NOT IN (' . USER_RELATION_TYPE_DELETED . ', ' . USER_RELATION_TYPE_RRHH . ') AND
-                    friend_user_id<>' . ((int)$user_id) . ' AND
+                    friend_user_id <> ' . ((int)$user_id) . ' AND
                     user_id=' . ((int)$user_id);
         if (isset($id_group) && $id_group > 0) {
             $sql .= ' AND relation_type=' . $id_group;
@@ -179,23 +178,24 @@ class SocialManager extends UserManager
         }
 
         $res = Database::query($sql);
+        $list = [];
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             if ($load_extra_info) {
-                $my_user_info = api_get_user_info($row['friend_user_id']);
-                $list_ids_friends[] = [
+                $userInfo = api_get_user_info($row['friend_user_id']);
+                $list[] = [
                     'friend_user_id' => $row['friend_user_id'],
-                    'firstName' => $my_user_info['firstName'],
-                    'lastName' => $my_user_info['lastName'],
-                    'username' => $my_user_info['username'],
-                    'image' => $my_user_info['avatar'],
-                    'user_info' => $my_user_info,
+                    'firstName' => $userInfo['firstName'],
+                    'lastName' => $userInfo['lastName'],
+                    'username' => $userInfo['username'],
+                    'image' => $userInfo['avatar'],
+                    'user_info' => $userInfo,
                 ];
             } else {
-                $list_ids_friends[] = $row;
+                $list[] = $row;
             }
         }
 
-        return $list_ids_friends;
+        return $list;
     }
 
     /**
@@ -2227,70 +2227,68 @@ class SocialManager extends UserManager
      *
      * @return string
      */
-    public static function listMyFriendsBlock($user_id, $link_shared = '')
+    public static function listMyFriendsBlock($user_id, $link_shared = '', $showLinkToChat = false)
     {
         //SOCIALGOODFRIEND , USER_RELATION_TYPE_FRIEND, USER_RELATION_TYPE_PARENT
         $friends = self::get_friends($user_id, USER_RELATION_TYPE_FRIEND);
         $number_of_images = 30;
-        $number_friends = count($friends);
+        $numberFriends = count($friends);
         $friendHtml = '';
 
-        if ($number_friends != 0) {
-            $friendHtml .= '<div class="list-group" >';
+        if (!empty($numberFriends)) {
+            $friendHtml .= '<div class="list-group">';
             $j = 1;
-            for ($k = 0; $k < $number_friends; $k++) {
-                if ($j > $number_of_images) {
+
+            usort($friends, function($a, $b) {
+                return strcmp($b['user_info']['user_is_online_in_chat'], $a['user_info']['user_is_online_in_chat']);
+            });
+
+            foreach ($friends as $friend) {
+                if ($j > $numberFriends) {
                     break;
                 }
-                if (isset($friends[$k])) {
-                    $friend = $friends[$k];
-                    $name_user = api_get_person_name($friend['firstName'], $friend['lastName']);
-                    $user_info_friend = api_get_user_info($friend['friend_user_id'], true);
+                $name_user = api_get_person_name($friend['firstName'], $friend['lastName']);
+                $user_info_friend = api_get_user_info($friend['friend_user_id'], true);
 
-                    if (!empty($user_info_friend['user_is_online_in_chat'])) {
-                        $statusIcon = Display::return_icon('statusonline.png', get_lang('Online'));
-                        $status = 1;
-                    } else {
-                        $statusIcon = Display::return_icon('statusoffline.png', get_lang('Offline'));
-                        $status = 0;
-                    }
-
-                    $friendAvatarMedium = UserManager::getUserPicture(
-                        $friend['friend_user_id'],
-                        USER_IMAGE_SIZE_MEDIUM
-                    );
-                    $friendAvatarSmall = UserManager::getUserPicture(
-                        $friend['friend_user_id'],
-                        USER_IMAGE_SIZE_SMALL
-                    );
-                    $friend_avatar = '<img src="' . $friendAvatarMedium . '" id="imgfriend_' . $friend['friend_user_id'] . '" title="' . $name_user . '" class="user-image"/>';
-
-                    $relation = self::get_relation_between_contacts(
-                        $friend['friend_user_id'],
-                        api_get_user_id()
-                    );
-                    //$showLinkToChat = api_is_global_chat_enabled() && $friend['friend_user_id'] != api_get_user_id() && $relation == USER_RELATION_TYPE_FRIEND;
-                    $showLinkToChat = false;
-                    if ($showLinkToChat) {
-                        $friendHtml .= '<a onclick="javascript:chatWith(\'' . $friend['friend_user_id'] . '\', \'' . $name_user . '\', \'' . $status . '\',\'' . $friendAvatarSmall . '\')" href="javascript:void(0);" class="list-group-item">';
-                        $friendHtml .= $friend_avatar . ' <span class="username">' . $name_user . '</span>';
-                        $friendHtml .= '<span class="status">' . $statusIcon . '</span>';
-                    } else {
-                        $link_shared = empty($link_shared) ? '' : '&' . $link_shared;
-                        $friendHtml .= '<a href="profile.php?' . 'u=' . $friend['friend_user_id'] . $link_shared . '" class="list-group-item">';
-                        $friendHtml .= $friend_avatar . ' <span class="username">' . $name_user . '</span>';
-                        $friendHtml .= '<span class="status">' . $statusIcon . '</span>';
-                    }
-
-                    $friendHtml .= '</a>';
+                if (!empty($user_info_friend['user_is_online_in_chat'])) {
+                    $statusIcon = Display::return_icon('statusonline.png', get_lang('Online'));
+                    $status = 1;
+                } else {
+                    $statusIcon = Display::return_icon('statusoffline.png', get_lang('Offline'));
+                    $status = 0;
                 }
+
+                $friendAvatarMedium = UserManager::getUserPicture(
+                    $friend['friend_user_id'],
+                    USER_IMAGE_SIZE_MEDIUM
+                );
+                $friendAvatarSmall = UserManager::getUserPicture(
+                    $friend['friend_user_id'],
+                    USER_IMAGE_SIZE_SMALL
+                );
+                $friend_avatar = '<img src="' . $friendAvatarMedium . '" id="imgfriend_' . $friend['friend_user_id'] . '" title="' . $name_user . '" class="user-image"/>';
+
+                $relation = self::get_relation_between_contacts(
+                    $friend['friend_user_id'],
+                    api_get_user_id()
+                );
+                //$showLinkToChat = api_is_global_chat_enabled() && $friend['friend_user_id'] != api_get_user_id() && $relation == USER_RELATION_TYPE_FRIEND;
+                if ($showLinkToChat) {
+                    $friendHtml .= '<a onclick="javascript:chatWith(\'' . $friend['friend_user_id'] . '\', \'' . $name_user . '\', \'' . $status . '\',\'' . $friendAvatarSmall . '\')" href="javascript:void(0);" class="list-group-item">';
+                    $friendHtml .= $friend_avatar . ' <span class="username">' . $name_user . '</span>';
+                    $friendHtml .= '<span class="status">' . $statusIcon . '</span>';
+                } else {
+                    $link_shared = empty($link_shared) ? '' : '&' . $link_shared;
+                    $friendHtml .= '<a href="profile.php?' . 'u=' . $friend['friend_user_id'] . $link_shared . '" class="list-group-item">';
+                    $friendHtml .= $friend_avatar . ' <span class="username">' . $name_user . '</span>';
+                    $friendHtml .= '<span class="status">' . $statusIcon . '</span>';
+                }
+
+                $friendHtml .= '</a>';
+
                 $j++;
             }
             $friendHtml .= '</div>';
-        } else {
-            /*$friendHtml .= '<div class="help">'.get_lang('NoFriendsInYourContactList').'
-                    <a href="'.api_get_path(WEB_PATH).'whoisonline.php">
-                    <em class="fa fa-search"></em> '.get_lang('TryAndFindSomeFriends').'</a></div>';*/
         }
 
         return $friendHtml;

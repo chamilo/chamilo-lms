@@ -40,6 +40,8 @@ class Chat extends Model
      */
     public function getUserStatus()
     {
+        // ofaj
+        return 1;
         $status = UserManager::get_extra_user_data_by_field(
             api_get_user_id(),
             'user_chat_status',
@@ -83,6 +85,18 @@ class Chat extends Model
         return array_reverse($items);
     }
 
+    public function getContacts()
+    {
+        $html = SocialManager::listMyFriendsBlock(
+            api_get_user_id(),
+            '',
+            true,
+            true
+        );
+
+        echo $html;
+    }
+
     /**
      * @param array $chatHistory
      * @param int   $latestMessages
@@ -115,7 +129,12 @@ class Chat extends Model
      */
     public function startSession()
     {
+        // ofaj
+        $chat = new Chat();
+        $chat->setUserStatus(1);
+
         $chatList = Session::read('chatHistory');
+
         $chats = self::getAllLatestChats($chatList);
         $return = [
             'user_status' => $this->getUserStatus(),
@@ -235,7 +254,6 @@ class Chat extends Model
             $items[] = $item;
             $_SESSION['openChatBoxes'][$fromUserId] = api_strtotime($chat['sent'], 'UTC');
         }
-        //array_unshift($_SESSION['chatHistory'][$fromUserId]['items'], $items);
 
         return $items;
     }
@@ -248,7 +266,7 @@ class Chat extends Model
         $to_user_id = api_get_user_id();
 
         $sql = "SELECT * FROM ".$this->table."
-                WHERE to_user = '".intval($to_user_id)."' AND (recd = 0)
+                WHERE to_user = '".$to_user_id."' AND (recd = 0)
                 ORDER BY id ASC";
         $result = Database::query($sql);
 
@@ -413,7 +431,7 @@ class Chat extends Model
     {
         unset($_SESSION['openChatBoxes'][$_POST['chatbox']]);
         unset($_SESSION['chatHistory'][$_POST['chatbox']]);
-        echo "1";
+        echo '1';
         exit;
     }
 

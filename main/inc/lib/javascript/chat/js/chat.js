@@ -74,11 +74,12 @@ $(document).ready(function() {
 	/* "On" conditions, divs are created dynamically */
 	// User name header toggle
 	$('body').on('click', '#chatboxtitlemain', function() {
-		if (user_status == 1) {
+		createMyContactsWindow();
+		/*if (user_status == 1) {
 			set_user_status(0);
 		} else {
 			set_user_status(1);
-		}
+		}*/
 	});
 
 	// User name header toogle
@@ -305,7 +306,7 @@ function chatHeartbeat()
 }
 
 /**
- * Draws a message buble
+ * Draws a message bubble
  * @param my_user_id
  * @param item
  * @returns {string}
@@ -329,7 +330,12 @@ function createChatBubble(my_user_id, item)
 function closeChatBox(user_id) {
 	$('#chatbox_'+user_id).css('display','none');
 	restructureChatBoxes();
-	$.post(ajax_url+"?action=closechat", {chatbox: user_id} , function(data){
+	$.post(
+		ajax_url+"?action=closechat",
+		{
+			chatbox: user_id
+		} ,
+		function(data) {
 	});
 }
 
@@ -363,6 +369,166 @@ function chatWith(user_id, user_name, status, userImage)
 	createChatBox(user_id, user_name, 0, status, userImage);
 	$("#chatbox_"+user_id+" .chatboxtextarea").focus();
 	getMoreItems(user_id, 'last');
+}
+
+/**
+ * Creates a div
+ */
+function createMyContactsWindow()
+{
+	var user_id = 'contacts';
+	var oldChatBox = $("#chatbox_"+user_id);
+	if (oldChatBox.length > 0) {
+		// reload contact list
+
+		if (oldChatBox.css('display') == 'none') {
+			oldChatBox.css('display','block');
+			restructureChatBoxes();
+		}
+
+		chatboxContent = oldChatBox.find('.chatboxcontent');
+
+		$.post(ajax_url + "?action=get_contacts", {
+			to: 'user_id'
+		}, function (data) {
+			chatboxContent.html(data);
+		});
+
+		$("#chatbox_"+user_id+" .chatboxtextarea").focus();
+		return;
+	}
+
+	var chatbox = $('<div>')
+		.attr({
+			id: 'chatbox_' + user_id
+		})
+		.addClass('chatbox')
+		.css('bottom', 0);
+
+	var chatboxHead = $('<div>')
+		.addClass('chatboxhead')
+		.append('');
+
+	/*$('<div>')
+		.addClass('chatimage')
+		.append('image?')
+		.appendTo(chatboxHead);*/
+
+	$('<div>')
+		.addClass('chatboxtitle')
+		.append('My contacts')
+		.appendTo(chatboxHead);
+
+	var chatboxoptions = $('<div>')
+		.addClass('chatboxoptions')
+		.appendTo(chatboxHead);
+
+	$('<a>')
+		.addClass('btn btn-xs togglelink')
+		.attr({
+			href: 'javascript:void(0)',
+			rel: user_id
+		})
+		.html('<em class="fa fa-toggle-down"></em>')
+		.appendTo(chatboxoptions);
+
+	$('<a>')
+		.addClass('btn btn-xs closelink')
+		.attr({
+			href: 'javascript:void(0)',
+			rel: user_id
+		})
+		.html('<em class="fa fa-close"></em>')
+		.appendTo(chatboxoptions);
+
+	$('<br>')
+		.attr('clear', 'all')
+		.appendTo(chatboxHead);
+
+	var chatboxContent = $('<div>').addClass('chatboxcontent');
+	var chatboxInput = $('<div>').addClass('chatboxinput');
+
+	$.post(ajax_url + "?action=get_contacts", {
+		to: 'user_id'
+	}, function (data) {
+		$('<div>').html(data).appendTo(chatboxContent);
+	});
+
+	/*$('<textarea>')
+		.addClass('chatboxtextarea')
+		.on('keydown', function(e) {
+			return checkChatBoxInputKey(e.originalEvent, this, user_id);
+		})
+		.appendTo(chatboxInput);*/
+
+	chatbox
+		.append(chatboxHead)
+		.append(chatboxContent)
+		.append(chatboxInput)
+		.appendTo('body');
+
+	var chatBoxeslength = 0;
+	for (x in chatBoxes) {
+		if ($("#chatbox_"+chatBoxes[x]).css('display') != 'none') {
+			chatBoxeslength++;
+		}
+	}
+
+	if (chatBoxeslength == 0) {
+		$("#chatbox_"+user_id).css('right', '10px');
+	} else {
+		width = (chatBoxeslength)*(widthBox+7) + 5 + 5;
+		$("#chatbox_"+user_id).css('right', width+'px');
+	}
+
+	chatBoxes.push(user_id);
+
+	/*if (minimizeChatBox == 1) {
+		minimizedChatBoxes = new Array();
+
+		if ($.cookie('chatbox_minimized')) {
+			minimizedChatBoxes = $.cookie('chatbox_minimized').split(/\|/);
+		}
+		minimize = 0;
+		for (j=0;j<minimizedChatBoxes.length;j++) {
+			if (minimizedChatBoxes[j] == user_id) {
+				minimize = 1;
+			}
+		}
+
+		if (minimize == 1) {
+			$('.togglelink').html('<em class="fa fa-toggle-up"></em>');
+			$('#chatbox_'+user_id+' .chatboxcontent').css('display','none');
+			$('#chatbox_'+user_id+' .chatboxinput').css('display','none');
+		}
+	}*/
+
+	chatboxFocus[user_id] = false;
+
+	$("#chatbox_"+user_id+" .chatboxtextarea").blur(function(){
+		chatboxFocus[user_id] = false;
+		$("#chatbox_"+user_id+" .chatboxtextarea").removeClass('chatboxtextareaselected');
+	}).focus(function(){
+		chatboxFocus[user_id] = true;
+		newMessages[user_id] = false;
+		$('#chatbox_'+user_id+' .chatboxhead').removeClass('chatboxblink');
+		$("#chatbox_"+user_id+" .chatboxtextarea").addClass('chatboxtextareaselected');
+	});
+
+	$("#chatbox_"+user_id).click(function() {
+		if ($('#chatbox_'+user_id+' .chatboxcontent').css('display') != 'none') {
+			$("#chatbox_"+user_id+" .chatboxtextarea").focus();
+		}
+	});
+	$("#chatbox_"+user_id).show();
+
+	$("#chatbox_"+user_id+" .chatboxcontent").scroll(function () {
+		var iCurScrollPos = $(this).scrollTop();
+		if (iCurScrollPos == 0) {
+			getMoreItems(user_id);
+			return false;
+		}
+	});
 }
 
 /**
@@ -408,23 +574,25 @@ function createChatBox(user_id, chatboxtitle, minimizeChatBox, online, userImage
 		.addClass('chatboxoptions')
 		.appendTo(chatboxHead);
 
-	if (!!Modernizr.prefixed('RTCPeerConnection', window) &&
-		(online === '1' || online === 1)
-	) {
-		$('<a>')
-			.addClass('btn btn-xs ajax')
-			.attr({
-				href: ajax_url + '?action=create_room&to=' + user_id
-			})
-			.data({
-				title: '<em class="fa fa-video-camera"></em>',
-				size: 'sm'
-			})
-			.on('click', function () {
-				$(this).data('title', $('.chatboxtitle').text());
-			})
-			.html('<em class="fa fa-video-camera"></em>')
-			.appendTo(chatboxoptions);
+	if (!hide_chat_video) {
+		if (!!Modernizr.prefixed('RTCPeerConnection', window) &&
+			(online === '1' || online === 1)
+		) {
+			$('<a>')
+				.addClass('btn btn-xs ajax')
+				.attr({
+					href: ajax_url + '?action=create_room&to=' + user_id
+				})
+				.data({
+					title: '<em class="fa fa-video-camera"></em>',
+					size: 'sm'
+				})
+				.on('click', function () {
+					$(this).data('title', $('.chatboxtitle').text());
+				})
+				.html('<em class="fa fa-video-camera"></em>')
+				.appendTo(chatboxoptions);
+		}
 	}
 
 	$('<a>')

@@ -5466,7 +5466,28 @@ class UserManager
     }
 
     /**
-     * Subscribe boss to students.
+     * @param int $userId
+     *
+     * @return bool
+     */
+    public static function removeAllBossFromStudent($userId)
+    {
+        $userId = (int) $userId;
+
+        if (empty($userId)) {
+            return false;
+        }
+
+        $userRelUserTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
+        $sql = "DELETE FROM $userRelUserTable 
+                WHERE user_id = $userId AND relation_type = ".USER_RELATION_TYPE_BOSS;
+        Database::query($sql);
+
+        return true;
+    }
+
+    /**
+     * Subscribe boss to students, if $bossList is empty then the boss list will be empty too
      *
      * @param int   $studentId
      * @param array $bossList
@@ -5480,7 +5501,8 @@ class UserManager
         $sendNotification = false
     ) {
         $inserted = 0;
-        if ($bossList) {
+        if (!empty($bossList)) {
+            sort($bossList);
             $studentId = (int) $studentId;
             $studentInfo = api_get_user_info($studentId);
 
@@ -5488,10 +5510,18 @@ class UserManager
                 return false;
             }
 
+            $previousBossList = self::getStudentBossList($studentId);
+            $previousBossList = !empty($previousBossList) ? array_column($previousBossList, 'boss_id') : [];
+            sort($previousBossList);
+
+            // Boss list is the same, nothing changed.
+            if ($bossList == $previousBossList) {
+
+                return false;
+            }
+
             $userRelUserTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-            $sql = "DELETE FROM $userRelUserTable 
-                    WHERE user_id = $studentId AND relation_type = ".USER_RELATION_TYPE_BOSS;
-            Database::query($sql);
+            self::removeAllBossFromStudent($studentId);
 
             foreach ($bossList as $bossId) {
                 $bossId = (int) $bossId;
@@ -5515,6 +5545,8 @@ class UserManager
                     $inserted++;
                 }
             }
+        } else {
+            self::removeAllBossFromStudent($studentId);
         }
 
         return $inserted;

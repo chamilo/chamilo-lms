@@ -2453,4 +2453,45 @@ class Event
         // proper logic for this filter
         return $res;
     }
+
+    /**
+     * Register the logout of the course (usually when logging out of the platform)
+     * from the track_e_access_complete table.
+     *
+     * @param array $logInfo Information stored by local.inc.php
+     *
+     * @return bool
+     */
+    public static function registerLog($logInfo)
+    {
+        if (!api_get_configuration_value('lp_minimum_time')) {
+            return false;
+        }
+
+        $loginAs = (int) (Session::read('login_as') === true);
+
+        $logInfo['user_id'] = api_get_user_id();
+        $logInfo['date_reg'] = api_get_utc_datetime();
+        $logInfo['tool'] = !empty($logInfo['tool']) ? $logInfo['tool'] : '';
+        $logInfo['tool_id'] = !empty($logInfo['tool_id']) ? (int) $logInfo['tool_id'] : 0;
+        $logInfo['tool_id_detail'] = !empty($logInfo['tool_id_detail']) ? (int) $logInfo['tool_id_detail'] : 0;
+        $logInfo['action'] = !empty($logInfo['action']) ? $logInfo['action'] : '';
+        $logInfo['action_details'] = !empty($logInfo['action_details']) ? $logInfo['action_details'] : '';
+        $logInfo['ip_user'] = api_get_real_ip();
+        $logInfo['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
+        $logInfo['session_id'] = api_get_session_id();
+        $logInfo['c_id'] = api_get_course_int_id();
+        $logInfo['ch_sid'] = session_id();
+        $logInfo['login_as'] = $loginAs;
+        $logInfo['info'] = !empty($logInfo['info']) ? $logInfo['info'] : '';
+        $logInfo['url'] = $_SERVER['REQUEST_URI'];
+        $logInfo['current_id'] = Session::read('last_id', 0);
+
+        $id = Database::insert('track_e_access_complete', $logInfo);
+        if ($id && empty($logInfo['current_id'])) {
+            Session::write('last_id', $id);
+        }
+
+        return true;
+    }
 }

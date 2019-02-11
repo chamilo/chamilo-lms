@@ -108,6 +108,7 @@ function online_logout($user_id = null, $logout_redirect = false)
     }
 
     //Changing global chat status to offline
+    // ofaj
     if (api_is_global_chat_enabled()) {
         $chat = new Chat();
         $chat->setUserStatus(0);

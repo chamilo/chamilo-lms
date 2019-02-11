@@ -1580,6 +1580,12 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
 
     $result['profile_url'] = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id;
 
+    $hasCertificates = Certificate::getCertificateByUser($user_id);
+    $result['has_certificates'] = 0;
+    if (!empty($hasCertificates)) {
+        $result['has_certificates'] = 1;
+    }
+
     // Send message link
     $sendMessage = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='.$user_id;
     $result['complete_name_with_message_link'] = Display::url(
@@ -1678,11 +1684,11 @@ function api_get_user_info(
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
         $result_array = Database::fetch_array($result);
+        $result_array['user_is_online_in_chat'] = 0;
         if ($checkIfUserOnline) {
             $use_status_in_platform = user_is_online($user_id);
             $result_array['user_is_online'] = $use_status_in_platform;
             $user_online_in_chat = 0;
-
             if ($use_status_in_platform) {
                 $user_status = UserManager::get_extra_user_data_by_field(
                     $user_id,

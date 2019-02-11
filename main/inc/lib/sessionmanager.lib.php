@@ -472,7 +472,8 @@ class SessionManager
         $options = [],
         $get_count = false,
         $columns = [],
-        $extraFieldsToLoad = []
+        $extraFieldsToLoad = [],
+        $language = ''
     ) {
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $sessionCategoryTable = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
@@ -563,6 +564,16 @@ class SessionManager
             $inject_joins .= " LEFT JOIN $table su ON (su.session_id = s.id)";
         }
 
+
+        if (!empty($language)) {
+            $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+            $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+            $inject_joins .= " INNER JOIN $table sc ON (sc.session_id = s.id) 
+                               INNER JOIN $tableCourse c ON (sc.c_id = c.id)";
+            $language = Database::escape_string($language);
+            $where .= " AND c.course_language = '$language' ";
+        }
+
         $query = "$select FROM $tbl_session s $inject_joins $where $inject_where";
 
         if (api_is_multiple_url_enabled()) {
@@ -577,6 +588,7 @@ class SessionManager
             }
         }
 
+
         if ($showCountUsers) {
             $query .= ' GROUP by s.id';
         }
@@ -587,7 +599,6 @@ class SessionManager
 
         $query .= $order;
         $query .= $limit;
-        $result = Database::query($query);
 
         $categories = self::get_all_session_category();
         $orderedCategories = [];
@@ -596,6 +607,8 @@ class SessionManager
                 $orderedCategories[$category['id']] = $category['name'];
             }
         }
+
+        $result = Database::query($query);
         $formatted_sessions = [];
         if (Database::num_rows($result)) {
             $sessions = Database::store_result($result, 'ASSOC');
@@ -624,10 +637,11 @@ class SessionManager
                         null,
                         true
                     );
-                    $courses = SessionManager::getCoursesInSession($session_id);
+                    $courses = self::getCoursesInSession($session_id);
                     $teachers = '';
                     foreach ($courses as $courseId) {
                         $courseInfo = api_get_course_info_by_id($courseId);
+
                         // Ofaj
                         $teachers = CourseManager::get_coachs_from_course_to_string($session_id, $courseInfo['real_id']);
                         /*$teachers .= CourseManager::get_teacher_list_from_course_code_to_string(

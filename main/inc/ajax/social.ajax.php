@@ -33,6 +33,7 @@ switch ($action) {
             );
 
             header('Location: '.api_get_path(WEB_CODE_PATH).'social/invitations.php');
+            exit;
         }
         break;
     case 'deny_friend':
@@ -53,6 +54,7 @@ switch ($action) {
             );
 
             header('Location: '.api_get_path(WEB_CODE_PATH).'social/invitations.php');
+            exit;
         }
         break;
     case 'delete_friend':
@@ -60,7 +62,7 @@ switch ($action) {
             echo '';
             break;
         }
-        $my_delete_friend = intval($_POST['delete_friend_id']);
+        $my_delete_friend = (int) $_POST['delete_friend_id'];
         if (isset($_POST['delete_friend_id'])) {
             SocialManager::remove_user_rel_user($my_delete_friend);
         }
@@ -197,20 +199,109 @@ switch ($action) {
                 break;
         }
         break;
-    case 'list_wall_message':
-        $start = isset($_REQUEST['start']) ? intval($_REQUEST['start']) - 1 : 0;
-        $length = isset($_REQUEST['length']) ? intval($_REQUEST['length']) : 10;
-        $userId = isset($_REQUEST['u']) ? intval($_REQUEST['u']) : api_get_user_id();
-        $friendId = $userId;
-        $array = SocialManager::getWallMessagesPostHTML($userId, $friendId, null, $length, $start);
-        if (!empty($array)) {
-            ksort($array);
-            $html = '';
-            for ($i = 0; $i < count($array); $i++) {
-                $post = $array[$i]['html'];
-                $comment = SocialManager::getWallMessagesHTML($userId, $friendId, $array[$i]['id']);
-                $html .= '<div class="panel panel-info"><div class="panel-body">'.$post.$comment.'</div></div>';
+    case 'send_comment':
+        if (api_is_anonymous()) {
+            exit;
+        }
+
+        if (api_get_setting('allow_social_tool') !== 'true') {
+            exit;
+        }
+
+        $messageId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+
+        if (empty($messageId)) {
+            exit;
+        }
+
+        $userId = api_get_user_id();
+
+        $messageInfo = MessageManager::get_message_by_id($messageId);
+        if (!empty($messageInfo)) {
+            $comment = isset($_REQUEST['comment']) ? $_REQUEST['comment'] : '';
+            if (!empty($comment)) {
+                $messageId = SocialManager::sendWallMessage(
+                    api_get_user_id(),
+                    $messageInfo['user_receiver_id'],
+                    $comment,
+                    $messageId,
+                    MESSAGE_STATUS_WALL
+                );
+                /*if ($messageId && !empty($_FILES['picture']['tmp_name'])) {
+                    self::sendWallMessageAttachmentFile(
+                        $friendId,
+                        $_FILES['picture'],
+                        $messageId
+                    );
+                }*/
+                if ($messageId) {
+                    $messageInfo = MessageManager::get_message_by_id($messageId);
+                    echo SocialManager::processPostComment($messageInfo);
+                }
             }
+        }
+        break;
+    case 'delete_message':
+        if (api_is_anonymous()) {
+            exit;
+        }
+
+        if (api_get_setting('allow_social_tool') !== 'true') {
+            exit;
+        }
+
+        $messageId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+
+        if (empty($messageId)) {
+            break;
+        }
+
+        $userId = api_get_user_id();
+        $messageInfo = MessageManager::get_message_by_id($messageId);
+        if (!empty($messageInfo)) {
+            $canDelete = ($messageInfo['user_receiver_id'] == $userId || $messageInfo['user_sender_id'] == $userId) &&
+                empty($messageInfo['group_id']);
+            if ($canDelete || api_is_platform_admin()) {
+                SocialManager::deleteMessage($messageId);
+                echo Display::return_message(get_lang('MessageDeleted'));
+                break;
+            }
+        }
+        break;
+    case 'list_wall_message':
+        if (api_is_anonymous()) {
+            break;
+        }
+        $start = isset($_REQUEST['start']) ? (int) $_REQUEST['start'] : 0;
+        $length = isset($_REQUEST['length']) ? (int) $_REQUEST['length'] : 10;
+        $userId = isset($_REQUEST['u']) ? (int) $_REQUEST['u'] : api_get_user_id();
+        $html = '';
+        if ($userId == api_get_user_id()) {
+            $html = SocialManager::getMyWallMessages($userId, $start, $length);
+            $html = $html['posts'];
+        } else {
+            $messages = SocialManager::getWallMessages(
+                $userId,
+                null,
+                0,
+                0,
+                '',
+                $start,
+                $length
+            );
+            $messages = SocialManager::formatWallMessages($messages);
+
+            if (!empty($messages)) {
+                ksort($messages);
+                foreach ($messages as $message) {
+                    $post = $message['html'];
+                    $comments = SocialManager::getWallPostComments($userId, $message);
+                    $html .= SocialManager::wrapPost($message, $post.$comments);
+                }
+            }
+        }
+
+        if (!empty($html)) {
             $html .= Display::div(
                 Display::url(
                     get_lang('SeeMore'),
@@ -224,8 +315,8 @@ switch ($action) {
                     'class' => 'next',
                 ]
             );
-            echo $html;
         }
+        echo $html;
         break;
         // Read the Url using OpenGraph and returns the hyperlinks content
     case 'read_url_with_open_graph':

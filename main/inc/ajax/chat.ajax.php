@@ -26,14 +26,6 @@ if ($action == 'preview') {
 $toUserId = isset($_REQUEST['to']) ? $_REQUEST['to'] : null;
 $message = isset($_REQUEST['message']) ? $_REQUEST['message'] : null;
 
-if (!isset($_SESSION['chatHistory'])) {
-    $_SESSION['chatHistory'] = [];
-}
-
-if (!isset($_SESSION['openChatBoxes'])) {
-    $_SESSION['openChatBoxes'] = [];
-}
-
 $chat = new Chat();
 if (Chat::disableChat()) {
     exit;
@@ -50,31 +42,10 @@ switch ($action) {
     case 'closechat':
         $chat->close();
         break;
-    case 'sendchat':
-        $chat->send(api_get_user_id(), $toUserId, $message);
-        break;
-    case 'startchatsession':
-        $chat->startSession();
-        break;
-    case 'get_previous_messages':
-        $userId = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : 0;
-        $visibleMessages = isset($_REQUEST['visible_messages']) ? $_REQUEST['visible_messages'] : null;
-        if (empty($userId)) {
-            return '';
-        }
-        $items = $chat->getPreviousMessages(
-            $userId,
-            api_get_user_id(),
-            $visibleMessages
-        );
-        echo json_encode($items);
-        exit;
-        break;
-    case 'set_status':
-        $status = isset($_REQUEST['status']) ? (int) $_REQUEST['status'] : 0;
-        $chat->setUserStatus($status);
-        break;
     case 'create_room':
+        if (api_get_configuration_value('hide_chat_video')) {
+            api_not_allowed();
+        }
         $room = VideoChat::getChatRoomByUsers(api_get_user_id(), $toUserId);
 
         if ($room === false) {
@@ -107,12 +78,39 @@ switch ($action) {
 
         echo Display::tag('p', $videoChatLink, ['class' => 'lead']);
         break;
+    case 'get_contacts':
+        echo $chat->getContacts();
+        break;
+    case 'get_previous_messages':
+        $userId = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : 0;
+        $visibleMessages = isset($_REQUEST['visible_messages']) ? $_REQUEST['visible_messages'] : null;
+        if (empty($userId)) {
+            return '';
+        }
+        $items = $chat->getPreviousMessages(
+            $userId,
+            api_get_user_id(),
+            $visibleMessages
+        );
+        echo json_encode($items);
+        exit;
+        break;
     case 'notify_not_support':
         $chat->send(
             api_get_user_id(),
             $toUserId,
             get_lang('TheXUserBrowserDoesNotSupportWebRTC')
         );
+        break;
+    case 'sendchat':
+        $chat->send(api_get_user_id(), $toUserId, $message);
+        break;
+    case 'startchatsession':
+        $chat->startSession();
+        break;
+    case 'set_status':
+        $status = isset($_REQUEST['status']) ? (int) $_REQUEST['status'] : 0;
+        $chat->setUserStatus($status);
         break;
     default:
         echo '';

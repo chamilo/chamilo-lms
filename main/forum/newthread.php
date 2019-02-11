@@ -30,6 +30,7 @@ $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 
 $cidreq = api_get_cidreq();
+$_user = api_get_user_info();
 
 $nameTools = get_lang('ToolForum');
 
@@ -44,6 +45,16 @@ $origin = api_get_origin();
 $current_forum = get_forum_information($_GET['forum']);
 $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
 
+$logInfo = [
+    'tool' => TOOL_FORUM,
+    'tool_id' => (int) $_GET['forum'],
+    'tool_id_detail' => 0,
+    'action' => 'add-thread',
+    'action_details' => '',
+    'current_id' => 0,
+];
+Event::registerLog($logInfo);
+
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
@@ -57,7 +68,7 @@ if (api_is_in_gradebook()) {
 
 // 1. the forumcategory or forum is invisible (visibility==0) and the user is not a course manager
 if (!api_is_allowed_to_edit(false, true) &&
-    (($current_forum_category['visibility'] && $current_forum_category['visibility'] == 0) || $current_forum['visibility'] == 0)
+    (($current_forum_category && $current_forum_category['visibility'] == 0) || $current_forum['visibility'] == 0)
 ) {
     api_not_allowed();
 }

@@ -146,6 +146,12 @@ class ExtraField extends Model
             case 'terms_and_condition':
                 $this->extraFieldType = EntityExtraField::TERMS_AND_CONDITION_TYPE;
                 break;
+            case 'forum_category':
+                $this->extraFieldType = EntityExtraField::FORUM_CATEGORY_TYPE;
+                break;
+            case 'forum_post':
+                $this->extraFieldType = EntityExtraField::FORUM_POST_TYPE;
+                break;
         }
 
         $this->pageUrl = 'extra_fields.php?type='.$this->type;
@@ -180,6 +186,8 @@ class ExtraField extends Model
             'user_certificate',
             'survey',
             'terms_and_condition',
+            'forum_category',
+            'forum_post',
         ];
 
         if (api_get_configuration_value('allow_scheduled_announcements')) {
@@ -474,11 +482,13 @@ class ExtraField extends Model
      * @param FormValidator $form                The form object to which to attach this element
      * @param int           $itemId              The item (course, user, session, etc) this extra_field is linked to
      * @param array         $exclude             Variables of extra field to exclude
-     * @param bool          $filter              Whether to get only the fields with the "filter" flag set to 1 (true) or not (false)
+     * @param bool          $filter              Whether to get only the fields with the "filter" flag set to 1 (true)
+     *                                           or not (false)
      * @param bool          $useTagAsSelect      Whether to show tag fields as select drop-down or not
      * @param array         $showOnlyTheseFields Limit the extra fields shown to just the list given here
      * @param array         $orderFields         An array containing the names of the fields shown, in the right order
-     * @param bool          $adminPermissions    Whether the display is considered without edition limits (true) or not (false)
+     * @param bool          $adminPermissions    Whether the display is considered without edition limits (true) or not
+     *                                           (false)
      *
      * @return array|bool
      */
@@ -498,7 +508,9 @@ class ExtraField extends Model
         $customLabelsExtraMultipleSelect = [],
         $fieldsToFreeze = [],
         $addEmptyOptionSelects = false,
-        $introductionTextList = []
+        $introductionTextList = [],
+        $requiredFields = [],
+        $hideGeoLocalizationDetails = false
     ) {
         if (empty($form)) {
             return false;
@@ -506,6 +518,7 @@ class ExtraField extends Model
 
         $itemId = (int) $itemId;
         $form->addHidden('item_id', $itemId);
+
         if (empty($extraData)) {
             if (!empty($itemId)) {
                 $extraData = self::get_handler_extra_data($itemId);
@@ -549,8 +562,19 @@ class ExtraField extends Model
             $customLabelsExtraMultipleSelect,
             $fieldsToFreeze,
             $addEmptyOptionSelects,
-            $introductionTextList
+            $introductionTextList,
+            $hideGeoLocalizationDetails
         );
+
+        if (!empty($requiredFields)) {
+            /** @var HTML_QuickForm_input $element */
+            foreach ($form->getElements() as $element) {
+                $name = str_replace('extra_', '', $element->getName());
+                if (in_array($name, $requiredFields)) {
+                    $form->setRequired($element);
+                }
+            }
+        }
 
         return $extra;
     }
@@ -988,7 +1012,8 @@ class ExtraField extends Model
      *
      * @param FormValidator $form                The form these fields are to be attached to
      * @param array         $extraData
-     * @param bool          $adminPermissions    Whether the display is considered without edition limits (true) or not (false)
+     * @param bool          $adminPermissions    Whether the display is considered without edition limits (true) or not
+     *                                           (false)
      * @param array         $extra
      * @param int           $itemId              The item (course, user, session, etc) this extra_field is attached to
      * @param array         $exclude             Extra fields to be skipped, by textual ID
@@ -1016,7 +1041,8 @@ class ExtraField extends Model
         $customLabelsExtraMultipleSelect = [],
         $fieldsToFreeze = [],
         $addEmptyOptionSelects = false,
-        $introductionTextList = []
+        $introductionTextList = [],
+        $hideGeoLocalizationDetails = false
     ) {
         $type = $this->type;
         $jquery_ready_content = '';
@@ -2065,11 +2091,20 @@ class ExtraField extends Model
                             $field_details['display_text'],
                             ['id' => 'extra_'.$field_details['variable']]
                         );
+
+                        $form->addHidden(
+                            'extra_'.$field_details['variable'].'_coordinates',
+                            '',
+                            ['id' => 'extra_'.$field_details['variable'].'_coordinates']
+                        );
+
                         $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
                         $form->applyFilter('extra_'.$field_details['variable'], 'trim');
                         if ($freezeElement) {
                             $form->freeze('extra_'.$field_details['variable']);
                         }
+
+                        $dataValue = addslashes($dataValue);
 
                         $form->addHtml("
                             <script>
@@ -2152,9 +2187,11 @@ class ExtraField extends Model
                                             if (status == google.maps.GeocoderStatus.OK) {
                                                 if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {
                                                     map_{$field_details['variable']}.setCenter(results[0].geometry.location);
-                                                    if (!address) {
-                                                        $('#extra_{$field_details['variable']}').val(results[0].formatted_address);
-                                                    }
+                                                    //if (!address) {
+                                                        $('#extra_{$field_details['variable']}').val(results[0].formatted_address);                                                        
+                                                        $('#extra_{$field_details['variable']}_coordinates').val(
+                                                            results[0].geometry.location.lat()+','+results[0].geometry.location.lng());
+                                                    //}
                                                     var infowindow = new google.maps.InfoWindow({
                                                         content: '<b>' + $('#extra_{$field_details['variable']}').val() + '</b>',
                                                         size: new google.maps.Size(150, 50)
@@ -2180,6 +2217,9 @@ class ExtraField extends Model
                                 }
                             </script>
                         ");
+                        if ($hideGeoLocalizationDetails) {
+                            $form->addHtml('<div style="display:none">');
+                        }
                         $form->addHtml('
                             <div class="form-group">
                                 <label for="geolocalization_extra_'.$field_details['variable'].'"
@@ -2189,7 +2229,7 @@ class ExtraField extends Model
                                         id="geolocalization_extra_'.$field_details['variable'].'"
                                         name="geolocalization_extra_'.$field_details['variable'].'"
                                         type="submit">
-                                        <em class="fa fa-map-marker"></em> '.get_lang('Geolocalization').'
+                                        <em class="fa fa-map-marker"></em> '.get_lang('SearchGeolocalization').'
                                     </button>
                                     <button class="null btn btn-default" id="myLocation_extra_'.$field_details['variable'].'"
                                         name="myLocation_extra_'.$field_details['variable'].'"
@@ -2212,6 +2252,9 @@ class ExtraField extends Model
                                 </div>
                             </div>
                         ');
+                        if ($hideGeoLocalizationDetails) {
+                            $form->addHtml('</div>');
+                        }
                         break;
                     case self::FIELD_TYPE_GEOLOCALIZATION_COORDINATES:
                         $dataValue = isset($extraData['extra_'.$field_details['variable']])

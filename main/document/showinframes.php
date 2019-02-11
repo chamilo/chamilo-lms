@@ -185,7 +185,8 @@ $js_glossary_in_documents = '
         { type:"stylesheet", id:"_fr5", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery-ui/themes/smoothness/jquery-ui.min.css"},
         { type:"stylesheet", id:"_fr6", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery-ui/themes/smoothness/theme.css"},
         { type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
-        { type:"script", id:"_fr3", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?'.api_get_cidreq().'"}
+        { type:"script", id:"_fr3", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?'.api_get_cidreq().'"},
+        { type:"script", id:"_fr4", src:"'.api_get_path(WEB_AJAX_PATH).'lang.ajax.php?a=translate_html&'.api_get_cidreq().'"},
     ]
   });';
 
@@ -207,7 +208,6 @@ if (in_array(strtolower($pathinfo['extension']), $web_odf_supported_files)) {
     </script>'
     ;
 }
-
 // Activate code highlight.
 $isChatFolder = false;
 if (isset($document_data['parents']) && isset($document_data['parents'][0])) {
@@ -243,6 +243,9 @@ $is_freemind_available = $pathinfo['extension'] == 'mm' && api_get_setting('enab
 if ($is_freemind_available) {
     $execute_iframe = false;
 }
+
+
+$execute_iframe = true;
 
 if (!$playerSupported && $execute_iframe) {
     $htmlHeadXtra[] = '<script>

@@ -362,6 +362,7 @@
                             {type: 'script', id: '_fr2', src: '{{ _p.web_lib }}javascript/jquery.highlight.js'},
                             {type: 'script', id: '_fr3', src: '{{ _p.web_main }}glossary/glossary.js.php'},
                             {type: 'script', id: '_fr3', src: '{{ _p.web_main }}glossary/glossary.js.php?{{ _p.web_cid_query }}'},
+                            {type: "script", id:"_fr4", src: '{{ _p.web_main }}inc/ajax/lang.ajax.php?a=translate_html&'},
                             {type: 'script', id: '_media1', src: '{{ _p.web }}web/assets/mediaelement/build/mediaelement-and-player.min.js'},
                             {type: 'stylesheet', id: '_media2', src: '{{ _p.web }}web/assets/mediaelement/build/mediaelementplayer.min.css'},
                             {type: 'stylesheet', id: '_media3', src: '{{ _p.web_css_theme }}mediaelement.css'},

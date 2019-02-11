@@ -1,22 +1,50 @@
 {% extends 'layout/layout_1_col.tpl'|get_template %}
 {% block content %}
 
+<script>
+    $(document).ready(function () {
+        // default
+        $('.category-forum ').hide();
+        $('.{{ default_user_language }}').show();
+        $('#extra_language').attr('data-width', '200px');
+        $('#extra_language option[value=""]').text('{{ 'Any' | get_lang | escape('js') }}');
+        $('#extra_language').on('change', function() {
+            var selectedLanguage = $(this).val();
+            $('.category-forum ').hide();
+            if (selectedLanguage == '') {
+                $('.category-forum ').show();
+            } else {
+                $('.'+ selectedLanguage).show();
+            }
+        });
+    });
+</script>
+
 {{ form_content }}
+{{ search_filter }}
 
 {% if data is not empty %}
     {% for item in data %}
-        <div class="category-forum" id="category_{{ item.id }}">
+        {% set category_language = '' %}
+        {% for extra_field in item.extra_fields %}
+            {% if extra_field.variable == 'language' %}
+                {% set category_language = extra_field.value %}
+            {% endif %}
+        {% endfor %}
+
+        <div class="category-forum {{ category_language }}" id="category_{{ item.id }}">
             <div class="pull-right">
                 {{ item.tools }}
             </div>
             <h3>
                 {{ 'forum_blue.png'|img(32) }}
                 <a href="{{ item.url }}" title="{{ item.title }}">{{ item.title }}{{ item.icon_session }}</a>
+                <span class="flag-icon flag-icon-{{ languages[category_language | lower] }}"></span>
             </h3>
             <div class="forum-description">
                 {{ item.description }}
             </div>
-        </div>
+
             {% for subitem in item.forums %}
                 <div class="forum_display">
                     <div class="panel panel-default forum">
@@ -25,6 +53,7 @@
                                 <div class="col-md-3">
                                     <div class="number-post">
                                         <a href="{{ forum.url }}" title="{{forum.title}}">
+
                                         {% if subitem.forum_image is not empty %}
                                             <img src="{{ subitem.forum_image }}" width="48px">
                                         {% else %}
@@ -58,6 +87,7 @@
                                         <div class="forum-date">
                                             <i class="fa fa-comments" aria-hidden="true"></i>
                                             {{ subitem.last_poster_date }}
+                                            « {{ subitem.last_post_title }} »
                                             {{ "By"|get_lang }}
                                             {{ subitem.last_poster_user }}
                                         </div>
@@ -65,6 +95,8 @@
                                     <div class="description">
                                         {{ subitem.description }}
                                     </div>
+                                    {{ subitem.last_post_text }}
+
                                     {{ subitem.alert }}
                                     {% if subitem.moderation is not empty %}
                                         <span class="label label-warning">
@@ -77,6 +109,7 @@
                     </div>
                 </div>
             {% endfor %}
+        </div>
     {% endfor %}
     {% else %}
         <div class="alert alert-warning">

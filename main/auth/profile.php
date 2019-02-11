@@ -201,7 +201,7 @@ $form->applyFilter('phone', 'html_filter');
 
 //  PICTURE
 if (is_profile_editable() && api_get_setting('profile', 'picture') == 'true') {
-    $form->addFile(
+    $pictureElement = $form->addFile(
         'picture',
         [
             $user_data['picture_uri'] != '' ? get_lang('UpdateImage') : get_lang('AddImage'),
@@ -324,10 +324,27 @@ if (is_platform_authentication() &&
     $form->addPasswordRule('password1');
 }
 
+
 $extraField = new ExtraField('user');
 $return = $extraField->addElements(
     $form,
-    api_get_user_id()
+    api_get_user_id(),
+    [],
+    false,
+    false,
+    [],
+    [],
+    [],
+    false,
+    false,
+    [],
+    [],
+    [],
+    false,
+    [],
+    [],
+    [],
+    true
 );
 
 $jquery_ready_content = $return['jquery_ready_content'];

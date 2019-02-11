@@ -17,7 +17,7 @@ if (api_get_setting('allow_social_tool') != 'true') {
 }
 
 $views = ['friends', 'mygroups'];
-$user_id = intval($_GET['user_id']);
+$user_id = (int) $_GET['user_id'];
 $userGroup = new UserGroup();
 
 if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
@@ -92,17 +92,13 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
                     $userGroup->get_all_users_by_group($id)
                 );
                 if ($count_users_group == 1) {
-                    $count_users_group = $count_users_group.' '.get_lang(
-                        'Member'
-                    );
+                    $count_users_group = $count_users_group.' '.get_lang('Member');
                 } else {
-                    $count_users_group = $count_users_group.' '.get_lang(
-                        'Members'
-                    );
+                    $count_users_group = $count_users_group.' '.get_lang('Members');
                 }
                 $picture = $userGroup->get_picture_group(
                     $result['id'],
-                    $result['picture_uri'],
+                    $result['picture'],
                     80
                 );
                 $item_name = '<div class="box_shared_profile_group_title">'.$url_open.api_xml_http_response_encode($name).$icon.$url_close.'</div>';
@@ -129,6 +125,7 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
                 $i++;
             }
         }
+
         if (count($grid_my_groups) > 0) {
             echo '<div style="margin-top:20px">';
             echo '<div><h3>'.get_lang('MyGroups').'</h3></div>';
@@ -140,15 +137,9 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
             }
             echo '<div>'.$count_groups.'</div>';
 
-            Display::display_sortable_grid(
-                'shared_profile_mygroups',
-                [],
-                $grid_my_groups,
-                ['hide_navigation' => true, 'per_page' => 2],
-                $query_vars,
-                false,
-                [true, true, true, false]
-            );
+            foreach ($grid_my_groups as $group) {
+                echo Display::panel($group[0], $group[1]) ;
+            }
             echo '</div>';
         }
     }

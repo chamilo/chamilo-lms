@@ -79,6 +79,7 @@ class Documents extends Basic
                 'BulletedList',
                 '-',
                 api_get_setting('allow_spellcheck') === 'true' ? 'Scayt' : '',
+                'Language',
                 'Source',
             ],
             '/',
@@ -123,6 +124,7 @@ class Documents extends Basic
                 'BGColor',
             ],
             [
+                'Language',
                 'ShowBlocks',
                 'Source',
             ],

@@ -398,6 +398,27 @@ $extra = $extraField->addElements(
     true
 );
 
+
+$fieldsToShow = [
+    'langue_cible'
+];
+
+$extra = $extraFieldUser->addElements(
+    $form,
+    $userToLoad,
+    [],
+    $filter,
+    true,
+    $fieldsToShow,
+    $fieldsToShow,
+    [],
+    [],
+    false,
+    $forceShowFields //$forceShowFields = false
+);
+
+
+
 $form->addHtml('</div></div></div>');
 
 $form->addHtml('<div class="panel panel-default">');

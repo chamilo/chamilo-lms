@@ -43,18 +43,19 @@
             </section>
         {% endblock %}
 
-        {# Content #}
-        {% block content %}
-        <section class="container-fluid">
 
+        <section class="container-fluid">
             <div class="card mb-4">
                 <div class="card-body">
-                    {{ content }}
+                    {# Content #}
+                    {% block content %}
+                        {{ content }}
+                    {% endblock %}
                 </div>
             </div>
 
         </section>
-        {% endblock %}
+
         {% endautoescape %}
 
     </section>

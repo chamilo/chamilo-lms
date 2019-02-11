@@ -67,7 +67,11 @@ class Display
             $showHeader = false;
         }
 
-        self::$global_template = new Template($tool_name, $showHeader, $showHeader);
+        /* USER_IN_ANON_SURVEY is defined in fillsurvey.php when survey is marked as anonymous survey */
+        $userInAnonSurvey = defined('USER_IN_ANON_SURVEY') && USER_IN_ANON_SURVEY;
+
+        self::$global_template = new Template($tool_name, $showHeader, $showHeader, false, $userInAnonSurvey);
+        self::$global_template->assign('user_in_anon_survey', $userInAnonSurvey);
 
         // Fixing tools with any help it takes xxx part of main/xxx/index.php
         if (empty($help)) {

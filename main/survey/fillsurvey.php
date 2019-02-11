@@ -225,6 +225,10 @@ if ($survey_data['survey_type'] == '3') {
     exit;
 }
 
+if (!empty($survey_data['anonymous'])) {
+    define('USER_IN_ANON_SURVEY', true);
+}
+
 // Storing the answers
 if (count($_POST) > 0) {
     if ($survey_data['survey_type'] === '0') {

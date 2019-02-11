@@ -289,7 +289,7 @@ class survey_question
         $formData['answers'] = isset($formData['answers']) ? $formData['answers'] : [];
         Session::write('answer_list', $formData['answers']);
 
-        if (!isset($formData['is_required']) && api_get_configuration_value('mark_survey_question_as_required')) {
+        if (!isset($formData['is_required']) && api_get_configuration_value('survey_mark_question_as_required')) {
             $formData['is_required'] = true;
         }
 

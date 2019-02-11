@@ -2,6 +2,13 @@
 
 {% autoescape false %}
 {% set content %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <div class="announcement-edit d-block text-right">
+            <a  href="{{ url('legacy_index') }}main/admin/system_announcements.php" class="btn btn-primary btn-sm" >
+                <i class="fas fa-pencil-alt"></i> {{ "Edit this section"|trans }}
+            </a>
+        </div>
+    {% endif %}
     {% if announcements %}
     <div id="carousel-announcement" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
@@ -14,7 +21,7 @@
             {% for announcement in announcements %}
                 <div class="carousel-item {% if loop.index0 == 0 %} active {% endif %}">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-12 col-md-6">
                             <div class="announcement-text">
                                 <div class="d-md-block">
                                     <h5>{{ announcement.title }}</h5>
@@ -29,7 +36,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-12 col-md-6">
                             <div class="announcement-image">
                                 <img src="{{ announcement.picture }}" class="d-block" alt="...">
                                 <div class="dotted-bg-block lines">
@@ -53,13 +60,7 @@
         </a>
     </div>
     {% else %}
-        {% if is_granted('ROLE_ADMIN') %}
-            <div class="d-block text-right">
-                <a  href="{{ url('legacy_index') }}main/admin/system_announcements.php" class="btn btn-primary btn-sm" >
-                    <i class="fas fa-pencil-alt"></i> {{ "Edit this section"|trans }}
-                </a>
-            </div>
-        {% endif %}
+
         <div class="row">
             <div class="col-md-6">
 

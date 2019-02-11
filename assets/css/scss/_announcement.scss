@@ -1,3 +1,7 @@
+.announcement-edit{
+  position: absolute;
+  z-index: 3;
+}
 .carousel{
   .carousel-control-prev,
   .carousel-control-next{
@@ -21,8 +25,8 @@
       padding-top: 12%;
       padding-left: 15%;
       @include portrait($breakpoint-sm, $breakpoint-md){
-        padding-top: 12%;
-        padding-left: 15%;
+        padding-top: 0;
+        padding-left: 0;
       }
       @include landscape($breakpoint-sm) {
         padding-top: 0;
@@ -34,6 +38,14 @@
         color: #ffffff;
         line-height: 45px;
         text-align: left;
+        @include portrait($breakpoint-sm, $breakpoint-md){
+          font-size: 28px;
+          line-height: 32px;
+        }
+        @include landscape($breakpoint-sm) {
+          font-size: 28px;
+          line-height: 32px;
+        }
       }
       h5{
         font-size: 20px;
@@ -56,6 +68,12 @@
     position: absolute;
     z-index: 0;
     overflow: hidden;
+    @include portrait($breakpoint-sm, $breakpoint-md){
+      height: 80px;
+    }
+    @include landscape($breakpoint-sm) {
+      height: 80px;
+    }
     div{
       background: repeating-linear-gradient(90deg,#ffffff00,#ffffff00 7px,#00000000 7px,#e4e4e4 9px);
       transform: rotate(45deg);

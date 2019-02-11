@@ -322,9 +322,19 @@ function createChatBubble(my_user_id, item)
 		sentDate = moment.unix(item.date).format('LLL');
 	}
 
+    var check = '';
+    if (my_user_id != item.f) {
+        var check = '<i class="fa fa-check"></i><i class="fa fa-check"></i>';
+        if (item.recd == 1) {
+            check = '<span class="chatbox_checked"><i class="fa fa-check"></i><i class="fa fa-check"></i></span>';
+        }
+    }
+
 	return '<div class="boot-tooltip well '+myDiv+'" title="'+sentDate+'" >' +
 		'<span class="chatboxmessagefrom">'+item.username+':&nbsp;&nbsp;</span>' +
-		'<span class="chatboxmessagecontent">'+item.m+'</span></div>';
+		'<div class="chatboxmessagecontent">'+item.m+'</div>' +
+        '<div class="chatbox_checks">'+check+'</div>' +
+        '</div>';
 }
 
 function closeChatBox(user_id) {

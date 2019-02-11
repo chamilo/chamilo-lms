@@ -243,6 +243,7 @@ class Chat extends Model
                 'f' => $fromUserId,
                 'm' => $chat['message'],
                 'username' => $username,
+                'recd' => $chat['recd'],
                 'user_info' => [
                     'username' => $username,
                     'online' => $userInfo['user_is_online'],
@@ -300,8 +301,8 @@ class Chat extends Model
             $items[$fromUserId]['user_info']['avatar'] = $user_info['avatar_small'];
             $items[$fromUserId]['user_info']['user_id'] = $user_info['user_id'];
 
-            $_SESSION['chatHistory'][$fromUserId]['items'] = $chatItems;
-            $_SESSION['chatHistory'][$fromUserId]['total_messages'] = $count;
+            $chatHistory[$fromUserId]['items'] = $chatItems;
+            $chatHistory[$fromUserId]['total_messages'] = $count;
             $_SESSION['chatHistory'][$fromUserId]['user_info']['user_id'] = $user_info['user_id'];
             $_SESSION['chatHistory'][$fromUserId]['user_info']['user_name'] = $user_info['complete_name'];
             $_SESSION['chatHistory'][$fromUserId]['user_info']['online'] = $user_info['user_is_online'];

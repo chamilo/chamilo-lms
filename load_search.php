@@ -152,13 +152,13 @@ $lang = api_get_interface_language();
 
 if ($userToLoadInfo) {
     $lang = $userToLoadInfo['language'];
-    $targetLanguageInfo = $extraFieldValueUser->get_values_by_handler_and_field_variable(
+    /*$targetLanguageInfo = $extraFieldValueUser->get_values_by_handler_and_field_variable(
         $userToLoad,
         'langue_cible'
     );
     if (!empty($targetLanguageInfo)) {
         $lang = strtolower($targetLanguageInfo['value']);
-    }
+    }*/
 
     switch ($lang) {
         case 'italian':

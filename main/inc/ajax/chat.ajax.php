@@ -25,6 +25,7 @@ if ($action == 'preview') {
 
 $toUserId = isset($_REQUEST['to']) ? $_REQUEST['to'] : null;
 $message = isset($_REQUEST['message']) ? $_REQUEST['message'] : null;
+$currentUserId = api_get_user_id();
 
 $chat = new Chat();
 if (Chat::disableChat()) {
@@ -36,6 +37,13 @@ if ($chat->isChatBlockedByExercises()) {
     exit;
 }
 switch ($action) {
+    case 'get_message_status':
+        $messageId = isset($_REQUEST['message_id']) ? $_REQUEST['message_id'] : 0;
+        $messageInfo = $chat->get($messageId);
+        if ($messageInfo && $messageInfo['from_user'] == $currentUserId) {
+            echo json_encode($messageInfo);
+        }
+        break;
     case 'chatheartbeat':
         $chat->heartbeat();
         break;
@@ -75,7 +83,6 @@ switch ($action) {
             false,
             false
         );
-
         echo Display::tag('p', $videoChatLink, ['class' => 'lead']);
         break;
     case 'get_contacts':

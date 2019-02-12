@@ -214,7 +214,10 @@ $actions = Display::toolbarAction('toolbar-forum', [$actionLeft]);
 $languages = api_get_languages();
 $languages = array_column($languages['all'], 'english_name', 'isocode');
 
-$defaultUserLanguage = ucfirst($_user['language']);
+$defaultUserLanguage = ucfirst(api_get_interface_language());
+if (isset($_user['language']) && !empty($_user['language'])) {
+    $defaultUserLanguage = ucfirst($_user['language']);
+}
 $extraFieldValues = new ExtraFieldValue('user');
 $value = $extraFieldValues->get_values_by_handler_and_field_variable(api_get_user_id(), 'langue_cible');
 

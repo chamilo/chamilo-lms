@@ -315,10 +315,11 @@ class Chat extends Model
      */
     public function heartbeat()
     {
-        $to_user_id = api_get_user_id();
+        $currentUserId = api_get_user_id();
 
         $sql = "SELECT * FROM ".$this->table."
-                WHERE to_user = '".$to_user_id."' AND recd = 0
+                WHERE 
+                    to_user = '".$currentUserId."' AND recd = 0
                 ORDER BY id ASC";
         $result = Database::query($sql);
 
@@ -329,15 +330,39 @@ class Chat extends Model
 
         $items = [];
         $chatHistory = Session::read('chatHistory');
+
+        // update current chats
+        foreach ($chatHistory as $fromUserId => $items) {
+            $user_info = api_get_user_info($fromUserId, true);
+            $count = $this->getCountMessagesExchangeBetweenUsers(
+                $fromUserId,
+                $currentUserId
+            );
+            $chatItems = self::getLatestChat($fromUserId, $currentUserId, 5);
+            $item = [
+                'window_user_info' => api_get_user_info($fromUserId),
+                'items' => $chatItems,
+                'total_messages' => $count,
+                'user_info' => [
+                    'user_name' => $user_info['complete_name'],
+                    'online' => $user_info['user_is_online'],
+                    'avatar' => $user_info['avatar_small'],
+                    'user_id' => $user_info['user_id'],
+                ]
+            ];
+
+            $items[$fromUserId] = $item;
+        }
+
         foreach ($chatList as $fromUserId => $rows) {
             $rows = $rows['items'];
             $user_info = api_get_user_info($fromUserId, true);
             $count = $this->getCountMessagesExchangeBetweenUsers(
                 $fromUserId,
-                $to_user_id
+                $currentUserId
             );
 
-            $chatItems = self::getLatestChat($fromUserId, $to_user_id, 5);
+            $chatItems = self::getLatestChat($fromUserId, $currentUserId, 5);
 
             // Cleaning tsChatBoxes
             unset($_SESSION['tsChatBoxes'][$fromUserId]);
@@ -389,7 +414,7 @@ class Chat extends Model
 
         $sql = "UPDATE ".$this->table." 
                 SET recd = 1
-                WHERE to_user = '".$to_user_id."' AND recd = 0";
+                WHERE to_user = '".$currentUserId."' AND recd = 0";
         Database::query($sql);
 
         echo json_encode(['items' => $items]);
@@ -423,10 +448,7 @@ class Chat extends Model
         $printResult = true,
         $sanitize = true
     ) {
-        $relation = SocialManager::get_relation_between_contacts(
-            $fromUserId,
-            $to_user_id
-        );
+        $relation = SocialManager::get_relation_between_contacts($fromUserId, $to_user_id);
 
         if ($relation == USER_RELATION_TYPE_FRIEND) {
             $now = api_get_utc_datetime();
@@ -465,18 +487,17 @@ class Chat extends Model
             $params['sent'] = api_get_utc_datetime();
 
             if (!empty($fromUserId) && !empty($to_user_id)) {
-                $this->save($params);
+                $messageId = $this->save($params);
+                if ($printResult) {
+                    echo $messageId;
+                    exit;
+                }
             }
+        }
 
-            if ($printResult) {
-                echo '1';
-                exit;
-            }
-        } else {
-            if ($printResult) {
-                echo '0';
-                exit;
-            }
+        if ($printResult) {
+            echo '0';
+            exit;
         }
     }
 

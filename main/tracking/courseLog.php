@@ -472,11 +472,11 @@ if (count($a_students) > 0) {
     $all_datas = [];
     $course_code = $_course['id'];
 
-    $table = new SortableTable(
-        'users_tracking',
-        ['TrackingCourseLog', 'get_number_of_users'],
-        ['TrackingCourseLog', 'get_user_data'],
-        1
+    $table = new SortableTableFromArray(
+        $usersTracking,
+        1,
+        20,
+        'users_tracking'
     );
 
     $parameters['cidReq'] = isset($_GET['cidReq']) ? Security::remove_XSS($_GET['cidReq']) : '';

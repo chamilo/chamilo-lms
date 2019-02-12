@@ -278,7 +278,6 @@ class Chat extends Model
                 $orderBy
                 LIMIT $start, $end
                 ";
-        error_log($sql);
         $result = Database::query($sql);
         $rows = Database::store_result($result);
         $fromUserInfo = api_get_user_info($fromUserId, true);

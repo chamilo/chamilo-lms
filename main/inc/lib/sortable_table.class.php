@@ -291,7 +291,7 @@ class SortableTable extends HTML_Table
             $table_id = 'form_'.$this->table_name.'_id';
             $form = $this->get_page_select_form();
             $nav = $this->get_navigation_html();
-
+var_dump($this->get_total_number_of_items());
             // Only show pagination info when there are items to paginate
             if ($this->get_total_number_of_items() > $this->default_items_per_page) {
                 $html = '<div class="table-well">';
@@ -1091,15 +1091,7 @@ class SortableTableFromArray extends SortableTable
      */
     public function get_total_number_of_items()
     {
-        if (isset($this->total_number_of_items) && !empty($this->total_number_of_items)) {
-            return $this->total_number_of_items;
-        } else {
-            if (!empty($this->table_data)) {
-                return count($this->table_data);
-            }
-
-            return 0;
-        }
+        return count($this->table_data);
     }
 }
 

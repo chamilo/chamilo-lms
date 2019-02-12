@@ -291,7 +291,7 @@ class SortableTable extends HTML_Table
             $table_id = 'form_'.$this->table_name.'_id';
             $form = $this->get_page_select_form();
             $nav = $this->get_navigation_html();
-var_dump($this->get_total_number_of_items());
+
             // Only show pagination info when there are items to paginate
             if ($this->get_total_number_of_items() > $this->default_items_per_page) {
                 $html = '<div class="table-well">';

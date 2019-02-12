@@ -142,6 +142,7 @@
         <li class="nav-item dropdown">
 
             {% set avatar %}
+
                 {% if app.user.pictureUri is empty %}
                     <img
                         class="img-avatar"
@@ -157,8 +158,9 @@
                 {% endif %}
             {% endset %}
 
-            <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+            <a class="nav-link nav-link-user dropdown-toggle d-none d-sm-inline-block mr-2" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                 {{ avatar }}
+                <span>{{ app.user.firstname }} {{ app.user.lastname }}</span>
             </a>
 
             <div class="dropdown-menu dropdown-menu-right">

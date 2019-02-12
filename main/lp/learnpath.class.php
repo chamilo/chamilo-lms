@@ -2543,9 +2543,7 @@ class learnpath
                         $is_visible = false;
                     }
                 }
-            }
 
-            if ($is_visible) {
                 $subscriptionSettings = self::getSubscriptionSettings();
 
                 // Check if the subscription users/group to a LP is ON

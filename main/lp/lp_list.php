@@ -215,7 +215,6 @@ foreach ($categories as $item) {
         $autolaunch_exists = false;
         $accumulateWorkTimeTotal = 0;
         if ($allowMinTime) {
-            // TT --- Tiempo total del curso
             $accumulateWorkTimeTotal = learnpath::getAccumulateWorkTimeTotal(api_get_course_int_id());
         }
 
@@ -404,7 +403,6 @@ foreach ($categories as $item) {
             $dsp_time = '';
             $linkMinTime = '';
             if ($allowMinTime) {
-                // Time info
                 // Minimum time (in minutes) to pass the learning path
                 $accumulateWorkTime = learnpath::getAccumulateWorkTimePrerequisite($id, api_get_course_int_id());
                 if ($accumulateWorkTime > 0) {

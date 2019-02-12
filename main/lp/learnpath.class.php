@@ -2545,44 +2545,46 @@ class learnpath
                 }
             }
 
-            $subscriptionSettings = self::getSubscriptionSettings();
+            if ($is_visible) {
+                $subscriptionSettings = self::getSubscriptionSettings();
 
-            // Check if the subscription users/group to a LP is ON
-            if (isset($row['subscribe_users']) && $row['subscribe_users'] == 1 &&
-                $subscriptionSettings['allow_add_users_to_lp'] === true
-            ) {
-                // Try group
-                $is_visible = false;
-                // Checking only the user visibility
-                $userVisibility = api_get_item_visibility(
-                    $courseInfo,
-                    'learnpath',
-                    $row['id'],
-                    $sessionId,
-                    $student_id,
-                    'LearnpathSubscription'
-                );
+                // Check if the subscription users/group to a LP is ON
+                if (isset($row['subscribe_users']) && $row['subscribe_users'] == 1 &&
+                    $subscriptionSettings['allow_add_users_to_lp'] === true
+                ) {
+                    // Try group
+                    $is_visible = false;
+                    // Checking only the user visibility
+                    $userVisibility = api_get_item_visibility(
+                        $courseInfo,
+                        'learnpath',
+                        $row['id'],
+                        $sessionId,
+                        $student_id,
+                        'LearnpathSubscription'
+                    );
 
-                if ($userVisibility == 1) {
-                    $is_visible = true;
-                } else {
-                    $userGroups = GroupManager::getAllGroupPerUserSubscription($student_id);
-                    if (!empty($userGroups)) {
-                        foreach ($userGroups as $groupInfo) {
-                            $groupId = $groupInfo['iid'];
-                            $userVisibility = api_get_item_visibility(
-                                $courseInfo,
-                                'learnpath',
-                                $row['id'],
-                                $sessionId,
-                                null,
-                                'LearnpathSubscription',
-                                $groupId
-                            );
+                    if ($userVisibility == 1) {
+                        $is_visible = true;
+                    } else {
+                        $userGroups = GroupManager::getAllGroupPerUserSubscription($student_id);
+                        if (!empty($userGroups)) {
+                            foreach ($userGroups as $groupInfo) {
+                                $groupId = $groupInfo['iid'];
+                                $userVisibility = api_get_item_visibility(
+                                    $courseInfo,
+                                    'learnpath',
+                                    $row['id'],
+                                    $sessionId,
+                                    null,
+                                    'LearnpathSubscription',
+                                    $groupId
+                                );
 
-                            if ($userVisibility == 1) {
-                                $is_visible = true;
-                                break;
+                                if ($userVisibility == 1) {
+                                    $is_visible = true;
+                                    break;
+                                }
                             }
                         }
                     }

@@ -4850,7 +4850,7 @@ EOT;
     }
 
     /**
-     * Display the ranking of results in a exercise
+     * Display the ranking of results in a exercise.
      *
      * @param int $exerciseId
      * @param int $currentUserId
@@ -4896,7 +4896,7 @@ EOT;
 
     /**
      * Get the ranking for results in a exercise.
-     * Function used internally by ExerciseLib::displayResultsInRanking
+     * Function used internally by ExerciseLib::displayResultsInRanking.
      *
      * @param int $exerciseId
      * @param int $courseId
@@ -4947,7 +4947,7 @@ EOT;
         $data = array_map(
             function ($item) use (&$lastScore, &$position) {
                 if ($item['exe_result'] < $lastScore) {
-                    ++$position;
+                    $position++;
                 }
 
                 $lastScore = $item['exe_result'];

@@ -190,9 +190,7 @@ if (isset($_GET['additional_profile_field'])) {
             $user_array
         );
 
-        $extra_info[$fieldId] = UserManager::get_extra_field_information(
-            $fieldId
-        );
+        $extra_info[$fieldId] = UserManager::get_extra_field_information($fieldId);
     }
 }
 
@@ -201,8 +199,6 @@ Session::write('extra_field_info', $extra_info);
 
 // Display the header.
 Display::display_header($nameTools, 'Tracking');
-
-/* MAIN CODE */
 
 $actionsLeft = TrackingCourseLog::actionsLeft('users', $sessionId);
 

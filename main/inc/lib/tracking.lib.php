@@ -5833,7 +5833,7 @@ class Tracking
                     if (!$learnpath['lp_visibility']) {
                         continue;
                     }
-                    
+
                     $progress = self::get_avg_student_progress(
                         $user_id,
                         $course,
@@ -5965,22 +5965,22 @@ class Tracking
     public static function generate_session_exercise_graph($names, $my_results, $average)
     {
         $html = api_get_js('chartjs/Chart.js');
-        $canvas = Display::tag('canvas', '', array('id' => 'session_graph_chart'));
-        $html .=  Display::tag('div',$canvas, array('style' => 'width:100%'));
+        $canvas = Display::tag('canvas', '', ['id' => 'session_graph_chart']);
+        $html .= Display::tag('div', $canvas, ['style' => 'width:100%']);
         $jsStr = " var data = {
-                       labels:".  json_encode($names).",
+                       labels:".json_encode($names).",
                        datasets: [
                        {
                          label: '".get_lang('MyResults')."',
                          backgroundColor: 'rgb(255, 99, 132)',
                          stack: 'Stack1',
-                         data: ".  json_encode($my_results).",
+                         data: ".json_encode($my_results).",
                         },
                         {
                          label: '".get_lang('AverageScore')."',
                          backgroundColor: 'rgb(75, 192, 192)',
                          stack: 'Stack2',
-                         data: ".  json_encode($average).",
+                         data: ".json_encode($average).",
                         },
                         ],  
                     };
@@ -6011,6 +6011,7 @@ class Tracking
                     }
                 });";
         $html .= Display::tag('script', $jsStr);
+
         return $html;
     }
 
@@ -6383,7 +6384,7 @@ class Tracking
             $myCache->saveFromCache($chartHash, $imgPath);
             $imgPath = api_get_path(WEB_ARCHIVE_PATH).$chartHash;
         }
-        
+
         return $imgPath;
     }
 

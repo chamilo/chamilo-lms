@@ -1127,7 +1127,7 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
-     * Get invoice numbering
+     * Get invoice numbering.
      *
      * @param int $saleId    The sale id
      * @param int $isService Check if a service

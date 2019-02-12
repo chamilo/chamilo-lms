@@ -33,14 +33,17 @@
         {% endfor %}
 
         <div class="category-forum {{ category_language }}" id="category_{{ item.id }}">
-            <div class="pull-right">
-                {{ item.tools }}
+            <div class="category-title">
+                <h3>
+                    {{ 'forum_blue.png'|img(32) }}
+                    <a href="{{ item.url }}" title="{{ item.title }}">{{ item.title }}{{ item.icon_session }}</a>
+                    <span class="flag-icon flag-icon-{{ languages[category_language | lower] }}"></span>
+                </h3>
+                <div class="tools">
+                    {{ item.tools }}
+                </div>
             </div>
-            <h3>
-                {{ 'forum_blue.png'|img(32) }}
-                <a href="{{ item.url }}" title="{{ item.title }}">{{ item.title }}{{ item.icon_session }}</a>
-                <span class="flag-icon flag-icon-{{ languages[category_language | lower] }}"></span>
-            </h3>
+
             <div class="forum-description">
                 {{ item.description }}
             </div>
@@ -50,9 +53,9 @@
                     <div class="panel panel-default forum">
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col-md-3">
+                                <div class="col-xs-4 col-md-3">
                                     <div class="number-post">
-                                        <a href="{{ forum.url }}" title="{{forum.title}}">
+                                        <a href="{{ subitem.url }}" title="{{subitem.title}}">
 
                                         {% if subitem.forum_image is not empty %}
                                             <img src="{{ subitem.forum_image }}" width="48px">
@@ -67,12 +70,8 @@
                                         <p>{{ 'ForumThreads'| get_lang }}: {{ subitem.number_threads }} </p>
                                     </div>
                                 </div>
-                                <div class="col-md-9">
-                                    <div class="pull-right">
-                                        <div class="toolbar">
-                                            {{ subitem.tools }}
-                                        </div>
-                                    </div>
+                                <div class="col-xs-8 col-md-9">
+
                                     <h3 class="title">
                                     {{ 'forum_yellow.png'|img(32) }}
                                     <a href="{{ subitem.url }}" title="{{ subitem.title }}" class="{{ subitem.visibility != '1' ? 'text-muted': '' }}">{{ subitem.title }}</a>
@@ -95,6 +94,7 @@
                                     <div class="description">
                                         {{ subitem.description }}
                                     </div>
+
                                     {{ subitem.last_post_text }}
 
                                     {{ subitem.alert }}
@@ -103,6 +103,13 @@
                                             {{ "PostsPendingModeration"|get_lang }}: {{ subitem.moderation }}
                                         </span>
                                     {% endif %}
+
+                                    <div class="tools">
+                                        <div class="toolbar">
+                                            {{ subitem.tools }}
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>

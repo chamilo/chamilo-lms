@@ -172,11 +172,7 @@ $sessionList = SessionManager::getSessionsFollowedByUser(
 );
 
 // My friends
-$friend_html = SocialManager::listMyFriendsBlock(
-    $user_id,
-    $link_shared
-);
-
+$friend_html = SocialManager::listMyFriendsBlock($user_id, $link_shared);
 $wallSocialAddPost = SocialManager::getWallForm(api_get_self());
 
 // Social Post Wall

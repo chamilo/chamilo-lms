@@ -24,7 +24,7 @@ $tpl->assign('course_url', $link);
 $tpl->assign('course_title', Display::url($title, $link));
 $tpl->assign('course_id', $course_info['code']);
 $tpl->assign('just_created', isset($_GET['first']) && $_GET['first'] ? 1 : 0);
-$add_course_tpl = $tpl->get_template('create_course/add_course.tpl');
+$add_course_tpl = $tpl->get_template('create_course/start.html.twig');
 $content = $tpl->fetch($add_course_tpl);
 
 $tpl->assign('content', $content);

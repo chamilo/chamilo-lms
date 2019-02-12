@@ -74,7 +74,7 @@ $form = new FormValidator('add_course');
 $form->addElement('header', $tool_name);
 
 // Title
-$form->addElement(
+/*$form->addElement(
     'text',
     'title',
     [
@@ -84,14 +84,43 @@ $form->addElement(
     [
         'id' => 'title',
     ]
-);
+);*/
+$form->addText(
+    'title',
+    [
+        get_lang('CourseName'),
+        get_lang('For example: Innovation management'),
+    ],
+    true);
 $form->applyFilter('title', 'html_filter');
-$form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
+//$form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
 
 $form->addButtonAdvancedSettings('advanced_params');
 $form->addElement(
     'html',
     '<div id="advanced_params_options" style="display:none">'
+);
+
+// Picture
+$form->addFile(
+    'picture',
+    [
+        get_lang('AddPicture')
+    ],
+    [
+        'id' => 'picture',
+        'class' => 'picture-form',
+        'crop_image' => true
+    ]
+);
+
+$allowed_picture_types = api_get_supported_image_extensions(false);
+
+$form->addRule(
+    'picture',
+    get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')',
+    'filetype',
+    $allowed_picture_types
 );
 
 $countCategories = $courseCategoriesRepo->countAllInAccessUrl(
@@ -281,7 +310,7 @@ if (isset($_user['language']) && $_user['language'] != '') {
 
 $form->setDefaults($values);
 $message = null;
-$content = null;
+$formContent = null;
 
 // Validate the form.
 if ($form->validate()) {
@@ -333,6 +362,18 @@ if ($form->validate()) {
             $course_info = CourseManager::create_course($params);
 
             if (!empty($course_info)) {
+
+                // update course picture
+                $picture = $_FILES['picture'];
+                if (!empty($picture['name'])) {
+                    $picture_uri = CourseManager::update_course_picture(
+                        $course_info,
+                        $picture['name'],
+                        $picture['tmp_name'],
+                        $course_values['picture_crop_result']
+                    );
+                }
+
                 /*
                 $directory  = $course_info['directory'];
                 $title      = $course_info['title'];
@@ -365,7 +406,7 @@ if ($form->validate()) {
                     false
                 );
                 // Display the form.
-                $content = $form->returnForm();
+                $formContent = $form->returnForm();
             }
         } else {
             // Create a request for a new course.
@@ -405,7 +446,7 @@ if ($form->validate()) {
                     false
                 );
                 // Display the form.
-                $content = $form->returnForm();
+                $formContent = $form->returnForm();
             }
         }
     } else {
@@ -415,16 +456,19 @@ if ($form->validate()) {
             false
         );
         // Display the form.
-        $content = $form->returnForm();
+        $formContent = $form->returnForm();
     }
 } else {
     if (!$course_validation_feature) {
         $message = Display::return_message(get_lang('Explanation'));
     }
     // Display the form.
-    $content = $form->returnForm();
+    $formContent = $form->returnForm();
 }
 
+
+$tpl->assign('form', $formContent);
+$layout = $tpl->fetch($tpl->get_template('create_course/add_course.html.twig'));
 $tpl->assign('message', $message);
-$tpl->assign('content', $content);
+$tpl->assign('content', $layout);
 $tpl->display_one_col_template();

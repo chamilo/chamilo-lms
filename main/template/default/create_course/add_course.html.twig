@@ -1,56 +1,47 @@
 {% autoescape false %}
-{% if just_created == 1%}
-    <h3>{{ 'JustCreated'|get_lang }} {{ course_title }}</h3>
-    <hr />
-{% endif %}
-
-<h3>{{ 'ThingsToDo'|get_lang }}</h3>
-<br />
-<div id="course_thing_to_do" class="row">
-    <div class="col-md-3">
-        <div class="thumbnail">
-            {{ 'info.png' | img(64, 'AddCourseDescription'|get_lang ) }}
-            <div class="caption">
-                <a href="{{ _p.web_main }}course_description/?cidReq={{ course_id }}" class="btn btn-default">
-                    <em class="fa fa-info-circle"></em> {{'AddCourseDescription'|get_lang}}
-                </a>
+<div class="row">
+    <div class="col-md-8">
+        {{ form }}
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                {{ 'Preview of the course'|trans }}
+            </div>
+            <div class="card-body">
+                <div id="view-course" class="card card-course-classic ">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <a href="#">
+                                    <img src="http://chamilo2.test/../courses/INTRODUCCIONLAREALIDADAUMENTADA/course-pic.png" class="img-fluid">
+                                </a>
+                            </div>
+                            <div class="col-md-7">
+                                <div class="card-inside">
+                                    <div class="float-right">
+                                        <a class="btn btn-outline-primary btn-sm" href="#">
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </a>
+                                    </div>
+                                    <h5 class="title">
+                                        <a href="#">
+                                            Titulo del curso
+                                        </a>
+                                    </h5>
+                                    <div class="list-teachers">
+                                        <i class="fas fa-user-tie"></i>
+                                        <a href="#">
+                                            Joe Doe
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="thumbnail">
-            {{ 'folder_document.png' | img(64, 'UploadADocument'|get_lang ) }}
-            <div class="caption">
-                <a href="{{ _p.web_main }}document/document.php?cidReq={{ course_id }}" class="btn btn-default">
-                    <em class="fa fa-paper-plane"></em> {{'UploadADocument'|get_lang}}
-                </a>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="thumbnail">
-            {{ 'forum.png' | img(64, 'AddForum'|get_lang ) }}
-
-            <div class="caption">
-                <a href="{{ _p.web_main }}forum/index.php?cidReq={{ course_id }}" class="btn btn-default">
-                    <em class="fa fa-users"></em> {{ 'AddForum'|get_lang }}
-                </a>
-            </div>
-        </div>
-    </div>
-    {% if ("allow_user_course_subscription_by_course_admin" | api_get_setting) == 'true' or is_granted('ROLE_ADMIN') %}
-    <div class="col-md-3">
-        <div class="thumbnail">
-        {{ 'user.png' | img(64, 'SubscribeUserToCourse'|get_lang ) }}
-            <div class="caption">
-            <a href="{{ _p.web_main }}user/subscribe_user.php?cidReq={{ course_id }}" class="btn btn-default">
-                <em class="fa fa-user-plus"></em> {{ 'SubscribeUserToCourse'|get_lang }}
-            </a>
-            </div>
-        </div>
-    </div>
-    {% endif %}
 </div>
-<div class="clear"></div>
-
 {% endautoescape %}

@@ -181,8 +181,7 @@ $social_group_block .= $form->returnForm();
 // My friends
 $friend_html = SocialManager::listMyFriendsBlock(
     $user_id,
-    '',
-    $show_full_profile
+    ''
 );
 
 // Block Social Sessions

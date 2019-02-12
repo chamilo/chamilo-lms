@@ -174,8 +174,7 @@ $sessionList = SessionManager::getSessionsFollowedByUser(
 // My friends
 $friend_html = SocialManager::listMyFriendsBlock(
     $user_id,
-    $link_shared,
-    $show_full_profile
+    $link_shared
 );
 
 $wallSocialAddPost = SocialManager::getWallForm(api_get_self());

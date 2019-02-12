@@ -142,17 +142,24 @@ function startChatSession()
 					}
 
 					$.each(data.items, function(my_user_id, user_items) {
+						if (currentUserId == my_user_id) {
+							// show contact list
+							createMyContactsWindow();
+							return true;
+						}
+
 						my_items = user_items['items'];
+						window_user_info = user_items['window_user_info'];
 						$.each(my_items, function(i, item) {
 							if (item) {
 								// fix strange ie bug
 								if ($("#chatbox_"+my_user_id).length <= 0) {
 									createChatBox(
 										my_user_id,
-										item.username,
+										window_user_info.complete_name,
 										1,
-										item.user_info.online,
-										item.user_info.avatar
+										window_user_info.online,
+										window_user_info.avatar_small
 									);
 								}
 
@@ -210,8 +217,8 @@ function chatHeartbeat()
 			if (newMessagesWin[x].status == true) {
 				++blinkNumber;
 				if (blinkNumber >= blinkOrder) {
-					document.title = newMessagesWin[x].username+' says...';
-					titleChanged = 1;
+					//document.title = newMessagesWin[x].username+' says...';
+					//titleChanged = 1;
 					break;
 				}
 			}
@@ -246,16 +253,17 @@ function chatHeartbeat()
 		success: function(data) {
 			$.each(data.items, function(my_user_id, user_items) {
 				my_items = user_items['items'];
+				userInfo = user_items['window_user_info'];
 				$.each(my_items, function(i, item) {
 					if (item) {
 						// fix strange ie bug
 						if ($("#chatbox_"+my_user_id).length <= 0) {
 							createChatBox(
 								my_user_id,
-								item.username,
+								userInfo.complete_name,
 								0,
-								item.user_info.online,
-								item.user_info.avatar
+								userInfo.online,
+								userInfo.avatar_small
 							);
 						}
 						if ($("#chatbox_"+my_user_id).css('display') == 'none') {
@@ -314,7 +322,7 @@ function chatHeartbeat()
 function createChatBubble(my_user_id, item)
 {
 	var myDiv = 'chatboxmessage_me';
-	if (my_user_id == item.f) {
+	if (my_user_id == item.from_user_info.id) {
 		myDiv = 'chatboxmessage';
 	}
 	var sentDate = '';
@@ -323,18 +331,25 @@ function createChatBubble(my_user_id, item)
 	}
 
     var check = '';
-    if (my_user_id != item.f) {
+    if (my_user_id != item.from_user_info.id) {
         var check = '<i class="fa fa-check"></i><i class="fa fa-check"></i>';
         if (item.recd == 1) {
             check = '<span class="chatbox_checked"><i class="fa fa-check"></i><i class="fa fa-check"></i></span>';
         }
     }
 
-	return '<div class="boot-tooltip well '+myDiv+'" title="'+sentDate+'" >' +
-		'<span class="chatboxmessagefrom">'+item.username+':&nbsp;&nbsp;</span>' +
+	var message = '<div class="boot-tooltip well '+myDiv+'" title="'+sentDate+'" >';
+
+	if (my_user_id == item.from_user_info.id) {
+		message += '<span class="chatboxmessagefrom">'+item.from_user_info.complete_name+':&nbsp;&nbsp;</span>';
+	}
+
+	message +=
 		'<div class="chatboxmessagecontent">'+item.m+'</div>' +
         '<div class="chatbox_checks">'+check+'</div>' +
         '</div>';
+
+    return message;
 }
 
 function closeChatBox(user_id) {
@@ -827,7 +842,7 @@ function toggleChatBoxGrowth(user_id)
  */
 function checkChatBoxInputKey(event, chatboxtextarea, user_id)
 {
-	if(event.keyCode == 13 && event.shiftKey == 0)  {
+	if (event.keyCode == 13 && event.shiftKey == 0)  {
 		message = $(chatboxtextarea).val();
 		message = message.replace(/^\s+|\s+$/g,"");
 
@@ -843,6 +858,7 @@ function checkChatBoxInputKey(event, chatboxtextarea, user_id)
 				if (data == 1) {
 					message = message.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;");
 					var item = {
+						from_user_info : {id: currentUserId, complete_name: 'me'},
 						username: username,
 						date: moment().unix(),
 						f: currentUserId,

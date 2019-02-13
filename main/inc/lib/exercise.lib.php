@@ -1394,7 +1394,7 @@ HTML;
             $questionDescription = $objQuestionTmp->selectDescription();
 
             // Get the answers, make a list
-            $objAnswerTmp = new Answer($questionId);
+            $objAnswerTmp = new Answer($questionId, $course_id);
             $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
 
             // get answers of hotpost

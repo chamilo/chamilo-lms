@@ -108,8 +108,8 @@ if (isset($_GET['sso'])) {
         if (isset($attributes['FirstName']) && !empty($attributes['FirstName']) {
             $firstName = reset($attributes['FirstName']);
         }
-        $lastName = '';
 
+        $lastName = '';
         if (isset($attributes['LastName']) && !empty($attributes['LastName']) {
             $lastName = reset($attributes['LastName']);
         }

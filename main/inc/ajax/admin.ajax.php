@@ -246,8 +246,6 @@ function check_system_version()
  */
 function getLatestNews()
 {
-    global $language_interface;
-
     $url = 'https://version.chamilo.org/news/latest.php';
 
     $client = new Client();
@@ -256,7 +254,7 @@ function getLatestNews()
         $url,
         [
             'query' => [
-                'language' => $language_interface,
+                'language' => api_get_interface_language(),
             ],
         ]
     );

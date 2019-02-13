@@ -108,7 +108,8 @@ switch ($action) {
 
                 $json = [];
                 if (!empty($result) && is_array($result)) {
-                    $json['name'] = Display::url(
+                    $json['name'] = api_htmlentities($result['title']);
+                    $json['link'] = Display::url(
                         api_htmlentities($result['title']),
                         api_htmlentities($result['url']),
                         ['target' => '_blank']

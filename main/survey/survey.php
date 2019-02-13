@@ -159,6 +159,8 @@ if ($survey_data['survey_type'] != 3) {
     }
 }
 
+$survey_actions .= SurveyUtil::getAdditionalTeacherActions($survey_id, ICON_SIZE_MEDIUM);
+
 echo '<div class="actions">'.$survey_actions.'</div>';
 
 $urlQuestion = api_get_path(WEB_CODE_PATH).'survey/question.php?'.api_get_cidreq().'&action=add';

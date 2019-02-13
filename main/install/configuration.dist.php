@@ -522,6 +522,9 @@ ALTER TABLE c_survey_question ADD is_required TINYINT(1) DEFAULT 0 NOT NULL;
 //$_configuration['allow_survey_availability_datetime'] = false;
 // Mark the "Required" field during question creation process when displaying the form.
 //$_configuration['survey_mark_question_as_required'] = false;
+// Allow add additional actions (as links) in survey list for teachers.
+// e.g. ['myplugin' => ['MyPlugin', 'urlGeneratorCallback']]
+//$_configuration['survey_additional_teacher_modify_actions'] = [];
 // ------
 
 // Allow career diagram, requires a DB change:

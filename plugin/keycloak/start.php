@@ -104,9 +104,20 @@ if (isset($_GET['sso'])) {
     $attributes = $auth->getAttributes();
     $userId = 0;
     if (!empty($attributes) && empty($userInfo)) {
-        $firstName = reset($attributes['FirstName']);
-        $lastName = reset($attributes['LastName']);
-        $email = reset($attributes['Email']);
+        $firstName = '';
+        if (isset($attributes['FirstName']) && !empty($attributes['FirstName']) {
+            $firstName = reset($attributes['FirstName']);
+        }
+        $lastName = '';
+
+        if (isset($attributes['LastName']) && !empty($attributes['LastName']) {
+            $lastName = reset($attributes['LastName']);
+        }
+
+        $email = '';
+        if (isset($attributes['Email']) && !empty($attributes['Email']) {
+            $email = reset($attributes['Email']);
+        }
 
         if (empty($email)) {
             api_not_allowed(true);

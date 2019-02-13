@@ -17,26 +17,82 @@ $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')]
 
 $form = new FormValidator('admin_questions', 'get');
 $form->addHeader(get_lang('Questions'));
-$form->addText('id', get_lang('Id'));
+$form->addText('id', get_lang('Id'), false);
+$form->addText('title', get_lang('Title'), false);
+$form->addText('description', get_lang('Description'), false);
+$form->addHidden('form_sent', 1);
 $form->addButtonSearch(get_lang('Search'));
 
-$formContent = $form->returnForm();
-$questionContent = '';
+$questions = [];
+$pagination = '';
+$formSent = isset($_REQUEST['form_sent']) ? (int) $_REQUEST['form_sent'] : 0;
+$length = 20;
+$questionCount = 0;
 
-if ($form->validate()) {
-    $id = (int) $form->getSubmitValue('id');
+if ($formSent) {
+    $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : '';
+    $description = isset($_REQUEST['description']) ? Security::remove_XSS($_REQUEST['description']) : '';
+    $title = isset($_REQUEST['title']) ? Security::remove_XSS($_REQUEST['title']) : '';
+    $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+
+    $em = Database::getManager();
+    $repo = $em->getRepository('ChamiloCourseBundle:CQuizQuestion');
+    $criteria = new \Doctrine\Common\Collections\Criteria();
     if (!empty($id)) {
-        $em = Database::getManager();
-        /** @var CQuizQuestion $question */
-        $question = $em->getRepository('ChamiloCourseBundle:CQuizQuestion')->find($id);
-        if ($question) {
+        $criteria->where($criteria->expr()->eq('iid', $id));
+    }
+
+    if (!empty($description)) {
+        $criteria->orWhere($criteria->expr()->contains('description', "%$description%"));
+    }
+
+    if (!empty($title)) {
+        $criteria->orWhere($criteria->expr()->contains('question', "%$title%"));
+    }
+
+    $questions = $repo->matching($criteria);
+
+    $params = [
+        'id' => $id,
+        'title' => $title,
+        'description' => $description,
+        'form_sent' => 1,
+    ];
+    $url = api_get_self().'?'.http_build_query($params);
+
+    $form->setDefaults($params);
+
+    $questionCount = count($questions);
+
+    $paginator = new Knp\Component\Pager\Paginator();
+    $pagination = $paginator->paginate($questions, $page, $length);
+    $pagination->setItemNumberPerPage($length);
+    $pagination->setCurrentPageNumber($page);
+    $pagination->renderer = function ($data) use ($url) {
+        $render = '<ul class="pagination">';
+        for ($i = 1; $i <= $data['pageCount']; $i++) {
+            $page = (int) $i;
+            $pageContent = '<li><a href="'.$url.'&page='.$page.'">'.$page.'</a></li>';
+            if ($data['current'] == $page) {
+                $pageContent = '<li class="active"><a href="#" >'.$page.'</a></li>';
+            }
+            $render .= $pageContent;
+        }
+        $render .= '</ul>';
+
+        return $render;
+    };
+
+    /** @var CQuizQuestion $question */
+    if ($pagination) {
+        foreach ($pagination as $question) {
             // Creating empty exercise
             $exercise = new Exercise();
             $exercise->course_id = $question->getCId();
             ob_start();
             ExerciseLib::showQuestion(
                 $exercise,
-                $id,
+                $question->getId(),
                 false,
                 null,
                 null,
@@ -46,23 +102,23 @@ if ($form->validate()) {
                 true,
                 true
             );
-
-            $questionContent = "<h3>#".$question->getIid()."</h3>";
-            $questionContent .= "<h4>".Security::remove_XSS($question->getQuestion())."</h4>";
-            $questionContent .= "<p>".Security::remove_XSS($question->getDescription())."</p>";
-            $questionContent .= ob_get_contents();
-
+            $question->questionData = ob_get_contents();
             ob_end_clean();
-        } else {
-            Display::addFlash(Display::return_message(get_lang('NotFound')));
-            header('Location:' .api_get_self());
-            exit;
         }
+    } else {
+        /*Display::addFlash(Display::return_message(get_lang('NotFound')));
+        header('Location:' .api_get_self());
+        exit;*/
     }
 }
 
-$tpl = new Template(get_lang('Questions'));
-$content = " $formContent $questionContent ";
+$formContent = $form->returnForm();
 
-$tpl->assign('content', $content);
-$tpl->display_one_col_template();
+$tpl = new Template(get_lang('Questions'));
+$tpl->assign('form', $formContent);
+$tpl->assign('pagination', $pagination);
+$tpl->assign('pagination_length', $length);
+$tpl->assign('question_count', $questionCount);
+
+$layout = $tpl->get_template('admin/questions.tpl');
+$tpl->display($layout);

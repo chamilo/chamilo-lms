@@ -50,7 +50,7 @@ class ExerciseLib
         // Change false to true in the following line to enable answer hinting
         $debug_mark_answer = $show_answers;
         // Reads question information
-        if (!$objQuestionTmp = Question::read($questionId)) {
+        if (!$objQuestionTmp = Question::read($questionId, $course_id)) {
             // Question not found
             return false;
         }
@@ -99,7 +99,7 @@ class ExerciseLib
 
             echo '<div class="question_options">';
             // construction of the Answer object (also gets all answers details)
-            $objAnswerTmp = new Answer($questionId, api_get_course_int_id(), $exercise);
+            $objAnswerTmp = new Answer($questionId, $course_id, $exercise);
             $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
             $quizQuestionOptions = Question::readQuestionOption($questionId, $course_id);
 

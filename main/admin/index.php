@@ -199,6 +199,7 @@ if (api_is_platform_admin()) {
     }
 
     $items[] = ['url' => 'extra_fields.php?type=course', 'label' => get_lang('ManageCourseFields')];
+    $items[] = ['url' => 'questions.php', 'label' => get_lang('Questions')];
 
     $blocks['courses']['items'] = $items;
     $blocks['courses']['extra'] = null;

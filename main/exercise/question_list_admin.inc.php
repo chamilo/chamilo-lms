@@ -173,16 +173,16 @@ if (!$inATest) {
         $showPagination = api_get_configuration_value('show_question_pagination');
         if (!empty($showPagination) && $nbrQuestions > $showPagination) {
             $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
-            $lenght = api_get_configuration_value('question_pagination_lenght');
+            $length = api_get_configuration_value('question_pagination_length');
             $url = api_get_self().'?'.api_get_cidreq();
             // Use pagination for exercise with more than 200 questions.
             $alloQuestionOrdering = false;
-            $start = ($page - 1) * $lenght;
-            $questionList = $objExercise->getQuestionForTeacher($start, $lenght);
+            $start = ($page - 1) * $length;
+            $questionList = $objExercise->getQuestionForTeacher($start, $length);
             $paginator = new Knp\Component\Pager\Paginator();
             $pagination = $paginator->paginate([]);
             $pagination->setTotalItemCount($nbrQuestions);
-            $pagination->setItemNumberPerPage($lenght);
+            $pagination->setItemNumberPerPage($length);
             $pagination->setCurrentPageNumber($page);
             $pagination->renderer = function ($data) use ($url) {
                 $render = '<ul class="pagination">';

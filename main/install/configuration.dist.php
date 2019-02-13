@@ -1084,7 +1084,7 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 
 // Number of questions to show in every page
 // Option only when building an exercise as a teacher
-// $_configuration['question_pagination_lenght'] = 20;
+// $_configuration['question_pagination_length'] = 20;
 
 // Teachers cannot delete an exercise/questions, change exercise visibility, download to qti, clean results
 // $_configuration['limit_exercise_teacher_access'] = false;

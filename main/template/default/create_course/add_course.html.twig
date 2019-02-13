@@ -1,45 +1,87 @@
 {% autoescape false %}
+    <script type="text/javascript">
+        $(function () {
+            var $inputTitle = $("#add_course_title");
+            $inputTitle.keyup(function () {
+                var value = $(this).val();
+                var titleDefault = "{{ "Titulo del curso"|trans }}";
+                if(value.length > 0){
+                    $("#title_course").text(value);
+                    $("#title_course_card").text(value);
+                } else {
+                    $("#title_course").text(titleDefault);
+                    $("#title_course_card").text(titleDefault);
+                }
+            }).keyup();
+        });
+
+    </script>
+    {% set name %}
+        {{ app.user.firstname }} {{ app.user.lastname }}
+    {% endset %}
 <div class="row">
     <div class="col-md-8">
         {{ form }}
     </div>
     <div class="col-md-4">
-        <div class="card">
-            <div class="card-header">
-                {{ 'Preview of the course'|trans }}
-            </div>
+        <div id="preview_course" class="card" style="display: none;">
             <div class="card-body">
-                <div id="view-course" class="card card-course-classic ">
+                <div id="view-classic-course" class="card card-view card-course-classic ">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-5">
-                                <a href="#">
-                                    <img src="http://chamilo2.test/../courses/INTRODUCCIONLAREALIDADAUMENTADA/course-pic.png" class="img-fluid">
-                                </a>
+                                <div class="doc-preview">
+                                    <div class="img-preview preview-sm">
+
+                                    </div>
+                                    <div class="img-box" style="display: none;">
+                                        <img id="image-cut-sm" src="" class="preview-sm" >
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-7">
                                 <div class="card-inside">
-                                    <div class="float-right">
-                                        <a class="btn btn-outline-primary btn-sm" href="#">
-                                            <i class="fas fa-pencil-alt"></i>
-                                        </a>
-                                    </div>
-                                    <h5 class="title">
-                                        <a href="#">
-                                            Titulo del curso
-                                        </a>
+                                    <h5 id="title_course" class="title">
                                     </h5>
                                     <div class="list-teachers">
                                         <i class="fas fa-user-tie"></i>
-                                        <a href="#">
-                                            Joe Doe
-                                        </a>
+                                        <span class="name">
+                                            {{ name }}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <div id="view-card-course" class="card card-view card-course mt-3 mb-3">
+                    <div class="card-image">
+                        <div class="doc-preview">
+                            <div class="img-preview preview-lg">
+
+                            </div>
+                            <div class="img-box" style="display: none;">
+                                <img id="image-cut-lg" src="" class="preview-lg" >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-3">
+
+                        <div class="card-title">
+                            <h5 id="title_course_card" class="title">
+                            </h5>
+                        </div>
+                        <div class="card-author mb-2">
+                            <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                            <span class="name">
+                                {{ name }}
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

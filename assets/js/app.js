@@ -271,6 +271,10 @@ $(function() {
         var id = $(this).attr('id') + '_options';
         var button = $(this);
         $("#" + id).toggle();
+        if($("#preview_course").length >= 0){
+            $("#preview_course").toggle();
+        }
+
     });
 
     /**

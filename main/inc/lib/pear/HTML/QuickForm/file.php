@@ -291,6 +291,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                     .cropper({
                         '.$ratio.'
                         responsive : true,
+                        preview: \'.img-preview\',
                         center : false,
                         guides : false,
                         movable: false,
@@ -308,6 +309,10 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                 var inputFile = this,
                     file = inputFile.files[0],
                     fileReader = new FileReader();
+                    
+                    $(".img-box").hide();
+                    $(".img-preview").show();
+
 
                 if (!isValidType(file)) {
                     $formGroup.hide();
@@ -335,13 +340,23 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
             });
 
             $cropButton.on(\'click\', function () {
+                var $imageLarge = $("#image-cut-lg");
+                var $imageSmall = $("#image-cut-sm");
                 var canvas = $image.cropper(\'getCroppedCanvas\'),
                     dataUrl = canvas.toDataURL();
-
+                
+                $(".img-box").show();
+                $(".img-preview").hide();
+                
+                
                 $image.attr(\'src\', dataUrl).cropper(\'destroy\').off(\'load\', imageCropper);
+                $imageSmall.attr(\'src\', dataUrl).cropper(\'destroy\').off(\'load\', imageCropper);
+                $imageLarge.attr(\'src\', dataUrl).cropper(\'destroy\').off(\'load\', imageCropper);
                 $(\'[name="'.$id.'_crop_image_base_64"]\').val(dataUrl);
                 $cropButton.hide();
             });
+                    
+                    
         });
         </script>';
     }

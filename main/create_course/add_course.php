@@ -74,26 +74,14 @@ $form = new FormValidator('add_course');
 $form->addElement('header', $tool_name);
 
 // Title
-/*$form->addElement(
-    'text',
-    'title',
-    [
-        get_lang('CourseName'),
-        get_lang('Ex'),
-    ],
-    [
-        'id' => 'title',
-    ]
-);*/
 $form->addText(
     'title',
     [
-        get_lang('CourseName'),
-        get_lang('For example: Innovation management'),
+        get_lang('Course Name'),
+        get_lang('Write a short and striking course name, For example: Innovation Management'),
     ],
     true);
 $form->applyFilter('title', 'html_filter');
-//$form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
 
 $form->addButtonAdvancedSettings('advanced_params');
 $form->addElement(

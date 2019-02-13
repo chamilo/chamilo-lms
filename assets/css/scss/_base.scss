@@ -744,23 +744,34 @@ hr {
 /* COURSE PREVIEW */
 
 .card-view{
-
+  .category {
+    position: absolute;
+    border-radius: 10px;
+    background-color: #FFCC00;
+    color: #000000;
+    font-weight: bold;
+    padding: 0.2rem 0.8rem;
+    top: -0.8rem;
+    left: 0.5rem;
+    font-size: 12px;
+    z-index: 1;
+  }
   &.card-course-classic{
     width: 425px;
   }
   &.card-course{
-    width: 340px;
+    width: 328px;
   }
   margin: auto;
   .doc-preview{
     .preview-lg{
-      width: 350px;
-      height: 190px;
+      width: 328px;
+      height: 185px;
       background-color: #000000;
     }
     .preview-sm{
       width: 160px;
-      height: 93px;
+      height: 90px;
       background-color: #000000;
     }
     .img-preview{

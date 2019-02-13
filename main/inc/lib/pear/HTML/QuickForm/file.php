@@ -261,14 +261,14 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
             $ratio = '';
             $scalable = $param['scalable'];
         }
-        
+
         return '<script>
         $(document).ready(function() {
-            var $inputFile = $(\'#'.$id.'\'),
-                $image = $(\'#'.$id.'_preview_image\'),
-                $input = $(\'[name="'.$id.'_crop_result"]\'),
-                $cropButton = $(\'#'.$id.'_crop_button\'),
-                $formGroup = $(\'#'.$id.'-form-group\');                
+            var $inputFile = $(\'#' . $id . '\'),
+                $image = $(\'#' . $id . '_preview_image\'),
+                $input = $(\'[name="' . $id . '_crop_result"]\'),
+                $cropButton = $(\'#' . $id . '_crop_button\'),
+                $formGroup = $(\'#' . $id . '-form-group\');                
 
             function isValidType(file) {
                 var fileTypes = [\'image/jpg\', \'image/jpeg\', \'image/gif\', \'image/png\'];
@@ -289,7 +289,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                 $image
                     .cropper(\'destroy\')
                     .cropper({
-                        '.$ratio.'
+                        ' . $ratio . '
                         responsive : true,
                         preview: \'.img-preview\',
                         center : false,
@@ -297,7 +297,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                         movable: false,
                         zoomable: false,
                         rotatable: false,
-                        scalable: '.$scalable.',
+                        scalable: ' . $scalable . ',
                         crop: function(event) {
                             // Output the result data for cropping image.
                             $input.val(event.detail.x + \',\' + event.detail.y + \',\' + event.detail.width + \',\' + event.detail.height);
@@ -320,7 +320,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
 
                     if (inputFile.setCustomValidity) {
                         inputFile.setCustomValidity(
-                            inputFile.title ? inputFile.title : \''.get_lang('OnlyImagesAllowed').'\'
+                            inputFile.title ? inputFile.title : \'' . get_lang('OnlyImagesAllowed') . '\'
                         );
                     }
 
@@ -352,7 +352,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                 $image.attr(\'src\', dataUrl).cropper(\'destroy\').off(\'load\', imageCropper);
                 $imageSmall.attr(\'src\', dataUrl).cropper(\'destroy\').off(\'load\', imageCropper);
                 $imageLarge.attr(\'src\', dataUrl).cropper(\'destroy\').off(\'load\', imageCropper);
-                $(\'[name="'.$id.'_crop_image_base_64"]\').val(dataUrl);
+                $(\'[name="' . $id . '_crop_image_base_64"]\').val(dataUrl);
                 $cropButton.hide();
             });
                     

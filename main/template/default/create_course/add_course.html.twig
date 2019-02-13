@@ -4,8 +4,8 @@
             var $inputTitle = $("#add_course_title");
             $inputTitle.keyup(function () {
                 var value = $(this).val();
-                var titleDefault = "{{ "Titulo del curso"|trans }}";
-                if(value.length > 0){
+                var titleDefault = "{{ "Course Title"|trans }}";
+                if (value.length > 0) {
                     $("#title_course").text(value);
                     $("#title_course_card").text(value);
                 } else {
@@ -13,77 +13,86 @@
                     $("#title_course_card").text(titleDefault);
                 }
             }).keyup();
-        });
 
+            $("select[name=category_code]").change(function () {
+                $(".category").show();
+                var $category = $('select[name=category_code] option:selected').html();
+                $(".category").text($category);
+            });
+        });
     </script>
     {% set name %}
         {{ app.user.firstname }} {{ app.user.lastname }}
     {% endset %}
-<div class="row">
-    <div class="col-md-8">
-        {{ form }}
-    </div>
-    <div class="col-md-4">
-        <div id="preview_course" class="card" style="display: none;">
-            <div class="card-body">
-                <div id="view-classic-course" class="card card-view card-course-classic ">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-5">
-                                <div class="doc-preview">
-                                    <div class="img-preview preview-sm">
-
+    <div class="row">
+        <div class="col-md-8">
+            {{ form }}
+        </div>
+        <div class="col-md-4">
+            <div id="preview_course" class="card" style="display: none; border: none; box-shadow: none;">
+                <div class="card-body">
+                    <div id="view-classic-course" class="card card-view card-course-classic ">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="category" style="display: none;">
                                     </div>
-                                    <div class="img-box" style="display: none;">
-                                        <img id="image-cut-sm" src="" class="preview-sm" >
+                                    <div class="doc-preview">
+                                        <div class="img-preview preview-sm">
+
+                                        </div>
+                                        <div class="img-box" style="display: none;">
+                                            <img id="image-cut-sm" src="" class="preview-sm">
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-7">
-                                <div class="card-inside">
-                                    <h5 id="title_course" class="title">
-                                    </h5>
-                                    <div class="list-teachers">
-                                        <i class="fas fa-user-tie"></i>
-                                        <span class="name">
+                                <div class="col-md-7">
+                                    <div class="card-inside">
+                                        <h5 id="title_course" class="title">
+                                        </h5>
+                                        <div class="list-teachers">
+                                            <i class="fas fa-user-tie"></i>
+                                            <span class="name">
                                             {{ name }}
                                         </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div id="view-card-course" class="card card-view card-course mt-3 mb-3">
-                    <div class="card-image">
-                        <div class="doc-preview">
-                            <div class="img-preview preview-lg">
-
+                    <div id="view-card-course" class="card card-view card-course mt-5 mb-3">
+                        <div class="card-image">
+                            <div class="category" style="display: none;">
                             </div>
-                            <div class="img-box" style="display: none;">
-                                <img id="image-cut-lg" src="" class="preview-lg" >
+                            <div class="doc-preview">
+                                <div class="img-preview preview-lg">
+
+                                </div>
+                                <div class="img-box" style="display: none;">
+                                    <img id="image-cut-lg" src="" class="preview-lg">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="card-body p-3">
+                        <div class="card-body p-3">
 
-                        <div class="card-title">
-                            <h5 id="title_course_card" class="title">
-                            </h5>
-                        </div>
-                        <div class="card-author mb-2">
-                            <i class="fa fa-graduation-cap" aria-hidden="true"></i>
-                            <span class="name">
+                            <div class="card-title">
+                                <h5 id="title_course_card" class="title">
+                                </h5>
+                            </div>
+                            <div class="card-author mb-2">
+                                <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                                <span class="name">
                                 {{ name }}
                             </span>
+                            </div>
+
                         </div>
-
                     </div>
-                </div>
 
+                </div>
             </div>
         </div>
     </div>
-</div>
 {% endautoescape %}

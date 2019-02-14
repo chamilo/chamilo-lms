@@ -201,7 +201,7 @@ if (count($sessionList) > 0) {
 }
 
 $social_group_block = Display::panelCollapse(
-    get_lang('MyGroups'),
+    get_lang('MyCommunities'),
     $social_group_block,
     'sm-groups',
     null,

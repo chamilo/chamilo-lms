@@ -1,4 +1,7 @@
 {% autoescape false %}
+
+    <h1>{{ "Welcome to your website Chamilo" | trans }}</h1>
+
     {{ "HelloXAsYouCanSeeYourCourseListIsEmpty" | trans | format(app.user.completeName) }}
 
     {#{% if count_courses == 0 %}

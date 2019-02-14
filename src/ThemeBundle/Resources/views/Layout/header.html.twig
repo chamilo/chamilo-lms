@@ -1,6 +1,19 @@
 {% autoescape false %}
     <script type="text/javascript">
+        $(window).resize(function(){
+            var widthScreen = $(window).width();
+            if(widthScreen >= 1400){
+                $('body').addClass('sidebar-lg-show');
+            } else {
+                $('body').removeClass('sidebar-lg-show');
+            }
+        });
         $(document).ready(function() {
+            var widthScreen = $(window).width();
+            if(widthScreen >= 1400){
+                $('body').addClass('sidebar-lg-show');
+            }
+
             /**
              * Notifications Systems
              */
@@ -109,7 +122,7 @@
                 {{ language_form }}
             </li>
         {% endif %}
-        <li class="nav-item dropdown">
+        <li class="nav-item d-md-down-none">
             <a id="list_notifications_friends" class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                 <i class="far fa-bell"></i>
                 <span id="notifications-social" class="badge badge-pill badge-danger"></span>
@@ -158,9 +171,9 @@
                 {% endif %}
             {% endset %}
 
-            <a class="nav-link nav-link-user dropdown-toggle d-none d-sm-inline-block mr-2" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+            <a class="nav-link nav-link-user dropdown-toggle d-sm-inline-block mr-2" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                 {{ avatar }}
-                <span>{{ app.user.firstname }} {{ app.user.lastname }}</span>
+                <span class="d-none">{{ app.user.firstname }} {{ app.user.lastname }}</span>
             </a>
 
             <div class="dropdown-menu dropdown-menu-right">
@@ -198,14 +211,14 @@
         </li>
     {% else %}
 
-        <li class="nav-item d-md-down-none">
-            <a class="btn btn-light btn-sm mr-2" href="{{ url('legacy_main', { 'name' : 'auth/inscription.php' }) }}">
+        <li class="nav-item">
+            <a class="btn btn-link" href="{{ url('legacy_main', { 'name' : 'auth/inscription.php' }) }}">
                 <i class="fas fa-pencil-alt"></i>
                 {{ "Register"|trans }}
             </a>
         </li>
-        <li class="nav-item d-md-down-none">
-            <a class="btn btn-light btn-sm mr-2" href="{{ url('legacy_main', { 'name' : '../public/login' }) }}">
+        <li class="nav-item">
+            <a class="btn btn-link" href="{{ url('legacy_main', { 'name' : '../public/login' }) }}">
                 <i class="fas fa-sign-in-alt"></i>
                 {{ "Sign in"|trans }}
             </a>

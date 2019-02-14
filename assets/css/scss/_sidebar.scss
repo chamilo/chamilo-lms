@@ -4,22 +4,10 @@
 
 .sidebar {
   background-color: $sidebar-background;
-  .nav-dropdown-items{
-    background: #ffffff;
-    .nav-item{
-      border-right: 1px solid #cdcdcd;
-      .nav-link{
-        i{
-          color: #2d3b48 !important;
-        }
-        color: #2d3b48 !important;
-      }
-    }
-  }
   .nav-dropdown{
     &.open{
       .nav-link{
-        color: #2d3b48;
+        color: $sidebar-link;
       }
     }
   }
@@ -37,10 +25,10 @@
     }
     &.current{
       i{
-        color: $sidebar-link-hover;
+        color: $sidebar-link;
       }
       .nav-link{
-        color: $sidebar-link-hover;
+        color: $sidebar-link-item;
       }
       background-color: $sidebar-current;
     }

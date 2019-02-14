@@ -6,6 +6,7 @@
             {% include '@ChamiloTheme/Layout/welcome_to_course.html.twig' %}
         {% endif %}
 
+        {% if html_courses is not empty or html_sessions is not empty %}
         <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
                 <a class="nav-item nav-link active" id="nav-courses-tab" data-toggle="tab" href="#nav-courses" role="tab" aria-controls="nav-courses" aria-selected="true">
@@ -24,6 +25,7 @@
                 {{ html_sessions }}
             </div>
         </div>
+        {% endif %}
 
     {% endautoescape %}
 {% endblock %}

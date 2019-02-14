@@ -17,10 +17,9 @@ switch ($action) {
             echo '';
             break;
         }
+        $relation_type = USER_RELATION_TYPE_UNKNOWN; //Unknown contact
         if (isset($_GET['is_my_friend'])) {
             $relation_type = USER_RELATION_TYPE_FRIEND; //My friend
-        } else {
-            $relation_type = USER_RELATION_TYPE_UNKNOWN; //Unknown contact
         }
 
         if (isset($_GET['friend_id'])) {
@@ -41,11 +40,9 @@ switch ($action) {
             echo '';
             break;
         }
-
+        $relation_type = USER_RELATION_TYPE_UNKNOWN; //Contact unknown
         if (isset($_GET['is_my_friend'])) {
             $relation_type = USER_RELATION_TYPE_FRIEND; //my friend
-        } else {
-            $relation_type = USER_RELATION_TYPE_UNKNOWN; //Contact unknown
         }
         if (isset($_GET['denied_friend_id'])) {
             SocialManager::invitation_denied($_GET['denied_friend_id'], $current_user_id);
@@ -86,7 +83,7 @@ switch ($action) {
         $number_of_images = 8;
         $number_friends = count($friends);
         if ($number_friends != 0) {
-            $number_loop = ($number_friends / $number_of_images);
+            $number_loop = $number_friends / $number_of_images;
             $loop_friends = ceil($number_loop);
             $j = 0;
             for ($k = 0; $k < $loop_friends; $k++) {
@@ -215,7 +212,6 @@ switch ($action) {
         }
 
         $userId = api_get_user_id();
-
         $messageInfo = MessageManager::get_message_by_id($messageId);
         if (!empty($messageInfo)) {
             $comment = isset($_REQUEST['comment']) ? $_REQUEST['comment'] : '';
@@ -277,7 +273,13 @@ switch ($action) {
         $userId = isset($_REQUEST['u']) ? (int) $_REQUEST['u'] : api_get_user_id();
         $html = '';
         if ($userId == api_get_user_id()) {
-            $html = SocialManager::getMyWallMessages($userId, $start, $length);
+            $threadList = SocialManager::getThreadList();
+            $threadIdList = [];
+            if (!empty($threadList)) {
+                $threadIdList = array_column($threadList, 'id');
+            }
+
+            $html = SocialManager::getMyWallMessages($userId, $start, $length, $threadIdList);
             $html = $html['posts'];
         } else {
             $messages = SocialManager::getWallMessages(

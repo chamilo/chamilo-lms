@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
 use Zend\Feed\Reader\Entry\Rss;
 use Zend\Feed\Reader\Reader;
 
@@ -1589,15 +1590,16 @@ class SocialManager extends UserManager
         $startDate = '',
         $start = 0,
         $length = 10,
-        $getCount = false
+        $getCount = false,
+        $threadList = []
     ) {
         $tblMessage = Database::get_main_table(TABLE_MESSAGE);
         $tblMessageAttachment = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
 
-        $parentId = (int)$parentId;
-        $userId = (int)$userId;
-        $start = (int)$start;
-        $length = (int)$length;
+        $parentId = (int) $parentId;
+        $userId = (int) $userId;
+        $start = (int) $start;
+        $length = (int) $length;
         $startDate = Database::escape_string($startDate);
 
         $select = " SELECT
@@ -1609,6 +1611,9 @@ class SocialManager extends UserManager
                     parent_id,
                     msg_status,
                     group_id,
+                    '' as forum_id,
+                    '' as thread_id,
+                    '' as c_id,                    
                     (
                         SELECT ma.path FROM $tblMessageAttachment ma
                         WHERE  ma.message_id = tm.id 
@@ -1616,16 +1621,17 @@ class SocialManager extends UserManager
                     (
                         SELECT ma.filename FROM $tblMessageAttachment ma 
                         WHERE ma.message_id = tm.id 
-                    ) as filename ";
+                    ) as filename
+                  ";
 
         if ($getCount) {
             $select = ' SELECT count(id) count ';
         }
 
         $sql = "$select                    
-                FROM $tblMessage tm
+                FROM $tblMessage tm                
                 WHERE 
-                    msg_status <> " . MESSAGE_STATUS_WALL_DELETE . ' AND ';
+                    msg_status <> ".MESSAGE_STATUS_WALL_DELETE.' AND ';
 
         // Date filter
         if (!empty($startDate)) {
@@ -1633,9 +1639,9 @@ class SocialManager extends UserManager
         }
 
         // My own posts
-        $userReceiverCondition = '  (
+        $userReceiverCondition = ' (
             user_receiver_id = ' . $userId . ' AND 
-            msg_status IN (' . MESSAGE_STATUS_WALL_POST . ', ' . MESSAGE_STATUS_WALL . ') AND
+            msg_status IN ('.MESSAGE_STATUS_WALL_POST.', '.MESSAGE_STATUS_WALL.') AND
             parent_id = ' . $parentId . '
         )';
 
@@ -1662,13 +1668,13 @@ class SocialManager extends UserManager
                 $groupId = implode("','", $groupId);
                 $groupCondition = " OR ( group_id IN ('$groupId') ";
             } else {
-                $groupId = (int)$groupId;
+                $groupId = (int) $groupId;
                 $groupCondition = " OR ( group_id = '$groupId' ";
             }
-            $groupCondition .= ' AND msg_status IN (' . MESSAGE_STATUS_NEW . ', ' . MESSAGE_STATUS_UNREAD . ')) ';
+            $groupCondition .= ' AND msg_status IN ('.MESSAGE_STATUS_NEW.', '.MESSAGE_STATUS_UNREAD.')) ';
         }
-        $friendCondition = '';
 
+        $friendCondition = '';
         // Get my friend posts
         if (!empty($friendId)) {
             if (is_array($friendId)) {
@@ -1676,21 +1682,54 @@ class SocialManager extends UserManager
                 $friendId = implode("','", $friendId);
                 $friendCondition = " OR ( user_receiver_id IN ('$friendId') ";
             } else {
-                $friendId = (int)$friendId;
+                $friendId = (int) $friendId;
                 $friendCondition = " OR ( user_receiver_id = '$friendId' ";
             }
-            $friendCondition .= ' AND msg_status IN (' . MESSAGE_STATUS_WALL_POST . ') AND parent_id = 0) ';
+            $friendCondition .= ' AND msg_status IN ('.MESSAGE_STATUS_WALL_POST.') AND parent_id = 0) ';
         }
 
         if (!empty($groupCondition) || !empty($friendCondition)) {
             $sql .= " $groupCondition $friendCondition ";
         }
 
+        if (!empty($threadList)) {
+            if ($getCount) {
+                $select = ' SELECT count(iid) count ';
+            } else {
+                $select = " SELECT 
+                                iid,
+                                poster_id,
+                                '' as user_receiver_id,
+                                post_date,
+                                post_text,
+                                '' as parent_id,
+                                ".MESSAGE_STATUS_FORUM.",
+                                '' as group_id,
+                                forum_id,
+                                thread_id,
+                                c_id,
+                                '' as path,
+                                '' as filename                             
+                                ";
+            }
+
+            $threadList = array_map('intval', $threadList);
+            $threadList = implode("','", $threadList);
+            $condition = " thread_id IN ('$threadList') ";
+            $sql .= "                
+                UNION (
+                    $select
+                    FROM c_forum_post  
+                    WHERE $condition                                         
+                )
+                ";
+        }
+
         if ($getCount) {
             $res = Database::query($sql);
             $row = Database::fetch_array($res);
 
-            return (int)$row['count'];
+            return (int) $row['count'];
         }
 
         $sql .= ' ORDER BY send_date DESC ';
@@ -1698,10 +1737,14 @@ class SocialManager extends UserManager
 
         $messages = [];
         $res = Database::query($sql);
+        $em = Database::getManager();
         if (Database::num_rows($res) > 0) {
+            $repo = $em->getRepository('ChamiloCourseBundle:CForumPost');
+            $repoThread = $em->getRepository('ChamiloCourseBundle:CForumThread');
             $groups = [];
+            $forums = [];
             $userGroup = new UserGroup();
-            $urlGroup = api_get_path(WEB_CODE_PATH) . 'social/group_view.php?id=';
+            $urlGroup = api_get_path(WEB_CODE_PATH).'social/group_view.php?id=';
             while ($row = Database::fetch_array($res, 'ASSOC')) {
                 $row['group_info'] = [];
                 if (!empty($row['group_id'])) {
@@ -1712,9 +1755,31 @@ class SocialManager extends UserManager
                         $row['group_info'] = $group;
                     } else {
                         $row['group_info'] = $groups[$row['group_id']];
-
                     }
                 }
+
+                // forums
+                $row['post_title'] = '';
+                $row['forum_title'] = '';
+                $row['thread_url'] = '';
+                if ($row['msg_status'] == MESSAGE_STATUS_FORUM) {
+                    /** @var \Chamilo\CourseBundle\Entity\CForumPost $post */
+                    $post = $repo->find($row['id']);
+                    /** @var \Chamilo\CourseBundle\Entity\CForumThread $thread */
+                    $thread = $repoThread->find($row['thread_id']);
+                    if ($post && $thread) {
+                        $courseInfo = api_get_course_info_by_id($post->getCId());
+                        $row['post_title'] = $post->getForumId();
+                        $row['forum_title'] = $thread->getThreadTitle();
+                        $row['thread_url'] = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.http_build_query([
+                            'cidReq' => $courseInfo['code'],
+                            'forum' => $post->getForumId(),
+                            'thread' => $post->getThreadId(),
+                            'post_id' => $post->getIid()
+                        ]).'#post_id_'.$post->getIid();
+                    }
+                }
+
                 $messages[] = $row;
             }
         }
@@ -1753,17 +1818,17 @@ class SocialManager extends UserManager
                 $users[$userIdLoop] = api_get_user_info($userIdLoop);
             }
             $media = self::processPostComment($message, $users);
-
             $formattedList .= $media;
         }
+
         $formattedList .= '</div>';
         $formattedList .= '<div class="mediapost-form">';
-        $formattedList .= '<form id = "form_comment_' . $messageId . '" name="post_comment" method="POST">
+        $formattedList .= '<form id = "form_comment_'.$messageId.'" name="post_comment" method="POST">
                 <label for="comment" class="hide">' . get_lang('SocialWriteNewComment') . '</label>
-                <input type="hidden" name = "messageId" value="' . $messageId . '" />
-                <textarea placeholder="' . get_lang('SocialWriteNewComment') . '" name="comment" rows="1" style="width:80%;" ></textarea>
-                <a onclick="submitComment(' . $messageId . ');" href="javascript:void(0);" name="social_wall_new_msg_submit" class="pull-right btn btn-default">
-                    <em class="fa fa-pencil"></em> ' . get_lang('Post') . '
+                <input type="hidden" name = "messageId" value="'.$messageId.'" />
+                <textarea placeholder="'.get_lang('SocialWriteNewComment').'" name="comment" rows="1" style="width:80%;" ></textarea>
+                <a onclick="submitComment('.$messageId.');" href="javascript:void(0);" name="social_wall_new_msg_submit" class="pull-right btn btn-default">
+                    <em class="fa fa-pencil"></em> '.get_lang('Post').'
                 </a>
                 </form>';
         $formattedList .= '</div>';
@@ -1771,8 +1836,18 @@ class SocialManager extends UserManager
         return $formattedList;
     }
 
+    /**
+     * @param array $message
+     * @param array $users
+     *
+     * @return string
+     */
     public static function processPostComment($message, $users = [])
     {
+        if (empty($message)) {
+            return false;
+        }
+
         $date = Display::dateToStringAgoAndLongDate($message['send_date']);
         $currentUserId = api_get_user_id();
         $userIdLoop = $message['user_sender_id'];
@@ -1788,38 +1863,40 @@ class SocialManager extends UserManager
 
         if ($userStatus == 5) {
             if ($users[$userIdLoop]['has_certificates']) {
-                $iconStatus = '<img class="pull-left" src="' . $urlImg . 'icons/svg/ofaj_graduated.svg" width="22px" height="22px">';
+                $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/ofaj_graduated.svg" width="22px" height="22px">';
             } else {
-                $iconStatus = '<img class="pull-left" src="' . $urlImg . 'icons/svg/ofaj_student.svg" width="22px" height="22px">';
+                $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/ofaj_student.svg" width="22px" height="22px">';
             }
         } else {
             if ($userStatus == 1) {
                 if ($isAdmin) {
-                    $iconStatus = '<img class="pull-left" src="' . $urlImg . 'icons/svg/ofaj_admin.svg" width="22px" height="22px">';
+                    $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/ofaj_admin.svg" width="22px" height="22px">';
                 } else {
-                    $iconStatus = '<img class="pull-left" src="' . $urlImg . 'icons/svg/ofaj_teacher.svg" width="22px" height="22px">';
+                    $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/ofaj_teacher.svg" width="22px" height="22px">';
                 }
             }
         }
 
-
         $nameComplete = $users[$userIdLoop]['complete_name'];
-        $url = api_get_path(WEB_CODE_PATH) . 'social/profile.php?u=' . $userIdLoop;
+        $url = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$userIdLoop;
 
         $comment = '<div class="rep-post col-md-12">';
         $comment .= '<div class="col-md-2 col-xs-2 social-post-answers">';
         $comment .= '<div class="user-image pull-right">';
-        $comment .= '<a href="' . $url . '" ><img src="' . $users[$userIdLoop]['avatar'] .
-            '" alt="' . $users[$userIdLoop]['complete_name'] . '" class="avatar-thumb"></a>';
+        $comment .= '<a href="'.$url.'">
+                        <img src="'.$users[$userIdLoop]['avatar'].'" 
+                        alt="'.$users[$userIdLoop]['complete_name'].'" 
+                        class="avatar-thumb">
+                     </a>';
         $comment .= '</div>';
         $comment .= '</div>';
         $comment .= '<div class="col-md-9 col-xs-9 social-post-answers">';
         $comment .= '<div class="user-data">';
         $comment .= $iconStatus;
-        $comment .= '<div class="username">' . '<a href="' . $url . '">' . $nameComplete . '</a> 
-                        <span>' . Security::remove_XSS($message['content']) . '</span>
-                       </div>';
-        $comment .= '<div>' . $date . '</div>';
+        $comment .= '<div class="username"><a href="'.$url.'">'.$nameComplete.'</a> 
+                        <span>'.Security::remove_XSS($message['content']).'</span>
+                     </div>';
+        $comment .= '<div>'.$date.'</div>';
         $comment .= '<br />';
         $comment .= '</div>';
         $comment .= '</div>';
@@ -1840,7 +1917,6 @@ class SocialManager extends UserManager
             $comment .= '</div>';
             $comment .= '</div>';
         }
-
         $comment .= '</div>';
 
         return $comment;
@@ -1858,9 +1934,9 @@ class SocialManager extends UserManager
 
         $list = [];
         if ($files) {
-            $downloadUrl = api_get_path(WEB_CODE_PATH) . 'social/download.php?message_id=' . $messageId;
+            $downloadUrl = api_get_path(WEB_CODE_PATH).'social/download.php?message_id='.$messageId;
             foreach ($files as $row_file) {
-                $url = $downloadUrl . '&attachment_id=' . $row_file['id'];
+                $url = $downloadUrl.'&attachment_id='.$row_file['id'];
                 $display = Display::fileHtmlGuesser($row_file['filename'], $url);
                 $list[] = $display;
             }
@@ -1923,7 +1999,7 @@ class SocialManager extends UserManager
     }
 
     /**
-     * get html data with OpenGrap passing the Url.
+     * get html data with OpenGrap passing the URL.
      *
      * @param $link url
      *
@@ -2343,7 +2419,7 @@ class SocialManager extends UserManager
      *
      * @return array
      */
-    public static function getMyWallMessages($userId, $start = 0, $length = 10)
+    public static function getMyWallMessages($userId, $start = 0, $length = 10, $threadList = [])
     {
         $userGroup = new UserGroup();
         $groups = $userGroup->get_groups_by_user($userId);
@@ -2365,10 +2441,12 @@ class SocialManager extends UserManager
             $friendList,
             '',
             $start,
-            $length
+            $length,
+            false,
+            $threadList
         );
 
-        $countPost = self::getCountWallMessagesByUser($userId, $groupList, $friendList);
+        $countPost = self::getCountWallMessagesByUser($userId, $groupList, $friendList, $threadList);
         $messages = self::formatWallMessages($messages);
 
         $html = '';
@@ -2403,7 +2481,7 @@ class SocialManager extends UserManager
      *
      * @return int
      */
-    public static function getCountWallMessagesByUser($userId, $groupList = [], $friendList = [])
+    public static function getCountWallMessagesByUser($userId, $groupList = [], $friendList = [], $threadList = [])
     {
         $count = self::getWallMessages(
             $userId,
@@ -2413,7 +2491,8 @@ class SocialManager extends UserManager
             '',
             0,
             0,
-            true
+            true,
+            $threadList
         );
 
         return $count;
@@ -2482,49 +2561,53 @@ class SocialManager extends UserManager
     {
         $currentUserId = api_get_user_id();
         $iconStatus = null;
-        $authorId = (int)$authorInfo['user_id'];
-        $receiverId = (int)$receiverInfo['user_id'];
+        $authorId = (int) $authorInfo['user_id'];
+        $receiverId = (int) $receiverInfo['user_id'];
         $userStatus = $authorInfo['status'];
         $urlImg = api_get_path(WEB_IMG_PATH);
         $isAdmin = self::is_admin($authorId);
 
         if ($userStatus == 5) {
             if ($authorInfo['has_certificates']) {
-                $iconStatus = '<img class="pull-left" src="' . $urlImg . 'icons/svg/ofaj_graduated.svg" width="22px" height="22px">';
+                $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/ofaj_graduated.svg" width="22px" height="22px">';
             } else {
-                $iconStatus = '<img class="pull-left" src="' . $urlImg . 'icons/svg/ofaj_student.svg" width="22px" height="22px">';
+                $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/ofaj_student.svg" width="22px" height="22px">';
             }
         } else {
             if ($userStatus == 1) {
                 if ($isAdmin) {
-                    $iconStatus = '<img class="pull-left" src="' . $urlImg . 'icons/svg/ofaj_admin.svg" width="22px" height="22px">';
+                    $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/ofaj_admin.svg" width="22px" height="22px">';
                 } else {
-                    $iconStatus = '<img class="pull-left" src="' . $urlImg . 'icons/svg/ofaj_teacher.svg" width="22px" height="22px">';
+                    $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/ofaj_teacher.svg" width="22px" height="22px">';
                 }
             }
         }
 
-
         $date = Display::dateToStringAgoAndLongDate($message['send_date']);
         $avatarAuthor = $authorInfo['avatar'];
-        $urlAuthor = api_get_path(WEB_CODE_PATH) . 'social/profile.php?u=' . $authorId;
+        $urlAuthor = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$authorId;
         $nameCompleteAuthor = $authorInfo['complete_name'];
 
-        $urlReceiver = api_get_path(WEB_CODE_PATH) . 'social/profile.php?u=' . $receiverId;
+        $urlReceiver = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$receiverId;
         $nameCompleteReceiver = $receiverInfo['complete_name'];
 
         $htmlReceiver = '';
         if ($authorId !== $receiverId) {
-            $htmlReceiver = ' > <a href="' . $urlReceiver . '">' . $nameCompleteReceiver . '</a> ';
+            $htmlReceiver = ' > <a href="'.$urlReceiver.'">'.$nameCompleteReceiver.'</a> ';
         }
 
         if (!empty($message['group_info'])) {
-            $htmlReceiver = ' > <a href="' . $message['group_info']['url'] . '">' . $message['group_info']['name'] . '</a> ';
+            $htmlReceiver = ' > <a href="'.$message['group_info']['url'].'">'.$message['group_info']['name'].'</a> ';
+        }
+        $canEdit = ($currentUserId == $authorInfo['user_id'] || $currentUserId == $receiverInfo['user_id']) && empty($message['group_info']);
+
+        if (!empty($message['thread_id'])) {
+            $htmlReceiver = ' > <a href="'.$message['thread_url'].'">'.$message['forum_title'].'</a> ';
+            $canEdit = false;
         }
 
         $postAttachment = self::getPostAttachment($message);
 
-        $canEdit = ($currentUserId == $authorInfo['user_id'] || $currentUserId == $receiverInfo['user_id']) && empty($message['group_info']);
         $html = '';
         $html .= '<div class="top-mediapost">';
         if ($canEdit) {
@@ -2543,19 +2626,19 @@ class SocialManager extends UserManager
         }
 
         $html .= '<div class="user-image" >';
-        $html .= '<a href="' . $urlAuthor . '">
-                    <img class="avatar-thumb" src="' . $avatarAuthor . '" alt="' . $nameCompleteAuthor . '"></a>';
+        $html .= '<a href="'.$urlAuthor.'">
+                    <img class="avatar-thumb" src="'.$avatarAuthor.'" alt="'.$nameCompleteAuthor.'"></a>';
         $html .= '</div>';
         $html .= '<div class="user-data">';
         $html .= $iconStatus;
-        $html .= '<div class="username"><a href="' . $urlAuthor . '">' . $nameCompleteAuthor . '</a>' . $htmlReceiver . '</div>';
-        $html .= '<div>' . $date . '</div>';
+        $html .= '<div class="username"><a href="'.$urlAuthor.'">'.$nameCompleteAuthor.'</a>'.$htmlReceiver.'</div>';
+        $html .= '<div>'.$date.'</div>';
         $html .= '</div>';
         $html .= '<div class="msg-content">';
         $html .= '<div class="post-attachment" >';
         $html .= $postAttachment;
         $html .= '</div>';
-        $html .= '<p>' . Security::remove_XSS($message['content']) . '</p>';
+        $html .= '<p>'.Security::remove_XSS($message['content']).'</p>';
         $html .= '</div>';
         $html .= '</div>'; // end mediaPost
 
@@ -2980,5 +3063,56 @@ class SocialManager extends UserManager
         }
 
         return $socialAutoExtendLink;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getThreadList()
+    {
+        $forumCourseId = api_get_configuration_value('global_forums_course_id');
+
+        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
+
+        $threads = [];
+        if (!empty($forumCourseId)) {
+            $courseInfo = api_get_course_info_by_id($forumCourseId);
+            getNotificationsPerUser(api_get_user_id(), true, $forumCourseId);
+            $notification = Session::read('forum_notification');
+            Session::erase('forum_notification');
+
+            $threadUrlBase = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.http_build_query([
+                'cidReq' => $courseInfo['code']
+            ]).'&';
+            if (isset($notification['thread']) && !empty($notification['thread'])) {
+                $threadList = array_filter(array_unique($notification['thread']));
+                $em = Database::getManager();
+                $repo = $em->getRepository('ChamiloCourseBundle:CForumThread');
+                foreach ($threadList as $threadId) {
+                    /** @var \Chamilo\CourseBundle\Entity\CForumThread $thread */
+                    $thread = $repo->find($threadId);
+                    if ($thread) {
+                        $threadUrl = $threadUrlBase.http_build_query([
+                            'forum' => $thread->getForumId(),
+                            'thread' => $thread->getIid(),
+                        ]);
+                        $threads[] = [
+                            'id' => $threadId,
+                            'url' => Display::url(
+                                $thread->getThreadTitle(),
+                                $threadUrl
+                            ),
+                            'name' => Display::url(
+                                $thread->getThreadTitle(),
+                                $threadUrl
+                            ),
+                            'description' => '',
+                        ];
+                    }
+                }
+            }
+        }
+
+        return $threads;
     }
 }

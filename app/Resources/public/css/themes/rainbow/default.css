@@ -2199,3 +2199,40 @@ blockquote p {
     text-align: center;
     width: 100%;
 }
+.category-title{
+    border-bottom: 1px solid #CDCDCD;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+.category-title h3{
+    font-weight: bold;
+}
+.category-forum .tools img{
+    border: 1px solid #cdcdcd;
+    padding: 2px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    margin-right: 5px;
+    width: 26px;
+}
+.category-forum .tools img:hover{
+    background-color: #cdcdcd;
+}
+.category-forum .tools .toolbar{
+    margin-top: 10px;
+}
+.category-forum .number-post img{
+    width: 32px;
+}
+.category-forum .number-post{
+    font-size: 12px;
+}
+.category-forum .panel.panel-default{
+    border: 1px solid #ddd !important;
+    padding: 10px;
+}
+.category-forum .forum-date{
+    border-bottom: 1px solid #cdcdcd;
+    margin-bottom: 10px;
+    color: #3b8dc4;
+}

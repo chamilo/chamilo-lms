@@ -542,7 +542,7 @@ $server['SERVER_PORT'] = 80;
 }
 if (isset($components['port'])) {
 $server['SERVER_PORT'] = $components['port'];
-$server['HTTP_HOST'] = $server['HTTP_HOST'].':'.$components['port'];
+$server['HTTP_HOST'] .=':'.$components['port'];
 }
 if (isset($components['user'])) {
 $server['PHP_AUTH_USER'] = $components['user'];
@@ -895,7 +895,7 @@ if ($path === $basePath = $this->getPathInfo()) {
 return'';
 }
 $sourceDirs = explode('/', isset($basePath[0]) &&'/'=== $basePath[0] ? substr($basePath, 1) : $basePath);
-$targetDirs = explode('/', isset($path[0]) &&'/'=== $path[0] ? substr($path, 1) : $path);
+$targetDirs = explode('/', substr($path, 1));
 array_pop($sourceDirs);
 $targetFile = array_pop($targetDirs);
 foreach ($sourceDirs as $i => $dir) {
@@ -988,7 +988,7 @@ public function getFormat($mimeType)
 {
 $canonicalMimeType = null;
 if (false !== $pos = strpos($mimeType,';')) {
-$canonicalMimeType = substr($mimeType, 0, $pos);
+$canonicalMimeType = trim(substr($mimeType, 0, $pos));
 }
 if (null === static::$formats) {
 static::initializeFormats();

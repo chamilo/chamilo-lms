@@ -1266,7 +1266,9 @@ EOT;
             $returnValue .= '<br />
 
             <div id="loading_div_'.$id.'" class="loading_div" style="display:none;margin-left:40%; margin-top:10px; height:50px;">
-                <div class="wobblebar-loader"></div>
+                <div id="main-spinner">
+                    <span class="spinner"></span>  
+                </div>
             </div>
             ';
         }

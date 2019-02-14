@@ -5,5 +5,7 @@ $(document).ready(function() {
 function addProgress(id)
 {
     $('#loading_div_'+id).show();
+
+    $('#preview_course_'+id).hide();
     $('#'+id).hide();
 }

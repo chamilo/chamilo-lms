@@ -423,7 +423,7 @@ if ($form->validate()) {
                     Display::url(
                         get_lang('Enter'),
                         api_get_path(WEB_PATH) . 'user_portal.php',
-                        ['class' => 'btn btn-default']
+                        ['class' => 'btn btn-primary']
                     ),
                     ['style' => 'float: left; margin:0px; padding: 0px;']
                 );

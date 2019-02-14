@@ -25,11 +25,11 @@
         {{ app.user.firstname }} {{ app.user.lastname }}
     {% endset %}
     <div class="row">
-        <div class="col-md-8">
+        <div id="column-left" class="col-md-12">
             {{ form }}
         </div>
-        <div class="col-md-4">
-            <div id="preview_course" class="card" style="display: none; border: none; box-shadow: none;">
+        <div id="column-right" class="col-md-12">
+            <div id="preview_course_add_course" class="card" style="display: none; border: none; box-shadow: none;">
                 <div class="card-body">
                     <div id="view-classic-course" class="card card-view card-course-classic ">
                         <div class="card-body">

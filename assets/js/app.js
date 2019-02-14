@@ -271,8 +271,22 @@ $(function() {
         var id = $(this).attr('id') + '_options';
         var button = $(this);
         $("#" + id).toggle();
-        if($("#preview_course").length >= 0){
-            $("#preview_course").toggle();
+
+        if($("#column-left").hasClass("col-md-12")){
+            $("#column-left").removeClass('col-md-12');
+            $("#column-right").removeClass('col-md-12');
+            $("#column-right").addClass('col-md-4');
+            $("#column-left").addClass('col-md-8');
+        }else{
+            $("#column-left").removeClass('col-md-8');
+            $("#column-right").removeClass('col-md-4');
+            $("#column-left").addClass('col-md-12');
+            $("#column-right").addClass('col-md-12');
+        };
+
+        if($("#preview_course_add_course").length >= 0){
+
+            $("#preview_course_add_course").toggle();
         }
 
     });

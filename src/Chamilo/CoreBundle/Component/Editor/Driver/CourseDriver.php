@@ -80,7 +80,7 @@ class CourseDriver extends Driver implements DriverInterface
             $courseCode = $this->connector->course['code'];
             $alias = $courseCode.' '.get_lang('Documents');
             $userId = api_get_user_id();
-
+error_log($this->getCourseDocumentSysPath());
             $config = [
                 'driver' => 'CourseDriver',
                 'path' => $this->getCourseDocumentSysPath(),
@@ -94,6 +94,27 @@ class CourseDriver extends Driver implements DriverInterface
                         'read' => false,
                         'write' => false,
                         'hidden' => true,
+                        'locked' => false,
+                    ],
+                    [
+                        'pattern' => '/^\/index.html$/',
+                        'read' => false,
+                        'write' => false,
+                        'hidden' => true,
+                        'locked' => false,
+                    ],
+                    [
+                        'pattern' => '/^\/learning_path$/', // block delete learning_path
+                        'read' => true,
+                        'write' => false,
+                        'hidden' => false,
+                        'locked' => true,
+                    ],
+                    [
+                        'pattern' => '/learning_path\/(.*)/', // allow edit/delete inside learning_path
+                        'read' => true,
+                        'write' => true,
+                        'hidden' => false,
                         'locked' => false,
                     ],
                 ],
@@ -382,6 +403,8 @@ class CourseDriver extends Driver implements DriverInterface
      */
     /*public function access($attr, $path, $data, $volume)
     {
+        error_log($path);
+        return true;
         if ($path == $this->coursePath) {
 
             return true;
@@ -407,6 +430,5 @@ class CourseDriver extends Driver implements DriverInterface
         }
 
         return false;
-
     }*/
 }

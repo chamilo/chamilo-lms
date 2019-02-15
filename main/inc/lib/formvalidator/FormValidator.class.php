@@ -1265,7 +1265,7 @@ EOT;
             // @todo improve UI
             $returnValue .= '<br />
 
-            <div id="loading_div_'.$id.'" class="loading_div" style="display:none;margin-left:40%; margin-top:10px; height:50px;">
+            <div id="loading_div_'.$id.'" class="loading_div" style="display:none;height:50vh;">
                 <div id="main-spinner">
                     <span class="spinner"></span>  
                 </div>

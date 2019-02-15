@@ -1,6 +1,7 @@
 // Load symfony routes in order to use it in a js
 const routes = require('../../public/js/fos_js_routes.json');
 import Routing from '../../vendor/friendsofsymfony/jsrouting-bundle/Resources/public/js/router.min.js';
+
 Routing.setRoutingData(routes);
 
 require('./vendor');
@@ -272,6 +273,8 @@ $(function() {
         var button = $(this);
         $("#" + id).toggle();
 
+        $("#card-container").css("height","100vh");
+
         if($("#column-left").hasClass("col-md-12")){
             $("#column-left").removeClass('col-md-12');
             $("#column-right").removeClass('col-md-12');
@@ -285,7 +288,6 @@ $(function() {
         };
 
         if($("#preview_course_add_course").length >= 0){
-
             $("#preview_course_add_course").toggle();
         }
 

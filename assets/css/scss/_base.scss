@@ -3867,8 +3867,8 @@ table.certaintyTable {
 }
 .spinner:before {
   animation: spinner 2.5s cubic-bezier(0.75, 0, 0.5, 1) infinite normal;
-  width: 1em;
-  height: 1em;
+  width: 2em;
+  height: 2em;
   background-color: $sidebar-background;
 }
 .spinner:after {

@@ -8,10 +8,11 @@
         {{ question.question }}
         {{ display.collapse(
             question.iid,
-            '#' ~ question.iid ~ '-' ~question.question,
+            '#' ~ question.iid ~ '-' ~ question.question ~ '&nbsp;' ~ question.editButton,
             question.questionData,
             false,
-            false)
+            false
+            )
         }}
     {% endfor %}
 

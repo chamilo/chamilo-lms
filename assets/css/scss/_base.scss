@@ -535,7 +535,11 @@ hr {
         margin-left: -32px;
         text-align: center;
         border: 2px solid rgba(0, 188, 212, 0.37) ;
+        box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,.16);
         border-radius: 10px;
+        &:hover{
+          box-shadow: 0 0.28rem 0.6rem rgba(0,0,0,.2);
+        }
         img{
           transition: transform .2s ease-in;
           padding-top: 10px;
@@ -984,7 +988,6 @@ hr {
     cursor: pointer;
     &.collapsed {
       color: #808080;
-      margin: 0;
     }
     i {
       color: $menu-background;

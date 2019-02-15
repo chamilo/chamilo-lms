@@ -7,24 +7,36 @@
         {% endif %}
 
         {% if html_courses is not empty or html_sessions is not empty %}
-        <nav>
-            <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <a class="nav-item nav-link active" id="nav-courses-tab" data-toggle="tab" href="#nav-courses" role="tab" aria-controls="nav-courses" aria-selected="true">
-                    {{ "My Courses"|trans }}
-                </a>
-                <a class="nav-item nav-link" id="nav-sessions-tab" data-toggle="tab" href="#nav-sessions" role="tab" aria-controls="nav-sessions" aria-selected="false">
-                    {{ "My Sessions"|trans }}
-                </a>
+            <ul class="nav nav-tabs" id="nav-tab" role="tablist">
+                {% if(html_courses is not empty) %}
+                <li class="nav-item">
+                    <a class="nav-link active" id="nav-courses-tab" data-toggle="tab" href="#nav-courses" role="tab" aria-controls="nav-courses" aria-selected="true">
+                        {{ "My Courses"|trans }}
+                    </a>
+                </li>
+                {% endif %}
+                {% if(html_sessions is not empty) %}
+                <li class="nav-item">
+                    <a class="nav-link disabled" id="nav-sessions-tab" data-toggle="tab" href="#nav-sessions" role="tab" aria-controls="nav-sessions" aria-selected="false">
+                        {{ "My Sessions"|trans }}
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+
+            <div class="tab-content card-body" id="nav-tabContent">
+                {% if(html_courses is not empty) %}
+                <div class="tab-pane fade show active" id="nav-courses" role="tabpanel" aria-labelledby="nav-courses-tab">
+                    {{ html_courses }}
+                </div>
+                {% endif %}
+                {% if(html_sessions is not empty) %}
+                <div class="tab-pane fade" id="nav-sessions" role="tabpanel" aria-labelledby="nav-sessions-tab">
+                    {{ html_sessions }}
+                </div>
+                {% endif %}
             </div>
-        </nav>
-        <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="nav-courses" role="tabpanel" aria-labelledby="nav-courses-tab">
-                {{ html_courses }}
-            </div>
-            <div class="tab-pane fade" id="nav-sessions" role="tabpanel" aria-labelledby="nav-sessions-tab">
-                {{ html_sessions }}
-            </div>
-        </div>
+
         {% endif %}
 
     {% endautoescape %}

@@ -22,6 +22,8 @@ class TestCategory
      */
     public function __construct()
     {
+        $this->name = '';
+        $this->description = '';
     }
 
     /**

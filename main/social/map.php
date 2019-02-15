@@ -32,7 +32,6 @@ $sql = "SELECT u.id, firstname, lastname, ev.value ville, ev2.value stage
             (ev.value LIKE '%::%' OR ev2.value LIKE '%::%')            
 ";
 
-
 $cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
 $keyDate = 'map_cache_date';
 $keyData = 'map_cache_data';
@@ -46,15 +45,13 @@ $tomorrow = strtotime('+5 minute', $now);
 $loadFromDatabase = true;
 if ($cacheDriver->contains($keyData) && $cacheDriver->contains($keyDate)) {
     $savedDate = $cacheDriver->fetch($keyDate);
+    $loadFromDatabase = false;
     if ($savedDate < $now) {
         $loadFromDatabase = true;
-    } else {
-        $loadFromDatabase = false;
     }
 }
 
 $loadFromDatabase = true;
-
 if ($loadFromDatabase) {
     $result = Database::query($sql);
     $data = Database::store_result($result, 'ASSOC');
@@ -70,7 +67,6 @@ foreach ($data as &$result) {
     $parts = explode('::', $result['ville']);
     if (isset($parts[1]) && !empty($parts[1])) {
         $parts2 = explode(',', $parts[1]);
-
         $result['ville_lat'] = $parts2[0];
         $result['ville_long'] = $parts2[1];
 

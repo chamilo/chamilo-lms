@@ -165,7 +165,10 @@ if (count($threadList) > 0) {
 }
 
 if (!empty($courseInfo)) {
-    $social_group_block .= Display::url(get_lang('SeeAllCommunities'), $courseInfo['course_public_url']);
+    $social_group_block .= Display::url(
+        get_lang('SeeAllCommunities'),
+        api_get_path(WEB_CODE_PATH).'forum/index.php?cidReq='.$courseInfo['code']
+    );
 }
 
 /*

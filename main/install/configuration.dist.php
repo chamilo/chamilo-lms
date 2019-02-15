@@ -988,6 +988,10 @@ $_configuration['required_extra_fields_in_profile'] = [
 // Hide global chat video
 //$_configuration['hide_chat_video'] = false;
 
+// global forum in social network BT#15309
+//$_configuration['global_forums_course_id'] = 0;
+
+
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email

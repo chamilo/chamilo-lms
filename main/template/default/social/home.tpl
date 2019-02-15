@@ -58,20 +58,20 @@
                         <div id="listFriends"
                              class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
                             <div class="panel-body">
-                                {{ social_friend_block }}
-                            </div>
 
-                            <div id="find_friends">
-                                <h4>{{ 'FindFriends' | get_lang }}</h4>
-                                <ul class="nav nav-tabs">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" href="#">{{ 'ByName' | get_lang }}</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="profile-tab" href="http://" >{{ 'ByGeolocalization' | get_lang }}</a>
-                                    </li>
-                                </ul>
-                                {{ search_friends_form }}
+                                {{ social_friend_block }}
+
+                                <div class="search-friend">
+                                    {{ search_friends_form }}
+                                </div>
+
+                                <div class="geolocalization">
+                                    <a class="btn btn-maps" id="profile-tab" href="{{ _p.web }}main/social/map.php" >
+                                        {{ "geolocalization.png"|img(32) }}
+                                        {{ 'ByGeolocalization' | get_lang }}
+                                    </a>
+                                </div>
+
                             </div>
                         </div>
                     </div>

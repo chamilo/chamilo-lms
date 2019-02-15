@@ -26,7 +26,7 @@ use Doctrine\Common\Collections\Criteria;
  * @todo convert into a class
  */
 define('FORUM_NEW_POST', 0);
-get_notifications_of_user();
+getNotificationsPerUser();
 
 $htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
 $htmlHeadXtra[] = '<script>
@@ -5580,7 +5580,7 @@ function set_notification($content, $id, $add_only = false)
                 VALUES (".$course_id.", '".Database::escape_string($id)."','".intval($_user['user_id'])."')";
         Database::query($sql);
         Session::erase('forum_notification');
-        get_notifications_of_user(0, true);
+        getNotificationsPerUser(0, true);
 
         return get_lang('YouWillBeNotifiedOfNewPosts');
     } else {
@@ -5592,7 +5592,7 @@ function set_notification($content, $id, $add_only = false)
                         user_id = '".intval($_user['user_id'])."'";
             Database::query($sql);
             Session::erase('forum_notification');
-            get_notifications_of_user(0, true);
+            getNotificationsPerUser(0, true);
 
             return get_lang('YouWillNoLongerBeNotifiedOfNewPosts');
         }
@@ -5724,11 +5724,11 @@ function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
  *
  * @since May 2008, dokeos 1.8.5
  */
-function get_notifications_of_user($user_id = 0, $force = false)
+function getNotificationsPerUser($user_id = 0, $force = false, $course_id = 0)
 {
     // Database table definition
     $table_notification = Database::get_course_table(TABLE_FORUM_NOTIFICATION);
-    $course_id = api_get_course_int_id();
+    $course_id = empty($course_id) ? api_get_course_int_id() : (int) $course_id;
     if (empty($course_id) || $course_id == -1) {
         return null;
     }
@@ -5744,6 +5744,7 @@ function get_notifications_of_user($user_id = 0, $force = false)
 
         $sql = "SELECT * FROM $table_notification
                 WHERE c_id = $course_id AND user_id='".intval($user_id)."'";
+
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             if (!is_null($row['forum_id'])) {

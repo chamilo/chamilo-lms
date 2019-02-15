@@ -640,8 +640,8 @@ foreach ($posts as $post) {
 
     // The post title
     $titlePost = Display::tag('h3', $post['post_title'], ['class' => 'forum_post_title']);
-    $post['post_title'] = Display::tag('div', $titlePost, ['class' => 'post-header']);
-    $post['post_title'] .= '<a name="post_id_'.$post['post_id'].'"></a>';
+    $post['post_title'] = '<a name="post_id_'.$post['post_id'].'"></a>';
+    $post['post_title'] .= Display::tag('div', $titlePost, ['class' => 'post-header']);
 
     // the post body
     $post['post_data'] = Display::tag('div', $post['post_text'], ['class' => 'post-body']);

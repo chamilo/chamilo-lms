@@ -69,7 +69,6 @@ if (api_get_setting('profile', 'picture') == 'true') {
                         SET 
                             picture_uri = '$new_picture' 
                         WHERE user_id =  ".api_get_user_id();
-
                 $result = Database::query($sql);
             }
         }
@@ -78,8 +77,20 @@ if (api_get_setting('profile', 'picture') == 'true') {
 
 SocialManager::handlePosts(api_get_self());
 
+$threadList = SocialManager::getThreadList();
+$threadIdList = [];
+if (!empty($threadList)) {
+    $threadIdList = array_column($threadList, 'id');
+}
+
+$forumCourseId = api_get_configuration_value('global_forums_course_id');
+$myGroups = [];
+if (!empty($forumCourseId)) {
+    $courseInfo = api_get_course_info_by_id($forumCourseId);
+}
+
 // Social Post Wall
-$posts = SocialManager::getMyWallMessages($user_id);
+$posts = SocialManager::getMyWallMessages($user_id, 0, 10, $threadIdList);
 $countPost = $posts['count'];
 $posts = $posts['posts'];
 SocialManager::getScrollJs($countPost, $htmlHeadXtra);
@@ -92,6 +103,8 @@ $social_search_block = Display::panel(
     get_lang('SearchUsers')
 );
 
+
+/*
 $results = $userGroup->get_groups_by_user($user_id,
     [
         GROUP_USER_PERMISSION_ADMIN,
@@ -108,11 +121,6 @@ if (!empty($results)) {
         $result['description'] = Security::remove_XSS($result['description'], STUDENT, true);
         $result['name'] = Security::remove_XSS($result['name'], STUDENT, true);
 
-        /*if ($result['count'] == 1) {
-            $result['count'] = '1 '.get_lang('Member');
-        } else {
-            $result['count'] = $result['count'].' '.get_lang('Members');
-        }*/
         $group_url = "group_view.php?id=$id";
 
         $link = Display::url(
@@ -144,11 +152,11 @@ if (!empty($results)) {
     }
 }
 
-
+*/
 $social_group_block = '';
-if (count($myGroups) > 0) {
+if (count($threadList) > 0) {
     $social_group_block .= '<div class="list-group">';
-    foreach ($myGroups as $group) {
+    foreach ($threadList as $group) {
         $social_group_block .= ' <li class="list-group-item">';
         $social_group_block .= $group['name'];
         $social_group_block .= '</li>';
@@ -156,6 +164,11 @@ if (count($myGroups) > 0) {
     $social_group_block .= '</div>';
 }
 
+if (!empty($courseInfo)) {
+    $social_group_block .= Display::url(get_lang('SeeAllCommunities'), $courseInfo['course_public_url']);
+}
+
+/*
 $form = new FormValidator(
     'find_groups_form',
     'get',
@@ -165,7 +178,6 @@ $form = new FormValidator(
     'inline'
 );
 $form->addHidden('search_type', 2);
-
 $form->addText(
     'q',
     get_lang('Search'),
@@ -176,13 +188,10 @@ $form->addText(
 );
 $form->addButtonSearch(get_lang('Search'));
 
-$social_group_block .= $form->returnForm();
+$social_group_block .= $form->returnForm();*/
 
 // My friends
-$friend_html = SocialManager::listMyFriendsBlock(
-    $user_id,
-    ''
-);
+$friend_html = SocialManager::listMyFriendsBlock($user_id, '');
 
 // Block Social Sessions
 $social_session_block = null;
@@ -194,7 +203,7 @@ if (count($sessionList) > 0) {
 }
 
 $social_group_block = Display::panelCollapse(
-    get_lang('MyGroups'),
+    get_lang('MyCommunities'),
     $social_group_block,
     'sm-groups',
     null,

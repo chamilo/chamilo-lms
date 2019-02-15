@@ -512,62 +512,6 @@ hr {
       margin-bottom: 0;
     }
   }
-  .card-body{
-    .tools{
-      width: 160px;
-      height: 160px;
-      display: block;
-      float: left;
-      text-align: center;
-      cursor: pointer;
-      position: relative;
-      background-color: transparent;
-      &.cursor-none{
-        cursor: inherit;
-      }
-      .big_icon{
-        position: absolute;
-        width: 84px;
-        height: 84px;
-        top: 40%;
-        margin-top: -50px;
-        left: 44%;
-        margin-left: -32px;
-        text-align: center;
-        border: 2px solid rgba(0, 188, 212, 0.37) ;
-        box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,.16);
-        border-radius: 10px;
-        &:hover{
-          box-shadow: 0 0.28rem 0.6rem rgba(0,0,0,.2);
-        }
-        img{
-          transition: transform .2s ease-in;
-          padding-top: 10px;
-          &:hover{
-            transform: scale(1.15);
-          }
-        }
-        a{
-          display: block;
-          overflow: hidden;
-        }
-      }
-      .content{
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        z-index: 2;
-        .name{
-          padding-top: 5px;
-          padding-bottom: 5px;
-        }
-      }
-    }
-    /*@include landscape($breakpoint-sm) {
-      padding: 0;
-    }*/
-  }
 }
 /*** GRID CATALOG ***/
 .list-course{
@@ -1037,9 +981,79 @@ hr {
       color: #808080;
     }
   }
-  .card-body {
-    border-top: 0 none;
-    color: #808080;
+}
+
+/*** TOOLS COURSE  ***/
+
+.grid-tools{
+  display: grid;
+  grid-gap: 1rem;
+  grid-row-gap: 16px;
+  grid-template-columns: repeat(6, 1fr);
+  @include large($breakpoint-xl){
+    grid-template-columns: repeat(7, 1fr);
+  }
+  @include portrait($breakpoint-sm, $breakpoint-md){
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @include landscape($breakpoint-sm) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .items-tools{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .tools{
+      width: 140px;
+      height: 160px;
+      display: block;
+      float: left;
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+      background-color: transparent;
+      &.cursor-none{
+        cursor: inherit;
+      }
+      .big_icon{
+        position: absolute;
+        width: 84px;
+        height: 84px;
+        top: 40%;
+        margin-top: -50px;
+        left: 44%;
+        margin-left: -32px;
+        text-align: center;
+        border: 2px solid rgba(0, 188, 212, 0.37) ;
+        box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,.16);
+        border-radius: 10px;
+        &:hover{
+          box-shadow: 0 0.28rem 0.6rem rgba(0,0,0,.2);
+        }
+        img{
+          transition: transform .2s ease-in;
+          padding-top: 10px;
+          &:hover{
+            transform: scale(1.15);
+          }
+        }
+        a{
+          display: block;
+          overflow: hidden;
+        }
+      }
+      .content{
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        z-index: 2;
+        .name{
+          padding-top: 5px;
+          padding-bottom: 5px;
+        }
+      }
+    }
   }
 }
 

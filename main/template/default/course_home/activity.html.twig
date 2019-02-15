@@ -13,51 +13,47 @@
             </div>
 
             <div id="collapse-{{ block.class }}" class="collapse show" aria-labelledby="heading-{{ block.class }}" data-parent="#course-tools">
-                <div class="card-body">
-                    <div class="row">
-
-                    {% if 'homepage_view'|api_get_setting == 'activity' %}
-                        {% for item in block.content %}
-                            <div class="col-md-4 course-tool">
-                                {{ item.extra|raw }}
-                                {{ item.visibility|raw }}
-                                {{ item.icon|raw }}
-                                {{ item.link|raw }}
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-
-                    {% if 'homepage_view'|api_get_setting == 'activity_big' %}
-                        {% for item in block.content %}
-                            <div class="col-6 col-md-2 ">
-                                <div class="tools mt-3 mb-3 p-2">
-                                    <div class="big_icon">
-                                        {{ item.tool.image|raw }}
-                                    </div>
-                                    <div class="content pt-2 pb-2">
-                                        {{ item.extra|raw }}
-                                        {{ item.link|raw }}
-                                        <div class="view">
-                                            {{ item.visibility|raw }}
-                                        </div>
+                <div class="grid-tools">
+                {% if 'homepage_view'|api_get_setting == 'activity' %}
+                    {% for item in block.content %}
+                        <div class="col-md-4 course-tool">
+                            {{ item.extra|raw }}
+                            {{ item.visibility|raw }}
+                            {{ item.icon|raw }}
+                            {{ item.link|raw }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                {% if 'homepage_view'|api_get_setting == 'activity_big' %}
+                    {% for item in block.content %}
+                        <div class="items-tools ">
+                            <div class="tools mt-3 mb-3">
+                                <div class="big_icon">
+                                    {{ item.tool.image|raw }}
+                                </div>
+                                <div class="content pt-2 pb-2">
+                                    {{ item.extra|raw }}
+                                    {{ item.link|raw }}
+                                    <div class="view">
+                                        {{ item.visibility|raw }}
                                     </div>
                                 </div>
                             </div>
-                        {% endfor %}
-                    {% endif %}
-                    </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
 {% else %}
-    <div class="row">
+    <div class="grid-tools">
     {% for block in blocks %}
         {% if 'homepage_view'|api_get_setting == 'activity_big' %}
             {% for item in block.content %}
-                <div class="col-6 col-md-2 ">
-                    <div class="tools mt-3 mb-3 p-2">
+                <div class="items-tools">
+                    <div class="tools mt-3 mb-3">
                         <div class="big_icon">
                             {{ item.tool.image|raw }}
                         </div>

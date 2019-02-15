@@ -8,7 +8,7 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 api_protect_course_script(true);
 api_protect_teacher_script();
 
-$surveyId = isset($_GET['survey']) ? (int)$_GET['survey'] : 0;
+$surveyId = isset($_GET['survey']) ? (int) $_GET['survey'] : 0;
 $surveyData = SurveyManager::get_survey($surveyId);
 $courseId = api_get_course_int_id();
 

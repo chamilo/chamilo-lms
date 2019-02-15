@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CourseBundle\Entity\CTool;
-
 /**
  * Class ApaExportSurvey.
  */
@@ -38,30 +36,6 @@ class ApaExportSurvey extends Plugin
     }
 
     /**
-     * Create tools for all courses.
-     */
-    private function createLinkToCourseTools()
-    {
-        $result = Database::getManager()
-            ->createQuery('SELECT c.id FROM ChamiloCoreBundle:Course c')
-            ->getResult();
-
-        foreach ($result as $item) {
-            $this->createLinkToCourseTool($this->get_name().':teacher', $item['id'], 'survey.png');
-        }
-    }
-
-    /**
-     * Remove all course tools created by plugin.
-     */
-    private function removeLinkToCourseTools()
-    {
-        Database::getManager()
-            ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.link LIKE :link AND t.category = :category')
-            ->execute(['link' => 'apaexportsurvey/start.php%', 'category' => 'plugin']);
-    }
-
-    /**
      * Uninstallation process.
      */
     public function uninstall()
@@ -92,5 +66,29 @@ class ApaExportSurvey extends Plugin
             Display::return_icon('export_evaluation.png', get_lang('Export'), [], $iconSize),
             api_get_path(WEB_PLUGIN_PATH).'apaexportsurvey/export.php?survey='.$surveyId.'&'.api_get_cidreq()
         );
+    }
+
+    /**
+     * Create tools for all courses.
+     */
+    private function createLinkToCourseTools()
+    {
+        $result = Database::getManager()
+            ->createQuery('SELECT c.id FROM ChamiloCoreBundle:Course c')
+            ->getResult();
+
+        foreach ($result as $item) {
+            $this->createLinkToCourseTool($this->get_name().':teacher', $item['id'], 'survey.png');
+        }
+    }
+
+    /**
+     * Remove all course tools created by plugin.
+     */
+    private function removeLinkToCourseTools()
+    {
+        Database::getManager()
+            ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.link LIKE :link AND t.category = :category')
+            ->execute(['link' => 'apaexportsurvey/start.php%', 'category' => 'plugin']);
     }
 }

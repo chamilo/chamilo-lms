@@ -2936,7 +2936,7 @@ class SurveyUtil
     }
 
     /**
-     * Get the additional actions added in survey_additional_teacher_modify_actions configuration
+     * Get the additional actions added in survey_additional_teacher_modify_actions configuration.
      *
      * @param int $surveyId
      * @param int $iconSize

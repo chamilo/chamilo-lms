@@ -337,6 +337,7 @@ $globalTable->addColumn('seller_address', \Doctrine\DBAL\Types\Type::STRING);
 $globalTable->addColumn('seller_email', \Doctrine\DBAL\Types\Type::STRING);
 $globalTable->addColumn('next_number_invoice', \Doctrine\DBAL\Types\Type::INTEGER);
 $globalTable->addColumn('invoice_series', \Doctrine\DBAL\Types\Type::STRING);
+$globalTable->addColumn('sale_email', \Doctrine\DBAL\Types\Type::STRING);
 $globalTable->setPrimaryKey(['id']);
 
 $invoiceTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_INVOICE);

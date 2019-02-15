@@ -51,7 +51,7 @@ Feature: Session management tool
     Given I am on "/main/session/session_list.php?keyword=Temp+session"
     And wait for the page to be loaded
     And I follow "Edit"
-    And And I press advanced settings
+    And I press advanced settings
     And I check "Show description"
     And I press "submit"
     Then I should see "Update successful"

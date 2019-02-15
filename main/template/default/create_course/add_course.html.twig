@@ -1,25 +1,4 @@
 {% autoescape false %}
-    <script type="text/javascript">
-        $(function () {
-            var $inputTitle = $("#add_course_title");
-            $inputTitle.keyup(function () {
-                var value = $(this).val();
-                var titleDefault = "{{ "Course Title"|trans }}";
-                if (value.length > 0) {
-                    $("#title_course_card").text(value);
-                } else {
-                    $("#title_course_card").text(titleDefault);
-                }
-            }).keyup();
-
-            $("select[name=category_code]").change(function () {
-                $(".category").show();
-                var $category = $('select[name=category_code] option:selected').html();
-                $(".category").text($category);
-            });
-
-        });
-    </script>
     {% set name %}
         {{ app.user.firstname }} {{ app.user.lastname }}
     {% endset %}

@@ -4,8 +4,8 @@ import Routing from '../../vendor/friendsofsymfony/jsrouting-bundle/Resources/pu
 
 Routing.setRoutingData(routes);
 
+require('./main');
 require('./vendor');
-
 
 // @todo rework url naming
 var homePublicUrl = Routing.generate('home') + 'public/';
@@ -13,10 +13,10 @@ var legacyIndex = Routing.generate('legacy_index');
 var mainUrl = Routing.generate('web.main');
 var webAjax = Routing.generate('web.ajax');
 
-console.log(homePublicUrl);
+/*console.log(homePublicUrl);
 console.log(legacyIndex);
 console.log(mainUrl);
-console.log(webAjax);
+console.log(webAjax);*/
 
 
 var ajax_url = webAjax + 'chat.ajax.php';

@@ -64,12 +64,6 @@ $(function() {
 
     checkBrand();
 
-    var id;
-    $(window).resize(function() {
-        clearTimeout(id);
-        id = setTimeout(doneResizing, 200);
-    });
-
     // Removes the yellow input in Chrome
     if (navigator.userAgent.toLowerCase().indexOf("chrome") >= 0) {
         $(window).on("load", function () {
@@ -272,8 +266,12 @@ $(function() {
         var id = $(this).attr('id') + '_options';
         var button = $(this);
         $("#" + id).toggle();
-
-        $("#card-container").css("height","100vh");
+        console.log($("#card-container").height());
+        if($("#card-container").height()>700){
+            $("#card-container").css("height","auto");
+        } else {
+            $("#card-container").css("height","100vh");
+        }
 
         if($("#column-left").hasClass("col-md-12")){
             $("#column-left").removeClass('col-md-12');
@@ -628,22 +626,7 @@ if (typeof CKEDITOR !== 'undefined') {
     };
 }
 
-function doneResizing() {
-    var widthWindow = $(window).width();
-    if ((widthWindow>=1024) && (widthWindow>=768)) {
-        $("#profileCollapse").addClass("in");
-        $("#courseCollapse").addClass("in");
-        $("#skillsCollapse").addClass("in");
-        $("#sn-sidebar-collapse").addClass("in");
-        $("#user_image_block").removeClass("text-muted");
-    } else {
-        $("#profileCollapse").removeClass("in");
-        $("#courseCollapse").removeClass("in");
-        $("#skillsCollapse").removeClass("in");
-        $("#sn-avatar-one").removeClass("in");
-        $("#user_image_block").addClass("text-muted");
-    }
-}
+
 
 function addMainEvent(elm, evType, fn, useCapture)
 {
@@ -680,6 +663,5 @@ window.checkBrand = checkBrand;
 window.setCheckbox = setCheckbox;
 window.action_click = action_click;
 window.hideUnhide = hideUnhide;
-window.doneResizing = doneResizing;
 window.addMainEvent = addMainEvent;
 window.showTemplates = showTemplates;

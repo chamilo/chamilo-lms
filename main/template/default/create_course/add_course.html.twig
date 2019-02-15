@@ -6,10 +6,8 @@
                 var value = $(this).val();
                 var titleDefault = "{{ "Course Title"|trans }}";
                 if (value.length > 0) {
-                    $("#title_course").text(value);
                     $("#title_course_card").text(value);
                 } else {
-                    $("#title_course").text(titleDefault);
                     $("#title_course_card").text(titleDefault);
                 }
             }).keyup();
@@ -32,37 +30,6 @@
         <div id="column-right" class="col-md-12">
             <div id="preview_course_add_course" class="card" style="display: none; border: none; box-shadow: none;">
                 <div class="card-body">
-                    <div id="view-classic-course" class="card card-view card-course-classic ">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-5">
-                                    <div class="category" style="display: none;">
-                                    </div>
-                                    <div class="doc-preview">
-                                        <div class="img-preview preview-sm">
-
-                                        </div>
-                                        <div class="img-box" style="display: none;">
-                                            <img id="image-cut-sm" src="" class="preview-sm">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-7">
-                                    <div class="card-inside">
-                                        <h5 id="title_course" class="title">
-                                        </h5>
-                                        <div class="list-teachers">
-                                            <i class="fas fa-user-tie"></i>
-                                            <span class="name">
-                                            {{ name }}
-                                        </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                     <div id="view-card-course" class="card card-view card-course mt-5 mb-3">
                         <div class="card-image">
                             <div class="category" style="display: none;">

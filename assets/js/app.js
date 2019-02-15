@@ -266,7 +266,6 @@ $(function() {
         var id = $(this).attr('id') + '_options';
         var button = $(this);
         $("#" + id).toggle();
-        console.log($("#card-container").height());
         if($("#card-container").height()>700){
             $("#card-container").css("height","auto");
         } else {

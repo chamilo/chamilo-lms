@@ -162,11 +162,13 @@ if (count($threadList) > 0) {
         $social_group_block .= '</li>';
     }
     $social_group_block .= '</div>';
-    if (!empty($courseInfo)) {
-        $social_group_block .= Display::url(get_lang('SeeAllCommunities'), $courseInfo['course_public_url']);
-    }
 }
 
+if (!empty($courseInfo)) {
+    $social_group_block .= Display::url(get_lang('SeeAllCommunities'), $courseInfo['course_public_url']);
+}
+
+/*
 $form = new FormValidator(
     'find_groups_form',
     'get',
@@ -186,7 +188,7 @@ $form->addText(
 );
 $form->addButtonSearch(get_lang('Search'));
 
-$social_group_block .= $form->returnForm();
+$social_group_block .= $form->returnForm();*/
 
 // My friends
 $friend_html = SocialManager::listMyFriendsBlock($user_id, '');

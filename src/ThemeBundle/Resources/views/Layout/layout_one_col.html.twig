@@ -31,12 +31,6 @@
 
         {% autoescape false %}
 
-        <section class="container-fluid">
-            {% if actions != '' %}
-                {{ actions }}
-            {% endif %}
-        </section>
-
         {% block chamilo_messages %}
             <section class="container-fluid">
                 {% include '@ChamiloTheme/FlashMessage/render.html.twig' %}
@@ -47,6 +41,9 @@
         <section class="container-fluid">
             <div class="card mb-4">
                 <div id="card-container" class="card-body">
+                    {% if actions != '' %}
+                        {{ actions }}
+                    {% endif %}
                     {# Content #}
                     {% block content %}
                         {{ content }}

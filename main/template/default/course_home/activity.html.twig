@@ -34,9 +34,11 @@
                                 <div class="content pt-2 pb-2">
                                     {{ item.extra|raw }}
                                     {{ item.link|raw }}
+                                    {% if item.visibility is not empty %}
                                     <div class="view">
                                         {{ item.visibility|raw }}
                                     </div>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -60,9 +62,11 @@
                         <div class="content pt-2 pb-2">
                             {{ item.extra|raw }}
                             {{ item.link|raw }}
+                            {% if item.visibility is not empty %}
                             <div class="view">
                                 {{ item.visibility|raw }}
                             </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

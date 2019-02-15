@@ -264,7 +264,7 @@ $(function() {
     $(".advanced_options").on("click", function (event) {
         event.preventDefault();
         var id = $(this).attr('id') + '_options';
-        var button = $(this);
+
         $("#" + id).toggle();
         if($("#card-container").height()>700){
             $("#card-container").css("height","auto");
@@ -335,11 +335,6 @@ $(function() {
         }
     });
 
-    /* For non HTML5 browsers */
-    if ($("#formLogin".length > 1)) {
-        $("input[name=login]").focus();
-    }
-
     // Tool tip (in exercises)
     var tip_options = {
         placement: 'right'
@@ -378,10 +373,6 @@ $(function() {
     });
 
     $("#notifications").load(webAjax + "online.ajax.php?a=get_users_online");
-});
-
-$(window).resize(function() {
-    checkBrand();
 });
 
 $(document).scroll(function() {
@@ -455,16 +446,6 @@ function get_url_params(q, attribute) {
             if (hash[0] == attribute) {
                 return hash[1];
             }
-        }
-    }
-}
-
-function checkBrand() {
-    if ($('.subnav').length) {
-        if ($(window).width() >= 969) {
-            $('.subnav .brand').hide();
-        } else {
-            $('.subnav .brand').show();
         }
     }
 }
@@ -658,7 +639,6 @@ function copyTextToClipBoard(elementId)
 // @todo check if there's a better way to expose functions.
 window.expandColumnToogle = expandColumnToogle;
 window.get_url_params = get_url_params;
-window.checkBrand = checkBrand;
 window.setCheckbox = setCheckbox;
 window.action_click = action_click;
 window.hideUnhide = hideUnhide;

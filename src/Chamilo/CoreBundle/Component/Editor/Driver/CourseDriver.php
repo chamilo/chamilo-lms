@@ -80,7 +80,6 @@ class CourseDriver extends Driver implements DriverInterface
             $courseCode = $this->connector->course['code'];
             $alias = $courseCode.' '.get_lang('Documents');
             $userId = api_get_user_id();
-error_log($this->getCourseDocumentSysPath());
             $config = [
                 'driver' => 'CourseDriver',
                 'path' => $this->getCourseDocumentSysPath(),

@@ -300,6 +300,7 @@ if (!$inATest) {
                     $move = Display::returnFontAwesomeIcon('arrows moved', 1, true);
                 }
 
+
                 // Question name
                 $questionName =
                     '<a href="#" title = "'.Security::remove_XSS($title).'">
@@ -328,8 +329,7 @@ if (!$inATest) {
                 // Question score
                 $questionScore = $objQuestionTmp->selectWeighting();
 
-                echo '
-                    <div id="question_id_list_'.$id.'">
+                echo '<div id="question_id_list_'.$id.'">
                         <div class="header_operations" data-exercise="'.$objExercise->selectId().'"
                             data-question="'.$id.'">
                             <div class="row">

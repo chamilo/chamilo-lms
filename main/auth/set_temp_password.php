@@ -24,8 +24,6 @@ if (empty($course_id)) {
 
 $course_info = api_get_course_info_by_id($course_id);
 
-$tpl = new Template(null);
-
 // Build the form
 $form = new FormValidator(
     'set_temp_password',
@@ -45,11 +43,12 @@ if ($form->validate()) {
         header('Location: '.api_get_course_url($course_info['code'], $session_id));
         exit;
     } else {
-        $tpl->assign('error_message', Display::return_message(get_lang('CourseRegistrationCodeIncorrect'), 'error', true));
+        Display::addFlash(
+            Display::return_message(get_lang('CourseRegistrationCodeIncorrect'), 'error')
+        );
     }
 }
 
-$tpl->assign('form', $form->toHtml());
-$content = $tpl->get_template('auth/set_temp_password.tpl');
-$tpl->assign('content', $tpl->fetch($content));
+$tpl = new Template(null);
+$tpl->assign('content', $form->toHtml());
 $tpl->display_one_col_template();

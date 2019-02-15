@@ -4341,7 +4341,9 @@ class Exercise
                                             ['style' => 'color: #FF0000; text-decoration: line-through;']
                                         );
                                         if ($this->showExpectedChoice()) {
-                                            $user_answer = '';
+                                            if (isset($real_list[$s_user_answer])) {
+                                                $user_answer = Display::span($real_list[$s_user_answer]);
+                                            }
                                         }
                                     }
                                 }

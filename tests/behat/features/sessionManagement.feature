@@ -32,7 +32,8 @@ Feature: Session management tool
     When I fill in the following:
       | name | Temp Session |
     And I fill in select2 input "#coach_username" with id "1" and value "admin"
-    And I press "Advanced settings"
+    And wait for the page to be loaded
+    And I press advanced settings
     And I fill in ckeditor field "description" with "Description for Temp Session"
     And I press "submit"
     Then I should see "Add courses to this session (Temp Session)"
@@ -50,7 +51,7 @@ Feature: Session management tool
     Given I am on "/main/session/session_list.php?keyword=Temp+session"
     And wait for the page to be loaded
     And I follow "Edit"
-    When I press "Advanced settings"
+    And And I press advanced settings
     And I check "Show description"
     And I press "submit"
     Then I should see "Update successful"

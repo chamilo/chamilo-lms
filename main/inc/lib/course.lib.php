@@ -3589,7 +3589,7 @@ class CourseManager
         $medium->resize(85);
         $medium->send_image($course_medium_image, -1, 'png');
         $normal = new Image($source_file);
-        $normal->resize(400);
+        $normal->resize(500);
         $normal->send_image($course_image, -1, 'png');
 
         $result = $medium && $normal;

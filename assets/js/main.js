@@ -1,5 +1,3 @@
-console.log("Hello");
-
 // HEADER
 
 $(window).resize(function(){

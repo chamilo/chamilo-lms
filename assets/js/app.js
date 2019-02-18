@@ -62,8 +62,6 @@ $(function() {
         $("#student-list-work").fadeOut(300);
     });
 
-    checkBrand();
-
     // Removes the yellow input in Chrome
     if (navigator.userAgent.toLowerCase().indexOf("chrome") >= 0) {
         $(window).on("load", function () {

@@ -2212,10 +2212,11 @@ class SocialManager extends UserManager
      * Get HTML code block for user skills.
      *
      * @param int $userId The user ID
+     * @param string $orientation
      *
      * @return string
      */
-    public static function getSkillBlock($userId, $orientation='horizontal')
+    public static function getSkillBlock($userId, $orientation = 'horizontal')
     {
         if (Skill::isAllowed($userId, false) === false) {
             return '';

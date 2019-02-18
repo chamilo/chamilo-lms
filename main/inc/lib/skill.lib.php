@@ -1437,7 +1437,7 @@ class Skill extends Model
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>'.get_lang('AchievedSkills').'</th>
+                                <th>' . get_lang('AchievedSkills') . '</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -1495,7 +1495,7 @@ class Skill extends Model
                         $label = $this->processSkillListSimple([$data], 'mini', $transparency);
                         $table .= '<td >';
 
-                        $table .= '<div class="skills_chart"> <ul><li>'.$label;
+                        $table .= '<div class="skills_chart"> <ul><li>' . $label;
                         $table .= $this->processVertex($vertex, $skills);
                         $table .= '</ul></li></div>';
                         $table .= '</td>';

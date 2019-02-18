@@ -6767,7 +6767,8 @@ class Tracking
                     user_id = $userId AND
                     c_id = $courseId AND                      
                     session_id = $sessionId AND      
-                    login_as = 0";
+                    login_as = 0 AND current_id <> 0";
+
         $res = Database::query($sql);
         $reg = [];
         while ($row = Database::fetch_assoc($res)) {

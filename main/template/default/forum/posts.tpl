@@ -31,6 +31,10 @@
                 <div class="col-md-10 {{ highlight }} ">
                     {{ post.post_title }}
 
+                    {% if post.is_a_revision %}
+                       {{ 'ProposedRevision' | get_lang  }} {{ post.flag_revision }}
+                    {% endif %}
+
                     <div class="{{ highlight_revision }} ">
                         {{ post.post_data }}
                     </div>

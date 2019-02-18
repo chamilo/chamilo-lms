@@ -9,13 +9,15 @@
         $('#extra_language').attr('data-width', '200px');
         $('#extra_language option[value=""]').text('{{ 'Any' | get_lang | escape('js') }}');
         $('#extra_language').on('change', function() {
-            var selectedLanguage = $(this).val();
+            var selectedLanguageArray = $(this).val();
             $('.category-forum ').hide();
-            if (selectedLanguage == '') {
-                $('.category-forum ').show();
-            } else {
-                $('.'+ selectedLanguage).show();
-            }
+            $.each(selectedLanguageArray, function(index, selectedLanguage) {
+                if (selectedLanguage == '') {
+                    $('.category-forum ').show();
+                } else {
+                    $('.'+ selectedLanguage).show();
+                }
+            });
         });
     });
 </script>
@@ -25,10 +27,12 @@
 
 {% if data is not empty %}
     {% for item in data %}
+        {% set category_language_array = [] %}
         {% set category_language = '' %}
         {% for extra_field in item.extra_fields %}
             {% if extra_field.variable == 'language' %}
-                {% set category_language = extra_field.value %}
+                {% set category_language_array = extra_field.value | split(';')  %}
+                {% set category_language = extra_field.value | replace({';': ' ' })  %}
             {% endif %}
         {% endfor %}
 
@@ -37,13 +41,14 @@
                 <h3>
                     {{ 'forum_blue.png'|img(32) }}
                     <a href="{{ item.url }}" title="{{ item.title }}">{{ item.title }}{{ item.icon_session }}</a>
-                    <span class="flag-icon flag-icon-{{ languages[category_language | lower] }}"></span>
+                    {% for category_language_item in category_language_array %}
+                        <span class="flag-icon flag-icon-{{ languages[category_language_item | lower] }}"></span>
+                    {% endfor %}
                 </h3>
                 <div class="tools">
                     {{ item.tools }}
                 </div>
             </div>
-
             <div class="forum-description">
                 {{ item.description }}
             </div>

@@ -3925,6 +3925,9 @@ function show_edit_post_form(
     );
     $form->addRule('post_text', get_lang('ThisFieldIsRequired'), 'required');
 
+    $extraFields = new ExtraField('forum_post');
+    $extraFields->addElements($form, $current_post['post_id']);
+
     $form->addButtonAdvancedSettings('advanced_params');
     $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
@@ -4013,6 +4016,11 @@ function show_edit_post_form(
     // Validation or display
     if ($form->validate()) {
         $values = $form->exportValues();
+
+        $values['item_id'] = $current_post['post_id'];
+        $extraFieldValues = new ExtraFieldValue('forum_post');
+        $extraFieldValues->saveFieldValues($values);
+
         store_edit_post($current_forum, $values);
     } else {
         // Delete from $_SESSION forum attachment from other posts
@@ -6638,6 +6646,11 @@ function savePostRevision($postId)
     );
 }
 
+/**
+ * @param int $postId
+ *
+ * @return string
+ */
 function getPostRevision($postId)
 {
     $extraFieldValue = new ExtraFieldValue('forum_post');
@@ -6653,6 +6666,11 @@ function getPostRevision($postId)
     return $revision;
 }
 
+/**
+ * @param int $postId
+ *
+ * @return bool
+ */
 function postNeedsRevision($postId)
 {
     $extraFieldValue = new ExtraFieldValue('forum_post');
@@ -6668,6 +6686,12 @@ function postNeedsRevision($postId)
     return $hasRevision;
 }
 
+/**
+ * @param int   $postId
+ * @param array $threadInfo
+ *
+ * @return string
+ */
 function getAskRevisionButton($postId, $threadInfo)
 {
     $postId = (int) $postId;
@@ -6685,6 +6709,12 @@ function getAskRevisionButton($postId, $threadInfo)
     );
 }
 
+/**
+ * @param int $postId
+ * @param array $threadInfo
+ *
+ * @return string
+ */
 function giveRevisionButton($postId, $threadInfo)
 {
     $postId = (int) $postId;

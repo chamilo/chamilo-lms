@@ -1392,9 +1392,15 @@ class ExtraField extends Model
                         break;
                     case self::FIELD_TYPE_SELECT_MULTIPLE:
                         $options = [];
+
+                        if (empty($defaultValueId)) {
+                            $options[''] = get_lang('SelectAnOption');
+                        }
+
                         foreach ($field_details['options'] as $option_id => $option_details) {
                             $options[$option_details['option_value']] = $option_details['display_text'];
                         }
+
 
                         if ($orderDependingDefaults) {
                             $defaultOptions = $extraData['extra_'.$field_details['variable']];

@@ -581,7 +581,6 @@ $tpl->assign('actions', $actions);
 $tpl->assign('data', $listForumCategory);
 $tpl->assign('form_content', $formContent);
 $tpl->assign('search_filter', $form->returnForm());
-
 $tpl->assign('default_user_language', $defaultUserLanguage);
 $tpl->assign('languages', array_flip($languages));
 $extraFieldValue = new ExtraFieldValue('course');

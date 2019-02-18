@@ -8,9 +8,9 @@
             {% if course.categoryName %}
                 <h5>{{ course.categoryName }}</h5>
             {% endif %}
-            <h2><a href="{{ course_link  }}">{{ course_title }}</a></h2>
+            <h2><a href="{{ course_url  }}">{{ course_title }}</a></h2>
             {% if just_created == 1%}
-                <a role="button" href="{{ course_link  }}" class="btn btn-primary btn-lg">{{ "Go to the course created"|trans }}</a>
+                <a role="button" href="{{ course_url  }}" class="btn btn-primary btn-lg">{{ "Go to the course created"|trans }}</a>
             {% endif %}
         </div>
         <div class="start-info">

@@ -2312,7 +2312,7 @@ class SocialManager extends UserManager
         $friendHtml = '';
 
         if (!empty($numberFriends)) {
-            $friendHtml .= '<div class="list-group">';
+            $friendHtml .= '<div class="list-group contact-list">';
             $j = 1;
 
             usort($friends, function($a, $b) {

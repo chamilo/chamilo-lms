@@ -111,8 +111,6 @@ if ($form->validate()) {
         'tool_id_detail' => 0,
         'action' => 'edit-link',
         'action_details' => '',
-        'current_id' => $_GET['editlink'],
-        'info' => '',
     ];
     Event::registerLog($logInfo);
 

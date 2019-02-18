@@ -439,6 +439,7 @@ class aicc extends learnpath
         $files_found = [];
         $subdir_isset = false;
         // The following loop should be stopped as soon as we found the right config files (.crs, .au, .des and .cst).
+        $realFileSize = 0;
         foreach ($zipContentArray as $thisContent) {
             if (preg_match('~.(php.*|phtml)$~i', $thisContent['filename'])) {
                 // If a php file is found, do not authorize (security risk).

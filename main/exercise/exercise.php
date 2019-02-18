@@ -110,7 +110,7 @@ $nameTools = get_lang('Exercises');
 $errorXmlExport = null;
 if ($is_allowedToEdit && !empty($choice) && $choice === 'exportqti2') {
     if ($limitTeacherAccess && !api_is_platform_admin()) {
-       api_not_allowed(true);
+        api_not_allowed(true);
     }
     require_once api_get_path(SYS_CODE_PATH).'exercise/export/qti2/qti2_export.php';
 
@@ -162,7 +162,6 @@ $logInfo = [
     'tool_id_detail' => 0,
     'action' => isset($_REQUEST['learnpath_id']) ? 'learnpath_id' : '',
     'action_details' => isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : '',
-    'current_id' => 0,
 ];
 Event::registerLog($logInfo);
 
@@ -249,7 +248,6 @@ if ($is_allowedToEdit) {
                                 GradebookUtils::remove_resource_from_course_gradebook($link_info['id']);
                             }
                             echo Display::return_message(get_lang('ExerciseDeleted'), 'confirmation');
-
                         }
                         break;
                     case 'enable':
@@ -1119,7 +1117,16 @@ if (!empty($exerciseList)) {
                     // Exam is ready to be taken
                     if ($is_actived_time) {
                         // Show results 	697 	$attempt_text = get_lang('LatestAttempt').' : ';
-                        if ($my_result_disabled == 0 || $my_result_disabled == 2) {
+                        if (
+                            in_array(
+                                $my_result_disabled,
+                                [
+                                    RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS,
+                                    RESULT_DISABLE_SHOW_SCORE_ONLY,
+                                    RESULT_DISABLE_RANKING,
+                                ]
+                            )
+                        ) {
                             //More than one attempt
                             if ($num > 0) {
                                 $row_track = Database :: fetch_array($qryres);
@@ -1174,7 +1181,16 @@ if (!empty($exerciseList)) {
                 } else {
                     // Normal behaviour.
                     // Show results.
-                    if ($my_result_disabled == 0 || $my_result_disabled == 2) {
+                    if (
+                        in_array(
+                            $my_result_disabled,
+                            [
+                                RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS,
+                                RESULT_DISABLE_SHOW_SCORE_ONLY,
+                                RESULT_DISABLE_RANKING,
+                            ]
+                        )
+                    ) {
                         if ($num > 0) {
                             $row_track = Database :: fetch_array($qryres);
                             $attempt_text = get_lang('LatestAttempt').' : ';

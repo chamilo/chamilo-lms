@@ -1146,6 +1146,13 @@ class ExtraField extends Model
                                 }
                             }
 
+                            if (empty($checkboxAttributes) &&
+                                isset($field_details['default_value']) && empty($extraData)) {
+                                if ($field_details['default_value'] == 1) {
+                                    $checkboxAttributes['checked'] = 1;
+                                }
+                            }
+
                             // We assume that is a switch on/off with 1 and 0 as values
                             $group[] = $form->createElement(
                                 'checkbox',

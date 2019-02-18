@@ -508,7 +508,7 @@
     {% endfor %}
 </div>
 
-{% if not is_invitee and lp_is_shown and 'lp_minimum_time'|api_get_configuration_value %}
+{% if not is_invitee and lp_is_shown and allow_min_time %}
     <div class="controls text-center">
         {% if not is_ending %}
             <button class="btn btn-primary" type="button" disabled>

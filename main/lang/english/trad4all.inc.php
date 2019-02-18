@@ -8324,7 +8324,11 @@ $PersonalDataOfficer = "Personal data officer";
 $MaxNumberSubscribedStudentsReached = "The maximum number of student has already been reached, it is not possible to subscribe more student.";
 $UserXAddedToCourseX = "User %s has been registered to course %s";
 $LpMinTime = "Minimum time (minutes)";
+$LpMinTimeDescription = "Minimum time (in minutes) a student must remain in the learning path to get access to the next one.";
+$LpMinTimeWarning = "You didn't spend the minimum time required in the learning path.";
+$YouHaveSpentXTime = "You have spent %s";
 $TimeSpentInLp = "Time spent in the learning path";
+$StudentXFinishedLp = "Student %s has completed his/her learning paths.";
 $IHaveFinishedTheLessonsNotifyTheTeacher = "I have finished the lessons, notify the teacher";
 $TheStudentXHasFinishedTheCourseYLearningPaths = "The student <b>%s</b> has finished the learning paths from the course <b>%s</b>";
 $ThisQuestionExistsInAnotherExercisesWarning = "This question is used in another exercises. If you continue its edition, the changes will affect all exercises that contain this question.";
@@ -8337,4 +8341,5 @@ $FormationUnit = "Formation unit";
 $GlobalProgress = "Global progress";
 $AttestationOfAttendance = "Attestation of attendance";
 $DontShowScoreOnlyWhenUserFinishesAllAttemptsButShowFeedbackEachAttempt = "Do not show the score (only when user finishes all attempts) but show feedback for each attempt.";
+$ExerciseRankingMode = "Ranking mode: Do not show results details question by question and show a table with the ranking of all other users.";
 ?>

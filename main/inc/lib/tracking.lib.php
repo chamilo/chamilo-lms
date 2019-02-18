@@ -436,7 +436,7 @@ class Tracking
                         $score = $row['myscore'];
                         $time_for_total = $row['mytime'];
 
-                        if (api_get_configuration_value('lp_minimum_time')) {
+                        if (self::minimunTimeAvailable($session_id, $course_id)) {
                             $timeCourse = self::getCalculateTime($user_id, $course_id, $session_id);
                             Session::write('trackTimeCourse', $timeCourse);
                             $lp_time = $timeCourse[TOOL_LEARNPATH];
@@ -1614,6 +1614,40 @@ class Tracking
     }
 
     /**
+     * Checks if the "lp_minimum_time" feature is available for the course.
+     *
+     * @param int $sessionId
+     * @param int $courseId
+     *
+     * @return bool
+     */
+    public static function minimunTimeAvailable($sessionId, $courseId)
+    {
+        if (!api_get_configuration_value('lp_minimum_time')) {
+            return false;
+        }
+
+        if (!empty($sessionId)) {
+            $extraFieldValue = new ExtraFieldValue('session');
+            $value = $extraFieldValue->get_values_by_handler_and_field_variable($sessionId, 'new_tracking_system');
+
+            if ($value && isset($value['value']) && $value['value'] == 1) {
+                return true;
+            }
+        } else {
+            if ($courseId) {
+                $extraFieldValue = new ExtraFieldValue('course');
+                $value = $extraFieldValue->get_values_by_handler_and_field_variable($courseId, 'new_tracking_system');
+                if ($value && isset($value['value']) && $value['value'] == 1) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Calculates the time spent on the course.
      *
      * @param int $user_id
@@ -1633,7 +1667,7 @@ class Tracking
             return 0;
         }
 
-        if (api_get_configuration_value('lp_minimum_time')) {
+        if (self::minimunTimeAvailable($session_id, $courseId)) {
             $courseTime = self::getCalculateTime($user_id, $courseId, $session_id);
             $time = isset($courseTime['total_time']) ? $courseTime['total_time'] : 0;
 
@@ -1811,7 +1845,7 @@ class Tracking
         $courseId = (int) $courseId;
         $session_id = (int) $session_id;
 
-        if (api_get_configuration_value('lp_minimum_time')) {
+        if (self::minimunTimeAvailable($session_id, $courseId)) {
             $tbl_track_e_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
             $sql = 'SELECT access_date
                     FROM '.$tbl_track_e_access.'
@@ -1883,7 +1917,7 @@ class Tracking
         $session_id = (int) $session_id;
         $courseId = $courseInfo['real_id'];
 
-        if (api_get_configuration_value('lp_minimum_time')) {
+        if (self::minimunTimeAvailable($session_id, $courseId)) {
             // Show the last date on which the user acceed the session when it was active
             $where_condition = '';
             $userInfo = api_get_user_info($student_id);
@@ -5796,6 +5830,10 @@ class Tracking
 
             if (!empty($lp_list) > 0) {
                 foreach ($lp_list as $lp_id => $learnpath) {
+                    if (!$learnpath['lp_visibility']) {
+                        continue;
+                    }
+
                     $progress = self::get_avg_student_progress(
                         $user_id,
                         $course,
@@ -5926,155 +5964,53 @@ class Tracking
      */
     public static function generate_session_exercise_graph($names, $my_results, $average)
     {
-        /* Create and populate the pData object */
-        $myData = new pData();
-        $myData->addPoints($names, 'Labels');
-        $myData->addPoints($my_results, 'Serie1');
-        $myData->addPoints($average, 'Serie2');
-        $myData->setSerieWeight('Serie1', 1);
-        $myData->setSerieTicks('Serie2', 4);
-        $myData->setSerieDescription('Labels', 'Months');
-        $myData->setAbscissa('Labels');
-        $myData->setSerieDescription('Serie1', get_lang('MyResults'));
-        $myData->setSerieDescription('Serie2', get_lang('AverageScore'));
-        $myData->setAxisUnit(0, '%');
-        $myData->loadPalette(api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color', true);
-        // Cache definition
-        $cachePath = api_get_path(SYS_ARCHIVE_PATH);
-        $myCache = new pCache(['CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)]);
-        $chartHash = $myCache->getHash($myData);
-
-        if ($myCache->isInCache($chartHash)) {
-            //if we already created the img
-            $imgPath = api_get_path(SYS_ARCHIVE_PATH).$chartHash;
-            $myCache->saveFromCache($chartHash, $imgPath);
-            $imgPath = api_get_path(WEB_ARCHIVE_PATH).$chartHash;
-        } else {
-            /* Define width, height and angle */
-            $mainWidth = 860;
-            $mainHeight = 500;
-            $angle = 50;
-
-            /* Create the pChart object */
-            $myPicture = new pImage($mainWidth, $mainHeight, $myData);
-
-            /* Turn of Antialiasing */
-            $myPicture->Antialias = false;
-
-            /* Draw the background */
-            $settings = ['R' => 255, 'G' => 255, 'B' => 255];
-            $myPicture->drawFilledRectangle(0, 0, $mainWidth, $mainHeight, $settings);
-
-            /* Add a border to the picture */
-            $myPicture->drawRectangle(
-                0,
-                0,
-                $mainWidth - 1,
-                $mainHeight - 1,
-                ['R' => 0, 'G' => 0, 'B' => 0]
-            );
-
-            /* Set the default font */
-            $myPicture->setFontProperties(
-                [
-                    'FontName' => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf',
-                    'FontSize' => 10, ]
-            );
-            /* Write the chart title */
-            $myPicture->drawText(
-                $mainWidth / 2,
-                30,
-                get_lang('ExercisesInTimeProgressChart'),
-                [
-                    'FontSize' => 12,
-                    'Align' => TEXT_ALIGN_BOTTOMMIDDLE,
-                ]
-            );
-
-            /* Set the default font */
-            $myPicture->setFontProperties(
-                [
-                    'FontName' => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf',
-                    'FontSize' => 6,
-                ]
-            );
-
-            /* Define the chart area */
-            $myPicture->setGraphArea(60, 60, $mainWidth - 60, $mainHeight - 150);
-
-            /* Draw the scale */
-            $scaleSettings = [
-                'XMargin' => 10,
-                'YMargin' => 10,
-                'Floating' => true,
-                'GridR' => 200,
-                'GridG' => 200,
-                'GridB' => 200,
-                'DrawSubTicks' => true,
-                'CycleBackground' => true,
-                'LabelRotation' => $angle,
-                'Mode' => SCALE_MODE_ADDALL_START0,
-            ];
-            $myPicture->drawScale($scaleSettings);
-
-            /* Turn on Antialiasing */
-            $myPicture->Antialias = true;
-
-            /* Enable shadow computing */
-            $myPicture->setShadow(
-                true,
-                [
-                    'X' => 1,
-                    'Y' => 1,
-                    'R' => 0,
-                    'G' => 0,
-                    'B' => 0,
-                    'Alpha' => 10,
-                ]
-            );
-
-            /* Draw the line chart */
-            $myPicture->setFontProperties(
-                [
-                    'FontName' => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf',
-                    'FontSize' => 10,
-                ]
-            );
-            $myPicture->drawSplineChart();
-            $myPicture->drawPlotChart(
-                [
-                    'DisplayValues' => true,
-                    'PlotBorder' => true,
-                    'BorderSize' => 1,
-                    'Surrounding' => -60,
-                    'BorderAlpha' => 80,
-                ]
-            );
-
-            /* Write the chart legend */
-            $myPicture->drawLegend(
-                $mainWidth / 2 + 50,
-                50,
-                [
-                    'Style' => LEGEND_BOX,
-                    'Mode' => LEGEND_HORIZONTAL,
-                    'FontR' => 0,
-                    'FontG' => 0,
-                    'FontB' => 0,
-                    'R' => 220,
-                    'G' => 220,
-                    'B' => 220,
-                    'Alpha' => 100,
-                ]
-            );
-
-            $myCache->writeToCache($chartHash, $myPicture);
-            $imgPath = api_get_path(SYS_ARCHIVE_PATH).$chartHash;
-            $myCache->saveFromCache($chartHash, $imgPath);
-            $imgPath = api_get_path(WEB_ARCHIVE_PATH).$chartHash;
-        }
-
-        $html = '<img src="'.$imgPath.'">';
+        $html = api_get_js('chartjs/Chart.js');
+        $canvas = Display::tag('canvas', '', ['id' => 'session_graph_chart']);
+        $html .= Display::tag('div', $canvas, ['style' => 'width:100%']);
+        $jsStr = " var data = {
+                       labels:".json_encode($names).",
+                       datasets: [
+                       {
+                         label: '".get_lang('MyResults')."',
+                         backgroundColor: 'rgb(255, 99, 132)',
+                         stack: 'Stack1',
+                         data: ".json_encode($my_results).",
+                        },
+                        {
+                         label: '".get_lang('AverageScore')."',
+                         backgroundColor: 'rgb(75, 192, 192)',
+                         stack: 'Stack2',
+                         data: ".json_encode($average).",
+                        },
+                        ],  
+                    };
+                    var ctx = document.getElementById('session_graph_chart').getContext('2d');
+                    var myBarChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: data,
+                    options: {
+                            title: {
+                                    display: true,
+                                    text: '".get_lang('ExercisesInTimeProgressChart')."'
+                            },
+                            tooltips: {
+                                    mode: 'index',
+                                    intersect: false
+                            },
+                            responsive: true,
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        // Include a dollar sign in the ticks
+                                        callback: function(value, index, values) {
+                                            return value + '%';
+                                        }
+                                    }
+                                }]
+                            }
+                    }
+                });";
+        $html .= Display::tag('script', $jsStr);
 
         return $html;
     }
@@ -6831,7 +6767,8 @@ class Tracking
                     user_id = $userId AND
                     c_id = $courseId AND                      
                     session_id = $sessionId AND      
-                    login_as = 0";
+                    login_as = 0 AND current_id <> 0";
+
         $res = Database::query($sql);
         $reg = [];
         while ($row = Database::fetch_assoc($res)) {
@@ -6901,17 +6838,7 @@ class Tracking
                                 $lpTime[$item['tool_id']] = 0;
                             }
                             $lpTime[$item['tool_id']] += $partialTime;
-                            if ($item['tool_id'] == 51) {
-                                //$counter++;
-                                //var_dump($beforeItem, $item);
-                                /*var_dump(
-                                    api_get_utc_datetime($item['date_reg']),
-                                    api_get_utc_datetime($beforeItem['date_reg'])
-                                );*/
-                                /*var_dump(
-                                    $counter.'-'.$beforeItem['id'].'-'.$item['id'].'-'.$partialTime.'-'.api_time_to_hms($lpTime[$item['tool_id']])
-                                );*/
-                            }
+
                             break;
                         case TOOL_QUIZ:
                             if (!isset($lpTime[$item['action_details']])) {

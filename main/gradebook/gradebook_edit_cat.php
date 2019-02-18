@@ -98,8 +98,6 @@ $logInfo = [
     'tool_id_detail' => 0,
     'action' => 'edit-cat',
     'action_details' => $action_details,
-    'current_id' => $current_id,
-    'info' => '',
 ];
 Event::registerLog($logInfo);
 

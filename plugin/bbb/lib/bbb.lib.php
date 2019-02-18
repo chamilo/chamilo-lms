@@ -734,6 +734,8 @@ class bbb
             );
         }
 
+        $conditions['order'] = "created_at ASC";
+
         $meetingList = Database::select(
             '*',
             $this->table,

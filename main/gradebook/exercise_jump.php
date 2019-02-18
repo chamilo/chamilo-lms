@@ -22,40 +22,31 @@ $cidReq = Security::remove_XSS($_GET['cidReq']);
 $type = Security::remove_XSS($_GET['type']);
 $doExerciseUrl = '';
 
-if (isset($_GET['doexercise'])) {
-    $doExerciseUrl = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.http_build_query([
-        'session_id' => $session_id,
-        'cidReq' => $cidReq,
-        'gradebook' => $gradebook,
-        'origin' => '',
-        'learnpath_id' => '',
-        'learnpath_item_id' => '',
-        'exerciseId' => intval($_GET['doexercise']),
-    ]);
-}
-
 // no support for hot potatoes
 if ($type == LINK_HOTPOTATOES) {
     $exerciseId = $_GET['exerciseId'];
     $path = Security::remove_XSS($_GET['path']);
-    $doExerciseUrl = api_get_path(WEB_CODE_PATH).'exercise/showinframes.php?'.http_build_query([
-        'session_id' => $session_id,
-        'cidReq' => Security::remove_XSS($cidReq),
-        'file' => $path,
-        'cid' => api_get_course_id(),
-        'uid' => api_get_user_id(),
-    ]);
+    $doExerciseUrl = api_get_path(WEB_CODE_PATH).'exercise/showinframes.php?'.http_build_query(
+        [
+            'session_id' => $session_id,
+            'cidReq' => Security::remove_XSS($cidReq),
+            'file' => $path,
+            'cid' => api_get_course_id(),
+            'uid' => api_get_user_id(),
+        ]
+    );
     header('Location: '.$doExerciseUrl);
     exit;
 }
 
-if (isset($_GET['doexercise'])) {
+if (!empty($doExerciseUrl)) {
     header('Location: '.$doExerciseUrl);
     exit;
 } else {
-    $url = api_get_path(WEB_CODE_PATH).'exercise/overview.php?session_id='.$session_id.'&cidReq='.Security::remove_XSS($cidReq);
+    $url = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'
+        .http_build_query(['session_id' => $session_id, 'cidReq' => $cidReq]);
     if (isset($_GET['gradebook'])) {
-        $url .= '&gradebook=view&exerciseId='.intval($_GET['exerciseId']);
+        $url .= '&gradebook=view&exerciseId='.((int) $_GET['exerciseId']);
 
         // Check if exercise is inserted inside a LP, if that's the case
         $exerciseId = $_GET['exerciseId'];
@@ -69,13 +60,32 @@ if (isset($_GET['doexercise'])) {
                         // If the exercise was added once redirect to the LP
                         $firstLp = current($exercise->lpList);
                         if (isset($firstLp['lp_id'])) {
-                            $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&lp_id='.$firstLp['lp_id'].'&action=view&isStudentView=true';
+                            $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&'
+                                .http_build_query(
+                                    [
+                                        'lp_id' => $firstLp['lp_id'],
+                                        'action' => 'view',
+                                        'isStudentView' => 'true',
+                                    ]
+                                );
                         }
                     } else {
                         // If the exercise was added multiple times show the LP list
                         $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=list';
                     }
                 }
+            } else {
+                $url = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.http_build_query(
+                    [
+                        'session_id' => $session_id,
+                        'cidReq' => $cidReq,
+                        'gradebook' => $gradebook,
+                        'origin' => '',
+                        'learnpath_id' => '',
+                        'learnpath_item_id' => '',
+                        'exerciseId' => (int) $_GET['exerciseId'],
+                    ]
+                );
             }
         }
     }

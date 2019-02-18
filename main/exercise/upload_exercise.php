@@ -129,12 +129,17 @@ function lp_upload_quiz_main()
  */
 function lp_upload_quiz_action_handling()
 {
-    $_course = api_get_course_info();
-    $courseId = $_course['real_id'];
-
     if (!isset($_POST['submit_upload_quiz'])) {
         return;
     }
+
+    $_course = api_get_course_info();
+
+    if (empty($_course)) {
+        return false;
+    }
+
+    $courseId = $_course['real_id'];
 
     // Get the extension of the document.
     $path_info = pathinfo($_FILES['user_upload_quiz']['name']);

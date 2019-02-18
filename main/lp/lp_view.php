@@ -559,7 +559,7 @@ if ($gamificationMode == 1) {
 $template->assign('lp_author', $lp->get_author());
 
 $lpMinTime = '';
-if (api_get_configuration_value('lp_minimum_time')) {
+if (Tracking::minimunTimeAvailable(api_get_session_id(), api_get_course_int_id())) {
     // Calulate minimum and accumulated time
     $timeLp = $_SESSION['oLP']->getAccumulateWorkTime();
     $timeTotalCourse = $_SESSION['oLP']->getAccumulateWorkTimeTotalCourse();

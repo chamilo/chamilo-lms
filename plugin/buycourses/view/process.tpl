@@ -20,6 +20,15 @@
                                 <img alt="{{ course.title }}" class="img-rounded img-responsive"
                                      src="{{ course.course_img ? course.course_img : 'session_default.png'|icon() }}">
                             </a>
+                            {% if course.tax_enable %}
+                            <div class="price-details-tax">
+                                {{ 'Price'|get_plugin_lang('BuyCoursesPlugin')}} :
+                                {{ course.currency == 'BRL' ? 'R$' : course.currency }} {{ course.price_without_tax }}
+                                <br>
+                                {{ course.tax_name }} ({{ course.tax_perc }}%):
+                                {{ course.currency == 'BRL' ? 'R$' : course.currency }} {{ course.tax_amount }}
+                            </div>
+                            {% endif %}
                             <div class="price">
                                 {{ 'Total'|get_plugin_lang('BuyCoursesPlugin')}} :
                                 {{ course.currency == 'BRL' ? 'R$' : course.currency }} {{ course.price }}
@@ -56,6 +65,15 @@
                         <div class="col-md-3">
                             <img alt="{{ session.name }}" class="img-rounded img-responsive""
                             src="{{ session.image ? session.image : 'session_default.png'|icon() }}">
+                            {% if session.tax_enable %}
+                            <div class="price-details-tax">
+                                {{ 'Price'|get_plugin_lang('BuyCoursesPlugin')}} :
+                                {{ session.currency == 'BRL' ? 'R$' : session.currency }} {{ session.price_without_tax }}
+                                <br>
+                                {{ session.tax_name }} ({{ session.tax_perc }}%):
+                                {{ session.currency == 'BRL' ? 'R$' : session.currency }} {{ session.tax_amount }}
+                            </div>
+                            {% endif %}
                             <div class="price">
                                 {{ 'Total'|get_plugin_lang('BuyCoursesPlugin')}} :
                                 {{ session.currency == 'BRL' ? 'R$' : session.currency }} {{ session.price }}

@@ -249,6 +249,8 @@ define('LOG_USER_ID', 'user_id');
 define('LOG_USER_OBJECT', 'user_object');
 define('LOG_USER_FIELD_VARIABLE', 'user_field_variable');
 define('LOG_SESSION_ID', 'session_id');
+
+define('LOG_QUESTION_ID', 'question_id');
 define('LOG_SESSION_CATEGORY_ID', 'session_category_id');
 define('LOG_CONFIGURATION_SETTINGS_CATEGORY', 'settings_category');
 define('LOG_CONFIGURATION_SETTINGS_VARIABLE', 'settings_variable');
@@ -275,8 +277,10 @@ define('LOG_MY_FOLDER_NEW_PATH', 'new_path');
 define('LOG_TERM_CONDITION_ACCEPTED', 'term_condition_accepted');
 define('LOG_USER_CONFIRMED_EMAIL', 'user_confirmed_email');
 define('LOG_USER_REMOVED_LEGAL_ACCEPT', 'user_removed_legal_accept');
-
 define('LOG_USER_DELETE_ACCOUNT_REQUEST', 'user_delete_account_request');
+
+define('LOG_QUESTION_CREATED', 'question_created');
+define('LOG_QUESTION_UPDATED', 'question_updated');
 
 define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.]/');
 
@@ -470,6 +474,7 @@ define('RESULT_DISABLE_SHOW_SCORE_ONLY', 2); //Show score only
 define('RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES', 3); //Show final score only with categories
 define('RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT', 4);
 define('RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK', 5);
+define('RESULT_DISABLE_RANKING', 6);
 // 4: Show final score only with categories and show expected answers only on the last attempt
 
 define('EXERCISE_MAX_NAME_SIZE', 80);

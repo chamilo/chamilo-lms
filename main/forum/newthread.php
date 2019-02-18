@@ -51,7 +51,6 @@ $logInfo = [
     'tool_id_detail' => 0,
     'action' => 'add-thread',
     'action_details' => '',
-    'current_id' => 0,
 ];
 Event::registerLog($logInfo);
 
@@ -68,7 +67,7 @@ if (api_is_in_gradebook()) {
 
 // 1. the forumcategory or forum is invisible (visibility==0) and the user is not a course manager
 if (!api_is_allowed_to_edit(false, true) &&
-    (($current_forum_category['visibility'] && $current_forum_category['visibility'] == 0) || $current_forum['visibility'] == 0)
+    (($current_forum_category && $current_forum_category['visibility'] == 0) || $current_forum['visibility'] == 0)
 ) {
     api_not_allowed();
 }

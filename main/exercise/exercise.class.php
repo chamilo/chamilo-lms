@@ -1963,6 +1963,14 @@ class Exercise
                     '5',
                     ['id' => 'result_disabled_5', 'onclick' => 'check_results_disabled()']
                 );
+                $radios_results_disabled[] = $form->createElement(
+                    'radio',
+                    'results_disabled',
+                    null,
+                    get_lang('ExerciseRankingMode'),
+                    '6',
+                    ['id' => 'result_disabled_6']
+                );
 
                 $form->addGroup(
                     $radios_results_disabled,
@@ -4333,7 +4341,9 @@ class Exercise
                                             ['style' => 'color: #FF0000; text-decoration: line-through;']
                                         );
                                         if ($this->showExpectedChoice()) {
-                                            $user_answer = '';
+                                            if (isset($real_list[$s_user_answer])) {
+                                                $user_answer = Display::span($real_list[$s_user_answer]);
+                                            }
                                         }
                                     }
                                 }
@@ -4379,7 +4389,7 @@ class Exercise
                                             echo '<td>'.$status.'</td>';
                                         } else {
                                             echo '<td>'.$s_answer_label.'</td>';
-                                            echo '<td>'.$user_answer.'</td>';
+                                            //echo '<td>'.$user_answer.'</td>';
                                             echo '<td>';
                                             if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
                                                 if (isset($real_list[$i_answer_correct_answer]) &&

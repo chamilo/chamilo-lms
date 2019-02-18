@@ -68,7 +68,12 @@ if (is_object($objQuestion)) {
                 echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&message=ItemUpdated"</script>';
             } else {
                 // New question
-                echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&message=ItemAdded"</script>';
+                $page = '';
+                $length = api_get_configuration_value('question_pagination_length');
+                if ($length) {
+                    $page = round($objExercise->get_count_question_list() / $length);
+                }
+                echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&page='.$page.'&message=ItemAdded"</script>';
             }
         } else {
             echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&hotspotadmin='.$objQuestion->id.'&'.api_get_cidreq().'"</script>';

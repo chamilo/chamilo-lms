@@ -109,17 +109,17 @@ function get_work_data_by_path($path, $courseId = 0)
  */
 function get_work_data_by_id($id, $courseId = 0, $sessionId = 0)
 {
-    $id = intval($id);
-    $courseId = intval($courseId);
-    if (empty($courseId)) {
-        $courseId = api_get_course_int_id();
-    }
+    $id = (int) $id;
+    $courseId = ((int) $courseId) ?: api_get_course_int_id();
+    $course = api_get_course_entity($courseId);
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
     $sessionCondition = '';
     if (!empty($sessionId)) {
         $sessionCondition = api_get_session_condition($sessionId, true);
     }
+
+    $webCodePath = api_get_path(WEB_CODE_PATH);
 
     $sql = "SELECT * FROM $table
             WHERE
@@ -132,17 +132,23 @@ function get_work_data_by_id($id, $courseId = 0, $sessionId = 0)
         if (empty($work['title'])) {
             $work['title'] = basename($work['url']);
         }
-        $work['download_url'] = api_get_path(WEB_CODE_PATH).'work/download.php?id='.$work['id'].'&'.api_get_cidreq();
-        $work['view_url'] = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$work['id'].'&'.api_get_cidreq();
-        $work['show_url'] = api_get_path(WEB_CODE_PATH).'work/show_file.php?id='.$work['id'].'&'.api_get_cidreq();
+        $work['download_url'] = $webCodePath.'work/download.php?id='.$work['id'].'&'.api_get_cidreq();
+        $work['view_url'] = $webCodePath.'work/view.php?id='.$work['id'].'&'.api_get_cidreq();
+        $work['show_url'] = $webCodePath.'work/show_file.php?id='.$work['id'].'&'.api_get_cidreq();
         $work['show_content'] = '';
         if ($work['contains_file']) {
-            $fileInfo = pathinfo($work['title']);
-            if (is_array($fileInfo) &&
-                !empty($fileInfo['extension']) &&
-                in_array($fileInfo['extension'], ['jpg', 'png', 'gif'])
-            ) {
-                $work['show_content'] = '<img src="'.$work['show_url'].'"/>';
+            $fileType = mime_content_type(
+                api_get_path(SYS_COURSE_PATH).$course->getDirectory().'/'.$work['url']
+            );
+
+            if (in_array($fileType, ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'])) {
+                $work['show_content'] = Display::img($work['show_url'], $work['title']);
+            } elseif (false !== strpos($fileType, 'video/')) {
+                $work['show_content'] = Display::tag(
+                    'video',
+                    get_lang('FileFormatNotSupported'),
+                    ['src' => $work['show_url']]
+                );
             }
         }
 

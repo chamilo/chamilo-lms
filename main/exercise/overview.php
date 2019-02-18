@@ -45,8 +45,6 @@ $logInfo = [
     'tool_id_detail' => 0,
     'action' => isset($_REQUEST['learnpath_id']) ? 'learnpath_id' : '',
     'action_details' => isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : '',
-    'current_id' => 0,
-    'info' => '',
 ];
 Event::registerLog($logInfo);
 
@@ -255,6 +253,7 @@ if (!empty($attempts)) {
                 RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES,
                 RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
                 RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
+                RESULT_DISABLE_RANKING,
             ]
         )) {
             $row['result'] = $score;
@@ -267,6 +266,7 @@ if (!empty($attempts)) {
                 RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES,
                 RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
                 RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
+                RESULT_DISABLE_RANKING,
             ]
         ) || (
             $objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ONLY &&
@@ -324,6 +324,7 @@ if (!empty($attempts)) {
             break;
         case RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS:
         case RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES:
+        case RESULT_DISABLE_RANKING:
             $header_names = [
                 get_lang('Attempt'),
                 get_lang('StartDate'),

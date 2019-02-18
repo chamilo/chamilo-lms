@@ -328,7 +328,7 @@ $sql = "SELECT attempts.question_id, answer
             questions.id = quizz_rel_questions.question_id AND
             questions.c_id = ".api_get_course_int_id()."
         WHERE
-            attempts.exe_id = ".intval($id)." $user_restriction
+            attempts.exe_id = ".$id." $user_restriction
 		GROUP BY quizz_rel_questions.question_order, attempts.question_id";
 $result = Database::query($sql);
 $question_list_from_database = [];
@@ -735,10 +735,9 @@ foreach ($questionList as $questionId) {
             if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
                 $url_name = get_lang('EditCommentsAndMarks');
             } else {
+                $url_name = get_lang('AddComments');
                 if ($action == 'edit') {
                     $url_name = get_lang('EditIndividualComment');
-                } else {
-                    $url_name = get_lang('AddComments');
                 }
             }
             echo '<p>';
@@ -1003,6 +1002,16 @@ if (!empty($category_list) && ($show_results || $show_only_total_score || $showT
     );
 }
 
+if (RESULT_DISABLE_RANKING == $track_exercise_info['results_disabled']) {
+    echo Display::page_header(get_lang('Ranking'), null, 'h4');
+    echo ExerciseLib::displayResultsInRanking(
+        $objExercise->iId,
+        $student_id,
+        $courseInfo['real_id'],
+        $sessionId
+    );
+}
+
 echo $totalScoreText;
 echo $exercise_content;
 
@@ -1011,7 +1020,7 @@ if ($show_results) {
     echo $totalScoreText;
 }
 
-if ($action == 'export') {
+if ($action === 'export') {
     $content = ob_get_clean();
     // needed in order to mpdf to work
     ob_clean();
@@ -1037,8 +1046,8 @@ if ($action == 'export') {
 
 if ($isFeedbackAllowed) {
     if (is_array($arrid) && is_array($arrmarks)) {
-        $strids = implode(",", $arrid);
-        $marksid = implode(",", $arrmarks);
+        $strids = implode(',', $arrid);
+        $marksid = implode(',', $arrmarks);
     }
 }
 

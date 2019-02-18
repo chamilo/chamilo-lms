@@ -520,6 +520,11 @@ ALTER TABLE c_survey_question ADD is_required TINYINT(1) DEFAULT 0 NOT NULL;
 // ALTER TABLE c_survey CHANGE avail_from avail_from DATETIME DEFAULT NULL, CHANGE avail_till avail_till DATETIME DEFAULT NULL;
 // Requires change the Doctrine type from date to datime in CSurvey::$availFrom and CSurvey::$availTill
 //$_configuration['allow_survey_availability_datetime'] = false;
+// Mark the "Required" field during question creation process when displaying the form.
+//$_configuration['survey_mark_question_as_required'] = false;
+// Allow add additional actions (as links) in survey list for teachers.
+// e.g. ['myplugin' => ['MyPlugin', 'urlGeneratorCallback']]
+//$_configuration['survey_additional_teacher_modify_actions'] = [];
 // ------
 
 // Allow career diagram, requires a DB change:
@@ -1055,6 +1060,7 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Requires a DB change:
 // ALTER TABLE c_lp ADD accumulate_work_time INT NOT NULL;
 // CREATE TABLE track_e_access_complete (id int(11) NOT NULL AUTO_INCREMENT, user_id int(11) NOT NULL, date_reg datetime NOT NULL, tool varchar(255) NOT NULL,  tool_id int(11) NOT NULL,   tool_id_detail int(11) NOT NULL,  action varchar(255) NOT NULL,   action_details varchar(255) NOT NULL, current_id int(11) NOT NULL,  ip_user varchar(255) NOT NULL,  user_agent varchar(255) NOT NULL,   session_id int(11) NOT NULL,   c_id int(11) NOT NULL,   ch_sid varchar(255) NOT NULL,   login_as int(11) NOT NULL,   info longtext NOT NULL,   url text NOT NULL,   PRIMARY KEY (id) ) ENGINE=InnoDB AUTO_INCREMENT=13989 DEFAULT CHARSET=utf8;
+// Only applied for courses with extra field "new_tracking_system" to "1"
 //$_configuration['lp_minimum_time'] = false;
 
 // Add collapsable option for user course categories
@@ -1072,9 +1078,8 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Hide social media links
 //$_configuration['hide_social_media_links'] = false;
 
-// Allow code field in exercise questions
-//ALTER TABLE c_quiz_question ADD COLUMN code VARCHAR(255) NULL DEFAULT NULL;
-// $_configuration['allow_question_code'] = false;
+// Show chamilo unique question id in exercises
+// $_configuration['show_question_id'] = false;
 
 // Show pagination if question list is bigger than "x" value, if 0 pagination will not appear.
 // Option only when building an exercise as a teacher
@@ -1082,10 +1087,19 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 
 // Number of questions to show in every page
 // Option only when building an exercise as a teacher
-// $_configuration['question_pagination_lenght'] = 20;
+// $_configuration['question_pagination_length'] = 20;
 
 // Teachers cannot delete an exercise/questions, change exercise visibility, download to qti, clean results
 // $_configuration['limit_exercise_teacher_access'] = false;
+
+// Changes the row list when using jqgrid/sortable tables
+//$_configuration['table_row_list'] = ['options' => [50, 100, 200, 500]];
+
+// Default selected row in jqgrid/sortable tables
+//$_configuration['table_default_row'] = 50;
+
+// Disable Chamilo.org announcements at the top of the admin page
+//$_configuration['admin_chamilo_announcements_disable'] = false;
 
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email

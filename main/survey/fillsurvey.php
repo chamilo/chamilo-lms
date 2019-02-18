@@ -166,8 +166,6 @@ $logInfo = [
     'tool_id_detail' => 0,
     'action' => 'invitationcode',
     'action_details' => $invitationcode,
-    'current_id' => 0,
-    'info' => '',
 ];
 Event::registerLog($logInfo);
 
@@ -223,6 +221,10 @@ if ($survey_data['survey_type'] == '3') {
         'survey/meeting.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId.'&invitationcode='.Security::remove_XSS($invitationcode)
     );
     exit;
+}
+
+if (!empty($survey_data['anonymous'])) {
+    define('USER_IN_ANON_SURVEY', true);
 }
 
 // Storing the answers

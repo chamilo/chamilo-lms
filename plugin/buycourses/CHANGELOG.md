@@ -1,3 +1,13 @@
+v5.0 - 2019-02-06
+====
+
+This version includes two additional modules (taxes and invoices), 
+which can be enabled from the configuration.
+
+The file update.php must be executed to update the structure of the tables
+ in the database.
+ 
+
 v4.0 - 2017-04-25
 ====
 

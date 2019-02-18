@@ -172,6 +172,7 @@ function online_logout($user_id = null, $logout_redirect = false)
         }
     }
 
+    Session::erase('last_id');
     CourseChatUtils::exitChat($user_id);
     session_regenerate_id();
     Session::destroy();

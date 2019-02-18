@@ -40,7 +40,7 @@
                             </div>
                         {% endif %}
                         <div class="section-notifications">
-                            {% if _u.logged == 1 %}
+                            {% if _u.logged == 1 and not user_in_anon_survey %}
                             <ul id="notifications" class="nav nav-pills pull-right">
                             </ul>
                             {% endif %}

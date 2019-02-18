@@ -2238,7 +2238,7 @@ class SurveyUtil
             $users_array = $result['users'];
 
             foreach ($groupList as $groupId) {
-                $userGroupList = GroupManager::getStudents($groupId);
+                $userGroupList = GroupManager::getStudents($groupId, true);
                 $userGroupIdList = array_column($userGroupList, 'user_id');
                 $users_array = array_merge($users_array, $userGroupIdList);
 
@@ -2919,6 +2919,8 @@ class SurveyUtil
         if (api_is_allowed_to_edit() ||
             api_is_element_in_the_session(TOOL_SURVEY, $survey_id)
         ) {
+            $actions[] = self::getAdditionalTeacherActions($survey_id);
+
             $warning = addslashes(api_htmlentities(get_lang('DeleteSurvey').'?', ENT_QUOTES));
             $actions[] = Display::url(
                 Display::return_icon('delete.png', get_lang('Delete')),
@@ -2927,6 +2929,34 @@ class SurveyUtil
                 [
                     'onclick' => "javascript: if (!confirm('".$warning."')) return false;",
                 ]
+            );
+        }
+
+        return implode(PHP_EOL, $actions);
+    }
+
+    /**
+     * Get the additional actions added in survey_additional_teacher_modify_actions configuration.
+     *
+     * @param int $surveyId
+     * @param int $iconSize
+     *
+     * @return string
+     */
+    public static function getAdditionalTeacherActions($surveyId, $iconSize = ICON_SIZE_SMALL)
+    {
+        $additionalActions = api_get_configuration_value('survey_additional_teacher_modify_actions') ?: [];
+
+        if (empty($additionalActions)) {
+            return '';
+        }
+
+        $actions = [];
+
+        foreach ($additionalActions as $additionalAction) {
+            $actions[] = call_user_func(
+                $additionalAction,
+                ['survey_id' => $surveyId, 'icon_size' => $iconSize]
             );
         }
 

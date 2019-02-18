@@ -160,7 +160,7 @@ $form->addElement('html', '<div class="col-md-2"></div>');
 $form->addElement('html', '</div>');
 
 // Time Control
-if (api_get_configuration_value('lp_minimum_time')) {
+if (Tracking::minimunTimeAvailable(api_get_session_id(), api_get_course_int_id())) {
     $accumulateTime = $_SESSION['oLP']->getAccumulateWorkTime();
     $form->addText('accumulate_work_time', [get_lang('LpMinTime'), get_lang('LpMinTimeDescription')]);
     $defaults['accumulate_work_time'] = $accumulateTime;

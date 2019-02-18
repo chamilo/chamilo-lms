@@ -33,8 +33,6 @@ $logInfo = [
     'tool_id_detail' => 0,
     'action' => 'edit-weight',
     'action_details' => $action_details,
-    'current_id' => $my_selectcat,
-    'info' => '',
 ];
 Event::registerLog($logInfo);
 

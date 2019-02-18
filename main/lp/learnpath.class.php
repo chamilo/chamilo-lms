@@ -2413,7 +2413,7 @@ class learnpath
                 $isBlocked = true;
             }
 
-            if (api_get_configuration_value('lp_minimum_time')) {
+            if (Tracking::minimunTimeAvailable($sessionId, $courseId)) {
                 // Block if it does not exceed minimum time
                 // Minimum time (in minutes) to pass the learning path
                 $accumulateWorkTime = self::getAccumulateWorkTimePrerequisite($prerequisite, $courseId);
@@ -2545,44 +2545,46 @@ class learnpath
                 }
             }
 
-            $subscriptionSettings = self::getSubscriptionSettings();
+            if ($is_visible) {
+                $subscriptionSettings = self::getSubscriptionSettings();
 
-            // Check if the subscription users/group to a LP is ON
-            if (isset($row['subscribe_users']) && $row['subscribe_users'] == 1 &&
-                $subscriptionSettings['allow_add_users_to_lp'] === true
-            ) {
-                // Try group
-                $is_visible = false;
-                // Checking only the user visibility
-                $userVisibility = api_get_item_visibility(
-                    $courseInfo,
-                    'learnpath',
-                    $row['id'],
-                    $sessionId,
-                    $student_id,
-                    'LearnpathSubscription'
-                );
+                // Check if the subscription users/group to a LP is ON
+                if (isset($row['subscribe_users']) && $row['subscribe_users'] == 1 &&
+                    $subscriptionSettings['allow_add_users_to_lp'] === true
+                ) {
+                    // Try group
+                    $is_visible = false;
+                    // Checking only the user visibility
+                    $userVisibility = api_get_item_visibility(
+                        $courseInfo,
+                        'learnpath',
+                        $row['id'],
+                        $sessionId,
+                        $student_id,
+                        'LearnpathSubscription'
+                    );
 
-                if ($userVisibility == 1) {
-                    $is_visible = true;
-                } else {
-                    $userGroups = GroupManager::getAllGroupPerUserSubscription($student_id);
-                    if (!empty($userGroups)) {
-                        foreach ($userGroups as $groupInfo) {
-                            $groupId = $groupInfo['iid'];
-                            $userVisibility = api_get_item_visibility(
-                                $courseInfo,
-                                'learnpath',
-                                $row['id'],
-                                $sessionId,
-                                null,
-                                'LearnpathSubscription',
-                                $groupId
-                            );
+                    if ($userVisibility == 1) {
+                        $is_visible = true;
+                    } else {
+                        $userGroups = GroupManager::getAllGroupPerUserSubscription($student_id);
+                        if (!empty($userGroups)) {
+                            foreach ($userGroups as $groupInfo) {
+                                $groupId = $groupInfo['iid'];
+                                $userVisibility = api_get_item_visibility(
+                                    $courseInfo,
+                                    'learnpath',
+                                    $row['id'],
+                                    $sessionId,
+                                    null,
+                                    'LearnpathSubscription',
+                                    $groupId
+                                );
 
-                            if ($userVisibility == 1) {
-                                $is_visible = true;
-                                break;
+                                if ($userVisibility == 1) {
+                                    $is_visible = true;
+                                    break;
+                                }
                             }
                         }
                     }
@@ -10728,6 +10730,8 @@ class learnpath
             'preview_view.png',
             get_lang('Preview')
         );
+        $quizIcon = Display::return_icon('quiz.png', '', [], ICON_SIZE_TINY);
+        $moveIcon = Display::return_icon('move_everywhere.png', get_lang('Move'), [], ICON_SIZE_TINY);
         $exerciseUrl = api_get_path(WEB_CODE_PATH).'exercise/showinframes.php?'.api_get_cidreq();
 
         // Display hotpotatoes
@@ -10758,33 +10762,32 @@ class learnpath
                 api_html_entity_decode($row_quiz['title'])
             );
 
+            $visibility = api_get_item_visibility(
+                ['real_id' => $course_id],
+                TOOL_QUIZ,
+                $row_quiz['iid'],
+                $session_id
+            );
+
             $link = Display::url(
                 $previewIcon,
                 $exerciseUrl.'&exerciseId='.$row_quiz['id'],
                 ['target' => '_blank']
             );
             $return .= '<li class="lp_resource_element" data_id="'.$row_quiz['id'].'" data_type="quiz" title="'.$title.'" >';
-            $return .= '<a class="moved" href="#">';
-            $return .= Display::return_icon(
-                'move_everywhere.png',
-                get_lang('Move'),
-                [],
-                ICON_SIZE_TINY
-            );
-            $return .= '</a> ';
-            $return .= Display::return_icon(
-                'quiz.png',
-                '',
-                [],
-                ICON_SIZE_TINY
-            );
+            $return .= Display::url($moveIcon, '#', ['class' => 'moved']);
+            $return .= $quizIcon;
             $sessionStar = api_get_session_image(
                 $row_quiz['session_id'],
                 $userInfo['status']
             );
-            $return .= '<a class="moved" href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_QUIZ.'&file='.$row_quiz['id'].'&lp_id='.$this->lp_id.'">'.
-                Security::remove_XSS(cut($title, 80)).$link.$sessionStar.
-                '</a>';
+            $return .= Display::url(
+                Security::remove_XSS(cut($title, 80)).$link.$sessionStar,
+                api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_QUIZ.'&file='.$row_quiz['id'].'&lp_id='.$this->lp_id,
+                [
+                    'class' => $visibility == 0 ? 'moved text-muted' : 'moved',
+                ]
+            );
 
             $return .= '</li>';
         }

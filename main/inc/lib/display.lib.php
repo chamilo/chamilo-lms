@@ -67,7 +67,11 @@ class Display
             $showHeader = false;
         }
 
-        self::$global_template = new Template($tool_name, $showHeader, $showHeader);
+        /* USER_IN_ANON_SURVEY is defined in fillsurvey.php when survey is marked as anonymous survey */
+        $userInAnonSurvey = defined('USER_IN_ANON_SURVEY') && USER_IN_ANON_SURVEY;
+
+        self::$global_template = new Template($tool_name, $showHeader, $showHeader, false, $userInAnonSurvey);
+        self::$global_template->assign('user_in_anon_survey', $userInAnonSurvey);
 
         // Fixing tools with any help it takes xxx part of main/xxx/index.php
         if (empty($help)) {
@@ -1321,9 +1325,23 @@ class Display
         $obj->viewrecords = 'true';
         $all_value = 10000000;
 
+        // Sets how many records we want to view in the grid
+        $obj->rowNum = 20;
+
         // Default row quantity
         if (!isset($extra_params['rowList'])) {
             $extra_params['rowList'] = [20, 50, 100, 500, 1000, $all_value];
+            $rowList = api_get_configuration_value('table_row_list');
+            if (!empty($rowList) && isset($rowList['options'])) {
+                $rowList = $rowList['options'];
+                $rowList[] = $all_value;
+            }
+            $extra_params['rowList'] = $rowList;
+        }
+
+        $defaultRow = api_get_configuration_value('table_default_row');
+        if (!empty($defaultRow)) {
+            $obj->rowNum = (int) $defaultRow;
         }
 
         $json = '';
@@ -1349,8 +1367,6 @@ class Display
             $obj->rowList = $extra_params['rowList'];
         }
 
-        // Sets how many records we want to view in the grid
-        $obj->rowNum = 20;
         if (!empty($extra_params['rowNum'])) {
             $obj->rowNum = $extra_params['rowNum'];
         } else {

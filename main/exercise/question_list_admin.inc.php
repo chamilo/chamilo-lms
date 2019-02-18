@@ -14,8 +14,6 @@ use ChamiloSession as Session;
  *    This script allows to manage the question list
  *    It is included from the script admin.php
  */
-
-
 $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
 
 // deletes a question from the exercise (not from the data base)
@@ -175,16 +173,16 @@ if (!$inATest) {
         $showPagination = api_get_configuration_value('show_question_pagination');
         if (!empty($showPagination) && $nbrQuestions > $showPagination) {
             $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
-            $lenght = api_get_configuration_value('question_pagination_lenght');
+            $length = api_get_configuration_value('question_pagination_length');
             $url = api_get_self().'?'.api_get_cidreq();
             // Use pagination for exercise with more than 200 questions.
             $alloQuestionOrdering = false;
-            $start = ($page - 1) * $lenght;
-            $questionList = $objExercise->getQuestionForTeacher($start, $lenght);
+            $start = ($page - 1) * $length;
+            $questionList = $objExercise->getQuestionForTeacher($start, $length);
             $paginator = new Knp\Component\Pager\Paginator();
             $pagination = $paginator->paginate([]);
             $pagination->setTotalItemCount($nbrQuestions);
-            $pagination->setItemNumberPerPage($lenght);
+            $pagination->setItemNumberPerPage($length);
             $pagination->setCurrentPageNumber($page);
             $pagination->renderer = function ($data) use ($url) {
                 $render = '<ul class="pagination">';
@@ -240,7 +238,7 @@ if (!$inATest) {
                     api_get_self().'?'.api_get_cidreq().'&clone_question='.$id,
                     ['class' => 'btn btn-default btn-sm']
                 );
-                $edit_link = ($objQuestionTmp->type == CALCULATED_ANSWER && $objQuestionTmp->isAnswered())
+                $edit_link = $objQuestionTmp->type == CALCULATED_ANSWER && $objQuestionTmp->isAnswered()
                     ? Display::span(
                         Display::return_icon(
                             'edit_na.png',
@@ -302,6 +300,7 @@ if (!$inATest) {
                     $move = Display::returnFontAwesomeIcon('arrows moved', 1, true);
                 }
 
+
                 // Question name
                 $questionName =
                     '<a href="#" title = "'.Security::remove_XSS($title).'">
@@ -330,8 +329,7 @@ if (!$inATest) {
                 // Question score
                 $questionScore = $objQuestionTmp->selectWeighting();
 
-                echo '
-                    <div id="question_id_list_'.$id.'">
+                echo '<div id="question_id_list_'.$id.'">
                         <div class="header_operations" data-exercise="'.$objExercise->selectId().'"
                             data-question="'.$id.'">
                             <div class="row">

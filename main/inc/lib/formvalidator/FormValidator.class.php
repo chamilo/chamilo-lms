@@ -1804,8 +1804,8 @@ EOT;
                 // which actually support image resizing, but fail to
                 // send Blob objects via XHR requests:
                 disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
-                previewMaxWidth: 50,
-                previewMaxHeight: 50,
+                previewMaxWidth: 300,
+                previewMaxHeight: 169,
                 previewCrop: true,
                 dropzone: $('#dropzone'),                                
             }).on('fileuploadadd', function (e, data) {                
@@ -1819,9 +1819,9 @@ EOT;
                     file = data.files[index],
                     node = $(data.context.children()[index]);
                 if (file.preview) {
-                    data.context.prepend($('<div class=\"col-sm-2\">').html(file.preview));
+                    data.context.prepend($('<div class=\"col-sm-4\">').html(file.preview));
                 } else {
-                    data.context.prepend($('<div class=\"col-sm-2\">').html('".$icon."'));
+                    data.context.prepend($('<div class=\"col-sm-4\">').html('".$icon."'));
                 }
                 if (index + 1 === data.files.length) {
                     data.context.find('button')

@@ -1928,14 +1928,14 @@ class Tracking
                 $where_condition = ' AND access_date < "'.$last_access.'" ';
             }
 
-            $tbl_track_e_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
-            $sql = 'SELECT access_date
-                FROM '.$tbl_track_e_access.'
-                WHERE   access_user_id = '.$student_id.' AND
-                        c_id = "'.$courseId.'" AND
-                        access_session_id = '.$session_id.$where_condition.'
-                ORDER BY access_date DESC
-                LIMIT 0,1';
+            $tbl_track_e_course_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+            $sql = "SELECT logout_course_date
+                FROM $tbl_track_e_course_access
+                WHERE   user_id = $student_id AND
+                        c_id = $courseId AND
+                        session_id = $session_id $where_condition
+                ORDER BY logout_course_date DESC
+                LIMIT 0,1";
 
             $rs = Database::query($sql);
             if (Database::num_rows($rs) > 0) {
@@ -1972,14 +1972,14 @@ class Tracking
                 }
             }
         } else {
-            $tbl_track_e_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
-            $sql = 'SELECT access_date
-                    FROM '.$tbl_track_e_access.'
-                    WHERE   access_user_id = '.$student_id.' AND
-                            c_id = "'.$courseId.'" AND
-                            access_session_id = '.$session_id.'
-                    ORDER BY access_date DESC
-                    LIMIT 0,1';
+            $tbl_track_e_course_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+            $sql = "SELECT logout_course_date
+                    FROM $tbl_track_e_course_access
+                    WHERE   user_id = $student_id AND
+                            c_id = $courseId AND
+                            session_id = $session_id
+                    ORDER BY logout_course_date DESC
+                    LIMIT 0,1";
 
             $rs = Database::query($sql);
             if (Database::num_rows($rs) > 0) {

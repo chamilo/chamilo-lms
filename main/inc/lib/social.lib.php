@@ -2215,7 +2215,7 @@ class SocialManager extends UserManager
      *
      * @return string
      */
-    public static function getSkillBlock($userId)
+    public static function getSkillBlock($userId, $orientation='horizontal')
     {
         if (Skill::isAllowed($userId, false) === false) {
             return '';
@@ -2226,7 +2226,8 @@ class SocialManager extends UserManager
 
         $template = new Template(null, false, false, false, false, false);
         $template->assign('ranking', $ranking);
-        $template->assign('skills', $skill->getUserSkillsTable($userId, 0, 0, false)['table']);
+        $template->assign('skills', $skill->getUserSkillsTable($userId, 0, 0, false)['skills']);
+        $template->assign('orientation', $orientation);
         $template->assign('user_id', $userId);
         $template->assign(
             'show_skills_report_link',

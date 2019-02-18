@@ -87,6 +87,7 @@ if ($formSent) {
     /** @var CQuizQuestion $question */
     if ($pagination) {
         $url = api_get_path(WEB_CODE_PATH).'exercise/admin.php?';
+        $exerciseUrl = api_get_path(WEB_CODE_PATH).'exercise/exercise.php?';
         foreach ($pagination as $question) {
             // Creating empty exercise
             $exercise = new Exercise();
@@ -127,12 +128,20 @@ if ($formSent) {
                             'exerciseId' => $exerciseId,
                             'type' => $question->getType(),
                             'editQuestion' => $question->getId()
-                        ])
+                        ]),
+                        ['target' => '_blank']
                     );
                 }
                 $question->questionData .= '<br />'. $exerciseData;
+            } else {
+                $question->questionData .= get_lang('Course').': '.Display::url(
+                    $courseInfo['name'],
+                    $exerciseUrl.http_build_query([
+                        'cidReq' => $courseCode
+                    ]),
+                    ['target' => '_blank']
+                );
             }
-
             ob_end_clean();
         }
     }

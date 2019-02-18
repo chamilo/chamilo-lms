@@ -138,8 +138,6 @@ if (isset($typeSelected) && $typeSelected != '0') {
             'tool_id_detail' => 0,
             'action' => 'new-link',
             'action_details' => 'selectcat='.$selectCat,
-            'current_id' => $link->get_id(),
-            'info' => '',
         ];
         Event::registerLog($logInfo);
 
@@ -167,8 +165,6 @@ $logInfo = [
     'tool_id_detail' => 0,
     'action' => 'add-link',
     'action_details' => 'selectcat='.$selectCat,
-    'current_id' => $current_id,
-    'info' => '',
 ];
 Event::registerLog($logInfo);
 

@@ -166,8 +166,6 @@ $logInfo = [
     'tool_id_detail' => 0,
     'action' => 'invitationcode',
     'action_details' => $invitationcode,
-    'current_id' => 0,
-    'info' => '',
 ];
 Event::registerLog($logInfo);
 

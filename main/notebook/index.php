@@ -45,8 +45,6 @@ $logInfo = [
     'tool_id_detail' => 0,
     'action' => $action,
     'action_details' => '',
-    'current_id' => isset($_REQUEST['notebook_id']) ? (int) $_REQUEST['notebook_id'] : 0,
-    'info' => '',
 ];
 Event::registerLog($logInfo);
 

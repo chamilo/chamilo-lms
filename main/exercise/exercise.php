@@ -162,7 +162,6 @@ $logInfo = [
     'tool_id_detail' => 0,
     'action' => isset($_REQUEST['learnpath_id']) ? 'learnpath_id' : '',
     'action_details' => isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : '',
-    'current_id' => 0,
 ];
 Event::registerLog($logInfo);
 

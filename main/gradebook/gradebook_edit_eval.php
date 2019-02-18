@@ -51,8 +51,6 @@ if ($form->validate()) {
         'tool_id_detail' => 0,
         'action' => 'edit-eval',
         'action_details' => '',
-        'current_id' => $eval->get_category_id(),
-        'info' => '',
     ];
     Event::registerLog($logInfo);
 

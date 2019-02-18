@@ -6837,17 +6837,7 @@ class Tracking
                                 $lpTime[$item['tool_id']] = 0;
                             }
                             $lpTime[$item['tool_id']] += $partialTime;
-                            if ($item['tool_id'] == 51) {
-                                //$counter++;
-                                //var_dump($beforeItem, $item);
-                                /*var_dump(
-                                    api_get_utc_datetime($item['date_reg']),
-                                    api_get_utc_datetime($beforeItem['date_reg'])
-                                );*/
-                                /*var_dump(
-                                    $counter.'-'.$beforeItem['id'].'-'.$item['id'].'-'.$partialTime.'-'.api_time_to_hms($lpTime[$item['tool_id']])
-                                );*/
-                            }
+
                             break;
                         case TOOL_QUIZ:
                             if (!isset($lpTime[$item['action_details']])) {

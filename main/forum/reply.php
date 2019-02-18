@@ -161,7 +161,6 @@ $logInfo = [
     'tool_id_detail' => $threadId,
     'action' => !empty($my_action) ? $my_action : 'reply',
     'action_details' => '',
-    'current_id' => $my_post,
 ];
 Event::registerLog($logInfo);
 

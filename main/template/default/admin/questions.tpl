@@ -5,7 +5,6 @@
     {{ form }}
 
     {% for question in pagination %}
-        {{ question.question }}
         {{ display.collapse(
             question.iid,
             '#' ~ question.iid ~ '-' ~ question.question,

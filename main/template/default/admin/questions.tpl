@@ -8,7 +8,7 @@
         {{ question.question }}
         {{ display.collapse(
             question.iid,
-            '#' ~ question.iid ~ '-' ~ question.question ~ '&nbsp;' ~ question.editButton,
+            '#' ~ question.iid ~ '-' ~ question.question,
             question.questionData,
             false,
             false

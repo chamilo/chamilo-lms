@@ -1,3 +1,4 @@
+
 <?php
 /* For licensing terms, see /license.txt */
 
@@ -90,6 +91,8 @@ if ($formSent) {
             // Creating empty exercise
             $exercise = new Exercise();
             $exercise->course_id = $question->getCId();
+            $questionObject = Question::read($question->getId(), $question->getCId());
+
             ob_start();
             ExerciseLib::showQuestion(
                 $exercise,
@@ -106,21 +109,32 @@ if ($formSent) {
             $question->questionData = ob_get_contents();
             $courseInfo = api_get_course_info_by_id($exercise->course_id);
             $courseCode = $courseInfo['code'];
-            $question->editButton = Display::url(
-                Display::return_icon('edit.png'),
-                $url.http_build_query([
-                    'cidReq' => $courseCode,
-                    'myid' => 1,
-                    'type' => $question->getType(),
-                    'editQuestion' => $question->getId()
-                ])
-            );
+
+            $exerciseData = '';
+            $exerciseId = 0;
+            if (!empty($questionObject->exerciseList)) {
+                $exerciseData .= get_lang('Exercises').'<br />';
+                foreach ($questionObject->exerciseList as $exerciseId) {
+                    $exercise = new Exercise();
+                    $exercise->course_id = $question->getCId();
+                    $exercise->read($exerciseId);
+                    $exerciseData .= $exercise->title.'&nbsp;';
+                    $exerciseData .= Display::url(
+                        Display::return_icon('edit.png', get_lang('Edit')),
+                        $url.http_build_query([
+                            'cidReq' => $courseCode,
+                            'myid' => 1,
+                            'exerciseId' => $exerciseId,
+                            'type' => $question->getType(),
+                            'editQuestion' => $question->getId()
+                        ])
+                    );
+                }
+                $question->questionData .= '<br />'. $exerciseData;
+            }
+
             ob_end_clean();
         }
-    } else {
-        /*Display::addFlash(Display::return_message(get_lang('NotFound')));
-        header('Location:' .api_get_self());
-        exit;*/
     }
 }
 

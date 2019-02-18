@@ -367,14 +367,14 @@ if (api_is_western_name_order()) {
     $table->set_header(2, get_lang('FirstName'));
 }
 
-if (api_get_setting('show_email_addresses') == 'true') {
+if (api_get_setting('show_email_addresses') == 'true' || api_is_allowed_to_edit() == 'true') {
     $table->set_header(3, get_lang('Email'));
     $table->set_column_filter(3, 'email_filter');
+    $table->set_header(4, get_lang('Active'));
+    $table->set_column_filter(4, 'activeFilter');
 } else {
-    if (api_is_allowed_to_edit() == 'true') {
-        $table->set_header(3, get_lang('Email'));
-        $table->set_column_filter(3, 'email_filter');
-    }
+    $table->set_header(3, get_lang('Active'));
+    $table->set_column_filter(3, 'activeFilter');
 }
 //the order of these calls is important
 //$table->set_column_filter(1, 'user_name_filter');
@@ -455,6 +455,7 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
 				user.firstname 	AS col2,"
             )."
 				user.email		AS col3
+				, user.active AS col4
 				FROM $table_user user 
 				INNER JOIN $table_group_user group_rel_user
 				ON (group_rel_user.user_id = user.id)
@@ -476,6 +477,7 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
                         "u.lastname 	AS col1,
                         u.firstname 	AS col2,")."
                         u.email		AS col3
+                        , u.active AS col4
                     FROM $table_user u 
                     INNER JOIN $table_group_user gu 
                     ON (gu.user_id = u.id)
@@ -497,6 +499,7 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
                     "user.lastname 	AS col1,
 						user.firstname 	AS col2 "
                     )."
+                    , user.active AS col3
                     FROM $table_user user 
                     INNER JOIN $table_group_user group_rel_user
                     ON (group_rel_user.user_id = user.id)
@@ -531,6 +534,14 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
 function email_filter($email)
 {
     return Display::encrypted_mailto_link($email, $email);
+}
+
+function activeFilter($isActive) {
+    if ($isActive) {
+        return Display::return_icon('accept.png', get_lang('Active'), [], ICON_SIZE_TINY);
+    }
+
+    return Display::return_icon('error.png', get_lang('Inactive'), [], ICON_SIZE_TINY);
 }
 
 /**

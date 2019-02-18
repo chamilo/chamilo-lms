@@ -10730,6 +10730,8 @@ class learnpath
             'preview_view.png',
             get_lang('Preview')
         );
+        $quizIcon = Display::return_icon('quiz.png', '', [], ICON_SIZE_TINY);
+        $moveIcon = Display::return_icon('move_everywhere.png', get_lang('Move'), [], ICON_SIZE_TINY);
         $exerciseUrl = api_get_path(WEB_CODE_PATH).'exercise/showinframes.php?'.api_get_cidreq();
 
         // Display hotpotatoes
@@ -10756,6 +10758,33 @@ class learnpath
 
         $exerciseUrl = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq();
         while ($row_quiz = Database::fetch_array($res_quiz)) {
+            $exercise = new Exercise();
+            $exercise->read($row_quiz['iid'], false);
+
+            $visibility = api_get_item_visibility(
+                ['real_id' => $course_id],
+                TOOL_QUIZ,
+                $row_quiz['iid'],
+                0
+            );
+
+            if (!empty($session_id)) {
+                if (api_get_configuration_value('show_hidden_exercise_added_to_lp')) {
+                    if (false == $exercise->exercise_was_added_in_lp && 0 == $visibility) {
+                        continue;
+                    }
+                } elseif (0 == $visibility) {
+                    continue;
+                }
+
+                $visibility = api_get_item_visibility(
+                    ['real_id' => $course_id],
+                    TOOL_QUIZ,
+                    $row_quiz['iid'],
+                    $session_id
+                );
+            }
+
             $title = strip_tags(
                 api_html_entity_decode($row_quiz['title'])
             );
@@ -10766,27 +10795,19 @@ class learnpath
                 ['target' => '_blank']
             );
             $return .= '<li class="lp_resource_element" data_id="'.$row_quiz['id'].'" data_type="quiz" title="'.$title.'" >';
-            $return .= '<a class="moved" href="#">';
-            $return .= Display::return_icon(
-                'move_everywhere.png',
-                get_lang('Move'),
-                [],
-                ICON_SIZE_TINY
-            );
-            $return .= '</a> ';
-            $return .= Display::return_icon(
-                'quiz.png',
-                '',
-                [],
-                ICON_SIZE_TINY
-            );
+            $return .= Display::url($moveIcon, '#', ['class' => 'moved']);
+            $return .= $quizIcon;
             $sessionStar = api_get_session_image(
                 $row_quiz['session_id'],
                 $userInfo['status']
             );
-            $return .= '<a class="moved" href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_QUIZ.'&file='.$row_quiz['id'].'&lp_id='.$this->lp_id.'">'.
-                Security::remove_XSS(cut($title, 80)).$link.$sessionStar.
-                '</a>';
+            $return .= Display::url(
+                Security::remove_XSS($exercise->getCutTitle()).$link.$sessionStar,
+                api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_QUIZ.'&file='.$row_quiz['id'].'&lp_id='.$this->lp_id,
+                [
+                    'class' => $visibility == 0 ? 'moved text-muted' : 'moved',
+                ]
+            );
 
             $return .= '</li>';
         }

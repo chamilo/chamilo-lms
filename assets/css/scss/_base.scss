@@ -983,6 +983,48 @@ hr {
   }
 }
 
+/*** TOOLS START COURSE ***/
+.start-course{
+  text-align: center;
+  .image-course{
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+  }
+  .start-info{
+    padding-top: 1rem;
+    margin-top: 1rem;
+  }
+}
+.grid-start{
+  display: grid;
+  grid-gap: 1rem;
+  grid-row-gap: 16px;
+  grid-template-columns: repeat(5, 1fr);
+  @include large($breakpoint-xl){
+    grid-template-columns: repeat(5, 1fr);
+  }
+  @include portrait($breakpoint-sm, $breakpoint-md){
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @include landscape($breakpoint-sm) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .items-tools{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .item{
+      display: inline-block;
+      width: 100%;
+      text-align: center;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+      margin-top: 1rem;
+    }
+  }
+}
+
 /*** TOOLS COURSE  ***/
 
 .grid-tools{

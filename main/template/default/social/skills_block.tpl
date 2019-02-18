@@ -30,10 +30,25 @@ $(function() {
                 </div>
             </h4>
         </div>
-        <div id="skillList" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+        <div id="skillList" class="panel-collapse collapse in list-{{ orientation }}" role="tabpanel" aria-labelledby="headingOne">
             <div class="panel-body">
                 {% if skills %}
-                    {{ skills }}
+                    <div class="list-skills">
+                        {% for item in skills %}
+                        <div class="item">
+                            <div class="image">
+                                <a href="{{ item.skill_url }}" title="{{ item.skill_name }}">
+                                    {{ item.skill_badge }}
+                                </a>
+                            </div>
+                            <div class="caption">
+                                <a href="{{ item.skill_url }}" title="{{ item.skill_name }}">
+                                    {{ item.skill_name }}
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
                 {% else %}
                     <p>{{ 'WithoutAchievedSkills'|get_lang }}</p>
                     <p>

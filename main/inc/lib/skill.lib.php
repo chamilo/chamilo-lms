@@ -1383,7 +1383,6 @@ class Skill extends Model
     public function getUserSkillsTable($userId, $courseId = 0, $sessionId = 0, $addTitle = true)
     {
         $skills = $this->getUserSkills($userId, true, $courseId, $sessionId);
-
         $courseTempList = [];
         $tableRows = [];
         $skillParents = [];
@@ -1408,11 +1407,11 @@ class Skill extends Model
                     $courseTempList[$courseId] = $courseInfo;
                 }
             }
-
             $tableRow = [
-                'skill_badge' => $resultData['img_mini'],
+                'skill_badge' => $resultData['img_small'],
                 'skill_name' => self::translateName($resultData['name']),
                 'short_code' => $resultData['short_code'],
+                'skill_url' => $resultData['url'],
                 'achieved_at' => api_get_local_time($resultData['acquired_skill_at']),
                 'course_image' => '',
                 'course_name' => '',
@@ -1438,7 +1437,7 @@ class Skill extends Model
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>'.get_lang('AchievedSkills').'</th>
+                                <th>' . get_lang('AchievedSkills') . '</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -1496,7 +1495,7 @@ class Skill extends Model
                         $label = $this->processSkillListSimple([$data], 'mini', $transparency);
                         $table .= '<td >';
 
-                        $table .= '<div class="skills_chart"> <ul><li>'.$label;
+                        $table .= '<div class="skills_chart"> <ul><li>' . $label;
                         $table .= $this->processVertex($vertex, $skills);
                         $table .= '</ul></li></div>';
                         $table .= '</td>';

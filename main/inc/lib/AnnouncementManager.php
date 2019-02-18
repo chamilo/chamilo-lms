@@ -1213,7 +1213,7 @@ class AnnouncementManager
             // outputting the name of the groups
             if (is_array($sent_to_array['groups'])) {
                 foreach ($sent_to_array['groups'] as $group_id) {
-                    $users = GroupManager::getStudents($group_id);
+                    $users = GroupManager::getStudents($group_id, true);
                     $userToArray = [];
                     foreach ($users as $student) {
                         $userToArray[] = $student['complete_name_with_username'];
@@ -1248,7 +1248,7 @@ class AnnouncementManager
             ) {
                 $group_id = $sent_to_array['groups'][0];
 
-                $users = GroupManager::getStudents($group_id);
+                $users = GroupManager::getStudents($group_id, true);
                 $userToArray = [];
                 foreach ($users as $student) {
                     $userToArray[] = $student['complete_name_with_username'];

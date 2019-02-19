@@ -85,13 +85,13 @@
                         <li class="item item-name">
                             <h5>{{ user.firstname }} {{ user.lastname }}</h5>
                         </li>
-
                         {% if show_full_profile %}
+
                             {% if user.email %}
                             <li class="item">
                                 <a href="{{ _p.web }}main/messages/new_message.php">
                                 <img src="{{ "instant_message.png" | icon }}" alt="{{ "Email" | get_lang }}">
-                                {{ user.email }}
+                                    <div class="email-overflow">{{ user.email }}</div>
                                 </a>
                             </li>
                             {% endif %}

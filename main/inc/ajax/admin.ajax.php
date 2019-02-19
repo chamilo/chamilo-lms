@@ -73,11 +73,15 @@ switch ($action) {
             break;
         }
 
-        $latestNews = getLatestNews();
-        $latestNews = json_decode($latestNews, true);
+        try {
+            $latestNews = getLatestNews();
+            $latestNews = json_decode($latestNews, true);
 
-        echo Security::remove_XSS($latestNews['text'], COURSEMANAGER);
-        break;
+            echo Security::remove_XSS($latestNews['text'], COURSEMANAGER);
+            break;
+        } catch (Exception $e) {
+            break;
+        }
 }
 
 /**
@@ -236,6 +240,7 @@ function check_system_version()
  * Display the latest news from the Chamilo Association for admins.
  *
  * @throws \GuzzleHttp\Exception\GuzzleException
+ * @throws Exception
  *
  * @return string|void
  */
@@ -255,7 +260,7 @@ function getLatestNews()
     );
 
     if ($response->getStatusCode() !== 200) {
-        return;
+        throw new Exception(get_lang('DenyEntry'));
     }
 
     return $response->getBody()->getContents();

@@ -2672,11 +2672,9 @@ class SocialManager extends UserManager
             $listType = [];
             $extraFieldItem = [];
             foreach ($extra_user_data as $key => $data) {
-
                 if (empty($data)) {
                     continue;
                 }
-
                 if (in_array($key, $fieldVisibilityKeys) && $fieldVisibility[$key] === false) {
                     continue;
                 }
@@ -2714,15 +2712,52 @@ class SocialManager extends UserManager
                 }
 
                 if (is_array($data)) {
-                    $extra_information_value .= '<li class="list-group-item">' . ucfirst($extraFieldInfo['display_text']) . ' '
-                        . ' ' . implode(',', $data) . '</li>';
-                    $extraFieldItem = [
-                        'variable' => $extraFieldInfo['variable'],
-                        'label' => ucfirst($extraFieldInfo['display_text']),
-                        'value' => implode(',', $data)
-                    ];
+                    switch ($extraFieldInfo['field_type']) {
+                        case ExtraField::FIELD_TYPE_RADIO:
+                            $objEfOption = new ExtraFieldOption('user');
+                            $value = $data['extra_'.$extraFieldInfo['variable']];
+                            $optionInfo = $objEfOption->get_field_option_by_field_and_option(
+                                $extraFieldInfo['id'],
+                                $value
+                            );
+
+                            if ($optionInfo && isset($optionInfo[0])) {
+                                $optionInfo = $optionInfo[0];
+                                $extraFieldItem = [
+                                    'variable' => $extraFieldInfo['variable'],
+                                    'label' => ucfirst($extraFieldInfo['display_text']),
+                                    'value' => $optionInfo['display_text']
+                                ];
+                            } else {
+                                $extraFieldItem = [
+                                    'variable' => $extraFieldInfo['variable'],
+                                    'label' => ucfirst($extraFieldInfo['display_text']),
+                                    'value' => implode(',', $data)
+                                ];
+                            }
+                            break;
+                        default:
+                            $extra_information_value .=
+                                '<li class="list-group-item">'.ucfirst($extraFieldInfo['display_text']).' '
+                                .' '.implode(',', $data).'</li>';
+                            $extraFieldItem = [
+                                'variable' => $extraFieldInfo['variable'],
+                                'label' => ucfirst($extraFieldInfo['display_text']),
+                                'value' => implode(',', $data)
+                            ];
+                            break;
+                    }
+
                 } else {
                     switch ($extraFieldInfo['field_type']) {
+                        case ExtraField::FIELD_TYPE_RADIO:
+
+                            $objEfOption = new ExtraFieldOption('user');
+                            $optionInfo = $objEfOption->get_field_option_by_field_and_option($extraFieldInfo['id'], $extraFieldInfo['value']);
+                            var_dump($extraFieldInfo, $optionInfo);
+
+
+                            break;
                         case ExtraField::FIELD_TYPE_GEOLOCALIZATION:
                             $data = explode('::', $data);
                             $data = $data[0];
@@ -2759,10 +2794,10 @@ class SocialManager extends UserManager
 
                             $tag_tmp = '';
                             foreach ($user_tags as $tags) {
-                                $tag_tmp.= '<a class="label label_tag"'
-                                    . ' href="' . api_get_path(WEB_PATH) . 'main/social/search.php?q=' . $tags['tag'] . '">'
-                                    . $tags['tag']
-                                    . '</a>';
+                                $tag_tmp .= '<a class="label label_tag"'
+                                    .' href="'.api_get_path(WEB_PATH).'main/social/search.php?q='.$tags['tag'].'">'
+                                    .$tags['tag']
+                                    .'</a>';
                             }
                             if (is_array($user_tags) && count($user_tags) > 0) {
                                 $extra_information_value .= '<li class="list-group-item">' . ucfirst($extraFieldInfo['display_text']) . ': '

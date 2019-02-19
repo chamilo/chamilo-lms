@@ -33,6 +33,7 @@
                         <!-- END TYPE PROFILE -->
                         <!-- LM -->
                         <div class="avatar-lm">
+
                             <h5>LM</h5>
 
                             {% if user.language %}
@@ -85,8 +86,8 @@
                         <li class="item item-name">
                             <h5>{{ user.firstname }} {{ user.lastname }}</h5>
                         </li>
-                        {% if show_full_profile %}
 
+                        {% if show_full_profile %}
                             {% if user.email %}
                             <li class="item">
                                 <a href="{{ _p.web }}main/messages/new_message.php">

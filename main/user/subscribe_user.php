@@ -95,9 +95,9 @@ if (isset($_POST['action'])) {
                 foreach ($_POST['user'] as $index => $user_id) {
                     $userInfo = api_get_user_info($user_id);
                     if ($userInfo) {
-                        $message = $userInfo['complete_name_with_username'].' '.get_lang('AddedToCourse');
                         if ($type === COURSEMANAGER) {
                             if (!empty($sessionId)) {
+                                $message = $userInfo['complete_name_with_username'].' '.get_lang('AddedToCourse');
                                 $result = SessionManager::set_coach_to_course_session(
                                     $user_id,
                                     $sessionId,
@@ -107,26 +107,10 @@ if (isset($_POST['action'])) {
                                     $isSuscribe[] = $message;
                                 }
                             } else {
-                                $result = CourseManager::subscribeUser(
-                                    $user_id,
-                                    $courseInfo['code'],
-                                    COURSEMANAGER
-                                );
-
-                                if ($result) {
-                                    $isSuscribe[] = $message;
-                                }
+                                CourseManager::subscribeUser($user_id, $courseInfo['code'], COURSEMANAGER);
                             }
                         } else {
-                            $result = CourseManager::subscribeUser(
-                                $user_id,
-                                $courseInfo['code']
-                            );
-                            if ($result) {
-                                $isSuscribe[] = $message;
-                            } else {
-                                $isSuscribe[] = get_lang('MaxNumberSubscribedStudentsReached').' '.$userInfo['complete_name_with_username'];
-                            }
+                            CourseManager::subscribeUser($user_id, $courseInfo['code']);
                         }
                     }
                 }

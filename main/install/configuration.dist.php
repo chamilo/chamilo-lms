@@ -915,6 +915,9 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Create a new session extra field called "collapsed" (checkbox yes/no - option)
 // $_configuration['allow_user_session_collapsable'] = false;
 
+// Disable Chamilo.org announcements at the top of the admin page
+//$_configuration['admin_chamilo_announcements_disable'] = false;
+
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email

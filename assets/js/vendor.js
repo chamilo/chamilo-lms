@@ -7,11 +7,11 @@ require("webpack-jquery-ui/css");
 
 // JS is equivalent to the normal "bootstrap" package
 // no need to set this to a variable, just require it
-require("bootstrap")
+require("bootstrap");
 require("@coreui/coreui/dist/js/coreui.min.js");
 require("chosen-js");
 require("mediaelement");
-require("pace-js-amd-fix")
+require("pace-js-amd-fix");
 require("multiselect-two-sides");
 require('@fortawesome/fontawesome-free');
 

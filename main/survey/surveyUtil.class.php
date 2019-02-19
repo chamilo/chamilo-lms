@@ -2223,7 +2223,7 @@ class SurveyUtil
             $users_array = $result['users'];
 
             foreach ($groupList as $groupId) {
-                $userGroupList = GroupManager::getStudents($groupId);
+                $userGroupList = GroupManager::getStudents($groupId, true);
                 $userGroupIdList = array_column($userGroupList, 'user_id');
                 $users_array = array_merge($users_array, $userGroupIdList);
 

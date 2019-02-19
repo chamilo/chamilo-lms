@@ -4,6 +4,7 @@
 use Chamilo\CoreBundle\Entity\BranchSync;
 use Chamilo\CoreBundle\Entity\Repository\BranchSyncRepository;
 use Chamilo\CoreBundle\Framework\Container;
+use GuzzleHttp\Client;
 use League\Flysystem\Filesystem;
 
 /**
@@ -67,6 +68,20 @@ switch ($action) {
         }
 
         break;
+    case 'get_latest_news':
+        if (api_get_configuration_value('admin_chamilo_announcements_disable') === true) {
+            break;
+        }
+
+        try {
+            $latestNews = getLatestNews();
+            $latestNews = json_decode($latestNews, true);
+
+            echo Security::remove_XSS($latestNews['text'], COURSEMANAGER);
+            break;
+        } catch (Exception $e) {
+            break;
+        }
 }
 
 /**
@@ -219,4 +234,34 @@ function check_system_version()
     }
 
     return '<span style="color:red">'.get_lang('ImpossibleToContactVersionServerPleaseTryAgain').'</span>';
+}
+
+/**
+ * Display the latest news from the Chamilo Association for admins.
+ *
+ * @throws \GuzzleHttp\Exception\GuzzleException
+ * @throws Exception
+ *
+ * @return string|void
+ */
+function getLatestNews()
+{
+    $url = 'https://version.chamilo.org/news/latest.php';
+
+    $client = new Client();
+    $response = $client->request(
+        'GET',
+        $url,
+        [
+            'query' => [
+                'language' => api_get_interface_language(),
+            ],
+        ]
+    );
+
+    if ($response->getStatusCode() !== 200) {
+        throw new Exception(get_lang('DenyEntry'));
+    }
+
+    return $response->getBody()->getContents();
 }

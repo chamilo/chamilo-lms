@@ -1320,21 +1320,26 @@ class GroupManager
     /**
      * Get only students from a group (not tutors).
      *
-     * @param int $group_id iid
+     * @param int  $group_id iid
+     * @param bool $filterOnlyActive
      *
      * @return array
      */
-    public static function getStudents($group_id)
+    public static function getStudents($group_id, $filterOnlyActive = false)
     {
+        $activeCondition = $filterOnlyActive ? 'AND u.active = 1' : '';
+
         $em = Database::getManager();
         $subscriptions = $em
-            ->createQuery('
-                SELECT gu
-                FROM ChamiloCourseBundle:CGroupRelUser gu
+            ->createQuery("
+                SELECT u.id FROM ChamiloUserBundle:User u
+                INNER JOIN ChamiloCourseBundle:CGroupRelUser gu
+                    WITH u.id = gu.userId
                 INNER JOIN ChamiloCourseBundle:CGroupInfo g
                 WITH gu.groupId = g.id AND g.cId = gu.cId
                 WHERE gu.cId = :course AND g.id = :group
-            ')
+                    $activeCondition
+            ")
             ->setParameters([
                 'course' => api_get_course_int_id(),
                 'group' => intval($group_id),
@@ -1343,9 +1348,8 @@ class GroupManager
 
         $users = [];
 
-        /** @var CGroupRelUser $subscription */
         foreach ($subscriptions as $subscription) {
-            $users[] = api_get_user_info($subscription->getUser()->getId());
+            $users[] = api_get_user_info($subscription['id']);
         }
 
         return $users;

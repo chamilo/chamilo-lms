@@ -1925,7 +1925,7 @@ class Tracking
                 // fin de acceso a la sesión
                 $sessionInfo = SessionManager::fetch($session_id);
                 $last_access = $sessionInfo['access_end_date'];
-                $where_condition = ' AND access_date < "'.$last_access.'" ';
+                $where_condition = ' AND logout_course_date < "'.$last_access.'" ';
             }
 
             $tbl_track_e_course_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);

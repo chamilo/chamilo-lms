@@ -32,15 +32,17 @@ switch ($action) {
                 var defaultLanguage = "";
                 var langFromUserFound = false;
                 $(this).find("span").each(function() {
-                    defaultLanguage = $(this).attr("lang");
-                    $(this).before().next("br").remove();                
-                    if (defaultLanguageFromUser == defaultLanguage) {
-                        langFromUserFound = true;
+                    defaultLanguage = $(this).attr("lang");                            
+                    if (defaultLanguage) {
+                        $(this).before().next("br").remove();                
+                        if (defaultLanguageFromUser == defaultLanguage) {
+                            langFromUserFound = true;
+                        }
                     }
                 });
                 
                 // Show default language
-                if (langFromUserFound == false) {
+                if (langFromUserFound == false && defaultLanguage) {
                     $("span:lang("+defaultLanguage+")").show();
                 }                   
             });

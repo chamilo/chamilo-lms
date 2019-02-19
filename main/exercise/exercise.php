@@ -1250,36 +1250,29 @@ if (!empty($exerciseList)) {
 $hotpotatoes_exist = false;
 
 if ($is_allowedToEdit) {
-    $sql = "SELECT d.path as path, d.comment as comment, ip.visibility as visibility
-            FROM $TBL_DOCUMENT d 
-            INNER JOIN $TBL_ITEM_PROPERTY ip
-            ON (d.id = ip.ref AND d.c_id = ip.c_id)
+    $sql = "SELECT d.iid, d.path as path, d.comment as comment
+            FROM $TBL_DOCUMENT d
             WHERE
                 d.c_id = $courseId AND
-                ip.c_id = $courseId AND                
-                ip.tool = '".TOOL_DOCUMENT."' AND
                 (d.path LIKE '%htm%') AND
                 d.path  LIKE '".Database :: escape_string($uploadPath.'/%/%')."'
             LIMIT ".$from.",".$limit; // only .htm or .html files listed
 } else {
-    $sql = "SELECT d.path as path, d.comment as comment, ip.visibility as visibility
-            FROM $TBL_DOCUMENT d 
-            INNER JOIN $TBL_ITEM_PROPERTY ip
-            ON (d.id = ip.ref AND d.c_id = ip.c_id)
+    $sql = "SELECT d.iid, d.path as path, d.comment as comment
+            FROM $TBL_DOCUMENT d
             WHERE
                 d.c_id = $courseId AND
-                ip.c_id = $courseId AND                
-                ip.tool = '".TOOL_DOCUMENT."' AND
                 (d.path LIKE '%htm%') AND
-                d.path  LIKE '".Database :: escape_string($uploadPath.'/%/%')."' AND
-                ip.visibility='1'
+                d.path  LIKE '".Database :: escape_string($uploadPath.'/%/%')."'
             LIMIT ".$from.",".$limit;
 }
 
 $result = Database::query($sql);
+$attribute = [];
+
 while ($row = Database :: fetch_array($result, 'ASSOC')) {
+    $attribute['id'][] = $row['iid'];
     $attribute['path'][] = $row['path'];
-    $attribute['visibility'][] = $row['visibility'];
     $attribute['comment'][] = $row['comment'];
 }
 
@@ -1288,8 +1281,6 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
     $hotpotatoes_exist = true;
     foreach ($attribute['path'] as $key => $path) {
         $item = '';
-        $vis = $attribute['visibility'][$key];
-        $active = !empty($vis);
         $title = GetQuizName($path, $documentPath);
         if ($title == '') {
             $title = basename($path);
@@ -1297,6 +1288,26 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
 
         // prof only
         if ($is_allowedToEdit) {
+            $visibility = api_get_item_visibility(
+                ['real_id' => $courseId],
+                TOOL_DOCUMENT,
+                $attribute['id'][$key],
+                0
+            );
+
+            if (!empty($sessionId)) {
+                if (0 == $visibility) {
+                    continue;
+                }
+
+                $visibility = api_get_item_visibility(
+                    ['real_id' => $courseId],
+                    TOOL_DOCUMENT,
+                    $attribute['id'][$key],
+                    $sessionId
+                );
+            }
+
             $item = Display::tag(
                 'td',
                 implode(PHP_EOL, [
@@ -1307,7 +1318,7 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
                             'file' => $path,
                             'uid' => $userId,
                         ]),
-                        ['class' => !$active ? 'text-muted' : null]
+                        ['class' => $visibility == 0 ? 'text-muted' : null]
                     ),
                 ])
             );
@@ -1328,7 +1339,7 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
                 Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
 
             // if active
-            if ($active) {
+            if ($visibility != 0) {
                 $nbrActiveTests = $nbrActiveTests + 1;
                 $actions .= '      <a href="'.$exercisePath.'?'.api_get_cidreq().'&hpchoice=disable&page='.$page.'&file='.$path.'">'.
                     Display::return_icon('visible.png', get_lang('Deactivate'), '', ICON_SIZE_SMALL).'</a>';
@@ -1341,55 +1352,64 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
             $item .= Display::tag('td', $actions);
             $tableRows[] = Display::tag('tr', $item);
         } else {
-            // Student only
-            if ($active) {
-                $attempt = ExerciseLib::getLatestHotPotatoResult(
-                    $path,
-                    $userId,
-                    api_get_course_int_id(),
-                    api_get_session_id()
-                );
+            $visibility = api_get_item_visibility(
+                ['real_id' => $courseId],
+                TOOL_DOCUMENT,
+                $attribute['id'][$key],
+                $sessionId
+            );
 
-                $nbrActiveTests = $nbrActiveTests + 1;
+            if (0 == $visibility) {
+                continue;
+            }
+
+            // Student only
+            $attempt = ExerciseLib::getLatestHotPotatoResult(
+                $path,
+                $userId,
+                api_get_course_int_id(),
+                api_get_session_id()
+            );
+
+            $nbrActiveTests = $nbrActiveTests + 1;
+            $item .= Display::tag(
+                'td',
+                Display::url(
+                    $title,
+                    'showinframes.php?'.api_get_cidreq().'&'.http_build_query([
+                        'file' => $path,
+                        'cid' => api_get_course_id(),
+                        'uid' => $userId,
+                    ])
+                )
+            );
+
+            if (!empty($attempt)) {
+                $actions = '<a href="hotpotatoes_exercise_report.php?'.api_get_cidreq().'&path='.$path.'&filter_by_user='.$userId.'">'.Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
+                $attemptText = get_lang('LatestAttempt').' : ';
+                $attemptText .= ExerciseLib::show_score(
+                    $attempt['exe_result'],
+                    $attempt['exe_weighting']
+                ).' ';
+                $attemptText .= $actions;
+            } else {
+                // No attempts.
+                $attemptText = get_lang('NotAttempted').' ';
+            }
+
+            $item .= Display::tag('td', $attemptText);
+
+            if ($isDrhOfCourse) {
+                $actions = '<a href="hotpotatoes_exercise_report.php?'.api_get_cidreq().'&path='.$path.'">'.
+                    Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
+
                 $item .= Display::tag(
                     'td',
-                    Display::url(
-                        $title,
-                        'showinframes.php?'.api_get_cidreq().'&'.http_build_query([
-                            'file' => $path,
-                            'cid' => api_get_course_id(),
-                            'uid' => $userId,
-                        ])
-                    )
+                    $actions,
+                    ['class' => 'td_actions']
                 );
-
-                if (!empty($attempt)) {
-                    $actions = '<a href="hotpotatoes_exercise_report.php?'.api_get_cidreq().'&path='.$path.'&filter_by_user='.$userId.'">'.Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
-                    $attemptText = get_lang('LatestAttempt').' : ';
-                    $attemptText .= ExerciseLib::show_score(
-                        $attempt['exe_result'],
-                        $attempt['exe_weighting']
-                    ).' ';
-                    $attemptText .= $actions;
-                } else {
-                    // No attempts.
-                    $attemptText = get_lang('NotAttempted').' ';
-                }
-
-                $item .= Display::tag('td', $attemptText);
-
-                if ($isDrhOfCourse) {
-                    $actions = '<a href="hotpotatoes_exercise_report.php?'.api_get_cidreq().'&path='.$path.'">'.
-                        Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
-
-                    $item .= Display::tag(
-                        'td',
-                        $actions,
-                        ['class' => 'td_actions']
-                    );
-                }
-                $tableRows[] = Display::tag('tr', $item);
             }
+            $tableRows[] = Display::tag('tr', $item);
         }
     }
 }

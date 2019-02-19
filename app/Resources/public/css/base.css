@@ -3015,6 +3015,28 @@ form .formw .freeze {
 /* ****************************************************
                      CSS SKILL
  **************************************************** */
+#skillList .header-title{
+    padding: 8px;
+    border-bottom: 2px solid #ddd;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+.skills-badges{
+    display: grid;
+    grid-gap: 1rem;
+    grid-row-gap: 16px;
+    grid-template-columns: repeat(6, 1fr);
+}
+.skills-badges .item{
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+.skills-badges a .caption{
+    text-align: center;
+}
 .list-horizontal .list-skills{
     display: grid;
     grid-gap: 1rem;

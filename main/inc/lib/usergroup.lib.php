@@ -1387,8 +1387,13 @@ class UserGroup extends Model
         $path = $path_info['dir'];
 
         // If this directory does not exist - we create it.
-        if (!file_exists($path)) {
-            @mkdir($path, api_get_permissions_for_new_directories(), true);
+        if (!is_dir($path)) {
+            $res = @mkdir($path, api_get_permissions_for_new_directories(), true);
+            if ($res === false) {
+                // There was an issue creating the directory $path, probably
+                // permissions-related
+                return false;
+            }
         }
 
         // The old photos (if any).

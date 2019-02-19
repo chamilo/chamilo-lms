@@ -2836,12 +2836,12 @@ form .formw .freeze {
     margin: auto;
     text-align: center;
 }
-.email-overflow:hover {
+/*.email-overflow:hover {
     width: auto;
     white-space: initial;
     overflow:visible;
     cursor: pointer;
-}
+}*/
 .show_element {
     display: block !important;
 }

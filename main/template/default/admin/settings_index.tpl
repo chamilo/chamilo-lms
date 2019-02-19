@@ -42,6 +42,10 @@
                 $
                     .ajax('{{ web_admin_ajax_url }}?a=get_latest_news')
                     .then(function (response) {
+                        if (!response.length) {
+                            return;
+                        }
+
                         $('#chamilo-news').removeClass('hidden');
                         $('#chamilo-news-content').html(response);
                     });

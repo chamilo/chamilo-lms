@@ -1,4 +1,6 @@
 <?php
+/* For licensing terms, see /license.txt */
+
 /**
  * This script fixes use of id instead of iid for the learning path
  */

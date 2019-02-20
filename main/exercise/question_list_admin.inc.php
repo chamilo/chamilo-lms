@@ -152,7 +152,7 @@ $ajax_url = api_get_path(WEB_AJAX_PATH)."exercise.ajax.php?".api_get_cidreq()."&
 Question::displayTypeMenu($objExercise);
 
 // Re sets the question list
-$objExercise->setQuestionList();
+//$objExercise->setQuestionList();
 
 echo '<div id="message"></div>';
 $token = Security::get_token();

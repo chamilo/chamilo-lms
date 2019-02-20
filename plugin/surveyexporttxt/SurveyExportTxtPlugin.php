@@ -49,7 +49,7 @@ class SurveyExportTxtPlugin extends Plugin
      */
     public static function filterModify($params)
     {
-        $enabled = api_get_plugin_setting('SurveyExportTxtPlugin', 'enabled');
+        $enabled = api_get_plugin_setting('surveyexporttxt', 'enabled');
 
         if ($enabled !== 'true') {
             return '';

@@ -395,6 +395,20 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
             case FormValidator::LAYOUT_HORIZONTAL:
                 if($attributes['custom']){
                     $template = '
+                        <div class="form-group">
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-10">
+                                <div class="input-file-container">  
+                                    {element}
+                                    <label tabindex="0" {label-for} class="input-file-trigger">
+                                        <i class="fa fa-picture-o fa-lg" aria-hidden="true"></i> {label}
+                                    </label>
+                                </div>
+                                <p class="file-return"></p>
+                            </div>
+                            <div class="col-sm-1"></div>
+                        </div>
+                        
                         <script type="text/javascript">
                             document.querySelector("html").classList.add(\'js\');
                             var fileInput  = document.querySelector( ".input-file" ),  
@@ -415,11 +429,6 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                             });
                             
                         </script>
-                        <div class="input-file-container">  
-                            {element}
-                            <label tabindex="0" {label-for} class="input-file-trigger">{label}</label>
-                        </div>
-                        <p class="file-return"></p>
                     ';
                 } else {
                     $template = '

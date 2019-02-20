@@ -124,6 +124,7 @@ if ($formSent) {
                         Display::return_icon('edit.png', get_lang('Edit')),
                         $url.http_build_query([
                             'cidReq' => $courseCode,
+                            'id_session' => $exercise->sessionId,
                             'myid' => 1,
                             'exerciseId' => $exerciseId,
                             'type' => $question->getType(),

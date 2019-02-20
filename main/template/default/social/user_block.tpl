@@ -33,6 +33,9 @@
                         <!-- END TYPE PROFILE -->
                         <!-- LM -->
                         <div class="avatar-lm">
+
+                            <h5>LM</h5>
+
                             {% if user.language %}
                                 {% if user.language.code == 'fr' %}
                                     <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/fr.svg" width="36px">
@@ -50,8 +53,10 @@
                         <!-- END LM -->
                         <!-- LC -->
                         <div class="avatar-lc">
+                            <h5>LC</h5>
                             {% for item in extra_info %}
                                 {% if item.variable == 'langue_cible' %}
+
                                     {% if item.value == 'French2' %}
                                         <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/fr.svg" width="36px">
                                     {% elseif item.value == 'German2' %}
@@ -72,21 +77,25 @@
                         <!-- END LC -->
                     </div>
 
+
                     {# Ofaj #}
+
+
+
                     <ul class="list-user-data">
                         <li class="item item-name">
                             <h5>{{ user.firstname }} {{ user.lastname }}</h5>
                         </li>
 
                         {% if show_full_profile %}
-                            {#{% if user.email %}#}
-                            {#<li class="item">#}
-                                {#<a href="{{ _p.web }}main/messages/new_message.php">#}
-                                {#<img src="{{ "instant_message.png" | icon }}" alt="{{ "Email" | get_lang }}">#}
-                                {#{{ user.email }}#}
-                                {#</a>#}
-                            {#</li>#}
-                            {#{% endif %}#}
+                            {% if user.email %}
+                            <li class="item">
+                                <a href="{{ _p.web }}main/messages/new_message.php">
+                                <img src="{{ "instant_message.png" | icon }}" alt="{{ "Email" | get_lang }}">
+                                    <div class="email-overflow">{{ user.email }}</div>
+                                </a>
+                            </li>
+                            {% endif %}
 
                             {% if vcard_user_link %}
                                 <li class="item">
@@ -145,11 +154,7 @@
                         {% for item in extra_info %}
                             {% if item.variable != 'langue_cible' %}
                             <dt>{{ item.label }}:</dt>
-                            <dd>
-
-                                {{ item.value }}
-                            </dd>
-
+                            <dd>{{ item.value }}</dd>
                             {% endif %}
                         {% endfor %}
                     </dl>

@@ -2823,7 +2823,25 @@ form .formw .freeze {
     text-align: left;
     vertical-align: middle;
 }
-
+.email-box{
+    display: flex;
+}
+.email-overflow{
+    width:200px;
+    height:20px;
+    padding:0;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    overflow:hidden;
+    margin: auto;
+    text-align: center;
+}
+/*.email-overflow:hover {
+    width: auto;
+    white-space: initial;
+    overflow:visible;
+    cursor: pointer;
+}*/
 .show_element {
     display: block !important;
 }

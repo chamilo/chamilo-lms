@@ -4,6 +4,21 @@
 
 .sidebar {
   background-color: $sidebar-background;
+  .nav-dropdown-items{
+    .nav-item{
+      .nav-link{
+        font-size: 12px;
+        padding: 10px 15px;
+        border-top: 1px solid #3c72d5;
+        &:hover{
+          color: $sidebar-link-hover;
+        }
+        i{
+          font-size: 12px;
+        }
+      }
+    }
+  }
   .nav-dropdown{
     &.open{
       .nav-link{

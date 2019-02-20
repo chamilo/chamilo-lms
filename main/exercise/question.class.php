@@ -1794,7 +1794,7 @@ abstract class Question
      *
      * @param Exercise $objExercise
      */
-    public static function display_type_menu($objExercise)
+    public static function displayTypeMenu($objExercise)
     {
         $feedback_type = $objExercise->feedback_type;
         $exerciseId = $objExercise->id;

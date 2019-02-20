@@ -57,9 +57,10 @@ $config = [
     'ToolbarSet' => 'Basic',
     'Width' => '100%',
     'Height' => '300',
+    'style' => true
 ];
 
-$form->addHtmlEditor('intro_content', null, false, false, $config);
+$form->addHtmlEditor('intro_content', null, false, false, $config, ['card-full'=>true]);
 $form->addButtonSave(get_lang('SaveIntroText'), 'intro_cmdUpdate');
 
 /* INTRODUCTION MICRO MODULE - COMMANDS SECTION (IF ALLOWED) */

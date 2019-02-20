@@ -999,19 +999,22 @@ EOT;
      * Adds a HTML-editor to the form.
      *
      * @param string $name
-     * @param string $label    The label for the form-element
-     * @param bool   $required (optional) Is the form-element required (default=true)
-     * @param bool   $fullPage (optional) When it is true, the editor loads completed html code for a full page
-     * @param array  $config   (optional) Configuration settings for the online editor
+     * @param string $label The label for the form-element
+     * @param bool $required (optional) Is the form-element required (default=true)
+     * @param bool $fullPage (optional) When it is true, the editor loads completed html code for a full page
+     * @param array $config (optional) Configuration settings for the online editor
+     * @param array $attributes
+     * @throws Exception
+     * @throws HTML_QuickForm_Error
      */
     public function addHtmlEditor(
         $name,
         $label,
         $required = true,
         $fullPage = false,
-        $config = []
+        $config = [],
+        $attributes = []
     ) {
-        $attributes = [];
         $attributes['rows'] = isset($config['rows']) ? $config['rows'] : 15;
         $attributes['cols'] = isset($config['cols']) ? $config['cols'] : 80;
         $attributes['cols-size'] = isset($config['cols-size']) ? $config['cols-size'] : [];
@@ -1025,6 +1028,7 @@ EOT;
 
         /** @var HtmlEditor $element */
         $element = $this->getElement($name);
+
         $config['style'] = false;
         if ($fullPage) {
             $config['fullPage'] = true;

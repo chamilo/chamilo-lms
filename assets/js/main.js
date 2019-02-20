@@ -1,6 +1,6 @@
 // HEADER
 
-$(window).resize(function(){
+/*$(window).resize(function(){
     var widthScreen = $(window).width();
     if(widthScreen >= 1400){
         $('body').addClass('sidebar-lg-show');
@@ -15,7 +15,7 @@ $(window).resize(function(){
     if(cardMain.height()>850){
         cardMain.css("height", "auto");
     }
-});
+});*/
 
 $(function () {
 
@@ -25,6 +25,8 @@ $(function () {
     if(widthScreen >= 1400){
         $('body').addClass('sidebar-lg-show');
     }
+
+    /*
     // Calculation of Width for Card Container
 
     var main = $('#app-main');
@@ -36,7 +38,7 @@ $(function () {
     if(cardMain.height()>850 || widthScreen <= 600){
         cardMain.css("height", "auto");
     }
-
+*/
 
     var $inputTitle = $("#add_course_title");
     $inputTitle.keyup(function () {

@@ -203,6 +203,10 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
     public function getTemplate($layout)
     {
         $size = $this->getColumnsSize();
+        $custom = $this->getAttributes();
+
+
+
         $this->removeAttribute('cols-size');
 
         if (empty($size)) {
@@ -221,7 +225,8 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
                 </div>';
                 break;
             case FormValidator::LAYOUT_HORIZONTAL:
-                return '
+
+                $template = '
                 <div class="form-group row {error_class}">
                     <label {label-for} class="col-sm-'.$size[0].' col-form-label" >
                         <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
@@ -245,6 +250,18 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
                         <!-- END label_3 -->
                     </div>
                 </div>';
+
+                if(isset($custom['card-full']) && $custom['card-full'] == true){
+                    $template = '
+                    <label {label-for}>{label}</label>
+                    <div class="card-textarea">
+                         {element}
+                    </div>
+                    
+                    ';
+                }
+
+                return $template;
 
                 break;
             case FormValidator::LAYOUT_BOX_NO_LABEL:

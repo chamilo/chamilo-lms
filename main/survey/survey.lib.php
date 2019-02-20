@@ -2254,24 +2254,20 @@ class SurveyManager
                     survey_id = $surveyId";
         $result = Database::query($sql);
         $countOfQuestions = Database::result($result, 0, 0);
-        $count = 1;
-        if (!empty($numberPageBreaks) && !empty($countOfQuestions)) {
-            $count = $countOfQuestions;
-        }
 
         if ($survey['one_question_per_page'] == 1) {
-            $count = 1;
             if (!empty($countOfQuestions)) {
-                $count = $countOfQuestions;
+                return $countOfQuestions;
             }
-        } else {
-            $count = $numberPageBreaks + 1;
-            if (empty($numberPageBreaks)) {
-                $count = 1;
-            }
+
+            return 1;
         }
 
-        return $count;
+        if (empty($numberPageBreaks)) {
+            return 1;
+        }
+
+        return $numberPageBreaks + 1;
     }
 
     /**

@@ -15,7 +15,11 @@ switch ($action) {
         $languageList = api_get_languages();
         $hideAll = '';
         foreach ($languageList['all'] as $language) {
-            $hideAll .= '$("span:lang('.$language['isocode'].')").hide();';
+            $hideAll .= '$("span:lang('.$language['isocode'].')").filter(
+            function() {
+                // Ignore ckeditor classes
+                return !this.className.match(/cke(.*)/);
+            }).hide();';
         }
 
         $userInfo = api_get_user_info();
@@ -24,14 +28,21 @@ switch ($action) {
 
         echo '
             $(document).ready(function() {
-                '.$hideAll.'
-                var defaultLanguageFromUser = "'.$languageInfo['isocode'].'";
-                
-                $("span:lang('.$languageInfo['isocode'].')").show();
+                 '.$hideAll.'                 
+                var defaultLanguageFromUser = "'.$languageInfo['isocode'].'";                                
+                $("span:lang('.$languageInfo['isocode'].')").filter(
+                    function() {
+                        // Ignore ckeditor classes
+                        return !this.className.match(/cke(.*)/);
+                }).show();
                 
                 var defaultLanguage = "";
                 var langFromUserFound = false;
-                $(this).find("span").each(function() {
+                $(this).find("span").filter(
+                    function() {
+                        // Ignore ckeditor classes
+                        return !this.className.match(/cke(.*)/);
+                }).each(function() {
                     defaultLanguage = $(this).attr("lang");                            
                     if (defaultLanguage) {
                         $(this).before().next("br").remove();                
@@ -43,8 +54,13 @@ switch ($action) {
                 
                 // Show default language
                 if (langFromUserFound == false && defaultLanguage) {
-                    $("span:lang("+defaultLanguage+")").show();
-                }                   
+                    $("span:lang("+defaultLanguage+")").filter(
+                    function() {
+                            // Ignore ckeditor classes
+                            return !this.className.match(/cke(.*)/);
+                    }).show();
+                }                  
+
             });
         ';
         break;

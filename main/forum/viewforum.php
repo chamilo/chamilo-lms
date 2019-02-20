@@ -49,6 +49,9 @@ $courseId = api_get_course_int_id();
 $groupInfo = GroupManager::get_group_properties($groupId);
 $isTutor = GroupManager::is_tutor_of_group($userId, $groupInfo, $courseId);
 
+$hideNotifications = api_get_course_setting('hide_forum_notifications');
+$hideNotifications = $hideNotifications == 1;
+
 $isAllowedToEdit = api_is_allowed_to_edit(false, true) && api_is_allowed_to_session_edit(false, true);
 
 /* MAIN DISPLAY SECTION */
@@ -434,10 +437,9 @@ if (is_array($threads)) {
                 $my_whatsnew_post_info = $whatsnew_post_info[$my_forum][$row['thread_id']];
             }
 
-            if (is_array($my_whatsnew_post_info) && !empty($my_whatsnew_post_info)) {
+            $newPost = '';
+            if ($hideNotifications == false && is_array($my_whatsnew_post_info) && !empty($my_whatsnew_post_info)) {
                 $newPost = ' '.Display::return_icon('alert.png', get_lang('Forum'), null, ICON_SIZE_SMALL);
-            } else {
-                $newPost = '';
             }
 
             $name = api_get_person_name($row['firstname'], $row['lastname']);
@@ -639,7 +641,7 @@ if (is_array($threads)) {
                 }
             }
             $icon_liststd = 'user.png';
-            if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
+            if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true) && $hideNotifications == false) {
                 $iconsEdit .= '<a href="'.api_get_self().'?'.$cidreq.'&forum='
                     .$my_forum
                     ."&action=notify&content=thread&id={$row['thread_id']}"

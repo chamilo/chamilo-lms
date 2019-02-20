@@ -148,17 +148,18 @@ $extraFieldValue = new ExtraFieldValue('session');
 $extraFieldValueUser = new ExtraFieldValue('user');
 
 $theme = 'theme_fr';
-$lang = api_get_interface_language();
+$lang = $defaultLangCible = api_get_interface_language();
 
 if ($userToLoadInfo) {
     $lang = $userToLoadInfo['language'];
-    /*$targetLanguageInfo = $extraFieldValueUser->get_values_by_handler_and_field_variable(
+    $targetLanguageInfo = $extraFieldValueUser->get_values_by_handler_and_field_variable(
         $userToLoad,
         'langue_cible'
     );
+
     if (!empty($targetLanguageInfo)) {
-        $lang = strtolower($targetLanguageInfo['value']);
-    }*/
+        $defaultLangCible = $targetLanguageInfo['value'];
+    }
 
     switch ($lang) {
         case 'italian':
@@ -935,7 +936,7 @@ if (!empty($filterToSend)) {
     }
 
     // Language
-    $lang = isset($params['extra_langue_cible']) ? $params['extra_langue_cible'] : $lang;
+    $lang = isset($params['extra_langue_cible']) ? $params['extra_langue_cible'] : $defaultLangCible;
     $lang = strtolower($lang);
 
     if ($userStartDate && !empty($userStartDate)) {

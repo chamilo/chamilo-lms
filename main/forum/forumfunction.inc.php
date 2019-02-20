@@ -2324,12 +2324,17 @@ function get_post_information($post_id)
     $table_posts = Database::get_course_table(TABLE_FORUM_POST);
     $table_users = Database::get_main_table(TABLE_MAIN_USER);
     $course_id = api_get_course_int_id();
+    $post_id = (int) $post_id;
+
+    if (empty($post_id)) {
+        return [];
+    }
 
     $sql = "SELECT posts.*, email FROM ".$table_posts." posts, ".$table_users." users
             WHERE
                 c_id = $course_id AND
                 posts.poster_id=users.user_id AND
-                posts.post_id = ".intval($post_id);
+                posts.post_id = ".$post_id;
     $result = Database::query($sql);
     $row = Database::fetch_array($result, 'ASSOC');
 
@@ -2855,11 +2860,9 @@ function store_thread(
     }
 
     $post_date = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
-
+    $visible = 1;
     if ($current_forum['approval_direct_post'] == '1' && !api_is_allowed_to_edit(null, true)) {
         $visible = 0; // The post has not been approved yet.
-    } else {
-        $visible = 1;
     }
     $clean_post_title = $values['post_title'];
 
@@ -2993,7 +2996,6 @@ function store_thread(
 
     $em->persist($lastPost);
     $em->flush();
-
     $lastPostId = $lastPost->getIid();
 
     $logInfo = [
@@ -3180,8 +3182,22 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
             'UserStatus' => 'student',
         ]
     );
-
     $form->addRule('post_text', get_lang('ThisFieldIsRequired'), 'required');
+
+    if (in_array($action, ['replythread', 'replymessage', 'quote'])) {
+        $extraFields = new ExtraField('forum_post');
+        $extraFields->addElements(
+            $form,
+            null,
+            [], //exclude
+            false, // filter
+            false, // tag as select
+            ['ask_for_revision'], //show only fields
+            [], // order fields
+            [] // extra data);
+        );
+    }
+
     $iframe = null;
     $myThread = Security::remove_XSS($myThread);
     if ($forum_setting['show_thread_iframe_on_reply'] && $action != 'newthread' && !empty($myThread)) {
@@ -3376,18 +3392,34 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
                 case 'replymessage':
                     $postId = store_reply($current_forum, $values);
 
-                    if ($postId && isset($values['give_revision']) && $values['give_revision'] == 1) {
-                        $extraFieldValues = new ExtraFieldValue('forum_post');
-                        $params = [
-                            'item_id' => $postId,
-                            'extra_revision_language' => $values['extra_revision_language'],
-                        ];
-                        $extraFieldValues->saveFieldValues(
-                            $params,
-                            false,
-                            false,
-                            ['revision_language']
-                        );
+                    if ($postId) {
+                        if (isset($values['give_revision']) && $values['give_revision'] == 1) {
+                            $extraFieldValues = new ExtraFieldValue('forum_post');
+                            $params = [
+                                'item_id' => $postId,
+                                'extra_revision_language' => $values['extra_revision_language'],
+                            ];
+                            $extraFieldValues->saveFieldValues(
+                                $params,
+                                false,
+                                false,
+                                ['revision_language']
+                            );
+                        }
+
+                        if (in_array($action, ['replythread', 'replymessage', 'quote'])) {
+                            $extraFieldValues = new ExtraFieldValue('forum_post');
+                            $params = [
+                                'item_id' => $postId,
+                                'extra_ask_for_revision' => $values['extra_ask_for_revision'],
+                            ];
+                            $extraFieldValues->saveFieldValues(
+                                $params,
+                                false,
+                                false,
+                                ['ask_for_revision']
+                            );
+                        }
                     }
                     break;
             }
@@ -5672,6 +5704,15 @@ function get_notifications($content, $id)
 function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
 {
     $_course = api_get_course_info();
+
+    $forumCourseId = api_get_configuration_value('global_forums_course_id');
+    if (!empty($forumCourseId)) {
+        if ($_course['real_id'] == $forumCourseId) {
+
+            return false;
+        }
+    }
+
     $forum_id = (int) $forum_id;
 
     // The content of the mail

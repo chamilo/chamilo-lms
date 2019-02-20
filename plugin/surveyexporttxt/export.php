@@ -16,7 +16,7 @@ if (empty($surveyData)) {
     api_not_allowed(true);
 }
 
-$plugin = ApaExportSurvey::create();
+$plugin = SurveyExportTxtPlugin::create();
 
 if ($plugin->get('enabled') !== 'true') {
     api_not_allowed(true);

@@ -1,4 +1,4 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-ApaExportSurvey::create()->uninstall();
+SurveyExportTxtPlugin::create()->uninstall();

@@ -6,7 +6,7 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 api_protect_course_script(true);
 api_protect_teacher_script();
 
-$plugin = ApaExportSurvey::create();
+$plugin = SurveyExportTxtPlugin::create();
 
 $courseCode = api_get_course_id();
 
@@ -33,10 +33,10 @@ $table->set_column_filter(8, ['SurveyUtil', 'anonymous_filter']);
 if (api_get_configuration_value('allow_mandatory_survey')) {
     $table->set_header(9, get_lang('IsMandatory'), true, ['class' => 'text-center'], ['class' => 'text-center']);
     $table->set_header(10, get_lang('Export'), false, ['class' => 'text-center'], ['class' => 'text-center']);
-    $table->set_column_filter(10, ['ApaExportSurvey', 'filterModify']);
+    $table->set_column_filter(10, ['SurveyExportTxtPlugin', 'filterModify']);
 } else {
     $table->set_header(9, get_lang('Export'), false, ['class' => 'text-center'], ['class' => 'text-center']);
-    $table->set_column_filter(9, ['ApaExportSurvey', 'filterModify']);
+    $table->set_column_filter(9, ['SurveyExportTxtPlugin', 'filterModify']);
 }
 
 $pageTitle = $plugin->get_title();

@@ -29,6 +29,8 @@ $surveyId = (int) $_GET['survey_id'];
 $userInvited = 0;
 $userAnonymous = 0;
 
+$allowRequiredSurveyQuestions = api_get_configuration_value('allow_required_survey_questions');
+
 //query to ask if logged user is allowed to see the preview (if he is invited of he is a teacher)
 $sql = "SELECT survey_invitation.user
         FROM $table_survey_invitation survey_invitation
@@ -164,6 +166,7 @@ if (api_is_course_admin() ||
                         survey_question_option.question_option_id,
                         survey_question_option.option_text,
                         survey_question_option.sort as option_sort
+                        ".($allowRequiredSurveyQuestions ? ', survey_question.is_required' : '')."
                     FROM $table_survey_question survey_question
                     LEFT JOIN $table_survey_question_option survey_question_option
                     ON
@@ -189,6 +192,7 @@ if (api_is_course_admin() ||
                     //$questions[$sort]['options'][intval($row['option_sort'])] = $row['option_text'];
                     $questions[$sort]['options'][$row['question_option_id']] = $row['option_text'];
                     $questions[$sort]['maximum_score'] = $row['max_value'];
+                    $questions[$row['sort']]['is_required'] = $allowRequiredSurveyQuestions && $row['is_required'];
                 } else {
                     // If the type is a pagebreak we are finished loading the questions for this page
                     //break;

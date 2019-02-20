@@ -834,10 +834,10 @@ class Skill extends Model
 
             $item = '';
             if ($showBadge) {
-                $item = $skill[$imageSize];
+                $item = '<div class="item">'.$skill[$imageSize].'</div>';
             }
 
-            $name = $skill['name'];
+            $name = '<div class="caption">'. $skill['name'].'</div>';
             if (!empty($skill['short_code'])) {
                 $name = $skill['short_code'];
             }
@@ -1433,15 +1433,9 @@ class Skill extends Model
         }
 
         if ($addTitle) {
-            $tableResult .= '
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>' . get_lang('AchievedSkills') . '</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <tr><td>';
+            $tableResult .= '<div class="header-title">' . get_lang('AchievedSkills') . '</div>
+                    <div class="skills-badges">
+                   ';
         }
 
         if (!empty($skillParents)) {
@@ -1541,11 +1535,7 @@ class Skill extends Model
         }
 
         if ($addTitle) {
-            $tableResult .= '</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                ';
+            $tableResult .= '</div>';
         }
         $tableResult .= '</div>';
 

@@ -40,7 +40,7 @@ class SequenceRepository extends EntityRepository
     public function getRequirementAndDependencies($resourceId, $type)
     {
         $sequence = $this->findRequirementForResource($resourceId, $type);
-        $result = ['requirements' => '', 'dependencies' => []];
+        $result = ['requirements' => [], 'dependencies' => []];
         if ($sequence && $sequence->hasGraph()) {
             $graph = $sequence->getSequence()->getUnSerializeGraph();
             $vertex = $graph->getVertex($resourceId);

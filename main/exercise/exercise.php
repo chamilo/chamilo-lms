@@ -453,8 +453,7 @@ HotPotGCt($documentPath, 1, $userId);
 
 //condition for the session
 $course_code = api_get_course_id();
-$session_id = api_get_session_id();
-$condition_session = api_get_session_condition($session_id, true, true);
+$condition_session = api_get_session_condition($sessionId, true, true);
 
 // Only for administrators
 if ($is_allowedToEdit) {
@@ -768,7 +767,7 @@ if (!empty($exerciseList)) {
                 $count_exercise_not_validated = (int) Event::count_exercise_result_not_validated(
                     $my_exercise_id,
                     $courseId,
-                    $session_id
+                    $sessionId
                 );
 
                 $move = Display::return_icon(
@@ -797,7 +796,7 @@ if (!empty($exerciseList)) {
                 $sqlresult = Database::query($sql);
                 $rowi = intval(Database :: result($sqlresult, 0, 0));
 
-                if ($session_id == $row['session_id']) {
+                if ($sessionId == $row['session_id']) {
                     // Questions list
                     $actions = Display::url(
                         Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL),
@@ -1001,7 +1000,7 @@ if (!empty($exerciseList)) {
 
                 // Delete
                 $delete = '';
-                if ($session_id == $row['session_id']) {
+                if ($sessionId == $row['session_id']) {
                     if ($locked == false) {
                         $delete = Display::url(
                             Display::return_icon(

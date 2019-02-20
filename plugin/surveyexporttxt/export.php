@@ -62,6 +62,13 @@ foreach ($questionsData as $questionData) {
     $parts[$indexPart][] = $questionData;
 }
 
+if (count($parts) < 2) {
+    api_not_allowed(
+        true,
+        Display::return_message(get_lang('NoData'), 'warning')
+    );
+}
+
 // Process introduction questions to show
 foreach ($parts[0] as $key => $introQuestion) {
     $content[] = chr($key + 97).'. '.strip_tags($introQuestion['question']);

@@ -2860,11 +2860,9 @@ function store_thread(
     }
 
     $post_date = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
-
+    $visible = 1;
     if ($current_forum['approval_direct_post'] == '1' && !api_is_allowed_to_edit(null, true)) {
         $visible = 0; // The post has not been approved yet.
-    } else {
-        $visible = 1;
     }
     $clean_post_title = $values['post_title'];
 
@@ -2998,7 +2996,6 @@ function store_thread(
 
     $em->persist($lastPost);
     $em->flush();
-
     $lastPostId = $lastPost->getIid();
 
     $logInfo = [
@@ -5707,6 +5704,15 @@ function get_notifications($content, $id)
 function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
 {
     $_course = api_get_course_info();
+
+    $forumCourseId = api_get_configuration_value('global_forums_course_id');
+    if (!empty($forumCourseId)) {
+        if ($_course['real_id'] == $forumCourseId) {
+
+            return false;
+        }
+    }
+
     $forum_id = (int) $forum_id;
 
     // The content of the mail

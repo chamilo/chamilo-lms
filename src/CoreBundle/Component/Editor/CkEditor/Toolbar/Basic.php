@@ -170,7 +170,7 @@ class Basic extends Toolbar
             'wordLimit' => 'unlimited'
         );*/
 
-        $config['skin'] = 'moono-lisa';
+        $config['skin'] = 'bootstrapck';
 
         $config['image2_chamilo_alignClasses'] = [
             'pull-left',

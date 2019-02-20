@@ -25,7 +25,6 @@ $(function () {
     if(widthScreen >= 1400){
         $('body').addClass('sidebar-lg-show');
     }
-
     /*
     // Calculation of Width for Card Container
 

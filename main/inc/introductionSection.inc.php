@@ -56,8 +56,7 @@ if (!empty($courseId)) {
 $config = [
     'ToolbarSet' => 'Basic',
     'Width' => '100%',
-    'Height' => '300',
-    'style' => true
+    'Height' => '300'
 ];
 
 $form->addHtmlEditor('intro_content', null, false, false, $config, ['card-full'=>true]);

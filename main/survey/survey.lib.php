@@ -2236,24 +2236,24 @@ class SurveyManager
         $table = Database::get_course_table(TABLE_SURVEY_QUESTION);
 
         // pagebreak
-        $sql = "SELECT * FROM $table
+        $sql = "SELECT COUNT(iid) FROM $table
                 WHERE
                     survey_question NOT LIKE '%{{%' AND
                     type = 'pagebreak' AND
                     c_id = $courseId AND
                     survey_id = $surveyId";
         $result = Database::query($sql);
-        $numberPageBreaks = Database::num_rows($result);
+        $numberPageBreaks = Database::result($result, 0, 0);
 
         // No pagebreak
-        $sql = "SELECT * FROM $table
+        $sql = "SELECT COUNT(iid) FROM $table
                 WHERE
                     survey_question NOT LIKE '%{{%' AND
                     type != 'pagebreak' AND
                     c_id = $courseId AND
                     survey_id = $surveyId";
         $result = Database::query($sql);
-        $countOfQuestions = Database::num_rows($result);
+        $countOfQuestions = Database::result($result, 0, 0);
         $count = 1;
         if (!empty($numberPageBreaks) && !empty($countOfQuestions)) {
             $count = $countOfQuestions;

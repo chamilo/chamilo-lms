@@ -56,6 +56,8 @@ api_protect_course_script(true);
 $is_allowedToEdit = api_is_allowed_to_edit(null, true, false, false);
 $sessionId = api_get_session_id();
 $studentViewActive = api_is_student_view_active();
+$showPagination = api_get_configuration_value('show_question_pagination');
+
 if (!$is_allowedToEdit) {
     api_not_allowed(true);
 }
@@ -167,7 +169,6 @@ if (!is_object($objExercise)) {
 
     // creation of a new exercise if wrong or not specified exercise ID
     if ($exerciseId) {
-        $showPagination = api_get_configuration_value('show_question_pagination');
         $objExercise->read($exerciseId, $showPagination > 0 ? false : true);
     }
     // saves the object into the session
@@ -353,12 +354,14 @@ if ($inATest) {
         Display::return_icon('settings.png', get_lang('ModifyExercise'), '', ICON_SIZE_MEDIUM).'</a>';
 
     $maxScoreAllQuestions = 0;
-    $questionList = $objExercise->selectQuestionList(true, true);
-    if (!empty($questionList)) {
-        foreach ($questionList as $questionItemId) {
-            $question = Question::read($questionItemId);
-            if ($question) {
-                $maxScoreAllQuestions += $question->selectWeighting();
+    if ($showPagination === false) {
+        $questionList = $objExercise->selectQuestionList(true, true);
+        if (!empty($questionList)) {
+            foreach ($questionList as $questionItemId) {
+                $question = Question::read($questionItemId);
+                if ($question) {
+                    $maxScoreAllQuestions += $question->selectWeighting();
+                }
             }
         }
     }
@@ -377,17 +380,18 @@ if ($inATest) {
         );
     }
 
-    echo '<div class="alert alert-info">';
-    echo sprintf(
-        get_lang('XQuestionsWithTotalScoreY'),
-        $nbrQuestions,
-        $maxScoreAllQuestions
-    );
-
-    if ($objExercise->random > 0) {
-        echo '<br />'.sprintf(get_lang('OnlyXQuestionsPickedRandomly'), $objExercise->random);
+    $alert = '';
+    if ($showPagination === false) {
+        $alert .= sprintf(
+            get_lang('XQuestionsWithTotalScoreY'),
+            $nbrQuestions,
+            $maxScoreAllQuestions
+        );
     }
-    echo '</div>';
+    if ($objExercise->random > 0) {
+        $alert .= '<br />'.sprintf(get_lang('OnlyXQuestionsPickedRandomly'), $objExercise->random);
+    }
+    echo Display::return_message($alert);
 } elseif (isset($_GET['newQuestion'])) {
     // we are in create a new question from question pool not in a test
     echo '<div class="actions">';

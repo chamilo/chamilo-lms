@@ -2265,7 +2265,7 @@ class SurveyManager
                 $count = $countOfQuestions;
             }
         } else {
-            $count = $numberPageBreaks * 2;
+            $count = $numberPageBreaks + 1;
             if (empty($numberPageBreaks)) {
                 $count = 1;
             }

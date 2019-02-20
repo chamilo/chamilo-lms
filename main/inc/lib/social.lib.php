@@ -2399,7 +2399,7 @@ class SocialManager extends UserManager
             ]
         );
 
-        $form->addFile('picture', get_lang('UploadFile'));
+        $form->addFile('picture', get_lang('UploadFile'),['custom'=> true]);
         $form->addHidden('url_content', '');
         $form->addButtonSend(
             get_lang('Post'),

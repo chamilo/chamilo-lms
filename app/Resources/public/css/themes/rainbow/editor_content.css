@@ -2,7 +2,7 @@
 Stylesheet for HTML blocks created with CKEditor to embed in Chamilo pages.
 */
 body{
-    padding: 1em;
+    padding: 0;
     font-family: 'Open Sans', sans-serif;
 }
 /* Hack for show Bootstrap alerts in CKEditor' style select */

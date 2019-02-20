@@ -367,7 +367,105 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
         if ($this->_flagFrozen) {
             return $this->getFrozenHtml();
         } else {
-            return $js.$this->_getTabs() . '<input' . $this->_getAttrString($this->_attributes) . ' />';
+            return $js.$this->_getTabs() . '<input class="input-file" ' . $this->_getAttrString($this->_attributes) . ' />';
         }
     }
+
+    /**
+     * @param string $layout
+     *
+     * @return string
+     */
+    public function getTemplate($layout)
+    {
+        $name = $this->getName();
+        $attributes = $this->getAttributes();
+
+        switch ($layout) {
+            case FormValidator::LAYOUT_INLINE:
+                return '
+                <div class="form-group {error_class}">
+                    <label {label-for} >
+                        <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
+                        {label}
+                    </label>
+                    {element}
+                </div>';
+                break;
+            case FormValidator::LAYOUT_HORIZONTAL:
+                if($attributes['custom']){
+                    $template = '
+                        <div class="form-group">
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-10">
+                                <div class="input-file-container">  
+                                    {element}
+                                    <label tabindex="0" {label-for} class="input-file-trigger">
+                                        <i class="fa fa-picture-o fa-lg" aria-hidden="true"></i> {label}
+                                    </label>
+                                </div>
+                                <p class="file-return"></p>
+                            </div>
+                            <div class="col-sm-1"></div>
+                        </div>
+                        
+                        <script type="text/javascript">
+                            document.querySelector("html").classList.add(\'js\');
+                            var fileInput  = document.querySelector( ".input-file" ),  
+                                button     = document.querySelector( ".input-file-trigger" ),
+                                the_return = document.querySelector(".file-return");
+                                  
+                            button.addEventListener("keydown", function(event) {  
+                                if ( event.keyCode == 13 || event.keyCode == 32 ) {  
+                                    fileInput.focus();  
+                                }  
+                            });
+                            button.addEventListener("click", function(event) {
+                               fileInput.focus();
+                               return false;
+                            });  
+                            fileInput.addEventListener("change", function(event) {  
+                                the_return.innerHTML = this.value;  
+                            });
+                            
+                        </script>
+                    ';
+                } else {
+                    $template = '
+                <div  id="file_'.$name.'" class="form-group {error_class}">
+                    <label {label-for} class="col-sm-3 control-label" >
+                        <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
+                        {label}
+                    </label>
+                    <div class="col-sm-7">
+                        {icon}
+                        {element}
+                        <!-- BEGIN label_2 -->
+                            <p class="help-block">{label_2}</p>
+                        <!-- END label_2 -->
+                        <!-- BEGIN error -->
+                            <span class="help-inline help-block">{error}</span>
+                        <!-- END error -->
+                    </div>
+                    <div class="col-sm-2">
+                        <!-- BEGIN label_3 -->
+                            {label_3}
+                        <!-- END label_3 -->
+                    </div>
+                </div>';
+                }
+                return $template;
+                break;
+            case FormValidator::LAYOUT_BOX_NO_LABEL:
+                return '
+                        <label {label-for}>{label}</label>
+                        <div class="input-group">
+                            
+                            {icon}
+                            {element}
+                        </div>';
+                break;
+        }
+    }
+
 }

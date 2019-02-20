@@ -133,7 +133,7 @@ EOT;
     public function getDefaultElementTemplate()
     {
         return '
-            <div class="form-group {error_class}">
+            <div  class="form-group {error_class}">
                 <label {label-for} class="col-sm-2 control-label {extra_label_class}" >
                     <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                     {label}

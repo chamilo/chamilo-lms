@@ -85,6 +85,9 @@ class Chat extends Model
         return array_reverse($items);
     }
 
+    /**
+     * @return string
+     */
     public function getContacts()
     {
         $html = SocialManager::listMyFriendsBlock(

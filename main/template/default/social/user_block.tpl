@@ -33,6 +33,7 @@
                         <!-- END TYPE PROFILE -->
                         <!-- LM -->
                         <div class="avatar-lm">
+
                             <h5>LM</h5>
 
                             {% if user.language %}
@@ -91,7 +92,7 @@
                             <li class="item">
                                 <a href="{{ _p.web }}main/messages/new_message.php">
                                 <img src="{{ "instant_message.png" | icon }}" alt="{{ "Email" | get_lang }}">
-                                {{ user.email }}
+                                    <div class="email-overflow">{{ user.email }}</div>
                                 </a>
                             </li>
                             {% endif %}

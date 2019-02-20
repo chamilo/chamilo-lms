@@ -480,7 +480,7 @@ foreach ($posts as $post) {
     }
 
     $postIsARevision = false;
-
+    $flagRevision = '';
     if ($post['poster_id'] == $userId) {
         $revision = getPostRevision($post['post_id']);
         if (empty($revision)) {
@@ -489,7 +489,7 @@ foreach ($posts as $post) {
             $languageId = api_get_language_id(strtolower($revision));
             $languageInfo = api_get_language_info($languageId);
             if ($languageInfo) {
-                $askForRevision = '<span class="flag-icon flag-icon-'.$languageInfo['isocode'].'"></span> ';
+                $flagRevision = '<span class="flag-icon flag-icon-'.$languageInfo['isocode'].'"></span> ';
                 $postIsARevision = true;
             }
         }
@@ -502,7 +502,7 @@ foreach ($posts as $post) {
                 $languageId = api_get_language_id(strtolower($revision));
                 $languageInfo = api_get_language_info($languageId);
                 if ($languageInfo) {
-                    $askForRevision = '<span class="flag-icon flag-icon-'.$languageInfo['isocode'].'"></span> ';
+                    $flagRevision = '<span class="flag-icon flag-icon-'.$languageInfo['isocode'].'"></span> ';
                     $postIsARevision = true;
                 }
             }
@@ -510,6 +510,7 @@ foreach ($posts as $post) {
     }
 
     $post['is_a_revision'] = $postIsARevision;
+    $post['flag_revision'] = $flagRevision;
 
     if (empty($currentThread['thread_qualify_max'])) {
         $userCanQualify = false;

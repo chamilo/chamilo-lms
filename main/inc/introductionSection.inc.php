@@ -279,23 +279,23 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
         );
     }
 }
-$introduction_section .= '<div class="row">';
+
+$thematicSection = '';
 if (!empty($thematic_advance_info)) {
-    $introduction_section .= '<div class="col-md-12">';
-    $introduction_section .= $thematic_description_html;
-    $introduction_section .= $thematicProgress;
-    $introduction_section .= '</div>';
+    $thematicSection = $thematic_description_html;
+    $thematicSection .= $thematicProgress;
 }
+
 $toolbar = [];
 
-if (api_is_allowed_to_edit() && empty($session_id)) {
+/*if (api_is_allowed_to_edit() && empty($session_id)) {
     $tool = [
         'name' => get_lang('CustomizeIcons'),
         'url' => api_get_path(WEB_CODE_PATH).'course_info/tools.php?'.api_get_cidreq(),
         'icon' => 'fas fa-cog',
     ];
     $toolbar[] = $tool;
-}
+}*/
 
 if ($intro_dispCommand) {
     if (empty($intro_content)) {
@@ -303,14 +303,14 @@ if ($intro_dispCommand) {
 
         if (!empty($courseId)) {
             $tool = [
-                'name' => addslashes(get_lang('AddIntro')),
+                'name' => addslashes(get_lang('Add Intro')),
                 'url' => api_get_self().'?'.api_get_cidreq().$blogParam.'&intro_cmdAdd=1',
                 'icon' => 'fas fa-pencil-alt',
             ];
             $toolbar[] = $tool;
         } else {
             $tool = [
-                'name' => get_lang('AddIntro'),
+                'name' => get_lang('Add Intro'),
                 'url' => api_get_self().'?intro_cmdAdd=1',
                 'icon' => 'fas fa-pencil-alt',
             ];
@@ -361,32 +361,33 @@ if ($intro_dispCommand) {
     }
 }
 
-$nameSection = get_lang('AddCustomCourseIntro');
+$nameSection = get_lang('Add an introduction to the course');
+$helpSection = get_lang('This course is already created! Now you can add a presentation or welcome text to your course in this section, ideal for your students.');
 if ($moduleId != 'course_homepage') {
-    $nameSection = get_lang('AddCustomToolsIntro');
+    $nameSection = get_lang('Add an introduction to the tool');
+    $helpSection = get_lang('Add Custom Tools Intro');
 }
 
 $textContent = [];
 if ($intro_dispDefault) {
     if (!empty($intro_content)) {
         $textContent = [
-            'name' => 'introduction-course',
-            'help' => $nameSection,
-            'text' => $intro_content,
+            'id' => 'introduction-tool',
+            'name' => $nameSection,
+            'help' => $helpSection,
+            'text' => $intro_content
         ];
     } else {
         if (api_is_allowed_to_edit()) {
             $textContent = [
-                'name' => 'introduction-section',
-                'help' => $nameSection,
-                'text' => $intro_content,
+                'id' => 'introduction-course',
+                'name' => $nameSection,
+                'help' => $helpSection,
+                'text' => $intro_content
             ];
         }
     }
 }
-
-//$introduction_section .= $toolbar;
-$introduction_section .= '</div>';
 
 $browser = api_get_navigator();
 
@@ -395,6 +396,7 @@ if (strpos($introduction_section, '<iframe') !== false && $browser['name'] == 'C
 }
 $data = null;
 $tpl = new Template(null);
+$tpl->assign('thematic', $thematicSection);
 $tpl->assign('intro', $textContent);
 $tpl->assign('toolbar', $toolbar);
 $introduction_section .= $tpl->fetch($tpl->get_template('auth/introduction_section.html.twig'));

@@ -1,21 +1,26 @@
 {% autoescape false %}
-    <section id="section-intro">
-        <div id="{{ intro.name }}" class="section-intro-content">
-            {% if intro.text !='' %}
-                {{ intro.text }}
-            {% else %}
-                {{ intro.help }}
-            {% endif %}
-        </div>
-        <div class="section-intro-toolbar">
-            <div class="btn-group btn-group-sm" role="group" aria-label="">
-                {% for item in toolbar %}
-                    <a href="{{ item.url }}" onclick="{{ (item.onclick!='')? item.onclick : '' }}"
-                       title="{{ item.name }}" class="btn btn-light">
-                        <i class="{{ item.icon }}"></i>
-                    </a>
-                {% endfor %}
+    {% if intro is not empty %}
+        <section id="section-intro" class="section-intro">
+            <div class="toolbar">
+                <div class="btn-group btn-group-sm" role="group" aria-label="">
+                    {% for item in toolbar %}
+                        <a href="{{ item.url }}" onclick="{{ (item.onclick!='')? item.onclick : '' }}"
+                           title="{{ item.name }}" class="btn btn-light">
+                            <i class="{{ item.icon }}"></i>
+                        </a>
+                    {% endfor %}
+                </div>
             </div>
-        </div>
-    </section>
+            {% if intro.text !='' %}
+                <div id="{{ intro.name }}" class="content">
+                    {{ intro.text }}
+                </div>
+            {% else %}
+                <div class="help">
+                    <h1>{{ intro.name }}</h1>
+                    <p>{{ intro.help }}</p>
+                </div>
+            {% endif %}
+        </section>
+    {% endif %}
 {% endautoescape %}

@@ -399,7 +399,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                 </div>';
                 break;
             case FormValidator::LAYOUT_HORIZONTAL:
-                if (isset($attributes['custom']) && $attributes['custom']) {
+                if (isset($attributes['custom']) && $attributes['custom'] == true) {
                     $template = '
                         <div class="form-group">
                             <div class="col-sm-1"></div>
@@ -438,7 +438,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                     ';
                 } else {
                     $template = '
-                <div  id="file_'.$name.'" class="form-group {error_class}">
+                <div  id="file_' . $name . '" class="form-group {error_class}">
                     <label {label-for} class="col-sm-3 control-label" >
                         <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                         {label}

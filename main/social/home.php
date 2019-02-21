@@ -217,24 +217,26 @@ $social_group_block = Display::panelCollapse(
 $wallSocialAddPost = SocialManager::getWallForm(api_get_self());
 $socialAutoExtendLink = SocialManager::getAutoExtendLink($user_id, $countPost);
 
-$form = new FormValidator(
+$formSearch = new FormValidator(
     'find_friends_form',
     'get',
     api_get_path(WEB_CODE_PATH).'social/search.php?search_type=1',
     null,
     null,
-    'inline'
+    'box-no-label'
 );
-$form->addHidden('search_type', 1);
-$form->addText(
+$formSearch->addHidden('search_type', 1);
+$formSearch->addText(
     'q',
     get_lang('Search'),
     false,
     [
         'aria-label' => get_lang('SearchUsers'),
+        'custom' => true,
+        'placeholder' => get_lang('ByName')
     ]
 );
-$form->addButtonSearch(get_lang('Search'));
+//$formSearch->addButtonSearch(get_lang('Search'));
 
 $tpl = new Template(get_lang('SocialNetwork'));
 SocialManager::setSocialUserBlock($tpl, $user_id, 'home');
@@ -242,7 +244,7 @@ $tpl->assign('social_wall_block', $wallSocialAddPost);
 $tpl->assign('social_post_wall_block', $posts);
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_auto_extend_link', $socialAutoExtendLink);
-$tpl->assign('search_friends_form', $form->returnForm());
+$tpl->assign('search_friends_form', $formSearch->returnForm());
 $tpl->assign('social_friend_block', $friend_html);
 //$tpl->assign('session_list', $social_session_block);
 $tpl->assign('social_search_block', $social_search_block);

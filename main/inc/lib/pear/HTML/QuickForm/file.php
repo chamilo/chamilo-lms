@@ -364,10 +364,16 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
             $js = $this->getElementJS(array('ratio' => $ratio, 'scalable' => $scalable));
         }
 
-        if ($this->_flagFrozen) {
+        if ($this->isFrozen()) {
             return $this->getFrozenHtml();
         } else {
-            return $js.$this->_getTabs() . '<input class="input-file" ' . $this->_getAttrString($this->_attributes) . ' />';
+            $class = '';
+            if (isset($this->_attributes['custom']) && $this->_attributes['custom']) {
+                $class = 'input-file';
+            }
+
+            return $js.$this->_getTabs().
+                '<input class="'.$class.'" '.$this->_getAttrString($this->_attributes).' />';
         }
     }
 

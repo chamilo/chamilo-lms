@@ -38,6 +38,22 @@ $(function () {
         cardMain.css("height", "auto");
     }
 */
+    //Elevator Scroll
+    $(window).scroll(function () {
+        if ($(this).scrollTop() > 50) {
+            $('.app-elevator').fadeIn();
+        } else {
+            $('.app-elevator').fadeOut();
+        }
+    });
+    // scroll body to 0px on click
+    $('#back-to-top').click(function () {
+        $('#back-to-top').tooltip('hide');
+        $('body,html').animate({
+            scrollTop: 0
+        }, 800);
+        return false;
+    });
 
     var $inputTitle = $("#add_course_title");
     $inputTitle.keyup(function () {

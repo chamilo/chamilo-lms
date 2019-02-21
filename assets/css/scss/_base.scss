@@ -140,10 +140,7 @@ hr {
     }
   }
 }
-.help-block{
-  font-size: 12px;
-  margin-bottom: 0;
-}
+
 // ---------------------------------------------------------
 // APP
 // ---------------------------------------------------------
@@ -157,7 +154,19 @@ hr {
     }
   }
 }
-
+.app-elevator{
+  border: none;
+  background: transparent;
+  z-index: 999998;
+  transform: translateZ(0px);
+  position: fixed;
+  transition: opacity 250ms cubic-bezier(0.645, 0.045, 0.355, 1) 0s, top, bottom;
+  opacity: 1;
+  margin: 10px 20px;
+  right: 0px;
+  bottom: 50px;
+  display: none;
+}
 // ---------------------------------------------------------
 // TABLES
 // ---------------------------------------------------------

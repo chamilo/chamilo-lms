@@ -23,7 +23,7 @@ require("jquery.scrollbar");
 require("blueimp-file-upload");
 require("select2");
 require("timeago");
-require("datatables/media/js/jquery.dataTables");
+//require("datatables/media/js/jquery.dataTables");
 require('bootstrap-select/dist/js/bootstrap-select.js');
 
 require("bootstrap-daterangepicker");

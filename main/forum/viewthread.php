@@ -489,7 +489,8 @@ foreach ($posts as $post) {
             $languageId = api_get_language_id(strtolower($revision));
             $languageInfo = api_get_language_info($languageId);
             if ($languageInfo) {
-                $flagRevision = '<span class="flag-icon flag-icon-'.$languageInfo['isocode'].'"></span> ';
+                $languages = getLanguageListForFlag();
+                $flagRevision = '<span class="flag-icon flag-icon-'.$languages[$languageInfo['english_name']].'"></span> ';
                 $postIsARevision = true;
             }
         }
@@ -501,8 +502,10 @@ foreach ($posts as $post) {
             if (!empty($revision)) {
                 $languageId = api_get_language_id(strtolower($revision));
                 $languageInfo = api_get_language_info($languageId);
+
+                $languages = getLanguageListForFlag();
                 if ($languageInfo) {
-                    $flagRevision = '<span class="flag-icon flag-icon-'.$languageInfo['isocode'].'"></span> ';
+                    $flagRevision = '<span class="flag-icon flag-icon-'.$languages[$languageInfo['english_name']].'"></span> ';
                     $postIsARevision = true;
                 }
             }

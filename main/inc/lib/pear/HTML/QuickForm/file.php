@@ -393,7 +393,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                 </div>';
                 break;
             case FormValidator::LAYOUT_HORIZONTAL:
-                if($attributes['custom']){
+                if(isset($attributes['custom'])){
                     $template = '
                         <div class="form-group">
                             <div class="col-sm-1"></div>

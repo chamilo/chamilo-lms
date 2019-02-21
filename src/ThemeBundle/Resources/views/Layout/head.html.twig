@@ -36,6 +36,7 @@
 {# Add third party js libraries that can't be loaded using webpack #}
 {% include "@ChamiloTheme/Layout/legacy_js.html.twig" %}
 {# app.js is generated using the file webpack.config.js and using yarn read /assets/README.md for more info #}
+<script src="{{ url('legacy_public') ~ 'build/runtime.js' }}"></script>
 <script src="{{ url('legacy_public') ~ 'build/app.js' }}"></script>
 
 {# Check chamilo_js key in assetic.yml #}

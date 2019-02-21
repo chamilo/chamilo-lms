@@ -4,18 +4,18 @@
   "description": "E-learning and collaboration software",
   "license": "GPL-3.0",
   "devDependencies": {
-    "@symfony/webpack-encore": "0.20.*",
+    "@coreui/coreui": "^2.1.7",
+    "@fortawesome/fontawesome-free": "^5.7.2",
+    "@symfony/webpack-encore": "^0.23.0",
     "babel-preset-react": "^6.24.1",
-    "bootstrap": "^4.1.3",
+    "bootstrap": "^4.3.1",
     "copy-webpack-plugin": "^4.5",
-    "node-sass": "^4.5.3",
-    "popper.js": "^1.14.4",
-    "sass-loader": "^6.0.7",
-    "webpack": "^3.0"
+    "jquery": "^3.3.1",
+    "node-sass": "^4.9.3",
+    "popper.js": "^1.14.7",
+    "sass-loader": "^7.1.0"
   },
   "dependencies": {
-    "@coreui/coreui": "2.1.6",
-    "@fortawesome/fontawesome-free": "^5.4.0",
     "blueimp-file-upload": "^9.19.2",
     "bootstrap-daterangepicker": "^3.0",
     "bootstrap-select": "^1.13",
@@ -28,13 +28,10 @@
     "fullcalendar": "^3.0",
     "highlight.js": "^9.12.0",
     "image-map-resizer": "^1.0.7",
-    "jquery": "^3.3.1",
     "jquery-ui": "^1.12.1",
     "jquery-ui-timepicker-addon": "^1.6.3",
     "jquery.scrollbar": "^0.2.11",
     "jsplumb": "^2.6.9",
-    "less": "^3.0.2",
-    "less-loader": "^4.0.5",
     "mathjax": "^2.7.4",
     "mediaelement": "^4.2.9",
     "moment": "^2.22",
@@ -50,6 +47,6 @@
     "timepicker": "^1.11.14",
     "uglifyjs-webpack-plugin": "^1.3.0",
     "webcamjs": "^1.0",
-    "webpack-jquery-ui": "^2.0.0"
+    "webpack-jquery-ui": "^2.0.1"
   }
 }

@@ -1,8 +1,5 @@
-const Encore = require('@symfony/webpack-encore');
-const copyWebpackPlugin = require('copy-webpack-plugin');
-const webpack = require('webpack');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-//const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+var Encore = require('@symfony/webpack-encore');
+var copyWebpackPlugin = require('copy-webpack-plugin');
 
 Encore
     .setOutputPath('public/build/')
@@ -12,16 +9,10 @@ Encore
     // If chamilo is installed in a domain my.chamilo.net
     //.setPublicPath('/build')
     .cleanupOutputBeforeBuild()
-    // enable features!
-    .enableSassLoader(function(sassOptions) {}, {
-         //resolveUrlLoader: false
-     })
-    .enableLessLoader()
-    .autoProvidejQuery() // not needed because in window.jQuery we set the $
-    // Reads the "assets/js/vendor.js" file and it will generate the file public/build/vendor.js file
+
     .addEntry('app', './assets/js/app.js')
     .addEntry('bootstrap', './assets/js/bootstrap.js')
-    // Reads app.scss -> output as web/build/css/base.css
+
     .addStyleEntry('css/app', './assets/css/app.scss')
     .addStyleEntry('css/bootstrap', './assets/css/bootstrap.scss')
 
@@ -34,15 +25,14 @@ Encore
     .addStyleEntry('css/responsive', './assets/css/responsive.css')
     .addStyleEntry('css/scorm', './assets/css/scorm.css')
 
-    .addPlugin(new UglifyJsPlugin())
-    //.addPlugin(new OptimizeCSSAssetsPlugin())
+    .enableSingleRuntimeChunk()
+
     .enableSourceMaps(!Encore.isProduction())
-    .autoProvideVariables({
-        $: 'jquery',
-        jQuery: 'jquery',
-        'window.jQuery': 'jquery'
-    })
-    //.enableVersioning() // hashed filenames (e.g. main.abc123.js)
+    .enableVersioning(Encore.isProduction())
+
+    .enableSassLoader()
+
+    .autoProvidejQuery()
 ;
 
 var themes = [
@@ -61,12 +51,4 @@ themes.forEach(function (theme) {
     ]));
 });
 
-Encore.addPlugin(
-    new webpack.ProvidePlugin({
-        $: 'jquery',
-        jQuery: 'jquery'
-    })
-);
-
-var config = Encore.getWebpackConfig();
-module.exports = config;
+module.exports = Encore.getWebpackConfig();

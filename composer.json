@@ -159,7 +159,8 @@
         "simplethings/entity-audit-bundle": "^1.0",
         "masterminds/html5": "2.*",
         "jtsternberg/oauth1-php": "dev-master",
-        "league/csv": "^9.1"
+        "league/csv": "^9.1",
+        "symfony/webpack-encore-bundle": "^1.1"
     },
     "config": {
         "component-dir": "public/assets"

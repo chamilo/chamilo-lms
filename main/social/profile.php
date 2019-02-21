@@ -720,7 +720,7 @@ $tpl->assign('social_extra_info_block', $social_extra_info_block);
 $tpl->assign('social_course_block', $social_course_block);
 $tpl->assign('social_group_info_block', $social_group_info_block);
 $tpl->assign('social_rss_block', $social_rss_block);
-$tpl->assign('social_skill_block', SocialManager::getSkillBlock($my_user_id,'vertical'));
+$tpl->assign('social_skill_block', SocialManager::getSkillBlock($my_user_id, 'vertical'));
 $tpl->assign('session_list', $social_session_block);
 $tpl->assign('invitations', $listInvitations);
 $tpl->assign('social_right_information', $socialRightInformation);

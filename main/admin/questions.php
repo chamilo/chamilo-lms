@@ -128,17 +128,17 @@ if ($formSent) {
                             'myid' => 1,
                             'exerciseId' => $exerciseId,
                             'type' => $question->getType(),
-                            'editQuestion' => $question->getId()
+                            'editQuestion' => $question->getId(),
                         ]),
                         ['target' => '_blank']
                     );
                 }
-                $question->questionData .= '<br />'. $exerciseData;
+                $question->questionData .= '<br />'.$exerciseData;
             } else {
                 $question->questionData .= get_lang('Course').': '.Display::url(
                     $courseInfo['name'],
                     $exerciseUrl.http_build_query([
-                        'cidReq' => $courseCode
+                        'cidReq' => $courseCode,
                     ]),
                     ['target' => '_blank']
                 );

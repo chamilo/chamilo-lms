@@ -9,7 +9,7 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 api_protect_course_script(true);
 api_protect_teacher_script();
 
-$surveyId = isset($_GET['survey']) ? (int)$_GET['survey'] : 0;
+$surveyId = isset($_GET['survey']) ? (int) $_GET['survey'] : 0;
 $surveyData = SurveyManager::get_survey($surveyId);
 $courseId = api_get_course_int_id();
 
@@ -61,7 +61,7 @@ $fileName = md5($surveyId.time());
 Export::arrayToCsv($content, $fileName);
 
 /**
- * Generate the first row for file
+ * Generate the first row for file.
  *
  * @param $questions
  *
@@ -84,7 +84,7 @@ function firstRow($questions)
 }
 
 /**
- * Get unique answer for surveys by users
+ * Get unique answer for surveys by users.
  *
  * @param int $courseId
  * @param int $surveyId
@@ -163,7 +163,7 @@ function getOpenAnswer($questionId, $surveyId, $courseId, $user)
 }
 
 /**
- * Generate the content rows for file
+ * Generate the content rows for file.
  *
  * @param array  $questions
  * @param string $user

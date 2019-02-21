@@ -301,7 +301,6 @@ if (!$inATest) {
                     $move = Display::returnFontAwesomeIcon('arrows moved', 1, true);
                 }
 
-
                 // Question name
                 $questionName =
                     '<a href="#" title = "'.Security::remove_XSS($title).'">

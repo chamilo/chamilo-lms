@@ -34,7 +34,7 @@
                         <!-- LM -->
                         <div class="avatar-lm">
 
-                            <h5>LM</h5>
+                            <h5></h5>
 
                             {% if user.language %}
                                 {% if user.language.code == 'fr' %}
@@ -53,7 +53,7 @@
                         <!-- END LM -->
                         <!-- LC -->
                         <div class="avatar-lc">
-                            <h5>LC</h5>
+                            <h5></h5>
                             {% for item in extra_info %}
                                 {% if item.variable == 'langue_cible' %}
 

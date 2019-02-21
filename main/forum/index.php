@@ -214,8 +214,7 @@ if (!empty($allCourseForums)) {
 
 $actions = Display::toolbarAction('toolbar-forum', [$actionLeft]);
 
-$languages = api_get_languages();
-$languages = array_column($languages['all'], 'english_name', 'isocode');
+$languages = getLanguageListForFlag();
 
 $defaultUserLanguage = ucfirst(api_get_interface_language());
 if (isset($_user['language']) && !empty($_user['language'])) {
@@ -588,7 +587,7 @@ $tpl->assign('data', $listForumCategory);
 $tpl->assign('form_content', $formContent);
 $tpl->assign('search_filter', $form->returnForm());
 $tpl->assign('default_user_language', $defaultUserLanguage);
-$tpl->assign('languages', array_flip($languages));
+$tpl->assign('languages', $languages);
 $extraFieldValue = new ExtraFieldValue('course');
 $value = $extraFieldValue->get_values_by_handler_and_field_variable(api_get_course_int_id(), 'global_forum');
 if ($value && isset($value['value']) && $value['value'] == 1) {

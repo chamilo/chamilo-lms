@@ -163,7 +163,7 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
                 </div>';
                 break;
             case FormValidator::LAYOUT_BOX_NO_LABEL:
-                if(isset($attributes['custom']) && $attributes['custom']==true){
+                if (isset($attributes['custom']) && $attributes['custom'] == true) {
                     $template = '
                         <label {label-for}>{label}</label>
                         <div class="input-group">

@@ -261,7 +261,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
             $ratio = '';
             $scalable = $param['scalable'];
         }
-        
+
         return '<script>
         $(document).ready(function() {
             var $inputFile = $(\'#'.$id.'\'),
@@ -364,10 +364,16 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
             $js = $this->getElementJS(array('ratio' => $ratio, 'scalable' => $scalable));
         }
 
-        if ($this->_flagFrozen) {
+        if ($this->isFrozen()) {
             return $this->getFrozenHtml();
         } else {
-            return $js.$this->_getTabs() . '<input class="input-file" ' . $this->_getAttrString($this->_attributes) . ' />';
+            $class = '';
+            if (isset($this->_attributes['custom']) && $this->_attributes['custom']) {
+                $class = 'input-file';
+            }
+
+            return $js.$this->_getTabs().
+                '<input class="'.$class.'" '.$this->_getAttrString($this->_attributes).' />';
         }
     }
 
@@ -393,7 +399,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                 </div>';
                 break;
             case FormValidator::LAYOUT_HORIZONTAL:
-                if(isset($attributes['custom'])){
+                if (isset($attributes['custom']) && $attributes['custom'] == true) {
                     $template = '
                         <div class="form-group">
                             <div class="col-sm-1"></div>
@@ -432,7 +438,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                     ';
                 } else {
                     $template = '
-                <div  id="file_'.$name.'" class="form-group {error_class}">
+                <div  id="file_' . $name . '" class="form-group {error_class}">
                     <label {label-for} class="col-sm-3 control-label" >
                         <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                         {label}

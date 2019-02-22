@@ -1351,6 +1351,8 @@ class Display
         $obj->pager = '#'.$div_id.'_pager';
         $obj->datatype = 'json';
         $obj->viewrecords = 'true';
+        $obj->guiStyle = 'bootstrap4';
+        $obj->iconSet = 'fontAwesomeSolid';
         $all_value = 10000000;
 
         // Default row quantity

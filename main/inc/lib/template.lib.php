@@ -1498,7 +1498,7 @@ class Template
         $this->assign('prefetch', $prefetch);
         $this->assign('text_direction', api_get_text_direction());
         $this->assign('section_name', 'section-'.$this_section);
-        $this->assignFavIcon(); //Set a 'favico' var for the template
+        $this->assignFavIcon();
         $this->setHelp();
 
         $this->assignBugNotification(); //Prepare the 'bug_notification' var for the template
@@ -1789,7 +1789,7 @@ class Template
                 $clean_url = api_replace_dangerous_char($url);
                 $clean_url = str_replace('/', '-', $clean_url);
                 $clean_url .= '/';
-                $homep = api_get_path(REL_PATH).'home/'.$clean_url; //homep for Home Path
+                $homep = api_get_path(WEB_HOME_PATH).$clean_url; //homep for Home Path
                 $icon_real_homep = api_get_path(SYS_APP_PATH).'home/'.$clean_url;
                 //we create the new dir for the new sites
                 if (is_file($icon_real_homep.'favicon.ico')) {

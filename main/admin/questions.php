@@ -3,6 +3,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
+use Knp\Component\Pager\Paginator;
+use Doctrine\Common\Collections\Criteria;
 
 /**
  *  @package chamilo.admin
@@ -38,7 +40,7 @@ if ($formSent) {
 
     $em = Database::getManager();
     $repo = $em->getRepository('ChamiloCourseBundle:CQuizQuestion');
-    $criteria = new \Doctrine\Common\Collections\Criteria();
+    $criteria = new Criteria();
     if (!empty($id)) {
         $criteria->where($criteria->expr()->eq('iid', $id));
     }
@@ -65,7 +67,7 @@ if ($formSent) {
 
     $questionCount = count($questions);
 
-    $paginator = new Knp\Component\Pager\Paginator();
+    $paginator = new Paginator();
     $pagination = $paginator->paginate($questions, $page, $length);
     $pagination->setItemNumberPerPage($length);
     $pagination->setCurrentPageNumber($page);
@@ -89,10 +91,14 @@ if ($formSent) {
         $url = api_get_path(WEB_CODE_PATH).'exercise/admin.php?';
         $exerciseUrl = api_get_path(WEB_CODE_PATH).'exercise/exercise.php?';
         foreach ($pagination as $question) {
+            $courseId = $question->getCId();
+            $courseInfo = api_get_course_info_by_id($courseId);
+            $courseCode = $courseInfo['code'];
+            $question->courseCode = $courseCode;
             // Creating empty exercise
             $exercise = new Exercise();
-            $exercise->course_id = $question->getCId();
-            $questionObject = Question::read($question->getId(), $question->getCId());
+            $exercise->course_id = $courseId;
+            $questionObject = Question::read($question->getId(), $courseId);
 
             ob_start();
             ExerciseLib::showQuestion(
@@ -108,8 +114,6 @@ if ($formSent) {
                 true
             );
             $question->questionData = ob_get_contents();
-            $courseInfo = api_get_course_info_by_id($exercise->course_id);
-            $courseCode = $courseInfo['code'];
 
             $exerciseData = '';
             $exerciseId = 0;
@@ -124,22 +128,21 @@ if ($formSent) {
                         Display::return_icon('edit.png', get_lang('Edit')),
                         $url.http_build_query([
                             'cidReq' => $courseCode,
+                            'id_session' => $exercise->sessionId,
                             'myid' => 1,
                             'exerciseId' => $exerciseId,
                             'type' => $question->getType(),
-                            'editQuestion' => $question->getId()
-                        ]),
-                        ['target' => '_blank']
+                            'editQuestion' => $question->getId(),
+                        ])
                     );
                 }
-                $question->questionData .= '<br />'. $exerciseData;
+                $question->questionData .= '<br />'.$exerciseData;
             } else {
                 $question->questionData .= get_lang('Course').': '.Display::url(
                     $courseInfo['name'],
                     $exerciseUrl.http_build_query([
-                        'cidReq' => $courseCode
-                    ]),
-                    ['target' => '_blank']
+                        'cidReq' => $courseCode,
+                    ])
                 );
             }
             ob_end_clean();

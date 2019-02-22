@@ -8275,4 +8275,5 @@ $GlobalProgress = "Progression Globale";
 $AttestationOfAttendance = "Attestation d'assiduité";
 $DontShowScoreOnlyWhenUserFinishesAllAttemptsButShowFeedbackEachAttempt = "Ne pas montrer le score (seulement quand l'utilisateur a utilisé toutes les tentatives) mais montrer la rétroalimentation pour chaque tentative.";
 $ExerciseRankingMode = "Mode classement: Ne pas montrer les résultats question par question, mais montrer une table de classification par rapport aux autres utilisateurs.";
+$BackToTop = "Sommet de la page";
 ?>

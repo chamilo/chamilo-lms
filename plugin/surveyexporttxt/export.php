@@ -16,7 +16,7 @@ if (empty($surveyData)) {
     api_not_allowed(true);
 }
 
-$plugin = ApaExportSurvey::create();
+$plugin = SurveyExportTxtPlugin::create();
 
 if ($plugin->get('enabled') !== 'true') {
     api_not_allowed(true);
@@ -60,6 +60,13 @@ foreach ($questionsData as $questionData) {
     }
 
     $parts[$indexPart][] = $questionData;
+}
+
+if (count($parts) < 2) {
+    api_not_allowed(
+        true,
+        Display::return_message(get_lang('NoData'), 'warning')
+    );
 }
 
 // Process introduction questions to show

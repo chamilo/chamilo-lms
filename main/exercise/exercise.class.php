@@ -186,7 +186,6 @@ class Exercise
             $this->text_when_finished = $object->text_when_finished;
             $this->display_category_name = $object->display_category_name;
             $this->pass_percentage = $object->pass_percentage;
-            $this->sessionId = $object->session_id;
             $this->is_gradebook_locked = api_resource_is_locked_by_gradebook($id, LINK_EXERCISE);
             $this->review_answers = (isset($object->review_answers) && $object->review_answers == 1) ? true : false;
             $this->globalCategoryId = isset($object->global_category_id) ? $object->global_category_id : null;
@@ -218,10 +217,9 @@ class Exercise
 
             $this->force_edit_exercise_in_lp = api_get_configuration_value('force_edit_exercise_in_lp');
 
+            $this->edit_exercise_in_lp = true;
             if ($this->exercise_was_added_in_lp) {
                 $this->edit_exercise_in_lp = $this->force_edit_exercise_in_lp == true;
-            } else {
-                $this->edit_exercise_in_lp = true;
             }
 
             if (!empty($object->end_time)) {

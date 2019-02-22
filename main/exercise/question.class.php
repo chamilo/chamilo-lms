@@ -236,7 +236,7 @@ abstract class Question
         $showQuestionTitleHtml = api_get_configuration_value('save_titles_as_html');
         $title = '';
         if (api_get_configuration_value('show_question_id')) {
-            $title .= '<h4>#'.$this->iid.'</h4>';
+            $title .= '<h4>#'.$this->course['code'].'-'.$this->iid.'</h4>';
         }
 
         $title .= $showQuestionTitleHtml ? '' : '<strong>';
@@ -1794,7 +1794,7 @@ abstract class Question
      *
      * @param Exercise $objExercise
      */
-    public static function display_type_menu($objExercise)
+    public static function displayTypeMenu($objExercise)
     {
         $feedback_type = $objExercise->feedback_type;
         $exerciseId = $objExercise->id;

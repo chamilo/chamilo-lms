@@ -2,12 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class ApaExportSurvey.
+ * Class SurveyExportTxtPlugin.
  */
-class ApaExportSurvey extends Plugin
+class SurveyExportTxtPlugin extends Plugin
 {
     /**
-     * ApaExportSurvey constructor.
+     * SurveyExportTxtPlugin constructor.
      */
     protected function __construct()
     {
@@ -15,11 +15,11 @@ class ApaExportSurvey extends Plugin
             'enabled' => 'boolean',
         ];
 
-        parent::__construct('0.1', 'Angel Fernado Quiroz Campos', $settings);
+        parent::__construct('0.1', 'Angel Fernando Quiroz Campos', $settings);
     }
 
     /**
-     * @return ApaExportSurvey|null
+     * @return SurveyExportTxtPlugin|null
      */
     public static function create()
     {
@@ -49,7 +49,7 @@ class ApaExportSurvey extends Plugin
      */
     public static function filterModify($params)
     {
-        $enabled = api_get_plugin_setting('apaexportsurvey', 'enabled');
+        $enabled = api_get_plugin_setting('surveyexporttxt', 'enabled');
 
         if ($enabled !== 'true') {
             return '';
@@ -64,7 +64,7 @@ class ApaExportSurvey extends Plugin
 
         return Display::url(
             Display::return_icon('export_evaluation.png', get_lang('Export'), [], $iconSize),
-            api_get_path(WEB_PLUGIN_PATH).'apaexportsurvey/export.php?survey='.$surveyId.'&'.api_get_cidreq()
+            api_get_path(WEB_PLUGIN_PATH).'surveyexporttxt/export.php?survey='.$surveyId.'&'.api_get_cidreq()
         );
     }
 
@@ -89,6 +89,6 @@ class ApaExportSurvey extends Plugin
     {
         Database::getManager()
             ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.link LIKE :link AND t.category = :category')
-            ->execute(['link' => 'apaexportsurvey/start.php%', 'category' => 'plugin']);
+            ->execute(['link' => 'surveyexporttxt/start.php%', 'category' => 'plugin']);
     }
 }

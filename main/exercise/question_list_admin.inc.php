@@ -149,9 +149,10 @@ $ajax_url = api_get_path(WEB_AJAX_PATH)."exercise.ajax.php?".api_get_cidreq()."&
 <?php
 
 //we filter the type of questions we can add
-Question::display_type_menu($objExercise);
+Question::displayTypeMenu($objExercise);
+
 // Re sets the question list
-$objExercise->setQuestionList();
+//$objExercise->setQuestionList();
 
 echo '<div id="message"></div>';
 $token = Security::get_token();
@@ -299,7 +300,6 @@ if (!$inATest) {
                 if ($alloQuestionOrdering) {
                     $move = Display::returnFontAwesomeIcon('arrows moved', 1, true);
                 }
-
 
                 // Question name
                 $questionName =

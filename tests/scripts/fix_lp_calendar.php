@@ -1,9 +1,7 @@
 <?php
-
+/* For licensing terms, see /license.txt */
 
 require __DIR__ . '/../../main/inc/global.inc.php';
-
-
 
 $extraField = new ExtraField('lp_item');
 $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable('calendar');
@@ -18,7 +16,7 @@ $sql = 'select iid from c_lp_item where title like "%(+)%"';
 $result = Database::query($sql);
 while ($row = Database::fetch_array($result)) {
     $lpItemId = $row['iid'];
-    
+
     $extraField = new ExtraFieldValue('lp_item');
     $values = $extraField->get_values_by_handler_and_field_variable($lpItemId, 'calendar');
 

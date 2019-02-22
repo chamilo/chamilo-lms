@@ -1,6 +1,6 @@
-# APA Export Survey
+# Survey Export CSV
 
-Export surveys for APA.
+Export surveys to CSV file.
 
 This plugin will add a new action button in survey list allowing export the survey.
 

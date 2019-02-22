@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CourseBundle\Entity\CGroupRelUser;
-
 /**
  * This library contains some functions for group-management.
  *
@@ -1313,7 +1311,7 @@ class GroupManager
     /**
      * Get only students from a group (not tutors).
      *
-     * @param int  $group_id iid
+     * @param int  $group_id         iid
      * @param bool $filterOnlyActive
      *
      * @return array

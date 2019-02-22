@@ -837,7 +837,7 @@ class Skill extends Model
                 $item = '<div class="item">'.$skill[$imageSize].'</div>';
             }
 
-            $name = '<div class="caption">'. $skill['name'].'</div>';
+            $name = '<div class="caption">'.$skill['name'].'</div>';
             if (!empty($skill['short_code'])) {
                 $name = $skill['short_code'];
             }
@@ -1433,7 +1433,7 @@ class Skill extends Model
         }
 
         if ($addTitle) {
-            $tableResult .= '<div class="header-title">' . get_lang('AchievedSkills') . '</div>
+            $tableResult .= '<div class="header-title">'.get_lang('AchievedSkills').'</div>
                     <div class="skills-badges">
                    ';
         }
@@ -1489,7 +1489,7 @@ class Skill extends Model
                         $label = $this->processSkillListSimple([$data], 'mini', $transparency);
                         $table .= '<td >';
 
-                        $table .= '<div class="skills_chart"> <ul><li>' . $label;
+                        $table .= '<div class="skills_chart"> <ul><li>'.$label;
                         $table .= $this->processVertex($vertex, $skills);
                         $table .= '</ul></li></div>';
                         $table .= '</td>';

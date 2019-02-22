@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Knp\Component\Pager\Paginator;
 
 /**
  * Question Pool
@@ -27,7 +28,6 @@ $exerciseId = isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) :
 $courseCategoryId = isset($_REQUEST['courseCategoryId']) ? intval($_REQUEST['courseCategoryId']) : null;
 $exerciseLevel = isset($_REQUEST['exerciseLevel']) ? intval($_REQUEST['exerciseLevel']) : -1;
 $answerType = isset($_REQUEST['answerType']) ? intval($_REQUEST['answerType']) : null;
-$page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 0;
 $question_copy = isset($_REQUEST['question_copy']) ? intval($_REQUEST['question_copy']) : 0;
 $session_id = isset($_REQUEST['session_id']) ? intval($_REQUEST['session_id']) : null;
 $selected_course = isset($_GET['selected_course']) ? intval($_GET['selected_course']) : null;
@@ -37,6 +37,7 @@ $course_id_changed = isset($_GET['course_id_changed']) ? intval($_GET['course_id
 $exercise_id_changed = isset($_GET['exercise_id_changed']) ? intval($_GET['exercise_id_changed']) : null;
 $questionId = isset($_GET['question_id']) && !empty($_GET['question_id']) ? (int) $_GET['question_id'] : '';
 $description = isset($_GET['description']) ? Database::escape_string($_GET['description']) : '';
+$page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 
 // by default when we go to the page for the first time, we select the current course
 if (!isset($_GET['selected_course']) && !isset($_GET['exerciseId'])) {
@@ -211,10 +212,22 @@ Display::display_header($nameTools, 'Exercise');
 
 // Menu
 echo '<div class="actions">';
-$url = api_get_self();
-if (isset($type)) {
-    $url = api_get_self().'?type=1';
-}
+$url = api_get_self().'?'.api_get_cidreq().'&'.http_build_query(
+    [
+        'fromExercise' => $fromExercise,
+        'session_id' => $session_id,
+        'selected_course' => $selected_course,
+        'courseCategoryId' => $courseCategoryId,
+        'exerciseId' => $exerciseId,
+        'exerciseLevel' => $exerciseLevel,
+        'answerType' => $answerType,
+        'question_id' => $questionId,
+        'description' => Security::remove_XSS($description),
+        'course_id_changed' => $course_id_changed,
+        'exercise_id_changed' => $exercise_id_changed,
+    ]
+);
+
 if (isset($fromExercise) && $fromExercise > 0) {
     echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$fromExercise.'">'.
             Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -222,7 +235,8 @@ if (isset($fromExercise) && $fromExercise > 0) {
 } else {
     echo '<a href="exercise.php?'.api_get_cidreq().'">'.
         Display::return_icon('back.png', get_lang('BackToExercisesList'), '', ICON_SIZE_MEDIUM).'</a>';
-    echo "<a href='admin.php?exerciseId=0'>".Display::return_icon('add_question.gif', get_lang('NewQu'), '', ICON_SIZE_MEDIUM)."</a>";
+    echo "<a href='admin.php?exerciseId=0'>".
+        Display::return_icon('add_question.gif', get_lang('NewQu'), '', ICON_SIZE_MEDIUM)."</a>";
     $titleAdd = get_lang('ManageAllQuestions');
 }
 echo '</div>';
@@ -236,21 +250,21 @@ if ($displayMessage != '') {
 echo '<form class="form-horizontal" name="question_pool" method="GET" action="'.$url.'">';
 // Title
 echo '<legend>'.$nameTools.' - '.$titleAdd.'</legend>';
-if (isset($type)) {
-    echo '<input type="hidden" name="type" value="1">';
-}
 echo '<input type="hidden" name="fromExercise" value="'.$fromExercise.'">';
 
 // Session list, if sessions are used.
 $sessionList = SessionManager::get_sessions_by_user(api_get_user_id(), api_is_platform_admin());
-$tabAttrParam = ['onchange' => 'submit_form(this)'];
-$labelFormRow = get_lang('Session');
 $session_select_list = [];
 foreach ($sessionList as $item) {
     $session_select_list[$item['session_id']] = $item['session_name'];
 }
-$select_session_html = Display::select('session_id', $session_select_list, $session_id, $tabAttrParam);
-echo Display::form_row($labelFormRow, $select_session_html);
+$select_session_html = Display::select(
+    'session_id',
+    $session_select_list,
+    $session_id,
+    ['onchange' => 'submit_form(this)']
+);
+echo Display::form_row(get_lang('Session'), $select_session_html);
 
 // Course list, get course list of session, or for course where user is admin
 if (!empty($session_id) && $session_id != '-1' && !empty($sessionList)) {
@@ -314,17 +328,8 @@ if ($course_id_changed) {
 }
 
 $course_id = $course_info['real_id'];
-// Redefining table calls
-$TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-$TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
-$TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-$TBL_REPONSES = Database::get_course_table(TABLE_QUIZ_ANSWER);
-$TBL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-$TBL_COURSE_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
 
-// Get course categories for the selected course
-
-// get category list for the course $selected_course
+// Get category list for the course $selected_course
 $categoryList = TestCategory::getCategoriesIdAndName($selected_course);
 $selectCourseCategory = Display::select(
     'courseCategoryId',
@@ -342,7 +347,8 @@ $exercise_list = ExerciseLib::get_all_exercises_for_course_id(
     $selected_course,
     false
 );
-//Exercise List
+
+// Exercise List
 $my_exercise_list = [];
 $my_exercise_list['0'] = get_lang('AllExercises');
 $my_exercise_list['-1'] = get_lang('OrphanQuestions');
@@ -359,6 +365,7 @@ if (is_array($exercise_list)) {
 if ($exercise_id_changed == 1) {
     reset_menu_lvl_type();
 }
+
 $select_exercise_html = Display::select(
     'exerciseId',
     $my_exercise_list,
@@ -379,6 +386,7 @@ $levels = [
     4 => 4,
     5 => 5,
 ];
+
 $select_difficulty_html = Display::select(
     'exerciseLevel',
     $levels,
@@ -410,6 +418,7 @@ if (!empty($_course)) {
         }
     }
 }
+
 // Answer type list
 $select_answer_html = Display::select(
     'answerType',
@@ -426,245 +435,209 @@ echo Display::form_row(
     Display::input('text', 'description', Security::remove_XSS($description))
 );
 
-$button = '<button class="btn btn-primary save" type="submit" name="name" value="'.get_lang('Filter').'">'.get_lang('Filter').'</button>';
+$button = '<button class="btn btn-primary save" type="submit" name="name" value="'.get_lang('Filter').'">'.
+    get_lang('Filter').'</button>';
 echo Display::form_row('', $button);
 echo "<input type='hidden' id='course_id_changed' name='course_id_changed' value='0' />";
 echo "<input type='hidden' id='exercise_id_changed' name='exercise_id_changed' value='0' />";
 ?>
 </form>
 <div class="clear"></div>
-<form method="post" action="<?php echo $url.'?'.api_get_cidreq().'&fromExercise='.$fromExercise; ?>" >
 <?php
-echo '<input type="hidden" name="course_id" value="'.$selected_course.'">';
-$mainQuestionList = [];
 
-// if we have selected an exercise in the list-box 'Filter'
-if ($exerciseId > 0) {
-    $where = '';
-    $from = '';
-    if (isset($courseCategoryId) && $courseCategoryId > 0) {
-        $from = ", $TBL_COURSE_REL_CATEGORY crc ";
-        $where .= " AND 
-                crc.c_id = $selected_course AND 
-                crc.question_id = qu.id AND 
-                crc.category_id = $courseCategoryId";
-    }
-    if (isset($exerciseLevel) && $exerciseLevel != -1) {
-        $where .= ' AND level='.$exerciseLevel;
-    }
-    if (isset($answerType) && $answerType > 0) {
-        $where .= ' AND type='.$answerType;
-    }
+function getQuestions(
+    $getCount,
+    $start,
+    $length,
+    $exerciseId,
+    $courseCategoryId,
+    $selected_course,
+    $session_id,
+    $exerciseLevel,
+    $answerType,
+    $questionId,
+    $description
+) {
+    $start = (int) $start;
+    $length = (int) $length;
+    $exerciseId = (int) $exerciseId;
+    $courseCategoryId = (int) $courseCategoryId;
+    $selected_course = (int) $selected_course;
+    $session_id = (int) $session_id;
+    $exerciseLevel = (int) $exerciseLevel;
+    $answerType = (int) $answerType;
+    $questionId = (int) $questionId;
+    $description  = Database::escape_string($description);
 
-    if (!empty($questionId)) {
-        $where .= ' AND qu.iid='.$questionId;
-    }
+    $TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+    $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
+    $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
+    $TBL_COURSE_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
 
-    if (!empty($description)) {
-        $where .= " AND qu.description LIKE '%$description%'";
-    }
-
-    $sql = "SELECT DISTINCT
-                id,
-                question,
-                type,
-                level
-            FROM
-                $TBL_EXERCISE_QUESTION qt,
-                $TBL_QUESTIONS qu
-                $from
-            WHERE
-                qt.question_id = qu.id
-                AND qt.exercice_id=$exerciseId
-                AND qt.c_id=$selected_course
-                AND qu.c_id=$selected_course
-                $where
-            ORDER BY question_order";
-
-    $result = Database::query($sql);
-    while ($row = Database::fetch_array($result, 'ASSOC')) {
-        $mainQuestionList[] = $row;
-    }
-} elseif ($exerciseId == -1) {
-    // If we have selected the option 'Orphan questions' in the list-box 'Filter'
-    $level_where = '';
-    $from = '';
-    if (isset($courseCategoryId) && $courseCategoryId > 0) {
-        $from = " INNER JOIN $TBL_COURSE_REL_CATEGORY crc 
-                  ON crc.question_id = q.id AND crc.c_id = q.c_id ";
-        $level_where .= " AND
-                crc.c_id = $selected_course AND
-                crc.category_id = $courseCategoryId";
-    }
-    if (isset($exerciseLevel) && $exerciseLevel != -1) {
-        $level_where = ' AND level='.$exerciseLevel;
-    }
-    $answer_where = '';
-    if (isset($answerType) && $answerType > 0 - 1) {
-        $answer_where = ' AND type='.$answerType;
-    }
-
-    if (!empty($questionId)) {
-        $answer_where .= ' AND q.iid='.$questionId;
-    }
-
-    if (!empty($description)) {
-        $answer_where .= " AND q.description LIKE '%$description%'";
-    }
-
-    // @todo fix this query with the new id field
-    $sql = " (
-                SELECT q.* FROM $TBL_QUESTIONS q
-                INNER JOIN $TBL_EXERCISE_QUESTION r
-                ON (q.c_id = r.c_id AND q.id = r.question_id)
-                INNER JOIN $TBL_EXERCISES ex
-                ON (ex.id = r.exercice_id AND ex.c_id = r.c_id)
-                $from
-                WHERE
-                    ex.c_id = '$selected_course' AND
-                    ex.active = '-1'
-                    $level_where 
-                    $answer_where
-             )
-             UNION
-             (
-                SELECT q.* FROM $TBL_QUESTIONS q
-                LEFT OUTER JOIN $TBL_EXERCISE_QUESTION r
-                ON (q.c_id = r.c_id AND q.id = r.question_id)
-                $from
-                WHERE
-                    q.c_id = '$selected_course' AND
-                    r.question_id is null
-                    $level_where 
-                    $answer_where
-             )
-             UNION
-             (
-                SELECT q.* FROM $TBL_QUESTIONS q
-                INNER JOIN $TBL_EXERCISE_QUESTION r
-                ON (q.c_id = r.c_id AND q.id = r.question_id)
-                $from
-                WHERE
-                    r.c_id = '$selected_course' AND
-                    (r.exercice_id = '-1' OR r.exercice_id = '0')
-                    $level_where 
-                    $answer_where
-             )";
-    $result = Database::query($sql);
-    while ($row = Database::fetch_array($result, 'ASSOC')) {
-        $mainQuestionList[] = $row;
-    }
-} else {
-    // All tests for selected course
-    // If we have not selected any option in the list-box 'Filter'
-    $filter = '';
-    $from = '';
-
-    if (isset($courseCategoryId) && $courseCategoryId > 0) {
-        $from = ", $TBL_COURSE_REL_CATEGORY crc ";
-        $filter .= " AND
-                    crc.c_id = $selected_course AND
-                    crc.question_id = qu.id AND
+    // if we have selected an exercise in the list-box 'Filter'
+    if ($exerciseId > 0) {
+        $where = '';
+        $from = '';
+        if (isset($courseCategoryId) && $courseCategoryId > 0) {
+            $from = ", $TBL_COURSE_REL_CATEGORY crc ";
+            $where .= " AND 
+                    crc.c_id = $selected_course AND 
+                    crc.question_id = qu.id AND 
                     crc.category_id = $courseCategoryId";
-    }
-    if (isset($exerciseLevel) && $exerciseLevel != -1) {
-        $filter .= ' AND level='.$exerciseLevel.' ';
-    }
-    if (isset($answerType) && $answerType > 0) {
-        $filter .= ' AND qu.type='.$answerType.' ';
-    }
+        }
+        if (isset($exerciseLevel) && $exerciseLevel != -1) {
+            $where .= ' AND level='.$exerciseLevel;
+        }
+        if (isset($answerType) && $answerType > 0) {
+            $where .= ' AND type='.$answerType;
+        }
 
-    if (!empty($questionId)) {
-        $filter .= ' AND qu.iid='.$questionId;
-    }
+        if (!empty($questionId)) {
+            $where .= ' AND qu.iid='.$questionId;
+        }
 
-    if (!empty($description)) {
-        $filter .= " AND qu.description LIKE '%$description%'";
-    }
+        if (!empty($description)) {
+            $where .= " AND qu.description LIKE '%$description%'";
+        }
 
-    if (!empty($session_id) && $session_id != '-1') {
-        $mainQuestionList = [];
-        if (!empty($course_list)) {
-            foreach ($course_list as $course_item) {
-                $courseItemId = $course_item['real_id'];
+        $select = 'DISTINCT
+                    id,
+                    question,
+                    type,
+                    level,  
+                    qt.exercice_id exerciseId';
+        if ($getCount) {
+            $select = 'count(qu.iid) as count';
+        }
+        $sql = "SELECT $select
+                FROM
+                    $TBL_EXERCISE_QUESTION qt,
+                    $TBL_QUESTIONS qu
+                    $from
+                WHERE
+                    qt.question_id = qu.id AND 
+                    qt.exercice_id = $exerciseId AND 
+                    qt.c_id = $selected_course  AND 
+                    qu.c_id = $selected_course
+                    $where
+                ORDER BY question_order";
+    } elseif ($exerciseId == -1) {
+        // If we have selected the option 'Orphan questions' in the list-box 'Filter'
+        $level_where = '';
+        $from = '';
+        if (isset($courseCategoryId) && $courseCategoryId > 0) {
+            $from = " INNER JOIN $TBL_COURSE_REL_CATEGORY crc 
+                      ON crc.question_id = q.id AND crc.c_id = q.c_id ";
+            $level_where .= " AND
+                    crc.c_id = $selected_course AND
+                    crc.category_id = $courseCategoryId";
+        }
+        if (isset($exerciseLevel) && $exerciseLevel != -1) {
+            $level_where = ' AND level='.$exerciseLevel;
+        }
+        $answer_where = '';
+        if (isset($answerType) && $answerType > 0 - 1) {
+            $answer_where = ' AND type='.$answerType;
+        }
 
-                if (!empty($selected_course) && $selected_course != '-1') {
-                    if ($selected_course != $courseItemId) {
-                        continue;
-                    }
-                }
+        if (!empty($questionId)) {
+            $answer_where .= ' AND q.iid='.$questionId;
+        }
 
-                $exerciseList = ExerciseLib::get_all_exercises($course_item, $session_id);
+        if (!empty($description)) {
+            $answer_where .= " AND q.description LIKE '%$description%'";
+        }
 
-                if (!empty($exerciseList)) {
-                    foreach ($exerciseList as $exercise) {
-                        $my_exercise = new Exercise($courseItemId);
-                        $my_exercise->read($exercise['id']);
-                        if (!empty($my_exercise)) {
-                            if (!empty($my_exercise->questionList)) {
-                                foreach ($my_exercise->questionList as $question_id) {
-                                    $question_obj = Question::read(
-                                        $question_id,
-                                        $courseItemId
-                                    );
+        $select = ' q.*, r.exercice_id exerciseId  ';
+        if ($getCount) {
+            $select = 'count(q.iid) as count';
+        }
 
-                                    if ($exerciseLevel != '-1') {
-                                        if ($exerciseLevel != $question_obj->level) {
-                                            continue;
-                                        }
-                                    }
-
-                                    if ($answerType > 0) {
-                                        if ($answerType != $question_obj->type) {
-                                            continue;
-                                        }
-                                    }
-
-                                    $categoryIdFromQuestion = TestCategory::getCategoryForQuestion(
-                                        $question_obj->id,
-                                        $selected_course
-                                    );
-
-                                    if ($courseCategoryId > 0 &&
-                                        $categoryIdFromQuestion != $courseCategoryId
-                                    ) {
-                                        continue;
-                                    }
-
-                                    if (!empty($objExercise) &&
-                                        $objExercise->feedback_type != EXERCISE_FEEDBACK_TYPE_DIRECT
-                                    ) {
-                                        if ($question_obj->type == HOT_SPOT_DELINEATION) {
-                                            continue;
-                                        }
-                                    }
-
-                                    $question_row = [
-                                        'id' => $question_obj->id,
-                                        'question' => $question_obj->question,
-                                        'type' => $question_obj->type,
-                                        'level' => $question_obj->level,
-                                        'exercise_id' => $exercise['id'],
-                                        'exercise_name' => $exercise['title'],
-                                        'course_id' => $courseItemId,
-                                    ];
-                                    $mainQuestionList[] = $question_row;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+        // @todo fix this query with the new id field
+        $sql = " (
+                    SELECT $select
+                    FROM $TBL_QUESTIONS q
+                    INNER JOIN $TBL_EXERCISE_QUESTION r
+                    ON (q.c_id = r.c_id AND q.id = r.question_id)
+                    INNER JOIN $TBL_EXERCISES ex
+                    ON (ex.id = r.exercice_id AND ex.c_id = r.c_id)
+                    $from
+                    WHERE
+                        ex.c_id = '$selected_course' AND
+                        ex.active = '-1'
+                        $level_where 
+                        $answer_where
+                )                  
+                UNION                 
+                (
+                    SELECT $select
+                    FROM $TBL_QUESTIONS q
+                    LEFT OUTER JOIN $TBL_EXERCISE_QUESTION r
+                    ON (q.c_id = r.c_id AND q.id = r.question_id)
+                    $from
+                    WHERE
+                        q.c_id = '$selected_course' AND
+                        r.question_id is null
+                        $level_where 
+                        $answer_where
+                )                  
+                UNION                 
+                (
+                        SELECT $select
+                        FROM $TBL_QUESTIONS q
+                        INNER JOIN $TBL_EXERCISE_QUESTION r
+                        ON (q.c_id = r.c_id AND q.id = r.question_id)
+                        $from
+                        WHERE
+                            r.c_id = '$selected_course' AND
+                            (r.exercice_id = '-1' OR r.exercice_id = '0')
+                            $level_where 
+                            $answer_where
+                    ) 
+                 ";
+        if ($getCount) {
+            $sql = "SELECT SUM(count) count FROM ($sql) as total";
         }
     } else {
+        // All tests for selected course
+        // If we have not selected any option in the list-box 'Filter'
+        $filter = '';
+        $from = '';
+        if (isset($courseCategoryId) && $courseCategoryId > 0) {
+            $from = ", $TBL_COURSE_REL_CATEGORY crc ";
+            $filter .= " AND
+                        crc.c_id = $selected_course AND
+                        crc.question_id = qu.id AND
+                        crc.category_id = $courseCategoryId";
+        }
+        if (isset($exerciseLevel) && $exerciseLevel != -1) {
+            $filter .= ' AND level='.$exerciseLevel.' ';
+        }
+        if (isset($answerType) && $answerType > 0) {
+            $filter .= ' AND qu.type='.$answerType.' ';
+        }
+
+        if (!empty($questionId)) {
+            $filter .= ' AND qu.iid='.$questionId;
+        }
+
+        if (!empty($description)) {
+            $filter .= " AND qu.description LIKE '%$description%'";
+        }
+
         if ($session_id == -1 || empty($session_id)) {
             $session_id = 0;
         }
-
         $sessionCondition = api_get_session_condition($session_id, true, 'q.session_id');
 
+        $select = 'qu.id, question, qu.type, level, q.session_id, qt.exercice_id exerciseId  ';
+        if ($getCount) {
+            $select = 'count(qu.iid) as count';
+        }
+
         // All tests for the course selected, not in session
-        $sql = "SELECT DISTINCT qu.id, question, qu.type, level, q.session_id
+        $sql = "SELECT DISTINCT
+                    $select
                 FROM
                 $TBL_QUESTIONS as qu,
                 $TBL_EXERCISE_QUESTION as qt,
@@ -674,20 +647,90 @@ if ($exerciseId > 0) {
                     qu.c_id = $selected_course AND
                     qt.c_id = $selected_course AND
                     q.c_id = $selected_course AND
-                    qu.id = qt.question_id 
-                    $sessionCondition AND                    
-                    q.id = qt.exercice_id $filter
+                    qu.id = qt.question_id
+                    $sessionCondition AND
+                    q.id = qt.exercice_id
+                    $filter
                 ORDER BY session_id ASC";
-        $result = Database::query($sql);
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
-            $mainQuestionList[] = $row;
-        }
     }
-    // forces the value to 0
-    $exerciseId = 0;
+
+    if ($getCount) {
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result, 'ASSOC');
+
+        return (int) $row['count'];
+    }
+
+    $sql .= " LIMIT $start, $length";
+
+    $result = Database::query($sql);
+
+    $mainQuestionList = [];
+    while ($row = Database::fetch_array($result, 'ASSOC')) {
+        $mainQuestionList[] = $row;
+    }
+
+    return $mainQuestionList;
 }
 
-$nbrQuestions = count($mainQuestionList);
+$nbrQuestions = getQuestions(
+    true,
+    null,
+    null,
+    $exerciseId,
+    $courseCategoryId,
+    $selected_course,
+    $session_id,
+    $exerciseLevel,
+    $answerType,
+    $questionId,
+    $description
+);
+
+$length = api_get_configuration_value('question_pagination_length');
+if (empty($length)) {
+    $length = 20;
+}
+
+$start = ($page - 1) * $length;
+
+$paginator = new Paginator();
+$pagination = $paginator->paginate([]);
+$pagination->setTotalItemCount($nbrQuestions);
+$pagination->setItemNumberPerPage($length);
+$pagination->setCurrentPageNumber($page);
+
+$pagination->renderer = function ($data) use ($url) {
+    $render = '';
+    if ($data['pageCount'] > 1) {
+        $render = '<ul class="pagination">';
+        for ($i = 1; $i <= $data['pageCount']; $i++) {
+            $page = (int) $i;
+            $pageContent = '<li><a href="'.$url.'&page='.$page.'">'.$page.'</a></li>';
+            if ($data['current'] == $page) {
+                $pageContent = '<li class="active"><a href="#" >'.$page.'</a></li>';
+            }
+            $render .= $pageContent;
+        }
+        $render .= '</ul>';
+    }
+
+    return $render;
+};
+
+$mainQuestionList = getQuestions(
+    false,
+    $start,
+    $length,
+    $exerciseId,
+    $courseCategoryId,
+    $selected_course,
+    $session_id,
+    $exerciseLevel,
+    $answerType,
+    $questionId,
+    $description
+);
 
 // build the line of the array to display questions
 // Actions are different if you launch the question_pool page
@@ -708,33 +751,88 @@ $nbrQuestions = count($mainQuestionList);
 */
 
 if ($fromExercise <= 0) {
-    // NOT IN A TEST - IN THE COURSE
+    // NOT IN A TEST - NOT IN THE COURSE
+    $actionLabel = get_lang('Reuse');
+    $actionIcon1 = get_lang('MustBeInATest');
+    $actionIcon2 = '';
+    // We are not in this course, to messy if we link to the question in another course
+    $questionTagA = 0;
     if ($selected_course == api_get_course_int_id()) {
+        // NOT IN A TEST - IN THE COURSE
         $actionLabel = get_lang('Modify');
         $actionIcon1 = 'edit';
         $actionIcon2 = 'delete';
         // We are in the course, question title can be a link to the question edit page
         $questionTagA = 1;
-    } else { // NOT IN A TEST - NOT IN THE COURSE
-        $actionLabel = get_lang('Reuse');
-        $actionIcon1 = get_lang('MustBeInATest');
-        $actionIcon2 = '';
-        // We are not in this course, to messy if we link to the question in another course
-        $questionTagA = 0;
     }
 } else {
-    // IN A TEST - IN THE COURSE
+    // IN A TEST - NOT IN THE COURSE
+    $actionLabel = get_lang('Reuse');
+    $actionIcon1 = 'clone';
+    $actionIcon2 = '';
+    $questionTagA = 0;
+
     if ($selected_course == api_get_course_int_id()) {
+        // IN A TEST - IN THE COURSE
         $actionLabel = get_lang('Reuse');
         $actionIcon1 = 'add';
         $actionIcon2 = '';
         $questionTagA = 1;
-    } else {
-        // IN A TEST - NOT IN THE COURSE
-        $actionLabel = get_lang('Reuse');
-        $actionIcon1 = 'clone';
-        $actionIcon2 = '';
-        $questionTagA = 0;
+    }
+}
+
+$data = [];
+if (is_array($mainQuestionList)) {
+    foreach ($mainQuestionList as $question) {
+        $row = [];
+        // This function checks if the question can be read
+        $question_type = get_question_type_for_question($selected_course, $question['id']);
+
+        if (empty($question_type)) {
+            continue;
+        }
+
+        $sessionId = isset($question['session_id']) ? $question['session_id'] : null;
+        $exerciseName = isset($question['exercise_name']) ? '<br />('.$question['exercise_id'].') ' : null;
+        $row[] = getLinkForQuestion(
+            $questionTagA,
+            $fromExercise,
+            $question['id'],
+            $question['type'],
+            $question['question'],
+            $sessionId,
+            $question['exerciseId']
+        ).$exerciseName;
+        $row[] = $question_type;
+        $row[] = TestCategory::getCategoryNameForQuestion($question['id'], $selected_course);
+        $row[] = $question['level'];
+        $row[] = get_action_icon_for_question(
+            $actionIcon1,
+            $fromExercise,
+            $question['id'],
+            $question['type'],
+            $question['question'],
+            $selected_course,
+            $courseCategoryId,
+            $exerciseLevel,
+            $answerType,
+            $session_id,
+            $question['exerciseId']
+        ).'&nbsp;'.
+        get_action_icon_for_question(
+            $actionIcon2,
+            $fromExercise,
+            $question['id'],
+            $question['type'],
+            $question['question'],
+            $selected_course,
+            $courseCategoryId,
+            $exerciseLevel,
+            $answerType,
+            $session_id,
+            $question['exerciseId']
+        );
+        $data[] = $row;
     }
 }
 
@@ -776,60 +874,7 @@ $header = [
     ],
 ];
 
-$data = [];
-
-if (is_array($mainQuestionList)) {
-    foreach ($mainQuestionList as $question) {
-        $row = [];
-        // This function checks if the question can be read
-        $question_type = get_question_type_for_question($selected_course, $question['id']);
-
-        if (empty($question_type)) {
-            continue;
-        }
-
-        $sessionId = isset($question['session_id']) ? $question['session_id'] : null;
-        $exerciseName = isset($question['exercise_name']) ? '<br />('.$question['exercise_id'].') ' : null;
-        $row[] = get_a_tag_for_question(
-            $questionTagA,
-            $fromExercise,
-            $question['id'],
-            $question['type'],
-            $question['question'],
-            $sessionId
-        ).$exerciseName;
-        $row[] = $question_type;
-        $row[] = get_question_categorie_for_question($selected_course, $question['id']);
-        $row[] = $question['level'];
-        $row[] = get_action_icon_for_question(
-            $actionIcon1,
-            $fromExercise,
-            $question['id'],
-            $question['type'],
-            $question['question'],
-            $selected_course,
-            $courseCategoryId,
-            $exerciseLevel,
-            $answerType,
-            $session_id,
-            $exerciseId
-        ).'&nbsp;'.
-        get_action_icon_for_question(
-            $actionIcon2,
-            $fromExercise,
-            $question['id'],
-            $question['type'],
-            $question['question'],
-            $selected_course,
-            $courseCategoryId,
-            $exerciseLevel,
-            $answerType,
-            $session_id,
-            $exerciseId
-        );
-        $data[] = $row;
-    }
-}
+echo $pagination;
 
 Display::display_sortable_table(
     $header,
@@ -837,10 +882,6 @@ Display::display_sortable_table(
     '',
     ['per_page_default' => 999, 'per_page' => 999, 'page_nr' => 1]
 );
-
-if (!$nbrQuestions) {
-    echo get_lang('NoQuestion');
-}
 
 Display::display_footer();
 
@@ -876,35 +917,44 @@ function reset_menu_exo_lvl_type()
  *
  * @param int    $in_addA
  * @param int    $in_fromex
- * @param int    $in_questionid
- * @param int    $in_questiontype
- * @param string $in_questionname
+ * @param int    $questionId
+ * @param int    $questiontype
+ * @param string $questionName
  * @param int    $sessionId
+ * @param int    $exerciseId
  *
  * @return string
  *
  * @author hubert.borderiou
  */
-function get_a_tag_for_question(
+function getLinkForQuestion(
     $in_addA,
-    $in_fromex,
-    $in_questionid,
-    $in_questiontype,
-    $in_questionname,
-    $sessionId
+    $fromExercise,
+    $questionId,
+    $questionType,
+    $questionName,
+    $sessionId,
+    $exerciseId
 ) {
-    $res = $in_questionname;
-    $sessionIcon = null;
+    $result = $questionName;
     if ($in_addA) {
+        $sessionIcon = '';
         if (!empty($sessionId) && $sessionId != -1) {
             $sessionIcon = ' '.Display::return_icon('star.png', get_lang('Session'));
         }
-        $res = "<a href='admin.php?".api_get_cidreq()."&editQuestion=$in_questionid&type=$in_questiontype&fromExercise=$in_fromex'>".
-            $res.$sessionIcon.
-            "</a>";
+        $exerciseId = (int) $exerciseId;
+        $questionId = (int) $questionId;
+        $questionType = (int) $questionType;
+        $fromExercise = (int) $fromExercise;
+
+        $result = Display::url(
+            $questionName.$sessionIcon,
+            "admin.php?".api_get_cidreq().
+            "&exerciseId=$exerciseId&editQuestion=$questionId&type=$questionType&fromExercise=$fromExercise"
+        );
     }
 
-    return $res;
+    return $result;
 }
 
 /**
@@ -942,18 +992,20 @@ function get_action_icon_for_question(
             if ($limitTeacherAccess && !api_is_platform_admin()) {
                 break;
             }
-            $res = "<a href='".api_get_self()."?".api_get_cidreq().$getParams."&delete=$in_questionid' onclick='return confirm_your_choice()'>";
+            $res = "<a href='".api_get_self()."?".
+                api_get_cidreq().$getParams."&delete=$in_questionid' onclick='return confirm_your_choice()'>";
             $res .= Display::return_icon('delete.png', get_lang('Delete'));
             $res .= "</a>";
             break;
         case 'edit':
-            $res = get_a_tag_for_question(
+            $res = getLinkForQuestion(
                 1,
                 $from_exercise,
                 $in_questionid,
                 $in_questiontype,
                 Display::return_icon('edit.png', get_lang('Modify')),
-                $in_session_id
+                $in_session_id,
+                $in_exercise_id
             );
             break;
         case 'add':
@@ -962,7 +1014,8 @@ function get_action_icon_for_question(
             $myObjEx->read($from_exercise);
             $res = "-";
             if (!$myObjEx->isInList($in_questionid)) {
-                $res = "<a href='".api_get_self()."?".api_get_cidreq().$getParams."&recup=$in_questionid&fromExercise=$from_exercise'>";
+                $res = "<a href='".api_get_self()."?".
+                    api_get_cidreq().$getParams."&recup=$in_questionid&fromExercise=$from_exercise'>";
                 $res .= Display::return_icon("view_more_stats.gif", get_lang('InsertALinkToThisQuestionInTheExercise'));
                 $res .= "</a>";
             }
@@ -996,20 +1049,7 @@ function get_question_type_for_question($in_selectedcourse, $in_questionid)
     if (!empty($myObjQuestion)) {
         list($typeImg, $typeExpl) = $myObjQuestion->get_type_icon_html();
         $questionType = Display::tag('div', Display::return_icon($typeImg, $typeExpl, [], 32), []);
-        unset($myObjQuestion);
     }
 
     return $questionType;
-}
-
-/**
- * Return the name of the category for the question in a course.
- *
- * @author hubert.borderiou 13-10-2011
- */
-function get_question_categorie_for_question($courseId, $questionId)
-{
-    $cat = TestCategory::getCategoryNameForQuestion($questionId, $courseId);
-
-    return $cat;
 }

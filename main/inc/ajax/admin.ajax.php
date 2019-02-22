@@ -4,7 +4,6 @@
 use Chamilo\CoreBundle\Entity\BranchSync;
 use Chamilo\CoreBundle\Entity\Repository\BranchSyncRepository;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
 
 /**
  * Responses to AJAX calls.

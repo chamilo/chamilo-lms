@@ -1,4 +1,6 @@
 <?php
+/* For licensing terms, see /license.txt */
+
 /**
  * Goes through all HTML files of the courses directory and replaces
  * the first string by the second string.

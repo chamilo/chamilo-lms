@@ -113,7 +113,6 @@ if ($formSent) {
             );
             $question->questionData = ob_get_contents();
 
-
             $exerciseData = '';
             $exerciseId = 0;
             if (!empty($questionObject->exerciseList)) {

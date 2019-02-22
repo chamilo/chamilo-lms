@@ -1016,7 +1016,7 @@ function get_question_type_for_question($in_selectedcourse, $in_questionid)
     if (!empty($myObjQuestion)) {
         list($typeImg, $typeExpl) = $myObjQuestion->get_type_icon_html();
         $questionType = Display::tag('div', Display::return_icon($typeImg, $typeExpl, [], 32), []);
-     }
+    }
 
     return $questionType;
 }

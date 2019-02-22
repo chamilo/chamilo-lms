@@ -140,7 +140,7 @@ if (isset($_GET['exerciseId'])) {
         'post',
         api_get_self().'?'.api_get_cidreq().'&exerciseId='.intval($_GET['exerciseId'])
     );
-    $objExercise->read($_GET['exerciseId']);
+    $objExercise->read($_GET['exerciseId'], false);
     $form->addElement('hidden', 'edit', 'true');
 } else {
     $form = new FormValidator(

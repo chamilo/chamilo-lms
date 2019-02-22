@@ -131,8 +131,7 @@ if ($formSent) {
                             'exerciseId' => $exerciseId,
                             'type' => $question->getType(),
                             'editQuestion' => $question->getId(),
-                        ]),
-                        ['target' => '_blank']
+                        ])
                     );
                 }
                 $question->questionData .= '<br />'.$exerciseData;
@@ -141,8 +140,7 @@ if ($formSent) {
                     $courseInfo['name'],
                     $exerciseUrl.http_build_query([
                         'cidReq' => $courseCode,
-                    ]),
-                    ['target' => '_blank']
+                    ])
                 );
             }
             ob_end_clean();

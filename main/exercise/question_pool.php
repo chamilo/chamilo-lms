@@ -323,9 +323,7 @@ $TBL_REPONSES = Database::get_course_table(TABLE_QUIZ_ANSWER);
 $TBL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
 $TBL_COURSE_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
 
-// Get course categories for the selected course
-
-// get category list for the course $selected_course
+// Get category list for the course $selected_course
 $categoryList = TestCategory::getCategoriesIdAndName($selected_course);
 $selectCourseCategory = Display::select(
     'courseCategoryId',
@@ -427,7 +425,8 @@ echo Display::form_row(
     Display::input('text', 'description', Security::remove_XSS($description))
 );
 
-$button = '<button class="btn btn-primary save" type="submit" name="name" value="'.get_lang('Filter').'">'.get_lang('Filter').'</button>';
+$button = '<button class="btn btn-primary save" type="submit" name="name" value="'.get_lang('Filter').'">'.
+    get_lang('Filter').'</button>';
 echo Display::form_row('', $button);
 echo "<input type='hidden' id='course_id_changed' name='course_id_changed' value='0' />";
 echo "<input type='hidden' id='exercise_id_changed' name='exercise_id_changed' value='0' />";

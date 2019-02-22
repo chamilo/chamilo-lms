@@ -32,7 +32,7 @@ use Chamilo\CourseBundle\Entity\CToolIntro;
 $em = Database::getManager();
 $intro_editAllowed = $is_allowed_to_edit = api_is_allowed_to_edit();
 $session_id = api_get_session_id();
-$blogParam = isset($_GET['blog_id']) ? ('&blog_id='.(int) $_GET['blog_id']) : '';
+$blogParam = isset($_GET['blog_id']) ? ('&blog_id=' . (int)$_GET['blog_id']) : '';
 
 $introduction_section = '';
 
@@ -47,7 +47,7 @@ if (!empty($courseId)) {
     $form = new FormValidator(
         'introduction_text',
         'post',
-        api_get_self().'?'.api_get_cidreq().$blogParam
+        api_get_self() . '?' . api_get_cidreq() . $blogParam
     );
 } else {
     $form = new FormValidator('introduction_text');
@@ -59,7 +59,7 @@ $config = [
     'Height' => '300'
 ];
 
-$form->addHtmlEditor('intro_content', null, false, false, $config, ['card-full'=>true]);
+$form->addHtmlEditor('intro_content', null, false, false, $config, ['card-full' => true]);
 $form->addButtonSave(get_lang('SaveIntroText'), 'intro_cmdUpdate');
 
 /* INTRODUCTION MICRO MODULE - COMMANDS SECTION (IF ALLOWED) */
@@ -139,10 +139,10 @@ if (api_get_configuration_value('course_introduction_html_strict_filtering')) {
 }
 
 // Ignore editor.css
-$cssEditor = api_get_path(WEB_CSS_PATH).'editor.css';
+$cssEditor = api_get_path(WEB_CSS_PATH) . 'editor.css';
 $linkToReplace = [
-    '<link href="'.$cssEditor.'" rel="stylesheet" type="text/css" />',
-    '<link href="'.$cssEditor.'" media="screen" rel="stylesheet" type="text/css" />',
+    '<link href="' . $cssEditor . '" rel="stylesheet" type="text/css" />',
+    '<link href="' . $cssEditor . '" media="screen" rel="stylesheet" type="text/css" />',
 ];
 $intro_content = str_replace($linkToReplace, '', $intro_content);
 $intro_content = Security::remove_XSS($intro_content, $userStatus);
@@ -209,8 +209,8 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 
     if (!empty($thematic_advance_info)) {
         $thematic_advance = get_lang('CourseThematicAdvance');
-        $thematicScore = $thematic->get_total_average_of_thematic_advances().'%';
-        $thematicUrl = api_get_path(WEB_CODE_PATH).'course_progress/index.php?action=thematic_details&'.api_get_cidreq();
+        $thematicScore = $thematic->get_total_average_of_thematic_advances() . '%';
+        $thematicUrl = api_get_path(WEB_CODE_PATH) . 'course_progress/index.php?action=thematic_details&' . api_get_cidreq();
         $thematic_info = $thematic->get_thematic_list(
             $thematic_advance_info['thematic_id']
         );
@@ -224,48 +224,49 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
         );
         $userInfo = api_get_user_info();
         $courseInfo = api_get_course_info();
-        $titleThematic = $thematic_advance.' : '.$courseInfo['name'].' <b>( '.$thematicScore.' )</b>';
+        $titleThematic = $thematic_advance . ' : ' . $courseInfo['name'] . ' <b>( ' . $thematicScore . ' )</b>';
 
-        $infoUser = '<div class="thematic-avatar"><img src="'.$userInfo['avatar'].'" class="img-circle img-responsive"></div>';
+        $infoUser = '<div class="thematic-avatar"><img src="' . $userInfo['avatar'] . '" class="img-circle img-responsive"></div>';
         $infoUser .= '<div class="progress">
-                        <div class="progress-bar progress-bar-primary" role="progressbar" style="width: '.$thematicScore.';">
-                        '.$thematicScore.'
+                        <div class="progress-bar progress-bar-primary" role="progressbar" style="width: ' . $thematicScore . ';">
+                        ' . $thematicScore . '
                         </div>
                     </div>';
 
         $thematicItemOne = '
         <div class="col-md-6 items-progress">
-            <div class="thematic-cont '.$class1.'">
-            <div class="topics">'.$subTitle1.'</div>
-            <h4 class="title-topics">'.Display::returnFontAwesomeIcon('book').strip_tags($thematic_info['title']).'</h4>
-            <p class="date">'.Display::returnFontAwesomeIcon('calendar-o').$thematic_advance_info['start_date'].'</p>
-            <div class="views">'.Display::returnFontAwesomeIcon('file-text-o').strip_tags($thematic_advance_info['content']).'</div>
-            <p class="time">'.Display::returnFontAwesomeIcon('clock-o').get_lang('DurationInHours').' : '.$thematic_advance_info['duration'].' - <a href="'.$thematicUrl.'">'.get_lang('SeeDetail').'</a></p>
+            <div class="thematic-cont ' . $class1 . '">
+            <div class="topics">' . $subTitle1 . '</div>
+            <h4 class="title-topics">' . Display::returnFontAwesomeIcon('book') . strip_tags($thematic_info['title']) . '</h4>
+            <p class="date">' . Display::returnFontAwesomeIcon('calendar-o') . $thematic_advance_info['start_date'] . '</p>
+            <div class="views">' . Display::returnFontAwesomeIcon('file-text-o') . strip_tags($thematic_advance_info['content']) . '</div>
+            <p class="time">' . Display::returnFontAwesomeIcon('clock-o') . get_lang('DurationInHours') . ' : ' . $thematic_advance_info['duration'] . ' - <a href="' . $thematicUrl . '">' . get_lang('SeeDetail') . '</a></p>
             </div>
         </div>';
 
         if (!empty($thematic_advance_info2)) {
             $thematic_info2 = $thematic->get_thematic_list($thematic_advance_info2['thematic_id']);
             $thematic_advance_info2['start_date'] = api_get_local_time($thematic_advance_info2['start_date']);
-            $thematic_advance_info2['start_date'] = api_format_date($thematic_advance_info2['start_date'], DATE_TIME_FORMAT_LONG);
+            $thematic_advance_info2['start_date'] = api_format_date($thematic_advance_info2['start_date'],
+                DATE_TIME_FORMAT_LONG);
 
             $thematicItemTwo = '
                 <div class="col-md-6 items-progress">
                     <div class="thematic-cont">
-                    <div class="topics">'.$subTitle2.'</div>
-                    <h4 class="title-topics">'.Display::returnFontAwesomeIcon('book').$thematic_info2['title'].'</h4>
-                    <p class="date">'.Display::returnFontAwesomeIcon('calendar-o').$thematic_advance_info2['start_date'].'</p>
-                    <div class="views">'.Display::returnFontAwesomeIcon('file-text-o').strip_tags($thematic_advance_info2['content']).'</div>
-                    <p class="time">'.Display::returnFontAwesomeIcon('clock-o').get_lang('DurationInHours').' : '.$thematic_advance_info2['duration'].' - <a href="'.$thematicUrl.'">'.get_lang('SeeDetail').'</a></p>
+                    <div class="topics">' . $subTitle2 . '</div>
+                    <h4 class="title-topics">' . Display::returnFontAwesomeIcon('book') . $thematic_info2['title'] . '</h4>
+                    <p class="date">' . Display::returnFontAwesomeIcon('calendar-o') . $thematic_advance_info2['start_date'] . '</p>
+                    <div class="views">' . Display::returnFontAwesomeIcon('file-text-o') . strip_tags($thematic_advance_info2['content']) . '</div>
+                    <p class="time">' . Display::returnFontAwesomeIcon('clock-o') . get_lang('DurationInHours') . ' : ' . $thematic_advance_info2['duration'] . ' - <a href="' . $thematicUrl . '">' . get_lang('SeeDetail') . '</a></p>
                     </div>
                 </div>';
         }
         $thematicPanel = '<div class="row">';
-        $thematicPanel .= '<div class="col-md-2">'.$infoUser.'</div>';
-        $thematicPanel .= '<div class="col-md-10"><div class="row">'.$thematicItemOne.$thematicItemTwo.'</div></div>';
+        $thematicPanel .= '<div class="col-md-2">' . $infoUser . '</div>';
+        $thematicPanel .= '<div class="col-md-10"><div class="row">' . $thematicItemOne . $thematicItemTwo . '</div></div>';
         $thematicPanel .= '</div>';
         $thematicPanel .= '<div class="separate">
-                        <a href="'.$thematicUrl.'" class="btn btn-default btn-block">'.get_lang('ShowFullCourseAdvance').'</a>
+                        <a href="' . $thematicUrl . '" class="btn btn-default btn-block">' . get_lang('ShowFullCourseAdvance') . '</a>
                     </div>';
 
         $thematicProgress = Display::panelCollapse(
@@ -304,14 +305,14 @@ if ($intro_dispCommand) {
         if (!empty($courseId)) {
             $tool = [
                 'name' => addslashes(get_lang('Add Intro')),
-                'url' => api_get_self().'?'.api_get_cidreq().$blogParam.'&intro_cmdAdd=1',
+                'url' => api_get_self() . '?' . api_get_cidreq() . $blogParam . '&intro_cmdAdd=1',
                 'icon' => 'fas fa-pencil-alt',
             ];
             $toolbar[] = $tool;
         } else {
             $tool = [
                 'name' => get_lang('Add Intro'),
-                'url' => api_get_self().'?intro_cmdAdd=1',
+                'url' => api_get_self() . '?intro_cmdAdd=1',
                 'icon' => 'fas fa-pencil-alt',
             ];
             $toolbar[] = $tool;
@@ -322,14 +323,14 @@ if ($intro_dispCommand) {
         if (!empty($courseId)) {
             $tool = [
                 'name' => get_lang('Modify'),
-                'url' => api_get_self().'?'.api_get_cidreq().$blogParam.'&intro_cmdEdit=1',
+                'url' => api_get_self() . '?' . api_get_cidreq() . $blogParam . '&intro_cmdEdit=1',
                 'icon' => 'fas fa-pencil-alt',
             ];
             $toolbar[] = $tool;
 
             $tool = [
                 'name' => get_lang('ConfirmYourChoice'),
-                'url' => api_get_self()."?".api_get_cidreq().$blogParam."&intro_cmdDel=1",
+                'url' => api_get_self() . "?" . api_get_cidreq() . $blogParam . "&intro_cmdDel=1",
                 'icon' => 'fas fa-trash-alt',
                 'class' => 'delete-swal'
             ];
@@ -337,14 +338,14 @@ if ($intro_dispCommand) {
         } else {
             $tool = [
                 'name' => get_lang('Modify'),
-                'url' => api_get_self().'?intro_cmdEdit=1',
+                'url' => api_get_self() . '?intro_cmdEdit=1',
                 'icon' => 'fas fa-pencil-alt',
             ];
             $toolbar[] = $tool;
 
             $tool = [
                 'name' => get_lang('ConfirmYourChoice'),
-                'url' => api_get_self()."?".api_get_cidreq()."&intro_cmdDel=1",
+                'url' => api_get_self() . "?" . api_get_cidreq() . "&intro_cmdDel=1",
                 'icon' => 'fas fa-trash-alt',
                 'class' => 'delete-swal'
             ];

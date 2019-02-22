@@ -3012,6 +3012,18 @@ form .formw .freeze {
     font-size: 11px;
 }
 
+.btn-collapse.collapsed .open{
+    display: none;
+}
+.btn-collapse.collapsed .closed{
+    display: inline-block;
+}
+.btn-collapse .closed{
+    display: none;
+}
+.btn-collapse .open{
+    display: inline-block;
+}
 /* ****************************************************
                      CSS SKILL
  **************************************************** */

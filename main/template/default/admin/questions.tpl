@@ -7,7 +7,7 @@
     {% for question in pagination %}
         {{ display.collapse(
             question.iid,
-            '#' ~ question.iid ~ '-' ~ question.question,
+            '#' ~ question.courseCode ~'-'~  question.iid ~ ' - ' ~ question.question,
             question.questionData,
             false,
             false

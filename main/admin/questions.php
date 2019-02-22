@@ -89,10 +89,14 @@ if ($formSent) {
         $url = api_get_path(WEB_CODE_PATH).'exercise/admin.php?';
         $exerciseUrl = api_get_path(WEB_CODE_PATH).'exercise/exercise.php?';
         foreach ($pagination as $question) {
+            $courseId = $question->getCId();
+            $courseInfo = api_get_course_info_by_id($courseId);
+            $courseCode = $courseInfo['code'];
+            $question->courseCode = $courseCode;
             // Creating empty exercise
             $exercise = new Exercise();
-            $exercise->course_id = $question->getCId();
-            $questionObject = Question::read($question->getId(), $question->getCId());
+            $exercise->course_id = $courseId;
+            $questionObject = Question::read($question->getId(), $courseId);
 
             ob_start();
             ExerciseLib::showQuestion(
@@ -108,8 +112,7 @@ if ($formSent) {
                 true
             );
             $question->questionData = ob_get_contents();
-            $courseInfo = api_get_course_info_by_id($exercise->course_id);
-            $courseCode = $courseInfo['code'];
+
 
             $exerciseData = '';
             $exerciseId = 0;

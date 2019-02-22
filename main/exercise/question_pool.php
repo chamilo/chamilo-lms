@@ -222,7 +222,8 @@ if (isset($fromExercise) && $fromExercise > 0) {
 } else {
     echo '<a href="exercise.php?'.api_get_cidreq().'">'.
         Display::return_icon('back.png', get_lang('BackToExercisesList'), '', ICON_SIZE_MEDIUM).'</a>';
-    echo "<a href='admin.php?exerciseId=0'>".Display::return_icon('add_question.gif', get_lang('NewQu'), '', ICON_SIZE_MEDIUM)."</a>";
+    echo "<a href='admin.php?exerciseId=0'>".
+        Display::return_icon('add_question.gif', get_lang('NewQu'), '', ICON_SIZE_MEDIUM)."</a>";
     $titleAdd = get_lang('ManageAllQuestions');
 }
 echo '</div>';
@@ -468,16 +469,17 @@ if ($exerciseId > 0) {
                 id,
                 question,
                 type,
-                level
+                level,  
+                qt.exercice_id exerciseId
             FROM
                 $TBL_EXERCISE_QUESTION qt,
                 $TBL_QUESTIONS qu
                 $from
             WHERE
-                qt.question_id = qu.id
-                AND qt.exercice_id=$exerciseId
-                AND qt.c_id=$selected_course
-                AND qu.c_id=$selected_course
+                qt.question_id = qu.id AND 
+                qt.exercice_id = $exerciseId AND 
+                qt.c_id = $selected_course  AND 
+                qu.c_id = $selected_course
                 $where
             ORDER BY question_order";
 
@@ -514,7 +516,8 @@ if ($exerciseId > 0) {
 
     // @todo fix this query with the new id field
     $sql = " (
-                SELECT q.* FROM $TBL_QUESTIONS q
+                SELECT q.*, r.exercice_id exerciseId 
+                FROM $TBL_QUESTIONS q
                 INNER JOIN $TBL_EXERCISE_QUESTION r
                 ON (q.c_id = r.c_id AND q.id = r.question_id)
                 INNER JOIN $TBL_EXERCISES ex
@@ -528,7 +531,8 @@ if ($exerciseId > 0) {
              )
              UNION
              (
-                SELECT q.* FROM $TBL_QUESTIONS q
+                SELECT q.*, r.exercice_id exerciseId 
+                FROM $TBL_QUESTIONS q
                 LEFT OUTER JOIN $TBL_EXERCISE_QUESTION r
                 ON (q.c_id = r.c_id AND q.id = r.question_id)
                 $from
@@ -540,7 +544,8 @@ if ($exerciseId > 0) {
              )
              UNION
              (
-                SELECT q.* FROM $TBL_QUESTIONS q
+                SELECT q.*, r.exercice_id exerciseId 
+                FROM $TBL_QUESTIONS q
                 INNER JOIN $TBL_EXERCISE_QUESTION r
                 ON (q.c_id = r.c_id AND q.id = r.question_id)
                 $from
@@ -660,11 +665,11 @@ if ($exerciseId > 0) {
         if ($session_id == -1 || empty($session_id)) {
             $session_id = 0;
         }
-
         $sessionCondition = api_get_session_condition($session_id, true, 'q.session_id');
 
         // All tests for the course selected, not in session
-        $sql = "SELECT DISTINCT qu.id, question, qu.type, level, q.session_id
+        $sql = "SELECT DISTINCT 
+                qu.id, question, qu.type, level, q.session_id, qt.exercice_id exerciseId 
                 FROM
                 $TBL_QUESTIONS as qu,
                 $TBL_EXERCISE_QUESTION as qt,
@@ -676,8 +681,10 @@ if ($exerciseId > 0) {
                     q.c_id = $selected_course AND
                     qu.id = qt.question_id 
                     $sessionCondition AND                    
-                    q.id = qt.exercice_id $filter
+                    q.id = qt.exercice_id 
+                    $filter
                 ORDER BY session_id ASC";
+
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $mainQuestionList[] = $row;
@@ -708,33 +715,33 @@ $nbrQuestions = count($mainQuestionList);
 */
 
 if ($fromExercise <= 0) {
-    // NOT IN A TEST - IN THE COURSE
+    // NOT IN A TEST - NOT IN THE COURSE
+    $actionLabel = get_lang('Reuse');
+    $actionIcon1 = get_lang('MustBeInATest');
+    $actionIcon2 = '';
+    // We are not in this course, to messy if we link to the question in another course
+    $questionTagA = 0;
     if ($selected_course == api_get_course_int_id()) {
+        // NOT IN A TEST - IN THE COURSE
         $actionLabel = get_lang('Modify');
         $actionIcon1 = 'edit';
         $actionIcon2 = 'delete';
         // We are in the course, question title can be a link to the question edit page
         $questionTagA = 1;
-    } else { // NOT IN A TEST - NOT IN THE COURSE
-        $actionLabel = get_lang('Reuse');
-        $actionIcon1 = get_lang('MustBeInATest');
-        $actionIcon2 = '';
-        // We are not in this course, to messy if we link to the question in another course
-        $questionTagA = 0;
     }
 } else {
-    // IN A TEST - IN THE COURSE
+    // IN A TEST - NOT IN THE COURSE
+    $actionLabel = get_lang('Reuse');
+    $actionIcon1 = 'clone';
+    $actionIcon2 = '';
+    $questionTagA = 0;
+
     if ($selected_course == api_get_course_int_id()) {
+        // IN A TEST - IN THE COURSE
         $actionLabel = get_lang('Reuse');
         $actionIcon1 = 'add';
         $actionIcon2 = '';
         $questionTagA = 1;
-    } else {
-        // IN A TEST - NOT IN THE COURSE
-        $actionLabel = get_lang('Reuse');
-        $actionIcon1 = 'clone';
-        $actionIcon2 = '';
-        $questionTagA = 0;
     }
 }
 
@@ -790,16 +797,17 @@ if (is_array($mainQuestionList)) {
 
         $sessionId = isset($question['session_id']) ? $question['session_id'] : null;
         $exerciseName = isset($question['exercise_name']) ? '<br />('.$question['exercise_id'].') ' : null;
-        $row[] = get_a_tag_for_question(
+        $row[] = getLinkForQuestion(
             $questionTagA,
             $fromExercise,
             $question['id'],
             $question['type'],
             $question['question'],
-            $sessionId
+            $sessionId,
+            $question['exerciseId']
         ).$exerciseName;
         $row[] = $question_type;
-        $row[] = get_question_categorie_for_question($selected_course, $question['id']);
+        $row[] = TestCategory::getCategoryNameForQuestion($question['id'], $selected_course);
         $row[] = $question['level'];
         $row[] = get_action_icon_for_question(
             $actionIcon1,
@@ -812,7 +820,7 @@ if (is_array($mainQuestionList)) {
             $exerciseLevel,
             $answerType,
             $session_id,
-            $exerciseId
+            $question['exerciseId']
         ).'&nbsp;'.
         get_action_icon_for_question(
             $actionIcon2,
@@ -825,7 +833,7 @@ if (is_array($mainQuestionList)) {
             $exerciseLevel,
             $answerType,
             $session_id,
-            $exerciseId
+            $question['exerciseId']
         );
         $data[] = $row;
     }
@@ -876,35 +884,44 @@ function reset_menu_exo_lvl_type()
  *
  * @param int    $in_addA
  * @param int    $in_fromex
- * @param int    $in_questionid
- * @param int    $in_questiontype
- * @param string $in_questionname
+ * @param int    $questionId
+ * @param int    $questiontype
+ * @param string $questionName
  * @param int    $sessionId
+ * @param int    $exerciseId
  *
  * @return string
  *
  * @author hubert.borderiou
  */
-function get_a_tag_for_question(
+function getLinkForQuestion(
     $in_addA,
-    $in_fromex,
-    $in_questionid,
-    $in_questiontype,
-    $in_questionname,
-    $sessionId
+    $fromExercise,
+    $questionId,
+    $questionType,
+    $questionName,
+    $sessionId,
+    $exerciseId
 ) {
-    $res = $in_questionname;
-    $sessionIcon = null;
+    $result = $questionName;
     if ($in_addA) {
+        $sessionIcon = '';
         if (!empty($sessionId) && $sessionId != -1) {
             $sessionIcon = ' '.Display::return_icon('star.png', get_lang('Session'));
         }
-        $res = "<a href='admin.php?".api_get_cidreq()."&editQuestion=$in_questionid&type=$in_questiontype&fromExercise=$in_fromex'>".
-            $res.$sessionIcon.
-            "</a>";
+        $exerciseId = (int) $exerciseId;
+        $questionId = (int) $questionId;
+        $questionType = (int) $questionType;
+        $fromExercise = (int) $fromExercise;
+
+        $result = Display::url(
+            $questionName.$sessionIcon,
+            "admin.php?".api_get_cidreq().
+            "&exerciseId=$exerciseId&editQuestion=$questionId&type=$questionType&fromExercise=$fromExercise"
+        );
     }
 
-    return $res;
+    return $result;
 }
 
 /**
@@ -942,18 +959,20 @@ function get_action_icon_for_question(
             if ($limitTeacherAccess && !api_is_platform_admin()) {
                 break;
             }
-            $res = "<a href='".api_get_self()."?".api_get_cidreq().$getParams."&delete=$in_questionid' onclick='return confirm_your_choice()'>";
+            $res = "<a href='".api_get_self()."?".
+                api_get_cidreq().$getParams."&delete=$in_questionid' onclick='return confirm_your_choice()'>";
             $res .= Display::return_icon('delete.png', get_lang('Delete'));
             $res .= "</a>";
             break;
         case 'edit':
-            $res = get_a_tag_for_question(
+            $res = getLinkForQuestion(
                 1,
                 $from_exercise,
                 $in_questionid,
                 $in_questiontype,
                 Display::return_icon('edit.png', get_lang('Modify')),
-                $in_session_id
+                $in_session_id,
+                $in_exercise_id
             );
             break;
         case 'add':
@@ -962,7 +981,8 @@ function get_action_icon_for_question(
             $myObjEx->read($from_exercise);
             $res = "-";
             if (!$myObjEx->isInList($in_questionid)) {
-                $res = "<a href='".api_get_self()."?".api_get_cidreq().$getParams."&recup=$in_questionid&fromExercise=$from_exercise'>";
+                $res = "<a href='".api_get_self()."?".
+                    api_get_cidreq().$getParams."&recup=$in_questionid&fromExercise=$from_exercise'>";
                 $res .= Display::return_icon("view_more_stats.gif", get_lang('InsertALinkToThisQuestionInTheExercise'));
                 $res .= "</a>";
             }
@@ -996,20 +1016,7 @@ function get_question_type_for_question($in_selectedcourse, $in_questionid)
     if (!empty($myObjQuestion)) {
         list($typeImg, $typeExpl) = $myObjQuestion->get_type_icon_html();
         $questionType = Display::tag('div', Display::return_icon($typeImg, $typeExpl, [], 32), []);
-        unset($myObjQuestion);
-    }
+     }
 
     return $questionType;
-}
-
-/**
- * Return the name of the category for the question in a course.
- *
- * @author hubert.borderiou 13-10-2011
- */
-function get_question_categorie_for_question($courseId, $questionId)
-{
-    $cat = TestCategory::getCategoryNameForQuestion($questionId, $courseId);
-
-    return $cat;
 }

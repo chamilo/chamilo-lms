@@ -34,7 +34,7 @@ if (!api_is_allowed_to_edit(null, true)) {
     if (empty($exeId)) {
         api_not_allowed();
     }
-  
+
     if (empty($trackExerciseInfo)) {
         api_not_allowed();
     }

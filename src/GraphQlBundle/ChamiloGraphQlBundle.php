@@ -12,5 +12,4 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class ChamiloGraphQlBundle extends Bundle
 {
-
 }

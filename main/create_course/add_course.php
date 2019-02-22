@@ -21,7 +21,7 @@ use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 // Flag forcing the "current course" reset.
 $cidReset = true;
 
-require_once __DIR__ . '/../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 // Check access rights.
 if (!api_is_allowed_to_create_course()) {
@@ -58,7 +58,7 @@ $htmlHeadXtra[] = '<script>
 </script>';
 
 $interbreadcrumb[] = [
-    'url' => api_get_path(WEB_PATH) . 'user_portal.php',
+    'url' => api_get_path(WEB_PATH).'user_portal.php',
     'name' => get_lang('MyCourses'),
 ];
 
@@ -93,12 +93,12 @@ $form->addElement(
 $form->addFile(
     'picture',
     [
-        get_lang('AddPicture')
+        get_lang('AddPicture'),
     ],
     [
         'id' => 'picture',
         'class' => 'picture-form',
-        'crop_image' => true
+        'crop_image' => true,
     ]
 );
 
@@ -106,7 +106,7 @@ $allowed_picture_types = api_get_supported_image_extensions(false);
 
 $form->addRule(
     'picture',
-    get_lang('OnlyImagesAllowed') . ' (' . implode(',', $allowed_picture_types) . ')',
+    get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')',
     'filetype',
     $allowed_picture_types
 );
@@ -118,7 +118,7 @@ $countCategories = $courseCategoriesRepo->countAllInAccessUrl(
 
 if ($countCategories >= 100) {
     // Category code
-    $url = api_get_path(WEB_AJAX_PATH) . 'course.ajax.php?a=search_category';
+    $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
     $form->addElement(
         'select_ajax',
         'category_code',
@@ -229,7 +229,7 @@ if ($course_validation_feature) {
     // if it is activated.
     if (empty($terms_and_conditions_url)) {
         if (api_get_setting('allow_terms_conditions') === 'true') {
-            $terms_and_conditions_url = api_get_path(WEB_CODE_PATH) . 'auth/inscription.php?legal';
+            $terms_and_conditions_url = api_get_path(WEB_CODE_PATH).'auth/inscription.php?legal';
         }
     }
 
@@ -277,7 +277,7 @@ if (api_get_setting('teacher_can_select_course_template') === 'true') {
             get_lang('PickACourseAsATemplateForThisNewCourse'),
         ],
         null,
-        ['url' => api_get_path(WEB_AJAX_PATH) . 'course.ajax.php?a=search_course']
+        ['url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course']
     );
 }
 
@@ -340,8 +340,8 @@ if ($form->validate()) {
             $params['gradebook_model_id'] = isset($course_values['gradebook_model_id']) ? $course_values['gradebook_model_id'] : null;
             $params['course_template'] = isset($course_values['course_template']) ? $course_values['course_template'] : '';
 
-            include_once api_get_path(SYS_CODE_PATH) . 'lang/english/trad4all.inc.php';
-            $file_to_include = api_get_path(SYS_CODE_PATH) . 'lang/' . $course_language . '/trad4all.inc.php';
+            include_once api_get_path(SYS_CODE_PATH).'lang/english/trad4all.inc.php';
+            $file_to_include = api_get_path(SYS_CODE_PATH).'lang/'.$course_language.'/trad4all.inc.php';
 
             if (file_exists($file_to_include)) {
                 include $file_to_include;
@@ -350,7 +350,6 @@ if ($form->validate()) {
             $course_info = CourseManager::create_course($params);
 
             if (!empty($course_info)) {
-
                 // update course picture
                 $picture = $_FILES['picture'];
                 if (!empty($picture['name'])) {
@@ -378,13 +377,13 @@ if ($form->validate()) {
                 $splash = api_get_setting('course_creation_splash_screen');
                 if ($splash === 'true') {
                     $url = api_get_path(WEB_CODE_PATH);
-                    $url .= 'course_info/start.php?' . api_get_cidreq_params($course_info['code']);
+                    $url .= 'course_info/start.php?'.api_get_cidreq_params($course_info['code']);
                     $url .= '&first=1';
-                    header('Location: ' . $url);
+                    header('Location: '.$url);
                     exit;
                 } else {
-                    $url = api_get_path(WEB_COURSE_PATH) . $course_info['directory'] . '/';
-                    header('Location: ' . $url);
+                    $url = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/';
+                    header('Location: '.$url);
                     exit;
                 }
             } else {
@@ -412,7 +411,7 @@ if ($form->validate()) {
 
             if ($request_id) {
                 $course_request_info = CourseRequestManager::get_course_request_info($request_id);
-                $message = (is_array($course_request_info) ? '<strong>' . $course_request_info['code'] . '</strong> : ' : '') . get_lang('CourseRequestCreated');
+                $message = (is_array($course_request_info) ? '<strong>'.$course_request_info['code'].'</strong> : ' : '').get_lang('CourseRequestCreated');
                 $message = Display::return_message(
                     $message,
                     'confirmation',
@@ -422,7 +421,7 @@ if ($form->validate()) {
                     'div',
                     Display::url(
                         get_lang('Enter'),
-                        api_get_path(WEB_PATH) . 'user_portal.php',
+                        api_get_path(WEB_PATH).'user_portal.php',
                         ['class' => 'btn btn-primary']
                     ),
                     ['style' => 'float: left; margin:0px; padding: 0px;']
@@ -453,7 +452,6 @@ if ($form->validate()) {
     // Display the form.
     $formContent = $form->returnForm();
 }
-
 
 $tpl->assign('form', $formContent);
 $layout = $tpl->fetch($tpl->get_template('create_course/add_course.html.twig'));

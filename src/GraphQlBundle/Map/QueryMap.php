@@ -3,13 +3,12 @@
 
 namespace Chamilo\GraphQlBundle\Map;
 
-use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
-use Chamilo\GraphQlBundle\Traits\GraphQLTrait;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionCategory;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
 use Chamilo\CourseBundle\Entity\CForumCategory;
 use Chamilo\CourseBundle\Entity\CForumForum;
 use Chamilo\CourseBundle\Entity\CForumPost;
@@ -17,6 +16,7 @@ use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CNotebook;
 use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\GraphQlBundle\Traits\GraphQLTrait;
 use Chamilo\UserBundle\Entity\User;
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;

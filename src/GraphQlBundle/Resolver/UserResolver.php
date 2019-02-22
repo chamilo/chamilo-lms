@@ -3,8 +3,8 @@
 
 namespace Chamilo\GraphQlBundle\Resolver;
 
-use Chamilo\GraphQlBundle\Traits\GraphQLTrait;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\GraphQlBundle\Traits\GraphQLTrait;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Overblog\GraphQLBundle\Definition\Argument;

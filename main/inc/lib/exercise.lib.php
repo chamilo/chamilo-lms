@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Entity\TrackEExercises;
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 
 /**
@@ -4847,7 +4847,7 @@ EOT;
     }
 
     /**
-     * Display the ranking of results in a exercise
+     * Display the ranking of results in a exercise.
      *
      * @param int $exerciseId
      * @param int $currentUserId
@@ -4893,7 +4893,7 @@ EOT;
 
     /**
      * Get the ranking for results in a exercise.
-     * Function used internally by ExerciseLib::displayResultsInRanking
+     * Function used internally by ExerciseLib::displayResultsInRanking.
      *
      * @param int $exerciseId
      * @param int $courseId
@@ -4944,7 +4944,7 @@ EOT;
         $data = array_map(
             function ($item) use (&$lastScore, &$position) {
                 if ($item['exe_result'] < $lastScore) {
-                    ++$position;
+                    $position++;
                 }
 
                 $lastScore = $item['exe_result'];

@@ -8368,4 +8368,5 @@ $GlobalProgress = "Progresion global";
 $AttestationOfAttendance = "Atestación de asistencia";
 $DontShowScoreOnlyWhenUserFinishesAllAttemptsButShowFeedbackEachAttempt = "No mostrar el puntaje (sólo cuando el usuario finaliza todos los intentos) pero mostrar la retroalimentación por cada itento.";
 $ExerciseRankingMode = "Modo clasificación: No mostrar los detalles de resultados pregunta por pregunta y mostrar una tabla con la clasificación de todos los demás usuarios.";
+$BackToTop = "Regreso al inicio";
 ?>

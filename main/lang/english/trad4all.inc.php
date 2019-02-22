@@ -8342,4 +8342,5 @@ $GlobalProgress = "Global progress";
 $AttestationOfAttendance = "Attestation of attendance";
 $DontShowScoreOnlyWhenUserFinishesAllAttemptsButShowFeedbackEachAttempt = "Do not show the score (only when user finishes all attempts) but show feedback for each attempt.";
 $ExerciseRankingMode = "Ranking mode: Do not show results details question by question and show a table with the ranking of all other users.";
+$BackToTop = "Back to top";
 ?>

@@ -5273,7 +5273,7 @@ class Exercise
                                     }
                                     if ($debug > 0) {
                                         error_log(__LINE__.' - answerId is >1 so we\'re probably in OAR', 0);
-                                    }                                 
+                                    }
                                     $delineation_cord = $objAnswerTmp->selectHotspotCoordinates($answerId);
                                     $poly_answer = convert_coordinates($delineation_cord, '|');
                                     $max_coord = poly_get_max($poly_user, $poly_answer);

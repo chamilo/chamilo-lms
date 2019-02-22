@@ -536,7 +536,8 @@ function email_filter($email)
     return Display::encrypted_mailto_link($email, $email);
 }
 
-function activeFilter($isActive) {
+function activeFilter($isActive)
+{
     if ($isActive) {
         return Display::return_icon('accept.png', get_lang('Active'), [], ICON_SIZE_TINY);
     }

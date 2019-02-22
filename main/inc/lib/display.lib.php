@@ -660,9 +660,10 @@ class Display
         }
         // Return encrypted mailto hyperlink
         $classCut = '';
-        if($cut){
+        if ($cut) {
             $classCut = 'cut-email';
         }
+
         return '<a href="'.$hmail.'"'.$style_class.' class="clickable_email_link '.$classCut.'">'.$hclickable_text.'</a>';
     }
 

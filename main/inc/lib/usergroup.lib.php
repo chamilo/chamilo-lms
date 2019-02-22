@@ -1359,10 +1359,10 @@ class UserGroup extends Model
      * Note: This method relies on configuration setting from main/inc/conf/profile.conf.php.
      *
      * @param    int    The group id
-     * @param string $file           The common file name for the newly created photos.
-     *                               It will be checked and modified for compatibility with the file system.
-     *                               If full name is provided, path component is ignored.
-     *                               If an empty name is provided, then old user photos are deleted only,
+     * @param string $file The common file name for the newly created photos.
+     *                     It will be checked and modified for compatibility with the file system.
+     *                     If full name is provided, path component is ignored.
+     *                     If an empty name is provided, then old user photos are deleted only,
      *
      * @see UserManager::delete_user_picture() as the prefered way for deletion.
      *

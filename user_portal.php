@@ -280,5 +280,5 @@ Session::erase('session_id');
 Session::erase('studentview');
 api_remove_in_gradebook();
 
-$controller->tpl->assign('content',$controller->tpl->fetch('@ChamiloTheme/Index/userportal.html.twig'));
+$controller->tpl->assign('content', $controller->tpl->fetch('@ChamiloTheme/Index/userportal.html.twig'));
 $controller->tpl->display_one_col_template();

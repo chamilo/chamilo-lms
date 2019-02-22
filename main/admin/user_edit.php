@@ -457,7 +457,7 @@ if ($form->validate()) {
             $template
         );
 
-       $studentBossListSent = isset($user['student_boss']) ? $user['student_boss'] : [];
+        $studentBossListSent = isset($user['student_boss']) ? $user['student_boss'] : [];
         UserManager::subscribeUserToBossList(
             $user_id,
             $studentBossListSent,

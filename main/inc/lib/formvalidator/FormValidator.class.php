@@ -999,11 +999,12 @@ EOT;
      * Adds a HTML-editor to the form.
      *
      * @param string $name
-     * @param string $label The label for the form-element
-     * @param bool $required (optional) Is the form-element required (default=true)
-     * @param bool $fullPage (optional) When it is true, the editor loads completed html code for a full page
-     * @param array $config (optional) Configuration settings for the online editor
-     * @param array $attributes
+     * @param string $label      The label for the form-element
+     * @param bool   $required   (optional) Is the form-element required (default=true)
+     * @param bool   $fullPage   (optional) When it is true, the editor loads completed html code for a full page
+     * @param array  $config     (optional) Configuration settings for the online editor
+     * @param array  $attributes
+     *
      * @throws Exception
      * @throws HTML_QuickForm_Error
      */

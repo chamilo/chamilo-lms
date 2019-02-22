@@ -174,7 +174,7 @@ if ($action_todo) {
             'picture',
             [
                 get_lang('Add Picture'),
-                get_lang('The image must have a maximum dimension of 950 x 712 pixelss')
+                get_lang('The image must have a maximum dimension of 950 x 712 pixelss'),
             ],
             ['id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '4/3']
         );

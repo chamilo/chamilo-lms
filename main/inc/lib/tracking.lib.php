@@ -1894,8 +1894,8 @@ class Tracking
                 $where_condition = ' AND access_date < "'.$last_access.'" ';
             }
 
-        $tbl_track_e_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
-        $sql = 'SELECT access_date
+            $tbl_track_e_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+            $sql = 'SELECT access_date
                 FROM '.$tbl_track_e_access.'
                 WHERE   access_user_id = '.$student_id.' AND
                         c_id = "'.$courseId.'" AND
@@ -1903,17 +1903,17 @@ class Tracking
                 ORDER BY access_date DESC
                 LIMIT 0,1';
 
-        $rs = Database::query($sql);
-        if (Database::num_rows($rs) > 0) {
-            if ($last_login_date = Database::result($rs, 0, 0)) {
-                if (empty($last_login_date)) {
-                    return false;
-                }
-                //see #5736
-                $last_login_date_timestamp = api_strtotime($last_login_date);
-                $now = time();
-                //If the last connection is > than 7 days, the text is red
-                //345600 = 7 days in seconds
+            $rs = Database::query($sql);
+            if (Database::num_rows($rs) > 0) {
+                if ($last_login_date = Database::result($rs, 0, 0)) {
+                    if (empty($last_login_date)) {
+                        return false;
+                    }
+                    //see #5736
+                    $last_login_date_timestamp = api_strtotime($last_login_date);
+                    $now = time();
+                    //If the last connection is > than 7 days, the text is red
+                    //345600 = 7 days in seconds
                     /*
                 if ($now - $last_login_date_timestamp > 604800) {
                     if ($convert_date) {
@@ -1960,8 +1960,8 @@ class Tracking
                     //345600 = 7 days in seconds
                     if ($now - $last_login_date_timestamp > 604800) {
                         if ($convert_date) {
-                                $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
-                                $icon = api_is_allowed_to_edit() ?
+                            $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
+                            $icon = api_is_allowed_to_edit() ?
                                     '<a href="'.api_get_path(
                                         WEB_CODE_PATH
                                     ).'announcements/announcements.php?action=add&remind_inactive='.$student_id.'&cidReq='.$courseInfo['code'].'" title="'.get_lang(
@@ -1979,7 +1979,7 @@ class Tracking
                         if ($convert_date) {
                             return api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
                         } else {
-                            return $last_login_date;                        
+                            return $last_login_date;
                         }
                     }
                 }
@@ -5803,7 +5803,7 @@ class Tracking
                     if (!$learnpath['lp_visibility']) {
                         continue;
                     }
-                    
+
                     $progress = self::get_avg_student_progress(
                         $user_id,
                         $course,
@@ -5935,23 +5935,23 @@ class Tracking
     public static function generate_session_exercise_graph($names, $my_results, $average)
     {
         $cdnChartJs = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js';
-        $html .= Display::tag('script', '', array('src' => $cdnChartJs));
-        $canvas = Display::tag('canvas', '', array('id' => 'session_graph_chart'));
-        $html .=  Display::tag('div',$canvas, array('style' => 'width:100%'));
+        $html .= Display::tag('script', '', ['src' => $cdnChartJs]);
+        $canvas = Display::tag('canvas', '', ['id' => 'session_graph_chart']);
+        $html .= Display::tag('div', $canvas, ['style' => 'width:100%']);
         $jsStr = " var data = {
-                       labels:".  json_encode($names).",
+                       labels:".json_encode($names).",
                        datasets: [
                        {
                          label: '".get_lang('MyResults')."',
                          backgroundColor: 'rgb(255, 99, 132)',
                          stack: 'Stack1',
-                         data: ".  json_encode($my_results).",
+                         data: ".json_encode($my_results).",
                         },
                         {
                          label: '".get_lang('AverageScore')."',
                          backgroundColor: 'rgb(75, 192, 192)',
                          stack: 'Stack2',
-                         data: ".  json_encode($average).",
+                         data: ".json_encode($average).",
                         },
                         ],  
                     };
@@ -5982,6 +5982,7 @@ class Tracking
                     }
                 });";
         $html .= Display::tag('script', $jsStr);
+
         return $html;
     }
 
@@ -6354,7 +6355,7 @@ class Tracking
             $myCache->saveFromCache($chartHash, $imgPath);
             $imgPath = api_get_path(WEB_ARCHIVE_PATH).$chartHash;
         }
-        
+
         return $imgPath;
     }
 

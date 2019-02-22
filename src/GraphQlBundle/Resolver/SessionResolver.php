@@ -3,10 +3,10 @@
 
 namespace Chamilo\GraphQlBundle\Resolver;
 
-use Chamilo\GraphQlBundle\Traits\GraphQLTrait;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
+use Chamilo\GraphQlBundle\Traits\GraphQLTrait;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**

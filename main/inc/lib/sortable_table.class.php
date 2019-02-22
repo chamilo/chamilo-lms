@@ -577,7 +577,7 @@ class SortableTable extends HTML_Table
         $nav = $pager_links['first'].' '.$pager_links['back'];
         $nav .= '<div class="btn btn-outline-secondary">'.$pager->getCurrentPageId().' / '.$pager->numPages().' </div>';
         $nav .= $pager_links['next'].' '.$pager_links['last'];
-        $html = Display::tag('div',$nav,['class'=>'btn-group btn-group-sm', 'role' => 'group']);
+        $html = Display::tag('div', $nav, ['class' => 'btn-group btn-group-sm', 'role' => 'group']);
 
         return $html;
     }

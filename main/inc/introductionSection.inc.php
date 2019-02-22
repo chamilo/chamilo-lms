@@ -56,10 +56,10 @@ if (!empty($courseId)) {
 $config = [
     'ToolbarSet' => 'Basic',
     'Width' => '100%',
-    'Height' => '300'
+    'Height' => '300',
 ];
 
-$form->addHtmlEditor('intro_content', null, false, false, $config, ['card-full'=>true]);
+$form->addHtmlEditor('intro_content', null, false, false, $config, ['card-full' => true]);
 $form->addButtonSave(get_lang('SaveIntroText'), 'intro_cmdUpdate');
 
 /* INTRODUCTION MICRO MODULE - COMMANDS SECTION (IF ALLOWED) */
@@ -375,7 +375,7 @@ if ($intro_dispDefault) {
             'id' => 'introduction-tool',
             'name' => $nameSection,
             'help' => $helpSection,
-            'text' => $intro_content
+            'text' => $intro_content,
         ];
     } else {
         if (api_is_allowed_to_edit()) {
@@ -383,7 +383,7 @@ if ($intro_dispDefault) {
                 'id' => 'introduction-course',
                 'name' => $nameSection,
                 'help' => $helpSection,
-                'text' => $intro_content
+                'text' => $intro_content,
             ];
         }
     }

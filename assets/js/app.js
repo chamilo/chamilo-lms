@@ -4,8 +4,8 @@ import Routing from '../../vendor/friendsofsymfony/jsrouting-bundle/Resources/pu
 
 Routing.setRoutingData(routes);
 
-require('./main');
 require('./vendor');
+require('./main');
 
 // @todo rework url naming
 var homePublicUrl = Routing.generate('home') + 'public/';

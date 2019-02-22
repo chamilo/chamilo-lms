@@ -1,21 +1,12 @@
-// HEADER
 
-/*$(window).resize(function(){
+$(window).resize(function(){
     var widthScreen = $(window).width();
     if(widthScreen >= 1400){
         $('body').addClass('sidebar-lg-show');
     } else {
         $('body').removeClass('sidebar-lg-show');
     }
-    var main = $('#app-main');
-    var cardMain = $('#card-container');
-    var highAverage = main.height() - cardMain.height()-100;
-
-    cardMain.css("height", highAverage+cardMain.height()+"px");
-    if(cardMain.height()>850){
-        cardMain.css("height", "auto");
-    }
-});*/
+});
 
 $(function () {
 
@@ -25,19 +16,7 @@ $(function () {
     if(widthScreen >= 1400){
         $('body').addClass('sidebar-lg-show');
     }
-    /*
-    // Calculation of Width for Card Container
 
-    var main = $('#app-main');
-    var cardMain = $('#card-container');
-    var highAverage = main.height() - cardMain.height()-100;
-
-    //cardMain.css("height", highAverage+cardMain.height()+"px");
-    cardMain.css("height", highAverage+cardMain.height()+"px");
-    if(cardMain.height()>850 || widthScreen <= 600){
-        cardMain.css("height", "auto");
-    }
-*/
     //Elevator Scroll
     $(window).scroll(function () {
         if ($(this).scrollTop() > 50) {

@@ -94,6 +94,31 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    // MODAL DELETE CONFIRM
 
+    $('.delete-swal').click(function (e) {
+        e.preventDefault(); // Prevent the href from redirecting directly
+        var linkURL = $(this).attr("href");
+        var title = $(this).attr("title");
+        deleteConfirm(linkURL, title);
+    })
+    function deleteConfirm(linkURL, title){
+        swal({
+            //title: '{{ 'Warning'|trans }}',
+            text: title,
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then((willDelete) => {
+            if (willDelete) {
+                window.location.href = linkURL;
+            }
+        });
+    }
+
+
+
+</script>
 </body>
 </html>

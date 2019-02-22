@@ -330,9 +330,8 @@ if ($intro_dispCommand) {
             $tool = [
                 'name' => get_lang('ConfirmYourChoice'),
                 'url' => api_get_self()."?".api_get_cidreq().$blogParam."&intro_cmdDel=1",
-                'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
-                    "')) return false",
                 'icon' => 'fas fa-trash-alt',
+                'class' => 'delete-swal'
             ];
             $toolbar[] = $tool;
         } else {
@@ -346,9 +345,8 @@ if ($intro_dispCommand) {
             $tool = [
                 'name' => get_lang('ConfirmYourChoice'),
                 'url' => api_get_self()."?".api_get_cidreq()."&intro_cmdDel=1",
-                'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_ilang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
-                    "')) return false",
                 'icon' => 'fas fa-trash-alt',
+                'class' => 'delete-swal'
             ];
             $toolbar[] = $tool;
         }

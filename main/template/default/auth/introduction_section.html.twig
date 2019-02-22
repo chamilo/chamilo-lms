@@ -4,8 +4,8 @@
             <div class="toolbar">
                 <div class="btn-group btn-group-sm" role="group" aria-label="">
                     {% for item in toolbar %}
-                        <a href="{{ item.url }}" onclick="{{ (item.onclick!='')? item.onclick : '' }}"
-                           title="{{ item.name }}" class="btn btn-light">
+                        <a href="{{ item.url }}"
+                           title="{{ item.name }}" class="btn btn-light {{ item.class }}">
                             <i class="{{ item.icon }}"></i>
                         </a>
                     {% endfor %}

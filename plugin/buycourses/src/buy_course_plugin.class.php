@@ -188,7 +188,8 @@ class BuyCoursesPlugin extends Plugin
                 seller_address varchar(255) NOT NULL,
                 seller_email varchar(255) NOT NULL,
                 next_number_invoice int unsigned NOT NULL,
-                invoice_series varchar(255) NOT NULL
+                invoice_series varchar(255) NOT NULL,
+                sale_email varchar(255) NOT NULL
             )";
             $res = Database::query($sql);
             if (!$res) {

@@ -14,17 +14,16 @@
                             <div class="float-right">
                                 <div class="btn-group btn-group-sm" role="group">
                                     {% if session_id == description.session_id %}
-                                        <a class="btn btn-outline-secondary" href="{{ _p.web_self }}?action=edit&amp;id={{ description.id }}&amp;{{ _p.web_cid_query }}"
+                                        <a class="btn btn-light" href="{{ _p.web_self }}?action=edit&amp;id={{ description.id }}&amp;{{ _p.web_cid_query }}"
                                            title="{{ 'Edit'|get_lang }}">
                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
-                                        <a class="btn btn-outline-secondary" href="{{ _p.web_self }}?action=delete&amp;id={{ description.id }}&amp;{{ _p.web_cid_query }}"
-                                           onclick="javascript:return confirmation('{{ description.title_js }}');"
-                                           title="{{ 'Delete'|get_lang }}">
+                                        <a class="btn btn-light delete-swal" href="{{ _p.web_self }}?action=delete&amp;id={{ description.id }}&amp;{{ _p.web_cid_query }}"
+                                           title="{{ 'Delete'|get_lang }} {{ description.title_js }}">
                                             <i class="far fa-trash-alt"></i>
                                         </a>
                                     {% else %}
-                                        <a class="btn btn-outline-secondary disabled" href="#"
+                                        <a class="btn btn-light disabled" href="#"
                                            title="{{ 'EditionNotAvailableFromSession'|get_lang }}">
                                             <i class="fas fa-pencil-alt"></i>
                                         </a>

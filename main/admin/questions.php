@@ -3,6 +3,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
+use Knp\Component\Pager\Paginator;
+use Doctrine\Common\Collections\Criteria;
 
 /**
  *  @package chamilo.admin
@@ -38,7 +40,7 @@ if ($formSent) {
 
     $em = Database::getManager();
     $repo = $em->getRepository('ChamiloCourseBundle:CQuizQuestion');
-    $criteria = new \Doctrine\Common\Collections\Criteria();
+    $criteria = new Criteria();
     if (!empty($id)) {
         $criteria->where($criteria->expr()->eq('iid', $id));
     }
@@ -65,7 +67,7 @@ if ($formSent) {
 
     $questionCount = count($questions);
 
-    $paginator = new Knp\Component\Pager\Paginator();
+    $paginator = new Paginator();
     $pagination = $paginator->paginate($questions, $page, $length);
     $pagination->setItemNumberPerPage($length);
     $pagination->setCurrentPageNumber($page);

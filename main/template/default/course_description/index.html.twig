@@ -5,11 +5,11 @@
     {% endfor %}
     {% for description in listing.descriptions %}
         {% if not description is empty %}
-            <div id="description_{{ description.description_type }}" class="card"
+            <div id="description_{{ description.description_type }}" class="card card-description"
                  data-id="{{ description.id }}" data-c_id="{{ description.c_id }}" data-type="course_description">
 
                 <div class="card-body">
-                    <h5 class="card-title">
+                    <h3 class="card-title">
                         {% if is_allowed_to_edit %}
                             <div class="float-right">
                                 <div class="btn-group btn-group-sm" role="group">
@@ -32,7 +32,7 @@
                             </div>
                         {% endif %}
                         {{ description.title }}
-                    </h5>
+                    </h3>
                     {{ description.content }}
                 </div>
             </div>

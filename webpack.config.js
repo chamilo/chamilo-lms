@@ -13,6 +13,8 @@ Encore
     .addEntry('app', './assets/js/app.js')
     .addEntry('bootstrap', './assets/js/bootstrap.js')
 
+    .addEntry('session_list', './assets/js/session_list.js')
+
     .addStyleEntry('css/app', './assets/css/app.scss')
     .addStyleEntry('css/bootstrap', './assets/css/bootstrap.scss')
 

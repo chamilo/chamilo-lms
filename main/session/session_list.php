@@ -6,15 +6,23 @@
  *
  * @package chamilo.admin
  */
+use Chamilo\CoreBundle\Framework\Container;
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
-SessionManager::protectSession(null, false);
+$router = Container::getRouter();
 
-//Add the JS needed to use the jqgrid
-$htmlHeadXtra[] = api_get_jqgrid_js();
+$htmlHeadXtra[] = api_get_css(
+    $router->generate('legacy_public').'build/session_list.css'
+);
+$htmlHeadXtra[] = api_get_js_simple(
+    $router->generate('legacy_public').'build/session_list.js'
+);
+
+SessionManager::protectSession(null, false);
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $idChecked = isset($_REQUEST['idChecked']) ? $_REQUEST['idChecked'] : null;

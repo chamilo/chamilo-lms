@@ -779,7 +779,7 @@ function modify_filter($user_id, $url_params, $row)
             !$user_is_anonymous &&
             api_global_admin_can_edit_admin($user_id)
         ) {
-            $result .= ' <a href="user_list.php?action=anonymize&user_id='.$user_id.'&'.$url_params.'&sec_token='.Security::getTokenFromSession().'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;">'.
+            $result .= ' <a href="user_list.php?action=anonymize&user_id='.$user_id.'&'.$url_params.'&sec_token='.Security::getTokenFromSession().'"  class="delete-swal" title="'.get_lang("ConfirmYourChoice").'" >'.
                 Display::return_icon(
                     'anonymous.png',
                     get_lang('Anonymize'),

@@ -58,7 +58,13 @@ switch ($action) {
 
         $userData = '<h3>'.$user_info['complete_name'].'</h3>'.$user_info['mail'].$user_info['official_code'];
         if ($isAnonymous) {
-            echo $userData;
+            // Only allow anonymous users to see user popup if the popup user
+            // is a teacher (which might be necessary to illustrate a course)
+            if ($user_info['status'] === COURSEMANAGER) {
+                echo $userData;
+            } else {
+                echo '<h3>-</h3>';
+            }
         } else {
             echo Display::url(
                 $userData,

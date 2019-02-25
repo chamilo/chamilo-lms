@@ -13,14 +13,11 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
-$router = Container::getRouter();
+$routePublic = Container::getRouter()->generate('legacy_public');
 
-$htmlHeadXtra[] = api_get_css(
-    $router->generate('legacy_public').'build/session_list.css'
-);
-$htmlHeadXtra[] = api_get_js_simple(
-    $router->generate('legacy_public').'build/session_list.js'
-);
+$htmlHeadXtra[] = "<script>window.lang = '".api_get_language_isocode()."';</script>";
+$htmlHeadXtra[] = api_get_css($routePublic.'build/session_list.css');
+$htmlHeadXtra[] = api_get_js_simple($routePublic.'build/session_list.js');
 
 SessionManager::protectSession(null, false);
 

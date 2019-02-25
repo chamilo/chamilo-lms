@@ -467,7 +467,7 @@ function getQuestions(
     $exerciseLevel = (int) $exerciseLevel;
     $answerType = (int) $answerType;
     $questionId = (int) $questionId;
-    $description  = Database::escape_string($description);
+    $description = Database::escape_string($description);
 
     $TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
     $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);

@@ -203,7 +203,7 @@ if (!$inATest) {
             $questionList = $objExercise->selectQuestionList(true, true);
         }
 
-    echo '
+        echo '
         <div class="row hidden-xs">
             <div class="col-sm-5"><strong>'.get_lang('Questions').'</strong></div>
             <div class="col-sm-1 text-center"><strong>'.get_lang('Type').'</strong></div>

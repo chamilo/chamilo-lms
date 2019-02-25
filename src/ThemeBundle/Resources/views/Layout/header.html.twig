@@ -1,70 +1,70 @@
 {% autoescape false %}
-<script type="text/javascript">
-    $(function () {
-        /**
-         * Notifications Systems
-         */
+<script>
+$(function () {
+    /**
+     * Notifications Systems
+     */
+    $.get(
+        '{{ url('legacy_main', { name : 'inc/ajax/message.ajax.php'}) }}',
+        {'a': 'get_count_message'},
+        function (data) {
+            var countFriends = data.ms_friends;
+            var countInbox = data.ms_inbox
+            if (countFriends != 0) {
+                $("#notifications-social").removeClass('d-none');
+                $("#notifications-social").append(countFriends);
+            }
+            if (countInbox != 0) {
+                $("#notifications-inbox").removeClass('d-none');
+                $("#notifications-inbox").append(countInbox);
+            }
+        }
+    );
+
+    $('#list_notifications_friends').on('click', e => {
+        const $listFriends = $('#list_friends .content');
+        let $html;
         $.get(
             '{{ url('legacy_main', { name : 'inc/ajax/message.ajax.php'}) }}',
-            {'a': 'get_count_message'},
+            {'a': 'get_notifications_friends'},
             function (data) {
-                var countFriends = data.ms_friends;
-                var countInbox = data.ms_inbox
-                if (countFriends != 0) {
-                    $("#notifications-social").removeClass('d-none');
-                    $("#notifications-social").append(countFriends);
-                }
-                if (countInbox != 0) {
-                    $("#notifications-inbox").removeClass('d-none');
-                    $("#notifications-inbox").append(countInbox);
+                $listFriends.empty();
+                for (let i in data) {
+                    $html = '<a class="dropdown-item preview-item">';
+                    $html += '<div class="preview-thumbnail"><img class="rounded-circle" src="' + data[i].avatar + '"/></div>';
+                    $html += '<div class="preview-item-content flex-grow">';
+                    $html += '<h6 class="preview-subject">' + data[i].fullname + '<span class="date-ago float-right">' + data[i].date + '</span></h6>';
+                    $html += '<p class="preview-text">' + data[i].content + '</p>';
+                    $html += '</div></a>';
+                    $listFriends.append($html);
                 }
             }
         );
-
-        $('#list_notifications_friends').on('click', e => {
-            const $listFriends = $('#list_friends .content');
-            let $html;
-            $.get(
-                '{{ url('legacy_main', { name : 'inc/ajax/message.ajax.php'}) }}',
-                {'a': 'get_notifications_friends'},
-                function (data) {
-                    $listFriends.empty();
-                    for (let i in data) {
-                        $html = '<a class="dropdown-item preview-item">';
-                        $html += '<div class="preview-thumbnail"><img class="rounded-circle" src="' + data[i].avatar + '"/></div>';
-                        $html += '<div class="preview-item-content flex-grow">';
-                        $html += '<h6 class="preview-subject">' + data[i].fullname + '<span class="date-ago float-right">' + data[i].date + '</span></h6>';
-                        $html += '<p class="preview-text">' + data[i].content + '</p>';
-                        $html += '</div></a>';
-                        $listFriends.append($html);
-                    }
-                }
-            );
-        });
-
-        $('#list_notifications_inbox').on('click', e => {
-            const $listInbox = $('#list_inbox .content');
-            let $html;
-            $.get(
-                '{{ url('legacy_main', { name : 'inc/ajax/message.ajax.php'}) }}',
-                {'a': 'get_notifications_inbox'},
-                function (data) {
-                    $listInbox.empty();
-                    for (let i in data) {
-                        $html = '<a class="dropdown-item preview-item" href="' + data[i].url + '">';
-                        $html += '<div class="preview-thumbnail"><div class="preview-icon bg-info">';
-                        $html += '<i class="far fa-envelope"></i>';
-                        $html += '</div></div>';
-                        $html += '<div class="preview-item-content flex-grow">';
-                        $html += '<h6 class="preview-subject">' + data[i].fullname + '<span class="date-ago float-right">' + data[i].date + '</span></h6>';
-                        $html += '<p class="preview-text">' + data[i].title + '</p>';
-                        $html += '</div></a>';
-                        $listInbox.append($html);
-                    }
-                }
-            );
-        });
     });
+
+    $('#list_notifications_inbox').on('click', e => {
+        const $listInbox = $('#list_inbox .content');
+        let $html;
+        $.get(
+            '{{ url('legacy_main', { name : 'inc/ajax/message.ajax.php'}) }}',
+            {'a': 'get_notifications_inbox'},
+            function (data) {
+                $listInbox.empty();
+                for (let i in data) {
+                    $html = '<a class="dropdown-item preview-item" href="' + data[i].url + '">';
+                    $html += '<div class="preview-thumbnail"><div class="preview-icon bg-info">';
+                    $html += '<i class="far fa-envelope"></i>';
+                    $html += '</div></div>';
+                    $html += '<div class="preview-item-content flex-grow">';
+                    $html += '<h6 class="preview-subject">' + data[i].fullname + '<span class="date-ago float-right">' + data[i].date + '</span></h6>';
+                    $html += '<p class="preview-text">' + data[i].title + '</p>';
+                    $html += '</div></a>';
+                    $listInbox.append($html);
+                }
+            }
+        );
+    });
+});
 </script>
 <header class="app-header navbar">
     <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
@@ -74,8 +74,12 @@
         <span class="navbar-toggler-icon"></span>
     </button>
     <a class="navbar-brand" href="{{ url('legacy_index') }}">
-        <img class="navbar-brand-full" width="130" src="{{ url('legacy_public') ~ 'build/css/themes/'~ theme ~'/images/logo_chamilo.svg' }}" alt="Chamilo"/>
-        <img class="navbar-brand-minimized" width="35" src="{{ url('legacy_public') ~ 'build/css/themes/'~ theme ~'/images/avatar.svg' }}"  alt="Chamilo">
+        <img class="navbar-brand-full" width="130"
+             src="{{ url('legacy_public') ~ 'build/css/themes/'~ theme ~'/images/logo_chamilo.svg' }}"
+             alt="Chamilo"/>
+        <img class="navbar-brand-minimized" width="35"
+             src="{{ url('legacy_public') ~ 'build/css/themes/'~ theme ~'/images/avatar.svg' }}"
+             alt="Chamilo">
     </a>
 
     <ul class="nav navbar-nav d-md-down-none">
@@ -139,9 +143,7 @@
             </ul>
         </li>
         <li class="nav-item dropdown">
-
             {% set avatar %}
-
                 {% if app.user.pictureUri is empty %}
                     <img
                         class="img-avatar"
@@ -192,7 +194,6 @@
                     <i class="fa fa-sign-out-alt"></i>
                     {{ "Logout"|trans }}
                 </a>
-
             </div>
         </li>
     {% else %}
@@ -209,9 +210,7 @@
                 {{ "Sign in"|trans }}
             </a>
         </li>
-
     {% endif %}
     </ul>
-
 </header>
 {% endautoescape %}

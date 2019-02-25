@@ -1,29 +1,32 @@
 {% extends '@ChamiloTheme/Layout/layout_cms.html.twig' %}
 
 {% block sonata_page_container %}
- <script type="text/javascript">
-        function backToTopGo () {
-          window.scroll(0, 0);
-          backToTopScroll();
-        }
-        $(document).on('ready', function(){
-            var positionCurrent, positionNew = 0;
-            $(window).scroll(function(){
+<script>
+    function backToTopGo() {
+        window.scroll(0, 0);
+        backToTopScroll();
+    }
+
+    $(document).on('ready', function () {
+        var positionCurrent, positionNew = 0;
+        $(window).scroll(function () {
             positionNew = $(this).scrollTop();
-            if(positionNew>positionCurrent){
+            if (positionNew > positionCurrent) {
                 $('#barra').show('slow');
-            } else if(positionNew<positionCurrent){
+            } else if (positionNew < positionCurrent) {
                 $('#barra').hide('slow');
             }
-            positionCurrent=positionNew;
-            });
+            positionCurrent = positionNew;
         });
-    </script>
-    <a id="barra" class="btn btn-primary back_to_top_wrap" onclick="backToTopGo()">
-        <div class="back_to_top">
-            <i class="fa fa-arrow-up" aria-hidden="true"></i> Go up
-        </div>
-    </a>
+    });
+</script>
+
+<a id="barra" class="btn btn-primary back_to_top_wrap" onclick="backToTopGo()">
+    <div class="back_to_top">
+        <i class="fa fa-arrow-up" aria-hidden="true"></i> Go up
+    </div>
+</a>
+
 <div class="page-faq">
     <h1 class="title">FAQ</h1>
     <div class="list-faq">

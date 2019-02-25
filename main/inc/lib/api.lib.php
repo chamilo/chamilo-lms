@@ -253,6 +253,8 @@ define('LOG_USER_ID', 'user_id');
 define('LOG_USER_OBJECT', 'user_object');
 define('LOG_USER_FIELD_VARIABLE', 'user_field_variable');
 define('LOG_SESSION_ID', 'session_id');
+
+define('LOG_QUESTION_ID', 'question_id');
 define('LOG_SESSION_CATEGORY_ID', 'session_category_id');
 define('LOG_CONFIGURATION_SETTINGS_CATEGORY', 'settings_category');
 define('LOG_CONFIGURATION_SETTINGS_VARIABLE', 'settings_variable');
@@ -279,8 +281,10 @@ define('LOG_MY_FOLDER_NEW_PATH', 'new_path');
 define('LOG_TERM_CONDITION_ACCEPTED', 'term_condition_accepted');
 define('LOG_USER_CONFIRMED_EMAIL', 'user_confirmed_email');
 define('LOG_USER_REMOVED_LEGAL_ACCEPT', 'user_removed_legal_accept');
-
 define('LOG_USER_DELETE_ACCOUNT_REQUEST', 'user_delete_account_request');
+
+define('LOG_QUESTION_CREATED', 'question_created');
+define('LOG_QUESTION_UPDATED', 'question_updated');
 
 define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.]/');
 

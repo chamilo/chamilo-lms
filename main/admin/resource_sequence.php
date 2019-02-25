@@ -39,7 +39,7 @@ if ($formSequence->validate()) {
     exit;
 }
 
-$selectSequence = new FormValidator('');
+$selectSequence = new FormValidator('frm_select_delete');
 $selectSequence->addHidden('sequence_type', 'session');
 $em = Database::getManager();
 
@@ -51,6 +51,30 @@ $selectSequence->addSelect(
     $sequenceList,
     ['id' => 'sequence_id', 'cols-size' => [3, 7, 2]]
 );
+
+if (!empty($sequenceList)) {
+    $selectSequence->addButtonDelete(get_lang('Delete'));
+}
+
+if ($selectSequence->validate()) {
+    $values = $selectSequence->exportValues();
+
+    $sequence = $em->find('ChamiloCoreBundle:Sequence', $values['sequence']);
+
+    $em
+        ->createQuery('DELETE FROM ChamiloCoreBundle:SequenceResource sr WHERE sr.sequence = :seq')
+        ->execute(['seq' => $sequence]);
+
+    $em->remove($sequence);
+    $em->flush();
+
+    Display::addFlash(
+        Display::return_message(get_lang('Deleted'), 'success')
+    );
+
+    header('Location: '.api_get_self());
+    exit;
+}
 
 $form = new FormValidator('');
 $form->addHtml("<div class='col-md-6'>");

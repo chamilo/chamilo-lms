@@ -6941,24 +6941,21 @@ class learnpath
         $creatorId = empty($creatorId) ? api_get_user_id() : $creatorId;
 
         $folder = false;
-        //if (!is_dir($filepath.'/'.$dir)) {
         $folderData = create_unexisting_directory(
-                $course,
-                $creatorId,
-                0,
-                null,
-                0,
-                $filepath,
-                $dir,
-                get_lang('LearningPaths'),
-                0
-            );
+            $course,
+            $creatorId,
+            0,
+            null,
+            0,
+            $filepath,
+            $dir,
+            get_lang('LearningPaths'),
+            0
+        );
+
         if (!empty($folderData)) {
             $folder = true;
         }
-        /*} else {
-            $folder = true;
-        }*/
 
         return $folder;
     }
@@ -6990,17 +6987,16 @@ class learnpath
         $documentId = null;
         if ($folder) {
             $filepath = api_get_path(SYS_COURSE_PATH).$course['path'].'/document';
-            //if (!is_dir($filepath.'/'.$dir)) {
             $folderData = create_unexisting_directory(
-                    $course,
-                    $creatorId,
-                    0,
-                    0,
-                    0,
-                    $filepath,
-                    $dir,
-                    $lp_name
-                );
+                $course,
+                $creatorId,
+                0,
+                0,
+                0,
+                $filepath,
+                $dir,
+                $lp_name
+            );
             if (!empty($folderData)) {
                 $folder = true;
             }

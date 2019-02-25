@@ -156,20 +156,18 @@
     {% endautoescape %}
 {% endmacro %}
 
-{% macro panel_box(title, content, subtitle) %}
+{% macro panel_box(id, title, content, subtitle) %}
     {% autoescape false %}
-        <div class="card card-box">
+        <div id="box-{{ id }}" class="card card-{{ id }}">
             <div class="card-body">
-                {% if subtitle is empty %}
-                    <h6 class="card-title">{{ title }}</h6>
+                {% if title %}
+                    {{ title }}
                 {% endif %}
 
                 {{ content }}
 
                 {% if subtitle %}
-                    <div class="card-text">
-                        {{ subtitle }}
-                    </div>
+                    {{ subtitle }}
                 {% endif %}
 
             </div>

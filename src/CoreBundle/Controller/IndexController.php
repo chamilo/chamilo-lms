@@ -23,7 +23,7 @@ class IndexController extends BaseController
      *
      * @return Response
      */
-    public function indexAction(Request $request): Response
+    public function indexAction(): Response
     {
         return $this->render(
             '@ChamiloTheme/Index/index.html.twig',

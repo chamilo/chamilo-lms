@@ -515,6 +515,7 @@ if ($form->validate()) {
         api_get_configuration_value('url_append').api_get_path(REL_COURSE_PATH),
         $content
     );
+
     $save_file_path = $dir.$filename.'.'.$extension;
 
     $document = DocumentManager::addDocument(

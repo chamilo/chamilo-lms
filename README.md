@@ -20,7 +20,6 @@ not in a sub folder inside a domain.
 git clone https://github.com/chamilo/chamilo-lms.git chamilo2
 cd chamilo2
 composer install (If composer asks to accept recipes, just press enter or "n")
-php bin/console assets:install
 php bin/console fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json
 yarn install
 yarn run encore dev
@@ -40,6 +39,8 @@ chown -R www-data: public/ var/
 If you have already installed it and just want to update it from Git, do:
 ~~~~
 git pull origin master
+php bin/console fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json
+    
 yarn upgrade
 yarn encore dev
 composer update

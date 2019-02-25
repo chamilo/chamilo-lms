@@ -58,7 +58,10 @@ try {
     $request->setBaseUrl($request->getRequestUri());
     $kernel->boot();
     if (!empty($append)) {
-        $append = "/$append/";
+        if (substr($append, 0, 1) !== '/') {
+            throw new Exception('APP_URL_APPEND must start with "/"');
+        }
+        $append = "$append/";
     }
 
     $container = $kernel->getContainer();

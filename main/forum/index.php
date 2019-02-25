@@ -128,8 +128,6 @@ $logInfo = [
     'tool_id_detail' => 0,
     'action' => !empty($actions) ? $actions : 'list-category',
     'action_details' => isset($_GET['content']) ? $_GET['content'] : '',
-    'current_id' => !empty($actions) ? (int) $_GET['id'] : 0,
-    'info' => '',
 ];
 Event::registerLog($logInfo);
 
@@ -152,7 +150,6 @@ $user_id = api_get_user_id();
 /* RETRIEVING ALL GROUPS AND THOSE OF THE USER */
 
 // The groups of the user.
-$groups_of_user = [];
 $groups_of_user = GroupManager::get_group_ids($_course['real_id'], $user_id);
 
 // All groups in the course (and sorting them as the
@@ -241,29 +238,25 @@ if (is_array($forumCategories)) {
         } else {
             $forumCategoryInfo['title'] = $forumCategory['cat_title'];
         }
-        $forumCategoryInfo['icon_session'] = api_get_session_image(
-            $forumCategory['session_id'],
-            $_user['status']
-        );
+        $forumCategoryInfo['icon_session'] = api_get_session_image($forumCategory['session_id'], $_user['status']);
 
         // Validation when belongs to a session
         $forumCategoryInfo['description'] = $forumCategory['cat_comment'];
+        $forumCategory['session_display'] = null;
         if (empty($sessionId) && !empty($forumCategory['session_name'])) {
             $forumCategory['session_display'] = ' ('.Security::remove_XSS($forumCategory['session_name']).')';
-        } else {
-            $forumCategory['session_display'] = null;
         }
 
         $tools = null;
-        $idCategory = $forumCategory['cat_id'];
-        $forumCategoryInfo['url'] = 'viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.intval($idCategory);
+        $idCategory = (int) $forumCategory['cat_id'];
+        $forumCategoryInfo['url'] = 'viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.$idCategory;
 
         if (!empty($idCategory)) {
             if (api_is_allowed_to_edit(false, true) &&
-                !($forumCategory['session_id'] == 0 && intval($sessionId) != 0)
+                !($forumCategory['session_id'] == 0 && $sessionId != 0)
             ) {
                 $tools .= '<a href="'.api_get_self().'?'.api_get_cidreq()
-                    .'&action=edit&content=forumcategory&id='.intval($idCategory)
+                    .'&action=edit&content=forumcategory&id='.$idCategory
                     .'">'.Display::return_icon(
                         'edit.png',
                         get_lang('Edit'),
@@ -273,7 +266,7 @@ if (is_array($forumCategories)) {
                     .'</a>';
 
                 $tools .= '<a href="'.api_get_self().'?'.api_get_cidreq()
-                    .'&action=delete&content=forumcategory&id='.intval($idCategory)
+                    .'&action=delete&content=forumcategory&id='.$idCategory
                     ."\" onclick=\"javascript:if(!confirm('"
                     .addslashes(api_htmlentities(
                         get_lang('DeleteForumCategory'),
@@ -304,6 +297,7 @@ if (is_array($forumCategories)) {
                 );
             }
         }
+
         $forumCategoryInfo['tools'] = $tools;
         $forumCategoryInfo['forums'] = [];
         // The forums in this category.
@@ -311,7 +305,7 @@ if (is_array($forumCategories)) {
         $forumsInCategory = get_forums_in_category($forumCategory['cat_id']);
 
         if (!empty($forumsInCategory)) {
-            $forumsDetailsList = null;
+            $forumsDetailsList = [];
             // We display all the forums in this category.
             foreach ($allCourseForums as $forum) {
                 // Here we clean the whatnew_post_info array a little bit because to display the icon we
@@ -469,7 +463,7 @@ if (is_array($forumCategories)) {
                         }
 
                         if (api_is_allowed_to_edit(false, true)
-                            && !($forum['session_id'] == 0 && intval($sessionId) != 0)
+                            && !($forum['session_id'] == 0 && $sessionId != 0)
                         ) {
                             $toolActions .= '<a href="'.api_get_self().'?'.api_get_cidreq()
                                 .'&action=edit&content=forum&id='.$forum['forum_id'].'">'
@@ -527,11 +521,20 @@ if (is_array($forumCategories)) {
             }
             $forumCategoryInfo['forums'] = $forumsDetailsList;
         }
+
+        // Don't show empty categories (for students)
+        if (!api_is_allowed_to_edit()) {
+            if (empty($forumCategoryInfo['forums'])) {
+                continue;
+            }
+        }
         $listForumCategory[] = $forumCategoryInfo;
     }
 }
-
 $tpl = new Template($nameTools);
+if(api_get_configuration_value('forum_fold_categories')==true){
+    $tpl->assign('forum_fold_categories', true);
+}
 $tpl->assign('introduction', $introduction);
 $tpl->assign('actions', $actions);
 $tpl->assign('data', $listForumCategory);

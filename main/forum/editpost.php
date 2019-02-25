@@ -222,7 +222,7 @@ echo Display::url(
     ['class' => empty($current_forum['visibility']) ? 'text-muted' : null]
 );
 echo '</h1>';
-echo '<div class="forum_description">'.prepare4display($current_forum['forum_comment']).'</div>';
+echo '<p class="forum_description">'.prepare4display($current_forum['forum_comment']).'</p>';
 echo '</div>';
 /* End new display forum */
 

@@ -130,16 +130,11 @@ $tableLink = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 $htmlHeadXtra[] = <<<JS
     <script>
     $(document).on('ready', function() {
-        if ($('#thread_qualify_gradebook').is(':checked') == true) {
-            document.getElementById('options_field').style.display = 'block';
-        } else {
-            document.getElementById('options_field').style.display = 'none';
-        }
-        $('#thread_qualify_gradebook').click(function() {
-            if ($('#thread_qualify_gradebook').is(':checked') == true) {
-                document.getElementById('options_field').style.display = 'block';
-            } else {
-                document.getElementById('options_field').style.display = 'none';
+        $('[name="thread_qualify_gradebook"]:checkbox').change(function () {
+            if (this.checked) {
+                $('#options_field').show();
+        } else {            
+                $('#options_field').hide();
                 $("[name='numeric_calification']").val(0);
                 $("[name='calification_notebook_title']").val('');
                 $("[name='weight_calification']").val(0);
@@ -190,8 +185,7 @@ if ((api_is_course_admin() || api_is_session_general_coach() || api_is_course_tu
             'checkbox',
             'thread_qualify_gradebook',
             '',
-            get_lang('QualifyThreadGradebook'),
-            ['id' => 'thread_qualify_gradebook']
+            get_lang('QualifyThreadGradebook')
         );
     } else {
         $form->addElement('hidden', 'thread_qualify_gradebook', false);

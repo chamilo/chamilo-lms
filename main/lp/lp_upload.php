@@ -11,7 +11,6 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
  *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 api_protect_course_script();
 $course_dir = api_get_course_path().'/scorm';

@@ -532,7 +532,7 @@ if (is_array($forumCategories)) {
     }
 }
 $tpl = new Template($nameTools);
-if(api_get_configuration_value('forum_fold_categories')==true){
+if (api_get_configuration_value('forum_fold_categories') == true) {
     $tpl->assign('forum_fold_categories', true);
 }
 $tpl->assign('introduction', $introduction);

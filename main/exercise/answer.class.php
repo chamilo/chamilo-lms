@@ -80,7 +80,7 @@ class Answer
             // fills arrays
             $objExercise = new Exercise($this->course_id);
             $exerciseId = isset($_REQUEST['exerciseId']) ? $_REQUEST['exerciseId'] : null;
-            $objExercise->read($exerciseId);
+            $objExercise->read($exerciseId, false);
         } else {
             $objExercise = $exercise;
         }

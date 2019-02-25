@@ -186,7 +186,6 @@ class Exercise
             $this->text_when_finished = $object->text_when_finished;
             $this->display_category_name = $object->display_category_name;
             $this->pass_percentage = $object->pass_percentage;
-            $this->sessionId = $object->session_id;
             $this->is_gradebook_locked = api_resource_is_locked_by_gradebook($id, LINK_EXERCISE);
             $this->review_answers = (isset($object->review_answers) && $object->review_answers == 1) ? true : false;
             $this->globalCategoryId = isset($object->global_category_id) ? $object->global_category_id : null;
@@ -218,10 +217,9 @@ class Exercise
 
             $this->force_edit_exercise_in_lp = api_get_setting('lp.show_invisible_exercise_in_lp_toc') === 'true';
 
+            $this->edit_exercise_in_lp = true;
             if ($this->exercise_was_added_in_lp) {
                 $this->edit_exercise_in_lp = $this->force_edit_exercise_in_lp == true;
-            } else {
-                $this->edit_exercise_in_lp = true;
             }
 
             if (!empty($object->end_time)) {
@@ -763,7 +761,7 @@ class Exercise
         $count = 0;
         if (Database::num_rows($result)) {
             $row = Database::fetch_array($result);
-            $count = $row['count'];
+            $count = (int) $row['count'];
         }
 
         return $count;
@@ -1033,7 +1031,7 @@ class Exercise
     /**
      * returns the array with the question ID list.
      *
-     * @param bool $from_db   Whether the results should be fetched in the database or just from memory
+     * @param bool $fromDatabase Whether the results should be fetched in the database or just from memory
      * @param bool $adminView Whether we should return all questions (admin view) or
      *                        just a list limited by the max number of random questions
      *
@@ -1041,9 +1039,9 @@ class Exercise
      *
      * @return array - question ID list
      */
-    public function selectQuestionList($from_db = false, $adminView = false)
+    public function selectQuestionList($fromDatabase = false, $adminView = false)
     {
-        if ($from_db && !empty($this->id)) {
+        if ($fromDatabase && !empty($this->id)) {
             $nbQuestions = $this->getQuestionCount();
             $questionSelectionType = $this->getQuestionSelectionType();
 
@@ -1085,7 +1083,7 @@ class Exercise
      */
     public function selectNbrQuestions()
     {
-        return sizeof($this->questionList);
+        return count($this->questionList);
     }
 
     /**
@@ -1127,7 +1125,7 @@ class Exercise
 
         // Random with no limit
         if ($random == -1) {
-            $randomLimit = "ORDER BY RAND() ";
+            $randomLimit = ' ORDER BY RAND() ';
         }
 
         // Admin see the list in default order
@@ -1488,18 +1486,18 @@ class Exercise
         $propagate_neg = (int) $this->propagate_neg;
         $saveCorrectAnswers = isset($this->saveCorrectAnswers) && $this->saveCorrectAnswers ? 1 : 0;
         $review_answers = isset($this->review_answers) && $this->review_answers ? 1 : 0;
-        $randomByCat = intval($this->randomByCat);
+        $randomByCat = (int) $this->randomByCat;
         $text_when_finished = $this->text_when_finished;
-        $display_category_name = intval($this->display_category_name);
-        $pass_percentage = intval($this->pass_percentage);
+        $display_category_name = (int) $this->display_category_name;
+        $pass_percentage = (int) $this->pass_percentage;
         $session_id = $this->sessionId;
 
         // If direct we do not show results
-        $results_disabled = intval($this->results_disabled);
+        $results_disabled = (int) $this->results_disabled;
         if ($feedback_type == EXERCISE_FEEDBACK_TYPE_DIRECT) {
             $results_disabled = 0;
         }
-        $expired_time = intval($this->expired_time);
+        $expired_time = (int) $this->expired_time;
 
         // Exercise already exists
         if ($id) {
@@ -4329,7 +4327,9 @@ class Exercise
                                             ['style' => 'color: #FF0000; text-decoration: line-through;']
                                         );
                                         if ($this->showExpectedChoice()) {
-                                            $user_answer = '';
+                                            if (isset($real_list[$s_user_answer])) {
+                                                $user_answer = Display::span($real_list[$s_user_answer]);
+                                            }
                                         }
                                     }
                                 }
@@ -4375,7 +4375,7 @@ class Exercise
                                             echo '<td>'.$status.'</td>';
                                         } else {
                                             echo '<td>'.$s_answer_label.'</td>';
-                                            echo '<td>'.$user_answer.'</td>';
+                                            //echo '<td>'.$user_answer.'</td>';
                                             echo '<td>';
                                             if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
                                                 if (isset($real_list[$i_answer_correct_answer]) &&
@@ -8003,6 +8003,38 @@ class Exercise
     public function getUnformattedTitle()
     {
         return strip_tags(api_html_entity_decode($this->title));
+    }
+
+    /**
+     * @param int $start
+     * @param int $lenght
+     *
+     * @return array
+     */
+    public function getQuestionForTeacher($start = 0, $lenght = 10)
+    {
+        $start = (int) $start;
+        $lenght = (int) $lenght;
+
+        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $sql = "SELECT DISTINCT e.question_id, e.question_order
+                FROM $TBL_EXERCICE_QUESTION e
+                INNER JOIN $TBL_QUESTIONS q
+                ON (e.question_id = q.id AND e.c_id = q.c_id)
+                WHERE
+                    e.c_id = {$this->course_id} AND
+                    e.exercice_id = '".$this->id."'
+                ORDER BY question_order
+                LIMIT $start, $lenght
+            ";
+        $result = Database::query($sql);
+        $questionList = [];
+        while ($object = Database::fetch_object($result)) {
+            $questionList[$object->question_order] = $object->question_id;
+        }
+
+        return $questionList;
     }
 
     /**

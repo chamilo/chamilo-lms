@@ -14,9 +14,14 @@ use ChamiloSession as Session;
  *    This script allows to manage the question list
  *    It is included from the script admin.php
  */
+$limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
 
 // deletes a question from the exercise (not from the data base)
 if ($deleteQuestion) {
+    if ($limitTeacherAccess && !api_is_platform_admin()) {
+        exit;
+    }
+
     // if the question exists
     if ($objQuestionTmp = Question::read($deleteQuestion)) {
         $objQuestionTmp->delete($exerciseId);
@@ -32,10 +37,10 @@ if ($deleteQuestion) {
 $ajax_url = api_get_path(WEB_AJAX_PATH)."exercise.ajax.php?".api_get_cidreq()."&exercise_id=".intval($exerciseId);
 ?>
 <div id="dialog-confirm"
-     title="<?php echo get_lang("ConfirmYourChoice"); ?>"
+     title="<?php echo get_lang('ConfirmYourChoice'); ?>"
      style="display:none;">
     <p>
-        <?php echo get_lang("AreYouSureToDelete"); ?>
+        <?php echo get_lang('AreYouSureToDelete'); ?>
     </p>
 </div>
 
@@ -144,9 +149,7 @@ $ajax_url = api_get_path(WEB_AJAX_PATH)."exercise.ajax.php?".api_get_cidreq()."&
 <?php
 
 //we filter the type of questions we can add
-Question::display_type_menu($objExercise);
-// Re sets the question list
-$objExercise->setQuestionList();
+Question::displayTypeMenu($objExercise);
 
 echo '<div id="message"></div>';
 $token = Security::get_token();
@@ -156,10 +159,50 @@ Session::erase('less_answer');
 // If we are in a test
 $inATest = isset($exerciseId) && $exerciseId > 0;
 if (!$inATest) {
-    echo "<div class='alert alert-warning'>"
-        .get_lang("ChoiceQuestionType")
-        ."</div>";
+    echo "<div class='alert alert-warning'>".get_lang('ChoiceQuestionType')."</div>";
 } else {
+    if ($nbrQuestions) {
+        // In the building exercise mode show question list ordered as is.
+        $objExercise->setCategoriesGrouping(false);
+
+        // In building mode show all questions not render by teacher order.
+        $objExercise->questionSelectionType = EX_Q_SELECTION_ORDERED;
+        $alloQuestionOrdering = true;
+        $showPagination = api_get_configuration_value('show_question_pagination');
+        if (!empty($showPagination) && $nbrQuestions > $showPagination) {
+            $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+            $length = api_get_configuration_value('question_pagination_length');
+            $url = api_get_self().'?'.api_get_cidreq();
+            // Use pagination for exercise with more than 200 questions.
+            $alloQuestionOrdering = false;
+            $start = ($page - 1) * $length;
+            $questionList = $objExercise->getQuestionForTeacher($start, $length);
+            $paginator = new Knp\Component\Pager\Paginator();
+            $pagination = $paginator->paginate([]);
+            $pagination->setTotalItemCount($nbrQuestions);
+            $pagination->setItemNumberPerPage($length);
+            $pagination->setCurrentPageNumber($page);
+            $pagination->renderer = function ($data) use ($url) {
+                $render = '<ul class="pagination">';
+                for ($i = 1; $i <= $data['pageCount']; $i++) {
+                    //foreach ($data['pagesInRange'] as $page) {
+                    $page = (int) $i;
+                    $pageContent = '<li><a href="'.$url.'&page='.$page.'">'.$page.'</a></li>';
+                    if ($data['current'] == $page) {
+                        $pageContent = '<li class="active"><a href="#" >'.$page.'</a></li>';
+                    }
+                    $render .= $pageContent;
+                }
+                $render .= '</ul>';
+
+                return $render;
+            };
+            echo $pagination;
+        } else {
+            // Classic order
+            $questionList = $objExercise->selectQuestionList(true, true);
+        }
+
     echo '
         <div class="row hidden-xs">
             <div class="col-sm-5"><strong>'.get_lang('Questions').'</strong></div>
@@ -172,26 +215,7 @@ if (!$inATest) {
         <div id="question_list">
     ';
 
-    if ($nbrQuestions) {
-        // Always getting list from DB
-        //$questionList = $objExercise->selectQuestionList(true);
-
-        // In the building exercise mode show question list ordered as is.
-        $objExercise->setCategoriesGrouping(false);
-
-        // Show exercises as in category settings
-        //$questionList = $objExercise->getQuestionListWithMediasUncompressed();
-
-        // In building mode show all questions not render by teacher order.
-        $objExercise->questionSelectionType = EX_Q_SELECTION_ORDERED;
-
-        // Get question list
-        $questionList = $objExercise->selectQuestionList(true, true);
-
-        $category_list = TestCategory::getListOfCategoriesNameForTest(
-            $objExercise->id,
-            false
-        );
+        $category_list = TestCategory::getListOfCategoriesNameForTest($objExercise->id, false);
 
         if (is_array($questionList)) {
             foreach ($questionList as $id) {
@@ -242,7 +266,6 @@ if (!$inATest) {
                         ['class' => 'btn btn-default btn-sm']
                     );
                 $delete_link = null;
-
                 if ($objExercise->edit_exercise_in_lp == true) {
                     $delete_link = Display::url(
                         Display::return_icon(
@@ -263,6 +286,10 @@ if (!$inATest) {
                     );
                 }
 
+                if ($limitTeacherAccess && !api_is_platform_admin()) {
+                    $delete_link = '';
+                }
+
                 $btnActions = implode(
                     PHP_EOL,
                     [$edit_link, $clone_link, $delete_link]
@@ -270,7 +297,10 @@ if (!$inATest) {
 
                 $title = Security::remove_XSS($objQuestionTmp->selectTitle());
                 $title = strip_tags($title);
-                $move = Display::returnFontAwesomeIcon("arrows moved", 1, true);
+                $move = '&nbsp;';
+                if ($alloQuestionOrdering) {
+                    $move = Display::returnFontAwesomeIcon('arrows moved', 1, true);
+                }
 
                 // Question name
                 $questionName =
@@ -300,8 +330,7 @@ if (!$inATest) {
                 // Question score
                 $questionScore = $objQuestionTmp->selectWeighting();
 
-                echo '
-                    <div id="question_id_list_'.$id.'">
+                echo '<div id="question_id_list_'.$id.'">
                         <div class="header_operations" data-exercise="'.$objExercise->selectId().'"
                             data-question="'.$id.'">
                             <div class="row">
@@ -336,9 +365,7 @@ if (!$inATest) {
                 unset($objQuestionTmp);
             }
         }
-    }
-
-    if (!$nbrQuestions) {
+    } else {
         echo Display::return_message(get_lang('NoQuestion'), 'warning');
     }
     echo '</div>'; //question list div

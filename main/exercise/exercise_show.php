@@ -128,6 +128,7 @@ if (empty($objExercise)) {
     $objExercise->read($exercise_id);
 }
 $feedback_type = $objExercise->feedback_type;
+
 // Only users can see their own results
 if (!$is_allowedToEdit) {
     if ($student_id != $currentUserId) {
@@ -734,10 +735,9 @@ foreach ($questionList as $questionId) {
             if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
                 $url_name = get_lang('EditCommentsAndMarks');
             } else {
+                $url_name = get_lang('AddComments');
                 if ($action == 'edit') {
                     $url_name = get_lang('EditIndividualComment');
-                } else {
-                    $url_name = get_lang('AddComments');
                 }
             }
             echo '<p>';
@@ -1020,7 +1020,7 @@ if ($show_results) {
     echo $totalScoreText;
 }
 
-if ($action == 'export') {
+if ($action === 'export') {
     $content = ob_get_clean();
     // needed in order to mpdf to work
     ob_clean();
@@ -1046,8 +1046,8 @@ if ($action == 'export') {
 
 if ($isFeedbackAllowed) {
     if (is_array($arrid) && is_array($arrmarks)) {
-        $strids = implode(",", $arrid);
-        $marksid = implode(",", $arrmarks);
+        $strids = implode(',', $arrid);
+        $marksid = implode(',', $arrmarks);
     }
 }
 

@@ -35,8 +35,13 @@ if (is_object($objQuestion)) {
     $typesInformation = Question::get_question_type_list();
     $form_title_extra = isset($typesInformation[$type][1]) ? get_lang($typesInformation[$type][1]) : null;
 
+    $code = '';
+    if (isset($objQuestion->code) && !empty($objQuestion->code)) {
+        $code = ' ('.$objQuestion->code.')';
+    }
+
     // form title
-    $form->addHeader($text.': '.$form_title_extra);
+    $form->addHeader($text.': '.$form_title_extra.$code);
 
     // question form elements
     $objQuestion->createForm($form, $objExercise);
@@ -63,7 +68,12 @@ if (is_object($objQuestion)) {
                 echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&message=ItemUpdated"</script>';
             } else {
                 // New question
-                echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&message=ItemAdded"</script>';
+                $page = '';
+                $length = api_get_configuration_value('question_pagination_length');
+                if ($length) {
+                    $page = round($objExercise->get_count_question_list() / $length);
+                }
+                echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&page='.$page.'&message=ItemAdded"</script>';
             }
         } else {
             echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&hotspotadmin='.$objQuestion->id.'&'.api_get_cidreq().'"</script>';

@@ -18,6 +18,7 @@ use Chamilo\CourseBundle\Entity\CQuizAnswer;
 abstract class Question
 {
     public $id;
+    public $iid;
     public $question;
     public $description;
     public $weighting;
@@ -38,6 +39,7 @@ abstract class Question
     public $questionTypeWithFeedback;
     public $extra;
     public $export = false;
+    public $code;
     public static $questionTypes = [
         UNIQUE_ANSWER => ['unique_answer.class.php', 'UniqueAnswer'],
         MULTIPLE_ANSWER => ['multiple_answer.class.php', 'MultipleAnswer'],
@@ -76,6 +78,7 @@ abstract class Question
     public function __construct()
     {
         $this->id = 0;
+        $this->iid = 0;
         $this->question = '';
         $this->description = '';
         $this->weighting = 0;
@@ -154,6 +157,7 @@ abstract class Question
             $objQuestion = self::getInstance($object->type);
             if (!empty($objQuestion)) {
                 $objQuestion->id = (int) $id;
+                $objQuestion->iid = (int) $object->iid;
                 $objQuestion->question = $object->question;
                 $objQuestion->description = $object->description;
                 $objQuestion->weighting = $object->ponderation;
@@ -165,6 +169,7 @@ abstract class Question
                 $objQuestion->course = $course_info;
                 $objQuestion->feedback = isset($object->feedback) ? $object->feedback : '';
                 $objQuestion->category = TestCategory::getCategoryForQuestion($id, $course_id);
+                $objQuestion->code = isset($object->code) ? $object->code : '';
 
                 $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
                 $sql = "SELECT DISTINCT q.exercice_id
@@ -229,8 +234,12 @@ abstract class Question
     public function getTitleToDisplay($itemNumber)
     {
         $showQuestionTitleHtml = api_get_configuration_value('save_titles_as_html');
+        $title = '';
+        if (api_get_configuration_value('show_question_id')) {
+            $title .= '<h4>#'.$this->course['code'].'-'.$this->iid.'</h4>';
+        }
 
-        $title = $showQuestionTitleHtml ? '' : '<strong>';
+        $title .= $showQuestionTitleHtml ? '' : '<strong>';
         $title .= $itemNumber.'. '.$this->selectTitle();
         $title .= $showQuestionTitleHtml ? '' : '</strong>';
 
@@ -403,7 +412,7 @@ abstract class Question
      */
     public function selectNbrExercises()
     {
-        return sizeof($this->exerciseList);
+        return count($this->exerciseList);
     }
 
     /**
@@ -423,7 +432,7 @@ abstract class Question
      */
     public function updateParentId($id)
     {
-        $this->parent_id = intval($id);
+        $this->parent_id = (int) $id;
     }
 
     /**
@@ -934,6 +943,12 @@ abstract class Question
                 $params,
                 ['c_id = ? AND id = ?' => [$c_id, $id]]
             );
+
+            Event::addEvent(
+                LOG_QUESTION_UPDATED,
+                LOG_QUESTION_ID,
+                $this->iid
+            );
             $this->saveCategory($categoryId);
 
             if (!empty($exerciseId)) {
@@ -990,6 +1005,12 @@ abstract class Question
             if ($this->id) {
                 $sql = "UPDATE $TBL_QUESTIONS SET id = iid WHERE iid = {$this->id}";
                 Database::query($sql);
+
+                Event::addEvent(
+                    LOG_QUESTION_CREATED,
+                    LOG_QUESTION_ID,
+                    $this->id
+                );
 
                 api_item_property_update(
                     $this->course,
@@ -1733,7 +1754,6 @@ abstract class Question
         if ($this->type != MEDIA_QUESTION) {
             $this->save($exercise);
 
-            // modify the exercise
             $exercise->addToList($this->id);
             $exercise->update_question_positions();
         }
@@ -1759,7 +1779,7 @@ abstract class Question
      *
      * @param Exercise $objExercise
      */
-    public static function display_type_menu($objExercise)
+    public static function displayTypeMenu($objExercise)
     {
         $feedback_type = $objExercise->feedback_type;
         $exerciseId = $objExercise->id;

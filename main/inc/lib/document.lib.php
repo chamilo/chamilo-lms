@@ -7156,12 +7156,10 @@ class DocumentManager
 
         $btn = Display::url(
             $iconEn,
-            '#',
+            api_get_self()."?$courseParams&$urlDeleteParams",
             [
-                'data-item-title' => $titleToShow,
-                'data-href' => api_get_self()."?$courseParams&$urlDeleteParams",
-                'data-toggle' => 'modal',
-                'data-target' => '#confirm-delete',
+                'title' => get_lang('Do you want to delete the file?').': '.$titleToShow,
+                'class' => 'delete-swal',
             ]
         );
 

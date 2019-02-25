@@ -2718,6 +2718,56 @@ HTML;
               </div>';
     }
 
+    /**
+     * @param string $frameName
+     *
+     * @return string
+     */
+    public static function getFrameReadyBlock($frameName)
+    {
+        $defaultFeatures = ['playpause', 'current', 'progress', 'duration', 'tracks', 'volume', 'fullscreen', 'vrview'];
+        $features = api_get_configuration_value('video_features');
+        if (!empty($features) && isset($features['features'])) {
+            foreach ($features['features'] as $feature) {
+                if ($feature === 'vrview') {
+                    continue;
+                }
+                $defaultFeatures[] = $feature;
+            }
+        }
+
+        $defaultFeatures = implode("','", $defaultFeatures);
+        $frameReady = '
+          $.frameReady(function() {
+            $(document).ready(function () {
+                $("video:not(.skip), audio:not(.skip)").mediaelementplayer({
+                    pluginPath: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/build/",            
+                    features: ["'.$defaultFeatures.'"],
+                    success: function(mediaElement, originalNode, instance) {
+                    },
+                    vrPath: "'.api_get_path(WEB_PUBLIC_PATH).'assets/vrview/build/vrview.js"
+                });
+            });
+          }, "'.$frameName.'",
+          {
+            load: [
+                { type:"script", id:"_fr1", src:"'.api_get_jquery_web_path().'"},
+                { type:"script", id:"_fr7", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/MathJax/MathJax.js?config=AM_HTMLorMML"},
+                { type:"script", id:"_fr4", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery-ui/jquery-ui.min.js"},
+                { type:"stylesheet", id:"_fr5", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery-ui/themes/smoothness/jquery-ui.min.css"},
+                { type:"stylesheet", id:"_fr6", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery-ui/themes/smoothness/theme.css"},
+                { type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
+                { type:"script", id:"_fr3", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?'.api_get_cidreq().'"},
+                {type: "script", id: "_media1", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/build/mediaelement-and-player.min.js"},
+                {type: "stylesheet", id: "_media2", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/build/mediaelementplayer.min.css"},                
+                {type: "stylesheet", id: "_media4", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/plugins/vrview/vrview.css"},
+                {type: "script", id: "_media4", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/plugins/vrview/vrview.js"},
+            ]
+          });';
+
+        return $frameReady;
+    }
+
     public static function dropdownMenu($items = [], array $attr = [])
     {
         $links = null;
@@ -2731,6 +2781,11 @@ HTML;
         return  $html;
     }
 
+    /**
+     * @param $id
+     *
+     * @return array|mixed
+     */
     public static function randomColor($id)
     {
         static $colors = [];
@@ -2744,9 +2799,9 @@ HTML;
             $c3 = hexdec(substr($color, 4, 2));
             $luminosity = $c1 + $c2 + $c3;
 
-            $type = "#000000";
+            $type = '#000000';
             if ($luminosity < (255 + 255 + 255) / 2) {
-                $type = "#FFFFFF";
+                $type = '#FFFFFF';
             }
 
             $result = [
@@ -2757,19 +2812,5 @@ HTML;
 
             return $result; // example: #fc443a
         }
-    }
-
-    /**
-     * Displays the reduced page header (without banner).
-     */
-    private static function set_header()
-    {
-        global $show_learnpath, $tool_name;
-        self::$global_template = new Template(
-            $tool_name,
-            false,
-            false,
-            $show_learnpath
-        );
     }
 }

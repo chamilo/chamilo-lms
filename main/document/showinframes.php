@@ -86,7 +86,8 @@ $is_visible = DocumentManager::check_visibility_tree(
     api_get_course_info(),
     api_get_session_id(),
     api_get_user_id(),
-    api_get_group_id()
+    api_get_group_id(),
+    false
 );
 
 if (!$is_allowed_to_edit && !$is_visible) {
@@ -277,7 +278,15 @@ if ($execute_iframe) {
         $content = Security::remove_XSS(file_get_contents($file_url_sys));
         echo $content;
     } else {
-        echo '<iframe id="mainFrame" name="mainFrame" border="0" frameborder="0" scrolling="no" style="width:100%;" height="600" src="'.$file_url_web.'&rand='.mt_rand(1, 10000).'" height="500" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>';
+        echo '<iframe 
+            id="mainFrame" 
+            name="mainFrame" 
+            border="0" 
+            frameborder="0" 
+            scrolling="no" 
+            style="width:100%;" height="600" 
+            src="'.$file_url_web.'&rand='.mt_rand(1, 10000).'" 
+            height="500" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>';
     }
 }
 Display::display_footer();

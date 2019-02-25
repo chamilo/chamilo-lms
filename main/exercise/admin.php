@@ -355,7 +355,7 @@ if ($inATest) {
     $maxScoreAllQuestions = 0;
     if ($showPagination === false) {
         $questionList = $objExercise->selectQuestionList(true, true);
-         if (!empty($questionList)) {
+        if (!empty($questionList)) {
             foreach ($questionList as $questionItemId) {
                 $question = Question::read($questionItemId);
                 if ($question) {

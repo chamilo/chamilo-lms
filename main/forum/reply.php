@@ -26,6 +26,7 @@ api_protect_course_script(true);
 
 $nameTools = get_lang('ForumCategories');
 $origin = api_get_origin();
+$_user = api_get_user_info();
 
 /* Including necessary files */
 require_once 'forumconfig.inc.php';

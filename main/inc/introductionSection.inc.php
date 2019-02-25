@@ -329,7 +329,7 @@ if ($intro_dispCommand) {
             $toolbar[] = $tool;
 
             $tool = [
-                'name' => get_lang('ConfirmYourChoice'),
+                'name' => addslashes(api_htmlentities(get_lang('ConfirmYourChoice'))),
                 'url' => api_get_self()."?".api_get_cidreq().$blogParam."&intro_cmdDel=1",
                 'icon' => 'fas fa-trash-alt',
                 'class' => 'delete-swal',
@@ -344,7 +344,7 @@ if ($intro_dispCommand) {
             $toolbar[] = $tool;
 
             $tool = [
-                'name' => get_lang('ConfirmYourChoice'),
+                'name' => addslashes(api_htmlentities(get_lang('ConfirmYourChoice'))),
                 'url' => api_get_self()."?".api_get_cidreq()."&intro_cmdDel=1",
                 'icon' => 'fas fa-trash-alt',
                 'class' => 'delete-swal',

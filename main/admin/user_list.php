@@ -755,7 +755,7 @@ function modify_filter($user_id, $url_params, $row)
             api_global_admin_can_edit_admin($user_id, null, true)
         ) {
             // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
-            $result .= ' <a href="user_list.php?action=delete_user&user_id='.$user_id.'&'.$url_params.'&sec_token='.Security::getTokenFromSession().'"  title="'.get_lang('ConfirmYourChoice').'" class="delete-swal">'.
+            $result .= ' <a href="user_list.php?action=delete_user&user_id='.$user_id.'&'.$url_params.'&sec_token='.Security::getTokenFromSession().'"  title="'.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'))).'" class="delete-swal">'.
                 Display::return_icon(
                     'delete.png',
                     get_lang('Delete'),
@@ -779,7 +779,7 @@ function modify_filter($user_id, $url_params, $row)
             !$user_is_anonymous &&
             api_global_admin_can_edit_admin($user_id)
         ) {
-            $result .= ' <a href="user_list.php?action=anonymize&user_id='.$user_id.'&'.$url_params.'&sec_token='.Security::getTokenFromSession().'"  class="delete-swal" title="'.get_lang("ConfirmYourChoice").'" >'.
+            $result .= ' <a href="user_list.php?action=anonymize&user_id='.$user_id.'&'.$url_params.'&sec_token='.Security::getTokenFromSession().'"  class="delete-swal" title="'.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"))).'" >'.
                 Display::return_icon(
                     'anonymous.png',
                     get_lang('Anonymize'),
@@ -797,7 +797,7 @@ function modify_filter($user_id, $url_params, $row)
             ) {
                 // you cannot lock yourself out otherwise you could disable all the accounts
                 // including your own => everybody is locked out and nobody can change it anymore.
-                $result .= ' <a href="user_list.php?action=delete_user&user_id='.$user_id.'&'.$url_params.'&sec_token='.Security::getTokenFromSession().'"  title="'.get_lang("ConfirmYourChoice").'" class="delete-swal">'.
+                $result .= ' <a href="user_list.php?action=delete_user&user_id='.$user_id.'&'.$url_params.'&sec_token='.Security::getTokenFromSession().'"  title="'.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"))).'" class="delete-swal">'.
                     Display::return_icon(
                         'delete.png',
                         get_lang('Delete'),

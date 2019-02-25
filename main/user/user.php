@@ -1047,7 +1047,7 @@ function modify_filter($user_id, $row, $data)
         if ($canEditUsers) {
             // unregister
             if ($user_id != $current_user_id || api_is_platform_admin()) {
-                $result .= '<a class="btn btn-sm btn-danger delete-swal" href="'.api_get_self().'?'.api_get_cidreq().'&type='.$type.'&unregister=yes&user_id='.$user_id.'" title="'.get_lang('Unreg').' " >'.
+                $result .= '<a class="btn btn-sm btn-danger delete-swal" href="'.api_get_self().'?'.api_get_cidreq().'&type='.$type.'&unregister=yes&user_id='.$user_id.'" title="'.addslashes(api_htmlentities(get_lang('Unreg'))).' " >'.
                     get_lang('Unreg').'</a>&nbsp;';
             }
         }
@@ -1055,7 +1055,7 @@ function modify_filter($user_id, $row, $data)
         // Show buttons for unsubscribe
         if ($course_info['unsubscribe'] == 1) {
             if ($user_id == $current_user_id) {
-                $result .= '<a class="btn btn-sm btn-danger delete-swal" href="'.api_get_self().'?'.api_get_cidreq().'&type='.$type.'&unregister=yes&user_id='.$user_id.'" title="'.get_lang('Unreg').' >'.
+                $result .= '<a class="btn btn-sm btn-danger delete-swal" href="'.api_get_self().'?'.api_get_cidreq().'&type='.$type.'&unregister=yes&user_id='.$user_id.'" title="'.addslashes(api_htmlentities(get_lang('Unreg'))).' >'.
                     get_lang('Unreg').'</a>&nbsp;';
             }
         }

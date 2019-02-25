@@ -39,7 +39,6 @@ class CourseDriver extends Driver implements DriverInterface
             if (!file_exists($baseDir.'/shared_folder')) {
                 $title = get_lang('UserFolders');
                 $folderName = '/shared_folder';
-
                 $visibility = 0;
                 create_unexisting_directory(
                     $courseInfo,

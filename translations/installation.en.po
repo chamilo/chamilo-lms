@@ -1,5 +1,17 @@
-msgid "InstallationLanguage"
+msgid "Installation language"
 msgstr "Installation language"
+
+msgid "Requirements"
+msgstr "Requirements"
+
+msgid "Database settings"
+msgid "Database settings"
+
+msgid "Read the installation guide"
+msgstr "Read the installation guide"
+
+msgid "Please select installation language"
+msgstr "Please select installation language"
 
 msgid "DefaultInstallAdminFirstname"
 msgstr "Joe"

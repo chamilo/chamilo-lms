@@ -709,7 +709,7 @@ function display_language_selection()
             <?php echo display_step_sequence(); ?>
             <?php echo get_lang('InstallationLanguage'); ?>
         </h2>
-        <label for="language_list"><?php echo get_lang('PleaseSelectInstallationProcessLanguage'); ?></label>
+        <label for="language_list"><?php echo get_lang('Please select installation language'); ?></label>
         <div class="form-group">
             <?php echo display_language_selection_box('language_list', api_get_interface_language()); ?>
         </div>
@@ -1401,12 +1401,12 @@ function display_database_settings_form(
         $dbNameForm = $_configuration['main_database'];
         $dbPortForm = isset($_configuration['db_port']) ? $_configuration['db_port'] : '';
 
-        echo '<div class="RequirementHeading"><h2>'.display_step_sequence().get_lang('DBSetting').'</h2></div>';
+        echo '<div class="RequirementHeading"><h2>'.display_step_sequence().get_lang('Database settings').'</h2></div>';
         echo '<div class="RequirementContent">';
         echo get_lang('DBSettingUpgradeIntro');
         echo '</div>';
     } else {
-        echo '<div class="RequirementHeading"><h2>'.display_step_sequence().get_lang('DBSetting').'</h2></div>';
+        echo '<div class="RequirementHeading"><h2>'.display_step_sequence().get_lang('Database settings').'</h2></div>';
         echo '<div class="RequirementContent">';
         echo get_lang('DBSettingIntro');
         echo '</div>';
@@ -2168,8 +2168,7 @@ function migrate($chamiloVersion, EntityManager $manager)
     }
 
     $to = null; // if $to == null then schema will be migrated to latest version
-
-    echo "<pre>";
+    echo '<pre>';
     try {
         // Execute migration!
         $migratedSQL = $migration->migrate($to);
@@ -2177,10 +2176,10 @@ function migrate($chamiloVersion, EntityManager $manager)
         if ($debug) {
             foreach ($migratedSQL as $version => $sqlList) {
                 echo "VERSION: $version<br>";
-                echo "----------------------------------------------<br>";
+                echo '----------------------------------------------<br />';
                 $total = count($sqlList);
                 error_log("VERSION: $version");
-                error_log("# queries: ".$total);
+                error_log("# queries: $total");
                 $counter = 1;
                 foreach ($sqlList as $sql) {
                     echo "<code>$sql</code><br>";
@@ -2201,7 +2200,7 @@ function migrate($chamiloVersion, EntityManager $manager)
         }
     }
 
-    echo "</pre>";
+    echo '</pre>';
 
     return false;
 }
@@ -2502,7 +2501,7 @@ function fixIds(EntityManager $em)
         error_log('update groups');
     }
 
-    $sql = "SELECT * FROM groups";
+    $sql = 'SELECT * FROM groups';
     $result = $connection->executeQuery($sql);
     $groups = $result->fetchAll();
     $oldGroups = [];
@@ -2849,10 +2848,6 @@ function fixLpId($connection, $debug)
                         SET link = '$correctLink'
                         WHERE c_id = $courseId AND (link = '$link' OR link ='$secondLink')";
                     $connection->query($sql);
-                    if ($debug) {
-                        //error_log("Fix wrong c_tool links");
-                        //error_log($sql);
-                    }
                 }
 
                 foreach ($items as $item) {
@@ -2864,9 +2859,6 @@ function fixLpId($connection, $debug)
                             $sql = "UPDATE $tblCLpItem SET $variable = $newId 
                                     WHERE iid = $itemIid AND c_id = $courseId AND lp_id = $oldId";
                             $connection->query($sql);
-                            if ($debug) {
-                                //error_log($sql);
-                            }
                         }
                     }
 
@@ -3059,6 +3051,8 @@ function installGroups($container, $manager)
  */
 function installPages($container)
 {
+    error_log('installPages');
+
     $siteManager = Container::getSiteManager();
 
     // Create site
@@ -3160,6 +3154,7 @@ function installPages($container)
  */
 function installSchemas($container, $manager, $upgrade = false)
 {
+    error_log('installSchemas');
     $settingsManager = Container::getSettingsManager();
 
     $accessUrl = $manager->getRepository('ChamiloCoreBundle:AccessUrl')->find(1);
@@ -3199,9 +3194,44 @@ function upgradeWithContainer($container)
     installGroups($container, $manager);
     error_log('installGroups');
     installSchemas($container, $manager, true);
-    error_log('installSchemas');
     installPages($container);
-    error_log('installPages');
+    fixMedia($container);
+}
+
+function fixMedia($container)
+{
+    error_log('fix medias');
+    $pool = $container->get('sonata.media.pool');
+    $contextManager = $container->get('sonata.classification.manager.context');
+    $categoryManager = $container->get('sonata.media.manager.category');
+
+    foreach ($pool->getContexts() as $context => $contextAttrs) {
+        /** @var ContextInterface $defaultContext */
+        $defaultContext = $contextManager->findOneBy([
+            'id' => $context,
+        ]);
+
+        if (!$defaultContext) {
+            $defaultContext = $contextManager->create();
+            $defaultContext->setId($context);
+            $defaultContext->setName(ucfirst($context));
+            $defaultContext->setEnabled(true);
+
+            $contextManager->save($defaultContext);
+        }
+
+        $defaultCategory = $categoryManager->getRootCategory($defaultContext);
+
+        if (!$defaultCategory) {
+            $defaultCategory = $categoryManager->create();
+            $defaultCategory->setContext($defaultContext);
+            $defaultCategory->setName(ucfirst($context));
+            $defaultCategory->setEnabled(true);
+            $defaultCategory->setPosition(0);
+
+            $categoryManager->save($defaultCategory);
+        }
+    }
 }
 
 /**
@@ -3422,6 +3452,7 @@ function finishInstallationWithContainer(
 
     lockSettings();
     updateDirAndFilesPermissions();
+    fixMedia($container);
 
     // Set the latest version
     /*$path = $sysPath.'app/Migrations/Schema/V111/';
@@ -3639,7 +3670,7 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
             // Fix type "enum" before running the migration with Doctrine
             $connection->executeQuery("ALTER TABLE course_category MODIFY COLUMN auth_course_child VARCHAR(40) DEFAULT 'TRUE'");
             $connection->executeQuery("ALTER TABLE course_category MODIFY COLUMN auth_cat_child VARCHAR(40) DEFAULT 'TRUE'");
-            $connection->executeQuery("ALTER TABLE c_quiz_answer MODIFY COLUMN hotspot_type varchar(40) default NULL");
+            $connection->executeQuery('ALTER TABLE c_quiz_answer MODIFY COLUMN hotspot_type varchar(40) default NULL');
             $connection->executeQuery("ALTER TABLE c_tool MODIFY COLUMN target varchar(20) NOT NULL default '_self'");
             $connection->executeQuery("ALTER TABLE c_link MODIFY COLUMN on_homepage char(10) NOT NULL default '0'");
             $connection->executeQuery("ALTER TABLE c_blog_rating MODIFY COLUMN rating_type char(40) NOT NULL default 'post'");

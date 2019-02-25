@@ -803,15 +803,15 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
 ?>
 <!DOCTYPE html>
 <head>
-    <title>&mdash; <?php echo get_lang('ChamiloInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?></title>
+    <title>&mdash; <?php echo get_lang('ChamiloInstallation').' &mdash; '.get_lang('Version').' '.$new_version; ?></title>
     <style type="text/css" media="screen, projection">
         @import "../../public/build/css/app.css";
         @import "../../public/build/css/themes/chamilo/default.css";
     </style>
+    <script type="text/javascript" src="../../public/build/runtime.js"></script>
     <script type="text/javascript" src="../../public/build/app.js"></script>
     <script type="text/javascript">
         $(document).ready( function() {
-
             $("#details_button").click(function() {
                 $( "#details" ).toggle("slow", function() {
                 });
@@ -907,7 +907,7 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
                 <ol class="list-group">
                     <li class="list-group-item <?php step_active('1'); ?>">
                         <span class="number"> 1 </span>
-                        <?php echo get_lang('InstallationLanguage'); ?>
+                        <?php echo get_lang('Installation language'); ?>
                     </li>
                     <li class="list-group-item <?php step_active('2'); ?>">
                         <span class="number"> 2 </span>
@@ -937,13 +937,14 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
             </div>
             <div id="note">
                 <a class="btn btn-info btn-block" href="<?php echo $installationGuideLink; ?>" target="_blank">
-                    <em class="fa fa-file-text-o"></em> <?php echo get_lang('ReadTheInstallationGuide'); ?>
+                    <em class="fa fa-file-text-o"></em> <?php echo get_lang('Read the installation guide'); ?>
                 </a>
             </div>
         </div>
 
         <div class="col-md-8">
-            <form class="form-horizontal" id="install_form" method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
+            <form class="form-horizontal" id="install_form" method="post"
+                  action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
                 <?php echo $form; ?>
             </form>
         </div>

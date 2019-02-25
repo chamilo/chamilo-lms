@@ -3,8 +3,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
-use Knp\Component\Pager\Paginator;
 use Doctrine\Common\Collections\Criteria;
+use Knp\Component\Pager\Paginator;
 
 /**
  *  @package chamilo.admin

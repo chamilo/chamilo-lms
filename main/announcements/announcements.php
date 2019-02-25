@@ -98,9 +98,6 @@ $logInfo = [
     'tool_id' => 0,
     'tool_id_detail' => 0,
     'action' => $action,
-    'action_details' => '',
-    'current_id' => (int) $announcement_id,
-    'info' => '',
 ];
 Event::registerLog($logInfo);
 

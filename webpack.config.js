@@ -7,7 +7,7 @@ Encore
     // If chamilo is installed in localhost/chamilo2
     .setPublicPath('../')
     // If chamilo is installed in a domain my.chamilo.net
-    //.setPublicPath('/build')
+    //.setPublicPath('/public/build')
     .cleanupOutputBeforeBuild()
 
     .addEntry('app', './assets/js/app.js')

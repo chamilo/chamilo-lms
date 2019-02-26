@@ -1,0 +1,47 @@
+.ui-widget{
+  font-family: inherit;
+}
+.ui-accordion{
+  .ui-accordion-header{
+    padding: 0;
+    margin: 0;
+  }
+  .card{
+    margin-bottom: 0;
+    margin-top: 1rem;
+    .card-body{
+      padding: 0;
+      .question-title{
+        padding-top: .5rem;
+        padding-bottom: .5rem;
+        font-weight: bold;
+      }
+    }
+    .btn-moved{
+      padding: .6rem .5rem;
+      font-size: 1.25rem;
+      display: block;
+      text-align: center;
+    }
+  }
+}
+.ui-state-default{
+  border: none;
+  background: transparent;
+}
+.ui-sortable-helper{
+  .card{
+    background: #ffffd9;
+  }
+}
+.ui-accordion-header-active{
+  &.ui-state-active{
+    .card{
+      background-color: #607d8b;
+    }
+  }
+}
+.ui-widget-content{
+  border: 1px solid #e5e9f2;
+  background: #faffff;
+}

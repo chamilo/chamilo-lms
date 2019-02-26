@@ -732,10 +732,10 @@ switch ($action) {
         $objQuestion = Question::read($questionId);
         $id = '';
         if (api_get_configuration_value('show_question_id')) {
-            $id = '<h4>#'.$objQuestion->course['code'].'-'.$objQuestion->iid.'</h4>';
+            $id = '<h4 class="question-type">#'.$objQuestion->course['code'].'-'.$objQuestion->iid.'</h4>';
         }
         echo $id;
-        echo '<p class="lead">'.$objQuestion->get_question_type_name().'</p>';
+        echo '<h4 class="question-type">'.$objQuestion->get_question_type_name().'</h4>';
         if ($objQuestion->type === FILL_IN_BLANKS) {
             echo '<script>
                 $(function() {

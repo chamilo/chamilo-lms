@@ -3,11 +3,11 @@
 {{ form_content }}
     {% set configuration = 'forum_fold_categories'|api_get_configuration_value %}
     {% if(configuration == true) %}
-        {% set collapsed = '' %}
-        {% set in_collapse = 'in' %}
-    {% else %}
         {% set collapsed = 'collapsed' %}
         {% set in_collapse = '' %}
+    {% else %}
+        {% set collapsed = '' %}
+        {% set in_collapse = 'in' %}
     {% endif %}
     {% if data is not empty %}
     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">

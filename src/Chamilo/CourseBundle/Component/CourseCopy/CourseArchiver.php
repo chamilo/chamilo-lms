@@ -293,7 +293,13 @@ class CourseArchiver
         // unzip the archive
         $zip = new \PclZip($unzip_dir.'/backup.zip');
         @chdir($unzip_dir);
-        $zip->extract(PCLZIP_OPT_TEMP_FILE_ON);
+
+        $zip->extract(
+            PCLZIP_OPT_TEMP_FILE_ON,
+            PCLZIP_CB_PRE_EXTRACT,
+            'clean_up_files_in_zip'
+        );
+
         // remove the archive-file
         if ($delete) {
             @unlink($filePath);

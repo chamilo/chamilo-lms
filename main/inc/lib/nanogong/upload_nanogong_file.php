@@ -3,7 +3,6 @@
 
 exit;
 
-
 use ChamiloSession as Session;
 
 

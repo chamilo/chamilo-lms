@@ -4218,24 +4218,6 @@ class DocumentManager
     }
 
     /**
-     * @param string $file
-     *
-     * @return string
-     */
-    public static function readNanogongFile($file)
-    {
-        $nanoGongJarFile = api_get_path(WEB_LIBRARY_PATH).'nanogong/nanogong.jar';
-        $html = '<applet id="applet" archive="'.$nanoGongJarFile.'" code="gong.NanoGong" width="160" height="95">';
-        $html .= '<param name="SoundFileURL" value="'.$file.'" />';
-        $html .= '<param name="ShowSaveButton" value="false" />';
-        $html .= '<param name="ShowTime" value="true" />';
-        $html .= '<param name="ShowRecordButton" value="false" />';
-        $html .= '</applet>';
-
-        return $html;
-    }
-
-    /**
      * @param string $filePath
      * @param string $path
      * @param array  $courseInfo

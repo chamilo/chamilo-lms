@@ -2,13 +2,14 @@
 {% block content %}
 {{ form_content }}
     {% set configuration = 'forum_fold_categories'|api_get_configuration_value %}
-    {% if(configuration == true) %}
+    {% if (configuration == true) %}
         {% set collapsed = '' %}
         {% set in_collapse = 'in' %}
     {% else %}
         {% set collapsed = 'collapsed' %}
         {% set in_collapse = '' %}
     {% endif %}
+
     {% if data is not empty %}
     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
         {% for item in data %}
@@ -24,7 +25,6 @@
                     </a>
                     <a href="{{ item.url }}" title="{{ item.title }}">{{ item.title }}{{ item.icon_session }}</a>
                 </h4>
-
             </div>
             <div id="collapse_{{ item.id }}" class="panel-collapse collapse {{ in_collapse }}" role="tabpanel" aria-labelledby="heading_{{ item.id }}">
                 <div class="panel-body">

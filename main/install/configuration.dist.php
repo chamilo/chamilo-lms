@@ -1104,12 +1104,12 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Disable course report graphs
 //$_configuration['hide_course_report_graph'] = false;
 
+// Visually "fold" forum categories by default
+// $_configuration['forum_fold_categories'] = false;
+
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email
 // You need add a new option called "confirmation" to the registration settings
 //INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_registration', 'confirmation', 'MailConfirmation');
 // ------ (End) Custom DB changes
-
-// Visually "fold" forum categories by default
-// $_configuration['forum_fold_categories'] = false;

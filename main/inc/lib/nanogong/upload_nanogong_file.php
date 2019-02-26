@@ -1,7 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+exit;
+
 use ChamiloSession as Session;
+
 
 /**
  *    This file allows creating new svg and png documents with an online editor.

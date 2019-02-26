@@ -742,81 +742,18 @@ class scorm extends learnpath
             if ($this->debug >= 1) {
                 error_log('New LP - Changing dir to '.$courseSysDir.$newDir);
             }
-            $savedDir = getcwd();
-            chdir($courseSysDir.$newDir);
-            $unzippingState = $zipFile->extract();
 
-            for ($j = 0; $j < count($unzippingState); $j++) {
-                $state = $unzippingState[$j];
-                // TODO: Fix relative links in html files (?)
-                $extension = strrchr($state['stored_filename'], '.');
-                if ($this->debug >= 1) {
-                    error_log('New LP - found extension '.$extension.' in '.$state['stored_filename']);
-                }
-            }
+            chdir($courseSysDir.$newDir);
+
+            $zipFile->extract(
+                PCLZIP_CB_PRE_EXTRACT,
+                'clean_up_files_in_zip'
+            );
 
             if (!empty($newDir)) {
                 $newDir = $newDir.'/';
             }
-
-            // Rename files, for example with \\ in it.
-            if ($this->debug >= 1) {
-                error_log('New LP - try to open: '.$courseSysDir.$newDir);
-            }
-
-            if ($dir = @opendir($courseSysDir.$newDir)) {
-                if ($this->debug >= 1) {
-                    error_log('New LP - Opened dir '.$courseSysDir.$newDir);
-                }
-                while ($file = readdir($dir)) {
-                    if ($file != '.' && $file != '..') {
-                        // TODO: RENAMING FILES CAN BE VERY DANGEROUS SCORM-WISE, avoid that as much as possible!
-                        //$safeFile = api_replace_dangerous_char($file, 'strict');
-                        $findStr = ['\\', '.php', '.phtml'];
-                        $replStr = ['/', '.txt', '.txt'];
-                        $safeFile = str_replace($findStr, $replStr, $file);
-
-                        if ($this->debug >= 1) {
-                            error_log('Comparing:  '.$safeFile);
-                            error_log('and:  '.$file);
-                        }
-
-                        if ($safeFile != $file) {
-                            $mydir = dirname($courseSysDir.$newDir.$safeFile);
-                            if (!is_dir($mydir)) {
-                                $mysubdirs = explode('/', $mydir);
-                                $mybasedir = '/';
-                                foreach ($mysubdirs as $mysubdir) {
-                                    if (!empty($mysubdir)) {
-                                        $mybasedir = $mybasedir.$mysubdir.'/';
-                                        if (!is_dir($mybasedir)) {
-                                            @mkdir($mybasedir, api_get_permissions_for_new_directories());
-                                            if ($this->debug >= 1) {
-                                                error_log('New LP - Dir '.$mybasedir.' doesnt exist. Creating.');
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            @rename($courseSysDir.$newDir.$file, $courseSysDir.$newDir.$safeFile);
-                            if ($this->debug >= 1) {
-                                error_log(
-                                    'New LP - Renaming '.$courseSysDir.$newDir.$file.' to '.$courseSysDir.$newDir
-                                        .$safeFile
-                                );
-                            }
-                        }
-                    }
-                }
-
-                closedir($dir);
-                chdir($savedDir);
-
-                api_chmod_R($courseSysDir.$newDir, api_get_permissions_for_new_directories());
-                if ($this->debug > 1) {
-                    error_log('New LP - changed back to init dir: '.$courseSysDir.$newDir);
-                }
-            }
+            api_chmod_R($courseSysDir.$newDir, api_get_permissions_for_new_directories());
         } else {
             return false;
         }

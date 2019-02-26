@@ -3,6 +3,9 @@ services:
         autowire: true
         public: true
 
+    Sonata\PageBundle\Entity\BlockInteractor:
+        alias: 'sonata.page.block_interactor'
+
     Sonata\PageBundle\Entity\SiteManager:
         alias: 'sonata.page.manager.site'
 
@@ -11,3 +14,6 @@ services:
 
     Sonata\PageBundle\Page\TemplateManager:
         alias: 'sonata.page.template_manager'
+
+    Sonata\PageBundle\Entity\BlockManager:
+        alias: 'sonata.page.manager.block'

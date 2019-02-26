@@ -1,15 +1,13 @@
 {% extends "@ChamiloTheme/Layout/layout_content.html.twig" %}
 
-{% block chamilo_right_column %}
+{% block content %}
+    {% include '@ChamiloTheme/Admin/switcher_links.html.twig' %}
 
-{% include '@ChamiloTheme/Admin/switcher_links.html.twig' %}
+    Edit page '{{ page.slug }}' in '{{ page.site.locale }}'
 
-Edit page '{{ page.slug }}' in '{{ page.site.locale }}'
+    {{ sonata_page_render_container('content', page) }}
 
-{{ sonata_page_render_container('content', page) }}
-
-{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-{{ form_widget(form) }}
-{{ form_end(form) }}
-
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
 {% endblock %}

@@ -9,6 +9,8 @@ use Chamilo\PageBundle\Entity\Page;
 use Chamilo\PageBundle\Entity\Snapshot;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sonata\PageBundle\Entity\BlockInteractor;
+use Sonata\PageBundle\Entity\BlockManager;
 use Sonata\PageBundle\Entity\PageManager;
 use Sonata\PageBundle\Entity\SiteManager;
 use Sonata\PageBundle\Page\TemplateManager;
@@ -68,11 +70,18 @@ class PageController extends BaseController
      * Creates a page if it doesn't exists.
      * Updates the page if page exists.
      *
-     * @param string  $pageSlug
-     * @param string  $redirect
-     * @param Request $request
+     * @param string              $pageSlug
+     * @param bool                $redirect
+     * @param Request             $request
+     * @param SiteManager         $siteManager
+     * @param PageManager         $pageManager
+     * @param TemplateManager     $templateManager
+     * @param TranslatorInterface $translator
+     * @param BlockInteractor     $blockInteractor
+     * @param BlockManager        $blockManager
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @throws \Exception
      */
     public function createPage(
         $pageSlug,
@@ -81,7 +90,9 @@ class PageController extends BaseController
         SiteManager $siteManager,
         PageManager $pageManager,
         TemplateManager $templateManager,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        BlockInteractor $blockInteractor,
+        BlockManager $blockManager
     ) {
         $host = $request->getHost();
         $criteria = [
@@ -187,7 +198,6 @@ class PageController extends BaseController
                 }
 
                 // Create blocks for this page
-                $blockInteractor = $this->get('sonata.page.block_interactor');
                 $parentBlock = null;
                 foreach ($containers as $id => $area) {
                     if (false === $area['block'] && $templateContainers[$id]['shared'] === false) {
@@ -206,9 +216,7 @@ class PageController extends BaseController
                 }
 
                 // Create block in main content
-                $block = $this->get('sonata.page.manager.block');
-                /** @var \Sonata\BlockBundle\Model\Block $myBlock */
-                $myBlock = $block->create();
+                $myBlock = $blockManager->create();
                 $myBlock->setType('sonata.formatter.block.formatter');
                 $myBlock->setSetting('format', 'richhtml');
                 $myBlock->setSetting('content', '');
@@ -234,7 +242,6 @@ class PageController extends BaseController
             $blockToEdit->setSetting('content', $content);
             $em->merge($blockToEdit);
             $em->flush();
-
             $this->addFlash('success', $translator->trans('Updated'));
 
             if (!empty($redirect)) {

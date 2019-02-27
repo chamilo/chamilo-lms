@@ -244,7 +244,7 @@ class ExerciseLib
                 if ($show_comment) {
                     $header .= Display::tag('th', get_lang('Feedback'));
                 }
-                $s .= '<table class="table table-hover table-striped">';
+                $s .= '<table class="table table-hover">';
                 $s .= Display::tag(
                     'tr',
                     $header,
@@ -429,7 +429,7 @@ class ExerciseLib
                     if ($exercise->feedback_type == EXERCISE_FEEDBACK_TYPE_END) {
                         $header .= Display::tag('th', get_lang('Feedback'));
                     }
-                    $s .= '<table class="table table-hover table-striped">';
+                    $s .= '<table class="table table-hover">';
                     $s .= Display::tag(
                         'tr',
                         $header,

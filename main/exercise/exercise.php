@@ -1009,8 +1009,9 @@ if (!empty($exerciseList)) {
                             ),
                             '',
                             [
-                                'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDeleteJS'), ENT_QUOTES, $charset))." ".addslashes($exercise->getUnformattedTitle())."?"."')) return false;",
                                 'href' => 'exercise.php?'.api_get_cidreq().'&choice=delete&sec_token='.$token.'&exerciseId='.$row['id'],
+                                'title' => addslashes(api_htmlentities(get_lang('AreYouSureToDeleteJS'),ENT_QUOTES, $charset))." ".addslashes($exercise->getUnformattedTitle())."?",
+                                'class' => 'delete-swal'
                             ]
                         );
                     } else {

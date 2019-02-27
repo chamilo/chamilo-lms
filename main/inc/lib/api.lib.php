@@ -1145,16 +1145,15 @@ function api_valid_email($address)
  */
 function api_protect_course_script($print_headers = false, $allow_session_admins = false, $allow_drh = false)
 {
-    $is_allowed_in_course = api_is_allowed_in_course();
-
-    $is_visible = false;
     $course_info = api_get_course_info();
-
     if (empty($course_info)) {
         api_not_allowed($print_headers);
 
         return false;
     }
+
+    $is_allowed_in_course = api_is_allowed_in_course();
+    $is_visible = false;
 
     if (api_is_drh()) {
         return true;

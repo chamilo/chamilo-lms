@@ -151,7 +151,7 @@ class OralExpression extends Question
                         'userId' => $this->userId,
                         'questionId' => $this->id,
                         'sessionId' => $this->sessionId,
-                        'cId' => $this->course['real_id'],
+                        'course' => $this->course['real_id'],
                     ]);
 
                 if (!$result) {

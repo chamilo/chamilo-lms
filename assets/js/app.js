@@ -1,3 +1,5 @@
+/* For licensing terms, see /license.txt */
+
 // Load symfony routes in order to use it in a js
 const routes = require('../../public/js/fos_js_routes.json');
 import Routing from '../../vendor/friendsofsymfony/jsrouting-bundle/Resources/public/js/router.min.js';
@@ -27,7 +29,10 @@ var disconnect_lang = '{{ "ChatDisconnected"|get_lang }}';*/
 var connect_lang = 'ChatConnected';
 var disconnect_lang = 'ChatDisconnected';
 
-$( document ).ready(function() {
+$(function() {
+    var webCidReq = '&cidReq=' + $('body').attr('data-course-code');
+    window.webCidReq = webCidReq;
+
     $("#menu_courses").click(function(){
         return false;
     });
@@ -37,8 +42,7 @@ $( document ).ready(function() {
     $("#menu_administrator").click(function(){
         return false;
     });
-});
-$(function() {
+
     var isInCourse = $("body").data("in-course");
     if (isInCourse == true) {
         var courseCode = $("body").data("course-code");
@@ -603,8 +607,6 @@ if (typeof CKEDITOR !== 'undefined') {
     };
 }
 
-
-
 function addMainEvent(elm, evType, fn, useCapture)
 {
     if (elm.addEventListener) {
@@ -626,10 +628,7 @@ function copyTextToClipBoard(elementId)
     copyText.select();
 
     /* Copy the text inside the text field */
-    document.execCommand("copy");
-
-    /* Alert the copied text */
-    //alert('Copied');
+    document.execCommand('copy');
 }
 
 // Expose functions to be use inside chamilo.

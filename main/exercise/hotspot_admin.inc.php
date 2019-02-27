@@ -1109,7 +1109,7 @@ if (isset($modifyAnswers)) {
         </div>
     </form>
     <script>
-        $(document).on('ready', function () {
+        $(function() {
             <?php if ($answerType == HOT_SPOT_DELINEATION) {
         ?>
             new DelineationQuestion({

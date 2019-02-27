@@ -12,9 +12,11 @@ use ChamiloSession as Session;
  *
  * @version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
  */
-session_cache_limiter("none");
+session_cache_limiter('none');
 
 require_once __DIR__.'/../inc/global.inc.php';
+
+$_course = api_get_course_info();
 require api_get_path(LIBRARY_PATH).'geometry.lib.php';
 
 // set vars
@@ -23,12 +25,11 @@ $exerciseId = isset($_GET['exe_id']) ? intval($_GET['exe_id']) : 0;
 $objQuestion = Question::read($questionId);
 $answer_type = $objQuestion->selectType(); //very important
 $TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
-$documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
-$picturePath = $documentPath.'/images';
+$picture = $objQuestion->getPicture();
 $pictureName = $objQuestion->getPictureFilename();
-$pictureSize = getimagesize($picturePath.'/'.$pictureName);
-$pictureWidth = $pictureSize[0];
-$pictureHeight = $pictureSize[1];
+$pictureWidth = $picture->getResourceNode()->getResourceFile()->getMedia()->getWidth();
+$pictureHeight = $picture->getResourceNode()->getResourceFile()->getMedia()->getHeight();
+
 $course_id = api_get_course_int_id();
 
 // Query db for answers

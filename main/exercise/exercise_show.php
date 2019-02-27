@@ -489,7 +489,7 @@ foreach ($questionList as $questionId) {
                             <td colspan=\"2\">
                                 <div id=\"hotspot-solution-$questionId-$id\"></div>
                                 <script>
-                                    $(document).on('ready', function () {
+                                    $(function() {
                                         new HotspotQuestion({
                                             questionId: $questionId,
                                             exerciseId: {$objExercise->id},                                            
@@ -658,7 +658,7 @@ foreach ($questionList as $questionId) {
                             <td colspan=\"2\">
                                 <div id=\"hotspot-solution\"></div>
                                 <script>
-                                    $(document).on('ready', function () {
+                                    $(function() {
                                         new HotspotQuestion({
                                             questionId: $questionId,
                                             exerciseId: {$objExercise->id},

@@ -4,7 +4,6 @@ window.HotspotQuestion = (function () {
             this.attributes = attributes;
             this.id = 0;
             this.name = '';
-
             this.changeEvent = null;
         };
         HotspotModel.prototype.set = function (key, value) {
@@ -577,6 +576,7 @@ window.HotspotQuestion = (function () {
                         currentHotspot.set('centerY', 0);
                         currentHotspot.set('radiusX', 0);
                         currentHotspot.set('radiusY', 0);
+
                         return;
                     }
                 })
@@ -1137,13 +1137,13 @@ window.HotspotQuestion = (function () {
 
         switch (config.for) {
             case 'admin':
-                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_actionscript_admin.as.php?' + _p.web_cid_query, {
+                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_actionscript_admin.as.php?' + webCidReq, {
                     modifyAnswers: parseInt(config.questionId)
                 });
                 break;
 
             case 'user':
-                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_actionscript.as.php?' + _p.web_cid_query, {
+                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_actionscript.as.php?' + webCidReq, {
                     modifyAnswers: parseInt(config.questionId),
                     exe_id: parseInt(config.exerciseId)
                 });
@@ -1152,7 +1152,7 @@ window.HotspotQuestion = (function () {
             case 'solution':
             //no break
             case 'preview':
-                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_answers.as.php?' + _p.web_cid_query, {
+                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_answers.as.php?' + webCidReq, {
                     modifyAnswers: parseInt(config.questionId),
                     exerciseId: parseInt(config.exerciseId),
                     exeId: parseInt(config.exeId)
@@ -1560,9 +1560,7 @@ window.DelineationQuestion = (function () {
             this.el.appendChild(imageSvg);
 
             this.renderDelineation();
-
             var isDrawing = false;
-
             var contextMenu = new ContextMenu();
             contextMenu.onHide(function () {
                 var answerInput = $('hotspot[' + config.questionId + '][1]'),
@@ -1700,7 +1698,6 @@ window.DelineationQuestion = (function () {
         var image = new Image();
         image.onload = function () {
             $(config.selector).html('');
-
             var polygonCollection = new PolygonCollection(),
                 previewSvg = new AdminSvg(polygonCollection, image);
 
@@ -1723,23 +1720,23 @@ window.DelineationQuestion = (function () {
     };
 
     var config = {
-            questionId: 0,
-            exerciseId: 0,
-            selector: null,
-            for: ''
-        },
-        lang = {},
-        selectedPolygonIndex = -1;
+        questionId: 0,
+        exerciseId: 0,
+        selector: null,
+        for: ''
+    },
+    lang = {},
+    selectedPolygonIndex = -1;
 
     var getPointOnImage = function (referenceElement, x, y) {
         var pointerPosition = {
-                left: x + window.scrollX,
-                top: y + window.scrollY
-            },
-            canvasOffset = {
-                x: referenceElement.getBoundingClientRect().left + window.scrollX,
-                y: referenceElement.getBoundingClientRect().top + window.scrollY
-            };
+            left: x + window.scrollX,
+            top: y + window.scrollY
+        },
+        canvasOffset = {
+            x: referenceElement.getBoundingClientRect().left + window.scrollX,
+            y: referenceElement.getBoundingClientRect().top + window.scrollY
+        };
 
         return {
             x: Math.round(pointerPosition.left - canvasOffset.x),
@@ -1763,22 +1760,21 @@ window.DelineationQuestion = (function () {
         ');
 
         var xhrQuestion = null;
-
         switch (config.for) {
             case 'admin':
-                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_actionscript_admin.as.php?' + _p.web_cid_query, {
+                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_actionscript_admin.as.php?' + webCidReq, {
                     modifyAnswers: parseInt(config.questionId)
                 });
                 break;
             case 'user':
-                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_actionscript.as.php?' + _p.web_cid_query, {
+                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_actionscript.as.php?' + webCidReq, {
                     modifyAnswers: parseInt(config.questionId)
                 });
                 break;
             case 'solution':
                 // no break
             case 'preview':
-                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_answers.as.php?' + _p.web_cid_query, {
+                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_answers.as.php?' + webCidReq, {
                     modifyAnswers: parseInt(config.questionId),
                     exerciseId: parseInt(config.exerciseId),
                     exeId: parseInt(config.exeId)

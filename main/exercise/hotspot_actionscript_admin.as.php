@@ -21,17 +21,20 @@ if (!$isAllowedToEdit) {
     exit;
 }
 
-// set vars
-$questionId = intval($_GET['modifyAnswers']);
-$objQuestion = Question::read($questionId);
 $_course = api_get_course_info();
+$questionId = (int) $_GET['modifyAnswers'];
+$objQuestion = Question::read($questionId);
+
+$picture = $objQuestion->getPicture();
+$publicPath = api_get_path(WEB_PUBLIC_PATH);
+$courseCode = $_course['code'];
+$path = $picture->getPath();
+
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 $picturePath = $documentPath.'/images';
 $pictureName = $objQuestion->getPictureFilename();
-
-$pictureSize = getimagesize($picturePath.'/'.$pictureName);
-$pictureWidth = $pictureSize[0];
-$pictureHeight = $pictureSize[1];
+$pictureWidth = $picture->getResourceNode()->getResourceFile()->getMedia()->getWidth();
+$pictureHeight = $picture->getResourceNode()->getResourceFile()->getMedia()->getHeight();
 
 $data = [];
 $data['type'] = 'admin';

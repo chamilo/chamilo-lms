@@ -15,6 +15,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script();
 
+$_course = api_get_course_info();
 $questionId = isset($_GET['modifyAnswers']) ? (int) $_GET['modifyAnswers'] : 0;
 $exerciseId = isset($_GET['exerciseId']) ? (int) $_GET['exerciseId'] : 0;
 $exeId = isset($_GET['exeId']) ? (int) $_GET['exeId'] : 0;
@@ -61,9 +62,21 @@ $em = Database::getManager();
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 $picturePath = $documentPath.'/images';
 $pictureName = $objQuestion->getPictureFilename();
-$pictureSize = getimagesize($picturePath.'/'.$pictureName);
-$pictureWidth = $pictureSize[0];
-$pictureHeight = $pictureSize[1];
+
+$picture = $objQuestion->getPicture();
+
+$publicPath = api_get_path(WEB_PUBLIC_PATH);
+$courseCode = $_course['code'];
+$path = $picture->getPath();
+
+$documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
+$picturePath = $documentPath.'/images';
+$pictureName = $objQuestion->getPictureFilename();
+
+//$pictureSize = getimagesize($picturePath.'/'.$pictureName);
+$pictureWidth = $picture->getResourceNode()->getResourceFile()->getMedia()->getWidth();
+$pictureHeight = $picture->getResourceNode()->getResourceFile()->getMedia()->getHeight();
+
 
 $data = [];
 $data['type'] = 'solution';
@@ -198,7 +211,7 @@ $rs = $em
     ->findBy(
         [
             'hotspotQuestionId' => $questionId,
-            'cId' => $courseId,
+            'course' => $courseId,
             'hotspotExeId' => $exeId,
         ],
         ['hotspotAnswerId' => 'ASC']

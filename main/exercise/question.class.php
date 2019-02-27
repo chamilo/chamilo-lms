@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 
 /**
@@ -392,6 +393,42 @@ abstract class Question
     }
 
     /**
+     * @param int $courseId
+     * @param int $sessionId
+     *
+     * @return false|CDocument
+     */
+    public function getPicture($courseId = 0, $sessionId = 0)
+    {
+        $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
+        $sessionId = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
+
+        if (empty($courseId)) {
+            return false;
+        }
+
+        $pictureId = $this->getPictureId();
+        $courseInfo = $this->course;
+        $documentInfo = DocumentManager::get_document_data_by_id(
+            $pictureId,
+            $courseInfo['code'],
+            false,
+            $sessionId
+        );
+
+        if ($documentInfo) {
+            $em = Database::getManager();
+
+            /** @var CDocument $document */
+            $document = $em->getRepository('ChamiloCourseBundle:CDocument')->find($documentInfo['iid']);
+
+            return $document;
+        }
+
+        return false;
+    }
+
+    /**
      * returns the array with the exercise ID list.
      *
      * @author Olivier Brouckaert
@@ -664,7 +701,7 @@ abstract class Question
      *
      * @param array $courseInfo
      *
-     * @return string
+     * @return CDocument
      */
     public function getHotSpotFolderInCourse($courseInfo = [])
     {
@@ -678,23 +715,21 @@ abstract class Question
         $pictureAbsolutePath = api_get_path(SYS_COURSE_PATH).$courseInfo['directory'].'/document/images/';
         $picturePath = basename($pictureAbsolutePath);
 
-        if (!is_dir($picturePath)) {
-            create_unexisting_directory(
-                $courseInfo,
-                api_get_user_id(),
-                0,
-                0,
-                0,
-                dirname($pictureAbsolutePath),
-                '/'.$picturePath,
-                $picturePath,
-                '',
-                false,
-                false
-            );
-        }
+        $folder = create_unexisting_directory(
+            $courseInfo,
+            api_get_user_id(),
+            0,
+            0,
+            0,
+            dirname($pictureAbsolutePath),
+            '/'.$picturePath,
+            $picturePath,
+            '',
+            false,
+            false
+        );
 
-        return $pictureAbsolutePath;
+        return $folder;
     }
 
     /**
@@ -708,29 +743,34 @@ abstract class Question
      */
     public function uploadPicture($picture)
     {
-        $picturePath = $this->getHotSpotFolderInCourse();
+        $folder = $this->getHotSpotFolderInCourse();
 
         // if the question has got an ID
-        if ($this->id) {
-            $pictureFilename = self::generatePictureName();
-            $img = new Image($picture);
-            $img->send_image($picturePath.'/'.$pictureFilename, -1, 'jpg');
-            $document = DocumentManager::addDocument(
-                $this->course,
-                '/images/'.$pictureFilename,
-                'file',
-                filesize($picturePath.'/'.$pictureFilename),
-                $pictureFilename
+        if ($folder && $this->id) {
+            $pictureFilename = $this->generatePictureName();
+
+            $document = DocumentManager::upload_document(
+                ['imageUpload' => $picture],
+                '/images',
+                '',
+                '',
+                false,
+                'overwrite',
+                false,
+                true,
+                'imageUpload',
+                true,
+                $folder->getId()
             );
 
             if ($document) {
-                $this->picture = $document->getId();
+                $this->picture = $document->getIid();
 
-                if (!file_exists($picturePath.'/'.$pictureFilename)) {
+                /*if (!file_exists($picturePath.'/'.$pictureFilename)) {
                     return false;
-                }
+                }*/
 
-                $this->resizePicture('width', 800);
+                //$this->resizePicture('width', 800);
 
                 return true;
             }
@@ -2419,5 +2459,10 @@ abstract class Question
         }
 
         return false;
+    }
+
+    public function getHotSpotData()
+    {
+
     }
 }

@@ -1488,7 +1488,7 @@ HOTSPOT;
             $s .= "<div class=\"col-sm-8 col-md-9\">
                    <div class=\"hotspot-image\"></div>
                     <script>
-                        $(document).on('ready', function() {
+                        $(function() {
                             new ".($answerType == HOT_SPOT_DELINEATION ? 'DelineationQuestion' : 'HotspotQuestion')."({
                                 questionId: $questionId,
                                 exerciseId: $exe_id,

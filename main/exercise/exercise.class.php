@@ -3491,7 +3491,7 @@ class Exercise
             $orderedHotspots = $em->getRepository('ChamiloCoreBundle:TrackEHotspot')->findBy(
                 [
                     'hotspotQuestionId' => $questionId,
-                    'cId' => $course_id,
+                    'course' => $course_id,
                     'hotspotExeId' => $exeId,
                 ],
                 ['hotspotAnswerId' => 'ASC']
@@ -5579,7 +5579,7 @@ class Exercise
                                 <p><em>".get_lang('HotSpot')."</em></p>
                                 <div id=\"hotspot-solution-$questionId\"></div>
                                 <script>
-                                    $(document).on('ready', function () {
+                                    $(function() {
                                         new HotspotQuestion({
                                             questionId: $questionId,
                                             exerciseId: {$this->id},

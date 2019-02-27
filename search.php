@@ -552,7 +552,6 @@ $extra = $extraFieldSession->addElements(
             get_lang('ThemeField').' 5',
         ],
     ],
-    [],
     true, //$addEmptyOptionSelects
     $introductionTextList
 );

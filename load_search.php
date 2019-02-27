@@ -212,8 +212,7 @@ $extra = $extraFieldUser->addElements(
     false,
     $forceShowFields, //$forceShowFields = false
     [],
-    [],
-    $fieldsToShow
+    []
 );
 
 $userForm->addHtml('</div></div></div>');
@@ -243,8 +242,7 @@ $extra = $extraFieldUser->addElements(
     false,
     $forceShowFields, //$forceShowFields = false
     [],
-    [],
-    $fieldsToShow
+    []
 );
 
 $userForm->addHtml('</div></div></div>');
@@ -270,8 +268,7 @@ $extra = $extraFieldUser->addElements(
     false,
     $forceShowFields,//$forceShowFields = false
     [],
-    [],
-    $fieldsToShow
+    []
 );
 
 $userForm->addHtml('</div></div></div>');
@@ -298,8 +295,7 @@ $extra = $extraFieldUser->addElements(
     false,
     $forceShowFields, //$forceShowFields = false
     [],
-    [],
-    $fieldsToShow
+    []
 );
 
 $userForm->addHtml('</div></div></div>');
@@ -388,7 +384,6 @@ $extra = $extraField->addElements(
             get_lang('ThemeField').' 5',
         ],
     ],
-    [],
     true
 );
 
@@ -410,10 +405,7 @@ $extra = $extraFieldUser->addElements(
     $forceShowFields //$forceShowFields = false
 );
 
-
-
 $form->addHtml('</div></div></div>');
-
 $form->addHtml('<div class="panel panel-default">');
 $form->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive">'.get_lang('NiveauLangue').'</a></div>');
 $form->addHtml('<div id="collapseFive" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFive">');
@@ -511,8 +503,7 @@ $extra = $extraFieldUser->addElements(
     false,
     $forceShowFields, //$forceShowFields = false
     [],
-    [],
-    $fieldsToShow
+    []
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];

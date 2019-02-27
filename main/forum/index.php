@@ -246,7 +246,6 @@ $returnParams = $extraField->addElements(
     false,
     [],
     [],
-    [],
     true //$addEmptyOptionSelects = false,
 );
 $form->setDefaults(['extra_language' => $defaultUserLanguage]);

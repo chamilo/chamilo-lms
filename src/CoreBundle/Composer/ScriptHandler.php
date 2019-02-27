@@ -146,6 +146,7 @@ class ScriptHandler
             __DIR__.'/../../../../main/exercice/testcategory.class.php',
             __DIR__.'/../../../../main/exercice/export/scorm/scorm_export.php',
             __DIR__.'/../../../../main/exercice/testheaderpage.php',
+            __DIR__.'/../../../../main/exercise/hotspot_lang_conversion.php',
             __DIR__.'/../../../../main/inc/lib/main_api.lib.php',
             //__DIR__.'/../../../../main/inc/lib/nusoap/class.soapclient.php',
             __DIR__.'/../../../../main/inc/lib/nusoap/nusoap.php',

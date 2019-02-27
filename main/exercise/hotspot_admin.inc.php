@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Brumann\Polyfill\Unserialize;
 use ChamiloSession as Session;
 
 /**
@@ -56,13 +57,14 @@ if ($modifyIn) {
         $objAnswer = new Answer($questionId);
     }
 
-    $color = unserialize($color);
-    $reponse = unserialize($reponse);
-    $comment = unserialize($comment);
-    $weighting = unserialize($weighting);
-    $hotspot_coordinates = unserialize($hotspot_coordinates);
-    $hotspot_type = unserialize($hotspot_type);
-    $destination = unserialize($destination);
+    $color = Unserialize::unserialize($color, ['allowed_classes' => false]);
+    $reponse = Unserialize::unserialize($reponse, ['allowed_classes' => false]);
+    $comment = Unserialize::unserialize($comment, ['allowed_classes' => false]);
+    $comment = Unserialize::unserialize($comment, ['allowed_classes' => false]);
+    $weighting = Unserialize::unserialize($weighting, ['allowed_classes' => false]);
+    $hotspot_coordinates = Unserialize::unserialize($hotspot_coordinates, ['allowed_classes' => false]);
+    $hotspot_type = Unserialize::unserialize($hotspot_type, ['allowed_classes' => false]);
+    $destination = Unserialize::unserialize($destination, ['allowed_classes' => false]);
     unset($buttonBack);
 }
 

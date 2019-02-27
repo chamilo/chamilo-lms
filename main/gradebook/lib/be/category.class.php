@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Brumann\Polyfill\Unserialize;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use ChamiloSession as Session;
 
@@ -264,12 +265,16 @@ class Category implements GradebookItem
      */
     public function setCourseListDependency($value)
     {
-        $result = [];
-        if (@unserialize($value) !== false) {
-            $result = unserialize($value);
-        }
+        $this->courseDependency = [];
 
-        $this->courseDependency = $result;
+        $unserialized = @Unserialize::unserialize(
+            $value,
+            ['allowed_classes' => false]
+        );
+
+        if (false !== $unserialized) {
+            $this->courseDependency = $unserialized;
+        }
     }
 
     /**

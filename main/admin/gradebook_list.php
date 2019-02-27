@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Brumann\Polyfill\Unserialize;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Doctrine\Common\Collections\Criteria;
 use Knp\Component\Pager\Paginator;
@@ -188,7 +189,10 @@ switch ($action) {
 
             $options = [];
             if (!empty($categoryData['depends'])) {
-                $list = unserialize($categoryData['depends']);
+                $list = Unserialize::unserialize(
+                    $categoryData['depends'],
+                    ['allowed_classes' => false]
+                );
                 foreach ($list as $itemId) {
                     $courseInfo = api_get_course_info_by_id($itemId);
                     $options[$itemId] = $courseInfo['name'];

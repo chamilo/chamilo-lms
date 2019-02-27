@@ -3,6 +3,7 @@
 
 namespace Chamilo\PluginBundle\Entity\ImsLti;
 
+use Brumann\Polyfill\Unserialize;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -465,7 +466,10 @@ class ImsLtiTool
      */
     public function unserializePrivacy()
     {
-        return unserialize($this->privacy);
+        return Unserialize::unserialize(
+            $this->privacy,
+            ['allowed_classes' => false]
+        );
     }
 
     /**

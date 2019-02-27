@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Brumann\Polyfill\Unserialize;
+
 /**
  * This class provides some functions for statistics.
  *
@@ -305,7 +307,10 @@ class Statistics
             } else {
                 if (!empty($row[2])) {
                     $originalData = str_replace('\\', '', $row[2]);
-                    $row[2] = unserialize($originalData);
+                    $row[2] = Unserialize::unserialize(
+                        $originalData,
+                        ['allowed_classes' => false]
+                    );
                     if (is_array($row[2]) && !empty($row[2])) {
                         $row[2] = implode_with_key(', ', $row[2]);
                     } else {

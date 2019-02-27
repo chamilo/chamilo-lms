@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Brumann\Polyfill\Unserialize;
 use ChamiloSession as Session;
 
 /**
@@ -548,7 +549,20 @@ function lp_upload_quiz_action_handling()
         $lpObject = Session::read('lpobject');
 
         if (!empty($lpObject)) {
-            $oLP = unserialize($lpObject);
+            /** @var learnpath $oLP */
+            $oLP = Unserialize::unserialize(
+                $lpObject,
+                [
+                    'allowed_classes' => [
+                        learnpath::class,
+                        learnpathItem::class,
+                        aiccItem::class,
+                        scormItem::class,
+                        Link::class,
+                        LpItem::class,
+                    ],
+                ]
+            );
             if (is_object($oLP)) {
                 if ((empty($oLP->cc)) || $oLP->cc != api_get_course_id()) {
                     $oLP = null;

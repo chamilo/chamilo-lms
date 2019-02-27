@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Brumann\Polyfill\Unserialize;
 use Chamilo\CoreBundle\Entity\Repository\CourseRepository;
 use Chamilo\CoreBundle\Entity\Repository\ItemPropertyRepository;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
@@ -12690,7 +12691,19 @@ EOD;
         $learnPath = null;
         $lpObject = Session::read('lpobject');
         if ($lpObject !== null) {
-            $learnPath = unserialize($lpObject);
+            $learnPath = Unserialize::unserialize(
+                $lpObject,
+                [
+                    'allowed_classes' => [
+                        learnpath::class,
+                        learnpathItem::class,
+                        aiccItem::class,
+                        scormItem::class,
+                        Link::class,
+                        LpItem::class,
+                    ],
+                ]
+            );
             if ($debug) {
                 error_log('getLpFromSession: unserialize');
                 error_log('------getLpFromSession------');

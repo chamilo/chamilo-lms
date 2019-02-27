@@ -7,6 +7,8 @@
  * @package chamilo.library
  */
 
+use Brumann\Polyfill\Unserialize;
+
 /**
  * Removes duplicate values from a dimensional array.
  *
@@ -27,7 +29,7 @@ function array_unique_dimensional($array)
     $array = array_unique($array);
 
     foreach ($array as &$myvalue) {
-        $myvalue = unserialize($myvalue);
+        $myvalue = Unserialize::unserialize($myvalue, ['allowed_classes' => false]);
     }
 
     return $array;

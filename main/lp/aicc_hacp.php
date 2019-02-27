@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Brumann\Polyfill\Unserialize;
 use ChamiloSession as Session;
 
 /**
@@ -63,7 +64,20 @@ if ($debug > 2) {
 
 // Is this needed? This is probabaly done in the header file.
 $file = Session::read('file');
-$oLP = unserialize(Session::read('lpobject'));
+/** @var learnpath $oLP */
+$oLP = Unserialize::unserialize(
+    Session::read('lpobject'),
+    [
+        'allowed_classes' => [
+            learnpath::class,
+            learnpathItem::class,
+            aiccItem::class,
+            scormItem::class,
+            Link::class,
+            LpItem::class,
+        ],
+    ]
+);
 $oItem = &$oLP->items[$oLP->current];
 if (!is_object($oItem)) {
     error_log('New LP - aicc_hacp - Could not load oItem item', 0);

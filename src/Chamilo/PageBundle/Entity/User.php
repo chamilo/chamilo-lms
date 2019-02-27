@@ -3,6 +3,7 @@
 
 namespace Chamilo\PageBundle\Entity;
 
+use Brumann\Polyfill\Unserialize;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -2282,7 +2283,10 @@ class User extends BaseUser
      */
     public function unserialize($serialized)
     {
-        $data = unserialize($serialized);
+        $data = Unserialize::unserialize(
+            $serialized,
+            ['allowed_classes' => false]
+        );
         // add a few extra elements in the array to ensure that we have enough keys when unserializing
         // older data which does not include all properties.
         $data = array_merge($data, array_fill(0, 2, null));

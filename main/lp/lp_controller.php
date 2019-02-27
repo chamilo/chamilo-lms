@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Brumann\Polyfill\Unserialize;
 use ChamiloSession as Session;
 
 /**
@@ -214,7 +215,20 @@ if (!empty($lpObject)) {
     if ($debug) {
         error_log(' SESSION[lpobject] is defined');
     }
-    $oLP = unserialize($lpObject);
+    /** @var learnpath $olP */
+    $olP = Unserialize::unserialize(
+        $lpObject,
+        [
+            'allowed_classes' => [
+                learnpath::class,
+                learnpathItem::class,
+                aiccItem::class,
+                scormItem::class,
+                Link::class,
+                LpItem::class,
+            ],
+        ]
+    );
     if (isset($oLP) && is_object($oLP)) {
         if ($debug) {
             error_log(' oLP is object');

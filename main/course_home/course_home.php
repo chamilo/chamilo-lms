@@ -1,7 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Brumann\Polyfill\Unserialize;
 use ChamiloSession as Session;
+use Fhaculty\Graph\Graph;
+use Fhaculty\Graph\Set\Edges;
+use Fhaculty\Graph\Set\Vertices;
+use Fhaculty\Graph\Set\VerticesMap;
 
 /**
  * HOME PAGE FOR EACH COURSE.
@@ -392,7 +397,12 @@ if ($allow === true) {
                 );
 
                 if (!empty($item) && isset($item['value']) && !empty($item['value'])) {
-                    $graph = unserialize($item['value']);
+                    $graph = Unserialize::unserialize(
+                        $item['value'],
+                        [
+                            'allowed_classes' => [Graph::class, VerticesMap::class, Vertices::class, Edges::class],
+                        ]
+                    );
                     $diagram = Career::renderDiagram($careerInfo, $graph);
                 }
             }

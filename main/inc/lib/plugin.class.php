@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Brumann\Polyfill\Unserialize;
 use Chamilo\CourseBundle\Entity\CTool;
 
 /**
@@ -322,10 +323,15 @@ class Plugin
         $settings = $this->get_settings();
         foreach ($settings as $setting) {
             if ($setting['variable'] == $this->get_name().'_'.$name) {
+                $unserialized = @Unserialize::unserialize(
+                    $setting['selected_value'],
+                    ['allowed_classes' => false]
+                );
+
                 if (!empty($setting['selected_value']) &&
-                    @unserialize($setting['selected_value']) !== false
+                    false !== $unserialized
                 ) {
-                    $setting['selected_value'] = unserialize($setting['selected_value']);
+                    $setting['selected_value'] = $unserialized;
                 }
 
                 return $setting['selected_value'];

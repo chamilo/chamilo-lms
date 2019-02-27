@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Brumann\Polyfill\Unserialize;
 use ChamiloSession as Session;
 
 /**
@@ -293,6 +294,9 @@ class ssoDrupal
      */
     private function decode_cookie($cookie)
     {
-        return unserialize(base64_decode($cookie));
+        return Unserialize::unserialize(
+            base64_decode($cookie),
+            ['allowed_classes' => false]
+        );
     }
 }

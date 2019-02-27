@@ -1,6 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Brumann\Polyfill\Unserialize;
+use Fhaculty\Graph\Graph;
+use Fhaculty\Graph\Set\Edges;
+use Fhaculty\Graph\Set\Vertices;
+use Fhaculty\Graph\Set\VerticesMap;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 if (api_get_configuration_value('allow_career_diagram') == false) {
@@ -41,7 +47,18 @@ foreach ($sessionCategories as $category) {
                         'career_diagram'
                     );
                     if ($diagram && !empty($diagram['value'])) {
-                        $graph = unserialize($diagram['value']);
+                        /** @var Graph $graph */
+                        $graph = Unserialize::unserialize(
+                            $diagram['value'],
+                            [
+                                'allowed_classess' => [
+                                    Graph::class,
+                                    VerticesMap::class,
+                                    Vertices::class,
+                                    Edges::class,
+                                ]
+                            ]
+                        );
                         $content .= Career::renderDiagram($careerInfo, $graph);
                     }
                 }

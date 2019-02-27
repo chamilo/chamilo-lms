@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Brumann\Polyfill\Unserialize;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\UserBundle\Entity\User;
@@ -2766,8 +2767,14 @@ function api_get_plugin_setting($plugin, $variable)
 
     if (isset($result[$plugin])) {
         $value = $result[$plugin];
-        if (@unserialize($value) !== false) {
-            $value = unserialize($value);
+
+        $unserialized = @Unserialize::unserialize(
+            $value,
+            ['allowed_classes' => false]
+        );
+
+        if (false !== $unserialized) {
+            $value = $unserialized;
         }
 
         return $value;

@@ -14,6 +14,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseDescription;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseSession;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Document;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Forum;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumCategory;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumPost;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumTopic;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Glossary;

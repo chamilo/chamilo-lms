@@ -211,6 +211,7 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
     public function getTemplate($layout)
     {
         $size = $this->getColumnsSize();
+        $attributes = $this->getAttributes();
 
         if (empty($size)) {
             $size = array(2, 8, 2);
@@ -234,30 +235,38 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
                 ';
                 break;
             case FormValidator::LAYOUT_HORIZONTAL:
-                return '
-                <div class="form-group {error_class}">
-                    <label {label-for} class="col-sm-'.$size[0].' control-label" >
-                        <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
-                        {label}
-                    </label>
-                    <div class="col-sm-'.$size[1].'">
+                if (isset($attributes['custom']) && $attributes['custom'] == true) {
+                    $template = '
                         {icon}
                         {element}
-
-                        <!-- BEGIN label_2 -->
-                            <p class="help-block">{label_2}</p>
-                        <!-- END label_2 -->
-
-                        <!-- BEGIN error -->
-                            <span class="help-inline help-block">{error}</span>
-                        <!-- END error -->
-                    </div>
-                    <div class="col-sm-'.$size[2].'">
-                        <!-- BEGIN label_3 -->
-                            {label_3}
-                        <!-- END label_3 -->
-                    </div>
-                </div>';
+                    ';
+                } else {
+                    $template = '
+                        <div class="form-group {error_class}">
+                            <label {label-for} class="col-sm-'.$size[0].' control-label" >
+                                <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
+                                {label}
+                            </label>
+                            <div class="col-sm-'.$size[1].'">
+                                {icon}
+                                {element}
+        
+                                <!-- BEGIN label_2 -->
+                                    <p class="help-block">{label_2}</p>
+                                <!-- END label_2 -->
+        
+                                <!-- BEGIN error -->
+                                    <span class="help-inline help-block">{error}</span>
+                                <!-- END error -->
+                            </div>
+                            <div class="col-sm-'.$size[2].'">
+                                <!-- BEGIN label_3 -->
+                                    {label_3}
+                                <!-- END label_3 -->
+                            </div>
+                        </div>';
+                }
+                return $template;
                 break;
             case FormValidator::LAYOUT_BOX:
             case FormValidator::LAYOUT_BOX_NO_LABEL:

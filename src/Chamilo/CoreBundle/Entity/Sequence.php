@@ -145,7 +145,7 @@ class Sequence
                     Graph::class,
                     VerticesMap::class,
                     Vertices::class,
-                    Edges::class
+                    Edges::class,
                 ],
             ]
         );

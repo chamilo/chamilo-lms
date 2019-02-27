@@ -120,7 +120,7 @@ if (!empty($item) && isset($item['value']) && !empty($item['value'])) {
                 Graph::class,
                 VerticesMap::class,
                 Vertices::class,
-                Edges::class
+                Edges::class,
             ],
         ]
     );

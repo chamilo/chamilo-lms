@@ -56,7 +56,7 @@ foreach ($sessionCategories as $category) {
                                     VerticesMap::class,
                                     Vertices::class,
                                     Edges::class,
-                                ]
+                                ],
                             ]
                         );
                         $content .= Career::renderDiagram($careerInfo, $graph);

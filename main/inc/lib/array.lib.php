@@ -6,7 +6,6 @@
  *
  * @package chamilo.library
  */
-
 use Brumann\Polyfill\Unserialize;
 
 /**

@@ -438,6 +438,7 @@ class Course
                         ToolIntro::class,
                         Wiki::class,
                         Work::class,
+                        \stdClass::class,
                     ],
                 ]
             );

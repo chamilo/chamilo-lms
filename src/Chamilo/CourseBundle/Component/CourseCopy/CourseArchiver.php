@@ -401,6 +401,7 @@ class CourseArchiver
                     ToolIntro::class,
                     Wiki::class,
                     Work::class,
+                    \stdClass::class,
                 ],
             ]
         );

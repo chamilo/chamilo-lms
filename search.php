@@ -385,7 +385,6 @@ $extra = $extraField->addElements(
     $fieldsToShow,
     $fieldsToShow,
     [],
-    [],
     false,
     $forceShowFields //$forceShowFields = false
 );
@@ -404,7 +403,6 @@ $extra = $extraFieldSession->addElements(
     true,
     $fieldsToShow,
     $fieldsToShow,
-    [],
     [],
     false,
     $forceShowFields //$forceShowFields = false
@@ -430,7 +428,6 @@ $extra = $extraFieldSession->addElements(
     $filter,
     true,
     ['access_start_date', 'access_end_date'],
-    [],
     [],
     [],
     false,
@@ -466,7 +463,6 @@ $extra = $extraField->addElements(
     $fieldsToShow,
     $fieldsToShow,
     [],
-    [],
     false,
     $forceShowFields //$forceShowFields = false
 );
@@ -499,7 +495,6 @@ $extra = $extraField->addElements(
     true,
     $fieldsToShow,
     $fieldsToShow,
-    [],
     [],
     false,
     $forceShowFields //$forceShowFields = false
@@ -540,7 +535,6 @@ $extra = $extraFieldSession->addElements(
     $fieldsToShow,
     $fieldsToShow,
     $defaults,
-    null,
     true,
     $forceShowFields, // $forceShowFields
     ['domaine' => 3, $theme => 5], // $separateExtraMultipleSelect
@@ -591,7 +585,6 @@ $extra = $extraFieldSession->addElements(
     $fieldsToShow,
     $fieldsToShow,
     $defaults,
-    [],
     false, //$orderDependingDefaults = false,
     $forceShowFields //$forceShowFields = false
 );
@@ -618,7 +611,6 @@ $extra = $extraField->addElements(
     false,
     $fieldsToShow,
     $fieldsToShow,
-    [],
     [],
     false,
     $forceShowFields //$forceShowFields = false
@@ -647,7 +639,6 @@ $extra = $extraField->addElements(
     true,
     $fieldsToShow,
     $fieldsToShow,
-    [],
     [],
     false,
     $forceShowFields //$forceShowFields = false
@@ -687,7 +678,6 @@ $extra = $extraField->addElements(
     $fieldsToShow,
     $fieldsToShow,
     [],
-    [],
     false,
     $forceShowFields //$forceShowFields = false
 );
@@ -712,7 +702,6 @@ $extra = $extraField->addElements(
     true,
     $fieldsToShow,
     $fieldsToShow,
-    [],
     [],
     false,
     $forceShowFields //$forceShowFields = false

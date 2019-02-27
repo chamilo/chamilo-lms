@@ -290,7 +290,10 @@ $extra = $extra_field->addElements(
     false,
     false,
     [],
-    []
+    [],
+    [],
+    false,
+    true
 );
 
 $htmlHeadXtra[] = '

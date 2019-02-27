@@ -209,7 +209,6 @@ $extra = $extraFieldUser->addElements(
     $fieldsToShow,
     $fieldsToShow,
     [],
-    [],
     false,
     $forceShowFields, //$forceShowFields = false
     [],
@@ -241,7 +240,6 @@ $extra = $extraFieldUser->addElements(
     $fieldsToShow,
     $fieldsToShow,
     [],
-    [],
     false,
     $forceShowFields, //$forceShowFields = false
     [],
@@ -269,7 +267,6 @@ $extra = $extraFieldUser->addElements(
     $fieldsToShow,
     $fieldsToShow,
     $defaults,
-    [],
     false,
     $forceShowFields,//$forceShowFields = false
     [],
@@ -297,7 +294,6 @@ $extra = $extraFieldUser->addElements(
     true,
     $fieldsToShow,
     $fieldsToShow,
-    [],
     [],
     false,
     $forceShowFields, //$forceShowFields = false
@@ -328,7 +324,6 @@ $extra = $extraField->addElements(
     $showOnlyThisFields,
     $showOnlyThisFields,
     $defaults,
-    [],
     false, //$orderDependingDefaults
     true, // force
     [], // $separateExtraMultipleSelect
@@ -349,7 +344,6 @@ $extra = $extraFieldUser->addElements(
     true,
     $fieldsToShow,
     $fieldsToShow,
-    [],
     [],
     false,
     $forceShowFields //$forceShowFields = false
@@ -377,7 +371,6 @@ $extra = $extraField->addElements(
     $showOnlyThisFields,
     $showOnlyThisFields,
     $defaults,
-    [],
     false, //$orderDependingDefaults
     true, // force
     ['domaine' => 3, $theme => 5], // $separateExtraMultipleSelect
@@ -413,7 +406,6 @@ $extra = $extraFieldUser->addElements(
     $fieldsToShow,
     $fieldsToShow,
     [],
-    [],
     false,
     $forceShowFields //$forceShowFields = false
 );
@@ -444,7 +436,6 @@ $extra = $extraField->addElements(
     $showOnlyThisFields,
     $showOnlyThisFields,
     $defaults,
-    [],
     false, //$orderDependingDefaults
     true, // force
     ['domaine' => 3, $theme => 5], // $separateExtraMultipleSelect
@@ -495,7 +486,6 @@ $extra = $extraFieldUser->addElements(
     $fieldsToShow,
     $fieldsToShow,
     [],
-    [],
     false,
     $forceShowFields
 );
@@ -517,7 +507,6 @@ $extra = $extraFieldUser->addElements(
     true,
     $fieldsToShow,
     $fieldsToShow,
-    [],
     [],
     false,
     $forceShowFields, //$forceShowFields = false

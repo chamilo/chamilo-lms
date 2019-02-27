@@ -2751,12 +2751,8 @@ class SocialManager extends UserManager
                 } else {
                     switch ($extraFieldInfo['field_type']) {
                         case ExtraField::FIELD_TYPE_RADIO:
-
                             $objEfOption = new ExtraFieldOption('user');
                             $optionInfo = $objEfOption->get_field_option_by_field_and_option($extraFieldInfo['id'], $extraFieldInfo['value']);
-                            var_dump($extraFieldInfo, $optionInfo);
-
-
                             break;
                         case ExtraField::FIELD_TYPE_GEOLOCALIZATION:
                             $data = explode('::', $data);

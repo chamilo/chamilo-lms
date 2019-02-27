@@ -501,7 +501,6 @@ class ExtraField extends Model
         $showOnlyTheseFields = [],
         $orderFields = [],
         $extraData = [],
-        $specialUrlList = [],
         $orderDependingDefaults = false,
         $forceShowFields = false,
         $separateExtraMultipleSelect = [],
@@ -1788,10 +1787,6 @@ class ExtraField extends Model
                                     'extra_'.$field_details['variable'] => $selectedOptions,
                                 ]
                             );
-
-                            if (isset($specialUrlList[$field_details['variable']])) {
-                                //$url = $specialUrlList[$field_details['variable']]."&field_id=$field_id&type={$this->type}";
-                            }
 
                             if ($useTagAsSelect == false) {
                                 $jquery_ready_content .= "

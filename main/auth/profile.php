@@ -334,7 +334,6 @@ $return = $extraField->addElements(
     false,
     [],
     [],
-    [],
     false,
     false,
     [],

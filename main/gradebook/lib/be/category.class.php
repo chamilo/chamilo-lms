@@ -514,7 +514,7 @@ class Category implements GradebookItem
                 $sql .= ' '.$order_by;
             }
         }
-
+//var_dump($sql);
         $result = Database::query($sql);
         $categories = [];
         if (Database::num_rows($result) > 0) {

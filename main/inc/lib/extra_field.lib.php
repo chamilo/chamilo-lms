@@ -1034,7 +1034,6 @@ class ExtraField extends Model
         $orderDependingDefaults = false,
         $separateExtraMultipleSelect = [],
         $customLabelsExtraMultipleSelect = [],
-        $fieldsToFreeze = [],
         $addEmptyOptionSelects = false,
         $introductionTextList = [],
         $hideGeoLocalizationDetails = false

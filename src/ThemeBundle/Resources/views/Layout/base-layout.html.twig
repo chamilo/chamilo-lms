@@ -21,42 +21,41 @@
     {{ sonata_seo_html_attributes() }}
     data-in-course="{{ course ? 'true' : 'false' }}"
     data-course-code="{{ course ? course.code : '' }}"
+    data-session-id="{{ session ? session.id : '' }}"
 >
 <noscript> {{ "NoJavascript" | trans }} </noscript>
 
 <!-- PAGE -->
 {% block chamilo_wrap %}
-
-<!-- HEADER -->
+    <!-- HEADER -->
     {% block page_header %}
         {% include '@ChamiloTheme/Layout/header.html.twig' %}
     {% endblock %}
-<!-- END HEADER -->
+    <!-- END HEADER -->
 
-<div class="app-body">
-    <!-- SIDEBAR -->
-    {% block page_sidebar %}
-        {% include '@ChamiloTheme/Layout/sidebar.html.twig' %}
-    {% endblock %}
-    <!-- END SIDEBAR -->
-    <main id="app-main" class="main">
-        <!-- BREADCRUMB -->
-        {% block chamilo_breadcrumb %}
-            {% include '@ChamiloTheme/Layout/breadcrumb.html.twig' %}
+    <div class="app-body">
+        <!-- SIDEBAR -->
+        {% block page_sidebar %}
+            {% include '@ChamiloTheme/Layout/sidebar.html.twig' %}
         {% endblock %}
-        <!-- END BREADCRUMB -->
-        <!-- CONTENT -->
-        {% block page_content %}
-
-        {% endblock %}
-        <!-- END CONTENT -->
-    </main>
-</div>
+        <!-- END SIDEBAR -->
+        <main id="app-main" class="main">
+            <!-- BREADCRUMB -->
+            {% block chamilo_breadcrumb %}
+                {% include '@ChamiloTheme/Layout/breadcrumb.html.twig' %}
+            {% endblock %}
+            <!-- END BREADCRUMB -->
+            <!-- CONTENT -->
+            {% block page_content %}
+            {% endblock %}
+            <!-- END CONTENT -->
+        </main>
+    </div>
 {% endblock %}
 <!-- END PAGE -->
 
 <!-- FOOTER -->
-{% block page_footer %}
+{% block chamilo_footer %}
     {% include '@ChamiloTheme/Layout/footer.html.twig' %}
 {% endblock %}
 <!-- END FOOTER -->

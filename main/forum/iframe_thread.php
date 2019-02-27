@@ -25,9 +25,6 @@ require_once __DIR__.'/../inc/global.inc.php';
 // A notice for unauthorized people.
 api_protect_course_script(true);
 $nameTools = get_lang('ToolForum');
-Display::display_reduced_header();
-
-/* Including necessary files */
 
 require 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
@@ -73,29 +70,30 @@ $sql = "SELECT * FROM $table_posts posts
         ORDER BY posts.post_id ASC";
 $result = Database::query($sql);
 
-echo "<table width=\"100%\" height=\"100%\" cellspacing=\"5\" border=\"0\">";
+$template = new Template('', false, false);
+
+$content = "<table width=\"100%\" height=\"100%\" cellspacing=\"5\" border=\"0\">";
 while ($row = Database::fetch_array($result)) {
-    echo "<tr>";
-    echo "<td rowspan=\"2\" class=\"forum_message_left\">";
+    $content .= "<tr>";
+    $content .= "<td rowspan=\"2\" class=\"forum_message_left\">";
     $username = api_htmlentities(sprintf(get_lang('LoginX'), $row['username']), ENT_QUOTES);
     if ($row['user_id'] == '0') {
         $name = $row['poster_name'];
     } else {
         $name = api_get_person_name($row['firstname'], $row['lastname']);
     }
-    echo Display::tag('span', $name, ['title' => $username]).'<br />';
-    echo api_convert_and_format_date($row['post_date']).'<br /><br />';
+    $content .= Display::tag('span', $name, ['title' => $username]).'<br />';
+    $content .= api_convert_and_format_date($row['post_date']).'<br /><br />';
 
-    echo "</td>";
-    echo "<td class=\"forum_message_post_title\">".Security::remove_XSS($row['post_title'])."</td>";
-    echo "</tr>";
+    $content .= "</td>";
+    $content .= "<td class=\"forum_message_post_title\">".Security::remove_XSS($row['post_title'])."</td>";
+    $content .= "</tr>";
 
-    echo "<tr>";
-    echo "<td class=\"forum_message_post_text\">".Security::remove_XSS($row['post_text'], STUDENT)."</td>";
-    echo "</tr>";
+    $content .= "<tr>";
+    $content .= "<td class=\"forum_message_post_text\">".Security::remove_XSS($row['post_text'], STUDENT)."</td>";
+    $content .= "</tr>";
 }
-echo "</table>";
+$content .= "</table>";
 
-?>
-</body>
-</html>
+$template->assign('content', $content);
+$template->display_no_layout_template();

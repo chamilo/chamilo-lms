@@ -59,24 +59,9 @@ if (empty($objQuestion) || empty($objExercise)) {
 }
 
 $em = Database::getManager();
-$documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
-$picturePath = $documentPath.'/images';
-$pictureName = $objQuestion->getPictureFilename();
-
 $picture = $objQuestion->getPicture();
-
-$publicPath = api_get_path(WEB_PUBLIC_PATH);
-$courseCode = $_course['code'];
-$path = $picture->getPath();
-
-$documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
-$picturePath = $documentPath.'/images';
-$pictureName = $objQuestion->getPictureFilename();
-
-//$pictureSize = getimagesize($picturePath.'/'.$pictureName);
 $pictureWidth = $picture->getResourceNode()->getResourceFile()->getMedia()->getWidth();
 $pictureHeight = $picture->getResourceNode()->getResourceFile()->getMedia()->getHeight();
-
 
 $data = [];
 $data['type'] = 'solution';

@@ -328,7 +328,20 @@ abstract class Question
     public function selectPicturePath()
     {
         if (!empty($this->picture)) {
-            return api_get_path(WEB_COURSE_PATH).$this->course['directory'].'/document/images/'.$this->getPictureFilename();
+            $router = \Chamilo\CoreBundle\Framework\Container::getRouter();
+            // this "filter" param is used to resize the image to width 800px see config/packages/liip_imagine.yaml
+            $params = [
+                'file' => 'images/'.$this->getPictureFilename(),
+                'type' => 'show',
+                'filter' => 'hotspot_question',
+                'course' => api_get_course_id(),
+            ];
+            $url = $router->generate('core_tool_document', $params);
+
+            return $url;
+
+            /*return api_get_path(WEB_COURSE_PATH).
+                $this->course['directory'].'/document/images/'.$this->getPictureFilename().'?'.api_get_cidreq().'&type=show&filter=hotspot_question';*/
         }
 
         return '';
@@ -735,11 +748,10 @@ abstract class Question
     /**
      * adds a picture to the question.
      *
-     * @param string $picture - temporary path of the picture to upload
+     * @param array $picture - picture to upload
      *
      * @return bool - true if uploaded, otherwise false
      *
-     * @author Olivier Brouckaert
      */
     public function uploadPicture($picture)
     {
@@ -747,8 +759,6 @@ abstract class Question
 
         // if the question has got an ID
         if ($folder && $this->id) {
-            $pictureFilename = $this->generatePictureName();
-
             $document = DocumentManager::upload_document(
                 ['imageUpload' => $picture],
                 '/images',
@@ -765,12 +775,6 @@ abstract class Question
 
             if ($document) {
                 $this->picture = $document->getIid();
-
-                /*if (!file_exists($picturePath.'/'.$pictureFilename)) {
-                    return false;
-                }*/
-
-                //$this->resizePicture('width', 800);
 
                 return true;
             }
@@ -797,22 +801,20 @@ abstract class Question
     }
 
     /**
-     * deletes the picture.
+     *  Deletes a hot spot picture.
      *
-     * @author Olivier Brouckaert
-     *
-     * @return bool - true if removed, otherwise false
+     * @return bool - true
      */
     public function removePicture()
     {
-        $picturePath = $this->getHotSpotFolderInCourse();
+        $picture = $this->getPicture();
 
-        // if the question has got an ID and if the picture exists
-        if ($this->id) {
-            $picture = $this->picture;
-            $this->picture = '';
+        if ($picture) {
+            $manager = Database::getManager();
+            $manager->remove($picture);
+            $manager->flush();
 
-            return @unlink($picturePath.'/'.$picture) ? true : false;
+            return true;
         }
 
         return false;
@@ -894,26 +896,6 @@ abstract class Question
         }
 
         return true;
-    }
-
-    /**
-     * Saves the picture coming from POST into a temporary file
-     * Temporary pictures are used when we don't want to save a picture right after a form submission.
-     * For example, if we first show a confirmation box.
-     *
-     * @author Olivier Brouckaert
-     *
-     * @param string $picture     - temporary path of the picture to move
-     * @param string $pictureName - Name of the picture
-     */
-    public function setTmpPicture($picture, $pictureName)
-    {
-        $picturePath = $this->getHotSpotFolderInCourse();
-        $pictureName = explode('.', $pictureName);
-        $Extension = $pictureName[sizeof($pictureName) - 1];
-
-        // saves the picture into a temporary file
-        @move_uploaded_file($picture, $picturePath.'/tmp.'.$Extension);
     }
 
     /**
@@ -2394,71 +2376,6 @@ abstract class Question
             ->getSingleScalarResult();
 
         return $count > 1;
-    }
-
-    /**
-     * Resizes a picture || Warning!: can only be called after uploadPicture,
-     * or if picture is already available in object.
-     *
-     * @param string $Dimension - Resizing happens proportional according to given dimension: height|width|any
-     * @param int    $Max       - Maximum size
-     *
-     * @return bool|null - true if success, false if failed
-     *
-     * @author Toon Keppens
-     */
-    private function resizePicture($Dimension, $Max)
-    {
-        // if the question has an ID
-        if (!$this->id) {
-            return false;
-        }
-
-        $picturePath = $this->getHotSpotFolderInCourse().'/'.$this->getPictureFilename();
-
-        // Get dimensions from current image.
-        $my_image = new Image($picturePath);
-
-        $current_image_size = $my_image->get_image_size();
-        $current_width = $current_image_size['width'];
-        $current_height = $current_image_size['height'];
-
-        if ($current_width < $Max && $current_height < $Max) {
-            return true;
-        } elseif ($current_height == '') {
-            return false;
-        }
-
-        // Resize according to height.
-        if ($Dimension == "height") {
-            $resize_scale = $current_height / $Max;
-            $new_width = ceil($current_width / $resize_scale);
-        }
-
-        // Resize according to width
-        if ($Dimension == "width") {
-            $new_width = $Max;
-        }
-
-        // Resize according to height or width, both should not be larger than $Max after resizing.
-        if ($Dimension == "any") {
-            if ($current_height > $current_width || $current_height == $current_width) {
-                $resize_scale = $current_height / $Max;
-                $new_width = ceil($current_width / $resize_scale);
-            }
-            if ($current_height < $current_width) {
-                $new_width = $Max;
-            }
-        }
-
-        $my_image->resize($new_width);
-        $result = $my_image->send_image($picturePath);
-
-        if ($result) {
-            return true;
-        }
-
-        return false;
     }
 
     public function getHotSpotData()

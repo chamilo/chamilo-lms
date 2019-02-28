@@ -254,11 +254,6 @@ function handle_uploaded_document(
         $sessionId = api_get_session_id();
     }
 
-    $groupInfo = [];
-    if (!empty($groupId)) {
-        $groupInfo = GroupManager::get_group_properties($groupId);
-    }
-
     $group = api_get_group_entity($groupId);
 
     // Just in case process_uploaded_file is not called
@@ -322,22 +317,6 @@ function handle_uploaded_document(
             // Full path to where we want to store the file with trailing slash
             $whereToSave = $documentDir.$uploadPath;
 
-            // At least if the directory doesn't exist, tell so
-            /*if (!is_dir($whereToSave)) {
-                if (!mkdir($whereToSave, api_get_permissions_for_new_directories())) {
-                    if ($output) {
-                        Display::addFlash(
-                            Display::return_message(
-                                get_lang('DestDirectoryDoesntExist').' ('.$uploadPath.')',
-                                'error'
-                            )
-                        );
-                    }
-
-                    return false;
-                }
-            }*/
-
             // Just upload the file "as is"
             if ($onlyUploadFile) {
                 $errorResult = moveUploadedFile($uploadedFile, $whereToSave.$cleanName);
@@ -366,9 +345,6 @@ function handle_uploaded_document(
             // Size of the uploaded file (in bytes)
             $fileSize = $uploadedFile['size'];
 
-            // Example: /var/www/chamilo/courses/xxx/document/folder/picture.jpg
-            $fullPath = $whereToSave.$fileSystemName;
-
             // Example: /folder/picture.jpg
             $filePath = $uploadPath.$fileSystemName;
 
@@ -383,6 +359,7 @@ function handle_uploaded_document(
 
             $request = Container::getRequest();
             $content = $request->files->get($uploadKey);
+
             if (is_array($content)) {
                 $content = $content[0];
             }
@@ -530,6 +507,7 @@ function handle_uploaded_document(
                             );
                         }
                     } else {
+                        error_log($filePath);
                         // Put the document data in the database
                         $document = DocumentManager::addDocument(
                             $courseInfo,
@@ -1402,8 +1380,6 @@ function create_unexisting_directory(
                 $counter++;
             }
             $desired_dir_name = $desired_dir_name.'_'.$counter;
-        } else {
-            return false;
         }
     }
 
@@ -1422,93 +1398,47 @@ function create_unexisting_directory(
         $title = basename($desired_dir_name);
     }
 
-    //if (!is_dir($base_work_dir.$systemFolderName)) {
-    /*$result = mkdir(
-        $base_work_dir.$systemFolderName,
-        api_get_permissions_for_new_directories(),
-        true
-    );*/
-    $result = true;
-    if ($result) {
-        // Check if pathname already exists inside document table
-        $tbl_document = Database::get_course_table(TABLE_DOCUMENT);
-        $sql = "SELECT id, path FROM $tbl_document
-                    WHERE
-                        c_id = $course_id AND
-                        (
-                            path = '".Database::escape_string($systemFolderName)."'
-                        )
-            ";
-        $rs = Database::query($sql);
-        if (Database::num_rows($rs) == 0) {
-            $document = DocumentManager::addDocument(
-                    $_course,
-                    $systemFolderName,
-                    'folder',
-                    0,
-                    $title,
-                    null,
-                    0,
-                    true,
-                    $to_group_id,
-                    $session_id,
-                    $user_id,
-                    $sendNotification
-                );
+    // Check if pathname already exists inside document table
+    $table = Database::get_course_table(TABLE_DOCUMENT);
+    $sql = "SELECT id, path FROM $table
+            WHERE
+                c_id = $course_id AND
+                path = '".Database::escape_string($systemFolderName)."'";
+    $rs = Database::query($sql);
+    if (Database::num_rows($rs) == 0) {
+        $document = DocumentManager::addDocument(
+            $_course,
+            $systemFolderName,
+            'folder',
+            0,
+            $title,
+            null,
+            0,
+            true,
+            $to_group_id,
+            $session_id,
+            $user_id,
+            $sendNotification
+        );
 
-            if ($document) {
-                // Update document item_property
-                /*if (!empty($visibility)) {
-                    $visibilities = [
-                        0 => 'invisible',
-                        1 => 'visible',
-                        2 => 'delete',
-                    ];
-                    api_item_property_update(
-                        $_course,
-                        TOOL_DOCUMENT,
-                        $document_id,
-                        $visibilities[$visibility],
-                        $user_id,
-                        $groupInfo,
-                        $to_user_id,
-                        null,
-                        null,
-                        $session_id
-                    );
-                } else {
-                    api_item_property_update(
-                        $_course,
-                        TOOL_DOCUMENT,
-                        $document_id,
-                        'FolderCreated',
-                        $user_id,
-                        $groupInfo,
-                        $to_user_id,
-                        null,
-                        null,
-                        $session_id
-                    );
-                }*/
-
-                return $document;
-            }
-        } else {
-            $document = Database::fetch_array($rs);
-            $documentData = DocumentManager::get_document_data_by_id(
-                    $document['id'],
-                    $_course['code'],
-                    false,
-                    $session_id
-                );
-
-            $em = Database::getManager();
-            $document = $em->getRepository('ChamiloCourseBundle:CDocument')->find($documentData['iid']);
-
+        if ($document) {
             return $document;
         }
+    } else {
+        $document = Database::fetch_array($rs);
+        $documentData = DocumentManager::get_document_data_by_id(
+            $document['id'],
+            $_course['code'],
+            false,
+            $session_id
+        );
+
+        $em = Database::getManager();
+        $document = $em->getRepository('ChamiloCourseBundle:CDocument')->find($documentData['iid']);
+
+        return $document;
     }
-    //}
+
 
     return false;
 }

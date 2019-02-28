@@ -454,3 +454,6 @@ services:
         arguments: ['%fos_user.model.user.class%']
         tags:
             - {name: form.type, alias: chamilo_sonata_user_profile}
+
+    Liip\ImagineBundle\Service\FilterService:
+        alias: 'liip_imagine.service.filter'

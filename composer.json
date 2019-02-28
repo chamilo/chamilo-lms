@@ -110,7 +110,7 @@
 
         "michelf/php-markdown": "~1.8",
         "mopa/bootstrap-bundle": "~3.2",
-        "sabre/vobject": "~3.1",
+        "sabre/vobject": "~4.2",
 
         "emojione/emojione": "1.3.0",
 
@@ -151,7 +151,8 @@
         "php-http/httplug-bundle": "^1.8",
         "knplabs/knp-menu-bundle": "^2.0",
         "symfony/requirements-checker": "^1.1",
-        "liip/theme-bundle": "^1.5",
+        "liip/theme-bundle": "^1.6",
+        "liip/imagine-bundle": "^2.1",
         "a2lix/translation-form-bundle": "^3.0",
         "oneup/uploader-bundle": "^2.0",
         "overblog/graphql-bundle": "^0.11.4",

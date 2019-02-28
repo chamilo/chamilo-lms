@@ -22,16 +22,9 @@ if (!$isAllowedToEdit) {
 }
 
 $_course = api_get_course_info();
-$questionId = (int) $_GET['modifyAnswers'];
+$questionId = isset($_GET['modifyAnswers']) ? (int) $_GET['modifyAnswers'] : 0;
 $objQuestion = Question::read($questionId);
-
 $picture = $objQuestion->getPicture();
-$publicPath = api_get_path(WEB_PUBLIC_PATH);
-$courseCode = $_course['code'];
-$path = $picture->getPath();
-
-$documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
-$picturePath = $documentPath.'/images';
 $pictureName = $objQuestion->getPictureFilename();
 $pictureWidth = $picture->getResourceNode()->getResourceFile()->getMedia()->getWidth();
 $pictureHeight = $picture->getResourceNode()->getResourceFile()->getMedia()->getHeight();
@@ -63,11 +56,9 @@ $data['image_height'] = $pictureHeight;
 $data['courseCode'] = $_course['path'];
 $data['hotspots'] = [];
 
-// Init
 $i = 0;
 $nmbrTries = 0;
 $answer_type = $objQuestion->type;
-
 $answers = Session::read('tmp_answers');
 $nbrAnswers = count($answers['answer']);
 

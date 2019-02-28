@@ -4,6 +4,7 @@
 use Chamilo\CoreBundle\Entity\Resource\ResourceFile;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
+use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CDocument;
@@ -1104,8 +1105,6 @@ class DocumentManager
         $documentId = null,
         $groupId = 0
     ) {
-        $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-
         $groupId = (int) $groupId;
         if (empty($groupId)) {
             $groupId = api_get_group_id();
@@ -2899,6 +2898,7 @@ class DocumentManager
 
         if (isset($files[$fileKey])) {
             $uploadOk = process_uploaded_file($files[$fileKey], $show_output);
+
             if ($uploadOk) {
                 $document = handle_uploaded_document(
                     $course_info,
@@ -2933,30 +2933,6 @@ class DocumentManager
                 }
 
                 if ($document) {
-                    /*
-                        $table_document = Database::get_course_table(TABLE_DOCUMENT);
-                        $params = [];
-
-                        if (!empty($title)) {
-                            $params['title'] = $title;
-                        }
-
-                        if (!empty($comment)) {
-                            $params['comment'] = trim($comment);
-                        }
-
-                        Database::update(
-                            $table_document,
-                            $params,
-                            [
-                                'id = ? AND c_id = ? ' => [
-                                    $documentId,
-                                    $course_info['real_id'],
-                                ],
-                            ]
-                        );
-                    }*/
-
                     if ($index_document) {
                         self::index_document(
                             $document->getId(),
@@ -6468,12 +6444,12 @@ class DocumentManager
     }
 
     /**
-     * @param CDocument $document
-     * @param           $path
-     * @param           $realPath
-     * @param           $content
-     * @param           $visibility
-     * @param           $group
+     * @param CDocument  $document
+     * @param string     $path
+     * @param string     $realPath
+     * @param            $content
+     * @param int        $visibility
+     * @param CGroupInfo $group
      *
      * @return bool|CDocument
      */
@@ -6513,6 +6489,7 @@ class DocumentManager
             if ($isImage) {
                 $provider = 'sonata.media.provider.image';
             }
+
             error_log($provider);
 
             $media->setProviderName($provider);
@@ -6540,6 +6517,7 @@ class DocumentManager
                     $file = new \Sonata\MediaBundle\Extra\ApiMediaFile($handle);
                     $file->setMimetype($media->getContentType());
                     error_log($file->getSize());
+                    error_log($media->getContentType());
                     error_log('3');
                 }
             }
@@ -6723,7 +6701,7 @@ class DocumentManager
                 }
 
                 $url = api_get_path(WEB_CODE_PATH).
-                    'document/showinframes.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId.'&id='.$documentId;
+                    'document/showinframes.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId.'&id='.$document->getId();
                 $link = Display::url(basename($title), $url, ['target' => '_blank']);
                 $userInfo = api_get_user_info($userId);
 

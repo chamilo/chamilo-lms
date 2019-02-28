@@ -11,15 +11,15 @@ use APY\DataGridBundle\Grid\Grid;
 use APY\DataGridBundle\Grid\Source\Entity;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
-use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Chamilo\CourseBundle\Controller\CourseControllerTrait;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use FOS\RestBundle\View\View;
+use Liip\ImagineBundle\Service\FilterService;
+use Sonata\MediaBundle\Provider\ImageProvider;
 use Sonata\MediaBundle\Provider\MediaProviderInterface;
-use Sylius\Bundle\ResourceBundle\Controller\ResourceController as BaseResourceController;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Sylius\Component\Resource\Exception\UpdateHandlingException;
 use Sylius\Component\Resource\ResourceActions;
@@ -29,6 +29,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+
 /**
  * Class ResourceController.
  *
@@ -36,7 +37,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  *
  * @package Chamilo\CoreBundle\Controller
  */
-//class ResourceController extends BaseResourceController implements CourseControllerInterface
 class ResourceController extends BaseController implements CourseControllerInterface
 {
     use CourseControllerTrait;
@@ -60,15 +60,15 @@ class ResourceController extends BaseController implements CourseControllerInter
             }
         );*/
 
-        /** @var CDocumentRepository $repository */
-        $repository = $this->repository;
+        $repository = $this->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
+
         $course = $this->getCourse();
         $tool = $repository->getTool('document');
 
         $parentId = $request->get('parent');
         $parent = null;
         if (!empty($parentId)) {
-            $parent = $this->repository->find($parentId);
+            $parent = $repository->find($parentId);
         }
         $resources = $repository->getResourceByCourse($course, $tool, $parent);
 
@@ -239,8 +239,6 @@ class ResourceController extends BaseController implements CourseControllerInter
                     break;
             }
 
-            /** @var ResourceRepository $repository */
-            $repository = $this->repository;
             $resourceNode = $repository->addResourceNode($newResource, $this->getUser(), $parent);
 
             // Loops all sharing options
@@ -399,21 +397,24 @@ class ResourceController extends BaseController implements CourseControllerInter
     }
 
     /**
+     * Shows a resource
+     *
      * @param Request             $request
      * @param CDocumentRepository $documentRepo
+     * @param FilterService       $filterService
      *
      * @return Response
      */
-    public function showAction(Request $request, CDocumentRepository $documentRepo): Response
+    public function showAction(Request $request, CDocumentRepository $documentRepo, FilterService $filterService): Response
     {
         $file = $request->get('file');
         $type = $request->get('type');
+        $filter = $request->get('filter');
 
         if (empty($type)) {
             $type = 'show';
         }
 
-        //$documentRepo = $this->getDoctrine()->getRepository('ChamiloCourseBundle:CDocument');
         $criteria = [
             'path' => "/$file",
             'course' => $this->getCourse(),
@@ -421,7 +422,7 @@ class ResourceController extends BaseController implements CourseControllerInter
 
         $document = $documentRepo->findOneBy($criteria);
 
-        if (empty($document)) {
+        if (null === $document) {
             throw new NotFoundHttpException();
         }
 
@@ -441,7 +442,7 @@ class ResourceController extends BaseController implements CourseControllerInter
         if ($media) {
             switch ($type) {
                 case 'show':
-                    /** @var \Sonata\MediaBundle\Provider\ImageProvider $provider */
+                    /** @var ImageProvider $provider */
                     $provider = $this->get('sonata.media.pool')->getProvider($media->getProviderName());
                     $filename = sprintf(
                         '%s/%s',
@@ -449,8 +450,24 @@ class ResourceController extends BaseController implements CourseControllerInter
                         $provider->generatePrivateUrl($media, $format)
                     );
 
+                    if (!empty($filter)) {
+                        $resourcePath = $filterService->getUrlOfFilteredImage(
+                            $provider->generatePrivateUrl($media, $format),
+                            $filter
+                        );
+                        if ($resourcePath) {
+                            $cacheFolder = '/var/cache/resource/';
+                            $pos = strpos($resourcePath, $cacheFolder);
+                            $cacheValue = substr($resourcePath, $pos + strlen($cacheFolder), strlen($resourcePath));
+                            $cachedFile = $this->get('kernel')->getResourceCacheDir().$cacheValue;
+
+                            if (is_file($cachedFile)) {
+                                $filename = $cachedFile;
+                            }
+                        }
+                    }
+
                     return new BinaryFileResponse($filename);
-                    exit;
 
                     return $this->render('@SonataMedia/Media/view.html.twig', [
                         'media' => $media,
@@ -468,12 +485,12 @@ class ResourceController extends BaseController implements CourseControllerInter
         }
 
         throw new NotFoundHttpException();
-        var_dump($resourceFile->getMedia()->getName());
+
+        /*
 
         $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
         $this->isGrantedOr403($configuration, ResourceActions::SHOW);
 
-        /** @var CDocument $resource */
         $resource = $this->findOr404($configuration);
         $resourceNode = $resource->getResourceNode();
 
@@ -500,7 +517,7 @@ class ResourceController extends BaseController implements CourseControllerInter
             ;
         }
 
-        return $this->viewHandler->handle($configuration, $view);
+        return $this->viewHandler->handle($configuration, $view);*/
     }
 
     /**

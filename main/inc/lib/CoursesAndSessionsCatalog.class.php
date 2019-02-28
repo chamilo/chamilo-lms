@@ -196,7 +196,7 @@ class CoursesAndSessionsCatalog
         $count_courses = CourseCategory::countCoursesInCategory();
         $categories['NONE'] = [
             'id' => 0,
-            'name' => get_lang('None'),
+            'name' => get_lang('WithoutCategory'),
             'code' => 'NONE',
             'parent_id' => null,
             'tree_pos' => 0,

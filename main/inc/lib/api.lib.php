@@ -9348,6 +9348,7 @@ function api_unserialize_content($type, $serialized, $ignoreErrors = false)
 {
     switch ($type) {
         case 'career':
+        case 'sequence_graph':
             $allowedClasses = [Graph::class, VerticesMap::class, Vertices::class, Edges::class];
             break;
         case 'lp':

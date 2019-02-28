@@ -5,9 +5,6 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Fhaculty\Graph\Graph;
-use Fhaculty\Graph\Set\Edges;
-use Fhaculty\Graph\Set\Vertices;
-use Fhaculty\Graph\Set\VerticesMap;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
@@ -138,17 +135,7 @@ class Sequence
      */
     public function getUnSerializeGraph()
     {
-        return Unserialize::unserialize(
-            $this->graph,
-            [
-                'allowed_classes' => [
-                    Graph::class,
-                    VerticesMap::class,
-                    Vertices::class,
-                    Edges::class,
-                ],
-            ]
-        );
+        return api_unserialize_content('sequence_graph', $this->graph);
     }
 
     /**

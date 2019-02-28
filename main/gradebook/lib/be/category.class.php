@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Brumann\Polyfill\Unserialize;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use ChamiloSession as Session;
 
@@ -267,10 +266,7 @@ class Category implements GradebookItem
     {
         $this->courseDependency = [];
 
-        $unserialized = @Unserialize::unserialize(
-            $value,
-            ['allowed_classes' => false]
-        );
+        $unserialized = api_unserialize_content('not_allowed_classes', $value, true);
 
         if (false !== $unserialized) {
             $this->courseDependency = $unserialized;

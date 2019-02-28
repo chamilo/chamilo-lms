@@ -2,7 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 // not used??
-use Brumann\Polyfill\Unserialize;
 
 exit;
 
@@ -31,9 +30,9 @@ $d_number = (int) $d_number;
 $sql4 = "UPDATE set_module SET cal_day_num = $d_number WHERE id = $d_id ";
 Database::query($sql4);
 print_r(
-    Unserialize::unserialize(
-        Security::remove_XSS($_POST['aaa']),
-        ['allowed_classes' => false]
+    api_unserialize_content(
+        'not_allowed_classes',
+        Security::remove_XSS($_POST['aaa'])
     )
 );
 

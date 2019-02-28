@@ -1,7 +1,6 @@
 <?php
 /* See license terms in /license.txt */
 
-use Brumann\Polyfill\Unserialize;
 use ChamiloSession as Session;
 
 /**
@@ -438,10 +437,7 @@ class AppPlugin
             $settings_filtered = [];
             foreach ($plugin_settings as $item) {
                 if (!empty($item['selected_value'])) {
-                    $unserialized = @Unserialize::unserialize(
-                        $item['selected_value'],
-                        ['allowed_classes' => false]
-                    );
+                    $unserialized = api_unserialize_content('not_allowed_classes', $item['selected_value'], true);
                     if (false !== $unserialized) {
                         $item['selected_value'] = $unserialized;
                     }

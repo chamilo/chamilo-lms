@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Brumann\Polyfill\Unserialize;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 
 /**
@@ -1146,9 +1145,9 @@ abstract class Question
                 $se_doc = $di->get_document((int) $se_ref['search_did']);
                 if ($se_doc !== false) {
                     if (($se_doc_data = $di->get_document_data($se_doc)) !== false) {
-                        $se_doc_data = Unserialize::unserialize(
-                            $se_doc_data,
-                            ['allowed_classes' => false]
+                        $se_doc_data = api_unserialize_content(
+                            'not_allowed_classes',
+                            $se_doc_data
                         );
                         if (isset($se_doc_data[SE_DATA]['type']) &&
                             $se_doc_data[SE_DATA]['type'] == SE_DOCTYPE_EXERCISE_QUESTION

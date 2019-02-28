@@ -3,9 +3,41 @@
 
 use Brumann\Polyfill\Unserialize;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
+use Chamilo\CourseBundle\Component\CourseCopy\Course;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\Announcement;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\Attendance;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\CalendarEvent;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseCopyLearnpath;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseCopyTestCategory;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseDescription;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseSession;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\Document;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\Forum;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumCategory;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumPost;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumTopic;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\Glossary;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\GradeBookBackup;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\Link;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\LinkCategory;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\Quiz;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\QuizQuestion;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\QuizQuestionOption;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\ScormDocument;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\Survey;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\SurveyInvitation;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\SurveyQuestion;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\Thematic;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\ToolIntro;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\Wiki;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\Work;
 use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
+use Fhaculty\Graph\Graph;
+use Fhaculty\Graph\Set\Edges;
+use Fhaculty\Graph\Set\Vertices;
+use Fhaculty\Graph\Set\VerticesMap;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -2768,10 +2800,7 @@ function api_get_plugin_setting($plugin, $variable)
     if (isset($result[$plugin])) {
         $value = $result[$plugin];
 
-        $unserialized = @Unserialize::unserialize(
-            $value,
-            ['allowed_classes' => false]
-        );
+        $unserialized = api_unserialize_content('not_allowed_classes', $value, true);
 
         if (false !== $unserialized) {
             $value = $unserialized;
@@ -9304,4 +9333,80 @@ function api_get_relative_path($from, $to)
     }
 
     return implode('/', $relPath);
+}
+
+/**
+ * Unserialize content using Brummann\Polyfill\Unserialize.
+ *
+ * @param string $type
+ * @param string $serialized
+ * @param bool   $ignoreErrors. Optional.
+ *
+ * @return mixed
+ */
+function api_unserialize_content($type, $serialized, $ignoreErrors = false)
+{
+    switch ($type) {
+        case 'career':
+            $allowedClasses = [Graph::class, VerticesMap::class, Vertices::class, Edges::class];
+            break;
+        case 'lp':
+            $allowedClasses = [
+                learnpath::class,
+                learnpathItem::class,
+                aiccItem::class,
+                scormItem::class,
+                Link::class,
+                LpItem::class,
+            ];
+            break;
+        case 'course':
+            $allowedClasses = [
+                Course::class,
+                Announcement::class,
+                Attendance::class,
+                CalendarEvent::class,
+                CourseCopyLearnpath::class,
+                CourseCopyTestCategory::class,
+                CourseDescription::class,
+                CourseSession::class,
+                Document::class,
+                Forum::class,
+                ForumCategory::class,
+                ForumPost::class,
+                ForumTopic::class,
+                Glossary::class,
+                GradeBookBackup::class,
+                Link::class,
+                LinkCategory::class,
+                Quiz::class,
+                QuizQuestion::class,
+                QuizQuestionOption::class,
+                ScormDocument::class,
+                Survey::class,
+                SurveyInvitation::class,
+                SurveyQuestion::class,
+                Thematic::class,
+                ToolIntro::class,
+                Wiki::class,
+                Work::class,
+                stdClass::class,
+            ];
+            break;
+        case 'not_allowed_classes':
+        default:
+            $allowedClasses = false;
+    }
+
+    if ($ignoreErrors) {
+        return @Unserialize::unserialize(
+            $serialized,
+            ['allowed_classes' => $allowedClasses]
+        );
+    }
+
+    return Unserialize::unserialize(
+        $serialized,
+        ['allowed_classes' => $allowedClasses]
+    );
 }

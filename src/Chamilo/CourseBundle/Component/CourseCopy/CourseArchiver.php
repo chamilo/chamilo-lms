@@ -3,35 +3,8 @@
 
 namespace Chamilo\CourseBundle\Component\CourseCopy;
 
-use Brumann\Polyfill\Unserialize;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\Announcement;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Asset;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\Attendance;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\CalendarEvent;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseCopyLearnpath;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseCopyTestCategory;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseDescription;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseSession;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Document;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\Forum;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumCategory;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumPost;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumTopic;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\Glossary;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\GradeBookBackup;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\Link;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\LinkCategory;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\Quiz;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\QuizQuestion;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\QuizQuestionOption;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\ScormDocument;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\Survey;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\SurveyInvitation;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\SurveyQuestion;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\Thematic;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\ToolIntro;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\Wiki;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\Work;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -370,42 +343,8 @@ class CourseArchiver
         class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\Wiki', 'Wiki');
         class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\Work', 'Work');
 
-        $course = Unserialize::unserialize(
-            base64_decode($contents),
-            [
-                'allowed_classes' => [
-                    Course::class,
-                    Announcement::class,
-                    Attendance::class,
-                    CalendarEvent::class,
-                    CourseCopyLearnpath::class,
-                    CourseCopyTestCategory::class,
-                    CourseDescription::class,
-                    CourseSession::class,
-                    Document::class,
-                    Forum::class,
-                    ForumCategory::class,
-                    ForumPost::class,
-                    ForumTopic::class,
-                    Glossary::class,
-                    GradeBookBackup::class,
-                    Link::class,
-                    LinkCategory::class,
-                    Quiz::class,
-                    QuizQuestion::class,
-                    QuizQuestionOption::class,
-                    ScormDocument::class,
-                    Survey::class,
-                    SurveyInvitation::class,
-                    SurveyQuestion::class,
-                    Thematic::class,
-                    ToolIntro::class,
-                    Wiki::class,
-                    Work::class,
-                    \stdClass::class,
-                ],
-            ]
-        );
+        /** @var Course $course */
+        $course = api_unserialize_content('course', base64_decode($contents));
 
         if (!in_array(
             get_class($course),

@@ -1,11 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Brumann\Polyfill\Unserialize;
 use Fhaculty\Graph\Graph;
-use Fhaculty\Graph\Set\Edges;
-use Fhaculty\Graph\Set\Vertices;
-use Fhaculty\Graph\Set\VerticesMap;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -48,17 +44,7 @@ foreach ($sessionCategories as $category) {
                     );
                     if ($diagram && !empty($diagram['value'])) {
                         /** @var Graph $graph */
-                        $graph = Unserialize::unserialize(
-                            $diagram['value'],
-                            [
-                                'allowed_classess' => [
-                                    Graph::class,
-                                    VerticesMap::class,
-                                    Vertices::class,
-                                    Edges::class,
-                                ],
-                            ]
-                        );
+                        $graph = api_unserialize_content('career', $diagram['value']);
                         $content .= Career::renderDiagram($careerInfo, $graph);
                     }
                 }

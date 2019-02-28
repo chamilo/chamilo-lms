@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Brumann\Polyfill\Unserialize;
 use ChamiloSession as Session;
 
 /**
@@ -57,14 +56,13 @@ if ($modifyIn) {
         $objAnswer = new Answer($questionId);
     }
 
-    $color = Unserialize::unserialize($color, ['allowed_classes' => false]);
-    $reponse = Unserialize::unserialize($reponse, ['allowed_classes' => false]);
-    $comment = Unserialize::unserialize($comment, ['allowed_classes' => false]);
-    $comment = Unserialize::unserialize($comment, ['allowed_classes' => false]);
-    $weighting = Unserialize::unserialize($weighting, ['allowed_classes' => false]);
-    $hotspot_coordinates = Unserialize::unserialize($hotspot_coordinates, ['allowed_classes' => false]);
-    $hotspot_type = Unserialize::unserialize($hotspot_type, ['allowed_classes' => false]);
-    $destination = Unserialize::unserialize($destination, ['allowed_classes' => false]);
+    $color = api_unserialize_content('not_allowed_classes', $color);
+    $reponse = api_unserialize_content('not_allowed_classes', $reponse);
+    $comment = api_unserialize_content('not_allowed_classes', $comment);
+    $weighting = api_unserialize_content('not_allowed_classes', $weighting);
+    $hotspot_coordinates = api_unserialize_content('not_allowed_classes', $hotspot_coordinates);
+    $hotspot_type = api_unserialize_content('not_allowed_classes', $hotspot_type);
+    $destination = api_unserialize_content('not_allowed_classes', $destination);
     unset($buttonBack);
 }
 

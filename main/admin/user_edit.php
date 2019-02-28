@@ -325,6 +325,8 @@ $returnParams = $extraField->addElements(
     false,
     [],
     [],
+    [],
+    false,
     true
 );
 $jqueryReadyContent = $returnParams['jquery_ready_content'];

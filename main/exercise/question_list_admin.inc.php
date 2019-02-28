@@ -182,14 +182,14 @@ if (!$inATest) {
             $questionList = $objExercise->getQuestionForTeacher($start, $length);
             $paginator = new Knp\Component\Pager\Paginator();
             $pagination = $paginator->paginate([]);
+
             $pagination->setTotalItemCount($nbrQuestions);
             $pagination->setItemNumberPerPage($length);
             $pagination->setCurrentPageNumber($page);
             $pagination->renderer = function ($data) use ($url) {
                 $render = '<ul class="pagination">';
                 for ($i = 1; $i <= $data['pageCount']; $i++) {
-                    //foreach ($data['pagesInRange'] as $page) {
-                    $page = (int) $i;
+                    $page = $i;
                     $pageContent = '<li><a href="'.$url.'&page='.$page.'">'.$page.'</a></li>';
                     if ($data['current'] == $page) {
                         $pageContent = '<li class="active"><a href="#" >'.$page.'</a></li>';

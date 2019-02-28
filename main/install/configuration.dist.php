@@ -1107,6 +1107,14 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Visually "fold" forum categories by default
 // $_configuration['forum_fold_categories'] = false;
 
+// Set extra fields as required in the inscription.php page
+/*$_configuration['required_extra_fields_in_inscription'] = [
+    'options' => [
+        'terms_ville',
+        'terms_paysresidence',
+    ],
+];*/
+
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email

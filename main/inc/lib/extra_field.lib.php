@@ -146,6 +146,12 @@ class ExtraField extends Model
             case 'terms_and_condition':
                 $this->extraFieldType = EntityExtraField::TERMS_AND_CONDITION_TYPE;
                 break;
+            case 'forum_category':
+                $this->extraFieldType = EntityExtraField::FORUM_CATEGORY_TYPE;
+                break;
+            case 'forum_post':
+                $this->extraFieldType = EntityExtraField::FORUM_POST_TYPE;
+                break;
         }
 
         $this->pageUrl = 'extra_fields.php?type='.$this->type;
@@ -180,6 +186,8 @@ class ExtraField extends Model
             'user_certificate',
             'survey',
             'terms_and_condition',
+            'forum_category',
+            'forum_post',
         ];
 
         if (api_get_configuration_value('allow_scheduled_announcements')) {
@@ -468,14 +476,22 @@ class ExtraField extends Model
     /**
      * Add elements to a form.
      *
-     * @param FormValidator $form                The form object to which to attach this element
-     * @param int           $itemId              The item (course, user, session, etc) this extra_field is linked to
-     * @param array         $exclude             Variables of extra field to exclude
-     * @param bool          $filter              Whether to get only the fields with the "filter" flag set to 1 (true) or not (false)
-     * @param bool          $useTagAsSelect      Whether to show tag fields as select drop-down or not
-     * @param array         $showOnlyTheseFields Limit the extra fields shown to just the list given here
-     * @param array         $orderFields         An array containing the names of the fields shown, in the right order
-     * @param bool          $adminPermissions    Whether the display is considered without edition limits (true) or not (false)
+     * @param FormValidator $form                            The form object to which to attach this element
+     * @param int           $itemId                          The item (course, user, session, etc) this extra_field is linked to
+     * @param array         $exclude                         Variables of extra field to exclude
+     * @param bool          $filter                          Whether to get only the fields with the "filter" flag set to 1 (true) or not (false)
+     * @param bool          $useTagAsSelect                  Whether to show tag fields as select drop-down or not
+     * @param array         $showOnlyTheseFields             Limit the extra fields shown to just the list given here
+     * @param array         $orderFields                     An array containing the names of the fields shown, in the right order
+     * @param array         $extraData
+     * @param bool          $orderDependingDefaults
+     * @param bool          $adminPermissions
+     * @param array         $separateExtraMultipleSelect
+     * @param array         $customLabelsExtraMultipleSelect
+     * @param bool          $addEmptyOptionSelects
+     * @param array         $introductionTextList
+     * @param array         $requiredFields
+     * @param bool          $hideGeoLocalizationDetails
      *
      * @throws Exception
      *
@@ -490,7 +506,15 @@ class ExtraField extends Model
         $useTagAsSelect = false,
         $showOnlyTheseFields = [],
         $orderFields = [],
-        $adminPermissions = false
+        $extraData = [],
+        $orderDependingDefaults = false,
+        $adminPermissions = false,
+        $separateExtraMultipleSelect = [],
+        $customLabelsExtraMultipleSelect = [],
+        $addEmptyOptionSelects = false,
+        $introductionTextList = [],
+        $requiredFields = [],
+        $hideGeoLocalizationDetails = false
     ) {
         if (empty($form)) {
             return false;
@@ -532,8 +556,24 @@ class ExtraField extends Model
             $exclude,
             $useTagAsSelect,
             $showOnlyTheseFields,
-            $orderFields
+            $orderFields,
+            $orderDependingDefaults,
+            $separateExtraMultipleSelect,
+            $customLabelsExtraMultipleSelect,
+            $addEmptyOptionSelects,
+            $introductionTextList,
+            $hideGeoLocalizationDetails
         );
+
+        if (!empty($requiredFields)) {
+            /** @var HTML_QuickForm_input $element */
+            foreach ($form->getElements() as $element) {
+                $name = str_replace('extra_', '', $element->getName());
+                if (in_array($name, $requiredFields)) {
+                    $form->setRequired($element);
+                }
+            }
+        }
 
         return $extra;
     }
@@ -992,7 +1032,13 @@ class ExtraField extends Model
         $exclude = [],
         $useTagAsSelect = false,
         $showOnlyTheseFields = [],
-        $orderFields = []
+        $orderFields = [],
+        $orderDependingDefaults = false,
+        $separateExtraMultipleSelect = [],
+        $customLabelsExtraMultipleSelect = [],
+        $addEmptyOptionSelects = false,
+        $introductionTextList = [],
+        $hideGeoLocalizationDetails = false
     ) {
         $jquery_ready_content = null;
         if (!empty($extra)) {
@@ -1042,6 +1088,12 @@ class ExtraField extends Model
                     if (in_array($field_details['variable'], $exclude)) {
                         continue;
                     }
+                }
+
+                if (!empty($introductionTextList) &&
+                    in_array($field_details['variable'], array_keys($introductionTextList))
+                ) {
+                    $form->addHtml($introductionTextList[$field_details['variable']]);
                 }
 
                 $freezeElement = false;
@@ -1643,6 +1695,8 @@ class ExtraField extends Model
                             $form->freeze('extra_'.$field_details['variable']);
                         }
 
+                        $dataValue = addslashes($dataValue);
+
                         $form->addHtml("
                             <script>
                                 $(document).ready(function() {
@@ -1752,6 +1806,9 @@ class ExtraField extends Model
                                 }
                             </script>
                         ");
+                        if ($hideGeoLocalizationDetails) {
+                            $form->addHtml('<div style="display:none">');
+                        }
                         $form->addHtml('
                             <div class="form-group">
                                 <label for="geolocalization_extra_'.$field_details['variable'].'"
@@ -1784,6 +1841,9 @@ class ExtraField extends Model
                                 </div>
                             </div>
                         ');
+                        if ($hideGeoLocalizationDetails) {
+                            $form->addHtml('</div>');
+                        }
                         break;
                     case self::FIELD_TYPE_GEOLOCALIZATION_COORDINATES:
                         $dataValue = isset($extraData['extra_'.$field_details['variable']])

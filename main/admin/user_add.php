@@ -303,6 +303,8 @@ $returnParams = $extraField->addElements(
     false,
     [],
     [],
+    [],
+    false,
     true
 );
 

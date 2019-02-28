@@ -40,6 +40,7 @@ function validate_data($users, $checkUniqueEmail = false)
                 $errors[] = $user;
             }
         }
+
         $username = $user['UserName'];
         // 2. Check username, first, check whether it is empty.
         if (!UserManager::is_username_empty($username)) {
@@ -63,6 +64,14 @@ function validate_data($users, $checkUniqueEmail = false)
             // 2.3. Check whether username is already occupied.
             if (!UserManager::is_username_available($username)) {
                 $user['error'] = get_lang('UserNameNotAvailable');
+                $errors[] = $user;
+            }
+        }
+
+        if (isset($user['Email'])) {
+            $result = api_valid_email($user['Email']);
+            if ($result === false) {
+                $user['error'] = get_lang('PleaseEnterValidEmail');
                 $errors[] = $user;
             }
         }

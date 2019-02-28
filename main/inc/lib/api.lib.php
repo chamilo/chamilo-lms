@@ -8836,14 +8836,14 @@ function api_mail_html(
         $message
             ->setBody(
                 Container::getTwig()->render(
-                    'ChamiloCoreBundle:Mailer:Default/default.html.twig',
+                    'ChamiloThemeBundle:Mailer:Default/default.html.twig',
                     $paramsHtml
                 ),
                 'text/html'
             )
             ->addPart(
                 Container::getTwig()->render(
-                    'ChamiloCoreBundle:Mailer:Default/default.text.twig',
+                    'ChamiloThemeBundle:Mailer:Default/default.text.twig',
                     $paramsText
                 ),
                 'text/plain'

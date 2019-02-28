@@ -39,11 +39,11 @@ chown -R www-data: public/ var/
 If you have already installed it and just want to update it from Git, do:
 ~~~~
 git pull origin master
+composer update
 php bin/console fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json
     
 yarn upgrade
 yarn encore dev
-composer update
 ~~~~
 This will update the JS (yarn) and PHP (composer) dependencies.
 

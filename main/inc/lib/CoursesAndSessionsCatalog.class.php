@@ -172,15 +172,23 @@ class CoursesAndSessionsCatalog
             'code' => 'ALL',
             'parent_id' => null,
             'tree_pos' => 0,
-            'count_courses' => $countCourses,
+            'number_courses' => $countCourses,
+            'level' => 0
         ];
 
         $allCategories = CourseCategory::getAllCategories();
 
         foreach ($allCategories as $category) {
+            $subList = [];
             if (empty($category['parent_id'])) {
                 $list[$category['code']] = $category;
-                $list[$category['code']]['children'] = self::buildCourseCategoryTree($allCategories, $category['code']);
+                $list[$category['code']]['level'] = 0;
+                list($subList, $childrenCount) = self::buildCourseCategoryTree($allCategories, $category['code'], 0);
+                //$list = array($list, $subList);
+                foreach($subList as $item) {
+                    $list[$item['code']] = $item;
+                }
+                $list[$category['code']]['number_courses'] = $childrenCount + $category['number_courses'];
             }
         }
 
@@ -195,7 +203,8 @@ class CoursesAndSessionsCatalog
             'children_count' => 0,
             'auth_course_child' => true,
             'auth_cat_child' => true,
-            'count_courses' => $count_courses,
+            'number_courses' => $count_courses,
+            'level' => 0
         ];
 
         $result = array_merge($list,$categories);
@@ -672,25 +681,38 @@ class CoursesAndSessionsCatalog
     /**
      * Build a recursive tree of course categories
      * @param $categories
-     * @param $list
      * @param $parentId
      * @return array
      */
-    public static function buildCourseCategoryTree($categories, $parentId = 0)
+    public static function buildCourseCategoryTree($categories, $parentId = 0, $level=0)
     {
         $list = [];
+        $count = 0;
+        $level++;
         foreach ($categories as $category) {
+            $childrenCount = 0;
+            $subList = [];
             if (empty($category['parent_id'])) {
                 continue;
             }
             if ($category['parent_id'] == $parentId) {
                 $list[$category['code']] = $category;
-                $list[$category['code']]['children'] = self::buildCourseCategoryTree($categories,
-                    $category['code']);
+                $count += $category['number_courses'];
+                $list[$category['code']]['level'] = $level;
+                list($subList, $childrenCount) = self::buildCourseCategoryTree(
+                    $categories,
+                    $category['code'],
+                    $level
+                );
+                $list[$category['code']]['number_courses'] += $childrenCount;
+                foreach($subList as $item) {
+                    $list[$item['code']] = $item;
+                }
+                $count += $childrenCount;
             }
         }
 
-        return $list;
+        return [$list, $count];
     }
 
 }

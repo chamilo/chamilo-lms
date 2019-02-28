@@ -114,6 +114,49 @@ class CourseCategory
     }
 
     /**
+     * @param string $category Optional. Parent category code
+     *
+     * @return array
+     */
+    public static function getAllCategories()
+    {
+        $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+
+        $whereCondition = '';
+        $allowBaseCategories = api_get_configuration_value('allow_base_course_category');
+        if ($allowBaseCategories) {
+            $whereCondition = " AND (a.access_url_id = ".api_get_current_access_url_id()." OR a.access_url_id = 1) ";
+        }
+
+        $sql = "SELECT
+                t1.id, 
+                t1.name, 
+                t1.code, 
+                t1.parent_id, 
+                t1.tree_pos, 
+                t1.children_count, 
+                COUNT(DISTINCT t3.code) AS number_courses 
+                FROM $tbl_category t1 
+                LEFT JOIN $tbl_course t3 
+                ON t3.category_code=t1.code
+                WHERE 1=1
+                    $whereCondition 
+                GROUP BY
+                    t1.name, 
+                    t1.code, 
+                    t1.parent_id, 
+                    t1.tree_pos, 
+                    t1.children_count 
+                ORDER BY t1.parent_id, t1.tree_pos";
+
+        $result = Database::query($sql);
+        $categories = Database::store_result($result, 'ASSOC');
+        return $categories;
+    }
+
+
+    /**
      * @param string $code
      * @param string $name
      * @param string $canHaveCourses

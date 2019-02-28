@@ -156,6 +156,54 @@ class CoursesAndSessionsCatalog
         return $row[0];
     }
 
+    public  static function getCourseCategoriesTree(){
+        $urlId = 1;
+        if (api_is_multiple_url_enabled()) {
+            $urlId = api_get_current_access_url_id();
+        }
+
+        $countCourses = self::countAvailableCoursesToShowInCatalog($urlId);
+        $categories = [];
+        $list = [];
+
+        $categories['ALL'] = [
+            'id' => 0,
+            'name' => get_lang('DisplayAll'),
+            'code' => 'ALL',
+            'parent_id' => null,
+            'tree_pos' => 0,
+            'count_courses' => $countCourses,
+        ];
+
+        $allCategories = CourseCategory::getAllCategories();
+
+        foreach ($allCategories as $category) {
+            if (empty($category['parent_id'])) {
+                $list[$category['code']] = $category;
+                $list[$category['code']]['children'] = self::buildCourseCategoryTree($allCategories, $category['code']);
+            }
+        }
+
+        // count courses that are in no category
+        $count_courses = CourseCategory::countCoursesInCategory();
+        $categories['NONE'] = [
+            'id' => 0,
+            'name' => get_lang('None'),
+            'code' => 'NONE',
+            'parent_id' => null,
+            'tree_pos' => 0,
+            'children_count' => 0,
+            'auth_course_child' => true,
+            'auth_cat_child' => true,
+            'count_courses' => $count_courses,
+        ];
+
+        $result = array_merge($list,$categories);
+
+        return $result;
+    }
+
+
     /**
      * @return array
      */
@@ -169,6 +217,7 @@ class CoursesAndSessionsCatalog
         $countCourses = self::countAvailableCoursesToShowInCatalog($urlId);
 
         $categories = [];
+
         $categories[0][0] = [
             'id' => 0,
             'name' => get_lang('DisplayAll'),
@@ -179,6 +228,8 @@ class CoursesAndSessionsCatalog
         ];
 
         $categoriesFromDatabase = CourseCategory::getCategories();
+
+        //$allCategories = CourseCategory::getCategoriesCanBeAddedInCourse();
         foreach ($categoriesFromDatabase as $row) {
             $count_courses = CourseCategory::countCoursesInCategory($row['code']);
             $row['count_courses'] = $count_courses;
@@ -188,6 +239,7 @@ class CoursesAndSessionsCatalog
                 $categories[$row['parent_id']][$row['tree_pos']] = $row;
             }
         }
+        // count courses that are in no category
         $count_courses = CourseCategory::countCoursesInCategory();
         $categories[0][count($categories[0]) + 1] = [
             'id' => 0,
@@ -616,4 +668,29 @@ class CoursesAndSessionsCatalog
 
         return $sessionsToBrowse;
     }
+
+    /**
+     * Build a recursive tree of course categories
+     * @param $categories
+     * @param $list
+     * @param $parentId
+     * @return array
+     */
+    public static function buildCourseCategoryTree($categories, $parentId = 0)
+    {
+        $list = [];
+        foreach ($categories as $category) {
+            if (empty($category['parent_id'])) {
+                continue;
+            }
+            if ($category['parent_id'] == $parentId) {
+                $list[$category['code']] = $category;
+                $list[$category['code']]['children'] = self::buildCourseCategoryTree($categories,
+                    $category['code']);
+            }
+        }
+
+        return $list;
+    }
+
 }

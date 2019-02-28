@@ -2841,9 +2841,21 @@ form .formw .freeze {
     display: block !important;
 }
 /*** ***/
-
+#social_wall_main_wall_post_button{
+    background: #f5f6f7 !important;
+    color: #7a7a7a !important;
+    border: 1px solid #bababa !important;
+}
+#social_wall_main_wall_post_button:hover{
+    border: 1px solid #162a83 !important;
+    background: #162a83 !important;
+    color: #ffffff !important;
+}
 .input-file-container {
     position: relative;
+}
+.input-file-container:hover{
+    cursor: pointer;
 }
 .js .input-file-trigger {
     display: inline-block;
@@ -2863,6 +2875,9 @@ form .formw .freeze {
     opacity: 0;
     padding: 5px 0;
     width: 100%;
+}
+.js .input-file:hover{
+    cursor:pointer;
 }
 .js .input-file:hover + .input-file-trigger,
 .js .input-file:focus + .input-file-trigger,

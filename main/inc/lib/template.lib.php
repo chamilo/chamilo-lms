@@ -232,6 +232,19 @@ class Template
     }
 
     /**
+     * Load legacy params
+     */
+    private function loadLegacyParams()
+    {
+        // Set legacy breadcrumb
+        global $interbreadcrumb;
+        $this->params['legacy_breadcrumb'] = $interbreadcrumb;
+
+        global $htmlHeadXtra;
+        $this->params['legacy_javascript'] = $htmlHeadXtra;
+    }
+
+    /**
      * Render the template.
      *
      * @param string $template           The template path
@@ -242,9 +255,7 @@ class Template
         $template = str_replace('tpl', 'html.twig', $template);
         $templateFile = api_get_path(SYS_PATH).'main/template/'.$template;
 
-        // Set legacy breadcrumb
-        global $interbreadcrumb;
-        $this->params['legacy_breadcrumb'] = $interbreadcrumb;
+        $this->loadLegacyParams();
 
         if (!file_exists($templateFile)) {
             $e = new \Gaufrette\Exception\FileNotFound($templateFile);
@@ -256,33 +267,13 @@ class Template
     }
 
     /**
-     * @param array  $params
-     * @param string $template
-     *
-     * @throws \Twig\Error\Error
-     */
-    public function returnResponse($params, $template)
-    {
-        $flash = Display::getFlashToString();
-        Display::cleanFlashMessages();
-        $response = new Response();
-        $params['flash_messages'] = $flash;
-        $content = Container::getTemplating()->render($template, $params);
-        $response->setContent($content);
-        $response->send();
-    }
-
-    /**
      * @param string $template
      *
      * @throws \Twig\Error\Error
      */
     public function displayTemplate($template)
     {
-        global $htmlHeadXtra;
-        //var_dump($htmlHeadXtra);exit;
-        $params['legacy_javascript'] = $htmlHeadXtra;
-
+        $this->loadLegacyParams();
         $this->returnResponse($this->params, $template);
     }
 
@@ -291,6 +282,7 @@ class Template
      * */
     public function display_one_col_template()
     {
+        $this->loadLegacyParams();
         $template = '@ChamiloTheme/Layout/layout_one_col.html.twig';
         $this->returnResponse($this->params, $template);
     }
@@ -300,6 +292,7 @@ class Template
      */
     public function display_blank_template()
     {
+        $this->loadLegacyParams();
         $template = '@ChamiloTheme/Layout/blank.html.twig';
         $this->returnResponse($this->params, $template);
     }
@@ -309,6 +302,7 @@ class Template
      */
     public function displayBlankTemplateNoHeader()
     {
+        $this->loadLegacyParams();
         $template = '@ChamiloTheme/Layout/blank_no_header.html.twig';
         $this->returnResponse($this->params, $template);
     }
@@ -318,6 +312,7 @@ class Template
      */
     public function display_no_layout_template()
     {
+        $this->loadLegacyParams();
         $template = '@ChamiloTheme/Layout/no_layout.html.twig';
         $this->returnResponse($this->params, $template);
     }
@@ -327,6 +322,7 @@ class Template
      */
     public function displaySkillLayout()
     {
+        $this->loadLegacyParams();
         $template = '@ChamiloTheme/Layout/skill_layout.html.twig';
         $this->returnResponse($this->params, $template);
     }
@@ -814,6 +810,23 @@ class Template
             $extraHeaders .= $courseLogoutCode;
             $this->assign('extra_headers', $extraHeaders);
         }
+    }
+
+    /**
+     * @param array  $params
+     * @param string $template
+     *
+     * @throws \Twig\Error\Error
+     */
+    public function returnResponse($params, $template)
+    {
+        $flash = Display::getFlashToString();
+        Display::cleanFlashMessages();
+        $response = new Response();
+        $params['flash_messages'] = $flash;
+        $content = Container::getTemplating()->render($template, $params);
+        $response->setContent($content);
+        $response->send();
     }
 
     /**

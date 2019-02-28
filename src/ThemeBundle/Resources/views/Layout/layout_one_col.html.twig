@@ -28,15 +28,12 @@
     {% endif %}
 
     <section class="section-content">
-
         {% autoescape false %}
-
         {% block chamilo_messages %}
             <section class="container-fluid">
                 {% include '@ChamiloTheme/FlashMessage/render.html.twig' %}
             </section>
         {% endblock %}
-
 
         <section class="container-fluid">
             <div class="card mb-4">
@@ -50,14 +47,10 @@
                     {% endblock %}
                 </div>
             </div>
-
         </section>
-
         {% endautoescape %}
-
     </section>
-
-     {% if plugin_content_bottom %}
+    {% if plugin_content_bottom %}
         <div id="plugin_content_bottom" class="col-md-12">
             {{ plugin_content_bottom }}
         </div>

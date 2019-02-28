@@ -1107,6 +1107,11 @@ $table->set_column_filter(7, 'status_filter');
 $table->set_column_filter(8, 'active_filter');
 $table->set_column_filter(10, 'modify_filter');
 
+// Hide email column if login is email, to avoid column with same data
+if (api_get_setting('login_is_email') === 'true') {
+    $table->setHideColumn(6);
+}
+
 // Only show empty actions bar if delete users has been blocked
 $actionsList = [];
 if (api_is_platform_admin() &&

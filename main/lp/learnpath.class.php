@@ -12690,7 +12690,7 @@ EOD;
         $learnPath = null;
         $lpObject = Session::read('lpobject');
         if ($lpObject !== null) {
-            $learnPath = unserialize($lpObject);
+            $learnPath = api_unserialize_content('lp', $lpObject);
             if ($debug) {
                 error_log('getLpFromSession: unserialize');
                 error_log('------getLpFromSession------');

@@ -65,18 +65,18 @@ if (is_object($objQuestion)) {
             $objQuestion->type != HOT_SPOT_DELINEATION
         ) {
             if (isset($_GET['editQuestion'])) {
-                echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&message=ItemUpdated"</script>';
+                echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&page='.$page.'&message=ItemUpdated"</script>';
             } else {
                 // New question
-                $page = '';
+                $page = 1;
                 $length = api_get_configuration_value('question_pagination_length');
-                if ($length) {
-                    $page = round($objExercise->get_count_question_list() / $length);
+                if (!empty($length)) {
+                    $page = round($objExercise->getQuestionCount() / $length);
                 }
                 echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&page='.$page.'&message=ItemAdded"</script>';
             }
         } else {
-            echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&hotspotadmin='.$objQuestion->id.'&'.api_get_cidreq().'"</script>';
+            echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&page='.$page.'&hotspotadmin='.$objQuestion->id.'&'.api_get_cidreq().'"</script>';
         }
     } else {
         if (isset($questionName)) {
@@ -86,7 +86,7 @@ if (is_object($objQuestion)) {
             echo '<img src="../document/download.php?doc_url=%2Fimages%2F'.$pictureName.'" border="0">';
         }
         if (!empty($msgErr)) {
-            echo Display::return_message($msgErr, 'normal');
+            echo Display::return_message($msgErr);
         }
         // display the form
         $form->display();

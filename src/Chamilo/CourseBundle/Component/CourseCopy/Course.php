@@ -379,7 +379,10 @@ class Course
         if (extension_loaded('igbinary')) {
             $unserialized = igbinary_unserialize($course);
         } else {
-            $unserialized = unserialize($course);
+            $unserialized = api_unserialize_content(
+                'course',
+                $course
+            );
         }
 
         return $unserialized;

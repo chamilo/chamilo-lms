@@ -1145,7 +1145,10 @@ abstract class Question
                 $se_doc = $di->get_document((int) $se_ref['search_did']);
                 if ($se_doc !== false) {
                     if (($se_doc_data = $di->get_document_data($se_doc)) !== false) {
-                        $se_doc_data = unserialize($se_doc_data);
+                        $se_doc_data = api_unserialize_content(
+                            'not_allowed_classes',
+                            $se_doc_data
+                        );
                         if (isset($se_doc_data[SE_DATA]['type']) &&
                             $se_doc_data[SE_DATA]['type'] == SE_DOCTYPE_EXERCISE_QUESTION
                         ) {
@@ -1261,9 +1264,9 @@ abstract class Question
         // checks if the exercise ID is not in the list
         if (!in_array($exerciseId, $this->exerciseList)) {
             $this->exerciseList[] = $exerciseId;
-            $new_exercise = new Exercise();
-            $new_exercise->read($exerciseId);
-            $count = $new_exercise->selectNbrQuestions();
+            $newExercise = new Exercise();
+            $newExercise->read($exerciseId, false);
+            $count = $newExercise->getQuestionCount();
             $count++;
             $sql = "INSERT INTO $exerciseRelQuestionTable (c_id, question_id, exercice_id, question_order)
                     VALUES ({$this->course['real_id']}, ".intval($id).", ".intval($exerciseId).", '$count')";

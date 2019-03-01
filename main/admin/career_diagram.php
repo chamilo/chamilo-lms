@@ -14,6 +14,8 @@ UPDATE extra_field_values SET updated_at = NULL WHERE CAST(updated_at AS CHAR(20
 ALTER TABLE extra_field_values modify column value longtext null;
 */
 
+use Fhaculty\Graph\Graph;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -106,7 +108,8 @@ if (!empty($itemUrls) && !empty($itemUrls['value'])) {
 $tpl = new Template(get_lang('Diagram'));
 $html = Display::page_subheader2($careerInfo['name'].$urlToString);
 if (!empty($item) && isset($item['value']) && !empty($item['value'])) {
-    $graph = unserialize($item['value']);
+    /** @var Graph $graph */
+    $graph = api_unserialize_content('career', $item['value']);
     $html .= Career::renderDiagramByColumn($graph, $tpl);
 } else {
     Display::addFlash(

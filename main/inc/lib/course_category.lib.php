@@ -69,7 +69,6 @@ class CourseCategory
         $conditions = null;
 
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
-
         $conditions = " INNER JOIN $table a ON (t1.id = a.course_category_id)";
         $whereCondition = " AND a.access_url_id = ".api_get_current_access_url_id();
         $allowBaseCategories = api_get_configuration_value('allow_base_course_category');
@@ -123,7 +122,9 @@ class CourseCategory
         $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
-        $whereCondition = '';
+        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
+        $conditions = " INNER JOIN $table a ON (t1.id = a.course_category_id)";
+        $whereCondition = " AND a.access_url_id = ".api_get_current_access_url_id();
         $allowBaseCategories = api_get_configuration_value('allow_base_course_category');
         if ($allowBaseCategories) {
             $whereCondition = " AND (a.access_url_id = ".api_get_current_access_url_id()." OR a.access_url_id = 1) ";
@@ -138,6 +139,7 @@ class CourseCategory
                 t1.children_count, 
                 COUNT(DISTINCT t3.code) AS number_courses 
                 FROM $tbl_category t1 
+                $conditions
                 LEFT JOIN $tbl_course t3 
                 ON t3.category_code=t1.code
                 WHERE 1=1
@@ -152,9 +154,9 @@ class CourseCategory
 
         $result = Database::query($sql);
         $categories = Database::store_result($result, 'ASSOC');
+
         return $categories;
     }
-
 
     /**
      * @param string $code

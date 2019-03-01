@@ -296,6 +296,9 @@ class sso
      */
     private function decode_cookie($cookie)
     {
-        return unserialize(base64_decode($cookie));
+        return api_unserialize_content(
+            'not_allowed_classes',
+            base64_decode($cookie)
+        );
     }
 }

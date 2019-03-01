@@ -3828,7 +3828,7 @@ class CourseManager
         $load_dirs = false,
         $useUserLanguageFilterIfAvailable = true
     ) {
-        $user_id = intval($user_id);
+        $user_id = (int) $user_id;
         if (empty($user_id)) {
             $user_id = api_get_user_id();
         }
@@ -3844,6 +3844,7 @@ class CourseManager
             'not_category' => [],
         ];
         $collapsable = api_get_configuration_value('allow_user_course_category_collapsable');
+        $stok = Security::get_token();
         while ($row = Database::fetch_array($result)) {
             // We simply display the title of the category.
             $courseInCategory = self::returnCoursesCategories(
@@ -3854,13 +3855,29 @@ class CourseManager
             );
 
             $collapsed = 0;
+            $collapsableLink = '';
             if ($collapsable) {
+                $url = api_get_path(WEB_CODE_PATH).
+                    'auth/courses.php?categoryid='.$row['id'].'&sec_token='.$stok.'&redirect=home';
                 $collapsed = isset($row['collapsed']) && $row['collapsed'] ? 1 : 0;
+                if ($collapsed === 0) {
+                    $collapsableLink = Display::url(
+                        '<i class="fa fa-folder-open"></i>',
+                        $url.'&action=set_collapsable&option=1'
+                    );
+                } else {
+                    $collapsableLink = Display::url(
+                        '<i class="fa fa-folder"></i>',
+                        $url.'&action=set_collapsable&option=0'
+                    );
+                }
             }
+
             $params = [
                 'id_category' => $row['id'],
                 'title_category' => $row['title'],
                 'collapsed' => $collapsed,
+                'collapsable_link' => $collapsableLink,
                 'courses' => $courseInCategory,
             ];
             $listItems['in_category'][] = $params;

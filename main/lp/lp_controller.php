@@ -214,7 +214,8 @@ if (!empty($lpObject)) {
     if ($debug) {
         error_log(' SESSION[lpobject] is defined');
     }
-    $oLP = unserialize($lpObject);
+    /** @var learnpath $oLP */
+    $oLP = api_unserialize_content('lp', $lpObject);
     if (isset($oLP) && is_object($oLP)) {
         if ($debug) {
             error_log(' oLP is object');

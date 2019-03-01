@@ -1171,6 +1171,33 @@ class Exercise
     }
 
     /**
+     * If current exercise has a question.
+     *
+     * @param int $questionId
+     *
+     * @return int
+     */
+    public function hasQuestion($questionId)
+    {
+        $questionId = (int) $questionId;
+
+        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $sql = "SELECT q.id
+                FROM $TBL_EXERCICE_QUESTION e 
+                INNER JOIN $TBL_QUESTIONS q
+                ON (e.question_id = q.id AND e.c_id = q.c_id)
+                WHERE 
+                    q.id = $questionId AND
+                    e.c_id = {$this->course_id} AND 
+                    e.exercice_id = ".$this->id;
+
+        $result = Database::query($sql);
+
+        return Database::num_rows($result) > 0;
+    }
+
+    /**
      * changes the exercise title.
      *
      * @author Olivier Brouckaert
@@ -3102,7 +3129,7 @@ class Exercise
         $myRemindList = []
     ) {
         global $origin, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id;
-        $nbrQuestions = $this->get_count_question_list();
+        $nbrQuestions = $this->getQuestionCount();
         $buttonList = [];
         $html = $label = '';
         $hotspot_get = isset($_POST['hotspot']) ? Security::remove_XSS($_POST['hotspot']) : null;
@@ -6898,21 +6925,6 @@ class Exercise
     }
 
     /**
-     * @return int
-     */
-    public function get_count_question_list()
-    {
-        // Real question count
-        $question_count = 0;
-        $question_list = $this->get_question_list();
-        if (!empty($question_list)) {
-            $question_count = count($question_list);
-        }
-
-        return $question_count;
-    }
-
-    /**
      * Get categories added in the exercise--category matrix.
      *
      * @return array
@@ -8026,6 +8038,10 @@ class Exercise
     public function getQuestionForTeacher($start = 0, $lenght = 10)
     {
         $start = (int) $start;
+        if ($start < 0) {
+            $start = 0;
+        }
+
         $lenght = (int) $lenght;
 
         $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);

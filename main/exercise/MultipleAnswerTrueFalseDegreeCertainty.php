@@ -1247,7 +1247,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             $objectExercise = new Exercise();
             $objectExercise->read($exerciseId);
 
-            return $objectExercise->get_count_question_list();
+            return $objectExercise->getQuestionCount();
         }
 
         return 0;

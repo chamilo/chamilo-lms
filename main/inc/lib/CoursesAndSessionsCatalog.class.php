@@ -156,6 +156,63 @@ class CoursesAndSessionsCatalog
         return $row[0];
     }
 
+    public  static function getCourseCategoriesTree(){
+        $urlId = 1;
+        if (api_is_multiple_url_enabled()) {
+            $urlId = api_get_current_access_url_id();
+        }
+
+        $countCourses = self::countAvailableCoursesToShowInCatalog($urlId);
+        $categories = [];
+        $list = [];
+
+        $categories['ALL'] = [
+            'id' => 0,
+            'name' => get_lang('DisplayAll'),
+            'code' => 'ALL',
+            'parent_id' => null,
+            'tree_pos' => 0,
+            'number_courses' => $countCourses,
+            'level' => 0
+        ];
+
+        $allCategories = CourseCategory::getAllCategories();
+
+        foreach ($allCategories as $category) {
+            $subList = [];
+            if (empty($category['parent_id'])) {
+                $list[$category['code']] = $category;
+                $list[$category['code']]['level'] = 0;
+                list($subList, $childrenCount) = self::buildCourseCategoryTree($allCategories, $category['code'], 0);
+                //$list = array($list, $subList);
+                foreach($subList as $item) {
+                    $list[$item['code']] = $item;
+                }
+                $list[$category['code']]['number_courses'] = $childrenCount + $category['number_courses'];
+            }
+        }
+
+        // count courses that are in no category
+        $count_courses = CourseCategory::countCoursesInCategory();
+        $categories['NONE'] = [
+            'id' => 0,
+            'name' => get_lang('WithoutCategory'),
+            'code' => 'NONE',
+            'parent_id' => null,
+            'tree_pos' => 0,
+            'children_count' => 0,
+            'auth_course_child' => true,
+            'auth_cat_child' => true,
+            'number_courses' => $count_courses,
+            'level' => 0
+        ];
+
+        $result = array_merge($list,$categories);
+
+        return $result;
+    }
+
+
     /**
      * @return array
      */
@@ -169,6 +226,7 @@ class CoursesAndSessionsCatalog
         $countCourses = self::countAvailableCoursesToShowInCatalog($urlId);
 
         $categories = [];
+
         $categories[0][0] = [
             'id' => 0,
             'name' => get_lang('DisplayAll'),
@@ -179,6 +237,8 @@ class CoursesAndSessionsCatalog
         ];
 
         $categoriesFromDatabase = CourseCategory::getCategories();
+
+        //$allCategories = CourseCategory::getCategoriesCanBeAddedInCourse();
         foreach ($categoriesFromDatabase as $row) {
             $count_courses = CourseCategory::countCoursesInCategory($row['code']);
             $row['count_courses'] = $count_courses;
@@ -188,6 +248,7 @@ class CoursesAndSessionsCatalog
                 $categories[$row['parent_id']][$row['tree_pos']] = $row;
             }
         }
+        // count courses that are in no category
         $count_courses = CourseCategory::countCoursesInCategory();
         $categories[0][count($categories[0]) + 1] = [
             'id' => 0,
@@ -616,4 +677,42 @@ class CoursesAndSessionsCatalog
 
         return $sessionsToBrowse;
     }
+
+    /**
+     * Build a recursive tree of course categories
+     * @param $categories
+     * @param $parentId
+     * @return array
+     */
+    public static function buildCourseCategoryTree($categories, $parentId = 0, $level=0)
+    {
+        $list = [];
+        $count = 0;
+        $level++;
+        foreach ($categories as $category) {
+            $childrenCount = 0;
+            $subList = [];
+            if (empty($category['parent_id'])) {
+                continue;
+            }
+            if ($category['parent_id'] == $parentId) {
+                $list[$category['code']] = $category;
+                $count += $category['number_courses'];
+                $list[$category['code']]['level'] = $level;
+                list($subList, $childrenCount) = self::buildCourseCategoryTree(
+                    $categories,
+                    $category['code'],
+                    $level
+                );
+                $list[$category['code']]['number_courses'] += $childrenCount;
+                foreach($subList as $item) {
+                    $list[$item['code']] = $item;
+                }
+                $count += $childrenCount;
+            }
+        }
+
+        return [$list, $count];
+    }
+
 }

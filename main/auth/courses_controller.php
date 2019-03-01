@@ -109,6 +109,8 @@ class CoursesController
     ) {
         $data = [];
         $browse_course_categories = CoursesAndSessionsCatalog::getCourseCategories();
+        $listCategories = CoursesAndSessionsCatalog::getCourseCategoriesTree();
+
         $data['countCoursesInCategory'] = CourseCategory::countCoursesInCategory($category_code);
         if ($action === 'display_random_courses') {
             // Random value is used instead limit filter
@@ -130,6 +132,7 @@ class CoursesController
         }
 
         $data['browse_course_categories'] = $browse_course_categories;
+        $data['list_categories'] = $listCategories;
         $data['code'] = Security::remove_XSS($category_code);
 
         // getting all the courses to which the user is subscribed to

@@ -375,7 +375,6 @@ switch ($action) {
         $option = isset($_REQUEST['option']) ? (int) $_REQUEST['option'] : 0;
         $redirect = isset($_REQUEST['redirect']) ? $_REQUEST['redirect'] : 0;
 
-
         if (empty($userId) || empty($categoryId)) {
             api_not_allowed(true);
         }

@@ -343,6 +343,7 @@ if ($user_already_registered_show_terms === false &&
             $extraFieldList = $allowedFields['extra_fields'];
         }
         $requiredFields = api_get_configuration_value('required_extra_fields_in_inscription');
+
         if (!empty($requiredFields) && $requiredFields['options']) {
             $requiredFields = $requiredFields['options'];
         }

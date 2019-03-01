@@ -3860,13 +3860,13 @@ class CourseManager
                 $url = api_get_path(WEB_CODE_PATH).
                     'auth/courses.php?categoryid='.$row['id'].'&sec_token='.$stok.'&redirect=home';
                 $collapsed = isset($row['collapsed']) && $row['collapsed'] ? 1 : 0;
-                 if ($collapsed === 0) {
-                     $collapsableLink = Display::url(
+                if ($collapsed === 0) {
+                    $collapsableLink = Display::url(
                         '<i class="fa fa-folder-open"></i>',
                         $url.'&action=set_collapsable&option=1'
                     );
                 } else {
-                     $collapsableLink = Display::url(
+                    $collapsableLink = Display::url(
                         '<i class="fa fa-folder"></i>',
                         $url.'&action=set_collapsable&option=0'
                     );

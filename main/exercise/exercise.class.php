@@ -8026,6 +8026,10 @@ class Exercise
     public function getQuestionForTeacher($start = 0, $lenght = 10)
     {
         $start = (int) $start;
+        if ($start < 0) {
+            $start = 0;
+        }
+
         $lenght = (int) $lenght;
 
         $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);

@@ -173,7 +173,7 @@ if (!$inATest) {
         $alloQuestionOrdering = true;
         $showPagination = api_get_configuration_value('show_question_pagination');
         if (!empty($showPagination) && $nbrQuestions > $showPagination) {
-            $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+            $page = isset($_GET['page']) && !empty($_GET['page']) ? (int) $_GET['page'] : 1;
             $length = api_get_configuration_value('question_pagination_length');
             $url = api_get_self().'?'.api_get_cidreq();
             // Use pagination for exercise with more than 200 questions.

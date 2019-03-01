@@ -355,6 +355,53 @@ if ($execute_iframe) {
         $content = Security::remove_XSS(file_get_contents($file_url_sys));
         echo $content;
     } else {
+        if (api_is_allowed_to_edit()) {
+            $parentId = $document_data['parent_id'];
+            $url = api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq().'&id='.$parentId;
+            $actionsLeft = Display::url(
+                Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM),
+                $url
+            );
+
+            $actionsLeft .= Display::url(
+                Display::return_icon(
+                    'edit.png',
+                    get_lang('Modify'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                ),
+                api_get_path(WEB_CODE_PATH).'document/edit_document.php?'.api_get_cidreq().'&id='.$document_id
+            );
+
+            $titleToShow = addslashes(basename($document_data['title']));
+
+            $urlDeleteParams = http_build_query(
+                [
+                    'action' => 'delete_item',
+                    'id' => $parentId,
+                    'deleteid' => $document_data['id'],
+                ]
+            );
+            $actionsLeft .= Display::url(
+                Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_MEDIUM),
+                '#',
+                [
+                    'data-item-title' => $titleToShow,
+                    'data-href' => api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq(
+                        ).'&'.$urlDeleteParams,
+                    'data-toggle' => 'modal',
+                    'data-target' => '#confirm-delete',
+                ]
+            );
+            $actionsLeft .= Display::url(
+                Display::return_icon('pdf.png', get_lang('Export2PDF'), [], ICON_SIZE_MEDIUM),
+                api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq(
+                ).'&action=export_to_pdf&id='.$document_id
+            );
+
+            echo $toolbar = Display::toolbarAction('actions-documents', [$actionsLeft]);
+        }
+
         echo '<iframe 
             id="mainFrame" 
             name="mainFrame" 

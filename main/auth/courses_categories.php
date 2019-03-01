@@ -101,6 +101,21 @@ $code = isset($code) ? $code : null;
                     </div>
                     <div class="col-md-<?php echo $showSessions ? '4' : '6'; ?>">
 <?php
+        $categoriesSelect = '';
+        $cacheAvailable = api_get_configuration_value('apc');
+        $accessUrlId = api_get_current_access_url_id();
+        if ($cacheAvailable === true) {
+            $apcVar = api_get_configuration_value('apc_prefix').'_'.$accessUrlId.'_course_categories_select';
+            if (apcu_exists($apcVar)) {
+                $categoriesSelect = apcu_fetch($apcVar);
+            } else {
+                $categoriesSelect = getOptionSelect($list_categories, $codeType);
+                apcu_store($apcVar, $categoriesSelect, 60);
+            }
+        } else {
+            $categoriesSelect = getOptionSelect($list_categories, $codeType);
+        }
+
         $webAction = api_get_path(WEB_CODE_PATH).'auth/courses.php';
         $form = '<form action="'.$webAction.'" method="GET">';
         $form .= '<input type="hidden" name="action" value="'.$action.'">';
@@ -108,7 +123,7 @@ $code = isset($code) ? $code : null;
         $form .= '<input type="hidden" name="pageLength" value="'.$pageLength.'">';
         $form .= '<div class="form-group">';
         $form .= '<label>'.get_lang('CourseCategories').'</label>';
-        $form .= getOptionSelect($list_categories, $codeType);
+        $form .= $categoriesSelect;
         $form .= '</div>';
         $form .= '</form>';
         echo $form;

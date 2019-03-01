@@ -112,7 +112,8 @@
         "knplabs/knp-components": "~1.3",
         "guzzlehttp/guzzle": "~6.0",
         "onelogin/php-saml": "^3.0",
-        "symfony/dom-crawler": "~3.4"
+        "symfony/dom-crawler": "~3.4",
+        "brumann/polyfill-unserialize": "^1.0"
     },
     "require-dev": {
         "behat/behat": "@stable",

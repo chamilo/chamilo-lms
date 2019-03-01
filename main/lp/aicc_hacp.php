@@ -63,7 +63,11 @@ if ($debug > 2) {
 
 // Is this needed? This is probabaly done in the header file.
 $file = Session::read('file');
-$oLP = unserialize(Session::read('lpobject'));
+/** @var learnpath $oLP */
+$oLP = api_unserialize_content(
+    'not_allowed_classes',
+    Session::read('lpobject')
+);
 $oItem = &$oLP->items[$oLP->current];
 if (!is_object($oItem)) {
     error_log('New LP - aicc_hacp - Could not load oItem item', 0);

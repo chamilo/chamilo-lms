@@ -56,13 +56,13 @@ if ($modifyIn) {
         $objAnswer = new Answer($questionId);
     }
 
-    $color = unserialize($color);
-    $reponse = unserialize($reponse);
-    $comment = unserialize($comment);
-    $weighting = unserialize($weighting);
-    $hotspot_coordinates = unserialize($hotspot_coordinates);
-    $hotspot_type = unserialize($hotspot_type);
-    $destination = unserialize($destination);
+    $color = api_unserialize_content('not_allowed_classes', $color);
+    $reponse = api_unserialize_content('not_allowed_classes', $reponse);
+    $comment = api_unserialize_content('not_allowed_classes', $comment);
+    $weighting = api_unserialize_content('not_allowed_classes', $weighting);
+    $hotspot_coordinates = api_unserialize_content('not_allowed_classes', $hotspot_coordinates);
+    $hotspot_type = api_unserialize_content('not_allowed_classes', $hotspot_type);
+    $destination = api_unserialize_content('not_allowed_classes', $destination);
     unset($buttonBack);
 }
 

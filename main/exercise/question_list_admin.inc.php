@@ -34,7 +34,7 @@ if ($deleteQuestion) {
     // destruction of the Question object
     unset($objQuestionTmp);
 }
-$ajax_url = api_get_path(WEB_AJAX_PATH)."exercise.ajax.php?".api_get_cidreq()."&exercise_id=".intval($exerciseId);
+$ajax_url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&exercise_id='.intval($exerciseId);
 ?>
 <div id="dialog-confirm"
      title="<?php echo get_lang('ConfirmYourChoice'); ?>"
@@ -173,7 +173,8 @@ if (!$inATest) {
         $alloQuestionOrdering = true;
         $showPagination = api_get_configuration_value('show_question_pagination');
         if (!empty($showPagination) && $nbrQuestions > $showPagination) {
-            $page = isset($_GET['page']) && !empty($_GET['page']) ? (int) $_GET['page'] : 1;
+            // $page is declare in admin.php
+            //$page = isset($_GET['page']) && !empty($_GET['page']) ? (int) $_GET['page'] : 1;
             $length = api_get_configuration_value('question_pagination_length');
             $url = api_get_self().'?'.api_get_cidreq();
             // Use pagination for exercise with more than 200 questions.
@@ -189,10 +190,9 @@ if (!$inATest) {
             $pagination->renderer = function ($data) use ($url) {
                 $render = '<ul class="pagination">';
                 for ($i = 1; $i <= $data['pageCount']; $i++) {
-                    $page = $i;
-                    $pageContent = '<li><a href="'.$url.'&page='.$page.'">'.$page.'</a></li>';
-                    if ($data['current'] == $page) {
-                        $pageContent = '<li class="active"><a href="#" >'.$page.'</a></li>';
+                    $pageContent = '<li><a href="'.$url.'&page='.$i.'">'.$i.'</a></li>';
+                    if ($data['current'] == $i) {
+                        $pageContent = '<li class="active"><a href="#" >'.$i.'</a></li>';
                     }
                     $render .= $pageContent;
                 }
@@ -236,7 +236,7 @@ if (!$inATest) {
                         [],
                         ICON_SIZE_TINY
                     ),
-                    api_get_self().'?'.api_get_cidreq().'&clone_question='.$id,
+                    api_get_self().'?'.api_get_cidreq().'&clone_question='.$id.'&page='.$page,
                     ['class' => 'btn btn-default btn-sm']
                 );
                 $edit_link = $objQuestionTmp->type == CALCULATED_ANSWER && $objQuestionTmp->isAnswered()
@@ -277,6 +277,7 @@ if (!$inATest) {
                             .http_build_query([
                                 'exerciseId' => $exerciseId,
                                 'deleteQuestion' => $id,
+                                'page' => $page,
                             ]),
                         [
                             'id' => "delete_$id",

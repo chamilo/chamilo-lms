@@ -81,13 +81,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 $newQuestion = isset($_GET['newQuestion']) ? $_GET['newQuestion'] : 0;
 $modifyAnswers = isset($_GET['modifyAnswers']) ? $_GET['modifyAnswers'] : 0;
 $editQuestion = isset($_GET['editQuestion']) ? $_GET['editQuestion'] : 0;
-
-if (empty($modifyQuestion)) {
-    $modifyQuestion = isset($_GET['modifyQuestion']) ? $_GET['modifyQuestion'] : 0;
-}
-if (empty($deleteQuestion)) {
-    $deleteQuestion = isset($_GET['deleteQuestion']) ? $_GET['deleteQuestion'] : 0;
-}
+$page = isset($_GET['page']) && !empty($_GET['page']) ? (int) $_GET['page'] : 1;
+$modifyQuestion = isset($_GET['modifyQuestion']) ? $_GET['modifyQuestion'] : 0;
+$deleteQuestion = isset($_GET['deleteQuestion']) ? $_GET['deleteQuestion'] : 0;
 $clone_question = isset($_REQUEST['clone_question']) ? $_REQUEST['clone_question'] : 0;
 if (empty($questionId)) {
     $questionId = Session::read('questionId');
@@ -258,7 +254,7 @@ if (!empty($clone_question) && !empty($objExercise->id)) {
     // Reloading tne $objExercise obj
     $objExercise->read($objExercise->id);
 
-    header('Location: admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id);
+    header('Location: admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&page='.$page);
     exit;
 }
 
@@ -284,7 +280,7 @@ if (api_is_in_gradebook()) {
 $interbreadcrumb[] = ['url' => 'exercise.php?'.api_get_cidreq(), 'name' => get_lang('Exercises')];
 if (isset($_GET['newQuestion']) || isset($_GET['editQuestion'])) {
     $interbreadcrumb[] = [
-        'url' => "admin.php?exerciseId=".$objExercise->id.'&'.api_get_cidreq(),
+        'url' => 'admin.php?exerciseId='.$objExercise->id.'&'.api_get_cidreq(),
         'name' => $objExercise->selectTitle(true),
     ];
 } else {

@@ -101,16 +101,14 @@ $code = isset($code) ? $code : null;
                     </div>
                     <div class="col-md-<?php echo $showSessions ? '4' : '6'; ?>">
 <?php
-    $webAction = api_get_path(WEB_CODE_PATH).'auth/courses.php';
+        $webAction = api_get_path(WEB_CODE_PATH).'auth/courses.php';
         $form = '<form action="'.$webAction.'" method="GET">';
         $form .= '<input type="hidden" name="action" value="'.$action.'">';
         $form .= '<input type="hidden" name="pageCurrent" value="'.$pageCurrent.'">';
         $form .= '<input type="hidden" name="pageLength" value="'.$pageLength.'">';
         $form .= '<div class="form-group">';
         $form .= '<label>'.get_lang('CourseCategories').'</label>';
-
         $form .= getOptionSelect($list_categories, $codeType);
-
         $form .= '</div>';
         $form .= '</form>';
         echo $form;
@@ -281,7 +279,7 @@ echo '</div>';
 function getOptionSelect($categories, $codeType)
 {
     $html = '';
-    $html .= '<select name="category_code" onchange="submit();" class="form-control">';
+    $html .= '<select name="category_code" onchange="submit();" class="selectpicker form-control">';
     foreach ($categories as $category) {
         $categoryCode = $category['code'];
         $countCourse = $category['number_courses'];
@@ -290,7 +288,7 @@ function getOptionSelect($categories, $codeType)
             continue;
         }
         if ($level > 0) {
-            $separate = str_repeat("-----", $level);
+            $separate = str_repeat("--", $level);
         } else {
             $separate = '';
         }

@@ -187,6 +187,7 @@ class CoursesAndSessionsCatalog
                 //$list = array($list, $subList);
                 foreach($subList as $item) {
                     $list[$item['code']] = $item;
+
                 }
                 $list[$category['code']]['number_courses'] = $childrenCount + $category['number_courses'];
             }
@@ -356,6 +357,23 @@ class CoursesAndSessionsCatalog
         } else {
             $limitFilter = self::getLimitFilterFromArray($limit);
             $category_code = Database::escape_string($category_code);
+
+            $listCode = self::childrenCategories($category_code);
+            $conditionCode = " ";
+
+            if (empty($listCode)) {
+                if ($category_code === 'NONE') {
+                    $conditionCode .= " category_code='' ";
+                } else {
+                    $conditionCode .= " category_code='$category_code' ";
+                }
+            } else {
+                foreach ($listCode as $code) {
+                    $conditionCode .= " category_code='$code' OR ";
+                }
+                $conditionCode .= " category_code='$category_code' ";
+            }
+
             if (empty($category_code) || $category_code == "ALL") {
                 $sql = "SELECT *, id as real_id 
                         FROM $tbl_course course
@@ -365,12 +383,9 @@ class CoursesAndSessionsCatalog
                           $visibilityCondition
                     ORDER BY title $limitFilter ";
             } else {
-                if ($category_code == 'NONE') {
-                    $category_code = '';
-                }
                 $sql = "SELECT *, id as real_id FROM $tbl_course course
                         WHERE
-                            category_code='$category_code'
+                            $conditionCode 
                             $avoidCoursesCondition
                             $visibilityCondition
                         ORDER BY title $limitFilter ";
@@ -715,4 +730,28 @@ class CoursesAndSessionsCatalog
         return [$list, $count];
     }
 
+    /**
+     * List Code Search Category
+     * @param $code
+     * @return array
+     */
+    public static function childrenCategories($code)
+    {
+        $allCategories = CourseCategory::getAllCategories();
+        $list = [];
+        $row = [];
+
+        if ($code != 'ALL' and $code != 'NONE') {
+            foreach ($allCategories as $category) {
+                if ($category['code'] === $code) {
+                    $list = self::buildCourseCategoryTree($allCategories, $category['code'], 0);
+                }
+            }
+            foreach ($list[0] as $item) {
+                $row[] = $item['code'];
+            }
+        }
+
+        return $row;
+    }
 }

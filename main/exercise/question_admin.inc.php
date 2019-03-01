@@ -68,10 +68,10 @@ if (is_object($objQuestion)) {
                 echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&message=ItemUpdated"</script>';
             } else {
                 // New question
-                $page = '';
+                $page = 1;
                 $length = api_get_configuration_value('question_pagination_length');
-                if ($length) {
-                    $page = round($objExercise->get_count_question_list() / $length);
+                if (!empty($length)) {
+                    $page = round($objExercise->getQuestionCount() / $length);
                 }
                 echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&page='.$page.'&message=ItemAdded"</script>';
             }

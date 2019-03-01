@@ -3102,7 +3102,7 @@ class Exercise
         $myRemindList = []
     ) {
         global $origin, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id;
-        $nbrQuestions = $this->get_count_question_list();
+        $nbrQuestions = $this->getQuestionCount();
         $buttonList = [];
         $html = $label = '';
         $hotspot_get = isset($_POST['hotspot']) ? Security::remove_XSS($_POST['hotspot']) : null;
@@ -6895,21 +6895,6 @@ class Exercise
         $html .= '<div id="exercise_clock_warning" class="count_down"></div>';
 
         return $html;
-    }
-
-    /**
-     * @return int
-     */
-    public function get_count_question_list()
-    {
-        // Real question count
-        $question_count = 0;
-        $question_list = $this->get_question_list();
-        if (!empty($question_list)) {
-            $question_count = count($question_list);
-        }
-
-        return $question_count;
     }
 
     /**

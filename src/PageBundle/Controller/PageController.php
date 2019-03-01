@@ -80,8 +80,9 @@ class PageController extends BaseController
      * @param BlockInteractor     $blockInteractor
      * @param BlockManager        $blockManager
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      * @throws \Exception
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function createPage(
         $pageSlug,

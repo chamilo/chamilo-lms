@@ -4,10 +4,10 @@
 use Chamilo\CoreBundle\Entity\Resource\ResourceFile;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
-use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CDocument;
+use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
 use Symfony\Component\HttpFoundation\File\UploadedFile;

@@ -13,9 +13,6 @@ use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface;
-use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\Expr\Join;
 

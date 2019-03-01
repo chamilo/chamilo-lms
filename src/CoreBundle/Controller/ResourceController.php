@@ -29,7 +29,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-
 /**
  * Class ResourceController.
  *
@@ -397,7 +396,7 @@ class ResourceController extends BaseController implements CourseControllerInter
     }
 
     /**
-     * Shows a resource
+     * Shows a resource.
      *
      * @param Request             $request
      * @param CDocumentRepository $documentRepo
@@ -485,7 +484,6 @@ class ResourceController extends BaseController implements CourseControllerInter
         }
 
         throw new NotFoundHttpException();
-
         /*
 
         $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);

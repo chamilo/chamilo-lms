@@ -252,7 +252,7 @@ if (!empty($clone_question) && !empty($objExercise->id)) {
     $new_answer_obj->duplicate($new_question_obj);
 
     // Reloading tne $objExercise obj
-    $objExercise->read($objExercise->id);
+    $objExercise->read($objExercise->id, false);
 
     header('Location: admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&page='.$page);
     exit;

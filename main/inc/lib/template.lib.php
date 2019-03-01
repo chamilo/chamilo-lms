@@ -232,19 +232,6 @@ class Template
     }
 
     /**
-     * Load legacy params
-     */
-    private function loadLegacyParams()
-    {
-        // Set legacy breadcrumb
-        global $interbreadcrumb;
-        $this->params['legacy_breadcrumb'] = $interbreadcrumb;
-
-        global $htmlHeadXtra;
-        $this->params['legacy_javascript'] = $htmlHeadXtra;
-    }
-
-    /**
      * Render the template.
      *
      * @param string $template           The template path
@@ -1223,6 +1210,19 @@ class Template
         $this->assign('bug_notification', $rightFloatMenu);
 
         return true;
+    }
+
+    /**
+     * Load legacy params.
+     */
+    private function loadLegacyParams()
+    {
+        // Set legacy breadcrumb
+        global $interbreadcrumb;
+        $this->params['legacy_breadcrumb'] = $interbreadcrumb;
+
+        global $htmlHeadXtra;
+        $this->params['legacy_javascript'] = $htmlHeadXtra;
     }
 
     /**

@@ -1010,8 +1010,8 @@ if (!empty($exerciseList)) {
                             '',
                             [
                                 'href' => 'exercise.php?'.api_get_cidreq().'&choice=delete&sec_token='.$token.'&exerciseId='.$row['id'],
-                                'title' => addslashes(api_htmlentities(get_lang('AreYouSureToDeleteJS'),ENT_QUOTES, $charset))." ".addslashes($exercise->getUnformattedTitle())."?",
-                                'class' => 'delete-swal'
+                                'title' => addslashes(api_htmlentities(get_lang('AreYouSureToDeleteJS'), ENT_QUOTES, $charset))." ".addslashes($exercise->getUnformattedTitle())."?",
+                                'class' => 'delete-swal',
                             ]
                         );
                     } else {

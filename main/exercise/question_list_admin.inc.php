@@ -230,7 +230,7 @@ if (!$inATest) {
                     api_get_self().'?'.api_get_cidreq().'&clone_question='.$id,
                     [
                         'class' => 'btn btn-outline-secondary btn-sm',
-                        'title' => get_lang('Copy')
+                        'title' => get_lang('Copy'),
                     ]
                 );
                 $edit_link = $objQuestionTmp->type == CALCULATED_ANSWER && $objQuestionTmp->isAnswered()
@@ -239,7 +239,7 @@ if (!$inATest) {
                         [
                            'class' => 'btn btn-outline-secondary btn-sm',
                            'title' => get_lang('QuestionEditionNotAvailableBecauseItIsAlreadyAnsweredHoweverYouCanCopyItAndModifyTheCopy'),
-                           'disabled'
+                           'disabled',
                         ]
                     )
                     : Display::url(
@@ -252,7 +252,7 @@ if (!$inATest) {
                             ]),
                         [
                             'class' => 'btn btn-outline-secondary btn-sm',
-                            'title' => get_lang('Modify')
+                            'title' => get_lang('Modify'),
                         ]
                     );
                 $delete_link = null;
@@ -292,7 +292,7 @@ if (!$inATest) {
                             1,
                             true),
                         [
-                            'class' => 'btn-moved moved'
+                            'class' => 'btn-moved moved',
                         ]
                     );
                 }
@@ -305,7 +305,7 @@ if (!$inATest) {
 
                 // Question type
                 list($typeImg, $typeExpl) = $objQuestionTmp->get_type_icon_html();
-                $questionType = Display::return_icon($typeImg, $typeExpl,[],ICON_SIZE_MEDIUM);
+                $questionType = Display::return_icon($typeImg, $typeExpl, [], ICON_SIZE_MEDIUM);
 
                 // Question category
                 $txtQuestionCat = Security::remove_XSS(

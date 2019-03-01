@@ -142,28 +142,28 @@ switch ($action) {
         $course_info = api_get_course_info($_GET['code']);
         $content = get_lang('NoDescription');
         if (!empty($course_info)) {
-        if (api_get_setting('course_catalog_hide_private') === 'true' &&
+            if (api_get_setting('course_catalog_hide_private') === 'true' &&
             $course_info['visibility'] == COURSE_VISIBILITY_REGISTERED
         ) {
-            echo get_lang('PrivateAccess');
-            break;
-        }
+                echo get_lang('PrivateAccess');
+                break;
+            }
             $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
             $sql = "SELECT * FROM $table
                 WHERE c_id = ".$course_info['real_id']." AND session_id = 0
                 ORDER BY id";
-        $result = Database::query($sql);
-        if (Database::num_rows($result) > 0) {
-            while ($description = Database::fetch_object($result)) {
-                $descriptions[$description->id] = $description;
-            }
+            $result = Database::query($sql);
+            if (Database::num_rows($result) > 0) {
+                while ($description = Database::fetch_object($result)) {
+                    $descriptions[$description->id] = $description;
+                }
 
                 $content = CourseManager::get_details_course_description_html(
                 $descriptions,
                     api_get_system_encoding(),
                     false
             );
-        }
+            }
         }
         echo $content;
         break;

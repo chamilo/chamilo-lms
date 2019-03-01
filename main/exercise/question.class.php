@@ -751,7 +751,6 @@ abstract class Question
      * @param array $picture - picture to upload
      *
      * @return bool - true if uploaded, otherwise false
-     *
      */
     public function uploadPicture($picture)
     {
@@ -2380,6 +2379,5 @@ abstract class Question
 
     public function getHotSpotData()
     {
-
     }
 }

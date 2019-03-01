@@ -1439,7 +1439,6 @@ function create_unexisting_directory(
         return $document;
     }
 
-
     return false;
 }
 

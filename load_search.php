@@ -209,12 +209,10 @@ $extra = $extraFieldUser->addElements(
     $fieldsToShow,
     $fieldsToShow,
     [],
-    [],
     false,
     $forceShowFields, //$forceShowFields = false
     [],
-    [],
-    $fieldsToShow
+    []
 );
 
 $userForm->addHtml('</div></div></div>');
@@ -241,12 +239,10 @@ $extra = $extraFieldUser->addElements(
     $fieldsToShow,
     $fieldsToShow,
     [],
-    [],
     false,
     $forceShowFields, //$forceShowFields = false
     [],
-    [],
-    $fieldsToShow
+    []
 );
 
 $userForm->addHtml('</div></div></div>');
@@ -269,12 +265,10 @@ $extra = $extraFieldUser->addElements(
     $fieldsToShow,
     $fieldsToShow,
     $defaults,
-    [],
     false,
     $forceShowFields,//$forceShowFields = false
     [],
-    [],
-    $fieldsToShow
+    []
 );
 
 $userForm->addHtml('</div></div></div>');
@@ -298,12 +292,10 @@ $extra = $extraFieldUser->addElements(
     $fieldsToShow,
     $fieldsToShow,
     [],
-    [],
     false,
     $forceShowFields, //$forceShowFields = false
     [],
-    [],
-    $fieldsToShow
+    []
 );
 
 $userForm->addHtml('</div></div></div>');
@@ -328,7 +320,6 @@ $extra = $extraField->addElements(
     $showOnlyThisFields,
     $showOnlyThisFields,
     $defaults,
-    [],
     false, //$orderDependingDefaults
     true, // force
     [], // $separateExtraMultipleSelect
@@ -349,7 +340,6 @@ $extra = $extraFieldUser->addElements(
     true,
     $fieldsToShow,
     $fieldsToShow,
-    [],
     [],
     false,
     $forceShowFields //$forceShowFields = false
@@ -377,7 +367,6 @@ $extra = $extraField->addElements(
     $showOnlyThisFields,
     $showOnlyThisFields,
     $defaults,
-    [],
     false, //$orderDependingDefaults
     true, // force
     ['domaine' => 3, $theme => 5], // $separateExtraMultipleSelect
@@ -395,7 +384,6 @@ $extra = $extraField->addElements(
             get_lang('ThemeField').' 5',
         ],
     ],
-    [],
     true
 );
 
@@ -413,15 +401,11 @@ $extra = $extraFieldUser->addElements(
     $fieldsToShow,
     $fieldsToShow,
     [],
-    [],
     false,
     $forceShowFields //$forceShowFields = false
 );
 
-
-
 $form->addHtml('</div></div></div>');
-
 $form->addHtml('<div class="panel panel-default">');
 $form->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive">'.get_lang('NiveauLangue').'</a></div>');
 $form->addHtml('<div id="collapseFive" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFive">');
@@ -444,7 +428,6 @@ $extra = $extraField->addElements(
     $showOnlyThisFields,
     $showOnlyThisFields,
     $defaults,
-    [],
     false, //$orderDependingDefaults
     true, // force
     ['domaine' => 3, $theme => 5], // $separateExtraMultipleSelect
@@ -495,7 +478,6 @@ $extra = $extraFieldUser->addElements(
     $fieldsToShow,
     $fieldsToShow,
     [],
-    [],
     false,
     $forceShowFields
 );
@@ -518,12 +500,10 @@ $extra = $extraFieldUser->addElements(
     $fieldsToShow,
     $fieldsToShow,
     [],
-    [],
     false,
     $forceShowFields, //$forceShowFields = false
     [],
-    [],
-    $fieldsToShow
+    []
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];

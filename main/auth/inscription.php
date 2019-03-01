@@ -484,7 +484,6 @@ if ($user_already_registered_show_terms === false) {
             [],
             [],
             false,
-            false,
             [],
             [],
             [],
@@ -493,7 +492,6 @@ if ($user_already_registered_show_terms === false) {
             [],
             $requiredFields,
             true
-
         );
         $extraFieldsLoaded = true;
     }

@@ -501,12 +501,10 @@ class ExtraField extends Model
         $showOnlyTheseFields = [],
         $orderFields = [],
         $extraData = [],
-        $specialUrlList = [],
         $orderDependingDefaults = false,
         $forceShowFields = false,
         $separateExtraMultipleSelect = [],
         $customLabelsExtraMultipleSelect = [],
-        $fieldsToFreeze = [],
         $addEmptyOptionSelects = false,
         $introductionTextList = [],
         $requiredFields = [],
@@ -556,11 +554,9 @@ class ExtraField extends Model
             $useTagAsSelect,
             $showOnlyTheseFields,
             $orderFields,
-            $specialUrlList,
             $orderDependingDefaults,
             $separateExtraMultipleSelect,
             $customLabelsExtraMultipleSelect,
-            $fieldsToFreeze,
             $addEmptyOptionSelects,
             $introductionTextList,
             $hideGeoLocalizationDetails
@@ -1035,11 +1031,9 @@ class ExtraField extends Model
         $useTagAsSelect = false,
         $showOnlyThisFields = [],
         $orderFields = [],
-        $specialUrlList = [],
         $orderDependingDefaults = false,
         $separateExtraMultipleSelect = [],
         $customLabelsExtraMultipleSelect = [],
-        $fieldsToFreeze = [],
         $addEmptyOptionSelects = false,
         $introductionTextList = [],
         $hideGeoLocalizationDetails = false
@@ -1788,10 +1782,6 @@ class ExtraField extends Model
                                     'extra_'.$field_details['variable'] => $selectedOptions,
                                 ]
                             );
-
-                            if (isset($specialUrlList[$field_details['variable']])) {
-                                //$url = $specialUrlList[$field_details['variable']]."&field_id=$field_id&type={$this->type}";
-                            }
 
                             if ($useTagAsSelect == false) {
                                 $jquery_ready_content .= "

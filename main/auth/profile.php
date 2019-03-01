@@ -324,7 +324,6 @@ if (is_platform_authentication() &&
     $form->addPasswordRule('password1');
 }
 
-
 $extraField = new ExtraField('user');
 $return = $extraField->addElements(
     $form,
@@ -334,14 +333,12 @@ $return = $extraField->addElements(
     false,
     [],
     [],
-    [],
     false,
     false,
     [],
     [],
     [],
     false,
-    [],
     [],
     [],
     true

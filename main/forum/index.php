@@ -242,10 +242,8 @@ $returnParams = $extraField->addElements(
     ['language'], //show only fields
     [], // order fields
     [], // extra data
-    [],
     false,
     false,
-    [],
     [],
     [],
     true //$addEmptyOptionSelects = false,

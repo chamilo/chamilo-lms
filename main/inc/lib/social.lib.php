@@ -2398,15 +2398,24 @@ class SocialManager extends UserManager
                 'aria-label' => $socialWallPlaceholder,
             ]
         );
-
+        $form->addHtml('<div class="form-group">');
+        $form->addHtml('<div class="col-sm-4 col-md-offset-1">');
         $form->addFile('picture', get_lang('UploadFile'),['custom'=> true]);
-        $form->addHidden('url_content', '');
+        $form->addHtml('</div>');
+        $form->addHtml('<div class="col-sm-6">');
         $form->addButtonSend(
             get_lang('Post'),
             'wall_post_button',
             false,
-            ['cols-size' => [1, 10, 1]]
+            [
+                'cols-size' => [1, 10, 1],
+                'custom' => true
+            ]
         );
+        $form->addHtml('</div>');
+        $form->addHtml('</div>');
+
+        $form->addHidden('url_content', '');
         $html = Display::panel($form->returnForm(), get_lang('SocialWall'));
 
         return $html;
@@ -2751,12 +2760,8 @@ class SocialManager extends UserManager
                 } else {
                     switch ($extraFieldInfo['field_type']) {
                         case ExtraField::FIELD_TYPE_RADIO:
-
                             $objEfOption = new ExtraFieldOption('user');
                             $optionInfo = $objEfOption->get_field_option_by_field_and_option($extraFieldInfo['id'], $extraFieldInfo['value']);
-                            var_dump($extraFieldInfo, $optionInfo);
-
-
                             break;
                         case ExtraField::FIELD_TYPE_GEOLOCALIZATION:
                             $data = explode('::', $data);

@@ -3170,7 +3170,7 @@ class Tracking
                     WHERE c_id = $course_id $condition_lp";
             $result = Database::query($sql);
             $session_condition = api_get_session_condition($session_id);
-
+echo $sql;
             // calculates time
             if (Database::num_rows($result) > 0) {
                 while ($row = Database::fetch_array($result)) {

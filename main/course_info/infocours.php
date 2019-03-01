@@ -136,9 +136,7 @@ $extra = $extra_field->addElements(
     [],
     false,
     false,
-    $showOnlyTheseFields,
-    [],
-    false
+    $showOnlyTheseFields
 );
 
 //Tags ExtraField

@@ -326,7 +326,10 @@ $returnParams = $extraField->addElements(
     false, // tag as select
     [], //show only fields
     [], // order fields
-    [] // extra data
+    [], // extra data
+    [],
+    false,
+    true
 );
 $jqueryReadyContent = $returnParams['jquery_ready_content'];
 

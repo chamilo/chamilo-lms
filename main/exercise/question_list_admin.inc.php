@@ -261,6 +261,7 @@ if (!$inATest) {
                                 'type' => $objQuestionTmp->selectType(),
                                 'myid' => 1,
                                 'editQuestion' => $id,
+                                'page' => $page,
                             ]),
                         ['class' => 'btn btn-default btn-sm']
                     );

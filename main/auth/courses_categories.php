@@ -294,11 +294,11 @@ function getOptionSelect($categories, $codeType)
         } else {
             $separate = '';
         }
-        $html .= '<option ' . ($categoryCode == $codeType ? 'selected="selected" ' : '')
-            . ' value="' . $category['code'] . '">' . $separate . ' ' . $category['name'] . ' (' . $countCourse . ') </option>';
-
+        $html .= '<option '.($categoryCode == $codeType ? 'selected="selected" ' : '')
+            .' value="'.$category['code'].'">'.$separate.' '.$category['name'].' ('.$countCourse.') </option>';
     }
     $html .= '</select>';
+
     return $html;
 }
 /**

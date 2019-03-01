@@ -156,7 +156,8 @@ class CoursesAndSessionsCatalog
         return $row[0];
     }
 
-    public  static function getCourseCategoriesTree(){
+    public static function getCourseCategoriesTree()
+    {
         $urlId = 1;
         if (api_is_multiple_url_enabled()) {
             $urlId = api_get_current_access_url_id();
@@ -173,7 +174,7 @@ class CoursesAndSessionsCatalog
             'parent_id' => null,
             'tree_pos' => 0,
             'number_courses' => $countCourses,
-            'level' => 0
+            'level' => 0,
         ];
 
         $allCategories = CourseCategory::getAllCategories();
@@ -185,7 +186,7 @@ class CoursesAndSessionsCatalog
                 $list[$category['code']]['level'] = 0;
                 list($subList, $childrenCount) = self::buildCourseCategoryTree($allCategories, $category['code'], 0);
                 //$list = array($list, $subList);
-                foreach($subList as $item) {
+                foreach ($subList as $item) {
                     $list[$item['code']] = $item;
                 }
                 $list[$category['code']]['number_courses'] = $childrenCount + $category['number_courses'];
@@ -204,14 +205,13 @@ class CoursesAndSessionsCatalog
             'auth_course_child' => true,
             'auth_cat_child' => true,
             'number_courses' => $count_courses,
-            'level' => 0
+            'level' => 0,
         ];
 
-        $result = array_merge($list,$categories);
+        $result = array_merge($list, $categories);
 
         return $result;
     }
-
 
     /**
      * @return array
@@ -679,12 +679,14 @@ class CoursesAndSessionsCatalog
     }
 
     /**
-     * Build a recursive tree of course categories
+     * Build a recursive tree of course categories.
+     *
      * @param $categories
      * @param $parentId
+     *
      * @return array
      */
-    public static function buildCourseCategoryTree($categories, $parentId = 0, $level=0)
+    public static function buildCourseCategoryTree($categories, $parentId = 0, $level = 0)
     {
         $list = [];
         $count = 0;
@@ -705,7 +707,7 @@ class CoursesAndSessionsCatalog
                     $level
                 );
                 $list[$category['code']]['number_courses'] += $childrenCount;
-                foreach($subList as $item) {
+                foreach ($subList as $item) {
                     $list[$item['code']] = $item;
                 }
                 $count += $childrenCount;
@@ -714,5 +716,4 @@ class CoursesAndSessionsCatalog
 
         return [$list, $count];
     }
-
 }

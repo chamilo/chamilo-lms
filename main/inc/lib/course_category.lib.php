@@ -154,9 +154,9 @@ class CourseCategory
 
         $result = Database::query($sql);
         $categories = Database::store_result($result, 'ASSOC');
+
         return $categories;
     }
-
 
     /**
      * @param string $code

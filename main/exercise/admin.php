@@ -169,7 +169,6 @@ if (!is_object($objExercise)) {
     // saves the object into the session
     Session::write('objExercise', $objExercise);
 }
-
 // Exercise can be edited in their course.
 if ($objExercise->sessionId != $sessionId) {
     api_not_allowed(true);

@@ -29,6 +29,7 @@ $term_preview = [
 $extraField = new ExtraField('terms_and_condition');
 
 $types = LegalManager::getTreatmentTypeList();
+
 foreach ($types as $variable => $name) {
     $label = 'PersonalData'.ucfirst($name).'Title';
     $params = [
@@ -40,7 +41,7 @@ foreach ($types as $variable => $name) {
         'changeable' => true,
         'filter' => true,
         'visible_to_self' => true,
-        'visible_to_others' => true,
+        'visible_to_others' => true
     ];
     $extraField->save($params);
 }
@@ -153,8 +154,17 @@ if (isset($_POST['language'])) {
         [],
         [],
         false,
+        true,
+        [],
+        [],
+        false,
+        [],
+        [],
+        false,
         true
+
     );
+
 
     $jqueryReady = $returnParams['jquery_ready_content'];
 

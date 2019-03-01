@@ -51,7 +51,7 @@ class ExtraField extends Model
         'extra_field_type',
         //Enable this when field_loggeable is introduced as a table field (2.0)
         //'field_loggeable',
-        'created_at',
+        'created_at'
     ];
 
     public $ops = [
@@ -514,7 +514,8 @@ class ExtraField extends Model
         $addEmptyOptionSelects = false,
         $introductionTextList = [],
         $requiredFields = [],
-        $hideGeoLocalizationDetails = false
+        $hideGeoLocalizationDetails = false,
+        $help = false
     ) {
         if (empty($form)) {
             return false;
@@ -562,7 +563,8 @@ class ExtraField extends Model
             $customLabelsExtraMultipleSelect,
             $addEmptyOptionSelects,
             $introductionTextList,
-            $hideGeoLocalizationDetails
+            $hideGeoLocalizationDetails,
+            $help
         );
 
         if (!empty($requiredFields)) {
@@ -1038,7 +1040,8 @@ class ExtraField extends Model
         $customLabelsExtraMultipleSelect = [],
         $addEmptyOptionSelects = false,
         $introductionTextList = [],
-        $hideGeoLocalizationDetails = false
+        $hideGeoLocalizationDetails = false,
+        $help = false
     ) {
         $jquery_ready_content = null;
         if (!empty($extra)) {
@@ -1102,8 +1105,13 @@ class ExtraField extends Model
                 }
 
                 $translatedDisplayText = get_lang($field_details['display_text'], true);
+                $translatedDisplayHelpText = '';
+                if ($help) {
+                    $translatedDisplayHelpText .= get_lang($field_details['display_text'] . 'Help');
+                }
+                $label = [$translatedDisplayText, $translatedDisplayHelpText];
                 if (!empty($translatedDisplayText)) {
-                    $field_details['display_text'] = $translatedDisplayText;
+                    $field_details['display_text'] = $label;
                 }
 
                 switch ($field_details['field_type']) {
@@ -1129,6 +1137,7 @@ class ExtraField extends Model
                         }
                         break;
                     case self::FIELD_TYPE_TEXTAREA:
+
                         $form->addHtmlEditor(
                             'extra_'.$field_details['variable'],
                             $field_details['display_text'],
@@ -1139,6 +1148,7 @@ class ExtraField extends Model
                                 'Width' => '100%',
                                 'Height' => '130',
                                 'id' => 'extra_'.$field_details['variable'],
+
                             ]
                         );
                         $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');

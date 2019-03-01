@@ -1171,7 +1171,7 @@ class Exercise
     }
 
     /**
-     * If current exercise has a question
+     * If current exercise has a question.
      *
      * @param int $questionId
      *

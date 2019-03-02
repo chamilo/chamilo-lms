@@ -9355,8 +9355,16 @@ function api_unserialize_content($type, $serialized, $ignoreErrors = false)
             $allowedClasses = [
                 learnpath::class,
                 learnpathItem::class,
+                aicc::class,
+                aiccBlock::class,
                 aiccItem::class,
+                aiccObjective::class,
+                aiccResource::class,
+                scorm::class,
                 scormItem::class,
+                scormMetadata::class,
+                scormOrganization::class,
+                scormResource::class,
                 Link::class,
                 LpItem::class,
             ];

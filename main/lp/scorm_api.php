@@ -31,18 +31,9 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $file = Session::read('file');
 /** @var learnpath $oLP */
-$oLP = Unserialize::unserialize(
-    Session::read('lpobject'),
-    [
-        'allowed_classes' => [
-            learnpath::class,
-            learnpathItem::class,
-            aiccItem::class,
-            scormItem::class,
-            Link::class,
-            LpItem::class,
-        ],
-    ]
+$oLP = api_unserialize_content(
+    'lp',
+    Session::read('lpobject')
 );
 /** @var learnpathItem $oItem */
 $oItem = isset($oLP->items[$oLP->current]) ? $oLP->items[$oLP->current] : null;

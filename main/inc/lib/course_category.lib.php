@@ -113,9 +113,10 @@ class CourseCategory
     }
 
     /**
-     * @param string $category Optional. Parent category code
-     *
-     * @return array
+     * Returns a flat list of all course categories in this URL. If the
+     * allow_base_course_category option is true, then also show the
+     * course categories of the base URL
+     * @return array [id, name, code, parent_id, tree_pos, children_count, number_courses]
      */
     public static function getAllCategories()
     {

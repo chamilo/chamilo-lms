@@ -549,7 +549,7 @@ function lp_upload_quiz_action_handling()
 
         if (!empty($lpObject)) {
             /** @var learnpath $oLP */
-            $oLP = api_unserialize_content('lp', $lpObject);
+            $oLP = UnserializeApi::unserialize('lp', $lpObject);
             if (is_object($oLP)) {
                 if ((empty($oLP->cc)) || $oLP->cc != api_get_course_id()) {
                     $oLP = null;

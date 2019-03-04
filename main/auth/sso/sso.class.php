@@ -296,7 +296,7 @@ class sso
      */
     private function decode_cookie($cookie)
     {
-        return api_unserialize_content(
+        return UnserializeApi::unserialize(
             'not_allowed_classes',
             base64_decode($cookie)
         );

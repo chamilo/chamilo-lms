@@ -44,7 +44,7 @@ foreach ($sessionCategories as $category) {
                     );
                     if ($diagram && !empty($diagram['value'])) {
                         /** @var Graph $graph */
-                        $graph = api_unserialize_content('career', $diagram['value']);
+                        $graph = UnserializeApi::unserialize('career', $diagram['value']);
                         $content .= Career::renderDiagram($careerInfo, $graph);
                     }
                 }

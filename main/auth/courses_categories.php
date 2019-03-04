@@ -296,9 +296,10 @@ function getOptionSelect($categories, $codeType)
     $html = '';
     $html .= '<select name="category_code" onchange="submit();" class="selectpicker form-control">';
     foreach ($categories as $category) {
-        $categoryCode = $category['code'];
-        $countCourse = $category['number_courses'];
-        $level = $category['level'];
+        $categoryCode = Security::remove_XSS($category['code']);
+        $categoryName = Security::remove_XSS($category['name']);
+        $countCourse = (int) $category['number_courses'];
+        $level =  $category['level'];
         if (empty($countCourse)) {
             continue;
         }
@@ -308,7 +309,7 @@ function getOptionSelect($categories, $codeType)
             $separate = '';
         }
         $html .= '<option '.($categoryCode == $codeType ? 'selected="selected" ' : '')
-            .' value="'.$category['code'].'">'.$separate.' '.$category['name'].' ('.$countCourse.') </option>';
+            .' value="'.$categoryCode.'">'.$separate.' '.$categoryName.' ('.$countCourse.') </option>';
     }
     $html .= '</select>';
 

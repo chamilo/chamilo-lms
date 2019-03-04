@@ -1145,7 +1145,7 @@ abstract class Question
                 $se_doc = $di->get_document((int) $se_ref['search_did']);
                 if ($se_doc !== false) {
                     if (($se_doc_data = $di->get_document_data($se_doc)) !== false) {
-                        $se_doc_data = api_unserialize_content(
+                        $se_doc_data = UnserializeApi::unserialize(
                             'not_allowed_classes',
                             $se_doc_data
                         );

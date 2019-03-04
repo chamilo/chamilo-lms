@@ -266,7 +266,7 @@ class Category implements GradebookItem
     {
         $this->courseDependency = [];
 
-        $unserialized = api_unserialize_content('not_allowed_classes', $value, true);
+        $unserialized = UnserializeApi::unserialize('not_allowed_classes', $value, true);
 
         if (false !== $unserialized) {
             $this->courseDependency = $unserialized;

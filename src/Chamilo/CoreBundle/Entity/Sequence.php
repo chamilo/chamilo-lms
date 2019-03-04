@@ -135,7 +135,7 @@ class Sequence
      */
     public function getUnSerializeGraph()
     {
-        return api_unserialize_content('sequence_graph', $this->graph);
+        return UnserializeApi::unserialize('sequence_graph', $this->graph);
     }
 
     /**

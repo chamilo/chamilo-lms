@@ -30,7 +30,7 @@ $d_number = (int) $d_number;
 $sql4 = "UPDATE set_module SET cal_day_num = $d_number WHERE id = $d_id ";
 Database::query($sql4);
 print_r(
-    api_unserialize_content(
+    UnserializeApi::unserialize(
         'not_allowed_classes',
         Security::remove_XSS($_POST['aaa'])
     )

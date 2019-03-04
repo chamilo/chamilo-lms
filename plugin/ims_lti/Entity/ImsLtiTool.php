@@ -465,7 +465,7 @@ class ImsLtiTool
      */
     public function unserializePrivacy()
     {
-        return api_unserialize_content('not_allowed_classes', $this->privacy);
+        return UnserializeApi::unserialize('not_allowed_classes', $this->privacy);
     }
 
     /**

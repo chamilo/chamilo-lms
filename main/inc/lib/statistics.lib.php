@@ -305,7 +305,7 @@ class Statistics
             } else {
                 if (!empty($row[2])) {
                     $originalData = str_replace('\\', '', $row[2]);
-                    $row[2] = api_unserialize_content('not_allowed_classes', $originalData);
+                    $row[2] = UnserializeApi::unserialize('not_allowed_classes', $originalData);
                     if (is_array($row[2]) && !empty($row[2])) {
                         $row[2] = implode_with_key(', ', $row[2]);
                     } else {

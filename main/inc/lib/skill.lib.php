@@ -604,18 +604,17 @@ class SkillRelUser extends Model
      */
     public function getByUserAndSkill($userId, $skillId, $courseId, $sessionId = 0)
     {
-        $where = [
-            'user_id = ? AND skill_id = ? AND course_id = ? AND session_id = ?' => [
-                intval($userId),
-                intval($skillId),
-                intval($courseId),
-                $sessionId ? intval($sessionId) : null,
-            ],
-        ];
+        $sessionCondition = api_get_session_condition($sessionId, true);
 
-        return Database::select('*', $this->table, [
-            'where' => $where,
-        ], 'first');
+        $sql = sprintf(
+            "SELECT * FROM {$this->table} WHERE user_id = %d AND skill_id = %d AND course_id = %d $sessionCondition",
+            $userId,
+            $skillId,
+            $courseId
+        );
+
+        $result = Database::query($sql);
+        return Database::fetch_assoc($result);
     }
 
     /**

@@ -337,9 +337,10 @@ function LMSInitialize() {
 
         logit_scorm('LMSInitialize() with params: '+log);
 
-        $("#tab-iframe").removeClass("iframe_"+olms.lms_item_type);
-        $("#tab-iframe").addClass("iframe_"+olms.lms_item_type);
-
+        if(olms.lms_item_type == 'sco'){
+            $("#tab-iframe").removeClass("tab-content");
+            $("#tab-iframe").addClass("tab-content iframe_"+olms.lms_item_type);
+        }
     if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document') {
             xajax_start_timer();
         }

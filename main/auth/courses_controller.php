@@ -111,7 +111,6 @@ class CoursesController
         //$browse_course_categories = CoursesAndSessionsCatalog::getCourseCategories();
         $listCategories = CoursesAndSessionsCatalog::getCourseCategoriesTree();
 
-
         $data['countCoursesInCategory'] = CourseCategory::countCoursesInCategory($category_code);
         if ($action === 'display_random_courses') {
             // Random value is used instead limit filter
@@ -122,7 +121,6 @@ class CoursesController
 
             $data['countCoursesInCategory'] = count($data['browse_courses_in_category']);
         } else {
-
             if (!isset($category_code)) {
                 $category_code = $listCategories['ALL']['code']; // by default first category
             }

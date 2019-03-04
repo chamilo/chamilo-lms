@@ -41,7 +41,7 @@ foreach ($types as $variable => $name) {
         'changeable' => true,
         'filter' => true,
         'visible_to_self' => true,
-        'visible_to_others' => true
+        'visible_to_others' => true,
     ];
     $extraField->save($params);
 }
@@ -162,9 +162,7 @@ if (isset($_POST['language'])) {
         [],
         false,
         true
-
     );
-
 
     $jqueryReady = $returnParams['jquery_ready_content'];
 

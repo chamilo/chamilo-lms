@@ -51,7 +51,7 @@ class ExtraField extends Model
         'extra_field_type',
         //Enable this when field_loggeable is introduced as a table field (2.0)
         //'field_loggeable',
-        'created_at'
+        'created_at',
     ];
 
     public $ops = [
@@ -1107,7 +1107,7 @@ class ExtraField extends Model
                 $translatedDisplayText = get_lang($field_details['display_text'], true);
                 $translatedDisplayHelpText = '';
                 if ($help) {
-                    $translatedDisplayHelpText .= get_lang($field_details['display_text'] . 'Help');
+                    $translatedDisplayHelpText .= get_lang($field_details['display_text'].'Help');
                 }
                 $label = [$translatedDisplayText, $translatedDisplayHelpText];
                 if (!empty($translatedDisplayText)) {
@@ -1148,7 +1148,6 @@ class ExtraField extends Model
                                 'Width' => '100%',
                                 'Height' => '130',
                                 'id' => 'extra_'.$field_details['variable'],
-
                             ]
                         );
                         $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');

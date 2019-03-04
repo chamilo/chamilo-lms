@@ -174,7 +174,7 @@ class CoursesAndSessionsCatalog
             'parent_id' => null,
             'tree_pos' => 0,
             'number_courses' => $countCourses,
-            'level' => 0
+            'level' => 0,
         ];
 
         $allCategories = CourseCategory::getAllCategories();
@@ -205,14 +205,13 @@ class CoursesAndSessionsCatalog
             'auth_course_child' => true,
             'auth_cat_child' => true,
             'number_courses' => $count_courses,
-            'level' => 0
+            'level' => 0,
         ];
 
         $result = array_merge($list, $categories);
 
         return $result;
     }
-
 
     /**
      * @return array
@@ -383,7 +382,6 @@ class CoursesAndSessionsCatalog
                           $visibilityCondition
                     ORDER BY title $limitFilter ";
             } else {
-
                 $sql = "SELECT *, id as real_id FROM $tbl_course course
                         WHERE
                             $conditionCode 
@@ -695,9 +693,11 @@ class CoursesAndSessionsCatalog
     }
 
     /**
-     * Build a recursive tree of course categories
+     * Build a recursive tree of course categories.
+     *
      * @param $categories
      * @param $parentId
+     *
      * @return array
      */
     public static function buildCourseCategoryTree($categories, $parentId = 0, $level = 0)
@@ -732,8 +732,10 @@ class CoursesAndSessionsCatalog
     }
 
     /**
-     * List Code Search Category
+     * List Code Search Category.
+     *
      * @param $code
+     *
      * @return array
      */
     public static function childrenCategories($code)

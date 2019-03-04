@@ -239,7 +239,6 @@ class CoursesAndSessionsCatalog
 
         $categoriesFromDatabase = CourseCategory::getCategories();
 
-        //$allCategories = CourseCategory::getCategoriesCanBeAddedInCourse();
         foreach ($categoriesFromDatabase as $row) {
             $count_courses = CourseCategory::countCoursesInCategory($row['code']);
             $row['count_courses'] = $count_courses;

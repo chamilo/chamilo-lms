@@ -31,7 +31,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $file = Session::read('file');
 /** @var learnpath $oLP */
-$oLP = api_unserialize_content(
+$oLP = UnserializeApi::unserialize(
     'lp',
     Session::read('lpobject')
 );

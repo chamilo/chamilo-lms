@@ -394,7 +394,7 @@ if ($allow === true) {
 
                 if (!empty($item) && isset($item['value']) && !empty($item['value'])) {
                     /** @var Graph $graph */
-                    $graph = api_unserialize_content(
+                    $graph = UnserializeApi::unserialize(
                         'career',
                         $item['value']
                     );

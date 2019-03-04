@@ -64,7 +64,7 @@ if ($debug > 2) {
 // Is this needed? This is probabaly done in the header file.
 $file = Session::read('file');
 /** @var learnpath $oLP */
-$oLP = api_unserialize_content(
+$oLP = UnserializeApi::unserialize(
     'not_allowed_classes',
     Session::read('lpobject')
 );

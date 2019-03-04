@@ -56,13 +56,13 @@ if ($modifyIn) {
         $objAnswer = new Answer($questionId);
     }
 
-    $color = api_unserialize_content('not_allowed_classes', $color);
-    $reponse = api_unserialize_content('not_allowed_classes', $reponse);
-    $comment = api_unserialize_content('not_allowed_classes', $comment);
-    $weighting = api_unserialize_content('not_allowed_classes', $weighting);
-    $hotspot_coordinates = api_unserialize_content('not_allowed_classes', $hotspot_coordinates);
-    $hotspot_type = api_unserialize_content('not_allowed_classes', $hotspot_type);
-    $destination = api_unserialize_content('not_allowed_classes', $destination);
+    $color = UnserializeApi::unserialize('not_allowed_classes', $color);
+    $reponse = UnserializeApi::unserialize('not_allowed_classes', $reponse);
+    $comment = UnserializeApi::unserialize('not_allowed_classes', $comment);
+    $weighting = UnserializeApi::unserialize('not_allowed_classes', $weighting);
+    $hotspot_coordinates = UnserializeApi::unserialize('not_allowed_classes', $hotspot_coordinates);
+    $hotspot_type = UnserializeApi::unserialize('not_allowed_classes', $hotspot_type);
+    $destination = UnserializeApi::unserialize('not_allowed_classes', $destination);
     unset($buttonBack);
 }
 

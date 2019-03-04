@@ -1,43 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Brumann\Polyfill\Unserialize;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
-use Chamilo\CourseBundle\Component\CourseCopy\Course;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\Announcement;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\Attendance;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\CalendarEvent;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseCopyLearnpath;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseCopyTestCategory;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseDescription;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseSession;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\Document;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\Forum;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumCategory;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumPost;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumTopic;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\Glossary;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\GradeBookBackup;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\Link;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\LinkCategory;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\Quiz;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\QuizQuestion;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\QuizQuestionOption;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\ScormDocument;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\Survey;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\SurveyInvitation;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\SurveyQuestion;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\Thematic;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\ToolIntro;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\Wiki;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\Work;
 use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
-use Fhaculty\Graph\Graph;
-use Fhaculty\Graph\Set\Edges;
-use Fhaculty\Graph\Set\Vertices;
-use Fhaculty\Graph\Set\VerticesMap;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -2800,7 +2767,7 @@ function api_get_plugin_setting($plugin, $variable)
     if (isset($result[$plugin])) {
         $value = $result[$plugin];
 
-        $unserialized = api_unserialize_content('not_allowed_classes', $value, true);
+        $unserialized = UnserializeApi::unserialize('not_allowed_classes', $value, true);
 
         if (false !== $unserialized) {
             $value = $unserialized;

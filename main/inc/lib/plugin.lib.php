@@ -437,7 +437,7 @@ class AppPlugin
             $settings_filtered = [];
             foreach ($plugin_settings as $item) {
                 if (!empty($item['selected_value'])) {
-                    $unserialized = api_unserialize_content('not_allowed_classes', $item['selected_value'], true);
+                    $unserialized = UnserializeApi::unserialize('not_allowed_classes', $item['selected_value'], true);
                     if (false !== $unserialized) {
                         $item['selected_value'] = $unserialized;
                     }

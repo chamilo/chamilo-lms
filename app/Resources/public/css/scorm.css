@@ -359,8 +359,12 @@ See https://support.chamilo.org/issues/6976
     color: #686f7a;
 }
 
+.lp-view-tabs{
+    margin-top: 4px;
+}
+
 #learning_path_right_zone .lp-view-tabs li a {
-    padding: 5px 10px;
+    padding: 5px;
 }
 
 #learning_path_main {
@@ -421,11 +425,13 @@ See https://support.chamilo.org/issues/6976
 }
 
 #learning_path_right_zone .lp-view-tabs .tab-content {
-    bottom: 5px;
-    left: 5px;
+    bottom: 0;
+    left: 0;
     position: absolute;
-    right: 5px;
-    top: 60px;
+    right: 0;
+    top: 45px;
+    border: 1px solid #dddddd;
+    border-top: none;
 }
 
 #learning_path_right_zone .tab-pane {
@@ -503,9 +509,9 @@ See https://support.chamilo.org/issues/6976
 
 .navegation-bar {
     display: block;
-    padding: 5px 10px 5px 5px;
-    right: 0;
-    top: 0;
+    padding: 0;
+    right: 5px;
+    top: 5px;
     position: absolute;
     z-index: 9999;
 }
@@ -623,9 +629,10 @@ See https://support.chamilo.org/issues/6976
     }
 
     #learning_path_right_zone .lp-view-tabs .tab-content {
-        bottom: 10px;
-        right: 10px;
-        top: 60px;
+        bottom: 0;
+        right: 0;
+        top: 45px;
+        left: 0;
     }
 
     #learning_path_right_zone .tab-pane {

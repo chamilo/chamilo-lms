@@ -547,7 +547,6 @@ $template->assign('media_player', $mediaplayer);
 $template->assign('toc_list', $get_toc_list);
 $template->assign('teacher_toc_buttons', $get_teacher_buttons);
 $template->assign('iframe_src', $src);
-$template->assign('type', $lp->get_type());
 $template->assign('navigation_bar_bottom', $navigation_bar_bottom);
 $template->assign('show_left_column', $lp->getHideTableOfContents() == 0);
 

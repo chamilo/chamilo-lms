@@ -238,6 +238,7 @@ $(document).ready(function() {
     olms.info_lms_item[0] = '<?php echo $oItem->get_id(); ?>';
     olms.info_lms_item[1] = '<?php echo $oItem->get_id(); ?>';
 
+
     $("#content_id").load(function() {
         logit_lms('#content_id load event starts');
         olms.info_lms_item[0] = olms.info_lms_item[1];
@@ -335,6 +336,9 @@ function LMSInitialize() {
                 ;
 
         logit_scorm('LMSInitialize() with params: '+log);
+
+        $("#tab-iframe").removeClass("iframe_"+olms.lms_item_type);
+        $("#tab-iframe").addClass("iframe_"+olms.lms_item_type);
 
     if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document') {
             xajax_start_timer();

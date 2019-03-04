@@ -453,7 +453,11 @@ See https://support.chamilo.org/issues/6976
     left: 0;
     width: 100%;
 }
-
+.iframe_sco{
+    background-color: #fffa90;
+    padding: 5px;
+    top: 0 !important;
+}
 .nav-tabs li.active a {
     color: #006A84;
 }

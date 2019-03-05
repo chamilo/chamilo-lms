@@ -2115,7 +2115,6 @@ class UserGroup extends Model
                 $relationType = array_map('intval', $relationType);
                 $relationType = implode("','", $relationType);
                 $relationCondition = " AND ( gu.relation_type IN ('$relationType')) ";
-
             } else {
                 $relationType = (int) $relationType;
                 $relationCondition = " AND gu.relation_type = $relationType ";

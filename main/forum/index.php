@@ -422,26 +422,26 @@ if (is_array($forumCategories)) {
                         // The number of topics and posts.
                         if ($hideNotifications == false) {
                             // The number of topics and posts.
-                        if ($forum['forum_of_group'] !== '0') {
-                            if (is_array($mywhatsnew_post_info) && !empty($mywhatsnew_post_info)) {
-                                $forumInfo['alert'] = ' '.
+                            if ($forum['forum_of_group'] !== '0') {
+                                if (is_array($mywhatsnew_post_info) && !empty($mywhatsnew_post_info)) {
+                                    $forumInfo['alert'] = ' '.
                                 Display::return_icon(
                                     'alert.png',
                                     get_lang('Forum'),
                                     null,
                                     ICON_SIZE_SMALL
                                 );
-                            }
-                        } else {
-                            if (is_array($mywhatsnew_post_info) && !empty($mywhatsnew_post_info)) {
-                                $forumInfo['alert'] = ' '.Display::return_icon(
+                                }
+                            } else {
+                                if (is_array($mywhatsnew_post_info) && !empty($mywhatsnew_post_info)) {
+                                    $forumInfo['alert'] = ' '.Display::return_icon(
                                     'alert.png',
                                     get_lang('Forum'),
                                     null,
                                     ICON_SIZE_SMALL
                                 );
+                                }
                             }
-                        }
                         }
                         $poster_id = null;
                         // The last post in the forum.

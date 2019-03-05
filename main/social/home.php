@@ -263,10 +263,9 @@ $formSearch->addText(
     [
         'aria-label' => get_lang('SearchUsers'),
         'custom' => true,
-        'placeholder' => get_lang('ByName')
+        'placeholder' => get_lang('ByName'),
     ]
 );
-
 
 $tpl = new Template(get_lang('SocialNetwork'));
 SocialManager::setSocialUserBlock($tpl, $user_id, 'home');

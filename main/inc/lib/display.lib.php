@@ -2791,7 +2791,6 @@ HTML;
             default:
                 //$html = self::url($data['basename'], $fileUrl);
                 break;
-
         }
         //$html = self::url($content, $fileUrl, ['ajax']);
 

@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CourseBundle\Entity\CGroupRelUser;
-
 /**
  * This library contains some functions for group-management.
  *

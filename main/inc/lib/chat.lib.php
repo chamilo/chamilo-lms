@@ -114,7 +114,6 @@ class Chat extends Model
 
         $chats = [];
         foreach ($chatHistory as $userId => $time) {
-
             /*$items = $this->getPreviousMessages(
                 $userId,
                 api_get_user_id(),
@@ -135,7 +134,6 @@ class Chat extends Model
             $chats[$userId]['items'] = $items;
             $chats[$userId]['window_user_info'] = api_get_user_info($userId);
         }
-
 
         /*
             foreach ($chatHistory as $chat) {
@@ -349,7 +347,7 @@ class Chat extends Model
                     'online' => $user_info['user_is_online'],
                     'avatar' => $user_info['avatar_small'],
                     'user_id' => $user_info['user_id'],
-                ]
+                ],
             ];
 
             $items[$fromUserId] = $item;
@@ -381,7 +379,7 @@ class Chat extends Model
                     'online' => $user_info['user_is_online'],
                     'avatar' => $user_info['avatar_small'],
                     'user_id' => $user_info['user_id'],
-                ]
+                ],
             ];
 
             $items[$fromUserId] = $item;

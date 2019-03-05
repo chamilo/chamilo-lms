@@ -70,7 +70,6 @@ $(function() {
     
 </script>';
 
-
 /* Actions */
 $my_action = isset($_GET['action']) ? $_GET['action'] : '';
 
@@ -196,14 +195,14 @@ if (!api_is_allowed_to_edit(false, true) &&
     increase_thread_view($_GET['thread']);
 
     if ($origin == 'learnpath') {
-    $template = new Template('', false, false, true, true, false);
-} else {
-    $template = new Template();
+        $template = new Template('', false, false, true, true, false);
+    } else {
+        $template = new Template();
     }
 
 $actions = '<span style="float:right;">'.search_link().'</span>';
     if ($origin != 'learnpath') {
-    $actions .= '<a href="'.$forumUrl.'viewforum.php?forum='
+        $actions .= '<a href="'.$forumUrl.'viewforum.php?forum='
             .intval($_GET['forum']).'&'.api_get_cidreq().'">'
             .Display::return_icon('back.png', get_lang('BackToForum'), '', ICON_SIZE_MEDIUM).'</a>';
     }
@@ -221,7 +220,7 @@ $actions = '<span style="float:right;">'.search_link().'</span>';
         if ($_user['user_id'] || ($current_forum['allow_anonymous'] == 1 && !$_user['user_id'])) {
             // reply link
             if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
-            $actions .= '<a href="'.$forumUrl.'reply.php?'.api_get_cidreq().'&forum='
+                $actions .= '<a href="'.$forumUrl.'reply.php?'.api_get_cidreq().'&forum='
                     .intval($_GET['forum']).'&thread='
                     .intval($_GET['thread']).'&action=replythread">'
                     .Display::return_icon('reply_thread.png', get_lang('ReplyToThread'), '', ICON_SIZE_MEDIUM)
@@ -236,9 +235,9 @@ $actions = '<span style="float:right;">'.search_link().'</span>';
                 ($current_forum['allow_new_threads'] == 1 && !isset($_user['user_id']) && $current_forum['allow_anonymous'] == 1)
             ) {
                 if ($current_forum['locked'] != 1 && $current_forum['locked'] != 1) {
-                $actions .= '&nbsp;&nbsp;';
+                    $actions .= '&nbsp;&nbsp;';
                 } else {
-                $actions .= get_lang('ForumLocked');
+                    $actions .= get_lang('ForumLocked');
                 }
             }
         }
@@ -246,16 +245,16 @@ $actions = '<span style="float:right;">'.search_link().'</span>';
 
     // The different views of the thread.
     if ($origin != 'learnpath') {
-    /*$actions .= '<a href="'.$forumUrl.'viewthread.php?'.api_get_cidreq().'&'.api_get_cidreq()
-            .'&forum='.intval($_GET['forum']).'&thread='.intval($_GET['thread'])
-            .'&search='.Security::remove_XSS(urlencode($my_search));
-        echo $my_url.'&view=flat">'
-            .Display::return_icon('forum_listview.png', get_lang('FlatView'), null, ICON_SIZE_MEDIUM)
-            .'</a>';
-    /*
-        echo $my_url.'&view=nested">'
-            .Display::return_icon('forum_nestedview.png', get_lang('NestedView'), null, ICON_SIZE_MEDIUM)
-        .'</a>';*/
+        /*$actions .= '<a href="'.$forumUrl.'viewthread.php?'.api_get_cidreq().'&'.api_get_cidreq()
+                .'&forum='.intval($_GET['forum']).'&thread='.intval($_GET['thread'])
+                .'&search='.Security::remove_XSS(urlencode($my_search));
+            echo $my_url.'&view=flat">'
+                .Display::return_icon('forum_listview.png', get_lang('FlatView'), null, ICON_SIZE_MEDIUM)
+                .'</a>';
+        /*
+            echo $my_url.'&view=nested">'
+                .Display::return_icon('forum_nestedview.png', get_lang('NestedView'), null, ICON_SIZE_MEDIUM)
+            .'</a>';*/
     }
 
 $template->assign('forum_actions', $actions);
@@ -279,7 +278,7 @@ $template->assign('origin', api_get_origin());
     }
 
     if ($current_thread['thread_peer_qualify'] == 1) {
-    Display::addFlash(Display::return_message(get_lang('ForumThreadPeerScoringStudentComment'), 'info'));
+        Display::addFlash(Display::return_message(get_lang('ForumThreadPeerScoringStudentComment'), 'info'));
     }
 
 $allowReport = reportAvailable();
@@ -292,7 +291,7 @@ if (isset($_GET['action']) &&
     isset($_GET['id_attach'])
 ) {
     delete_attachment(0, $_GET['id_attach']);
-    }
+}
 
 $origin = api_get_origin();
 $sessionId = api_get_session_id();
@@ -326,7 +325,7 @@ foreach ($posts as $post) {
     $username = '';
     if (isset($post['username'])) {
         $username = sprintf(get_lang('LoginX'), $post['username']);
-}
+    }
 
     $name = $post['complete_name'];
     if (empty($posterId)) {
@@ -334,11 +333,11 @@ foreach ($posts as $post) {
     }
 
     $post['user_data'] = '';
-if ($origin != 'learnpath') {
+    if ($origin != 'learnpath') {
         if ($allowUserImageForum) {
             $post['user_data'] = '<div class="thumbnail">'.
                 display_user_image($posterId, $name, $origin).'</div>';
-}
+        }
 
         $post['user_data'] .= Display::tag(
             'h4',
@@ -350,25 +349,25 @@ if ($origin != 'learnpath') {
         $urlImg = api_get_path(WEB_IMG_PATH);
         $iconStatus = null;
         $isAdmin = UserManager::is_admin($posterId);
-        /*
+    /*
 
-        if ($_user['status'] == 5) {
-            if ($_user['has_certificates']) {
-                $iconStatus = '<img src="'.$urlImg.'icons/svg/ofaj_graduated.svg" width="22px" height="22px">';
-            } else {
-                $iconStatus = '<img src="'.$urlImg.'icons/svg/ofaj_student.svg" width="22px" height="22px">';
-            }
+    if ($_user['status'] == 5) {
+        if ($_user['has_certificates']) {
+            $iconStatus = '<img src="'.$urlImg.'icons/svg/ofaj_graduated.svg" width="22px" height="22px">';
         } else {
-            if ($_user['status'] == 1) {
-                if ($isAdmin) {
-                    $iconStatus = '<img src="'.$urlImg.'icons/svg/ofaj_admin.svg" width="22px" height="22px">';
-                } else {
-                    $iconStatus = '<img src="'.$urlImg.'icons/svg/ofaj_teacher.svg" width="22px" height="22px">';
-                }
+            $iconStatus = '<img src="'.$urlImg.'icons/svg/ofaj_student.svg" width="22px" height="22px">';
+        }
+    } else {
+        if ($_user['status'] == 1) {
+            if ($isAdmin) {
+                $iconStatus = '<img src="'.$urlImg.'icons/svg/ofaj_admin.svg" width="22px" height="22px">';
+            } else {
+                $iconStatus = '<img src="'.$urlImg.'icons/svg/ofaj_teacher.svg" width="22px" height="22px">';
             }
         }
+    }
 
-        $post['user_data'] .= '<div class="text-center">'.$iconStatus.'</div>';*/
+    $post['user_data'] .= '<div class="text-center">'.$iconStatus.'</div>';*/
     } else {
         if ($allowUserImageForum) {
             $post['user_data'] .= '<div class="thumbnail">'.

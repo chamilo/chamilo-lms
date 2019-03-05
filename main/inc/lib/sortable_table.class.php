@@ -1095,8 +1095,8 @@ class SortableTableFromArray extends SortableTable
             return $this->total_number_of_items;
         } else {
             if (!empty($this->table_data)) {
-        return count($this->table_data);
-    }
+                return count($this->table_data);
+            }
 
             return 0;
         }

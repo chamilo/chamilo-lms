@@ -138,7 +138,7 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
             echo '<div>'.$count_groups.'</div>';
 
             foreach ($grid_my_groups as $group) {
-                echo Display::panel($group[0], $group[1]) ;
+                echo Display::panel($group[0], $group[1]);
             }
             echo '</div>';
         }

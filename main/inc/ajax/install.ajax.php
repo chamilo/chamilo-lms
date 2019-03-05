@@ -6,7 +6,6 @@ use GuzzleHttp\Client;
 /**
  * Responses to AJAX calls for install.
  */
-
 require_once __DIR__.'/../../../vendor/autoload.php';
 
 $action = $_GET['a'];

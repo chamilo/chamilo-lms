@@ -187,8 +187,8 @@ function complete_missing_data($user)
 /**
  * Save the imported data.
  *
- * @param array $users List of users
- * @param bool $sendMail
+ * @param array $users    List of users
+ * @param bool  $sendMail
  *
  * @uses \global variable $inserted_in_course, which returns the list of
  * courses the user was inserted in
@@ -285,7 +285,6 @@ function save_data($users, $sendMail = false)
 
     return $users;
 }
-
 
 /**
  * @param array  $users
@@ -412,11 +411,11 @@ function parse_xml_data($file)
 
 /**
  * @param array $users
- * @param bool $sendMail
+ * @param bool  $sendMail
  */
 function processUsers(&$users, $sendMail)
 {
-    $users = save_data($users,$sendMail);
+    $users = save_data($users, $sendMail);
 
     $warningMessage = '';
     if (!empty($users)) {
@@ -595,7 +594,7 @@ if (!empty($importData)) {
         }
     }
 
-    $formContinue->addHtml( get_lang('Results') .'<br />'.$importData['log_messages']);
+    $formContinue->addHtml(get_lang('Results').'<br />'.$importData['log_messages']);
 
     if ($formContinue->validate()) {
         $users = parse_csv_data(

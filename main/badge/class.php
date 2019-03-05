@@ -8,7 +8,6 @@
  *
  * @package chamilo.badge
  */
-header('Content-Type: application/json');
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -23,5 +22,7 @@ $json = [
     'criteria' => api_get_path(WEB_CODE_PATH)."badge/criteria.php?id=$skillId",
     'issuer' => api_get_path(WEB_CODE_PATH)."badge/issuer.php",
 ];
+
+header('Content-Type: application/json');
 
 echo json_encode($json);

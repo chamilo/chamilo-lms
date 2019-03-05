@@ -614,6 +614,7 @@ class SkillRelUser extends Model
         );
 
         $result = Database::query($sql);
+
         return Database::fetch_assoc($result);
     }
 
@@ -1299,7 +1300,7 @@ class Skill extends Model
             foreach ($skills as $skill) {
                 if ($getSkillData) {
                     $skillData = $this->get($skill['id']);
-                    $skillData['url'] = api_get_path(WEB_PATH).'badge/'.$skill['issue'].'/user/'.$userId;
+                    $skillData['url'] = api_get_path(WEB_PATH).'badge/'.$skill['id'].'/user/'.$userId;
                     $skillList[$skill['id']] = array_merge($skill, $skillData);
                 } else {
                     $skillList[$skill['id']] = $skill['id'];

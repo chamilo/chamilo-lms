@@ -1908,15 +1908,15 @@ class Display
     }
 
     /**
-     * @param $percentage
-     * @param bool $show_percentage
-     * @param null $extra_info
+     * @param int    $percentage
+     * @param bool   $show_percentage
+     * @param string $extra_info
      *
      * @return string
      */
-    public static function bar_progress($percentage, $show_percentage = true, $extra_info = null)
+    public static function bar_progress($percentage, $show_percentage = true, $extra_info = '')
     {
-        $percentage = intval($percentage);
+        $percentage = (int) $percentage;
         $div = '<div class="progress">
                 <div
                     class="progress-bar progress-bar-striped"
@@ -1933,7 +1933,7 @@ class Display
                 $div .= $extra_info;
             }
         }
-        $div .= '</div>';
+        $div .= '</div></div>';
 
         return $div;
     }
@@ -2812,4 +2812,3 @@ HTML;
         return $frameReady;
     }
 }
-

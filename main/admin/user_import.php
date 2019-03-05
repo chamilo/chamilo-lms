@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * This tool allows platform admins to add users by uploading a CSV or XML file.
  *
@@ -11,6 +13,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 // Set this option to true to enforce strict purification for usenames.
 $purification_option_for_usernames = false;
+$userId = api_get_user_id();
 
 /**
  * @param array $users
@@ -21,7 +24,6 @@ $purification_option_for_usernames = false;
 function validate_data($users, $checkUniqueEmail = false)
 {
     global $defined_auth_sources;
-    $errors = [];
     $usernames = [];
 
     // 1. Check if mandatory fields are set.
@@ -32,12 +34,14 @@ function validate_data($users, $checkUniqueEmail = false)
 
     $classExistList = [];
     $usergroup = new UserGroup();
+    foreach ($users as &$user) {
+        $user['has_error'] = false;
+        $user['message'] = '';
 
-    foreach ($users as $user) {
         foreach ($mandatory_fields as $field) {
             if (empty($user[$field])) {
-                $user['error'] = get_lang($field.'Mandatory');
-                $errors[] = $user;
+                $user['message'] .= Display::return_message(get_lang($field.'Mandatory'), 'warning');
+                $user['has_error'] = true;
             }
         }
 
@@ -46,33 +50,33 @@ function validate_data($users, $checkUniqueEmail = false)
         if (!UserManager::is_username_empty($username)) {
             // 2.1. Check whether username is too long.
             if (UserManager::is_username_too_long($username)) {
-                $user['error'] = get_lang('UserNameTooLong');
-                $errors[] = $user;
+                $user['message'] .= Display::return_message(get_lang('UserNameTooLong'), 'warning');
+                $user['has_error'] = true;
             }
             // 2.1.1
             $hasDash = strpos($username, '-');
             if ($hasDash !== false) {
-                $user['error'] = get_lang('UserNameHasDash');
-                $errors[] = $user;
+                $user['message'] .= Display::return_message(get_lang('UserNameHasDash'), 'warning');
+                $user['has_error'] = true;
             }
             // 2.2. Check whether the username was used twice in import file.
             if (isset($usernames[$username])) {
-                $user['error'] = get_lang('UserNameUsedTwice');
-                $errors[] = $user;
+                $user['message'] .= Display::return_message(get_lang('UserNameUsedTwice'), 'warning');
+                $user['has_error'] = true;
             }
             $usernames[$username] = 1;
             // 2.3. Check whether username is already occupied.
             if (!UserManager::is_username_available($username)) {
-                $user['error'] = get_lang('UserNameNotAvailable');
-                $errors[] = $user;
+                $user['message'] .= Display::return_message(get_lang('UserNameNotAvailable'), 'warning');
+                $user['has_error'] = true;
             }
         }
 
         if (isset($user['Email'])) {
             $result = api_valid_email($user['Email']);
             if ($result === false) {
-                $user['error'] = get_lang('PleaseEnterValidEmail');
-                $errors[] = $user;
+                $user['message'] .= Display::return_message(get_lang('PleaseEnterValidEmail'), 'warning');
+                $user['has_error'] = true;
             }
         }
 
@@ -80,16 +84,16 @@ function validate_data($users, $checkUniqueEmail = false)
             if (isset($user['Email'])) {
                 $userFromEmail = api_get_user_info_from_email($user['Email']);
                 if (!empty($userFromEmail)) {
-                    $user['error'] = get_lang('EmailUsedTwice');
-                    $errors[] = $user;
+                    $user['message'] .= Display::return_message(get_lang('EmailUsedTwice'), 'warning');
+                    $user['has_error'] = true;
                 }
             }
         }
 
         // 3. Check status.
         if (isset($user['Status']) && !api_status_exists($user['Status'])) {
-            $user['error'] = get_lang('WrongStatus');
-            $errors[] = $user;
+            $user['message'] .= Display::return_message(get_lang('WrongStatus'), 'warning');
+            $user['has_error'] = true;
         }
 
         // 4. Check ClassId
@@ -101,8 +105,11 @@ function validate_data($users, $checkUniqueEmail = false)
                 }
                 $info = $usergroup->get($id);
                 if (empty($info)) {
-                    $user['error'] = sprintf(get_lang('ClassIdDoesntExists'), $id);
-                    $errors[] = $user;
+                    $user['message'] .= Display::return_message(
+                        sprintf(get_lang('ClassIdDoesntExists'), $id),
+                        'warning'
+                    );
+                    $user['has_error'] = true;
                 } else {
                     $classExistList[] = $info['id'];
                 }
@@ -112,13 +119,13 @@ function validate_data($users, $checkUniqueEmail = false)
         // 5. Check authentication source
         if (!empty($user['AuthSource'])) {
             if (!in_array($user['AuthSource'], $defined_auth_sources)) {
-                $user['error'] = get_lang('AuthSourceNotAvailable');
-                $errors[] = $user;
+                $user['message'] .= Display::return_message(get_lang('AuthSourceNotAvailable'), 'warning');
+                $user['has_error'] = true;
             }
         }
     }
 
-    return $errors;
+    return $users;
 }
 
 /**
@@ -181,22 +188,26 @@ function complete_missing_data($user)
  * Save the imported data.
  *
  * @param array $users List of users
+ * @param bool $sendMail
  *
  * @uses \global variable $inserted_in_course, which returns the list of
  * courses the user was inserted in
  */
-function save_data($users)
+function save_data($users, $sendMail = false)
 {
     global $inserted_in_course;
     // Not all scripts declare the $inserted_in_course array (although they should).
     if (!isset($inserted_in_course)) {
         $inserted_in_course = [];
     }
-    $usergroup = new UserGroup();
-    $send_mail = $_POST['sendMail'] ? true : false;
 
+    $usergroup = new UserGroup();
     if (is_array($users)) {
-        foreach ($users as $user) {
+        foreach ($users as &$user) {
+            if ($user['has_error']) {
+                continue;
+            }
+
             $user = complete_missing_data($user);
             $user['Status'] = api_status_key($user['Status']);
             $user_id = UserManager::create_user(
@@ -216,67 +227,78 @@ function save_data($users)
                 0,
                 null,
                 null,
-                $send_mail
+                $sendMail
             );
 
-            if (isset($user['Courses']) && is_array($user['Courses'])) {
-                foreach ($user['Courses'] as $course) {
-                    if (CourseManager::course_exists($course)) {
-                        $result = CourseManager::subscribeUser($user_id, $course, $user['Status']);
-                        if ($result) {
-                            $course_info = api_get_course_info($course);
-                            $inserted_in_course[$course] = $course_info['title'];
+            if ($user_id) {
+                $returnMessage = Display::return_message(get_lang('UserAdded'), 'success');
+
+                if (isset($user['Courses']) && is_array($user['Courses'])) {
+                    foreach ($user['Courses'] as $course) {
+                        if (CourseManager::course_exists($course)) {
+                            $result = CourseManager::subscribeUser($user_id, $course, $user['Status']);
+                            if ($result) {
+                                $course_info = api_get_course_info($course);
+                                $inserted_in_course[$course] = $course_info['title'];
+                            }
                         }
                     }
                 }
-            }
 
-            if (isset($user['Sessions']) && is_array($user['Sessions'])) {
-                foreach ($user['Sessions'] as $sessionId) {
-                    $sessionInfo = api_get_session_info($sessionId);
-                    if (!empty($sessionInfo)) {
-                        SessionManager::subscribeUsersToSession(
-                            $sessionId,
-                            [$user_id],
-                            SESSION_VISIBLE_READ_ONLY,
-                            false
-                        );
+                if (isset($user['Sessions']) && is_array($user['Sessions'])) {
+                    foreach ($user['Sessions'] as $sessionId) {
+                        $sessionInfo = api_get_session_info($sessionId);
+                        if (!empty($sessionInfo)) {
+                            SessionManager::subscribeUsersToSession(
+                                $sessionId,
+                                [$user_id],
+                                SESSION_VISIBLE_READ_ONLY,
+                                false
+                            );
+                        }
                     }
                 }
-            }
 
-            if (!empty($user['ClassId'])) {
-                $classId = explode('|', trim($user['ClassId']));
-                foreach ($classId as $id) {
-                    $usergroup->subscribe_users_to_usergroup($id, [$user_id], false);
+                if (!empty($user['ClassId'])) {
+                    $classId = explode('|', trim($user['ClassId']));
+                    foreach ($classId as $id) {
+                        $usergroup->subscribe_users_to_usergroup($id, [$user_id], false);
+                    }
                 }
-            }
 
-            // Saving extra fields.
-            global $extra_fields;
-
-            // We are sure that the extra field exists.
-            foreach ($extra_fields as $extras) {
-                if (isset($user[$extras[1]])) {
-                    $key = $extras[1];
-                    $value = $user[$extras[1]];
-                    UserManager::update_extra_field_value($user_id, $key, $value);
+                // Saving extra fields.
+                global $extra_fields;
+                // We are sure that the extra field exists.
+                foreach ($extra_fields as $extras) {
+                    if (isset($user[$extras[1]])) {
+                        $key = $extras[1];
+                        $value = $user[$extras[1]];
+                        UserManager::update_extra_field_value($user_id, $key, $value);
+                    }
                 }
+            } else {
+                $returnMessage = Display::return_message(get_lang('Error'), 'warning');
             }
+            $user['message'] = $returnMessage;
         }
     }
+
+    return $users;
 }
 
+
 /**
- * Read the CSV-file.
+ * @param array  $users
+ * @param string $fileName
+ * @param int    $sendEmail
+ * @param bool   $checkUniqueEmail
+ * @param bool   $resumeImport
  *
- * @param string $file Path to the CSV-file
- *
- * @return array All userinformation read from the file
+ * @return array
  */
-function parse_csv_data($file)
+function parse_csv_data($users, $fileName, $sendEmail = 0, $checkUniqueEmail = true, $resumeImport = false)
 {
-    $users = Import::csvToArray($file);
+    $usersFromOrigin = $users;
     $allowRandom = api_get_configuration_value('generate_random_login');
     if ($allowRandom) {
         $factory = new RandomLib\Factory();
@@ -284,7 +306,32 @@ function parse_csv_data($file)
         $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     }
 
+    $readMax = 50;
+    $userId = api_get_user_id();
+    $logMessages = '';
+    $importData = Session::read('user_import_data_'.$userId);
+    if (!empty($importData)) {
+        $counter = $importData['counter'];
+        $users = $importData['complete_list'];
+        $users = array_splice($users, $counter, $readMax);
+        $logMessages = $importData['log_messages'];
+    } else {
+        $users = array_splice($users, 0, $readMax);
+    }
+
+    if ($resumeImport === false) {
+        $users = $usersFromOrigin;
+    }
+
+    $counter = 0;
     foreach ($users as $index => $user) {
+        if ($resumeImport) {
+            if ($counter >= $readMax) {
+                $users = array_splice($users, $counter, $readMax);
+                break;
+            }
+        }
+        $counter++;
         if (isset($user['UserName'])) {
             if ($allowRandom) {
                 $username = $generator->generateString(10, $chars);
@@ -313,6 +360,24 @@ function parse_csv_data($file)
 
         $users[$index] = $user;
     }
+
+    $globalCounter = $counter;
+    if (!empty($importData)) {
+        $globalCounter = $importData['counter'] + $counter;
+    }
+
+    $importData = [
+        'complete_list' => $usersFromOrigin,
+        'filename' => $fileName,
+        'counter' => $globalCounter,
+        'check_unique_email' => $checkUniqueEmail,
+        'send_email' => $sendEmail,
+        'date' => api_get_utc_datetime(),
+        'log_messages' => $logMessages,
+        'resume' => $resumeImport,
+    ];
+
+    Session::write('user_import_data_'.$userId, $importData);
 
     return $users;
 }
@@ -345,9 +410,62 @@ function parse_xml_data($file)
     return $array;
 }
 
+/**
+ * @param array $users
+ * @param bool $sendMail
+ */
+function processUsers(&$users, $sendMail)
+{
+    $users = save_data($users,$sendMail);
+
+    $warningMessage = '';
+    if (!empty($users)) {
+        $table = new HTML_Table(['class' => 'table table-responsive']);
+        $headers = [
+            get_lang('User'),
+            get_lang('Status'),
+        ];
+        $row = 0;
+        $column = 0;
+        foreach ($headers as $header) {
+            $table->setHeaderContents($row, $column, $header);
+            $column++;
+        }
+        $row++;
+        foreach ($users as $user) {
+            $column = 0;
+            $email = isset($user['Email']) ? ' - '.$user['Email'] : null;
+            $userData =
+                '<strong>'.$user['UserName'].'</strong> - '.
+                api_get_person_name(
+                    $user['FirstName'],
+                    $user['LastName']
+                ).' '.$email;
+            $table->setCellContents($row, $column, $userData);
+            $table->setCellContents($row, ++$column, $user['message']);
+            $row++;
+        }
+        $warningMessage = $table->toHtml();
+    }
+
+    // if the warning message is too long then we display the warning message trough a session
+    Display::addFlash(Display::return_message(get_lang('Updated'), 'confirmation', false));
+
+    $importData = Session::read('user_import_data_'.api_get_user_id());
+    if (!empty($importData)) {
+        if (isset($importData['log_messages'])) {
+            $importData['log_messages'] .= $warningMessage;
+        } else {
+            $importData['log_messages'] = $warningMessage;
+        }
+        Session::write('user_import_data_'.api_get_user_id(), $importData);
+    }
+}
+
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true, null);
 api_protect_limit_for_session_admin();
+set_time_limit(0);
 
 $defined_auth_sources[] = PLATFORM_AUTH_SOURCE;
 
@@ -356,102 +474,65 @@ if (isset($extAuthSource) && is_array($extAuthSource)) {
 }
 
 $tool_name = get_lang('ImportUserListXMLCSV');
-$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$reloadImport = (isset($_REQUEST['reload_import']) && (int) $_REQUEST['reload_import'] === 1);
 
-set_time_limit(0);
 $extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', true);
-$user_id_error = [];
-$error_message = '';
 
 if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['size'] !== 0) {
     $file_type = $_POST['file_type'];
     Security::clear_token();
     $tok = Security::get_token();
     $allowed_file_mimetype = ['csv', 'xml'];
-    $error_kind_file = false;
+    $error_kind_file = true;
 
     $checkUniqueEmail = isset($_POST['check_unique_email']) ? $_POST['check_unique_email'] : null;
-
+    $sendMail = $_POST['sendMail'] ? true : false;
+    $resume = isset($_POST['resume_import']) ? true : false;
     $uploadInfo = pathinfo($_FILES['import_file']['name']);
     $ext_import_file = $uploadInfo['extension'];
+
     $users = [];
     if (in_array($ext_import_file, $allowed_file_mimetype)) {
         if (strcmp($file_type, 'csv') === 0 &&
             $ext_import_file == $allowed_file_mimetype[0]
         ) {
-            $users = parse_csv_data($_FILES['import_file']['tmp_name']);
-            $errors = validate_data($users, $checkUniqueEmail);
+            Session::erase('user_import_data_'.$userId);
+            $users = Import::csvToArray($_FILES['import_file']['tmp_name']);
+            $users = parse_csv_data(
+                $users,
+                $_FILES['import_file']['name'],
+                $sendMail,
+                $checkUniqueEmail,
+                $resume
+            );
+            $users = validate_data($users, $checkUniqueEmail);
             $error_kind_file = false;
         } elseif (strcmp($file_type, 'xml') === 0 && $ext_import_file == $allowed_file_mimetype[1]) {
             $users = parse_xml_data($_FILES['import_file']['tmp_name']);
-            $errors = validate_data($users, $checkUniqueEmail);
+            $users = validate_data($users, $checkUniqueEmail);
             $error_kind_file = false;
+        }
+
+        processUsers($users, $sendMail);
+
+        if ($error_kind_file) {
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('YouMustImportAFileAccordingToSelectedOption'),
+                    'error',
+                    false
+                )
+            );
         } else {
-            $error_kind_file = true;
-        }
-    } else {
-        $error_kind_file = true;
-    }
-
-    // List user id with error.
-    $users_to_insert = [];
-
-    $keyToCheck = 'UserName';
-    if ($checkUniqueEmail || api_get_setting('registration', 'email') == 'true') {
-        $keyToCheck = 'Email';
-    }
-
-    if (is_array($errors)) {
-        foreach ($errors as $my_errors) {
-            $user_id_error[] = $my_errors[$keyToCheck];
-        }
-    }
-
-    if (is_array($users)) {
-        foreach ($users as $my_user) {
-            if (!in_array($my_user[$keyToCheck], $user_id_error)) {
-                $users_to_insert[] = $my_user;
+            $reload = '';
+            if ($resume) {
+                $reload = '?reload_import=1';
             }
+            header('Location: '.api_get_self().$reload);
+            exit;
         }
-    }
-
-    $inserted_in_course = [];
-    if (strcmp($file_type, 'csv') === 0) {
-        save_data($users_to_insert);
-    } elseif (strcmp($file_type, 'xml') === 0) {
-        save_data($users_to_insert);
     } else {
-        $error_message = get_lang('YouMustImportAFileAccordingToSelectedOption');
-    }
-
-    if (count($errors) > 0) {
-        $see_message_import = get_lang('FileImportedJustUsersThatAreNotRegistered');
-    } else {
-        $see_message_import = get_lang('FileImported');
-    }
-
-    $warning_message = '';
-    if (count($errors) != 0) {
-        $warning_message = '<ul>';
-        foreach ($errors as $index => $error_user) {
-            $email = isset($error_user['Email']) ? ' - '.$error_user['Email'] : null;
-            $warning_message .= '<li><b>'.$error_user['error'].'</b>: ';
-            $warning_message .=
-                '<strong>'.$error_user['UserName'].'</strong> - '.
-                api_get_person_name(
-                    $error_user['FirstName'],
-                    $error_user['LastName']
-                ).' '.$email;
-            $warning_message .= '</li>';
-        }
-        $warning_message .= '</ul>';
-    }
-
-    // if the warning message is too long then we display the warning message trough a session
-    Display::addFlash(Display::return_message($warning_message, 'warning', false));
-    Display::addFlash(Display::return_message($see_message_import, 'confirmation', false));
-
-    if ($error_kind_file) {
         Display::addFlash(
             Display::return_message(
                 get_lang('YouMustImportAFileAccordingToSelectedOption'),
@@ -459,8 +540,81 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
                 false
             )
         );
+        //header('Location: '.api_get_path(WEB_CODE_PATH).'admin/user_list.php?sec_token='.$tok);
+        header('Location: '.api_get_self());
+        exit;
+    }
+}
+
+$importData = Session::read('user_import_data_'.$userId);
+
+$formContinue = false;
+$resumeStop = true;
+if (!empty($importData)) {
+    $isResume = $importData['resume'];
+
+    $formContinue = new FormValidator('user_import_continue', 'post', api_get_self());
+    $label = get_lang('Results');
+    if ($isResume) {
+        $label = get_lang('ContinueLastImport');
+    }
+    $formContinue->addHeader($label);
+    $formContinue->addLabel(get_lang('File'), $importData['filename']);
+
+    $resumeStop = true;
+    if ($isResume) {
+        $totalUsers = isset($importData['complete_list']) ? count($importData['complete_list']) : 0;
+        $counter = isset($importData['counter']) ? $importData['counter'] : 0;
+        $bar = '';
+        if (!empty($totalUsers)) {
+            $bar = Display::bar_progress($counter / $totalUsers * 100);
+        }
+        $formContinue->addLabel(get_lang('Status'), $bar);
+        $formContinue->addLabel(
+            get_lang('UsersAdded'),
+            $importData['counter'].' / '.count($importData['complete_list'])
+        );
     } else {
-        header('Location: '.api_get_path(WEB_CODE_PATH).'admin/user_list.php?sec_token='.$tok);
+        $formContinue->addLabel(
+            get_lang('Users'),
+            count($importData['complete_list'])
+        );
+    }
+
+    $formContinue->addLabel(
+        get_lang('CheckUniqueEmail'),
+        $importData['check_unique_email'] ? get_lang('Yes') : get_lang('No')
+    );
+    $formContinue->addLabel(get_lang('SendMailToUsers'), $importData['send_email'] ? get_lang('Yes') : get_lang('No'));
+    $formContinue->addLabel(get_lang('Date'), Display::dateToStringAgoAndLongDate($importData['date']));
+
+    if ($isResume) {
+        $resumeStop = $importData['counter'] >= count($importData['complete_list']);
+        if ($resumeStop == false) {
+            $formContinue->addButtonImport(get_lang('ContinueImport'), 'import_continue');
+        }
+    }
+
+    $formContinue->addHtml( get_lang('Results') .'<br />'.$importData['log_messages']);
+
+    if ($formContinue->validate()) {
+        $users = parse_csv_data(
+            $importData['complete_list'],
+            $importData['filename'],
+            $importData['send_email'],
+            $importData['check_unique_email'],
+            true
+        );
+        $users = validate_data($users, $importData['check_unique_email']);
+
+        processUsers($users, $importData['send_email']);
+
+        $reload = '';
+        if ($isResume && $resumeStop === false) {
+            $reload = '?reload_import=1';
+        }
+
+        header('Location: '.api_get_self().$reload);
         exit;
     }
 }
@@ -468,7 +622,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
 Display::display_header($tool_name);
 
 $form = new FormValidator('user_import', 'post', api_get_self());
-$form->addElement('header', '', $tool_name);
+$form->addHeader($tool_name);
 $form->addElement('hidden', 'formSent');
 $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
 $group = [
@@ -503,7 +657,15 @@ $form->addElement(
     get_lang('CheckUniqueEmail')
 );
 
+$form->addElement(
+    'checkbox',
+    'resume_import',
+    '',
+    get_lang('ResumeImport')
+);
+
 $form->addButtonImport(get_lang('Import'));
+
 $defaults['formSent'] = 1;
 $defaults['sendMail'] = 0;
 $defaults['file_type'] = 'csv';
@@ -517,6 +679,22 @@ if (!empty($extraSettings) && isset($extraSettings['options']) &&
 
 $form->setDefaults($defaults);
 $form->display();
+
+if ($formContinue) {
+    $formContinue->display();
+}
+
+if ($reloadImport) {
+    echo '<script>
+        
+        $(function() {
+            function reload() {
+                $("#user_import_continue").submit();                
+            }
+            setTimeout(reload, 3000);
+        });        
+    </script>';
+}
 
 $list = [];
 $list_reponse = [];

@@ -195,7 +195,8 @@
                         </li>
                     </ul>
                 </div>
-                <div class="tab-content">
+
+                <div id="tab-iframe" class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="lp-view-content">
                         <div id="wrapper-iframe">
                         {% if lp_mode == 'fullscreen' %}

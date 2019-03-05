@@ -109,7 +109,7 @@ $tpl = new Template(get_lang('Diagram'));
 $html = Display::page_subheader2($careerInfo['name'].$urlToString);
 if (!empty($item) && isset($item['value']) && !empty($item['value'])) {
     /** @var Graph $graph */
-    $graph = api_unserialize_content('career', $item['value']);
+    $graph = UnserializeApi::unserialize('career', $item['value']);
     $html .= Career::renderDiagramByColumn($graph, $tpl);
 } else {
     Display::addFlash(

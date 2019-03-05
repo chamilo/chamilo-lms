@@ -401,7 +401,6 @@ if ($lp->mode == 'fullscreen') {
         window.open('$src','content_id','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');
     </script>";
 }
-
 // Set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php).
 Session::write('loaded_lp_view', true);
 $display_none = '';

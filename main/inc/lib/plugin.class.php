@@ -322,7 +322,7 @@ class Plugin
         $settings = $this->get_settings();
         foreach ($settings as $setting) {
             if ($setting['variable'] == $this->get_name().'_'.$name) {
-                $unserialized = api_unserialize_content('not_allowed_classes', $setting['selected_value'], true);
+                $unserialized = UnserializeApi::unserialize('not_allowed_classes', $setting['selected_value'], true);
 
                 if (!empty($setting['selected_value']) &&
                     false !== $unserialized

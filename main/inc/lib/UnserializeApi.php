@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Brumann\Polyfill\Unserialize;
+use Fhaculty\Graph\Edge\Base;
 
 /**
  * Class UnserializeApi.
@@ -29,6 +30,10 @@ class UnserializeApi
                     \Fhaculty\Graph\Set\VerticesMap::class,
                     \Fhaculty\Graph\Set\Vertices::class,
                     \Fhaculty\Graph\Set\Edges::class,
+                    \Fhaculty\Graph\Vertex::class,
+                    \Fhaculty\Graph\Edge\Base::class,
+                    \Fhaculty\Graph\Edge\Directed::class,
+                    \Fhaculty\Graph\Edge\Undirected::class,
                 ];
                 break;
             case 'course':

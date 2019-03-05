@@ -448,7 +448,7 @@ function processUsers(&$users, $sendMail)
     }
 
     // if the warning message is too long then we display the warning message trough a session
-    Display::addFlash(Display::return_message(get_lang('Updated'), 'confirmation', false));
+    Display::addFlash(Display::return_message(get_lang('FileImported'), 'confirmation', false));
 
     $importData = Session::read('user_import_data_'.api_get_user_id());
     if (!empty($importData)) {

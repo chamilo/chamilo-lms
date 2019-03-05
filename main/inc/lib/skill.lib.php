@@ -614,6 +614,7 @@ class SkillRelUser extends Model
         );
 
         $result = Database::query($sql);
+
         return Database::fetch_assoc($result);
     }
 

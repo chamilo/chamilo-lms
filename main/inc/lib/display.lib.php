@@ -2812,4 +2812,3 @@ HTML;
         return $frameReady;
     }
 }
-

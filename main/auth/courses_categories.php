@@ -299,7 +299,7 @@ function getOptionSelect($categories, $codeType)
         $categoryCode = Security::remove_XSS($category['code']);
         $categoryName = Security::remove_XSS($category['name']);
         $countCourse = (int) $category['number_courses'];
-        $level =  $category['level'];
+        $level = $category['level'];
         if (empty($countCourse)) {
             continue;
         }

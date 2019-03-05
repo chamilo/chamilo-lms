@@ -1,10 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use GuzzleHttp\Client;
+
 /**
  * Responses to AJAX calls for install.
  */
 
-use GuzzleHttp\Client;
 require_once __DIR__.'/../../../vendor/autoload.php';
 
 $action = $_GET['a'];

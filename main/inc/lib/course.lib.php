@@ -35,8 +35,8 @@ class CourseManager
      * Creates a course.
      *
      * @param array $params      Columns in the main.course table.
-     * @param int   $authorId    Optional.
-     * @param int   $accessUrlId Optional.
+     * @param int   $authorId    optional
+     * @param int   $accessUrlId optional
      *
      * @return mixed false if the course was not created, array with the course info
      */
@@ -601,7 +601,7 @@ class CourseManager
      *
      * @param int    $userId
      * @param string $courseCode
-     * @param int    $status               (STUDENT, COURSEMANAGER, COURSE_ADMIN, NORMAL_COURSE_MEMBER)
+     * @param int    $status                 (STUDENT, COURSEMANAGER, COURSE_ADMIN, NORMAL_COURSE_MEMBER)
      * @param int    $sessionId
      * @param int    $userCourseCategoryId
      * @param bool   $checkTeacherPermission
@@ -648,7 +648,7 @@ class CourseManager
         $sessionId = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
         $status = $status === STUDENT || $status === COURSEMANAGER ? $status : STUDENT;
         $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-                // The user has been already subscribed to the course.
+        // The user has been already subscribed to the course.
         if (!empty($sessionId)) {
             SessionManager::subscribe_users_to_session_course(
                 [$userId],
@@ -765,8 +765,8 @@ class CourseManager
                     );
                 }
 
-            // Add event to the system log
-            Event::addEvent(
+                // Add event to the system log
+                Event::addEvent(
                 LOG_SUBSCRIBE_USER_TO_COURSE,
                 LOG_COURSE_CODE,
                 $courseCode,
@@ -775,7 +775,7 @@ class CourseManager
                 $courseId
             );
 
-            Event::addEvent(
+                Event::addEvent(
                 LOG_SUBSCRIBE_USER_TO_COURSE,
                 LOG_USER_OBJECT,
                     $userInfo,
@@ -784,8 +784,8 @@ class CourseManager
                 $courseId
             );
 
-        return true;
-    }
+                return true;
+            }
 
             return false;
         }

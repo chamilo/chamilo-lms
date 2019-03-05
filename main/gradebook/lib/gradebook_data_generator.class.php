@@ -431,7 +431,7 @@ class GradebookDataGenerator
      * @param GradebookItem $item
      * @param bool          $ignore_score_color
      *
-     * @return null|string
+     * @return string|null
      */
     private function build_result_column(
         $userId,

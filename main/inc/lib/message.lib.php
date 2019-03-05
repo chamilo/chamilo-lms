@@ -911,6 +911,7 @@ class MessageManager
                     'message_id' => $message_id,
                     'size' => $file_attach['size'],
                 ];
+
                 return Database::insert($table, $params);
             }
         }
@@ -2380,7 +2381,7 @@ class MessageManager
         );
 
         if (!empty($result)) {
-           return $result;
+            return $result;
         }
 
         return false;

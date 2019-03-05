@@ -4643,7 +4643,7 @@ function api_get_languages_combo($name = 'language')
  * @param  bool Hide form if only one language available (defaults to false = show the box anyway)
  * @param bool $showAsButton
  *
- * @return null|string Display the box directly
+ * @return string|null Display the box directly
  */
 function api_display_language_form($hide_if_no_choice = false, $showAsButton = false)
 {
@@ -6295,7 +6295,7 @@ function api_replace_dangerous_char($filename, $treat_spaces_as_hyphens = true)
                 if (api_is_valid_utf8($result)) {
                     $filename = $result;
                     $encoding = 'UTF-8';
-    }
+                }
             }
         }
     }

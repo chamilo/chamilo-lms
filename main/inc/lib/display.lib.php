@@ -1900,7 +1900,7 @@ class Display
     /**
      * @param array $list
      *
-     * @return null|string
+     * @return string|null
      */
     public static function description($list)
     {
@@ -1919,7 +1919,7 @@ class Display
 
     /**
      * @param int    $percentage
-     * @param bool $show_percentage
+     * @param bool   $show_percentage
      * @param string $extra_info
      *
      * @return string
@@ -2801,7 +2801,6 @@ HTML;
             default:
                 //$html = self::url($data['basename'], $fileUrl);
                 break;
-
         }
         //$html = self::url($content, $fileUrl, ['ajax']);
 

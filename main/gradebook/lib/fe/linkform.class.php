@@ -140,9 +140,9 @@ class LinkForm extends FormValidator
 
     /**
      * @param int         $link
-     * @param null|string $courseCode
+     * @param string|null $courseCode
      *
-     * @return AttendanceLink|DropboxLink|ExerciseLink|ForumThreadLink|LearnpathLink|null|StudentPublicationLink|SurveyLink
+     * @return AttendanceLink|DropboxLink|ExerciseLink|ForumThreadLink|LearnpathLink|StudentPublicationLink|SurveyLink|null
      */
     private function createLink($link, $courseCode)
     {

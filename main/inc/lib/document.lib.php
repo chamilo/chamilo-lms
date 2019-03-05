@@ -3595,11 +3595,11 @@ class DocumentManager
     }
 
     /**
-     * @param int    $doc_id
+     * @param int   $doc_id
      * @param array $courseInfo
      * @param int   $sessionId
-     * @param int    $user_id
-     * @param int    $groupId     iid
+     * @param int   $user_id
+     * @param int   $groupId               iid
      * @param bool  $checkParentVisibility
      *
      * @return bool
@@ -3658,7 +3658,7 @@ class DocumentManager
                     return false;
                 } else {
                     if ($checkParentVisibility) {
-                    return self::check_visibility_tree(
+                        return self::check_visibility_tree(
                         $document_data['parent_id'],
                             $courseInfo,
                             $sessionId,

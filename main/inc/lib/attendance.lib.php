@@ -154,11 +154,11 @@ class Attendance
         $user_info = api_get_user_info();
         $allowDelete = api_get_setting('allow_delete_attendance');
 
-            $student_param = '';
+        $student_param = '';
         $studentRequestId = isset($_GET['student_id']) ? (int) $_GET['student_id'] : 0;
         if (api_is_drh() && !empty($studentRequestId)) {
             $student_param = '&student_id='.$studentRequestId;
-            }
+        }
 
         while ($attendance = Database::fetch_row($res)) {
             $session_star = '';

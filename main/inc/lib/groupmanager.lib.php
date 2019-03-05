@@ -1313,7 +1313,7 @@ class GroupManager
     /**
      * Get only students from a group (not tutors).
      *
-     * @param int $group_id iid
+     * @param int  $group_id         iid
      * @param bool $filterOnlyActive
      *
      * @return array

@@ -862,7 +862,7 @@ function removeMoreIfMailing($file_id)
  * @param array            $file
  * @param Dropbox_SentWork $work
  *
- * @return array|null|string
+ * @return array|string|null
  */
 function store_add_dropbox($file = [], $work = null)
 {

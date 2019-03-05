@@ -564,7 +564,6 @@ class SessionManager
             $inject_joins .= " LEFT JOIN $table su ON (su.session_id = s.id)";
         }
 
-
         if (!empty($language)) {
             $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
             $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);

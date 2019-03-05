@@ -45,70 +45,6 @@ class DateTimeRangePicker extends DateRangePicker
     }
 
     /**
-     * Get the necessary javascript for this datepicker.
-     *
-     * @return string
-     */
-    private function getElementJS()
-    {
-        $js = null;
-        $id = $this->getAttribute('id');
-
-        $js .= "<script>                    
-            $(function() {
-                var txtDate = $('#$id'),
-                    inputGroup = txtDate.parents('.input-group'),
-                    txtDateAlt = $('#{$id}_alt'),
-                    txtDateAltText = $('#{$id}_alt_text');
-                    
-                txtDate
-                    .hide()
-                    .datepicker({
-                        defaultDate: '".$this->getValue()."',
-                        dateFormat: 'yy-mm-dd',
-                        altField: '#{$id}_alt',
-                        altFormat: \"".get_lang('DateFormatLongNoDayJS')."\",
-                        showOn: 'both',
-                        buttonImage: '".Display::return_icon('attendance.png', null, [], ICON_SIZE_TINY, true, true)."',
-                        buttonImageOnly: true,
-                        buttonText: '".get_lang('SelectDate')."',
-                        changeMonth: true,
-                        changeYear: true,
-                        yearRange: 'c-60y:c+5y'
-                    })
-                    .on('change', function (e) {
-                        txtDateAltText.text(txtDateAlt.val());
-                    });
-                    
-                txtDateAltText.on('click', function () {
-                    txtDate.datepicker('show');
-                });
-
-                inputGroup
-                    .find('button')
-                    .on('click', function (e) {
-                        e.preventDefault();
-
-                        $('#$id, #{$id}_alt').val('');
-                        $('#{$id}_alt_text').html('');
-                    });
-                
-                $('#".$id."_time_range .time').timepicker({
-                    'showDuration': true,
-                    'timeFormat': 'H:i:s',
-                    'scrollDefault': 'now',
-                    
-                });
-                var timeOnlyExampleEl = document.getElementById('".$id."_time_range');
-                var timeOnlyDatepair = new Datepair(timeOnlyExampleEl);
-                
-            });
-        </script>";
-
-        return $js;
-    }
-
-    /**
      * @param string $layout
      *
      * @return string
@@ -122,7 +58,7 @@ class DateTimeRangePicker extends DateRangePicker
             if (empty($size)) {
                 $sizeTemp = 8;
             }
-            $size = array(2, $sizeTemp, 2);
+            $size = [2, $sizeTemp, 2];
         } else {
             if (is_array($size)) {
                 if (count($size) != 3) {
@@ -130,11 +66,11 @@ class DateTimeRangePicker extends DateRangePicker
                     if (empty($size)) {
                         $sizeTemp = 8;
                     }
-                    $size = array(2, $sizeTemp, 2);
+                    $size = [2, $sizeTemp, 2];
                 }
                 // else just keep the $size array as received
             } else {
-                $size = array(2, intval($size), 2);
+                $size = [2, intval($size), 2];
             }
         }
 
@@ -205,5 +141,69 @@ class DateTimeRangePicker extends DateRangePicker
                         </div>';
                 break;
         }
+    }
+
+    /**
+     * Get the necessary javascript for this datepicker.
+     *
+     * @return string
+     */
+    private function getElementJS()
+    {
+        $js = null;
+        $id = $this->getAttribute('id');
+
+        $js .= "<script>                    
+            $(function() {
+                var txtDate = $('#$id'),
+                    inputGroup = txtDate.parents('.input-group'),
+                    txtDateAlt = $('#{$id}_alt'),
+                    txtDateAltText = $('#{$id}_alt_text');
+                    
+                txtDate
+                    .hide()
+                    .datepicker({
+                        defaultDate: '".$this->getValue()."',
+                        dateFormat: 'yy-mm-dd',
+                        altField: '#{$id}_alt',
+                        altFormat: \"".get_lang('DateFormatLongNoDayJS')."\",
+                        showOn: 'both',
+                        buttonImage: '".Display::return_icon('attendance.png', null, [], ICON_SIZE_TINY, true, true)."',
+                        buttonImageOnly: true,
+                        buttonText: '".get_lang('SelectDate')."',
+                        changeMonth: true,
+                        changeYear: true,
+                        yearRange: 'c-60y:c+5y'
+                    })
+                    .on('change', function (e) {
+                        txtDateAltText.text(txtDateAlt.val());
+                    });
+                    
+                txtDateAltText.on('click', function () {
+                    txtDate.datepicker('show');
+                });
+
+                inputGroup
+                    .find('button')
+                    .on('click', function (e) {
+                        e.preventDefault();
+
+                        $('#$id, #{$id}_alt').val('');
+                        $('#{$id}_alt_text').html('');
+                    });
+                
+                $('#".$id."_time_range .time').timepicker({
+                    'showDuration': true,
+                    'timeFormat': 'H:i:s',
+                    'scrollDefault': 'now',
+                    
+                });
+                var timeOnlyExampleEl = document.getElementById('".$id."_time_range');
+                var timeOnlyDatepair = new Datepair(timeOnlyExampleEl);
+                
+            });
+        </script>";
+
+        return $js;
     }
 }

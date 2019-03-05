@@ -63,7 +63,7 @@ switch ($action) {
             // Only allow anonymous users to see user popup if the popup user
             // is a teacher (which might be necessary to illustrate a course)
             if ($user_info['status'] === COURSEMANAGER) {
-            echo $userData;
+                echo $userData;
             } else {
                 echo '<h3>-</h3>';
             }

@@ -22,7 +22,7 @@ $allowedFields = [
     'status',
     'language',
     'extra_fields',
-    'address'
+    'address',
 ];
 
 $allowedFieldsConfiguration = api_get_configuration_value('allow_fields_inscription');

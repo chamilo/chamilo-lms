@@ -82,7 +82,6 @@ foreach ($data as &$result) {
     }
 }
 
-
 $apiKey = api_get_configuration_value('google_api_key');
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_JS_PATH).'map/markerclusterer.js"></script>';
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_JS_PATH).'map/oms.min.js"></script>';
@@ -114,7 +113,6 @@ $tpl->assign(
 
 $tpl->assign('places', json_encode($data));
 $tpl->assign('api_key', $apiKey);
-
 
 $layout = $tpl->get_template('social/map.tpl');
 $tpl->display($layout);

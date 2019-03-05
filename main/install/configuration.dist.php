@@ -991,11 +991,9 @@ $_configuration['required_extra_fields_in_profile'] = [
 // global forum in social network BT#15309
 //$_configuration['global_forums_course_id'] = 0;
 
-
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email
 // You need add a new option called "confirmation" to the registration settings
 //INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_registration', 'confirmation', 'MailConfirmation');
 // ------ (End) Custom DB changes
-

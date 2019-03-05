@@ -104,7 +104,6 @@ $social_search_block = Display::panel(
     get_lang('SearchUsers')
 );
 
-
 /*
 $results = $userGroup->get_groups_by_user($user_id,
     [
@@ -234,7 +233,7 @@ $formSearch->addText(
     [
         'aria-label' => get_lang('SearchUsers'),
         'custom' => true,
-        'placeholder' => get_lang('ByName')
+        'placeholder' => get_lang('ByName'),
     ]
 );
 //$formSearch->addButtonSearch(get_lang('Search'));

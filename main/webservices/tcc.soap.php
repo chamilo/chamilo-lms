@@ -22,7 +22,7 @@ define('WS_ERROR_SETTING', 4);
 /**
  * @param string $code
  *
- * @return null|soap_fault
+ * @return soap_fault|null
  */
 function returnError($code)
 {

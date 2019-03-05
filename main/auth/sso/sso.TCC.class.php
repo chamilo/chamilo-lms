@@ -89,7 +89,7 @@ class ssoTCC
     /**
      * Validates the received active connection data with the database.
      *
-     * @return null|false Return the loginFailed variable value to local.inc.php
+     * @return false|null Return the loginFailed variable value to local.inc.php
      */
     public function check_user()
     {
@@ -297,7 +297,7 @@ class ssoTCC
                 // In all other cases, generate a link to the Drupal profile edition
                 $drupalUserId = $drupalUserIdData['value'];
                 $url = "{$this->protocol}{$this->domain}/user/{$drupalUserId}/edit";
-        
+
                 return $url;
         */
         return api_get_path(WEB_CODE_PATH).'auth/profile.php';

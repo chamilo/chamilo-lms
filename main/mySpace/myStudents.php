@@ -2,7 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Message;
-use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use ChamiloSession as Session;
 
@@ -1048,7 +1047,6 @@ $userGroups = $userGroupManager->getNameListByUser(
                         }
                     }
                 }
-
 
                 // Display timezone if the user selected one and if the admin allows the use of user's timezone
                 $timezone = null;

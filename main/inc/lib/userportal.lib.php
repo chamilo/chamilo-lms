@@ -103,7 +103,7 @@ class IndexManager
     /**
      * @param bool $show_slide
      *
-     * @return null|string
+     * @return string|null
      */
     public function return_announcements($show_slide = true)
     {

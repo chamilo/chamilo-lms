@@ -39,7 +39,7 @@ if ($form->validate()) {
     $moodleImport = new MoodleImport();
 
     try {
-    $responseImport = $moodleImport->import($file);
+        $responseImport = $moodleImport->import($file);
 
         Display::addFlash(
             Display::return_message(

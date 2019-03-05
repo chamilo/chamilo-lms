@@ -1391,7 +1391,6 @@ class ExtraField extends Model
                             $options[$option_details['option_value']] = $option_details['display_text'];
                         }
 
-
                         if ($orderDependingDefaults) {
                             $defaultOptions = $extraData['extra_'.$field_details['variable']];
                             if (!empty($defaultOptions)) {

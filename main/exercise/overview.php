@@ -76,11 +76,10 @@ if ($origin != 'learnpath') {
 }
 
 $tpl = new Template('Overview');
-$list = array();
+$list = [];
 
 $html = '';
 $message = '';
-
 
 $isAllowedToEdit = api_is_allowed_to_edit(null, true);
 $list['id'] = $objExercise->id;
@@ -316,7 +315,7 @@ if ($objExercise->selectAttempts()) {
 }
 
 if ($time_control) {
-    $tpl->assign('time_control',$objExercise->return_time_left_div());
+    $tpl->assign('time_control', $objExercise->return_time_left_div());
 }
 
 $tpl->assign('fluid', $fluid);
@@ -329,4 +328,3 @@ $tpl->assign('table_result', $tableContent);
 $layout = $tpl->get_template('exercise/overview.tpl');
 $tpl->assign('content', $tpl->fetch($layout));
 $tpl->display_one_col_template();
-

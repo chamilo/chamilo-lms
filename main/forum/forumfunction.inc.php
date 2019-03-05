@@ -5699,7 +5699,6 @@ function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
     $forumCourseId = api_get_configuration_value('global_forums_course_id');
     if (!empty($forumCourseId)) {
         if ($_course['real_id'] == $forumCourseId) {
-
             return false;
         }
     }
@@ -6643,7 +6642,7 @@ function postIsEditableByStudent($forum, $post)
 }
 
 /**
- * @param int  $postId
+ * @param int $postId
  *
  * @return bool
  */
@@ -6692,7 +6691,7 @@ function getPostRevision($postId)
     );
     $revision = '';
     if ($value && isset($value['value'])) {
-        $revision =  $value['value'];
+        $revision = $value['value'];
     }
 
     return $revision;
@@ -6742,7 +6741,7 @@ function getAskRevisionButton($postId, $threadInfo)
 }
 
 /**
- * @param int $postId
+ * @param int   $postId
  * @param array $threadInfo
  *
  * @return string
@@ -6769,6 +6768,7 @@ function giveRevisionButton($postId, $threadInfo)
 /**
  * @param int   $postId
  * @param array $threadInfo
+ *
  * @return string
  */
 function getReportButton($postId, $threadInfo)
@@ -6832,7 +6832,6 @@ function getReportRecepients()
                 case 'community_managers':
                     $managers = api_get_configuration_value('community_managers_user_list');
                     if (!empty($managers) && isset($managers['users'])) {
-
                         $users = array_merge($users, $managers['users']);
                     }
                     break;

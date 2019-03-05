@@ -70,7 +70,6 @@ $(function() {
     
 </script>';
 
-
 /* Actions */
 $my_action = isset($_GET['action']) ? $_GET['action'] : '';
 

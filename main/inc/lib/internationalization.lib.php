@@ -721,9 +721,10 @@ function api_format_date($time, $format = null, $language = null)
  * You can use it like this:
  * Display::dateToStringAgoAndLongDate($dateInUtc);.
  *
- * @param string $date     Result of a date function in this format -> date('Y-m-d H:i:s', time());
+ * @param string $date                 Result of a date function in this format -> date('Y-m-d H:i:s', time());
  * @param string $timeZone
  * @param bool   $returnDateDifference
+ *
  * @return string
  *
  * @author Julio Montoya

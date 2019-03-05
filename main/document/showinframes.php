@@ -244,7 +244,6 @@ if ($is_freemind_available) {
     $execute_iframe = false;
 }
 
-
 $execute_iframe = true;
 
 if (!$playerSupported && $execute_iframe) {

@@ -1,4 +1,4 @@
-<div id="learning_path_main" class="{{ is_allowed_to_edit ? 'lp-view-include-breadcrumb' }} {{ lp_mode == 'embedframe' ? 'lp-view-collapsed' : 'lp-view-collapsed' }}">
+<div id="learning_path_main" class="{{ is_allowed_to_edit ? 'lp-view-include-breadcrumb' }} {{ lp_mode == 'embedframe' ? 'lp-view-collapsed' : '' }}">
     {% if show_left_column == 1 %}
     <div id="learning_path_left_zone" class="sidebar-scorm">
         <div class="lp-view-zone-container">
@@ -176,7 +176,7 @@
 
                 <nav id="btn-menu-float" class="circular-menu">
 
-                    <div class="circle open">
+                    <div class="circle">
 
                         {% if show_left_column == 1 %}
                             <a href="#" title = "{{ 'Expand'|get_lang }}" id="lp-view-expand-toggle" class="icon-toolbar expand" role="button">

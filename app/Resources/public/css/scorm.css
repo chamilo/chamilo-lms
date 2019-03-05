@@ -520,15 +520,17 @@ See https://support.chamilo.org/issues/6976
 }
 
 .circle {
-    width: 100%;
-    height: 40px;
     opacity: 0;
-    margin-top: 0;
-    padding-top: 50px;
+    margin-left: 50px;
+    margin-top: 5px;
+    padding: 2px;
+    border-radius: 20px;
+    background-color: #ffffff;
+    border: 2px solid #8dcbf3;
 
-    -webkit-transform: scale(0);
-    -moz-transform: scale(0);
-    -transform: scale(0);
+    -webkit-transform: translate(-100%);
+    -moz-transform:  translate(-100%);
+    -transform:  translate(-100%);
 
     -webkit-transition: all 0.4s ease-out;
     -moz-transition: all 0.4s ease-out;
@@ -538,21 +540,20 @@ See https://support.chamilo.org/issues/6976
 .open.circle {
     opacity: 1;
 
-    -webkit-transform: scale(1);
-    -moz-transform: scale(1);
-    -transform: scale(1);
+    -webkit-transform:  translate(0%);
+    -moz-transform: translate(0%);
+    -transform: translate(0%);
 }
 
 .circle a {
     text-decoration: none;
     color: #fff;
-    display: block;
-    height: 40px;
-    width: 40px;
-    line-height: 40px;
+    display: inline-block;
+    height: 35px;
+    width: 35px;
+    line-height: 35px;
     text-align: center;
     border-radius: 100%;
-    margin-left: 5px;
 }
 
 .circle a:hover {

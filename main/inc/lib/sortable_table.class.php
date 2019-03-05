@@ -140,6 +140,11 @@ class SortableTable extends HTML_Table
         $this->column = Session::read($this->param_prefix.'column', $default_column);
         $this->column = isset($_GET[$this->param_prefix.'column']) ? intval($_GET[$this->param_prefix.'column']) : $this->column;
 
+        $defaultRow = api_get_configuration_value('table_default_row');
+        if (!empty($defaultRow)) {
+            $default_items_per_page = $defaultRow;
+        }
+
         // Default direction.
         if (in_array(strtoupper($default_order_direction), ['ASC', 'DESC'])) {
             $this->direction = $default_order_direction;
@@ -676,6 +681,12 @@ class SortableTable extends HTML_Table
         }
         $result[] = '<select name="'.$this->param_prefix.'per_page" onchange="javascript: this.form.submit();">';
         $list = [10, 20, 50, 100, 500, 1000];
+
+        $rowList = api_get_configuration_value('table_row_list');
+        if (!empty($rowList) && isset($rowList['options'])) {
+            $list = $rowList['options'];
+        }
+
         foreach ($list as $nr) {
             if ($total_number_of_items <= $nr) {
                 break;
@@ -1148,6 +1159,7 @@ class SortableTableFromArrayConfig extends SortableTable
         $this->column_show = $column_show;
         $this->column_order = $column_order;
         $this->doc_filter = $doc_filter;
+
         parent::__construct(
             $tablename,
             null,

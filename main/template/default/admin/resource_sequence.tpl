@@ -254,6 +254,14 @@
             $('select#sequence_id').on('change', function() {
                 sequenceId = $(this).val();
             });
+
+            $('form[name="frm_select_delete"]').on('submit', function (e) {
+                var confirmDelete = confirm('{{ 'AreYouSureToDeleteJS'|get_lang }}');
+
+                if (!confirmDelete) {
+                    e.preventDefault();
+                }
+            });
         });
     </script>
     <div class="panel panel-default">

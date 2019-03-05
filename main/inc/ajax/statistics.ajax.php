@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+
 /**
  * Responses to AJAX calls.
  */
@@ -82,7 +84,8 @@ switch ($action) {
         }
 
         if (!empty($operation)) {
-            $fileName = !empty($action) ? get_lang('PortalUserSessionStats').'_'.api_get_local_time() : 'report';
+            $fileName = !empty($action) ? api_get_setting('siteName').
+                '_'.get_lang('PortalUserSessionStats').'_'.api_get_local_time() : 'report';
             switch ($exportFormat) {
                 case 'xls':
                     Export::arrayToXls($list, $fileName);

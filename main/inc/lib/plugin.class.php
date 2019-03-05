@@ -934,6 +934,33 @@ class Plugin
     }
 
     /**
+     * Overwrite to perform some actions when deleting a user.
+     *
+     * @param int $userId
+     */
+    public function doWhenDeletingUser($userId)
+    {
+    }
+
+    /**
+     * Overwrite to perform some actions when deleting a course.
+     *
+     * @param int $courseId
+     */
+    public function doWhenDeletingCourse($courseId)
+    {
+    }
+
+    /**
+     * Overwrite to perform some actions when deleting a session.
+     *
+     * @param int $sessionId
+     */
+    public function doWhenDeletingSession($sessionId)
+    {
+    }
+
+    /**
      * Add an link for a course tool.
      *
      * @param string $name     The tool name
@@ -964,6 +991,7 @@ class Plugin
             ->findOneBy([
                 'name' => $name,
                 'cId' => $courseId,
+                'category' => 'plugin',
             ]);
 
         if (!$tool) {

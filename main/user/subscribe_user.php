@@ -70,7 +70,7 @@ if (isset($_REQUEST['register'])) {
             );
             Display::addFlash(Display::return_message($message));
         } else {
-            CourseManager::subscribe_user(
+            CourseManager::subscribeUser(
                 $_REQUEST['user_id'],
                 $courseInfo['code'],
                 COURSEMANAGER
@@ -78,7 +78,7 @@ if (isset($_REQUEST['register'])) {
             Display::addFlash(Display::return_message($message));
         }
     } else {
-        CourseManager::subscribe_user(
+        CourseManager::subscribeUser(
             $_REQUEST['user_id'],
             $courseInfo['code']
         );
@@ -102,14 +102,14 @@ if (isset($_POST['action'])) {
                                 $courseInfo['real_id']
                             );
                         } else {
-                            $is_suscribe[] = CourseManager::subscribe_user(
+                            $is_suscribe[] = CourseManager::subscribeUser(
                                 $user_id,
                                 $courseInfo['code'],
                                 COURSEMANAGER
                             );
                         }
                     } else {
-                        $is_suscribe[] = CourseManager::subscribe_user(
+                        $is_suscribe[] = CourseManager::subscribeUser(
                             $user_id,
                             $courseInfo['code']
                         );

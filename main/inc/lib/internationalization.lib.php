@@ -753,9 +753,6 @@ function date_to_str_ago($date, $timeZone = 'UTC', $returnDateDifference = false
     }
 
     return $value;
-
-
-
 }
 
 /**

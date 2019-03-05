@@ -407,6 +407,7 @@ class UserGroup extends Model
 
     /**
      * @param array $options
+     * @param int   $type
      *
      * @return array
      */
@@ -550,7 +551,8 @@ class UserGroup extends Model
                     ],
                 ],
             ];
-            $from = $this->usergroup_rel_course_table." as c INNER JOIN ".$this->access_url_rel_usergroup." a
+            $from = $this->usergroup_rel_course_table." as c 
+                    INNER JOIN ".$this->access_url_rel_usergroup." a
                     ON c.usergroup_id = a.usergroup_id";
         } else {
             $options = ['where' => ['c.course_id = ?' => $course_id]];
@@ -881,7 +883,7 @@ class UserGroup extends Model
                 if ($course_info) {
                     if (!empty($user_list)) {
                         foreach ($user_list as $user_id) {
-                            CourseManager::subscribe_user(
+                            CourseManager::subscribeUser(
                                 $user_id,
                                 $course_info['code']
                             );
@@ -1031,7 +1033,7 @@ class UserGroup extends Model
                 if (!empty($course_list)) {
                     foreach ($course_list as $course_id) {
                         $course_info = api_get_course_info_by_id($course_id);
-                        CourseManager::subscribe_user($user_id, $course_info['code']);
+                        CourseManager::subscribeUser($user_id, $course_info['code']);
                     }
                 }
                 $params = [
@@ -1369,6 +1371,8 @@ class UserGroup extends Model
     public function update_group_picture($group_id, $file = null, $source_file = null)
     {
         // Validation 1.
+        $group_id = (int) $group_id;
+        // Validation 1.
         if (empty($group_id)) {
             return false;
         }
@@ -1383,8 +1387,13 @@ class UserGroup extends Model
         $path = $path_info['dir'];
 
         // If this directory does not exist - we create it.
-        if (!file_exists($path)) {
-            @mkdir($path, api_get_permissions_for_new_directories(), true);
+        if (!is_dir($path)) {
+            $res = @mkdir($path, api_get_permissions_for_new_directories(), true);
+            if ($res === false) {
+                // There was an issue creating the directory $path, probably
+                // permissions-related
+                return false;
+            }
         }
 
         // The old photos (if any).
@@ -1774,12 +1783,12 @@ class UserGroup extends Model
             default: // Base: empty, the result path below will be relative.
                 $base = '';
         }
+        $id = (int) $id;
 
         if (empty($id) || empty($type)) {
             return $anonymous ? ['dir' => $base.'img/', 'file' => 'unknown.jpg'] : ['dir' => '', 'file' => ''];
         }
 
-        $id = (int) $id;
         $group_table = Database::get_main_table(TABLE_USERGROUP);
         $sql = "SELECT picture FROM $group_table WHERE id = ".$id;
         $res = Database::query($sql);
@@ -1976,7 +1985,7 @@ class UserGroup extends Model
     {
         $table_url_rel_group = $this->usergroup_rel_user_table;
         $result_array = [];
-        $relation_type = intval($relation_type);
+        $relation_type = (int) $relation_type;
 
         if (is_array($user_list) && is_array($group_list)) {
             foreach ($group_list as $group_id) {
@@ -1987,7 +1996,7 @@ class UserGroup extends Model
 		               			SET
 		               			    user_id = ".intval($user_id).",
 		               			    usergroup_id = ".intval($group_id).",
-		               			    relation_type = ".intval($relation_type);
+		               			    relation_type = ".$relation_type;
 
                         $result = Database::query($sql);
                         if ($result) {
@@ -2545,7 +2554,6 @@ class UserGroup extends Model
         $from = intval($from);
         $number_of_items = intval($number_of_items);
 
-        //$sql .= " ORDER BY col$column $direction ";
         $sql .= " LIMIT $from,$number_of_items";
 
         $res = Database::query($sql);
@@ -2568,6 +2576,8 @@ class UserGroup extends Model
     public static function get_parent_groups($group_id)
     {
         $t_rel_group = Database::get_main_table(TABLE_USERGROUP_REL_USERGROUP);
+        $group_id = (int) $group_id;
+
         $max_level = 10;
         $select_part = "SELECT ";
         $cond_part = '';
@@ -2614,7 +2624,7 @@ class UserGroup extends Model
         $relationType = GROUP_USER_PERMISSION_ADMIN,
         $includeSubgroupsUsers = true
     ) {
-        $userId = intval($userId);
+        $userId = (int) $userId;
         $groups = $this->get_groups_by_user($userId, $relationType);
         $groupsId = array_keys($groups);
         $subgroupsId = [];
@@ -2665,7 +2675,7 @@ class UserGroup extends Model
     public static function getGroupsByDepthLevel($groupId, $levels = 10)
     {
         $groups = [];
-        $groupId = intval($groupId);
+        $groupId = (int) $groupId;
 
         $groupTable = Database::get_main_table(TABLE_USERGROUP);
         $groupRelGroupTable = Database::get_main_table(TABLE_USERGROUP_REL_USERGROUP);

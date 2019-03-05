@@ -104,6 +104,7 @@ define('SURVEY_VISIBLE_PUBLIC', 2);
 /* When you add a new tool you must add it into function api_get_tools_lists() too */
 define('TOOL_DOCUMENT', 'document');
 define('TOOL_LP_FINAL_ITEM', 'final_item');
+define('TOOL_READOUT_TEXT', 'readout_text');
 define('TOOL_THUMBNAIL', 'thumbnail');
 define('TOOL_HOTPOTATOES', 'hotpotatoes');
 define('TOOL_CALENDAR_EVENT', 'calendar_event');
@@ -248,6 +249,8 @@ define('LOG_USER_ID', 'user_id');
 define('LOG_USER_OBJECT', 'user_object');
 define('LOG_USER_FIELD_VARIABLE', 'user_field_variable');
 define('LOG_SESSION_ID', 'session_id');
+
+define('LOG_QUESTION_ID', 'question_id');
 define('LOG_SESSION_CATEGORY_ID', 'session_category_id');
 define('LOG_CONFIGURATION_SETTINGS_CATEGORY', 'settings_category');
 define('LOG_CONFIGURATION_SETTINGS_VARIABLE', 'settings_variable');
@@ -276,6 +279,9 @@ define('LOG_USER_CONFIRMED_EMAIL', 'user_confirmed_email');
 define('LOG_USER_REMOVED_LEGAL_ACCEPT', 'user_removed_legal_accept');
 
 define('LOG_USER_DELETE_ACCOUNT_REQUEST', 'user_delete_account_request');
+
+define('LOG_QUESTION_CREATED', 'question_created');
+define('LOG_QUESTION_UPDATED', 'question_updated');
 
 define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.]/');
 
@@ -468,6 +474,8 @@ define('RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS', 1); //Do not show score n
 define('RESULT_DISABLE_SHOW_SCORE_ONLY', 2); //Show score only
 define('RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES', 3); //Show final score only with categories
 define('RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT', 4);
+define('RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK', 5);
+define('RESULT_DISABLE_RANKING', 6);
 // 4: Show final score only with categories and show expected answers only on the last attempt
 
 define('EXERCISE_MAX_NAME_SIZE', 80);
@@ -1462,7 +1470,7 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
     $result['complete_name'] = api_get_person_name($result['firstname'], $result['lastname']);
     $result['complete_name_with_username'] = $result['complete_name'];
 
-    if (!empty($user['username'])) {
+    if (!empty($user['username']) && !api_get_configuration_value('hide_username_with_complete_name')) {
         $result['complete_name_with_username'] = $result['complete_name'].' ('.$user['username'].')';
     }
 

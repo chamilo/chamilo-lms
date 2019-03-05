@@ -32,7 +32,7 @@ class FormValidator extends HTML_QuickForm
         $method = 'post',
         $action = '',
         $target = '',
-        $attributes = array(),
+        $attributes = [],
         $layout = self::LAYOUT_HORIZONTAL,
         $trackSubmit = true
     ) {

@@ -183,6 +183,7 @@ class UserManager
      * @param bool          $sendEmailToAllAdmins
      * @param FormValidator $form
      * @param int           $creatorId
+     * @param array         $emailTemplate
      *
      * @return mixed new user id - if the new user creation succeeds, false otherwise
      * @desc The function tries to retrieve user id from the session.
@@ -212,7 +213,8 @@ class UserManager
         $address = '',
         $sendEmailToAllAdmins = false,
         $form = null,
-        $creatorId = 0
+        $creatorId = 0,
+        $emailTemplate = []
     ) {
         $creatorId = empty($creatorId) ? api_get_user_id() : 0;
         $hook = HookCreateUser::create();
@@ -432,9 +434,7 @@ class UserManager
                     false,
                     false
                 );
-                $layoutSubject = $tplSubject->get_template(
-                    'mail/subject_registration_platform.tpl'
-                );
+                $layoutSubject = $tplSubject->get_template('mail/subject_registration_platform.tpl');
                 $emailSubject = $tplSubject->fetch($layoutSubject);
                 $sender_name = api_get_person_name(
                     api_get_setting('administratorName'),

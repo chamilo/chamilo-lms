@@ -54,10 +54,9 @@ class HtmlEditor extends HTML_QuickForm_textarea
      */
     public function toHtml()
     {
-        $value = $this->getValue();
-
         if ($this->editor) {
             if ($this->editor->getConfigAttribute('fullPage')) {
+                $value = $this->getValue();
                 if (strlen(trim($value)) == 0) {
                     // TODO: To be considered whether here to add
                     // language and character set declarations.
@@ -71,10 +70,9 @@ class HtmlEditor extends HTML_QuickForm_textarea
             return $this->getFrozenHtml();
         } else {
             $styleCss = $this->editor->getConfigAttribute('style');
+            $style = false;
             if ($styleCss) {
                 $style = true;
-            } else {
-                $style = false;
             }
 
             return $this->buildEditor($style);

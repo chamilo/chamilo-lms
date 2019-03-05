@@ -440,7 +440,7 @@ class Tracking
                         if ($score == 0) {
                             $maxscore = $row['mymaxscore'];
                         } else {
-                            if ($row['item_type'] == 'sco') {
+                            if ($row['item_type'] === 'sco') {
                                 if (!empty($row['myviewmaxscore']) && $row['myviewmaxscore'] > 0) {
                                     $maxscore = $row['myviewmaxscore'];
                                 } elseif ($row['myviewmaxscore'] === '') {
@@ -1605,6 +1605,40 @@ class Tracking
     }
 
     /**
+     * Checks if the "lp_minimum_time" feature is available for the course.
+     *
+     * @param int $sessionId
+     * @param int $courseId
+     *
+     * @return bool
+     */
+    public static function minimunTimeAvailable($sessionId, $courseId)
+    {
+        if (!api_get_configuration_value('lp_minimum_time')) {
+            return false;
+        }
+
+        if (!empty($sessionId)) {
+            $extraFieldValue = new ExtraFieldValue('session');
+            $value = $extraFieldValue->get_values_by_handler_and_field_variable($sessionId, 'new_tracking_system');
+
+            if ($value && isset($value['value']) && $value['value'] == 1) {
+                return true;
+            }
+        } else {
+            if ($courseId) {
+                $extraFieldValue = new ExtraFieldValue('course');
+                $value = $extraFieldValue->get_values_by_handler_and_field_variable($courseId, 'new_tracking_system');
+                if ($value && isset($value['value']) && $value['value'] == 1) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Calculates the time spent on the course.
      *
      * @param int $user_id
@@ -1622,6 +1656,13 @@ class Tracking
 
         if (empty($courseId) || empty($user_id)) {
             return 0;
+        }
+
+        if (self::minimunTimeAvailable($session_id, $courseId)) {
+            $courseTime = self::getCalculateTime($user_id, $courseId, $session_id);
+            $time = isset($courseTime['total_time']) ? $courseTime['total_time'] : 0;
+
+            return $time;
         }
 
         $session_id = (int) $session_id;
@@ -1791,9 +1832,9 @@ class Tracking
         $session_id = 0,
         $convert_date = true
     ) {
-        $student_id = intval($student_id);
-        $courseId = intval($courseId);
-        $session_id = intval($session_id);
+        $student_id = (int) $student_id;
+        $courseId = (int) $courseId;
+        $session_id = (int) $session_id;
 
         $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $sql = 'SELECT login_course_date

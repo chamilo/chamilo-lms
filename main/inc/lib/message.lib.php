@@ -78,7 +78,11 @@ class MessageManager
         $result = Database::query($sql);
         $result = Database::fetch_array($result);
 
-        return $result['number_messages'];
+        if ($result) {
+            return (int) $result['number_messages'];
+        }
+
+        return 0;
     }
 
     /**
@@ -1298,12 +1302,13 @@ class MessageManager
     {
         $table = Database::get_main_table(TABLE_MESSAGE);
         $messageId = (int) $messageId;
+        $currentUserId = api_get_user_id();
 
         if ($source == 'outbox') {
             if (isset($messageId) && is_numeric($messageId)) {
                 $query = "SELECT * FROM $table
                           WHERE
-                            user_sender_id = ".api_get_user_id()." AND
+                            user_sender_id = ".$currentUserId." AND
                             id = $messageId AND
                             msg_status = ".MESSAGE_STATUS_OUTBOX;
                 $result = Database::query($query);
@@ -1313,19 +1318,24 @@ class MessageManager
                 $query = "UPDATE $table SET
                           msg_status = '".MESSAGE_STATUS_NEW."'
                           WHERE
-                            user_receiver_id=".api_get_user_id()." AND
+                            user_receiver_id=".$currentUserId." AND
                             id='".$messageId."'";
                 Database::query($query);
 
                 $query = "SELECT * FROM $table
                           WHERE
                             msg_status<> ".MESSAGE_STATUS_OUTBOX." AND
-                            user_receiver_id=".api_get_user_id()." AND
+                            user_receiver_id=".$currentUserId." AND
                             id='".$messageId."'";
                 $result = Database::query($query);
             }
         }
         $row = Database::fetch_array($result, 'ASSOC');
+
+        if (empty($row)) {
+            return '';
+        }
+
         $user_sender_id = $row['user_sender_id'];
 
         // get file attachments by message id

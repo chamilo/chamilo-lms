@@ -57,7 +57,9 @@ if ($form->validate()) {
             $sendMail,
             $removeOldRelationships
         );
-        echo Display::return_message($result, 'info', false);
+        Display::addFlash(Display::return_message($result, 'info', false));
+        header('Location: '.api_get_self());
+        exit;
     } else {
         $error_message = get_lang('NoInputFile');
     }

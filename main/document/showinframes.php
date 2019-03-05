@@ -27,7 +27,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_protect_course_script();
 
 $header_file = isset($_GET['file']) ? Security::remove_XSS($_GET['file']) : null;
-$document_id = intval($_GET['id']);
+$document_id = (int) $_GET['id'];
 $originIsLearnpath = isset($_GET['origin']) && $_GET['origin'] === 'learnpathitem';
 $courseInfo = api_get_course_info();
 $course_code = api_get_course_id();

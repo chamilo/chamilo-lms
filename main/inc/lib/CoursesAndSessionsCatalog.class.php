@@ -156,6 +156,63 @@ class CoursesAndSessionsCatalog
         return $row[0];
     }
 
+    public static function getCourseCategoriesTree()
+    {
+        $urlId = 1;
+        if (api_is_multiple_url_enabled()) {
+            $urlId = api_get_current_access_url_id();
+        }
+
+        $countCourses = self::countAvailableCoursesToShowInCatalog($urlId);
+        $categories = [];
+        $list = [];
+
+        $categories['ALL'] = [
+            'id' => 0,
+            'name' => get_lang('DisplayAll'),
+            'code' => 'ALL',
+            'parent_id' => null,
+            'tree_pos' => 0,
+            'number_courses' => $countCourses,
+            'level' => 0,
+        ];
+
+        $allCategories = CourseCategory::getAllCategories();
+
+        foreach ($allCategories as $category) {
+            $subList = [];
+            if (empty($category['parent_id'])) {
+                $list[$category['code']] = $category;
+                $list[$category['code']]['level'] = 0;
+                list($subList, $childrenCount) = self::buildCourseCategoryTree($allCategories, $category['code'], 0);
+                //$list = array($list, $subList);
+                foreach ($subList as $item) {
+                    $list[$item['code']] = $item;
+                }
+                $list[$category['code']]['number_courses'] = $childrenCount + $category['number_courses'];
+            }
+        }
+
+        // count courses that are in no category
+        $count_courses = CourseCategory::countCoursesInCategory();
+        $categories['NONE'] = [
+            'id' => 0,
+            'name' => get_lang('WithoutCategory'),
+            'code' => 'NONE',
+            'parent_id' => null,
+            'tree_pos' => 0,
+            'children_count' => 0,
+            'auth_course_child' => true,
+            'auth_cat_child' => true,
+            'number_courses' => $count_courses,
+            'level' => 0,
+        ];
+
+        $result = array_merge($list, $categories);
+
+        return $result;
+    }
+
     /**
      * @return array
      */
@@ -215,8 +272,8 @@ class CoursesAndSessionsCatalog
     {
         $limitFilter = '';
         if (!empty($limit) && is_array($limit)) {
-            $limitStart = isset($limit['start']) ? $limit['start'] : 0;
-            $limitLength = isset($limit['length']) ? $limit['length'] : 12;
+            $limitStart = isset($limit['start']) ? (int) $limit['start'] : 0;
+            $limitLength = isset($limit['length']) ? (int) $limit['length'] : 12;
             $limitFilter = 'LIMIT '.$limitStart.', '.$limitLength;
         }
 
@@ -469,6 +526,8 @@ class CoursesAndSessionsCatalog
      * @param string $date  (optional) The date of sessions
      * @param array  $limit
      *
+     * @throws Exception
+     *
      * @return array The session list
      */
     public static function browseSessions($date = null, $limit = [])
@@ -487,6 +546,7 @@ class CoursesAndSessionsCatalog
         ";
 
         if (!is_null($date)) {
+            $date = Database::escape_string($date);
             $sql .= "
                 AND (
                     ('$date' BETWEEN DATE(s.access_start_date) AND DATE(s.access_end_date))
@@ -501,6 +561,8 @@ class CoursesAndSessionsCatalog
         }
 
         if (!empty($limit)) {
+            $limit['start'] = (int) $limit['start'];
+            $limit['length'] = (int) $limit['length'];
             $sql .= "LIMIT {$limit['start']}, {$limit['length']} ";
         }
 
@@ -609,5 +671,71 @@ class CoursesAndSessionsCatalog
         }
 
         return $sessionsToBrowse;
+    }
+
+    /**
+     * Build a recursive tree of course categories.
+     *
+     * @param $categories
+     * @param $parentId
+     *
+     * @return array
+     */
+    public static function buildCourseCategoryTree($categories, $parentId = 0, $level = 0)
+    {
+        $list = [];
+        $count = 0;
+        $level++;
+        foreach ($categories as $category) {
+            $childrenCount = 0;
+            $subList = [];
+            if (empty($category['parent_id'])) {
+                continue;
+            }
+            if ($category['parent_id'] == $parentId) {
+                $list[$category['code']] = $category;
+                $count += $category['number_courses'];
+                $list[$category['code']]['level'] = $level;
+                list($subList, $childrenCount) = self::buildCourseCategoryTree(
+                    $categories,
+                    $category['code'],
+                    $level
+                );
+                $list[$category['code']]['number_courses'] += $childrenCount;
+                foreach ($subList as $item) {
+                    $list[$item['code']] = $item;
+                }
+                $count += $childrenCount;
+            }
+        }
+
+        return [$list, $count];
+    }
+
+    /**
+     * List Code Search Category.
+     *
+     * @param $code
+     *
+     * @return array
+     */
+    public static function childrenCategories($code)
+    {
+        $allCategories = CourseCategory::getAllCategories();
+        $list = [];
+        $row = [];
+
+        if ($code != 'ALL' and $code != 'NONE') {
+            foreach ($allCategories as $category) {
+                if ($category['code'] === $code) {
+                    $list = self::buildCourseCategoryTree($allCategories, $category['code'], 0);
+                }
+            }
+            foreach ($list[0] as $item) {
+                $row[] = $item['code'];
+            }
+        }
+
+        return $row;
     }
 }

@@ -110,6 +110,8 @@ $usergroup = new UserGroup();
 
 if ($group_id != 0) {
     $group_info = $usergroup->get($group_id);
+    $group_info['name'] = Security::remove_XSS($group_info['name']);
+    $group_info['description'] = Security::remove_XSS($group_info['description']);
 
     $interbreadcrumb[] = ['url' => '#', 'name' => $group_info['name']];
 
@@ -152,9 +154,10 @@ if ($group_id != 0) {
 $create_thread_link = '';
 $social_right_content = null;
 $socialForum = '';
-$friend_html = '';
 
 $group_info = $usergroup->get($group_id);
+$group_info['name'] = Security::remove_XSS($group_info['name']);
+$group_info['description'] = Security::remove_XSS($group_info['description']);
 
 //Loading group information
 if (isset($_GET['status']) && $_GET['status'] == 'sent') {

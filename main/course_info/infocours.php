@@ -861,8 +861,15 @@ $group = [
 ];
 $myButton = $form->addButtonSave(get_lang('SaveSettings'), 'submit_save', true);
 
+// Forum settings
+$groupNotification = [
+    $form->createElement('radio', 'hide_forum_notifications', null, get_lang('Yes'), 1),
+    $form->createElement('radio', 'hide_forum_notifications', null, get_lang('No'), 2),
+];
+
 $globalGroup = [
     get_lang('EnableForumAutoLaunch') => $group,
+    get_lang('HideForumNotifications') => $groupNotification,
     '' => $myButton,
 ];
 

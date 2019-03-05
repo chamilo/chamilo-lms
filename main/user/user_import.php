@@ -104,7 +104,7 @@ if ($form->validate()) {
 
                 foreach ($clean_users as $userId) {
                     $userInfo = api_get_user_info($userId);
-                    CourseManager::subscribe_user($userId, $course_code, $userType, $session_id);
+                    CourseManager::subscribeUser($userId, $course_code, $userType, $session_id);
                     if (empty($session_id)) {
                         //just to make sure
                         if (CourseManager :: is_user_subscribed_in_course($userId, $course_code)) {

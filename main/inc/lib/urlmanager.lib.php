@@ -168,7 +168,7 @@ class UrlManager
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
         $orderBy = empty($orderBy) ? ' id ' : Database::escape_string($orderBy);
 
-        $sql = "SELECT id, url, description, active
+        $sql = "SELECT id, url, description, active, tms
                 FROM $table
                 ORDER BY $orderBy";
 

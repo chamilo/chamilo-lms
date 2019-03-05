@@ -386,11 +386,11 @@ class LegalManager
         $webPath = api_get_path(WEB_PATH);
 
         // @ofaj
-	    $link = '<a href="'.$webPath.'contrat.php">'.$webPath.'contrat.php</a>';
+        $link = '<a href="'.$webPath.'contrat.php">'.$webPath.'contrat.php</a>';
         $content = sprintf(
             get_lang('SendTermsDescriptionToUrlX'),
             $userInfo['firstName'],
-	        $link,
+            $link,
             $senderInfo['firstName']
         );
         MessageManager::send_message_simple($userId, $subject, $content);

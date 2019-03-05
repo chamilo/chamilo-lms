@@ -34,7 +34,7 @@ if ($user !== false && ($chamilo_uid = external_add_user($user)) !== false) {
         $autoSubscribe = explode('|', $user['courses']);
         foreach ($autoSubscribe as $code) {
             if (CourseManager::course_exists($code)) {
-                CourseManager::subscribe_user($_user['user_id'], $code);
+                CourseManager::subscribeUser($_user['user_id'], $code);
             }
         }
     }

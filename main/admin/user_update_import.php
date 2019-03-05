@@ -199,7 +199,7 @@ function updateUsers($users)
             if (is_array($user['Courses'])) {
                 foreach ($user['Courses'] as $course) {
                     if (CourseManager::course_exists($course)) {
-                        CourseManager::subscribe_user($user_id, $course, $user['Status']);
+                        CourseManager::subscribeUser($user_id, $course, $user['Status']);
                         $course_info = CourseManager::get_course_information($course);
                         $inserted_in_course[$course] = $course_info['title'];
                     }

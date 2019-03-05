@@ -50,6 +50,7 @@ $usergroup = new UserGroup();
 // I'm searching something
 if ($query != '' || ($query_vars['search_type'] == '1' && count($query_vars) > 2)) {
     $itemPerPage = 6;
+
     if ($_GET['search_type'] == '0' || $_GET['search_type'] == '1') {
         $page = isset($_GET['users_page_nr']) ? intval($_GET['users_page_nr']) : 1;
         $totalUsers = UserManager::get_all_user_tags(
@@ -249,6 +250,7 @@ $formModalTpl = new Template();
 $formModalTpl->assign('invitation_form', MessageManager::generate_invitation_form('send_invitation'));
 $template = $formModalTpl->get_template('social/form_modals.tpl');
 $formModals = $formModalTpl->fetch($template);
+
 $tpl->assign('form_modals', $formModals);
 
 $social_layout = $tpl->get_template('social/search.tpl');

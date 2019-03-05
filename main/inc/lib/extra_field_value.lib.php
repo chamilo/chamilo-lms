@@ -234,6 +234,7 @@ class ExtraFieldValue extends Model
                         $tag->setCount(count($tagUses) + 1);
                         $em->persist($tag);
                     }
+
                     $em->flush();
 
                     foreach ($tags as $tag) {
@@ -243,6 +244,7 @@ class ExtraFieldValue extends Model
                         $fieldRelTag->setTagId($tag->getId());
                         $em->persist($fieldRelTag);
                     }
+
                     $em->flush();
                     break;
                 case ExtraField::FIELD_TYPE_FILE_IMAGE:

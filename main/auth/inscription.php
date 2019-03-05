@@ -22,7 +22,7 @@ $allowedFields = [
     'status',
     'language',
     'extra_fields',
-    'address'
+    'address',
 ];
 
 $allowedFieldsConfiguration = api_get_configuration_value('allow_fields_inscription');
@@ -974,7 +974,7 @@ if ($form->validate()) {
                         ]
                     )
                     ) {
-                        CourseManager::subscribe_user(
+                        CourseManager::subscribeUser(
                             $user_id,
                             $course_info['code']
                         );
@@ -1274,7 +1274,7 @@ if ($form->validate()) {
                         ]
                     )
                     ) {
-                        CourseManager::subscribe_user(
+                        CourseManager::subscribeUser(
                             $user_id,
                             $course_info['code']
                         );

@@ -78,7 +78,12 @@ if ($form->validate()) {
             $title,
             $text,
             api_get_person_name($_user['firstname'], $_user['lastname']),
-            $_user['mail']
+            '',
+            ['reply_to' => [
+                    'mail' => $_user['mail'],
+                    'name' => api_get_person_name($_user['firstname'], $_user['lastname']),
+                ],
+            ]
         );
     } else {
         api_mail_html(

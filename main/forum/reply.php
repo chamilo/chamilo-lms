@@ -26,6 +26,7 @@ api_protect_course_script(true);
 
 $nameTools = get_lang('ForumCategories');
 $origin = api_get_origin();
+$_user = api_get_user_info();
 
 /* Including necessary files */
 require_once 'forumconfig.inc.php';
@@ -161,7 +162,6 @@ $logInfo = [
     'tool_id_detail' => $threadId,
     'action' => !empty($my_action) ? $my_action : 'reply',
     'action_details' => '',
-    'current_id' => $my_post,
 ];
 Event::registerLog($logInfo);
 

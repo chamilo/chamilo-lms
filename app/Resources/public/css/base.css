@@ -9418,6 +9418,12 @@ ul.dropdown-menu.inner > li > a {
     margin: 16px 6px;
 }
 
+/* end document mp3 preview */
+
+#announcement_preview_result .label {
+    display: inline-table;
+}
+
 .forum_revision {
     background-color: #fff3cd;
 }
@@ -9426,7 +9432,10 @@ ul.dropdown-menu.inner > li > a {
     max-width: 30px;
 }
 
-/* end document mp3 preview */
+.chatboxcontent .status {
+    float:left;
+    margin-right: 10px;
+}
 
 /* Fix grid with one row and multiples columns. Works for .col-sm-6.col-md-4.col-lg-3 */
 .row.clear-rows-6-4-3 {

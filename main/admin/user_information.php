@@ -526,11 +526,11 @@ if (isset($_GET['action'])) {
                 api_get_path(WEB_PATH)
             );
             MessageManager::send_message_simple($userId, $subject, $content);
-	    Display::addFlash(Display::return_message(get_lang('Sent')));*/
+        Display::addFlash(Display::return_message(get_lang('Sent')));*/
             // ofaj
             LegalManager::sendLegal($userId);
             break;
-	case 'delete_legal':
+    case 'delete_legal':
             // ofaj
             LegalManager::deleteLegal($userId);
             /*$extraFieldValue = new ExtraFieldValue('user');
@@ -541,7 +541,7 @@ if (isset($_GET['action'])) {
             $result = $extraFieldValue->delete($value['id']);
             if ($result) {
                 Display::addFlash(Display::return_message(get_lang('Deleted')));
-	    }*/
+        }*/
             break;
         case 'unsubscribe':
             $courseId = !empty($_GET['course_id']) ? (int) $_GET['course_id'] : 0;

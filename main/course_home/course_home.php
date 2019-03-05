@@ -132,7 +132,7 @@ $isSpecialCourse = CourseManager::isSpecialCourse($courseId);
 
 if ($isSpecialCourse) {
     if (isset($_GET['autoreg']) && $_GET['autoreg'] == 1) {
-        if (CourseManager::subscribe_user($user_id, $course_code, STUDENT)) {
+        if (CourseManager::subscribeUser($user_id, $course_code, STUDENT)) {
             Session::write('is_allowed_in_course', true);
         }
     }

@@ -258,7 +258,7 @@ class AppPlugin
      * @param Template $template
      * @param bool     $forced
      *
-     * @return null|string
+     * @return string|null
      */
     public function load_region($region, $template, $forced = false)
     {
@@ -532,6 +532,36 @@ class AppPlugin
                         $obj->course_install($courseId);
                     }
                 }
+            }
+        }
+    }
+
+    /**
+     * Trigger for Plugin::doWhenDeleting[Item] functions.
+     *
+     * @param string $itemType
+     * @param int    $itemId
+     */
+    public function performActionsWhenDeletingItem($itemType, $itemId)
+    {
+        $pluginList = $this->getInstalledPluginListObject();
+
+        if (empty($pluginList)) {
+            return;
+        }
+
+        /** @var Plugin $pluginObj */
+        foreach ($pluginList as $pluginObj) {
+            switch ($itemType) {
+                case 'course':
+                    $pluginObj->doWhenDeletingCourse($itemId);
+                    break;
+                case 'session':
+                    $pluginObj->doWhenDeletingSession($itemId);
+                    break;
+                case 'user':
+                    $pluginObj->doWhenDeletingUser($itemId);
+                    break;
             }
         }
     }

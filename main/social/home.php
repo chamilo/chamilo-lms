@@ -13,14 +13,15 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_block_anonymous_users();
+
 $user_id = api_get_user_id();
 $show_full_profile = true;
 // social tab
 Session::erase('this_section');
 $this_section = SECTION_SOCIAL;
-api_block_anonymous_users();
 
-if (api_get_setting('allow_social_tool') != 'true') {
+if (api_get_setting('allow_social_tool') !== 'true') {
     $url = api_get_path(WEB_CODE_PATH).'auth/profile.php';
     header('Location: '.$url);
     exit;
@@ -102,7 +103,6 @@ $social_search_block = Display::panel(
     UserManager::get_search_form(''),
     get_lang('SearchUsers')
 );
-
 
 /*
 $results = $userGroup->get_groups_by_user($user_id,
@@ -233,7 +233,7 @@ $formSearch->addText(
     [
         'aria-label' => get_lang('SearchUsers'),
         'custom' => true,
-        'placeholder' => get_lang('ByName')
+        'placeholder' => get_lang('ByName'),
     ]
 );
 //$formSearch->addButtonSearch(get_lang('Search'));

@@ -564,7 +564,6 @@ class SessionManager
             $inject_joins .= " LEFT JOIN $table su ON (su.session_id = s.id)";
         }
 
-
         if (!empty($language)) {
             $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
             $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -587,7 +586,6 @@ class SessionManager
                         ON (ar.session_id = s.id) $where";
             }
         }
-
 
         if ($showCountUsers) {
             $query .= ' GROUP by s.id';
@@ -5543,7 +5541,7 @@ SQL;
                                         $userCourseCategory = $courseUserData['user_course_cat'];
                                     }
 
-                                    CourseManager::subscribe_user(
+                                    CourseManager::subscribeUser(
                                         $teacherToAdd,
                                         $course_code,
                                         COURSEMANAGER,
@@ -5666,7 +5664,7 @@ SQL;
                                             $userCourseCategory = $courseUserData['user_course_cat'];
                                         }
 
-                                        CourseManager::subscribe_user(
+                                        CourseManager::subscribeUser(
                                             $teacherId,
                                             $course_code,
                                             COURSEMANAGER,

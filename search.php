@@ -451,7 +451,7 @@ foreach ($elements as $element) {
 
 $fieldsToShow = [
     'heures_disponibilite_par_semaine',
-    'moment_de_disponibilite'
+    'moment_de_disponibilite',
 ];
 
 $extra = $extraField->addElements(
@@ -685,13 +685,11 @@ $userForm->addLabel(null, get_lang('MonEnvironnementDeTravailExplanationIntro2')
 
 $jqueryExtra .= $extra['jquery_ready_content'];
 
-
 $fieldsToShow = [
     'browser_platforme',
     'browser_platforme_autre',
     'browser_platforme_version',
 ];
-
 
 $extra = $extraField->addElements(
     $userForm,
@@ -714,11 +712,7 @@ $userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseEight]');
 $userForm->addHtml('</div></div></div>');
 $userForm->addHtml('</div>');
 
-
 $userForm->addHtml('</div>');
-
-
-
 
 $htmlHeadXtra[] = '<script>
 $(document).ready(function(){

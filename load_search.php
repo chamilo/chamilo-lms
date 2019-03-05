@@ -329,7 +329,7 @@ $extra = $extraField->addElements(
 $fieldsToShow = [
     'heures_disponibilite_par_semaine',
     'moment_de_disponibilite',
-    'langue_cible'
+    'langue_cible',
 ];
 
 $extra = $extraFieldUser->addElements(
@@ -387,9 +387,8 @@ $extra = $extraField->addElements(
     true
 );
 
-
 $fieldsToShow = [
-    'langue_cible'
+    'langue_cible',
 ];
 
 $extra = $extraFieldUser->addElements(
@@ -659,7 +658,6 @@ if ($form->validate()) {
             'item_id' => $userToLoad,
             'extra_heures_disponibilite_par_semaine' => isset($userData['extra_heures_disponibilite_par_semaine']) ? $userData['extra_heures_disponibilite_par_semaine'] : '',
             'extra_langue_cible' => isset($userData['extra_langue_cible']) ? $userData['extra_langue_cible'] : '',
-
         ];
         $extraFieldValue->saveFieldValues(
             $userDataToSave,
@@ -928,7 +926,6 @@ if (!empty($filterToSend)) {
 } else {
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_search=true&load_extra_field='.$extraFieldListToString.'&_force_search=true&rows=20&page=1&sidx=&sord=asc';
 }
-
 
 // Autowidth
 $extra_params['autowidth'] = 'true';

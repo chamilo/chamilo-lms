@@ -646,7 +646,6 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
             'tool_id_detail' => 0,
             'action' => 'update-forumcategory',
             'action_details' => 'forumcategory',
-            'current_id' => $values['forum_category_id'],
             'info' => $clean_cat_title,
         ];
         Event::registerLog($logInfo);
@@ -690,7 +689,6 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
             'tool_id_detail' => 0,
             'action' => 'new-forumcategory',
             'action_details' => 'forumcategory',
-            'current_id' => $last_id,
             'info' => $clean_cat_title,
         ];
         Event::registerLog($logInfo);
@@ -900,7 +898,6 @@ function store_forum($values, $courseInfo = [], $returnId = false)
             'tool_id_detail' => 0,
             'action' => 'update-forum',
             'action_details' => 'forum',
-            'current_id' => $values['forum_id'],
             'info' => $values['forum_title'],
         ];
         Event::registerLog($logInfo);
@@ -959,7 +956,6 @@ function store_forum($values, $courseInfo = [], $returnId = false)
                 'tool_id_detail' => 0,
                 'action' => 'new-forum',
                 'action_details' => 'forum',
-                'current_id' => $forumId,
                 'info' => $values['forum_title'],
             ];
             Event::registerLog($logInfo);
@@ -2711,7 +2707,6 @@ function updateThread($values)
         'tool_id_detail' => $values['thread_id'],
         'action' => 'edit-thread',
         'action_details' => 'thread',
-        'current_id' => $values['thread_id'],
         'info' => $values['thread_title'],
     ];
     Event::registerLog($logInfo);
@@ -2965,7 +2960,6 @@ function store_thread(
             'tool_id_detail' => $lastThread->getIid(),
             'action' => 'new-thread',
             'action_details' => '',
-            'current_id' => $lastThread->getIid(),
             'info' => $clean_post_title,
         ];
         Event::registerLog($logInfo);
@@ -2996,6 +2990,7 @@ function store_thread(
 
     $em->persist($lastPost);
     $em->flush();
+
     $lastPostId = $lastPost->getIid();
 
     $logInfo = [
@@ -3004,7 +2999,6 @@ function store_thread(
         'tool_id_detail' => $lastThread->getIid(),
         'action' => 'new-post',
         'action_details' => '',
-        'current_id' => $lastPostId,
         'info' => $clean_post_title,
     ];
     Event::registerLog($logInfo);
@@ -3320,7 +3314,6 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
 
     if (($action == 'quote' || $action == 'replymessage' || $giveRevision) && !empty($my_post)) {
         // We also need to put the parent_id of the post in a hidden form when
-        // we are quoting or replying to a message (<> reply to a thread !!!)
         $form->addHidden('post_parent_id', $my_post);
 
         // If we are replying or are quoting then we display a default title.
@@ -3876,7 +3869,6 @@ function store_reply($current_forum, $values, $courseId = 0, $userId = 0)
                 'tool_id_detail' => $values['thread_id'],
                 'action' => 'new-post',
                 'action_details' => $values['action'],
-                'current_id' => $new_post_id,
                 'info' => $values['post_title'],
             ];
             Event::registerLog($logInfo);
@@ -4081,7 +4073,6 @@ function store_edit_post($forumInfo, $values)
         'tool_id_detail' => $values['thread_id'],
         'action' => 'edit-post',
         'action_details' => 'post',
-        'current_id' => $values['post_id'],
         'info' => $values['post_title'],
     ];
     Event::registerLog($logInfo);
@@ -5708,7 +5699,6 @@ function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
     $forumCourseId = api_get_configuration_value('global_forums_course_id');
     if (!empty($forumCourseId)) {
         if ($_course['real_id'] == $forumCourseId) {
-
             return false;
         }
     }
@@ -6652,7 +6642,7 @@ function postIsEditableByStudent($forum, $post)
 }
 
 /**
- * @param int  $postId
+ * @param int $postId
  *
  * @return bool
  */
@@ -6701,7 +6691,7 @@ function getPostRevision($postId)
     );
     $revision = '';
     if ($value && isset($value['value'])) {
-        $revision =  $value['value'];
+        $revision = $value['value'];
     }
 
     return $revision;
@@ -6751,7 +6741,7 @@ function getAskRevisionButton($postId, $threadInfo)
 }
 
 /**
- * @param int $postId
+ * @param int   $postId
  * @param array $threadInfo
  *
  * @return string
@@ -6778,6 +6768,7 @@ function giveRevisionButton($postId, $threadInfo)
 /**
  * @param int   $postId
  * @param array $threadInfo
+ *
  * @return string
  */
 function getReportButton($postId, $threadInfo)
@@ -6841,7 +6832,6 @@ function getReportRecepients()
                 case 'community_managers':
                     $managers = api_get_configuration_value('community_managers_user_list');
                     if (!empty($managers) && isset($managers['users'])) {
-
                         $users = array_merge($users, $managers['users']);
                     }
                     break;

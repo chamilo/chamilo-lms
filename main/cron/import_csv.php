@@ -2347,7 +2347,7 @@ class ImportCsv
                     $userCourseCategory = $courseUserData['user_course_cat'];
                 }
 
-                CourseManager::subscribe_user(
+                CourseManager::subscribeUser(
                     $userId,
                     $courseInfo['code'],
                     $status,

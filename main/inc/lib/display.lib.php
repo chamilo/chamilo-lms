@@ -67,7 +67,11 @@ class Display
             $showHeader = false;
         }
 
-        self::$global_template = new Template($tool_name, $showHeader, $showHeader);
+        /* USER_IN_ANON_SURVEY is defined in fillsurvey.php when survey is marked as anonymous survey */
+        $userInAnonSurvey = defined('USER_IN_ANON_SURVEY') && USER_IN_ANON_SURVEY;
+
+        self::$global_template = new Template($tool_name, $showHeader, $showHeader, false, $userInAnonSurvey);
+        self::$global_template->assign('user_in_anon_survey', $userInAnonSurvey);
 
         // Fixing tools with any help it takes xxx part of main/xxx/index.php
         if (empty($help)) {
@@ -1063,6 +1067,7 @@ class Display
         $html = '';
         $extra = '';
         $default_id = 'id="'.$name.'" ';
+        $extra_attributes = array_merge(['class' => 'form-control'], $extra_attributes);
         foreach ($extra_attributes as $key => $parameter) {
             if ($key == 'id') {
                 $default_id = '';
@@ -1321,8 +1326,22 @@ class Display
         $all_value = 10000000;
 
         // Default row quantity
+        $obj->rowNum = 20;
+
+        // Default row quantity
         if (!isset($extra_params['rowList'])) {
             $extra_params['rowList'] = [20, 50, 100, 500, 1000, $all_value];
+            $rowList = api_get_configuration_value('table_row_list');
+            if (!empty($rowList) && isset($rowList['options'])) {
+                $rowList = $rowList['options'];
+                $rowList[] = $all_value;
+            }
+            $extra_params['rowList'] = $rowList;
+        }
+
+        $defaultRow = api_get_configuration_value('table_default_row');
+        if (!empty($defaultRow)) {
+            $obj->rowNum = (int) $defaultRow;
         }
 
         $json = '';
@@ -1348,8 +1367,6 @@ class Display
             $obj->rowList = $extra_params['rowList'];
         }
 
-        // Sets how many records we want to view in the grid
-        $obj->rowNum = 20;
         if (!empty($extra_params['rowNum'])) {
             $obj->rowNum = $extra_params['rowNum'];
         } else {
@@ -1883,7 +1900,7 @@ class Display
     /**
      * @param array $list
      *
-     * @return null|string
+     * @return string|null
      */
     public static function description($list)
     {
@@ -1901,15 +1918,15 @@ class Display
     }
 
     /**
-     * @param $percentage
-     * @param bool $show_percentage
-     * @param null $extra_info
+     * @param int    $percentage
+     * @param bool   $show_percentage
+     * @param string $extra_info
      *
      * @return string
      */
-    public static function bar_progress($percentage, $show_percentage = true, $extra_info = null)
+    public static function bar_progress($percentage, $show_percentage = true, $extra_info = '')
     {
-        $percentage = intval($percentage);
+        $percentage = (int) $percentage;
         $div = '<div class="progress">
                 <div
                     class="progress-bar progress-bar-striped"
@@ -1926,7 +1943,7 @@ class Display
                 $div .= $extra_info;
             }
         }
-        $div .= '</div>';
+        $div .= '</div></div>';
 
         return $div;
     }
@@ -1935,7 +1952,7 @@ class Display
      * @param string $count
      * @param string $type
      *
-     * @return null|string
+     * @return string|null
      */
     public static function badge($count, $type = "warning")
     {
@@ -2026,7 +2043,7 @@ class Display
      * @param array  $items
      * @param string $class
      *
-     * @return null|string
+     * @return string|null
      */
     public static function actions($items, $class = 'new_actions')
     {
@@ -2079,7 +2096,7 @@ class Display
      * @param string $type
      * @param null   $id
      *
-     * @return null|string
+     * @return string|null
      */
     public static function generate_accordion($items, $type = 'jquery', $id = null)
     {
@@ -2160,7 +2177,7 @@ class Display
      * @param string $file
      * @param array  $params
      *
-     * @return null|string
+     * @return string|null
      */
     public static function getMediaPlayer($file, $params = [])
     {
@@ -2637,7 +2654,7 @@ class Display
      * @param bool|true  $open
      * @param bool|false $fullClickable
      *
-     * @return null|string
+     * @return string|null
      *
      * @todo rework function to easy use
      */
@@ -2784,7 +2801,6 @@ HTML;
             default:
                 //$html = self::url($data['basename'], $fileUrl);
                 break;
-
         }
         //$html = self::url($content, $fileUrl, ['ajax']);
 

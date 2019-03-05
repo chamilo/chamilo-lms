@@ -405,7 +405,7 @@ class HookAdvancedSubscription extends HookObserver implements HookAdminBlockObs
     /**
      * @param $params
      *
-     * @return null|soap_fault
+     * @return soap_fault|null
      */
     public static function WSSessionListInCategory($params)
     {
@@ -456,7 +456,7 @@ class HookAdvancedSubscription extends HookObserver implements HookAdminBlockObs
     /**
      * @param $params
      *
-     * @return null|soap_fault
+     * @return soap_fault|null
      */
     public static function WSSessionGetDetailsByUser($params)
     {

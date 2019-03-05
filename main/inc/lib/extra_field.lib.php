@@ -243,9 +243,6 @@ class ExtraField extends Model
             case 'filter':
                 $sidx = 'e.filter';
                 break;
-            case 'display_text':
-                $sidx = 'e.fieldType';
-                break;
         }
         $em = Database::getManager();
         $query = $em->getRepository('ChamiloCoreBundle:ExtraField')->createQueryBuilder('e');
@@ -520,7 +517,6 @@ class ExtraField extends Model
         if (empty($extraData)) {
             if (!empty($itemId)) {
                 $extraData = self::get_handler_extra_data($itemId);
-
                 if ($form) {
                     if (!empty($showOnlyTheseFields)) {
                         $setData = [];
@@ -1394,7 +1390,6 @@ class ExtraField extends Model
                         foreach ($field_details['options'] as $option_id => $option_details) {
                             $options[$option_details['option_value']] = $option_details['display_text'];
                         }
-
 
                         if ($orderDependingDefaults) {
                             $defaultOptions = $extraData['extra_'.$field_details['variable']];

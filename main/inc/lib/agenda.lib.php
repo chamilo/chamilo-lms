@@ -161,6 +161,18 @@ class Agenda
     }
 
     /**
+     * Returns the type previously set (and filtered) through setType
+     * If setType() was not called, then type defaults to "personal" as
+     * set in the class definition.
+     */
+    public function getType()
+    {
+        if (isset($this->type)) {
+            return $this->type;
+        }
+    }
+
+    /**
      * @param int $id
      */
     public function setSessionId($id)
@@ -1338,6 +1350,25 @@ class Agenda
     }
 
     /**
+     * Clean events.
+     *
+     * @return bool
+     */
+    public function cleanEvents()
+    {
+        if (empty($this->events)) {
+            return false;
+        }
+
+        foreach ($this->events as &$event) {
+            $event['description'] = Security::remove_XSS($event['description']);
+            $event['title'] = Security::remove_XSS($event['title']);
+        }
+
+        return true;
+    }
+
+    /**
      * @param int $id
      * @param int $minute_delta
      *
@@ -2304,10 +2335,9 @@ class Agenda
         $action = isset($params['action']) ? Security::remove_XSS($params['action']) : null;
         $id = isset($params['id']) ? (int) $params['id'] : 0;
 
+        $url = api_get_self().'?action='.$action.'&id='.$id.'&type='.$this->type;
         if ($this->type == 'course') {
             $url = api_get_self().'?'.api_get_cidreq().'&action='.$action.'&id='.$id.'&type='.$this->type;
-        } else {
-            $url = api_get_self().'?action='.$action.'&id='.$id.'&type='.$this->type;
         }
 
         $form = new FormValidator(
@@ -2673,10 +2703,14 @@ class Agenda
      */
     public function getAttachment($attachmentId, $eventId, $courseInfo)
     {
+        if (empty($courseInfo) || empty($attachmentId) || empty($eventId)) {
+            return [];
+        }
+
         $tableAttachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
-        $courseId = intval($courseInfo['real_id']);
-        $eventId = intval($eventId);
-        $attachmentId = intval($attachmentId);
+        $courseId = (int) $courseInfo['real_id'];
+        $eventId = (int) $eventId;
+        $attachmentId = (int) $attachmentId;
 
         $row = [];
         $sql = "SELECT id, path, filename, comment
@@ -2711,7 +2745,7 @@ class Agenda
         $courseInfo
     ) {
         $agenda_table_attachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
-        $eventId = intval($eventId);
+        $eventId = (int) $eventId;
 
         // Storing the attachments
         $upload_ok = false;
@@ -2848,6 +2882,8 @@ class Agenda
     public function getAllRepeatEvents($eventId)
     {
         $events = [];
+        $eventId = (int) $eventId;
+
         switch ($this->type) {
             case 'personal':
                 break;
@@ -3062,7 +3098,7 @@ class Agenda
             api_get_self().'?action=importical&type='.$this->type,
             ['enctype' => 'multipart/form-data']
         );
-        $form->addElement('header', get_lang('ICalFileImport'));
+        $form->addHeader(get_lang('ICalFileImport'));
         $form->addElement('file', 'ical_import', get_lang('ICalFileImport'));
         $form->addRule(
             'ical_import',
@@ -3350,12 +3386,12 @@ class Agenda
 
         // sorting by hour for every day
         $agendaitems = [];
-        while (list($agendaday, $tmpitems) = each($items)) {
+        foreach ($items as $agendaday => $tmpitems) {
             if (!isset($agendaitems[$agendaday])) {
                 $agendaitems[$agendaday] = '';
             }
             sort($tmpitems);
-            while (list($key, $val) = each($tmpitems)) {
+            foreach ($tmpitems as $val) {
                 $agendaitems[$agendaday] .= $val;
             }
         }

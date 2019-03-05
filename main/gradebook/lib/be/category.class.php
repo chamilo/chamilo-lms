@@ -296,7 +296,7 @@ class Category implements GradebookItem
     }
 
     /**
-     * @return null|int
+     * @return int|null
      */
     public function get_grade_model_id()
     {
@@ -514,7 +514,7 @@ class Category implements GradebookItem
                 $sql .= ' '.$order_by;
             }
         }
-//var_dump($sql);
+        //var_dump($sql);
         $result = Database::query($sql);
         $categories = [];
         if (Database::num_rows($result) > 0) {
@@ -2644,7 +2644,7 @@ class Category implements GradebookItem
      * Internal function used by get_tree().
      *
      * @param int      $level
-     * @param null|int $visible
+     * @param int|null $visible
      *
      * @return array
      */

@@ -48,6 +48,7 @@ $groupId = api_get_group_id();
 $courseId = api_get_course_int_id();
 $groupInfo = GroupManager::get_group_properties($groupId);
 $isTutor = GroupManager::is_tutor_of_group($userId, $groupInfo, $courseId);
+
 $isAllowedToEdit = api_is_allowed_to_edit(false, true) && api_is_allowed_to_session_edit(false, true);
 
 /* MAIN DISPLAY SECTION */
@@ -108,7 +109,6 @@ $logInfo = [
     'tool_id_detail' => 0,
     'action' => !empty($my_action) ? $my_action : 'list-threads',
     'action_details' => isset($_GET['content']) ? $_GET['content'] : '',
-    'current_id' => isset($_GET['id']) ? $_GET['id'] : 0,
 ];
 Event::registerLog($logInfo);
 
@@ -500,16 +500,16 @@ if (is_array($threads)) {
                 );
             }
 
-            if($_user['status']==5) {
-                if($_user['has_certificates']){
+            if ($_user['status'] == 5) {
+                if ($_user['has_certificates']) {
                     $iconStatus = '<img src="'.$urlImg.'icons/svg/ofaj_graduated.svg" width="22px" height="22px">';
-                }else{
+                } else {
                     $iconStatus = '<img src="'.$urlImg.'icons/svg/ofaj_student.svg" width="22px" height="22px">';
                 }
-            }else if($_user['status'] == 1){
-                if($isAdmin){
+            } elseif ($_user['status'] == 1) {
+                if ($isAdmin) {
                     $iconStatus = '<img src="'.$urlImg.'icons/svg/ofaj_admin.svg" width="22px" height="22px">';
-                }else{
+                } else {
                     $iconStatus = '<img src="'.$urlImg.'icons/svg/ofaj_teacher.svg" width="22px" height="22px">';
                 }
             }

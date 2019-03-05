@@ -827,7 +827,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
             }
         }
 
-	if (!empty($lis)) {
+        if (!empty($lis)) {
             //Ofaj
             $html .= Display::tag('ul', get_lang('YouAreHere').': '.$lis, ['class' => 'breadcrumb']);
         }

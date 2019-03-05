@@ -24,6 +24,7 @@ $forumUrl = api_get_path(WEB_CODE_PATH).'forum/';
 
 // Are we in a lp ?
 $origin = api_get_origin();
+$_user = api_get_user_info();
 $my_search = null;
 
 /* MAIN DISPLAY SECTION */
@@ -68,7 +69,6 @@ $(function() {
 });
     
 </script>';
-
 
 /* Actions */
 $my_action = isset($_GET['action']) ? $_GET['action'] : '';

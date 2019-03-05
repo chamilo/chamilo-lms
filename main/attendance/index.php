@@ -187,6 +187,7 @@ $(function() {
 </script>';
 $student_param = '';
 $student_id = null;
+
 if (api_is_drh() && isset($_GET['student_id'])) {
     $student_id = intval($_GET['student_id']);
     $student_param = '&student_id='.$student_id;

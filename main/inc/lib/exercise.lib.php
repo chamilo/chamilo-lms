@@ -49,7 +49,7 @@ class ExerciseLib
         // Change false to true in the following line to enable answer hinting
         $debug_mark_answer = $show_answers;
         // Reads question information
-        if (!$objQuestionTmp = Question::read($questionId)) {
+        if (!$objQuestionTmp = Question::read($questionId, $course_id)) {
             // Question not found
             return false;
         }
@@ -98,12 +98,9 @@ class ExerciseLib
 
             echo '<div class="question_options">';
             // construction of the Answer object (also gets all answers details)
-            $objAnswerTmp = new Answer($questionId, api_get_course_int_id(), $exercise);
+            $objAnswerTmp = new Answer($questionId, $course_id, $exercise);
             $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
-            $quizQuestionOptions = Question::readQuestionOption(
-                $questionId,
-                $course_id
-            );
+            $quizQuestionOptions = Question::readQuestionOption($questionId, $course_id);
 
             // For "matching" type here, we need something a little bit special
             // because the match between the suggestions and the answers cannot be
@@ -211,7 +208,7 @@ class ExerciseLib
 
                 $form->addHtml('<div id="'.'hide_description_'.$questionId.'_options" style="display: none;">');
                 $form->addHtmlEditor(
-                    "choice[".$questionId."]",
+                    "choice[$questionId]",
                     null,
                     false,
                     false,
@@ -446,6 +443,7 @@ class ExerciseLib
 
             $hidingClass = '';
             if ($answerType == READING_COMPREHENSION) {
+                $objQuestionTmp->setExerciseType($exercise->selectType());
                 $objQuestionTmp->processText($objQuestionTmp->selectDescription());
                 $hidingClass = 'hide-reading-answers';
                 $s .= Display::div(
@@ -598,7 +596,9 @@ class ExerciseLib
                             if (!empty($userChoiceList)) {
                                 foreach ($userChoiceList as $item) {
                                     $item = explode(':', $item);
-                                    $myChoice[$item[0]] = $item[1];
+                                    if (!empty($item)) {
+                                        $myChoice[$item[0]] = isset($item[1]) ? $item[1] : '';
+                                    }
                                 }
                             }
 
@@ -1393,7 +1393,7 @@ HTML;
             $questionDescription = $objQuestionTmp->selectDescription();
 
             // Get the answers, make a list
-            $objAnswerTmp = new Answer($questionId);
+            $objAnswerTmp = new Answer($questionId, $course_id);
             $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
 
             // get answers of hotpost
@@ -2744,6 +2744,31 @@ HOTSPOT;
         }
 
         return $listInfo;
+    }
+
+    /**
+     * @param $score
+     * @param $weight
+     *
+     * @return array
+     */
+    public static function convertScoreToPlatformSetting($score, $weight)
+    {
+        $result = ['score' => $score, 'weight' => $weight];
+
+        $maxNote = api_get_setting('exercise_max_score');
+        $minNote = api_get_setting('exercise_min_score');
+
+        if ($maxNote != '' && $minNote != '') {
+            if (!empty($weight) && intval($weight) != 0) {
+                $score = $minNote + ($maxNote - $minNote) * $score / $weight;
+            } else {
+                $score = $minNote;
+            }
+            $weight = $maxNote;
+        }
+
+        return ['score' => $score, 'weight' => $weight];
     }
 
     /**

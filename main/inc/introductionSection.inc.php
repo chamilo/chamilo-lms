@@ -32,6 +32,7 @@ use Chamilo\CourseBundle\Entity\CToolIntro;
 $em = Database::getManager();
 $intro_editAllowed = $is_allowed_to_edit = api_is_allowed_to_edit();
 $session_id = api_get_session_id();
+$blogParam = isset($_GET['blog_id']) ? ('&blog_id='.(int) $_GET['blog_id']) : '';
 
 $introduction_section = '';
 

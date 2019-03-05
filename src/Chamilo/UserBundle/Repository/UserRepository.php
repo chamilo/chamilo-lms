@@ -1293,7 +1293,7 @@ class UserRepository extends EntityRepository
      *
      * @throws \Exception
      *
-     * @return null|TrackELogin
+     * @return TrackELogin|null
      */
     public function getLastLogin(User $user)
     {

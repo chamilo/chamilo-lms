@@ -4,7 +4,8 @@
  * Responses to AJAX calls for install.
  */
 
-//require_once '../global.inc.php';
+use GuzzleHttp\Client;
+require_once __DIR__.'/../../../vendor/autoload.php';
 
 $action = $_GET['a'];
 
@@ -32,31 +33,52 @@ switch ($action) {
                 }
             }
 
+            // Return error if any of the required fields is empty
             if ($required_field_error) {
                 echo 'required_field_error';
+                break;
             } else {
                 // save contact information with web service
                 // create a client
-                $client = new SoapClient('https://version.chamilo.org/contact.php?wsdl');
 
-                // call method ws_add_contact_information
-                $contact_params = [
-                                        'person_name' => $person_name,
-                                        'person_email' => $person_email,
-                                        'person_role' => $person_role,
-                                        'financial_decision' => $financial_decision,
-                                        'contact_language' => $contact_language,
-                                        'company_name' => $company_name,
-                                        'company_activity' => $company_activity,
-                                        'company_country' => $company_country,
-                                        'company_city' => $company_city,
-                                    ];
+                $url = 'https://version.chamilo.org/contactv2.php';
+                $options = [
+                    'verify' => false,
+                ];
 
-                $result = $client->__soapCall(
-                    'ws_add_contact_information',
-                    ['contact_params' => $contact_params]
-                );
-                echo $result;
+                $urlValidated = false;
+                try {
+                    $client = new GuzzleHttp\Client();
+                    $res = $client->request('GET', $url, $options);
+                    if ($res->getStatusCode() == '200' || $res->getStatusCode() == '301') {
+                        $urlValidated = true;
+                    }
+                } catch (Exception $e) {
+                    error_log("Could not check $url from ".__FILE__);
+                    break;
+                }
+
+                $data = [
+                    'person_name' => $person_name,
+                    'person_email' => $person_email,
+                    'person_role' => $person_role,
+                    'financial_decision' => $financial_decision,
+                    'contact_language' => $contact_language,
+                    'company_name' => $company_name,
+                    'company_activity' => $company_activity,
+                    'company_country' => $company_country,
+                    'company_city' => $company_city,
+                ];
+
+                $client = new GuzzleHttp\Client();
+                $url .= '?';
+                foreach ($data as $k => $v) {
+                    $url .= urlencode($k).'='.urlencode($v).'&';
+                }
+                $res = $client->request('GET', $url, $options);
+                if ($res->getStatusCode() == '200') {
+                    echo '1';
+                }
             }
         }
         break;

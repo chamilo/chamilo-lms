@@ -171,3 +171,11 @@
 .chatboxoptions a:hover {
 	background-color: #aaa;
 }
+
+.chatbox_checks {
+	float:right;
+}
+
+.chatbox_checked {
+	color: #13A7F0;
+}

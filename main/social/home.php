@@ -70,19 +70,38 @@ if (api_get_setting('profile', 'picture') == 'true') {
                         SET 
                             picture_uri = '$new_picture' 
                         WHERE user_id =  ".api_get_user_id();
-
                 $result = Database::query($sql);
             }
         }
     }
 }
 
+SocialManager::handlePosts(api_get_self());
+
+$threadList = SocialManager::getThreadList();
+$threadIdList = [];
+if (!empty($threadList)) {
+    $threadIdList = array_column($threadList, 'id');
+}
+
+$forumCourseId = api_get_configuration_value('global_forums_course_id');
+$myGroups = [];
+if (!empty($forumCourseId)) {
+    $courseInfo = api_get_course_info_by_id($forumCourseId);
+}
+
+// Social Post Wall
+$posts = SocialManager::getMyWallMessages($user_id, 0, 10, $threadIdList);
+$countPost = $posts['count'];
+$posts = $posts['posts'];
+SocialManager::getScrollJs($countPost, $htmlHeadXtra);
+
 //Block Menu
 $social_menu_block = SocialManager::show_social_menu('home');
 
 $social_search_block = Display::panel(
     UserManager::get_search_form(''),
-    get_lang("SearchUsers")
+    get_lang('SearchUsers')
 );
 
 $results = $userGroup->get_groups_by_age(1, false);
@@ -109,7 +128,7 @@ if (!empty($results)) {
         );
 
         $result['name'] = '<div class="group-name">'.$link.'</div><div class="count-username">'.
-                            Display::returnFontAwesomeIcon('user').$result['count'].'</div>';
+            Display::returnFontAwesomeIcon('user').$result['count'].'</div>';
 
         $picture = $userGroup->get_picture_group(
             $id,
@@ -205,11 +224,8 @@ if ($list > 0) {
     $social_group_block .= "</div>";
 }
 // My friends
-$friend_html = SocialManager::listMyFriendsBlock(
-    $user_id,
-    '',
-    $show_full_profile
-);
+$friend_html = SocialManager::listMyFriendsBlock($user_id, '');
+
 // Block Social Sessions
 $social_session_block = null;
 $user_info = api_get_user_info($user_id);
@@ -228,13 +244,39 @@ $social_group_block = Display::panelCollapse(
     'groups-collapse'
 );
 
+$wallSocialAddPost = SocialManager::getWallForm(api_get_self());
+$socialAutoExtendLink = SocialManager::getAutoExtendLink($user_id, $countPost);
+
+$formSearch = new FormValidator(
+    'find_friends_form',
+    'get',
+    api_get_path(WEB_CODE_PATH).'social/search.php?search_type=1',
+    null,
+    null,
+    'box-no-label'
+);
+$formSearch->addHidden('search_type', 1);
+$formSearch->addText(
+    'q',
+    get_lang('Search'),
+    false,
+    [
+        'aria-label' => get_lang('SearchUsers'),
+        'custom' => true,
+        'placeholder' => get_lang('ByName')
+    ]
+);
+
+
 $tpl = new Template(get_lang('SocialNetwork'));
-
-SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'home');
-
+SocialManager::setSocialUserBlock($tpl, $user_id, 'home');
+$tpl->assign('social_wall_block', $wallSocialAddPost);
+$tpl->assign('social_post_wall_block', $posts);
 $tpl->assign('social_menu_block', $social_menu_block);
+$tpl->assign('social_auto_extend_link', $socialAutoExtendLink);
+$tpl->assign('search_friends_form', $formSearch->returnForm());
 $tpl->assign('social_friend_block', $friend_html);
-$tpl->assign('session_list', $social_session_block);
+//$tpl->assign('session_list', $social_session_block);
 $tpl->assign('social_search_block', $social_search_block);
 $tpl->assign('social_skill_block', SocialManager::getSkillBlock($user_id));
 $tpl->assign('social_group_block', $social_group_block);

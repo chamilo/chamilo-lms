@@ -5,6 +5,7 @@ use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Tag;
+use ChamiloSession as Session;
 
 /**
  * Class ExtraFieldValue
@@ -325,7 +326,6 @@ class ExtraFieldValue extends Model
                         'value' => $fieldToSave,
                         'comment' => $comment,
                     ];
-
                     $this->save($newParams);
 
                     break;

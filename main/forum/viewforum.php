@@ -433,10 +433,9 @@ if (is_array($threads)) {
                 $my_whatsnew_post_info = $whatsnew_post_info[$my_forum][$row['thread_id']];
             }
 
+            $newPost = '';
             if (is_array($my_whatsnew_post_info) && !empty($my_whatsnew_post_info)) {
                 $newPost = ' '.Display::return_icon('alert.png', get_lang('Forum'), null, ICON_SIZE_SMALL);
-            } else {
-                $newPost = '';
             }
 
             $name = api_get_person_name($row['firstname'], $row['lastname']);
@@ -488,7 +487,12 @@ if (is_array($threads)) {
                     'class' => 'title',
                 ]
             );
-            $html .= '<p>'.get_lang('By').' '.$authorName.'</p>';
+            $html .= '<p>'.get_lang('By').' '.$iconStatus.' '.$authorName.'</p>';
+
+            if ($last_post_info) {
+                $html .= '<p>'.Security::remove_XSS(cut($last_post_info['post_text'], 140)).'</p>';
+            }
+
             $html .= '<p>'.api_convert_and_format_date($row['insert_date']).'</p>';
 
             if ($current_forum['moderated'] == 1 && api_is_allowed_to_edit(false, true)) {
@@ -509,6 +513,7 @@ if (is_array($threads)) {
             $html .= '</div>';
 
             $html .= '</div>';
+
             $html .= '<div class="col-md-6">';
             $html .= '<div class="row">';
             $html .= '<div class="col-md-4">'

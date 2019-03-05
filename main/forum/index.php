@@ -47,6 +47,9 @@ $_course = api_get_course_info();
 $sessionId = api_get_session_id();
 $_user = api_get_user_info();
 
+$hideNotifications = api_get_course_setting('hide_forum_notifications');
+$hideNotifications = $hideNotifications == 1;
+
 // Including necessary files.
 require_once 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
@@ -238,6 +241,7 @@ if (is_array($forumCategories)) {
         } else {
             $forumCategoryInfo['title'] = $forumCategory['cat_title'];
         }
+        $forumCategoryInfo['extra_fields'] = $forumCategory['extra_fields'];
         $forumCategoryInfo['icon_session'] = api_get_session_image($forumCategory['session_id'], $_user['status']);
 
         // Validation when belongs to a session
@@ -416,6 +420,8 @@ if (is_array($forumCategories)) {
                         $toolActions = null;
                         $forumInfo['alert'] = null;
                         // The number of topics and posts.
+                        if ($hideNotifications == false) {
+                            // The number of topics and posts.
                         if ($forum['forum_of_group'] !== '0') {
                             if (is_array($mywhatsnew_post_info) && !empty($mywhatsnew_post_info)) {
                                 $forumInfo['alert'] = ' '.
@@ -435,6 +441,7 @@ if (is_array($forumCategories)) {
                                     ICON_SIZE_SMALL
                                 );
                             }
+                        }
                         }
                         $poster_id = null;
                         // The last post in the forum.
@@ -460,6 +467,8 @@ if (is_array($forumCategories)) {
                         if (!empty($forum['last_poster_id'])) {
                             $forumInfo['last_poster_date'] = api_convert_and_format_date($forum['last_post_date']);
                             $forumInfo['last_poster_user'] = display_user_link($poster_id, $name, null, $username);
+                            $forumInfo['last_post_title'] = Security::remove_XSS(cut($forum['last_post_title'], 140));
+                            $forumInfo['last_post_text'] = Security::remove_XSS(cut($forum['last_post_text'], 140));
                         }
 
                         if (api_is_allowed_to_edit(false, true)
@@ -508,7 +517,7 @@ if (is_array($forumCategories)) {
                             }
                         }
 
-                        if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
+                        if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true) && $hideNotifications == false) {
                             $toolActions .= '<a href="'.api_get_self().'?'.api_get_cidreq()
                                 .'&action=notify&content=forum&id='.$forum['forum_id'].'">'
                                 .Display::return_icon($iconnotify, get_lang('NotifyMe'), null, ICON_SIZE_SMALL)

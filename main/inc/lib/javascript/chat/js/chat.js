@@ -33,32 +33,34 @@ var chatboxFocus = new Array();
 var newMessages = new Array();
 var newMessagesWin = new Array();
 var chatBoxes = new Array();
+var intervals = new Array();
 var timer;
 var user_status = 0;
 var widthBox = 320; // see css class .chatbox
 //var ajax_url = 'chat.php'; // This variable is loaded in the template/layout/head.tpl file
+var doubleCheck = '<span class="chatbox_checked"><i class="fa fa-check"></i><i class="fa fa-check"></i></span>';
 
 function set_user_status(status)
 {
-    if (status == 1) {
-        stopChatHeartBeat();
-        startChatHeartBeat();
-        $('.user_status_main').html(online_button);
-        $('#chatboxtitlemain').html(connect_lang);
-    } else {
-        stopChatHeartBeat();
-        $('.user_status_main').html(offline_button);
-        $('#chatboxtitlemain').html(disconnect_lang);
-    }
+	if (status == 1) {
+		stopChatHeartBeat();
+		startChatHeartBeat();
+		$('.user_status_main').html(online_button);
+		$('#chatboxtitlemain').html(connect_lang);
+	} else {
+		stopChatHeartBeat();
+		$('.user_status_main').html(offline_button);
+		$('#chatboxtitlemain').html(disconnect_lang);
+	}
 
-    $.ajax({
-        url: ajax_url+"?action=set_status",
-        data: "status="+status,
-        cache: false,
-        success: function(data) {
-        }
-    });
-    user_status = status;
+	$.ajax({
+		url: ajax_url+"?action=set_status",
+		data: "status="+status,
+		cache: false,
+		success: function(data) {
+		}
+	});
+	user_status = status;
 }
 
 $(document).ready(function() {
@@ -72,13 +74,15 @@ $(document).ready(function() {
 	});
 
 	/* "On" conditions, divs are created dynamically */
-    // User name header toggle
+	// User name header toggle
 	$('body').on('click', '#chatboxtitlemain', function() {
-	    if (user_status == 1) {
-            set_user_status(0);
-        } else {
-	        set_user_status(1);
-        }
+		createMyContactsWindow();
+        set_user_status(1);
+		/*if (user_status == 1) {
+			set_user_status(0);
+		} else {
+			set_user_status(1);
+		}*/
 	});
 
 	// User name header toogle
@@ -104,17 +108,17 @@ $(document).ready(function() {
 
 function showChatConnect()
 {
-    if (user_status == 1) {
-        button = online_button;
-        label = connect_lang;
-    } else {
-        button = offline_button;
-        label = disconnect_lang;
-    }
-    $("<div />").attr("id","chatmain")
-	.addClass("chatboxmain")
-	.html('<div class="chatboxheadmain"><div class="user_status_main">'+button+'</div><div id="chatboxtitlemain">'+label+'</div><div class="chatboxoptions"></div></div>')
-	.appendTo($( "body" ));
+	if (user_status == 1) {
+		button = online_button;
+		label = connect_lang;
+	} else {
+		button = offline_button;
+		label = disconnect_lang;
+	}
+	$("<div />").attr("id","chatmain")
+		.addClass("chatboxmain")
+		.html('<div class="chatboxheadmain"><div class="user_status_main">'+button+'</div><div id="chatboxtitlemain">'+label+'</div><div class="chatboxoptions"></div></div>')
+		.appendTo($( "body" ));
 }
 
 /**
@@ -122,70 +126,77 @@ function showChatConnect()
  */
 function startChatSession()
 {
-    /* fix bug BT#5728 whereby users cannot move to the next question in IE9 */
-    if (typeof ajax_url != 'undefined') {
-        $.ajax({
-          url: ajax_url+"?action=startchatsession",
-          cache: false,
-          dataType: "json",
-          success: function(data) {
-            if (data) {
-                username = data.me;
-                currentUserId = data.user_id;
-                user_status = data.user_status;
-                showChatConnect();
-                if (user_status == 1) {
-                    startChatHeartBeat();
-                } else {
-                    stopChatHeartBeat();
-                }
+	/* fix bug BT#5728 whereby users cannot move to the next question in IE9 */
+	if (typeof ajax_url != 'undefined') {
+		$.ajax({
+			url: ajax_url+"?action=startchatsession",
+			cache: false,
+			dataType: "json",
+			success: function(data) {
+				if (data) {
+					username = data.me;
+					currentUserId = data.user_id;
+					user_status = data.user_status;
+					showChatConnect();
+					if (user_status == 1) {
+						startChatHeartBeat();
+					} else {
+						stopChatHeartBeat();
+					}
 
-                $.each(data.items, function(my_user_id, user_items) {
-                    my_items = user_items['items'];
-                    $.each(my_items, function(i, item) {
-                        if (item) {
-                            // fix strange ie bug
-                            if ($("#chatbox_"+my_user_id).length <= 0) {
-                                createChatBox(
-                                    my_user_id,
-                                    item.username,
-                                    1,
-                                    item.user_info.online,
-                                    item.user_info.avatar
-                                );
-                            }
+					$.each(data.items, function(my_user_id, user_items) {
+						if (currentUserId == my_user_id) {
+							// show contact list
+							createMyContactsWindow();
+							return true;
+						}
 
-                            if (item.s == 2) {
-                                // info message
-                                //$("#chatbox_"+my_user_id+" .chatboxcontent").append('<div class="'+messageLogMe+'"><span class="chatboxinfo">'+item.m+'</span></div>');
-                            } else {
-                                var chatBubble = createChatBubble(my_user_id, item);
-                                $("#chatbox_"+my_user_id+" .chatboxcontent").append(chatBubble);
-                            }
-                        }
-                    });
-                });
+						my_items = user_items['items'];
+						window_user_info = user_items['window_user_info'];
+						$.each(my_items, function(i, item) {
+							if (item) {
+								// fix strange ie bug
+								if ($("#chatbox_"+my_user_id).length <= 0) {
+									createChatBox(
+										my_user_id,
+										window_user_info.complete_name,
+										1,
+										window_user_info.online,
+										window_user_info.avatar_small
+									);
+								}
 
-                for (i = 0; i < chatBoxes.length; i++) {
-                    my_user_id = chatBoxes[i];
-                    $("#chatbox_"+my_user_id+" .chatboxcontent").scrollTop(
-                        $("#chatbox_"+my_user_id+" .chatboxcontent")[0].scrollHeight
-                    );
-                }
-            }
-        }});
-    }
+								if (item.s == 2) {
+									// info message
+									//$("#chatbox_"+my_user_id+" .chatboxcontent").append('<div class="'+messageLogMe+'"><span class="chatboxinfo">'+item.m+'</span></div>');
+								} else {
+									var chatBubble = createChatBubble(my_user_id, item);
+									$("#chatbox_"+my_user_id+" .chatboxcontent").append(chatBubble);
+								}
+							}
+						});
+					});
+
+					for (i = 0; i < chatBoxes.length; i++) {
+						my_user_id = chatBoxes[i];
+						$("#chatbox_"+my_user_id+" .chatboxcontent").scrollTop(
+							$("#chatbox_"+my_user_id+" .chatboxcontent")[0].scrollHeight
+						);
+					}
+				}
+			}});
+	}
 }
 
 function stopChatHeartBeat()
 {
-    clearInterval(timer);
-    timer = null;
+	clearInterval(timer);
+	timer = null;
 }
 
 function startChatHeartBeat()
 {
-    timer = setInterval(chatHeartbeat, chatHeartbeatTime);
+	timer = setInterval(chatHeartbeat, chatHeartbeatTime);
 }
 
 /*
@@ -209,8 +220,8 @@ function chatHeartbeat()
 			if (newMessagesWin[x].status == true) {
 				++blinkNumber;
 				if (blinkNumber >= blinkOrder) {
-					document.title = newMessagesWin[x].username+' says...';
-					titleChanged = 1;
+					//document.title = newMessagesWin[x].username+' says...';
+					//titleChanged = 1;
 					break;
 				}
 			}
@@ -244,27 +255,28 @@ function chatHeartbeat()
 		dataType: "json",
 		success: function(data) {
 			$.each(data.items, function(my_user_id, user_items) {
-                my_items = user_items['items'];
+				my_items = user_items['items'];
+				userInfo = user_items['window_user_info'];
 				$.each(my_items, function(i, item) {
 					if (item) {
-                        // fix strange ie bug
+						// fix strange ie bug
 						if ($("#chatbox_"+my_user_id).length <= 0) {
 							createChatBox(
-							    my_user_id,
-                                item.username,
-                                0,
-                                item.user_info.online,
-                                item.user_info.avatar
-                            );
+								my_user_id,
+								userInfo.complete_name,
+								0,
+								userInfo.online,
+								userInfo.avatar_small
+							);
 						}
 						if ($("#chatbox_"+my_user_id).css('display') == 'none') {
 							$("#chatbox_"+my_user_id).css('display','block');
 							restructureChatBoxes();
 						}
 						update_online_user(
-						    my_user_id,
-                            user_items.user_info.online
-                        );
+							my_user_id,
+							user_items.user_info.online
+						);
 
 						if (item.s == 2) {
 							//$("#chatbox_"+my_user_id+" .chatboxcontent").append('<div class="chatboxmessage"><span class="chatboxinfo">'+item.m+'</span></div>');
@@ -276,12 +288,12 @@ function chatHeartbeat()
 						}
 
 						$("#chatbox_"+my_user_id+" .chatboxcontent").scrollTop(
-						    $("#chatbox_"+my_user_id+" .chatboxcontent")[0].scrollHeight
-                        );
+							$("#chatbox_"+my_user_id+" .chatboxcontent")[0].scrollHeight
+						);
 
-                        if ($('#chatbox_'+my_user_id+' .chatboxcontent').css('display') == 'none') {
-                            $('#chatbox_'+my_user_id+' .chatboxhead').toggleClass('chatboxblink');
-                        }
+						if ($('#chatbox_'+my_user_id+' .chatboxcontent').css('display') == 'none') {
+							$('#chatbox_'+my_user_id+' .chatboxhead').toggleClass('chatboxblink');
+						}
 						itemsfound += 1;
 					}
 				});
@@ -305,32 +317,57 @@ function chatHeartbeat()
 }
 
 /**
- * Draws a message buble
+ * Draws a message bubble
  * @param my_user_id
  * @param item
  * @returns {string}
  */
 function createChatBubble(my_user_id, item)
 {
-    var myDiv = 'chatboxmessage_me';
-    if (my_user_id == item.f) {
-        myDiv = 'chatboxmessage';
-    }
-    var sentDate = '';
-    if (moment.unix(item.date).isValid()) {
-        sentDate = moment.unix(item.date).format('LLL');
-    }
+	var myDiv = 'chatboxmessage_me';
+	if (my_user_id == item.from_user_info.id) {
+		myDiv = 'chatboxmessage';
+	}
+	var sentDate = '';
+	if (moment.unix(item.date).isValid()) {
+		sentDate = moment.unix(item.date).format('LLL');
+	}
 
-    return '<div class="boot-tooltip well '+myDiv+'" title="'+sentDate+'" >' +
-        '<span class="chatboxmessagefrom">'+item.username+':&nbsp;&nbsp;</span>' +
-        '<span class="chatboxmessagecontent">'+item.m+'</span></div>';
+	var check = '';
+	var unCheckClass = ' check_status';
+	if (my_user_id != item.from_user_info.id) {
+		check = '<i class="fa fa-check"></i><i class="fa fa-check"></i>';
+		if (item.recd == 1) {
+			unCheckClass = '';
+			check = doubleCheck;
+		}
+	}
+
+	var message = '<div id="message_id_'+item.id+'" class="boot-tooltip well '+myDiv+'" title="'+sentDate+'" >';
+
+	if (my_user_id == item.from_user_info.id) {
+		message += '<span class="chatboxmessagefrom">'+item.from_user_info.complete_name+':&nbsp;&nbsp;</span>';
+	}
+
+	message +=
+		'<div class="chatboxmessagecontent">'+item.m+'</div>' +
+		'<div class="chatbox_checks' + unCheckClass + '">'+check+'</div>' +
+		'</div>';
+
+	return message;
 }
 
-function closeChatBox(user_id) {
+function closeChatBox(user_id)
+{
 	$('#chatbox_'+user_id).css('display','none');
-        restructureChatBoxes();
-        $.post(ajax_url+"?action=closechat", {chatbox: user_id} , function(data){
-	});
+	restructureChatBoxes();
+	$.post(
+		ajax_url+"?action=closechat",
+		{
+			chatbox: user_id
+		} ,
+		function(data) {
+		});
 }
 
 function restructureChatBoxes()
@@ -359,7 +396,7 @@ function restructureChatBoxes()
  **/
 function chatWith(user_id, user_name, status, userImage)
 {
-    set_user_status(1);
+	set_user_status(1);
 	createChatBox(user_id, user_name, 0, status, userImage);
 	$("#chatbox_"+user_id+" .chatboxtextarea").focus();
 	getMoreItems(user_id, 'last');
@@ -368,9 +405,147 @@ function chatWith(user_id, user_name, status, userImage)
 /**
  * Creates a div
  */
+function createMyContactsWindow()
+{
+	var user_id = 'contacts';
+	var oldChatBox = $("#chatbox_"+user_id);
+	if (oldChatBox.length > 0) {
+		// reload contact list
+		if (oldChatBox.css('display') == 'none') {
+			oldChatBox.css('display','block');
+			restructureChatBoxes();
+		}
+
+		chatboxContent = oldChatBox.find('.chatboxcontent');
+
+		$.post(ajax_url + "?action=get_contacts", {
+			to: 'user_id'
+		}, function (data) {
+			chatboxContent.html(data);
+		});
+
+		$("#chatbox_"+user_id+" .chatboxtextarea").focus();
+		return;
+	}
+
+	var chatbox = $('<div>')
+		.attr({
+			id: 'chatbox_' + user_id
+		})
+		.addClass('chatbox')
+		.css('bottom', 0);
+
+	var chatboxHead = $('<div>')
+		.addClass('chatboxhead')
+		.append('');
+
+	/*$('<div>')
+		.addClass('chatimage')
+		.append('image?')
+		.appendTo(chatboxHead);*/
+
+	$('<div>')
+		.addClass('chatboxtitle')
+		.append('My contacts')
+		.appendTo(chatboxHead);
+
+	var chatboxoptions = $('<div>')
+		.addClass('chatboxoptions')
+		.appendTo(chatboxHead);
+
+	$('<a>')
+		.addClass('btn btn-xs togglelink')
+		.attr({
+			href: 'javascript:void(0)',
+			rel: user_id
+		})
+		.html('<em class="fa fa-toggle-down"></em>')
+		.appendTo(chatboxoptions);
+
+	$('<a>')
+		.addClass('btn btn-xs closelink')
+		.attr({
+			href: 'javascript:void(0)',
+			rel: user_id
+		})
+		.html('<em class="fa fa-close"></em>')
+		.appendTo(chatboxoptions);
+
+	$('<br>')
+		.attr('clear', 'all')
+		.appendTo(chatboxHead);
+
+	var chatboxContent = $('<div>').addClass('chatboxcontent');
+	var chatboxInput = $('<div>').addClass('chatboxinput');
+
+	$.post(ajax_url + "?action=get_contacts", {
+		to: 'user_id'
+	}, function (data) {
+		$('<div>').html(data).appendTo(chatboxContent);
+	});
+
+	/*$('<textarea>')
+		.addClass('chatboxtextarea')
+		.on('keydown', function(e) {
+			return checkChatBoxInputKey(e.originalEvent, this, user_id);
+		})
+		.appendTo(chatboxInput);*/
+
+	chatbox
+		.append(chatboxHead)
+		.append(chatboxContent)
+		.append(chatboxInput)
+		.appendTo('body');
+
+	var chatBoxeslength = 0;
+	for (x in chatBoxes) {
+		if ($("#chatbox_"+chatBoxes[x]).css('display') != 'none') {
+			chatBoxeslength++;
+		}
+	}
+
+	if (chatBoxeslength == 0) {
+		$("#chatbox_"+user_id).css('right', '10px');
+	} else {
+		width = (chatBoxeslength)*(widthBox+7) + 5 + 5;
+		$("#chatbox_"+user_id).css('right', width+'px');
+	}
+
+	chatBoxes.push(user_id);
+	chatboxFocus[user_id] = false;
+
+	$("#chatbox_"+user_id+" .chatboxtextarea").blur(function(){
+		chatboxFocus[user_id] = false;
+		$("#chatbox_"+user_id+" .chatboxtextarea").removeClass('chatboxtextareaselected');
+	}).focus(function(){
+		chatboxFocus[user_id] = true;
+		newMessages[user_id] = false;
+		$('#chatbox_'+user_id+' .chatboxhead').removeClass('chatboxblink');
+		$("#chatbox_"+user_id+" .chatboxtextarea").addClass('chatboxtextareaselected');
+	});
+
+	$("#chatbox_"+user_id).click(function() {
+		if ($('#chatbox_'+user_id+' .chatboxcontent').css('display') != 'none') {
+			$("#chatbox_"+user_id+" .chatboxtextarea").focus();
+		}
+	});
+	$("#chatbox_"+user_id).show();
+
+	$("#chatbox_"+user_id+" .chatboxcontent").scroll(function () {
+		var iCurScrollPos = $(this).scrollTop();
+		if (iCurScrollPos == 0) {
+			getMoreItems(user_id);
+			return false;
+		}
+	});
+}
+
+/**
+ * Creates a div
+ */
 function createChatBox(user_id, chatboxtitle, minimizeChatBox, online, userImage)
 {
-    var oldChatBox = $("#chatbox_"+user_id);
+	var oldChatBox = $("#chatbox_"+user_id);
 	if (oldChatBox.length > 0) {
 		if (oldChatBox.css('display') == 'none') {
 			oldChatBox.css('display','block');
@@ -394,10 +569,10 @@ function createChatBox(user_id, chatboxtitle, minimizeChatBox, online, userImage
 		.addClass('chatboxhead')
 		.append(user_is_online);
 
-    $('<div>')
-        .addClass('chatimage')
-        .append('<img src="'+userImage+'"/>')
-        .appendTo(chatboxHead);
+	$('<div>')
+		.addClass('chatimage')
+		.append('<img src="'+userImage+'"/>')
+		.appendTo(chatboxHead);
 
 	$('<div>')
 		.addClass('chatboxtitle')
@@ -408,23 +583,25 @@ function createChatBox(user_id, chatboxtitle, minimizeChatBox, online, userImage
 		.addClass('chatboxoptions')
 		.appendTo(chatboxHead);
 
- 	if (!!Modernizr.prefixed('RTCPeerConnection', window) &&
-        (online === '1' || online === 1)
-    ) {
-		$('<a>')
-			.addClass('btn btn-xs ajax')
-			.attr({
-				href: ajax_url + '?action=create_room&to=' + user_id
-			})
-            .data({
-                title: '<em class="fa fa-video-camera"></em>',
-                size: 'sm'
-            })
-            .on('click', function () {
-                $(this).data('title', $('.chatboxtitle').text());
-            })
-			.html('<em class="fa fa-video-camera"></em>')
-			.appendTo(chatboxoptions);
+	if (!hide_chat_video) {
+		if (!!Modernizr.prefixed('RTCPeerConnection', window) &&
+			(online === '1' || online === 1)
+		) {
+			$('<a>')
+				.addClass('btn btn-xs ajax')
+				.attr({
+					href: ajax_url + '?action=create_room&to=' + user_id
+				})
+				.data({
+					title: '<em class="fa fa-video-camera"></em>',
+					size: 'sm'
+				})
+				.on('click', function () {
+					$(this).data('title', $('.chatboxtitle').text());
+				})
+				.html('<em class="fa fa-video-camera"></em>')
+				.appendTo(chatboxoptions);
+		}
 	}
 
 	$('<a>')
@@ -495,7 +672,7 @@ function createChatBox(user_id, chatboxtitle, minimizeChatBox, online, userImage
 		}
 
 		if (minimize == 1) {
-                        $('.togglelink').html('<em class="fa fa-toggle-up"></em>');
+			$('.togglelink').html('<em class="fa fa-toggle-up"></em>');
 			$('#chatbox_'+user_id+' .chatboxcontent').css('display','none');
 			$('#chatbox_'+user_id+' .chatboxinput').css('display','none');
 		}
@@ -521,12 +698,12 @@ function createChatBox(user_id, chatboxtitle, minimizeChatBox, online, userImage
 	$("#chatbox_"+user_id).show();
 
 	$("#chatbox_"+user_id+" .chatboxcontent").scroll(function () {
-        var iCurScrollPos = $(this).scrollTop();
-        if (iCurScrollPos == 0) {
-            getMoreItems(user_id);
-            return false;
-        }
-    });
+		var iCurScrollPos = $(this).scrollTop();
+		if (iCurScrollPos == 0) {
+			getMoreItems(user_id);
+			return false;
+		}
+	});
 }
 
 /**
@@ -535,38 +712,38 @@ function createChatBox(user_id, chatboxtitle, minimizeChatBox, online, userImage
  */
 function getMoreItems(userId, scrollType)
 {
-    var visibleMessages = $("#chatbox_"+userId+" .chatboxcontent").find('div').length;
-    $.ajax({
+	var visibleMessages = $("#chatbox_"+userId+" .chatboxcontent").find('div').length;
+	$.ajax({
 		url: ajax_url+"?action=get_previous_messages&user_id="+userId+"&visible_messages="+visibleMessages,
 		cache: false,
 		dataType: "json",
 		success: function(items) {
-            $.each(items, function(i, item) {
-                if (item) {
-                    if ($("#chatbox_"+userId).css('display') == 'none') {
-                        $("#chatbox_"+userId).css('display','block');
-                        restructureChatBoxes();
-                    }
-                    var chatBubble = createChatBubble(userId, item);
-                    $("#chatbox_"+userId+" .chatboxcontent").prepend(chatBubble);
+			$.each(items, function(i, item) {
+				if (item) {
+					if ($("#chatbox_"+userId).css('display') == 'none') {
+						$("#chatbox_"+userId).css('display','block');
+						restructureChatBoxes();
+					}
+					var chatBubble = createChatBubble(userId, item);
+					$("#chatbox_"+userId+" .chatboxcontent").prepend(chatBubble);
 
-                    if ($('#chatbox_'+userId+' .chatboxcontent').css('display') == 'none') {
-                        $('#chatbox_'+userId+' .chatboxhead').toggleClass('chatboxblink');
-                    }
+					if ($('#chatbox_'+userId+' .chatboxcontent').css('display') == 'none') {
+						$('#chatbox_'+userId+' .chatboxhead').toggleClass('chatboxblink');
+					}
 
-                    // When using scroll set the scroll window to the first
-                    var scrollValue = 10;
-                    if (scrollType === 'last') {
-                        // When loading for the first time show the last msg
-                        scrollValue = $("#chatbox_"+userId+" .chatboxcontent").height();
-                    }
+					// When using scroll set the scroll window to the first
+					var scrollValue = 10;
+					if (scrollType === 'last') {
+						// When loading for the first time show the last msg
+						scrollValue = $("#chatbox_"+userId+" .chatboxcontent").height();
+					}
 
-                    $("#chatbox_"+userId+" .chatboxcontent").scrollTop(
-                        scrollValue
-                    );
+					$("#chatbox_"+userId+" .chatboxcontent").scrollTop(
+						scrollValue
+					);
 
-                }
-            });
+				}
+			});
 		}
 	}); //ajax
 }
@@ -627,7 +804,7 @@ function toggleChatBoxGrowth(user_id)
 		$('#chatbox_'+user_id+' .chatboxcontent').css('display','block');
 		$('#chatbox_'+user_id+' .chatboxinput').css('display','block');
 		$("#chatbox_"+user_id+" .chatboxcontent").scrollTop($("#chatbox_"+user_id+" .chatboxcontent")[0].scrollHeight);
-        $('.togglelink').html('<em class="fa fa-toggle-down"></em>');
+		$('.togglelink').html('<em class="fa fa-toggle-down"></em>');
 	} else {
 		var newCookie = user_id;
 		if ($.cookie('chatbox_minimized')) {
@@ -636,8 +813,28 @@ function toggleChatBoxGrowth(user_id)
 		$.cookie('chatbox_minimized',newCookie);
 		$('#chatbox_'+user_id+' .chatboxcontent').css('display','none');
 		$('#chatbox_'+user_id+' .chatboxinput').css('display','none');
-        $('.togglelink').html('<em class="fa fa-toggle-up"></em>');
+		$('.togglelink').html('<em class="fa fa-toggle-up"></em>');
 	}
+}
+
+function checkMessageStatus(messageId, chatBox)
+{
+	$.ajax({
+		type: 'GET',
+		dataType: 'json',
+		url: ajax_url + "?action=get_message_status",
+		data: {
+			message_id: messageId
+		},
+		success: function (messageInfo) {
+			if (messageInfo) {
+				if (messageInfo.recd == 1) {
+					$('#message_id_' + messageId + ' .chatbox_checks ').html(doubleCheck);
+					clearInterval(intervals[messageId]);
+				}
+			}
+		}
+	});
 }
 
 /**
@@ -658,26 +855,30 @@ function checkChatBoxInputKey(event, chatboxtextarea, user_id)
 		$(chatboxtextarea).css('height','44px');
 
 		if (message != '') {
-            $.post(ajax_url + "?action=sendchat", {
-                to: user_id,
-                message: message
-            }, function (data) {
-                if (data == 1) {
-                    message = message.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;");
-                    var item = {
-                        username: username,
-                        date: moment().unix(),
-                        f: currentUserId,
-                        m: message
-                    };
-                    var bubble = createChatBubble(user_id, item);
-                    $("#chatbox_" + user_id + " .chatboxcontent").append(bubble);
-                    $("#chatbox_" + user_id + " .chatboxcontent").scrollTop(
-                        $("#chatbox_" + user_id + " .chatboxcontent")[0].scrollHeight
-                    );
-                } else {
-                    $("#chatbox_" + user_id + " .chatboxcontent").append('<i class="fa fa-exclamation-triangle" aria-hidden="true"></i><br />');
-                }
+			$.post(ajax_url + "?action=sendchat", {
+				to: user_id,
+				message: message
+			}, function (messageId) {
+				if (messageId > 0) {
+					message = message.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;");
+					var item = {
+						from_user_info : {id: currentUserId, complete_name: 'me'},
+						username: username,
+						date: moment().unix(),
+						f: currentUserId,
+						m: message,
+						id: messageId
+					};
+					var bubble = createChatBubble(user_id, item);
+					$("#chatbox_" + user_id + " .chatboxcontent").append(bubble);
+					$("#chatbox_" + user_id + " .chatboxcontent").scrollTop(
+						$("#chatbox_" + user_id + " .chatboxcontent")[0].scrollHeight
+					);
+
+					intervals[messageId] = setInterval(checkMessageStatus, chatHeartbeatTime, messageId);
+				} else {
+					$("#chatbox_" + user_id + " .chatboxcontent").append('<i class="fa fa-exclamation-triangle" aria-hidden="true"></i><br />');
+				}
 			});
 		}
 		chatHeartbeatTime = minChatHeartbeat;
@@ -710,43 +911,43 @@ function checkChatBoxInputKey(event, chatboxtextarea, user_id)
  *
  */
 jQuery.cookie = function(name, value, options) {
-    if (typeof value != 'undefined') { // name and value given, set cookie
-        options = options || {};
-        if (value === null) {
-            value = '';
-            options.expires = -1;
-        }
-        var expires = '';
-        if (options.expires && (typeof options.expires == 'number' || options.expires.toUTCString)) {
-            var date;
-            if (typeof options.expires == 'number') {
-                date = new Date();
-                date.setTime(date.getTime() + (options.expires * 24 * 60 * 60 * 1000));
-            } else {
-                date = options.expires;
-            }
-            expires = '; expires=' + date.toUTCString(); // use expires attribute, max-age is not supported by IE
-        }
-        // CAUTION: Needed to parenthesize options.path and options.domain
-        // in the following expressions, otherwise they evaluate to undefined
-        // in the packed version for some reason...
-        var path = options.path ? '; path=' + (options.path) : '';
-        var domain = options.domain ? '; domain=' + (options.domain) : '';
-        var secure = options.secure ? '; secure' : '';
-        document.cookie = [name, '=', encodeURIComponent(value), expires, path, domain, secure].join('');
-    } else { // only name given, get cookie
-        var cookieValue = null;
-        if (document.cookie && document.cookie != '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = jQuery.trim(cookies[i]);
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
+	if (typeof value != 'undefined') { // name and value given, set cookie
+		options = options || {};
+		if (value === null) {
+			value = '';
+			options.expires = -1;
+		}
+		var expires = '';
+		if (options.expires && (typeof options.expires == 'number' || options.expires.toUTCString)) {
+			var date;
+			if (typeof options.expires == 'number') {
+				date = new Date();
+				date.setTime(date.getTime() + (options.expires * 24 * 60 * 60 * 1000));
+			} else {
+				date = options.expires;
+			}
+			expires = '; expires=' + date.toUTCString(); // use expires attribute, max-age is not supported by IE
+		}
+		// CAUTION: Needed to parenthesize options.path and options.domain
+		// in the following expressions, otherwise they evaluate to undefined
+		// in the packed version for some reason...
+		var path = options.path ? '; path=' + (options.path) : '';
+		var domain = options.domain ? '; domain=' + (options.domain) : '';
+		var secure = options.secure ? '; secure' : '';
+		document.cookie = [name, '=', encodeURIComponent(value), expires, path, domain, secure].join('');
+	} else { // only name given, get cookie
+		var cookieValue = null;
+		if (document.cookie && document.cookie != '') {
+			var cookies = document.cookie.split(';');
+			for (var i = 0; i < cookies.length; i++) {
+				var cookie = jQuery.trim(cookies[i]);
+				// Does this cookie string begin with the name we want?
+				if (cookie.substring(0, name.length + 1) == (name + '=')) {
+					cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+					break;
+				}
+			}
+		}
+		return cookieValue;
+	}
 };

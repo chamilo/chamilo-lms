@@ -727,12 +727,12 @@ function api_format_date($time, $format = null, $language = null)
  *
  * @param string $date     Result of a date function in this format -> date('Y-m-d H:i:s', time());
  * @param string $timeZone
- *
+ * @param bool   $returnDateDifference
  * @return string
  *
  * @author Julio Montoya
  */
-function date_to_str_ago($date, $timeZone = 'UTC')
+function date_to_str_ago($date, $timeZone = 'UTC', $returnDateDifference = false)
 {
     if ($date === '0000-00-00 00:00:00') {
         return '';
@@ -751,6 +751,10 @@ function date_to_str_ago($date, $timeZone = 'UTC')
     $value = $timeAgo->inWords($date);
 
     date_default_timezone_set($getOldTimezone);
+
+    if ($returnDateDifference) {
+        $value = $timeAgo->dateDifference($date);
+    }
 
     return $value;
 }

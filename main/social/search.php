@@ -100,6 +100,7 @@ if ($query != '' || ($query_vars['search_type'] == '1' && count($query_vars) > 2
                 'a' => 'get_user_popup',
                 'user_id' => $user_info['user_id'],
             ]);
+
             $sendMessage = Display::toolbarButton(
                 get_lang('SendMessage'),
                 $sendMessageUrl,

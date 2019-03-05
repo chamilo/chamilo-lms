@@ -2810,6 +2810,75 @@ form .formw .freeze {
     display: block !important;
 }
 
+#social_wall_main_wall_post_button{
+    background: #f5f6f7 !important;
+    color: #7a7a7a !important;
+    border: 1px solid #bababa !important;
+}
+#social_wall_main_wall_post_button:hover{
+    border: 1px solid #162a83 !important;
+    background: #162a83 !important;
+    color: #ffffff !important;
+}
+.input-file-container {
+    position: relative;
+}
+.input-file-container:hover{
+    cursor: pointer;
+}
+.js .input-file-trigger {
+    display: inline-block;
+    padding: 6px 15px;
+    background: #f5f6f7;
+    color: #7a7a7a;
+    font-size: 12px;
+    transition: all .4s;
+    border-radius: 5px;
+    border: 1px solid #bababa;
+    cursor: pointer;
+    font-weight: normal;
+}
+.js .input-file {
+    position: absolute;
+    top: 0; left: 0;
+    opacity: 0;
+    padding: 5px 0;
+    width: 100%;
+}
+.js .input-file:hover{
+    cursor:pointer;
+}
+.js .input-file:hover + .input-file-trigger,
+.js .input-file:focus + .input-file-trigger,
+.js .input-file-trigger:hover,
+.js .input-file-trigger:focus {
+    background: #162a83;
+    color: #ffffff;
+    cursor: pointer;
+    border: 1px solid #162a83;
+}
+
+.file-return {
+    margin: 0;
+}
+.file-return:not(:empty) {
+    margin: 1em 0;
+}
+.js .file-return {
+    font-style: italic;
+    font-size: .9em;
+    font-weight: bold;
+    padding: 0;
+    margin: 0;
+}
+.js .file-return:not(:empty):before {
+    content: "Selected file: ";
+    font-style: normal;
+    font-weight: normal;
+}
+
+
+/*** ***/
 .tag {
     background-color: #D3E6EF;
     border-radius: 3px 3px 3px 3px;
@@ -9462,6 +9531,19 @@ ul.dropdown-menu.inner > li > a {
 
 #announcement_preview_result .label {
     display: inline-table;
+}
+
+.forum_revision {
+    background-color: #fff3cd;
+}
+
+.chatboxcontent .contact-list img {
+    max-width: 30px;
+}
+
+.chatboxcontent .status {
+    float:left;
+    margin-right: 10px;
 }
 
 /* Fix grid with one row and multiples columns. Works for .col-sm-6.col-md-4.col-lg-3 */

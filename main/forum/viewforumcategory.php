@@ -51,6 +51,8 @@ $_user = api_get_user_info();
 $_course = api_get_course_info();
 
 $action = isset($_GET['action']) ? $_GET['action'] : '';
+$hideNotifications = api_get_course_setting('hide_forum_notifications');
+$hideNotifications = $hideNotifications == 1;
 
 // Including necessary files
 require 'forumconfig.inc.php';
@@ -483,7 +485,7 @@ if ($action != 'add') {
                         }
                     }
 
-                    if (!api_is_anonymous()) {
+                    if (!api_is_anonymous() && $hideNotifications == false) {
                         $html .= '<a href="'.$url.'?'.api_get_cidreq().'&forumcategory='.$forumCategoryId.'&action=notify&content=forum&id='.$forum['forum_id'].'">'.
                             Display::return_icon($iconnotify, get_lang('NotifyMe')).
                         '</a>';

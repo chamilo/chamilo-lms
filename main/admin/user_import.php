@@ -45,7 +45,7 @@ function validate_data($users, $checkUniqueEmail = false)
             }
         }
 
-        $username = $user['UserName'];
+        $username = isset($user['UserName']) ? $user['UserName'] : '';
         // 2. Check username, first, check whether it is empty.
         if (!UserManager::is_username_empty($username)) {
             // 2.1. Check whether username is too long.
@@ -130,13 +130,17 @@ function validate_data($users, $checkUniqueEmail = false)
 
 /**
  * Add missing user-information (which isn't required, like password, username etc).
+ *
+ * @param array $user
  */
 function complete_missing_data($user)
 {
     global $purification_option_for_usernames;
 
+    $username = isset($user['UserName']) ? $user['UserName'] : '';
+
     // 1. Create a username if necessary.
-    if (UserManager::is_username_empty($user['UserName'])) {
+    if (UserManager::is_username_empty($username)) {
         $user['UserName'] = UserManager::create_unique_username(
             $user['FirstName'],
             $user['LastName']

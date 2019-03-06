@@ -1874,9 +1874,9 @@ class SocialManager extends UserManager
         $userIdLoop = $message['user_sender_id'];
         $receiverId = $message['user_receiver_id'];
         $iconStatus = null;
-        $userStatus = $users[$userIdLoop]['status'];
+        /*$userStatus = $users[$userIdLoop]['status'];
         $urlImg = api_get_path(WEB_IMG_PATH);
-        $isAdmin = self::is_admin($users[$userIdLoop]['id']);
+        $isAdmin = self::is_admin($users[$userIdLoop]['id']);*/
 
         if (!isset($users[$userIdLoop])) {
             $users[$userIdLoop] = api_get_user_info($userIdLoop);

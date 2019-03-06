@@ -522,11 +522,11 @@ See https://support.chamilo.org/issues/6976
 .circle {
     opacity: 0;
     margin-left: 50px;
-    margin-top: 5px;
+    margin-top: 4px;
     padding: 2px;
     border-radius: 20px;
     background-color: #ffffff;
-    border: 2px solid #8dcbf3;
+    border: 1px solid #8dcbf3;
 
     -webkit-transform: translate(-100%);
     -moz-transform:  translate(-100%);
@@ -569,11 +569,11 @@ See https://support.chamilo.org/issues/6976
     display: block;
     height: 40px;
     width: 40px;
-    line-height: 17px;
+    line-height: 19px;
     padding: 10px;
     background: #ffffff;
-    font-size: 18px;
-    border: 2px solid #8dcbf3;
+    font-size: 16px;
+    border: 1px solid #8dcbf3;
 }
 
 .menu-button:hover {

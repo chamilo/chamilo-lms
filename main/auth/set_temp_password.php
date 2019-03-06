@@ -41,7 +41,7 @@ if ($form->validate()) {
     if (sha1($formValues['course_password']) === $courseInfo['registration_code']) {
         Session::write('course_password_'.$courseInfo['real_id'], true);
         header('Location: '.api_get_course_url($courseInfo['code'], $sessionId).
-            '&action=subscribe&sec_token='.Security::get_existing_token());
+        '&action=subscribe&sec_token='.Security::get_existing_token());
         exit;
     } else {
         Display::addFlash(

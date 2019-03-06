@@ -143,6 +143,20 @@ class ExtraFieldValue extends Model
             $dirPermissions = api_get_permissions_for_new_directories();
 
             switch ($extraFieldInfo['field_type']) {
+                case ExtraField::FIELD_TYPE_GEOLOCALIZATION:
+                    if (!empty($value)) {
+                        if (isset($params['extra_'.$extraFieldInfo['variable'].'_coordinates'])) {
+                            $value = $value.'::'.$params['extra_'.$extraFieldInfo['variable'].'_coordinates'];
+                        }
+                        $newParams = [
+                            'item_id' => $params['item_id'],
+                            'field_id' => $extraFieldInfo['id'],
+                            'value' => $value,
+                            'comment' => $comment,
+                        ];
+                        self::save($newParams, $showQuery);
+                    }
+                    break;
                 case ExtraField::FIELD_TYPE_TAG:
                     if ($type == EntityExtraField::USER_FIELD_TYPE) {
                         UserManager::delete_user_tags(
@@ -170,9 +184,7 @@ class ExtraFieldValue extends Model
                     foreach ($currentTags as $extraFieldtag) {
                         $em->remove($extraFieldtag);
                     }
-
                     $em->flush();
-
                     $tagValues = is_array($value) ? $value : [$value];
                     $tags = [];
 

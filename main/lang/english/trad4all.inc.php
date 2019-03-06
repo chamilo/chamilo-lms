@@ -7831,7 +7831,7 @@ $Icon = "Icon";
 $DesignWithBadgeStudio = "Design with Badge Studio";
 $UseThisBadge = "Use this badge";
 $Palettes = "Palettes";
-$DesignWithBadgeStudioComment = "Usa Badge Studio para crear tu propia insignia dentro de tu plataforma";
+$DesignWithBadgeStudioComment = "Use the Badge Studio to create your own badge from within your platform";
 $YouAlreadySentThisFile = "You have already sent this file or another file with the same name. Please make sure you only upload each file once.";
 $DocumentsDefaultVisibility = "Default visibility of new documents";
 $TicketAllowStudentAddTitle = "Allow users to add tickets";
@@ -8359,4 +8359,6 @@ $PersonalDataLimitationTitleHelp = "What are the limits that we will always resp
 $PersonalDataDeletionTitleHelp = "After how long do we erase the data? (event, last use, contract validity, etc.) What are the elimination processes?";
 $PersonalDataDestructionTitleHelp = "What happens if the data is destroyed as a result of a technical failure? (unauthorized deletion or loss of material, for example)";
 $PersonalDataProfilingTitleHelp = "For what purpose do we process personal data? Do we use it to filter the access users have to certain parts of our application? (negative or positive discrimination)";
+$SearchUsersByName = "By name";
+$GlobalChat = "Chat";
 ?>

@@ -113,7 +113,7 @@ class ExerciseLink extends AbstractLink
                     $attribute['id'] = $row['id'];
 
                     if (isset($attribute['path']) && is_array($attribute['path'])) {
-                        while (list($key, $path) = each($attribute['path'])) {
+                        foreach ($attribute['path'] as $path) {
                             $title = GetQuizName($path, $documentPath);
                             if ($title == '') {
                                 $title = basename($path);
@@ -186,20 +186,34 @@ class ExerciseLink extends AbstractLink
         $courseId = $this->getCourseId();
         $exerciseData = $this->get_exercise_data();
         $exerciseId = isset($exerciseData['id']) ? $exerciseData['id'] : 0;
+        $stud_id = (int) $stud_id;
 
         if (empty($exerciseId)) {
             return null;
         }
+
+        $key = 'exercise_link_id:'.
+            $this->get_id().
+            'exerciseId:'.$exerciseId.'student:'.$stud_id.'session:'.$sessionId.'courseId:'.$courseId.'type:'.$type;
+
+        $useCache = api_get_configuration_value('gradebook_use_apcu_cache');
+        $cacheAvailable = api_get_configuration_value('apc') && $useCache;
+        $cacheDriver = null;
+        if ($cacheAvailable) {
+            $cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
+            if ($cacheDriver->contains($key)) {
+                return $cacheDriver->fetch($key);
+            }
+        }
+
         $exercise = new Exercise($courseId);
         $exercise->read($exerciseData['id']);
-
-        $stud_id = (int) $stud_id;
 
         if (!$this->is_hp) {
             if ($exercise->exercise_was_added_in_lp == false) {
                 $sql = "SELECT * FROM $tblStats
                         WHERE
-                            exe_exo_id = ".$exerciseId." AND
+                            exe_exo_id = $exerciseId AND
                             orig_lp_id = 0 AND
                             orig_lp_item_id = 0 AND
                             status <> 'incomplete' AND
@@ -217,7 +231,7 @@ class ExerciseLink extends AbstractLink
                 $sql = "SELECT * 
                         FROM $tblStats
                         WHERE
-                            exe_exo_id = ".$exerciseId." AND
+                            exe_exo_id = $exerciseId AND
                             orig_lp_id = $lpId AND
                             status <> 'incomplete' AND
                             session_id = $sessionId AND
@@ -246,8 +260,17 @@ class ExerciseLink extends AbstractLink
         if (isset($stud_id) && empty($type)) {
             // for 1 student
             if ($data = Database::fetch_array($scores)) {
-                return [$data['exe_result'], $data['exe_weighting']];
+                $result = [$data['exe_result'], $data['exe_weighting']];
+                if ($cacheAvailable) {
+                    $cacheDriver->save($key, $result);
+                }
+
+                return $result;
             } else {
+                if ($cacheAvailable) {
+                    $cacheDriver->save($key, null);
+                }
+
                 return null;
             }
         } else {
@@ -290,25 +313,55 @@ class ExerciseLink extends AbstractLink
             }
 
             if ($student_count == 0) {
+                if ($cacheAvailable) {
+                    $cacheDriver->save($key, null);
+                }
+
                 return null;
             } else {
                 switch ($type) {
                     case 'best':
-                        return [$bestResult, $weight];
+                        $result = [$bestResult, $weight];
+                        if ($cacheAvailable) {
+                            $cacheDriver->save($key, $result);
+                        }
+
+                        return $result;
                         break;
                     case 'average':
                         $count = count($this->getStudentList());
                         if (empty($count)) {
-                            return [0, $weight];
+                            $result = [0, $weight];
+                            if ($cacheAvailable) {
+                                $cacheDriver->save($key, $result);
                         }
 
-                        return [$sumResult / $count, $weight];
+                            return $result;
+                        }
+
+                        $result = [$sumResult / $count, $weight];
+
+                        if ($cacheAvailable) {
+                            $cacheDriver->save($key, $result);
+                        }
+
+                        return $result;
                         break;
                     case 'ranking':
-                        return AbstractLink::getCurrentUserRanking($stud_id, $students);
+                        $ranking = AbstractLink::getCurrentUserRanking($stud_id, $students);
+                        if ($cacheAvailable) {
+                            $cacheDriver->save($key, $ranking);
+                        }
+
+                        return $ranking;
                         break;
                     default:
-                        return [$sum, $student_count];
+                        $result = [$sum, $student_count];
+                        if ($cacheAvailable) {
+                            $cacheDriver->save($key, $result);
+                        }
+
+                        return $result;
                         break;
                 }
             }
@@ -334,10 +387,17 @@ class ExerciseLink extends AbstractLink
         $exerciseId = $data['id'];
         $path = isset($data['path']) ? $data['path'] : '';
 
-        $url = api_get_path(WEB_CODE_PATH).'gradebook/exercise_jump.php?path='.$path.'&session_id='.$sessionId.'&cidReq='.$this->get_course_code().'&gradebook=view&exerciseId='.$exerciseId.'&type='.$this->get_type();
-        if ((!api_is_allowed_to_edit() && $this->calc_score($user_id) == null) || $status_user != 1) {
-            $url .= '&doexercise='.$exerciseId;
-        }
+        $url = api_get_path(WEB_CODE_PATH).'gradebook/exercise_jump.php?'
+            .http_build_query(
+                [
+                    'path' => $path,
+                    'session_id' => $sessionId,
+                    'cidReq' => $this->get_course_code(),
+                    'gradebook' => 'view',
+                    'exerciseId' => $exerciseId,
+                    'type' => $this->get_type(),
+                ]
+            );
 
         return $url;
     }

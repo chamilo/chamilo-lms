@@ -22,6 +22,7 @@ class GradebookDataGenerator
     const GDG_SORT_DESC = 64;
     const GDG_SORT_ID = 128;
     public $userId;
+    public $hidePercentage = false;
 
     private $items;
     private $evals_links;
@@ -141,6 +142,7 @@ class GradebookDataGenerator
 
                 // Best
                 $best = $this->buildBestResultColumn($item);
+
                 $row['best'] = $best['display'];
                 $row['best_score'] = $best['score'];
 
@@ -188,7 +190,6 @@ class GradebookDataGenerator
                             $ignore_score_color,
                             true
                         );
-
                         if (!empty($score['score'][0])) {
                             $invalidateResults = false;
                         }

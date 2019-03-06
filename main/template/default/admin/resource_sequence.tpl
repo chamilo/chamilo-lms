@@ -263,7 +263,13 @@
                 sequenceId = $(this).val();
 
                 if (sequenceId > 0) {
+                    $('#secuence-title').text(
+                        $(this).children(':selected').text()
+                    );
+                    $('#show_graph').html('');
                     $('#pnl-configuration').show();
+                    $('#pnl-preview').hide();
+                    $('button[name="set_requirement"], #requirements, button[name="save_resource"]').prop('disabled', true);
                     $('#item, button[name="use_as_reference"]').prop('disabled', false);
 
                     return;
@@ -309,7 +315,9 @@
     </div>
     <div id="pnl-preview" class="panel panel-default" style="display: none;">
         <div class="panel-body">
-            <div class="section-title-sequence">{{ 'SequencePreview' | get_lang }}</div>
+            <div class="section-title-sequence">{{ 'SequencePreview' | get_lang }} &mdash;
+                <span id="secuence-title"></span>
+            </div>
             <div class="row">
                 <div class="col-md-9">
                     <h4 class="title-sequence">

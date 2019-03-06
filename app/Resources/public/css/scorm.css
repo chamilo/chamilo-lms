@@ -768,9 +768,6 @@ See https://support.chamilo.org/issues/6976
         margin: 0;
     }
 
-    .nav-tabs-bar {
-        display: none;
-    }
 }
 
 /* Landscape phones and down */
@@ -812,21 +809,6 @@ See https://support.chamilo.org/issues/6976
     }
 
     #panel-scorm .image-avatar {
-        display: none;
-    }
-
-    .navegation-bar {
-        display: block;
-        padding: 2px;
-        position: fixed;
-        top: 0;
-        right: 0;
-        z-index: 999;
-        width: 100%;
-        text-align: center;
-    }
-
-    .nav-tabs-bar {
         display: none;
     }
 

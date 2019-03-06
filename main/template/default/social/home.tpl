@@ -62,12 +62,15 @@
                                 <div class="search-friend">
                                     {{ search_friends_form }}
                                 </div>
-                            {#<div class="geolocalization">#}
-                                {#<a class="btn btn-maps" id="profile-tab" href="{{ _p.web }}main/social/map.php" >#}
-                                    {#{{ "geolocalization.png"|img(32) }}#}
-                                    {#{{ 'ByGeolocalization' | get_lang }}#}
-                                {#</a>#}
-                            {#</div>#}
+
+                                {% if 'allow_social_map'|api_get_configuration_value %}
+                                <div class="geolocalization">
+                                    <a class="btn btn-maps" id="profile-tab" href="{{ _p.web }}main/social/map.php" >
+                                        {{ "geolocalization.png"|img(32) }}
+                                        {{ 'ByGeolocalization' | get_lang }}
+                                    </a>
+                                </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

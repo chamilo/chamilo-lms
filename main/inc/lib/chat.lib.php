@@ -308,7 +308,7 @@ class Chat extends Model
         if (!empty($_SESSION['openChatBoxes'])) {
             foreach ($_SESSION['openChatBoxes'] as $userId => $time) {
                 if (!isset($_SESSION['tsChatBoxes'][$userId])) {
-                    $now = time() - $time;
+                    $now = is_string($time) ? time() - strtotime($time) : time() - $time;
                     $time = api_convert_and_format_date($time, DATE_TIME_FORMAT_SHORT_TIME_FIRST);
                     $message = sprintf(get_lang('SentAtX'), $time);
 

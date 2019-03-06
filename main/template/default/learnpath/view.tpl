@@ -20,12 +20,93 @@
                             </div>
                         {% endif %}
                     </div>
-
                     {% if show_audio_player %}
                         <div id="lp_media_file" class="audio-scorm">
                             {{ media_player }}
                         </div>
                     {% endif %}
+
+                    {% if lp_accumulate_work_time != '' %}
+                        {% set lp_progress %}
+                        <style>
+                            #timer .container{display:table;background:#777;color:#eee;font-weight:bold;width:100%;text-align:center;text-shadow:1px 1px 4px #999;}
+                            #timer .container div{display:table-cell;font-size:24px;padding:0px;width:20px;}
+                            #timer .container .divider{width:10px;color:#ddd;}
+                            #btn-comenzar{box-sizing:border-box;background:#eee;border:none;margin:0 auto;padding:20px;width:100%;font-size:30px;color:#777;}
+                            #btn-comenzar:hover{background:#fff;}
+                        </style>
+                        <script>
+                            $(document).ready(function() {
+                                var timerData = {
+                                    hour: parseInt($("#hour").text()),
+                                    minute: parseInt($("#minute").text()),
+                                    second:  parseInt($("#second").text())
+                                };
+                                //window.timerInterval = null;
+                                clearInterval(window.timerInterval);
+                                window.timerInterval = setInterval(function(){
+                                    // Seconds
+                                    timerData.second++;
+                                    if (timerData.second >= 60) {
+                                        timerData.second = 0;
+                                        timerData.minute++;
+                                    }
+
+                                    // Minutes
+                                    if (timerData.minute >= 60) {
+                                        timerData.minute = 0;
+                                        timerData.hour++;
+                                    }
+
+                                    $("#hour").text(timerData.hour < 10 ? '0' + timerData.hour : timerData.hour);
+                                    $("#minute").text(timerData.minute < 10 ? '0' + timerData.minute : timerData.minute);
+                                    $("#second").text(timerData.second < 10 ? '0' + timerData.second : timerData.second);
+                                }, 1000);
+                            })
+                        </script>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <b>
+                                    {{ "ProgressSpentInLp"|get_lang|format(lp_accumulate_work_time) }}
+                                </b>
+                            </div>
+                            <div class="col-xs-8">
+                                <div id="progress_bar">
+                                    {{ progress_bar }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <b>
+                                    {{ "TimeSpentInLp"|get_lang|format(lp_accumulate_work_time) }}
+                                </b>
+                            </div>
+                            <div class="col-xs-8">
+                                <div id="timer">
+                                    <div class="container">
+                                        <div id="hour">{{ hour }}</div>
+                                        <div class="divider">:</div>
+                                        <div id="minute">{{ minute }}</div>
+                                        <div class="divider">:</div>
+                                        <div id="second">{{ second }}</div>
+
+                                        <div id="slash"> / </div>
+                                        <div>{{ hour_min }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endset %}
+                    {% else %}
+                        {% set lp_progress %}
+                            <div id="progress_bar">
+                                {{ progress_bar }}
+                            </div>
+                        {% endset %}
+                    {% endif %}
+
                     {% if gamification_mode == 1 %}
                         <!--- gamification -->
                         <div id="scorm-gamification">

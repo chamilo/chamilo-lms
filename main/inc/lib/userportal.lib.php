@@ -885,6 +885,7 @@ class IndexManager
                 'link' => api_get_path(WEB_PATH).'main/messages/inbox.php',
                 'title' => get_lang('Inbox').$cant_msg,
             ];
+
             $items[] = [
                 'class' => 'new-message-social',
                 'icon' => Display::return_icon('new-message.png', get_lang('Compose')),
@@ -901,16 +902,23 @@ class IndexManager
                     'title' => get_lang('PendingInvitations').$total_invitations,
                 ];
             }
+        }
 
-            if (api_get_configuration_value('allow_my_files_link_in_homepage')) {
-                if (api_get_setting('allow_my_files') !== 'false') {
-                    $items[] = [
+        $items[] = [
+            'class' => 'personal-data',
+            'icon' => Display::return_icon('database.png', get_lang('PersonalDataReport')),
+            'link' => api_get_path(WEB_CODE_PATH).'social/personal_data.php',
+            'title' => get_lang('PersonalDataReport'),
+        ];
+
+        if (api_get_configuration_value('allow_my_files_link_in_homepage')) {
+            if (api_get_setting('allow_my_files') !== 'false') {
+                $items[] = [
                         'class' => 'myfiles-social',
                         'icon' => Display::return_icon('sn-files.png', get_lang('Files')),
                         'link' => api_get_path(WEB_PATH).'main/social/myfiles.php',
                         'title' => get_lang('MyFiles'),
                     ];
-                }
             }
         }
 
@@ -943,6 +951,17 @@ class IndexManager
                 ),
                 'link' => $url,
                 'title' => get_lang('VideoConference'),
+            ];
+        }
+
+        if (true === api_get_configuration_value('whispeak_auth_enabled')) {
+            $itemTitle = WhispeakAuthPlugin::create()->get_title();
+
+            $items[] = [
+                'class' => 'whispeak-enrollment',
+                'icon' => Display::return_icon('addworkuser.png', $itemTitle),
+                'link' => WhispeakAuthPlugin::getEnrollmentUrl(),
+                'title' => $itemTitle,
             ];
         }
 
@@ -1329,10 +1348,7 @@ class IndexManager
 
             if ($specialCourses) {
                 if ($categoryCodeFilter) {
-                    $specialCourses = self::filterByCategory(
-                        $specialCourses,
-                        $categoryCodeFilter
-                    );
+                    $specialCourses = self::filterByCategory($specialCourses, $categoryCodeFilter);
                 }
                 $this->tpl->assign('courses', $specialCourses);
                 // Ofaj
@@ -1342,6 +1358,7 @@ class IndexManager
                 );
                 $courseCompleteList = array_merge($courseCompleteList, $specialCourses);
             }
+
             if ($courses['in_category'] || $courses['not_category']) {
                 foreach ($courses['in_category'] as $courseData) {
                     if (!empty($courseData['courses'])) {
@@ -1700,7 +1717,9 @@ class IndexManager
                                                 $session_id,
                                                 'session_course_item'
                                             );
-                                            $html_courses_session[] = $c[1];
+                                            if (isset($c[1])) {
+                                                $html_courses_session[] = $c[1];
+                                            }
                                         }
                                         $count_courses_session++;
                                         $count++;

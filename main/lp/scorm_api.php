@@ -303,7 +303,7 @@ function LMSInitialize() {
             dataType: 'script',
             async: false,
             success:function(data) {
-                jQuery("video:not(.skip), audio:not(.skip)").mediaelementplayer();
+                $('video:not(.skip), audio:not(.skip)').mediaelementplayer();
             }
         });
 
@@ -843,7 +843,7 @@ function LMSSetValue(param, val) {
         echo " var mycommit = LMSCommit('force');";
     }
     ?>
-    return(return_value);
+    return return_value;
 }
 
 /**
@@ -1519,7 +1519,9 @@ function switch_item(current_item, next_item){
             1,
             olms.statusSignalReceived
         );
+
         reinit_updatable_vars_list();
+
         xajax_switch_item_toc(
             olms.lms_lp_id,
             olms.lms_user_id,
@@ -2357,6 +2359,7 @@ function attach_glossary_into_scorm(type) {
                         src = url+'&type=link&src='+src;
                         src = src.replace('https', 'http');
                         $(this).attr('href', src);
+                        $(this).attr('target', '_blank');
                         var myAnchor = $('<a><img width="16px" src="<?php echo Display::returnIconPath('link-external.png'); ?>"/></a>').attr("href", src).attr('target', '_blank').attr('class', 'generated');
                         $(this).after(myAnchor);
                         $(this).after('-');
@@ -2365,4 +2368,96 @@ function attach_glossary_into_scorm(type) {
             });
         }
     }
+}
+
+/**
+ * Updates the time bar with the new status. Prevents the need of a page refresh and flickering
+ * @param	integer	Number of completed items
+ * @param	integer	Number of items in total
+ * @param	string  Display mode (absolute 'abs' or percentage '%').Defaults to %
+ */
+function update_time_bar(nbr_complete, nbr_total, mode)
+{
+    logit_lms('update_progress_bar('+nbr_complete+', '+nbr_total+', '+mode+')',3);
+    logit_lms(
+        'update_progress_bar with params: lms_lp_id= ' + olms.lms_lp_id +
+        ', lms_view_id= '+ olms.lms_view_id + ' lms_user_id= '+ olms.lms_user_id,
+        3
+    );
+
+    if (mode == '') {
+        mode='%';
+    }
+
+    if (nbr_total == 0) {
+        nbr_total=1;
+    }
+
+    var percentage = (nbr_complete/nbr_total)*100;
+    percentage = Math.round(percentage);
+
+    var progress_bar = $("#progress_bar_value2");
+    progress_bar.css('width', percentage + "%");
+
+    var mytext = '';
+    switch(mode){
+        case 'abs':
+            mytext = nbr_complete + '/' + nbr_total;
+            break;
+        case '%':
+        default:
+            mytext = percentage + '%';
+            break;
+    }
+    progress_bar.html(mytext);
+    return true;
+}
+
+/**
+ * Update chronometer
+ */
+function update_chronometer(text_hour, text_minute, text_second)
+{
+    $("#hour").text(text_hour);
+    $("#minute").text(text_minute);
+    $("#second").text(text_second);
+
+    var timerData = {
+        hour: parseInt($("#hour").text()),
+        minute: parseInt($("#minute").text()),
+        second:  parseInt($("#second").text())
+    };
+    /*
+    var timerData = {
+       hour: text_hour,
+       minute: text_minute,
+       second: text_second
+   };
+   */
+
+    //window.timerInterval = null;
+    clearInterval(window.timerInterval);
+    window.timerInterval = setInterval(function(){
+        // Seconds
+        timerData.second++;
+        if(timerData.second >= 60) {
+            timerData.second = 0;
+            timerData.minute++;
+        }
+
+        // Minutes
+        if(timerData.minute >= 60) {
+            timerData.minute = 0;
+            timerData.hour++;
+        }
+
+        $("#hour").text(timerData.hour < 10 ? '0' + timerData.hour : timerData.hour);
+        //$("#hour").text(timerData.hour);
+        $("#minute").text(timerData.minute < 10 ? '0' + timerData.minute : timerData.minute);
+        //$("#minute").text(timerData.minute);
+        $("#second").text(timerData.second < 10 ? '0' + timerData.second : timerData.second);
+        //$("#second").text(timerData.second);
+    }, 1000);
+
+    return true;
 }

@@ -53,8 +53,7 @@ class HTML_QuickForm_advanced_settings extends HTML_QuickForm_static
         }
 
         $html .= '           
-            <button id="'.$name.'" type="button" class="btn btn-default advanced_options"
-                    data-toggle="button" aria-pressed="false" autocomplete="off">
+            <button id="'.$name.'" type="button" class="btn btn-default advanced_options" aria-pressed="false">
                 <em class="fa fa-bars"></em> '.$label.'
             </button>
         ';

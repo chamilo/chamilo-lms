@@ -32,7 +32,7 @@ if ($table->per_page == 0) {
 }
 
 $formToString = '';
-$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+$id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 $interbreadcrumb[] = [
@@ -89,7 +89,7 @@ switch ($action) {
         $url = api_get_self().'?action=edit&id='.$id;
         $form = TicketManager::getStatusForm($url);
 
-        $item = TicketManager::getStatus($_GET['id']);
+        $item = TicketManager::getStatus($id);
         $form->setDefaults([
             'name' => $item->getName(),
             'description' => $item->getDescription(),
@@ -102,7 +102,7 @@ switch ($action) {
                 'name' => $values['name'],
                 'description' => $values['description'],
             ];
-            $cat = TicketManager::updateStatus($_GET['id'], $params);
+            $cat = TicketManager::updateStatus($id, $params);
             Display::addFlash(Display::return_message(get_lang('Updated')));
             header("Location: ".api_get_self());
             exit;

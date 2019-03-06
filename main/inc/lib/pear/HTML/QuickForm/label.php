@@ -19,8 +19,6 @@
  */
 class HTML_QuickForm_label extends HTML_QuickForm_static
 {
-    // {{{ constructor
-
     /**
      * Class constructor
      *
@@ -35,13 +33,5 @@ class HTML_QuickForm_label extends HTML_QuickForm_static
     ) {
         parent::__construct(null, $label, $text, $attributes);
         $this->_type = 'html';
-    }
-
-    /**
-     * @return string
-     */
-    public function toHtml()
-    {
-        return parent::toHtml();
     }
 }

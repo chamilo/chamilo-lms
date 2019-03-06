@@ -23,8 +23,38 @@ if (empty($fromUserId) || empty($toUserId)) {
 
 if (api_is_drh()) {
     $isFollowed = UserManager::is_user_followed_by_drh($fromUserId, api_get_user_id());
-    if (!$isFollowed) {
-        api_not_allowed(true);
+    if (api_drh_can_access_all_session_content()) {
+        $students = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
+            'drh_all',
+            api_get_user_id(),
+            false,
+            0, //$from,
+            null, //$limit,
+            null, //$column,
+            'desc', //$direction,
+            null, //$keyword,
+            null, //$active,
+            null, //$lastConnectionDate,
+            null,
+            null,
+            STUDENT
+        );
+
+        if (empty($students)) {
+            api_not_allowed(true);
+        }
+        $userIdList = [];
+        foreach ($students as $student) {
+            $userIdList[] = $student['user_id'];
+        }
+
+        if (!in_array($fromUserId, $userIdList)) {
+            api_not_allowed(true);
+        }
+    } else {
+        if (!$isFollowed) {
+            api_not_allowed(true);
+        }
     }
 }
 

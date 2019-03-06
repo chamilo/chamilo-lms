@@ -26,10 +26,21 @@ $doc_url = str_replace('///', '&', $doc_url);
 // Still a space present? it must be a '+' (that got replaced by mod_rewrite)
 $doc_url = str_replace(' ', '+', $doc_url);
 
-$doc_url = str_replace(['../', '\\..', '\\0', '..\\'], ['', '', '', ''], $doc_url); //echo $doc_url;
+$docUrlParts = preg_split('/\/|\\\/', $doc_url);
+$doc_url = '';
 
-if (strpos($doc_url, '../') || strpos($doc_url, '/..')) {
-    $doc_url = '';
+foreach ($docUrlParts as $docUrlPart) {
+    if (empty($docUrlPart) || in_array($docUrlPart, ['.', '..', '0'])) {
+        continue;
+    }
+
+    $doc_url .= '/'.$docUrlPart;
+}
+
+if (empty($doc_url)) {
+    api_not_allowed(
+        !empty($_GET['origin']) && $_GET['origin'] === 'learnpath'
+    );
 }
 
 // Dealing with image included into survey: when users receive a link towards a

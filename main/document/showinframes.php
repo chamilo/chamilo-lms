@@ -91,10 +91,11 @@ if ($is_allowed_in_course == false) {
 // Check user visibility.
 $is_visible = DocumentManager::check_visibility_tree(
     $document_id,
-    api_get_course_id(),
+    api_get_course_info(),
     api_get_session_id(),
     api_get_user_id(),
-    api_get_group_id()
+    api_get_group_id(),
+    false
 );
 
 if (!$is_allowed_to_edit && !$is_visible) {
@@ -169,26 +170,11 @@ header('Pragma: no-cache');
 $browser_display_title = 'Documents - '.Security::remove_XSS($_GET['cidReq']).' - '.$file;
 // Only admins get to see the "no frames" link in pageheader.php, so students get a header that's not so high
 $frameheight = 135;
-if ($is_courseAdmin) {
+if (api_is_course_admin()) {
     $frameheight = 165;
 }
 
-$js_glossary_in_documents = '
-  $.frameReady(function(){
-   //  $("<div>I am a div courses</div>").prependTo("body");
-  }, "top.mainFrame",
-  {
-    load: [
-        { type:"script", id:"_fr1", src:"'.api_get_jquery_web_path().'"},
-        { type:"script", id:"_fr7", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/MathJax/MathJax.js?config=AM_HTMLorMML"},
-        { type:"script", id:"_fr4", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery-ui/jquery-ui.min.js"},
-        { type:"stylesheet", id:"_fr5", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery-ui/themes/smoothness/jquery-ui.min.css"},
-        { type:"stylesheet", id:"_fr6", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery-ui/themes/smoothness/theme.css"},
-        { type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
-        { type:"script", id:"_fr3", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?'.api_get_cidreq().'"},
-        { type:"script", id:"_fr4", src:"'.api_get_path(WEB_AJAX_PATH).'lang.ajax.php?a=translate_html&'.api_get_cidreq().'"},
-    ]
-  });';
+$frameReady = Display::getFrameReadyBlock('top.mainFrame');
 
 $web_odf_supported_files = DocumentManager::get_web_odf_extension_list();
 // PDF should be displayed with viewerJS
@@ -208,6 +194,7 @@ if (in_array(strtolower($pathinfo['extension']), $web_odf_supported_files)) {
     </script>'
     ;
 }
+
 // Activate code highlight.
 $isChatFolder = false;
 if (isset($document_data['parents']) && isset($document_data['parents'][0])) {
@@ -244,8 +231,6 @@ if ($is_freemind_available) {
     $execute_iframe = false;
 }
 
-$execute_iframe = true;
-
 if (!$playerSupported && $execute_iframe) {
     $htmlHeadXtra[] = '<script>
     <!--
@@ -258,16 +243,14 @@ if (!$playerSupported && $execute_iframe) {
             my_iframe = document.getElementById("mainFrame");
             if (my_iframe) {
                 //this doesnt seem to work in IE 7,8,9
-                new_height = my_iframe.contentWindow.document.body.scrollHeight;
-                my_iframe.height = my_iframe.contentWindow.document.body.scrollHeight + "px";
+                my_iframe.height = my_iframe.contentWindow.document.body.scrollHeight + 50 + "px";
             }
         };
 
         // Fixes the content height of the frame
         window.onload = function() {
             updateContentHeight();
-            '.$js_glossary_in_documents.'
-
+            '.$frameReady.'
         }
     </script>';
 }
@@ -372,7 +355,62 @@ if ($execute_iframe) {
         $content = Security::remove_XSS(file_get_contents($file_url_sys));
         echo $content;
     } else {
-        echo '<iframe id="mainFrame" name="mainFrame" border="0" frameborder="0" scrolling="no" style="width:100%;" height="600" src="'.$file_url_web.'&rand='.mt_rand(1, 10000).'" height="500" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>';
+        if (api_is_allowed_to_edit()) {
+            $parentId = $document_data['parent_id'];
+            $url = api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq().'&id='.$parentId;
+            $actionsLeft = Display::url(
+                Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM),
+                $url
+            );
+
+            $actionsLeft .= Display::url(
+                Display::return_icon(
+                    'edit.png',
+                    get_lang('Modify'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                ),
+                api_get_path(WEB_CODE_PATH).'document/edit_document.php?'.api_get_cidreq().'&id='.$document_id
+            );
+
+            $titleToShow = addslashes(basename($document_data['title']));
+
+            $urlDeleteParams = http_build_query(
+                [
+                    'action' => 'delete_item',
+                    'id' => $parentId,
+                    'deleteid' => $document_data['id'],
+                ]
+            );
+            $actionsLeft .= Display::url(
+                Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_MEDIUM),
+                '#',
+                [
+                    'data-item-title' => $titleToShow,
+                    'data-href' => api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq(
+                        ).'&'.$urlDeleteParams,
+                    'data-toggle' => 'modal',
+                    'data-target' => '#confirm-delete',
+                ]
+            );
+            $actionsLeft .= Display::url(
+                Display::return_icon('pdf.png', get_lang('Export2PDF'), [], ICON_SIZE_MEDIUM),
+                api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq(
+                ).'&action=export_to_pdf&id='.$document_id
+            );
+
+            echo $toolbar = Display::toolbarAction('actions-documents', [$actionsLeft]);
+        }
+
+        echo '<iframe 
+            id="mainFrame" 
+            name="mainFrame" 
+            border="0" 
+            frameborder="0" 
+            scrolling="no" 
+            style="width:100%;" height="600" 
+            src="'.$file_url_web.'&rand='.mt_rand(1, 10000).'" 
+            height="500" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>';
     }
 }
 Display::display_footer();

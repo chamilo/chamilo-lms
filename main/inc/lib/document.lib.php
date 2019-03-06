@@ -173,7 +173,6 @@ class DocumentManager
             'pptx' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
             'ppm' => 'image/x-portable-pixmap',
             'ppt' => 'application/vnd.ms-powerpoint',
-            'pps' => 'application/vnd.ms-powerpoint',
             'ps' => 'application/postscript',
             'qt' => 'video/quicktime',
             'ra' => 'audio/x-realaudio',
@@ -539,18 +538,17 @@ class DocumentManager
         $tblItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tblDocument = Database::get_course_table(TABLE_DOCUMENT);
 
-        $userGroupFilter = '';
         if (!is_null($toUserId)) {
-            $toUserId = intval($toUserId);
+            $toUserId = (int) $toUserId;
             $userGroupFilter = "last.to_user_id = $toUserId";
             if (empty($toUserId)) {
-                $userGroupFilter = " (last.to_user_id = 0 OR last.to_user_id IS NULL) ";
+                $userGroupFilter = ' (last.to_user_id = 0 OR last.to_user_id IS NULL) ';
             }
         } else {
-            $toGroupId = intval($toGroupId);
+            $toGroupId = (int) $toGroupId;
             $userGroupFilter = "last.to_group_id = $toGroupId";
             if (empty($toGroupId)) {
-                $userGroupFilter = "( last.to_group_id = 0 OR last.to_group_id IS NULL) ";
+                $userGroupFilter = '( last.to_group_id = 0 OR last.to_group_id IS NULL) ';
             }
         }
 
@@ -679,7 +677,7 @@ class DocumentManager
                 foreach ($documentData as $row) {
                     $isVisible = self::check_visibility_tree(
                         $row['id'],
-                        $courseInfo['code'],
+                        $courseInfo,
                         $sessionId,
                         api_get_user_id(),
                         $toGroupId
@@ -3367,7 +3365,6 @@ class DocumentManager
                     last.visibility <> 2 AND
                     docs.c_id = {$course_info['real_id']} AND
                     last.c_id = {$course_info['real_id']}
-                    $showOnlyFoldersCondition
                     $folderCondition
                     $levelCondition
                     $add_folder_filter
@@ -3428,7 +3425,7 @@ class DocumentManager
             }
         }
 
-        $write_result = self::write_resources_tree(
+        $writeResult = self::write_resources_tree(
             $userInfo,
             $course_info,
             $session_id,
@@ -3440,43 +3437,35 @@ class DocumentManager
             $folderId
         );
 
-        $return .= $write_result;
+        $return .= $writeResult;
+        $lpAjaxUrl = api_get_path(WEB_AJAX_PATH).'lp.ajax.php';
         if ($lp_id === false) {
-            $url = api_get_path(WEB_AJAX_PATH).
-                'lp.ajax.php?a=get_documents&url='.$overwrite_url.'&lp_id='.$lp_id.'&cidReq='.$course_info['code'];
+            $url = $lpAjaxUrl.'?a=get_documents&lp_id=&cidReq='.$course_info['code'];
             $return .= "<script>
-            $('.doc_folder').click(function() {
-                var realId = this.id;
-                var my_id = this.id.split('_')[2];
-                var tempId = 'temp_'+my_id;
-                $('#res_'+my_id).show();
-                var tempDiv = $('#'+realId).find('#'+tempId);
-                if (tempDiv.length == 0) {
-                    $.ajax({
-                        async: false,
-                        type: 'GET',
-                        url:  '".$url."',
-                        data: 'folder_id='+my_id,
-                        success: function(data) {
-                            $('#'+realId).append('<div id='+tempId+'>'+data+'</div>');
-                        }
-                    });
-                }
-            });
-
+            $(document).ready(function () {
             $('.close_div').click(function() {
                 var course_id = this.id.split('_')[2];
                 var session_id = this.id.split('_')[3];
                 $('#document_result_'+course_id+'_'+session_id).hide();
                 $('.lp_resource').remove();
                 $('.document_preview_container').html('');
+                });
             });
             </script>";
         } else {
             //For LPs
-            $url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?a=get_documents&lp_id='.$lp_id.'&'.api_get_cidreq();
-            $return .= "<script>
+            $url = $lpAjaxUrl.'?a=get_documents&lp_id='.$lp_id.'&'.api_get_cidreq();
+        }
 
+        if (!empty($overwrite_url)) {
+            $url .= '&url='.Security::remove_XSS($overwrite_url);
+        }
+
+        if ($add_move_button) {
+            $url .= '&add_move_button=1';
+        }
+
+        $return .= "<script>
             function testResources(id, img) {
                 var numericId = id.split('_')[1];
                 var parentId = 'doc_id_'+numericId;
@@ -3508,7 +3497,6 @@ class DocumentManager
                 }
             }
             </script>";
-        }
 
         if (!$user_in_course) {
             $return = '';
@@ -6650,15 +6638,15 @@ class DocumentManager
             return null;
         }
 
-        $onclick = '';
+        //$onclick = '';
         // if in LP, hidden folder are displayed in grey
         $folder_class_hidden = '';
         if ($lp_id) {
             if (isset($resource['visible']) && $resource['visible'] == 0) {
-                $folder_class_hidden = "doc_folder_hidden"; // in base.css
+                $folder_class_hidden = ' doc_folder_hidden'; // in base.css
             }
-            $onclick = 'onclick="javascript: testResources(\'res_'.$resource['id'].'\',\'img_'.$resource['id'].'\')"';
         }
+        $onclick = 'onclick="javascript: testResources(\'res_'.$resource['id'].'\',\'img_'.$resource['id'].'\')"';
         $return = null;
 
         if (empty($path)) {

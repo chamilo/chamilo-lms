@@ -28,7 +28,7 @@ function initializeReport($course_code)
     $resWeeks = Database::query($sqlWeeks);
     $weeks = Database::fetch_object($resWeeks);
     $obj = Database::fetch_object($res);
-    $weeksCount = (!isset($_POST['weeksNumber'])) ? (($weeks->semanas == 0) ? 7 : $weeks->semanas) : $_POST['weeksNumber'];
+    $weeksCount = (!isset($_POST['weeksNumber'])) ? (($weeks->semanas == 0) ? 7 : $weeks->semanas) : (int) $_POST['weeksNumber'];
     $weeksCount = Database::escape_string($weeksCount);
     Database::query("REPLACE INTO $table_semanas_curso (course_code , semanas) VALUES ('$course_code','$weeksCount')");
     if (intval($obj->cant) != $weeksCount) {
@@ -57,7 +57,7 @@ function initializeReport($course_code)
     if (!Database::query($sql)) {
         return false;
     } else {
-        $page = (!isset($_GET['page'])) ? 1 : $_GET['page'];
+        $page = (!isset($_GET['page'])) ? 1 : (int) $_GET['page'];
 
         Database::query("UPDATE $table_students_report sr SET sr.work_ok = 1
 		WHERE CONCAT (sr.user_id,',',sr.week_report_id)

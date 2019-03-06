@@ -6033,7 +6033,7 @@ class Wiki
                     'addnew'
                 ).'>'
                 .Display::return_icon(
-                    'add.png',
+                    'new_document.png',
                     get_lang('AddNew'),
                     '',
                     ICON_SIZE_MEDIUM

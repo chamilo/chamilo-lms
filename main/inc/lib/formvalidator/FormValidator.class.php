@@ -178,16 +178,21 @@ EOT;
      * Adds a text field to the form.
      * A trim-filter is attached to the field.
      *
-     * @param string $label      The label for the form-element
-     * @param string $name       The element name
-     * @param bool   $required   (optional)    Is the form-element required (default=true)
-     * @param array  $attributes (optional)    List of attributes for the form-element
+     * @param string|array $label      The label for the form-element
+     * @param string       $name       The element name
+     * @param bool         $required   (optional)    Is the form-element required (default=true)
+     * @param array        $attributes (optional)    List of attributes for the form-element
      *
      * @return HTML_QuickForm_text
      */
-    public function addText($name, $label, $required = true, $attributes = [])
+    public function addText($name, $label, $required = true, $attributes = [], $createElement = false)
     {
-        $element = $this->addElement('text', $name, $label, $attributes);
+        if ($createElement) {
+            $element = $this->createElement('text', $name, $label, $attributes);
+        } else {
+            $element = $this->addElement('text', $name, $label, $attributes);
+        }
+
         $this->applyFilter($name, 'trim');
         if ($required) {
             $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');

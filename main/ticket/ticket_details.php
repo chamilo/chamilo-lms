@@ -119,12 +119,17 @@ $htmlHeadXtra[] = '<style>
 }
 </style>';
 
-$ticket_id = $_GET['ticket_id'];
+$ticket_id = (int) $_REQUEST['ticket_id'];
 $ticket = TicketManager::get_ticket_detail_by_id($ticket_id);
-if (!isset($ticket['ticket'])) {
+if (!isset($ticket['ticket']) ||
+    // make sure it's either a user assigned to this ticket, or the reporter, or and admin
+    !($ticket['ticket']['assigned_last_user'] == $user_id ||
+      $ticket['ticket']['sys_insert_user_id'] == $user_id ||
+      $isAdmin)
+    ) {
     api_not_allowed(true);
 }
-if (!isset($_GET['ticket_id'])) {
+if (!isset($_REQUEST['ticket_id'])) {
     header('Location: '.api_get_path(WEB_CODE_PATH).'ticket/tickets.php');
     exit;
 }
@@ -150,7 +155,7 @@ if (!isset($_GET['ticket_id'])) {
 $title = 'Ticket #'.$ticket['ticket']['code'];
 
 if (isset($_REQUEST['close'])) {
-    TicketManager::close_ticket($_REQUEST['ticket_id'], $user_id);
+    TicketManager::close_ticket($ticket_id, $user_id);
     $ticket['ticket']['status_id'] = TicketManager::STATUS_CLOSE;
     $ticket['ticket']['status'] = get_lang('Closed');
 }
@@ -169,11 +174,11 @@ foreach ($messages as $message) {
 
     $receivedMessage = '';
     if (!empty($message['subject'])) {
-        $receivedMessage = '<b>'.get_lang('Subject').': </b> '.$message['subject'].'<br/>';
+        $receivedMessage = '<b>'.get_lang('Subject').': </b> '.Security::remove_XSS($message['subject']).'<br />';
     }
 
     if (!empty($message['message'])) {
-        $receivedMessage = '<b>'.get_lang('Message').':</b><br/>'.$message['message'].'<br/>';
+        $receivedMessage = '<b>'.get_lang('Message').':</b><br />'.Security::remove_XSS($message['message']).'<br />';
     }
 
     $attachmentLinks = '';
@@ -206,7 +211,7 @@ foreach ($messages as $message) {
     $counter++;
 }
 
-$subject = get_lang('ReplyShort').': '.$ticket['ticket']['subject'];
+$subject = get_lang('ReplyShort').': '.Security::remove_XSS($ticket['ticket']['subject']);
 
 if ($ticket['ticket']['status_id'] != TicketManager::STATUS_FORWARDED &&
     $ticket['ticket']['status_id'] != TicketManager::STATUS_CLOSE
@@ -219,10 +224,8 @@ if ($ticket['ticket']['status_id'] != TicketManager::STATUS_FORWARDED &&
         $formToShow = $form->returnForm();
 
         if ($form->validate()) {
-            $ticket_id = $_POST['ticket_id'];
-            $content = $_POST['content'];
+            $ticket_id = (int) $_POST['ticket_id'];
             $messageToSend = '';
-            $subject = $_POST['subject'];
             $message = isset($_POST['confirmation']) ? true : false;
             $file_attachments = $_FILES;
 
@@ -258,8 +261,8 @@ if ($ticket['ticket']['status_id'] != TicketManager::STATUS_FORWARDED &&
 
                 TicketManager::updateTicket(
                     [
-                        'priority_id' => $_POST['priority_id'],
-                        'status_id' => $_POST['status_id'],
+                        'priority_id' => (int) $_POST['priority_id'],
+                        'status_id' => (int) $_POST['status_id'],
                     ],
                     $ticket_id,
                     api_get_user_id()
@@ -311,11 +314,11 @@ if ($ticket['ticket']['status_id'] != TicketManager::STATUS_FORWARDED &&
                 }
             }
 
-            $messageToSend .= $content;
+            $messageToSend .= $_POST['content'];
 
             TicketManager::insertMessage(
                 $ticket_id,
-                $subject,
+                $_POST['subject'],
                 $messageToSend,
                 $file_attachments,
                 $user_id,
@@ -353,7 +356,7 @@ echo '<table width="100%" >
         <tr>
           <td colspan="3">
           <h1>'.$title.'</h1>
-          <h2>'.$ticket['ticket']['subject'].'</h2>
+          <h2>'.Security::remove_XSS($ticket['ticket']['subject']).'</h2>
           <p>
             '.$senderData.' '.
             get_lang('Created').' '.
@@ -407,11 +410,12 @@ if ($ticket['ticket']['course_url'] != null) {
             <td colspan="2"></td>
           </tr>';
 }
+
 echo '<tr>
         <td>
         <hr />
         <b>'.get_lang('Description').':</b> <br />
-        '.$ticket['ticket']['message'].'
+        '.Security::remove_XSS($ticket['ticket']['message']).'
         <hr />
         </td>            
      </tr>

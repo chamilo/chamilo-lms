@@ -477,6 +477,43 @@ if (is_array($threads)) {
                 );
             }
 
+            $_user = api_get_user_info($row['user_id']);
+            $urlImg = api_get_path(WEB_IMG_PATH);
+            $iconStatus = null;
+            $isAdmin = UserManager::is_admin($row['user_id']);
+
+            $last_post_info = get_last_post_by_thread(
+                $row['c_id'],
+                $row['thread_id'],
+                $row['forum_id'],
+                api_is_allowed_to_edit()
+            );
+            $last_post = null;
+            if ($last_post_info) {
+                $poster_info = api_get_user_info($last_post_info['poster_id']);
+                $post_date = api_convert_and_format_date($last_post_info['post_date']);
+                $last_post = $post_date.'<br>'.get_lang('By').' '.display_user_link(
+                    $last_post_info['poster_id'],
+                    $poster_info['complete_name'],
+                    '',
+                    $poster_info['username']
+                );
+            }
+
+            /*if ($_user['status'] == 5) {
+                if ($_user['has_certificates']) {
+                    $iconStatus = '<img src="'.$urlImg.'icons/svg/ofaj_graduated.svg" width="22px" height="22px">';
+                } else {
+                    $iconStatus = '<img src="'.$urlImg.'icons/svg/ofaj_student.svg" width="22px" height="22px">';
+                }
+            } elseif ($_user['status'] == 1) {
+                if ($isAdmin) {
+                    $iconStatus = '<img src="'.$urlImg.'icons/svg/ofaj_admin.svg" width="22px" height="22px">';
+                } else {
+                    $iconStatus = '<img src="'.$urlImg.'icons/svg/ofaj_teacher.svg" width="22px" height="22px">';
+                }
+            }*/
+
             $html .= '<div class="thumbnail">'.display_user_image($row['user_id'], $name, $origin).'</div>';
             $html .= '</div>';
             $html .= '<div class="col-md-10">';

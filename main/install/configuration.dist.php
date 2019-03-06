@@ -1115,8 +1115,18 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
     ],
 ];*/
 
+// Community manager users
+//$_configuration['community_managers_user_list'] = ['users' => [1]];
+
 // Hide global chat video
 //$_configuration['hide_chat_video'] = false;
+
+// global forum in social network BT#15309
+//$_configuration['global_forums_course_id'] = 0;
+
+// Allow forum post revisions
+// Requires new forum_category and forum_post "language" extra fields (multiple select)
+//$_configuration['allow_forum_post_revisions'] = false;
 
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email

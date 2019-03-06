@@ -6725,6 +6725,9 @@ function postNeedsRevision($postId)
  */
 function getAskRevisionButton($postId, $threadInfo)
 {
+    if (api_get_configuration_value('allow_forum_post_revisions') !== false) {
+        return '';
+    }
     $postId = (int) $postId;
 
     $status = 'btn-default';

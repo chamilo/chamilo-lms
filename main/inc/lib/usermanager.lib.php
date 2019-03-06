@@ -4602,7 +4602,7 @@ class UserManager
      *
      * @param bool   $friend_id
      * @param bool   $real_removed          true will delete ALL friends relationship
-     * @param string                                              $with_status_condition
+     * @param string $with_status_condition
      *
      * @author isaac flores paz <isaac.flores@dokeos.com>
      * @author Julio Montoya <gugli100@gmail.com> Cleaning code

@@ -3465,7 +3465,7 @@ class DocumentManager
             $url .= '&add_move_button=1';
         }
 
-            $return .= "<script>
+        $return .= "<script>
             function testResources(id, img) {
                 var numericId = id.split('_')[1];
                 var parentId = 'doc_id_'+numericId;

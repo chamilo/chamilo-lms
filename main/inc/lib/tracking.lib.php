@@ -1869,8 +1869,8 @@ class Tracking
                 }
             }
         } else {
-        $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $sql = 'SELECT login_course_date
+            $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+            $sql = 'SELECT login_course_date
                 FROM '.$tbl_track_login.'
                 WHERE
                     user_id = '.$student_id.' AND
@@ -1878,19 +1878,19 @@ class Tracking
                     session_id = '.$session_id.'
                 ORDER BY login_course_date ASC 
                 LIMIT 0,1';
-        $rs = Database::query($sql);
-        if (Database::num_rows($rs) > 0) {
-            if ($first_login_date = Database::result($rs, 0, 0)) {
-                if ($convert_date) {
-                    return api_convert_and_format_date(
+            $rs = Database::query($sql);
+            if (Database::num_rows($rs) > 0) {
+                if ($first_login_date = Database::result($rs, 0, 0)) {
+                    if ($convert_date) {
+                        return api_convert_and_format_date(
                         $first_login_date,
                         DATE_FORMAT_SHORT
                     );
-                } else {
-                    return $first_login_date;
+                    } else {
+                        return $first_login_date;
+                    }
                 }
             }
-        }
         }
 
         return false;
@@ -1937,17 +1937,17 @@ class Tracking
                 ORDER BY logout_course_date DESC
                 LIMIT 0,1";
 
-        $rs = Database::query($sql);
-        if (Database::num_rows($rs) > 0) {
-            if ($last_login_date = Database::result($rs, 0, 0)) {
-                if (empty($last_login_date)) {
-                    return false;
-                }
-                //see #5736
-                $last_login_date_timestamp = api_strtotime($last_login_date);
-                $now = time();
-                //If the last connection is > than 7 days, the text is red
-                //345600 = 7 days in seconds
+            $rs = Database::query($sql);
+            if (Database::num_rows($rs) > 0) {
+                if ($last_login_date = Database::result($rs, 0, 0)) {
+                    if (empty($last_login_date)) {
+                        return false;
+                    }
+                    //see #5736
+                    $last_login_date_timestamp = api_strtotime($last_login_date);
+                    $now = time();
+                    //If the last connection is > than 7 days, the text is red
+                    //345600 = 7 days in seconds
                     /*
                 if ($now - $last_login_date_timestamp > 604800) {
                     if ($convert_date) {
@@ -2005,19 +2005,19 @@ class Tracking
                                  </a>'
                                 : null;
 
-                        return $icon.Display::label($last_login_date, 'warning');
+                            return $icon.Display::label($last_login_date, 'warning');
+                        } else {
+                            return $last_login_date;
+                        }
                     } else {
-                        return $last_login_date;
-                    }
-                } else {
-                    if ($convert_date) {
-                        return api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
-                    } else {
-                        return $last_login_date;
+                        if ($convert_date) {
+                            return api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
+                        } else {
+                            return $last_login_date;
+                        }
                     }
                 }
             }
-        }
         }
 
         return false;

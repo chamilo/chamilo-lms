@@ -911,16 +911,16 @@ class IndexManager
             'title' => get_lang('PersonalDataReport'),
         ];
 
-            if (api_get_configuration_value('allow_my_files_link_in_homepage')) {
-                if (api_get_setting('allow_my_files') !== 'false') {
-                    $items[] = [
+        if (api_get_configuration_value('allow_my_files_link_in_homepage')) {
+            if (api_get_setting('allow_my_files') !== 'false') {
+                $items[] = [
                         'class' => 'myfiles-social',
                         'icon' => Display::return_icon('sn-files.png', get_lang('Files')),
                         'link' => api_get_path(WEB_PATH).'main/social/myfiles.php',
                         'title' => get_lang('MyFiles'),
                     ];
-                }
             }
+        }
 
         $items[] = [
             'class' => 'profile-social',

@@ -754,7 +754,7 @@ class AnnouncementManager
                 );
                 $sentToAllGroup = true;
             }
-                // when no user is selected we send it to everyone
+            // when no user is selected we send it to everyone
             if ($sentToAllGroup === false) {
                 if (!empty($send_to_users['groups'])) {
                     foreach ($send_to_users['groups'] as $group) {
@@ -773,7 +773,7 @@ class AnnouncementManager
                 $groupInfo = GroupManager::get_group_properties($groupId);
                 if (!empty($send_to_users['users'])) {
                     foreach ($send_to_users['users'] as $user) {
-                            api_item_property_update(
+                        api_item_property_update(
                                 $courseInfo,
                                 TOOL_ANNOUNCEMENT,
                                 $last_id,
@@ -1145,8 +1145,8 @@ class AnnouncementManager
                 case null:
                     if (isset($row['to_user_id']) && !empty($row['to_user_id'])) {
                         if (!in_array('USER:'.$row['to_user_id'], $to)) {
-                        $to[] = 'USER:'.$row['to_user_id'];
-                    }
+                            $to[] = 'USER:'.$row['to_user_id'];
+                        }
                     }
                     break;
                 // it was sent to everyone
@@ -1160,9 +1160,9 @@ class AnnouncementManager
                         }
                     } else {
                         if (!in_array('GROUP:'.$toGroup, $to)) {
-                    $to[] = 'GROUP:'.$toGroup;
-            }
-        }
+                            $to[] = 'GROUP:'.$toGroup;
+                        }
+                    }
 
                     if ($includeGroupWhenLoadingUser) {
                         if (!in_array('GROUP:'.$toGroup, $to)) {
@@ -1253,7 +1253,7 @@ class AnnouncementManager
                 $userToArray = [];
                 foreach ($users as $student) {
                     $userToArray[] = $student['complete_name_with_username'];
-            }
+                }
                 $output[] =
                     '<br />'.
                     Display::label($group_names[$group_id]['name'], 'info').
@@ -1962,7 +1962,7 @@ class AnnouncementManager
                     if ($disableEdit === true) {
                         $modify_icons = "<a href='#'>".$editIconDisable."</a>";
                     } else {
-                    $modify_icons = "<a href=\"".$actionUrl."&action=modify&id=".$row['id']."\">".$editIcon."</a>";
+                        $modify_icons = "<a href=\"".$actionUrl."&action=modify&id=".$row['id']."\">".$editIcon."</a>";
                     }
 
                     if ($row['visibility'] == 1) {

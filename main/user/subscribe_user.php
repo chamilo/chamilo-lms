@@ -60,24 +60,24 @@ $list_not_register_user = '';
 if (isset($_REQUEST['register'])) {
     $userInfo = api_get_user_info($_REQUEST['user_id']);
     if ($userInfo) {
-    if ($type === COURSEMANAGER) {
-        if (!empty($sessionId)) {
+        if ($type === COURSEMANAGER) {
+            if (!empty($sessionId)) {
                 $message = $userInfo['complete_name_with_username'].' '.get_lang('AddedToCourse');
-            SessionManager::set_coach_to_course_session(
+                SessionManager::set_coach_to_course_session(
                 $_REQUEST['user_id'],
                 $sessionId,
                 $courseInfo['real_id']
             );
-            Display::addFlash(Display::return_message($message));
-        } else {
-            CourseManager::subscribeUser(
+                Display::addFlash(Display::return_message($message));
+            } else {
+                CourseManager::subscribeUser(
                 $_REQUEST['user_id'],
                 $courseInfo['code'],
                 COURSEMANAGER
             );
-        }
-    } else {
-        CourseManager::subscribeUser(
+            }
+        } else {
+            CourseManager::subscribeUser(
             $_REQUEST['user_id'],
             $courseInfo['code']
         );
@@ -95,8 +95,8 @@ if (isset($_POST['action'])) {
                 foreach ($_POST['user'] as $index => $user_id) {
                     $userInfo = api_get_user_info($user_id);
                     if ($userInfo) {
-                    if ($type === COURSEMANAGER) {
-                        if (!empty($sessionId)) {
+                        if ($type === COURSEMANAGER) {
+                            if (!empty($sessionId)) {
                                 $message = $userInfo['complete_name_with_username'].' '.get_lang('AddedToCourse');
                                 $result = SessionManager::set_coach_to_course_session(
                                 $user_id,
@@ -106,12 +106,12 @@ if (isset($_POST['action'])) {
                                 if ($result) {
                                     $isSuscribe[] = $message;
                                 }
-                        } else {
+                            } else {
                                 CourseManager::subscribeUser($user_id, $courseInfo['code'], COURSEMANAGER);
-                        }
-                    } else {
+                            }
+                        } else {
                             CourseManager::subscribeUser($user_id, $courseInfo['code']);
-                    }
+                        }
                     }
                 }
 

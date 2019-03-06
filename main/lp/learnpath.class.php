@@ -2039,13 +2039,13 @@ class learnpath
         $previousIcon = '';
         $nextIcon = '';
         if ($hideArrows === false) {
-        $previousIcon = '
+            $previousIcon = '
             <a class="icon-toolbar" id="scorm-previous" href="#" 
                 onclick="switch_item('.$mycurrentitemid.',\'previous\');return false;" title="'.$previousText.'">
                 <span class="fa fa-chevron-left"></span><span class="sr-only">'.$previousText.'</span>
             </a>';
 
-        $nextIcon = '
+            $nextIcon = '
             <a class="icon-toolbar" id="scorm-next" href="#" 
                 onclick="switch_item('.$mycurrentitemid.',\'next\');return false;" title="'.$nextText.'">
                 <span class="fa fa-chevron-right"></span><span class="sr-only">'.$nextText.'</span>
@@ -2329,7 +2329,7 @@ class learnpath
                 } else {
                     $autostart_audio = $autostart;
                 }
-                    }
+            }
                     break;
                 case TOOL_READOUT_TEXT:;
                     $autostart_audio = 'false';
@@ -2546,16 +2546,16 @@ class learnpath
             }
 
             if ($is_visible) {
-            $subscriptionSettings = self::getSubscriptionSettings();
+                $subscriptionSettings = self::getSubscriptionSettings();
 
-            // Check if the subscription users/group to a LP is ON
-            if (isset($row['subscribe_users']) && $row['subscribe_users'] == 1 &&
+                // Check if the subscription users/group to a LP is ON
+                if (isset($row['subscribe_users']) && $row['subscribe_users'] == 1 &&
                 $subscriptionSettings['allow_add_users_to_lp'] === true
             ) {
-                // Try group
-                $is_visible = false;
-                // Checking only the user visibility
-                $userVisibility = api_get_item_visibility(
+                    // Try group
+                    $is_visible = false;
+                    // Checking only the user visibility
+                    $userVisibility = api_get_item_visibility(
                     $courseInfo,
                     'learnpath',
                     $row['id'],
@@ -2564,14 +2564,14 @@ class learnpath
                     'LearnpathSubscription'
                 );
 
-                if ($userVisibility == 1) {
-                    $is_visible = true;
-                } else {
-                    $userGroups = GroupManager::getAllGroupPerUserSubscription($student_id);
-                    if (!empty($userGroups)) {
-                        foreach ($userGroups as $groupInfo) {
-                            $groupId = $groupInfo['iid'];
-                            $userVisibility = api_get_item_visibility(
+                    if ($userVisibility == 1) {
+                        $is_visible = true;
+                    } else {
+                        $userGroups = GroupManager::getAllGroupPerUserSubscription($student_id);
+                        if (!empty($userGroups)) {
+                            foreach ($userGroups as $groupInfo) {
+                                $groupId = $groupInfo['iid'];
+                                $userVisibility = api_get_item_visibility(
                                 $courseInfo,
                                 'learnpath',
                                 $row['id'],
@@ -2581,14 +2581,14 @@ class learnpath
                                 $groupId
                             );
 
-                            if ($userVisibility == 1) {
-                                $is_visible = true;
-                                break;
+                                if ($userVisibility == 1) {
+                                    $is_visible = true;
+                                    break;
+                                }
                             }
                         }
                     }
                 }
-            }
             }
 
             return $is_visible;
@@ -10162,7 +10162,6 @@ class learnpath
         if (in_array($item_type, [TOOL_DOCUMENT, TOOL_LP_FINAL_ITEM, TOOL_HOTPOTATOES])) {
             $documentData = DocumentManager::get_document_data_by_id($row['path'], $course_code);
             if (empty($documentData)) {
-
                 $table = Database::get_course_table(TABLE_DOCUMENT);
                 $sql = "SELECT path FROM $table
                         WHERE 

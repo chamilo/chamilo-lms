@@ -1048,7 +1048,6 @@ class CourseHome
                         .$tool['original_link'].$qm_or_amp.api_get_cidreq();
                 }
 
-
                 $icon = Display::return_icon(
                     $tool['image'],
                     $tool_name,

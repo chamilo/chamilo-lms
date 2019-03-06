@@ -631,7 +631,7 @@ switch ($action) {
                 ).'<div id="announcement_preview_result" style="display:none"></div>'
             );
             $form->addHtml('<div id="send_button" style="display:none">');
-        $form->addButtonSave(get_lang('ButtonPublishAnnouncement'));
+            $form->addButtonSave(get_lang('ButtonPublishAnnouncement'));
             $form->addHtml('</div>');
         }
         $form->setDefaults($defaults);

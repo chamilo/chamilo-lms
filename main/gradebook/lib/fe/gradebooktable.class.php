@@ -105,7 +105,7 @@ class GradebookTable extends SortableTable
 
         $model = ExerciseLib::getCourseScoreModel();
 
-            $this->set_header(
+        $this->set_header(
                 $column++,
                 get_lang('Weight'),
                 '',
@@ -116,17 +116,17 @@ class GradebookTable extends SortableTable
             $this->set_header($column++, get_lang('Result'), false);
         }
 
-            if (empty($model)) {
-                if (in_array(1, $this->loadStats)) {
-                    $this->set_header($column++, get_lang('Ranking'), false);
-                }
-                if (in_array(2, $this->loadStats)) {
-                    $this->set_header($column++, get_lang('BestScore'), false);
-                }
-                if (in_array(3, $this->loadStats)) {
-                    $this->set_header($column++, get_lang('Average'), false);
-                }
+        if (empty($model)) {
+            if (in_array(1, $this->loadStats)) {
+                $this->set_header($column++, get_lang('Ranking'), false);
             }
+            if (in_array(2, $this->loadStats)) {
+                $this->set_header($column++, get_lang('BestScore'), false);
+            }
+            if (in_array(3, $this->loadStats)) {
+                $this->set_header($column++, get_lang('Average'), false);
+            }
+        }
 
         if ($this->teacherView) {
         } else {

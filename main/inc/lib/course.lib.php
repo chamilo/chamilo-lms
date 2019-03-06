@@ -35,8 +35,8 @@ class CourseManager
      * Creates a course.
      *
      * @param array $params      Columns in the main.course table.
-     * @param int   $authorId    Optional.
-     * @param int   $accessUrlId Optional.
+     * @param int   $authorId    optional
+     * @param int   $accessUrlId optional
      *
      * @return mixed false if the course was not created, array with the course info
      */

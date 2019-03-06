@@ -54,8 +54,8 @@ if (api_is_drh()) {
     } else {
         if (!$isFollowed) {
             api_not_allowed(true);
-            }
         }
+    }
 }
 
 $usersData[$toUserId] = api_get_user_info($toUserId);

@@ -518,7 +518,6 @@ function createMyContactsWindow()
 	});
 
 	$("#chatbox_"+user_id).show();
-
 	$("#chatbox_"+user_id+" .chatboxcontent").scroll(function () {
 		var iCurScrollPos = $(this).scrollTop();
 		if (iCurScrollPos == 0) {
@@ -526,6 +525,24 @@ function createMyContactsWindow()
 			return false;
 		}
 	});
+
+	minimizedChatBoxes = new Array();
+	if (Cookies.get('chatbox_minimized')) {
+		minimizedChatBoxes = Cookies.getJSON('chatbox_minimized');
+
+		minimize = 0;
+		for (j = 0; j < minimizedChatBoxes.length; j++) {
+			if (minimizedChatBoxes[j] == user_id) {
+				minimize = 1;
+			}
+		}
+
+		if (minimize == 1) {
+			$('.togglelink').html('<em class="fa fa-toggle-up"></em>');
+			$('#chatbox_'+user_id+' .chatboxcontent').css('display','none');
+			$('#chatbox_'+user_id+' .chatboxinput').css('display','none');
+		}
+	}
 }
 
 /**
@@ -649,12 +666,11 @@ function createChatBox(user_id, chatboxtitle, minimizeChatBox, online, userImage
 
 	if (minimizeChatBox == 1) {
 		minimizedChatBoxes = new Array();
-
-		if ($.cookie('chatbox_minimized')) {
-			minimizedChatBoxes = $.cookie('chatbox_minimized').split(/\|/);
+		if (Cookies.get('chatbox_minimized')) {
+			minimizedChatBoxes = Cookies.getJSON('chatbox_minimized');
 		}
 		minimize = 0;
-		for (j=0;j<minimizedChatBoxes.length;j++) {
+		for (j = 0; j < minimizedChatBoxes.length; j++) {
 			if (minimizedChatBoxes[j] == user_id) {
 				minimize = 1;
 			}
@@ -684,8 +700,8 @@ function createChatBox(user_id, chatboxtitle, minimizeChatBox, online, userImage
 			$("#chatbox_"+user_id+" .chatboxtextarea").focus();
 		}
 	});
-	$("#chatbox_"+user_id).show();
 
+	$("#chatbox_"+user_id).show();
 	$("#chatbox_"+user_id+" .chatboxcontent").scroll(function () {
 		var iCurScrollPos = $(this).scrollTop();
 		if (iCurScrollPos == 0) {
@@ -774,33 +790,44 @@ function update_online_user(user_id, status)
 	}
 }
 
+/**
+ * @param user_id
+ */
 function toggleChatBoxGrowth(user_id)
 {
 	if ($('#chatbox_'+user_id+' .chatboxcontent').css('display') == 'none') {
+		// Show box
 		var minimizedChatBoxes = new Array();
-		if ($.cookie('chatbox_minimized')) {
-			minimizedChatBoxes = $.cookie('chatbox_minimized').split(/\|/);
+		if (Cookies.get('chatbox_minimized')) {
+			minimizedChatBoxes = Cookies.getJSON('chatbox_minimized');
 		}
 
-		var newCookie = '';
-		for (i=0;i<minimizedChatBoxes.length;i++) {
+		var newCookie = new Array();
+		for (var i = 0; i < minimizedChatBoxes.length; i++) {
 			if (minimizedChatBoxes[i] != user_id) {
-				newCookie += user_id+'|';
+				newCookie.push(minimizedChatBoxes[i]);
 			}
 		}
 
-		newCookie = newCookie.slice(0, -1);
-		$.cookie('chatbox_minimized', newCookie);
+		Cookies.set('chatbox_minimized', newCookie);
 		$('#chatbox_'+user_id+' .chatboxcontent').css('display','block');
 		$('#chatbox_'+user_id+' .chatboxinput').css('display','block');
 		$("#chatbox_"+user_id+" .chatboxcontent").scrollTop($("#chatbox_"+user_id+" .chatboxcontent")[0].scrollHeight);
 		$('.togglelink').html('<em class="fa fa-toggle-down"></em>');
 	} else {
-		var newCookie = user_id;
-		if ($.cookie('chatbox_minimized')) {
-			newCookie += '|'+$.cookie('chatbox_minimized');
+		// hide box
+		if (Cookies.get('chatbox_minimized')) {
+			newCookie = Cookies.getJSON('chatbox_minimized');
+
+			for (i = 0; i < newCookie.length; i++) {
+				if (newCookie[i] == user_id) {
+					newCookie.splice(i, 1);
+				}
+			}
+			newCookie.push(user_id);
+			Cookies.set('chatbox_minimized', newCookie);
 		}
-		$.cookie('chatbox_minimized',newCookie);
+
 		$('#chatbox_'+user_id+' .chatboxcontent').css('display','none');
 		$('#chatbox_'+user_id+' .chatboxinput').css('display','none');
 		$('.togglelink').html('<em class="fa fa-toggle-up"></em>');
@@ -891,54 +918,3 @@ function checkChatBoxInputKey(event, chatboxtextarea, user_id)
 		$(chatboxtextarea).css('overflow','auto');
 	}
 }
-
-/**
- * Cookie plugin
- *
- * Copyright (c) 2006 Klaus Hartl (stilbuero.de)
- * Dual licensed under the MIT and GPL licenses:
- * http://www.opensource.org/licenses/mit-license.php
- * http://www.gnu.org/licenses/gpl.html
- *
- */
-jQuery.cookie = function(name, value, options) {
-	if (typeof value != 'undefined') { // name and value given, set cookie
-		options = options || {};
-		if (value === null) {
-			value = '';
-			options.expires = -1;
-		}
-		var expires = '';
-		if (options.expires && (typeof options.expires == 'number' || options.expires.toUTCString)) {
-			var date;
-			if (typeof options.expires == 'number') {
-				date = new Date();
-				date.setTime(date.getTime() + (options.expires * 24 * 60 * 60 * 1000));
-			} else {
-				date = options.expires;
-			}
-			expires = '; expires=' + date.toUTCString(); // use expires attribute, max-age is not supported by IE
-		}
-		// CAUTION: Needed to parenthesize options.path and options.domain
-		// in the following expressions, otherwise they evaluate to undefined
-		// in the packed version for some reason...
-		var path = options.path ? '; path=' + (options.path) : '';
-		var domain = options.domain ? '; domain=' + (options.domain) : '';
-		var secure = options.secure ? '; secure' : '';
-		document.cookie = [name, '=', encodeURIComponent(value), expires, path, domain, secure].join('');
-	} else { // only name given, get cookie
-		var cookieValue = null;
-		if (document.cookie && document.cookie != '') {
-			var cookies = document.cookie.split(';');
-			for (var i = 0; i < cookies.length; i++) {
-				var cookie = jQuery.trim(cookies[i]);
-				// Does this cookie string begin with the name we want?
-				if (cookie.substring(0, name.length + 1) == (name + '=')) {
-					cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-					break;
-				}
-			}
-		}
-		return cookieValue;
-	}
-};

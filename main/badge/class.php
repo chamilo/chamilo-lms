@@ -8,7 +8,6 @@
  *
  * @package chamilo.badge
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $skillId = isset($_GET['id']) ? intval($_GET['id']) : 0;

@@ -818,13 +818,18 @@ function toggleChatBoxGrowth(user_id)
 		// hide box
 		if (Cookies.get('chatbox_minimized')) {
 			newCookie = Cookies.getJSON('chatbox_minimized');
+            if ($.isArray(newCookie)) {
+                for (i = 0; i < newCookie.length; i++) {
+                    if (newCookie[i] == user_id) {
+                        newCookie.splice(i, 1);
+                    }
+                }
+                newCookie.push(user_id);
+            } else {
+                newCookie = new Array();
+                newCookie.push(user_id);
+            }
 
-			for (i = 0; i < newCookie.length; i++) {
-				if (newCookie[i] == user_id) {
-					newCookie.splice(i, 1);
-				}
-			}
-			newCookie.push(user_id);
 			Cookies.set('chatbox_minimized', newCookie);
 		}
 

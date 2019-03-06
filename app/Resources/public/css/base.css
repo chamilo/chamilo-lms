@@ -5548,10 +5548,10 @@ div#chat-remote-video video {
 #resource .parent .big-icon .sequence-id,
 #children .parent .big-icon .sequence-id {
     border: 0 none;
-    border-radius: 50%;
+    border-radius: 20px;
     background-color: #E74C3C;
-    width: 20%;
     color: #ffffff;
+    padding: 0 6px;
     position: absolute;
     right: 5px;
     top: 5px;

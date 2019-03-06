@@ -106,10 +106,6 @@
             var type = $('input[name="sequence_type"]').val();
             // By default "set requirement" is set to false
 
-            $('button[name="set_requirement"]').prop('disabled', true);
-            $('#requirements').prop('disabled', true);
-            $('button[name="save_resource"]').prop('disabled', true);
-
             sequenceId = $("#sequence_id option:selected" ).val();
 
             // Load parents
@@ -154,22 +150,31 @@
             });
 
             // Button use as reference
+            $('button[name="use_as_reference"]').click(function(e) {
+                e.preventDefault();
 
-            $('button[name="use_as_reference"]').click(function() {
-                $('button[name="set_requirement"]').prop('disabled', false);
-                $('#requirements').prop('disabled', false);
+                if (!sequenceId) {
+                    return;
+                }
+
+                $('#pnl-preview').show();
+                $('button[name="set_requirement"], #requirements, button[name="save_resource"]').prop('disabled', false);
                 $('#requirements').selectpicker('refresh');
-                $('button[name="save_resource"]').prop('disabled', false);
 
                 useAsReference(type, sequenceId);
-
-                return false;
             });
 
             // Button set requirement
+            $('button[name="set_requirement"]').click(function(e) {
+                e.preventDefault();
 
-            $('button[name="set_requirement"]').click(function() {
-                $("#requirements option:selected" ).each(function() {
+                var requirementsSelectedEl = $("#requirements option:selected");
+
+                if (0 === requirementsSelectedEl.length || !sequenceId) {
+                    return;
+                }
+
+                requirementsSelectedEl.each(function() {
                     var id = $(this).val();
                     if ($.inArray(id, parentList) == -1) {
                         $.ajax({
@@ -181,12 +186,15 @@
                         });
                     }
                 });
-                return false;
             });
 
             // Button save
             $('button[name="save_resource"]').click(function(e) {
                 e.preventDefault();
+
+                if (!sequenceId) {
+                    return;
+                }
 
                 var self = $(this).prop('disabled', true);
 
@@ -253,6 +261,15 @@
 
             $('select#sequence_id').on('change', function() {
                 sequenceId = $(this).val();
+
+                if (sequenceId > 0) {
+                    $('#pnl-configuration').show();
+                    $('#item, button[name="use_as_reference"]').prop('disabled', false);
+
+                    return;
+                }
+
+                $('#pnl-configuration').hide();
             });
 
             $('form[name="frm_select_delete"]').on('submit', function (e) {
@@ -262,6 +279,8 @@
                     e.preventDefault();
                 }
             });
+
+            $('select#sequence_id').trigger('change');
         });
     </script>
     <div class="panel panel-default">
@@ -278,7 +297,7 @@
         </div>
     </div>
 
-    <div class="panel panel-default">
+    <div id="pnl-configuration" class="panel panel-default" style="display: none;">
         <div class="panel-body">
             <div class="section-title-sequence">{{ 'SequenceConfiguration' | get_lang }}</div>
             <div class="row">
@@ -288,7 +307,7 @@
 
         </div>
     </div>
-    <div class="panel panel-default">
+    <div id="pnl-preview" class="panel panel-default" style="display: none;">
         <div class="panel-body">
             <div class="section-title-sequence">{{ 'SequencePreview' | get_lang }}</div>
             <div class="row">

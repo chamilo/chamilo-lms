@@ -539,12 +539,12 @@ input[type=checkbox], input[type=radio] {
 }
 
 [dir=rtl] .actions {
-    background: #efefef;
+    /*background: #efefef;
     border: 1px solid #ccc;
     margin-bottom: 11px;
     padding: 2px 2px 2px 14px;
     vertical-align: middle;
-    float: right;
+    float: right;*/
 }
 
 .actions .actions-pagination {

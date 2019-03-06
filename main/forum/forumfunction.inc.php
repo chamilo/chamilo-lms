@@ -5008,16 +5008,16 @@ function add_forum_attachment_file($file_comment, $last_id)
     $_course = api_get_course_info();
     $agenda_forum_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
 
-    if (!isset($_FILES['user_upload'])) {
+    if (empty($_FILES['user_upload'])) {
         return false;
     }
 
-    $fileCount = count($_FILES['user_upload']['name']);
     $filesData = [];
 
     if (!is_array($_FILES['user_upload']['name'])) {
         $filesData[] = $_FILES['user_upload'];
     } else {
+        $fileCount = count($_FILES['user_upload']['name']);
         $fileKeys = array_keys($_FILES['user_upload']);
         for ($i = 0; $i < $fileCount; $i++) {
             foreach ($fileKeys as $key) {
@@ -5107,12 +5107,12 @@ function edit_forum_attachment_file($file_comment, $post_id, $id_attach)
     $table_forum_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
     $course_id = api_get_course_int_id();
 
-    $fileCount = count($_FILES['user_upload']['name']);
     $filesData = [];
 
     if (!is_array($_FILES['user_upload']['name'])) {
         $filesData[] = $_FILES['user_upload'];
     } else {
+        $fileCount = count($_FILES['user_upload']['name']);
         $fileKeys = array_keys($_FILES['user_upload']);
 
         for ($i = 0; $i < $fileCount; $i++) {

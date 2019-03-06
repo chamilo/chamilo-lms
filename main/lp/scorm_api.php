@@ -338,10 +338,11 @@ function LMSInitialize() {
         logit_scorm('LMSInitialize() with params: '+log);
 
         if(olms.lms_item_type == 'sco'){
-            $("#tab-iframe").removeClass("tab-content");
+            $("#tab-iframe").removeClass();
             $("#tab-iframe").addClass("tab-content iframe_"+olms.lms_item_type);
         }
-    if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document') {
+
+        if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document') {
             xajax_start_timer();
         }
 
@@ -1757,11 +1758,15 @@ var loadForumThread = function(lpId, lpItemId) {
         var tabForumLink = $('.lp-view-tabs a[href="#lp-view-forum"]'),
             tabForum = tabForumLink.parent();
             $("#navTabs").show();
+            $("#tab-iframe").removeClass("tab-none-forum");
+            $("#btn-menu-float").removeClass("none-forum");
 
         if (forumThreadData.error) {
             tabForumLink.removeAttr('data-toggle');
             tabForum.addClass('disabled');
             $("#navTabs").hide();
+            $("#tab-iframe").addClass("tab-none-forum");
+            $("#btn-menu-float").addClass("none-forum");
             $('#lp-view-forum').html('');
 
             return;

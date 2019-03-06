@@ -335,7 +335,7 @@ function parse_csv_data($users, $fileName, $sendEmail = 0, $checkUniqueEmail = t
             }
         }
         $counter++;
-        if (isset($user['UserName'])) {
+        if (empty($user['UserName'])) {
             if ($allowRandom) {
                 $username = $generator->generateString(10, $chars);
                 $user['UserName'] = $username;

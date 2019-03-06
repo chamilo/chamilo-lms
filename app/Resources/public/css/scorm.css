@@ -509,14 +509,77 @@ See https://support.chamilo.org/issues/6976
     text-align: center;
 }
 
-.navegation-bar {
-    display: block;
-    padding: 0;
-    right: 5px;
-    top: 5px;
-    position: absolute;
-    z-index: 9999;
+/** MENU FLOAT **/
+
+.circular-menu {
+    height: auto;
+    left: 0;
+    top: 50px;
+    position: fixed;
+    z-index: 5;
 }
+
+.circle {
+    opacity: 0;
+    margin-left: 50px;
+    margin-top: 5px;
+    padding: 2px;
+    border-radius: 20px;
+    background-color: #ffffff;
+    border: 2px solid #8dcbf3;
+
+    -webkit-transform: translate(-100%);
+    -moz-transform:  translate(-100%);
+    -transform:  translate(-100%);
+
+    -webkit-transition: all 0.4s ease-out;
+    -moz-transition: all 0.4s ease-out;
+    transition: all 0.4s ease-out;
+}
+
+.open.circle {
+    opacity: 1;
+
+    -webkit-transform:  translate(0%);
+    -moz-transform: translate(0%);
+    -transform: translate(0%);
+}
+
+.circle a {
+    text-decoration: none;
+    color: #fff;
+    display: inline-block;
+    height: 35px;
+    width: 35px;
+    line-height: 35px;
+    text-align: center;
+    border-radius: 100%;
+}
+
+.circle a:hover {
+    color: #eef;
+}
+
+.menu-button {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    text-align: center;
+    border-radius: 50%;
+    display: block;
+    height: 40px;
+    width: 40px;
+    line-height: 17px;
+    padding: 10px;
+    background: #ffffff;
+    font-size: 18px;
+    border: 2px solid #8dcbf3;
+}
+
+.menu-button:hover {
+    background-color: #ffffff;
+}
+
 
 /* LP VIEW COLLAPSE */
 .scorm-collapse .panel:hover {
@@ -608,7 +671,12 @@ See https://support.chamilo.org/issues/6976
 .scorm_item_normal.scorm_highlight a {
     color: #FFFFFF;
 }
-
+.tab-none-forum{
+    top: 0 !important;
+}
+.circular-menu.none-forum{
+    top: 0 !important;
+}
 /* END LP VIEW COLLAPSE */
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) {

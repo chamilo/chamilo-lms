@@ -9069,7 +9069,7 @@ input.form-control[type="color"] {
         clear: left;
     }
 
-    #settings .settings-block:nth-child(2n+1) {
+    #settings .settings-block:nth-child(2n+2) {
         clear: left;
     }
 }

@@ -158,7 +158,7 @@
         <div class="lp-view-zone-container">
             <div class="lp-view-tabs">
                 <div id="navTabsbar" class="nav-tabs-bar">
-                    <ul id="navTabs" class="nav nav-tabs" role="tablist">
+                    <ul id="navTabs" class="nav nav-tabs tabs-right" role="tablist">
                         <li role="presentation" class="active">
                             <a href="#lp-view-content" title="{{ 'Lesson'|get_lang }}" aria-controls="lp-view-content" role="tab" data-toggle="tab">
                                 <span class="fa fa-book fa-2x fa-fw" aria-hidden="true"></span>

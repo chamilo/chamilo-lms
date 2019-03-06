@@ -370,6 +370,10 @@ if (api_is_platform_admin() || ($allowCareer && api_is_session_admin())) {
     }
     $items[] = ['url' => 'career_dashboard.php', 'label' => get_lang('CareersAndPromotions')];
     $items[] = ['url' => 'extra_fields.php?type=session', 'label' => get_lang('ManageSessionFields')];
+    $items[] = [
+        'url' => 'resource_sequence.php',
+        'label' => get_lang('ResourcesSequencing'),
+    ];
 }
 
 $blocks['sessions']['items'] = $items;
@@ -408,10 +412,6 @@ if (api_is_platform_admin()) {
         ];
     }
 
-    $items[] = [
-        'url' => 'resource_sequence.php',
-        'label' => get_lang('ResourcesSequencing'),
-    ];
     if (is_dir(api_get_path(SYS_TEST_PATH))) {
         $items[] = [
             'url' => 'email_tester.php',

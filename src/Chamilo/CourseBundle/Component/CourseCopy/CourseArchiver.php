@@ -344,7 +344,7 @@ class CourseArchiver
         class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\Work', 'Work');
 
         /** @var Course $course */
-        $course = UnserializeApi::unserialize('course', base64_decode($contents));
+        $course = \UnserializeApi::unserialize('course', base64_decode($contents));
 
         if (!in_array(
             get_class($course),

@@ -72,10 +72,7 @@ switch ($action) {
                 ];
 
                 $client = new GuzzleHttp\Client();
-                $url .= '?';
-                foreach ($data as $k => $v) {
-                    $url .= urlencode($k).'='.urlencode($v).'&';
-                }
+                $options['query'] = $data;
                 $res = $client->request('GET', $url, $options);
                 if ($res->getStatusCode() == '200') {
                     echo '1';

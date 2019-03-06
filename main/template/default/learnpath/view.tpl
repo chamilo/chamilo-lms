@@ -1,4 +1,4 @@
-<div id="learning_path_main" class="{{ is_allowed_to_edit ? 'lp-view-include-breadcrumb' }} {{ lp_mode == 'embedframe' ? 'lp-view-collapsed' }}">
+<div id="learning_path_main" class="{{ is_allowed_to_edit ? 'lp-view-include-breadcrumb' }} {{ lp_mode == 'embedframe' ? 'lp-view-collapsed' : '' }}">
     {% if show_left_column == 1 %}
     <div id="learning_path_left_zone" class="sidebar-scorm">
         <div class="lp-view-zone-container">
@@ -152,28 +152,6 @@
     {# end left zone #}
     {% endif %}
 
-    <div id="lp_navigation_elem" class="navegation-bar">
-        {% if show_left_column == 1 %}
-        <a href="#" title = "{{ 'Expand'|get_lang }}" id="lp-view-expand-toggle" class="icon-toolbar expand" role="button">
-            {% if lp_mode == 'embedframe' %}
-                <span class="fa fa-compress" aria-hidden="true"></span>
-                <span class="sr-only">{{ 'Expand'|get_lang }}</span>
-            {% else %}
-                <span class="fa fa-expand" aria-hidden="true"></span>
-                <span class="sr-only">{{ 'Expand'|get_lang }}</span>
-            {% endif %}
-        </a>
-        {% endif %}
-
-        <a id="home-course"
-            title = "{{ 'Home'|get_lang }}"
-            href="{{ button_home_url }}"
-            class="icon-toolbar" target="_self"
-           onclick="javascript: window.parent.API.save_asset();">
-            <em class="fa fa-home"></em> <span class="hidden-xs hidden-sm"></span>
-        </a>
-        {{ navigation_bar }}
-    </div>
 
     {# Right zone #}
     <div id="learning_path_right_zone" class="{{ show_left_column == 1 ? 'content-scorm' : 'no-right-col' }}">
@@ -195,6 +173,38 @@
                         </li>
                     </ul>
                 </div>
+
+                <nav id="btn-menu-float" class="circular-menu">
+
+                    <div class="circle">
+
+                        {% if show_left_column == 1 %}
+                            <a href="#" title = "{{ 'Expand'|get_lang }}" id="lp-view-expand-toggle" class="icon-toolbar expand" role="button">
+                                {% if lp_mode == 'embedframe' %}
+                                    <span class="fa fa-compress" aria-hidden="true"></span>
+                                    <span class="sr-only">{{ 'Expand'|get_lang }}</span>
+                                {% else %}
+                                    <span class="fa fa-expand" aria-hidden="true"></span>
+                                    <span class="sr-only">{{ 'Expand'|get_lang }}</span>
+                                {% endif %}
+                            </a>
+                        {% endif %}
+
+
+                        <a id="home-course"
+                           title = "{{ 'Home'|get_lang }}"
+                           href="{{ button_home_url }}"
+                           class="icon-toolbar" target="_self"
+                           onclick="javascript: window.parent.API.save_asset();">
+                            <em class="fa fa-home"></em> <span class="hidden-xs hidden-sm"></span>
+                        </a>
+
+                        {{ navigation_bar }}
+
+                    </div>
+                    <a class="menu-button fa fa-bars icons" href="#"></a>
+
+                </nav>
 
                 <div id="tab-iframe" class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="lp-view-content">
@@ -232,6 +242,12 @@
 </div>
 
 <script>
+
+    document.querySelector('.menu-button').onclick = function(e) {
+        e.preventDefault(); document.querySelector('.circle').classList.toggle('open');
+    }
+
+
     var LPViewUtils = {
         setHeightLPToc: function () {
             var scormInfoHeight = $('#scorm-info').outerHeight(true);
@@ -242,6 +258,9 @@
     };
 
     $(document).ready(function () {
+
+
+
         if (/iPhone|iPod|iPad/.test(navigator.userAgent)) {
             // Fix an issue where you cannot scroll below first screen in
             // learning paths on Apple devices
@@ -289,11 +308,7 @@
                     $(this).attr('title', '{{ "Collapse" | get_lang }}');
                 }
 
-                if($('#navTabsbar').is(':hidden')){
-                    $('#navTabsbar').show();
-                } else {
-                    $('#navTabsbar').hide();
-                }
+
             });
         {% endif %}
 

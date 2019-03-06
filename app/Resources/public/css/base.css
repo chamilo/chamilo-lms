@@ -7452,6 +7452,7 @@ a.sessionView {
     display: inline-block;
     text-overflow: ellipsis;
     white-space: nowrap;
+    line-height: 32px;
     overflow: hidden;
     width: 120px;
 }
@@ -7466,6 +7467,7 @@ a.sessionView {
 
 #listFriends .status {
     float: right;
+    line-height: 32px;
 }
 
 #listFriends .user-image {

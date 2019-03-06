@@ -8292,4 +8292,8 @@ $PersonalDataLimitationTitleHelp = "Quelles sont les limites à respecter lors d
 $PersonalDataDeletionTitleHelp = "Après combien de temps effaçons-nous les données? (événement, dernière utilisation, validité du contrat, etc.) Quels sont les processus d'élimination?";
 $PersonalDataDestructionTitleHelp = "Que se passe-t-il si les données sont détruites à la suite d'une défaillance technique? (suppression non autorisée ou perte de matériel, par exemple)";
 $PersonalDataProfilingTitleHelp = "Dans quel but traitons-nous les données personnelles? Modifions-nous l'accès des utilisateurs à certaines parties de notre application? (discrimination négative ou positive)";
+$SearchUsersByName = "Par nom";
+$GlobalChat = "Chat";
+$AskRevision = "Demander une révision";
+$FeatureDisabledBecauseOfUnmaintainedThirdPartyLibraries = "Cette fonctionnalité a été désactivée en raison de l'interruption du support de librairies tierces nécessaires à son fonctionnement.";
 ?>

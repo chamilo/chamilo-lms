@@ -75,7 +75,8 @@ switch ($action) {
         $chat->setUserStatus($status);
         break;
     case 'create_room':
-        $room = VideoChat::getChatRoomByUsers(api_get_user_id(), $toUserId);
+        echo Display::return_message(get_lang('FeatureDisabledBecauseOfUnmaintainedThirdPartyLibraries'), 'error');
+        /*$room = VideoChat::getChatRoomByUsers(api_get_user_id(), $toUserId);
 
         if ($room === false) {
             $createdRoom = VideoChat::createRoom(api_get_user_id(), $toUserId);
@@ -105,7 +106,7 @@ switch ($action) {
             false
         );
 
-        echo Display::tag('p', $videoChatLink, ['class' => 'lead']);
+        echo Display::tag('p', $videoChatLink, ['class' => 'lead']);*/
         break;
     case 'notify_not_support':
         $chat->send(

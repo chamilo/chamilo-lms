@@ -597,17 +597,21 @@ class SkillRelUser extends Model
      *
      * @param int $userId    The user id
      * @param int $skillId   The skill id
-     * @param int $courseId  The course id
+     * @param int $courseId  Optional. The course id
      * @param int $sessionId Optional. The session id
      *
      * @return array The relation data. Otherwise return false
      */
-    public function getByUserAndSkill($userId, $skillId, $courseId, $sessionId = 0)
+    public function getByUserAndSkill($userId, $skillId, $courseId = 0, $sessionId = 0)
     {
-        $sessionCondition = api_get_session_condition($sessionId, true);
+        $sql = "SELECT * FROM {$this->table} WHERE user_id = %d AND skill_id = %d ";
+
+        if ($courseId > 0) {
+            $sql .= "AND course_id = %d ".api_get_session_condition($sessionId, true);
+        }
 
         $sql = sprintf(
-            "SELECT * FROM {$this->table} WHERE user_id = %d AND skill_id = %d AND course_id = %d $sessionCondition",
+            $sql,
             $userId,
             $skillId,
             $courseId

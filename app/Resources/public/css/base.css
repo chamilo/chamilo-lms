@@ -539,12 +539,12 @@ input[type=checkbox], input[type=radio] {
 }
 
 [dir=rtl] .actions {
-    background: #efefef;
+    /*background: #efefef;
     border: 1px solid #ccc;
     margin-bottom: 11px;
     padding: 2px 2px 2px 14px;
     vertical-align: middle;
-    float: right;
+    float: right;*/
 }
 
 .actions .actions-pagination {
@@ -5548,10 +5548,10 @@ div#chat-remote-video video {
 #resource .parent .big-icon .sequence-id,
 #children .parent .big-icon .sequence-id {
     border: 0 none;
-    border-radius: 50%;
+    border-radius: 20px;
     background-color: #E74C3C;
-    width: 20%;
     color: #ffffff;
+    padding: 0 6px;
     position: absolute;
     right: 5px;
     top: 5px;
@@ -7452,6 +7452,7 @@ a.sessionView {
     display: inline-block;
     text-overflow: ellipsis;
     white-space: nowrap;
+    line-height: 32px;
     overflow: hidden;
     width: 120px;
 }
@@ -7466,6 +7467,7 @@ a.sessionView {
 
 #listFriends .status {
     float: right;
+    line-height: 32px;
 }
 
 #listFriends .user-image {
@@ -9067,7 +9069,7 @@ input.form-control[type="color"] {
         clear: left;
     }
 
-    #settings .settings-block:nth-child(2n+1) {
+    #settings .settings-block:nth-child(2n+2) {
         clear: left;
     }
 }

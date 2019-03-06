@@ -261,7 +261,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
             $ratio = '';
             $scalable = $param['scalable'];
         }
-        
+
         return '<script>
         $(document).ready(function() {
             var $inputFile = $(\'#'.$id.'\'),
@@ -424,8 +424,12 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                                fileInput.focus();
                                return false;
                             });  
-                            fileInput.addEventListener("change", function(event) {  
-                                the_return.innerHTML = this.value;  
+                            fileInput.addEventListener("change", function(event) {
+                                fileName = this.value;
+                                if (this.files[0]) {
+                                    fileName = this.files[0].name;
+                                }
+                                the_return.innerHTML = fileName;  
                             });
                             
                         </script>

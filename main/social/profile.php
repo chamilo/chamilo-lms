@@ -175,7 +175,6 @@ $sessionList = SessionManager::getSessionsFollowedByUser(
 $friend_html = SocialManager::listMyFriendsBlock($user_id, $link_shared);
 $wallSocialAddPost = SocialManager::getWallForm(api_get_self());
 
-// Social Post Wall
 $posts = SocialManager::getWallMessagesByUser($friendId);
 $socialAutoExtendLink = SocialManager::getAutoExtendLink($user_id, $countPost);
 
@@ -223,7 +222,6 @@ $social_right_content = '';
 $listInvitations = '';
 
 if ($show_full_profile) {
-    // MY GROUPS
     $results = $userGroup->get_groups_by_user($friendId, 0);
     $grid_my_groups = [];
     $max_numbers_of_group = 4;

@@ -28,6 +28,12 @@ $interbreadcrumb[] = [
 $my_folder_data = get_work_data_by_id($work['parent_id']);
 $courseInfo = api_get_course_info();
 
+$blockScoreEdition = api_get_configuration_value('block_student_publication_score_edition');
+
+if ($blockScoreEdition && !empty($work['qualification']) && !api_is_platform_admin()) {
+    api_not_allowed(true);
+}
+
 protectWork(api_get_course_info(), $work['parent_id']);
 
 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
@@ -130,6 +136,11 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
                     }
                 }
 
+                $blockScoreEdition = api_get_configuration_value('block_student_publication_score_edition');
+
+                if ($blockScoreEdition && !api_is_platform_admin()) {
+                    $url = api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$my_folder_data['id'];
+                }
                 header('Location: '.$url);
                 exit;
                 break;

@@ -13,19 +13,14 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
 
 $this_section = SECTION_TRACKING;
-
-api_block_anonymous_users();
-
 $export_csv = false;
-
 if (isset($_GET['export']) && $_GET['export'] == 'csv') {
     $export_csv = true;
 }
 
+$id_coach = api_get_user_id();
 if (isset($_GET['id_coach']) && $_GET['id_coach'] != '') {
-    $id_coach = intval($_GET['id_coach']);
-} else {
-    $id_coach = api_get_user_id();
+    $id_coach = (int) $_GET['id_coach'];
 }
 
 $allowToTrack = api_is_platform_admin(true, true) || api_is_teacher();
@@ -35,7 +30,7 @@ if (!$allowToTrack) {
 }
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
-$interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('MySpace')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('MySpace')];
 Display::display_header(get_lang('Sessions'));
 
 if (api_is_platform_admin(true, true)) {

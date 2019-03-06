@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+exit;
 use ChamiloSession as Session;
 
 /**

@@ -1098,7 +1098,8 @@ class UserManager
         $encrypt_method = '',
         $send_email = false,
         $reset_password = 0,
-        $address = null
+        $address = null,
+        $emailTemplate = []
     ) {
         $hook = HookUpdateUser::create();
         if (!empty($hook)) {
@@ -2996,8 +2997,8 @@ class UserManager
         // sessions, BT#14115) but executing a similar query twice and grouping
         // the results afterwards in PHP takes about 1/1000th of the time
         // (0.1s + 0.0s) for the same set of data, so we do it this way...
-        $dqlStudent = $dql." WHERE scu.user = :user AND url.accessUrlId = :url ";
-        $dqlCoach = $dql." WHERE s.generalCoach = :user AND url.accessUrlId = :url ";
+        $dqlStudent = $dql.' WHERE scu.user = :user AND url.accessUrlId = :url ';
+        $dqlCoach = $dql.' WHERE s.generalCoach = :user AND url.accessUrlId = :url ';
 
         // Default order
         $order = 'ORDER BY sc.name, s.name';
@@ -3027,7 +3028,7 @@ class UserManager
                     if ($orderSetting == 'asc') {
                         // Put null values at the end
                         // https://stackoverflow.com/questions/12652034/how-can-i-order-by-null-in-dql
-                        $order = " ORDER BY _isFieldNull asc, s.accessEndDate asc";
+                        $order = ' ORDER BY _isFieldNull asc, s.accessEndDate asc';
                     }
                     break;
             }
@@ -3148,10 +3149,7 @@ class UserManager
                         $ignore_visibility_for_admins
                     );
 
-                    $courseIsVisible = !in_array(
-                        $course['visibility'],
-                        $closedVisibilityList
-                    );
+                    $courseIsVisible = !in_array($course['visibility'], $closedVisibilityList);
                     if ($courseIsVisible === false || $sessionCourseVisibility == SESSION_INVISIBLE) {
                         $blockedCourseCount++;
                     }
@@ -3176,6 +3174,19 @@ class UserManager
                     }
             }
 
+            $collapsed = '';
+            $collapsedAction = '';
+            if ($collapsable) {
+                $collapsableData = Sessionmanager::getCollapsableData(
+                    $user_id,
+                    $session_id,
+                    $extraField,
+                    $collapsableLink
+                );
+                $collapsed = $collapsableData['collapsed'];
+                $collapsedAction = $collapsableData['collapsable_link'];
+            }
+
             $categories[$row['session_category_id']]['sessions'][] = [
                 'session_name' => $row['name'],
                 'session_id' => $row['id'],
@@ -3184,6 +3195,8 @@ class UserManager
                 'coach_access_start_date' => $row['coach_access_start_date'] ? $row['coach_access_start_date']->format('Y-m-d H:i:s') : null,
                 'coach_access_end_date' => $row['coach_access_end_date'] ? $row['coach_access_end_date']->format('Y-m-d H:i:s') : null,
                 'courses' => $courseList,
+                'collapsed' => $collapsed,
+                'collapsable_link' => $collapsedAction,
             ];
         }
 
@@ -4587,8 +4600,8 @@ class UserManager
     /**
      * Deletes a contact.
      *
-     * @param int user friend id
-     * @param bool true will delete ALL friends relationship from $friend_id
+     * @param bool   $friend_id
+     * @param bool   $real_removed          true will delete ALL friends relationship
      * @param string                                              $with_status_condition
      *
      * @author isaac flores paz <isaac.flores@dokeos.com>
@@ -5924,7 +5937,7 @@ SQL;
      */
     public static function loginAsUser($userId, $checkIfUserCanLoginAs = true)
     {
-        $userId = intval($userId);
+        $userId = (int) $userId;
         $userInfo = api_get_user_info($userId);
 
         // Check if the user is allowed to 'login_as'
@@ -5938,6 +5951,15 @@ SQL;
         }
 
         if ($userId) {
+            $logInfo = [
+                'tool' => 'logout',
+                'tool_id' => 0,
+                'tool_id_detail' => 0,
+                'action' => '',
+                'info' => 'Change user (login as)',
+            ];
+            Event::registerLog($logInfo);
+
             // Logout the current user
             self::loginDelete(api_get_user_id());
 
@@ -5964,6 +5986,15 @@ SQL;
             // will be useful later to know if the user is actually an admin or not (example reporting)
             Session::write('login_as', true);
 
+            $logInfo = [
+                'tool' => 'login',
+                'tool_id' => 0,
+                'tool_id_detail' => 0,
+                'action' => '',
+                'info' => $userId,
+            ];
+            Event::registerLog($logInfo);
+
             return true;
         }
 
@@ -5979,8 +6010,8 @@ SQL;
     public static function loginDelete($userId)
     {
         $online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-        $userId = intval($userId);
-        $query = "DELETE FROM ".$online_table." WHERE login_user_id = $userId";
+        $userId = (int) $userId;
+        $query = "DELETE FROM $online_table WHERE login_user_id = $userId";
         Database::query($query);
     }
 

@@ -716,7 +716,9 @@ class Template
 
         // Logo
         $logo = return_logo($this->theme);
+        $logoPdf = return_logo($this->theme, false);
         $this->assign('logo', $logo);
+        $this->assign('logo_pdf', $logoPdf);
         $this->assign('show_media_element', 1);
     }
 

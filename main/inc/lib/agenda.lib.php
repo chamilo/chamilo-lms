@@ -1331,6 +1331,8 @@ class Agenda
                 break;
         }
 
+        $this->cleanEvents();
+
         switch ($format) {
             case 'json':
                 if (empty($this->events)) {
@@ -4061,30 +4063,6 @@ class Agenda
         }
 
         return $items;
-    }
-
-    /**
-     * This function retrieves one personal agenda item returns it.
-     *
-     * @param int $id The agenda item ID
-     *
-     * @return array The results of the database query, or null if not found
-     */
-    public static function get_personal_agenda_item($id)
-    {
-        $table = Database::get_main_table(TABLE_PERSONAL_AGENDA);
-        $id = intval($id);
-        // make sure events of the personal agenda can only be seen by the user himself
-        $user = api_get_user_id();
-        $sql = " SELECT * FROM ".$table." WHERE id=".$id." AND user = ".$user;
-        $result = Database::query($sql);
-        if (Database::num_rows($result) == 1) {
-            $item = Database::fetch_array($result);
-        } else {
-            $item = null;
-        }
-
-        return $item;
     }
 
     /**

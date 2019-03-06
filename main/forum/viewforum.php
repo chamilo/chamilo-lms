@@ -502,15 +502,15 @@ if (is_array($threads)) {
 
             if ($_user['status'] == 5) {
                 if ($_user['has_certificates']) {
-                    $iconStatus = '<img src="'.$urlImg.'icons/svg/ofaj_graduated.svg" width="22px" height="22px">';
+                    $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_graduated.svg" width="22px" height="22px">';
                 } else {
-                    $iconStatus = '<img src="'.$urlImg.'icons/svg/ofaj_student.svg" width="22px" height="22px">';
+                    $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_student.svg" width="22px" height="22px">';
                 }
             } elseif ($_user['status'] == 1) {
                 if ($isAdmin) {
-                    $iconStatus = '<img src="'.$urlImg.'icons/svg/ofaj_admin.svg" width="22px" height="22px">';
+                    $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_admin.svg" width="22px" height="22px">';
                 } else {
-                    $iconStatus = '<img src="'.$urlImg.'icons/svg/ofaj_teacher.svg" width="22px" height="22px">';
+                    $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_teacher.svg" width="22px" height="22px">';
                 }
             }
 

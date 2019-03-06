@@ -16,17 +16,17 @@
                         {% if user.status == 5 %}
                             <div class="avatar-icon">
                                 {% if user.has_certificates %}
-                                    <img src="{{ _p.web_img }}icons/svg/ofaj_graduated.svg" width="32px" height="32px">
+                                    <img src="{{ _p.web_img }}icons/svg/identifier_graduated.svg" width="32px" height="32px">
                                 {% else %}
-                                    <img src="{{ _p.web_img }}icons/svg/ofaj_student.svg" width="32px" height="32px">
+                                    <img src="{{ _p.web_img }}icons/svg/identifier_student.svg" width="32px" height="32px">
                                 {% endif %}
                             </div>
                         {% elseif user.status == 1 %}
                             <div class="avatar-icon">
                                 {% if user.is_admin %}
-                                    <img src="{{ _p.web_img }}icons/svg/ofaj_admin.svg" width="32px" height="32px">
+                                    <img src="{{ _p.web_img }}icons/svg/identifier_admin.svg" width="32px" height="32px">
                                 {% else %}
-                                    <img src="{{ _p.web_img }}icons/svg/ofaj_teacher.svg" width="32px" height="32px">
+                                    <img src="{{ _p.web_img }}icons/svg/identifier_teacher.svg" width="32px" height="32px">
                                 {% endif %}
                             </div>
                         {% endif %}

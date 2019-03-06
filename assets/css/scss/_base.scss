@@ -1630,66 +1630,44 @@ hr {
 }
 /**** LP COLLAPSE CATEGORY ****/
 
-#lp-accordion .panel-default {
-  border-radius: 10px;
+.progress{
+  border: 1px solid #d5d5d5;
 }
-
-#lp-accordion .panel-default .panel-heading {
-  background: url(#{$svg-path}/arrow-down.svg) #FFF right center no-repeat;
-  border-radius: 10px;
+.lp-accordion{
+  .list-group{
+    .list-group-item{
+      padding: 0.75rem 0;
+      .title{
+        font-size: 14px;
+        font-weight: normal;
+      }
+      .extra {
+        padding-left: 26px;
+        font-size: 12px;
+        color: #868686;
+      }
+      .list-allowed{
+        margin-bottom: 5px;
+        font-size: 12px;
+        list-style: none;
+        padding: 0;
+      }
+    }
+  }
+  .lp-actions{
+    a{
+      img{
+        border: 1px solid #cdcdcd;
+        background-color: #ffffff;
+        padding: 2px;
+        border-radius: 4px;
+        &:hover{
+          background-color: #cdcdcd;
+        }
+      }
+    }
+  }
 }
-
-#lp-accordion .panel-default .panel-heading .tools-actions {
-  padding-right: 20px;
-}
-
-#lp-accordion .panel {
-  box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
-}
-
-#lp-accordion .panel .panel-title {
-  font-weight: bold;
-  width: 100%;
-  display: block;
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-
-#lp-accordion .panel .panel-title a {
-  width: 100%;
-  display: block;
-}
-
-#lp-accordion .lp-item {
-  border-bottom: 1px solid #dddddd;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  margin-bottom: 5px;
-  display: inline-block;
-  width: 100%;
-}
-
-#lp-accordion .lp-item:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
-}
-
-#lp-accordion .lp-item .fa {
-  color: #686f7a;
-  opacity: .5;
-  margin-right: 5px;
-}
-
-#lp-accordion .lp-item .progress {
-  border: none;
-  background: #D7E3E6;
-  margin-bottom: 10px;
-}
-
-#lp-accordion #not-category .lp-item {
-  margin-bottom: 0;
-}
-
 /***** PROMOTIONS *****/
 
 .promotions {

@@ -321,12 +321,11 @@ foreach ($categories as $item) {
                 //   student view automatically. Many teachers are confused
                 //   by that, so maybe a solution can be found to avoid it
                 $url_start_lp .= '&isStudentView=true';
-                $dsp_desc = '<em>'.$details['lp_maker'].'</em> '
+                $dsp_desc = '<span>'.$details['lp_maker'].'</span> '
                     .($lpVisibility
                         ? ''
                         : ' - ('.get_lang('LPNotVisibleToStudent').')');
-                $extra = '<div class ="lp_content_type_label">'.$dsp_desc
-                    .'</div>';
+                $extra = $dsp_desc;
             }
 
             $my_title = $name;
@@ -391,7 +390,7 @@ foreach ($categories as $item) {
             }
 
             if ($is_allowed_to_edit) {
-                $dsp_progress = '<center>'.$progress.'%</center>';
+                $dsp_progress = learnpath::get_progress_bar($progress, '%');
             } else {
                 $dsp_progress = '';
                 if (!api_is_invitee()) {

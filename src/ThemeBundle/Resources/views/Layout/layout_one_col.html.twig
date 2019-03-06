@@ -38,6 +38,10 @@
         <section class="container-fluid">
             <div class="card mb-4">
                 <div id="card-container" class="card-body">
+                    {% if introduction != '' %}
+                        {{ introduction }}
+                    {% endif %}
+
                     {% if actions != '' %}
                         {{ actions }}
                     {% endif %}

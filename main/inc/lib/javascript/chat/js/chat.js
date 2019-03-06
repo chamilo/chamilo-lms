@@ -168,7 +168,6 @@ function startChatSession()
 
 								if (item.s == 2) {
 									// info message
-									//$("#chatbox_"+my_user_id+" .chatboxcontent").append('<div class="'+messageLogMe+'"><span class="chatboxinfo">'+item.m+'</span></div>');
 								} else {
 									var chatBubble = createChatBubble(my_user_id, item);
 									$("#chatbox_"+my_user_id+" .chatboxcontent").append(chatBubble);
@@ -311,7 +310,6 @@ function chatHeartbeat()
 					chatHeartbeatTime = maxChatHeartbeat;
 				}
 			}
-			//timer = setTimeout('chatHeartbeat();',chatHeartbeatTime);
 		}
 	}); //ajax
 }
@@ -425,6 +423,7 @@ function createMyContactsWindow()
 		});
 
 		$("#chatbox_"+user_id+" .chatboxtextarea").focus();
+
 		return;
 	}
 
@@ -439,14 +438,9 @@ function createMyContactsWindow()
 		.addClass('chatboxhead')
 		.append('');
 
-	/*$('<div>')
-		.addClass('chatimage')
-		.append('image?')
-		.appendTo(chatboxHead);*/
-
 	$('<div>')
 		.addClass('chatboxtitle')
-		.append('My contacts')
+		.append(chatLang)
 		.appendTo(chatboxHead);
 
 	var chatboxoptions = $('<div>')
@@ -483,13 +477,6 @@ function createMyContactsWindow()
 	}, function (data) {
 		$('<div>').html(data).appendTo(chatboxContent);
 	});
-
-	/*$('<textarea>')
-		.addClass('chatboxtextarea')
-		.on('keydown', function(e) {
-			return checkChatBoxInputKey(e.originalEvent, this, user_id);
-		})
-		.appendTo(chatboxInput);*/
 
 	chatbox
 		.append(chatboxHead)
@@ -529,6 +516,7 @@ function createMyContactsWindow()
 			$("#chatbox_"+user_id+" .chatboxtextarea").focus();
 		}
 	});
+
 	$("#chatbox_"+user_id).show();
 
 	$("#chatbox_"+user_id+" .chatboxcontent").scroll(function () {
@@ -553,10 +541,11 @@ function createChatBox(user_id, chatboxtitle, minimizeChatBox, online, userImage
 		}
 
 		$("#chatbox_"+user_id+" .chatboxtextarea").focus();
+
 		return;
 	}
 
-	user_is_online = return_online_user(user_id, online, userImage);
+	var user_is_online = return_online_user(user_id, online, userImage);
 
 	var chatbox = $('<div>')
 		.attr({
@@ -767,6 +756,7 @@ function return_online_user(user_id, status, userImage)
 		new_div.html(offline_button);
 	}
 	div_wrapper.append(new_div);
+
 	return div_wrapper.html();
 }
 
@@ -878,6 +868,7 @@ function checkChatBoxInputKey(event, chatboxtextarea, user_id)
 					intervals[messageId] = setInterval(checkMessageStatus, chatHeartbeatTime, messageId);
 				} else {
 					$("#chatbox_" + user_id + " .chatboxcontent").append('<i class="fa fa-exclamation-triangle" aria-hidden="true"></i><br />');
+					append('<i class="fa fa-exclamation-triangle" aria-hidden="true"></i><br />');
 				}
 			});
 		}

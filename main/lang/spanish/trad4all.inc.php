@@ -7866,7 +7866,7 @@ $Icon = "Icono";
 $DesignWithBadgeStudio = "Diseñar con Badge Studio";
 $UseThisBadge = "Usar esta insignia";
 $Palettes = "Paletas";
-$DesignWithBadgeStudioComment = "Use the Badge Studio to create your own badge from within your platform";
+$DesignWithBadgeStudioComment = "Usa Badge Studio para crear tu propia insignia dentro de tu plataforma";
 $YouAlreadySentThisFile = "Ya envió este archivo u otro archivo con el mismo nombre. Por favor asegúrese de enviar cada archivo una sola vez.";
 $DocumentsDefaultVisibility = "Visibilidad por defecto de los documentos";
 $TicketAllowStudentAddTitle = "Permitir a usuarios añadir tickets";
@@ -8385,4 +8385,8 @@ $PersonalDataLimitationTitleHelp = "¿Cuáles son los límites que respetaremos 
 $PersonalDataDeletionTitleHelp = "¿Después de cuánto tiempo borramos los datos? (evento, último uso, vigencia del contrato, etc.) ¿Cuáles son los procesos de eliminación?";
 $PersonalDataDestructionTitleHelp = "¿Qué pasa si los datos son destruidos como consecuencia de una fallo técnico? (borrado no autorizado o pérdida de material, por ejemplo)";
 $PersonalDataProfilingTitleHelp = "¿Con qué propósito hacemos un tratamiento de datos personales? ¿Filtramos el acceso que los usuarios tienen a ciertas partes de nuestra aplicación? (discriminación negativa o positiva)";
+$SearchUsersByName = "Por nombre";
+$GlobalChat = "Chat";
+$AskRevision = "Solicitar revisión";
+$FeatureDisabledBecauseOfUnmaintainedThirdPartyLibraries = "Esta funcionalidad ha sido desactivada porque las librerías de terceros de las cuales depende ya no están mantenidas.";
 ?>

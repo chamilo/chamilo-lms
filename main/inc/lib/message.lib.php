@@ -982,7 +982,6 @@ class MessageManager
         $message_id = (int) $message_id;
 
         if (empty($user_id) || empty($message_id)) {
-
             return false;
         }
 
@@ -1012,7 +1011,6 @@ class MessageManager
         $type = (int) $type;
 
         if (empty($user_id) || empty($message_id) || empty($type)) {
-
             return false;
         }
 
@@ -1039,7 +1037,6 @@ class MessageManager
         $message_id = (int) $message_id;
 
         if (empty($user_id) || empty($message_id)) {
-
             return false;
         }
 

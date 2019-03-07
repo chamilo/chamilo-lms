@@ -4508,7 +4508,7 @@ function handle_mail_cue($content, $id)
                     posts.thread_id = $id AND
                     posts.post_notification = '1' AND
                     mailcue.thread_id = $id AND
-                    users.user_id = posts.poster_id
+                    users.user_id = posts.poster_id AND
                     users.active = 1
                 GROUP BY users.email";
         $result = Database::query($sql);

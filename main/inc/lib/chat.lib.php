@@ -91,7 +91,6 @@ class Chat extends Model
         $html = SocialManager::listMyFriendsBlock(
             api_get_user_id(),
             '',
-            true,
             true
         );
 
@@ -422,7 +421,6 @@ class Chat extends Model
     /**
      * Saves into session the fact that a chat window exists with the given user.
      *
-     * @param int The ID of the user with whom the current user is chatting
      * @param int $userId
      */
     public function saveWindow($userId)
@@ -480,8 +478,8 @@ class Chat extends Model
             unset($_SESSION['tsChatBoxes'][$to_user_id]);
 
             $params = [];
-            $params['from_user'] = intval($fromUserId);
-            $params['to_user'] = intval($to_user_id);
+            $params['from_user'] = (int) $fromUserId;
+            $params['to_user'] = (int) $to_user_id;
             $params['message'] = $message;
             $params['sent'] = api_get_utc_datetime();
 
@@ -502,11 +500,41 @@ class Chat extends Model
 
     /**
      * Close a specific chat box (user ID taken from $_POST['chatbox']).
+     *
+     * @param $userId
+     */
+    public function closeWindow($userId)
+    {
+        if (empty($userId)) {
+            return false;
+        }
+
+        $list = Session::read('openChatBoxes');
+        if (isset($list[$userId])) {
+            unset($list[$userId]);
+            Session::write('openChatBoxes', $list);
+        }
+
+        $list = Session::read('chatHistory');
+        if (isset($list[$userId])) {
+            unset($list[$userId]);
+            Session::write('chatHistory', $list);
+        }
+
+        return true;
+    }
+
+
+    /**
+     * Close chat - disconnects the user
      */
     public function close()
     {
-        unset($_SESSION['openChatBoxes'][$_POST['chatbox']]);
-        unset($_SESSION['chatHistory'][$_POST['chatbox']]);
+        Session::erase('tsChatBoxes');
+        Session::erase('openChatBoxes');
+        Session::erase('chatHistory');
+        Session::erase('window_list');
+
         echo '1';
         exit;
     }

@@ -2328,7 +2328,6 @@ class SocialManager extends UserManager
     {
         //SOCIALGOODFRIEND , USER_RELATION_TYPE_FRIEND, USER_RELATION_TYPE_PARENT
         $friends = self::get_friends($user_id, USER_RELATION_TYPE_FRIEND);
-        $number_of_images = 30;
         $numberFriends = count($friends);
         $friendHtml = '';
 
@@ -2336,9 +2335,12 @@ class SocialManager extends UserManager
             $friendHtml .= '<div class="list-group contact-list">';
             $j = 1;
 
-            usort($friends, function ($a, $b) {
-                return strcmp($b['user_info']['user_is_online_in_chat'], $a['user_info']['user_is_online_in_chat']);
-            });
+            usort(
+                $friends,
+                function ($a, $b) {
+                    return strcmp($b['user_info']['user_is_online_in_chat'], $a['user_info']['user_is_online_in_chat']);
+                }
+            );
 
             foreach ($friends as $friend) {
                 if ($j > $numberFriends) {
@@ -2356,19 +2358,19 @@ class SocialManager extends UserManager
                 }
 
                 $friendAvatarMedium = UserManager::getUserPicture(
-                        $friend['friend_user_id'],
-                        USER_IMAGE_SIZE_MEDIUM
-                    );
+                    $friend['friend_user_id'],
+                    USER_IMAGE_SIZE_MEDIUM
+                );
                 $friendAvatarSmall = UserManager::getUserPicture(
-                        $friend['friend_user_id'],
-                        USER_IMAGE_SIZE_SMALL
-                    );
+                    $friend['friend_user_id'],
+                    USER_IMAGE_SIZE_SMALL
+                );
                 $friend_avatar = '<img src="'.$friendAvatarMedium.'" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$name_user.'" class="user-image"/>';
 
                 $relation = self::get_relation_between_contacts(
-                        $friend['friend_user_id'],
-                        api_get_user_id()
-                    );
+                    $friend['friend_user_id'],
+                    api_get_user_id()
+                );
 
                 if ($showLinkToChat) {
                     $friendHtml .= '<a onclick="javascript:chatWith(\''.$friend['friend_user_id'].'\', \''.$name_user.'\', \''.$status.'\',\''.$friendAvatarSmall.'\')" href="javascript:void(0);" class="list-group-item">';
@@ -2400,39 +2402,41 @@ class SocialManager extends UserManager
     {
         $userId = isset($_GET['u']) ? '?u='.intval($_GET['u']) : '';
         $form = new FormValidator(
-                'social_wall_main',
-                'post',
+            'social_wall_main',
+            'post',
             $urlForm.$userId,
-                null,
-                ['enctype' => 'multipart/form-data'],
-                FormValidator::LAYOUT_HORIZONTAL
-            );
+            null,
+            ['enctype' => 'multipart/form-data'],
+            FormValidator::LAYOUT_HORIZONTAL
+        );
 
-        $socialWallPlaceholder = isset($_GET['u']) ? get_lang('SocialWallWriteNewPostToFriend') : get_lang('SocialWallWhatAreYouThinkingAbout');
+        $socialWallPlaceholder = isset($_GET['u']) ? get_lang('SocialWallWriteNewPostToFriend') : get_lang(
+            'SocialWallWhatAreYouThinkingAbout'
+        );
 
         $form->addTextarea(
-                'social_wall_new_msg_main',
-                null,
-                [
-                    'placeholder' => $socialWallPlaceholder,
-                    'cols-size' => [1, 10, 1],
-                    'aria-label' => $socialWallPlaceholder,
-                ]
-            );
+            'social_wall_new_msg_main',
+            null,
+            [
+                'placeholder' => $socialWallPlaceholder,
+                'cols-size' => [1, 10, 1],
+                'aria-label' => $socialWallPlaceholder,
+            ]
+        );
         $form->addHtml('<div class="form-group">');
         $form->addHtml('<div class="col-sm-4 col-md-offset-1">');
         $form->addFile('picture', get_lang('UploadFile'), ['custom' => true]);
         $form->addHtml('</div>');
         $form->addHtml('<div class="col-sm-6">');
         $form->addButtonSend(
-                get_lang('Post'),
-                'wall_post_button',
-                false,
+            get_lang('Post'),
+            'wall_post_button',
+            false,
             [
                 'cols-size' => [1, 10, 1],
                 'custom' => true,
             ]
-            );
+        );
         $form->addHtml('</div>');
         $form->addHtml('</div>');
 
@@ -2496,6 +2500,12 @@ class SocialManager extends UserManager
         ];
     }
 
+    /**
+     * @param string $message
+     * @param string $content
+     *
+     * @return string
+     */
     public static function wrapPost($message, $content)
     {
         return Display::panel($content, '',
@@ -3091,18 +3101,18 @@ class SocialManager extends UserManager
         $iconStatus = null;
         $authorId = (int) $authorInfo['user_id'];
         $receiverId = (int) $receiverInfo['user_id'];
-        $userStatus = $authorInfo['status'];
+        $userStatus = (int) $authorInfo['status'];
         $urlImg = api_get_path(WEB_IMG_PATH);
         $isAdmin = self::is_admin($authorId);
 
-        if ($userStatus == 5) {
+        if ($userStatus === 5) {
             if ($authorInfo['has_certificates']) {
                 $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_graduated.svg" width="22px" height="22px">';
             } else {
                 $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_student.svg" width="22px" height="22px">';
             }
         } else {
-            if ($userStatus == 1) {
+            if ($userStatus === 1) {
                 if ($isAdmin) {
                     $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_admin.svg" width="22px" height="22px">';
                 } else {

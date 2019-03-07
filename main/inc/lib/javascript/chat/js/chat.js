@@ -102,7 +102,12 @@ $(document).ready(function() {
 	// Close button
 	$('body').on('click', '.chatboxhead .closelink', function(){
 		var chat_id =  $(this).attr('rel');
-		closeChatBox(chat_id);
+		closeWindow(chat_id);
+	});
+
+	// Close main chat
+	$('body').on('click', '.chatboxhead .close_chat', function(){
+		closeChat();
 	});
 });
 
@@ -278,7 +283,6 @@ function chatHeartbeat()
 						);
 
 						if (item.s == 2) {
-							//$("#chatbox_"+my_user_id+" .chatboxcontent").append('<div class="chatboxmessage"><span class="chatboxinfo">'+item.m+'</span></div>');
 						} else {
 							newMessages[my_user_id] = {'status':true, 'username':item.username};
 							newMessagesWin[my_user_id]= {'status':true, 'username':item.username};
@@ -355,17 +359,38 @@ function createChatBubble(my_user_id, item)
 	return message;
 }
 
-function closeChatBox(user_id)
+/**
+ * Disconnect user from chat
+ */
+function closeChat()
+{
+	$.post(
+		ajax_url + "?action=close",
+		{
+		},
+		function (data) {
+			// Disconnects from chat
+			set_user_status(0);
+			// Clean cookies
+			Cookies.set('chatbox_minimized', new Array());
+			// Delete all windows
+			$('.chatbox ').remove();
+		}
+	);
+}
+
+function closeWindow(user_id)
 {
 	$('#chatbox_'+user_id).css('display','none');
 	restructureChatBoxes();
 	$.post(
-		ajax_url+"?action=closechat",
+		ajax_url + "?action=close_window",
 		{
 			chatbox: user_id
-		} ,
-		function(data) {
-		});
+		},
+		function (data) {
+		}
+	);
 }
 
 function restructureChatBoxes()
@@ -457,7 +482,7 @@ function createMyContactsWindow()
 		.appendTo(chatboxoptions);
 
 	$('<a>')
-		.addClass('btn btn-xs closelink')
+		.addClass('btn btn-xs close_chat')
 		.attr({
 			href: 'javascript:void(0)',
 			rel: user_id

@@ -15,10 +15,10 @@ if (api_get_setting('allow_global_chat') == 'false') {
 if (api_is_anonymous()) {
     exit;
 }
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
+$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 
 // Course Chat
-if ($action == 'preview') {
+if ($action === 'preview') {
     echo CourseChatUtils::prepareMessage($_REQUEST['message']);
     exit;
 }
@@ -31,11 +31,13 @@ $chat = new Chat();
 if (Chat::disableChat()) {
     exit;
 }
+
 if ($chat->isChatBlockedByExercises()) {
     // Disconnecting the user
     $chat->setUserStatus(0);
     exit;
 }
+
 switch ($action) {
     case 'get_message_status':
         $messageId = isset($_REQUEST['message_id']) ? $_REQUEST['message_id'] : 0;
@@ -47,7 +49,15 @@ switch ($action) {
     case 'chatheartbeat':
         $chat->heartbeat();
         break;
-    case 'closechat':
+    case 'close_window':
+        // Closes friend window
+        $chatId = isset($_POST['chatbox']) ? $_POST['chatbox'] : '';
+        $chat->closeWindow($chatId);
+        echo '1';
+        exit;
+        break;
+    case 'close':
+        // Disconnects user from all chat
         $chat->close();
         break;
     case 'create_room':

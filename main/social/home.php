@@ -104,57 +104,8 @@ $social_search_block = Display::panel(
     get_lang('SearchUsers')
 );
 
-/*
-$results = $userGroup->get_groups_by_user($user_id,
-    [
-        GROUP_USER_PERMISSION_ADMIN,
-        GROUP_USER_PERMISSION_READER,
-        GROUP_USER_PERMISSION_MODERATOR,
-        GROUP_USER_PERMISSION_HRM,
-    ]
-);
-
-$myGroups = [];
-if (!empty($results)) {
-    foreach ($results as $result) {
-        $id = $result['id'];
-        $result['description'] = Security::remove_XSS($result['description'], STUDENT, true);
-        $result['name'] = Security::remove_XSS($result['name'], STUDENT, true);
-
-        $group_url = "group_view.php?id=$id";
-
-        $link = Display::url(
-            api_ucwords(cut($result['name'], 40, true)),
-            $group_url
-        );
-
-        $result['name'] = $link;
-
-        $picture = $userGroup->get_picture_group(
-            $id,
-            $result['picture'],
-            null,
-            GROUP_IMAGE_SIZE_BIG
-        );
-
-        $result['picture'] = '<img class="img-responsive" src="'.$picture['file'].'" />';
-        $group_actions = '<div class="group-more"><a class="btn btn-default" href="groups.php?#tab_browse-2">'.
-            get_lang('SeeMore').'</a></div>';
-        $group_info = '<div class="description"><p>'.cut($result['description'], 120, true)."</p></div>";
-        $myGroups[] = [
-            'url' => Display::url(
-                $result['picture'],
-                $group_url
-            ),
-            'name' => $result['name'],
-            'description' => $group_info.$group_actions,
-        ];
-    }
-}
-
-*/
 $social_group_block = '';
-if (count($threadList) > 0) {
+if (!empty($threadList)) {
     $social_group_block .= '<div class="list-group">';
     foreach ($threadList as $group) {
         $social_group_block .= ' <li class="list-group-item">';
@@ -162,14 +113,92 @@ if (count($threadList) > 0) {
         $social_group_block .= '</li>';
     }
     $social_group_block .= '</div>';
-}
 
-// Top popular
-if (!empty($courseInfo)) {
-    $social_group_block .= Display::url(
-        get_lang('SeeAllCommunities'),
-        api_get_path(WEB_CODE_PATH).'forum/index.php?cidReq='.$courseInfo['code']
+    // Top popular
+    if (!empty($courseInfo)) {
+        $social_group_block .= Display::url(
+            get_lang('SeeAllCommunities'),
+            api_get_path(WEB_CODE_PATH).'forum/index.php?cidReq='.$courseInfo['code']
+        );
+    }
+
+    if (!empty($social_group_block)) {
+        $social_group_block = Display::panelCollapse(
+            get_lang('MyCommunities'),
+            $social_group_block,
+            'sm-groups',
+            null,
+            'grups-acordion',
+            'groups-collapse'
+        );
+    }
+} else {
+    // Load my groups
+    $results = $userGroup->get_groups_by_user($user_id,
+        [
+            GROUP_USER_PERMISSION_ADMIN,
+            GROUP_USER_PERMISSION_READER,
+            GROUP_USER_PERMISSION_MODERATOR,
+            GROUP_USER_PERMISSION_HRM,
+        ]
     );
+
+    $myGroups = [];
+    if (!empty($results)) {
+        foreach ($results as $result) {
+            $id = $result['id'];
+            $result['description'] = Security::remove_XSS($result['description'], STUDENT, true);
+            $result['name'] = Security::remove_XSS($result['name'], STUDENT, true);
+
+            $group_url = "group_view.php?id=$id";
+
+            $link = Display::url(
+                api_ucwords(cut($result['name'], 40, true)),
+                $group_url
+            );
+
+            $result['name'] = $link;
+
+            $picture = $userGroup->get_picture_group(
+                $id,
+                $result['picture'],
+                null,
+                GROUP_IMAGE_SIZE_BIG
+            );
+
+            $result['picture'] = '<img class="img-responsive" src="'.$picture['file'].'" />';
+            $group_actions = '<div class="group-more"><a class="btn btn-default" href="groups.php?#tab_browse-2">'.
+                get_lang('SeeMore').'</a></div>';
+            $group_info = '<div class="description"><p>'.cut($result['description'], 120, true)."</p></div>";
+            $myGroups[] = [
+                'url' => Display::url(
+                    $result['picture'],
+                    $group_url
+                ),
+                'name' => $result['name'],
+                'description' => $group_info.$group_actions,
+            ];
+        }
+
+        $social_group_block .= '<div class="list-group">';
+        foreach ($myGroups as $group) {
+            $social_group_block .= ' <li class="list-group-item">';
+            $social_group_block .= $group['name'];
+            $social_group_block .= '</li>';
+        }
+        $social_group_block .= '</div>';
+
+        if (!empty($social_group_block)) {
+            $social_group_block = Display::panelCollapse(
+                get_lang('MyGroups'),
+                $social_group_block,
+                'sm-groups',
+                null,
+                'grups-acordion',
+                'groups-collapse'
+            );
+        }
+    }
 }
 
 /*
@@ -204,17 +233,6 @@ $sessionList = SessionManager::getSessionsFollowedByUser($user_id, $user_info['s
 
 if (count($sessionList) > 0) {
     $social_session_block = $sessionList;
-}
-
-if (!empty($social_group_block)) {
-    $social_group_block = Display::panelCollapse(
-        get_lang('MyCommunities'),
-        $social_group_block,
-        'sm-groups',
-        null,
-        'grups-acordion',
-        'groups-collapse'
-    );
 }
 
 $wallSocialAddPost = SocialManager::getWallForm(api_get_self());

@@ -206,8 +206,7 @@ class ExtraFieldValue extends Model
                             continue;
                         }
 
-                        $tagsResult = $em
-                            ->getRepository('ChamiloCoreBundle:Tag')
+                        $tagsResult = $em->getRepository('ChamiloCoreBundle:Tag')
                             ->findBy([
                                 'tag' => $tagValue,
                                 'fieldId' => $extraFieldInfo['id'],

@@ -375,6 +375,10 @@ function closeChat()
 			Cookies.set('chatbox_minimized', new Array());
 			// Delete all windows
 			$('.chatbox ').remove();
+
+			// Reset variables
+            chatBoxes = new Array();
+            intervals = new Array();
 		}
 	);
 }
@@ -924,8 +928,8 @@ function checkChatBoxInputKey(event, chatboxtextarea, user_id)
 
 					intervals[messageId] = setInterval(checkMessageStatus, chatHeartbeatTime, messageId);
 				} else {
-					$("#chatbox_" + user_id + " .chatboxcontent").append('<i class="fa fa-exclamation-triangle" aria-hidden="true"></i><br />');
-					append('<i class="fa fa-exclamation-triangle" aria-hidden="true"></i><br />');
+					$("#chatbox_" + user_id + " .chatboxcontent").
+                    append('<i class="fa fa-exclamation-triangle" aria-hidden="true"></i><br />');
 				}
 			});
 		}

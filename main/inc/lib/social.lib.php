@@ -1951,16 +1951,21 @@ class SocialManager extends UserManager
     public static function getAttachmentPreviewList($message)
     {
         $messageId = $message['id'];
-        $files = MessageManager::getAttachmentList($messageId);
 
         $list = [];
-        if ($files) {
-            $downloadUrl = api_get_path(WEB_CODE_PATH).'social/download.php?message_id='.$messageId;
-            foreach ($files as $row_file) {
-                $url = $downloadUrl.'&attachment_id='.$row_file['id'];
-                $display = Display::fileHtmlGuesser($row_file['filename'], $url);
-                $list[] = $display;
+
+        if (empty($message['group_id'])) {
+            $files = MessageManager::getAttachmentList($messageId);
+            if ($files) {
+                $downloadUrl = api_get_path(WEB_CODE_PATH).'social/download.php?message_id='.$messageId;
+                foreach ($files as $row_file) {
+                    $url = $downloadUrl.'&attachment_id='.$row_file['id'];
+                    $display = Display::fileHtmlGuesser($row_file['filename'], $url);
+                    $list[] = $display;
+                }
             }
+        } else {
+            $list = MessageManager::getAttachmentLinkList($messageId);
         }
 
         return $list;

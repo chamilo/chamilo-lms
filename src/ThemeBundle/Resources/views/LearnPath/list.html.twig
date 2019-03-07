@@ -17,7 +17,6 @@
 <h4 class="learning-lessons">{{ 'Learning lessons'|trans }}</h4>
 
 <div class="accordion lp-accordion" id="lessons-learning">
-
     {% for lp_data in data %}
         {% set show_category = true %}
         {% if filtered_category and filtered_category != lp_data.category.id %}
@@ -171,12 +170,12 @@
             <!-- END LIST SCORM -->
 
             {% if categories|length > 1 and lp_data.category.id%}
-                {% set counter = counter + 1  %}
                 <!--- START CARD LESSON  --->
+                {% set counter = counter + 1 %}
                 <div class="card card-learnpath">
                     <h5 class="card-header" id="heading-{{ lp_data.category.id }}">
                         <a href="#" class="btn btn-link" data-toggle="collapse" data-target="#collapse-{{ lp_data.category.id }}" aria-expanded="true" aria-controls="collapse-{{ lp_data.category.id }}">
-                            {{ lp_data.category.getName() }}
+                            {{ lp_data.category.getName() }} - ({{ lp_data.lp_list|length }})
                         </a>
                         <div class="float-actions">
                             {{ toolbar_actions }}

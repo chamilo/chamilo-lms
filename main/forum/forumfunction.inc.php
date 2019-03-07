@@ -6807,7 +6807,7 @@ function reportAvailable()
 /**
  * @return array
  */
-function getReportRecepients()
+function getReportRecipients()
 {
     $extraFieldValue = new ExtraFieldValue('course');
     $value = $extraFieldValue->get_values_by_handler_and_field_variable(
@@ -6870,7 +6870,7 @@ function reportPost($postId, $forumInfo, $threadInfo)
     $currentUser = api_get_user_info();
 
     if (!empty($postData)) {
-        $users = getReportRecepients();
+        $users = getReportRecipients();
         if (!empty($users)) {
             $url = api_get_path(WEB_CODE_PATH).
                 'forum/viewthread.php?forum='.$threadInfo['forum_id'].'&thread='.$threadInfo['thread_id'].'&'.api_get_cidreq().'&post_id='.$postId.'#post_id_'.$postId;

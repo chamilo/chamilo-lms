@@ -67,7 +67,7 @@
                                 <div class="geolocalization">
                                     <a class="btn btn-maps" id="profile-tab" href="{{ _p.web }}main/social/map.php" >
                                         {{ "geolocalization.png"|img(32) }}
-                                        {{ 'ByGeolocalization' | get_lang }}
+                                        {{ 'SearchUserByGeolocalization' | get_lang }}
                                     </a>
                                 </div>
                                 {% endif %}

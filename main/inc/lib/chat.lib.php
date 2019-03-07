@@ -113,16 +113,7 @@ class Chat extends Model
 
         $chats = [];
         foreach ($chatHistory as $userId => $time) {
-            /*$items = $this->getPreviousMessages(
-                $userId,
-                api_get_user_id(),
-                0
-            );*/
-
-            $total = self::getCountMessagesExchangeBetweenUsers(
-                $userId,
-                $currentUserId
-            );
+            $total = self::getCountMessagesExchangeBetweenUsers($userId, $currentUserId);
 
             $start = $total - $latestMessages;
 
@@ -160,8 +151,8 @@ class Chat extends Model
     public function startSession()
     {
         // ofaj
-        $chat = new Chat();
-//        $chat->setUserStatus(1);
+        // $chat = new Chat();
+        // $chat->setUserStatus(1);
 
         $chatList = Session::read('openChatBoxes');
         $chats = self::getAllLatestChats($chatList);
@@ -217,14 +208,10 @@ class Chat extends Model
         $visibleMessages = 1,
         $previousMessageCount = 5
     ) {
-        $currentUserId = api_get_user_id();
         $toUserId = (int) $toUserId;
         $fromUserId = (int) $fromUserId;
 
-        $total = self::getCountMessagesExchangeBetweenUsers(
-            $fromUserId,
-            $toUserId
-        );
+        $total = $this->getCountMessagesExchangeBetweenUsers($fromUserId, $toUserId);
 
         $show = $total - $visibleMessages;
         $from = $show - $previousMessageCount;
@@ -255,8 +242,6 @@ class Chat extends Model
         if (empty($toUserId) || empty($fromUserId)) {
             return [];
         }
-
-        $currentUserId = api_get_user_id();
         $orderBy = Database::escape_string($orderBy);
 
         if (empty($orderBy)) {
@@ -267,7 +252,8 @@ class Chat extends Model
                 WHERE 
                     (
                         to_user = $toUserId AND 
-                        from_user = $fromUserId)
+                        from_user = $fromUserId
+                    )
                     OR
                     (
                         from_user = $toUserId AND 
@@ -526,7 +512,7 @@ class Chat extends Model
 
 
     /**
-     * Close chat - disconnects the user
+     * Close chat - disconnects the user.
      */
     public function close()
     {

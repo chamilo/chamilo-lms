@@ -14,11 +14,12 @@
     }
 </script>
 
-<div class="lp-accordion">
-    <h4 class="learning-lessons">{{ 'Learning lessons'|trans }}</h4>
+<h4 class="learning-lessons">{{ 'Learning lessons'|trans }}</h4>
+
+<div class="accordion lp-accordion" id="lessons-learning">
+
     {% for lp_data in data %}
         {% set show_category = true %}
-
         {% if filtered_category and filtered_category != lp_data.category.id %}
             {% set show_category = false %}
         {% endif %}
@@ -169,17 +170,22 @@
             {% endset %}
             <!-- END LIST SCORM -->
 
-            {% if categories|length > 1 %}
+            {% if categories|length > 1 and lp_data.category.id%}
+                {% set counter = counter + 1  %}
                 <!--- START CARD LESSON  --->
                 <div class="card card-learnpath">
-                    <h5 class="card-header">
-                        {{ lp_data.category.getName() }}
-                        <div class="float-right">
+                    <h5 class="card-header" id="heading-{{ lp_data.category.id }}">
+                        <a href="#" class="btn btn-link" data-toggle="collapse" data-target="#collapse-{{ lp_data.category.id }}" aria-expanded="true" aria-controls="collapse-{{ lp_data.category.id }}">
+                            {{ lp_data.category.getName() }}
+                        </a>
+                        <div class="float-actions">
                             {{ toolbar_actions }}
                         </div>
                     </h5>
-                    <div class="card-body">
-                        {{ list_learnpath }}
+                    <div id="collapse-{{ lp_data.category.id }}" class="collapse {{ (counter < 2) ? 'show' : '' }}" aria-labelledby="heading-{{ lp_data.category.id }}" data-parent="#lessons-learning">
+                        <div class="card-body">
+                            {{ list_learnpath }}
+                        </div>
                     </div>
                 </div>
                 <!--- END CARD LESSON -->

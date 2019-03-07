@@ -1646,6 +1646,21 @@ hr {
   .learning-lessons{
     margin-bottom: 2rem;
   }
+  .card{
+    margin-bottom: 0;
+  }
+  .btn-link{
+    display: inline-block;
+    width: 100%;
+    padding: 0;
+    text-align: left;
+    font-weight: 500;
+  }
+  .float-actions{
+    position: absolute;
+    right: 17px;
+    top: 12px;
+  }
   .list-group{
     .list-group-item{
       padding: 0.75rem 0;

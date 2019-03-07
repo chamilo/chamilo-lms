@@ -1598,7 +1598,7 @@ class SocialManager extends UserManager
      * @param int        $start     Limit for the number of parent messages we want to show
      * @param int        $length    Wall message query offset
      * @param bool       $getCount
-     *
+     * @param array      $threadList
      * @return array|int
      *
      * @author Yannick Warnier
@@ -2447,20 +2447,22 @@ class SocialManager extends UserManager
     }
 
     /**
-     * @param int $userId
-     * @param int $start
-     * @param int $length
+     * @param int   $userId
+     * @param int   $start
+     * @param int   $length
+     * @param array $threadList
      *
      * @return array
      */
     public static function getMyWallMessages($userId, $start = 0, $length = 10, $threadList = [])
     {
         $userGroup = new UserGroup();
-        $groups = $userGroup->get_groups_by_user($userId);
+        $groups = $userGroup->get_groups_by_user($userId, [GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_ADMIN]);
         $groupList = [];
         if (!empty($groups)) {
             $groupList = array_column($groups, 'id');
         }
+
 
         $friends = self::get_friends($userId, USER_RELATION_TYPE_FRIEND);
         $friendList = [];

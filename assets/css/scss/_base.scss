@@ -172,6 +172,9 @@ hr {
 // ---------------------------------------------------------
 
 .section-intro{
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
   .toolbar{
     text-align: right;
   }
@@ -1629,14 +1632,26 @@ hr {
   }
 }
 /**** LP COLLAPSE CATEGORY ****/
-
+.learnpath-item{
+  &:hover{
+    .lp-actions{
+      opacity: 1;
+    }
+  }
+}
 .progress{
   border: 1px solid #d5d5d5;
 }
 .lp-accordion{
+  .learning-lessons{
+    margin-bottom: 2rem;
+  }
   .list-group{
     .list-group-item{
       padding: 0.75rem 0;
+      &:first-child{
+        border: none;
+      }
       .title{
         font-size: 14px;
         font-weight: normal;
@@ -1652,9 +1667,15 @@ hr {
         list-style: none;
         padding: 0;
       }
+      .progress{
+        margin-bottom: 10px;
+      }
     }
   }
   .lp-actions{
+    opacity: 0;
+    margin-top: 10px;
+    transition: opacity 1s;
     a{
       img{
         border: 1px solid #cdcdcd;

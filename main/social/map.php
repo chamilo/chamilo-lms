@@ -28,6 +28,10 @@ $extraField = new ExtraField('user');
 $infoStage = $extraField->get_handler_field_info_by_field_variable($fields['0']);
 $infoVille = $extraField->get_handler_field_info_by_field_variable($fields['1']);
 
+if (empty($infoStage) || empty($infoVille)) {
+    api_not_allowed(true);
+}
+
 $tableUser = Database::get_main_table(TABLE_MAIN_USER);
 $sql = "SELECT u.id, firstname, lastname, ev.value ville, ev2.value stage
         FROM $tableUser u 

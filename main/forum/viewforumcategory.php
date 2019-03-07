@@ -54,8 +54,6 @@ $action = isset($_GET['action']) ? $_GET['action'] : '';
 $hideNotifications = api_get_course_setting('hide_forum_notifications');
 $hideNotifications = $hideNotifications == 1;
 
-// Including necessary files
-require 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
 // Are we in a lp ?

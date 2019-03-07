@@ -16,7 +16,6 @@ $this_section = SECTION_COURSES;
 // Notification for unauthorized people.
 api_protect_course_script(true);
 
-require_once 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
 $nameTools = get_lang('Forum');

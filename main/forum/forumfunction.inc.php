@@ -3,7 +3,6 @@
 
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
-use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
 
@@ -3109,7 +3108,6 @@ function store_thread(
  * This function displays the form that is used to add a post. This can be a new thread or a reply.
  *
  * @param array  $current_forum
- * @param array  $forum_setting
  * @param string $action        is the parameter that determines if we are
  *                              1. newthread: adding a new thread (both empty) => No I-frame
  *                              2. replythread: Replying to a thread ($action = replythread) => I-frame with the complete thread (if enabled)
@@ -3124,7 +3122,7 @@ function store_thread(
  *
  * @version february 2006, dokeos 1.8
  */
-function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $form_values = '')
+function show_add_post_form($current_forum, $action, $id = '', $form_values = '')
 {
     $_user = api_get_user_info();
     $action = isset($action) ? Security::remove_XSS($action) : '';
@@ -3194,7 +3192,7 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
 
     $iframe = null;
     $myThread = Security::remove_XSS($myThread);
-    if ($forum_setting['show_thread_iframe_on_reply'] && $action != 'newthread' && !empty($myThread)) {
+    if ($action != 'newthread' && !empty($myThread)) {
         $iframe = "<iframe style=\"border: 1px solid black\" src=\"iframe_thread.php?".api_get_cidreq()."&forum=".$forumId."&thread=".$myThread."#".$my_post."\" width=\"100%\"></iframe>";
     }
     if (!empty($iframe)) {
@@ -3255,7 +3253,7 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
         Skill::addSkillsToForm($form, ITEM_TYPE_FORUM_THREAD, 0);
     }
 
-    if ($forum_setting['allow_sticky'] && api_is_allowed_to_edit(null, true) && $action == 'newthread') {
+    if (api_is_allowed_to_edit(null, true) && $action == 'newthread') {
         $form->addElement('checkbox', 'thread_sticky', '', get_lang('StickyPost'));
     }
 
@@ -3906,7 +3904,6 @@ function store_reply($current_forum, $values, $courseId = 0, $userId = 0)
  * @version february 2006, dokeos 1.8
  */
 function show_edit_post_form(
-    $forum_setting,
     $current_post,
     $current_thread,
     $current_forum,
@@ -3982,18 +3979,14 @@ function show_edit_post_form(
     }
 
     $defaults['status']['status'] = isset($current_post['status']) && !empty($current_post['status']) ? $current_post['status'] : 2;
+    $form->addElement(
+        'checkbox',
+        'post_notification',
+        '',
+        get_lang('NotifyByEmail').' ('.$current_post['email'].')'
+    );
 
-    if ($forum_setting['allow_post_notification']) {
-        $form->addElement(
-            'checkbox',
-            'post_notification',
-            '',
-            get_lang('NotifyByEmail').' ('.$current_post['email'].')'
-        );
-    }
-
-    if ($forum_setting['allow_sticky'] &&
-        api_is_allowed_to_edit(null, true) &&
+    if (api_is_allowed_to_edit(null, true) &&
         empty($current_post['post_parent_id'])
     ) {
         // The sticky checkbox only appears when it is the first post of a thread.

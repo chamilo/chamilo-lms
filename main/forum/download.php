@@ -17,8 +17,6 @@ api_protect_course_script(true);
 
 $this_section = SECTION_COURSES;
 
-require_once 'forumconfig.inc.php';
-
 // IMPORTANT to avoid caching of documents
 header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
 header('Cache-Control: public');

@@ -27,8 +27,6 @@ $nameTools = get_lang('ForumCategories');
 $origin = api_get_origin();
 $_user = api_get_user_info();
 
-/* Including necessary files */
-require_once 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
 $forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : 0;
@@ -166,7 +164,6 @@ Event::registerLog($logInfo);
 
 $form = show_add_post_form(
     $current_forum,
-    $forum_setting,
     $my_action,
     $my_post,
     $my_elements

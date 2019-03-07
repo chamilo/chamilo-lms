@@ -316,26 +316,28 @@ class Chat extends Model
         $chatHistory = Session::read('chatHistory');
 
         // update current chats
-        foreach ($chatHistory as $fromUserId => $items) {
-            $user_info = api_get_user_info($fromUserId, true);
-            $count = $this->getCountMessagesExchangeBetweenUsers(
-                $fromUserId,
-                $currentUserId
-            );
-            $chatItems = self::getLatestChat($fromUserId, $currentUserId, 5);
-            $item = [
-                'window_user_info' => api_get_user_info($fromUserId),
-                'items' => $chatItems,
-                'total_messages' => $count,
-                'user_info' => [
-                    'user_name' => $user_info['complete_name'],
-                    'online' => $user_info['user_is_online'],
-                    'avatar' => $user_info['avatar_small'],
-                    'user_id' => $user_info['user_id'],
-                ],
-            ];
+        if (is_array($chatHistory)) {
+            foreach ($chatHistory as $fromUserId => $items) {
+                $user_info = api_get_user_info($fromUserId, true);
+                $count = $this->getCountMessagesExchangeBetweenUsers(
+                    $fromUserId,
+                    $currentUserId
+                );
+                $chatItems = self::getLatestChat($fromUserId, $currentUserId, 5);
+                $item = [
+                    'window_user_info' => api_get_user_info($fromUserId),
+                    'items' => $chatItems,
+                    'total_messages' => $count,
+                    'user_info' => [
+                        'user_name' => $user_info['complete_name'],
+                        'online' => $user_info['user_is_online'],
+                        'avatar' => $user_info['avatar_small'],
+                        'user_id' => $user_info['user_id'],
+                    ],
+                ];
 
-            $items[$fromUserId] = $item;
+                $items[$fromUserId] = $item;
+            }
         }
 
         foreach ($chatList as $fromUserId => $rows) {

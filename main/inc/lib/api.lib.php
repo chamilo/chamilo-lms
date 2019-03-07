@@ -277,6 +277,7 @@ define('LOG_MY_FOLDER_NEW_PATH', 'new_path');
 define('LOG_TERM_CONDITION_ACCEPTED', 'term_condition_accepted');
 define('LOG_USER_CONFIRMED_EMAIL', 'user_confirmed_email');
 define('LOG_USER_REMOVED_LEGAL_ACCEPT', 'user_removed_legal_accept');
+
 define('LOG_USER_DELETE_ACCOUNT_REQUEST', 'user_delete_account_request');
 
 define('LOG_QUESTION_CREATED', 'question_created');
@@ -582,6 +583,7 @@ define('MESSAGE_STATUS_WALL', '8');
 define('MESSAGE_STATUS_WALL_DELETE', '9');
 define('MESSAGE_STATUS_WALL_POST', '10');
 define('MESSAGE_STATUS_CONVERSATION', '11');
+define('MESSAGE_STATUS_FORUM', '12');
 
 // Images
 define('IMAGE_WALL_SMALL_SIZE', 200);
@@ -1585,6 +1587,12 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
 
     $result['profile_url'] = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id;
 
+    $hasCertificates = Certificate::getCertificateByUser($user_id);
+    $result['has_certificates'] = 0;
+    if (!empty($hasCertificates)) {
+        $result['has_certificates'] = 1;
+    }
+
     // Send message link
     $sendMessage = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='.$user_id;
     $result['complete_name_with_message_link'] = Display::url(
@@ -1688,11 +1696,11 @@ function api_get_user_info(
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
         $result_array = Database::fetch_array($result);
+        $result_array['user_is_online_in_chat'] = 0;
         if ($checkIfUserOnline) {
             $use_status_in_platform = user_is_online($user_id);
             $result_array['user_is_online'] = $use_status_in_platform;
             $user_online_in_chat = 0;
-
             if ($use_status_in_platform) {
                 $user_status = UserManager::get_extra_user_data_by_field(
                     $user_id,

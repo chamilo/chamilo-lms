@@ -10969,7 +10969,6 @@ class learnpath
     public function get_forums()
     {
         require_once '../forum/forumfunction.inc.php';
-        require_once '../forum/forumconfig.inc.php';
 
         $forumCategories = get_forum_categories();
         $forumsInNoCategory = get_forums_in_category(0);

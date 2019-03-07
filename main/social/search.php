@@ -100,6 +100,7 @@ if ($query != '' || ($query_vars['search_type'] == '1' && count($query_vars) > 2
                 'a' => 'get_user_popup',
                 'user_id' => $user_info['user_id'],
             ]);
+
             $sendMessage = Display::toolbarButton(
                 get_lang('SendMessage'),
                 $sendMessageUrl,
@@ -138,27 +139,29 @@ if ($query != '' || ($query_vars['search_type'] == '1' && count($query_vars) > 2
     $results .= '</div>';
 
     $visibility = [true, true, true, true, true];
-    $results .= Display::return_sortable_grid(
-        'users',
-        null,
-        null,
-        ['hide_navigation' => false, 'per_page' => $itemPerPage],
-        $query_vars,
-        false,
-        $visibility,
-        true,
-        [],
-        $totalUsers
-    );
 
-    $block_search .= Display::panelCollapse(
-        get_lang('Users'),
-        $results,
-        'search-friends',
-        null,
-        'friends-accordion',
-        'friends-collapse'
-    );
+    if (!empty($users)) {
+        $results .= Display::return_sortable_grid(
+            'users',
+            null,
+            null,
+            ['hide_navigation' => false, 'per_page' => $itemPerPage],
+            $query_vars,
+            false,
+            $visibility,
+            true,
+            [],
+            $totalUsers
+        );
+        $block_search .= Display::panelCollapse(
+            get_lang('Users'),
+            $results,
+            'search-friends',
+            null,
+            'friends-accordion',
+            'friends-collapse'
+        );
+    }
 
     $grid_groups = [];
     $block_groups = '<div id="whoisonline">';
@@ -210,27 +213,29 @@ if ($query != '' || ($query_vars['search_type'] == '1' && count($query_vars) > 2
     $block_groups .= '</div>';
 
     $visibility = [true, true, true, true, true];
-    $block_groups .= Display::return_sortable_grid(
-        'groups',
-        null,
-        $grid_groups,
-        ['hide_navigation' => false, 'per_page' => $itemPerPage],
-        $query_vars,
-        false,
-        $visibility,
-        true,
-        [],
-        $totalGroups
-    );
 
-    $block_search .= Display:: panelCollapse(
-        get_lang('Groups'),
-        $block_groups,
-        'search-groups',
-        null,
-        'groups-accordion',
-        'groups-collapse'
-    );
+    if (!empty($groups)) {
+        $block_groups .= Display::return_sortable_grid(
+            'groups',
+            null,
+            $grid_groups,
+            ['hide_navigation' => false, 'per_page' => $itemPerPage],
+            $query_vars,
+            false,
+            $visibility,
+            true,
+            [],
+            $totalGroups
+        );
+        $block_search .= Display:: panelCollapse(
+            get_lang('Groups'),
+            $block_groups,
+            'search-groups',
+            null,
+            'groups-accordion',
+            'groups-collapse'
+        );
+    }
 }
 
 $tpl = new Template($tool_name);

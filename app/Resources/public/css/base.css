@@ -2805,11 +2805,93 @@ form .formw .freeze {
     text-align: left;
     vertical-align: middle;
 }
+.email-box{
+    display: flex;
+}
+.email-overflow{
+    width:200px;
+    height:20px;
+    padding:0;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    overflow:hidden;
+    margin: auto;
+    text-align: center;
+}
 
 .show_element {
     display: block !important;
 }
 
+#social_wall_main_wall_post_button{
+    background: #f5f6f7 !important;
+    color: #7a7a7a !important;
+    border: 1px solid #bababa !important;
+}
+#social_wall_main_wall_post_button:hover{
+    border: 1px solid #162a83 !important;
+    background: #162a83 !important;
+    color: #ffffff !important;
+}
+.input-file-container {
+    position: relative;
+}
+.input-file-container:hover{
+    cursor: pointer;
+}
+.js .input-file-trigger {
+    display: inline-block;
+    padding: 6px 15px;
+    background: #f5f6f7;
+    color: #7a7a7a;
+    font-size: 12px;
+    transition: all .4s;
+    border-radius: 5px;
+    border: 1px solid #bababa;
+    cursor: pointer;
+    font-weight: normal;
+}
+.js .input-file {
+    position: absolute;
+    top: 0; left: 0;
+    opacity: 0;
+    padding: 5px 0;
+    width: 100%;
+}
+.js .input-file:hover{
+    cursor:pointer;
+}
+.js .input-file:hover + .input-file-trigger,
+.js .input-file:focus + .input-file-trigger,
+.js .input-file-trigger:hover,
+.js .input-file-trigger:focus {
+    background: #162a83;
+    color: #ffffff;
+    cursor: pointer;
+    border: 1px solid #162a83;
+}
+
+.file-return {
+    margin: 0;
+}
+.file-return:not(:empty) {
+    margin: 1em 0;
+}
+.js .file-return {
+    font-style: italic;
+    font-size: .9em;
+    font-weight: bold;
+    padding: 0;
+    margin: 0;
+}
+.js .file-return:not(:empty):before {
+    content: "Selected file: ";
+    font-style: normal;
+    font-weight: normal;
+}
+
+
+/*** ***/
 .tag {
     background-color: #D3E6EF;
     border-radius: 3px 3px 3px 3px;
@@ -9465,6 +9547,115 @@ ul.dropdown-menu.inner > li > a {
 #announcement_preview_result .label {
     display: inline-table;
 }
+
+.forum_revision {
+    background-color: #fff3cd;
+}
+
+.chatboxcontent .contact-list img {
+    max-width: 30px;
+}
+
+.chatboxcontent .status {
+    float:left;
+    margin-right: 10px;
+}
+
+.user-data .username {
+    display: inline-block;
+}
+
+.user-data img.pull-left {
+    margin-right: 0.5em;
+}
+
+#user_image_block img, #sn-avatar-one a.expand-image img {
+    width: 100px;
+}
+
+.sidebar-avatar .list-info {
+    font-size: 12px;
+    margin-top: 2rem;
+    border-top: 1px solid #cdcdcd;
+    padding-top: 2rem;
+}
+
+.sidebar-avatar .list-info dd {
+    margin-bottom: 10px;
+}
+
+.sidebar-avatar .area-avatar {
+    display: block;
+    width: 100%;
+    position: relative;
+}
+
+.sidebar-avatar .area-avatar .img-circle {
+    border: 3px solid #96bd0d;
+}
+
+.sidebar-avatar .area-avatar .avatar-icon {
+    position: absolute;
+    top: 55px;
+    right: 50px;
+    background: #FFF;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    border: 2px solid #cdcdcd;
+}
+
+.sidebar-avatar .area-avatar .avatar-lm h5,
+.sidebar-avatar .area-avatar .avatar-lc h5 {
+    font-weight: bold;
+}
+
+.sidebar-avatar .area-avatar .avatar-lm {
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-align: center;
+}
+
+.sidebar-avatar .area-avatar .avatar-lc {
+    position: absolute;
+    top: 0;
+    right: 0;
+    text-align: center;
+}
+
+.sidebar-avatar .item-name h5 {
+    font-weight: bold;
+}
+
+.sidebar-avatar .edit-admin {
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+}
+
+.search-friend {
+    padding-bottom: 20px;
+    border-top: 1px solid #cdcdcd;
+    padding-top: 10px;
+}
+
+.btn-maps {
+    border-radius: 5px;
+    border-color: #6d9b00;
+    background-color: #f8ffdd;
+}
+
+.btn-maps:hover {
+    background-color: #d4e9ff !important;
+    color: #0b3e6f;
+    border-color: #75a9e0;
+}
+
+.post-attachment {
+    text-align: center;
+}
+
 
 /* Fix grid with one row and multiples columns. Works for .col-sm-6.col-md-4.col-lg-3 */
 .row.clear-rows-6-4-3 {

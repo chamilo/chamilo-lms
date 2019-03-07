@@ -4097,7 +4097,6 @@ class Tracking
             return $row['count'];
         }
 
-        require_once api_get_path(SYS_CODE_PATH).'forum/forumconfig.inc.php';
         require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
         $courseInfo = api_get_course_info($courseCode);

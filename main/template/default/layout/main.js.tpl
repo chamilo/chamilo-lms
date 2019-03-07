@@ -4,6 +4,13 @@ var online_button = '<img src="' + _p.web_img + 'statusonline.png">';
 var offline_button = '<img src="' + _p.web_img + 'statusoffline.png">';
 var connect_lang = '{{ "ChatConnected"|get_lang | escape('js')}}';
 var disconnect_lang = '{{ "ChatDisconnected"|get_lang | escape('js')}}';
+var chatLang = '{{ "GlobalChat"|get_lang | escape('js')}}';
+
+{% if 'hide_chat_video'|api_get_configuration_value %}
+    var hide_chat_video = true;
+{% else %}
+    var hide_chat_video = false;
+{% endif %}
 
 $(function() {
     addMainEvent(window, 'unload', courseLogout ,false);
@@ -314,6 +321,10 @@ $(function() {
     });
 
     $("#notifications").load(_p.web_ajax + "online.ajax.php?a=get_users_online");
+
+    $(document).ready(function () {
+        $('video:not(.skip)').attr('preload', 'metadata');
+    })
 });
 
 $(window).resize(function() {

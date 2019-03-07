@@ -1137,7 +1137,6 @@ class ExtraField extends Model
                         }
                         break;
                     case self::FIELD_TYPE_TEXTAREA:
-
                         $form->addHtmlEditor(
                             'extra_'.$field_details['variable'],
                             $field_details['display_text'],
@@ -1698,6 +1697,13 @@ class ExtraField extends Model
                             $field_details['display_text'],
                             ['id' => 'extra_'.$field_details['variable']]
                         );
+
+                        $form->addHidden(
+                            'extra_'.$field_details['variable'].'_coordinates',
+                            '',
+                            ['id' => 'extra_'.$field_details['variable'].'_coordinates']
+                        );
+
                         $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
                         $form->applyFilter('extra_'.$field_details['variable'], 'trim');
                         if ($freezeElement) {

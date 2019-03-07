@@ -283,7 +283,6 @@ class GroupManager
 
             // create a forum if needed
             if ($forumState >= 0) {
-                require_once api_get_path(SYS_CODE_PATH).'forum/forumconfig.inc.php';
                 require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
                 $forum_categories = get_forum_categories();

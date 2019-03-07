@@ -3364,7 +3364,7 @@ class DocumentManager
                     (last.visibility = '1' $lp_visibility_condition) AND
                     last.visibility <> 2 AND
                     docs.c_id = {$course_info['real_id']} AND
-                    last.c_id = {$course_info['real_id']}                    
+                    last.c_id = {$course_info['real_id']}
                     $folderCondition
                     $levelCondition
                     $add_folder_filter

@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Fhaculty\Graph\Graph;
+
 /**
  *  @package chamilo.admin
  */
@@ -13,8 +15,6 @@ UPDATE extra_field_values SET created_at = NULL WHERE CAST(created_at AS CHAR(20
 UPDATE extra_field_values SET updated_at = NULL WHERE CAST(updated_at AS CHAR(20)) = '0000-00-00 00:00:00';
 ALTER TABLE extra_field_values modify column value longtext null;
 */
-
-use Fhaculty\Graph\Graph;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';

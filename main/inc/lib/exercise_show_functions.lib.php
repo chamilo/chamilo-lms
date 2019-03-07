@@ -344,6 +344,11 @@ class ExerciseShowFunctions
 
         $hide_expected_answer = false;
         switch ($resultsDisabled) {
+            case RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER:
+                if (!$answerCorrect) {
+                    $hide_expected_answer = true;
+                }
+                break;
             case RESULT_DISABLE_SHOW_SCORE_ONLY:
                 if ($feedback_type == 0) {
                     $hide_expected_answer = true;
@@ -372,7 +377,7 @@ class ExerciseShowFunctions
         if (!$hide_expected_answer) {
             echo Display::return_icon($iconAnswer, null, null, ICON_SIZE_TINY);
         } else {
-            echo "-";
+            echo '-';
         }
         echo '</td><td width="40%">';
         echo $answer;
@@ -380,10 +385,8 @@ class ExerciseShowFunctions
 
         if ($exercise->showExpectedChoice()) {
             $status = Display::label(get_lang('Incorrect'), 'danger');
-            if ($studentChoice) {
-                if ($answerCorrect) {
-                    $status = Display::label(get_lang('Correct'), 'success');
-                }
+            if ($studentChoice && $answerCorrect) {
+                $status = Display::label(get_lang('Correct'), 'success');
             }
             echo '<td width="20%">';
             echo $status;
@@ -400,8 +403,15 @@ class ExerciseShowFunctions
                 if ($hide_expected_answer) {
                     $color = '';
                 }
-                echo '<span style="font-weight: bold; color: '.$color.';">'.
-                    Security::remove_XSS($answerComment).'</span>';
+
+                $comment = '<span style="font-weight: bold; color: '.$color.';">'.
+                    Security::remove_XSS($answerComment).
+                    '</span>';
+
+                if (!$answerCorrect && $resultsDisabled == RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
+                    $comment = '';
+                }
+                echo $comment;
             }
             echo '</td>';
             if ($ans == 1) {

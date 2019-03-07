@@ -2,7 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 use Brumann\Polyfill\Unserialize;
-use Fhaculty\Graph\Edge\Base;
 
 /**
  * Class UnserializeApi.

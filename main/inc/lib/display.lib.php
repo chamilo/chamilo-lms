@@ -2763,6 +2763,41 @@ HTML;
     }
 
     /**
+     * @param string $fileName
+     * @param string $fileUrl
+     *
+     * @return string
+     */
+    public static function fileHtmlGuesser($fileName, $fileUrl)
+    {
+        $data = pathinfo($fileName);
+
+        //$content = self::url($data['basename'], $fileUrl);
+        $content = '';
+        switch ($data['extension']) {
+            case 'webm':
+            case 'mp4':
+            case 'ogg':
+                $content = '<video style="width: 400px; height:100%;" src="'.$fileUrl.'"></video>';
+                // Allows video to play when loading during an ajax call
+                $content .= "<script>jQuery('video:not(.skip), audio:not(.skip)').mediaelementplayer();</script>";
+                break;
+            case 'jpg':
+            case 'jpeg':
+            case 'gif':
+            case 'png':
+                $content = '<img width="400px" src="'.$fileUrl.'" />';
+                break;
+            default:
+                //$html = self::url($data['basename'], $fileUrl);
+                break;
+        }
+        //$html = self::url($content, $fileUrl, ['ajax']);
+
+        return $content;
+    }
+
+    /**
      * @param string $frameName
      *
      * @return string

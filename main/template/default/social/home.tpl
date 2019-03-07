@@ -63,7 +63,7 @@
                                     {{ search_friends_form }}
                                 </div>
 
-                                {% if 'allow_social_map'|api_get_configuration_value %}
+                                {% if 'allow_social_map_fields'|api_get_configuration_value %}
                                 <div class="geolocalization">
                                     <a class="btn btn-maps" id="profile-tab" href="{{ _p.web }}main/social/map.php" >
                                         {{ "geolocalization.png"|img(32) }}

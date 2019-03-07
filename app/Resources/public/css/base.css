@@ -9053,6 +9053,19 @@ input.form-control[type="color"] {
     opacity: 0.8 !important;
 }
 
+#chamilo-news {
+    bottom: 0;
+    padding-bottom: 15px;
+    position: -webkit-sticky;
+    position: -moz-sticky;
+    position: -ms-sticky;
+    position: -o-sticky;
+    position: sticky;
+}
+#chamilo-news .alert {
+    margin-bottom: 0;
+}
+
 /* Extra small devices (phones, less than 768px) */
 /* No media query since this is the default in Bootstrap */
 
@@ -9151,7 +9164,7 @@ input.form-control[type="color"] {
         clear: left;
     }
 
-    #settings .settings-block:nth-child(2n+2) {
+    #settings .settings-block:nth-child(2n+1) {
         clear: left;
     }
 }

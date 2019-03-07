@@ -1872,24 +1872,24 @@ class SocialManager extends UserManager
         $date = Display::dateToStringAgoAndLongDate($message['send_date']);
         $currentUserId = api_get_user_id();
         $userIdLoop = $message['user_sender_id'];
-        $receiverId = $message['user_receiver_id'];
-        $iconStatus = null;
-        $userStatus = $users[$userIdLoop]['status'];
+        $receiverId = $message['user_receiver_id'];       
         $urlImg = api_get_path(WEB_IMG_PATH);
-        $isAdmin = self::is_admin($users[$userIdLoop]['id']);
-
+        
         if (!isset($users[$userIdLoop])) {
             $users[$userIdLoop] = api_get_user_info($userIdLoop);
         }
 
-        if ($userStatus == 5) {
+        $iconStatus = '';
+        $userStatus = (int) $users[$userIdLoop]['status'];
+        $isAdmin = self::is_admin($users[$userIdLoop]['id']);
+        if ($userStatus === 5) {
             if ($users[$userIdLoop]['has_certificates']) {
                 $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_graduated.svg" width="22px" height="22px">';
             } else {
                 $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_student.svg" width="22px" height="22px">';
             }
         } else {
-            if ($userStatus == 1) {
+            if ($userStatus === 1) {
                 if ($isAdmin) {
                     $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_admin.svg" width="22px" height="22px">';
                 } else {
@@ -2496,6 +2496,12 @@ class SocialManager extends UserManager
         ];
     }
 
+    /**
+     * @param string $message
+     * @param string $content
+     *
+     * @return string
+     */
     public static function wrapPost($message, $content)
     {
         return Display::panel($content, '',
@@ -3091,18 +3097,18 @@ class SocialManager extends UserManager
         $iconStatus = null;
         $authorId = (int) $authorInfo['user_id'];
         $receiverId = (int) $receiverInfo['user_id'];
-        $userStatus = $authorInfo['status'];
+        $userStatus = (int) $authorInfo['status'];
         $urlImg = api_get_path(WEB_IMG_PATH);
         $isAdmin = self::is_admin($authorId);
 
-        if ($userStatus == 5) {
+        if ($userStatus === 5) {
             if ($authorInfo['has_certificates']) {
                 $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_graduated.svg" width="22px" height="22px">';
             } else {
                 $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_student.svg" width="22px" height="22px">';
             }
         } else {
-            if ($userStatus == 1) {
+            if ($userStatus === 1) {
                 if ($isAdmin) {
                     $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_admin.svg" width="22px" height="22px">';
                 } else {

@@ -978,7 +978,10 @@ class MessageManager
      */
     public static function update_message($user_id, $message_id)
     {
-        if ($message_id != strval(intval($message_id)) || $user_id != strval(intval($user_id))) {
+        $user_id = (int) $user_id;
+        $message_id = (int) $message_id;
+
+        if (empty($user_id) || empty($message_id)) {
             return false;
         }
 
@@ -987,8 +990,8 @@ class MessageManager
                     msg_status = '".MESSAGE_STATUS_NEW."'
                 WHERE
                     msg_status <> ".MESSAGE_STATUS_OUTBOX." AND
-                    user_receiver_id = ".intval($user_id)." AND
-                    id = '".intval($message_id)."'";
+                    user_receiver_id = ".$user_id." AND
+                    id = '".$message_id."'";
         Database::query($sql);
 
         return true;
@@ -997,22 +1000,26 @@ class MessageManager
     /**
      * @param int    $user_id
      * @param int    $message_id
-     * @param string $type
+     * @param int $type
      *
      * @return bool
      */
     public static function update_message_status($user_id, $message_id, $type)
     {
-        $type = intval($type);
-        if ($message_id != strval(intval($message_id)) || $user_id != strval(intval($user_id))) {
+        $user_id = (int) $user_id;
+        $message_id = (int) $message_id;
+        $type = (int) $type;
+
+        if (empty($user_id) || empty($message_id) || empty($type)) {
             return false;
         }
+
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $sql = "UPDATE $table_message SET
                     msg_status = '$type'
                 WHERE
-                    user_receiver_id = ".intval($user_id)." AND
-                    id = '".intval($message_id)."'";
+                    user_receiver_id = ".$user_id." AND
+                    id = '".$message_id."'";
         Database::query($sql);
     }
 
@@ -1026,12 +1033,16 @@ class MessageManager
      */
     public static function get_message_by_user($user_id, $message_id)
     {
-        if ($message_id != strval(intval($message_id)) || $user_id != strval(intval($user_id))) {
+        $user_id = (int) $user_id;
+        $message_id = (int) $message_id;
+
+        if (empty($user_id) || empty($message_id)) {
             return false;
         }
+
         $table = Database::get_main_table(TABLE_MESSAGE);
         $query = "SELECT * FROM $table
-                  WHERE user_receiver_id=".intval($user_id)." AND id='".intval($message_id)."'";
+                  WHERE user_receiver_id=".$user_id." AND id='".$message_id."'";
         $result = Database::query($query);
 
         return $row = Database::fetch_array($result);

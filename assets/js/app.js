@@ -77,6 +77,8 @@ $(function() {
         });
     }
 
+
+
     // Start modals
     // class='ajax' loads a page in a modal
     $('body').on('click', 'a.ajax', function(e) {

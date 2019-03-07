@@ -438,7 +438,7 @@ if ($action != 'add') {
                     $html .= '<div class="col-md-6">';
                     if (!empty($forum['last_post_id'])) {
                         $html .= Display::return_icon('post-item.png', null, null, ICON_SIZE_TINY).' ';
-                        $html .= api_convert_and_format_date($forum['last_post_date'])
+                        $html .= Display::dateToStringAgoAndLongDate($forum['last_post_date'])
                             .' '.get_lang('By').' '
                             .display_user_link($poster_id, $name);
                     }

@@ -530,7 +530,7 @@ if (is_array($threads)) {
                 $html .= '<p>'.Security::remove_XSS(cut($last_post_info['post_text'], 140)).'</p>';
             }
 
-            $html .= '<p>'.api_convert_and_format_date($row['insert_date']).'</p>';
+            $html .= '<p>'.Display::dateToStringAgoAndLongDate($row['insert_date']).'</p>';
 
             if ($current_forum['moderated'] == 1 && api_is_allowed_to_edit(false, true)) {
                 $waitingCount = getCountPostsWithStatus(
@@ -574,7 +574,7 @@ if (is_array($threads)) {
 
             if ($last_post_info) {
                 $poster_info = api_get_user_info($last_post_info['poster_id']);
-                $post_date = api_convert_and_format_date($last_post_info['post_date']);
+                $post_date = Display::dateToStringAgoAndLongDate($last_post_info['post_date']);
                 $last_post = $post_date.'<br>'.get_lang('By').' '.display_user_link(
                     $last_post_info['poster_id'],
                     $poster_info['complete_name'],

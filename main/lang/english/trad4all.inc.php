@@ -8363,4 +8363,8 @@ $SearchUsersByName = "By name";
 $GlobalChat = "Chat";
 $AskRevision = "Ask for a revision";
 $FeatureDisabledBecauseOfUnmaintainedThirdPartyLibraries = "This feature has been disabled because the libraries it depends on are no longer unmaintained.";
+$SearchUserByGeolocalization = "By geolocalization";
+$GiveRevision = "Give revision";
+$ForumPostReported = "Post reported";
+$UserXReportedPostXInForumX = "User %s has reported the message %s in the forum %s";
 ?>

@@ -8296,4 +8296,6 @@ $SearchUsersByName = "Par nom";
 $GlobalChat = "Chat";
 $AskRevision = "Demander une révision";
 $FeatureDisabledBecauseOfUnmaintainedThirdPartyLibraries = "Cette fonctionnalité a été désactivée en raison de l'interruption du support de librairies tierces nécessaires à son fonctionnement.";
+$ForumPostReported = "Signalement d'un message de forum";
+$UserXReportedPostXInForumX = "L'utilisateur %s a signalé le message %s du forum %s";
 ?>

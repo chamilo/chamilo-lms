@@ -5369,7 +5369,6 @@ function getAllAttachment($postId)
  *
  * @param int  $post_id
  * @param int  $id_attach
- * @param bool $display   to show or not result message
  *
  * @return int
  *
@@ -5377,7 +5376,7 @@ function getAllAttachment($postId)
  *
  * @version october 2014, chamilo 1.9.8
  */
-function delete_attachment($post_id, $id_attach = 0, $display = true)
+function delete_attachment($post_id, $id_attach = 0)
 {
     $_course = api_get_course_info();
 
@@ -5417,9 +5416,8 @@ function delete_attachment($post_id, $id_attach = 0, $display = true)
         api_get_user_id()
     );
 
-    if (!empty($result) && !empty($id_attach) && $display) {
-        $message = get_lang('AttachmentFileDeleteSuccess');
-        echo Display::return_message($message, 'confirmation');
+    if (!empty($result) && !empty($id_attach)) {
+        Display::addFlash(Display::return_message(get_lang('AttachmentFileDeleteSuccess'), 'confirmation'));
     }
 
     return $affectedRows;
@@ -6414,7 +6412,7 @@ function clearAttachedFiles($postId = null, $courseId = null)
                     $array[] = $attachId;
                     if ($postId !== 0) {
                         // Post 0 is temporal, delete them from file system and DB
-                        delete_attachment(0, $attachId, false);
+                        delete_attachment(0, $attachId);
                     }
                     // Delete attachment data from $_SESSION
                     unset($_SESSION['forum']['upload_file'][$courseId][$attachId]);

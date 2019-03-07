@@ -24,6 +24,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 // A notice for unauthorized people.
 api_protect_course_script(true);
+
 $nameTools = get_lang('ToolForum');
 Display::display_reduced_header();
 

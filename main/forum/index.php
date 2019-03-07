@@ -25,6 +25,9 @@ use ChamiloSession as Session;
  * @package chamilo.forum
  */
 require_once __DIR__.'/../inc/global.inc.php';
+
+api_protect_course_script(true);
+
 $current_course_tool = TOOL_FORUM;
 $htmlHeadXtra[] = '<script>
 $(document).ready(function() {
@@ -39,8 +42,6 @@ function hidecontent(content){
 // The section (tabs).
 $this_section = SECTION_COURSES;
 
-// Notification for unauthorized people.
-api_protect_course_script(true);
 
 $nameTools = get_lang('Forums');
 $_course = api_get_course_info();

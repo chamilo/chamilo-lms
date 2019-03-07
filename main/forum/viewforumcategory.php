@@ -28,6 +28,9 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 Session::erase('_gid');
 
+// Notification for unauthorized people.
+api_protect_course_script(true);
+
 $htmlHeadXtra[] = '<script>
 $(document).ready(function(){
     $(\'.hide-me\').slideUp()
@@ -40,9 +43,6 @@ function hidecontent(content){
 
 // The section (tabs)
 $this_section = SECTION_COURSES;
-
-// Notification for unauthorized people.
-api_protect_course_script(true);
 
 // Including additional library scripts.
 $nameTools = get_lang('ToolForum');

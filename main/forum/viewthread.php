@@ -27,6 +27,9 @@ $origin = api_get_origin();
 $_user = api_get_user_info();
 $my_search = null;
 
+$forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : 0;
+$threadId = isset($_GET['thread']) ? (int) $_GET['thread'] : 0;
+
 /* MAIN DISPLAY SECTION */
 /* Retrieving forum and forum category information */
 
@@ -34,7 +37,7 @@ $my_search = null;
 // Note pcool: I tried to use only one sql statement (and function) for this,
 // but the problem is that the visibility of the forum AND forum category are stored in the item_property table.
 // Note: This has to be validated that it is an existing thread
-$current_thread = get_thread_information($_GET['forum'], $_GET['thread']);
+$current_thread = get_thread_information($forumId, $threadId);
 // Note: This has to be validated that it is an existing forum.
 $current_forum = get_forum_information($current_thread['forum_id']);
 $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
@@ -75,15 +78,14 @@ $my_action = isset($_GET['action']) ? $_GET['action'] : '';
 
 $logInfo = [
     'tool' => TOOL_FORUM,
-    'tool_id' => $_GET['forum'],
-    'tool_id_detail' => $_GET['thread'],
+    'tool_id' => $forumId,
+    'tool_id_detail' => $threadId,
     'action' => !empty($my_action) ? $my_action : 'view-thread',
     'action_details' => isset($_GET['content']) ? $_GET['content'] : '',
-    'current_id' => isset($_GET['id']) ? $_GET['id'] : 0,
 ];
 Event::registerLog($logInfo);
 
-$currentUrl = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.intval($_GET['forum']).'&'.api_get_cidreq().'&thread='.intval($_GET['thread']);
+$currentUrl = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.$forumId.'&'.api_get_cidreq().'&thread='.intval($threadId);
 
 switch ($my_action) {
     case 'delete':
@@ -147,11 +149,11 @@ if (!empty($groupId)) {
         'name' => get_lang('GroupSpace').' '.$group_properties['name'],
     ];
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.intval($_GET['forum']).'&'.api_get_cidreq()."&search=".Security::remove_XSS(urlencode($my_search)),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$forumId.'&'.api_get_cidreq()."&search=".Security::remove_XSS(urlencode($my_search)),
         'name' => Security::remove_XSS($current_forum['forum_title']),
     ];
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.intval($_GET['forum']).'&'.api_get_cidreq().'&thread='.intval($_GET['thread']),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.$forumId.'&'.api_get_cidreq().'&thread='.intval($threadId),
         'name' => Security::remove_XSS($current_thread['thread_title']),
     ];
 } else {
@@ -172,9 +174,7 @@ if (!empty($groupId)) {
             'name' => Security::remove_XSS($current_forum_category['cat_title']),
         ];
         $interbreadcrumb[] = [
-            'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.intval(
-                    $_GET['forum']
-                )."&search=".Security::remove_XSS(urlencode($my_search)),
+            'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$forumId."&search=".Security::remove_XSS(urlencode($my_search)),
             'name' => Security::remove_XSS($current_forum['forum_title']),
         ];
         $interbreadcrumb[] = [
@@ -192,7 +192,7 @@ if (!api_is_allowed_to_edit(false, true) &&
     api_not_allowed(false);
 }
     // this increases the number of times the thread has been viewed
-    increase_thread_view($_GET['thread']);
+    increase_thread_view($threadId);
 
     if ($origin == 'learnpath') {
         $template = new Template('', false, false, true, true, false);
@@ -202,8 +202,7 @@ if (!api_is_allowed_to_edit(false, true) &&
 
 $actions = '<span style="float:right;">'.search_link().'</span>';
     if ($origin != 'learnpath') {
-        $actions .= '<a href="'.$forumUrl.'viewforum.php?forum='
-            .intval($_GET['forum']).'&'.api_get_cidreq().'">'
+        $actions .= '<a href="'.$forumUrl.'viewforum.php?forum='.$forumId.'&'.api_get_cidreq().'">'
             .Display::return_icon('back.png', get_lang('BackToForum'), '', ICON_SIZE_MEDIUM).'</a>';
     }
 
@@ -220,9 +219,8 @@ $actions = '<span style="float:right;">'.search_link().'</span>';
         if ($_user['user_id'] || ($current_forum['allow_anonymous'] == 1 && !$_user['user_id'])) {
             // reply link
             if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
-                $actions .= '<a href="'.$forumUrl.'reply.php?'.api_get_cidreq().'&forum='
-                    .intval($_GET['forum']).'&thread='
-                    .intval($_GET['thread']).'&action=replythread">'
+                $actions .= '<a href="'.$forumUrl.'reply.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='
+                    .intval($threadId).'&action=replythread">'
                     .Display::return_icon('reply_thread.png', get_lang('ReplyToThread'), '', ICON_SIZE_MEDIUM)
                     .'</a>';
             }
@@ -246,7 +244,7 @@ $actions = '<span style="float:right;">'.search_link().'</span>';
     // The different views of the thread.
     if ($origin != 'learnpath') {
         /*$actions .= '<a href="'.$forumUrl.'viewthread.php?'.api_get_cidreq().'&'.api_get_cidreq()
-                .'&forum='.intval($_GET['forum']).'&thread='.intval($_GET['thread'])
+                .'&forum='.intval($forumId).'&thread='.intval($threadId)
                 .'&search='.Security::remove_XSS(urlencode($my_search));
             echo $my_url.'&view=flat">'
                 .Display::return_icon('forum_listview.png', get_lang('FlatView'), null, ICON_SIZE_MEDIUM)
@@ -301,14 +299,12 @@ $groupId = api_get_group_id();
 
 // Decide whether we show the latest post first
 $sortDirection = isset($_GET['posts_order']) && $_GET['posts_order'] === 'desc' ? 'DESC' : ($origin != 'learnpath' ? 'ASC' : 'DESC');
-$posts = getPosts($current_forum, $_GET['thread'], $sortDirection, true);
+$posts = getPosts($current_forum, $threadId, $sortDirection, true);
 $count = 0;
-$clean_forum_id = intval($_GET['forum']);
-$clean_thread_id = intval($_GET['thread']);
 $group_id = api_get_group_id();
-$locked = api_resource_is_locked_by_gradebook($clean_thread_id, LINK_FORUM_THREAD);
+$locked = api_resource_is_locked_by_gradebook($threadId, LINK_FORUM_THREAD);
 $sessionId = api_get_session_id();
-$currentThread = get_thread_information($clean_forum_id, $_GET['thread']);
+$currentThread = get_thread_information($forumId, $threadId);
 $userId = api_get_user_id();
 $groupInfo = GroupManager::get_group_properties($group_id);
 $postCount = 1;
@@ -412,7 +408,7 @@ foreach ($posts as $post) {
     ) {
         if ($locked == false && postIsEditableByStudent($current_forum, $post)) {
             $editUrl = api_get_path(WEB_CODE_PATH).'forum/editpost.php?'.api_get_cidreq();
-            $editUrl .= "&forum=$clean_forum_id&thread=$clean_thread_id&post={$post['post_id']}&id_attach=$id_attach";
+            $editUrl .= "&forum=$forumId&thread=$threadId&post={$post['post_id']}&id_attach=$id_attach";
             $iconEdit .= "<a href='".$editUrl."'>"
                 .Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL)
                 ."</a>";
@@ -431,13 +427,15 @@ foreach ($posts as $post) {
         !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId)
     ) {
         if ($locked == false) {
-            $deleteUrl = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
-                    'forum' => $clean_forum_id,
-                    'thread' => $clean_thread_id,
+            $deleteUrl = api_get_self().'?'.api_get_cidreq().'&'.http_build_query(
+                [
+                    'forum' => $forumId,
+                    'thread' => $threadId,
                     'action' => 'delete',
                     'content' => 'post',
                     'id' => $post['post_id'],
-                ]);
+                ]
+            );
             $iconEdit .= Display::url(
                 Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL),
                 $deleteUrl,
@@ -462,14 +460,14 @@ foreach ($posts as $post) {
             $post['post_id'],
             $post['visible'],
             [
-                'forum' => $clean_forum_id,
-                'thread' => $clean_thread_id,
+                'forum' => $forumId,
+                'thread' => $threadId,
             ]
         );
 
         if ($count > 0) {
             $iconEdit .= "<a href=\"viewthread.php?".api_get_cidreq()
-                ."&forum=$clean_forum_id&thread=$clean_thread_id&action=move&post={$post['post_id']}"
+                ."&forum=$forumId&thread=$threadId&action=move&post={$post['post_id']}"
                 ."\">".Display::return_icon('move.png', get_lang('MovePost'), [], ICON_SIZE_SMALL)."</a>";
         }
     }
@@ -502,9 +500,8 @@ foreach ($posts as $post) {
             if (!empty($revision)) {
                 $languageId = api_get_language_id(strtolower($revision));
                 $languageInfo = api_get_language_info($languageId);
-
-                $languages = getLanguageListForFlag();
                 if ($languageInfo) {
+                    $languages = getLanguageListForFlag();
                     $flagRevision = '<span class="flag-icon flag-icon-'.$languages[$languageInfo['english_name']].'"></span> ';
                     $postIsARevision = true;
                 }
@@ -524,11 +521,11 @@ foreach ($posts as $post) {
             $current_qualify_thread = showQualify(
                 '1',
                 $posterId,
-                $_GET['thread']
+                $threadId
             );
             if ($locked == false) {
                 $iconEdit .= "<a href=\"forumqualify.php?".api_get_cidreq()
-                    ."&forum=$clean_forum_id&thread=$clean_thread_id&action=list&post={$post['post_id']}"
+                    ."&forum=$forumId&thread=$threadId&action=list&post={$post['post_id']}"
                     ."&user={$post['user_id']}&user_id={$post['user_id']}"
                     ."&idtextqualify=$current_qualify_thread"
                     ."\" >".Display::return_icon('quiz.png', get_lang('Qualify'))."</a>";
@@ -562,8 +559,8 @@ foreach ($posts as $post) {
                 $buttonReply = Display::toolbarButton(
                     get_lang('ReplyToMessage'),
                     'reply.php?'.api_get_cidreq().'&'.http_build_query([
-                        'forum' => $clean_forum_id,
-                        'thread' => $clean_thread_id,
+                        'forum' => $forumId,
+                        'thread' => $threadId,
                         'post' => $post['post_id'],
                         'action' => 'replymessage',
                     ]),
@@ -575,8 +572,8 @@ foreach ($posts as $post) {
                 $buttonQuote = Display::toolbarButton(
                     get_lang('QuoteMessage'),
                     'reply.php?'.api_get_cidreq().'&'.http_build_query([
-                        'forum' => $clean_forum_id,
-                        'thread' => $clean_thread_id,
+                        'forum' => $forumId,
+                        'thread' => $threadId,
                         'post' => $post['post_id'],
                         'action' => 'quote',
                     ]),
@@ -623,7 +620,7 @@ foreach ($posts as $post) {
     // note: this can be removed here because it will be displayed in the tree
     if (isset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$post['post_id']]) &&
         !empty($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$post['post_id']]) &&
-        !empty($whatsnew_post_info[$_GET['forum']][$post['thread_id']])
+        !empty($whatsnew_post_info[$forumId][$post['thread_id']])
     ) {
         $post_image = Display::return_icon('forumpostnew.gif');
     } else {
@@ -665,7 +662,7 @@ foreach ($posts as $post) {
                 (api_is_allowed_to_edit(false, true) && !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId))
             ) {
                 $post['post_attachments'] .= '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete_attach&id_attach='
-                    .$attachment['iid'].'&forum='.$clean_forum_id.'&thread='.$clean_thread_id
+                    .$attachment['iid'].'&forum='.$forumId.'&thread='.$threadId
                     .'" onclick="javascript:if(!confirm(\''
                     .addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;">'
                     .Display::return_icon('delete.png', get_lang('Delete')).'</a><br />';

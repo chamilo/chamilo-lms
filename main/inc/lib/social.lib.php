@@ -2211,7 +2211,7 @@ class SocialManager extends UserManager
             $socialAvatarBlock = '';
         }
 
-        $extraFieldBlock = SocialManager::getExtraFieldBlock($userId, true);
+        $extraFieldBlock = self::getExtraFieldBlock($userId, true);
 
         $template->assign('user', $userInfo);
         $template->assign('extra_info', $extraFieldBlock);

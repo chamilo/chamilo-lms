@@ -83,8 +83,8 @@
 
 
                     <ul class="list-user-data">
-                        <li class="item">
-                            {{ user.complete_name }}
+                        <li class="item item-name">
+                            <h5>{{ user.complete_name }} </h5>
                         </li>
                         {% if _u.is_admin == 1 %}
                             <li class="item">
@@ -155,6 +155,15 @@
                                 {% endif %}
                             {% endif %}
                         {% endif %}
+
+                    <dl class="list-info">
+                        {% for item in extra_info %}
+                            {% if item.variable != 'langue_cible' %}
+                            <dt>{{ item.label }}:</dt>
+                            <dd>{{ item.value }}</dd>
+                            {% endif %}
+                        {% endfor %}
+                    </dl>
 
                     {% if not profile_edition_link is empty %}
                     <li class="item">

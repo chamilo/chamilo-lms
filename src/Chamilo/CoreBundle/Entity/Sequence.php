@@ -63,6 +63,14 @@ class Sequence
     }
 
     /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
      * @param int $id
      *
      * @return Sequence

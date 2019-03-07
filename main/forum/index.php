@@ -42,7 +42,6 @@ function hidecontent(content){
 // The section (tabs).
 $this_section = SECTION_COURSES;
 
-
 $nameTools = get_lang('Forums');
 $_course = api_get_course_info();
 $sessionId = api_get_session_id();

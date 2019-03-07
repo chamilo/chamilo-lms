@@ -54,7 +54,7 @@ switch ($action) {
         if (api_get_configuration_value('hide_chat_video')) {
             api_not_allowed();
         }
-        $room = VideoChat::getChatRoomByUsers(api_get_user_id(), $toUserId);
+        /*$room = VideoChat::getChatRoomByUsers(api_get_user_id(), $toUserId);
 
         if ($room === false) {
             $createdRoom = VideoChat::createRoom(api_get_user_id(), $toUserId);
@@ -83,7 +83,7 @@ switch ($action) {
             false,
             false
         );
-        echo Display::tag('p', $videoChatLink, ['class' => 'lead']);
+        echo Display::tag('p', $videoChatLink, ['class' => 'lead']);*/
         break;
     case 'get_contacts':
         echo $chat->getContacts();

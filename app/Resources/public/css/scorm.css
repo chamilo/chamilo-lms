@@ -514,7 +514,7 @@ See https://support.chamilo.org/issues/6976
 .circular-menu {
     height: auto;
     left: 0;
-    top: 50px;
+    top: 0;
     position: fixed;
     z-index: 5;
 }
@@ -522,11 +522,11 @@ See https://support.chamilo.org/issues/6976
 .circle {
     opacity: 0;
     margin-left: 50px;
-    margin-top: 5px;
+    margin-top: 4px;
     padding: 2px;
     border-radius: 20px;
     background-color: #ffffff;
-    border: 2px solid #8dcbf3;
+    border: 1px solid #8dcbf3;
 
     -webkit-transform: translate(-100%);
     -moz-transform:  translate(-100%);
@@ -569,11 +569,11 @@ See https://support.chamilo.org/issues/6976
     display: block;
     height: 40px;
     width: 40px;
-    line-height: 17px;
+    line-height: 19px;
     padding: 10px;
     background: #ffffff;
-    font-size: 18px;
-    border: 2px solid #8dcbf3;
+    font-size: 16px;
+    border: 1px solid #8dcbf3;
 }
 
 .menu-button:hover {
@@ -677,6 +677,9 @@ See https://support.chamilo.org/issues/6976
 .circular-menu.none-forum{
     top: 0 !important;
 }
+.tabs-right li{
+    float: right;
+}
 /* END LP VIEW COLLAPSE */
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) {
@@ -768,9 +771,6 @@ See https://support.chamilo.org/issues/6976
         margin: 0;
     }
 
-    .nav-tabs-bar {
-        display: none;
-    }
 }
 
 /* Landscape phones and down */
@@ -812,21 +812,6 @@ See https://support.chamilo.org/issues/6976
     }
 
     #panel-scorm .image-avatar {
-        display: none;
-    }
-
-    .navegation-bar {
-        display: block;
-        padding: 2px;
-        position: fixed;
-        top: 0;
-        right: 0;
-        z-index: 999;
-        width: 100%;
-        text-align: center;
-    }
-
-    .nav-tabs-bar {
         display: none;
     }
 

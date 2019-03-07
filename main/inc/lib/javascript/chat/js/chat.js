@@ -593,7 +593,7 @@ function createChatBox(user_id, chatboxtitle, minimizeChatBox, online, userImage
 		if (!!Modernizr.prefixed('RTCPeerConnection', window) &&
 			(online === '1' || online === 1)
 		) {
-			$('<a>')
+			/*$('<a>')
 				.addClass('btn btn-xs ajax')
 				.attr({
 					href: ajax_url + '?action=create_room&to=' + user_id
@@ -606,7 +606,7 @@ function createChatBox(user_id, chatboxtitle, minimizeChatBox, online, userImage
 					$(this).data('title', $('.chatboxtitle').text());
 				})
 				.html('<em class="fa fa-video-camera"></em>')
-				.appendTo(chatboxoptions);
+				.appendTo(chatboxoptions);*/
 		}
 	}
 

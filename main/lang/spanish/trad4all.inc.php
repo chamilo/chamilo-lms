@@ -1550,7 +1550,7 @@ $SplitUsersUploadDirectory = "Dividir el directorio de transferencias (upload) d
 $SplitUsersUploadDirectoryComment = "En plataformas que tengan un uso muy elevado, donde están registrados muchos usuarios que envían sus fotos, el directorio al que se transfieren (main/upload/users/) puede contener demasiados archivos para que el sistema los maneje de forma eficiente (se ha documentado el caso de un servidor Debian con más de 36000 archivos). Si cambia esta opción añadirá un nivel de división a los directorios del directorio upload. Nueve directorios se utilizarán en el directorio base para contener los directorios de todos los usuarios. El cambio de esta opción no afectará a la estructura de los directorios en el disco, sino al comportamiento del código de Chamilo, por lo que si la activa tendrá que crear nuevos directorios y mover manualmente los directorios existentes en el servidor. Cuando cree y mueva estos directorios, tendrá que mover los directorios de los usuarios 1 a 9 a subdirectorios con el mismo nombre. Si no está seguro de usar esta opción, es mejor que no la active.";
 $CourseQuota = "Espacio del curso en el servidor";
 $EditNotice = "Editar aviso";
-$InsertLink = "Insertar enlace";
+$InsertLink = "Insertar página/enlace";
 $EditNews = "Editar noticias";
 $EditCategories = "Editar categorías";
 $EditHomePage = "Editar la página principal";
@@ -8385,4 +8385,8 @@ $PersonalDataLimitationTitleHelp = "¿Cuáles son los límites que respetaremos 
 $PersonalDataDeletionTitleHelp = "¿Después de cuánto tiempo borramos los datos? (evento, último uso, vigencia del contrato, etc.) ¿Cuáles son los procesos de eliminación?";
 $PersonalDataDestructionTitleHelp = "¿Qué pasa si los datos son destruidos como consecuencia de una fallo técnico? (borrado no autorizado o pérdida de material, por ejemplo)";
 $PersonalDataProfilingTitleHelp = "¿Con qué propósito hacemos un tratamiento de datos personales? ¿Filtramos el acceso que los usuarios tienen a ciertas partes de nuestra aplicación? (discriminación negativa o positiva)";
+$SearchUsersByName = "Por nombre";
+$GlobalChat = "Chat";
+$AskRevision = "Solicitar revisión";
+$FeatureDisabledBecauseOfUnmaintainedThirdPartyLibraries = "Esta funcionalidad ha sido desactivada porque las librerías de terceros de las cuales depende ya no están mantenidas.";
 ?>

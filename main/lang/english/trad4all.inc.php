@@ -1550,7 +1550,7 @@ $SplitUsersUploadDirectory = "Split users' upload directory";
 $SplitUsersUploadDirectoryComment = "On high-load portals, where a lot of users are registered and send their pictures, the upload directory (main/upload/users/) might contain too many files for the filesystem to handle (it has been reported with more than 36000 files on a Debian server). Changing this option will enable a one-level splitting of the directories in the upload directory. 9 directories will be used in the base directory and all subsequent users' directories will be stored into one of these 9 directories. The change of this option will not affect the directories structure on disk, but will affect the behaviour of the Chamilo code, so if you change this option, you have to create the new directories and move the existing directories by yourself on te server. Be aware that when creating and moving those directories, you will have to move the directories of users 1 to 9 into subdirectories of the same name. If you are not sure about this option, it is best not to activate it.";
 $CourseQuota = "Disk Space";
 $EditNotice = "Edit notice";
-$InsertLink = "Add a page (CMS)";
+$InsertLink = "Add a page/hyperlink";
 $EditNews = "Edit News";
 $EditCategories = "Edit courses categories";
 $EditHomePage = "Edit Homepage central area";
@@ -8361,4 +8361,6 @@ $PersonalDataDestructionTitleHelp = "What happens if the data is destroyed as a 
 $PersonalDataProfilingTitleHelp = "For what purpose do we process personal data? Do we use it to filter the access users have to certain parts of our application? (negative or positive discrimination)";
 $SearchUsersByName = "By name";
 $GlobalChat = "Chat";
+$AskRevision = "Ask for a revision";
+$FeatureDisabledBecauseOfUnmaintainedThirdPartyLibraries = "This feature has been disabled because the libraries it depends on are no longer unmaintained.";
 ?>

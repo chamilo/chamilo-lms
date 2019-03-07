@@ -1543,7 +1543,7 @@ $SplitUsersUploadDirectory = "Diviser le répertoire de téléchargement des uti
 $SplitUsersUploadDirectoryComment = "Sur les portails à usage très important, où un grand nombre d'utilisateurs sont enregistrés et envoient leur photo, le répertoire de téléchargement (main/upload/users/) pourrait contenir plus de fichiers que le système de fichiers du serveur ne peut gérer (ceci a été signalé pour plus de 36000 fichiers dans un même répertoire sur un serveur Debian). Activer cette option modifiera la gestion de ce répertoire pour utiliser une méthode de séparation en 9 sous-répertoires de \"1\" à \"9\" dans le répertoire de base. Les répertoires et fichiers des utilisateurs seront alors stockés dans un de ces 9 répertoires selon leur première lettre/chiffre. L'activation de cette option ne modifie en rien la structure des répertoires sur votre serveur, mais uniquement le comportement du code de Chamilo. C'est à vous de prendre en charge la répartition des répertoires existants dans les nouveaux répertoires, en prenant garde à ce que les répertoires des utilisateurs 1 à 9 soient mis dans un sous-répertoire du même nom. Si vous n'êtes pas certain de ce que vous faites, il est préférable de laisser cette option désactivée.";
 $CourseQuota = "Quotum du cours";
 $EditNotice = "Éditer l'avis";
-$InsertLink = "Insérer un lien";
+$InsertLink = "Insérer une page/un lien";
 $EditNews = "Éditer les nouvelles";
 $EditCategories = "Éditer les catégories";
 $EditHomePage = "Éditer la page d'accueil";
@@ -8292,4 +8292,8 @@ $PersonalDataLimitationTitleHelp = "Quelles sont les limites à respecter lors d
 $PersonalDataDeletionTitleHelp = "Après combien de temps effaçons-nous les données? (événement, dernière utilisation, validité du contrat, etc.) Quels sont les processus d'élimination?";
 $PersonalDataDestructionTitleHelp = "Que se passe-t-il si les données sont détruites à la suite d'une défaillance technique? (suppression non autorisée ou perte de matériel, par exemple)";
 $PersonalDataProfilingTitleHelp = "Dans quel but traitons-nous les données personnelles? Modifions-nous l'accès des utilisateurs à certaines parties de notre application? (discrimination négative ou positive)";
+$SearchUsersByName = "Par nom";
+$GlobalChat = "Chat";
+$AskRevision = "Demander une révision";
+$FeatureDisabledBecauseOfUnmaintainedThirdPartyLibraries = "Cette fonctionnalité a été désactivée en raison de l'interruption du support de librairies tierces nécessaires à son fonctionnement.";
 ?>

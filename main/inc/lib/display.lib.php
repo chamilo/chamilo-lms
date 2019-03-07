@@ -2815,6 +2815,12 @@ HTML;
             }
         }
 
+        $translateHtml = '';
+        $translate = api_get_configuration_value('translate_html');
+        if ($translate) {
+            $translateHtml = '{type:"script", id:"_fr4", src:"'.api_get_path(WEB_AJAX_PATH).'lang.ajax.php?a=translate_html&'.api_get_cidreq().'"},';
+        }
+
         $defaultFeatures = implode("','", $defaultFeatures);
         $frameReady = '
           $.frameReady(function() {
@@ -2841,6 +2847,7 @@ HTML;
                 {type: "stylesheet", id: "_media2", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/build/mediaelementplayer.min.css"},                
                 {type: "stylesheet", id: "_media4", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/plugins/vrview/vrview.css"},
                 {type: "script", id: "_media4", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/plugins/vrview/vrview.js"},
+                '.$translateHtml.'
             ]
           });';
 

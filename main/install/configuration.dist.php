@@ -1131,6 +1131,9 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Allow to show users in a map, users need to have a coordinates extra field BT#15176
 //$_configuration['allow_social_map_fields'] = ['fields' => ['terms_villedustage', 'terms_ville']];
 
+// Translate HTML based in the HTML "lang" attribute see BT#15166
+//$_configuration['translate_html'] = false;
+
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email

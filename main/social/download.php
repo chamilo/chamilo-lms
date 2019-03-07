@@ -52,7 +52,7 @@ if (empty($dir)) {
 
 $file = $dir.'message_attachments/'.$attachmentInfo['path'];
 $title = api_replace_dangerous_char($attachmentInfo['filename']);
-var_dump($file);
+
 if (Security::check_abs_path($file, $dir.'message_attachments/')) {
     // launch event
     Event::event_download($file);

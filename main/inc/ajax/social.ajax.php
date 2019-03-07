@@ -249,7 +249,7 @@ switch ($action) {
         $messageId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
         if (empty($messageId)) {
-            break;
+            exit;
         }
 
         $userId = api_get_user_id();

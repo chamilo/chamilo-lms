@@ -510,7 +510,6 @@ class Chat extends Model
         return true;
     }
 
-
     /**
      * Close chat - disconnects the user.
      */

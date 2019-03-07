@@ -8779,43 +8779,14 @@ function api_mail_html(
     $mail->Priority = 3;
     $mail->SMTPKeepAlive = true;
 
-    // Default values
-    $notification = new Notification();
-    $defaultEmail = $notification->getDefaultPlatformSenderEmail();
-    $defaultName = $notification->getDefaultPlatformSenderName();
+    api_set_noreply_and_from_address_to_mailer(
+        $mail,
+        ['name' => $senderName, 'email' => $senderEmail],
+        !empty($extra_headers['reply_to']) ? $extra_headers['reply_to'] : []
+    );
 
-    // If the parameter is set don't use the admin.
-    $senderName = !empty($senderName) ? $senderName : $defaultName;
-    $senderEmail = !empty($senderEmail) ? $senderEmail : $defaultEmail;
+    unset($extra_headers['reply_to']);
 
-    // Reply to first
-    if (isset($extra_headers['reply_to']) && empty($platform_email['SMTP_UNIQUE_REPLY_TO'])) {
-        if (PHPMailer::validateAddress($extra_headers['reply_to']['mail'])) {
-            $mail->AddReplyTo(
-                $extra_headers['reply_to']['mail'],
-                $extra_headers['reply_to']['name']
-            );
-            // Errors to sender
-            $mail->AddCustomHeader('Errors-To: '.$extra_headers['reply_to']['mail']);
-            $mail->Sender = $extra_headers['reply_to']['mail'];
-            unset($extra_headers['reply_to']);
-        }
-    } else {
-        $mail->AddCustomHeader('Errors-To: '.$defaultEmail);
-    }
-
-    //If the SMTP configuration only accept one sender
-    if (isset($platform_email['SMTP_UNIQUE_SENDER']) && $platform_email['SMTP_UNIQUE_SENDER']) {
-        $senderName = $platform_email['SMTP_FROM_NAME'];
-        $senderEmail = $platform_email['SMTP_FROM_EMAIL'];
-        $valid = PHPMailer::validateAddress($senderEmail);
-        if ($valid) {
-            //force-set Sender to $senderEmail, otherwise SetFrom only does it if it is currently empty
-            $mail->Sender = $senderEmail;
-        }
-    }
-
-    $mail->SetFrom($senderEmail, $senderName);
     $mail->Subject = $subject;
     $mail->AltBody = strip_tags(
         str_replace('<br />', "\n", api_html_entity_decode($message))
@@ -9393,4 +9364,63 @@ function api_unserialize_content($type, $serialized, $ignoreErrors = false)
         $serialized,
         ['allowed_classes' => $allowedClasses]
     );
+}
+
+/**
+ * Set the From and ReplyTo properties to PHPMailer instance.
+ *
+ * @param PHPMailer $mailer
+ * @param array     $sender
+ * @param array     $replyToAddress
+ *
+ * @throws phpmailerException
+ */
+function api_set_noreply_and_from_address_to_mailer(PHPMailer $mailer, array $sender, array $replyToAddress = [])
+{
+    $platformEmail = $GLOBALS['platform_email'];
+
+    $noReplyAddress = api_get_setting('noreply_email_address');
+    $avoidReplyToAddress = false;
+
+    if (!empty($noReplyAddress)) {
+        $avoidReplyToAddress = api_get_configuration_value('mail_no_reply_avoid_reply_to');
+    }
+
+    $notification = new Notification();
+
+    // If the parameter is set don't use the admin.
+    $senderName = !empty($sender['name']) ? $sender['name'] : $notification->getDefaultPlatformSenderName();
+    $senderEmail = !empty($sender['email']) ? $sender['email'] : $notification->getDefaultPlatformSenderEmail();
+
+    // Reply to first
+    if (!$avoidReplyToAddress) {
+        $mailer->AddCustomHeader('Errors-To: '.$notification->getDefaultPlatformSenderEmail());
+
+        if (
+            !empty($replyToAddress) &&
+            $platformEmail['SMTP_UNIQUE_REPLY_TO'] &&
+            PHPMailer::ValidateAddress($replyToAddress['mail'])
+        ) {
+            $mailer->AddReplyTo($replyToAddress['email'], $replyToAddress['name']);
+            // Errors to sender
+            $mailer->AddCustomHeader('Errors-To: '.$replyToAddress['mail']);
+            $mailer->Sender = $replyToAddress['mail'];
+        }
+    }
+
+    //If the SMTP configuration only accept one sender
+    if (
+        isset($platformEmail['SMTP_UNIQUE_SENDER']) &&
+        $platformEmail['SMTP_UNIQUE_SENDER']
+    ) {
+        $senderName = $platformEmail['SMTP_FROM_NAME'];
+        $senderEmail = $platformEmail['SMTP_FROM_EMAIL'];
+
+        if (PHPMailer::ValidateAddress($senderEmail)) {
+            //force-set Sender to $senderEmail, otherwise SetFrom only does it if it is currently empty
+            $mailer->Sender = $senderEmail;
+        }
+    }
+
+    $mailer->SetFrom($senderEmail, $senderName, !$avoidReplyToAddress);
 }

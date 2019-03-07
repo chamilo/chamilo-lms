@@ -188,6 +188,29 @@ if (!empty($threadList)) {
         }
         $social_group_block .= '</div>';
 
+        $form = new FormValidator(
+            'find_groups_form',
+            'get',
+            api_get_path(WEB_CODE_PATH).'social/search.php?search_type=2',
+            null,
+            null,
+            FormValidator::LAYOUT_BOX_NO_LABEL
+        );
+        $form->addHidden('search_type', 2);
+
+        $form->addText(
+            'q',
+            get_lang('Search'),
+            false,
+            [
+                'aria-label' => get_lang('Search'),
+                'custom' => true,
+                'placeholder' => get_lang('Search'),
+            ]
+        );
+
+        $social_group_block .= $form->returnForm();
+
         if (!empty($social_group_block)) {
             $social_group_block = Display::panelCollapse(
                 get_lang('MyGroups'),
@@ -198,30 +221,11 @@ if (!empty($threadList)) {
                 'groups-collapse'
             );
         }
+
+
     }
 }
 
-/*
-$form = new FormValidator(
-    'find_groups_form',
-    'get',
-    api_get_path(WEB_CODE_PATH).'social/search.php?search_type=2',
-        null,
-    null,
-    'inline'
-    );
-$form->addHidden('search_type', 2);
-$form->addText(
-    'q',
-    get_lang('Search'),
-    false,
-    [
-        'aria-label' => get_lang('SearchGroups'),
-    ]
-);
-$form->addButtonSearch(get_lang('Search'));
-
-$social_group_block .= $form->returnForm();*/
 
 // My friends
 $friend_html = SocialManager::listMyFriendsBlock($user_id, '');
@@ -244,7 +248,7 @@ $formSearch = new FormValidator(
     api_get_path(WEB_CODE_PATH).'social/search.php?search_type=1',
     null,
     null,
-    'box-no-label'
+    FormValidator::LAYOUT_BOX_NO_LABEL
 );
 $formSearch->addHidden('search_type', 1);
 $formSearch->addText(

@@ -2700,6 +2700,7 @@ class SocialManager extends UserManager
                             $objEfOption = new ExtraFieldOption('user');
                             $optionInfo = $objEfOption->get_field_option_by_field_and_option($extraFieldInfo['id'], $extraFieldInfo['value']);
                             break;
+                        case ExtraField::FIELD_TYPE_GEOLOCALIZATION_COORDINATES:
                         case ExtraField::FIELD_TYPE_GEOLOCALIZATION:
                             $data = explode('::', $data);
                             $data = $data[0];
@@ -2709,7 +2710,6 @@ class SocialManager extends UserManager
                                 'label' => ucfirst($extraFieldInfo['display_text']),
                                 'value' => $data,
                             ];
-
                             break;
                         case ExtraField::FIELD_TYPE_DOUBLE_SELECT:
                             $id_options = explode('::', $data);

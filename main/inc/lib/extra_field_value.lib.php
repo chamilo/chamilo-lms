@@ -143,6 +143,7 @@ class ExtraFieldValue extends Model
             $dirPermissions = api_get_permissions_for_new_directories();
 
             switch ($extraFieldInfo['field_type']) {
+                case ExtraField::FIELD_TYPE_GEOLOCALIZATION_COORDINATES:
                 case ExtraField::FIELD_TYPE_GEOLOCALIZATION:
                     if (!empty($value)) {
                         if (isset($params['extra_'.$extraFieldInfo['variable'].'_coordinates'])) {

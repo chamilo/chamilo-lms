@@ -1231,10 +1231,13 @@ class ExtraField extends Model
                         }
                         break;
                     case self::FIELD_TYPE_SELECT:
-                        self::addSelectElement($form, $field_details, $defaultValueId, $freezeElement);
+                        $this->addSelectElement($form, $field_details, $defaultValueId, $freezeElement);
                         break;
                     case self::FIELD_TYPE_SELECT_MULTIPLE:
                         $options = [];
+                        if (empty($defaultValueId)) {
+                            $options[''] = get_lang('SelectAnOption');
+                        }
                         foreach ($field_details['options'] as $optionDetails) {
                             $options[$optionDetails['option_value']] = $optionDetails['display_text'];
                         }
@@ -3020,31 +3023,6 @@ JAVASCRIPT;
         $addOptions = [];
         $optionsExists = false;
         global $app;
-        // Check if exist $app['orm.em'] object
-        if (isset($app['orm.em']) && is_object($app['orm.em'])) {
-            $optionsExists = $app['orm.em']
-                ->getRepository('ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption')
-                ->findOneBy(['fieldId' => $fieldDetails['id']]);
-        }
-
-        if ($optionsExists) {
-            if (isset($userInfo['status'])
-                && !empty($userInfo['status'])
-            ) {
-                $fieldWorkFlow = $app['orm.em']
-                    ->getRepository('ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption')
-                    ->findBy(
-                        [
-                            'fieldId' => $fieldDetails['id'],
-                            'relatedFieldOptionId' => $defaultValueId,
-                            'roleId' => $userInfo['status'],
-                        ]
-                    );
-                foreach ($fieldWorkFlow as $item) {
-                    $addOptions[] = $item->getFieldOptionId();
-                }
-            }
-        }
 
         $options = [];
         if (empty($defaultValueId)) {
@@ -3077,17 +3055,6 @@ JAVASCRIPT;
                 }
             }
 
-            if (isset($optionList[$defaultValueId])) {
-                if (isset($optionList[$defaultValueId]['option_value'])
-                    && $optionList[$defaultValueId]['option_value'] == 'aprobada'
-                ) {
-                    // @todo function don't exists api_is_question_manager
-                    /*if (api_is_question_manager() == false) {
-                        $form->freeze();
-                    }*/
-                }
-            }
-
             // Setting priority message
             if (isset($optionList[$defaultValueId])
                 && isset($optionList[$defaultValueId]['priority'])
@@ -3113,7 +3080,7 @@ JAVASCRIPT;
             'select',
             'extra_'.$fieldDetails['variable'],
             $fieldDetails['display_text'],
-            [],
+            $options,
             ['id' => 'extra_'.$fieldDetails['variable']]
         );
 

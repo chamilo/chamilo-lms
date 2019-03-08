@@ -171,7 +171,7 @@ if ($relative_url == '') {
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 $editorConfig = [
-    'ToolbarSet' => ($is_allowed_to_edit ? 'Documents' : 'DocumentsStudent'),
+    'ToolbarSet' => $is_allowed_to_edit ? 'Documents' : 'DocumentsStudent',
     'Width' => '100%',
     'Height' => '400',
     'cols-size' => [2, 10, 0],

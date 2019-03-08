@@ -15,12 +15,10 @@ html {
     position: relative;
     min-height: 100%;
 }
-
 body {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
 }
-
 .footer {
     position: absolute;
     bottom: 0;
@@ -29,7 +27,6 @@ body {
     height: 60px;
     background-color: #f5f5f5;
 }
-
 /* Custom page CSS
 -------------------------------------------------- */
 /* Not required for template or sticky footer method. */
@@ -2121,7 +2118,6 @@ div.admin_section h4 {
 }
 
 /* MAIN QUESTION */
-
 .main-question {
     padding: 10px 20px;
     box-sizing: border-box;
@@ -2992,17 +2988,14 @@ form .formw .freeze {
     width: 100%;
     border: 1px solid #DDDDDD;
 }
-
 .data_table td {
     font-size: 12px;
 }
-
 .data_table th, .data_table td {
     border-top: 1px solid #DDDDDD;
     line-height: 18px;
     padding: 10px;
 }
-
 .data_table th {
     padding: 8px 10px;
     font-weight: normal;
@@ -3010,11 +3003,9 @@ form .formw .freeze {
     border-bottom: 1px solid #DDDDDD;
     color: #333;
 }
-
 .data_table th a {
     color: #333;
 }
-
 .data_table_no_border {
     border-collapse: collapse;
     border-spacing: 0;
@@ -3024,14 +3015,12 @@ form .formw .freeze {
     text-align: left;
     width: 100%;
 }
-
 .data_table_no_border td {
     line-height: normal;
     padding: 6px;
     text-align: left;
     vertical-align: middle;
 }
-
 .data_table tr.row_odd {
     background-color: #F9F9F9;
 }
@@ -3119,9 +3108,62 @@ form .formw .freeze {
     font-size: 11px;
 }
 
+.btn-collapse.collapsed .open{
+    display: none;
+}
+.btn-collapse.collapsed .closed{
+    display: inline-block;
+}
+.btn-collapse .closed{
+    display: none;
+}
+.btn-collapse .open{
+    display: inline-block;
+}
 /* ****************************************************
                      CSS SKILL
  **************************************************** */
+#skillList .header-title{
+    padding: 8px;
+    border-bottom: 2px solid #ddd;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+.skills-badges{
+    display: grid;
+    grid-gap: 1rem;
+    grid-row-gap: 16px;
+    grid-template-columns: repeat(6, 1fr);
+}
+.skills-badges .item{
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+.skills-badges a .caption{
+    text-align: center;
+}
+.list-horizontal .list-skills{
+    display: grid;
+    grid-gap: 1rem;
+    grid-row-gap: 16px;
+    grid-template-columns: repeat(4, 1fr);
+}
+.list-vertical .list-skills{
+    display: grid;
+    grid-gap: 1rem;
+    grid-row-gap: 16px;
+    grid-template-columns: repeat(2, 1fr);
+}
+.list-skills .item{
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
 .skill-options .legend {
     border: 1px dashed #cccccc;
     padding: 1em;
@@ -8290,6 +8332,116 @@ ul#toolnavbox-two li a.btn {
 /**** END LP COLLAPSE CATEGORY ****/
 
 /* CSS Responsive */
+.tracking .panel-body{
+    padding: 5px;
+}
+.tracking .tracking-icon{
+    display: block;
+    float: left;
+    height: 70px;
+    width: 50px;
+    text-align: center;
+    line-height: 70px;
+    font-size: 35px;
+}
+.tracking-box-title{
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+.tracking .tracking-info{
+    padding: 5px 10px;
+    margin-left: 50px;
+}
+.tracking .tracking-info .tracking-text{
+    display: block;
+    font-size: 14px;
+}
+.tracking .tracking-info .tracking-number{
+    display: block;
+    font-weight: bold;
+    font-size: 2em;
+}
+.tracking-top-student .list-top{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.tracking-top-student .list-top li{
+    display: inline-block;
+    width: 100%;
+}
+.tracking-top-student .list-top .avatar{
+    display: block;
+    float: left;
+    height: 55px;
+    width: 50px;
+    text-align: center;
+    line-height: 60px;
+}
+.tracking-top-student .list-top .info{
+    padding: 5px 10px;
+    margin-left: 60px;
+}
+.tracking-top-student .list-top .info .name{
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+}
+.tracking-top-student .list-top .info .progress{
+    height: 15px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border: 1px solid #1e88e5;
+    background: #ffffff;
+    text-shadow: none;
+}
+.tracking-top-student .list-top .info .progress-bar{
+    line-height: 14px;
+    background-color: #1e88e5;
+}
+.tracking-top-student .list-top .avatar .round {
+    line-height: 39px;
+    color: #ffffff;
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    border-radius: 100%;
+    background: transparent;
+    font-size: 25px;
+}
+.tracking-top-student .list-top .avatar .round.trophy{
+    background: #ffb22b;
+}
+.tracking-top-student .list-top .avatar .round img{
+    border-radius: 100%;
+}
+.tracking-box-legend{
+    font-size: 10px;
+    color: #828282;
+}
+.tracking-student{
+    background-color: #725890;
+    border-color: #725890;
+    color: #ffffff;
+}
+.tracking-lessons{
+    background-color: #4199b0;
+    border-color: #4199b0;
+    color: #ffffff;
+}
+.tracking-exercise{
+    background-color: #ab4643;
+    border-color: #ab4643;
+    color: #ffffff;
+}
+.tracking-certificate{
+    background-color: #dd853d;
+    border-color: #dd853d;
+    color: #ffffff;
+}
+/* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {
     .sidebar-scorm {
         width: 16.66666667%;
@@ -8602,6 +8754,9 @@ ul#toolnavbox-two li a.btn {
 
     .form-inline .survey_question .input-group .bootstrap-select {
         width: 300px;
+    }
+    .list-skills{
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 

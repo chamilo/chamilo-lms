@@ -1073,6 +1073,7 @@ class UserManager
      * @param bool   $send_email      Whether to send an e-mail to the user after the update is complete
      * @param int    $reset_password  Method used to reset password (0, 1, 2 or 3 - see usage examples for details)
      * @param string $address
+     * @param array  $emailTemplate
      *
      * @return bool|int False on error, or the user ID if the user information was updated
      * @assert (false, false, false, false, false, false, false, false, false, false, false, false, false) === false

@@ -499,6 +499,8 @@ ALTER TABLE portfolio_category CHANGE title title LONGTEXT NOT NULL;
 //$_configuration['survey_answered_at_field'] = false;
 // Add support to mandatory surveys. The user will not be able to enter to the course until fill the mandatory surveys
 // Requires DB change:
+// Add support to mandatory surveys. The user will not be able to enter to the course until fill the mandatory surveys
+// Requires DB change:
 /*
 INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, created_at)
 VALUES (12, 13, 'is_mandatory', 'IsMandatory', 1, 1, NOW());
@@ -526,6 +528,11 @@ ALTER TABLE c_survey_question ADD is_required TINYINT(1) DEFAULT 0 NOT NULL;
 //ALTER TABLE extra_field_values modify column value longtext null;
 //$_configuration['allow_career_diagram'] = false;
 // Allow scheduled emails to session users.
+//CREATE TABLE scheduled_announcements (id INT AUTO_INCREMENT NOT NULL, subject VARCHAR(255) NOT NULL, message LONGTEXT NOT NULL, date DATETIME DEFAULT NULL, sent TINYINT(1) NOT NULL, session_id INT NOT NULL, c_id INT DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+// sudo mkdir app/upload/scheduled_announcement
+// Add "attachment" file extra field in: main/admin/extra_fields.php?type=scheduled_announcement&action=add
+//$_configuration['allow_scheduled_announcements'] = false;
+// Add the list of emails as a bcc when sending an email.
 //CREATE TABLE scheduled_announcements (id INT AUTO_INCREMENT NOT NULL, subject VARCHAR(255) NOT NULL, message LONGTEXT NOT NULL, date DATETIME DEFAULT NULL, sent TINYINT(1) NOT NULL, session_id INT NOT NULL, c_id INT DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 // sudo mkdir app/upload/scheduled_announcement
 // Add "attachment" file extra field in: main/admin/extra_fields.php?type=scheduled_announcement&action=add
@@ -569,6 +576,11 @@ $_configuration['send_all_emails_to'] = [
 // Hide user information in the quiz result's page
 //$_configuration['hide_user_info_in_quiz_result'] = false;
 // Show the username field in exercise results report
+//$_configuration['exercise_attempts_report_show_username'] = false;
+
+// Score model
+// Allow to convert a score into a text/color label
+// using a model if score is inside those values. See BT#12898
 //$_configuration['exercise_attempts_report_show_username'] = false;
 
 // Score model
@@ -817,7 +829,12 @@ ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA613FECDF FOREIGN KEY (ses
 //$_configuration['send_two_inscription_confirmation_mail'] = false;
 
 // LP view custom settings
-// $_configuration['lp_view_settings'] = ['display' => ['show_reporting_icon' => true]];
+/*$_configuration['lp_view_settings'] = [
+    'display' => [
+        'show_reporting_icon' => true,
+        'hide_lp_arrow_navigation' => false,
+    ],
+];*/
 
 // Force to hide the invisible course documents in sessions
 //$_configuration['hide_invisible_course_documents_in_sessions'] = false;
@@ -847,6 +864,10 @@ ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED106212469DE2 FOREIGN KEY (category_i
 ALTER TABLE portfolio_category ADD CONSTRAINT FK_7AC64359A76ED395 FOREIGN KEY (user_id) REFERENCES user (id);
 INSERT INTO settings_current(variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('course_create_active_tools','portfolio','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Portfolio', 0);
 */
+// In 1.11.8, before enabling this feature, you also need to:
+// - edit src/Chamilo/CoreBundle/Entity/Portfolio.php and PortfolioCategory.php
+//   and follow the instructions about the @ORM\Entity() line
+// - launch composer install to rebuild the autoload.php
 //$_configuration['allow_portfolio_tool'] = false;
 
 // Enable best score column in gradebook. Previously called disable_gradebook_stats
@@ -903,6 +924,19 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 
 // Show multiple conditions to user during sign up process
 // Example with a GDPR condition
+// $_configuration['disable_gdpr'] = true;
+
+// GDPR requires users to be informed of the Data Protection Officer name and contact point
+// These can only be defined here for now, but will be moved to web settings in the future.
+// Name of the person or organization that is responsible for the treatment of personal info
+//$_configuration['data_protection_officer_name'] = '';
+// A description of the role of the DP Officer in this context
+//$_configuration['data_protection_officer_role'] = '';
+// An e-mail address where to contact the data protection officer for queries
+//$_configuration['data_protection_officer_email'] = '';
+
+// Show multiple conditions to user during sign up process
+// Example with a GDPR condition
 /*$_configuration['show_conditions_to_user'] = [
     'conditions' => [
         [
@@ -934,6 +968,12 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 
 // GDPR: European's General Data Protection Rules activation option
 // Set to true to disable the new personal data page inside the social network menu
+/*$_configuration['webservice_validation'] = [
+    'options' => [
+        'wsdl' => 'https://example.com/soap?wsdl',
+        'check_login_function' => 'myWebServiceFunctionToLogin'
+    ]
+];*/
 // $_configuration['disable_gdpr'] = true;
 
 // GDPR requires users to be informed of the Data Protection Officer name and contact point

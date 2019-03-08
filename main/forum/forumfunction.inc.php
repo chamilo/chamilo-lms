@@ -2807,7 +2807,7 @@ function updateThread($values)
  * @param int   $userId        Optional. The user ID
  * @param int   $sessionId
  *
- * @return int
+ * @return CForumThread
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  *
@@ -2992,12 +2992,16 @@ function store_thread(
 
     $lastPostId = $lastPost->getIid();
 
+    $lastThread->setThreadLastPost($lastPostId);
+
+    $em->merge($lastThread);
+    $em->flush();
+
     $logInfo = [
         'tool' => TOOL_FORUM,
         'tool_id' => $values['forum_id'],
         'tool_id_detail' => $lastThread->getIid(),
         'action' => 'new-post',
-        'action_details' => '',
         'info' => $clean_post_title,
     ];
     Event::registerLog($logInfo);
@@ -3101,7 +3105,7 @@ function store_thread(
         Display::addFlash(Display::return_message($message, 'success', false));
     }
 
-    return $lastThread->getIid();
+    return $lastThread;
 }
 
 /**
@@ -3375,54 +3379,62 @@ function show_add_post_form($current_forum, $action, $id = '', $form_values = ''
 
                 return false;
             }
+
+            $postId = 0;
+            $threadId = 0;
+
             switch ($action) {
                 case 'newthread':
                     $myThread = store_thread($current_forum, $values);
-                    Skill::saveSkills($form, ITEM_TYPE_FORUM_THREAD, $myThread);
+                    if ($myThread) {
+                        $threadId = $myThread->getIid();
+                        Skill::saveSkills($form, ITEM_TYPE_FORUM_THREAD, $threadId);
+                        $postId = $myThread->getThreadLastPost();
+                    }
                     break;
                 case 'quote':
                 case 'replythread':
                 case 'replymessage':
                     $postId = store_reply($current_forum, $values);
-
-                    if ($postId) {
-                        if (isset($values['give_revision']) && $values['give_revision'] == 1) {
-                            $extraFieldValues = new ExtraFieldValue('forum_post');
-                            $params = [
-                                'item_id' => $postId,
-                                'extra_revision_language' => $values['extra_revision_language'],
-                            ];
-                            $extraFieldValues->saveFieldValues(
-                                $params,
-                                false,
-                                false,
-                                ['revision_language']
-                            );
-                        }
-
-                        if (in_array($action, ['replythread', 'replymessage', 'quote'])) {
-                            $extraFieldValues = new ExtraFieldValue('forum_post');
-                            $params = [
-                                'item_id' => $postId,
-                                'extra_ask_for_revision' => $values['extra_ask_for_revision'],
-                            ];
-                            $extraFieldValues->saveFieldValues(
-                                $params,
-                                false,
-                                false,
-                                ['ask_for_revision']
-                            );
-                        }
-                    }
                     break;
             }
 
+            if ($postId) {
+                if (isset($values['give_revision']) && $values['give_revision'] == 1) {
+                    $extraFieldValues = new ExtraFieldValue('forum_post');
+                    $params = [
+                        'item_id' => $postId,
+                        'extra_revision_language' => $values['extra_revision_language'],
+                    ];
+                    $extraFieldValues->saveFieldValues(
+                        $params,
+                        false,
+                        false,
+                        ['revision_language']
+                    );
+                }
+
+                if (in_array($action, ['newthread', 'replythread', 'replymessage', 'quote'])) {
+                    $extraFieldValues = new ExtraFieldValue('forum_post');
+                    $params = [
+                        'item_id' => $postId,
+                        'extra_ask_for_revision' => $values['extra_ask_for_revision'],
+                    ];
+                    $extraFieldValues->saveFieldValues(
+                        $params,
+                        false,
+                        false,
+                        ['ask_for_revision']
+                    );
+                }
+            }
+
             $url = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&'.http_build_query(
-                    [
-                        'forum' => $forumId,
-                        'thread' => $myThread,
-                    ]
-                );
+                [
+                    'forum' => $forumId,
+                    'thread' => $threadId,
+                ]
+            );
 
             Security::clear_token();
             header('Location: '.$url);

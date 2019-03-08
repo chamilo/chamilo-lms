@@ -678,6 +678,7 @@ foreach ($posts as $post) {
 
     $count++;
 }
+
 $template->assign('posts', $postList);
 
 $layout = $template->get_template('forum/posts.tpl');

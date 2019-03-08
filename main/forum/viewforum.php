@@ -38,8 +38,6 @@ $nameTools = get_lang('ToolForum');
 // Are we in a lp ?
 $origin = api_get_origin();
 
-/* Including necessary files */
-require 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
 $userId = api_get_user_id();

@@ -52,7 +52,6 @@
             <div class="forum-description">
                 {{ item.description }}
             </div>
-
             {% for subitem in item.forums %}
                 <div class="forum_display">
                     <div class="panel panel-default forum">

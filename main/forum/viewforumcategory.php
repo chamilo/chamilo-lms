@@ -28,6 +28,9 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 Session::erase('_gid');
 
+// Notification for unauthorized people.
+api_protect_course_script(true);
+
 $htmlHeadXtra[] = '<script>
 $(document).ready(function(){
     $(\'.hide-me\').slideUp()
@@ -42,9 +45,6 @@ function hidecontent(content){
 $this_section = SECTION_COURSES;
 
 // Notification for unauthorized people.
-api_protect_course_script(true);
-
-// Including additional library scripts.
 $nameTools = get_lang('ToolForum');
 
 $_user = api_get_user_info();
@@ -54,8 +54,6 @@ $action = isset($_GET['action']) ? $_GET['action'] : '';
 $hideNotifications = api_get_course_setting('hide_forum_notifications');
 $hideNotifications = $hideNotifications == 1;
 
-// Including necessary files
-require 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
 // Are we in a lp ?

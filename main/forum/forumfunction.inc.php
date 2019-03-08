@@ -3109,7 +3109,6 @@ function store_thread(
  * This function displays the form that is used to add a post. This can be a new thread or a reply.
  *
  * @param array  $current_forum
- * @param array  $forum_setting
  * @param string $action        is the parameter that determines if we are
  *                              1. newthread: adding a new thread (both empty) => No I-frame
  *                              2. replythread: Replying to a thread ($action = replythread) => I-frame with the complete thread (if enabled)
@@ -3124,7 +3123,7 @@ function store_thread(
  *
  * @version february 2006, dokeos 1.8
  */
-function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $form_values = '')
+function show_add_post_form($current_forum, $action, $id = '', $form_values = '')
 {
     $_user = api_get_user_info();
     $action = isset($action) ? Security::remove_XSS($action) : '';
@@ -3194,7 +3193,7 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
 
     $iframe = null;
     $myThread = Security::remove_XSS($myThread);
-    if ($forum_setting['show_thread_iframe_on_reply'] && $action != 'newthread' && !empty($myThread)) {
+    if ($action != 'newthread' && !empty($myThread)) {
         $iframe = "<iframe style=\"border: 1px solid black\" src=\"iframe_thread.php?".api_get_cidreq()."&forum=".$forumId."&thread=".$myThread."#".$my_post."\" width=\"100%\"></iframe>";
     }
     if (!empty($iframe)) {
@@ -3255,7 +3254,7 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
         Skill::addSkillsToForm($form, ITEM_TYPE_FORUM_THREAD, 0);
     }
 
-    if ($forum_setting['allow_sticky'] && api_is_allowed_to_edit(null, true) && $action == 'newthread') {
+    if (api_is_allowed_to_edit(null, true) && $action == 'newthread') {
         $form->addElement('checkbox', 'thread_sticky', '', get_lang('StickyPost'));
     }
 
@@ -3906,7 +3905,6 @@ function store_reply($current_forum, $values, $courseId = 0, $userId = 0)
  * @version february 2006, dokeos 1.8
  */
 function show_edit_post_form(
-    $forum_setting,
     $current_post,
     $current_thread,
     $current_forum,
@@ -3982,18 +3980,14 @@ function show_edit_post_form(
     }
 
     $defaults['status']['status'] = isset($current_post['status']) && !empty($current_post['status']) ? $current_post['status'] : 2;
-
-    if ($forum_setting['allow_post_notification']) {
         $form->addElement(
             'checkbox',
             'post_notification',
             '',
             get_lang('NotifyByEmail').' ('.$current_post['email'].')'
         );
-    }
 
-    if ($forum_setting['allow_sticky'] &&
-        api_is_allowed_to_edit(null, true) &&
+    if (api_is_allowed_to_edit(null, true) &&
         empty($current_post['post_parent_id'])
     ) {
         // The sticky checkbox only appears when it is the first post of a thread.
@@ -4508,7 +4502,7 @@ function handle_mail_cue($content, $id)
                     posts.thread_id = $id AND
                     posts.post_notification = '1' AND
                     mailcue.thread_id = $id AND
-                    users.user_id = posts.poster_id
+                    users.user_id = posts.poster_id AND
                     users.active = 1
                 GROUP BY users.email";
         $result = Database::query($sql);
@@ -5126,16 +5120,16 @@ function add_forum_attachment_file($file_comment, $last_id)
     $_course = api_get_course_info();
     $agenda_forum_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
 
-    if (!isset($_FILES['user_upload'])) {
+    if (empty($_FILES['user_upload'])) {
         return false;
     }
 
-    $fileCount = count($_FILES['user_upload']['name']);
     $filesData = [];
 
     if (!is_array($_FILES['user_upload']['name'])) {
         $filesData[] = $_FILES['user_upload'];
     } else {
+        $fileCount = count($_FILES['user_upload']['name']);
         $fileKeys = array_keys($_FILES['user_upload']);
         for ($i = 0; $i < $fileCount; $i++) {
             foreach ($fileKeys as $key) {
@@ -5225,12 +5219,12 @@ function edit_forum_attachment_file($file_comment, $post_id, $id_attach)
     $table_forum_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
     $course_id = api_get_course_int_id();
 
-    $fileCount = count($_FILES['user_upload']['name']);
     $filesData = [];
 
     if (!is_array($_FILES['user_upload']['name'])) {
         $filesData[] = $_FILES['user_upload'];
     } else {
+        $fileCount = count($_FILES['user_upload']['name']);
         $fileKeys = array_keys($_FILES['user_upload']);
 
         for ($i = 0; $i < $fileCount; $i++) {
@@ -5369,7 +5363,6 @@ function getAllAttachment($postId)
  *
  * @param int  $post_id
  * @param int  $id_attach
- * @param bool $display   to show or not result message
  *
  * @return int
  *
@@ -5377,7 +5370,7 @@ function getAllAttachment($postId)
  *
  * @version october 2014, chamilo 1.9.8
  */
-function delete_attachment($post_id, $id_attach = 0, $display = true)
+function delete_attachment($post_id, $id_attach = 0)
 {
     $_course = api_get_course_info();
 
@@ -5417,9 +5410,8 @@ function delete_attachment($post_id, $id_attach = 0, $display = true)
         api_get_user_id()
     );
 
-    if (!empty($result) && !empty($id_attach) && $display) {
-        $message = get_lang('AttachmentFileDeleteSuccess');
-        echo Display::return_message($message, 'confirmation');
+    if (!empty($result) && !empty($id_attach)) {
+        Display::addFlash(Display::return_message(get_lang('AttachmentFileDeleteSuccess'), 'confirmation'));
     }
 
     return $affectedRows;
@@ -6414,7 +6406,7 @@ function clearAttachedFiles($postId = null, $courseId = null)
                     $array[] = $attachId;
                     if ($postId !== 0) {
                         // Post 0 is temporal, delete them from file system and DB
-                        delete_attachment(0, $attachId, false);
+                        delete_attachment(0, $attachId);
                     }
                     // Delete attachment data from $_SESSION
                     unset($_SESSION['forum']['upload_file'][$courseId][$attachId]);

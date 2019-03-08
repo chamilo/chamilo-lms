@@ -34,8 +34,6 @@ $nameTools = get_lang('ToolForum');
 // Unset the formElements in session before the includes function works
 unset($_SESSION['formelements']);
 
-/* Including necessary files */
-require_once 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
 // Are we in a lp ?
@@ -234,7 +232,6 @@ getAttachedFiles(
 );
 
 show_edit_post_form(
-    $forum_setting,
     $current_post,
     $current_thread,
     $current_forum,

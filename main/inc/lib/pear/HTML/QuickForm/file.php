@@ -408,8 +408,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                                     </label>
                                 </div>
                                 <p class="file-return"></p>
-                        
-                        <script type="text/javascript">
+                        <script>
                             document.querySelector("html").classList.add(\'js\');
                             var fileInput  = document.querySelector( ".input-file" ),  
                                 button     = document.querySelector( ".input-file-trigger" ),
@@ -425,9 +424,12 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                                return false;
                             });  
                             fileInput.addEventListener("change", function(event) {  
-                                the_return.innerHTML = this.value;  
+                                fileName = this.value;
+                                if (this.files[0]) {
+                                    fileName = this.files[0].name;
+                                }
+                                the_return.innerHTML = fileName;  
                             });
-                            
                         </script>
                     ';
                 } else {

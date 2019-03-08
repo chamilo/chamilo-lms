@@ -479,15 +479,24 @@ class ExtraField extends Model
      * @param FormValidator $form                The form object to which to attach this element
      * @param int           $itemId              The item (course, user, session, etc) this extra_field is linked to
      * @param array         $exclude             Variables of extra field to exclude
-     * @param bool          $filter              Whether to get only the fields with the "filter" flag set to 1 (true)
-     *                                           or not (false)
+     * @param bool          $filter                          Whether to get only the fields with the "filter" flag set to 1 (true) or not (false)
      * @param bool          $useTagAsSelect      Whether to show tag fields as select drop-down or not
      * @param array         $showOnlyTheseFields Limit the extra fields shown to just the list given here
      * @param array         $orderFields         An array containing the names of the fields shown, in the right order
-     * @param bool          $adminPermissions    Whether the display is considered without edition limits (true) or not
-     *                                           (false)
+     * @param array         $extraData
+     * @param bool          $orderDependingDefaults
+     * @param bool          $adminPermissions
+     * @param array         $separateExtraMultipleSelect
+     * @param array         $customLabelsExtraMultipleSelect
+     * @param bool          $addEmptyOptionSelects
+     * @param array         $introductionTextList
+     * @param array         $requiredFields
+     * @param bool          $hideGeoLocalizationDetails
      *
-     * @return array|bool
+     * @throws Exception
+     *
+     * @return array|bool If relevant, returns a one-element array with JS code to be added to the page HTML headers.
+     *                    Returns false if the form object was not given
      */
     public function addElements(
         $form,
@@ -499,13 +508,14 @@ class ExtraField extends Model
         $orderFields = [],
         $extraData = [],
         $orderDependingDefaults = false,
-        $forceShowFields = false,
+        $adminPermissions = false,
         $separateExtraMultipleSelect = [],
         $customLabelsExtraMultipleSelect = [],
         $addEmptyOptionSelects = false,
         $introductionTextList = [],
         $requiredFields = [],
-        $hideGeoLocalizationDetails = false
+        $hideGeoLocalizationDetails = false,
+        $help = false
     ) {
         if (empty($form)) {
             return false;
@@ -543,7 +553,7 @@ class ExtraField extends Model
         $extra = $this->set_extra_fields_in_form(
             $form,
             $extraData,
-            $forceShowFields,
+            $adminPermissions,
             $extraFields,
             $itemId,
             $exclude,
@@ -555,7 +565,8 @@ class ExtraField extends Model
             $customLabelsExtraMultipleSelect,
             $addEmptyOptionSelects,
             $introductionTextList,
-            $hideGeoLocalizationDetails
+            $hideGeoLocalizationDetails,
+            $help
         );
 
         if (!empty($requiredFields)) {
@@ -1004,8 +1015,7 @@ class ExtraField extends Model
      *
      * @param FormValidator $form                The form these fields are to be attached to
      * @param array         $extraData
-     * @param bool          $adminPermissions    Whether the display is considered without edition limits (true) or not
-     *                                           (false)
+     * @param bool          $adminPermissions    Whether the display is considered without edition limits (true) or not (false)
      * @param array         $extra
      * @param int           $itemId              The item (course, user, session, etc) this extra_field is attached to
      * @param array         $exclude             Extra fields to be skipped, by textual ID
@@ -1025,14 +1035,15 @@ class ExtraField extends Model
         $itemId = null,
         $exclude = [],
         $useTagAsSelect = false,
-        $showOnlyThisFields = [],
+        $showOnlyTheseFields = [],
         $orderFields = [],
         $orderDependingDefaults = false,
         $separateExtraMultipleSelect = [],
         $customLabelsExtraMultipleSelect = [],
         $addEmptyOptionSelects = false,
         $introductionTextList = [],
-        $hideGeoLocalizationDetails = false
+        $hideGeoLocalizationDetails = false,
+        $help = false
     ) {
         $type = $this->type;
         $jquery_ready_content = '';
@@ -1051,8 +1062,8 @@ class ExtraField extends Model
             }
 
             foreach ($extra as $field_details) {
-                if (!empty($showOnlyThisFields)) {
-                    if (!in_array($field_details['variable'], $showOnlyThisFields)) {
+                if (!empty($showOnlyTheseFields)) {
+                    if (!in_array($field_details['variable'], $showOnlyTheseFields)) {
                         continue;
                     }
                 }
@@ -1098,8 +1109,14 @@ class ExtraField extends Model
                 }
 
                 $translatedDisplayText = get_lang($field_details['display_text'], true);
+                $translatedDisplayHelpText = '';
+                if ($help) {
+                    $translatedDisplayHelpText .= get_lang($field_details['display_text'].'Help');
+                }
+                $label = [$translatedDisplayText, $translatedDisplayHelpText];
+                // Ofaj
                 if (!empty($translatedDisplayText)) {
-                    $field_details['display_text'] = $translatedDisplayText;
+                    //$field_details['display_text'] = $label;
                 }
 
                 switch ($field_details['field_type']) {
@@ -1194,6 +1211,13 @@ class ExtraField extends Model
                                 }
                             }
 
+                            if (empty($checkboxAttributes) &&
+                                isset($field_details['default_value']) && empty($extraData)) {
+                                if ($field_details['default_value'] == 1) {
+                                    $checkboxAttributes['checked'] = 1;
+                                }
+                            }
+
                             // We assume that is a switch on/off with 1 and 0 as values
                             $group[] = $form->createElement(
                                 'checkbox',
@@ -1283,17 +1307,6 @@ class ExtraField extends Model
                                 }
                             }
 
-                            if (isset($optionList[$defaultValueId])) {
-                                if (isset($optionList[$defaultValueId]['option_value']) &&
-                                    $optionList[$defaultValueId]['option_value'] == 'aprobada'
-                                ) {
-                                    // @todo function don't exists api_is_question_manager
-                                    /*if (api_is_question_manager() == false) {
-                                        $form->freeze();
-                                    }*/
-                                }
-                            }
-
                             // Setting priority message
                             if (isset($optionList[$defaultValueId]) &&
                                 isset($optionList[$defaultValueId]['priority'])
@@ -1322,57 +1335,6 @@ class ExtraField extends Model
                             $options,
                             ['id' => 'extra_'.$field_details['variable']]
                         );
-
-                        /* Enable this when field_loggeable is introduced as a table field (2.0)
-                        if ($optionsExists && $field_details['field_loggeable'] && !empty($defaultValueId)) {
-
-                            $form->addElement(
-                                'textarea',
-                                'extra_' . $field_details['variable'] . '_comment',
-                                $field_details['display_text'] . ' ' . get_lang('Comment')
-                            );
-
-                            $extraFieldValue = new ExtraFieldValue($this->type);
-                            $repo = $app['orm.em']->getRepository($extraFieldValue->entityName);
-                            $repoLog = $app['orm.em']->getRepository('Gedmo\Loggable\Entity\LogEntry');
-                            $newEntity = $repo->findOneBy(
-                                array(
-                                    $this->handlerEntityId => $itemId,
-                                    'fieldId' => $field_details['id']
-                                )
-                            );
-                            // @todo move this in a function inside the class
-                            if ($newEntity) {
-                                $logs = $repoLog->getLogEntries($newEntity);
-                                if (!empty($logs)) {
-                                    $html = '<b>' . get_lang('LatestChanges') . '</b><br /><br />';
-
-                                    $table = new HTML_Table(array('class' => 'data_table'));
-                                    $table->setHeaderContents(0, 0, get_lang('Value'));
-                                    $table->setHeaderContents(0, 1, get_lang('Comment'));
-                                    $table->setHeaderContents(0, 2, get_lang('ModifyDate'));
-                                    $table->setHeaderContents(0, 3, get_lang('Username'));
-                                    $row = 1;
-                                    foreach ($logs as $log) {
-                                        $column = 0;
-                                        $data = $log->getData();
-                                        $fieldValue = isset($data['fieldValue']) ? $data['fieldValue'] : null;
-                                        $comment = isset($data['comment']) ? $data['comment'] : null;
-
-                                        $table->setCellContents($row, $column, $fieldValue);
-                                        $column++;
-                                        $table->setCellContents($row, $column, $comment);
-                                        $column++;
-                                        $table->setCellContents($row, $column, api_get_local_time($log->getLoggedAt()->format('Y-m-d H:i:s')));
-                                        $column++;
-                                        $table->setCellContents($row, $column, $log->getUsername());
-                                        $row++;
-                                    }
-                                    $form->addElement('label', null, $html.$table->toHtml());
-                                }
-                            }
-                        }
-                        */
 
                         if (!$admin_permissions) {
                             if ($field_details['visible_to_self'] == 0) {
@@ -1596,17 +1558,6 @@ class ExtraField extends Model
                                         'itemId' => $itemId,
                                     ]
                                 );
-
-                            /*if (!empty($extraData) && isset($extraData['extra_'.$field_details['variable']])) {
-                                $data = $extraData['extra_'.$field_details['variable']];
-                                foreach ($data as $option) {
-                                    $tagsSelect->addOption(
-                                        $option,
-                                        $option,
-                                        ['selected' => 'selected', 'class' => 'selected']
-                                    );
-                                }
-                            }*/
                             // ofaj
 
                             for ($i = 0; $i < $separateValue; $i++) {
@@ -1624,20 +1575,6 @@ class ExtraField extends Model
                                         ''
                                     );
                                 }
-
-                                /*if (!empty($extraData) && isset($extraData['extra_'.$field_details['variable']])) {
-                                    $data = $extraData['extra_'.$field_details['variable']];
-                                    foreach ($data as $option) {
-                                        $tagsSelect->addOption(
-                                            $option,
-                                            $option,
-                                            [
-                                                'selected' => 'selected',
-                                                'class' => 'selected'
-                                            ]
-                                        );
-                                    }
-                                }*/
 
                                 foreach ($fieldTags as $fieldTag) {
                                     $tag = $em->find('ChamiloCoreBundle:Tag', $fieldTag->getTagId());
@@ -1670,6 +1607,7 @@ class ExtraField extends Model
                             );
                             $tagsSelect->setMultiple(true);
 
+                            $selectedOptions = [];
                             if ($this->type === 'user') {
                                 // The magic should be here
                                 $user_tags = UserManager::get_user_tags(
@@ -1699,20 +1637,17 @@ class ExtraField extends Model
                                 $fieldTags = $em->getRepository(
                                     'ChamiloCoreBundle:ExtraFieldRelTag'
                                 )
-                                    ->findBy(
-                                        [
-                                            'fieldId' => $field_id,
-                                            'itemId' => $itemId,
-                                        ]
-                                    );
+                                ->findBy(
+                                    [
+                                        'fieldId' => $field_id,
+                                        'itemId' => $itemId,
+                                    ]
+                                );
 
                                 /** @var ExtraFieldRelTag $fieldTag */
                                 foreach ($fieldTags as $fieldTag) {
                                     /** @var Tag $tag */
-                                    $tag = $em->find(
-                                        'ChamiloCoreBundle:Tag',
-                                        $fieldTag->getTagId()
-                                    );
+                                    $tag = $em->find('ChamiloCoreBundle:Tag', $fieldTag->getTagId());
 
                                     if (empty($tag)) {
                                         continue;
@@ -1745,10 +1680,7 @@ class ExtraField extends Model
                                         );
                                     $tagsAdded = [];
                                     foreach ($fieldTags as $fieldTag) {
-                                        $tag = $em->find(
-                                            'ChamiloCoreBundle:Tag',
-                                            $fieldTag->getTagId()
-                                        );
+                                        $tag = $em->find('ChamiloCoreBundle:Tag', $fieldTag->getTagId());
 
                                         if (empty($tag)) {
                                             continue;
@@ -2216,13 +2148,13 @@ class ExtraField extends Model
                                 <label for="geolocalization_extra_'.$field_details['variable'].'"
                                     class="col-sm-2 control-label"></label>
                                 <div class="col-sm-8">
-                                    <button class="null btn btn-default"
+                                    <button class="btn btn-default"
                                         id="geolocalization_extra_'.$field_details['variable'].'"
                                         name="geolocalization_extra_'.$field_details['variable'].'"
                                         type="submit">
                                         <em class="fa fa-map-marker"></em> '.get_lang('SearchGeolocalization').'
                                     </button>
-                                    <button class="null btn btn-default" id="myLocation_extra_'.$field_details['variable'].'"
+                                    <button class="btn btn-default" id="myLocation_extra_'.$field_details['variable'].'"
                                         name="myLocation_extra_'.$field_details['variable'].'"
                                         type="submit">
                                         <em class="fa fa-crosshairs"></em> '.get_lang('MyLocation').'

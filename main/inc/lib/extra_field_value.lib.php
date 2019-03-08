@@ -363,7 +363,7 @@ class ExtraFieldValue extends Model
                         'value' => $value,
                         'comment' => $comment,
                     ];
-                    self::save($newParams, $showQuery);
+                    $this->save($newParams, $showQuery);
             }
         }
 

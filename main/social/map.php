@@ -32,6 +32,19 @@ if (empty($infoStage) || empty($infoVille)) {
     api_not_allowed(true);
 }
 
+$gMapsPlugin = GoogleMapsPlugin::create();
+$localization = $gMapsPlugin->get('enable_api') === 'true';
+
+if ($localization) {
+    $apiKey = $gMapsPlugin->get('api_key');
+    if (empty($apiKey)) {
+        api_not_allowed(true);
+    }
+} else {
+    api_not_allowed(true);
+}
+
+
 $tableUser = Database::get_main_table(TABLE_MAIN_USER);
 $sql = "SELECT u.id, firstname, lastname, ev.value ville, ev2.value stage
         FROM $tableUser u 
@@ -96,18 +109,6 @@ foreach ($data as &$result) {
         $result['stage_long'] = $parts2[1];
         unset($result['stage']);
     }
-}
-
-$gMapsPlugin = GoogleMapsPlugin::create();
-$localization = $gMapsPlugin->get('enable_api') === 'true';
-
-if ($localization) {
-    $apiKey = $gMapsPlugin->get('api_key');
-    if (empty($apiKey)) {
-        api_not_allowed(true);
-    }
-} else {
-    api_not_allowed(true);
 }
 
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_JS_PATH).'map/markerclusterer.js"></script>';

@@ -8,17 +8,16 @@ $_dont_save_user_course_access = true;
 
 require_once __DIR__.'/../global.inc.php';
 
+api_block_anonymous_users();
+
 if (api_get_setting('allow_global_chat') == 'false') {
     exit;
 }
 
-if (api_is_anonymous()) {
-    exit;
-}
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
+$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 
 // Course Chat
-if ($action == 'preview') {
+if ($action === 'preview') {
     echo CourseChatUtils::prepareMessage($_REQUEST['message']);
     exit;
 }
@@ -28,14 +27,17 @@ $message = isset($_REQUEST['message']) ? $_REQUEST['message'] : null;
 $currentUserId = api_get_user_id();
 
 $chat = new Chat();
+
 if (Chat::disableChat()) {
     exit;
 }
+
 if ($chat->isChatBlockedByExercises()) {
     // Disconnecting the user
     $chat->setUserStatus(0);
     exit;
 }
+
 switch ($action) {
     case 'get_message_status':
         $messageId = isset($_REQUEST['message_id']) ? $_REQUEST['message_id'] : 0;
@@ -96,7 +98,7 @@ switch ($action) {
         }
         $items = $chat->getPreviousMessages(
             $userId,
-            api_get_user_id(),
+            $currentUserId,
             $visibleMessages
         );
         echo json_encode($items);
@@ -104,13 +106,13 @@ switch ($action) {
         break;
     case 'notify_not_support':
         $chat->send(
-            api_get_user_id(),
+            $currentUserId,
             $toUserId,
             get_lang('TheXUserBrowserDoesNotSupportWebRTC')
         );
         break;
     case 'sendchat':
-        $chat->send(api_get_user_id(), $toUserId, $message);
+        $chat->send($currentUserId, $toUserId, $message);
         break;
     case 'startchatsession':
         $chat->startSession();

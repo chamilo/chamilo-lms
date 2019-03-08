@@ -93,7 +93,6 @@ class Chat extends Model
         $html = SocialManager::listMyFriendsBlock(
             api_get_user_id(),
             '',
-            true,
             true
         );
 
@@ -116,16 +115,7 @@ class Chat extends Model
 
         $chats = [];
         foreach ($chatHistory as $userId => $time) {
-            /*$items = $this->getPreviousMessages(
-                $userId,
-                api_get_user_id(),
-                0
-            );*/
-
-            $total = self::getCountMessagesExchangeBetweenUsers(
-                $userId,
-                $currentUserId
-            );
+            $total = self::getCountMessagesExchangeBetweenUsers($userId, $currentUserId);
 
             $start = $total - $latestMessages;
 
@@ -136,21 +126,6 @@ class Chat extends Model
             $chats[$userId]['items'] = $items;
             $chats[$userId]['window_user_info'] = api_get_user_info($userId);
         }
-
-        /*
-            foreach ($chatHistory as $chat) {
-                $userId = $chat['user_info']['user_id'];
-
-                $items = $this->getMessages($currentUserId,  $userId, 1, 0, $latestMessages);
-
-                /*$items = self::getLatestChat(
-                    $currentUserId,
-                    $userId,
-                    $latestMessages
-                );
-                $chats[$userId]['items'] = $items;
-
-        }*/
 
         return $chats;
     }
@@ -219,15 +194,11 @@ class Chat extends Model
         $toUserId,
         $visibleMessages = 1,
         $previousMessageCount = 5
-    ) {
-        $currentUserId = api_get_user_id();
+    ) {        
         $toUserId = (int) $toUserId;
         $fromUserId = (int) $fromUserId;
 
-        $total = self::getCountMessagesExchangeBetweenUsers(
-            $fromUserId,
-            $toUserId
-        );
+        $total = $this->getCountMessagesExchangeBetweenUsers($fromUserId, $toUserId);
 
         $show = $total - $visibleMessages;
         $from = $show - $previousMessageCount;
@@ -258,8 +229,6 @@ class Chat extends Model
         if (empty($toUserId) || empty($fromUserId)) {
             return [];
         }
-
-        $currentUserId = api_get_user_id();
         $orderBy = Database::escape_string($orderBy);
 
         if (empty($orderBy)) {
@@ -270,7 +239,8 @@ class Chat extends Model
                 WHERE 
                     (
                         to_user = $toUserId AND 
-                        from_user = $fromUserId)
+                        from_user = $fromUserId
+                    )
                     OR
                     (
                         from_user = $toUserId AND 
@@ -333,26 +303,28 @@ class Chat extends Model
         $chatHistory = Session::read('chatHistory');
 
         // update current chats
-        foreach ($chatHistory as $fromUserId => $items) {
-            $user_info = api_get_user_info($fromUserId, true);
-            $count = $this->getCountMessagesExchangeBetweenUsers(
-                $fromUserId,
-                $currentUserId
-            );
-            $chatItems = self::getLatestChat($fromUserId, $currentUserId, 5);
-            $item = [
-                'window_user_info' => api_get_user_info($fromUserId),
-                'items' => $chatItems,
-                'total_messages' => $count,
-                'user_info' => [
-                    'user_name' => $user_info['complete_name'],
-                    'online' => $user_info['user_is_online'],
-                    'avatar' => $user_info['avatar_small'],
-                    'user_id' => $user_info['user_id'],
-                ],
-            ];
+        if (is_array($chatHistory)) {
+            foreach ($chatHistory as $fromUserId => $items) {
+                $user_info = api_get_user_info($fromUserId, true);
+                $count = $this->getCountMessagesExchangeBetweenUsers(
+                    $fromUserId,
+                    $currentUserId
+                );
+                $chatItems = self::getLatestChat($fromUserId, $currentUserId, 5);
+                $item = [
+                    'window_user_info' => api_get_user_info($fromUserId),
+                    'items' => $chatItems,
+                    'total_messages' => $count,
+                    'user_info' => [
+                        'user_name' => $user_info['complete_name'],
+                        'online' => $user_info['user_is_online'],
+                        'avatar' => $user_info['avatar_small'],
+                        'user_id' => $user_info['user_id'],
+                    ],
+                ];
 
-            $items[$fromUserId] = $item;
+                $items[$fromUserId] = $item;
+            }
         }
 
         foreach ($chatList as $fromUserId => $rows) {
@@ -424,7 +396,6 @@ class Chat extends Model
     /**
      * Saves into session the fact that a chat window exists with the given user.
      *
-     * @param int The ID of the user with whom the current user is chatting
      * @param int $userId
      */
     public function saveWindow($userId)
@@ -482,8 +453,8 @@ class Chat extends Model
             unset($_SESSION['tsChatBoxes'][$to_user_id]);
 
             $params = [];
-            $params['from_user'] = intval($fromUserId);
-            $params['to_user'] = intval($to_user_id);
+            $params['from_user'] = (int) $fromUserId;
+            $params['to_user'] = (int) $to_user_id;
             $params['message'] = $message;
             $params['sent'] = api_get_utc_datetime();
 

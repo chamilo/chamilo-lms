@@ -63,7 +63,7 @@ function set_user_status(status)
 	user_status = status;
 }
 
-$(document).ready(function() {
+$(function() {
 	originalTitle = document.title;
 	startChatSession();
 	$([window, document]).blur(function() {

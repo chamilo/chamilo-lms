@@ -125,21 +125,6 @@ class Chat extends Model
             $chats[$userId]['window_user_info'] = api_get_user_info($userId);
         }
 
-        /*
-            foreach ($chatHistory as $chat) {
-                $userId = $chat['user_info']['user_id'];
-
-                $items = $this->getMessages($currentUserId,  $userId, 1, 0, $latestMessages);
-
-                /*$items = self::getLatestChat(
-                    $currentUserId,
-                    $userId,
-                    $latestMessages
-                );
-                $chats[$userId]['items'] = $items;
-
-        }*/
-
         return $chats;
     }
 
@@ -343,12 +328,9 @@ class Chat extends Model
         foreach ($chatList as $fromUserId => $rows) {
             $rows = $rows['items'];
             $user_info = api_get_user_info($fromUserId, true);
-            $count = $this->getCountMessagesExchangeBetweenUsers(
-                $fromUserId,
-                $currentUserId
-            );
+            $count = $this->getCountMessagesExchangeBetweenUsers($fromUserId, $currentUserId);
 
-            $chatItems = self::getLatestChat($fromUserId, $currentUserId, 5);
+            $chatItems = $this->getLatestChat($fromUserId, $currentUserId, 5);
 
             // Cleaning tsChatBoxes
             unset($_SESSION['tsChatBoxes'][$fromUserId]);

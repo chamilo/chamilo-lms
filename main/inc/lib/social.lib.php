@@ -1616,7 +1616,6 @@ class SocialManager extends UserManager
         $threadList = []
     ) {
         $tblMessage = Database::get_main_table(TABLE_MESSAGE);
-        $tblMessageAttachment = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
 
         $parentId = (int) $parentId;
         $userId = (int) $userId;
@@ -1635,15 +1634,7 @@ class SocialManager extends UserManager
                     group_id,
                     '' as forum_id,
                     '' as thread_id,
-                    '' as c_id,                    
-                    (
-                        SELECT ma.path FROM $tblMessageAttachment ma
-                        WHERE  ma.message_id = tm.id 
-                    ) as path,
-                    (
-                        SELECT ma.filename FROM $tblMessageAttachment ma 
-                        WHERE ma.message_id = tm.id 
-                    ) as filename
+                    '' as c_id
                   ";
 
         if ($getCount) {
@@ -1655,29 +1646,12 @@ class SocialManager extends UserManager
                 WHERE
                     msg_status <> ".MESSAGE_STATUS_WALL_DELETE.' AND ';
 
-        // Date filter
-        if (!empty($startDate)) {
-            //$sql .= " AND send_date > '$startDate' ";
-        }
-
         // My own posts
         $userReceiverCondition = ' (
             user_receiver_id = '.$userId.' AND 
             msg_status IN ('.MESSAGE_STATUS_WALL_POST.', '.MESSAGE_STATUS_WALL.') AND
             parent_id = '.$parentId.'
         )';
-
-        /*$messageStatusCondition = '';
-        if (!empty($messageStatus)) {
-            if (is_array($messageStatus)) {
-                $messageStatus = array_map('intval', $messageStatus);
-                $messageStatus = implode("','", $messageStatus);
-                $messageStatusCondition = " AND msg_status IN ('$messageStatus') ";
-            } else {
-                $messageStatus = (int) $messageStatus;
-                $messageStatusCondition = " AND msg_status = '$messageStatus') ";
-            }
-        }*/
 
         // User condition
         $sql .= $userReceiverCondition;
@@ -1729,9 +1703,7 @@ class SocialManager extends UserManager
                                 '' as group_id,
                                 forum_id,
                                 thread_id,
-                                c_id,
-                                '' as path,
-                                '' as filename                             
+                                c_id                            
         ";
             }
 
@@ -1979,17 +1951,14 @@ class SocialManager extends UserManager
      */
     public static function getPostAttachment($message)
     {
-        if (isset($message['path']) && !empty($message['path'])) {
-            $previews = self::getAttachmentPreviewList($message);
+        $previews = self::getAttachmentPreviewList($message);
 
-            if (empty($previews)) {
-                return '';
-            }
-
-            return implode('', $previews);
+        if (empty($previews)) {
+            return '';
         }
 
-        return '';
+        return implode('', $previews);
+
     }
 
     /**

@@ -82,7 +82,18 @@ foreach ($data as &$result) {
     }
 }
 
-$apiKey = api_get_configuration_value('google_api_key');
+$gMapsPlugin = GoogleMapsPlugin::create();
+$localization = $gMapsPlugin->get('enable_api') === 'true';
+
+if ($localization) {
+    $apiKey = $gMapsPlugin->get('api_key');
+    if (empty($apiKey)) {
+        api_not_allowed(true);
+    }
+} else {
+    api_not_allowed(true);
+}
+
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_JS_PATH).'map/markerclusterer.js"></script>';
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_JS_PATH).'map/oms.min.js"></script>';
 

@@ -65,14 +65,6 @@ function confirmation(name) {
 }
 </script>';
 
-$gMapsPlugin = GoogleMapsPlugin::create();
-$geolocalization = $gMapsPlugin->get('enable_api') === 'true';
-
-if ($geolocalization) {
-    $gmapsApiKey = $gMapsPlugin->get('api_key');
-    $htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true&key='.$gmapsApiKey.'" ></script>';
-}
-
 $htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
 $htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 $tool_name = get_lang('ModifyUserInfo');
@@ -333,6 +325,11 @@ $returnParams = $extraField->addElements(
 );
 $jqueryReadyContent = $returnParams['jquery_ready_content'];
 
+$allowEmailTemplate = api_get_configuration_value('mail_template_system');
+if ($allowEmailTemplate) {
+    $form->addEmailTemplate(['user_edit_content.tpl']);
+}
+
 // the $jqueryReadyContent variable collects all functions that will be load in the
 // $(document).ready javascript function
 $htmlHeadXtra[] = '<script>
@@ -435,6 +432,8 @@ if ($form->validate()) {
             $username = $email;
         }
 
+        $template = isset($user['email_template_option']) ? $user['email_template_option'] : [];
+
         UserManager::update_user(
             $user_id,
             $firstname,
@@ -456,14 +455,9 @@ if ($form->validate()) {
             null,
             $send_mail,
             $reset_password,
-            $address
+            $address,
+            $template
         );
-
-        if (api_get_setting('openid_authentication') == 'true' && !empty($user['openid'])) {
-            $up = UserManager::update_openid($user_id, $user['openid']);
-        }
-        $currentUserId = api_get_user_id();
-        $userObj = api_get_user_entity($user_id);
 
         $studentBossListSent = isset($user['student_boss']) ? $user['student_boss'] : [];
         UserManager::subscribeUserToBossList(
@@ -471,6 +465,13 @@ if ($form->validate()) {
             $studentBossListSent,
             true
         );
+
+        if (api_get_setting('openid_authentication') == 'true' && !empty($user['openid'])) {
+            $up = UserManager::update_openid($user_id, $user['openid']);
+        }
+        $currentUserId = api_get_user_id();
+
+        $userObj = api_get_user_entity($user_id);
 
         UserManager::add_user_as_admin($userObj);
 

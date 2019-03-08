@@ -1598,6 +1598,7 @@ class SocialManager extends UserManager
      * @param int        $start     Limit for the number of parent messages we want to show
      * @param int        $length    Wall message query offset
      * @param bool       $getCount
+     * @param array      $threadList
      *
      * @return array|int
      *
@@ -1951,16 +1952,21 @@ class SocialManager extends UserManager
     public static function getAttachmentPreviewList($message)
     {
         $messageId = $message['id'];
-        $files = MessageManager::getAttachmentList($messageId);
 
         $list = [];
-        if ($files) {
-            $downloadUrl = api_get_path(WEB_CODE_PATH).'social/download.php?message_id='.$messageId;
-            foreach ($files as $row_file) {
-                $url = $downloadUrl.'&attachment_id='.$row_file['id'];
-                $display = Display::fileHtmlGuesser($row_file['filename'], $url);
-                $list[] = $display;
+
+        if (empty($message['group_id'])) {
+            $files = MessageManager::getAttachmentList($messageId);
+            if ($files) {
+                $downloadUrl = api_get_path(WEB_CODE_PATH).'social/download.php?message_id='.$messageId;
+                foreach ($files as $row_file) {
+                    $url = $downloadUrl.'&attachment_id='.$row_file['id'];
+                    $display = Display::fileHtmlGuesser($row_file['filename'], $url);
+                    $list[] = $display;
+                }
             }
+        } else {
+            $list = MessageManager::getAttachmentLinkList($messageId);
         }
 
         return $list;
@@ -2206,7 +2212,7 @@ class SocialManager extends UserManager
             $socialAvatarBlock = '';
         }
 
-        $extraFieldBlock = SocialManager::getExtraFieldBlock($userId, true);
+        $extraFieldBlock = self::getExtraFieldBlock($userId, true);
 
         $template->assign('user', $userInfo);
         $template->assign('extra_info', $extraFieldBlock);
@@ -2446,13 +2452,14 @@ class SocialManager extends UserManager
      * @param int $userId
      * @param int $start
      * @param int $length
+     * @param array $threadList
      *
      * @return array
      */
     public static function getMyWallMessages($userId, $start = 0, $length = 10, $threadList = [])
     {
         $userGroup = new UserGroup();
-        $groups = $userGroup->get_groups_by_user($userId);
+        $groups = $userGroup->get_groups_by_user($userId, [GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_ADMIN]);
         $groupList = [];
         if (!empty($groups)) {
             $groupList = array_column($groups, 'id');
@@ -2689,6 +2696,7 @@ class SocialManager extends UserManager
                             $objEfOption = new ExtraFieldOption('user');
                             $optionInfo = $objEfOption->get_field_option_by_field_and_option($extraFieldInfo['id'], $extraFieldInfo['value']);
                             break;
+                        case ExtraField::FIELD_TYPE_GEOLOCALIZATION_COORDINATES:
                         case ExtraField::FIELD_TYPE_GEOLOCALIZATION:
                             $data = explode('::', $data);
                             $data = $data[0];
@@ -2698,7 +2706,6 @@ class SocialManager extends UserManager
                                 'label' => ucfirst($extraFieldInfo['display_text']),
                                 'value' => $data,
                             ];
-
                             break;
                         case ExtraField::FIELD_TYPE_DOUBLE_SELECT:
                             $id_options = explode('::', $data);

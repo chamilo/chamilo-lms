@@ -1299,40 +1299,14 @@ class ExtraField extends Model
                     case self::FIELD_TYPE_TAG:
                         $variable = $field_details['variable'];
                         $field_id = $field_details['id'];
-
-                        $tagsSelect = $form->addSelect(
-                            "extra_{$field_details['variable']}",
-                            $field_details['display_text'],
-                            [],
-                            ['style' => 'width: 100%;']
-                        );
-
-                        if ($useTagAsSelect == false) {
-                            $tagsSelect->setAttribute('class', null);
+                        $separateValue = 0;
+                        if (isset($separateExtraMultipleSelect[$field_details['variable']])) {
+                            $separateValue = $separateExtraMultipleSelect[$field_details['variable']];
                         }
 
-                        $tagsSelect->setAttribute('id', "extra_{$field_details['variable']}");
-                        $tagsSelect->setMultiple(true);
-
                         $selectedOptions = [];
-                        if ($this->type === 'user') {
-                            // The magic should be here
-                            $user_tags = UserManager::get_user_tags($itemId, $field_details['id']);
 
-                            if (is_array($user_tags) && count($user_tags) > 0) {
-                                foreach ($user_tags as $tag) {
-                                    if (empty($tag['tag'])) {
-                                        continue;
-                                    }
-                                    $tagsSelect->addOption(
-                                        $tag['tag'],
-                                        $tag['tag']
-                                    );
-                                    $selectedOptions[] = $tag['tag'];
-                                }
-                            }
-                            $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php';
-                        } else {
+                        if ($separateValue > 0) {
                             $em = Database::getManager();
                             $fieldTags = $em
                                 ->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
@@ -1342,6 +1316,92 @@ class ExtraField extends Model
                                         'itemId' => $itemId,
                                     ]
                                 );
+                            // ofaj
+
+                            for ($i = 0; $i < $separateValue; $i++) {
+                                $tagsSelect = $form->addElement(
+                                    'select',
+                                    'extra_'.$field_details['variable'].'['.$i.']',
+                                    $customLabelsExtraMultipleSelect[$field_details['variable']][$i], //$field_details['display_text'],
+                                    null,
+                                    ['id' => 'extra_'.$field_details['variable'].'_'.$i]
+                                );
+
+                                if ($addEmptyOptionSelects) {
+                                    $tagsSelect->addOption(
+                                        '',
+                                        ''
+                                    );
+                                }
+
+                                foreach ($fieldTags as $fieldTag) {
+                                    $tag = $em->find('ChamiloCoreBundle:Tag', $fieldTag->getTagId());
+
+                                    if (empty($tag)) {
+                                        continue;
+                                    }
+
+                                    $tagsSelect->addOption(
+                                        $tag->getTag(),
+                                        $tag->getTag()
+                                    );
+                                }
+                            }
+                        } else {
+                            $tagsSelect = $form->addSelect(
+                                "extra_{$field_details['variable']}",
+                                $field_details['display_text'],
+                                [],
+                                ['style' => 'width: 100%;']
+                            );
+
+                            if ($useTagAsSelect === false) {
+                            $tagsSelect->setAttribute('class', null);
+                        }
+
+                            $tagsSelect->setAttribute(
+                                'id',
+                                "extra_{$field_details['variable']}"
+                            );
+                        $tagsSelect->setMultiple(true);
+
+                        $selectedOptions = [];
+                        if ($this->type === 'user') {
+                            // The magic should be here
+                                $user_tags = UserManager::get_user_tags(
+                                    $itemId,
+                                    $field_details['id']
+                                );
+
+                            if (is_array($user_tags) && count($user_tags) > 0) {
+                                foreach ($user_tags as $tag) {
+                                    if (empty($tag['tag'])) {
+                                        continue;
+                                    }
+                                    $tagsSelect->addOption(
+                                        $tag['tag'],
+                                            $tag['tag'],
+                                            [
+                                                'selected' => 'selected',
+                                                'class' => 'selected',
+                                            ]
+                                    );
+                                    $selectedOptions[] = $tag['tag'];
+                                }
+                            }
+                            $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php';
+                        } else {
+                            $em = Database::getManager();
+                                $fieldTags = $em->getRepository(
+                                    'ChamiloCoreBundle:ExtraFieldRelTag'
+                                )
+                                ->findBy(
+                                    [
+                                        'fieldId' => $field_id,
+                                        'itemId' => $itemId,
+                                    ]
+                                );
+
                             /** @var ExtraFieldRelTag $fieldTag */
                             foreach ($fieldTags as $fieldTag) {
                                 /** @var Tag $tag */
@@ -1355,14 +1415,27 @@ class ExtraField extends Model
                                     $tag->getTag()
                                 );
                                 $selectedOptions[] = $tag->getTag();
+                                }
+
+                                if (!empty($extraData) && isset($extraData['extra_'.$field_details['variable']])) {
+                                    $data = $extraData['extra_'.$field_details['variable']];
+                                    if (!empty($data)) {
+                                        foreach ($data as $option) {
+                                            $tagsSelect->addOption(
+                                                $option,
+                                                $option
+                                            );
+                                        }
+                                    }
                             }
 
                             if ($useTagAsSelect) {
-                                $fieldTags = $em
-                                    ->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
-                                    ->findBy([
+                                    $fieldTags = $em->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
+                                        ->findBy(
+                                            [
                                         'fieldId' => $field_id,
-                                    ]);
+                                            ]
+                                        );
                                 $tagsAdded = [];
                                 foreach ($fieldTags as $fieldTag) {
                                     $tag = $em->find('ChamiloCoreBundle:Tag', $fieldTag->getTagId());
@@ -1413,6 +1486,8 @@ class ExtraField extends Model
                                 });
                             ";
                         }
+                        }
+
                         break;
                     case self::FIELD_TYPE_TIMEZONE:
                         $form->addElement(
@@ -1793,9 +1868,11 @@ class ExtraField extends Model
                                             if (status == google.maps.GeocoderStatus.OK) {
                                                 if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {
                                                     map_{$field_details['variable']}.setCenter(results[0].geometry.location);
-                                                    if (!address) {
+                                                    //if (!address) {
                                                         $('#extra_{$field_details['variable']}').val(results[0].formatted_address);
-                                                    }
+                                                        $('#extra_{$field_details['variable']}_coordinates').val(
+                                                            results[0].geometry.location.lat()+','+results[0].geometry.location.lng());
+                                                    //}
                                                     var infowindow = new google.maps.InfoWindow({
                                                         content: '<b>' + $('#extra_{$field_details['variable']}').val() + '</b>',
                                                         size: new google.maps.Size(150, 50)
@@ -1833,7 +1910,7 @@ class ExtraField extends Model
                                         id="geolocalization_extra_'.$field_details['variable'].'"
                                         name="geolocalization_extra_'.$field_details['variable'].'"
                                         type="submit">
-                                        <em class="fa fa-map-marker"></em> '.get_lang('Geolocalization').'
+                                        <em class="fa fa-map-marker"></em> '.get_lang('SearchGeolocalization').'
                                     </button>
                                     <button class="null btn btn-default" id="myLocation_extra_'.$field_details['variable'].'"
                                         name="myLocation_extra_'.$field_details['variable'].'"

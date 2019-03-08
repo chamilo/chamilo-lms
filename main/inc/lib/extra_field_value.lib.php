@@ -302,6 +302,8 @@ class ExtraFieldValue extends Model
                             break;
                     }
 
+                    $cleanedName = api_replace_dangerous_char($value['name']);
+                    $fileName = ExtraField::FIELD_TYPE_FILE."_{$params['item_id']}_$cleanedName";
                     if (!file_exists($fileDir)) {
                         mkdir($fileDir, $dirPermissions, true);
                     }
@@ -908,12 +910,56 @@ class ExtraFieldValue extends Model
                 ORDER BY s.value";
 
         $result = Database::query($sql);
-
+        $idList = [];
         if (Database::num_rows($result)) {
-            return Database::store_result($result, 'ASSOC');
+            $result = Database::store_result($result, 'ASSOC');
+            $finalResult = [];
+            foreach ($result as $item) {
+                $finalResult[$item['id']] = $item;
+            }
+            $idList = array_column($result, 'id');
         }
 
-        return false;
+        $em = Database::getManager();
+
+        $extraField = new ExtraField($this->type);
+        $allData = $extraField->get_all(['filter = ?' => 1]);
+        $allResults = [];
+        foreach ($allData as $field) {
+            if (in_array($field['id'], $idList)) {
+                $allResults[] = $finalResult[$field['id']];
+            } else {
+                if ($field['field_type'] == ExtraField::FIELD_TYPE_TAG) {
+                    $tagResult = [];
+                    $tags = $em->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
+                        ->findBy(
+                            [
+                                'fieldId' => $field['id'],
+                                'itemId' => $itemId,
+                            ]
+                        );
+                    if ($tags) {
+                        /** @var ExtraFieldRelTag $extraFieldTag */
+                        foreach ($tags as $extraFieldTag) {
+                            /** @var \Chamilo\CoreBundle\Entity\Tag $tag */
+                            $tag = $em->find('ChamiloCoreBundle:Tag', $extraFieldTag->getTagId());
+                            $tagResult[] = [
+                                'id' => $extraFieldTag->getTagId(),
+                                'value' => $tag->getTag(),
+                            ];
+                        }
+                    }
+                    $allResults[] = [
+                        'value' => $tagResult,
+                        'variable' => $field['variable'],
+                        'field_type' => $field['field_type'],
+                        'id' => $field['id'],
+                    ];
+                }
+            }
+        }
+
+        return $allResults;
     }
 
     /**

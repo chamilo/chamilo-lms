@@ -221,11 +221,8 @@ if (!empty($threadList)) {
                 'groups-collapse'
             );
         }
-
-
     }
 }
-
 
 // My friends
 $friend_html = SocialManager::listMyFriendsBlock($user_id, '');

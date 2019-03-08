@@ -1590,15 +1590,16 @@ class SocialManager extends UserManager
     /**
      * Gets all messages from someone's wall (within specific limits).
      *
-     * @param int        $userId    id of wall shown
-     * @param int|string $parentId  id message (Post main)
+     * @param int        $userId     id of wall shown
+     * @param int|string $parentId   id message (Post main)
      * @param int|array  $groupId
      * @param int|array  $friendId
-     * @param string     $startDate Date from which we want to show the messages, in UTC time
-     * @param int        $start     Limit for the number of parent messages we want to show
-     * @param int        $length    Wall message query offset
+     * @param string     $startDate  Date from which we want to show the messages, in UTC time
+     * @param int        $start      Limit for the number of parent messages we want to show
+     * @param int        $length     Wall message query offset
      * @param bool       $getCount
      * @param array      $threadList
+     *
      * @return array|int
      *
      * @author Yannick Warnier
@@ -2467,7 +2468,6 @@ class SocialManager extends UserManager
         if (!empty($groups)) {
             $groupList = array_column($groups, 'id');
         }
-
 
         $friends = self::get_friends($userId, USER_RELATION_TYPE_FRIEND);
         $friendList = [];

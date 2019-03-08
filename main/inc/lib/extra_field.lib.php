@@ -1356,29 +1356,29 @@ class ExtraField extends Model
                             );
 
                             if ($useTagAsSelect === false) {
-                            $tagsSelect->setAttribute('class', null);
-                        }
+                                $tagsSelect->setAttribute('class', null);
+                            }
 
                             $tagsSelect->setAttribute(
                                 'id',
                                 "extra_{$field_details['variable']}"
                             );
-                        $tagsSelect->setMultiple(true);
+                            $tagsSelect->setMultiple(true);
 
-                        $selectedOptions = [];
-                        if ($this->type === 'user') {
-                            // The magic should be here
+                            $selectedOptions = [];
+                            if ($this->type === 'user') {
+                                // The magic should be here
                                 $user_tags = UserManager::get_user_tags(
                                     $itemId,
                                     $field_details['id']
                                 );
 
-                            if (is_array($user_tags) && count($user_tags) > 0) {
-                                foreach ($user_tags as $tag) {
-                                    if (empty($tag['tag'])) {
-                                        continue;
-                                    }
-                                    $tagsSelect->addOption(
+                                if (is_array($user_tags) && count($user_tags) > 0) {
+                                    foreach ($user_tags as $tag) {
+                                        if (empty($tag['tag'])) {
+                                            continue;
+                                        }
+                                        $tagsSelect->addOption(
                                         $tag['tag'],
                                             $tag['tag'],
                                             [
@@ -1386,12 +1386,12 @@ class ExtraField extends Model
                                                 'class' => 'selected',
                                             ]
                                     );
-                                    $selectedOptions[] = $tag['tag'];
+                                        $selectedOptions[] = $tag['tag'];
+                                    }
                                 }
-                            }
-                            $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php';
-                        } else {
-                            $em = Database::getManager();
+                                $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php';
+                            } else {
+                                $em = Database::getManager();
                                 $fieldTags = $em->getRepository(
                                     'ChamiloCoreBundle:ExtraFieldRelTag'
                                 )
@@ -1402,19 +1402,19 @@ class ExtraField extends Model
                                     ]
                                 );
 
-                            /** @var ExtraFieldRelTag $fieldTag */
-                            foreach ($fieldTags as $fieldTag) {
-                                /** @var Tag $tag */
-                                $tag = $em->find('ChamiloCoreBundle:Tag', $fieldTag->getTagId());
+                                /** @var ExtraFieldRelTag $fieldTag */
+                                foreach ($fieldTags as $fieldTag) {
+                                    /** @var Tag $tag */
+                                    $tag = $em->find('ChamiloCoreBundle:Tag', $fieldTag->getTagId());
 
-                                if (empty($tag)) {
-                                    continue;
-                                }
-                                $tagsSelect->addOption(
+                                    if (empty($tag)) {
+                                        continue;
+                                    }
+                                    $tagsSelect->addOption(
                                     $tag->getTag(),
                                     $tag->getTag()
                                 );
-                                $selectedOptions[] = $tag->getTag();
+                                    $selectedOptions[] = $tag->getTag();
                                 }
 
                                 if (!empty($extraData) && isset($extraData['extra_'.$field_details['variable']])) {
@@ -1427,49 +1427,49 @@ class ExtraField extends Model
                                             );
                                         }
                                     }
-                            }
+                                }
 
-                            if ($useTagAsSelect) {
+                                if ($useTagAsSelect) {
                                     $fieldTags = $em->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
                                         ->findBy(
                                             [
                                         'fieldId' => $field_id,
                                             ]
                                         );
-                                $tagsAdded = [];
-                                foreach ($fieldTags as $fieldTag) {
-                                    $tag = $em->find('ChamiloCoreBundle:Tag', $fieldTag->getTagId());
+                                    $tagsAdded = [];
+                                    foreach ($fieldTags as $fieldTag) {
+                                        $tag = $em->find('ChamiloCoreBundle:Tag', $fieldTag->getTagId());
 
-                                    if (empty($tag)) {
-                                        continue;
-                                    }
+                                        if (empty($tag)) {
+                                            continue;
+                                        }
 
-                                    $tagText = $tag->getTag();
+                                        $tagText = $tag->getTag();
 
-                                    if (in_array($tagText, $tagsAdded)) {
-                                        continue;
-                                    }
+                                        if (in_array($tagText, $tagsAdded)) {
+                                            continue;
+                                        }
 
-                                    $tagsSelect->addOption(
+                                        $tagsSelect->addOption(
                                         $tag->getTag(),
                                         $tag->getTag(),
                                         []
                                     );
 
-                                    $tagsAdded[] = $tagText;
+                                        $tagsAdded[] = $tagText;
+                                    }
                                 }
+                                $url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php';
                             }
-                            $url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php';
-                        }
 
-                        $form->setDefaults(
+                            $form->setDefaults(
                             [
                                 'extra_'.$field_details['variable'] => $selectedOptions,
                             ]
                         );
 
-                        if ($useTagAsSelect == false) {
-                            $jquery_ready_content .= "
+                            if ($useTagAsSelect == false) {
+                                $jquery_ready_content .= "
                                 $('#extra_$variable').select2({
                                     ajax: {
                                         url: '$url?a=search_tags&field_id=$field_id&type={$this->type}',
@@ -1485,7 +1485,7 @@ class ExtraField extends Model
                                     placeholder: '".get_lang('StartToType')."'
                                 });
                             ";
-                        }
+                            }
                         }
 
                         break;

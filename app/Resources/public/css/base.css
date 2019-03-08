@@ -5460,6 +5460,19 @@ div#chat-remote-video video {
     border-color: #FAEBCC !important;
 }
 
+.forum_display .panel-default{
+    border: none;
+    box-shadow: none;
+}
+
+.forum_display .panel-default .panel-body{
+    padding: 0;
+}
+
+.forum_display .panel .title img{
+    display: none;
+}
+
 .forum-post {
     border-color: #dddddd !important;
 }
@@ -8726,6 +8739,17 @@ ul#toolnavbox-two li a.btn {
     }
     .list-skills{
         grid-template-columns: repeat(2, 1fr);
+    }
+    .forum_display .number-post{
+        padding: 0;
+        background-color: transparent;
+        border: none;
+    }
+    .forum_display .number-post img{
+        width: 32px;
+    }
+    .forum_display .panel .pull-right{
+        float: initial;
     }
 }
 

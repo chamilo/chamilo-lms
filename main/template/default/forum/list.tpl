@@ -76,7 +76,7 @@
                         <div class="panel panel-default forum">
                             <div class="panel-body">
                                 <div class="row">
-                                    <div class="col-md-3">
+                                    <div class="col-xs-4 col-md-3">
                                         <div class="number-post">
                                             <a href="{{ forum.url }}" title="{{forum.title}}">
                                                 {% if subitem.forum_image is not empty %}
@@ -92,7 +92,7 @@
                                             <p>{{ 'ForumThreads'| get_lang }}: {{ subitem.number_threads }} </p>
                                         </div>
                                     </div>
-                                    <div class="col-md-9">
+                                    <div class="col-xs-8 col-md-9">
                                         <div class="pull-right">
                                             <div class="toolbar">
                                                 {{ subitem.tools }}

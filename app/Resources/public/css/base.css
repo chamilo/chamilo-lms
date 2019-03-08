@@ -9061,6 +9061,7 @@ input.form-control[type="color"] {
     position: -ms-sticky;
     position: -o-sticky;
     position: sticky;
+    z-index: 9999;
 }
 #chamilo-news .alert {
     margin-bottom: 0;

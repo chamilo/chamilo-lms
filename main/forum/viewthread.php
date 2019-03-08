@@ -129,10 +129,11 @@ switch ($my_action) {
         exit;
         break;
     case 'ask_revision':
-        $postId = isset($_GET['post_id']) ? $_GET['post_id'] : 0;
-
-        $result = savePostRevision($postId, $current_forum, $current_thread);
-        Display::addFlash(Display::return_message(get_lang('Saved')));
+        if (api_get_configuration_value('allow_forum_post_revisions')) {
+            $postId = isset($_GET['post_id']) ? $_GET['post_id'] : 0;
+            $result = savePostRevision($postId);
+            Display::addFlash(Display::return_message(get_lang('Saved')));
+        }
         header('Location: '.$currentUrl);
         exit;
         break;

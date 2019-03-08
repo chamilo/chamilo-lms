@@ -3129,14 +3129,16 @@ function show_add_post_form($current_forum, $action, $id = '', $form_values = ''
     $myThread = isset($_GET['thread']) ? (int) $_GET['thread'] : '';
     $forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : '';
     $my_post = isset($_GET['post']) ? (int) $_GET['post'] : '';
-    $giveRevision = isset($_GET['give_revision']) && $_GET['give_revision'] == 1 ? true : false;
+    $giveRevision = (isset($_GET['give_revision']) && $_GET['give_revision'] == 1);
 
-    $url = api_get_self().'?'.http_build_query([
+    $url = api_get_self().'?'.http_build_query(
+        [
             'action' => $action,
             'forum' => $forumId,
             'thread' => $myThread,
             'post' => $my_post,
-        ]).'&'.api_get_cidreq();
+        ]
+    ).'&'.api_get_cidreq();
 
     $form = new FormValidator(
         'thread',
@@ -3176,7 +3178,7 @@ function show_add_post_form($current_forum, $action, $id = '', $form_values = ''
     );
     $form->addRule('post_text', get_lang('ThisFieldIsRequired'), 'required');
 
-    if (in_array($action, ['replythread', 'replymessage', 'quote'])) {
+    if (in_array($action, ['newthread', 'replythread', 'replymessage', 'quote'])) {
         $extraFields = new ExtraField('forum_post');
         $extraFields->addElements(
             $form,
@@ -6716,16 +6718,16 @@ function postNeedsRevision($postId)
  */
 function getAskRevisionButton($postId, $threadInfo)
 {
-    if (api_get_configuration_value('allow_forum_post_revisions') !== false) {
+    if (api_get_configuration_value('allow_forum_post_revisions') === false) {
         return '';
     }
+
     $postId = (int) $postId;
 
     $status = 'btn-default';
     if (postNeedsRevision($postId)) {
         $status = 'btn-success';
     }
-
     return Display::url(
         get_lang('AskRevision'),
         api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.
@@ -6746,13 +6748,15 @@ function giveRevisionButton($postId, $threadInfo)
 
     return Display::toolbarButton(
         get_lang('GiveRevision'),
-       api_get_path(WEB_CODE_PATH).'forum/reply.php?'.api_get_cidreq().'&'.http_build_query([
-            'forum' => $threadInfo['forum_id'],
-            'thread' => $threadInfo['thread_id'],
-            'post' => $postId = (int) $postId,
-            'action' => 'replymessage',
-            'give_revision' => 1,
-        ]),
+        api_get_path(WEB_CODE_PATH).'forum/reply.php?'.api_get_cidreq().'&'.http_build_query(
+            [
+                'forum' => $threadInfo['forum_id'],
+                'thread' => $threadInfo['thread_id'],
+                'post' => $postId = (int)$postId,
+                'action' => 'replymessage',
+                'give_revision' => 1,
+            ]
+        ),
         'reply',
         'primary',
         ['id' => "reply-to-post-{$postId}"]

@@ -998,8 +998,8 @@ class MessageManager
     }
 
     /**
-     * @param int    $user_id
-     * @param int    $message_id
+     * @param int $user_id
+     * @param int $message_id
      * @param int $type
      *
      * @return bool

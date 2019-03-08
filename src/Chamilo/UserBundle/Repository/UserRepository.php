@@ -680,7 +680,7 @@ class UserRepository extends EntityRepository
                 ;
                 $result = $qb->getQuery()->getResult();
             } else {
-        $criteria = [
+                $criteria = [
                     $field => $userId,
         ];
                 $result = $em->getRepository($entity)->findBy($criteria);

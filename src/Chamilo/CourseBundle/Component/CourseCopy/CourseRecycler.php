@@ -328,7 +328,7 @@ class CourseRecycler
                   i.visibility = 1";
         $sql = "DELETE FROM $forumCategoryTable
                     WHERE c_id = $courseId AND cat_id NOT IN ($subQuery)";
-            Database::query($sql);
+        Database::query($sql);
     }
 
     /**

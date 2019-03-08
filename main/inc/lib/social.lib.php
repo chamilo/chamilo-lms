@@ -1872,9 +1872,9 @@ class SocialManager extends UserManager
         $date = Display::dateToStringAgoAndLongDate($message['send_date']);
         $currentUserId = api_get_user_id();
         $userIdLoop = $message['user_sender_id'];
-        $receiverId = $message['user_receiver_id'];       
+        $receiverId = $message['user_receiver_id'];
         $urlImg = api_get_path(WEB_IMG_PATH);
-        
+
         if (!isset($users[$userIdLoop])) {
             $users[$userIdLoop] = api_get_user_info($userIdLoop);
         }

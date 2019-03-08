@@ -580,7 +580,6 @@ See https://support.chamilo.org/issues/6976
     background-color: #ffffff;
 }
 
-
 /* LP VIEW COLLAPSE */
 .scorm-collapse .panel:hover {
     box-shadow: 0 3px 1px 0 rgba(20, 23, 28, .1);
@@ -678,7 +677,11 @@ See https://support.chamilo.org/issues/6976
     top: 0 !important;
 }
 .tabs-right li{
-    float: right;
+    display: inline-block;
+    float: initial;
+}
+.tabs-right{
+    text-align: right;
 }
 /* END LP VIEW COLLAPSE */
 /* Small devices (tablets, 768px and up) */

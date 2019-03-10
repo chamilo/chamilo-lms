@@ -18,7 +18,7 @@
   "dependencies": {
     "blueimp-file-upload": "^9.19.2",
     "bootstrap-daterangepicker": "^3.0",
-    "bootstrap-select": "^1.13",
+    "bootstrap-select": "^1.13.6",
     "chosen-js": "^1.8.7",
     "cropper": "^4.0",
     "datepair.js": "^0.4.16",

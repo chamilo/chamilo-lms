@@ -86,6 +86,7 @@ if (!empty($threadList)) {
 
 $forumCourseId = api_get_configuration_value('global_forums_course_id');
 $myGroups = [];
+$courseInfo = null;
 if (!empty($forumCourseId)) {
     $courseInfo = api_get_course_info_by_id($forumCourseId);
 }
@@ -105,22 +106,21 @@ $social_search_block = Display::panel(
 );
 
 $social_group_block = '';
-if (!empty($threadList)) {
-    $social_group_block .= '<div class="list-group">';
-    foreach ($threadList as $group) {
-        $social_group_block .= ' <li class="list-group-item">';
-        $social_group_block .= $group['name'];
-        $social_group_block .= '</li>';
+if (!empty($courseInfo)) {
+    if (!empty($threadList)) {
+        $social_group_block .= '<div class="list-group">';
+        foreach ($threadList as $group) {
+            $social_group_block .= ' <li class="list-group-item">';
+            $social_group_block .= $group['name'];
+            $social_group_block .= '</li>';
+        }
+        $social_group_block .= '</div>';
     }
-    $social_group_block .= '</div>';
 
-    // Top popular
-    if (!empty($courseInfo)) {
-        $social_group_block .= Display::url(
-            get_lang('SeeAllCommunities'),
-            api_get_path(WEB_CODE_PATH).'forum/index.php?cidReq='.$courseInfo['code']
-        );
-    }
+    $social_group_block .= Display::url(
+        get_lang('SeeAllCommunities'),
+        api_get_path(WEB_CODE_PATH).'forum/index.php?cidReq='.$courseInfo['code']
+    );
 
     if (!empty($social_group_block)) {
         $social_group_block = Display::panelCollapse(

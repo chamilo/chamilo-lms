@@ -826,7 +826,6 @@ if (!empty($exerciseList)) {
                     }
                     $actions .= $settings;
 
-
                     // Exercise results
                     $resultsLink = '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.
                         Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';

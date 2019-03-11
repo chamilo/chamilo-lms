@@ -171,6 +171,18 @@ class DateTimeRangePicker extends DateRangePicker
     }
 
     /**
+     * @param string $value
+     */
+    public function setValue($value)
+    {
+        $this->updateAttributes(
+            [
+                'value' => $value,
+            ]
+        );
+    }
+
+    /**
      * Get the necessary javascript for this datepicker.
      *
      * @return string
@@ -245,17 +257,5 @@ class DateTimeRangePicker extends DateRangePicker
         </script>";
 
         return $js;
-    }
-
-    /**
-     * @param string $value
-     */
-    public function setValue($value)
-    {
-        $this->updateAttributes(
-            [
-                'value' => $value
-            ]
-        );
     }
 }

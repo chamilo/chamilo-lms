@@ -343,7 +343,6 @@ $form->setDefaults($defaults);
 
 // The validation or display
 if ($form->validate()) {
-
     // Exporting the values
     $values = $form->getSubmitValues();
     // Storing the survey

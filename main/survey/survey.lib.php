@@ -508,7 +508,7 @@ class SurveyManager
             $return['id'] = $values['survey_id'];
         }
 
-        $survey_id = intval($return['id']);
+        $survey_id = (int) $return['id'];
 
         // Gradebook
         $gradebook_option = false;
@@ -1478,7 +1478,6 @@ class SurveyManager
 		            survey_id='".$survey_id."' AND
 		            question_id='".$question_id."'";
         Database::query($sql);
-        error_log($sql);
 
         // Deleting the options of the question of the survey
         self::delete_survey_question_option($survey_id, $question_id, $shared);

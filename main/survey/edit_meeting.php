@@ -79,7 +79,6 @@ $form->addRule(
     'lte'
 );
 
-
 $form->addHtmlEditor('survey_introduction', get_lang('Description'), false);
 $form->setRequired($text);
 

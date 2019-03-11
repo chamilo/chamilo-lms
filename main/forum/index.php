@@ -307,6 +307,7 @@ if (is_array($forumCategories)) {
         if (!empty($forumsInCategory)) {
             $forumsDetailsList = [];
             // We display all the forums in this category.
+
             foreach ($allCourseForums as $forum) {
                 // Here we clean the whatnew_post_info array a little bit because to display the icon we
                 // test if $whatsnew_post_info[$forum['forum_id']] is empty or not.
@@ -347,7 +348,7 @@ if (is_array($forumCategories)) {
                             );
                         }
                     }
-
+                    //var_dump($forum);
                     if ($show_forum) {
                         $form_count++;
                         $mywhatsnew_post_info = isset($whatsnew_post_info[$forum['forum_id']])
@@ -460,6 +461,9 @@ if (is_array($forumCategories)) {
                         if (!empty($forum['last_poster_id'])) {
                             $forumInfo['last_poster_date'] = api_convert_and_format_date($forum['last_post_date']);
                             $forumInfo['last_poster_user'] = display_user_link($poster_id, $name, null, $username);
+                            $forumInfo['avatar'] = UserManager::getUserPicture($poster_id);
+                        } else {
+                            $forumInfo['avatar'] = UserManager::getUserPicture($forum['insert_user_id']);
                         }
 
                         if (api_is_allowed_to_edit(false, true)
@@ -539,5 +543,5 @@ $tpl->assign('introduction', $introduction);
 $tpl->assign('actions', $actions);
 $tpl->assign('data', $listForumCategory);
 $tpl->assign('form_content', $formContent);
-$layout = $tpl->get_template('forum/list.tpl');
+$layout = $tpl->get_template('forum/list.html.twig');
 $tpl->display($layout);

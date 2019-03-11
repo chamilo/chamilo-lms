@@ -181,6 +181,10 @@ if ($is_allowedToEdit) {
         if ($choice === 'clean_all_test') {
             $check = Security::check_token('get');
             if ($check) {
+                if ($limitTeacherAccess && !api_is_platform_admin()) {
+                    api_not_allowed(true);
+                }
+
                 // list of exercises in a course/session
                 // we got variable $courseId $courseInfo session api_get_session_id()
                 $exerciseList = ExerciseLib::get_all_exercises_for_course_id(
@@ -530,7 +534,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/aiken.php?'.api_get_cidreq().'">'.Display::return_icon('import_aiken.png', get_lang('ImportAikenQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/upload_exercise.php?'.api_get_cidreq().'">'.Display::return_icon('import_excel.png', get_lang('ImportExcelQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    echo Display::url(
+    $cleanAll = Display::url(
         Display::return_icon(
             'clean_all.png',
             get_lang('CleanAllStudentsResultsForAllTests'),
@@ -545,6 +549,14 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
             'data-target' => '#confirm-delete',
         ]
     );
+
+    if ($limitTeacherAccess) {
+        if (api_is_platform_admin()) {
+            echo $cleanAll;
+        }
+    } else {
+        echo $cleanAll;
+    }
 }
 
 if ($is_allowedToEdit) {
@@ -814,9 +826,19 @@ if (!empty($exerciseList)) {
                     }
                     $actions .= $settings;
 
+
                     // Exercise results
-                    $actions .= '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.
+                    $resultsLink = '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.
                         Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
+
+                    if ($limitTeacherAccess) {
+                        if (api_is_platform_admin()) {
+                            $actions .= $resultsLink;
+                        }
+                    } else {
+                        // Exercise results
+                        $actions .= $resultsLink;
+                    }
 
                     // Auto launch
                     if ($autoLaunchAvailable) {

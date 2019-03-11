@@ -566,6 +566,10 @@ $_configuration['send_all_emails_to'] = [
 //$_configuration['quiz_prevent_copy_paste'] = false;
 // Always show the test description on the results page of the test
 //$_configuration['quiz_show_description_on_results_page'] = false;
+// Allow add additional actions (as links) in exercises list for teachers.
+// Callback get the $exerciseId and $iconSize as parameters.
+// e.g. ['myplugin' => ['MyPlugin', 'urlGeneratorCallback']]
+//$_configuration['exercise_additional_teacher_modify_actions'] = []
 
 // Hide search form in session list
 //$_configuration['hide_search_form_in_session_list'] = false;

@@ -5231,4 +5231,28 @@ EOT;
 
         return $emailAlerts;
     }
+
+    /**
+     * Get the additional actions added in exercise_additional_teacher_modify_actions configuration.
+     *
+     * @param int $exerciseId
+     * @param int $iconSize
+     *
+     * @return string
+     */
+    public static function getAdditionalTeacherActions($exerciseId, $iconSize = ICON_SIZE_SMALL)
+    {
+        $additionalActions = api_get_configuration_value('exercise_additional_teacher_modify_actions') ?: [];
+        $actions = [];
+
+        foreach ($additionalActions as $additionalAction) {
+            $actions[] = call_user_func(
+                $additionalAction,
+                $exerciseId,
+                $iconSize
+            );
+        }
+
+        return implode(PHP_EOL, $actions);
+    }
 }

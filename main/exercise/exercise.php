@@ -1245,6 +1245,12 @@ if (!empty($exerciseList)) {
             }
 
             if ($is_allowedToEdit) {
+                $additionalActions = ExerciseLib::getAdditionalTeacherActions($row['id']);
+
+                if (!empty($additionalActions)) {
+                    $actions .= $additionalActions.PHP_EOL;
+                }
+
                 $item .= Display::tag('td', $actions, ['class' => 'td_actions']);
             } else {
                 if ($isDrhOfCourse) {

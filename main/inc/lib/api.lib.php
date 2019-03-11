@@ -476,7 +476,9 @@ define('RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES', 3); //Show final 
 define('RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT', 4);
 define('RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK', 5);
 define('RESULT_DISABLE_RANKING', 6);
-// 4: Show final score only with categories and show expected answers only on the last attempt
+define('RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER', 7);
+
+// 4: Show final score only with  and show expected answers only on the last attempt
 
 define('EXERCISE_MAX_NAME_SIZE', 80);
 

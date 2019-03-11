@@ -32,8 +32,6 @@ $logInfo = [
     'tool' => TOOL_SURVEY,
     'tool_id' => 0,
     'tool_id_detail' => 0,
-    'action' => '',
-    'action_details' => '',
 ];
 Event::registerLog($logInfo);
 

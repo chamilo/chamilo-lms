@@ -14,7 +14,7 @@ $surveyId = isset($_REQUEST['survey_id']) ? (int) $_REQUEST['survey_id'] : 0;
 $invitationcode = isset($_REQUEST['invitationcode']) ? Database::escape_string($_REQUEST['invitationcode']) : 0;
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 
-if (!api_is_allowed_to_edit() || !empty($invitationcode)) {
+if (!empty($invitationcode) || !api_is_allowed_to_edit()) {
     $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
     $table_survey = Database::get_course_table(TABLE_SURVEY);
 
@@ -37,26 +37,6 @@ if (!api_is_allowed_to_edit() || !empty($invitationcode)) {
     $result = Database::fetch_array($result, 'ASSOC');
     $surveyId = $result['iid'];
 }
-
-// getting all the students of the course
-/*if (empty($sessionId)) {
-    // Registered students in a course outside session.
-    $students = CourseManager:: get_student_list_from_course_code(
-        api_get_course_id(),
-        false,
-        0,
-        null,
-        null,
-        true
-    );
-} else {
-    // Registered students in session.
-    $students = CourseManager:: get_student_list_from_course_code(
-        api_get_course_id(),
-        true,
-        $sessionId
-    );
-}*/
 
 $surveyData = SurveyManager::get_survey($surveyId);
 
@@ -154,8 +134,9 @@ foreach ($questions as $item) {
     $date = explode(' ', $startDateTime);
     $endDate = explode(' ', $endDateTime);
     $mainDate = $date[0];
-    $startTime = $date[1];
-    $endTime = $endDate[1];
+
+    $startTime = isset($date[1]) && $date[1] != '00:00:00' ? $date[1] : '';
+    $endTime = isset($endDate[1]) && $endDate[1] != '00:00:00' ? $endDate[1] : '';
 
     $mainDate = api_format_date($mainDate, DATE_FORMAT_SHORT);
     $table->setHeaderContents($row, $column, "<h4>$mainDate</h4> $startTime <br >$endTime");
@@ -279,30 +260,6 @@ if ($action === 'edit') {
         <button name="submit" type="submit" class="btn btn-primary btn-lg">'.get_lang('Save').'</button></div>';
     $content .= '</form>';
 }
-
-/*$ajaxUrl = api_get_path(WEB_AJAX_PATH).
-    'survey.ajax.php?a=save_question&'.api_get_cidreq().'&survey_id='.$surveyId.'&question_id=';
-
-$content .= '<script>
-$(function() {
-    $(".question").on("change", function() {
-        var questionId = $(this).attr("id");
-        var status = 0;
-        if ($(this).prop("checked")) {
-            status = 1;
-        }
-        $.ajax({
-            url: "'.$ajaxUrl.'" + questionId + "&status=" + status,
-            success: function (data) {
-                $("#ajax_result").html("<div class=\"alert alert-info\">"+ "'.get_lang('Saved').'" + "</div>");
-                $("#ajax_result").show();
-                return;
-            },
-        });
-    });
-
-});
-</script>';*/
 
 $template->assign('content', $content);
 $template->display_one_col_template();

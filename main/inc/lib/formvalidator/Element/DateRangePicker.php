@@ -122,7 +122,6 @@ class DateRangePicker extends HTML_QuickForm_text
     {
         $js = null;
         $id = $this->getAttribute('id');
-
         $dateRange = $this->getAttribute('value');
 
         $defaultDates = null;

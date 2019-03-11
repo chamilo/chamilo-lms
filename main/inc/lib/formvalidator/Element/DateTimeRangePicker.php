@@ -20,10 +20,12 @@ class DateTimeRangePicker extends DateRangePicker
         }
 
         $id = $this->getAttribute('id');
-        $value = $this->getValue();
+        $dateRange = $this->getValue();
 
-        if (!empty($value)) {
-            $value = api_format_date($value, DATE_FORMAT_LONG_NO_DAY);
+        $value = '';
+        if (!empty($dateRange)) {
+            $dates = $this->parseDateRange($dateRange);
+            $value = api_format_date($dates['date'], DATE_FORMAT_LONG_NO_DAY);
         }
 
         return '
@@ -70,7 +72,7 @@ class DateTimeRangePicker extends DateRangePicker
                 }
                 // else just keep the $size array as received
             } else {
-                $size = [2, intval($size), 2];
+                $size = [2, (int) $size, 2];
             }
         }
 
@@ -121,9 +123,9 @@ class DateTimeRangePicker extends DateRangePicker
                     <div class="col-sm-'.$size[1].'"> 
                         <div class="input-group"> 
                             <p id="'.$id.'_time_range">                    
-                                <input type="text" name="'.$id.'_time_range_start" class="time start" autocomplete="off"> 
+                                <input type="text" id="'.$id.'_time_range_start" name="'.$id.'_time_range_start" class="time start" autocomplete="off"> 
                                 '.get_lang('To').'
-                                <input type="text" name="'.$id.'_time_range_end" class="time end " autocomplete="off">
+                                <input type="text" id="'.$id.'_time_range_end" name="'.$id.'_time_range_end" class="time end " autocomplete="off">
                             </p>
                         </div>                   
                     </div>
@@ -144,6 +146,31 @@ class DateTimeRangePicker extends DateRangePicker
     }
 
     /**
+     * @param array $dateRange
+     *
+     * @return array
+     */
+    public function parseDateRange($dateRange)
+    {
+        $dateRange = Security::remove_XSS($dateRange);
+        $dates = explode('@@', $dateRange);
+        $dates = array_map('trim', $dates);
+        $start = isset($dates[0]) ? $dates[0] : '';
+        $end = isset($dates[1]) ? $dates[1] : '';
+
+        $date = substr($start, 0, 10);
+        $start = isset($dates[0]) ? $dates[0] : '';
+        //$start = substr($start, 11, strlen($start));
+        //$end = substr($end, 11, strlen($end));
+
+        return [
+            'date' => $date,
+            'start_time' => $start,
+            'end_time' => $end,
+        ];
+    }
+
+    /**
      * Get the necessary javascript for this datepicker.
      *
      * @return string
@@ -152,6 +179,18 @@ class DateTimeRangePicker extends DateRangePicker
     {
         $js = null;
         $id = $this->getAttribute('id');
+
+        $dateRange = $this->getValue();
+
+        $defaultDate = '';
+        $startTime = '';
+        $endTime = '';
+        if (!empty($dateRange)) {
+            $dates = $this->parseDateRange($dateRange);
+            $defaultDate = $dates['date'];
+            $startTime = $dates['start_time'];
+            $endTime = $dates['end_time'];
+        }
 
         $js .= "<script>                    
             $(function() {
@@ -163,7 +202,7 @@ class DateTimeRangePicker extends DateRangePicker
                 txtDate
                     .hide()
                     .datepicker({
-                        defaultDate: '".$this->getValue()."',
+                        defaultDate: '".$defaultDate."',
                         dateFormat: 'yy-mm-dd',
                         altField: '#{$id}_alt',
                         altFormat: \"".get_lang('DateFormatLongNoDayJS')."\",
@@ -178,16 +217,15 @@ class DateTimeRangePicker extends DateRangePicker
                     .on('change', function (e) {
                         txtDateAltText.text(txtDateAlt.val());
                     });
-                    
+                                        
                 txtDateAltText.on('click', function () {
                     txtDate.datepicker('show');
                 });
-
+                
                 inputGroup
                     .find('button')
                     .on('click', function (e) {
                         e.preventDefault();
-
                         $('#$id, #{$id}_alt').val('');
                         $('#{$id}_alt_text').html('');
                     });
@@ -195,15 +233,29 @@ class DateTimeRangePicker extends DateRangePicker
                 $('#".$id."_time_range .time').timepicker({
                     'showDuration': true,
                     'timeFormat': 'H:i:s',
-                    'scrollDefault': 'now',
-                    
+                    'scrollDefault': 'now',                    
                 });
-                var timeOnlyExampleEl = document.getElementById('".$id."_time_range');
-                var timeOnlyDatepair = new Datepair(timeOnlyExampleEl);
                 
+                $('#".$id."_time_range_start').timepicker('setTime', new Date('".$startTime."'));
+                $('#".$id."_time_range_end').timepicker('setTime', new Date('".$endTime."'));
+                
+                var timeOnlyExampleEl = document.getElementById('".$id."_time_range');
+                var timeOnlyDatepair = new Datepair(timeOnlyExampleEl);                
             });
         </script>";
 
         return $js;
+    }
+
+    /**
+     * @param string $value
+     */
+    public function setValue($value)
+    {
+        $this->updateAttributes(
+            [
+                'value' => $value
+            ]
+        );
     }
 }

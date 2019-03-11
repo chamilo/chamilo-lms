@@ -165,12 +165,18 @@ $form->addElement(
 // Pass the language of the survey in the form
 $form->addElement('hidden', 'survey_language');
 
+$allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
+
 if ($allowSurveyAvailabilityDatetime) {
     $startDateElement = $form->addDateTimePicker('start_date', get_lang('StartDate'));
     $endDateElement = $form->addDateTimePicker('end_date', get_lang('EndDate'));
+    $form->addRule('start_date', get_lang('InvalidDate'), 'datetime');
+    $form->addRule('end_date', get_lang('InvalidDate'), 'datetime');
 } else {
     $startDateElement = $form->addElement('date_picker', 'start_date', get_lang('StartDate'));
     $endDateElement = $form->addElement('date_picker', 'end_date', get_lang('EndDate'));
+    $form->addRule('start_date', get_lang('InvalidDate'), 'date');
+    $form->addRule('end_date', get_lang('InvalidDate'), 'date');
 }
 
 $form->setRequired($startDateElement);

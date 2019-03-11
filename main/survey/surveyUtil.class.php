@@ -2851,10 +2851,16 @@ class SurveyUtil
         if (api_is_allowed_to_edit() ||
             api_is_element_in_the_session(TOOL_SURVEY, $survey_id)
         ) {
+            $editUrl = $codePath.'survey/create_new_survey.php?'.
+                http_build_query($params + ['action' => 'edit', 'survey_id' => $survey_id]);
+            if ($survey->getSurveyType() == 3) {
+                $editUrl = $codePath.'survey/edit_meeting.php?'.
+                    http_build_query($params + ['action' => 'edit', 'survey_id' => $survey_id]);
+            }
+
             $actions[] = Display::url(
                 Display::return_icon('edit.png', get_lang('Edit')),
-                $codePath.'survey/create_new_survey.php?'
-                .http_build_query($params + ['action' => 'edit', 'survey_id' => $survey_id])
+                $editUrl
             );
 
             if (SurveyManager::survey_generation_hash_available()) {

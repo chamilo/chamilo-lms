@@ -136,14 +136,15 @@ class SurveyManager
         $course_code = '',
         $simple_return = false
     ) {
+        $my_course_id = api_get_course_id();
+
         // Table definition
         if (!empty($course_code)) {
             $my_course_id = $course_code;
         } elseif (isset($_GET['course'])) {
             $my_course_id = Security::remove_XSS($_GET['course']);
-        } else {
-            $my_course_id = api_get_course_id();
         }
+
         $courseInfo = api_get_course_info($my_course_id);
         $survey_id = (int) $survey_id;
         $table_survey = Database::get_course_table(TABLE_SURVEY);
@@ -433,8 +434,8 @@ class SurveyManager
             $extraParams['shuffle'] = isset($values['shuffle']) ? $values['shuffle'] : null;
 
             if ($values['anonymous'] == 0) {
-                $extraParams['show_form_profile'] = $values['show_form_profile'];
-                if ($values['show_form_profile'] == 1) {
+                $extraParams['show_form_profile'] = isset($values['show_form_profile']) ? $values['show_form_profile'] : '';
+                if ($extraParams['show_form_profile'] == 1) {
                     $fields = explode(',', $values['input_name_list']);
                     $field_values = '';
                     foreach ($fields as &$field) {
@@ -1460,7 +1461,10 @@ class SurveyManager
      */
     public static function delete_survey_question($survey_id, $question_id, $shared = false)
     {
+        $survey_id = (int) $survey_id;
+        $question_id = (int) $question_id;
         $course_id = api_get_course_int_id();
+
         if ($shared) {
             self::delete_shared_survey_question($survey_id, $question_id);
         }
@@ -1471,9 +1475,10 @@ class SurveyManager
         $sql = "DELETE FROM $table
 		        WHERE
 		            c_id = $course_id AND
-		            survey_id='".intval($survey_id)."' AND
-		            question_id='".intval($question_id)."'";
+		            survey_id='".$survey_id."' AND
+		            question_id='".$question_id."'";
         Database::query($sql);
+        error_log($sql);
 
         // Deleting the options of the question of the survey
         self::delete_survey_question_option($survey_id, $question_id, $shared);

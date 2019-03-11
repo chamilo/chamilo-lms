@@ -595,6 +595,6 @@ $value = $extraFieldValue->get_values_by_handler_and_field_variable(api_get_cour
 if ($value && isset($value['value']) && $value['value'] == 1) {
     $layout = $tpl->get_template('forum/global_list.tpl');
 } else {
-$layout = $tpl->get_template('forum/list.tpl');
+    $layout = $tpl->get_template('forum/list.tpl');
 }
 $tpl->display($layout);

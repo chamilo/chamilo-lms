@@ -1958,7 +1958,6 @@ class SocialManager extends UserManager
         }
 
         return implode('', $previews);
-
     }
 
     /**

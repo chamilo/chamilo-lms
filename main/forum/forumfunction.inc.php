@@ -6740,6 +6740,7 @@ function getAskRevisionButton($postId, $threadInfo)
     if (postNeedsRevision($postId)) {
         $status = 'btn-success';
     }
+
     return Display::url(
         get_lang('AskRevision'),
         api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.
@@ -6764,7 +6765,7 @@ function giveRevisionButton($postId, $threadInfo)
             [
                 'forum' => $threadInfo['forum_id'],
                 'thread' => $threadInfo['thread_id'],
-                'post' => $postId = (int)$postId,
+                'post' => $postId = (int) $postId,
                 'action' => 'replymessage',
                 'give_revision' => 1,
             ]

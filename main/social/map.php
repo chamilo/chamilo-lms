@@ -44,7 +44,6 @@ if ($localization) {
     api_not_allowed(true);
 }
 
-
 $tableUser = Database::get_main_table(TABLE_MAIN_USER);
 $sql = "SELECT u.id, firstname, lastname, ev.value ville, ev2.value stage
         FROM $tableUser u 

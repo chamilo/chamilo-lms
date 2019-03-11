@@ -232,8 +232,8 @@ class SurveyManager
             $sql = 'SELECT 1 FROM '.$table_survey.'
 			        WHERE
 			            c_id = '.$course_id.' AND
-			            code="'.Database::escape_string($values['survey_code']).'" AND
-			            lang="'.Database::escape_string($values['survey_language']).'"';
+			            code = "'.Database::escape_string($values['survey_code']).'" AND
+			            lang = "'.Database::escape_string($values['survey_language']).'"';
             $rs = Database::query($sql);
             if (Database::num_rows($rs) > 0) {
                 Display::addFlash(
@@ -341,12 +341,6 @@ class SurveyManager
                 'subtitle' => $values['survey_subtitle'],
                 'author' => $_user['user_id'],
                 'lang' => $values['survey_language'],
-                'avail_from' => $allowSurveyAvailabilityDatetime
-                    ? api_get_utc_datetime($values['start_date'].':00')
-                    : $values['start_date'],
-                'avail_till' => $allowSurveyAvailabilityDatetime
-                    ? api_get_utc_datetime($values['end_date'].':59')
-                    : $values['end_date'],
                 'is_shared' => $shared_survey_id,
                 'template' => 'template',
                 'intro' => $values['survey_introduction'],
@@ -357,11 +351,28 @@ class SurveyManager
                 'visible_results' => $values['visible_results'],
             ];
 
+            if (!empty($values['start_date'])) {
+                if ($allowSurveyAvailabilityDatetime) {
+                    $params['avail_from'] = api_get_utc_datetime($values['start_date'].':00');
+                } else {
+                    $params['avail_from'] = $values['start_date'];
+                }
+            }
+
+            if (!empty($values['end_date'])) {
+                if ($allowSurveyAvailabilityDatetime) {
+                    $params['avail_till'] = api_get_utc_datetime($values['end_date'].':00');
+                } else {
+                    $params['avail_till'] = $values['end_date'];
+                }
+            }
+
             if (isset($values['survey_type']) && !empty($values['survey_type'])) {
                 $params['survey_type'] = $values['survey_type'];
             }
 
             $params = array_merge($params, $extraParams);
+
             $survey_id = Database::insert($table_survey, $params);
             if ($survey_id > 0) {
                 $sql = "UPDATE $table_survey SET survey_id = $survey_id

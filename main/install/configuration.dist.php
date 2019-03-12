@@ -1138,12 +1138,13 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Translate HTML based in the HTML "lang" attribute see BT#15166
 //$_configuration['translate_html'] = false;
 
-// ------ Custom DB changes (keep this at the end)
+// Avoid add a reply-to header when a no-reply address is set.
+//$_configuration['mail_no_reply_avoid_reply_to'] = false;
+
+// KEEP THIS AT THE END
+// -------- Custom DB changes
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email
 // You need add a new option called "confirmation" to the registration settings
 //INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_registration', 'confirmation', 'MailConfirmation');
 // ------ (End) Custom DB changes
-
-// Avoid add a reply-to header when a no-reply address is set.
-//$_configuration['mail_no_reply_avoid_reply_to'] = false;

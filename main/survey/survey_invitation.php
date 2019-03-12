@@ -95,17 +95,10 @@ echo '	</tr>';
 
 $course_id = api_get_course_int_id();
 $sessionId = api_get_session_id();
-$sessionCondition = api_get_session_condition($sessionId);
 
-$sql = "SELECT survey_invitation.*, user.firstname, user.lastname, user.email
-        FROM $table_survey_invitation survey_invitation
-        LEFT JOIN $table_user user
-        ON (survey_invitation.user = user.id AND survey_invitation.c_id = $course_id)
-        WHERE
-            survey_invitation.survey_code = '".Database::escape_string($survey_data['code'])."' $sessionCondition";
+$sentIntitations = SurveyUtil::getSentInvitations($survey_data['code'], $course_id, $sessionId);
 
-$res = Database::query($sql);
-while ($row = Database::fetch_assoc($res)) {
+foreach ($sentIntitations as $row) {
     if (!$_GET['view'] || $_GET['view'] == 'invited' ||
         ($_GET['view'] == 'answered' && in_array($row['user'], $answered_data)) ||
         ($_GET['view'] == 'unanswered' && !in_array($row['user'], $answered_data))

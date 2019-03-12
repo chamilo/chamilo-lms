@@ -58,7 +58,7 @@ if ($form->validate()) {
             continue;
         }
 
-        $questionAnswers = new Answer($questionId, 0,$exercise);
+        $questionAnswers = new Answer($questionId, 0, $exercise);
         $counts = array_count_values($questionAnswers->correct);
 
         $weighting = [];

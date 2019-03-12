@@ -61,6 +61,19 @@ class QuestionOptionsEvaluationPlugin extends Plugin
         $this->createExtraField();
     }
 
+    public function uninstall()
+    {
+        $this->removeExtraField();
+    }
+
+    /**
+     * @return Plugin
+     */
+    public function performActionsAfterConfigure()
+    {
+        return $this;
+    }
+
     private function createExtraField()
     {
         $qEf = new ExtraField('question');
@@ -79,11 +92,6 @@ class QuestionOptionsEvaluationPlugin extends Plugin
         }
     }
 
-    public function uninstall()
-    {
-        $this->removeExtraField();
-    }
-
     private function removeExtraField()
     {
         $extraField = new ExtraField('question');
@@ -92,13 +100,5 @@ class QuestionOptionsEvaluationPlugin extends Plugin
         if (false !== $qEf) {
             $extraField->delete($qEf['id']);
         }
-    }
-
-    /**
-     * @return Plugin
-     */
-    public function performActionsAfterConfigure()
-    {
-        return $this;
     }
 }

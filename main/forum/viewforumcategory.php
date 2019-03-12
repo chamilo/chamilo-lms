@@ -28,6 +28,9 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 Session::erase('_gid');
 
+// Notification for unauthorized people.
+api_protect_course_script(true);
+
 $htmlHeadXtra[] = '<script>
 $(document).ready(function(){
     $(\'.hide-me\').slideUp()
@@ -42,18 +45,15 @@ function hidecontent(content){
 $this_section = SECTION_COURSES;
 
 // Notification for unauthorized people.
-api_protect_course_script(true);
-
-// Including additional library scripts.
 $nameTools = get_lang('ToolForum');
 
 $_user = api_get_user_info();
 $_course = api_get_course_info();
 
 $action = isset($_GET['action']) ? $_GET['action'] : '';
+$hideNotifications = api_get_course_setting('hide_forum_notifications');
+$hideNotifications = $hideNotifications == 1;
 
-// Including necessary files
-require 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
 // Are we in a lp ?
@@ -436,7 +436,7 @@ if ($action != 'add') {
                     $html .= '<div class="col-md-6">';
                     if (!empty($forum['last_post_id'])) {
                         $html .= Display::return_icon('post-item.png', null, null, ICON_SIZE_TINY).' ';
-                        $html .= api_convert_and_format_date($forum['last_post_date'])
+                        $html .= Display::dateToStringAgoAndLongDate($forum['last_post_date'])
                             .' '.get_lang('By').' '
                             .display_user_link($poster_id, $name);
                     }
@@ -483,7 +483,7 @@ if ($action != 'add') {
                         }
                     }
 
-                    if (!api_is_anonymous()) {
+                    if (!api_is_anonymous() && $hideNotifications == false) {
                         $html .= '<a href="'.$url.'?'.api_get_cidreq().'&forumcategory='.$forumCategoryId.'&action=notify&content=forum&id='.$forum['forum_id'].'">'.
                             Display::return_icon($iconnotify, get_lang('NotifyMe')).
                         '</a>';

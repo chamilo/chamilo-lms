@@ -842,4 +842,24 @@ class Certificate extends Model
             false
         );
     }
+
+    /**
+     * @param int $userId
+     *
+     * @return array
+     */
+    public static function getCertificateByUser($userId)
+    {
+        $userId = (int) $userId;
+        if (empty($userId)) {
+            return [];
+        }
+
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
+        $sql = "SELECT * FROM $table
+                WHERE user_id= $userId";
+        $rs = Database::query($sql);
+
+        return Database::store_result($rs, 'ASSOC');
+    }
 }

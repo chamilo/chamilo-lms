@@ -54,16 +54,27 @@
     </li>
 {% endmacro %}
 
-{% macro collapse(name, title, content, list = false, expanded = 'true') %}
+{% macro collapse(name, title, content, list = false, expanded = 'true', title_right = '', title_icons = '') %}
     {% autoescape false %}
     <div class="panel-group" id="{{ name }}" role="tablist" aria-multiselectable="true">
         <div class="panel panel-default" id="{{ name }}_block">
             <div class="panel-heading" role="tab">
+
+                {% if title_icons %}
+                    {{ title_icons }}
+                {% endif %}
+
                 <h4 class="panel-title">
                     <a role="button" data-toggle="collapse" data-parent="#{{ name }}" href="#{{ name }}Collapse" aria-expanded="{{ expanded }}" aria-controls="{{ name }}Collapse">
                         {{ title }}
                     </a>
                 </h4>
+
+                {% if title_right %}
+                    <div class="pull-right">
+                        {{ title_right }}
+                    </div>
+                {% endif %}
             </div>
             <div style="" aria-expanded="{{ expanded }}" id="{{ name }}Collapse" class="panel-collapse collapse {{  expanded == 'true' ? 'in' : '' }}" role="tabpanel">
                 <div class="panel-body">

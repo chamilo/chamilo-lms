@@ -18,9 +18,6 @@ api_protect_course_script(true);
 $cidreq = api_get_cidreq();
 $nameTools = get_lang('ToolForum');
 
-/* Including necessary files */
-
-require_once 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
 // Are we in a lp ?
@@ -30,9 +27,6 @@ $origin = api_get_origin();
 $forumId = (int) $_GET['forum'];
 $currentForum = get_forum_information($forumId);
 $currentForumCategory = get_forumcategory_information($currentForum['forum_category']);
-
-// the variable $forum_settings is declared in forumconfig.inc.php
-$forumSettings = $forum_setting;
 
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
@@ -214,7 +208,7 @@ if ((api_is_course_admin() || api_is_session_general_coach() || api_is_course_tu
     $form->addElement('html', '</div>');
 }
 
-if ($forumSettings['allow_sticky'] && api_is_allowed_to_edit(null, true)) {
+if (api_is_allowed_to_edit(null, true)) {
     $form->addElement('checkbox', 'thread_sticky', '', get_lang('StickyPost'));
 }
 

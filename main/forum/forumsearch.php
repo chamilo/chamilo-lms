@@ -30,7 +30,6 @@ api_protect_course_script(true);
 
 // Including additional library scripts.
 include 'forumfunction.inc.php';
-include 'forumconfig.inc.php';
 
 // Are we in a lp ?
 $origin = api_get_origin();

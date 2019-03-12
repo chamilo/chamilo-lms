@@ -7,8 +7,9 @@
  * @todo fix all this qualify files avoid including files, use classes POO jmontoya
  */
 require_once __DIR__.'/../inc/global.inc.php';
-require_once 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
+
+api_protect_course_script(true);
 
 $nameTools = get_lang('ToolForum');
 $this_section = SECTION_COURSES;

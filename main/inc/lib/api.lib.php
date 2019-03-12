@@ -1588,6 +1588,12 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
 
     $result['profile_url'] = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id;
 
+    $hasCertificates = Certificate::getCertificateByUser($user_id);
+    $result['has_certificates'] = 0;
+    if (!empty($hasCertificates)) {
+        $result['has_certificates'] = 1;
+    }
+
     // Send message link
     $sendMessage = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='.$user_id;
     $result['complete_name_with_message_link'] = Display::url(

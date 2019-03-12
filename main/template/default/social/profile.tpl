@@ -48,8 +48,11 @@
                 </div>
             </div>
         </div>
-        {#{{ social_skill_block }}#}
+
         {{ social_group_info_block }}
+
+        {{ social_skill_block }}
+
         <!-- Block course list -->
         {% if social_course_block != null %}
         <div class="panel-group" id="course-block" role="tablist" aria-multiselectable="true">

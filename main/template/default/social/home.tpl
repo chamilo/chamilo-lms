@@ -33,7 +33,6 @@
                 {{ social_auto_extend_link }}
             </div>
 
-            {#{{ social_skill_block }}#}
             {{ social_right_content }}
             <div id="message_ajax_reponse" class=""></div>
             <div id="display_response_id"></div>
@@ -78,6 +77,8 @@
             </div>
 
             {{ social_group_block }}
+
+            {{ social_skill_block }}
 
             <!-- Block session list -->
             {% if session_list != null %}

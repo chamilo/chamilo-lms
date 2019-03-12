@@ -97,7 +97,7 @@ $countPost = $posts['count'];
 $posts = $posts['posts'];
 SocialManager::getScrollJs($countPost, $htmlHeadXtra);
 
-//Block Menu
+// Block Menu
 $social_menu_block = SocialManager::show_social_menu('home');
 
 $social_search_block = Display::panel(

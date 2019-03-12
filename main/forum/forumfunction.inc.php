@@ -3418,7 +3418,7 @@ function show_add_post_form($current_forum, $action, $id = '', $form_values = ''
                     $extraFieldValues = new ExtraFieldValue('forum_post');
                     $params = [
                         'item_id' => $postId,
-                        'extra_ask_for_revision' => $values['extra_ask_for_revision'],
+                        'extra_ask_for_revision' => isset($values['extra_ask_for_revision']) ? $values['extra_ask_for_revision'] : '',
                     ];
                     $extraFieldValues->saveFieldValues(
                         $params,

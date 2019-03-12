@@ -30,7 +30,7 @@
     {% endif %}
 
     {{ form_content }}
-{{ search_filter }}
+    {{ search_filter }}
 
     {% set fold_forum_categories = 'forum_fold_categories'|api_get_configuration_value %}
 

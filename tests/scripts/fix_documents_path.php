@@ -1,24 +1,38 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+/**
+ * This script will find paths with:
+ *
+ * https://example.fr/../../../../../../../LOLOS/CHAMILO/document/Chamilo/Fonctionalite_de_groupe.html
+ *
+ * And will be transformed to:
+ *
+ * /NEWFOLDER/courses/CHAMILO/document/Chamilo/Fonctionalite_de_groupe.html
+ *
+ * You need to choose the /NEWFOLDER in the $newUrlAppend variable
+ *
+ * The script will edit HTML documents inside every document course folder and also edit
+ * exercises (question, answer) and course description in the database.
+ *
+ */
+
 exit;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
+/*$test = '
+https://example.fr/../../../../../../../LOLOS/CHAMILO/document/Chamilo/Fonctionalite_de_groupe.html
+http://example.fr/../../../../../../../LOLOS/CHAMILO/document/Chamilo/Fonctionalite_de_groupe.html
+';*/
+
 $courses = CourseManager::get_courses_list();
 
-// Old values
-$webPath = 'xx/'; // With out protocol (http://) Example: 'myportal.com'
-$customCourseFolder = 'yy'; // Custom course folder
-
 // New values
-$newUrlAppend = '/zz'; // Url append of new portal
+$newUrlAppend = '/NEWFOLDER'; // Url append of new portal
 
-// Path to search
-$pathToSearch = $webPath.'../../../../../../../'.$customCourseFolder;
-
-// Will find http or https
-$pathToSearch = ['http://'.$pathToSearch, 'https://'.$pathToSearch];
+$slashes = '/../../../../../../../';
+$pathToSearch = '#http(.*)://(.*)'.$slashes.'([^/]+)/(.*)#';
 
 $courseSysPath = api_get_path(SYS_COURSE_PATH);
 foreach ($courses as $course) {
@@ -33,7 +47,7 @@ foreach ($courses as $course) {
         foreach ($finder as $file) {
             echo $file->getRealPath().'<br />';
             $contents = file_get_contents($file->getRealPath());
-            $newContent = str_replace($pathToSearch, $newUrlAppend.'/courses', $contents);
+            $newContent = preg_replace($pathToSearch, $newUrlAppend.'/courses/${4}', $contents);
             file_put_contents($file->getRealPath(), $newContent);
         }
 
@@ -43,7 +57,7 @@ foreach ($courses as $course) {
         $items = Database::store_result($result);
         foreach ($items as $item) {
             $id = $item['iid'];
-            $newContent = str_replace($pathToSearch, $newUrlAppend.'/courses', $item['description']);
+            $newContent = preg_replace($pathToSearch, $newUrlAppend.'/courses/${4}', $item['description']);
             $newContent = Database::escape_string($newContent);
             $sql = "UPDATE c_quiz SET description = '$newContent' WHERE iid = $id";
             Database::query($sql);
@@ -55,10 +69,10 @@ foreach ($courses as $course) {
         $items = Database::store_result($result);
         foreach ($items as $item) {
             $id = $item['iid'];
-            $description = str_replace($pathToSearch, $newUrlAppend.'/courses', $item['description']);
+            $description = preg_replace($pathToSearch, $newUrlAppend.'/courses/${4}', $item['description']);
             $description = Database::escape_string($description);
 
-            $question = str_replace($pathToSearch, $newUrlAppend.'/courses', $item['question']);
+            $question = preg_replace($pathToSearch, $newUrlAppend.'/courses/${4}', $item['question']);
             $question = Database::escape_string($question);
 
             $sql = "UPDATE c_quiz_question SET 
@@ -74,10 +88,10 @@ foreach ($courses as $course) {
         $items = Database::store_result($result);
         foreach ($items as $item) {
             $id = $item['iid'];
-            $answer = str_replace($pathToSearch, $newUrlAppend.'/courses', $item['answer']);
+            $answer = preg_replace($pathToSearch, $newUrlAppend.'/courses/${4}', $item['answer']);
             $answer = Database::escape_string($answer);
 
-            $comment = str_replace($pathToSearch, $newUrlAppend.'/courses', $item['comment']);
+            $comment = preg_replace($pathToSearch, $newUrlAppend.'/courses/${4}', $item['comment']);
             $comment = Database::escape_string($comment);
 
             $sql = "UPDATE c_quiz_answer SET 
@@ -93,8 +107,7 @@ foreach ($courses as $course) {
         $items = Database::store_result($result);
         foreach ($items as $item) {
             $id = $item['iid'];
-
-            $text = str_replace($pathToSearch, $newUrlAppend.'/courses', $item['intro_text']);
+            $text = preg_replace($pathToSearch, $newUrlAppend.'/courses/${4}', $item['intro_text']);
             $text = Database::escape_string($text);
 
             $sql = "UPDATE c_tool_intro SET

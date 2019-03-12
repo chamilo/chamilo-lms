@@ -135,8 +135,8 @@ foreach ($questions as $item) {
     $endDate = explode(' ', $endDateTime);
     $mainDate = $date[0];
 
-    $startTime = isset($date[1]) && $date[1] != '00:00:00' ? $date[1] : '';
-    $endTime = isset($endDate[1]) && $endDate[1] != '00:00:00' ? $endDate[1] : '';
+    $startTime = isset($date[1]) && $date[1] != '00:00:00' ? get_lang('FromTime').' '.$date[1] : '';
+    $endTime = isset($endDate[1]) && $endDate[1] != '00:00:00' ? get_lang('ToTime').' '.$endDate[1] : '';
 
     $mainDate = api_format_date($mainDate, DATE_FORMAT_SHORT);
     $table->setHeaderContents($row, $column, "<h4>$mainDate</h4> $startTime <br >$endTime");

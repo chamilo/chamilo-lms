@@ -55,7 +55,7 @@ Display::display_header($tool_name);
 
 // Getting all the people who have filled this survey
 $answered_data = SurveyManager::get_people_who_filled_survey($survey_id);
-if ($survey_data['anonymous'] == 1) {
+if ($survey_data['anonymous'] == 1 && !api_get_configuration_value('survey_anonymous_show_answered')) {
     echo Display::return_message(
         get_lang('AnonymousSurveyCannotKnowWhoAnswered').' '.count(
             $answered_data
@@ -122,7 +122,8 @@ while ($row = Database::fetch_assoc($res)) {
         echo '	<td>'.Display::dateToStringAgoAndLongDate($row['invitation_date']).'</td>';
         echo '	<td>';
 
-        if (in_array($row['user'], $answered_data) && !api_get_configuration_value('hide_survey_reporting_button')) {
+        if (in_array($row['user'], $answered_data) && !api_get_configuration_value('hide_survey_reporting_button') &&
+            !api_get_configuration_value('survey_anonymous_show_answered')) {
             echo '<a href="'.
                 api_get_path(WEB_CODE_PATH).
                 'survey/reporting.php?action=userreport&survey_id='.$survey_id.'&user='.$row['user'].'&'.api_get_cidreq().'">'.

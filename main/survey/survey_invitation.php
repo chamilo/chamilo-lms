@@ -100,8 +100,8 @@ $sentIntitations = SurveyUtil::getSentInvitations($survey_data['code'], $course_
 
 foreach ($sentIntitations as $row) {
     if (!$_GET['view'] || $_GET['view'] == 'invited' ||
-        ($_GET['view'] == 'answered' && in_array($row['user'], $answered_data)) ||
-        ($_GET['view'] == 'unanswered' && !in_array($row['user'], $answered_data))
+        ($_GET['view'] == 'answered' && in_array($row['user'], $answered_data) && count($answered_data) > 1) ||
+        ($_GET['view'] == 'unanswered' && !in_array($row['user'], $answered_data) && count($answered_data) > 1)
     ) {
         echo '<tr>';
         if (is_numeric($row['user'])) {

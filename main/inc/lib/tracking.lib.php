@@ -7658,7 +7658,7 @@ class TrackingCourseLog
             $user_ids = array_map('intval', $user_ids);
             $condition_user = " WHERE user.user_id IN (".implode(',', $user_ids).") ";
         } else {
-            $user_ids = intval($user_ids);
+            $user_ids = (int) $user_ids;
             $condition_user = " WHERE user.user_id = $user_ids ";
         }
 
@@ -7696,9 +7696,9 @@ class TrackingCourseLog
             $direction = 'ASC';
         }
 
-        $column = intval($column);
-        $from = intval($from);
-        $number_of_items = intval($number_of_items);
+        $column = (int) $column;
+        $from = (int) $from;
+        $number_of_items = (int) $number_of_items;
 
         $sql .= " ORDER BY col$column $direction ";
         $sql .= " LIMIT $from,$number_of_items";

@@ -384,8 +384,14 @@ class ExerciseShowFunctions
         echo '</td>';
 
         if ($exercise->showExpectedChoice()) {
-            $status = Display::label(get_lang('Incorrect'), 'danger');
+            /*$status = Display::label(get_lang('Incorrect'), 'danger');
             if ($studentChoice && $answerCorrect) {
+                $status = Display::label(get_lang('Correct'), 'success');
+            }*/
+            $studentChoiceChoice = (int) $studentChoice;
+            $answerCorrectChoice = (int) $answerCorrect;
+            $status = Display::label(get_lang('Incorrect'), 'danger');
+            if ($studentChoiceChoice === $answerCorrectChoice) {
                 $status = Display::label(get_lang('Correct'), 'success');
             }
             echo '<td width="20%">';

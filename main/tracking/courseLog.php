@@ -478,6 +478,7 @@ if ($nbStudents > 0) {
         20,
         'users_tracking'
     );
+    $table->total_number_of_items = $nbStudents;
 
     $parameters['cidReq'] = isset($_GET['cidReq']) ? Security::remove_XSS($_GET['cidReq']) : '';
     $parameters['id_session'] = $sessionId;

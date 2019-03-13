@@ -36,7 +36,7 @@
                             #btn-comenzar:hover{background:#fff;}
                         </style>
                         <script>
-                            $(document).ready(function() {
+                            $(function() {
                                 var timerData = {
                                     hour: parseInt($("#hour").text()),
                                     minute: parseInt($("#minute").text()),
@@ -152,7 +152,6 @@
     {# end left zone #}
     {% endif %}
 
-
     {# Right zone #}
     <div id="learning_path_right_zone" class="{{ show_left_column == 1 ? 'content-scorm' : 'no-right-col' }}">
         <div class="lp-view-zone-container">
@@ -160,26 +159,26 @@
                 <div id="navTabsbar" class="nav-tabs-bar">
                     <ul id="navTabs" class="nav nav-tabs tabs-right" role="tablist">
                         <li role="presentation" class="active">
-                            <a href="#lp-view-content" title="{{ 'Lesson'|get_lang }}" aria-controls="lp-view-content" role="tab" data-toggle="tab">
+                            <a href="#lp-view-content" title="{{ 'Lesson'|get_lang }}"
+                               aria-controls="lp-view-content" role="tab" data-toggle="tab">
                                 <span class="fa fa-book fa-2x fa-fw" aria-hidden="true"></span>
                                 <span class="sr-only">{{ 'Lesson'|get_lang }}</span>
                             </a>
                         </li>
                         <li role="presentation">
-                            <a href="#lp-view-forum" title="{{ 'Forum'|get_lang }}" aria-controls="lp-view-forum" role="tab" data-toggle="tab">
+                            <a href="#lp-view-forum" title="{{ 'Forum'|get_lang }}"
+                               aria-controls="lp-view-forum" role="tab" data-toggle="tab">
                                 <span class="fa fa-commenting-o fa-2x fa-fw" aria-hidden="true"></span>
                                 <span class="sr-only">{{ 'Forum'|get_lang }}</span>
                             </a>
                         </li>
                     </ul>
                 </div>
-
                 <nav id="btn-menu-float" class="circular-menu">
-
                     <div class="circle">
-
                         {% if show_left_column == 1 %}
-                            <a href="#" title = "{{ 'Expand'|get_lang }}" id="lp-view-expand-toggle" class="icon-toolbar expand" role="button">
+                            <a href="#" title = "{{ 'Expand'|get_lang }}" id="lp-view-expand-toggle"
+                               class="icon-toolbar expand" role="button">
                                 {% if lp_mode == 'embedframe' %}
                                     <span class="fa fa-compress" aria-hidden="true"></span>
                                     <span class="sr-only">{{ 'Expand'|get_lang }}</span>
@@ -189,8 +188,6 @@
                                 {% endif %}
                             </a>
                         {% endif %}
-
-
                         <a id="home-course"
                            title = "{{ 'Home'|get_lang }}"
                            href="{{ button_home_url }}"
@@ -198,12 +195,9 @@
                            onclick="javascript: window.parent.API.save_asset();">
                             <em class="fa fa-home"></em> <span class="hidden-xs hidden-sm"></span>
                         </a>
-
                         {{ navigation_bar }}
-
                     </div>
                     <a class="menu-button fa fa-bars icons" href="#"></a>
-
                 </nav>
 
                 <div id="tab-iframe" class="tab-content">
@@ -242,12 +236,9 @@
 </div>
 
 <script>
-
     document.querySelector('.menu-button').onclick = function(e) {
         e.preventDefault(); document.querySelector('.circle').classList.toggle('open');
     }
-
-
     var LPViewUtils = {
         setHeightLPToc: function () {
             var scormInfoHeight = $('#scorm-info').outerHeight(true);
@@ -257,10 +248,7 @@
         }
     };
 
-    $(document).ready(function () {
-
-
-
+    $(function() {
         if (/iPhone|iPod|iPad/.test(navigator.userAgent)) {
             // Fix an issue where you cannot scroll below first screen in
             // learning paths on Apple devices
@@ -296,7 +284,6 @@
         {% else %}
             $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
                 e.preventDefault();
-
                 $('#learning_path_main').toggleClass('lp-view-collapsed');
                 $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
                 $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
@@ -307,8 +294,6 @@
                 } else {
                     $(this).attr('title', '{{ "Collapse" | get_lang }}');
                 }
-
-
             });
         {% endif %}
 
@@ -324,7 +309,6 @@
 
                 return;
             }
-
             icon.removeClass('fa-chevron-down').addClass('fa-chevron-up');
         });
 
@@ -400,7 +384,7 @@
             })();
         {% endif %}
         {% if disable_js_in_lp_view == 0 %}
-            $(document).ready(function () {
+            $(function() {
                 $('iframe#content_id').on('load', function () {
                     var arr = ['link', 'sco'];
                     if ($.inArray(olms.lms_item_type, arr) == -1) {

@@ -3177,7 +3177,7 @@ function show_add_post_form($current_forum, $action, $id = '', $form_values = ''
     );
     $form->addRule('post_text', get_lang('ThisFieldIsRequired'), 'required');
 
-    if (in_array($action, ['replythread', 'replymessage', 'quote'])) {
+    if (in_array($action, ['newthread', 'replythread', 'replymessage', 'quote'])) {
         $extraFields = new ExtraField('forum_post');
         $extraFields->addElements(
             $form,

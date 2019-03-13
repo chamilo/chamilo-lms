@@ -498,7 +498,6 @@ class CoursesAndSessionsCatalog
                     $urlCondition = ' (access_url_id = '.$urlId.' OR access_url_id = 1) AND ';
                 }
 
-
                 $sql = "SELECT *
                             FROM $courseTable as course
                             INNER JOIN $tbl_url_rel_course as url_rel_course

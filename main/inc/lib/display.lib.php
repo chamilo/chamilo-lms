@@ -2853,4 +2853,22 @@ HTML;
 
         return $frameReady;
     }
+
+    public static function get_icon_path($image, $size = ICON_SIZE_SMALL)
+    {
+        return self::return_icon($image, '', [], $size, false, true);
+    }
+
+    /**
+     * @param string $image
+     * @param int    $size
+     * @param string $name
+     *
+     * @return string
+     */
+    public static function get_image($image, $size = ICON_SIZE_SMALL, $name = '')
+    {
+        return self::return_icon($image, $name, [], $size);
+    }
+
 }

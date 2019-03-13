@@ -163,15 +163,15 @@ class Template
             ],
             [
                 'name' => 'icon',
-                'callable' => 'Template::get_icon_path',
+                'callable' => 'Display::get_icon_path',
             ],
             [
                 'name' => 'img',
-                'callable' => 'Template::get_image',
+                'callable' => 'Display::get_image',
             ],
             [
                 'name' => 'format_date',
-                'callable' => 'Template::format_date',
+                'callable' => 'api_format_date',
             ],
             [
                 'name' => 'get_template',
@@ -253,40 +253,6 @@ class Template
                 }
             }
         }
-    }
-
-    /**
-     * @param string $image
-     * @param int    $size
-     *
-     * @return string
-     */
-    public static function get_icon_path($image, $size = ICON_SIZE_SMALL)
-    {
-        return Display::return_icon($image, '', [], $size, false, true);
-    }
-
-    /**
-     * @param string $image
-     * @param int    $size
-     * @param string $name
-     *
-     * @return string
-     */
-    public static function get_image($image, $size = ICON_SIZE_SMALL, $name = '')
-    {
-        return Display::return_icon($image, $name, [], $size);
-    }
-
-    /**
-     * @param string $timestamp
-     * @param string $format
-     *
-     * @return string
-     */
-    public static function format_date($timestamp, $format = null)
-    {
-        return api_format_date($timestamp, $format);
     }
 
     /**
@@ -531,7 +497,7 @@ class Template
      */
     public function get_template($name)
     {
-        return self::findTemplateFilePath($name);
+        return api_find_template($name);
     }
 
     /**

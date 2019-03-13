@@ -1,4 +1,4 @@
-{% import 'default/macro/macro.tpl' as display %}
+{% import 'macro/macro.tpl'|get_template as display %}
 {% extends 'layout/layout_1_col.tpl'|get_template %}
 
 {% block content %}

@@ -1,5 +1,5 @@
 {% extends 'layout/page.tpl'|get_template %}
-{% import 'default/macro/macro.tpl' as display %}
+{% import 'macro/macro.tpl'|get_template as display %}
 
 {% block body %}
     {% if plugin_main_top %}

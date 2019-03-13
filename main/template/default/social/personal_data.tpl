@@ -1,5 +1,5 @@
 {% extends 'layout/layout_1_col.tpl'|get_template %}
-{% import 'default/macro/macro.tpl' as display %}
+{% import 'macro/macro.tpl'|get_template as display %}
 
 {% block content %}
 <div class="row">

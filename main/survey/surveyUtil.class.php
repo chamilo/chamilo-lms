@@ -25,10 +25,11 @@ class SurveyUtil
         // Table definitions
         $tbl_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $course_id = api_get_course_int_id();
+        $survey_id = (int) $survey_id;
 
         // Getting the information of the question
         $sql = "SELECT * FROM $tbl_survey_question
-                WHERE c_id = $course_id AND survey_id='".Database::escape_string($survey_id)."'
+                WHERE c_id = $course_id AND survey_id='".$survey_id."'
                 ORDER BY sort ASC";
         $result = Database::query($sql);
         $total = Database::num_rows($result);
@@ -106,6 +107,7 @@ class SurveyUtil
         if (empty($question_id)) {
             return false;
         }
+
         // Table definition
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
 
@@ -876,7 +878,7 @@ class SurveyUtil
         $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
-
+        $course_id = api_get_course_int_id();
         $surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : 0;
         $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
 
@@ -951,7 +953,6 @@ class SurveyUtil
             }
         }
 
-        $course_id = api_get_course_int_id();
         $sql = "SELECT 
                   q.question_id, 
                   q.type, 
@@ -1224,6 +1225,8 @@ class SurveyUtil
             return false;
         }
 
+        $course_id = api_get_course_int_id();
+
         $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
@@ -1243,7 +1246,6 @@ class SurveyUtil
 
         $num = count($extra_user_fields);
         $return .= str_repeat(';', $num);
-        $course_id = api_get_course_int_id();
 
         $sql = "SELECT
                     questions.question_id,
@@ -1764,7 +1766,7 @@ class SurveyUtil
         if ($display_extra_user_fields) {
             //show user fields data, if any, for this user
             $user_fields_values = UserManager::get_extra_user_data(
-                intval($user),
+                $user,
                 false,
                 false,
                 false,
@@ -2360,9 +2362,9 @@ class SurveyUtil
     public static function invitationExists($courseId, $sessionId, $groupId, $surveyCode)
     {
         $table = Database::get_course_table(TABLE_SURVEY_INVITATION);
-        $courseId = intval($courseId);
-        $sessionId = intval($sessionId);
-        $groupId = intval($groupId);
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+        $groupId = (int) $groupId;
         $surveyCode = Database::escape_string($surveyCode);
 
         $sql = "SELECT survey_invitation_id FROM $table
@@ -2467,6 +2469,10 @@ class SurveyUtil
      */
     public static function update_count_invited($survey_code, $courseId = 0, $sessionId = 0)
     {
+        $survey_code = Database::escape_string($survey_code);
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+
         $courseId = $courseId ?: api_get_course_int_id();
         $sessionId = $sessionId ?: api_get_session_id();
         $sessionCondition = api_get_session_condition($sessionId);
@@ -2480,7 +2486,7 @@ class SurveyUtil
                 FROM $table_survey_invitation
 		        WHERE
 		            c_id = $courseId AND
-		            survey_code = '".Database::escape_string($survey_code)."' AND
+		            survey_code = '".$survey_code."' AND
 		            user <> ''
 		            $sessionCondition
                 ";
@@ -2493,7 +2499,7 @@ class SurveyUtil
 		        SET invited = '".Database::escape_string($total_invited)."'
 		        WHERE
 		            c_id = $courseId AND
-		            code = '".Database::escape_string($survey_code)."'
+		            code = '".$survey_code."'
 		            $sessionCondition
                 ";
         Database::query($sql);
@@ -2518,11 +2524,17 @@ class SurveyUtil
      */
     public static function get_invited_users($survey_code, $course_code = '', $session_id = 0)
     {
+        $session_id = (int) $session_id;
+        $survey_code = Database::escape_string($survey_code);
+        $course_code = Database::escape_string($course_code);
+
+        $course_id = api_get_course_int_id();
+
         if (!empty($course_code)) {
             $course_info = api_get_course_info($course_code);
-            $course_id = $course_info['real_id'];
-        } else {
-            $course_id = api_get_course_int_id();
+            if ($course_info) {
+                $course_id = $course_info['real_id'];
+            }
         }
 
         if (empty($session_id)) {
@@ -2538,7 +2550,7 @@ class SurveyUtil
 				FROM $table_survey_invitation as table_invitation
 				WHERE
 				    table_invitation.c_id = $course_id AND
-                    survey_code='".Database::escape_string($survey_code)."' AND
+                    survey_code='".$survey_code."' AND
                     session_id = $session_id
                 ";
 
@@ -2958,7 +2970,6 @@ class SurveyUtil
         }
 
         $actions = [];
-
         foreach ($additionalActions as $additionalAction) {
             $actions[] = call_user_func(
                 $additionalAction,
@@ -2989,7 +3000,7 @@ class SurveyUtil
             Display::return_icon('mail_send.png', get_lang('Publish')),
             $codePath.'survey/survey_invite.php?'.http_build_query($params + ['survey_id' => $survey_id])
         );
-        $warning = addslashes(api_htmlentities(get_lang("EmptySurvey").'?', ENT_QUOTES));
+        $warning = addslashes(api_htmlentities(get_lang('EmptySurvey').'?', ENT_QUOTES));
         $actions[] = Display::url(
             Display::return_icon('clean.png', get_lang('EmptySurvey')),
             $codePath.'survey/survey_list.php?'
@@ -3687,9 +3698,9 @@ class SurveyUtil
         $chartContainerId = 'chartContainer'
     ) {
         $htmlChart = '';
-        if (api_browser_support("svg")) {
-            $htmlChart .= api_get_js("d3/d3.v3.5.4.min.js");
-            $htmlChart .= api_get_js("dimple.v2.1.2.min.js").'
+        if (api_browser_support('svg')) {
+            $htmlChart .= api_get_js('d3/d3.v3.5.4.min.js');
+            $htmlChart .= api_get_js('dimple.v2.1.2.min.js').'
             <script>
             var svg = dimple.newSvg("#'.$chartContainerId.'", "100%", 400);
             var data = [';

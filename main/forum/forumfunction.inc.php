@@ -3400,6 +3400,11 @@ function show_add_post_form($current_forum, $action, $id = '', $form_values = ''
             }
 
             if ($postId) {
+                $postInfo = get_post_information($postId);
+                if ($postInfo) {
+                    $threadId = $postInfo['thread_id'];
+                }
+
                 if (isset($values['give_revision']) && $values['give_revision'] == 1) {
                     $extraFieldValues = new ExtraFieldValue('forum_post');
                     $params = [

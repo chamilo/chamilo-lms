@@ -428,7 +428,7 @@ $AllowurlfopenIsSetToOff = "El parámetro de PHP \"allow_url_fopen\" está desac
 $ImpossibleToContactVersionServerPleaseTryAgain = "Imposible de conectarse al servidor de versiones. Por favor inténtelo de nuevo más tarde \tImposible de conectarse al servidor de versiones. Por favor inténtelo de nuevo más tarde";
 $VersionUpToDate = "Su versión está actualizada";
 $LatestVersionIs = "La última versión es";
-$YourVersionNotUpToDate = "Su versión está actualizada";
+$YourVersionNotUpToDate = "Su versión no está actualizada";
 $Hotpotatoes = "Hotpotatoes";
 $ZeroMeansNoQuestionWillBeSelectedMinusOneMeansThatAllQuestionsWillBeSelected = "-1 = Todas las preguntas serán seleccionadas. 0 = Ninguna pregunta será seleccionada.";
 $EmailNotificationTemplateDescription = "Puede modificar el correo enviado a los usuarios al terminar el ejercicio. Puede usar los siguientes términos: 

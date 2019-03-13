@@ -1,5 +1,5 @@
-{% extends 'layout/layout_1_col.tpl'|get_template %}
 {% import 'macro/macro.tpl'|get_template as display %}
+{% extends 'layout/layout_1_col.tpl'|get_template %}
 
 {% block content %}
     {% if origin == 'learnpath' %}
@@ -51,7 +51,7 @@
         {% endset %}
 
         <div class="col-md-offset-{{ post.indent_cnt }} forum-post">
-            {{ display.panel('', post_data ) }}
+            {{ display.panel('', post_data) }}
         </div>
     {% endfor %}
 {% endblock %}

@@ -9426,3 +9426,8 @@ function api_set_noreply_and_from_address_to_mailer(PHPMailer $mailer, array $se
 
     $mailer->SetFrom($senderEmail, $senderName, !$avoidReplyToAddress);
 }
+
+function api_find_template($template)
+{
+    return Template::findTemplateFilePath($template);
+}

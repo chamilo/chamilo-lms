@@ -175,7 +175,7 @@ class Template
             ],
             [
                 'name' => 'get_template',
-                'callable' => 'Template::findTemplateFilePath',
+                'callable' => 'api_find_template',
             ],
             [
                 'name' => 'date_to_time_ago',

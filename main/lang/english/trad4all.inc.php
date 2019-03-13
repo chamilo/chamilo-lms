@@ -8367,4 +8367,13 @@ $SearchUserByGeolocalization = "By geolocalization";
 $GiveRevision = "Give revision";
 $ForumPostReported = "Post reported";
 $UserXReportedPostXInForumX = "User %s has reported the message %s in the forum %s";
+$MyCommunities = "My communities";
+$SeeAllCommunities = "See all communities";
+$HideForumNotifications = "Hide forum notifications";
+$Forum_categoryFields = "Forum Category fields";
+$Forum_postFields = "Forum post fields";
+$ProposedRevision = "Proposed revision";
+$Reported = "Reported";
+$FromTimeX = "From %s";
+$ToTimeX = "To %s";
 ?>

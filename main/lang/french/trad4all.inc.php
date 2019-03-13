@@ -8296,6 +8296,17 @@ $SearchUsersByName = "Par nom";
 $GlobalChat = "Chat";
 $AskRevision = "Demander une révision";
 $FeatureDisabledBecauseOfUnmaintainedThirdPartyLibraries = "Cette fonctionnalité a été désactivée en raison de l'interruption du support de librairies tierces nécessaires à son fonctionnement.";
+$SearchUserByGeolocalization = "Par géolocalisation";
+$GiveRevision = "Proposer une révision";
 $ForumPostReported = "Signalement d'un message de forum";
 $UserXReportedPostXInForumX = "L'utilisateur %s a signalé le message %s du forum %s";
+$MyCommunities = "Mes communautés";
+$SeeAllCommunities = "Voir toutes mes communautés";
+$HideForumNotifications = "Cacher les notifications de forum";
+$Forum_categoryFields = "Champs de catégorie de forum";
+$Forum_postFields = "Champs de post de forum";
+$ProposedRevision = "Revision proposée";
+$Reported = "Signalé";
+$FromTimeX = "De %s";
+$ToTimeX = "à %s";
 ?>

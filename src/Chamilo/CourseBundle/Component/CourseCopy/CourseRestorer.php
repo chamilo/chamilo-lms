@@ -2591,6 +2591,7 @@ class CourseRestorer
             foreach ($resources[RESOURCE_LEARNPATH_CATEGORY] as $id => $item) {
                 /** @var CLpCategory $lpCategory */
                 $lpCategory = $item->object;
+
                 if ($lpCategory) {
                     $values = [
                         'c_id' => $this->destination_course_id,

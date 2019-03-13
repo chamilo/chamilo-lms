@@ -3850,4 +3850,32 @@ class SurveyUtil
 
         return $pendingSurveys;
     }
+
+    /**
+     * @param string $surveyCode
+     * @param int    $courseId
+     * @param int    $sessionId
+     *
+     * @return array
+     */
+    public static function getSentInvitations($surveyCode, $courseId, $sessionId = 0)
+    {
+        $tblUser = Database::get_main_table(TABLE_MAIN_USER);
+        $tblSurveyInvitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
+
+        $sessionCondition = api_get_session_condition($sessionId);
+        $surveyCode = Database::escape_string($surveyCode);
+
+        $sql = "SELECT survey_invitation.*, user.firstname, user.lastname, user.email
+            FROM $tblSurveyInvitation survey_invitation
+            LEFT JOIN $tblUser user
+            ON (survey_invitation.user = user.id AND survey_invitation.c_id = $courseId)
+            WHERE
+                survey_invitation.survey_code = '$surveyCode'
+                $sessionCondition";
+
+        $query = Database::query($sql);
+
+        return Database::store_result($query);
+    }
 }

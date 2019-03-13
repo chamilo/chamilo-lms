@@ -142,7 +142,7 @@ $form->addHtmlEditor(
 );
 $form->addElement('html', '</div>');
 // You cab send a reminder to unanswered people if the survey is not anonymous
-if ($survey_data['anonymous'] != 1) {
+if ($survey_data['anonymous'] != 1 || api_get_configuration_value('survey_anonymous_show_answered')) {
     $form->addElement('checkbox', 'remindUnAnswered', '', get_lang('RemindUnanswered'));
 }
 // Allow resending to all selected users

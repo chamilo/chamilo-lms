@@ -1790,6 +1790,15 @@ class SurveyManager
         } else {
             $sql = "SELECT DISTINCT user FROM $table_survey_answer
 			        WHERE c_id = $course_id AND survey_id= '".$survey_id."'  ";
+
+            if (api_get_configuration_value('survey_anonymous_show_answered')) {
+                $tblInvitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
+                $tblSurvey = Database::get_course_table(TABLE_SURVEY);
+
+                $sql = "SELECT i.user FROM $tblInvitation i
+                    INNER JOIN $tblSurvey s ON i.survey_code = s.code
+                    WHERE i.answered IS TRUE AND s.iid = $survey_id";
+            }
         }
 
         $res = Database::query($sql);

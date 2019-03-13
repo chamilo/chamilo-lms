@@ -46,7 +46,7 @@ class QuestionOptionsEvaluationPlugin extends Plugin
         }
 
         return Display::url(
-            Display::return_icon('reload.png', $title, [], $iconSize),
+            Display::return_icon('options_evaluation.png', $title, [], $iconSize),
             api_get_path(WEB_PATH)."plugin/$directory/evaluation.php?exercise=$exerciseId",
             [
                 'class' => 'ajax',

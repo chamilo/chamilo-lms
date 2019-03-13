@@ -84,7 +84,7 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
-$currentUrl = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.$forumId.'&'.api_get_cidreq().'&thread='.intval($threadId);
+$currentUrl = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.$forumId.'&'.api_get_cidreq().'&thread='.$threadId;
 
 switch ($my_action) {
     case 'delete':
@@ -153,7 +153,7 @@ if (!empty($groupId)) {
         'name' => Security::remove_XSS($current_forum['forum_title']),
     ];
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.$forumId.'&'.api_get_cidreq().'&thread='.intval($threadId),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.$forumId.'&'.api_get_cidreq().'&thread='.$threadId,
         'name' => Security::remove_XSS($current_thread['thread_title']),
     ];
 } else {
@@ -178,7 +178,7 @@ if (!empty($groupId)) {
             'name' => Security::remove_XSS($current_forum['forum_title']),
         ];
         $interbreadcrumb[] = [
-            'url' => '#', 'name' => Security::remove_XSS($current_thread['thread_title']),
+            'url' => '#',
             'name' => Security::remove_XSS($current_thread['thread_title']),
         ];
     }
@@ -189,95 +189,94 @@ if (!empty($groupId)) {
 if (!api_is_allowed_to_edit(false, true) &&
     ($current_forum['visibility'] == 0 || $current_thread['visibility'] == 0)
 ) {
-    api_not_allowed(false);
+    api_not_allowed();
 }
-    // this increases the number of times the thread has been viewed
-    increase_thread_view($threadId);
+// this increases the number of times the thread has been viewed
+increase_thread_view($threadId);
 
-    if ($origin == 'learnpath') {
-        $template = new Template('', false, false, true, true, false);
-    } else {
-        $template = new Template();
-    }
+if ($origin == 'learnpath') {
+    $template = new Template('', false, false, true, true, false);
+} else {
+    $template = new Template();
+}
 
 $actions = '<span style="float:right;">'.search_link().'</span>';
-    if ($origin != 'learnpath') {
-        $actions .= '<a href="'.$forumUrl.'viewforum.php?forum='.$forumId.'&'.api_get_cidreq().'">'
-            .Display::return_icon('back.png', get_lang('BackToForum'), '', ICON_SIZE_MEDIUM).'</a>';
-    }
+if ($origin != 'learnpath') {
+    $actions .= '<a href="'.$forumUrl.'viewforum.php?forum='.$forumId.'&'.api_get_cidreq().'">'
+        .Display::return_icon('back.png', get_lang('BackToForum'), '', ICON_SIZE_MEDIUM).'</a>';
+}
 
-    // The reply to thread link should only appear when the forum_category is
-    // not locked AND the forum is not locked AND the thread is not locked.
-    // If one of the three levels is locked then the link should not be displayed.
-    if (($current_forum_category &&
-        $current_forum_category['locked'] == 0) &&
-        $current_forum['locked'] == 0 &&
-        $current_thread['locked'] == 0 ||
-        api_is_allowed_to_edit(false, true)
-    ) {
-        // The link should only appear when the user is logged in or when anonymous posts are allowed.
-        if ($_user['user_id'] || ($current_forum['allow_anonymous'] == 1 && !$_user['user_id'])) {
-            // reply link
-            if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
-                $actions .= '<a href="'.$forumUrl.'reply.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='
-                    .intval($threadId).'&action=replythread">'
-                    .Display::return_icon('reply_thread.png', get_lang('ReplyToThread'), '', ICON_SIZE_MEDIUM)
-                    .'</a>';
-            }
-            // new thread link
-            if ((
-                api_is_allowed_to_edit(false, true) &&
-                !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId)
-                ) ||
-                ($current_forum['allow_new_threads'] == 1 && isset($_user['user_id'])) ||
-                ($current_forum['allow_new_threads'] == 1 && !isset($_user['user_id']) && $current_forum['allow_anonymous'] == 1)
-            ) {
-                if ($current_forum['locked'] != 1 && $current_forum['locked'] != 1) {
-                    $actions .= '&nbsp;&nbsp;';
-                } else {
-                    $actions .= get_lang('ForumLocked');
-                }
+// The reply to thread link should only appear when the forum_category is
+// not locked AND the forum is not locked AND the thread is not locked.
+// If one of the three levels is locked then the link should not be displayed.
+if (($current_forum_category &&
+    $current_forum_category['locked'] == 0) &&
+    $current_forum['locked'] == 0 &&
+    $current_thread['locked'] == 0 ||
+    api_is_allowed_to_edit(false, true)
+) {
+    // The link should only appear when the user is logged in or when anonymous posts are allowed.
+    if ($_user['user_id'] || ($current_forum['allow_anonymous'] == 1 && !$_user['user_id'])) {
+        // reply link
+        if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
+            $actions .= '<a href="'.$forumUrl.'reply.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='
+                .$threadId.'&action=replythread">'
+                .Display::return_icon('reply_thread.png', get_lang('ReplyToThread'), '', ICON_SIZE_MEDIUM)
+                .'</a>';
+        }
+        // new thread link
+        if ((
+            api_is_allowed_to_edit(false, true) &&
+            !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId)) ||
+            ($current_forum['allow_new_threads'] == 1 && isset($_user['user_id'])) ||
+            ($current_forum['allow_new_threads'] == 1 && !isset($_user['user_id']) && $current_forum['allow_anonymous'] == 1)
+        ) {
+            if ($current_forum['locked'] != 1 && $current_forum['locked'] != 1) {
+                $actions .= '&nbsp;&nbsp;';
+            } else {
+                $actions .= get_lang('ForumLocked');
             }
         }
     }
+}
 
-    // The different views of the thread.
-    if ($origin != 'learnpath') {
-        /*$actions .= '<a href="'.$forumUrl.'viewthread.php?'.api_get_cidreq().'&'.api_get_cidreq()
-                .'&forum='.intval($forumId).'&thread='.intval($threadId)
-                .'&search='.Security::remove_XSS(urlencode($my_search));
-            echo $my_url.'&view=flat">'
-                .Display::return_icon('forum_listview.png', get_lang('FlatView'), null, ICON_SIZE_MEDIUM)
-                .'</a>';
-        /*
-            echo $my_url.'&view=nested">'
-                .Display::return_icon('forum_nestedview.png', get_lang('NestedView'), null, ICON_SIZE_MEDIUM)
-            .'</a>';*/
-    }
+// The different views of the thread.
+if ($origin != 'learnpath') {
+    /*$actions .= '<a href="'.$forumUrl.'viewthread.php?'.api_get_cidreq().'&'.api_get_cidreq()
+            .'&forum='.intval($forumId).'&thread='.intval($threadId)
+            .'&search='.Security::remove_XSS(urlencode($my_search));
+        echo $my_url.'&view=flat">'
+            .Display::return_icon('forum_listview.png', get_lang('FlatView'), null, ICON_SIZE_MEDIUM)
+            .'</a>';
+    /*
+        echo $my_url.'&view=nested">'
+            .Display::return_icon('forum_nestedview.png', get_lang('NestedView'), null, ICON_SIZE_MEDIUM)
+        .'</a>';*/
+}
 
 $template->assign('forum_actions', $actions);
 $template->assign('origin', api_get_origin());
 
-    /* Display Forum Category and the Forum information */
-    if (!isset($_SESSION['view'])) {
-        $viewMode = $current_forum['default_view'];
-    } else {
-        $viewMode = $_SESSION['view'];
-    }
+/* Display Forum Category and the Forum information */
+if (!isset($_SESSION['view'])) {
+    $viewMode = $current_forum['default_view'];
+} else {
+    $viewMode = $_SESSION['view'];
+}
 
-    $whiteList = ['flat', 'threaded', 'nested'];
-    if (isset($_GET['view']) && in_array($_GET['view'], $whiteList)) {
-        $viewMode = $_GET['view'];
-        $_SESSION['view'] = $viewMode;
-    }
+$whiteList = ['flat', 'threaded', 'nested'];
+if (isset($_GET['view']) && in_array($_GET['view'], $whiteList)) {
+    $viewMode = $_GET['view'];
+    $_SESSION['view'] = $viewMode;
+}
 
-    if (empty($viewMode)) {
-        $viewMode = 'flat';
-    }
+if (empty($viewMode)) {
+    $viewMode = 'flat';
+}
 
-    if ($current_thread['thread_peer_qualify'] == 1) {
-        Display::addFlash(Display::return_message(get_lang('ForumThreadPeerScoringStudentComment'), 'info'));
-    }
+if ($current_thread['thread_peer_qualify'] == 1) {
+    Display::addFlash(Display::return_message(get_lang('ForumThreadPeerScoringStudentComment'), 'info'));
+}
 
 $allowReport = reportAvailable();
 
@@ -676,7 +675,6 @@ foreach ($posts as $post) {
     // The post has been displayed => it can be removed from the what's new array
     unset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$post['post_id']]);
     unset($_SESSION['whatsnew_post_info'][$current_forum['forum_id']][$current_thread['thread_id']][$post['post_id']]);
-
     $count++;
 }
 

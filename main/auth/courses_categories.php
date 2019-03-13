@@ -77,7 +77,8 @@ echo '<div class="row">
 
 if ($showCourses) {
     echo '<div class="col-md-'.($showSessions ? '4' : '6').'">';
-    if (!isset($_GET['hidden_links']) || intval($_GET['hidden_links']) != 1) { ?>
+    if (!isset($_GET['hidden_links']) || intval($_GET['hidden_links']) != 1) {
+        ?>
         <form method="post"
               action="<?php echo CourseCategory::getCourseCategoryUrl(1, $pageLength, 'ALL', 0, 'subscribe'); ?>">
             <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">

@@ -2854,6 +2854,12 @@ HTML;
         return $frameReady;
     }
 
+    /**
+     * @param string $image
+     * @param int    $size
+     *
+     * @return string
+     */
     public static function get_icon_path($image, $size = ICON_SIZE_SMALL)
     {
         return self::return_icon($image, '', [], $size, false, true);
@@ -2870,5 +2876,4 @@ HTML;
     {
         return self::return_icon($image, $name, [], $size);
     }
-
 }

@@ -3865,14 +3865,15 @@ class SurveyUtil
 
         $sessionCondition = api_get_session_condition($sessionId);
         $surveyCode = Database::escape_string($surveyCode);
+        $courseId = (int) $courseId;
 
         $sql = "SELECT survey_invitation.*, user.firstname, user.lastname, user.email
-            FROM $tblSurveyInvitation survey_invitation
-            LEFT JOIN $tblUser user
-            ON (survey_invitation.user = user.id AND survey_invitation.c_id = $courseId)
-            WHERE
-                survey_invitation.survey_code = '$surveyCode'
-                $sessionCondition";
+                FROM $tblSurveyInvitation survey_invitation
+                LEFT JOIN $tblUser user
+                ON (survey_invitation.user = user.id AND survey_invitation.c_id = $courseId)
+                WHERE
+                    survey_invitation.survey_code = '$surveyCode'
+                    $sessionCondition";
 
         $query = Database::query($sql);
 

@@ -50,10 +50,17 @@ $interbreadcrumb[] = [
     'name' => get_lang('SurveyList'),
 ];
 if (api_is_course_admin()) {
-    $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&'.api_get_cidreq(),
-        'name' => $urlname,
-    ];
+    if ($survey_data['survey_type'] == 3) {
+        $interbreadcrumb[] = [
+            'url' => api_get_path(WEB_CODE_PATH).'survey/meeting.php?survey_id='.$survey_id.'&'.api_get_cidreq(),
+            'name' => $urlname,
+        ];
+    } else {
+        $interbreadcrumb[] = [
+            'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&'.api_get_cidreq(),
+            'name' => $urlname,
+        ];
+    }
 } else {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey_invite.php?survey_id='.$survey_id.'&'.api_get_cidreq(),

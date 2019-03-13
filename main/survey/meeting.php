@@ -268,5 +268,23 @@ if ($action === 'edit') {
     $content .= '</form>';
 }
 
+$actions = '';
+if (api_is_allowed_to_edit()) {
+    $actions .= Display::url(
+        Display::return_icon('edit.png', get_lang('EditSurvey'), '', ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH).'survey/edit_meeting.php?'.api_get_cidreq().'&action=edit&survey_id='.$surveyId
+    );
+    $actions .= Display::url(
+        Display::return_icon('delete.png', get_lang('DeleteSurvey'), '', ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq().'&action=delete&survey_id='.$surveyId,
+        ['onclick' => 'javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('DeleteSurvey').'?', ENT_QUOTES)).'\')) return false;']
+    );
+    $actions .= Display::url(
+        Display::return_icon('mail_send.png', get_lang('Publish'), '', ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH).'survey/survey_invite.php?'.api_get_cidreq().'&survey_id='.$surveyId
+    );
+}
+
+$template->assign('actions', Display::toolbarAction('toolbar', [$actions]));
 $template->assign('content', $content);
 $template->display_one_col_template();

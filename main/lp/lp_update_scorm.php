@@ -8,7 +8,6 @@
  *
  * @package chamilo.learnpath
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;

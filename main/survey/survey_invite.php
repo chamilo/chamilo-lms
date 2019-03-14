@@ -26,7 +26,7 @@ $course_id = api_get_course_int_id();
 $_course = api_get_course_info();
 
 // Getting the survey information
-$survey_id = Security::remove_XSS($_GET['survey_id']);
+$survey_id = (int) $_GET['survey_id'];
 $survey_data = SurveyManager::get_survey($survey_id);
 if (empty($survey_data)) {
     api_not_allowed(true);

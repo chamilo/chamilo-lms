@@ -411,14 +411,31 @@ class GlossaryManager
                 Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM) . '</a>';
         }
 
-
-
         if (!api_is_anonymous()) {
             $actionsLeft .= Display::url(
                 Display::return_icon('export_to_documents.png', get_lang('ExportToDocArea'), [], ICON_SIZE_MEDIUM),
                 api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query(['action' => 'export_documents'])
             );
         }
+
+        $orderList = isset($_GET['order']) ? Database::escape_string($_GET['order']) : '';
+        if(empty($orderList)){
+            $orderList = 'ASC';
+        }
+        if (!api_is_anonymous()) {
+            if($orderList ==='ASC'){
+                $actionsLeft .= Display::url(
+                    Display::return_icon('falling.png', get_lang('Sort Descending'), [], ICON_SIZE_MEDIUM),
+                    api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query(['order' => 'DESC'])
+                );
+            } else {
+                $actionsLeft .= Display::url(
+                    Display::return_icon('upward.png', get_lang('Sort Ascending'), [], ICON_SIZE_MEDIUM),
+                    api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query(['order' => 'ASC'])
+                );
+            }
+        }
+
 
         /* BUILD SEARCH FORM */
         $form = new FormValidator(
@@ -441,7 +458,8 @@ class GlossaryManager
         );
 
         $content = $toolbar;
-        $list = self::getListGlossary(1000,0,'ASC');
+
+        $list = self::getListGlossary(1000,0,$orderList);
 
         $tpl = new Template(null);
         $tpl->assign('data', $list);

@@ -31,6 +31,7 @@ $questionsData = array_filter(
         return in_array($questionData['type'], ['yesno', 'multiplechoice', 'open']);
     }
 );
+
 usort(
     $questionsData,
     function ($qL, $qR) {
@@ -58,7 +59,7 @@ foreach ($surveyAnswers as $i => $answer) {
 // Generate file
 $fileName = md5($surveyId.time());
 
-Export::arrayToCsv($content, $fileName);
+Export::arrayToCsv($content, $fileName, false, "'");
 
 /**
  * Generate the first row for file.
@@ -181,9 +182,7 @@ function otherRow($questions, $user, $courseId)
         if ('open' === $question['type']) {
             $answer = getOpenAnswer($question['question_id'], $question['survey_id'], $courseId, $user);
 
-            $row[] = Security::remove_XSS(
-                $answer->getOptionId()
-            );
+            $row[] = Security::remove_XSS($answer->getOptionId());
         } else {
             $options = getQuestionOptions(
                 $user,
@@ -194,7 +193,8 @@ function otherRow($questions, $user, $courseId)
 
             /** @var CSurveyQuestionOption $option */
             foreach ($options as $option) {
-                $row[] = $option->getSort();
+                $value = $option->getSort();
+                $row[] = '"'.$value.'"';
             }
         }
     }

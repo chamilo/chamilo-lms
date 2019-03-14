@@ -639,7 +639,7 @@ if (isset($_POST['finish_survey'])) {
         $survey_invitation['c_id']
     );
 
-    if ($courseInfo) {
+    if ($courseInfo && !api_is_anonymous()) {
         echo Display::toolbarButton(
             get_lang('ReturnToCourseHomepage'),
             api_get_course_url($courseInfo['code']),

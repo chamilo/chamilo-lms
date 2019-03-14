@@ -25,6 +25,7 @@ $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
 $table_user = Database::get_main_table(TABLE_MAIN_USER);
 $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
 $tool_name = get_lang('SurveyInvitations');
+$courseInfo = api_get_course_info();
 
 // Getting the survey information
 $survey_id = Security::remove_XSS($_GET['survey_id']);
@@ -32,6 +33,8 @@ $survey_data = SurveyManager::get_survey($survey_id);
 if (empty($survey_data)) {
     api_not_allowed(true);
 }
+
+$view = isset($_GET['view']) ? $_GET['view'] : 'invited';
 
 $urlname = strip_tags(
     api_substr(api_html_entity_decode($survey_data['title'], ENT_QUOTES), 0, 40)
@@ -65,20 +68,20 @@ if ($survey_data['anonymous'] == 1 && !api_get_configuration_value('survey_anony
 }
 $url = api_get_self().'?survey_id='.$survey_id.'&'.api_get_cidreq();
 
-if (!isset($_GET['view']) || $_GET['view'] == 'invited') {
+if ($view == 'invited') {
     echo get_lang('ViewInvited').' | ';
 } else {
     echo '	<a href="'.$url.'&view=invited">'.
         get_lang('ViewInvited').'</a> |';
 }
-if ($_GET['view'] == 'answered') {
+if ($view == 'answered') {
     echo get_lang('ViewAnswered').' | ';
 } else {
     echo '	<a href="'.$url.'&view=answered">'.
         get_lang('ViewAnswered').'</a> |';
 }
 
-if ($_GET['view'] == 'unanswered') {
+if ($view == 'unanswered') {
     echo get_lang('ViewUnanswered');
 } else {
     echo '	<a href="'.$url.'&view=unanswered">'.
@@ -91,8 +94,13 @@ echo '	<tr>';
 echo '		<th>'.get_lang('User').'</th>';
 echo '		<th>'.get_lang('InvitationDate').'</th>';
 
-if ($_GET['view'] != 'answered') {
-    echo '		<th>'.get_lang('Answered').'</th>';
+switch ($view) {
+    case 'unanswered':
+        echo '		<th>'.get_lang('SurveyInviteLink').'</th>';
+        break;
+    case 'invited':
+        echo '		<th>'.get_lang('Answered').'</th>';
+        break;
 }
 
 echo '	</tr>';
@@ -103,9 +111,10 @@ $sessionId = api_get_session_id();
 $sentIntitations = SurveyUtil::getSentInvitations($survey_data['code'], $course_id, $sessionId);
 
 foreach ($sentIntitations as $row) {
-    if (!$_GET['view'] || $_GET['view'] == 'invited' ||
-        ($_GET['view'] == 'answered' && in_array($row['user'], $answered_data) && count($answered_data) > 1) ||
-        ($_GET['view'] == 'unanswered' && !in_array($row['user'], $answered_data) && count($answered_data) > 1)
+    $id = $row['iid'];
+    if ($view == 'invited' ||
+        ($view == 'answered' && in_array($row['user'], $answered_data) && count($answered_data) > 1) ||
+        ($view == 'unanswered' && !in_array($row['user'], $answered_data) && count($answered_data) > 1)
     ) {
         echo '<tr>';
         if (is_numeric($row['user'])) {
@@ -131,14 +140,33 @@ foreach ($sentIntitations as $row) {
         if (in_array($row['user'], $answered_data)) {
             $answered = Display::url(
                 get_lang('ViewAnswers'),
-                api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=userreport&survey_id='.$survey_id.'&user='.$row['user'].'&'.api_get_cidreq()
+                api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=userreport&survey_id='.$survey_id.'&user='.$row['user'].'&'.api_get_cidreq(),
+                ['class' => 'btn btn-primary']
             );
         }
+        switch ($view) {
+            case 'unanswered':
+                echo '	<td>';
+                $code = $row['invitation_code'];
 
-        if ($_GET['view'] != 'answered') {
-            echo '	<td>';
-            echo $answered;
-            echo '	</td>';
+                $link = api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?';
+                $link .= 'id_session='.$sessionId.'&course='.$courseInfo['code'].'&invitationcode='.$code;
+
+                $link = Display::input('text', 'copy_'.$id, $link, ['id' => 'copy_'.$id, 'class' => '']);
+                $link .= ' '.Display::url(
+                    Display::returnFontAwesomeIcon('copy').get_lang('CopyTextToClipboard'),
+                    'javascript:void()',
+                    ['onclick' => "copyTextToClipBoard('copy_".$id."')", 'class' => 'btn btn-primary btn-sm']
+                );
+
+                echo $link;
+                echo '	</td>';
+                break;
+            case 'invited':
+                echo '	<td>';
+                echo $answered;
+                echo '	</td>';
+                break;
         }
 
         echo '</tr>';

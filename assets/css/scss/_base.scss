@@ -40,6 +40,7 @@ h5, h6{
 p {
   font-family: $font-primary;
   line-height: 1.9;
+  color: #666666;
 }
 
 .lead {
@@ -1209,6 +1210,9 @@ hr {
   border-radius: 4px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
   margin-bottom: 10px;
+  .btn-export{
+    padding: 0;
+  }
   img {
     padding: 3px;
     border: 1px solid #dcdcdc;
@@ -2057,6 +2061,22 @@ hr {
       color: #FFF;
       background-color: #0077b5;
       border-color: #0077b5;
+    }
+  }
+}
+/****** GLOSSARY *****/
+.glossary{
+  .title{
+    font-size: 1.65rem;
+    text-align: center;
+  }
+  .item-glossary{
+    border-bottom: 1px solid #dddddd;
+    h5{
+      margin-bottom: 0;
+      font-weight: bold;
+      color: #5b6be8;
+      font-size: 1.15rem;
     }
   }
 }

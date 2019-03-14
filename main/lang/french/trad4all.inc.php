@@ -8309,4 +8309,5 @@ $ProposedRevision = "Revision proposée";
 $Reported = "Signalé";
 $FromTimeX = "De %s";
 $ToTimeX = "à %s";
+$SurveyInviteLink = "Lien d'invitation à l'enquête";
 ?>

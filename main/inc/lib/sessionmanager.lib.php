@@ -2245,7 +2245,7 @@ class SessionManager
     ) {
         $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tableSessionCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-        $sessionId = intval($sessionId);
+        $sessionId = (int) $sessionId;
 
         if (empty($sessionId) || empty($userList) || empty($courseInfo)) {
             return false;
@@ -2255,12 +2255,12 @@ class SessionManager
 
         $statusCondition = null;
         if (isset($status) && !is_null($status)) {
-            $status = intval($status);
+            $status = (int) $status;
             $statusCondition = " AND status = $status";
         }
 
         foreach ($userList as $userId) {
-            $userId = intval($userId);
+            $userId = (int) $userId;
             $sql = "DELETE FROM $table
                     WHERE
                         session_id = $sessionId AND
@@ -2269,6 +2269,16 @@ class SessionManager
                         $statusCondition
                     ";
             Database::query($sql);
+
+            Event::addEvent(
+                LOG_SESSION_DELETE_USER_COURSE,
+                LOG_USER_ID,
+                $userId,
+                api_get_utc_datetime(),
+                api_get_user_id(),
+                $courseId,
+                $sessionId
+            );
         }
 
         if ($updateTotal) {

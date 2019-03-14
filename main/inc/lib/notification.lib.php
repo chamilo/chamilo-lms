@@ -220,15 +220,15 @@ class Notification extends Model
     /**
      * Save message notification.
      *
-     * @param int    $type          message type
-     *                              NOTIFICATION_TYPE_MESSAGE,
-     *                              NOTIFICATION_TYPE_INVITATION,
-     *                              NOTIFICATION_TYPE_GROUP
+     * @param int    $type                       message type
+     *                                           NOTIFICATION_TYPE_MESSAGE,
+     *                                           NOTIFICATION_TYPE_INVITATION,
+     *                                           NOTIFICATION_TYPE_GROUP
      * @param int    $messageId
-     * @param array  $userList      recipients: user list of ids
+     * @param array  $userList                   recipients: user list of ids
      * @param string $title
      * @param string $content
-     * @param array  $senderInfo    result of api_get_user_info() or GroupPortalManager:get_group_data()
+     * @param array  $senderInfo                 result of api_get_user_info() or GroupPortalManager:get_group_data()
      * @param array  $attachments
      * @param array  $smsParameters
      * @param bool   $forceTitleWhenSendingEmail force the use of $title as subject instead of "You have a new message"

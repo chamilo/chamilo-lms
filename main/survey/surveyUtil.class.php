@@ -3889,7 +3889,7 @@ class SurveyUtil
     }
 
     /**
-     * @param string $code invitation code
+     * @param string $code       invitation code
      * @param array  $courseInfo
      * @param int    $sessionId
      * @param string $surveyCode
@@ -3905,7 +3905,7 @@ class SurveyUtil
             return '';
         }
 
-        $params =  [
+        $params = [
             'invitationcode' => $code,
             'cidReq' => $courseInfo['code'],
             'course' => $courseInfo['code'],

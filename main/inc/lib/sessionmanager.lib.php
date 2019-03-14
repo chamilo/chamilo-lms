@@ -2429,7 +2429,7 @@ class SessionManager
                 WHERE
                     session_id = $session_id AND
                     user_id = $user_id AND
-                    relation_type <> ".SESSION_RELATION_TYPE_RRHH."";
+                    relation_type <> ".SESSION_RELATION_TYPE_RRHH;
         $result = Database::query($sql);
         $return = Database::affected_rows($result);
 
@@ -2479,6 +2479,14 @@ class SessionManager
                 WHERE session_id = $session_id AND c_id = $courseId AND user_id = $user_id";
         $result = Database::query($sql);
 
+        if (Database::affected_rows($result)) {
+            // Update number of users in this relation
+            $sql = "UPDATE $tbl_session_rel_course SET 
+                    nbr_users = nbr_users - 1
+                    WHERE session_id = $session_id AND c_id = $courseId";
+            Database::query($sql);
+        }
+
         Event::addEvent(
             LOG_SESSION_DELETE_USER_COURSE,
             LOG_USER_ID,
@@ -2488,14 +2496,6 @@ class SessionManager
             $courseId,
             $session_id
         );
-
-        if (Database::affected_rows($result)) {
-            // Update number of users in this relation
-            $sql = "UPDATE $tbl_session_rel_course SET 
-                    nbr_users = nbr_users - 1
-                    WHERE session_id = $session_id AND c_id = $courseId";
-            Database::query($sql);
-        }
     }
 
     /**

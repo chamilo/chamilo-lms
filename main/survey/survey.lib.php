@@ -875,25 +875,28 @@ class SurveyManager
      */
     public static function update_survey_answered($survey_data, $user, $survey_code)
     {
+        if (empty($survey_data)) {
+            return false;
+        }
+
         // Database table definitions
         $table_survey = Database::get_course_table(TABLE_SURVEY);
         $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
 
-        $survey_id = $survey_data['survey_id'];
-        $course_id = $survey_data['c_id'];
+        $survey_id = (int) $survey_data['survey_id'];
+        $course_id = (int) $survey_data['c_id'];
         $session_id = $survey_data['session_id'];
 
         // Getting a list with all the people who have filled the survey
-        $people_filled = self::get_people_who_filled_survey($survey_id, false, $course_id);
-
-        $number = count($people_filled);
+        /*$people_filled = self::get_people_who_filled_survey($survey_id, false, $course_id);
+        $number = count($people_filled);*/
 
         // Storing this value in the survey table
         $sql = "UPDATE $table_survey
-		        SET answered = $number
+		        SET answered = answered + 1
 		        WHERE
                     c_id = $course_id AND
-		            survey_id = ".intval($survey_id);
+		            survey_id = ".$survey_id;
         Database::query($sql);
 
         $allow = api_get_configuration_value('survey_answered_at_field');

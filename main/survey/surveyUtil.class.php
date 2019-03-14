@@ -2396,8 +2396,7 @@ class SurveyUtil
         $sessionId = api_get_session_id();
 
         // Replacing the **link** part with a valid link for the user
-        $link = api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?';
-        $link .= 'id_session='.$sessionId.'&course='.$_course['code'].'&invitationcode='.$invitation_code;
+        $link = self::generateFillSurveyLink($invitation_code, $_course, $sessionId);
 
         $text_link = '<a href="'.$link.'">'.get_lang('ClickHereToAnswerTheSurvey')."</a><br />\r\n<br />\r\n"
             .get_lang('OrCopyPasteTheFollowingUrl')." <br />\r\n ".$link;
@@ -3417,8 +3416,7 @@ class SurveyUtil
                     [],
                     ICON_SIZE_TINY
                 );
-                $url = api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?course='.$_course['sysCode']
-                    .'&invitationcode='.$row['invitation_code'].'&cidReq='.$_course['sysCode'].'&id_session='.$row['session_id'];
+                $url = self::generateFillSurveyLink($row['invitation_code'], $_course, $row['session_id']);
                 echo '<a href="'.$url.'">
                     '.$row['title']
                     .'</a></td>';
@@ -3888,5 +3886,36 @@ class SurveyUtil
         $query = Database::query($sql);
 
         return Database::store_result($query);
+    }
+
+    /**
+     * @param string $code invitation code
+     * @param array  $courseInfo
+     * @param int    $sessionId
+     * @param string $surveyCode
+     *
+     * @return string
+     */
+    public static function generateFillSurveyLink($code, $courseInfo, $sessionId, $surveyCode = '')
+    {
+        $code = Security::remove_XSS($code);
+        $sessionId = (int) $sessionId;
+
+        if (empty($courseInfo)) {
+            return '';
+        }
+
+        $params =  [
+            'invitationcode' => $code,
+            'cidReq' => $courseInfo['code'],
+            'course' => $courseInfo['code'],
+            'id_session' => $sessionId,
+        ];
+
+        if (!empty($surveyCode)) {
+            $params['scode'] = Security::remove_XSS($surveyCode);
+        }
+
+        return api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?'.http_build_query($params);
     }
 }

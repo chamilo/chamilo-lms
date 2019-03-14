@@ -11,13 +11,10 @@
 </div>
 <br>
 {% for survey in surveys %}
-    {% set course_code = survey.course ? survey.course.code : '' %}
-    {% set session_id = survey.session ? survey.session.id : 0 %}
-
     <div class="panel panel-default">
         <div class="panel-body">
             <div>
-                <a href="{{ _p.web_main ~ 'survey/fillsurvey.php?' ~ {'course': course_code, 'invitationcode': survey.invitation_code, 'cidReq': course_code, 'id_session': session_id}|url_encode }}">
+                <a href="{{ survey.link }}">
                     {{ survey.title }}
                 </a>
             </div>

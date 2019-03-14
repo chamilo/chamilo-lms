@@ -149,9 +149,7 @@ foreach ($sentIntitations as $row) {
                 echo '	<td>';
                 $code = $row['invitation_code'];
 
-                $link = api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?';
-                $link .= 'id_session='.$sessionId.'&course='.$courseInfo['code'].'&invitationcode='.$code;
-
+                $link = SurveyUtil::generateFillSurveyLink($code, $courseInfo, $sessionId);
                 $link = Display::input('text', 'copy_'.$id, $link, ['id' => 'copy_'.$id, 'class' => '']);
                 $link .= ' '.Display::url(
                     Display::returnFontAwesomeIcon('copy').get_lang('CopyTextToClipboard'),

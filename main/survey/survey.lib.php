@@ -1948,16 +1948,17 @@ class SurveyManager
             return;
         }
 
-        $urlParams = http_build_query([
-            'course' => api_get_course_id(),
-            'invitationcode' => $invitation->getInvitationCode(),
-        ]);
-
         Display::addFlash(
             Display::return_message(get_lang('MandatorySurveyNoAnswered'), 'warning')
         );
 
-        header('Location: '.api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?'.$urlParams.'&'.api_get_cidreq());
+        $url = SurveyUtil::generateFillSurveyLink(
+            $invitation->getInvitationCode(),
+            api_get_course_info(),
+            api_get_session_id()
+        );
+
+        header('Location: '.$url);
         exit;
     }
 

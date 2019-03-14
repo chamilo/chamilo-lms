@@ -22,7 +22,148 @@ $TemplateCertificateComment = "مثال لصيغة الشهادة";
 $TemplateCertificateTitle = "الشهادة";
 $ResultsVisibility = "مرئية النتائج";
 $DownloadCertificate = "تحميل الشهادة";
+$UserNeverAccessedSessionDefaultDurationIsX = "لم يقم المستخدم بالولوج الى الموسم من قبل. المدة محددة بـ %s يوم - من اول يوم دخول";
+$SessionDurationEdit = "تحرير مدة الموسم";
+$EditUserSessionDuration = "تحرير مدة المستخدم في الموسم";
+$SessionDurationXDaysLeft = "هذا الموسم فيه مدة قصوى. فقط %s يوم قد تبقى.";
+$NextTopic = "الموضوع القادم";
+$CurrentTopic = "الموضوع الحالي";
+$ShowFullCourseAdvance = "عرض تخطيط المقرر";
+$RedirectToCourseHome = "اعادة توجيه الى الصفحة الرئيسية للمقرر";
+$LpReturnLink = "رابط الرجوع لمسار التعلم";
+$LearningPathList = "قائمة مسار التعلم";
+$UsersWithoutTask = "الطلبة الذين لم يرسلوا عملهم";
+$UsersWithTask = "الطلبة الذي ارسلوا عملهم";
+$UploadFromTemplate = "رفع من القالب";
+$DocumentAlreadyAdded = "المستند تم اضافته مسبقا";
+$AddDocument = "اضافة مستند";
+$ExportToDoc = ".doc تصدير الى ملف وورد";
+$SortByTitle = "توزيع حسب العنوان";
+$SortByUpdatedDate = "توزيع حسب تاريخ التحرير";
+$SortByCreatedDate = "توزيع حسب تاريخ الانشاء";
+$ViewTable = "عرض الجدول";
+$ViewList = "عرض القائمة";
+$DRH = "مدير  الموارد البشرية";
+$Global = "شامل";
+$QuestionTitle = "عنوان السؤال";
+$QuestionId = "هوية السؤال";
+$ExerciseId = "هوية التمرين";
+$ExportExcel = "تصدير الى الاكسل";
+$CompanyReportResumed = "تقرير المنظمة، النسخة المختصرة";
+$CompanyReport = "تقرير المنظمة";
+$Report = "التقرير";
+$TraceIP = "IP تتبع";
+$NoSessionProvided = "لا يوجد موسم متوفر";
+$UserMustHaveTheDrhRole = "يجب ان يكون للمستخدمين دور مدير الموارد البشرية";
+$NothingToAdd = "لا يوجد شيء لاضافته";
+$NoStudentsFoundForSession = "لم يتم العثور على طالب في الموسم";
+$NoDestinationSessionProvided = "لا توجد وجهة موسم";
+$SessionXSkipped = "الموسم %s تم تخطيه";
+$CheckDates = "التحقق من التواريخ";
+$CreateACategory = "انشاء فئة";
+$PriorityOfMessage = "نوع الرسالة";
+$ModifyDate = "تاريخ التعديل";
+$Weep = "يبكي";
+$LatestChanges = "التغييرات الاخيرة";
+$FinalScore = "الدرجة النهائية";
+$ErrorWritingXMLFile = "يرجى مراسلة مدير النظام للتحقق من الخطأ XML يوجد خطأ في  ملف";
+$TeacherXInSession = "المدرس في موسم: %s";
+$DeleteAttachment = "حذف المرفق";
+$EditingThisEventWillRemoveItFromTheSerie = "ان تحرير هذا الحدث سوف يزيله من بقية سلسلة الاحداث التي هي جزء منه";
+$EnterTheCharactersYouReadInTheImage = "ادخل الرموز التي تراها في الصورة";
+$YouDontHaveAnInstitutionAccount = "ليس لديك حساب مؤسسي";
+$LoginWithYourAccount = "تسجيل الدخول بحسابك";
+$YouHaveAnInstitutionalAccount = "لديك حساب مؤسسي مسبق";
+$NoActionAvailable = "لا يوجد اجراء متوفر";
+$Coaches = "المعلمين";
+$ShowDescription = "عرض الوصف";
+$HumanResourcesManagerShouldNotBeRegisteredToCourses = "لا يجب تسجيل مدراء الموارد البشرية في المقررات، المستخدمين الذين حددتهم لم يتم تسجيلهم";
+$CleanAndUpdateCourseCoaches = "حذف وتحديث معلمي المقرر";
+$NoPDFFoundAtRoot = "zip لا يوجد ملف بي دي اف، يرجى التأكد من وجودها في اساس الملف المصغوط";
+$PDFsMustLookLike = ":يجب ان تبدو ملفات البي دي اف هكذا";
+$ImportZipFileLocation = "موقع الملف المصغوط المستورد";
+$YouMustImportAZipFile = "zip يجب عليك استيراد ملف مضغوط بصيغة";
+$ImportPDFIntroToCourses = "استيراد مقدمات ملفات البي دي اف في المقررات";
+$SubscribeTeachersToSession = "تسجيل المدرسين الى الموسم او المواسم";
+$SubscribeStudentsToSession = "تسجيل الطلبة الى الموسم او المواسم";
+$ManageCourseCategories = "ادارة فئات المقرر";
+$CourseCategoryListInX = "فئات المقرر في %s موقع:";
+$CourseCategoryInPlatform = "فئات المقرر المتوفرة";
+$UserGroupBelongURL = "المجموعة الان اصبحت تنتمي الى الموقع المحدد";
+$AtLeastOneUserGroupAndOneURL = "يجب عليك اختيار مجموعة واحدة على الاقل وموقع واحد";
 $AgendaList = "قائمة التقويم";
+$Calendar = "التقويم";
+$CustomRange = "مدى مخصص";
+$ThisWeek = "هذا الاسبوع";
+$SendToUsersInSessions = "ارسال المستخدمين الى كافة المواسم لهذا المقرر";
+$ParametersNotFound = "لا توجد معلمات";
+$UsersToAdd = "المستخدمين للاضافة";
+$DocumentsAdded = "تم اضافة المستندات";
+$NoUsersToAdd = "لا يوجد مستخدمين لاضافتهم";
+$StartSurvey = "ابدأ الاستبيان";
+$Subgroup = "مجموعة فرعية";
+$Subgroups = "المجاميع الفرعية";
+$EnterTheLettersYouSee = "قم بادخال الحروف التي تراها";
+$ClickOnTheImageForANewOne = "انقر على الصورة من اجل تحميل واحدة جديدة";
+$AccountBlockedByCaptcha = "تم حظر الحساب من قبل رمز التحقق";
+$CatchScreenCasts = "التقاط صورة شاشة/تسجيل شاشة";
+$View = "عرض";
+$AmountSubmitted = "العدد الذي تم تسليمه";
+$InstallWarningCouldNotInterpretPHP = "تحذير: تم اكتشاف خطأ عند محاولة الوصول الى ملف الاختبار في %s. هذا الخطأ قد يكون علامة تحذير لمشاكل مستقبلية قد تحدث عند انشاء مقررات، يرجى التحقق من دليل التنصيب للمزيد من المعلومات حول السماحات";
+$BeforeX = "قبل %s";
+$AfterX = "بعد %s";
+$ExportSettingsAsXLS = "XLS تصدير الاعدادات كملف اكسل";
+$DeleteAllItems = "حذف كافة الفقرات";
+$DeleteThisItem = "حذف هذه الفقرة";
+$RecordYourVoice = "تسجيل صوتك";
+$RecordIsNotAvailable = "لا يوجد تسجيل متوفر";
+$WorkNumberSubmitted = "تم استلام الاعمال";
+$ClassIdDoesntExists = "هوية الصف ليست موجودة";
+$WithoutCategory = "من دون فئة";
+$IncorrectScore = "درجة غير صحيحة";
+$CorrectScore = "درجة صحيحة";
+$UseCustomScoreForAllQuestions = "استخدم درجة مخصصة لكافة الاسئلة";
+$YouShouldAddItemsBeforeAttachAudio = "يجب عليك اضافة بعض العناصر الى مسار التعلم، والا لا يمكن ارفاق الملفات الصوتية لها";
+$InactiveDays = "الايام غير النشطة";
+$FollowedHumanResources = "مدراء الموارد البشرية الذين تتم تتبعهم";
+$TheTextYouEnteredDoesNotMatchThePicture = "النص الذي ادخلته لا يطابق الصورة";
+$RemoveOldRelationships = "ازالة العلاقة السابقة";
+$ImportSessionDrhList = "استيراد قائمة مدراء الموارد البشرية الى المواسم";
+$FollowedStudents = "الطلبة الذين يتم تتبعهم";
+$FollowedTeachers = "المدرسين الذي يتم تتبعهم";
+$AllowOnlyFiles = "السماح بالملفات فقط";
+$AllowOnlyText = "السماح بالنص فقط";
+$AllowFileOrText = "السماح للملفات او النص";
+$DocumentType = "نوع المستند";
+$SendOnlyAnEmailToMySelfToTest = "ارسال بريد الى نفسي لغرض الاختبار والتحقق";
+$DeleteAllSelectedAttendances = "حذف كافة الحضور المحدد";
+$AvailableClasses = "الصفوف المتوفرة";
+$RegisteredClasses = "الصفوف المسجلة";
+$DeleteItemsNotInFile = "حذف الفقرات غير الموجودة في الملف";
+$ImportGroups = "استيراد المجاميع";
+$HereIsYourFeedback = "هنا معلوماتك المرتجعة";
+$SearchSessions = "بحث الموسم";
+$ShowSystemFolders = "عرض مجلدات النظام";
+$SelectADateOnTheCalendar = "قم باختيار التاريخ من التقويم";
+$AreYouSureDeleteTestResultBeforeDateD = "هل انت متأكد من حذف نتائج الاختبار قبل التاريخ المحدد؟";
+$CleanStudentsResultsBeforeDate = "حذف كافة النتائج قبل التاريخ المحدد";
+$HGlossary = "مساعدة القاموس";
+$GlossaryContent = "هذه الاداة تسمح لك بانشاء قاموس المصطلحات لهذا المقرر والذي يمكن ان يستخدم من اداة المستندات";
+$ForumContent = "يعد المنتدى بانه اداة للمناقشة للتعليم غير المتزامن، وبخلاف البريد الذي يكون سريا، فان المنتدى يمكن ان يكون عاما او نصف عاما.
+لغرض تنظيم المنتدى فان عليك النقر على اداة المنتديات، ويتم ترتيب المناقشات بشكل هرمي وبالشكل  التالي: الفئة←المنتدى←الموضوع، من اجل ضمان ان يتفاعل الاعضاء بشكل مرتب وفعال. وبالتالي فان من الضروري انشاء الفئات والمنتديات، ثم يمكن للاعضاء انشاء المواضيع والمنشورات
+\n
+يمكن ان يتضمن وصف المنتدى على قائمة للاعضاء وتعريف بهدف المنتدى وموضوع المنتدى..الخ
+ملاحظة: تختلف المنتديات في هذا النظام عن المنتديات الموجودة في الانترنت، اذ ان الفرق الجوهري هنا هو ان الطالب لا يستطيع تعديل المنشور في المنتدى بعد ان تم نشره، كذلك فقد تم تصميم المنتدى بالشكل الذي يسمح للمدرسين بتصحيح منشورات الطلبة في حال وجود خطأ فيها من خلال تحديد موضع الخطأ بلون اصفر وهذا ما يسمح لبقية الطلبة من الانتفاع بها، في حين ان الطلبة لا يسمح لهم في تصحيح منشورات بعضهم البعض";
+$HForum = "مساعدة المنتدى";
+$LoginToGoToThisCourse = "يرجى تسجيل الدخول لغرض الانتقال الى المقرر";
+$AreYouSureToEmptyAllTestResults = "حذف كافة نتائج الطلبة لكل التمارين؟";
+$CleanAllStudentsResultsForAllTests = "هل انت متأكد من حذف نتائج الاختبار؟";
+$AdditionalMailWasSentToSelectedUsers = "بشكل اضافي، فان تبليغ جديد تم انشاؤه وارساله الى المستخدمين المحددين";
+$LoginDate = "تاريخ تسجيل الدخول";
+$ChooseStartDateAndEndDate = "قم باختيار تواريخ البدأ والنهاية";
+$TestFeedbackNotShown = "هذا الاختبار تم تهيئته كي لايعرض المعلومات المرتجعة للطلبة، وسوف لن تظهر التعليقات في نهاية الاختبار";
+$WorkAdded = "تم اضافة العمل";
+$FeedbackDisplayOptions = "كم يجب ان يعرض التعليق/المعلومات المرتجعة لكل سؤال؟ هذا الخيار يحدد كيف سوف تظهر للطالب عندما يؤدي الاختبار. ننصح بتجربة عدة خيارات من خلال تحرير خيارات الاختبار قبل ان يؤديها الطالب";
 $InactiveUsers = "المستخدمين الذي تم تعطيل حساباتهم";
 $ActiveUsers = "المستخدمين ذوي الحساب الفعال";
 $SurveysProgress = "التقدم في الاستبيانات";
@@ -904,6 +1045,7 @@ $NotesSortedByUpdateDateDESC = "فرز الملاحظات تنازليا حسب 
 $NotesSortedByCreationDateAsc = "فرز الملاحظات تصاعديا حسب تاريخ الانشاء";
 $NotesSortedByCreationDateDESC = "فرز الملاحظات تنازليا حسب تاريخ الانشاء";
 $Titular = "القائد";
+$SendToAllUsers = "ارسال الى جميع المستخدمين";
 $AdministrationTools = " أدوات الإدارة";
 $CatList = " التصانيف";
 $Subscribe = " تسجيل";
@@ -3633,6 +3775,7 @@ $PersonalSettings = "لقد تم تسجيل إعداداتك الخاصة";
 $Problem = "في حال حصول أي مشكلة , اتصل بنا";
 $Is = "is";
 $Address = "عنوان الـ";
+$FieldTypeFile = "رفع الملف";
 $YourReg = "تسجيلك في";
 $UserFree = "اسم المستخدم هذا مستخدم من قبل شخص آخر. فضلا استخدم زر الرجوع في متصفحك للتراجع";
 $EmptyFields = "لقد تركت بعض الحقول فارغة , استخدم زر الرجوع في متصفحك وحاول مرة أخرى";
@@ -6703,8 +6846,8 @@ II. Activate LDAP authentication
 Edit file app/config/configuration.php
 -> Uncomment lines:
 
-\$extAuthSource[\"extldap\"][\"login\"] = \$_configuration['root_sys'].\"main/auth/external_login/login.ldap.php\";
-\$extAuthSource[\"extldap\"][\"newUser\"] = \$_configuration['root_sys'].\"main/auth/external_login/newUser.ldap.php\";
+\$extAuthSource['extldap']['login'] = \$_configuration['root_sys'].'main/auth/external_login/login.ldap.php';
+\$extAuthSource['extldap']['newUser'] = \$_configuration['root_sys'].'main/auth/external_login/newUser.ldap.php';
 N.B.: LDAP users use same fields than platform users to login. 
 N.B.: LDAP activation adds a menu External authentication [LDAP] in \"add or modify\" user pages.";
 $ShibbolethMainActivateTitle = "Shibboleth توثيق";
@@ -6712,27 +6855,28 @@ $ShibbolethMainActivateComment = "First of all, you have to configure Shibboleth
 
 To configure it for Chamilo
 edit file main/auth/shibboleth/config/aai.class.php
-Modify object $result values with the name of your Shibboleth attributes
+Modify object \$result values with the name of your Shibboleth attributes
 
-$result->unique_id = 'mail';
-$result->firstname = 'cn';
-$result->lastname = 'uid';
-$result->email = 'mail';
-$result->language = '-';
-$result->gender = '-';
-$result->address = '-';
-$result->staff_category = '-';
-$result->home_organization_type = '-';
-$result->home_organization = '-';
-$result->affiliation = '-';
-$result->persistent_id = '-';
+\$result->unique_id = 'mail';
+\$result->firstname = 'cn';
+\$result->lastname = 'uid';
+\$result->email = 'mail';
+\$result->language = '-';
+\$result->gender = '-';
+\$result->address = '-';
+\$result->staff_category = '-';
+\$result->home_organization_type = '-';
+\$result->home_organization = '-';
+\$result->affiliation = '-';
+\$result->persistent_id = '-';
 ...
 
 Go to Plugin to add a configurable 'Shibboleth Login' button for your Chamilo campus.";
 $LdapDescriptionTitle = "LDAP توثيق";
 $FacebookMainActivateTitle = "توثيق الفيسبوك";
 $FacebookMainActivateComment = "Create your Facebook Application
-First of all, you have to create a Facebook Application (see https://developers.facebook.com/apps) with your Facebook account. In the Facebook Apps settings, the site URL value should be the URL of this campus. Enable the Web OAuth Login option. And add the site URL of your campus to the Valid OAuth redirect URIs field Uncomment the line \$_configuration['facebook_auth'] = 1; to enable the Facebook Auth.
+First of all, you have to create a Facebook Application (see https://developers.facebook.com/apps) with your Facebook account. In the Facebook Apps settings, the site URL value should be the URL of this campus. Enable the Web OAuth Login option. And add the site URL of your campus to the Valid OAuth redirect URIs field
+Uncomment the line \$_configuration['facebook_auth'] = 1; to enable the Facebook Auth.
 
 Then, edit the app/config/auth.conf.php file and enter 'appId' and 'secret' values for \$facebook_config.
 

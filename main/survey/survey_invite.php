@@ -91,12 +91,15 @@ if (Database::num_rows($result) > 1) {
 
 // Invited / answered message
 if ($survey_data['invited'] > 0 && !isset($_POST['submit'])) {
-    $message = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=answered&survey_id='.$survey_data['survey_id'].'&'.api_get_cidreq().'">'.
-        $survey_data['answered'].'</a> ';
-    $message .= get_lang('HaveAnswered').' ';
-    $message .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=invited&survey_id='.$survey_data['survey_id'].'&'.api_get_cidreq().'">'.
-        $survey_data['invited'].'</a> ';
-    $message .= get_lang('WereInvited');
+    $message = Display::url(
+        $survey_data['answered'],
+        api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=answered&survey_id='.$survey_data['survey_id'].'&'.api_get_cidreq()
+    );
+    $message .= ' '.get_lang('HaveAnswered').' ';
+    $message .= Display::url(
+        $survey_data['invited'],
+        api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=invited&survey_id='.$survey_data['survey_id'].'&'.api_get_cidreq());
+    $message .= ' '.get_lang('WereInvited');
     echo Display::return_message($message, 'normal', false);
 }
 

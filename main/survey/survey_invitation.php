@@ -90,7 +90,11 @@ echo '<table class="data_table">';
 echo '	<tr>';
 echo '		<th>'.get_lang('User').'</th>';
 echo '		<th>'.get_lang('InvitationDate').'</th>';
-echo '		<th>'.get_lang('Answered').'</th>';
+
+if ($_GET['view'] != 'answered') {
+    echo '		<th>'.get_lang('Answered').'</th>';
+}
+
 echo '	</tr>';
 
 $course_id = api_get_course_int_id();
@@ -113,9 +117,8 @@ foreach ($sentIntitations as $row) {
             echo '<td>'.$row['user'].'</td>';
         }
         echo '	<td>'.Display::dateToStringAgoAndLongDate($row['invitation_date']).'</td>';
-        echo '	<td>';
 
-        if (in_array($row['user'], $answered_data) && !api_get_configuration_value('hide_survey_reporting_button') &&
+        /*if (in_array($row['user'], $answered_data) && !api_get_configuration_value('hide_survey_reporting_button') &&
             !api_get_configuration_value('survey_anonymous_show_answered')) {
             echo '<a href="'.
                 api_get_path(WEB_CODE_PATH).
@@ -123,9 +126,21 @@ foreach ($sentIntitations as $row) {
                 get_lang('ViewAnswers').'</a>';
         } else {
             echo '-';
+        }*/
+        $answered = '';
+        if (in_array($row['user'], $answered_data)) {
+            $answered = Display::url(
+                get_lang('ViewAnswers'),
+                api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=userreport&survey_id='.$survey_id.'&user='.$row['user'].'&'.api_get_cidreq()
+            );
         }
 
-        echo '	</td>';
+        if ($_GET['view'] != 'answered') {
+            echo '	<td>';
+            echo $answered;
+            echo '	</td>';
+        }
+
         echo '</tr>';
     }
 }

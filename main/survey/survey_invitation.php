@@ -56,40 +56,63 @@ $interbreadcrumb[] = [
 // Displaying the header
 Display::display_header($tool_name);
 
+$course_id = api_get_course_int_id();
+$sessionId = api_get_session_id();
+
+$sentInvitations = SurveyUtil::getSentInvitations($survey_data['code'], $course_id, $sessionId);
+
 // Getting all the people who have filled this survey
 $answered_data = SurveyManager::get_people_who_filled_survey($survey_id);
+
+$invitationsCount = count($sentInvitations);
+$answeredCount = count($answered_data);
+$unasnweredCount = count($sentInvitations) - count($answered_data);
+
 if ($survey_data['anonymous'] == 1 && !api_get_configuration_value('survey_anonymous_show_answered')) {
     echo Display::return_message(
-        get_lang('AnonymousSurveyCannotKnowWhoAnswered').' '.count(
-            $answered_data
-        ).' '.get_lang('PeopleAnswered')
+        get_lang('AnonymousSurveyCannotKnowWhoAnswered').' '.$answeredCount.' '.get_lang('PeopleAnswered')
     );
     $answered_data = [];
 }
+if ($survey_data['anonymous'] == 1) {
+    if ($answeredCount < 2) {
+        $answeredCount = 0;
+        $unasnweredCount = $invitationsCount;
+    }
+}
 $url = api_get_self().'?survey_id='.$survey_id.'&'.api_get_cidreq();
 
+echo '<ul class="nav nav-tabs">';
+
 if ($view == 'invited') {
-    echo get_lang('ViewInvited').' | ';
+    echo '<li role="presentation" class="active"><a href="#">'.get_lang('ViewInvited');
 } else {
-    echo '	<a href="'.$url.'&view=invited">'.
-        get_lang('ViewInvited').'</a> |';
+    echo '<li role="presentation"><a href="'.$url.'&view=invited">'.
+        get_lang('ViewInvited');
 }
+echo ' <span class="badge badge-default">'.$invitationsCount.'</span>';
+echo '</a></li>';
 if ($view == 'answered') {
-    echo get_lang('ViewAnswered').' | ';
+    echo '<li role="presentation" class="active"><a href="#">'.get_lang('ViewAnswered');
 } else {
-    echo '	<a href="'.$url.'&view=answered">'.
-        get_lang('ViewAnswered').'</a> |';
+    echo '<li role="presentation"><a href="'.$url.'&view=answered">'.
+        get_lang('ViewAnswered');
 }
+echo ' <span class="badge badge-default">'.$answeredCount.'</span>';
+echo '</a></li>';
 
 if ($view == 'unanswered') {
-    echo get_lang('ViewUnanswered');
+    echo '<li role="presentation" class="active"><a href="#">'.get_lang('ViewUnanswered');
 } else {
-    echo '	<a href="'.$url.'&view=unanswered">'.
-        get_lang('ViewUnanswered').'</a>';
+    echo '<li role="presentation"><a href="'.$url.'&view=unanswered">'.
+        get_lang('ViewUnanswered');
 }
+echo ' <span class="badge badge-default">'.$unasnweredCount.'</span>';
+echo '</a></li>';
+echo '</ul>';
 
 // Table header
-echo '<table class="data_table">';
+echo '<table class="data_table" style="margin-top: 5px;">';
 echo '	<tr>';
 echo '		<th>'.get_lang('User').'</th>';
 echo '		<th>'.get_lang('InvitationDate').'</th>';
@@ -98,23 +121,21 @@ switch ($view) {
     case 'unanswered':
         echo '		<th>'.get_lang('SurveyInviteLink').'</th>';
         break;
-    case 'invited':
+    default:
         echo '		<th>'.get_lang('Answered').'</th>';
         break;
 }
 
 echo '	</tr>';
 
-$course_id = api_get_course_int_id();
-$sessionId = api_get_session_id();
+$surveyAnonymousShowAnswered = api_get_configuration_value('survey_anonymous_show_answered');
+$hideSurveyReportingButton = api_get_configuration_value('hide_survey_reporting_button');
 
-$sentIntitations = SurveyUtil::getSentInvitations($survey_data['code'], $course_id, $sessionId);
-
-foreach ($sentIntitations as $row) {
+foreach ($sentInvitations as $row) {
     $id = $row['iid'];
     if ($view == 'invited' ||
-        ($view == 'answered' && in_array($row['user'], $answered_data) && count($answered_data) > 1) ||
-        ($view == 'unanswered' && !in_array($row['user'], $answered_data) && count($answered_data) > 1)
+        ($view == 'answered' && in_array($row['user'], $answered_data) && $answeredCount > 1) ||
+        ($view == 'unanswered' && !in_array($row['user'], $answered_data) && $answeredCount > 1)
     ) {
         echo '<tr>';
         if (is_numeric($row['user'])) {
@@ -127,46 +148,66 @@ foreach ($sentIntitations as $row) {
         }
         echo '	<td>'.Display::dateToStringAgoAndLongDate($row['invitation_date']).'</td>';
 
-        /*if (in_array($row['user'], $answered_data) && !api_get_configuration_value('hide_survey_reporting_button') &&
-            !api_get_configuration_value('survey_anonymous_show_answered')) {
-            echo '<a href="'.
-                api_get_path(WEB_CODE_PATH).
-                'survey/reporting.php?action=userreport&survey_id='.$survey_id.'&user='.$row['user'].'&'.api_get_cidreq().'">'.
-                get_lang('ViewAnswers').'</a>';
-        } else {
-            echo '-';
-        }*/
-        $answered = '';
         if (in_array($row['user'], $answered_data)) {
-            $answered = Display::url(
-                get_lang('ViewAnswers'),
-                api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=userreport&survey_id='.$survey_id.'&user='.$row['user'].'&'.api_get_cidreq(),
-                ['class' => 'btn btn-primary']
-            );
-        }
-        switch ($view) {
-            case 'unanswered':
+            if (!$surveyAnonymousShowAnswered && !$hideSurveyReportingButton) {
+                echo '<td>';
+                echo '<a href="'.
+                    api_get_path(WEB_CODE_PATH).
+                    'survey/reporting.php?action=userreport&survey_id='.$survey_id.'&user='.$row['user'].'&'.api_get_cidreq().'">'.
+                    get_lang('ViewAnswers').'</a>';
+                echo '</td>';
+            } else {
+                if ($survey_data['anonymous'] == 1 && $answeredCount > 1) {
+                    echo '<td>'.get_lang('Answered').'</td>';
+                } else {
+                    echo '<td>-</td>';
+                }
+            }
+        } else {
+            if ($view == 'unanswered') {
                 echo '	<td>';
                 $code = $row['invitation_code'];
 
                 $link = SurveyUtil::generateFillSurveyLink($code, $courseInfo, $sessionId);
                 $link = Display::input('text', 'copy_'.$id, $link, ['id' => 'copy_'.$id, 'class' => '']);
                 $link .= ' '.Display::url(
-                    Display::returnFontAwesomeIcon('copy').get_lang('CopyTextToClipboard'),
-                    'javascript:void()',
-                    ['onclick' => "copyTextToClipBoard('copy_".$id."')", 'class' => 'btn btn-primary btn-sm']
-                );
+                        Display::returnFontAwesomeIcon('copy').get_lang('CopyTextToClipboard'),
+                        'javascript:void()',
+                        ['onclick' => "copyTextToClipBoard('copy_".$id."')", 'class' => 'btn btn-primary btn-sm']
+                    );
 
                 echo $link;
                 echo '	</td>';
-                break;
-            case 'invited':
-                echo '	<td>';
-                echo $answered;
-                echo '	</td>';
-                break;
+            } else {
+                echo '<td>-</td>';
+            }
         }
 
+        echo '</tr>';
+    } elseif ($view === 'unanswered' && $answeredCount == 0) {
+        echo '<tr>';
+        if (is_numeric($row['user'])) {
+            $userInfo = api_get_user_info($row['user']);
+            echo '<td>';
+            echo UserManager::getUserProfileLink($userInfo);
+            echo '</td>';
+        } else {
+            echo '<td>'.$row['user'].'</td>';
+        }
+        echo '	<td>'.Display::dateToStringAgoAndLongDate($row['invitation_date']).'</td>';
+        echo '	<td>';
+        $code = $row['invitation_code'];
+
+        $link = SurveyUtil::generateFillSurveyLink($code, $courseInfo, $sessionId);
+        $link = Display::input('text', 'copy_'.$id, $link, ['id' => 'copy_'.$id, 'class' => '']);
+        $link .= ' '.Display::url(
+                Display::returnFontAwesomeIcon('copy').get_lang('CopyTextToClipboard'),
+                'javascript:void()',
+                ['onclick' => "copyTextToClipBoard('copy_".$id."')", 'class' => 'btn btn-primary btn-sm']
+            );
+
+        echo $link;
+        echo '	</td>';
         echo '</tr>';
     }
 }

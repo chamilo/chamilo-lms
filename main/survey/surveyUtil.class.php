@@ -2436,14 +2436,13 @@ class SurveyUtil
                 null,
                 null,
                 null,
-                $sender_user_id
+                $sender_user_id,
+                true
             );
         } else {
-            /** @todo check if the address is a valid email */
-            $recipient_email = $invitedUser;
             @api_mail_html(
                 '',
-                $recipient_email,
+                $invitedUser,
                 $invitation_title,
                 $full_invitation_text,
                 $sender_name,

@@ -375,6 +375,7 @@ class MessageManager
      * @param int    $forwardId
      * @param array  $smsParameters
      * @param bool   $checkCurrentAudioId
+     * @param bool   $forceTitleWhenSendingEmail force the use of $title as subject instead of "You have a new message"
      *
      * @return bool
      */
@@ -392,7 +393,8 @@ class MessageManager
         $directMessage = false,
         $forwardId = 0,
         $smsParameters = [],
-        $checkCurrentAudioId = false
+        $checkCurrentAudioId = false,
+        $forceTitleWhenSendingEmail = false
     ) {
         $table = Database::get_main_table(TABLE_MESSAGE);
         $group_id = (int) $group_id;
@@ -598,7 +600,8 @@ class MessageManager
                     $content,
                     $sender_info,
                     $attachmentAddedByMail,
-                    $smsParameters
+                    $smsParameters,
+                    $forceTitleWhenSendingEmail
                 );
             } else {
                 $usergroup = new UserGroup();

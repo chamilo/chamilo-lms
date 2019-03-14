@@ -2422,8 +2422,6 @@ class SessionManager
         $session_id = (int) $session_id;
         $user_id = (int) $user_id;
 
-        $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
@@ -2441,37 +2439,63 @@ class SessionManager
                 WHERE id = $session_id ";
         Database::query($sql);
 
+        Event::addEvent(
+            LOG_SESSION_DELETE_USER,
+            LOG_USER_ID,
+            $user_id,
+            api_get_utc_datetime(),
+            api_get_user_id(),
+            null,
+            $session_id
+        );
+
         // Get the list of courses related to this session
         $course_list = self::get_course_list_by_session_id($session_id);
         if (!empty($course_list)) {
             foreach ($course_list as $course) {
-                $courseId = $course['id'];
-                // Delete user from course
-                $sql = "DELETE FROM $tbl_session_rel_course_rel_user
-                        WHERE session_id = $session_id AND c_id = $courseId AND user_id = $user_id";
-                $result = Database::query($sql);
-
-                Event::addEvent(
-                    LOG_SESSION_DELETE_USER_COURSE,
-                    LOG_USER_ID,
-                    $user_id,
-                    api_get_utc_datetime(),
-                    api_get_user_id(),
-                    $courseId,
-                    $session_id
-                );
-
-                if (Database::affected_rows($result)) {
-                    // Update number of users in this relation
-                    $sql = "UPDATE $tbl_session_rel_course SET 
-                            nbr_users = nbr_users - 1
-                            WHERE session_id = $session_id AND c_id = $courseId";
-                    Database::query($sql);
-                }
+                self::unSubscribeUserFromCourseSession($user_id, $course['id'], $session_id);
             }
         }
 
         return true;
+    }
+
+    /**
+     * @param int $user_id
+     * @param int $courseId
+     * @param int $session_id
+     */
+    public static function unSubscribeUserFromCourseSession($user_id, $courseId, $session_id)
+    {
+        $user_id = (int) $user_id;
+        $courseId = (int) $courseId;
+        $session_id = (int) $session_id;
+
+        $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+
+        // Delete user from course
+        $sql = "DELETE FROM $tbl_session_rel_course_rel_user
+                WHERE session_id = $session_id AND c_id = $courseId AND user_id = $user_id";
+        $result = Database::query($sql);
+
+        Event::addEvent(
+            LOG_SESSION_DELETE_USER_COURSE,
+            LOG_USER_ID,
+            $user_id,
+            api_get_utc_datetime(),
+            api_get_user_id(),
+            $courseId,
+            $session_id
+        );
+
+        if (Database::affected_rows($result)) {
+            // Update number of users in this relation
+            $sql = "UPDATE $tbl_session_rel_course SET 
+                    nbr_users = nbr_users - 1
+                    WHERE session_id = $session_id AND c_id = $courseId";
+            Database::query($sql);
+        }
     }
 
     /**

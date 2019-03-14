@@ -1947,61 +1947,7 @@ class Exercise
                 );
 
                 // Type of results display on the final page
-                $radios_results_disabled = [];
-                $radios_results_disabled[] = $form->createElement(
-                    'radio',
-                    'results_disabled',
-                    null,
-                    get_lang('ShowScoreAndRightAnswer'),
-                    '0',
-                    ['id' => 'result_disabled_0']
-                );
-                $radios_results_disabled[] = $form->createElement(
-                    'radio',
-                    'results_disabled',
-                    null,
-                    get_lang('DoNotShowScoreNorRightAnswer'),
-                    '1',
-                    ['id' => 'result_disabled_1', 'onclick' => 'check_results_disabled()']
-                );
-                $radios_results_disabled[] = $form->createElement(
-                    'radio',
-                    'results_disabled',
-                    null,
-                    get_lang('OnlyShowScore'),
-                    '2',
-                    ['id' => 'result_disabled_2']
-                );
-                $radios_results_disabled[] = $form->createElement(
-                    'radio',
-                    'results_disabled',
-                    null,
-                    get_lang('ShowScoreEveryAttemptShowAnswersLastAttempt'),
-                    '4',
-                    ['id' => 'result_disabled_4']
-                );
-                $radios_results_disabled[] = $form->createElement(
-                    'radio',
-                    'results_disabled',
-                    null,
-                    get_lang('DontShowScoreOnlyWhenUserFinishesAllAttemptsButShowFeedbackEachAttempt'),
-                    '5',
-                    ['id' => 'result_disabled_5', 'onclick' => 'check_results_disabled()']
-                );
-                $radios_results_disabled[] = $form->createElement(
-                    'radio',
-                    'results_disabled',
-                    null,
-                    get_lang('ExerciseRankingMode'),
-                    '6',
-                    ['id' => 'result_disabled_6']
-                );
-
-                $form->addGroup(
-                    $radios_results_disabled,
-                    null,
-                    get_lang('ShowResultsToStudents')
-                );
+                $this->setResultDisabledGroup($form);
 
                 // Type of questions disposition on page
                 $radios = [];
@@ -2031,7 +1977,7 @@ class Exercise
                 $form->addGroup($radios, null, get_lang('QuestionsPerPage'));
             } else {
                 // if is Direct feedback but has not questions we can allow to modify the question type
-                if ($this->selectNbrQuestions() == 0) {
+                if ($this->getQuestionCount() === 0) {
                     // feedback type
                     $radios_feedback = [];
                     $radios_feedback[] = $form->createElement(
@@ -2067,33 +2013,7 @@ class Exercise
                         [get_lang('FeedbackType'), get_lang('FeedbackDisplayOptions')]
                     );
 
-                    $radios_results_disabled = [];
-                    $radios_results_disabled[] = $form->createElement(
-                        'radio',
-                        'results_disabled',
-                        null,
-                        get_lang('ShowScoreAndRightAnswer'),
-                        '0',
-                        ['id' => 'result_disabled_0']
-                    );
-                    $radios_results_disabled[] = $form->createElement(
-                        'radio',
-                        'results_disabled',
-                        null,
-                        get_lang('DoNotShowScoreNorRightAnswer'),
-                        '1',
-                        ['id' => 'result_disabled_1', 'onclick' => 'check_results_disabled()']
-                    );
-                    $radios_results_disabled[] = $form->createElement(
-                        'radio',
-                        'results_disabled',
-                        null,
-                        get_lang('OnlyShowScore'),
-                        '2',
-                        ['id' => 'result_disabled_2', 'onclick' => 'check_results_disabled()']
-                    );
-
-                    $form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'), '');
+                    $this->setResultDisabledGroup($form);
 
                     // Type of questions disposition on page
                     $radios = [];
@@ -2107,40 +2027,8 @@ class Exercise
                     );
                     $form->addGroup($radios, null, get_lang('ExerciseType'));
                 } else {
-                    // Show options freeze
-                    $radios_results_disabled[] = $form->createElement(
-                        'radio',
-                        'results_disabled',
-                        null,
-                        get_lang('ShowScoreAndRightAnswer'),
-                        '0',
-                        ['id' => 'result_disabled_0']
-                    );
-                    $radios_results_disabled[] = $form->createElement(
-                        'radio',
-                        'results_disabled',
-                        null,
-                        get_lang('DoNotShowScoreNorRightAnswer'),
-                        '1',
-                        ['id' => 'result_disabled_1', 'onclick' => 'check_results_disabled()']
-                    );
-                    $radios_results_disabled[] = $form->createElement(
-                        'radio',
-                        'results_disabled',
-                        null,
-                        get_lang('OnlyShowScore'),
-                        '2',
-                        ['id' => 'result_disabled_2', 'onclick' => 'check_results_disabled()']
-                    );
-
-                    $form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'), '');
-
-                    $result_disable_group = $form->addGroup(
-                        $radios_results_disabled,
-                        null,
-                        get_lang('ShowResultsToStudents')
-                    );
-                    $result_disable_group->freeze();
+                    $group = $this->setResultDisabledGroup($form);
+                    $group->freeze();
 
                     // we force the options to the DirectFeedback exercisetype
                     $form->addElement('hidden', 'exerciseFeedbackType', EXERCISE_FEEDBACK_TYPE_DIRECT);
@@ -4346,19 +4234,27 @@ class Exercise
 
                                         // Try with id
                                         if (isset($real_list[$i_answer_id])) {
-                                            $user_answer = Display::span($real_list[$i_answer_id]);
+                                            $user_answer = Display::span(
+                                                $real_list[$i_answer_id],
+                                                ['style' => 'color: #008000; font-weight: bold;']
+                                            );
                                         }
 
                                         // Try with $i_answer_id_auto
                                         if (empty($user_answer)) {
                                             if (isset($real_list[$i_answer_id_auto])) {
-                                                $user_answer = Display::span($real_list[$i_answer_id_auto]);
+                                                $user_answer = Display::span(
+                                                    $real_list[$i_answer_id_auto],
+                                                    ['style' => 'color: #008000; font-weight: bold;']
+                                                );
                                             }
                                         }
-                                        if ($this->showExpectedChoice()) {
-                                            if (isset($real_list[$i_answer_correct_answer])) {
-                                                $user_answer = Display::span($real_list[$i_answer_correct_answer]);
-                                            }
+
+                                        if (isset($real_list[$i_answer_correct_answer])) {
+                                            $user_answer = Display::span(
+                                                $real_list[$i_answer_correct_answer],
+                                                ['style' => 'color: #008000; font-weight: bold;']
+                                            );
                                         }
                                     } else {
                                         $user_answer = Display::span(
@@ -4414,7 +4310,7 @@ class Exercise
                                             echo '<td>'.$status.'</td>';
                                         } else {
                                             echo '<td>'.$s_answer_label.'</td>';
-                                            //echo '<td>'.$user_answer.'</td>';
+                                            echo '<td>'.$user_answer.'</td>';
                                             echo '<td>';
                                             if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
                                                 if (isset($real_list[$i_answer_correct_answer]) &&
@@ -7953,8 +7849,10 @@ class Exercise
             $hideLabel = api_get_configuration_value('exercise_hide_label');
             $label = '<div class="rib rib-'.$class.'">
                         <h3>'.$scoreLabel.'</h3>
-                  </div> 
-                  <h4>'.get_lang('Score').': '.$result.'</h4>';
+                      </div>';
+            if (!empty($result)) {
+                $label .= '<h4>'.get_lang('Score').': '.$result.'</h4>';
+            }
             if ($hideLabel === true) {
                 $answerUsed = (int) $array['used'];
                 $answerMissing = (int) $array['missing'] - $answerUsed;
@@ -7979,13 +7877,16 @@ class Exercise
                 </div>'
                 ;
         } else {
-            return '<div class="ribbon">
+            $html = '<div class="ribbon">
                         <div class="rib rib-'.$class.'">
                             <h3>'.$scoreLabel.'</h3>
-                        </div>
-                        <h4>'.get_lang('Score').': '.$result.'</h4>
-                    </div>'
-                ;
+                        </div>';
+            if (!empty($result)) {
+                $html .= '<h4>'.get_lang('Score').': '.$result.'</h4>';
+            }
+            $html .= '</div>';
+
+            return $html;
         }
     }
 
@@ -8427,5 +8328,96 @@ class Exercise
             }
         }
         $this->mediaList = $mediaList;
+    }
+
+    /**
+     * @param FormValidator $form
+     *
+     * @return HTML_QuickForm_group
+     */
+    private function setResultDisabledGroup(FormValidator $form)
+    {
+        $resultDisabledGroup = [];
+
+        $resultDisabledGroup[] = $form->createElement(
+            'radio',
+            'results_disabled',
+            null,
+            get_lang('ShowScoreAndRightAnswer'),
+            '0',
+            ['id' => 'result_disabled_0']
+        );
+
+        $resultDisabledGroup[] = $form->createElement(
+            'radio',
+            'results_disabled',
+            null,
+            get_lang('DoNotShowScoreNorRightAnswer'),
+            '1',
+            ['id' => 'result_disabled_1', 'onclick' => 'check_results_disabled()']
+        );
+
+        $resultDisabledGroup[] = $form->createElement(
+            'radio',
+            'results_disabled',
+            null,
+            get_lang('OnlyShowScore'),
+            '2',
+            ['id' => 'result_disabled_2', 'onclick' => 'check_results_disabled()']
+        );
+
+        if ($this->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
+            $group = $form->addGroup(
+                $resultDisabledGroup,
+                null,
+                get_lang('ShowResultsToStudents')
+            );
+
+            return $group;
+        }
+
+        $resultDisabledGroup[] = $form->createElement(
+            'radio',
+            'results_disabled',
+            null,
+            get_lang('ShowScoreEveryAttemptShowAnswersLastAttempt'),
+            '4',
+            ['id' => 'result_disabled_4']
+        );
+
+        $resultDisabledGroup[] = $form->createElement(
+            'radio',
+            'results_disabled',
+            null,
+            get_lang('DontShowScoreOnlyWhenUserFinishesAllAttemptsButShowFeedbackEachAttempt'),
+            '5',
+            ['id' => 'result_disabled_5', 'onclick' => 'check_results_disabled()']
+        );
+
+        $resultDisabledGroup[] = $form->createElement(
+            'radio',
+            'results_disabled',
+            null,
+            get_lang('ExerciseRankingMode'),
+            '6',
+            ['id' => 'result_disabled_6']
+        );
+
+        /*$resultDisabledGroup[] = $form->createElement(
+            'radio',
+            'results_disabled',
+            null,
+            get_lang('ExerciseShowOnlyCorrectAnswer'),
+            '7',
+            ['id' => 'result_disabled_7']
+        );*/
+
+        $group = $form->addGroup(
+            $resultDisabledGroup,
+            null,
+            get_lang('ShowResultsToStudents')
+        );
+
+        return $group;
     }
 }

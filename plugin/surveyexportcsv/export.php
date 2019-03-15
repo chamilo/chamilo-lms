@@ -97,8 +97,8 @@ function getSurveyAnswers($courseId, $surveyId)
     $surveyAnswers = Database::getManager()
         ->createQuery(
             'SELECT sa.user, MIN(sa.iid) AS id FROM ChamiloCourseBundle:CSurveyAnswer sa
-        WHERE sa.cId = :course AND sa.surveyId = :survey
-        GROUP BY sa.user ORDER BY id ASC'
+            WHERE sa.cId = :course AND sa.surveyId = :survey
+            GROUP BY sa.user ORDER BY id ASC'
         )
         ->setParameters(['course' => $courseId, 'survey' => $surveyId])
         ->getResult();

@@ -74,12 +74,15 @@ class QuestionOptionsEvaluationPlugin extends Plugin
         return $this;
     }
 
+    /**
+     * Creates an extrafield.
+     */
     private function createExtraField()
     {
-        $qEf = new ExtraField('question');
+        $extraField = new ExtraField('question');
 
-        if (false === $qEf->get_handler_field_info_by_field_variable(self::EXTRAFIELD_FORMULA)) {
-            $qEf
+        if (false === $extraField->get_handler_field_info_by_field_variable(self::EXTRAFIELD_FORMULA)) {
+            $extraField
                 ->save(
                     [
                         'variable' => self::EXTRAFIELD_FORMULA,
@@ -92,13 +95,16 @@ class QuestionOptionsEvaluationPlugin extends Plugin
         }
     }
 
+    /**
+     * Removes the extrafield .
+     */
     private function removeExtraField()
     {
         $extraField = new ExtraField('question');
-        $qEf = $extraField->get_handler_field_info_by_field_variable(self::EXTRAFIELD_FORMULA);
+        $value = $extraField->get_handler_field_info_by_field_variable(self::EXTRAFIELD_FORMULA);
 
-        if (false !== $qEf) {
-            $extraField->delete($qEf['id']);
+        if (false !== $value) {
+            $extraField->delete($value['id']);
         }
     }
 }

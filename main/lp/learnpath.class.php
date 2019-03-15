@@ -2316,7 +2316,6 @@ class learnpath
             switch ($row['item_type']) {
                 case 'quiz':
                     $type_quiz = false;
-
                     foreach ($list as $toc) {
                         if ($toc['id'] == $_SESSION['oLP']->current) {
                             $type_quiz = true;
@@ -7432,8 +7431,8 @@ class learnpath
                     case TOOL_DOCUMENT:
                     case TOOL_READOUT_TEXT:
                         $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
-                        $sql_doc = "SELECT path FROM ".$tbl_doc."
-                                    WHERE c_id = ".$course_id." AND iid = ".intval($row['path']);
+                        $sql_doc = "SELECT path FROM $tbl_doc
+                                    WHERE c_id = $course_id AND iid = ".intval($row['path']);
                         $result = Database::query($sql_doc);
                         $path_file = Database::result($result, 0, 0);
                         $path_parts = pathinfo($path_file);

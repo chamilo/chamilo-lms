@@ -24,7 +24,7 @@ $lp = Session::read('oLP');
 
 if (isset($_GET['lp_item_id'])) {
     // Get parameter only came from lp_view.php.
-    $lp_item_id = intval($_GET['lp_item_id']);
+    $lp_item_id = (int) $_GET['lp_item_id'];
     if (is_object($lp)) {
         $src = $lp->get_link('http', $lp_item_id);
     }

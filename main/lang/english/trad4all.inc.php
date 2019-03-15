@@ -8376,4 +8376,5 @@ $ProposedRevision = "Proposed revision";
 $Reported = "Reported";
 $FromTimeX = "From %s";
 $ToTimeX = "To %s";
+$SurveyInviteLink = "Survey invitation link";
 ?>

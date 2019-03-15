@@ -20,8 +20,6 @@ Webpack takes CSS, JS and other files and generates tidy single-files to attach 
 
 The behaviour of how packages will be processed is describe here: "webpack.config.js".
 
-In order to process that file you will first need to edit webpack.config.js (around line 8) and decide whether .setPublicPath() shoud be configured for a subdirectory or a FQDN (Fully Qualified Domain Name). Leave as is for subdirectories or comment and uncomment the following .setPublicPath() for an FQDN.
-
 If the public/js/fos_js_routes.json file does not exist (or if you're in doubt about the version of your PHP libs), run:
 ```
 composer update

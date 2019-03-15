@@ -2237,9 +2237,10 @@ blockquote p {
     color: #3b8dc4;
 }
 .search-friend{
-    padding-bottom: 20px;
-    border-top: 1px solid #cdcdcd;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #cdcdcd;
     padding-top: 10px;
+    margin-bottom: 15px;
 }
 .btn-maps{
     border-radius: 5px;

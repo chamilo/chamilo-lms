@@ -58,11 +58,10 @@
                         <div id="listFriends"
                              class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
                             <div class="panel-body">
-                                {{ social_friend_block }}
                                 <div class="search-friend">
                                     {{ search_friends_form }}
                                 </div>
-
+                                {{ social_friend_block }}
                                 <div class="geolocalization">
                                     <a class="btn btn-maps" id="profile-tab" href="{{ _p.web }}main/social/map.php" >
                                         {{ "geolocalization.png"|img(32) }}

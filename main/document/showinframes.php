@@ -103,7 +103,7 @@ if (!$is_allowed_to_edit && !$is_visible) {
 }
 
 $pathinfo = pathinfo($header_file);
-$playerSupportedFiles = ['mp4', 'ogv', 'flv', 'm4v', 'webm'];
+$playerSupportedFiles = ['mp3', 'mp4', 'ogv', 'flv', 'm4v', 'webm'];
 $playerSupported = false;
 if (in_array(strtolower($pathinfo['extension']), $playerSupportedFiles)) {
     $playerSupported = true;
@@ -188,7 +188,7 @@ if (in_array(strtolower($pathinfo['extension']), $web_odf_supported_files)) {
             var topbarHeight = $("#topbar").height();
             $("#viewerJSContent").height((bodyHeight - topbarHeight));
         }
-        $(document).ready(function() {
+        $(function() {
             $(window).resize(resizeIframe());
         });
     </script>'
@@ -261,12 +261,11 @@ if ($originIsLearnpath) {
     Display::display_header('');
 }
 
-echo '<div class="text-center">';
-
 $file_url = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document'.$header_file;
 $file_url_web = $file_url.'?'.api_get_cidreq();
 
 if ($show_web_odf) {
+    echo '<div class="text-center">';
     $browser = api_get_navigator();
     $pdfUrl = api_get_path(WEB_LIBRARY_PATH).'javascript/ViewerJS/index.html#'.$file_url;
     if ($browser['name'] == 'Mozilla' && preg_match('|.*\.pdf|i', $header_file)) {
@@ -277,12 +276,11 @@ if ($show_web_odf) {
             src="'.$pdfUrl.'">
         </iframe>';
     echo '</div>';
+    echo '</div>';
 }
 
-echo '</div>';
-
 if ($playerSupported) {
-    echo DocumentManager::generateVideoPreview($file_url_web, $extension);
+    echo DocumentManager::generateMediaPreview($file_url_web, $extension);
 }
 
 if ($is_freemind_available) {

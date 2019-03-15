@@ -13491,9 +13491,9 @@ EOD;
                 }
 
                 $documentPathInfo = pathinfo($document->getPath());
-                $jplayerSupportedFiles = ['mp4', 'ogv', 'flv', 'm4v'];
+                $mediaSupportedFiles = ['mp3', 'mp4', 'ogv', 'flv', 'm4v'];
                 $extension = isset($documentPathInfo['extension']) ? $documentPathInfo['extension'] : '';
-                $showDirectUrl = !in_array($extension, $jplayerSupportedFiles);
+                $showDirectUrl = !in_array($extension, $mediaSupportedFiles);
 
                 $openmethod = 2;
                 $officedoc = false;

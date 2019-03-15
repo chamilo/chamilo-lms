@@ -2806,12 +2806,16 @@ HTML;
     {
         $defaultFeatures = ['playpause', 'current', 'progress', 'duration', 'tracks', 'volume', 'fullscreen', 'vrview'];
         $features = api_get_configuration_value('video_features');
+        $bowerJsFiles = [];
+        $bowerCSSFiles = [];
         if (!empty($features) && isset($features['features'])) {
             foreach ($features['features'] as $feature) {
                 if ($feature === 'vrview') {
                     continue;
                 }
                 $defaultFeatures[] = $feature;
+                $bowerJsFiles[] = "mediaelement/plugins/$feature/$feature.js";
+                $bowerCSSFiles[] = "mediaelement/plugins/$feature/$feature.css";
             }
         }
 
@@ -2821,11 +2825,24 @@ HTML;
             $translateHtml = '{type:"script", id:"_fr4", src:"'.api_get_path(WEB_AJAX_PATH).'lang.ajax.php?a=translate_html&'.api_get_cidreq().'"},';
         }
 
+        $counter = 10;
+        $extraMediaFiles = '';
+        foreach ($bowerJsFiles as $file) {
+            $extraMediaFiles .= '{type: "script", id: "media_'.$counter.'", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/'.$file.'"},';
+            $counter++;
+        }
+
+        foreach ($bowerCSSFiles as $file) {
+            $extraMediaFiles .= '{type: "stylesheet", id: "media_'.$counter.'", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/'.$file.'"},';
+            $counter++;
+        }
+
+
         $defaultFeatures = implode("','", $defaultFeatures);
         $frameReady = '
           $.frameReady(function() {
-            $(document).ready(function () {
-                $("video:not(.skip), audio:not(.skip)").mediaelementplayer({
+            $(function() {
+                $("video:not(.skip), audio:not(.skip)").mediaelementplayer({                    
                     pluginPath: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/build/",            
                     features: ["'.$defaultFeatures.'"],
                     success: function(mediaElement, originalNode, instance) {
@@ -2847,6 +2864,7 @@ HTML;
                 {type: "stylesheet", id: "_media2", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/build/mediaelementplayer.min.css"},                
                 {type: "stylesheet", id: "_media4", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/plugins/vrview/vrview.css"},
                 {type: "script", id: "_media4", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/plugins/vrview/vrview.js"},
+                '.$extraMediaFiles.'
                 '.$translateHtml.'
             ]
           });';

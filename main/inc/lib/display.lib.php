@@ -2837,7 +2837,6 @@ HTML;
             $counter++;
         }
 
-
         $defaultFeatures = implode("','", $defaultFeatures);
         $frameReady = '
           $.frameReady(function() {

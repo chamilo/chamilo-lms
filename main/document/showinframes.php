@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
-
 /**
  *  This file will show documents in a separate frame.
  *  We don't like frames, but it was the best of two bad things.

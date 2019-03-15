@@ -2536,7 +2536,7 @@ class SocialManager extends UserManager
     /**
      * Get HTML code block for user skills.
      *
-     * @param int $userId The user ID
+     * @param int    $userId      The user ID
      * @param string $orientation
      *
      * @return string

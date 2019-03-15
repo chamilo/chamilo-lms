@@ -1801,7 +1801,7 @@ class SocialManager extends UserManager
     ) {
         $messageId = $messageInfo['id'];
         $messages = MessageManager::getMessagesByParent($messageInfo['id'], 0, $offset, $limit);
-        $formattedList = '<div class="sub-mediapost">';
+        $formattedList = '<div class="sub-mediapost row">';
         $users = [];
 
         // The messages are ordered by date descendant, for comments we need ascendant
@@ -1857,16 +1857,16 @@ class SocialManager extends UserManager
         $isAdmin = self::is_admin($users[$userIdLoop]['id']);
         if ($userStatus === 5) {
             if ($users[$userIdLoop]['has_certificates']) {
-                $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_graduated.svg" width="22px" height="22px">';
+                $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_graduated.svg" width="22px" height="22px">';
             } else {
-                $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_student.svg" width="22px" height="22px">';
+                $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_student.svg" width="22px" height="22px">';
             }
         } else {
             if ($userStatus === 1) {
                 if ($isAdmin) {
-                    $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_admin.svg" width="22px" height="22px">';
+                    $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_admin.svg" width="22px" height="22px">';
                 } else {
-                    $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_teacher.svg" width="22px" height="22px">';
+                    $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_teacher.svg" width="22px" height="22px">';
                 }
             }
         }
@@ -1884,7 +1884,7 @@ class SocialManager extends UserManager
                      </a>';
         $comment .= '</div>';
         $comment .= '</div>';
-        $comment .= '<div class="col-md-9 col-xs-9 social-post-answers">';
+        $comment .= '<div class="col-md-7 col-xs-7 social-post-answers">';
         $comment .= '<div class="user-data">';
         $comment .= $iconStatus;
         $comment .= '<div class="username"><a href="'.$url.'">'.$nameComplete.'</a> 
@@ -1895,22 +1895,30 @@ class SocialManager extends UserManager
         $comment .= '</div>';
         $comment .= '</div>';
 
+        $comment .= '<div class="col-md-3 col-xs-3 social-post-answers">';
+        $comment .= '<div class="pull-right btn-group btn-group-sm">';
+
+        $comment .= MessageManager::getLikesButton(
+            $message['id'],
+            $currentUserId
+        );
+
         $isOwnWall = $currentUserId == $userIdLoop || $currentUserId == $receiverId;
         if ($isOwnWall) {
-            $comment .= '<div class="col-md-1 col-xs-1 social-post-answers">';
-            $comment .= '<div class="pull-right deleted-mgs">';
+
             $comment .= Display::url(
-                    Display::returnFontAwesomeIcon('trash'),
+                    Display::returnFontAwesomeIcon('trash', '', true),
                 'javascript:void(0)',
                 [
                     'id' => 'message_'.$message['id'],
                     'title' => get_lang('SocialMessageDelete'),
                     'onclick' => 'deleteComment('.$message['id'].')',
+                    'class' => 'btn btn-default',
                 ]
-                );
-            $comment .= '</div>';
-            $comment .= '</div>';
+            );
         }
+        $comment .= '</div>';
+        $comment .= '</div>';
         $comment .= '</div>';
 
         return $comment;
@@ -3123,20 +3131,29 @@ class SocialManager extends UserManager
 
         $html = '';
         $html .= '<div class="top-mediapost" >';
+        $html .= '<div class="pull-right btn-group btn-group-sm">';
+
+        $html .= MessageManager::getLikesButton(
+            $message['id'],
+            $currentUserId,
+            !empty($message['group_info']['id']) ? (int) $message['group_info']['id'] : 0
+        );
+
         if ($canEdit) {
             $htmlDelete = Display::url(
-                Display::returnFontAwesomeIcon('trash'),
+                Display::returnFontAwesomeIcon('trash', '', true),
                 'javascript:void(0)',
                 [
                     'id' => 'message_'.$message['id'],
                     'title' => get_lang('SocialMessageDelete'),
                     'onclick' => 'deleteMessage('.$message['id'].')',
+                    'class' => 'btn btn-default',
                 ]
             );
-            $html .= '<div class="pull-right deleted-mgs">';
+
             $html .= $htmlDelete;
-            $html .= '</div>';
         }
+        $html .= '</div>';
 
         $html .= '<div class="user-image" >';
         $html .= '<a href="'.$urlAuthor.'">
@@ -3151,7 +3168,7 @@ class SocialManager extends UserManager
         $html .= '<div class="post-attachment" >';
         $html .= $postAttachment;
         $html .= '</div>';
-        $html .= '<p>'.Security::remove_XSS($message['content']).'</p>';
+        $html .= '<div>'.Security::remove_XSS($message['content']).'</div>';
         $html .= '</div>';
         $html .= '</div>'; // end mediaPost
 

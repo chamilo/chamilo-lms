@@ -1144,6 +1144,18 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Avoid add a reply-to header when a no-reply address is set.
 //$_configuration['mail_no_reply_avoid_reply_to'] = false;
 
+// Allows to user add likes or dislikes to posts in social wall. Requires DB changes:
+// CREATE TABLE message_likes (id BIGINT AUTO_INCREMENT NOT NULL, message_id BIGINT NOT NULL, user_id INT NOT NULL, liked TINYINT(1) DEFAULT '0' NOT NULL, disliked TINYINT(1) DEFAULT '0' NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_B66CB196537A1329 (message_id), INDEX IDX_B66CB196A76ED395 (user_id), INDEX idx_message_likes_uid_mid (message_id, user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+// ALTER TABLE message_likes ADD CONSTRAINT FK_B66CB196537A1329 FOREIGN KEY (message_id) REFERENCES message (id) ON DELETE CASCADE;
+// ALTER TABLE message_likes ADD CONSTRAINT FK_B66CB196A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;
+// In 1.11.8, before enabling this feature, you also need to:
+// - edit src/Chamilo/CoreBundle/Entity/MessageLikes.php
+//   and follow the instructions about the @ORM\Entity() line
+// - edit src/Chamilo/CoreBundle/Entity/Message.php
+//   and fllow the instruccions about the @ORM\OneToMany line for the $likes property
+// - launch composer install to rebuild the autoload.php
+//$_configuration['social_enable_likes_messages'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

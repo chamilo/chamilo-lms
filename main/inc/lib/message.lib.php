@@ -1691,6 +1691,10 @@ class MessageManager
             );
         }
 
+        if (api_get_configuration_value('social_enable_likes_messages')) {
+            $links .= self::getLikesButton($main_message['id'], $current_user_id, $groupId);
+        }
+
         $urlReply = $webCodePath.'social/message_for_group_form.inc.php?'
             .http_build_query(
                 [
@@ -1827,6 +1831,11 @@ class MessageManager
                         false
                     );
                 }
+
+                if (api_get_configuration_value('social_enable_likes_messages')) {
+                    $links .= self::getLikesButton($topic['id'], $current_user_id, $groupId);
+                }
+
                 $links .= Display::toolbarButton(
                     $langReply,
                     $webCodePath.'social/message_for_group_form.inc.php?'
@@ -2749,5 +2758,80 @@ class MessageManager
         $row = Database::fetch_assoc($result);
 
         return $row['count'];
+    }
+
+    /**
+     * @param int $messageId
+     *
+     * @return array
+     *
+     * @throws \Doctrine\ORM\Query\QueryException
+     */
+    public static function countLikesAndDislikes($messageId, $userId)
+    {
+        $em = Database::getManager();
+
+        $likesCount = $em
+            ->createQuery('SELECT COUNT(l) FROM ChamiloCoreBundle:MessageLikes l
+                WHERE l.liked = true AND l.message = :message')
+            ->setParameters(['message' => (int) $messageId])
+            ->getSingleScalarResult();
+
+        $dislikesCount = $em
+            ->createQuery('SELECT COUNT(l) FROM ChamiloCoreBundle:MessageLikes l
+                WHERE l.liked = false AND l.message = :message')
+            ->setParameters(['message' => (int) $messageId])
+            ->getSingleScalarResult();
+
+        $userLike = $em
+            ->getRepository('ChamiloCoreBundle:MessageLikes')
+            ->findOneBy(['message' => $messageId, 'user' => $userId]);
+
+        return [
+            'likes' => $likesCount,
+            'dislikes' => $dislikesCount,
+            'user_liked' => $userLike ? $userLike->isLiked() : false,
+            'user_disliked' => $userLike ? $userLike->isDisliked() : false,
+        ];
+    }
+
+    /**
+     * @param int $messageId
+     * @param int $userId
+     * @param int $groupId   Optional.
+     *
+     * @return string
+     * @throws \Doctrine\ORM\Query\QueryException
+     */
+    public static function getLikesButton($messageId, $userId, $groupId = 0)
+    {
+        $countLikes = self::countLikesAndDislikes($messageId, $userId);
+
+        $btnLike = Display::button(
+            'like',
+            Display::returnFontAwesomeIcon('thumbs-up', '', true)
+                .PHP_EOL.'<span>'.$countLikes['likes'].'</span>',
+            [
+                'title' => get_lang('Like'),
+                'class' => 'btn btn-default social-like '.($countLikes['user_liked'] ? 'disabled' : ''),
+                'data-status' => 'like',
+                'data-message' => $messageId,
+                'data-group' => $groupId,
+            ]
+        );
+        $btnDislike = Display::button(
+            'like',
+            Display::returnFontAwesomeIcon('thumbs-down', '', true)
+            .PHP_EOL.'<span>'.$countLikes['dislikes'].'</span>',
+            [
+                'title' => get_lang('Dislike'),
+                'class' => 'btn btn-default social-like '.($countLikes['user_disliked'] ? 'disabled' : ''),
+                'data-status' => 'dislike',
+                'data-message' => $messageId,
+                'data-group' => $groupId,
+            ]
+        );
+
+        return $btnLike.PHP_EOL.$btnDislike;
     }
 }

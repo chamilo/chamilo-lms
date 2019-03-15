@@ -1,3 +1,4 @@
+{% import 'default/macro/macro.tpl' as display %}
 <script>
 $(function() {
     jQuery('.scrollbar-inner').scrollbar();
@@ -31,7 +32,7 @@ $(function() {
             </h4>
         </div>
         <div id="skillList" class="panel-collapse collapse in list-{{ orientation }}" role="tabpanel" aria-labelledby="headingOne">
-            <div class="panel-body">
+            {% set panel_content %}
                 {% if skills %}
                     <div class="list-skills">
                         {% for item in skills %}
@@ -55,7 +56,8 @@ $(function() {
                         <a href="{{ _p.web_main ~ 'social/skills_wheel.php' }}">{{ 'SkillsWheel'|get_lang }}</a>
                     </p>
                 {% endif %}
-            </div>
+            {% endset %}
+            {{ display.panel('', panel_content) }}
         </div>
     </div>
 </div>

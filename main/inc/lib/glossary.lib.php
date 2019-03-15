@@ -393,44 +393,55 @@ class GlossaryManager
     {
         // This function should always be called with the corresponding
         // parameter for view type. Meanwhile, use this cheap trick.
-        $view = self::getGlossaryView();
+
         // action links
         $actionsLeft = '';
         if (api_is_allowed_to_edit(null, true)) {
-            $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=addglossary&msg=add?'.api_get_cidreq().'">'.
-                Display::return_icon('new_glossary_term.png', get_lang('TermAddNew'), '', ICON_SIZE_MEDIUM).'</a>';
+            $actionsLeft .= '<a href="index.php?' . api_get_cidreq() . '&action=addglossary&msg=add?' . api_get_cidreq() . '">' .
+                Display::return_icon('new_glossary_term.png', get_lang('TermAddNew'), '', ICON_SIZE_MEDIUM) . '</a>';
         }
 
         if (api_is_allowed_to_edit(null, true)) {
-            $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=import">'.
-                Display::return_icon('import.png', get_lang('ImportGlossary'), '', ICON_SIZE_MEDIUM).'</a>';
+            $actionsLeft .= '<a href="index.php?' . api_get_cidreq() . '&action=import">' .
+                Display::return_icon('import.png', get_lang('ImportGlossary'), '', ICON_SIZE_MEDIUM) . '</a>';
         }
 
         if (!api_is_anonymous()) {
-            $actionsLeft .= '<a id="export_opener" href="'.api_get_self().'?'.api_get_cidreq().'&action=export">'.
-                Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
-        }
-
-        if (($view == 'table') || (!isset($view))) {
-            $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=list">'.
-                Display::return_icon('view_detailed.png', get_lang('ListView'), '', ICON_SIZE_MEDIUM).'</a>';
-        } else {
-            $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=table">'.
-                Display::return_icon('view_text.png', get_lang('TableView'), '', ICON_SIZE_MEDIUM).'</a>';
+            $actionsLeft .= '<a id="export-glossary" href="' . api_get_self() . '?' . api_get_cidreq() . '&action=export" class="btn btn-link btn-export" data-toggle="modal" data-target="#modal-export">' .
+                Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM) . '</a>';
         }
 
         if (!api_is_anonymous()) {
             $actionsLeft .= Display::url(
                 Display::return_icon('export_to_documents.png', get_lang('ExportToDocArea'), [], ICON_SIZE_MEDIUM),
-                api_get_self().'?'.api_get_cidreq().'&'.http_build_query(['action' => 'export_documents'])
+                api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query(['action' => 'export_documents'])
             );
         }
+
+        $orderList = isset($_GET['order']) ? Database::escape_string($_GET['order']) : '';
+        if(empty($orderList)){
+            $orderList = 'ASC';
+        }
+        if (!api_is_anonymous()) {
+            if($orderList ==='ASC'){
+                $actionsLeft .= Display::url(
+                    Display::return_icon('falling.png', get_lang('Sort Descending'), [], ICON_SIZE_MEDIUM),
+                    api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query(['order' => 'DESC'])
+                );
+            } else {
+                $actionsLeft .= Display::url(
+                    Display::return_icon('upward.png', get_lang('Sort Ascending'), [], ICON_SIZE_MEDIUM),
+                    api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query(['order' => 'ASC'])
+                );
+            }
+        }
+
 
         /* BUILD SEARCH FORM */
         $form = new FormValidator(
             'search',
             'get',
-            api_get_self().'?'.api_get_cidreq(),
+            api_get_self() . '?' . api_get_cidreq(),
             '',
             [],
             FormValidator::LAYOUT_INLINE
@@ -439,7 +450,7 @@ class GlossaryManager
         $form->addElement('hidden', 'cidReq', api_get_course_id());
         $form->addElement('hidden', 'id_session', api_get_session_id());
         $form->addButtonSearch(get_lang('Search'));
-        $actionsRight = $form->returnForm();
+        $actionsRight = '<div class="float-right">'.$form->returnForm().'</div>';
 
         $toolbar = Display::toolbarAction(
             'toolbar-document',
@@ -448,26 +459,12 @@ class GlossaryManager
 
         $content = $toolbar;
 
-        if (!$view || $view === 'table') {
-            $table = new SortableTable(
-                'glossary',
-                ['GlossaryManager', 'get_number_glossary_terms'],
-                ['GlossaryManager', 'get_glossary_data'],
-                0
-            );
-            //$table->set_header(0, '', false);
-            $table->set_header(0, get_lang('TermName'), true);
-            $table->set_header(1, get_lang('TermDefinition'), true);
-            if (api_is_allowed_to_edit(null, true)) {
-                $table->set_header(2, get_lang('Actions'), false, 'width=90px', ['class' => 'td_actions']);
-                $table->set_column_filter(2, ['GlossaryManager', 'actions_filter']);
-            }
-            $content .= $table->return_table();
-        }
+        $list = self::getListGlossary(1000,0,$orderList);
 
-        if ($view === 'list') {
-            $content .= self::displayGlossaryList();
-        }
+        $tpl = new Template(null);
+        $tpl->assign('data', $list);
+        $layout = $tpl->get_template('glossary/list.html.twig');
+        $content .= $tpl->fetch($layout);
 
         return $content;
     }
@@ -524,6 +521,78 @@ class GlossaryManager
         $obj = Database::fetch_object($res);
 
         return $obj->total;
+    }
+
+    public static function getListGlossary($numberOfItems, $column, $direction){
+        $_user = api_get_user_info();
+
+        // Database table definition
+        $t_glossary = Database::get_course_table(TABLE_GLOSSARY);
+        $t_item_propery = Database::get_course_table(TABLE_ITEM_PROPERTY);
+
+        if (api_is_allowed_to_edit(null, true)) {
+            $col2 = " glossary.glossary_id	as col2, ";
+        } else {
+            $col2 = ' ';
+        }
+
+        //condition for the session
+        $session_id = api_get_session_id();
+        $condition_session = api_get_session_condition(
+            $session_id,
+            true,
+            true,
+            'glossary.session_id'
+        );
+
+        $column = intval($column);
+        if (!in_array($direction, ['DESC', 'ASC'])) {
+            $direction = 'ASC';
+        }
+
+        $numberOfItems = intval($numberOfItems);
+
+        $keyword = isset($_GET['keyword']) ? Database::escape_string($_GET['keyword']) : '';
+        $keywordCondition = '';
+        if (!empty($keyword)) {
+            $keywordCondition = "AND (glossary.name LIKE '%$keyword%' OR glossary.description LIKE '%$keyword%')";
+        }
+        $sql = "SELECT
+                    glossary.name as col0,
+					glossary.description as col1,
+					$col2
+					glossary.session_id
+				FROM $t_glossary glossary 
+				INNER JOIN $t_item_propery ip
+				ON (glossary.glossary_id = ip.ref AND glossary.c_id = ip.c_id)
+				WHERE				    
+					tool = '".TOOL_GLOSSARY."' 
+					$condition_session AND
+					glossary.c_id = ".api_get_course_int_id()." AND
+					ip.c_id = ".api_get_course_int_id()."
+					$keywordCondition
+		        ORDER BY col$column $direction
+		        LIMIT 0,$numberOfItems";
+        $res = Database::query($sql);
+
+        $list = [];
+        $array = [];
+
+        while ($data = Database::fetch_array($res)) {
+            // Validation when belongs to a session
+            if (api_is_allowed_to_edit(null, true)) {
+                $array['id'] = $data[2];
+                $array['edit'] = '/main/glossary/index.php?action=edit_glossary&glossary_id='.$data[2].'&'.api_get_cidreq().'&msg=edit';
+                $array['delete'] = '/main/glossary/index.php?action=delete_glossary&glossary_id='.$data[2];
+            }
+            $session_img = api_get_session_image($data['session_id'], $_user['status']);
+            $array['title'] = $data[0].$session_img;
+            $array['description'] = api_html_entity_decode($data[1]);
+            $list[] = $array;
+        }
+
+        return $list;
+        
     }
 
     /**

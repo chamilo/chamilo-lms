@@ -1,0 +1,22 @@
+{% autoescape false %}
+<div class="glossary mt-5">
+    {% for item in data %}
+    <div class="item-glossary mb-4 pl-2 pr-2">
+        {% if item.edit %}
+            <div class="float-right">
+                <div class="btn-group" role="group">
+                    <a href="{{ item.edit }}" class="btn btn-light btn-sm">
+                        <i class="fas fa-pencil-alt"></i>
+                    </a>
+                    <a title="{{ 'Confirm if you want to delete'|trans }}" href="{{ item.delete }}" class="btn btn-light btn-sm delete-swal">
+                        <i class="far fa-trash-alt"></i>
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+        <h5 class="terms-title">{{ item.title }}</h5>
+        {{ item.description }}
+    </div>
+    {% endfor %}
+</div>
+{% endautoescape %}

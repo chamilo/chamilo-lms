@@ -2846,7 +2846,6 @@ HOTSPOT;
             $weight = float_format($weight, 1, $decimalSeparator, $thousandSeparator);
         }
 
-        $html = '';
         if ($show_percentage) {
             $percentageSign = '%';
             if ($hidePercentageSign) {
@@ -3902,9 +3901,7 @@ EOT;
         $track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
-        $courseUserSession = Database::get_main_table(
-            TABLE_MAIN_SESSION_COURSE_USER
-        );
+        $courseUserSession = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
         $question_id = intval($question_id);
         $exercise_id = intval($exercise_id);
@@ -4000,15 +3997,13 @@ EOT;
         $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
 
-        $courseUserSession = Database::get_main_table(
-            TABLE_MAIN_SESSION_COURSE_USER
-        );
+        $courseUserSession = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-        $question_id = intval($question_id);
-        $answer_id = intval($answer_id);
-        $exercise_id = intval($exercise_id);
+        $question_id = (int) $question_id;
+        $answer_id = (int) $answer_id;
+        $exercise_id = (int) $exercise_id;
         $course_code = Database::escape_string($course_code);
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
 
         if (empty($session_id)) {
             $courseCondition = "
@@ -4075,26 +4070,24 @@ EOT;
         $track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $courseUserSession = Database::get_main_table(
-            TABLE_MAIN_SESSION_COURSE_USER
-        );
+        $courseUserSession = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-        $question_id = intval($question_id);
-        $answer_id = intval($answer_id);
-        $exercise_id = intval($exercise_id);
+        $question_id = (int) $question_id;
+        $answer_id = (int) $answer_id;
+        $exercise_id = (int) $exercise_id;
         $courseId = api_get_course_int_id($course_code);
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
 
         switch ($question_type) {
             case FILL_IN_BLANKS:
-                $answer_condition = "";
+                $answer_condition = '';
                 $select_condition = " e.exe_id, answer ";
                 break;
             case MATCHING:
             case MATCHING_DRAGGABLE:
             default:
                 $answer_condition = " answer = $answer_id AND ";
-                $select_condition = " DISTINCT exe_user_id ";
+                $select_condition = ' DISTINCT exe_user_id ';
         }
 
         if (empty($session_id)) {
@@ -4106,7 +4099,7 @@ EOT;
             $courseCondition = "
             INNER JOIN $courseUserSession cu
             ON cu.c_id = a.c_id AND cu.user_id = exe_user_id";
-            $courseConditionWhere = " AND cu.status = 0 ";
+            $courseConditionWhere = ' AND cu.status = 0 ';
         }
 
         $sql = "SELECT $select_condition
@@ -4307,9 +4300,9 @@ EOT;
         $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-        $exercise_id = intval($exercise_id);
+        $exercise_id = (int) $exercise_id;
         $course_code = Database::escape_string($course_code);
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
 
         $sql = "SELECT DISTINCT exe_user_id
                 FROM $track_exercises e

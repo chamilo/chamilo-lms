@@ -1954,15 +1954,9 @@ class SessionManager
                     false
                 );
                 // Variables for default template
-                $tplContent->assign(
-                    'complete_name',
-                    stripslashes($user_info['complete_name'])
-                );
+                $tplContent->assign('complete_name', stripslashes($user_info['complete_name']));
                 $tplContent->assign('session_name', $session->getName());
-                $tplContent->assign(
-                    'session_coach',
-                    $session->getGeneralCoach()->getCompleteName()
-                );
+                $tplContent->assign('session_coach', $session->getGeneralCoach()->getCompleteName());
                 $layoutContent = $tplContent->get_template(
                     'mail/content_subscription_to_session_confirmation.tpl'
                 );
@@ -2005,27 +1999,7 @@ class SessionManager
                 if ($empty_users) {
                     foreach ($existingUsers as $existing_user) {
                         if (!in_array($existing_user, $userList)) {
-                            $sql = "DELETE FROM $tbl_session_rel_course_rel_user
-                                    WHERE
-                                        session_id = $sessionId AND
-                                        c_id = $courseId AND
-                                        user_id = $existing_user AND
-                                        status = 0 ";
-                            $result = Database::query($sql);
-
-                            Event::addEvent(
-                                LOG_SESSION_DELETE_USER_COURSE,
-                                LOG_USER_ID,
-                                $existing_user,
-                                api_get_utc_datetime(),
-                                api_get_user_id(),
-                                $courseId,
-                                $sessionId
-                            );
-
-                            if (Database::affected_rows($result)) {
-                                $nbr_users--;
-                            }
+                            self::unSubscribeUserFromCourseSession($existing_user, $courseId, $sessionId);
                         }
                     }
                 }

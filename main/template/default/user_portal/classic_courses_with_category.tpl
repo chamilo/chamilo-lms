@@ -1,4 +1,4 @@
-{% import 'macro/macro.tpl'|get_template as display %}
+{% import 'default/macro/macro.tpl' as display %}
 
 {% if not categories is empty %}
     <div class="classic-courses">

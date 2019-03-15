@@ -3212,19 +3212,21 @@ class DocumentManager
      *
      * @return string
      */
-    public static function generateVideoPreview($file, $extension)
+    public static function generateMediaPreview($file, $extension)
     {
-        $type = '';
-        /*if ($extension != 'flv') {
-
-        }*/
-        //$type = "video/$extension";
-        //$fileInfo = parse_url($file);
-        //$type = self::file_get_mime_type(basename($fileInfo['path']));
-
-        $html = '<video id="myvideo" controls>';
-        $html .= '<source src="'.$file.'" >';
-        $html .= '</video>';
+        $id = api_get_unique_id();
+        switch ($extension) {
+            case 'mp3':
+                $document_data['file_extension'] = $extension;
+                $html = '<div style="margin: 0; position: absolute; top: 50%; left: 35%;">';
+                $html .= '<audio id="'.$id.'" controls="controls" src="'.$file.'" type="audio/mp3" ></audio></div>';
+                break;
+            default:
+                $html = '<video id="'.$id.'" controls>';
+                $html .= '<source src="'.$file.'" >';
+                $html .= '</video>';
+                break;
+        }
 
         return $html;
     }

@@ -3088,7 +3088,7 @@ class GroupManager
         }
 
         // Tutor can also make any change
-        $isTutor = GroupManager::is_tutor_of_group($userId, $groupInfo, $courseId);
+        $isTutor = self::is_tutor_of_group($userId, $groupInfo, $courseId);
 
         if ($isTutor) {
             return true;
@@ -3172,7 +3172,7 @@ class GroupManager
                 break;
             case self::DOCUMENT_MODE_COLLABORATION:
                 // Student can upload content, can modify another content.
-                $isMember = GroupManager::is_subscribed($userId, $groupInfo);
+                $isMember = self::is_subscribed($userId, $groupInfo);
                 if ($isMember) {
                     $result = true;
                 }

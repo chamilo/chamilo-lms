@@ -8,7 +8,7 @@
                 </button>
                 <h4 class="modal-title" id="global-modal-title">&nbsp;</h4>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" id="global-modal-body">
             </div>
         </div>
     </div>

@@ -125,7 +125,7 @@ $session[] = [
 $quota_data = json_encode($session);
 
 $htmlHeadXtra[] = "<script>
-$(document).ready(function() {
+$(function() {
     var data = ".$quota_data.";
     var plot1 = jQuery.jqplot('chart1', [data], {
         seriesDefaults: {

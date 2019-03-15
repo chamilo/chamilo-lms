@@ -60,11 +60,9 @@ if ($form->validate()) {
 
         $questionAnswers = new Answer($questionId, 0, $exercise);
         $counts = array_count_values($questionAnswers->correct);
-
         $weighting = [];
-
         foreach ($questionAnswers->correct as $i => $correct) {
-            // successes
+            // Success
             if (1 == $correct) {
                 $weighting[$i] = 10 / $counts[1] / $nbrQuestions;
 
@@ -114,9 +112,7 @@ if ($form->validate()) {
         );
 
         $questionAnswers->save();
-        $question->updateWeighting(
-            array_sum($allowedWeights)
-        );
+        $question->updateWeighting(array_sum($allowedWeights));
         $question->save($exercise);
     }
 
@@ -127,7 +123,6 @@ if ($form->validate()) {
     header(
         'Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq()."&exerciseId=$exerciseId"
     );
-
     exit;
 }
 

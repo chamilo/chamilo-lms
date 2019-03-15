@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  *  This file will show documents in a separate frame.
  *  We don't like frames, but it was the best of two bad things.
@@ -207,9 +209,7 @@ if (isset($document_data['parents']) && isset($document_data['parents'][0])) {
 if ($isChatFolder) {
     $htmlHeadXtra[] = api_get_js('highlight/highlight.pack.js');
     $htmlHeadXtra[] = api_get_css(api_get_path(WEB_CSS_PATH).'chat.css');
-    $htmlHeadXtra[] = api_get_css(
-        api_get_path(WEB_LIBRARY_PATH).'javascript/highlight/styles/github.css'
-    );
+    $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/highlight/styles/github.css');
     $htmlHeadXtra[] = '
     <script>
         hljs.initHighlightingOnLoad();
@@ -258,7 +258,7 @@ if (!$playerSupported && $execute_iframe) {
 if ($originIsLearnpath) {
     Display::display_reduced_header();
 } else {
-    Display::display_header('');
+    Display::display_header();
 }
 
 $file_url = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document'.$header_file;
@@ -353,14 +353,30 @@ if ($execute_iframe) {
         $content = Security::remove_XSS(file_get_contents($file_url_sys));
         echo $content;
     } else {
-        if (api_is_allowed_to_edit()) {
-            $parentId = $document_data['parent_id'];
-            $url = api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq().'&id='.$parentId;
-            $actionsLeft = Display::url(
-                Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM),
-                $url
-            );
+        $parentId = $document_data['parent_id'];
+        $url = api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq().'&id='.$parentId;
+        $actionsLeft = Display::url(
+            Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM),
+            $url
+        );
 
+        $groupMemberWithEditRights = false;
+        $groupId = api_get_group_id();
+        if (!empty($groupId)) {
+            $groupInfo = GroupManager::get_group_properties($groupId);
+            if ($groupInfo) {
+                $groupMemberWithEditRights = GroupManager::allowUploadEditDocument(
+                    api_get_user_id(),
+                    api_get_course_int_id(),
+                    $groupInfo,
+                        $document_data
+                );
+            }
+        }
+
+        $allowToEdit = api_is_allowed_to_edit(null, true) || $groupMemberWithEditRights;
+
+        if ($allowToEdit) {
             $actionsLeft .= Display::url(
                 Display::return_icon(
                     'edit.png',
@@ -396,9 +412,9 @@ if ($execute_iframe) {
                 api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq(
                 ).'&action=export_to_pdf&id='.$document_id
             );
-
-            echo $toolbar = Display::toolbarAction('actions-documents', [$actionsLeft]);
         }
+
+        echo $toolbar = Display::toolbarAction('actions-documents', [$actionsLeft]);
 
         echo '<iframe 
             id="mainFrame" 

@@ -5787,6 +5787,10 @@ div#chat-remote-video video {
 }
 
 /**** SOCIAL MEDIA ****/
+.search-friend label {
+    display: none;
+}
+
 .share-social-media {
     background-color: #FFF;
     margin-bottom: 5px;

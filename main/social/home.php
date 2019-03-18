@@ -233,7 +233,7 @@ $formSearch->addText(
     [
         'aria-label' => get_lang('SearchUsers'),
         'custom' => true,
-        'placeholder' => get_lang('Rechercher'),
+        'placeholder' => get_lang('Search'),
     ]
 );
 //$formSearch->addButtonSearch(get_lang('Search'));

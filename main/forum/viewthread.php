@@ -631,7 +631,7 @@ foreach ($posts as $post) {
         'AW:',
     ];
     $replace = '<span>'.Display::returnFontAwesomeIcon('mail-reply').'</span>';
-    $post['post_title'] = str_replace($search,$replace, $post['post_title']);
+    $post['post_title'] = str_replace($search, $replace, $post['post_title']);
 
     // The post title
     $titlePost = Display::tag('h3', $post['post_title'], ['class' => 'forum_post_title']);

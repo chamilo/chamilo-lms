@@ -6831,7 +6831,7 @@ class Tracking
                             break;
                         case TOOL_LEARNPATH:
                             if ($item['tool_id'] != $beforeItem['tool_id']) {
-                                continue;
+                                break;
                             }
                             if (!isset($lpTime[$item['tool_id']])) {
                                 $lpTime[$item['tool_id']] = 0;

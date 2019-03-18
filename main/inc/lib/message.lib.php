@@ -2819,16 +2819,19 @@ class MessageManager
      *
      * @return int The number of unread messages in the database for the given user
      */
-    private static function getCountNewMessagesFromDB($userId)
+    public static function getCountNewMessagesFromDB($userId)
     {
+        $userId = (int) $userId;
+
         if (empty($userId)) {
             return 0;
         }
+
         $table = Database::get_main_table(TABLE_MESSAGE);
         $sql = "SELECT COUNT(id) as count 
                 FROM $table
                 WHERE
-                    user_receiver_id=".api_get_user_id()." AND
+                    user_receiver_id=".$userId." AND
                     msg_status = ".MESSAGE_STATUS_UNREAD;
         $result = Database::query($sql);
         $row = Database::fetch_assoc($result);

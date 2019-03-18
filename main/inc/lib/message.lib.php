@@ -1691,9 +1691,7 @@ class MessageManager
             );
         }
 
-        if (api_get_configuration_value('social_enable_likes_messages')) {
-            $links .= self::getLikesButton($main_message['id'], $current_user_id, $groupId);
-        }
+        $links .= self::getLikesButton($main_message['id'], $current_user_id, $groupId);
 
         $urlReply = $webCodePath.'social/message_for_group_form.inc.php?'
             .http_build_query(
@@ -1832,9 +1830,7 @@ class MessageManager
                     );
                 }
 
-                if (api_get_configuration_value('social_enable_likes_messages')) {
-                    $links .= self::getLikesButton($topic['id'], $current_user_id, $groupId);
-                }
+                $links .= self::getLikesButton($topic['id'], $current_user_id, $groupId);
 
                 $links .= Display::toolbarButton(
                     $langReply,
@@ -2738,6 +2734,7 @@ class MessageManager
 
     /**
      * @param int $messageId
+     * @param int $userId
      *
      * @throws \Doctrine\ORM\Query\QueryException
      *
@@ -2745,18 +2742,25 @@ class MessageManager
      */
     public static function countLikesAndDislikes($messageId, $userId)
     {
+        if (!api_get_configuration_value('social_enable_likes_messages')) {
+            return [];
+        }
+
+        $messageId = (int) $messageId;
+        $userId = (int) $userId;
+
         $em = Database::getManager();
 
         $likesCount = $em
             ->createQuery('SELECT COUNT(l) FROM ChamiloCoreBundle:MessageLikes l
                 WHERE l.liked = true AND l.message = :message')
-            ->setParameters(['message' => (int) $messageId])
+            ->setParameters(['message' => $messageId])
             ->getSingleScalarResult();
 
         $dislikesCount = $em
             ->createQuery('SELECT COUNT(l) FROM ChamiloCoreBundle:MessageLikes l
                 WHERE l.liked = false AND l.message = :message')
-            ->setParameters(['message' => (int) $messageId])
+            ->setParameters(['message' => $messageId])
             ->getSingleScalarResult();
 
         $userLike = $em
@@ -2782,6 +2786,10 @@ class MessageManager
      */
     public static function getLikesButton($messageId, $userId, $groupId = 0)
     {
+        if (!api_get_configuration_value('social_enable_likes_messages')) {
+            return '';
+        }
+
         $countLikes = self::countLikesAndDislikes($messageId, $userId);
 
         $btnLike = Display::button(

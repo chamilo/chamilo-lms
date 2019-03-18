@@ -9272,19 +9272,21 @@ SQL;
             $dateHuman
         );
 
+        $format = $showTime ? DATE_TIME_FORMAT_LONG_24H : DATE_FORMAT_LONG_NO_DAY;
+
         $result = '';
         if (!empty($startDateToLocal) && !empty($endDateToLocal)) {
             $result = sprintf(
                 get_lang('FromDateXToDateY'),
-                api_format_date($startDateToLocal, DATE_TIME_FORMAT_LONG_24H),
-                api_format_date($endDateToLocal, DATE_TIME_FORMAT_LONG_24H)
+                api_format_date($startDateToLocal, $format),
+                api_format_date($endDateToLocal, $format)
             );
         } else {
             if (!empty($startDateToLocal)) {
-                $result = get_lang('From').' '.api_format_date($startDateToLocal, DATE_TIME_FORMAT_LONG_24H);
+                $result = get_lang('From').' '.api_format_date($startDateToLocal, $format);
             }
             if (!empty($endDateToLocal)) {
-                $result = get_lang('Until').' '.api_format_date($endDateToLocal, DATE_TIME_FORMAT_LONG_24H);
+                $result = get_lang('Until').' '.api_format_date($endDateToLocal, $format);
             }
         }
         if (empty($result)) {

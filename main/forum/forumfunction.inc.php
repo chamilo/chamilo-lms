@@ -4430,12 +4430,11 @@ function send_notification_mails($forumId, $thread_id, $reply_info)
     ) {
         $send_mails = true;
     }
+
     // The forum category, the forum, the thread and the reply are visible to the user
-    if ($send_mails) {
-        if (!empty($forumId)) {
-            $postId = isset($reply_info['new_post_id']) ? $reply_info['new_post_id'] : 0;
-            send_notifications($forumId, $thread_id, $postId);
-        }
+    if ($send_mails && !empty($forumId)) {
+        $postId = isset($reply_info['new_post_id']) ? $reply_info['new_post_id'] : 0;
+        send_notifications($forumId, $thread_id, $postId);
     } else {
         $table_notification = Database::get_course_table(TABLE_FORUM_NOTIFICATION);
         if (isset($current_forum['forum_id'])) {
@@ -4577,7 +4576,7 @@ function send_mail($user_info = [], $thread_information = [], $postInfo = [])
     $courseInfoTitle = get_lang('Course').': '.$_course['name'].' - ['.$_course['official_code']."] - <br />\n";
     if (!empty($courseId) && $_course['real_id'] == $courseId)  {
         $subject = get_lang('NewForumPost');
-        $courseInfoTitle = '';
+        $courseInfoTitle = " <br />\n";
     }
     $email_body .= $courseInfoTitle;
 
@@ -5725,14 +5724,14 @@ function get_notifications($content, $id)
  */
 function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
 {
-    $_course = api_get_course_info();
+    //$_course = api_get_course_info();
 
-    $forumCourseId = api_get_configuration_value('global_forums_course_id');
+    /*$forumCourseId = api_get_configuration_value('global_forums_course_id');
     if (!empty($forumCourseId)) {
         if ($_course['real_id'] == $forumCourseId) {
             return false;
         }
-    }
+    }*/
 
     $forum_id = (int) $forum_id;
 

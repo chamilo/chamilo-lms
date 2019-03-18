@@ -4563,14 +4563,23 @@ function send_mail($user_info = [], $thread_information = [], $postInfo = [])
 {
     $_course = api_get_course_info();
     $user_id = api_get_user_id();
-    $subject = get_lang('NewForumPost').' - '.$_course['official_code'];
+
     $thread_link = '';
     if (isset($thread_information) && is_array($thread_information)) {
         $thread_link = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&forum='.$thread_information['forum_id'].'&thread='.$thread_information['thread_id'];
     }
     $email_body = get_lang('Dear').' '.api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS).", <br />\n\r";
     $email_body .= get_lang('NewForumPost')."\n";
-    $email_body .= get_lang('Course').': '.$_course['name'].' - ['.$_course['official_code']."] - <br />\n";
+
+    $courseId = api_get_configuration_value('global_forums_course_id');
+    $subject = get_lang('NewForumPost').' - '.$_course['official_code'];
+
+    $courseInfoTitle = get_lang('Course').': '.$_course['name'].' - ['.$_course['official_code']."] - <br />\n";
+    if (!empty($courseId) && $_course['real_id'] == $courseId)  {
+        $subject = get_lang('NewForumPost');
+        $courseInfoTitle = '';
+    }
+    $email_body .= $courseInfoTitle;
 
     if (!empty($postInfo) && isset($postInfo['post_text'])) {
         $text = cut(strip_tags($postInfo['post_text']), 100);

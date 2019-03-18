@@ -240,20 +240,6 @@ if (($current_forum_category &&
     }
 }
 
-// The different views of the thread.
-if ($origin != 'learnpath') {
-    /*$actions .= '<a href="'.$forumUrl.'viewthread.php?'.api_get_cidreq().'&'.api_get_cidreq()
-            .'&forum='.intval($forumId).'&thread='.intval($threadId)
-            .'&search='.Security::remove_XSS(urlencode($my_search));
-        echo $my_url.'&view=flat">'
-            .Display::return_icon('forum_listview.png', get_lang('FlatView'), null, ICON_SIZE_MEDIUM)
-            .'</a>';
-    /*
-        echo $my_url.'&view=nested">'
-            .Display::return_icon('forum_nestedview.png', get_lang('NestedView'), null, ICON_SIZE_MEDIUM)
-        .'</a>';*/
-}
-
 $template->assign('forum_actions', $actions);
 $template->assign('origin', api_get_origin());
 
@@ -637,6 +623,15 @@ foreach ($posts as $post) {
     if (isset($_GET['post_id']) && $_GET['post_id'] == $post['post_id']) {
         $post['current'] = true;
     }
+
+    // Replace Re: with an icon
+    $search = [
+        get_lang('ReplyShort'),
+        'Re:',
+        'AW:',
+    ];
+    $replace = '<span>'.Display::returnFontAwesomeIcon('mail-reply').'</span>';
+    $post['post_title'] = str_replace($search,$replace, $post['post_title']);
 
     // The post title
     $titlePost = Display::tag('h3', $post['post_title'], ['class' => 'forum_post_title']);

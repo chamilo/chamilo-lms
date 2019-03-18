@@ -2594,7 +2594,7 @@ class Display
     /**
      * Get a HTML code for a icon by Font Awesome.
      *
-     * @param string     $name            The icon name
+     * @param string     $name            The icon name. Example: "mail-reply"
      * @param int|string $size            Optional. The size for the icon. (Example: lg, 2, 3, 4, 5)
      * @param bool       $fixWidth        Optional. Whether add the fw class
      * @param string     $additionalClass Optional. Additional class

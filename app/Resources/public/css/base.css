@@ -5480,15 +5480,31 @@ div#chat-remote-video video {
 
 .forum-post .thumbnail {
     margin-bottom: 5px;
+    text-align: center;
+    border: none;
+}
+.forum-post .thumbnail img{
+    border-radius: 50%;
+    border: 3px solid #96bd0d;
 }
 
 .forum-post .title-username {
     text-align: center;
-    font-size: 16px;
+    font-size: 12px;
     margin-bottom: 5px;
     margin-top: 0;
+    font-weight: bold;
+    padding-top: 5px;
 }
-
+.forum-post .user-type.text-center {
+    border-radius: 50%;
+    position: absolute;
+    top: 55px;
+    right: 40px;
+    border: 2px solid #6B1D82;
+    padding: 5px;
+    background-color: #fff;
+}
 .forum-post .post-date {
     font-size: 12px;
     text-align: center;

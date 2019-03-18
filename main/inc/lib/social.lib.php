@@ -1905,7 +1905,6 @@ class SocialManager extends UserManager
 
         $isOwnWall = $currentUserId == $userIdLoop || $currentUserId == $receiverId;
         if ($isOwnWall) {
-
             $comment .= Display::url(
                     Display::returnFontAwesomeIcon('trash', '', true),
                 'javascript:void(0)',

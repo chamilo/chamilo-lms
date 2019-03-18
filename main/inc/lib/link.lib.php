@@ -973,7 +973,8 @@ class Link extends Model
      * @param int $courseId
      * @param int $session_id
      *
-     * @return string
+     * @return array
+     *
      */
     public static function showLinksPerCategory($catid, $courseId, $session_id)
     {
@@ -982,22 +983,19 @@ class Link extends Model
         $catid = intval($catid);
 
         $links = self::getLinksPerCategory($catid, $courseId, $session_id);
-        $content = '';
         $numberOfLinks = count($links);
+        $listLink = [];
 
         if (!empty($links)) {
-            $content .= '<div class="list-group">';
+
             $i = 1;
             $linksAdded = [];
             foreach ($links as $myrow) {
+
                 $linkId = $myrow['id'];
-
-                if (in_array($linkId, $linksAdded)) {
-                    continue;
-                }
-
-                $linksAdded[] = $linkId;
+                $linksAdded['id'] = $linkId;
                 $categoryId = $myrow['category_id'];
+                $linksAdded['category'] = $categoryId;
 
                 // Validation when belongs to a session.
                 $session_img = api_get_session_image(
@@ -1012,7 +1010,7 @@ class Link extends Model
                         '',
                         'javascript:void(0);',
                         'check-circle',
-                        'outline-secondary btn-sm',
+                        'secondary btn-sm',
                         [
                             'onclick' => "check_url('".$linkId."', '".addslashes($myrow['url'])."');",
                             'title' => get_lang('CheckURL'),
@@ -1034,7 +1032,7 @@ class Link extends Model
                             '',
                             $url,
                             'pencil-alt',
-                            'outline-secondary btn-sm',
+                            'secondary btn-sm',
                             [
                                 'title' => $title,
                             ]
@@ -1054,7 +1052,7 @@ class Link extends Model
                                 '',
                                 $urlVisibility,
                                 'eye',
-                                'outline-secondary btn-sm',
+                                'secondary btn-sm',
                                 [
                                     'title' => $title,
                                 ]
@@ -1067,7 +1065,7 @@ class Link extends Model
                                 '',
                                 $urlVisibility,
                                 'eye-slash',
-                                'outline-secondary btn-sm',
+                                'secondary btn-sm',
                                 [
                                     'title' => $title,
                                 ]
@@ -1087,7 +1085,7 @@ class Link extends Model
                             get_lang('MoveUp'),
                             api_get_self().'?'.api_get_cidreq().'&'.http_build_query($moveLinkParams),
                             'level-up-alt',
-                            'outline-secondary',
+                            'secondary',
                             ['class' => 'btn-sm '.($i === 1 ? 'disabled' : '')],
                             false
                         );
@@ -1097,12 +1095,12 @@ class Link extends Model
                             get_lang('MoveDown'),
                             api_get_self().'?'.api_get_cidreq().'&'.http_build_query($moveLinkParams),
                             'level-down-alt',
-                            'outline-secondary',
+                            'secondary',
                             ['class' => 'btn-sm '.($i === $numberOfLinks ? 'disabled' : '')],
                             false
                         );
 
-                        $url .= api_get_self().'?'.api_get_cidreq().'&sec_token='.$token.'&action=deletelink&id='.$linkId.'&category_id='.$categoryId;
+                        $url = api_get_self().'?'.api_get_cidreq().'&sec_token='.$token.'&action=deletelink&id='.$linkId.'&category_id='.$categoryId;
                         $event = "javascript: if(!confirm('".get_lang('LinkDelconfirm')."'))return false;";
                         $title = get_lang('Delete');
 
@@ -1110,7 +1108,7 @@ class Link extends Model
                             '',
                             $url,
                             'trash',
-                            'outline-secondary btn-sm',
+                            'secondary btn-sm',
                             [
                                 'onclick' => $event,
                                 'title' => $title,
@@ -1119,50 +1117,34 @@ class Link extends Model
                     }
                 }
 
-                $showLink = false;
-                $titleClass = '';
-                if ($myrow['visibility'] == '1') {
-                    $showLink = true;
-                } else {
-                    if (api_is_allowed_to_edit(null, true)) {
-                        $showLink = true;
-                        $titleClass = 'text-muted';
-                    }
+                $showLink = true;
+                $urlLink = null;
+
+                if ($myrow['visibility'] != '1') {
+                    $showLink = false;
                 }
+
+                $linksAdded['visibility'] = $showLink;
 
                 if ($showLink) {
-                    $iconLink = Display::return_icon(
-                        'url.png',
-                        get_lang('Link'),
-                        null,
-                        ICON_SIZE_SMALL
-                    );
-                    $url = api_get_path(WEB_CODE_PATH).'link/link_goto.php?'.api_get_cidreq().'&link_id='.$linkId.'&link_url='.urlencode($myrow['url']);
-                    $content .= '<div class="list-group-item">';
-                    $content .= '<div class="float-right"><div class="btn-group">'.$toolbar.'</div></div>';
-                    $content .= '<h4 class="list-group-item-heading">';
-                    $content .= $iconLink;
-                    $content .= Display::tag(
-                        'a',
-                        Security::remove_XSS($myrow['title']),
-                        [
-                            'href' => $url,
-                            'target' => $myrow['target'],
-                            'class' => $titleClass,
-                        ]
-                    );
-                    $content .= $link_validator;
-                    $content .= $session_img;
-                    $content .= '</h4>';
-                    $content .= '<p class="list-group-item-text">'.$myrow['description'].'</p>';
-                    $content .= '</div>';
+                    $urlLink = api_get_path(WEB_CODE_PATH).'link/link_goto.php?'.api_get_cidreq().'&link_id='.$linkId.'&link_url='.urlencode($myrow['url']);
                 }
+
                 $i++;
+
+                $linksAdded['title'] = Security::remove_XSS($myrow['title']);
+                $linksAdded['description'] = $myrow['description'];
+                $linksAdded['target'] = $myrow['target'];
+                $linksAdded['url'] = $urlLink;
+                $linksAdded['toolbar'] = $toolbar;
+                $linksAdded['session'] = $session_img;
+                $linksAdded['link_validator'] = $link_validator;
+
+                $listLink[] = $linksAdded;
             }
-            $content .= '</div>';
         }
 
-        return $content;
+        return $listLink;
     }
 
     /**
@@ -1684,19 +1666,14 @@ class Link extends Model
             echo Display::return_icon('forum_nestedview.png', get_lang('NestedView'), '', ICON_SIZE_MEDIUM).'</a>';
         }
         echo '</div>';
-        $linksPerCategory = self::showLinksPerCategory(0, $course_id, $session_id);
 
-        if (empty($countCategories)) {
-            echo $linksPerCategory;
-        } else {
-            if (!empty($linksPerCategory)) {
-                echo Display::panel($linksPerCategory, get_lang('NoCategory'));
-            }
-        }
 
         $counter = 0;
         $category = [];
-        $list = [];
+        $listCategory = [];
+
+        $list['not_category'] = self::showLinksPerCategory(0, $course_id, $session_id);;
+
         foreach ($categories as $myrow) {
             // Student don't see invisible categories.
             if (!api_is_allowed_to_edit(null, true)) {
@@ -1707,7 +1684,7 @@ class Link extends Model
 
             // Validation when belongs to a session
             $showChildren = $categoryId == $myrow['id'] || $show == 'all';
-
+            $category['id'] = $myrow['id'];
             $category['description'] = Security::remove_XSS($myrow['description']);
 
             $strVisibility = '';
@@ -1724,17 +1701,15 @@ class Link extends Model
                 $strVisibility = Display::toolbarButton(null, $url, 'eye-slash', null, ['title' => $title]);
             }
 
-            $iconTree = '';
             if ($showChildren) {
-                $iconTree .= '<a class="'.$visibilityClass.'" href="'.api_get_self().'?'.api_get_cidreq().'&category_id=">';
-                $iconTree .= Display::return_icon('forum_nestedview.png');
+                $category['visibility'] = $visibilityClass;
+                $category['url'] = api_get_self().'?'.api_get_cidreq().'&category_id=';
             } else {
-                $iconTree .= '<a class="'.$visibilityClass.'" href="'.api_get_self().'?'.api_get_cidreq().'&category_id='.$myrow['id'].'">';
-                $iconTree .= Display::return_icon('forum_listview.png');
+                $category['visibility'] = $visibilityClass;
+                $category['url'] = api_get_self().'?'.api_get_cidreq().'&category_id='.$myrow['id'];
             }
-            $iconTree .= Security::remove_XSS($myrow['category_title']);
-            $iconTree .= '</a>';
-            $category['title'] = $iconTree;
+
+            $category['title'] = Security::remove_XSS($myrow['category_title']);
 
             $iconTools = '';
 
@@ -1758,10 +1733,13 @@ class Link extends Model
                 );
             }
             $category['children'] = $childrenContent;
-            $list[] = $category;
+            $listCategory[] = $category;
         }
+        $list['in_category'] = $listCategory;
+
         $tpl = new Template(null);
-        $tpl->assign('data', $list);
+        $tpl->assign('list_not_category', $list['not_category']);
+        $tpl->assign('list_in_category', $list['in_category']);
         $courseInfoLayout = $tpl->get_template("link/index.html.twig");
         $content = $tpl->fetch($courseInfoLayout);
 

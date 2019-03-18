@@ -1,19 +1,60 @@
 {% block content %}
     {% autoescape false %}
-        {% for item in data %}
-            <div class="card">
-                <div class="card-body">
-                    <h4>{{ item.title }}</h4>
-                    <div class="float-right">
-                        <div class="btn-group btn-group-sm">
-                            {{ item.tools }}
+        <ul>
+        {% for item in list_not_category %}
+            <li>
+                <h4>
+                    {{ item.link_validator }}
+                    <a href="{{ item.url }}" class="{{ item.visibility == true ? '' : 'text-muted' }}" target="{{ item.target }}">{{ item.title }}</a>
+                </h4>
+                <div class="float-right">
+                    <div class="btn-group btn-group-sm">
+                        {{ item.toolbar }}
+                    </div>
+                </div>
+                {{ item.description }}
+            </li>
+        {% endfor %}
+        </ul>
+
+        {% for item in list_in_category %}
+            <div class="accordion" id="accordion_category">
+                <div class="card">
+                    <h4 class="card-header" id="heading_{{ item.id }}">
+                        <a href="#" class="btn btn-link"  data-toggle="collapse" data-target="#collapse_{{ item.id }}" aria-expanded="true" aria-controls="collapse_{{ item.id }}">
+                            {{ item.title }}
+                        </a>
+                        <div class="float-right">
+                            <div class="btn-group btn-group-sm">
+                                {{ item.tools }}
+                            </div>
+                        </div>
+                    </h4>
+                    <div id="collapse_{{ item.id }}" class="collapse show" aria-labelledby="heading_{{ item.id }}" data-parent="#accordion_category">
+                        <div class="card-body">
+                            {{ item.description }}
+
+                            <ul>
+                                {% for row in item.children %}
+                                    <li>
+                                        <h4>
+                                            {{ row.link_validator }}
+                                            <a href="{{ row.url }}" class="{{ row.visibility == true ? '' : 'text-muted' }}" target="{{ row.target }}">{{ row.title }}</a>
+                                        </h4>
+                                        <div class="float-right">
+                                            <div class="btn-group btn-group-sm">
+                                                {{ row.toolbar }}
+                                            </div>
+                                        </div>
+                                        {{ row.description }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+
                         </div>
                     </div>
-                    {{ item.description }}
-                    {{ item.children }}
                 </div>
             </div>
-
         {% endfor %}
     {% endautoescape %}
 {% endblock %}

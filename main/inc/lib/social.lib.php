@@ -953,6 +953,15 @@ class SocialManager extends UserManager
         $portfolioIcon = Display::return_icon('wiki_task.png', get_lang('Portfolio'));
         $personalDataIcon = Display::return_icon('database.png', get_lang('PersonalDataReport'));
 
+        $forumCourseId = api_get_configuration_value('global_forums_course_id');
+        $groupUrl = api_get_path(WEB_CODE_PATH).'social/groups.php';
+        if (!empty($forumCourseId)) {
+            $courseInfo = api_get_course_info_by_id($forumCourseId);
+            if (!empty($courseInfo)) {
+                $groupUrl = api_get_path(WEB_CODE_PATH).'forum/index.php?cidReq='.$courseInfo['code'];
+            }
+        }
+
         $html = '';
         $active = null;
         if (!in_array(
@@ -960,7 +969,7 @@ class SocialManager extends UserManager
             ['shared_profile', 'groups', 'group_edit', 'member_list', 'waiting_list', 'invite_friends']
         )) {
             $links = '<ul class="nav nav-pills nav-stacked">';
-            $active = $show == 'home' ? 'active' : null;
+            $active = $show === 'home' ? 'active' : null;
             $links .= '
                 <li class="home-icon '.$active.'">
                     <a href="'.api_get_path(WEB_CODE_PATH).'social/home.php">
@@ -975,7 +984,7 @@ class SocialManager extends UserManager
                     </a>
                 </li>';
 
-            //Invitations
+            // Invitations
             $active = $show == 'invitations' ? 'active' : null;
             $links .= '
                 <li class="invitations-icon '.$active.'">
@@ -984,7 +993,7 @@ class SocialManager extends UserManager
                     </a>
                 </li>';
 
-            //Shared profile and groups
+            // Shared profile and groups
             $active = $show == 'shared_profile' ? 'active' : null;
             $links .= '
                 <li class="shared-profile-icon'.$active.'">
@@ -999,15 +1008,15 @@ class SocialManager extends UserManager
                         '.$friendsIcon.' '.get_lang('Friends').'
                     </a>
                 </li>';
-            $active = $show == 'browse_groups' ? 'active' : null;
+            $active = $show === 'browse_groups' ? 'active' : null;
             $links .= '
                 <li class="browse-groups-icon '.$active.'">
-                    <a href="'.api_get_path(WEB_CODE_PATH).'social/groups.php">
+                    <a href="'.$groupUrl.'">
                         '.$groupsIcon.' '.get_lang('SocialGroups').'
                     </a>
                 </li>';
 
-            //Search users
+            // Search users
             $active = $show == 'search' ? 'active' : null;
             $links .= '
                 <li class="search-icon '.$active.'">
@@ -1016,7 +1025,7 @@ class SocialManager extends UserManager
                     </a>
                 </li>';
 
-            //My files
+            // My files
             $active = $show == 'myfiles' ? 'active' : null;
 
             $myFiles = '
@@ -1070,7 +1079,7 @@ class SocialManager extends UserManager
             );
         }
 
-        if ($show == 'shared_profile') {
+        if ($show === 'shared_profile') {
             $links = '<ul class="nav nav-pills nav-stacked">';
             // My own profile
             if ($show_full_profile && $user_id == intval(api_get_user_id())) {
@@ -1085,7 +1094,7 @@ class SocialManager extends UserManager
                             '.$messagesIcon.' '.get_lang('Messages').$count_unread_message.'
                         </a>
                     </li>';
-                $active = $show == 'invitations' ? 'active' : null;
+                $active = $show === 'invitations' ? 'active' : null;
                 $links .= '
                     <li class="invitations-icon'.$active.'">
                         <a href="'.api_get_path(WEB_CODE_PATH).'social/invitations.php">
@@ -1103,12 +1112,14 @@ class SocialManager extends UserManager
                         <a href="'.api_get_path(WEB_CODE_PATH).'social/friends.php">
                             '.$friendsIcon.' '.get_lang('Friends').'
                         </a>
-                    </li>
-                    <li class="browse-groups-icon">
-                        <a href="'.api_get_path(WEB_CODE_PATH).'social/groups.php">
+                    </li>';
+
+                $links .= '<li class="browse-groups-icon">
+                        <a href="'.$groupUrl.'">
                             '.$groupsIcon.' '.get_lang('SocialGroups').'
                         </a>
-                    </li>';
+                        </li>';
+
                 $active = $show == 'search' ? 'active' : null;
                 $links .= '
                     <li class="search-icon '.$active.'">
@@ -1177,9 +1188,7 @@ class SocialManager extends UserManager
             }
 
             // Check if I already sent an invitation message
-            $invitation_sent_list = self::get_list_invitation_sent_by_user_id(
-                api_get_user_id()
-            );
+            $invitation_sent_list = self::get_list_invitation_sent_by_user_id(api_get_user_id());
 
             if (isset($invitation_sent_list[$user_id]) && is_array($invitation_sent_list[$user_id]) &&
                 count($invitation_sent_list[$user_id]) > 0

@@ -9252,7 +9252,7 @@ SQL;
      *
      * @return string
      */
-    private static function convertSessionDateToString($startDate, $endDate, $showTime, $dateHuman)
+    public static function convertSessionDateToString($startDate, $endDate, $showTime, $dateHuman)
     {
         // api_get_local_time returns empty if date is invalid like 0000-00-00 00:00:00
         $startDateToLocal = api_get_local_time(

@@ -59,6 +59,9 @@ switch ($action) {
     case 'close':
         // Disconnects user from all chat
         $chat->close();
+
+        echo '1';
+        exit;
         break;
     case 'create_room':
         if (api_get_configuration_value('hide_chat_video')) {

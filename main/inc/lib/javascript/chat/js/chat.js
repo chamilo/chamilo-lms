@@ -237,7 +237,6 @@ function chatHeartbeat()
 		} else {
 			++blinkOrder;
 		}
-
 	} else {
 		for (x in newMessagesWin) {
 			newMessagesWin[x].status = false;
@@ -259,6 +258,7 @@ function chatHeartbeat()
 		dataType: "json",
 		success: function(data) {
 			$.each(data.items, function(my_user_id, user_items) {
+				// Each window
 				my_items = user_items['items'];
 				userInfo = user_items['window_user_info'];
 				$.each(my_items, function(i, item) {

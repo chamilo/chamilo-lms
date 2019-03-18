@@ -55,8 +55,8 @@ select {
 .header-ol li{
     display: inline-block;
 }
-.header-ol .user-online a{
-    padding: 0;
+.header-ol li a{
+    padding: 0 5px;
 }
 /*------------------------------*/
 .admin-block-version {

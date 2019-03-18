@@ -2850,10 +2850,10 @@ form .formw .freeze {
 }
 .js .input-file-trigger {
     display: inline-block;
-    padding: 6px 15px;
+    padding: 7px 15px;
     background: #f5f6f7;
     color: #7a7a7a;
-    font-size: 12px;
+    font-size: 14px;
     transition: all .4s;
     border-radius: 5px;
     border: 1px solid #bababa;

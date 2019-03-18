@@ -5486,6 +5486,7 @@ div#chat-remote-video video {
 .forum-post .thumbnail img{
     border-radius: 50%;
     border: 3px solid #96bd0d;
+    width: 85px;
 }
 
 .forum-post .title-username {
@@ -5499,8 +5500,8 @@ div#chat-remote-video video {
 .forum-post .user-type.text-center {
     border-radius: 50%;
     position: absolute;
-    top: 55px;
-    right: 40px;
+    top: 25%;
+    right: 17%;
     border: 2px solid #6B1D82;
     padding: 5px;
     background-color: #fff;

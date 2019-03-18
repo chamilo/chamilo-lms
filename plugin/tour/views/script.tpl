@@ -51,7 +51,7 @@
 
                                 intro.start();
                             }
-                        }).appendTo('#tour-button-cotainer');
+                        }).appendTo('#tour-button-container');
                     });
                 }
             };
@@ -84,5 +84,5 @@
         });
     </script>
 
-    <div id="tour-button-cotainer"></div>
+    <div id="tour-button-container"></div>
 {% endif %}

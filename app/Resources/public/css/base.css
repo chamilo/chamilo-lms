@@ -46,7 +46,18 @@ body {
 select {
     width: auto;
 }
-
+.header-ol{
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+    text-align: right;
+}
+.header-ol li{
+    display: inline-block;
+}
+.header-ol .user-online a{
+    padding: 0;
+}
 /*------------------------------*/
 .admin-block-version {
     font-size: 12px;
@@ -1126,13 +1137,11 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 .breadcrumb{
     margin-bottom: 10px;
 }
-.breadcrumb .home {
-    padding: 0;
-    height: 22px;
-}
 
-.breadcrumb .home img {
+.breadcrumb li a img {
     float: left;
+    padding-right: 5px;
+    margin-top: 2px;
 }
 
 /* ATTENDANCE */
@@ -9641,6 +9650,8 @@ ul.dropdown-menu.inner > li > a {
     width: 45px;
     height: 45px;
     border: 2px solid #cdcdcd;
+    padding-top: 5px;
+    padding-left: 4px;
 }
 
 .sidebar-avatar .area-avatar .avatar-lm h5,

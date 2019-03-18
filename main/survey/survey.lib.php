@@ -781,6 +781,13 @@ class SurveyManager
                 'survey_group_sec1' => $row['survey_group_sec1'],
                 'survey_group_sec2' => $row['survey_group_sec2'],
             ];
+
+            if (api_get_configuration_value('allow_required_survey_questions')) {
+                if (isset($row['is_required'])) {
+                    $params['is_required'] = $row['is_required'];
+                }
+            }
+
             $insertId = Database::insert($table_survey_question, $params);
             if ($insertId) {
                 $sql = "UPDATE $table_survey_question SET question_id = iid WHERE iid = $insertId";
@@ -2083,6 +2090,13 @@ class SurveyManager
                     'survey_group_sec1' => $row['survey_group_sec1'],
                     'survey_group_sec2' => $row['survey_group_sec2'],
                 ];
+
+                if (api_get_configuration_value('allow_required_survey_questions')) {
+                    if (isset($row['is_required'])) {
+                        $params['is_required'] = $row['is_required'];
+                    }
+                }
+
                 $insertId = Database::insert($surveyQuestionTable, $params);
                 if ($insertId) {
                     $sql = "UPDATE $surveyQuestionTable 

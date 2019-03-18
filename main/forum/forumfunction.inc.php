@@ -4574,7 +4574,7 @@ function send_mail($user_info = [], $thread_information = [], $postInfo = [])
     $subject = get_lang('NewForumPost').' - '.$_course['official_code'];
 
     $courseInfoTitle = get_lang('Course').': '.$_course['name'].' - ['.$_course['official_code']."] - <br />\n";
-    if (!empty($courseId) && $_course['real_id'] == $courseId)  {
+    if (!empty($courseId) && $_course['real_id'] == $courseId) {
         $subject = get_lang('NewForumPost');
         $courseInfoTitle = " <br />\n";
     }

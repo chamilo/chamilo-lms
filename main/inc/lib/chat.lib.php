@@ -200,15 +200,11 @@ class Chat extends Model
         $total = $this->getCountMessagesExchangeBetweenUsers($fromUserId, $toUserId);
         $show = $total - $visibleMessages;
 
-        //$newFrom = $show - $previousMessageCount;
-        //error_log("from before fix  $newFrom");
-
         if ($show < $previousMessageCount) {
             $show = $previousMessageCount;
         }
         $from = $show - $previousMessageCount;
-        //error_log("total $total - visible $visibleMessages = show $show");
-        //error_log("from $from");
+
         if ($from < 0) {
             return [];
         }
@@ -255,7 +251,6 @@ class Chat extends Model
                 $orderBy
                 LIMIT $start, $end
                 ";
-        //error_log($sql);
         $result = Database::query($sql);
         $rows = Database::store_result($result);
         $fromUserInfo = api_get_user_info($fromUserId, true);
@@ -357,20 +352,7 @@ class Chat extends Model
                 SET recd = 1
                 WHERE to_user = '".$currentUserId."' AND recd = 0";
         Database::query($sql);
-        /*echo '<pre>';
-        //print_r($chatHistory);
 
-        var_dump(count($chatHistory[1]));
-
-        foreach ($chatHistory as $user => $items) {
-            var_dump("USer: $user");
-            foreach ($items as $item) {
-                var_dump('userinfo');
-                var_dump($item['window_user_info']);
-                var_dump($item['items']);
-            }
-        }
-        */
         echo json_encode(['items' => $chatHistory]);
     }
 

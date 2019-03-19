@@ -281,9 +281,9 @@ function chatHeartbeat()
 						var chatBubble = createChatBubble(my_user_id, item);
 						//$("#chatbox_"+my_user_id+" .chatboxcontent").append(chatBubble);
 
-						/*$("#chatbox_"+my_user_id+" .chatboxcontent").scrollTop(
+						$("#chatbox_"+my_user_id+" .chatboxcontent").scrollTop(
 							$("#chatbox_"+my_user_id+" .chatboxcontent")[0].scrollHeight
-						);*/
+						);
 
 						if ($('#chatbox_'+my_user_id+' .chatboxcontent').css('display') == 'none') {
 							$('#chatbox_'+my_user_id+' .chatboxhead').toggleClass('chatboxblink');
@@ -338,9 +338,6 @@ function createChatBubble(my_user_id, item, appendType = 'append')
 
 	var messageObject = $("#chatbox_"+my_user_id+" .chatboxcontent").find('#message_id_' + item.id);
 	var exists = messageObject.length !== 0;
-
-	console.log('#message_id_' + item.id + ': exists: ' + exists);
-
 	var messageHeader = '<div id="message_id_'+item.id+'" class="chatbox-common boot-tooltip well '+myDiv+'" title="'+sentDate+'" >';
 	var messageEnd = '</div>';
 
@@ -352,12 +349,8 @@ function createChatBubble(my_user_id, item, appendType = 'append')
 	message += '<div class="chatbox_checks' + unCheckClass + '">'+check+'</div>';
 
 	if (exists) {
-		console.log('already exits');
-		console.log(item.message);
 		messageObject.html(message);
 	} else {
-		console.log(appendType);
-		console.log(item.message);
 		message = messageHeader + message + messageEnd;
 		if (appendType == 'append') {
 			$("#chatbox_"+my_user_id+" .chatboxcontent").append(message);

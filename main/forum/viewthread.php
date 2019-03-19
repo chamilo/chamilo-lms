@@ -347,7 +347,7 @@ foreach ($posts as $post) {
             }
         }
 
-        $post['user_data'] .= '<div class="text-center">'.$iconStatus.'</div>';
+        $post['user_data'] .= '<div class="user-type text-center">'.$iconStatus.'</div>';
     } else {
         if ($allowUserImageForum) {
             $post['user_data'] .= '<div class="thumbnail">'.

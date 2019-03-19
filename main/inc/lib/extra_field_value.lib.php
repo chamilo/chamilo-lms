@@ -5,7 +5,6 @@ use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Tag;
-use ChamiloSession as Session;
 
 /**
  * Class ExtraFieldValue
@@ -81,12 +80,19 @@ class ExtraFieldValue extends Model
      * @param array $params              array for the insertion into the *_field_values table
      * @param bool  $onlySubmittedFields Only save parameters in the $param array
      * @param bool  $showQuery
+     * @param array $saveOnlyThisFields
+     * @param array $avoidFields         do not insert/modify this field
      *
      * @return mixed false on empty params, void otherwise
      * @assert (array()) === false
      */
-    public function saveFieldValues($params, $onlySubmittedFields = false, $showQuery = false)
-    {
+    public function saveFieldValues(
+        $params,
+        $onlySubmittedFields = false,
+        $showQuery = false,
+        $saveOnlyThisFields = [],
+        $avoidFields = []
+    ) {
         foreach ($params as $key => $value) {
             $found = strpos($key, '__persist__');
 
@@ -126,6 +132,18 @@ class ExtraFieldValue extends Model
 
             if ($onlySubmittedFields && !isset($params['extra_'.$field_variable])) {
                 continue;
+            }
+
+            if (!empty($avoidFields)) {
+                if (in_array($field_variable, $avoidFields)) {
+                    continue;
+                }
+            }
+
+            if (!empty($saveOnlyThisFields)) {
+                if (!in_array($field_variable, $saveOnlyThisFields)) {
+                    continue;
+                }
             }
 
             $value = '';

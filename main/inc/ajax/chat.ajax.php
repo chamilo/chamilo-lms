@@ -103,16 +103,23 @@ switch ($action) {
         break;
     case 'get_previous_messages':
         $userId = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : 0;
-        $visibleMessages = isset($_REQUEST['visible_messages']) ? $_REQUEST['visible_messages'] : null;
+        $visibleMessages = isset($_REQUEST['visible_messages']) ? $_REQUEST['visible_messages'] : 0;
         if (empty($userId)) {
             return '';
         }
+
         $items = $chat->getPreviousMessages(
             $userId,
             $currentUserId,
             $visibleMessages
         );
-        echo json_encode($items);
+
+        if (!empty($items)) {
+            sort($items);
+            echo json_encode($items);
+            exit;
+        }
+        echo json_encode([]);
         exit;
         break;
     case 'notify_not_support':

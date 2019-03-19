@@ -9177,6 +9177,60 @@ SQL;
     }
 
     /**
+     * Converts "start date" and "end date" to "From start date to end date" string.
+     *
+     * @param string $startDate
+     * @param string $endDate
+     * @param bool   $showTime
+     * @param bool   $dateHuman
+     *
+     * @return string
+     */
+    public static function convertSessionDateToString($startDate, $endDate, $showTime, $dateHuman)
+    {
+        // api_get_local_time returns empty if date is invalid like 0000-00-00 00:00:00
+        $startDateToLocal = api_get_local_time(
+            $startDate,
+            null,
+            null,
+            true,
+            $showTime,
+            $dateHuman
+        );
+        $endDateToLocal = api_get_local_time(
+            $endDate,
+            null,
+            null,
+            true,
+            $showTime,
+            $dateHuman
+        );
+
+        $format = $showTime ? DATE_TIME_FORMAT_LONG_24H : DATE_FORMAT_LONG_NO_DAY;
+
+        $result = '';
+        if (!empty($startDateToLocal) && !empty($endDateToLocal)) {
+            $result = sprintf(
+                get_lang('FromDateXToDateY'),
+                api_format_date($startDateToLocal, $format),
+                api_format_date($endDateToLocal, $format)
+            );
+        } else {
+            if (!empty($startDateToLocal)) {
+                $result = get_lang('From').' '.api_format_date($startDateToLocal, $format);
+            }
+            if (!empty($endDateToLocal)) {
+                $result = get_lang('Until').' '.api_format_date($endDateToLocal, $format);
+            }
+        }
+        if (empty($result)) {
+            $result = get_lang('NoTimeLimits');
+        }
+
+        return $result;
+    }
+
+    /**
      * @param int $id
      *
      * @return bool
@@ -9240,58 +9294,6 @@ SQL;
                 $deleteClassSessions
             );
         }
-    }
-
-    /**
-     * Converts "start date" and "end date" to "From start date to end date" string.
-     *
-     * @param string $startDate
-     * @param string $endDate
-     * @param bool   $showTime
-     * @param bool   $dateHuman
-     *
-     * @return string
-     */
-    private static function convertSessionDateToString($startDate, $endDate, $showTime, $dateHuman)
-    {
-        // api_get_local_time returns empty if date is invalid like 0000-00-00 00:00:00
-        $startDateToLocal = api_get_local_time(
-            $startDate,
-            null,
-            null,
-            true,
-            $showTime,
-            $dateHuman
-        );
-        $endDateToLocal = api_get_local_time(
-            $endDate,
-            null,
-            null,
-            true,
-            $showTime,
-            $dateHuman
-        );
-
-        $result = '';
-        if (!empty($startDateToLocal) && !empty($endDateToLocal)) {
-            $result = sprintf(
-                get_lang('FromDateXToDateY'),
-                api_format_date($startDateToLocal, DATE_TIME_FORMAT_LONG_24H),
-                api_format_date($endDateToLocal, DATE_TIME_FORMAT_LONG_24H)
-            );
-        } else {
-            if (!empty($startDateToLocal)) {
-                $result = get_lang('From').' '.api_format_date($startDateToLocal, DATE_TIME_FORMAT_LONG_24H);
-            }
-            if (!empty($endDateToLocal)) {
-                $result = get_lang('Until').' '.api_format_date($endDateToLocal, DATE_TIME_FORMAT_LONG_24H);
-            }
-        }
-        if (empty($result)) {
-            $result = get_lang('NoTimeLimits');
-        }
-
-        return $result;
     }
 
     /**

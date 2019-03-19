@@ -717,7 +717,7 @@ class DocumentManager
     ) {
         $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-        $groupIid = intval($groupIid);
+        $groupIid = (int) $groupIid;
         $document_folders = [];
 
         $students = CourseManager::get_user_list_from_course_code(
@@ -734,7 +734,7 @@ class DocumentManager
 
         $groupCondition = " last.to_group_id = $groupIid";
         if (empty($groupIid)) {
-            $groupCondition = " (last.to_group_id = 0 OR last.to_group_id IS NULL)";
+            $groupCondition = ' (last.to_group_id = 0 OR last.to_group_id IS NULL)';
         }
 
         $show_users_condition = '';
@@ -821,7 +821,7 @@ class DocumentManager
             $condition_session = api_get_session_condition(
                 $session_id,
                 true,
-                false,
+                true, // needed to don't show files in elfinder browser
                 'docs.session_id'
             );
 

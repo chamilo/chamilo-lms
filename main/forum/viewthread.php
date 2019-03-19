@@ -628,7 +628,9 @@ foreach ($posts as $post) {
     $search = [
         get_lang('ReplyShort'),
         'Re:',
+        'RE:',
         'AW:',
+        'Aw:',
     ];
     $replace = '<span>'.Display::returnFontAwesomeIcon('mail-reply').'</span>';
     $post['post_title'] = str_replace($search, $replace, $post['post_title']);

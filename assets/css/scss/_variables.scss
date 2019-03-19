@@ -87,3 +87,30 @@ $img-path: "../img/icons/";
 // FORMS
 // ---------------------------------------------------------
 $legend-color: #009688;
+
+// BUTTON
+$primary_custom:       #30c5d8 !default;
+$secondary_custom:     #fcfcfc !default;
+$success_custom:       #73c08e !default;
+$info_custom:          #90d5e9 !default;
+$warning_custom:       #ffef7d !default;
+$danger_custom:        #fb8b8b !default;
+$light_custom:         #ffffff !default;
+$dark_custom:          #607d8b !default;
+
+$theme-colors-custom: () !default;
+// stylelint-disable-next-line scss/dollar-variable-default
+$theme-colors-custom: map-merge(
+  (
+    "primary":    $primary_custom,
+    "secondary":  $secondary_custom,
+    "success":    $success_custom,
+    "info":       $info_custom,
+    "warning":    $warning_custom,
+    "danger":     $danger_custom,
+    "light":      $light_custom,
+    "dark":       $dark_custom
+  ),
+  $theme-colors-custom
+);
+

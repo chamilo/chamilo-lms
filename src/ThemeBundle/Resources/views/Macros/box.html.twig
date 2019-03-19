@@ -72,7 +72,7 @@
                 <div class="forum-description">
                     {{ item.description }}
                 </div>
-
+                <div class="list-forum">
                 {% for subitem in item.forums %}
                     <div id="box-{{ subitem.id }}" class="card card-{{ subitem.id }}">
                         <div class="card-body">
@@ -127,6 +127,7 @@
                     </div>
 
                 {% endfor %}
+                </div>
 
             </div>
         </div>

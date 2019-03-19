@@ -4504,7 +4504,8 @@ function handle_mail_cue($content, $id)
 
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
-            send_mail($row, get_thread_information($post_info['forum_id'], $post_info['thread_id']), $post_info);
+            $forumInfo = get_forum_information($post_info['forum_id']);
+            send_mail($row, $forumInfo, get_thread_information($post_info['forum_id'], $post_info['thread_id']), $post_info);
         }
     } elseif ($content == 'thread') {
         // Sending the mail to all the users that wanted to be informed for replies on this thread.
@@ -4521,7 +4522,8 @@ function handle_mail_cue($content, $id)
                 GROUP BY users.email";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
-            send_mail($row, get_thread_information($row['forum_id'], $id));
+            $forumInfo = get_forum_information($row['forum_id']);
+            send_mail($row, $forumInfo, get_thread_information($row['forum_id'], $id));
         }
 
         // Deleting the relevant entries from the mailcue.
@@ -4553,13 +4555,18 @@ function handle_mail_cue($content, $id)
  * @param array
  * @param array
  * @param array
+ * @param array
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  *
  * @version february 2006, dokeos 1.8
  */
-function send_mail($user_info = [], $thread_information = [], $postInfo = [])
+function send_mail($user_info, $forumInfo, $thread_information, $postInfo = [])
 {
+    if (empty($user_info) || empty($forumInfo) || empty($thread_information)) {
+        return false;
+    }
+
     $_course = api_get_course_info();
     $user_id = api_get_user_id();
 
@@ -4570,12 +4577,14 @@ function send_mail($user_info = [], $thread_information = [], $postInfo = [])
     $email_body = get_lang('Dear').' '.api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS).", <br />\n\r";
     $email_body .= get_lang('NewForumPost')."\n";
 
+    $email_body .= get_lang('NewForumPost').': '.$forumInfo['forum_title'].' - '.$thread_information['thread_title']." <br />\n";
+
     $courseId = api_get_configuration_value('global_forums_course_id');
-    $subject = get_lang('NewForumPost').' - '.$_course['official_code'];
+    $subject = get_lang('NewForumPost').' - '.$_course['official_code'].': '.$forumInfo['forum_title'].' - '.$thread_information['thread_title']." <br />\n";
 
     $courseInfoTitle = get_lang('Course').': '.$_course['name'].' - ['.$_course['official_code']."] - <br />\n";
     if (!empty($courseId) && $_course['real_id'] == $courseId) {
-        $subject = get_lang('NewForumPost');
+        $subject = get_lang('NewForumPost').': '.$forumInfo['forum_title'].' - '.$thread_information['thread_title']." <br />\n";
         $courseInfoTitle = " <br />\n";
     }
     $email_body .= $courseInfoTitle;
@@ -5761,26 +5770,12 @@ function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
 
     // Merging the two
     $users_to_be_notified = array_merge($users_to_be_notified_by_forum, $users_to_be_notified_by_thread);
-    //$sender_id = api_get_user_id();
+    $forumInfo = get_forum_information($forum_id);
 
     if (is_array($users_to_be_notified)) {
         foreach ($users_to_be_notified as $value) {
-            /*$user_info = api_get_user_info($value['user_id']);
-            $email_body = get_lang('Dear').' '.api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS).", <br />\n\r";
-            $email_body .= get_lang('NewForumPost').": ".$current_forum['forum_title'].' - '.$current_thread['thread_title']." <br />\n";
-            $email_body .= get_lang('Course').': '.$_course['name'].' - ['.$_course['official_code']."]  <br />\n";
-            $email_body .= get_lang('YouWantedToStayInformed')."<br />\n";
-            $email_body .= get_lang('ThreadCanBeFoundHere').': <br /> <a href="'.$thread_link.'">'.$thread_link."</a>\n";
-
-            MessageManager::send_message_simple(
-                $value['user_id'],
-                $subject,
-                $email_body,
-                $sender_id
-            );*/
-
             $userInfo = api_get_user_info($value['user_id']);
-            send_mail($userInfo, $current_thread, $postInfo);
+            send_mail($userInfo, $forumInfo, $current_thread, $postInfo);
         }
     }
 }

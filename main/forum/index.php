@@ -510,6 +510,9 @@ if (is_array($forumCategories)) {
                             $forumInfo['last_poster_user'] = display_user_link($poster_id, $name, null, $username);
                             $forumInfo['last_post_title'] = Security::remove_XSS(cut($forum['last_post_title'], 140));
                             $forumInfo['last_post_text'] = Security::remove_XSS(cut($forum['last_post_text'], 140));
+                            $forumInfo['avatar'] = UserManager::getUserPicture($poster_id);
+                        } else {
+                            $forumInfo['avatar'] = UserManager::getUserPicture($forum['insert_user_id']);
                         }
 
                         if (api_is_allowed_to_edit(false, true)

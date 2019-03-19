@@ -8450,6 +8450,13 @@ ul#toolnavbox-two li a.btn {
     border-color: #dd853d;
     color: #ffffff;
 }
+.checkbox input[type=checkbox],
+.checkbox-inline input[type=checkbox],
+.radio input[type=radio],
+.radio-inline input[type=radio]{
+    position: relative;
+    margin-left: 10px;
+}
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {
     .sidebar-scorm {

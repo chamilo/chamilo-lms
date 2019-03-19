@@ -4561,9 +4561,9 @@ function handle_mail_cue($content, $id)
  *
  * @version february 2006, dokeos 1.8
  */
-function send_mail($user_info, $forumInfo, $thread_information, $postInfo = [])
+function send_mail($userInfo, $forumInfo, $thread_information, $postInfo = [])
 {
-    if (empty($user_info) || empty($forumInfo) || empty($thread_information)) {
+    if (empty($userInfo) || empty($forumInfo) || empty($thread_information)) {
         return false;
     }
 
@@ -4572,11 +4572,10 @@ function send_mail($user_info, $forumInfo, $thread_information, $postInfo = [])
 
     $thread_link = '';
     if (isset($thread_information) && is_array($thread_information)) {
-        $thread_link = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&forum='.$thread_information['forum_id'].'&thread='.$thread_information['thread_id'];
+        $thread_link = api_get_path(WEB_CODE_PATH).
+            'forum/viewthread.php?'.api_get_cidreq().'&forum='.$thread_information['forum_id'].'&thread='.$thread_information['thread_id'];
     }
-    $email_body = get_lang('Dear').' '.api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS).", <br />\n\r";
-    $email_body .= get_lang('NewForumPost')."\n";
-
+    $email_body = get_lang('Dear').' '.api_get_person_name($userInfo['firstname'], $userInfo['lastname'], null, PERSON_NAME_EMAIL_ADDRESS).", <br />\n\r";
     $email_body .= get_lang('NewForumPost').': '.$forumInfo['forum_title'].' - '.$thread_information['thread_title']." <br />\n";
 
     $courseId = api_get_configuration_value('global_forums_course_id');
@@ -4604,9 +4603,9 @@ function send_mail($user_info, $forumInfo, $thread_information, $postInfo = [])
         $email_body .= get_lang('ThreadCanBeFoundHere')." : <br /><a href=\"".$thread_link."\">".$thread_link."</a>\n";
     }
 
-    if ($user_info['user_id'] != $user_id) {
+    if ($userInfo['user_id'] != $user_id) {
         MessageManager::send_message(
-            $user_info['user_id'],
+            $userInfo['user_id'],
             $subject,
             $email_body,
             [],

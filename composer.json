@@ -45,7 +45,6 @@
         "ext-libxml": "*",
         "ext-dom": "*",
         "ext-fileinfo": "*",
-        "ext-bcmath": "*",
         "twig/twig": "1.*",
         "twig/extensions": "~1.0",
         "doctrine/orm": "~2.4",

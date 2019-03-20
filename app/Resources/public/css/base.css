@@ -8450,6 +8450,9 @@ ul#toolnavbox-two li a.btn {
     border-color: #dd853d;
     color: #ffffff;
 }
+.btn-post{
+    margin-top: 10px;
+}
 .checkbox input[type=checkbox],
 .checkbox-inline input[type=checkbox],
 .radio input[type=radio],
@@ -9728,8 +9731,12 @@ ul.dropdown-menu.inner > li > a {
 
 .post-attachment {
     text-align: center;
+    margin-bottom: 10px;
 }
-
+.post-date{
+    display: inline-block;
+    width: 100%;
+}
 
 /* Fix grid with one row and multiples columns. Works for .col-sm-6.col-md-4.col-lg-3 */
 .row.clear-rows-6-4-3 {

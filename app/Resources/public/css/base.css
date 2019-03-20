@@ -8453,10 +8453,10 @@ ul#toolnavbox-two li a.btn {
 .btn-post{
     margin-top: 10px;
 }
-.checkbox input[type=checkbox],
-.checkbox-inline input[type=checkbox],
-.radio input[type=radio],
-.radio-inline input[type=radio]{
+main[dir="rtl"] .checkbox input[type=checkbox],
+main[dir="rtl"] .checkbox-inline input[type=checkbox],
+main[dir="rtl"] .radio input[type=radio],
+main[dir="rtl"] .radio-inline input[type=radio]{
     position: relative;
     margin-left: 10px;
 }

@@ -54,6 +54,87 @@
     </li>
 {% endmacro %}
 
+
+{% macro card_collapse(name, item, expanded = 'true') %}
+    {% autoescape false %}
+    <div class="card">
+        <h5 class="card-header" id="heading-{{ item.id }}">
+            <div class="float-actions">
+                {{ item.tools }}
+            </div>
+            <a href="#" data-toggle="collapse" class="btn btn-link" data-target="#collapse-{{ item.id }}" aria-expanded="{{ expanded }}" aria-controls="collapse-{{ item.id }}">
+                {{ 'forum_blue.png'|img(32) }}
+            </a>
+            <a href="{{ item.url }}" title="{{ item.title }}">{{ item.title }}{{ item.icon_session }}</a>
+        </h5>
+        <div id="collapse-{{ item.id }}" class="collapse {{  expanded == 'true' ? 'show' : '' }}" aria-labelledby="heading-{{ item.id }}" data-parent="#{{ name }}">
+            <div class="card-body">
+                <div class="forum-description">
+                    {{ item.description }}
+                </div>
+                <div class="list-forum">
+                {% for subitem in item.forums %}
+                    <div id="box-{{ subitem.id }}" class="card card-{{ subitem.id }}">
+                        <div class="card-body">
+                            <div class="d-flex flex-row bd-highlight mb-3">
+                                <div class="p-2 bd-highlight">
+                                    <div class="avatar">
+                                        <img src="{{ subitem.avatar }}" width="32px" class="rounded-circle">
+                                    </div>
+                                </div>
+                                <div class="p-2 bd-highlight">
+                                    <h4 class="title">
+                                        <a href="{{ subitem.url }}" title="{{ subitem.title }}" class="{{ subitem.visibility != '1' ? 'text-muted': '' }}">{{ subitem.title }}</a>
+                                        {% if subitem.forum_of_group != 0 %}
+                                            <a class="forum-goto" href="../group/group_space.php?{{ _p.web_cid_query }}&gidReq={{ subitem.forum_of_group }}">
+                                                {{ "forum.png"|img(22) }} {{ "GoTo"|get_lang }} {{ subitem.forum_group_title }}
+                                            </a>
+                                        {% endif %}
+                                        {{ subitem.icon_session }}
+                                        <div class="float-right">
+                                            <div class="toolbar">
+                                                {{ subitem.tools }}
+                                            </div>
+                                        </div>
+                                    </h4>
+                                    <ul class="forum-threads">
+                                        <li class="threads">{{ 'ForumThreads'| get_lang }}: {{ subitem.number_threads }} </li>
+                                        {% if subitem.last_poster_id is not empty %}
+                                            <li class="date">
+                                                <i class="fa fa-comments" aria-hidden="true"></i>
+                                                {{ subitem.last_poster_date }}
+                                                « {{ subitem.last_post_title }} »
+                                                {{ "By"|get_lang }}
+                                                {{ subitem.last_poster_user }}
+                                            </li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="description">
+                                {{ subitem.description }}
+                                {{ subitem.last_post_text }}
+                            </div>
+                            {{ subitem.alert }}
+                            {% if subitem.moderation is not empty %}
+                                <span class="label label-warning">
+                                    {{ "PostsPendingModeration"|get_lang }}: {{ subitem.moderation }}
+                                </span>
+                            {% endif %}
+
+                        </div>
+                    </div>
+
+                {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {% endautoescape %}
+{% endmacro %}
+
 {% macro collapse(name, title, content, list = false, expanded = 'true', title_right = '', title_icons = '') %}
     {% autoescape false %}
     <div class="panel-group" id="{{ name }}" role="tablist" aria-multiselectable="true">

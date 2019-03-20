@@ -2110,14 +2110,14 @@ hr {
         }
       }
       .toolbar{
-          opacity: 0;
-          margin-left: 5px;
-          img{
-            border: 1px solid #cdcdcd;
-            background-color: #ffffff;
-            padding: 2px;
-            border-radius: 4px;
-          }
+        opacity: 0;
+        margin-left: 5px;
+        img{
+          border: 1px solid #cdcdcd;
+          background-color: #ffffff;
+          padding: 2px;
+          border-radius: 4px;
+        }
 
       }
     }
@@ -2143,44 +2143,7 @@ hr {
     }
   }
 }
-.forum-post {
-  border-color: #dddddd !important;
-  .title-username {
-    text-align: center;
-    font-size: 16px;
-    margin-bottom: 5px;
-    margin-top: 0;
-  }
-  .post-date {
-    font-size: 12px;
-    text-align: center;
-    color: #666666;
-  }
-  .post-closed {
-    padding: 5px;
-    text-align: center;
-  }
-  .post-header {
-    border-bottom: 1px solid #dddddd;
-    margin-bottom: 20px;
-  }
-  .post-body {
-    color: #666666;
-    img {
-      display: block;
-      max-width: 100%;
-    }
-  }
-  .tools-icons {
-    text-align: center;
-    border: 1px solid #dddddd;
-    padding: 5px;
-    a {
-      padding: 2px;
-      white-space: normal;
-    }
-  }
-}
+
 
 /****** ABOUT COURSE AND SESSION ******/
 .about{

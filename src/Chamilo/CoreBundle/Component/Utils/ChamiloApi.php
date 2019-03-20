@@ -320,7 +320,8 @@ class ChamiloApi
         }
         if ($wrapInRGBA) {
             foreach ($palette as $index => $color) {
-                $palette[$index] = 'rgba('.$palette[$index].')';
+                $color = trim($color);
+                $palette[$index] = 'rgba('.$color.')';
             }
         }
         // If we want more colors, loop through existing colors

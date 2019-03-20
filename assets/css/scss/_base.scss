@@ -2667,7 +2667,39 @@ hr {
   color: #006633;
   text-align: center;
 }
-
+/****** LINKS ******/
+.link-page{
+  .list-group-item{
+    .link-title{
+      display: inline-block;
+      width: 100%;
+      .toolbar{
+        float: right;
+        opacity: 0;
+      }
+    }
+    &:hover{
+      .link-title{
+        .toolbar{
+          opacity: 1;
+        }
+      }
+    }
+  }
+  .link-accordion{
+    .card{
+      margin-bottom: 0;
+      .card-header{
+        padding: .5rem;
+        .title-card{
+          padding-top: 5px;
+          display: inline-block;
+          padding-left: 10px;
+        }
+      }
+    }
+  }
+}
 /****** SKILLS ******/
 .skill-options{
   .legend {

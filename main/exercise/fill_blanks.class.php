@@ -1231,6 +1231,12 @@ class FillBlanks extends Question
 
         // rebuild the sentence with student answer inserted
         for ($i = 0; $i < count($listStudentAnswerInfo['common_words']); $i++) {
+            if ($resultsDisabled == RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
+                if (isset($listStudentAnswerInfo['student_score'][$i]) &&
+                    $listStudentAnswerInfo['student_score'][$i] != 1) {
+                    continue;
+                }
+            }
             $result .= isset($listStudentAnswerInfo['common_words'][$i]) ? $listStudentAnswerInfo['common_words'][$i] : '';
             $result .= isset($listStudentAnswerInfo['student_answer'][$i]) ? $listStudentAnswerInfo['student_answer'][$i] : '';
         }

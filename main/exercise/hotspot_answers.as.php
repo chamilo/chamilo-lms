@@ -163,8 +163,36 @@ if (!$hideExpectedAnswer) {
 
     /** @var CQuizAnswer $hotSpotAnswer */
     foreach ($result as $hotSpotAnswer) {
+        $hotSpotAnswerId = $hotSpotAnswer->getIid();
+
+        // Show only correct hotspots
+        if ($objExercise->selectResultsDisabled() == RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
+            $TBL_TRACK_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+            // Check auto id
+            $sql = "SELECT hotspot_correct
+                    FROM $TBL_TRACK_HOTSPOT
+                    WHERE
+                        hotspot_exe_id = $exeId AND
+                        hotspot_question_id= $questionId AND
+                        hotspot_answer_id = ".$hotSpotAnswerId."
+                    ORDER BY hotspot_id ASC";
+            $result = Database::query($sql);
+            $studentChoice = false;
+            if (Database::num_rows($result)) {
+                $studentChoice = Database::result(
+                    $result,
+                    0,
+                    'hotspot_correct'
+                );
+            }
+
+            if (!$studentChoice) {
+                continue;
+            }
+        }
+
         $hotSpot = [];
-        $hotSpot['id'] = $hotSpotAnswer->getIid();
+        $hotSpot['id'] = $hotSpotAnswerId;
         $hotSpot['answer'] = $hotSpotAnswer->getAnswer();
 
         switch ($hotSpotAnswer->getHotspotType()) {

@@ -4429,6 +4429,10 @@ EOT;
             $show_results = true;
         }
 
+        if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
+            $show_results = true;
+        }
+
         if (in_array(
             $objExercise->results_disabled,
             [

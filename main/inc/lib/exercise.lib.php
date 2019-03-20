@@ -4654,9 +4654,11 @@ EOT;
 
                 $score = [];
                 if ($show_results) {
-                    $compareResult = bccomp($my_total_score, $my_total_weight, 3);
-                    $scorePassed = $compareResult === 1 || $compareResult === 0;
-
+                    $scorePassed = $my_total_score >= $my_total_weight;
+                    if (function_exists('bccomp')) {
+                        $compareResult = bccomp($my_total_score, $my_total_weight, 3);
+                        $scorePassed = $compareResult === 1 || $compareResult === 0;
+                    }
                     $score = [
                         'result' => self::show_score(
                             $my_total_score,

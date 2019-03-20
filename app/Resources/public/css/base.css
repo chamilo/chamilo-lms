@@ -5482,19 +5482,37 @@ div#chat-remote-video video {
     display: none;
 }
 
-.forum-post {
-    border-color: #dddddd !important;
-}
-
 .forum-post .thumbnail {
     margin-bottom: 5px;
+    text-align: center;
+    border: none;
+}
+.forum-post .thumbnail img{
+    border-radius: 50%;
+    border: 2px solid #dddddd;
+    width: 85px;
 }
 
 .forum-post .title-username {
     text-align: center;
-    font-size: 16px;
+    font-size: 14px;
     margin-bottom: 5px;
     margin-top: 0;
+    font-weight: bold;
+    padding-top: 5px;
+}
+.forum-post .user-type.text-center {
+    border-radius: 50%;
+    position: absolute;
+    top: 25%;
+    right: 17%;
+    border: 2px solid #dddddd;
+    padding: 5px;
+    background-color: #fff;
+}
+
+.forum-post {
+    border-color: #dddddd !important;
 }
 
 .forum-post .post-date {
@@ -8431,6 +8449,13 @@ ul#toolnavbox-two li a.btn {
     background-color: #dd853d;
     border-color: #dd853d;
     color: #ffffff;
+}
+.checkbox input[type=checkbox],
+.checkbox-inline input[type=checkbox],
+.radio input[type=radio],
+.radio-inline input[type=radio]{
+    position: relative;
+    margin-left: 10px;
 }
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {

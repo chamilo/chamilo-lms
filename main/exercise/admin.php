@@ -384,7 +384,7 @@ if ($inATest) {
     if ($objExercise->random > 0) {
         $alert .= '<br />'.sprintf(get_lang('OnlyXQuestionsPickedRandomly'), $objExercise->random);
     }
-    echo Display::return_message($alert);
+    echo Display::return_message($alert, 'normal', false);
 } elseif (isset($_GET['newQuestion'])) {
     // we are in create a new question from question pool not in a test
     echo '<div class="actions">';

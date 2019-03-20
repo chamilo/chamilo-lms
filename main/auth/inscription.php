@@ -468,6 +468,7 @@ if ($user_already_registered_show_terms === false) {
         if (!empty($requiredFields) && $requiredFields['options']) {
             $requiredFields = $requiredFields['options'];
         }
+
         $returnParams = $extraField->addElements(
             $form,
             0,

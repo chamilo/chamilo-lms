@@ -2010,7 +2010,8 @@ class ExtraField extends Model
                         $form->addGeoLocationMapField(
                             'extra_'.$field_details['variable'],
                             $field_details['display_text'],
-                            $dataValue
+                            $dataValue,
+                            $hideGeoLocalizationDetails
                         );
 
                         /*$form->addElement(

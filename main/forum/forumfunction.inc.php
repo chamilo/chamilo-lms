@@ -5377,8 +5377,8 @@ function getAllAttachment($postId)
 /**
  * Delete the all the attachments from the DB and the file according to the post's id or attach id(optional).
  *
- * @param int  $post_id
- * @param int  $id_attach
+ * @param int $post_id
+ * @param int $id_attach
  *
  * @return int
  *

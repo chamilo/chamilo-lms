@@ -397,51 +397,50 @@ class GlossaryManager
         // action links
         $actionsLeft = '';
         if (api_is_allowed_to_edit(null, true)) {
-            $actionsLeft .= '<a href="index.php?' . api_get_cidreq() . '&action=addglossary&msg=add?' . api_get_cidreq() . '">' .
-                Display::return_icon('new_glossary_term.png', get_lang('TermAddNew'), '', ICON_SIZE_MEDIUM) . '</a>';
+            $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=addglossary&msg=add?'.api_get_cidreq().'">'.
+                Display::return_icon('new_glossary_term.png', get_lang('TermAddNew'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
         if (api_is_allowed_to_edit(null, true)) {
-            $actionsLeft .= '<a href="index.php?' . api_get_cidreq() . '&action=import">' .
-                Display::return_icon('import.png', get_lang('ImportGlossary'), '', ICON_SIZE_MEDIUM) . '</a>';
+            $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=import">'.
+                Display::return_icon('import.png', get_lang('ImportGlossary'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
         if (!api_is_anonymous()) {
-            $actionsLeft .= '<a id="export-glossary" href="' . api_get_self() . '?' . api_get_cidreq() . '&action=export" class="btn btn-link btn-export" data-toggle="modal" data-target="#modal-export">' .
-                Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM) . '</a>';
+            $actionsLeft .= '<a id="export-glossary" href="'.api_get_self().'?'.api_get_cidreq().'&action=export" class="btn btn-link btn-export" data-toggle="modal" data-target="#modal-export">'.
+                Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
         if (!api_is_anonymous()) {
             $actionsLeft .= Display::url(
                 Display::return_icon('export_to_documents.png', get_lang('ExportToDocArea'), [], ICON_SIZE_MEDIUM),
-                api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query(['action' => 'export_documents'])
+                api_get_self().'?'.api_get_cidreq().'&'.http_build_query(['action' => 'export_documents'])
             );
         }
 
         $orderList = isset($_GET['order']) ? Database::escape_string($_GET['order']) : '';
-        if(empty($orderList)){
+        if (empty($orderList)) {
             $orderList = 'ASC';
         }
         if (!api_is_anonymous()) {
-            if($orderList ==='ASC'){
+            if ($orderList === 'ASC') {
                 $actionsLeft .= Display::url(
                     Display::return_icon('falling.png', get_lang('Sort Descending'), [], ICON_SIZE_MEDIUM),
-                    api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query(['order' => 'DESC'])
+                    api_get_self().'?'.api_get_cidreq().'&'.http_build_query(['order' => 'DESC'])
                 );
             } else {
                 $actionsLeft .= Display::url(
                     Display::return_icon('upward.png', get_lang('Sort Ascending'), [], ICON_SIZE_MEDIUM),
-                    api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query(['order' => 'ASC'])
+                    api_get_self().'?'.api_get_cidreq().'&'.http_build_query(['order' => 'ASC'])
                 );
             }
         }
-
 
         /* BUILD SEARCH FORM */
         $form = new FormValidator(
             'search',
             'get',
-            api_get_self() . '?' . api_get_cidreq(),
+            api_get_self().'?'.api_get_cidreq(),
             '',
             [],
             FormValidator::LAYOUT_INLINE
@@ -459,7 +458,7 @@ class GlossaryManager
 
         $content = $toolbar;
 
-        $list = self::getListGlossary(1000,0,$orderList);
+        $list = self::getListGlossary(1000, 0, $orderList);
 
         $tpl = new Template(null);
         $tpl->assign('data', $list);
@@ -523,7 +522,8 @@ class GlossaryManager
         return $obj->total;
     }
 
-    public static function getListGlossary($numberOfItems, $column, $direction){
+    public static function getListGlossary($numberOfItems, $column, $direction)
+    {
         $_user = api_get_user_info();
 
         // Database table definition
@@ -592,7 +592,6 @@ class GlossaryManager
         }
 
         return $list;
-        
     }
 
     /**

@@ -9719,14 +9719,15 @@ ul.dropdown-menu.inner > li > a {
 
 .btn-maps {
     border-radius: 5px;
-    border-color: #6d9b00;
-    background-color: #f8ffdd;
+    border-color: #cccccc;
+    background-color: #ffffff;
+    color: #7a7a7a;
 }
 
 .btn-maps:hover {
-    background-color: #d4e9ff !important;
-    color: #0b3e6f;
-    border-color: #75a9e0;
+    background-color: #f5f6f7 !important;
+    color: #7a7a7a;
+    border-color: #bababa;
 }
 
 .post-attachment {

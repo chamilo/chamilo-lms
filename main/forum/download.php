@@ -81,8 +81,8 @@ if ($forum_thread_visibility == 1 && $forum_forum_visibility == 1) {
 
         if ($result === false) {
             api_not_allowed(true);
+        }
     }
-}
 }
 
 api_not_allowed();

@@ -974,7 +974,6 @@ class Link extends Model
      * @param int $session_id
      *
      * @return array
-     *
      */
     public static function showLinksPerCategory($catid, $courseId, $session_id)
     {
@@ -987,11 +986,9 @@ class Link extends Model
         $listLink = [];
 
         if (!empty($links)) {
-
             $i = 1;
             $linksAdded = [];
             foreach ($links as $myrow) {
-
                 $linkId = $myrow['id'];
                 $linksAdded['id'] = $linkId;
                 $categoryId = $myrow['category_id'];
@@ -1667,12 +1664,11 @@ class Link extends Model
         }
         echo '</div>';
 
-
         $counter = 0;
         $category = [];
         $listCategory = [];
 
-        $list['not_category'] = self::showLinksPerCategory(0, $course_id, $session_id);;
+        $list['not_category'] = self::showLinksPerCategory(0, $course_id, $session_id);
 
         foreach ($categories as $myrow) {
             // Student don't see invisible categories.

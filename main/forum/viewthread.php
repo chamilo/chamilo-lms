@@ -197,7 +197,7 @@ if (!api_is_allowed_to_edit(false, true) &&
         $template = new Template('', false, false, true, true, false);
     } else {
         $template = new Template();
-}
+    }
 
 $actions = '<span style="float:right;">'.search_link().'</span>';
     if ($origin != 'learnpath') {
@@ -288,7 +288,7 @@ if (isset($_GET['action']) &&
     isset($_GET['id_attach'])
 ) {
     delete_attachment(0, $_GET['id_attach']);
-    }
+}
 
 $origin = api_get_origin();
 $sessionId = api_get_session_id();
@@ -320,7 +320,7 @@ foreach ($posts as $post) {
     $username = '';
     if (isset($post['username'])) {
         $username = sprintf(get_lang('LoginX'), $post['username']);
-}
+    }
 
     $name = $post['complete_name'];
     if (empty($posterId)) {
@@ -328,11 +328,11 @@ foreach ($posts as $post) {
     }
 
     $post['user_data'] = '';
-if ($origin != 'learnpath') {
+    if ($origin != 'learnpath') {
         if ($allowUserImageForum) {
             $post['user_data'] = '<div class="thumbnail">'.
                 display_user_image($posterId, $name, $origin).'</div>';
-}
+        }
 
         $post['user_data'] .= Display::tag(
             'h4',

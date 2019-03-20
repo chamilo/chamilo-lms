@@ -548,7 +548,7 @@ hr {
   display: grid;
   grid-gap: 1rem;
   grid-row-gap: 16px;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   @include portrait($breakpoint-sm, $breakpoint-md){
     grid-template-columns: repeat(3, 1fr);
   }
@@ -783,7 +783,7 @@ hr {
   grid-row-gap: 16px;
   grid-template-columns: repeat(2, 1fr);
   @include large($breakpoint-xl){
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
   @include portrait($breakpoint-sm, $breakpoint-md){
     grid-template-columns: repeat(2, 1fr);

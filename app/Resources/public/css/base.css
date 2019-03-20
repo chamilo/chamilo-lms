@@ -9730,6 +9730,62 @@ ul.dropdown-menu.inner > li > a {
     text-align: center;
 }
 
+.pager .current {
+    display: inline-block;
+    padding: 5px 14px;
+    background-color: #fff;
+    font-weight: bold;
+}
+
+#calendar-session-planification .col-session {
+    max-width: 230px;
+    min-width: 230px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 230px;
+}
+#calendar-session-planification .col-week {
+    max-width: 15px;
+    min-width: 15px;
+}
+#calendar-session-planification th.col-week {
+    vertical-align: middle;
+}
+#calendar-session-planification th.col-week span {
+    display: block;
+    font-size: 8px;
+    float: left;
+    padding: 0px;
+    transform: rotate(270deg);
+    transform-origin: center center 0;
+}
+#calendar-session-planification td.col-week {
+    padding: 0px 0px;
+    position: relative;
+    white-space: nowrap;
+}
+#calendar-session-planification td.col-week.in_last_year:before,
+#calendar-session-planification td.col-week.in_next_year:after {
+    bottom: 0px;
+    border: 5px solid transparent;
+    border-bottom: 15px solid #FFF;
+    border-top: 15px solid #FFF;
+    content: " ";
+    position: absolute;
+    top: 0px;
+    width: 5px;
+}
+#calendar-session-planification td.col-week.in_last_year:before {
+    border-left-width: 0;
+    left: 0;
+}
+#calendar-session-planification td.col-week.in_next_year:after {
+    border-right-width: 0;
+    right: -1px;
+}
+#calendar-session-planification td.col-week span {
+}
 
 /* Fix grid with one row and multiples columns. Works for .col-sm-6.col-md-4.col-lg-3 */
 .row.clear-rows-6-4-3 {

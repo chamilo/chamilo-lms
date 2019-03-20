@@ -3000,6 +3000,13 @@ class Agenda
             }
         }
 
+        if ($this->type == 'personal' && !api_is_anonymous()) {
+            $actionsLeft .= Display::url(
+                Display::return_icon('1day.png', get_lang('ViewSessionsPlanification'), [], ICON_SIZE_MEDIUM),
+                $codePath."calendar/planification.php"
+            );
+        }
+
         if (api_is_platform_admin() ||
             api_is_teacher() ||
             api_is_student_boss() ||

@@ -4429,6 +4429,10 @@ EOT;
             $show_results = true;
         }
 
+        if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
+            $show_results = true;
+        }
+
         if (in_array(
             $objExercise->results_disabled,
             [
@@ -4654,14 +4658,18 @@ EOT;
 
                 $score = [];
                 if ($show_results) {
+                    $scorePassed = $my_total_score >= $my_total_weight;
+                    if (function_exists('bccomp')) {
+                        $compareResult = bccomp($my_total_score, $my_total_weight, 3);
+                        $scorePassed = $compareResult === 1 || $compareResult === 0;
+                    }
                     $score = [
                         'result' => self::show_score(
                             $my_total_score,
                             $my_total_weight,
-                            false,
-                            true
+                            false
                         ),
-                        'pass' => $my_total_score >= $my_total_weight ? true : false,
+                        'pass' => $scorePassed,
                         'score' => $my_total_score,
                         'weight' => $my_total_weight,
                         'comments' => $comnt,
@@ -4683,7 +4691,6 @@ EOT;
                 $question_content = '';
                 if ($show_results) {
                     $question_content = '<div class="question_row_answer">';
-
                     if ($showQuestionScore == false) {
                         $score = [];
                     }

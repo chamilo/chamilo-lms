@@ -1826,13 +1826,17 @@ class SocialManager extends UserManager
 
         $formattedList .= '</div>';
         $formattedList .= '<div class="mediapost-form">';
-        $formattedList .= '<form id = "form_comment_'.$messageId.'" name="post_comment" method="POST">
+        $formattedList .= '<form class="form-horizontal" id="form_comment_'.$messageId.'" name="post_comment" method="POST">
+                <div class="col-sm-9">
                 <label for="comment" class="hide">'.get_lang('SocialWriteNewComment').'</label>
                 <input type="hidden" name = "messageId" value="'.$messageId.'" />
-                <textarea placeholder="'.get_lang('SocialWriteNewComment').'" name="comment" rows="1" style="width:80%;" ></textarea>
-                <a onclick="submitComment('.$messageId.');" href="javascript:void(0);" name="social_wall_new_msg_submit" class="pull-right btn btn-default">
+                <textarea rows="3" class="form-control" placeholder="'.get_lang('SocialWriteNewComment').'" name="comment" rows="1" ></textarea>
+                </div>
+                <div class="col-sm-3">
+                <a onclick="submitComment('.$messageId.');" href="javascript:void(0);" name="social_wall_new_msg_submit" class="btn btn-default btn-post">
                     <em class="fa fa-pencil"></em> '.get_lang('Post').'
                 </a>
+                </div>
                 </form>';
         $formattedList .= '</div>';
 
@@ -3169,10 +3173,10 @@ class SocialManager extends UserManager
         $html .= '<div class="user-data">';
         $html .= $iconStatus;
         $html .= '<div class="username"><a href="'.$urlAuthor.'">'.$nameCompleteAuthor.'</a>'.$htmlReceiver.'</div>';
-        $html .= '<div>'.$date.'</div>';
+        $html .= '<div class="post-date">'.$date.'</div>';
         $html .= '</div>';
         $html .= '<div class="msg-content">';
-        $html .= '<div class="post-attachment" >';
+        $html .= '<div class="post-attachment thumbnail">';
         $html .= $postAttachment;
         $html .= '</div>';
         $html .= '<div>'.Security::remove_XSS($message['content']).'</div>';

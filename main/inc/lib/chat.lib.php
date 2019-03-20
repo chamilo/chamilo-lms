@@ -323,7 +323,7 @@ class Chat extends Model
                 $_SESSION['openChatBoxes'][$fromUserId] = api_strtotime($chat['sent'], 'UTC');
             }
 
-            $chatHistory[$fromUserId] =  [
+            $chatHistory[$fromUserId] = [
                 'window_user_info' => $userInfo,
                 'total_messages' => $count,
                 'items' => $chatItems,

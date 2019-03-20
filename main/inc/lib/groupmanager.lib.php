@@ -387,27 +387,31 @@ class GroupManager
     /**
      * Create a group for every class subscribed to the current course.
      *
-     * @param int $category_id The category in which the groups should be created
+     * @param int $categoryId The category in which the groups should be created
      *
      * @return array
      */
-    public static function create_class_groups($category_id)
+    public static function create_class_groups($categoryId)
     {
-        $options['where'] = [" usergroup.course_id = ? " => api_get_course_int_id()];
+        $options['where'] = [' usergroup.course_id = ? ' => api_get_course_int_id()];
         $obj = new UserGroup();
         $classes = $obj->getUserGroupInCourse($options);
         $group_ids = [];
+
         foreach ($classes as $class) {
-            $users_ids = $obj->get_users_by_usergroup($class['id']);
-            $group_id = self::create_group(
+            $userList = $obj->get_users_by_usergroup($class['id']);
+            $groupId = self::create_group(
                 $class['name'],
-                $category_id,
+                $categoryId,
                 0,
-                count($users_ids)
+                null
             );
-            $groupInfo = self::get_group_properties($group_id);
-            self::subscribe_users($users_ids, $groupInfo);
-            $group_ids[] = $group_id;
+
+            if ($groupId) {
+                $groupInfo = self::get_group_properties($groupId);
+                self::subscribe_users($userList, $groupInfo);
+                $group_ids[] = $groupId;
+            }
         }
 
         return $group_ids;

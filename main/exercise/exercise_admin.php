@@ -19,12 +19,6 @@ if (!api_is_allowed_to_edit(null, true)) {
     api_not_allowed(true);
 }
 
-$limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
-
-if ($limitTeacherAccess && !api_is_platform_admin()) {
-    api_not_allowed(true);
-}
-
 $htmlHeadXtra[] = '<script>
     function activate_start_date() {
         if(document.getElementById(\'start_date_div\').style.display == \'none\') {

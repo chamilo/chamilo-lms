@@ -8,3 +8,10 @@ This plugin will add a new action button in survey list allowing export the surv
 
 - Install plugin
 - Set enabled in configuration
+- Edit `configuration.php` file
+  ```php
+  $_configuration['survey_additional_teacher_modify_actions'] = [
+      // ...
+      'SurveyExportCSVPlugin' => ['SurveyExportCsvPlugin', 'filterModify'],
+  ];
+  ```

@@ -46,7 +46,18 @@ body {
 select {
     width: auto;
 }
-
+.header-ol{
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+    text-align: right;
+}
+.header-ol li{
+    display: inline-block;
+}
+.header-ol li a{
+    padding: 0 5px;
+}
 /*------------------------------*/
 .admin-block-version {
     font-size: 12px;
@@ -539,12 +550,12 @@ input[type=checkbox], input[type=radio] {
 }
 
 [dir=rtl] .actions {
-    background: #efefef;
+    /*background: #efefef;
     border: 1px solid #ccc;
     margin-bottom: 11px;
     padding: 2px 2px 2px 14px;
     vertical-align: middle;
-    float: right;
+    float: right;*/
 }
 
 .actions .actions-pagination {
@@ -1126,13 +1137,11 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 .breadcrumb{
     margin-bottom: 10px;
 }
-.breadcrumb .home {
-    padding: 0;
-    height: 22px;
-}
 
-.breadcrumb .home img {
+.breadcrumb li a img {
     float: left;
+    padding-right: 5px;
+    margin-top: 2px;
 }
 
 /* ATTENDANCE */
@@ -2805,11 +2814,93 @@ form .formw .freeze {
     text-align: left;
     vertical-align: middle;
 }
+.email-box{
+    display: flex;
+}
+.email-overflow{
+    width:200px;
+    height:20px;
+    padding:0;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    overflow:hidden;
+    margin: auto;
+    text-align: center;
+}
 
 .show_element {
     display: block !important;
 }
 
+#social_wall_main_wall_post_button{
+    background: #f5f6f7 !important;
+    color: #7a7a7a !important;
+    border: 1px solid #bababa !important;
+}
+#social_wall_main_wall_post_button:hover{
+    border: 1px solid #162a83 !important;
+    background: #162a83 !important;
+    color: #ffffff !important;
+}
+.input-file-container {
+    position: relative;
+}
+.input-file-container:hover{
+    cursor: pointer;
+}
+.js .input-file-trigger {
+    display: inline-block;
+    padding: 7px 15px;
+    background: #f5f6f7;
+    color: #7a7a7a;
+    font-size: 14px;
+    transition: all .4s;
+    border-radius: 5px;
+    border: 1px solid #bababa;
+    cursor: pointer;
+    font-weight: normal;
+}
+.js .input-file {
+    position: absolute;
+    top: 0; left: 0;
+    opacity: 0;
+    padding: 5px 0;
+    width: 100%;
+}
+.js .input-file:hover{
+    cursor:pointer;
+}
+.js .input-file:hover + .input-file-trigger,
+.js .input-file:focus + .input-file-trigger,
+.js .input-file-trigger:hover,
+.js .input-file-trigger:focus {
+    background: #162a83;
+    color: #ffffff;
+    cursor: pointer;
+    border: 1px solid #162a83;
+}
+
+.file-return {
+    margin: 0;
+}
+.file-return:not(:empty) {
+    margin: 1em 0;
+}
+.js .file-return {
+    font-style: italic;
+    font-size: .9em;
+    font-weight: bold;
+    padding: 0;
+    margin: 0;
+}
+.js .file-return:not(:empty):before {
+    content: "Selected file: ";
+    font-style: normal;
+    font-weight: normal;
+}
+
+
+/*** ***/
 .tag {
     background-color: #D3E6EF;
     border-radius: 3px 3px 3px 3px;
@@ -3012,6 +3103,18 @@ form .formw .freeze {
     font-size: 11px;
 }
 
+.btn-collapse.collapsed .open{
+    display: none;
+}
+.btn-collapse.collapsed .closed{
+    display: inline-block;
+}
+.btn-collapse .closed{
+    display: none;
+}
+.btn-collapse .open{
+    display: inline-block;
+}
 /* ****************************************************
                      CSS SKILL
  **************************************************** */
@@ -5366,19 +5469,50 @@ div#chat-remote-video video {
     border-color: #FAEBCC !important;
 }
 
-.forum-post {
-    border-color: #dddddd !important;
+.forum_display .panel-default{
+    border: none;
+    box-shadow: none;
+}
+
+.forum_display .panel-default .panel-body{
+    padding: 0;
+}
+
+.forum_display .panel .title img{
+    display: none;
 }
 
 .forum-post .thumbnail {
     margin-bottom: 5px;
+    text-align: center;
+    border: none;
+}
+.forum-post .thumbnail img{
+    border-radius: 50%;
+    border: 2px solid #dddddd;
+    width: 85px;
 }
 
 .forum-post .title-username {
     text-align: center;
-    font-size: 16px;
+    font-size: 14px;
     margin-bottom: 5px;
     margin-top: 0;
+    font-weight: bold;
+    padding-top: 5px;
+}
+.forum-post .user-type.text-center {
+    border-radius: 50%;
+    position: absolute;
+    top: 25%;
+    right: 17%;
+    border: 2px solid #dddddd;
+    padding: 5px;
+    background-color: #fff;
+}
+
+.forum-post {
+    border-color: #dddddd !important;
 }
 
 .forum-post .post-date {
@@ -5536,10 +5670,10 @@ div#chat-remote-video video {
 #resource .parent .big-icon .sequence-id,
 #children .parent .big-icon .sequence-id {
     border: 0 none;
-    border-radius: 50%;
+    border-radius: 20px;
     background-color: #E74C3C;
-    width: 20%;
     color: #ffffff;
+    padding: 0 6px;
     position: absolute;
     right: 5px;
     top: 5px;
@@ -7440,6 +7574,7 @@ a.sessionView {
     display: inline-block;
     text-overflow: ellipsis;
     white-space: nowrap;
+    line-height: 32px;
     overflow: hidden;
     width: 120px;
 }
@@ -7454,6 +7589,7 @@ a.sessionView {
 
 #listFriends .status {
     float: right;
+    line-height: 32px;
 }
 
 #listFriends .user-image {
@@ -8314,6 +8450,13 @@ ul#toolnavbox-two li a.btn {
     border-color: #dd853d;
     color: #ffffff;
 }
+.checkbox input[type=checkbox],
+.checkbox-inline input[type=checkbox],
+.radio input[type=radio],
+.radio-inline input[type=radio]{
+    position: relative;
+    margin-left: 10px;
+}
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {
     .sidebar-scorm {
@@ -8630,6 +8773,17 @@ ul#toolnavbox-two li a.btn {
     }
     .list-skills{
         grid-template-columns: repeat(2, 1fr);
+    }
+    .forum_display .number-post{
+        padding: 0;
+        background-color: transparent;
+        border: none;
+    }
+    .forum_display .number-post img{
+        width: 32px;
+    }
+    .forum_display .panel .pull-right{
+        float: initial;
     }
 }
 
@@ -8955,6 +9109,20 @@ input.form-control[type="color"] {
 .exercise_mark_select .dropdown-menu > li > a.btn-success:hover {
     background-color: #5cb85c !important;
     opacity: 0.8 !important;
+}
+
+#chamilo-news {
+    bottom: 0;
+    padding-bottom: 15px;
+    position: -webkit-sticky;
+    position: -moz-sticky;
+    position: -ms-sticky;
+    position: -o-sticky;
+    position: sticky;
+    z-index: 9999;
+}
+#chamilo-news .alert {
+    margin-bottom: 0;
 }
 
 /* Extra small devices (phones, less than 768px) */
@@ -9451,6 +9619,117 @@ ul.dropdown-menu.inner > li > a {
 #announcement_preview_result .label {
     display: inline-table;
 }
+
+.forum_revision {
+    background-color: #fff3cd;
+}
+
+.chatboxcontent .contact-list img {
+    max-width: 30px;
+}
+
+.chatboxcontent .status {
+    float:left;
+    margin-right: 10px;
+}
+
+.user-data .username {
+    display: inline-block;
+}
+
+.user-data img.pull-left {
+    margin-right: 0.5em;
+}
+
+#user_image_block img, #sn-avatar-one a.expand-image img {
+    width: 100px;
+}
+
+.sidebar-avatar .list-info {
+    font-size: 12px;
+    margin-top: 2rem;
+    border-top: 1px solid #cdcdcd;
+    padding-top: 2rem;
+}
+
+.sidebar-avatar .list-info dd {
+    margin-bottom: 10px;
+}
+
+.sidebar-avatar .area-avatar {
+    display: block;
+    width: 100%;
+    position: relative;
+}
+
+.sidebar-avatar .area-avatar .img-circle {
+    border: 3px solid #96bd0d;
+}
+
+.sidebar-avatar .area-avatar .avatar-icon {
+    position: absolute;
+    top: 55px;
+    right: 50px;
+    background: #FFF;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    border: 2px solid #cdcdcd;
+    padding-top: 5px;
+    padding-left: 4px;
+}
+
+.sidebar-avatar .area-avatar .avatar-lm h5,
+.sidebar-avatar .area-avatar .avatar-lc h5 {
+    font-weight: bold;
+}
+
+.sidebar-avatar .area-avatar .avatar-lm {
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-align: center;
+}
+
+.sidebar-avatar .area-avatar .avatar-lc {
+    position: absolute;
+    top: 0;
+    right: 0;
+    text-align: center;
+}
+
+.sidebar-avatar .item-name h5 {
+    font-weight: bold;
+}
+
+.sidebar-avatar .edit-admin {
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+}
+
+.search-friend {
+    padding-bottom: 20px;
+    border-top: 1px solid #cdcdcd;
+    padding-top: 10px;
+}
+
+.btn-maps {
+    border-radius: 5px;
+    border-color: #6d9b00;
+    background-color: #f8ffdd;
+}
+
+.btn-maps:hover {
+    background-color: #d4e9ff !important;
+    color: #0b3e6f;
+    border-color: #75a9e0;
+}
+
+.post-attachment {
+    text-align: center;
+}
+
 
 /* Fix grid with one row and multiples columns. Works for .col-sm-6.col-md-4.col-lg-3 */
 .row.clear-rows-6-4-3 {

@@ -1,6 +1,12 @@
 {% extends 'layout/layout_1_col.tpl'|get_template %}
 
 {% block content %}
+    <style>
+        #listFriends .list-group {
+            max-height: 250px;
+            overflow-y:auto;
+        }
+    </style>
 <div class="row">
     <div class="col-md-3">
         {{ social_avatar_block }}
@@ -42,8 +48,11 @@
                 </div>
             </div>
         </div>
-        {{ social_skill_block }}
+
         {{ social_group_info_block }}
+
+        {{ social_skill_block }}
+
         <!-- Block course list -->
         {% if social_course_block != null %}
         <div class="panel-group" id="course-block" role="tablist" aria-multiselectable="true">

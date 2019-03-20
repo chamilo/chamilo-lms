@@ -39,9 +39,12 @@ $student_id = $track_exercise_info['exe_user_id'];
 $current_user_id = api_get_user_id();
 
 $objExercise = new Exercise();
-
 if (!empty($exercise_id)) {
     $objExercise->read($exercise_id);
+}
+
+if (empty($objExercise)) {
+    api_not_allowed($show_headers);
 }
 
 // Only users can see their own results
@@ -57,7 +60,7 @@ $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'annotation/
 
 if ($show_headers) {
     $interbreadcrumb[] = [
-        'url' => "exercise.php?".api_get_cidreq(),
+        'url' => 'exercise.php?'.api_get_cidreq(),
         'name' => get_lang('Exercises'),
     ];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Result')];
@@ -72,6 +75,7 @@ if ($show_headers) {
 
 $message = Session::read('attempt_remaining');
 Session::erase('attempt_remaining');
+
 ExerciseLib::displayQuestionListByAttempt(
     $objExercise,
     $id,

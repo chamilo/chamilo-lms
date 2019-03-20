@@ -137,9 +137,11 @@ function get_work_data_by_id($id, $courseId = 0, $sessionId = 0)
         $work['show_url'] = $webCodePath.'work/show_file.php?id='.$work['id'].'&'.api_get_cidreq();
         $work['show_content'] = '';
         if ($work['contains_file']) {
-            $fileType = mime_content_type(
-                api_get_path(SYS_COURSE_PATH).$course->getDirectory().'/'.$work['url']
-            );
+            $fileType = '';
+            $file = api_get_path(SYS_COURSE_PATH).$course->getDirectory().'/'.$work['url'];
+            if (file_exists($file)) {
+                $fileType = mime_content_type($file);
+            }
 
             if (in_array($fileType, ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'])) {
                 $work['show_content'] = Display::img($work['show_url'], $work['title']);
@@ -153,10 +155,7 @@ function get_work_data_by_id($id, $courseId = 0, $sessionId = 0)
         }
 
         $fieldValue = new ExtraFieldValue('work');
-        $work['extra'] = $fieldValue->getAllValuesForAnItem(
-            $id,
-            true
-        );
+        $work['extra'] = $fieldValue->getAllValuesForAnItem($id, true);
     }
 
     return $work;

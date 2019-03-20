@@ -277,6 +277,7 @@ define('LOG_MY_FOLDER_NEW_PATH', 'new_path');
 define('LOG_TERM_CONDITION_ACCEPTED', 'term_condition_accepted');
 define('LOG_USER_CONFIRMED_EMAIL', 'user_confirmed_email');
 define('LOG_USER_REMOVED_LEGAL_ACCEPT', 'user_removed_legal_accept');
+
 define('LOG_USER_DELETE_ACCOUNT_REQUEST', 'user_delete_account_request');
 
 define('LOG_QUESTION_CREATED', 'question_created');
@@ -475,7 +476,9 @@ define('RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES', 3); //Show final 
 define('RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT', 4);
 define('RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK', 5);
 define('RESULT_DISABLE_RANKING', 6);
-// 4: Show final score only with categories and show expected answers only on the last attempt
+define('RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER', 7);
+
+// 4: Show final score only with  and show expected answers only on the last attempt
 
 define('EXERCISE_MAX_NAME_SIZE', 80);
 
@@ -582,6 +585,7 @@ define('MESSAGE_STATUS_WALL', '8');
 define('MESSAGE_STATUS_WALL_DELETE', '9');
 define('MESSAGE_STATUS_WALL_POST', '10');
 define('MESSAGE_STATUS_CONVERSATION', '11');
+define('MESSAGE_STATUS_FORUM', '12');
 
 // Images
 define('IMAGE_WALL_SMALL_SIZE', 200);
@@ -1145,16 +1149,15 @@ function api_valid_email($address)
  */
 function api_protect_course_script($print_headers = false, $allow_session_admins = false, $allow_drh = false)
 {
-    $is_allowed_in_course = api_is_allowed_in_course();
-
-    $is_visible = false;
     $course_info = api_get_course_info();
-
     if (empty($course_info)) {
         api_not_allowed($print_headers);
 
         return false;
     }
+
+    $is_allowed_in_course = api_is_allowed_in_course();
+    $is_visible = false;
 
     if (api_is_drh()) {
         return true;
@@ -1586,6 +1589,12 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
 
     $result['profile_url'] = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id;
 
+    $hasCertificates = Certificate::getCertificateByUser($user_id);
+    $result['has_certificates'] = 0;
+    if (!empty($hasCertificates)) {
+        $result['has_certificates'] = 1;
+    }
+
     // Send message link
     $sendMessage = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='.$user_id;
     $result['complete_name_with_message_link'] = Display::url(
@@ -1689,11 +1698,11 @@ function api_get_user_info(
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
         $result_array = Database::fetch_array($result);
+        $result_array['user_is_online_in_chat'] = 0;
         if ($checkIfUserOnline) {
             $use_status_in_platform = user_is_online($user_id);
             $result_array['user_is_online'] = $use_status_in_platform;
             $user_online_in_chat = 0;
-
             if ($use_status_in_platform) {
                 $user_status = UserManager::get_extra_user_data_by_field(
                     $user_id,
@@ -2767,8 +2776,11 @@ function api_get_plugin_setting($plugin, $variable)
 
     if (isset($result[$plugin])) {
         $value = $result[$plugin];
-        if (@unserialize($value) !== false) {
-            $value = unserialize($value);
+
+        $unserialized = UnserializeApi::unserialize('not_allowed_classes', $value, true);
+
+        if (false !== $unserialized) {
+            $value = $unserialized;
         }
 
         return $value;
@@ -8769,43 +8781,14 @@ function api_mail_html(
     $mail->Priority = 3;
     $mail->SMTPKeepAlive = true;
 
-    // Default values
-    $notification = new Notification();
-    $defaultEmail = $notification->getDefaultPlatformSenderEmail();
-    $defaultName = $notification->getDefaultPlatformSenderName();
+    api_set_noreply_and_from_address_to_mailer(
+        $mail,
+        ['name' => $senderName, 'email' => $senderEmail],
+        !empty($extra_headers['reply_to']) ? $extra_headers['reply_to'] : []
+    );
 
-    // If the parameter is set don't use the admin.
-    $senderName = !empty($senderName) ? $senderName : $defaultName;
-    $senderEmail = !empty($senderEmail) ? $senderEmail : $defaultEmail;
+    unset($extra_headers['reply_to']);
 
-    // Reply to first
-    if (isset($extra_headers['reply_to']) && empty($platform_email['SMTP_UNIQUE_REPLY_TO'])) {
-        if (PHPMailer::validateAddress($extra_headers['reply_to']['mail'])) {
-            $mail->AddReplyTo(
-                $extra_headers['reply_to']['mail'],
-                $extra_headers['reply_to']['name']
-            );
-            // Errors to sender
-            $mail->AddCustomHeader('Errors-To: '.$extra_headers['reply_to']['mail']);
-            $mail->Sender = $extra_headers['reply_to']['mail'];
-            unset($extra_headers['reply_to']);
-        }
-    } else {
-        $mail->AddCustomHeader('Errors-To: '.$defaultEmail);
-    }
-
-    //If the SMTP configuration only accept one sender
-    if (isset($platform_email['SMTP_UNIQUE_SENDER']) && $platform_email['SMTP_UNIQUE_SENDER']) {
-        $senderName = $platform_email['SMTP_FROM_NAME'];
-        $senderEmail = $platform_email['SMTP_FROM_EMAIL'];
-        $valid = PHPMailer::validateAddress($senderEmail);
-        if ($valid) {
-            //force-set Sender to $senderEmail, otherwise SetFrom only does it if it is currently empty
-            $mail->Sender = $senderEmail;
-        }
-    }
-
-    $mail->SetFrom($senderEmail, $senderName);
     $mail->Subject = $subject;
     $mail->AltBody = strip_tags(
         str_replace('<br />', "\n", api_html_entity_decode($message))
@@ -9298,4 +9281,158 @@ function api_get_relative_path($from, $to)
     }
 
     return implode('/', $relPath);
+}
+
+/**
+ * Unserialize content using Brummann\Polyfill\Unserialize.
+ *
+ * @param string $type
+ * @param string $serialized
+ * @param bool   $ignoreErrors. Optional.
+ *
+ * @return mixed
+ */
+function api_unserialize_content($type, $serialized, $ignoreErrors = false)
+{
+    switch ($type) {
+        case 'career':
+        case 'sequence_graph':
+            $allowedClasses = [Graph::class, VerticesMap::class, Vertices::class, Edges::class];
+            break;
+        case 'lp':
+            $allowedClasses = [
+                learnpath::class,
+                learnpathItem::class,
+                aicc::class,
+                aiccBlock::class,
+                aiccItem::class,
+                aiccObjective::class,
+                aiccResource::class,
+                scorm::class,
+                scormItem::class,
+                scormMetadata::class,
+                scormOrganization::class,
+                scormResource::class,
+                Link::class,
+                LpItem::class,
+            ];
+            break;
+        case 'course':
+            $allowedClasses = [
+                Course::class,
+                Announcement::class,
+                Attendance::class,
+                CalendarEvent::class,
+                CourseCopyLearnpath::class,
+                CourseCopyTestCategory::class,
+                CourseDescription::class,
+                CourseSession::class,
+                Document::class,
+                Forum::class,
+                ForumCategory::class,
+                ForumPost::class,
+                ForumTopic::class,
+                Glossary::class,
+                GradeBookBackup::class,
+                Link::class,
+                LinkCategory::class,
+                Quiz::class,
+                QuizQuestion::class,
+                QuizQuestionOption::class,
+                ScormDocument::class,
+                Survey::class,
+                SurveyInvitation::class,
+                SurveyQuestion::class,
+                Thematic::class,
+                ToolIntro::class,
+                Wiki::class,
+                Work::class,
+                stdClass::class,
+            ];
+            break;
+        case 'not_allowed_classes':
+        default:
+            $allowedClasses = false;
+    }
+
+    if ($ignoreErrors) {
+        return @Unserialize::unserialize(
+            $serialized,
+            ['allowed_classes' => $allowedClasses]
+        );
+    }
+
+    return Unserialize::unserialize(
+        $serialized,
+        ['allowed_classes' => $allowedClasses]
+    );
+}
+
+/**
+ * Set the From and ReplyTo properties to PHPMailer instance.
+ *
+ * @param PHPMailer $mailer
+ * @param array     $sender
+ * @param array     $replyToAddress
+ *
+ * @throws phpmailerException
+ */
+function api_set_noreply_and_from_address_to_mailer(PHPMailer $mailer, array $sender, array $replyToAddress = [])
+{
+    $platformEmail = $GLOBALS['platform_email'];
+
+    $noReplyAddress = api_get_setting('noreply_email_address');
+    $avoidReplyToAddress = false;
+
+    if (!empty($noReplyAddress)) {
+        $avoidReplyToAddress = api_get_configuration_value('mail_no_reply_avoid_reply_to');
+    }
+
+    $notification = new Notification();
+
+    // If the parameter is set don't use the admin.
+    $senderName = !empty($sender['name']) ? $sender['name'] : $notification->getDefaultPlatformSenderName();
+    $senderEmail = !empty($sender['email']) ? $sender['email'] : $notification->getDefaultPlatformSenderEmail();
+
+    // Reply to first
+    if (!$avoidReplyToAddress) {
+        $mailer->AddCustomHeader('Errors-To: '.$notification->getDefaultPlatformSenderEmail());
+
+        if (
+            !empty($replyToAddress) &&
+            $platformEmail['SMTP_UNIQUE_REPLY_TO'] &&
+            PHPMailer::ValidateAddress($replyToAddress['mail'])
+        ) {
+            $mailer->AddReplyTo($replyToAddress['email'], $replyToAddress['name']);
+            // Errors to sender
+            $mailer->AddCustomHeader('Errors-To: '.$replyToAddress['mail']);
+            $mailer->Sender = $replyToAddress['mail'];
+        }
+    }
+
+    //If the SMTP configuration only accept one sender
+    if (
+        isset($platformEmail['SMTP_UNIQUE_SENDER']) &&
+        $platformEmail['SMTP_UNIQUE_SENDER']
+    ) {
+        $senderName = $platformEmail['SMTP_FROM_NAME'];
+        $senderEmail = $platformEmail['SMTP_FROM_EMAIL'];
+
+        if (PHPMailer::ValidateAddress($senderEmail)) {
+            //force-set Sender to $senderEmail, otherwise SetFrom only does it if it is currently empty
+            $mailer->Sender = $senderEmail;
+        }
+    }
+
+    $mailer->SetFrom($senderEmail, $senderName, !$avoidReplyToAddress);
+}
+
+/**
+ * @param string $template
+ *
+ * @return string
+ */
+function api_find_template($template)
+{
+    return Template::findTemplateFilePath($template);
 }

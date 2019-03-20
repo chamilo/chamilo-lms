@@ -108,28 +108,24 @@ class CoursesController
         $limit = []
     ) {
         $data = [];
-        $browse_course_categories = CoursesAndSessionsCatalog::getCourseCategories();
+        $listCategories = CoursesAndSessionsCatalog::getCourseCategoriesTree();
+
         $data['countCoursesInCategory'] = CourseCategory::countCoursesInCategory($category_code);
         if ($action === 'display_random_courses') {
             // Random value is used instead limit filter
-            $data['browse_courses_in_category'] = CoursesAndSessionsCatalog::getCoursesInCategory(
-                null,
-                12
-            );
+            $data['browse_courses_in_category'] = CoursesAndSessionsCatalog::getCoursesInCategory(null, 12);
             $data['countCoursesInCategory'] = count($data['browse_courses_in_category']);
         } else {
             if (!isset($category_code)) {
-                $category_code = $browse_course_categories[0][1]['code']; // by default first category
+                $category_code = $listCategories['ALL']['code']; // by default first category
             }
             $limit = isset($limit) ? $limit : self::getLimitArray();
-            $data['browse_courses_in_category'] = CoursesAndSessionsCatalog::getCoursesInCategory(
-                $category_code,
-                null,
-                $limit
-            );
+            $listCourses = CoursesAndSessionsCatalog::getCoursesInCategory($category_code, null, $limit);
+
+            $data['browse_courses_in_category'] = $listCourses;
         }
 
-        $data['browse_course_categories'] = $browse_course_categories;
+        $data['list_categories'] = $listCategories;
         $data['code'] = Security::remove_XSS($category_code);
 
         // getting all the courses to which the user is subscribed to
@@ -188,10 +184,7 @@ class CoursesController
         $data = [];
         $limit = !empty($limit) ? $limit : self::getLimitArray();
         $browse_course_categories = CoursesAndSessionsCatalog::getCourseCategories();
-        $data['countCoursesInCategory'] = CourseCategory::countCoursesInCategory(
-            'ALL',
-            $search_term
-        );
+        $data['countCoursesInCategory'] = CourseCategory::countCoursesInCategory('ALL', $search_term);
         $data['browse_courses_in_category'] = CoursesAndSessionsCatalog::search_courses(
             $search_term,
             $limit,

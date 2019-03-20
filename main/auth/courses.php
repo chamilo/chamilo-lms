@@ -179,6 +179,8 @@ switch ($action) {
                 exit;
             }
         }
+
+        $courseController->courseList($action);
         break;
     case 'subscribe_course':
         if (api_is_anonymous()) {
@@ -234,9 +236,6 @@ switch ($action) {
         break;
     case 'createcoursecategory':
         $courseController->categoryList();
-        break;
-    case 'deletecoursecategory':
-        $courseController->courseList($action);
         break;
     case 'sortmycourses':
         $courseController->courseList($action);
@@ -374,6 +373,7 @@ switch ($action) {
         $userId = api_get_user_id();
         $categoryId = isset($_REQUEST['categoryid']) ? (int) $_REQUEST['categoryid'] : 0;
         $option = isset($_REQUEST['option']) ? (int) $_REQUEST['option'] : 0;
+        $redirect = isset($_REQUEST['redirect']) ? $_REQUEST['redirect'] : 0;
 
         if (empty($userId) || empty($categoryId)) {
             api_not_allowed(true);
@@ -385,6 +385,13 @@ switch ($action) {
                 WHERE user_id = $userId AND id = $categoryId";
         Database::query($sql);
         Display::addFlash(Display::return_message(get_lang('Updated')));
+
+        if ($redirect === 'home') {
+            $url = api_get_path(WEB_PATH).'user_portal.php';
+            header('Location: '.$url);
+            exit;
+        }
+
         $url = api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses';
         header('Location: '.$url);
         exit;

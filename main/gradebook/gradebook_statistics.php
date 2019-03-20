@@ -89,19 +89,18 @@ if (!$displayScore->is_custom() || empty($displays)) {
     $stattable = '<table class="data_table" cellspacing="0" cellpadding="3">';
     $stattable .= '<tr><th>'.get_lang('ScoringSystem').'</th>';
     $stattable .= '<th>'.get_lang('Percentage').'</th>';
-    $stattable .= '<th>'.get_lang('CountUsers').'</th>';
-    //$stattable .= '<th>' . get_lang('Statistics') . '</th></tr>';
+    $stattable .= '<th>'.get_lang('CountUsers').'</th></tr>';
     $counter = 0;
     foreach ($keys as $key) {
         $bar = ($highest_ratio > 0 ? ($nr_items[$key] / $highest_ratio) * 100 : 0);
         $stattable .= '<tr class="row_'.($counter % 2 == 0 ? 'odd' : 'even').'">';
         $stattable .= '<td width="150">'.$key.'</td>';
-
         $stattable .= '<td width="550">'.Display::bar_progress($bar).'</td>';
         $stattable .= '<td align="right">'.$nr_items[$key].'</td>';
+        $stattable .= '</tr>';
         $counter++;
     }
-    $stattable .= '</tr></table>';
+    $stattable .= '</table>';
     echo $stattable;
 }
 Display :: display_footer();

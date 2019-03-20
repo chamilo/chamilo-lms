@@ -102,30 +102,42 @@ class CourseDriver extends Driver implements DriverInterface
                         'hidden' => true,
                         'locked' => false,
                     ],
-                    [
-                        'pattern' => '/^\/learning_path$/', // block delete learning_path
-                        'read' => true,
-                        'write' => false,
-                        'hidden' => false,
-                        'locked' => true,
-                    ],
-                    [
-                        'pattern' => '/learning_path\/(.*)/', // allow edit/delete inside learning_path
-                        'read' => true,
-                        'write' => true,
-                        'hidden' => false,
-                        'locked' => false,
-                    ],
                 ],
             ];
 
             // admin/teachers can create dirs from ckeditor
             if ($this->allowToEdit()) {
+                $config['attributes'][] = [
+                    'pattern' => '/^\/learning_path$/', // block delete learning_path
+                    'read' => true,
+                    'write' => false,
+                    'hidden' => false,
+                    'locked' => true,
+                ];
+                $config['attributes'][] = [
+                    'pattern' => '/learning_path\/(.*)/', // allow edit/delete inside learning_path
+                    'read' => true,
+                    'write' => true,
+                    'hidden' => false,
+                    'locked' => false,
+                ];
+
                 $defaultDisabled = $this->connector->getDefaultDriverSettings()['disabled'];
                 $defaultDisabled = array_flip($defaultDisabled);
                 unset($defaultDisabled['mkdir']);
                 $defaultDisabled = array_flip($defaultDisabled);
                 $config['disabled'] = $defaultDisabled;
+            } else {
+                $protectedFolders = \DocumentManager::getProtectedFolderFromStudent();
+                foreach ($protectedFolders as $folder) {
+                    $config['attributes'][] = [
+                        'pattern' => $folder.'/',
+                        'read' => false,
+                        'write' => false,
+                        'hidden' => true,
+                        'locked' => false,
+                    ];
+                }
             }
 
             $foldersToHide = \DocumentManager::get_all_document_folders(

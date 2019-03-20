@@ -23,7 +23,7 @@ $current_course_tool = TOOL_SURVEY;
 $currentUserId = api_get_user_id();
 
 api_protect_course_script(true);
-$action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
+$action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
 
 // Tracking
 Event::event_access_tool(TOOL_SURVEY);
@@ -32,8 +32,6 @@ $logInfo = [
     'tool' => TOOL_SURVEY,
     'tool_id' => 0,
     'tool_id_detail' => 0,
-    'action' => '',
-    'action_details' => '',
 ];
 Event::registerLog($logInfo);
 

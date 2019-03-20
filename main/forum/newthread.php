@@ -34,9 +34,6 @@ $_user = api_get_user_info();
 
 $nameTools = get_lang('ToolForum');
 
-/* Including necessary files */
-
-require_once 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
 // Are we in a lp ?
@@ -157,7 +154,6 @@ $htmlHeadXtra[] = "
 
 $form = show_add_post_form(
     $current_forum,
-    $forum_setting,
     'newthread',
     '',
     isset($_SESSION['formelements']) ? $_SESSION['formelements'] : null

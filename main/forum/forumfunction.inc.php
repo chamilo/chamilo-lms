@@ -3,7 +3,6 @@
 
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
-use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
 
@@ -26,7 +25,7 @@ use Doctrine\Common\Collections\Criteria;
  * @todo convert into a class
  */
 define('FORUM_NEW_POST', 0);
-get_notifications_of_user();
+getNotificationsPerUser();
 
 $htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
 $htmlHeadXtra[] = '<script>
@@ -211,6 +210,19 @@ function show_add_forumcategory_form($inputvalues = [], $lp_id)
         null,
         ['ToolbarSet' => 'Forum', 'Width' => '98%', 'Height' => '200']
     );
+
+    $extraField = new ExtraField('forum_category');
+    $returnParams = $extraField->addElements(
+        $form,
+        null,
+        [], //exclude
+        false, // filter
+        false, // tag as select
+        [], //show only fields
+        [], // order fields
+        [] // extra data
+    );
+
     $form->addButtonCreate(get_lang('CreateCategory'), 'SubmitForumCategory');
 
     // Setting the rules.
@@ -531,6 +543,18 @@ function show_edit_forumcategory_form($inputvalues = [])
         ['ToolbarSet' => 'Forum', 'Width' => '98%', 'Height' => '200']
     );
 
+    $extraField = new ExtraField('forum_category');
+    $returnParams = $extraField->addElements(
+        $form,
+        $categoryId,
+        [], //exclude
+        false, // filter
+        false, // tag as select
+        [], //show only fields
+        [], // order fields
+        [] // extra data
+    );
+
     $form->addButtonUpdate(get_lang('ModifyCategory'), 'SubmitEditForumCategory');
 
     // Setting the default values.
@@ -624,6 +648,8 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
             'info' => $clean_cat_title,
         ];
         Event::registerLog($logInfo);
+
+        $values['item_id'] = $values['forum_category_id'];
     } else {
         $params = [
             'c_id' => $course_id,
@@ -665,7 +691,12 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
             'info' => $clean_cat_title,
         ];
         Event::registerLog($logInfo);
+
+        $values['item_id'] = $last_id;
     }
+
+    $extraFieldValue = new ExtraFieldValue('forum_category');
+    $extraFieldValue->saveFieldValues($values);
 
     if ($showMessage) {
         Display::addFlash(Display::return_message($return_message, 'confirmation'));
@@ -1575,7 +1606,10 @@ function get_forum_categories($id = '', $courseId = 0, $sessionId = 0)
 
     $result = Database::query($sql);
     $forum_categories_list = [];
+    $extraFieldValue = new ExtraFieldValue('forum_category');
     while ($row = Database::fetch_assoc($result)) {
+        $row['extra_fields'] = $extraFieldValue->getAllValuesByItem($row['cat_id']);
+
         if (empty($id)) {
             $forum_categories_list[$row['cat_id']] = $row;
         } else {
@@ -1823,6 +1857,8 @@ function get_forums(
                     $forum_list[$key]['last_poster_name'] = $last_post_info_of_forum['last_poster_name'];
                     $forum_list[$key]['last_poster_lastname'] = $last_post_info_of_forum['last_poster_lastname'];
                     $forum_list[$key]['last_poster_firstname'] = $last_post_info_of_forum['last_poster_firstname'];
+                    $forum_list[$key]['last_post_title'] = $last_post_info_of_forum['last_post_title'];
+                    $forum_list[$key]['last_post_text'] = $last_post_info_of_forum['last_post_text'];
                 }
             }
         } else {
@@ -1841,6 +1877,8 @@ function get_forums(
             $forum_list['last_poster_name'] = $last_post_info_of_forum['last_poster_name'];
             $forum_list['last_poster_lastname'] = $last_post_info_of_forum['last_poster_lastname'];
             $forum_list['last_poster_firstname'] = $last_post_info_of_forum['last_poster_firstname'];
+            $forum_list['last_post_title'] = $last_post_info_of_forum['last_post_title'];
+            $forum_list['last_post_text'] = $last_post_info_of_forum['last_post_text'];
         }
     }
 
@@ -1945,7 +1983,9 @@ function get_last_post_information($forum_id, $show_invisibles = false, $course_
                 users.firstname,
                 post.visible,
                 thread_properties.visibility AS thread_visibility,
-                forum_properties.visibility AS forum_visibility
+                forum_properties.visibility AS forum_visibility,
+                post.post_title,
+                post.post_text
             FROM
                 $table_posts post,
                 $table_users users,
@@ -1973,6 +2013,8 @@ function get_last_post_information($forum_id, $show_invisibles = false, $course_
         $return_array['last_poster_name'] = $row['poster_name'];
         $return_array['last_poster_lastname'] = $row['lastname'];
         $return_array['last_poster_firstname'] = $row['firstname'];
+        $return_array['last_post_title'] = $row['post_title'];
+        $return_array['last_post_text'] = $row['post_text'];
 
         return $return_array;
     } else {
@@ -1986,6 +2028,8 @@ function get_last_post_information($forum_id, $show_invisibles = false, $course_
                 $return_array['last_poster_name'] = $row['poster_name'];
                 $return_array['last_poster_lastname'] = $row['lastname'];
                 $return_array['last_poster_firstname'] = $row['firstname'];
+                $return_array['last_post_title'] = $row['post_title'];
+                $return_array['last_post_text'] = $row['post_text'];
 
                 return $return_array;
             }
@@ -2275,12 +2319,17 @@ function get_post_information($post_id)
     $table_posts = Database::get_course_table(TABLE_FORUM_POST);
     $table_users = Database::get_main_table(TABLE_MAIN_USER);
     $course_id = api_get_course_int_id();
+    $post_id = (int) $post_id;
+
+    if (empty($post_id)) {
+        return [];
+    }
 
     $sql = "SELECT posts.*, email FROM ".$table_posts." posts, ".$table_users." users
             WHERE
                 c_id = $course_id AND
                 posts.poster_id=users.user_id AND
-                posts.post_id = ".intval($post_id);
+                posts.post_id = ".$post_id;
     $result = Database::query($sql);
     $row = Database::fetch_array($result, 'ASSOC');
 
@@ -2758,7 +2807,7 @@ function updateThread($values)
  * @param int   $userId        Optional. The user ID
  * @param int   $sessionId
  *
- * @return int
+ * @return CForumThread
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  *
@@ -2805,11 +2854,9 @@ function store_thread(
     }
 
     $post_date = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
-
+    $visible = 1;
     if ($current_forum['approval_direct_post'] == '1' && !api_is_allowed_to_edit(null, true)) {
         $visible = 0; // The post has not been approved yet.
-    } else {
-        $visible = 1;
     }
     $clean_post_title = $values['post_title'];
 
@@ -2945,12 +2992,16 @@ function store_thread(
 
     $lastPostId = $lastPost->getIid();
 
+    $lastThread->setThreadLastPost($lastPostId);
+
+    $em->merge($lastThread);
+    $em->flush();
+
     $logInfo = [
         'tool' => TOOL_FORUM,
         'tool_id' => $values['forum_id'],
         'tool_id_detail' => $lastThread->getIid(),
         'action' => 'new-post',
-        'action_details' => '',
         'info' => $clean_post_title,
     ];
     Event::registerLog($logInfo);
@@ -3054,14 +3105,13 @@ function store_thread(
         Display::addFlash(Display::return_message($message, 'success', false));
     }
 
-    return $lastThread->getIid();
+    return $lastThread;
 }
 
 /**
  * This function displays the form that is used to add a post. This can be a new thread or a reply.
  *
  * @param array  $current_forum
- * @param array  $forum_setting
  * @param string $action        is the parameter that determines if we are
  *                              1. newthread: adding a new thread (both empty) => No I-frame
  *                              2. replythread: Replying to a thread ($action = replythread) => I-frame with the complete thread (if enabled)
@@ -3076,20 +3126,23 @@ function store_thread(
  *
  * @version february 2006, dokeos 1.8
  */
-function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $form_values = '')
+function show_add_post_form($current_forum, $action, $id = '', $form_values = '')
 {
     $_user = api_get_user_info();
     $action = isset($action) ? Security::remove_XSS($action) : '';
     $myThread = isset($_GET['thread']) ? (int) $_GET['thread'] : '';
     $forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : '';
     $my_post = isset($_GET['post']) ? (int) $_GET['post'] : '';
+    $giveRevision = (isset($_GET['give_revision']) && $_GET['give_revision'] == 1);
 
-    $url = api_get_self().'?'.http_build_query([
+    $url = api_get_self().'?'.http_build_query(
+        [
             'action' => $action,
             'forum' => $forumId,
             'thread' => $myThread,
             'post' => $my_post,
-        ]).'&'.api_get_cidreq();
+        ]
+    ).'&'.api_get_cidreq();
 
     $form = new FormValidator(
         'thread',
@@ -3127,12 +3180,26 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
             'UserStatus' => 'student',
         ]
     );
-
     $form->addRule('post_text', get_lang('ThisFieldIsRequired'), 'required');
+
+    if (in_array($action, ['newthread', 'replythread', 'replymessage', 'quote'])) {
+        $extraFields = new ExtraField('forum_post');
+        $extraFields->addElements(
+            $form,
+            null,
+            [], //exclude
+            false, // filter
+            false, // tag as select
+            ['ask_for_revision'], //show only fields
+            [], // order fields
+            [] // extra data);
+        );
+    }
+
     $iframe = null;
     $myThread = Security::remove_XSS($myThread);
-    if ($forum_setting['show_thread_iframe_on_reply'] && $action != 'newthread' && !empty($myThread)) {
-        $iframe = "<iframe style=\"border: 1px solid black\" src=\"iframe_thread.php?".api_get_cidreq()."&forum=".intval($forumId)."&thread=".$myThread."#".Security::remove_XSS($my_post)."\" width=\"100%\"></iframe>";
+    if ($action != 'newthread' && !empty($myThread)) {
+        $iframe = "<iframe style=\"border: 1px solid black\" src=\"iframe_thread.php?".api_get_cidreq()."&forum=".$forumId."&thread=".$myThread."#".$my_post."\" width=\"100%\"></iframe>";
     }
     if (!empty($iframe)) {
         $form->addElement('label', get_lang('Thread'), $iframe);
@@ -3192,7 +3259,7 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
         Skill::addSkillsToForm($form, ITEM_TYPE_FORUM_THREAD, 0);
     }
 
-    if ($forum_setting['allow_sticky'] && api_is_allowed_to_edit(null, true) && $action == 'newthread') {
+    if (api_is_allowed_to_edit(null, true) && $action == 'newthread') {
         $form->addElement('checkbox', 'thread_sticky', '', get_lang('StickyPost'));
     }
 
@@ -3211,6 +3278,21 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
         $form->addFile('user_upload', get_lang('Attachment'));
     }
 
+    if ($giveRevision) {
+        $form->addHidden('give_revision', 1);
+        $extraField = new ExtraField('forum_post');
+        $returnParams = $extraField->addElements(
+            $form,
+            null,
+            [], //exclude
+            false, // filter
+            false, // tag as select
+            ['revision_language'], //show only fields
+            [], // order fields
+            [] // extra data
+        );
+    }
+
     // Setting the class and text of the form title and submit button.
     if ($action == 'quote') {
         $form->addButtonCreate(get_lang('QuoteMessage'), 'SubmitPost');
@@ -3222,22 +3304,21 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
         $form->addButtonCreate(get_lang('CreateThread'), 'SubmitPost');
     }
 
+    $defaults['thread_peer_qualify'] = 0;
     if (!empty($form_values)) {
         $defaults['post_title'] = prepare4display($form_values['post_title']);
         $defaults['post_text'] = prepare4display($form_values['post_text']);
         $defaults['post_notification'] = (int) $form_values['post_notification'];
         $defaults['thread_sticky'] = (int) $form_values['thread_sticky'];
         $defaults['thread_peer_qualify'] = (int) $form_values['thread_peer_qualify'];
-    } else {
-        $defaults['thread_peer_qualify'] = 0;
     }
 
     // If we are quoting a message we have to retrieve the information of the post we are quoting so that
     // we can add this as default to the textarea.
-    if (($action == 'quote' || $action == 'replymessage') && isset($my_post)) {
-        // We also need to put the parent_id of the post in a hidden form when
+    // We also need to put the parent_id of the post in a hidden form when
+    if (($action == 'quote' || $action == 'replymessage' || $giveRevision) && !empty($my_post)) {
         // we are quoting or replying to a message (<> reply to a thread !!!)
-        $form->addHidden('post_parent_id', intval($my_post));
+        $form->addHidden('post_parent_id', $my_post);
 
         // If we are replying or are quoting then we display a default title.
         $values = get_post_information($my_post);
@@ -3262,6 +3343,9 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
                 <div>&nbsp;</div>
             ';
         }
+        if ($giveRevision) {
+            $defaults['post_text'] = prepare4display($values['post_text']);
+        }
     }
 
     $form->setDefaults(isset($defaults) ? $defaults : []);
@@ -3280,7 +3364,7 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
     if ($form->validate()) {
         $check = Security::check_token('post');
         if ($check) {
-            $values = $form->exportValues();
+            $values = $form->getSubmitValues();
             if (isset($values['thread_qualify_gradebook']) &&
                 $values['thread_qualify_gradebook'] == '1' &&
                 empty($values['weight_calification'])
@@ -3296,25 +3380,66 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
                 return false;
             }
 
+            $postId = 0;
+            $threadId = 0;
+
             switch ($action) {
                 case 'newthread':
                     $myThread = store_thread($current_forum, $values);
-                    Skill::saveSkills($form, ITEM_TYPE_FORUM_THREAD, $myThread);
+                    if ($myThread) {
+                        $threadId = $myThread->getIid();
+                        Skill::saveSkills($form, ITEM_TYPE_FORUM_THREAD, $threadId);
+                        $postId = $myThread->getThreadLastPost();
+                    }
                     break;
                 case 'quote':
                 case 'replythread':
                 case 'replymessage':
-                    store_reply($current_forum, $values);
-
+                    $postId = store_reply($current_forum, $values);
                     break;
             }
 
+            if ($postId) {
+                $postInfo = get_post_information($postId);
+                if ($postInfo) {
+                    $threadId = $postInfo['thread_id'];
+                }
+
+                if (isset($values['give_revision']) && $values['give_revision'] == 1) {
+                    $extraFieldValues = new ExtraFieldValue('forum_post');
+                    $params = [
+                        'item_id' => $postId,
+                        'extra_revision_language' => $values['extra_revision_language'],
+                    ];
+                    $extraFieldValues->saveFieldValues(
+                        $params,
+                        false,
+                        false,
+                        ['revision_language']
+                    );
+                }
+
+                if (in_array($action, ['newthread', 'replythread', 'replymessage', 'quote'])) {
+                    $extraFieldValues = new ExtraFieldValue('forum_post');
+                    $params = [
+                        'item_id' => $postId,
+                        'extra_ask_for_revision' => isset($values['extra_ask_for_revision']) ? $values['extra_ask_for_revision'] : '',
+                    ];
+                    $extraFieldValues->saveFieldValues(
+                        $params,
+                        false,
+                        false,
+                        ['ask_for_revision']
+                    );
+                }
+            }
+
             $url = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&'.http_build_query(
-                    [
-                        'forum' => $forumId,
-                        'thread' => $myThread,
-                    ]
-                );
+                [
+                    'forum' => $forumId,
+                    'thread' => $threadId,
+                ]
+            );
 
             Security::clear_token();
             header('Location: '.$url);
@@ -3455,8 +3580,8 @@ function showQualify($option, $user_id, $thread_id)
     $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
 
     $course_id = api_get_course_int_id();
-    $user_id = intval($user_id);
-    $thread_id = intval($thread_id);
+    $user_id = (int) $user_id;
+    $thread_id = (int) $thread_id;
 
     if (empty($user_id) || empty($thread_id)) {
         return false;
@@ -3503,6 +3628,9 @@ function showQualify($option, $user_id, $thread_id)
  */
 function getThreadScoreHistory($user_id, $thread_id, $opt)
 {
+    $user_id = (int) $user_id;
+    $thread_id = (int) $thread_id;
+
     $table_threads_qualify_log = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY_LOG);
     $course_id = api_get_course_int_id();
 
@@ -3510,15 +3638,15 @@ function getThreadScoreHistory($user_id, $thread_id, $opt)
         $sql = "SELECT * FROM $table_threads_qualify_log
                 WHERE
                     c_id = $course_id AND
-                    thread_id='".Database::escape_string($thread_id)."' AND
-                    user_id='".Database::escape_string($user_id)."'
+                    thread_id='".$thread_id."' AND
+                    user_id='".$user_id."'
                 ORDER BY qualify_time";
     } else {
         $sql = "SELECT * FROM $table_threads_qualify_log
                 WHERE
                     c_id = $course_id AND
-                    thread_id='".Database::escape_string($thread_id)."' AND
-                    user_id='".Database::escape_string($user_id)."'
+                    thread_id='".$thread_id."' AND
+                    user_id='".$user_id."'
                 ORDER BY qualify_time DESC";
     }
     $rs = Database::query($sql);
@@ -3634,7 +3762,7 @@ function current_qualify_of_thread($threadId, $sessionId, $userId)
  * @param int   $courseId      Optional
  * @param int   $userId        Optional
  *
- * @return array
+ * @return int post id
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  *
@@ -3658,16 +3786,15 @@ function store_reply($current_forum, $values, $courseId = 0, $userId = 0)
         return false;
     }
 
+    $visible = 1;
     if ($current_forum['approval_direct_post'] == '1' &&
         !api_is_allowed_to_edit(null, true)
     ) {
         $visible = 0;
-    } else {
-        $visible = 1;
     }
 
     $upload_ok = 1;
-    $return = [];
+    $new_post_id = 0;
 
     if ($upload_ok) {
         // We first store an entry in the forum_post table.
@@ -3780,7 +3907,7 @@ function store_reply($current_forum, $values, $courseId = 0, $userId = 0)
         );
     }
 
-    return $return;
+    return $new_post_id;
 }
 
 /**
@@ -3796,7 +3923,6 @@ function store_reply($current_forum, $values, $courseId = 0, $userId = 0)
  * @version february 2006, dokeos 1.8
  */
 function show_edit_post_form(
-    $forum_setting,
     $current_post,
     $current_thread,
     $current_forum,
@@ -3839,6 +3965,9 @@ function show_edit_post_form(
     );
     $form->addRule('post_text', get_lang('ThisFieldIsRequired'), 'required');
 
+    $extraFields = new ExtraField('forum_post');
+    $extraFields->addElements($form, $current_post['post_id']);
+
     $form->addButtonAdvancedSettings('advanced_params');
     $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
@@ -3869,18 +3998,14 @@ function show_edit_post_form(
     }
 
     $defaults['status']['status'] = isset($current_post['status']) && !empty($current_post['status']) ? $current_post['status'] : 2;
+    $form->addElement(
+        'checkbox',
+        'post_notification',
+        '',
+        get_lang('NotifyByEmail').' ('.$current_post['email'].')'
+    );
 
-    if ($forum_setting['allow_post_notification']) {
-        $form->addElement(
-            'checkbox',
-            'post_notification',
-            '',
-            get_lang('NotifyByEmail').' ('.$current_post['email'].')'
-        );
-    }
-
-    if ($forum_setting['allow_sticky'] &&
-        api_is_allowed_to_edit(null, true) &&
+    if (api_is_allowed_to_edit(null, true) &&
         empty($current_post['post_parent_id'])
     ) {
         // The sticky checkbox only appears when it is the first post of a thread.
@@ -3927,6 +4052,11 @@ function show_edit_post_form(
     // Validation or display
     if ($form->validate()) {
         $values = $form->exportValues();
+
+        $values['item_id'] = $current_post['post_id'];
+        $extraFieldValues = new ExtraFieldValue('forum_post');
+        $extraFieldValues->saveFieldValues($values);
+
         store_edit_post($current_forum, $values);
     } else {
         // Delete from $_SESSION forum attachment from other posts
@@ -4289,26 +4419,22 @@ function send_notification_mails($forumId, $thread_id, $reply_info)
 
     $current_forum_category = null;
     if (isset($current_forum['forum_category'])) {
-        $current_forum_category = get_forumcategory_information(
-            $current_forum['forum_category']
-        );
+        $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
     }
 
+    $send_mails = false;
     if ($current_thread['visibility'] == '1' &&
         $current_forum['visibility'] == '1' &&
         ($current_forum_category && $current_forum_category['visibility'] == '1') &&
         $current_forum['approval_direct_post'] != '1'
     ) {
         $send_mails = true;
-    } else {
-        $send_mails = false;
     }
 
     // The forum category, the forum, the thread and the reply are visible to the user
-    if ($send_mails) {
-        if (!empty($forumId)) {
-            send_notifications($forumId, $thread_id);
-        }
+    if ($send_mails && !empty($forumId)) {
+        $postId = isset($reply_info['new_post_id']) ? $reply_info['new_post_id'] : 0;
+        send_notifications($forumId, $thread_id, $postId);
     } else {
         $table_notification = Database::get_course_table(TABLE_FORUM_NOTIFICATION);
         if (isset($current_forum['forum_id'])) {
@@ -4378,7 +4504,8 @@ function handle_mail_cue($content, $id)
 
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
-            send_mail($row, get_thread_information($post_info['forum_id'], $post_info['thread_id']));
+            $forumInfo = get_forum_information($post_info['forum_id']);
+            send_mail($row, $forumInfo, get_thread_information($post_info['forum_id'], $post_info['thread_id']), $post_info);
         }
     } elseif ($content == 'thread') {
         // Sending the mail to all the users that wanted to be informed for replies on this thread.
@@ -4390,12 +4517,13 @@ function handle_mail_cue($content, $id)
                     posts.thread_id = $id AND
                     posts.post_notification = '1' AND
                     mailcue.thread_id = $id AND
-                    users.user_id = posts.poster_id
+                    users.user_id = posts.poster_id AND
                     users.active = 1
                 GROUP BY users.email";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
-            send_mail($row, get_thread_information($row['forum_id'], $id));
+            $forumInfo = get_forum_information($row['forum_id']);
+            send_mail($row, $forumInfo, get_thread_information($row['forum_id'], $id));
         }
 
         // Deleting the relevant entries from the mailcue.
@@ -4426,28 +4554,58 @@ function handle_mail_cue($content, $id)
  *
  * @param array
  * @param array
+ * @param array
+ * @param array
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  *
  * @version february 2006, dokeos 1.8
  */
-function send_mail($user_info = [], $thread_information = [])
+function send_mail($userInfo, $forumInfo, $thread_information, $postInfo = [])
 {
+    if (empty($userInfo) || empty($forumInfo) || empty($thread_information)) {
+        return false;
+    }
+
     $_course = api_get_course_info();
     $user_id = api_get_user_id();
-    $subject = get_lang('NewForumPost').' - '.$_course['official_code'];
-    if (isset($thread_information) && is_array($thread_information)) {
-        $thread_link = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&forum='.$thread_information['forum_id'].'&thread='.$thread_information['thread_id'];
-    }
-    $email_body = get_lang('Dear').' '.api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS).", <br />\n\r";
-    $email_body .= get_lang('NewForumPost')."\n";
-    $email_body .= get_lang('Course').': '.$_course['name'].' - ['.$_course['official_code']."] - <br />\n";
-    $email_body .= get_lang('YouWantedToStayInformed')."<br />\n";
-    $email_body .= get_lang('ThreadCanBeFoundHere')." : <br /><a href=\"".$thread_link."\">".$thread_link."</a>\n";
 
-    if ($user_info['user_id'] != $user_id) {
+    $thread_link = '';
+    if (isset($thread_information) && is_array($thread_information)) {
+        $thread_link = api_get_path(WEB_CODE_PATH).
+            'forum/viewthread.php?'.api_get_cidreq().'&forum='.$thread_information['forum_id'].'&thread='.$thread_information['thread_id'];
+    }
+    $email_body = get_lang('Dear').' '.api_get_person_name($userInfo['firstname'], $userInfo['lastname'], null, PERSON_NAME_EMAIL_ADDRESS).", <br />\n\r";
+    $email_body .= get_lang('NewForumPost').': '.$forumInfo['forum_title'].' - '.$thread_information['thread_title']." <br />\n";
+
+    $courseId = api_get_configuration_value('global_forums_course_id');
+    $subject = get_lang('NewForumPost').' - '.$_course['official_code'].': '.$forumInfo['forum_title'].' - '.$thread_information['thread_title']." <br />\n";
+
+    $courseInfoTitle = get_lang('Course').': '.$_course['name'].' - ['.$_course['official_code']."] - <br />\n";
+    if (!empty($courseId) && $_course['real_id'] == $courseId) {
+        $subject = get_lang('NewForumPost').': '.$forumInfo['forum_title'].' - '.$thread_information['thread_title']." <br />\n";
+        $courseInfoTitle = " <br />\n";
+    }
+    $email_body .= $courseInfoTitle;
+
+    if (!empty($postInfo) && isset($postInfo['post_text'])) {
+        $text = cut(strip_tags($postInfo['post_text']), 100);
+        if (!empty($text)) {
+            $email_body .= get_lang('Message').": <br />\n ";
+            $email_body .= $text;
+            $email_body .= "<br /><br />\n";
+        }
+    }
+
+    $email_body .= get_lang('YouWantedToStayInformed')."<br />\n";
+
+    if (!empty($thread_link)) {
+        $email_body .= get_lang('ThreadCanBeFoundHere')." : <br /><a href=\"".$thread_link."\">".$thread_link."</a>\n";
+    }
+
+    if ($userInfo['user_id'] != $user_id) {
         MessageManager::send_message(
-            $user_info['user_id'],
+            $userInfo['user_id'],
             $subject,
             $email_body,
             [],
@@ -5008,16 +5166,16 @@ function add_forum_attachment_file($file_comment, $last_id)
     $_course = api_get_course_info();
     $agenda_forum_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
 
-    if (!isset($_FILES['user_upload'])) {
+    if (empty($_FILES['user_upload'])) {
         return false;
     }
 
-    $fileCount = count($_FILES['user_upload']['name']);
     $filesData = [];
 
     if (!is_array($_FILES['user_upload']['name'])) {
         $filesData[] = $_FILES['user_upload'];
     } else {
+        $fileCount = count($_FILES['user_upload']['name']);
         $fileKeys = array_keys($_FILES['user_upload']);
         for ($i = 0; $i < $fileCount; $i++) {
             foreach ($fileKeys as $key) {
@@ -5107,12 +5265,12 @@ function edit_forum_attachment_file($file_comment, $post_id, $id_attach)
     $table_forum_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
     $course_id = api_get_course_int_id();
 
-    $fileCount = count($_FILES['user_upload']['name']);
     $filesData = [];
 
     if (!is_array($_FILES['user_upload']['name'])) {
         $filesData[] = $_FILES['user_upload'];
     } else {
+        $fileCount = count($_FILES['user_upload']['name']);
         $fileKeys = array_keys($_FILES['user_upload']);
 
         for ($i = 0; $i < $fileCount; $i++) {
@@ -5249,9 +5407,8 @@ function getAllAttachment($postId)
 /**
  * Delete the all the attachments from the DB and the file according to the post's id or attach id(optional).
  *
- * @param int  $post_id
- * @param int  $id_attach
- * @param bool $display   to show or not result message
+ * @param int $post_id
+ * @param int $id_attach
  *
  * @return int
  *
@@ -5259,7 +5416,7 @@ function getAllAttachment($postId)
  *
  * @version october 2014, chamilo 1.9.8
  */
-function delete_attachment($post_id, $id_attach = 0, $display = true)
+function delete_attachment($post_id, $id_attach = 0)
 {
     $_course = api_get_course_info();
 
@@ -5299,9 +5456,8 @@ function delete_attachment($post_id, $id_attach = 0, $display = true)
         api_get_user_id()
     );
 
-    if (!empty($result) && !empty($id_attach) && $display) {
-        $message = get_lang('AttachmentFileDeleteSuccess');
-        echo Display::return_message($message, 'confirmation');
+    if (!empty($result) && !empty($id_attach)) {
+        Display::addFlash(Display::return_message(get_lang('AttachmentFileDeleteSuccess'), 'confirmation'));
     }
 
     return $affectedRows;
@@ -5493,7 +5649,7 @@ function set_notification($content, $id, $add_only = false)
                 VALUES (".$course_id.", '".Database::escape_string($id)."','".intval($_user['user_id'])."')";
         Database::query($sql);
         Session::erase('forum_notification');
-        get_notifications_of_user(0, true);
+        getNotificationsPerUser(0, true);
 
         return get_lang('YouWillBeNotifiedOfNewPosts');
     } else {
@@ -5505,7 +5661,7 @@ function set_notification($content, $id, $add_only = false)
                         user_id = '".intval($_user['user_id'])."'";
             Database::query($sql);
             Session::erase('forum_notification');
-            get_notifications_of_user(0, true);
+            getNotificationsPerUser(0, true);
 
             return get_lang('YouWillNoLongerBeNotifiedOfNewPosts');
         }
@@ -5576,11 +5732,19 @@ function get_notifications($content, $id)
  */
 function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
 {
-    $_course = api_get_course_info();
+    //$_course = api_get_course_info();
+
+    /*$forumCourseId = api_get_configuration_value('global_forums_course_id');
+    if (!empty($forumCourseId)) {
+        if ($_course['real_id'] == $forumCourseId) {
+            return false;
+        }
+    }*/
+
     $forum_id = (int) $forum_id;
 
     // The content of the mail
-    $thread_link = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&forum='.$forum_id.'&thread='.$thread_id;
+    //$thread_link = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&forum='.$forum_id.'&thread='.$thread_id;
 
     // Users who subscribed to the forum
     if ($forum_id != 0) {
@@ -5590,33 +5754,27 @@ function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
     }
 
     $current_thread = get_thread_information($forum_id, $thread_id);
-    $current_forum = get_forum_information($current_thread['forum_id']);
-    $subject = get_lang('NewForumPost').' - '.$_course['official_code'].' - '.$current_forum['forum_title'].' - '.$current_thread['thread_title'];
+    //$current_forum = get_forum_information($current_thread['forum_id']);
+    //$subject = get_lang('NewForumPost').' - '.$_course['official_code'].' - '.$current_forum['forum_title'].' - '.$current_thread['thread_title'];
 
     // User who subscribed to the thread
     if ($thread_id != 0) {
         $users_to_be_notified_by_thread = get_notifications('thread', $thread_id);
     }
 
+    $postInfo = [];
+    if (!empty($post_id)) {
+        $postInfo = get_post_information($post_id);
+    }
+
     // Merging the two
     $users_to_be_notified = array_merge($users_to_be_notified_by_forum, $users_to_be_notified_by_thread);
-    $sender_id = api_get_user_id();
+    $forumInfo = get_forum_information($forum_id);
 
     if (is_array($users_to_be_notified)) {
         foreach ($users_to_be_notified as $value) {
-            $user_info = api_get_user_info($value['user_id']);
-            $email_body = get_lang('Dear').' '.api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS).", <br />\n\r";
-            $email_body .= get_lang('NewForumPost').": ".$current_forum['forum_title'].' - '.$current_thread['thread_title']." <br />\n";
-            $email_body .= get_lang('Course').': '.$_course['name'].' - ['.$_course['official_code']."]  <br />\n";
-            $email_body .= get_lang('YouWantedToStayInformed')."<br />\n";
-            $email_body .= get_lang('ThreadCanBeFoundHere').': <br /> <a href="'.$thread_link.'">'.$thread_link."</a>\n";
-
-            MessageManager::send_message_simple(
-                $value['user_id'],
-                $subject,
-                $email_body,
-                $sender_id
-            );
+            $userInfo = api_get_user_info($value['user_id']);
+            send_mail($userInfo, $forumInfo, $current_thread, $postInfo);
         }
     }
 }
@@ -5637,11 +5795,11 @@ function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
  *
  * @since May 2008, dokeos 1.8.5
  */
-function get_notifications_of_user($user_id = 0, $force = false)
+function getNotificationsPerUser($user_id = 0, $force = false, $course_id = 0)
 {
     // Database table definition
     $table_notification = Database::get_course_table(TABLE_FORUM_NOTIFICATION);
-    $course_id = api_get_course_int_id();
+    $course_id = empty($course_id) ? api_get_course_int_id() : (int) $course_id;
     if (empty($course_id) || $course_id == -1) {
         return null;
     }
@@ -5657,6 +5815,7 @@ function get_notifications_of_user($user_id = 0, $force = false)
 
         $sql = "SELECT * FROM $table_notification
                 WHERE c_id = $course_id AND user_id='".intval($user_id)."'";
+
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             if (!is_null($row['forum_id'])) {
@@ -6287,7 +6446,7 @@ function clearAttachedFiles($postId = null, $courseId = null)
                     $array[] = $attachId;
                     if ($postId !== 0) {
                         // Post 0 is temporal, delete them from file system and DB
-                        delete_attachment(0, $attachId, false);
+                        delete_attachment(0, $attachId);
                     }
                     // Delete attachment data from $_SESSION
                     unset($_SESSION['forum']['upload_file'][$courseId][$attachId]);
@@ -6512,4 +6671,272 @@ function postIsEditableByStudent($forum, $post)
     } else {
         return true;
     }
+}
+
+/**
+ * @param int $postId
+ *
+ * @return bool
+ */
+function savePostRevision($postId)
+{
+    $postData = get_post_information($postId);
+
+    if (empty($postData)) {
+        return false;
+    }
+
+    $userId = api_get_user_id();
+
+    if ($postData['poster_id'] != $userId) {
+        return false;
+    }
+
+    $status = (int) !postNeedsRevision($postId);
+    $extraFieldValue = new ExtraFieldValue('forum_post');
+    $params = [
+        'item_id' => $postId,
+        'extra_ask_for_revision' => ['extra_ask_for_revision' => $status],
+    ];
+    if (empty($status)) {
+        unset($params['extra_ask_for_revision']);
+    }
+    $extraFieldValue->saveFieldValues(
+        $params,
+        true,
+        false,
+        ['ask_for_revision']
+    );
+}
+
+/**
+ * @param int $postId
+ *
+ * @return string
+ */
+function getPostRevision($postId)
+{
+    $extraFieldValue = new ExtraFieldValue('forum_post');
+    $value = $extraFieldValue->get_values_by_handler_and_field_variable(
+        $postId,
+        'revision_language'
+    );
+    $revision = '';
+    if ($value && isset($value['value'])) {
+        $revision = $value['value'];
+    }
+
+    return $revision;
+}
+
+/**
+ * @param int $postId
+ *
+ * @return bool
+ */
+function postNeedsRevision($postId)
+{
+    $extraFieldValue = new ExtraFieldValue('forum_post');
+    $value = $extraFieldValue->get_values_by_handler_and_field_variable(
+        $postId,
+        'ask_for_revision'
+    );
+    $hasRevision = false;
+    if ($value && isset($value['value'])) {
+        return $value['value'] == 1;
+    }
+
+    return $hasRevision;
+}
+
+/**
+ * @param int   $postId
+ * @param array $threadInfo
+ *
+ * @return string
+ */
+function getAskRevisionButton($postId, $threadInfo)
+{
+    if (api_get_configuration_value('allow_forum_post_revisions') === false) {
+        return '';
+    }
+
+    $postId = (int) $postId;
+
+    $status = 'btn-default';
+    if (postNeedsRevision($postId)) {
+        $status = 'btn-success';
+    }
+
+    return Display::url(
+        get_lang('AskRevision'),
+        api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.
+        api_get_cidreq().'&action=ask_revision&post_id='.$postId.'&forum='.$threadInfo['forum_id'].'&thread='.$threadInfo['thread_id'],
+        ['class' => "btn $status", 'title' => get_lang('AskRevision')]
+    );
+}
+
+/**
+ * @param int   $postId
+ * @param array $threadInfo
+ *
+ * @return string
+ */
+function giveRevisionButton($postId, $threadInfo)
+{
+    $postId = (int) $postId;
+
+    return Display::toolbarButton(
+        get_lang('GiveRevision'),
+        api_get_path(WEB_CODE_PATH).'forum/reply.php?'.api_get_cidreq().'&'.http_build_query(
+            [
+                'forum' => $threadInfo['forum_id'],
+                'thread' => $threadInfo['thread_id'],
+                'post' => $postId = (int) $postId,
+                'action' => 'replymessage',
+                'give_revision' => 1,
+            ]
+        ),
+        'reply',
+        'primary',
+        ['id' => "reply-to-post-{$postId}"]
+    );
+}
+
+/**
+ * @param int   $postId
+ * @param array $threadInfo
+ *
+ * @return string
+ */
+function getReportButton($postId, $threadInfo)
+{
+    $postId = (int) $postId;
+
+    return Display::url(
+        Display::returnFontAwesomeIcon('flag'),
+        api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.
+        api_get_cidreq().'&action=report&post_id='.$postId.'&forum='.$threadInfo['forum_id'].'&thread='.$threadInfo['thread_id'],
+        ['class' => 'btn btn-danger', 'title' => get_lang('Report')]
+    );
+}
+
+/**
+ * @return bool
+ */
+function reportAvailable()
+{
+    $extraFieldValue = new ExtraFieldValue('course');
+    $value = $extraFieldValue->get_values_by_handler_and_field_variable(
+        api_get_course_int_id(),
+        'allow_forum_report_button'
+    );
+    $allowReport = false;
+    if ($value && isset($value['value']) && $value['value'] == 1) {
+        $allowReport = true;
+    }
+
+    return $allowReport;
+}
+
+/**
+ * @return array
+ */
+function getReportRecipients()
+{
+    $extraFieldValue = new ExtraFieldValue('course');
+    $value = $extraFieldValue->get_values_by_handler_and_field_variable(
+        api_get_course_int_id(),
+        'forum_report_recipients'
+    );
+    $users = [];
+    if ($value && isset($value['value'])) {
+        $usersType = explode(';', $value['value']);
+
+        foreach ($usersType as $type) {
+            switch ($type) {
+                case 'teachers':
+                    $teachers = CourseManager::get_teacher_list_from_course_code(api_get_course_id());
+                    if (!empty($teachers)) {
+                        $users = array_merge($users, array_column($teachers, 'user_id'));
+                    }
+                break;
+                case 'admins':
+                    $admins = UserManager::get_all_administrators();
+                    if (!empty($admins)) {
+                        $users = array_merge($users, array_column($admins, 'user_id'));
+                    }
+                    break;
+                case 'community_managers':
+                    $managers = api_get_configuration_value('community_managers_user_list');
+                    if (!empty($managers) && isset($managers['users'])) {
+                        $users = array_merge($users, $managers['users']);
+                    }
+                    break;
+            }
+        }
+
+        $users = array_unique(array_filter($users));
+    }
+
+    return $users;
+}
+
+/**
+ * @param int   $postId
+ * @param array $forumInfo
+ * @param array $threadInfo
+ *
+ * @return bool
+ */
+function reportPost($postId, $forumInfo, $threadInfo)
+{
+    if (!reportAvailable()) {
+        return false;
+    }
+
+    if (empty($forumInfo) || empty($threadInfo)) {
+        return false;
+    }
+
+    $postId = (int) $postId;
+
+    $postData = get_post_information($postId);
+    $currentUser = api_get_user_info();
+
+    if (!empty($postData)) {
+        $users = getReportRecipients();
+        if (!empty($users)) {
+            $url = api_get_path(WEB_CODE_PATH).
+                'forum/viewthread.php?forum='.$threadInfo['forum_id'].'&thread='.$threadInfo['thread_id'].'&'.api_get_cidreq().'&post_id='.$postId.'#post_id_'.$postId;
+            $postLink = Display::url(
+                $postData['post_title'],
+                $url
+            );
+            $subject = get_lang('ForumPostReported');
+            $content = sprintf(
+                get_lang('UserXReportedPostXInForumX'),
+                $currentUser['complete_name'],
+                $postLink,
+                $forumInfo['forum_title']
+            );
+            foreach ($users as $userId) {
+                MessageManager::send_message_simple($userId, $subject, $content);
+            }
+        }
+    }
+}
+
+/**
+ * @return array
+ */
+function getLanguageListForFlag()
+{
+    $languages = api_get_languages();
+    $languages = array_column($languages['all'], 'english_name', 'isocode');
+    unset($languages['en']);
+    $languages['gb'] = 'english';
+    $languages = array_flip($languages);
+
+    return $languages;
 }

@@ -36,12 +36,12 @@ if (!api_is_allowed_to_edit()) {
         !api_is_element_in_the_session(TOOL_SURVEY, $_GET['survey_id']))
     ) {
         api_not_allowed(true);
-        exit;
     }
 }
 
 // Getting the survey information
 $survey_id = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : null;
+$action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
 $survey_data = SurveyManager::get_survey($survey_id);
 
 // Additional information
@@ -51,14 +51,14 @@ $gradebook_link_type = 8;
 $urlname = isset($survey_data['title']) ? strip_tags($survey_data['title']) : null;
 
 // Breadcrumbs
-if ($_GET['action'] == 'add') {
+if ($action == 'add') {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
         'name' => get_lang('SurveyList'),
     ];
     $tool_name = get_lang('CreateNewSurvey');
 }
-if ($_GET['action'] == 'edit' && is_numeric($survey_id)) {
+if ($action == 'edit' && is_numeric($survey_id)) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
         'name' => get_lang('SurveyList'),
@@ -71,7 +71,7 @@ if ($_GET['action'] == 'edit' && is_numeric($survey_id)) {
 }
 $gradebook_link_id = null;
 // Getting the default values
-if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
+if ($action == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
     $defaults = $survey_data;
     $defaults['survey_id'] = $survey_id;
     $defaults['anonymous'] = $survey_data['anonymous'];
@@ -113,8 +113,6 @@ if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
         $allowSurveyAvailabilityDatetime ? 'Y-m-d 23:59:59' : 'Y-m-d',
         $startdateandxdays
     );
-    //$defaults['survey_share']['survey_share'] = 0;
-    //$form_share_value = 1;
     $defaults['anonymous'] = 0;
 }
 
@@ -122,13 +120,13 @@ if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
 $form = new FormValidator(
     'survey',
     'post',
-    api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.$survey_id.'&'.api_get_cidreq()
+    api_get_self().'?action='.$action.'&survey_id='.$survey_id.'&'.api_get_cidreq()
 );
 
 $form->addElement('header', $tool_name);
 
 // Setting the form elements
-if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
+if ($action == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
     $form->addElement('hidden', 'survey_id');
 }
 
@@ -139,7 +137,7 @@ $survey_code = $form->addElement(
     ['size' => '20', 'maxlength' => '20', 'autofocus' => 'autofocus']
 );
 
-if ($_GET['action'] == 'edit') {
+if ($action == 'edit') {
     $survey_code->freeze();
     $form->applyFilter('survey_code', 'api_strtoupper');
 }
@@ -167,13 +165,22 @@ $form->addElement(
 // Pass the language of the survey in the form
 $form->addElement('hidden', 'survey_language');
 
+$allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
+
 if ($allowSurveyAvailabilityDatetime) {
-    $form->addDateTimePicker('start_date', get_lang('StartDate'));
-    $form->addDateTimePicker('end_date', get_lang('EndDate'));
+    $startDateElement = $form->addDateTimePicker('start_date', get_lang('StartDate'));
+    $endDateElement = $form->addDateTimePicker('end_date', get_lang('EndDate'));
+    $form->addRule('start_date', get_lang('InvalidDate'), 'datetime');
+    $form->addRule('end_date', get_lang('InvalidDate'), 'datetime');
 } else {
-    $form->addElement('date_picker', 'start_date', get_lang('StartDate'));
-    $form->addElement('date_picker', 'end_date', get_lang('EndDate'));
+    $startDateElement = $form->addElement('date_picker', 'start_date', get_lang('StartDate'));
+    $endDateElement = $form->addElement('date_picker', 'end_date', get_lang('EndDate'));
+    $form->addRule('start_date', get_lang('InvalidDate'), 'date');
+    $form->addRule('end_date', get_lang('InvalidDate'), 'date');
 }
+
+$form->setRequired($startDateElement);
+$form->setRequired($endDateElement);
 
 $form->addElement('checkbox', 'anonymous', null, get_lang('Anonymous'));
 $visibleResults = [
@@ -234,7 +241,7 @@ if (Gradebook::is_active()) {
     // Loading Gradebook select
     GradebookUtils::load_gradebook_select_in_tool($form);
 
-    if ($_GET['action'] == 'edit') {
+    if ($action == 'edit') {
         $element = $form->getElement('category_id');
         $element->freeze();
     }
@@ -245,7 +252,7 @@ if (Gradebook::is_active()) {
 $surveytypes[0] = get_lang('Normal');
 $surveytypes[1] = get_lang('Conditional');
 
-if ($_GET['action'] == 'add') {
+if ($action == 'add') {
     $form->addElement('hidden', 'survey_type', 0);
     $survey_tree = new SurveyTree();
     $list_surveys = $survey_tree->createList($survey_tree->surveylist);
@@ -259,7 +266,7 @@ $form->addElement('checkbox', 'shuffle', null, get_lang('ActivateShuffle'));
 
 $input_name_list = null;
 
-if (isset($_GET['action']) && $_GET['action'] == 'edit' && !empty($survey_id)) {
+if ($action == 'edit' && !empty($survey_id)) {
     if ($survey_data['anonymous'] == 0) {
         $form->addElement(
             'checkbox',
@@ -308,14 +315,14 @@ $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_SURVEY, $survey_id);
 
 $form->addElement('html', '</div><br />');
 
-if (isset($_GET['survey_id']) && $_GET['action'] == 'edit') {
+if (isset($_GET['survey_id']) && $action == 'edit') {
     $form->addButtonUpdate(get_lang('ModifySurvey'), 'submit_survey');
 } else {
     $form->addButtonCreate(get_lang('CreateSurvey'), 'submit_survey');
 }
 
 // Setting the rules
-if ($_GET['action'] == 'add') {
+if ($action == 'add') {
     $form->addRule('survey_code', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('survey_code', '', 'maxlength', 20);
 }

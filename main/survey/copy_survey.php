@@ -34,7 +34,7 @@ if (empty($survey)) {
     api_not_allowed(true);
 }
 
-$surveyTitle = str_replace("&nbsp;", '', strip_tags($survey['title'].' ('.$survey['code'].') '));
+$surveyTitle = str_replace('&nbsp;', '', strip_tags($survey['title'].' ('.$survey['code'].') '));
 
 $form = new FormValidator('copy_survey', 'post', api_get_self().'?survey_id='.$surveyId.'&'.api_get_cidreq());
 $form->addElement(

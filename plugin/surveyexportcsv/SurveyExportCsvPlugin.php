@@ -43,7 +43,7 @@ class SurveyExportCsvPlugin extends Plugin
     }
 
     /**
-     * @param $id
+     * @param array $params
      *
      * @return string
      */

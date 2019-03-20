@@ -2591,13 +2591,16 @@ class CourseRestorer
             foreach ($resources[RESOURCE_LEARNPATH_CATEGORY] as $id => $item) {
                 /** @var CLpCategory $lpCategory */
                 $lpCategory = $item->object;
-                $values = [
-                    'c_id' => $this->destination_course_id,
-                    'name' => $lpCategory->getName(),
-                ];
-                $categoryId = \learnpath::createCategory($values);
-                if ($categoryId) {
-                    $this->course->resources[RESOURCE_LEARNPATH_CATEGORY][$id]->destination_id = $categoryId;
+
+                if ($lpCategory) {
+                    $values = [
+                        'c_id' => $this->destination_course_id,
+                        'name' => $lpCategory->getName(),
+                    ];
+                    $categoryId = \learnpath::createCategory($values);
+                    if ($categoryId) {
+                        $this->course->resources[RESOURCE_LEARNPATH_CATEGORY][$id]->destination_id = $categoryId;
+                    }
                 }
             }
         }

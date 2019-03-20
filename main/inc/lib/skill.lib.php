@@ -597,25 +597,29 @@ class SkillRelUser extends Model
      *
      * @param int $userId    The user id
      * @param int $skillId   The skill id
-     * @param int $courseId  The course id
+     * @param int $courseId  Optional. The course id
      * @param int $sessionId Optional. The session id
      *
      * @return array The relation data. Otherwise return false
      */
-    public function getByUserAndSkill($userId, $skillId, $courseId, $sessionId = 0)
+    public function getByUserAndSkill($userId, $skillId, $courseId = 0, $sessionId = 0)
     {
-        $where = [
-            'user_id = ? AND skill_id = ? AND course_id = ? AND session_id = ?' => [
-                intval($userId),
-                intval($skillId),
-                intval($courseId),
-                $sessionId ? intval($sessionId) : null,
-            ],
-        ];
+        $sql = "SELECT * FROM {$this->table} WHERE user_id = %d AND skill_id = %d ";
 
-        return Database::select('*', $this->table, [
-            'where' => $where,
-        ], 'first');
+        if ($courseId > 0) {
+            $sql .= "AND course_id = %d ".api_get_session_condition($sessionId, true);
+        }
+
+        $sql = sprintf(
+            $sql,
+            $userId,
+            $skillId,
+            $courseId
+        );
+
+        $result = Database::query($sql);
+
+        return Database::fetch_assoc($result);
     }
 
     /**
@@ -1300,7 +1304,7 @@ class Skill extends Model
             foreach ($skills as $skill) {
                 if ($getSkillData) {
                     $skillData = $this->get($skill['id']);
-                    $skillData['url'] = api_get_path(WEB_PATH).'badge/'.$skill['issue'].'/user/'.$userId;
+                    $skillData['url'] = api_get_path(WEB_PATH).'badge/'.$skill['id'].'/user/'.$userId;
                     $skillList[$skill['id']] = array_merge($skill, $skillData);
                 } else {
                     $skillList[$skill['id']] = $skill['id'];

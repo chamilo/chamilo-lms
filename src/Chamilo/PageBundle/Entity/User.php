@@ -2282,7 +2282,7 @@ class User extends BaseUser
      */
     public function unserialize($serialized)
     {
-        $data = unserialize($serialized);
+        $data = \UnserializeApi::unserialize('not_allowed_classes', $serialized);
         // add a few extra elements in the array to ensure that we have enough keys when unserializing
         // older data which does not include all properties.
         $data = array_merge($data, array_fill(0, 2, null));

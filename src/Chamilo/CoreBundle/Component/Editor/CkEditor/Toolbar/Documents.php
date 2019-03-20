@@ -78,6 +78,7 @@ class Documents extends Basic
                 'NumberedList',
                 'BulletedList',
                 '-',
+                api_get_configuration_value('translate_html') ? 'Language' : '',
                 api_get_setting('allow_spellcheck') === 'true' ? 'Scayt' : '',
             ],
             '/',
@@ -123,6 +124,7 @@ class Documents extends Basic
                 'BGColor',
             ],
             [
+                api_get_configuration_value('translate_html') ? 'Language' : '',
                 'ShowBlocks',
                 'Source',
             ],

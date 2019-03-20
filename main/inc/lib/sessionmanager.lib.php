@@ -1954,15 +1954,9 @@ class SessionManager
                     false
                 );
                 // Variables for default template
-                $tplContent->assign(
-                    'complete_name',
-                    stripslashes($user_info['complete_name'])
-                );
+                $tplContent->assign('complete_name', stripslashes($user_info['complete_name']));
                 $tplContent->assign('session_name', $session->getName());
-                $tplContent->assign(
-                    'session_coach',
-                    $session->getGeneralCoach()->getCompleteName()
-                );
+                $tplContent->assign('session_coach', $session->getGeneralCoach()->getCompleteName());
                 $layoutContent = $tplContent->get_template(
                     'mail/content_subscription_to_session_confirmation.tpl'
                 );
@@ -2005,27 +1999,7 @@ class SessionManager
                 if ($empty_users) {
                     foreach ($existingUsers as $existing_user) {
                         if (!in_array($existing_user, $userList)) {
-                            $sql = "DELETE FROM $tbl_session_rel_course_rel_user
-                                    WHERE
-                                        session_id = $sessionId AND
-                                        c_id = $courseId AND
-                                        user_id = $existing_user AND
-                                        status = 0 ";
-                            $result = Database::query($sql);
-
-                            Event::addEvent(
-                                LOG_SESSION_DELETE_USER_COURSE,
-                                LOG_USER_ID,
-                                $existing_user,
-                                api_get_utc_datetime(),
-                                api_get_user_id(),
-                                $courseId,
-                                $sessionId
-                            );
-
-                            if (Database::affected_rows($result)) {
-                                $nbr_users--;
-                            }
+                            self::unSubscribeUserFromCourseSession($existing_user, $courseId, $sessionId);
                         }
                     }
                 }
@@ -2245,7 +2219,7 @@ class SessionManager
     ) {
         $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tableSessionCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-        $sessionId = intval($sessionId);
+        $sessionId = (int) $sessionId;
 
         if (empty($sessionId) || empty($userList) || empty($courseInfo)) {
             return false;
@@ -2255,12 +2229,12 @@ class SessionManager
 
         $statusCondition = null;
         if (isset($status) && !is_null($status)) {
-            $status = intval($status);
+            $status = (int) $status;
             $statusCondition = " AND status = $status";
         }
 
         foreach ($userList as $userId) {
-            $userId = intval($userId);
+            $userId = (int) $userId;
             $sql = "DELETE FROM $table
                     WHERE
                         session_id = $sessionId AND
@@ -2269,6 +2243,16 @@ class SessionManager
                         $statusCondition
                     ";
             Database::query($sql);
+
+            Event::addEvent(
+                LOG_SESSION_DELETE_USER_COURSE,
+                LOG_USER_ID,
+                $userId,
+                api_get_utc_datetime(),
+                api_get_user_id(),
+                $courseId,
+                $sessionId
+            );
         }
 
         if ($updateTotal) {
@@ -2422,8 +2406,6 @@ class SessionManager
         $session_id = (int) $session_id;
         $user_id = (int) $user_id;
 
-        $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
@@ -2431,7 +2413,7 @@ class SessionManager
                 WHERE
                     session_id = $session_id AND
                     user_id = $user_id AND
-                    relation_type <> ".SESSION_RELATION_TYPE_RRHH."";
+                    relation_type <> ".SESSION_RELATION_TYPE_RRHH;
         $result = Database::query($sql);
         $return = Database::affected_rows($result);
 
@@ -2441,37 +2423,63 @@ class SessionManager
                 WHERE id = $session_id ";
         Database::query($sql);
 
+        Event::addEvent(
+            LOG_SESSION_DELETE_USER,
+            LOG_USER_ID,
+            $user_id,
+            api_get_utc_datetime(),
+            api_get_user_id(),
+            null,
+            $session_id
+        );
+
         // Get the list of courses related to this session
         $course_list = self::get_course_list_by_session_id($session_id);
         if (!empty($course_list)) {
             foreach ($course_list as $course) {
-                $courseId = $course['id'];
-                // Delete user from course
-                $sql = "DELETE FROM $tbl_session_rel_course_rel_user
-                        WHERE session_id = $session_id AND c_id = $courseId AND user_id = $user_id";
-                $result = Database::query($sql);
-
-                Event::addEvent(
-                    LOG_SESSION_DELETE_USER_COURSE,
-                    LOG_USER_ID,
-                    $user_id,
-                    api_get_utc_datetime(),
-                    api_get_user_id(),
-                    $courseId,
-                    $session_id
-                );
-
-                if (Database::affected_rows($result)) {
-                    // Update number of users in this relation
-                    $sql = "UPDATE $tbl_session_rel_course SET 
-                            nbr_users = nbr_users - 1
-                            WHERE session_id = $session_id AND c_id = $courseId";
-                    Database::query($sql);
-                }
+                self::unSubscribeUserFromCourseSession($user_id, $course['id'], $session_id);
             }
         }
 
         return true;
+    }
+
+    /**
+     * @param int $user_id
+     * @param int $courseId
+     * @param int $session_id
+     */
+    public static function unSubscribeUserFromCourseSession($user_id, $courseId, $session_id)
+    {
+        $user_id = (int) $user_id;
+        $courseId = (int) $courseId;
+        $session_id = (int) $session_id;
+
+        $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+
+        // Delete user from course
+        $sql = "DELETE FROM $tbl_session_rel_course_rel_user
+                WHERE session_id = $session_id AND c_id = $courseId AND user_id = $user_id";
+        $result = Database::query($sql);
+
+        if (Database::affected_rows($result)) {
+            // Update number of users in this relation
+            $sql = "UPDATE $tbl_session_rel_course SET 
+                    nbr_users = nbr_users - 1
+                    WHERE session_id = $session_id AND c_id = $courseId";
+            Database::query($sql);
+        }
+
+        Event::addEvent(
+            LOG_SESSION_DELETE_USER_COURSE,
+            LOG_USER_ID,
+            $user_id,
+            api_get_utc_datetime(),
+            api_get_user_id(),
+            $courseId,
+            $session_id
+        );
     }
 
     /**
@@ -9169,6 +9177,60 @@ SQL;
     }
 
     /**
+     * Converts "start date" and "end date" to "From start date to end date" string.
+     *
+     * @param string $startDate
+     * @param string $endDate
+     * @param bool   $showTime
+     * @param bool   $dateHuman
+     *
+     * @return string
+     */
+    public static function convertSessionDateToString($startDate, $endDate, $showTime, $dateHuman)
+    {
+        // api_get_local_time returns empty if date is invalid like 0000-00-00 00:00:00
+        $startDateToLocal = api_get_local_time(
+            $startDate,
+            null,
+            null,
+            true,
+            $showTime,
+            $dateHuman
+        );
+        $endDateToLocal = api_get_local_time(
+            $endDate,
+            null,
+            null,
+            true,
+            $showTime,
+            $dateHuman
+        );
+
+        $format = $showTime ? DATE_TIME_FORMAT_LONG_24H : DATE_FORMAT_LONG_NO_DAY;
+
+        $result = '';
+        if (!empty($startDateToLocal) && !empty($endDateToLocal)) {
+            $result = sprintf(
+                get_lang('FromDateXToDateY'),
+                api_format_date($startDateToLocal, $format),
+                api_format_date($endDateToLocal, $format)
+            );
+        } else {
+            if (!empty($startDateToLocal)) {
+                $result = get_lang('From').' '.api_format_date($startDateToLocal, $format);
+            }
+            if (!empty($endDateToLocal)) {
+                $result = get_lang('Until').' '.api_format_date($endDateToLocal, $format);
+            }
+        }
+        if (empty($result)) {
+            $result = get_lang('NoTimeLimits');
+        }
+
+        return $result;
+    }
+
+    /**
      * @param int $id
      *
      * @return bool
@@ -9232,58 +9294,6 @@ SQL;
                 $deleteClassSessions
             );
         }
-    }
-
-    /**
-     * Converts "start date" and "end date" to "From start date to end date" string.
-     *
-     * @param string $startDate
-     * @param string $endDate
-     * @param bool   $showTime
-     * @param bool   $dateHuman
-     *
-     * @return string
-     */
-    private static function convertSessionDateToString($startDate, $endDate, $showTime, $dateHuman)
-    {
-        // api_get_local_time returns empty if date is invalid like 0000-00-00 00:00:00
-        $startDateToLocal = api_get_local_time(
-            $startDate,
-            null,
-            null,
-            true,
-            $showTime,
-            $dateHuman
-        );
-        $endDateToLocal = api_get_local_time(
-            $endDate,
-            null,
-            null,
-            true,
-            $showTime,
-            $dateHuman
-        );
-
-        $result = '';
-        if (!empty($startDateToLocal) && !empty($endDateToLocal)) {
-            $result = sprintf(
-                get_lang('FromDateXToDateY'),
-                api_format_date($startDateToLocal, DATE_TIME_FORMAT_LONG_24H),
-                api_format_date($endDateToLocal, DATE_TIME_FORMAT_LONG_24H)
-            );
-        } else {
-            if (!empty($startDateToLocal)) {
-                $result = get_lang('From').' '.api_format_date($startDateToLocal, DATE_TIME_FORMAT_LONG_24H);
-            }
-            if (!empty($endDateToLocal)) {
-                $result = get_lang('Until').' '.api_format_date($endDateToLocal, DATE_TIME_FORMAT_LONG_24H);
-            }
-        }
-        if (empty($result)) {
-            $result = get_lang('NoTimeLimits');
-        }
-
-        return $result;
     }
 
     /**

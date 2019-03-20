@@ -291,6 +291,7 @@ class Matching extends Question
             $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
             $header .= '<th>'.get_lang('Status').'</th>';
         } else {
+            $header .= '<th>'.get_lang('YourChoice').'</th>';
             $header .= '<th>'.get_lang('CorrespondsTo').'</th>';
         }
         $header .= '</tr>';

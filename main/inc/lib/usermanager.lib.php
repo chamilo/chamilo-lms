@@ -2663,14 +2663,12 @@ class UserManager
         $splitMultiple = false,
         $fieldFilter = null
     ) {
-        // A sanity check.
+        $user_id = (int) $user_id;
+
         if (empty($user_id)) {
-            $user_id = 0;
-        } else {
-            if ($user_id != strval(intval($user_id))) {
-                return [];
-            }
+            return [];
         }
+
         $extra_data = [];
         $t_uf = Database::get_main_table(TABLE_EXTRA_FIELD);
         $t_ufv = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
@@ -2695,7 +2693,7 @@ class UserManager
             }
         }
 
-        $sql .= " ORDER BY f.field_order";
+        $sql .= ' ORDER BY f.field_order';
 
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {

@@ -717,7 +717,7 @@ class DocumentManager
     ) {
         $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-        $groupIid = intval($groupIid);
+        $groupIid = (int) $groupIid;
         $document_folders = [];
 
         $students = CourseManager::get_user_list_from_course_code(
@@ -734,7 +734,7 @@ class DocumentManager
 
         $groupCondition = " last.to_group_id = $groupIid";
         if (empty($groupIid)) {
-            $groupCondition = " (last.to_group_id = 0 OR last.to_group_id IS NULL)";
+            $groupCondition = ' (last.to_group_id = 0 OR last.to_group_id IS NULL)';
         }
 
         $show_users_condition = '';
@@ -821,7 +821,7 @@ class DocumentManager
             $condition_session = api_get_session_condition(
                 $session_id,
                 true,
-                false,
+                true, // needed to don't show files in elfinder browser
                 'docs.session_id'
             );
 
@@ -3212,19 +3212,21 @@ class DocumentManager
      *
      * @return string
      */
-    public static function generateVideoPreview($file, $extension)
+    public static function generateMediaPreview($file, $extension)
     {
-        $type = '';
-        /*if ($extension != 'flv') {
-
-        }*/
-        //$type = "video/$extension";
-        //$fileInfo = parse_url($file);
-        //$type = self::file_get_mime_type(basename($fileInfo['path']));
-
-        $html = '<video id="myvideo" controls>';
-        $html .= '<source src="'.$file.'" >';
-        $html .= '</video>';
+        $id = api_get_unique_id();
+        switch ($extension) {
+            case 'mp3':
+                $document_data['file_extension'] = $extension;
+                $html = '<div style="margin: 0; position: absolute; top: 50%; left: 35%;">';
+                $html .= '<audio id="'.$id.'" controls="controls" src="'.$file.'" type="audio/mp3" ></audio></div>';
+                break;
+            default:
+                $html = '<video id="'.$id.'" controls>';
+                $html .= '<source src="'.$file.'" >';
+                $html .= '</video>';
+                break;
+        }
 
         return $html;
     }
@@ -3364,7 +3366,7 @@ class DocumentManager
                     (last.visibility = '1' $lp_visibility_condition) AND
                     last.visibility <> 2 AND
                     docs.c_id = {$course_info['real_id']} AND
-                    last.c_id = {$course_info['real_id']}                    
+                    last.c_id = {$course_info['real_id']}
                     $folderCondition
                     $levelCondition
                     $add_folder_filter
@@ -4204,24 +4206,6 @@ class DocumentManager
                 );
             }
         }
-    }
-
-    /**
-     * @param string $file
-     *
-     * @return string
-     */
-    public static function readNanogongFile($file)
-    {
-        $nanoGongJarFile = api_get_path(WEB_LIBRARY_PATH).'nanogong/nanogong.jar';
-        $html = '<applet id="applet" archive="'.$nanoGongJarFile.'" code="gong.NanoGong" width="160" height="95">';
-        $html .= '<param name="SoundFileURL" value="'.$file.'" />';
-        $html .= '<param name="ShowSaveButton" value="false" />';
-        $html .= '<param name="ShowTime" value="true" />';
-        $html .= '<param name="ShowRecordButton" value="false" />';
-        $html .= '</applet>';
-
-        return $html;
     }
 
     /**

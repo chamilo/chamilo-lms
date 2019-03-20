@@ -254,31 +254,43 @@ EOT;
     /*
      * Show form to generate subgroups
      */
-    if (api_get_setting('allow_group_categories') === 'true' && count(GroupManager :: get_group_list()) > 0) {
-        $base_group_options = [];
-        $groups = GroupManager :: get_group_list();
-        foreach ($groups as $index => $group) {
-            $number_of_students = GroupManager :: number_of_students($group['id']);
-            if ($number_of_students > 0) {
-                $base_group_options[$group['id']] = $group['name'].' ('.$number_of_students.' '.get_lang('Users').')';
+    if (api_get_setting('allow_group_categories') === 'true') {
+        $groups = GroupManager::get_group_list();
+        if (!empty($groups)) {
+            $base_group_options = [];
+            foreach ($groups as $index => $group) {
+                $number_of_students = GroupManager::number_of_students($group['id']);
+                if ($number_of_students > 0) {
+                    $base_group_options[$group['id']] =
+                        $group['name'].' ('.$number_of_students.' '.get_lang('Users').')';
+                }
             }
-        }
-        if (count($base_group_options) > 0) {
-            $create_subgroups_form = new FormValidator('create_subgroups', 'post', api_get_self().'?'.api_get_cidreq());
-            $create_subgroups_form->addElement('header', get_lang('CreateSubgroups'));
-            $create_subgroups_form->addElement('html', get_lang('CreateSubgroupsInfo'));
-            $create_subgroups_form->addElement('hidden', 'action');
-            $group_el = [];
-            $group_el[] = $create_subgroups_form->createElement('static', null, null, get_lang('CreateNumberOfGroups'));
-            $group_el[] = $create_subgroups_form->createElement('text', 'number_of_groups', null, ['size' => 3]);
-            $group_el[] = $create_subgroups_form->createElement('static', null, null, get_lang('WithUsersFrom'));
-            $group_el[] = $create_subgroups_form->createElement('select', 'base_group', null, $base_group_options);
-            $group_el[] = $create_subgroups_form->addButtonSave(get_lang('Ok'), 'submit', true);
-            $create_subgroups_form->addGroup($group_el, 'create_groups', null, null, false);
-            $defaults = [];
-            $defaults['action'] = 'create_subgroups';
-            $create_subgroups_form->setDefaults($defaults);
-            $create_subgroups_form->display();
+            if (count($base_group_options) > 0) {
+                $create_subgroups_form = new FormValidator(
+                    'create_subgroups',
+                    'post',
+                    api_get_self().'?'.api_get_cidreq()
+                );
+                $create_subgroups_form->addElement('header', get_lang('CreateSubgroups'));
+                $create_subgroups_form->addElement('html', get_lang('CreateSubgroupsInfo'));
+                $create_subgroups_form->addElement('hidden', 'action');
+                $group_el = [];
+                $group_el[] = $create_subgroups_form->createElement(
+                    'static',
+                    null,
+                    null,
+                    get_lang('CreateNumberOfGroups')
+                );
+                $group_el[] = $create_subgroups_form->createElement('text', 'number_of_groups', null, ['size' => 3]);
+                $group_el[] = $create_subgroups_form->createElement('static', null, null, get_lang('WithUsersFrom'));
+                $group_el[] = $create_subgroups_form->createElement('select', 'base_group', null, $base_group_options);
+                $group_el[] = $create_subgroups_form->addButtonSave(get_lang('Ok'), 'submit', true);
+                $create_subgroups_form->addGroup($group_el, 'create_groups', null, null, false);
+                $defaults = [];
+                $defaults['action'] = 'create_subgroups';
+                $create_subgroups_form->setDefaults($defaults);
+                $create_subgroups_form->display();
+            }
         }
     }
 

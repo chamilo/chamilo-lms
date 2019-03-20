@@ -127,6 +127,17 @@ class CourseDriver extends Driver implements DriverInterface
                 unset($defaultDisabled['mkdir']);
                 $defaultDisabled = array_flip($defaultDisabled);
                 $config['disabled'] = $defaultDisabled;
+            } else {
+                $protectedFolders = \DocumentManager::getProtectedFolderFromStudent();
+                foreach ($protectedFolders as $folder) {
+                    $config['attributes'][] = [
+                        'pattern' => $folder.'/',
+                        'read' => false,
+                        'write' => false,
+                        'hidden' => true,
+                        'locked' => false,
+                    ];
+                }
             }
 
             $foldersToHide = \DocumentManager::get_all_document_folders(

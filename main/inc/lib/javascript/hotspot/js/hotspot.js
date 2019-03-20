@@ -764,11 +764,9 @@ window.HotspotQuestion = (function () {
                         default:
                             hotspot = SquareModel.decode(hotspotInfo);
                             break;
-
                         case 'circle':
                             hotspot = EllipseModel.decode(hotspotInfo);
                             break;
-
                         case 'poly':
                             hotspot = PolygonModel.decode(hotspotInfo);
                             break;
@@ -891,9 +889,7 @@ window.HotspotQuestion = (function () {
                 })
                 .on('mousedown', 'circle, text', function (e) {
                     e.preventDefault();
-
                     isMoving = true;
-
                     if (e.target.tagName === 'circle') {
                         //Hack to move correctly the hot spots if there are more than one HS question in same page
                         answerIndex = $(e.target).next().html();
@@ -1141,16 +1137,14 @@ window.HotspotQuestion = (function () {
                     modifyAnswers: parseInt(config.questionId)
                 });
                 break;
-
             case 'user':
                 xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_actionscript.as.php?' + _p.web_cid_query, {
                     modifyAnswers: parseInt(config.questionId),
                     exe_id: parseInt(config.exerciseId)
                 });
                 break;
-
             case 'solution':
-            //no break
+                //no break
             case 'preview':
                 xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_answers.as.php?' + _p.web_cid_query, {
                     modifyAnswers: parseInt(config.questionId),

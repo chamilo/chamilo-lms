@@ -38,15 +38,15 @@
                             <ul class="list-group">
                                 {% for row in item.children %}
                                     <li class="list-group-item list-group-item-action">
-                                        <h5 class="mb-1">
+                                        <h5 class="link-title mb-1">
                                             {{ row.link_validator }}
                                             <a href="{{ row.url }}" class="{{ row.visibility == true ? '' : 'text-muted' }}" target="{{ row.target }}">{{ row.title }}</a>
-                                        </h5>
-                                        <div class="toolbar">
-                                            <div class="btn-group btn-group-sm">
-                                                {{ row.toolbar }}
+                                            <div class="toolbar">
+                                                <div class="btn-group btn-group-sm">
+                                                    {{ row.toolbar }}
+                                                </div>
                                             </div>
-                                        </div>
+                                        </h5>
                                         {{ row.description }}
                                     </li>
                                 {% endfor %}

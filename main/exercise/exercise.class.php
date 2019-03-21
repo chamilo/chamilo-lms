@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
 use ChamiloSession as Session;
 
@@ -6258,9 +6259,9 @@ class Exercise
         }
 
         // 4. We check if the student have attempts
-        $exerciseAttempts = $this->selectAttempts();
-
         if ($isVisible) {
+            $exerciseAttempts = $this->selectAttempts();
+
             if ($exerciseAttempts > 0) {
                 $attemptCount = Event::get_attempt_count_not_finished(
                     api_get_user_id(),
@@ -6276,6 +6277,19 @@ class Exercise
                         $this->name,
                         $exerciseAttempts
                     );
+                    $isVisible = false;
+                }
+            } else {
+                $isLimitReached = ExerciseLib::isQuestionsLimitPerDayReached(
+                    api_get_user_id(),
+                    $this->selectNbrQuestions(),
+                    api_get_course_int_id(),
+                    api_get_session_id()
+                );
+
+                if ($isLimitReached) {
+                    $maxQuestionsAnswered = (int) api_get_course_setting('quiz_question_limit_per_day');
+                    $message = sprintf(get_lang('QuizQuestionsLimitPerDayXReached'), $maxQuestionsAnswered);
                     $isVisible = false;
                 }
             }

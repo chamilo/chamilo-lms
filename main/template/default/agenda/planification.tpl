@@ -3,6 +3,8 @@
 {% set user_id = student_id == _u.id ? 0 : student_id %}
 
 {% block content %}
+    {{ toolbar }}
+
     <nav aria-label="...">
         <ul class="pager">
             <li class="previous">

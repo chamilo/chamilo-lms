@@ -8386,7 +8386,7 @@ class Exercise
             'radio',
             'results_disabled',
             null,
-            get_lang('ExerciseShowOnlyCorrectAnswer'),
+            get_lang('ExerciseShowOnlyGlobalScoreAndCorrectAnswers'),
             '7',
             ['id' => 'result_disabled_7']
         );

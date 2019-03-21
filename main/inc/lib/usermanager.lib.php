@@ -6583,97 +6583,105 @@ SQL;
     {
         $timezone = new DateTimeZone(api_get_timezone());
 
+        $sessions = [];
+
         if (DRH == $userInfo['status']) {
             $sessions = SessionManager::get_sessions_followed_by_drh($userInfo['id']);
-
-            $sessions = array_map(
-                function ($sessionInfo) {
-                    $sessionInfo['session_id'] = $sessionInfo['id'];
-                    $sessionInfo['session_name'] = $sessionInfo['name'];
-
-                    return $sessionInfo;
-                },
-                $sessions
-            );
-
-            $sessionsByCategory = ['' => $sessions];
+        } elseif (SESSIONADMIN == $userInfo['status']) {
+            $sessions = SessionManager::getSessionsAdmin($userInfo['id']);
         } else {
             $sessionsByCategory = self::get_sessions_by_category($userInfo['id'], false, true, true);
             $sessionsByCategory = array_column($sessionsByCategory, 'sessions');
-        }
 
-        $sessionsList = [];
-
-        foreach ($sessionsByCategory as $categorySessions) {
-            foreach ($categorySessions as $sessionInfo) {
-                if (!empty($sessionInfo['duration'])) {
-                    $courseAccess = CourseManager::getFirstCourseAccessPerSessionAndUser(
-                        $sessionInfo['session_id'],
-                        $userInfo['id']
-                    );
-
-                    if (empty($courseAccess)) {
-                        continue;
-                    }
-
-                    $firstAcessDate = new DateTime(api_get_local_time($courseAccess['login_course_date']), $timezone);
-                    $lastAccessDate = clone $firstAcessDate;
-                    $lastAccessDate->modify("+{$sessionInfo['duration']} days");
-
-                    $firstAccessYear = (int) $firstAcessDate->format('Y');
-                    $lastAccessYear = (int) $lastAccessDate->format('Y');
-
-                    if ($firstAccessYear <= $searchYear && $lastAccessYear >= $searchYear) {
-                        $sessionsList[$sessionInfo['session_id']] = [
-                            'name' => $sessionInfo['session_name'],
-                            'access_start_date' => $firstAcessDate->format('Y-m-d h:i:s'),
-                            'access_end_date' => $lastAccessDate->format('Y-m-d h:i:s'),
-                        ];
-                    }
-
-                    continue;
-                }
-
-                $accessStartDate = !empty($sessionInfo['access_start_date'])
-                    ? new DateTime(api_get_local_time($sessionInfo['access_start_date']), $timezone)
-                    : null;
-                $accessEndDate = !empty($sessionInfo['access_end_date'])
-                    ? new DateTime(api_get_local_time($sessionInfo['access_end_date']), $timezone)
-                    : null;
-                $accessStartYear = $accessStartDate ? (int) $accessStartDate->format('Y') : 0;
-                $accessEndYear = $accessEndDate ? (int) $accessEndDate->format('Y') : 0;
-
-                $isValid = false;
-
-                if ($accessStartYear && $accessEndYear) {
-                    if ($accessStartYear <= $searchYear && $accessEndYear >= $searchYear) {
-                        $isValid = true;
-                    }
-                }
-
-                if ($accessStartYear && !$accessEndYear) {
-                    if ($accessStartYear == $searchYear) {
-                        $isValid = true;
-                    }
-                }
-
-                if (!$accessStartYear && $accessEndYear) {
-                    if ($accessEndYear == $searchYear) {
-                        $isValid = true;
-                    }
-                }
-
-                if ($isValid) {
-                    $sessionsList[$sessionInfo['session_id']] = [
-                        'name' => $sessionInfo['session_name'],
-                        'access_start_date' => $accessStartDate ? $accessStartDate->format('Y-m-d h:i:s') : null,
-                        'access_end_date' => $accessEndDate ? $accessEndDate->format('Y-m-d h:i:s') : null,
-                    ];
-                }
+            foreach ($sessionsByCategory as $sessionsInCategory) {
+                $sessions = array_merge($sessions, $sessionsInCategory);
             }
         }
 
-        return $sessionsList;
+        $sessions = array_map(
+            function ($sessionInfo) {
+                if (!isset($sessionInfo['session_id'])) {
+                    $sessionInfo['session_id'] = $sessionInfo['id'];
+                }
+                if (!isset($sessionInfo['session_name'])) {
+                    $sessionInfo['session_name'] = $sessionInfo['name'];
+                }
+
+                return $sessionInfo;
+            },
+            $sessions
+        );
+
+        $calendarSessions = [];
+
+        foreach ($sessions as $sessionInfo) {
+            if (!empty($sessionInfo['duration'])) {
+                $courseAccess = CourseManager::getFirstCourseAccessPerSessionAndUser(
+                    $sessionInfo['session_id'],
+                    $userInfo['id']
+                );
+
+                if (empty($courseAccess)) {
+                    continue;
+                }
+
+                $firstAcessDate = new DateTime(api_get_local_time($courseAccess['login_course_date']), $timezone);
+                $lastAccessDate = clone $firstAcessDate;
+                $lastAccessDate->modify("+{$sessionInfo['duration']} days");
+
+                $firstAccessYear = (int) $firstAcessDate->format('Y');
+                $lastAccessYear = (int) $lastAccessDate->format('Y');
+
+                if ($firstAccessYear <= $searchYear && $lastAccessYear >= $searchYear) {
+                    $calendarSessions[$sessionInfo['session_id']] = [
+                        'name' => $sessionInfo['session_name'],
+                        'access_start_date' => $firstAcessDate->format('Y-m-d h:i:s'),
+                        'access_end_date' => $lastAccessDate->format('Y-m-d h:i:s'),
+                    ];
+                }
+
+                continue;
+            }
+
+            $accessStartDate = !empty($sessionInfo['access_start_date'])
+                ? new DateTime(api_get_local_time($sessionInfo['access_start_date']), $timezone)
+                : null;
+            $accessEndDate = !empty($sessionInfo['access_end_date'])
+                ? new DateTime(api_get_local_time($sessionInfo['access_end_date']), $timezone)
+                : null;
+            $accessStartYear = $accessStartDate ? (int) $accessStartDate->format('Y') : 0;
+            $accessEndYear = $accessEndDate ? (int) $accessEndDate->format('Y') : 0;
+
+            $isValid = false;
+
+            if ($accessStartYear && $accessEndYear) {
+                if ($accessStartYear <= $searchYear && $accessEndYear >= $searchYear) {
+                    $isValid = true;
+                }
+            }
+
+            if ($accessStartYear && !$accessEndYear) {
+                if ($accessStartYear == $searchYear) {
+                    $isValid = true;
+                }
+            }
+
+            if (!$accessStartYear && $accessEndYear) {
+                if ($accessEndYear == $searchYear) {
+                    $isValid = true;
+                }
+            }
+
+            if ($isValid) {
+                $calendarSessions[$sessionInfo['session_id']] = [
+                    'name' => $sessionInfo['session_name'],
+                    'access_start_date' => $accessStartDate ? $accessStartDate->format('Y-m-d h:i:s') : null,
+                    'access_end_date' => $accessEndDate ? $accessEndDate->format('Y-m-d h:i:s') : null,
+                ];
+            }
+        }
+
+        return $calendarSessions;
     }
 
     /**

@@ -130,6 +130,7 @@ class BuyCoursesPlugin extends Plugin
             self::TABLE_SERVICES,
             self::TABLE_SERVICES_SALE,
             self::TABLE_GLOBAL_CONFIG,
+            self::TABLE_INVOICE,
         ];
         $em = Database::getManager();
         $cn = $em->getConnection();
@@ -161,6 +162,7 @@ class BuyCoursesPlugin extends Plugin
             self::TABLE_SERVICES_SALE,
             self::TABLE_SERVICES,
             self::TABLE_GLOBAL_CONFIG,
+            self::TABLE_INVOICE,
         ];
 
         foreach ($tablesToBeDeleted as $tableToBeDeleted) {
@@ -743,6 +745,7 @@ class BuyCoursesPlugin extends Plugin
             );
 
         $price = $item['price'];
+        $taxAmount = 0;
         $taxPerc = null;
         $priceWithoutTax = $item['price'];
         $precision = 2;
@@ -833,6 +836,7 @@ class BuyCoursesPlugin extends Plugin
         ]);
 
         $price = $item['price'];
+        $taxAmount = 0;
         $taxPerc = null;
         $priceWithoutTax = $item['price'];
         $precision = 2;
@@ -971,14 +975,15 @@ class BuyCoursesPlugin extends Plugin
         $price = $item['price'];
         $priceWithoutTax = null;
         $taxPerc = null;
+        $taxAmount = 0;
 
         $taxEnable = $this->get('tax_enable') === 'true';
         $globalParameters = $this->getGlobalParameters();
         $taxAppliesTo = $globalParameters['tax_applies_to'];
         if ($taxEnable &&
             ($taxAppliesTo == self::TAX_APPLIES_TO_ALL ||
-            ($taxAppliesTo == TAX_APPLIES_TO_ONLY_COURSE && $item['product_type'] == self::PRODUCT_TYPE_COURSE) ||
-            ($taxAppliesTo == TAX_APPLIES_TO_ONLY_SESSION && $item['product_type'] == self::PRODUCT_TYPE_SESSION))
+            ($taxAppliesTo == self::TAX_APPLIES_TO_ONLY_COURSE && $item['product_type'] == self::PRODUCT_TYPE_COURSE) ||
+            ($taxAppliesTo == self::TAX_APPLIES_TO_ONLY_SESSION && $item['product_type'] == self::PRODUCT_TYPE_SESSION))
         ) {
             $priceWithoutTax = $item['price'];
             $globalTaxPerc = $globalParameters['global_tax_perc'];
@@ -1281,9 +1286,10 @@ class BuyCoursesPlugin extends Plugin
 
         // Record invoice in the sales table
         $table = Database::get_main_table(self::TABLE_SALE);
-        if (empty($isService)) {
+        if (!empty($isService)) {
             $table = Database::get_main_table(self::TABLE_SERVICES_SALE);
         }
+
         Database::update(
             $table,
             ['invoice' => 1],
@@ -2518,7 +2524,7 @@ class BuyCoursesPlugin extends Plugin
         $globalParameters = $this->getGlobalParameters();
         $taxAppliesTo = $globalParameters['tax_applies_to'];
         if ($taxEnable &&
-            ($taxAppliesTo == self::TAX_APPLIES_TO_ALL || $taxAppliesTo == TAX_APPLIES_TO_ONLY_SERVICES)
+            ($taxAppliesTo == self::TAX_APPLIES_TO_ALL || $taxAppliesTo == self::TAX_APPLIES_TO_ONLY_SERVICES)
         ) {
             $priceWithoutTax = $service['price'];
             $globalTaxPerc = $globalParameters['global_tax_perc'];

@@ -29,6 +29,13 @@ $buyer = api_get_user_info($infoSale['user_id']);
 $extraUserInfoData = UserManager::get_extra_user_data($infoSale['user_id']);
 $infoInvoice = $plugin->getDataInvoice($saleId, $isService);
 
+$taxAppliesTo = $globalParameters['tax_applies_to'];
+$taxEnable = $plugin->get('tax_enable') === 'true' &&
+    ($taxAppliesTo == BuyCoursesPlugin::TAX_APPLIES_TO_ALL ||
+    ($taxAppliesTo == BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_COURSE && !$isService) ||
+    ($taxAppliesTo == BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_SESSION && $isService)
+);
+
 $htmlText = '<html>';
 $htmlText .= '<link rel="stylesheet" type="text/css" href="plugin.css">';
 $htmlText .= '<link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_CSS_PATH).'base.css">';
@@ -68,39 +75,52 @@ $htmlText .= '</table>';
 
 $htmlText .= '<br><br>';
 $htmlText .= '<p>';
-$htmlText .= $plugin->get_lang('InvoiceDate').': <span style="font-weight:bold;">'.api_format_date($infoInvoice['date_invoice'], DATE_TIME_FORMAT_LONG_24H).'</span><br>';
-$htmlText .= $plugin->get_lang('InvoiceNumber').': <span style="font-weight:bold;">'.$infoInvoice['serie'].$infoInvoice['year'].'/'.$infoInvoice['num_invoice'].'</span><br>';
+$htmlText .= $plugin->get_lang('InvoiceDate').': <span style="font-weight:bold;">'
+    .api_convert_and_format_date($infoInvoice['date_invoice'], DATE_TIME_FORMAT_LONG_24H).'</span><br>';
+$htmlText .= $plugin->get_lang('InvoiceNumber').': <span style="font-weight:bold;">'
+    .$infoInvoice['serie'].$infoInvoice['year'].'/'.$infoInvoice['num_invoice'].'</span><br>';
 $htmlText .= '</p><br><br>';
 
 $header = [
-        $plugin->get_lang('OrderReference'),
-        $plugin->get_lang('ProductType'),
-        $plugin->get_lang('Price'),
-        $globalParameters['tax_name'],
-        $plugin->get_lang('TotalPayout'),
+    $plugin->get_lang('OrderReference'),
+    $plugin->get_lang('ProductType'),
+    $plugin->get_lang('Price'),
 ];
+
+if ($taxEnable) {
+    $header[] = $globalParameters['tax_name'];
+    $header[] = $plugin->get_lang('Total');
+}
 
 $data = [];
 $row = [
     $infoSale['reference'],
     $infoSale['product_name'],
-    $plugin->getCurrency($infoSale['currency_id'])['iso_code'].
-        ' '.$infoSale['price_without_tax'],
-    $plugin->getCurrency($infoSale['currency_id'])['iso_code'].
-        ' '.$infoSale['tax_amount'].
-        ' ('.(int) $infoSale['tax_perc'].'%)',
-    $plugin->getCurrency($infoSale['currency_id'])['iso_code'].
-        ' '.$infoSale['price'],
 ];
+if ($taxEnable) {
+    $row[] = $plugin->getCurrency($infoSale['currency_id'])['iso_code'].' '.$infoSale['price_without_tax'];
+    $row[] = $plugin->getCurrency($infoSale['currency_id'])['iso_code'].
+        ' '.$infoSale['tax_amount'].
+        ' ('.(int) $infoSale['tax_perc'].'%)';
+}
+$row[] = $plugin->getCurrency($infoSale['currency_id'])['iso_code'].' '.$infoSale['price'];
 $data[] = $row;
 
-$row = [
-    '',
-    '',
-    '',
-    $plugin->get_lang('TotalPayout'),
-    $plugin->getCurrency($infoSale['currency_id'])['iso_code'].' '.$infoSale['price'],
-];
+if ($taxEnable) {
+    $row = [
+        '',
+        '',
+        '',
+        $plugin->get_lang('TotalPayout'),
+        $plugin->getCurrency($infoSale['currency_id'])['iso_code'].' '.$infoSale['price'],
+    ];
+} else {
+    $row = [
+        '',
+        $plugin->get_lang('TotalPayout'),
+        $plugin->getCurrency($infoSale['currency_id'])['iso_code'].' '.$infoSale['price'],
+    ];
+}
 $data[] = $row;
 $attr = [];
 $attr['class'] = "table data_table";

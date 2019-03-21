@@ -459,8 +459,8 @@ class SessionManager
     /**
      * Gets the admin session list callback of the session/session_list.php page.
      *
-     * @param array $options           order and limit keys
-     * @param bool  $get_count         Whether to get all the results or only the count
+     * @param array $options  order and limit keys
+     * @param bool  $getCount Whether to get all the results or only the count
      * @param array $columns
      * @param array $extraFieldsToLoad
      *
@@ -469,21 +469,21 @@ class SessionManager
      */
     public static function get_sessions_admin(
         $options = [],
-        $get_count = false,
+        $getCount = false,
         $columns = [],
         $extraFieldsToLoad = []
     ) {
-        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+        $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
         $sessionCategoryTable = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 
         $where = 'WHERE 1 = 1 ';
-        $user_id = api_get_user_id();
+        $userId = api_get_user_id();
 
         if (!api_is_platform_admin()) {
             if (api_is_session_admin() &&
                 api_get_setting('allow_session_admins_to_manage_all_sessions') == 'false'
             ) {
-                $where .= " AND s.session_admin_id = $user_id ";
+                $where .= " AND s.session_admin_id = $userId ";
             }
         }
 
@@ -491,13 +491,13 @@ class SessionManager
             api_is_teacher() &&
             api_get_setting('allow_teachers_to_create_sessions') == 'true'
         ) {
-            $where .= " AND s.id_coach = $user_id ";
+            $where .= " AND s.id_coach = $userId ";
         }
-        $extra_field = new ExtraFieldModel('session');
-        $conditions = $extra_field->parseConditions($options);
-        $inject_joins = $conditions['inject_joins'];
+        $extraFieldModel = new ExtraFieldModel('session');
+        $conditions = $extraFieldModel->parseConditions($options);
+        $sqlInjectJoins = $conditions['inject_joins'];
         $where .= $conditions['where'];
-        $inject_where = $conditions['inject_where'];
+        $sqlInjectWhere = $conditions['inject_where'];
         $inject_extra_fields = $conditions['inject_extra_fields'];
         $order = $conditions['order'];
         $limit = $conditions['limit'];
@@ -505,7 +505,7 @@ class SessionManager
         $isMakingOrder = false;
         $showCountUsers = false;
 
-        if ($get_count == true) {
+        if ($getCount == true) {
             $select = " SELECT count(DISTINCT s.id) as total_rows";
         } else {
             if (!empty($columns['column_model'])) {
@@ -541,7 +541,7 @@ class SessionManager
         $isFilteringSessionCategoryWithName = strpos($where, 'sc.name') !== false;
 
         if ($isMakingOrder || $isFilteringSessionCategory || $isFilteringSessionCategoryWithName) {
-            $inject_joins .= " LEFT JOIN $sessionCategoryTable sc ON s.session_category_id = sc.id ";
+            $sqlInjectJoins .= " LEFT JOIN $sessionCategoryTable sc ON s.session_category_id = sc.id ";
 
             if ($isFilteringSessionCategory) {
                 $where = str_replace('category_name', 'sc.name', $where);
@@ -553,21 +553,21 @@ class SessionManager
         }
 
         if ($showCountUsers) {
-            $table = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-            $inject_joins .= " LEFT JOIN $table su ON (su.session_id = s.id)";
+            $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+            $sqlInjectJoins .= " LEFT JOIN $tblSessionRelUser su ON (su.session_id = s.id)";
         }
 
-        $query = "$select FROM $tbl_session s $inject_joins $where $inject_where";
+        $query = "$select FROM $tblSession s $sqlInjectJoins $where $sqlInjectWhere";
 
         if (api_is_multiple_url_enabled()) {
-            $table_access_url_rel_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-            $access_url_id = api_get_current_access_url_id();
-            if ($access_url_id != -1) {
-                $where .= " AND ar.access_url_id = $access_url_id ";
+            $tblAccessUrlRelSession = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+            $accessUrlId = api_get_current_access_url_id();
+            if ($accessUrlId != -1) {
+                $where .= " AND ar.access_url_id = $accessUrlId ";
                 $query = "$select
-                        FROM $tbl_session s $inject_joins
-                        INNER JOIN $table_access_url_rel_session ar
-                        ON (ar.session_id = s.id) $where";
+                    FROM $tblSession s $sqlInjectJoins
+                    INNER JOIN $tblAccessUrlRelSession ar
+                    ON (ar.session_id = s.id) $where";
             }
         }
 
@@ -590,46 +590,25 @@ class SessionManager
                 $orderedCategories[$category['id']] = $category['name'];
             }
         }
-        $formatted_sessions = [];
+        $formattedSessions = [];
         if (Database::num_rows($result)) {
             $sessions = Database::store_result($result, 'ASSOC');
-            if ($get_count) {
+            if ($getCount) {
                 return $sessions[0]['total_rows'];
             }
 
-            $activeIcon = Display::return_icon(
-                'accept.png',
-                get_lang('Active'),
-                [],
-                ICON_SIZE_SMALL
-            );
-            $inactiveIcon = Display::return_icon(
-                'error.png',
-                get_lang('Inactive'),
-                [],
-                ICON_SIZE_SMALL
-            );
+            $activeIcon = Display::return_icon('accept.png', get_lang('Active'));
+            $inactiveIcon = Display::return_icon('error.png', get_lang('Inactive'));
 
             foreach ($sessions as $session) {
-                $session_id = $session['id'];
                 if ($showCountUsers) {
-                    $session['users'] = self::get_users_by_session(
-                        $session['id'],
-                        0,
-                        true
-                    );
+                    $session['users'] = self::get_users_by_session($session['id'], 0, true);
                 }
                 $url = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session['id'];
-                if (api_is_drh()) {
-                    $url = api_get_path(WEB_CODE_PATH).'session/about.php?session_id='.$session['id'];
-                }
-                if (api_is_platform_admin()) {
-                    $url = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session['id'];
+                if (api_is_drh() || $extraFieldsToLoad) {
+                    $url = api_get_path(WEB_PATH).'session/'.$session['id'].'/about/';
                 }
 
-                if ($extraFieldsToLoad) {
-                    $url = api_get_path(WEB_CODE_PATH).'session/about.php?session_id='.$session['id'];
-                }
                 $session['name'] = Display::url($session['name'], $url);
 
                 if (!empty($extraFieldsToLoad)) {
@@ -674,35 +653,35 @@ class SessionManager
 
                 // Cleaning double selects.
                 foreach ($session as $key => &$value) {
-                    if (isset($options_by_double[$key]) || isset($options_by_double[$key.'_second'])) {
+                    if (isset($optionsByDouble[$key]) || isset($optionsByDouble[$key.'_second'])) {
                         $options = explode('::', $value);
                     }
                     $original_key = $key;
-                    if (strpos($key, '_second') === false) {
-                    } else {
+                    if (strpos($key, '_second') !== false) {
                         $key = str_replace('_second', '', $key);
                     }
 
-                    if (isset($options_by_double[$key])) {
-                        if (isset($options[0])) {
-                            if (isset($options_by_double[$key][$options[0]])) {
-                                if (strpos($original_key, '_second') === false) {
-                                    $value = $options_by_double[$key][$options[0]]['option_display_text'];
-                                } else {
-                                    $value = $options_by_double[$key][$options[1]]['option_display_text'];
-                                }
-                            }
+                    if (isset($optionsByDouble[$key]) &&
+                        isset($options[0]) &&
+                        isset($optionsByDouble[$key][$options[0]])
+                    ) {
+                        if (strpos($original_key, '_second') === false) {
+                            $value = $optionsByDouble[$key][$options[0]]['option_display_text'];
+                        } else {
+                            $value = $optionsByDouble[$key][$options[1]]['option_display_text'];
                         }
                     }
                 }
 
-                $categoryName = isset($orderedCategories[$session['session_category_id']]) ? $orderedCategories[$session['session_category_id']] : '';
+                $categoryName = isset($orderedCategories[$session['session_category_id']])
+                    ? $orderedCategories[$session['session_category_id']]
+                    : '';
                 $session['category_name'] = $categoryName;
-                $formatted_sessions[] = $session;
+                $formattedSessions[] = $session;
             }
         }
 
-        return $formatted_sessions;
+        return $formattedSessions;
     }
 
     /**

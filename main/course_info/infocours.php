@@ -723,9 +723,8 @@ $form->addHtml('
 $form->addHtml('</div>');
 
 // Exercise
-if (api_get_configuration_value('allow_exercise_auto_launch')) {
-    $form->addHtml('<div class="panel panel-default">');
-    $form->addHtml('
+$form->addHtml('<div class="panel panel-default">');
+$form->addHtml('
         <div class="panel-heading" role="tab" id="heading-exercise">
             <h4 class="panel-title">
                 <a class="collapsed" 
@@ -733,18 +732,20 @@ if (api_get_configuration_value('allow_exercise_auto_launch')) {
                    data-parent="#accordion" 
                    href="#collapse-exercise" aria-expanded="false" aria-controls="collapse-exercise">
     ');
-    $form->addHtml(
-        Display::return_icon('quiz.png', get_lang('Exercise')).' '.get_lang('Exercise')
-    );
-    $form->addHtml('
+$form->addHtml(
+    Display::return_icon('quiz.png', get_lang('Exercises')).' '.get_lang('Exercises')
+);
+$form->addHtml('
                 </a>
             </h4>
         </div>
     ');
-    $form->addHtml('
+$form->addHtml('
         <div id="collapse-exercise" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-exercise">
             <div class="panel-body">
     ');
+
+if (api_get_configuration_value('allow_exercise_auto_launch')) {
 
     // Auto launch exercise
     $group = [];
@@ -764,22 +765,30 @@ if (api_get_configuration_value('allow_exercise_auto_launch')) {
     );
     $group[] = $form->createElement('radio', 'enable_exercise_auto_launch', null, get_lang('Deactivate'), 0);
     $form->addGroup($group, '', [get_lang('ExerciseAutoLaunch')]);
+}
 
-    if (is_settings_editable()) {
-        $form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
-    } else {
-        // Is it allowed to edit the course settings?
-        if (!is_settings_editable()) {
-            $disabled_output = "disabled";
-        }
-        $form->freeze();
+$form->addElement(
+    'number',
+    'quiz_question_limit_per_day',
+    [get_lang('QuizQuestionsLimitPerDay'), get_lang('QuizQuestionsLimitPerDayComment')],
+    ['step' => 1, 'min' => 0]
+);
+
+if (is_settings_editable()) {
+    $form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
+} else {
+    // Is it allowed to edit the course settings?
+    if (!is_settings_editable()) {
+        $disabled_output = "disabled";
     }
-    $form->addHtml('
+    $form->freeze();
+}
+
+$form->addHtml('
             </div>
         </div>
     ');
-    $form->addHtml('</div>');
-}
+$form->addHtml('</div>');
 
 // THEMATIC ADVANCE SETTINGS
 $group = [];

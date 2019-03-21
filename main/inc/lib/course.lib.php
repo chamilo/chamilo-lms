@@ -5618,6 +5618,7 @@ class CourseManager
             'email_to_teachers_on_new_work_feedback',
             'student_delete_own_publication',
             'hide_forum_notifications',
+            'quiz_question_limit_per_day',
         ];
 
         $courseModels = ExerciseLib::getScoreModels();

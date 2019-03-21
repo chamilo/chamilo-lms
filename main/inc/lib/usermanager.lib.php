@@ -6474,104 +6474,6 @@ SQL;
     }
 
     /**
-     * @return EncoderFactory
-     */
-    private static function getEncoderFactory()
-    {
-        $encryption = self::getPasswordEncryption();
-        $encoders = [
-            'Chamilo\\UserBundle\\Entity\\User' => new \Chamilo\UserBundle\Security\Encoder($encryption),
-        ];
-
-        $encoderFactory = new EncoderFactory($encoders);
-
-        return $encoderFactory;
-    }
-
-    /**
-     * @param User $user
-     *
-     * @return \Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface
-     */
-    private static function getEncoder(User $user)
-    {
-        $encoderFactory = self::getEncoderFactory();
-
-        return $encoderFactory->getEncoder($user);
-    }
-
-    /**
-     * Disables or enables a user.
-     *
-     * @param int $user_id
-     * @param int $active  Enable or disable
-     *
-     * @return bool True on success, false on failure
-     * @assert (-1,0) === false
-     * @assert (1,1) === true
-     */
-    private static function change_active_state($user_id, $active)
-    {
-        if (strval(intval($user_id)) != $user_id) {
-            return false;
-        }
-        if ($user_id < 1) {
-            return false;
-        }
-        $user_id = intval($user_id);
-        $table_user = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = "UPDATE $table_user SET active = '$active' WHERE id = $user_id";
-        $r = Database::query($sql);
-        $ev = LOG_USER_DISABLE;
-        if ($active == 1) {
-            $ev = LOG_USER_ENABLE;
-        }
-        if ($r !== false) {
-            Event::addEvent($ev, LOG_USER_ID, $user_id);
-        }
-
-        return $r;
-    }
-
-    /**
-     * Get either a Gravatar URL or complete image tag for a specified email address.
-     *
-     * @param string $email The email address
-     * @param int    $s     Size in pixels, defaults to 80px [ 1 - 2048 ]
-     * @param string $d     Default imageset to use [ 404 | mm | identicon | monsterid | wavatar ]
-     * @param string $r     Maximum rating (inclusive) [ g | pg | r | x ]
-     * @param bool   $img   True to return a complete IMG tag False for just the URL
-     * @param array  $atts  Optional, additional key/value attributes to include in the IMG tag
-     *
-     * @return string containing either just a URL or a complete image tag
-     * @source http://gravatar.com/site/implement/images/php/
-     */
-    private static function getGravatar(
-        $email,
-        $s = 80,
-        $d = 'mm',
-        $r = 'g',
-        $img = false,
-        $atts = []
-    ) {
-        $url = 'http://www.gravatar.com/avatar/';
-        if (!empty($_SERVER['HTTPS'])) {
-            $url = 'https://secure.gravatar.com/avatar/';
-        }
-        $url .= md5(strtolower(trim($email)));
-        $url .= "?s=$s&d=$d&r=$r";
-        if ($img) {
-            $url = '<img src="'.$url.'"';
-            foreach ($atts as $key => $val) {
-                $url .= ' '.$key.'="'.$val.'"';
-            }
-            $url .= ' />';
-        }
-
-        return $url;
-    }
-
-    /**
      * @param array $userInfo
      * @param int   $searchYear
      *
@@ -6746,5 +6648,103 @@ SQL;
         );
 
         return $calendar;
+    }
+
+    /**
+     * @return EncoderFactory
+     */
+    private static function getEncoderFactory()
+    {
+        $encryption = self::getPasswordEncryption();
+        $encoders = [
+            'Chamilo\\UserBundle\\Entity\\User' => new \Chamilo\UserBundle\Security\Encoder($encryption),
+        ];
+
+        $encoderFactory = new EncoderFactory($encoders);
+
+        return $encoderFactory;
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return \Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface
+     */
+    private static function getEncoder(User $user)
+    {
+        $encoderFactory = self::getEncoderFactory();
+
+        return $encoderFactory->getEncoder($user);
+    }
+
+    /**
+     * Disables or enables a user.
+     *
+     * @param int $user_id
+     * @param int $active  Enable or disable
+     *
+     * @return bool True on success, false on failure
+     * @assert (-1,0) === false
+     * @assert (1,1) === true
+     */
+    private static function change_active_state($user_id, $active)
+    {
+        if (strval(intval($user_id)) != $user_id) {
+            return false;
+        }
+        if ($user_id < 1) {
+            return false;
+        }
+        $user_id = intval($user_id);
+        $table_user = Database::get_main_table(TABLE_MAIN_USER);
+        $sql = "UPDATE $table_user SET active = '$active' WHERE id = $user_id";
+        $r = Database::query($sql);
+        $ev = LOG_USER_DISABLE;
+        if ($active == 1) {
+            $ev = LOG_USER_ENABLE;
+        }
+        if ($r !== false) {
+            Event::addEvent($ev, LOG_USER_ID, $user_id);
+        }
+
+        return $r;
+    }
+
+    /**
+     * Get either a Gravatar URL or complete image tag for a specified email address.
+     *
+     * @param string $email The email address
+     * @param int    $s     Size in pixels, defaults to 80px [ 1 - 2048 ]
+     * @param string $d     Default imageset to use [ 404 | mm | identicon | monsterid | wavatar ]
+     * @param string $r     Maximum rating (inclusive) [ g | pg | r | x ]
+     * @param bool   $img   True to return a complete IMG tag False for just the URL
+     * @param array  $atts  Optional, additional key/value attributes to include in the IMG tag
+     *
+     * @return string containing either just a URL or a complete image tag
+     * @source http://gravatar.com/site/implement/images/php/
+     */
+    private static function getGravatar(
+        $email,
+        $s = 80,
+        $d = 'mm',
+        $r = 'g',
+        $img = false,
+        $atts = []
+    ) {
+        $url = 'http://www.gravatar.com/avatar/';
+        if (!empty($_SERVER['HTTPS'])) {
+            $url = 'https://secure.gravatar.com/avatar/';
+        }
+        $url .= md5(strtolower(trim($email)));
+        $url .= "?s=$s&d=$d&r=$r";
+        if ($img) {
+            $url = '<img src="'.$url.'"';
+            foreach ($atts as $key => $val) {
+                $url .= ' '.$key.'="'.$val.'"';
+            }
+            $url .= ' />';
+        }
+
+        return $url;
     }
 }

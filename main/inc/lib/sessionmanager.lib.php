@@ -594,8 +594,8 @@ class SessionManager
     /**
      * Gets the admin session list callback of the session/session_list.php page.
      *
-     * @param array $options  order and limit keys
-     * @param bool  $getCount Whether to get all the results or only the count
+     * @param array $options           order and limit keys
+     * @param bool  $getCount          Whether to get all the results or only the count
      * @param array $columns
      * @param array $extraFieldsToLoad
      *

@@ -251,7 +251,7 @@ if (!empty($attempts)) {
                 RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
                 RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
                 RESULT_DISABLE_RANKING,
-                RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER
+                RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
             ]
         )) {
             $row['result'] = $score;
@@ -265,7 +265,7 @@ if (!empty($attempts)) {
                 RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
                 RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
                 RESULT_DISABLE_RANKING,
-                RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER
+                RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
             ]
         ) || (
             $objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ONLY &&

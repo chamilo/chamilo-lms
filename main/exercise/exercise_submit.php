@@ -216,6 +216,12 @@ if ($time_control) {
 $show_clock = true;
 $user_id = api_get_user_id();
 if ($objExercise->selectAttempts() > 0) {
+    $messageReachedMax = Display::return_message(
+        sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()),
+        'warning',
+        false
+    );
+
     $attempt_html = '';
     $attempt_count = Event::get_attempt_count(
         $user_id,
@@ -245,15 +251,7 @@ if ($objExercise->selectAttempts() > 0) {
                         ['id' => '']
                     );
 
-                    $attempt_html .= Display::return_message(
-                        sprintf(
-                            get_lang('ReachedMaxAttempts'),
-                            $exercise_title,
-                            $objExercise->selectAttempts()
-                        ),
-                        'warning',
-                        false
-                    );
+                    $attempt_html .= $messageReachedMax;
 
                     if (!empty($last_attempt_info['question_list'])) {
                         foreach ($last_attempt_info['question_list'] as $questions) {
@@ -282,37 +280,13 @@ if ($objExercise->selectAttempts() > 0) {
                         ['id' => 'question_score']
                     );
                 } else {
-                    $attempt_html .= Display::return_message(
-                        sprintf(
-                            get_lang('ReachedMaxAttempts'),
-                            $exercise_title,
-                            $objExercise->selectAttempts()
-                        ),
-                        'warning',
-                        false
-                    );
+                    $attempt_html .= $messageReachedMax;
                 }
             } else {
-                $attempt_html .= Display::return_message(
-                    sprintf(
-                        get_lang('ReachedMaxAttempts'),
-                        $exercise_title,
-                        $objExercise->selectAttempts()
-                    ),
-                    'warning',
-                    false
-                );
+                $attempt_html .= $messageReachedMax;
             }
         } else {
-            $attempt_html .= Display::return_message(
-                sprintf(
-                    get_lang('ReachedMaxAttempts'),
-                    $exercise_title,
-                    $objExercise->selectAttempts()
-                ),
-                'warning',
-                false
-            );
+            $attempt_html .= $messageReachedMax;
         }
 
         if ($origin == 'learnpath') {

@@ -8305,9 +8305,14 @@ $SeeAllCommunities = "Voir toutes mes communautés";
 $HideForumNotifications = "Cacher les notifications de forum";
 $Forum_categoryFields = "Champs de catégorie de forum";
 $Forum_postFields = "Champs de post de forum";
-$ProposedRevision = "Revision proposée";
+$ExerciseShowOnlyGlobalScoreAndCorrectAnswers = "Afficher uniquement le score global (pas celui de chaque question) et uniquement la réponse correcte (pas les réponses incorrectes)";
 $Reported = "Signalé";
 $FromTimeX = "De %s";
 $ToTimeX = "à %s";
 $SurveyInviteLink = "Lien d'invitation à l'enquête";
+$RevisionProposed = "Révision proposée";
+$SessionsPlanCalendar = "Calendrier de planification des sessions";
+$QuizQuestionsLimitPerDay = "Limite de questions par jour";
+$QuizQuestionsLimitPerDayComment = "Si ce paramètre est configuré à plus de zéro, il empêchera l'utilisateur d'entrer dans un exercice qui a plus de questions que ce qui lui reste. Par exemple, si la limite est de 50 et que l'utilisateur a déjà passé 2 exercices de 20 questions, le système ne permettra pas à l'utilisateur de commencer un 3ème exercice de 20 questions (20+20+20=60 > 50). Il pourra cependant encore commencer un exercice de 10 questions (20+20+10=50).";
+$QuizQuestionsLimitPerDayXReached = "Désolé, vous avez atteint la quantité maximale de questions (%s) par jour. Réessayez demain.";
 ?>

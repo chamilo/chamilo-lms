@@ -882,6 +882,9 @@ hr {
       position: absolute;
       bottom: 0;
       left: 0;
+      .btn-sm{
+        border-radius: 0;
+      }
     }
   }
   .card-ranking{
@@ -935,6 +938,40 @@ hr {
     }
   }
 }
+/***** RANKING ****/
+
+.rating-stars ul {
+  list-style-type:none;
+  padding:0;
+  -moz-user-select:none;
+  -webkit-user-select:none;
+  li{
+    &.star{
+      display:inline-block;
+      i{
+        &.fa{
+          font-size:1.25em;
+          color:#c3c3c3;
+        }
+      }
+      &:hover{
+        i{
+          &.fa{
+            color:#FFCC36;
+          }
+        }
+      }
+      &.selected{
+        i{
+          &.fa{
+            color:#FF912C;
+          }
+        }
+      }
+    }
+  }
+}
+
 
 /******************* ACCORDION B4 *****************/
 .accordion-b4 {

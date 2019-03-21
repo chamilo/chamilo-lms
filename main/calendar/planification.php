@@ -41,7 +41,7 @@ $sessions = UserManager::getSessionsCalendarByYear($sessionsList, $searchYear);
 
 $colors = ChamiloApi::getColorPalette(false, true, count($sessions));
 
-$toolName = get_lang('ViewSessionsPlanification');
+$toolName = get_lang('SessionsPlanCalendar');
 
 $template = new Template($toolName);
 $template->assign('student_id', $userId);

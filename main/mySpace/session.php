@@ -70,7 +70,7 @@ if (api_is_platform_admin(true, true)) {
 
     if (!api_is_session_admin()) {
         $menu_items[] = Display::url(
-            Display::return_icon('1day.png', get_lang('ViewSessionsPlanification'), [], ICON_SIZE_MEDIUM),
+            Display::return_icon('1day.png', get_lang('SessionsPlanCalendar'), [], ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH)."calendar/planification.php"
         );
     }

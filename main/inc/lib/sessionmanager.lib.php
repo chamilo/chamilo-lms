@@ -457,27 +457,22 @@ class SessionManager
     }
 
     /**
-     * Gets the admin session list callback of the session/session_list.php page.
+     * @param array $options  Optional. Order and limit keys
+     * @param bool  $getCount Optional. Whether to get all the results or only the count
+     * @param array $columns  Optional. Columns from jqGrid
      *
-     * @param array $options  order and limit keys
-     * @param bool  $getCount Whether to get all the results or only the count
-     * @param array $columns
-     * @param array $extraFieldsToLoad
-     *
-     * @return mixed Integer for number of rows, or array of results
-     * @assert ([],true) !== false
+     * @return array
      */
-    public static function formatSessionsAdminForGrid(
+    public static function getSessionsAdmin(
+        $userId,
         $options = [],
         $getCount = false,
-        $columns = [],
-        $extraFieldsToLoad = []
+        $columns = []
     ) {
         $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
         $sessionCategoryTable = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 
         $where = 'WHERE 1 = 1 ';
-        $userId = api_get_user_id();
 
         if (!api_is_platform_admin()) {
             if (api_is_session_admin() &&
@@ -493,6 +488,7 @@ class SessionManager
         ) {
             $where .= " AND s.id_coach = $userId ";
         }
+
         $extraFieldModel = new ExtraFieldModel('session');
         $conditions = $extraFieldModel->parseConditions($options);
         $sqlInjectJoins = $conditions['inject_joins'];
@@ -562,6 +558,7 @@ class SessionManager
         if (api_is_multiple_url_enabled()) {
             $tblAccessUrlRelSession = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $accessUrlId = api_get_current_access_url_id();
+
             if ($accessUrlId != -1) {
                 $where .= " AND ar.access_url_id = $accessUrlId ";
                 $query = "$select
@@ -574,7 +571,9 @@ class SessionManager
         if ($showCountUsers) {
             $query .= ' GROUP by s.id';
         }
+
         $allowOrder = api_get_configuration_value('session_list_order');
+
         if ($allowOrder) {
             $order = ' ORDER BY position ASC';
         }
@@ -583,6 +582,52 @@ class SessionManager
         $query .= $limit;
         $result = Database::query($query);
 
+        $sessions = Database::store_result($result, 'ASSOC');
+
+        if ($getCount) {
+            return $sessions[0]['total_rows'];
+        }
+
+        return $sessions;
+    }
+
+    /**
+     * Gets the admin session list callback of the session/session_list.php page.
+     *
+     * @param array $options  order and limit keys
+     * @param bool  $getCount Whether to get all the results or only the count
+     * @param array $columns
+     * @param array $extraFieldsToLoad
+     *
+     * @return mixed Integer for number of rows, or array of results
+     * @assert ([],true) !== false
+     */
+    public static function formatSessionsAdminForGrid(
+        $options = [],
+        $getCount = false,
+        $columns = [],
+        $extraFieldsToLoad = []
+    ) {
+        $showCountUsers = false;
+
+        if (!$getCount && !empty($columns['column_model'])) {
+            foreach ($columns['column_model'] as $column) {
+                if ($column['name'] == 'users') {
+                    $showCountUsers = true;
+                }
+            }
+        }
+
+        $userId = api_get_user_id();
+
+        $sessions = self::getSessionsAdmin($userId, $options, $getCount, $columns);
+
+        if ($getCount) {
+            return (int) $sessions;
+        }
+
+        $formattedSessions = [];
+
         $categories = self::get_all_session_category();
         $orderedCategories = [];
         if (!empty($categories)) {
@@ -590,95 +635,88 @@ class SessionManager
                 $orderedCategories[$category['id']] = $category['name'];
             }
         }
-        $formattedSessions = [];
-        if (Database::num_rows($result)) {
-            $sessions = Database::store_result($result, 'ASSOC');
-            if ($getCount) {
-                return $sessions[0]['total_rows'];
+
+        $activeIcon = Display::return_icon('accept.png', get_lang('Active'));
+        $inactiveIcon = Display::return_icon('error.png', get_lang('Inactive'));
+
+        foreach ($sessions as $session) {
+            if ($showCountUsers) {
+                $session['users'] = self::get_users_by_session($session['id'], 0, true);
+            }
+            $url = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session['id'];
+            if (api_is_drh() || $extraFieldsToLoad) {
+                $url = api_get_path(WEB_PATH).'session/'.$session['id'].'/about/';
             }
 
-            $activeIcon = Display::return_icon('accept.png', get_lang('Active'));
-            $inactiveIcon = Display::return_icon('error.png', get_lang('Inactive'));
+            $session['name'] = Display::url($session['name'], $url);
 
-            foreach ($sessions as $session) {
-                if ($showCountUsers) {
-                    $session['users'] = self::get_users_by_session($session['id'], 0, true);
-                }
-                $url = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session['id'];
-                if (api_is_drh() || $extraFieldsToLoad) {
-                    $url = api_get_path(WEB_PATH).'session/'.$session['id'].'/about/';
-                }
-
-                $session['name'] = Display::url($session['name'], $url);
-
-                if (!empty($extraFieldsToLoad)) {
-                    foreach ($extraFieldsToLoad as $field) {
-                        $extraFieldValue = new ExtraFieldValue('session');
-                        $fieldData = $extraFieldValue->getAllValuesByItemAndField(
-                            $session['id'],
-                            $field['id']
-                        );
-                        $fieldDataArray = [];
-                        $fieldDataToString = '';
-                        if (!empty($fieldData)) {
-                            foreach ($fieldData as $data) {
-                                $fieldDataArray[] = $data['value'];
-                            }
-                            $fieldDataToString = implode(', ', $fieldDataArray);
+            if (!empty($extraFieldsToLoad)) {
+                foreach ($extraFieldsToLoad as $field) {
+                    $extraFieldValue = new ExtraFieldValue('session');
+                    $fieldData = $extraFieldValue->getAllValuesByItemAndField(
+                        $session['id'],
+                        $field['id']
+                    );
+                    $fieldDataArray = [];
+                    $fieldDataToString = '';
+                    if (!empty($fieldData)) {
+                        foreach ($fieldData as $data) {
+                            $fieldDataArray[] = $data['value'];
                         }
-                        $session[$field['variable']] = $fieldDataToString;
+                        $fieldDataToString = implode(', ', $fieldDataArray);
                     }
+                    $session[$field['variable']] = $fieldDataToString;
                 }
-
-                if (isset($session['session_active']) && $session['session_active'] == 1) {
-                    $session['session_active'] = $activeIcon;
-                } else {
-                    $session['session_active'] = $inactiveIcon;
-                }
-
-                $session = self::convert_dates_to_local($session, true);
-
-                switch ($session['visibility']) {
-                    case SESSION_VISIBLE_READ_ONLY: //1
-                        $session['visibility'] = get_lang('ReadOnly');
-                        break;
-                    case SESSION_VISIBLE:           //2
-                    case SESSION_AVAILABLE:         //4
-                        $session['visibility'] = get_lang('Visible');
-                        break;
-                    case SESSION_INVISIBLE:         //3
-                        $session['visibility'] = api_ucfirst(get_lang('Invisible'));
-                        break;
-                }
-
-                // Cleaning double selects.
-                foreach ($session as $key => &$value) {
-                    if (isset($optionsByDouble[$key]) || isset($optionsByDouble[$key.'_second'])) {
-                        $options = explode('::', $value);
-                    }
-                    $original_key = $key;
-                    if (strpos($key, '_second') !== false) {
-                        $key = str_replace('_second', '', $key);
-                    }
-
-                    if (isset($optionsByDouble[$key]) &&
-                        isset($options[0]) &&
-                        isset($optionsByDouble[$key][$options[0]])
-                    ) {
-                        if (strpos($original_key, '_second') === false) {
-                            $value = $optionsByDouble[$key][$options[0]]['option_display_text'];
-                        } else {
-                            $value = $optionsByDouble[$key][$options[1]]['option_display_text'];
-                        }
-                    }
-                }
-
-                $categoryName = isset($orderedCategories[$session['session_category_id']])
-                    ? $orderedCategories[$session['session_category_id']]
-                    : '';
-                $session['category_name'] = $categoryName;
-                $formattedSessions[] = $session;
             }
+
+            if (isset($session['session_active']) && $session['session_active'] == 1) {
+                $session['session_active'] = $activeIcon;
+            } else {
+                $session['session_active'] = $inactiveIcon;
+            }
+
+            $session = self::convert_dates_to_local($session, true);
+
+            switch ($session['visibility']) {
+                case SESSION_VISIBLE_READ_ONLY: //1
+                    $session['visibility'] = get_lang('ReadOnly');
+                    break;
+                case SESSION_VISIBLE:           //2
+                case SESSION_AVAILABLE:         //4
+                    $session['visibility'] = get_lang('Visible');
+                    break;
+                case SESSION_INVISIBLE:         //3
+                    $session['visibility'] = api_ucfirst(get_lang('Invisible'));
+                    break;
+            }
+
+            // Cleaning double selects.
+            foreach ($session as $key => &$value) {
+                if (isset($optionsByDouble[$key]) || isset($optionsByDouble[$key.'_second'])) {
+                    $options = explode('::', $value);
+                }
+                $original_key = $key;
+                if (strpos($key, '_second') !== false) {
+                    $key = str_replace('_second', '', $key);
+                }
+
+                if (isset($optionsByDouble[$key]) &&
+                    isset($options[0]) &&
+                    isset($optionsByDouble[$key][$options[0]])
+                ) {
+                    if (strpos($original_key, '_second') === false) {
+                        $value = $optionsByDouble[$key][$options[0]]['option_display_text'];
+                    } else {
+                        $value = $optionsByDouble[$key][$options[1]]['option_display_text'];
+                    }
+                }
+            }
+
+            $categoryName = isset($orderedCategories[$session['session_category_id']])
+                ? $orderedCategories[$session['session_category_id']]
+                : '';
+            $session['category_name'] = $categoryName;
+            $formattedSessions[] = $session;
         }
 
         return $formattedSessions;

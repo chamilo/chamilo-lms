@@ -8404,7 +8404,7 @@ $FromTimeX = "De %s";
 $ToTimeX = "a %s";
 $SurveyInviteLink = "Enlace de invitación a la encuesta";
 $RevisionProposed = "Revisión propuesta";
-$SessionsPlanCalendar = "Ver calendario de planificación de sesiones";
+$SessionsPlanCalendar = "Calendario de planificación de sesiones";
 $QuizQuestionsLimitPerDay = "Límite de preguntas por día";
 $QuizQuestionsLimitPerDayComment = "Si está opción tiene un valor superior a cero, prohibirá el ingreso a un ejercicio que, en combinación con los ejercicios anteriores, supera el límite de preguntas diarias. Por ejemplo, si el límite fuera de 50 preguntas por día y un alumno hubiese pasado dos ejercicios de 20 preguntas cada uno, no lo dejaría ingresar a un nuevo ejercicio de 20 preguntas (20+20+20=60 > 50). Sin embargo, lo dejaría entrar en un ejercicio de 10 preguntas todavía (20+20+10=50).";
 $QuizQuestionsLimitPerDayXReached = "Lo sentimos, ha alcanzado la cantidad máxima de preguntas (%s) por hoy. Vuelva a intentarlo mañana.";

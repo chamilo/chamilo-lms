@@ -467,7 +467,7 @@ class SessionManager
      * @return mixed Integer for number of rows, or array of results
      * @assert ([],true) !== false
      */
-    public static function get_sessions_admin(
+    public static function formatSessionsAdminForGrid(
         $options = [],
         $getCount = false,
         $columns = [],
@@ -7859,7 +7859,7 @@ SQL;
         $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
         if (empty($sessionId)) {
-            $sessions = SessionManager::get_sessions_admin();
+            $sessions = SessionManager::formatSessionsAdminForGrid();
             $sessionList = [];
             $sessionList[] = '';
             foreach ($sessions as $session) {

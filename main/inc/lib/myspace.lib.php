@@ -1481,7 +1481,7 @@ class MySpace
             'order' => " $columnName $direction",
             'limit' => " $from,$numberItems",
         ];
-        $sessions = SessionManager::get_sessions_admin($options);
+        $sessions = SessionManager::formatSessionsAdminForGrid($options);
         $list = [];
         foreach ($sessions as $session) {
             $list[] = [

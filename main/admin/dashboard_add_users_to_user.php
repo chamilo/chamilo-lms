@@ -32,7 +32,7 @@ $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 $tbl_access_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
 // initializing variables
-$user_id = intval($_GET['user']);
+$user_id = isset($_GET['user']) ? (int) $_GET['user'] : 0;
 $user_info = api_get_user_info($user_id);
 $user_anonymous = api_get_anonymous_id();
 $current_user_id = api_get_user_id();
@@ -63,7 +63,7 @@ if (!api_is_platform_admin()) {
     api_not_allowed(true);
 }
 
-function search_users($needle, $type)
+function search_users($needle, $type = 'multiple')
 {
     global $tbl_access_url_rel_user, $tbl_user, $user_anonymous, $current_user_id, $user_id, $userStatus;
 
@@ -365,6 +365,7 @@ if (count($assigned_users_id) > 0) {
 }
 
 $search_user = '';
+$needle = '';
 if (!empty($firstLetterUser)) {
     $needle = Database::escape_string($firstLetterUser);
     $search_user = "AND ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%'";

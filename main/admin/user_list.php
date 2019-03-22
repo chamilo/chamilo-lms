@@ -12,6 +12,8 @@ use ChamiloSession as Session;
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_session_admin_list_users();
+
 $urlId = api_get_current_access_url_id();
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 
@@ -576,9 +578,19 @@ function modify_filter($user_id, $url_params, $row)
     }
 
     //only allow platform admins to login_as, or session admins only for students (not teachers nor other admins)
-    if (api_is_platform_admin() || (api_is_session_admin() && $current_user_status_label == $statusname[STUDENT])) {
+    $loginAsStatusForSessionAdmins = [$statusname[STUDENT]];
+
+    //except when allow_session_admin_login_as_teacher is enabled, then can login_as teachers also
+    if (api_get_configuration_value('allow_session_admin_login_as_teacher')) {
+        $loginAsStatusForSessionAdmins[] = $statusname[COURSEMANAGER];
+    }
+
+    $sessionAdminCanLoginAs = api_is_session_admin() &&
+        in_array($current_user_status_label, $loginAsStatusForSessionAdmins);
+
+    if (api_is_platform_admin() || $sessionAdminCanLoginAs) {
         if (!$user_is_anonymous) {
-            if (api_global_admin_can_edit_admin($user_id)) {
+            if (api_global_admin_can_edit_admin($user_id, null, $sessionAdminCanLoginAs)) {
                 $result .= '<a href="user_list.php?action=login_as&user_id='.$user_id.'&sec_token='.Security::getTokenFromSession().'">'.
                     Display::return_icon('login_as.png', get_lang('LoginAs')).'</a>&nbsp;';
             } else {
@@ -1094,6 +1106,11 @@ $table->set_column_filter(6, 'email_filter');
 $table->set_column_filter(7, 'status_filter');
 $table->set_column_filter(8, 'active_filter');
 $table->set_column_filter(10, 'modify_filter');
+
+// Hide email column if login is email, to avoid column with same data
+if (api_get_setting('login_is_email') === 'true') {
+    $table->setHideColumn(6);
+}
 
 // Only show empty actions bar if delete users has been blocked
 $actionsList = [];

@@ -309,16 +309,14 @@ $form->addElement('advmultiselect', 'student_boss', get_lang('StudentBoss'), $st
 
 // EXTRA FIELDS
 $extraField = new ExtraField('user');
-//ofaj
 $returnParams = $extraField->addElements(
     $form,
     $user_data['user_id'],
-    [], //exclude
-    false, // filter
-    false, // tag as select
-    [], //show only fields
-    [], // order fields
-    [], // extra data
+    [],
+    false,
+    false,
+    [],
+    [],
     [],
     false,
     true

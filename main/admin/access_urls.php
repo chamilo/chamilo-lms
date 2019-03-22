@@ -143,7 +143,7 @@ echo '</div>';
 $data = UrlManager::get_url_data();
 $urls = [];
 foreach ($data as $row) {
-    //title
+    // Title
     $url = Display::url($row['url'], $row['url'], ['target' => '_blank']);
     $description = $row['description'];
     $createdAt = api_get_local_time($row['tms']);

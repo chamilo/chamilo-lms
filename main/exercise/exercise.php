@@ -640,7 +640,10 @@ if (isset($list_ordered) && !empty($list_ordered)) {
 }
 
 $tableRows = [];
-/*  Listing exercises  */
+$listExercise = [];
+$list=[];
+/*  LIST EXERCISES  */
+
 if (!empty($exerciseList)) {
     if ($origin != 'learnpath') {
         //avoid sending empty parameters
@@ -785,6 +788,10 @@ if (!empty($exerciseList)) {
                 $url = $move.'<a '.$alt_title.' class="'.$class_tip.'" id="tooltip_'.$row['id'].'" href="overview.php?'.api_get_cidreq().$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'">
                              '.Display::return_icon('quiz.png', $row['title']).'
                  '.$title.' </a>';
+
+                $listExercise['id'] = $row['id'];
+                $listExercise['title'] = $title;
+                $listExercise['url'] = "overview.php?".api_get_cidreq().$mylpid.$mylpitemid.'&exerciseId='.$row['id'];
 
                 $item = Display::tag('td', $url.' '.$session_img.$lp_blocked);
 
@@ -1223,12 +1230,18 @@ if (!empty($exerciseList)) {
             }
 
             if ($is_allowedToEdit) {
+                $listExercise['actions'] = $actions;
+
                 $item .= Display::tag('td', $actions, ['class' => 'td_actions']);
             } else {
                 if ($isDrhOfCourse) {
+
                     $actions = '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.
                         Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
+                    $listExercise['actions'] = $actions;
+
                     $item .= Display::tag('td', $actions, ['class' => 'td_actions']);
+
                 }
             }
 
@@ -1239,12 +1252,17 @@ if (!empty($exerciseList)) {
                     'id' => 'exercise_list_'.$my_exercise_id,
                 ]
             );
+
+            $list[] = $listExercise;
         }
+
     }
 }
 
-// end exercise list
-// Hotpotatoes results
+// END EXERCISE LIST
+
+// HOTPOTATOES
+
 $hotpotatoes_exist = false;
 
 if ($is_allowedToEdit) {
@@ -1408,6 +1426,7 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
                 );
             }
             $tableRows[] = Display::tag('tr', $item);
+
         }
     }
 }
@@ -1464,6 +1483,12 @@ if (empty($exerciseList) && $hotpotatoes_exist == false) {
     echo '</tbody>';
     echo '</table>';
     echo '</div>';
+
+    $tpl = new Template(null);
+    $tpl->assign('temp', $list);
+    $layout = $tpl->get_template('exercise/index.html.twig');
+    $content = $tpl->fetch($layout);
+    echo $content;
 }
 
 if ($origin != 'learnpath') { //so we are not in learnpath tool

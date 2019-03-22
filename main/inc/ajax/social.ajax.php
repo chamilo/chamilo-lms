@@ -273,7 +273,7 @@ switch ($action) {
         $start = isset($_REQUEST['start']) ? (int) $_REQUEST['start'] : 0;
         $length = isset($_REQUEST['length']) ? (int) $_REQUEST['length'] : 10;
         $userId = isset($_REQUEST['u']) ? (int) $_REQUEST['u'] : api_get_user_id();
-            $html = '';
+        $html = '';
         if ($userId == api_get_user_id()) {
             $threadList = SocialManager::getThreadList();
             $threadIdList = [];

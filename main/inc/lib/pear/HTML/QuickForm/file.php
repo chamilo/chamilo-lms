@@ -372,9 +372,9 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                 $class = 'input-file';
         }
 
-            return $js.$this->_getTabs().
+        return $js.$this->_getTabs().
                 '<input class="'.$class.'" '.$this->_getAttrString($this->_attributes).' />';
-    }
+        }
     }
 
     /**

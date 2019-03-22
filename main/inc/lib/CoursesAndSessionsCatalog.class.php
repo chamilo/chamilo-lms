@@ -332,7 +332,6 @@ class CoursesAndSessionsCatalog
                             $visibilityCondition
                         ORDER BY RAND()
                         LIMIT 0, $random_value";
-                echo $sql;
             } else {
                 $sql = "SELECT id, id as real_id FROM $tbl_course course
                         WHERE 

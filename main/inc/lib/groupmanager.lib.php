@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CGroupRelUser;
+
 /**
  * This library contains some functions for group-management.
  *
@@ -1345,7 +1347,7 @@ class GroupManager
             ->getResult();
 
         $users = [];
-
+        /** @var CGroupRelUser $subscription */
         foreach ($subscriptions as $subscription) {
             $users[] = api_get_user_info($subscription['id']);
         }

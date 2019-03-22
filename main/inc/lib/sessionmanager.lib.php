@@ -7730,7 +7730,7 @@ SQL;
             case 1:
                 return get_lang('ReadOnly');
             case 2:
-               return get_lang('Visible');
+                return get_lang('Visible');
             case 3:
                 return api_ucfirst(get_lang('Invisible'));
         }

@@ -1379,13 +1379,13 @@ class ExtraField extends Model
                                             continue;
                                         }
                                         $tagsSelect->addOption(
-                                        $tag['tag'],
+                                            $tag['tag'],
                                             $tag['tag'],
                                             [
                                                 'selected' => 'selected',
                                                 'class' => 'selected',
                                             ]
-                                    );
+                                        );
                                         $selectedOptions[] = $tag['tag'];
                                     }
                                 }
@@ -1411,9 +1411,9 @@ class ExtraField extends Model
                                         continue;
                                     }
                                     $tagsSelect->addOption(
-                                    $tag->getTag(),
-                                    $tag->getTag()
-                                );
+                                        $tag->getTag(),
+                                        $tag->getTag()
+                                    );
                                     $selectedOptions[] = $tag->getTag();
                                 }
 
@@ -1433,7 +1433,7 @@ class ExtraField extends Model
                                     $fieldTags = $em->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
                                         ->findBy(
                                             [
-                                        'fieldId' => $field_id,
+                                                'fieldId' => $field_id,
                                             ]
                                         );
                                     $tagsAdded = [];
@@ -1451,10 +1451,10 @@ class ExtraField extends Model
                                         }
 
                                         $tagsSelect->addOption(
-                                        $tag->getTag(),
-                                        $tag->getTag(),
-                                        []
-                                    );
+                                            $tag->getTag(),
+                                            $tag->getTag(),
+                                            []
+                                        );
 
                                         $tagsAdded[] = $tagText;
                                     }
@@ -1463,10 +1463,10 @@ class ExtraField extends Model
                             }
 
                             $form->setDefaults(
-                            [
-                                'extra_'.$field_details['variable'] => $selectedOptions,
-                            ]
-                        );
+                                [
+                                    'extra_'.$field_details['variable'] => $selectedOptions,
+                                ]
+                            );
 
                             if ($useTagAsSelect == false) {
                                 $jquery_ready_content .= "

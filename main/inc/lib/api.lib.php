@@ -1906,7 +1906,7 @@ function api_get_anonymous_id()
     $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
     $tableU = Database::get_main_table(TABLE_MAIN_USER);
     $ip = Database::escape_string(api_get_real_ip());
-    $max = api_get_configuration_value('max_anonymous_users');
+    $max = (int) api_get_configuration_value('max_anonymous_users');
     if ($max >= 2) {
         $sql = "SELECT * FROM $table as TEL 
                 JOIN $tableU as U
@@ -1919,7 +1919,7 @@ function api_get_anonymous_id()
         if (empty(Database::num_rows($result))) {
             $login = uniqid('anon_');
             $anonList = UserManager::get_user_list(['status' => ANONYMOUS], ['registration_date ASC']);
-            if (count($anonList) == $max) {
+            if (count($anonList) >= $max) {
                 foreach ($anonList as $userToDelete) {
                     UserManager::delete_user($userToDelete['user_id']);
                     break;
@@ -3327,7 +3327,6 @@ function api_is_allowed_to_edit(
     $check_student_view = true
 ) {
     $allowSessionAdminEdit = api_get_configuration_value('session_admins_edit_courses_content') === true;
-
     // Admins can edit anything.
     if (api_is_platform_admin($allowSessionAdminEdit)) {
         //The student preview was on

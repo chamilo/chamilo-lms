@@ -125,7 +125,7 @@ class AppPlugin
         $installedPlugins = [];
         $plugins = api_get_settings_params(
             [
-                'variable = ? AND selected_value = ? AND category = ? ' => ['status', 'installed', 'Plugins'],
+                "variable = ? AND selected_value = ? AND category = ? " => ['status', 'installed', 'Plugins'],
             ]
         );
 
@@ -263,6 +263,10 @@ class AppPlugin
      */
     public function loadRegion($pluginName, $region, $template, $forced = false)
     {
+        if ($region == 'course_tool_plugin') {
+            return '';
+        }
+
         ob_start();
         $this->getAllPluginContentsByRegion($pluginName, $region, $template, $forced);
         $content = ob_get_contents();

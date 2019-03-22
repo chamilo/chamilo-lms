@@ -19,7 +19,6 @@ define('ADD_BLOCK', 8);
 $this_section = SECTION_COURSES;
 
 $action = !empty($_GET['action']) ? Security::remove_XSS($_GET['action']) : 'listing';
-// protect a course script
 $logInfo = [
     'tool' => TOOL_COURSE_DESCRIPTION,
     'tool_id' => 0,
@@ -29,7 +28,7 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
-// get actions
+// protect a course script
 api_protect_course_script(true);
 
 $description_type = '';

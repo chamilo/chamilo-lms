@@ -13,7 +13,6 @@ $logInfo = [
     'tool_id' => 0,
     'tool_id_detail' => 0,
     'action' => $action,
-    'info' => '',
 ];
 Event::registerLog($logInfo);
 
@@ -31,12 +30,12 @@ if (!empty($groupId)) {
     $groupProperties = GroupManager::get_group_properties($groupId);
     $groupId = $groupProperties['iid'];
     $interbreadcrumb[] = [
-        "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
-        "name" => get_lang('Groups'),
+        'url' => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
+        'name' => get_lang('Groups'),
     ];
     $interbreadcrumb[] = [
-        "url" => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
-        "name" => get_lang('GroupSpace').' '.$groupProperties['name'],
+        'url' => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
+        'name' => get_lang('GroupSpace').' '.$groupProperties['name'],
     ];
 }
 

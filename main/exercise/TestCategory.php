@@ -733,7 +733,7 @@ class TestCategory
                         category_id
                   FROM $tbl_track_attempt ta 
                   INNER JOIN $tbl_question_rel_category qrc
-                  ON (ta.question_id=qrc.question_id)
+                  ON (ta.question_id = qrc.question_id)
                   WHERE
                     qrc.category_id = $in_cat_id AND
                     exe_id = $in_exe_id AND 

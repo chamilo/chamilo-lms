@@ -64,8 +64,8 @@ $exfile = explode('/', $exercisePath);
 $exfile = strtolower($exfile[sizeof($exfile) - 1]);
 $exercisePath = substr($exercisePath, 0, strpos($exercisePath, $exfile));
 $exercisePath = $exercisePath.'exercise.php';
-// Clear the exercise session
 
+// Clear the exercise session
 Session::erase('objExercise');
 Session::erase('objQuestion');
 Session::erase('objAnswer');
@@ -179,6 +179,10 @@ if ($is_allowedToEdit) {
         if ($choice === 'clean_all_test') {
             $check = Security::check_token('get');
             if ($check) {
+                if ($limitTeacherAccess && !api_is_platform_admin()) {
+                    api_not_allowed(true);
+                }
+
                 // list of exercises in a course/session
                 // we got variable $courseId $courseInfo session api_get_session_id()
                 $exerciseList = ExerciseLib::get_all_exercises_for_course_id(
@@ -328,7 +332,7 @@ if ($is_allowedToEdit) {
                             break;
                         }
 
-                        //clean student results
+                        // Clean student results
                         if ($exercise_action_locked == false) {
                             $quantity_results_deleted = $objExerciseTmp->cleanResults(true);
                             $title = $objExerciseTmp->selectTitle();
@@ -399,7 +403,7 @@ if ($is_allowedToEdit) {
 
                 $newVisibilityStatus = '1'; //"visible"
                 $query = "SELECT id FROM $TBL_DOCUMENT
-                          WHERE c_id = $courseId AND path='".Database :: escape_string($file)."'";
+                          WHERE c_id = $courseId AND path='".Database::escape_string($file)."'";
                 $res = Database::query($query);
                 $row = Database :: fetch_array($res, 'ASSOC');
                 api_item_property_update(
@@ -419,7 +423,7 @@ if ($is_allowedToEdit) {
                 }
                 $newVisibilityStatus = '0'; //"invisible"
                 $query = "SELECT id FROM $TBL_DOCUMENT
-                          WHERE c_id = $courseId AND path='".Database :: escape_string($file)."'";
+                          WHERE c_id = $courseId AND path='".Database::escape_string($file)."'";
                 $res = Database::query($query);
                 $row = Database :: fetch_array($res, 'ASSOC');
                 api_item_property_update(
@@ -487,21 +491,21 @@ if ($is_allowedToEdit) {
     $sql = "SELECT * FROM $TBL_DOCUMENT
             WHERE
                 c_id = $courseId AND
-                path LIKE '".Database :: escape_string($uploadPath.'/%/%')."'";
+                path LIKE '".Database::escape_string($uploadPath.'/%/%')."'";
     $res = Database::query($sql);
     $hp_count = Database :: num_rows($res);
 } else {
     $sql = "SELECT * FROM $TBL_DOCUMENT d 
             INNER JOIN $TBL_ITEM_PROPERTY ip
             ON (d.id = ip.ref AND d.c_id = ip.c_id) 
-            WHERE
+            WHERE                
                 ip.tool = '".TOOL_DOCUMENT."' AND
-                d.path LIKE '".Database :: escape_string($uploadPath.'/%/%')."' AND
+                d.path LIKE '".Database::escape_string($uploadPath.'/%/%')."' AND
                 ip.visibility ='1' AND
                 d.c_id = $courseId AND
                 ip.c_id  = $courseId";
     $res = Database::query($sql);
-    $hp_count = Database :: num_rows($res);
+    $hp_count = Database::num_rows($res);
 }
 
 $total = $total_exercises + $hp_count;
@@ -528,7 +532,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/aiken.php?'.api_get_cidreq().'">'.Display::return_icon('import_aiken.png', get_lang('ImportAikenQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/upload_exercise.php?'.api_get_cidreq().'">'.Display::return_icon('import_excel.png', get_lang('ImportExcelQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    echo Display::url(
+    $cleanAll = Display::url(
         Display::return_icon(
             'clean_all.png',
             get_lang('CleanAllStudentsResultsForAllTests'),
@@ -543,6 +547,14 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
             'data-target' => '#confirm-delete',
         ]
     );
+
+    if ($limitTeacherAccess) {
+        if (api_is_platform_admin()) {
+            echo $cleanAll;
+        }
+    } else {
+        echo $cleanAll;
+    }
 }
 
 if ($is_allowedToEdit) {
@@ -581,7 +593,7 @@ $offline_icon = Display::return_icon(
 
 $exerciseList = [];
 $list_ordered = null;
-while ($row = Database :: fetch_array($result, 'ASSOC')) {
+while ($row = Database::fetch_array($result, 'ASSOC')) {
     $exerciseList[$row['iid']] = $row;
 }
 
@@ -813,8 +825,17 @@ if (!empty($exerciseList)) {
                     $actions .= $settings;
 
                     // Exercise results
-                    $actions .= '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.
+                    $resultsLink = '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.
                         Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
+
+                    if ($limitTeacherAccess) {
+                        if (api_is_platform_admin()) {
+                            $actions .= $resultsLink;
+                        }
+                    } else {
+                        // Exercise results
+                        $actions .= $resultsLink;
+                    }
 
                     // Auto launch
                     if ($autoLaunchAvailable) {
@@ -915,7 +936,7 @@ if (!empty($exerciseList)) {
                             );
                         }
                     }
-                    // Export qti ...
+
                     if ($limitTeacherAccess && !api_is_platform_admin()) {
                         $visibility = '';
                     }
@@ -1223,6 +1244,12 @@ if (!empty($exerciseList)) {
             }
 
             if ($is_allowedToEdit) {
+                $additionalActions = ExerciseLib::getAdditionalTeacherActions($row['id']);
+
+                if (!empty($additionalActions)) {
+                    $actions .= $additionalActions.PHP_EOL;
+                }
+
                 $item .= Display::tag('td', $actions, ['class' => 'td_actions']);
             } else {
                 if ($isDrhOfCourse) {
@@ -1467,5 +1494,5 @@ if (empty($exerciseList) && $hotpotatoes_exist == false) {
 }
 
 if ($origin != 'learnpath') { //so we are not in learnpath tool
-    Display :: display_footer();
+    Display::display_footer();
 }

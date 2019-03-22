@@ -644,12 +644,12 @@ class TicketManager
         if ($sendConfirmation) {
             $form =
                 '<form action="ticket_details.php?ticket_id='.$ticketId.'" id="confirmticket" method="POST" >
-                         <p>'.get_lang('TicketWasThisAnswerSatisfying').'</p>
+                     <p>'.get_lang('TicketWasThisAnswerSatisfying').'</p>
                      <button class="btn btn-primary responseyes" name="response" id="responseyes" value="1">'.
                 get_lang('Yes').'</button>
                      <button class="btn btn-danger responseno" name="response" id="responseno" value="0">'.
                 get_lang('No').'</button>
-                     </form>';
+                 </form>';
             $content .= $form;
         }
 
@@ -672,7 +672,7 @@ class TicketManager
             $sql = "UPDATE $table_support_tickets
                     SET 
                         sys_lastedit_user_id = $userId,
-                        sys_lastedit_datetime ='$now',
+                        sys_lastedit_datetime = '$now',
                         total_messages = (
                             SELECT COUNT(*) as total_messages
                             FROM $table_support_messages
@@ -1510,7 +1510,7 @@ class TicketManager
         $sql = "UPDATE $table_support_tickets SET
                   priority_id = '".self::PRIORITY_HIGH."',
                   sys_lastedit_user_id = $userId,
-                  sys_lastedit_datetime ='$now'
+                  sys_lastedit_datetime = '$now'
                 WHERE id = $ticketId";
         Database::query($sql);
     }

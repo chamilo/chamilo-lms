@@ -42,7 +42,10 @@ if ($form->validate()) {
         $responseImport = $moodleImport->import($file);
 
         Display::addFlash(
-            Display::return_message(get_lang('MoodleFileImportedSuccessfully'), 'success')
+            Display::return_message(
+                get_lang('MoodleFileImportedSuccessfully'),
+                'success'
+            )
         );
     } catch (Exception $exception) {
         Display::addFlash(

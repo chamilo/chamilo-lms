@@ -107,10 +107,10 @@ function save_data($users_courses)
                 $courseInfo = $courseListById[$courseId];
                 $courseCode = $courseInfo['code'];
                 $result = CourseManager::subscribeUser(
-                        $user_id,
-                        $courseCode,
-                        $csv_subscriptions[$courseId]
-                    );
+                    $user_id,
+                    $courseCode,
+                    $csv_subscriptions[$courseId]
+                );
                 if ($result) {
                     $inserted_in_course[$courseInfo['code']] = $courseInfo['title'];
                 }

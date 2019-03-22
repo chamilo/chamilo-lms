@@ -33,19 +33,23 @@ class Export
      * @param array  $data
      * @param string $filename
      * @param bool   $writeOnly Whether to only write on disk or also send for download
+     * @param string $enclosure
      *
      * @return mixed csv raw data | false if no data to export | string file path if success in $writeOnly mode
      */
-    public static function arrayToCsv($data, $filename = 'export', $writeOnly = false)
+    public static function arrayToCsv($data, $filename = 'export', $writeOnly = false, $enclosure = '"')
     {
         if (empty($data)) {
             return false;
         }
 
+        $enclosure = !empty($enclosure) ? $enclosure : '"';
+
         $filePath = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.csv';
         $stream = fopen($filePath, 'w');
-        $writer = new CsvWriter(';', '"', $stream, true);
+        $writer = new CsvWriter(';', $enclosure, $stream, true);
         $writer->prepare();
+
         foreach ($data as $item) {
             if (empty($item)) {
                 $writer->writeItem([]);

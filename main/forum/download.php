@@ -27,7 +27,7 @@ $doc_url = $_GET['file'];
 $doc_url = str_replace('///', '&', $doc_url);
 //still a space present? it must be a '+' (that got replaced by mod_rewrite)
 $doc_url = str_replace(' ', '+', $doc_url);
-$doc_url = str_replace('/..', '', $doc_url); //echo $doc_url;
+$doc_url = str_replace('/..', '', $doc_url);
 
 $tbl_forum_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
 $tbl_forum_post = Database::get_course_table(TABLE_FORUM_POST);

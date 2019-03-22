@@ -441,7 +441,7 @@ if ($form->validate()) {
 }
 
 // Else display the form
-Display :: display_header($nameTools, 'Group');
+Display::display_header($nameTools, 'Group');
 
 // actions bar
 echo '<div class="actions">';

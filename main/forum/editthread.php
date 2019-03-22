@@ -127,7 +127,7 @@ $htmlHeadXtra[] = <<<JS
         $('[name="thread_qualify_gradebook"]:checkbox').change(function () {
             if (this.checked) {
                 $('#options_field').show();
-        } else {            
+            } else {
                 $('#options_field').hide();
                 $("[name='numeric_calification']").val(0);
                 $("[name='calification_notebook_title']").val('');

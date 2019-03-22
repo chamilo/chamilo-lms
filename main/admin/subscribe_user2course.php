@@ -54,7 +54,7 @@ $extra_field_list = UserManager::get_extra_fields();
 $new_field_list = [];
 if (is_array($extra_field_list)) {
     foreach ($extra_field_list as $extra_field) {
-        //if is enabled to filter and is a "<select>" field type
+        // if is enabled to filter and is a "<select>" field type
         if ($extra_field[8] == 1 && $extra_field[2] == ExtraField::FIELD_TYPE_SELECT) {
             $new_field_list[] = [
                 'name' => $extra_field[3],
@@ -304,7 +304,7 @@ if (is_array($extra_field_list)) {
      <b><?php echo get_lang('CourseList'); ?> :</b>
      <br/><br/>
         <?php echo get_lang('FirstLetterCourse'); ?> :
-     <select name="firstLetterCourse" 
+     <select name="firstLetterCourse"
         onchange="javascript:document.formulaire.form_sent.value='2'; document.formulaire.submit();"
         aria-label="<?php echo get_lang('FirstLetterCourse'); ?>">
       <option value="">--</option>

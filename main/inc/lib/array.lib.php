@@ -27,7 +27,7 @@ function array_unique_dimensional($array)
     $array = array_unique($array);
 
     foreach ($array as &$myvalue) {
-        $myvalue = unserialize($myvalue);
+        $myvalue = UnserializeApi::unserialize('not_allowed_clases', $myvalue);
     }
 
     return $array;

@@ -837,7 +837,6 @@ class Pager_Common
      */
     function _renderLink($altText, $linkText)
     {
-
         if ($this->_httpMethod == 'GET') {
             if ($this->_append) {
                 $href = '?' . $this->_http_build_query_wrapper($this->_linkData);

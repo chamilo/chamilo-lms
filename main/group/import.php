@@ -38,7 +38,8 @@ $form->addElement(
     null,
     Display::url(
         get_lang('ExampleCSVFile'),
-        api_get_path(WEB_CODE_PATH).'group/example.csv'
+        api_get_path(WEB_CODE_PATH).'group/example.csv',
+        ['download' => true]
     )
 );
 $form->addButtonImport(get_lang('Import'));

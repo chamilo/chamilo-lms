@@ -29,7 +29,7 @@ if (api_get_setting('course_catalog_published') !== 'true') {
     api_block_anonymous_users();
 }
 
-//For students
+// For students
 $user_can_view_page = true;
 if (api_get_setting('allow_students_to_browse_courses') === 'false') {
     $user_can_view_page = false;
@@ -126,7 +126,7 @@ if (isset($_POST['submit_edit_course_category']) &&
     }
 }
 
-// we are deleting a course category
+// We are creating a new user defined course category (= Create Course Category).
 if (isset($_POST['create_course_category']) &&
     isset($_POST['title_course_category']) &&
     strlen(trim($_POST['title_course_category'])) > 0
@@ -151,7 +151,7 @@ if (isset($_REQUEST['search_course'])) {
     }
 }
 
-// Subscribe user to course
+// We are unsubscribing from a course (=Unsubscribe from course).
 if (isset($_GET['unsubscribe'])) {
     if (!empty($_GET['sec_token']) && $ctok == $_GET['sec_token']) {
         $courseController->unsubscribe_user_from_course(
@@ -234,9 +234,6 @@ switch ($action) {
         break;
     case 'createcoursecategory':
         $courseController->categoryList();
-        break;
-    case 'deletecoursecategory':
-        $courseController->courseList($action);
         break;
     case 'sortmycourses':
         $courseController->courseList($action);
@@ -374,6 +371,7 @@ switch ($action) {
         $userId = api_get_user_id();
         $categoryId = isset($_REQUEST['categoryid']) ? (int) $_REQUEST['categoryid'] : 0;
         $option = isset($_REQUEST['option']) ? (int) $_REQUEST['option'] : 0;
+        $redirect = isset($_REQUEST['redirect']) ? $_REQUEST['redirect'] : 0;
 
         if (empty($userId) || empty($categoryId)) {
             api_not_allowed(true);
@@ -385,6 +383,13 @@ switch ($action) {
                 WHERE user_id = $userId AND id = $categoryId";
         Database::query($sql);
         Display::addFlash(Display::return_message(get_lang('Updated')));
+
+        if ($redirect === 'home') {
+            $url = api_get_path(WEB_PATH).'user_portal.php';
+            header('Location: '.$url);
+            exit;
+        }
+
         $url = api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses';
         header('Location: '.$url);
         exit;

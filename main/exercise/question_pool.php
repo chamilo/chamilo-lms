@@ -48,7 +48,7 @@ $_course = api_get_course_info();
 
 if (empty($objExercise) && !empty($fromExercise)) {
     $objExercise = new Exercise();
-    $objExercise->read($fromExercise);
+    $objExercise->read($fromExercise, false);
 }
 
 $nameTools = get_lang('QuestionPool');
@@ -402,8 +402,6 @@ $question_list = Question::get_question_type_list();
 $new_question_list = [];
 $new_question_list['-1'] = get_lang('All');
 if (!empty($_course)) {
-    $objExercise = new Exercise();
-    $objExercise->read($fromExercise);
     foreach ($question_list as $key => $item) {
         if ($objExercise->feedback_type == EXERCISE_FEEDBACK_TYPE_DIRECT) {
             if (!in_array($key, [HOT_SPOT_DELINEATION, UNIQUE_ANSWER])) {
@@ -705,10 +703,9 @@ $pagination->renderer = function ($data) use ($url) {
     if ($data['pageCount'] > 1) {
         $render = '<ul class="pagination">';
         for ($i = 1; $i <= $data['pageCount']; $i++) {
-            $page = (int) $i;
-            $pageContent = '<li><a href="'.$url.'&page='.$page.'">'.$page.'</a></li>';
-            if ($data['current'] == $page) {
-                $pageContent = '<li class="active"><a href="#" >'.$page.'</a></li>';
+            $pageContent = '<li><a href="'.$url.'&page='.$i.'">'.$i.'</a></li>';
+            if ($data['current'] == $i) {
+                $pageContent = '<li class="active"><a href="#" >'.$i.'</a></li>';
             }
             $render .= $pageContent;
         }
@@ -791,7 +788,6 @@ if (is_array($mainQuestionList)) {
         if (empty($question_type)) {
             continue;
         }
-
         $sessionId = isset($question['session_id']) ? $question['session_id'] : null;
         $exerciseName = isset($question['exercise_name']) ? '<br />('.$question['exercise_id'].') ' : null;
         $row[] = getLinkForQuestion(
@@ -803,6 +799,7 @@ if (is_array($mainQuestionList)) {
             $sessionId,
             $question['exerciseId']
         ).$exerciseName;
+
         $row[] = $question_type;
         $row[] = TestCategory::getCategoryNameForQuestion($question['id'], $selected_course);
         $row[] = $question['level'];
@@ -817,7 +814,8 @@ if (is_array($mainQuestionList)) {
             $exerciseLevel,
             $answerType,
             $session_id,
-            $question['exerciseId']
+            $question['exerciseId'],
+            $objExercise
         ).'&nbsp;'.
         get_action_icon_for_question(
             $actionIcon2,
@@ -830,7 +828,8 @@ if (is_array($mainQuestionList)) {
             $exerciseLevel,
             $answerType,
             $session_id,
-            $question['exerciseId']
+            $question['exerciseId'],
+            $objExercise
         );
         $data[] = $row;
     }
@@ -982,7 +981,8 @@ function get_action_icon_for_question(
     $in_exerciseLevel,
     $in_answerType,
     $in_session_id,
-    $in_exercise_id
+    $in_exercise_id,
+    Exercise $myObjEx
 ) {
     $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
     $getParams = "&selected_course=$in_selected_course&courseCategoryId=$in_courseCategoryId&exerciseId=$in_exercise_id&exerciseLevel=$in_exerciseLevel&answerType=$in_answerType&session_id=$in_session_id";
@@ -1009,20 +1009,16 @@ function get_action_icon_for_question(
             );
             break;
         case 'add':
-            // add if question is not already in test
-            $myObjEx = new Exercise();
-            $myObjEx->read($from_exercise);
-            $res = "-";
-            if (!$myObjEx->isInList($in_questionid)) {
+            $res = '-';
+            if (!$myObjEx->hasQuestion($in_questionid)) {
                 $res = "<a href='".api_get_self()."?".
                     api_get_cidreq().$getParams."&recup=$in_questionid&fromExercise=$from_exercise'>";
-                $res .= Display::return_icon("view_more_stats.gif", get_lang('InsertALinkToThisQuestionInTheExercise'));
+                $res .= Display::return_icon('view_more_stats.gif', get_lang('InsertALinkToThisQuestionInTheExercise'));
                 $res .= "</a>";
             }
-            unset($myObjEx);
             break;
         case 'clone':
-            $url = api_get_self()."?".api_get_cidreq().$getParams.
+            $url = api_get_self().'?'.api_get_cidreq().$getParams.
                 "&question_copy=$in_questionid&course_id=$in_selected_course&fromExercise=$from_exercise";
             $res = Display::url(
                 Display::return_icon('cd.png', get_lang('ReUseACopyInCurrentTest')),

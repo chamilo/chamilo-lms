@@ -151,7 +151,7 @@ function handlePlugins()
     // Plugins NOT installed
     echo Display::page_subheader(get_lang('Plugins'));
     echo '<form class="form-horizontal" name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'&sec_token='.$token.'">';
-    echo '<table class="table table-hover">';
+    echo '<table class="table table-hover table-striped table-bordered">';
     echo '<tr>';
     echo '<th width="20px">';
     echo get_lang('Action');
@@ -1496,7 +1496,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                     // Conversion of the textfield to a select box with valid values.
                     $default_values[$row['variable']] = $row['selected_value'];
                 } elseif ($row['variable'] == 'platform_charset') {
-                    continue;
+                    break;
                 } else {
                     $hideme['class'] = 'col-md-4';
                     $hideme['aria-label'] = get_lang($row['title']);

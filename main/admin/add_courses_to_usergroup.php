@@ -21,7 +21,7 @@ $xajax->registerFunction('search');
 // Setting the section (for the tabs).
 $this_section = SECTION_PLATFORM_ADMIN;
 
-// Access restrictions.
+// Setting breadcrumbs.
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 $interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
 
@@ -137,7 +137,7 @@ if (!empty($course_list)) {
 
 $ajax_search = $add_type == 'unique' ? true : false;
 
-//checking for extra field with filter on
+// checking for extra field with filter on
 function search($needle, $type)
 {
     global $elements_in;

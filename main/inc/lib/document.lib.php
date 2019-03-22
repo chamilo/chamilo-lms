@@ -182,7 +182,6 @@ class DocumentManager
             'pptx' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
             'ppm' => 'image/x-portable-pixmap',
             'ppt' => 'application/vnd.ms-powerpoint',
-            'pps' => 'application/vnd.ms-powerpoint',
             'ps' => 'application/postscript',
             'qt' => 'video/quicktime',
             'ra' => 'audio/x-realaudio',
@@ -268,10 +267,10 @@ class DocumentManager
             return $mimeTypes;
         }
 
-        //get the extension of the file
+        // Get the extension of the file
         $extension = explode('.', $filename);
 
-        //$filename will be an array if a . was found
+        // $filename will be an array if a . was found
         if (is_array($extension)) {
             $extension = strtolower($extension[count($extension) - 1]);
         } else {

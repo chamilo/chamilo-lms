@@ -1,4 +1,3 @@
-
 <?php
 /* For licensing terms, see /license.txt */
 
@@ -36,7 +35,7 @@ if ($formSent) {
     $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : '';
     $description = isset($_REQUEST['description']) ? Security::remove_XSS($_REQUEST['description']) : '';
     $title = isset($_REQUEST['title']) ? Security::remove_XSS($_REQUEST['title']) : '';
-    $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+    $page = isset($_GET['page']) && !empty($_GET['page']) ? (int) $_GET['page'] : 1;
 
     $em = Database::getManager();
     $repo = $em->getRepository('ChamiloCourseBundle:CQuizQuestion');

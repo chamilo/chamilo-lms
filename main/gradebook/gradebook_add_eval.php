@@ -74,8 +74,6 @@ if ($form->validate()) {
         'tool_id_detail' => 0,
         'action' => 'new-eval',
         'action_details' => 'selectcat='.$eval->get_category_id(),
-        'current_id' => $eval->get_id(),
-        'info' => '',
     ];
     Event::registerLog($logInfo);
 
@@ -106,8 +104,6 @@ $logInfo = [
     'tool_id_detail' => 0,
     'action' => 'add-eval',
     'action_details' => 'selectcat='.$select_cat,
-    'current_id' => 0,
-    'info' => '',
 ];
 Event::registerLog($logInfo);
 

@@ -322,10 +322,12 @@ class Plugin
         $settings = $this->get_settings();
         foreach ($settings as $setting) {
             if ($setting['variable'] == $this->get_name().'_'.$name) {
+                $unserialized = UnserializeApi::unserialize('not_allowed_classes', $setting['selected_value'], true);
+
                 if (!empty($setting['selected_value']) &&
-                    @unserialize($setting['selected_value']) !== false
+                    false !== $unserialized
                 ) {
-                    $setting['selected_value'] = unserialize($setting['selected_value']);
+                    $setting['selected_value'] = $unserialized;
                 }
 
                 return $setting['selected_value'];
@@ -528,7 +530,7 @@ class Plugin
             return true;
         }
 
-        //Add an icon in the table tool list
+        // Add an icon in the table tool list
         $this->createLinkToCourseTool($plugin_name, $courseId);
     }
 

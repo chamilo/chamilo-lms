@@ -1724,17 +1724,11 @@ class Display
         }
         $output = [];
         if (!$nosession) {
-            $main_user_table = Database::get_main_table(TABLE_MAIN_USER);
-            $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-            // Request for the name of the general coach
-            $sql = 'SELECT tu.lastname, tu.firstname, ts.*
-                    FROM '.$tbl_session.' ts
-                    LEFT JOIN '.$main_user_table.' tu
-                    ON ts.id_coach = tu.user_id
-                    WHERE ts.id = '.intval($session_id);
-            $rs = Database::query($sql);
-            $session_info = Database::store_result($rs, 'ASSOC');
-            $session_info = $session_info[0];
+            $session_info = api_get_session_info($session_id);
+            $coachInfo = [];
+            if (!empty($session['id_coach'])) {
+                $coachInfo = api_get_user_info($session['id_coach']);
+            }
 
             $session = [];
             $session['category'] = SessionManager::get_session_category($session_info['session_category_id']);
@@ -2110,6 +2104,47 @@ class Display
             $text,
             ['class' => 'boot-tooltip', 'title' => strip_tags($tip)]
         );
+    }
+
+    /**
+     * @param array  $items
+     * @param string $type
+     * @param null   $id
+     *
+     * @return string|null
+     */
+    public static function generate_accordion($items, $type = 'jquery', $id = null)
+    {
+        $html = null;
+        if (!empty($items)) {
+            if (empty($id)) {
+                $id = api_get_unique_id();
+            }
+            if ($type == 'jquery') {
+                $html = '<div class="accordion_jquery" id="'.$id.'">'; //using jquery
+            } else {
+                $html = '<div class="accordion" id="'.$id.'">'; //using bootstrap
+            }
+
+            $count = 1;
+            foreach ($items as $item) {
+                $html .= '<div class="accordion-my-group">';
+                $html .= '<div class="accordion-heading">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#'.$id.'" href="#collapse'.$count.'">
+                            '.$item['title'].'
+                            </a>
+                          </div>';
+
+                $html .= '<div id="collapse'.$count.'" class="accordion-body">';
+                $html .= '<div class="accordion-my-inner">
+                            '.$item['content'].'
+                            </div>
+                          </div>';
+            }
+            $html .= '</div>';
+        }
+
+        return $html;
     }
 
     /**
@@ -2730,6 +2765,41 @@ HTML;
     }
 
     /**
+     * @param string $fileName
+     * @param string $fileUrl
+     *
+     * @return string
+     */
+    public static function fileHtmlGuesser($fileName, $fileUrl)
+    {
+        $data = pathinfo($fileName);
+
+        //$content = self::url($data['basename'], $fileUrl);
+        $content = '';
+        switch ($data['extension']) {
+            case 'webm':
+            case 'mp4':
+            case 'ogg':
+                $content = '<video style="width: 400px; height:100%;" src="'.$fileUrl.'"></video>';
+                // Allows video to play when loading during an ajax call
+                $content .= "<script>jQuery('video:not(.skip), audio:not(.skip)').mediaelementplayer();</script>";
+                break;
+            case 'jpg':
+            case 'jpeg':
+            case 'gif':
+            case 'png':
+                $content = '<img class="img-responsive" src="'.$fileUrl.'" />';
+                break;
+            default:
+                //$html = self::url($data['basename'], $fileUrl);
+                break;
+        }
+        //$html = self::url($content, $fileUrl, ['ajax']);
+
+        return $content;
+    }
+
+    /**
      * @param string $frameName
      *
      * @return string
@@ -2738,20 +2808,42 @@ HTML;
     {
         $defaultFeatures = ['playpause', 'current', 'progress', 'duration', 'tracks', 'volume', 'fullscreen', 'vrview'];
         $features = api_get_configuration_value('video_features');
+        $bowerJsFiles = [];
+        $bowerCSSFiles = [];
         if (!empty($features) && isset($features['features'])) {
             foreach ($features['features'] as $feature) {
                 if ($feature === 'vrview') {
                     continue;
                 }
                 $defaultFeatures[] = $feature;
+                $bowerJsFiles[] = "mediaelement/plugins/$feature/$feature.js";
+                $bowerCSSFiles[] = "mediaelement/plugins/$feature/$feature.css";
             }
+        }
+
+        $translateHtml = '';
+        $translate = api_get_configuration_value('translate_html');
+        if ($translate) {
+            $translateHtml = '{type:"script", id:"_fr4", src:"'.api_get_path(WEB_AJAX_PATH).'lang.ajax.php?a=translate_html&'.api_get_cidreq().'"},';
+        }
+
+        $counter = 10;
+        $extraMediaFiles = '';
+        foreach ($bowerJsFiles as $file) {
+            $extraMediaFiles .= '{type: "script", id: "media_'.$counter.'", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/'.$file.'"},';
+            $counter++;
+        }
+
+        foreach ($bowerCSSFiles as $file) {
+            $extraMediaFiles .= '{type: "stylesheet", id: "media_'.$counter.'", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/'.$file.'"},';
+            $counter++;
         }
 
         $defaultFeatures = implode("','", $defaultFeatures);
         $frameReady = '
           $.frameReady(function() {
-            $(document).ready(function () {
-                $("video:not(.skip), audio:not(.skip)").mediaelementplayer({
+            $(function() {
+                $("video:not(.skip), audio:not(.skip)").mediaelementplayer({                    
                     pluginPath: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/build/",            
                     features: ["'.$defaultFeatures.'"],
                     success: function(mediaElement, originalNode, instance) {
@@ -2768,15 +2860,41 @@ HTML;
                 { type:"stylesheet", id:"_fr5", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery-ui/themes/smoothness/jquery-ui.min.css"},
                 { type:"stylesheet", id:"_fr6", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery-ui/themes/smoothness/theme.css"},
                 { type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
+                { type:"stylesheet", id:"_fr7", src:"'.api_get_path(WEB_PUBLIC_PATH).'css/dialog.css"},
                 { type:"script", id:"_fr3", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?'.api_get_cidreq().'"},
                 {type: "script", id: "_media1", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/build/mediaelement-and-player.min.js"},
                 {type: "stylesheet", id: "_media2", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/build/mediaelementplayer.min.css"},                
                 {type: "stylesheet", id: "_media4", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/plugins/vrview/vrview.css"},
                 {type: "script", id: "_media4", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/plugins/vrview/vrview.js"},
+                '.$extraMediaFiles.'
+                '.$translateHtml.'
             ]
           });';
 
         return $frameReady;
+    }
+
+    /**
+     * @param string $image
+     * @param int    $size
+     *
+     * @return string
+     */
+    public static function get_icon_path($image, $size = ICON_SIZE_SMALL)
+    {
+        return self::return_icon($image, '', [], $size, false, true);
+    }
+
+    /**
+     * @param string $image
+     * @param int    $size
+     * @param string $name
+     *
+     * @return string
+     */
+    public static function get_image($image, $size = ICON_SIZE_SMALL, $name = '')
+    {
+        return self::return_icon($image, $name, [], $size);
     }
 
     public static function dropdownMenu($items = [], array $attr = [])

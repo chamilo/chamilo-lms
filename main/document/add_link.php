@@ -175,7 +175,7 @@ echo DocumentManager::build_directory_selector(
 
 // Add tooltip and correctly parse its inner HTML
 echo '<script>
-$(document).ready(function() {
+$(function() {
     $("[data-toggle=\'tooltip\']").tooltip({
         content: 
             function() {

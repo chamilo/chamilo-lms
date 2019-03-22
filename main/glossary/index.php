@@ -22,24 +22,36 @@ api_protect_course_script(true);
 // Additional javascripts.
 $htmlHeadXtra[] = GlossaryManager::javascript_glossary();
 $htmlHeadXtra[] = '<script>
+function setFocus(){
+    $("#glossary_title").focus();
+}
 
 $(document).ready(function () {
-    
-    var targetUrl;
-    var export_format;
-    
-    $("#export-glossary").click(function() {
-        targetUrl = $(this).attr("href");
+    setFocus();
+    $( "#dialog:ui-dialog" ).dialog( "destroy" );
+    $( "#dialog-confirm" ).dialog({
+        autoOpen: false,
+        show: "blind",
+        resizable: false,
+        height:300,
+        modal: true
     });
-    
-    $("#btn-download").click(function() {
-      export_format = $("input[name=export_format]:checked").val();
-      location.href = targetUrl+"&export_format="+export_format;
-      $("#modal-export").modal("hide");
+    $("#export_opener").click(function() {
+        var targetUrl = $(this).attr("href");        
+        $( "#dialog-confirm" ).dialog({
+            width:400,
+            height:300,
+            buttons: {
+                "'.addslashes(get_lang('Download')).'": function() {
+                    var export_format = $("input[name=export_format]:checked").val();
+                    location.href = targetUrl+"&export_format="+export_format;
+                    $( this ).dialog( "close" );
+                }
+            }
+        });
+        $( "#dialog-confirm" ).dialog("open");
+        return false;
     });
-    
-    
-    
 });
 </script>';
 
@@ -447,7 +459,7 @@ Display::display_introduction_section(TOOL_GLOSSARY);
 
 echo $content;
 
-$extra = null;
+$extra = '<div id="dialog-confirm" title="'.get_lang("ConfirmYourChoice").'">';
 $form = new FormValidator(
     'report',
     'post',
@@ -481,28 +493,8 @@ $form->addElement(
 );
 
 $form->setDefaults(['export_format' => 'csv']);
-
-$extra .= '
-    <div class="modal fade" id="modal-export" tabindex="-1" role="dialog" aria-labelledby="exportModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exportModalLabel">'.get_lang("ConfirmYourChoice").'</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">'
-                    .$form->returnForm().
-                '</div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">'.get_lang('Close').'</button>
-                    <button type="button" id="btn-download" class="btn btn-primary">'.get_lang('Download').'</button>
-                </div>
-            </div>
-        </div>
-    </div>
-';
+$extra .= $form->returnForm();
+$extra .= '</div>';
 
 echo $extra;
 

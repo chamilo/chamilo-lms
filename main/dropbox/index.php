@@ -20,6 +20,7 @@ if (isset($_SESSION[$_course['id']]) &&
 }
 
 $postAction = isset($_POST['action']) ? $_POST['action'] : null;
+$action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
 $view = isset($_GET['view']) ? Security::remove_XSS($_GET['view']) : null;
 $viewReceivedCategory = isset($_GET['view_received_category']) ? Security::remove_XSS($_GET['view_received_category']) : null;
 $viewSentCategory = isset($_GET['view_sent_category']) ? Security::remove_XSS($_GET['view_sent_category']) : null;
@@ -27,6 +28,14 @@ $showSentReceivedTabs = true;
 
 // Do the tracking
 Event::event_access_tool(TOOL_DROPBOX);
+
+$logInfo = [
+    'tool' => TOOL_DROPBOX,
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => $action,
+];
+Event::registerLog($logInfo);
 
 /*	DISPLAY SECTION */
 Display::display_introduction_section(TOOL_DROPBOX);
@@ -47,7 +56,6 @@ if (isset($_GET['dropbox_direction']) && in_array($_GET['dropbox_direction'], ['
 }
 
 $sort_params = Security::remove_XSS(implode('&', $sort_params));
-$action = isset($_GET['action']) ? $_GET['action'] : null;
 
 // Display the form for adding a new dropbox item.
 if ($action == 'add') {

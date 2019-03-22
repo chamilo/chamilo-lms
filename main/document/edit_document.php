@@ -36,7 +36,7 @@ $groupRights = Session::read('group_member_with_upload_rights');
 // Template's javascript
 $htmlHeadXtra[] = '
 <script>
-$(document).ready(function() {
+$(function() {
     $(".scrollbar-light").scrollbar();
     
     expandColumnToogle("#hide_bar_template", {

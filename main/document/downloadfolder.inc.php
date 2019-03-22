@@ -32,6 +32,7 @@ $documentInfo = DocumentManager::get_document_data_by_id(
 if (!empty($sessionId)) {
     /* If no data found and session id exists
        try to look the file inside the session */
+
     if (empty($documentInfo)) {
         $documentInfo = DocumentManager::get_document_data_by_id(
             $_GET['id'],

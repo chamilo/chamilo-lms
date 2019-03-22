@@ -446,7 +446,7 @@ class AnnouncementManager
             $html .= "<tr><th style='text-align:right'>$modify_icons</th></tr>";
         }
 
-        //$toUser = $itemProperty->getToUser();
+        // The user id is always the current one.
         $toUserId = api_get_user_id();
         $content = self::parseContent(
             $toUserId,
@@ -739,7 +739,7 @@ class AnnouncementManager
 
             $send_to_users = CourseManager::separateUsersGroups($to_users);
 
-            // Store in item_property (first the groups, then the users)
+            // if nothing was selected in the menu then send to all the group
             $sentToAllGroup = false;
             if (empty($send_to_users['groups']) && empty($send_to_users['users'])) {
                 $groupInfo = GroupManager::get_group_properties($groupId);
@@ -1770,7 +1770,7 @@ class AnnouncementManager
                             $condition_session
                             $searchCondition AND 
                             ip.visibility='1'
-                        $groupBy
+                            $groupBy
                         ORDER BY display_order DESC";
             } else {
                 if ($user_id) {
@@ -1823,7 +1823,7 @@ class AnnouncementManager
                                 $searchCondition  AND
                                 ip.visibility='1' AND
                                 announcement.session_id IN ( 0,".api_get_session_id().")
-                            $groupBy
+                                $groupBy
                             ";
                 }
             }
@@ -1910,7 +1910,7 @@ class AnnouncementManager
                         $disableEdit = true;
                     }
 
-                    // show attachment list
+                    // Announcement sent to only a user
                     if ($separated['groups'] > 1 && !in_array($group_id, $separated['groups'])) {
                         $disableEdit = true;
                     }

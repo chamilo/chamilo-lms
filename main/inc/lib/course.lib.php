@@ -454,11 +454,11 @@ class CourseManager
         }
 
         $userList = [];
-
+        // Cleaning the $user_id variable
         if (is_array($user_id)) {
             $new_user_id_list = [];
             foreach ($user_id as $my_user_id) {
-                $new_user_id_list[] = intval($my_user_id);
+                $new_user_id_list[] = (int) $my_user_id;
             }
             $new_user_id_list = array_filter($new_user_id_list);
             $userList = $new_user_id_list;
@@ -478,8 +478,8 @@ class CourseManager
         $sql = "DELETE FROM ".Database::get_course_table(TABLE_GROUP_TUTOR)."
                 WHERE c_id = $course_id AND user_id IN (".$user_ids.")";
         Database::query($sql);
-        // Erase user student publications (works) in the course - by André Boivin
 
+        // Erase user student publications (works) in the course - by André Boivin
         if (!empty($userList)) {
             require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
             foreach ($userList as $userId) {
@@ -519,52 +519,18 @@ class CourseManager
 
         // Unsubscribe user from the course.
         if (!empty($session_id)) {
-            // Delete in table session_rel_course_rel_user
-            $sql = "DELETE FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
-                    WHERE
-                        session_id = $session_id AND
-                        c_id = $course_id AND
-                        user_id IN ($user_ids)";
-            Database::query($sql);
-
             foreach ($userList as $uid) {
+                SessionManager::unSubscribeUserFromCourseSession($uid, $course_id, $session_id);
+
                 // check if a user is register in the session with other course
                 $sql = "SELECT user_id FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
                         WHERE session_id = $session_id AND user_id = $uid";
                 $rs = Database::query($sql);
 
                 if (Database::num_rows($rs) == 0) {
-                    // Delete in table session_rel_user
-                    $sql = "DELETE FROM ".Database::get_main_table(TABLE_MAIN_SESSION_USER)."
-                            WHERE
-                                session_id = $session_id AND
-                                user_id = $uid AND
-                                relation_type<>".SESSION_RELATION_TYPE_RRHH;
-                    Database::query($sql);
+                    SessionManager::unsubscribe_user_from_session($uid, $session_id);
                 }
             }
-
-            // Update the table session
-            $sql = "SELECT COUNT(*) FROM ".Database::get_main_table(TABLE_MAIN_SESSION_USER)."
-                    WHERE session_id = '".$session_id."' AND relation_type <> ".SESSION_RELATION_TYPE_RRHH;
-            $row = Database::fetch_array(Database::query($sql));
-            $count = $row[0];
-            // number of users by session
-            $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_SESSION)." SET nbr_users = $count
-                    WHERE id = $session_id";
-            Database::query($sql);
-
-            // Update the table session_rel_course
-            $sql = "SELECT COUNT(*) FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
-                    WHERE session_id = $session_id AND c_id = $course_id AND status <> 2";
-            $row = Database::fetch_array(@Database::query($sql));
-            $count = $row[0];
-
-            // number of users by session and course
-            $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE)."
-                    SET nbr_users = $count
-                    WHERE session_id = $session_id AND c_id = $course_id";
-            Database::query($sql);
 
             Event::addEvent(
                 LOG_UNSUBSCRIBE_USER_FROM_COURSE,
@@ -676,7 +642,7 @@ class CourseManager
         $status = (int) $status;
 
         if (empty($userId) || empty($courseCode)) {
-            return false; //detected possible SQL injection
+            return false;
         }
 
         $courseInfo = api_get_course_info($courseCode);
@@ -692,17 +658,17 @@ class CourseManager
         if (empty($userInfo)) {
             Display::addFlash(Display::return_message(get_lang('UserDoesNotExist'), 'warning'));
 
-            return false; // The user has not been registered to the platform.
+            return false;
         }
 
         $courseId = $courseInfo['real_id'];
         $courseCode = $courseInfo['code'];
         $userCourseCategoryId = (int) $userCourseCategoryId;
-        // Check whether the user has not been already subscribed to the course.
+
         $sessionId = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
         $status = $status === STUDENT || $status === COURSEMANAGER ? $status : STUDENT;
         $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        // The user has been already subscribed to the course.
+
         if (!empty($sessionId)) {
             SessionManager::subscribe_users_to_session_course(
                 [$userId],
@@ -770,7 +736,7 @@ class CourseManager
                             STUDENT,
                             true,
                             false
-            );
+                        );
 
                         if ($count >= $maxStudents) {
                             Display::addFlash(Display::return_message(get_lang('MaxNumberSubscribedStudentsReached'), 'warning'));
@@ -821,22 +787,22 @@ class CourseManager
 
                 // Add event to the system log
                 Event::addEvent(
-                LOG_SUBSCRIBE_USER_TO_COURSE,
-                LOG_COURSE_CODE,
-                $courseCode,
-                api_get_utc_datetime(),
-                api_get_user_id(),
-                $courseId
-            );
+                    LOG_SUBSCRIBE_USER_TO_COURSE,
+                    LOG_COURSE_CODE,
+                    $courseCode,
+                    api_get_utc_datetime(),
+                    api_get_user_id(),
+                    $courseId
+                );
 
                 Event::addEvent(
-                LOG_SUBSCRIBE_USER_TO_COURSE,
-                LOG_USER_OBJECT,
+                    LOG_SUBSCRIBE_USER_TO_COURSE,
+                    LOG_USER_OBJECT,
                     $userInfo,
-                api_get_utc_datetime(),
-                api_get_user_id(),
-                $courseId
-            );
+                    api_get_utc_datetime(),
+                    api_get_user_id(),
+                    $courseId
+                );
 
                 return true;
             }
@@ -3589,7 +3555,7 @@ class CourseManager
         $medium->resize(85);
         $medium->send_image($course_medium_image, -1, 'png');
         $normal = new Image($source_file);
-        $normal->resize(500);
+        $normal->resize(400);
         $normal->send_image($course_image, -1, 'png');
 
         $result = $medium && $normal;
@@ -3858,7 +3824,7 @@ class CourseManager
         $load_dirs = false,
         $useUserLanguageFilterIfAvailable = true
     ) {
-        $user_id = intval($user_id);
+        $user_id = (int) $user_id;
         if (empty($user_id)) {
             $user_id = api_get_user_id();
         }
@@ -3874,6 +3840,7 @@ class CourseManager
             'not_category' => [],
         ];
         $collapsable = api_get_configuration_value('allow_user_course_category_collapsable');
+        $stok = Security::get_token();
         while ($row = Database::fetch_array($result)) {
             // We simply display the title of the category.
             $courseInCategory = self::returnCoursesCategories(
@@ -3884,13 +3851,29 @@ class CourseManager
             );
 
             $collapsed = 0;
+            $collapsableLink = '';
             if ($collapsable) {
+                $url = api_get_path(WEB_CODE_PATH).
+                    'auth/courses.php?categoryid='.$row['id'].'&sec_token='.$stok.'&redirect=home';
                 $collapsed = isset($row['collapsed']) && $row['collapsed'] ? 1 : 0;
+                if ($collapsed === 0) {
+                    $collapsableLink = Display::url(
+                        '<i class="fa fa-folder-open"></i>',
+                        $url.'&action=set_collapsable&option=1'
+                    );
+                } else {
+                    $collapsableLink = Display::url(
+                        '<i class="fa fa-folder"></i>',
+                        $url.'&action=set_collapsable&option=0'
+                    );
+                }
             }
+
             $params = [
                 'id_category' => $row['id'],
                 'title_category' => $row['title'],
                 'collapsed' => $collapsed,
+                'collapsable_link' => $collapsableLink,
                 'courses' => $courseInCategory,
             ];
             $listItems['in_category'][] = $params;
@@ -4042,7 +4025,7 @@ class CourseManager
             if (api_is_platform_admin()) {
                 $params['edit_actions'] .= api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course_info['code'];
                 if ($load_dirs) {
-                    $params['document'] = '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview btn btn-outline-secondary btn-sm" href="javascript:void(0);">'
+                    $params['document'] = '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'
                                .Display::returnFontAwesomeIcon('folder-open').'</a>';
                     $params['document'] .= Display::div(
                         '',
@@ -4054,7 +4037,7 @@ class CourseManager
                 }
             }
             if ($load_dirs) {
-                $params['document'] = '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview btn btn-outline-secondary btn-sm" href="javascript:void(0);">'
+                $params['document'] = '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'
                     .Display::returnFontAwesomeIcon('folder-open').'</a>';
                 $params['document'] .= Display::div(
                     '',
@@ -5667,6 +5650,8 @@ class CourseManager
             'show_course_in_user_language',
             'email_to_teachers_on_new_work_feedback',
             'student_delete_own_publication',
+            'hide_forum_notifications',
+            'quiz_question_limit_per_day',
         ];
 
         $courseModels = ExerciseLib::getScoreModels();

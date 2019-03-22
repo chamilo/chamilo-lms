@@ -20,19 +20,17 @@ $action = in_array($action, $actions) ? $action : 'display_courses';
 
 $showCourses = CoursesAndSessionsCatalog::showCourses();
 $showSessions = CoursesAndSessionsCatalog::showSessions();
-$pageCurrent = isset($pageCurrent) ? $pageCurrent : isset($_GET['pageCurrent']) ? intval($_GET['pageCurrent']) : 1;
-$pageLength = isset($pageLength) ? $pageLength : isset($_GET['pageLength']) ? intval($_GET['pageLength']) : CoursesAndSessionsCatalog::PAGE_LENGTH;
-$pageTotal = intval(ceil(intval($countCoursesInCategory) / $pageLength));
+$pageCurrent = isset($pageCurrent) ? $pageCurrent : isset($_GET['pageCurrent']) ? (int) $_GET['pageCurrent'] : 1;
+$pageLength = isset($pageLength) ? $pageLength : isset($_GET['pageLength']) ? (int) $_GET['pageLength'] : CoursesAndSessionsCatalog::PAGE_LENGTH;
+$pageTotal = (int) ceil((int) $countCoursesInCategory / $pageLength);
 $cataloguePagination = $pageTotal > 1 ? CourseCategory::getCatalogPagination($pageCurrent, $pageLength, $pageTotal) : '';
 $searchTerm = isset($_REQUEST['search_term']) ? Security::remove_XSS($_REQUEST['search_term']) : '';
 $codeType = isset($_REQUEST['category_code']) ? Security::remove_XSS($_REQUEST['category_code']) : '';
 
+$date = date('Y-m-d');
 if ($showSessions && isset($_POST['date'])) {
     $date = $_POST['date'];
-} else {
-    $date = date('Y-m-d');
 }
-
 $userInfo = api_get_user_info();
 $code = isset($code) ? $code : null;
 $search = null;

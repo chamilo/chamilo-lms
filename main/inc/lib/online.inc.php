@@ -107,11 +107,14 @@ function online_logout($user_id = null, $logout_redirect = false)
         $user_id = isset($_GET['uid']) ? intval($_GET['uid']) : 0;
     }
 
-    //Changing global chat status to offline
+    // Changing global chat status to offline
     if (api_is_global_chat_enabled()) {
         $chat = new Chat();
         $chat->setUserStatus(0);
     }
+
+    $chat = new Chat();
+    $chat->close();
 
     // selecting the last login of the user
     $sql = "SELECT login_id, login_date
@@ -135,8 +138,6 @@ function online_logout($user_id = null, $logout_redirect = false)
         'tool' => 'logout',
         'tool_id' => 0,
         'tool_id_detail' => 0,
-        'action' => '',
-        'info' => '',
     ];
     Event::registerLog($logInfo);
 
@@ -172,12 +173,13 @@ function online_logout($user_id = null, $logout_redirect = false)
         }
     }
 
+    Session::erase('last_id');
     CourseChatUtils::exitChat($user_id);
     session_regenerate_id();
     Session::destroy();
 
     $pluginKeycloak = api_get_plugin_setting('keycloak', 'tool_enable') === 'true';
-    if ($pluginKeycloak && $uinfo['auth_source'] === 'keycloack') {
+    if ($pluginKeycloak && $uinfo['auth_source'] === 'keycloak') {
         $pluginUrl = api_get_path(WEB_PLUGIN_PATH).'keycloak/start.php?slo';
         header('Location: '.$pluginUrl);
         exit;
@@ -361,7 +363,7 @@ function who_is_online_count($time_limit = null, $friends = false)
     $current_date = api_get_utc_datetime($online_time);
 
     if ($friends) {
-        // 	who friends from social network is online
+        // who friends from social network is online
         $query = "SELECT DISTINCT count(login_user_id) as count
 				  FROM $track_online_table INNER JOIN $friend_user_table
                   ON (friend_user_id = login_user_id)
@@ -382,7 +384,7 @@ function who_is_online_count($time_limit = null, $friends = false)
         $access_url_id = api_get_current_access_url_id();
         if ($access_url_id != -1) {
             if ($friends) {
-                // 	friends from social network is online
+                // friends from social network is online
                 $query = "SELECT DISTINCT count(login_user_id) as count
 							FROM $track_online_table track
 							INNER JOIN $friend_user_table ON (friend_user_id = login_user_id)

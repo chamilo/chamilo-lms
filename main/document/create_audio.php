@@ -76,11 +76,18 @@ if ($dir[strlen($dir) - 1] != '/') {
     $dir .= '/';
 }
 
+$filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$dir;
+
+if (!is_dir($filepath)) {
+    $filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
+    $dir = '/';
+}
+
 //groups //TODO: clean
 if (!empty($groupId)) {
     $interbreadcrumb[] = [
-        'url' => '../group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('GroupSpace'),
+        "url" => "../group/group_space.php?".api_get_cidreq(),
+        "name" => get_lang('GroupSpace'),
     ];
     $group = GroupManager:: get_group_properties($groupId);
     $path = explode('/', $dir);

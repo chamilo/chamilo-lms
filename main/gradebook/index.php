@@ -24,7 +24,7 @@ $stud_id = api_get_user_id();
 $session_id = api_get_session_id();
 $course_id = api_get_course_int_id();
 
-//make sure the destination for scripts is index.php instead of gradebook.php
+// Make sure the destination for scripts is index.php instead of gradebook.php
 Category::setUrl('index.php');
 
 $this_section = SECTION_COURSES;
@@ -119,8 +119,6 @@ $logInfo = [
     'tool_id_detail' => 0,
     'action' => $my_actions,
     'action_details' => $my_actions_values,
-    'current_id' => 0,
-    'info' => '',
 ];
 Event::registerLog($logInfo);
 
@@ -283,7 +281,7 @@ if (isset($_GET['movelink'])) {
     }
 }
 
-//parameters for categories
+// Parameters for categories.
 if (isset($_GET['visiblecat'])) {
     GradebookUtils::block_students();
 
@@ -322,7 +320,7 @@ if (isset($_GET['deletecat'])) {
     $filter_confirm_msg = false;
 }
 
-//parameters for evaluations
+// Parameters for evaluations.
 if (isset($_GET['visibleeval'])) {
     GradebookUtils::block_students();
     if (isset($_GET['set_visible'])) {
@@ -343,7 +341,7 @@ if (isset($_GET['visibleeval'])) {
     }
 }
 
-//parameters for evaluations
+// Parameters for evaluations.
 if (isset($_GET['lockedeval'])) {
     GradebookUtils::block_students();
     $locked = Security::remove_XSS($_GET['lockedeval']);
@@ -372,7 +370,7 @@ if (isset($_GET['deleteeval'])) {
     $filter_confirm_msg = false;
 }
 
-//parameters for links
+// Parameters for links.
 if (isset($_GET['visiblelink'])) {
     GradebookUtils::block_students();
     if (isset($_GET['set_visible'])) {
@@ -469,7 +467,7 @@ switch ($action) {
         break;
 }
 
-//actions on the sortabletable
+// Actions on the sortabletable.
 if (isset($_POST['action'])) {
     GradebookUtils::block_students();
     $number_of_selected_items = count($_POST['id']);
@@ -640,8 +638,8 @@ if (!isset($_GET['exportpdf'])) {
         $viewTitle = get_lang('ToolGradebook');
     }
 }
-// LOAD DATA & DISPLAY TABLE
 
+// LOAD DATA & DISPLAY TABLE
 $is_platform_admin = api_is_platform_admin();
 $is_course_admin = api_is_allowed_to_edit(null, true);
 $simple_search_form = '';
@@ -703,7 +701,7 @@ if (isset($_GET['studentoverview'])) {
         exit;
     }
 } else {
-    //Student view
+    // Student view
 
     //in any other case (no search, no pdf), print the available gradebooks
     // Important note: loading a category will actually load the *contents* of
@@ -1012,9 +1010,9 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                         ];
 
                         if (!empty($loadStats)) {
-                        for ($z = 5; $z < count($loadStats); $z++) {
-                            $gradebookTable->td_attributes[$z] = 'class="text-center"';
-                        }
+                            for ($z = 5; $z < count($loadStats); $z++) {
+                                $gradebookTable->td_attributes[$z] = 'class="text-center"';
+                            }
                         }
                     } else {
                         $gradebookTable->td_attributes = [

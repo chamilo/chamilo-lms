@@ -33,8 +33,7 @@ $taxAppliesTo = $globalParameters['tax_applies_to'];
 $taxEnable = $plugin->get('tax_enable') === 'true' &&
     ($taxAppliesTo == BuyCoursesPlugin::TAX_APPLIES_TO_ALL ||
     ($taxAppliesTo == BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_COURSE && !$isService) ||
-    ($taxAppliesTo == BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_SESSION && $isService)
-);
+    ($taxAppliesTo == BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_SESSION && $isService));
 
 $htmlText = '<html>';
 $htmlText .= '<link rel="stylesheet" type="text/css" href="plugin.css">';

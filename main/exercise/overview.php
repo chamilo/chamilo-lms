@@ -52,7 +52,7 @@ $interbreadcrumb[] = [
     'url' => 'exercise.php?'.api_get_cidreq(),
     'name' => get_lang('Exercises'),
 ];
-$interbreadcrumb[] = ["url" => "#", "name" => $objExercise->selectTitle(true)];
+$interbreadcrumb[] = ['url' => '#', 'name' => $objExercise->selectTitle(true)];
 
 $time_control = false;
 $clock_expired_time = ExerciseLib::get_session_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
@@ -210,10 +210,7 @@ if (in_array(
 if (!empty($attempts)) {
     $i = $counter;
     foreach ($attempts as $attempt_result) {
-        $score = ExerciseLib::show_score(
-            $attempt_result['exe_result'],
-            $attempt_result['exe_weighting']
-        );
+        $score = ExerciseLib::show_score($attempt_result['exe_result'], $attempt_result['exe_weighting']);
         $attempt_url = api_get_path(WEB_CODE_PATH).'exercise/result.php?';
         $attempt_url .= api_get_cidreq().'&show_headers=1&';
         $attempt_url .= http_build_query([
@@ -254,6 +251,7 @@ if (!empty($attempts)) {
                 RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
                 RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
                 RESULT_DISABLE_RANKING,
+                RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
             ]
         )) {
             $row['result'] = $score;
@@ -267,6 +265,7 @@ if (!empty($attempts)) {
                 RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
                 RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
                 RESULT_DISABLE_RANKING,
+                RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
             ]
         ) || (
             $objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ONLY &&

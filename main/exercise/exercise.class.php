@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
 use ChamiloSession as Session;
 
@@ -3537,8 +3538,10 @@ class Exercise
                     if (!empty($studentChoice)) {
                         if ($studentChoice == $answerCorrect) {
                             // correct answer and student is Unsure or PrettySur
-                            if ($quiz_question_options[$studentChoiceDegree]['position'] >= 3
-                                && $quiz_question_options[$studentChoiceDegree]['position'] < 9) {
+                            if (isset($quiz_question_options[$studentChoiceDegree]) &&
+                                $quiz_question_options[$studentChoiceDegree]['position'] >= 3 &&
+                                $quiz_question_options[$studentChoiceDegree]['position'] < 9
+                            ) {
                                 $questionScore += $true_score;
                             } else {
                                 // student ignore correct answer
@@ -3629,21 +3632,15 @@ class Exercise
                         }
                         $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : '';
 
+                        $real_answers[$answerId] = false;
                         if ($answerCorrect == $studentChoice) {
-                            //$answerCorrect = 1;
                             $real_answers[$answerId] = true;
-                        } else {
-                            //$answerCorrect = 0;
-                            $real_answers[$answerId] = false;
                         }
                     } else {
                         $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : '';
+                        $real_answers[$answerId] = false;
                         if ($answerCorrect == $studentChoice) {
-                            //$answerCorrect = 1;
                             $real_answers[$answerId] = true;
-                        } else {
-                            //$answerCorrect = 0;
-                            $real_answers[$answerId] = false;
                         }
                     }
                     break;
@@ -3659,31 +3656,27 @@ class Exercise
 
                         $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
                         if ($answerCorrect == 1) {
+                            $real_answers[$answerId] = false;
                             if ($studentChoice) {
                                 $real_answers[$answerId] = true;
-                            } else {
-                                $real_answers[$answerId] = false;
                             }
                         } else {
+                            $real_answers[$answerId] = true;
                             if ($studentChoice) {
                                 $real_answers[$answerId] = false;
-                            } else {
-                                $real_answers[$answerId] = true;
                             }
                         }
                     } else {
                         $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
                         if ($answerCorrect == 1) {
+                            $real_answers[$answerId] = false;
                             if ($studentChoice) {
                                 $real_answers[$answerId] = true;
-                            } else {
-                                $real_answers[$answerId] = false;
                             }
                         } else {
+                            $real_answers[$answerId] = true;
                             if ($studentChoice) {
                                 $real_answers[$answerId] = false;
-                            } else {
-                                $real_answers[$answerId] = true;
                             }
                         }
                     }
@@ -4280,6 +4273,12 @@ class Exercise
                                 );
                                 if ($this->showExpectedChoice()) {
                                     $user_answer = '';
+                                }
+                            }
+
+                            if ($results_disabled == RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
+                                if ($s_user_answer != $i_answer_correct_answer) {
+                                    continue;
                                 }
                             }
 
@@ -4901,6 +4900,7 @@ class Exercise
                     if ($debug) {
                         error_log('Showing questions $from '.$from);
                     }
+
                     switch ($answerType) {
                         case UNIQUE_ANSWER:
                         case UNIQUE_ANSWER_IMAGE:
@@ -5097,26 +5097,6 @@ class Exercise
                         case HOT_SPOT_DELINEATION:
                             $user_answer = $user_array;
                             if ($next) {
-                                //$tbl_track_e_hotspot = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
-                                // Save into db
-                                /*	$sql = "INSERT INTO $tbl_track_e_hotspot (
-                                 * hotspot_user_id,
-                                 *  hotspot_course_code,
-                                 *  hotspot_exe_id,
-                                 *  hotspot_question_id,
-                                 *  hotspot_answer_id,
-                                 *  hotspot_correct,
-                                 *  hotspot_coordinate
-                                 *  )
-                                VALUES (
-                                 * '".Database::escape_string($_user['user_id'])."',
-                                 *  '".Database::escape_string($_course['id'])."',
-                                 *  '".Database::escape_string($exeId)."', '".Database::escape_string($questionId)."',
-                                 *  '".Database::escape_string($answerId)."',
-                                 *  '".Database::escape_string($studentChoice)."',
-                                 *  '".Database::escape_string($user_array)."')";
-                                $result = Database::query($sql,__FILE__,__LINE__);
-                                 */
                                 $user_answer = $user_array;
                                 // we compare only the delineation not the other points
                                 $answer_question = $_SESSION['hotspot_coord'][1];
@@ -5266,7 +5246,6 @@ class Exercise
                                 )
                             );
                             echo '</tr>';
-
                             break;
                         case ANNOTATION:
                             ExerciseShowFunctions::displayAnnotationAnswer(
@@ -5578,16 +5557,17 @@ class Exercise
             ) {
                 if ($choice != 0) {
                     $reply = array_keys($choice);
-                    for ($i = 0; $i < sizeof($reply); $i++) {
+                    $countReply = count($reply);
+                    for ($i = 0; $i < $countReply; $i++) {
                         $chosenAnswer = $reply[$i];
                         if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
                             if ($choiceDegreeCertainty != 0) {
                                 $replyDegreeCertainty = array_keys($choiceDegreeCertainty);
-                                $answerDegreeCertainty = $replyDegreeCertainty[$i];
+                                $answerDegreeCertainty = isset($replyDegreeCertainty[$i]) ? $replyDegreeCertainty[$i] : '';
+                                $answerValue = isset($choiceDegreeCertainty[$answerDegreeCertainty]) ? $choiceDegreeCertainty[$answerDegreeCertainty] : '';
                                 Event::saveQuestionAttempt(
                                     $questionScore,
-                                    $chosenAnswer.':'.$choice[$chosenAnswer].':'.
-                                    $choiceDegreeCertainty[$answerDegreeCertainty],
+                                    $chosenAnswer.':'.$choice[$chosenAnswer].':'.$answerValue,
                                     $quesId,
                                     $exeId,
                                     $i,
@@ -6279,9 +6259,9 @@ class Exercise
         }
 
         // 4. We check if the student have attempts
-        $exerciseAttempts = $this->selectAttempts();
-
         if ($isVisible) {
+            $exerciseAttempts = $this->selectAttempts();
+
             if ($exerciseAttempts > 0) {
                 $attemptCount = Event::get_attempt_count_not_finished(
                     api_get_user_id(),
@@ -6297,6 +6277,19 @@ class Exercise
                         $this->name,
                         $exerciseAttempts
                     );
+                    $isVisible = false;
+                }
+            } else {
+                $isLimitReached = ExerciseLib::isQuestionsLimitPerDayReached(
+                    api_get_user_id(),
+                    $this->selectNbrQuestions(),
+                    api_get_course_int_id(),
+                    api_get_session_id()
+                );
+
+                if ($isLimitReached) {
+                    $maxQuestionsAnswered = (int) api_get_course_setting('quiz_question_limit_per_day');
+                    $message = sprintf(get_lang('QuizQuestionsLimitPerDayXReached'), $maxQuestionsAnswered);
                     $isVisible = false;
                 }
             }
@@ -8403,14 +8396,14 @@ class Exercise
             ['id' => 'result_disabled_6']
         );
 
-        /*$resultDisabledGroup[] = $form->createElement(
+        $resultDisabledGroup[] = $form->createElement(
             'radio',
             'results_disabled',
             null,
-            get_lang('ExerciseShowOnlyCorrectAnswer'),
+            get_lang('ExerciseShowOnlyGlobalScoreAndCorrectAnswers'),
             '7',
             ['id' => 'result_disabled_7']
-        );*/
+        );
 
         $group = $form->addGroup(
             $resultDisabledGroup,

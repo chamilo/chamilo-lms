@@ -8372,9 +8372,14 @@ $SeeAllCommunities = "See all communities";
 $HideForumNotifications = "Hide forum notifications";
 $Forum_categoryFields = "Forum Category fields";
 $Forum_postFields = "Forum post fields";
-$ProposedRevision = "Proposed revision";
+$ExerciseShowOnlyGlobalScoreAndCorrectAnswers = "Show only global score (not question score) and show only the correct answers, do not show incorrect answers at all";
 $Reported = "Reported";
 $FromTimeX = "From %s";
 $ToTimeX = "To %s";
 $SurveyInviteLink = "Survey invitation link";
+$RevisionProposed = "Revision proposed";
+$SessionsPlanCalendar = "Sessions plan calendar";
+$QuizQuestionsLimitPerDay = "Limit of questions per day";
+$QuizQuestionsLimitPerDayComment = "If set to greater than 0, this option will prevent the learner from entering a test that has more than what remains for the daily allowance. For example, is the limit is 50 and the learner has already taken 2 tests of 20 questions, it will not let the learner enter another 20 questions test (20+20+20=60 > 50). However, it will let the learner enter a 10 questions test (20+20+10=50).";
+$QuizQuestionsLimitPerDayXReached = "Sorry, you have reached the maximum number of questions (%s) for the day. Please try again tomorrow.";
 ?>

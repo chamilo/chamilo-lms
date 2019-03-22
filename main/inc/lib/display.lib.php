@@ -2786,7 +2786,7 @@ HTML;
             case 'jpeg':
             case 'gif':
             case 'png':
-                $content = '<img width="400px" src="'.$fileUrl.'" />';
+                $content = '<img class="img-responsive" src="'.$fileUrl.'" />';
                 break;
             default:
                 //$html = self::url($data['basename'], $fileUrl);

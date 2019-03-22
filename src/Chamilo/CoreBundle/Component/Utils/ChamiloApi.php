@@ -320,7 +320,8 @@ class ChamiloApi
         }
         if ($wrapInRGBA) {
             foreach ($palette as $index => $color) {
-                $palette[$index] = 'rgba('.$palette[$index].')';
+                $color = trim($color);
+                $palette[$index] = 'rgba('.$color.')';
             }
         }
         // If we want more colors, loop through existing colors
@@ -332,5 +333,26 @@ class ChamiloApi
         }
 
         return $palette;
+    }
+
+    /**
+     * Get the local time for the midnight
+     *
+     * @param string|null $utcTime Optional. The time to ve converted.
+     *                             See api_get_local_time.
+     *
+     * @throws \Exception
+     *
+     * @return \DateTime
+     */
+    public static function getServerMidnightTime($utcTime = null)
+    {
+        $localTime = api_get_local_time($utcTime);
+        $localTimeZone = api_get_timezone();
+
+        $localMidnight = new \DateTime($localTime, new \DateTimeZone($localTimeZone));
+        $localMidnight->modify('midnight');
+
+        return $localMidnight;
     }
 }

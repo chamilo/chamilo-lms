@@ -76,13 +76,13 @@ if ($form->validate()) {
                     $weighting[$i] = isset($questionAnswers->weighting[$i]) ? $questionAnswers->weighting[$i] : 0;
                     break;
                 case 1:
-                    $weighting[$i] = -10 / $nbrQuestions;
+                    $weighting[$i] = (-10 / $counts[0]) / $nbrQuestions;
                     break;
                 case 2:
-                    $weighting[$i] = -10 / 2 / $nbrQuestions;
+                    $weighting[$i] = (-10 / $counts[0]) / 2 / $nbrQuestions;
                     break;
                 case 3:
-                    $weighting[$i] = -10 / 3 / $nbrQuestions;
+                    $weighting[$i] = (-10 / $counts[0]) / 3 / $nbrQuestions;
                     break;
             }
         }

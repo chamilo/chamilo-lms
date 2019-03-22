@@ -49,7 +49,7 @@ class HTML_QuickForm_submit extends HTML_QuickForm_input
         parent::__construct($elementName, null, $attributes);
         $this->setValue($value);
         $this->setType('submit');
-    } //end constructor
+    }
 
     /**
      * Freeze the element so that only its value is returned
@@ -60,7 +60,7 @@ class HTML_QuickForm_submit extends HTML_QuickForm_input
     function freeze()
     {
         return false;
-    } //end func freeze
+    }
 
    /**
     * Only return the value if it is found within $submitValues (i.e. if
@@ -71,4 +71,4 @@ class HTML_QuickForm_submit extends HTML_QuickForm_input
         return $this->_prepareValue($this->_findValue($submitValues), $assoc);
     }
 
-} //end class HTML_QuickForm_submit
+}

@@ -1675,7 +1675,7 @@ class Attendance
      */
     public static function is_locked_attendance($attendanceId)
     {
-        //use gradebook lock
+        //  Use gradebook lock
         $result = api_resource_is_locked_by_gradebook($attendanceId, LINK_ATTENDANCE);
 
         return $result;

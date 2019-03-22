@@ -53,7 +53,7 @@ class HTML_QuickForm_static extends HTML_QuickForm_element
         $this->_persistantFreeze = false;
         $this->_type = 'static';
         $this->_text = $text;
-    } //end constructor
+    }
 
     /**
      * Sets the element name
@@ -65,7 +65,7 @@ class HTML_QuickForm_static extends HTML_QuickForm_element
     function setName($name)
     {
         $this->updateAttributes(array('name'=>$name));
-    } //end func setName
+    }
 
     /**
      * Returns the element name
@@ -76,7 +76,7 @@ class HTML_QuickForm_static extends HTML_QuickForm_element
     function getName()
     {
         return $this->getAttribute('name');
-    } //end func getName
+    }
 
     /**
      * Sets the text
@@ -88,7 +88,7 @@ class HTML_QuickForm_static extends HTML_QuickForm_element
     function setText($text)
     {
         $this->_text = $text;
-    } // end func setText
+    }
 
     /**
      * Sets the text (uses the standard setValue call to emulate a form element.
@@ -100,7 +100,7 @@ class HTML_QuickForm_static extends HTML_QuickForm_element
     function setValue($text)
     {
         $this->setText($text);
-    } // end func setValue
+    }
 
     /**
      * Returns the static text element in HTML
@@ -111,7 +111,7 @@ class HTML_QuickForm_static extends HTML_QuickForm_element
     public function toHtml()
     {
         return $this->_getTabs() . $this->_text;
-    } //end func toHtml
+    }
 
     /**
      * Returns the value of field without HTML tags
@@ -122,7 +122,7 @@ class HTML_QuickForm_static extends HTML_QuickForm_element
     function getFrozenHtml()
     {
         return $this->toHtml();
-    } //end func getFrozenHtml
+    }
 
     /**
      * Called by HTML_QuickForm whenever form event is made on this element
@@ -152,9 +152,9 @@ class HTML_QuickForm_static extends HTML_QuickForm_element
                 parent::onQuickFormEvent($event, $arg, $caller);
         }
         return true;
-    } // end func onQuickFormEvent
+    }
 
-   /**
+    /**
     * We override this here because we don't want any values from static elements
     */
     function exportValue(&$submitValues, $assoc = false)

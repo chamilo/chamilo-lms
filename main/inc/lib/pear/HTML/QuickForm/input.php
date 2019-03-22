@@ -46,7 +46,7 @@ class HTML_QuickForm_input extends HTML_QuickForm_element
     public function __construct($elementName=null, $elementLabel=null, $attributes=null)
     {
         parent::__construct($elementName, $elementLabel, $attributes);
-    } //end constructor
+    }
 
     /**
      * Sets the element type
@@ -60,7 +60,7 @@ class HTML_QuickForm_input extends HTML_QuickForm_element
     {
         $this->_type = $type;
         $this->updateAttributes(array('type'=>$type));
-    } // end func setType
+    }
 
     /**
      * Sets the input field name
@@ -73,7 +73,7 @@ class HTML_QuickForm_input extends HTML_QuickForm_element
     function setName($name)
     {
         $this->updateAttributes(array('name'=>$name));
-    } //end func setName
+    }
 
     /**
      * Returns the element name
@@ -85,7 +85,7 @@ class HTML_QuickForm_input extends HTML_QuickForm_element
     function getName()
     {
         return $this->getAttribute('name');
-    } //end func getName
+    }
 
     /**
      * Sets the value of the form element
@@ -97,8 +97,8 @@ class HTML_QuickForm_input extends HTML_QuickForm_element
      */
     public function setValue($value)
     {
-        $this->updateAttributes(array('value'=>$value));
-    } // end func setValue
+        $this->updateAttributes(array('value' => $value));
+    }
 
     /**
      * Returns the value of the form element
@@ -110,7 +110,7 @@ class HTML_QuickForm_input extends HTML_QuickForm_element
     public function getValue()
     {
         return $this->getAttribute('value');
-    } // end func getValue
+    }
 
     /**
      * Returns the input field in HTML
@@ -126,7 +126,7 @@ class HTML_QuickForm_input extends HTML_QuickForm_element
         } else {
             return $this->_getTabs() . '<input' . $this->_getAttrString($this->_attributes) . ' />';
         }
-    } //end func toHtml
+    }
 
     /**
      * Called by HTML_QuickForm whenever form event is made on this element

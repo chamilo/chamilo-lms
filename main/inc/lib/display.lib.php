@@ -1325,7 +1325,7 @@ class Display
         $obj->viewrecords = 'true';
         $all_value = 10000000;
 
-        // Default row quantity
+        // Sets how many records we want to view in the grid
         $obj->rowNum = 20;
 
         // Default row quantity
@@ -1708,27 +1708,20 @@ class Display
         }
         $output = [];
         if (!$nosession) {
-            $main_user_table = Database::get_main_table(TABLE_MAIN_USER);
-            $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-            // Request for the name of the general coach
-            $sql = 'SELECT tu.lastname, tu.firstname, ts.*
-                    FROM '.$tbl_session.' ts
-                    LEFT JOIN '.$main_user_table.' tu
-                    ON ts.id_coach = tu.user_id
-                    WHERE ts.id = '.intval($session_id);
-            $rs = Database::query($sql);
-            $session_info = Database::store_result($rs, 'ASSOC');
-            $session_info = $session_info[0];
+            $session_info = api_get_session_info($session_id);
+            $coachInfo = [];
+            if (!empty($session['id_coach'])) {
+                $coachInfo = api_get_user_info($session['id_coach']);
+            }
 
             $session = [];
             $session['category_id'] = $session_info['session_category_id'];
             $session['title'] = $session_info['name'];
             $session['id_coach'] = $session_info['id_coach'];
-            $session['coach'] = '';
             $session['dates'] = '';
-
-            if (api_get_setting('show_session_coach') === 'true') {
-                $session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($session_info['firstname'], $session_info['lastname']);
+            $session['coach'] = '';
+            if (api_get_setting('show_session_coach') === 'true' && isset($coachInfo['complete_name'])) {
+                $session['coach'] = get_lang('GeneralCoach').': '.$coachInfo['complete_name'];
             }
 
             if (($session_info['access_end_date'] == '0000-00-00 00:00:00' &&
@@ -1745,11 +1738,8 @@ class Display
             } else {
                 $dates = SessionManager::parseSessionDates($session_info, true);
                 $session['dates'] = $dates['access'];
-                if (api_get_setting('show_session_coach') === 'true') {
-                    $session['coach'] = api_get_person_name(
-                        $session_info['firstname'],
-                        $session_info['lastname']
-                    );
+                if (api_get_setting('show_session_coach') === 'true' && isset($coachInfo['complete_name'])) {
+                    $session['coach'] = $coachInfo['complete_name'];
                 }
                 $active = $date_start <= $now && $date_end >= $now;
             }
@@ -2604,7 +2594,7 @@ class Display
     /**
      * Get a HTML code for a icon by Font Awesome.
      *
-     * @param string     $name            The icon name
+     * @param string     $name            The icon name. Example: "mail-reply"
      * @param int|string $size            Optional. The size for the icon. (Example: lg, 2, 3, 4, 5)
      * @param bool       $fixWidth        Optional. Whether add the fw class
      * @param string     $additionalClass Optional. Additional class
@@ -2796,7 +2786,7 @@ HTML;
             case 'jpeg':
             case 'gif':
             case 'png':
-                $content = '<img width="400px" src="'.$fileUrl.'" />';
+                $content = '<img class="img-responsive" src="'.$fileUrl.'" />';
                 break;
             default:
                 //$html = self::url($data['basename'], $fileUrl);
@@ -2816,20 +2806,42 @@ HTML;
     {
         $defaultFeatures = ['playpause', 'current', 'progress', 'duration', 'tracks', 'volume', 'fullscreen', 'vrview'];
         $features = api_get_configuration_value('video_features');
+        $bowerJsFiles = [];
+        $bowerCSSFiles = [];
         if (!empty($features) && isset($features['features'])) {
             foreach ($features['features'] as $feature) {
                 if ($feature === 'vrview') {
                     continue;
                 }
                 $defaultFeatures[] = $feature;
+                $bowerJsFiles[] = "mediaelement/plugins/$feature/$feature.js";
+                $bowerCSSFiles[] = "mediaelement/plugins/$feature/$feature.css";
             }
+        }
+
+        $translateHtml = '';
+        $translate = api_get_configuration_value('translate_html');
+        if ($translate) {
+            $translateHtml = '{type:"script", id:"_fr4", src:"'.api_get_path(WEB_AJAX_PATH).'lang.ajax.php?a=translate_html&'.api_get_cidreq().'"},';
+        }
+
+        $counter = 10;
+        $extraMediaFiles = '';
+        foreach ($bowerJsFiles as $file) {
+            $extraMediaFiles .= '{type: "script", id: "media_'.$counter.'", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/'.$file.'"},';
+            $counter++;
+        }
+
+        foreach ($bowerCSSFiles as $file) {
+            $extraMediaFiles .= '{type: "stylesheet", id: "media_'.$counter.'", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/'.$file.'"},';
+            $counter++;
         }
 
         $defaultFeatures = implode("','", $defaultFeatures);
         $frameReady = '
           $.frameReady(function() {
-            $(document).ready(function () {
-                $("video:not(.skip), audio:not(.skip)").mediaelementplayer({
+            $(function() {
+                $("video:not(.skip), audio:not(.skip)").mediaelementplayer({                    
                     pluginPath: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/build/",            
                     features: ["'.$defaultFeatures.'"],
                     success: function(mediaElement, originalNode, instance) {
@@ -2846,15 +2858,40 @@ HTML;
                 { type:"stylesheet", id:"_fr5", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery-ui/themes/smoothness/jquery-ui.min.css"},
                 { type:"stylesheet", id:"_fr6", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery-ui/themes/smoothness/theme.css"},
                 { type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
+                { type:"stylesheet", id:"_fr7", src:"'.api_get_path(WEB_PUBLIC_PATH).'css/dialog.css"},
                 { type:"script", id:"_fr3", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?'.api_get_cidreq().'"},
                 {type: "script", id: "_media1", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/build/mediaelement-and-player.min.js"},
                 {type: "stylesheet", id: "_media2", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/build/mediaelementplayer.min.css"},                
                 {type: "stylesheet", id: "_media4", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/plugins/vrview/vrview.css"},
                 {type: "script", id: "_media4", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/plugins/vrview/vrview.js"},
-                {type:"script", id:"_fr4", src:"'.api_get_path(WEB_AJAX_PATH).'lang.ajax.php?a=translate_html&'.api_get_cidreq().'"},
+                '.$extraMediaFiles.'
+                '.$translateHtml.'
             ]
           });';
 
         return $frameReady;
+    }
+
+    /**
+     * @param string $image
+     * @param int    $size
+     *
+     * @return string
+     */
+    public static function get_icon_path($image, $size = ICON_SIZE_SMALL)
+    {
+        return self::return_icon($image, '', [], $size, false, true);
+    }
+
+    /**
+     * @param string $image
+     * @param int    $size
+     * @param string $name
+     *
+     * @return string
+     */
+    public static function get_image($image, $size = ICON_SIZE_SMALL, $name = '')
+    {
+        return self::return_icon($image, $name, [], $size);
     }
 }

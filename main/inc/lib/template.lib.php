@@ -163,19 +163,19 @@ class Template
             ],
             [
                 'name' => 'icon',
-                'callable' => 'Template::get_icon_path',
+                'callable' => 'Display::get_icon_path',
             ],
             [
                 'name' => 'img',
-                'callable' => 'Template::get_image',
+                'callable' => 'Display::get_image',
             ],
             [
                 'name' => 'format_date',
-                'callable' => 'Template::format_date',
+                'callable' => 'api_format_date',
             ],
             [
                 'name' => 'get_template',
-                'callable' => 'Template::findTemplateFilePath',
+                'callable' => 'api_find_template',
             ],
             [
                 'name' => 'date_to_time_ago',
@@ -253,40 +253,6 @@ class Template
                 }
             }
         }
-    }
-
-    /**
-     * @param string $image
-     * @param int    $size
-     *
-     * @return string
-     */
-    public static function get_icon_path($image, $size = ICON_SIZE_SMALL)
-    {
-        return Display::return_icon($image, '', [], $size, false, true);
-    }
-
-    /**
-     * @param string $image
-     * @param int    $size
-     * @param string $name
-     *
-     * @return string
-     */
-    public static function get_image($image, $size = ICON_SIZE_SMALL, $name = '')
-    {
-        return Display::return_icon($image, $name, [], $size);
-    }
-
-    /**
-     * @param string $timestamp
-     * @param string $format
-     *
-     * @return string
-     */
-    public static function format_date($timestamp, $format = null)
-    {
-        return api_format_date($timestamp, $format);
     }
 
     /**
@@ -469,16 +435,16 @@ class Template
 
         $this->assign('show_toolbar', $show_toolbar);
 
-        //Only if course is available
+        // Only if course is available
         $courseToolBar = '';
         $show_course_navigation_menu = '';
         if (!empty($this->course_id) && $this->user_is_logged_in) {
             if (api_get_setting('show_toolshortcuts') != 'false') {
-                //Course toolbar
+                // Course toolbar
                 $courseToolBar = CourseHome::show_navigation_tool_shortcuts();
             }
             if (api_get_setting('show_navigation_menu') != 'false') {
-                //Course toolbar
+                // Course toolbar
                 $show_course_navigation_menu = CourseHome::show_navigation_menu();
             }
         }
@@ -531,7 +497,7 @@ class Template
      */
     public function get_template($name)
     {
-        return self::findTemplateFilePath($name);
+        return api_find_template($name);
     }
 
     /**
@@ -776,6 +742,7 @@ class Template
             'select2/dist/js/select2.min.js',
             "select2/dist/js/i18n/$isoCode.js",
             'mediaelement/plugins/vrview/vrview.js',
+            'js-cookie/src/js.cookie.js',
         ];
 
         $features = api_get_configuration_value('video_features');
@@ -1518,7 +1485,7 @@ class Template
         $this->assign('prefetch', $prefetch);
         $this->assign('text_direction', api_get_text_direction());
         $this->assign('section_name', 'section-'.$this_section);
-        $this->assignFavIcon(); //Set a 'favico' var for the template
+        $this->assignFavIcon();
         $this->setHelp();
 
         $this->assignBugNotification(); //Prepare the 'bug_notification' var for the template

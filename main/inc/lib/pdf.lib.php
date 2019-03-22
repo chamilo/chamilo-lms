@@ -58,10 +58,6 @@ class PDF
         $this->params['pdf_date'] = isset($params['pdf_date']) ? $params['pdf_date'] : api_format_date($localTime, DATE_TIME_FORMAT_LONG);
         $this->params['pdf_date_only'] = isset($params['pdf_date']) ? $params['pdf_date'] : api_format_date($localTime, DATE_FORMAT_LONG);
 
-        // Ofaj set custom paths to load ttfonts and font configuration
-        define('_MPDF_SYSTEM_TTFONTS_CONFIG', api_get_path(LIBRARY_PATH).'pdf_config.php');
-        define('_MPDF_SYSTEM_TTFONTS', api_get_path(SYS_APP_PATH).'Resources/public/fonts/');
-
         $this->pdf = new mPDF(
             'UTF-8',
             $pageFormat,
@@ -273,7 +269,7 @@ class PDF
                 $this->pdf->WriteHTML($css, 1);
             }
 
-            //it's not a chapter but the file exists, print its title
+            // it's not a chapter but the file exists, print its title
             if ($print_title) {
                 $this->pdf->WriteHTML(
                     '<html><body><h3>'.$html_title.'</h3></body></html>'
@@ -333,7 +329,6 @@ class PDF
                 $this->pdf->WriteHTML('<html><body>'.$image.'</body></html>'.$page_break);
             }
         }
-
         if (empty($pdf_name)) {
             $output_file = 'pdf_'.date('Y-m-d-his').'.pdf';
         } else {
@@ -364,6 +359,8 @@ class PDF
      * 'D' (download file) (this is the default value),
      * 'F' (save to local file) or
      * 'S' (return as a string)
+     *
+     * @throws MpdfException
      *
      * @return string Web path
      */
@@ -416,9 +413,15 @@ class PDF
             //Fixing only images @todo do the same thing with other elements
             $elements = $doc->getElementsByTagName('img');
             $protocol = api_get_protocol();
+            $replaced = [];
             if (!empty($elements)) {
                 foreach ($elements as $item) {
                     $old_src = $item->getAttribute('src');
+
+                    if (in_array($old_src, $replaced)) {
+                        continue;
+                    }
+
                     if (strpos($old_src, $protocol) === false) {
                         if (strpos($old_src, '/main/default_course_document') === false) {
                             if (strpos($old_src, '/main/inc/lib/') === false &&
@@ -436,6 +439,7 @@ class PDF
                                 );
                                 $new_path = $document_path.$old_src_fixed;
                                 $document_html = str_replace($old_src, $new_path, $document_html);
+                                $replaced[] = $old_src;
                             }
                         }
                     }
@@ -459,7 +463,11 @@ class PDF
         }
 
         if (!empty($css)) {
-            $this->pdf->WriteHTML($css, 1);
+            try {
+                $this->pdf->WriteHTML($css, 1);
+            } catch (MpdfException $e) {
+                error_log($e);
+            }
         }
 
         if ($addDefaultCss) {
@@ -470,11 +478,19 @@ class PDF
             ];
             foreach ($basicStyles as $style) {
                 $cssContent = file_get_contents($style);
-                $this->pdf->WriteHTML($cssContent, 1);
+                try {
+                    $this->pdf->WriteHTML($cssContent, 1);
+                } catch (MpdfException $e) {
+                    error_log($e);
+                }
             }
         }
 
-        $this->pdf->WriteHTML($document_html);
+        try {
+            $this->pdf->WriteHTML($document_html);
+        } catch (MpdfException $e) {
+            error_log($e);
+        }
 
         if (empty($pdf_name)) {
             $output_file = 'pdf_'.date('Y-m-d-his').'.pdf';
@@ -864,6 +880,7 @@ class PDF
      */
     private static function fixImagesPaths($documentHtml, array $courseInfo, $dirName = '')
     {
+        $documentHtml = '<?xml encoding="utf-8" ?>'.$documentHtml;
         $doc = new DOMDocument();
         @$doc->loadHTML($documentHtml);
 
@@ -889,12 +906,16 @@ class PDF
                 continue;
             }
 
+            // It's a reference to a file in the system, do not change it
+            if (file_exists($src)) {
+                continue;
+            }
+
             if (strpos($src, '/main/default_course_document') === 0) {
                 $element->setAttribute(
                     'src',
                     str_replace('/main/default_course_document', $sysCodePath.'default_course_document', $src)
                 );
-
                 continue;
             }
 
@@ -903,7 +924,6 @@ class PDF
                     'src',
                     str_replace('/main/img/', $sysCodePath.'img/', $src)
                 );
-
                 continue;
             }
 
@@ -912,7 +932,6 @@ class PDF
                     'src',
                     str_replace('/app/upload/', $sysUploadPath, $src)
                 );
-
                 continue;
             }
 

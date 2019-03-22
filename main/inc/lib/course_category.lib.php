@@ -600,7 +600,7 @@ class CourseCategory
     {
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
         $conditions = " INNER JOIN $table a ON (c.id = a.course_category_id)";
-        $whereCondition = " AND a.access_url_id = ".api_get_current_access_url_id();
+        $whereCondition = ' AND a.access_url_id = '.api_get_current_access_url_id();
 
         $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $sql = "SELECT code, name
@@ -629,13 +629,12 @@ class CourseCategory
     public static function countCoursesInCategory($category_code = '', $searchTerm = '')
     {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+
         $categoryCode = Database::escape_string($category_code);
         $searchTerm = Database::escape_string($searchTerm);
+
         $avoidCoursesCondition = CoursesAndSessionsCatalog::getAvoidCourseCondition();
-        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition(
-            'course',
-            true
-        );
+        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true);
 
         $categoryFilter = '';
         if ($categoryCode === 'ALL') {
@@ -655,14 +654,14 @@ class CourseCategory
             ) ';
         }
 
-        $url_access_id = api_get_current_access_url_id();
+        $urlCondition = ' access_url_id = '.api_get_current_access_url_id().' AND';
         $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql = "SELECT * 
+        $sql = "SELECT count(*) as count 
                 FROM $tbl_course as course
                 INNER JOIN $tbl_url_rel_course as url_rel_course
                 ON (url_rel_course.c_id = course.id)
                 WHERE
-                    access_url_id = $url_access_id AND
+                    $urlCondition
                     course.visibility != '0' AND
                     course.visibility != '4'
                     $categoryFilter
@@ -671,7 +670,10 @@ class CourseCategory
                     $visibilityCondition
             ";
 
-        return Database::num_rows(Database::query($sql));
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result);
+
+        return (int) $row['count'];
     }
 
     /**

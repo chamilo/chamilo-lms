@@ -51,7 +51,7 @@ class Auth
                 FROM $TABLECOURS course, $TABLECOURSUSER  course_rel_user
                 WHERE
                     course.id = course_rel_user.c_id AND
-                    course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND
+                    course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
                     course_rel_user.user_id = '".$user_id."' 
                     $avoidCoursesCondition
                 ORDER BY course_rel_user.sort ASC";

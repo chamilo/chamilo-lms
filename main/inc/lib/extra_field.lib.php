@@ -3036,6 +3036,200 @@ JAVASCRIPT;
     }
 
     /**
+     * @param string $variable
+     * @param string $dataValue
+     *
+     * @return string
+     */
+    public static function getLocalizationJavascript($variable, $dataValue)
+    {
+        $dataValue = addslashes($dataValue);
+        $html = "<script>
+            $(function() {
+                if (typeof google === 'object') {
+                    var address = '$dataValue';
+                    initializeGeo{$variable}(address, false);
+    
+                    $('#geolocalization_extra_{$variable}').on('click', function() {
+                        var address = $('#{$variable}').val();
+                        initializeGeo{$variable}(address, false);
+                        return false;
+                    });
+    
+                    $('#myLocation_extra_{$variable}').on('click', function() {
+                        myLocation{$variable}();
+                        return false;
+                    });
+    
+                    // When clicking enter
+                    $('#{$variable}').keypress(function(event) {                        
+                        if (event.which == 13) {                            
+                            $('#geolocalization_extra_{$variable}').click();
+                            return false;
+                        }
+                    });
+                    
+                    // On focus out update city
+                    $('#{$variable}').focusout(function() {                                                 
+                        $('#geolocalization_extra_{$variable}').click();
+                        return false;                        
+                    });
+                    
+                    return;
+                }
+    
+                $('#map_extra_{$variable}')
+                    .html('<div class=\"alert alert-info\">"
+                .addslashes(get_lang('YouNeedToActivateTheGoogleMapsPluginInAdminPlatformToSeeTheMap'))
+                ."</div>');
+            });
+    
+            function myLocation{$variable}() 
+            {                                                    
+                if (navigator.geolocation) {
+                    var geoPosition = function(position) {
+                        var lat = position.coords.latitude;
+                        var lng = position.coords.longitude;
+                        var latLng = new google.maps.LatLng(lat, lng);
+                        initializeGeo{$variable}(false, latLng);
+                    };
+    
+                    var geoError = function(error) {                        
+                        alert('Geocode ".get_lang('Error').": ' + error);
+                    };
+    
+                    var geoOptions = {
+                        enableHighAccuracy: true
+                    };
+                    navigator.geolocation.getCurrentPosition(geoPosition, geoError, geoOptions);
+                }
+            }
+    
+            function initializeGeo{$variable}(address, latLng)
+            {                
+                var geocoder = new google.maps.Geocoder();
+                var latlng = new google.maps.LatLng(-34.397, 150.644);
+                var myOptions = {
+                    zoom: 15,
+                    center: latlng,
+                    mapTypeControl: true,
+                    mapTypeControlOptions: {
+                        style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+                    },
+                    navigationControl: true,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+    
+                map_{$variable} = new google.maps.Map(
+                    document.getElementById('map_extra_{$variable}'),
+                    myOptions
+                );
+    
+                var parameter = address ? {'address': address} : latLng ? {'latLng': latLng} : false;
+    
+                if (geocoder && parameter) {
+                    geocoder.geocode(parameter, function(results, status) {
+                        if (status == google.maps.GeocoderStatus.OK) {
+                            if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {                                
+                                map_{$variable}.setCenter(results[0].geometry.location);
+                                
+                                // get city and country                                
+                                var defaultAddress = results[0].formatted_address;
+                                var city = '';
+                                var country = '';
+                                
+                                for (var i=0; i<results[0].address_components.length; i++) {
+                                    if (results[0].address_components[i].types[0] == \"locality\") {
+                                        //this is the object you are looking for City
+                                        city = results[0].address_components[i];
+                                    }
+                                    /*if (results[j].address_components[i].types[0] == \"administrative_area_level_1\") {
+                                        //this is the object you are looking for State
+                                        region = results[0].address_components[i];
+                                    }*/
+                                    if (results[0].address_components[i].types[0] == \"country\") {
+                                        //this is the object you are looking for
+                                        country = results[0].address_components[i];
+                                    }
+                                }
+                        
+                                if (city && city.long_name && country && country.long_name) {
+                                    defaultAddress = city.long_name + ', ' + country.long_name;
+                                }
+                                $('#{$variable}').val(defaultAddress);                                
+                                $('#{$variable}_coordinates').val(
+                                    results[0].geometry.location.lat()+','+results[0].geometry.location.lng()
+                                );
+                                
+                                var infowindow = new google.maps.InfoWindow({
+                                    content: '<b>' + $('#extra_{$variable}').val() + '</b>',
+                                    size: new google.maps.Size(150, 50)
+                                });
+    
+                                var marker = new google.maps.Marker({
+                                    position: results[0].geometry.location,
+                                    map: map_{$variable},
+                                    title: $('#extra_{$variable}').val()
+                                });
+                                google.maps.event.addListener(marker, 'click', function() {
+                                    infowindow.open(map_{$variable}, marker);
+                                });
+                            } else {
+                                alert('".get_lang('NotFound')."');
+                            }
+                        } else {
+                            alert('Geocode ".get_lang('Error').": ".get_lang("AddressField")." ".get_lang('NotFound')."');
+                        }
+                    });
+                }
+            }
+            </script>";
+
+        return $html;
+    }
+
+    /**
+     * @param string $variable
+     * @param string $text
+     *
+     * @return string
+     */
+    public static function getLocalizationInput($variable, $text)
+    {
+        $html = '
+                <div class="form-group">
+                    <label for="geolocalization_extra_'.$variable.'"
+                        class="col-sm-2 control-label"></label>
+                    <div class="col-sm-8">
+                        <button class="btn btn-default"
+                            id="geolocalization_extra_'.$variable.'"
+                            name="geolocalization_extra_'.$variable.'"
+                            type="submit">
+                            <em class="fa fa-map-marker"></em> '.get_lang('SearchGeolocalization').'
+                        </button>
+                        <button class="btn btn-default" id="myLocation_extra_'.$variable.'"
+                            name="myLocation_extra_'.$variable.'"
+                            type="submit">
+                            <em class="fa fa-crosshairs"></em> '.get_lang('MyLocation').'
+                        </button>
+                    </div>
+                </div>                   
+                <div class="form-group">
+                    <label for="map_extra_'.$variable.'" class="col-sm-2 control-label">
+                        '.$text.' - '.get_lang('Map').'
+                    </label>
+                    <div class="col-sm-8">
+                        <div name="map_extra_'.$variable.'"
+                            id="map_extra_'.$variable.'" style="width:100%; height:300px;">
+                        </div>
+                    </div>
+                </div>
+            ';
+
+        return $html;
+    }
+
+    /**
      * @param array $options
      * @param int   $parentId
      *
@@ -3069,31 +3263,6 @@ JAVASCRIPT;
         $addOptions = [];
         $optionsExists = false;
         global $app;
-        // Check if exist $app['orm.em'] object
-        if (isset($app['orm.em']) && is_object($app['orm.em'])) {
-            $optionsExists = $app['orm.em']
-                ->getRepository('ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption')
-                ->findOneBy(['fieldId' => $fieldDetails['id']]);
-        }
-
-        if ($optionsExists) {
-            if (isset($userInfo['status'])
-                && !empty($userInfo['status'])
-            ) {
-                $fieldWorkFlow = $app['orm.em']
-                    ->getRepository('ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption')
-                    ->findBy(
-                        [
-                            'fieldId' => $fieldDetails['id'],
-                            'relatedFieldOptionId' => $defaultValueId,
-                            'roleId' => $userInfo['status'],
-                        ]
-                    );
-                foreach ($fieldWorkFlow as $item) {
-                    $addOptions[] = $item->getFieldOptionId();
-                }
-            }
-        }
 
         $options = [];
         if (empty($defaultValueId)) {
@@ -3126,17 +3295,6 @@ JAVASCRIPT;
                 }
             }
 
-            if (isset($optionList[$defaultValueId])) {
-                if (isset($optionList[$defaultValueId]['option_value'])
-                    && $optionList[$defaultValueId]['option_value'] == 'aprobada'
-                ) {
-                    // @todo function don't exists api_is_question_manager
-                    /*if (api_is_question_manager() == false) {
-                        $form->freeze();
-                    }*/
-                }
-            }
-
             // Setting priority message
             if (isset($optionList[$defaultValueId])
                 && isset($optionList[$defaultValueId]['priority'])
@@ -3162,7 +3320,7 @@ JAVASCRIPT;
             'select',
             'extra_'.$fieldDetails['variable'],
             $fieldDetails['display_text'],
-            [],
+            $options,
             ['id' => 'extra_'.$fieldDetails['variable']]
         );
 
@@ -3545,199 +3703,5 @@ JAVASCRIPT;
         }
 
         return $js;
-    }
-
-    /**
-     * @param string $variable
-     * @param string $dataValue
-     *
-     * @return string
-     */
-    public static function getLocalizationJavascript($variable, $dataValue)
-    {
-        $dataValue = addslashes($dataValue);
-        $html = "<script>
-            $(function() {
-                if (typeof google === 'object') {
-                    var address = '$dataValue';
-                    initializeGeo{$variable}(address, false);
-    
-                    $('#geolocalization_extra_{$variable}').on('click', function() {
-                        var address = $('#{$variable}').val();
-                        initializeGeo{$variable}(address, false);
-                        return false;
-                    });
-    
-                    $('#myLocation_extra_{$variable}').on('click', function() {
-                        myLocation{$variable}();
-                        return false;
-                    });
-    
-                    // When clicking enter
-                    $('#{$variable}').keypress(function(event) {                        
-                        if (event.which == 13) {                            
-                            $('#geolocalization_extra_{$variable}').click();
-                            return false;
-                        }
-                    });
-                    
-                    // On focus out update city
-                    $('#{$variable}').focusout(function() {                                                 
-                        $('#geolocalization_extra_{$variable}').click();
-                        return false;                        
-                    });
-                    
-                    return;
-                }
-    
-                $('#map_extra_{$variable}')
-                    .html('<div class=\"alert alert-info\">"
-                .addslashes(get_lang('YouNeedToActivateTheGoogleMapsPluginInAdminPlatformToSeeTheMap'))
-                ."</div>');
-            });
-    
-            function myLocation{$variable}() 
-            {                                                    
-                if (navigator.geolocation) {
-                    var geoPosition = function(position) {
-                        var lat = position.coords.latitude;
-                        var lng = position.coords.longitude;
-                        var latLng = new google.maps.LatLng(lat, lng);
-                        initializeGeo{$variable}(false, latLng);
-                    };
-    
-                    var geoError = function(error) {                        
-                        alert('Geocode ".get_lang('Error').": ' + error);
-                    };
-    
-                    var geoOptions = {
-                        enableHighAccuracy: true
-                    };
-                    navigator.geolocation.getCurrentPosition(geoPosition, geoError, geoOptions);
-                }
-            }
-    
-            function initializeGeo{$variable}(address, latLng)
-            {                
-                var geocoder = new google.maps.Geocoder();
-                var latlng = new google.maps.LatLng(-34.397, 150.644);
-                var myOptions = {
-                    zoom: 15,
-                    center: latlng,
-                    mapTypeControl: true,
-                    mapTypeControlOptions: {
-                        style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
-                    },
-                    navigationControl: true,
-                    mapTypeId: google.maps.MapTypeId.ROADMAP
-                };
-    
-                map_{$variable} = new google.maps.Map(
-                    document.getElementById('map_extra_{$variable}'),
-                    myOptions
-                );
-    
-                var parameter = address ? {'address': address} : latLng ? {'latLng': latLng} : false;
-    
-                if (geocoder && parameter) {
-                    geocoder.geocode(parameter, function(results, status) {
-                        if (status == google.maps.GeocoderStatus.OK) {
-                            if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {                                
-                                map_{$variable}.setCenter(results[0].geometry.location);
-                                
-                                // get city and country                                
-                                var defaultAddress = results[0].formatted_address;
-                                var city = '';
-                                var country = '';
-                                
-                                for (var i=0; i<results[0].address_components.length; i++) {
-                                    if (results[0].address_components[i].types[0] == \"locality\") {
-                                        //this is the object you are looking for City
-                                        city = results[0].address_components[i];
-                                    }
-                                    /*if (results[j].address_components[i].types[0] == \"administrative_area_level_1\") {
-                                        //this is the object you are looking for State
-                                        region = results[0].address_components[i];
-                                    }*/
-                                    if (results[0].address_components[i].types[0] == \"country\") {
-                                        //this is the object you are looking for
-                                        country = results[0].address_components[i];
-                                    }
-                                }
-                        
-                                if (city && city.long_name && country && country.long_name) {
-                                    defaultAddress = city.long_name + ', ' + country.long_name;
-                                }
-                                $('#{$variable}').val(defaultAddress);                                
-                                $('#{$variable}_coordinates').val(
-                                    results[0].geometry.location.lat()+','+results[0].geometry.location.lng()
-                                );
-                                
-                                var infowindow = new google.maps.InfoWindow({
-                                    content: '<b>' + $('#extra_{$variable}').val() + '</b>',
-                                    size: new google.maps.Size(150, 50)
-                                });
-    
-                                var marker = new google.maps.Marker({
-                                    position: results[0].geometry.location,
-                                    map: map_{$variable},
-                                    title: $('#extra_{$variable}').val()
-                                });
-                                google.maps.event.addListener(marker, 'click', function() {
-                                    infowindow.open(map_{$variable}, marker);
-                                });
-                            } else {
-                                alert('".get_lang('NotFound')."');
-                            }
-                        } else {
-                            alert('Geocode ".get_lang('Error').": ".get_lang("AddressField")." ".get_lang('NotFound')."');
-                        }
-                    });
-                }
-            }
-            </script>";
-
-        return $html;
-    }
-
-    /**
-     * @param string $variable
-     * @param string $text
-     *
-     * @return string
-     */
-    public static function getLocalizationInput($variable, $text)
-    {
-        $html = '
-                <div class="form-group">
-                    <label for="geolocalization_extra_'.$variable.'"
-                        class="col-sm-2 control-label"></label>
-                    <div class="col-sm-8">
-                        <button class="btn btn-default"
-                            id="geolocalization_extra_'.$variable.'"
-                            name="geolocalization_extra_'.$variable.'"
-                            type="submit">
-                            <em class="fa fa-map-marker"></em> '.get_lang('SearchGeolocalization').'
-                        </button>
-                        <button class="btn btn-default" id="myLocation_extra_'.$variable.'"
-                            name="myLocation_extra_'.$variable.'"
-                            type="submit">
-                            <em class="fa fa-crosshairs"></em> '.get_lang('MyLocation').'
-                        </button>
-                    </div>
-                </div>                   
-                <div class="form-group">
-                    <label for="map_extra_'.$variable.'" class="col-sm-2 control-label">
-                        '.$text.' - '.get_lang('Map').'
-                    </label>
-                    <div class="col-sm-8">
-                        <div name="map_extra_'.$variable.'"
-                            id="map_extra_'.$variable.'" style="width:100%; height:300px;">
-                        </div>
-                    </div>
-                </div>
-            ';
-
-        return $html;
     }
 }

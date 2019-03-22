@@ -307,7 +307,7 @@ require_once $libraryPath.'formvalidator/Rule/allowed_tags.inc.php';
 // which will then be usable from the banner and header scripts
 $this_section = SECTION_GLOBAL;
 
-// Include Chamilo Mail conf this is added here because the api_get_setting works
+// Including configuration files
 $configurationFiles = [
     'mail.conf.php',
     'profile.conf.php',

@@ -76,7 +76,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
     function setName($name)
     {
         $this->updateAttributes(array('name'=>$name));
-    } //end func setName
+    }
 
     /**
      * Returns the element name
@@ -88,7 +88,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
     function getName()
     {
         return $this->getAttribute('name');
-    } //end func getName
+    }
 
     /**
      * Sets value for textarea element
@@ -101,7 +101,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
     function setValue($value)
     {
         $this->_value = $value;
-    } //end func setValue
+    }
 
     /**
      * Returns the value of the form element
@@ -113,7 +113,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
     function getValue()
     {
         return $this->_value;
-    } // end func getValue
+    }
 
     /**
      * Sets wrap type for textarea element
@@ -126,7 +126,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
     function setWrap($wrap)
     {
         $this->updateAttributes(array('wrap' => $wrap));
-    } //end func setWrap
+    }
 
     /**
      * Sets height in rows for textarea element
@@ -139,7 +139,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
     function setRows($rows)
     {
         $this->updateAttributes(array('rows' => $rows));
-    } //end func setRows
+    }
 
     /**
      * Sets width in cols for textarea element
@@ -152,7 +152,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
     function setCols($cols)
     {
         $this->updateAttributes(array('cols' => $cols));
-    } //end func setCols
+    }
 
     /**
      * Returns the textarea element in HTML
@@ -171,7 +171,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
                    // because we wrap the form later we don't want the text indented
                    // Modified by Ivan Tcholakov, 16-MAR-2010.
                    //preg_replace("/(\r\n|\n|\r)/", '&#010;', htmlspecialchars($this->_value)) .
-                   preg_replace("/(\r\n|\n|\r)/", '&#010;', @htmlspecialchars($this->_value, ENT_COMPAT, HTML_Common::charset())) .
+                   preg_replace("/(\r\n|\n|\r)/", '&#010;', $this->getCleanValue()) .
                    //
                    '</textarea>';
         }

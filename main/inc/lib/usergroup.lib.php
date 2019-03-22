@@ -1372,7 +1372,7 @@ class UserGroup extends Model
     {
         // Validation 1.
         $group_id = (int) $group_id;
-        // Validation 1.
+
         if (empty($group_id)) {
             return false;
         }

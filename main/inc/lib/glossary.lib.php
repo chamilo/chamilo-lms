@@ -813,9 +813,9 @@ class GlossaryManager
             return;
         }
 
-        $data = GlossaryManager::get_glossary_data(
+        $data = self::get_glossary_data(
             0,
-            GlossaryManager::get_number_glossary_terms(api_get_session_id()),
+            self::get_number_glossary_terms(api_get_session_id()),
             0,
             'ASC'
         );

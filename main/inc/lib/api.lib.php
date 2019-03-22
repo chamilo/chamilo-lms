@@ -476,7 +476,9 @@ define('RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES', 3); //Show final 
 define('RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT', 4);
 define('RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK', 5);
 define('RESULT_DISABLE_RANKING', 6);
-// 4: Show final score only with categories and show expected answers only on the last attempt
+define('RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER', 7);
+
+// 4: Show final score only with  and show expected answers only on the last attempt
 
 define('EXERCISE_MAX_NAME_SIZE', 80);
 
@@ -1147,16 +1149,15 @@ function api_valid_email($address)
  */
 function api_protect_course_script($print_headers = false, $allow_session_admins = false, $allow_drh = false)
 {
-    $is_allowed_in_course = api_is_allowed_in_course();
-
-    $is_visible = false;
     $course_info = api_get_course_info();
-
     if (empty($course_info)) {
         api_not_allowed($print_headers);
 
         return false;
     }
+
+    $is_allowed_in_course = api_is_allowed_in_course();
+    $is_visible = false;
 
     if (api_is_drh()) {
         return true;
@@ -2771,8 +2772,11 @@ function api_get_plugin_setting($plugin, $variable)
 
     if (isset($result[$plugin])) {
         $value = $result[$plugin];
-        if (@unserialize($value) !== false) {
-            $value = unserialize($value);
+
+        $unserialized = UnserializeApi::unserialize('not_allowed_classes', $value, true);
+
+        if (false !== $unserialized) {
+            $value = $unserialized;
         }
 
         return $value;
@@ -3319,7 +3323,6 @@ function api_is_allowed_to_edit(
     $check_student_view = true
 ) {
     $allowSessionAdminEdit = api_get_configuration_value('session_admins_edit_courses_content') === true;
-    // Admins can edit anything.
     // Admins can edit anything.
     if (api_is_platform_admin($allowSessionAdminEdit)) {
         //The student preview was on
@@ -6218,7 +6221,6 @@ function api_is_course_visible_for_user($userid = null, $cid = null)
  * @param string the tool of the element
  * @param int the element id in database
  * @param int the session_id to compare with element session id
- * @param string $tool
  *
  * @return bool true if the element is in the session, false else
  */
@@ -6257,7 +6259,7 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null)
     }
     $course_id = api_get_course_int_id();
 
-    $sql = "SELECT session_id FROM $table_tool 
+    $sql = "SELECT session_id FROM $table_tool
             WHERE c_id = $course_id AND $key_field =  ".$element_id;
     $rs = Database::query($sql);
     if ($element_session_id = Database::result($rs, 0, 0)) {
@@ -8082,7 +8084,7 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
     ];
 
     $js = api_get_asset('pwstrength-bootstrap/dist/pwstrength-bootstrap.min.js');
-    $js .= "<script>    
+    $js .= "<script>
     var errorMessages = {
         password_to_short : \"".get_lang('PasswordIsTooShort')."\",
         same_as_username : \"".get_lang('YourPasswordCannotBeTheSameAsYourUsername')."\"
@@ -9303,4 +9305,158 @@ function api_get_relative_path($from, $to)
     }
 
     return implode('/', $relPath);
+}
+
+/**
+ * Unserialize content using Brummann\Polyfill\Unserialize.
+ *
+ * @param string $type
+ * @param string $serialized
+ * @param bool   $ignoreErrors. Optional.
+ *
+ * @return mixed
+ */
+function api_unserialize_content($type, $serialized, $ignoreErrors = false)
+{
+    switch ($type) {
+        case 'career':
+        case 'sequence_graph':
+            $allowedClasses = [Graph::class, VerticesMap::class, Vertices::class, Edges::class];
+            break;
+        case 'lp':
+            $allowedClasses = [
+                learnpath::class,
+                learnpathItem::class,
+                aicc::class,
+                aiccBlock::class,
+                aiccItem::class,
+                aiccObjective::class,
+                aiccResource::class,
+                scorm::class,
+                scormItem::class,
+                scormMetadata::class,
+                scormOrganization::class,
+                scormResource::class,
+                Link::class,
+                LpItem::class,
+            ];
+            break;
+        case 'course':
+            $allowedClasses = [
+                Course::class,
+                Announcement::class,
+                Attendance::class,
+                CalendarEvent::class,
+                CourseCopyLearnpath::class,
+                CourseCopyTestCategory::class,
+                CourseDescription::class,
+                CourseSession::class,
+                Document::class,
+                Forum::class,
+                ForumCategory::class,
+                ForumPost::class,
+                ForumTopic::class,
+                Glossary::class,
+                GradeBookBackup::class,
+                Link::class,
+                LinkCategory::class,
+                Quiz::class,
+                QuizQuestion::class,
+                QuizQuestionOption::class,
+                ScormDocument::class,
+                Survey::class,
+                SurveyInvitation::class,
+                SurveyQuestion::class,
+                Thematic::class,
+                ToolIntro::class,
+                Wiki::class,
+                Work::class,
+                stdClass::class,
+            ];
+            break;
+        case 'not_allowed_classes':
+        default:
+            $allowedClasses = false;
+    }
+
+    if ($ignoreErrors) {
+        return @Unserialize::unserialize(
+            $serialized,
+            ['allowed_classes' => $allowedClasses]
+        );
+    }
+
+    return Unserialize::unserialize(
+        $serialized,
+        ['allowed_classes' => $allowedClasses]
+    );
+}
+
+/**
+ * Set the From and ReplyTo properties to PHPMailer instance.
+ *
+ * @param PHPMailer $mailer
+ * @param array     $sender
+ * @param array     $replyToAddress
+ *
+ * @throws phpmailerException
+ */
+function api_set_noreply_and_from_address_to_mailer(PHPMailer $mailer, array $sender, array $replyToAddress = [])
+{
+    $platformEmail = $GLOBALS['platform_email'];
+
+    $noReplyAddress = api_get_setting('noreply_email_address');
+    $avoidReplyToAddress = false;
+
+    if (!empty($noReplyAddress)) {
+        $avoidReplyToAddress = api_get_configuration_value('mail_no_reply_avoid_reply_to');
+    }
+
+    $notification = new Notification();
+
+    // If the parameter is set don't use the admin.
+    $senderName = !empty($sender['name']) ? $sender['name'] : $notification->getDefaultPlatformSenderName();
+    $senderEmail = !empty($sender['email']) ? $sender['email'] : $notification->getDefaultPlatformSenderEmail();
+
+    // Reply to first
+    if (!$avoidReplyToAddress) {
+        $mailer->AddCustomHeader('Errors-To: '.$notification->getDefaultPlatformSenderEmail());
+
+        if (
+            !empty($replyToAddress) &&
+            $platformEmail['SMTP_UNIQUE_REPLY_TO'] &&
+            PHPMailer::ValidateAddress($replyToAddress['mail'])
+        ) {
+            $mailer->AddReplyTo($replyToAddress['email'], $replyToAddress['name']);
+            // Errors to sender
+            $mailer->AddCustomHeader('Errors-To: '.$replyToAddress['mail']);
+            $mailer->Sender = $replyToAddress['mail'];
+        }
+    }
+
+    //If the SMTP configuration only accept one sender
+    if (
+        isset($platformEmail['SMTP_UNIQUE_SENDER']) &&
+        $platformEmail['SMTP_UNIQUE_SENDER']
+    ) {
+        $senderName = $platformEmail['SMTP_FROM_NAME'];
+        $senderEmail = $platformEmail['SMTP_FROM_EMAIL'];
+
+        if (PHPMailer::ValidateAddress($senderEmail)) {
+            //force-set Sender to $senderEmail, otherwise SetFrom only does it if it is currently empty
+            $mailer->Sender = $senderEmail;
+        }
+    }
+
+    $mailer->SetFrom($senderEmail, $senderName, !$avoidReplyToAddress);
+}
+
+/**
+ * @param string $template
+ *
+ * @return string
+ */
+function api_find_template($template)
+{
+    return Template::findTemplateFilePath($template);
 }

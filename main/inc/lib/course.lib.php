@@ -35,8 +35,8 @@ class CourseManager
      * Creates a course.
      *
      * @param array $params      Columns in the main.course table.
-     * @param int   $authorId    optional
-     * @param int   $accessUrlId optional
+     * @param int   $authorId    Optional.
+     * @param int   $accessUrlId Optional.
      *
      * @return mixed false if the course was not created, array with the course info
      */
@@ -400,11 +400,11 @@ class CourseManager
         }
 
         $userList = [];
-
+        // Cleaning the $user_id variable
         if (is_array($user_id)) {
             $new_user_id_list = [];
             foreach ($user_id as $my_user_id) {
-                $new_user_id_list[] = intval($my_user_id);
+                $new_user_id_list[] = (int) $my_user_id;
             }
             $new_user_id_list = array_filter($new_user_id_list);
             $userList = $new_user_id_list;
@@ -424,8 +424,8 @@ class CourseManager
         $sql = "DELETE FROM ".Database::get_course_table(TABLE_GROUP_TUTOR)."
                 WHERE c_id = $course_id AND user_id IN (".$user_ids.")";
         Database::query($sql);
-        // Erase user student publications (works) in the course - by André Boivin
 
+        // Erase user student publications (works) in the course - by André Boivin
         if (!empty($userList)) {
             require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
             foreach ($userList as $userId) {
@@ -465,52 +465,18 @@ class CourseManager
 
         // Unsubscribe user from the course.
         if (!empty($session_id)) {
-            // Delete in table session_rel_course_rel_user
-            $sql = "DELETE FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
-                    WHERE
-                        session_id = $session_id AND
-                        c_id = $course_id AND
-                        user_id IN ($user_ids)";
-            Database::query($sql);
-
             foreach ($userList as $uid) {
+                SessionManager::unSubscribeUserFromCourseSession($uid, $course_id, $session_id);
+
                 // check if a user is register in the session with other course
                 $sql = "SELECT user_id FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
                         WHERE session_id = $session_id AND user_id = $uid";
                 $rs = Database::query($sql);
 
                 if (Database::num_rows($rs) == 0) {
-                    // Delete in table session_rel_user
-                    $sql = "DELETE FROM ".Database::get_main_table(TABLE_MAIN_SESSION_USER)."
-                            WHERE
-                                session_id = $session_id AND
-                                user_id = $uid AND
-                                relation_type<>".SESSION_RELATION_TYPE_RRHH;
-                    Database::query($sql);
+                    SessionManager::unsubscribe_user_from_session($uid, $session_id);
                 }
             }
-
-            // Update the table session
-            $sql = "SELECT COUNT(*) FROM ".Database::get_main_table(TABLE_MAIN_SESSION_USER)."
-                    WHERE session_id = '".$session_id."' AND relation_type <> ".SESSION_RELATION_TYPE_RRHH;
-            $row = Database::fetch_array(Database::query($sql));
-            $count = $row[0];
-            // number of users by session
-            $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_SESSION)." SET nbr_users = $count
-                    WHERE id = $session_id";
-            Database::query($sql);
-
-            // Update the table session_rel_course
-            $sql = "SELECT COUNT(*) FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
-                    WHERE session_id = $session_id AND c_id = $course_id AND status <> 2";
-            $row = Database::fetch_array(@Database::query($sql));
-            $count = $row[0];
-
-            // number of users by session and course
-            $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE)."
-                    SET nbr_users = $count
-                    WHERE session_id = $session_id AND c_id = $course_id";
-            Database::query($sql);
 
             Event::addEvent(
                 LOG_UNSUBSCRIBE_USER_FROM_COURSE,
@@ -622,7 +588,7 @@ class CourseManager
         $status = (int) $status;
 
         if (empty($userId) || empty($courseCode)) {
-            return false; //detected possible SQL injection
+            return false;
         }
 
         $courseInfo = api_get_course_info($courseCode);
@@ -638,17 +604,17 @@ class CourseManager
         if (empty($userInfo)) {
             Display::addFlash(Display::return_message(get_lang('UserDoesNotExist'), 'warning'));
 
-            return false; // The user has not been registered to the platform.
+            return false;
         }
 
         $courseId = $courseInfo['real_id'];
         $courseCode = $courseInfo['code'];
         $userCourseCategoryId = (int) $userCourseCategoryId;
-        // Check whether the user has not been already subscribed to the course.
+
         $sessionId = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
         $status = $status === STUDENT || $status === COURSEMANAGER ? $status : STUDENT;
         $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        // The user has been already subscribed to the course.
+
         if (!empty($sessionId)) {
             SessionManager::subscribe_users_to_session_course(
                 [$userId],
@@ -709,14 +675,14 @@ class CourseManager
                     if ($maxStudents !== '') {
                         $maxStudents = (int) $maxStudents;
                         $count = self::get_user_list_from_course_code(
-                $courseCode,
+                            $courseCode,
                             0,
                             null,
                             null,
                             STUDENT,
                             true,
                             false
-            );
+                        );
 
                         if ($count >= $maxStudents) {
                             Display::addFlash(Display::return_message(get_lang('MaxNumberSubscribedStudentsReached'), 'warning'));
@@ -767,22 +733,22 @@ class CourseManager
 
                 // Add event to the system log
                 Event::addEvent(
-                LOG_SUBSCRIBE_USER_TO_COURSE,
-                LOG_COURSE_CODE,
-                $courseCode,
-                api_get_utc_datetime(),
-                api_get_user_id(),
-                $courseId
-            );
+                    LOG_SUBSCRIBE_USER_TO_COURSE,
+                    LOG_COURSE_CODE,
+                    $courseCode,
+                    api_get_utc_datetime(),
+                    api_get_user_id(),
+                    $courseId
+                );
 
                 Event::addEvent(
-                LOG_SUBSCRIBE_USER_TO_COURSE,
-                LOG_USER_OBJECT,
+                    LOG_SUBSCRIBE_USER_TO_COURSE,
+                    LOG_USER_OBJECT,
                     $userInfo,
-                api_get_utc_datetime(),
-                api_get_user_id(),
-                $courseId
-            );
+                    api_get_utc_datetime(),
+                    api_get_user_id(),
+                    $courseId
+                );
 
                 return true;
             }
@@ -5652,6 +5618,7 @@ class CourseManager
             'email_to_teachers_on_new_work_feedback',
             'student_delete_own_publication',
             'hide_forum_notifications',
+            'quiz_question_limit_per_day',
         ];
 
         $courseModels = ExerciseLib::getScoreModels();
@@ -6164,7 +6131,7 @@ class CourseManager
                         "GROUP:".$groupId,
                         $alreadySelected
                     )
-                    ) { // $alreadySelected is the array containing the groups (and users) that are already selected
+                    ) {
                         $userCount = isset($thisGroup['userNb']) ? $thisGroup['userNb'] : 0;
                         if (empty($userCount)) {
                             $userCount = isset($thisGroup['count_users']) ? $thisGroup['count_users'] : 0;

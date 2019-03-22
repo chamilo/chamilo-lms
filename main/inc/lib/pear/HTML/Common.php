@@ -128,7 +128,7 @@ class HTML_Common
     function _getTabs()
     {
         return str_repeat($this->_getTab(), $this->_tabOffset);
-    } // end func _getTabs
+    }
 
     /**
      * Returns an HTML formatted attribute string
@@ -145,7 +145,7 @@ class HTML_Common
             foreach ($attributes as $key => $value) {
             	// Modified by Ivan Tcholakov, 16-MAR-2010
                 $value = @htmlspecialchars($value, ENT_COMPAT, $charset);
-                $strAttr .= ' ' . $key . '= "' . $value. '"';
+                $strAttr .= ' ' . $key . '="' . $value. '"';
             }
         }
 
@@ -244,7 +244,7 @@ class HTML_Common
         if (isset($attributes[$attr])) {
             unset($attributes[$attr]);
         }
-    } //end func _removeAttr
+    }
 
     /**
      * Returns the value of the given attribute
@@ -461,5 +461,5 @@ class HTML_Common
     function charset($newCharset = null)
     {
         return 'UTF-8';
-    } // end func charset
+    }
 }

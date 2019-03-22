@@ -29,13 +29,17 @@ class UnserializeApi
                     \Fhaculty\Graph\Set\VerticesMap::class,
                     \Fhaculty\Graph\Set\Vertices::class,
                     \Fhaculty\Graph\Set\Edges::class,
+                    \Fhaculty\Graph\Vertex::class,
+                    \Fhaculty\Graph\Edge\Base::class,
+                    \Fhaculty\Graph\Edge\Directed::class,
+                    \Fhaculty\Graph\Edge\Undirected::class,
                 ];
                 break;
             case 'course':
                 $allowedClasses = [
                     \Chamilo\CourseBundle\Component\CourseCopy\Course::class,
-                    \Chamilo\CourseBundle\Component\CourseCopy\Resources\Asset::class,
                     \Chamilo\CourseBundle\Component\CourseCopy\Resources\Announcement::class,
+                    \Chamilo\CourseBundle\Component\CourseCopy\Resources\Asset::class,
                     \Chamilo\CourseBundle\Component\CourseCopy\Resources\Attendance::class,
                     \Chamilo\CourseBundle\Component\CourseCopy\Resources\CalendarEvent::class,
                     \Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseCopyLearnpath::class,
@@ -49,6 +53,7 @@ class UnserializeApi
                     \Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumTopic::class,
                     \Chamilo\CourseBundle\Component\CourseCopy\Resources\Glossary::class,
                     \Chamilo\CourseBundle\Component\CourseCopy\Resources\GradeBookBackup::class,
+                    \Chamilo\CourseBundle\Component\CourseCopy\Resources\LearnPathCategory::class,
                     \Chamilo\CourseBundle\Component\CourseCopy\Resources\Link::class,
                     \Chamilo\CourseBundle\Component\CourseCopy\Resources\LinkCategory::class,
                     \Chamilo\CourseBundle\Component\CourseCopy\Resources\Quiz::class,
@@ -62,6 +67,7 @@ class UnserializeApi
                     \Chamilo\CourseBundle\Component\CourseCopy\Resources\ToolIntro::class,
                     \Chamilo\CourseBundle\Component\CourseCopy\Resources\Wiki::class,
                     \Chamilo\CourseBundle\Component\CourseCopy\Resources\Work::class,
+                    \Chamilo\CourseBundle\Entity\CLpCategory::class,
                     stdClass::class,
                     Category::class,
                     AttendanceLink::class,

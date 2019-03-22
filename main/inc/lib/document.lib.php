@@ -273,7 +273,7 @@ class DocumentManager
         if (isset($mimeTypes[$extension])) {
             return $mimeTypes[$extension];
         }
-        //else return octet-stream
+
         return 'application/octet-stream';
     }
 
@@ -717,7 +717,7 @@ class DocumentManager
     ) {
         $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-        $groupIid = intval($groupIid);
+        $groupIid = (int) $groupIid;
         $document_folders = [];
 
         $students = CourseManager::get_user_list_from_course_code(
@@ -734,7 +734,7 @@ class DocumentManager
 
         $groupCondition = " last.to_group_id = $groupIid";
         if (empty($groupIid)) {
-            $groupCondition = " (last.to_group_id = 0 OR last.to_group_id IS NULL)";
+            $groupCondition = ' (last.to_group_id = 0 OR last.to_group_id IS NULL)';
         }
 
         $show_users_condition = '';
@@ -821,7 +821,7 @@ class DocumentManager
             $condition_session = api_get_session_condition(
                 $session_id,
                 true,
-                false,
+                true, // needed to don't show files in elfinder browser
                 'docs.session_id'
             );
 
@@ -3212,19 +3212,21 @@ class DocumentManager
      *
      * @return string
      */
-    public static function generateVideoPreview($file, $extension)
+    public static function generateMediaPreview($file, $extension)
     {
-        $type = '';
-        /*if ($extension != 'flv') {
-
-        }*/
-        //$type = "video/$extension";
-        //$fileInfo = parse_url($file);
-        //$type = self::file_get_mime_type(basename($fileInfo['path']));
-
-        $html = '<video id="myvideo" controls>';
-        $html .= '<source src="'.$file.'" >';
-        $html .= '</video>';
+        $id = api_get_unique_id();
+        switch ($extension) {
+            case 'mp3':
+                $document_data['file_extension'] = $extension;
+                $html = '<div style="margin: 0; position: absolute; top: 50%; left: 35%;">';
+                $html .= '<audio id="'.$id.'" controls="controls" src="'.$file.'" type="audio/mp3" ></audio></div>';
+                break;
+            default:
+                $html = '<video id="'.$id.'" controls>';
+                $html .= '<source src="'.$file.'" >';
+                $html .= '</video>';
+                break;
+        }
 
         return $html;
     }
@@ -3443,17 +3445,17 @@ class DocumentManager
             $url = $lpAjaxUrl.'?a=get_documents&lp_id=&cidReq='.$course_info['code'];
             $return .= "<script>
             $(document).ready(function () {
-            $('.close_div').click(function() {
-                var course_id = this.id.split('_')[2];
-                var session_id = this.id.split('_')[3];
-                $('#document_result_'+course_id+'_'+session_id).hide();
-                $('.lp_resource').remove();
-                $('.document_preview_container').html('');
+                $('.close_div').click(function() {
+                    var course_id = this.id.split('_')[2];
+                    var session_id = this.id.split('_')[3];
+                    $('#document_result_'+course_id+'_'+session_id).hide();
+                    $('.lp_resource').remove();
+                    $('.document_preview_container').html('');
                 });
             });
             </script>";
         } else {
-            //For LPs
+            // For LPs
             $url = $lpAjaxUrl.'?a=get_documents&lp_id='.$lp_id.'&'.api_get_cidreq();
         }
 
@@ -3647,12 +3649,12 @@ class DocumentManager
                 } else {
                     if ($checkParentVisibility) {
                         return self::check_visibility_tree(
-                        $document_data['parent_id'],
+                            $document_data['parent_id'],
                             $courseInfo,
                             $sessionId,
-                        $user_id,
-                        $groupId
-                    );
+                            $user_id,
+                            $groupId
+                        );
                     }
 
                     return true;
@@ -6548,16 +6550,14 @@ class DocumentManager
         if ($lp_id) {
             // LP URL
             $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=add_item&type='.TOOL_DOCUMENT.'&file='.$documentId.'&lp_id='.$lp_id;
-            if (!empty($overwrite_url)) {
-                $url = $overwrite_url.'&cidReq='.$course_info['code'].'&id_session='.$session_id.'&document_id='.$documentId.'';
-            }
         } else {
             // Direct document URL
             $url = $web_code_path.'document/document.php?cidReq='.$course_info['code'].'&id_session='.$session_id.'&id='.$documentId;
-            if (!empty($overwrite_url)) {
-                $overwrite_url = Security::remove_XSS($overwrite_url);
-                $url = $overwrite_url.'&cidReq='.$course_info['code'].'&id_session='.$session_id.'&document_id='.$documentId;
-            }
+        }
+
+        if (!empty($overwrite_url)) {
+            $overwrite_url = Security::remove_XSS($overwrite_url);
+            $url = $overwrite_url.'&cidReq='.$course_info['code'].'&id_session='.$session_id.'&document_id='.$documentId;
         }
 
         $img = Display::returnIconPath($icon);
@@ -6653,7 +6653,7 @@ class DocumentManager
             $return = '<ul class="lp_resource">';
         }
 
-        $return .= '<li class="doc_folder '.$folder_class_hidden.'" id="doc_id_'.$resource['id'].'"  style="margin-left:'.($num * 18).'px; ">';
+        $return .= '<li class="doc_folder'.$folder_class_hidden.'" id="doc_id_'.$resource['id'].'"  style="margin-left:'.($num * 18).'px; ">';
 
         $image = Display::returnIconPath('nolines_plus.gif');
         if (empty($path)) {

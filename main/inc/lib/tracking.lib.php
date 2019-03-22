@@ -1871,21 +1871,21 @@ class Tracking
         } else {
             $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
             $sql = 'SELECT login_course_date
-                FROM '.$tbl_track_login.'
-                WHERE
-                    user_id = '.$student_id.' AND
-                    c_id = '.$courseId.' AND
-                    session_id = '.$session_id.'
-                ORDER BY login_course_date ASC 
-                LIMIT 0,1';
+                    FROM '.$tbl_track_login.'
+                    WHERE
+                        user_id = '.$student_id.' AND
+                        c_id = '.$courseId.' AND
+                        session_id = '.$session_id.'
+                    ORDER BY login_course_date ASC 
+                    LIMIT 0,1';
             $rs = Database::query($sql);
             if (Database::num_rows($rs) > 0) {
                 if ($first_login_date = Database::result($rs, 0, 0)) {
                     if ($convert_date) {
                         return api_convert_and_format_date(
-                        $first_login_date,
-                        DATE_FORMAT_SHORT
-                    );
+                            $first_login_date,
+                            DATE_FORMAT_SHORT
+                        );
                     } else {
                         return $first_login_date;
                     }
@@ -1949,14 +1949,14 @@ class Tracking
                     //If the last connection is > than 7 days, the text is red
                     //345600 = 7 days in seconds
                     /*
-                if ($now - $last_login_date_timestamp > 604800) {
-                    if ($convert_date) {
-                        $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
-                        $icon = api_is_allowed_to_edit() ?
-                            '<a href="'.api_get_path(WEB_CODE_PATH).'announcements/announcements.php?action=add&remind_inactive='.$student_id.'&cidReq='.$courseInfo['code'].'" title="'.get_lang('RemindInactiveUser').'">
-                              '.Display::return_icon('messagebox_warning.gif').'
-                             </a>'
-                            : null;
+                    if ($now - $last_login_date_timestamp > 604800) {
+                        if ($convert_date) {
+                            $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
+                            $icon = api_is_allowed_to_edit() ?
+                                '<a href="'.api_get_path(WEB_CODE_PATH).'announcements/announcements.php?action=add&remind_inactive='.$student_id.'&cidReq='.$courseInfo['code'].'" title="'.get_lang('RemindInactiveUser').'">
+                                  '.Display::return_icon('messagebox_warning.gif').'
+                                 </a>'
+                                : null;
                             return $icon.Display::label($last_login_date, 'warning');
                         } else {
                             return $last_login_date;
@@ -3302,6 +3302,7 @@ class Tracking
                     WHERE c_id = $course_id $condition_lp";
             $result = Database::query($sql);
             $session_condition = api_get_session_condition($session_id);
+
             // calculates time
             if (Database::num_rows($result) > 0) {
                 while ($row = Database::fetch_array($result)) {
@@ -3767,7 +3768,7 @@ class Tracking
     /**
      * Get sessions coached by user.
      *
-     * @param $coach_id
+     * @param        $coach_id
      * @param int    $start
      * @param int    $limit
      * @param bool   $getCount
@@ -4096,7 +4097,6 @@ class Tracking
             return $row['count'];
         }
 
-        require_once api_get_path(SYS_CODE_PATH).'forum/forumconfig.inc.php';
         require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
         $courseInfo = api_get_course_info($courseCode);
@@ -5963,155 +5963,53 @@ class Tracking
      */
     public static function generate_session_exercise_graph($names, $my_results, $average)
     {
-        /* Create and populate the pData object */
-        $myData = new pData();
-        $myData->addPoints($names, 'Labels');
-        $myData->addPoints($my_results, 'Serie1');
-        $myData->addPoints($average, 'Serie2');
-        $myData->setSerieWeight('Serie1', 1);
-        $myData->setSerieTicks('Serie2', 4);
-        $myData->setSerieDescription('Labels', 'Months');
-        $myData->setAbscissa('Labels');
-        $myData->setSerieDescription('Serie1', get_lang('MyResults'));
-        $myData->setSerieDescription('Serie2', get_lang('AverageScore'));
-        $myData->setAxisUnit(0, '%');
-        $myData->loadPalette(api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color', true);
-        // Cache definition
-        $cachePath = api_get_path(SYS_ARCHIVE_PATH);
-        $myCache = new pCache(['CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)]);
-        $chartHash = $myCache->getHash($myData);
-
-        if ($myCache->isInCache($chartHash)) {
-            //if we already created the img
-            $imgPath = api_get_path(SYS_ARCHIVE_PATH).$chartHash;
-            $myCache->saveFromCache($chartHash, $imgPath);
-            $imgPath = api_get_path(WEB_ARCHIVE_PATH).$chartHash;
-        } else {
-            /* Define width, height and angle */
-            $mainWidth = 860;
-            $mainHeight = 500;
-            $angle = 50;
-
-            /* Create the pChart object */
-            $myPicture = new pImage($mainWidth, $mainHeight, $myData);
-
-            /* Turn of Antialiasing */
-            $myPicture->Antialias = false;
-
-            /* Draw the background */
-            $settings = ['R' => 255, 'G' => 255, 'B' => 255];
-            $myPicture->drawFilledRectangle(0, 0, $mainWidth, $mainHeight, $settings);
-
-            /* Add a border to the picture */
-            $myPicture->drawRectangle(
-                0,
-                0,
-                $mainWidth - 1,
-                $mainHeight - 1,
-                ['R' => 0, 'G' => 0, 'B' => 0]
-            );
-
-            /* Set the default font */
-            $myPicture->setFontProperties(
-                [
-                    'FontName' => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf',
-                    'FontSize' => 10, ]
-            );
-            /* Write the chart title */
-            $myPicture->drawText(
-                $mainWidth / 2,
-                30,
-                get_lang('ExercisesInTimeProgressChart'),
-                [
-                    'FontSize' => 12,
-                    'Align' => TEXT_ALIGN_BOTTOMMIDDLE,
-                ]
-            );
-
-            /* Set the default font */
-            $myPicture->setFontProperties(
-                [
-                    'FontName' => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf',
-                    'FontSize' => 6,
-                ]
-            );
-
-            /* Define the chart area */
-            $myPicture->setGraphArea(60, 60, $mainWidth - 60, $mainHeight - 150);
-
-            /* Draw the scale */
-            $scaleSettings = [
-                'XMargin' => 10,
-                'YMargin' => 10,
-                'Floating' => true,
-                'GridR' => 200,
-                'GridG' => 200,
-                'GridB' => 200,
-                'DrawSubTicks' => true,
-                'CycleBackground' => true,
-                'LabelRotation' => $angle,
-                'Mode' => SCALE_MODE_ADDALL_START0,
-            ];
-            $myPicture->drawScale($scaleSettings);
-
-            /* Turn on Antialiasing */
-            $myPicture->Antialias = true;
-
-            /* Enable shadow computing */
-            $myPicture->setShadow(
-                true,
-                [
-                    'X' => 1,
-                    'Y' => 1,
-                    'R' => 0,
-                    'G' => 0,
-                    'B' => 0,
-                    'Alpha' => 10,
-                ]
-            );
-
-            /* Draw the line chart */
-            $myPicture->setFontProperties(
-                [
-                    'FontName' => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf',
-                    'FontSize' => 10,
-                ]
-            );
-            $myPicture->drawSplineChart();
-            $myPicture->drawPlotChart(
-                [
-                    'DisplayValues' => true,
-                    'PlotBorder' => true,
-                    'BorderSize' => 1,
-                    'Surrounding' => -60,
-                    'BorderAlpha' => 80,
-                ]
-            );
-
-            /* Write the chart legend */
-            $myPicture->drawLegend(
-                $mainWidth / 2 + 50,
-                50,
-                [
-                    'Style' => LEGEND_BOX,
-                    'Mode' => LEGEND_HORIZONTAL,
-                    'FontR' => 0,
-                    'FontG' => 0,
-                    'FontB' => 0,
-                    'R' => 220,
-                    'G' => 220,
-                    'B' => 220,
-                    'Alpha' => 100,
-                ]
-            );
-
-            $myCache->writeToCache($chartHash, $myPicture);
-            $imgPath = api_get_path(SYS_ARCHIVE_PATH).$chartHash;
-            $myCache->saveFromCache($chartHash, $imgPath);
-            $imgPath = api_get_path(WEB_ARCHIVE_PATH).$chartHash;
-        }
-
-        $html = '<img src="'.$imgPath.'">';
+        $html = api_get_js('chartjs/Chart.js');
+        $canvas = Display::tag('canvas', '', ['id' => 'session_graph_chart']);
+        $html .= Display::tag('div', $canvas, ['style' => 'width:100%']);
+        $jsStr = " var data = {
+                       labels:".json_encode($names).",
+                       datasets: [
+                       {
+                         label: '".get_lang('MyResults')."',
+                         backgroundColor: 'rgb(255, 99, 132)',
+                         stack: 'Stack1',
+                         data: ".json_encode($my_results).",
+                        },
+                        {
+                         label: '".get_lang('AverageScore')."',
+                         backgroundColor: 'rgb(75, 192, 192)',
+                         stack: 'Stack2',
+                         data: ".json_encode($average).",
+                        },
+                        ],  
+                    };
+                    var ctx = document.getElementById('session_graph_chart').getContext('2d');
+                    var myBarChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: data,
+                    options: {
+                            title: {
+                                    display: true,
+                                    text: '".get_lang('ExercisesInTimeProgressChart')."'
+                            },
+                            tooltips: {
+                                    mode: 'index',
+                                    intersect: false
+                            },
+                            responsive: true,
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        // Include a dollar sign in the ticks
+                                        callback: function(value, index, values) {
+                                            return value + '%';
+                                        }
+                                    }
+                                }]
+                            }
+                    }
+                });";
+        $html .= Display::tag('script', $jsStr);
 
         return $html;
     }
@@ -6933,7 +6831,7 @@ class Tracking
                             break;
                         case TOOL_LEARNPATH:
                             if ($item['tool_id'] != $beforeItem['tool_id']) {
-                                continue;
+                                break;
                             }
                             if (!isset($lpTime[$item['tool_id']])) {
                                 $lpTime[$item['tool_id']] = 0;
@@ -7760,7 +7658,7 @@ class TrackingCourseLog
             $user_ids = array_map('intval', $user_ids);
             $condition_user = " WHERE user.user_id IN (".implode(',', $user_ids).") ";
         } else {
-            $user_ids = intval($user_ids);
+            $user_ids = (int) $user_ids;
             $condition_user = " WHERE user.user_id = $user_ids ";
         }
 
@@ -7798,9 +7696,9 @@ class TrackingCourseLog
             $direction = 'ASC';
         }
 
-        $column = intval($column);
-        $from = intval($from);
-        $number_of_items = intval($number_of_items);
+        $column = (int) $column;
+        $from = (int) $from;
+        $number_of_items = (int) $number_of_items;
 
         $sql .= " ORDER BY col$column $direction ";
         $sql .= " LIMIT $from,$number_of_items";

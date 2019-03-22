@@ -739,8 +739,8 @@ class AnnouncementManager
             }
 
             $send_to_users = CourseManager::separateUsersGroups($to_users);
-            // Store in item_property (first the groups, then the users)
-            //if (!isset($to_users)) {
+
+            // if nothing was selected in the menu then send to all the group
             $sentToAllGroup = false;
             if (empty($send_to_users['groups']) && empty($send_to_users['users'])) {
                 $groupInfo = GroupManager::get_group_properties($groupId);
@@ -754,7 +754,7 @@ class AnnouncementManager
                 );
                 $sentToAllGroup = true;
             }
-            // when no user is selected we send it to everyone
+
             if ($sentToAllGroup === false) {
                 if (!empty($send_to_users['groups'])) {
                     foreach ($send_to_users['groups'] as $group) {
@@ -769,19 +769,19 @@ class AnnouncementManager
                         );
                     }
                 }
-                // storing the selected users
+
                 $groupInfo = GroupManager::get_group_properties($groupId);
                 if (!empty($send_to_users['users'])) {
                     foreach ($send_to_users['users'] as $user) {
                         api_item_property_update(
-                                $courseInfo,
-                                TOOL_ANNOUNCEMENT,
-                                $last_id,
-                                'AnnouncementAdded',
-                                api_get_user_id(),
-                                $groupInfo,
-                                $user
-                            );
+                            $courseInfo,
+                            TOOL_ANNOUNCEMENT,
+                            $last_id,
+                            'AnnouncementAdded',
+                            api_get_user_id(),
+                            $groupInfo,
+                            $user
+                        );
                     }
                 }
             }
@@ -1633,8 +1633,8 @@ class AnnouncementManager
             ($allowUserEditSetting && !api_is_anonymous()) ||
             ($allowDrhAccess && api_is_drh())
         ) {
+            // A.1. you are a course admin with a USER filter
             // => see only the messages of this specific user + the messages of the group (s)he is member of.
-
             //if (!empty($user_id)) {
             if (0) {
                 if (is_array($group_memberships) &&
@@ -1771,13 +1771,13 @@ class AnnouncementManager
                             $condition_session
                             $searchCondition AND 
                             ip.visibility='1'
-                        $groupBy
+                            $groupBy
                         ORDER BY display_order DESC";
             } else {
                 if ($user_id) {
                     if ($allowUserEditSetting && !api_is_anonymous()) {
                         $cond_user_id = " AND (
-                            ip.lastedit_user_id = '".api_get_user_id()."' OR
+                                ip.lastedit_user_id = '".api_get_user_id()."' OR
                                 ((ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND 
                                 (ip.to_group_id='0' OR ip.to_group_id IS NULL)
                             )
@@ -1824,7 +1824,7 @@ class AnnouncementManager
                                 $searchCondition  AND
                                 ip.visibility='1' AND
                                 announcement.session_id IN ( 0,".api_get_session_id().")
-                            $groupBy
+                                $groupBy
                             ";
                 }
             }
@@ -2000,7 +2000,7 @@ class AnnouncementManager
                                         api_get_system_encoding()
                                     )
                                 )."')) return false;\">".
-                            $deleteIcon."</a>";
+                                $deleteIcon."</a>";
                         }
                     }
                     $iterator++;

@@ -59,7 +59,8 @@ try {
     $kernel->boot();
     if (!empty($append)) {
         if (substr($append, 0, 1) !== '/') {
-            throw new Exception('APP_URL_APPEND must start with "/"');
+            echo 'APP_URL_APPEND must start with "/"';
+            exit;
         }
         $append = "$append/";
     }

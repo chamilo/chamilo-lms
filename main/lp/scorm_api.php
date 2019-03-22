@@ -31,7 +31,10 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $file = Session::read('file');
 /** @var learnpath $oLP */
-$oLP = unserialize(Session::read('lpobject'));
+$oLP = UnserializeApi::unserialize(
+    'lp',
+    Session::read('lpobject')
+);
 /** @var learnpathItem $oItem */
 $oItem = isset($oLP->items[$oLP->current]) ? $oLP->items[$oLP->current] : null;
 
@@ -235,6 +238,7 @@ $(document).ready(function() {
     olms.info_lms_item[0] = '<?php echo $oItem->get_id(); ?>';
     olms.info_lms_item[1] = '<?php echo $oItem->get_id(); ?>';
 
+
     $("#content_id").load(function() {
         logit_lms('#content_id load event starts');
         olms.info_lms_item[0] = olms.info_lms_item[1];
@@ -387,8 +391,7 @@ function Initialize() {
 function LMSGetValue(param) {
     olms.G_LastError = G_NoError;
     olms.G_LastErrorMessage = 'No error';
-    var result='';
-
+    var result = '';
     // the LMSInitialize is missing
     if (olms.lms_initialized == 0) {
          if (param == 'cmi.core.score.raw') {
@@ -539,7 +542,7 @@ function LMSGetValue(param) {
                         olms.G_LastError = G_NotImplementedError;
                         olms.G_LastErrorString = 'Not implemented yet';
                     }
-                }else if(req_type == 'status'){
+                } else if(req_type == 'status'){
                     result = 'not attempted';
                 }
            } else {
@@ -612,7 +615,9 @@ function LMSGetValue(param) {
         result = '';
         return result;
     }
-    logit_scorm("LMSGetValue\n\t('"+param+"') returned '"+result+"'",1);
+
+    logit_scorm("LMSGetValue ('"+param+"') returned '"+result+"'",1);
+
     return result;
 }
 
@@ -653,7 +658,7 @@ function LMSSetValue(param, val) {
     } else if ( param == "cmi.core.lesson_location" ) {
         olms.lesson_location = val;
         olms.updatable_vars_list['cmi.core.lesson_location']=true;
-        return_value='true';
+        return_value = 'true';
     } else if ( param == "cmi.core.lesson_status" ) {
         olms.lesson_status = val;
         olms.updatable_vars_list['cmi.core.lesson_status'] = true;

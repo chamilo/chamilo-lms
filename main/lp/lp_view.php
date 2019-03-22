@@ -423,7 +423,7 @@ if (!api_is_invitee()) {
     $progress_bar = $lp->getProgressBar();
 }
 $navigation_bar = $lp->get_navigation_bar();
-$navigation_bar_bottom = $lp->get_navigation_bar("control-bottom", "display:none");
+$navigation_bar_bottom = $lp->get_navigation_bar('control-bottom', 'display:none');
 $mediaplayer = $lp->get_mediaplayer($lp->current, $autostart);
 
 $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
@@ -459,10 +459,6 @@ if ($is_allowed_to_edit) {
         'url' => '#',
         'name' => get_lang('Preview'),
     ];
-}
-
-// Return to course home.
-if ($is_allowed_to_edit) {
     $buttonHomeUrl = 'lp_controller.php?'.api_get_cidreq(true, true, 'course').'&'.http_build_query([
         'isStudentView' => 'false',
         'action' => 'return_to_course_homepage',

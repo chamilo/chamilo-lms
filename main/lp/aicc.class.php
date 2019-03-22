@@ -439,6 +439,7 @@ class aicc extends learnpath
         $files_found = [];
         $subdir_isset = false;
         // The following loop should be stopped as soon as we found the right config files (.crs, .au, .des and .cst).
+        $realFileSize = 0;
         foreach ($zipContentArray as $thisContent) {
             if (preg_match('~.(php.*|phtml)$~i', $thisContent['filename'])) {
                 // If a php file is found, do not authorize (security risk).
@@ -576,68 +577,11 @@ class aicc extends learnpath
             if ($this->debug >= 1) {
                 error_log('New LP - Changing dir to '.$course_sys_dir.$new_dir, 0);
             }
-            $saved_dir = getcwd();
             chdir($course_sys_dir.$new_dir);
-            $unzippingState = $zipFile->extract();
-            for ($j = 0; $j < count($unzippingState); $j++) {
-                $state = $unzippingState[$j];
-
-                // TODO: Fix relative links in html files (?)
-                $extension = strrchr($state["stored_filename"], '.');
-                //if ($this->debug > 1) { error_log('New LP - found extension '.$extension.' in '.$state['stored_filename'], 0); }
-            }
-
-            if (!empty($new_dir)) {
-                $new_dir = $new_dir.'/';
-            }
-            // Rename files, for example with \\ in it.
-            if ($dir = @opendir($course_sys_dir.$new_dir)) {
-                if ($this->debug == 1) {
-                    error_log('New LP - Opened dir '.$course_sys_dir.$new_dir, 0);
-                }
-                while ($file = readdir($dir)) {
-                    if ($file != '.' && $file != '..') {
-                        $filetype = 'file';
-
-                        if (is_dir($course_sys_dir.$new_dir.$file)) {
-                            $filetype = 'folder';
-                        }
-
-                        // TODO: RENAMING FILES CAN BE VERY DANGEROUS AICC-WISE, avoid that as much as possible!
-                        //$safe_file = api_replace_dangerous_char($file, 'strict');
-                        $find_str = ['\\', '.php', '.phtml'];
-                        $repl_str = ['/', '.txt', '.txt'];
-                        $safe_file = str_replace($find_str, $repl_str, $file);
-
-                        if ($safe_file != $file) {
-                            //@rename($course_sys_dir.$new_dir, $course_sys_dir.'/'.$safe_file);
-                            $mydir = dirname($course_sys_dir.$new_dir.$safe_file);
-                            if (!is_dir($mydir)) {
-                                $mysubdirs = split('/', $mydir);
-                                $mybasedir = '/';
-                                foreach ($mysubdirs as $mysubdir) {
-                                    if (!empty($mysubdir)) {
-                                        $mybasedir = $mybasedir.$mysubdir.'/';
-                                        if (!is_dir($mybasedir)) {
-                                            @mkdir($mybasedir, api_get_permissions_for_new_directories());
-                                            if ($this->debug == 1) {
-                                                error_log('New LP - Dir '.$mybasedir.' doesnt exist. Creating.');
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            @rename($course_sys_dir.$new_dir.$file, $course_sys_dir.$new_dir.$safe_file);
-                            if ($this->debug == 1) {
-                                error_log('New LP - Renaming '.$course_sys_dir.$new_dir.$file.' to '.$course_sys_dir.$new_dir.$safe_file);
-                            }
-                        }
-                    }
-                }
-
-                closedir($dir);
-                chdir($saved_dir);
-            }
+            $zipFile->extract(
+                PCLZIP_CB_PRE_EXTRACT,
+                'clean_up_files_in_zip'
+            );
         } else {
             return '';
         }

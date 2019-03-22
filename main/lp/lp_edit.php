@@ -158,7 +158,7 @@ $form->addElement('html', '<div class="help-block">'.get_lang('LpPrerequisiteDes
 $form->addElement('html', '</div>');
 $form->addElement('html', '<div class="col-md-2"></div>');
 $form->addElement('html', '</div>');
-//Start date
+
 // Time Control
 if (Tracking::minimunTimeAvailable(api_get_session_id(), api_get_course_int_id())) {
     $accumulateTime = $_SESSION['oLP']->getAccumulateWorkTime();

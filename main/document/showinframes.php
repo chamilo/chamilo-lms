@@ -103,7 +103,7 @@ if (!$is_allowed_to_edit && !$is_visible) {
 }
 
 $pathinfo = pathinfo($header_file);
-$playerSupportedFiles = ['mp4', 'ogv', 'flv', 'm4v', 'webm'];
+$playerSupportedFiles = ['mp3', 'mp4', 'ogv', 'flv', 'm4v', 'webm'];
 $playerSupported = false;
 if (in_array(strtolower($pathinfo['extension']), $playerSupportedFiles)) {
     $playerSupported = true;
@@ -188,7 +188,7 @@ if (in_array(strtolower($pathinfo['extension']), $web_odf_supported_files)) {
             var topbarHeight = $("#topbar").height();
             $("#viewerJSContent").height((bodyHeight - topbarHeight));
         }
-        $(document).ready(function() {
+        $(function() {
             $(window).resize(resizeIframe());
         });
     </script>'
@@ -207,9 +207,7 @@ if (isset($document_data['parents']) && isset($document_data['parents'][0])) {
 if ($isChatFolder) {
     $htmlHeadXtra[] = api_get_js('highlight/highlight.pack.js');
     $htmlHeadXtra[] = api_get_css(api_get_path(WEB_CSS_PATH).'chat.css');
-    $htmlHeadXtra[] = api_get_css(
-        api_get_path(WEB_LIBRARY_PATH).'javascript/highlight/styles/github.css'
-    );
+    $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/highlight/styles/github.css');
     $htmlHeadXtra[] = '
     <script>
         hljs.initHighlightingOnLoad();
@@ -242,7 +240,7 @@ if (!$playerSupported && $execute_iframe) {
         var updateContentHeight = function() {
             my_iframe = document.getElementById("mainFrame");
             if (my_iframe) {
-                //this doesnt seem to work in IE 7,8,9
+                //this doesnt seem to work in IE 7,8,9         
                 my_iframe.height = my_iframe.contentWindow.document.body.scrollHeight + 50 + "px";
             }
         };
@@ -258,15 +256,14 @@ if (!$playerSupported && $execute_iframe) {
 if ($originIsLearnpath) {
     Display::display_reduced_header();
 } else {
-    Display::display_header('');
+    Display::display_header();
 }
-
-echo '<div class="text-center">';
 
 $file_url = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document'.$header_file;
 $file_url_web = $file_url.'?'.api_get_cidreq();
 
 if ($show_web_odf) {
+    echo '<div class="text-center">';
     $browser = api_get_navigator();
     $pdfUrl = api_get_path(WEB_LIBRARY_PATH).'javascript/ViewerJS/index.html#'.$file_url;
     if ($browser['name'] == 'Mozilla' && preg_match('|.*\.pdf|i', $header_file)) {
@@ -277,12 +274,11 @@ if ($show_web_odf) {
             src="'.$pdfUrl.'">
         </iframe>';
     echo '</div>';
+    echo '</div>';
 }
 
-echo '</div>';
-
 if ($playerSupported) {
-    echo DocumentManager::generateVideoPreview($file_url_web, $extension);
+    echo DocumentManager::generateMediaPreview($file_url_web, $extension);
 }
 
 if ($is_freemind_available) {
@@ -355,14 +351,30 @@ if ($execute_iframe) {
         $content = Security::remove_XSS(file_get_contents($file_url_sys));
         echo $content;
     } else {
-        if (api_is_allowed_to_edit()) {
-            $parentId = $document_data['parent_id'];
-            $url = api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq().'&id='.$parentId;
-            $actionsLeft = Display::url(
-                Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM),
-                $url
-            );
+        $parentId = $document_data['parent_id'];
+        $url = api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq().'&id='.$parentId;
+        $actionsLeft = Display::url(
+            Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM),
+            $url
+        );
 
+        $groupMemberWithEditRights = false;
+        $groupId = api_get_group_id();
+        if (!empty($groupId)) {
+            $groupInfo = GroupManager::get_group_properties($groupId);
+            if ($groupInfo) {
+                $groupMemberWithEditRights = GroupManager::allowUploadEditDocument(
+                    api_get_user_id(),
+                    api_get_course_int_id(),
+                    $groupInfo,
+                        $document_data
+                );
+            }
+        }
+
+        $allowToEdit = api_is_allowed_to_edit(null, true) || $groupMemberWithEditRights;
+
+        if ($allowToEdit) {
             $actionsLeft .= Display::url(
                 Display::return_icon(
                     'edit.png',
@@ -398,9 +410,9 @@ if ($execute_iframe) {
                 api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq(
                 ).'&action=export_to_pdf&id='.$document_id
             );
-
-            echo $toolbar = Display::toolbarAction('actions-documents', [$actionsLeft]);
         }
+
+        echo $toolbar = Display::toolbarAction('actions-documents', [$actionsLeft]);
 
         echo '<iframe 
             id="mainFrame" 

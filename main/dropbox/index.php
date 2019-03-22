@@ -299,7 +299,7 @@ if ($action != 'add') {
                 echo '<div class="actions">';
                 if (empty($viewSentCategory)) {
                     echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$view."&action=add\">".
-                    Display::return_icon('upload_file.png', get_lang('UploadNewFile'), '', ICON_SIZE_MEDIUM).
+                        Display::return_icon('upload_file.png', get_lang('UploadNewFile'), '', ICON_SIZE_MEDIUM).
                     "</a>";
                 }
                 if ($view_dropbox_category_sent != 0) {

@@ -182,7 +182,7 @@ function aiken_import_exercise($file)
     if (!empty($last_exercise_id)) {
         // For each question found...
         foreach ($exercise_info['question'] as $key => $question_array) {
-            //2.create question
+            // 2.create question
             $question = new Aiken2Question();
             $question->type = $question_array['type'];
             $question->setAnswer();

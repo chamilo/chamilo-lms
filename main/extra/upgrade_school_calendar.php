@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 // not used??
+
 exit;
 
 require_once '../inc/global.inc.php';
@@ -28,6 +29,11 @@ $d_id = (int) $d_id;
 $d_number = (int) $d_number;
 $sql4 = "UPDATE set_module SET cal_day_num = $d_number WHERE id = $d_id ";
 Database::query($sql4);
-print_r(unserialize(Security::remove_XSS($_POST['aaa'])));
+print_r(
+    UnserializeApi::unserialize(
+        'not_allowed_classes',
+        Security::remove_XSS($_POST['aaa'])
+    )
+);
 
 Display::display_footer();

@@ -639,7 +639,7 @@ if ($form->validate()) {
         $sql .= ", official_code = '".Database::escape_string($user_data['official_code'])."'";
     }
 
-    $sql .= " WHERE user_id  = '".api_get_user_id()."'";
+    $sql .= " WHERE id  = '".api_get_user_id()."'";
     Database::query($sql);
 
     $webserviceUrl = api_get_plugin_setting('logintcc', 'webservice_url');
@@ -741,6 +741,10 @@ if ($form->validate()) {
     Session::write('_user', $userInfo);
 
     if ($hook) {
+        Database::getManager()->clear(User::class); //Avoid cache issue (user entity is used before)
+
+        $user = api_get_user_entity(api_get_user_id()); //Get updated user info for hook event
+
         $hook->setEventData(['user' => $user]);
         $hook->notifyUpdateUser(HOOK_EVENT_TYPE_POST);
     }

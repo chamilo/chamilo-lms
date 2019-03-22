@@ -61,7 +61,7 @@ class FreeAnswer extends Question
         $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'" >
         <tr>
-        <th>'.get_lang("Answer").'</th>
+        <th>'.get_lang('Answer').'</th>
         </tr>';
 
         return $header;

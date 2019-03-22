@@ -11,7 +11,7 @@ use ChamiloSession as Session;
  *
  * @author Toon Keppens
  */
-$modifyAnswers = intval($_GET['hotspotadmin']);
+$modifyAnswers = (int) $_GET['hotspotadmin'];
 
 if (!is_object($objQuestion)) {
     $objQuestion = Question::read($modifyAnswers);
@@ -30,7 +30,7 @@ if ($modifyIn) {
         echo '$modifyIn was set'."<br />\n";
     }
     // if the user has chosen to modify the question only in the current exercise
-    if ($modifyIn == 'thisExercise') {
+    if ($modifyIn === 'thisExercise') {
         // duplicates the question
         $questionId = $objQuestion->duplicate();
 
@@ -56,13 +56,13 @@ if ($modifyIn) {
         $objAnswer = new Answer($questionId);
     }
 
-    $color = unserialize($color);
-    $reponse = unserialize($reponse);
-    $comment = unserialize($comment);
-    $weighting = unserialize($weighting);
-    $hotspot_coordinates = unserialize($hotspot_coordinates);
-    $hotspot_type = unserialize($hotspot_type);
-    $destination = unserialize($destination);
+    $color = UnserializeApi::unserialize('not_allowed_classes', $color);
+    $reponse = UnserializeApi::unserialize('not_allowed_classes', $reponse);
+    $comment = UnserializeApi::unserialize('not_allowed_classes', $comment);
+    $weighting = UnserializeApi::unserialize('not_allowed_classes', $weighting);
+    $hotspot_coordinates = UnserializeApi::unserialize('not_allowed_classes', $hotspot_coordinates);
+    $hotspot_type = UnserializeApi::unserialize('not_allowed_classes', $hotspot_type);
+    $destination = UnserializeApi::unserialize('not_allowed_classes', $destination);
     unset($buttonBack);
 }
 
@@ -71,14 +71,13 @@ $hotspot_admin_url = api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_c
 // the answer form has been submitted
 $submitAnswers = isset($_POST['submitAnswers']) ? true : false;
 $buttonBack = isset($_POST['buttonBack']) ? true : false;
-$nbrAnswers = isset($_POST['nbrAnswers']) ? intval($_POST['nbrAnswers']) : 0;
+$nbrAnswers = isset($_POST['nbrAnswers']) ? (int) $_POST['nbrAnswers'] : 0;
 
 if ($submitAnswers || $buttonBack) {
     if ($answerType == HOT_SPOT) {
         if ($debug > 0) {
             echo '$submitAnswers or $buttonBack was set'."<br />\n";
         }
-
         $questionWeighting = $nbrGoodAnswers = 0;
         for ($i = 1; $i <= $nbrAnswers; $i++) {
             if ($debug > 0) {
@@ -324,7 +323,7 @@ if ($submitAnswers || $buttonBack) {
 
             // sets the total weighting of the question
             $objQuestion->updateWeighting($questionWeighting);
-            $objQuestion->save($exerciseId);
+            $objQuestion->save($objExercise);
 
             $editQuestion = $questionId;
             unset($modifyAnswers);
@@ -334,7 +333,7 @@ if ($submitAnswers || $buttonBack) {
     }
 }
 
-if ($modifyAnswers) {
+if (isset($modifyAnswers)) {
     if ($debug > 0) {
         echo str_repeat('&nbsp;', 0).'$modifyAnswers is set'."<br />\n";
     }

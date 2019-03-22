@@ -6,6 +6,16 @@
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
+$action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : 'calendar_list';
+
+$logInfo = [
+    'tool' => TOOL_CALENDAR_EVENT,
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => $action,
+];
+Event::registerLog($logInfo);
+
 $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
 
 $interbreadcrumb[] = [
@@ -20,12 +30,12 @@ if (!empty($groupId)) {
     $groupProperties = GroupManager::get_group_properties($groupId);
     $groupId = $groupProperties['iid'];
     $interbreadcrumb[] = [
-        "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
-        "name" => get_lang('Groups'),
+        'url' => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
+        'name' => get_lang('Groups'),
     ];
     $interbreadcrumb[] = [
-        "url" => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
-        "name" => get_lang('GroupSpace').' '.$groupProperties['name'],
+        'url' => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
+        'name' => get_lang('GroupSpace').' '.$groupProperties['name'],
     ];
 }
 
@@ -83,7 +93,7 @@ $tpl->assign('agenda_actions', $actions);
 $tpl->assign('is_allowed_to_edit', api_is_allowed_to_edit());
 
 if (api_is_allowed_to_edit()) {
-    if (isset($_GET['action']) && $_GET['action'] == 'change_visibility') {
+    if ($action == 'change_visibility') {
         $courseInfo = api_get_course_info();
         $courseCondition = '';
         // This happens when list agenda is not inside a course

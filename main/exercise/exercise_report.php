@@ -31,6 +31,12 @@ if (api_is_student_boss() && !empty($filter_user)) {
     api_protect_course_script(true, false, true);
 }
 
+$limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
+
+if ($limitTeacherAccess && !api_is_platform_admin()) {
+    api_not_allowed(true);
+}
+
 // including additional libraries
 require_once 'hotpotatoes.lib.php';
 

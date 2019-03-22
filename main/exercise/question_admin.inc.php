@@ -13,7 +13,7 @@
  */
 if (isset($_GET['editQuestion'])) {
     $objQuestion = Question::read($_GET['editQuestion']);
-    $action = api_get_self()."?".api_get_cidreq()."&myid=1&modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id;
+    $action = api_get_self()."?".api_get_cidreq()."&myid=1&modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id.'&page='.$page;
 } else {
     $objQuestion = Question::getInstance($_REQUEST['answerType']);
     $action = api_get_self()."?".api_get_cidreq()."&modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion;
@@ -35,8 +35,13 @@ if (is_object($objQuestion)) {
     $typesInformation = Question::get_question_type_list();
     $form_title_extra = isset($typesInformation[$type][1]) ? get_lang($typesInformation[$type][1]) : null;
 
+    $code = '';
+    if (isset($objQuestion->code) && !empty($objQuestion->code)) {
+        $code = ' ('.$objQuestion->code.')';
+    }
+
     // form title
-    $form->addHeader($text.': '.$form_title_extra);
+    $form->addHeader($text.': '.$form_title_extra.$code);
 
     // question form elements
     $objQuestion->createForm($form, $objExercise);
@@ -60,13 +65,18 @@ if (is_object($objQuestion)) {
             $objQuestion->type != HOT_SPOT_DELINEATION
         ) {
             if (isset($_GET['editQuestion'])) {
-                echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&message=ItemUpdated"</script>';
+                echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&page='.$page.'&message=ItemUpdated"</script>';
             } else {
                 // New question
-                echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&message=ItemAdded"</script>';
+                $page = 1;
+                $length = api_get_configuration_value('question_pagination_length');
+                if (!empty($length)) {
+                    $page = round($objExercise->getQuestionCount() / $length);
+                }
+                echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&page='.$page.'&message=ItemAdded"</script>';
             }
         } else {
-            echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&hotspotadmin='.$objQuestion->id.'&'.api_get_cidreq().'"</script>';
+            echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&page='.$page.'&hotspotadmin='.$objQuestion->id.'&'.api_get_cidreq().'"</script>';
         }
     } else {
         if (isset($questionName)) {
@@ -76,7 +86,7 @@ if (is_object($objQuestion)) {
             echo '<img src="../document/download.php?doc_url=%2Fimages%2F'.$pictureName.'" border="0">';
         }
         if (!empty($msgErr)) {
-            echo Display::return_message($msgErr, 'normal');
+            echo Display::return_message($msgErr);
         }
         // display the form
         $form->display();

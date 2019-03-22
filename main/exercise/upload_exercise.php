@@ -129,18 +129,23 @@ function lp_upload_quiz_main()
  */
 function lp_upload_quiz_action_handling()
 {
-    $_course = api_get_course_info();
-    $courseId = $_course['real_id'];
-
     if (!isset($_POST['submit_upload_quiz'])) {
         return;
     }
+
+    $_course = api_get_course_info();
+
+    if (empty($_course)) {
+        return false;
+    }
+
+    $courseId = $_course['real_id'];
 
     // Get the extension of the document.
     $path_info = pathinfo($_FILES['user_upload_quiz']['name']);
 
     // Check if the document is an Excel document
-    if ($path_info['extension'] != 'xls') {
+    if (!in_array($path_info['extension'], ['xls', 'xlsx'])) {
         return;
     }
 
@@ -543,7 +548,8 @@ function lp_upload_quiz_action_handling()
         $lpObject = Session::read('lpobject');
 
         if (!empty($lpObject)) {
-            $oLP = unserialize($lpObject);
+            /** @var learnpath $oLP */
+            $oLP = UnserializeApi::unserialize('lp', $lpObject);
             if (is_object($oLP)) {
                 if ((empty($oLP->cc)) || $oLP->cc != api_get_course_id()) {
                     $oLP = null;

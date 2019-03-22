@@ -805,12 +805,11 @@ if (!empty($exerciseList)) {
 
                 $listExercise['id'] = $row['id'];
                 $listExercise['title'] = $title;
+                $listExercise['description'] = $row['description'];
                 $listExercise['url'] = "overview.php?".api_get_cidreq().$mylpid.$mylpitemid.'&exerciseId='.$row['id'];
                 $listExercise['lp_blocked'] = $lp_blocked;
                 $listExercise['visibility'] = $visibility;
                 $listExercise['active'] = $row['active'];
-
-
 
                 $item = Display::tag('td', $url.' '.$session_img.$lp_blocked);
 
@@ -1093,7 +1092,6 @@ if (!empty($exerciseList)) {
                 } else {
                     $number_of_questions = $rowi;
                 }
-
                 $listExercise['number_questions'] = $number_of_questions;
                 $item .= Display::tag('td', $number_of_questions);
             } else {

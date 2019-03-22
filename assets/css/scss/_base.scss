@@ -1313,7 +1313,21 @@ hr {
     }
   }
 }
-
+.list-exercise{
+  .list-group{
+    .list-group-item{
+      .description{
+        width:100%;
+        height:20px;
+        padding:0;
+        text-overflow:ellipsis;
+        overflow:hidden;
+        transition: all 1s;
+        box-sizing: border-box;
+      }
+    }
+  }
+}
 .main-question{
   margin-bottom: 20px;
   margin-top: 20px;

@@ -784,6 +784,7 @@ if (!empty($exerciseList)) {
                     $sessionId
                 );
 
+
                 $move = Display::return_icon(
                     'all_directions.png',
                     get_lang('Move'),
@@ -805,6 +806,11 @@ if (!empty($exerciseList)) {
                 $listExercise['id'] = $row['id'];
                 $listExercise['title'] = $title;
                 $listExercise['url'] = "overview.php?".api_get_cidreq().$mylpid.$mylpitemid.'&exerciseId='.$row['id'];
+                $listExercise['lp_blocked'] = $lp_blocked;
+                $listExercise['visibility'] = $visibility;
+                $listExercise['active'] = $row['active'];
+
+
 
                 $item = Display::tag('td', $url.' '.$session_img.$lp_blocked);
 
@@ -1087,6 +1093,8 @@ if (!empty($exerciseList)) {
                 } else {
                     $number_of_questions = $rowi;
                 }
+
+                $listExercise['number_questions'] = $number_of_questions;
                 $item .= Display::tag('td', $number_of_questions);
             } else {
                 // Student only.
@@ -1100,9 +1108,12 @@ if (!empty($exerciseList)) {
                 if ($visibility == 0) {
                     continue;
                 }
-
+                $score = null;
                 $url = '<a '.$alt_title.'  href="overview.php?'.api_get_cidreq().$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'">'.
                         $cut_title.'</a>';
+                $listExercise['id'] = $row['id'];
+                $listExercise['title'] = $cut_title;
+                $listExercise['url'] = 'overview.php?'.api_get_cidreq().$mylpid.$mylpitemid.'&exerciseId='.$row['id'];
 
                 // Link of the exercise.
                 $item = Display::tag('td', $url.' '.$session_img);
@@ -1158,7 +1169,8 @@ if (!empty($exerciseList)) {
                             if ($num > 0) {
                                 $row_track = Database :: fetch_array($qryres);
                                 $attempt_text = get_lang('LatestAttempt').' : ';
-                                $attempt_text .= ExerciseLib::show_score($row_track['score'], $row_track['max_score']);
+                                $score = ExerciseLib::show_score($row_track['score'], $row_track['max_score']);
+                                $attempt_text .= $score['html'];
                             } else {
                                 //No attempts
                                 $attempt_text = get_lang('NotAttempted');
@@ -1248,6 +1260,9 @@ if (!empty($exerciseList)) {
                     $num = '<span class="tooltip" style="display: none;">'.$num.'</span>';
                 }
 
+                $listExercise['status'] = $attempt_text;
+                $listExercise['description'] = $row['description'];
+                $listExercise['score'] = $score;
                 $item .= Display::tag('td', $attempt_text);
             }
 
@@ -1511,7 +1526,8 @@ if (empty($exerciseList) && $hotpotatoes_exist == false) {
     echo '</div>';
 
     $tpl = new Template(null);
-    $tpl->assign('temp', $list);
+    $tpl->assign('data', $list);
+    $tpl->assign('is_teacher', $is_allowedToEdit);
     $layout = $tpl->get_template('exercise/index.html.twig');
     $content = $tpl->fetch($layout);
     echo $content;

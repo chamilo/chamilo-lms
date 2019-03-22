@@ -1,1 +1,46 @@
-{{ dump(temp) }}
+{% block content %}
+    {% autoescape false %}
+        <ul class="list-group list-group-flush">
+            {% for item in data %}
+            <li class="list-group-item">
+                <div class="row">
+                    <div class="col-md-5">
+                        <h5>
+                            <img src="{{ 'quiz.png'|icon(22) }}">
+                            <a href="{{ item.url }}">
+                                {{ item.title }}
+                            </a>
+                        </h5>
+                        {% if item.description %}
+                            <div class="description">
+                                {{ item.description }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-5">
+                        <p>{{ 'Percentage of completion'|trans }}</p>
+                        {% if item.score %}
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" style="width: {{ item.score.percentage }}%" aria-valuenow="{{ item.score.percentage }}" aria-valuemin="0" aria-valuemax="100">
+                                    {{ item.score.percentage }}%
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-2">
+                        {% if is_teacher %}
+                            {{ item.actions }}
+                        {% else %}
+                            <p>{{ 'Latest Attempt'|trans }}</p>
+                            <ul class="score-list">
+                                <li>{{ 'Score obtained'|trans }} : {{ item.score.score_obtained }}</li>
+                                <li>{{ 'Total score'|trans }} : {{ item.score.total_score }}</li>
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    {% endautoescape %}
+{% endblock %}

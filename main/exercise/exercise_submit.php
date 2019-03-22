@@ -181,7 +181,7 @@ if ($objExercise->review_answers) {
 }
 
 $template->assign('shuffle_answers', $objExercise->random_answers);
-$templateName = $template->get_template('exercise/submit.js.tpl');
+$templateName = $template->get_template('exercise/submit.js.html.twig');
 $htmlHeadXtra[] = $template->fetch($templateName);
 
 $current_timestamp = time();

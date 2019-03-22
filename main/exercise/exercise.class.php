@@ -7818,7 +7818,7 @@ class Exercise
     /**
      * @param string $class
      * @param string $scoreLabel
-     * @param string $result
+     * @param array $result
      * @param array
      *
      * @return string
@@ -7832,7 +7832,7 @@ class Exercise
                         <h3>'.$scoreLabel.'</h3>
                       </div>';
             if (!empty($result)) {
-                $label .= '<h4>'.get_lang('Score').': '.$result.'</h4>';
+                $label .= '<h4>'.get_lang('Score').': '.$result['html'].'</h4>';
             }
             if ($hideLabel === true) {
                 $answerUsed = (int) $array['used'];
@@ -7847,7 +7847,7 @@ class Exercise
                         Display::return_icon('attempt-nocheck.png', null, null, ICON_SIZE_SMALL).
                         '</span>';
                 }
-                $label = '<div class="score-title">'.get_lang('CorrectAnswers').': '.$result.'</div>';
+                $label = '<div class="score-title">'.get_lang('CorrectAnswers').': '.$result['html'].'</div>';
                 $label .= '<div class="score-limits">';
                 $label .= $html;
                 $label .= '</div>';
@@ -7863,7 +7863,7 @@ class Exercise
                             <h3>'.$scoreLabel.'</h3>
                         </div>';
             if (!empty($result)) {
-                $html .= '<h4>'.get_lang('Score').': '.$result.'</h4>';
+                $html .= '<h4>'.get_lang('Score').': '.$result['html'].'</h4>';
             }
             $html .= '</div>';
 

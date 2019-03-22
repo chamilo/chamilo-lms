@@ -2789,7 +2789,7 @@ HOTSPOT;
      * @param string $thousandSeparator
      * @param bool   $roundValues           This option rounds the float values into a int using ceil()
      *
-     * @return string an html with the score modified
+     * @return array an html with the score modified
      */
     public static function show_score(
         $score,
@@ -2870,7 +2870,12 @@ HOTSPOT;
 
         $html = Display::span($html, ['class' => 'score_exercise']);
 
-        return $html;
+        return [
+            'html' => $html,
+            'percentage' => $percentage,
+            'score_obtained' => $score,
+            'total_score' => $weight
+        ];
     }
 
     /**
@@ -5055,7 +5060,8 @@ EOT;
             $ribbon .= '<div class="total">';
         }
         $ribbon .= '<h3>'.get_lang('YourTotalScore').":&nbsp;";
-        $ribbon .= self::show_score($score, $weight, false, true);
+        $score = self::show_score($score, $weight, false, true);
+        $ribbon .= $score['html'];
         $ribbon .= '</h3>';
         $ribbon .= '</div>';
         if ($checkPassPercentage) {

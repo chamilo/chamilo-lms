@@ -9,7 +9,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 
 /**
- * @author Bart Mollet, Julio Montoya lot of fixes
+ * @author  Bart Mollet, Julio Montoya lot of fixes
  *
  * @package chamilo.admin
  */
@@ -26,6 +26,8 @@ if (empty($sessionId)) {
 }
 
 SessionManager::protectSession($sessionId);
+
+$codePath = api_get_path(WEB_CODE_PATH);
 
 $tool_name = get_lang('SessionOverview');
 $interbreadcrumb[] = [
@@ -97,8 +99,10 @@ switch ($action) {
         }
 
         if (!empty($_GET['class'])) {
-            $result = Database::query("DELETE FROM $tbl_session_rel_class
-                             WHERE session_id='$sessionId' AND class_id=".intval($_GET['class']));
+            $result = Database::query(
+                "DELETE FROM $tbl_session_rel_class
+                 WHERE session_id='$sessionId' AND class_id=".intval($_GET['class'])
+            );
             $nbr_affected_rows = Database::affected_rows($result);
             Database::query("UPDATE $tbl_session SET nbr_classes=nbr_classes-$nbr_affected_rows WHERE id='$sessionId'");
         }
@@ -170,11 +174,13 @@ if ($session->getNbrCourses() === 0) {
         // Get coachs of the courses in session
         $namesOfCoaches = [];
         $coachSubscriptions = $session->getUserCourseSubscriptionsByStatus($course, Session::COACH)
-            ->forAll(function ($index, SessionRelCourseRelUser $subscription) use (&$namesOfCoaches) {
-                $namesOfCoaches[] = $subscription->getUser()->getCompleteNameWithUserName();
+            ->forAll(
+                function ($index, SessionRelCourseRelUser $subscription) use (&$namesOfCoaches) {
+                    $namesOfCoaches[] = $subscription->getUser()->getCompleteNameWithUserName();
 
-                return true;
-            });
+                    return true;
+                }
+            );
 
         $orderButtons = '';
         if (SessionManager::orderCourseIsEnabled()) {
@@ -204,11 +210,12 @@ if ($session->getNbrCourses() === 0) {
         // hide_course_breadcrumb the parameter has been added to hide the name
         // of the course, that appeared in the default $interbreadcrumb
         $courseItem .= '<tr>
-			<td class="title">'.
-            Display::url(
+			<td class="title">'
+            .Display::url(
                 $course->getTitle().' ('.$course->getVisualCode().')',
                 $courseUrl
-            ).'</td>';
+            )
+            .'</td>';
         $courseItem .= '<td>'.($namesOfCoaches ? implode('<br>', $namesOfCoaches) : get_lang('None')).'</td>';
         $courseItem .= '<td>'.$numberOfUsers.'</td>';
         $courseItem .= '<td>';
@@ -217,25 +224,42 @@ if ($session->getNbrCourses() === 0) {
         if ($allowSkills) {
             $courseItem .= Display::url(
                 Display::return_icon('skills.png', get_lang('Skills')),
-                api_get_path(WEB_CODE_PATH).'admin/skill_rel_course.php?session_id='.$sessionId.'&course_id='.$course->getId()
+                $codePath.'admin/skill_rel_course.php?session_id='.$sessionId.'&course_id='.$course->getId()
             );
         }
         $courseItem .= $orderButtons;
 
-        $courseItem .= '<a href="add_users_to_session_course.php?id_session='.$sessionId.'&course_id='.$course->getId().'">'.
-            Display::return_icon('new_user.png', get_lang('AddUsers'), ['style' => 'width:22px'], ICON_SIZE_MEDIUM).'</a>';
-        $courseItem .= '<a href="session_course_user_list.php?id_session='.$sessionId.'&course_code='.$course->getCode().'">'.
-                Display::return_icon('user.png', get_lang('Users'), '', ICON_SIZE_SMALL).'</a>';
-        $courseItem .= '<a href="'.api_get_path(WEB_CODE_PATH).'user/user_import.php?action=import&cidReq='.$course->getCode().'&id_session='.$sessionId.'">'.
-                Display::return_icon('import_csv.png', get_lang('ImportUsersToACourse'), null, ICON_SIZE_SMALL).'</a>
-                <a href="'.api_get_path(WEB_CODE_PATH).'user/user_export.php?file_type=csv&course_session='.$course->getCode().':'.$sessionId.'&addcsvheader=1">'.
-                Display::return_icon('export_csv.png', get_lang('ExportUsersOfACourse'), null, ICON_SIZE_SMALL).'</a>
-				<a href="../tracking/courseLog.php?id_session='.$sessionId.'&cidReq='.$course->getCode().$orig_param.'&hide_course_breadcrumb=1">'.
-                Display::return_icon('statistics.gif', get_lang('Tracking')).'</a>&nbsp;
-				<a href="session_course_edit.php?id_session='.$sessionId.'&page=resume_session.php&course_code='.$course->getCode().''.$orig_param.'">'.
-                Display::return_icon('teacher.png', get_lang('ModifyCoach'), '', ICON_SIZE_SMALL).'</a>
-				<a href="'.api_get_self().'?id_session='.$sessionId.'&action=delete&idChecked[]='.$course->getCode().'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.
-            Display::return_icon('delete.png', get_lang('Delete')).'</a>';
+        $courseItem .= Display::url(
+            Display::return_icon('new_user.png', get_lang('AddUsers')),
+            $codePath."session/add_users_to_session_course.php?id_session=$sessionId&course_id=".$course->getId()
+        );
+        $courseItem .= Display::url(
+            Display::return_icon('user.png', get_lang('Users')),
+            $codePath."session/session_course_user_list.php?id_session=$sessionId&course_code=".$course->getCode()
+        );
+        $courseItem .= Display::url(
+            Display::return_icon('import_csv.png', get_lang('ImportUsersToACourse')),
+            $codePath."user/user_import.php?action=import&cidReq={$course->getCode()}&id_session=$sessionId"
+        );
+        $courseItem .= Display::url(
+            Display::return_icon('export_csv.png', get_lang('ExportUsersOfACourse')),
+            $codePath."user/user_export.php?file_type=csv&course_session={$course->getCode()}:$sessionId&addcsvheader=1"
+        );
+        $courseItem .= Display::url(
+            Display::return_icon('statistics.gif', get_lang('Tracking')),
+            $codePath."tracking/courseLog.php?id_session=$sessionId&cidReq={$course->getCode()}$orig_param&hide_course_breadcrumb=1"
+        );
+        $courseItem .= Display::url(
+            Display::return_icon('teacher.png', get_lang('ModifyCoach')),
+            $codePath."session/session_course_edit.php?id_session=$sessionId&page=resume_session.php&course_code={$course->getCode()}$orig_param"
+        );
+        $courseItem .= Display::url(
+            Display::return_icon('delete.png', get_lang('Delete')),
+            api_get_self()."?id_session=$sessionId&action=delete&idChecked[]={$course->getCode()}",
+            [
+                'onclick' => "javascript:if(!confirm('".get_lang('ConfirmYourChoice')."')) return false;"
+            ]
+        );
 
         $courseItem .= '</td></tr>';
         $count++;
@@ -245,16 +269,16 @@ if ($session->getNbrCourses() === 0) {
 $courseListToShow .= '</table><br />';
 
 $url = '&nbsp;'.Display::url(
-    Display::return_icon('user_subscribe_session.png', get_lang('Add'), [], ICON_SIZE_SMALL),
-    "add_users_to_session.php?page=resume_session.php&id_session=$sessionId"
+    Display::return_icon('user_subscribe_session.png', get_lang('Add')),
+    $codePath."session/add_users_to_session.php?page=resume_session.php&id_session=$sessionId"
 );
 $url .= Display::url(
-    Display::return_icon('import_csv.png', get_lang('ImportUsers'), [], ICON_SIZE_SMALL),
-    "session_user_import.php?id_session=$sessionId"
+    Display::return_icon('import_csv.png', get_lang('ImportUsers')),
+    $codePath."session/session_user_import.php?id_session=$sessionId"
 );
 $url .= Display::url(
-    Display::return_icon('export_csv.png', get_lang('ExportUsers'), [], ICON_SIZE_SMALL),
-    api_get_path(WEB_CODE_PATH)."user/user_export.php?file_type=csv&session=$sessionId&addcsvheader=1"
+    Display::return_icon('export_csv.png', get_lang('ExportUsers')),
+    $codePath."user/user_export.php?file_type=csv&session=$sessionId&addcsvheader=1"
 );
 
 $userListToShow = Display::page_subheader(get_lang('UserList').$url);
@@ -274,17 +298,19 @@ if (!empty($userList)) {
         $userId = $user['user_id'];
         $userInfo = api_get_user_info($userId);
 
-        $userLink = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$userId.'">'.
+        $userLink = '<a href="'.$codePath.'admin/user_information.php?user_id='.$userId.'">'.
             api_htmlentities($userInfo['complete_name_with_username']).'</a>';
 
         $reportingLink = Display::url(
             Display::return_icon('statistics.gif', get_lang('Reporting')),
-            api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$user['user_id'].''.$orig_param.'&id_session='.$sessionId
+            $codePath.'mySpace/myStudents.php?student='.$user['user_id'].''.$orig_param.'&id_session='
+            .$sessionId
         );
 
         $courseUserLink = Display::url(
             Display::return_icon('course.png', get_lang('BlockCoursesForThisUser')),
-            api_get_path(WEB_CODE_PATH).'session/session_course_user.php?id_user='.$user['user_id'].'&id_session='.$sessionId
+            $codePath.'session/session_course_user.php?id_user='.$user['user_id'].'&id_session='
+            .$sessionId
         );
 
         $removeLink = Display::url(
@@ -296,26 +322,17 @@ if (!empty($userList)) {
         $addUserToUrlLink = '';
         if ($multiple_url_is_on) {
             if ($user['access_url_id'] != $url_id) {
-                $userLink .= ' '.Display::return_icon(
-                    'warning.png',
-                    get_lang('UserNotAddedInURL'),
-                    [],
-                    ICON_SIZE_SMALL
-                );
-                $add = Display::return_icon(
-                    'add.png',
-                    get_lang('AddUsersToURL'),
-                    [],
-                    ICON_SIZE_SMALL
-                );
-                $addUserToUrlLink = '<a href="resume_session.php?action=add_user_to_url&id_session='.$sessionId.'&user_id='.$user['user_id'].'">'.$add.'</a>';
+                $userLink .= ' '.Display::return_icon('warning.png', get_lang('UserNotAddedInURL'));
+                $add = Display::return_icon('add.png', get_lang('AddUsersToURL'));
+                $addUserToUrlLink = '<a href="resume_session.php?action=add_user_to_url&id_session='.$sessionId
+                    .'&user_id='.$user['user_id'].'">'.$add.'</a>';
             }
         }
 
         $editUrl = null;
         /*
         if (isset($sessionInfo['duration']) && !empty($sessionInfo['duration'])) {
-            $editUrl = api_get_path(WEB_CODE_PATH) . 'session/session_user_edit.php?session_id=' . $sessionId . '&user_id=' . $userId;
+            $editUrl = $codePath . 'session/session_user_edit.php?session_id=' . $sessionId . '&user_id=' . $userId;
             $editUrl = Display::url(
                 Display::return_icon('agenda.png', get_lang('SessionDurationEdit')),
                 $editUrl
@@ -329,7 +346,7 @@ if (!empty($userList)) {
                 $status = get_lang('Drh');
                 $link = Display::url(
                     Display::return_icon('edit.png', get_lang('Edit')),
-                    api_get_path(WEB_CODE_PATH).'admin/dashboard_add_sessions_to_user.php?user='.$userId
+                    $codePath.'admin/dashboard_add_sessions_to_user.php?user='.$userId
                 );
                 break;
             default:

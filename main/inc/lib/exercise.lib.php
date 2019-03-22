@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\TrackEExercises;
 use ChamiloSession as Session;
 
@@ -5254,5 +5255,63 @@ EOT;
         }
 
         return implode(PHP_EOL, $actions);
+    }
+
+    /**
+     * @param DateTime $time
+     * @param int      $userId
+     * @param int      $courseId
+     * @param int      $sessionId
+     *
+     * @throws \Doctrine\ORM\Query\QueryException
+     *
+     * @return int
+     */
+    public static function countAnsweredQuestionsByUserAfterTime(DateTime $time, $userId, $courseId, $sessionId)
+    {
+        $em = Database::getManager();
+
+        $time = api_get_utc_datetime($time->format('Y-m-d H:i:s'), false, true);
+
+        $result = $em
+            ->createQuery('
+                SELECT COUNT(ea) FROM ChamiloCoreBundle:TrackEAttempt ea
+                WHERE ea.userId = :user AND ea.cId = :course AND ea.sessionId = :session
+                    AND ea.tms > :time
+                GROUP BY ea.questionId
+            ')
+            ->setParameters(['user' => $userId, 'course' => $courseId, 'session' => $sessionId, 'time' => $time])
+            ->getResult();
+
+        return count($result);
+    }
+
+    /**
+     * @param int $userId
+     * @param int $numberOfQuestions
+     * @param int $courseId
+     * @param int $sessionId
+     *
+     * @return bool
+     * @throws \Doctrine\ORM\Query\QueryException
+     */
+    public static function isQuestionsLimitPerDayReached($userId, $numberOfQuestions, $courseId, $sessionId)
+    {
+        $questionsLimitPerDay = (int) api_get_course_setting('quiz_question_limit_per_day');
+
+        if ($questionsLimitPerDay <= 0) {
+            return false;
+        }
+
+        $midnightTime = ChamiloApi::getServerMidnightTime();
+
+        $answeredQuestionsCount = ExerciseLib::countAnsweredQuestionsByUserAfterTime(
+            $midnightTime,
+            $userId,
+            $courseId,
+            $sessionId
+        );
+
+        return ($answeredQuestionsCount + $numberOfQuestions) > $questionsLimitPerDay;
     }
 }

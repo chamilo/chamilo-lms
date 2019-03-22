@@ -41,9 +41,18 @@ $sessions = UserManager::getSessionsCalendarByYear($sessionsList, $searchYear);
 
 $colors = ChamiloApi::getColorPalette(false, true, count($sessions));
 
-$toolName = get_lang('ViewSessionsPlanification');
+$agenda = new Agenda('personal');
+$actions = $agenda->displayActions('list', $userId);
+
+$toolName = get_lang('SessionsPlanCalendar');
+
+$interbreadcrumb[] = [
+    'url' => api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=personal',
+    'name' => get_lang('Agenda'),
+];
 
 $template = new Template($toolName);
+$template->assign('toolbar', $actions);
 $template->assign('student_id', $userId);
 $template->assign('search_year', $searchYear);
 $template->assign('colors', $colors);

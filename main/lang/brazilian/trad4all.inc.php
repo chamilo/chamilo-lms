@@ -8257,7 +8257,6 @@ $SeeAllCommunities = "Veja todas as comunidades";
 $HideForumNotifications = "Ocultar notificações do fórum";
 $Forum_categoryFields = "Campos da Categoria do Fórum";
 $Forum_postFields = "Campos de postagem no fórum";
-$ProposedRevision = "Revisão proposta";
 $Reported = "Relatado";
 $FromTimeX = "De %s";
 $ToTimeX = "Para %s";

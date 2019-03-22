@@ -294,7 +294,7 @@ class ExerciseShowFunctions
      * Display the answers to a multiple choice question.
      *
      * @param Exercise $exercise
-     * @param int      $feedbackType                Feedback type
+     * @param int      $feedbackType                 Feedback type
      * @param int      $answerType                   Answer type
      * @param int      $studentChoice                Student choice
      * @param string   $answer                       Textual answer

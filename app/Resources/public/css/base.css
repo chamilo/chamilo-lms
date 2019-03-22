@@ -9771,29 +9771,31 @@ ul.dropdown-menu.inner > li > a {
 }
 #calendar-session-planification td.col-week {
     padding: 0px 0px;
-    position: relative;
     white-space: nowrap;
 }
-#calendar-session-planification td.col-week.in_last_year:before,
-#calendar-session-planification td.col-week.in_next_year:after {
+#calendar-session-planification td.col-week.in_last_year > span:before,
+#calendar-session-planification td.col-week.in_next_year > span:after {
     bottom: 0px;
     border: 5px solid transparent;
     border-bottom: 15px solid #FFF;
     border-top: 15px solid #FFF;
     content: " ";
+    display: block;
     position: absolute;
     top: 0px;
     width: 5px;
 }
-#calendar-session-planification td.col-week.in_last_year:before {
+#calendar-session-planification td.col-week.in_last_year > span:before {
     border-left-width: 0;
     left: 0;
 }
-#calendar-session-planification td.col-week.in_next_year:after {
+#calendar-session-planification td.col-week.in_next_year > span:after {
     border-right-width: 0;
     right: -1px;
 }
-#calendar-session-planification td.col-week span {
+#calendar-session-planification td.col-week > span {
+    display: block;
+    position: relative;
 }
 
 /* Fix grid with one row and multiples columns. Works for .col-sm-6.col-md-4.col-lg-3 */

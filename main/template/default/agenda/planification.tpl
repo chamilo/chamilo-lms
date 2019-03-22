@@ -3,6 +3,8 @@
 {% set user_id = student_id == _u.id ? 0 : student_id %}
 
 {% block content %}
+    {{ toolbar }}
+
     <nav aria-label="...">
         <ul class="pager">
             <li class="previous">
@@ -47,7 +49,9 @@
                         <td class="col-week text-center {{ session.start_in_last_year or session.no_start ? 'in_last_year' : '' }} {{ session.end_in_next_year or session.no_end ? 'in_next_year' : '' }}"
                             colspan="{{ session.duration }}" title="{{ session.human_date }}"
                             style="background-color: {{ colors[loop.index0] }}">
-                            <span class="sr-only">{{ session.human_date }}</span>
+                            <span>
+                                <span class="sr-only">{{ session.human_date }}</span>
+                            </span>
                         </td>
 
                         {% if session.duration + session.start < 52 %}

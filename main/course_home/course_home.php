@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Fhaculty\Graph\Graph;
 
 /**
  * HOME PAGE FOR EACH COURSE.
@@ -392,7 +393,11 @@ if ($allow === true) {
                 );
 
                 if (!empty($item) && isset($item['value']) && !empty($item['value'])) {
-                    $graph = unserialize($item['value']);
+                    /** @var Graph $graph */
+                    $graph = UnserializeApi::unserialize(
+                        'career',
+                        $item['value']
+                    );
                     $diagram = Career::renderDiagram($careerInfo, $graph);
                 }
             }

@@ -170,7 +170,8 @@ if (!$inATest) {
         $alloQuestionOrdering = true;
         $showPagination = api_get_configuration_value('show_question_pagination');
         if (!empty($showPagination) && $nbrQuestions > $showPagination) {
-            $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+            // $page is declare in admin.php
+            //$page = isset($_GET['page']) && !empty($_GET['page']) ? (int) $_GET['page'] : 1;
             $length = api_get_configuration_value('question_pagination_length');
             $url = api_get_self().'?'.api_get_cidreq();
             // Use pagination for exercise with more than 200 questions.
@@ -179,17 +180,16 @@ if (!$inATest) {
             $questionList = $objExercise->getQuestionForTeacher($start, $length);
             $paginator = new Knp\Component\Pager\Paginator();
             $pagination = $paginator->paginate([]);
+
             $pagination->setTotalItemCount($nbrQuestions);
             $pagination->setItemNumberPerPage($length);
             $pagination->setCurrentPageNumber($page);
             $pagination->renderer = function ($data) use ($url) {
                 $render = '<ul class="pagination">';
                 for ($i = 1; $i <= $data['pageCount']; $i++) {
-                    //foreach ($data['pagesInRange'] as $page) {
-                    $page = (int) $i;
-                    $pageContent = '<li><a href="'.$url.'&page='.$page.'">'.$page.'</a></li>';
-                    if ($data['current'] == $page) {
-                        $pageContent = '<li class="active"><a href="#" >'.$page.'</a></li>';
+                    $pageContent = '<li><a href="'.$url.'&page='.$i.'">'.$i.'</a></li>';
+                    if ($data['current'] == $i) {
+                        $pageContent = '<li class="active"><a href="#" >'.$i.'</a></li>';
                     }
                     $render .= $pageContent;
                 }

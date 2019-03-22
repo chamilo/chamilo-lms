@@ -4,6 +4,7 @@ window.HotspotQuestion = (function () {
             this.attributes = attributes;
             this.id = 0;
             this.name = '';
+
             this.changeEvent = null;
         };
         HotspotModel.prototype.set = function (key, value) {
@@ -576,7 +577,6 @@ window.HotspotQuestion = (function () {
                         currentHotspot.set('centerY', 0);
                         currentHotspot.set('radiusX', 0);
                         currentHotspot.set('radiusY', 0);
-
                         return;
                     }
                 })
@@ -764,11 +764,9 @@ window.HotspotQuestion = (function () {
                         default:
                             hotspot = SquareModel.decode(hotspotInfo);
                             break;
-
                         case 'circle':
                             hotspot = EllipseModel.decode(hotspotInfo);
                             break;
-
                         case 'poly':
                             hotspot = PolygonModel.decode(hotspotInfo);
                             break;
@@ -891,9 +889,7 @@ window.HotspotQuestion = (function () {
                 })
                 .on('mousedown', 'circle, text', function (e) {
                     e.preventDefault();
-
                     isMoving = true;
-
                     if (e.target.tagName === 'circle') {
                         //Hack to move correctly the hot spots if there are more than one HS question in same page
                         answerIndex = $(e.target).next().html();
@@ -1141,16 +1137,14 @@ window.HotspotQuestion = (function () {
                     modifyAnswers: parseInt(config.questionId)
                 });
                 break;
-
             case 'user':
                 xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_actionscript.as.php?' + webCidReq, {
                     modifyAnswers: parseInt(config.questionId),
                     exe_id: parseInt(config.exerciseId)
                 });
                 break;
-
             case 'solution':
-            //no break
+                //no break
             case 'preview':
                 xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_answers.as.php?' + webCidReq, {
                     modifyAnswers: parseInt(config.questionId),
@@ -1560,7 +1554,9 @@ window.DelineationQuestion = (function () {
             this.el.appendChild(imageSvg);
 
             this.renderDelineation();
+
             var isDrawing = false;
+
             var contextMenu = new ContextMenu();
             contextMenu.onHide(function () {
                 var answerInput = $('hotspot[' + config.questionId + '][1]'),
@@ -1698,6 +1694,7 @@ window.DelineationQuestion = (function () {
         var image = new Image();
         image.onload = function () {
             $(config.selector).html('');
+
             var polygonCollection = new PolygonCollection(),
                 previewSvg = new AdminSvg(polygonCollection, image);
 

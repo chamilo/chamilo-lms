@@ -28,7 +28,7 @@
  * file into document.php
  */
 
-// Resetting the images of the slideshow = destroying the slideshow
+// We check if there are images in this folder by searching the extensions for .jpg, .gif, .png
 // grabbing the list of all the documents of this folder
 $array_to_search = !empty($documentAndFolders) && is_array($documentAndFolders) ? $documentAndFolders : [];
 

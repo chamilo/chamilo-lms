@@ -253,31 +253,31 @@ if (!empty($track_exercise_info)) {
                     );
                 }
             }
-        break;
-    case RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK:
-    case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT:
-        $attempts = Event::getExerciseResultsByUser(
-            $currentUserId,
-            $objExercise->id,
-            api_get_course_int_id(),
-            api_get_session_id(),
-            $track_exercise_info['orig_lp_id'],
-            $track_exercise_info['orig_lp_item_id'],
-            'desc'
-        );
-        $numberAttempts = count($attempts);
-        if ($numberAttempts >= $track_exercise_info['max_attempt']) {
-            $show_results = true;
-            $show_only_total_score = true;
-            // Attempt reach max so show score/feedback now
-            $showTotalScoreAndUserChoicesInLastAttempt = true;
-        } else {
-            $show_results = true;
-            $show_only_total_score = true;
-            // Last attempt not reach don't show score/feedback
-            $showTotalScoreAndUserChoicesInLastAttempt = false;
-        }
-        break;
+            break;
+        case RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK:
+        case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT:
+            $attempts = Event::getExerciseResultsByUser(
+                $currentUserId,
+                $objExercise->id,
+                api_get_course_int_id(),
+                api_get_session_id(),
+                $track_exercise_info['orig_lp_id'],
+                $track_exercise_info['orig_lp_item_id'],
+                'desc'
+            );
+            $numberAttempts = count($attempts);
+            if ($numberAttempts >= $track_exercise_info['max_attempt']) {
+                $show_results = true;
+                $show_only_total_score = true;
+                // Attempt reach max so show score/feedback now
+                $showTotalScoreAndUserChoicesInLastAttempt = true;
+            } else {
+                $show_results = true;
+                $show_only_total_score = true;
+                // Last attempt not reach don't show score/feedback
+                $showTotalScoreAndUserChoicesInLastAttempt = false;
+            }
+            break;
     }
 } else {
     echo Display::return_message(get_lang('CantViewResults'), 'warning');
@@ -328,7 +328,7 @@ $sql = "SELECT attempts.question_id, answer
             questions.id = quizz_rel_questions.question_id AND
             questions.c_id = ".api_get_course_int_id()."
         WHERE
-            attempts.exe_id = ".intval($id)." $user_restriction
+            attempts.exe_id = ".$id." $user_restriction
 		GROUP BY quizz_rel_questions.question_order, attempts.question_id";
 $result = Database::query($sql);
 $question_list_from_database = [];
@@ -910,13 +910,18 @@ foreach ($questionList as $questionId) {
 
     $score = [];
     if ($show_results) {
+        $scorePassed = $my_total_score >= $my_total_weight;
+        if (function_exists('bccomp')) {
+            $compareResult = bccomp($my_total_score, $my_total_weight, 3);
+            $scorePassed = $compareResult === 1 || $compareResult === 0;
+        }
         $score['result'] = ExerciseLib::show_score(
             $my_total_score,
             $my_total_weight,
             false,
             false
         );
-        $score['pass'] = $my_total_score >= $my_total_weight ? true : false;
+        $score['pass'] = $scorePassed;
         $score['type'] = $answerType;
         $score['score'] = $my_total_score;
         $score['weight'] = $my_total_weight;
@@ -956,7 +961,7 @@ foreach ($questionList as $questionId) {
 
 $totalScoreText = '';
 
-//Total score
+// Total score
 $myTotalScoreTemp = $totalScore;
 if ($origin != 'learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type']))) {
     if ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLastAttempt) {

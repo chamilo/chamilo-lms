@@ -44,7 +44,7 @@ function hidecontent(content){
 // The section (tabs)
 $this_section = SECTION_COURSES;
 
-// Notification for unauthorized people.
+// Including additional library scripts.
 $nameTools = get_lang('ToolForum');
 
 $_user = api_get_user_info();

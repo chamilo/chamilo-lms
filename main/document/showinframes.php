@@ -180,7 +180,7 @@ if (in_array(strtolower($pathinfo['extension']), $web_odf_supported_files)) {
             var topbarHeight = $("#topbar").height();
             $("#viewerJSContent").height((bodyHeight - topbarHeight));
         }
-        $(document).ready(function() {
+        $(function() {
             $(window).resize(resizeIframe());
         });
     </script>'
@@ -246,15 +246,14 @@ if (!$playerSupported && $execute_iframe) {
 if ($originIsLearnpath) {
     Display::display_reduced_header();
 } else {
-    Display::display_header('');
+    Display::display_header();
 }
-
-echo '<div class="text-center">';
 
 $file_url = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document'.$header_file;
 $file_url_web = $file_url.'?'.api_get_cidreq();
 
 if ($show_web_odf) {
+    echo '<div class="text-center">';
     $browser = api_get_navigator();
     $pdfUrl = api_get_path(WEB_LIBRARY_PATH).'javascript/ViewerJS/index.html#'.$file_url;
     if ($browser['name'] == 'Mozilla' && preg_match('|.*\.pdf|i', $header_file)) {
@@ -265,12 +264,11 @@ if ($show_web_odf) {
             src="'.$pdfUrl.'">
         </iframe>';
     echo '</div>';
+    echo '</div>';
 }
 
-echo '</div>';
-
 if ($playerSupported) {
-    echo DocumentManager::generateVideoPreview($file_url_web, $extension);
+    echo DocumentManager::generateMediaPreview($file_url_web, $extension);
 }
 
 if ($execute_iframe) {
@@ -278,6 +276,68 @@ if ($execute_iframe) {
         $content = Security::remove_XSS(file_get_contents($file_url_sys));
         echo $content;
     } else {
+        $parentId = $document_data['parent_id'];
+        $url = api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq().'&id='.$parentId;
+        $actionsLeft = Display::url(
+            Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM),
+            $url
+        );
+
+        $groupMemberWithEditRights = false;
+        $groupId = api_get_group_id();
+        if (!empty($groupId)) {
+            $groupInfo = GroupManager::get_group_properties($groupId);
+            if ($groupInfo) {
+                $groupMemberWithEditRights = GroupManager::allowUploadEditDocument(
+                    api_get_user_id(),
+                    api_get_course_int_id(),
+                    $groupInfo,
+                        $document_data
+                );
+            }
+        }
+
+        $allowToEdit = api_is_allowed_to_edit(null, true) || $groupMemberWithEditRights;
+
+        if ($allowToEdit) {
+            $actionsLeft .= Display::url(
+                Display::return_icon(
+                    'edit.png',
+                    get_lang('Modify'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                ),
+                api_get_path(WEB_CODE_PATH).'document/edit_document.php?'.api_get_cidreq().'&id='.$document_id
+            );
+
+            $titleToShow = addslashes(basename($document_data['title']));
+
+            $urlDeleteParams = http_build_query(
+                [
+                    'action' => 'delete_item',
+                    'id' => $parentId,
+                    'deleteid' => $document_data['id'],
+                ]
+            );
+            $actionsLeft .= Display::url(
+                Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_MEDIUM),
+                '#',
+                [
+                    'data-item-title' => $titleToShow,
+                    'data-href' => api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq(
+                        ).'&'.$urlDeleteParams,
+                    'data-toggle' => 'modal',
+                    'data-target' => '#confirm-delete',
+                ]
+            );
+            $actionsLeft .= Display::url(
+                Display::return_icon('pdf.png', get_lang('Export2PDF'), [], ICON_SIZE_MEDIUM),
+                api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq(
+                ).'&action=export_to_pdf&id='.$document_id
+            );
+        }
+
+        echo $toolbar = Display::toolbarAction('actions-documents', [$actionsLeft]);
         echo '<iframe 
             id="mainFrame" 
             name="mainFrame" 

@@ -213,7 +213,7 @@ class NotebookManager
             return false;
         }
 
-        //update item_property (delete)
+        // Update item_property (delete)
         api_item_property_update(
             api_get_course_info(),
             TOOL_NOTEBOOK,

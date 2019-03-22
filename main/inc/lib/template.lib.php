@@ -124,40 +124,6 @@ class Template
     }
 
     /**
-     * @param string $image
-     * @param int    $size
-     *
-     * @return string
-     */
-    public static function get_icon_path($image, $size = ICON_SIZE_SMALL)
-    {
-        return Display::return_icon($image, '', [], $size, false, true);
-    }
-
-    /**
-     * @param string $image
-     * @param int    $size
-     * @param string $name
-     *
-     * @return string
-     */
-    public static function get_image($image, $size = ICON_SIZE_SMALL, $name = '')
-    {
-        return Display::return_icon($image, $name, [], $size);
-    }
-
-    /**
-     * @param string $timestamp
-     * @param string $format
-     *
-     * @return string
-     */
-    public static function format_date($timestamp, $format = null)
-    {
-        return api_format_date($timestamp, $format);
-    }
-
-    /**
      * Return the item's url key:.
      *
      *      c_id=xx&id=xx
@@ -382,8 +348,42 @@ class Template
 
     /**
      * Returns the sub-folder and filename for the given tpl file.
-     * If template not found in overrides/ or custom template folder, the
-     * default template will be used.
+     *
+     * If template not found in overrides/ or custom template folder, the default template will be used.
+     *
+     * @param string $name
+     *
+     * @return string
+     */
+    public static function findTemplateFilePath($name)
+    {
+        $sysTemplatePath = api_get_path(SYS_TEMPLATE_PATH);
+
+        // Check if the tpl file is present in the main/template/overrides/ dir
+        // Overrides is a special directory meant for temporary template
+        // customization. It must be taken into account before anything else
+        if (is_readable($sysTemplatePath."overrides/$name")) {
+            return "overrides/$name";
+        }
+
+        $defaultFolder = api_get_configuration_value('default_template');
+
+        // If a template folder has been manually defined, search for the right
+        // file, and if not found, go for the same file in the default template
+        if ($defaultFolder && $defaultFolder != 'default') {
+            // Avoid missing template error, use the default file.
+            if (file_exists($sysTemplatePath."$defaultFolder/$name")) {
+                return "$defaultFolder/$name";
+            }
+        }
+
+        return "default/$name";
+    }
+
+    /**
+     * Call non-static for Template::findTemplateFilePath.
+     *
+     * @see Template::findTemplateFilePath()
      *
      * @param string $name
      *
@@ -391,25 +391,7 @@ class Template
      */
     public function get_template($name)
     {
-        // Check if the tpl file is present in the main/template/overrides/ dir
-        // Overrides is a special directory meant for temporary template
-        // customization. It must be taken into account before anything else
-        $file = api_get_path(SYS_CODE_PATH).'template/overrides/'.$name;
-        if (is_readable($file)) {
-            return 'overrides/'.$name;
-        }
-        // If a template folder has been manually defined, search for the right
-        // file, and if not found, go for the same file in the default template
-        if ($this->templateFolder !== 'default') {
-            // Avoid missing template error, use the default file.
-            $file = api_get_path(SYS_CODE_PATH).'template/'.$this->templateFolder.'/'.$name;
-            if (!file_exists($file)) {
-                return 'default/'.$name;
-            }
-        }
-        $name = str_replace('tpl', 'html.twig', $name);
-
-        return $this->templateFolder.'/'.$name;
+        return api_find_template($name);
     }
 
     /**

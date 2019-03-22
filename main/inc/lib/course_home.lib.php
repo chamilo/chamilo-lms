@@ -994,8 +994,8 @@ class CourseHome
                 }
 
                 $qm_or_amp = strpos($tool['link'], '?') === false ? '?' : '&';
-                // If it's a link, we don't add the cidReq
 
+                // If it's a link, we don't add the cidReq
                 if ($tool['image'] == 'file_html.png' || $tool['image'] == 'file_html_na.png') {
                     $tool['link'] = $tool['link'];
                 } else {
@@ -1112,7 +1112,7 @@ class CourseHome
                     $tool_link_params
                 );
                 $items[] = $item;
-            } // end of foreach
+            }
         }
 
         foreach ($items as &$item) {
@@ -1273,7 +1273,7 @@ class CourseHome
 
         $html = '<div id="toolnav">';
         $html .= '<ul id="toolnavbox">';
-        //students can't see the course settings option
+
         $showOnlyText = api_get_setting('show_navigation_menu') === 'text';
         $showOnlyIcons = api_get_setting('show_navigation_menu') === 'icons';
 

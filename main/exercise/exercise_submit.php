@@ -39,6 +39,7 @@ api_protect_course_script(true);
 $origin = api_get_origin();
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 $courseId = api_get_course_int_id();
+$sessionId = api_get_session_id();
 $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
 
 $showGlossary = in_array($glossaryExtraTools, ['true', 'exercise', 'exercise_and_lp']);
@@ -216,6 +217,12 @@ if ($time_control) {
 $show_clock = true;
 $user_id = api_get_user_id();
 if ($objExercise->selectAttempts() > 0) {
+    $messageReachedMax = Display::return_message(
+        sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()),
+        'warning',
+        false
+    );
+
     $attempt_html = '';
     $attempt_count = Event::get_attempt_count(
         $user_id,
@@ -238,6 +245,35 @@ if ($objExercise->selectAttempts() > 0) {
                 );
 
                 if (!empty($exercise_stat_info)) {
+                    $isQuestionsLimitReached = ExerciseLib::isQuestionsLimitPerDayReached(
+                        $user_id,
+                        $objExercise->selectNbrQuestions(),
+                        $courseId,
+                        $sessionId
+                    );
+
+                    if ($isQuestionsLimitReached) {
+                        $maxQuestionsAnswered = (int) api_get_course_setting('quiz_question_limit_per_day');
+
+                        Display::addFlash(
+                            Display::return_message(
+                                sprintf(get_lang('QuizQuestionsLimitPerDayXReached'), $maxQuestionsAnswered),
+                                'warning',
+                                false
+                            )
+                        );
+
+                        if ($origin == 'learnpath') {
+                            Display::display_reduced_header();
+                            Display::display_reduced_footer();
+                        } else {
+                            Display::display_header(get_lang('Exercises'));
+                            Display::display_footer();
+                        }
+
+                        exit;
+                    }
+
                     $max_exe_id = max(array_keys($exercise_stat_info));
                     $last_attempt_info = $exercise_stat_info[$max_exe_id];
                     $attempt_html .= Display::div(
@@ -245,15 +281,7 @@ if ($objExercise->selectAttempts() > 0) {
                         ['id' => '']
                     );
 
-                    $attempt_html .= Display::return_message(
-                        sprintf(
-                            get_lang('ReachedMaxAttempts'),
-                            $exercise_title,
-                            $objExercise->selectAttempts()
-                        ),
-                        'warning',
-                        false
-                    );
+                    $attempt_html .= $messageReachedMax;
 
                     if (!empty($last_attempt_info['question_list'])) {
                         foreach ($last_attempt_info['question_list'] as $questions) {
@@ -282,37 +310,13 @@ if ($objExercise->selectAttempts() > 0) {
                         ['id' => 'question_score']
                     );
                 } else {
-                    $attempt_html .= Display::return_message(
-                        sprintf(
-                            get_lang('ReachedMaxAttempts'),
-                            $exercise_title,
-                            $objExercise->selectAttempts()
-                        ),
-                        'warning',
-                        false
-                    );
+                    $attempt_html .= $messageReachedMax;
                 }
             } else {
-                $attempt_html .= Display::return_message(
-                    sprintf(
-                        get_lang('ReachedMaxAttempts'),
-                        $exercise_title,
-                        $objExercise->selectAttempts()
-                    ),
-                    'warning',
-                    false
-                );
+                $attempt_html .= $messageReachedMax;
             }
         } else {
-            $attempt_html .= Display::return_message(
-                sprintf(
-                    get_lang('ReachedMaxAttempts'),
-                    $exercise_title,
-                    $objExercise->selectAttempts()
-                ),
-                'warning',
-                false
-            );
+            $attempt_html .= $messageReachedMax;
         }
 
         if ($origin == 'learnpath') {
@@ -1117,7 +1121,7 @@ if (!empty($error)) {
         }
         
         $(function() {
-            // This pre-load the save.png icon
+            //This pre-load the save.png icon
             var saveImage = new Image();
             saveImage.src = "'.$saveIcon.'";
 
@@ -1139,7 +1143,7 @@ if (!empty($error)) {
             $(".no_remind_highlight").hide();
 
             // if the users validates the form using return key, 
-            // if the users validates the form using return key, prevent form action and simulates click on validation button
+            // prevent form action and simulates click on validation button
             /*$("#exercise_form").submit(function(){
                 $(".question-validate-btn").first().trigger("click");
                 return false;

@@ -156,6 +156,63 @@ class CoursesAndSessionsCatalog
         return $row[0];
     }
 
+    public static function getCourseCategoriesTree()
+    {
+        $urlId = 1;
+        if (api_is_multiple_url_enabled()) {
+            $urlId = api_get_current_access_url_id();
+        }
+
+        $countCourses = self::countAvailableCoursesToShowInCatalog($urlId);
+        $categories = [];
+        $list = [];
+
+        $categories['ALL'] = [
+            'id' => 0,
+            'name' => get_lang('DisplayAll'),
+            'code' => 'ALL',
+            'parent_id' => null,
+            'tree_pos' => 0,
+            'number_courses' => $countCourses,
+            'level' => 0,
+        ];
+
+        $allCategories = CourseCategory::getAllCategories();
+
+        foreach ($allCategories as $category) {
+            if (empty($category['parent_id'])) {
+                $list[$category['code']] = $category;
+                $list[$category['code']]['level'] = 0;
+                list($subList, $childrenCount) = self::buildCourseCategoryTree($allCategories, $category['code'], 0);
+                foreach ($subList as $item) {
+                    $list[$item['code']] = $item;
+                }
+                // Real course count
+                $countCourses = CourseCategory::countCoursesInCategory($category['code']);
+                $list[$category['code']]['number_courses'] = $childrenCount + $countCourses;
+            }
+        }
+
+        // count courses that are in no category
+        $countCourses = CourseCategory::countCoursesInCategory();
+        $categories['NONE'] = [
+            'id' => 0,
+            'name' => get_lang('WithoutCategory'),
+            'code' => 'NONE',
+            'parent_id' => null,
+            'tree_pos' => 0,
+            'children_count' => 0,
+            'auth_course_child' => true,
+            'auth_cat_child' => true,
+            'number_courses' => $countCourses,
+            'level' => 0,
+        ];
+
+        $result = array_merge($list, $categories);
+
+        return $result;
+    }
+
     /**
      * @return array
      */
@@ -179,16 +236,19 @@ class CoursesAndSessionsCatalog
         ];
 
         $categoriesFromDatabase = CourseCategory::getCategories();
+
         foreach ($categoriesFromDatabase as $row) {
-            $count_courses = CourseCategory::countCoursesInCategory($row['code']);
-            $row['count_courses'] = $count_courses;
+            $countCourses = CourseCategory::countCoursesInCategory($row['code']);
+            $row['count_courses'] = $countCourses;
             if (empty($row['parent_id'])) {
                 $categories[0][$row['tree_pos']] = $row;
             } else {
                 $categories[$row['parent_id']][$row['tree_pos']] = $row;
             }
         }
-        $count_courses = CourseCategory::countCoursesInCategory();
+
+        // count courses that are in no category
+        $countCourses = CourseCategory::countCoursesInCategory();
         $categories[0][count($categories[0]) + 1] = [
             'id' => 0,
             'name' => get_lang('None'),
@@ -198,7 +258,7 @@ class CoursesAndSessionsCatalog
             'children_count' => 0,
             'auth_course_child' => true,
             'auth_cat_child' => true,
-            'count_courses' => $count_courses,
+            'count_courses' => $countCourses,
         ];
 
         return $categories;
@@ -235,26 +295,29 @@ class CoursesAndSessionsCatalog
     {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $avoidCoursesCondition = self::getAvoidCourseCondition();
-        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition(
-            'course',
-            true
-        );
+        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true);
 
         if (!empty($random_value)) {
-            $random_value = intval($random_value);
+            $random_value = (int) $random_value;
 
             $sql = "SELECT COUNT(*) FROM $tbl_course";
             $result = Database::query($sql);
             list($num_records) = Database::fetch_row($result);
 
             if (api_is_multiple_url_enabled()) {
-                $url_access_id = api_get_current_access_url_id();
+                $urlId = api_get_current_access_url_id();
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+
+                $urlCondition = ' access_url_id = '.$urlId.' ';
+                $allowBaseCategories = api_get_configuration_value('allow_base_course_category');
+                if ($allowBaseCategories) {
+                    $urlCondition = ' (access_url_id = '.$urlId.' OR access_url_id = 1)  ';
+                }
 
                 $sql = "SELECT COUNT(*) FROM $tbl_course course
                         INNER JOIN $tbl_url_rel_course as url_rel_course
                         ON (url_rel_course.c_id = course.id)
-                        WHERE access_url_id = $url_access_id ";
+                        WHERE access_url_id = '.$urlId.' ";
                 $result = Database::query($sql);
                 list($num_records) = Database::fetch_row($result);
 
@@ -263,7 +326,7 @@ class CoursesAndSessionsCatalog
                         INNER JOIN $tbl_url_rel_course as url_rel_course
                         ON (url_rel_course.c_id = course.id)
                         WHERE
-                            access_url_id = $url_access_id AND
+                            $urlCondition AND
                             RAND()*$num_records< $random_value
                             $avoidCoursesCondition 
                             $visibilityCondition
@@ -295,7 +358,23 @@ class CoursesAndSessionsCatalog
         } else {
             $limitFilter = self::getLimitFilterFromArray($limit);
             $category_code = Database::escape_string($category_code);
-            if (empty($category_code) || $category_code == "ALL") {
+            $listCode = self::childrenCategories($category_code);
+            $conditionCode = ' ';
+
+            if (empty($listCode)) {
+                if ($category_code === 'NONE') {
+                    $conditionCode .= " category_code='' ";
+                } else {
+                    $conditionCode .= " category_code='$category_code' ";
+                }
+            } else {
+                foreach ($listCode as $code) {
+                    $conditionCode .= " category_code='$code' OR ";
+                }
+                $conditionCode .= " category_code='$category_code' ";
+            }
+
+            if (empty($category_code) || $category_code == 'ALL') {
                 $sql = "SELECT *, id as real_id 
                         FROM $tbl_course course
                         WHERE
@@ -304,12 +383,9 @@ class CoursesAndSessionsCatalog
                           $visibilityCondition
                     ORDER BY title $limitFilter ";
             } else {
-                if ($category_code == 'NONE') {
-                    $category_code = '';
-                }
                 $sql = "SELECT *, id as real_id FROM $tbl_course course
                         WHERE
-                            category_code='$category_code'
+                            $conditionCode 
                             $avoidCoursesCondition
                             $visibilityCondition
                         ORDER BY title $limitFilter ";
@@ -317,15 +393,17 @@ class CoursesAndSessionsCatalog
 
             // Showing only the courses of the current Chamilo access_url_id
             if (api_is_multiple_url_enabled()) {
-                $url_access_id = api_get_current_access_url_id();
+                $urlId = api_get_current_access_url_id();
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-                if ($category_code != "ALL") {
+
+                $urlCondition = ' access_url_id = '.$urlId.' ';
+                if ($category_code != 'ALL') {
                     $sql = "SELECT *, course.id real_id FROM $tbl_course as course
                             INNER JOIN $tbl_url_rel_course as url_rel_course
                             ON (url_rel_course.c_id = course.id)
                             WHERE
-                                access_url_id = $url_access_id AND
-                                category_code='$category_code'
+                                $urlCondition AND
+                                $conditionCode
                                 $avoidCoursesCondition
                                 $visibilityCondition
                             ORDER BY title $limitFilter";
@@ -334,7 +412,7 @@ class CoursesAndSessionsCatalog
                             INNER JOIN $tbl_url_rel_course as url_rel_course
                             ON (url_rel_course.c_id = course.id)
                             WHERE
-                                access_url_id = $url_access_id
+                                $urlCondition
                                 $avoidCoursesCondition
                                 $visibilityCondition
                             ORDER BY title $limitFilter";
@@ -396,28 +474,36 @@ class CoursesAndSessionsCatalog
         $avoidCoursesCondition = self::getAvoidCourseCondition();
         $visibilityCondition = $justVisible ? CourseManager::getCourseVisibilitySQLCondition('course', true) : '';
         $search_term_safe = Database::escape_string($search_term);
-        $sql_find = "SELECT * FROM $courseTable course
-                      WHERE (
-                            course.code LIKE '%".$search_term_safe."%' OR
-                            course.title LIKE '%".$search_term_safe."%' OR
-                            course.tutor_name LIKE '%".$search_term_safe."%'
-                        )
-                        $avoidCoursesCondition
-                        $visibilityCondition
-                    ORDER BY title, visual_code ASC
-                    $limitFilter
-                    ";
+        $sql = "SELECT * FROM $courseTable course
+                WHERE (
+                        course.code LIKE '%".$search_term_safe."%' OR
+                        course.title LIKE '%".$search_term_safe."%' OR
+                        course.tutor_name LIKE '%".$search_term_safe."%'
+                    )
+                    $avoidCoursesCondition
+                    $visibilityCondition
+                ORDER BY title, visual_code ASC
+                $limitFilter
+                ";
 
         if (api_is_multiple_url_enabled()) {
-            $url_access_id = api_get_current_access_url_id();
-            if ($url_access_id != -1) {
+            $urlId = api_get_current_access_url_id();
+            if ($urlId != -1) {
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-                $sql_find = "SELECT *
+
+                $urlCondition = ' access_url_id = '.$urlId.' AND';
+                $allowBaseCategories = api_get_configuration_value('allow_base_course_category');
+                if ($allowBaseCategories) {
+                    $urlCondition = ' (access_url_id = '.$urlId.' OR access_url_id = 1) AND ';
+                }
+
+                $sql = "SELECT *
                             FROM $courseTable as course
                             INNER JOIN $tbl_url_rel_course as url_rel_course
                             ON (url_rel_course.c_id = course.id)
                             WHERE
-                                access_url_id = $url_access_id AND (
+                                access_url_id = $urlId AND 
+                                (
                                     code LIKE '%".$search_term_safe."%' OR
                                     title LIKE '%".$search_term_safe."%' OR
                                     tutor_name LIKE '%".$search_term_safe."%'
@@ -429,7 +515,7 @@ class CoursesAndSessionsCatalog
                             ";
             }
         }
-        $result_find = Database::query($sql_find);
+        $result_find = Database::query($sql);
         $courses = [];
         while ($row = Database::fetch_array($result_find)) {
             $row['registration_code'] = !empty($row['registration_code']);
@@ -477,7 +563,7 @@ class CoursesAndSessionsCatalog
     {
         $em = Database::getManager();
         $urlId = api_get_current_access_url_id();
-        $date = Database::escape_string($date);
+
         $sql = "SELECT s.id FROM session s ";
         $sql .= "
             INNER JOIN access_url_rel_session ars
@@ -490,6 +576,7 @@ class CoursesAndSessionsCatalog
         ";
 
         if (!is_null($date)) {
+            $date = Database::escape_string($date);
             $sql .= "
                 AND (
                     ('$date' BETWEEN DATE(s.access_start_date) AND DATE(s.access_end_date))
@@ -614,5 +701,69 @@ class CoursesAndSessionsCatalog
         }
 
         return $sessionsToBrowse;
+    }
+
+    /**
+     * Build a recursive tree of course categories.
+     *
+     * @param $categories
+     * @param $parentId
+     *
+     * @return array
+     */
+    public static function buildCourseCategoryTree($categories, $parentId = 0, $level = 0)
+    {
+        $list = [];
+        $count = 0;
+        $level++;
+        foreach ($categories as $category) {
+            if (empty($category['parent_id'])) {
+                continue;
+            }
+            if ($category['parent_id'] == $parentId) {
+                $list[$category['code']] = $category;
+                $count += $category['number_courses'];
+                $list[$category['code']]['level'] = $level;
+                list($subList, $childrenCount) = self::buildCourseCategoryTree(
+                    $categories,
+                    $category['code'],
+                    $level
+                );
+                $list[$category['code']]['number_courses'] += $childrenCount;
+                foreach ($subList as $item) {
+                    $list[$item['code']] = $item;
+                }
+                $count += $childrenCount;
+            }
+        }
+
+        return [$list, $count];
+    }
+
+    /**
+     * List Code Search Category.
+     *
+     * @param $code
+     *
+     * @return array
+     */
+    public static function childrenCategories($code)
+    {
+        $allCategories = CourseCategory::getAllCategories();
+        $list = [];
+        $row = [];
+
+        if ($code != 'ALL' and $code != 'NONE') {
+            foreach ($allCategories as $category) {
+                if ($category['code'] === $code) {
+                    $list = self::buildCourseCategoryTree($allCategories, $category['code'], 0);
+                }
+            }
+            foreach ($list[0] as $item) {
+                $row[] = $item['code'];
+            }
+        }
+
+        return $row;
     }
 }

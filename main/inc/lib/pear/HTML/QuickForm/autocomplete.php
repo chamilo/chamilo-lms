@@ -249,4 +249,5 @@ EOS;
     }// end func toHtml
 
     // }}}
-}
+} // end class HTML_QuickForm_autocomplete
+?>

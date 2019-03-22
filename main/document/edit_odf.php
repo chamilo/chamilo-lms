@@ -76,11 +76,11 @@ $htmlHeadXtra[] = api_get_js('wodotexteditor/wodotexteditor.js');
 $htmlHeadXtra[] = api_get_js('wodotexteditor/localfileeditor.js');
 $htmlHeadXtra[] = api_get_js('wodotexteditor/FileSaver.js');
 $htmlHeadXtra[] = '
-    <script type="text/javascript" charset="utf-8">
-        $(document).on(\'ready\', function() {
-            createEditor(\''.$fileUrl.'\');
-        });
-    </script>
+<script>
+    $(function() {
+        createEditor(\''.$fileUrl.'\');
+    });
+</script>
 ';
 $htmlHeadXtra[] = '
     <style>

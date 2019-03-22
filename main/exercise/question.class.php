@@ -1983,20 +1983,20 @@ abstract class Question
         if (!empty($counter)) {
             $counterLabel = (int) $counter;
         }
-        $score_label = get_lang('Wrong');
+        $scoreLabel = get_lang('Wrong');
         $class = 'error';
         if (isset($score['pass']) && $score['pass'] == true) {
-            $score_label = get_lang('Correct');
+            $scoreLabel = get_lang('Correct');
             $class = 'success';
         }
 
         if (in_array($this->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
             $score['revised'] = isset($score['revised']) ? $score['revised'] : false;
             if ($score['revised'] == true) {
-                $score_label = get_lang('Revised');
+                $scoreLabel = get_lang('Revised');
                 $class = '';
             } else {
-                $score_label = get_lang('NotRevised');
+                $scoreLabel = get_lang('NotRevised');
                 $class = 'warning';
                 if (isset($score['weight'])) {
                     $weight = float_format($score['weight'], 1);
@@ -2032,7 +2032,10 @@ abstract class Question
         // dont display score for certainty degree questions
         if ($this->type != MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
             if (isset($score['result'])) {
-                $header .= $exercise->getQuestionRibbon($class, $score_label, $score['result'], $scoreCurrent);
+                if ($exercise->results_disabled == RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
+                    $score['result'] = null;
+                }
+                $header .= $exercise->getQuestionRibbon($class, $scoreLabel, $score['result'], $scoreCurrent);
             }
         }
 
@@ -2073,6 +2076,7 @@ abstract class Question
     }
 
     /**
+     * @deprecated
      * Create a question from a set of parameters.
      *
      * @param   int     Quiz ID

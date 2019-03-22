@@ -51,7 +51,7 @@ class Auth
                 FROM $TABLECOURS course, $TABLECOURSUSER  course_rel_user
                 WHERE
                     course.id = course_rel_user.c_id AND
-                    course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND
+                    course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
                     course_rel_user.user_id = '".$user_id."' 
                     $avoidCoursesCondition
                 ORDER BY course_rel_user.sort ASC";
@@ -80,7 +80,7 @@ class Auth
     /**
      * This function get all the courses in the particular user category;.
      *
-     * @return string The name of the user defined course category
+     * @return array
      */
     public function get_courses_in_category()
     {

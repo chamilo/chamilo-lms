@@ -39,7 +39,7 @@ if ($session_id == 0) {
 $category = Category :: load($selectCat);
 $url = api_get_self().'?selectcat='.$selectCat.'&newtypeselected='.$typeSelected.'&course_code='.api_get_course_id().'&'.api_get_cidreq();
 $typeform = new LinkForm(
-    LinkForm :: TYPE_CREATE,
+    LinkForm::TYPE_CREATE,
     $category[0],
     null,
     'create_link',
@@ -138,8 +138,6 @@ if (isset($typeSelected) && $typeSelected != '0') {
             'tool_id_detail' => 0,
             'action' => 'new-link',
             'action_details' => 'selectcat='.$selectCat,
-            'current_id' => $link->get_id(),
-            'info' => '',
         ];
         Event::registerLog($logInfo);
 
@@ -167,8 +165,6 @@ $logInfo = [
     'tool_id_detail' => 0,
     'action' => 'add-link',
     'action_details' => 'selectcat='.$selectCat,
-    'current_id' => $current_id,
-    'info' => '',
 ];
 Event::registerLog($logInfo);
 

@@ -17,10 +17,12 @@ $this_section = SECTION_PLATFORM_ADMIN;
 require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
 
-if (!isset($_GET['user_id'])) {
+$userId = isset($_GET['user_id']) ? (int) $_GET['user_id'] : 0;
+
+if (empty($userId)) {
     api_not_allowed(true);
 }
-$user = api_get_user_info($_GET['user_id'], true);
+$user = api_get_user_info($userId, true);
 
 if (empty($user)) {
     api_not_allowed(true);
@@ -39,8 +41,8 @@ if (!api_is_student_boss()) {
     }
 }
 
-$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ["url" => 'user_list.php', "name" => get_lang('UserList')];
+$interbreadcrumb[] = ["url" => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ["url" => 'user_list.php', 'name' => get_lang('UserList')];
 
 $userId = $user['user_id'];
 
@@ -61,7 +63,7 @@ $actions = [
             ICON_SIZE_MEDIUM
         ),
         api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?'.http_build_query([
-            'student' => intval($_GET['user_id']),
+            'student' => $userId,
         ]),
         ['title' => get_lang('Reporting')]
     ),
@@ -253,10 +255,7 @@ if (api_get_setting('allow_social_tool') === 'true') {
     $count = SocialManager::get_message_number_invitation_by_user_id($user['user_id']);
     $data[] = [get_lang('InvitationReceived'), $count];
 
-    $socialInformation = Display::return_sortable_table(
-        '',
-        $data
-    );
+    $socialInformation = Display::return_sortable_table('', $data);
 }
 
 /**
@@ -379,7 +378,7 @@ if (count($sessions) > 0) {
             $data,
             [],
             [],
-            ['user_id' => intval($_GET['user_id'])]
+            ['user_id' => $userId]
         );
         $sessionInformation .= $courseToolInformationTotal;
     }
@@ -477,7 +476,7 @@ if (Database::num_rows($res) > 0) {
         $data,
         [],
         [],
-        ['user_id' => intval($_GET['user_id'])]
+        ['user_id' => $userId]
     );
     $courseInformation .= $courseToolInformationTotal;
 } else {
@@ -510,7 +509,7 @@ if (api_is_multiple_url_enabled()) {
             $data,
             [],
             [],
-            ['user_id' => intval($_GET['user_id'])]
+            ['user_id' => $userId]
         );
     } else {
         $urlInformation = '<p>'.get_lang('NoUrlForThisUser').'</p>';
@@ -561,7 +560,6 @@ if (isset($_GET['action'])) {
             exit;
             break;
         case 'unsubscribe_session_course':
-            $userId = empty($_GET['user_id']) ? 0 : intval($_GET['user_id']);
             $courseId = !empty($_GET['course_id']) ? (int) $_GET['course_id'] : 0;
             $sessionId = !empty($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
 

@@ -337,13 +337,28 @@ if ($user_already_registered_show_terms === false &&
         if (isset($allowedFields['extra_fields']) && is_array($allowedFields['extra_fields'])) {
             $extraFieldList = $allowedFields['extra_fields'];
         }
+        $requiredFields = api_get_configuration_value('required_extra_fields_in_inscription');
+
+        if (!empty($requiredFields) && $requiredFields['options']) {
+            $requiredFields = $requiredFields['options'];
+        }
+
         $returnParams = $extraField->addElements(
             $form,
             0,
             [],
             false,
             false,
-            $extraFieldList
+            $extraFieldList,
+            [],
+            false,
+            false,
+            false,
+            [],
+            [],
+            [],
+            false,
+            $requiredFields
         );
         $extraFieldsLoaded = true;
     }

@@ -173,7 +173,6 @@ if (!is_object($objExercise)) {
     // saves the object into the session
     Session::write('objExercise', $objExercise);
 }
-
 // Exercise can be edited in their course.
 if ($objExercise->sessionId != $sessionId) {
     api_not_allowed(true);
@@ -256,9 +255,9 @@ if (!empty($clone_question) && !empty($objExercise->id)) {
     $new_answer_obj->duplicate($new_question_obj);
 
     // Reloading tne $objExercise obj
-    $objExercise->read($objExercise->id);
+    $objExercise->read($objExercise->id, false);
 
-    header('Location: admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id);
+    header('Location: admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&page='.$page);
     exit;
 }
 
@@ -284,7 +283,7 @@ if (api_is_in_gradebook()) {
 $interbreadcrumb[] = ['url' => 'exercise.php?'.api_get_cidreq(), 'name' => get_lang('Exercises')];
 if (isset($_GET['newQuestion']) || isset($_GET['editQuestion'])) {
     $interbreadcrumb[] = [
-        'url' => "admin.php?exerciseId=".$objExercise->id.'&'.api_get_cidreq(),
+        'url' => 'admin.php?exerciseId='.$objExercise->id.'&'.api_get_cidreq(),
         'name' => $objExercise->selectTitle(true),
     ];
 } else {
@@ -389,7 +388,7 @@ if ($inATest) {
     if ($objExercise->random > 0) {
         $alert .= '<br />'.sprintf(get_lang('OnlyXQuestionsPickedRandomly'), $objExercise->random);
     }
-    echo Display::return_message($alert);
+    echo Display::return_message($alert, 'normal', false);
 } elseif (isset($_GET['newQuestion'])) {
     // we are in create a new question from question pool not in a test
     echo '<div class="actions">';

@@ -15,11 +15,8 @@ $current_course_tool = TOOL_GROUP;
 // Notice for unauthorized people.
 api_protect_course_script(true);
 
-/*	Libraries & config files */
 require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'forum/forumconfig.inc.php';
 
-/*	MAIN CODE */
 $group_id = api_get_group_id();
 $user_id = api_get_user_id();
 $current_group = GroupManager::get_group_properties($group_id);

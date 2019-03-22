@@ -73,10 +73,10 @@ class ZombieReport implements Countable
         $form = new FormValidator(
             'zombie_report_parameters',
             'get',
-                null,
-                null,
+            null,
+            null,
             ['class' => 'well form-horizontal form-search']
-            );
+        );
 
         $form->addDatePicker('ceiling', get_lang('LastAccess'));
         $form->addCheckBox('active_only', get_lang('ActiveOnly'));

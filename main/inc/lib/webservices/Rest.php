@@ -1015,10 +1015,10 @@ class Rest extends WebService
         $sessionId = $this->session ? $this->session->getId() : 0;
         $forum = get_forums($forumId, $this->course->getCode(), true, $sessionId);
         $courseInfo = api_get_course_info($this->course->getCode());
-        $id = store_thread($forum, $values, $courseInfo, false, $this->user->getId(), $sessionId);
+        $thread = store_thread($forum, $values, $courseInfo, false, $this->user->getId(), $sessionId);
 
         return [
-            'registered' => $id,
+            'registered' => $thread->getIid(),
         ];
     }
 
@@ -1144,6 +1144,128 @@ class Rest extends WebService
                 }
             }
             $results[] = $courseCode;
+        }
+
+        return $results;
+    }
+
+    /**
+     * @param $user_param
+     *
+     * @return array
+     */
+    public function addUser($user_param)
+    {
+        $results = [];
+        $orig_user_id_value = [];
+        $userManager = UserManager::getManager();
+        $firstName = $user_param['firstname'];
+        $lastName = $user_param['lastname'];
+        $status = $user_param['status'];
+        $email = $user_param['email'];
+        $loginName = $user_param['loginname'];
+        $password = $user_param['password'];
+        $official_code = '';
+        $language = '';
+        $phone = '';
+        $picture_uri = '';
+        $auth_source = PLATFORM_AUTH_SOURCE;
+        $expiration_date = '';
+        $active = 1;
+        $hr_dept_id = 0;
+        $extra = null;
+        $original_user_id_name = $user_param['original_user_id_name'];
+        $original_user_id_value = $user_param['original_user_id_value'];
+        $orig_user_id_value[] = $user_param['original_user_id_value'];
+        $extra_list = $user_param['extra'];
+        if (!empty($user_param['language'])) {
+            $language = $user_param['language'];
+        }
+        if (!empty($user_param['phone'])) {
+            $phone = $user_param['phone'];
+        }
+        if (!empty($user_param['expiration_date'])) {
+            $expiration_date = $user_param['expiration_date'];
+        }
+
+        // Default language.
+        if (empty($language)) {
+            $language = api_get_setting('platformLanguage');
+        }
+
+        // First check wether the login already exists.
+        if (!UserManager::is_username_available($loginName)) {
+            $results[] = 0;
+        }
+
+        $userId = UserManager::create_user(
+            $firstName,
+            $lastName,
+            $status,
+            $email,
+            $loginName,
+            $password,
+            $official_code,
+            $language,
+            $phone,
+            $picture_uri,
+            $auth_source,
+            $expiration_date,
+            $active,
+            $hr_dept_id
+        );
+
+        if ($userId) {
+            if (api_is_multiple_url_enabled()) {
+                if (api_get_current_access_url_id() != -1) {
+                    UrlManager::add_user_to_url(
+                        $userId,
+                        api_get_current_access_url_id()
+                    );
+                } else {
+                    UrlManager::add_user_to_url($userId, 1);
+                }
+            } else {
+                // We add by default the access_url_user table with access_url_id = 1
+                UrlManager::add_user_to_url($userId, 1);
+            }
+
+            // Save new field label into user_field table.
+            UserManager::create_extra_field(
+                $original_user_id_name,
+                1,
+                $original_user_id_name,
+                ''
+            );
+            // Save the external system's id into user_field_value table.
+            UserManager::update_extra_field_value(
+                $userId,
+                $original_user_id_name,
+                $original_user_id_value
+            );
+
+            if (is_array($extra_list) && count($extra_list) > 0) {
+                foreach ($extra_list as $extra) {
+                    $extra_field_name = $extra['field_name'];
+                    $extra_field_value = $extra['field_value'];
+                    // Save new field label into user_field table.
+                    UserManager::create_extra_field(
+                        $extra_field_name,
+                        1,
+                        $extra_field_name,
+                        ''
+                    );
+                    // Save the external system's id into user_field_value table.
+                    UserManager::update_extra_field_value(
+                        $userId,
+                        $extra_field_name,
+                        $extra_field_value
+                    );
+                }
+            }
+            $results[] = $userId;
+        } else {
+            $results[] = 0;
         }
 
         return $results;

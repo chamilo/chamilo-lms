@@ -52,7 +52,7 @@ $interbreadcrumb[] = [
     'url' => 'exercise.php?'.api_get_cidreq(),
     'name' => get_lang('Exercises'),
 ];
-$interbreadcrumb[] = ["url" => "#", "name" => $objExercise->selectTitle(true)];
+$interbreadcrumb[] = ['url' => '#', 'name' => $objExercise->selectTitle(true)];
 
 $time_control = false;
 $clock_expired_time = ExerciseLib::get_session_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
@@ -103,8 +103,8 @@ if ($is_allowed_to_edit) {
 }
 
 $iconExercise = Display::return_icon('test-quiz.png', null, [], ICON_SIZE_MEDIUM);
-// Exercise name.
 
+// Exercise name.
 if (api_get_configuration_value('save_titles_as_html')) {
     $html .= Display::div(
         $objExercise->get_formated_title().PHP_EOL.$editLink
@@ -115,7 +115,7 @@ if (api_get_configuration_value('save_titles_as_html')) {
     );
 }
 
-//Exercise description
+// Exercise description
 if (!empty($objExercise->description)) {
     $html .= Display::div($objExercise->description, ['class' => 'exercise_description']);
 }
@@ -254,24 +254,26 @@ if (!empty($attempts)) {
                 RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
                 RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
                 RESULT_DISABLE_RANKING,
+                RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
             ]
         )) {
             $row['result'] = $score;
         }
 
         if (in_array(
-                $objExercise->results_disabled,
-                [
-                    RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS,
-                    RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES,
-                    RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
-                    RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
-                    RESULT_DISABLE_RANKING,
-                ]
-            ) || (
-                $objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ONLY &&
-                $objExercise->feedback_type == EXERCISE_FEEDBACK_TYPE_END
-            )
+            $objExercise->results_disabled,
+            [
+                RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS,
+                RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES,
+                RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
+                RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
+                RESULT_DISABLE_RANKING,
+                RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
+            ]
+        ) || (
+            $objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ONLY &&
+            $objExercise->feedback_type == EXERCISE_FEEDBACK_TYPE_END
+        )
         ) {
             if ($blockShowAnswers &&
                 $objExercise->results_disabled != RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK

@@ -29,6 +29,7 @@ $term_preview = [
 $extraField = new ExtraField('terms_and_condition');
 
 $types = LegalManager::getTreatmentTypeList();
+
 foreach ($types as $variable => $name) {
     $label = 'PersonalData'.ucfirst($name).'Title';
     $params = [
@@ -50,7 +51,7 @@ if ($form->validate()) {
     if ($check) {
         $values = $form->getSubmitValues();
         $lang = $values['language'];
-        //language id
+        // language id
         $lang = api_get_language_id($lang);
         $type = 0;
         if (isset($values['type'])) {
@@ -151,6 +152,15 @@ if (isset($_POST['language'])) {
         false,
         [],
         [],
+        [],
+        false,
+        true,
+        [],
+        [],
+        false,
+        [],
+        [],
+        false,
         true
     );
 

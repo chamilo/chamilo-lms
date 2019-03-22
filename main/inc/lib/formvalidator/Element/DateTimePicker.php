@@ -33,8 +33,9 @@ class DateTimePicker extends HTML_QuickForm_text
         $id = $this->getAttribute('id');
         $value = $this->getValue();
 
+        $formattedValue = '';
         if (!empty($value)) {
-            $value = api_format_date($value, DATE_TIME_FORMAT_LONG_24H);
+            $formattedValue = api_format_date($value, DATE_TIME_FORMAT_LONG_24H);
         }
 
         $label = $this->getLabel();
@@ -49,7 +50,7 @@ class DateTimePicker extends HTML_QuickForm_text
                 <span class="input-group-prepend">
                     <input '.$this->_getAttrString($this->_attributes).'>
                 </span>
-                <p class="form-control disabled" id="'.$id.'_alt_text">'.$value.'</p>
+                <p class="form-control disabled" id="'.$id.'_alt_text">'.$formattedValue.'</p>
                 <input class="form-control" type="hidden" id="'.$id.'_alt" value="'.$value.'">
                 <div class="input-group-append">
                     <button class="btn btn-light" type="button"
@@ -79,7 +80,7 @@ class DateTimePicker extends HTML_QuickForm_text
     public function getTemplate($layout)
     {
         $size = $this->getColumnsSize();
-        $value = $this->getValue();
+
         if (empty($size)) {
             $sizeTemp = $this->getInputSize();
             if (empty($size)) {
@@ -97,7 +98,7 @@ class DateTimePicker extends HTML_QuickForm_text
                 }
                 // else just keep the $size array as received
             } else {
-                $size = [2, intval($size), 2];
+                $size = [2, (int) $size, 2];
             }
         }
 

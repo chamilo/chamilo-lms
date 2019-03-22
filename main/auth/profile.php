@@ -16,7 +16,8 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_MYPROFILE;
-if (api_get_setting('allow_social_tool') === 'true') {
+$allowSocialTool = api_get_setting('allow_social_tool') == 'true';
+if ($allowSocialTool) {
     $this_section = SECTION_SOCIAL;
 }
 
@@ -25,8 +26,6 @@ $logInfo = [
     'tool_id' => 0,
     'tool_id_detail' => 0,
     'action' => $this_section,
-    'action_details' => '',
-    'current_id' => 0,
     'info' => '',
 ];
 Event::registerLog($logInfo);
@@ -661,6 +660,10 @@ if ($form->validate()) {
     Session::write('_user', $userInfo);
 
     if ($hook) {
+        Database::getManager()->clear(User::class); //Avoid cache issue (user entity is used before)
+
+        $user = api_get_user_entity(api_get_user_id()); //Get updated user info for hook event
+
         $hook->setEventData(['user' => $user]);
         $hook->notifyUpdateUser(HOOK_EVENT_TYPE_POST);
     }

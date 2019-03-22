@@ -69,6 +69,7 @@ class HTML_Common
      * @access    private
      */
     var $_comment = '';
+    public $freezeSeeOnlySelected;
 
     /**
      * Class constructor
@@ -79,6 +80,7 @@ class HTML_Common
      */
     public function __construct($attributes = null, $tabOffset = 0)
     {
+        $this->freezeSeeOnlySelected = false;
         $this->setAttributes($attributes);
         $this->setTabOffset($tabOffset);
     } // end constructor
@@ -126,7 +128,7 @@ class HTML_Common
     function _getTabs()
     {
         return str_repeat($this->_getTab(), $this->_tabOffset);
-    } // end func _getTabs
+    }
 
     /**
      * Returns an HTML formatted attribute string
@@ -242,7 +244,7 @@ class HTML_Common
         if (isset($attributes[$attr])) {
             unset($attributes[$attr]);
         }
-    } //end func _removeAttr
+    }
 
     /**
      * Returns the value of the given attribute
@@ -260,7 +262,7 @@ class HTML_Common
         }
 
         return null;
-    } //end func getAttribute
+    }
 
     /**
      * Sets the value of the attribute
@@ -459,5 +461,5 @@ class HTML_Common
     function charset($newCharset = null)
     {
         return 'UTF-8';
-    } // end func charset
+    }
 }

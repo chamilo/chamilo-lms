@@ -40,6 +40,10 @@ $htmlHeadXtra[] = '<script type="text/javascript" src="'
 
 $navigator = api_get_navigator();
 
+Display::addFlash(
+    Display::return_message(get_lang('FeatureDisabledBecauseOfUnmaintainedThirdPartyLibraries'), 'error')
+);
+
 $template = new Template();
 $template->assign('room_name', $chatVideo->getRoomName());
 $template->assign('chat_user', $chatUser);

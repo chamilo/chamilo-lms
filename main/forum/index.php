@@ -49,7 +49,6 @@ $_user = api_get_user_info();
 
 $hideNotifications = api_get_course_setting('hide_forum_notifications');
 $hideNotifications = $hideNotifications == 1;
-// Including necessary files.
 require_once 'forumfunction.inc.php';
 
 if (api_is_in_gradebook()) {

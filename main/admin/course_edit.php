@@ -291,6 +291,8 @@ $extra = $extra_field->addElements(
     false,
     [],
     [],
+    [],
+    false,
     true
 );
 

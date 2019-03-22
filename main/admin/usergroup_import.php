@@ -84,11 +84,11 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 $usergroup = new UserGroup();
 $usergroup->protectScript();
-// Access restrictions.
 
+// setting breadcrumbs
 $interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
 
-// Database Table Definitions
+// Setting the name of the tool.
 $tool_name = get_lang('ImportClassListCSV');
 
 set_time_limit(0);
@@ -100,7 +100,7 @@ $group[] = $form->createElement(
     'radio',
     'file_type',
     '',
-    'CSV (<a href="example_class.csv" target="_blank">'.get_lang('ExampleCSVFile').'</a>)',
+    'CSV (<a href="example_class.csv" target="_blank" download>'.get_lang('ExampleCSVFile').'</a>)',
     'csv'
 );
 $form->addGroup($group, '', get_lang('FileType'), null);

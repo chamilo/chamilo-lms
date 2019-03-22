@@ -23,9 +23,10 @@ if (!api_is_allowed_to_edit(false, true)) {
 }
 
 $course_id = api_get_course_int_id();
+$_course = api_get_course_info();
 
 // Getting the survey information
-$survey_id = Security::remove_XSS($_GET['survey_id']);
+$survey_id = (int) $_GET['survey_id'];
 $survey_data = SurveyManager::get_survey($survey_id);
 if (empty($survey_data)) {
     api_not_allowed(true);
@@ -49,10 +50,17 @@ $interbreadcrumb[] = [
     'name' => get_lang('SurveyList'),
 ];
 if (api_is_course_admin()) {
-    $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&'.api_get_cidreq(),
-        'name' => $urlname,
-    ];
+    if ($survey_data['survey_type'] == 3) {
+        $interbreadcrumb[] = [
+            'url' => api_get_path(WEB_CODE_PATH).'survey/meeting.php?survey_id='.$survey_id.'&'.api_get_cidreq(),
+            'name' => $urlname,
+        ];
+    } else {
+        $interbreadcrumb[] = [
+            'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&'.api_get_cidreq(),
+            'name' => $urlname,
+        ];
+    }
 } else {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey_invite.php?survey_id='.$survey_id.'&'.api_get_cidreq(),
@@ -83,12 +91,15 @@ if (Database::num_rows($result) > 1) {
 
 // Invited / answered message
 if ($survey_data['invited'] > 0 && !isset($_POST['submit'])) {
-    $message = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=answered&survey_id='.$survey_data['survey_id'].'&'.api_get_cidreq().'">'.
-        $survey_data['answered'].'</a> ';
-    $message .= get_lang('HaveAnswered').' ';
-    $message .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=invited&survey_id='.$survey_data['survey_id'].'&'.api_get_cidreq().'">'.
-        $survey_data['invited'].'</a> ';
-    $message .= get_lang('WereInvited');
+    $message = Display::url(
+        $survey_data['answered'],
+        api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=answered&survey_id='.$survey_data['survey_id'].'&'.api_get_cidreq()
+    );
+    $message .= ' '.get_lang('HaveAnswered').' ';
+    $message .= Display::url(
+        $survey_data['invited'],
+        api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=invited&survey_id='.$survey_data['survey_id'].'&'.api_get_cidreq());
+    $message .= ' '.get_lang('WereInvited');
     echo Display::return_message($message, 'normal', false);
 }
 
@@ -141,7 +152,7 @@ $form->addHtmlEditor(
 );
 $form->addElement('html', '</div>');
 // You cab send a reminder to unanswered people if the survey is not anonymous
-if ($survey_data['anonymous'] != 1) {
+if ($survey_data['anonymous'] != 1 || api_get_configuration_value('survey_anonymous_show_answered')) {
     $form->addElement('checkbox', 'remindUnAnswered', '', get_lang('RemindUnanswered'));
 }
 // Allow resending to all selected users
@@ -164,7 +175,7 @@ if (api_is_multiple_url_enabled()) {
 }
 
 // Show the URL that can be used by users to fill a survey without invitation
-$auto_survey_link = $portal_url.'main/survey/fillsurvey.php?course='.$_course['sysCode'].'&invitationcode=auto&scode='.$survey_data['survey_code'].'&id_session='.$survey_data['session_id'];
+$auto_survey_link = SurveyUtil::generateFillSurveyLink('auto', $_course, $survey_data['session_id'], $survey_data['survey_code']);
 
 $form->addElement('label', null, get_lang('AutoInviteLink'));
 $form->addElement('label', null, $auto_survey_link);

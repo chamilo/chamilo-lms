@@ -128,7 +128,7 @@
         }
 
         function startQuestion() {
-        updateView();
+            updateView();
 
             timeOuId = window.setInterval(updateView, {{ refresh_time }} * 1000);
         }

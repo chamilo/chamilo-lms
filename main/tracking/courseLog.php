@@ -12,7 +12,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_TRACKING;
 $courseId = api_get_course_id();
 $courseInfo = api_get_course_info($courseId);
-
+//keep course_code form as it is loaded (global) by the table's get_user_data
 $course_code = $courseCode = $courseInfo['code'];
 $sessionId = api_get_session_id();
 // PERSON_NAME_DATA_EXPORT is buggy
@@ -160,9 +160,9 @@ if (isset($_GET['origin']) && $_GET['origin'] == 'resume_session') {
 $view = isset($_REQUEST['view']) ? $_REQUEST['view'] : '';
 $nameTools = get_lang('Tracking');
 
-// getting all the students of the course
+//Template Tracking
 $tpl = new Template($nameTools);
-    // Registered students in a course outside session.
+
 // getting all the students of the course
 if (empty($sessionId)) {
     // Registered students in a course outside session.
@@ -331,7 +331,7 @@ if ($showReporting) {
 $trackingColumn = isset($_GET['users_tracking_column']) ? $_GET['users_tracking_column'] : null;
 $trackingDirection = isset($_GET['users_tracking_direction']) ? $_GET['users_tracking_direction'] : null;
 
-// PERSON_NAME_DATA_EXPORT is buggy
+// Show the charts part only if there are students subscribed to this course/session
 if ($nbStudents > 0) {
     $usersTracking = TrackingCourseLog::get_user_data(null, $nbStudents, $trackingColumn, $trackingDirection, false);
 
@@ -478,6 +478,7 @@ if ($nbStudents > 0) {
         20,
         'users_tracking'
     );
+    $table->total_number_of_items = $nbStudents;
 
     $parameters['cidReq'] = isset($_GET['cidReq']) ? Security::remove_XSS($_GET['cidReq']) : '';
     $parameters['id_session'] = $sessionId;
@@ -658,8 +659,8 @@ if ($export_csv) {
     ob_end_clean();
 
     $csvContentInSession = Session::read('csv_content');
-    // Adding headers before the content.
 
+    // Adding headers before the content.
     array_unshift($csvContentInSession, $csv_headers);
 
     if ($sessionId) {

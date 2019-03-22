@@ -124,10 +124,9 @@ if ($query != '' || ($query_vars['search_type'] == '1' && count($query_vars) > 2
                 $user_icon = Display::return_icon('teacher.png', get_lang('Teacher'), null, ICON_SIZE_TINY);
             }
 
-            //$tag = isset($user['tag']) ? ' <br /><br />'.$user['tag'] : null;
-            $tag = '';
+            $tag = isset($user['tag']) ? ' <br /><br />'.$user['tag'] : null;
             $user_info['complete_name'] = Display::url($user_info['complete_name'], $url);
-            $invitations = $tag.$sendInvitation.$sendMessage;
+            $invitations = $user['tag'].$sendInvitation.$sendMessage;
 
             $results .= Display::getUserCard(
                 $user_info,
@@ -137,8 +136,8 @@ if ($query != '' || ($query_vars['search_type'] == '1' && count($query_vars) > 2
         }
         $results .= '</div>';
     }
-
     $results .= '</div>';
+
     $visibility = [true, true, true, true, true];
 
     if (!empty($users)) {

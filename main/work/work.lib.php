@@ -137,9 +137,11 @@ function get_work_data_by_id($id, $courseId = 0, $sessionId = 0)
         $work['show_url'] = $webCodePath.'work/show_file.php?id='.$work['id'].'&'.api_get_cidreq();
         $work['show_content'] = '';
         if ($work['contains_file']) {
-            $fileType = mime_content_type(
-                api_get_path(SYS_COURSE_PATH).$course->getDirectory().'/'.$work['url']
-            );
+            $fileType = '';
+            $file = api_get_path(SYS_COURSE_PATH).$course->getDirectory().'/'.$work['url'];
+            if (file_exists($file)) {
+                $fileType = mime_content_type($file);
+            }
 
             if (in_array($fileType, ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'])) {
                 $work['show_content'] = Display::img($work['show_url'], $work['title']);
@@ -153,10 +155,7 @@ function get_work_data_by_id($id, $courseId = 0, $sessionId = 0)
         }
 
         $fieldValue = new ExtraFieldValue('work');
-        $work['extra'] = $fieldValue->getAllValuesForAnItem(
-            $id,
-            true
-        );
+        $work['extra'] = $fieldValue->getAllValuesForAnItem($id, true);
     }
 
     return $work;
@@ -2033,7 +2032,7 @@ function get_work_user_list(
                     $feedback .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang(
                             'View'
                         ).'">'.
-                    $count.' '.Display::returnFontAwesomeIcon('comments-o').'</a> ';
+                        $count.' '.Display::returnFontAwesomeIcon('comments-o').'</a> ';
                 }
 
                 $correction = '';
@@ -2155,13 +2154,13 @@ function get_work_user_list(
                                     ).'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang(
                                         'Edit'
                                     ).'"  >'.
-                                Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
+                                    Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
                             } else {
                                 $editLink = '<a href="'.$url.'edit.php?'.api_get_cidreq(
                                     ).'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang(
                                         'Modify'
                                     ).'">'.
-                                Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
+                                    Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
                             }
                         }
                         $action .= $editLink;

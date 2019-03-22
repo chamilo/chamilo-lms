@@ -890,11 +890,9 @@ function get_user_data($from, $number_of_items, $column, $direction)
                 // Active
                 $temp[] = $o_course_user['active'];
 
-                $extraFieldOption = new ExtraFieldOption('user');
-                $extraFieldValue = new ExtraFieldValue('user');
-
                 if (!empty($extraFields)) {
                     foreach ($extraFields as $extraField) {
+                        $extraFieldValue = new ExtraFieldValue('user');
                         $data = $extraFieldValue->get_values_by_handler_and_field_id(
                             $user_id,
                             $extraField['id']
@@ -1011,7 +1009,7 @@ function modify_filter($user_id, $row, $data)
     $result = '';
     if ($is_allowed_to_track) {
         $result .= '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&student='.$user_id.'&details=true&course='.$_course['id'].'&origin=user_course&id_session='.api_get_session_id().'" title="'.get_lang('Tracking').'">
-            '.Display::return_icon('stats.png', get_lang('Tracking')).'
+            '.Display::return_icon('statistics.png', get_lang('Tracking')).'
         </a>';
     }
 

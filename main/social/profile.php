@@ -213,7 +213,7 @@ $(document).ready(function() {
                 }
             }
         });
-    });   
+    });
 });
 </script>';
 
@@ -470,7 +470,7 @@ $tpl->assign('social_post_wall_block', $posts);
 $tpl->assign('social_course_block', $social_course_block);
 $tpl->assign('social_group_info_block', $social_group_info_block);
 $tpl->assign('social_rss_block', $social_rss_block);
-$tpl->assign('social_skill_block', SocialManager::getSkillBlock($friendId));
+$tpl->assign('social_skill_block', SocialManager::getSkillBlock($friendId, 'vertical'));
 $tpl->assign('session_list', $social_session_block);
 $tpl->assign('invitations', $listInvitations);
 $tpl->assign('social_right_information', $socialRightInformation);

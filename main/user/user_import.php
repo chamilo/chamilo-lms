@@ -107,7 +107,7 @@ if ($form->validate()) {
                     CourseManager::subscribeUser($userId, $course_code, $userType, $session_id);
                     if (empty($session_id)) {
                         //just to make sure
-                        if (CourseManager :: is_user_subscribed_in_course($userId, $course_code)) {
+                        if (CourseManager::is_user_subscribed_in_course($userId, $course_code)) {
                             $user_to_show[] = $userInfo['complete_name'];
                         }
                     } else {

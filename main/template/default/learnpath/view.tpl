@@ -1,4 +1,4 @@
-<div id="learning_path_main" class="{{ is_allowed_to_edit ? 'lp-view-include-breadcrumb' }} {{ lp_mode == 'embedframe' ? 'lp-view-collapsed' }}">
+<div id="learning_path_main" class="{{ is_allowed_to_edit ? 'lp-view-include-breadcrumb' }} {{ lp_mode == 'embedframe' ? 'lp-view-collapsed' : '' }}">
     {% if show_left_column == 1 %}
     <div id="learning_path_left_zone" class="sidebar-scorm">
         <div class="lp-view-zone-container">
@@ -36,7 +36,7 @@
                             #btn-comenzar:hover{background:#fff;}
                         </style>
                         <script>
-                            $(document).ready(function() {
+                            $(function() {
                                 var timerData = {
                                     hour: parseInt($("#hour").text()),
                                     minute: parseInt($("#minute").text()),
@@ -145,11 +145,11 @@
                     {{ teacher_toc_buttons }}
                 </div>
             </div>
-        {# TOC layout #}
-        <div id="toc_id" class="scorm-body" name="toc_name">
+            {# TOC layout #}
+            <div id="toc_id" class="scorm-body" name="toc_name">
                 {% include 'learnpath/scorm_list.tpl'|get_template %}
             </div>
-        {# end TOC layout #}
+            {# end TOC layout #}
         </div>
     </div>
     {# end left zone #}
@@ -218,7 +218,6 @@
     var LPViewUtils = {
         setHeightLPToc: function () {
             var scormInfoHeight = $('#scorm-info').outerHeight(true);
-
             $('#learning_path_toc').css({
                 top: scormInfoHeight
             });
@@ -296,15 +295,12 @@
 
         $('a#ui-option').on('click', function (e) {
             e.preventDefault();
-
             var icon = $(this).children('.fa');
-
             if (icon.is('.fa-chevron-up')) {
                 icon.removeClass('fa-chevron-up').addClass('fa-chevron-down');
 
                 return;
             }
-
             icon.removeClass('fa-chevron-down').addClass('fa-chevron-up');
         });
 
@@ -316,7 +312,6 @@
 
         $('#learning_path_right_zone #lp-view-content iframe').on('load', function () {
             $('.lp-view-tabs a[href="#lp-view-content"]').tab('show');
-
             $('.lp-view-tabs').animate({opacity: 1}, 500);
         });
 
@@ -376,32 +371,20 @@
                 {% endif %}
             })();
         {% endif %}
-
         {% if disable_js_in_lp_view == 0 %}
-        $('iframe#content_id').on('load', function () {
-            if ('link' !== olms.lms_item_type) {
-                $.frameReady(function () {
-                }, 'top.content_name', {
-                    load: [
-                        {type: 'script', id: '_fr1', src: '{{ _p.web }}web/assets/jquery/dist/jquery.min.js'},
-                        {type: 'script', id: '_fr7', src: '{{ _p.web }}web/assets/MathJax/MathJax.js?config=AM_HTMLorMML'},
-                        {type: 'script', id: '_fr4', src: '{{ _p.web }}web/assets/jquery-ui/jquery-ui.min.js'},
-                        {type: 'stylesheet', id: '_fr5', src: '{{ _p.web }}web/assets/jquery-ui/themes/smoothness/jquery-ui.min.css'},
-                        {type: 'stylesheet', id: '_fr6', src: '{{ _p.web }}web/assets/jquery-ui/themes/smoothness/theme.css'},
-                        {type: 'script', id: '_fr2', src: '{{ _p.web_lib }}javascript/jquery.highlight.js'},
-                        {type: 'script', id: '_fr3', src: '{{ _p.web_main }}glossary/glossary.js.php?{{ _p.web_cid_query }}'},
-                        {type: 'script', id: '_media1', src: '{{ _p.web }}web/assets/mediaelement/build/mediaelement-and-player.min.js'},
-                        {type: 'stylesheet', id: '_media2', src: '{{ _p.web }}web/assets/mediaelement/build/mediaelementplayer.min.css'},
-                        {type: 'script', id: '_media3', src: '{{ _p.web_lib }}javascript/iframe-js-loader.js'}
-                    ]
+            $(function() {
+                $('iframe#content_id').on('load', function () {
+                    var arr = ['link', 'sco'];
+                    if ($.inArray(olms.lms_item_type, arr) == -1) {
+                        {{ frame_ready }}
+                    }
                 });
-            }
-        });
+            });
         {% endif %}
-    });
 
-    $(window).on('resize', function () {
-        LPViewUtils.setHeightLPToc();
+        $(window).on('resize', function () {
+            LPViewUtils.setHeightLPToc();
+        });
     });
 })();
 </script>

@@ -103,7 +103,7 @@ if (count($_GET) <= 0) {
     $socialInvitationsBlock .= '<div class="row">
         <div class="col-md-12">
             <a class="btn btn-success" href="search.php"><em class="fa fa-search"></em> '.
-        get_lang('TryAndFindSomeFriends').'
+                get_lang('TryAndFindSomeFriends').'
             </a>
             </div>
         </div><br />';

@@ -64,23 +64,23 @@ if (isset($_REQUEST['register'])) {
             if (!empty($sessionId)) {
                 $message = $userInfo['complete_name_with_username'].' '.get_lang('AddedToCourse');
                 SessionManager::set_coach_to_course_session(
-                $_REQUEST['user_id'],
-                $sessionId,
-                $courseInfo['real_id']
-            );
+                    $_REQUEST['user_id'],
+                    $sessionId,
+                    $courseInfo['real_id']
+                );
                 Display::addFlash(Display::return_message($message));
             } else {
                 CourseManager::subscribeUser(
-                $_REQUEST['user_id'],
-                $courseInfo['code'],
-                COURSEMANAGER
-            );
+                    $_REQUEST['user_id'],
+                    $courseInfo['code'],
+                    COURSEMANAGER
+                );
             }
         } else {
             CourseManager::subscribeUser(
-            $_REQUEST['user_id'],
-            $courseInfo['code']
-        );
+                $_REQUEST['user_id'],
+                $courseInfo['code']
+            );
         }
     }
     header('Location:'.api_get_path(WEB_CODE_PATH).'user/user.php?'.api_get_cidreq().'&type='.$type);
@@ -99,10 +99,10 @@ if (isset($_POST['action'])) {
                             if (!empty($sessionId)) {
                                 $message = $userInfo['complete_name_with_username'].' '.get_lang('AddedToCourse');
                                 $result = SessionManager::set_coach_to_course_session(
-                                $user_id,
-                                $sessionId,
-                                $courseInfo['real_id']
-                            );
+                                    $user_id,
+                                    $sessionId,
+                                    $courseInfo['real_id']
+                                );
                                 if ($result) {
                                     $isSuscribe[] = $message;
                                 }
@@ -168,8 +168,8 @@ if (!empty($_POST['keyword'])) {
 }
 
 Display :: display_header($tool_name, 'User');
-// Build search-form
 
+// Build search-form
 switch ($type) {
     case STUDENT:
         $url = api_get_path(WEB_CODE_PATH).'user/user.php?'.api_get_cidreq().'';

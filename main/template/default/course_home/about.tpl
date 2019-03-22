@@ -12,10 +12,10 @@
     </div>
 
     {% set course_video = '' %}
-    {% for extra_field in course.extra_fields %}
-    {% if extra_field.value.getField().getVariable() == 'video_url' %}
-    {% set course_video = extra_field.value.getValue() %}
-    {% endif %}
+        {% for extra_field in course.extra_fields %}
+        {% if extra_field.value.getField().getVariable() == 'video_url' %}
+            {% set course_video = extra_field.value.getValue() %}
+        {% endif %}
     {% endfor %}
 
     <div class="panel panel-default">
@@ -151,29 +151,29 @@
                 </div>
                 {% endif %}
                 {% if course.teachers %}
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <div class="panel-teachers">
-                            <h3 class="sub-title">{{ "Coaches"|get_lang }}</h3>
-                        </div>
-                        {%  for teacher in course.teachers %}
-                        <div class="coach-information">
-                            <div class="coach-header">
-                                <div class="coach-avatar">
-                                    <img class="img-circle img-responsive" src="{{ teacher.image }}" alt="{{ teacher.complete_name }}">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="panel-teachers">
+                                <h3 class="sub-title">{{ "Coaches"|get_lang }}</h3>
+                            </div>
+                            {%  for teacher in course.teachers %}
+                            <div class="coach-information">
+                                <div class="coach-header">
+                                    <div class="coach-avatar">
+                                        <img class="img-circle img-responsive" src="{{ teacher.image }}" alt="{{ teacher.complete_name }}">
+                                    </div>
+                                    <div class="coach-title">
+                                        <h4>{{ teacher.complete_name }}</h4>
+                                        <p> {{ teacher.diploma }}</p>
+                                    </div>
                                 </div>
-                                <div class="coach-title">
-                                    <h4>{{ teacher.complete_name }}</h4>
-                                    <p> {{ teacher.diploma }}</p>
+                                <div class="open-area  {{ course.teachers | length >= 2 ? 'open-more' : ' ' }}">
+                                    {{ teacher.openarea }}
                                 </div>
                             </div>
-                            <div class="open-area  {{ course.teachers | length >= 2 ? 'open-more' : ' ' }}">
-                                {{ teacher.openarea }}
-                            </div>
+                            {% endfor %}
                         </div>
-                        {% endfor %}
                     </div>
-                </div>
                 {% endif %}
             </div>
         </div>

@@ -305,16 +305,16 @@ $(function() {
 
     $('.star-rating li a').on('click', function(event) {
         var id = $(this).parents('ul').attr('id');
-        $('#vote_label2_' + id).html("{{'Loading'|get_lang}}");
+        $('#vote_label2_' + id).html("{{'Loading'|get_lang| escape('js')}}");
         $.ajax({
             url: $(this).attr('data-link'),
             success: function(data) {
                 $("#rating_wrapper_"+id).html(data);
                 if (data == 'added') {
-                    //$('#vote_label2_' + id).html("{{'Saved'|get_lang}}");
+                    //$('#vote_label2_' + id).html("{{'Saved'|get_lang | escape('js')}}");
                 }
                 if (data == 'updated') {
-                    //$('#vote_label2_' + id).html("{{'Saved'|get_lang}}");
+                    //$('#vote_label2_' + id).html("{{'Saved'|get_lang| escape('js')}}");
                 }
             }
         });
@@ -322,9 +322,62 @@ $(function() {
 
     $("#notifications").load(_p.web_ajax + "online.ajax.php?a=get_users_online");
 
-    $(document).ready(function () {
-        $('video:not(.skip)').attr('preload', 'metadata');
-    })
+    $('video:not(.skip)').attr('preload', 'metadata');
+
+    function socialLikes() {
+        {% if 'social_enable_likes_messages'|api_get_configuration_value %}
+        $('body').on('click', '.social-like', function (e) {
+            e.preventDefault();
+
+            var $self = $(this),
+                status = $self.data('status') || '',
+                group = $self.data('group') || 0,
+                message = $self.data('message') || 0;
+
+            $.getJSON(
+                '{{ _p.web_ajax }}social.ajax.php',
+                {'a': 'like_message', 'group': group, 'id': message, 'status': status}
+            ).then(function (response) {
+                if (!response) {
+                    return;
+                }
+
+                var $count = $self.children('span'),
+                    currentCount = parseInt($count.text()) || 0;
+
+                if ('like' === status) {
+                    var $dislike = $self.next(),
+                        $dislikeCount = $dislike.children('span'),
+                        dislikeCount = parseInt($dislikeCount.text()) || 0;
+
+                    $count.text(++currentCount);
+
+                    if ($dislike.prop('disabled') || $dislike.is('.disabled')) {
+                        $dislikeCount.text(dislikeCount <= 0 ? 0 : --dislikeCount);
+                        $dislike.removeClass('disabled').prop('disabled', false);
+                    }
+
+                    $self.addClass('disabled').prop('disabled', true);
+                } else if ('dislike' === status) {
+                    var $like = $self.prev(),
+                        $likeCount = $like.children('span'),
+                        likeCount = parseInt($likeCount.text()) || 0;
+
+                    $count.text(++currentCount);
+
+                    if ($like.prop('disabled') || $like.is('.disabled')) {
+                        $likeCount.text(likeCount <= 0 ? 0 : --likeCount);
+                        $like.removeClass('disabled').prop('disabled', false);
+                    }
+
+                    $self.addClass('disabled').prop('disabled', true);
+                }
+            });
+        });
+        {% endif %}
+    }
+
+    socialLikes();
 });
 
 $(window).resize(function() {
@@ -345,7 +398,7 @@ $(document).scroll(function() {
         $('.bottom_actions').addClass('bottom_actions_fixed');
     }
 
-    //Exercise warning fixed at the top
+    // Exercise warning fixed at the top
     var fixed =  $("#exercise_clock_warning");
     if (fixed.length) {
         if (!fixed.attr('data-top')) {

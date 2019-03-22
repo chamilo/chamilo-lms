@@ -32,7 +32,7 @@
                 {{ social_post_wall_block }}
                 {{ social_auto_extend_link }}
             </div>
-
+            
             {#{{ social_skill_block }}#}
             {{ social_right_content }}
             <div id="message_ajax_reponse" class=""></div>
@@ -61,14 +61,15 @@
                                 <div class="search-friend">
                                     {{ search_friends_form }}
                                 </div>
-                                {{ social_friend_block }}
+
+                                {% if 'allow_social_map_fields'|api_get_configuration_value %}
                                 <div class="geolocalization">
                                     <a class="btn btn-maps" id="profile-tab" href="{{ _p.web }}main/social/map.php" >
                                         {{ "geolocalization.png"|img(32) }}
-                                        {{ 'ByGeolocalization' | get_lang }}
+                                        {{ 'SearchUserByGeolocalization' | get_lang }}
                                     </a>
                                 </div>
-
+                                {% endif %}
                             </div>
                         </div>
                     </div>

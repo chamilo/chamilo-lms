@@ -86,6 +86,7 @@ if (!empty($threadList)) {
 
 $forumCourseId = api_get_configuration_value('global_forums_course_id');
 $myGroups = [];
+$courseInfo = null;
 if (!empty($forumCourseId)) {
     $courseInfo = api_get_course_info_by_id($forumCourseId);
 }
@@ -104,94 +105,124 @@ $social_search_block = Display::panel(
     get_lang('SearchUsers')
 );
 
-/*
-$results = $userGroup->get_groups_by_user($user_id,
-    [
-        GROUP_USER_PERMISSION_ADMIN,
-        GROUP_USER_PERMISSION_READER,
-        GROUP_USER_PERMISSION_MODERATOR,
-        GROUP_USER_PERMISSION_HRM,
-    ]
-);
-
-$myGroups = [];
-if (!empty($results)) {
-    foreach ($results as $result) {
-        $id = $result['id'];
-        $result['description'] = Security::remove_XSS($result['description'], STUDENT, true);
-        $result['name'] = Security::remove_XSS($result['name'], STUDENT, true);
-
-        $group_url = "group_view.php?id=$id";
-
-        $link = Display::url(
-            api_ucwords(cut($result['name'], 40, true)),
-            $group_url
-        );
-
-        $result['name'] = $link;
-
-        $picture = $userGroup->get_picture_group(
-            $id,
-            $result['picture'],
-            null,
-            GROUP_IMAGE_SIZE_BIG
-        );
-
-        $result['picture'] = '<img class="img-responsive" src="'.$picture['file'].'" />';
-        $group_actions = '<div class="group-more"><a class="btn btn-default" href="groups.php?#tab_browse-2">'.
-            get_lang('SeeMore').'</a></div>';
-        $group_info = '<div class="description"><p>'.cut($result['description'], 120, true)."</p></div>";
-        $myGroups[] = [
-            'url' => Display::url(
-                $result['picture'],
-                $group_url
-            ),
-            'name' => $result['name'],
-            'description' => $group_info.$group_actions,
-        ];
-    }
-}
-
-*/
 $social_group_block = '';
-if (count($threadList) > 0) {
-    $social_group_block .= '<div class="list-group">';
-    foreach ($threadList as $group) {
-        $social_group_block .= ' <li class="list-group-item">';
-        $social_group_block .= $group['name'];
-        $social_group_block .= '</li>';
-    }
-    $social_group_block .= '</div>';
-}
-
 if (!empty($courseInfo)) {
+    if (!empty($threadList)) {
+        $social_group_block .= '<div class="list-group">';
+        foreach ($threadList as $group) {
+            $social_group_block .= ' <li class="list-group-item">';
+            $social_group_block .= $group['name'];
+            $social_group_block .= '</li>';
+        }
+        $social_group_block .= '</div>';
+    }
+
     $social_group_block .= Display::url(
         get_lang('SeeAllCommunities'),
         api_get_path(WEB_CODE_PATH).'forum/index.php?cidReq='.$courseInfo['code']
     );
+
+    if (!empty($social_group_block)) {
+        $social_group_block = Display::panelCollapse(
+            get_lang('MyCommunities'),
+            $social_group_block,
+            'sm-groups',
+            null,
+            'grups-acordion',
+            'groups-collapse'
+        );
+    }
+} else {
+    // Load my groups
+    $results = $userGroup->get_groups_by_user($user_id,
+        [
+            GROUP_USER_PERMISSION_ADMIN,
+            GROUP_USER_PERMISSION_READER,
+            GROUP_USER_PERMISSION_MODERATOR,
+            GROUP_USER_PERMISSION_HRM,
+        ]
+    );
+
+    $myGroups = [];
+    if (!empty($results)) {
+        foreach ($results as $result) {
+            $id = $result['id'];
+            $result['description'] = Security::remove_XSS($result['description'], STUDENT, true);
+            $result['name'] = Security::remove_XSS($result['name'], STUDENT, true);
+
+            $group_url = "group_view.php?id=$id";
+
+            $link = Display::url(
+                api_ucwords(cut($result['name'], 40, true)),
+                $group_url
+            );
+
+            $result['name'] = $link;
+
+            $picture = $userGroup->get_picture_group(
+                $id,
+                $result['picture'],
+                null,
+                GROUP_IMAGE_SIZE_BIG
+            );
+
+            $result['picture'] = '<img class="img-responsive" src="'.$picture['file'].'" />';
+            $group_actions = '<div class="group-more"><a class="btn btn-default" href="groups.php?#tab_browse-2">'.
+                get_lang('SeeMore').'</a></div>';
+            $group_info = '<div class="description"><p>'.cut($result['description'], 120, true)."</p></div>";
+            $myGroups[] = [
+                'url' => Display::url(
+                    $result['picture'],
+                    $group_url
+                ),
+                'name' => $result['name'],
+                'description' => $group_info.$group_actions,
+            ];
+        }
+
+        $social_group_block .= '<div class="list-group">';
+        foreach ($myGroups as $group) {
+            $social_group_block .= ' <li class="list-group-item">';
+            $social_group_block .= $group['name'];
+            $social_group_block .= '</li>';
+        }
+        $social_group_block .= '</div>';
+
+        $form = new FormValidator(
+            'find_groups_form',
+            'get',
+            api_get_path(WEB_CODE_PATH).'social/search.php?search_type=2',
+            null,
+            null,
+            FormValidator::LAYOUT_BOX_NO_LABEL
+        );
+        $form->addHidden('search_type', 2);
+
+        $form->addText(
+            'q',
+            get_lang('Search'),
+            false,
+            [
+                'aria-label' => get_lang('Search'),
+                'custom' => true,
+                'placeholder' => get_lang('Search'),
+            ]
+        );
+
+        $social_group_block .= $form->returnForm();
+
+        if (!empty($social_group_block)) {
+            $social_group_block = Display::panelCollapse(
+                get_lang('MyGroups'),
+                $social_group_block,
+                'sm-groups',
+                null,
+                'grups-acordion',
+                'groups-collapse'
+            );
+        }
+    }
 }
-
-/*
-$form = new FormValidator(
-    'find_groups_form',
-    'get',
-    api_get_path(WEB_CODE_PATH).'social/search.php?search_type=2',
-    null,
-    null,
-    'inline'
-);
-$form->addHidden('search_type', 2);
-$form->addText(
-    'q',
-    get_lang('Search'),
-    false,
-    [
-        'aria-label' => get_lang('SearchGroups'),
-    ]
-);
-$form->addButtonSearch(get_lang('Search'));
-
-$social_group_block .= $form->returnForm();*/
 
 // My friends
 $friend_html = SocialManager::listMyFriendsBlock($user_id, '');
@@ -205,15 +236,6 @@ if (count($sessionList) > 0) {
     $social_session_block = $sessionList;
 }
 
-$social_group_block = Display::panelCollapse(
-    get_lang('MyCommunities'),
-    $social_group_block,
-    'sm-groups',
-    null,
-    'grups-acordion',
-    'groups-collapse'
-);
-
 $wallSocialAddPost = SocialManager::getWallForm(api_get_self());
 $socialAutoExtendLink = SocialManager::getAutoExtendLink($user_id, $countPost);
 
@@ -223,7 +245,7 @@ $formSearch = new FormValidator(
     api_get_path(WEB_CODE_PATH).'social/search.php?search_type=1',
     null,
     null,
-    'box-no-label'
+    FormValidator::LAYOUT_BOX_NO_LABEL
 );
 $formSearch->addHidden('search_type', 1);
 $formSearch->addText(
@@ -233,10 +255,9 @@ $formSearch->addText(
     [
         'aria-label' => get_lang('SearchUsers'),
         'custom' => true,
-        'placeholder' => get_lang('Search'),
+        'placeholder' => get_lang('SearchUsersByName'),
     ]
 );
-//$formSearch->addButtonSearch(get_lang('Search'));
 
 $tpl = new Template(get_lang('SocialNetwork'));
 SocialManager::setSocialUserBlock($tpl, $user_id, 'home');
@@ -246,7 +267,6 @@ $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_auto_extend_link', $socialAutoExtendLink);
 $tpl->assign('search_friends_form', $formSearch->returnForm());
 $tpl->assign('social_friend_block', $friend_html);
-//$tpl->assign('session_list', $social_session_block);
 $tpl->assign('social_search_block', $social_search_block);
 $tpl->assign('social_skill_block', SocialManager::getSkillBlock($user_id));
 $tpl->assign('social_group_block', $social_group_block);

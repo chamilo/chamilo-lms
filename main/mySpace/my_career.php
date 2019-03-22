@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Fhaculty\Graph\Graph;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 if (api_get_configuration_value('allow_career_diagram') == false) {
@@ -41,7 +43,8 @@ foreach ($sessionCategories as $category) {
                         'career_diagram'
                     );
                     if ($diagram && !empty($diagram['value'])) {
-                        $graph = unserialize($diagram['value']);
+                        /** @var Graph $graph */
+                        $graph = UnserializeApi::unserialize('career', $diagram['value']);
                         $content .= Career::renderDiagram($careerInfo, $graph);
                     }
                 }

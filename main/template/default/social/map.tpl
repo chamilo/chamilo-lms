@@ -87,7 +87,6 @@ function start()
 }
 </script>
 <script async defer type="text/javascript" src="https://maps.google.com/maps/api/js?key={{ api_key }}&callback=start"></script>
-
-    <img src="{{ image_city }}" />  {{ 'ResidencePlace' | get_lang }}  <br />
-    <img src="{{ image_stage }}" /> {{ 'StagePlace' | get_lang }}
+<img src="{{ image_city }}" />  {{ field_1 }}  <br />
+<img src="{{ image_stage }}" /> {{ field_2 }}
 {% endblock %}

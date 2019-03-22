@@ -38,12 +38,12 @@ if (api_is_platform_admin(true, true)) {
 
     if (!api_is_session_admin()) {
         $menu_items[] = Display::url(
-            Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),
-            api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
+            Display::return_icon('statistics.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'auth/my_progress.php'
         );
         $menu_items[] = Display::url(
             Display::return_icon('user.png', get_lang('Students'), [], ICON_SIZE_MEDIUM),
-            "index.php?view=drh_students&amp;display=yourstudents"
+            'index.php?view=drh_students&amp;display=yourstudents'
         );
         $menu_items[] = Display::url(
             Display::return_icon('teacher.png', get_lang('Trainers'), [], ICON_SIZE_MEDIUM),
@@ -67,6 +67,13 @@ if (api_is_platform_admin(true, true)) {
         Display::return_icon('clock.png', get_lang('TeacherTimeReportBySession'), [], ICON_SIZE_MEDIUM),
         api_get_path(WEB_CODE_PATH).'admin/teachers_time_by_session_report.php'
     );
+
+    if (!api_is_session_admin()) {
+        $menu_items[] = Display::url(
+            Display::return_icon('1day.png', get_lang('SessionsPlanCalendar'), [], ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH)."calendar/planification.php"
+        );
+    }
 
     $actionsLeft = '';
     $nb_menu_items = count($menu_items);
@@ -138,7 +145,7 @@ $columns = [
 // Column config
 $columnModel = [
     ['name' => 'name', 'index' => 'name', 'width' => '255', 'align' => 'left'],
-    ['name' => 'date', 'index' => 'date', 'width' => '150', 'align' => 'left', 'sortable' => 'false'],
+    ['name' => 'date', 'index' => 'access_start_date', 'width' => '150', 'align' => 'left'],
     ['name' => 'course_per_session', 'index' => 'course_per_session', 'width' => '150', 'sortable' => 'false'],
     ['name' => 'student_per_session', 'index' => 'student_per_session', 'width' => '100', 'sortable' => 'false'],
     ['name' => 'details', 'index' => 'details', 'width' => '100', 'sortable' => 'false'],

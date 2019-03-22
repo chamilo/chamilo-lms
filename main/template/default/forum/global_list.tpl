@@ -1,6 +1,8 @@
 {% extends 'layout/layout_1_col.tpl'|get_template %}
 {% block content %}
 
+
+{% if 'translate_html'|api_get_configuration_value %}
 <script>
     $(document).ready(function () {
         // default
@@ -21,9 +23,9 @@
         });
     });
 </script>
+{% endif %}
 
 {{ form_content }}
-
 {{ search_filter }}
 
 {% if data is not empty %}

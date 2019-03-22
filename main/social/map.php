@@ -12,9 +12,37 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
+$fields = api_get_configuration_value('allow_social_map_fields');
+
+if (!$fields) {
+    api_not_allowed(true);
+}
+
+$fields = isset($fields['fields']) ? $fields['fields'] : '';
+
+if (empty($fields)) {
+    api_not_allowed(true);
+}
+
 $extraField = new ExtraField('user');
-$infoStage = $extraField->get_handler_field_info_by_field_variable('terms_villedustage');
-$infoVille = $extraField->get_handler_field_info_by_field_variable('terms_ville');
+$infoStage = $extraField->get_handler_field_info_by_field_variable($fields['0']);
+$infoVille = $extraField->get_handler_field_info_by_field_variable($fields['1']);
+
+if (empty($infoStage) || empty($infoVille)) {
+    api_not_allowed(true);
+}
+
+$gMapsPlugin = GoogleMapsPlugin::create();
+$localization = $gMapsPlugin->get('enable_api') === 'true';
+
+if ($localization) {
+    $apiKey = $gMapsPlugin->get('api_key');
+    if (empty($apiKey)) {
+        api_not_allowed(true);
+    }
+} else {
+    api_not_allowed(true);
+}
 
 $tableUser = Database::get_main_table(TABLE_MAIN_USER);
 $sql = "SELECT u.id, firstname, lastname, ev.value ville, ev2.value stage
@@ -39,7 +67,7 @@ $keyData = 'map_cache_data';
 $now = time();
 
 // Refresh cache every day
-$tomorrow = strtotime('+1 day', $now);
+//$tomorrow = strtotime('+1 day', $now);
 $tomorrow = strtotime('+5 minute', $now);
 
 $loadFromDatabase = true;
@@ -82,18 +110,6 @@ foreach ($data as &$result) {
     }
 }
 
-$gMapsPlugin = GoogleMapsPlugin::create();
-$localization = $gMapsPlugin->get('enable_api') === 'true';
-
-if ($localization) {
-    $apiKey = $gMapsPlugin->get('api_key');
-    if (empty($apiKey)) {
-        api_not_allowed(true);
-    }
-} else {
-    api_not_allowed(true);
-}
-
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_JS_PATH).'map/markerclusterer.js"></script>';
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_JS_PATH).'map/oms.min.js"></script>';
 
@@ -124,6 +140,9 @@ $tpl->assign(
 
 $tpl->assign('places', json_encode($data));
 $tpl->assign('api_key', $apiKey);
+
+$tpl->assign('field_1', $infoStage['display_text']);
+$tpl->assign('field_2', $infoVille['display_text']);
 
 $layout = $tpl->get_template('social/map.tpl');
 $tpl->display($layout);

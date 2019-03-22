@@ -15,7 +15,7 @@ $eval = Evaluation::load($categoryId);
 if (!isset($eval[0])) {
     api_not_allowed(true);
 }
-    // if category id is negative, then the evaluation's origin is a link
+/** @var Evaluation $eval */
 $eval = $eval[0];
 
 if ($eval->get_category_id() < 0) {

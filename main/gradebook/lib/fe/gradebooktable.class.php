@@ -106,11 +106,11 @@ class GradebookTable extends SortableTable
         $model = ExerciseLib::getCourseScoreModel();
 
         $this->set_header(
-                $column++,
-                get_lang('Weight'),
-                '',
-                'width="100px"'
-            );
+            $column++,
+            get_lang('Weight'),
+            '',
+            'width="100px"'
+        );
 
         if (!$this->teacherView) {
             $this->set_header($column++, get_lang('Result'), false);
@@ -432,7 +432,7 @@ class GradebookTable extends SortableTable
                             $result = ExerciseLib::convertScoreToPlatformSetting(
                                 $data['result_score'][0],
                                 $data['result_score'][1]
-                        );
+                            );
                             $data['my_result_no_float'][0] = $result['score'];
                         }
 
@@ -704,9 +704,9 @@ class GradebookTable extends SortableTable
                 );
 
                 $row = [
-                        null,
-                        '<h3>'.get_lang('Total').'</h3>',
-                    ];
+                    null,
+                    '<strong>'.get_lang('Total').'</strong>',
+                ];
 
                 if (!$this->exportToPdf) {
                     $row[] = null;
@@ -736,11 +736,12 @@ class GradebookTable extends SortableTable
 
                     $totalRanking = AbstractLink::getCurrentUserRanking($user_id, $totalRanking);
                     $totalRanking = $scoredisplay->display_score(
-                            $totalRanking,
-                            SCORE_DIV,
-                            SCORE_BOTH,
-                            true
-                        );
+                        $totalRanking,
+                        SCORE_DIV,
+                        SCORE_BOTH,
+                        true,
+                        true
+                    );
 
                     if ($invalidateRanking) {
                         $totalRanking = null;
@@ -752,11 +753,11 @@ class GradebookTable extends SortableTable
                     // Overwrite main weight
                     $totalBest[1] = $main_weight;
                     $totalBest = $scoredisplay->display_score(
-                            $totalBest,
-                            SCORE_DIV,
-                            SCORE_BOTH,
-                            true
-                        );
+                        $totalBest,
+                        SCORE_DIV,
+                        SCORE_BOTH,
+                        true
+                    );
                     $row[] = $totalBest;
                 }
                 if (in_array(3, $this->loadStats)) {
@@ -764,11 +765,11 @@ class GradebookTable extends SortableTable
                     $totalAverage[0] = $average / count($this->studentList);
                     $totalAverage[1] = $main_weight;
                     $totalAverage = $scoredisplay->display_score(
-                            $totalAverage,
-                            SCORE_DIV,
-                            SCORE_BOTH,
-                            true
-                        );
+                        $totalAverage,
+                        SCORE_DIV,
+                        SCORE_BOTH,
+                        true
+                    );
 
                     $row[] = $totalAverage;
                 }
@@ -864,9 +865,9 @@ class GradebookTable extends SortableTable
         }
 
         if (!$this->teacherView) {
-            $rowTotal = [];
+            /*$rowTotal = [];
             $rowTotal[] = ' ';
-            $rowTotal[] = get_lang('FinalScore');
+            $rowTotal[] = '<strong>'.get_lang('FinalScore').'</strong>';
 
             if (!$this->exportToPdf) {
                 $rowTotal[] = ' ';
@@ -881,7 +882,7 @@ class GradebookTable extends SortableTable
                 $rowTotal[] = ' ';
             }
 
-            $sortable_data[] = $rowTotal;
+            $sortable_data[] = $rowTotal;*/
         }
 
         return $sortable_data;
@@ -920,7 +921,7 @@ class GradebookTable extends SortableTable
                 ["R" => 0, "G" => 0, "B" => 0]
             );
             $pChart->drawText(
-                10,
+                80,
                 16,
                 get_lang('Results'),
                 ["FontSize" => 11, "Align" => TEXT_ALIGN_BOTTOMMIDDLE]

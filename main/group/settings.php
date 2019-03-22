@@ -323,10 +323,10 @@ if ($form->validate()) {
         $max_member != GroupManager::MEMBER_PER_GROUP_NO_LIMIT
     ) {
         Display::addFlash(Display::return_message(get_lang('GroupTooMuchMembers'), 'warning'));
-        header('Location: group.php?'.api_get_cidreq(true, false));
+        header('Location: group.php?'.api_get_cidreq(true, false).'&category='.$categoryId);
     } else {
         Display::addFlash(Display::return_message(get_lang('GroupSettingsModified'), 'success'));
-        header('Location: group.php?'.api_get_cidreq(true, false).'&category='.$cat['id']);
+        header('Location: group.php?'.api_get_cidreq(true, false).'&category='.$categoryId);
     }
     exit;
 }

@@ -39,7 +39,7 @@ if ($session_id == 0) {
 $category = Category :: load($selectCat);
 $url = api_get_self().'?selectcat='.$selectCat.'&newtypeselected='.$typeSelected.'&course_code='.api_get_course_id().'&'.api_get_cidreq();
 $typeform = new LinkForm(
-    LinkForm :: TYPE_CREATE,
+    LinkForm::TYPE_CREATE,
     $category[0],
     null,
     'create_link',

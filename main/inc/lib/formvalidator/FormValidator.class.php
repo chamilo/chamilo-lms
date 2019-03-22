@@ -133,7 +133,7 @@ EOT;
     public function getDefaultElementTemplate()
     {
         return '
-            <div  class="form-group {error_class}">
+            <div class="form-group {error_class}">
                 <label {label-for} class="col-sm-2 control-label {extra_label_class}" >
                     <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                     {label}
@@ -1039,8 +1039,8 @@ EOT;
     /**
      * Adds a Google Maps Geolocalization field to the form.
      *
-     * @param $name
-     * @param $label
+     * @param      $name
+     * @param      $label
      * @param bool $hideGeoLocalizationDetails
      */
     public function addGeoLocationMapField($name, $label, $dataValue, $hideGeoLocalizationDetails = false)
@@ -1075,7 +1075,7 @@ EOT;
 
         if ($hideGeoLocalizationDetails) {
             $this->addHtml('<div style="display:none">');
-                        }
+        }
 
         $this->addHtml(
             Extrafield::getLocalizationInput($name, $label)
@@ -1083,7 +1083,7 @@ EOT;
 
         if ($hideGeoLocalizationDetails) {
             $this->addHtml('</div>');
-                }
+        }
     }
 
     /**
@@ -1709,7 +1709,7 @@ EOT;
                 previewMaxHeight: 169,
                 previewCrop: true,
                 dropzone: $('#dropzone'),                                
-            }).on('fileuploadadd', function (e, data) {
+            }).on('fileuploadadd', function (e, data) {                
                 data.context = $('<div class=\"row\" />').appendTo('#files');
                 $.each(data.files, function (index, file) {
                     var node = $('<div class=\"col-sm-5 file_name\">').text(file.name);                    
@@ -1756,8 +1756,8 @@ EOT;
                             .prop('href', file.url);
                         $(data.context.children()[index]).parent().wrap(link);
                     }
-                        // Update file name with new one from Chamilo
-                        $(data.context.children()[index]).parent().find('.file_name').html(file.name);                        
+                    // Update file name with new one from Chamilo
+                    $(data.context.children()[index]).parent().find('.file_name').html(file.name);
                     var message = $('<div class=\"col-sm-3\">').html(
                         $('<span class=\"message-image-success\"/>').text('".addslashes(get_lang('UplUploadSucceeded'))."')
                     );
@@ -1774,7 +1774,7 @@ EOT;
                     $(data.context.children()[index]).parent().append(error);
                 });
                 $('#dropzone').removeClass('hover');
-            }).prop('disabled', !$.support.fileInput).parent().addClass($.support.fileInput ? undefined : 'disabled');            
+            }).prop('disabled', !$.support.fileInput).parent().addClass($.support.fileInput ? undefined : 'disabled');           
             
             $('#dropzone').on('dragover', function (e) {
                 // dragleave callback implementation                

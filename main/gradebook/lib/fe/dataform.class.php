@@ -116,7 +116,7 @@ class DataForm extends FormValidator
                 .'</a>)',
             'csv'
         );
-        //$this->addRule('file', get_lang('InvalidExtension') . ' (' . implode(',', $allowed_file_types) . ')', 'filetype', $allowed_file_types);
+        //$this->addElement('radio', 'file_type', null, 'XML (<a href="docs/example_xml.html" target="_blank" download>'.get_lang('ExampleXMLFile').'</a>)', 'xml');
         $this->addElement('checkbox', 'overwrite', null, get_lang('OverwriteScores'));
         $this->addElement('checkbox', 'ignoreerrors', null, get_lang('IgnoreErrors'));
         $this->addButtonImport(get_lang('Ok'));

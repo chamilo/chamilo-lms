@@ -1003,14 +1003,16 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                         4 => 'class="text-center"',
                     ];
                 } else {
-                    if (empty($model)) {
+                    /*if (empty($model)) {
                         $gradebookTable->td_attributes = [
                             3 => 'class="text-right"',
                             4 => 'class="text-center"',
                         ];
 
-                        for ($z = 5; $z < count($loadStats); $z++) {
-                            $gradebookTable->td_attributes[$z] = 'class="text-center"';
+                        if (!empty($loadStats)) {
+                            for ($z = 5; $z < count($loadStats); $z++) {
+                                $gradebookTable->td_attributes[$z] = 'class="text-center"';
+                            }
                         }
                     } else {
                         $gradebookTable->td_attributes = [
@@ -1021,7 +1023,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
 
                     if ($action == 'export_table') {
                         unset($gradebookTable->td_attributes[7]);
-                    }
+                    }*/
                 }
 
                 $table = $gradebookTable->return_table();

@@ -27,7 +27,7 @@ $doc_url = $_GET['file'];
 $doc_url = str_replace('///', '&', $doc_url);
 //still a space present? it must be a '+' (that got replaced by mod_rewrite)
 $doc_url = str_replace(' ', '+', $doc_url);
-$doc_url = str_replace('/..', '', $doc_url); //echo $doc_url;
+$doc_url = str_replace('/..', '', $doc_url);
 
 $tbl_forum_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
 $tbl_forum_post = Database::get_course_table(TABLE_FORUM_POST);
@@ -70,17 +70,17 @@ if ($forum_thread_visibility == 1 && $forum_forum_visibility == 1) {
         $full_file_name,
         api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/upload/forum/'
     )) {
-            // launch event
-            Event::event_download($doc_url);
+        // launch event
+        Event::event_download($doc_url);
 
-            $result = DocumentManager::file_send_for_download(
-                $full_file_name,
-                true,
-                $row['filename']
-            );
+        $result = DocumentManager::file_send_for_download(
+            $full_file_name,
+            true,
+            $row['filename']
+        );
 
-            if ($result === false) {
-                api_not_allowed(true);
+        if ($result === false) {
+            api_not_allowed(true);
         }
     }
 }

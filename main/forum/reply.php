@@ -158,7 +158,6 @@ $logInfo = [
     'tool_id' => $forumId,
     'tool_id_detail' => $threadId,
     'action' => !empty($my_action) ? $my_action : 'reply',
-    'action_details' => '',
 ];
 Event::registerLog($logInfo);
 

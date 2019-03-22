@@ -57,7 +57,6 @@ if (!api_is_allowed_to_edit(false, true) &&
 
 $course_id = api_get_course_int_id();
 
-
 $table_posts = Database::get_course_table(TABLE_FORUM_POST);
 $table_users = Database::get_main_table(TABLE_MAIN_USER);
 

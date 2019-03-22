@@ -177,7 +177,7 @@ if (isset($_GET['action'])) {
 
 if (isset($_GET['editres'])) {
     $edit_res_xml = Security::remove_XSS($_GET['editres']);
-    $resultedit = Result :: load($edit_res_xml);
+    $resultedit = Result::load($edit_res_xml);
     $edit_res_form = new EvalForm(
         EvalForm::TYPE_RESULT_EDIT,
         $eval[0],

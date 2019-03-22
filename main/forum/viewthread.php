@@ -28,6 +28,7 @@ $my_search = null;
 
 $forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : 0;
 $threadId = isset($_GET['thread']) ? (int) $_GET['thread'] : 0;
+
 /* MAIN DISPLAY SECTION */
 /* Retrieving forum and forum category information */
 
@@ -83,7 +84,7 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
-$currentUrl = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.$forumId.'&'.api_get_cidreq().'&thread='.intval($threadId);
+$currentUrl = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.$forumId.'&'.api_get_cidreq().'&thread='.$threadId;
 
 switch ($my_action) {
     case 'delete':
@@ -128,10 +129,11 @@ switch ($my_action) {
         exit;
         break;
     case 'ask_revision':
-        $postId = isset($_GET['post_id']) ? $_GET['post_id'] : 0;
-
-        $result = savePostRevision($postId, $current_forum, $current_thread);
-        Display::addFlash(Display::return_message(get_lang('Saved')));
+        if (api_get_configuration_value('allow_forum_post_revisions')) {
+            $postId = isset($_GET['post_id']) ? $_GET['post_id'] : 0;
+            $result = savePostRevision($postId);
+            Display::addFlash(Display::return_message(get_lang('Saved')));
+        }
         header('Location: '.$currentUrl);
         exit;
         break;
@@ -151,7 +153,7 @@ if (!empty($groupId)) {
         'name' => Security::remove_XSS($current_forum['forum_title']),
     ];
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.$forumId.'&'.api_get_cidreq().'&thread='.intval($threadId),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.$forumId.'&'.api_get_cidreq().'&thread='.$threadId,
         'name' => Security::remove_XSS($current_thread['thread_title']),
     ];
 } else {
@@ -187,10 +189,10 @@ if (!empty($groupId)) {
 if (!api_is_allowed_to_edit(false, true) &&
     ($current_forum['visibility'] == 0 || $current_thread['visibility'] == 0)
 ) {
-    api_not_allowed(false);
+    api_not_allowed();
 }
-
-    increase_thread_view($threadId);
+// this increases the number of times the thread has been viewed
+increase_thread_view($threadId);
 
 if ($origin == 'learnpath') {
     $template = new Template('', false, false, true, true, false);
@@ -200,7 +202,7 @@ if ($origin == 'learnpath') {
 
 $actions = '<span style="float:right;">'.search_link().'</span>';
 if ($origin != 'learnpath') {
-        $actions .= '<a href="'.$forumUrl.'viewforum.php?forum='.$forumId.'&'.api_get_cidreq().'">'
+    $actions .= '<a href="'.$forumUrl.'viewforum.php?forum='.$forumId.'&'.api_get_cidreq().'">'
         .Display::return_icon('back.png', get_lang('BackToForum'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 
@@ -217,16 +219,15 @@ if (($current_forum_category &&
     if ($_user['user_id'] || ($current_forum['allow_anonymous'] == 1 && !$_user['user_id'])) {
         // reply link
         if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
-                $actions .= '<a href="'.$forumUrl.'reply.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='
-                    .intval($threadId).'&action=replythread">'
+            $actions .= '<a href="'.$forumUrl.'reply.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='
+                .$threadId.'&action=replythread">'
                 .Display::return_icon('reply_thread.png', get_lang('ReplyToThread'), '', ICON_SIZE_MEDIUM)
                 .'</a>';
         }
         // new thread link
         if ((
             api_is_allowed_to_edit(false, true) &&
-            !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId)
-            ) ||
+            !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId)) ||
             ($current_forum['allow_new_threads'] == 1 && isset($_user['user_id'])) ||
             ($current_forum['allow_new_threads'] == 1 && !isset($_user['user_id']) && $current_forum['allow_anonymous'] == 1)
         ) {
@@ -237,20 +238,6 @@ if (($current_forum_category &&
             }
         }
     }
-}
-
-// The different views of the thread.
-if ($origin != 'learnpath') {
-    /*$actions .= '<a href="'.$forumUrl.'viewthread.php?'.api_get_cidreq().'&'.api_get_cidreq()
-                .'&forum='.intval($forumId).'&thread='.intval($threadId)
-        .'&search='.Security::remove_XSS(urlencode($my_search));
-    echo $my_url.'&view=flat">'
-        .Display::return_icon('forum_listview.png', get_lang('FlatView'), null, ICON_SIZE_MEDIUM)
-        .'</a>';
-    /*
-    echo $my_url.'&view=nested">'
-        .Display::return_icon('forum_nestedview.png', get_lang('NestedView'), null, ICON_SIZE_MEDIUM)
-        .'</a>';*/
 }
 
 $template->assign('forum_actions', $actions);
@@ -637,6 +624,17 @@ foreach ($posts as $post) {
         $post['current'] = true;
     }
 
+    // Replace Re: with an icon
+    $search = [
+        get_lang('ReplyShort'),
+        'Re:',
+        'RE:',
+        'AW:',
+        'Aw:',
+    ];
+    $replace = '<span>'.Display::returnFontAwesomeIcon('mail-reply').'</span>';
+    $post['post_title'] = str_replace($search, $replace, $post['post_title']);
+
     // The post title
     $titlePost = Display::tag('h3', $post['post_title'], ['class' => 'forum_post_title']);
     $post['post_title'] = '<a name="post_id_'.$post['post_id'].'"></a>';
@@ -674,7 +672,6 @@ foreach ($posts as $post) {
     // The post has been displayed => it can be removed from the what's new array
     unset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$post['post_id']]);
     unset($_SESSION['whatsnew_post_info'][$current_forum['forum_id']][$current_thread['thread_id']][$post['post_id']]);
-
     $count++;
 }
 

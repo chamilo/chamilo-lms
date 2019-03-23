@@ -121,7 +121,7 @@ foreach ($sales as $sale) {
         'id' => $sale['id'],
         'reference' => $sale['reference'],
         'status' => $sale['status'],
-        'date' => api_format_date($sale['date'], DATE_TIME_FORMAT_LONG_24H),
+        'date' => api_convert_and_format_date($sale['date'], DATE_TIME_FORMAT_LONG_24H),
         'currency' => $sale['iso_code'],
         'price' => $sale['price'],
         'product_name' => $sale['product_name'],

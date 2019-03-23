@@ -48,7 +48,7 @@ foreach ($servicesSales as $sale) {
         'id' => $sale['id'],
         'reference' => $sale['reference'],
         'status' => $sale['status'],
-        'date' => api_format_date($sale['buy_date'], DATE_TIME_FORMAT_LONG_24H),
+        'date' => api_convert_and_format_date($sale['buy_date'], DATE_TIME_FORMAT_LONG_24H),
         'currency' => $sale['currency'],
         'price' => $sale['price'],
         'service_type' => $sale['service']['applies_to'],

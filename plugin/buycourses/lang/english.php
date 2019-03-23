@@ -49,6 +49,7 @@ $strings['PayoutStatusCompleted'] = "Payment completed";
 $strings['PayoutsTotalPending'] = "Pending payments:";
 $strings['PayoutsTotalCanceled'] = "Cancelled payments:";
 $strings['PayoutsTotalCompleted'] = "Completed payments:";
+$strings['Total'] = "Total";
 $strings['TotalAmount'] = "Total amount:";
 $strings['CourseListOnSale'] = "List of courses on sale";
 $strings['AvailableCourses'] = "Available Courses";

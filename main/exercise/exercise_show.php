@@ -288,7 +288,7 @@ if ($origin == 'learnpath' && !isset($_GET['fb_type'])) {
     $show_results = false;
 }
 
-if ($is_allowedToEdit && in_array($action, ['qualify', 'edit'])) {
+if ($is_allowedToEdit && in_array($action, ['qualify', 'edit', 'export'])) {
     $show_results = true;
 }
 
@@ -727,7 +727,6 @@ foreach ($questionList as $questionId) {
         if ($isBossOfStudent) {
             $isFeedbackAllowed = false;
         }
-
         $marksname = '';
         if ($isFeedbackAllowed && $action != 'export') {
             $name = 'fckdiv'.$questionId;

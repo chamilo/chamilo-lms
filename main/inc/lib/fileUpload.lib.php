@@ -68,6 +68,10 @@ function get_document_title($name)
     $name = disable_dangerous_file($name);
     $ext = substr(strrchr($name, '.'), 0);
 
+    if (empty($ext)) {
+        return substr($name, 0, strlen($name));
+    }
+
     return substr($name, 0, strlen($name) - strlen(strstr($name, $ext)));
 }
 

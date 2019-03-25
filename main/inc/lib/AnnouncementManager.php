@@ -1337,7 +1337,7 @@ class AnnouncementManager
     public static function get_attachment($announcementId)
     {
         $table = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
-        $announcementId = intval($announcementId);
+        $announcementId = (int) $announcementId;
         $courseId = api_get_course_int_id();
         $row = [];
         $sql = 'SELECT id, path, filename, comment 

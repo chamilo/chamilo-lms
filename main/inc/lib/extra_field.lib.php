@@ -1964,7 +1964,7 @@ class ExtraField extends Model
         $form = new FormValidator($this->type.'_field', 'post', $url);
 
         $form->addElement('hidden', 'type', $this->type);
-        $id = isset($_GET['id']) ? intval($_GET['id']) : null;
+        $id = isset($_GET['id']) ? (int) $_GET['id'] : null;
         $form->addElement('hidden', 'id', $id);
 
         // Setting the form elements

@@ -237,7 +237,10 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
         }
 
         // Percentage of the learning paths
-        $pl = $timeLp / $timeTotalCourse;
+        $pl = 0;
+        if (!empty($timeTotalCourse)) {
+            $pl = $timeLp / $timeTotalCourse;
+        }
 
         // Minimum time for each learning path
         $time_total = intval($pl * $tc * $perc / 100) * 60;

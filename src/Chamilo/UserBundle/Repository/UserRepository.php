@@ -656,7 +656,7 @@ class UserRepository extends EntityRepository
             'ChamiloCoreBundle:GradebookResult' => 'userId',
             'ChamiloCoreBundle:TrackEDownloads' => 'downUserId',
         ];
-        // TrackELogin
+
         $maxResults = 1000;
         $trackResults = [];
         foreach ($checkEntities as $entity => $field) {
@@ -682,7 +682,7 @@ class UserRepository extends EntityRepository
             } else {
                 $criteria = [
                     $field => $userId,
-        ];
+                ];
                 $result = $em->getRepository($entity)->findBy($criteria);
             }
             $trackResults[$entity] = $result;

@@ -815,7 +815,7 @@ if (is_array($mainQuestionList)) {
             $answerType,
             $session_id,
             $question['exerciseId'],
-                $objExercise
+            $objExercise
         ).'&nbsp;'.
         get_action_icon_for_question(
             $actionIcon2,

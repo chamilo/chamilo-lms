@@ -47,7 +47,7 @@ switch ($action) {
                 exit;
             }
         } elseif ($is_allowed_to_edit ||
-            DocumentManager::is_my_shared_folder(api_get_user_id(), $_POST['curdirpath'], api_get_session_id())
+            DocumentManager::is_my_shared_folder(api_get_user_id(), $_REQUEST['curdirpath'], api_get_session_id())
         ) {
             // ??
         } else {

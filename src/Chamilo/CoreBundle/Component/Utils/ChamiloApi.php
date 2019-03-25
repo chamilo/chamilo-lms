@@ -336,7 +336,7 @@ class ChamiloApi
     }
 
     /**
-     * Get the local time for the midnight
+     * Get the local time for the midnight.
      *
      * @param string|null $utcTime Optional. The time to ve converted.
      *                             See api_get_local_time.

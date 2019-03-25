@@ -141,7 +141,7 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
                 HTML_QuickForm_input::toHtml().
                 ''.
                 $this->_text .
-                '</label>&nbsp;&nbsp;
+                '</label>
             </div>';
             return $label;
         }

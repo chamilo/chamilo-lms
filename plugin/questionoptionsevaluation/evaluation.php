@@ -49,7 +49,7 @@ if ($form->validate()) {
     $values = $form->exportValues();
     $formula = isset($values['formula']) ? (int) $values['formula'] : 0;
 
-    $nbrQuestions = count($exercise->questionList);
+    $nbrQuestions = count($exercise->get_validated_question_list());
 
     foreach ($exercise->questionList as $questionId) {
         $question = Question::read($questionId);

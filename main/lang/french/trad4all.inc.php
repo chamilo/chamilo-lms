@@ -8315,4 +8315,6 @@ $SessionsPlanCalendar = "Calendrier de planification des sessions";
 $QuizQuestionsLimitPerDay = "Limite de questions par jour";
 $QuizQuestionsLimitPerDayComment = "Si ce paramètre est configuré à plus de zéro, il empêchera l'utilisateur d'entrer dans un exercice qui a plus de questions que ce qui lui reste. Par exemple, si la limite est de 50 et que l'utilisateur a déjà passé 2 exercices de 20 questions, le système ne permettra pas à l'utilisateur de commencer un 3ème exercice de 20 questions (20+20+20=60 > 50). Il pourra cependant encore commencer un exercice de 10 questions (20+20+10=50).";
 $QuizQuestionsLimitPerDayXReached = "Désolé, vous avez atteint la quantité maximale de questions (%s) par jour. Réessayez demain.";
+$VoteLike = "J'aime";
+$VoteDislike = "Je n'aime pas";
 ?>

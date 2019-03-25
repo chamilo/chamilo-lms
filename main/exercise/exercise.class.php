@@ -2123,7 +2123,7 @@ class Exercise
                 '<div id="hidden_random" style="display:'.$displayRandom.'">'
             );
             // Number of random question.
-            $max = ($this->id > 0) ? $this->selectNbrQuestions() : 10;
+            $max = ($this->id > 0) ? $this->getQuestionCount() : 10;
             $option = range(0, $max);
             $option[0] = get_lang('No');
             $option[-1] = get_lang('AllQuestionsShort');
@@ -2384,11 +2384,11 @@ class Exercise
         // defaults
         if ($type == 'full') {
             if ($this->id > 0) {
-                if ($this->random > $this->selectNbrQuestions()) {
-                    $defaults['randomQuestions'] = $this->selectNbrQuestions();
-                } else {
+                //if ($this->random > $this->selectNbrQuestions()) {
+                //    $defaults['randomQuestions'] = $this->selectNbrQuestions();
+                //} else {
                     $defaults['randomQuestions'] = $this->random;
-                }
+                //}
 
                 $defaults['randomAnswers'] = $this->getRandomAnswers();
                 $defaults['exerciseType'] = $this->selectType();

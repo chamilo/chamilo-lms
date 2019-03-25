@@ -337,7 +337,8 @@ B. Answer 2
 C. Answer 3
 D. Answer 4
 ANSWER: D
-ANSWER_EXPLANATION: this is an optional feedback comment that will appear next to the correct answer.";
+ANSWER_EXPLANATION: this is an optional feedback comment that will appear next to the correct answer.
+SCORE: 20";
 $ImportAikenQuizExplanation = "The Aiken format comes in a simple text (.txt) file, with several question blocks, each separated by a blank line. The first line is the question, the answer lines are prefixed by a letter and a dot, and the correct answer comes next with the ANSWER: prefix. See example below.";
 $ExerciseAikenErrorNoAnswerOptionGiven = "The imported file has at least one question without any answer (or the answers do not include the required prefix letter). Please make sure each question has at least one answer and that it is prefixed by a letter and a dot or a parenthesis, like this: A. answer one";
 $ExerciseAikenErrorNoCorrectAnswerDefined = "The imported file includes at least one question without any correct answer defined. Please make sure all questions include the ANSWER: [Letter] line.";

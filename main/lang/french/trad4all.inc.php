@@ -338,8 +338,8 @@ B. Réponse 2
 C. Réponse 3
 D. Réponse 4
 ANSWER: D
-
-ANSWER_EXPLANATION: C'est un commentaire facultatif de retour qui apparaîtra à côté de la bonne réponse.";
+ANSWER_EXPLANATION: C'est un commentaire facultatif de retour qui apparaîtra à côté de la bonne réponse.
+SCORE: 20";
 $ImportAikenQuizExplanation = "Le format Aiken est un fichier (.txt) avec un texte simple, avec plusieurs blocs de questions, chacune séparée par une ligne blanche. La première ligne est la question, les lignes de réponse sont préfixés par une lettre et un point, et la bonne réponse vient avec le préfixe 'ANSWER'.
 Voir l'exemple ci-dessous.";
 $ExerciseAikenErrorNoAnswerOptionGiven = "Le fichier importé comporte au moins une question sans réponse (ou les réponses ne comprennent pas la lettre de préfixe requis). Assurez-vous que chaque question a au moins une réponse et qu'elle est précédée par une lettre et un point ou une parenthèse, comme ceci: 

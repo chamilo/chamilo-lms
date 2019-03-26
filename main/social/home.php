@@ -101,7 +101,7 @@ $social_search_block = Display::panel(
 $social_group_block = SocialManager::getGroupBlock($user_id);
 
 // My friends
-$friend_html = SocialManager::listMyFriendsBlock($user_id, '');
+$friend_html = SocialManager::listMyFriendsBlock($user_id);
 
 // Block Social Sessions
 $social_session_block = null;

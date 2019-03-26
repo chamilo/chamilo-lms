@@ -2387,7 +2387,7 @@ class Exercise
                 //if ($this->random > $this->selectNbrQuestions()) {
                 //    $defaults['randomQuestions'] = $this->selectNbrQuestions();
                 //} else {
-                    $defaults['randomQuestions'] = $this->random;
+                $defaults['randomQuestions'] = $this->random;
                 //}
 
                 $defaults['randomAnswers'] = $this->getRandomAnswers();

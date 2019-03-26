@@ -3083,117 +3083,6 @@ class SocialManager extends UserManager
     }
 
     /**
-     * Returns the formatted header message post.
-     *
-     * @param int   $authorInfo
-     * @param int   $receiverInfo
-     * @param array $message      Message data
-     *
-     * @return string $html       The formatted header message post
-     */
-    private static function headerMessagePost($authorInfo, $receiverInfo, $message)
-    {
-        $currentUserId = api_get_user_id();
-        $iconStatus = null;
-        $authorId = (int) $authorInfo['user_id'];
-        $receiverId = (int) $receiverInfo['user_id'];
-        $userStatus = (int) $authorInfo['status'];
-        $urlImg = api_get_path(WEB_IMG_PATH);
-        $isAdmin = self::is_admin($authorId);
-
-        if ($userStatus === 5) {
-            if ($authorInfo['has_certificates']) {
-                $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_graduated.svg" width="22px" height="22px">';
-            } else {
-                $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_student.svg" width="22px" height="22px">';
-            }
-        } else {
-            if ($userStatus === 1) {
-                if ($isAdmin) {
-                    $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_admin.svg" width="22px" height="22px">';
-                } else {
-                    $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_teacher.svg" width="22px" height="22px">';
-                }
-            }
-        }
-
-        $date = Display::dateToStringAgoAndLongDate($message['send_date']);
-        $avatarAuthor = $authorInfo['avatar'];
-        $urlAuthor = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$authorId;
-        $nameCompleteAuthor = $authorInfo['complete_name'];
-
-        $urlReceiver = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$receiverId;
-        $nameCompleteReceiver = $receiverInfo['complete_name'];
-
-        $htmlReceiver = '';
-        if ($authorId !== $receiverId) {
-            $htmlReceiver = ' > <a href="'.$urlReceiver.'">'.$nameCompleteReceiver.'</a> ';
-        }
-
-        if (!empty($message['group_info'])) {
-            $htmlReceiver = ' > <a href="'.$message['group_info']['url'].'">'.$message['group_info']['name'].'</a> ';
-        }
-        $canEdit = ($currentUserId == $authorInfo['user_id'] || $currentUserId == $receiverInfo['user_id']) && empty($message['group_info']);
-
-        if (!empty($message['thread_id'])) {
-            $htmlReceiver = ' > <a href="'.$message['thread_url'].'">'.$message['forum_title'].'</a> ';
-            $canEdit = false;
-        }
-
-        $postAttachment = self::getPostAttachment($message);
-
-        $html = '';
-        $html .= '<div class="top-mediapost" >';
-        $html .= '<div class="pull-right btn-group btn-group-sm">';
-
-        $html .= MessageManager::getLikesButton(
-            $message['id'],
-            $currentUserId,
-            !empty($message['group_info']['id']) ? (int) $message['group_info']['id'] : 0
-        );
-
-        if ($canEdit) {
-            $htmlDelete = Display::url(
-                Display::returnFontAwesomeIcon('trash', '', true),
-                'javascript:void(0)',
-                [
-                    'id' => 'message_'.$message['id'],
-                    'title' => get_lang('SocialMessageDelete'),
-                    'onclick' => 'deleteMessage('.$message['id'].')',
-                    'class' => 'btn btn-default',
-                ]
-            );
-
-            $html .= $htmlDelete;
-        }
-        $html .= '</div>';
-
-        $html .= '<div class="user-image" >';
-        $html .= '<a href="'.$urlAuthor.'">
-                    <img class="avatar-thumb" src="'.$avatarAuthor.'" alt="'.$nameCompleteAuthor.'"></a>';
-        $html .= '</div>';
-        $html .= '<div class="user-data">';
-        $html .= $iconStatus;
-        $html .= '<div class="username"><a href="'.$urlAuthor.'">'.$nameCompleteAuthor.'</a>'.$htmlReceiver.'</div>';
-        $html .= '<div class="post-date">'.$date.'</div>';
-        $html .= '</div>';
-        $html .= '<div class="msg-content">';
-        if (!empty($postAttachment)) {
-            $html .= '<div class="post-attachment thumbnail">';
-            $html .= $postAttachment;
-            $html .= '</div>';
-        }
-        $html .= '<div>'.Security::remove_XSS($message['content']).'</div>';
-        $html .= '</div>';
-        $html .= '</div>'; // end mediaPost
-
-        // Popularity post functionality
-        $html .= '<div class="popularity-mediapost"></div>';
-
-        return $html;
-    }
-
-    /**
      * @param int $userId
      *
      * @return string
@@ -3329,5 +3218,116 @@ class SocialManager extends UserManager
         }
 
         return $social_group_block;
+    }
+
+    /**
+     * Returns the formatted header message post.
+     *
+     * @param int   $authorInfo
+     * @param int   $receiverInfo
+     * @param array $message      Message data
+     *
+     * @return string $html       The formatted header message post
+     */
+    private static function headerMessagePost($authorInfo, $receiverInfo, $message)
+    {
+        $currentUserId = api_get_user_id();
+        $iconStatus = null;
+        $authorId = (int) $authorInfo['user_id'];
+        $receiverId = (int) $receiverInfo['user_id'];
+        $userStatus = (int) $authorInfo['status'];
+        $urlImg = api_get_path(WEB_IMG_PATH);
+        $isAdmin = self::is_admin($authorId);
+
+        if ($userStatus === 5) {
+            if ($authorInfo['has_certificates']) {
+                $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_graduated.svg" width="22px" height="22px">';
+            } else {
+                $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_student.svg" width="22px" height="22px">';
+            }
+        } else {
+            if ($userStatus === 1) {
+                if ($isAdmin) {
+                    $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_admin.svg" width="22px" height="22px">';
+                } else {
+                    $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_teacher.svg" width="22px" height="22px">';
+                }
+            }
+        }
+
+        $date = Display::dateToStringAgoAndLongDate($message['send_date']);
+        $avatarAuthor = $authorInfo['avatar'];
+        $urlAuthor = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$authorId;
+        $nameCompleteAuthor = $authorInfo['complete_name'];
+
+        $urlReceiver = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$receiverId;
+        $nameCompleteReceiver = $receiverInfo['complete_name'];
+
+        $htmlReceiver = '';
+        if ($authorId !== $receiverId) {
+            $htmlReceiver = ' > <a href="'.$urlReceiver.'">'.$nameCompleteReceiver.'</a> ';
+        }
+
+        if (!empty($message['group_info'])) {
+            $htmlReceiver = ' > <a href="'.$message['group_info']['url'].'">'.$message['group_info']['name'].'</a> ';
+        }
+        $canEdit = ($currentUserId == $authorInfo['user_id'] || $currentUserId == $receiverInfo['user_id']) && empty($message['group_info']);
+
+        if (!empty($message['thread_id'])) {
+            $htmlReceiver = ' > <a href="'.$message['thread_url'].'">'.$message['forum_title'].'</a> ';
+            $canEdit = false;
+        }
+
+        $postAttachment = self::getPostAttachment($message);
+
+        $html = '';
+        $html .= '<div class="top-mediapost" >';
+        $html .= '<div class="pull-right btn-group btn-group-sm">';
+
+        $html .= MessageManager::getLikesButton(
+            $message['id'],
+            $currentUserId,
+            !empty($message['group_info']['id']) ? (int) $message['group_info']['id'] : 0
+        );
+
+        if ($canEdit) {
+            $htmlDelete = Display::url(
+                Display::returnFontAwesomeIcon('trash', '', true),
+                'javascript:void(0)',
+                [
+                    'id' => 'message_'.$message['id'],
+                    'title' => get_lang('SocialMessageDelete'),
+                    'onclick' => 'deleteMessage('.$message['id'].')',
+                    'class' => 'btn btn-default',
+                ]
+            );
+
+            $html .= $htmlDelete;
+        }
+        $html .= '</div>';
+
+        $html .= '<div class="user-image" >';
+        $html .= '<a href="'.$urlAuthor.'">
+                    <img class="avatar-thumb" src="'.$avatarAuthor.'" alt="'.$nameCompleteAuthor.'"></a>';
+        $html .= '</div>';
+        $html .= '<div class="user-data">';
+        $html .= $iconStatus;
+        $html .= '<div class="username"><a href="'.$urlAuthor.'">'.$nameCompleteAuthor.'</a>'.$htmlReceiver.'</div>';
+        $html .= '<div class="post-date">'.$date.'</div>';
+        $html .= '</div>';
+        $html .= '<div class="msg-content">';
+        if (!empty($postAttachment)) {
+            $html .= '<div class="post-attachment thumbnail">';
+            $html .= $postAttachment;
+            $html .= '</div>';
+        }
+        $html .= '<div>'.Security::remove_XSS($message['content']).'</div>';
+        $html .= '</div>';
+        $html .= '</div>'; // end mediaPost
+
+        // Popularity post functionality
+        $html .= '<div class="popularity-mediapost"></div>';
+
+        return $html;
     }
 }

@@ -78,7 +78,7 @@ if (api_get_setting('profile', 'picture') == 'true') {
 
 SocialManager::handlePosts(api_get_self());
 
-$threadList = SocialManager::getThreadList();
+$threadList = SocialManager::getThreadList($user_id);
 $threadIdList = [];
 if (!empty($threadList)) {
     $threadIdList = array_column($threadList, 'id');

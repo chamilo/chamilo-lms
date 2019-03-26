@@ -3030,9 +3030,11 @@ class SocialManager extends UserManager
     }
 
     /**
+     * @param int $userId
+     *
      * @return array
      */
-    public static function getThreadList()
+    public static function getThreadList($userId)
     {
         $forumCourseId = api_get_configuration_value('global_forums_course_id');
 
@@ -3041,7 +3043,7 @@ class SocialManager extends UserManager
         $threads = [];
         if (!empty($forumCourseId)) {
             $courseInfo = api_get_course_info_by_id($forumCourseId);
-            getNotificationsPerUser(api_get_user_id(), true, $forumCourseId);
+            getNotificationsPerUser($userId, true, $forumCourseId);
             $notification = Session::read('forum_notification');
             Session::erase('forum_notification');
 
@@ -3195,7 +3197,7 @@ class SocialManager extends UserManager
      */
     public static function getGroupBlock($user_id)
     {
-        $threadList = self::getThreadList();
+        $threadList = self::getThreadList($user_id);
         $userGroup = new UserGroup();
 
         $forumCourseId = api_get_configuration_value('global_forums_course_id');

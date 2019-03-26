@@ -2797,7 +2797,7 @@ class MessageManager
             Display::returnFontAwesomeIcon('thumbs-up', '', true)
                 .PHP_EOL.'<span>'.$countLikes['likes'].'</span>',
             [
-                'title' => get_lang('Like'),
+                'title' => get_lang('VoteLike'),
                 'class' => 'btn btn-default social-like '.($countLikes['user_liked'] ? 'disabled' : ''),
                 'data-status' => 'like',
                 'data-message' => $messageId,
@@ -2809,7 +2809,7 @@ class MessageManager
             Display::returnFontAwesomeIcon('thumbs-down', '', true)
             .PHP_EOL.'<span>'.$countLikes['dislikes'].'</span>',
             [
-                'title' => get_lang('Dislike'),
+                'title' => get_lang('VoteDislike'),
                 'class' => 'btn btn-default social-like '.($countLikes['user_disliked'] ? 'disabled' : ''),
                 'data-status' => 'dislike',
                 'data-message' => $messageId,

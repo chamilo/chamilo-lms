@@ -190,12 +190,6 @@ class ExerciseShowFunctions
                 echo Security::remove_XSS($answer);
             }
             echo '</td>';
-
-            if (!api_is_allowed_to_edit(null, true) && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
-                echo '<td>';
-                $comm = Event::get_comments($id, $questionId);
-                echo '</td>';
-            }
             echo '</tr>';
         }
     }
@@ -413,9 +407,6 @@ class ExerciseShowFunctions
                 echo $comment;
             }
             echo '</td>';
-            if ($ans == 1) {
-                $comm = Event::get_comments($id, $questionId);
-            }
         } else {
             echo '<td>&nbsp;</td>';
         }
@@ -708,9 +699,6 @@ class ExerciseShowFunctions
                 echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br($answerComment).'</span>';
             }
             echo '</td>';
-            if ($ans == 1) {
-                $comm = Event::get_comments($id, $questionId);
-            }
         } else {
             echo '<td>&nbsp;</td>';
         }

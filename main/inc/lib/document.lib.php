@@ -498,7 +498,7 @@ class DocumentManager
      */
     public static function getSessionFolderFilters($path, $sessionId)
     {
-        $sessionId = intval($sessionId);
+        $sessionId = (int) $sessionId;
         $condition = null;
 
         if (!empty($sessionId)) {

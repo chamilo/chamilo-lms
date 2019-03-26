@@ -5292,8 +5292,9 @@ EOT;
      * @param int $courseId
      * @param int $sessionId
      *
-     * @return bool
      * @throws \Doctrine\ORM\Query\QueryException
+     *
+     * @return bool
      */
     public static function isQuestionsLimitPerDayReached($userId, $numberOfQuestions, $courseId, $sessionId)
     {

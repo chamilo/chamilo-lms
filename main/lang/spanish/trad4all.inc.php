@@ -342,7 +342,8 @@ B. Respuesta 2
 C. Respuesta 3
 D. Respuesta 4
 ANSWER: D
-ANSWER_EXPLANATION: Este es un texto opcional de retroalimentación que aparecerá al costado de la respuesta correcta.";
+ANSWER_EXPLANATION: Este es un texto opcional de retroalimentación que aparecerá al costado de la respuesta correcta.
+SCORE: 20";
 $ImportAikenQuizExplanation = "El formato Aiken es un simple formato texto (archivo .txt) con varios bloques de preguntas, cada bloque separado por una línea blanca. La primera línea es la pregunta. Las líneas de respuestas tienen un prefijo de letra y punto, y la respuesta correcta sigue, con el prefijo 'ANSWER:'. Ver ejemplo a continuación.";
 $ExerciseAikenErrorNoAnswerOptionGiven = "El archivo importado tiene por lo menos una pregunta sin respuesta (o las respuestas no incluyen la letra de prefijo requerida). Asegúrese de que cada pregunta tengo por lo mínimo una respuesta y que esté prefijada por una letra y un punto o una paréntesis, como sigue: A. Respuesta uno";
 $ExerciseAikenErrorNoCorrectAnswerDefined = "El archivo importado contiene por lo menos una pregunta sin ninguna respuesta definida. Asegúrese que todas las preguntas tienen una línea tipo ANSWER: [letra], y vuelva a intentar.";
@@ -8408,4 +8409,6 @@ $SessionsPlanCalendar = "Calendario de planificación de sesiones";
 $QuizQuestionsLimitPerDay = "Límite de preguntas por día";
 $QuizQuestionsLimitPerDayComment = "Si está opción tiene un valor superior a cero, prohibirá el ingreso a un ejercicio que, en combinación con los ejercicios anteriores, supera el límite de preguntas diarias. Por ejemplo, si el límite fuera de 50 preguntas por día y un alumno hubiese pasado dos ejercicios de 20 preguntas cada uno, no lo dejaría ingresar a un nuevo ejercicio de 20 preguntas (20+20+20=60 > 50). Sin embargo, lo dejaría entrar en un ejercicio de 10 preguntas todavía (20+20+10=50).";
 $QuizQuestionsLimitPerDayXReached = "Lo sentimos, ha alcanzado la cantidad máxima de preguntas (%s) por hoy. Vuelva a intentarlo mañana.";
+$VoteLike = "Me gusta";
+$VoteDislike = "No me gusta";
 ?>

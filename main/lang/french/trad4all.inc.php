@@ -338,8 +338,8 @@ B. Réponse 2
 C. Réponse 3
 D. Réponse 4
 ANSWER: D
-
-ANSWER_EXPLANATION: C'est un commentaire facultatif de retour qui apparaîtra à côté de la bonne réponse.";
+ANSWER_EXPLANATION: C'est un commentaire facultatif de retour qui apparaîtra à côté de la bonne réponse.
+SCORE: 20";
 $ImportAikenQuizExplanation = "Le format Aiken est un fichier (.txt) avec un texte simple, avec plusieurs blocs de questions, chacune séparée par une ligne blanche. La première ligne est la question, les lignes de réponse sont préfixés par une lettre et un point, et la bonne réponse vient avec le préfixe 'ANSWER'.
 Voir l'exemple ci-dessous.";
 $ExerciseAikenErrorNoAnswerOptionGiven = "Le fichier importé comporte au moins une question sans réponse (ou les réponses ne comprennent pas la lettre de préfixe requis). Assurez-vous que chaque question a au moins une réponse et qu'elle est précédée par une lettre et un point ou une parenthèse, comme ceci: 
@@ -8315,4 +8315,6 @@ $SessionsPlanCalendar = "Calendrier de planification des sessions";
 $QuizQuestionsLimitPerDay = "Limite de questions par jour";
 $QuizQuestionsLimitPerDayComment = "Si ce paramètre est configuré à plus de zéro, il empêchera l'utilisateur d'entrer dans un exercice qui a plus de questions que ce qui lui reste. Par exemple, si la limite est de 50 et que l'utilisateur a déjà passé 2 exercices de 20 questions, le système ne permettra pas à l'utilisateur de commencer un 3ème exercice de 20 questions (20+20+20=60 > 50). Il pourra cependant encore commencer un exercice de 10 questions (20+20+10=50).";
 $QuizQuestionsLimitPerDayXReached = "Désolé, vous avez atteint la quantité maximale de questions (%s) par jour. Réessayez demain.";
+$VoteLike = "J'aime";
+$VoteDislike = "Je n'aime pas";
 ?>

@@ -78,17 +78,10 @@ if (api_get_setting('profile', 'picture') == 'true') {
 
 SocialManager::handlePosts(api_get_self());
 
-$threadList = SocialManager::getThreadList();
+$threadList = SocialManager::getThreadList($user_id);
 $threadIdList = [];
 if (!empty($threadList)) {
     $threadIdList = array_column($threadList, 'id');
-}
-
-$forumCourseId = api_get_configuration_value('global_forums_course_id');
-$myGroups = [];
-$courseInfo = null;
-if (!empty($forumCourseId)) {
-    $courseInfo = api_get_course_info_by_id($forumCourseId);
 }
 
 // Social Post Wall

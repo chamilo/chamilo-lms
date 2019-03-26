@@ -2399,7 +2399,7 @@ class SurveyUtil
         $link = self::generateFillSurveyLink($invitation_code, $_course, $sessionId);
 
         $text_link = '<a href="'.$link.'">'.get_lang('ClickHereToAnswerTheSurvey')."</a><br />\r\n<br />\r\n"
-            .get_lang('OrCopyPasteTheFollowingUrl')." <br />\r\n ".$link;
+            .get_lang('OrCopyPasteTheFollowingUrl')." <br /> \r\n <br /> \r\n ".$link;
 
         $replace_count = 0;
         $full_invitation_text = api_str_ireplace('**link**', $text_link, $invitation_text, $replace_count);

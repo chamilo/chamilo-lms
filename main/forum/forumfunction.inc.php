@@ -5787,7 +5787,7 @@ function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
  * @param int  $user_id the user_id of a user (default = 0 => the current user)
  * @param bool $force   force get the notification subscriptions (even if the information is already in the session
  *
- * @return array returns
+ * @return array
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  *
@@ -5803,18 +5803,16 @@ function getNotificationsPerUser($user_id = 0, $force = false, $course_id = 0)
     if (empty($course_id) || $course_id == -1) {
         return null;
     }
-    if ($user_id == 0) {
-        $user_id = api_get_user_id();
-    }
+
+    $user_id = empty($user_id) ? api_get_user_id() : (int) $user_id;
 
     if (!isset($_SESSION['forum_notification']) ||
         $_SESSION['forum_notification']['course'] != $course_id ||
         $force == true
     ) {
         $_SESSION['forum_notification']['course'] = $course_id;
-
         $sql = "SELECT * FROM $table_notification
-                WHERE c_id = $course_id AND user_id='".intval($user_id)."'";
+                WHERE c_id = $course_id AND user_id='".$user_id."'";
 
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {

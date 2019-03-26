@@ -1286,7 +1286,7 @@ if (empty($details)) {
                     $isSubscribed = CourseManager::is_user_subscribed_in_course(
                         $student_id,
                         $courseCodeItem,
-                            false
+                        false
                     );
                 } else {
                     $isSubscribed = CourseManager::is_user_subscribed_in_course(

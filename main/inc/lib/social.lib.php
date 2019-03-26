@@ -2315,6 +2315,7 @@ class SocialManager extends UserManager
     /**
      * @param int $user_id
      * @param $link_shared
+     * @param bool $showLinkToChat
      *
      * @return string
      */
@@ -2343,12 +2344,11 @@ class SocialManager extends UserManager
                 $name_user = api_get_person_name($friend['firstName'], $friend['lastName']);
                 $user_info_friend = api_get_user_info($friend['friend_user_id'], true);
 
+                $statusIcon = Display::return_icon('statusoffline.png', get_lang('Offline'));
+                $status = 0;
                 if (!empty($user_info_friend['user_is_online_in_chat'])) {
                     $statusIcon = Display::return_icon('statusonline.png', get_lang('Online'));
                     $status = 1;
-                } else {
-                    $statusIcon = Display::return_icon('statusoffline.png', get_lang('Offline'));
-                    $status = 0;
                 }
 
                 $friendAvatarMedium = UserManager::getUserPicture(

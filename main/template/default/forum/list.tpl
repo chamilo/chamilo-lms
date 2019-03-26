@@ -54,6 +54,9 @@
 
                 {% set panel_title %}
                     {{ item.title }}{{ item.icon_session }}
+                    {% for category_language_item in category_language_array %}
+                        <span class="flag-icon flag-icon-{{ languages[category_language_item | lower] }}"></span>
+                    {% endfor %}
                 {% endset %}
             {% else %}
                 {% set panel_title %}
@@ -61,6 +64,9 @@
                         <span class="open">{{ 'forum_blue.png'|img(32) }}</span>
                         {{ item.title }}{{ item.icon_session }}
                     </a>
+                    {% for category_language_item in category_language_array %}
+                        <span class="flag-icon flag-icon-{{ languages[category_language_item | lower] }}"></span>
+                    {% endfor %}
                     <div class="pull-right">
                         {{ item.tools  }}
                     </div>

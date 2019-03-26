@@ -2175,13 +2175,19 @@ class CourseRestorer
 
             // Fix correct answers
             if (in_array($question->quiz_type, [DRAGGABLE, MATCHING, MATCHING_DRAGGABLE])) {
-                $onlyAnswersFlip = array_flip($onlyAnswers);
                 foreach ($correctAnswers as $answer_id => $correct_answer) {
                     $params = [];
-                    if (isset($allAnswers[$correct_answer]) &&
-                        isset($onlyAnswersFlip[$allAnswers[$correct_answer]])
-                    ) {
-                        $params['correct'] = $onlyAnswersFlip[$allAnswers[$correct_answer]];
+
+                    if (isset($allAnswers[$correct_answer])) {
+                        $correct = '';
+                        foreach ($onlyAnswers as $key => $value) {
+                            if ($value == $allAnswers[$correct_answer]) {
+                                $correct = $key;
+                                break;
+                            }
+                        }
+
+                        $params['correct'] = $correct;
                         Database::update(
                             $table_ans,
                             $params,

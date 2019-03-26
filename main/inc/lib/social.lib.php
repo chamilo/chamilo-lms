@@ -3178,9 +3178,11 @@ class SocialManager extends UserManager
         $html .= '<div class="post-date">'.$date.'</div>';
         $html .= '</div>';
         $html .= '<div class="msg-content">';
-        $html .= '<div class="post-attachment thumbnail">';
-        $html .= $postAttachment;
-        $html .= '</div>';
+        if (!empty($postAttachment)) {
+            $html .= '<div class="post-attachment thumbnail">';
+            $html .= $postAttachment;
+            $html .= '</div>';
+        }
         $html .= '<div>'.Security::remove_XSS($message['content']).'</div>';
         $html .= '</div>';
         $html .= '</div>'; // end mediaPost

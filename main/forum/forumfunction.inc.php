@@ -5787,7 +5787,7 @@ function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
  * @param int  $user_id the user_id of a user (default = 0 => the current user)
  * @param bool $force   force get the notification subscriptions (even if the information is already in the session
  *
- * @return array returns
+ * @return array
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  *
@@ -5795,7 +5795,7 @@ function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
  *
  * @since May 2008, dokeos 1.8.5
  */
-function getNotificationsPerUser($user_id, $force = false, $course_id = 0)
+function getNotificationsPerUser($user_id = 0, $force = false, $course_id = 0)
 {
     // Database table definition
     $table_notification = Database::get_course_table(TABLE_FORUM_NOTIFICATION);

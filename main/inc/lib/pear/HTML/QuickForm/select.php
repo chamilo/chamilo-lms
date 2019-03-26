@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
  * Class to dynamically create an HTML SELECT
@@ -607,16 +606,13 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
         switch ($layout) {
             case FormValidator::LAYOUT_INLINE:
                 return '
-                <div class="input-group">
+                <div class="form-group {error_class}">
                     <label {label-for} >
                         <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                         {label}
-                    </label>     
-                </div>
-                <div class="input-group {error_class}">                               
-                    {element}                     
-                </div>
-                ';
+                    </label>                                          
+                    {element}   
+                </div>';
                 break;
             case FormValidator::LAYOUT_HORIZONTAL:
                 return '

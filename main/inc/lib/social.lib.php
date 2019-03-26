@@ -3192,12 +3192,13 @@ class SocialManager extends UserManager
     }
 
     /**
-     * @param int $user_id
+     * @param int $userId
+     *
      * @return string
      */
-    public static function getGroupBlock($user_id)
+    public static function getGroupBlock($userId)
     {
-        $threadList = self::getThreadList($user_id);
+        $threadList = self::getThreadList($userId);
         $userGroup = new UserGroup();
 
         $forumCourseId = api_get_configuration_value('global_forums_course_id');
@@ -3235,7 +3236,7 @@ class SocialManager extends UserManager
             }
         } else {
             // Load my groups
-            $results = $userGroup->get_groups_by_user($user_id,
+            $results = $userGroup->get_groups_by_user($userId,
                 [
                     GROUP_USER_PERMISSION_ADMIN,
                     GROUP_USER_PERMISSION_READER,

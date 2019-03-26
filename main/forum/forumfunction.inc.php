@@ -5795,7 +5795,7 @@ function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
  *
  * @since May 2008, dokeos 1.8.5
  */
-function getNotificationsPerUser($user_id = 0, $force = false, $course_id = 0)
+function getNotificationsPerUser($user_id, $force = false, $course_id = 0)
 {
     // Database table definition
     $table_notification = Database::get_course_table(TABLE_FORUM_NOTIFICATION);
@@ -5803,18 +5803,16 @@ function getNotificationsPerUser($user_id = 0, $force = false, $course_id = 0)
     if (empty($course_id) || $course_id == -1) {
         return null;
     }
-    if ($user_id == 0) {
-        $user_id = api_get_user_id();
-    }
+
+    $user_id = empty($user_id) ? api_get_user_id() : (int) $user_id;
 
     if (!isset($_SESSION['forum_notification']) ||
         $_SESSION['forum_notification']['course'] != $course_id ||
         $force == true
     ) {
         $_SESSION['forum_notification']['course'] = $course_id;
-
         $sql = "SELECT * FROM $table_notification
-                WHERE c_id = $course_id AND user_id='".intval($user_id)."'";
+                WHERE c_id = $course_id AND user_id='".$user_id."'";
 
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {

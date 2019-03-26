@@ -2315,6 +2315,7 @@ class SocialManager extends UserManager
     /**
      * @param int $user_id
      * @param $link_shared
+     * @param bool $showLinkToChat
      *
      * @return string
      */
@@ -2343,12 +2344,11 @@ class SocialManager extends UserManager
                 $name_user = api_get_person_name($friend['firstName'], $friend['lastName']);
                 $user_info_friend = api_get_user_info($friend['friend_user_id'], true);
 
+                $statusIcon = Display::return_icon('statusoffline.png', get_lang('Offline'));
+                $status = 0;
                 if (!empty($user_info_friend['user_is_online_in_chat'])) {
                     $statusIcon = Display::return_icon('statusonline.png', get_lang('Online'));
                     $status = 1;
-                } else {
-                    $statusIcon = Display::return_icon('statusoffline.png', get_lang('Offline'));
-                    $status = 0;
                 }
 
                 $friendAvatarMedium = UserManager::getUserPicture(
@@ -3030,9 +3030,11 @@ class SocialManager extends UserManager
     }
 
     /**
+     * @param int $userId
+     *
      * @return array
      */
-    public static function getThreadList()
+    public static function getThreadList($userId)
     {
         $forumCourseId = api_get_configuration_value('global_forums_course_id');
 
@@ -3041,7 +3043,7 @@ class SocialManager extends UserManager
         $threads = [];
         if (!empty($forumCourseId)) {
             $courseInfo = api_get_course_info_by_id($forumCourseId);
-            getNotificationsPerUser(api_get_user_id(), true, $forumCourseId);
+            getNotificationsPerUser($userId, true, $forumCourseId);
             $notification = Session::read('forum_notification');
             Session::erase('forum_notification');
 
@@ -3078,6 +3080,144 @@ class SocialManager extends UserManager
         }
 
         return $threads;
+    }
+
+    /**
+     * @param int $userId
+     *
+     * @return string
+     */
+    public static function getGroupBlock($userId)
+    {
+        $threadList = self::getThreadList($userId);
+        $userGroup = new UserGroup();
+
+        $forumCourseId = api_get_configuration_value('global_forums_course_id');
+        $courseInfo = null;
+        if (!empty($forumCourseId)) {
+            $courseInfo = api_get_course_info_by_id($forumCourseId);
+        }
+
+        $social_group_block = '';
+        if (!empty($courseInfo)) {
+            if (!empty($threadList)) {
+                $social_group_block .= '<div class="list-group">';
+                foreach ($threadList as $group) {
+                    $social_group_block .= ' <li class="list-group-item">';
+                    $social_group_block .= $group['name'];
+                    $social_group_block .= '</li>';
+                }
+                $social_group_block .= '</div>';
+            }
+
+            $social_group_block .= Display::url(
+                get_lang('SeeAllCommunities'),
+                api_get_path(WEB_CODE_PATH).'forum/index.php?cidReq='.$courseInfo['code']
+            );
+
+            if (!empty($social_group_block)) {
+                $social_group_block = Display::panelCollapse(
+                    get_lang('MyCommunities'),
+                    $social_group_block,
+                    'sm-groups',
+                    null,
+                    'grups-acordion',
+                    'groups-collapse'
+                );
+            }
+        } else {
+            // Load my groups
+            $results = $userGroup->get_groups_by_user($userId,
+                [
+                    GROUP_USER_PERMISSION_ADMIN,
+                    GROUP_USER_PERMISSION_READER,
+                    GROUP_USER_PERMISSION_MODERATOR,
+                    GROUP_USER_PERMISSION_HRM,
+                ]
+            );
+
+            $myGroups = [];
+            if (!empty($results)) {
+                foreach ($results as $result) {
+                    $id = $result['id'];
+                    $result['description'] = Security::remove_XSS($result['description'], STUDENT, true);
+                    $result['name'] = Security::remove_XSS($result['name'], STUDENT, true);
+
+                    $group_url = "group_view.php?id=$id";
+
+                    $link = Display::url(
+                        api_ucwords(cut($result['name'], 40, true)),
+                        $group_url
+                    );
+
+                    $result['name'] = $link;
+
+                    $picture = $userGroup->get_picture_group(
+                        $id,
+                        $result['picture'],
+                        null,
+                        GROUP_IMAGE_SIZE_BIG
+                    );
+
+                    $result['picture'] = '<img class="img-responsive" src="'.$picture['file'].'" />';
+                    $group_actions = '<div class="group-more"><a class="btn btn-default" href="groups.php?#tab_browse-2">'.
+                        get_lang('SeeMore').'</a></div>';
+                    $group_info = '<div class="description"><p>'.cut($result['description'], 120, true)."</p></div>";
+                    $myGroups[] = [
+                        'url' => Display::url(
+                            $result['picture'],
+                            $group_url
+                        ),
+                        'name' => $result['name'],
+                        'description' => $group_info.$group_actions,
+                    ];
+                }
+
+                $social_group_block .= '<div class="list-group">';
+                foreach ($myGroups as $group) {
+                    $social_group_block .= ' <li class="list-group-item">';
+                    $social_group_block .= $group['name'];
+                    $social_group_block .= '</li>';
+                }
+                $social_group_block .= '</div>';
+
+                $form = new FormValidator(
+                    'find_groups_form',
+                    'get',
+                    api_get_path(WEB_CODE_PATH).'social/search.php?search_type=2',
+                    null,
+                    null,
+                    FormValidator::LAYOUT_BOX_NO_LABEL
+                );
+                $form->addHidden('search_type', 2);
+
+                $form->addText(
+                    'q',
+                    get_lang('Search'),
+                    false,
+                    [
+                        'aria-label' => get_lang('Search'),
+                        'custom' => true,
+                        'placeholder' => get_lang('Search'),
+                    ]
+                );
+
+                $social_group_block .= $form->returnForm();
+
+                if (!empty($social_group_block)) {
+                    $social_group_block = Display::panelCollapse(
+                        get_lang('MyGroups'),
+                        $social_group_block,
+                        'sm-groups',
+                        null,
+                        'grups-acordion',
+                        'groups-collapse'
+                    );
+                }
+            }
+        }
+
+        return $social_group_block;
     }
 
     /**
@@ -3176,9 +3316,11 @@ class SocialManager extends UserManager
         $html .= '<div class="post-date">'.$date.'</div>';
         $html .= '</div>';
         $html .= '<div class="msg-content">';
-        $html .= '<div class="post-attachment thumbnail">';
-        $html .= $postAttachment;
-        $html .= '</div>';
+        if (!empty($postAttachment)) {
+            $html .= '<div class="post-attachment thumbnail">';
+            $html .= $postAttachment;
+            $html .= '</div>';
+        }
         $html .= '<div>'.Security::remove_XSS($message['content']).'</div>';
         $html .= '</div>';
         $html .= '</div>'; // end mediaPost

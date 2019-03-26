@@ -275,7 +275,7 @@ switch ($action) {
         $userId = isset($_REQUEST['u']) ? (int) $_REQUEST['u'] : api_get_user_id();
         $html = '';
         if ($userId == api_get_user_id()) {
-            $threadList = SocialManager::getThreadList();
+            $threadList = SocialManager::getThreadList($userId);
             $threadIdList = [];
             if (!empty($threadList)) {
                 $threadIdList = array_column($threadList, 'id');

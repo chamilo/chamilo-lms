@@ -168,6 +168,7 @@ if (!$hideExpectedAnswer) {
         $hotSpotAnswerId = $hotSpotAnswer->getIid();
 
         // Show only correct hotspots
+        /*
         if ($objExercise->selectResultsDisabled() == RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
             $TBL_TRACK_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
             // Check auto id
@@ -191,7 +192,7 @@ if (!$hideExpectedAnswer) {
             if (!$studentChoice) {
                 continue;
             }
-        }
+        }*/
 
         $hotSpot = [];
         $hotSpot['id'] = $hotSpotAnswerId;

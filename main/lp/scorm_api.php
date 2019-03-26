@@ -1937,7 +1937,9 @@ function xajax_save_item_scorm(
         } else if (my_scorm_values[k]=='cmi.completion_status') {
         } else if (my_scorm_values[k]=='cmi.score.scaled') {
         } else if (my_scorm_values[k]=='cmi.suspend_data') {
-            params += '&suspend='+olms.suspend_data;
+            // params += '&suspend='+olms.suspend_data;
+            // Fixes error when scorm sends text with "+" sign
+            params += '&suspend='+encodeURIComponent(olms.suspend_data);
         } else if (my_scorm_values[k]=='cmi.completion_status') {
         } else if (my_scorm_values[k]=='cmi.core.exit') {
             params += '&core_exit='+olms.lms_item_core_exit;

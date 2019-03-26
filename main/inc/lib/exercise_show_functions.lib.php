@@ -190,12 +190,6 @@ class ExerciseShowFunctions
                 echo Security::remove_XSS($answer);
             }
             echo '</td>';
-
-            if (!api_is_allowed_to_edit(null, true) && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
-                echo '<td>';
-                $comm = Event::get_comments($id, $questionId);
-                echo '</td>';
-            }
             echo '</tr>';
         }
     }
@@ -336,14 +330,20 @@ class ExerciseShowFunctions
 
         $studentChoiceInt = (int) $studentChoice;
         $answerCorrectChoice = (int) $answerCorrect;
-
+        $hideStudentChoice = false;
         $hide_expected_answer = false;
+
+        $status = '';
+        if ($exercise->showExpectedChoice()) {
+            $status = Display::label(get_lang('Incorrect'), 'danger');
+            if ($studentChoiceInt === $answerCorrectChoice) {
+                $status = Display::label(get_lang('Correct'), 'success');
+            }
+        }
         switch ($resultsDisabled) {
             case RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER:
-                if ($studentChoiceInt !== $answerCorrectChoice) {
-                    return '';
-                }
-
+                $hideStudentChoice = true;
+                $status = Display::label(get_lang('Correct'), 'success');
                 if (!$answerCorrect) {
                     return '';
                 }
@@ -370,23 +370,24 @@ class ExerciseShowFunctions
         $iconAnswer .= '.png';
 
         echo '<tr>';
+        if ($hideStudentChoice === false) {
+            echo '<td width="5%">';
+            echo Display::return_icon($icon, null, null, ICON_SIZE_TINY);
+            echo '</td>';
+        }
+
         echo '<td width="5%">';
-        echo Display::return_icon($icon, null, null, ICON_SIZE_TINY);
-        echo '</td><td width="5%">';
         if (!$hide_expected_answer) {
             echo Display::return_icon($iconAnswer, null, null, ICON_SIZE_TINY);
         } else {
             echo '-';
         }
+
         echo '</td><td width="40%">';
         echo $answer;
         echo '</td>';
 
         if ($exercise->showExpectedChoice()) {
-            $status = Display::label(get_lang('Incorrect'), 'danger');
-            if ($studentChoiceInt === $answerCorrectChoice) {
-                $status = Display::label(get_lang('Correct'), 'success');
-            }
             echo '<td width="20%">';
             echo $status;
             echo '</td>';
@@ -413,9 +414,6 @@ class ExerciseShowFunctions
                 echo $comment;
             }
             echo '</td>';
-            if ($ans == 1) {
-                $comm = Event::get_comments($id, $questionId);
-            }
         } else {
             echo '<td>&nbsp;</td>';
         }
@@ -708,9 +706,6 @@ class ExerciseShowFunctions
                 echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br($answerComment).'</span>';
             }
             echo '</td>';
-            if ($ans == 1) {
-                $comm = Event::get_comments($id, $questionId);
-            }
         } else {
             echo '<td>&nbsp;</td>';
         }

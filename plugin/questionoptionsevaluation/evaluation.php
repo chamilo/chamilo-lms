@@ -30,94 +30,15 @@ if ($plugin->get('enable') !== 'true') {
     exit;
 }
 
-$form = new FormValidator('evaluation');
+$formRecalculate = new FormValidator('recalculate');
+$formRecalculate->addHidden('exercise', $exerciseId);
+$formRecalculate->addButtonUpdate($plugin->get_lang('RecalculateQuestionScores'));
 
-$form->addRadio(
-    'formula',
-    $plugin->get_lang('EvaluationFormula'),
-    [
-        $plugin->get_lang('NoFormula'),
-        $plugin->get_lang('Formula1'),
-        $plugin->get_lang('Formula2'),
-        $plugin->get_lang('Formula3'),
-    ]
-)->setColumnsSize([4, 7, 1]);
-$form->addButtonSave(get_lang('Save'))->setColumnsSize([4, 7, 1]);
-$form->addHidden('exercise', $exerciseId);
-
-if ($form->validate()) {
-    $values = $form->exportValues();
-    $formula = isset($values['formula']) ? (int) $values['formula'] : 0;
-
-    $nbrQuestions = count($exercise->get_validated_question_list());
-
-    foreach ($exercise->questionList as $questionId) {
-        $question = Question::read($questionId);
-
-        if (!in_array($question->selectType(), [UNIQUE_ANSWER, MULTIPLE_ANSWER])) {
-            continue;
-        }
-
-        $questionAnswers = new Answer($questionId, 0, $exercise);
-        $counts = array_count_values($questionAnswers->correct);
-        $weighting = [];
-        foreach ($questionAnswers->correct as $i => $correct) {
-            // Success
-            if (1 == $correct) {
-                $weighting[$i] = 10 / $counts[1] / $nbrQuestions;
-
-                continue;
-            }
-
-            // failures
-            switch ($formula) {
-                case 0:
-                default:
-                    $weighting[$i] = isset($questionAnswers->weighting[$i]) ? $questionAnswers->weighting[$i] : 0;
-                    break;
-                case 1:
-                    $weighting[$i] = (-10 / $counts[0]) / $nbrQuestions;
-                    break;
-                case 2:
-                    $weighting[$i] = (-10 / $counts[0]) / 2 / $nbrQuestions;
-                    break;
-                case 3:
-                    $weighting[$i] = (-10 / $counts[0]) / 3 / $nbrQuestions;
-                    break;
-            }
-        }
-
-        $weighting = array_map(
-            function ($weight) {
-                return float_format($weight);
-            },
-            $weighting
-        );
-
-        $questionAnswers->new_nbrAnswers = $questionAnswers->nbrAnswers;
-        $questionAnswers->new_answer = $questionAnswers->answer;
-        $questionAnswers->new_comment = $questionAnswers->comment;
-        $questionAnswers->new_correct = $questionAnswers->correct;
-        $questionAnswers->new_weighting = $weighting;
-        $questionAnswers->new_position = $questionAnswers->position;
-        $questionAnswers->new_destination = $questionAnswers->destination;
-        $questionAnswers->new_hotspot_coordinates = $questionAnswers->hotspot_coordinates;
-        $questionAnswers->new_hotspot_type = $questionAnswers->hotspot_type;
-
-        $allowedWeights = array_filter(
-            $weighting,
-            function ($weight) {
-                return $weight > 0;
-            }
-        );
-
-        $questionAnswers->save();
-        $question->updateWeighting(array_sum($allowedWeights));
-        $question->save($exercise);
-    }
+if ($formRecalculate->validate()) {
+    $plugin->recalculateQuestionScore($exercise);
 
     Display::addFlash(
-        Display::return_message($plugin->get_lang('QuestionsEvaluated'))
+        Display::return_message($plugin->get_lang('QuestionsEvaluated'), 'success')
     );
 
     header(
@@ -126,9 +47,45 @@ if ($form->validate()) {
     exit;
 }
 
+$formEvaluation = new FormValidator('evaluation');
+$formEvaluation
+    ->addRadio(
+        'formula',
+        $plugin->get_lang('EvaluationFormula'),
+        [
+            $plugin->get_lang('NoFormula'),
+            $plugin->get_lang('Formula1'),
+            $plugin->get_lang('Formula2'),
+            $plugin->get_lang('Formula3'),
+        ]
+    )
+    ->setColumnsSize([4, 7, 1]);
+$formEvaluation->addButtonSave(get_lang('Save'))->setColumnsSize([4, 7, 1]);
+$formEvaluation->addHidden('exercise', $exerciseId);
+
+if ($formEvaluation->validate()) {
+    $values = $formEvaluation->exportValues();
+    $formula = isset($values['formula']) ? (int) $values['formula'] : 0;
+
+    $plugin->saveFormulaForExercise($formula, $exercise);
+
+    Display::addFlash(
+        Display::return_message($plugin->get_lang('FormulaSaved'), 'success')
+    );
+
+    header(
+        'Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq()."&exerciseId=$exerciseId"
+    );
+    exit;
+}
+
+$formEvaluation->setDefaults(['formula' => $plugin->getFormulaForExercise($exercise->iId)]);
+
 echo Display::return_message(
     $plugin->get_lang('QuizQuestionsScoreRulesTitleConfirm'),
     'warning'
 );
-
-$form->display();
+echo '<hr>';
+$formRecalculate->display();
+echo '<hr>';
+$formEvaluation->display();

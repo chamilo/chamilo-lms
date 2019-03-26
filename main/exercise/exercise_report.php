@@ -233,13 +233,28 @@ if (isset($_REQUEST['comments']) &&
         Database::insert($TBL_TRACK_ATTEMPT_RECORDING, $params);
     }
 
-    $qry = 'SELECT DISTINCT question_id, marks
+    $useEvaluationPlugin = false;
+    $pluginEvaluation = QuestionOptionsEvaluationPlugin::create();
+
+    if ('true' === $pluginEvaluation->get(QuestionOptionsEvaluationPlugin::SETTING_ENABLE)) {
+        $formula = $pluginEvaluation->getFormulaForExercise($exerciseId);
+
+        if (!empty($formula)) {
+            $useEvaluationPlugin = true;
+        }
+    }
+
+    if (!$useEvaluationPlugin) {
+        $qry = 'SELECT DISTINCT question_id, marks
             FROM '.$TBL_TRACK_ATTEMPT.' WHERE exe_id = '.$id.'
             GROUP BY question_id';
-    $res = Database::query($qry);
-    $tot = 0;
-    while ($row = Database :: fetch_array($res, 'ASSOC')) {
-        $tot += $row['marks'];
+        $res = Database::query($qry);
+        $tot = 0;
+        while ($row = Database :: fetch_array($res, 'ASSOC')) {
+            $tot += $row['marks'];
+        }
+    } else {
+        $tot = $pluginEvaluation->getResultWithFormula($id, $formula);
     }
 
     $sql = "UPDATE $TBL_TRACK_EXERCISES

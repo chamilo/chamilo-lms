@@ -49,50 +49,66 @@ $exercise->read($exerciseId);
 $totalScore = 0;
 $totalWeight = 0;
 
-foreach ($questionList as $questionId) {
-    $question = Question::read($questionId, $courseId);
-    $totalWeight += $question->selectWeighting();
+$useEvaluationPlugin = false;
+$pluginEvaluation = QuestionOptionsEvaluationPlugin::create();
 
-    // We're inside *one* question. Go through each possible answer for this question
-    if ($question->type === MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
-        $result = $exercise->manage_answer(
-            $exeId,
-            $questionId,
-            [],
-            'exercise_result',
-            [],
-            false,
-            true,
-            false,
-            $exercise->selectPropagateNeg(),
-            [],
-            [],
-            true
-        );
-    } else {
-        $result = $exercise->manage_answer(
-            $exeId,
-            $questionId,
-            [],
-            'exercise_result',
-            [],
-            false,
-            true,
-            false,
-            $exercise->selectPropagateNeg(),
-            [],
-            [],
-            true
-        );
+if ('true' === $pluginEvaluation->get(QuestionOptionsEvaluationPlugin::SETTING_ENABLE)) {
+    $formula = $pluginEvaluation->getFormulaForExercise($exerciseId);
+
+    if (!empty($formula)) {
+        $useEvaluationPlugin = true;
     }
-
-    //  Adding the new score.
-    $totalScore += $result['score'];
 }
 
-$remindList = $trackedExercise->getQuestionsToCheck();
-if (!empty($remindList)) {
-    $remindList = explode(',', $remindList);
+if (!$useEvaluationPlugin) {
+    foreach ($questionList as $questionId) {
+        $question = Question::read($questionId, $courseId);
+        $totalWeight += $question->selectWeighting();
+
+        // We're inside *one* question. Go through each possible answer for this question
+        if ($question->type === MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+            $result = $exercise->manage_answer(
+                $exeId,
+                $questionId,
+                [],
+                'exercise_result',
+                [],
+                false,
+                true,
+                false,
+                $exercise->selectPropagateNeg(),
+                [],
+                [],
+                true
+            );
+        } else {
+            $result = $exercise->manage_answer(
+                $exeId,
+                $questionId,
+                [],
+                'exercise_result',
+                [],
+                false,
+                true,
+                false,
+                $exercise->selectPropagateNeg(),
+                [],
+                [],
+                true
+            );
+        }
+
+        //  Adding the new score.
+        $totalScore += $result['score'];
+    }
+
+    $remindList = $trackedExercise->getQuestionsToCheck();
+    if (!empty($remindList)) {
+        $remindList = explode(',', $remindList);
+    }
+} else {
+    $totalScore = $pluginEvaluation->getResultWithFormula($exeId, $formula);
+    $totalWeight = $pluginEvaluation->getMaxScore();
 }
 
 $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);

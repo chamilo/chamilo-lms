@@ -285,13 +285,16 @@ class Matching extends Question
         $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'">';
         $header .= '<tr>';
-        $header .= '<th>'.get_lang('ElementList').'</th>';
+
+        if ($exercise->results_disabled != RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
+            $header .= '<th>'.get_lang('ElementList').'</th>';
+            $header .= '<th>'.get_lang('Choice').'</th>';
+        }
+
         if ($exercise->showExpectedChoice()) {
-            $header .= '<th>'.get_lang('YourChoice').'</th>';
             $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
             $header .= '<th>'.get_lang('Status').'</th>';
         } else {
-            $header .= '<th>'.get_lang('YourChoice').'</th>';
             $header .= '<th>'.get_lang('CorrespondsTo').'</th>';
         }
         $header .= '</tr>';

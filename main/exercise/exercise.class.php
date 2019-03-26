@@ -4187,6 +4187,7 @@ class Exercise
                             $s_answer_label = $a_answers['answer']; // your daddy - your mother
                             $i_answer_correct_answer = $a_answers['correct']; //1 - 2
                             $i_answer_id_auto = $a_answers['id_auto']; // 3 - 4
+
                             $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
                                     WHERE
                                         exe_id = '$exeId' AND
@@ -4201,6 +4202,7 @@ class Exercise
                             $i_answerWeighting = $a_answers['ponderation'];
                             $user_answer = '';
                             $status = Display::label(get_lang('Incorrect'), 'danger');
+
                             if (!empty($s_user_answer)) {
                                 if ($answerType == DRAGGABLE) {
                                     if ($s_user_answer == $i_answer_correct_answer) {
@@ -4275,12 +4277,6 @@ class Exercise
                                 }
                             }
 
-                            if ($results_disabled == RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
-                                if ($s_user_answer != $i_answer_correct_answer) {
-                                    continue;
-                                }
-                            }
-
                             if ($show_result) {
                                 if ($this->showExpectedChoice() == false &&
                                     $showTotalScoreAndUserChoicesInLastAttempt === false
@@ -4291,9 +4287,14 @@ class Exercise
                                     case MATCHING:
                                     case MATCHING_DRAGGABLE:
                                         echo '<tr>';
-                                        if ($this->showExpectedChoice()) {
+                                        if ($this->results_disabled != RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
                                             echo '<td>'.$s_answer_label.'</td>';
                                             echo '<td>'.$user_answer.'</td>';
+                                        } else {
+                                            $status = Display::label(get_lang('Correct'), 'success');
+                                        }
+
+                                        if ($this->showExpectedChoice()) {
                                             echo '<td>';
                                             if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
                                                 if (isset($real_list[$i_answer_correct_answer]) &&
@@ -4307,8 +4308,6 @@ class Exercise
                                             echo '</td>';
                                             echo '<td>'.$status.'</td>';
                                         } else {
-                                            echo '<td>'.$s_answer_label.'</td>';
-                                            echo '<td>'.$user_answer.'</td>';
                                             echo '<td>';
                                             if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
                                                 if (isset($real_list[$i_answer_correct_answer]) &&
@@ -4330,7 +4329,11 @@ class Exercise
                                         }
                                         echo '<tr>';
                                         if ($this->showExpectedChoice()) {
-                                            echo '<td>'.$user_answer.'</td>';
+                                            if ($this->results_disabled != RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
+                                                echo '<td>'.$user_answer.'</td>';
+                                            } else {
+                                                $status = Display::label(get_lang('Correct'), 'success');
+                                            }
                                             echo '<td>'.$s_answer_label.'</td>';
                                             echo '<td>'.$status.'</td>';
                                         } else {

@@ -144,7 +144,7 @@ function get_work_data_by_id($id, $courseId = 0, $sessionId = 0)
             }
 
             if (in_array($fileType, ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'])) {
-                $work['show_content'] = Display::img($work['show_url'], $work['title']);
+                $work['show_content'] = Display::img($work['show_url'], $work['title'], null, false);
             } elseif (false !== strpos($fileType, 'video/')) {
                 $work['show_content'] = Display::tag(
                     'video',

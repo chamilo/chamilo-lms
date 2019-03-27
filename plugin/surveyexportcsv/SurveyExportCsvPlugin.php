@@ -13,6 +13,7 @@ class SurveyExportCsvPlugin extends Plugin
     {
         $settings = [
             'enabled' => 'boolean',
+            'export_incomplete' => 'boolean',
         ];
 
         parent::__construct('0.1', 'Angel Fernando Quiroz Campos', $settings);

@@ -98,7 +98,7 @@ class QuestionOptionsEvaluationPlugin extends Plugin
                 continue;
             }
 
-            $questionAnswers = new Answer($questionId, 0, $exercise);
+            $questionAnswers = new Answer($questionId, $exercise->course_id, $exercise);
             $counts = array_count_values($questionAnswers->correct);
             $weighting = [];
 

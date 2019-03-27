@@ -23,7 +23,7 @@ if (!$is_allowed_to_edit) {
 
 $this_section = SECTION_COURSES;
 $htmlHeadXtra[] = "<script>
-$(document).ready( function(){
+$(function(){
     $('#user_custom_score').click(function() {
         $('#options').toggle();
     });
@@ -34,8 +34,8 @@ $(document).ready( function(){
 lp_upload_quiz_action_handling();
 
 $interbreadcrumb[] = [
-    "url" => "exercise.php?".api_get_cidreq(),
-    "name" => get_lang('Exercises'),
+    'url' => 'exercise.php?'.api_get_cidreq(),
+    'name' => get_lang('Exercises'),
 ];
 
 // Display the header
@@ -64,7 +64,7 @@ function lp_upload_quiz_actions()
 
 function lp_upload_quiz_main()
 {
-    $lp_id = isset($_GET['lp_id']) ? intval($_GET['lp_id']) : null;
+    $lp_id = isset($_GET['lp_id']) ? (int) $_GET['lp_id'] : null;
 
     $form = new FormValidator(
         'upload',
@@ -119,8 +119,6 @@ function lp_upload_quiz_main()
 
     $form->addProgress();
     $form->addButtonUpload(get_lang('Upload'), 'submit_upload_quiz');
-
-    // Display the upload field
     $form->display();
 }
 
@@ -630,5 +628,5 @@ function detectQuestionType($answers_data)
 
 if ($origin != 'learnpath') {
     //so we are not in learnpath tool
-    Display :: display_footer();
+    Display::display_footer();
 }

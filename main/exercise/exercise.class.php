@@ -4291,6 +4291,7 @@ class Exercise
                                             echo '<td>'.$s_answer_label.'</td>';
                                             echo '<td>'.$user_answer.'</td>';
                                         } else {
+                                            echo '<td>'.$s_answer_label.'</td>';
                                             $status = Display::label(get_lang('Correct'), 'success');
                                         }
 

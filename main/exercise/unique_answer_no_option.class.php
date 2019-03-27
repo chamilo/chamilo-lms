@@ -404,8 +404,8 @@ class UniqueAnswerNoOption extends Question
 
         if ($exercise->results_disabled != RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
             $header .= '<th>'.get_lang('Choice').'</th>';
+            $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
         }
-        $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
         $header .= '<th>'.get_lang('Answer').'</th>';
         if ($exercise->showExpectedChoice()) {
             $header .= '<th>'.get_lang('Status').'</th>';

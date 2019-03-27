@@ -348,6 +348,7 @@ if ($is_allowedToEdit) {
                         }
                         break;
                     case 'copy_exercise': //copy an exercise
+                        api_set_more_memory_and_time_limits();
                         $objExerciseTmp->copyExercise();
                         echo Display::return_message(
                             get_lang('ExerciseCopied'),

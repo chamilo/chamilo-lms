@@ -235,7 +235,7 @@ function lp_upload_quiz_action_handling()
                 $scoreList[] = $cellScoreInfo->getValue();
                 break;
             case 'NoNegativeScore':
-                $noNegativeScoreList[] = $cellDataInfo->getValue();
+                $noNegativeScoreList[] = $cellScoreInfo->getValue();
                 break;
             case 'Category':
                 $categoryList[] = $cellDataInfo->getValue();
@@ -354,7 +354,6 @@ function lp_upload_quiz_action_handling()
                         );
                     }
                 }
-
                 switch ($detectQuestionType) {
                     case GLOBAL_MULTIPLE_ANSWER:
                     case MULTIPLE_ANSWER:
@@ -401,18 +400,15 @@ function lp_upload_quiz_action_handling()
                                 // Fixing scores:
                                 switch ($detectQuestionType) {
                                     case GLOBAL_MULTIPLE_ANSWER:
-                                        if (!$correct) {
-                                            if (isset($noNegativeScoreList[$i])) {
-                                                if (strtolower($noNegativeScoreList[$i]) == 'x') {
-                                                    $score = 0;
-                                                } else {
-                                                    $score = $scoreList[$i] * -1;
-                                                }
-                                            }
+                                        if ($correct) {
+                                            $score = abs($scoreList[$i]);
                                         } else {
-                                            $score = $scoreList[$i];
+                                            if (isset($noNegativeScoreList[$i]) && $noNegativeScoreList[$i] == 'x') {
+                                                $score = 0;
+                                            } else {
+                                                $score = -abs($scoreList[$i]);
+                                            }
                                         }
-
                                         $score /= $numberRightAnswers;
                                         break;
                                     case UNIQUE_ANSWER:

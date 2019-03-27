@@ -233,7 +233,7 @@ class QuestionOptionsEvaluationPlugin extends Plugin
                 break;
         }
 
-        return ($result / count($qTracks)) * 10;
+        return ($result / count($qTracks)) * $this->getMaxScore();
     }
 
     /**

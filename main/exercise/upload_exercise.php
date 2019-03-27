@@ -281,15 +281,6 @@ function lp_upload_quiz_action_handling()
         $quiz_id = $exercise->save();
 
         if ($quiz_id) {
-            // insert into the item_property table
-            api_item_property_update(
-                $_course,
-                TOOL_QUIZ,
-                $quiz_id,
-                'QuizAdded',
-                api_get_user_id()
-            );
-
             // Import questions.
             for ($i = 0; $i < $numberQuestions; $i++) {
                 // Question name

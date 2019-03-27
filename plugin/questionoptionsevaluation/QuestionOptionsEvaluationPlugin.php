@@ -26,7 +26,7 @@ class QuestionOptionsEvaluationPlugin extends Plugin
             $author,
             [
                 self::SETTING_ENABLE => 'boolean',
-                self::SETTING_MAX_SCORE => 'text'
+                self::SETTING_MAX_SCORE => 'text',
             ]
         );
     }
@@ -84,40 +84,6 @@ class QuestionOptionsEvaluationPlugin extends Plugin
     public function performActionsAfterConfigure()
     {
         return $this;
-    }
-
-    /**
-     * Creates an extrafield.
-     */
-    private function createExtraField()
-    {
-        $extraField = new ExtraField('quiz');
-
-        if (false === $extraField->get_handler_field_info_by_field_variable(self::EXTRAFIELD_FORMULA)) {
-            $extraField
-                ->save(
-                    [
-                        'variable' => self::EXTRAFIELD_FORMULA,
-                        'field_type' => ExtraField::FIELD_TYPE_TEXT,
-                        'display_text' => $this->get_lang('EvaluationFormula'),
-                        'visible_to_self' => false,
-                        'changeable' => false,
-                    ]
-                );
-        }
-    }
-
-    /**
-     * Removes the extrafield .
-     */
-    private function removeExtraField()
-    {
-        $extraField = new ExtraField('quiz');
-        $value = $extraField->get_handler_field_info_by_field_variable(self::EXTRAFIELD_FORMULA);
-
-        if (false !== $value) {
-            $extraField->delete($value['id']);
-        }
     }
 
     /**
@@ -268,5 +234,39 @@ class QuestionOptionsEvaluationPlugin extends Plugin
         }
 
         return ($result / count($qTracks)) * 10;
+    }
+
+    /**
+     * Creates an extrafield.
+     */
+    private function createExtraField()
+    {
+        $extraField = new ExtraField('quiz');
+
+        if (false === $extraField->get_handler_field_info_by_field_variable(self::EXTRAFIELD_FORMULA)) {
+            $extraField
+                ->save(
+                    [
+                        'variable' => self::EXTRAFIELD_FORMULA,
+                        'field_type' => ExtraField::FIELD_TYPE_TEXT,
+                        'display_text' => $this->get_lang('EvaluationFormula'),
+                        'visible_to_self' => false,
+                        'changeable' => false,
+                    ]
+                );
+        }
+    }
+
+    /**
+     * Removes the extrafield .
+     */
+    private function removeExtraField()
+    {
+        $extraField = new ExtraField('quiz');
+        $value = $extraField->get_handler_field_info_by_field_variable(self::EXTRAFIELD_FORMULA);
+
+        if (false !== $value) {
+            $extraField->delete($value['id']);
+        }
     }
 }

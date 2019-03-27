@@ -16,3 +16,4 @@ $strings['Formula2'] = 'Successes - Failures / 2';
 $strings['Formula3'] = 'Successes - Failures / 3';
 $strings['QuestionsEvaluated'] = 'Questions evaluated';
 $strings['RecalculateQuestionScores'] = 'Recalculate question scores';
+$strings['FormulaSavedForExerciseX'] = 'Formula saved for exercise "%s".';

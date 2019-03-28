@@ -114,7 +114,8 @@
         "guzzlehttp/guzzle": "~6.0",
         "onelogin/php-saml": "^3.0",
         "symfony/dom-crawler": "~3.4",
-        "brumann/polyfill-unserialize": "^1.0"
+        "brumann/polyfill-unserialize": "^1.0",
+        "yuloh/bccomp-polyfill":  "dev-master"
     },
     "require-dev": {
         "behat/behat": "@stable",

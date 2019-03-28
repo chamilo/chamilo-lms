@@ -6489,7 +6489,7 @@ SQL;
 
         if (DRH == $userInfo['status']) {
             $sessions = SessionManager::get_sessions_followed_by_drh($userInfo['id']);
-        } elseif (SESSIONADMIN == $userInfo['status']) {
+        } elseif (api_is_platform_admin(true)) {
             $sessions = SessionManager::getSessionsForAdmin($userInfo['id']);
         } else {
             $sessionsByCategory = self::get_sessions_by_category($userInfo['id'], false, true, true);

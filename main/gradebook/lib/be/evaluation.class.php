@@ -11,6 +11,8 @@ use ChamiloSession as Session;
 class Evaluation implements GradebookItem
 {
     public $studentList;
+    /** @var \Chamilo\CoreBundle\Entity\GradebookEvaluation */
+    public $entity;
     private $id;
     private $name;
     private $description;
@@ -23,8 +25,6 @@ class Evaluation implements GradebookItem
     private $eval_max;
     private $visible;
     private $sessionId;
-    /** @var \Chamilo\CoreBundle\Entity\GradebookEvaluation */
-    public $entity;
 
     /**
      * Construct.
@@ -563,6 +563,7 @@ class Evaluation implements GradebookItem
                         break;
                     case 'ranking':
                         $ranking = AbstractLink::getCurrentUserRanking($stud_id, $evaluation->getUserScoreList());
+
                         return $ranking;
                         break;
                     default:
@@ -573,12 +574,14 @@ class Evaluation implements GradebookItem
                             if (isset($scoreList[$stud_id])) {
                                 $result = [$scoreList[$stud_id], $weight];
                             }
+
                             return $result;
                         } else {
                             $studentCount = count($evaluation->getUserScoreList());
                             $sumResult = array_sum($evaluation->getUserScoreList());
                             $result = [$sumResult, $studentCount];
                         }
+
                         return $result;
                         break;
                 }
@@ -872,7 +875,6 @@ class Evaluation implements GradebookItem
 
     /**
      * @param int $evaluationId
-     *
      */
     public static function generateStats($evaluationId)
     {

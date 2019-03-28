@@ -7965,12 +7965,13 @@ class Exercise
     }
 
     /**
-     * @param int $exerciseId
+     * @param int   $exerciseId
      * @param array $courseInfo
-     * @param int $sessionId
+     * @param int   $sessionId
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
      *
      * @return bool
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function generateStats($exerciseId, $courseInfo, $sessionId)
     {

@@ -16,6 +16,8 @@ class Category implements GradebookItem
     public $evaluations;
     public $links;
     public $subCategories;
+    /** @var GradebookCategory */
+    public $entity;
     private $id;
     private $name;
     private $description;
@@ -34,8 +36,6 @@ class Category implements GradebookItem
     private $minimumToValidate;
     /** @var int */
     private $gradeBooksToValidateInDependence;
-    /** @var GradebookCategory */
-    public $entity;
 
     /**
      * Consctructor.

@@ -27,8 +27,8 @@ class GradebookDataGenerator
     public $hidePercentage = false;
 
     public $items;
-    private $evals_links;
     public $preLoadDataKey;
+    private $evals_links;
 
     /**
      * @param array $cats
@@ -576,7 +576,7 @@ class GradebookDataGenerator
      * @param GradebookItem $item
      * @param bool          $ignore_score_color
      *
-     * @return null|string
+     * @return string|null
      */
     public function build_result_column(
         $userId,

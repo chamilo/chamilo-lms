@@ -17,6 +17,8 @@ abstract class AbstractLink implements GradebookItem
 {
     public $course_id;
     public $studentList;
+    /** @var \Chamilo\CoreBundle\Entity\GradebookLink */
+    public $entity;
     protected $id;
     protected $type;
     protected $ref_id;
@@ -28,8 +30,6 @@ abstract class AbstractLink implements GradebookItem
     protected $weight;
     protected $visible;
     protected $session_id;
-    /** @var \Chamilo\CoreBundle\Entity\GradebookLink */
-    public $entity;
 
     /**
      * Constructor.
@@ -694,6 +694,45 @@ abstract class AbstractLink implements GradebookItem
     }
 
     /**
+     * @param int    $itemId
+     * @param int    $linkType
+     * @param string $courseCode
+     * @param int    $sessionId
+     *
+     * @return array|bool|\Doctrine\DBAL\Driver\Statement
+     */
+    public static function getGradebookLinksFromItem($itemId, $linkType, $courseCode, $sessionId = 0)
+    {
+        if (empty($courseCode) || empty($itemId) || empty($linkType)) {
+            return false;
+        }
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+        $tableCategory = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $itemId = (int) $itemId;
+        $linkType = (int) $linkType;
+        $sessionId = (int) $sessionId;
+        $courseCode = Database::escape_string($courseCode);
+
+        $sql = "SELECT DISTINCT l.* 
+                FROM $table l INNER JOIN $tableCategory c 
+                ON (c.course_code = l.course_code AND c.id = l.category_id)
+                WHERE 
+                    ref_id = $itemId AND 
+                    type = $linkType AND 
+                    l.course_code = '$courseCode' AND 
+                    c.session_id = $sessionId";
+
+        $result = Database::query($sql);
+        if (Database::num_rows($result)) {
+            $result = Database::store_result($result);
+
+            return $result;
+        }
+
+        return false;
+    }
+
+    /**
      * @param Doctrine\DBAL\Driver\Statement|null $result
      *
      * @return array
@@ -755,44 +794,5 @@ abstract class AbstractLink implements GradebookItem
         }
 
         return $targets;
-    }
-
-    /**
-     * @param int    $itemId
-     * @param int    $linkType
-     * @param string $courseCode
-     * @param int    $sessionId
-     *
-     * @return array|bool|\Doctrine\DBAL\Driver\Statement
-     */
-    public static function getGradebookLinksFromItem($itemId, $linkType, $courseCode, $sessionId = 0)
-    {
-        if (empty($courseCode) || empty($itemId) || empty($linkType)) {
-            return false;
-        }
-        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-        $tableCategory = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $itemId = (int) $itemId;
-        $linkType = (int) $linkType;
-        $sessionId = (int) $sessionId;
-        $courseCode = Database::escape_string($courseCode);
-
-        $sql = "SELECT DISTINCT l.* 
-                FROM $table l INNER JOIN $tableCategory c 
-                ON (c.course_code = l.course_code AND c.id = l.category_id)
-                WHERE 
-                    ref_id = $itemId AND 
-                    type = $linkType AND 
-                    l.course_code = '$courseCode' AND 
-                    c.session_id = $sessionId";
-
-        $result = Database::query($sql);
-        if (Database::num_rows($result)) {
-            $result = Database::store_result($result);
-
-            return $result;
-        }
-
-        return false;
     }
 }

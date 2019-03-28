@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
-
 /**
  * Class ExerciseLink
  * Defines a gradebook ExerciseLink object.
@@ -201,14 +199,14 @@ class ExerciseLink extends AbstractLink
                         }
                         $sumResult = array_sum($link->getUserScoreList());
                         $result = [$sumResult / $count, $weight];
+
                         return $result;
                         break;
                     case 'ranking':
                         return '';
                         $newList = [];
-                        var_dump($this->getStudentList());exit;
+                        var_dump($this->getStudentList()); exit;
                         foreach ($this->getStudentList() as $userId) {
-
                         }
                         $ranking = AbstractLink::getCurrentUserRanking($stud_id, $link->getUserScoreList());
 
@@ -221,12 +219,14 @@ class ExerciseLink extends AbstractLink
                             if (isset($scoreList[$stud_id])) {
                                 $result = [$scoreList[$stud_id], $weight];
                             }
+
                             return $result;
                         } else {
                             $studentCount = count($this->getStudentList());
                             $sumResult = array_sum($link->getUserScoreList());
                             $result = [$sumResult, $studentCount];
                         }
+
                         return $result;
                         break;
                 }
@@ -551,6 +551,20 @@ class ExerciseLink extends AbstractLink
         $this->hp = $hp;
     }
 
+    public function getBestScore()
+    {
+        return $this->getStats('best');
+    }
+
+    public function getStats($type)
+    {
+        switch ($type) {
+            case 'best':
+
+                break;
+        }
+    }
+
     /**
      * Lazy load function to get the database table of the exercise.
      */
@@ -616,19 +630,5 @@ class ExerciseLink extends AbstractLink
         }
 
         return $this->exercise_data;
-    }
-
-    public function getBestScore()
-    {
-        return $this->getStats('best');
-    }
-
-    public function getStats($type)
-    {
-        switch ($type) {
-            case 'best':
-
-                break;
-        }
     }
 }

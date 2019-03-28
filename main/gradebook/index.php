@@ -77,7 +77,6 @@ switch ($action) {
 
 ob_start();
 
-
 // Make sure the destination for scripts is index.php instead of gradebook.php
 Category::setUrl('index.php');
 
@@ -493,7 +492,6 @@ if (!empty($course_to_crsind) && !isset($_GET['confirm'])) {
     $warning_message = get_lang('MoveWarning').'<br><br>'.$button;
     $filter_warning_msg = false;
 }
-
 
 // Actions on the sortabletable.
 if (isset($_POST['action'])) {

@@ -1,10 +1,10 @@
 <?php
 /* For licensing terms, see license.txt */
 
+use ChamiloSession as Session;
 use CpChart\Cache as pCache;
 use CpChart\Data as pData;
 use CpChart\Image as pImage;
-use ChamiloSession as Session;
 
 /**
  * GradebookTable Class
@@ -281,9 +281,9 @@ class GradebookTable extends SortableTable
         } else {
             $defaultData = $defaultDataFromSession;
         }
+
         return $defaultData;
     }
-
 
     /**
      * Function used by SortableTable to generate the data to display.

@@ -48,6 +48,8 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
 
 if ($isDrhOfCourse) {
     Display::display_header(get_lang('SurveyList'));
+    // Tool introduction
+    Display::display_introduction_section('survey', 'left');
     SurveyUtil::displaySurveyListForDrh();
     Display::display_footer();
     exit;
@@ -56,6 +58,8 @@ if ($isDrhOfCourse) {
 if (!api_is_allowed_to_edit(false, true)) {
     // Coach can see this
     Display::display_header(get_lang('SurveyList'));
+    // Tool introduction
+    Display::display_introduction_section('survey', 'left');
     SurveyUtil::getSurveyList($currentUserId);
     Display::display_footer();
     exit;

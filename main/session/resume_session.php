@@ -266,7 +266,7 @@ if ($session->getNbrCourses() === 0) {
             Display::return_icon('delete.png', get_lang('Delete')),
             api_get_self()."?id_session=$sessionId&action=delete&idChecked[]={$course->getCode()}",
             [
-                'onclick' => "javascript:if(!confirm('".get_lang('ConfirmYourChoice')."')) return false;"
+                'onclick' => "javascript:if(!confirm('".get_lang('ConfirmYourChoice')."')) return false;",
             ]
         );
 

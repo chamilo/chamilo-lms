@@ -70,7 +70,10 @@ if ($formEvaluation->validate()) {
     $plugin->saveFormulaForExercise($formula, $exercise);
 
     Display::addFlash(
-        Display::return_message($plugin->get_lang('FormulaSaved'), 'success')
+        Display::return_message(
+            sprintf($plugin->get_lang('FormulaSavedForExerciseX'), $exercise->selectTitle(true)),
+            'success'
+        )
     );
 
     header(

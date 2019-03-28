@@ -17,6 +17,7 @@ if (empty($surveyData)) {
 }
 
 $plugin = SurveyExportTxtPlugin::create();
+$allowExportIncomplete = 'true' === $plugin->get('export_incomplete');
 
 if ($plugin->get('enabled') !== 'true') {
     api_not_allowed(true);
@@ -41,6 +42,8 @@ $content = [];
 $parts = [];
 $indexPart = 0;
 
+$numberOfQuestions = 0;
+
 // Separate questions in introduction and main blocks
 foreach ($questionsData as $questionData) {
     if (!in_array($questionData['type'], ['yesno', 'pagebreak', 'multiplechoice'])) {
@@ -52,6 +55,8 @@ foreach ($questionsData as $questionData) {
 
         continue;
     }
+
+    $numberOfQuestions++;
 
     if (0 === $indexPart) {
         $parts[0][] = $questionData;
@@ -91,8 +96,11 @@ $surveyAnswers = Database::getManager()
     ->getResult();
 
 // Process answers
-foreach ($surveyAnswers as $i => $answer) {
-    $surveyLine = '"'.($i + 1).'","';
+$i = 1;
+
+foreach ($surveyAnswers as $answer) {
+    $userAnswersCount = 0;
+    $surveyLine = '';
 
     // Show answers for introduction questions
     foreach ($parts[0] as $introQuestion) {
@@ -102,6 +110,7 @@ foreach ($surveyAnswers as $i => $answer) {
             $introQuestion['survey_id'],
             $introQuestion['question_id']
         );
+        $userAnswersCount += count($options);
 
         /** @var CSurveyQuestionOption $option */
         foreach ($options as $option) {
@@ -119,6 +128,7 @@ foreach ($surveyAnswers as $i => $answer) {
             $mainQuestion['survey_id'],
             $mainQuestion['question_id']
         );
+        $userAnswersCount += count($options);
 
         /** @var CSurveyQuestionOption $option */
         foreach ($options as $option) {
@@ -128,7 +138,12 @@ foreach ($surveyAnswers as $i => $answer) {
 
     $surveyLine .= '"';
 
-    $content[] = $surveyLine;
+    if (!$allowExportIncomplete && $userAnswersCount < $numberOfQuestions) {
+        continue;
+    }
+
+    $content[] = '"'.$i.'","'.$surveyLine;
+    $i++;
 }
 
 // Add EOL to lines

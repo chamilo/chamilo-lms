@@ -4740,6 +4740,17 @@ EOT;
                     true
                 );
             } else {
+                $pluginEvaluation = QuestionOptionsEvaluationPlugin::create();
+
+                if ('true' === $pluginEvaluation->get(QuestionOptionsEvaluationPlugin::SETTING_ENABLE)) {
+                    $formula = $pluginEvaluation->getFormulaForExercise($objExercise->selectId());
+
+                    if (!empty($formula)) {
+                        $total_score = $pluginEvaluation->getResultWithFormula($exeId, $formula);
+                        $total_weight = $pluginEvaluation->getMaxScore();
+                    }
+                }
+
                 $totalScoreText .= self::getTotalScoreRibbon(
                     $objExercise,
                     $total_score,
@@ -4805,17 +4816,6 @@ EOT;
                 $learnpath_item_view_id = $exercise_stat_info['orig_lp_item_view_id'];
 
                 if (api_is_allowed_to_session_edit()) {
-                    $plugin = QuestionOptionsEvaluationPlugin::create();
-
-                    if ('true' === $plugin->get(QuestionOptionsEvaluationPlugin::SETTING_ENABLE)) {
-                        $formula = $plugin->getFormulaForExercise($exercise_stat_info['exe_exo_id']);
-
-                        if (!empty($formula)) {
-                            $total_score = $plugin->getResultWithFormula($exercise_stat_info['exe_id'], $formula);
-                            $total_weight = $plugin->getMaxScore();
-                        }
-                    }
-
                     Event::updateEventExercise(
                         $exercise_stat_info['exe_id'],
                         $objExercise->selectId(),

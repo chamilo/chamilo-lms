@@ -18,6 +18,7 @@ if (empty($surveyData)) {
 }
 
 $plugin = SurveyExportCsvPlugin::create();
+$allowExportIncomplete = 'true' === $plugin->get('export_incomplete');
 
 if ($plugin->get('enabled') !== 'true') {
     api_not_allowed(true);
@@ -31,6 +32,7 @@ $questionsData = array_filter(
         return in_array($questionData['type'], ['yesno', 'multiplechoice', 'open']);
     }
 );
+$numberOfQuestions = count($questionsData);
 
 usort(
     $questionsData,
@@ -49,11 +51,18 @@ $content[] = firstRow($questionsData);
 $surveyAnswers = getSurveyAnswers($courseId, $surveyId);
 
 // Process answers
-foreach ($surveyAnswers as $i => $answer) {
+$i = 1;
+foreach ($surveyAnswers as $answer) {
     $row = otherRow($questionsData, $answer['user'], $courseId);
-    array_unshift($row, $i + 1);
+
+    if (!$allowExportIncomplete && count($row) < $numberOfQuestions) {
+        continue;
+    }
+
+    array_unshift($row, $i);
 
     $content[] = $row;
+    $i++;
 }
 
 // Generate file
@@ -182,7 +191,9 @@ function otherRow($questions, $user, $courseId)
         if ('open' === $question['type']) {
             $answer = getOpenAnswer($question['question_id'], $question['survey_id'], $courseId, $user);
 
-            $row[] = Security::remove_XSS($answer->getOptionId());
+            if ($answer){
+                $row[] = Security::remove_XSS($answer->getOptionId());
+            }
         } else {
             $options = getQuestionOptions(
                 $user,

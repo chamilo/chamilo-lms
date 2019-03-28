@@ -98,7 +98,7 @@ class QuestionOptionsEvaluationPlugin extends Plugin
                 continue;
             }
 
-            $questionAnswers = new Answer($questionId, 0, $exercise);
+            $questionAnswers = new Answer($questionId, $exercise->course_id, $exercise);
             $counts = array_count_values($questionAnswers->correct);
             $weighting = [];
 
@@ -233,7 +233,7 @@ class QuestionOptionsEvaluationPlugin extends Plugin
                 break;
         }
 
-        return ($result / count($qTracks)) * 10;
+        return ($result / count($qTracks)) * $this->getMaxScore();
     }
 
     /**

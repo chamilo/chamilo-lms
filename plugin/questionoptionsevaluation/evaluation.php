@@ -30,33 +30,17 @@ if ($plugin->get('enable') !== 'true') {
     exit;
 }
 
-$formRecalculate = new FormValidator('recalculate');
-$formRecalculate->addHidden('exercise', $exerciseId);
-$formRecalculate->addButtonUpdate($plugin->get_lang('RecalculateQuestionScores'));
-
-if ($formRecalculate->validate()) {
-    $plugin->recalculateQuestionScore($exercise);
-
-    Display::addFlash(
-        Display::return_message($plugin->get_lang('QuestionsEvaluated'), 'success')
-    );
-
-    header(
-        'Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq()."&exerciseId=$exerciseId"
-    );
-    exit;
-}
-
 $formEvaluation = new FormValidator('evaluation');
 $formEvaluation
     ->addRadio(
         'formula',
         $plugin->get_lang('EvaluationFormula'),
         [
-            $plugin->get_lang('NoFormula'),
-            $plugin->get_lang('Formula1'),
-            $plugin->get_lang('Formula2'),
-            $plugin->get_lang('Formula3'),
+            -1 => $plugin->get_lang('NoFormula'),
+            0 => $plugin->get_lang('RecalculateQuestionScores'),
+            1 => $plugin->get_lang('Formula1'),
+            2 => $plugin->get_lang('Formula2'),
+            3 => $plugin->get_lang('Formula3'),
         ]
     )
     ->setColumnsSize([4, 7, 1]);
@@ -88,7 +72,4 @@ echo Display::return_message(
     $plugin->get_lang('QuizQuestionsScoreRulesTitleConfirm'),
     'warning'
 );
-echo '<hr>';
-$formRecalculate->display();
-echo '<hr>';
 $formEvaluation->display();

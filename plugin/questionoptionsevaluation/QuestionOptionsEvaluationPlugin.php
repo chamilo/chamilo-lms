@@ -87,9 +87,10 @@ class QuestionOptionsEvaluationPlugin extends Plugin
     }
 
     /**
+     * @param int      $formula
      * @param Exercise $exercise
      */
-    public function recalculateQuestionScore(Exercise $exercise)
+    private function recalculateQuestionScore($formula, Exercise $exercise)
     {
         foreach ($exercise->questionList as $questionId) {
             $question = Question::read($questionId);
@@ -103,7 +104,15 @@ class QuestionOptionsEvaluationPlugin extends Plugin
             $weighting = [];
 
             foreach ($questionAnswers->correct as $i => $correct) {
-                $weighting[$i] = 1 == $correct ? 1 / $counts[1] : -1 / $counts[0];
+                if ($question->selectType() == MULTIPLE_ANSWER || 0 === $formula) {
+                    $weighting[$i] = 1 == $correct ? 1 / $counts[1] : -1 / $counts[0];
+
+                    continue;
+                }
+
+                if ($question->selectType() == UNIQUE_ANSWER) {
+                    $weighting[$i] = 1 == $correct ? 1 : -1 / $formula;
+                }
             }
 
             $questionAnswers->new_nbrAnswers = $questionAnswers->nbrAnswers;
@@ -135,6 +144,8 @@ class QuestionOptionsEvaluationPlugin extends Plugin
      */
     public function saveFormulaForExercise($formula, Exercise $exercise)
     {
+        $this->recalculateQuestionScore($formula, $exercise);
+
         $extraFieldValue = new ExtraFieldValue('quiz');
         $extraFieldValue->save(
             [

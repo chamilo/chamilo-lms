@@ -217,6 +217,7 @@ switch ($action) {
     case 'delete_item':
         if ($isAllowedToEdit ||
             $groupMemberWithUploadRights ||
+            DocumentManager::isBasicCourseFolder($curdirpath, $sessionId) ||
             DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId) ||
             DocumentManager::is_my_shared_folder(api_get_user_id(), $moveTo, $sessionId)
         ) {

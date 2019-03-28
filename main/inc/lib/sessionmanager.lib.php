@@ -457,13 +457,16 @@ class SessionManager
     }
 
     /**
-     * @param array $options  Optional. Order and limit keys
-     * @param bool  $getCount Optional. Whether to get all the results or only the count
-     * @param array $columns  Optional. Columns from jqGrid
+     * Get session list for a session admin or platform admin.
+     *
+     * @param int   $userId   User Id for the session admin.
+     * @param array $options  Optional. Order and limit keys.
+     * @param bool  $getCount Optional. Whether to get all the results or only the count.
+     * @param array $columns  Optional. Columns from jqGrid.
      *
      * @return array
      */
-    public static function getSessionsAdmin(
+    public static function getSessionsForAdmin(
         $userId,
         $options = [],
         $getCount = false,
@@ -620,7 +623,7 @@ class SessionManager
 
         $userId = api_get_user_id();
 
-        $sessions = self::getSessionsAdmin($userId, $options, $getCount, $columns);
+        $sessions = self::getSessionsForAdmin($userId, $options, $getCount, $columns);
 
         if ($getCount) {
             return (int) $sessions;

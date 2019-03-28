@@ -6490,7 +6490,7 @@ SQL;
         if (DRH == $userInfo['status']) {
             $sessions = SessionManager::get_sessions_followed_by_drh($userInfo['id']);
         } elseif (SESSIONADMIN == $userInfo['status']) {
-            $sessions = SessionManager::getSessionsAdmin($userInfo['id']);
+            $sessions = SessionManager::getSessionsForAdmin($userInfo['id']);
         } else {
             $sessionsByCategory = self::get_sessions_by_category($userInfo['id'], false, true, true);
             $sessionsByCategory = array_column($sessionsByCategory, 'sessions');

@@ -74,11 +74,11 @@ class LinkFactory
     /**
      * Static method to create specific link objects.
      *
-     * @param $type link type
+     * @param int $type link type
      */
     public static function create($type)
     {
-        $type = intval($type);
+        $type = (int) $type;
         switch ($type) {
             case LINK_EXERCISE:
                 return new ExerciseLink();

@@ -2767,6 +2767,7 @@ class Exercise
      */
     public function cleanResults($cleanLpTests = false, $cleanResultBeforeDate = null)
     {
+        $sessionId = api_get_session_id();
         $table_track_e_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $table_track_e_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
@@ -2796,7 +2797,7 @@ class Exercise
             WHERE
                 c_id = ".api_get_course_int_id()." AND
                 exe_exo_id = ".$this->id." AND
-                session_id = ".api_get_session_id()." ".
+                session_id = ".$sessionId." ".
                 $sql_where;
 
         $result = Database::query($sql);
@@ -2814,14 +2815,15 @@ class Exercise
             }
         }
 
-        $session_id = api_get_session_id();
         // delete TRACK_E_EXERCISES table
         $sql = "DELETE FROM $table_track_e_exercises
                 WHERE 
                   c_id = ".api_get_course_int_id()." AND 
                   exe_exo_id = ".$this->id." $sql_where AND 
-                  session_id = ".$session_id;
+                  session_id = ".$sessionId;
         Database::query($sql);
+
+        $this->generateStats($this->id, api_get_course_info(), $sessionId);
 
         Event::addEvent(
             LOG_EXERCISE_RESULT_DELETE,
@@ -2830,7 +2832,7 @@ class Exercise
             null,
             null,
             api_get_course_int_id(),
-            $session_id
+            $sessionId
         );
 
         return $i;
@@ -7960,6 +7962,145 @@ class Exercise
         }
 
         return $questionList;
+    }
+
+    /**
+     * @param int $exerciseId
+     * @param array $courseInfo
+     * @param int $sessionId
+     *
+     * @return bool
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function generateStats($exerciseId, $courseInfo, $sessionId)
+    {
+        $allowStats = api_get_configuration_value('allow_gradebook_stats');
+        if (!$allowStats) {
+            return false;
+        }
+
+        if (empty($courseInfo)) {
+            return false;
+        }
+
+        $courseId = $courseInfo['real_id'];
+
+        $sessionId = (int) $sessionId;
+        $result = $this->read($exerciseId);
+
+        if (empty($result)) {
+            api_not_allowed(true);
+        }
+
+        $statusToFilter = empty($sessionId) ? STUDENT : 0;
+
+        $studentList = CourseManager::get_user_list_from_course_code(
+            api_get_course_id(),
+            $sessionId,
+            null,
+            null,
+            $statusToFilter
+        );
+
+        if (empty($studentList)) {
+            Display::addFlash(Display::return_message(get_lang('NoUsersInCourse')));
+            header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq());
+            exit;
+        }
+
+        $tblStats = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+
+        $studentIdList = [];
+        if (!empty($studentList)) {
+            $studentIdList = array_column($studentList, 'user_id');
+        }
+
+        if ($this->exercise_was_added_in_lp == false) {
+            $sql = "SELECT * FROM $tblStats
+                        WHERE
+                            exe_exo_id = $exerciseId AND
+                            orig_lp_id = 0 AND
+                            orig_lp_item_id = 0 AND
+                            status <> 'incomplete' AND
+                            session_id = $sessionId AND
+                            c_id = $courseId
+                        ";
+        } else {
+            $lpId = null;
+            if (!empty($this->lpList)) {
+                // Taking only the first LP
+                $lpId = current($this->lpList);
+                $lpId = $lpId['lp_id'];
+            }
+
+            $sql = "SELECT * 
+                        FROM $tblStats
+                        WHERE
+                            exe_exo_id = $exerciseId AND
+                            orig_lp_id = $lpId AND
+                            status <> 'incomplete' AND
+                            session_id = $sessionId AND
+                            c_id = $courseId ";
+        }
+
+        $sql .= ' ORDER BY exe_id DESC';
+
+        $studentCount = 0;
+        $sum = 0;
+        $bestResult = 0;
+        $weight = 0;
+        $sumResult = 0;
+        $result = Database::query($sql);
+        while ($data = Database::fetch_array($result, 'ASSOC')) {
+            // Only take into account users in the current student list.
+            if (!empty($studentIdList)) {
+                if (!in_array($data['exe_user_id'], $studentIdList)) {
+                    continue;
+                }
+            }
+
+            if (!isset($students[$data['exe_user_id']])) {
+                if ($data['exe_weighting'] != 0) {
+                    $students[$data['exe_user_id']] = $data['exe_result'];
+                    $studentCount++;
+                    if ($data['exe_result'] > $bestResult) {
+                        $bestResult = $data['exe_result'];
+                    }
+                    $sum += $data['exe_result'] / $data['exe_weighting'];
+                    $sumResult += $data['exe_result'];
+                    $weight = $data['exe_weighting'];
+                }
+            }
+        }
+
+        $count = count($studentList);
+        $average = $sumResult / $count;
+        $em = Database::getManager();
+
+        $links = AbstractLink::getGradebookLinksFromItem(
+            $this->selectId(),
+            LINK_EXERCISE,
+            api_get_course_id(),
+            api_get_session_id()
+        );
+
+        $repo = $em->getRepository('ChamiloCoreBundle:GradebookLink');
+
+        foreach ($links as $link) {
+            $linkId = $link['id'];
+            /** @var \Chamilo\CoreBundle\Entity\GradebookLink $exerciseLink */
+            $exerciseLink = $repo->find($linkId);
+            if ($exerciseLink) {
+                $exerciseLink
+                    ->setUserScoreList($students)
+                    ->setBestScore($bestResult)
+                    ->setAverageScore($average)
+                    ->setScoreWeight($this->get_max_score())
+                ;
+                $em->persist($exerciseLink);
+                $em->flush();
+            }
+        }
     }
 
     /**

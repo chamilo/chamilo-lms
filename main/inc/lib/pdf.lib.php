@@ -147,12 +147,17 @@ class PDF
         $html = $tpl->fetch($tableTemplate);
         $html = api_utf8_encode($html);
 
+        if ($returnHtml) {
+            return $html;
+        }
+
         $css_file = api_get_path(SYS_CSS_PATH).'themes/'.$tpl->theme.'/print.css';
         if (!file_exists($css_file)) {
             $css_file = api_get_path(SYS_CSS_PATH).'print.css';
         }
         $css = file_get_contents($css_file);
-        $html = self::content_to_pdf(
+
+        self::content_to_pdf(
             $html,
             $css,
             $this->params['filename'],
@@ -163,10 +168,6 @@ class PDF
             $returnHtml,
             $addDefaultCss
         );
-
-        if ($returnHtml) {
-            return $html;
-        }
     }
 
     /**
@@ -382,7 +383,7 @@ class PDF
             return false;
         }
 
-        //clean styles and javascript document
+        // clean styles and javascript document
         $clean_search = [
             '@<script[^>]*?>.*?</script>@si',
             '@<style[^>]*?>.*?</style>@siU',

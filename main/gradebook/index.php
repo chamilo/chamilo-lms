@@ -17,12 +17,66 @@ $current_course_tool = TOOL_GRADEBOOK;
 api_block_anonymous_users();
 api_protect_course_script(true);
 
-ob_start();
-
 $course_code = api_get_course_id();
 $stud_id = api_get_user_id();
 $session_id = api_get_session_id();
 $course_id = api_get_course_int_id();
+$courseInfo = api_get_course_info();
+
+$action = isset($_GET['action']) ? $_GET['action'] : null;
+$itemId = isset($_GET['itemId']) ? $_GET['itemId'] : 0;
+
+switch ($action) {
+    case 'generate_eval_stats':
+        if (!empty($itemId)) {
+            Evaluation::generateStats($itemId);
+            Display::addFlash(Display::return_message(get_lang('Updated')));
+        }
+        header('Location: '.api_get_self().'?'.api_get_cidreq());
+        exit;
+        break;
+    case 'generate_link_stats':
+        if (!empty($itemId)) {
+            $link = LinkFactory::create(LINK_EXERCISE);
+            $links = $link::load($itemId);
+            /** @var ExerciseLink $link */
+            foreach ($links as $link) {
+                $exercise = new Exercise(api_get_course_int_id());
+                $exercise->read($link->get_ref_id());
+                $exercise->generateStats($link->get_ref_id(), api_get_course_info(), api_get_session_id());
+            }
+            Display::addFlash(Display::return_message(get_lang('Updated')));
+        }
+        header('Location: '.api_get_self().'?'.api_get_cidreq());
+        exit;
+        break;
+    case 'lock':
+        $category_to_lock = Category::load($_GET['category_id']);
+        $category_to_lock[0]->lockAllItems(1);
+        $confirmation_message = get_lang('GradebookLockedAlert');
+        break;
+    case 'unlock':
+        if (api_is_platform_admin()) {
+            $category_to_lock = Category::load($_GET['category_id']);
+            $category_to_lock[0]->lockAllItems(0);
+            $confirmation_message = get_lang('EvaluationHasBeenUnLocked');
+        }
+        break;
+    case 'export_table':
+        $hidePdfReport = api_get_configuration_value('gradebook_hide_pdf_report_button');
+        if ($hidePdfReport) {
+            api_not_allowed(true);
+        }
+        if (isset($_GET['category_id'])) {
+            $cats = Category::load($_GET['category_id'], null, null, null, null, null, false);
+            GradebookUtils::generateTable($courseInfo, api_get_user_id(), $cats);
+            exit;
+        }
+        break;
+}
+
+ob_start();
+
 
 // Make sure the destination for scripts is index.php instead of gradebook.php
 Category::setUrl('index.php');
@@ -262,15 +316,16 @@ if (isset($_GET['moveeval'])) {
 
 //move a link
 if (isset($_GET['movelink'])) {
+    $moveLink = (int) $_GET['movelink'];
     GradebookUtils::block_students();
-    $link = LinkFactory::load($_GET['movelink']);
+    $link = LinkFactory::load($moveLink);
     $move_form = new LinkForm(
         LinkForm::TYPE_MOVE,
         null,
         $link[0],
         'move_link_form',
         null,
-        api_get_self().'?movelink='.$_GET['movelink'].'&selectcat='.$selectCat.'&'.api_get_cidreq()
+        api_get_self().'?movelink='.$moveLink.'&selectcat='.$selectCat.'&'.api_get_cidreq()
     );
 
     if ($move_form->validate()) {
@@ -323,10 +378,9 @@ if (isset($_GET['deletecat'])) {
 // Parameters for evaluations.
 if (isset($_GET['visibleeval'])) {
     GradebookUtils::block_students();
+    $visibility_command = 0;
     if (isset($_GET['set_visible'])) {
         $visibility_command = 1;
-    } else {
-        $visibility_command = 0;
     }
     $eval = Evaluation::load($_GET['visibleeval']);
     $eval[0]->set_visible($visibility_command);
@@ -344,7 +398,7 @@ if (isset($_GET['visibleeval'])) {
 // Parameters for evaluations.
 if (isset($_GET['lockedeval'])) {
     GradebookUtils::block_students();
-    $locked = Security::remove_XSS($_GET['lockedeval']);
+    $locked = (int) $_GET['lockedeval'];
     if (isset($_GET['typelocked']) && api_is_platform_admin()) {
         $type_locked = 0;
         $confirmation_message = get_lang('EvaluationHasBeenUnLocked');
@@ -373,10 +427,9 @@ if (isset($_GET['deleteeval'])) {
 // Parameters for links.
 if (isset($_GET['visiblelink'])) {
     GradebookUtils::block_students();
+    $visibility_command = 0;
     if (isset($_GET['set_visible'])) {
         $visibility_command = 1;
-    } else {
-        $visibility_command = 0;
     }
     $link = LinkFactory::load($_GET['visiblelink']);
     if (isset($link) && isset($link[0])) {
@@ -395,7 +448,7 @@ if (isset($_GET['visiblelink'])) {
 
 if (isset($_GET['deletelink'])) {
     GradebookUtils::block_students();
-    $get_delete_link = intval($_GET['deletelink']);
+    $get_delete_link = (int) $_GET['deletelink'];
     //fixing #5229
     if (!empty($get_delete_link)) {
         $link = LinkFactory::load($get_delete_link);
@@ -441,38 +494,13 @@ if (!empty($course_to_crsind) && !isset($_GET['confirm'])) {
     $filter_warning_msg = false;
 }
 
-$action = isset($_GET['action']) ? $_GET['action'] : null;
-
-switch ($action) {
-    case 'lock':
-        $category_to_lock = Category::load($_GET['category_id']);
-        $category_to_lock[0]->lockAllItems(1);
-        $confirmation_message = get_lang('GradebookLockedAlert');
-        break;
-    case 'unlock':
-        if (api_is_platform_admin()) {
-            $category_to_lock = Category::load($_GET['category_id']);
-            $category_to_lock[0]->lockAllItems(0);
-            $confirmation_message = get_lang('EvaluationHasBeenUnLocked');
-        }
-        break;
-    case 'export_table':
-        $hidePdfReport = api_get_configuration_value('gradebook_hide_pdf_report_button');
-        if ($hidePdfReport) {
-            api_not_allowed(true);
-        }
-
-        //table will be export below
-        ob_start();
-        break;
-}
 
 // Actions on the sortabletable.
 if (isset($_POST['action'])) {
     GradebookUtils::block_students();
     $number_of_selected_items = count($_POST['id']);
 
-    if ($number_of_selected_items == '0') {
+    if ($number_of_selected_items == 0) {
         $warning_message = get_lang('NoItemsSelected');
         $filter_warning_msg = false;
     } else {
@@ -751,11 +779,9 @@ if (isset($_GET['studentoverview'])) {
     }
     $cats = Category::load($selectCat, null, null, null, null, null, false);
 
-    //with this fix the teacher only can view 1 gradebook
+    // With this fix the teacher only can view 1 gradebook
     if (api_is_platform_admin()) {
         $stud_id = (api_is_allowed_to_edit() ? null : api_get_user_id());
-    } else {
-        $stud_id = $stud_id;
     }
 
     $allcat = $cats[0]->get_subcategories($stud_id, $course_code, $session_id);
@@ -787,7 +813,6 @@ if (!empty($selectCat)) {
     $cat = new Category();
     $course_id = CourseManager::get_course_by_category($selectCat);
     $show_message = $cat->show_message_resource_delete($course_id);
-
     if ($show_message == '') {
         // Student
         if (!api_is_allowed_to_edit() && !api_is_excluded_user_type()) {
@@ -819,7 +844,7 @@ if (!api_is_allowed_to_edit(null, true)) {
     if ($allowButton) {
         $actionsLeft .= Display::url(
             Display::returnFontAwesomeIcon('file-pdf-o').get_lang('DownloadReportPdf'),
-            api_get_self().'?action=export_table&'.api_get_cidreq(),
+            api_get_self().'?action=export_table&'.api_get_cidreq().'&category_id='.$selectCat,
             ['class' => 'btn btn-default']
         );
     }
@@ -960,7 +985,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                 if (api_is_allowed_to_edit(null, true) &&
                     api_get_setting('gradebook_enable_grade_model') === 'true'
                 ) {
-                    //Showing the grading system
+                    // Showing the grading system
                     if (!empty($grade_models[$grade_model_id])) {
                         echo Display::return_message(
                             get_lang('GradeModel').': '.$grade_models[$grade_model_id]['name']
@@ -1002,28 +1027,6 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     $gradebookTable->td_attributes = [
                         4 => 'class="text-center"',
                     ];
-                } else {
-                    /*if (empty($model)) {
-                        $gradebookTable->td_attributes = [
-                            3 => 'class="text-right"',
-                            4 => 'class="text-center"',
-                        ];
-
-                        if (!empty($loadStats)) {
-                            for ($z = 5; $z < count($loadStats); $z++) {
-                                $gradebookTable->td_attributes[$z] = 'class="text-center"';
-                            }
-                        }
-                    } else {
-                        $gradebookTable->td_attributes = [
-                            3 => 'class="text-right"',
-                            4 => 'class="text-center"',
-                        ];
-                    }
-
-                    if ($action == 'export_table') {
-                        unset($gradebookTable->td_attributes[7]);
-                    }*/
                 }
 
                 $table = $gradebookTable->return_table();
@@ -1034,7 +1037,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     $graph = $gradebookTable->getGraph();
                 }
 
-                if ($action == 'export_table') {
+                if ($action === 'export_table') {
                     ob_clean();
                     $params = [
                         'pdf_title' => sprintf(get_lang('GradeFromX'), $courseInfo['name']),

@@ -23,6 +23,8 @@ class Evaluation implements GradebookItem
     private $eval_max;
     private $visible;
     private $sessionId;
+    /** @var \Chamilo\CoreBundle\Entity\GradebookEvaluation */
+    public $entity;
 
     /**
      * Construct.
@@ -534,6 +536,55 @@ class Evaluation implements GradebookItem
      */
     public function calc_score($stud_id = null, $type = null)
     {
+        $allowStats = api_get_configuration_value('allow_gradebook_stats');
+        if ($allowStats) {
+            $evaluation = $this->entity;
+            if (!empty($evaluation)) {
+                $weight = $evaluation->getMax();
+                switch ($type) {
+                    case 'best':
+                        $bestResult = $evaluation->getBestScore();
+                        $result = [$bestResult, $weight];
+
+                        return $result;
+                        break;
+                    case 'average':
+                        $count = count($evaluation->getUserScoreList());
+                        if (empty($count)) {
+                            $result = [0, $weight];
+
+                            return $result;
+                        }
+
+                        $sumResult = array_sum($evaluation->getUserScoreList());
+                        $result = [$sumResult / $count, $weight];
+
+                        return $result;
+                        break;
+                    case 'ranking':
+                        $ranking = AbstractLink::getCurrentUserRanking($stud_id, $evaluation->getUserScoreList());
+                        return $ranking;
+                        break;
+                    default:
+                        $weight = $evaluation->getMax();
+                        if (!empty($stud_id)) {
+                            $scoreList = $evaluation->getUserScoreList();
+                            $result = [0, $weight];
+                            if (isset($scoreList[$stud_id])) {
+                                $result = [$scoreList[$stud_id], $weight];
+                            }
+                            return $result;
+                        } else {
+                            $studentCount = count($evaluation->getUserScoreList());
+                            $sumResult = array_sum($evaluation->getUserScoreList());
+                            $result = [$sumResult, $studentCount];
+                        }
+                        return $result;
+                        break;
+                }
+            }
+        }
+
         $useSession = true;
         if (isset($stud_id) && empty($type)) {
             $key = 'result_score_student_list_'.api_get_course_int_id().'_'.api_get_session_id().'_'.$this->id.'_'.$stud_id;
@@ -803,14 +854,64 @@ class Evaluation implements GradebookItem
     {
     }
 
+    /**
+     * @return mixed
+     */
     public function getStudentList()
     {
         return $this->studentList;
     }
 
+    /**
+     * @param $list
+     */
     public function setStudentList($list)
     {
         $this->studentList = $list;
+    }
+
+    /**
+     * @param int $evaluationId
+     *
+     */
+    public static function generateStats($evaluationId)
+    {
+        $allowStats = api_get_configuration_value('allow_gradebook_stats');
+        if ($allowStats) {
+            $evaluation = self::load($evaluationId);
+
+            $results = Result::load(null, null, $evaluationId);
+            $sumResult = 0;
+            $bestResult = 0;
+            $average = 0;
+            $scoreList = [];
+
+            if (!empty($results)) {
+                /** @var Result $result */
+                foreach ($results as $result) {
+                    $score = $result->get_score();
+                    $scoreList[$result->get_user_id()] = $score;
+                    $sumResult += $score;
+                    if ($score > $bestResult) {
+                        $bestResult = $score;
+                    }
+                }
+                $average = $sumResult / count($results);
+            }
+
+            /** @var Evaluation $evaluation */
+            $evaluation = $evaluation[0];
+            $evaluation = $evaluation->entity;
+            $evaluation
+                ->setBestScore($bestResult)
+                ->setAverageScore($average)
+                ->setUserScoreList($scoreList)
+            ;
+
+            $em = Database::getManager();
+            $em->persist($evaluation);
+            $em->flush();
+        }
     }
 
     /**
@@ -821,6 +922,12 @@ class Evaluation implements GradebookItem
     private static function create_evaluation_objects_from_sql_result($result)
     {
         $alleval = [];
+        $allow = api_get_configuration_value('allow_gradebook_stats');
+        if ($allow) {
+            $em = Database::getManager();
+            $repo = $em->getRepository('ChamiloCoreBundle:GradebookEvaluation');
+        }
+
         if (Database::num_rows($result)) {
             while ($data = Database::fetch_array($result)) {
                 $eval = new Evaluation();
@@ -837,6 +944,10 @@ class Evaluation implements GradebookItem
                 $eval->set_type($data['type']);
                 $eval->set_locked($data['locked']);
                 $eval->setSessionId(api_get_session_id());
+
+                if ($allow) {
+                    $eval->entity = $repo->find($data['id']);
+                }
 
                 $alleval[] = $eval;
             }

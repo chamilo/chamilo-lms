@@ -1082,6 +1082,13 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Allow to session admins login as teachers
 //$_configuration['allow_session_admin_login_as_teacher'] = false;
 
+// Allow gradebook stats
+// Requires to edit the GradebookLink.php And GradebookEvaluation.php files adding the "@" in the ORM phpdoc block
+/* ALTER TABLE gradebook_link ADD score_weight DOUBLE PRECISION DEFAULT NULL, ADD average_score DOUBLE PRECISION DEFAULT NULL, ADD best_score DOUBLE PRECISION DEFAULT NULL, ADD user_score_list LONGTEXT DEFAULT NULL COMMENT '(DC2Type:array)' ;
+ALTER TABLE gradebook_evaluation ADD score_weight DOUBLE PRECISION DEFAULT NULL, ADD average_score DOUBLE PRECISION DEFAULT NULL, ADD best_score DOUBLE PRECISION DEFAULT NULL, ADD user_score_list LONGTEXT DEFAULT NULL COMMENT '(DC2Type:array)' ;
+
+//$_configuration['allow_gradebook_stats'] = false;
+
 // Hide social media links
 //$_configuration['hide_social_media_links'] = false;
 

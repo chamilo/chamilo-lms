@@ -2847,6 +2847,7 @@ HOTSPOT;
             $weight = float_format($weight, 1, $decimalSeparator, $thousandSeparator);
         }
 
+        $html = '';
         if ($show_percentage) {
             $percentageSign = '%';
             if ($hidePercentageSign) {
@@ -4828,6 +4829,15 @@ EOT;
                         $exercise_stat_info['exe_duration'],
                         $question_list
                     );
+
+                    $allowStats = api_get_configuration_value('allow_gradebook_stats');
+                    if ($allowStats) {
+                        $objExercise->generateStats(
+                            $objExercise->selectId(),
+                            api_get_course_info(),
+                            api_get_session_id()
+                        );
+                    }
                 }
             }
 

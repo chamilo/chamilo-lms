@@ -25,13 +25,13 @@ $interbreadcrumb[] = [
 ];
 
 //load the evaluation & category
-$select_eval = intval($_GET['selecteval']);
+$select_eval = (int) $_GET['selecteval'];
 if (empty($select_eval)) {
     api_not_allowed();
 }
 
 $displayscore = ScoreDisplay::instance();
-$eval = Evaluation :: load($select_eval);
+$eval = Evaluation::load($select_eval);
 $overwritescore = 0;
 if ($eval[0]->get_category_id() < 0) {
     // if category id is negative, then the evaluation's origin is a link
@@ -43,7 +43,7 @@ if ($eval[0]->get_category_id() < 0) {
 
 //load the result with the evaluation id
 if (isset($_GET['delete_mark'])) {
-    $result = Result :: load($_GET['delete_mark']);
+    $result = Result::load($_GET['delete_mark']);
     if (!empty($result[0])) {
         $result[0]->delete();
     }

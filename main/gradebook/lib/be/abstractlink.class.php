@@ -28,6 +28,8 @@ abstract class AbstractLink implements GradebookItem
     protected $weight;
     protected $visible;
     protected $session_id;
+    /** @var \Chamilo\CoreBundle\Entity\GradebookLink */
+    public $entity;
 
     /**
      * Constructor.
@@ -699,6 +701,12 @@ abstract class AbstractLink implements GradebookItem
     private static function create_objects_from_sql_result($result)
     {
         $links = [];
+        $allow = api_get_configuration_value('allow_gradebook_stats');
+        if ($allow) {
+            $em = Database::getManager();
+            $repo = $em->getRepository('ChamiloCoreBundle:GradebookLink');
+        }
+
         while ($data = Database::fetch_array($result)) {
             $link = LinkFactory::create($data['type']);
             $link->set_id($data['id']);
@@ -714,8 +722,11 @@ abstract class AbstractLink implements GradebookItem
 
             //session id should depend of the category --> $data['category_id']
             $session_id = api_get_session_id();
-
             $link->set_session_id($session_id);
+
+            if ($allow) {
+                $link->entity = $repo->find($data['id']);
+            }
             $links[] = $link;
         }
 
@@ -744,5 +755,44 @@ abstract class AbstractLink implements GradebookItem
         }
 
         return $targets;
+    }
+
+    /**
+     * @param int    $itemId
+     * @param int    $linkType
+     * @param string $courseCode
+     * @param int    $sessionId
+     *
+     * @return array|bool|\Doctrine\DBAL\Driver\Statement
+     */
+    public static function getGradebookLinksFromItem($itemId, $linkType, $courseCode, $sessionId = 0)
+    {
+        if (empty($courseCode) || empty($itemId) || empty($linkType)) {
+            return false;
+        }
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+        $tableCategory = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $itemId = (int) $itemId;
+        $linkType = (int) $linkType;
+        $sessionId = (int) $sessionId;
+        $courseCode = Database::escape_string($courseCode);
+
+        $sql = "SELECT DISTINCT l.* 
+                FROM $table l INNER JOIN $tableCategory c 
+                ON (c.course_code = l.course_code AND c.id = l.category_id)
+                WHERE 
+                    ref_id = $itemId AND 
+                    type = $linkType AND 
+                    l.course_code = '$courseCode' AND 
+                    c.session_id = $sessionId";
+
+        $result = Database::query($sql);
+        if (Database::num_rows($result)) {
+            $result = Database::store_result($result);
+
+            return $result;
+        }
+
+        return false;
     }
 }

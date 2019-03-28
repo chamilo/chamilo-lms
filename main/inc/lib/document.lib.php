@@ -5014,6 +5014,9 @@ class DocumentManager
         $path = $document_data['path'];
         $url_path = urlencode($document_data['path']);
 
+        $basePageUrl = api_get_path(WEB_CODE_PATH).'document/';
+        $pageUrl = $basePageUrl.'document.php';
+
         // Add class="invisible" on invisible files
         $visibility_class = $visibility == false ? ' class="muted"' : '';
         $forcedownload_link = '';
@@ -5023,7 +5026,9 @@ class DocumentManager
 
         if (!$show_as_icon) {
             // Build download link (icon)
-            $forcedownload_link = $filetype == 'folder' ? api_get_self().'?'.$courseParams.'&action=downloadfolder&id='.$document_data['id'] : api_get_self().'?'.$courseParams.'&amp;action=download&amp;id='.$document_data['id'];
+            $forcedownload_link = $filetype == 'folder'
+                ? $pageUrl.'?'.$courseParams.'&action=downloadfolder&id='.$document_data['id']
+                : $pageUrl.'?'.$courseParams.'&amp;action=download&amp;id='.$document_data['id'];
             // Folder download or file download?
             $forcedownload_icon = $filetype == 'folder' ? 'save_pack.png' : 'save.png';
             // Prevent multiple clicks on zipped folder download
@@ -5042,9 +5047,9 @@ class DocumentManager
             $is_browser_viewable_file = self::isBrowserViewable($ext);
             if ($is_browser_viewable_file) {
                 if ($ext == 'pdf' || in_array($ext, $webODFList)) {
-                    $url = api_get_self().'?'.$courseParams.'&amp;action=download&amp;id='.$document_data['id'];
+                    $url = $pageUrl.'?'.$courseParams.'&amp;action=download&amp;id='.$document_data['id'];
                 } else {
-                    $url = 'showinframes.php?'.$courseParams.'&id='.$document_data['id'];
+                    $url = $basePageUrl.'showinframes.php?'.$courseParams.'&id='.$document_data['id'];
                 }
             } else {
                 // url-encode for problematic characters (we may not call them dangerous characters...)
@@ -5052,7 +5057,7 @@ class DocumentManager
                 $url = $www.str_replace('%2F', '/', $url_path).'?'.$courseParams;
             }
         } else {
-            $url = api_get_self().'?'.$courseParams.'&id='.$document_data['id'];
+            $url = $pageUrl.'?'.$courseParams.'&id='.$document_data['id'];
         }
 
         if ($isCertificateMode) {
@@ -5130,7 +5135,7 @@ class DocumentManager
             if (api_get_setting('allow_my_files') === 'true' &&
                 api_get_setting('users_copy_files') === 'true' && api_is_anonymous() === false
             ) {
-                $copy_myfiles_link = $filetype == 'file' ? api_get_self().'?'.$courseParams.'&action=copytomyfiles&id='.$document_data['id'] : api_get_self().'?'.$courseParams;
+                $copy_myfiles_link = $filetype == 'file' ? $pageUrl.'?'.$courseParams.'&action=copytomyfiles&id='.$document_data['id'] : api_get_self().'?'.$courseParams;
                 if ($filetype == 'file') {
                     $copyToMyFiles = '<a href="'.$copy_myfiles_link.'" style="float:right"'.$prevent_multiple_click.'>'.
                         Display::return_icon('briefcase.png', get_lang('CopyToMyFiles'), [], ICON_SIZE_SMALL).'&nbsp;&nbsp;</a>';
@@ -5147,7 +5152,7 @@ class DocumentManager
                 $filetype == 'file' &&
                 in_array($extension, ['html', 'htm'])
             ) {
-                $pdf_icon = ' <a style="float:right".'.$prevent_multiple_click.' href="'.api_get_self().'?'.$courseParams.'&action=export_to_pdf&id='.$document_data['id'].'&curdirpath='.$curdirpath.'">'.
+                $pdf_icon = ' <a style="float:right".'.$prevent_multiple_click.' href="'.$pageUrl.'?'.$courseParams.'&action=export_to_pdf&id='.$document_data['id'].'&curdirpath='.$curdirpath.'">'.
                     Display::return_icon('pdf.png', get_lang('Export2PDF'), [], ICON_SIZE_SMALL).'</a> ';
             }
 
@@ -5198,7 +5203,7 @@ class DocumentManager
                     // For a "PDF Download" of the file.
                     $pdfPreview = null;
                     if ($ext != 'pdf' && !in_array($ext, $webODFList)) {
-                        $url = 'showinframes.php?'.$courseParams.'&id='.$document_data['id'];
+                        $url = $basePageUrl.'showinframes.php?'.$courseParams.'&id='.$document_data['id'];
                     } else {
                         $pdfPreview = Display::url(
                             Display::return_icon('preview.png', get_lang('Preview'), null, ICON_SIZE_SMALL),
@@ -5239,7 +5244,7 @@ class DocumentManager
                         preg_match('/bmp$/i', urldecode($checkExtension)) ||
                         preg_match('/svg$/i', urldecode($checkExtension))
                     ) {
-                        $url = 'showinframes.php?'.$courseParams.'&id='.$document_data['id'];
+                        $url = $basePageUrl.'showinframes.php?'.$courseParams.'&id='.$document_data['id'];
 
                         return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" '.$visibility_class.' style="float:left">'.
                             self::build_document_icon_tag($filetype, $path, $isAllowedToEdit).
@@ -5278,7 +5283,7 @@ class DocumentManager
                         preg_match('/bmp$/i', urldecode($checkExtension)) ||
                         preg_match('/svg$/i', urldecode($checkExtension))
                     ) {
-                        $url = 'showinframes.php?'.$courseParams.'&id='.$document_data['id']; //without preview
+                        $url = $basePageUrl.'showinframes.php?'.$courseParams.'&id='.$document_data['id']; //without preview
                         return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" '.$visibility_class.' style="float:left">'.
                             self::build_document_icon_tag($filetype, $path, $isAllowedToEdit).
                         '</a>';
@@ -5838,6 +5843,14 @@ class DocumentManager
         } else {
             return false;
         }
+    }
+
+    public static function isBasicCourseFolder($path, $sessionId)
+    {
+        $cleanPath = Security::remove_XSS($path);
+        $basicCourseFolder = '/basic-course-documents__'.$sessionId.'__0';
+
+        return $cleanPath == $basicCourseFolder;
     }
 
     /**

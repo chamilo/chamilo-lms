@@ -119,4 +119,90 @@
 
 {{ requirements }}
 {{ dependencies }}
+
+    <script>
+        $(function () {
+            function loadFiles(courseId, sessionId) {
+                return $.get('{{ _p.web_ajax }}session.ajax.php', {
+                    course: courseId,
+                    session: sessionId,
+                    a: 'get_basic_course_documents_list'
+                });
+            }
+
+            function loadForm(courseId, sessionId) {
+                return $.get('{{ _p.web_ajax }}session.ajax.php', {
+                    course: courseId,
+                    session: sessionId,
+                    a: 'get_basic_course_documents_form'
+                });
+            }
+
+            var c = 0;
+
+            $('.session-upload-file-btn').on('click', function (e) {
+                e.preventDefault();
+
+                var $self = $(this),
+                    $trParent = $self.parents('tr'),
+                    $trContainer = $trParent.next(),
+                    courseId = $self.data('course') || 0,
+                    sessionId = $self.data('session') || 0;
+
+                $('.session-upload-file-tr').remove();
+
+                if (courseId == c) {
+                    c = 0;
+
+                    return;
+                }
+
+                c = courseId;
+
+                $trContainer = $('<tr>')
+                    .addClass('session-upload-file-tr')
+                    .html('<td colspan="4">{{ 'Loading'|get_lang }}</td>')
+                    .insertAfter($trParent);
+
+                $.when
+                    .apply($, [loadFiles(courseId, sessionId), loadForm(courseId, sessionId)])
+                    .then(function (response1, response2) {
+                        $trContainer.find('td:first')
+                            .html('<div id="session-' + sessionId + '-docs">' + response1[0] + '</div>'
+                                + '<div id="session-' + sessionId + '-form">' + response2[0] + '</div>');
+
+                        $('#input_file_upload').on('fileuploaddone', function (e, data) {
+                            $('#session-' + sessionId + '-docs').html('{{ 'Loading'|get_lang }}');
+
+                            loadFiles(courseId, sessionId)
+                                .then(function (response) {
+                                    $('#session-' + sessionId + '-docs').html(response);
+                                });
+                        });
+                    });
+            });
+
+            $('#session-list-course').on('click', '.delete_document', function (e) {
+                e.preventDefault();
+
+                if (!confirm('{{ 'ConfirmYourChoice'|get_lang }}')) {
+                    return;
+                }
+
+                var $self = $(this),
+                    courseId = $self.data('course') || 0,
+                    sessionId = $self.data('session') || 0;
+
+                $('#session-' + sessionId + '-docs').html('{{ 'Loading'|get_lang }}');
+
+                $.ajax(this.href)
+                    .then(function () {
+                        loadFiles(courseId, sessionId)
+                            .then(function (response) {
+                                $('#session-' + sessionId + '-docs').html(response);
+                            })
+                    });
+            });
+        });
+    </script>
 {% endblock %}

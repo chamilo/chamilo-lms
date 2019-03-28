@@ -254,6 +254,15 @@ if ($session->getNbrCourses() === 0) {
             $codePath."session/session_course_edit.php?id_session=$sessionId&page=resume_session.php&course_code={$course->getCode()}$orig_param"
         );
         $courseItem .= Display::url(
+            Display::return_icon('folder_document.png', get_lang('UploadFile')),
+            '#',
+            [
+                'class' => 'session-upload-file-btn',
+                'data-session' => $sessionId,
+                'data-course' => $course->getId(),
+            ]
+        );
+        $courseItem .= Display::url(
             Display::return_icon('delete.png', get_lang('Delete')),
             api_get_self()."?id_session=$sessionId&action=delete&idChecked[]={$course->getCode()}",
             [
@@ -389,6 +398,8 @@ if (!empty($sessionInfo['promotion_id'])) {
 
 $programmedAnnouncement = new ScheduledAnnouncement();
 $programmedAnnouncement = $programmedAnnouncement->allowed();
+
+$htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
 
 $tpl = new Template($tool_name);
 $tpl->assign('session_header', $sessionHeader);

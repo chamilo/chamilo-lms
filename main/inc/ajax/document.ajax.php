@@ -35,6 +35,17 @@ switch ($action) {
         api_protect_course_script(true);
         // User access same as upload.php
         $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+
+        $sessionId = api_get_session_id();
+
+        if (!$is_allowed_to_edit && $sessionId && $_REQUEST['curdirpath'] == "/basic-course-documents__{$sessionId}__0") {
+            $session = SessionManager::fetch($sessionId);
+
+            if (!empty($session) && $session['session_admin_id'] == api_get_user_id()) {
+                $is_allowed_to_edit = true;
+            }
+        }
+
         // This needs cleaning!
         if (api_get_group_id()) {
             $groupInfo = GroupManager::get_group_properties(api_get_group_id());

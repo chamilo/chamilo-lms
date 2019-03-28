@@ -102,28 +102,28 @@ class GradebookEvaluation
     /**
      * @var float
      *
-     * ORM\Column(name="best_score", type="float", precision=6, scale=2, nullable=true)
+     * @ORM\Column(name="best_score", type="float", precision=6, scale=2, nullable=true)
      */
     protected $bestScore;
 
     /**
      * @var float
      *
-     * ORM\Column(name="average_score", type="float", precision=6, scale=2, nullable=true)
+     * @ORM\Column(name="average_score", type="float", precision=6, scale=2, nullable=true)
      */
     protected $averageScore;
 
     /**
      * @var float
      *
-     * ORM\Column(name="score_weight", type="float", precision=6, scale=2, nullable=true)
+     * @ORM\Column(name="score_weight", type="float", precision=6, scale=2, nullable=true)
      */
     protected $scoreWeight;
 
     /**
      * @var array
      *
-     * ORM\Column(name="user_score_list", type="array", nullable=true)
+     * @ORM\Column(name="user_score_list", type="array", nullable=true)
      */
     protected $userScoreList;
 

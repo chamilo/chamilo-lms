@@ -2736,8 +2736,6 @@ class MessageManager
      * @param int $messageId
      * @param int $userId
      *
-     * @throws \Doctrine\ORM\Query\QueryException
-     *
      * @return array
      */
     public static function countLikesAndDislikes($messageId, $userId)
@@ -2750,26 +2748,26 @@ class MessageManager
         $userId = (int) $userId;
 
         $em = Database::getManager();
+        $query = $em
+            ->createQuery('
+                SELECT SUM(l.liked) AS likes, SUM(l.disliked) AS dislikes FROM ChamiloCoreBundle:MessageLikes l
+                WHERE l.message = :message
+            ')
+            ->setParameters(['message' => $messageId]);
 
-        $likesCount = $em
-            ->createQuery('SELECT COUNT(l) FROM ChamiloCoreBundle:MessageLikes l
-                WHERE l.liked = true AND l.message = :message')
-            ->setParameters(['message' => $messageId])
-            ->getSingleScalarResult();
-
-        $dislikesCount = $em
-            ->createQuery('SELECT COUNT(l) FROM ChamiloCoreBundle:MessageLikes l
-                WHERE l.liked = false AND l.message = :message')
-            ->setParameters(['message' => $messageId])
-            ->getSingleScalarResult();
+        try {
+            $counts = $query->getSingleResult();
+        } catch (Exception $e) {
+            $counts = ['likes' => 0, 'dislikes' => 0];
+        }
 
         $userLike = $em
             ->getRepository('ChamiloCoreBundle:MessageLikes')
             ->findOneBy(['message' => $messageId, 'user' => $userId]);
 
         return [
-            'likes' => $likesCount,
-            'dislikes' => $dislikesCount,
+            'likes' => (int) $counts['likes'],
+            'dislikes' => (int) $counts['dislikes'],
             'user_liked' => $userLike ? $userLike->isLiked() : false,
             'user_disliked' => $userLike ? $userLike->isDisliked() : false,
         ];
@@ -2779,8 +2777,6 @@ class MessageManager
      * @param int $messageId
      * @param int $userId
      * @param int $groupId   Optional.
-     *
-     * @throws \Doctrine\ORM\Query\QueryException
      *
      * @return string
      */

@@ -635,6 +635,17 @@ class DocumentManager
                     }
                 }
 
+                if (self::isBasicCourseFolder($row['path'], $sessionId)) {
+                    $basicCourseDocumentsContent = self::getAllDocumentData(
+                        $courseInfo,
+                        $row['path']
+                    );
+
+                    if (empty($basicCourseDocumentsContent)) {
+                        continue;
+                    }
+                }
+
                 $rows[$row['id']] = $row;
             }
 

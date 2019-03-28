@@ -191,7 +191,7 @@ function otherRow($questions, $user, $courseId)
         if ('open' === $question['type']) {
             $answer = getOpenAnswer($question['question_id'], $question['survey_id'], $courseId, $user);
 
-            if ($answer){
+            if ($answer) {
                 $row[] = Security::remove_XSS($answer->getOptionId());
             }
         } else {

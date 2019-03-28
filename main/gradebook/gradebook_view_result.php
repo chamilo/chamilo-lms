@@ -116,13 +116,6 @@ if (isset($_GET['action'])) {
                 );
 
                 $form->addTextarea('comment', get_lang('Comment'));
-
-                /*$form->addRule(
-                    'score',
-                    get_lang('ValueTooBig'),
-                    'max_numeric_length',
-                    $evaluation->get_max()
-                );*/
                 $form->addButtonSave(get_lang('Save'));
                 $attemptList = ResultTable::getResultAttemptTable($result, $url);
                 $form->addLabel(get_lang('Attempts'), $attemptList);
@@ -130,7 +123,6 @@ if (isset($_GET['action'])) {
                 if ($form->validate()) {
                     $values = $form->getSubmitValues();
                     $newScore = $values['score'];
-
                     $newScore = api_number_format(
                         $newScore,
                         api_get_setting('gradebook_number_decimals')
@@ -155,7 +147,6 @@ if (isset($_GET['action'])) {
                 }
 
                 Display::display_header();
-
                 $items[] = [
                     'url' => $backUrl,
                     'content' => Display::return_icon(
@@ -165,7 +156,6 @@ if (isset($_GET['action'])) {
                         ICON_SIZE_MEDIUM
                     ),
                 ];
-
                 echo Display::actions($items);
                 $form->display();
                 Display::display_footer();
@@ -215,7 +205,6 @@ if (isset($_GET['editres'])) {
                 'created_at' => $now,
                 'updated_at' => $now,
             ];
-
             Database::insert($table, $params);
         }
 
@@ -651,7 +640,7 @@ if (!isset($_GET['export']) && (!isset($_GET['import']))) {
         'url' => api_get_path(WEB_CODE_PATH).'gradebook/gradebook_view_result.php?selecteval='.$select_eval.'&'.api_get_cidreq(),
         'name' => get_lang('ViewResult'),
     ];
-    Display :: display_header('');
+    Display::display_header();
 }
 
 if (isset($_GET['adduser'])) {

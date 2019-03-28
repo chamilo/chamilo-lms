@@ -1156,6 +1156,9 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // - launch composer install to rebuild the autoload.php
 //$_configuration['social_enable_likes_messages'] = false;
 
+// Block student's access to the course documents when using the ckeditor "Browse server" button
+//$_configuration['block_editor_file_manager_for_students'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

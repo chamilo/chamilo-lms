@@ -3015,7 +3015,7 @@ class SocialManager extends UserManager
         $userId = (int) $userId;
         $socialAjaxUrl = api_get_path(WEB_AJAX_PATH).'social.ajax.php';
         $socialAutoExtendLink = '';
-        if ($countPost > self::DEFAULT_SCROLL_NEW_POST) {
+        if ($countPost > self::DEFAULT_WALL_POSTS) {
             $socialAutoExtendLink = Display::url(
                 get_lang('SeeMore'),
                 $socialAjaxUrl.'?u='.$userId.'&a=list_wall_message&start='.

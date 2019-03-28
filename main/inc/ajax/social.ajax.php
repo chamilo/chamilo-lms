@@ -281,7 +281,7 @@ switch ($action) {
                 $threadIdList = array_column($threadList, 'id');
             }
 
-            $html = SocialManager::getMyWallMessages($userId, $start, $length, $threadIdList);
+            $html = SocialManager::getMyWallMessages($userId, $start, SocialManager::DEFAULT_SCROLL_NEW_POST, $threadIdList);
             $html = $html['posts'];
         } else {
             $messages = SocialManager::getWallMessages(
@@ -291,7 +291,7 @@ switch ($action) {
                 0,
                 '',
                 $start,
-                $length
+                SocialManager::DEFAULT_SCROLL_NEW_POST
             );
             $messages = SocialManager::formatWallMessages($messages);
 
@@ -310,7 +310,7 @@ switch ($action) {
                 Display::url(
                     get_lang('SeeMore'),
                     api_get_self().'?u='.$userId.'&a=list_wall_message&start='.
-                    ($start + $length + 1).'&length='.$length,
+                    ($start + SocialManager::DEFAULT_SCROLL_NEW_POST).'&length='.SocialManager::DEFAULT_SCROLL_NEW_POST,
                     [
                         'class' => 'nextPage',
                     ]

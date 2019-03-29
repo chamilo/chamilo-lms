@@ -5299,11 +5299,12 @@ EOT;
                 SELECT COUNT(ea) FROM ChamiloCoreBundle:TrackEAttempt ea
                 WHERE ea.userId = :user AND ea.cId = :course AND ea.sessionId = :session
                     AND ea.tms > :time
+                GROUP BY ea.questionId
             ')
             ->setParameters(['user' => $userId, 'course' => $courseId, 'session' => $sessionId, 'time' => $time])
-            ->getSingleScalarResult();
+            ->getResult();
 
-        return $result;
+        return count($result);
     }
 
     /**

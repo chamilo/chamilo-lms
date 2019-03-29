@@ -28,7 +28,7 @@ $sessionId = api_get_session_id();
 $exercise_id = isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) : 0;
 
 $objExercise = new Exercise();
-$result = $objExercise->read($exercise_id, true);
+$result = $objExercise->read($exercise_id, false);
 
 if (!$result) {
     api_not_allowed(true);
@@ -392,14 +392,7 @@ if ($disable && empty($exercise_stat_info)) {
     $exercise_url_button = Display::return_message(get_lang('NewExerciseAttemptDisabled'));
 }
 
-$isLimitReached = ExerciseLib::isQuestionsLimitPerDayReached(
-    api_get_user_id(),
-    count($objExercise->get_validated_question_list()),
-    api_get_course_int_id(),
-    api_get_session_id()
-);
-
-if (!empty($exercise_url_button) && !$isLimitReached) {
+if (!empty($exercise_url_button)) {
     $html .= Display::div(
         Display::div(
             $exercise_url_button,

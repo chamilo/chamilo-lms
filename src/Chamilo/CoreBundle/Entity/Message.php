@@ -103,8 +103,8 @@ class Message
     /**
      * @var ArrayCollection
      *
-     * Add @ to the next line if api_get_configuration_value('social_enable_likes_messages') is true
-     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\MessageLikes", mappedBy="message", orphanRemoval=true)
+     * Add @ to the next line if api_get_configuration_value('social_enable_messages_feedback') is true
+     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\MessageFeedback", mappedBy="message", orphanRemoval=true)
      */
     protected $likes;
 

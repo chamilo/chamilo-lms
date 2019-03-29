@@ -1005,7 +1005,7 @@ function to_javascript_work()
             $("#work_title").focus();
         }
 
-        $(document).ready(function() {
+        $(function() {
             setFocus();
             var checked = $("#expiry_date").attr("checked");
             if (checked) {
@@ -2101,7 +2101,7 @@ function get_work_user_list(
                     ';
 
                     $correction .= "<script>
-                    $(document).ready(function() {
+                    $(function() {
                         $('.work_correction_file_upload').each(function () {
                             $(this).fileupload({
                                 dropZone: $(this)

@@ -418,7 +418,7 @@ if ($disableList) {
 }
 
 $htmlHeadXtra[] = '<script>
-$(document).ready(function() {
+$(function() {
     $("#skill").on("change", function() {
         $(location).attr("href", "'.$url.'&id="+$(this).val());
     });

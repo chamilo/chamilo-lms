@@ -149,7 +149,7 @@ function add_image_form() {
 	}
 }
 
-$(document).ready(function() {
+$(function() {
 	if ($("#msg_'.$message_id.'").length) {
 		$("html,body").animate({
 			scrollTop: $("#msg_'.$message_id.'").offset().top

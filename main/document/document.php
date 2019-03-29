@@ -778,7 +778,7 @@ function confirmation (name) {
     }
 }
 
-$(document).ready(function() {
+$(function() {
     $(".convertAction").click(function() {
         var id = $(this).attr("data-documentId");
         var format = $(this).attr("data-formatType");
@@ -944,7 +944,7 @@ if (!empty($documentAndFolders)) {
 
 $htmlHeadXtra[] = '
     <script>
-        $(document).ready( function() {
+        $(function() {
             //Experimental changes to preview mp3, ogg files'
             .$jquery.'
         });
@@ -2162,7 +2162,7 @@ $ajaxURL = api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=get_document_quota&'
 
 if (count($documentAndFolders) > 1) {
     echo '<script>
-    $(document).ready(function() {
+    $(function() {
         $.ajax({
             url:"'.$ajaxURL.'",
             success:function(data){

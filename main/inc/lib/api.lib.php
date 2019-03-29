@@ -8094,7 +8094,7 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
         same_as_username : \"".get_lang('YourPasswordCannotBeTheSameAsYourUsername')."\"
     };
 
-    $(document).ready(function() {
+    $(function() {
         var lang = ".json_encode($translations).";     
         var options = {        
             onLoad : function () {

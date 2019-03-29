@@ -586,7 +586,7 @@ $allowDoubleValidation = api_get_configuration_value('allow_double_validation_in
 $formContainsSendButton = false;
 if ($allowDoubleValidation && $showTerms == false) {
     $htmlHeadXtra[] = '<script>
-        $(document).ready(function() {
+        $(function() {
             $("#pre_validation").click(function() {
                 $(this).hide();
                 $("#final_button").show();

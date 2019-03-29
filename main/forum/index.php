@@ -30,7 +30,7 @@ api_protect_course_script(true);
 
 $current_course_tool = TOOL_FORUM;
 $htmlHeadXtra[] = '<script>
-$(document).ready(function() {
+$(function() {
     $(\'.hide-me\').slideUp();
 });
 

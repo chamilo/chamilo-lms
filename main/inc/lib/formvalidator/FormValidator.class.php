@@ -1622,7 +1622,7 @@ EOT;
             $this->addHtml('</div>');
 
             $this->addHtml("<script>            
-            $(document).on('ready', function() {
+            $(function() {
                 var defaultValue = '$defaultId';
                 $('#$typeNoDots').val(defaultValue);
                 $('#$typeNoDots').selectpicker('render');

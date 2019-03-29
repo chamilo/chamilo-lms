@@ -2904,7 +2904,7 @@ class SocialManager extends UserManager
 
         if ($countPost > self::DEFAULT_WALL_POSTS) {
             $htmlHeadXtra[] = '<script>
-            $(document).ready(function() {
+            $(function() {
                 var container = $("#wallMessages");
                 container.jscroll({
                     loadingHtml: "<div class=\"well_border\">'.get_lang('Loading').' </div>",
@@ -2966,8 +2966,8 @@ class SocialManager extends UserManager
                 });  
             } 
             
-            $(document).ready(function() {
-                timeAgo();  
+            $(function() {
+                timeAgo();
                 
                 /*$(".delete_message").on("click", function() {
                     var id = $(this).attr("id");

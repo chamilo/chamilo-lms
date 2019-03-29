@@ -3223,7 +3223,7 @@ class Exercise
                 openClockWarning();
             }
 
-			$(document).ready(function() {
+			$(function() {
 				// time in seconds when using minutes there are some seconds lost
                 var time_left = parseInt(".$time_left.");
                 $('#exercise_clock_warning').epiclock({
@@ -5498,7 +5498,7 @@ class Exercise
                                 <p><em>".get_lang('HotSpot')."</em></p>
                                 <div id=\"hotspot-solution-$questionId\"></div>
                                 <script>
-                                    $(document).on('ready', function () {
+                                    $(function() {
                                         new HotspotQuestion({
                                             questionId: $questionId,
                                             exerciseId: {$this->id},

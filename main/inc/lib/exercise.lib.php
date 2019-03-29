@@ -295,7 +295,7 @@ class ExerciseLib
                         RadioValidator(question_id, answer_id);
                     }
                     
-                    $(document).ready(function() {
+                    $(function() {
                         var ShowAlert = '';
                         var typeRadioB = '';
                         var question_id = $('input[name=question_id]').val();
@@ -1257,7 +1257,7 @@ HTML;
                                 if (!$freeze) {
                                     $s .= "
                                         <script>
-                                            $(document).on('ready', function() {
+                                            $(function() {
                                                 jsPlumb.ready(function() {
                                                     jsPlumb.connect({
                                                         source: 'window_$windowId',
@@ -1483,7 +1483,7 @@ HOTSPOT;
             $s .= "<div class=\"col-sm-8 col-md-9\">
                    <div class=\"hotspot-image\"></div>
                     <script>
-                        $(document).on('ready', function() {
+                        $(function() {
                             new ".($answerType == HOT_SPOT_DELINEATION ? 'DelineationQuestion' : 'HotspotQuestion')."({
                                 questionId: $questionId,
                                 exerciseId: $exe_id,
@@ -3037,7 +3037,7 @@ HOTSPOT;
             spanTag.addClass(optionClass);
         }
         
-        $(document).ready( function() {
+        $(function() {
             // Loading values
             $('.exercise_mark_select').on('loaded.bs.select', function() {
                 updateSelect($(this));

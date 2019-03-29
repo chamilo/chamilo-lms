@@ -1656,7 +1656,7 @@ class ExtraField extends Model
                                     $deleteId = $field_details['variable'].'_delete';
                                     $form->addHtml("
                                         <script>
-                                            $(document).ready(function() {                                      
+                                            $(function() {                                     
                                                 $('#".$deleteId."').on('click', function() {
                                                     $.ajax({			
                                                         type: 'GET',

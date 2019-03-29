@@ -3455,7 +3455,7 @@ class DocumentManager
         if ($lp_id === false) {
             $url = $lpAjaxUrl.'?a=get_documents&lp_id=&cidReq='.$course_info['code'];
             $return .= "<script>
-            $(document).ready(function () {
+            $(function() {
                 $('.close_div').click(function() {
                     var course_id = this.id.split('_')[2];
                     var session_id = this.id.split('_')[3];

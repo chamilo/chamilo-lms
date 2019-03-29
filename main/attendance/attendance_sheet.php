@@ -182,7 +182,7 @@ if (api_is_allowed_to_edit(null, true) ||
                 });
             }
 
-            $(document).ready(function() {
+            $(function() {
                 $("table.tableWithFloatingHeader").each(function() {
                     $(this).wrap("<div class=\"divTableWithFloatingHeader\" style=\"position:relative\"></div>");
 

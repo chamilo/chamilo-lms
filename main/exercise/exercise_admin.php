@@ -119,7 +119,7 @@ $htmlHeadXtra[] = '<script>
 function setFocus(){
     $("#exercise_title").focus();
 }
-$(document).ready(function () {
+$(function() {
     setFocus();
 });
 </script>';

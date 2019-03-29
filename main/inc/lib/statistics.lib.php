@@ -1130,7 +1130,7 @@ class Statistics
     {
         $chartCode = '
         <script>
-        $(document).ready(function() {
+        $(function() {
             $.ajax({
                 url: "'.$url.'",
                 type: "POST",

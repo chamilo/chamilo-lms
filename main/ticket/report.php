@@ -21,7 +21,7 @@ $this_section = 'Reports';
 Session::erase('this_section');
 
 $htmlHeadXtra[] = '<script>
-$(document).ready(function(){
+$(function() {
     $( "#keyword_start_date_start" ).datepicker({ dateFormat: '."'yy-mm-dd'".' });
     $( "#keyword_start_date_end" ).datepicker({ dateFormat: '."'yy-mm-dd'".' });
 });

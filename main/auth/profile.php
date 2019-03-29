@@ -40,7 +40,7 @@ $htmlHeadXtra[] = api_get_password_checker_js('#username', '#password1');
 $htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
 $htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 $htmlHeadXtra[] = '<script>
-$(document).ready(function() {
+$(function() {
     $("#id_generate_api_key").on("click", function (e) {
         e.preventDefault();
 
@@ -332,7 +332,7 @@ $jquery_ready_content = $return['jquery_ready_content'];
 // the $jquery_ready_content variable collects all functions that
 // will be load in the $(document).ready javascript function
 $htmlHeadXtra[] = '<script>
-$(document).ready(function(){
+$(function() {
     '.$jquery_ready_content.'
 });
 </script>';

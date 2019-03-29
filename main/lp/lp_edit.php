@@ -284,13 +284,13 @@ echo Display::return_icon('course_setting_layout.png');
 echo '</div>';
 echo '</div>';
 echo "
-    <script>
-        $(document).on('ready', function () {
-            $('[name=\'hide_toc_frame\']').on('change', function() {
-                $('#pnl-frm').toggleClass('col-md-8').toggleClass('col-sm-12');
-                $('#pnl-toc').toggleClass('col-md-4').toggleClass('hide');
-            });
+<script>
+    $(function() {
+        $('[name=\'hide_toc_frame\']').on('change', function() {
+            $('#pnl-frm').toggleClass('col-md-8').toggleClass('col-sm-12');
+            $('#pnl-toc').toggleClass('col-md-4').toggleClass('hide');
         });
-    </script>
+    });
+</script>
 ";
 Display::display_footer();

@@ -495,7 +495,7 @@ $token = Security::get_token();
 $actions = Display::div($actions, ['class' => 'actions']);
 
 $extra = '<script>
-    $(document).ready(function() {
+    $(function() {
         $( "#dialog:ui-dialog" ).dialog( "destroy" );
         $( "#dialog-confirm" ).dialog({
                 autoOpen: false,

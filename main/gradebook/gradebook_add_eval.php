@@ -109,7 +109,7 @@ $interbreadcrumb[] = [
 $this_section = SECTION_COURSES;
 
 $htmlHeadXtra[] = '<script>
-$(document).ready( function() {
+$(function() {
     $("#hid_category_id").change(function() {
        $("#hid_category_id option:selected").each(function () {
            var cat_id = $(this).val();

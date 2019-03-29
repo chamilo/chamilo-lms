@@ -94,7 +94,7 @@ function confirmation() {
 	}
 }
 
-$(document).ready(function() {
+$(function() {
     $("body").on("click", ".view_children", function() {
         var id = $(this).attr("data-cat-id");
         $(".hidden_"+id).removeClass("hidden");

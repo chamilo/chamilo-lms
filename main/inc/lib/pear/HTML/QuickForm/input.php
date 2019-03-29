@@ -33,8 +33,6 @@
  */
 class HTML_QuickForm_input extends HTML_QuickForm_element
 {
-    protected $inputSize;
-
     /**
      * Class constructor
      *
@@ -112,54 +110,6 @@ class HTML_QuickForm_input extends HTML_QuickForm_element
     public function getValue()
     {
         return $this->getAttribute('value');
-    }
-
-
-    /**
-     * @return null
-     */
-    public function getInputSize()
-    {
-        return $this->inputSize;
-    }
-
-    /**
-     * @param null $inputSize
-     */
-    public function setInputSize($inputSize)
-    {
-        $this->inputSize = $inputSize;
-    }
-
-    /**
-     * @return array|null
-     */
-    public function calculateSize()
-    {
-        $size = $this->getColumnsSize();
-
-        if (empty($size)) {
-            $sizeTemp = $this->getInputSize();
-            if (empty($size)) {
-                $sizeTemp = 8;
-            }
-            $size = array(2, $sizeTemp, 2);
-        } else {
-            if (is_array($size)) {
-                if (count($size) != 3) {
-                    $sizeTemp = $this->getInputSize();
-                    if (empty($size)) {
-                        $sizeTemp = 8;
-                    }
-                    $size = array(2, $sizeTemp, 2);
-                }
-            } else {
-                // else just keep the $size array as received
-                $size = array(2, (int) $size, 2);
-            }
-        }
-
-        return $size;
     }
 
     /**

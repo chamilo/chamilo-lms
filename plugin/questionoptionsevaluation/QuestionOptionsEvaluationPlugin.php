@@ -90,58 +90,6 @@ class QuestionOptionsEvaluationPlugin extends Plugin
      * @param int      $formula
      * @param Exercise $exercise
      */
-    private function recalculateQuestionScore($formula, Exercise $exercise)
-    {
-        foreach ($exercise->questionList as $questionId) {
-            $question = Question::read($questionId);
-
-            if (!in_array($question->selectType(), [UNIQUE_ANSWER, MULTIPLE_ANSWER])) {
-                continue;
-            }
-
-            $questionAnswers = new Answer($questionId, $exercise->course_id, $exercise);
-            $counts = array_count_values($questionAnswers->correct);
-            $weighting = [];
-
-            foreach ($questionAnswers->correct as $i => $correct) {
-                if ($question->selectType() == MULTIPLE_ANSWER || 0 === $formula) {
-                    $weighting[$i] = 1 == $correct ? 1 / $counts[1] : -1 / $counts[0];
-
-                    continue;
-                }
-
-                if ($question->selectType() == UNIQUE_ANSWER) {
-                    $weighting[$i] = 1 == $correct ? 1 : -1 / $formula;
-                }
-            }
-
-            $questionAnswers->new_nbrAnswers = $questionAnswers->nbrAnswers;
-            $questionAnswers->new_answer = $questionAnswers->answer;
-            $questionAnswers->new_comment = $questionAnswers->comment;
-            $questionAnswers->new_correct = $questionAnswers->correct;
-            $questionAnswers->new_weighting = $weighting;
-            $questionAnswers->new_position = $questionAnswers->position;
-            $questionAnswers->new_destination = $questionAnswers->destination;
-            $questionAnswers->new_hotspot_coordinates = $questionAnswers->hotspot_coordinates;
-            $questionAnswers->new_hotspot_type = $questionAnswers->hotspot_type;
-
-            $allowedWeights = array_filter(
-                $weighting,
-                function ($weight) {
-                    return $weight > 0;
-                }
-            );
-
-            $questionAnswers->save();
-            $question->updateWeighting(array_sum($allowedWeights));
-            $question->save($exercise);
-        }
-    }
-
-    /**
-     * @param int      $formula
-     * @param Exercise $exercise
-     */
     public function saveFormulaForExercise($formula, Exercise $exercise)
     {
         $this->recalculateQuestionScore($formula, $exercise);
@@ -245,6 +193,58 @@ class QuestionOptionsEvaluationPlugin extends Plugin
         }
 
         return ($result / count($qTracks)) * $this->getMaxScore();
+    }
+
+    /**
+     * @param int      $formula
+     * @param Exercise $exercise
+     */
+    private function recalculateQuestionScore($formula, Exercise $exercise)
+    {
+        foreach ($exercise->questionList as $questionId) {
+            $question = Question::read($questionId);
+
+            if (!in_array($question->selectType(), [UNIQUE_ANSWER, MULTIPLE_ANSWER])) {
+                continue;
+            }
+
+            $questionAnswers = new Answer($questionId, $exercise->course_id, $exercise);
+            $counts = array_count_values($questionAnswers->correct);
+            $weighting = [];
+
+            foreach ($questionAnswers->correct as $i => $correct) {
+                if ($question->selectType() == MULTIPLE_ANSWER || 0 === $formula) {
+                    $weighting[$i] = 1 == $correct ? 1 / $counts[1] : -1 / $counts[0];
+
+                    continue;
+                }
+
+                if ($question->selectType() == UNIQUE_ANSWER) {
+                    $weighting[$i] = 1 == $correct ? 1 : -1 / $formula;
+                }
+            }
+
+            $questionAnswers->new_nbrAnswers = $questionAnswers->nbrAnswers;
+            $questionAnswers->new_answer = $questionAnswers->answer;
+            $questionAnswers->new_comment = $questionAnswers->comment;
+            $questionAnswers->new_correct = $questionAnswers->correct;
+            $questionAnswers->new_weighting = $weighting;
+            $questionAnswers->new_position = $questionAnswers->position;
+            $questionAnswers->new_destination = $questionAnswers->destination;
+            $questionAnswers->new_hotspot_coordinates = $questionAnswers->hotspot_coordinates;
+            $questionAnswers->new_hotspot_type = $questionAnswers->hotspot_type;
+
+            $allowedWeights = array_filter(
+                $weighting,
+                function ($weight) {
+                    return $weight > 0;
+                }
+            );
+
+            $questionAnswers->save();
+            $question->updateWeighting(array_sum($allowedWeights));
+            $question->save($exercise);
+        }
     }
 
     /**

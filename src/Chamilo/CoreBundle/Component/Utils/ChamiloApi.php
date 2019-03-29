@@ -174,8 +174,8 @@ class ChamiloApi
     /**
      * Adds or Subtract a time in hh:mm:ss to a datetime.
      *
-     * @param string $time      Time in hh:mm:ss format
-     * @param string $datetime  Datetime as accepted by the Datetime class constructor
+     * @param string $time      Time to add or substract in hh:mm:ss format
+     * @param string $datetime  Datetime to be modified as accepted by the Datetime class constructor
      * @param bool   $operation True for Add, False to Subtract
      *
      * @return string

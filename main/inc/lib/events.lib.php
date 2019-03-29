@@ -2218,7 +2218,6 @@ class Event
      * @param int    $sessionId   The session in which to add the time (if any)
      * @param string $virtualTime The amount of time to be added,
      *                            in a hh:mm:ss format. If int, we consider it is expressed in hours.
-     * @param string $ip          IP address to go on record for this time record
      *
      * @return true on successful insertion, false otherwise
      */
@@ -2226,80 +2225,32 @@ class Event
         $courseId,
         $userId,
         $sessionId,
-        $virtualTime = '',
-        $ip = ''
+        $virtualTime = ''
     ) {
-        $courseTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $time = $loginDate = $logoutDate = api_get_utc_datetime();
-
         $courseId = (int) $courseId;
         $userId = (int) $userId;
         $sessionId = (int) $sessionId;
-        $ip = Database::escape_string($ip);
 
-        // Get the current latest course connection register. We need that
-        // record to re-use the data and create a new record.
-        $sql = "SELECT *
-                FROM $courseTrackingTable
-                WHERE
-                    user_id = $userId AND
-                    c_id = $courseId  AND
-                    session_id  = $sessionId AND
-                    login_course_date > '$time' - INTERVAL 3600 SECOND
-                ORDER BY login_course_date DESC 
-                LIMIT 0,1";
-        $result = Database::query($sql);
+        $logoutDate = api_get_utc_datetime();
+        $loginDate = ChamiloApi::addOrSubTimeToDateTime(
+            $virtualTime,
+            $logoutDate,
+            false
+        );
 
-        // Ignore if we didn't find any course connection record in the last
-        // hour. In this case it wouldn't be right to add a "fake" time record.
-        if (Database::num_rows($result) > 0) {
-            // Found the latest connection
-            $row = Database::fetch_array($result);
-            $courseAccessId = $row['course_access_id'];
-            $courseAccessLoginDate = $row['login_course_date'];
-            $counter = $row['counter'];
-            $counter = $counter ? $counter : 0;
-            // Insert a new record, copy of the current one (except the logout
-            // date that we update to the current time)
-            $sql = "INSERT INTO $courseTrackingTable(
-                    c_id,
-                    user_ip, 
-                    user_id, 
-                    login_course_date, 
-                    logout_course_date, 
-                    counter, 
-                    session_id
-                ) VALUES(
-                    $courseId, 
-                    '$ip', 
-                    $userId, 
-                    '$courseAccessLoginDate', 
-                    '$logoutDate', 
-                    $counter, 
-                    $sessionId
-                )";
-            Database::query($sql);
+        $params = [
+            'login_course_date' => $loginDate,
+            'logout_course_date' => $logoutDate,
+            'session_id' => $sessionId,
+            'user_id' => $userId,
+            'counter' => 0,
+            'c_id' => $courseId,
+            'user_ip' => api_get_real_ip(),
+        ];
+        $courseTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        Database::insert($courseTrackingTable, $params);
 
-            $loginDate = ChamiloApi::addOrSubTimeToDateTime(
-                $virtualTime,
-                $courseAccessLoginDate,
-                false
-            );
-            // We update the course tracking table
-            $sql = "UPDATE $courseTrackingTable  
-                    SET 
-                        login_course_date = '$loginDate',
-                        logout_course_date = '$courseAccessLoginDate',
-                        counter = 0
-                    WHERE 
-                        course_access_id = ".intval($courseAccessId)." AND 
-                        session_id = ".$sessionId;
-            Database::query($sql);
-
-            return true;
-        }
-
-        return false;
+        return true;
     }
 
     /**
@@ -2331,8 +2282,6 @@ class Event
             return false;
         }
         $courseTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $time = $loginDate = $logoutDate = api_get_utc_datetime();
-
         $courseId = (int) $courseId;
         $userId = (int) $userId;
         $sessionId = (int) $sessionId;

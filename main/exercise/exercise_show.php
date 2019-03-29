@@ -1092,7 +1092,7 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
         );
     }
 
-    if ($objExercise->feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
+    if ($objExercise->results_disabled != RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS) {
         $emailForm->addCheckBox(
             'send_notification',
             get_lang('SendEmail'),

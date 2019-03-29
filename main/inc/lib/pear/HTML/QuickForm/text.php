@@ -33,8 +33,6 @@
  */
 class HTML_QuickForm_text extends HTML_QuickForm_input
 {
-    private $inputSize;
-
     /**
      * Class constructor
      *
@@ -101,29 +99,8 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
      */
     public function getTemplate($layout)
     {
-        $size = $this->getColumnsSize();
+        $size = $this->calculateSize();
         $attributes = $this->getAttributes();
-
-        if (empty($size)) {
-            $sizeTemp = $this->getInputSize();
-            if (empty($size)) {
-                $sizeTemp = 8;
-            }
-            $size = array(2, $sizeTemp, 2);
-        } else {
-            if (is_array($size)) {
-                if (count($size) != 3) {
-                    $sizeTemp = $this->getInputSize();
-                    if (empty($size)) {
-                        $sizeTemp = 8;
-                    }
-                    $size = array(2, $sizeTemp, 2);
-                }
-                // else just keep the $size array as received
-            } else {
-                $size = array(2, intval($size), 2);
-            }
-        }
 
         switch ($layout) {
             case FormValidator::LAYOUT_INLINE:
@@ -189,22 +166,6 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
                 return $template;
                 break;
         }
-    }
-
-    /**
-     * @return null
-     */
-    public function getInputSize()
-    {
-        return $this->inputSize;
-    }
-
-    /**
-     * @param null $inputSize
-     */
-    public function setInputSize($inputSize)
-    {
-        $this->inputSize = $inputSize;
     }
 
     /**

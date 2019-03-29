@@ -347,6 +347,7 @@ if ($is_allowedToEdit) {
                         }
                         break;
                     case 'copy_exercise': //copy an exercise
+                        api_set_more_memory_and_time_limits();
                         $objExerciseTmp->copyExercise();
                         echo Display::return_message(
                             get_lang('ExerciseCopied'),
@@ -735,12 +736,6 @@ if (!empty($exerciseList)) {
             }
 
             // Teacher only
-            // Count number exercise - teacher
-            $sql = "SELECT count(*) count FROM $TBL_EXERCISE_QUESTION
-                        WHERE c_id = $courseId AND exercice_id = $my_exercise_id";
-            $sqlresult = Database::query($sql);
-            $rowi = intval(Database :: result($sqlresult, 0, 0));
-
             if ($is_allowedToEdit) {
                 $lp_blocked = null;
                 if ($exercise->exercise_was_added_in_lp == true) {
@@ -790,7 +785,6 @@ if (!empty($exerciseList)) {
                     $courseId,
                     $sessionId
                 );
-
 
                 $move = Display::return_icon(
                     'all_directions.png',
@@ -1066,7 +1060,6 @@ if (!empty($exerciseList)) {
                 $actions .= $delete;
 
                 // Number of questions
-                
                 $random_label = null;
                 if ($row['random'] > 0 || $row['random'] == -1) {
                     // if random == -1 means use random questions with all questions

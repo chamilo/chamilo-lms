@@ -176,6 +176,60 @@ class ExerciseLink extends AbstractLink
      */
     public function calc_score($stud_id = null, $type = null)
     {
+        $allowStats = api_get_configuration_value('allow_gradebook_stats');
+
+        if ($allowStats) {
+            $link = $this->entity;
+            if (!empty($link)) {
+                $weight = $link->getScoreWeight();
+
+                switch ($type) {
+                    case 'best':
+                        $bestResult = $link->getBestScore();
+                        $result = [$bestResult, $weight];
+
+                        return $result;
+                        break;
+                    case 'average':
+                        $count = count($this->getStudentList());
+                        if (empty($count)) {
+                            $result = [0, $weight];
+
+                            return $result;
+                        }
+                        $sumResult = array_sum($link->getUserScoreList());
+                        $result = [$sumResult / $count, $weight];
+
+                        return $result;
+                        break;
+                    case 'ranking':
+                        return '';
+                        /*
+                        $newList = [];
+                        $ranking = AbstractLink::getCurrentUserRanking($stud_id, $link->getUserScoreList());
+                        return $ranking;*/
+                        break;
+                    default:
+                        if (!empty($stud_id)) {
+                            $scoreList = $link->getUserScoreList();
+                            $result = [0, $weight];
+                            if (isset($scoreList[$stud_id])) {
+                                $result = [$scoreList[$stud_id], $weight];
+                            }
+
+                            return $result;
+                        } else {
+                            $studentCount = count($this->getStudentList());
+                            $sumResult = array_sum($link->getUserScoreList());
+                            $result = [$sumResult, $studentCount];
+                        }
+
+                        return $result;
+                        break;
+                }
+            }
+        }
+
         $tblStats = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $tblHp = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
         $tblDoc = Database::get_course_table(TABLE_DOCUMENT);
@@ -185,6 +239,7 @@ class ExerciseLink extends AbstractLink
         $sessionId = $this->get_session_id();
         $courseId = $this->getCourseId();
         $exerciseData = $this->get_exercise_data();
+
         $exerciseId = isset($exerciseData['id']) ? $exerciseData['id'] : 0;
         $stud_id = (int) $stud_id;
 
@@ -493,6 +548,20 @@ class ExerciseLink extends AbstractLink
         $this->hp = $hp;
     }
 
+    public function getBestScore()
+    {
+        return $this->getStats('best');
+    }
+
+    public function getStats($type)
+    {
+        switch ($type) {
+            case 'best':
+
+                break;
+        }
+    }
+
     /**
      * Lazy load function to get the database table of the exercise.
      */
@@ -546,7 +615,7 @@ class ExerciseLink extends AbstractLink
                 if (!empty($rows)) {
                     $this->exercise_data = Database::fetch_array($result);
                 } else {
-                    // Try wit iid
+                    // Try wit id
                     $sql = 'SELECT * FROM '.$table.'
                             WHERE
                                 c_id = '.$this->course_id.' AND

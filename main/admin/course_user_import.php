@@ -142,7 +142,7 @@ function save_data($users_courses)
  */
 function parse_csv_data($file)
 {
-    $courses = Import :: csvToArray($file);
+    $courses = Import::csvToArray($file);
 
     return $courses;
 }

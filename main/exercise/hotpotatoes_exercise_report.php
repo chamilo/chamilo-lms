@@ -107,8 +107,7 @@ Display :: display_header($nameTools);
 $actions = Display::div($actions, ['class' => 'actions']);
 
 $extra = '<script>
-$(document).ready(function() {
-
+$(function() {
     $( "#dialog:ui-dialog" ).dialog( "destroy" );
     $( "#dialog-confirm" ).dialog({
         autoOpen: false,

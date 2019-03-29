@@ -30,7 +30,7 @@ api_protect_course_script(true);
 
 $current_course_tool = TOOL_FORUM;
 $htmlHeadXtra[] = '<script>
-$(document).ready(function() {
+$(function() {
     $(\'.hide-me\').slideUp();
 });
 
@@ -49,6 +49,7 @@ $_user = api_get_user_info();
 
 $hideNotifications = api_get_course_setting('hide_forum_notifications');
 $hideNotifications = $hideNotifications == 1;
+
 require_once 'forumfunction.inc.php';
 
 if (api_is_in_gradebook()) {
@@ -391,7 +392,7 @@ if (is_array($forumCategories)) {
                             );
                         }
                     }
-                    //var_dump($forum);
+
                     if ($show_forum) {
                         $form_count++;
                         $mywhatsnew_post_info = isset($whatsnew_post_info[$forum['forum_id']])

@@ -22,7 +22,6 @@ $action = isset($_GET['action']) ? $_GET['action'] : '';
 $id = isset($_GET['id']) ? intval($_GET['id']) : '';
 
 $toolName = get_lang('CustomizeIcons');
-$tpl = new Template($toolName);
 
 switch ($action) {
     case 'delete_icon':
@@ -164,5 +163,6 @@ switch ($action) {
         break;
 }
 
+$tpl = new Template($toolName);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

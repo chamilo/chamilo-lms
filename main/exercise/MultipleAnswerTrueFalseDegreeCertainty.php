@@ -146,6 +146,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 if (isset($_POST['correct']) && isset($_POST['correct'][$i])) {
                     $defaults['correct['.$i.']'] = Security::remove_XSS($_POST['correct'][$i]);
                 }
+
                 $j = 1;
                 if (!empty($optionData)) {
                     foreach ($optionData as $id => $data) {

@@ -32,7 +32,7 @@ Session::erase('_gid');
 api_protect_course_script(true);
 
 $htmlHeadXtra[] = '<script>
-$(document).ready(function(){
+$(function() {
     $(\'.hide-me\').slideUp()
 });
 

@@ -523,7 +523,7 @@ if ($owner_id == api_get_user_id() ||
     } else {
         // Add tooltip and correctly parse its inner HTML
         echo '<script>
-        $(document).ready(function() {
+        $(function() {
             $("[data-toggle=\'tooltip\']").tooltip(
                 {
                     content: 

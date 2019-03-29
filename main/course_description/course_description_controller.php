@@ -114,19 +114,15 @@ class CourseDescriptionController
             $actions = Display::toolbarAction('toolbar', [0 => $actionLeft]);
         }
 
-        $tpl = new Template(null);
+        $tpl = new Template(get_lang('CourseProgram'));
         $tpl->assign('listing', $data);
         $tpl->assign('is_allowed_to_edit', $is_allowed_to_edit);
+        $tpl->assign('actions', $actions);
         $tpl->assign('session_id', $session_id);
-        $tpl->assign('c_id', api_get_course_int_id());
-        $templateName = $tpl->get_template('course_description/index.html.twig');
-        $data['toolbar'] = $actions;
-        $data['descriptions'] = $tpl->fetch($templateName);
-
-        $this->view->set_data($data);
-        $this->view->set_layout('layout');
-        $this->view->set_template('listing');
-        $this->view->render();
+        $templateName = $tpl->get_template('course_description/index.tpl');
+        $content = $tpl->fetch($templateName);
+        $tpl->assign('content', $content);
+        $tpl->display_one_col_template();
     }
 
     /**

@@ -189,7 +189,7 @@ switch ($action) {
 
             $options = [];
             if (!empty($categoryData['depends'])) {
-                $list = unserialize($categoryData['depends']);
+                $list = UnserializeApi::unserialize('not_allowed_classes', $categoryData['depends']);
                 foreach ($list as $itemId) {
                     $courseInfo = api_get_course_info_by_id($itemId);
                     $options[$itemId] = $courseInfo['name'];

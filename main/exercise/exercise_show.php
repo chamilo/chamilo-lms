@@ -288,7 +288,7 @@ if ($origin == 'learnpath' && !isset($_GET['fb_type'])) {
     $show_results = false;
 }
 
-if ($is_allowedToEdit && in_array($action, ['qualify', 'edit'])) {
+if ($is_allowedToEdit && in_array($action, ['qualify', 'edit', 'export'])) {
     $show_results = true;
 }
 
@@ -727,7 +727,6 @@ foreach ($questionList as $questionId) {
         if ($isBossOfStudent) {
             $isFeedbackAllowed = false;
         }
-
         $marksname = '';
         if ($isFeedbackAllowed && $action != 'export') {
             $name = 'fckdiv'.$questionId;
@@ -1093,19 +1092,21 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
         );
     }
 
-    $emailForm->addCheckBox(
-        'send_notification',
-        get_lang('SendEmail'),
-        get_lang('SendEmail'),
-        ['onclick' => 'openEmailWrapper();']
-    );
-    $emailForm->addHtml('<div id="email_content_wrapper" style="display:none; margin-bottom: 20px;">');
-    $emailForm->addHtmlEditor(
-        'notification_content',
-        get_lang('Content'),
-        false
-    );
-    $emailForm->addHtml('</div>');
+    if ($objExercise->results_disabled != RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS) {
+        $emailForm->addCheckBox(
+            'send_notification',
+            get_lang('SendEmail'),
+            get_lang('SendEmail'),
+            ['onclick' => 'openEmailWrapper();']
+        );
+        $emailForm->addHtml('<div id="email_content_wrapper" style="display:none; margin-bottom: 20px;">');
+        $emailForm->addHtmlEditor(
+            'notification_content',
+            get_lang('Content'),
+            false
+        );
+        $emailForm->addHtml('</div>');
+    }
 
     if (empty($track_exercise_info['orig_lp_id']) || empty($track_exercise_info['orig_lp_item_id'])) {
         // Default url

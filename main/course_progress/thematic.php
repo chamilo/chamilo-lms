@@ -289,7 +289,6 @@ if ($action == 'thematic_list') {
     $html = $form->returnForm();
 }
 $tpl->assign('actions', $toolbar);
-
 if (!empty($html)) {
     $tpl->assign('content', $html);
     $thematicLayout = $tpl->get_template('course_progress/layout.tpl');

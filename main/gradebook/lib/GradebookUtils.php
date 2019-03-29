@@ -379,6 +379,7 @@ class GradebookUtils
                     ICON_SIZE_SMALL
                 ).
                 '</a>';
+
             if (api_is_allowed_to_edit(null, true)) {
                 $modify_icons .= '&nbsp;<a href="gradebook_showlog_eval.php?visiblelog='.$eval->get_id().'&selectcat='.$selectcat.' &'.$courseParams.'">'.
                     Display::return_icon(
@@ -388,6 +389,14 @@ class GradebookUtils
                         ICON_SIZE_SMALL
                     ).
                     '</a>';
+
+                $allowStats = api_get_configuration_value('allow_gradebook_stats');
+                if ($allowStats) {
+                    $modify_icons .= Display::url(
+                        Display::return_icon('reload.png', get_lang('GenerateStats')),
+                        api_get_self().'?itemId='.$eval->get_id().'&action=generate_eval_stats&selectcat='.$selectcat.'&'.$courseParams
+                    );
+                }
             }
 
             if ($is_locked && !api_is_platform_admin()) {
@@ -467,6 +476,7 @@ class GradebookUtils
                     ICON_SIZE_SMALL
                 ).
                 '</a>';
+
             $modify_icons .= '&nbsp;<a href="gradebook_showlog_link.php?visiblelink='.$link->get_id().'&selectcat='.$selectcat.'&'.$courseParams.'">'.
                 Display::return_icon(
                     'history.png',
@@ -475,6 +485,14 @@ class GradebookUtils
                     ICON_SIZE_SMALL
                 ).
                 '</a>';
+
+            $allowStats = api_get_configuration_value('allow_gradebook_stats');
+            if ($allowStats && $link->get_type() == LINK_EXERCISE) {
+                $modify_icons .= Display::url(
+                    Display::return_icon('reload.png', get_lang('GenerateStats')),
+                    api_get_self().'?itemId='.$link->get_id().'&action=generate_link_stats&selectcat='.$selectcat.'&'.$courseParams
+                );
+            }
 
             //If a work is added in a gradebook you can only delete the link in the work tool
             if ($is_locked && !api_is_platform_admin()) {
@@ -656,40 +674,6 @@ class GradebookUtils
         $current_value = $data;
     }
 
-    /**
-     * XML-parser: handle end of element.
-     */
-    public static function element_end($parser, $data)
-    {
-        global $user;
-        global $users;
-        global $current_value;
-        switch ($data) {
-            case 'Result':
-                $users[] = $user;
-                break;
-            default:
-                $user[$data] = $current_value;
-                break;
-        }
-    }
-
-    /**
-     * XML-parser: handle start of element.
-     */
-    public static function element_start($parser, $data)
-    {
-        global $user;
-        global $current_tag;
-        switch ($data) {
-            case 'Result':
-                $user = [];
-                break;
-            default:
-                $current_tag = $data;
-        }
-    }
-
     public static function overwritescore($resid, $importscore, $eval_max)
     {
         $result = Result::load($resid);
@@ -700,30 +684,6 @@ class GradebookUtils
         $result[0]->set_score($importscore);
         $result[0]->save();
         unset($result);
-    }
-
-    /**
-     * Read the XML-file.
-     *
-     * @param string $file Path to the XML-file
-     *
-     * @return array All user information read from the file
-     */
-    public static function parse_xml_data($file)
-    {
-        global $current_tag;
-        global $current_value;
-        global $user;
-        global $users;
-        $users = [];
-        $parser = xml_parser_create();
-        xml_set_element_handler($parser, 'element_start', 'element_end');
-        xml_set_character_data_handler($parser, "character_data");
-        xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
-        xml_parse($parser, file_get_contents($file));
-        xml_parser_free($parser);
-
-        return $users;
     }
 
     /**
@@ -1589,16 +1549,19 @@ class GradebookUtils
     }
 
     /**
-     * @param int   $userId
-     * @param array $cats
-     * @param bool  $saveToFile
-     * @param bool  $saveToHtmlFile
-     * @param array $studentList
-     * @param PDF   $pdf
+     * @param GradebookTable $gradebooktable
+     * @param array          $courseInfo
+     * @param int            $userId
+     * @param array          $cats
+     * @param bool           $saveToFile
+     * @param bool           $saveToHtmlFile
+     * @param array          $studentList
+     * @param PDF            $pdf
      *
      * @return string
      */
     public static function generateTable(
+        $courseInfo,
         $userId,
         $cats,
         $saveToFile = false,
@@ -1606,9 +1569,7 @@ class GradebookUtils
         $studentList = [],
         $pdf = null
     ) {
-        $courseInfo = api_get_course_info();
         $userInfo = api_get_user_info($userId);
-
         $cat = $cats[0];
         $allcat = $cats[0]->get_subcategories(
             $userId,
@@ -1626,6 +1587,7 @@ class GradebookUtils
                 $loadStats = [2];
             }
         }
+
         $gradebooktable = new GradebookTable(
             $cat,
             $allcat,
@@ -1642,9 +1604,6 @@ class GradebookUtils
         $gradebooktable->userId = $userId;
 
         if (api_is_allowed_to_edit(null, true)) {
-            /*$gradebooktable->td_attributes = [
-                4 => 'class=centered',
-            ];*/
         } else {
             $gradebooktable->td_attributes = [
                 3 => 'class=centered',
@@ -1654,7 +1613,6 @@ class GradebookUtils
                 7 => 'class=centered',
             ];
         }
-
         $table = $gradebooktable->return_table();
         $graph = $gradebooktable->getGraph();
 
@@ -1691,6 +1649,7 @@ class GradebookUtils
         );
 
         if ($saveToHtmlFile) {
+            return $result;
             file_put_contents($file, $result);
 
             return $file;

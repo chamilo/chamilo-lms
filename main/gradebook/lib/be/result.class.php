@@ -179,7 +179,6 @@ class Result
                 $sql .= ' WHERE';
             }
             $sql .= ' gr.evaluation_id = '.intval($evaluation_id);
-            $paramcount++;
         }
         $sql .= ' ORDER BY u.lastname, u.firstname';
 
@@ -272,6 +271,8 @@ class Result
         $sql .= ' WHERE id = '.$this->id;
         // no need to update creation date
         Database::query($sql);
+
+        Evaluation::generateStats($this->get_evaluation_id());
     }
 
     /**
@@ -288,6 +289,8 @@ class Result
             $sql = "DELETE FROM $table WHERE result_id = ".$this->id;
             Database::query($sql);
         }
+
+        Evaluation::generateStats($this->get_evaluation_id());
     }
 
     /**

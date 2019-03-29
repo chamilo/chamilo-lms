@@ -70,7 +70,7 @@ function save_scores($file, $score)
         global $jscript2run;
         //record the results in the learning path, using the SCORM interface (API)
         $jscript2run .= "<script>
-            $(document).ready(function() {
+            $(function() {
                 //API_obj = window.frames.window.content.API;
                 //API_obj = $('content_id').context.defaultView.content.API; //works only in FF
                 //API_obj = window.parent.frames.window.top.API;

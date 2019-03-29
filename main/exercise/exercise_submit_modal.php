@@ -621,4 +621,4 @@ if ($links != '') {
 
 echo '</div>';
 
-Display::display_footer();
+//Display::display_footer();

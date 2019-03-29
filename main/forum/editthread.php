@@ -123,7 +123,7 @@ $tableLink = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 /* Header */
 $htmlHeadXtra[] = <<<JS
     <script>
-    $(document).on('ready', function() {
+    $(function() {
         $('[name="thread_qualify_gradebook"]:checkbox').change(function () {
             if (this.checked) {
                 $('#options_field').show();

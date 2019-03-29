@@ -28,7 +28,7 @@ $sessionId = api_get_session_id();
 $exercise_id = isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) : 0;
 
 $objExercise = new Exercise();
-$result = $objExercise->read($exercise_id);
+$result = $objExercise->read($exercise_id, false);
 
 if (!$result) {
     api_not_allowed(true);

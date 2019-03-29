@@ -17,6 +17,9 @@ if (empty($select_eval)) {
 $resultedit = Result::load(null, null, $select_eval);
 $evaluation = Evaluation::load($select_eval);
 $evaluation[0]->check_lock_permissions();
+$courseInfo = api_get_course_info();
+$sessionId = api_get_session_id();
+
 $edit_result_form = new EvalForm(
     EvalForm::TYPE_ALL_RESULTS_EDIT,
     $evaluation[0],
@@ -28,6 +31,8 @@ $edit_result_form = new EvalForm(
 if ($edit_result_form->validate()) {
     $values = $edit_result_form->exportValues();
     $scores = $values['score'];
+    $bestResult = 0;
+    $scoreFinalList = [];
     foreach ($scores as $userId => $score) {
         /** @var array $resultedit */
         $resultedit = Result::load($userId);
@@ -36,6 +41,12 @@ if ($edit_result_form->validate()) {
 
         if (empty($score)) {
             $score = 0;
+        }
+
+        $scoreFinalList[$result->get_user_id()] = $score;
+
+        if ($score > $bestResult) {
+            $bestResult = $score;
         }
         $score = api_number_format($score, api_get_setting('gradebook_number_decimals'));
         $result->set_score($score);

@@ -356,7 +356,7 @@ switch ($action) {
 
         $em = Database::getManager();
         $messageRepo = $em->getRepository('ChamiloCoreBundle:Message');
-        $messageLikesRepo = $em->getRepository('MessageFeedback');
+        $messageLikesRepo = $em->getRepository('ChamiloCoreBundle:MessageFeedback');
 
         /** @var Message $message */
         $message = $messageRepo->find($messageId);

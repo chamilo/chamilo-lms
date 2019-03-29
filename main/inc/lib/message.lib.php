@@ -2762,7 +2762,7 @@ class MessageManager
         }
 
         $userLike = $em
-            ->getRepository('MessageFeedback')
+            ->getRepository('ChamiloCoreBundle:MessageFeedback')
             ->findOneBy(['message' => $messageId, 'user' => $userId]);
 
         return [

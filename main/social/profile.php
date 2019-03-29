@@ -244,7 +244,6 @@ if ($show_full_profile) {
 
     // Block Social Sessions
     if (count($sessionList) > 0) {
-        //$social_session_block = $htmlSessionList;
         $social_session_block = $sessionList;
     }
 

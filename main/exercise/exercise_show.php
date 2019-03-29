@@ -1092,19 +1092,21 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
         );
     }
 
-    $emailForm->addCheckBox(
-        'send_notification',
-        get_lang('SendEmail'),
-        get_lang('SendEmail'),
-        ['onclick' => 'openEmailWrapper();']
-    );
-    $emailForm->addHtml('<div id="email_content_wrapper" style="display:none; margin-bottom: 20px;">');
-    $emailForm->addHtmlEditor(
-        'notification_content',
-        get_lang('Content'),
-        false
-    );
-    $emailForm->addHtml('</div>');
+    if ($objExercise->feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
+        $emailForm->addCheckBox(
+            'send_notification',
+            get_lang('SendEmail'),
+            get_lang('SendEmail'),
+            ['onclick' => 'openEmailWrapper();']
+        );
+        $emailForm->addHtml('<div id="email_content_wrapper" style="display:none; margin-bottom: 20px;">');
+        $emailForm->addHtmlEditor(
+            'notification_content',
+            get_lang('Content'),
+            false
+        );
+        $emailForm->addHtml('</div>');
+    }
 
     if (empty($track_exercise_info['orig_lp_id']) || empty($track_exercise_info['orig_lp_item_id'])) {
         // Default url

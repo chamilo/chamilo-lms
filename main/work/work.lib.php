@@ -4009,12 +4009,10 @@ function processWorkForm(
                         $courseId,
                         $sessionId
                     );
-
                     if (count($userWorks) == 1) {
                         // The student only uploaded one doc so far, so add the
                         // considered work time to his course connection time
-                        $ip = api_get_real_ip();
-                        Event::eventAddVirtualCourseTime($courseId, $userId, $sessionId, $workingTime, $ip);
+                        Event::eventAddVirtualCourseTime($courseId, $userId, $sessionId, $workingTime);
                     }
                 }
             }

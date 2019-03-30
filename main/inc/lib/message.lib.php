@@ -2740,7 +2740,7 @@ class MessageManager
      */
     public static function countLikesAndDislikes($messageId, $userId)
     {
-        if (!api_get_configuration_value('social_enable_likes_messages')) {
+        if (!api_get_configuration_value('social_enable_messages_feedback')) {
             return [];
         }
 
@@ -2750,7 +2750,7 @@ class MessageManager
         $em = Database::getManager();
         $query = $em
             ->createQuery('
-                SELECT SUM(l.liked) AS likes, SUM(l.disliked) AS dislikes FROM ChamiloCoreBundle:MessageLikes l
+                SELECT SUM(l.liked) AS likes, SUM(l.disliked) AS dislikes FROM ChamiloCoreBundle:MessageFeedback l
                 WHERE l.message = :message
             ')
             ->setParameters(['message' => $messageId]);
@@ -2762,7 +2762,7 @@ class MessageManager
         }
 
         $userLike = $em
-            ->getRepository('ChamiloCoreBundle:MessageLikes')
+            ->getRepository('ChamiloCoreBundle:MessageFeedback')
             ->findOneBy(['message' => $messageId, 'user' => $userId]);
 
         return [
@@ -2782,7 +2782,7 @@ class MessageManager
      */
     public static function getLikesButton($messageId, $userId, $groupId = 0)
     {
-        if (!api_get_configuration_value('social_enable_likes_messages')) {
+        if (!api_get_configuration_value('social_enable_messages_feedback')) {
             return '';
         }
 

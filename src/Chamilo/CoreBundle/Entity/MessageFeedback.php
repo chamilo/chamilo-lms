@@ -8,20 +8,20 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
 
 /**
- * Class MessageLikes.
+ * Class MessageFeedback.
  *
  * @package Chamilo\CoreBundle\Entity
  *
  * @ORM\Table(
- *     name="message_likes",
+ *     name="message_feedback",
  *     indexes={
- *         @Index(name="idx_message_likes_uid_mid", columns={"message_id", "user_id"})
+ *         @Index(name="idx_message_feedback_uid_mid", columns={"message_id", "user_id"})
  *     }
  * )
- * Add @ to the next line if api_get_configuration_value('social_enable_likes_messages') is true
+ * Add @ to the next line if api_get_configuration_value('social_enable_messages_feedback') is true
  * ORM\Entity()
  */
-class MessageLikes
+class MessageFeedback
 {
     /**
      * @var int
@@ -75,7 +75,7 @@ class MessageLikes
     /**
      * @param int $id
      *
-     * @return MessageLikes
+     * @return MessageFeedback
      */
     public function setId($id)
     {
@@ -95,7 +95,7 @@ class MessageLikes
     /**
      * @param Message $message
      *
-     * @return MessageLikes
+     * @return MessageFeedback
      */
     public function setMessage(Message $message)
     {
@@ -115,7 +115,7 @@ class MessageLikes
     /**
      * @param User $user
      *
-     * @return MessageLikes
+     * @return MessageFeedback
      */
     public function setUser(User $user)
     {
@@ -135,7 +135,7 @@ class MessageLikes
     /**
      * @param bool $liked
      *
-     * @return MessageLikes
+     * @return MessageFeedback
      */
     public function setLiked($liked)
     {
@@ -155,7 +155,7 @@ class MessageLikes
     /**
      * @param bool $disliked
      *
-     * @return MessageLikes
+     * @return MessageFeedback
      */
     public function setDisliked($disliked)
     {
@@ -175,7 +175,7 @@ class MessageLikes
     /**
      * @param \DateTime $updatedAt
      *
-     * @return MessageLikes
+     * @return MessageFeedback
      */
     public function setUpdatedAt(\DateTime $updatedAt)
     {

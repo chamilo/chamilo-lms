@@ -247,7 +247,7 @@ if ($objExercise->selectAttempts() > 0) {
                 if (!empty($exercise_stat_info)) {
                     $isQuestionsLimitReached = ExerciseLib::isQuestionsLimitPerDayReached(
                         $user_id,
-                        $objExercise->selectNbrQuestions(),
+                        count($objExercise->get_validated_question_list()),
                         $courseId,
                         $sessionId
                     );

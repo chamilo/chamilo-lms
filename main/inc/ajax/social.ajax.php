@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Message;
-use Chamilo\CoreBundle\Entity\MessageLikes;
+use Chamilo\CoreBundle\Entity\MessageFeedback;
 use ChamiloSession as Session;
 
 /**
@@ -339,7 +339,7 @@ switch ($action) {
 
         if (
             api_is_anonymous() ||
-            !api_get_configuration_value('social_enable_likes_messages')
+            !api_get_configuration_value('social_enable_messages_feedback')
         ) {
             echo json_encode(false);
             exit;
@@ -356,7 +356,7 @@ switch ($action) {
 
         $em = Database::getManager();
         $messageRepo = $em->getRepository('ChamiloCoreBundle:Message');
-        $messageLikesRepo = $em->getRepository('ChamiloCoreBundle:MessageLikes');
+        $messageLikesRepo = $em->getRepository('ChamiloCoreBundle:MessageFeedback');
 
         /** @var Message $message */
         $message = $messageRepo->find($messageId);
@@ -393,7 +393,7 @@ switch ($action) {
         $userLike = $messageLikesRepo->findOneBy(['message' => $message, 'user' => $user]);
 
         if (empty($userLike)) {
-            $userLike = new MessageLikes();
+            $userLike = new MessageFeedback();
             $userLike
                 ->setMessage($message)
                 ->setUser($user);

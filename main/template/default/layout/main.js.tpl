@@ -325,7 +325,7 @@ $(function() {
     $('video:not(.skip)').attr('preload', 'metadata');
 
     function socialLikes() {
-        {% if 'social_enable_likes_messages'|api_get_configuration_value %}
+        {% if 'social_enable_messages_feedback'|api_get_configuration_value %}
         $('body').on('click', '.social-like', function (e) {
             e.preventDefault();
 

@@ -1264,7 +1264,8 @@ abstract class Question
         // checks if the exercise ID is not in the list
         if (!in_array($exerciseId, $this->exerciseList)) {
             $this->exerciseList[] = $exerciseId;
-            $newExercise = new Exercise();
+            $courseId = isset($this->course['real_id']) ? $this->course['real_id'] : 0;
+            $newExercise = new Exercise($courseId);
             $newExercise->read($exerciseId, false);
             $count = $newExercise->getQuestionCount();
             $count++;

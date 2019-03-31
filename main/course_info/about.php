@@ -51,7 +51,7 @@ $courseDescriptionTools = $em->getRepository('ChamiloCourseBundle:CCourseDescrip
 $courseValues = new ExtraFieldValue('course');
 $userValues = new ExtraFieldValue('user');
 
-$urlCourse = api_get_path(WEB_PATH).'main/course/about.php?course_id='.$courseId;
+$urlCourse = api_get_path(WEB_PATH)."course/$courseId/about";
 $courseTeachers = $course->getTeachers();
 $teachersData = [];
 
@@ -125,6 +125,10 @@ $topics = [
 
 $subscriptionUser = CourseManager::is_user_subscribed_in_course($userId, $course->getCode());
 
+$allowSubscribe = false;
+if ($course->getSubscribe() == true || api_is_platform_admin()) {
+    $allowSubscribe = true;
+}
 $plugin = BuyCoursesPlugin::create();
 $checker = $plugin->isEnabled();
 $courseIsPremium = null;
@@ -154,7 +158,7 @@ $courseItem = [
 $metaInfo = '<meta property="og:url" content="'.$urlCourse.'" />';
 $metaInfo .= '<meta property="og:type" content="website" />';
 $metaInfo .= '<meta property="og:title" content="'.$courseItem['title'].'" />';
-$metaInfo .= '<meta property="og:description" content="'.$courseDescription.'" />';
+$metaInfo .= '<meta property="og:description" content="'.strip_tags($courseDescription).'" />';
 $metaInfo .= '<meta property="og:image" content="'.$courseItem['image'].'" />';
 
 $htmlHeadXtra[] = $metaInfo;
@@ -165,6 +169,7 @@ $template->assign('course', $courseItem);
 $essence = Essence\Essence::instance();
 $template->assign('essence', $essence);
 $template->assign('is_premium', $courseIsPremium);
+$template->assign('allow_subscribe', $allowSubscribe);
 $template->assign('token', $token);
 $template->assign('url', $urlCourse);
 $layout = $template->get_template('course_home/about.tpl');

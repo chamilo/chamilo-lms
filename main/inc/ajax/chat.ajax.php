@@ -8,17 +8,16 @@ $_dont_save_user_course_access = true;
 
 require_once __DIR__.'/../global.inc.php';
 
+api_block_anonymous_users();
+
 if (api_get_setting('allow_global_chat') == 'false') {
     exit;
 }
 
-if (api_is_anonymous()) {
-    exit;
-}
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
+$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 
 // Course Chat
-if ($action == 'preview') {
+if ($action === 'preview') {
     echo CourseChatUtils::prepareMessage($_REQUEST['message']);
     exit;
 }
@@ -28,14 +27,17 @@ $message = isset($_REQUEST['message']) ? $_REQUEST['message'] : null;
 $currentUserId = api_get_user_id();
 
 $chat = new Chat();
+
 if (Chat::disableChat()) {
     exit;
 }
+
 if ($chat->isChatBlockedByExercises()) {
     // Disconnecting the user
     $chat->setUserStatus(0);
     exit;
 }
+
 switch ($action) {
     case 'get_message_status':
         $messageId = isset($_REQUEST['message_id']) ? $_REQUEST['message_id'] : 0;
@@ -47,14 +49,25 @@ switch ($action) {
     case 'chatheartbeat':
         $chat->heartbeat();
         break;
-    case 'closechat':
+    case 'close_window':
+        // Closes friend window
+        $chatId = isset($_POST['chatbox']) ? $_POST['chatbox'] : '';
+        $chat->closeWindow($chatId);
+        echo '1';
+        exit;
+        break;
+    case 'close':
+        // Disconnects user from all chat
         $chat->close();
+
+        echo '1';
+        exit;
         break;
     case 'create_room':
         if (api_get_configuration_value('hide_chat_video')) {
             api_not_allowed();
         }
-        $room = VideoChat::getChatRoomByUsers(api_get_user_id(), $toUserId);
+        /*$room = VideoChat::getChatRoomByUsers(api_get_user_id(), $toUserId);
 
         if ($room === false) {
             $createdRoom = VideoChat::createRoom(api_get_user_id(), $toUserId);
@@ -83,34 +96,41 @@ switch ($action) {
             false,
             false
         );
-        echo Display::tag('p', $videoChatLink, ['class' => 'lead']);
+        echo Display::tag('p', $videoChatLink, ['class' => 'lead']);*/
         break;
     case 'get_contacts':
         echo $chat->getContacts();
         break;
     case 'get_previous_messages':
         $userId = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : 0;
-        $visibleMessages = isset($_REQUEST['visible_messages']) ? $_REQUEST['visible_messages'] : null;
+        $visibleMessages = isset($_REQUEST['visible_messages']) ? $_REQUEST['visible_messages'] : 0;
         if (empty($userId)) {
             return '';
         }
+
         $items = $chat->getPreviousMessages(
             $userId,
-            api_get_user_id(),
+            $currentUserId,
             $visibleMessages
         );
-        echo json_encode($items);
+
+        if (!empty($items)) {
+            sort($items);
+            echo json_encode($items);
+            exit;
+        }
+        echo json_encode([]);
         exit;
         break;
     case 'notify_not_support':
         $chat->send(
-            api_get_user_id(),
+            $currentUserId,
             $toUserId,
             get_lang('TheXUserBrowserDoesNotSupportWebRTC')
         );
         break;
     case 'sendchat':
-        $chat->send(api_get_user_id(), $toUserId, $message);
+        $chat->send($currentUserId, $toUserId, $message);
         break;
     case 'startchatsession':
         $chat->startSession();

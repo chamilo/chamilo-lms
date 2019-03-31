@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Message;
+use Chamilo\CoreBundle\Entity\MessageLikes;
 use ChamiloSession as Session;
 
 /**
@@ -249,7 +251,7 @@ switch ($action) {
         $messageId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
         if (empty($messageId)) {
-            break;
+            exit;
         }
 
         $userId = api_get_user_id();
@@ -273,7 +275,7 @@ switch ($action) {
         $userId = isset($_REQUEST['u']) ? (int) $_REQUEST['u'] : api_get_user_id();
         $html = '';
         if ($userId == api_get_user_id()) {
-            $threadList = SocialManager::getThreadList();
+            $threadList = SocialManager::getThreadList($userId);
             $threadIdList = [];
             if (!empty($threadList)) {
                 $threadIdList = array_column($threadList, 'id');
@@ -331,6 +333,101 @@ switch ($action) {
             );
         }
         echo $html;
+        break;
+    case 'like_message':
+        header('Content-Type: application/json');
+
+        if (
+            api_is_anonymous() ||
+            !api_get_configuration_value('social_enable_likes_messages')
+        ) {
+            echo json_encode(false);
+            exit;
+        }
+
+        $messageId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+        $status = isset($_GET['status']) ? $_GET['status'] : '';
+        $groupId = isset($_GET['group']) ? (int) $_GET['group'] : 0;
+
+        if (empty($messageId) || !in_array($status, ['like', 'dislike'])) {
+            echo json_encode(false);
+            exit;
+        }
+
+        $em = Database::getManager();
+        $messageRepo = $em->getRepository('ChamiloCoreBundle:Message');
+        $messageLikesRepo = $em->getRepository('ChamiloCoreBundle:MessageLikes');
+
+        /** @var Message $message */
+        $message = $messageRepo->find($messageId);
+
+        if (empty($message)) {
+            echo json_encode(false);
+            exit;
+        }
+
+        if ((int) $message->getGroupId() !== $groupId) {
+            echo json_encode(false);
+            exit;
+        }
+
+        if (!empty($message->getGroupId())) {
+            $usergroup = new UserGroup();
+            $groupInfo = $usergroup->get($groupId);
+
+            if (empty($groupInfo)) {
+                echo json_encode(false);
+                exit;
+            }
+
+            $isMember = $usergroup->is_group_member($groupId, $current_user_id);
+
+            if (GROUP_PERMISSION_CLOSED == $groupInfo['visibility'] && !$isMember) {
+                echo json_encode(false);
+                exit;
+            }
+        }
+
+        $user = api_get_user_entity($current_user_id);
+
+        $userLike = $messageLikesRepo->findOneBy(['message' => $message, 'user' => $user]);
+
+        if (empty($userLike)) {
+            $userLike = new MessageLikes();
+            $userLike
+                ->setMessage($message)
+                ->setUser($user);
+        }
+
+        if ('like' === $status) {
+            if ($userLike->isLiked()) {
+                echo json_encode(false);
+                exit;
+            }
+
+            $userLike
+                ->setLiked(true)
+                ->setDisliked(false);
+        } elseif ('dislike' === $status) {
+            if ($userLike->isDisliked()) {
+                echo json_encode(false);
+                exit;
+            }
+
+            $userLike
+                ->setLiked(false)
+                ->setDisliked(true);
+        }
+
+        $userLike
+            ->setUpdatedAt(
+                api_get_utc_datetime(null, false, true)
+            );
+
+        $em->persist($userLike);
+        $em->flush();
+
+        echo json_encode(true);
         break;
     default:
         echo '';

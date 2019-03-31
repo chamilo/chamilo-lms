@@ -20,6 +20,14 @@ switch ($action) {
         $userId = api_get_user_id();
         $groupId = api_get_group_id();
 
+        $onlyOnePublication = api_get_configuration_value('allow_only_one_student_publication_per_user');
+        if ($onlyOnePublication) {
+            $count = get_work_count_by_student($userId, $workId);
+            if ($count >= 1) {
+                exit;
+            }
+        }
+
         if (!empty($_FILES)) {
             $files = $_FILES['files'];
             $fileList = [];
@@ -56,7 +64,8 @@ switch ($action) {
 
                 $json = [];
                 if (!empty($result) && is_array($result) && empty($result['error'])) {
-                    $json['name'] = Display::url(
+                    $json['name'] = api_htmlentities($result['title']);
+                    $json['link'] = Display::url(
                         api_htmlentities($result['title']),
                         api_htmlentities($result['view_url']),
                         ['target' => '_blank']

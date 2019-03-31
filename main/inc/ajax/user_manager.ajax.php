@@ -14,21 +14,23 @@ $action = $_GET['a'];
 
 switch ($action) {
     case 'get_user_like':
-        $query = $_REQUEST['q'];
-        $conditions = [
-            'username' => $query,
-            'firstname' => $query,
-            'lastname' => $query,
-        ];
-        $users = UserManager::getUserListLike($conditions, [], false, 'OR');
-        $result = [];
-        if (!empty($users)) {
-            foreach ($users as $user) {
-                $result[] = ['id' => $user['id'], 'text' => $user['complete_name'].' ('.$user['username'].')'];
+        if (api_is_platform_admin() || api_is_drh()) {
+            $query = $_REQUEST['q'];
+            $conditions = [
+                'username' => $query,
+                'firstname' => $query,
+                'lastname' => $query,
+            ];
+            $users = UserManager::getUserListLike($conditions, [], false, 'OR');
+            $result = [];
+            if (!empty($users)) {
+                foreach ($users as $user) {
+                    $result[] = ['id' => $user['id'], 'text' => $user['complete_name'].' ('.$user['username'].')'];
+                }
+                $result['items'] = $result;
             }
-            $result['items'] = $result;
+            echo json_encode($result);
         }
-        echo json_encode($result);
         break;
     case 'get_user_popup':
         $courseId = isset($_REQUEST['course_id']) ? (int) $_REQUEST['course_id'] : 0;
@@ -58,7 +60,13 @@ switch ($action) {
 
         $userData = '<h3>'.$user_info['complete_name'].'</h3>'.$user_info['mail'].$user_info['official_code'];
         if ($isAnonymous) {
-            echo $userData;
+            // Only allow anonymous users to see user popup if the popup user
+            // is a teacher (which might be necessary to illustrate a course)
+            if ($user_info['status'] === COURSEMANAGER) {
+                echo $userData;
+            } else {
+                echo '<h3>-</h3>';
+            }
         } else {
             echo Display::url(
                 $userData,

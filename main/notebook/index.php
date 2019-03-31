@@ -39,6 +39,15 @@ Event::event_access_tool(TOOL_NOTEBOOK);
 
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
+$logInfo = [
+    'tool' => TOOL_NOTEBOOK,
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => $action,
+    'action_details' => '',
+];
+Event::registerLog($logInfo);
+
 // Tool name
 if ($action === 'addnote') {
     $tool = 'NoteAddNew';

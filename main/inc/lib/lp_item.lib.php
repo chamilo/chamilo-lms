@@ -46,7 +46,7 @@ class LpItem
             $sql = "SELECT * FROM $item_view_table
                     WHERE
                         c_id=".intval($in_c_id)." AND
-                        id=".intval($in_id);
+                        iid=".intval($in_id);
 
             $res = Database::query($sql);
             $data = Database::fetch_array($res);

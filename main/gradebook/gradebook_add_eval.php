@@ -64,6 +64,16 @@ if ($form->validate()) {
     }
     $eval->set_visible($visible);
     $eval->add();
+
+    $logInfo = [
+        'tool' => TOOL_GRADEBOOK,
+        'tool_id' => 0,
+        'tool_id_detail' => 0,
+        'action' => 'new-eval',
+        'action_details' => 'selectcat='.$eval->get_category_id(),
+    ];
+    Event::registerLog($logInfo);
+
     if ($eval->get_course_code() == null) {
         if ($values['adduser'] == 1) {
             //Disabling code when course code is null see issue #2705
@@ -84,6 +94,15 @@ if ($form->validate()) {
         }
     }
 }
+
+$logInfo = [
+    'tool' => TOOL_GRADEBOOK,
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => 'add-eval',
+    'action_details' => 'selectcat='.$select_cat,
+];
+Event::registerLog($logInfo);
 
 $interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat='.$select_cat,

@@ -370,11 +370,11 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
             $class = '';
             if (isset($this->_attributes['custom']) && $this->_attributes['custom']) {
                 $class = 'input-file';
-            }
+        }
 
             return $js.$this->_getTabs().
                 '<input class="'.$class.'" '.$this->_getAttrString($this->_attributes).' />';
-        }
+    }
     }
 
     /**
@@ -401,15 +401,14 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
             case FormValidator::LAYOUT_HORIZONTAL:
                 if (isset($attributes['custom']) && $attributes['custom'] == true) {
                     $template = '
-                                <div class="input-file-container">  
-                                    {element}
-                                    <label tabindex="0" {label-for} class="input-file-trigger">
-                                        <i class="fa fa-picture-o fa-lg" aria-hidden="true"></i> {label}
-                                    </label>
-                                </div>
-                                <p class="file-return"></p>
-                        
-                        <script type="text/javascript">
+                        <div class="input-file-container">  
+                            {element}
+                            <label tabindex="0" {label-for} class="input-file-trigger">
+                                <i class="fa fa-picture-o fa-lg" aria-hidden="true"></i> {label}
+                            </label>
+                        </div>
+                        <p class="file-return"></p>                        
+                        <script>
                             document.querySelector("html").classList.add(\'js\');
                             var fileInput  = document.querySelector( ".input-file" ),  
                                 button     = document.querySelector( ".input-file-trigger" ),
@@ -424,35 +423,38 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                                fileInput.focus();
                                return false;
                             });  
-                            fileInput.addEventListener("change", function(event) {  
-                                the_return.innerHTML = this.value;  
-                            });
-                            
+                            fileInput.addEventListener("change", function(event) {
+                                fileName = this.value;
+                                if (this.files[0]) {
+                                    fileName = this.files[0].name;
+                                }
+                                the_return.innerHTML = fileName;  
+                            });                            
                         </script>
                     ';
                 } else {
                     $template = '
-                <div  id="file_' . $name . '" class="form-group {error_class}">
-                    <label {label-for} class="col-sm-3 control-label" >
-                        <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
-                        {label}
-                    </label>
-                    <div class="col-sm-7">
-                        {icon}
-                        {element}
-                        <!-- BEGIN label_2 -->
-                            <p class="help-block">{label_2}</p>
-                        <!-- END label_2 -->
-                        <!-- BEGIN error -->
-                            <span class="help-inline help-block">{error}</span>
-                        <!-- END error -->
-                    </div>
-                    <div class="col-sm-2">
-                        <!-- BEGIN label_3 -->
-                            {label_3}
-                        <!-- END label_3 -->
-                    </div>
-                </div>';
+                    <div  id="file_' . $name . '" class="form-group {error_class}">
+                        <label {label-for} class="col-sm-3 control-label" >
+                            <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
+                            {label}
+                        </label>
+                        <div class="col-sm-7">
+                            {icon}
+                            {element}
+                            <!-- BEGIN label_2 -->
+                                <p class="help-block">{label_2}</p>
+                            <!-- END label_2 -->
+                            <!-- BEGIN error -->
+                                <span class="help-inline help-block">{error}</span>
+                            <!-- END error -->
+                        </div>
+                        <div class="col-sm-2">
+                            <!-- BEGIN label_3 -->
+                                {label_3}
+                            <!-- END label_3 -->
+                        </div>
+                    </div>';
                 }
                 return $template;
                 break;

@@ -102,7 +102,8 @@ if ($current_access_url_id == -1) {
     );
     if ($quant == 0) {
         echo Display::return_message(
-            '<a href="'.api_get_self().'?action=register&sec_token='.$parameters['sec_token'].'">'.get_lang('ClickToRegisterAdmin').'</a>',
+            '<a href="'.api_get_self().'?action=register&sec_token='.$parameters['sec_token'].'">'.
+            get_lang('ClickToRegisterAdmin').'</a>',
             'warning',
             false
         );
@@ -139,22 +140,21 @@ echo Display::url(
 
 echo '</div>';
 
-$sortable_data = UrlManager::get_url_data();
+$data = UrlManager::get_url_data();
 $urls = [];
-foreach ($sortable_data as $row) {
-    //title
+foreach ($data as $row) {
+    // Title
     $url = Display::url($row['url'], $row['url'], ['target' => '_blank']);
     $description = $row['description'];
+    $createdAt = api_get_local_time($row['tms']);
 
     //Status
     $active = $row['active'];
+    $action = 'unlock';
+    $image = 'wrong';
     if ($active == '1') {
         $action = 'lock';
         $image = 'right';
-    }
-    if ($active == '0') {
-        $action = 'unlock';
-        $image = 'wrong';
     }
     // you cannot lock the default
     if ($row['id'] == '1') {
@@ -165,12 +165,15 @@ foreach ($sortable_data as $row) {
     }
     // Actions
     $url_id = $row['id'];
-    $actions = Display::url(Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL), "access_url_edit.php?url_id=$url_id");
+    $actions = Display::url(
+        Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL),
+        "access_url_edit.php?url_id=$url_id"
+    );
     if ($url_id != '1') {
         $actions .= '<a href="access_urls.php?action=delete_url&amp;url_id='.$url_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset))."'".')) return false;">'.
             Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL).'</a>';
     }
-    $urls[] = [$url, $description, $status, $actions];
+    $urls[] = [$url, $description, $status, $createdAt, $actions];
 }
 
 $table = new SortableTableFromArrayConfig($urls, 2, 50, 'urls');
@@ -178,7 +181,8 @@ $table->set_additional_parameters($parameters);
 $table->set_header(0, 'URL');
 $table->set_header(1, get_lang('Description'));
 $table->set_header(2, get_lang('Active'));
-$table->set_header(3, get_lang('Modify'), false);
+$table->set_header(3, get_lang('CreatedAt'));
+$table->set_header(4, get_lang('Modify'), false);
 $table->display();
 
 Display :: display_footer();

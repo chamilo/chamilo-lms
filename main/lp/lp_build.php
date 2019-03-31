@@ -27,8 +27,7 @@ $learnpath_id = (int) $_REQUEST['lp_id'];
 $submit = $_POST['submit_button'];
 
 /* MAIN CODE */
-if ((!$is_allowed_to_edit) || ($isStudentView)) {
-    error_log('New LP - User not authorized in lp_build.php');
+if (!$is_allowed_to_edit || $isStudentView) {
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id.'&'.api_get_cidreq());
     exit;
 }

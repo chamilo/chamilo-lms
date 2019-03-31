@@ -1,0 +1,37 @@
+body {
+    font-size: 25px;
+    line-height: 1.25em !important;
+    text-align: justify;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.text-highlight {
+    -webkit-transition: color .3s linear, text-shadow .3s linear;
+    -khtml-transition: color .3s linear, text-shadow .3s linear;
+    -moz-transition: color .3s linear, text-shadow .3s linear;
+    -ms-transition: color .3s linear, text-shadow .3s linear;
+    transition: color .3s linear, text-shadow .3s linear;
+}
+
+.text-highlight.active {
+    color: red;
+    -webkit-text-shadow: 0px 0px 1px rgba(255, 0, 0, 1);
+    -khtml-text-shadow: 0px 0px 1px rgba(255, 0, 0, 1);
+    -moz-text-shadow: 0px 0px 1px rgba(255, 0, 0, 1);
+    -ms-text-shadow: 0px 0px 1px rgba(255, 0, 0, 1);
+    text-shadow: 0px 0px 1px rgba(255, 0, 0, 1);
+    -webkit-transition: color .3s linear, text-shadow .3s linear;
+    -khtml-transition: color .3s linear, text-shadow .3s linear;
+    -moz-transition: color .3s linear, text-shadow .3s linear;
+    -ms-transition: color .3s linear, text-shadow .3s linear;
+    transition: color .3s linear, text-shadow .3s linear;
+}
+
+br {
+    margin-bottom: 1em;
+}

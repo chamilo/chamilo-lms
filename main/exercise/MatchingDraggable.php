@@ -184,7 +184,6 @@ class MatchingDraggable extends Question
 
             $form->addHtml('<tr>');
             $form->addHtml('<td>'.chr(64 + $i).'</td>');
-            //$form->addText("option[$i]", null);
             $form->addHtmlEditor(
                 "option[$i]",
                 null,
@@ -272,7 +271,7 @@ class MatchingDraggable extends Question
             $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
             $header .= '<th>'.get_lang('Status').'</th>';
         } else {
-            $header .= '<th>'.get_lang('ElementList').'</th>';
+            $header .= '<th>'.get_lang('YourChoice').'</th>';
             $header .= '<th>'.get_lang('CorrespondsTo').'</th>';
         }
         $header .= '</tr>';

@@ -25,6 +25,9 @@ use ChamiloSession as Session;
  * @package chamilo.forum
  */
 require_once __DIR__.'/../inc/global.inc.php';
+
+api_protect_course_script(true);
+
 $current_course_tool = TOOL_FORUM;
 $htmlHeadXtra[] = '<script>
 $(document).ready(function() {
@@ -39,9 +42,6 @@ function hidecontent(content){
 // The section (tabs).
 $this_section = SECTION_COURSES;
 
-// Notification for unauthorized people.
-api_protect_course_script(true);
-
 $nameTools = get_lang('Forums');
 $_course = api_get_course_info();
 $sessionId = api_get_session_id();
@@ -50,8 +50,6 @@ $_user = api_get_user_info();
 $hideNotifications = api_get_course_setting('hide_forum_notifications');
 $hideNotifications = $hideNotifications == 1;
 
-// Including necessary files.
-require_once 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
 if (api_is_in_gradebook()) {
@@ -131,7 +129,6 @@ $logInfo = [
     'tool_id_detail' => 0,
     'action' => !empty($actions) ? $actions : 'list-category',
     'action_details' => isset($_GET['content']) ? $_GET['content'] : '',
-    'current_id' => isset($_GET['id']) ? $_GET['id'] : 0,
 ];
 Event::registerLog($logInfo);
 
@@ -228,27 +225,34 @@ if ($value && isset($value['value']) && !empty($value['value'])) {
 }
 
 // Create a search-box
-$form = new FormValidator('search_simple', 'get', api_get_self().'?'.api_get_cidreq(), null, null, 'inline');
-$form->addHidden('cidReq', api_get_course_id());
-$form->addHidden('id_session', api_get_session_id());
+$searchFilter = '';
 
-$extraField = new ExtraField('forum_category');
-$returnParams = $extraField->addElements(
-    $form,
-    null,
-    [], //exclude
-    false, // filter
-    false, // tag as select
-    ['language'], //show only fields
-    [], // order fields
-    [], // extra data
-    false,
-    false,
-    [],
-    [],
-    true //$addEmptyOptionSelects = false,
-);
-$form->setDefaults(['extra_language' => $defaultUserLanguage]);
+$translate = api_get_configuration_value('translate_html');
+if ($translate) {
+    $form = new FormValidator('search_simple', 'get', api_get_self().'?'.api_get_cidreq(), null, null, 'inline');
+    $form->addHidden('cidReq', api_get_course_id());
+    $form->addHidden('id_session', api_get_session_id());
+
+    $extraField = new ExtraField('forum_category');
+    $returnParams = $extraField->addElements(
+        $form,
+        null,
+        [], //exclude
+        false, // filter
+        false, // tag as select
+        ['language'], //show only fields
+        [], // order fields
+        [], // extra data
+        false,
+        false,
+        [],
+        [],
+        true //$addEmptyOptionSelects = false,
+    );
+    $form->setDefaults(['extra_language' => $defaultUserLanguage]);
+
+    $searchFilter = $form->returnForm();
+}
 
 // Fixes error if there forums with no category.
 $forumsInNoCategory = get_forums_in_category(0);
@@ -456,27 +460,27 @@ if (is_array($forumCategories)) {
 
                         $toolActions = null;
                         $forumInfo['alert'] = null;
-
+                        // The number of topics and posts.
                         if ($hideNotifications == false) {
                             // The number of topics and posts.
                             if ($forum['forum_of_group'] !== '0') {
                                 if (is_array($mywhatsnew_post_info) && !empty($mywhatsnew_post_info)) {
                                     $forumInfo['alert'] = ' '.
-                                        Display::return_icon(
-                                            'alert.png',
-                                            get_lang('Forum'),
-                                            null,
-                                            ICON_SIZE_SMALL
-                                        );
+                                Display::return_icon(
+                                    'alert.png',
+                                    get_lang('Forum'),
+                                    null,
+                                    ICON_SIZE_SMALL
+                                );
                                 }
                             } else {
                                 if (is_array($mywhatsnew_post_info) && !empty($mywhatsnew_post_info)) {
                                     $forumInfo['alert'] = ' '.Display::return_icon(
-                                            'alert.png',
-                                            get_lang('Forum'),
-                                            null,
-                                            ICON_SIZE_SMALL
-                                        );
+                                    'alert.png',
+                                    get_lang('Forum'),
+                                    null,
+                                    ICON_SIZE_SMALL
+                                );
                                 }
                             }
                         }
@@ -583,7 +587,7 @@ $tpl->assign('introduction', $introduction);
 $tpl->assign('actions', $actions);
 $tpl->assign('data', $listForumCategory);
 $tpl->assign('form_content', $formContent);
-$tpl->assign('search_filter', $form->returnForm());
+$tpl->assign('search_filter', $searchFilter);
 $tpl->assign('default_user_language', $defaultUserLanguage);
 $tpl->assign('languages', $languages);
 $extraFieldValue = new ExtraFieldValue('course');

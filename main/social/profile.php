@@ -175,7 +175,6 @@ $sessionList = SessionManager::getSessionsFollowedByUser(
 $friend_html = SocialManager::listMyFriendsBlock($user_id, $link_shared);
 $wallSocialAddPost = SocialManager::getWallForm(api_get_self());
 
-// Social Post Wall
 $posts = SocialManager::getWallMessagesByUser($friendId);
 $socialAutoExtendLink = SocialManager::getAutoExtendLink($user_id, $countPost);
 
@@ -214,7 +213,7 @@ $(document).ready(function() {
                 }
             }
         });
-    });   
+    });
 });
 </script>';
 
@@ -223,90 +222,7 @@ $social_right_content = '';
 $listInvitations = '';
 
 if ($show_full_profile) {
-    // MY GROUPS
-    $results = $userGroup->get_groups_by_user($friendId, 0);
-    $grid_my_groups = [];
-    $max_numbers_of_group = 4;
-
-    if (is_array($results) && count($results) > 0) {
-        $i = 1;
-        foreach ($results as $result) {
-            if ($i > $max_numbers_of_group) {
-                break;
-            }
-            $id = $result['id'];
-            $url_open = '<a href="group_view.php?id='.$id.'">';
-            $url_close = '</a>';
-            $icon = '';
-            $name = cut($result['name'], CUT_GROUP_NAME, true);
-            if ($result['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {
-                $icon = Display::return_icon(
-                    'social_group_admin.png',
-                    get_lang('Admin'),
-                    ['style' => 'vertical-align:middle;width:16px;height:16px;']
-                );
-            } elseif ($result['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {
-                $icon = Display::return_icon(
-                    'social_group_moderator.png',
-                    get_lang('Moderator'),
-                    ['style' => 'vertical-align:middle;width:16px;height:16px;']
-                );
-            }
-            $count_users_group = count($userGroup->get_all_users_by_group($id));
-            if ($count_users_group == 1) {
-                $count_users_group = $count_users_group.' '.get_lang('Member');
-            } else {
-                $count_users_group = $count_users_group.' '.get_lang('Members');
-            }
-            $item_name = $url_open.$name.$icon.$url_close;
-            $item_actions = '';
-            $grid_my_groups[] = [
-                $item_name,
-                $url_open.$result['picture'].$url_close,
-                $item_actions,
-            ];
-            $i++;
-        }
-    }
-
-    // Block My Groups
-    if (count($grid_my_groups) > 0) {
-        $my_groups = '';
-        $count_groups = 0;
-        if (count($results) == 1) {
-            $count_groups = count($results);
-        } else {
-            $count_groups = count($results);
-        }
-
-        $my_groups .= '<div class="panel panel-default">';
-        $my_groups .= '<div class="panel-heading">'.get_lang('MyGroups').' ('.$count_groups.') </div>';
-
-        if ($i > $max_numbers_of_group) {
-            if (api_get_user_id() == $user_id) {
-                $my_groups .= '<div class="box_shared_profile_group_actions">'
-                    .'<a href="groups.php?#tab_browse-1">'.get_lang('SeeAllMyGroups').'</a></div>';
-            } else {
-                $my_groups .= '<div class="box_shared_profile_group_actions">'
-                    .'<a href="'.api_get_path(WEB_CODE_PATH).'social/profile_friends_and_groups.inc.php'
-                    .'?view=mygroups&height=390&width=610&user_id='.$user_id.'"'
-                    .' class="ajax" title="'.get_lang('SeeAll').'" >'
-                    .get_lang('SeeAllMyGroups')
-                    .'</a></div>';
-            }
-        }
-
-        $total = count($grid_my_groups);
-        $i = 1;
-        foreach ($grid_my_groups as $group) {
-            $my_groups .= '<div class="panel-body">';
-            $my_groups .= $group[0];
-            $my_groups .= '</div>';
-            $i++;
-        }
-        $my_groups .= '</div>';
-        $social_group_info_block = $my_groups;
-    }
+    $social_group_info_block = SocialManager::getGroupBlock($friendId);
 
     // Block Social Course
     $my_courses = null;
@@ -472,7 +388,7 @@ $tpl->assign('social_post_wall_block', $posts);
 $tpl->assign('social_course_block', $social_course_block);
 $tpl->assign('social_group_info_block', $social_group_info_block);
 $tpl->assign('social_rss_block', $social_rss_block);
-$tpl->assign('social_skill_block', SocialManager::getSkillBlock($friendId));
+$tpl->assign('social_skill_block', SocialManager::getSkillBlock($friendId, 'vertical'));
 $tpl->assign('session_list', $social_session_block);
 $tpl->assign('invitations', $listInvitations);
 $tpl->assign('social_right_information', $socialRightInformation);

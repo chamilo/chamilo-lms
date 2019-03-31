@@ -20,7 +20,7 @@ class EvalForm extends FormValidator
     const TYPE_ALL_RESULTS_EDIT = 6;
     const TYPE_ADD_USERS_TO_EVAL = 7;
 
-    private $evaluation_object;
+    protected $evaluation_object;
     private $result_object;
     private $extra;
 
@@ -394,6 +394,11 @@ class EvalForm extends FormValidator
             0,
             $this->evaluation_object->get_max()
         );
+
+        $allowMultipleAttempts = api_get_configuration_value('gradebook_multiple_evaluation_attempts');
+        if ($allowMultipleAttempts) {
+            $this->addTextarea('comment', get_lang('Comment'));
+        }
 
         $this->addButtonSave(get_lang('Edit'), 'submit');
         $this->addElement('hidden', 'hid_user_id', $this->result_object->get_user_id());

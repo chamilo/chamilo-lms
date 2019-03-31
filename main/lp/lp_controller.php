@@ -214,7 +214,8 @@ if (!empty($lpObject)) {
     if ($debug) {
         error_log(' SESSION[lpobject] is defined');
     }
-    $oLP = unserialize($lpObject);
+    /** @var learnpath $oLP */
+    $oLP = UnserializeApi::unserialize('lp', $lpObject);
     if (isset($oLP) && is_object($oLP)) {
         if ($debug) {
             error_log(' oLP is object');
@@ -263,13 +264,14 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
         // Select the lp in the database and check which type it is (scorm/chamilo/aicc) to generate the
         // right object.
         if (!empty($_REQUEST['lp_id'])) {
-            $lp_id = intval($_REQUEST['lp_id']);
+            $lp_id = $_REQUEST['lp_id'];
         } else {
-            $lp_id = intval($myrefresh_id);
+            $lp_id = $myrefresh_id;
         }
+        $lp_id = (int) $lp_id;
 
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
-        if (is_numeric($lp_id)) {
+        if (!empty($lp_id)) {
             $sel = "SELECT iid, lp_type FROM $lp_table WHERE c_id = $course_id AND id = $lp_id";
             if ($debug > 0) {
                 error_log(' querying '.$sel);
@@ -283,6 +285,14 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
                     error_log('Found row type '.$type);
                     error_log('Calling constructor: '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id());
                 }
+                $logInfo = [
+                    'tool' => TOOL_LEARNPATH,
+                    'tool_id' => 0,
+                    'tool_id_detail' => 0,
+                    'action' => 'lp_load',
+                ];
+                Event::registerLog($logInfo);
+
                 switch ($type) {
                     case 1:
                         $oLP = new learnpath(api_get_course_id(), $lpIid, api_get_user_id());
@@ -369,6 +379,36 @@ if ($debug) {
     error_log('Entered lp_controller.php -+- (action: '.$action.')');
 }
 
+$eventLpId = $lp_id = !empty($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : 0;
+if (empty($lp_id)) {
+    if (isset($_SESSION['oLP'])) {
+        $eventLpId = $_SESSION['oLP']->get_id();
+    }
+}
+
+$lp_detail_id = 0;
+switch ($action) {
+    case '':
+    case 'list':
+        $eventLpId = 0;
+        break;
+    case 'view':
+    case 'content':
+        $lp_detail_id = $_SESSION['oLP']->get_current_item_id();
+        break;
+    default:
+        $lp_detail_id = (!empty($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0);
+        break;
+}
+
+$logInfo = [
+    'tool' => TOOL_LEARNPATH,
+    'tool_id' => $eventLpId,
+    'tool_id_detail' => $lp_detail_id,
+    'action' => !empty($action) ? $action : 'list',
+];
+Event::registerLog($logInfo);
+
 // format title to be displayed correctly if QUIZ
 $post_title = '';
 if (isset($_POST['title'])) {
@@ -392,6 +432,54 @@ if ($debug > 0) {
 }
 
 switch ($action) {
+    case 'send_notify_teacher':
+        // Enviar correo al profesor
+        $studentInfo = api_get_user_info();
+        $course_info = api_get_course_info();
+
+        global $_configuration;
+        $root_web = $_configuration['root_web'];
+
+        if (api_get_session_id() > 0) {
+            $session_info = api_get_session_info(api_get_session_id());
+            $course_name = $session_info['name'];
+            $course_url = $root_web.'courses/'.$course_info['code'].'/index.php?id_session='.api_get_session_id();
+        } else {
+            $course_name = $course_info['title'];
+            $course_url = $root_web.'courses/'.$course_info['code'].'/index.php?';
+        }
+        $url = Display::url($course_name, $course_url, ['title' => get_lang('GoToCourse')]);
+        $coachList = CourseManager::get_coachs_from_course(api_get_session_id(), api_get_course_int_id());
+        foreach ($coachList as $coach_course) {
+            $recipient_name = $coach_course['full_name'];
+
+            $coachInfo = api_get_user_info($coach_course['user_id']);
+            $email = $coachInfo['email'];
+
+            $tplContent = new Template(null, false, false, false, false, false);
+            // variables for the default template
+            $tplContent->assign('name_teacher', $recipient_name);
+            $tplContent->assign('name_student', $studentInfo['complete_name']);
+            $tplContent->assign('course_name', $course_name);
+            $tplContent->assign('course_url', $url);
+            //$tplContent->assign('telefono', $telefono);
+            //$tplContent->assign('prefix', $prefix);
+            $layoutContent = $tplContent->get_template('mail/content_ending_learnpath.tpl');
+            $emailBody = $tplContent->fetch($layoutContent);
+
+            api_mail_html(
+                $recipient_name,
+                $email,
+                sprintf(get_lang('StudentXFinishedLp'), $studentInfo['complete_name']),
+                $emailBody,
+                $studentInfo['complete_name'],
+                $studentInfo['email'],
+                true
+            );
+        }
+        Display::addFlash(Display::return_message(get_lang('MessageSent')));
+        require 'lp_list.php';
+        break;
     case 'add_item':
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
@@ -446,6 +534,27 @@ switch ($action) {
                             $parent,
                             $previous,
                             $type,
+                            $document_id,
+                            $post_title,
+                            $description,
+                            $prerequisites
+                        );
+                    } elseif ($_POST['type'] == TOOL_READOUT_TEXT) {
+                        if (isset($_POST['path']) && $_GET['edit'] != 'true') {
+                            $document_id = $_POST['path'];
+                        } else {
+                            $document_id = $_SESSION['oLP']->createReadOutText(
+                                $_course,
+                                $_POST['content_lp'],
+                                $_POST['title'],
+                                $directoryParentId
+                            );
+                        }
+
+                        $new_item_id = $_SESSION['oLP']->add_item(
+                            $parent,
+                            $previous,
+                            TOOL_READOUT_TEXT,
                             $document_id,
                             $post_title,
                             $description,
@@ -736,6 +845,7 @@ switch ($action) {
                     $is_success = true;
                 }
 
+                Display::addFlash(Display::return_message(get_lang('Updated')));
                 $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
                 header('Location: '.$url);
                 exit;
@@ -1007,12 +1117,9 @@ switch ($action) {
                 $hide_toc_frame = null;
             }
             $_SESSION['oLP']->set_hide_toc_frame($hide_toc_frame);
-            $_SESSION['oLP']->set_prerequisite(
-                isset($_POST['prerequisites']) ? (int) $_POST['prerequisites'] : 0
-            );
-            $_SESSION['oLP']->set_use_max_score(
-                isset($_POST['use_max_score']) ? 1 : 0
-            );
+            $_SESSION['oLP']->set_prerequisite(isset($_POST['prerequisites']) ? (int) $_POST['prerequisites'] : 0);
+            $_SESSION['oLP']->setAccumulateWorkTime(isset($_REQUEST['accumulate_work_time']) ? $_REQUEST['accumulate_work_time'] : 0);
+            $_SESSION['oLP']->set_use_max_score(isset($_POST['use_max_score']) ? 1 : 0);
 
             $subscribeUsers = isset($_REQUEST['subscribe_users']) ? 1 : 0;
             $_SESSION['oLP']->setSubscribeUsers($subscribeUsers);
@@ -1041,9 +1148,7 @@ switch ($action) {
             }
 
             $extraFieldValue = new ExtraFieldValue('lp');
-            $params = [
-                'lp_id' => $_SESSION['oLP']->lp_id,
-            ];
+            $_REQUEST['item_id'] = $_SESSION['oLP']->lp_id;
             $extraFieldValue->saveFieldValues($_REQUEST);
 
             if ($_FILES['lp_preview_image']['size'] > 0) {

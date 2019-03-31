@@ -156,6 +156,7 @@ class ExtraFieldValue extends Model
             $comment = isset($params[$commentVariable]) ? $params[$commentVariable] : null;
 
             switch ($extraFieldInfo['field_type']) {
+                case ExtraField::FIELD_TYPE_GEOLOCALIZATION_COORDINATES:
                 case ExtraField::FIELD_TYPE_GEOLOCALIZATION:
                     if (!empty($value)) {
                         if (isset($params['extra_'.$extraFieldInfo['variable'].'_coordinates'])) {
@@ -206,8 +207,7 @@ class ExtraFieldValue extends Model
                             continue;
                         }
 
-                        $tagsResult = $em
-                            ->getRepository('ChamiloCoreBundle:Tag')
+                        $tagsResult = $em->getRepository('ChamiloCoreBundle:Tag')
                             ->findBy([
                                 'tag' => $tagValue,
                                 'fieldId' => $extraFieldInfo['id'],
@@ -234,6 +234,7 @@ class ExtraFieldValue extends Model
                         $tag->setCount(count($tagUses) + 1);
                         $em->persist($tag);
                     }
+
                     $em->flush();
 
                     foreach ($tags as $tag) {
@@ -243,6 +244,7 @@ class ExtraFieldValue extends Model
                         $fieldRelTag->setTagId($tag->getId());
                         $em->persist($fieldRelTag);
                     }
+
                     $em->flush();
                     break;
                 case ExtraField::FIELD_TYPE_FILE_IMAGE:
@@ -362,7 +364,7 @@ class ExtraFieldValue extends Model
                         'value' => $value,
                         'comment' => $comment,
                     ];
-                    self::save($newParams, $showQuery);
+                    $this->save($newParams, $showQuery);
             }
         }
 

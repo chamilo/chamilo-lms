@@ -108,7 +108,8 @@ switch ($action) {
 
                 $json = [];
                 if (!empty($result) && is_array($result)) {
-                    $json['name'] = Display::url(
+                    $json['name'] = api_htmlentities($result['title']);
+                    $json['link'] = Display::url(
                         api_htmlentities($result['title']),
                         api_htmlentities($result['url']),
                         ['target' => '_blank']
@@ -133,10 +134,10 @@ switch ($action) {
         exit;
         break;
     case 'document_preview':
-        $course_info = api_get_course_info_by_id($_REQUEST['course_id']);
-        if (!empty($course_info) && is_array($course_info)) {
+        $courseInfo = api_get_course_info_by_id($_REQUEST['course_id']);
+        if (!empty($courseInfo) && is_array($courseInfo)) {
             echo DocumentManager::get_document_preview(
-                $course_info,
+                $courseInfo,
                 false,
                 '_blank',
                 $_REQUEST['session_id']

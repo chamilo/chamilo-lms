@@ -14,7 +14,7 @@
 <div id="record-audio-wami" class="wami-container"></div>
 
 <script>
-    $(document).on('ready', function () {
+    $(function() {
         function useRecordRTC(){
             $('#record-audio-recordrtc').show();
 

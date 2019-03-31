@@ -21,10 +21,8 @@ class LearnPathCategory extends Resource
      * @param int    $id
      * @param string $object
      */
-    public function __construct(
-        $id,
-        $object
-    ) {
+    public function __construct($id, $object)
+    {
         parent::__construct($id, RESOURCE_LEARNPATH_CATEGORY);
         $this->object = $object;
     }

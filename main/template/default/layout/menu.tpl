@@ -1,13 +1,14 @@
 <!-- Fixed navbar -->
-{% if _u.logged == 1 %}
+{% if _u.logged == 1 and not user_in_anon_survey %}
     <script>
         $(document).ready(function () {
             $.get('{{ _p.web_main }}inc/ajax/message.ajax.php?a=get_count_message', function(data) {
-                if (data === '0') {
+                var countNotifications = (data.ms_friends + data.ms_groups + data.ms_inbox);
+                if (countNotifications === 0 ) {
                     $("#count_message_li").addClass('hidden');
                 } else {
                     $("#count_message_li").removeClass('hidden');
-                    $("#count_message").append(data);
+                    $("#count_message").append(countNotifications);
                 }
             });
         });
@@ -27,14 +28,22 @@
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 {% for item in menu %}
-                    <li class="{{ item.key }} {{ item.current }}">
-                        <a href="{{ item.url }}" {{ item.target ? 'target="' ~ item.target ~ '"' : '' }} title="{{ item.title }}">
-                            {{ item.title }}
-                        </a>
-                    </li>
+                    {% set show_item = true %}
+
+                    {% if user_in_anon_survey and item.key != 'homepage' %}
+                        {% set show_item = false %}
+                    {% endif %}
+
+                    {% if show_item %}
+                        <li class="{{ item.key }} {{ item.current }}">
+                            <a href="{{ item.url }}" {{ item.target ? 'target="' ~ item.target ~ '"' : '' }} title="{{ item.title }}">
+                                {{ item.title }}
+                            </a>
+                        </li>
+                    {% endif %}
                 {% endfor %}
             </ul>
-            {% if _u.logged == 1 %}
+            {% if _u.logged == 1 and not user_in_anon_survey %}
                 <ul class="nav navbar-nav navbar-right">
                     <li id="count_message_li" class="hidden">
                         <a href="{{ message_url }}">

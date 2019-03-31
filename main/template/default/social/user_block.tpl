@@ -11,22 +11,22 @@
             <div id="sn-avatar-one" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading-sn">
                 <div class="panel-body">
                     <div class="area-avatar">
-                        {{ social_avatar_block }}
+                    {{ social_avatar_block }}
                         <!-- TYPE USER PROFILE -->
                         {% if user.status == 5 %}
                             <div class="avatar-icon">
                                 {% if user.has_certificates %}
-                                    <img src="{{ _p.web_img }}icons/svg/ofaj_graduated.svg" width="32px" height="32px">
+                                    <img src="{{ _p.web_img }}icons/svg/identifier_graduated.svg" width="32px" height="32px">
                                 {% else %}
-                                    <img src="{{ _p.web_img }}icons/svg/ofaj_student.svg" width="32px" height="32px">
+                                    <img src="{{ _p.web_img }}icons/svg/identifier_student.svg" width="32px" height="32px">
                                 {% endif %}
                             </div>
                         {% elseif user.status == 1 %}
                             <div class="avatar-icon">
                                 {% if user.is_admin %}
-                                    <img src="{{ _p.web_img }}icons/svg/ofaj_admin.svg" width="32px" height="32px">
+                                    <img src="{{ _p.web_img }}icons/svg/identifier_admin.svg" width="32px" height="32px">
                                 {% else %}
-                                    <img src="{{ _p.web_img }}icons/svg/ofaj_teacher.svg" width="32px" height="32px">
+                                    <img src="{{ _p.web_img }}icons/svg/identifier_teacher.svg" width="32px" height="32px">
                                 {% endif %}
                             </div>
                         {% endif %}
@@ -84,9 +84,15 @@
 
                     <ul class="list-user-data">
                         <li class="item item-name">
-                            <h5>{{ user.firstname }} {{ user.lastname }}</h5>
+                            <h5>{{ user.complete_name }} </h5>
                         </li>
-
+                        {% if _u.is_admin == 1 %}
+                            <li class="item">
+                                <a href="{{ _p.web }}main/admin/user_edit.php?user_id={{ user.id }}">
+                                    <img src="{{ "edit.png" | icon }}" alt="{{ "Edit" | get_lang }}">
+                                </a>
+                            </li>
+                        {% endif %}
                         {% if show_full_profile %}
                             {% if user.email %}
                             <li class="item">
@@ -158,14 +164,6 @@
                             {% endif %}
                         {% endfor %}
                     </dl>
-
-                    {% if _u.is_admin == 1 %}
-                        <div class="edit-admin">
-                            <a href="{{ _p.web }}main/admin/user_edit.php?user_id={{ user.id }}">
-                                <img src="{{ "edit.png" | icon }}" alt="{{ "Edit" | get_lang }}">
-                            </a>
-                        </div>
-                    {% endif %}
 
                     {% if not profile_edition_link is empty %}
                     <li class="item">

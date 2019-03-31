@@ -12,6 +12,7 @@
  * mod-Download: http://code.google.com/p/lajox
  */
 /*********************************************************************************************************/
+
 CKEDITOR.dialog.add('inserthtmlDialog',function(editor){
 	return{
 		title:'Insert HTML',

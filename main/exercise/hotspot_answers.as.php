@@ -27,12 +27,13 @@ if ($debug) {
     error_log("Call to hotspot_answers.as.php");
 }
 
+$trackExerciseInfo = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
+
 // Check if student has access to the hotspot answers
 if (!api_is_allowed_to_edit(null, true)) {
     if (empty($exeId)) {
         api_not_allowed();
     }
-    $trackExerciseInfo = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
 
     if (empty($trackExerciseInfo)) {
         api_not_allowed();
@@ -92,11 +93,17 @@ $data['courseCode'] = $_course['path'];
 $data['hotspots'] = [];
 
 $showTotalScoreAndUserChoicesInLastAttempt = true;
-if ($objExercise->selectResultsDisabled() == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
+if (in_array(
+    $objExercise->selectResultsDisabled(), [
+        RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
+        RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
+    ]
+)
+) {
     $showOnlyScore = true;
     $showResults = true;
     $lpId = isset($trackExerciseInfo['orig_lp_id']) ? $trackExerciseInfo['orig_lp_id'] : 0;
-    $lpItemId  = isset($trackExerciseInfo['orig_lp_item_id']) ? $trackExerciseInfo['orig_lp_item_id'] : 0;
+    $lpItemId = isset($trackExerciseInfo['orig_lp_item_id']) ? $trackExerciseInfo['orig_lp_item_id'] : 0;
     if ($objExercise->attempts > 0) {
         $attempts = Event::getExerciseResultsByUser(
             api_get_user_id(),
@@ -119,11 +126,19 @@ if ($objExercise->selectResultsDisabled() == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_S
 }
 
 $hideExpectedAnswer = false;
-if ($objExercise->selectFeedbackType() == 0 && $objExercise->selectResultsDisabled() == 2) {
+if ($objExercise->selectFeedbackType() == 0 &&
+    $objExercise->selectResultsDisabled() == RESULT_DISABLE_SHOW_SCORE_ONLY
+) {
     $hideExpectedAnswer = true;
 }
 
-if ($objExercise->selectResultsDisabled() == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
+if (in_array(
+    $objExercise->selectResultsDisabled(), [
+        RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
+        RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
+    ]
+)
+) {
     $hideExpectedAnswer = $showTotalScoreAndUserChoicesInLastAttempt ? false : true;
 }
 
@@ -150,8 +165,36 @@ if (!$hideExpectedAnswer) {
 
     /** @var CQuizAnswer $hotSpotAnswer */
     foreach ($result as $hotSpotAnswer) {
+        $hotSpotAnswerId = $hotSpotAnswer->getIid();
+
+        // Show only correct hotspots
+        if ($objExercise->selectResultsDisabled() == RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
+            $TBL_TRACK_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+            // Check auto id
+            $sql = "SELECT hotspot_correct
+                    FROM $TBL_TRACK_HOTSPOT
+                    WHERE
+                        hotspot_exe_id = $exeId AND
+                        hotspot_question_id= $questionId AND
+                        hotspot_answer_id = ".$hotSpotAnswerId."
+                    ORDER BY hotspot_id ASC";
+            $result = Database::query($sql);
+            $studentChoice = false;
+            if (Database::num_rows($result)) {
+                $studentChoice = Database::result(
+                    $result,
+                    0,
+                    'hotspot_correct'
+                );
+            }
+
+            if (!$studentChoice) {
+                continue;
+            }
+        }
+
         $hotSpot = [];
-        $hotSpot['id'] = $hotSpotAnswer->getIid();
+        $hotSpot['id'] = $hotSpotAnswerId;
         $hotSpot['answer'] = $hotSpotAnswer->getAnswer();
 
         switch ($hotSpotAnswer->getHotspotType()) {

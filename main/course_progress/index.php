@@ -75,6 +75,7 @@ $thematic = new Thematic();
 
 // thematic controller object
 $thematic_controller = new ThematicController();
+
 $thematic_data = [];
 if (!empty($thematic_id)) {
     // thematic data by id

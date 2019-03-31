@@ -38,8 +38,6 @@ $nameTools = get_lang('ToolForum');
 // Are we in a lp ?
 $origin = api_get_origin();
 
-/* Including necessary files */
-require 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
 $userId = api_get_user_id();
@@ -48,6 +46,7 @@ $groupId = api_get_group_id();
 $courseId = api_get_course_int_id();
 $groupInfo = GroupManager::get_group_properties($groupId);
 $isTutor = GroupManager::is_tutor_of_group($userId, $groupInfo, $courseId);
+
 $isAllowedToEdit = api_is_allowed_to_edit(false, true) && api_is_allowed_to_session_edit(false, true);
 
 /* MAIN DISPLAY SECTION */
@@ -108,7 +107,6 @@ $logInfo = [
     'tool_id_detail' => 0,
     'action' => !empty($my_action) ? $my_action : 'list-threads',
     'action_details' => isset($_GET['content']) ? $_GET['content'] : '',
-    'current_id' => isset($_GET['id']) ? $_GET['id'] : 0,
 ];
 Event::registerLog($logInfo);
 
@@ -500,17 +498,17 @@ if (is_array($threads)) {
                 );
             }
 
-            if($_user['status']==5) {
-                if($_user['has_certificates']){
-                    $iconStatus = '<img src="'.$urlImg.'icons/svg/ofaj_graduated.svg" width="22px" height="22px">';
-                }else{
-                    $iconStatus = '<img src="'.$urlImg.'icons/svg/ofaj_student.svg" width="22px" height="22px">';
+            if ($_user['status'] == 5) {
+                if ($_user['has_certificates']) {
+                    $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_graduated.svg" width="22px" height="22px">';
+                } else {
+                    $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_student.svg" width="22px" height="22px">';
                 }
-            }else if($_user['status'] == 1){
-                if($isAdmin){
-                    $iconStatus = '<img src="'.$urlImg.'icons/svg/ofaj_admin.svg" width="22px" height="22px">';
-                }else{
-                    $iconStatus = '<img src="'.$urlImg.'icons/svg/ofaj_teacher.svg" width="22px" height="22px">';
+            } elseif ($_user['status'] == 1) {
+                if ($isAdmin) {
+                    $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_admin.svg" width="22px" height="22px">';
+                } else {
+                    $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_teacher.svg" width="22px" height="22px">';
                 }
             }
 
@@ -530,7 +528,7 @@ if (is_array($threads)) {
                 $html .= '<p>'.Security::remove_XSS(cut($last_post_info['post_text'], 140)).'</p>';
             }
 
-            $html .= '<p>'.api_convert_and_format_date($row['insert_date']).'</p>';
+            $html .= '<p>'.Display::dateToStringAgoAndLongDate($row['insert_date']).'</p>';
 
             if ($current_forum['moderated'] == 1 && api_is_allowed_to_edit(false, true)) {
                 $waitingCount = getCountPostsWithStatus(
@@ -563,6 +561,25 @@ if (is_array($threads)) {
                 ICON_SIZE_SMALL
             ).' '.$row['thread_views'].' '.get_lang('Views').'<br>'.$newPost;
             $html .= '</div>';
+
+            $last_post_info = get_last_post_by_thread(
+                $row['c_id'],
+                $row['thread_id'],
+                $row['forum_id'],
+                api_is_allowed_to_edit()
+            );
+            $last_post = null;
+
+            if ($last_post_info) {
+                $poster_info = api_get_user_info($last_post_info['poster_id']);
+                $post_date = Display::dateToStringAgoAndLongDate($last_post_info['post_date']);
+                $last_post = $post_date.'<br>'.get_lang('By').' '.display_user_link(
+                    $last_post_info['poster_id'],
+                    $poster_info['complete_name'],
+                    '',
+                    $poster_info['username']
+                );
+            }
 
             $html .= '<div class="col-md-5">'
                 .Display::return_icon('post-item.png', null, null, ICON_SIZE_TINY)

@@ -180,7 +180,6 @@ class Database
             $sysPath."vendor/gedmo/doctrine-extensions/lib"
         );
 
-
         Type::overrideType(
             Type::DATETIME,
             self::getUTCDateTimeTypeClass()

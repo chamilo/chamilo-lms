@@ -19,7 +19,7 @@ $max = 10;
 $counter = 0;
 // Check Sessions
 $_configuration['access_url'] = 6;
-$sessions = SessionManager::get_sessions_admin();
+$sessions = SessionManager::formatSessionsAdminForGrid();
 foreach ($sessions as $session) {
     $sessionId = $session['id'];
     if (!empty($testSessionId)) {

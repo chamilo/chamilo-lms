@@ -130,7 +130,7 @@ class HotSpotDelineation extends HotSpot
      */
     public function createForm(&$form, $exercise)
     {
-        parent::createForm($form);
+        parent::createForm($form, $exercise);
     }
 
     /**

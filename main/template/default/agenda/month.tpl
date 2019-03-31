@@ -204,8 +204,13 @@ $(document).ready(function() {
     });
 
     FC.views.CustomView = CustomView; // register our class with the view system
+    var height = '';
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        height = 'auto';
+    }
 
 	var calendar = $('#calendar').fullCalendar({
+        height: height,
 		header: {
 			left: 'today,prev,next',
 			center: 'title',
@@ -257,8 +262,6 @@ $(document).ready(function() {
         },
 		// Add event
 		select: function(start, end, jsEvent, view) {
-            var start_date = start.format("YYYY-MM-DD h:mm");
-            var end_date = end.format("YYYY-MM-DD h:mm");
             var diffDays = moment(end).diff(start, 'days');
 
             var allDay = true;
@@ -279,7 +282,10 @@ $(document).ready(function() {
 			// Update chz-select
 			//$("#users_to_send").trigger("chosen:updated");
 			if ({{ can_add_events }} == 1) {
-				var url = '{{ web_agenda_ajax_url }}&a=add_event&start='+start.format("YYYY-MM-DD HH:mm:00")+'&end='+end.format("YYYY-MM-DD HH:mm:00")+'&all_day='+allDay+'&view='+view.name;
+			    var startEn = start.clone().locale('en'),
+                    endEn = end.clone().locale('en');
+
+				var url = '{{ web_agenda_ajax_url }}&a=add_event&start='+startEn.format("YYYY-MM-DD HH:mm:00")+'&end='+endEn.format("YYYY-MM-DD HH:mm:00")+'&all_day='+allDay+'&view='+view.name;
 			    var start_date_value = start.format('{{ js_format_date }}');
                 $('#start_date').html(start_date_value);
 
@@ -412,7 +418,8 @@ $(document).ready(function() {
                     content: onHoverInfo,
                     position: {
                         at: 'top center',
-                        my: 'bottom center'
+                        my: 'bottom center',
+                        viewport: $(window)
                     }
                 });
 			}
@@ -422,6 +429,36 @@ $(document).ready(function() {
             var end = calEvent.end;
             var diffDays = moment(end).diff(start, 'days');
             var endDateMinusOne = '';
+
+            // If event is not editable then just return the qtip
+            if (!calEvent.editable) {
+                var onHoverInfo = '';
+                {% if calEvent.description %}
+                if (calEvent.description) {
+                    onHoverInfo = calEvent.description;
+                }
+                {% endif %}
+                {% if on_hover_info.comment %}
+                if (calEvent.comment) {
+                    onHoverInfo = onHoverInfo + calEvent.comment;
+                }
+                {% endif %}
+
+                if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                    $(this).qtip({
+                        overwrite: false,
+                        show: {ready: true},
+                        content: onHoverInfo,
+                        position: {
+                            at: 'top center',
+                            my: 'bottom center',
+                            viewport: $(window)
+                        }
+                    });
+
+                    return;
+                }
+            }
 
             if (end) {
                 var clone = end.clone();

@@ -25,6 +25,7 @@ $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
 $table_user = Database::get_main_table(TABLE_MAIN_USER);
 $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
 $tool_name = get_lang('SurveyInvitations');
+$courseInfo = api_get_course_info();
 
 // Getting the survey information
 $survey_id = Security::remove_XSS($_GET['survey_id']);
@@ -32,6 +33,8 @@ $survey_data = SurveyManager::get_survey($survey_id);
 if (empty($survey_data)) {
     api_not_allowed(true);
 }
+
+$view = isset($_GET['view']) ? $_GET['view'] : 'invited';
 
 $urlname = strip_tags(
     api_substr(api_html_entity_decode($survey_data['title'], ENT_QUOTES), 0, 40)
@@ -53,62 +56,86 @@ $interbreadcrumb[] = [
 // Displaying the header
 Display::display_header($tool_name);
 
+$course_id = api_get_course_int_id();
+$sessionId = api_get_session_id();
+
+$sentInvitations = SurveyUtil::getSentInvitations($survey_data['code'], $course_id, $sessionId);
+
 // Getting all the people who have filled this survey
 $answered_data = SurveyManager::get_people_who_filled_survey($survey_id);
-if ($survey_data['anonymous'] == 1) {
+
+$invitationsCount = count($sentInvitations);
+$answeredCount = count($answered_data);
+$unasnweredCount = count($sentInvitations) - count($answered_data);
+
+if ($survey_data['anonymous'] == 1 && !api_get_configuration_value('survey_anonymous_show_answered')) {
     echo Display::return_message(
-        get_lang('AnonymousSurveyCannotKnowWhoAnswered').' '.count(
-            $answered_data
-        ).' '.get_lang('PeopleAnswered')
+        get_lang('AnonymousSurveyCannotKnowWhoAnswered').' '.$answeredCount.' '.get_lang('PeopleAnswered')
     );
     $answered_data = [];
 }
+if ($survey_data['anonymous'] == 1) {
+    if ($answeredCount < 2) {
+        $answeredCount = 0;
+        $unasnweredCount = $invitationsCount;
+    }
+}
 $url = api_get_self().'?survey_id='.$survey_id.'&'.api_get_cidreq();
 
-if (!isset($_GET['view']) || $_GET['view'] == 'invited') {
-    echo get_lang('ViewInvited').' | ';
-} else {
-    echo '	<a href="'.$url.'&view=invited">'.
-        get_lang('ViewInvited').'</a> |';
-}
-if ($_GET['view'] == 'answered') {
-    echo get_lang('ViewAnswered').' | ';
-} else {
-    echo '	<a href="'.$url.'&view=answered">'.
-        get_lang('ViewAnswered').'</a> |';
-}
+echo '<ul class="nav nav-tabs">';
 
-if ($_GET['view'] == 'unanswered') {
-    echo get_lang('ViewUnanswered');
+if ($view == 'invited') {
+    echo '<li role="presentation" class="active"><a href="#">'.get_lang('ViewInvited');
 } else {
-    echo '	<a href="'.$url.'&view=unanswered">'.
-        get_lang('ViewUnanswered').'</a>';
+    echo '<li role="presentation"><a href="'.$url.'&view=invited">'.
+        get_lang('ViewInvited');
 }
+echo ' <span class="badge badge-default">'.$invitationsCount.'</span>';
+echo '</a></li>';
+if ($view == 'answered') {
+    echo '<li role="presentation" class="active"><a href="#">'.get_lang('ViewAnswered');
+} else {
+    echo '<li role="presentation"><a href="'.$url.'&view=answered">'.
+        get_lang('ViewAnswered');
+}
+echo ' <span class="badge badge-default">'.$answeredCount.'</span>';
+echo '</a></li>';
+
+if ($view == 'unanswered') {
+    echo '<li role="presentation" class="active"><a href="#">'.get_lang('ViewUnanswered');
+} else {
+    echo '<li role="presentation"><a href="'.$url.'&view=unanswered">'.
+        get_lang('ViewUnanswered');
+}
+echo ' <span class="badge badge-default">'.$unasnweredCount.'</span>';
+echo '</a></li>';
+echo '</ul>';
 
 // Table header
-echo '<table class="data_table">';
+echo '<table class="data_table" style="margin-top: 5px;">';
 echo '	<tr>';
 echo '		<th>'.get_lang('User').'</th>';
 echo '		<th>'.get_lang('InvitationDate').'</th>';
-echo '		<th>'.get_lang('Answered').'</th>';
+
+switch ($view) {
+    case 'unanswered':
+        echo '		<th>'.get_lang('SurveyInviteLink').'</th>';
+        break;
+    default:
+        echo '		<th>'.get_lang('Answered').'</th>';
+        break;
+}
+
 echo '	</tr>';
 
-$course_id = api_get_course_int_id();
-$sessionId = api_get_session_id();
-$sessionCondition = api_get_session_condition($sessionId);
+$surveyAnonymousShowAnswered = api_get_configuration_value('survey_anonymous_show_answered');
+$hideSurveyReportingButton = api_get_configuration_value('hide_survey_reporting_button');
 
-$sql = "SELECT survey_invitation.*, user.firstname, user.lastname, user.email
-        FROM $table_survey_invitation survey_invitation
-        LEFT JOIN $table_user user
-        ON (survey_invitation.user = user.id AND survey_invitation.c_id = $course_id)
-        WHERE
-            survey_invitation.survey_code = '".Database::escape_string($survey_data['code'])."' $sessionCondition";
-
-$res = Database::query($sql);
-while ($row = Database::fetch_assoc($res)) {
-    if (!$_GET['view'] || $_GET['view'] == 'invited' ||
-        ($_GET['view'] == 'answered' && in_array($row['user'], $answered_data)) ||
-        ($_GET['view'] == 'unanswered' && !in_array($row['user'], $answered_data))
+foreach ($sentInvitations as $row) {
+    $id = $row['iid'];
+    if ($view == 'invited' ||
+        ($view == 'answered' && in_array($row['user'], $answered_data) && $answeredCount > 1) ||
+        ($view == 'unanswered' && !in_array($row['user'], $answered_data) && $answeredCount > 1)
     ) {
         echo '<tr>';
         if (is_numeric($row['user'])) {
@@ -120,17 +147,66 @@ while ($row = Database::fetch_assoc($res)) {
             echo '<td>'.$row['user'].'</td>';
         }
         echo '	<td>'.Display::dateToStringAgoAndLongDate($row['invitation_date']).'</td>';
-        echo '	<td>';
 
-        if (in_array($row['user'], $answered_data) && !api_get_configuration_value('hide_survey_reporting_button')) {
-            echo '<a href="'.
-                api_get_path(WEB_CODE_PATH).
-                'survey/reporting.php?action=userreport&survey_id='.$survey_id.'&user='.$row['user'].'&'.api_get_cidreq().'">'.
-                get_lang('ViewAnswers').'</a>';
+        if (in_array($row['user'], $answered_data)) {
+            if (!$surveyAnonymousShowAnswered && !$hideSurveyReportingButton) {
+                echo '<td>';
+                echo '<a href="'.
+                    api_get_path(WEB_CODE_PATH).
+                    'survey/reporting.php?action=userreport&survey_id='.$survey_id.'&user='.$row['user'].'&'.api_get_cidreq().'">'.
+                    get_lang('ViewAnswers').'</a>';
+                echo '</td>';
+            } else {
+                if ($survey_data['anonymous'] == 1 && $answeredCount > 1) {
+                    echo '<td>'.get_lang('Answered').'</td>';
+                } else {
+                    echo '<td>-</td>';
+                }
+            }
         } else {
-            echo '-';
+            if ($view == 'unanswered') {
+                echo '	<td>';
+                $code = $row['invitation_code'];
+
+                $link = SurveyUtil::generateFillSurveyLink($code, $courseInfo, $sessionId);
+                $link = Display::input('text', 'copy_'.$id, $link, ['id' => 'copy_'.$id, 'class' => '']);
+                $link .= ' '.Display::url(
+                        Display::returnFontAwesomeIcon('copy').get_lang('CopyTextToClipboard'),
+                        'javascript:void()',
+                        ['onclick' => "copyTextToClipBoard('copy_".$id."')", 'class' => 'btn btn-primary btn-sm']
+                    );
+
+                echo $link;
+                echo '	</td>';
+            } else {
+                echo '<td>-</td>';
+            }
         }
 
+        echo '</tr>';
+    } elseif ($view === 'unanswered' && $answeredCount == 0) {
+        echo '<tr>';
+        if (is_numeric($row['user'])) {
+            $userInfo = api_get_user_info($row['user']);
+            echo '<td>';
+            echo UserManager::getUserProfileLink($userInfo);
+            echo '</td>';
+        } else {
+            echo '<td>'.$row['user'].'</td>';
+        }
+        echo '	<td>'.Display::dateToStringAgoAndLongDate($row['invitation_date']).'</td>';
+        echo '	<td>';
+        $code = $row['invitation_code'];
+
+        $link = SurveyUtil::generateFillSurveyLink($code, $courseInfo, $sessionId);
+        $link = Display::input('text', 'copy_'.$id, $link, ['id' => 'copy_'.$id, 'class' => '']);
+        $link .= ' '.Display::url(
+                Display::returnFontAwesomeIcon('copy').get_lang('CopyTextToClipboard'),
+                'javascript:void()',
+                ['onclick' => "copyTextToClipBoard('copy_".$id."')", 'class' => 'btn btn-primary btn-sm']
+            );
+
+        echo $link;
         echo '	</td>';
         echo '</tr>';
     }

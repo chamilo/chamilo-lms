@@ -165,7 +165,7 @@ if (api_is_allowed_to_edit(null, true)) {
                 ).get_lang('ViewUser').'</a>';
         }
     }
-    echo '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&origin=user_course&student='.$userIdViewed.'&details=true&course='.$_course['id'].'">'.Display::return_icon('stats.png', get_lang('UserStatistics'), '', ICON_SIZE_MEDIUM).get_lang('UserStatistics').'</a>';
+    echo '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&origin=user_course&student='.$userIdViewed.'&details=true&course='.$_course['id'].'">'.Display::return_icon('statistics.png', get_lang('UserStatistics'), '', ICON_SIZE_MEDIUM).get_lang('UserStatistics').'</a>';
     echo '</div>';
 } else {
     if ($tool_info['visibility'] == 1) {

@@ -18,6 +18,7 @@ use Chamilo\CourseBundle\Entity\CQuizAnswer;
 abstract class Question
 {
     public $id;
+    public $iid;
     public $question;
     public $description;
     public $weighting;
@@ -38,6 +39,7 @@ abstract class Question
     public $questionTypeWithFeedback;
     public $extra;
     public $export = false;
+    public $code;
     public static $questionTypes = [
         UNIQUE_ANSWER => ['unique_answer.class.php', 'UniqueAnswer'],
         MULTIPLE_ANSWER => ['multiple_answer.class.php', 'MultipleAnswer'],
@@ -76,6 +78,7 @@ abstract class Question
     public function __construct()
     {
         $this->id = 0;
+        $this->iid = 0;
         $this->question = '';
         $this->description = '';
         $this->weighting = 0;
@@ -154,6 +157,7 @@ abstract class Question
             $objQuestion = self::getInstance($object->type);
             if (!empty($objQuestion)) {
                 $objQuestion->id = (int) $id;
+                $objQuestion->iid = (int) $object->iid;
                 $objQuestion->question = $object->question;
                 $objQuestion->description = $object->description;
                 $objQuestion->weighting = $object->ponderation;
@@ -165,6 +169,7 @@ abstract class Question
                 $objQuestion->course = $course_info;
                 $objQuestion->feedback = isset($object->feedback) ? $object->feedback : '';
                 $objQuestion->category = TestCategory::getCategoryForQuestion($id, $course_id);
+                $objQuestion->code = isset($object->code) ? $object->code : '';
 
                 $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
                 $sql = "SELECT DISTINCT q.exercice_id
@@ -229,8 +234,12 @@ abstract class Question
     public function getTitleToDisplay($itemNumber)
     {
         $showQuestionTitleHtml = api_get_configuration_value('save_titles_as_html');
+        $title = '';
+        if (api_get_configuration_value('show_question_id')) {
+            $title .= '<h4>#'.$this->course['code'].'-'.$this->iid.'</h4>';
+        }
 
-        $title = $showQuestionTitleHtml ? '' : '<strong>';
+        $title .= $showQuestionTitleHtml ? '' : '<strong>';
         $title .= $itemNumber.'. '.$this->selectTitle();
         $title .= $showQuestionTitleHtml ? '' : '</strong>';
 
@@ -403,7 +412,7 @@ abstract class Question
      */
     public function selectNbrExercises()
     {
-        return sizeof($this->exerciseList);
+        return count($this->exerciseList);
     }
 
     /**
@@ -423,7 +432,7 @@ abstract class Question
      */
     public function updateParentId($id)
     {
-        $this->parent_id = intval($id);
+        $this->parent_id = (int) $id;
     }
 
     /**
@@ -948,6 +957,12 @@ abstract class Question
                 $params,
                 ['c_id = ? AND id = ?' => [$c_id, $id]]
             );
+
+            Event::addEvent(
+                LOG_QUESTION_UPDATED,
+                LOG_QUESTION_ID,
+                $this->iid
+            );
             $this->saveCategory($categoryId);
 
             if (!empty($exerciseId)) {
@@ -1004,6 +1019,12 @@ abstract class Question
             if ($this->id) {
                 $sql = "UPDATE $TBL_QUESTIONS SET id = iid WHERE iid = {$this->id}";
                 Database::query($sql);
+
+                Event::addEvent(
+                    LOG_QUESTION_CREATED,
+                    LOG_QUESTION_ID,
+                    $this->id
+                );
 
                 api_item_property_update(
                     $this->course,
@@ -1124,7 +1145,10 @@ abstract class Question
                 $se_doc = $di->get_document((int) $se_ref['search_did']);
                 if ($se_doc !== false) {
                     if (($se_doc_data = $di->get_document_data($se_doc)) !== false) {
-                        $se_doc_data = unserialize($se_doc_data);
+                        $se_doc_data = UnserializeApi::unserialize(
+                            'not_allowed_classes',
+                            $se_doc_data
+                        );
                         if (isset($se_doc_data[SE_DATA]['type']) &&
                             $se_doc_data[SE_DATA]['type'] == SE_DOCTYPE_EXERCISE_QUESTION
                         ) {
@@ -1240,9 +1264,9 @@ abstract class Question
         // checks if the exercise ID is not in the list
         if (!in_array($exerciseId, $this->exerciseList)) {
             $this->exerciseList[] = $exerciseId;
-            $new_exercise = new Exercise();
-            $new_exercise->read($exerciseId);
-            $count = $new_exercise->selectNbrQuestions();
+            $newExercise = new Exercise();
+            $newExercise->read($exerciseId, false);
+            $count = $newExercise->getQuestionCount();
             $count++;
             $sql = "INSERT INTO $exerciseRelQuestionTable (c_id, question_id, exercice_id, question_order)
                     VALUES ({$this->course['real_id']}, ".intval($id).", ".intval($exerciseId).", '$count')";
@@ -1747,7 +1771,6 @@ abstract class Question
         //Save normal question if NOT media
         if ($this->type != MEDIA_QUESTION) {
             $this->save($exercise);
-
             // modify the exercise
             $exercise->addToList($this->id);
             $exercise->update_question_positions();
@@ -1774,7 +1797,7 @@ abstract class Question
      *
      * @param Exercise $objExercise
      */
-    public static function display_type_menu($objExercise)
+    public static function displayTypeMenu($objExercise)
     {
         $feedback_type = $objExercise->feedback_type;
         $exerciseId = $objExercise->id;
@@ -1957,23 +1980,25 @@ abstract class Question
         if (!empty($counter)) {
             $counterLabel = (int) $counter;
         }
-        $score_label = get_lang('Wrong');
+        $scoreLabel = get_lang('Wrong');
         $class = 'error';
-        if ($score['pass'] == true) {
-            $score_label = get_lang('Correct');
+        if (isset($score['pass']) && $score['pass'] == true) {
+            $scoreLabel = get_lang('Correct');
             $class = 'success';
         }
 
         if (in_array($this->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
             $score['revised'] = isset($score['revised']) ? $score['revised'] : false;
             if ($score['revised'] == true) {
-                $score_label = get_lang('Revised');
+                $scoreLabel = get_lang('Revised');
                 $class = '';
             } else {
-                $score_label = get_lang('NotRevised');
+                $scoreLabel = get_lang('NotRevised');
                 $class = 'warning';
-                $weight = float_format($score['weight'], 1);
-                $score['result'] = " ? / ".$weight;
+                if (isset($score['weight'])) {
+                    $weight = float_format($score['weight'], 1);
+                    $score['result'] = ' ? / '.$weight;
+                }
                 $model = ExerciseLib::getCourseScoreModel();
                 if (!empty($model)) {
                     $score['result'] = ' ? ';
@@ -1996,13 +2021,19 @@ abstract class Question
             $header .= $this->show_media_content();
         }
         $scoreCurrent = [
-            'used' => $score['score'],
-            'missing' => $score['weight'],
+            'used' => isset($score['score']) ? $score['score'] : '',
+            'missing' => isset($score['weight']) ? $score['weight'] : '',
         ];
         $header .= Display::page_subheader2($counterLabel.'. '.$this->question);
+
         // dont display score for certainty degree questions
         if ($this->type != MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
-            $header .= $exercise->getQuestionRibbon($class, $score_label, $score['result'], $scoreCurrent);
+            if (isset($score['result'])) {
+                if ($exercise->results_disabled == RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
+                    $score['result'] = null;
+                }
+                $header .= $exercise->getQuestionRibbon($class, $scoreLabel, $score['result'], $scoreCurrent);
+            }
         }
 
         if ($this->type != READING_COMPREHENSION) {
@@ -2042,6 +2073,7 @@ abstract class Question
     }
 
     /**
+     * @deprecated
      * Create a question from a set of parameters.
      *
      * @param   int     Quiz ID
@@ -2322,6 +2354,28 @@ abstract class Question
     public function returnFormatFeedback()
     {
         return '<br />'.Display::return_message($this->feedback, 'normal', false);
+    }
+
+    /**
+     * Check if this question exists in another exercise.
+     *
+     * @throws \Doctrine\ORM\Query\QueryException
+     *
+     * @return mixed
+     */
+    public function existsInAnotherExercises()
+    {
+        $em = Database::getManager();
+
+        $count = $em
+            ->createQuery('
+                SELECT COUNT(qq.iid) FROM ChamiloCourseBundle:CQuizRelQuestion qq
+                WHERE qq.questionId = :id
+            ')
+            ->setParameters(['id' => (int) $this->id])
+            ->getSingleScalarResult();
+
+        return $count > 1;
     }
 
     /**

@@ -289,4 +289,70 @@ class ChamiloApi
 
         return api_get_path(WEB_CSS_PATH).'editor_content.css';
     }
+
+    /**
+     * Get a list of colors from the palette at main/palette/pchart/default.color
+     * and return it as an array of strings.
+     *
+     * @param bool $decimalOpacity Whether to return the opacity as 0..100 or 0..1
+     * @param bool $wrapInRGBA     Whether to return it as 1,1,1,100 or rgba(1,1,1,100)
+     * @param int  $fillUpTo       If the number of colors is smaller than this number, generate more colors
+     *
+     * @return array An array of string colors
+     */
+    public static function getColorPalette(
+        $decimalOpacity = false,
+        $wrapInRGBA = false,
+        $fillUpTo = null
+    ) {
+        // Get the common colors from the palette used for pchart
+        $paletteFile = api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color';
+        $palette = file($paletteFile);
+        if ($decimalOpacity) {
+            // Because the pchart palette has transparency as integer values
+            // (0..100) and chartjs uses percentage (0.0..1.0), we need to divide
+            // the last value by 100, which is a bit overboard for just one chart
+            foreach ($palette as $index => $color) {
+                $components = preg_split('/,/', trim($color));
+                $components[3] = round($components[3] / 100, 1);
+                $palette[$index] = join(',', $components);
+            }
+        }
+        if ($wrapInRGBA) {
+            foreach ($palette as $index => $color) {
+                $color = trim($color);
+                $palette[$index] = 'rgba('.$color.')';
+            }
+        }
+        // If we want more colors, loop through existing colors
+        $count = count($palette);
+        if (isset($fillUpTo) && $fillUpTo > $count) {
+            for ($i = $count; $i < $fillUpTo; $i++) {
+                $palette[$i] = $palette[$i % $count];
+            }
+        }
+
+        return $palette;
+    }
+
+    /**
+     * Get the local time for the midnight
+     *
+     * @param string|null $utcTime Optional. The time to ve converted.
+     *                             See api_get_local_time.
+     *
+     * @throws \Exception
+     *
+     * @return \DateTime
+     */
+    public static function getServerMidnightTime($utcTime = null)
+    {
+        $localTime = api_get_local_time($utcTime);
+        $localTimeZone = api_get_timezone();
+
+        $localMidnight = new \DateTime($localTime, new \DateTimeZone($localTimeZone));
+        $localMidnight->modify('midnight');
+
+        return $localMidnight;
+    }
 }

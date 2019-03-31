@@ -52,6 +52,14 @@ class ReadingComprehension extends UniqueAnswer
     public $refreshTime = 3;
 
     /**
+     * Indicates how show the question list.
+     * 1 = all in one page; 2 = one per page (default).
+     *
+     * @var int
+     */
+    private $exerciseType = 2;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -190,6 +198,18 @@ class ReadingComprehension extends UniqueAnswer
     }
 
     /**
+     * @param int $type
+     *
+     * @return ReadingComprehension
+     */
+    public function setExerciseType($type)
+    {
+        $this->exerciseType = (int) $type;
+
+        return $this;
+    }
+
+    /**
      * @param $wordsCount
      * @param $turns
      * @param $text
@@ -205,6 +225,7 @@ class ReadingComprehension extends UniqueAnswer
         $view->assign('words_count', $wordsCount);
         $view->assign('turns', $turns);
         $view->assign('refresh_time', $this->refreshTime);
+        $view->assign('exercise_type', $this->exerciseType);
         $view->display($template);
     }
 }

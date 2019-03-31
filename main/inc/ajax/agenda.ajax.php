@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Responses to AJAX calls.
  */
@@ -18,7 +19,18 @@ if ($type == 'course') {
     api_protect_course_script(true);
 }
 
+$logInfo = [
+    'tool' => TOOL_CALENDAR_EVENT,
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => $action,
+    'info' => '',
+];
+Event::registerLog($logInfo);
+
 $agenda = new Agenda($type);
+// get filtered type
+$type = $agenda->getType();
 
 switch ($action) {
     case 'add_event':
@@ -26,6 +38,8 @@ switch ($action) {
             break;
         }
         $add_as_announcement = isset($_REQUEST['add_as_annonuncement']) ? $_REQUEST['add_as_annonuncement'] : null;
+        $title = isset($_REQUEST['title']) ? $_REQUEST['title'] : null;
+        $content = isset($_REQUEST['content']) ? $_REQUEST['content'] : null;
         $comment = isset($_REQUEST['comment']) ? $_REQUEST['comment'] : null;
         $userToSend = isset($_REQUEST['users_to_send']) ? $_REQUEST['users_to_send'] : [];
 
@@ -33,8 +47,8 @@ switch ($action) {
             $_REQUEST['start'],
             $_REQUEST['end'],
             $_REQUEST['all_day'],
-            $_REQUEST['title'],
-            $_REQUEST['content'],
+            $title,
+            $content,
             $userToSend,
             $add_as_announcement,
             null, //$parentEventId = null,
@@ -54,8 +68,8 @@ switch ($action) {
             $_REQUEST['start'],
             $_REQUEST['end'],
             $_REQUEST['all_day'],
-            $_REQUEST['title'],
-            $_REQUEST['content']
+            $title,
+            $content
         );
         break;
     case 'delete_event':

@@ -13,13 +13,7 @@
     <!-- START MAIN -->
     <main id="main" dir="{{ text_direction }}" class="{{ section_name }} {{ login_class }}">
     <noscript>{{ "NoJavascript"|get_lang }}</noscript>
-            {% if show_course_shortcut is not null %}
-            <!-- TOOLS SHOW COURSE -->
-            <div id="cm-tools" class="nav-tools">
-                {{ show_course_shortcut }}
-            </div>
-            <!-- END TOOLS SHOW COURSE -->
-            {% endif %}
+
             {% if displayCookieUsageWarning == true %}
                 <!-- START DISPLAY COOKIES VALIDATION -->
                 <div class="toolbar-cookie alert-warning">
@@ -42,20 +36,29 @@
                 <!-- END DISPLAY COOKIES VALIDATION -->
             {% endif %}
 
-            <!-- START HEADER -->
-            <header id="cm-header">
-                {% if show_header == true %}
+            {% if show_header == true %}
+                <!-- START HEADER -->
+                <header id="cm-header">
                     {% include 'layout/page_header.tpl'|get_template %}
-                {% endif %}
-            </header>
-            <!-- END HEADER -->
+                </header>
+
+            {% endif %}
 
             <!-- START CONTENT -->
             <section id="cm-content">
                 <div class="container">
+                    {% if show_course_shortcut is not null %}
+                        <!-- TOOLS SHOW COURSE -->
+                        <div id="cm-tools" class="nav-tools">
+                            {{ show_course_shortcut }}
+                        </div>
+                        <!-- END TOOLS SHOW COURSE -->
+                    {% endif %}
+
                     {% block breadcrumb %}
                         {{ breadcrumb }}
                     {% endblock %}
+
                     {% block body %}
                         {{ content }}
                     {% endblock %}
@@ -63,15 +66,17 @@
             </section>
             <!-- END CONTENT -->
 
+            {% if show_footer == true %}
             <!-- START FOOTER -->
             <footer class="footer">
-                {% if show_footer == true %}
-                    {% include 'layout/page_footer.tpl'|get_template %}
-                {% endif %}
+                {% include 'layout/page_footer.tpl'|get_template %}
             </footer>
             <!-- END FOOTER -->
+            {% endif %}
 
         </main>
     <!-- END MAIN -->
+
+    {% include 'layout/modals.tpl'|get_template %}
 </body>
 </html>

@@ -88,7 +88,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         if (!empty($this->id)) {
             $answer = new Answer($this->id);
             $answer->read();
-            if (count($answer->nbrAnswers) > 0 && !$form->isSubmitted()) {
+            if ($answer->nbrAnswers > 0 && !$form->isSubmitted()) {
                 $nbAnswers = $answer->nbrAnswers;
             }
         }
@@ -130,11 +130,23 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             $defaults['correct['.$i.']'] = '';
 
             if (is_object($answer)) {
-                $defaults['answer['.$i.']'] = $answer->answer[$i];
-                $defaults['comment['.$i.']'] = $answer->comment[$i];
-                $defaults['weighting['.$i.']'] = float_format($answer->weighting[$i], 1);
-                $correct = $answer->correct[$i];
+                $defaults['answer['.$i.']'] = isset($answer->answer[$i]) ? $answer->answer[$i] : '';
+                if (isset($_POST['answer']) && isset($_POST['answer'][$i])) {
+                    $defaults['answer['.$i.']'] = Security::remove_XSS($_POST['answer'][$i]);
+                }
+
+                $defaults['comment['.$i.']'] = isset($answer->comment[$i]) ? $answer->comment[$i] : '';
+                if (isset($_POST['comment']) && isset($_POST['comment'][$i])) {
+                    $defaults['comment['.$i.']'] = Security::remove_XSS($_POST['comment'][$i]);
+                }
+
+                $defaults['weighting['.$i.']'] = isset($answer->weighting[$i]) ? float_format($answer->weighting[$i], 1) : '';
+                $correct = isset($answer->correct[$i]) ? $answer->correct[$i] : '';
                 $defaults['correct['.$i.']'] = $correct;
+                if (isset($_POST['correct']) && isset($_POST['correct'][$i])) {
+                    $defaults['correct['.$i.']'] = Security::remove_XSS($_POST['correct'][$i]);
+                }
+
                 $j = 1;
                 if (!empty($optionData)) {
                     foreach ($optionData as $id => $data) {
@@ -293,7 +305,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
      * @param int      $counter
      * @param float    $score
      *
-     * @return null|string
+     * @return string|null
      */
     public function return_header($exercise, $counter = null, $score = null)
     {
@@ -1086,10 +1098,14 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         }
 
         // get student answer option id
-        $studentAnswerOptionId = $splitAnswer[1];
+        $studentAnswerOptionId = isset($splitAnswer[1]) ? $splitAnswer[1] : null;
 
         // we got the correct answer option id, let's compare ti with the student answer
-        $percentage = self::getPercentagePosition($splitAnswer[2]);
+        $percentage = null;
+        if (isset($splitAnswer[2])) {
+            $percentage = self::getPercentagePosition($splitAnswer[2]);
+        }
+
         if ($studentAnswerOptionId == $correctAnswerOptionId) {
             // yeah, student got correct answer
             switch ($percentage) {
@@ -1188,6 +1204,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $and = '';
         $questionId = (int) $questionId;
         $position = (int) $position;
+        $exeId = (int) $exeId;
 
         if ($questionId >= 0) {
             $and .= " AND question_id = $questionId";
@@ -1230,7 +1247,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             $objectExercise = new Exercise();
             $objectExercise->read($exerciseId);
 
-            return $objectExercise->get_count_question_list();
+            return $objectExercise->getQuestionCount();
         }
 
         return 0;

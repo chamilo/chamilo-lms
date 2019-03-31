@@ -83,11 +83,13 @@ class Editor
     /**
      * Return the HTML code required to run editor.
      *
+     * @param string $value
+     *
      * @return string
      */
-    public function createHtml()
+    public function createHtml($value)
     {
-        $html = '<textarea id="'.$this->getName().'" name="'.$this->getName().'">'.$this->value.'</textarea>';
+        $html = '<textarea id="'.$this->getName().'" name="'.$this->getName().'">'.$value.'</textarea>';
 
         return $html;
     }

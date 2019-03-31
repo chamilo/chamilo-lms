@@ -12,6 +12,12 @@ $action = $_REQUEST['a'];
 
 switch ($action) {
     case 'translate_html':
+        $translate = api_get_configuration_value('translate_html');
+
+        if (!$translate) {
+            exit;
+        }
+
         $languageList = api_get_languages();
         $hideAll = '';
         foreach ($languageList['all'] as $language) {

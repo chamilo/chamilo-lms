@@ -22,19 +22,13 @@ $allowedFields = [
     'status',
     'language',
     'extra_fields',
-    'address'
+    'address',
 ];
 
 $allowedFieldsConfiguration = api_get_configuration_value('allow_fields_inscription');
 if ($allowedFieldsConfiguration !== false) {
     $allowedFields = isset($allowedFieldsConfiguration['fields']) ? $allowedFieldsConfiguration['fields'] : [];
     $allowedFields['extra_fields'] = isset($allowedFieldsConfiguration['extra_fields']) ? $allowedFieldsConfiguration['extra_fields'] : [];
-}
-
-$gMapsPlugin = GoogleMapsPlugin::create();
-if ($gMapsPlugin->get('enable_api') === 'true') {
-    $key = $gMapsPlugin->get('api_key');
-    $htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true&key='.$key.'" ></script>';
 }
 
 $webserviceUrl = api_get_plugin_setting('logintcc', 'webservice_url');
@@ -474,6 +468,7 @@ if ($user_already_registered_show_terms === false) {
         if (!empty($requiredFields) && $requiredFields['options']) {
             $requiredFields = $requiredFields['options'];
         }
+
         $returnParams = $extraField->addElements(
             $form,
             0,
@@ -488,7 +483,6 @@ if ($user_already_registered_show_terms === false) {
             [],
             [],
             false,
-            [],
             [],
             $requiredFields,
             true
@@ -974,7 +968,7 @@ if ($form->validate()) {
                         ]
                     )
                     ) {
-                        CourseManager::subscribe_user(
+                        CourseManager::subscribeUser(
                             $user_id,
                             $course_info['code']
                         );
@@ -1274,7 +1268,7 @@ if ($form->validate()) {
                         ]
                     )
                     ) {
-                        CourseManager::subscribe_user(
+                        CourseManager::subscribeUser(
                             $user_id,
                             $course_info['code']
                         );

@@ -1015,10 +1015,10 @@ class Rest extends WebService
         $sessionId = $this->session ? $this->session->getId() : 0;
         $forum = get_forums($forumId, $this->course->getCode(), true, $sessionId);
         $courseInfo = api_get_course_info($this->course->getCode());
-        $id = store_thread($forum, $values, $courseInfo, false, $this->user->getId(), $sessionId);
+        $thread = store_thread($forum, $values, $courseInfo, false, $this->user->getId(), $sessionId);
 
         return [
-            'registered' => $id,
+            'registered' => $thread->getIid(),
         ];
     }
 
@@ -1289,7 +1289,7 @@ class Rest extends WebService
         if (!$course_code) {
             $course_code = CourseManager::get_course_code_from_course_id($course_id);
         }
-        if (CourseManager::subscribe_user($user_id, $course_code)) {
+        if (CourseManager::subscribeUser($user_id, $course_code)) {
             return [true];
         } else {
             return [false];

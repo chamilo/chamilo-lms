@@ -266,7 +266,7 @@ class sso
 
         return $loginFailed;
     }
-
+    
     /**
      * Generate the URL for profile editing for a any user or the current user.
      *
@@ -296,6 +296,9 @@ class sso
      */
     private function decode_cookie($cookie)
     {
-        return unserialize(base64_decode($cookie));
+        return UnserializeApi::unserialize(
+            'not_allowed_classes',
+            base64_decode($cookie)
+        );
     }
 }

@@ -136,7 +136,7 @@ class ExtraFieldOption extends Model
      * @param array $params
      * @param bool  $showQuery
      *
-     * @return int
+     * @return int|bool
      */
     public function saveOptions($params, $showQuery = false)
     {
@@ -721,7 +721,7 @@ class ExtraFieldOption extends Model
     /**
      * @param $priority
      *
-     * @return null|string
+     * @return string|null
      */
     public function getPriorityMessageType($priority)
     {

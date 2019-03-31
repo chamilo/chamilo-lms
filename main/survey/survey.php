@@ -153,11 +153,13 @@ $survey_actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invite
 if ($survey_data['survey_type'] != 3) {
     if (!api_get_configuration_value('hide_survey_reporting_button')) {
         $survey_actions .= Display::url(
-            Display::return_icon('stats.png', get_lang('Reporting'), [], ICON_SIZE_MEDIUM),
+            Display::return_icon('statistics.png', get_lang('Reporting'), [], ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&survey_id='.$survey_id
         );
     }
 }
+
+$survey_actions .= SurveyUtil::getAdditionalTeacherActions($survey_id, ICON_SIZE_MEDIUM);
 
 echo '<div class="actions">'.$survey_actions.'</div>';
 
@@ -196,10 +198,13 @@ if ($survey_data['survey_type'] == 0) {
         Display::return_icon('commentquestion.png', get_lang('Comment'), null, ICON_SIZE_BIG),
         $urlQuestion.'&type=comment&survey_id='.$survey_id
     );
-    echo Display::url(
-        Display::return_icon('page_end.png', get_lang('Pagebreak'), null, ICON_SIZE_BIG),
-        $urlQuestion.'&type=pagebreak&survey_id='.$survey_id
-    );
+
+    if ($survey_data['one_question_per_page'] == 0) {
+        echo Display::url(
+            Display::return_icon('page_end.png', get_lang('Pagebreak'), null, ICON_SIZE_BIG),
+            $urlQuestion.'&type=pagebreak&survey_id='.$survey_id
+        );
+    }
     echo '</div>';
 } else {
     if ($survey_data['survey_type'] != 3) {

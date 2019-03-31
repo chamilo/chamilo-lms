@@ -11,15 +11,17 @@ $(document).ready(function() {
         div_show_id = "div_show_id";
         div_content_id = "div_content_id";
 
-        $(this).append("<div id="+div_show_id+" ><div id="+div_content_id+">&nbsp;</div></div>");
-
         var $target = $(this);
+        var title = $target.text();
+
+        $(this).append("<div id="+div_show_id+" title="+title+" ><div id="+div_content_id+">&nbsp;</div></div>");
+
 
         //$("#"+div_show_id).dialog("destroy");
         $("#"+div_show_id).dialog({
             autoOpen: false,
-            width: 600,
-            height: 200,
+            width: 500,
+            height: 'auto',
             position:  { my: 'left top', at: 'right top', of: $target },
             close: function(){
                 $("div#"+div_show_id).remove();

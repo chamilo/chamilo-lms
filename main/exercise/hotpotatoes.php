@@ -246,7 +246,7 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
     if ($finish == 2) {
         // If we are in the img upload process.
         $dialogBox .= get_lang('ImgNote_st').$imgcount.get_lang('ImgNote_en').'<br />';
-        while (list($key, $string) = each($imgparams)) {
+        foreach ($imgparams as $key => $string) {
             $dialogBox .= $string.'; ';
         }
     }

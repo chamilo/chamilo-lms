@@ -597,6 +597,7 @@ class Template
             'volume',
             'fullscreen',
             'vrview',
+            'markersrolls',
         ];
 
         if (!empty($features) && isset($features['features'])) {
@@ -752,6 +753,7 @@ class Template
             "select2/dist/js/i18n/$isoCode.js",
             'mediaelement/plugins/vrview/vrview.js',
             'js-cookie/src/js.cookie.js',
+            'mediaelement/plugins/markersrolls/markersrolls.js',
         ];
 
         $features = api_get_configuration_value('video_features');

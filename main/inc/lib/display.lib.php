@@ -2813,6 +2813,7 @@ HTML;
             'volume',
             'fullscreen',
             'vrview',
+            'markersrolls',
         ];
         $features = api_get_configuration_value('video_features');
         $bowerJsFiles = [];
@@ -2874,6 +2875,7 @@ HTML;
                 {type: "stylesheet", id: "_media2", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelementplayer.min.css"},                
                 {type: "stylesheet", id: "_media4", src: "'.$webPublicPath.'assets/mediaelement/plugins/vrview/vrview.css"},
                 {type: "script", id: "_media4", src: "'.$webPublicPath.'assets/mediaelement/plugins/vrview/vrview.js"},
+                {type: "script", id: "_media5", src: "'.$webPublicPath.'assets/mediaelement/plugins/markersrolls/markersrolls.js"},
                 '.$extraMediaFiles.'
                 '.$translateHtml.'
             ]

@@ -32,7 +32,7 @@
                 {{ social_post_wall_block }}
                 {{ social_auto_extend_link }}
             </div>
-            
+
             {#{{ social_skill_block }}#}
             {{ social_right_content }}
             <div id="message_ajax_reponse" class=""></div>
@@ -58,10 +58,11 @@
                         <div id="listFriends"
                              class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
                             <div class="panel-body">
-                                {{ social_friend_block }}
                                 <div class="search-friend">
                                     {{ search_friends_form }}
                                 </div>
+
+                                {{ social_friend_block }}
 
                                 {% if 'allow_social_map_fields'|api_get_configuration_value %}
                                 <div class="geolocalization">

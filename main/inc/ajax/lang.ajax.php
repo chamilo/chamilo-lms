@@ -12,6 +12,8 @@ $action = $_REQUEST['a'];
 
 switch ($action) {
     case 'translate_html':
+        header('Content-type: application/x-javascript');
+
         $translate = api_get_configuration_value('translate_html');
 
         if (!$translate) {

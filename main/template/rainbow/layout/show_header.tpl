@@ -42,17 +42,17 @@
         <!-- END DISPLAY COOKIES VALIDATION -->
     {% endif %}
 
-    <!-- START HEADER -->
-    <header id="cm-header">
-        {% if show_header == true %}
-            {% include 'layout/page_header.tpl'|get_template %}
-        {% endif %}
-    </header>
-    <!-- END HEADER -->
+    {% if show_header == true %}
+        <!-- START HEADER -->
+        <header id="cm-header">
+        {% include 'layout/page_header.tpl'|get_template %}
+        </header>
+        <!-- END HEADER -->
+    {% endif %}
 
     <!-- START CONTENT -->
     <section id="cm-content">
-        {% if (section_name == 'section-exercise' or section_name == 'section-results') %}
+        {% if (_p.self_basename == 'exercise_submit.php' or _p.self_basename == 'result.php') %}
             <div class="container-fluid">
         {% else %}
             <div class="container">

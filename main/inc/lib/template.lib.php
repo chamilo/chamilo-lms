@@ -1387,6 +1387,7 @@ class Template
             'web_lib' => api_get_path(WEB_LIBRARY_PATH),
             'web_upload' => api_get_path(WEB_UPLOAD_PATH),
             'web_self' => api_get_self(),
+            'self_basename' => basename(api_get_self()),
             'web_query_vars' => api_htmlentities($queryString),
             'web_self_query_vars' => api_htmlentities($requestURI),
             'web_cid_query' => api_get_cidreq(),

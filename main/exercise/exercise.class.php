@@ -6499,66 +6499,65 @@ class Exercise
      */
     public function get_validated_question_list()
     {
-        $result = [];
         $isRandomByCategory = $this->isRandomByCat();
         if ($isRandomByCategory == 0) {
             if ($this->isRandom()) {
-                $result = $this->getRandomList();
-            } else {
-                $result = $this->selectQuestionList();
+                return $this->getRandomList();
             }
-        } else {
-            if ($this->isRandom()) {
-                // USE question categories
-                // get questions by category for this exercise
-                // we have to choice $objExercise->random question in each array values of $tabCategoryQuestions
-                // key of $tabCategoryQuestions are the categopy id (0 for not in a category)
-                // value is the array of question id of this category
-                $questionList = [];
-                $tabCategoryQuestions = TestCategory::getQuestionsByCat($this->id);
-                $isRandomByCategory = $this->getRandomByCategory();
-                // We sort categories based on the term between [] in the head
-                // of the category's description
-                /* examples of categories :
-                 * [biologie] Maitriser les mecanismes de base de la genetique
-                 * [biologie] Relier les moyens de depenses et les agents infectieux
-                 * [biologie] Savoir ou est produite l'enrgie dans les cellules et sous quelle forme
-                 * [chimie] Classer les molles suivant leur pouvoir oxydant ou reacteur
-                 * [chimie] Connaître la denition de la theoie acide/base selon Brönsted
-                 * [chimie] Connaître les charges des particules
-                 * We want that in the order of the groups defined by the term
-                 * between brackets at the beginning of the category title
-                */
-                // If test option is Grouped By Categories
-                if ($isRandomByCategory == 2) {
-                    $tabCategoryQuestions = TestCategory::sortTabByBracketLabel($tabCategoryQuestions);
-                }
-                foreach ($tabCategoryQuestions as $tabquestion) {
-                    $number_of_random_question = $this->random;
-                    if ($this->random == -1) {
-                        $number_of_random_question = count($this->questionList);
-                    }
-                    $questionList = array_merge(
-                        $questionList,
-                        TestCategory::getNElementsFromArray(
-                            $tabquestion,
-                            $number_of_random_question
-                        )
-                    );
-                }
-                // shuffle the question list if test is not grouped by categories
-                if ($isRandomByCategory == 1) {
-                    shuffle($questionList); // or not
-                }
-                $result = $questionList;
-            } else {
-                // Problem, random by category has been selected and
-                // we have no $this->isRandom number of question selected
-                // Should not happened
-            }
+
+            return $this->selectQuestionList();
         }
 
-        return $result;
+        if ($this->isRandom()) {
+            // USE question categories
+            // get questions by category for this exercise
+            // we have to choice $objExercise->random question in each array values of $tabCategoryQuestions
+            // key of $tabCategoryQuestions are the categopy id (0 for not in a category)
+            // value is the array of question id of this category
+            $questionList = [];
+            $tabCategoryQuestions = TestCategory::getQuestionsByCat($this->id);
+            $isRandomByCategory = $this->getRandomByCategory();
+            // We sort categories based on the term between [] in the head
+            // of the category's description
+            /* examples of categories :
+             * [biologie] Maitriser les mecanismes de base de la genetique
+             * [biologie] Relier les moyens de depenses et les agents infectieux
+             * [biologie] Savoir ou est produite l'enrgie dans les cellules et sous quelle forme
+             * [chimie] Classer les molles suivant leur pouvoir oxydant ou reacteur
+             * [chimie] Connaître la denition de la theoie acide/base selon Brönsted
+             * [chimie] Connaître les charges des particules
+             * We want that in the order of the groups defined by the term
+             * between brackets at the beginning of the category title
+            */
+            // If test option is Grouped By Categories
+            if ($isRandomByCategory == 2) {
+                $tabCategoryQuestions = TestCategory::sortTabByBracketLabel($tabCategoryQuestions);
+            }
+            foreach ($tabCategoryQuestions as $tabquestion) {
+                $number_of_random_question = $this->random;
+                if ($this->random == -1) {
+                    $number_of_random_question = count($this->questionList);
+                }
+                $questionList = array_merge(
+                    $questionList,
+                    TestCategory::getNElementsFromArray(
+                        $tabquestion,
+                        $number_of_random_question
+                    )
+                );
+            }
+            // shuffle the question list if test is not grouped by categories
+            if ($isRandomByCategory == 1) {
+                shuffle($questionList); // or not
+            }
+            return $questionList;
+        }
+
+        // Problem, random by category has been selected and
+        // we have no $this->isRandom number of question selected
+        // Should not happened
+
+        return [];
     }
 
     public function get_question_list($expand_media_questions = false)

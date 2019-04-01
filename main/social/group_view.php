@@ -211,7 +211,7 @@ if ($is_group_member || $groupInfo['visibility'] == GROUP_PERMISSION_OPEN) {
                 get_lang('YouShouldCreateATopic'),
                 $createThreadUrl,
                 [
-                    'class' => 'btn btn-primary',
+                    'class' => 'ajax btn btn-primary',
                     'title' => get_lang('ComposeMessage'),
                     'data-title' => get_lang('ComposeMessage'),
                     'data-size' => 'lg',
@@ -231,7 +231,7 @@ if ($is_group_member || $groupInfo['visibility'] == GROUP_PERMISSION_OPEN) {
                 get_lang('NewTopic'),
                 $createThreadUrl,
                 [
-                    'class' => 'btn btn-primary',
+                    'class' => 'ajax btn btn-default',
                     'title' => get_lang('ComposeMessage'),
                     'data-title' => get_lang('ComposeMessage'),
                     'data-size' => 'lg',
@@ -241,6 +241,13 @@ if ($is_group_member || $groupInfo['visibility'] == GROUP_PERMISSION_OPEN) {
     }
     $members = $usergroup->get_users_by_group($group_id, true);
     $member_content = '';
+
+    // My friends
+    $friend_html = SocialManager::listMyFriendsBlock(
+        $user_id,
+        '',
+        ''
+    );
 
     // Members
     if (count($members) > 0) {
@@ -295,9 +302,8 @@ if ($is_group_member || $groupInfo['visibility'] == GROUP_PERMISSION_OPEN) {
     if (!empty($create_thread_link)) {
         $create_thread_link = Display::div($create_thread_link, ['class' => 'float-right']);
     }
-
-    $listTopic = $content;
-    $listMembers = $member_content;
+    $headers = [get_lang('Discussions'), get_lang('Members')];
+    $socialForum = Display::tabs($headers, [$content, $member_content], 'tabs');
 } else {
     // if I already sent an invitation message
     if (!in_array(
@@ -321,6 +327,10 @@ SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'groups', $group_id);
 $tpl->setHelp('Groups');
 $tpl->assign('create_link', $create_thread_link);
 $tpl->assign('is_group_member', $is_group_member);
+$tpl->assign('group_info', $group_info);
+$tpl->assign('social_friend_block', $friend_html);
+$tpl->assign('social_menu_block', $social_menu_block);
+$tpl->assign('social_forum', $socialForum);
 
 $tpl->assign('list_members', $listMembers);
 $tpl->assign('list_topic', $listTopic);

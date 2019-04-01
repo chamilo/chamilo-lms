@@ -52,7 +52,9 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'delete') {
 }
 
 // My friends
-$friend_html = SocialManager::listMyFriendsBlock(api_get_user_id());
+$friend_html = SocialManager::listMyFriendsBlock(
+    $user_id
+);
 $content = null;
 $social_right_content = '';
 
@@ -147,7 +149,7 @@ function add_image_form() {
 	}
 }
 
-$(document).ready(function() {
+$(function() {
 	if ($("#msg_'.$message_id.'").length) {
 		$("html,body").animate({
 			scrollTop: $("#msg_'.$message_id.'").offset().top

@@ -9,7 +9,7 @@ $current_course_tool = TOOL_TRACKING;
 
 $from_myspace = false;
 $from = isset($_GET['from']) ? $_GET['from'] : null;
-
+// Starting the output buffering when we are exporting the information.
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 $exportXls = isset($_GET['export']) && $_GET['export'] == 'xls' ? true : false;
 $session_id = intval($_REQUEST['id_session']);

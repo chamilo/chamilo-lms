@@ -122,6 +122,7 @@ $s->register(
     ['return' => 'xsd:string']
 );
 
+require_once __DIR__.'/soap_user.php';
 require_once __DIR__.'/soap_course.php';
 require_once __DIR__.'/soap_session.php';
 require_once __DIR__.'/soap_report.php';

@@ -13,6 +13,142 @@ require_once __DIR__.'/cm_soap.php';
 $s = WSCMSoapServer::singleton();
 
 $s->wsdl->addComplexType(
+    'course_id',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    [
+        'course_id_field_name' => ['name' => 'course_id_field_name', 'type' => 'xsd:string'],
+        'course_id_value' => ['name' => 'course_id_value', 'type' => 'xsd:string'],
+    ]
+);
+
+$s->wsdl->addComplexType(
+    'course_result',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    [
+        'course_id_value' => ['name' => 'course_id_value', 'type' => 'xsd:string'],
+        'result' => ['name' => 'result', 'type' => 'tns:result'],
+    ]
+);
+
+$s->wsdl->addComplexType(
+    'course_result_array',
+    'complexType',
+    'array',
+    '',
+    'SOAP-ENC:Array',
+    [],
+    [['ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:course_result[]']],
+    'tns:course_result'
+);
+
+$s->register(
+    'WSCMCourse.DeleteCourse',
+    ['secret_key' => 'xsd:string', 'course_id_field_name' => 'xsd:string', 'course_id_value' => 'xsd:string']
+);
+
+$s->register(
+    'WSCMCourse.DeleteCourses',
+    ['secret_key' => 'xsd:string', 'courses' => 'tns:course_id[]'],
+    ['return' => 'tns:course_result_array']
+);
+
+$s->register(
+    'WSCMCourse.CreateCourse',
+    [
+        'secret_key' => 'xsd:string',
+        'title' => 'xsd:string',
+        'category_code' => 'xsd:string',
+        'wanted_code' => 'xsd:string',
+        'tutor_name' => 'xsd:string',
+        'course_admin_user_id_field_name' => 'xsd:string',
+        'course_admin_user_id_value' => 'xsd:string',
+        'language' => 'xsd:string',
+        'course_id_field_name' => 'xsd:string',
+        'course_id_value' => 'xsd:string',
+        'extras' => 'tns:extra_field[]',
+    ],
+    ['return' => 'xsd:int']
+);
+
+$s->wsdl->addComplexType(
+    'course_create',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    [
+        'title' => ['name' => 'title', 'type' => 'xsd:string'],
+        'category_code' => ['name' => 'category_code', 'type' => 'xsd:string'],
+        'wanted_code' => ['name' => 'wanted_code', 'type' => 'xsd:int'],
+        'tutor_name' => ['name' => 'tutor_name', 'type' => 'xsd:string'],
+        'course_admin_user_id_field_name' => ['name' => 'course_admin_user_id_field_name', 'type' => 'xsd:string'],
+        'course_admin_user_id_value' => ['name' => 'course_admin_user_id_value', 'type' => 'xsd:string'],
+        'language' => ['name' => 'language', 'type' => 'xsd:string'],
+        'course_id_field_name' => ['name' => 'course_id_field_name', 'type' => 'xsd:string'],
+        'course_id_value' => ['name' => 'course_id_value', 'type' => 'xsd:string'],
+        'extras' => ['name' => 'extras', 'type' => 'tns:extra_field[]'],
+    ]
+);
+
+$s->wsdl->addComplexType(
+    'course_create_result',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    [
+        'course_id_value' => ['name' => 'course_id_value', 'type' => 'xsd:string'],
+        'course_id_generated' => ['name' => 'course_id_generated', 'type' => 'xsd:int'],
+        'result' => ['name' => 'result', 'type' => 'tns:result'],
+    ]
+);
+
+$s->wsdl->addComplexType(
+    'course_create_result_array',
+    'complexType',
+    'array',
+    '',
+    'SOAP-ENC:Array',
+    [],
+    [['ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:course_create_result[]']],
+    'tns:course_create_result'
+);
+
+$s->register(
+    'WSCMCourse.CreateCourses',
+    [
+        'secret_key' => 'xsd:string',
+        'courses' => 'tns:course_create[]',
+    ],
+    ['return' => 'tns:course_create_result_array']
+);
+
+$s->register(
+    'WSCMCourse.EditCourse',
+    [
+        'secret_key' => 'xsd:string',
+        'course_id_field_name' => 'xsd:string',
+        'course_id_value' => 'xsd:string',
+        'title' => 'xsd:string',
+        'category_code' => 'xsd:string',
+        'department_name' => 'xsd:string',
+        'department_url' => 'xsd:string',
+        'language' => 'xsd:string',
+        'visibility' => 'xsd:int',
+        'subscribe' => 'xsd:int',
+        'unsubscribe' => 'xsd:int',
+        'visual_code' => 'xsd:string',
+        'extras' => 'tns:extra_field[]',
+    ]
+);
+
+$s->wsdl->addComplexType(
     'course',
     'complexType',
     'struct',

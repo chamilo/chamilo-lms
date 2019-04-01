@@ -29,6 +29,8 @@ $surveyId = (int) $_GET['survey_id'];
 $userInvited = 0;
 $userAnonymous = 0;
 
+$allowRequiredSurveyQuestions = api_get_configuration_value('allow_required_survey_questions');
+
 //query to ask if logged user is allowed to see the preview (if he is invited of he is a teacher)
 $sql = "SELECT survey_invitation.user
         FROM $table_survey_invitation survey_invitation
@@ -84,7 +86,7 @@ if ($surveyAnonymous == 0 && api_is_anonymous()) {
     }
 }
 $show = 0;
-// Header
+
 Display::display_header(get_lang('SurveyPreview'));
 
 // We exit here is the first or last question is a pagebreak (which causes errors)
@@ -112,7 +114,7 @@ if (api_is_course_admin() ||
     if (isset($_POST['finish_survey'])) {
         echo Display::return_message(get_lang('SurveyFinished'), 'confirm');
         echo $survey_data['survey_thanks'];
-        Display :: display_footer();
+        Display::display_footer();
         exit;
     }
 
@@ -127,7 +129,7 @@ if (api_is_course_admin() ||
         $sql = "SELECT * FROM $table_survey_question
                 WHERE
                   survey_question NOT LIKE '%{{%' AND 
-                  c_id = $course_id AND 
+                  c_id = $course_id AND
                   survey_id = '".$surveyId."'
                 ORDER BY sort ASC";
         $result = Database::query($sql);
@@ -164,6 +166,7 @@ if (api_is_course_admin() ||
                         survey_question_option.question_option_id,
                         survey_question_option.option_text,
                         survey_question_option.sort as option_sort
+                        ".($allowRequiredSurveyQuestions ? ', survey_question.is_required' : '')."
                     FROM $table_survey_question survey_question
                     LEFT JOIN $table_survey_question_option survey_question_option
                     ON
@@ -189,6 +192,7 @@ if (api_is_course_admin() ||
                     //$questions[$sort]['options'][intval($row['option_sort'])] = $row['option_text'];
                     $questions[$sort]['options'][$row['question_option_id']] = $row['option_text'];
                     $questions[$sort]['maximum_score'] = $row['max_value'];
+                    $questions[$row['sort']]['is_required'] = $allowRequiredSurveyQuestions && $row['is_required'];
                 } else {
                     // If the type is a pagebreak we are finished loading the questions for this page
                     //break;
@@ -204,8 +208,8 @@ if (api_is_course_admin() ||
     }
 
     $numberOfPages = SurveyManager::getCountPages($survey_data);
-    // Selecting the maximum number of pages
 
+    // Displaying the form with the questions
     if (isset($_GET['show'])) {
         $show = (int) $_GET['show'] + 1;
     }

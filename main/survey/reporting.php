@@ -61,20 +61,13 @@ $format = isset($_REQUEST['export_format']) ? $_REQUEST['export_format'] : '';
 if (!empty($exportReport) && !empty($format)) {
     switch ($format) {
         case 'xls':
-            $filename = 'survey_results_'.$survey_id;
-            $data = SurveyUtil::export_complete_report_xls(
-                $survey_data,
-                $filename,
-                $userId
-            );
+            $filename = 'survey_results_'.$survey_id.'.xlsx';
+            $data = SurveyUtil::export_complete_report_xls($survey_data, $filename, $userId);
             exit;
             break;
         case 'csv':
         default:
-            $data = SurveyUtil::export_complete_report(
-                $survey_data,
-                $userId
-            );
+            $data = SurveyUtil::export_complete_report($survey_data, $userId);
             $filename = 'survey_results_'.$survey_id.'.csv';
             header('Content-type: application/octet-stream');
             header('Content-Type: application/force-download');

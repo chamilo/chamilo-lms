@@ -9,6 +9,15 @@ if (!api_is_allowed_to_edit()) {
     api_not_allowed(true);
 }
 
+if (!api_is_allowed_to_edit()) {
+    if (!api_is_session_general_coach() ||
+        (!empty($_GET['survey_id']) &&
+            !api_is_element_in_the_session(TOOL_SURVEY, $_GET['survey_id']))
+    ) {
+        api_not_allowed(true);
+    }
+}
+
 $htmlHeadXtra[] = api_get_css_asset('jt.timepicker/jquery.timepicker.css');
 $htmlHeadXtra[] = api_get_asset('jt.timepicker/jquery.timepicker.js');
 $htmlHeadXtra[] = api_get_asset('datepair.js/dist/datepair.js');
@@ -19,14 +28,21 @@ $interbreadcrumb[] = [
     'name' => get_lang('SurveyList'),
 ];
 
+$surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : null;
+$surveyData = SurveyManager::get_survey($surveyId);
+
+if (empty($surveyData)) {
+    api_not_allowed(true);
+}
+
 $courseInfo = api_get_course_info();
 
-$tool_name = get_lang('CreateMeeting');
+$tool_name = get_lang('Edit');
 
 $form = new FormValidator(
     'survey',
     'post',
-    api_get_self().'?action=add&'.api_get_cidreq()
+    api_get_self().'?action=edit&'.api_get_cidreq().'&survey_id='.$surveyId
 );
 
 $form->addElement('header', $tool_name);
@@ -63,34 +79,51 @@ $form->addRule(
     'lte'
 );
 
-$form->setRequired($startDateElement);
-$form->setRequired($endDateElement);
-
 $form->addHtmlEditor('survey_introduction', get_lang('Description'), false);
 $form->setRequired($text);
 
+$questions = SurveyManager::get_questions($surveyData['iid']);
+$currentQuestionsCount = count($questions);
+$counter = 1;
+foreach ($questions as $question) {
+    $name = 'time_'.$counter;
+    $parts = explode('@@', $question['question']);
+    $surveyData[$name] = api_get_local_time($parts[0]).'@@'.api_get_local_time($parts[1]);
+
+    $form->addDateTimeRangePicker($name, get_lang('Date'));
+    $form->addHidden($name.'_question_id', $question['question_id']);
+    $counter++;
+}
+$currentQuestionsCount++;
+
 $hideList = '';
-$maxEvents = 20;
-for ($i = 1; $i <= $maxEvents; $i++) {
+$maxEvents = $currentQuestionsCount + 10;
+for ($i = $currentQuestionsCount; $i <= $maxEvents; $i++) {
     $name = 'time_'.$i;
     $form->addDateTimeRangePicker($name, get_lang('Date'));
-    if ($i > 3) {
-        $hideList .= "$('#".$name."_date_time_wrapper').hide();";
-    }
+    $hideList .= "$('#".$name."_date_time_wrapper').hide();";
 }
 
 $form->addHtml('<script>
 $(function() {
     '.$hideList.'
-    var number = 3;    
+    var number = "'.--$currentQuestionsCount.'";    
     $("#add_button").on("click", function() {
         number++;
         $("#time_" + number + "_date_time_wrapper").show();
+        $("#time_" + number + "_time_range_start").val("");
+        $("#time_" + number + "_time_range_end").val("");
+        $("#time_" + number + "_alt").val("");
     });
     
     $("#remove_button").on("click", function() {
-        if (number > 1) {            
+        if (number > 1) {      
+            console.log("#time_" + number + "_time_range_start");
             $("#time_" + number + "_date_time_wrapper").hide();
+            $("#time_" + number).val("delete");
+            
+            $("#time_" + number + "_alt").val("delete");
+            $("#time_" + number + "_time_range_start").val("delete");                        
             number--;
         }
     });
@@ -108,24 +141,37 @@ $form->addLabel(
     )
 );
 
-$form->addButtonCreate(get_lang('CreateSurvey'), 'submit_survey');
+$form->addButtonUpdate(get_lang('Edit'), 'submit_survey');
 
-$defaults = [];
-$form->setDefaults($defaults);
+$form->setDefaults($surveyData);
 
 // The validation or display
 if ($form->validate()) {
     // Exporting the values
     $values = $form->getSubmitValues();
+
+    $values['survey_id'] = $surveyId;
     $values['survey_code'] = SurveyManager::generateSurveyCode($values['survey_title']);
     // Storing the survey
-    $surveyData = SurveyManager::store_survey($values);
+    SurveyManager::store_survey($values);
 
     $dates = [];
+    $deleteItems = [];
+
     for ($i = 1; $i <= $maxEvents; $i++) {
         $name = 'time_'.$i;
+
         if (isset($values[$name]) && !empty($values[$name])) {
+            $id = '';
+            if (isset($values[$name.'_question_id'])) {
+                $id = $values[$name.'_question_id'];
+            }
+
             $date = $values[$name];
+
+            if ($date === 'delete' && !empty($id)) {
+                $deleteItems[] = $id;
+            }
 
             if (empty($date)) {
                 continue;
@@ -137,11 +183,15 @@ if ($form->validate()) {
             $start = $values[$start];
             $end = $values[$end];
 
-            $start = api_get_utc_datetime($values[$name].' '.$start, true);
-            $end = api_get_utc_datetime($values[$name].' '.$end, true);
+            $part = explode('@@', $values[$name]);
+            $firstDate = substr($part[0], 0, 10);
+
+            $start = api_get_utc_datetime($firstDate.' '.$start);
+            $end = api_get_utc_datetime($firstDate.' '.$end);
 
             if (!empty($start) && !empty($start)) {
                 $row = [
+                    'id' => $id,
                     'start' => $start,
                     'end' => $end,
                 ];
@@ -152,26 +202,44 @@ if ($form->validate()) {
 
     $questionTable = Database::get_course_table(TABLE_SURVEY_QUESTION);
     $counter = 1;
-    if (!empty($surveyData['id'])) {
+    if (!empty($surveyData['iid'])) {
+        $questions = SurveyManager::get_questions($surveyData['iid']);
+        if (!empty($questions)) {
+            $questions = array_column($questions, 'question');
+        }
+
         foreach ($dates as $date) {
-            $params = [
-                'c_id' => api_get_course_int_id(),
-                'survey_id' => $surveyData['id'],
-                'survey_question' => $date['start'].'@@'.$date['end'],
-                'survey_question_comment' => '',
-                'type' => 'doodle',
-                'display' => 'horizontal',
-                'sort' => $counter,
-                'shared_question_id' => '0',
-                'max_value' => 0,
-            ];
-            $questionId = Database::insert($questionTable, $params);
-            if ($questionId) {
-                $sql = "UPDATE $questionTable SET question_id = $questionId
+            $formattedDate = $date['start'].'@@'.$date['end'];
+
+            if (!empty($date['id'])) {
+                $questionId = $date['id'];
+                $sql = "UPDATE $questionTable SET survey_question = '$formattedDate'
                         WHERE iid = $questionId";
                 Database::query($sql);
+            } else {
+                $params = [
+                    'c_id' => api_get_course_int_id(),
+                    'survey_id' => $surveyData['iid'],
+                    'survey_question' => $formattedDate,
+                    'survey_question_comment' => '',
+                    'type' => 'doodle',
+                    'display' => 'horizontal',
+                    'sort' => $counter,
+                    'shared_question_id' => '0',
+                    'max_value' => 0,
+                ];
+                $questionId = Database::insert($questionTable, $params);
+                if ($questionId) {
+                    $sql = "UPDATE $questionTable SET question_id = $questionId
+                            WHERE iid = $questionId";
+                    Database::query($sql);
+                }
+                $counter++;
             }
-            $counter++;
+        }
+
+        foreach ($deleteItems as $deleteId) {
+            SurveyManager::delete_survey_question($surveyData['iid'], $deleteId);
         }
     }
 

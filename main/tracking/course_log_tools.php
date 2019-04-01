@@ -174,7 +174,7 @@ if ($lpReporting) {
 }
 
 if ($exerciseReporting) {
-    // Exercices tracking.
+    // Exercises tracking.
     echo '<div class="report_section">';
     echo Display::page_subheader(
         Display::return_icon(

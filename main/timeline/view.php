@@ -21,7 +21,7 @@ $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/timelin
 $htmlHeadXtra[] = api_get_js('timeline/timeline-min.js');
 $htmlHeadXtra[] = '
 <script>
-	$(document).ready(function() {
+	$(function() {
 		var timeline = new VMM.Timeline();
 		timeline.init("'.$url.'");
 	});

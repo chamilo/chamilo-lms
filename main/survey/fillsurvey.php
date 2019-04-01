@@ -109,8 +109,8 @@ if ($invitationcode == 'auto' && isset($_GET['scode'])) {
     $result = Database::query($sql);
     if (Database :: num_rows($result) > 0) {
         // Check availability
-        $row = Database :: fetch_array($result, 'ASSOC');
-        $tempdata = SurveyManager :: get_survey($row['survey_id']);
+        $row = Database::fetch_array($result, 'ASSOC');
+        $tempdata = SurveyManager::get_survey($row['survey_id']);
         SurveyManager::checkTimeAvailability($tempdata);
         // Check for double invitation records (insert should be done once)
         $sql = "SELECT user
@@ -166,8 +166,6 @@ $logInfo = [
     'tool_id_detail' => 0,
     'action' => 'invitationcode',
     'action_details' => $invitationcode,
-    'current_id' => 0,
-    'info' => '',
 ];
 Event::registerLog($logInfo);
 
@@ -184,7 +182,7 @@ if (Database::num_rows($result) > 1) {
     if ($_POST['language']) {
         $survey_invitation['survey_id'] = $_POST['language'];
     } else {
-        Display :: display_header(get_lang('ToolSurvey'));
+        Display::display_header(get_lang('ToolSurvey'));
         $frmLangUrl = api_get_self().'?'.api_get_cidreq().'&'
             .http_build_query([
                 'course' => Security::remove_XSS($_GET['course']),
@@ -223,6 +221,10 @@ if ($survey_data['survey_type'] == '3') {
         'survey/meeting.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId.'&invitationcode='.Security::remove_XSS($invitationcode)
     );
     exit;
+}
+
+if (!empty($survey_data['anonymous'])) {
+    define('USER_IN_ANON_SURVEY', true);
 }
 
 // Storing the answers
@@ -526,7 +528,7 @@ if ($survey_data['form_fields'] != '' &&
     // the $jquery_ready_content variable collects all functions
     // that will be load in the $(document).ready javascript function
     $htmlHeadXtra[] = '<script>
-    $(document).ready(function(){
+    $(function() {
         '.$jquery_ready_content.'
     });
     </script>';
@@ -635,7 +637,7 @@ if (isset($_POST['finish_survey'])) {
         $survey_invitation['c_id']
     );
 
-    if ($courseInfo) {
+    if ($courseInfo && !api_is_anonymous()) {
         echo Display::toolbarButton(
             get_lang('ReturnToCourseHomepage'),
             api_get_course_url($courseInfo['code']),
@@ -663,7 +665,7 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
     // As long as there is no pagebreak fount we keep adding questions to the page
     $questions_displayed = [];
     $counter = 0;
-    // If non-conditional survey
+    //$paged_questions = Session::read('paged_questions');
     $paged_questions = [];
     // If non-conditional survey
     if ($survey_data['survey_type'] == '0') {
@@ -749,9 +751,9 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
                             ".($allowRequiredSurveyQuestions ? ', survey_question.is_required' : '')."
                         FROM $table_survey_question survey_question
                         LEFT JOIN $table_survey_question_option survey_question_option
-                            ON survey_question.question_id = survey_question_option.question_id AND
+                        ON survey_question.question_id = survey_question_option.question_id AND
                             survey_question_option.c_id = $course_id
-                        WHERE
+                        WHERE                        
                             survey_question NOT LIKE '%{{%' AND
                             survey_question.survey_id = '".intval($survey_invitation['survey_id'])."' AND
                             survey_question.question_id IN (".implode(',', $paged_questions[$_GET['show']]).") AND
@@ -816,7 +818,7 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
                 $answer_list['group'] = $row['survey_group_pri'];
                 $results[] = $answer_list;
             }
-            //echo '<br />'; print_r($results); echo '<br />';
+
             // Get the total score for each group of questions
             $totals = [];
             $sql = "SELECT SUM(temp.value) as value, temp.survey_group_pri FROM
@@ -1188,7 +1190,7 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
 }
 
 $numberOfPages = SurveyManager::getCountPages($survey_data);
-// Selecting the maximum number of pages
+
 // Displaying the form with the questions
 $show = 0;
 if (isset($_GET['show']) && $_GET['show'] != '') {
@@ -1347,7 +1349,7 @@ if ($survey_data['survey_type'] == '0') {
         }
     }
 } elseif ($survey_data['survey_type'] == '1') {
-    //conditional/personality-test type survey
+    // Conditional/personality-test type survey
     if (isset($_GET['show']) || isset($_POST['personality'])) {
         $numberOfPages = count($paged_questions);
         if (!empty($paged_questions_sec) && count($paged_questions_sec) > 0) {

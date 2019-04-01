@@ -159,6 +159,8 @@ if ($survey_data['survey_type'] != 3) {
     }
 }
 
+$survey_actions .= SurveyUtil::getAdditionalTeacherActions($survey_id, ICON_SIZE_MEDIUM);
+
 echo '<div class="actions">'.$survey_actions.'</div>';
 
 $urlQuestion = api_get_path(WEB_CODE_PATH).'survey/question.php?'.api_get_cidreq().'&action=add';
@@ -374,11 +376,11 @@ if ($is_survey_type_1) {
     $rs = Database::query($sql);
     while ($row = Database::fetch_array($rs, 'ASSOC')) {
         $grouplist .= '<tr><td>'.$row['name'].'</td><td>'.$row['description'].'</td><td>'.
-            '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&gid='.$row['id'].'&action=editgroup">'.
-            Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a> '.
-            '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&gid='.$row['id'].'&action=deletegroup" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('DeleteSurveyGroup'), $row['name']).'?', ENT_QUOTES)).'\')) return false;">'.
-            Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>'.
-            '</td></tr>';
+        '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&gid='.$row['id'].'&action=editgroup">'.
+        Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a> '.
+        '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&gid='.$row['id'].'&action=deletegroup" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('DeleteSurveyGroup'), $row['name']).'?', ENT_QUOTES)).'\')) return false;">'.
+        Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>'.
+        '</td></tr>';
     }
     echo $grouplist.'</table>';
 }

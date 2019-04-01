@@ -60,7 +60,6 @@ if (empty($docId)) {
     if (!empty($documents)) {
         echo Display::page_subheader(get_lang('DocumentsAdded'));
         echo '<div class="well">';
-        $urlDocument = api_get_path(WEB_CODE_PATH).'work/add_document.php';
         foreach ($documents as $doc) {
             $documentId = $doc['document_id'];
             $docData = DocumentManager::get_document_data_by_id($documentId, $courseInfo['code']);

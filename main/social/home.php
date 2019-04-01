@@ -77,19 +77,33 @@ $userGroup = new UserGroup();
     }
 }*/
 
-$socialSearch = UserManager::getSearchForm('');
+SocialManager::handlePosts(api_get_self());
 
-// Top Last
-$results['newest'] = $userGroup->get_groups_by_age(2, true);
-// Top popular
-$results['popular'] = $userGroup->get_groups_by_popularity(2, true);
+$threadList = SocialManager::getThreadList($user_id);
+$threadIdList = [];
+if (!empty($threadList)) {
+    $threadIdList = array_column($threadList, 'id');
+}
+
+// Social Post Wall
+$posts = SocialManager::getMyWallMessages($user_id, 0, 10, $threadIdList);
+$countPost = $posts['count'];
+$posts = $posts['posts'];
+SocialManager::getScrollJs($countPost, $htmlHeadXtra);
+
+// Block Menu
+$social_menu_block = SocialManager::show_social_menu('home');
+
+$social_search_block = Display::panel(
+    UserManager::get_search_form(''),
+    get_lang('SearchUsers')
+);
+
+$social_group_block = SocialManager::getGroupBlock($user_id);
 
 // My friends
-$friend_html = SocialManager::listMyFriendsBlock(
-    $user_id,
-    '',
-    $show_full_profile
-);
+$friend_html = SocialManager::listMyFriendsBlock($user_id);
+
 // Block Social Sessions
 $social_session_block = null;
 $user_info = api_get_user_info($user_id);
@@ -99,16 +113,40 @@ if (count($sessionList) > 0) {
     $social_session_block = $sessionList;
 }
 
+$wallSocialAddPost = SocialManager::getWallForm(api_get_self());
+$socialAutoExtendLink = SocialManager::getAutoExtendLink($user_id, $countPost);
+
+$formSearch = new FormValidator(
+    'find_friends_form',
+    'get',
+    api_get_path(WEB_CODE_PATH).'social/search.php?search_type=1',
+    null,
+    null,
+    FormValidator::LAYOUT_BOX_NO_LABEL
+);
+$formSearch->addHidden('search_type', 1);
+$formSearch->addText(
+    'q',
+    get_lang('Search'),
+    false,
+    [
+        'aria-label' => get_lang('SearchUsers'),
+        'custom' => true,
+        'placeholder' => get_lang('SearchUsersByName'),
+    ]
+);
+
 $tpl = new Template(get_lang('SocialNetwork'));
-
-SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'home');
-
+SocialManager::setSocialUserBlock($tpl, $user_id, 'home');
+$tpl->assign('social_wall_block', $wallSocialAddPost);
+$tpl->assign('social_post_wall_block', $posts);
+$tpl->assign('social_menu_block', $social_menu_block);
+$tpl->assign('social_auto_extend_link', $socialAutoExtendLink);
+$tpl->assign('search_friends_form', $formSearch->returnForm());
 $tpl->assign('social_friend_block', $friend_html);
-$tpl->assign('session_list', $social_session_block);
-$tpl->assign('social_search', $socialSearch);
+$tpl->assign('social_search_block', $social_search_block);
 $tpl->assign('social_skill_block', SocialManager::getSkillBlock($user_id));
-$tpl->assign('groups', $results);
+$tpl->assign('social_group_block', $social_group_block);
+$tpl->assign('session_list', $social_session_block);
 $social_layout = $tpl->get_template('social/home.tpl');
-$content = $tpl->fetch($social_layout);
-$tpl->assign('content', $content);
-$tpl->display_one_col_template();
+$tpl->display($social_layout);

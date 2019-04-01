@@ -12,6 +12,232 @@ require_once __DIR__.'/webservice.php';
 class WSCourse extends WS
 {
     /**
+     * Deletes a course.
+     *
+     * @param string API secret key
+     * @param string Course id field name
+     * @param string Course id value
+     */
+    public function DeleteCourse(
+        $secret_key,
+        $course_id_field_name,
+        $course_id_value
+    ) {
+        $verifKey = $this->verifyKey($secret_key);
+        if ($verifKey instanceof WSError) {
+            $this->handleError($verifKey);
+        } else {
+            $result = $this->deleteCourseHelper(
+                $course_id_field_name,
+                $course_id_value
+            );
+            if ($result instanceof WSError) {
+                $this->handleError($result);
+            }
+        }
+    }
+
+    /**
+     * Deletes multiple courses.
+     *
+     * @param string API secret key
+     * @param array Array of courses with elements of the form
+     * array('course_id_field_name' => 'name_of_field', 'course_id_value' => 'value')
+     *
+     * @return array Array with elements like
+     *               array('course_id_value' => 'value', 'result' => array('code' => 0, 'message' => 'Operation was successful')).
+     *               Note that if the result array contains a code different
+     *               than 0, an error occured
+     */
+    public function DeleteCourses($secret_key, $courses)
+    {
+        $verifKey = $this->verifyKey($secret_key);
+        if ($verifKey instanceof WSError) {
+            $this->handleError($verifKey);
+        } else {
+            $results = [];
+            foreach ($courses as $course) {
+                $result_tmp = [];
+                $result_op = $this->deleteCourseHelper(
+                    $course['course_id_field_name'],
+                    $course['course_id_value']
+                );
+                $result_tmp['course_id_value'] = $course['course_id_value'];
+                if ($result_op instanceof WSError) {
+                    // Return the error in the results
+                    $result_tmp['result'] = $result_op->toArray();
+                } else {
+                    $result_tmp['result'] = $this->getSuccessfulResult();
+                }
+                $results[] = $result_tmp;
+            }
+
+            return $results;
+        }
+    }
+
+    /**
+     * Creates a course.
+     *
+     * @param string API secret key
+     * @param string Title
+     * @param string Category code
+     * @param string Wanted code. If it's not defined, it will be generated automatically
+     * @param string Tutor name
+     * @param string Course admin user id field name
+     * @param string Course admin user id value
+     * @param string Course language
+     * @param string Course id field name
+     * @param string Course id value
+     * @param array Course extra fields
+     *
+     * @return int Course id generated
+     */
+    public function CreateCourse(
+        $secret_key,
+        $title,
+        $category_code,
+        $wanted_code,
+        $tutor_name,
+        $course_admin_user_id_field_name,
+        $course_admin_user_id_value,
+        $language,
+        $course_id_field_name,
+        $course_id_value,
+        $extras
+    ) {
+        // First, verify the secret key
+        $verifKey = $this->verifyKey($secret_key);
+        if ($verifKey instanceof WSError) {
+            $this->handleError($verifKey);
+        } else {
+            $result = $this->createCourseHelper(
+                $title,
+                $category_code,
+                $wanted_code,
+                $tutor_name,
+                $course_admin_user_id_field_name,
+                $course_admin_user_id_value,
+                $language,
+                $course_id_field_name,
+                $course_id_value,
+                $extras
+            );
+            if ($result instanceof WSError) {
+                $this->handleError($result);
+            } else {
+                return $result;
+            }
+        }
+    }
+
+    /**
+     * Create multiple courses.
+     *
+     * @param string API secret key
+     * @param array Courses to be created, with elements following the structure presented in CreateCourse
+     *
+     * @return array Array with elements of the form
+     *               array('course_id_value' => 'original value sent', 'course_id_generated' => 'value_generated', 'result' => array('code' => 0, 'message' => 'Operation was successful'))
+     */
+    public function CreateCourses($secret_key, $courses)
+    {
+        // First, verify the secret key
+        $verifKey = $this->verifyKey($secret_key);
+        if ($verifKey instanceof WSError) {
+            $this->handleError($verifKey);
+        } else {
+            $results = [];
+            foreach ($courses as $course) {
+                $result_tmp = [];
+                // re-initialize variables just in case
+                $title = $category_code = $wanted_code = $tutor_name = $course_admin_user_id_field_name = $course_admin_user_id_value = $language = $course_id_field_name = $course_id_value = $extras = 0;
+                extract($course);
+                $result = $this->createCourseHelper(
+                    $title,
+                    $category_code,
+                    $wanted_code,
+                    $tutor_name,
+                    $course_admin_user_id_field_name,
+                    $course_admin_user_id_value,
+                    $language,
+                    $course_id_field_name,
+                    $course_id_value,
+                    $extras
+                );
+                if ($result instanceof WSError) {
+                    $result_tmp['result'] = $result->toArray();
+                    $result_tmp['course_id_value'] = $course_id_value;
+                    $result_tmp['course_id_generated'] = 0;
+                } else {
+                    $result_tmp['result'] = $this->getSuccessfulResult();
+                    $result_tmp['course_id_value'] = $course_id_value;
+                    $result_tmp['course_id_generated'] = $result;
+                }
+                $results[] = $result_tmp;
+            }
+
+            return $results;
+        }
+    }
+
+    /**
+     * Edits a course.
+     *
+     * @param string API secret key
+     * @param string Course id field name
+     * @param string Course id value
+     * @param string Title
+     * @param string Category code
+     * @param string Department name
+     * @param string Department url
+     * @param string Course language
+     * @param int Visibility
+     * @param int Subscribe (0 = denied, 1 = allowed)
+     * @param int Unsubscribe (0 = denied, 1 = allowed)
+     * @param string Visual code
+     * @param array Course extra fields
+     */
+    public function EditCourse(
+        $secret_key,
+        $course_id_field_name,
+        $course_id_value,
+        $title,
+        $category_code,
+        $department_name,
+        $department_url,
+        $language,
+        $visibility,
+        $subscribe,
+        $unsubscribe,
+        $visual_code,
+        $extras
+    ) {
+        $verifKey = $this->verifyKey($secret_key);
+        if ($verifKey instanceof WSError) {
+            $this->handleError($verifKey);
+        } else {
+            $result = $this->editCourseHelper(
+                $course_id_field_name,
+                $course_id_value,
+                $title,
+                $category_code,
+                $department_name,
+                $department_url,
+                $language,
+                $visibility,
+                $subscribe,
+                $unsubscribe,
+                $visual_code,
+                $extras
+            );
+            if ($result instanceof WSError) {
+                $this->handleError($result);
+            }
+        }
+    }
+
+    /**
      * List courses.
      *
      * @param string API secret key
@@ -250,6 +476,199 @@ class WSCourse extends WS
                     $cd->update();
                 }
             }
+        }
+    }
+
+    /**
+     * Deletes a course (helper method).
+     *
+     * @param string Course id field name
+     * @param string Course id value
+     *
+     * @return mixed True if the course was successfully deleted, WSError otherwise
+     */
+    protected function deleteCourseHelper(
+        $course_id_field_name,
+        $course_id_value
+    ) {
+        $course_id = $this->getCourseId(
+            $course_id_field_name,
+            $course_id_value
+        );
+        if ($course_id instanceof WSError) {
+            return $course_id;
+        } else {
+            $course_code = CourseManager::get_course_code_from_course_id(
+                $course_id
+            );
+            CourseManager::delete_course($course_code);
+
+            return true;
+        }
+    }
+
+    /**
+     * Creates a course (helper method).
+     *
+     * @param string Title
+     * @param string Category code
+     * @param string Wanted code. If it's not defined, it will be generated automatically
+     * @param string Tutor name
+     * @param string Course admin user id field name
+     * @param string Course admin user id value
+     * @param string Course language
+     * @param string Course id field name
+     * @param string Course id value
+     * @param array Course extra fields
+     *
+     * @return mixed Generated id if creation was successful, WSError otherwise
+     */
+    protected function createCourseHelper(
+        $title,
+        $category_code,
+        $wanted_code,
+        $tutor_name,
+        $course_admin_user_id_field_name,
+        $course_admin_user_id_value,
+        $language,
+        $course_id_field_name,
+        $course_id_value,
+        $extras
+    ) {
+        // Add the original course id field name and value to the extra fields if needed
+        $extras_associative = [];
+        if ($course_id_field_name != "chamilo_course_id") {
+            $extras_associative[$course_id_field_name] = $course_id_value;
+        }
+        foreach ($extras as $extra) {
+            $extras_associative[$extra['field_name']] = $extra['field_value'];
+        }
+        $course_admin_id = $this->getUserId(
+            $course_admin_user_id_field_name,
+            $course_admin_user_id_value
+        );
+        if ($course_admin_id instanceof WSError) {
+            return $course_admin_id;
+        }
+        if ($wanted_code == '') {
+            $wanted_code = CourseManager::generate_course_code($title);
+        }
+        $result = create_course(
+            $wanted_code,
+            $title,
+            $tutor_name,
+            $category_code,
+            $language,
+            $course_admin_id,
+            $this->_configuration['db_prefix'],
+            0
+        );
+        if (!$result) {
+            return new WSError(202, 'There was an error creating the course');
+        } else {
+            // Update extra fields
+            foreach ($extras_associative as $fname => $fvalue) {
+                CourseManager::update_course_extra_field_value(
+                    $result,
+                    $fname,
+                    $fvalue
+                );
+            }
+            // Get course id
+            $course_info = CourseManager::get_course_information($result);
+
+            return $course_info['real_id'];
+        }
+    }
+
+    /**
+     * Edits a course (helper method).
+     *
+     * @param string Course id field name
+     * @param string Course id value
+     * @param string Title
+     * @param string Category code
+     * @param string Department name
+     * @param string Department url
+     * @param string Course language
+     * @param int Visibility
+     * @param int Subscribe (0 = denied, 1 = allowed)
+     * @param int Unsubscribe (0 = denied, 1 = allowed)
+     * @param string Visual code
+     * @param array Course extra fields
+     *
+     * @return mixed True in case of success, WSError otherwise
+     */
+    protected function editCourseHelper(
+        $course_id_field_name,
+        $course_id_value,
+        $title,
+        $category_code,
+        $department_name,
+        $department_url,
+        $language,
+        $visibility,
+        $subscribe,
+        $unsubscribe,
+        $visual_code,
+        $extras
+    ) {
+        $course_id = $this->getCourseId(
+            $course_id_field_name,
+            $course_id_value
+        );
+        if ($course_id instanceof WSError) {
+            return $course_id;
+        } else {
+            $attributes = [];
+            if (!empty($title)) {
+                $attributes['title'] = $title;
+            }
+            if (!empty($category_code)) {
+                $attributes['category_code'] = $category_code;
+            }
+            if (!empty($department_name)) {
+                $attributes['department_name'] = $department_name;
+            }
+            if (!empty($department_url)) {
+                $attributes['department_url'] = $department_url;
+            }
+            if (!empty($language)) {
+                $attributes['course_language'] = $language;
+            }
+            if ($visibility != '') {
+                $attributes['visibility'] = (int) $visibility;
+            }
+            if ($subscribe != '') {
+                $attributes['subscribe'] = (int) $subscribe;
+            }
+            if ($unsubscribe != '') {
+                $attributes['unsubscribe'] = (int) $unsubscribe;
+            }
+            if (!empty($visual_code)) {
+                $attributes['visual_code'] = $visual_code;
+            }
+            if (!empty($attributes)) {
+                CourseManager::update_attributes($course_id, $attributes);
+            }
+            if (!empty($extras)) {
+                $course_code = CourseManager::get_course_code_from_course_id(
+                    $course_id
+                );
+                $extras_associative = [];
+                foreach ($extras as $extra) {
+                    $extras_associative[$extra['field_name']] = $extra['field_value'];
+                }
+                foreach ($extras_associative as $fname => $fvalue) {
+                    CourseManager::update_extra_field_value(
+                        $course_code,
+                        $fname,
+                        $fvalue
+                    );
+                }
+            }
+
+            return true;
         }
     }
 

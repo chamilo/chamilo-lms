@@ -36,7 +36,7 @@ function clear_course_list(div_course) {
     $("div#"+div_course).hide("");
 }
 
-$(document).ready(function() {
+$(function() {
     $("#advanced_search_form").css("display","none");
 });
 

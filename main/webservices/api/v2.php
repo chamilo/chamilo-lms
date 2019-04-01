@@ -123,6 +123,10 @@ try {
             $data = $restApi->addCourse($_POST);
             $restResponse->setData($data);
             break;
+        case Rest::SAVE_USER:
+            $data = $restApi->addUser($_POST);
+            $restResponse->setData($data);
+            break;
         case Rest::SUBSCRIBE_USER_TO_COURSE:
             $data = $restApi->subscribeUserToCourse($_POST);
             $restResponse->setData($data);

@@ -20,7 +20,7 @@ $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('TicketDetail')];
 
 $disableReponseButtons = '';
 $htmlHeadXtra[] = '<script>
-$(document).ready(function() {
+$(function() {
 	$("#dialog-form").dialog({
 		autoOpen: false,
 		height: 450,

@@ -297,8 +297,8 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                         movable: false,
                         zoomable: false,
                         rotatable: false,
-                        scalable: ' . $scalable . ',
-                        crop: function(event) {
+                        scalable: '.$scalable.',
+                        crop: function(e) {
                             // Output the result data for cropping image.
                             $input.val(event.detail.x + \',\' + event.detail.y + \',\' + event.detail.width + \',\' + event.detail.height);
                         }

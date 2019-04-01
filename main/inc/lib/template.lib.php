@@ -377,6 +377,8 @@ class Template
             }
         }
 
+        $name = str_replace('tpl', 'html.twig', $name);
+
         return "default/$name";
     }
 

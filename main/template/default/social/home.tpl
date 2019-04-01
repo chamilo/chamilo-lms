@@ -57,10 +57,11 @@
                         <div id="listFriends"
                              class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
                             <div class="panel-body">
-                                {{ social_friend_block }}
                                 <div class="search-friend">
                                     {{ search_friends_form }}
                                 </div>
+
+                                {{ social_friend_block }}
 
                                 {% if 'allow_social_map_fields'|api_get_configuration_value %}
                                 <div class="geolocalization">

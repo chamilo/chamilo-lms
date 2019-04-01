@@ -588,7 +588,16 @@ class Template
         }
 
         $features = api_get_configuration_value('video_features');
-        $defaultFeatures = ['playpause', 'current', 'progress', 'duration', 'tracks', 'volume', 'fullscreen', 'vrview'];
+        $defaultFeatures = [
+            'playpause',
+            'current',
+            'progress',
+            'duration',
+            'tracks',
+            'volume',
+            'fullscreen',
+            'vrview',
+        ];
 
         if (!empty($features) && isset($features['features'])) {
             foreach ($features['features'] as $feature) {

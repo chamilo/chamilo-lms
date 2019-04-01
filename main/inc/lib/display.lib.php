@@ -2804,7 +2804,16 @@ HTML;
      */
     public static function getFrameReadyBlock($frameName)
     {
-        $defaultFeatures = ['playpause', 'current', 'progress', 'duration', 'tracks', 'volume', 'fullscreen', 'vrview'];
+        $defaultFeatures = [
+            'playpause',
+            'current',
+            'progress',
+            'duration',
+            'tracks',
+            'volume',
+            'fullscreen',
+            'vrview',
+        ];
         $features = api_get_configuration_value('video_features');
         $bowerJsFiles = [];
         $bowerCSSFiles = [];

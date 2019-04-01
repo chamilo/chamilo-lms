@@ -2852,7 +2852,7 @@ HTML;
             $(function() {
                 $("video:not(.skip), audio:not(.skip)").mediaelementplayer({                    
                     pluginPath: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/build/",            
-                    features: ["'.$defaultFeatures.'"],
+                    features: [\''.$defaultFeatures.'\'],
                     success: function(mediaElement, originalNode, instance) {
                     },
                     vrPath: "'.api_get_path(WEB_PUBLIC_PATH).'assets/vrview/build/vrview.js"

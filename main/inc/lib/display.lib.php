@@ -1353,9 +1353,23 @@ class Display
         $obj->viewrecords = 'true';
         $all_value = 10000000;
 
+        // Sets how many records we want to view in the grid
+        $obj->rowNum = 20;
+
         // Default row quantity
         if (!isset($extra_params['rowList'])) {
             $extra_params['rowList'] = [20, 50, 100, 500, 1000, $all_value];
+            $rowList = api_get_configuration_value('table_row_list');
+            if (!empty($rowList) && isset($rowList['options'])) {
+                $rowList = $rowList['options'];
+                $rowList[] = $all_value;
+            }
+            $extra_params['rowList'] = $rowList;
+        }
+
+        $defaultRow = api_get_configuration_value('table_default_row');
+        if (!empty($defaultRow)) {
+            $obj->rowNum = (int) $defaultRow;
         }
 
         $json = '';
@@ -1381,8 +1395,6 @@ class Display
             $obj->rowList = $extra_params['rowList'];
         }
 
-        // Sets how many records we want to view in the grid
-        $obj->rowNum = 20;
         if (!empty($extra_params['rowNum'])) {
             $obj->rowNum = $extra_params['rowNum'];
         } else {
@@ -1753,9 +1765,13 @@ class Display
             } else {
                 $dates = SessionManager::parseSessionDates($session_info, true);
                 $session['dates'] = $dates['access'];
+                if (api_get_setting('show_session_coach') === 'true' && isset($coachInfo['complete_name'])) {
+                    $session['coach'] = $coachInfo['complete_name'];
+                }
                 $active = $date_start <= $now && $date_end >= $now;
             }
             $session['active'] = $active;
+            $session['session_category_id'] = $session_info['session_category_id'];
             $session['visibility'] = $session_info['visibility'];
             $session['num_users'] = $session_info['nbr_users'];
             $session['num_courses'] = $session_info['nbr_courses'];
@@ -1933,15 +1949,15 @@ class Display
     }
 
     /**
-     * @param $percentage
-     * @param bool $show_percentage
-     * @param null $extra_info
+     * @param int    $percentage
+     * @param bool   $show_percentage
+     * @param string $extra_info
      *
      * @return string
      */
-    public static function bar_progress($percentage, $show_percentage = true, $extra_info = null)
+    public static function bar_progress($percentage, $show_percentage = true, $extra_info = '')
     {
-        $percentage = intval($percentage);
+        $percentage = (int) $percentage;
         $div = '<div class="progress">
                 <div
                     class="progress-bar progress-bar-striped"
@@ -1958,7 +1974,7 @@ class Display
                 $div .= $extra_info;
             }
         }
-        $div .= '</div>';
+        $div .= '</div></div>';
 
         return $div;
     }

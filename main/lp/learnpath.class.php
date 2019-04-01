@@ -2266,7 +2266,6 @@ class learnpath
             switch ($row['item_type']) {
                 case 'quiz':
                     $type_quiz = false;
-
                     foreach ($list as $toc) {
                         if ($toc['id'] == $_SESSION['oLP']->current) {
                             $type_quiz = true;
@@ -2363,7 +2362,7 @@ class learnpath
                 $isBlocked = true;
             }
 
-            if (api_get_configuration_value('lp_minimum_time')) {
+            if (Tracking::minimunTimeAvailable($sessionId, $courseId)) {
                 // Block if it does not exceed minimum time
                 // Minimum time (in minutes) to pass the learning path
                 $accumulateWorkTime = self::getAccumulateWorkTimePrerequisite($prerequisite, $courseId);
@@ -2495,44 +2494,46 @@ class learnpath
                 }
             }
 
-            $subscriptionSettings = self::getSubscriptionSettings();
+            if ($is_visible) {
+                $subscriptionSettings = self::getSubscriptionSettings();
 
-            // Check if the subscription users/group to a LP is ON
-            if (isset($row['subscribe_users']) && $row['subscribe_users'] == 1 &&
-                $subscriptionSettings['allow_add_users_to_lp'] === true
-            ) {
-                // Try group
-                $is_visible = false;
-                // Checking only the user visibility
-                $userVisibility = api_get_item_visibility(
-                    $courseInfo,
-                    'learnpath',
-                    $row['id'],
-                    $sessionId,
-                    $student_id,
-                    'LearnpathSubscription'
-                );
+                // Check if the subscription users/group to a LP is ON
+                if (isset($row['subscribe_users']) && $row['subscribe_users'] == 1 &&
+                    $subscriptionSettings['allow_add_users_to_lp'] === true
+                ) {
+                    // Try group
+                    $is_visible = false;
+                    // Checking only the user visibility
+                    $userVisibility = api_get_item_visibility(
+                        $courseInfo,
+                        'learnpath',
+                        $row['id'],
+                        $sessionId,
+                        $student_id,
+                        'LearnpathSubscription'
+                    );
 
-                if ($userVisibility == 1) {
-                    $is_visible = true;
-                } else {
-                    $userGroups = GroupManager::getAllGroupPerUserSubscription($student_id);
-                    if (!empty($userGroups)) {
-                        foreach ($userGroups as $groupInfo) {
-                            $groupId = $groupInfo['iid'];
-                            $userVisibility = api_get_item_visibility(
-                                $courseInfo,
-                                'learnpath',
-                                $row['id'],
-                                $sessionId,
-                                null,
-                                'LearnpathSubscription',
-                                $groupId
-                            );
+                    if ($userVisibility == 1) {
+                        $is_visible = true;
+                    } else {
+                        $userGroups = GroupManager::getAllGroupPerUserSubscription($student_id);
+                        if (!empty($userGroups)) {
+                            foreach ($userGroups as $groupInfo) {
+                                $groupId = $groupInfo['iid'];
+                                $userVisibility = api_get_item_visibility(
+                                    $courseInfo,
+                                    'learnpath',
+                                    $row['id'],
+                                    $sessionId,
+                                    null,
+                                    'LearnpathSubscription',
+                                    $groupId
+                                );
 
-                            if ($userVisibility == 1) {
-                                $is_visible = true;
-                                break;
+                                if ($userVisibility == 1) {
+                                    $is_visible = true;
+                                    break;
+                                }
                             }
                         }
                     }
@@ -7370,8 +7371,8 @@ class learnpath
                     case TOOL_DOCUMENT:
                     case TOOL_READOUT_TEXT:
                         $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
-                        $sql_doc = "SELECT path FROM ".$tbl_doc."
-                                    WHERE c_id = ".$course_id." AND iid = ".intval($row['path']);
+                        $sql_doc = "SELECT path FROM $tbl_doc
+                                    WHERE c_id = $course_id AND iid = ".intval($row['path']);
                         $result = Database::query($sql_doc);
                         $path_file = Database::result($result, 0, 0);
                         $path_parts = pathinfo($path_file);
@@ -9099,7 +9100,7 @@ class learnpath
                         $renderer = $form->defaultRenderer();
                         $renderer->setElementTemplate('&nbsp;{label}{element}', 'content_lp');
                         $form->addElement('html', '<div class="editor-lp">');
-                        $form->addHtmlEditor('content_lp', null, null, true, $editor_config);
+                        $form->addHtmlEditor('content_lp', null, null, true, $editor_config, true);
                         $form->addElement('html', '</div>');
                         $defaults['content_lp'] = $content;
                     }
@@ -10893,7 +10894,6 @@ class learnpath
     public function get_forums()
     {
         require_once '../forum/forumfunction.inc.php';
-        require_once '../forum/forumconfig.inc.php';
 
         $forumCategories = get_forum_categories();
         $forumsInNoCategory = get_forums_in_category(0);
@@ -12614,7 +12614,7 @@ EOD;
         $learnPath = null;
         $lpObject = Session::read('lpobject');
         if ($lpObject !== null) {
-            $learnPath = unserialize($lpObject);
+            $learnPath = UnserializeApi::unserialize('lp', $lpObject);
             if ($debug) {
                 error_log('getLpFromSession: unserialize');
                 error_log('------getLpFromSession------');
@@ -13420,9 +13420,9 @@ EOD;
                 }
 
                 $documentPathInfo = pathinfo($document->getPath());
-                $jplayerSupportedFiles = ['mp4', 'ogv', 'flv', 'm4v'];
+                $mediaSupportedFiles = ['mp3', 'mp4', 'ogv', 'flv', 'm4v'];
                 $extension = isset($documentPathInfo['extension']) ? $documentPathInfo['extension'] : '';
-                $showDirectUrl = !in_array($extension, $jplayerSupportedFiles);
+                $showDirectUrl = !in_array($extension, $mediaSupportedFiles);
 
                 $openmethod = 2;
                 $officedoc = false;
@@ -13464,7 +13464,7 @@ EOD;
                 }
 
                 return $main_dir_path.'work/work.php?'.api_get_cidreq().'&id='.$rowItem->getPath().'&'.$extraParams;
-        } //end switch
+        }
 
         return $link;
     }

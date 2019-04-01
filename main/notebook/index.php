@@ -26,7 +26,7 @@ $htmlHeadXtra[] = '<script>
 function setFocus(){
     $("#note_title").focus();
 }
-$(document).ready(function () {
+$(function() {
     setFocus();
 });
 </script>';
@@ -45,10 +45,9 @@ $logInfo = [
     'tool_id_detail' => 0,
     'action' => $action,
     'action_details' => '',
-    'current_id' => isset($_REQUEST['notebook_id']) ? (int) $_REQUEST['notebook_id'] : 0,
-    'info' => '',
 ];
 Event::registerLog($logInfo);
+
 // Tool name
 if ($action === 'addnote') {
     $tool = 'NoteAddNew';

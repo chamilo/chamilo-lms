@@ -15,24 +15,16 @@ $xajax->registerFunction('search_users');
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
-$id_session = (int) $_GET['id_session'];
-$courseId = isset($_GET['course_id']) ? (int) $_GET['course_id'] : 0;
-
-if (empty($id_session) || empty($courseId)) {
-    api_not_allowed(true);
-}
-
+$id_session = intval($_GET['id_session']);
 $addProcess = isset($_GET['add']) ? Security::remove_XSS($_GET['add']) : null;
 
 SessionManager::protectSession($id_session);
-
-$courseInfo = api_get_course_info_by_id($courseId);
 
 // setting breadcrumbs
 $interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('SessionList')];
 $interbreadcrumb[] = [
     'url' => "resume_session.php?id_session=".$id_session,
-    'name' => get_lang('SessionOverview'),
+    "name" => get_lang('SessionOverview'),
 ];
 
 // Database Table Definitions
@@ -40,7 +32,6 @@ $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-$tableRelSessionCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 // setting the name of the tool
 $tool_name = get_lang('SubscribeUsersToSession');
@@ -81,11 +72,10 @@ if (is_array($extra_field_list)) {
 
 function search_users($needle, $type)
 {
-    global $id_session, $courseId;
+    global $id_session;
 
     $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
     $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-    $tableRelSessionCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
     $xajax_response = new xajaxResponse();
     $return = '';
@@ -121,14 +111,8 @@ function search_users($needle, $type)
                 $id_session = intval($id_session);
                 // check id_user from session_rel_user table
                 $sql = "
-                    SELECT su.user_id 
-                    FROM $tbl_session_rel_user  su 
-                    INNER JOIN $tableRelSessionCourseUser sc
-                    ON (sc.session_id = su.session_id AND su.user_id = sc.user_id)
-                    WHERE 
-                        sc.c_id = $courseId AND
-                        su.session_id = $id_session AND 
-                        relation_type <> ".SESSION_RELATION_TYPE_RRHH;
+                    SELECT user_id FROM $tbl_session_rel_user
+                    WHERE session_id = $id_session AND relation_type <> ".SESSION_RELATION_TYPE_RRHH;
                 $res = Database::query($sql);
                 $user_ids = [];
                 if (Database::num_rows($res) > 0) {
@@ -194,7 +178,7 @@ function search_users($needle, $type)
                             SELECT user.id, username, lastname, firstname, official_code
                             FROM $tbl_user user
                             INNER JOIN $tbl_user_rel_access_url url_user
-                            ON (url_user.user_id = user.id)
+                                ON (url_user.user_id = user.id)
                             WHERE
                                 access_url_id = '$access_url_id'
                                 AND (
@@ -263,6 +247,7 @@ function search_users($needle, $type)
 
             $xajax_response->addAssign('ajax_list_users_single', 'innerHTML', api_utf8_encode($return));
         } else {
+            global $nosessionUsersList;
             $return .= '<select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:360px;">';
             while ($user = Database:: fetch_array($rs)) {
                 $person_name =
@@ -342,21 +327,15 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     }
 
     if ($form_sent == 1) {
+        $notEmptyList = api_get_configuration_value('session_multiple_subscription_students_list_avoid_emptying');
+
         // Added a parameter to send emails when registering a user
         SessionManager::subscribeUsersToSession(
             $id_session,
             $UserList,
             null,
-            false,
-            false
+            !$notEmptyList
         );
-
-        SessionManager::subscribe_users_to_session_course(
-            $UserList,
-            $id_session,
-            $courseInfo['code']
-        );
-
         Display::addFlash(Display::return_message(get_lang('Updated')));
         header('Location: resume_session.php?id_session='.$id_session);
         exit;
@@ -386,18 +365,14 @@ if ($orderListByOfficialCode === 'true') {
 
 if ($ajax_search) {
     $sql = "
-        SELECT u.id, u.lastname, u.firstname, u.username, su.session_id, u.official_code        
-        FROM $tbl_session_rel_user su
-        INNER JOIN $tableRelSessionCourseUser sc
-        ON (sc.session_id = su.session_id AND su.user_id = sc.user_id)
-        INNER JOIN $tbl_user u
-        ON su.user_id = u.id
-        WHERE 
-           su.session_id = ".intval($id_session)." AND
-           su.relation_type <> ".SESSION_RELATION_TYPE_RRHH." AND
-           sc.c_id = $courseId AND
-            u.status<>".DRH."  AND 
-            u.status <> 6
+        SELECT u.id, u.lastname, u.firstname, u.username, session_id, u.official_code
+        FROM $tbl_user u
+        INNER JOIN $tbl_session_rel_user su
+            ON su.user_id = u.id
+            AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+            AND su.session_id = ".intval($id_session)."
+        WHERE u.status<>".DRH."
+            AND u.status <> 6
         $order_clause
     ";
 
@@ -406,18 +381,14 @@ if ($ajax_search) {
         $access_url_id = api_get_current_access_url_id();
         if ($access_url_id != -1) {
             $sql = "
-                SELECT u.id, u.lastname, u.firstname, u.username, su.session_id, u.official_code
+                SELECT u.id, u.lastname, u.firstname, u.username, session_id, u.official_code
                 FROM $tbl_user u
                 INNER JOIN $tbl_session_rel_user su
                     ON su.user_id = u.id
                     AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
                     AND su.session_id = ".intval($id_session)."
-                INNER JOIN $tbl_user_rel_access_url url_user 
-                ON (url_user.user_id = u.id)
-                INNER JOIN $tableRelSessionCourseUser sc
-                ON (sc.session_id = su.session_id AND su.user_id = sc.user_id)
+                INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id = u.id)
                 WHERE access_url_id = $access_url_id
-                    sc.c_id = $courseId AND
                     AND u.status <> ".DRH."
                     AND u.status <> 6
                 $order_clause
@@ -430,7 +401,8 @@ if ($ajax_search) {
         $sessionUsersList[$user['id']] = $user;
     }
 
-    $sessionUserInfo = SessionManager::getTotalUserCoursesInSession($id_session, $courseId);
+    $sessionUserInfo = SessionManager::getTotalUserCoursesInSession($id_session);
+
     // Filter the user list in all courses in the session
     foreach ($sessionUserInfo as $sessionUser) {
         // filter students in session
@@ -510,31 +482,26 @@ if ($ajax_search) {
     }
     if ($use_extra_fields) {
         $sql = "
-            SELECT  u.id, lastname, firstname, username, su.session_id, official_code
+            SELECT  u.id, lastname, firstname, username, session_id, official_code
             FROM $tbl_user u
             LEFT JOIN $tbl_session_rel_user su
                 ON su.user_id = u.id
                 AND su.session_id = $id_session
                 AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
-            INNER JOIN $tableRelSessionCourseUser sc
-            ON (sc.session_id = su.session_id AND su.user_id = sc.user_id)
             $where_filter
                 AND u.status <> ".DRH."
                 AND u.status <> 6
-                AND sc.c_id = $courseId
             $order_clause
            ";
     } else {
         $sql = "
-            SELECT  u.id, lastname, firstname, username, su.session_id, official_code
+            SELECT  u.id, lastname, firstname, username, session_id, official_code
             FROM $tbl_user u
             LEFT JOIN $tbl_session_rel_user su
                 ON su.user_id = u.id
                 AND su.session_id = $id_session
                 AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
-            WHERE 
-                u.status <> ".DRH." AND 
-                u.status <> 6
+            WHERE u.status <> ".DRH." AND u.status <> 6
             $order_clause
         ";
     }
@@ -543,18 +510,15 @@ if ($ajax_search) {
         $access_url_id = api_get_current_access_url_id();
         if ($access_url_id != -1) {
             $sql = "
-                SELECT  u.id, lastname, firstname, username, su.session_id, official_code
+                SELECT  u.id, lastname, firstname, username, session_id, official_code
                 FROM $tbl_user u
                 LEFT JOIN $tbl_session_rel_user su
                     ON su.user_id = u.id
                     AND su.session_id = $id_session
                     AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
                 INNER JOIN $tbl_user_rel_access_url url_user
-                ON (url_user.user_id = u.id)   
-               
-                WHERE
-                    access_url_id = $access_url_id 
-                    $where_filter
+                ON (url_user.user_id = u.id)
+                WHERE access_url_id = $access_url_id $where_filter
                     AND u.status <> ".DRH."
                     AND u.status<>6
                 $order_clause
@@ -579,18 +543,13 @@ if ($ajax_search) {
 
     // filling the correct users in list
     $sql = "
-        SELECT  u.id, lastname, firstname, username, su.session_id, official_code
+        SELECT  u.id, lastname, firstname, username, session_id, official_code
         FROM $tbl_user u
-        LEFT JOIN $tbl_session_rel_user su
-        ON su.user_id = u.id
-        AND su.session_id = $id_session
-        AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
-        INNER JOIN $tableRelSessionCourseUser sc
-        ON (sc.session_id = su.session_id AND su.user_id = sc.user_id)
-        WHERE
-            sc.c_id = $courseId AND 
-            u.status <> ".DRH." AND u.status <> 6 
-        $order_clause
+        LEFT JOIN $tbl_session_rel_user
+        ON $tbl_session_rel_user.user_id = u.id
+            AND $tbl_session_rel_user.session_id = $id_session
+            AND $tbl_session_rel_user.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+        WHERE u.status <> ".DRH." AND u.status <> 6 $order_clause
     ";
 
     if (api_is_multiple_url_enabled()) {
@@ -598,19 +557,14 @@ if ($ajax_search) {
         $access_url_id = api_get_current_access_url_id();
         if ($access_url_id != -1) {
             $sql = "
-                SELECT  u.id, lastname, firstname, username, su.session_id, official_code
+                SELECT  u.id, lastname, firstname, username, session_id, official_code
                 FROM $tbl_user u
-                LEFT JOIN $tbl_session_rel_user su
-                ON su.user_id = u.id
-                AND su.session_id = $id_session
-                AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
-                INNER JOIN $tbl_user_rel_access_url url_user 
-                ON (url_user.user_id = u.id)
-                INNER JOIN $tableRelSessionCourseUser sc
-                ON (sc.session_id = su.session_id AND su.user_id = sc.user_id)
-                WHERE 
-                    sc.c_id = $courseId AND
-                    access_url_id = $access_url_id
+                LEFT JOIN $tbl_session_rel_user
+                    ON $tbl_session_rel_user.user_id = u.id
+                    AND $tbl_session_rel_user.session_id = $id_session
+                    AND $tbl_session_rel_user.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+                INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id = u.id)
+                WHERE access_url_id = $access_url_id
                     AND u.status <> ".DRH."
                     AND u.status <> 6
                 $order_clause
@@ -634,13 +588,13 @@ if ($ajax_search) {
 
 if ($add_type == 'multiple') {
     $link_add_type_unique =
-        '<a href="'.api_get_self().'?course_id='.$courseId.'&id_session='.$id_session.'&add='.$addProcess.'&add_type=unique">'.
+        '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.$addProcess.'&add_type=unique">'.
         Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
     $link_add_type_multiple = Display::url(Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple'), '');
 } else {
     $link_add_type_unique = Display::url(Display::return_icon('single.gif').get_lang('SessionAddTypeUnique'), '');
     $link_add_type_multiple =
-        '<a href="'.api_get_self().'?course_id='.$courseId.'&id_session='.$id_session.'&amp;add='.$addProcess.'&amp;add_type=multiple">'
+        '<a href="'.api_get_self().'?id_session='.$id_session.'&amp;add='.$addProcess.'&amp;add_type=multiple">'
         .Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
 }
 $link_add_group = Display::url(
@@ -668,12 +622,12 @@ $newLinks .= Display::url(
         ?>
     </div>
     <form name="formulaire" method="post"
-          action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&course_id=<?php echo $courseId; ?>&id_session=<?php echo $id_session; ?><?php if (!empty($addProcess)) {
+          action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id_session=<?php echo $id_session; ?><?php if (!empty($addProcess)) {
             echo '&add=true';
         } ?>" <?php if ($ajax_search) {
             echo ' onsubmit="valide();"';
         } ?>>
-        <?php echo '<legend>'.$tool_name.' ('.$session_info['name'].') - '.$courseInfo['title'].' </legend>'; ?>
+        <?php echo '<legend>'.$tool_name.' ('.$session_info['name'].') </legend>'; ?>
         <?php
         if ($add_type == 'multiple') {
             if (is_array($extra_field_list)) {
@@ -784,7 +738,7 @@ $newLinks .= Display::url(
                     </select>
                     <br/>
                     <br/>
-                    <?php
+                <?php
                     } ?>
                 <div class="control-course">
                     <?php

@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
  * Class to dynamically create an HTML SELECT
@@ -618,22 +617,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
      */
     public function getTemplate($layout)
     {
-        $size = $this->getColumnsSize();
-
-        if (empty($size)) {
-            $size = array(2, 8, 2);
-        } else {
-            if (is_array($size)) {
-                if (count($size) == 1) {
-                    $size = array(2, intval($size[0]), 2);
-                } elseif (count($size) != 3) {
-                    $size = array(2, 8, 2);
-                }
-                // else just keep the $size array as received
-            } else {
-                $size = array(2, intval($size), 2);
-            }
-        }
+        $size = $this->calculateSize();
 
         switch ($layout) {
             case FormValidator::LAYOUT_INLINE:

@@ -1155,7 +1155,7 @@ if (empty($details)) {
                     $isSubscribed = CourseManager::is_user_subscribed_in_course(
                         $student_id,
                         $courseCodeItem,
-                            false
+                        false
                     );
                 } else {
                     $isSubscribed = CourseManager::is_user_subscribed_in_course(
@@ -1387,7 +1387,7 @@ if (empty($details)) {
     ];
 
     $timeCourse = null;
-    if (api_get_configuration_value('lp_minimum_time')) {
+    if (Tracking::minimunTimeAvailable($session_id, $courseInfo['real_id'])) {
         $timeCourse = Tracking::getCalculateTime($student_id, $courseInfo['real_id'], $session_id);
     }
 

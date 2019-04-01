@@ -66,7 +66,6 @@ $exercisePath = substr($exercisePath, 0, strpos($exercisePath, $exfile));
 $exercisePath = $exercisePath.'exercise.php';
 
 // Clear the exercise session
-
 Session::erase('objExercise');
 Session::erase('objQuestion');
 Session::erase('objAnswer');
@@ -664,7 +663,6 @@ if (!empty($exerciseList)) {
         $mylpid = (empty($learnpath_id) ? '' : '&learnpath_id='.$learnpath_id);
         $mylpitemid = (empty($learnpath_item_id) ? '' : '&learnpath_item_id='.$learnpath_item_id);
         $i = 1;
-
         foreach ($exerciseList as $row) {
             $my_exercise_id = $row['id'];
 
@@ -1259,7 +1257,6 @@ if (!empty($exerciseList)) {
                 $listExercise['description'] = cut($row['description'], 150, false);
                 $listExercise['score'] = $score;
                 $listExercise['number_questions'] = $rowi;
-                //$item .= Display::tag('td', $attempt_text);
             }
 
             if ($is_allowedToEdit) {
@@ -1269,10 +1266,8 @@ if (!empty($exerciseList)) {
                     $actions .= $additionalActions.PHP_EOL;
                 }		
 		        $listExercise['actions'] = $actions;
-                //$item .= Display::tag('td', $actions, ['class' => 'td_actions']);
             } else {
                 if ($isDrhOfCourse) {
-
                     $actions = '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.
                         Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
                     $listExercise['actions'] = $actions;
@@ -1281,25 +1276,13 @@ if (!empty($exerciseList)) {
 
                 }
             }
-
-            /*$tableRows[] = Display::tag(
-                'tr',
-                $item,
-                [
-                    'id' => 'exercise_list_'.$my_exercise_id,
-                ]
-            );*/
-
             $list[] = $listExercise;
         }
-
     }
 }
 
-// END EXERCISE LIST
-
-// HOTPOTATOES
-
+// end exercise list
+// Hotpotatoes results
 $hotpotatoes_exist = false;
 
 if ($is_allowedToEdit) {
@@ -1336,10 +1319,7 @@ $listHotpotatoes = [];
 if (isset($attribute['path']) && is_array($attribute['path'])) {
     $hotpotatoes_exist = true;
     foreach ($attribute['path'] as $key => $path) {
-
-        //$item = '';
         $title = GetQuizName($path, $documentPath);
-
         if ($title == '') {
             $title = basename($path);
         }

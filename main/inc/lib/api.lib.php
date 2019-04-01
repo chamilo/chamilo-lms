@@ -8056,13 +8056,13 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
     ];
 
     $js = api_get_asset('pwstrength-bootstrap/dist/pwstrength-bootstrap.min.js');
-    $js .= "<script>    
+    $js .= "<script>
     var errorMessages = {
         password_to_short : \"".get_lang('PasswordIsTooShort')."\",
         same_as_username : \"".get_lang('YourPasswordCannotBeTheSameAsYourUsername')."\"
     };
 
-    $(document).ready(function() {
+    $(function() {
         var lang = ".json_encode($translations).";     
         var options = {        
             onLoad : function () {

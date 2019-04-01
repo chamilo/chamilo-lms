@@ -20,8 +20,6 @@ $logInfo = [
     'tool_id_detail' => 0,
     'action' => isset($_GET['action']) ? $_GET['action'] : 'inbox',
     'action_details' => '',
-    'current_id' => isset($_GET['id']) ? (int) $_GET['id'] : 0,
-    'info' => '',
 ];
 Event::registerLog($logInfo);
 
@@ -117,47 +115,47 @@ $interbreadcrumb[] = [
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Inbox')];
 
 $actions = '';
-$keyword = '';
 
 // Comes from normal profile
-if ($allowMessage) {
-    $actionsLeft = '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
-        Display::return_icon('new-message.png', get_lang('ComposeMessage'), null, ICON_SIZE_MEDIUM).'</a>';
-    $actionsLeft .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
-        Display::return_icon('inbox.png', get_lang('Inbox'), null, ICON_SIZE_MEDIUM).'</a>';
-    $actionsLeft .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.
-        Display::return_icon('outbox.png', get_lang('Outbox'), null, ICON_SIZE_MEDIUM).'</a>';
-
-    $form = MessageManager::getSearchForm(api_get_path(WEB_PATH).'main/messages/inbox.php');
-    try {
-        if ($form->validate()) {
-            $values = $form->getSubmitValues();
-            $keyword = $values['keyword'];
-        }
-    } catch (HTML_QuickForm_Error $e) {
-        echo  $e->getMessage();
-    }
-
-    $actionsRight = $form->returnForm();
-    $actions = Display::toolbarAction('toolbar', [$actionsLeft, $actionsRight]);
+if ($allowSocial == false && $allowMessage) {
+    $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
+        Display::return_icon('message_new.png', get_lang('ComposeMessage')).'</a>';
+    $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
+        Display::return_icon('inbox.png', get_lang('Inbox')).'</a>';
+    $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.
+        Display::return_icon('outbox.png', get_lang('Outbox')).'</a>';
 }
 
-// SOCIAL MENU
-/*$social_menu_block = '';
+// LEFT CONTENT
+$social_menu_block = '';
 if ($allowSocial) {
     // Block Social Menu
     $social_menu_block = SocialManager::show_social_menu('messages');
-}*/
+}
 
 // Right content
-$message_content = '';
+$social_right_content = '';
+$keyword = '';
+if (api_get_setting('allow_social_tool') === 'true') {
+    $actionsLeft = '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
+        Display::return_icon('new-message.png', get_lang('ComposeMessage'), [], 32).'</a>';
+    $actionsLeft .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.
+        Display::return_icon('outbox.png', get_lang('Outbox'), [], 32).'</a>';
 
+    $form = MessageManager::getSearchForm(api_get_path(WEB_PATH).'main/messages/inbox.php');
+    if ($form->validate()) {
+        $values = $form->getSubmitValues();
+        $keyword = $values['keyword'];
+    }
+    $actionsRight = $form->returnForm();
+    $social_right_content .= Display::toolbarAction('toolbar', [$actionsLeft, $actionsRight]);
+}
 //MAIN CONTENT
 
 if (!isset($_GET['del_msg'])) {
-    $message_content .= MessageManager::inbox_display($keyword);
+    $social_right_content .= MessageManager::inbox_display($keyword);
 } else {
-    $num_msg = (int) $_POST['total'];
+    $num_msg = intval($_POST['total']);
     for ($i = 0; $i < $num_msg; $i++) {
         if ($_POST[$i]) {
             //the user_id was necessary to delete a message??
@@ -167,20 +165,24 @@ if (!isset($_GET['del_msg'])) {
             );
         }
     }
-    $message_content .= MessageManager::inbox_display();
+    $social_right_content .= MessageManager::inbox_display();
 }
 
-$tpl = new Template($nameTools);
+$tpl = new Template(null);
 
 if ($actions) {
-    $tpl->assign('actions', $actions);
+    $tpl->assign('actions', Display::toolbarAction('toolbar', [$actions]));
 }
 // Block Social Avatar
-// SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
-
-$tpl->assign('content_inbox', $message_content);
-$social_layout = $tpl->get_template('message/inbox.html.twig');
-$content = $tpl->fetch($social_layout);
-$tpl->assign('message', $show_message);
-$tpl->assign('content', $content);
-$tpl->display_one_col_template();
+SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
+if (api_get_setting('allow_social_tool') == 'true') {
+    $tpl->assign('social_menu_block', $social_menu_block);
+    $tpl->assign('social_right_content', $social_right_content);
+    $social_layout = $tpl->get_template('social/inbox.tpl');
+    $tpl->display($social_layout);
+} else {
+    $content = $social_right_content;
+    $tpl->assign('message', $show_message);
+    $tpl->assign('content', $content);
+    $tpl->display_one_col_template();
+}

@@ -673,7 +673,7 @@ switch ($action) {
     case 'get_sessions':
         $list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
         if ($list_type === 'simple') {
-            $count = SessionManager::get_sessions_admin(
+            $count = SessionManager::formatSessionsAdminForGrid(
                 ['where' => $whereCondition, 'extra' => $extra_fields],
                 true
             );
@@ -1556,7 +1556,7 @@ switch ($action) {
         $columns = $session_columns['simple_column_name'];
 
         if ($list_type == 'simple') {
-            $result = SessionManager::get_sessions_admin(
+            $result = SessionManager::formatSessionsAdminForGrid(
                 [
                     'where' => $whereCondition,
                     'order' => "$sidx $sord, s.name",

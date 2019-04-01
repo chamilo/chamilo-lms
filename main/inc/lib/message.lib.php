@@ -2762,13 +2762,11 @@ class MessageManager
      * @param int $messageId
      * @param int $userId
      *
-     * @throws \Doctrine\ORM\Query\QueryException
-     *
      * @return array
      */
     public static function countLikesAndDislikes($messageId, $userId)
     {
-        if (!api_get_configuration_value('social_enable_likes_messages')) {
+        if (!api_get_configuration_value('social_enable_messages_feedback')) {
             return [];
         }
 
@@ -2776,26 +2774,26 @@ class MessageManager
         $userId = (int) $userId;
 
         $em = Database::getManager();
+        $query = $em
+            ->createQuery('
+                SELECT SUM(l.liked) AS likes, SUM(l.disliked) AS dislikes FROM ChamiloCoreBundle:MessageFeedback l
+                WHERE l.message = :message
+            ')
+            ->setParameters(['message' => $messageId]);
 
-        $likesCount = $em
-            ->createQuery('SELECT COUNT(l) FROM ChamiloCoreBundle:MessageLikes l
-                WHERE l.liked = true AND l.message = :message')
-            ->setParameters(['message' => $messageId])
-            ->getSingleScalarResult();
-
-        $dislikesCount = $em
-            ->createQuery('SELECT COUNT(l) FROM ChamiloCoreBundle:MessageLikes l
-                WHERE l.liked = false AND l.message = :message')
-            ->setParameters(['message' => $messageId])
-            ->getSingleScalarResult();
+        try {
+            $counts = $query->getSingleResult();
+        } catch (Exception $e) {
+            $counts = ['likes' => 0, 'dislikes' => 0];
+        }
 
         $userLike = $em
-            ->getRepository('ChamiloCoreBundle:MessageLikes')
+            ->getRepository('ChamiloCoreBundle:MessageFeedback')
             ->findOneBy(['message' => $messageId, 'user' => $userId]);
 
         return [
-            'likes' => $likesCount,
-            'dislikes' => $dislikesCount,
+            'likes' => (int) $counts['likes'],
+            'dislikes' => (int) $counts['dislikes'],
             'user_liked' => $userLike ? $userLike->isLiked() : false,
             'user_disliked' => $userLike ? $userLike->isDisliked() : false,
         ];
@@ -2806,13 +2804,11 @@ class MessageManager
      * @param int $userId
      * @param int $groupId   Optional.
      *
-     * @throws \Doctrine\ORM\Query\QueryException
-     *
      * @return string
      */
     public static function getLikesButton($messageId, $userId, $groupId = 0)
     {
-        if (!api_get_configuration_value('social_enable_likes_messages')) {
+        if (!api_get_configuration_value('social_enable_messages_feedback')) {
             return '';
         }
 
@@ -2823,7 +2819,7 @@ class MessageManager
             Display::returnFontAwesomeIcon('thumbs-up', '', true)
                 .PHP_EOL.'<span>'.$countLikes['likes'].'</span>',
             [
-                'title' => get_lang('Like'),
+                'title' => get_lang('VoteLike'),
                 'class' => 'btn btn-default social-like '.($countLikes['user_liked'] ? 'disabled' : ''),
                 'data-status' => 'like',
                 'data-message' => $messageId,
@@ -2835,7 +2831,7 @@ class MessageManager
             Display::returnFontAwesomeIcon('thumbs-down', '', true)
             .PHP_EOL.'<span>'.$countLikes['dislikes'].'</span>',
             [
-                'title' => get_lang('Dislike'),
+                'title' => get_lang('VoteDislike'),
                 'class' => 'btn btn-default social-like '.($countLikes['user_disliked'] ? 'disabled' : ''),
                 'data-status' => 'dislike',
                 'data-message' => $messageId,

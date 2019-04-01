@@ -263,7 +263,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
         }
 
         return '<script>
-        $(document).ready(function() {
+        $(function() {
             var $inputFile = $(\'#'.$id.'\'),
                 $image = $(\'#'.$id.'_preview_image\'),
                 $input = $(\'[name="'.$id.'_crop_result"]\'),
@@ -348,15 +348,12 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                 $(".img-box").show();
                 $(".img-preview").hide();
                 
-                
-                $image.attr(\'src\', dataUrl).cropper(\'destroy\').off(\'load\', imageCropper);
+                image.attr(\'src\', dataUrl).cropper(\'destroy\').off(\'load\', imageCropper);
                 $imageSmall.attr(\'src\', dataUrl).cropper(\'destroy\').off(\'load\', imageCropper);
                 $imageLarge.attr(\'src\', dataUrl).cropper(\'destroy\').off(\'load\', imageCropper);
-                $(\'[name="' . $id . '_crop_image_base_64"]\').val(dataUrl);
+                $(\'[name="'.$id.'_crop_image_base_64"]\').val(dataUrl);
                 $cropButton.hide();
             });
-                    
-                    
         });
         </script>';
     }
@@ -401,6 +398,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
     {
         $name = $this->getName();
         $attributes = $this->getAttributes();
+        $size = $this->calculateSize();
 
         switch ($layout) {
             case FormValidator::LAYOUT_INLINE:
@@ -414,7 +412,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                 </div>';
                 break;
             case FormValidator::LAYOUT_HORIZONTAL:
-                if (isset($attributes['custom']) && $attributes['custom'] == true) {
+                if (isset($attributes['custom']) && $attributes['custom']) {
                     $template = '
                         <div class="input-file-container">  
                             {element}
@@ -449,12 +447,13 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                     ';
                 } else {
                     $template = '
-                    <div  id="file_' . $name . '" class="form-group {error_class}">
-                        <label {label-for} class="col-sm-3 control-label" >
+                    <div id="file_'.$name.'" class="form-group {error_class}">
+                        
+                        <label {label-for} class="col-sm-'.$size[0].' control-label" >
                             <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                             {label}
                         </label>
-                        <div class="col-sm-7">
+                         <div class="col-sm-'.$size[1].'">
                             {icon}
                             {element}
                             <!-- BEGIN label_2 -->
@@ -464,7 +463,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                                 <span class="help-inline help-block">{error}</span>
                             <!-- END error -->
                         </div>
-                        <div class="col-sm-2">
+                        <div class="col-sm-'.$size[2].'">
                             <!-- BEGIN label_3 -->
                                 {label_3}
                             <!-- END label_3 -->

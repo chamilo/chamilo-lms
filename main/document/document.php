@@ -222,6 +222,7 @@ switch ($action) {
     case 'delete_item':
         if ($isAllowedToEdit ||
             $groupMemberWithUploadRights ||
+            DocumentManager::isBasicCourseFolder($curdirpath, $sessionId) ||
             DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId) ||
             DocumentManager::is_my_shared_folder(api_get_user_id(), $moveTo, $sessionId)
         ) {
@@ -787,7 +788,7 @@ function confirmation (name) {
     }
 }
 
-$(document).ready(function() {
+$(function() {
     $(".convertAction").click(function() {
         var id = $(this).attr("data-documentId");
         var format = $(this).attr("data-formatType");
@@ -953,7 +954,7 @@ if (!empty($documentAndFolders)) {
 
 $htmlHeadXtra[] = '
     <script>
-        $(document).ready( function() {
+        $(function() {
             //Experimental changes to preview mp3, ogg files'
             .$jquery.'
         });
@@ -1799,7 +1800,6 @@ if ($isAllowedToEdit ||
         );
     }
 }
-require 'document_slideshow.inc.php';
 if (!isset($_GET['keyword']) && !$is_certificate_mode) {
     $actionsLeft .= Display::url(
         Display::return_icon('slideshow.png', get_lang('ViewSlideshow'), '', ICON_SIZE_MEDIUM),
@@ -1861,7 +1861,6 @@ if (!empty($documentAndFolders)) {
                 false,
                 $userIsSubscribed
             );
-
             $invisibility_span_open = ($is_visible == 0) ? '<span class="muted">' : '';
             $invisibility_span_close = ($is_visible == 0) ? '</span>' : '';
             $size = 1;
@@ -2192,7 +2191,7 @@ $ajaxURL = api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=get_document_quota&'
 
 if (count($documentAndFolders) > 1) {
     echo '<script>
-    $(document).ready(function() {
+    $(function() {
         $.ajax({
             url:"'.$ajaxURL.'",
             success:function(data){

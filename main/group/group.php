@@ -30,7 +30,7 @@ $sessionId = api_get_session_id();
 api_protect_course_script(true);
 
 $htmlHeadXtra[] = '<script>
-$(document).ready( function() {
+$(function() {
     var i;
 	for (i=0; i<$(".actions").length; i++) {
 		if ($(".actions:eq("+i+")").html()=="<table border=\"0\"></table>" || $(".actions:eq("+i+")").html()=="" || $(".actions:eq("+i+")").html()==null) {

@@ -597,25 +597,29 @@ class SkillRelUser extends Model
      *
      * @param int $userId    The user id
      * @param int $skillId   The skill id
-     * @param int $courseId  The course id
+     * @param int $courseId  Optional. The course id
      * @param int $sessionId Optional. The session id
      *
      * @return array The relation data. Otherwise return false
      */
-    public function getByUserAndSkill($userId, $skillId, $courseId, $sessionId = 0)
+    public function getByUserAndSkill($userId, $skillId, $courseId = 0, $sessionId = 0)
     {
-        $where = [
-            'user_id = ? AND skill_id = ? AND course_id = ? AND session_id = ?' => [
-                intval($userId),
-                intval($skillId),
-                intval($courseId),
-                $sessionId ? intval($sessionId) : null,
-            ],
-        ];
+        $sql = "SELECT * FROM {$this->table} WHERE user_id = %d AND skill_id = %d ";
 
-        return Database::select('*', $this->table, [
-            'where' => $where,
-        ], 'first');
+        if ($courseId > 0) {
+            $sql .= "AND course_id = %d ".api_get_session_condition($sessionId, true);
+        }
+
+        $sql = sprintf(
+            $sql,
+            $userId,
+            $skillId,
+            $courseId
+        );
+
+        $result = Database::query($sql);
+
+        return Database::fetch_assoc($result);
     }
 
     /**
@@ -835,10 +839,10 @@ class Skill extends Model
 
             $item = '';
             if ($showBadge) {
-                $item = $skill[$imageSize];
+                $item = '<div class="item">'.$skill[$imageSize].'</div>';
             }
 
-            $name = $skill['name'];
+            $name = '<div class="caption">'.$skill['name'].'</div>';
             if (!empty($skill['short_code'])) {
                 $name = $skill['short_code'];
             }
@@ -1384,7 +1388,6 @@ class Skill extends Model
     public function getUserSkillsTable($userId, $courseId = 0, $sessionId = 0, $addTitle = true)
     {
         $skills = $this->getUserSkills($userId, true, $courseId, $sessionId);
-
         $courseTempList = [];
         $tableRows = [];
         $skillParents = [];
@@ -1414,6 +1417,7 @@ class Skill extends Model
                 'skill_badge' => $resultData['img_mini'],
                 'skill_name' => self::translateName($resultData['name']),
                 'short_code' => $resultData['short_code'],
+                'skill_url' => $resultData['url'],
                 'achieved_at' => api_get_local_time($resultData['acquired_skill_at']),
                 'course_image' => '',
                 'course_name' => '',

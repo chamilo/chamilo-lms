@@ -436,7 +436,7 @@ class Tracking
                         $score = $row['myscore'];
                         $time_for_total = $row['mytime'];
 
-                        if (api_get_configuration_value('lp_minimum_time')) {
+                        if (self::minimunTimeAvailable($session_id, $course_id)) {
                             $timeCourse = self::getCalculateTime($user_id, $course_id, $session_id);
                             Session::write('trackTimeCourse', $timeCourse);
                             $lp_time = $timeCourse[TOOL_LEARNPATH];
@@ -1667,7 +1667,7 @@ class Tracking
             return 0;
         }
 
-        if (api_get_configuration_value('lp_minimum_time')) {
+        if (self::minimunTimeAvailable($session_id, $courseId)) {
             $courseTime = self::getCalculateTime($user_id, $courseId, $session_id);
             $time = isset($courseTime['total_time']) ? $courseTime['total_time'] : 0;
 
@@ -1845,7 +1845,7 @@ class Tracking
         $courseId = (int) $courseId;
         $session_id = (int) $session_id;
 
-        if (api_get_configuration_value('lp_minimum_time')) {
+        if (self::minimunTimeAvailable($session_id, $courseId)) {
             $tbl_track_e_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
             $sql = 'SELECT access_date
                     FROM '.$tbl_track_e_access.'
@@ -1917,7 +1917,7 @@ class Tracking
         $session_id = (int) $session_id;
         $courseId = $courseInfo['real_id'];
 
-        if (api_get_configuration_value('lp_minimum_time')) {
+        if (self::minimunTimeAvailable($session_id, $courseId)) {
             // Show the last date on which the user acceed the session when it was active
             $where_condition = '';
             $userInfo = api_get_user_info($student_id);
@@ -2877,10 +2877,6 @@ class Tracking
                             $condition_user1 AND
                             session_id = $session_id
                         GROUP BY lp_id, user_id";
-                if ($debug) {
-                    echo 'get LP results';
-                    var_dump($sql);
-                }
 
                 $rs_last_lp_view_id = Database::query($sql);
                 $global_result = 0;
@@ -3533,7 +3529,7 @@ class Tracking
             }
         }
 
-        // Then, courses where $coach_id is coach of the session    //
+        // Then, courses where $coach_id is coach of the session
         $sql = 'SELECT session_course_user.user_id
                 FROM '.$tbl_session_course_user.' as session_course_user
                 INNER JOIN '.$tbl_session_user.' sru
@@ -3590,7 +3586,7 @@ class Tracking
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
         $students = [];
-        // At first, courses where $coach_id is coach of the course //
+        // At first, courses where $coach_id is coach of the course
         $sql = 'SELECT c_id FROM '.$tbl_session_course_user.'
                 WHERE session_id="'.$id_session.'" AND user_id='.$coach_id.' AND status=2';
         $result = Database::query($sql);
@@ -3644,7 +3640,7 @@ class Tracking
         $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
-        // At first, courses where $coach_id is coach of the course //
+        // At first, courses where $coach_id is coach of the course
         $sql = 'SELECT 1 FROM '.$tbl_session_course_user.'
                 WHERE user_id='.$coach_id.' AND status=2';
         $result = Database::query($sql);
@@ -3772,7 +3768,7 @@ class Tracking
     /**
      * Get sessions coached by user.
      *
-     * @param $coach_id
+     * @param        $coach_id
      * @param int    $start
      * @param int    $limit
      * @param bool   $getCount
@@ -3876,7 +3872,7 @@ class Tracking
 
         $sessions = [];
         while ($row = Database::fetch_array($rs)) {
-            if ($row['access_start_date'] == '0000-00-00 00:00:00') {
+            if ($row['access_start_date'] === '0000-00-00 00:00:00') {
                 $row['access_start_date'] = null;
             }
 
@@ -4101,7 +4097,6 @@ class Tracking
             return $row['count'];
         }
 
-        require_once api_get_path(SYS_CODE_PATH).'forum/forumconfig.inc.php';
         require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
         $courseInfo = api_get_course_info($courseCode);
@@ -5592,7 +5587,7 @@ class Tracking
             $html .= '<div class="table-responsive">';
             $html .= '<table class="table table-striped table-hover">';
 
-            //Course details
+            // Course details
             $html .= '
                 <thead>
                 <tr>
@@ -5968,8 +5963,7 @@ class Tracking
      */
     public static function generate_session_exercise_graph($names, $my_results, $average)
     {
-        $cdnChartJs = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js';
-        $html .= Display::tag('script', '', ['src' => $cdnChartJs]);
+        $html = api_get_js('chartjs/Chart.js');
         $canvas = Display::tag('canvas', '', ['id' => 'session_graph_chart']);
         $html .= Display::tag('div', $canvas, ['style' => 'width:100%']);
         $jsStr = " var data = {
@@ -6046,7 +6040,7 @@ class Tracking
             }
         }
 
-        //Getting best result
+        // Getting best result
         rsort($my_exercise_result_array);
         $my_exercise_result = 0;
         if (isset($my_exercise_result_array[0])) {
@@ -6087,7 +6081,7 @@ class Tracking
             }
         }
 
-        //Fix to remove the data of the user with my data
+        // Fix to remove the data of the user with my data
         for ($i = 0; $i <= count($my_final_array); $i++) {
             if (!empty($my_final_array[$i])) {
                 $my_final_array[$i] = $final_array[$i] + 1; //Add my result
@@ -6772,7 +6766,8 @@ class Tracking
                     user_id = $userId AND
                     c_id = $courseId AND                      
                     session_id = $sessionId AND      
-                    login_as = 0";
+                    login_as = 0 AND current_id <> 0";
+
         $res = Database::query($sql);
         $reg = [];
         while ($row = Database::fetch_assoc($res)) {
@@ -6836,23 +6831,13 @@ class Tracking
                             break;
                         case TOOL_LEARNPATH:
                             if ($item['tool_id'] != $beforeItem['tool_id']) {
-                                continue;
+                                break;
                             }
                             if (!isset($lpTime[$item['tool_id']])) {
                                 $lpTime[$item['tool_id']] = 0;
                             }
                             $lpTime[$item['tool_id']] += $partialTime;
-                            if ($item['tool_id'] == 51) {
-                                //$counter++;
-                                //var_dump($beforeItem, $item);
-                                /*var_dump(
-                                    api_get_utc_datetime($item['date_reg']),
-                                    api_get_utc_datetime($beforeItem['date_reg'])
-                                );*/
-                                /*var_dump(
-                                    $counter.'-'.$beforeItem['id'].'-'.$item['id'].'-'.$partialTime.'-'.api_time_to_hms($lpTime[$item['tool_id']])
-                                );*/
-                            }
+
                             break;
                         case TOOL_QUIZ:
                             if (!isset($lpTime[$item['action_details']])) {
@@ -7673,7 +7658,7 @@ class TrackingCourseLog
             $user_ids = array_map('intval', $user_ids);
             $condition_user = " WHERE user.user_id IN (".implode(',', $user_ids).") ";
         } else {
-            $user_ids = intval($user_ids);
+            $user_ids = (int) $user_ids;
             $condition_user = " WHERE user.user_id = $user_ids ";
         }
 
@@ -7711,9 +7696,9 @@ class TrackingCourseLog
             $direction = 'ASC';
         }
 
-        $column = intval($column);
-        $from = intval($from);
-        $number_of_items = intval($number_of_items);
+        $column = (int) $column;
+        $from = (int) $from;
+        $number_of_items = (int) $number_of_items;
 
         $sql .= " ORDER BY col$column $direction ";
         $sql .= " LIMIT $from,$number_of_items";

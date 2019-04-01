@@ -126,7 +126,7 @@ var jQueryFrameReadyConfigPath = \''.api_get_jquery_web_path().'\';
 //$htmlHeadXtra[] = api_get_asset('qtip2/jquery.qtip.min.js');
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
 $htmlHeadXtra[] = '<script>
-$(document).ready(function() {    
+$(function() {   
     $("div#log_content_cleaner").bind("click", function() {
         $("div#log_content").empty();
     });
@@ -137,7 +137,7 @@ var chamilo_xajax_handler = window.oxajax;
 $allowLpItemTip = api_get_configuration_value('hide_accessibility_label_on_lp_item') === false;
 if ($allowLpItemTip) {
     $htmlHeadXtra[] = '<script>
-    $(document).ready(function() {    
+    $(function() {   
          $(".scorm_item_normal").qtip({
             content: {
                 text: function(event, api) {
@@ -544,7 +544,7 @@ if ($gamificationMode == 1) {
 $template->assign('lp_author', $lp->get_author());
 
 $lpMinTime = '';
-if (api_get_configuration_value('lp_minimum_time')) {
+if (Tracking::minimunTimeAvailable(api_get_session_id(), api_get_course_int_id())) {
     // Calulate minimum and accumulated time
     $timeLp = $_SESSION['oLP']->getAccumulateWorkTime();
     $timeTotalCourse = $_SESSION['oLP']->getAccumulateWorkTimeTotalCourse();
@@ -583,7 +583,6 @@ if (api_get_configuration_value('lp_minimum_time')) {
     $template->assign('hour', $hour);
     $template->assign('minute', date('i', $lpTime));
     $template->assign('second', date('s', $lpTime));
-
     $template->assign('hour_min', api_time_to_hms($timeLp * 60, '</div><div class="divider">:</div><div>'));
 }
 

@@ -2072,11 +2072,17 @@ class UserGroup extends Model
         $tbl_group = $this->table;
         $user_id = (int) $user_id;
 
-        if ($relation_type == 0) {
+        if ($relationType == 0) {
             $relationCondition = '';
         } else {
-            $relation_type = (int) $relation_type;
-            $relationCondition = " AND gu.relation_type = $relation_type ";
+            if (is_array($relationType)) {
+                $relationType = array_map('intval', $relationType);
+                $relationType = implode("','", $relationType);
+                $relationCondition = " AND ( gu.relation_type IN ('$relationType')) ";
+            } else {
+                $relationType = (int) $relationType;
+                $relationCondition = " AND gu.relation_type = $relationType ";
+            }
         }
 
         $sql = "SELECT
@@ -2094,6 +2100,7 @@ class UserGroup extends Model
                     $relationCondition
                 ORDER BY created_at DESC ";
         $result = Database::query($sql);
+
         $array = [];
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {

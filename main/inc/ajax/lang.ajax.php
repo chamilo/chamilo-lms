@@ -33,7 +33,7 @@ switch ($action) {
         $languageInfo = api_get_language_info($languageId);
 
         echo '
-            $(document).ready(function() {
+            $(function() {
                  '.$hideAll.'                 
                 var defaultLanguageFromUser = "'.$languageInfo['isocode'].'";                                
                 $("span:lang('.$languageInfo['isocode'].')").filter(

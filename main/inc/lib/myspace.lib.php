@@ -1481,7 +1481,7 @@ class MySpace
             'order' => " $columnName $direction",
             'limit' => " $from,$numberItems",
         ];
-        $sessions = SessionManager::get_sessions_admin($options);
+        $sessions = SessionManager::formatSessionsAdminForGrid($options);
         $list = [];
         foreach ($sessions as $session) {
             $list[] = [
@@ -2359,7 +2359,7 @@ class MySpace
      *
      * @author Julio Montoya Armas
      */
-    public function check_all_usernames($users, $course_list, $id_session)
+    public static function check_all_usernames($users, $course_list, $id_session)
     {
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $usernames = [];
@@ -2409,7 +2409,7 @@ class MySpace
      *
      * @author Julio Montoya Armas
      */
-    public function get_user_creator($users)
+    public static function get_user_creator($users)
     {
         $errors = [];
         foreach ($users as $index => $user) {
@@ -2437,7 +2437,7 @@ class MySpace
      *
      * @param array $users list of users
      */
-    public function validate_data($users, $id_session = null)
+    public static function validate_data($users, $id_session = null)
     {
         $errors = [];
         $new_users = [];
@@ -2475,7 +2475,7 @@ class MySpace
     /**
      * Adds missing user-information (which isn't required, like password, etc).
      */
-    public function complete_missing_data($user)
+    public static function complete_missing_data($user)
     {
         // 1. Generate a password if it is necessary.
         if (!isset($user['Password']) || strlen($user['Password']) == 0) {
@@ -2488,14 +2488,14 @@ class MySpace
     /**
      * Saves imported data.
      */
-    public function save_data($users, $course_list, $id_session)
+    public static function save_data($users, $course_list, $id_session)
     {
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
-        $id_session = intval($id_session);
+        $id_session = (int) $id_session;
         $sendMail = $_POST['sendMail'] ? 1 : 0;
 
         // Adding users to the platform.
@@ -2612,7 +2612,7 @@ class MySpace
                     $addedto = get_lang('UserNotAdded');
                 }
 
-                $registered_users .= UserManager::getUserProfileLink($userInfo)." - ".$addedto.'<br />';
+                $registered_users .= UserManager::getUserProfileLink($userInfo).' - '.$addedto.'<br />';
             }
         } else {
             $i = 0;
@@ -2632,10 +2632,10 @@ class MySpace
                     $addedto = get_lang('UserNotAdded');
                 }
                 $registered_users .= "<a href=\"../user/userInfo.php?uInfo=".$user['id']."\">".
-                    api_get_person_name($user['FirstName'], $user['LastName'])."</a> - ".$addedto.'<br />';
+                    Security::remove_XSS($userInfo['complete_user_name'])."</a> - ".$addedto.'<br />';
             }
         }
-        Display::addFlash(Display::return_message($registered_users));
+        Display::addFlash(Display::return_message($registered_users, 'normal', false));
         header('Location: course.php?id_session='.$id_session);
         exit;
     }
@@ -2661,76 +2661,31 @@ class MySpace
     }
 
     /**
-     * XML-parser: the handler at the beginning of element.
-     */
-    public function element_start($parser, $data)
-    {
-        $data = api_utf8_decode($data);
-        global $user;
-        global $current_tag;
-        switch ($data) {
-            case 'Contact':
-                $user = [];
-                break;
-            default:
-                $current_tag = $data;
-        }
-    }
-
-    /**
-     * XML-parser: the handler at the end of element.
-     */
-    public function element_end($parser, $data)
-    {
-        $data = api_utf8_decode($data);
-        global $user;
-        global $users;
-        global $current_value;
-        global $purification_option_for_usernames;
-        $user[$data] = $current_value;
-        switch ($data) {
-            case 'Contact':
-                $user['UserName'] = UserManager::purify_username($user['UserName'], $purification_option_for_usernames);
-                $users[] = $user;
-                break;
-            default:
-                $user[$data] = $current_value;
-                break;
-        }
-    }
-
-    /**
-     * XML-parser: the handler for character data.
-     */
-    public function character_data($parser, $data)
-    {
-        $data = trim(api_utf8_decode($data));
-        global $current_value;
-        $current_value = $data;
-    }
-
-    /**
      * Reads XML-file.
      *
      * @param string $file Path to the XML-file
      *
      * @return array All userinformation read from the file
      */
-    public function parse_xml_data($file)
+    public static function parse_xml_data($file)
     {
-        global $current_tag;
-        global $current_value;
-        global $user;
-        global $users;
-        $users = [];
-        $parser = xml_parser_create('UTF-8');
-        xml_set_element_handler($parser, ['MySpace', 'element_start'], ['MySpace', 'element_end']);
-        xml_set_character_data_handler($parser, "character_data");
-        xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
-        xml_parse($parser, api_utf8_encode_xml(file_get_contents($file)));
-        xml_parser_free($parser);
+        $crawler = new \Symfony\Component\DomCrawler\Crawler();
+        $crawler->addXmlContent(file_get_contents($file));
+        $crawler = $crawler->filter('Contacts > Contact ');
+        $array = [];
+        foreach ($crawler as $domElement) {
+            $row = [];
+            foreach ($domElement->childNodes as $node) {
+                if ($node->nodeName != '#text') {
+                    $row[$node->nodeName] = $node->nodeValue;
+                }
+            }
+            if (!empty($row)) {
+                $array[] = $row;
+            }
+        }
 
-        return $users;
+        return $array;
     }
 
     /**

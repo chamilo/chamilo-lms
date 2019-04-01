@@ -915,8 +915,9 @@ EOT;
      * @param string $label
      * @param array  $attributes
      *
-     * @throws Exception            if the file doesn't have an id
-     * @throws HTML_QuickForm_Error
+     * @throws Exception if the file doesn't have an id
+     *
+     * @return HTML_QuickForm_file
      */
     public function addFile($name, $label, $attributes = [])
     {
@@ -948,6 +949,8 @@ EOT;
         } catch (HTML_Quick | Form_Error $e) {
             var_dump($e->getMessage());
         }
+
+        return $element;
     }
 
     /**
@@ -1629,7 +1632,7 @@ EOT;
             $this->addHtml('</div>');
 
             $this->addHtml("<script>            
-            $(document).on('ready', function() {
+            $(function() {
                 var defaultValue = '$defaultId';
                 $('#$typeNoDots').val(defaultValue);
                 $('#$typeNoDots').selectpicker('render');

@@ -482,7 +482,7 @@ $form->addElement(
         Display::url(
             get_lang('ExampleCSVFile'),
             api_get_path(WEB_CODE_PATH).'admin/example_session.csv',
-            ['target' => '_blank']
+            ['target' => '_blank', 'download' => null]
         ),
     ],
     'CSV',
@@ -496,7 +496,7 @@ $form->addElement(
         Display::url(
             get_lang('ExampleXMLFile'),
             api_get_path(WEB_CODE_PATH).'admin/example_session.xml',
-            ['target' => '_blank']
+            ['target' => '_blank', 'download' => null]
         ),
     ],
     'XML',

@@ -1124,5 +1124,6 @@ class nusoap_server extends nusoap_base
 /**
  * Backward compatibility
  */
-class soap_server extends nusoap_server {
+class soap_server extends nusoap_server
+{
 }

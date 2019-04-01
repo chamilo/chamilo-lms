@@ -14,7 +14,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script();
 $allow = api_is_allowed_to_edit(null, true);
-$lpId = !empty($_GET['lp_id']) ? intval($_GET['lp_id']) : 0;
+$lpId = !empty($_GET['lp_id']) ? (int) $_GET['lp_id'] : 0;
 
 if (!$allow || empty($lpId)) {
     api_not_allowed(true);
@@ -44,8 +44,8 @@ $form = new FormValidator(
     api_get_self().'?'.api_get_cidreq().'&lp_id='.$lpId,
     '',
     [
-        'id' => "upload_form",
-        'enctype' => "multipart/form-data",
+        'id' => 'upload_form',
+        'enctype' => 'multipart/form-data',
     ]
 );
 $form->addHeader(get_lang('UpdateFile'));

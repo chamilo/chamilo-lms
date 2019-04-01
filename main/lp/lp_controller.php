@@ -62,7 +62,7 @@ $htmlHeadXtra[] = '
 
     // uncomment for some debug display utility
     /*
-    $(document).ready(function() {
+    $(function() {
         buildLPtree_debug($("#lp_item_list"), 0, 0);
         alert(lp_id_list+"\n\n"+lptree_debug);
     });
@@ -214,7 +214,8 @@ if (!empty($lpObject)) {
     if ($debug) {
         error_log(' SESSION[lpobject] is defined');
     }
-    $oLP = unserialize($lpObject);
+    /** @var learnpath $oLP */
+    $oLP = UnserializeApi::unserialize('lp', $lpObject);
     if (isset($oLP) && is_object($oLP)) {
         if ($debug) {
             error_log(' oLP is object');
@@ -260,7 +261,7 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
         if ($debug > 0) {
             error_log(' lp_id is defined');
         }
-        // Select the lp in the database and check which type it is (scorm/dokeos/aicc) to generate the
+        // Select the lp in the database and check which type it is (scorm/chamilo/aicc) to generate the
         // right object.
         if (!empty($_REQUEST['lp_id'])) {
             $lp_id = $_REQUEST['lp_id'];

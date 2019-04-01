@@ -6273,19 +6273,6 @@ class Exercise
                     );
                     $isVisible = false;
                 }
-            } else {
-                $isLimitReached = ExerciseLib::isQuestionsLimitPerDayReached(
-                    api_get_user_id(),
-                    $this->selectNbrQuestions(),
-                    api_get_course_int_id(),
-                    api_get_session_id()
-                );
-
-                if ($isLimitReached) {
-                    $maxQuestionsAnswered = (int) api_get_course_setting('quiz_question_limit_per_day');
-                    $message = sprintf(get_lang('QuizQuestionsLimitPerDayXReached'), $maxQuestionsAnswered);
-                    $isVisible = false;
-                }
             }
         }
 
@@ -7824,7 +7811,7 @@ class Exercise
     /**
      * @param string $class
      * @param string $scoreLabel
-     * @param array $result
+     * @param string $result
      * @param array
      *
      * @return string

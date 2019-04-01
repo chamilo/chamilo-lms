@@ -27,7 +27,7 @@ $defaults['course_id'] = $courseId;
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
 $htmlHeadXtra[] = '<script>
-$(document).ready( function() {
+$(function() {
     $("#exercise_course_id").on("change", function(e) {        
         var data = $(this).select2(\'data\');
         var option = data[0];
@@ -35,7 +35,7 @@ $(document).ready( function() {
         var value = option.id;        
         var selectedDate = $("#start_date").datepicker({ dateFormat: \'dd,MM,yyyy\' }).val();        
         window.location.replace("'.$currentUrl.'?start_date="+selectedDate+"&course_id="+value);
-    });	
+    });
 });
 </script>';
 

@@ -84,7 +84,7 @@ $xajax->processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = "
 <script>
-$(document).ready( function() {
+$(function() {
     accessSwitcher(0);
 });
 

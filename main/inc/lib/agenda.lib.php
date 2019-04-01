@@ -113,7 +113,7 @@ class Agenda
         $agendaColors = array_merge(
             [
                 'platform' => 'red', //red
-                'course' => '#43D29E', //green
+                'course' => '#458B00', //green
                 'group' => '#A0522D', //siena
                 'session' => '#00496D', // kind of green
                 'other_session' => '#999', // kind of green
@@ -2705,10 +2705,14 @@ class Agenda
      */
     public function getAttachment($attachmentId, $eventId, $courseInfo)
     {
+        if (empty($courseInfo) || empty($attachmentId) || empty($eventId)) {
+            return [];
+        }
+
         $tableAttachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
-        $courseId = intval($courseInfo['real_id']);
-        $eventId = intval($eventId);
-        $attachmentId = intval($attachmentId);
+        $courseId = (int) $courseInfo['real_id'];
+        $eventId = (int) $eventId;
+        $attachmentId = (int) $attachmentId;
 
         $row = [];
         $sql = "SELECT id, path, filename, comment
@@ -2743,7 +2747,7 @@ class Agenda
         $courseInfo
     ) {
         $agenda_table_attachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
-        $eventId = intval($eventId);
+        $eventId = (int) $eventId;
 
         // Storing the attachments
         $upload_ok = false;
@@ -2880,6 +2884,8 @@ class Agenda
     public function getAllRepeatEvents($eventId)
     {
         $events = [];
+        $eventId = (int) $eventId;
+
         switch ($this->type) {
             case 'personal':
                 break;
@@ -4055,30 +4061,6 @@ class Agenda
         }
 
         return $items;
-    }
-
-    /**
-     * This function retrieves one personal agenda item returns it.
-     *
-     * @param int $id The agenda item ID
-     *
-     * @return array The results of the database query, or null if not found
-     */
-    public static function get_personal_agenda_item($id)
-    {
-        $table = Database::get_main_table(TABLE_PERSONAL_AGENDA);
-        $id = intval($id);
-        // make sure events of the personal agenda can only be seen by the user himself
-        $user = api_get_user_id();
-        $sql = " SELECT * FROM ".$table." WHERE id=".$id." AND user = ".$user;
-        $result = Database::query($sql);
-        if (Database::num_rows($result) == 1) {
-            $item = Database::fetch_array($result);
-        } else {
-            $item = null;
-        }
-
-        return $item;
     }
 
     /**

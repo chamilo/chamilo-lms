@@ -13,9 +13,6 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
 
 $this_section = SECTION_TRACKING;
-
-api_block_anonymous_users();
-
 $export_csv = false;
 if (isset($_GET['export']) && $_GET['export'] == 'csv') {
     $export_csv = true;
@@ -70,6 +67,13 @@ if (api_is_platform_admin(true, true)) {
         Display::return_icon('clock.png', get_lang('TeacherTimeReportBySession'), [], ICON_SIZE_MEDIUM),
         api_get_path(WEB_CODE_PATH).'admin/teachers_time_by_session_report.php'
     );
+
+    if (!api_is_session_admin()) {
+        $menu_items[] = Display::url(
+            Display::return_icon('1day.png', get_lang('SessionsPlanCalendar'), [], ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH)."calendar/planification.php"
+        );
+    }
 
     $actionsLeft = '';
     $nb_menu_items = count($menu_items);

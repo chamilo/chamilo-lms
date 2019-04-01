@@ -21,10 +21,14 @@ $idChecked = isset($_REQUEST['idChecked']) ? $_REQUEST['idChecked'] : null;
 $list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
 
 if ($action == 'delete') {
-    $response = SessionManager::delete($idChecked);
-
-    if ($response) {
-        Display::addFlash(Display::return_message(get_lang('Deleted')));
+    $sessionInfo = api_get_session_info($idChecked);
+    if ($sessionInfo) {
+        $response = SessionManager::delete($idChecked);
+        if ($response) {
+            Display::addFlash(
+                Display::return_message(get_lang('Deleted').': '.Security::remove_XSS($sessionInfo['name']))
+            );
+        }
     }
     header('Location: session_list.php');
     exit();

@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\TrackEExercises;
 use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
@@ -210,7 +211,7 @@ class ExerciseLib
 
                 $form->addHtml('<div id="'.'hide_description_'.$questionId.'_options" style="display: none;">');
                 $form->addHtmlEditor(
-                    "choice[".$questionId."]",
+                    "choice[$questionId]",
                     null,
                     false,
                     false,
@@ -295,7 +296,7 @@ class ExerciseLib
                         RadioValidator(question_id, answer_id);
                     }
                     
-                    $(document).ready(function() {
+                    $(function() {
                         var ShowAlert = '';
                         var typeRadioB = '';
                         var question_id = $('input[name=question_id]').val();
@@ -1259,7 +1260,7 @@ HTML;
                                 if (!$freeze) {
                                     $s .= "
                                         <script>
-                                            $(document).on('ready', function() {
+                                            $(function() {
                                                 jsPlumb.ready(function() {
                                                     jsPlumb.connect({
                                                         source: 'window_$windowId',
@@ -3043,7 +3044,7 @@ HOTSPOT;
             spanTag.addClass(optionClass);
         }
         
-        $(document).ready( function() {
+        $(function() {
             // Loading values
             $('.exercise_mark_select').on('loaded.bs.select', function() {
                 updateSelect($(this));
@@ -4740,6 +4741,17 @@ EOT;
                     true
                 );
             } else {
+                $pluginEvaluation = QuestionOptionsEvaluationPlugin::create();
+
+                if ('true' === $pluginEvaluation->get(QuestionOptionsEvaluationPlugin::SETTING_ENABLE)) {
+                    $formula = $pluginEvaluation->getFormulaForExercise($objExercise->selectId());
+
+                    if (!empty($formula)) {
+                        $total_score = $pluginEvaluation->getResultWithFormula($exeId, $formula);
+                        $total_weight = $pluginEvaluation->getMaxScore();
+                    }
+                }
+
                 $totalScoreText .= self::getTotalScoreRibbon(
                     $objExercise,
                     $total_score,
@@ -4815,10 +4827,17 @@ EOT;
                         $learnpath_item_id,
                         $learnpath_item_view_id,
                         $exercise_stat_info['exe_duration'],
-                        $question_list,
-                        '',
-                        []
+                        $question_list
                     );
+
+                    $allowStats = api_get_configuration_value('allow_gradebook_stats');
+                    if ($allowStats) {
+                        $objExercise->generateStats(
+                            $objExercise->selectId(),
+                            api_get_course_info(),
+                            api_get_session_id()
+                        );
+                    }
                 }
             }
 
@@ -5060,8 +5079,7 @@ EOT;
             $ribbon .= '<div class="total">';
         }
         $ribbon .= '<h3>'.get_lang('YourTotalScore').":&nbsp;";
-        $score = self::show_score($score, $weight, false, true);
-        $ribbon .= $score['html'];
+        $ribbon .= self::show_score($score, $weight, false, true);
         $ribbon .= '</h3>';
         $ribbon .= '</div>';
         if ($checkPassPercentage) {
@@ -5284,12 +5302,11 @@ EOT;
                 SELECT COUNT(ea) FROM ChamiloCoreBundle:TrackEAttempt ea
                 WHERE ea.userId = :user AND ea.cId = :course AND ea.sessionId = :session
                     AND ea.tms > :time
-                GROUP BY ea.questionId
             ')
             ->setParameters(['user' => $userId, 'course' => $courseId, 'session' => $sessionId, 'time' => $time])
-            ->getResult();
+            ->getSingleScalarResult();
 
-        return count($result);
+        return $result;
     }
 
     /**
@@ -5298,8 +5315,9 @@ EOT;
      * @param int $courseId
      * @param int $sessionId
      *
-     * @return bool
      * @throws \Doctrine\ORM\Query\QueryException
+     *
+     * @return bool
      */
     public static function isQuestionsLimitPerDayReached($userId, $numberOfQuestions, $courseId, $sessionId)
     {

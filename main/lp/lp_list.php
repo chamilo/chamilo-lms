@@ -155,7 +155,7 @@ if ($filteredCategoryId) {
 $test_mode = api_get_setting('server_type');
 $showBlockedPrerequisite = api_get_configuration_value('show_prerequisite_as_blocked');
 $allowLpChamiloExport = api_get_configuration_value('allow_lp_chamilo_export');
-$allowMinTime = api_get_configuration_value('lp_minimum_time');
+$allowMinTime = Tracking::minimunTimeAvailable(api_get_session_id(), api_get_course_int_id());
 $user = api_get_user_entity($userId);
 $ending = true;
 
@@ -405,7 +405,6 @@ foreach ($categories as $item) {
             $dsp_time = '';
             $linkMinTime = '';
             if ($allowMinTime) {
-                // Time info
                 // Minimum time (in minutes) to pass the learning path
                 $accumulateWorkTime = learnpath::getAccumulateWorkTimePrerequisite($id, api_get_course_int_id());
                 if ($accumulateWorkTime > 0) {
@@ -469,7 +468,7 @@ foreach ($categories as $item) {
             $actionUpdateScormFile = '';
             $actionExportToCourseBuild = '';
             // Only for "Chamilo" packages
-            $allowExportCourseFormat = $allowLpChamiloExport && $details['lp_maker'] == 'Chamilo';
+            $allowExportCourseFormat = $allowLpChamiloExport && $details['lp_maker'] === 'Chamilo';
 
             if ($is_allowed_to_edit) {
                 // EDIT LP

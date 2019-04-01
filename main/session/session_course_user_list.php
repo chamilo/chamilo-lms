@@ -64,17 +64,11 @@ if (!list($session_name, $course_title) = Database::fetch_row($result)) {
 switch ($action) {
     case 'delete':
         if (is_array($idChecked) && count($idChecked) > 0) {
-            array_map('intval', $idChecked);
-            $idChecked = implode(',', $idChecked);
-        }
-        if (!empty($idChecked)) {
-            $sql = "DELETE FROM $tbl_session_rel_course_rel_user
-                    WHERE session_id='$id_session' AND c_id='".$courseId."' AND user_id IN($idChecked)";
-            $result = Database::query($sql);
-            $nbr_affected_rows = Database::affected_rows($result);
-            $sql = "UPDATE $tbl_session_rel_course SET nbr_users=nbr_users-$nbr_affected_rows
-                    WHERE session_id='$id_session' AND c_id='".$courseId."'";
-            Database::query($sql);
+            foreach ($idChecked as $userId) {
+                SessionManager::unSubscribeUserFromCourseSession($userId, $courseId, $id_session);
+            }
+        } else {
+            SessionManager::unSubscribeUserFromCourseSession($idChecked, $courseId, $id_session);
         }
         header('Location: '.api_get_self()
             .'?id_session='.$id_session.'&course_code='.urlencode($course_code).'&sort='.$sort);

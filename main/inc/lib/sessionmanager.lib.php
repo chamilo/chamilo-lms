@@ -728,35 +728,6 @@ class SessionManager
     }
 
     /**
-     *  Get total of records for progress of learning paths in the given session.
-     *
-     *  @param int session id
-     *
-     *  @return int
-     */
-    public static function get_count_session_lp_progress($sessionId = 0)
-    {
-        $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-        $tbl_lp_view = Database::get_course_table(TABLE_LP_VIEW);
-        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-
-        $sessionId = intval($sessionId);
-
-        $sql = "SELECT  count(*) as total_rows
-                FROM $tbl_lp_view v
-                INNER JOIN $tbl_lp l ON l.id = v.lp_id
-                INNER JOIN $tbl_user u ON u.user_id = v.user_id
-                INNER JOIN $tbl_course c
-                WHERE v.session_id = ".$sessionId;
-        $result_rows = Database::query($sql);
-        $row = Database::fetch_array($result_rows);
-        $num = $row['total_rows'];
-
-        return $num;
-    }
-
-    /**
      * Gets the progress of learning paths in the given session.
      *
      * @param int    $sessionId
@@ -777,8 +748,6 @@ class SessionManager
         //escaping vars
         $sessionId = $sessionId == 'T' ? 'T' : intval($sessionId);
         $courseId = intval($courseId);
-        $date_from = Database::escape_string($date_from);
-        $date_to = Database::escape_string($date_to);
 
         //tables
         $session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -786,18 +755,6 @@ class SessionManager
         $tbl_course_lp_view = Database::get_course_table(TABLE_LP_VIEW);
 
         $course = api_get_course_info_by_id($courseId);
-
-        //getting all the students of the course
-        //we are not using this because it only returns user ids
-        /* if (empty($sessionId)
-          {
-          // Registered students in a course outside session.
-          $users = CourseManager::get_student_list_from_course_code($course_code);
-          } else {
-          // Registered students in session.
-          $users = CourseManager::get_student_list_from_course_code($course_code, true, $sessionId);
-          } */
-
         $sessionCond = 'and session_id = %s';
         if ($sessionId == 'T') {
             $sessionCond = '';
@@ -2136,7 +2093,7 @@ class SessionManager
         $courseInfo,
         $status = null
     ) {
-        $sessionId = intval($sessionId);
+        $sessionId = (int) $sessionId;
         $courseId = $courseInfo['real_id'];
 
         if (empty($sessionId) || empty($courseId)) {
@@ -2145,7 +2102,7 @@ class SessionManager
 
         $statusCondition = null;
         if (isset($status) && !is_null($status)) {
-            $status = intval($status);
+            $status = (int) $status;
             $statusCondition = " AND status = $status";
         }
 
@@ -2526,7 +2483,7 @@ class SessionManager
         $removeExistingCoursesWithUsers = true,
         $copyEvaluation = false
     ) {
-        $sessionId = intval($sessionId);
+        $sessionId = (int) $sessionId;
 
         if (empty($sessionId) || empty($courseList)) {
             return false;
@@ -2796,7 +2753,6 @@ class SessionManager
 
         // Get course code
         $course_code = CourseManager::get_course_code_from_course_id($course_id);
-        $course_id = intval($course_id);
 
         if (empty($course_code)) {
             return false;
@@ -2944,6 +2900,8 @@ class SessionManager
     {
         $table = Database::get_main_table(TABLE_MAIN_SESSION);
         $name = Database::escape_string(trim($name));
+        $sessionId = (int) $sessionId;
+
         if (empty($name)) {
             return false;
         }
@@ -3295,7 +3253,7 @@ class SessionManager
     public static function get_session_category($id)
     {
         $table = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-        $id = intval($id);
+        $id = (int) $id;
         $sql = "SELECT id, name, date_start, date_end
                 FROM $table
                 WHERE id= $id";
@@ -3315,8 +3273,9 @@ class SessionManager
      */
     public static function getSessionImage($id)
     {
+        $id = (int) $id;
         $extraFieldValuesTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-        $sql = "SELECT value  FROM extra_field_values WHERE field_id = 16 AND item_id = ".intval($id);
+        $sql = "SELECT value  FROM $extraFieldValuesTable WHERE field_id = 16 AND item_id = ".$id;
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -3414,9 +3373,9 @@ class SessionManager
             $data = Database::store_result($result, 'ASSOC');
 
             return $data;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -3668,8 +3627,8 @@ class SessionManager
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
-        $userId = intval($userId);
-        $sessionId = intval($sessionId);
+        $userId = (int) $userId;
+        $sessionId = (int) $sessionId;
 
         $select = " SELECT * ";
         if (api_is_multiple_url_enabled()) {
@@ -3681,7 +3640,7 @@ class SessionManager
                         sru.session_id = '$sessionId' AND
                         sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."' AND
                         access_url_id = ".api_get_current_access_url_id()."
-                        ";
+                    ";
         } else {
             $sql = "$select FROM $tbl_session s
                      INNER JOIN $tbl_session_rel_user sru
@@ -4090,7 +4049,7 @@ class SessionManager
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
         $course_name = Database::escape_string($course_name);
 
         // select the courses
@@ -4132,7 +4091,7 @@ class SessionManager
     {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
 
         // select the courses
         $sql = "SELECT COUNT(c.code) count
@@ -4263,7 +4222,7 @@ class SessionManager
     public static function get_sessions_by_general_coach($user_id, $asPlatformAdmin = false)
     {
         $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
-        $user_id = intval($user_id);
+        $user_id = (int) $user_id;
 
         // Session where we are general coach
         $sql = "SELECT DISTINCT *
@@ -4398,7 +4357,7 @@ class SessionManager
         $params['promotion_id'] = $promotion_id;
         if (!empty($list)) {
             foreach ($list as $session_id) {
-                $session_id = intval($session_id);
+                $session_id = (int) $session_id;
                 Database::update($table, $params, ['id = ?' => $session_id]);
             }
         }
@@ -4769,7 +4728,7 @@ SQL;
         $table_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $table_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-        $courseId = intval($courseId);
+        $courseId = (int) $courseId;
         $urlId = api_get_current_access_url_id();
 
         if (empty($courseId)) {
@@ -5796,8 +5755,8 @@ SQL;
     public static function getCoachesByCourseSession($sessionId, $courseId)
     {
         $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $sessionId = intval($sessionId);
-        $courseId = intval($courseId);
+        $sessionId = (int) $sessionId;
+        $courseId = (int) $courseId;
 
         $sql = "SELECT user_id FROM $table
                 WHERE
@@ -6522,64 +6481,6 @@ SQL;
     }
 
     /**
-     * @param int $sessionId
-     * @param int $courseId
-     */
-    public static function addCourseIntroduction($sessionId, $courseId)
-    {
-        // @todo create a tool intro lib
-        $sessionId = intval($sessionId);
-        $courseId = intval($courseId);
-
-        $TBL_INTRODUCTION = Database::get_course_table(TABLE_TOOL_INTRO);
-        $sql = "SELECT * FROM $TBL_INTRODUCTION WHERE c_id = $courseId";
-        $result = Database::query($sql);
-        $result = Database::store_result($result, 'ASSOC');
-
-        if (!empty($result)) {
-            foreach ($result as $result) {
-                // @todo check if relation exits.
-                $result['session_id'] = $sessionId;
-                Database::insert($TBL_INTRODUCTION, $result);
-            }
-        }
-    }
-
-    /**
-     * @param int $sessionId
-     * @param int $courseId
-     */
-    public static function removeCourseIntroduction($sessionId, $courseId)
-    {
-        $sessionId = intval($sessionId);
-        $courseId = intval($courseId);
-        $TBL_INTRODUCTION = Database::get_course_table(TABLE_TOOL_INTRO);
-        $sql = "DELETE FROM $TBL_INTRODUCTION
-                WHERE c_id = $courseId AND session_id = $sessionId";
-        Database::query($sql);
-    }
-
-    /**
-     * @param int $sessionId
-     * @param int $courseId
-     */
-    public static function addCourseDescription($sessionId, $courseId)
-    {
-        /* $description = new CourseDescription();
-          $descriptions = $description->get_descriptions($courseId);
-          foreach ($descriptions as $description) {
-          } */
-    }
-
-    /**
-     * @param int $sessionId
-     * @param int $courseId
-     */
-    public static function removeCourseDescription($sessionId, $courseId)
-    {
-    }
-
-    /**
      * @param array $userSessionList        format see self::importSessionDrhCSV()
      * @param bool  $sendEmail
      * @param bool  $removeOldRelationShips
@@ -7034,7 +6935,7 @@ SQL;
      */
     public static function sessionHasCourse($sessionId, $courseCode)
     {
-        $sessionId = intval($sessionId);
+        $sessionId = (int) $sessionId;
         $courseCode = Database::escape_string($courseCode);
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $sessionRelCourseTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
@@ -7060,55 +6961,6 @@ SQL;
     }
 
     /**
-     * Get the list of course coaches.
-     *
-     * @return array The list
-     */
-    public static function getAllCourseCoaches()
-    {
-        $coaches = [];
-
-        $scuTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $userTable = Database::get_main_table(TABLE_MAIN_USER);
-
-        $idResult = Database::select('DISTINCT user_id', $scuTable, [
-            'where' => [
-                'status = ?' => 2,
-            ],
-        ]);
-
-        if ($idResult != false) {
-            foreach ($idResult as $idData) {
-                $userResult = Database::select(
-                    'user_id, lastname, firstname, username',
-                    $userTable,
-                    [
-                        'where' => [
-                            'user_id = ?' => $idData['user_id'],
-                        ],
-                    ],
-                    'first'
-                );
-
-                if ($userResult != false) {
-                    $coaches[] = [
-                        'id' => $userResult['user_id'],
-                        'lastname' => $userResult['lastname'],
-                        'firstname' => $userResult['firstname'],
-                        'username' => $userResult['username'],
-                        'completeName' => api_get_person_name(
-                            $userResult['firstname'],
-                            $userResult['lastname']
-                        ),
-                    ];
-                }
-            }
-        }
-
-        return $coaches;
-    }
-
-    /**
      * Calculate the total user time in the platform.
      *
      * @param int    $userId The user id
@@ -7119,7 +6971,7 @@ SQL;
      */
     public static function getTotalUserTimeInPlatform($userId, $from = '', $until = '')
     {
-        $userId = intval($userId);
+        $userId = (int) $userId;
         $trackLoginTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $whereConditions = [
             'login_user_id = ? ' => $userId,
@@ -7179,6 +7031,8 @@ SQL;
         $tableUser = Database::get_main_table(TABLE_MAIN_USER);
         $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
+        $sessionId = (int) $sessionId;
+
         if (empty($sessionId)) {
             return [];
         }
@@ -7199,7 +7053,7 @@ SQL;
                 ON scu.user_id = u.id
                 WHERE 
                   $courseCondition
-                  scu.session_id = ".intval($sessionId)."
+                  scu.session_id = ".$sessionId."
                 GROUP BY u.id";
 
         $result = Database::query($sql);
@@ -7517,7 +7371,7 @@ SQL;
     public static function getDescriptionFromSessionId($sessionId)
     {
         // Init variables
-        $sessionId = intval($sessionId);
+        $sessionId = (int) $sessionId;
         $description = '';
         // Check if session id is valid
         if ($sessionId > 0) {
@@ -8981,77 +8835,6 @@ SQL;
     }
 
     /**
-     * Return HTML code for displaying session_course_for_coach.
-     *
-     * @param $userId
-     *
-     * @return string
-     */
-    public static function getHtmlNamedSessionCourseForCoach($userId)
-    {
-        $htmlRes = '';
-        $listInfo = self::getNamedSessionCourseForCoach($userId);
-        foreach ($listInfo as $i => $listCoursesInfo) {
-            $courseInfo = $listCoursesInfo['course'];
-            $courseCode = $listCoursesInfo['course']['code'];
-
-            $listParamsCourse = [];
-            $listParamsCourse['icon'] = '<div style="float:left">
-                <input style="border:none;" type="button" onclick="$(\'#course-'.$courseCode.'\').toggle(\'fast\')" value="+" /></div>'.
-                Display::return_icon('blackboard.png', $courseInfo['title'], [], ICON_SIZE_LARGE);
-            $listParamsCourse['link'] = '';
-            $listParamsCourse['title'] = Display::tag(
-                'a',
-                $courseInfo['title'],
-                ['href' => $listParamsCourse['link']]
-            );
-            $htmlCourse = '<div class="well" style="border-color:#27587D">'.
-                CourseManager::course_item_html($listParamsCourse, true);
-            // for each category of session
-            $htmlCatSessions = '';
-            foreach ($listCoursesInfo['sessionCatList'] as $j => $listCatSessionsInfo) {
-                // we got an array of session categories
-                $catSessionId = $listCoursesInfo['sessionCatList'][$j]['catSessionId'];
-                $catSessionName = $listCoursesInfo['sessionCatList'][$j]['catSessionName'];
-
-                $listParamsCatSession['icon'] = Display::return_icon('folder_blue.png', $catSessionName, [], ICON_SIZE_LARGE);
-                $listParamsCatSession['link'] = '';
-                $listParamsCatSession['title'] = $catSessionName;
-
-                $marginShift = 20;
-                if ($catSessionName != '') {
-                    $htmlCatSessions .= '<div style="margin-left:'.$marginShift.'px;">'.
-                        CourseManager::course_item_html($listParamsCatSession, true).'</div>';
-                    $marginShift = 40;
-                }
-
-                // for each sessions
-                $listCatSessionSessionList = $listCoursesInfo['sessionCatList'][$j]['sessionList'];
-                $htmlSession = '';
-                foreach ($listCatSessionSessionList as $k => $listSessionInfo) {
-                    // we got an array of session info
-                    $sessionId = $listSessionInfo['sessionId'];
-                    $sessionName = $listSessionInfo['sessionName'];
-
-                    $listParamsSession['icon'] = Display::return_icon('blackboard_blue.png', $sessionName, [], ICON_SIZE_LARGE);
-                    $listParamsSession['link'] = '';
-                    $linkToCourseSession = $courseInfo['course_public_url'].'?id_session='.$sessionId;
-                    $listParamsSession['title'] =
-                        $sessionName.'<div style="font-weight:normal; font-style:italic">
-                            <a href="'.$linkToCourseSession.'">'.get_lang('GoToCourseInsideSession').'</a>
-                            </div>';
-                    $htmlSession .= '<div style="margin-left:'.$marginShift.'px;">'.
-                        CourseManager::course_item_html($listParamsSession, true).'</div>';
-                }
-                $htmlCatSessions .= $htmlSession;
-            }
-            $htmlRes .= $htmlCourse.'<div style="display:none" id="course-'.$courseCode.'">'.$htmlCatSessions.'</div></div>';
-        }
-
-        return $htmlRes;
-    }
-
-    /**
      * @param int $userId
      * @param int $courseId
      *
@@ -9078,7 +8861,7 @@ SQL;
      */
     public static function redirectToSession()
     {
-        $sessionId = ChamiloSession::read('session_redirect');
+        $sessionId = (int) ChamiloSession::read('session_redirect');
         $onlyOneCourseSessionToRedirect = ChamiloSession::read('only_one_course_session_redirect');
         if ($sessionId) {
             $sessionInfo = api_get_session_info($sessionId);

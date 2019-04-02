@@ -120,19 +120,25 @@ foreach ($surveyAnswers as $answer) {
 
     $surveyLine .= '","';
 
-    // Show answers for main questions
-    foreach ($parts[1] as $mainQuestion) {
-        $options = getQuestionOptions(
-            $answer['user'],
-            $courseId,
-            $mainQuestion['survey_id'],
-            $mainQuestion['question_id']
-        );
-        $userAnswersCount += count($options);
+    foreach ($parts as $z => $part) {
+        if (0 === $z) {
+            continue;
+        }
 
-        /** @var CSurveyQuestionOption $option */
-        foreach ($options as $option) {
-            $surveyLine .= $option->getSort();
+        // Show answers for main questions
+        foreach ($part as $mainQuestion) {
+            $options = getQuestionOptions(
+                $answer['user'],
+                $courseId,
+                $mainQuestion['survey_id'],
+                $mainQuestion['question_id']
+            );
+            $userAnswersCount += count($options);
+
+            /** @var CSurveyQuestionOption $option */
+            foreach ($options as $option) {
+                $surveyLine .= $option->getSort();
+            }
         }
     }
 
@@ -174,13 +180,13 @@ function getQuestionOptions($user, $courseId, $surveyId, $questionId)
     $options = Database::getManager()
         ->createQuery(
             'SELECT sqo FROM ChamiloCourseBundle:CSurveyQuestionOption sqo
-                INNER JOIN ChamiloCourseBundle:CSurveyAnswer sa
-                    WITH
-                        sqo.cId = sa.cId
-                        AND sqo.questionId = sa.questionId
-                        AND sqo.surveyId = sa.surveyId
-                        AND sqo.iid = sa.optionId
-                WHERE sa.user = :user AND sa.cId = :course AND sa.surveyId = :survey AND sa.questionId = :question'
+            INNER JOIN ChamiloCourseBundle:CSurveyAnswer sa
+                WITH
+                    sqo.cId = sa.cId
+                    AND sqo.questionId = sa.questionId
+                    AND sqo.surveyId = sa.surveyId
+                    AND sqo.iid = sa.optionId
+            WHERE sa.user = :user AND sa.cId = :course AND sa.surveyId = :survey AND sa.questionId = :question'
         )
         ->setParameters(
             [

@@ -8385,4 +8385,7 @@ $QuizQuestionsLimitPerDayComment = "If set to greater than 0, this option will p
 $QuizQuestionsLimitPerDayXReached = "Sorry, you have reached the maximum number of questions (%s) for the day. Please try again tomorrow.";
 $VoteLike = "Like";
 $VoteDislike = "Dislike";
+$GenerateStats = "Generate statistics";
+$BasicCourseDocuments = "Basic course documents";
+$WeekX = "Week %s";
 ?>

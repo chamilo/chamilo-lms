@@ -761,7 +761,7 @@ $Poll = "استبيان";
 $YouHaveToBecomeModeratorOfThisRoomToStartPolls = "يجب عليك أن تصبح وسيطا في هذه الغرفة كي يمكنك عمل استبيان";
 $YourVoteHasBeenSent = "لقد تم ارسال تصويتك";
 $YouAlreadyVotedForThisPoll = "لقد صوت الآن لهذا الاستفتاء";
-$VoteButton = "تصويت !";
+$VoteButton = "تصويت";
 $YourAnswer = "اجابتك:";
 $WantsToKnow = "يريد أن يعرف :";
 $PollResults = "نتائج الاستبيان";
@@ -1546,7 +1546,7 @@ $OpenInNewWindow = " فتح في نافذة جديدة";
 $LimitUsersListDefaultMaxComment = " (في الشاشات التي تسمح بإضافة مستخدمين إلى مقررات أو فصول، إذا كانت أول قائمة الغير مرشحة تحتوي على أكثر من هذا العدد من المستخدمين، فعندئذعد إفتراضيا إلى أول حرف (أ";
 $HideDLTTMarkupComment = " [= ... =]  أخف العلامة عندما لايترجم متغير اللغة";
 $UpgradeFromLMS19x = "ترقية النظام من اصدار *1.9";
-$SignUp = "!انشاء حساب";
+$SignUp = "انشاء حساب";
 $UserDeleted = " لقد تم حذف المستخدم";
 $NoClassesForThisCourse = " و لا فصل مسجل في هذا المقرر";
 $CourseUsage = " استخدام المقرر";
@@ -2792,7 +2792,7 @@ $notCorrectedYet = "هذا الجواب لم يتم تصحيحه بعد. معن�
 $adminHP = "Hot Potatoes مدير محتوى";
 $NewQu = "سؤال جديد";
 $NoImage = " فضلا، اختر صورة";
-$AnswerHotspot = " التوصيف و النتيجة هما متطلبين لكل بقعة ساخنة - الاستجابة اختيارية";
+$AnswerHotspot = "التوصيف والدرجة مطلوب لكل منطقة ساخنة، اما المعلومات المرتجعة فهي اختيارية";
 $MinHotspot = "(يجب عليك أن تنشئ على الأقل بقعة ساخنة واحدة (1";
 $MaxHotspot = "(12)الحد الأقصى لعدد البقع الساخنة التي يمكن أن تنشئها هو اثنى عشر";
 $HotspotError = ".فضلا، زود توصيفا و وزنا لكل بقعة ساخنة";
@@ -2810,7 +2810,7 @@ $HotspotNotDrawn = "لم تقم بعد برسم كل البقع الساخنة �
 $HotspotWeightingError = "  يجب أن تعطي وزن موجب (>0) لحميع البقع الساخنة";
 $HotspotValidateError1 = "يجب أن تجيب بشكل كامل على السؤال";
 $HotspotValidateError2 = " المطلوب نقرة أو نقرات على الصورة قبل مشاهدة النتائج";
-$HotspotRequired = ".التوصيف و النتيجة هما متطلبين لكل بقعة ساخنة. الاستجابة اختيارية";
+$HotspotRequired = "التوصيف والدرجة مطلوب لكل منطقة ساخنة، اما المعلومات المرتجعة فهي اختيارية";
 $HotspotChoose = "<div style=\"padding:2px 3px;\">•  .لإنشاء بقعة ساخنة: اختر شكلا بجوار اللون، و من ثم أرسم البقعة الساخنة </div><div style=\"padding:2px 3px;\">• لنقل بقعة ساخنة، اختر اللون، أنقر على بقعة أخرى على الصورة، و من ثم أرسم البقعة الساخنة.</div><div style=\"padding:2px 3px;\">•    [+hotspot] لإضافة بقعة ساخنة: أنقر على الزر  </div><div style=\"padding:2px 3px;\">•  \"Close polygon\"لإغلاق شكل المضلع: أنقر على الزر الأيمن للفارة و اختر   .</div>";
 $Fault = "غير صحيح";
 $HotSpot = "مناطق الصورة";
@@ -2823,8 +2823,8 @@ $backtoTesthome = "عودة إلى بداية الاختبار";
 $MarkIsUpdated = "لقد تم تحديث الدرجة";
 $MarkInserted = "تم ادخال الدرجة";
 $PleaseGiveAMark = "قضلا، أعط  جوابا";
-$EditCommentsAndMarks = "قم بتحرير الاستجابة و الدرجات";
-$AddComments = "إضافة الاستجابة";
+$EditCommentsAndMarks = "تحرير المعلومات المرتجعة المنفردة ومنح درجة للسؤال المفتوح";
+$AddComments = "اضافة معلومات مرتجعة منفردة";
 $Number = "رقم";
 $Weighting = "النتيجة";
 $ChooseQuestionType = "لإنشاء سؤالا جديدا، اختر النوع أعلاه";
@@ -2843,7 +2843,7 @@ $ExerciseStored = " لقد تم تخزين التمرين";
 $ChooseAtLeastOneCheckbox = "اختر على الأقل جوابا واحدا صحيحا";
 $ExerciseEdited = "لقد تم تحرير التمرين";
 $ExerciseDeleted = "لقد تم حذف التمرين";
-$ClickToCommentAndGiveFeedback = "أنقر على الرابط التالي لتحديد الجواب و اعط استجابة";
+$ClickToCommentAndGiveFeedback = "أنقر على الرابط التالي لتحديد الجواب او قم بتقديم معلومات مرتجعة";
 $OpenQuestionsAttempted = " لقد تم الإجابة على سؤال مفتوح من طرف متعلم";
 $AttemptDetails = "تفاصيل المحاولة";
 $TestAttempted = "لقد تم محاولة إجراء الاختبار";
@@ -3661,7 +3661,7 @@ $Menu = "قائمة";
 $BackToUserList = "الرجوع الى قائمة المستخدمين";
 $GraphicNotAvailable = "الرسوم غير متوفرة";
 $BackTo = "العودة الى";
-$HistoryTrainingSessions = "تاريخ المقررات";
+$HistoryTrainingSessions = "مقرراتي السابقة";
 $ConversionFailled = "فشل التحويل";
 $AlreadyExists = "موجود مسبقا";
 $TheNewWordHasBeenAdded = "تم اضافة الكلمة الجديدة";
@@ -3678,7 +3678,7 @@ $WikiAdded = "تم اضافة ويكي";
 $ReadOnly = "القراءة فقط";
 $Unacceptable = "غير مقبول";
 $DisplayTrainingList = "عرض قائمة المقررات";
-$HistoryTrainingSession = "تاريخ المقررات";
+$HistoryTrainingSession = "مقرراتي السابقة";
 $Until = "حتى";
 $FirstPage = "اول صفحة";
 $LastPage = "اخر صفحة";
@@ -4262,7 +4262,7 @@ $ScormScoreColumn = "النقاط";
 $ScormTimeColumn = "الوقت";
 $ScormNeverOpened = "هذا المقرر لم يتم فتحه أبدا من قبل هذا المستخدم";
 $WorkTitle = "العنوان";
-$WorkAuthors = "الكتاب";
+$WorkAuthors = "المؤلفون";
 $WorkDescription = "نبذة";
 $informationsAbout = "متابعة";
 $NoEmail = "لم يتم تحديد أي بريد إلكتروني";
@@ -4670,12 +4670,12 @@ $LastResent = "آخر إعادة إرسال على";
 $kB = "kB";
 $UnsubscribeFromPlatformSuccess = "حسابك %s قد تم ازالته بشكل كامل من النظام. شكرا لبقاءك معنا لبعض الوقت. نأمل ان نراك مرة لاحقا";
 $UploadNewFile = "أرسل ملف جديد";
-$Feedback = "استجابة";
-$CloseFeedback = "أغلق الاستجابة";
-$AddNewFeedback = "أضف الاستجابة التالية";
+$Feedback = "معلومات مرتجعة";
+$CloseFeedback = "اغلاق المعلومات المرتجعة";
+$AddNewFeedback = "اضافة معلومات مرتجعة";
 $DropboxFeedbackStored = "تم حفظ رسالة المعلومات المرتجعة";
-$AllUsersHaveDeletedTheFileAndWillNotSeeFeedback = " .لقد تم حذف الملف من طرف جميع المستخدمين و لهذا لا يمكن لأحد مشاهدة الاستجابة التي تقوم بإضافتها";
-$FeedbackError = "خطأ في الاستجابة";
+$AllUsersHaveDeletedTheFileAndWillNotSeeFeedback = "لقد قام جميع المستخدمين بحذف الملف ولذا فانه لن يتم مشاهدة المعلومات المرتجعة التي تود اضافتها";
+$FeedbackError = "خطأ في المعلومات المرتجعة";
 $PleaseTypeText = ".فضلا، أكتب بعض النص";
 $YouAreNotAllowedToDownloadThisFile = ". غير مسموح لك بتحميل هذا الملف";
 $CheckAtLeastOneFile = ".تحقق على الأقل من ملف واحد";
@@ -4759,7 +4759,7 @@ $HHome = "Help Course Home Page";
 $HomeContent = "<p>The course home page shows a series of tools : an introduction text, a course description, a Documents manager etc. This page is modular : you can hide / show any tool in one clic. Hidden tools can be reactivated at any time.</p><b>Navigation</b><p>To browse your course, you have 2 navigation tools. One on top left is a tree showing where you are and how deep you are in the course. On top right, you can access to a tool through its icon in one clic. Whether you select your course code on left (always UPPER CASE) or the house icon on the right, you will reach the home page of your course. </p><b>Best practice</b><p>To motivate your students, it is important that your course area is a dynamic area. This will indicate that there is 'somebody behind the screen'. A quick way to give this feeling is to edit the Introduction text (clic on yellow pencil) at least evey week to tell latest news, forthcoming deadlines and so on.</p><p>To build your course, it might proove relevant to follow these steps:<ol><li>In Course Settings, check Course Acces : Private and Subscription : Denied. This way, nobody can enter your course area during building process,</li><li>Show all the tools clicking on the grey link below the ones situated at the bottom of the page,</li><li>Use the tools you need to 'fill' your area with content, events, guidelines, tests etc.,</li><li>Hide all tools : your home page is empty in Student view,</li><li>Use the Path tool to structure the way students will visit it and learn with it. This way, you use the other tools, but you don't show them at first sight.</li><li>Click on the eye icon besides the path you created : this path will then show on your home page,</li><li>The preparation of your course area is over. Your home page shows an introdution text followed by one link only and this link drives students through the course. Clic on Student view (top right) to see things from a student point of view.<I></I></li></ol>";
 $HOnline = "Help Live Conferencing system";
 $YouNeedToActivateTheGoogleMapsPluginInAdminPlatformToSeeTheMap = "يجب تفعيل المكون الاضافي لخرائط الكوكل من قبل مدير النظام من اجل عرض الخريطة";
-$HClar = "Chamilo Help";
+$HClar = "مساعدة كاميلو";
 $HDoc = "Help Documents";
 $HUser = "Help Users";
 $HExercise = "Help tests";
@@ -5132,7 +5132,7 @@ $DocModif = "تم تعديل عنوان الصفحة";
 $DocAdd = "لقد تم إضافة الملف لقائمة النشر";
 $DocDel = "تم حذف الملف";
 $TitleWork = "عنوان الملف";
-$Authors = "الكتاب";
+$Authors = "المؤلفون";
 $WorkDelete = "حذف";
 $WorkModify = "تعديل";
 $WorkConfirmDelete = "هل تريد حقا حذف هذا الملف";
@@ -5429,7 +5429,7 @@ $UserChangeToReader = "تم ترقية المستخدم الى قارئ";
 $AddModerator = "اضافة المستخدم كمشرف";
 $JoinGroup = "الانضمام الى المجموعة";
 $YouShouldJoinTheGroup = "يجب عليك الانضمام للمجموعة";
-$WaitingForAdminResponse = "انتظار استجابة المدير";
+$WaitingForAdminResponse = "انتظار معلومات مرتجعة من المدير";
 $Re = "Re";
 $FilesAttachment = "الملفات المرفقة";
 $GroupWaitingList = "قائمة انتظار المجموعة";
@@ -8411,4 +8411,12 @@ $ToTimeX = "الى %s";
 $SurveyInviteLink = "رابط الدعوة للاستبيان";
 $RevisionProposed = "تم تقديم مراجعة";
 $SessionsPlanCalendar = "عرض تقويم المواسم";
+$QuizQuestionsLimitPerDay = "حدود الاسئلة في اليوم";
+$QuizQuestionsLimitPerDayComment = "اذا تم تحديد قيمة اكبر من صفر، فان ذلك سوف يمنع الطالب من الدخول  الى الاختبار الذي فيه من الاسئلة اكثر مما هو متبقي للحد المسموح يوميا. فمثلا لو كان الحد اليومي 50 سؤال والطالب قد اجاب على اختبارين ذات 20 سؤال للاختبار، بالتالي فانه سوف يتم منع الطالب من الدخول الى اختبار اخر ذو 20 سؤال، لكن يمكنه دخول  اختبار ذو 10 اسئلة";
+$QuizQuestionsLimitPerDayXReached = "للاسف، لقد وصلت للحد الاقصى من عدد الاسئلة (%s) لهذا اليوم. يرجى اعادة المحاولة غدا.";
+$VoteLike = "اعجبني";
+$VoteDislike = "لا يعجبني";
+$GenerateStats = "توليد احصاءات";
+$BasicCourseDocuments = "المستندات الاساسية للمقرر";
+$WeekX = "اسبوعX";
 ?>

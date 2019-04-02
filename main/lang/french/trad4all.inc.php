@@ -2620,7 +2620,7 @@ $ObjectiveStatus = "Statut";
 $ObjectiveRawScore = "Score";
 $ObjectiveMaxScore = "Score max";
 $ObjectiveMinScore = "Score min";
-$LPName = "Nom du cours";
+$LPName = "Nom du parcours";
 $AuthoringOptions = "Options d'authoring";
 $SaveSection = "Enregistrer la section";
 $AddLinkToCourse = "Ajouter ce lien au cours";
@@ -8317,4 +8317,7 @@ $QuizQuestionsLimitPerDayComment = "Si ce paramètre est configuré à plus de z
 $QuizQuestionsLimitPerDayXReached = "Désolé, vous avez atteint la quantité maximale de questions (%s) par jour. Réessayez demain.";
 $VoteLike = "J'aime";
 $VoteDislike = "Je n'aime pas";
+$GenerateStats = "Générer les statistiques";
+$BasicCourseDocuments = "Documents de base du cours";
+$WeekX = "Semaine %s";
 ?>

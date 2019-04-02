@@ -972,35 +972,6 @@ class MessageManager
     }
 
     /**
-     * update messages by user id and message id.
-     *
-     * @param int $user_id
-     * @param int $message_id
-     *
-     * @return bool
-     */
-    public static function update_message($user_id, $message_id)
-    {
-        $user_id = (int) $user_id;
-        $message_id = (int) $message_id;
-
-        if (empty($user_id) || empty($message_id)) {
-            return false;
-        }
-
-        $table = Database::get_main_table(TABLE_MESSAGE);
-        $sql = "UPDATE $table SET 
-                    msg_status = '".MESSAGE_STATUS_NEW."'
-                WHERE
-                    msg_status <> ".MESSAGE_STATUS_OUTBOX." AND
-                    user_receiver_id = ".$user_id." AND
-                    id = '".$message_id."'";
-        Database::query($sql);
-
-        return true;
-    }
-
-    /**
      * @param int $user_id
      * @param int $message_id
      * @param int $type
@@ -1024,31 +995,6 @@ class MessageManager
                     user_receiver_id = ".$user_id." AND
                     id = '".$message_id."'";
         Database::query($sql);
-    }
-
-    /**
-     * get messages by user id and message id.
-     *
-     * @param int $user_id
-     * @param int $message_id
-     *
-     * @return array
-     */
-    public static function get_message_by_user($user_id, $message_id)
-    {
-        $user_id = (int) $user_id;
-        $message_id = (int) $message_id;
-
-        if (empty($user_id) || empty($message_id)) {
-            return false;
-        }
-
-        $table = Database::get_main_table(TABLE_MESSAGE);
-        $query = "SELECT * FROM $table
-                  WHERE user_receiver_id=".$user_id." AND id='".$message_id."'";
-        $result = Database::query($query);
-
-        return $row = Database::fetch_array($result);
     }
 
     /**
@@ -1989,19 +1935,6 @@ class MessageManager
     }
 
     /**
-     * Sort date by desc from a multi-dimensional array.
-     *
-     * @param array $array1 first array to compare
-     * @param array $array2 second array to compare
-     *
-     * @return bool
-     */
-    public function order_desc_date($array1, $array2)
-    {
-        return strcmp($array2['send_date'], $array1['send_date']);
-    }
-
-    /**
      * @param int $messageId
      *
      * @return array
@@ -2297,44 +2230,6 @@ class MessageManager
         Session::erase('message_sent_search_keyword');
 
         return $html;
-    }
-
-    /**
-     * Get the count of the last received messages for a user.
-     *
-     * @param int $userId The user id
-     * @param int $lastId The id of the last received message
-     *
-     * @return int The count of new messages
-     */
-    public static function countMessagesFromLastReceivedMessage($userId, $lastId = 0)
-    {
-        $userId = intval($userId);
-        $lastId = intval($lastId);
-
-        if (empty($userId)) {
-            return 0;
-        }
-
-        $messagesTable = Database::get_main_table(TABLE_MESSAGE);
-
-        $conditions = [
-            'where' => [
-                'user_receiver_id = ?' => $userId,
-                'AND msg_status = ?' => MESSAGE_STATUS_UNREAD,
-                'AND id > ?' => $lastId,
-            ],
-        ];
-
-        $result = Database::select('COUNT(1) AS qty', $messagesTable, $conditions);
-
-        if (!empty($result)) {
-            $row = current($result);
-
-            return $row['qty'];
-        }
-
-        return 0;
     }
 
     /**

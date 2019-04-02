@@ -249,44 +249,6 @@ class CourseDescription
     }
 
     /**
-     * Insert a row like history inside track_e_item_property table
-     * first you must set description_type, title, content, progress and
-     * session_id properties with the object CourseDescription.
-     *
-     * @param int $description_type
-     *
-     * @return int affected rows
-     */
-    public function insert_stats($description_type)
-    {
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY);
-        $description_id = $this->get_id_by_description_type($description_type);
-        $course_id = api_get_course_int_id();
-        $course_code = api_get_course_id();
-        $item_property_id = api_get_item_property_id(
-            $course_code,
-            TOOL_COURSE_DESCRIPTION,
-            $description_id
-        );
-
-        $params = [
-            'c_id' => api_get_course_int_id(),
-            'course_id' => $course_id,
-            'item_property_id' => $item_property_id,
-            'title' => $this->title,
-            'content' => $this->content,
-            'progress' => $this->progress,
-            'lastedit_date' => api_get_utc_datetime(),
-            'lastedit_user_id' => api_get_user_id(),
-            'session_id' => $this->session_id,
-        ];
-
-        $result = Database::insert($table, $params);
-
-        return $result ? 1 : 0;
-    }
-
-    /**
      * Update a description, first you must set description_type, title, content, progress
      * and session_id properties with the object CourseDescription.
      *
@@ -356,29 +318,6 @@ class CourseDescription
         }
 
         return $affected_rows;
-    }
-
-    /**
-     * Get description id by description type.
-     *
-     * @param int $description_type
-     *
-     * @return int description id
-     */
-    public function get_id_by_description_type($description_type)
-    {
-        $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
-        $course_id = api_get_course_int_id();
-
-        $sql = "SELECT id FROM $table
-		        WHERE 
-		            c_id = $course_id AND 
-		            description_type = '".intval($description_type)."'";
-        $rs = Database::query($sql);
-        $row = Database::fetch_array($rs);
-        $description_id = $row['id'];
-
-        return $description_id;
     }
 
     /**

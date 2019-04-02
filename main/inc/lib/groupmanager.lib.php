@@ -2060,32 +2060,6 @@ class GroupManager
     }
 
     /**
-     * Remove all users that are not students and all users who have tutor status
-     * from  the list.
-     *
-     * @param array $user_array_in
-     *
-     * @return array
-     */
-    public static function filter_only_students($user_array_in)
-    {
-        $user_array_out = [];
-        foreach ($user_array_in as $this_user) {
-            if (api_get_session_id()) {
-                if ($this_user['status_session'] == 0) {
-                    $user_array_out[] = $this_user;
-                }
-            } else {
-                if ($this_user['status_rel'] == STUDENT) {
-                    $user_array_out[] = $this_user;
-                }
-            }
-        }
-
-        return $user_array_out;
-    }
-
-    /**
      * Check if a user has access to a certain group tool.
      *
      * @param int    $user_id  The user id
@@ -2283,45 +2257,6 @@ class GroupManager
         }
 
         return $groups;
-    }
-
-    /**
-     * @param array $userList
-     * @param array $groupInfo
-     *
-     * @return mixed
-     */
-    public static function getNumberLeftFromGroupFromUserList($userList, $groupInfo)
-    {
-        $groupIid = (int) $groupInfo['iid'];
-        $category = self::get_category_from_group($groupIid);
-        $number_groups_per_user = $groupInfo['maximum_number_of_students'];
-        $categoryId = 0;
-        if ($category) {
-            $groups_per_user = $category['groups_per_user'];
-            $number_groups_per_user = $groups_per_user == self::GROUP_PER_MEMBER_NO_LIMIT ? self::INFINITE : $groups_per_user;
-            $categoryId = $category['id'];
-        }
-
-        $usersAdded = [];
-        foreach ($userList as &$userInfo) {
-            // find # of groups the user is enrolled in
-            $numberOfGroups = self::user_in_number_of_groups(
-                $userInfo['user_id'],
-                $categoryId
-            );
-
-            if (in_array($userInfo['user_id'], $usersAdded)) {
-                continue;
-            }
-
-            $usersAdded[] = $userInfo['user_id'];
-
-            // add # of groups to user list
-            $userInfo['number_groups_left'] = $number_groups_per_user - $numberOfGroups;
-        }
-
-        return $userList;
     }
 
     /**

@@ -90,6 +90,8 @@ class CourseChatUtils
         if (empty($message)) {
             return false;
         }
+        $friendId = (int) $friendId;
+
         $user = api_get_user_entity($this->userId);
         $courseInfo = api_get_course_info_by_id($this->courseId);
         $isMaster = api_is_course_admin();

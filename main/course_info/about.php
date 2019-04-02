@@ -19,6 +19,11 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 $courseId = isset($_GET['course_id']) ? (int) $_GET['course_id'] : 0;
+
+if (empty($courseId)) {
+    api_not_allowed(true);
+}
+
 $token = Security::get_existing_token();
 $em = Database::getManager();
 //userID
@@ -173,7 +178,7 @@ $template->assign('is_premium', $courseIsPremium);
 $template->assign('allow_subscribe', $allowSubscribe);
 $template->assign('token', $token);
 $template->assign('url', $urlCourse);
-$layout = $template->get_template('course_home/about.html.twig');
+$layout = $template->get_template('course_home/about.tpl');
 $content = $template->fetch($layout);
 $template->assign('content', $content);
 $template->display_one_col_template();

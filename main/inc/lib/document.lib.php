@@ -3309,7 +3309,7 @@ class DocumentManager
             }
         }
 
-        $levelCondition = null;
+        $levelCondition = '';
         if ($folderId === false) {
             $levelCondition = " AND docs.path NOT LIKE'/%/%'";
         }
@@ -3324,7 +3324,6 @@ class DocumentManager
                     docs.path NOT LIKE '%_DELETED_%' AND                    
                     docs.c_id = {$course_info['real_id']} AND
                     l.visibility NOT IN ('".ResourceLink::VISIBILITY_DELETED."')                    
-                    $showOnlyFoldersCondition
                     $folderCondition
                     $levelCondition
                     $add_folder_filter

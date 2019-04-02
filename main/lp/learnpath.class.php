@@ -9100,7 +9100,7 @@ class learnpath
                         $renderer = $form->defaultRenderer();
                         $renderer->setElementTemplate('&nbsp;{label}{element}', 'content_lp');
                         $form->addElement('html', '<div class="editor-lp">');
-                        $form->addHtmlEditor('content_lp', null, null, true, $editor_config, true);
+                        $form->addHtmlEditor('content_lp', null, null, true, $editor_config);
                         $form->addElement('html', '</div>');
                         $defaults['content_lp'] = $content;
                     }
@@ -13150,8 +13150,7 @@ EOD;
             null,
             true,
             false,
-            $editorConfig,
-            true
+            $editorConfig
         );
         $form->addHidden('action', 'add_final_item');
         $form->addHidden('path', Session::read('pathItem'));

@@ -209,7 +209,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
             $path.'admin/course_list.php?delete_course='.$courseCode,
             [
                 'onclick' => "javascript: if (!confirm('"
-                    .addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."')) return false;"
+                    .addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."')) return false;",
             ]
         );
 

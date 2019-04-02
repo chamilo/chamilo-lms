@@ -6550,6 +6550,7 @@ class Exercise
             if ($isRandomByCategory == 1) {
                 shuffle($questionList); // or not
             }
+
             return $questionList;
         }
 

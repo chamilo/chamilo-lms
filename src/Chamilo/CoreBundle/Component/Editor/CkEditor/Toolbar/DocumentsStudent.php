@@ -148,7 +148,7 @@ class DocumentsStudent extends Basic
                 'Asciisvg',
             ],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyBlock'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight'],
             [
                 'Format',
                 'Font',

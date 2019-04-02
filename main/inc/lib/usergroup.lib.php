@@ -2066,7 +2066,7 @@ class UserGroup extends Model
      *
      * @author Julio Montoya
      * */
-    public function get_groups_by_user($user_id, $relation_type = GROUP_USER_PERMISSION_READER, $with_image = false)
+    public function get_groups_by_user($user_id, $relationType = GROUP_USER_PERMISSION_READER, $with_image = false)
     {
         $table_group_rel_user = $this->usergroup_rel_user_table;
         $tbl_group = $this->table;

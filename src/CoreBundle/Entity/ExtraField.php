@@ -29,6 +29,9 @@ class ExtraField // extends BaseAttribute
     public const USER_CERTIFICATE = 11;
     public const SURVEY_FIELD_TYPE = 12;
     public const SCHEDULED_ANNOUNCEMENT = 13;
+    public const TERMS_AND_CONDITION_TYPE = 14;
+    public const FORUM_CATEGORY_TYPE = 15;
+    public const FORUM_POST_TYPE = 16;
 
     /**
      * @var int

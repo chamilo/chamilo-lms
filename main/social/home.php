@@ -95,7 +95,7 @@ SocialManager::getScrollJs($countPost, $htmlHeadXtra);
 $social_menu_block = SocialManager::show_social_menu('home');
 
 $social_search_block = Display::panel(
-    UserManager::get_search_form(''),
+    UserManager::getSearchForm(''),
     get_lang('SearchUsers')
 );
 

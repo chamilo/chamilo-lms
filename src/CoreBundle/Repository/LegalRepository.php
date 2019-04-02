@@ -3,19 +3,25 @@
 
 namespace Chamilo\CoreBundle\Repository;
 
+use Chamilo\CoreBundle\Entity\Legal;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\ORM\EntityRepository;
 
 /**
  * Class LegalRepository.
  *
  * @package Chamilo\CoreBundle\Repository
  */
-class LegalRepository extends EntityRepository
+class LegalRepository extends ServiceEntityRepository
 {
+    /**
+     * LegalRepository constructor.
+     *
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Language::class);
+        parent::__construct($registry, Legal::class);
     }
 
     /**

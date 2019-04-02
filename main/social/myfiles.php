@@ -102,7 +102,7 @@ if (api_get_setting('allow_social_tool') == 'true') {
 
 $tpl = new Template(get_lang('MyFiles'));
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'myfiles');
-$editor = new \Chamilo\CoreBundle\Component\Editor\Editor();
+$editor = \Chamilo\CoreBundle\Framework\Container::getHtmlEditor();
 $template = $tpl->get_template($editor->getEditorStandAloneTemplate());
 $editor = $tpl->fetch($template);
 

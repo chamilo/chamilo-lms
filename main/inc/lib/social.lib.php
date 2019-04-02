@@ -413,7 +413,7 @@ class SocialManager extends UserManager
      *
      * @return array
      */
-    public static function get_list_invitation_of_friends_by_user_id($userId, $limit)
+    public static function get_list_invitation_of_friends_by_user_id($userId, $limit = 0)
     {
         $userId = (int) $userId;
         $limit = (int) $limit;
@@ -1261,6 +1261,413 @@ class SocialManager extends UserManager
 //        }
 
         return Display::dropdownMenu($itemMenu);
+    }
+
+    /**
+     * Shows the right menu of the Social Network tool.
+     *
+     * @param string $show                       highlight link possible values:
+     *                                           group_add,
+     *                                           home,
+     *                                           messages,
+     *                                           messages_inbox,
+     *                                           messages_compose ,
+     *                                           messages_outbox,
+     *                                           invitations,
+     *                                           shared_profile,
+     *                                           friends,
+     *                                           groups search
+     * @param int    $group_id                   group id
+     * @param int    $user_id                    user id
+     * @param bool   $show_full_profile          show profile or not (show or hide the user image/information)
+     * @param bool   $show_delete_account_button
+     */
+    public static function show_social_menu(
+        $show = '',
+        $group_id = 0,
+        $user_id = 0,
+        $show_full_profile = false,
+        $show_delete_account_button = false
+    ) {
+        $user_id = (int) $user_id;
+        $group_id = (int) $group_id;
+
+        if (empty($user_id)) {
+            $user_id = api_get_user_id();
+        }
+
+        $usergroup = new UserGroup();
+        $show_groups = [
+            'groups',
+            'group_messages',
+            'messages_list',
+            'group_add',
+            'mygroups',
+            'group_edit',
+            'member_list',
+            'invite_friends',
+            'waiting_list',
+            'browse_groups',
+        ];
+
+        // get count unread message and total invitations
+        $count_unread_message = MessageManager::getNumberOfMessages(true);
+        $count_unread_message = !empty($count_unread_message) ? Display::badge($count_unread_message) : null;
+
+        $number_of_new_messages_of_friend = self::get_message_number_invitation_by_user_id(api_get_user_id());
+        $group_pending_invitations = $usergroup->get_groups_by_user(
+            api_get_user_id(),
+            GROUP_USER_PERMISSION_PENDING_INVITATION,
+            false
+        );
+        $group_pending_invitations = count($group_pending_invitations);
+        $total_invitations = $number_of_new_messages_of_friend + $group_pending_invitations;
+        $total_invitations = (!empty($total_invitations) ? Display::badge($total_invitations) : '');
+
+        $filesIcon = Display::return_icon('sn-files.png', get_lang('MyFiles'), null, ICON_SIZE_SMALL);
+        $friendsIcon = Display::return_icon('sn-friends.png', get_lang('Friends'), null, ICON_SIZE_SMALL);
+        $groupsIcon = Display::return_icon('sn-groups.png', get_lang('SocialGroups'), null, ICON_SIZE_SMALL);
+        $homeIcon = Display::return_icon('sn-home.png', get_lang('Home'), null, ICON_SIZE_SMALL);
+        $invitationsIcon = Display::return_icon('sn-invitations.png', get_lang('Invitations'), null, ICON_SIZE_SMALL);
+        $messagesIcon = Display::return_icon('sn-message.png', get_lang('Messages'), null, ICON_SIZE_SMALL);
+        $sharedProfileIcon = Display::return_icon('sn-profile.png', get_lang('ViewMySharedProfile'));
+        $searchIcon = Display::return_icon('sn-search.png', get_lang('Search'), null, ICON_SIZE_SMALL);
+        $portfolioIcon = Display::return_icon('wiki_task.png', get_lang('Portfolio'));
+        $personalDataIcon = Display::return_icon('database.png', get_lang('PersonalDataReport'));
+
+        $forumCourseId = api_get_configuration_value('global_forums_course_id');
+        $groupUrl = api_get_path(WEB_CODE_PATH).'social/groups.php';
+        if (!empty($forumCourseId)) {
+            $courseInfo = api_get_course_info_by_id($forumCourseId);
+            if (!empty($courseInfo)) {
+                $groupUrl = api_get_path(WEB_CODE_PATH).'forum/index.php?cidReq='.$courseInfo['code'];
+            }
+        }
+
+        $html = '';
+        $active = null;
+        if (!in_array(
+            $show,
+            ['shared_profile', 'groups', 'group_edit', 'member_list', 'waiting_list', 'invite_friends']
+        )) {
+            $links = '<ul class="nav nav-pills nav-stacked">';
+            $active = $show === 'home' ? 'active' : null;
+            $links .= '
+                <li class="home-icon '.$active.'">
+                    <a href="'.api_get_path(WEB_CODE_PATH).'social/home.php">
+                        '.$homeIcon.' '.get_lang('Home').'
+                    </a>
+                </li>';
+            $active = $show == 'messages' ? 'active' : null;
+            $links .= '
+                <li class="messages-icon '.$active.'">
+                    <a href="'.api_get_path(WEB_CODE_PATH).'messages/inbox.php">
+                        '.$messagesIcon.' '.get_lang('Messages').$count_unread_message.'
+                    </a>
+                </li>';
+
+            // Invitations
+            $active = $show == 'invitations' ? 'active' : null;
+            $links .= '
+                <li class="invitations-icon '.$active.'">
+                    <a href="'.api_get_path(WEB_CODE_PATH).'social/invitations.php">
+                        '.$invitationsIcon.' '.get_lang('Invitations').$total_invitations.'
+                    </a>
+                </li>';
+
+            // Shared profile and groups
+            $active = $show == 'shared_profile' ? 'active' : null;
+            $links .= '
+                <li class="shared-profile-icon'.$active.'">
+                    <a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php">
+                        '.$sharedProfileIcon.' '.get_lang('ViewMySharedProfile').'
+                    </a>
+                </li>';
+            $active = $show == 'friends' ? 'active' : null;
+            $links .= '
+                <li class="friends-icon '.$active.'">
+                    <a href="'.api_get_path(WEB_CODE_PATH).'social/friends.php">
+                        '.$friendsIcon.' '.get_lang('Friends').'
+                    </a>
+                </li>';
+            $active = $show === 'browse_groups' ? 'active' : null;
+            $links .= '
+                <li class="browse-groups-icon '.$active.'">
+                    <a href="'.$groupUrl.'">
+                        '.$groupsIcon.' '.get_lang('SocialGroups').'
+                    </a>
+                </li>';
+
+            // Search users
+            $active = $show == 'search' ? 'active' : null;
+            $links .= '
+                <li class="search-icon '.$active.'">
+                    <a href="'.api_get_path(WEB_CODE_PATH).'social/search.php">
+                        '.$searchIcon.' '.get_lang('Search').'
+                    </a>
+                </li>';
+
+            // My files
+            $active = $show == 'myfiles' ? 'active' : null;
+
+            $myFiles = '
+                <li class="myfiles-icon '.$active.'">
+                    <a href="'.api_get_path(WEB_CODE_PATH).'social/myfiles.php">
+                        '.$filesIcon.' '.get_lang('MyFiles').'
+                    </a>
+                </li>';
+
+            if (api_get_setting('allow_my_files') === 'false') {
+                $myFiles = '';
+            }
+            $links .= $myFiles;
+            if (api_get_configuration_value('allow_portfolio_tool')) {
+                $links .= '
+                    <li class="portoflio-icon '.($show == 'portfolio' ? 'active' : '').'">
+                        <a href="'.api_get_path(WEB_CODE_PATH).'portfolio/index.php">
+                            '.$portfolioIcon.' '.get_lang('Portfolio').'
+                        </a>
+                    </li>
+                ';
+            }
+
+            if (!api_get_configuration_value('disable_gdpr')) {
+                $active = $show == 'personal-data' ? 'active' : null;
+                $personalData = '
+                    <li class="personal-data-icon '.$active.'">
+                        <a href="'.api_get_path(WEB_CODE_PATH).'social/personal_data.php">
+                            '.$personalDataIcon.' '.get_lang('PersonalDataReport').'
+                        </a>
+                    </li>';
+                $links .= $personalData;
+                $links .= '</ul>';
+            }
+
+            $html .= Display::panelCollapse(
+                get_lang('SocialNetwork'),
+                $links,
+                'social-network-menu',
+                null,
+                'sn-sidebar',
+                'sn-sidebar-collapse'
+            );
+        }
+
+        if (in_array($show, $show_groups) && !empty($group_id)) {
+            $html .= $usergroup->show_group_column_information(
+                $group_id,
+                api_get_user_id(),
+                $show
+            );
+        }
+
+        if ($show === 'shared_profile') {
+            $links = '<ul class="nav nav-pills nav-stacked">';
+            // My own profile
+            if ($show_full_profile && $user_id == intval(api_get_user_id())) {
+                $links .= '
+                    <li class="home-icon '.$active.'">
+                        <a href="'.api_get_path(WEB_CODE_PATH).'social/home.php">
+                            '.$homeIcon.' '.get_lang('Home').'
+                        </a>
+                    </li>
+                    <li class="messages-icon '.$active.'">
+                        <a href="'.api_get_path(WEB_CODE_PATH).'messages/inbox.php">
+                            '.$messagesIcon.' '.get_lang('Messages').$count_unread_message.'
+                        </a>
+                    </li>';
+                $active = $show === 'invitations' ? 'active' : null;
+                $links .= '
+                    <li class="invitations-icon'.$active.'">
+                        <a href="'.api_get_path(WEB_CODE_PATH).'social/invitations.php">
+                            '.$invitationsIcon.' '.get_lang('Invitations').$total_invitations.'
+                        </a>
+                    </li>';
+
+                $links .= '
+                    <li class="shared-profile-icon active">
+                        <a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php">
+                            '.$sharedProfileIcon.' '.get_lang('ViewMySharedProfile').'
+                        </a>
+                    </li>
+                    <li class="friends-icon">
+                        <a href="'.api_get_path(WEB_CODE_PATH).'social/friends.php">
+                            '.$friendsIcon.' '.get_lang('Friends').'
+                        </a>
+                    </li>';
+
+                $links .= '<li class="browse-groups-icon">
+                        <a href="'.$groupUrl.'">
+                            '.$groupsIcon.' '.get_lang('SocialGroups').'
+                        </a>
+                        </li>';
+
+                $active = $show == 'search' ? 'active' : null;
+                $links .= '
+                    <li class="search-icon '.$active.'">
+                        <a href="'.api_get_path(WEB_CODE_PATH).'social/search.php">
+                            '.$searchIcon.' '.get_lang('Search').'
+                        </a>
+                    </li>';
+                $active = $show == 'myfiles' ? 'active' : null;
+
+                $myFiles = '
+                    <li class="myfiles-icon '.$active.'">
+                     <a href="'.api_get_path(WEB_CODE_PATH).'social/myfiles.php">
+                            '.$filesIcon.' '.get_lang('MyFiles').'
+                        </a>
+                    </li>';
+
+                if (api_get_setting('allow_my_files') === 'false') {
+                    $myFiles = '';
+                }
+                $links .= $myFiles;
+
+                if (api_get_configuration_value('allow_portfolio_tool')) {
+                    $links .= '
+                        <li class="portoflio-icon '.($show == 'portfolio' ? 'active' : '').'">
+                            <a href="'.api_get_path(WEB_CODE_PATH).'portfolio/index.php">
+                                '.$portfolioIcon.' '.get_lang('Portfolio').'
+                            </a>
+                        </li>
+                    ';
+                }
+            }
+
+            // My friend profile.
+            if ($user_id != api_get_user_id()) {
+                $sendMessageText = get_lang('SendMessage');
+                $sendMessageIcon = Display::return_icon(
+                    'new-message.png',
+                    $sendMessageText
+                );
+                $sendMessageUrl = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?'.http_build_query([
+                        'a' => 'get_user_popup',
+                        'user_id' => $user_id,
+                    ]);
+
+                $links .= '<li>';
+                $links .= Display::url(
+                    "$sendMessageIcon $sendMessageText",
+                    $sendMessageUrl,
+                    [
+                        'class' => 'ajax',
+                        'title' => $sendMessageText,
+                        'data-title' => $sendMessageText,
+                    ]
+                );
+                $links .= '</li>';
+
+                if (api_get_configuration_value('allow_portfolio_tool')) {
+                    $links .= '
+                        <li class="portoflio-icon '.($show == 'portfolio' ? 'active' : '').'">
+                            <a href="'.api_get_path(WEB_CODE_PATH).'portfolio/index.php?user='.$user_id.'">
+                                '.$portfolioIcon.' '.get_lang('Portfolio').'
+                            </a>
+                        </li>
+                    ';
+                }
+            }
+
+            // Check if I already sent an invitation message
+            $invitation_sent_list = self::get_list_invitation_sent_by_user_id(api_get_user_id());
+
+            if (isset($invitation_sent_list[$user_id]) && is_array($invitation_sent_list[$user_id]) &&
+                count($invitation_sent_list[$user_id]) > 0
+            ) {
+                $links .= '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/invitations.php">'.
+                    Display::return_icon('invitation.png', get_lang('YouAlreadySentAnInvitation'))
+                    .'&nbsp;&nbsp;'.get_lang('YouAlreadySentAnInvitation').'</a></li>';
+            } else {
+                if (!$show_full_profile) {
+                    $links .= '<li>
+                        <a class="btn-to-send-invitation" href="#" data-send-to="'.$user_id.'" title="'.get_lang('SendInvitation').'">'.
+                        Display::return_icon('invitation.png', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').
+                        '</a></li>';
+                }
+            }
+
+            $links .= '</ul>';
+            $html .= Display::panelCollapse(
+                get_lang('SocialNetwork'),
+                $links,
+                'social-network-menu',
+                null,
+                'sn-sidebar',
+                'sn-sidebar-collapse'
+            );
+
+            if ($show_full_profile && $user_id == intval(api_get_user_id())) {
+                $personal_course_list = UserManager::get_personal_session_course_list($user_id);
+                $course_list_code = [];
+                $i = 1;
+                if (is_array($personal_course_list)) {
+                    foreach ($personal_course_list as $my_course) {
+                        if ($i <= 10) {
+                            $course_list_code[] = ['code' => $my_course['code']];
+                        } else {
+                            break;
+                        }
+                        $i++;
+                    }
+                    // To avoid repeated courses
+                    $course_list_code = array_unique_dimensional($course_list_code);
+                }
+
+                // Announcements
+                $my_announcement_by_user_id = intval($user_id);
+                $announcements = [];
+                foreach ($course_list_code as $course) {
+                    $course_info = api_get_course_info($course['code']);
+                    if (!empty($course_info)) {
+                        $content = AnnouncementManager::get_all_annoucement_by_user_course(
+                            $course_info['code'],
+                            $my_announcement_by_user_id
+                        );
+
+                        if (!empty($content)) {
+                            $url = Display::url(
+                                Display::return_icon(
+                                    'announcement.png',
+                                    get_lang('Announcements')
+                                ).$course_info['name'].' ('.$content['count'].')',
+                                api_get_path(WEB_CODE_PATH).'announcements/announcements.php?cidReq='.$course['code']
+                            );
+                            $announcements[] = Display::tag('li', $url);
+                        }
+                    }
+                }
+                if (!empty($announcements)) {
+                    $html .= '<div class="social_menu_items">';
+                    $html .= '<ul>';
+                    foreach ($announcements as $announcement) {
+                        $html .= $announcement;
+                    }
+                    $html .= '</ul>';
+                    $html .= '</div>';
+                }
+            }
+        }
+
+        if ($show_delete_account_button) {
+            $html .= '<div class="panel panel-default"><div class="panel-body">';
+            $html .= '<ul class="nav nav-pills nav-stacked"><li>';
+            $url = api_get_path(WEB_CODE_PATH).'auth/unsubscribe_account.php';
+            $html .= Display::url(
+                Display::return_icon(
+                    'delete.png',
+                    get_lang('Unsubscribe'),
+                    [],
+                    ICON_SIZE_TINY
+                ).get_lang('Unsubscribe'),
+                $url
+            );
+            $html .= '</li></ul>';
+            $html .= '</div></div>';
+        }
+        $html .= '';
+
+        return $html;
     }
 
     /**

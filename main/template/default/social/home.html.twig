@@ -1,89 +1,114 @@
-
-{% import '@ChamiloTheme/Macros/box.html.twig' as macro %}
+{% extends '@ChamiloTheme/Layout/layout_one_col.html.twig' %}
 
 {% block content %}
-{% autoescape false %}
+    {% autoescape false %}
+    <style>
+        #listFriends .list-group {
+            max-height: 250px;
+            overflow-y:auto;
+        }
+    </style>
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-3">
+            {{ social_avatar_block }}
 
-            {% set avatar %}
-                {% include '@ChamiloTheme/Social/user_block.html.twig' %}
-            {% endset %}
-
-            {{ macro.panel('', avatar ) }}
-
-            {{ macro.panel("Search Users" | trans, social_search ) }}
-
-            {{ macro.panel("SocialFriend" | get_lang, social_friend_block ) }}
+            <div class="social-network-menu">
+                {{ social_menu_block }}
+            </div>
         </div>
-        <div class="col-md-8">
+        <div class="col-md-6">
+            {#{{ social_search_block }}#}
 
-            {{ social_skill_block }}
-
-            {% set group %}
-                <div class="group-title">
-                    {{ 'The last'|get_lang }}
+            <div id="wallMessages">
+                {{ social_wall_block }}
+                <div class="spinner"></div>
+                <div class="panel panel-preview panel-default" hidden="true">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">{{ "Url" | get_lang }} - {{ "Preview" | get_lang }}</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="url_preview"></div>
+                    </div>
                 </div>
-                <ul class="list-unstyled">
-                {% for item in groups.newest %}
-                    <li class="media item-{{ item.id }}">
-                        <a href="{{ item.url }}" title="{{ item.name }}">
-                            <img class="mr-3" src="{{ item.picture }}" alt="{{ item.name }}">
-                        </a>
-                        <div class="media-body">
-                            <h5 class="mt-0 mb-1"><a href="{{ item.url }}" title="{{ item.name }}">{{ item.name }}</a></h5>
-                            <div class="details"><i class="fas fa-users"></i> {{ 'Members'|get_lang }} {{ item.count }}</div>
-                            {{ item.description }}
-                        </div>
-                    </li>
-                {% endfor %}
-                </ul>
-                <div class="group-title">
-                    {{ 'Popular'|get_lang }}
-                </div>
-                <ul class="list-unstyled">
-                    {% for item in groups.popular %}
-                        <li class="media mb-3 item-{{ item.id }}">
-                            <a href="{{ item.url }}" title="{{ item.name }}">
-                                <img class="mr-3" src="{{ item.picture }}" alt="{{ item.name }}">
-                            </a>
-                            <div class="media-body">
-                                <h5 class="mt-0 mb-1"><a href="{{ item.url }}" title="{{ item.name }}">{{ item.name }}</a></h5>
-                                <div class="details"><i class="fas fa-users"></i> {{ 'Members'|get_lang }} {{ item.count }}</div>
-                                {{ item.description }}
-                            </div>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% endset %}
-
-            {{ macro.panel("Groups" | trans, group ) }}
+                {{ social_post_wall_block }}
+                {{ social_auto_extend_link }}
+            </div>
 
             {{ social_right_content }}
             <div id="message_ajax_reponse" class=""></div>
             <div id="display_response_id"></div>
-            {{ social_auto_extend_link }}
         </div>
+        <div class="col-md-3">
+            <!-- Block chat list -->
+            <div class="chat-friends">
+                <div class="panel-group" id="blocklistFriends" role="tablist" aria-multiselectable="true">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingOne">
+                            <h4 class="panel-title">
+                                <a role="button"
+                                   data-toggle="collapse"
+                                   data-parent="#blocklistFriends"
+                                   href="#listFriends"
+                                   aria-expanded="true"
+                                   aria-controls="listFriends">
+                                    {{ "SocialFriend" | get_lang }}
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="listFriends"
+                             class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="panel-body">
+                                <div class="search-friend">
+                                    {{ search_friends_form }}
+                                </div>
 
+                                {{ social_friend_block }}
 
-        {#<div class="col-md-3">
-            {{ macro.panel("SocialFriend" | get_lang, social_friend_block ) }}
+                                {% if 'allow_social_map_fields'|api_get_configuration_value %}
+                                    <div class="geolocalization">
+                                        <a class="btn btn-maps" id="profile-tab" href="{{ _p.web }}main/social/map.php" >
+                                            {{ "geolocalization.png"|img(32) }}
+                                            {{ 'SearchUserByGeolocalization' | get_lang }}
+                                        </a>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{ social_group_block }}
+
+            {{ social_skill_block }}
 
             <!-- Block session list -->
-            {% set sessionList %}
-                <ul class="list-group">
-                    {% for session in session_list %}
-                        <li id="session_{{ session.id }}" class="list-group-item" style="min-height:65px;">
-                            <img class="img-session" src="{{ session.image }}"/>
-                            <span class="title">{{ session.name }}</span>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% endset %}
-
-            {{ macro.panel("MySessions" | get_lang, sessionList) }}
-        </div>#}
-
+            {% if session_list != null %}
+                <div class="panel-group" id="session-block" role="tablist" aria-multiselectable="true">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingOne">
+                            <h4 class="panel-title">
+                                <a role="button" data-toggle="collapse" data-parent="#session-block" href="#sessionList" aria-expanded="true" aria-controls="sessionList">
+                                    {{ "MySessions" | get_lang }}
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="sessionList" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="panel-body">
+                                <ul class="list-group">
+                                    {% for session in session_list %}
+                                        <li id="session_{{ session.id }}" class="list-group-item" style="min-height:65px;">
+                                            <img class="img-session" src="{{ session.image }}"/>
+                                            <span class="title">{{ session.name }}</span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
     </div>
-{% endautoescape %}
+    {% endautoescape %}
 {% endblock %}

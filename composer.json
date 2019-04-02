@@ -164,7 +164,8 @@
         "masterminds/html5": "2.*",
         "jtsternberg/oauth1-php": "dev-master",
         "league/csv": "^9.1",
-        "symfony/webpack-encore-bundle": "^1.1"
+        "symfony/webpack-encore-bundle": "^1.1",
+        "brumann/polyfill-unserialize": "^1.0"
     },
     "config": {
         "component-dir": "public/assets"

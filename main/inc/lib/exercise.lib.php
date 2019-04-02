@@ -46,8 +46,13 @@ class ExerciseLib
         $show_answers = false,
         $show_icon = false
     ) {
-        $course_id = empty($exercise->course_id) ? api_get_course_int_id() : $exercise->course_id;
-        $course = api_get_course_info_by_id($course_id);
+        $course_id = $exercise->course_id;
+
+        if (empty($course_id)) {
+            return '';
+        }
+        $course = $exercise->course;
+
         // Change false to true in the following line to enable answer hinting
         $debug_mark_answer = $show_answers;
         // Reads question information
@@ -5326,7 +5331,7 @@ EOT;
 
         $midnightTime = ChamiloApi::getServerMidnightTime();
 
-        $answeredQuestionsCount = ExerciseLib::countAnsweredQuestionsByUserAfterTime(
+        $answeredQuestionsCount = self::countAnsweredQuestionsByUserAfterTime(
             $midnightTime,
             $userId,
             $courseId,

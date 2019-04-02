@@ -192,7 +192,9 @@ class QuestionOptionsEvaluationPlugin extends Plugin
                 break;
         }
 
-        return ($result / count($qTracks)) * $this->getMaxScore();
+        $score = ($result / count($qTracks)) * $this->getMaxScore();
+error_log($score);
+        return $score >= 0 ? $score : 0;
     }
 
     /**

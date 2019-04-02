@@ -167,18 +167,36 @@
                 $.when
                     .apply($, [loadFiles(courseId, sessionId), loadForm(courseId, sessionId)])
                     .then(function (response1, response2) {
+                        var filesCount = 0,
+                            filesUploadedCount = 0;
+
                         $trContainer.find('td:first')
                             .html('<div id="session-' + sessionId + '-docs">' + response1[0] + '</div>'
                                 + '<div id="session-' + sessionId + '-form">' + response2[0] + '</div>');
 
-                        $('#input_file_upload').on('fileuploaddone', function (e, data) {
-                            $('#session-' + sessionId + '-docs').html('{{ 'Loading'|get_lang }}');
+                        $('#input_file_upload')
+                            .on('fileuploadadd', function (e, data) {
+                                filesCount += data.files.length;
+                            })
+                            .on('fileuploaddone', function (e, data) {
+                                filesUploadedCount += data.files.length;
 
-                            loadFiles(courseId, sessionId)
-                                .then(function (response) {
-                                    $('#session-' + sessionId + '-docs').html(response);
-                                });
-                        });
+                                data.context.parent().remove();
+
+                                if (filesUploadedCount < filesCount) {
+                                    return;
+                                }
+
+                                $('#session-' + sessionId + '-docs').html('{{ 'Loading'|get_lang }}');
+
+                                loadFiles(courseId, sessionId)
+                                    .then(function (response) {
+                                        filesCount = 0;
+                                        filesUploadedCount = 0;
+
+                                        $('#session-' + sessionId + '-docs').html(response);
+                                    });
+                            });
                     });
             });
 

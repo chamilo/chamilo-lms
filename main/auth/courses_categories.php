@@ -98,21 +98,8 @@ if ($showCourses) {
     }
     echo '</div>';
     echo '<div class="col-md-'.($showSessions ? '4' : '6').'">';
-
-    $categoriesSelect = '';
-    $cacheAvailable = api_get_configuration_value('apc');
-    $accessUrlId = api_get_current_access_url_id();
-    if ($cacheAvailable === true) {
-        $apcVar = api_get_configuration_value('apc_prefix').'_'.$accessUrlId.'_course_categories_select';
-        if (apcu_exists($apcVar)) {
-            $categoriesSelect = apcu_fetch($apcVar);
-        } else {
-            $categoriesSelect = getOptionSelect($list_categories, $codeType);
-            apcu_store($apcVar, $categoriesSelect, 60);
-        }
-    } else {
-        $categoriesSelect = getOptionSelect($list_categories, $codeType);
-    }
+    $listCategories = CoursesAndSessionsCatalog::getCourseCategoriesTree();
+    $categoriesSelect = getOptionSelect($listCategories, $codeType);
 
     $webAction = api_get_path(WEB_CODE_PATH).'auth/courses.php';
     $form = '<form action="'.$webAction.'" method="GET">';
@@ -300,7 +287,7 @@ function getOptionSelect($categories, $codeType)
             continue;
         }
         if ($level > 0) {
-            $separate = str_repeat("--", $level);
+            $separate = str_repeat('--', $level);
         } else {
             $separate = '';
         }

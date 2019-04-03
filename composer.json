@@ -162,7 +162,6 @@
         "firebase/php-jwt": "^5.0",
         "simplethings/entity-audit-bundle": "^1.0",
         "masterminds/html5": "2.*",
-        "jtsternberg/oauth1-php": "dev-master",
         "league/csv": "^9.1",
         "symfony/webpack-encore-bundle": "^1.1",
         "brumann/polyfill-unserialize": "^1.0"
@@ -206,11 +205,5 @@
         "pre-update-cmd": [
             "Chamilo\\CoreBundle\\Composer\\ScriptHandler::deleteOldFilesFrom19x"
         ]
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/jtsternberg/oauth1-php"
-        }
-    ]
+    }
 }

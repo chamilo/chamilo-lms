@@ -141,7 +141,6 @@ EOT;
                 <div class="col-sm-8">
                     {icon}
                     {element}
-
                     <!-- BEGIN label_2 -->
                         <p class="help-block">{label_2}</p>
                     <!-- END label_2 -->
@@ -283,9 +282,9 @@ EOT;
     }
 
     /**
-     * @param string $name
+     * @param string       $name
      * @param string|array $label
-     * @param array  $attributes
+     * @param array        $attributes
      *
      * @return DateTimeRangePicker
      */

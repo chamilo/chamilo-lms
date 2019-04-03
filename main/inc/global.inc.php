@@ -555,6 +555,13 @@ if (!empty($parent_path)) {
     if (file_exists($langfile)) {
         include $langfile;
     }
+
+    // Check if language/custom.php exists
+    $customLanguage = $langpath.$language_interface.'/custom.php';
+
+    if (file_exists($customLanguage)) {
+        include $customLanguage;
+    }
 }
 
 // include the local (contextual) parameters of this course or section

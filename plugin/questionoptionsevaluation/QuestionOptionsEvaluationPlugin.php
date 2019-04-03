@@ -193,7 +193,7 @@ class QuestionOptionsEvaluationPlugin extends Plugin
         }
 
         $score = ($result / count($qTracks)) * $this->getMaxScore();
-error_log($score);
+
         return $score >= 0 ? $score : 0;
     }
 

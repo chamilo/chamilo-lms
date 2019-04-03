@@ -1019,6 +1019,7 @@ EOT;
         $config = [],
         $attributes = []
     ) {
+        $attributes = [];
         $attributes['rows'] = isset($config['rows']) ? $config['rows'] : 15;
         $attributes['cols'] = isset($config['cols']) ? $config['cols'] : 80;
         $attributes['cols-size'] = isset($config['cols-size']) ? $config['cols-size'] : [];
@@ -1032,7 +1033,6 @@ EOT;
 
         /** @var HtmlEditor $element */
         $element = $this->getElement($name);
-
         $config['style'] = false;
         if ($fullPage) {
             $config['fullPage'] = true;
@@ -1174,10 +1174,8 @@ EOT;
             // @todo improve UI
             $returnValue .= '<br />
 
-            <div id="loading_div_'.$id.'" class="loading_div" style="display:none;height:50vh;">
-                <div id="main-spinner">
-                    <span class="spinner"></span>  
-                </div>
+            <div id="loading_div_'.$id.'" class="loading_div" style="display:none;margin-left:40%; margin-top:10px; height:50px;">
+                <div class="wobblebar-loader"></div>
             </div>
             ';
         }

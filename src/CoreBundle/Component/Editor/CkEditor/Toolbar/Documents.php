@@ -18,6 +18,7 @@ class Documents extends Basic
     public function getConfig()
     {
         $config = [];
+
         if (api_get_setting('more_buttons_maximized_mode') !== 'true') {
             $config['toolbar'] = $this->getNormalToolbar();
         } else {
@@ -75,12 +76,13 @@ class Documents extends Basic
                 'NumberedList',
                 'BulletedList',
                 '-',
+                api_get_configuration_value('translate_html') ? 'Language' : '',
                 api_get_setting('allow_spellcheck') === 'true' ? 'Scayt' : '',
             ],
             '/',
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['Bold', 'Italic', 'Underline'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyRight'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             api_get_setting('enabled_wiris') === 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
             ['Source'],
         ];
@@ -108,7 +110,7 @@ class Documents extends Basic
                 'Asciisvg',
             ],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyBlock'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight'],
             ['Styles',
                 'Format',
                 'Font',
@@ -120,6 +122,7 @@ class Documents extends Basic
                 'BGColor',
             ],
             [
+                api_get_configuration_value('translate_html') ? 'Language' : '',
                 'ShowBlocks',
                 'Source',
             ],

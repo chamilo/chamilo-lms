@@ -56,6 +56,7 @@ class Forum extends Basic
                 'JustifyLeft',
                 'JustifyCenter',
                 'JustifyRight',
+                'JustifyBlock',
             ],
         ];
     }

@@ -37,6 +37,7 @@ class CourseSelectForm
         $list[RESOURCE_QUIZ] = get_lang('Tests');
         $list[RESOURCE_TEST_CATEGORY] = get_lang('QuestionCategory');
         $list[RESOURCE_LEARNPATH] = get_lang('ToolLearnpath');
+        $list[RESOURCE_LEARNPATH_CATEGORY] = get_lang('LearnpathCategory');
         $list[RESOURCE_SCORM] = 'SCORM';
         $list[RESOURCE_TOOL_INTRO] = get_lang('ToolIntro');
         $list[RESOURCE_SURVEY] = get_lang('Survey');
@@ -444,7 +445,7 @@ class CourseSelectForm
     {
         if (is_array($course->resources)) {
             foreach ($course->resources as $type => $resources) {
-                if (count($resources) > 0) {
+                if (!empty($resources) && count($resources) > 0) {
                     switch ($type) {
                         case RESOURCE_QUIZQUESTION:
                             foreach ($resources as $id => $resource) {
@@ -467,7 +468,7 @@ class CourseSelectForm
     {
         if (is_array($course->resources)) {
             foreach ($course->resources as $type => $resources) {
-                if (count($resources) > 0) {
+                if (!empty($resources) && count($resources) > 0) {
                     switch ($type) {
                         case RESOURCE_SCORM:
                             foreach ($resources as $id => $resource) {
@@ -497,13 +498,11 @@ class CourseSelectForm
      */
     public static function get_posted_course($from = '', $session_id = 0, $course_code = '', $postedCourse = null)
     {
-        $course = null;
-        if (isset($_POST['course'])) {
-            $course = Course::unserialize(base64_decode($_POST['course']));
-        }
-
-        if ($postedCourse) {
-            $course = $postedCourse;
+        $course = $postedCourse;
+        if (empty($postedCourse)) {
+            $cb = new CourseBuilder();
+            $postResource = isset($_POST['resource']) ? $_POST['resource'] : [];
+            $course = $cb->build(0, null, false, array_keys($postResource), $postResource);
         }
 
         if (empty($course)) {
@@ -527,7 +526,7 @@ class CourseSelectForm
                 foreach ($resource as $resource_item) {
                     $conditionSession = '';
                     if (!empty($session_id)) {
-                        $session_id = intval($session_id);
+                        $session_id = (int) $session_id;
                         $conditionSession = ' AND d.session_id ='.$session_id;
                     }
 
@@ -645,7 +644,7 @@ class CourseSelectForm
                         $documents = isset($_POST['resource'][RESOURCE_DOCUMENT]) ? $_POST['resource'][RESOURCE_DOCUMENT] : null;
                         if (!empty($resources) && is_array($resources)) {
                             foreach ($resources as $id => $obj) {
-                                if (isset($obj->file_type) && $obj->file_type == 'folder' &&
+                                if (isset($obj->file_type) && $obj->file_type === 'folder' &&
                                     !isset($_POST['resource'][RESOURCE_DOCUMENT][$id]) &&
                                     is_array($documents)
                                 ) {

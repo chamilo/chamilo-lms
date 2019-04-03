@@ -7769,7 +7769,7 @@ SQL;
         $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
         if (empty($sessionId)) {
-            $sessions = SessionManager::formatSessionsAdminForGrid();
+            $sessions = self::formatSessionsAdminForGrid();
             $sessionList = [];
             $sessionList[] = '';
             foreach ($sessions as $session) {

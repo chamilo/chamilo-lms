@@ -204,9 +204,6 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
     {
         $size = $this->getColumnsSize();
         $custom = $this->getAttributes();
-
-
-
         $this->removeAttribute('cols-size');
 
         if (empty($size)) {

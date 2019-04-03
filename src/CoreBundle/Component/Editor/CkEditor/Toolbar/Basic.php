@@ -66,6 +66,13 @@ class Basic extends Toolbar
     ];
 
     /**
+     * Plugins this toolbar.
+     *
+     * @var array
+     */
+    public $plugins = [];
+
+    /**
      * {@inheritdoc}
      */
     public function __construct(
@@ -127,7 +134,7 @@ class Basic extends Toolbar
             $plugins[] = 'scayt';
         }
 
-        $this->defaultPlugins = array_merge($this->defaultPlugins, $plugins);
+        $this->defaultPlugins = array_unique(array_merge($this->defaultPlugins, $plugins));
         parent::__construct($router, $toolbar, $config, $prefix);
     }
 
@@ -170,7 +177,7 @@ class Basic extends Toolbar
             'wordLimit' => 'unlimited'
         );*/
 
-        $config['skin'] = 'bootstrapck';
+        $config['skin'] = 'moono-lisa';
 
         $config['image2_chamilo_alignClasses'] = [
             'pull-left',

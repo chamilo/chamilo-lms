@@ -87,8 +87,7 @@ class TestMatching extends Basic
                 'Subscript',
                 'Superscript',
                 'ShowBlocks',
-            ], ['JustifyLeft', 'JustifyCenter', 'JustifyRight'],
-            ['Source'],
+            ],
         ];
     }
 
@@ -104,7 +103,7 @@ class TestMatching extends Basic
             ['Undo', 'Redo'],
             ['Link', 'Image', 'Video', 'Flash', 'Audio', 'Table', 'Asciimath'],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyBlock'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight'],
             ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
             ['Source', 'Toolbarswitch'],
         ];

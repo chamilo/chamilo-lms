@@ -531,15 +531,15 @@
      inkscape:pageshadow="2"
      inkscape:zoom="2.7787087"
      inkscape:cx="95.401696"
-     inkscape:cy="62.253572"
+     inkscape:cy="4.6728691"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
      units="px"
-     inkscape:window-width="1366"
-     inkscape:window-height="713"
-     inkscape:window-x="0"
-     inkscape:window-y="27"
+     inkscape:window-width="1920"
+     inkscape:window-height="1052"
+     inkscape:window-x="1366"
+     inkscape:window-y="0"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata2102">
@@ -549,7 +549,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -561,9 +561,9 @@
     <g
        transform="translate(-126.32224,160.74601)"
        id="g3077"
-       inkscape:export-filename="/var/www/chamilo/main/img/icons/32/1day.png"
-       inkscape:export-xdpi="24.000002"
-       inkscape:export-ydpi="24.000002">
+       inkscape:export-filename="/var/www/chamilo/main/img/icons/128/1day.png"
+       inkscape:export-xdpi="96.000008"
+       inkscape:export-ydpi="96.000008">
       <rect
          y="102.38734"
          x="126.32224"
@@ -611,7 +611,7 @@
          id="g1470"
          transform="translate(75.247224,-1.5875)">
         <path
-           style="fill:#bdc3c7;stroke:none;stroke-width:0.26458332;stroke-opacity:1"
+           style="fill:#6c5353;stroke:none;stroke-width:0.26458332;stroke-opacity:1"
            d="m 57.94124,118.23553 v 3.09122 h 3.091224 v -3.09122 z"
            id="path1440"
            inkscape:connector-curvature="0" />
@@ -621,7 +621,7 @@
            id="path1442"
            inkscape:connector-curvature="0" />
         <path
-           style="fill:#ffffff;stroke:none;stroke-width:0.26458332;stroke-opacity:1"
+           style="fill:#d38d5f;stroke:none;stroke-width:0.26458332;stroke-opacity:1"
            d="m 67.214911,118.23553 v 3.09122 h 3.091223 v -3.09122 z"
            id="path1444"
            inkscape:connector-curvature="0" />
@@ -651,7 +651,7 @@
            id="path1454"
            inkscape:connector-curvature="0" />
         <path
-           style="fill:#ffd42a;stroke:none;stroke-width:0.26458332;stroke-opacity:1"
+           style="fill:#ff7f2a;stroke:none;stroke-width:0.26458332;stroke-opacity:1"
            d="m 71.851746,122.87237 v 3.09122 h 3.091223 v -3.09122 z"
            id="path1456"
            inkscape:connector-curvature="0" />
@@ -681,7 +681,7 @@
            id="path1466"
            inkscape:connector-curvature="0" />
         <path
-           style="fill:#ffffff;stroke:none;stroke-width:0.26458332;stroke-opacity:1"
+           style="fill:#ffdd55;stroke:none;stroke-width:0.26458332;stroke-opacity:1"
            d="m 76.488581,127.5092 v 3.09123 h 3.091225 v -3.09123 z"
            id="path1468"
            inkscape:connector-curvature="0" />

@@ -84,12 +84,12 @@ class HTML_QuickForm_element extends HTML_Common
     /**
      * Class constructor
      *
-     * @param    string     Name of the element
-     * @param    mixed      Label(s) for the element
-     * @param    mixed      Associative array of tag attributes or HTML attributes name="value" pairs
-     * @since    1.0
-     * @access   public
+     * @param string     Name of the element
+     * @param string|array      Label(s) for the element
+     * @param mixed      Associative array of tag attributes or HTML attributes name="value" pairs
+     *
      * @return   void
+     * @since    1.0
      */
     public function __construct($elementName = null, $elementLabel = null, $attributes = null)
     {
@@ -394,7 +394,7 @@ class HTML_QuickForm_element extends HTML_Common
      * @access    public
      * @return    string
      */
-    function getLabel()
+    public function getLabel()
     {
         return $this->_label;
     }
@@ -504,7 +504,7 @@ class HTML_QuickForm_element extends HTML_Common
     * @access public
     * @return void
     */
-    function accept(&$renderer, $required=false, $error=null)
+    public function accept(&$renderer, $required=false, $error=null)
     {
         $renderer->renderElement($this, $required, $error);
     }
@@ -518,7 +518,7 @@ class HTML_QuickForm_element extends HTML_Common
     * @access private
     * @return void
     */
-    function _generateId()
+    public function _generateId()
     {
         static $idx = 1;
 
@@ -535,7 +535,7 @@ class HTML_QuickForm_element extends HTML_Common
     * @access public
     * @return mixed
     */
-    function exportValue(&$submitValues, $assoc = false)
+    public function exportValue(&$submitValues, $assoc = false)
     {
         $value = $this->_findValue($submitValues);
         if (null === $value) {
@@ -552,7 +552,7 @@ class HTML_QuickForm_element extends HTML_Common
     * @access private
     * @return mixed
     */
-    function _prepareValue($value, $assoc)
+    public function _prepareValue($value, $assoc)
     {
         if (null === $value) {
             return null;
@@ -604,8 +604,6 @@ class HTML_QuickForm_element extends HTML_Common
         return $this;
     }
 
-
-
     /**
      * @return null
      */
@@ -623,7 +621,7 @@ class HTML_QuickForm_element extends HTML_Common
     }
 
     /**
-     * @return array|null
+     * @return array
      */
     public function calculateSize()
     {

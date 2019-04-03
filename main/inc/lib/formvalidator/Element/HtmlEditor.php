@@ -19,27 +19,26 @@ class HtmlEditor extends HTML_QuickForm_textarea
     /**
      * Class Constructor.
      *
-     * @param string $name
-     * @param string $elementLabel HTML editor  label
-     * @param array  $attributes   Attributes for the textarea
-     * @param array  $config       optional configuration settings for the online editor
+     * @param string       $name
+     * @param string|array $label      HTML editor  label
+     * @param array        $attributes Attributes for the textarea
+     * @param array        $config     optional configuration settings for the online editor
      */
     public function __construct(
-        $name = null,
-        $elementLabel = null,
+        $name,
+        $label = null,
         $attributes = [],
         $config = []
     ) {
         if (empty($name)) {
-            throw new Exception('The html editor needs a name');
+            throw new \Exception('Name is required');
         }
 
-        parent::__construct($name, $elementLabel, $attributes);
+        parent::__construct($name, $label, $attributes);
         $this->_persistantFreeze = true;
         $this->_type = 'html_editor';
 
         $editor = Container::getHtmlEditor();
-
         if ($editor) {
             $this->editor = $editor;
             $this->editor->setName($name);

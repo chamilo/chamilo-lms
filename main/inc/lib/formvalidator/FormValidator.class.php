@@ -271,11 +271,11 @@ EOT;
     }
 
     /**
-     * @param string $name
-     * @param string $label
-     * @param array  $attributes
+     * @param string       $name
+     * @param string|array $label
+     * @param array        $attributes
      *
-     * @return mixed
+     * @return DateTimePicker
      */
     public function addDateTimePicker($name, $label, $attributes = [])
     {
@@ -284,10 +284,10 @@ EOT;
 
     /**
      * @param string $name
-     * @param string $label
+     * @param string|array $label
      * @param array  $attributes
      *
-     * @return HTML_QuickForm_element
+     * @return DateTimeRangePicker
      */
     public function addDateTimeRangePicker($name, $label, $attributes = [])
     {
@@ -305,10 +305,10 @@ EOT;
     }
 
     /**
-     * @param string $name
-     * @param string $label
-     * @param array  $attributes
-     * @param bool   $required
+     * @param string       $name
+     * @param string|array $label
+     * @param array        $attributes
+     * @param bool         $required
      *
      * @return HTML_QuickForm_textarea
      */
@@ -997,11 +997,11 @@ EOT;
     /**
      * Adds a HTML-editor to the form.
      *
-     * @param string $name
+     * @param string       $name
      * @param string|array $label    The label for the form-element
-     * @param bool   $required (optional) Is the form-element required (default=true)
-     * @param bool   $fullPage (optional) When it is true, the editor loads completed html code for a full page
-     * @param array  $config   (optional) Configuration settings for the online editor
+     * @param bool         $required (optional) Is the form-element required (default=true)
+     * @param bool         $fullPage (optional) When it is true, the editor loads completed html code for a full page
+     * @param array        $config   (optional) Configuration settings for the online editor
      */
     public function addHtmlEditor(
         $name,

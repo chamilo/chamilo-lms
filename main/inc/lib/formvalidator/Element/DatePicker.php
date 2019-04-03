@@ -9,11 +9,11 @@
 class DatePicker extends HTML_QuickForm_text
 {
     /**
-     * @param string $elementName
-     * @param string $elementLabel
-     * @param array  $attributes
+     * @param string       $elementName
+     * @param string|array $elementLabel
+     * @param array        $attributes
      */
-    public function __construct($elementName = null, $elementLabel = null, $attributes = null)
+    public function __construct($elementName, $elementLabel = null, $attributes = null)
     {
         if (!isset($attributes['id'])) {
             $attributes['id'] = $elementName;

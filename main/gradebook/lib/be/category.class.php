@@ -16,6 +16,8 @@ class Category implements GradebookItem
     public $evaluations;
     public $links;
     public $subCategories;
+    /** @var GradebookCategory */
+    public $entity;
     private $id;
     private $name;
     private $description;
@@ -264,12 +266,13 @@ class Category implements GradebookItem
      */
     public function setCourseListDependency($value)
     {
-        $result = [];
-        if (@unserialize($value) !== false) {
-            $result = unserialize($value);
-        }
+        $this->courseDependency = [];
 
-        $this->courseDependency = $result;
+        $unserialized = UnserializeApi::unserialize('not_allowed_classes', $value, true);
+
+        if (false !== $unserialized) {
+            $this->courseDependency = $unserialized;
+        }
     }
 
     /**
@@ -2570,6 +2573,12 @@ class Category implements GradebookItem
     private static function create_category_objects_from_sql_result($result)
     {
         $categories = [];
+        $allow = api_get_configuration_value('allow_gradebook_stats');
+        if ($allow) {
+            $em = Database::getManager();
+            $repo = $em->getRepository('ChamiloCoreBundle:GradebookCategory');
+        }
+
         while ($data = Database::fetch_array($result)) {
             $cat = new Category();
             $cat->set_id($data['id']);
@@ -2589,6 +2598,10 @@ class Category implements GradebookItem
             $cat->setCourseListDependency(isset($data['depends']) ? $data['depends'] : []);
             $cat->setMinimumToValidate(isset($data['minimum_to_validate']) ? $data['minimum_to_validate'] : null);
             $cat->setGradeBooksToValidateInDependence(isset($data['gradebooks_to_validate_in_dependence']) ? $data['gradebooks_to_validate_in_dependence'] : null);
+
+            if ($allow) {
+                $cat->entity = $repo->find($data['id']);
+            }
 
             $categories[] = $cat;
         }

@@ -1496,7 +1496,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                     // Conversion of the textfield to a select box with valid values.
                     $default_values[$row['variable']] = $row['selected_value'];
                 } elseif ($row['variable'] == 'platform_charset') {
-                    continue;
+                    break;
                 } else {
                     $hideme['class'] = 'col-md-4';
                     $hideme['aria-label'] = get_lang($row['title']);

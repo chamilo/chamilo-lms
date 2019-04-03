@@ -11,10 +11,8 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
  *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-
-// Flag to allow for anonymous user - needs to be set before global.inc.php.
-$use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
+api_protect_course_script();
 $course_dir = api_get_course_path().'/scorm';
 $course_sys_dir = api_get_path(SYS_COURSE_PATH).$course_dir;
 if (empty($_POST['current_dir'])) {

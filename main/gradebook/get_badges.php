@@ -56,7 +56,7 @@ $tpl = new Template(get_lang('Badges'), false, false);
 $tpl->assign(
     'content',
     "<script>
-    $(document).on('ready', function (){ 
+    $(function() {
         OpenBadges.issue_no_modal(".json_encode($assertions)."); 
     });
     </script>"

@@ -93,7 +93,7 @@ function getInfoQuiz($courseId, $id)
  *
  * @return array Results (list question ID)
  */
-function getQuestions($courseId, $quizId, $sessionId = 0)
+function getQuestionsFromCourse($courseId, $quizId, $sessionId = 0)
 {
     $courseId = (int) $courseId;
     $quizId = (int) $quizId;

@@ -126,7 +126,7 @@ $htmlHeadXtra[] = api_get_css_asset('qtip2/jquery.qtip.min.css');
 $htmlHeadXtra[] = api_get_asset('qtip2/jquery.qtip.min.js');
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
 $htmlHeadXtra[] = '<script>
-$(document).ready(function() {    
+$(function() {   
     $("div#log_content_cleaner").bind("click", function() {
         $("div#log_content").empty();
     });
@@ -137,7 +137,7 @@ var chamilo_xajax_handler = window.oxajax;
 $allowLpItemTip = api_get_configuration_value('hide_accessibility_label_on_lp_item') === false;
 if ($allowLpItemTip) {
     $htmlHeadXtra[] = '<script>
-    $(document).ready(function() {    
+    $(function() {   
          $(".scorm_item_normal").qtip({
             content: {
                 text: function(event, api) {
@@ -401,7 +401,6 @@ if ($lp->mode == 'fullscreen') {
         window.open('$src','content_id','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');
     </script>";
 }
-
 // Set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php).
 Session::write('loaded_lp_view', true);
 $display_none = '';
@@ -424,7 +423,7 @@ if (!api_is_invitee()) {
     $progress_bar = $lp->getProgressBar();
 }
 $navigation_bar = $lp->get_navigation_bar();
-$navigation_bar_bottom = $lp->get_navigation_bar("control-bottom", "display:none");
+$navigation_bar_bottom = $lp->get_navigation_bar('control-bottom', 'display:none');
 $mediaplayer = $lp->get_mediaplayer($lp->current, $autostart);
 
 $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
@@ -598,7 +597,6 @@ if (Tracking::minimunTimeAvailable(api_get_session_id(), api_get_course_int_id()
     $template->assign('hour', $hour);
     $template->assign('minute', date('i', $lpTime));
     $template->assign('second', date('s', $lpTime));
-
     $template->assign('hour_min', api_time_to_hms($timeLp * 60, '</div><div class="divider">:</div><div>'));
 }
 

@@ -90,6 +90,8 @@ class CourseChatUtils
         if (empty($message)) {
             return false;
         }
+        $friendId = (int) $friendId;
+
         $user = api_get_user_entity($this->userId);
         $courseInfo = api_get_course_info_by_id($this->courseId);
         $isMaster = api_is_course_admin();
@@ -783,7 +785,8 @@ class CourseChatUtils
                     'SELECT u FROM ChamiloUserBundle:User u
                     INNER JOIN ChamiloCourseBundle:CGroupRelUser gru
                         WITH u.id = gru.userId AND gru.cId = :course
-                    WHERE u.id != :user AND gru.groupId = :group'
+                    WHERE u.id != :user AND gru.groupId = :group
+                        AND u.active = true'
                 )
                 ->setParameters(['course' => $this->courseId, 'user' => $this->userId, 'group' => $this->groupId])
                 ->getResult();
@@ -792,7 +795,8 @@ class CourseChatUtils
                     'SELECT u FROM ChamiloUserBundle:User u
                     INNER JOIN ChamiloCourseBundle:CGroupRelTutor grt
                         WITH u.id = grt.userId AND grt.cId = :course
-                    WHERE u.id != :user AND grt.groupId = :group'
+                    WHERE u.id != :user AND grt.groupId = :group
+                        AND u.active = true'
                 )
                 ->setParameters(['course' => $this->courseId, 'user' => $this->userId, 'group' => $this->groupId])
                 ->getResult();
@@ -825,10 +829,17 @@ class CourseChatUtils
 
             return $session
                 ->getUserCourseSubscriptions()
-                ->matching($criteria);
+                ->matching($criteria)
+                ->filter(function (SessionRelCourseRelUser $sessionRelCourseRelUser) {
+                    return $sessionRelCourseRelUser->getUser()->isActive();
+                });
         }
 
-        return $course->getUsers();
+        return $course
+            ->getUsers()
+            ->filter(function (CourseRelUser $courseRelUser) {
+                return $courseRelUser->getUser()->isActive();
+            });
     }
 
     /**

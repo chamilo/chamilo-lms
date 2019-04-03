@@ -24,12 +24,10 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 // A notice for unauthorized people.
 api_protect_course_script(true);
+
 $nameTools = get_lang('ToolForum');
 Display::display_reduced_header();
 
-/* Including necessary files */
-
-require 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
 /* Retrieving forum and forum categorie information */
@@ -58,6 +56,9 @@ if (!api_is_allowed_to_edit(false, true) &&
 }
 
 $course_id = api_get_course_int_id();
+
+$table_posts = Database::get_course_table(TABLE_FORUM_POST);
+$table_users = Database::get_main_table(TABLE_MAIN_USER);
 
 /* Display Forum Category and the Forum information */
 

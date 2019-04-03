@@ -175,8 +175,6 @@ if (api_is_allowed_to_edit()) {
                 }
             }
         }
-        //error_log($sysCoursePath.$courseInfo['path'].'/document'.$not_deleted_file['path']);
-        //error_log($sysCoursePath.$courseInfo['path'].'/document'.$remove_dir);
         $zip->add(
             $sysCoursePath.$courseInfo['path'].'/document'.$not_deleted_file['path'],
             PCLZIP_OPT_REMOVE_PATH,
@@ -189,7 +187,6 @@ if (api_is_allowed_to_edit()) {
     Session::erase('doc_files_to_download');
 } else {
     // For other users, we need to create a zip  file with only visible files and folders
-
     if ($path == '/') {
         $querypath = ''; // To prevent ...path LIKE '//%'... in query
     } else {

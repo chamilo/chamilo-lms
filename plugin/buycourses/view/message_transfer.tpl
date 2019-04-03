@@ -3,14 +3,14 @@
     <p>{{ 'PurchaseDetailsIntro'|get_plugin_lang('BuyCoursesPlugin') }}</p>
     <dl>
         <dt>{{ 'OrderDate'|get_plugin_lang('BuyCoursesPlugin') }}</dt>
-        <dd>{{ sale.date }}</dd>
+        <dd>{{ sale.date|api_convert_and_format_date(constant('DATE_TIME_FORMAT_LONG_24H')) }}</dd>
         <dt>{{ 'OrderReference'|get_plugin_lang('BuyCoursesPlugin') }}</dt>
-        <dd>sale.reference</dd>
+        <dd>{{ sale.reference }}</dd>
         <dt>{{ 'UserName'|get_lang }}</dt>
         <dd>{{ user.complete_name }}</dd>
-        <dt>{{ 'Course'|get_lang }}</dt>
-        <dd>{{ sale.product }}</dd>
         <dt>{{ 'ProductName'|get_plugin_lang('BuyCoursesPlugin') }}</dt>
+        <dd>{{ sale.product }}</dd>
+        <dt>{{ 'SalePrice'|get_plugin_lang('BuyCoursesPlugin') }}</dt>
         <dd>{{ sale.currency ~ ' ' ~ sale.price }}</dd>
     </dl>
     <p>{{ 'BankAccountIntro'|get_plugin_lang('BuyCoursesPlugin')|format(sale.product) }}</p>

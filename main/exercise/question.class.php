@@ -236,7 +236,7 @@ abstract class Question
         $showQuestionTitleHtml = api_get_configuration_value('save_titles_as_html');
         $title = '';
         if (api_get_configuration_value('show_question_id')) {
-            $title .= '<h4>#'.$this->iid.'</h4>';
+            $title .= '<h4>#'.$this->course['code'].'-'.$this->iid.'</h4>';
         }
 
         $title .= $showQuestionTitleHtml ? '' : '<strong>';
@@ -1145,7 +1145,10 @@ abstract class Question
                 $se_doc = $di->get_document((int) $se_ref['search_did']);
                 if ($se_doc !== false) {
                     if (($se_doc_data = $di->get_document_data($se_doc)) !== false) {
-                        $se_doc_data = unserialize($se_doc_data);
+                        $se_doc_data = UnserializeApi::unserialize(
+                            'not_allowed_classes',
+                            $se_doc_data
+                        );
                         if (isset($se_doc_data[SE_DATA]['type']) &&
                             $se_doc_data[SE_DATA]['type'] == SE_DOCTYPE_EXERCISE_QUESTION
                         ) {
@@ -1261,9 +1264,10 @@ abstract class Question
         // checks if the exercise ID is not in the list
         if (!in_array($exerciseId, $this->exerciseList)) {
             $this->exerciseList[] = $exerciseId;
-            $new_exercise = new Exercise();
-            $new_exercise->read($exerciseId);
-            $count = $new_exercise->selectNbrQuestions();
+            $courseId = isset($this->course['real_id']) ? $this->course['real_id'] : 0;
+            $newExercise = new Exercise($courseId);
+            $newExercise->read($exerciseId, false);
+            $count = $newExercise->getQuestionCount();
             $count++;
             $sql = "INSERT INTO $exerciseRelQuestionTable (c_id, question_id, exercice_id, question_order)
                     VALUES ({$this->course['real_id']}, ".intval($id).", ".intval($exerciseId).", '$count')";
@@ -1794,7 +1798,7 @@ abstract class Question
      *
      * @param Exercise $objExercise
      */
-    public static function display_type_menu($objExercise)
+    public static function displayTypeMenu($objExercise)
     {
         $feedback_type = $objExercise->feedback_type;
         $exerciseId = $objExercise->id;
@@ -1977,20 +1981,20 @@ abstract class Question
         if (!empty($counter)) {
             $counterLabel = (int) $counter;
         }
-        $score_label = get_lang('Wrong');
+        $scoreLabel = get_lang('Wrong');
         $class = 'error';
         if (isset($score['pass']) && $score['pass'] == true) {
-            $score_label = get_lang('Correct');
+            $scoreLabel = get_lang('Correct');
             $class = 'success';
         }
 
         if (in_array($this->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
             $score['revised'] = isset($score['revised']) ? $score['revised'] : false;
             if ($score['revised'] == true) {
-                $score_label = get_lang('Revised');
+                $scoreLabel = get_lang('Revised');
                 $class = '';
             } else {
-                $score_label = get_lang('NotRevised');
+                $scoreLabel = get_lang('NotRevised');
                 $class = 'warning';
                 if (isset($score['weight'])) {
                     $weight = float_format($score['weight'], 1);
@@ -2026,7 +2030,10 @@ abstract class Question
         // dont display score for certainty degree questions
         if ($this->type != MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
             if (isset($score['result'])) {
-                $header .= $exercise->getQuestionRibbon($class, $score_label, $score['result'], $scoreCurrent);
+                if ($exercise->results_disabled == RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
+                    $score['result'] = null;
+                }
+                $header .= $exercise->getQuestionRibbon($class, $scoreLabel, $score['result'], $scoreCurrent);
             }
         }
 
@@ -2067,6 +2074,7 @@ abstract class Question
     }
 
     /**
+     * @deprecated
      * Create a question from a set of parameters.
      *
      * @param   int     Quiz ID

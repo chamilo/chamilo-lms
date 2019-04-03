@@ -12,5 +12,7 @@
 
     </main>
     <!-- END MAIN -->
+
+    {% include 'layout/modals.tpl'|get_template %}
 </body>
 </html>

@@ -19,7 +19,7 @@ $evaladd = new Evaluation();
 $evaladd->set_user_id($_user['user_id']);
 if (!empty($select_cat)) {
     $evaladd->set_category_id($_GET['selectcat']);
-    $cat = Category :: load($_GET['selectcat']);
+    $cat = Category::load($_GET['selectcat']);
     $evaladd->set_course_code($cat[0]->get_course_code());
 } else {
     $evaladd->set_category_id(0);
@@ -49,18 +49,16 @@ if ($form->validate()) {
     $eval->set_course_code(api_get_course_id());
     $eval->set_category_id($values['hid_category_id']);
 
-    $parent_cat = Category :: load($values['hid_category_id']);
+    $parent_cat = Category::load($values['hid_category_id']);
     $global_weight = $cat[0]->get_weight();
     //$values['weight'] = $values['weight_mask']/$global_weight*$parent_cat[0]->get_weight();
     $values['weight'] = $values['weight_mask'];
 
     $eval->set_weight($values['weight']);
     $eval->set_max($values['max']);
-
+    $visible = 1;
     if (empty($values['visible'])) {
         $visible = 0;
-    } else {
-        $visible = 1;
     }
     $eval->set_visible($visible);
     $eval->add();
@@ -71,8 +69,6 @@ if ($form->validate()) {
         'tool_id_detail' => 0,
         'action' => 'new-eval',
         'action_details' => 'selectcat='.$eval->get_category_id(),
-        'current_id' => $eval->get_id(),
-        'info' => '',
     ];
     Event::registerLog($logInfo);
 
@@ -103,8 +99,6 @@ $logInfo = [
     'tool_id_detail' => 0,
     'action' => 'add-eval',
     'action_details' => 'selectcat='.$select_cat,
-    'current_id' => 0,
-    'info' => '',
 ];
 Event::registerLog($logInfo);
 
@@ -115,7 +109,7 @@ $interbreadcrumb[] = [
 $this_section = SECTION_COURSES;
 
 $htmlHeadXtra[] = '<script>
-$(document).ready( function() {
+$(function() {
     $("#hid_category_id").change(function() {
        $("#hid_category_id option:selected").each(function () {
            var cat_id = $(this).val();

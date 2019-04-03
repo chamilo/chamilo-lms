@@ -684,7 +684,7 @@ class AddCourse
                 'id' => 2,
                 'title' => get_lang('DefaultGroupCategory'),
                 'description' => '',
-                'max_student' => 8,
+                'max_student' => 0,
                 'self_reg_allowed' => 0,
                 'self_unreg_allowed' => 0,
                 'groups_per_user' => 0,
@@ -744,7 +744,6 @@ class AddCourse
                 'audio',
                 'flash',
                 'video',
-                'certificates',
             ];
 
             $default_course_path = api_get_path(SYS_CODE_PATH).'default_course_document/';

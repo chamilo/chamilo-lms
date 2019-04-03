@@ -176,6 +176,60 @@ class ExerciseLink extends AbstractLink
      */
     public function calc_score($stud_id = null, $type = null)
     {
+        $allowStats = api_get_configuration_value('allow_gradebook_stats');
+
+        if ($allowStats) {
+            $link = $this->entity;
+            if (!empty($link)) {
+                $weight = $link->getScoreWeight();
+
+                switch ($type) {
+                    case 'best':
+                        $bestResult = $link->getBestScore();
+                        $result = [$bestResult, $weight];
+
+                        return $result;
+                        break;
+                    case 'average':
+                        $count = count($this->getStudentList());
+                        if (empty($count)) {
+                            $result = [0, $weight];
+
+                            return $result;
+                        }
+                        $sumResult = array_sum($link->getUserScoreList());
+                        $result = [$sumResult / $count, $weight];
+
+                        return $result;
+                        break;
+                    case 'ranking':
+                        return '';
+                        /*
+                        $newList = [];
+                        $ranking = AbstractLink::getCurrentUserRanking($stud_id, $link->getUserScoreList());
+                        return $ranking;*/
+                        break;
+                    default:
+                        if (!empty($stud_id)) {
+                            $scoreList = $link->getUserScoreList();
+                            $result = [0, $weight];
+                            if (isset($scoreList[$stud_id])) {
+                                $result = [$scoreList[$stud_id], $weight];
+                            }
+
+                            return $result;
+                        } else {
+                            $studentCount = count($this->getStudentList());
+                            $sumResult = array_sum($link->getUserScoreList());
+                            $result = [$sumResult, $studentCount];
+                        }
+
+                        return $result;
+                        break;
+                }
+            }
+        }
+
         $tblStats = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $tblHp = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
         $tblDoc = Database::get_course_table(TABLE_DOCUMENT);
@@ -185,6 +239,7 @@ class ExerciseLink extends AbstractLink
         $sessionId = $this->get_session_id();
         $courseId = $this->getCourseId();
         $exerciseData = $this->get_exercise_data();
+
         $exerciseId = isset($exerciseData['id']) ? $exerciseData['id'] : 0;
         $stud_id = (int) $stud_id;
 
@@ -387,10 +442,17 @@ class ExerciseLink extends AbstractLink
         $exerciseId = $data['id'];
         $path = isset($data['path']) ? $data['path'] : '';
 
-        $url = api_get_path(WEB_CODE_PATH).'gradebook/exercise_jump.php?path='.$path.'&session_id='.$sessionId.'&cidReq='.$this->get_course_code().'&gradebook=view&exerciseId='.$exerciseId.'&type='.$this->get_type();
-        if ((!api_is_allowed_to_edit() && $this->calc_score($user_id) == null) || $status_user != 1) {
-            $url .= '&doexercise='.$exerciseId;
-        }
+        $url = api_get_path(WEB_CODE_PATH).'gradebook/exercise_jump.php?'
+            .http_build_query(
+                [
+                    'path' => $path,
+                    'session_id' => $sessionId,
+                    'cidReq' => $this->get_course_code(),
+                    'gradebook' => 'view',
+                    'exerciseId' => $exerciseId,
+                    'type' => $this->get_type(),
+                ]
+            );
 
         return $url;
     }
@@ -484,6 +546,20 @@ class ExerciseLink extends AbstractLink
     public function setHp($hp)
     {
         $this->hp = $hp;
+    }
+
+    public function getBestScore()
+    {
+        return $this->getStats('best');
+    }
+
+    public function getStats($type)
+    {
+        switch ($type) {
+            case 'best':
+
+                break;
+        }
     }
 
     /**

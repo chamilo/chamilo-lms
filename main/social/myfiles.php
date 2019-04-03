@@ -62,7 +62,7 @@ function register_friend(element_input) {
     }
 }
 
-$(document).on("ready", function () {
+$(function() {
     $("#el-finder")
         .elfinder({
             url: "'.api_get_path(WEB_LIBRARY_PATH).'elfinder/php/connector.php",

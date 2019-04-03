@@ -2663,14 +2663,12 @@ class UserManager
         $splitMultiple = false,
         $fieldFilter = null
     ) {
-        // A sanity check.
+        $user_id = (int) $user_id;
+
         if (empty($user_id)) {
-            $user_id = 0;
-        } else {
-            if ($user_id != strval(intval($user_id))) {
-                return [];
-            }
+            return [];
         }
+
         $extra_data = [];
         $t_uf = Database::get_main_table(TABLE_EXTRA_FIELD);
         $t_ufv = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
@@ -2695,7 +2693,7 @@ class UserManager
             }
         }
 
-        $sql .= " ORDER BY f.field_order";
+        $sql .= ' ORDER BY f.field_order';
 
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
@@ -3001,7 +2999,8 @@ class UserManager
         $user_id,
         $is_time_over = true,
         $ignore_visibility_for_admins = false,
-        $ignoreTimeLimit = false
+        $ignoreTimeLimit = false,
+        $getCount = false
     ) {
         if ($user_id != strval(intval($user_id))) {
             return [];
@@ -3019,20 +3018,27 @@ class UserManager
         // LEFT JOIN is used for session_rel_course_rel_user because an inner
         // join would not catch session-courses where the user is general
         // session coach but which do not have students nor coaches registered
-        $dql = "SELECT DISTINCT
-                    s.id,
-                    s.name,
-                    s.accessStartDate AS access_start_date,
-                    s.accessEndDate AS access_end_date,
-                    s.duration,
-                    sc.id AS session_category_id,
-                    sc.name AS session_category_name,
-                    sc.dateStart AS session_category_date_start,
-                    sc.dateEnd AS session_category_date_end,
-                    s.coachAccessStartDate AS coach_access_start_date,
-                    s.coachAccessEndDate AS coach_access_end_date,
-                    CASE WHEN s.accessEndDate IS NULL THEN 1 ELSE 0 END HIDDEN _isFieldNull
-                    $position
+        $dqlSelect = " COUNT(DISTINCT s.id) ";
+
+        if (!$getCount) {
+            $dqlSelect = " DISTINCT
+                s.id,
+                s.name,
+                s.accessStartDate AS access_start_date,
+                s.accessEndDate AS access_end_date,
+                s.duration,
+                sc.id AS session_category_id,
+                sc.name AS session_category_name,
+                sc.dateStart AS session_category_date_start,
+                sc.dateEnd AS session_category_date_end,
+                s.coachAccessStartDate AS coach_access_start_date,
+                s.coachAccessEndDate AS coach_access_end_date,
+                CASE WHEN s.accessEndDate IS NULL THEN 1 ELSE 0 END HIDDEN _isFieldNull
+                $position
+            ";
+        }
+
+        $dql = "SELECT $dqlSelect
                 FROM ChamiloCoreBundle:Session AS s
                 LEFT JOIN ChamiloCoreBundle:SessionRelCourseRelUser AS scu WITH scu.session = s
                 INNER JOIN ChamiloCoreBundle:AccessUrlRelSession AS url WITH url.sessionId = s.id
@@ -3096,6 +3102,10 @@ class UserManager
                 ['user' => $user_id, 'url' => $accessUrlId]
             )
         ;
+
+        if ($getCount) {
+            return $dqlStudent->getSingleScalarResult() + $dqlCoach->getSingleScalarResult();
+        }
 
         $sessionDataStudent = $dqlStudent->getResult();
         $sessionDataCoach = $dqlCoach->getResult();
@@ -3247,6 +3257,7 @@ class UserManager
                 'courses' => $courseList,
                 'collapsed' => $collapsed,
                 'collapsable_link' => $collapsedAction,
+                'duration' => $row['duration'],
             ];
         }
 
@@ -6460,6 +6471,183 @@ SQL;
         $row = Database::fetch_array($result);
 
         return (int) $row['count'];
+    }
+
+    /**
+     * @param array $userInfo
+     * @param int   $searchYear
+     *
+     * @throws Exception
+     *
+     * @return array
+     */
+    public static function getSubscribedSessionsByYear(array $userInfo, $searchYear)
+    {
+        $timezone = new DateTimeZone(api_get_timezone());
+
+        $sessions = [];
+
+        if (DRH == $userInfo['status']) {
+            $sessions = SessionManager::get_sessions_followed_by_drh($userInfo['id']);
+        } elseif (api_is_platform_admin(true)) {
+            $sessions = SessionManager::getSessionsForAdmin($userInfo['id']);
+        } else {
+            $sessionsByCategory = self::get_sessions_by_category($userInfo['id'], false, true, true);
+            $sessionsByCategory = array_column($sessionsByCategory, 'sessions');
+
+            foreach ($sessionsByCategory as $sessionsInCategory) {
+                $sessions = array_merge($sessions, $sessionsInCategory);
+            }
+        }
+
+        $sessions = array_map(
+            function ($sessionInfo) {
+                if (!isset($sessionInfo['session_id'])) {
+                    $sessionInfo['session_id'] = $sessionInfo['id'];
+                }
+                if (!isset($sessionInfo['session_name'])) {
+                    $sessionInfo['session_name'] = $sessionInfo['name'];
+                }
+
+                return $sessionInfo;
+            },
+            $sessions
+        );
+
+        $calendarSessions = [];
+
+        foreach ($sessions as $sessionInfo) {
+            if (!empty($sessionInfo['duration'])) {
+                $courseAccess = CourseManager::getFirstCourseAccessPerSessionAndUser(
+                    $sessionInfo['session_id'],
+                    $userInfo['id']
+                );
+
+                if (empty($courseAccess)) {
+                    continue;
+                }
+
+                $firstAcessDate = new DateTime(api_get_local_time($courseAccess['login_course_date']), $timezone);
+                $lastAccessDate = clone $firstAcessDate;
+                $lastAccessDate->modify("+{$sessionInfo['duration']} days");
+
+                $firstAccessYear = (int) $firstAcessDate->format('Y');
+                $lastAccessYear = (int) $lastAccessDate->format('Y');
+
+                if ($firstAccessYear <= $searchYear && $lastAccessYear >= $searchYear) {
+                    $calendarSessions[$sessionInfo['session_id']] = [
+                        'name' => $sessionInfo['session_name'],
+                        'access_start_date' => $firstAcessDate->format('Y-m-d h:i:s'),
+                        'access_end_date' => $lastAccessDate->format('Y-m-d h:i:s'),
+                    ];
+                }
+
+                continue;
+            }
+
+            $accessStartDate = !empty($sessionInfo['access_start_date'])
+                ? new DateTime(api_get_local_time($sessionInfo['access_start_date']), $timezone)
+                : null;
+            $accessEndDate = !empty($sessionInfo['access_end_date'])
+                ? new DateTime(api_get_local_time($sessionInfo['access_end_date']), $timezone)
+                : null;
+            $accessStartYear = $accessStartDate ? (int) $accessStartDate->format('Y') : 0;
+            $accessEndYear = $accessEndDate ? (int) $accessEndDate->format('Y') : 0;
+
+            $isValid = false;
+
+            if ($accessStartYear && $accessEndYear) {
+                if ($accessStartYear <= $searchYear && $accessEndYear >= $searchYear) {
+                    $isValid = true;
+                }
+            }
+
+            if ($accessStartYear && !$accessEndYear) {
+                if ($accessStartYear == $searchYear) {
+                    $isValid = true;
+                }
+            }
+
+            if (!$accessStartYear && $accessEndYear) {
+                if ($accessEndYear == $searchYear) {
+                    $isValid = true;
+                }
+            }
+
+            if ($isValid) {
+                $calendarSessions[$sessionInfo['session_id']] = [
+                    'name' => $sessionInfo['session_name'],
+                    'access_start_date' => $accessStartDate ? $accessStartDate->format('Y-m-d h:i:s') : null,
+                    'access_end_date' => $accessEndDate ? $accessEndDate->format('Y-m-d h:i:s') : null,
+                ];
+            }
+        }
+
+        return $calendarSessions;
+    }
+
+    /**
+     * Get sessions info for planification calendar.
+     *
+     * @param array $sessionsList Session list from UserManager::getSubscribedSessionsByYear
+     * @param int   $searchYear
+     *
+     * @throws Exception
+     *
+     * @return array
+     */
+    public static function getSessionsCalendarByYear(array $sessionsList, $searchYear)
+    {
+        $timezone = new DateTimeZone(api_get_timezone());
+        $calendar = [];
+
+        foreach ($sessionsList as $sessionId => $sessionInfo) {
+            $startDate = $sessionInfo['access_start_date']
+                ? new DateTime(api_get_local_time($sessionInfo['access_start_date']), $timezone)
+                : null;
+            $endDate = $sessionInfo['access_end_date']
+                ? new DateTime(api_get_local_time($sessionInfo['access_end_date']), $timezone)
+                : null;
+
+            $startYear = $startDate ? (int) $startDate->format('Y') : 0;
+            $startWeekYear = $startDate ? (int) $startDate->format('o') : 0;
+            $startWeek = $startDate ? (int) $startDate->format('W') : 0;
+            $endYear = $endDate ? (int) $endDate->format('Y') : 0;
+            $endWeekYear = $endDate ? (int) $endDate->format('o') : 0;
+            $endWeek = $endDate ? (int) $endDate->format('W') : 0;
+
+            $start = $startWeekYear < $searchYear ? 0 : $startWeek - 1;
+            $duration = $endWeekYear > $searchYear ? 52 - $start : $endWeek - $start;
+
+            $calendar[] = [
+                'id' => $sessionId,
+                'name' => $sessionInfo['name'],
+                'human_date' => SessionManager::convertSessionDateToString($startDate, $endDate, false, true),
+                'start_in_last_year' => $startYear < $searchYear,
+                'end_in_next_year' => $endYear > $searchYear,
+                'no_start' => !$startWeek,
+                'no_end' => !$endWeek,
+                'start' => $start,
+                'duration' => $duration > 0 ? $duration : 1,
+            ];
+        }
+
+        usort(
+            $calendar,
+            function ($sA, $sB) {
+                if ($sA['start'] == $sB['start']) {
+                    return 0;
+                }
+
+                if ($sA['start'] < $sB['start']) {
+                    return -1;
+                }
+
+                return 1;
+            }
+        );
+
+        return $calendar;
     }
 
     /**

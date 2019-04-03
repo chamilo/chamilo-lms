@@ -138,8 +138,6 @@ if (isset($typeSelected) && $typeSelected != '0') {
             'tool_id_detail' => 0,
             'action' => 'new-link',
             'action_details' => 'selectcat='.$selectCat,
-            'current_id' => $link->get_id(),
-            'info' => '',
         ];
         Event::registerLog($logInfo);
 
@@ -167,8 +165,6 @@ $logInfo = [
     'tool_id_detail' => 0,
     'action' => 'add-link',
     'action_details' => 'selectcat='.$selectCat,
-    'current_id' => $current_id,
-    'info' => '',
 ];
 Event::registerLog($logInfo);
 
@@ -179,7 +175,7 @@ $interbreadcrumb[] = [
 $this_section = SECTION_COURSES;
 
 $htmlHeadXtra[] = '<script>
-$(document).ready( function() {
+$(function() {
     $("#hide_category_id").change(function() {
        $("#hide_category_id option:selected").each(function () {
            var cat_id = $(this).val();

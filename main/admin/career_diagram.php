@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Fhaculty\Graph\Graph;
+
 /**
  *  @package chamilo.admin
  */
@@ -106,7 +108,8 @@ if (!empty($itemUrls) && !empty($itemUrls['value'])) {
 $tpl = new Template(get_lang('Diagram'));
 $html = Display::page_subheader2($careerInfo['name'].$urlToString);
 if (!empty($item) && isset($item['value']) && !empty($item['value'])) {
-    $graph = unserialize($item['value']);
+    /** @var Graph $graph */
+    $graph = UnserializeApi::unserialize('career', $item['value']);
     $html .= Career::renderDiagramByColumn($graph, $tpl);
 } else {
     Display::addFlash(

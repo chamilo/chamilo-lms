@@ -122,7 +122,6 @@ class UniqueAnswer extends Question
         }
 
         $temp_scenario = [];
-
         if ($nb_answers < 1) {
             $nb_answers = 1;
             echo Display::return_message(
@@ -416,8 +415,12 @@ class UniqueAnswer extends Question
     ) {
         $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'"><tr>';
-        $header .= '<th>'.get_lang('Choice').'</th>';
-        $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+
+        if ($exercise->results_disabled != RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
+            $header .= '<th>'.get_lang('Choice').'</th>';
+            $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+        }
+
         $header .= '<th>'.get_lang('Answer').'</th>';
         if ($exercise->showExpectedChoice()) {
             $header .= '<th>'.get_lang('Status').'</th>';

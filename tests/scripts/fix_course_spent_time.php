@@ -1,4 +1,6 @@
 <?php
+/* For licensing terms, see /license.txt */
+
 /**
  * This script checks and updates (if you uncomment the query)
  * the records in track_e_course_access that is used to calculate the

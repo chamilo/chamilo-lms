@@ -801,6 +801,7 @@ class Certificate extends Model
         $tplContent->assign('sessions', $sessionsApproved);
         $tplContent->assign('courses', $coursesApproved);
         $tplContent->assign('time_spent_in_lps', api_time_to_hms($totalTimeInLearningPaths));
+        $tplContent->assign('time_spent_in_lps_in_hours', round($totalTimeInLearningPaths / 3600, 1));
         $layoutContent = $tplContent->get_template('gradebook/custom_certificate.tpl');
         $content = $tplContent->fetch($layoutContent);
 
@@ -833,5 +834,25 @@ class Certificate extends Model
             false,
             false
         );
+    }
+
+    /**
+     * @param int $userId
+     *
+     * @return array
+     */
+    public static function getCertificateByUser($userId)
+    {
+        $userId = (int) $userId;
+        if (empty($userId)) {
+            return [];
+        }
+
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
+        $sql = "SELECT * FROM $table
+                WHERE user_id= $userId";
+        $rs = Database::query($sql);
+
+        return Database::store_result($rs, 'ASSOC');
     }
 }

@@ -12,6 +12,7 @@ require_once __DIR__.'/../../../main/inc/global.inc.php';
 $plugin = BuyCoursesPlugin::create();
 $includeSession = $plugin->get('include_sessions') === 'true';
 $includeServices = $plugin->get('include_services') === 'true';
+$taxEnable = $plugin->get('tax_enable') === 'true';
 
 api_protect_admin_script(true);
 
@@ -39,6 +40,7 @@ $tpl->assign('product_type_session', BuyCoursesPlugin::PRODUCT_TYPE_SESSION);
 $tpl->assign('courses', $courses);
 $tpl->assign('sessions_are_included', $includeSession);
 $tpl->assign('services_are_included', $includeServices);
+$tpl->assign('tax_enable', $taxEnable);
 
 if ($includeSession) {
     $sessions = $plugin->getSessionsForConfiguration();
@@ -48,6 +50,13 @@ if ($includeSession) {
 if ($includeServices) {
     $services = $plugin->getServices();
     $tpl->assign('services', $services);
+}
+
+if ($taxEnable) {
+    $globalParameters = $plugin->getGlobalParameters();
+    $tpl->assign('global_tax_perc', $globalParameters['global_tax_perc']);
+    $tpl->assign('tax_applies_to', $globalParameters['tax_applies_to']);
+    $tpl->assign('tax_name', $globalParameters['tax_name']);
 }
 
 $content = $tpl->fetch('buycourses/view/configuration.tpl');

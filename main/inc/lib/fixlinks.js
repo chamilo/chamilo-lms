@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(function() {
     var objects = $(document).find('object');
     var pathname = location.pathname;
     var coursePath = pathname.substr(0, pathname.indexOf('/courses/'));

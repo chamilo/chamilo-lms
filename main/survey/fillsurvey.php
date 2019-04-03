@@ -166,8 +166,6 @@ $logInfo = [
     'tool_id_detail' => 0,
     'action' => 'invitationcode',
     'action_details' => $invitationcode,
-    'current_id' => 0,
-    'info' => '',
 ];
 Event::registerLog($logInfo);
 
@@ -223,6 +221,10 @@ if ($survey_data['survey_type'] == '3') {
         'survey/meeting.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId.'&invitationcode='.Security::remove_XSS($invitationcode)
     );
     exit;
+}
+
+if (!empty($survey_data['anonymous'])) {
+    define('USER_IN_ANON_SURVEY', true);
 }
 
 // Storing the answers
@@ -528,7 +530,7 @@ if ($survey_data['form_fields'] != '' &&
     // the $jquery_ready_content variable collects all functions
     // that will be load in the $(document).ready javascript function
     $htmlHeadXtra[] = '<script>
-    $(document).ready(function(){
+    $(function() {
         '.$jquery_ready_content.'
     });
     </script>';
@@ -637,7 +639,7 @@ if (isset($_POST['finish_survey'])) {
         $survey_invitation['c_id']
     );
 
-    if ($courseInfo) {
+    if ($courseInfo && !api_is_anonymous()) {
         echo Display::toolbarButton(
             get_lang('ReturnToCourseHomepage'),
             api_get_course_url($courseInfo['code']),

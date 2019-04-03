@@ -56,13 +56,13 @@ if ($modifyIn) {
         $objAnswer = new Answer($questionId);
     }
 
-    $color = unserialize($color);
-    $reponse = unserialize($reponse);
-    $comment = unserialize($comment);
-    $weighting = unserialize($weighting);
-    $hotspot_coordinates = unserialize($hotspot_coordinates);
-    $hotspot_type = unserialize($hotspot_type);
-    $destination = unserialize($destination);
+    $color = UnserializeApi::unserialize('not_allowed_classes', $color);
+    $reponse = UnserializeApi::unserialize('not_allowed_classes', $reponse);
+    $comment = UnserializeApi::unserialize('not_allowed_classes', $comment);
+    $weighting = UnserializeApi::unserialize('not_allowed_classes', $weighting);
+    $hotspot_coordinates = UnserializeApi::unserialize('not_allowed_classes', $hotspot_coordinates);
+    $hotspot_type = UnserializeApi::unserialize('not_allowed_classes', $hotspot_type);
+    $destination = UnserializeApi::unserialize('not_allowed_classes', $destination);
     unset($buttonBack);
 }
 
@@ -1109,7 +1109,7 @@ if (isset($modifyAnswers)) {
         </div>
     </form>
     <script>
-        $(document).on('ready', function () {
+        $(function() {
             <?php if ($answerType == HOT_SPOT_DELINEATION) {
         ?>
             new DelineationQuestion({

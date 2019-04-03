@@ -80,7 +80,7 @@ class Answer
             // fills arrays
             $objExercise = new Exercise($this->course_id);
             $exerciseId = isset($_REQUEST['exerciseId']) ? $_REQUEST['exerciseId'] : null;
-            $objExercise->read($exerciseId);
+            $objExercise->read($exerciseId, false);
         } else {
             $objExercise = $exercise;
         }
@@ -845,7 +845,6 @@ class Answer
         $tableAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
         if (self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE ||
-            self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE ||
             self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY
         ) {
             // Selecting origin options
@@ -965,7 +964,6 @@ class Answer
 
                     $correct = $this->correct[$i];
                     if ($newQuestion->type == MULTIPLE_ANSWER_TRUE_FALSE ||
-                        $newQuestion->type == MULTIPLE_ANSWER_TRUE_FALSE ||
                         $newQuestion->type == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY
                     ) {
                         $correct = $fixed_list[intval($correct)];

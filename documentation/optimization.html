@@ -200,6 +200,7 @@ ALTER TABLE c_lp_item_view ADD INDEX idx_clpiv_c_i_v (c_id, id, view_count);
         CREATE INDEX idx_survey_code ON c_survey (code);
         CREATE INDEX idx_survey_inv_code ON c_survey_invitation (survey_code);
         CREATE INDEX idx_survey_qo_qid ON c_survey_question_option (question_id);
+        CREATE INDEX idx_c_survey_answerucsq ON c_survey_answer (user, c_id, survey_id, question_id);
     </pre>
     Also by adding a index on access_url_rel_session to improve the course/session list
     <pre>

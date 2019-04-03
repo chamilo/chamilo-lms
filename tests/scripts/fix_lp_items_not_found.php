@@ -1,4 +1,6 @@
 <?php
+/* For licensing terms, see /license.txt */
+
 /**
  * This script try to fix the lp items path for missing files
  * It's useful when the path field in c_lp_item table has a value like 'document/item_file.html'

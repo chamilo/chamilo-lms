@@ -32,14 +32,14 @@ if (isset($_GET['action'], $_GET['id'])) {
     }
 }
 
-$currencyForm = new FormValidator('currency');
+$globalSettingForm = new FormValidator('currency');
 
-if ($currencyForm->validate()) {
-    $currencyFormValues = $currencyForm->getSubmitValues();
+if ($globalSettingForm->validate()) {
+    $globalSettingFormValues = $globalSettingForm->getSubmitValues();
 
-    $plugin->selectCurrency($currencyFormValues['currency']);
-    unset($currencyFormValues['currency']);
-    $plugin->saveGlobalParameters($currencyFormValues);
+    $plugin->selectCurrency($globalSettingFormValues['currency']);
+    unset($globalSettingFormValues['currency']);
+    $plugin->saveGlobalParameters($globalSettingFormValues);
 
     Display::addFlash(
         Display::return_message(get_lang('Saved'), 'success')
@@ -51,7 +51,7 @@ if ($currencyForm->validate()) {
 
 $currencies = $plugin->getCurrencies();
 
-$currencySelect = $currencyForm->addSelect(
+$currencySelect = $globalSettingForm->addSelect(
     'currency',
     [
         $plugin->get_lang('CurrencyType'),
@@ -77,14 +77,98 @@ foreach ($currencies as $currency) {
     }
 }
 
-$currencyForm->addTextarea(
+$globalSettingForm->addTextarea(
     'terms_and_conditions',
     [get_lang('TermsAndConditions'),
-     $plugin->get_lang('WriteHereTheTermsAndConditionsOfYourECommerce'), ],
+            $plugin->get_lang('WriteHereTheTermsAndConditionsOfYourECommerce'), ],
     []
 );
-$currencyForm->addButtonSave(get_lang('Save'));
-$currencyForm->setDefaults($plugin->getGlobalParameters());
+
+$globalSettingForm->addElement(
+    'text',
+    'sale_email',
+    $plugin->get_lang('SaleEmail')
+);
+
+$taxEnable = $plugin->get('tax_enable') === 'true';
+$invoicingEnable = $plugin->get('invoicing_enable') === 'true';
+
+if ($taxEnable) {
+    $globalSettingForm->addHtml('<hr/>');
+
+    $globalSettingForm->addElement(
+        'number',
+        'global_tax_perc',
+        [$plugin->get_lang('GlobalTaxPerc'), $plugin->get_lang('GlobalTaxPercDescription'), '%'],
+        ['step' => 1]
+    );
+
+    $taxAppliesTo = $plugin->getTaxAppliesTo();
+
+    $taxTypeSelect = $globalSettingForm->addSelect(
+        'tax_applies_to',
+        $plugin->get_lang('TaxAppliesTo'),
+        [get_lang('Select')]
+    );
+
+    foreach ($taxAppliesTo as $key => $value) {
+        $optionText = $value;
+        $optionyValue = $key;
+
+        $taxTypeSelect->addOption($optionText, $optionyValue);
+    }
+
+    $globalSettingForm->addElement(
+        'text',
+        'tax_name',
+        $plugin->get_lang('TaxNameCustom'),
+        ['placeholder' => $plugin->get_lang('TaxNameExamples')]
+    );
+}
+
+if ($invoicingEnable) {
+    $globalSettingForm->addHtml('<hr/>');
+
+    $globalSettingForm->addElement(
+        'text',
+        'seller_name',
+        $plugin->get_lang('SellerName')
+    );
+
+    $globalSettingForm->addElement(
+        'text',
+        'seller_id',
+        $plugin->get_lang('SellerId')
+    );
+
+    $globalSettingForm->addElement(
+        'text',
+        'seller_address',
+        $plugin->get_lang('SellerAddress')
+    );
+
+    $globalSettingForm->addElement(
+        'text',
+        'seller_email',
+        $plugin->get_lang('SellerEmail')
+    );
+
+    $globalSettingForm->addElement(
+        'number',
+        'next_number_invoice',
+        [$plugin->get_lang('NextNumberInvoice'), $plugin->get_lang('NextNumberInvoiceDescription')],
+        ['step' => 1]
+    );
+
+    $globalSettingForm->addElement(
+        'text',
+        'invoice_series',
+        [$plugin->get_lang('InvoiceSeries'), $plugin->get_lang('InvoiceSeriesDescription')]
+    );
+}
+
+$globalSettingForm->addButtonSave(get_lang('Save'));
+$globalSettingForm->setDefaults($plugin->getGlobalParameters());
 
 $termsAndConditionsForm = new FormValidator('termsconditions');
 
@@ -231,7 +315,7 @@ $interbreadcrumb[] = [
 $templateName = $plugin->get_lang('PaymentsConfiguration');
 $tpl = new Template($templateName);
 $tpl->assign('header', $templateName);
-$tpl->assign('global_config_form', $currencyForm->returnForm());
+$tpl->assign('global_config_form', $globalSettingForm->returnForm());
 $tpl->assign('paypal_form', $paypalForm->returnForm());
 $tpl->assign('commission_form', $commissionForm->returnForm());
 $tpl->assign('transfer_form', $transferForm->returnForm());

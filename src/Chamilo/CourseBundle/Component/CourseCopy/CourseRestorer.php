@@ -2175,13 +2175,19 @@ class CourseRestorer
 
             // Fix correct answers
             if (in_array($question->quiz_type, [DRAGGABLE, MATCHING, MATCHING_DRAGGABLE])) {
-                $onlyAnswersFlip = array_flip($onlyAnswers);
                 foreach ($correctAnswers as $answer_id => $correct_answer) {
                     $params = [];
-                    if (isset($allAnswers[$correct_answer]) &&
-                        isset($onlyAnswersFlip[$allAnswers[$correct_answer]])
-                    ) {
-                        $params['correct'] = $onlyAnswersFlip[$allAnswers[$correct_answer]];
+
+                    if (isset($allAnswers[$correct_answer])) {
+                        $correct = '';
+                        foreach ($onlyAnswers as $key => $value) {
+                            if ($value == $allAnswers[$correct_answer]) {
+                                $correct = $key;
+                                break;
+                            }
+                        }
+
+                        $params['correct'] = $correct;
                         Database::update(
                             $table_ans,
                             $params,
@@ -2591,13 +2597,16 @@ class CourseRestorer
             foreach ($resources[RESOURCE_LEARNPATH_CATEGORY] as $id => $item) {
                 /** @var CLpCategory $lpCategory */
                 $lpCategory = $item->object;
-                $values = [
-                    'c_id' => $this->destination_course_id,
-                    'name' => $lpCategory->getName(),
-                ];
-                $categoryId = \learnpath::createCategory($values);
-                if ($categoryId) {
-                    $this->course->resources[RESOURCE_LEARNPATH_CATEGORY][$id]->destination_id = $categoryId;
+
+                if ($lpCategory) {
+                    $values = [
+                        'c_id' => $this->destination_course_id,
+                        'name' => $lpCategory->getName(),
+                    ];
+                    $categoryId = \learnpath::createCategory($values);
+                    if ($categoryId) {
+                        $this->course->resources[RESOURCE_LEARNPATH_CATEGORY][$id]->destination_id = $categoryId;
+                    }
                 }
             }
         }

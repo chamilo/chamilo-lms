@@ -93,7 +93,7 @@ $htmlHeadXtra[] = <<<HTML
             iframe.height = maxheight;
         }
         
-        $(document).on('ready', function () {
+        $(function() {
             var iframe = document.getElementById('hotpotatoe');
             iframe.onload = function () {
                 // this.height = $(this.contentDocument.body).outerHeight(true)

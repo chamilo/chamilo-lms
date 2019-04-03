@@ -8,6 +8,7 @@ $this_section = SECTION_COURSES;
 if (!api_is_allowed_to_edit()) {
     api_not_allowed(true);
 }
+
 $htmlHeadXtra[] = api_get_css_asset('jt.timepicker/jquery.timepicker.css');
 $htmlHeadXtra[] = api_get_asset('jt.timepicker/jquery.timepicker.js');
 $htmlHeadXtra[] = api_get_asset('datepair.js/dist/datepair.js');
@@ -36,30 +37,34 @@ $form->addHidden('survey_thanks', '');
 $form->addHidden('visible_results', '0');
 $form->addHidden('survey_type', 3);
 
-// Setting the form elements
-/*if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
-    $form->addElement('hidden', 'survey_id');
-}*/
-
-$text = $form->addElement(
-    'text',
+$text = $form->addText(
     'survey_title',
-    get_lang('Title'),
-    null,
-    ['ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '200']
+    get_lang('Title')
 );
 
-$form->addDateTimePicker('start_date', get_lang('StartDate'));
-$form->addDateTimePicker('end_date', get_lang('EndDate'));
+$allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
 
-$form->addRule('start_date', get_lang('InvalidDate'), 'datetime');
-$form->addRule('end_date', get_lang('InvalidDate'), 'datetime');
+if ($allowSurveyAvailabilityDatetime) {
+    $startDateElement = $form->addDateTimePicker('start_date', get_lang('StartDate'));
+    $endDateElement = $form->addDateTimePicker('end_date', get_lang('EndDate'));
+    $form->addRule('start_date', get_lang('InvalidDate'), 'datetime');
+    $form->addRule('end_date', get_lang('InvalidDate'), 'datetime');
+} else {
+    $startDateElement = $form->addElement('date_picker', 'start_date', get_lang('StartDate'));
+    $endDateElement = $form->addElement('date_picker', 'end_date', get_lang('EndDate'));
+    $form->addRule('start_date', get_lang('InvalidDate'), 'date');
+    $form->addRule('end_date', get_lang('InvalidDate'), 'date');
+}
+
 $form->addRule(
     ['start_date', 'end_date'],
     get_lang('StartDateShouldBeBeforeEndDate'),
     'date_compare',
     'lte'
 );
+
+$form->setRequired($startDateElement);
+$form->setRequired($endDateElement);
 
 $form->addHtmlEditor('survey_introduction', get_lang('Description'), false);
 $form->setRequired($text);
@@ -149,7 +154,6 @@ if ($form->validate()) {
     $counter = 1;
     if (!empty($surveyData['id'])) {
         foreach ($dates as $date) {
-            //SurveyManager::save_question();
             $params = [
                 'c_id' => api_get_course_int_id(),
                 'survey_id' => $surveyData['id'],

@@ -19,12 +19,6 @@ if (!api_is_allowed_to_edit(null, true)) {
     api_not_allowed(true);
 }
 
-$limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
-
-if ($limitTeacherAccess && !api_is_platform_admin()) {
-    api_not_allowed(true);
-}
-
 $htmlHeadXtra[] = '<script>
     function activate_start_date() {
         if(document.getElementById(\'start_date_div\').style.display == \'none\') {
@@ -125,7 +119,7 @@ $htmlHeadXtra[] = '<script>
 function setFocus(){
     $("#exercise_title").focus();
 }
-$(document).ready(function () {
+$(function() {
     setFocus();
 });
 </script>';
@@ -140,7 +134,7 @@ if (isset($_GET['exerciseId'])) {
         'post',
         api_get_self().'?'.api_get_cidreq().'&exerciseId='.intval($_GET['exerciseId'])
     );
-    $objExercise->read($_GET['exerciseId']);
+    $objExercise->read($_GET['exerciseId'], false);
     $form->addElement('hidden', 'edit', 'true');
 } else {
     $form = new FormValidator(

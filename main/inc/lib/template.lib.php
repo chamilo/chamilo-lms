@@ -163,19 +163,19 @@ class Template
             ],
             [
                 'name' => 'icon',
-                'callable' => 'Template::get_icon_path',
+                'callable' => 'Display::get_icon_path',
             ],
             [
                 'name' => 'img',
-                'callable' => 'Template::get_image',
+                'callable' => 'Display::get_image',
             ],
             [
                 'name' => 'format_date',
-                'callable' => 'Template::format_date',
+                'callable' => 'api_format_date',
             ],
             [
                 'name' => 'get_template',
-                'callable' => 'Template::findTemplateFilePath',
+                'callable' => 'api_find_template',
             ],
             [
                 'name' => 'date_to_time_ago',
@@ -253,40 +253,6 @@ class Template
                 }
             }
         }
-    }
-
-    /**
-     * @param string $image
-     * @param int    $size
-     *
-     * @return string
-     */
-    public static function get_icon_path($image, $size = ICON_SIZE_SMALL)
-    {
-        return Display::return_icon($image, '', [], $size, false, true);
-    }
-
-    /**
-     * @param string $image
-     * @param int    $size
-     * @param string $name
-     *
-     * @return string
-     */
-    public static function get_image($image, $size = ICON_SIZE_SMALL, $name = '')
-    {
-        return Display::return_icon($image, $name, [], $size);
-    }
-
-    /**
-     * @param string $timestamp
-     * @param string $format
-     *
-     * @return string
-     */
-    public static function format_date($timestamp, $format = null)
-    {
-        return api_format_date($timestamp, $format);
     }
 
     /**
@@ -531,7 +497,7 @@ class Template
      */
     public function get_template($name)
     {
-        return self::findTemplateFilePath($name);
+        return api_find_template($name);
     }
 
     /**
@@ -622,7 +588,17 @@ class Template
         }
 
         $features = api_get_configuration_value('video_features');
-        $defaultFeatures = ['playpause', 'current', 'progress', 'duration', 'tracks', 'volume', 'fullscreen', 'vrview'];
+        $defaultFeatures = [
+            'playpause',
+            'current',
+            'progress',
+            'duration',
+            'tracks',
+            'volume',
+            'fullscreen',
+            'vrview',
+            'markersrolls',
+        ];
 
         if (!empty($features) && isset($features['features'])) {
             foreach ($features['features'] as $feature) {
@@ -776,6 +752,8 @@ class Template
             'select2/dist/js/select2.min.js',
             "select2/dist/js/i18n/$isoCode.js",
             'mediaelement/plugins/vrview/vrview.js',
+            'js-cookie/src/js.cookie.js',
+            'mediaelement/plugins/markersrolls/markersrolls.js',
         ];
 
         $features = api_get_configuration_value('video_features');
@@ -796,9 +774,13 @@ class Template
             $bowerJsFiles[] = 'MathJax/MathJax.js?config=TeX-MML-AM_HTMLorMML';
         }
 
+        // If not English and the language is supported by timepicker, localize
+        $assetsPath = api_get_path(SYS_PUBLIC_PATH).'assets/';
         if ($isoCode != 'en') {
-            $bowerJsFiles[] = 'jqueryui-timepicker-addon/dist/i18n/jquery-ui-timepicker-'.$isoCode.'.js';
-            $bowerJsFiles[] = 'jquery-ui/ui/minified/i18n/datepicker-'.$isoCode.'.min.js';
+            if (is_file($assetsPath.'jqueryui-timepicker-addon/dist/i18n/jquery-ui-timepicker-'.$isoCode.'.js') && is_file($assetsPath.'jquery-ui/ui/minified/i18n/datepicker-'.$isoCode.'.min.js')) {
+                $bowerJsFiles[] = 'jqueryui-timepicker-addon/dist/i18n/jquery-ui-timepicker-'.$isoCode.'.js';
+                $bowerJsFiles[] = 'jquery-ui/ui/minified/i18n/datepicker-'.$isoCode.'.min.js';
+            }
         }
 
         foreach ($bowerJsFiles as $file) {
@@ -1416,6 +1398,7 @@ class Template
             'web_lib' => api_get_path(WEB_LIBRARY_PATH),
             'web_upload' => api_get_path(WEB_UPLOAD_PATH),
             'web_self' => api_get_self(),
+            'self_basename' => basename(api_get_self()),
             'web_query_vars' => api_htmlentities($queryString),
             'web_self_query_vars' => api_htmlentities($requestURI),
             'web_cid_query' => api_get_cidreq(),
@@ -1498,7 +1481,7 @@ class Template
         $this->assign('prefetch', $prefetch);
         $this->assign('text_direction', api_get_text_direction());
         $this->assign('section_name', 'section-'.$this_section);
-        $this->assignFavIcon(); //Set a 'favico' var for the template
+        $this->assignFavIcon();
         $this->setHelp();
 
         $this->assignBugNotification(); //Prepare the 'bug_notification' var for the template
@@ -1789,7 +1772,7 @@ class Template
                 $clean_url = api_replace_dangerous_char($url);
                 $clean_url = str_replace('/', '-', $clean_url);
                 $clean_url .= '/';
-                $homep = api_get_path(REL_PATH).'home/'.$clean_url; //homep for Home Path
+                $homep = api_get_path(WEB_HOME_PATH).$clean_url; //homep for Home Path
                 $icon_real_homep = api_get_path(SYS_APP_PATH).'home/'.$clean_url;
                 //we create the new dir for the new sites
                 if (is_file($icon_real_homep.'favicon.ico')) {

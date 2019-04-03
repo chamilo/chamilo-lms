@@ -34,7 +34,7 @@ if ($deleteQuestion) {
     // destruction of the Question object
     unset($objQuestionTmp);
 }
-$ajax_url = api_get_path(WEB_AJAX_PATH)."exercise.ajax.php?".api_get_cidreq()."&exercise_id=".intval($exerciseId);
+$ajax_url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&exercise_id='.intval($exerciseId);
 ?>
 <div id="dialog-confirm"
      title="<?php echo get_lang('ConfirmYourChoice'); ?>"
@@ -149,9 +149,10 @@ $ajax_url = api_get_path(WEB_AJAX_PATH)."exercise.ajax.php?".api_get_cidreq()."&
 <?php
 
 //we filter the type of questions we can add
-Question::display_type_menu($objExercise);
+Question::displayTypeMenu($objExercise);
+
 // Re sets the question list
-$objExercise->setQuestionList();
+//$objExercise->setQuestionList();
 
 echo '<div id="message"></div>';
 $token = Security::get_token();
@@ -172,26 +173,26 @@ if (!$inATest) {
         $alloQuestionOrdering = true;
         $showPagination = api_get_configuration_value('show_question_pagination');
         if (!empty($showPagination) && $nbrQuestions > $showPagination) {
-            $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
-            $lenght = api_get_configuration_value('question_pagination_lenght');
+            // $page is declare in admin.php
+            //$page = isset($_GET['page']) && !empty($_GET['page']) ? (int) $_GET['page'] : 1;
+            $length = api_get_configuration_value('question_pagination_length');
             $url = api_get_self().'?'.api_get_cidreq();
             // Use pagination for exercise with more than 200 questions.
             $alloQuestionOrdering = false;
-            $start = ($page - 1) * $lenght;
-            $questionList = $objExercise->getQuestionForTeacher($start, $lenght);
+            $start = ($page - 1) * $length;
+            $questionList = $objExercise->getQuestionForTeacher($start, $length);
             $paginator = new Knp\Component\Pager\Paginator();
             $pagination = $paginator->paginate([]);
+
             $pagination->setTotalItemCount($nbrQuestions);
-            $pagination->setItemNumberPerPage($lenght);
+            $pagination->setItemNumberPerPage($length);
             $pagination->setCurrentPageNumber($page);
             $pagination->renderer = function ($data) use ($url) {
                 $render = '<ul class="pagination">';
                 for ($i = 1; $i <= $data['pageCount']; $i++) {
-                    //foreach ($data['pagesInRange'] as $page) {
-                    $page = (int) $i;
-                    $pageContent = '<li><a href="'.$url.'&page='.$page.'">'.$page.'</a></li>';
-                    if ($data['current'] == $page) {
-                        $pageContent = '<li class="active"><a href="#" >'.$page.'</a></li>';
+                    $pageContent = '<li><a href="'.$url.'&page='.$i.'">'.$i.'</a></li>';
+                    if ($data['current'] == $i) {
+                        $pageContent = '<li class="active"><a href="#" >'.$i.'</a></li>';
                     }
                     $render .= $pageContent;
                 }
@@ -235,7 +236,7 @@ if (!$inATest) {
                         [],
                         ICON_SIZE_TINY
                     ),
-                    api_get_self().'?'.api_get_cidreq().'&clone_question='.$id,
+                    api_get_self().'?'.api_get_cidreq().'&clone_question='.$id.'&page='.$page,
                     ['class' => 'btn btn-default btn-sm']
                 );
                 $edit_link = $objQuestionTmp->type == CALCULATED_ANSWER && $objQuestionTmp->isAnswered()
@@ -260,6 +261,7 @@ if (!$inATest) {
                                 'type' => $objQuestionTmp->selectType(),
                                 'myid' => 1,
                                 'editQuestion' => $id,
+                                'page' => $page,
                             ]),
                         ['class' => 'btn btn-default btn-sm']
                     );
@@ -276,6 +278,7 @@ if (!$inATest) {
                             .http_build_query([
                                 'exerciseId' => $exerciseId,
                                 'deleteQuestion' => $id,
+                                'page' => $page,
                             ]),
                         [
                             'id' => "delete_$id",
@@ -328,8 +331,7 @@ if (!$inATest) {
                 // Question score
                 $questionScore = $objQuestionTmp->selectWeighting();
 
-                echo '
-                    <div id="question_id_list_'.$id.'">
+                echo '<div id="question_id_list_'.$id.'">
                         <div class="header_operations" data-exercise="'.$objExercise->selectId().'"
                             data-question="'.$id.'">
                             <div class="row">

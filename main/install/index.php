@@ -320,8 +320,7 @@ if ($encryptPassForm == '1') {
     <script type="text/javascript" src="../../web/assets/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="../../web/assets/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
     <script type="text/javascript">
-        $(document).ready( function() {
-
+        $(function() {
             $("#details_button").click(function() {
                 $( "#details" ).toggle("slow", function() {
                 });
@@ -346,7 +345,7 @@ if ($encryptPassForm == '1') {
         });
 
         init_visibility=0;
-        $(document).ready( function() {
+        $(function() {
             $(".advanced_parameters").click(function() {
                 if ($("#id_contact_form").css("display") == "none") {
                     $("#id_contact_form").css("display","block");
@@ -631,7 +630,7 @@ if (@$_POST['step2']) {
         </p>
     </div>
     <script>
-        $(document).on('ready', function () {
+        $(function() {
             $.post('<?php echo api_get_path(WEB_CODE_PATH); ?>install/ajax.php', {
                 a: 'check_crs_tables',
                 db_host: '<?php echo $dbHostForm; ?>',

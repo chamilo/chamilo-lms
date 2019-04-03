@@ -77,7 +77,7 @@ class WikiTask extends Basic
             ['Image', 'Video', 'Flash', 'Oembed', 'Youtube', 'Audio'],
             ['Table'],
             ['Bold', 'Italic', 'Underline'],
-            ['JustifyLeft', 'JustifyCenter', '-', 'NumberedList', 'BulletedList', '-', 'TextColor', 'BGColor'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', '-', 'NumberedList', 'BulletedList', '-', 'TextColor', 'BGColor'],
             api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
             ['Source'],
         ];
@@ -95,7 +95,7 @@ class WikiTask extends Basic
             ['Undo', 'Redo'],
             ['Link', 'Image', 'Video', 'Flash', 'Audio', 'Table'],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyBlock'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight'],
             ['Styles', 'Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
             api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
             ['Toolbarswitch'],

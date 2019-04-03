@@ -19,6 +19,11 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 $courseId = isset($_GET['course_id']) ? (int) $_GET['course_id'] : 0;
+
+if (empty($courseId)) {
+    api_not_allowed(true);
+}
+
 $token = Security::get_existing_token();
 $em = Database::getManager();
 //userID

@@ -4,6 +4,13 @@ var online_button = '<img src="' + _p.web_img + 'statusonline.png">';
 var offline_button = '<img src="' + _p.web_img + 'statusoffline.png">';
 var connect_lang = '{{ "ChatConnected"|get_lang | escape('js')}}';
 var disconnect_lang = '{{ "ChatDisconnected"|get_lang | escape('js')}}';
+var chatLang = '{{ "GlobalChat"|get_lang | escape('js')}}';
+
+{% if 'hide_chat_video'|api_get_configuration_value %}
+    var hide_chat_video = true;
+{% else %}
+    var hide_chat_video = false;
+{% endif %}
 
 $(function() {
     addMainEvent(window, 'unload', courseLogout ,false);
@@ -314,6 +321,63 @@ $(function() {
     });
 
     $("#notifications").load(_p.web_ajax + "online.ajax.php?a=get_users_online");
+
+    $('video:not(.skip)').attr('preload', 'metadata');
+
+    function socialLikes() {
+        {% if 'social_enable_messages_feedback'|api_get_configuration_value %}
+        $('body').on('click', '.social-like', function (e) {
+            e.preventDefault();
+
+            var $self = $(this),
+                status = $self.data('status') || '',
+                group = $self.data('group') || 0,
+                message = $self.data('message') || 0;
+
+            $.getJSON(
+                '{{ _p.web_ajax }}social.ajax.php',
+                {'a': 'like_message', 'group': group, 'id': message, 'status': status}
+            ).then(function (response) {
+                if (!response) {
+                    return;
+                }
+
+                var $count = $self.children('span'),
+                    currentCount = parseInt($count.text()) || 0;
+
+                if ('like' === status) {
+                    var $dislike = $self.next(),
+                        $dislikeCount = $dislike.children('span'),
+                        dislikeCount = parseInt($dislikeCount.text()) || 0;
+
+                    $count.text(++currentCount);
+
+                    if ($dislike.prop('disabled') || $dislike.is('.disabled')) {
+                        $dislikeCount.text(dislikeCount <= 0 ? 0 : --dislikeCount);
+                        $dislike.removeClass('disabled').prop('disabled', false);
+                    }
+
+                    $self.addClass('disabled').prop('disabled', true);
+                } else if ('dislike' === status) {
+                    var $like = $self.prev(),
+                        $likeCount = $like.children('span'),
+                        likeCount = parseInt($likeCount.text()) || 0;
+
+                    $count.text(++currentCount);
+
+                    if ($like.prop('disabled') || $like.is('.disabled')) {
+                        $likeCount.text(likeCount <= 0 ? 0 : --likeCount);
+                        $like.removeClass('disabled').prop('disabled', false);
+                    }
+
+                    $self.addClass('disabled').prop('disabled', true);
+                }
+            });
+        });
+        {% endif %}
+    }
+
+    socialLikes();
 });
 
 $(window).resize(function() {
@@ -334,7 +398,7 @@ $(document).scroll(function() {
         $('.bottom_actions').addClass('bottom_actions_fixed');
     }
 
-    //Exercise warning fixed at the top
+    // Exercise warning fixed at the top
     var fixed =  $("#exercise_clock_warning");
     if (fixed.length) {
         if (!fixed.attr('data-top')) {

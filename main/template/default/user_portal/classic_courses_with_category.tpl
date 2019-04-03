@@ -1,11 +1,10 @@
-{% import 'macro/macro.tpl'|get_template as display %}
+{% import 'default/macro/macro.tpl' as display %}
 
 {% if not categories is empty %}
     <div class="classic-courses">
         {% for category in categories %}
             {% if category.courses %}
                 {% set course_content %}
-
                 {% for item in category.courses %}
                     <div class="row">
                         <div class="col-md-2">
@@ -95,7 +94,14 @@
                 {% endfor %}
                 {% endset %}
 
-                {{ display.collapse('course_category_' ~ category.id_category, category.title_category, course_content, false, category.collapsed == 0) }}
+                {{ display.collapse(
+                    'course_category_' ~ category.id_category,
+                    category.title_category ~ '<div class="pull-right">'~ category.collapsable_link~ "</div>",
+                    course_content,
+                    false,
+                    category.collapsed == 0
+                )
+                }}
             {% endif %}
         {% endfor %}
     </div>

@@ -51,8 +51,6 @@ if ($form->validate()) {
         'tool_id_detail' => 0,
         'action' => 'edit-eval',
         'action_details' => '',
-        'current_id' => $eval->get_category_id(),
-        'info' => '',
     ];
     Event::registerLog($logInfo);
 
@@ -66,7 +64,7 @@ $interbreadcrumb[] = [
 ];
 
 $htmlHeadXtra[] = '<script>
-$(document).ready( function() {
+$(function() {
     $("#hid_category_id").change(function() {
        $("#hid_category_id option:selected").each(function () {
            var cat_id = $(this).val();

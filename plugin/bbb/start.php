@@ -17,7 +17,6 @@ $logInfo = [
     'tool_id_detail' => 0,
     'action' => '',
     'action_details' => '',
-    'current_id' => 0,
 ];
 Event::registerLog($logInfo);
 

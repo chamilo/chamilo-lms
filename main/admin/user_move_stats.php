@@ -12,6 +12,8 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
+$em = Database::getManager();
+
 $interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
 $debug = 0;
 

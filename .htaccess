@@ -9,7 +9,7 @@
 RewriteEngine on
 
 # Prevent execution of PHP from directories used for different types of uploads
-RedirectMatch 403 ^/app/(cache|courses|home|logs|upload|Resources/public/css)/.*\.ph(p[3457]?|t|tml|ar)$
+RedirectMatch 403 ^/app/(?!courses/proxy)(cache|courses|home|logs|upload|Resources/public/css)/.*\.ph(p[3457]?|t|tml|ar)$
 RedirectMatch 403 ^/main/default_course_document/images/.*\.ph(p[3457]?|t|tml|ar)$
 RedirectMatch 403 ^/main/lang/.*\.ph(p[3457]?|t|tml|ar)$
 RedirectMatch 403 ^/web/css/.*\.ph(p[3457]?|t|tml|ar)$
@@ -53,12 +53,12 @@ RewriteRule ^session/(\d{1,})/about/?$ main/session/about.php?session_id=$1 [L]
 RewriteRule ^course/(\d{1,})/about/?$ main/course_info/about.php?course_id=$1 [L]
 
 # Issued individual badge friendly URL
-RewriteRule ^badge/(\d{1,}) main/badge/issued.php?issue=$1 [L]
+RewriteRule ^badge/(\d{1,})/?$ main/badge/issued.php?issue=$1 [L]
 
 # Issued badges friendly URL
-RewriteRule ^skill/(\d{1,})/user/(\d{1,}) main/badge/issued_all.php?skill=$1&user=$2 [L]
+RewriteRule ^skill/(\d{1,})/user/(\d{1,})/?$ main/badge/issued_all.php?skill=$1&user=$2 [L]
 # Support deprecated URL (avoid 404)
-RewriteRule ^badge/(\d{1,})/user/(\d{1,}) main/badge/issued_all.php?skill=$1&user=$2 [L]
+RewriteRule ^badge/(\d{1,})/user/(\d{1,})/?$ main/badge/issued_all.php?skill=$1&user=$2 [L]
 
 # Support old URLs using the exercice (with a c) folder rather than exercise
 RewriteRule ^main/exercice/(.*)$ main/exercise/$1 [QSA,L]

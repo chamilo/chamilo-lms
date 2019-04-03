@@ -23,7 +23,7 @@ $current_course_tool = TOOL_SURVEY;
 $currentUserId = api_get_user_id();
 
 api_protect_course_script(true);
-$action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
+$action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
 
 // Tracking
 Event::event_access_tool(TOOL_SURVEY);
@@ -32,10 +32,6 @@ $logInfo = [
     'tool' => TOOL_SURVEY,
     'tool_id' => 0,
     'tool_id_detail' => 0,
-    'action' => '',
-    'action_details' => '',
-    'current_id' => 0,
-    'info' => '',
 ];
 Event::registerLog($logInfo);
 
@@ -52,6 +48,8 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
 
 if ($isDrhOfCourse) {
     Display::display_header(get_lang('SurveyList'));
+    // Tool introduction
+    Display::display_introduction_section('survey', 'left');
     SurveyUtil::displaySurveyListForDrh();
     Display::display_footer();
     exit;
@@ -60,6 +58,8 @@ if ($isDrhOfCourse) {
 if (!api_is_allowed_to_edit(false, true)) {
     // Coach can see this
     Display::display_header(get_lang('SurveyList'));
+    // Tool introduction
+    Display::display_introduction_section('survey', 'left');
     SurveyUtil::getSurveyList($currentUserId);
     Display::display_footer();
     exit;

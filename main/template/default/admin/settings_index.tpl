@@ -42,28 +42,17 @@
                 $
                     .ajax('{{ web_admin_ajax_url }}?a=get_latest_news')
                     .then(function (response) {
-                        $('#chamilo-news').removeClass('hidden');
+                        if (!response.length) {
+                            return;
+                        }
+
+                        $('#chamilo-news').show(150);
                         $('#chamilo-news-content').html(response);
                     });
             {% endif %}
         {% endif %}
     });
 </script>
-
-{% if not admin_chamilo_announcements_disable %}
-    <section id="chamilo-news" class="row hidden">
-        <div class="col-xs-12">
-            <div class="alert alert-info">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <div id="chamilo-news-content">
-
-                </div>
-            </div>
-        </div>
-    </section>
-{% endif %}
 
 <section id="settings" class="row">
     {% set columns = 2 %}
@@ -114,6 +103,17 @@
         {% endif %}
     {% endfor %}
 </section>
+
+{% if not admin_chamilo_announcements_disable %}
+    <section id="chamilo-news" style="display: none;">
+        <div class="alert alert-info">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div id="chamilo-news-content"></div>
+        </div>
+    </section>
+{% endif %}
 
 {% if _u.is_admin %}
     <div class="modal fade" id="modal-extra">

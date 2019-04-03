@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Fhaculty\Graph\Graph;
 
 /**
  * HOME PAGE FOR EACH COURSE.
@@ -33,7 +34,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $htmlHeadXtra[] = '<script>
 /* option show/hide thematic-block */
-$(document).ready(function(){
+$(function() {
     $("#thematic-show").click(function(){
         $(".btn-hide-thematic").hide();
         $(".btn-show-thematic").show(); //show using class
@@ -392,7 +393,11 @@ if ($allow === true) {
                 );
 
                 if (!empty($item) && isset($item['value']) && !empty($item['value'])) {
-                    $graph = unserialize($item['value']);
+                    /** @var Graph $graph */
+                    $graph = UnserializeApi::unserialize(
+                        'career',
+                        $item['value']
+                    );
                     $diagram = Career::renderDiagram($careerInfo, $graph);
                 }
             }

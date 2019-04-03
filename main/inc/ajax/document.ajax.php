@@ -35,6 +35,17 @@ switch ($action) {
         api_protect_course_script(true);
         // User access same as upload.php
         $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+
+        $sessionId = api_get_session_id();
+
+        if (!$is_allowed_to_edit && $sessionId && $_REQUEST['curdirpath'] == "/basic-course-documents__{$sessionId}__0") {
+            $session = SessionManager::fetch($sessionId);
+
+            if (!empty($session) && $session['session_admin_id'] == api_get_user_id()) {
+                $is_allowed_to_edit = true;
+            }
+        }
+
         // This needs cleaning!
         if (api_get_group_id()) {
             $groupInfo = GroupManager::get_group_properties(api_get_group_id());
@@ -47,7 +58,7 @@ switch ($action) {
                 exit;
             }
         } elseif ($is_allowed_to_edit ||
-            DocumentManager::is_my_shared_folder(api_get_user_id(), $_POST['curdirpath'], api_get_session_id())
+            DocumentManager::is_my_shared_folder(api_get_user_id(), $_REQUEST['curdirpath'], api_get_session_id())
         ) {
             // ??
         } else {
@@ -108,7 +119,8 @@ switch ($action) {
 
                 $json = [];
                 if (!empty($result) && is_array($result)) {
-                    $json['name'] = Display::url(
+                    $json['name'] = api_htmlentities($result['title']);
+                    $json['link'] = Display::url(
                         api_htmlentities($result['title']),
                         api_htmlentities($result['url']),
                         ['target' => '_blank']

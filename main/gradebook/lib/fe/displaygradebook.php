@@ -23,7 +23,8 @@ class DisplayGradebook
             $header = '<div class="actions">';
             if ($page != 'statistics') {
                 $header .= '<a href="'.Category::getUrl().'selectcat='.$selectcat.'">'.
-                    Display::return_icon(('back.png'), get_lang('FolderView'), '', ICON_SIZE_MEDIUM).'</a>';
+                    Display::return_icon('back.png', get_lang('FolderView'), '', ICON_SIZE_MEDIUM)
+                    .'</a>';
                 if (($evalobj->get_course_code() != null) && !$evalobj->has_results()) {
                     $header .= '<a href="gradebook_add_result.php?'.api_get_cidreq().'&selectcat='.$selectcat.'&selecteval='.$evalobj->get_id().'">
     				'.Display::return_icon('evaluation_rate.png', get_lang('AddResult'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -45,20 +46,13 @@ class DisplayGradebook
                             Display::return_icon('delete.png', get_lang('DeleteResult'), '', ICON_SIZE_MEDIUM).'</a>';
                     }
                 }
-
                 $header .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&print=&selecteval='.$evalobj->get_id().'" target="_blank">'.
                     Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).'</a>';
             } else {
                 $header .= '<a href="gradebook_view_result.php?'.api_get_cidreq().'&selecteval='.Security::remove_XSS($_GET['selecteval']).'"> '.
-                    Display::return_icon(('back.png'), get_lang('FolderView'), '', ICON_SIZE_MEDIUM).'</a>';
+                    Display::return_icon('back.png', get_lang('FolderView'), '', ICON_SIZE_MEDIUM).'</a>';
             }
             $header .= '</div>';
-        }
-
-        if ($evalobj->is_visible() == '1') {
-            $visible = get_lang('Yes');
-        } else {
-            $visible = get_lang('No');
         }
 
         $scoredisplay = ScoreDisplay::instance();
@@ -87,6 +81,7 @@ class DisplayGradebook
                 }
             }
         }
+
         $description = '';
         if (!$evalobj->get_description() == '') {
             $description = get_lang('Description').' :<b> '.$evalobj->get_description().'</b><br>';

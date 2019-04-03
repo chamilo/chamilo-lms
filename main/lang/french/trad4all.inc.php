@@ -338,8 +338,8 @@ B. Réponse 2
 C. Réponse 3
 D. Réponse 4
 ANSWER: D
-
-ANSWER_EXPLANATION: C'est un commentaire facultatif de retour qui apparaîtra à côté de la bonne réponse.";
+ANSWER_EXPLANATION: C'est un commentaire facultatif de retour qui apparaîtra à côté de la bonne réponse.
+SCORE: 20";
 $ImportAikenQuizExplanation = "Le format Aiken est un fichier (.txt) avec un texte simple, avec plusieurs blocs de questions, chacune séparée par une ligne blanche. La première ligne est la question, les lignes de réponse sont préfixés par une lettre et un point, et la bonne réponse vient avec le préfixe 'ANSWER'.
 Voir l'exemple ci-dessous.";
 $ExerciseAikenErrorNoAnswerOptionGiven = "Le fichier importé comporte au moins une question sans réponse (ou les réponses ne comprennent pas la lettre de préfixe requis). Assurez-vous que chaque question a au moins une réponse et qu'elle est précédée par une lettre et un point ou une parenthèse, comme ceci: 
@@ -1543,7 +1543,7 @@ $SplitUsersUploadDirectory = "Diviser le répertoire de téléchargement des uti
 $SplitUsersUploadDirectoryComment = "Sur les portails à usage très important, où un grand nombre d'utilisateurs sont enregistrés et envoient leur photo, le répertoire de téléchargement (main/upload/users/) pourrait contenir plus de fichiers que le système de fichiers du serveur ne peut gérer (ceci a été signalé pour plus de 36000 fichiers dans un même répertoire sur un serveur Debian). Activer cette option modifiera la gestion de ce répertoire pour utiliser une méthode de séparation en 9 sous-répertoires de \"1\" à \"9\" dans le répertoire de base. Les répertoires et fichiers des utilisateurs seront alors stockés dans un de ces 9 répertoires selon leur première lettre/chiffre. L'activation de cette option ne modifie en rien la structure des répertoires sur votre serveur, mais uniquement le comportement du code de Chamilo. C'est à vous de prendre en charge la répartition des répertoires existants dans les nouveaux répertoires, en prenant garde à ce que les répertoires des utilisateurs 1 à 9 soient mis dans un sous-répertoire du même nom. Si vous n'êtes pas certain de ce que vous faites, il est préférable de laisser cette option désactivée.";
 $CourseQuota = "Quotum du cours";
 $EditNotice = "Éditer l'avis";
-$InsertLink = "Insérer un lien";
+$InsertLink = "Insérer une page/un lien";
 $EditNews = "Éditer les nouvelles";
 $EditCategories = "Éditer les catégories";
 $EditHomePage = "Éditer la page d'accueil";
@@ -2620,7 +2620,7 @@ $ObjectiveStatus = "Statut";
 $ObjectiveRawScore = "Score";
 $ObjectiveMaxScore = "Score max";
 $ObjectiveMinScore = "Score min";
-$LPName = "Nom du cours";
+$LPName = "Nom du parcours";
 $AuthoringOptions = "Options d'authoring";
 $SaveSection = "Enregistrer la section";
 $AddLinkToCourse = "Ajouter ce lien au cours";
@@ -8256,10 +8256,68 @@ $NewExerciseAttemptDisabled = "Le portail ne permet pas le démarrage d'exercice
 $PersonalDataOfficer = "Délégué à la protection des données personnelles";
 $MaxNumberSubscribedStudentsReached = "Le nombre maximum d'apprenants a déjà été atteint, il n'est pas possible d'en inscrire de nouveau";
 $UserXAddedToCourseX = "L'utilisateur %s a été inscrit au cours %s";
+$LpMinTime = "Temps minimum (minutes)";
+$LpMinTimeDescription = "Temps minimum (en minutes) pendant lequel l'apprenant doit rester dans le parcours d'apprentissage pour pouvoir accéder au suivant.";
+$LpMinTimeWarning = "Vous n'avez pas atteint le temps minimum dans le parcours.";
+$YouHaveSpentXTime = "Vous avez dépensé %s";
+$TimeSpentInLp = "Temps passé dans le parcours";
+$StudentXFinishedLp = "L'apprenant %s a terminé ses parcours.";
+$IHaveFinishedTheLessonsNotifyTheTeacher = "J'ai terminé les parcours du cours. Prévenir l'enseignant.";
+$TheStudentXHasFinishedTheCourseYLearningPaths = "L'apprenant <b>%s</b> a terminé les parcours du cours <b>%s</b>";
+$ThisQuestionExistsInAnotherExercisesWarning = "Cette question est utilisée dans d'autres exercices. Si vous l'éditez, les modifications affecteront tous les exercices qui contiennent cette question.";
+$TimeSpentTimeRequired = "Temps passé / Temps requis";
+$ProgressSpentInLp = "Progrès contenus";
 $InSessionXYouHadTheFollowingResults = "Dans la formation %s, vous avez obtenu les résultats suivants:";
 $TimeSpent = "Temps de connexion global";
 $NumberOfVisits = "Nombre de passages";
 $FormationUnit = "Unité de formation";
 $GlobalProgress = "Progression Globale";
 $AttestationOfAttendance = "Attestation d'assiduité";
+$DontShowScoreOnlyWhenUserFinishesAllAttemptsButShowFeedbackEachAttempt = "Ne pas montrer le score (seulement quand l'utilisateur a utilisé toutes les tentatives) mais montrer la rétroalimentation pour chaque tentative.";
+$ExerciseRankingMode = "Mode classement: Ne pas montrer les résultats question par question, mais montrer une table de classification par rapport aux autres utilisateurs.";
+$BackToTop = "Sommet de la page";
+$PersonalDataTreatmentTitleHelp = "Que considérons-nous comme des données personnelles?";
+$PersonalDataCollectionTitleHelp = "Pourquoi recueillons-nous ces données?";
+$PersonalDataRecordingTitleHelp = "Où enregistrons-nous les données? (dans quel système, hébergé où, accessible par quelle entreprise qui gère les serveurs, etc.)";
+$PersonalDataOrganizationTitleHelp = "Comment sont structurées les données? Dans quelle mesure l'organisation des données protège-t-elle votre sécurité? ... Avons-nous mis en place des processus garantissant qu'un pirate informatique ne sera pas en mesure de collecter toutes les données personnelles à la première tentative? Sont-elles cryptées?";
+$PersonalDataStructureTitleHelp = "Comment les données sont-elles structurées dans l'application? (un onglet pour toutes les données, il y a une catégorisation / étiquette, ...)";
+$PersonalDataConservationTitleHelp = "Combien de temps sauvegardons-nous les données? Y a-t-il des données qui expirent même si le compte est toujours actif? Combien de temps les gardons-nous après la dernière utilisation du système?";
+$PersonalDataAdaptationTitleHelp = "Quels changements pouvons-nous apporter aux données? Quelles modifications peuvent être apportées aux données sans affecter le service?";
+$PersonalDataExtractionTitleHelp = "Pourquoi y-a-il extraction de données (vers d'autres processus internes) et quelles sont ces données?";
+$PersonalDataConsultationTitleHelp = "Qui peut consulter les données personnelles, dans quel but?";
+$PersonalDataUsageTitleHelp = "Comment et pourquoi pouvons-nous utiliser les données personnelles?";
+$PersonalDataCommunicationTitleHelp = "Avec qui pouvons-nous les partager, dans quelles opportunités, à travers quels processus (sécurisés ou non)?";
+$PersonalDataInterconnectionTitleHelp = "Avons-nous un autre système avec lequel Chamilo interagit? Quel est le processus d'interconnexion? Quelles sont les données échangées et de quelle manière?";
+$PersonalDataLimitationTitleHelp = "Quelles sont les limites à respecter lors de l'utilisation de données personnelles? Jusqu'où pouvons-nous aller?";
+$PersonalDataDeletionTitleHelp = "Après combien de temps effaçons-nous les données? (événement, dernière utilisation, validité du contrat, etc.) Quels sont les processus d'élimination?";
+$PersonalDataDestructionTitleHelp = "Que se passe-t-il si les données sont détruites à la suite d'une défaillance technique? (suppression non autorisée ou perte de matériel, par exemple)";
+$PersonalDataProfilingTitleHelp = "Dans quel but traitons-nous les données personnelles? Modifions-nous l'accès des utilisateurs à certaines parties de notre application? (discrimination négative ou positive)";
+$SearchUsersByName = "Par nom";
+$GlobalChat = "Chat";
+$AskRevision = "Demander une révision";
+$FeatureDisabledBecauseOfUnmaintainedThirdPartyLibraries = "Cette fonctionnalité a été désactivée en raison de l'interruption du support de librairies tierces nécessaires à son fonctionnement.";
+$SearchUserByGeolocalization = "Par géolocalisation";
+$GiveRevision = "Proposer une révision";
+$ForumPostReported = "Signalement d'un message de forum";
+$UserXReportedPostXInForumX = "L'utilisateur %s a signalé le message %s du forum %s";
+$MyCommunities = "Mes communautés";
+$SeeAllCommunities = "Voir toutes mes communautés";
+$HideForumNotifications = "Cacher les notifications de forum";
+$Forum_categoryFields = "Champs de catégorie de forum";
+$Forum_postFields = "Champs de post de forum";
+$ExerciseShowOnlyGlobalScoreAndCorrectAnswers = "Afficher uniquement le score global (pas celui de chaque question) et uniquement la réponse correcte (pas les réponses incorrectes)";
+$Reported = "Signalé";
+$FromTimeX = "De %s";
+$ToTimeX = "à %s";
+$SurveyInviteLink = "Lien d'invitation à l'enquête";
+$RevisionProposed = "Révision proposée";
+$SessionsPlanCalendar = "Calendrier de planification des sessions";
+$QuizQuestionsLimitPerDay = "Limite de questions par jour";
+$QuizQuestionsLimitPerDayComment = "Si ce paramètre est configuré à plus de zéro, il empêchera l'utilisateur d'entrer dans un exercice qui a plus de questions que ce qui lui reste. Par exemple, si la limite est de 50 et que l'utilisateur a déjà passé 2 exercices de 20 questions, le système ne permettra pas à l'utilisateur de commencer un 3ème exercice de 20 questions (20+20+20=60 > 50). Il pourra cependant encore commencer un exercice de 10 questions (20+20+10=50).";
+$QuizQuestionsLimitPerDayXReached = "Désolé, vous avez atteint la quantité maximale de questions (%s) par jour. Réessayez demain.";
+$VoteLike = "J'aime";
+$VoteDislike = "Je n'aime pas";
+$GenerateStats = "Générer les statistiques";
+$BasicCourseDocuments = "Documents de base du cours";
+$WeekX = "Semaine %s";
 ?>

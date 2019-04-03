@@ -619,13 +619,15 @@ class CourseRecycler
     {
         $learningPathTable = Database::get_course_table(TABLE_LP_MAIN);
         $learningPathCategoryTable = Database::get_course_table(TABLE_LP_CATEGORY);
-        foreach ($this->course->resources[RESOURCE_LEARNPATH_CATEGORY] as $id => $learnpathCategory) {
-            $categoryId = $learnpathCategory->object->getId();
-            // Dissociate learning paths from categories that will be deleted
-            $sql = "UPDATE $learningPathTable SET category_id = 0 WHERE category_id = ".$categoryId;
-            Database::query($sql);
-            $sql = "DELETE FROM $learningPathCategoryTable WHERE iid = ".$categoryId;
-            Database::query($sql);
+        if (isset($this->course->resources[RESOURCE_LEARNPATH_CATEGORY])) {
+            foreach ($this->course->resources[RESOURCE_LEARNPATH_CATEGORY] as $id => $learnpathCategory) {
+                $categoryId = $learnpathCategory->object->getId();
+                // Dissociate learning paths from categories that will be deleted
+                $sql = "UPDATE $learningPathTable SET category_id = 0 WHERE category_id = ".$categoryId;
+                Database::query($sql);
+                $sql = "DELETE FROM $learningPathCategoryTable WHERE iid = ".$categoryId;
+                Database::query($sql);
+            }
         }
     }
 

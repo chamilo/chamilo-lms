@@ -62,7 +62,7 @@ $htmlHeadXtra[] = '
 
     // uncomment for some debug display utility
     /*
-    $(document).ready(function() {
+    $(function() {
         buildLPtree_debug($("#lp_item_list"), 0, 0);
         alert(lp_id_list+"\n\n"+lptree_debug);
     });
@@ -214,7 +214,8 @@ if (!empty($lpObject)) {
     if ($debug) {
         error_log(' SESSION[lpobject] is defined');
     }
-    $oLP = unserialize($lpObject);
+    /** @var learnpath $oLP */
+    $oLP = UnserializeApi::unserialize('lp', $lpObject);
     if (isset($oLP) && is_object($oLP)) {
         if ($debug) {
             error_log(' oLP is object');

@@ -20,8 +20,6 @@ $logInfo = [
     'tool_id_detail' => 0,
     'action' => isset($_GET['action']) ? $_GET['action'] : 'inbox',
     'action_details' => '',
-    'current_id' => isset($_GET['id']) ? (int) $_GET['id'] : 0,
-    'info' => '',
 ];
 Event::registerLog($logInfo);
 

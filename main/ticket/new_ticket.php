@@ -43,7 +43,7 @@ function updateCourseList(sessionId) {
     }, "json");    
 }
 
-$(document).on("ready", function () {    
+$(function() {  
     $("select#session_id").on("change", function () {        
         var sessionId = parseInt(this.value, 10);
         updateCourseList(sessionId);

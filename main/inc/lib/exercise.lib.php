@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Entity\TrackEExercises;
 use ChamiloSession as Session;
 
 /**
@@ -44,12 +46,17 @@ class ExerciseLib
         $show_answers = false,
         $show_icon = false
     ) {
-        $course_id = empty($exercise->course_id) ? api_get_course_int_id() : $exercise->course_id;
-        $course = api_get_course_info_by_id($course_id);
+        $course_id = $exercise->course_id;
+
+        if (empty($course_id)) {
+            return '';
+        }
+        $course = $exercise->course;
+
         // Change false to true in the following line to enable answer hinting
         $debug_mark_answer = $show_answers;
         // Reads question information
-        if (!$objQuestionTmp = Question::read($questionId)) {
+        if (!$objQuestionTmp = Question::read($questionId, $course_id)) {
             // Question not found
             return false;
         }
@@ -98,7 +105,7 @@ class ExerciseLib
 
             echo '<div class="question_options">';
             // construction of the Answer object (also gets all answers details)
-            $objAnswerTmp = new Answer($questionId, api_get_course_int_id(), $exercise);
+            $objAnswerTmp = new Answer($questionId, $course_id, $exercise);
             $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
             $quizQuestionOptions = Question::readQuestionOption($questionId, $course_id);
 
@@ -293,7 +300,7 @@ class ExerciseLib
                         RadioValidator(question_id, answer_id);
                     }
                     
-                    $(document).ready(function() {
+                    $(function() {
                         var ShowAlert = '';
                         var typeRadioB = '';
                         var question_id = $('input[name=question_id]').val();
@@ -1255,7 +1262,7 @@ HTML;
                                 if (!$freeze) {
                                     $s .= "
                                         <script>
-                                            $(document).on('ready', function() {
+                                            $(function() {
                                                 jsPlumb.ready(function() {
                                                     jsPlumb.connect({
                                                         source: 'window_$windowId',
@@ -1393,7 +1400,7 @@ HTML;
             $questionDescription = $objQuestionTmp->selectDescription();
 
             // Get the answers, make a list
-            $objAnswerTmp = new Answer($questionId);
+            $objAnswerTmp = new Answer($questionId, $course_id);
             $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
 
             // get answers of hotpost
@@ -1481,7 +1488,7 @@ HOTSPOT;
             $s .= "<div class=\"col-sm-8 col-md-9\">
                    <div class=\"hotspot-image\"></div>
                     <script>
-                        $(document).on('ready', function() {
+                        $(function() {
                             new ".($answerType == HOT_SPOT_DELINEATION ? 'DelineationQuestion' : 'HotspotQuestion')."({
                                 questionId: $questionId,
                                 exerciseId: $exe_id,
@@ -3035,7 +3042,7 @@ HOTSPOT;
             spanTag.addClass(optionClass);
         }
         
-        $(document).ready( function() {
+        $(function() {
             // Loading values
             $('.exercise_mark_select').on('loaded.bs.select', function() {
                 updateSelect($(this));
@@ -3901,9 +3908,7 @@ EOT;
         $track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
-        $courseUserSession = Database::get_main_table(
-            TABLE_MAIN_SESSION_COURSE_USER
-        );
+        $courseUserSession = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
         $question_id = intval($question_id);
         $exercise_id = intval($exercise_id);
@@ -3999,15 +4004,13 @@ EOT;
         $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
 
-        $courseUserSession = Database::get_main_table(
-            TABLE_MAIN_SESSION_COURSE_USER
-        );
+        $courseUserSession = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-        $question_id = intval($question_id);
-        $answer_id = intval($answer_id);
-        $exercise_id = intval($exercise_id);
+        $question_id = (int) $question_id;
+        $answer_id = (int) $answer_id;
+        $exercise_id = (int) $exercise_id;
         $course_code = Database::escape_string($course_code);
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
 
         if (empty($session_id)) {
             $courseCondition = "
@@ -4074,26 +4077,24 @@ EOT;
         $track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $courseUserSession = Database::get_main_table(
-            TABLE_MAIN_SESSION_COURSE_USER
-        );
+        $courseUserSession = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-        $question_id = intval($question_id);
-        $answer_id = intval($answer_id);
-        $exercise_id = intval($exercise_id);
+        $question_id = (int) $question_id;
+        $answer_id = (int) $answer_id;
+        $exercise_id = (int) $exercise_id;
         $courseId = api_get_course_int_id($course_code);
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
 
         switch ($question_type) {
             case FILL_IN_BLANKS:
-                $answer_condition = "";
+                $answer_condition = '';
                 $select_condition = " e.exe_id, answer ";
                 break;
             case MATCHING:
             case MATCHING_DRAGGABLE:
             default:
                 $answer_condition = " answer = $answer_id AND ";
-                $select_condition = " DISTINCT exe_user_id ";
+                $select_condition = ' DISTINCT exe_user_id ';
         }
 
         if (empty($session_id)) {
@@ -4105,7 +4106,7 @@ EOT;
             $courseCondition = "
             INNER JOIN $courseUserSession cu
             ON cu.c_id = a.c_id AND cu.user_id = exe_user_id";
-            $courseConditionWhere = " AND cu.status = 0 ";
+            $courseConditionWhere = ' AND cu.status = 0 ';
         }
 
         $sql = "SELECT $select_condition
@@ -4306,9 +4307,9 @@ EOT;
         $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-        $exercise_id = intval($exercise_id);
+        $exercise_id = (int) $exercise_id;
         $course_code = Database::escape_string($course_code);
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
 
         $sql = "SELECT DISTINCT exe_user_id
                 FROM $track_exercises e
@@ -4435,11 +4436,16 @@ EOT;
             $show_results = true;
         }
 
+        if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
+            $show_results = true;
+        }
+
         if (in_array(
             $objExercise->results_disabled,
             [
                 RESULT_DISABLE_SHOW_SCORE_ONLY,
                 RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES,
+                RESULT_DISABLE_RANKING,
             ]
         )
         ) {
@@ -4659,14 +4665,18 @@ EOT;
 
                 $score = [];
                 if ($show_results) {
+                    $scorePassed = $my_total_score >= $my_total_weight;
+                    if (function_exists('bccomp')) {
+                        $compareResult = bccomp($my_total_score, $my_total_weight, 3);
+                        $scorePassed = $compareResult === 1 || $compareResult === 0;
+                    }
                     $score = [
                         'result' => self::show_score(
                             $my_total_score,
                             $my_total_weight,
-                            false,
-                            true
+                            false
                         ),
-                        'pass' => $my_total_score >= $my_total_weight ? true : false,
+                        'pass' => $scorePassed,
                         'score' => $my_total_score,
                         'weight' => $my_total_weight,
                         'comments' => $comnt,
@@ -4688,7 +4698,6 @@ EOT;
                 $question_content = '';
                 if ($show_results) {
                     $question_content = '<div class="question_row_answer">';
-
                     if ($showQuestionScore == false) {
                         $score = [];
                     }
@@ -4737,6 +4746,17 @@ EOT;
                     true
                 );
             } else {
+                $pluginEvaluation = QuestionOptionsEvaluationPlugin::create();
+
+                if ('true' === $pluginEvaluation->get(QuestionOptionsEvaluationPlugin::SETTING_ENABLE)) {
+                    $formula = $pluginEvaluation->getFormulaForExercise($objExercise->selectId());
+
+                    if (!empty($formula)) {
+                        $total_score = $pluginEvaluation->getResultWithFormula($exeId, $formula);
+                        $total_weight = $pluginEvaluation->getMaxScore();
+                    }
+                }
+
                 $totalScoreText .= self::getTotalScoreRibbon(
                     $objExercise,
                     $total_score,
@@ -4794,10 +4814,6 @@ EOT;
             echo $totalScoreText;
         }
 
-        if (!empty($remainingMessage)) {
-            echo Display::return_message($remainingMessage, 'normal', false);
-        }
-
         if ($save_user_result) {
             // Tracking of results
             if ($exercise_stat_info) {
@@ -4818,6 +4834,15 @@ EOT;
                         $exercise_stat_info['exe_duration'],
                         $question_list
                     );
+
+                    $allowStats = api_get_configuration_value('allow_gradebook_stats');
+                    if ($allowStats) {
+                        $objExercise->generateStats(
+                            $objExercise->selectId(),
+                            api_get_course_info(),
+                            api_get_session_id()
+                        );
+                    }
                 }
             }
 
@@ -4835,6 +4860,136 @@ EOT;
                 );
             }
         }
+
+        if (RESULT_DISABLE_RANKING == $objExercise->selectResultsDisabled()) {
+            echo Display::page_header(get_lang('Ranking'), null, 'h4');
+            echo self::displayResultsInRanking(
+                $objExercise->iId,
+                api_get_user_id(),
+                api_get_course_int_id(),
+                api_get_session_id()
+            );
+        }
+
+        if (!empty($remainingMessage)) {
+            echo Display::return_message($remainingMessage, 'normal', false);
+        }
+    }
+
+    /**
+     * Display the ranking of results in a exercise.
+     *
+     * @param int $exerciseId
+     * @param int $currentUserId
+     * @param int $courseId
+     * @param int $sessionId
+     *
+     * @return string
+     */
+    public static function displayResultsInRanking($exerciseId, $currentUserId, $courseId, $sessionId = 0)
+    {
+        $data = self::exerciseResultsInRanking($exerciseId, $courseId, $sessionId);
+
+        $table = new HTML_Table(['class' => 'table table-hover table-bordered']);
+        $table->setHeaderContents(0, 0, get_lang('Position'), ['class' => 'text-right']);
+        $table->setHeaderContents(0, 1, get_lang('Username'));
+        $table->setHeaderContents(0, 2, get_lang('Score'), ['class' => 'text-right']);
+        $table->setHeaderContents(0, 3, get_lang('Date'), ['class' => 'text-center']);
+
+        foreach ($data as $r => $item) {
+            $selected = $item[1]->getId() == $currentUserId;
+
+            foreach ($item as $c => $value) {
+                $table->setCellContents($r + 1, $c, $value);
+
+                $attrClass = '';
+
+                if (in_array($c, [0, 2])) {
+                    $attrClass = 'text-right';
+                } elseif (3 == $c) {
+                    $attrClass = 'text-center';
+                }
+
+                if ($selected) {
+                    $attrClass .= ' warning';
+                }
+
+                $table->setCellAttributes($r + 1, $c, ['class' => $attrClass]);
+            }
+        }
+
+        return $table->toHtml();
+    }
+
+    /**
+     * Get the ranking for results in a exercise.
+     * Function used internally by ExerciseLib::displayResultsInRanking.
+     *
+     * @param int $exerciseId
+     * @param int $courseId
+     * @param int $sessionId
+     *
+     * @return array
+     */
+    public static function exerciseResultsInRanking($exerciseId, $courseId, $sessionId = 0)
+    {
+        $em = Database::getManager();
+
+        $dql = 'SELECT DISTINCT te.exeUserId FROM ChamiloCoreBundle:TrackEExercises te WHERE te.exeExoId = :id AND te.cId = :cId';
+        $dql .= api_get_session_condition($sessionId, true, false, 'te.sessionId');
+
+        $result = $em
+            ->createQuery($dql)
+            ->setParameters(['id' => $exerciseId, 'cId' => $courseId])
+            ->getScalarResult();
+
+        $data = [];
+
+        /** @var TrackEExercises $item */
+        foreach ($result as $item) {
+            $bestAttemp = self::get_best_attempt_by_user($item['exeUserId'], $exerciseId, $courseId, $sessionId = 0);
+
+            $data[] = $bestAttemp;
+        }
+
+        usort(
+            $data,
+            function ($a, $b) {
+                if ($a['exe_result'] != $b['exe_result']) {
+                    return $a['exe_result'] > $b['exe_result'] ? -1 : 1;
+                }
+
+                if ($a['exe_date'] != $b['exe_date']) {
+                    return $a['exe_date'] < $b['exe_date'] ? -1 : 1;
+                }
+
+                return 0;
+            }
+        );
+
+        // flags to display the same position in case of tie
+        $lastScore = $data[0]['exe_result'];
+        $position = 1;
+
+        $data = array_map(
+            function ($item) use (&$lastScore, &$position) {
+                if ($item['exe_result'] < $lastScore) {
+                    $position++;
+                }
+
+                $lastScore = $item['exe_result'];
+
+                return [
+                    $position,
+                    api_get_user_entity($item['exe_user_id']),
+                    self::show_score($item['exe_result'], $item['exe_weighting'], true, true, true),
+                    api_convert_and_format_date($item['exe_date'], DATE_TIME_FORMAT_SHORT),
+                ];
+            },
+            $data
+        );
+
+        return $data;
     }
 
     /**
@@ -5102,5 +5257,87 @@ EOT;
         ];
 
         return $emailAlerts;
+    }
+
+    /**
+     * Get the additional actions added in exercise_additional_teacher_modify_actions configuration.
+     *
+     * @param int $exerciseId
+     * @param int $iconSize
+     *
+     * @return string
+     */
+    public static function getAdditionalTeacherActions($exerciseId, $iconSize = ICON_SIZE_SMALL)
+    {
+        $additionalActions = api_get_configuration_value('exercise_additional_teacher_modify_actions') ?: [];
+        $actions = [];
+
+        foreach ($additionalActions as $additionalAction) {
+            $actions[] = call_user_func(
+                $additionalAction,
+                $exerciseId,
+                $iconSize
+            );
+        }
+
+        return implode(PHP_EOL, $actions);
+    }
+
+    /**
+     * @param DateTime $time
+     * @param int      $userId
+     * @param int      $courseId
+     * @param int      $sessionId
+     *
+     * @throws \Doctrine\ORM\Query\QueryException
+     *
+     * @return int
+     */
+    public static function countAnsweredQuestionsByUserAfterTime(DateTime $time, $userId, $courseId, $sessionId)
+    {
+        $em = Database::getManager();
+
+        $time = api_get_utc_datetime($time->format('Y-m-d H:i:s'), false, true);
+
+        $result = $em
+            ->createQuery('
+                SELECT COUNT(ea) FROM ChamiloCoreBundle:TrackEAttempt ea
+                WHERE ea.userId = :user AND ea.cId = :course AND ea.sessionId = :session
+                    AND ea.tms > :time
+            ')
+            ->setParameters(['user' => $userId, 'course' => $courseId, 'session' => $sessionId, 'time' => $time])
+            ->getSingleScalarResult();
+
+        return $result;
+    }
+
+    /**
+     * @param int $userId
+     * @param int $numberOfQuestions
+     * @param int $courseId
+     * @param int $sessionId
+     *
+     * @throws \Doctrine\ORM\Query\QueryException
+     *
+     * @return bool
+     */
+    public static function isQuestionsLimitPerDayReached($userId, $numberOfQuestions, $courseId, $sessionId)
+    {
+        $questionsLimitPerDay = (int) api_get_course_setting('quiz_question_limit_per_day');
+
+        if ($questionsLimitPerDay <= 0) {
+            return false;
+        }
+
+        $midnightTime = ChamiloApi::getServerMidnightTime();
+
+        $answeredQuestionsCount = self::countAnsweredQuestionsByUserAfterTime(
+            $midnightTime,
+            $userId,
+            $courseId,
+            $sessionId
+        );
+
+        return ($answeredQuestionsCount + $numberOfQuestions) > $questionsLimitPerDay;
     }
 }

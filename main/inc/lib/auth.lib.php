@@ -80,7 +80,7 @@ class Auth
     /**
      * This function get all the courses in the particular user category;.
      *
-     * @return string The name of the user defined course category
+     * @return array
      */
     public function get_courses_in_category()
     {

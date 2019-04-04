@@ -4517,7 +4517,6 @@ class UserManager
             FormValidator::LAYOUT_HORIZONTAL
         );
 
-
         $query = Security::remove_XSS($query);
 
         if (!empty($query)) {

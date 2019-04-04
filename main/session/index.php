@@ -19,7 +19,6 @@ if (empty($session_id)) {
     api_not_allowed(true);
 }
 
-
 $sessionField = new ExtraFieldValue('session');
 $valueAllowVisitors = $sessionField->get_values_by_handler_and_field_variable(
     $session_id,

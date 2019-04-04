@@ -10424,8 +10424,8 @@ class learnpath
                 break;
             }
 
-            $selectedMaxScoreValue = isset($selectedMaxScore[$item['id']]) ? $selectedMaxScore[$item['id']] : $item['max_score'];
             $selectedMinScoreValue = isset($selectedMinScore[$item['id']]) ? $selectedMinScore[$item['id']] : 0;
+            $selectedMaxScoreValue = isset($selectedMaxScore[$item['id']]) ? $selectedMaxScore[$item['id']] : $item['max_score'];
             $masteryScoreAsMinValue = isset($masteryScore[$item['id']]) ? $masteryScore[$item['id']] : 0;
 
             $return .= '<tr>';
@@ -10459,7 +10459,7 @@ class learnpath
                 $lpItemObj->update();
                 $item['max_score'] = $lpItemObj->max_score;
 
-                if (empty($selectedMinScoreValue) && !empty($masteryScoreAsMinValue)) {
+                if (!isset($selectedMinScore[$item['id']]) && !empty($masteryScoreAsMinValue)) {
                     // Backwards compatibility with 1.9.x use mastery_score as min value
                     $selectedMinScoreValue = $masteryScoreAsMinValue;
                 }

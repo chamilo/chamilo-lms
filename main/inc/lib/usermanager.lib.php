@@ -4524,8 +4524,11 @@ class UserManager
             FormValidator::LAYOUT_HORIZONTAL
         );
 
+
+        $query = Security::remove_XSS($query);
+
         if (!empty($query)) {
-            $form->addHeader(get_lang('Results').' "'.Security::remove_XSS($query).'"');
+            $form->addHeader(get_lang('Results').' "'.$query.'"');
         }
 
         $form->addText(
@@ -4533,7 +4536,7 @@ class UserManager
             get_lang('UsersGroups'),
             false,
             [
-                "id" => "q",
+                'id' => 'q',
             ]
         );
         $options = [
@@ -4549,7 +4552,8 @@ class UserManager
         );
 
         // Extra fields
-        $extraFields = self::getExtraFilterableFields();
+        //Ofaj
+        /*$extraFields = self::getExtraFilterableFields();
         $defaults = [];
         if (is_array($extraFields) && count($extraFields) > 0) {
             foreach ($extraFields as $extraField) {
@@ -4569,10 +4573,10 @@ class UserManager
                 }
                 $form->addSelect($varName, $extraField['name'], $options);
             }
-        }
+        }*/
 
-        $defaults['search_type'] = intval($searchType);
-        $defaults['q'] = Security::remove_XSS($query);
+        $defaults['search_type'] = (int) $searchType;
+        $defaults['q'] = $query;
 
         if (!empty($defaultParams)) {
             $defaults = array_merge($defaults, $defaultParams);
@@ -4580,16 +4584,17 @@ class UserManager
         $form->setDefaults($defaults);
         $form->addButtonSearch(get_lang('Search'));
 
-        $js = '<script>
+        /*$js = '<script>
         extra_field_toogle();
         function extra_field_toogle() {
-            if (jQuery("select[name=search_type]").val() != "1") { 
-                jQuery(".extra_field").hide(); 
-            } else { 
-                jQuery(".extra_field").show(); 
+            if (jQuery("select[name=search_type]").val() != "1") {
+                jQuery(".extra_field").hide();
+            } else {
+                jQuery(".extra_field").show();
             }
         }
-        </script>';
+        </script>';*/
+        $js = '';
 
         return $js.$form->returnForm();
     }

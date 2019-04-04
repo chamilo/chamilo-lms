@@ -47,6 +47,10 @@ class Rest extends WebService
     const CREATE_CAMPUS = 'add_campus';
     const EDIT_CAMPUS = 'edit_campus';
     const DELETE_CAMPUS = 'delete_campus';
+    const SAVE_SESSION = 'save_session';
+    const GET_USERS = 'get_users';
+    const GET_COURSE = 'get_courses';
+    const ADD_COURSES_SESSION = 'add_courses_session';
 
     /**
      * @var Session
@@ -685,6 +689,8 @@ class Rest extends WebService
 
         $result = [
             'pictureUri' => $pictureInfo['dir'] . $pictureInfo['file'],
+            'id' => $this->user->getId(),
+            'status' => $this->user->getStatus(),
             'fullName' => $this->user->getCompleteName(),
             'username' => $this->user->getUsername(),
             'officialCode' => $this->user->getOfficialCode(),
@@ -1023,6 +1029,96 @@ class Rest extends WebService
         return [
             'registered' => $thread->getIid(),
         ];
+    }
+
+    public function getUsersCampus(array $params){
+        $conditions = [
+            'status' => $params['status'],
+        ];
+        $idCampus = $params['id_campus'];
+        $users = UserManager::get_user_list($conditions, ['firstname'], false, false, $idCampus);
+        $listTemp = [];
+        $list = [];
+        foreach ($users as $item){
+            $listTemp = [
+                'id' => $item['user_id'],
+                'firstname' => $item['firstname'],
+                'lastname' => $item['lastname'],
+                'email' => $item['email']
+            ];
+            $list[] = $listTemp;
+
+        }
+        return $list;
+    }
+
+    public function getCoursesCampus(array $params){
+
+        $idCampus = $params['id_campus'];
+
+        $courseList = CourseManager::get_courses_list(
+            0, //offset
+            0, //howMany
+            1, //$orderby = 1
+            'ASC',
+            -1, //visibility
+            null,
+            $idCampus, //$urlId
+            true //AlsoSearchCode
+        );
+
+
+        return $courseList;
+    }
+
+    public function addSession(array $params){
+
+        $name = $params['name'];
+        $coach_username = intval($params['coach_username']);
+        $startDate = $params['access_start_date'];
+        $endDate = $params['access_end_date'];
+        $displayStartDate = $startDate;
+        $displayEndDate = $endDate;
+        $description = $params['description'];
+        $idUrlCampus = $params['id_campus'];
+
+
+        $return = SessionManager::create_session(
+            $name,
+            $startDate,
+            $endDate,
+            $displayStartDate,
+            $displayEndDate,
+            null,
+            null,
+            $coach_username,
+            null,
+            1,
+            false,
+            null,
+            $description,
+            1,
+            [],
+            null,
+            false,
+            $idUrlCampus
+        );
+
+
+        if($return){
+            $out = [
+                'status' => true,
+                'message' => 'Sesión creada correctamente',
+                'id_session' => $return
+            ];
+        } else {
+            $out = [
+                'status' => false,
+                'message' => 'Error al crear la sesión'
+            ];
+        }
+
+        return $out;
     }
 
     /**
@@ -1410,6 +1506,30 @@ class Rest extends WebService
             return [
                 'status' => false,
                 'message' => get_lang('Error')
+            ];
+        }
+    }
+
+    public function addCoursesSession(array $params){
+        $sessionId = $params['id_session'];
+        $courseList = $params['list_courses'];
+
+        $result = SessionManager::add_courses_to_session(
+            $sessionId,
+            $courseList,
+            true,
+            false
+        );
+
+        if($result){
+            return [
+                'status' => $result,
+                'message' => 'Los cursos fueron añadidos a la sessión'
+            ];
+        } else {
+            return [
+                'status' => $result,
+                'message' => 'Error al añadir cursos a la sessión'
             ];
         }
     }

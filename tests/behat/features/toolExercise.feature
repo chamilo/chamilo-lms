@@ -373,8 +373,10 @@ Feature: Exercise tool
     And I select "B" from "choice_id_7_2"
     And I select "C" from "choice_id_7_3"
     And I press "Next question"
+    And wait for the page to be loaded
     And I check "1"
     And I press "Next question"
+    And wait for the page to be loaded
     And I press "End test"
     Then I should see "Score for the test: 190 / 190"
     And I should see the table "#category_results":

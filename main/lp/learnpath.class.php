@@ -1539,56 +1539,53 @@ class learnpath
      *
      * @param int    $id              Element ID
      * @param string $prerequisite_id Prerequisite Element ID
-     * @param int    $mastery_score   Prerequisite min score
-     * @param int    $max_score       Prerequisite max score
+     * @param int    $minScore        Prerequisite min score
+     * @param int    $maxScore        Prerequisite max score
      *
      * @return bool True on success, false on error
      */
     public function edit_item_prereq(
         $id,
         $prerequisite_id,
-        $mastery_score = 0,
-        $max_score = 100
+        $minScore = 0,
+        $maxScore = 100
     ) {
-        $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
-            error_log('In learnpath::edit_item_prereq('.$id.','.$prerequisite_id.','.$mastery_score.','.$max_score.')', 0);
+            error_log('In learnpath::edit_item_prereq('.$id.','.$prerequisite_id.','.$minScore.','.$maxScore.')', 0);
         }
 
-        if (empty($id) || ($id != strval(intval($id))) || empty($prerequisite_id)) {
+        $id = (int) $id;
+        $prerequisite_id = (int) $prerequisite_id;
+
+        if (empty($id) || empty($prerequisite_id)) {
             return false;
         }
 
-        $prerequisite_id = (int) $prerequisite_id;
-        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-
-        if (!is_numeric($mastery_score) || $mastery_score < 0) {
-            $mastery_score = 0;
+        if (empty($minScore) || $minScore < 0) {
+            $minScore = 0;
         }
 
-        if (!is_numeric($max_score) || $max_score < 0) {
-            $max_score = 100;
+        if (empty($maxScore) || $maxScore < 0) {
+            $maxScore = 100;
         }
 
-        /*if ($mastery_score > $max_score) {
-            $max_score = $mastery_score;
-        }*/
-
-        if (!is_numeric($prerequisite_id)) {
+        if (empty($prerequisite_id)) {
             $prerequisite_id = 'NULL';
         }
 
-        $mastery_score = floatval($mastery_score);
-        $max_score = floatval($max_score);
+        $minScore = floatval($minScore);
+        $maxScore = floatval($maxScore);
 
+        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $sql = " UPDATE $tbl_lp_item
                  SET
                     prerequisite = $prerequisite_id ,
-                    prerequisite_min_score = $mastery_score ,
-                    prerequisite_max_score = $max_score
+                    prerequisite_min_score = $minScore ,
+                    prerequisite_max_score = $maxScore
                  WHERE iid = $id";
+
         Database::query($sql);
-        // TODO: Update the item object (can be ignored for now because refreshed).
+
         return true;
     }
 
@@ -10427,8 +10424,8 @@ class learnpath
                 break;
             }
 
-            $selectedMaxScoreValue = isset($selectedMaxScore[$item['id']]) ? $selectedMaxScore[$item['id']] : $item['max_score'];
             $selectedMinScoreValue = isset($selectedMinScore[$item['id']]) ? $selectedMinScore[$item['id']] : 0;
+            $selectedMaxScoreValue = isset($selectedMaxScore[$item['id']]) ? $selectedMaxScore[$item['id']] : $item['max_score'];
             $masteryScoreAsMinValue = isset($masteryScore[$item['id']]) ? $masteryScore[$item['id']] : 0;
 
             $return .= '<tr>';
@@ -10462,7 +10459,7 @@ class learnpath
                 $lpItemObj->update();
                 $item['max_score'] = $lpItemObj->max_score;
 
-                if (empty($selectedMinScoreValue) && !empty($masteryScoreAsMinValue)) {
+                if (!isset($selectedMinScore[$item['id']]) && !empty($masteryScoreAsMinValue)) {
                     // Backwards compatibility with 1.9.x use mastery_score as min value
                     $selectedMinScoreValue = $masteryScoreAsMinValue;
                 }

@@ -126,9 +126,8 @@ if ($query != '' || ($query_vars['search_type'] == '1' && count($query_vars) > 2
                 $user_icon = Display::return_icon('teacher.png', get_lang('Teacher'), null, ICON_SIZE_TINY);
             }
 
-            $tag = isset($user['tag']) ? ' <br /><br />'.$user['tag'] : null;
             $user_info['complete_name'] = Display::url($user_info['complete_name'], $url);
-            $invitations = $user['tag'].$sendInvitation.$sendMessage;
+            $invitations = $sendInvitation.$sendMessage;
 
             $results .= Display::getUserCard(
                 $user_info,

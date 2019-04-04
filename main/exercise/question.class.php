@@ -1975,16 +1975,27 @@ abstract class Question
      *
      * @return string HTML string with the header of the question (before the answers table)
      */
-    public function return_header($exercise, $counter = null, $score = [])
+    public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $counterLabel = '';
         if (!empty($counter)) {
             $counterLabel = (int) $counter;
         }
+
         $scoreLabel = get_lang('Wrong');
+
+        if ($exercise->results_disabled == RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
+            $scoreLabel = get_lang('QuizWrongAnswerHereIsTheCorrectOne');
+        }
+
         $class = 'error';
         if (isset($score['pass']) && $score['pass'] == true) {
             $scoreLabel = get_lang('Correct');
+
+            if ($exercise->results_disabled == RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
+                $scoreLabel = get_lang('CorrectAnswer');
+            }
+
             $class = 'success';
         }
 

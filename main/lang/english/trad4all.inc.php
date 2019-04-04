@@ -8388,4 +8388,5 @@ $VoteDislike = "Dislike";
 $GenerateStats = "Generate statistics";
 $BasicCourseDocuments = "Basic course documents";
 $WeekX = "Week %s";
+$QuizWrongAnswerHereIsTheCorrectOne = "Wrong answer. The correct one was:";
 ?>

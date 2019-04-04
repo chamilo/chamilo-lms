@@ -4517,9 +4517,21 @@ class UserManager
             FormValidator::LAYOUT_HORIZONTAL
         );
 
-        $form->addText('q', get_lang('UsersGroups'), false, [
-            "id" => "q",
-        ]);
+
+        $query = Security::remove_XSS($query);
+
+        if (!empty($query)) {
+            $form->addHeader(get_lang('Results').' "'.$query.'"');
+        }
+
+        $form->addText(
+            'q',
+            get_lang('UsersGroups'),
+            false,
+            [
+                'id' => 'q',
+            ]
+        );
         $options = [
             0 => get_lang('Select'),
             1 => get_lang('User'),
@@ -4555,8 +4567,8 @@ class UserManager
             }
         }
 
-        $defaults['search_type'] = intval($searchType);
-        $defaults['q'] = api_htmlentities(Security::remove_XSS($query));
+        $defaults['search_type'] = (int) $searchType;
+        $defaults['q'] = $query;
 
         if (!empty($defaultParams)) {
             $defaults = array_merge($defaults, $defaultParams);

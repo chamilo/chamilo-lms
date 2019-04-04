@@ -24,6 +24,8 @@ $interbreadcrumb[] = [
 ];
 
 $query = isset($_GET['q']) ? Security::remove_XSS($_GET['q']) : null;
+
+$queryNoFilter = isset($_GET['q']) ? $_GET['q'] : null;
 $query_search_type = isset($_GET['search_type']) && in_array($_GET['search_type'], ['0', '1', '2']) ? $_GET['search_type'] : null;
 $extra_fields = UserManager::getExtraFilterableFields();
 $query_vars = ['q' => $query, 'search_type' => $query_search_type];
@@ -39,7 +41,7 @@ if (!empty($extra_fields)) {
 //Block Social Menu
 $social_menu_block = SocialManager::show_social_menu('search');
 $block_search = '';
-$searchForm = UserManager::get_search_form($query);
+$searchForm = UserManager::get_search_form($queryNoFilter);
 
 $groups = [];
 $totalGroups = [];

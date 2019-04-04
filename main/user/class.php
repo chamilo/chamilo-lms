@@ -30,7 +30,7 @@ $groupFilter = isset($_GET['group_filter']) ? intval($_GET['group_filter']) : 0;
 
 $htmlHeadXtra[] = '
 <script>
-$(document).ready( function() {
+$(function() {
     $("#group_filter").change(function() {
         window.location = "class.php?'.api_get_cidreq().'&type='.$type.'" +"&group_filter=" + $(this).val();
     });

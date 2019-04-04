@@ -1071,11 +1071,10 @@ class CourseManager
         $session_id = 0
     ) {
         $user_id = (int) $user_id;
+        $session_id = (int) $session_id;
 
         if (empty($session_id)) {
             $session_id = api_get_session_id();
-        } else {
-            $session_id = (int) $session_id;
         }
 
         $condition_course = '';
@@ -1085,7 +1084,7 @@ class CourseManager
                 return false;
             }
             $courseId = $courseInfo['real_id'];
-            $condition_course = ' AND c_id = '.$courseId;
+            $condition_course = " AND c_id = $courseId";
         }
 
         $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
@@ -1107,22 +1106,22 @@ class CourseManager
         }
 
         $tableSessionCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $sql = 'SELECT 1 FROM '.$tableSessionCourseUser.'
-            WHERE user_id = '.$user_id.' AND session_id = '.$session_id.' '.$condition_course;
+        $sql = "SELECT 1 FROM $tableSessionCourseUser
+                WHERE user_id = $user_id AND session_id = $session_id $condition_course";
 
         if (Database::num_rows(Database::query($sql)) > 0) {
             return true;
         }
 
-        $sql = 'SELECT 1 FROM '.$tableSessionCourseUser.'
-            WHERE user_id = '.$user_id.' AND session_id = '.$session_id.' AND status = 2 '.$condition_course;
+        $sql = "SELECT 1 FROM $tableSessionCourseUser
+                WHERE user_id = $user_id AND session_id = $session_id AND status = 2 $condition_course";
 
         if (Database::num_rows(Database::query($sql)) > 0) {
             return true;
         }
 
         $sql = 'SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_SESSION).
-            ' WHERE id = '.$session_id.' AND id_coach='.$user_id;
+              " WHERE id = $session_id AND id_coach = $user_id";
 
         if (Database::num_rows(Database::query($sql)) > 0) {
             return true;
@@ -1293,7 +1292,7 @@ class CourseManager
         // we have to check if it is a valid field that can be sorted on
         if (!strstr($order_by, 'ORDER BY')) {
             if (!empty($order_by)) {
-                $order_by = 'ORDER BY '.$order_by;
+                $order_by = "ORDER BY $order_by";
             } else {
                 $order_by = '';
             }
@@ -1326,7 +1325,7 @@ class CourseManager
             if (!empty($courseCodeList)) {
                 $courseCodeListForSession = array_map(['Database', 'escape_string'], $courseCodeList);
                 $courseCodeListForSession = implode('","', $courseCodeListForSession);
-                $courseCondition = ' course.code IN ("'.$courseCodeListForSession.'")  ';
+                $courseCondition = " course.code IN ('$courseCodeListForSession')  ";
             }
 
             $sql .= ' FROM '.Database::get_main_table(TABLE_MAIN_USER).' as user ';
@@ -1381,7 +1380,7 @@ class CourseManager
                        ON course_rel_user.c_id = course.id ";
 
             if (!empty($course_code)) {
-                $sql .= ' AND course_rel_user.c_id = "'.$courseId.'"';
+                $sql .= " AND course_rel_user.c_id = $courseId";
             }
             $where[] = ' course_rel_user.c_id IS NOT NULL ';
 
@@ -1403,17 +1402,17 @@ class CourseManager
                 $extraFieldInfo = UserManager::get_extra_field_information_by_name($extraField);
                 if (!empty($extraFieldInfo)) {
                     $fieldValuesTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-                    $sql .= ' LEFT JOIN '.$fieldValuesTable.' as ufv
+                    $sql .= " LEFT JOIN $fieldValuesTable as ufv
                             ON (
                                 user.id = ufv.item_id AND
-                                (field_id = '.$extraFieldInfo['id'].' OR field_id IS NULL)
-                            )';
+                                (field_id = ".$extraFieldInfo['id']." OR field_id IS NULL)
+                            )";
                     $extraFieldWasAdded = true;
                 }
             }
         }
 
-        $sql .= ' WHERE '.$filter_by_status_condition.' '.implode(' OR ', $where);
+        $sql .= " WHERE $filter_by_status_condition ".implode(' OR ', $where);
 
         if ($multiple_access_url) {
             $current_access_url_id = api_get_current_access_url_id();
@@ -1440,7 +1439,7 @@ class CourseManager
 
         if (isset($filterByActive)) {
             $filterByActive = (int) $filterByActive;
-            $sql .= ' AND user.active = '.$filterByActive;
+            $sql .= " AND user.active = $filterByActive";
         }
 
         if (!empty($searchByKeyword)) {
@@ -1452,7 +1451,7 @@ class CourseManager
                     ) ";
         }
 
-        $sql .= ' '.$order_by.' '.$limit;
+        $sql .= " $order_by $limit";
 
         $rs = Database::query($sql);
         $users = [];
@@ -1679,7 +1678,7 @@ class CourseManager
         $status = null
     ) {
         // variable initialisation
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
         $course_code = Database::escape_string($course_code);
         $tblUser = Database::get_main_table(TABLE_MAIN_USER);
         $tblSessionCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -1755,12 +1754,12 @@ class CourseManager
         $course_code = Database::escape_string($course_code);
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['real_id'];
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
         $users = [];
 
         // We get the coach for the given course in a given session.
         $sql = 'SELECT user_id FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).
-               ' WHERE session_id = '.$session_id.' AND c_id = '.$courseId.' AND status = 2';
+               " WHERE session_id = $session_id AND c_id = $courseId AND status = 2";
         $rs = Database::query($sql);
         while ($user = Database::fetch_array($rs)) {
             $userInfo = api_get_user_info($user['user_id']);
@@ -1823,7 +1822,7 @@ class CourseManager
                         FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)." cu
                         INNER JOIN $userTable u
                         ON cu.user_id = u.user_id
-                        WHERE c_id = '$courseId' AND cu.status = ".STUDENT;
+                        WHERE c_id = $courseId AND cu.status = ".STUDENT;
 
                 if (!$includeInvitedUsers) {
                     $sql .= " AND u.status != ".INVITEE;
@@ -1866,7 +1865,7 @@ class CourseManager
             }
 
             if ($session_id != 0) {
-                $sql_query .= ' AND scu.session_id = '.$session_id;
+                $sql_query .= " AND scu.session_id = $session_id";
             }
 
             if (!$includeInvitedUsers) {
@@ -2850,7 +2849,7 @@ class CourseManager
                     ON (course.id = url.c_id) 
                     WHERE 
                         url.access_url_id = $urlId AND 
-                        cru.user_id = '$user_id' 
+                        cru.user_id = $user_id 
                         $withoutSpecialCourses
                         $languageCondition
                     ORDER BY course.title
@@ -3050,27 +3049,6 @@ class CourseManager
         ];
 
         return $extraField->save($params);
-    }
-
-    /**
-     * Updates course attribute. Note that you need to check that your
-     * attribute is valid before you use this function.
-     *
-     * @param int    $id    Course id
-     * @param string $name  Attribute name
-     * @param string $value Attribute value
-     *
-     * @return Doctrine\DBAL\Driver\Statement|null True if attribute was successfully updated,
-     *                                             false if course was not found or attribute name is invalid
-     */
-    public static function update_attribute($id, $name, $value)
-    {
-        $id = (int) $id;
-        $table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "UPDATE $table SET $name = '".Database::escape_string($value)."'
-                WHERE id = $id";
-
-        return Database::query($sql);
     }
 
     /**

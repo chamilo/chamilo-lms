@@ -77,7 +77,7 @@ if (isset($_POST['idtextqualify'])) {
 
 /*     Including necessary files */
 $htmlHeadXtra[] = '<script>
-    $(document).ready(function(){
+    $(function() {
         $(\'.hide-me\').slideUp()
     });
 

@@ -115,7 +115,7 @@ function check_group_members($value)
 }
 
 $htmlHeadXtra[] = '<script>
-$(document).ready( function() {
+$(function() {
     $("#max_member").on("focus", function() {
         $("#max_member_selected").attr("checked", true);
     });

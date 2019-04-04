@@ -121,7 +121,7 @@ $js = "<script>
     // be sure that these columns always exists
     // see headers = array();
     // tab of header texts
-    $(document).ready( function() {
+    $(function() {
         init_hide();
         var columnsToHide = ".$columnsToHide.";
         if (columnsToHide) {

@@ -196,7 +196,7 @@ class ScormQuestion extends Question
         $weight = $this->selectWeighting();
         $js = '
             questions.push('.$this->js_id.');
-            $(document).ready(function() {         
+            $(function() {     
                 if (exerciseInfo.randomAnswers == true) {
                     $("#question_'.$this->js_id.'").shuffleRows();                    
                 } 

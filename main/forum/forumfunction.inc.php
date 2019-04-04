@@ -6930,11 +6930,17 @@ function reportPost($postId, $forumInfo, $threadInfo)
  */
 function getLanguageListForFlag()
 {
-    $languages = api_get_languages();
-    $languages = array_column($languages['all'], 'english_name', 'isocode');
-    unset($languages['en']);
-    $languages['gb'] = 'english';
-    $languages = array_flip($languages);
+    $table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+    $sql = "SELECT english_name, isocode FROM $table 
+            ORDER BY original_name ASC";
+    static $languages = [];
+    if (empty($languages)) {
+        $result = Database::query($sql);
+        while ($row = Database::fetch_array($result)) {
+            $languages[$row['english_name']] = $row['isocode'];
+        }
+        $languages['english'] = 'gb';
+    }
 
     return $languages;
 }

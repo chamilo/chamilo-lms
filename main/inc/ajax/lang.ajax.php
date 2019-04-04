@@ -12,6 +12,8 @@ $action = $_REQUEST['a'];
 
 switch ($action) {
     case 'translate_html':
+        header('Content-type: application/x-javascript');
+
         $translate = api_get_configuration_value('translate_html');
 
         if (!$translate) {
@@ -33,7 +35,7 @@ switch ($action) {
         $languageInfo = api_get_language_info($languageId);
 
         echo '
-            $(document).ready(function() {
+            $(function() {
                  '.$hideAll.'                 
                 var defaultLanguageFromUser = "'.$languageInfo['isocode'].'";                                
                 $("span:lang('.$languageInfo['isocode'].')").filter(

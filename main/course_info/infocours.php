@@ -746,7 +746,6 @@ $form->addHtml('
     ');
 
 if (api_get_configuration_value('allow_exercise_auto_launch')) {
-
     // Auto launch exercise
     $group = [];
     $group[] = $form->createElement(

@@ -497,30 +497,37 @@ class CoursesAndSessionsCatalog
                     $urlCondition = ' (access_url_id = '.$urlId.' OR access_url_id = 1) AND ';
                 }
 
-                $sql = "SELECT *
-                            FROM $courseTable as course
-                            INNER JOIN $tbl_url_rel_course as url_rel_course
-                            ON (url_rel_course.c_id = course.id)
-                            WHERE
-                                access_url_id = $urlId AND 
-                                (
-                                    code LIKE '%".$search_term_safe."%' OR
-                                    title LIKE '%".$search_term_safe."%' OR
-                                    tutor_name LIKE '%".$search_term_safe."%'
-                                )
-                                $avoidCoursesCondition
-                                $visibilityCondition
-                            ORDER BY title, visual_code ASC
-                            $limitFilter
-                            ";
+                $sql = "SELECT course.*
+                        FROM $courseTable as course
+                        INNER JOIN $tbl_url_rel_course as url_rel_course
+                        ON (url_rel_course.c_id = course.id)
+                        WHERE
+                            access_url_id = $urlId AND 
+                            (
+                                code LIKE '%".$search_term_safe."%' OR
+                                title LIKE '%".$search_term_safe."%' OR
+                                tutor_name LIKE '%".$search_term_safe."%'
+                            )
+                            $avoidCoursesCondition
+                            $visibilityCondition
+                        ORDER BY title, visual_code ASC
+                        $limitFilter
+                       ";
             }
         }
         $result_find = Database::query($sql);
         $courses = [];
         while ($row = Database::fetch_array($result_find)) {
             $row['registration_code'] = !empty($row['registration_code']);
-            $count_users = count(CourseManager::get_user_list_from_course_code($row['code']));
-            $count_connections_last_month = Tracking::get_course_connections_count(
+            $countUsers = CourseManager::get_user_list_from_course_code(
+                $row['code'],
+                0,
+                null,
+                null,
+                null,
+                true
+            );
+            $connectionsLastMonth = Tracking::get_course_connections_count(
                 $row['id'],
                 0,
                 api_get_utc_datetime(time() - (30 * 86400))
@@ -541,8 +548,8 @@ class CoursesAndSessionsCatalog
                 'registration_code' => $row['registration_code'],
                 'creation_date' => $row['creation_date'],
                 'visibility' => $row['visibility'],
-                'count_users' => $count_users,
-                'count_connections' => $count_connections_last_month,
+                'count_users' => $countUsers,
+                'count_connections' => $connectionsLastMonth,
             ];
         }
 

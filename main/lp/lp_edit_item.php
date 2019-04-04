@@ -22,7 +22,7 @@ $learnPath = Session::read('oLP');
 
 /* Header and action code */
 $htmlHeadXtra[] = '<script>'.$learnPath->get_js_dropdown_array().'
-$(document).on("ready", function() {
+$(function() {
     CKEDITOR.on("instanceReady", function (e) {
         showTemplates("content_lp");
     });
@@ -96,7 +96,7 @@ function confirmation(name) {
     }
 }
 
-$(document).ready(function() {
+$(function() {
     jQuery('.scrollbar-inner').scrollbar();
     expandColumnToogle('#hide_bar_template', {
         selector: '#lp_sidebar'

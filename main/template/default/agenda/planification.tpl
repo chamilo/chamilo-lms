@@ -29,7 +29,7 @@
                 <tr>
                     <th class="col-session">{{ 'Session'|get_lang }}</th>
                     {% for i in 1..52 %}
-                        <th class="col-week text-center"><span>{{ i }}</span></th>
+                        <th class="col-week text-center" title="{{ 'WeekX'|get_lang|format(i) }}"><span>{{ i }}</span></th>
                     {% endfor %}
                 </tr>
                 </thead>

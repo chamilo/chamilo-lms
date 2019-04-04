@@ -126,7 +126,7 @@ $htmlHeadXtra[] = api_get_css_asset('qtip2/jquery.qtip.min.css');
 $htmlHeadXtra[] = api_get_asset('qtip2/jquery.qtip.min.js');
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
 $htmlHeadXtra[] = '<script>
-$(document).ready(function() {    
+$(function() {   
     $("div#log_content_cleaner").bind("click", function() {
         $("div#log_content").empty();
     });
@@ -137,7 +137,7 @@ var chamilo_xajax_handler = window.oxajax;
 $allowLpItemTip = api_get_configuration_value('hide_accessibility_label_on_lp_item') === false;
 if ($allowLpItemTip) {
     $htmlHeadXtra[] = '<script>
-    $(document).ready(function() {    
+    $(function() {   
          $(".scorm_item_normal").qtip({
             content: {
                 text: function(event, api) {

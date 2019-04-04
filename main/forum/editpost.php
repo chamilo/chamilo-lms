@@ -110,7 +110,7 @@ $table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 /* Header */
 $htmlHeadXtra[] = <<<JS
     <script>
-    $(document).on('ready', function() {
+    $(function() {
         $('#reply-add-attachment').on('click', function(e) {
             e.preventDefault();
 

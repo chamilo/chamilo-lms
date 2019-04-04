@@ -530,7 +530,7 @@ if ($survey_data['form_fields'] != '' &&
     // the $jquery_ready_content variable collects all functions
     // that will be load in the $(document).ready javascript function
     $htmlHeadXtra[] = '<script>
-    $(document).ready(function(){
+    $(function() {
         '.$jquery_ready_content.'
     });
     </script>';

@@ -162,7 +162,7 @@ echo '</div>';
     <!-- javascript and styles for textareaCounter-->
     <script>
         var info;
-        $(document).ready(function () {
+        $(function() {
             var options = {
                 'maxCharacterSize': 100,
                 'originalStyle': 'originalTextareaInfo',

@@ -34,7 +34,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $htmlHeadXtra[] = '<script>
 /* option show/hide thematic-block */
-$(document).ready(function(){
+$(function() {
     $("#thematic-show").click(function(){
         $(".btn-hide-thematic").hide();
         $(".btn-show-thematic").show(); //show using class

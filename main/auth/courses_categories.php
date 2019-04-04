@@ -36,7 +36,7 @@ $code = isset($code) ? $code : null;
 
 ?>
 <script>
-    $(document).ready( function() {
+    $(function() {
         $('.star-rating li a').on('click', function(event) {
             var id = $(this).parents('ul').attr('id');
             $('#vote_label2_' + id).html("<?php echo get_lang('Loading'); ?>");
@@ -300,7 +300,7 @@ function getOptionSelect($categories, $codeType)
             continue;
         }
         if ($level > 0) {
-            $separate = str_repeat("--", $level);
+            $separate = str_repeat('--', $level);
         } else {
             $separate = '';
         }

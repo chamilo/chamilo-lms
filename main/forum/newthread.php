@@ -138,7 +138,7 @@ if (!empty($groupId)) {
 
 $htmlHeadXtra[] = "
     <script>
-        $(document).on('ready', function() {
+        $(function() {
             $('#reply-add-attachment').on('click', function(e) {
                 e.preventDefault();
     

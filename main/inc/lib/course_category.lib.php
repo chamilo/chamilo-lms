@@ -482,8 +482,8 @@ class CourseCategory
      */
     public static function listCategories($categorySource)
     {
-        $categorySource = isset($categorySource) ? $categorySource : null;
         $categories = self::getCategories($categorySource);
+        $categorySource = Security::remove_XSS($categorySource);
 
         if (count($categories) > 0) {
             $table = new HTML_Table(['class' => 'data_table']);

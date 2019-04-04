@@ -11,7 +11,7 @@
 require_once __DIR__.'/../inc/global.inc.php';
 
 $htmlHeadXtra[] = '<script>
-$(document).ready( function() {
+$(function() {
     $("button").click(function() {
         $("#is_executable").attr("value",$(this).attr("name"));
     });

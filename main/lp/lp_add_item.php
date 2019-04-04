@@ -159,7 +159,7 @@ function confirmation(name) {
     }
 }
 
-$(document).ready(function() {
+$(function() {
     jQuery('.scrollbar-inner').scrollbar();
 
     $('#subtab ').on('click', 'a:first', function() {

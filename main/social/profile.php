@@ -180,7 +180,7 @@ $socialAutoExtendLink = SocialManager::getAutoExtendLink($user_id, $countPost);
 
 // Added a Jquery Function to return the Preview of OpenGraph URL Content
 $htmlHeadXtra[] = '<script>
-$(document).ready(function() {
+$(function() {
     var getUrl = $("[name=\'social_wall_new_msg_main\']");
     var matchUrl = /https?:\/\/w{0,3}\w*?\.(\w*?\.)?\w{2,3}\S*|www\.(\w*?\.)?\w*?\.\w{2,3}\S*|(\w*?\.)?\w*?\.\w{2,3}[\/\?]\S*/ ;
 
@@ -244,7 +244,6 @@ if ($show_full_profile) {
 
     // Block Social Sessions
     if (count($sessionList) > 0) {
-        //$social_session_block = $htmlSessionList;
         $social_session_block = $sessionList;
     }
 

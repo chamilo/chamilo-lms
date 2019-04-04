@@ -13,11 +13,13 @@ use ChamiloSession as Session;
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (empty($_GET['session_id'])) {
+$session_id = isset($_GET['session_id']) ? (int) $_GET['session_id'] : null;
+
+if (empty($session_id)) {
     api_not_allowed(true);
 }
 
-$session_id = isset($_GET['session_id']) ? intval($_GET['session_id']) : null;
+
 $sessionField = new ExtraFieldValue('session');
 $valueAllowVisitors = $sessionField->get_values_by_handler_and_field_variable(
     $session_id,
@@ -32,7 +34,7 @@ if (!$allowVisitors) {
 
 $this_section = SECTION_COURSES;
 $htmlHeadXtra[] = api_get_jqgrid_js();
-$course_id = isset($_GET['course_id']) ? intval($_GET['course_id']) : null;
+$course_id = isset($_GET['course_id']) ? (int) $_GET['course_id'] : null;
 Session::write('id_session', $session_id);
 
 // Clear the exercise session just in case
@@ -66,7 +68,6 @@ if (empty($user_course_list)) {
 $my_session_list = [];
 $final_array = [];
 $new_course_list = [];
-
 if (!empty($course_list)) {
     foreach ($course_list as $course_data) {
         if (api_is_platform_admin()) {
@@ -248,6 +249,17 @@ if (!empty($courseList)) {
             // Exercises
             foreach ($exerciseList as $exerciseInfo) {
                 $exerciseId = $exerciseInfo['id'];
+
+                $visibility = api_get_item_visibility(
+                    $courseInfo,
+                    TOOL_QUIZ,
+                    $exerciseId,
+                    $session_id
+                );
+
+                if ($visibility == 0) {
+                    continue;
+                }
 
                 if ($exerciseInfo['start_time'] == '0000-00-00 00:00:00') {
                     $start_date = '-';

@@ -181,16 +181,12 @@ function aiken_import_exercise($file)
     $exercise->exercise = $exercise_info['name'];
     $exercise->save();
     $last_exercise_id = $exercise->selectId();
-    error_log('--------------start---');
-    $counter = 0;
     $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
     $tableAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
     if (!empty($last_exercise_id)) {
         // For each question found...
         $courseId = api_get_course_int_id();
         foreach ($exercise_info['question'] as $key => $question_array) {
-            error_log($counter);
-            $counter++;
             // 2.create question
             $question = new Aiken2Question();
             $question->type = $question_array['type'];

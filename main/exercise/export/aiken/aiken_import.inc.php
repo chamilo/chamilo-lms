@@ -10,6 +10,8 @@
  * @package chamilo.exercise
  */
 
+use Chamilo\CourseBundle\Entity\CQuizAnswer;
+
 /**
  * This function displays the form for import of the zip file with qti2.
  *
@@ -179,9 +181,16 @@ function aiken_import_exercise($file)
     $exercise->exercise = $exercise_info['name'];
     $exercise->save();
     $last_exercise_id = $exercise->selectId();
+    error_log('--------------start---');
+    $counter = 0;
+    $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
+    $tableAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
     if (!empty($last_exercise_id)) {
         // For each question found...
+        $courseId = api_get_course_int_id();
         foreach ($exercise_info['question'] as $key => $question_array) {
+            error_log($counter);
+            $counter++;
             // 2.create question
             $question = new Aiken2Question();
             $question->type = $question_array['type'];
@@ -191,14 +200,13 @@ function aiken_import_exercise($file)
             if (isset($question_array['description'])) {
                 $question->updateDescription($question_array['description']);
             }
-
             $type = $question->selectType();
             $question->type = constant($type);
             $question->save($exercise);
-
             $last_question_id = $question->selectId();
-            //3. Create answer
-            $answer = new Answer($last_question_id);
+
+            // 3. Create answer
+            $answer = new Answer($last_question_id, $courseId, $exercise, false);
             $answer->new_nbrAnswers = count($question_array['answer']);
             $max_score = 0;
 
@@ -211,6 +219,7 @@ function aiken_import_exercise($file)
                 $key++;
                 $answer->new_answer[$key] = $answers['value'];
                 $answer->new_position[$key] = $key;
+                $answer->new_comment[$key] = '';
                 // Correct answers ...
                 if (in_array($key, $question_array['correct_answers'])) {
                     $answer->new_correct[$key] = 1;
@@ -229,16 +238,41 @@ function aiken_import_exercise($file)
                 if (!empty($scoreFromFile) && $answer->new_correct[$key]) {
                     $answer->new_weighting[$key] = $scoreFromFile;
                 }
+
+                $params = [
+                    'c_id' => $courseId,
+                    'question_id' => $last_question_id,
+                    'answer' => $answer->new_answer[$key],
+                    'correct' => $answer->new_correct[$key],
+                    'comment' => $answer->new_comment[$key],
+                    'ponderation' => isset($answer->new_weighting[$key]) ? $answer->new_weighting[$key] : '',
+                    'position' => $answer->new_position[$key],
+                    'hotspot_coordinates' => '',
+                    'hotspot_type' => '',
+                ];
+
+                $answerId = Database::insert($tableAnswer, $params);
+                if ($answerId) {
+                    $params = [
+                        'id_auto' => $answerId,
+                        'id' => $answerId,
+                    ];
+                    Database::update($tableAnswer, $params, ['iid = ?' => [$answerId]]);
+                }
             }
 
             if (!empty($scoreFromFile)) {
                 $max_score = $scoreFromFile;
             }
 
-            $answer->save();
-            // Now that we know the question score, set it!
-            $question->updateWeighting($max_score);
-            $question->save($exercise);
+            //$answer->save();
+
+            $params = ['ponderation' => $max_score];
+            Database::update(
+                $tableQuestion,
+                $params,
+                ['iid = ?' => [$last_question_id]]
+            );
         }
 
         // Delete the temp dir where the exercise was unzipped

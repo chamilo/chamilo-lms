@@ -100,7 +100,10 @@ hr {
   margin-bottom: 10px;
 }
 .tab-content{
-  margin-top: 10px;
+  margin-top: 1rem !important;
+  &.card-body{
+    padding: 0.5rem;
+  }
 }
 
 /****** BOOTSTRAP SELECT ******/
@@ -540,6 +543,8 @@ hr {
     border-bottom: 1px solid #e5e9f2;
     .card-title{
       margin-bottom: 0;
+      font-weight: normal;
+      color: #316dab;
     }
   }
 }
@@ -781,9 +786,9 @@ hr {
   display: grid;
   grid-gap: 1rem;
   grid-row-gap: 16px;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   @include large($breakpoint-xl){
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
   @include portrait($breakpoint-sm, $breakpoint-md){
     grid-template-columns: repeat(2, 1fr);
@@ -820,7 +825,7 @@ hr {
         padding: 0.8rem;
       }
       .title{
-        font-size: 14px;
+        font-size: 16px;
       }
     }
   }
@@ -987,9 +992,7 @@ hr {
   .card-title a {
     display: block;
     position: relative;
-    color: $grey-900;
-    font-size: 16px;
-    font-weight: bold;
+    font-size: 18px;
     margin-bottom: 15px;
     padding: 10px 5px;
     border: none;
@@ -1032,7 +1035,7 @@ hr {
       font-size: 20px;
       line-height: 20px;
       position: absolute;
-      top: 18px;
+      top: 14px;
       right: 10px;
     }
     &.collapsed:after {
@@ -1132,7 +1135,7 @@ hr {
         left: 44%;
         margin-left: -32px;
         text-align: center;
-        border: 2px solid rgba(0, 188, 212, 0.37) ;
+        border: 2px solid rgba(216, 216, 216, 0.37);
         box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,.16);
         border-radius: 10px;
         &:hover{

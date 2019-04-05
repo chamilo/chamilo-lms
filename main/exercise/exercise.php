@@ -810,8 +810,15 @@ if (!empty($exerciseList)) {
                 $rowi = intval(Database :: result($sqlresult, 0, 0));
 
                 if ($sessionId == $row['session_id']) {
+                    $actions = '';
+
+                    if (ExerciseLib::isQuizEmbeddable($row)) {
+                        $actions .= Display::return_icon('om_integration.png', get_lang('ThisQuizCanBeEmbeddable'))
+                            .PHP_EOL;
+                    }
+
                     // Questions list
-                    $actions = Display::url(
+                    $actions .= Display::url(
                         Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL),
                         'admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']
                     );

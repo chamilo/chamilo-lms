@@ -5340,4 +5340,49 @@ EOT;
 
         return ($answeredQuestionsCount + $numberOfQuestions) > $questionsLimitPerDay;
     }
+
+    /**
+     * Check if an exercise complies with the requirements to be embedded in the mobile app or a video. By making sure
+     * it is set on one question per page and it only contains unique-answer or multiple-answer questions
+     *
+     * @param array $exercise Exercise info
+     *
+     * @return bool
+     * @throws \Doctrine\ORM\Query\QueryException
+     */
+    public static function isQuizEmbeddable(array $exercise)
+    {
+        $em = Database::getManager();
+
+        if (2 != $exercise['type']) {
+            return false;
+        }
+
+        $countAll = $em
+            ->createQuery('SELECT COUNT(qq)
+                FROM ChamiloCourseBundle:CQuizQuestion qq
+                INNER JOIN ChamiloCourseBundle:CQuizRelQuestion qrq
+                   WITH qq.iid = qrq.questionId
+                WHERE qrq.exerciceId = :id'
+            )
+            ->setParameter('id', $exercise['iid'])
+            ->getSingleScalarResult();
+
+        $countOfAllowed = $em
+            ->createQuery('SELECT COUNT(qq)
+                FROM ChamiloCourseBundle:CQuizQuestion qq
+                INNER JOIN ChamiloCourseBundle:CQuizRelQuestion qrq
+                   WITH qq.iid = qrq.questionId
+                WHERE qrq.exerciceId = :id AND qq.type IN (:types)'
+            )
+            ->setParameters(
+                [
+                    'id' => $exercise['iid'],
+                    'types' => [UNIQUE_ANSWER, MULTIPLE_ANSWER, UNIQUE_ANSWER_IMAGE],
+                ]
+            )
+            ->getSingleScalarResult();
+
+        return $countAll === $countOfAllowed;
+    }
 }

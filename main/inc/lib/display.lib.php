@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use ChamiloSession as Session;
 
@@ -2856,6 +2857,7 @@ HTML;
                     pluginPath: "'.$webPublicPath.'assets/mediaelement/build/",            
                     features: [\''.$defaultFeatures.'\'],
                     success: function(mediaElement, originalNode, instance) {
+                        '.ChamiloApi::getQuizMarkersRollsJS().'
                     },
                     vrPath: "'.$webPublicPath.'assets/vrview/build/vrview.js"
                 });

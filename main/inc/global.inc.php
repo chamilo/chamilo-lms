@@ -16,6 +16,8 @@
  */
 
 // Showing/hiding error codes in global error messages.
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+
 define('SHOW_ERROR_CODES', false);
 
 // Include the libraries that are necessary everywhere
@@ -666,6 +668,7 @@ if (!empty($language_interface)) {
 // if portal is in test mode always generate the file
 if (!file_exists($file) || api_get_setting('server_type') === 'test') {
     $template = new Template();
+    $template->assign('quiz_markers_rolls_js', ChamiloApi::getQuizMarkersRollsJS());
     // Force use of default to avoid problems
     $tpl = 'default/layout/main.js.tpl';
     $contents = $template->fetch($tpl);

@@ -203,12 +203,17 @@ class QuestionOptionsEvaluationPlugin extends Plugin
      */
     private function recalculateQuestionScore($formula, Exercise $exercise)
     {
-        foreach ($exercise->questionList as $questionId) {
-            $question = Question::read($questionId);
+        $counter = 0;
 
+        $table = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $tableAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
+
+        foreach ($exercise->questionList as $questionId) {
+            $question = Question::read($questionId, $exercise->course, false);
             if (!in_array($question->selectType(), [UNIQUE_ANSWER, MULTIPLE_ANSWER])) {
                 continue;
             }
+            $counter++;
 
             $questionAnswers = new Answer($questionId, $exercise->course_id, $exercise);
             $counts = array_count_values($questionAnswers->correct);
@@ -217,7 +222,6 @@ class QuestionOptionsEvaluationPlugin extends Plugin
             foreach ($questionAnswers->correct as $i => $correct) {
                 if ($question->selectType() == MULTIPLE_ANSWER || 0 === $formula) {
                     $weighting[$i] = 1 == $correct ? 1 / $counts[1] : -1 / $counts[0];
-
                     continue;
                 }
 
@@ -226,15 +230,16 @@ class QuestionOptionsEvaluationPlugin extends Plugin
                 }
             }
 
-            $questionAnswers->new_nbrAnswers = $questionAnswers->nbrAnswers;
-            $questionAnswers->new_answer = $questionAnswers->answer;
-            $questionAnswers->new_comment = $questionAnswers->comment;
-            $questionAnswers->new_correct = $questionAnswers->correct;
-            $questionAnswers->new_weighting = $weighting;
-            $questionAnswers->new_position = $questionAnswers->position;
-            $questionAnswers->new_destination = $questionAnswers->destination;
-            $questionAnswers->new_hotspot_coordinates = $questionAnswers->hotspot_coordinates;
-            $questionAnswers->new_hotspot_type = $questionAnswers->hotspot_type;
+            for ($i = 1; $i <= $questionAnswers->nbrAnswers; $i++) {
+                $weightingValue = $weighting[$i];
+                if (!isset($questionAnswers->iid[$i])) {
+                    continue;
+                }
+
+                $iid = $questionAnswers->iid[$i];
+                $sql = "UPDATE $tableAnswer SET ponderation = '$weightingValue' WHERE iid = $iid";
+                Database::query($sql);
+            }
 
             $allowedWeights = array_filter(
                 $weighting,
@@ -243,9 +248,15 @@ class QuestionOptionsEvaluationPlugin extends Plugin
                 }
             );
 
-            $questionAnswers->save();
-            $question->updateWeighting(array_sum($allowedWeights));
-            $question->save($exercise);
+            //$question->updateWeighting(array_sum($allowedWeights));
+            //$question->save($exercise);
+
+            $params = ['ponderation' => array_sum($allowedWeights)];
+            Database::update(
+                $table,
+                $params,
+                ['iid = ?' => [$question->iid]]
+            );
         }
     }
 

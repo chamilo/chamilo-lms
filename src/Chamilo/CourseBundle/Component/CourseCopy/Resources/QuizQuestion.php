@@ -110,7 +110,7 @@ class QuizQuestion extends Resource
             $courseId = $courseInfo['real_id'];
             $courseCode = $courseInfo['code'];
             $questionId = $this->source_id;
-            $question = \Question::read($questionId, $courseId);
+            $question = \Question::read($questionId, $courseInfo);
             $pictureId = $question->getPictureId();
             // Add the picture document in the builder
             if (!empty($pictureId)) {

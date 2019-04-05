@@ -50,7 +50,7 @@ if (!api_is_allowed_to_edit(null, true)) {
     }
 }
 
-$objQuestion = Question::read($questionId, $courseId);
+$objQuestion = Question::read($questionId, $objExercise->course);
 $objExercise->read($exerciseId);
 
 if (empty($objQuestion) || empty($objExercise)) {

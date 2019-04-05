@@ -14,7 +14,7 @@ if (empty($courseInfo)) {
     return '';
 }
 
-$objQuestion = Question::read($questionId, $courseId);
+$objQuestion = Question::read($questionId, $courseInfo);
 $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
 $picturePath = $documentPath.'/images';
 $pictureSize = getimagesize($picturePath.'/'.$objQuestion->getPictureFilename());

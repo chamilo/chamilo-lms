@@ -216,7 +216,6 @@ class Exercise
             }
 
             $this->force_edit_exercise_in_lp = api_get_configuration_value('force_edit_exercise_in_lp');
-
             $this->edit_exercise_in_lp = true;
             if ($this->exercise_was_added_in_lp) {
                 $this->edit_exercise_in_lp = $this->force_edit_exercise_in_lp == true;
@@ -3318,7 +3317,7 @@ class Exercise
 
         // Creates a temporary Question object
         $course_id = $this->course_id;
-        $objQuestionTmp = Question::read($questionId, $course_id);
+        $objQuestionTmp = Question::read($questionId, $this->course);
 
         if ($objQuestionTmp === false) {
             return false;
@@ -6453,7 +6452,6 @@ class Exercise
         $new_question_list = [];
         if (!empty($question_list)) {
             $media_questions = $this->getMediaList();
-
             $media_active = $this->mediaIsActivated($media_questions);
 
             if ($media_active) {
@@ -7476,7 +7474,7 @@ class Exercise
         } else {
             // standard test, just add each question score
             foreach ($questionList as $questionId) {
-                $question = Question::read($questionId, $this->course_id);
+                $question = Question::read($questionId, $this->course);
                 $out_max_score += $question->weighting;
             }
         }
@@ -8098,13 +8096,12 @@ class Exercise
      */
     private function getQuestionOrderedList()
     {
-        $questionList = [];
         $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
 
         // Getting question_order to verify that the question
         // list is correct and all question_order's were set
-        $sql = "SELECT DISTINCT e.question_order
+        $sql = "SELECT DISTINCT count(e.question_order) as count
                 FROM $TBL_EXERCICE_QUESTION e
                 INNER JOIN $TBL_QUESTIONS q
                 ON (e.question_id = q.id AND e.c_id = q.c_id)
@@ -8113,7 +8110,8 @@ class Exercise
                   e.exercice_id	= ".$this->id;
 
         $result = Database::query($sql);
-        $count_question_orders = Database::num_rows($result);
+        $row = Database::fetch_array($result);
+        $count_question_orders = $row['count'];
 
         // Getting question list from the order (question list drag n drop interface).
         $sql = "SELECT DISTINCT e.question_id, e.question_order
@@ -8130,6 +8128,7 @@ class Exercise
         // the key of the array is the question position
         $temp_question_list = [];
         $counter = 1;
+        $questionList = [];
         while ($new_object = Database::fetch_object($result)) {
             // Correct order.
             $questionList[$new_object->question_order] = $new_object->question_id;
@@ -8440,6 +8439,8 @@ class Exercise
     private function setMediaList($questionList)
     {
         $mediaList = [];
+        /*
+         * Media feature is not activated in 1.11.x
         if (!empty($questionList)) {
             foreach ($questionList as $questionId) {
                 $objQuestionTmp = Question::read($questionId, $this->course_id);
@@ -8451,7 +8452,8 @@ class Exercise
                     $mediaList[999][] = $objQuestionTmp->id;
                 }
             }
-        }
+        }*/
+
         $this->mediaList = $mediaList;
     }
 

@@ -203,8 +203,6 @@ class QuestionOptionsEvaluationPlugin extends Plugin
      */
     private function recalculateQuestionScore($formula, Exercise $exercise)
     {
-        $counter = 0;
-
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $tableAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
@@ -213,7 +211,6 @@ class QuestionOptionsEvaluationPlugin extends Plugin
             if (!in_array($question->selectType(), [UNIQUE_ANSWER, MULTIPLE_ANSWER])) {
                 continue;
             }
-            $counter++;
 
             $questionAnswers = new Answer($questionId, $exercise->course_id, $exercise);
             $counts = array_count_values($questionAnswers->correct);

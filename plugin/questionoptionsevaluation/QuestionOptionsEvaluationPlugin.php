@@ -203,8 +203,8 @@ class QuestionOptionsEvaluationPlugin extends Plugin
      */
     private function recalculateQuestionScore($formula, Exercise $exercise)
     {
-        $table = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $tableAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
+        $tblQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $tblAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
         foreach ($exercise->questionList as $questionId) {
             $question = Question::read($questionId, $exercise->course, false);
@@ -214,46 +214,31 @@ class QuestionOptionsEvaluationPlugin extends Plugin
 
             $questionAnswers = new Answer($questionId, $exercise->course_id, $exercise);
             $counts = array_count_values($questionAnswers->correct);
-            $weighting = [];
 
-            foreach ($questionAnswers->correct as $i => $correct) {
-                if ($question->selectType() == MULTIPLE_ANSWER || 0 === $formula) {
-                    $weighting[$i] = 1 == $correct ? 1 / $counts[1] : -1 / $counts[0];
-                    continue;
-                }
+            $questionPonderation = 0;
 
-                if ($question->selectType() == UNIQUE_ANSWER) {
-                    $weighting[$i] = 1 == $correct ? 1 : -1 / $formula;
-                }
-            }
-
-            for ($i = 1; $i <= $questionAnswers->nbrAnswers; $i++) {
-                $weightingValue = $weighting[$i];
+            foreach ($questionAnswers->correct as $i => $isCorrect) {
                 if (!isset($questionAnswers->iid[$i])) {
                     continue;
                 }
 
                 $iid = $questionAnswers->iid[$i];
-                $sql = "UPDATE $tableAnswer SET ponderation = '$weightingValue' WHERE iid = $iid";
-                Database::query($sql);
+
+                if ($question->selectType() == MULTIPLE_ANSWER || 0 === $formula) {
+                    $ponderation = 1 == $isCorrect ? 1 / $counts[1] : -1 / $counts[0];
+                } else {
+                    $ponderation = 1 == $isCorrect ? 1 : -1 / $formula;
+                }
+
+                if ($ponderation > 0) {
+                    $questionPonderation += $ponderation;
+                }
+
+                //error_log("question: $questionId -- i: $i -- w: $ponderation");
+                Database::query("UPDATE $tblAnswer SET ponderation = $ponderation WHERE iid = $iid");
             }
 
-            $allowedWeights = array_filter(
-                $weighting,
-                function ($weight) {
-                    return $weight > 0;
-                }
-            );
-
-            //$question->updateWeighting(array_sum($allowedWeights));
-            //$question->save($exercise);
-
-            $params = ['ponderation' => array_sum($allowedWeights)];
-            Database::update(
-                $table,
-                $params,
-                ['iid = ?' => [$question->iid]]
-            );
+            Database::query("UPDATE $tblQuestion SET ponderation = $questionPonderation WHERE iid = {$question->iid}");
         }
     }
 

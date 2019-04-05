@@ -51,6 +51,7 @@ class Rest extends WebService
     const GET_USERS = 'get_users';
     const GET_COURSE = 'get_courses';
     const ADD_COURSES_SESSION = 'add_courses_session';
+    const ADD_USER_SESSION = 'add_users_session';
 
     /**
      * @var Session
@@ -1131,18 +1132,9 @@ class Rest extends WebService
         $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
         $extraList = [];
         $results = [];
-
+        $idCampus = isset($courseParam['id_campus']) ? $courseParam['id_campus'] : 1;
         $title = isset($courseParam['title']) ? $courseParam['title'] : '';
-        $categoryCode = isset($courseParam['category_code']) ? $courseParam['category_code'] : '';
-        $wantedCode = isset($courseParam['wanted_code']) ? intval($courseParam['wanted_code']) : 0;
-        $tutorName = isset($courseParam['tutor_name']) ? $courseParam['tutor_name'] : '';
-        $courseLanguage = isset($courseParam['language']) ? $courseParam['language'] : null;
-        $originalCourseIdName = isset($courseParam['original_course_id_name'])
-            ? $courseParam['original_course_id_name']
-            : null;
-        $originalCourseIdValue = isset($courseParam['original_course_id_value'])
-            ? $courseParam['original_course_id_value']
-            : null;
+        $wantedCode = isset($courseParam['wanted_code']) ? $courseParam['wanted_code'] : null;
         $diskQuota = isset($courseParam['disk_quota']) ? $courseParam['disk_quota'] : '100';
         $visibility = isset($courseParam['visibility']) ? (int)$courseParam['visibility'] : null;
 
@@ -1155,94 +1147,24 @@ class Rest extends WebService
             }
         }
 
-        // Check whether exits $x_course_code into user_field_values table.
-        $courseInfo = CourseManager::getCourseInfoFromOriginalId(
-            $originalCourseIdValue,
-            $originalCourseIdName
-        );
-
-        if (!empty($courseInfo)) {
-            if ($courseInfo['visibility'] != 0) {
-                $sql = "UPDATE $tableCourse SET
-                            course_language = '" . Database::escape_string($courseLanguage) . "',
-                            title = '" . Database::escape_string($title) . "',
-                            category_code = '" . Database::escape_string($categoryCode) . "',
-                            tutor_name = '" . Database::escape_string($tutorName) . "',
-                            visual_code = '" . Database::escape_string($wantedCode) . "'";
-                if ($visibility !== null) {
-                    $sql .= ", visibility = $visibility ";
-                }
-                $sql .= " WHERE id = " . $courseInfo['real_id'];
-                Database::query($sql);
-                if (is_array($extraList) && count($extraList) > 0) {
-                    foreach ($extraList as $extra) {
-                        $extraFieldName = $extra['field_name'];
-                        $extraFieldValue = $extra['field_value'];
-                        // Save the external system's id into course_field_value table.
-                        CourseManager::update_course_extra_field_value(
-                            $courseInfo['code'],
-                            $extraFieldName,
-                            $extraFieldValue
-                        );
-                    }
-                }
-                $results[] = $courseInfo['code'];
-            }
-        }
 
         $params = [];
         $params['title'] = $title;
-        $params['wanted_code'] = $wantedCode;
-        $params['category_code'] = $categoryCode;
-        $params['course_category'] = $categoryCode;
-        $params['tutor_name'] = $tutorName;
-        $params['course_language'] = $courseLanguage;
+        $params['wanted_code'] = 'CAMPUS_'.$idCampus.'_'.$wantedCode;
         $params['user_id'] = $this->user->getId();
         $params['visibility'] = $visibility;
         $params['disk_quota'] = $diskQuota;
-        $params['subscribe'] = empty($courseParam['subscribe']) ? 0 : 1;
-        $params['unsubscribe'] = empty($courseParam['unsubscribe']) ? 0 : 1;
 
-        $courseInfo = CourseManager::create_course($params, $params['user_id']);
+        $courseInfo = CourseManager::create_course($params, $params['user_id'],$idCampus);
 
         if (!empty($courseInfo)) {
-            $courseCode = $courseInfo['code'];
-
-            // Save new field label into course_field table
-            CourseManager::create_course_extra_field(
-                $originalCourseIdName,
-                1,
-                $originalCourseIdName,
-                ''
-            );
-
-            // Save the external system's id into user_field_value table.
-            CourseManager::update_course_extra_field_value(
-                $courseCode,
-                $originalCourseIdName,
-                $originalCourseIdValue
-            );
-
-            if (is_array($extraList) && count($extraList) > 0) {
-                foreach ($extraList as $extra) {
-                    $extraFieldName = $extra['field_name'];
-                    $extraFieldValue = $extra['field_value'];
-                    // Save new fieldlabel into course_field table.
-                    CourseManager::create_course_extra_field(
-                        $extraFieldName,
-                        1,
-                        $extraFieldName,
-                        ''
-                    );
-                    // Save the external system's id into course_field_value table.
-                    CourseManager::update_course_extra_field_value(
-                        $courseCode,
-                        $extraFieldName,
-                        $extraFieldValue
-                    );
-                }
-            }
-            $results[] = $courseCode;
+            $results['status'] = true;
+            $results['code_course'] = $courseInfo['code'];
+            $results['title_course'] = $courseInfo['title'];
+            $results['message'] = 'Curso registrado con exito';
+        } else {
+            $results['status'] = false;
+            $results['message'] = 'Error al registrar el curso';
         }
 
         return $results;
@@ -1257,7 +1179,6 @@ class Rest extends WebService
     {
         $results = [];
         $orig_user_id_value = [];
-        $userManager = UserManager::getManager();
         $firstName = $user_param['firstname'];
         $lastName = $user_param['lastname'];
         $status = $user_param['status'];
@@ -1532,6 +1453,28 @@ class Rest extends WebService
                 'message' => 'Error al añadir cursos a la sessión'
             ];
         }
+    }
+
+    public function addUsersSession(array $params){
+        $sessionId = $params['id_session'];
+        $userList = $params['list_users'];
+
+        if (!is_array($userList)) {
+            $userList = [];
+        }
+
+        SessionManager::subscribeUsersToSession(
+            $sessionId,
+            $userList,
+            null,
+            false
+        );
+        
+        return [
+            'status' => true,
+            'message' => 'Error al añadir usuarios a la sessión'
+        ];
+
     }
 }
 

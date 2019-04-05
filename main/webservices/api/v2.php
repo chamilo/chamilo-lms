@@ -159,6 +159,10 @@ try {
             $data = $restApi->addCoursesSession($_POST);
             $restResponse->setData($data);
             break;
+        case Rest::ADD_USER_SESSION;
+            $data = $restApi->addUsersSession($_POST);
+            $restResponse->setData($data);
+            break;
         case Rest::SAVE_FORUM_POST:
             if (
                 empty($_POST['title']) || empty($_POST['text']) || empty($_POST['thread']) || empty($_POST['forum'])

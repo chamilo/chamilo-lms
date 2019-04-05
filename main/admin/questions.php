@@ -96,7 +96,7 @@ if ($formSent) {
             $question->courseCode = $courseCode;
             // Creating empty exercise
             $exercise = new Exercise($courseId);
-            $questionObject = Question::read($question->getId(), $courseId);
+            $questionObject = Question::read($question->getId(), $courseInfo);
 
             ob_start();
             ExerciseLib::showQuestion(

@@ -16,7 +16,7 @@ if (empty($exerciseId)) {
 
 $exercise = new Exercise();
 
-if (!$exercise->read($exerciseId)) {
+if (!$exercise->read($exerciseId, false)) {
     echo Display::return_message(get_lang('ExerciseNotFound'), 'error');
 
     exit;
@@ -48,11 +48,10 @@ $formEvaluation->addButtonSave(get_lang('Save'))->setColumnsSize([4, 7, 1]);
 $formEvaluation->addHidden('exercise', $exerciseId);
 
 if ($formEvaluation->validate()) {
+    $exercise->read($exerciseId, true);
     $values = $formEvaluation->exportValues();
     $formula = isset($values['formula']) ? (int) $values['formula'] : 0;
-
     $plugin->saveFormulaForExercise($formula, $exercise);
-
     Display::addFlash(
         Display::return_message(
             sprintf($plugin->get_lang('FormulaSavedForExerciseX'), $exercise->selectTitle(true)),

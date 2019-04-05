@@ -56,7 +56,7 @@ class ExerciseLib
         // Change false to true in the following line to enable answer hinting
         $debug_mark_answer = $show_answers;
         // Reads question information
-        if (!$objQuestionTmp = Question::read($questionId, $course_id)) {
+        if (!$objQuestionTmp = Question::read($questionId, $course)) {
             // Question not found
             return false;
         }
@@ -2545,7 +2545,7 @@ HOTSPOT;
                                     $question_list = explode(',', $exercise_stat_info['data_tracking']);
                                     if (!empty($question_list)) {
                                         foreach ($question_list as $questionId) {
-                                            $objQuestionTmp = Question::read($questionId, $course_id);
+                                            $objQuestionTmp = Question::read($questionId, $objExercise->course);
                                             // We're inside *one* question. Go through each possible answer for this question
                                             $result = $objExercise->manage_answer(
                                                 $exeId,
@@ -4560,7 +4560,7 @@ EOT;
         if (!empty($question_list)) {
             foreach ($question_list as $questionId) {
                 // Creates a temporary Question object
-                $objQuestionTmp = Question::read($questionId);
+                $objQuestionTmp = Question::read($questionId, $objExercise->course);
                 // This variable came from exercise_submit_modal.php
                 ob_start();
                 $choice = null;

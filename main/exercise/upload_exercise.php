@@ -436,7 +436,7 @@ function lp_upload_quiz_action_handling()
 
                             $questionObj = Question::read(
                                 $question_id,
-                                $courseId
+                                $_course
                             );
 
                             if ($questionObj) {
@@ -456,7 +456,7 @@ function lp_upload_quiz_action_handling()
                         break;
                     case FREE_ANSWER:
                         $globalScore = isset($scoreList[$i]) ? $scoreList[$i] : null;
-                        $questionObj = Question::read($question_id, $courseId);
+                        $questionObj = Question::read($question_id, $_course);
                         if ($questionObj) {
                             $questionObj->updateWeighting($globalScore);
                             $questionObj->save($exercise);
@@ -489,7 +489,7 @@ function lp_upload_quiz_action_handling()
 
                         $objAnswer->save();
 
-                        $questionObj = Question::read($question_id, $courseId);
+                        $questionObj = Question::read($question_id, $_course);
                         if ($questionObj) {
                             $questionObj->updateWeighting($globalScore);
                             $questionObj->save($exercise);
@@ -520,7 +520,7 @@ function lp_upload_quiz_action_handling()
                             $counter++;
                         }
                         $objAnswer->save();
-                        $questionObj = Question::read($question_id, $courseId);
+                        $questionObj = Question::read($question_id, $_course);
                         if ($questionObj) {
                             $questionObj->updateWeighting($globalScore);
                             $questionObj->save($exercise);

@@ -62,7 +62,7 @@ if ('true' === $pluginEvaluation->get(QuestionOptionsEvaluationPlugin::SETTING_E
 
 if (!$useEvaluationPlugin) {
     foreach ($questionList as $questionId) {
-        $question = Question::read($questionId, $courseId);
+        $question = Question::read($questionId, api_get_course_info());
         $totalWeight += $question->selectWeighting();
 
         // We're inside *one* question. Go through each possible answer for this question

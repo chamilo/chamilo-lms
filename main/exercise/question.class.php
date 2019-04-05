@@ -122,22 +122,20 @@ abstract class Question
     /**
      * Reads question information from the data base.
      *
-     * @param int $id        - question ID
-     * @param int $course_id
+     * @param int   $id - question ID
+     * @param array $course_info
+     * @param bool  $getExerciseList
      *
      * @return Question
      *
      * @author Olivier Brouckaert
      */
-    public static function read($id, $course_id = null)
+    public static function read($id, $course_info = [], $getExerciseList = true)
     {
         $id = (int) $id;
-        if (!empty($course_id)) {
-            $course_info = api_get_course_info_by_id($course_id);
-        } else {
+        if (empty($course_info)) {
             $course_info = api_get_course_info();
         }
-
         $course_id = $course_info['real_id'];
 
         if (empty($course_id) || $course_id == -1) {
@@ -171,22 +169,24 @@ abstract class Question
                 $objQuestion->category = TestCategory::getCategoryForQuestion($id, $course_id);
                 $objQuestion->code = isset($object->code) ? $object->code : '';
 
-                $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
-                $sql = "SELECT DISTINCT q.exercice_id
-                        FROM $TBL_EXERCISE_QUESTION q
-                        INNER JOIN $tblQuiz e
-                        ON e.c_id = q.c_id AND e.id = q.exercice_id
-                        WHERE
-                            q.c_id = $course_id AND
-                            q.question_id = $id AND
-                            e.active >= 0";
+                if ($getExerciseList) {
+                    $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
+                    $sql = "SELECT DISTINCT q.exercice_id
+                            FROM $TBL_EXERCISE_QUESTION q
+                            INNER JOIN $tblQuiz e
+                            ON e.c_id = q.c_id AND e.id = q.exercice_id
+                            WHERE
+                                q.c_id = $course_id AND
+                                q.question_id = $id AND
+                                e.active >= 0";
 
-                $result = Database::query($sql);
+                    $result = Database::query($sql);
 
-                // fills the array with the exercises which this question is in
-                if ($result) {
-                    while ($obj = Database::fetch_object($result)) {
-                        $objQuestion->exerciseList[] = $obj->exercice_id;
+                    // fills the array with the exercises which this question is in
+                    if ($result) {
+                        while ($obj = Database::fetch_object($result)) {
+                            $objQuestion->exerciseList[] = $obj->exercice_id;
+                        }
                     }
                 }
 

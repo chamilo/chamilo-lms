@@ -560,7 +560,12 @@ hr {
     grid-template-columns: repeat(1, 1fr);
   }
 }
-
+.tool-view{
+  text-align: center;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  margin-top: 2rem;
+}
 /* CATEGORY CLASSIC */
 .category-list{
   display: grid;

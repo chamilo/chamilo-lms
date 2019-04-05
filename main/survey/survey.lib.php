@@ -1806,7 +1806,10 @@ class SurveyManager
                 $tblSurvey = Database::get_course_table(TABLE_SURVEY);
 
                 $sql = "SELECT i.user FROM $tblInvitation i
-                    INNER JOIN $tblSurvey s ON i.survey_code = s.code
+                    INNER JOIN $tblSurvey s 
+                    ON i.survey_code = s.code
+                        AND i.c_id = s.c_id
+                        AND i.session_id = s.session_id
                     WHERE i.answered IS TRUE AND s.iid = $survey_id";
             }
         }

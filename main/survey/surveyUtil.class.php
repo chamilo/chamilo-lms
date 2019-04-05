@@ -3881,6 +3881,7 @@ class SurveyUtil
                 ON (survey_invitation.user = user.id AND survey_invitation.c_id = $courseId)
                 WHERE
                     survey_invitation.survey_code = '$surveyCode'
+                    AND survey_invitation.c_id = $courseId
                     $sessionCondition";
 
         $query = Database::query($sql);

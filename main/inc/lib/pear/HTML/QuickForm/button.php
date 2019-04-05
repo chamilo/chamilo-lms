@@ -226,30 +226,38 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
                         {element}
                     ';
                 } else {
-                    $template = '
-                <div class="form-group {error_class}">
-                    <label {label-for} class="col-sm-'.$size[0].' control-label" >
-                        <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
-                        {label}
-                    </label>
-                    <div class="col-sm-'.$size[1].'">
-                        {icon}
-                        {element}
+                    if(isset($attributes['data-block']) && $attributes['data-block'] == true){
+                        $template = '
+                        <div class="form-group text-center">
+                            {icon}
+                            {element}
+                        </div>
+                        ';
+                    } else {
+                        $template = '
+                            <div class="form-group {error_class}">
+                                <label {label-for} class="col-sm-'.$size[0].' control-label" >
+                                    <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
+                                    {label}
+                                </label>
+                                <div class="col-sm-'.$size[1].'">
+                                    {icon}
+                                    {element}
+                                    <!-- BEGIN label_2 -->
+                                        <p class="help-block">{label_2}</p>
+                                    <!-- END label_2 -->
+                                    <!-- BEGIN error -->
+                                        <span class="help-inline help-block">{error}</span>
+                                    <!-- END error -->
+                                </div>
+                                <div class="col-sm-'.$size[2].'">
+                                    <!-- BEGIN label_3 -->
+                                        {label_3}
+                                    <!-- END label_3 -->
+                                </div>
+                            </div>';
+                    }
 
-                        <!-- BEGIN label_2 -->
-                            <p class="help-block">{label_2}</p>
-                        <!-- END label_2 -->
-
-                        <!-- BEGIN error -->
-                            <span class="help-inline help-block">{error}</span>
-                        <!-- END error -->
-                    </div>
-                    <div class="col-sm-'.$size[2].'">
-                        <!-- BEGIN label_3 -->
-                            {label_3}
-                        <!-- END label_3 -->
-                    </div>
-                </div>';
                 }
                 return $template;
                 break;

@@ -233,7 +233,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
                     </div>
                 </div>';
 
-                if(isset($custom['card-full']) && $custom['card-full'] == true){
+                if(isset($custom['data-block']) && $custom['data-block'] == true){
                     $template = '
                     <label {label-for}>{label}</label>
                     <div class="card-textarea">

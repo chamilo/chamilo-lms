@@ -23,7 +23,6 @@ legend{
 .btn{
   @each $color, $value in $theme-colors-custom{
     &.btn-#{$color}{
-      font-size: 12px;
       background-color: $value;
       border-color: darken($value, 10%);
       color: color-yiq-const($value);

@@ -59,8 +59,8 @@ $config = [
     'Height' => '300',
 ];
 
-$form->addHtmlEditor('intro_content', null, false, false, $config, ['card-full' => true]);
-$form->addButtonSave(get_lang('SaveIntroText'), 'intro_cmdUpdate');
+$form->addHtmlEditor('intro_content', null, false, false, $config, ['data-block' => true]);
+$form->addButtonSave(get_lang('Save introductory text'), 'intro_cmdUpdate','success',false,['data-block'=> true]);
 
 /* INTRODUCTION MICRO MODULE - COMMANDS SECTION (IF ALLOWED) */
 $course_id = api_get_course_int_id();

@@ -374,22 +374,24 @@ EOT;
     /**
      * Returns a button with the primary color and a check mark.
      *
-     * @param string $label         Text appearing on the button
-     * @param string $name          Element name (for form treatment purposes)
-     * @param bool   $createElement Whether to use the create or add method
+     * @param string $label Text appearing on the button
+     * @param string $name Element name (for form treatment purposes)
+     * @param string $style
+     * @param bool $createElement Whether to use the create or add method
      *
+     * @param $attributes
      * @return HTML_QuickForm_button
      */
-    public function addButtonSave($label, $name = 'submit', $createElement = false)
+    public function addButtonSave($label, $name = 'submit', $style = 'primary', $createElement = false, $attributes)
     {
         return $this->addButton(
             $name,
             $label,
             'check',
-            'primary',
+            $style,
             null,
             null,
-            [],
+            $attributes,
             $createElement
         );
     }

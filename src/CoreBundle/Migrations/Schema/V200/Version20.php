@@ -818,6 +818,26 @@ class Version20 extends AbstractMigrationChamilo
                 $schema->dropTable($table);
             }
         }
+
+        $result = $connection
+            ->executeQuery("SELECT COUNT(1) FROM settings_current WHERE variable = 'exercise_invisible_in_session' AND category = 'Session'");
+        $count = $result->fetch()[0];
+
+        if (empty($count)) {
+            $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('exercise_invisible_in_session',NULL,'radio','Session','false','ExerciseInvisibleInSessionTitle','ExerciseInvisibleInSessionComment','',NULL, 1)");
+            $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('exercise_invisible_in_session','true','Yes')");
+            $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('exercise_invisible_in_session','false','No')");
+        }
+
+        $result = $connection
+            ->executeQuery("SELECT COUNT(1) FROM settings_current WHERE variable = 'configure_exercise_visibility_in_course' AND category = 'Session'");
+        $count = $result->fetch()[0];
+
+        if (empty($count)) {
+            $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('configure_exercise_visibility_in_course',NULL,'radio','Session','false','ConfigureExerciseVisibilityInCourseTitle','ConfigureExerciseVisibilityInCourseComment','',NULL, 1)");
+            $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('configure_exercise_visibility_in_course','true','Yes')");
+            $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('configure_exercise_visibility_in_course','false','No')");
+        }
     }
 
     /**

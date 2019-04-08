@@ -1557,7 +1557,7 @@ class learnpath
         $id = (int) $id;
         $prerequisite_id = (int) $prerequisite_id;
 
-        if (empty($id) || empty($prerequisite_id)) {
+        if (empty($id)) {
             return false;
         }
 
@@ -1569,12 +1569,14 @@ class learnpath
             $maxScore = 100;
         }
 
-        if (empty($prerequisite_id)) {
-            $prerequisite_id = 'NULL';
-        }
-
         $minScore = floatval($minScore);
         $maxScore = floatval($maxScore);
+
+        if (empty($prerequisite_id)) {
+            $prerequisite_id = 'NULL';
+            $minScore = 0;
+            $maxScore = 100;
+        }
 
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $sql = " UPDATE $tbl_lp_item
@@ -10424,8 +10426,8 @@ class learnpath
                 break;
             }
 
-            $selectedMinScoreValue = isset($selectedMinScore[$item['id']]) ? $selectedMinScore[$item['id']] : 0;
             $selectedMaxScoreValue = isset($selectedMaxScore[$item['id']]) ? $selectedMaxScore[$item['id']] : $item['max_score'];
+            $selectedMinScoreValue = isset($selectedMinScore[$item['id']]) ? $selectedMinScore[$item['id']] : 0;
             $masteryScoreAsMinValue = isset($masteryScore[$item['id']]) ? $masteryScore[$item['id']] : 0;
 
             $return .= '<tr>';

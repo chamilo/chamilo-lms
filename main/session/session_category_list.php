@@ -31,7 +31,7 @@ $action = isset($_REQUEST['action']) ? Security::remove_XSS($_REQUEST['action'])
 $sort = isset($_GET['sort']) && in_array($_GET['sort'], ['name', 'nbr_session', 'date_start', 'date_end']) ? Security::remove_XSS($_GET['sort']) : 'name';
 $idChecked = isset($_REQUEST['idChecked']) ? Security::remove_XSS($_REQUEST['idChecked']) : null;
 $order = isset($_REQUEST['order']) ? Security::remove_XSS($_REQUEST['order']) : 'ASC';
-$keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
+$keyword = isset($_REQUEST['keyword']) ? Security::remove_XSS($_REQUEST['keyword']) : null;
 
 if ($action == 'delete_on_session' || $action == 'delete_off_session') {
     $delete_session = ($action == 'delete_on_session') ? true : false;

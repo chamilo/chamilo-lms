@@ -1443,14 +1443,6 @@ class SocialManager extends UserManager
                 $links .= '</ul>';
             }
 
-            $html .= Display::panelCollapse(
-                get_lang('SocialNetwork'),
-                $links,
-                'social-network-menu',
-                null,
-                'sn-sidebar',
-                'sn-sidebar-collapse'
-            );
         }
 
         if (in_array($show, $show_groups) && !empty($group_id)) {
@@ -1588,14 +1580,7 @@ class SocialManager extends UserManager
             }
 
             $links .= '</ul>';
-            $html .= Display::panelCollapse(
-                get_lang('SocialNetwork'),
-                $links,
-                'social-network-menu',
-                null,
-                'sn-sidebar',
-                'sn-sidebar-collapse'
-            );
+
 
             if ($show_full_profile && $user_id == intval(api_get_user_id())) {
                 $personal_course_list = UserManager::get_personal_session_course_list($user_id);
@@ -3204,9 +3189,9 @@ class SocialManager extends UserManager
         $locale = api_get_language_isocode();
 
         // Add Jquery scroll pagination plugin
-        $htmlHeadXtra[] = api_get_js('jscroll/jquery.jscroll.js');
+        //$htmlHeadXtra[] = api_get_js('jscroll/jquery.jscroll.js');
         // Add Jquery Time ago plugin
-        $htmlHeadXtra[] = api_get_asset('jquery-timeago/jquery.timeago.js');
+        //$htmlHeadXtra[] = api_get_asset('jquery-timeago/jquery.timeago.js');
         $timeAgoLocaleDir = $javascriptDir.'jquery-timeago/locales/jquery.timeago.'.$locale.'.js';
         if (file_exists($timeAgoLocaleDir)) {
             $htmlHeadXtra[] = api_get_js('jquery-timeago/locales/jquery.timeago.'.$locale.'.js');
@@ -3552,16 +3537,16 @@ class SocialManager extends UserManager
 
         if ($userStatus === 5) {
             if ($authorInfo['has_certificates']) {
-                $iconStatus = Display::return_icon('identifier_graduated.png',get_lang('User status'),['class' => 'pull-left'],ICON_SIZE_SMALL);
+                $iconStatus = Display::return_icon('identifier_graduated.png',get_lang('User status'),['class' => 'float-left'],ICON_SIZE_SMALL);
             } else {
-                $iconStatus = Display::return_icon('identifier_student.png',get_lang('User status'),['class' => 'pull-left'],ICON_SIZE_SMALL);
+                $iconStatus = Display::return_icon('identifier_student.png',get_lang('User status'),['class' => 'float-left'],ICON_SIZE_SMALL);
             }
         } else {
             if ($userStatus === 1) {
                 if ($isAdmin) {
-                    $iconStatus = Display::return_icon('identifier_admin.png',get_lang('User status'),['class' => 'pull-left'],ICON_SIZE_SMALL);
+                    $iconStatus = Display::return_icon('identifier_admin.png',get_lang('User status'),['class' => 'float-left'],ICON_SIZE_SMALL);
                 } else {
-                    $iconStatus = Display::return_icon('identifier_teacher.png',get_lang('User status'),['class' => 'pull-left'],ICON_SIZE_SMALL);
+                    $iconStatus = Display::return_icon('identifier_teacher.png',get_lang('User status'),['class' => 'float-left'],ICON_SIZE_SMALL);
                 }
             }
         }

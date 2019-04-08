@@ -297,14 +297,14 @@ switch ($action) {
                 $html .= Display::return_icon('valves.png', '', [], 64);
                 $html .= '<div class="controls">';
                 $html .= Display::url(
-                    get_lang('AddAnnouncement'),
+                    get_lang('Add Announcement'),
                     api_get_self()."?".api_get_cidreq()."&action=add",
                     ['class' => 'btn btn-primary']
                 );
                 $html .= '</div>';
                 $html .= '</div>';
             } else {
-                $html = Display::return_message(get_lang('NoAnnouncements'), 'warning');
+                $html = Display::return_message(get_lang('No Announcements'), 'warning');
             }
             $content = $html;
         } else {

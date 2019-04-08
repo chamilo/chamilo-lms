@@ -1489,12 +1489,12 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
 
 if (empty($exerciseList) && $hotpotatoes_exist == false) {
     if ($is_allowedToEdit && $origin != 'learnpath') {
-        echo '<div id="no-data-view">';
+        echo '<div id="no-data-view" class="tool-view">';
         echo '<h3>'.get_lang('Quiz').'</h3>';
         echo Display::return_icon('quiz.png', '', [], 64);
         echo '<div class="controls">';
         echo Display::url(
-            '<em class="fa fa-plus"></em> '.get_lang('NewEx'),
+            '<em class="fa fa-plus"></em> '.get_lang('New Exercise'),
             'exercise_admin.php?'.api_get_cidreq(),
             ['class' => 'btn btn-primary']
         );

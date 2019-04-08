@@ -382,13 +382,13 @@ EOT;
      * @param $attributes
      * @return HTML_QuickForm_button
      */
-    public function addButtonSave($label, $name = 'submit', $style = 'primary', $createElement = false, $attributes)
+    public function addButtonSave($label, $name = 'submit', $createElement = false, $attributes)
     {
         return $this->addButton(
             $name,
             $label,
             'check',
-            $style,
+            'primary',
             null,
             null,
             $attributes,

@@ -3094,28 +3094,26 @@ class SessionManager
         $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         if (is_array($id_checked)) {
-            $id_checked = Database::escape_string(implode(',', $id_checked));
+            $id_checked = array_map('intval', $id_checked);
         } else {
-            $id_checked = intval($id_checked);
+            $id_checked = [(int) $id_checked];
         }
 
-        //Setting session_category_id to 0
-        $sql = "UPDATE $tbl_session SET session_category_id = NULL
-                WHERE session_category_id IN (".$id_checked.")";
-        Database::query($sql);
+        $id_checked = implode(', ', $id_checked);
 
-        $sql = "SELECT id FROM $tbl_session WHERE session_category_id IN (".$id_checked.")";
-        $result = Database::query($sql);
-        while ($rows = Database::fetch_array($result)) {
-            $session_id = $rows['id'];
-            if ($delete_session) {
-                if ($from_ws) {
-                    self::delete($session_id, true);
-                } else {
-                    self::delete($session_id);
-                }
+        if ($delete_session) {
+            $sql = "SELECT id FROM $tbl_session WHERE session_category_id IN (".$id_checked.")";
+            $result = Database::query($sql);
+            while ($rows = Database::fetch_array($result)) {
+                $session_id = $rows['id'];
+                self::delete($session_id, $from_ws);
             }
+        } else {
+            $sql = "UPDATE $tbl_session SET session_category_id = NULL
+                WHERE session_category_id IN ($id_checked)";
+            Database::query($sql);
         }
+
         $sql = "DELETE FROM $tbl_session_category WHERE id IN (".$id_checked.")";
         Database::query($sql);
 

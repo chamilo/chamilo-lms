@@ -461,7 +461,9 @@ class GlossaryManager
         $list = self::getListGlossary(1000, 0, $orderList);
 
         $tpl = new Template(null);
+        $isTeacher = api_is_allowed_to_edit(null, true);
         $tpl->assign('data', $list);
+        $tpl->assign('is_allowed_to_edit', $isTeacher);
         $layout = $tpl->get_template('glossary/list.html.twig');
         $content .= $tpl->fetch($layout);
 

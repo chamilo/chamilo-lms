@@ -14,193 +14,198 @@
     }
 </script>
 
-<h4 class="learning-lessons">{{ 'Learning lessons'|trans }}</h4>
+{% if data|length != 0 %}
+    <div class="alert alert-info" role="alert">
+        {{ 'No lessons were recorded'|trans }}
+    </div>
+{% else %}
+    <h4 class="learning-lessons">{{ 'Learning lessons'|trans }}</h4>
+    <div class="accordion lp-accordion" id="lessons-learning">
+        {% for lp_data in data %}
+            {% set show_category = true %}
+            {% if filtered_category and filtered_category != lp_data.category.id %}
+                {% set show_category = false %}
+            {% endif %}
 
-<div class="accordion lp-accordion" id="lessons-learning">
-    {% for lp_data in data %}
-        {% set show_category = true %}
-        {% if filtered_category and filtered_category != lp_data.category.id %}
-            {% set show_category = false %}
-        {% endif %}
+            {% if show_category %}
 
-        {% if show_category %}
-
-            <!--- TOOLBAR SET CATEGORY -->
-            {% if is_allowed_to_edit %}
-                {% set toolbar_actions %}
-                    {% if lp_data.category.getId() > 0 %}
-                        {% if not _c.session_id %}
-                            <a href="{{ 'lp_controller.php?' ~ _p.web_cid_query ~ '&action=add_lp_category&id=' ~ lp_data.category.getId() }}"
-                               title="{{ "Edit"|trans }}">
-                                <img src="{{ "edit.png"|icon }}" alt="{{ "Edit"|trans }}">
-                            </a>
-                            {% if subscription_settings.allow_add_users_to_lp_category %}
-                                <a href="{{ 'lp_controller.php?' ~ _p.web_cid_query ~ '&action=add_users_to_category&id=' ~ lp_data.category.getId() }}"
-                                   title="{{ "AddUsers"|trans }}">
-                                    <img src="{{ "user.png"|icon }}" alt="{{ "AddUsers"|trans }}">
+                <!--- TOOLBAR SET CATEGORY -->
+                {% if is_allowed_to_edit %}
+                    {% set toolbar_actions %}
+                        {% if lp_data.category.getId() > 0 %}
+                            {% if not _c.session_id %}
+                                <a href="{{ 'lp_controller.php?' ~ _p.web_cid_query ~ '&action=add_lp_category&id=' ~ lp_data.category.getId() }}"
+                                   title="{{ "Edit"|trans }}">
+                                    <img src="{{ "edit.png"|icon }}" alt="{{ "Edit"|trans }}">
                                 </a>
+                                {% if subscription_settings.allow_add_users_to_lp_category %}
+                                    <a href="{{ 'lp_controller.php?' ~ _p.web_cid_query ~ '&action=add_users_to_category&id=' ~ lp_data.category.getId() }}"
+                                       title="{{ "AddUsers"|trans }}">
+                                        <img src="{{ "user.png"|icon }}" alt="{{ "AddUsers"|trans }}">
+                                    </a>
+                                {% endif %}
+                                {% if loop.index0 == 1 %}
+                                    <a href="#">
+                                        <img src="{{ "up_na.png"|icon }}" alt="{{ "Move"|trans }}">
+                                    </a>
+                                {% else %}
+                                    <a href="{{ 'lp_controller.php?' ~ _p.web_cid_query ~ '&action=move_up_category&id=' ~ lp_data.category.getId() }}"
+                                       title="{{ "Move"|trans }}">
+                                        <img src="{{ "up.png"|icon }}" alt="{{ "Move"|trans }}">
+                                    </a>
+                                {% endif %}
+                                {% if (data|length - 1) == loop.index0 %}
+                                    <a href="#">
+                                        <img src="{{ "down_na.png"|icon }}" alt="{{ "Move"|trans }}">
+                                    </a>
+                                {% else %}
+                                    <a href="{{ 'lp_controller.php?' ~ _p.web_cid_query ~ '&action=move_down_category&id=' ~ lp_data.category.getId() }}"
+                                       title="{{ "Move"|trans }}">
+                                        <img src="{{ "down.png"|icon }}" alt="{{ "Move"|trans }}">
+                                    </a>
+                                {% endif %}
                             {% endif %}
-                            {% if loop.index0 == 1 %}
-                                <a href="#">
-                                    <img src="{{ "up_na.png"|icon }}" alt="{{ "Move"|trans }}">
+                            {% if lp_data.category_visibility == 0 %}
+                                <a href="lp_controller.php?{{ _p.web_cid_query ~ '&' ~ {'action':'toggle_category_visibility', 'id':lp_data.category.id, 'new_status':1}|url_encode }}"
+                                   title="{{ 'Show'|trans }}">
+                                    <img src="{{ 'invisible.png'|icon }}" alt="{{ 'Show'|trans }}">
                                 </a>
                             {% else %}
-                                <a href="{{ 'lp_controller.php?' ~ _p.web_cid_query ~ '&action=move_up_category&id=' ~ lp_data.category.getId() }}"
-                                   title="{{ "Move"|trans }}">
-                                    <img src="{{ "up.png"|icon }}" alt="{{ "Move"|trans }}">
+                                <a href="lp_controller.php?{{ _p.web_cid_query ~ '&' ~ {'action':'toggle_category_visibility', 'id':lp_data.category.id, 'new_status':0}|url_encode }}"
+                                   title="{{ 'Hide'|trans }}">
+                                    <img src="{{ 'visible.png'|icon }}" alt="{{ 'Hide'|trans }}">
                                 </a>
                             {% endif %}
-                            {% if (data|length - 1) == loop.index0 %}
-                                <a href="#">
-                                    <img src="{{ "down_na.png"|icon }}" alt="{{ "Move"|trans }}">
+
+                            {% if lp_data.category_is_published == 0 %}
+                                <a href="lp_controller.php?{{ _p.web_cid_query ~ '&' ~ {'action':'toggle_category_publish', 'id':lp_data.category.id, 'new_status':1}|url_encode }}"
+                                   title="{{ 'LearnpathPublish'|trans }}">
+                                    <img src="{{ 'lp_publish_na.png'|icon }}"
+                                         alt="{{ 'LearnpathPublish'|trans }}">
                                 </a>
                             {% else %}
-                                <a href="{{ 'lp_controller.php?' ~ _p.web_cid_query ~ '&action=move_down_category&id=' ~ lp_data.category.getId() }}"
-                                   title="{{ "Move"|trans }}">
-                                    <img src="{{ "down.png"|icon }}" alt="{{ "Move"|trans }}">
+                                <a href="lp_controller.php?{{ _p.web_cid_query ~ '&' ~ {'action':'toggle_category_publish', 'id':lp_data.category.id, 'new_status':0}|url_encode }}"
+                                   title="{{ 'LearnpathDoNotPublish'|trans }}">
+                                    <img src="{{ 'lp_publish.png'|icon }}" alt="{{ 'Hide'|trans }}">
+                                </a>
+                            {% endif %}
+                            {% if not _c.session_id %}
+                                <a href="{{ 'lp_controller.php?' ~ _p.web_cid_query  ~ '&action=delete_lp_category&id=' ~ lp_data.category.getId() }}"
+                                   title="{{ "Delete"|trans }}">
+                                    <img src="{{ "delete.png"|icon }}" alt="{{ "Delete"|trans }}">
                                 </a>
                             {% endif %}
                         {% endif %}
-                        {% if lp_data.category_visibility == 0 %}
-                            <a href="lp_controller.php?{{ _p.web_cid_query ~ '&' ~ {'action':'toggle_category_visibility', 'id':lp_data.category.id, 'new_status':1}|url_encode }}"
-                               title="{{ 'Show'|trans }}">
-                                <img src="{{ 'invisible.png'|icon }}" alt="{{ 'Show'|trans }}">
-                            </a>
-                        {% else %}
-                            <a href="lp_controller.php?{{ _p.web_cid_query ~ '&' ~ {'action':'toggle_category_visibility', 'id':lp_data.category.id, 'new_status':0}|url_encode }}"
-                               title="{{ 'Hide'|trans }}">
-                                <img src="{{ 'visible.png'|icon }}" alt="{{ 'Hide'|trans }}">
-                            </a>
-                        {% endif %}
+                    {% endset %}
+                {% endif %}
+                <!-- END TOOLBAR SET CATEGORY -->
+                {% set list_learnpath %}
+                    <!-- LIST SCORM -->
+                    {% if lp_data.lp_list %}
+                        <ul class="list-group list-group-flush">
+                            {% for row in lp_data.lp_list %}
+                                <li class="list-group-item learnpath-item">
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <h4 class="title">
+                                                <a href="{{ row.url_start }}">
+                                                    {{ row.learnpath_icon }}
+                                                    {{ row.title }}
+                                                    {{ row.session_image }}
+                                                </a>
+                                            </h4>
+                                            {% if row.extra %}
+                                            <div class="extra">
+                                                {{ row.extra }}
+                                            </div>
+                                            {% endif %}
+                                            {% if row.action_build %}
+                                            <div class="lp-actions">
+                                                {{ row.action_build }}
+                                                {{ row.action_edit }}
+                                                {{ row.action_visible }}
+                                                {{ row.action_tracking }}
+                                                {{ row.action_publish }}
+                                                {{ row.action_subscribe_users }}
+                                                {{ row.action_serious_game }}
+                                                {{ row.action_reinit }}
+                                                {{ row.action_default_view }}
+                                                {{ row.action_debug }}
+                                                {{ row.action_export }}
+                                                {{ row.action_copy }}
+                                                {{ row.action_auto_launch }}
+                                                {{ row.action_pdf }}
+                                                {{ row.action_delete }}
+                                                {{ row.action_order }}
+                                                {{ row.action_update_scorm }}
+                                                {{ row.action_export_to_course_build }}
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-md-5 col-md-offset-2">
+                                            {% if is_allowed_to_edit %}
+                                                <ul class="list-allowed">
+                                                {% if row.start_time %}
+                                                    <li>
+                                                        <strong>{{ "PublicationDate"|trans }} :</strong>
+                                                        {{ row.start_time }}
+                                                    </li>
+                                                {% endif %}
+                                                    <li>
+                                                        <strong>{{ "ExpirationDate"|trans }} :</strong>
+                                                        {{ row.end_time }}
+                                                    </li>
+                                                </ul>
+                                                {{ row.dsp_progress }}
+                                            {% else %}
+                                                {% if not is_invitee %}
+                                                    {{ row.dsp_progress }}
+                                                {% endif %}
+                                            {% endif %}
+                                        </div>
 
-                        {% if lp_data.category_is_published == 0 %}
-                            <a href="lp_controller.php?{{ _p.web_cid_query ~ '&' ~ {'action':'toggle_category_publish', 'id':lp_data.category.id, 'new_status':1}|url_encode }}"
-                               title="{{ 'LearnpathPublish'|trans }}">
-                                <img src="{{ 'lp_publish_na.png'|icon }}"
-                                     alt="{{ 'LearnpathPublish'|trans }}">
-                            </a>
-                        {% else %}
-                            <a href="lp_controller.php?{{ _p.web_cid_query ~ '&' ~ {'action':'toggle_category_publish', 'id':lp_data.category.id, 'new_status':0}|url_encode }}"
-                               title="{{ 'LearnpathDoNotPublish'|trans }}">
-                                <img src="{{ 'lp_publish.png'|icon }}" alt="{{ 'Hide'|trans }}">
-                            </a>
-                        {% endif %}
-                        {% if not _c.session_id %}
-                            <a href="{{ 'lp_controller.php?' ~ _p.web_cid_query  ~ '&action=delete_lp_category&id=' ~ lp_data.category.getId() }}"
-                               title="{{ "Delete"|trans }}">
-                                <img src="{{ "delete.png"|icon }}" alt="{{ "Delete"|trans }}">
-                            </a>
-                        {% endif %}
+                                    </div>
+
+                                </li>
+                            {% endfor %}
+                        </ul>
                     {% endif %}
                 {% endset %}
-            {% endif %}
-            <!-- END TOOLBAR SET CATEGORY -->
-            {% set list_learnpath %}
-                <!-- LIST SCORM -->
-                {% if lp_data.lp_list %}
-                    <ul class="list-group list-group-flush">
-                        {% for row in lp_data.lp_list %}
-                            <li class="list-group-item learnpath-item">
-                                <div class="row">
-                                    <div class="col-md-5">
-                                        <h4 class="title">
-                                            <a href="{{ row.url_start }}">
-                                                {{ row.learnpath_icon }}
-                                                {{ row.title }}
-                                                {{ row.session_image }}
-                                            </a>
-                                        </h4>
-                                        {% if row.extra %}
-                                        <div class="extra">
-                                            {{ row.extra }}
-                                        </div>
-                                        {% endif %}
-                                        {% if row.action_build %}
-                                        <div class="lp-actions">
-                                            {{ row.action_build }}
-                                            {{ row.action_edit }}
-                                            {{ row.action_visible }}
-                                            {{ row.action_tracking }}
-                                            {{ row.action_publish }}
-                                            {{ row.action_subscribe_users }}
-                                            {{ row.action_serious_game }}
-                                            {{ row.action_reinit }}
-                                            {{ row.action_default_view }}
-                                            {{ row.action_debug }}
-                                            {{ row.action_export }}
-                                            {{ row.action_copy }}
-                                            {{ row.action_auto_launch }}
-                                            {{ row.action_pdf }}
-                                            {{ row.action_delete }}
-                                            {{ row.action_order }}
-                                            {{ row.action_update_scorm }}
-                                            {{ row.action_export_to_course_build }}
-                                        </div>
-                                        {% endif %}
-                                    </div>
-                                    <div class="col-md-5 col-md-offset-2">
-                                        {% if is_allowed_to_edit %}
-                                            <ul class="list-allowed">
-                                            {% if row.start_time %}
-                                                <li>
-                                                    <strong>{{ "PublicationDate"|trans }} :</strong>
-                                                    {{ row.start_time }}
-                                                </li>
-                                            {% endif %}
-                                                <li>
-                                                    <strong>{{ "ExpirationDate"|trans }} :</strong>
-                                                    {{ row.end_time }}
-                                                </li>
-                                            </ul>
-                                            {{ row.dsp_progress }}
-                                        {% else %}
-                                            {% if not is_invitee %}
-                                                {{ row.dsp_progress }}
-                                            {% endif %}
-                                        {% endif %}
-                                    </div>
+                <!-- END LIST SCORM -->
 
-                                </div>
-
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-            {% endset %}
-            <!-- END LIST SCORM -->
-
-            {% if categories|length > 1 and lp_data.category.id%}
-                <!--- START CARD LESSON  --->
-                {% set counter = counter + 1 %}
-                <div class="card card-learnpath">
-                    <h5 class="card-header" id="heading-{{ lp_data.category.id }}">
-                        <a href="#" class="btn btn-link" data-toggle="collapse" data-target="#collapse-{{ lp_data.category.id }}" aria-expanded="true" aria-controls="collapse-{{ lp_data.category.id }}">
-                            {{ lp_data.category.getName() }} - ({{ lp_data.lp_list|length }})
-                        </a>
-                        <div class="float-actions">
-                            {{ toolbar_actions }}
-                        </div>
-                    </h5>
-                    <div id="collapse-{{ lp_data.category.id }}" class="collapse {{ (counter < 2) ? 'show' : '' }}" aria-labelledby="heading-{{ lp_data.category.id }}" data-parent="#lessons-learning">
-                        <div class="card-body">
-                            {{ list_learnpath }}
+                {% if categories|length > 1 and lp_data.category.id%}
+                    <!--- START CARD LESSON  --->
+                    {% set counter = counter + 1 %}
+                    <div class="card card-learnpath">
+                        <h5 class="card-header" id="heading-{{ lp_data.category.id }}">
+                            <a href="#" class="btn btn-link" data-toggle="collapse" data-target="#collapse-{{ lp_data.category.id }}" aria-expanded="true" aria-controls="collapse-{{ lp_data.category.id }}">
+                                {{ lp_data.category.getName() }} - ({{ lp_data.lp_list|length }})
+                            </a>
+                            <div class="float-actions">
+                                {{ toolbar_actions }}
+                            </div>
+                        </h5>
+                        <div id="collapse-{{ lp_data.category.id }}" class="collapse {{ (counter < 2) ? 'show' : '' }}" aria-labelledby="heading-{{ lp_data.category.id }}" data-parent="#lessons-learning">
+                            <div class="card-body">
+                                {{ list_learnpath }}
+                            </div>
                         </div>
                     </div>
-                </div>
-                <!--- END CARD LESSON -->
-            {% else %}
-                {{ list_learnpath }}
+                    <!--- END CARD LESSON -->
+                {% else %}
+                    {{ list_learnpath }}
+                {% endif %}
             {% endif %}
-        {% endif %}
-    {% endfor %}
-</div>
+        {% endfor %}
+    </div>
+{% endif %}
 {% if is_allowed_to_edit and not lp_is_shown %}
     <div id="no-data-view" class="tool-view">
-        <h2>{{ "LearningPaths"|trans }}</h2>
+        <h2>{{ "Learning paths"|trans }}</h2>
         <img src="{{ "scorms.png"|icon(64) }}" width="64" height="64">
         <div class="controls">
             <a href="{{ web_self ~ "?" ~ _p.web_cid_query ~ "&action=add_lp" }}" class="btn btn-outline-primary">
-                {{ "LearnpathAddLearnpath"|trans }}
+                {{ "Learnpath add learnpath"|trans }}
             </a>
         </div>
     </div>

@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+
 /**
  * It is recommended that ALL Chamilo scripts include this important file.
  * This script manages
@@ -14,9 +16,6 @@
  * @todo remove the code that displays the button that links to the install page
  * but use a redirect immediately. By doing so the $alreadyInstalled variable can be removed.
  */
-
-// Showing/hiding error codes in global error messages.
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 define('SHOW_ERROR_CODES', false);
 

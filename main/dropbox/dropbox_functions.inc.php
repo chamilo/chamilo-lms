@@ -16,7 +16,7 @@ $htmlHeadXtra[] = '<script>
 function setFocus(){
     $("#category_title").focus();
 }
-$(document).ready(function () {
+$(function() {
     setFocus();
 });
 </script>';

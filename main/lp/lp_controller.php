@@ -834,11 +834,14 @@ switch ($action) {
                 // Updating the lp.modified_on
                 $_SESSION['oLP']->set_modified_on();
                 Session::write('refresh', 1);
+                $min = isset($_POST['min_'.$_POST['prerequisites']]) ? $_POST['min_'.$_POST['prerequisites']] : '';
+                $max = isset($_POST['max_'.$_POST['prerequisites']]) ? $_POST['max_'.$_POST['prerequisites']] : '';
+
                 $editPrerequisite = $_SESSION['oLP']->edit_item_prereq(
                     $_GET['id'],
                     $_POST['prerequisites'],
-                    $_POST['min_'.$_POST['prerequisites']],
-                    $_POST['max_'.$_POST['prerequisites']]
+                    $max,
+                    $max
                 );
 
                 if ($editPrerequisite) {

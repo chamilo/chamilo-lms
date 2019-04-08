@@ -2136,7 +2136,8 @@ class learnpathItem
      */
     public function parse_prereq($prereqs_string, $items, $refs_list, $user_id)
     {
-        if (self::DEBUG > 0) {
+        $debug = self::DEBUG;
+        if ($debug > 0) {
             error_log(
                 'learnpathItem::parse_prereq() for learnpath '.$this->lp_id.' with string '.$prereqs_string,
                 0
@@ -2198,7 +2199,7 @@ class learnpathItem
         // Parenthesis removed, now look for ORs as it is the lesser-priority
         //  binary operator (= always uses one text operand).
         if (strpos($prereqs_string, '|') === false) {
-            if (self::DEBUG > 1) {
+            if ($debug) {
                 error_log('New LP - Didnt find any OR, looking for AND', 0);
             }
             if (strpos($prereqs_string, '&') !== false) {
@@ -2214,7 +2215,7 @@ class learnpathItem
                         );
 
                         if (!$andstatus) {
-                            if (self::DEBUG > 1) {
+                            if ($debug) {
                                 error_log(
                                     'New LP - One condition in AND was false, short-circuit',
                                     0
@@ -2245,12 +2246,12 @@ class learnpathItem
                 }
             } else {
                 // No ORs found, now look for ANDs.
-                if (self::DEBUG > 1) {
+                if ($debug) {
                     error_log('New LP - Didnt find any AND, looking for =', 0);
                 }
 
                 if (strpos($prereqs_string, '=') !== false) {
-                    if (self::DEBUG > 1) {
+                    if ($debug) {
                         error_log('New LP - Found =, looking into it', 0);
                     }
                     // We assume '=' signs only appear when there's nothing else around.
@@ -2272,7 +2273,7 @@ class learnpathItem
                     }
                 } else {
                     // No ANDs found, look for <>
-                    if (self::DEBUG > 1) {
+                    if ($debug) {
                         error_log(
                             'New LP - Didnt find any =, looking for <>',
                             0
@@ -2280,7 +2281,7 @@ class learnpathItem
                     }
 
                     if (strpos($prereqs_string, '<>') !== false) {
-                        if (self::DEBUG > 1) {
+                        if ($debug) {
                             error_log('New LP - Found <>, looking into it', 0);
                         }
                         // We assume '<>' signs only appear when there's nothing else around.
@@ -2302,7 +2303,7 @@ class learnpathItem
                         }
                     } else {
                         // No <> found, look for ~ (unary)
-                        if (self::DEBUG > 1) {
+                        if ($debug) {
                             error_log(
                                 'New LP - Didnt find any =, looking for ~',
                                 0
@@ -2311,7 +2312,7 @@ class learnpathItem
                         // Only remains: ~ and X*{}
                         if (strpos($prereqs_string, '~') !== false) {
                             // Found NOT.
-                            if (self::DEBUG > 1) {
+                            if ($debug) {
                                 error_log(
                                     'New LP - Found ~, looking into it',
                                     0
@@ -2337,7 +2338,7 @@ class learnpathItem
                                 return $returnstatus;
                             } else {
                                 // Strange...
-                                if (self::DEBUG > 1) {
+                                if ($debug) {
                                     error_log(
                                         'New LP - Found ~ but strange string: '.$prereqs_string,
                                         0
@@ -2346,7 +2347,7 @@ class learnpathItem
                             }
                         } else {
                             // Finally, look for sets/groups
-                            if (self::DEBUG > 1) {
+                            if ($debug) {
                                 error_log(
                                     'New LP - Didnt find any ~, looking for groups',
                                     0
@@ -2364,7 +2365,7 @@ class learnpathItem
                                 foreach ($groups[1] as $gr) {
                                     // Only take the results that correspond to
                                     //  the big brackets-enclosed condition.
-                                    if (self::DEBUG > 1) {
+                                    if ($debug) {
                                         error_log(
                                             'New LP - Dealing with group '.$gr,
                                             0
@@ -2378,7 +2379,7 @@ class learnpathItem
                                         $multi
                                     )
                                     ) {
-                                        if (self::DEBUG > 1) {
+                                        if ($debug) {
                                             error_log(
                                                 'New LP - Found multiplier '.$multi[0],
                                                 0
@@ -2394,7 +2395,7 @@ class learnpathItem
                                                     $status == $this->possible_status[3]
                                                 ) {
                                                     $mytrue++;
-                                                    if (self::DEBUG > 1) {
+                                                    if ($debug) {
                                                         error_log(
                                                             'New LP - Found true item, counting.. ('.($mytrue).')',
                                                             0
@@ -2402,7 +2403,7 @@ class learnpathItem
                                                     }
                                                 }
                                             } else {
-                                                if (self::DEBUG > 1) {
+                                                if ($debug) {
                                                     error_log(
                                                         'New LP - item '.$cond.' does not exist in items list',
                                                         0
@@ -2411,7 +2412,7 @@ class learnpathItem
                                             }
                                         }
                                         if ($mytrue >= $count) {
-                                            if (self::DEBUG > 1) {
+                                            if ($debug) {
                                                 error_log(
                                                     'New LP - Got enough true results, return true',
                                                     0
@@ -2419,7 +2420,7 @@ class learnpathItem
                                             }
                                             $mycond = true;
                                         } else {
-                                            if (self::DEBUG > 1) {
+                                            if ($debug) {
                                                 error_log(
                                                     'New LP - Not enough true results',
                                                     0
@@ -2427,7 +2428,7 @@ class learnpathItem
                                             }
                                         }
                                     } else {
-                                        if (self::DEBUG > 1) {
+                                        if ($debug) {
                                             error_log(
                                                 'New LP - No multiplier',
                                                 0
@@ -2442,14 +2443,14 @@ class learnpathItem
                                                     $status == $this->possible_status[3]
                                                 ) {
                                                     $mycond = true;
-                                                    if (self::DEBUG > 1) {
+                                                    if ($debug) {
                                                         error_log(
                                                             'New LP - Found true item',
                                                             0
                                                         );
                                                     }
                                                 } else {
-                                                    if (self::DEBUG > 1) {
+                                                    if ($debug) {
                                                         error_log(
                                                             'New LP - '.
                                                             ' Found false item, the set is not true, return false',
@@ -2460,13 +2461,13 @@ class learnpathItem
                                                     break;
                                                 }
                                             } else {
-                                                if (self::DEBUG > 1) {
+                                                if ($debug) {
                                                     error_log(
                                                         'New LP - item '.$cond.' does not exist in items list',
                                                         0
                                                     );
                                                 }
-                                                if (self::DEBUG > 1) {
+                                                if ($debug) {
                                                     error_log(
                                                         'New LP - Found false item, the set is not true, return false',
                                                         0
@@ -2486,7 +2487,7 @@ class learnpathItem
                             } else {
                                 // Nothing found there either. Now return the
                                 // value of the corresponding resource completion status.
-                                if (self::DEBUG > 1) {
+                                if ($debug) {
                                     error_log(
                                         'New LP - Didnt find any group, returning value for '.$prereqs_string,
                                         0
@@ -2510,14 +2511,14 @@ class learnpathItem
                                                 $itemToCheck->get_title()
                                             );
                                             $this->prereq_alert = $explanation;
-                                            if (self::DEBUG > 1) {
+                                            if ($debug) {
                                                 error_log(
                                                     'New LP - Prerequisite '.$prereqs_string.' not complete',
                                                     0
                                                 );
                                             }
                                         } else {
-                                            if (self::DEBUG > 1) {
+                                            if ($debug) {
                                                 error_log(
                                                     'New LP - Prerequisite '.$prereqs_string.' complete',
                                                     0

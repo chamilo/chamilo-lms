@@ -121,33 +121,48 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
                 </div>
             </div>
         </div>
-    <form method="post" action="<?php echo api_get_self(); ?>?action=delete&sort=<?php echo $sort; ?>" onsubmit="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">
     </div>
-    <div align="left">
+    <form method="post" action="<?php echo api_get_self(); ?>?action=delete&sort=<?php echo $sort; ?>" onsubmit="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">
         <?php
         if (count($Sessions) == 0 && isset($_POST['keyword'])) {
-            echo get_lang('NoSearchResults');
-            echo '</div>';
+            echo Display::return_message(get_lang('NoSearchResults'), 'warning');
         } else {
             if ($num > $limit) {
-                if ($page) {
-                    ?>
-                    <a href="<?php echo api_get_self(); ?>?page=<?php echo $page - 1; ?>&sort=<?php echo $sort; ?>&order=<?php echo Security::remove_XSS($order); ?>&keyword=<?php echo $keyword; ?><?php echo @$cond_url; ?>"><?php echo get_lang('Previous'); ?></a>
+                ?>
+                <div>
                     <?php
-                } else {
-                    echo get_lang('Previous');
-                } ?>
-                |
+                    if ($page) {
+                        ?>
+                        <a href="<?php echo api_get_self(); ?>?page=<?php echo $page
+                            - 1; ?>&sort=<?php echo $sort; ?>&order=<?php echo Security::remove_XSS(
+                            $order
+                        ); ?>&keyword=<?php echo $keyword; ?><?php echo @$cond_url; ?>"><?php echo get_lang(
+                                'Previous'
+                            ); ?></a>
+                        <?php
+                    } else {
+                        echo get_lang('Previous');
+                    } ?>
+                    |
+                    <?php
+                    if ($nbr_results > $limit) {
+                        ?>
+                        <a href="<?php echo api_get_self(); ?>?page=<?php echo $page
+                            + 1; ?>&sort=<?php echo $sort; ?>&order=<?php echo Security::remove_XSS(
+                            $order
+                        ); ?>&keyword=<?php echo $keyword; ?><?php echo @$cond_url; ?>"><?php echo get_lang(
+                                'Next'
+                            ); ?></a>
+                        <?php
+                    } else {
+                        echo get_lang('Next');
+                    }
+
+                    ?>
+                </div>
                 <?php
-                if ($nbr_results > $limit) {
-                    ?>
-                    <a href="<?php echo api_get_self(); ?>?page=<?php echo $page + 1; ?>&sort=<?php echo $sort; ?>&order=<?php echo Security::remove_XSS($order); ?>&keyword=<?php echo $keyword; ?><?php echo @$cond_url; ?>"><?php echo get_lang('Next'); ?></a>
-                    <?php
-                } else {
-                    echo get_lang('Next');
-                }
-            } ?>
-        </div>
+            }
+            ?>
 
         <table class="data_table" width="100%">
             <tr>
@@ -205,7 +220,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
             unset($Sessions); ?>
         </table>
         <br />
-        <div align="left">
+        <div>
         <?php
         if ($num > $limit) {
             if ($page) {
@@ -230,20 +245,27 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
             }
         } ?>
         </div>
-        <div class="btn-group">
-            <a class="btn btn-default" href="#" onclick="selectAll('idChecked',<?php echo $x; ?>,'true');return false;"><?php echo get_lang('SelectAll'); ?></a>
-            <a class="btn btn-default" href="#" onclick="selectAll('idChecked',<?php echo $x; ?>,'false');return false;"><?php echo get_lang('UnSelectAll'); ?></a>
-        </div>
-        <div class="list-category">
-            <select class="selectpicker show-tick form-control" name="action">
-                <option value="delete_off_session" selected="selected"><?php echo get_lang('DeleteSelectedSessionCategory'); ?></option>
-                <option value="delete_on_session"><?php echo get_lang('DeleteSelectedFullSessionCategory'); ?></option>
-            </select>
-        </div>
-        <button class="btn btn-success" type="submit" name="name" value="<?php echo get_lang('Ok'); ?>"><?php echo get_lang('Ok'); ?></button>
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="btn-group">
+                        <a class="btn btn-default" href="#" onclick="selectAll('idChecked',<?php echo $x; ?>,'true');return false;"><?php echo get_lang('SelectAll'); ?></a>
+                        <a class="btn btn-default" href="#" onclick="selectAll('idChecked',<?php echo $x; ?>,'false');return false;"><?php echo get_lang('UnSelectAll'); ?></a>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <select class="selectpicker show-tick form-control" name="action">
+                        <option value="delete_off_session" selected="selected"><?php echo get_lang('DeleteSelectedSessionCategory'); ?></option>
+                        <option value="delete_on_session"><?php echo get_lang('DeleteSelectedFullSessionCategory'); ?></option>
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <button class="btn btn-success" type="submit" name="name" value="<?php echo get_lang('Ok'); ?>"><?php echo get_lang('Ok'); ?></button>
+                </div>
+            </div>
     <?php
         } ?>
-    </table>
+        </table>
+    </form>
 <?php
 }
 Display::display_footer();

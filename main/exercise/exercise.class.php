@@ -5188,7 +5188,7 @@ class Exercise
                                         }
                                         //type no error shouldn't be treated
                                         $next = 1;
-                                        continue;
+                                        break;
                                     }
                                     if ($debug > 0) {
                                         error_log(__LINE__.' - answerId is >1 so we\'re probably in OAR', 0);
@@ -5202,7 +5202,7 @@ class Exercise
                                     if ($overlap == false) {
                                         //all good, no overlap
                                         $next = 1;
-                                        continue;
+                                        break;
                                     } else {
                                         if ($debug > 0) {
                                             error_log(__LINE__.' - Overlap is '.$overlap.': OAR hit', 0);

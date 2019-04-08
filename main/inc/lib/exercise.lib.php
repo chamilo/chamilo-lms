@@ -5056,7 +5056,7 @@ EOT;
      * @return string
      */
     public static function getTotalScoreRibbon(
-        $objExercise,
+        Exercise $objExercise,
         $score,
         $weight,
         $checkPassPercentage = false,

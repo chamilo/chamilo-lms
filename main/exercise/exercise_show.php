@@ -960,6 +960,19 @@ foreach ($questionList as $questionId) {
 
 $totalScoreText = '';
 
+if ($answerType != MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+    $pluginEvaluation = QuestionOptionsEvaluationPlugin::create();
+
+    if ('true' === $pluginEvaluation->get(QuestionOptionsEvaluationPlugin::SETTING_ENABLE)) {
+        $formula = $pluginEvaluation->getFormulaForExercise($objExercise->selectId());
+
+        if (!empty($formula)) {
+            $totalScore = $pluginEvaluation->getResultWithFormula($id, $formula);
+            $totalWeighting = $pluginEvaluation->getMaxScore();
+        }
+    }
+}
+
 // Total score
 $myTotalScoreTemp = $totalScore;
 if ($origin != 'learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type']))) {

@@ -3549,18 +3549,19 @@ class SocialManager extends UserManager
         $urlImg = api_get_path(WEB_IMG_PATH);
         $isAdmin = self::is_admin($authorId);
 
+
         if ($userStatus === 5) {
             if ($authorInfo['has_certificates']) {
-                $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_graduated.svg" width="22px" height="22px">';
+                $iconStatus = Display::return_icon('identifier_graduated.png',get_lang('User status'),['class' => 'pull-left'],ICON_SIZE_SMALL);
             } else {
-                $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_student.svg" width="22px" height="22px">';
+                $iconStatus = Display::return_icon('identifier_student.png',get_lang('User status'),['class' => 'pull-left'],ICON_SIZE_SMALL);
             }
         } else {
             if ($userStatus === 1) {
                 if ($isAdmin) {
-                    $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_admin.svg" width="22px" height="22px">';
+                    $iconStatus = Display::return_icon('identifier_admin.png',get_lang('User status'),['class' => 'pull-left'],ICON_SIZE_SMALL);
                 } else {
-                    $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_teacher.svg" width="22px" height="22px">';
+                    $iconStatus = Display::return_icon('identifier_teacher.png',get_lang('User status'),['class' => 'pull-left'],ICON_SIZE_SMALL);
                 }
             }
         }

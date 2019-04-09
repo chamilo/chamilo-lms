@@ -5,15 +5,15 @@ Encore
     .setOutputPath('public/build/')
     .setManifestKeyPrefix('public/build/')
     // If chamilo is installed in localhost/chamilo2
-    .setPublicPath('../')
+    // .setPublicPath('../')
     // If chamilo is installed in a domain my.chamilo.net
-    //.setPublicPath('/build')
+    .setPublicPath('/public/build')
     .cleanupOutputBeforeBuild()
 
     .addEntry('app', './assets/js/app.js')
     .addEntry('bootstrap', './assets/js/bootstrap.js')
 
-    .addEntry('session_list', './assets/js/session_list.js')
+    .addEntry('free-jqgrid', './assets/js/free-jqgrid.js')
 
     .addStyleEntry('css/app', './assets/css/app.scss')
     .addStyleEntry('css/bootstrap', './assets/css/bootstrap.scss')

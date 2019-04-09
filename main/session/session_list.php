@@ -16,8 +16,8 @@ $this_section = SECTION_PLATFORM_ADMIN;
 $routePublic = Container::getRouter()->generate('legacy_public');
 
 $htmlHeadXtra[] = "<script>window.lang = '".api_get_language_isocode()."';</script>";
-$htmlHeadXtra[] = api_get_css($routePublic.'build/session_list.css');
-$htmlHeadXtra[] = api_get_js_simple($routePublic.'build/session_list.js');
+$htmlHeadXtra[] = api_get_css($routePublic.'build/free-jqgrid.css');
+$htmlHeadXtra[] = api_get_js_simple($routePublic.'build/free-jqgrid.js');
 
 SessionManager::protectSession(null, false);
 

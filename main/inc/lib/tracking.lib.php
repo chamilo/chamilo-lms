@@ -2636,7 +2636,7 @@ class Tracking
             return false;
         }
 
-        $sessionId = intval($sessionId);
+        $sessionId = (int) $sessionId;
         $courseInfo = api_get_course_info($courseCode);
 
         if (empty($courseInfo)) {
@@ -2679,7 +2679,7 @@ class Tracking
 
         $conditions = [
             " c_id = {$courseInfo['real_id']} ",
-            " lp_view.lp_id IN(".implode(', ', $filteredLP).") ",
+            " lp_view.lp_id IN (".implode(', ', $filteredLP).") ",
         ];
 
         $groupBy = 'GROUP BY lp_id';
@@ -2688,7 +2688,7 @@ class Tracking
             $studentId = array_map('intval', $studentId);
             $conditions[] = " lp_view.user_id IN (".implode(',', $studentId).")  ";
         } else {
-            $studentId = intval($studentId);
+            $studentId = (int) $studentId;
             $conditions[] = " lp_view.user_id = '$studentId' ";
 
             if (empty($lpIdList)) {
@@ -2714,7 +2714,7 @@ class Tracking
         if (!empty($sessionId)) {
             $conditions[] = " session_id = $sessionId ";
         } else {
-            $conditions[] = " (session_id = 0 OR session_id IS NULL) ";
+            $conditions[] = ' (session_id = 0 OR session_id IS NULL) ';
         }
 
         $conditionToString = implode('AND', $conditions);
@@ -3185,13 +3185,11 @@ class Tracking
      * 3. And finally it will return the average between 1. and 2.
      * This function does not take the results of a Test out of a LP.
      *
-     * @param   int|array   Array of user ids or an user id
-     * @param string $course_code Course code
-     * @param array  $lp_ids      List of LP ids
-     * @param int    $session_id  Session id (optional), if param $session_id is 0(default)
-     *                            it'll return results including sessions, 0 = session is not filtered
-     * @param   bool        Returns an array of the type [sum_score, num_score] if set to true
-     * @param   bool        get only the latest attempts or ALL attempts
+     * @param int|array $student_id  Array of user ids or an user id
+     * @param string    $course_code Course code
+     * @param array     $lp_ids      List of LP ids
+     * @param int       $session_id  Session id (optional), if param $session_id is 0(default)
+     *                               it'll return results including sessions, 0 = session is not filtered
      *
      * @return string value (number %) Which represents a round integer explain in got in 3
      */
@@ -3220,11 +3218,11 @@ class Tracking
 
         // Compose a filter based on optional learning paths list given
         if (!empty($lp_ids) && count($lp_ids) > 0) {
-            $conditions[] = " id IN(".implode(',', $lp_ids).") ";
+            $conditions[] = ' id IN ('.implode(',', $lp_ids).') ';
         }
 
         // Compose a filter based on optional session id
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
         if (!empty($session_id)) {
             $conditions[] = " session_id = $session_id ";
         }
@@ -3233,6 +3231,7 @@ class Tracking
             array_walk($student_id, 'intval');
             $conditions[] = " lp_view.user_id IN (".implode(',', $student_id).") ";
         } else {
+            $student_id = (int) $student_id;
             $conditions[] = " lp_view.user_id = $student_id ";
         }
 
@@ -3994,17 +3993,13 @@ class Tracking
     /**
      * Count assignments per student.
      *
-     * @param $student_id
-     * @param null $course_code
-     * @param null $session_id
+     * @param array|int $student_id
+     * @param string    $course_code
+     * @param int       $session_id if param is null(default) return count of assignments including sessions,
+     *                              0 = session is not filtered
      *
      * @return int Count of assignments
      *
-     * @internal param array|int $Student id(s)
-     * @internal param Course $string code
-     * @internal param Session $int id (optional),
-     * if param $session_id is null(default) return count of assignments
-     * including sessions, 0 = session is not filtered
      */
     public static function count_student_assignments(
         $student_id,
@@ -4032,7 +4027,7 @@ class Tracking
             $studentList = array_map('intval', $student_id);
             $conditions[] = " ip.insert_user_id IN ('".implode("','", $studentList)."') ";
         } else {
-            $student_id = intval($student_id);
+            $student_id = (int) $student_id;
             $conditions[] = " ip.insert_user_id = '$student_id' ";
         }
 

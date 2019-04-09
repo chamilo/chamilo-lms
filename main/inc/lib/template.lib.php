@@ -753,7 +753,7 @@ class Template
             "select2/dist/js/i18n/$isoCode.js",
             'mediaelement/plugins/vrview/vrview.js',
             'js-cookie/src/js.cookie.js',
-            'mediaelement/plugins/markersrolls/markersrolls.js',
+            'mediaelement/plugins/markersrolls/markersrolls.min.js',
         ];
 
         $features = api_get_configuration_value('video_features');

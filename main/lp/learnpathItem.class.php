@@ -2549,13 +2549,13 @@ class learnpathItem
                                                     $minScore = $myItemToCheck->getPrerequisiteMinScore();
                                                     $maxScore = $myItemToCheck->getPrerequisiteMaxScore();
 
-                                                    if (empty($minScore)) {
+                                                    /*if (empty($minScore)) {
                                                         // Try with mastery_score
                                                         $masteryScoreAsMin = $myItemToCheck->get_mastery_score();
                                                         if (!empty($masteryScoreAsMin)) {
                                                             $minScore = $masteryScoreAsMin;
                                                         }
-                                                    }
+                                                    }*/
 
                                                     if (isset($minScore) && isset($minScore)) {
                                                         // Taking min/max prerequisites values see BT#5776

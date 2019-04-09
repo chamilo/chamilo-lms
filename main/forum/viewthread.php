@@ -677,6 +677,15 @@ foreach ($posts as $post) {
 
 $template->assign('posts', $postList);
 
+$form = show_add_post_form(
+    $current_forum,
+    'replythread',
+    null,
+    false
+);
+
+$template->assign('form', $form->returnForm());
+
 $layout = $template->get_template('forum/posts.tpl');
 
 $template->display($layout);

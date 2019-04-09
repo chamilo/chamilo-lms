@@ -3119,6 +3119,8 @@ function store_thread(
  *                              (I first thought to put and I-frame with the message only)
  *                              4. quote: Quoting a message ($action= quotemessage) => I-frame with the complete thread (if enabled).
  *                              The message will be in the reply. (I first thought not to put an I-frame here)
+ * @param array  $form_values
+ * @param bool   $showPreview
  *
  * @return FormValidator
  *
@@ -3126,14 +3128,14 @@ function store_thread(
  *
  * @version february 2006, dokeos 1.8
  */
-function show_add_post_form($current_forum, $action, $id = '', $form_values = '')
+function show_add_post_form($current_forum, $action, $form_values = '', $showPreview = true)
 {
     $_user = api_get_user_info();
     $action = isset($action) ? Security::remove_XSS($action) : '';
     $myThread = isset($_GET['thread']) ? (int) $_GET['thread'] : '';
     $forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : '';
     $my_post = isset($_GET['post']) ? (int) $_GET['post'] : '';
-    $giveRevision = (isset($_GET['give_revision']) && $_GET['give_revision'] == 1);
+    $giveRevision = isset($_GET['give_revision']) && $_GET['give_revision'] == 1;
 
     $url = api_get_self().'?'.http_build_query(
         [
@@ -3197,12 +3199,15 @@ function show_add_post_form($current_forum, $action, $id = '', $form_values = ''
     }
 
     $iframe = null;
-    $myThread = Security::remove_XSS($myThread);
-    if ($action != 'newthread' && !empty($myThread)) {
-        $iframe = "<iframe style=\"border: 1px solid black\" src=\"iframe_thread.php?".api_get_cidreq()."&forum=".$forumId."&thread=".$myThread."#".$my_post."\" width=\"100%\"></iframe>";
-    }
-    if (!empty($iframe)) {
-        $form->addElement('label', get_lang('Thread'), $iframe);
+    if ($showPreview) {
+        $myThread = Security::remove_XSS($myThread);
+        if ($action != 'newthread' && !empty($myThread)) {
+            $iframe = "<iframe style=\"border: 1px solid black\" src=\"iframe_thread.php?".api_get_cidreq(
+                )."&forum=".$forumId."&thread=".$myThread."#".$my_post."\" width=\"100%\"></iframe>";
+        }
+        if (!empty($iframe)) {
+            $form->addElement('label', get_lang('Thread'), $iframe);
+        }
     }
 
     if (Gradebook::is_active() &&

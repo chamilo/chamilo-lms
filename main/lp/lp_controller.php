@@ -840,7 +840,7 @@ switch ($action) {
                 $editPrerequisite = $_SESSION['oLP']->edit_item_prereq(
                     $_GET['id'],
                     $_POST['prerequisites'],
-                    $max,
+                    $min,
                     $max
                 );
 

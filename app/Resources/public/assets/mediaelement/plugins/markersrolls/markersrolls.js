@@ -42,6 +42,8 @@ Object.assign(MediaElementPlayer.prototype, {
 		markersRollsLayer.className = this.options.classPrefix + 'markersrolls-layer' + ' ' + (this.options.classPrefix + 'overlay') + ' ' + (this.options.classPrefix + 'layer');
 		markersRollsLayer.style.display = 'none';
 		markersRollsLayer.style.backgroundColor = '#FFF';
+		markersRollsLayer.style.border = '0 none';
+		markersRollsLayer.style.boxShadow = '#B0B0B0 0px 0px 20px -10px inset';
 
 		layers.appendChild(markersRollsLayer);
 

@@ -2075,6 +2075,7 @@ class ExtraField extends Model
                 'width' => '35',
                 'align' => 'left',
                 'sortable' => 'true',
+                'formatter' => '',
             ],
             [
                 'name' => 'visible_to_self',
@@ -2082,6 +2083,7 @@ class ExtraField extends Model
                 'width' => '45',
                 'align' => 'left',
                 'sortable' => 'true',
+                'formatter' => '',
             ],
             [
                 'name' => 'visible_to_others',
@@ -2089,6 +2091,7 @@ class ExtraField extends Model
                 'width' => '35',
                 'align' => 'left',
                 'sortable' => 'true',
+                'formatter' => '',
             ],
             [
                 'name' => 'filter',
@@ -2096,6 +2099,7 @@ class ExtraField extends Model
                 'width' => '30',
                 'align' => 'left',
                 'sortable' => 'true',
+                'formatter' => '',
             ],
             [
                 'name' => 'field_order',
@@ -2275,29 +2279,20 @@ class ExtraField extends Model
     public function getJqgridActionLinks($token)
     {
         //With this function we can add actions to the jgrid (edit, delete, etc)
-        $editIcon = Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL);
-        $deleteIcon = Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL);
+        $editIcon = Display::return_icon('edit.png', get_lang('Edit'));
+        $deleteIcon = Display::return_icon('delete.png', get_lang('Delete'));
         $confirmMessage = addslashes(
             api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES)
         );
 
-        $editButton = <<<JAVASCRIPT
-            <a href="?action=edit&type={$this->type}&id=' + options.rowId + '" class="btn btn-link btn-xs">\
-                $editIcon\
-            </a>
+        return <<<JAVASCRIPT
+            function action_formatter(cellValue, options, rowObject) {
+                return '<a href="?action=edit&type={$this->type}&id=' + options.rowId + '">$editIcon</a>'
+                    + '<a \
+                    onclick="if (!confirm(\'$confirmMessage\')) {return false;}" \
+                    href="?sec_token=$token&type={$this->type}&id=' + options.rowId + '&action=delete">$deleteIcon</a>';
+            }
 JAVASCRIPT;
-        $deleteButton = <<<JAVASCRIPT
-            <a \
-                onclick="if (!confirm(\'$confirmMessage\')) {return false;}" \
-                href="?sec_token=$token&type={$this->type}&id=' + options.rowId + '&action=delete" \
-                class="btn btn-link btn-xs">\
-                $deleteIcon\
-            </a>
-JAVASCRIPT;
-
-        return "function action_formatter(cellvalue, options, rowObject) {        
-            return '$editButton $deleteButton';
-        }";
     }
 
     /**

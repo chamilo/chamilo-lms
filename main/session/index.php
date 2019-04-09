@@ -412,7 +412,7 @@ $columns_courses = [
     get_lang('NumberOfPublishedLps'),
 ];
 $column_model_courses = [
-    ['name' => 'title', 'index' => 'title', 'width' => '400px', 'align' => 'left', 'sortable' => 'true'],
+    ['name' => 'title', 'index' => 'title', 'width' => '400px', 'align' => 'left', 'sortable' => 'true', 'formatter' => ''],
     //array('name'=>'recent_lps',         'index'=>'recent_lps',          'width'=>'10px',  'align'=>'left',  'sortable'=>'false'),
 //    array('name'=>'max_mutation_date',  'index'=>'max_mutation_date',   'width'=>'120px',  'align'=>'left',  'sortable'=>'true'),
     ['name' => 'exercise_count', 'index' => 'exercise_count', 'width' => '180px', 'align' => 'left', 'sortable' => 'true'],

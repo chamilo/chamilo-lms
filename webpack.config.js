@@ -5,9 +5,9 @@ Encore
     .setOutputPath('public/build/')
     .setManifestKeyPrefix('public/build/')
     // If chamilo is installed in localhost/chamilo2
-    // .setPublicPath('../')
+    .setPublicPath('../')
     // If chamilo is installed in a domain my.chamilo.net
-    .setPublicPath('/public/build')
+    //.setPublicPath('/build')
     .cleanupOutputBeforeBuild()
 
     .addEntry('app', './assets/js/app.js')

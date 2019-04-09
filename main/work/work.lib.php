@@ -533,12 +533,40 @@ function showStudentWorkGrid()
 function showTeacherWorkGrid()
 {
     $columnModel = [
-        ['name' => 'type', 'index' => 'type', 'width' => '35', 'align' => 'center', 'sortable' => 'false'],
-        ['name' => 'title', 'index' => 'title', 'width' => '300', 'align' => 'left', 'wrap_cell' => "true"],
+        [
+            'name' => 'type',
+            'index' => 'type',
+            'width' => '35',
+            'align' => 'center',
+            'sortable' => 'false',
+            'formatter' => '',
+        ],
+        [
+            'name' => 'title',
+            'index' => 'title',
+            'width' => '300',
+            'align' => 'left',
+            'wrap_cell' => "true",
+            'formatter' => '',
+        ],
         ['name' => 'sent_date', 'index' => 'sent_date', 'width' => '125', 'align' => 'center'],
         ['name' => 'expires_on', 'index' => 'expires_on', 'width' => '125', 'align' => 'center'],
-        ['name' => 'amount', 'index' => 'amount', 'width' => '110', 'align' => 'center', 'sortable' => 'false'],
-        ['name' => 'actions', 'index' => 'actions', 'width' => '110', 'align' => 'left', 'sortable' => 'false'],
+        [
+            'name' => 'amount',
+            'index' => 'amount',
+            'width' => '110',
+            'align' => 'center',
+            'sortable' => 'false',
+            'formatter' => '',
+        ],
+        [
+            'name' => 'actions',
+            'index' => 'actions',
+            'width' => '110',
+            'align' => 'left',
+            'sortable' => 'false',
+            'formatter' => '',
+        ],
     ];
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_teacher&'.api_get_cidreq();
     $deleteUrl = api_get_path(WEB_AJAX_PATH).'work.ajax.php?a=delete_work&'.api_get_cidreq();
@@ -4813,12 +4841,14 @@ function showStudentList($workId)
             'width' => '350px',
             'align' => 'left',
             'sortable' => 'false',
+            'formatter' => '',
         ],
         [
             'name' => 'works',
             'index' => 'works',
             'align' => 'center',
             'sortable' => 'false',
+            'formatter' => '',
         ],
     ];
     $token = null;

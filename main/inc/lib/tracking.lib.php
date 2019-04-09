@@ -1550,12 +1550,12 @@ class Tracking
     /**
      * Calculates the time spent on the platform by a user.
      *
-     * @param   int|array User id
-     * @param string $timeFilter type of time filter: 'last_week' or 'custom'
-     * @param string $start_date start date date('Y-m-d H:i:s')
-     * @param string $end_date   end date date('Y-m-d H:i:s')
+     * @param int|array $userId
+     * @param string    $timeFilter type of time filter: 'last_week' or 'custom'
+     * @param string    $start_date start date date('Y-m-d H:i:s')
+     * @param string    $end_date   end date date('Y-m-d H:i:s')
      *
-     * @return int $nb_seconds
+     * @return int
      */
     public static function get_time_spent_on_the_platform(
         $userId,
@@ -1608,9 +1608,9 @@ class Tracking
 
         if ($diff >= 0) {
             return $diff;
-        } else {
-            return -1;
         }
+
+        return -1;
     }
 
     /**
@@ -1796,7 +1796,7 @@ class Tracking
         if (empty($studentList)) {
             return 0;
         }
-        $days = intval($days);
+        $days = (int) $days;
         $date = api_get_utc_datetime(strtotime($days.' days ago'));
         $studentList = array_map('intval', $studentList);
 
@@ -2042,7 +2042,7 @@ class Tracking
         if ($start < 0) {
             $start = 0;
         }
-        if (!isset($stop) or ($stop < 0)) {
+        if (!isset($stop) || $stop < 0) {
             $stop = api_get_utc_datetime();
         }
 
@@ -2053,8 +2053,8 @@ class Tracking
         $roundedStart = Database::escape_string($roundedStart);
         $roundedStop = Database::escape_string($roundedStop);
         $month_filter = " AND login_course_date > '$roundedStart' AND login_course_date < '$roundedStop' ";
-        $courseId = intval($courseId);
-        $session_id = intval($session_id);
+        $courseId = (int) $courseId;
+        $session_id = (int) $session_id;
         $count = 0;
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $sql = "SELECT count(*) as count_connections
@@ -2106,7 +2106,7 @@ class Tracking
      */
     public static function count_course_per_student($user_id, $include_sessions = true)
     {
-        $user_id = intval($user_id);
+        $user_id = (int) $user_id;
         $tbl_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $tbl_session_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
@@ -2363,9 +2363,9 @@ class Tracking
         $courseId,
         $session_id
     ) {
-        $courseId = intval($courseId);
-        $user_id = intval($user_id);
-        $session_id = intval($session_id);
+        $courseId = (int) $courseId;
+        $user_id = (int) $user_id;
+        $session_id = (int) $session_id;
 
         if (empty($exercise_list)) {
             return '0%';

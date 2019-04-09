@@ -3241,11 +3241,11 @@ class Tracking
                     SUM(lp_i.max_score) sum_max_score
                 FROM $lp_table as lp
                 INNER JOIN $lp_item_table as lp_i
-                ON lp.id = lp_id AND lp.c_id = lp_i.c_id
+                ON lp.iid = lp_id AND lp.c_id = lp_i.c_id
                 INNER JOIN $lp_view_table as lp_view
                 ON lp_view.lp_id = lp_i.lp_id AND lp_view.c_id = lp_i.c_id
                 INNER JOIN $lp_item_view_table as lp_iv
-                ON lp_i.id = lp_iv.lp_item_id AND lp_view.c_id = lp_iv.c_id AND lp_iv.lp_view_id = lp_view.id
+                ON lp_i.iid = lp_iv.lp_item_id AND lp_view.c_id = lp_iv.c_id AND lp_iv.lp_view_id = lp_view.iid
                 WHERE (lp_i.item_type='sco' OR lp_i.item_type='".TOOL_QUIZ."') AND
                 $conditionsToString
         ";

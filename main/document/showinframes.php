@@ -421,9 +421,10 @@ if ($execute_iframe) {
             echo "<script>
                     function waitToLoad() {     
                         $('#mainFrame').css('display', 'block');
+                        updateContentHeight();
                     }
                     $(function() {
-                        setTimeout(waitToLoad, 2000);
+                        setTimeout(waitToLoad, 2500);
                     });
             </script>";
         }

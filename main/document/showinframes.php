@@ -424,7 +424,7 @@ if ($execute_iframe) {
                         updateContentHeight();
                     }
                     $(function() {
-                        setTimeout(waitToLoad, 2500);
+                        setTimeout(waitToLoad, 3500);
                     });
             </script>";
         }

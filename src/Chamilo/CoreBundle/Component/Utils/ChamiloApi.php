@@ -357,7 +357,7 @@ class ChamiloApi
     }
 
     /**
-     * Get JavaScript code necessary to load quiz markers-rolls in medialement's Markers Rolls plugin
+     * Get JavaScript code necessary to load quiz markers-rolls in medialement's Markers Rolls plugin.
      *
      * @return string
      */

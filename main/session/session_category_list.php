@@ -109,11 +109,10 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
                     Display::return_icon('new_folder.png', get_lang('AddSessionCategory'), [], ICON_SIZE_MEDIUM),
                     api_get_path(WEB_CODE_PATH).'session/session_category_add.php'
                 );
-                echo Display::url(
+    echo Display::url(
                     Display::return_icon('session.png', get_lang('ListSession'), [], ICON_SIZE_MEDIUM),
                     api_get_path(WEB_CODE_PATH).'session/session_list.php'
-                );
-                ?>
+                ); ?>
             </div>
             <div class="col-md-6">
                 <div class="pull-right">
@@ -166,13 +165,10 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
                         <?php
                     } else {
                         echo get_lang('Next');
-                    }
-
-                    ?>
+                    } ?>
                 </div>
                 <?php
-            }
-            ?>
+            } ?>
 
             <table class="data_table" width="100%">
                 <tr>
@@ -190,12 +186,12 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
 
                 <?php
                 $i = 0;
-                $x = 0;
-                foreach ($Sessions as $key => $enreg) {
-                    if ($key == $limit) {
-                        break;
-                    }
-                    $sql = 'SELECT COUNT(session_category_id)
+            $x = 0;
+            foreach ($Sessions as $key => $enreg) {
+                if ($key == $limit) {
+                    break;
+                }
+                $sql = 'SELECT COUNT(session_category_id)
                         FROM '.$tbl_session.' s 
                         INNER JOIN '.$table_access_url_rel_session.'  us 
                         ON (s.id = us.session_id)
@@ -203,8 +199,8 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
                             s.session_category_id = '.intval($enreg['id']).' AND 
                             us.access_url_id = '.api_get_current_access_url_id();
 
-                    $rs = Database::query($sql);
-                    list($nb_courses) = Database::fetch_array($rs); ?>
+                $rs = Database::query($sql);
+                list($nb_courses) = Database::fetch_array($rs); ?>
                     <tr class="<?php echo $i ? 'row_odd' : 'row_even'; ?>">
                         <td><input type="checkbox" id="idChecked_<?php echo $x; ?>" name="idChecked[]"
                                    value="<?php echo $enreg['id']; ?>"></td>
@@ -235,9 +231,9 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
                     </tr>
                     <?php
                     $i = $i ? 0 : 1;
-                    $x++;
-                }
-                unset($Sessions); ?>
+                $x++;
+            }
+            unset($Sessions); ?>
             </table>
             <br/>
             <div>

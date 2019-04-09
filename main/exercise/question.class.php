@@ -122,7 +122,7 @@ abstract class Question
     /**
      * Reads question information from the data base.
      *
-     * @param int   $id - question ID
+     * @param int   $id              - question ID
      * @param array $course_info
      * @param bool  $getExerciseList
      *

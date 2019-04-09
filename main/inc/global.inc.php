@@ -16,7 +16,6 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
  * @todo remove the code that displays the button that links to the install page
  * but use a redirect immediately. By doing so the $alreadyInstalled variable can be removed.
  */
-
 define('SHOW_ERROR_CODES', false);
 
 // Include the libraries that are necessary everywhere

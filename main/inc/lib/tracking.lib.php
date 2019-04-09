@@ -3995,11 +3995,10 @@ class Tracking
      *
      * @param array|int $student_id
      * @param string    $course_code
-     * @param int       $session_id if param is null(default) return count of assignments including sessions,
-     *                              0 = session is not filtered
+     * @param int       $session_id  if param is null(default) return count of assignments including sessions,
+     *                               0 = session is not filtered
      *
      * @return int Count of assignments
-     *
      */
     public static function count_student_assignments(
         $student_id,

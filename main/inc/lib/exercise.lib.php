@@ -5343,12 +5343,13 @@ EOT;
 
     /**
      * Check if an exercise complies with the requirements to be embedded in the mobile app or a video. By making sure
-     * it is set on one question per page and it only contains unique-answer or multiple-answer questions
+     * it is set on one question per page and it only contains unique-answer or multiple-answer questions.
      *
      * @param array $exercise Exercise info
      *
-     * @return bool
      * @throws \Doctrine\ORM\Query\QueryException
+     *
+     * @return bool
      */
     public static function isQuizEmbeddable(array $exercise)
     {

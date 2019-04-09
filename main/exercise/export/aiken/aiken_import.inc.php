@@ -10,8 +10,6 @@
  * @package chamilo.exercise
  */
 
-use Chamilo\CourseBundle\Entity\CQuizAnswer;
-
 /**
  * This function displays the form for import of the zip file with qti2.
  *

@@ -1,15 +1,20 @@
 {% extends 'layout/layout_1_col.tpl'|get_template %}
-{% import 'macro/macro.tpl'|get_template as display %}
+{% import 'default/macro/macro.tpl' as display %}
 
 {% block content %}
-<div id="personal_data" class="row">
-    <div class="col-md-3">
-        <div class="social-network-menu">
-            {{ social_avatar_block }}
-            {{ social_menu_block }}
+<div class="row">
+    {% set columns = '12' %}
+    {% if social_menu_block %}
+        <div class="col-md-3">
+            <div class="social-network-menu">
+                {{ social_avatar_block }}
+                {{ social_menu_block }}
+            </div>
         </div>
-    </div>
-    <div class="col-md-9">
+        {% set columns = '9' %}
+    {% endif %}
+
+    <div class="col-md-{{ columns }}">
         {{ display.panel('PersonalDataIntroductionTitle' | get_lang , 'PersonalDataIntroductionText' | get_lang) }}
         {{ display.collapse('', 'PersonalDataKeptOnYou' | get_lang, personal_data.data, false, 'false') }}
 
@@ -33,6 +38,7 @@
         </div>
         {% endif %}
         {% if personal_data.officer_name %}
+            {% set officer_data %}
             <div class="panel personal-data-responsible">
                 <div class="panel-title">{{ 'PersonalDataOfficerName' | get_lang }}</div>
                 <div class="personal-data-responsible-description">
@@ -43,6 +49,8 @@
                     {{ personal_data.officer_role }}
                 </div>
             </div>
+            {% endset %}
+            {{ display.panel('PersonalDataOfficer' | get_lang , officer_data ) }}
         {% endif %}
 
         {% if term_link %}

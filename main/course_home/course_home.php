@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Fhaculty\Graph\Graph;
 
 /**
  * HOME PAGE FOR EACH COURSE.
@@ -33,7 +34,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $htmlHeadXtra[] = '<script>
 /* option show/hide thematic-block */
-$(document).ready(function(){
+$(function() {
     $("#thematic-show").click(function(){
         $(".btn-hide-thematic").hide();
         $(".btn-show-thematic").show(); //show using class
@@ -132,27 +133,25 @@ $isSpecialCourse = CourseManager::isSpecialCourse($courseId);
 
 if ($isSpecialCourse) {
     if (isset($_GET['autoreg']) && $_GET['autoreg'] == 1) {
-        if (CourseManager::subscribe_user($user_id, $course_code, STUDENT)) {
+        if (CourseManager::subscribeUser($user_id, $course_code, STUDENT)) {
             Session::write('is_allowed_in_course', true);
         }
     }
 }
 
-if (isset($_GET['action']) && $_GET['action'] == 'subscribe') {
+$action = !empty($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
+
+if ($action == 'subscribe') {
     if (Security::check_token('get')) {
         Security::clear_token();
-        $auth = new Auth();
-        $msg = $auth->subscribe_user($course_code);
-        if (CourseManager::is_user_subscribed_in_course($user_id, $course_code)) {
-            Session::write('is_allowed_in_course', true);
+        $result = CourseManager::autoSubscribeToCourse($course_code);
+        if ($result) {
+            if (CourseManager::is_user_subscribed_in_course($user_id, $course_code)) {
+                Session::write('is_allowed_in_course', true);
+            }
         }
-        if (!empty($msg)) {
-            $show_message .= Display::return_message(
-                get_lang($msg['message']),
-                'info',
-                false
-            );
-        }
+        header('Location: '.api_get_self());
+        exit;
     }
 }
 
@@ -165,6 +164,15 @@ if (!isset($coursesAlreadyVisited[$course_code])) {
     $coursesAlreadyVisited[$course_code] = 1;
     Session::write('coursesAlreadyVisited', $coursesAlreadyVisited);
 }
+
+$logInfo = [
+    'tool' => 'course-main',
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => $action,
+    'info' => '',
+];
+Event::registerLog($logInfo);
 
 /*Auto launch code */
 $autoLaunchWarning = '';
@@ -385,7 +393,11 @@ if ($allow === true) {
                 );
 
                 if (!empty($item) && isset($item['value']) && !empty($item['value'])) {
-                    $graph = unserialize($item['value']);
+                    /** @var Graph $graph */
+                    $graph = UnserializeApi::unserialize(
+                        'career',
+                        $item['value']
+                    );
                     $diagram = Career::renderDiagram($careerInfo, $graph);
                 }
             }

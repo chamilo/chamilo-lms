@@ -56,13 +56,13 @@ api_protect_course_script(true);
 $is_allowedToEdit = api_is_allowed_to_edit(null, true, false, false);
 $sessionId = api_get_session_id();
 $studentViewActive = api_is_student_view_active();
+$showPagination = api_get_configuration_value('show_question_pagination');
+
 if (!$is_allowedToEdit) {
     api_not_allowed(true);
 }
 
-if (empty($exerciseId)) {
-    $exerciseId = isset($_GET['exerciseId']) ? intval($_GET['exerciseId']) : '0';
-}
+$exerciseId = isset($_GET['exerciseId']) ? (int) $_GET['exerciseId'] : '0';
 
 /*  stripslashes POST data  */
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -79,19 +79,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 $newQuestion = isset($_GET['newQuestion']) ? $_GET['newQuestion'] : 0;
-
-if (empty($modifyAnswers)) {
-    $modifyAnswers = isset($_GET['modifyAnswers']) ? $_GET['modifyAnswers'] : 0;
-}
-
+$modifyAnswers = isset($_GET['modifyAnswers']) ? $_GET['modifyAnswers'] : 0;
 $editQuestion = isset($_GET['editQuestion']) ? $_GET['editQuestion'] : 0;
-
-if (empty($modifyQuestion)) {
-    $modifyQuestion = isset($_GET['modifyQuestion']) ? $_GET['modifyQuestion'] : 0;
-}
-if (empty($deleteQuestion)) {
-    $deleteQuestion = isset($_GET['deleteQuestion']) ? $_GET['deleteQuestion'] : 0;
-}
+$page = isset($_GET['page']) && !empty($_GET['page']) ? (int) $_GET['page'] : 1;
+$modifyQuestion = isset($_GET['modifyQuestion']) ? $_GET['modifyQuestion'] : 0;
+$deleteQuestion = isset($_GET['deleteQuestion']) ? $_GET['deleteQuestion'] : 0;
 $clone_question = isset($_REQUEST['clone_question']) ? $_REQUEST['clone_question'] : 0;
 if (empty($questionId)) {
     $questionId = Session::read('questionId');
@@ -124,6 +116,7 @@ if (isset($_REQUEST['convertAnswer'])) {
     Session::write('objQuestion', $objQuestion);
 }
 $objAnswer = Session::read('objAnswer');
+$_course = api_get_course_info();
 
 // document path
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
@@ -166,12 +159,16 @@ if (!is_object($objExercise)) {
 
     // creation of a new exercise if wrong or not specified exercise ID
     if ($exerciseId) {
-        $objExercise->read($exerciseId);
+        $parseQuestionList = $showPagination > 0 ? false : true;
+        if ($editQuestion) {
+            $parseQuestionList = false;
+            $showPagination = true;
+        }
+        $objExercise->read($exerciseId, $parseQuestionList);
     }
     // saves the object into the session
     Session::write('objExercise', $objExercise);
 }
-
 // Exercise can be edited in their course.
 if ($objExercise->sessionId != $sessionId) {
     api_not_allowed(true);
@@ -185,7 +182,7 @@ if (!$fromExercise) {
     }
 }
 
-$nbrQuestions = $objExercise->selectNbrQuestions();
+$nbrQuestions = $objExercise->getQuestionCount();
 
 // Question object creation.
 if ($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
@@ -254,9 +251,9 @@ if (!empty($clone_question) && !empty($objExercise->id)) {
     $new_answer_obj->duplicate($new_question_obj);
 
     // Reloading tne $objExercise obj
-    $objExercise->read($objExercise->id);
+    $objExercise->read($objExercise->id, false);
 
-    header('Location: admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id);
+    header('Location: admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&page='.$page);
     exit;
 }
 
@@ -279,24 +276,24 @@ if (api_is_in_gradebook()) {
     ];
 }
 
-$interbreadcrumb[] = ["url" => "exercise.php?".api_get_cidreq(), 'name' => get_lang('Exercises')];
+$interbreadcrumb[] = ['url' => 'exercise.php?'.api_get_cidreq(), 'name' => get_lang('Exercises')];
 if (isset($_GET['newQuestion']) || isset($_GET['editQuestion'])) {
     $interbreadcrumb[] = [
-        "url" => "admin.php?exerciseId=".$objExercise->id.'&'.api_get_cidreq(),
-        "name" => $objExercise->selectTitle(true),
+        'url' => 'admin.php?exerciseId='.$objExercise->id.'&'.api_get_cidreq(),
+        'name' => $objExercise->selectTitle(true),
     ];
 } else {
     $interbreadcrumb[] = [
-        "url" => "#",
-        "name" => $objExercise->selectTitle(true),
+        'url' => '#',
+        'name' => $objExercise->selectTitle(true),
     ];
 }
 
 // shows a link to go back to the question pool
 if (!$exerciseId && $nameTools != get_lang('ExerciseManagement')) {
     $interbreadcrumb[] = [
-        "url" => api_get_path(WEB_CODE_PATH)."exercise/question_pool.php?fromExercise=$fromExercise&".api_get_cidreq(),
-        "name" => get_lang('QuestionPool'),
+        'url' => api_get_path(WEB_CODE_PATH)."exercise/question_pool.php?fromExercise=$fromExercise&".api_get_cidreq(),
+        'name' => get_lang('QuestionPool'),
     ];
 }
 
@@ -306,6 +303,7 @@ if ($modifyIn == 'thisExercise') {
         $modifyIn = 'allExercises';
     }
 }
+
 $htmlHeadXtra[] = api_get_js('jqueryui-touch-punch/jquery.ui.touch-punch.min.js');
 $htmlHeadXtra[] = api_get_js('jquery.jsPlumb.all.js');
 
@@ -350,12 +348,14 @@ if ($inATest) {
         Display::return_icon('settings.png', get_lang('ModifyExercise'), '', ICON_SIZE_MEDIUM).'</a>';
 
     $maxScoreAllQuestions = 0;
-    $questionList = $objExercise->selectQuestionList(true, true);
-    if (!empty($questionList)) {
-        foreach ($questionList as $questionItemId) {
-            $question = Question::read($questionItemId);
-            if ($question) {
-                $maxScoreAllQuestions += $question->selectWeighting();
+    if ($showPagination === false) {
+        $questionList = $objExercise->selectQuestionList(true, true);
+        if (!empty($questionList)) {
+            foreach ($questionList as $questionItemId) {
+                $question = Question::read($questionItemId);
+                if ($question) {
+                    $maxScoreAllQuestions += $question->selectWeighting();
+                }
             }
         }
     }
@@ -364,17 +364,27 @@ if ($inATest) {
     if ($objExercise->added_in_lp()) {
         echo Display::return_message(get_lang('AddedToLPCannotBeAccessed'), 'warning');
     }
-    echo '<div class="alert alert-info">';
-    echo sprintf(
-        get_lang('XQuestionsWithTotalScoreY'),
-        $objExercise->selectNbrQuestions(),
-        $maxScoreAllQuestions
-    );
-
-    if ($objExercise->random > 0) {
-        echo '<br />'.sprintf(get_lang('OnlyXQuestionsPickedRandomly'), $objExercise->random);
+    if ($editQuestion && $objQuestion->existsInAnotherExercises()) {
+        echo Display::return_message(
+            Display::returnFontAwesomeIcon('exclamation-triangle"')
+                .get_lang('ThisQuestionExistsInAnotherExercisesWarning'),
+            'warning',
+            false
+        );
     }
-    echo '</div>';
+
+    $alert = '';
+    if ($showPagination === false) {
+        $alert .= sprintf(
+            get_lang('XQuestionsWithTotalScoreY'),
+            $nbrQuestions,
+            $maxScoreAllQuestions
+        );
+    }
+    if ($objExercise->random > 0) {
+        $alert .= '<br />'.sprintf(get_lang('OnlyXQuestionsPickedRandomly'), $objExercise->random);
+    }
+    echo Display::return_message($alert, 'normal', false);
 } elseif (isset($_GET['newQuestion'])) {
     // we are in create a new question from question pool not in a test
     echo '<div class="actions">';
@@ -399,7 +409,6 @@ if ($newQuestion || $editQuestion) {
         $objExercise->edit_exercise_in_lp = true;
         require 'question_admin.inc.php';
     }
-
     if ($editQuestion) {
         // Question preview if teacher clicked the "switch to student"
         if ($studentViewActive && $is_allowedToEdit) {

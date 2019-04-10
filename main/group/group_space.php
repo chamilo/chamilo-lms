@@ -15,11 +15,8 @@ $current_course_tool = TOOL_GROUP;
 // Notice for unauthorized people.
 api_protect_course_script(true);
 
-/*	Libraries & config files */
 require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'forum/forumconfig.inc.php';
 
-/*	MAIN CODE */
 $group_id = api_get_group_id();
 $user_id = api_get_user_id();
 $current_group = GroupManager::get_group_properties($group_id);
@@ -367,14 +364,14 @@ if (api_is_western_name_order()) {
     $table->set_header(2, get_lang('FirstName'));
 }
 
-if (api_get_setting('show_email_addresses') == 'true') {
+if (api_get_setting('show_email_addresses') == 'true' || api_is_allowed_to_edit() == 'true') {
     $table->set_header(3, get_lang('Email'));
     $table->set_column_filter(3, 'email_filter');
+    $table->set_header(4, get_lang('Active'));
+    $table->set_column_filter(4, 'activeFilter');
 } else {
-    if (api_is_allowed_to_edit() == 'true') {
-        $table->set_header(3, get_lang('Email'));
-        $table->set_column_filter(3, 'email_filter');
-    }
+    $table->set_header(3, get_lang('Active'));
+    $table->set_column_filter(3, 'activeFilter');
 }
 //the order of these calls is important
 //$table->set_column_filter(1, 'user_name_filter');
@@ -455,11 +452,12 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
 				user.firstname 	AS col2,"
             )."
 				user.email		AS col3
-				FROM $table_user user INNER JOIN 
-				$table_group_user group_rel_user
+				, user.active AS col4
+				FROM $table_user user 
+				INNER JOIN $table_group_user group_rel_user
 				ON (group_rel_user.user_id = user.id)
 				INNER JOIN $tableGroup g
-				ON (group_rel_user.group_id = g.id)
+				ON (group_rel_user.group_id = g.iid)
 				WHERE 
 				    group_rel_user.c_id = $course_id AND 
 				    g.iid = '".$groupInfo['iid']."'
@@ -476,11 +474,12 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
                         "u.lastname 	AS col1,
                         u.firstname 	AS col2,")."
                         u.email		AS col3
+                        , u.active AS col4
                     FROM $table_user u 
                     INNER JOIN $table_group_user gu 
                     ON (gu.user_id = u.id)
                     INNER JOIN $tableGroup g
-				    ON (gu.group_id = g.id)
+				    ON (gu.group_id = g.iid)
                     WHERE 
                         g.iid = '".$groupInfo['iid']."' AND 
                         gu.c_id = $course_id
@@ -497,11 +496,12 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
                     "user.lastname 	AS col1,
 						user.firstname 	AS col2 "
                     )."
+                    , user.active AS col3
                     FROM $table_user user 
                     INNER JOIN $table_group_user group_rel_user
                     ON (group_rel_user.user_id = user.id)
                     INNER JOIN $tableGroup g
-                    ON (group_rel_user.group_id = g.id)
+                    ON (group_rel_user.group_id = g.iid)
                     WHERE 
                         g.iid = '".$groupInfo['iid']."' AND 
                         group_rel_user.c_id = $course_id AND  
@@ -531,6 +531,15 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
 function email_filter($email)
 {
     return Display::encrypted_mailto_link($email, $email);
+}
+
+function activeFilter($isActive)
+{
+    if ($isActive) {
+        return Display::return_icon('accept.png', get_lang('Active'), [], ICON_SIZE_TINY);
+    }
+
+    return Display::return_icon('error.png', get_lang('Inactive'), [], ICON_SIZE_TINY);
 }
 
 /**

@@ -32,6 +32,11 @@ a:focus {
 hr{
     border-top: 1px solid #96bd0d;
 }
+.avatar-icon{
+    text-align: center;
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
 .logo-ofaj{
     padding: 5px;
     margin-bottom: 0;
@@ -2133,4 +2138,122 @@ blockquote p {
 
 #personal_data .panel-default .panel-heading a {
     color: #666;
+}
+.user-data .username{
+    display: inline-block;
+}
+.user-data img.pull-left{
+    margin-right: 0.5em;
+}
+#user_image_block img, #sn-avatar-one a.expand-image img {
+    width: 100px;
+}
+.sidebar-avatar .list-info{
+    font-size: 12px;
+    margin-top: 2rem;
+    border-top: 1px solid #cdcdcd;
+    padding-top: 2rem;
+}
+.sidebar-avatar .list-info dd{
+    margin-bottom: 10px;
+}
+.sidebar-avatar .area-avatar{
+    display: block;
+    width: 100%;
+    position: relative;
+}
+.sidebar-avatar .area-avatar .img-circle{
+    border: 3px solid #96bd0d;
+}
+.sidebar-avatar .area-avatar .avatar-icon{
+    position: absolute;
+    top: 55px;
+    right: 50px;
+    background: #FFF;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    border: 2px solid #cdcdcd;
+}
+.sidebar-avatar .area-avatar .avatar-lm h5,
+.sidebar-avatar .area-avatar .avatar-lc h5{
+    font-weight: bold;
+}
+.sidebar-avatar .area-avatar .avatar-lm{
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-align: center;
+}
+.sidebar-avatar .area-avatar .avatar-lc{
+    position: absolute;
+    top: 0;
+    right: 0;
+    text-align: center;
+}
+.sidebar-avatar .item-name h5{
+    font-weight: bold;
+}
+.sidebar-avatar .edit-admin{
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+}
+.category-title{
+    border-bottom: 1px solid #CDCDCD;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+.category-title h3{
+    font-weight: bold;
+}
+.category-forum .tools img{
+    border: 1px solid #cdcdcd;
+    padding: 2px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    margin-right: 5px;
+    width: 26px;
+}
+.category-forum .tools img:hover{
+    background-color: #cdcdcd;
+}
+.category-forum .tools .toolbar{
+    margin-top: 10px;
+}
+.category-forum .number-post img{
+    width: 32px;
+}
+.category-forum .number-post{
+    font-size: 12px;
+}
+.category-forum .panel.panel-default{
+    border: 1px solid #ddd !important;
+    padding: 10px;
+}
+.category-forum .forum-date{
+    border-bottom: 1px solid #cdcdcd;
+    margin-bottom: 10px;
+    color: #3b8dc4;
+}
+.search-friend{
+    padding-bottom: 10px;
+    border-bottom: 1px solid #cdcdcd;
+    padding-top: 10px;
+    margin-bottom: 15px;
+}
+.btn-maps{
+    border-radius: 5px;
+    border-color: #cccccc;
+    background-color: #ffffff;
+    color: #7a7a7a;
+}
+.btn-maps:hover{
+    background-color: #f5f6f7 !important;
+    color: #7a7a7a;
+    border-color: #bababa;
+}
+
+.post-attachment {
+    text-align: center;
 }

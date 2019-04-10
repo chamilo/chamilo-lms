@@ -18,6 +18,17 @@ $json = ['status' => false];
 $courseChatUtils = new CourseChatUtils($courseId, $userId, $sessionId, $groupId);
 
 switch ($_REQUEST['action']) {
+    case 'chat_logout':
+        $logInfo = [
+            'tool' => TOOL_CHAT,
+            'tool_id' => 0,
+            'tool_id_detail' => 0,
+            'action' => 'exit',
+            'action_details' => 'exit-chat',
+            'info' => '',
+        ];
+        Event::registerLog($logInfo);
+        break;
     case 'track':
         $courseChatUtils->keepUserAsConnected();
         $courseChatUtils->disconnectInactiveUsers();

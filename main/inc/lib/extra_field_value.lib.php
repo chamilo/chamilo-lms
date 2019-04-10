@@ -116,6 +116,8 @@ class ExtraFieldValue extends Model
         $extraField = new ExtraField($this->type);
         $extraFields = $extraField->get_all(null, 'option_order');
         $resultsExist = [];
+
+        $dirPermissions = api_get_permissions_for_new_directories();
         // Parse params
         foreach ($extraFields as $fieldDetails) {
             if ($forceSave === false) {
@@ -152,9 +154,23 @@ class ExtraFieldValue extends Model
 
             $commentVariable = 'extra_'.$field_variable.'_comment';
             $comment = isset($params[$commentVariable]) ? $params[$commentVariable] : null;
-            $dirPermissions = api_get_permissions_for_new_directories();
 
             switch ($extraFieldInfo['field_type']) {
+                case ExtraField::FIELD_TYPE_GEOLOCALIZATION_COORDINATES:
+                case ExtraField::FIELD_TYPE_GEOLOCALIZATION:
+                    if (!empty($value)) {
+                        if (isset($params['extra_'.$extraFieldInfo['variable'].'_coordinates'])) {
+                            $value = $value.'::'.$params['extra_'.$extraFieldInfo['variable'].'_coordinates'];
+                        }
+                        $newParams = [
+                            'item_id' => $params['item_id'],
+                            'field_id' => $extraFieldInfo['id'],
+                            'value' => $value,
+                            'comment' => $comment,
+                        ];
+                        self::save($newParams, $showQuery);
+                    }
+                    break;
                 case ExtraField::FIELD_TYPE_TAG:
                     if ($type == EntityExtraField::USER_FIELD_TYPE) {
                         UserManager::delete_user_tags(
@@ -182,9 +198,7 @@ class ExtraFieldValue extends Model
                     foreach ($currentTags as $extraFieldtag) {
                         $em->remove($extraFieldtag);
                     }
-
                     $em->flush();
-
                     $tagValues = is_array($value) ? $value : [$value];
                     $tags = [];
 
@@ -193,8 +207,7 @@ class ExtraFieldValue extends Model
                             continue;
                         }
 
-                        $tagsResult = $em
-                            ->getRepository('ChamiloCoreBundle:Tag')
+                        $tagsResult = $em->getRepository('ChamiloCoreBundle:Tag')
                             ->findBy([
                                 'tag' => $tagValue,
                                 'fieldId' => $extraFieldInfo['id'],
@@ -341,7 +354,6 @@ class ExtraFieldValue extends Model
                         'value' => $fieldToSave,
                         'comment' => $comment,
                     ];
-
                     $this->save($newParams);
 
                     break;
@@ -352,7 +364,7 @@ class ExtraFieldValue extends Model
                         'value' => $value,
                         'comment' => $comment,
                     ];
-                    self::save($newParams, $showQuery);
+                    $this->save($newParams, $showQuery);
             }
         }
 
@@ -372,6 +384,13 @@ class ExtraFieldValue extends Model
                 }
 
                 $userId = $params['item_id'];
+
+                // Check if user has a photo
+                $userInfo = api_get_user_info($userId);
+                if (empty($userInfo['picture_uri'])) {
+                    $profileCompleted = 0;
+                }
+
                 $table = Database::get_main_table(TABLE_MAIN_USER);
                 $sql = "UPDATE $table SET profile_completed = $profileCompleted WHERE user_id = $userId";
                 Database::query($sql);

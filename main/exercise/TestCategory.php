@@ -22,6 +22,8 @@ class TestCategory
      */
     public function __construct()
     {
+        $this->name = '';
+        $this->description = '';
     }
 
     /**
@@ -73,15 +75,15 @@ class TestCategory
 
         // check if name already exists
         $sql = "SELECT count(*) AS nb FROM $table
-                WHERE title = '".$this->name."' AND c_id = $courseId";
+                WHERE title = '".Database::escape_string($this->name)."' AND c_id = $courseId";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         // lets add in BDD if not the same name
         if ($row['nb'] <= 0) {
             $params = [
                 'c_id' => $courseId,
-                'title' => (string) $this->name,
-                'description' => (string) $this->description,
+                'title' => $this->name,
+                'description' => $this->description,
             ];
             $newId = Database::insert($table, $params);
 
@@ -116,7 +118,7 @@ class TestCategory
     {
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $tbl_question_rel_cat = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-        $id = intval($id);
+        $id = (int) $id;
         $course_id = api_get_course_int_id();
         $category = $this->getCategory($id);
 
@@ -130,9 +132,9 @@ class TestCategory
                     WHERE category_id = $id AND c_id=".$course_id;
             Database::query($sql);
             // item_property update
-            $course_info = api_get_course_info_by_id($course_id);
+            $courseInfo = api_get_course_info_by_id($course_id);
             api_item_property_update(
-                $course_info,
+                $courseInfo,
                 TOOL_TEST_CATEGORY,
                 $this->id,
                 'TestCategoryDeleted',
@@ -193,7 +195,7 @@ class TestCategory
     public function getCategoryQuestionsNumber()
     {
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-        $id = intval($this->id);
+        $id = (int) $this->id;
         $sql = "SELECT count(*) AS nb
                 FROM $table
                 WHERE category_id = $id AND c_id=".api_get_course_int_id();
@@ -305,10 +307,8 @@ class TestCategory
      *
      * @return string
      */
-    public static function getCategoryNameForQuestion(
-        $questionId,
-        $courseId = 0
-    ) {
+    public static function getCategoryNameForQuestion($questionId, $courseId = 0)
+    {
         if (empty($courseId)) {
             $courseId = api_get_course_int_id();
         }
@@ -399,9 +399,7 @@ class TestCategory
     public static function getListOfCategoriesNameForTest($exerciseId, $grouped_by_category = true)
     {
         $result = [];
-        $categories = self::getListOfCategoriesIDForTest(
-            $exerciseId
-        );
+        $categories = self::getListOfCategoriesIDForTest($exerciseId);
 
         foreach ($categories as $catInfo) {
             $categoryId = $catInfo['id'];
@@ -552,7 +550,7 @@ class TestCategory
         $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $TBL_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
         $categoryTable = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $exerciseId = intval($exerciseId);
+        $exerciseId = (int) $exerciseId;
         $courseId = api_get_course_int_id();
 
         $sql = "SELECT DISTINCT qrc.question_id, qrc.category_id
@@ -652,7 +650,7 @@ class TestCategory
      * @param int $questionId
      * @param int $in_display_category_name
      *
-     * @return null|string
+     * @return string|null
      */
     public static function returnCategoryAndTitle($questionId, $in_display_category_name = 1)
     {
@@ -699,7 +697,7 @@ class TestCategory
     {
         $tabResult = [];
         $tabCatName = []; // tab of category name
-        while (list($cat_id, $tabquestion) = each($in_tab)) {
+        foreach ($in_tab as $cat_id => $tabquestion) {
             $category = new TestCategory();
             $category = $category->getCategory($cat_id);
             $tabCatName[$cat_id] = $category->name;
@@ -708,7 +706,7 @@ class TestCategory
         // sort table by value, keeping keys as they are
         asort($tabCatName);
         // keys of $tabCatName are keys order for $in_tab
-        while (list($key, $val) = each($tabCatName)) {
+        foreach ($tabCatName as $key => $val) {
             $tabResult[$key] = $in_tab[$key];
         }
 
@@ -723,9 +721,9 @@ class TestCategory
     {
         $tbl_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $tbl_question_rel_category = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-        $in_cat_id = intval($in_cat_id);
-        $in_exe_id = intval($in_exe_id);
-        $in_user_id = intval($in_user_id);
+        $in_cat_id = (int) $in_cat_id;
+        $in_exe_id = (int) $in_exe_id;
+        $in_user_id = (int) $in_user_id;
 
         $query = "SELECT DISTINCT
                         marks, 
@@ -735,7 +733,7 @@ class TestCategory
                         category_id
                   FROM $tbl_track_attempt ta 
                   INNER JOIN $tbl_question_rel_category qrc
-                  ON (ta.question_id=qrc.question_id)
+                  ON (ta.question_id = qrc.question_id)
                   WHERE
                     qrc.category_id = $in_cat_id AND
                     exe_id = $in_exe_id AND 
@@ -937,12 +935,15 @@ class TestCategory
         $courseId = (int) $courseId;
         $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
         $categoryTable = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
+        $exercise->id = (int) $exercise->id;
+
         $sql = "SELECT * FROM $table qc
                 LEFT JOIN $categoryTable c
                 ON (qc.c_id = c.c_id AND c.id = qc.category_id)
                 WHERE qc.c_id = $courseId AND exercise_id = {$exercise->id} ";
 
         if (!empty($order)) {
+            $order = Database::escape_string($order);
             $sql .= "ORDER BY $order";
         }
 
@@ -1158,7 +1159,7 @@ class TestCategory
         if (empty($courseId)) {
             $courseId = api_get_course_int_id();
         }
-        $courseId = intval($courseId);
+        $courseId = (int) $courseId;
         $tbl_cat = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $sql = "SELECT id FROM $tbl_cat
                 WHERE c_id = $courseId AND title = '".Database::escape_string($title)."'";

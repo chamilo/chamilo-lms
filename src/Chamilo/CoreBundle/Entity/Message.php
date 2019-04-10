@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -98,6 +99,22 @@ class Message
      * @ORM\Column(name="votes", type="integer", nullable=true)
      */
     protected $votes;
+
+    /**
+     * @var ArrayCollection
+     *
+     * Add @ to the next line if api_get_configuration_value('social_enable_likes_messages') is true
+     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\MessageLikes", mappedBy="message", orphanRemoval=true)
+     */
+    protected $likes;
+
+    /**
+     * Message constructor.
+     */
+    public function __construct()
+    {
+        $this->likes = new ArrayCollection();
+    }
 
     /**
      * Set userSenderId.

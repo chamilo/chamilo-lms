@@ -597,25 +597,29 @@ class SkillRelUser extends Model
      *
      * @param int $userId    The user id
      * @param int $skillId   The skill id
-     * @param int $courseId  The course id
+     * @param int $courseId  Optional. The course id
      * @param int $sessionId Optional. The session id
      *
      * @return array The relation data. Otherwise return false
      */
-    public function getByUserAndSkill($userId, $skillId, $courseId, $sessionId = 0)
+    public function getByUserAndSkill($userId, $skillId, $courseId = 0, $sessionId = 0)
     {
-        $where = [
-            'user_id = ? AND skill_id = ? AND course_id = ? AND session_id = ?' => [
-                intval($userId),
-                intval($skillId),
-                intval($courseId),
-                $sessionId ? intval($sessionId) : null,
-            ],
-        ];
+        $sql = "SELECT * FROM {$this->table} WHERE user_id = %d AND skill_id = %d ";
 
-        return Database::select('*', $this->table, [
-            'where' => $where,
-        ], 'first');
+        if ($courseId > 0) {
+            $sql .= "AND course_id = %d ".api_get_session_condition($sessionId, true);
+        }
+
+        $sql = sprintf(
+            $sql,
+            $userId,
+            $skillId,
+            $courseId
+        );
+
+        $result = Database::query($sql);
+
+        return Database::fetch_assoc($result);
     }
 
     /**
@@ -834,10 +838,10 @@ class Skill extends Model
 
             $item = '';
             if ($showBadge) {
-                $item = $skill[$imageSize];
+                $item = '<div class="item">'.$skill[$imageSize].'</div>';
             }
 
-            $name = $skill['name'];
+            $name = '<div class="caption">'.$skill['name'].'</div>';
             if (!empty($skill['short_code'])) {
                 $name = $skill['short_code'];
             }
@@ -1300,7 +1304,7 @@ class Skill extends Model
             foreach ($skills as $skill) {
                 if ($getSkillData) {
                     $skillData = $this->get($skill['id']);
-                    $skillData['url'] = api_get_path(WEB_PATH).'badge/'.$skill['issue'].'/user/'.$userId;
+                    $skillData['url'] = api_get_path(WEB_PATH).'badge/'.$skill['id'].'/user/'.$userId;
                     $skillList[$skill['id']] = array_merge($skill, $skillData);
                 } else {
                     $skillList[$skill['id']] = $skill['id'];
@@ -1383,7 +1387,6 @@ class Skill extends Model
     public function getUserSkillsTable($userId, $courseId = 0, $sessionId = 0, $addTitle = true)
     {
         $skills = $this->getUserSkills($userId, true, $courseId, $sessionId);
-
         $courseTempList = [];
         $tableRows = [];
         $skillParents = [];
@@ -1408,11 +1411,11 @@ class Skill extends Model
                     $courseTempList[$courseId] = $courseInfo;
                 }
             }
-
             $tableRow = [
-                'skill_badge' => $resultData['img_mini'],
+                'skill_badge' => $resultData['img_small'],
                 'skill_name' => self::translateName($resultData['name']),
                 'short_code' => $resultData['short_code'],
+                'skill_url' => $resultData['url'],
                 'achieved_at' => api_get_local_time($resultData['acquired_skill_at']),
                 'course_image' => '',
                 'course_name' => '',
@@ -1434,15 +1437,9 @@ class Skill extends Model
         }
 
         if ($addTitle) {
-            $tableResult .= '
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>'.get_lang('AchievedSkills').'</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <tr><td>';
+            $tableResult .= '<div class="header-title">'.get_lang('AchievedSkills').'</div>
+                    <div class="skills-badges">
+                   ';
         }
 
         if (!empty($skillParents)) {
@@ -1542,11 +1539,7 @@ class Skill extends Model
         }
 
         if ($addTitle) {
-            $tableResult .= '</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                ';
+            $tableResult .= '</div>';
         }
         $tableResult .= '</div>';
 
@@ -2194,8 +2187,10 @@ class Skill extends Model
      */
     public static function isAllowed($studentId = 0, $blockPage = true)
     {
+        $allowHR = api_get_setting('allow_hr_skills_management') === 'true';
+
         if (self::isToolAvailable()) {
-            if (api_is_platform_admin()) {
+            if (api_is_platform_admin(false, $allowHR)) {
                 return true;
             }
 

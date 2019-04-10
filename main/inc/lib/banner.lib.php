@@ -182,19 +182,24 @@ function getCustomTabs()
 /**
  * Return the active logo of the portal, based on a series of settings.
  *
- * @param string $theme The name of the theme folder from web/css/themes/
+ * @param string $theme      The name of the theme folder from web/css/themes/
+ * @param bool   $responsive add class img-responsive
  *
  * @return string HTML string with logo as an HTML element
  */
-function return_logo($theme = '')
+function return_logo($theme = '', $responsive = true)
 {
     $siteName = api_get_setting('siteName');
+    $class = 'img-responsive';
+    if (!$responsive) {
+        $class = '';
+    }
 
     return ChamiloApi::getPlatformLogo(
         $theme,
         [
             'title' => $siteName,
-            'class' => 'img-responsive',
+            'class' => $class,
             'id' => 'header-logo',
         ]
     );
@@ -827,7 +832,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
             }
         }
 
-	if (!empty($lis)) {
+        if (!empty($lis)) {
             //Ofaj
             $html .= Display::tag('ul', get_lang('YouAreHere').': '.$lis, ['class' => 'breadcrumb']);
         }

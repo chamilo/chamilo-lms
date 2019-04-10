@@ -78,14 +78,15 @@ class Documents extends Basic
                 'NumberedList',
                 'BulletedList',
                 '-',
+                api_get_configuration_value('translate_html') ? 'Language' : '',
                 api_get_setting('allow_spellcheck') === 'true' ? 'Scayt' : '',
-                'Source',
             ],
             '/',
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['Bold', 'Italic', 'Underline'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight'],
             api_get_setting('enabled_wiris') === 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
+            ['Source'],
         ];
     }
 
@@ -123,6 +124,7 @@ class Documents extends Basic
                 'BGColor',
             ],
             [
+                'Language',
                 'ShowBlocks',
                 'Source',
             ],

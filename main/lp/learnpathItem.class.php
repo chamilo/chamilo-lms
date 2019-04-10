@@ -89,7 +89,7 @@ class learnpathItem
      * @param int        $id           Learning path item ID
      * @param int        $user_id      User ID
      * @param int        $course_id    Course int id
-     * @param null|array $item_content An array with the contents of the item
+     * @param array|null $item_content An array with the contents of the item
      */
     public function __construct(
         $id,
@@ -1889,14 +1889,62 @@ class learnpathItem
             $sessionLifetime = 3600;
         }
 
-        $fixedAddedMinute = 5 * 60; // Add only 5 minutes
-        if ($time > $sessionLifetime) {
-            error_log("fixAbusiveTime: Total time is too big: $time replaced with: $fixedAddedMinute");
-            error_log("item_id : ".$this->db_id." lp_item_view.iid: ".$this->db_item_view_id);
-            $time = $fixedAddedMinute;
-        }
+        if (!Tracking::minimunTimeAvailable(api_get_session_id(), api_get_course_int_id())) {
+            $fixedAddedMinute = 5 * 60; // Add only 5 minutes
+            if ($time > $sessionLifetime) {
+                error_log("fixAbusiveTime: Total time is too big: $time replaced with: $fixedAddedMinute");
+                error_log("item_id : ".$this->db_id." lp_item_view.iid: ".$this->db_item_view_id);
+                $time = $fixedAddedMinute;
+            }
 
-        return $time;
+            return $time;
+        } else {
+            // Calulate minimum and accumulated time
+            $user_id = api_get_user_id();
+            $myLP = learnpath::getLpFromSession(api_get_course_id(), $this->lp_id, $user_id);
+            $timeLp = $myLP->getAccumulateWorkTime();
+            $timeTotalCourse = $myLP->getAccumulateWorkTimeTotalCourse();
+            /*
+            $timeLp = $_SESSION['oLP']->getAccumulateWorkTime();
+            $timeTotalCourse = $_SESSION['oLP']->getAccumulateWorkTimeTotalCourse();
+            */
+            // Minimum connection percentage
+            $perc = 100;
+            // Time from the course
+            $tc = $timeTotalCourse;
+            /*if (!empty($sessionId) && $sessionId != 0) {
+                $sql = "SELECT hours, perc FROM plugin_licences_course_session WHERE session_id = $sessionId";
+                $res = Database::query($sql);
+                if (Database::num_rows($res) > 0) {
+                    $aux = Database::fetch_assoc($res);
+                    $perc = $aux['perc'];
+                    $tc = $aux['hours'] * 60;
+                }
+            }*/
+            // Percentage of the learning paths
+            $pl = 0;
+            if (!empty($timeTotalCourse)) {
+                $pl = $timeLp / $timeTotalCourse;
+            }
+
+            // Minimum time for each learning path
+            $accumulateWorkTime = ($pl * $tc * $perc / 100);
+            $time_seg = intval($accumulateWorkTime * 60);
+
+            if ($time_seg < $sessionLifetime) {
+                $sessionLifetime = $time_seg;
+            }
+
+            if ($time > $sessionLifetime) {
+                $fixedAddedMinute = $time_seg + mt_rand(0, 300);
+                if (self::DEBUG > 2) {
+                    error_log("Total time is too big: $time replaced with: $fixedAddedMinute");
+                }
+                $time = $fixedAddedMinute;
+            }
+
+            return $time;
+        }
     }
 
     /**
@@ -2088,7 +2136,8 @@ class learnpathItem
      */
     public function parse_prereq($prereqs_string, $items, $refs_list, $user_id)
     {
-        if (self::DEBUG > 0) {
+        $debug = self::DEBUG;
+        if ($debug > 0) {
             error_log(
                 'learnpathItem::parse_prereq() for learnpath '.$this->lp_id.' with string '.$prereqs_string,
                 0
@@ -2150,7 +2199,7 @@ class learnpathItem
         // Parenthesis removed, now look for ORs as it is the lesser-priority
         //  binary operator (= always uses one text operand).
         if (strpos($prereqs_string, '|') === false) {
-            if (self::DEBUG > 1) {
+            if ($debug) {
                 error_log('New LP - Didnt find any OR, looking for AND', 0);
             }
             if (strpos($prereqs_string, '&') !== false) {
@@ -2166,7 +2215,7 @@ class learnpathItem
                         );
 
                         if (!$andstatus) {
-                            if (self::DEBUG > 1) {
+                            if ($debug) {
                                 error_log(
                                     'New LP - One condition in AND was false, short-circuit',
                                     0
@@ -2175,10 +2224,9 @@ class learnpathItem
                             break;
                         }
                     }
+
                     if (empty($this->prereq_alert) && !$andstatus) {
-                        $this->prereq_alert = get_lang(
-                            'LearnpathPrereqNotCompleted'
-                        );
+                        $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
                     }
 
                     return $andstatus;
@@ -2198,12 +2246,12 @@ class learnpathItem
                 }
             } else {
                 // No ORs found, now look for ANDs.
-                if (self::DEBUG > 1) {
+                if ($debug) {
                     error_log('New LP - Didnt find any AND, looking for =', 0);
                 }
 
                 if (strpos($prereqs_string, '=') !== false) {
-                    if (self::DEBUG > 1) {
+                    if ($debug) {
                         error_log('New LP - Found =, looking into it', 0);
                     }
                     // We assume '=' signs only appear when there's nothing else around.
@@ -2225,7 +2273,7 @@ class learnpathItem
                     }
                 } else {
                     // No ANDs found, look for <>
-                    if (self::DEBUG > 1) {
+                    if ($debug) {
                         error_log(
                             'New LP - Didnt find any =, looking for <>',
                             0
@@ -2233,7 +2281,7 @@ class learnpathItem
                     }
 
                     if (strpos($prereqs_string, '<>') !== false) {
-                        if (self::DEBUG > 1) {
+                        if ($debug) {
                             error_log('New LP - Found <>, looking into it', 0);
                         }
                         // We assume '<>' signs only appear when there's nothing else around.
@@ -2255,7 +2303,7 @@ class learnpathItem
                         }
                     } else {
                         // No <> found, look for ~ (unary)
-                        if (self::DEBUG > 1) {
+                        if ($debug) {
                             error_log(
                                 'New LP - Didnt find any =, looking for ~',
                                 0
@@ -2264,7 +2312,7 @@ class learnpathItem
                         // Only remains: ~ and X*{}
                         if (strpos($prereqs_string, '~') !== false) {
                             // Found NOT.
-                            if (self::DEBUG > 1) {
+                            if ($debug) {
                                 error_log(
                                     'New LP - Found ~, looking into it',
                                     0
@@ -2290,7 +2338,7 @@ class learnpathItem
                                 return $returnstatus;
                             } else {
                                 // Strange...
-                                if (self::DEBUG > 1) {
+                                if ($debug) {
                                     error_log(
                                         'New LP - Found ~ but strange string: '.$prereqs_string,
                                         0
@@ -2299,7 +2347,7 @@ class learnpathItem
                             }
                         } else {
                             // Finally, look for sets/groups
-                            if (self::DEBUG > 1) {
+                            if ($debug) {
                                 error_log(
                                     'New LP - Didnt find any ~, looking for groups',
                                     0
@@ -2317,7 +2365,7 @@ class learnpathItem
                                 foreach ($groups[1] as $gr) {
                                     // Only take the results that correspond to
                                     //  the big brackets-enclosed condition.
-                                    if (self::DEBUG > 1) {
+                                    if ($debug) {
                                         error_log(
                                             'New LP - Dealing with group '.$gr,
                                             0
@@ -2331,7 +2379,7 @@ class learnpathItem
                                         $multi
                                     )
                                     ) {
-                                        if (self::DEBUG > 1) {
+                                        if ($debug) {
                                             error_log(
                                                 'New LP - Found multiplier '.$multi[0],
                                                 0
@@ -2347,7 +2395,7 @@ class learnpathItem
                                                     $status == $this->possible_status[3]
                                                 ) {
                                                     $mytrue++;
-                                                    if (self::DEBUG > 1) {
+                                                    if ($debug) {
                                                         error_log(
                                                             'New LP - Found true item, counting.. ('.($mytrue).')',
                                                             0
@@ -2355,7 +2403,7 @@ class learnpathItem
                                                     }
                                                 }
                                             } else {
-                                                if (self::DEBUG > 1) {
+                                                if ($debug) {
                                                     error_log(
                                                         'New LP - item '.$cond.' does not exist in items list',
                                                         0
@@ -2364,7 +2412,7 @@ class learnpathItem
                                             }
                                         }
                                         if ($mytrue >= $count) {
-                                            if (self::DEBUG > 1) {
+                                            if ($debug) {
                                                 error_log(
                                                     'New LP - Got enough true results, return true',
                                                     0
@@ -2372,7 +2420,7 @@ class learnpathItem
                                             }
                                             $mycond = true;
                                         } else {
-                                            if (self::DEBUG > 1) {
+                                            if ($debug) {
                                                 error_log(
                                                     'New LP - Not enough true results',
                                                     0
@@ -2380,7 +2428,7 @@ class learnpathItem
                                             }
                                         }
                                     } else {
-                                        if (self::DEBUG > 1) {
+                                        if ($debug) {
                                             error_log(
                                                 'New LP - No multiplier',
                                                 0
@@ -2395,14 +2443,14 @@ class learnpathItem
                                                     $status == $this->possible_status[3]
                                                 ) {
                                                     $mycond = true;
-                                                    if (self::DEBUG > 1) {
+                                                    if ($debug) {
                                                         error_log(
                                                             'New LP - Found true item',
                                                             0
                                                         );
                                                     }
                                                 } else {
-                                                    if (self::DEBUG > 1) {
+                                                    if ($debug) {
                                                         error_log(
                                                             'New LP - '.
                                                             ' Found false item, the set is not true, return false',
@@ -2413,13 +2461,13 @@ class learnpathItem
                                                     break;
                                                 }
                                             } else {
-                                                if (self::DEBUG > 1) {
+                                                if ($debug) {
                                                     error_log(
                                                         'New LP - item '.$cond.' does not exist in items list',
                                                         0
                                                     );
                                                 }
-                                                if (self::DEBUG > 1) {
+                                                if ($debug) {
                                                     error_log(
                                                         'New LP - Found false item, the set is not true, return false',
                                                         0
@@ -2439,7 +2487,7 @@ class learnpathItem
                             } else {
                                 // Nothing found there either. Now return the
                                 // value of the corresponding resource completion status.
-                                if (self::DEBUG > 1) {
+                                if ($debug) {
                                     error_log(
                                         'New LP - Didnt find any group, returning value for '.$prereqs_string,
                                         0
@@ -2451,7 +2499,8 @@ class learnpathItem
                                 ) {
                                     /** @var learnpathItem $itemToCheck */
                                     $itemToCheck = $items[$refs_list[$prereqs_string]];
-                                    if ($itemToCheck->type == 'quiz') {
+
+                                    if ($itemToCheck->type === 'quiz') {
                                         // 1. Checking the status in current items.
                                         $status = $itemToCheck->get_status(true);
                                         $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
@@ -2462,14 +2511,14 @@ class learnpathItem
                                                 $itemToCheck->get_title()
                                             );
                                             $this->prereq_alert = $explanation;
-                                            if (self::DEBUG > 1) {
+                                            if ($debug) {
                                                 error_log(
                                                     'New LP - Prerequisite '.$prereqs_string.' not complete',
                                                     0
                                                 );
                                             }
                                         } else {
-                                            if (self::DEBUG > 1) {
+                                            if ($debug) {
                                                 error_log(
                                                     'New LP - Prerequisite '.$prereqs_string.' complete',
                                                     0
@@ -2495,8 +2544,18 @@ class learnpathItem
                                                         LIMIT 0, 1';
                                                 $rs_quiz = Database::query($sql);
                                                 if ($quiz = Database::fetch_array($rs_quiz)) {
-                                                    $minScore = $items[$refs_list[$this->get_id()]]->getPrerequisiteMinScore();
-                                                    $maxScore = $items[$refs_list[$this->get_id()]]->getPrerequisiteMaxScore();
+                                                    /** @var learnpathItem $myItemToCheck */
+                                                    $myItemToCheck = $items[$refs_list[$this->get_id()]];
+                                                    $minScore = $myItemToCheck->getPrerequisiteMinScore();
+                                                    $maxScore = $myItemToCheck->getPrerequisiteMaxScore();
+
+                                                    /*if (empty($minScore)) {
+                                                        // Try with mastery_score
+                                                        $masteryScoreAsMin = $myItemToCheck->get_mastery_score();
+                                                        if (!empty($masteryScoreAsMin)) {
+                                                            $minScore = $masteryScoreAsMin;
+                                                        }
+                                                    }*/
 
                                                     if (isset($minScore) && isset($minScore)) {
                                                         // Taking min/max prerequisites values see BT#5776
@@ -2542,17 +2601,29 @@ class learnpathItem
                                                         exe_exo_id = '.$items[$refs_list[$prereqs_string]]->path.' AND
                                                         exe_user_id = '.$user_id.' AND
                                                         orig_lp_id = '.$this->lp_id.' AND
-                                                        orig_lp_item_id = '.$prereqs_string.' ';
+                                                        orig_lp_item_id = '.$prereqs_string;
 
                                             $rs_quiz = Database::query($sql);
                                             if (Database::num_rows($rs_quiz) > 0) {
                                                 while ($quiz = Database::fetch_array($rs_quiz)) {
-                                                    $minScore = $items[$refs_list[$this->get_id()]]->getPrerequisiteMinScore();
-                                                    $maxScore = $items[$refs_list[$this->get_id()]]->getPrerequisiteMaxScore();
+                                                    /** @var learnpathItem $myItemToCheck */
+                                                    $myItemToCheck = $items[$refs_list[$this->get_id()]];
+                                                    $minScore = $myItemToCheck->getPrerequisiteMinScore();
+                                                    $maxScore = $myItemToCheck->getPrerequisiteMaxScore();
+
+                                                    if (empty($minScore)) {
+                                                        // Try with mastery_score
+                                                        $masteryScoreAsMin = $myItemToCheck->get_mastery_score();
+                                                        if (!empty($masteryScoreAsMin)) {
+                                                            $minScore = $masteryScoreAsMin;
+                                                        }
+                                                    }
 
                                                     if (isset($minScore) && isset($minScore)) {
                                                         // Taking min/max prerequisites values see BT#5776
-                                                        if ($quiz['exe_result'] >= $minScore && $quiz['exe_result'] <= $maxScore) {
+                                                        if ($quiz['exe_result'] >= $minScore &&
+                                                            $quiz['exe_result'] <= $maxScore
+                                                        ) {
                                                             $returnstatus = true;
                                                             break;
                                                         } else {
@@ -2578,6 +2649,24 @@ class learnpathItem
                                             } else {
                                                 $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
                                                 $returnstatus = false;
+                                            }
+                                        }
+
+                                        return $returnstatus;
+                                    } elseif ($itemToCheck->type === 'student_publication') {
+                                        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+                                        $workId = $items[$refs_list[$prereqs_string]]->path;
+                                        $count = get_work_count_by_student($user_id, $workId);
+                                        if ($count >= 1) {
+                                            $returnstatus = true;
+                                        } else {
+                                            $returnstatus = false;
+                                            $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
+                                            if (self::DEBUG > 1) {
+                                                error_log(
+                                                    'Student pub, prereq'.$prereqs_string.' not completed',
+                                                    0
+                                                );
                                             }
                                         }
 
@@ -2651,6 +2740,8 @@ class learnpathItem
 
                                                 return $returnstatus;
                                             }
+                                        } else {
+                                            return $returnstatus;
                                         }
                                     }
                                 } else {
@@ -2701,9 +2792,7 @@ class learnpathItem
                     }
                 }
                 if (!$orstatus && empty($this->prereq_alert)) {
-                    $this->prereq_alert = get_lang(
-                        'LearnpathPrereqNotCompleted'
-                    );
+                    $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
                 }
 
                 return $orstatus;
@@ -4238,7 +4327,7 @@ class learnpathItem
     /**
      * Adds an audio file attached to the current item (store on disk and in db).
      *
-     * @return bool|null|string
+     * @return bool|string|null
      */
     public function add_audio()
     {

@@ -104,7 +104,7 @@ function save_data($users_courses)
                     $course_info = api_get_course_info($course_code);
                     $inserted_in_course[$course_code] = $course_info['title'];
 
-                    CourseManager::subscribe_user(
+                    CourseManager::subscribeUser(
                         $user_id,
                         $course_code,
                         $csv_subscriptions[$course_code]

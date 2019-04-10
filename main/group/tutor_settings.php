@@ -99,7 +99,7 @@ function sort_users($user_a, $user_b)
 }
 
 $htmlHeadXtra[] = '<script>
-$(document).ready( function() {
+$(function() {
     $("#max_member").on("focus", function() {
         $("#max_member_selected").attr("checked", true);
     });

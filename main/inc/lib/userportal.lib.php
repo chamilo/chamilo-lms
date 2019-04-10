@@ -103,7 +103,7 @@ class IndexManager
     /**
      * @param bool $show_slide
      *
-     * @return null|string
+     * @return string|null
      */
     public function return_announcements($show_slide = true)
     {
@@ -885,6 +885,7 @@ class IndexManager
                 'link' => api_get_path(WEB_PATH).'main/messages/inbox.php',
                 'title' => get_lang('Inbox').$cant_msg,
             ];
+
             $items[] = [
                 'class' => 'new-message-social',
                 'icon' => Display::return_icon('new-message.png', get_lang('Compose')),
@@ -901,16 +902,23 @@ class IndexManager
                     'title' => get_lang('PendingInvitations').$total_invitations,
                 ];
             }
+        }
 
-            if (api_get_configuration_value('allow_my_files_link_in_homepage')) {
-                if (api_get_setting('allow_my_files') !== 'false') {
-                    $items[] = [
-                        'class' => 'myfiles-social',
-                        'icon' => Display::return_icon('sn-files.png', get_lang('Files')),
-                        'link' => api_get_path(WEB_PATH).'main/social/myfiles.php',
-                        'title' => get_lang('MyFiles'),
-                    ];
-                }
+        $items[] = [
+            'class' => 'personal-data',
+            'icon' => Display::return_icon('database.png', get_lang('PersonalDataReport')),
+            'link' => api_get_path(WEB_CODE_PATH).'social/personal_data.php',
+            'title' => get_lang('PersonalDataReport'),
+        ];
+
+        if (api_get_configuration_value('allow_my_files_link_in_homepage')) {
+            if (api_get_setting('allow_my_files') !== 'false') {
+                $items[] = [
+                    'class' => 'myfiles-social',
+                    'icon' => Display::return_icon('sn-files.png', get_lang('Files')),
+                    'link' => api_get_path(WEB_PATH).'main/social/myfiles.php',
+                    'title' => get_lang('MyFiles'),
+                ];
             }
         }
 
@@ -943,6 +951,17 @@ class IndexManager
                 ),
                 'link' => $url,
                 'title' => get_lang('VideoConference'),
+            ];
+        }
+
+        if (true === api_get_configuration_value('whispeak_auth_enabled')) {
+            $itemTitle = WhispeakAuthPlugin::create()->get_title();
+
+            $items[] = [
+                'class' => 'whispeak-enrollment',
+                'icon' => Display::return_icon('addworkuser.png', $itemTitle),
+                'link' => WhispeakAuthPlugin::getEnrollmentUrl(),
+                'title' => $itemTitle,
             ];
         }
 
@@ -1329,10 +1348,7 @@ class IndexManager
 
             if ($specialCourses) {
                 if ($categoryCodeFilter) {
-                    $specialCourses = self::filterByCategory(
-                        $specialCourses,
-                        $categoryCodeFilter
-                    );
+                    $specialCourses = self::filterByCategory($specialCourses, $categoryCodeFilter);
                 }
                 $this->tpl->assign('courses', $specialCourses);
                 // Ofaj
@@ -1342,6 +1358,7 @@ class IndexManager
                 );
                 $courseCompleteList = array_merge($courseCompleteList, $specialCourses);
             }
+
             if ($courses['in_category'] || $courses['not_category']) {
                 foreach ($courses['in_category'] as $courseData) {
                     if (!empty($courseData['courses'])) {
@@ -1378,6 +1395,14 @@ class IndexManager
 
         $sessions_with_category = '';
         $sessions_with_no_category = '';
+
+        $collapsable = api_get_configuration_value('allow_user_session_collapsable');
+        $collapsableLink = '';
+        if ($collapsable) {
+            $collapsableLink = api_get_path(WEB_PATH).'user_portal.php?action=collapse_session';
+        }
+
+        $extraFieldValue = new ExtraFieldValue('session');
         if ($showSessions) {
             $coursesListSessionStyle = api_get_configuration_value('courses_list_session_title_link');
             $coursesListSessionStyle = $coursesListSessionStyle === false ? 1 : $coursesListSessionStyle;
@@ -1570,9 +1595,8 @@ class IndexManager
                                 $params['category_id'] = $session_box['category_id'];
                                 $params['title'] = $session_box['title'];
                                 $params['id_coach'] = $coachId;
-                                $params['coach_url'] = api_get_path(
-                                        WEB_AJAX_PATH
-                                    ).'user_manager.ajax.php?a=get_user_popup&user_id='.$coachId;
+                                $params['coach_url'] = api_get_path(WEB_AJAX_PATH).
+                                    'user_manager.ajax.php?a=get_user_popup&user_id='.$coachId;
                                 $params['coach_name'] = !empty($session_box['coach']) ? $session_box['coach'] : null;
                                 $params['coach_avatar'] = UserManager::getUserPicture(
                                     $coachId,
@@ -1583,6 +1607,18 @@ class IndexManager
                                 $params['duration'] = isset($session_box['duration']) ? ' '.$session_box['duration'] : null;
                                 $params['edit_actions'] = $actions;
                                 $params['show_actions'] = SessionManager::cantEditSession($session_id);
+
+                                if ($collapsable) {
+                                    $collapsableData = Sessionmanager::getCollapsableData(
+                                        $user_id,
+                                        $session_id,
+                                        $extraFieldValue,
+                                        $collapsableLink
+                                    );
+                                    $params['collapsed'] = $collapsableData['collapsed'];
+                                    $params['collapsable_link'] = $collapsableData['collapsable_link'];
+                                }
+
                                 $params['show_description'] = $session_box['show_description'] == 1 && $portalShowDescription;
                                 $params['description'] = $session_box['description'];
                                 $params['visibility'] = $session_box['visibility'];
@@ -1700,7 +1736,9 @@ class IndexManager
                                                 $session_id,
                                                 'session_course_item'
                                             );
-                                            $html_courses_session[] = $c[1];
+                                            if (isset($c[1])) {
+                                                $html_courses_session[] = $c[1];
+                                            }
                                         }
                                         $count_courses_session++;
                                         $count++;
@@ -1731,6 +1769,17 @@ class IndexManager
                                     // ofaj
                                     $sessionParams[0]['is_old'] = $markAsOld;
                                     $sessionParams[0]['is_future'] = $markAsFuture;
+
+                                    if ($collapsable) {
+                                        $collapsableData = Sessionmanager::getCollapsableData(
+                                            $user_id,
+                                            $session_id,
+                                            $extraFieldValue,
+                                            $collapsableLink
+                                        );
+                                        $sessionParams[0]['collapsable_link'] = $collapsableData['collapsable_link'];
+                                        $sessionParams[0]['collapsed'] = $collapsableData['collapsed'];
+                                    }
                                     $sessionParams[0]['image'] = isset($imageField['value']) ? $imageField['value'] : null;
 
                                     $actions = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session_id;

@@ -31,12 +31,6 @@ if ($allowedFieldsConfiguration !== false) {
     $allowedFields['extra_fields'] = isset($allowedFieldsConfiguration['extra_fields']) ? $allowedFieldsConfiguration['extra_fields'] : [];
 }
 
-$gMapsPlugin = GoogleMapsPlugin::create();
-if ($gMapsPlugin->get('enable_api') === 'true') {
-    $key = $gMapsPlugin->get('api_key');
-    $htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true&key='.$key.'" ></script>';
-}
-
 $webserviceUrl = api_get_plugin_setting('logintcc', 'webservice_url');
 $hash = api_get_plugin_setting('logintcc', 'hash');
 
@@ -470,13 +464,28 @@ if ($user_already_registered_show_terms === false) {
         if (isset($allowedFields['extra_fields']) && is_array($allowedFields['extra_fields'])) {
             $extraFieldList = $allowedFields['extra_fields'];
         }
+        $requiredFields = api_get_configuration_value('required_extra_fields_in_inscription');
+        if (!empty($requiredFields) && $requiredFields['options']) {
+            $requiredFields = $requiredFields['options'];
+        }
+
         $returnParams = $extraField->addElements(
             $form,
             0,
             [],
             false,
             false,
-            $extraFieldList
+            $extraFieldList,
+            [],
+            [],
+            false,
+            [],
+            [],
+            [],
+            false,
+            [],
+            $requiredFields,
+            true
         );
         $extraFieldsLoaded = true;
     }
@@ -959,7 +968,7 @@ if ($form->validate()) {
                         ]
                     )
                     ) {
-                        CourseManager::subscribe_user(
+                        CourseManager::subscribeUser(
                             $user_id,
                             $course_info['code']
                         );
@@ -1259,7 +1268,7 @@ if ($form->validate()) {
                         ]
                     )
                     ) {
-                        CourseManager::subscribe_user(
+                        CourseManager::subscribeUser(
                             $user_id,
                             $course_info['code']
                         );

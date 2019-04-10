@@ -419,7 +419,7 @@ class GlossaryManager
                 Display::return_icon('view_text.png', get_lang('TableView'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
-        if (!api_is_anonymous()) {
+        if (api_is_allowed_to_edit(true, true, true)) {
             $actionsLeft .= Display::url(
                 Display::return_icon('export_to_documents.png', get_lang('ExportToDocArea'), [], ICON_SIZE_MEDIUM),
                 api_get_self().'?'.api_get_cidreq().'&'.http_build_query(['action' => 'export_documents'])
@@ -813,9 +813,9 @@ class GlossaryManager
             return;
         }
 
-        $data = GlossaryManager::get_glossary_data(
+        $data = self::get_glossary_data(
             0,
-            GlossaryManager::get_number_glossary_terms(api_get_session_id()),
+            self::get_number_glossary_terms(api_get_session_id()),
             0,
             'ASC'
         );

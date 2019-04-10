@@ -105,7 +105,7 @@ CKEDITOR.editorConfig = function (config) {
     // File manager (elFinder)
     config.filebrowserBrowseUrl = '{{ _p.web_lib ~ 'elfinder/filemanager.php?' }}{{ course_condition }}';
     config.videobrowserBrowseUrl = '{{ _p.web_lib ~ 'elfinder/filemanager.php?' }}{{ course_condition }}';
-
+    // Ofaj
     config.enterMode = CKEDITOR.ENTER_BR;
     // Allows to use "class" attribute inside divs and spans.
     config.allowedContent = true;
@@ -115,6 +115,8 @@ CKEDITOR.editorConfig = function (config) {
         '{{ font_awesome_css }}',
         '{{ css_editor }}',
     ];
+
+    config.language_list = ['{{ language_list }}'];
 };
 
 // Sets default target to "_blank" in link plugin

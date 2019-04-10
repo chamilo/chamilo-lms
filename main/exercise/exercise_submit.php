@@ -31,7 +31,7 @@ use ChamiloSession as Session;
  */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_QUIZ;
-$this_section = 'exercise';
+$this_section = SECTION_COURSES;
 $debug = false;
 
 // Notice for unauthorized people.
@@ -39,6 +39,7 @@ api_protect_course_script(true);
 $origin = api_get_origin();
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 $courseId = api_get_course_int_id();
+$sessionId = api_get_session_id();
 $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
 
 $showGlossary = in_array($glossaryExtraTools, ['true', 'exercise', 'exercise_and_lp']);
@@ -63,6 +64,9 @@ $htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/css/hotspot.css">';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'annotation/js/annotation.js"></script>';
+if (api_get_configuration_value('quiz_prevent_copy_paste')) {
+    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'jquery.nocopypaste.js"></script>';
+}
 
 if (api_get_setting('enable_record_audio') === 'true') {
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'rtc/RecordRTC.js"></script>';
@@ -92,6 +96,15 @@ $choice = empty($choice) ? isset($_REQUEST['choice2']) ? $_REQUEST['choice2'] : 
 $current_question = isset($_REQUEST['num']) ? intval($_REQUEST['num']) : null;
 $currentAnswer = isset($_REQUEST['num_answer']) ? intval($_REQUEST['num_answer']) : null;
 $endExercise = isset($_REQUEST['end_exercise']) && $_REQUEST['end_exercise'] == 1 ? true : false;
+
+$logInfo = [
+    'tool' => TOOL_QUIZ,
+    'tool_id' => $exerciseId,
+    'tool_id_detail' => 0,
+    'action' => ((int) $_REQUEST['learnpath_id'] > 0) ? 'learnpath_id' : '',
+    'action_details' => ((int) $_REQUEST['learnpath_id'] > 0) ? (int) $_REQUEST['learnpath_id'] : '',
+];
+Event::registerLog($logInfo);
 
 // Error message
 $error = '';
@@ -204,6 +217,12 @@ if ($time_control) {
 $show_clock = true;
 $user_id = api_get_user_id();
 if ($objExercise->selectAttempts() > 0) {
+    $messageReachedMax = Display::return_message(
+        sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()),
+        'warning',
+        false
+    );
+
     $attempt_html = '';
     $attempt_count = Event::get_attempt_count(
         $user_id,
@@ -226,6 +245,35 @@ if ($objExercise->selectAttempts() > 0) {
                 );
 
                 if (!empty($exercise_stat_info)) {
+                    $isQuestionsLimitReached = ExerciseLib::isQuestionsLimitPerDayReached(
+                        $user_id,
+                        $objExercise->selectNbrQuestions(),
+                        $courseId,
+                        $sessionId
+                    );
+
+                    if ($isQuestionsLimitReached) {
+                        $maxQuestionsAnswered = (int) api_get_course_setting('quiz_question_limit_per_day');
+
+                        Display::addFlash(
+                            Display::return_message(
+                                sprintf(get_lang('QuizQuestionsLimitPerDayXReached'), $maxQuestionsAnswered),
+                                'warning',
+                                false
+                            )
+                        );
+
+                        if ($origin == 'learnpath') {
+                            Display::display_reduced_header();
+                            Display::display_reduced_footer();
+                        } else {
+                            Display::display_header(get_lang('Exercises'));
+                            Display::display_footer();
+                        }
+
+                        exit;
+                    }
+
                     $max_exe_id = max(array_keys($exercise_stat_info));
                     $last_attempt_info = $exercise_stat_info[$max_exe_id];
                     $attempt_html .= Display::div(
@@ -233,15 +281,7 @@ if ($objExercise->selectAttempts() > 0) {
                         ['id' => '']
                     );
 
-                    $attempt_html .= Display::return_message(
-                        sprintf(
-                            get_lang('ReachedMaxAttempts'),
-                            $exercise_title,
-                            $objExercise->selectAttempts()
-                        ),
-                        'warning',
-                        false
-                    );
+                    $attempt_html .= $messageReachedMax;
 
                     if (!empty($last_attempt_info['question_list'])) {
                         foreach ($last_attempt_info['question_list'] as $questions) {
@@ -270,37 +310,13 @@ if ($objExercise->selectAttempts() > 0) {
                         ['id' => 'question_score']
                     );
                 } else {
-                    $attempt_html .= Display::return_message(
-                        sprintf(
-                            get_lang('ReachedMaxAttempts'),
-                            $exercise_title,
-                            $objExercise->selectAttempts()
-                        ),
-                        'warning',
-                        false
-                    );
+                    $attempt_html .= $messageReachedMax;
                 }
             } else {
-                $attempt_html .= Display::return_message(
-                    sprintf(
-                        get_lang('ReachedMaxAttempts'),
-                        $exercise_title,
-                        $objExercise->selectAttempts()
-                    ),
-                    'warning',
-                    false
-                );
+                $attempt_html .= $messageReachedMax;
             }
         } else {
-            $attempt_html .= Display::return_message(
-                sprintf(
-                    get_lang('ReachedMaxAttempts'),
-                    $exercise_title,
-                    $objExercise->selectAttempts()
-                ),
-                'warning',
-                false
-            );
+            $attempt_html .= $messageReachedMax;
         }
 
         if ($origin == 'learnpath') {
@@ -331,6 +347,11 @@ $questionListUncompressed = $objExercise->getQuestionListWithMediasUncompressed(
 Session::write('question_list_uncompressed', $questionListUncompressed);
 $clock_expired_time = null;
 if (empty($exercise_stat_info)) {
+    $disable = api_get_configuration_value('exercises_disable_new_attempts');
+    if ($disable) {
+        api_not_allowed(true);
+    }
+
     if ($debug) {
         error_log('5  $exercise_stat_info is empty ');
     }
@@ -716,7 +737,7 @@ if ($formSent && isset($_POST)) {
                 exit;
             } else {
                 if ($debug) {
-                    error_log('10. Redirecting to exercise_show.php');
+                    error_log('10. Redirecting to exercise_result.php');
                 }
                 header("Location: exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
                 exit;
@@ -1201,8 +1222,13 @@ if (!empty($error)) {
             //$("#save_for_now_"+question_id).html(\''.Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
             window.location = url;
         }
+        
+        function redirectExerciseToResult() 
+        {
+            window.location = "'.$script_php.'?'.$params.'";
+        }
 
-        function save_now(question_id, url_extra) {
+        function save_now(question_id, url_extra, validate) {
             //1. Normal choice inputs
             var my_choice = $(\'*[name*="choice[\'+question_id+\']"]\').serialize();
 
@@ -1245,7 +1271,7 @@ if (!empty($error)) {
                 success: function(return_value) {
                     if (return_value == "ok") {
                         $("#save_for_now_"+question_id).html(\''.
-                            Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
+                        Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');                                                    
                     } else if (return_value == "error") {
                         $("#save_for_now_"+question_id).html(\''.
                             Display::return_icon('error.png', get_lang('Error'), [], ICON_SIZE_SMALL).'\');
@@ -1311,7 +1337,6 @@ if (!empty($error)) {
                 data: "'.$params.'&type=all&"+my_choice+"&"+hotspot+"&"+free_answers+"&"+remind_list,
                 success: function(return_value) {
                     if (return_value == "ok") {
-                        //$("#save_all_response").html(\''.Display::return_icon('accept.png').'\');
                         if (validate == "validate") {
                             window.location = "'.$script_php.'?'.$params.'";
                         } else {

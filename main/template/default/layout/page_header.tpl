@@ -26,26 +26,34 @@
                             </div>
                         {% endif %}
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         {% if plugin_header_center is not null %}
                             <div id="plugin_header_center">
                                 {{ plugin_header_center }}
                             </div>
                         {% endif %}
                     </div>
-                    <div class="col-sm-4">
-                        {% if plugin_header_right is not null %}
-                            <div id="plugin_header_right">
-                                {{ plugin_header_right }}
-                            </div>
-                        {% endif %}
-                        <div class="section-notifications">
-                            {% if _u.logged == 1 %}
-                            <ul id="notifications" class="nav nav-pills pull-right">
-                            </ul>
+                    <div class="col-sm-5">
+                        <ol class="header-ol">
+                            {% if plugin_header_right is not null %}
+                                <li>
+                                    <div id="plugin_header_right">
+                                        {{ plugin_header_right }}
+                                    </div>
+                                </li>
                             {% endif %}
-                        </div>
-                        {{ accessibility }}
+                            <li>
+                                <div class="section-notifications">
+                                    {% if _u.logged == 1 and not user_in_anon_survey %}
+                                        <ul id="notifications" class="nav nav-pills pull-right">
+                                        </ul>
+                                    {% endif %}
+                                </div>
+                            </li>
+                            <li>
+                                {{ accessibility }}
+                            </li>
+                        </ol>
                     </div>
                 </div>
             </div>

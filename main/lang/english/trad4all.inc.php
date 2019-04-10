@@ -8301,4 +8301,6 @@ $DifferenceOfDaysAndCalendar = "Difference between days and calendar";
 $SkillUserList = "Skills and users list";
 $CourseId = "Course ID";
 $CareDetailView = "Student care detail view";
+
+$UserXReportedPostXInForumX = 'L\'utilisateur %s a signalé le message %s du forum %s';
 ?>

@@ -143,10 +143,11 @@ class Notification extends Model
     /**
      * @param string $title
      * @param array  $senderInfo
+     * @param bool   $forceTitleWhenSendingEmail force the use of $title as subject instead of "You have a new message"
      *
      * @return string
      */
-    public function formatTitle($title, $senderInfo)
+    public function formatTitle($title, $senderInfo, $forceTitleWhenSendingEmail = false)
     {
         $hook = HookNotificationTitle::create();
         if (!empty($hook)) {
@@ -200,6 +201,11 @@ class Notification extends Model
                 break;
         }
 
+        // The title won't be changed, it will be used as is
+        if ($forceTitleWhenSendingEmail) {
+            $newTitle = $title;
+        }
+
         if (!empty($hook)) {
             $hook->setEventData(['title' => $newTitle]);
             $data = $hook->notifyNotificationTitle(HOOK_EVENT_TYPE_POST);
@@ -214,17 +220,18 @@ class Notification extends Model
     /**
      * Save message notification.
      *
-     * @param int    $type          message type
-     *                              NOTIFICATION_TYPE_MESSAGE,
-     *                              NOTIFICATION_TYPE_INVITATION,
-     *                              NOTIFICATION_TYPE_GROUP
+     * @param int    $type                       message type
+     *                                           NOTIFICATION_TYPE_MESSAGE,
+     *                                           NOTIFICATION_TYPE_INVITATION,
+     *                                           NOTIFICATION_TYPE_GROUP
      * @param int    $messageId
-     * @param array  $userList      recipients: user list of ids
+     * @param array  $userList                   recipients: user list of ids
      * @param string $title
      * @param string $content
-     * @param array  $senderInfo    result of api_get_user_info() or GroupPortalManager:get_group_data()
+     * @param array  $senderInfo                 result of api_get_user_info() or GroupPortalManager:get_group_data()
      * @param array  $attachments
      * @param array  $smsParameters
+     * @param bool   $forceTitleWhenSendingEmail force the use of $title as subject instead of "You have a new message"
      */
     public function saveNotification(
         $messageId,
@@ -234,12 +241,13 @@ class Notification extends Model
         $content,
         $senderInfo = [],
         $attachments = [],
-        $smsParameters = []
+        $smsParameters = [],
+        $forceTitleWhenSendingEmail = false
     ) {
         $this->type = (int) $type;
         $messageId = (int) $messageId;
         $content = $this->formatContent($messageId, $content, $senderInfo);
-        $titleToNotification = $this->formatTitle($title, $senderInfo);
+        $titleToNotification = $this->formatTitle($title, $senderInfo, $forceTitleWhenSendingEmail);
         $settingToCheck = '';
         $avoid_my_self = false;
 
@@ -303,6 +311,7 @@ class Notification extends Model
                     case self::NOTIFY_INVITATION_AT_ONCE:
                     case self::NOTIFY_GROUP_AT_ONCE:
                         $extraHeaders = [];
+                        //ofaj
                         $noReply = api_get_setting('noreply_email_address');
                         if (empty($noReply) && isset($senderInfo['email'])) {
                             $extraHeaders = [
@@ -442,25 +451,6 @@ class Notification extends Model
         if (!empty($linkToNewMessage) && api_get_setting('allow_message_tool') == 'true') {
             $content = $content.'<br /><br />'.$linkToNewMessage;
         }
-
-        /*$courseInfo = api_get_course_info();
-        // Add course info
-        if (!empty($courseInfo)) {
-            $sessionId = api_get_session_id();
-            if (empty($sessionId)) {
-                $courseNotification = sprintf(get_lang('ThisEmailWasSentViaCourseX'), $courseInfo['title']);
-            } else {
-                $sessionInfo = api_get_session_info($sessionId);
-                if (!empty($sessionInfo)) {
-                    $courseNotification = sprintf(
-                        get_lang('ThisEmailWasSentViaCourseXInSessionX'),
-                        $courseInfo['title'],
-                        $sessionInfo['title']
-                    );
-                }
-            }
-            $content = $content.'<br /><br />'.$courseNotification;
-        }*/
 
         // You have received this message because you are subscribed text
         $content = $content.'<br /><hr><i>'.

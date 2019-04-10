@@ -205,7 +205,7 @@ $form->display();
 ?>
 
 <script>
-$(document).ready( function() {
+$(function() {
 
 <?php
     if (!empty($sessionInfo['duration'])) {

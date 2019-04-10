@@ -35,12 +35,14 @@ class CkEditor extends Editor
     /**
      * Return the HTML code required to run editor.
      *
+     * @param string $value
+     *
      * @return string
      */
-    public function createHtml()
+    public function createHtml($value)
     {
         $html = '<textarea id="'.$this->getName().'" name="'.$this->getName().'" class="ckeditor">
-                 '.$this->value.'
+                 '.$value.'
                  </textarea>';
         $html .= $this->editorReplace();
 
@@ -50,23 +52,30 @@ class CkEditor extends Editor
     /**
      * Return the HTML code required to run editor.
      *
+     * @param string $value
+     *
      * @return string
      */
-    public function createHtmlStyle()
+    public function createHtmlStyle($value)
     {
         $style = '';
 
-        if (trim($this->value) == '<html><head><title></title></head><body></body></html>' ||
-            trim($this->value) == '<!DOCTYPE html><html><head><title></title></head><body></body></html>' ||
-            $this->value == ''
-        ) {
+        $value = trim($value);
+
+        $defaultValues = [0 => ''];
+        $defaultValues[1] = '<html><head><title></title></head><body></body></html>';
+        $defaultValues[2] = '<!DOCTYPE html>'.$defaultValues[1];
+        $defaultValues[3] = htmlentities($defaultValues[1]);
+        $defaultValues[4] = htmlentities($defaultValues[2]);
+
+        if (in_array($value, $defaultValues)) {
             $style = api_get_css_asset('bootstrap/dist/css/bootstrap.min.css');
             $style .= api_get_css_asset('fontawesome/css/font-awesome.min.css');
             $style .= api_get_css(ChamiloApi::getEditorDocStylePath());
         }
 
         $html = '<textarea id="'.$this->getName().'" name="'.$this->getName().'" class="ckeditor">
-                 '.$style.htmlspecialchars($this->value, ENT_COMPAT).'
+                 '.$style.$value.'
                  </textarea>';
         $html .= $this->editorReplace();
 

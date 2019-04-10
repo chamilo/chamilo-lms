@@ -13,7 +13,7 @@ if (!isset($_GET['id']) || !isset($_GET['ticket_id'])) {
     api_not_allowed(true);
 }
 
-$ticket_id = intval($_GET['ticket_id']);
+$ticket_id = (int) $_GET['ticket_id'];
 $ticketInfo = TicketManager::get_ticket_detail_by_id($ticket_id);
 if (empty($ticketInfo)) {
     api_not_allowed(true);

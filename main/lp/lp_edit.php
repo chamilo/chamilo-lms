@@ -158,7 +158,14 @@ $form->addElement('html', '<div class="help-block">'.get_lang('LpPrerequisiteDes
 $form->addElement('html', '</div>');
 $form->addElement('html', '<div class="col-md-2"></div>');
 $form->addElement('html', '</div>');
-//Start date
+// Time Control
+if (Tracking::minimunTimeAvailable(api_get_session_id(), api_get_course_int_id())) {
+    $accumulateTime = $_SESSION['oLP']->getAccumulateWorkTime();
+    $form->addText('accumulate_work_time', [get_lang('LpMinTime'), get_lang('LpMinTimeDescription')]);
+    $defaults['accumulate_work_time'] = $accumulateTime;
+}
+
+// Start date
 $form->addElement(
     'checkbox',
     'activate_start_date_check',
@@ -218,6 +225,17 @@ $form->addElement(
     get_lang('AccumulateScormTime')
 );
 
+$options = learnpath::getIconSelect();
+
+if (!empty($options)) {
+    $form->addSelect(
+        'extra_lp_icon',
+        get_lang('Icon'),
+        $options
+    );
+    $defaults['extra_lp_icon'] = learnpath::getSelectedIcon($lpId);
+}
+
 $enableLpExtraFields = false;
 if ($enableLpExtraFields) {
     $extraField = new ExtraField('lp');
@@ -241,7 +259,7 @@ if ($enableLpExtraFields) {
     </script>';
 }
 
-$htmlHeadXtra[] = '<script>'.$learnPath->get_js_dropdown_array()."</script>";
+$htmlHeadXtra[] = '<script>'.$learnPath->get_js_dropdown_array().'</script>';
 
 $defaults['publicated_on'] = !empty($publicated_on) && $publicated_on !== '0000-00-00 00:00:00'
     ? api_get_local_time($publicated_on)
@@ -265,13 +283,13 @@ echo Display::return_icon('course_setting_layout.png');
 echo '</div>';
 echo '</div>';
 echo "
-    <script>
-        $(document).on('ready', function () {
-            $('[name=\'hide_toc_frame\']').on('change', function() {
-                $('#pnl-frm').toggleClass('col-md-8').toggleClass('col-sm-12');
-                $('#pnl-toc').toggleClass('col-md-4').toggleClass('hide');
-            });
+<script>
+    $(function() {
+        $('[name=\'hide_toc_frame\']').on('change', function() {
+            $('#pnl-frm').toggleClass('col-md-8').toggleClass('col-sm-12');
+            $('#pnl-toc').toggleClass('col-md-4').toggleClass('hide');
         });
-    </script>
+    });
+</script>
 ";
 Display::display_footer();

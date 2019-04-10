@@ -66,7 +66,7 @@ class Session implements \ArrayAccess
 
     /**
      * @param string $variable
-     * @param string $value
+     * @param mixed  $value
      */
     public static function write($variable, $value)
     {

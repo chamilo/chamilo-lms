@@ -59,7 +59,7 @@
         </div>
     </div>
 </div>
-<audio id="chat-alert">
+<audio id="chat-alert" class="skip">
     <source src="{{ _p.web_main }}chat/sound/notification.wav" type="audio/wav"></source>
     <source src="{{ _p.web_main }}chat/sound/notification.ogg" type="audio/ogg"></source>
     <source src="{{ _p.web_main }}chat/sound/notification.mp3" type="audio/mpeg"></source>
@@ -121,7 +121,13 @@ $(document).on('ready', function () {
                         '           </button>';
                 }
                 html += '           </li>' +
+
+                    {% if not 'hide_username_in_course_chat'|api_get_configuration_value %}
                     '           <li><small>' + user.username + '</small></li>' +
+                    {% else %}
+                    '           <li>&nbsp;</li>' +
+                    {% endif %}
+
                     '       </ul>' +
                     '   </div>' +
                     '</li>';

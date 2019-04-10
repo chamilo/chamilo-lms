@@ -38,8 +38,6 @@ $nameTools = get_lang('ToolForum');
 // Are we in a lp ?
 $origin = api_get_origin();
 
-/* Including necessary files */
-require 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
 $userId = api_get_user_id();
@@ -103,6 +101,15 @@ if (!empty($groupId)) {
 $my_search = isset($_GET['search']) ? $_GET['search'] : '';
 $my_action = isset($_GET['action']) ? $_GET['action'] : '';
 
+$logInfo = [
+    'tool' => TOOL_FORUM,
+    'tool_id' => $my_forum,
+    'tool_id_detail' => 0,
+    'action' => !empty($my_action) ? $my_action : 'list-threads',
+    'action_details' => isset($_GET['content']) ? $_GET['content'] : '',
+];
+Event::registerLog($logInfo);
+
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
@@ -145,7 +152,7 @@ if ($origin == 'learnpath') {
     Display::display_reduced_header();
 } else {
     // The last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string.
-    Display::display_header('');
+    Display::display_header();
 }
 
 /* Actions */
@@ -424,10 +431,9 @@ if (is_array($threads)) {
                 $my_whatsnew_post_info = $whatsnew_post_info[$my_forum][$row['thread_id']];
             }
 
+            $newPost = '';
             if (is_array($my_whatsnew_post_info) && !empty($my_whatsnew_post_info)) {
                 $newPost = ' '.Display::return_icon('alert.png', get_lang('Forum'), null, ICON_SIZE_SMALL);
-            } else {
-                $newPost = '';
             }
 
             $name = api_get_person_name($row['firstname'], $row['lastname']);
@@ -469,6 +475,43 @@ if (is_array($threads)) {
                 );
             }
 
+            $_user = api_get_user_info($row['user_id']);
+            $urlImg = api_get_path(WEB_IMG_PATH);
+            $iconStatus = null;
+            $isAdmin = UserManager::is_admin($row['user_id']);
+
+            $last_post_info = get_last_post_by_thread(
+                $row['c_id'],
+                $row['thread_id'],
+                $row['forum_id'],
+                api_is_allowed_to_edit()
+            );
+            $last_post = null;
+            if ($last_post_info) {
+                $poster_info = api_get_user_info($last_post_info['poster_id']);
+                $post_date = api_convert_and_format_date($last_post_info['post_date']);
+                $last_post = $post_date.'<br>'.get_lang('By').' '.display_user_link(
+                    $last_post_info['poster_id'],
+                    $poster_info['complete_name'],
+                    '',
+                    $poster_info['username']
+                );
+            }
+
+            if ($_user['status'] == 5) {
+                if ($_user['has_certificates']) {
+                    $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_graduated.svg" width="22px" height="22px">';
+                } else {
+                    $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_student.svg" width="22px" height="22px">';
+                }
+            } elseif ($_user['status'] == 1) {
+                if ($isAdmin) {
+                    $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_admin.svg" width="22px" height="22px">';
+                } else {
+                    $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_teacher.svg" width="22px" height="22px">';
+                }
+            }
+
             $html .= '<div class="thumbnail">'.display_user_image($row['user_id'], $name, $origin).'</div>';
             $html .= '</div>';
             $html .= '<div class="col-md-10">';
@@ -479,8 +522,13 @@ if (is_array($threads)) {
                     'class' => 'title',
                 ]
             );
-            $html .= '<p>'.get_lang('By').' '.$authorName.'</p>';
-            $html .= '<p>'.api_convert_and_format_date($row['insert_date']).'</p>';
+            $html .= '<p>'.get_lang('By').' '.$iconStatus.' '.$authorName.'</p>';
+
+            if ($last_post_info) {
+                $html .= '<p>'.Security::remove_XSS(cut($last_post_info['post_text'], 140)).'</p>';
+            }
+
+            $html .= '<p>'.Display::dateToStringAgoAndLongDate($row['insert_date']).'</p>';
 
             if ($current_forum['moderated'] == 1 && api_is_allowed_to_edit(false, true)) {
                 $waitingCount = getCountPostsWithStatus(
@@ -500,6 +548,7 @@ if (is_array($threads)) {
             $html .= '</div>';
 
             $html .= '</div>';
+
             $html .= '<div class="col-md-6">';
             $html .= '<div class="row">';
             $html .= '<div class="col-md-4">'
@@ -523,7 +572,7 @@ if (is_array($threads)) {
 
             if ($last_post_info) {
                 $poster_info = api_get_user_info($last_post_info['poster_id']);
-                $post_date = api_convert_and_format_date($last_post_info['post_date']);
+                $post_date = Display::dateToStringAgoAndLongDate($last_post_info['post_date']);
                 $last_post = $post_date.'<br>'.get_lang('By').' '.display_user_link(
                     $last_post_info['poster_id'],
                     $poster_info['complete_name'],

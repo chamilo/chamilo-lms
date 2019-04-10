@@ -102,6 +102,7 @@ class CourseBuilder
     /* With this array you can filter wich elements of the tools are going
     to be added in the course obj (only works with LPs) */
     public $specific_id_list = [];
+    public $documentsAddedInText = [];
 
     /**
      * Create a new CourseBuilder.
@@ -124,6 +125,68 @@ class CourseBuilder
         $this->course->backup_path = api_get_path(SYS_COURSE_PATH).$_course['path'];
         $this->course->encoding = api_get_system_encoding();
         $this->course->info = $_course;
+    }
+
+    /**
+     * @param array $list
+     */
+    public function addDocumentList($list)
+    {
+        foreach ($list as $item) {
+            if (!in_array($item[0], $this->documentsAddedInText)) {
+                $this->documentsAddedInText[$item[0]] = $item;
+            }
+        }
+    }
+
+    /**
+     * @param string $text
+     */
+    public function findAndSetDocumentsInText($text)
+    {
+        $documentList = \DocumentManager::get_resources_from_source_html($text);
+        $this->addDocumentList($documentList);
+    }
+
+    /**
+     * Parse documents added in the documentsAddedInText variable.
+     */
+    public function restoreDocumentsFromList()
+    {
+        if (!empty($this->documentsAddedInText)) {
+            $list = [];
+            $courseInfo = api_get_course_info();
+            foreach ($this->documentsAddedInText as $item) {
+                // Get information about source url
+                $url = $item[0]; // url
+                $scope = $item[1]; // scope (local, remote)
+                $type = $item[2]; // type (rel, abs, url)
+
+                $origParseUrl = parse_url($url);
+                $realOrigPath = isset($origParseUrl['path']) ? $origParseUrl['path'] : null;
+
+                if ($scope == 'local') {
+                    if ($type == 'abs' || $type == 'rel') {
+                        $documentFile = strstr($realOrigPath, 'document');
+                        if (strpos($realOrigPath, $documentFile) !== false) {
+                            $documentFile = str_replace('document', '', $documentFile);
+                            $itemDocumentId = \DocumentManager::get_document_id($courseInfo, $documentFile);
+                            // Document found! Add it to the list
+                            if ($itemDocumentId) {
+                                $list[] = $itemDocumentId;
+                            }
+                        }
+                    }
+                }
+            }
+
+            $this->build_documents(
+                api_get_session_id(),
+                api_get_course_int_id(),
+                true,
+                $list
+            );
+        }
     }
 
     /**
@@ -302,7 +365,7 @@ class CourseBuilder
             }
 
             if (!empty($this->course->type) && $this->course->type == 'partial') {
-                $sql = "SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size
+                $sql = "SELECT d.iid, d.path, d.comment, d.title, d.filetype, d.size
                         FROM $table_doc d 
                         INNER JOIN $table_prop p
                         ON (p.ref = d.id AND d.c_id = p.c_id)
@@ -317,7 +380,7 @@ class CourseBuilder
                             $session_condition
                         ORDER BY path";
             } else {
-                $sql = "SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size
+                $sql = "SELECT d.iid, d.path, d.comment, d.title, d.filetype, d.size
                         FROM $table_doc d 
                         INNER JOIN $table_prop p
                         ON (p.ref = d.id AND d.c_id = p.c_id)
@@ -334,7 +397,7 @@ class CourseBuilder
             $db_result = Database::query($sql);
             while ($obj = Database::fetch_object($db_result)) {
                 $doc = new Document(
-                    $obj->id,
+                    $obj->iid,
                     $obj->path,
                     $obj->comment,
                     $obj->title,
@@ -345,7 +408,7 @@ class CourseBuilder
             }
         } else {
             if (!empty($this->course->type) && $this->course->type == 'partial') {
-                $sql = "SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size
+                $sql = "SELECT d.iid, d.path, d.comment, d.title, d.filetype, d.size
                         FROM $table_doc d 
                         INNER JOIN $table_prop p
                         ON (p.ref = d.id AND d.c_id = p.c_id)
@@ -360,7 +423,7 @@ class CourseBuilder
                             (d.session_id = 0 OR d.session_id IS NULL)
                         ORDER BY path";
             } else {
-                $sql = "SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size
+                $sql = "SELECT d.iid, d.path, d.comment, d.title, d.filetype, d.size
                         FROM $table_doc d 
                         INNER JOIN $table_prop p
                         ON (p.ref = d.id AND d.c_id = p.c_id)
@@ -378,7 +441,7 @@ class CourseBuilder
             $result = Database::query($sql);
             while ($obj = Database::fetch_object($result)) {
                 $doc = new Document(
-                    $obj->id,
+                    $obj->iid,
                     $obj->path,
                     $obj->comment,
                     $obj->title,
@@ -732,6 +795,7 @@ class CourseBuilder
                 $doc = Database::fetch_object($res);
                 $obj->sound = $doc->id;
             }
+            $this->findAndSetDocumentsInText($obj->description);
 
             $quiz = new Quiz($obj);
             $sql = 'SELECT * FROM '.$table_rel.'
@@ -780,6 +844,8 @@ class CourseBuilder
                 $courseId
             );
 
+            $this->findAndSetDocumentsInText($obj->description);
+
             // build the backup resource question object
             $question = new QuizQuestion(
                 $obj->id,
@@ -809,6 +875,10 @@ class CourseBuilder
                     $obj2->hotspot_coordinates,
                     $obj2->hotspot_type
                 );
+
+                $this->findAndSetDocumentsInText($obj2->answer);
+                $this->findAndSetDocumentsInText($obj2->comment);
+
                 if ($obj->type == MULTIPLE_ANSWER_TRUE_FALSE) {
                     $table_options = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
                     $sql = 'SELECT * FROM '.$table_options.'
@@ -1013,6 +1083,8 @@ class CourseBuilder
         // get all test category in course
         $categories = TestCategory::getCategoryListInfo('', $courseId);
         foreach ($categories as $category) {
+            $this->findAndSetDocumentsInText($category->description);
+
             /** @var TestCategory $category */
             $courseCopyTestCategory = new CourseCopyTestCategory(
                 $category->id,
@@ -1072,7 +1144,9 @@ class CourseBuilder
                 $obj->invited,
                 $obj->answered,
                 $obj->invite_mail,
-                $obj->reminder_mail
+                $obj->reminder_mail,
+                $obj->one_question_per_page,
+                $obj->shuffle
             );
             $sql = 'SELECT * FROM '.$table_question.'
                     WHERE c_id = '.$courseId.' AND survey_id = '.$obj->survey_id;
@@ -1096,8 +1170,14 @@ class CourseBuilder
         $table_opt = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 
         $courseId = (int) $courseId;
+        $idList = isset($this->specific_id_list['surveys']) ? $this->specific_id_list['surveys'] : [];
 
         $sql = 'SELECT * FROM '.$table_que.' WHERE c_id = '.$courseId.'  ';
+
+        if (!empty($idList)) {
+            $sql .= " AND survey_id IN (".implode(', ', $idList).")";
+        }
+
         $db_result = Database::query($sql);
         $is_required = 0;
         while ($obj = Database::fetch_object($db_result)) {
@@ -1382,7 +1462,7 @@ class CourseBuilder
                         WHERE c_id = '$courseId' AND lp_id = ".$obj->id;
                 $resultItem = Database::query($sql);
                 while ($obj_item = Database::fetch_object($resultItem)) {
-                    $item['id'] = $obj_item->id;
+                    $item['id'] = $obj_item->iid;
                     $item['item_type'] = $obj_item->item_type;
                     $item['ref'] = $obj_item->ref;
                     $item['title'] = $obj_item->title;

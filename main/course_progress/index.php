@@ -75,6 +75,7 @@ $thematic = new Thematic();
 
 // thematic controller object
 $thematic_controller = new ThematicController();
+
 $thematic_data = [];
 if (!empty($thematic_id)) {
     // thematic data by id
@@ -88,7 +89,7 @@ $default_thematic_plan_title = $thematic->get_default_thematic_plan_title();
 // Only when I see the 3 columns. Avoids double or triple click binding for onclick event
 
 $htmlHeadXtra[] = '<script>
-$(document).ready(function() {
+$(function() {
     $(".thematic_advance_actions, .thematic_tools ").hide();
 	$(".thematic_content").mouseover(function() {
 		var id = parseInt(this.id.split("_")[3]);

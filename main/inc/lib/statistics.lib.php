@@ -305,7 +305,7 @@ class Statistics
             } else {
                 if (!empty($row[2])) {
                     $originalData = str_replace('\\', '', $row[2]);
-                    $row[2] = unserialize($originalData);
+                    $row[2] = UnserializeApi::unserialize('not_allowed_classes', $originalData);
                     if (is_array($row[2]) && !empty($row[2])) {
                         $row[2] = implode_with_key(', ', $row[2]);
                     } else {
@@ -629,12 +629,13 @@ class Statistics
     /**
      * get the number of recent logins.
      *
-     * @param bool $distinct        Whether to only give distinct users stats, or *all* logins
+     * @param bool $distinct            Whether to only give distinct users stats, or *all* logins
      * @param int  $sessionDuration
+     * @param bool $completeMissingDays Whether to fill the daily gaps (if any) when getting a list of logins
      *
      * @return array
      */
-    public static function getRecentLoginStats($distinct = false, $sessionDuration = 0)
+    public static function getRecentLoginStats($distinct = false, $sessionDuration = 0, $completeMissingDays = true)
     {
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -650,6 +651,7 @@ class Statistics
         $date = new DateTime($now);
         $date->sub(new DateInterval('P15D'));
         $newDate = $date->format('Y-m-d h:i:s');
+        $totalLogin = self::buildDatesArray($newDate, $now, true);
 
         $field = 'login_id';
         if ($distinct) {
@@ -665,18 +667,18 @@ class Statistics
                 GROUP BY date(login_date)";
 
         $res = Database::query($sql);
-        $totalLogin = [];
         while ($row = Database::fetch_array($res, 'ASSOC')) {
-            $totalLogin[$row['login_date']] = $row['number'];
+            $monthAndDay = substr($row['login_date'], 5, 5);
+            $totalLogin[$monthAndDay] = $row['number'];
         }
 
         return $totalLogin;
     }
 
     /**
-     * Show some stats about the accesses to the different course tools.
+     * Get course tools usage statistics for the whole platform (by URL if multi-url).
      */
-    public static function printToolStats()
+    public static function getToolsStats()
     {
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
         $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -724,6 +726,19 @@ class Statistics
             $result[$tool_names[$obj->access_tool]] = $obj->number_of_logins;
         }
 
+        return $result;
+    }
+
+    /**
+     * Show some stats about the accesses to the different course tools.
+     *
+     * @param array $result If defined, this serves as data. Otherwise, will get the data from getToolsStats()
+     */
+    public static function printToolStats($result = null)
+    {
+        if (empty($result)) {
+            $result = self::getToolsStats();
+        }
         self::printStats(get_lang('PlatformToolAccess'), $result, true);
     }
 
@@ -751,7 +766,8 @@ class Statistics
         while ($obj = Database::fetch_object($res)) {
             $result[$obj->course_language] = $obj->number_of_courses;
         }
-        self::printStats(get_lang('CountCourseByLanguage'), $result, true);
+
+        return $result;
     }
 
     /**
@@ -1059,5 +1075,78 @@ class Statistics
             $totalLogin,
             false
         );
+    }
+
+    /**
+     * Returns an array with indexes as the 'yyyy-mm-dd' format of each date
+     * within the provided range (including limits). Dates are assumed to be
+     * given in UTC.
+     *
+     * @param string $startDate  Start date, in Y-m-d or Y-m-d h:i:s format
+     * @param string $endDate    End date, in Y-m-d or Y-m-d h:i:s format
+     * @param bool   $removeYear Whether to remove the year in the results (for easier reading)
+     *
+     * @return array|bool False on error in the params, array of [date1 => 0, date2 => 0, ...] otherwise
+     */
+    public static function buildDatesArray($startDate, $endDate, $removeYear = false)
+    {
+        if (strlen($startDate) > 10) {
+            $startDate = substr($startDate, 0, 10);
+        }
+        if (strlen($endDate) > 10) {
+            $endDate = substr($endDate, 0, 10);
+        }
+        if (!preg_match('/\d\d\d\d-\d\d-\d\d/', $startDate)) {
+            return false;
+        }
+        if (!preg_match('/\d\d\d\d-\d\d-\d\d/', $startDate)) {
+            return false;
+        }
+        $startTimestamp = strtotime($startDate);
+        $endTimestamp = strtotime($endDate);
+        $list = [];
+        for ($time = $startTimestamp; $time < $endTimestamp; $time += 86400) {
+            $datetime = api_get_utc_datetime($time);
+            if ($removeYear) {
+                $datetime = substr($datetime, 5, 5);
+            } else {
+                $dateTime = substr($datetime, 0, 10);
+            }
+            $list[$datetime] = 0;
+        }
+
+        return $list;
+    }
+
+    /**
+     * Prepare the JS code to load a chart.
+     *
+     * @param string $url     URL for AJAX data generator
+     * @param string $type    bar, line, pie, etc
+     * @param string $options Additional options to the chart (see chart-specific library)
+     * @param string A JS code for loading the chart together with a call to AJAX data generator
+     */
+    public static function getJSChartTemplate($url, $type = 'pie', $options = '', $elementId = 'canvas')
+    {
+        $chartCode = '
+        <script>
+        $(function() {
+            $.ajax({
+                url: "'.$url.'",
+                type: "POST",
+                success: function(data) {
+                    Chart.defaults.global.responsive = true;
+                    var ctx = document.getElementById("'.$elementId.'").getContext("2d");
+                    var myLoginChart = new Chart(ctx, {
+                        type: "'.$type.'",
+                        data: data,
+                        options: {'.$options.'}
+                    });
+                }
+            });
+        });
+        </script>';
+
+        return $chartCode;
     }
 }

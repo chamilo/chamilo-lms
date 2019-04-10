@@ -234,7 +234,7 @@ function GetSrcName($imageTag)
     // Select src tag from img tag.
     $match = [];
     preg_match("|(src=\".*\" )|U", $imageTag, $match); //src
-    list(, $srctag) = each($match);
+    $srctag = reset($match);
     $src = substr($srctag, 5, (strlen($srctag) - 7));
     if (stristr($src, 'http') === false) {
         // valid or invalid image name
@@ -261,9 +261,9 @@ function GetImgParams($fname, $fpath, &$imgparams, &$imgcount)
     $matches = [];
     preg_match_all('(<img .*>)', $contents, $matches);
     $imgcount = 0;
-    while (list(, $match) = each($matches)) {
+    foreach ($matches as $match) {
         // Each match consists of a key and a value.
-        while (list(, $imageTag) = each($match)) {
+        foreach ($match as $imageTag) {
             $imgname = GetImgName($imageTag);
             if ($imgname != '' && !in_array($imgname, $imgparams)) {
                 array_push($imgparams, $imgname); // name (+ type) of the images in the html test
@@ -284,7 +284,7 @@ function GenerateHiddenList($imgparams)
 {
     $list = '';
     if (is_array($imgparams)) {
-        while (list(, $string) = each($imgparams)) {
+        foreach ($imgparams as $string) {
             $list .= "<input type=\"hidden\" name=\"imgparams[]\" value=\"$string\" />\n";
         }
     }
@@ -345,8 +345,8 @@ function ReplaceImgTag($content)
     $newcontent = $content;
     $matches = [];
     preg_match_all('(<img .*>)', $content, $matches);
-    while (list(, $match) = each($matches)) {
-        while (list(, $imageTag) = each($match)) {
+    foreach ($matches as $match) {
+        foreach ($match as $imageTag) {
             $imgname = GetSrcName($imageTag);
             if ($imgname != '') {
                 $prehref = $imgname;

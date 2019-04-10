@@ -26,7 +26,7 @@ function setFocus(){
     $("#glossary_title").focus();
 }
 
-$(document).ready(function () {
+$(function() {
     setFocus();
     $( "#dialog:ui-dialog" ).dialog( "destroy" );
     $( "#dialog-confirm" ).dialog({

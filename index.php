@@ -194,5 +194,6 @@ if (isset($_GET['firstpage'])) {
 } else {
     api_delete_firstpage_parameter();
 }
+
 $controller->setGradeBookDependencyBar(api_get_user_id());
 $controller->tpl->display_two_col_template();

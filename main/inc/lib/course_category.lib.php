@@ -69,7 +69,6 @@ class CourseCategory
         $conditions = null;
 
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
-
         $conditions = " INNER JOIN $table a ON (t1.id = a.course_category_id)";
         $whereCondition = " AND a.access_url_id = ".api_get_current_access_url_id();
         $allowBaseCategories = api_get_configuration_value('allow_base_course_category');
@@ -106,6 +105,54 @@ class CourseCategory
                          t1.tree_pos,
                          t1.children_count
                 ORDER BY t1.tree_pos";
+
+        $result = Database::query($sql);
+        $categories = Database::store_result($result, 'ASSOC');
+
+        return $categories;
+    }
+
+    /**
+     * Returns a flat list of all course categories in this URL. If the
+     * allow_base_course_category option is true, then also show the
+     * course categories of the base URL.
+     *
+     * @return array [id, name, code, parent_id, tree_pos, children_count, number_courses]
+     */
+    public static function getAllCategories()
+    {
+        $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+
+        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
+        $conditions = " INNER JOIN $table a ON (t1.id = a.course_category_id)";
+        $whereCondition = " AND a.access_url_id = ".api_get_current_access_url_id();
+        $allowBaseCategories = api_get_configuration_value('allow_base_course_category');
+        if ($allowBaseCategories) {
+            $whereCondition = " AND (a.access_url_id = ".api_get_current_access_url_id()." OR a.access_url_id = 1) ";
+        }
+
+        $sql = "SELECT
+                t1.id, 
+                t1.name, 
+                t1.code, 
+                t1.parent_id, 
+                t1.tree_pos, 
+                t1.children_count, 
+                COUNT(DISTINCT t3.code) AS number_courses 
+                FROM $tbl_category t1 
+                $conditions
+                LEFT JOIN $tbl_course t3 
+                ON t3.category_code=t1.code
+                WHERE 1=1
+                    $whereCondition 
+                GROUP BY
+                    t1.name, 
+                    t1.code, 
+                    t1.parent_id, 
+                    t1.tree_pos, 
+                    t1.children_count 
+                ORDER BY t1.parent_id, t1.tree_pos";
 
         $result = Database::query($sql);
         $categories = Database::store_result($result, 'ASSOC');
@@ -408,7 +455,7 @@ class CourseCategory
     /**
      * @param string $categoryCode
      *
-     * @return null|string
+     * @return string|null
      */
     public static function getParentsToString($categoryCode)
     {
@@ -435,8 +482,8 @@ class CourseCategory
      */
     public static function listCategories($categorySource)
     {
-        $categorySource = isset($categorySource) ? $categorySource : null;
         $categories = self::getCategories($categorySource);
+        $categorySource = Security::remove_XSS($categorySource);
 
         if (count($categories) > 0) {
             $table = new HTML_Table(['class' => 'data_table']);
@@ -553,7 +600,7 @@ class CourseCategory
     {
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
         $conditions = " INNER JOIN $table a ON (c.id = a.course_category_id)";
-        $whereCondition = " AND a.access_url_id = ".api_get_current_access_url_id();
+        $whereCondition = ' AND a.access_url_id = '.api_get_current_access_url_id();
 
         $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $sql = "SELECT code, name
@@ -582,13 +629,12 @@ class CourseCategory
     public static function countCoursesInCategory($category_code = '', $searchTerm = '')
     {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+
         $categoryCode = Database::escape_string($category_code);
         $searchTerm = Database::escape_string($searchTerm);
+
         $avoidCoursesCondition = CoursesAndSessionsCatalog::getAvoidCourseCondition();
-        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition(
-            'course',
-            true
-        );
+        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true);
 
         $categoryFilter = '';
         if ($categoryCode === 'ALL') {
@@ -608,14 +654,14 @@ class CourseCategory
             ) ';
         }
 
-        $url_access_id = api_get_current_access_url_id();
+        $urlCondition = ' access_url_id = '.api_get_current_access_url_id().' AND';
         $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql = "SELECT * 
+        $sql = "SELECT count(*) as count 
                 FROM $tbl_course as course
                 INNER JOIN $tbl_url_rel_course as url_rel_course
                 ON (url_rel_course.c_id = course.id)
                 WHERE
-                    access_url_id = $url_access_id AND
+                    $urlCondition
                     course.visibility != '0' AND
                     course.visibility != '4'
                     $categoryFilter
@@ -624,7 +670,10 @@ class CourseCategory
                     $visibilityCondition
             ";
 
-        return Database::num_rows(Database::query($sql));
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result);
+
+        return (int) $row['count'];
     }
 
     /**

@@ -102,6 +102,7 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
     public function getTemplate($layout)
     {
         $size = $this->getColumnsSize();
+        $attributes = $this->getAttributes();
 
         if (empty($size)) {
             $sizeTemp = $this->getInputSize();
@@ -162,13 +163,30 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
                 </div>';
                 break;
             case FormValidator::LAYOUT_BOX_NO_LABEL:
-                return '
+                if (isset($attributes['custom']) && $attributes['custom'] == true) {
+                    $template = '
                         <label {label-for}>{label}</label>
                         <div class="input-group">
-                            
+                            {icon}
+                            {element}
+                            <div class="input-group-btn">
+                                <button class="btn btn-default" type="submit">
+                                    <em class="fa fa-search"></em>
+                                </button>
+                            </div>
+                        </div>  
+                    ';
+                } else {
+                    $template = '
+                        <label {label-for}>{label}</label>
+                        <div class="input-group">
                             {icon}
                             {element}
                         </div>';
+                }
+
+
+                return $template;
                 break;
         }
     }
@@ -223,7 +241,7 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
         if ($this->isFrozen()) {
             return $this->getFrozenHtml();
         } else {
-            return '<input ' . $this->_getAttrString($this->_attributes) . ' />';
+            return '<input '.$this->_getAttrString($this->_attributes).' />';
         }
     }
 }

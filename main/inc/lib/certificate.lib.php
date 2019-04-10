@@ -391,6 +391,7 @@ class Certificate extends Model
             '((author_last_name))',
             '((score))',
             '((portal_name))',
+            '((certificate_link))',
         ];
 
         return $tags;
@@ -417,6 +418,9 @@ class Certificate extends Model
         }
 
         $currentUserInfo = api_get_user_info();
+        $url = api_get_path(WEB_PATH).
+            'certificates/index.php?id='.$certificateInfo['id'].'&user_id='.$certificateInfo['user_id'];
+        $link = Display::url($url, $url);
 
         $replace = [
             $courseInfo['title'],
@@ -426,9 +430,10 @@ class Certificate extends Model
             $currentUserInfo['lastname'],
             $certificateInfo['score_certificate'],
             api_get_setting('Institution'),
+            $link,
         ];
-        $message = str_replace(self::notificationTags(), $replace, $message);
 
+        $message = str_replace(self::notificationTags(), $replace, $message);
         MessageManager::send_message(
             $userInfo['id'],
             $subject,
@@ -829,5 +834,25 @@ class Certificate extends Model
             false,
             false
         );
+    }
+
+    /**
+     * @param int $userId
+     *
+     * @return array
+     */
+    public static function getCertificateByUser($userId)
+    {
+        $userId = (int) $userId;
+        if (empty($userId)) {
+            return [];
+        }
+
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
+        $sql = "SELECT * FROM $table
+                WHERE user_id= $userId";
+        $rs = Database::query($sql);
+
+        return Database::store_result($rs, 'ASSOC');
     }
 }

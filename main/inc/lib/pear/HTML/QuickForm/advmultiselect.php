@@ -640,8 +640,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
                 'id' => $selectId.'',
                 'name' => $selectNameFrom,
             );
-            $this->_attributesUnselected
-                = array_merge($this->_attributes, $this->_attributesUnselected);
+            $this->_attributesUnselected = array_merge($this->_attributes, $this->_attributesUnselected);
             $attrUnselected = $this->_getAttrString($this->_attributesUnselected);
 
             // set name of Select To Box
@@ -650,8 +649,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
                 'id' => $selectId.'_to',
                 'name' => $selectNameTo,
             );
-            $this->_attributesSelected
-                = array_merge($this->_attributes, $this->_attributesSelected);
+            $this->_attributesSelected = array_merge($this->_attributes, $this->_attributesSelected);
             $attrSelected = $this->_getAttrString($this->_attributesSelected);
 
             // set name of Select hidden Box
@@ -731,6 +729,9 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
             $strHtmlSelected = "<select$attrSelected>";
             if ($selected_count > 0) {
                 foreach ($arrHtmlSelected as $data) {
+                    if (!is_array($data)) {
+                        continue;
+                    }
                     $attribute  = null;
                     if (isset($data['attr'])) {
                         $attribute = $this->_getAttrString($data['attr']);

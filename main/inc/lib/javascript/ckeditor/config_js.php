@@ -31,5 +31,13 @@ if (!empty($courseId)) {
 }
 $template->assign('course_condition', $courseCondition);
 
+$languageList = api_get_languages();
+$list = [];
+foreach ($languageList['all'] as $language) {
+    $list[] = $language['isocode'].':'.$language['original_name'];
+}
+
+$template->assign('language_list', implode("','", $list));
+
 header('Content-type: application/x-javascript');
 $template->display($template->get_template('javascript/editor/ckeditor/config_js.tpl'));

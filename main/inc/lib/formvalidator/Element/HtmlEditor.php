@@ -31,7 +31,7 @@ class HtmlEditor extends HTML_QuickForm_textarea
         $config = []
     ) {
         if (empty($name)) {
-            return false;
+            throw new \Exception('Name is required');
         }
 
         parent::__construct($name, $elementLabel, $attributes);
@@ -54,10 +54,9 @@ class HtmlEditor extends HTML_QuickForm_textarea
      */
     public function toHtml()
     {
-        $value = $this->getValue();
-
         if ($this->editor) {
             if ($this->editor->getConfigAttribute('fullPage')) {
+                $value = $this->getValue();
                 if (strlen(trim($value)) == 0) {
                     // TODO: To be considered whether here to add
                     // language and character set declarations.
@@ -71,10 +70,9 @@ class HtmlEditor extends HTML_QuickForm_textarea
             return $this->getFrozenHtml();
         } else {
             $styleCss = $this->editor->getConfigAttribute('style');
+            $style = false;
             if ($styleCss) {
                 $style = true;
-            } else {
-                $style = false;
             }
 
             return $this->buildEditor($style);
@@ -88,7 +86,7 @@ class HtmlEditor extends HTML_QuickForm_textarea
      */
     public function getFrozenHtml()
     {
-        return $this->getValue();
+        return Security::remove_XSS($this->getValue());
     }
 
     /**
@@ -100,12 +98,13 @@ class HtmlEditor extends HTML_QuickForm_textarea
     {
         $result = '';
         if ($this->editor) {
-            $this->editor->value = $this->getValue();
+            $value = $this->getCleanValue();
+
             $this->editor->setName($this->getName());
-            if ($style == true) {
-                $result = $this->editor->createHtmlStyle();
+            if ($style === true) {
+                $result = $this->editor->createHtmlStyle($value);
             } else {
-                $result = $this->editor->createHtml();
+                $result = $this->editor->createHtml($value);
             }
         }
 

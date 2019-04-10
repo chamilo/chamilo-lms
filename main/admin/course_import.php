@@ -133,7 +133,7 @@ function save_courses_data($courses)
         if (!empty($courseInfo)) {
             if (!empty($teacherList)) {
                 foreach ($teacherList as $teacher) {
-                    CourseManager::add_user_to_course(
+                    CourseManager::subscribeUser(
                         $teacher['user_id'],
                         $courseInfo['code'],
                         COURSEMANAGER

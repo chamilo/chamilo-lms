@@ -37,7 +37,6 @@ class DatePicker extends HTML_QuickForm_text
 
         $id = $this->getAttribute('id');
         $value = $this->getValue();
-        $label = $this->getLabel();
 
         if (!empty($value)) {
             $value = api_format_date($value, DATE_FORMAT_LONG_NO_DAY);
@@ -82,7 +81,6 @@ class DatePicker extends HTML_QuickForm_text
     public function getTemplate($layout)
     {
         $size = $this->getColumnsSize();
-        $value = $this->getValue();
 
         if (empty($size)) {
             $sizeTemp = $this->getInputSize();
@@ -101,12 +99,8 @@ class DatePicker extends HTML_QuickForm_text
                 }
                 // else just keep the $size array as received
             } else {
-                $size = [2, intval($size), 2];
+                $size = [2, (int) $size, 2];
             }
-        }
-
-        if (!empty($value)) {
-            $value = api_format_date($value, DATE_FORMAT_LONG_NO_DAY);
         }
 
         switch ($layout) {

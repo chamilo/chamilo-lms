@@ -63,6 +63,14 @@ class Sequence
     }
 
     /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
      * @param int $id
      *
      * @return Sequence
@@ -127,7 +135,7 @@ class Sequence
      */
     public function getUnSerializeGraph()
     {
-        return unserialize($this->graph);
+        return \UnserializeApi::unserialize('sequence_graph', $this->graph);
     }
 
     /**

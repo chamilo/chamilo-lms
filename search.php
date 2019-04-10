@@ -58,10 +58,33 @@ if ($hide === false) {
 
 $url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?a=order&user_id='.$userId;
 
+// Use current user language
+$targetLanguage = $userInfo['language'];
+
 // Theme fix
-$lang = api_get_interface_language();
+/*
+$targetLanguage = api_get_interface_language();
+
+$targetLanguageInfo = $extraFieldValue->get_values_by_handler_and_field_variable(
+    api_get_user_id(),
+    'langue_cible'
+);
+
+if (!empty($targetLanguageInfo)) {
+    $targetLanguage = strtolower($targetLanguageInfo['value']);
+}*/
+
 $theme = 'theme_fr';
-switch ($lang) {
+switch ($targetLanguage) {
+    case 'italian':
+        $theme = 'theme_it';
+        break;
+    case 'polish':
+        $theme = 'theme_pl';
+        break;
+    case 'spanish':
+        $theme = 'theme_es';
+        break;
     case 'french2':
     case 'french':
         $theme = 'theme_fr';
@@ -85,15 +108,7 @@ $(document).ready(function() {
             extraFiliere.hide();
         }
     });
-        
-    /*$("#extra_domaine").parent().append(
-        $("<a>", {
-            "class": "btn ajax btn-default",
-            "href": "'.$url.'&field_variable=extra_domaine",
-            "text": "'.get_lang('Order').'"             
-        })
-    );*/    
-    
+
     $("#extra_theme").parent().append(
         $("<a>", {
             "class": "btn ajax btn-default",
@@ -116,7 +131,32 @@ $(document).ready(function() {
             "href": "'.$url.'&field_variable=extra_theme_de",
             "text": "'.get_lang('Order').'"             
         })
-    );    
+    );
+    
+    $("#extra_theme_it").parent().append(
+        $("<a>", {
+            "class": "btn ajax btn-default",
+            "href": "'.$url.'&field_variable=extra_theme_it",
+            "text": "'.get_lang('Order').'"             
+        })
+    );
+    
+    $("#extra_theme_es").parent().append(
+        $("<a>", {
+            "class": "btn ajax btn-default",
+            "href": "'.$url.'&field_variable=extra_theme_es",
+            "text": "'.get_lang('Order').'"             
+        })
+    );
+    
+     $("#extra_theme_pl").parent().append(
+        $("<a>", {
+            "class": "btn ajax btn-default",
+            "href": "'.$url.'&field_variable=extra_theme_pl",
+            "text": "'.get_lang('Order').'"             
+        })
+    );
+        
     
     $("#extra_domaine_0, #extra_domaine_1, #extra_domaine_2").on("change", function() {
         var domainList = [];
@@ -345,7 +385,6 @@ $extra = $extraField->addElements(
     $fieldsToShow,
     $fieldsToShow,
     [],
-    [],
     false,
     $forceShowFields //$forceShowFields = false
 );
@@ -364,7 +403,6 @@ $extra = $extraFieldSession->addElements(
     true,
     $fieldsToShow,
     $fieldsToShow,
-    [],
     [],
     false,
     $forceShowFields //$forceShowFields = false
@@ -392,7 +430,6 @@ $extra = $extraFieldSession->addElements(
     ['access_start_date', 'access_end_date'],
     [],
     [],
-    [],
     false,
     $forceShowFields //$forceShowFields = false
 );
@@ -414,7 +451,7 @@ foreach ($elements as $element) {
 
 $fieldsToShow = [
     'heures_disponibilite_par_semaine',
-    'moment_de_disponibilite'
+    'moment_de_disponibilite',
 ];
 
 $extra = $extraField->addElements(
@@ -425,7 +462,6 @@ $extra = $extraField->addElements(
     true,
     $fieldsToShow,
     $fieldsToShow,
-    [],
     [],
     false,
     $forceShowFields //$forceShowFields = false
@@ -459,7 +495,6 @@ $extra = $extraField->addElements(
     true,
     $fieldsToShow,
     $fieldsToShow,
-    [],
     [],
     false,
     $forceShowFields //$forceShowFields = false
@@ -500,7 +535,6 @@ $extra = $extraFieldSession->addElements(
     $fieldsToShow,
     $fieldsToShow,
     $defaults,
-    null,
     true,
     $forceShowFields, // $forceShowFields
     ['domaine' => 3, $theme => 5], // $separateExtraMultipleSelect
@@ -518,7 +552,6 @@ $extra = $extraFieldSession->addElements(
             get_lang('ThemeField').' 5',
         ],
     ],
-    [],
     true, //$addEmptyOptionSelects
     $introductionTextList
 );
@@ -551,7 +584,6 @@ $extra = $extraFieldSession->addElements(
     $fieldsToShow,
     $fieldsToShow,
     $defaults,
-    [],
     false, //$orderDependingDefaults = false,
     $forceShowFields //$forceShowFields = false
 );
@@ -578,7 +610,6 @@ $extra = $extraField->addElements(
     false,
     $fieldsToShow,
     $fieldsToShow,
-    [],
     [],
     false,
     $forceShowFields //$forceShowFields = false
@@ -607,7 +638,6 @@ $extra = $extraField->addElements(
     true,
     $fieldsToShow,
     $fieldsToShow,
-    [],
     [],
     false,
     $forceShowFields //$forceShowFields = false
@@ -647,7 +677,6 @@ $extra = $extraField->addElements(
     $fieldsToShow,
     $fieldsToShow,
     [],
-    [],
     false,
     $forceShowFields //$forceShowFields = false
 );
@@ -656,13 +685,11 @@ $userForm->addLabel(null, get_lang('MonEnvironnementDeTravailExplanationIntro2')
 
 $jqueryExtra .= $extra['jquery_ready_content'];
 
-
 $fieldsToShow = [
     'browser_platforme',
     'browser_platforme_autre',
     'browser_platforme_version',
 ];
-
 
 $extra = $extraField->addElements(
     $userForm,
@@ -672,7 +699,6 @@ $extra = $extraField->addElements(
     true,
     $fieldsToShow,
     $fieldsToShow,
-    [],
     [],
     false,
     $forceShowFields //$forceShowFields = false
@@ -686,11 +712,7 @@ $userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseEight]');
 $userForm->addHtml('</div></div></div>');
 $userForm->addHtml('</div>');
 
-
 $userForm->addHtml('</div>');
-
-
-
 
 $htmlHeadXtra[] = '<script>
 $(document).ready(function(){

@@ -107,11 +107,14 @@ function online_logout($user_id = null, $logout_redirect = false)
         $user_id = isset($_GET['uid']) ? intval($_GET['uid']) : 0;
     }
 
-    //Changing global chat status to offline
+    // Changing global chat status to offline
     if (api_is_global_chat_enabled()) {
         $chat = new Chat();
         $chat->setUserStatus(0);
     }
+
+    $chat = new Chat();
+    $chat->close();
 
     // selecting the last login of the user
     $sql = "SELECT login_id, login_date
@@ -131,6 +134,12 @@ function online_logout($user_id = null, $logout_redirect = false)
         		WHERE login_id='$i_id_last_connection'";
         Database::query($sql);
     }
+    $logInfo = [
+        'tool' => 'logout',
+        'tool_id' => 0,
+        'tool_id_detail' => 0,
+    ];
+    Event::registerLog($logInfo);
 
     UserManager::loginDelete($user_id);
 
@@ -164,12 +173,20 @@ function online_logout($user_id = null, $logout_redirect = false)
         }
     }
 
+    Session::erase('last_id');
     CourseChatUtils::exitChat($user_id);
     session_regenerate_id();
     Session::destroy();
 
+    $pluginKeycloak = api_get_plugin_setting('keycloak', 'tool_enable') === 'true';
+    if ($pluginKeycloak && $uinfo['auth_source'] === 'keycloak') {
+        $pluginUrl = api_get_path(WEB_PLUGIN_PATH).'keycloak/start.php?slo';
+        header('Location: '.$pluginUrl);
+        exit;
+    }
+
     if ($logout_redirect) {
-        header("Location: ".$url);
+        header("Location: $url");
         exit;
     }
 }

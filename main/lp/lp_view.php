@@ -126,7 +126,7 @@ $htmlHeadXtra[] = api_get_css_asset('qtip2/jquery.qtip.min.css');
 $htmlHeadXtra[] = api_get_asset('qtip2/jquery.qtip.min.js');
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
 $htmlHeadXtra[] = '<script>
-$(document).ready(function() {    
+$(function() {   
     $("div#log_content_cleaner").bind("click", function() {
         $("div#log_content").empty();
     });
@@ -137,7 +137,7 @@ var chamilo_xajax_handler = window.oxajax;
 $allowLpItemTip = api_get_configuration_value('hide_accessibility_label_on_lp_item') === false;
 if ($allowLpItemTip) {
     $htmlHeadXtra[] = '<script>
-    $(document).ready(function() {    
+    $(function() {   
          $(".scorm_item_normal").qtip({
             content: {
                 text: function(event, api) {
@@ -244,7 +244,7 @@ if (!isset($src)) {
                 }
 
                 if (isset($file_info['extension']) &&
-                    api_strtolower(substr($file_info['extension'], 0, 3) == 'pdf')
+                    api_strtolower(substr($file_info['extension'], 0, 3)) == 'pdf'
                 ) {
                     $src = api_get_path(WEB_CODE_PATH).'lp/lp_view_item.php?lp_item_id='.$lp_item_id.'&'.api_get_cidreq();
                 }
@@ -401,7 +401,6 @@ if ($lp->mode == 'fullscreen') {
         window.open('$src','content_id','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');
     </script>";
 }
-
 // Set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php).
 Session::write('loaded_lp_view', true);
 $display_none = '';
@@ -424,7 +423,7 @@ if (!api_is_invitee()) {
     $progress_bar = $lp->getProgressBar();
 }
 $navigation_bar = $lp->get_navigation_bar();
-$navigation_bar_bottom = $lp->get_navigation_bar("control-bottom", "display:none");
+$navigation_bar_bottom = $lp->get_navigation_bar('control-bottom', 'display:none');
 $mediaplayer = $lp->get_mediaplayer($lp->current, $autostart);
 
 $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
@@ -460,10 +459,6 @@ if ($is_allowed_to_edit) {
         'url' => '#',
         'name' => get_lang('Preview'),
     ];
-}
-
-// Return to course home.
-if ($is_allowed_to_edit) {
     $buttonHomeUrl = 'lp_controller.php?'.api_get_cidreq(true, true, 'course').'&'.http_build_query([
         'isStudentView' => 'false',
         'action' => 'return_to_course_homepage',
@@ -535,6 +530,7 @@ $template->assign('glossary_tool_available_list', ['true', 'lp', 'exercise_and_l
 $gamificationMode = api_get_setting('gamification_mode');
 // ...AND this learning path is set in gamification mode, then change the display
 $gamificationMode = $gamificationMode && $lp->seriousgame_mode;
+
 $template->assign('gamification_mode', $gamificationMode);
 $template->assign('glossary_extra_tools', api_get_setting('show_glossary_in_extra_tools'));
 $template->assign('show_glossary_in_documents', api_get_setting('show_glossary_in_documents'));

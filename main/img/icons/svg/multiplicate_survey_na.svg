@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="128"
+   height="128"
+   viewBox="0 0 128 128"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   sodipodi:docname="multiplicate_survey_na.svg">
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="2.0070573"
+     inkscape:cx="60.958988"
+     inkscape:cy="19.789317"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     units="px"
+     inkscape:window-width="1366"
+     inkscape:window-height="713"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     showguides="false" />
+  <defs
+     id="defs4">
+    <linearGradient
+       id="linearGradient4872"
+       inkscape:collect="always">
+      <stop
+         id="stop4868"
+         offset="0"
+         style="stop-color:#58a5c1;stop-opacity:1" />
+      <stop
+         id="stop4870"
+         offset="1"
+         style="stop-color:#fbfbfb;stop-opacity:1" />
+    </linearGradient>
+    <marker
+       inkscape:stockid="Arrow2Lend"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="marker4864"
+       style="overflow:visible;"
+       inkscape:isstock="true">
+      <path
+         id="path4862"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round;stroke:#000000;stroke-opacity:1;fill:#000000;fill-opacity:1"
+         d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+         transform="scale(1.1) rotate(180) translate(1,0)" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible;"
+       id="marker4858"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow2Lend">
+      <path
+         transform="scale(1.1) rotate(180) translate(1,0)"
+         d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round;stroke:#000000;stroke-opacity:1;fill:#000000;fill-opacity:1"
+         id="path4856" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible;"
+       id="Arrow2Mend"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow2Mend">
+      <path
+         transform="scale(0.6) rotate(180) translate(0,0)"
+         d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round;stroke:#000000;stroke-opacity:1;fill:#000000;fill-opacity:1"
+         id="path4609" />
+    </marker>
+    <linearGradient
+       id="linearGradient3480"
+       inkscape:collect="always">
+      <stop
+         id="stop3476"
+         offset="0"
+         style="stop-color:#ff6600;stop-opacity:1" />
+      <stop
+         id="stop3478"
+         offset="1"
+         style="stop-color:#ffff00;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient
+       gradientTransform="matrix(1.3632513,0,0,1.671541,77.67816,-730.28092)"
+       gradientUnits="userSpaceOnUse"
+       y2="1011.3207"
+       x2="-30.067835"
+       y1="1078.3464"
+       x1="-23.909666"
+       id="linearGradient2295"
+       xlink:href="#linearGradient3480"
+       inkscape:collect="always" />
+    <filter
+       height="1.0267532"
+       y="-0.013376624"
+       width="1.0217606"
+       x="-0.010880281"
+       id="filter2496"
+       style="color-interpolation-filters:sRGB"
+       inkscape:collect="always">
+      <feGaussianBlur
+         id="feGaussianBlur2498"
+         stdDeviation="0.23167235"
+         inkscape:collect="always" />
+    </filter>
+    <linearGradient
+       y2="1017.9606"
+       x2="-27.688286"
+       y1="1055.5681"
+       x1="-27.688286"
+       gradientTransform="matrix(0.58775441,0,0,0.72067095,65.672392,196.62598)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient3454"
+       xlink:href="#linearGradient4872"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="1017.9606"
+       x2="-27.688286"
+       y1="1055.5681"
+       x1="-27.688286"
+       gradientTransform="matrix(0.58775441,0,0,0.72067095,122.67438,265.33374)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient4876"
+       xlink:href="#linearGradient4872"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="1017.9606"
+       x2="-27.688286"
+       y1="1055.5681"
+       x1="-27.688286"
+       gradientTransform="matrix(0.73685519,0,0,0.90348981,122.27587,21.440871)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient4880"
+       xlink:href="#linearGradient4872"
+       inkscape:collect="always" />
+    <linearGradient
+       gradientTransform="matrix(1.3632513,0,0,1.671541,77.67816,-730.28092)"
+       gradientUnits="userSpaceOnUse"
+       y2="1021.5123"
+       x2="-23.125393"
+       y1="1069.2872"
+       x1="-23.631968"
+       id="linearGradient2295-692"
+       xlink:href="#linearGradient3480-289"
+       inkscape:collect="always" />
+    <linearGradient
+       id="linearGradient3480-289"
+       inkscape:collect="always">
+      <stop
+         id="stop889"
+         offset="0"
+         style="stop-color:#7f7f7f;stop-opacity:1;opacity:1" />
+      <stop
+         id="stop891"
+         offset="1"
+         style="stop-color:#f9f9f9;stop-opacity:1;opacity:1" />
+    </linearGradient>
+    <linearGradient
+       y2="1017.9606"
+       x2="-27.688286"
+       y1="1055.5681"
+       x1="-27.688286"
+       gradientTransform="matrix(0.58775441,0,0,0.72067095,65.672392,196.62598)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient3454-548"
+       xlink:href="#linearGradient4872-155"
+       inkscape:collect="always" />
+    <linearGradient
+       id="linearGradient4872-155"
+       inkscape:collect="always">
+      <stop
+         id="stop895"
+         offset="0"
+         style="stop-color:#8c8c8c;stop-opacity:1;opacity:1" />
+      <stop
+         id="stop897"
+         offset="1"
+         style="stop-color:#fbfbfb;stop-opacity:1;opacity:1" />
+    </linearGradient>
+    <linearGradient
+       y2="1017.9606"
+       x2="-27.688286"
+       y1="1055.5681"
+       x1="-27.688286"
+       gradientTransform="matrix(0.58775441,0,0,0.72067095,122.67438,265.33374)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient4876-311"
+       xlink:href="#linearGradient4872-435"
+       inkscape:collect="always" />
+    <linearGradient
+       id="linearGradient4872-435"
+       inkscape:collect="always">
+      <stop
+         id="stop901"
+         offset="0"
+         style="stop-color:#8c8c8c;stop-opacity:1;opacity:1" />
+      <stop
+         id="stop903"
+         offset="1"
+         style="stop-color:#fbfbfb;stop-opacity:1;opacity:1" />
+    </linearGradient>
+    <linearGradient
+       y2="1017.9606"
+       x2="-27.688286"
+       y1="1055.5681"
+       x1="-27.688286"
+       gradientTransform="matrix(0.73685519,0,0,0.90348981,122.27587,21.440871)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient4880-302"
+       xlink:href="#linearGradient4872-258"
+       inkscape:collect="always" />
+    <linearGradient
+       id="linearGradient4872-258"
+       inkscape:collect="always">
+      <stop
+         id="stop907"
+         offset="0"
+         style="stop-color:#8c8c8c;stop-opacity:1;opacity:1" />
+      <stop
+         id="stop909"
+         offset="1"
+         style="stop-color:#fbfbfb;stop-opacity:1;opacity:1" />
+    </linearGradient>
+  </defs>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(0,-924.36216)"
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="Capa 1">
+    <g
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/var/www/chamilo/main/img/icons/128/multiplicate_survey_na.png"
+       id="g4937">
+      <rect
+         style="opacity:0.36960012;fill:#1f1f1f;fill-opacity:0;stroke:none;stroke-width:1.66299999;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect4561"
+         width="128"
+         height="128"
+         x="0"
+         y="924.36218"
+         inkscape:export-filename="/var/www/chamilo/main/img/icons/22/multiplicate_survey.png"
+         inkscape:export-xdpi="16.5"
+         inkscape:export-ydpi="16.5" />
+      <g
+         id="g4884"
+         transform="matrix(0.93063006,0,0,0.93063006,2.2156317,69.820664)"
+         inkscape:export-filename="/var/www/chamilo/main/img/icons/22/multiplicate_survey.png"
+         inkscape:export-xdpi="16.5"
+         inkscape:export-ydpi="16.5">
+        <rect
+           inkscape:export-ydpi="16.5"
+           inkscape:export-xdpi="16.5"
+           inkscape:export-filename="/var/www/chamilo/main/img/icons/22/multiplicate_survey.png"
+           transform="matrix(1.3632514,0,0,1.6715409,78.02507,-729.90874)"
+           ry="3.058975"
+           y="1023.0187"
+           x="-52.795624"
+           height="41.566067"
+           width="51.102875"
+           id="rect2279"
+           style="opacity:1;fill:#000000;fill-opacity:0.2;stroke:none;stroke-width:2.99524426;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:2.9952442, 2.9952442;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter2496)" />
+        <rect
+           inkscape:export-ydpi="16.5"
+           inkscape:export-xdpi="16.5"
+           inkscape:export-filename="/var/www/chamilo/main/img/icons/22/multiplicate_survey.png"
+           ry="5.1132021"
+           y="978.65106"
+           x="4.6084313"
+           height="69.479378"
+           width="69.666061"
+           id="rect2287"
+           style="opacity:1;fill:url(#linearGradient2295-692);fill-opacity:1;stroke:#5a5a5a;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      </g>
+      <g
+         id="g4905"
+         transform="matrix(1.0779368,0,0,1.0779368,-2.1410026,-75.742823)"
+         inkscape:export-filename="/var/www/chamilo/main/img/icons/22/multiplicate_survey.png"
+         inkscape:export-xdpi="16.5"
+         inkscape:export-ydpi="16.5">
+        <rect
+           inkscape:export-ydpi="16.5"
+           inkscape:export-xdpi="16.5"
+           inkscape:export-filename="/var/www/chamilo/main/img/icons/22/multiplicate_survey.png"
+           transform="matrix(0.58775443,0,0,0.72067088,58.828668,204.23326)"
+           ry="3.058975"
+           y="1023.0187"
+           x="-52.795624"
+           height="41.566067"
+           width="51.102875"
+           id="rect4892"
+           style="opacity:1;fill:#000000;fill-opacity:0.2;stroke:none;stroke-width:2.99524426;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:2.9952442, 2.9952442;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter2496)" />
+        <rect
+           style="opacity:1;fill:#000000;fill-opacity:0.42745098;stroke:none;stroke-width:2.99524426;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:2.9952442, 2.9952442;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter2496)"
+           id="rect3446"
+           width="51.102875"
+           height="41.566067"
+           x="-52.795624"
+           y="1023.0187"
+           ry="3.058975"
+           transform="matrix(0.58775443,0,0,0.72067088,61.879697,200.16434)"
+           inkscape:export-filename="/var/www/chamilo/main/img/icons/22/multiplicate_survey.png"
+           inkscape:export-xdpi="16.5"
+           inkscape:export-ydpi="16.5" />
+        <rect
+           style="opacity:1;fill:url(#linearGradient3454-548);fill-opacity:1;stroke:#5a5a5a;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           id="rect3448"
+           width="30.035942"
+           height="29.955452"
+           x="34.168991"
+           y="933.41772"
+           ry="2.2045143"
+           inkscape:export-filename="/var/www/chamilo/main/img/icons/22/multiplicate_survey.png"
+           inkscape:export-xdpi="16.5"
+           inkscape:export-ydpi="16.5" />
+      </g>
+      <g
+         id="g4917"
+         transform="matrix(1.0766861,0,0,1.0766861,-6.2987212,-76.791562)"
+         inkscape:export-filename="/var/www/chamilo/main/img/icons/22/multiplicate_survey.png"
+         inkscape:export-xdpi="16.5"
+         inkscape:export-ydpi="16.5">
+        <rect
+           style="opacity:1;fill:#000000;fill-opacity:0.2;stroke:none;stroke-width:2.99524426;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:2.9952442, 2.9952442;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter2496)"
+           id="rect4898"
+           width="51.102875"
+           height="41.566067"
+           x="-52.795624"
+           y="1023.0187"
+           ry="3.058975"
+           transform="matrix(0.58775443,0,0,0.72067088,113.49409,274.59135)"
+           inkscape:export-filename="/var/www/chamilo/main/img/icons/22/multiplicate_survey.png"
+           inkscape:export-xdpi="16.5"
+           inkscape:export-ydpi="16.5" />
+        <rect
+           inkscape:export-ydpi="16.5"
+           inkscape:export-xdpi="16.5"
+           inkscape:export-filename="/var/www/chamilo/main/img/icons/22/multiplicate_survey.png"
+           transform="matrix(0.58775443,0,0,0.72067088,117.56566,269.75636)"
+           ry="3.058975"
+           y="1023.0187"
+           x="-52.795624"
+           height="41.566067"
+           width="51.102875"
+           id="rect4900"
+           style="opacity:1;fill:#000000;fill-opacity:0.42745098;stroke:none;stroke-width:2.99524426;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:2.9952442, 2.9952442;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter2496)" />
+        <g
+           inkscape:export-ydpi="16.5"
+           inkscape:export-xdpi="16.5"
+           inkscape:export-filename="/var/www/chamilo/main/img/icons/22/multiplicate_survey.png"
+           id="g4890">
+          <rect
+             style="opacity:1;fill:url(#linearGradient4876-311);fill-opacity:1;stroke:#5a5a5a;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+             id="rect4874"
+             width="30.035942"
+             height="29.955452"
+             x="91.170982"
+             y="1002.1254"
+             ry="2.2045143"
+             inkscape:export-filename="/var/www/chamilo/main/img/icons/22/multiplicate_survey.png"
+             inkscape:export-xdpi="16.5"
+             inkscape:export-ydpi="16.5" />
+        </g>
+      </g>
+      <g
+         id="g4911"
+         transform="translate(3.3081511,-3.0536779)"
+         inkscape:export-filename="/var/www/chamilo/main/img/icons/22/multiplicate_survey.png"
+         inkscape:export-xdpi="16.5"
+         inkscape:export-ydpi="16.5">
+        <rect
+           style="opacity:1;fill:#000000;fill-opacity:0.2;stroke:none;stroke-width:2.99524426;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:2.9952442, 2.9952442;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter2496)"
+           id="rect4896"
+           width="51.102875"
+           height="41.566067"
+           x="-52.795624"
+           y="1023.0187"
+           ry="3.058975"
+           transform="matrix(0.73905258,0,0,0.90618401,113.83899,27.862945)"
+           inkscape:export-filename="/var/www/chamilo/main/img/icons/22/multiplicate_survey.png"
+           inkscape:export-xdpi="16.5"
+           inkscape:export-ydpi="16.5" />
+        <rect
+           inkscape:export-ydpi="16.5"
+           inkscape:export-xdpi="16.5"
+           inkscape:export-filename="/var/www/chamilo/main/img/icons/22/multiplicate_survey.png"
+           transform="matrix(0.73905258,0,0,0.90618401,117.65499,23.280877)"
+           ry="3.058975"
+           y="1023.0187"
+           x="-52.795624"
+           height="41.566067"
+           width="51.102875"
+           id="rect4894"
+           style="opacity:1;fill:#000000;fill-opacity:0.42807019;stroke:none;stroke-width:2.99524426;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:2.9952442, 2.9952442;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter2496)" />
+        <g
+           inkscape:export-ydpi="16.5"
+           inkscape:export-xdpi="16.5"
+           inkscape:export-filename="/var/www/chamilo/main/img/icons/22/multiplicate_survey.png"
+           id="g4887">
+          <rect
+             inkscape:export-ydpi="16.5"
+             inkscape:export-xdpi="16.5"
+             inkscape:export-filename="/var/www/chamilo/main/img/icons/22/multiplicate_survey.png"
+             ry="2.7637527"
+             y="945.14099"
+             x="82.780708"
+             height="37.554512"
+             width="37.655422"
+             id="rect4878"
+             style="opacity:1;fill:url(#linearGradient4880-302);fill-opacity:1;stroke:#5a5a5a;stroke-width:1.88051784;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

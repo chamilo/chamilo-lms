@@ -222,6 +222,7 @@ if (($search || $forceSearch) && ($search !== 'false')) {
                         $extraQuestionCondition
                     );
                 }
+
                 $whereCondition .= $extraQuestionCondition;
 
                 if (isset($filters->custom_dates)) {
@@ -629,7 +630,7 @@ switch ($action) {
         }
 
         $startDate = Database::escape_string($_REQUEST['start_date']);
-        $whereCondition .= " AND exe_date > '$startDate' ";
+        $whereCondition .= " AND exe_date > '$startDate' AND te.status = '' ";
         $count = ExerciseLib::get_count_exam_results(
             $exerciseId,
             $whereCondition,
@@ -676,6 +677,7 @@ switch ($action) {
         break;
     case 'get_sessions':
         $list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
+        $language = isset($_REQUEST['lang']) ? $_REQUEST['lang'] : '';
         $session_columns = SessionManager::getGridColumns($list_type);
         $columns = $session_columns['simple_column_name'];
 
@@ -696,8 +698,9 @@ switch ($action) {
                 true,
                 [],
                 $extraFieldsToLoad,
-                $accessStartDate,
-                $accessEndDate
+                $language
+                //$accessStartDate,
+                //$accessEndDate
             );
         } else {
             $count = SessionManager::get_count_admin_complete(
@@ -794,6 +797,10 @@ switch ($action) {
         break;
     case 'get_promotions':
         $obj = new Promotion();
+        $count = $obj->get_count();
+        break;
+    case 'get_mail_template':
+        $obj = new MailTemplateManager();
         $count = $obj->get_count();
         break;
     case 'get_grade_models':
@@ -899,7 +906,7 @@ switch ($action) {
             '*',
             $object->table,
             [
-                'where' => ["session_id = ? " => $sessionId],
+                'where' => ['session_id = ? ' => $sessionId],
                 'order' => "$sidx $sord",
                 'LIMIT' => "$start , $limit", ]
         );
@@ -1383,7 +1390,6 @@ switch ($action) {
             $overwriteColumnHeaderExport['only_score'] = get_lang('Score').' - '.get_lang('ScoreNote');
             $overwriteColumnHeaderExport['total'] = get_lang('Score').' - '.get_lang('ScoreTest');
         }
-
         $categoryList = TestCategory::getListOfCategoriesIDForTest($exerciseId, $courseId);
 
         if (!empty($categoryList)) {
@@ -1409,6 +1415,8 @@ switch ($action) {
         if ($operation !== 'excel') {
             $columns[] = 'actions';
         }
+
+        $whereCondition .= " AND te.status = '' ";
 
         $result = ExerciseLib::get_exam_results_data(
             $start,
@@ -1483,6 +1491,9 @@ switch ($action) {
         break;
     case 'get_sessions_tracking':
         if (api_is_drh() || api_is_session_admin()) {
+            $orderByName = Database::escape_string($sidx);
+            $orderByName = in_array($orderByName, ['name', 'access_start_date']) ? $orderByName : 'name';
+            $orderBy = " ORDER BY $orderByName $sord";
             $sessions = SessionManager::get_sessions_followed_by_drh(
                 api_get_user_id(),
                 $start,
@@ -1490,7 +1501,7 @@ switch ($action) {
                 false,
                 false,
                 false,
-                null,
+                $orderBy,
                 $keyword,
                 $description
             );
@@ -1502,7 +1513,9 @@ switch ($action) {
                 $limit,
                 false,
                 $keyword,
-                $description
+                $description,
+                $sidx,
+                $sord
             );
         }
 
@@ -1577,21 +1590,22 @@ switch ($action) {
             $result = SessionManager::get_sessions_admin(
                 [
                     'where' => $whereCondition,
-                    'order' => "$sidx $sord",
+                    'order' => "$sidx $sord, s.name",
                     'extra' => $extra_fields,
                     'limit' => "$start , $limit",
                 ],
                 false,
                 $session_columns,
                 $extraFieldsToLoad,
-                $accessStartDate,
-                $accessEndDate
+                $language
+                //$accessStartDate,
+                //$accessEndDate
             );
         } else {
             $result = SessionManager::get_sessions_admin_complete(
                 [
                     'where' => $whereCondition,
-                    'order' => "$sidx $sord",
+                    'order' => "$sidx $sord, s.name",
                     'extra' => $extra_fields,
                     'limit' => "$start , $limit",
                 ]
@@ -1996,6 +2010,32 @@ switch ($action) {
         }
         $result = $new_result;
         break;
+    case 'get_mail_template':
+        $columns = ['name', 'type', 'default_template', 'actions'];
+        if (!in_array($sidx, $columns)) {
+            $sidx = 'name';
+        }
+
+        if (!in_array($sidx, $columns)) {
+            $sidx = 'name';
+        }
+
+        $result = Database::select(
+            '*',
+            $obj->table,
+            [
+                'where' => ['url_id = ? ' => api_get_current_access_url_id()],
+                'order' => "$sidx $sord",
+                'LIMIT' => "$start , $limit",
+            ]
+        );
+
+        $new_result = [];
+        foreach ($result as $item) {
+            $new_result[] = $item;
+        }
+        $result = $new_result;
+        break;
     case 'get_grade_models':
         $columns = ['name', 'description', 'actions'];
         if (!in_array($sidx, $columns)) {
@@ -2221,7 +2261,7 @@ switch ($action) {
 
                 if ($obj->allowTeachers()) {
                     $group['actions'] .= Display::url(
-                        Display::return_icon('stats.png'),
+                        Display::return_icon('statistics.png'),
                         $urlUserGroup.'&id='.$group['id']
                     ).'&nbsp;';
                 }
@@ -2245,6 +2285,7 @@ switch ($action) {
 $allowed_actions = [
     'get_careers',
     'get_promotions',
+    'get_mail_template',
     'get_usergroups',
     'get_usergroups_teacher',
     'get_gradebooks',

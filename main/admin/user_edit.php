@@ -65,14 +65,6 @@ function confirmation(name) {
 }
 </script>';
 
-$gMapsPlugin = GoogleMapsPlugin::create();
-$geolocalization = $gMapsPlugin->get('enable_api') === 'true';
-
-if ($geolocalization) {
-    $gmapsApiKey = $gMapsPlugin->get('api_key');
-    $htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true&key='.$gmapsApiKey.'" ></script>';
-}
-
 $htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
 $htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 $tool_name = get_lang('ModifyUserInfo');
@@ -317,18 +309,24 @@ $form->addElement('advmultiselect', 'student_boss', get_lang('StudentBoss'), $st
 
 // EXTRA FIELDS
 $extraField = new ExtraField('user');
-//ofaj
 $returnParams = $extraField->addElements(
     $form,
     $user_data['user_id'],
-    [], //exclude
-    false, // filter
-    false, // tag as select
-    [], //show only fields
-    [], // order fields
-    [] // extra data
+    [],
+    false,
+    false,
+    [],
+    [],
+    [],
+    false,
+    true
 );
 $jqueryReadyContent = $returnParams['jquery_ready_content'];
+
+$allowEmailTemplate = api_get_configuration_value('mail_template_system');
+if ($allowEmailTemplate) {
+    $form->addEmailTemplate(['user_edit_content.tpl']);
+}
 
 // the $jqueryReadyContent variable collects all functions that will be load in the
 // $(document).ready javascript function
@@ -432,6 +430,8 @@ if ($form->validate()) {
             $username = $email;
         }
 
+        $template = isset($user['email_template_option']) ? $user['email_template_option'] : [];
+
         UserManager::update_user(
             $user_id,
             $firstname,
@@ -453,16 +453,16 @@ if ($form->validate()) {
             null,
             $send_mail,
             $reset_password,
-            $address
+            $address,
+            $template
         );
 
-        if (isset($user['student_boss'])) {
-            UserManager::subscribeUserToBossList(
-                $user_id,
-                $user['student_boss'],
-                true
-            );
-        }
+        $studentBossListSent = isset($user['student_boss']) ? $user['student_boss'] : [];
+        UserManager::subscribeUserToBossList(
+            $user_id,
+            $studentBossListSent,
+            true
+        );
 
         if (api_get_setting('openid_authentication') == 'true' && !empty($user['openid'])) {
             $up = UserManager::update_openid($user_id, $user['openid']);

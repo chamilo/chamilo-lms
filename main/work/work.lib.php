@@ -109,17 +109,17 @@ function get_work_data_by_path($path, $courseId = 0)
  */
 function get_work_data_by_id($id, $courseId = 0, $sessionId = 0)
 {
-    $id = intval($id);
-    $courseId = intval($courseId);
-    if (empty($courseId)) {
-        $courseId = api_get_course_int_id();
-    }
+    $id = (int) $id;
+    $courseId = ((int) $courseId) ?: api_get_course_int_id();
+    $course = api_get_course_entity($courseId);
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
     $sessionCondition = '';
     if (!empty($sessionId)) {
         $sessionCondition = api_get_session_condition($sessionId, true);
     }
+
+    $webCodePath = api_get_path(WEB_CODE_PATH);
 
     $sql = "SELECT * FROM $table
             WHERE
@@ -132,25 +132,30 @@ function get_work_data_by_id($id, $courseId = 0, $sessionId = 0)
         if (empty($work['title'])) {
             $work['title'] = basename($work['url']);
         }
-        $work['download_url'] = api_get_path(WEB_CODE_PATH).'work/download.php?id='.$work['id'].'&'.api_get_cidreq();
-        $work['view_url'] = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$work['id'].'&'.api_get_cidreq();
-        $work['show_url'] = api_get_path(WEB_CODE_PATH).'work/show_file.php?id='.$work['id'].'&'.api_get_cidreq();
+        $work['download_url'] = $webCodePath.'work/download.php?id='.$work['id'].'&'.api_get_cidreq();
+        $work['view_url'] = $webCodePath.'work/view.php?id='.$work['id'].'&'.api_get_cidreq();
+        $work['show_url'] = $webCodePath.'work/show_file.php?id='.$work['id'].'&'.api_get_cidreq();
         $work['show_content'] = '';
         if ($work['contains_file']) {
-            $fileInfo = pathinfo($work['title']);
-            if (is_array($fileInfo) &&
-                !empty($fileInfo['extension']) &&
-                in_array($fileInfo['extension'], ['jpg', 'png', 'gif'])
-            ) {
-                $work['show_content'] = '<img src="'.$work['show_url'].'"/>';
+            $fileType = '';
+            $file = api_get_path(SYS_COURSE_PATH).$course->getDirectory().'/'.$work['url'];
+            if (file_exists($file)) {
+                $fileType = mime_content_type($file);
+            }
+
+            if (in_array($fileType, ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'])) {
+                $work['show_content'] = Display::img($work['show_url'], $work['title'], null, false);
+            } elseif (false !== strpos($fileType, 'video/')) {
+                $work['show_content'] = Display::tag(
+                    'video',
+                    get_lang('FileFormatNotSupported'),
+                    ['src' => $work['show_url']]
+                );
             }
         }
 
         $fieldValue = new ExtraFieldValue('work');
-        $work['extra'] = $fieldValue->getAllValuesForAnItem(
-            $id,
-            true
-        );
+        $work['extra'] = $fieldValue->getAllValuesForAnItem($id, true);
     }
 
     return $work;
@@ -1404,6 +1409,7 @@ function getWorkListTeacher(
         }
 
         $url = api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq();
+        $blockEdition = api_get_configuration_value('block_student_publication_edition');
         while ($work = Database::fetch_array($result, 'ASSOC')) {
             $workId = $work['id'];
             $work['type'] = Display::return_icon('work.png');
@@ -1456,10 +1462,14 @@ function getWorkListTeacher(
             $work['title'] .= ' '.Display::label(get_count_work($work['id']), 'success');
             $work['sent_date'] = api_get_local_time($work['sent_date']);
 
-            $editLink = Display::url(
-                Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL),
-                api_get_path(WEB_CODE_PATH).'work/edit_work.php?id='.$workId.'&'.api_get_cidreq()
-            );
+            if ($blockEdition && !api_is_platform_admin()) {
+                $editLink = '';
+            } else {
+                $editLink = Display::url(
+                    Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL),
+                    api_get_path(WEB_CODE_PATH).'work/edit_work.php?id='.$workId.'&'.api_get_cidreq()
+                );
+            }
 
             $correctionLink = '&nbsp;'.Display::url(
                 Display::return_icon('upload_package.png', get_lang('UploadCorrections'), '', ICON_SIZE_SMALL),
@@ -1932,6 +1942,9 @@ function get_work_user_list(
             ICON_SIZE_SMALL
         );
 
+        $blockEdition = api_get_configuration_value('block_student_publication_edition');
+        $blockScoreEdition = api_get_configuration_value('block_student_publication_score_edition');
+
         while ($work = Database::fetch_array($result, 'ASSOC')) {
             $item_id = $work['id'];
             // Get the author ID for that document from the item_property table
@@ -2015,8 +2028,11 @@ function get_work_user_list(
                     if ($qualification_exists) {
                         $feedback .= ' ';
                     }
-                    $feedback .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
-                    $count.' '.Display::returnFontAwesomeIcon('comments-o').'</a> ';
+
+                    $feedback .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang(
+                            'View'
+                        ).'">'.
+                        $count.' '.Display::returnFontAwesomeIcon('comments-o').'</a> ';
                 }
 
                 $correction = '';
@@ -2049,9 +2065,13 @@ function get_work_user_list(
                 // Actions.
                 $action = '';
                 if (api_is_allowed_to_edit()) {
-                    $action .= '<a 
-                        href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" 
-                        title="'.get_lang('View').'">'.$rateIcon.'</a> ';
+                    if ($blockScoreEdition && !api_is_platform_admin() && !empty($work['qualification_score'])) {
+                        $rateLink = '';
+                    } else {
+                        $rateLink = '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
+                            $rateIcon.'</a> ';
+                    }
+                    $action .= $rateLink;
 
                     if ($unoconv && empty($work['contains_file'])) {
                         $action .= '<a f
@@ -2126,13 +2146,24 @@ function get_work_user_list(
                             $action .= Display::return_icon('edit_na.png', get_lang('Comment'), [], ICON_SIZE_SMALL);
                         }
                     } else {
-                        if ($qualification_exists) {
-                            $action .= '<a href="'.$url.'edit.php?'.api_get_cidreq().'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang('Edit').'"  >'.
-                                Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
+                        if ($blockEdition && !api_is_platform_admin()) {
+                            $editLink = '';
                         } else {
-                            $action .= '<a href="'.$url.'edit.php?'.api_get_cidreq().'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang('Modify').'">'.
-                                Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
+                            if ($qualification_exists) {
+                                $editLink = '<a href="'.$url.'edit.php?'.api_get_cidreq(
+                                    ).'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang(
+                                        'Edit'
+                                    ).'"  >'.
+                                    Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
+                            } else {
+                                $editLink = '<a href="'.$url.'edit.php?'.api_get_cidreq(
+                                    ).'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang(
+                                        'Modify'
+                                    ).'">'.
+                                    Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
+                            }
                         }
+                        $action .= $editLink;
                     }
 
                     if ($work['contains_file']) {
@@ -2829,16 +2860,23 @@ function getStudentSubscribedToWork(
 }
 
 /**
- * @param int $userId
- * @param int $workId
- * @param int $courseId
+ * @param int  $userId
+ * @param int  $workId
+ * @param int  $courseId
+ * @param bool $forceAccessForCourseAdmins
  *
  * @return bool
  */
-function allowOnlySubscribedUser($userId, $workId, $courseId)
+function allowOnlySubscribedUser($userId, $workId, $courseId, $forceAccessForCourseAdmins = false)
 {
     if (api_is_platform_admin() || api_is_allowed_to_edit()) {
         return true;
+    }
+
+    if ($forceAccessForCourseAdmins) {
+        if (api_is_course_admin() || api_is_coach()) {
+            return true;
+        }
     }
 
     return userIsSubscribedToWork($userId, $workId, $courseId);
@@ -3786,7 +3824,7 @@ function checkExistingWorkFileName($filename, $workId)
  * @param bool  $checkDuplicated
  * @param bool  $showFlashMessage
  *
- * @return null|string
+ * @return string|null
  */
 function processWorkForm(
     $workInfo,
@@ -4981,7 +5019,7 @@ function getWorkUserListData(
  */
 function downloadFile($id, $course_info, $isCorrection)
 {
-    return getFile($id, $course_info, true, $isCorrection);
+    return getFile($id, $course_info, true, $isCorrection, true);
 }
 
 /**
@@ -4989,12 +5027,13 @@ function downloadFile($id, $course_info, $isCorrection)
  * @param array $course_info
  * @param bool  $download
  * @param bool  $isCorrection
+ * @param bool  $forceAccessForCourseAdmins
  *
  * @return bool
  */
-function getFile($id, $course_info, $download = true, $isCorrection = false)
+function getFile($id, $course_info, $download = true, $isCorrection = false, $forceAccessForCourseAdmins = false)
 {
-    $file = getFileContents($id, $course_info, 0, $isCorrection);
+    $file = getFileContents($id, $course_info, 0, $isCorrection, $forceAccessForCourseAdmins);
     if (!empty($file) && is_array($file)) {
         return DocumentManager::file_send_for_download(
             $file['path'],
@@ -5013,10 +5052,11 @@ function getFile($id, $course_info, $download = true, $isCorrection = false)
  * @param array $courseInfo
  * @param int   $sessionId
  * @param bool  $correction
+ * @param bool  $forceAccessForCourseAdmins
  *
  * @return array|bool
  */
-function getFileContents($id, $courseInfo, $sessionId = 0, $correction = false)
+function getFileContents($id, $courseInfo, $sessionId = 0, $correction = false, $forceAccessForCourseAdmins = false)
 {
     $id = (int) $id;
     if (empty($courseInfo) || empty($id)) {
@@ -5060,7 +5100,8 @@ function getFileContents($id, $courseInfo, $sessionId = 0, $correction = false)
             $isAllow = allowOnlySubscribedUser(
                 api_get_user_id(),
                 $row['parent_id'],
-                $courseInfo['real_id']
+                $courseInfo['real_id'],
+                $forceAccessForCourseAdmins
             );
 
             if (empty($isAllow)) {
@@ -5101,7 +5142,8 @@ function getFileContents($id, $courseInfo, $sessionId = 0, $correction = false)
             $is_editor = api_is_allowed_to_edit(true, true, true);
             $student_is_owner_of_work = user_is_author($row['id'], api_get_user_id());
 
-            if ($is_editor ||
+            if (($forceAccessForCourseAdmins && $isAllow) ||
+                $is_editor ||
                 $student_is_owner_of_work ||
                 ($doc_visible_for_all && $work_is_visible)
             ) {

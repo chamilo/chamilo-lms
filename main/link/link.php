@@ -25,7 +25,7 @@ $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 
 $htmlHeadXtra[] = '<script>
-    $(document).ready( function() {
+    $(function() {
         for (i=0;i<$(".actions").length;i++) {
             if ($(".actions:eq("+i+")").html()=="<table border=\"0\"></table>" || $(".actions:eq("+i+")").html()=="" || $(".actions:eq("+i+")").html()==null) {
                 $(".actions:eq("+i+")").hide();

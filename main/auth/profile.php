@@ -15,24 +15,25 @@ use ChamiloSession as Session;
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (api_get_setting('allow_social_tool') == 'true') {
+$this_section = SECTION_MYPROFILE;
+$allowSocialTool = api_get_setting('allow_social_tool') == 'true';
+if ($allowSocialTool) {
     $this_section = SECTION_SOCIAL;
-} else {
-    $this_section = SECTION_MYPROFILE;
 }
+
+$logInfo = [
+    'tool' => 'profile',
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => $this_section,
+    'info' => '',
+];
+Event::registerLog($logInfo);
 
 $_SESSION['this_section'] = $this_section;
 
 if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'], true)) {
     api_not_allowed(true);
-}
-
-$gMapsPlugin = GoogleMapsPlugin::create();
-$geolocalization = $gMapsPlugin->get('enable_api') === 'true';
-
-if ($geolocalization) {
-    $gmapsApiKey = $gMapsPlugin->get('api_key');
-    $htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true&key='.$gmapsApiKey.'" ></script>';
 }
 
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#password1');
@@ -201,7 +202,7 @@ $form->applyFilter('phone', 'html_filter');
 
 //  PICTURE
 if (is_profile_editable() && api_get_setting('profile', 'picture') == 'true') {
-    $form->addFile(
+    $pictureElement = $form->addFile(
         'picture',
         [
             $user_data['picture_uri'] != '' ? get_lang('UpdateImage') : get_lang('AddImage'),
@@ -327,7 +328,21 @@ if (is_platform_authentication() &&
 $extraField = new ExtraField('user');
 $return = $extraField->addElements(
     $form,
-    api_get_user_id()
+    api_get_user_id(),
+    [],
+    false,
+    false,
+    [],
+    [],
+    false,
+    false,
+    [],
+    [],
+    [],
+    false,
+    [],
+    [],
+    true
 );
 
 $jquery_ready_content = $return['jquery_ready_content'];
@@ -624,7 +639,7 @@ if ($form->validate()) {
         $sql .= ", official_code = '".Database::escape_string($user_data['official_code'])."'";
     }
 
-    $sql .= " WHERE user_id  = '".api_get_user_id()."'";
+    $sql .= " WHERE id  = '".api_get_user_id()."'";
     Database::query($sql);
 
     $webserviceUrl = api_get_plugin_setting('logintcc', 'webservice_url');
@@ -726,6 +741,10 @@ if ($form->validate()) {
     Session::write('_user', $userInfo);
 
     if ($hook) {
+        Database::getManager()->clear(User::class); //Avoid cache issue (user entity is used before)
+
+        $user = api_get_user_entity(api_get_user_id()); //Get updated user info for hook event
+
         $hook->setEventData(['user' => $user]);
         $hook->notifyUpdateUser(HOOK_EVENT_TYPE_POST);
     }
@@ -738,7 +757,7 @@ if ($form->validate()) {
 // the header
 
 $actions = '';
-if (api_get_setting('allow_social_tool') !== 'true') {
+if ($allowSocialTool) {
     if (api_get_setting('extended_profile') === 'true') {
         if (api_get_setting('allow_message_tool') === 'true') {
             $actions .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.
@@ -793,7 +812,7 @@ if ($actions) {
 
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
 
-if (api_get_setting('allow_social_tool') === 'true') {
+if ($allowSocialTool) {
     SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'home');
     $menu = SocialManager::show_social_menu(
         'home',

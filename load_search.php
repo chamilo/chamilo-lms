@@ -145,11 +145,32 @@ if (!empty($items)) {
 
 $extraField = new ExtraField('session');
 $extraFieldValue = new ExtraFieldValue('session');
+$extraFieldValueUser = new ExtraFieldValue('user');
 
 $theme = 'theme_fr';
+$lang = $defaultLangCible = api_get_interface_language();
+
 if ($userToLoadInfo) {
     $lang = $userToLoadInfo['language'];
+    $targetLanguageInfo = $extraFieldValueUser->get_values_by_handler_and_field_variable(
+        $userToLoad,
+        'langue_cible'
+    );
+
+    if (!empty($targetLanguageInfo)) {
+        $defaultLangCible = $targetLanguageInfo['value'];
+    }
+
     switch ($lang) {
+        case 'italian':
+            $theme = 'theme_it';
+            break;
+        case 'polish':
+            $theme = 'theme_pl';
+            break;
+        case 'spanish':
+            $theme = 'theme_es';
+            break;
         case 'french2':
         case 'french':
             $theme = 'theme_fr';
@@ -188,12 +209,10 @@ $extra = $extraFieldUser->addElements(
     $fieldsToShow,
     $fieldsToShow,
     [],
-    [],
     false,
     $forceShowFields, //$forceShowFields = false
     [],
-    [],
-    $fieldsToShow
+    []
 );
 
 $userForm->addHtml('</div></div></div>');
@@ -220,12 +239,10 @@ $extra = $extraFieldUser->addElements(
     $fieldsToShow,
     $fieldsToShow,
     [],
-    [],
     false,
     $forceShowFields, //$forceShowFields = false
     [],
-    [],
-    $fieldsToShow
+    []
 );
 
 $userForm->addHtml('</div></div></div>');
@@ -248,12 +265,10 @@ $extra = $extraFieldUser->addElements(
     $fieldsToShow,
     $fieldsToShow,
     $defaults,
-    [],
     false,
     $forceShowFields,//$forceShowFields = false
     [],
-    [],
-    $fieldsToShow
+    []
 );
 
 $userForm->addHtml('</div></div></div>');
@@ -277,12 +292,10 @@ $extra = $extraFieldUser->addElements(
     $fieldsToShow,
     $fieldsToShow,
     [],
-    [],
     false,
     $forceShowFields, //$forceShowFields = false
     [],
-    [],
-    $fieldsToShow
+    []
 );
 
 $userForm->addHtml('</div></div></div>');
@@ -307,7 +320,6 @@ $extra = $extraField->addElements(
     $showOnlyThisFields,
     $showOnlyThisFields,
     $defaults,
-    [],
     false, //$orderDependingDefaults
     true, // force
     [], // $separateExtraMultipleSelect
@@ -317,6 +329,7 @@ $extra = $extraField->addElements(
 $fieldsToShow = [
     'heures_disponibilite_par_semaine',
     'moment_de_disponibilite',
+    'langue_cible',
 ];
 
 $extra = $extraFieldUser->addElements(
@@ -327,7 +340,6 @@ $extra = $extraFieldUser->addElements(
     true,
     $fieldsToShow,
     $fieldsToShow,
-    [],
     [],
     false,
     $forceShowFields //$forceShowFields = false
@@ -355,7 +367,6 @@ $extra = $extraField->addElements(
     $showOnlyThisFields,
     $showOnlyThisFields,
     $defaults,
-    [],
     false, //$orderDependingDefaults
     true, // force
     ['domaine' => 3, $theme => 5], // $separateExtraMultipleSelect
@@ -373,12 +384,27 @@ $extra = $extraField->addElements(
             get_lang('ThemeField').' 5',
         ],
     ],
-    [],
     true
 );
 
-$form->addHtml('</div></div></div>');
+$fieldsToShow = [
+    'langue_cible',
+];
 
+$extra = $extraFieldUser->addElements(
+    $form,
+    $userToLoad,
+    [],
+    $filter,
+    true,
+    $fieldsToShow,
+    $fieldsToShow,
+    [],
+    false,
+    $forceShowFields //$forceShowFields = false
+);
+
+$form->addHtml('</div></div></div>');
 $form->addHtml('<div class="panel panel-default">');
 $form->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive">'.get_lang('NiveauLangue').'</a></div>');
 $form->addHtml('<div id="collapseFive" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFive">');
@@ -401,7 +427,6 @@ $extra = $extraField->addElements(
     $showOnlyThisFields,
     $showOnlyThisFields,
     $defaults,
-    [],
     false, //$orderDependingDefaults
     true, // force
     ['domaine' => 3, $theme => 5], // $separateExtraMultipleSelect
@@ -422,7 +447,6 @@ $extra = $extraField->addElements(
 );
 
 $form->addHtml('</div></div></div>');
-
 
 // Enviroment
 $userForm->addHtml('<div class="panel panel-default">');
@@ -453,7 +477,6 @@ $extra = $extraFieldUser->addElements(
     $fieldsToShow,
     $fieldsToShow,
     [],
-    [],
     false,
     $forceShowFields
 );
@@ -461,7 +484,6 @@ $extra = $extraFieldUser->addElements(
 $userForm->addLabel(null, get_lang('MonEnvironnementDeTravailExplanationIntro2'));
 
 $jqueryExtra .= $extra['jquery_ready_content'];
-
 
 $fieldsToShow = [
     'browser_platforme',
@@ -477,12 +499,10 @@ $extra = $extraFieldUser->addElements(
     $fieldsToShow,
     $fieldsToShow,
     [],
-    [],
     false,
     $forceShowFields, //$forceShowFields = false
     [],
-    [],
-    $fieldsToShow
+    []
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];
@@ -491,9 +511,6 @@ $userForm->addHtml('<p class="text-info">'.get_lang('MonEnvironnementDeTravailRe
 
 $userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseEight]');
 $userForm->addHtml('</div></div></div>');
-
-
-
 
 $form->addButtonSave(get_lang('SaveDiagnosticChanges'), 'save');
 $form->addButtonSearch(get_lang('SearchSessions'), 'search');
@@ -543,7 +560,6 @@ if ($resultOptions) {
 }
 
 $filterToSend = '';
-
 if ($formSearch->validate()) {
     $formSearchParams = $formSearch->getSubmitValues();
 }
@@ -641,8 +657,14 @@ if ($form->validate()) {
         $userDataToSave = [
             'item_id' => $userToLoad,
             'extra_heures_disponibilite_par_semaine' => isset($userData['extra_heures_disponibilite_par_semaine']) ? $userData['extra_heures_disponibilite_par_semaine'] : '',
+            'extra_langue_cible' => isset($userData['extra_langue_cible']) ? $userData['extra_langue_cible'] : '',
         ];
-        $extraFieldValue->saveFieldValues($userDataToSave, true, false, ['heures_disponibilite_par_semaine']);
+        $extraFieldValue->saveFieldValues(
+            $userDataToSave,
+            true,
+            false,
+            ['heures_disponibilite_par_semaine', 'langue_cible']
+        );
 
         // Save session search
         /** @var \Chamilo\UserBundle\Entity\User $user */
@@ -747,7 +769,6 @@ if (!empty($tagsData)) {
     foreach ($tagsData as $extraField => $tags) {
         foreach ($tags as $tag) {
             $tag = api_htmlentities($tag);
-            // $jsTag .= "$('#$extraField')[0].addItem('$tag', '$tag');";
         }
     }
 }
@@ -758,6 +779,7 @@ $(function() {
     '.$jsTag.'
 });
 </script>';
+
 if (!empty($filterToSend)) {
     // Get start and end date from ExtraFieldSavedSearch
     $defaultExtraStartDate = isset($defaults['extra_access_start_date']) ? $defaults['extra_access_start_date'] : '';
@@ -803,83 +825,83 @@ if (!empty($filterToSend)) {
     foreach ($filterToSend['rules'] as &$filterItem) {
         if (isset($filterItem['field'])) {
             switch ($filterItem['field']) {
-            case 'extra_ecouter':
-            case 'extra_lire':
-            case 'extra_participer_a_une_conversation':
-            case 'extra_s_exprimer_oralement_en_continu':
-            case 'extra_ecrire':
-                $selectedValue = '';
-                $fieldExtra = str_replace('extra_', '', $filterItem['field']);
-                $extraFieldSessionData = $extraFieldSession->get_handler_field_info_by_field_variable($fieldExtra);
+                case 'extra_ecouter':
+                case 'extra_lire':
+                case 'extra_participer_a_une_conversation':
+                case 'extra_s_exprimer_oralement_en_continu':
+                case 'extra_ecrire':
+                    $selectedValue = '';
+                    $fieldExtra = str_replace('extra_', '', $filterItem['field']);
+                    $extraFieldSessionData = $extraFieldSession->get_handler_field_info_by_field_variable($fieldExtra);
 
-                if (is_array($filterItem['data'])) {
-                    $myOrder = [];
-                    foreach ($filterItem['data'] as $option) {
-                        foreach ($extraFieldSessionData['options'] as $optionValue) {
-                            if ($option == $optionValue['option_value']) {
-                                $myOrder[$optionValue['option_order']] = $optionValue['option_value'];
+                    if (is_array($filterItem['data'])) {
+                        $myOrder = [];
+                        foreach ($filterItem['data'] as $option) {
+                            foreach ($extraFieldSessionData['options'] as $optionValue) {
+                                if ($option == $optionValue['option_value']) {
+                                    $myOrder[$optionValue['option_order']] = $optionValue['option_value'];
+                                }
                             }
                         }
+
+                        if (!empty($myOrder)) {
+                            // Taking last from list
+                            $selectedValue = end($myOrder);
+                        }
+                    } else {
+                        $selectedValue = $filterItem['data'];
                     }
 
-                    if (!empty($myOrder)) {
-                        // Taking last from list
-                        $selectedValue = end($myOrder);
-                    }
-                } else {
-                    $selectedValue = $filterItem['data'];
-                }
+                    $newOptions = array_column(
+                        $extraFieldSessionData['options'],
+                        'option_value',
+                        'option_order'
+                    );
 
-                $newOptions = array_column(
-                    $extraFieldSessionData['options'],
-                    'option_value',
-                    'option_order'
-                );
-
-                $searchOptions = [];
-                for ($i = 1; $i < count($newOptions); $i++) {
-                    if ($selectedValue == $newOptions[$i]) {
-                        if (isset($newOptions[$i - 1])) {
-                            $searchOptions[] = $newOptions[$i - 1];
-                        }
-                        if (isset($newOptions[$i])) {
-                            $searchOptions[] = $newOptions[$i];
-                        }
-                        if (isset($newOptions[$i + 1])) {
-                            $searchOptions[] = $newOptions[$i + 1];
-                        }
-                        break;
-                    }
-                }
-
-                $filterItem['data'] = $searchOptions;
-                break;
-            case 'extra_domaine':
-                // Special condition see:
-                // https://task.beeznest.com/issues/10849#note-218
-                // Remove filiere
-                $list = [
-                    'vie-quotidienne',
-                    //'competente-dans-mon-domaine-de-specialite',
-                    'arrivee-sur-mon-poste-de-travail',
-                ];
-
-                $deleteFiliere = false;
-                if (is_array($filterItem['data'])) {
-                    $myOrder = [];
-                    foreach ($filterItem['data'] as $option) {
-                        if (in_array($option, $list)) {
-                            $deleteFiliere = true;
+                    $searchOptions = [];
+                    for ($i = 1; $i < count($newOptions); $i++) {
+                        if ($selectedValue == $newOptions[$i]) {
+                            if (isset($newOptions[$i - 1])) {
+                                $searchOptions[] = $newOptions[$i - 1];
+                            }
+                            if (isset($newOptions[$i])) {
+                                $searchOptions[] = $newOptions[$i];
+                            }
+                            if (isset($newOptions[$i + 1])) {
+                                $searchOptions[] = $newOptions[$i + 1];
+                            }
                             break;
                         }
                     }
-                } else {
-                    if (in_array($filterItem['data'], $list)) {
-                        $deleteFiliere = true;
+
+                    $filterItem['data'] = $searchOptions;
+                    break;
+                case 'extra_domaine':
+                    // Special condition see:
+                    // https://task.beeznest.com/issues/10849#note-218
+                    // Remove filiere
+                    $list = [
+                        'vie-quotidienne',
+                        //'competente-dans-mon-domaine-de-specialite',
+                        'arrivee-sur-mon-poste-de-travail',
+                    ];
+
+                    $deleteFiliere = false;
+                    if (is_array($filterItem['data'])) {
+                        $myOrder = [];
+                        foreach ($filterItem['data'] as $option) {
+                            if (in_array($option, $list)) {
+                                $deleteFiliere = true;
+                                break;
+                            }
+                        }
+                    } else {
+                        if (in_array($filterItem['data'], $list)) {
+                            $deleteFiliere = true;
+                        }
                     }
-                }
-                break;
-        }
+                    break;
+            }
         }
 
         if ($deleteFiliere) {
@@ -891,11 +913,16 @@ if (!empty($filterToSend)) {
         }
     }
 
+    // Language
+    $lang = isset($params['extra_langue_cible']) ? $params['extra_langue_cible'] : $defaultLangCible;
+    $lang = strtolower($lang);
+
     if ($userStartDate && !empty($userStartDate)) {
         $filterToSend['custom_dates'] = $sql;
     }
     $filterToSend = json_encode($filterToSend);
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_search=true&load_extra_field='.$extraFieldListToString.'&_force_search=true&rows=20&page=1&sidx=&sord=asc&filters2='.$filterToSend;
+    $url .= '&lang='.$lang;
 } else {
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_search=true&load_extra_field='.$extraFieldListToString.'&_force_search=true&rows=20&page=1&sidx=&sord=asc';
 }
@@ -942,6 +969,7 @@ $griJs = Display::grid_js(
     $action_links,
     true
 );
+
 $grid = '<div id="session-table" class="table-responsive">';
 $grid .= Display::grid_html('sessions');
 $grid .= '</div>';

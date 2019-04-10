@@ -79,11 +79,12 @@ if (isset($_GET['id'])) {
         'announcements_state' => GroupManager::TOOL_PRIVATE,
         'forum_state' => GroupManager::TOOL_PRIVATE,
         'max_student' => 0,
+        'document_access' => 0,
     ];
 }
 
 $htmlHeadXtra[] = '<script>
-$(document).ready( function() {
+$(function() {
     $("#max_member").on("focus", function() {
         $("#max_member_selected").attr("checked", true);
     });
@@ -440,7 +441,7 @@ if ($form->validate()) {
 }
 
 // Else display the form
-Display :: display_header($nameTools, 'Group');
+Display::display_header($nameTools, 'Group');
 
 // actions bar
 echo '<div class="actions">';

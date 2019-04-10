@@ -1,12 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+exit;
+
 /**
  * @package chamilo.plugin.ticket
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
-$userId = intval($_GET['user_id']);
+$userId = (int) $_GET['user_id'];
 $userInfo = api_get_user_info($userId);
 
 $coursesList = CourseManager::get_courses_list_by_user_id($userId, false, true);

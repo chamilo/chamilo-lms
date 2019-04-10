@@ -141,7 +141,7 @@ $url = Display::url(
 );
 $courseListToShow = Display::page_subheader(get_lang('CourseList').$url);
 
-$courseListToShow .= '<table id="session-list-course" class="data_table">
+$courseListToShow .= '<table id="session-list-course" class="table table-hover data_table">
 <tr>
   <th width="35%">'.get_lang('CourseTitle').'</th>
   <th width="30%">'.get_lang('CourseCoach').'</th>
@@ -220,8 +220,10 @@ if ($session->getNbrCourses() === 0) {
                 api_get_path(WEB_CODE_PATH).'admin/skill_rel_course.php?session_id='.$sessionId.'&course_id='.$course->getId()
             );
         }
-
         $courseItem .= $orderButtons;
+
+        $courseItem .= '<a href="add_users_to_session_course.php?id_session='.$sessionId.'&course_id='.$course->getId().'">'.
+            Display::return_icon('new_user.png', get_lang('AddUsers'), ['style' => 'width:22px'], ICON_SIZE_MEDIUM).'</a>';
         $courseItem .= '<a href="session_course_user_list.php?id_session='.$sessionId.'&course_code='.$course->getCode().'">'.
                 Display::return_icon('user.png', get_lang('Users'), '', ICON_SIZE_SMALL).'</a>';
         $courseItem .= '<a href="'.api_get_path(WEB_CODE_PATH).'user/user_import.php?action=import&cidReq='.$course->getCode().'&id_session='.$sessionId.'">'.
@@ -242,8 +244,8 @@ if ($session->getNbrCourses() === 0) {
 }
 $courseListToShow .= '</table><br />';
 
-$url = Display::url(
-    Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL),
+$url = '&nbsp;'.Display::url(
+    Display::return_icon('user_subscribe_session.png', get_lang('Add'), [], ICON_SIZE_SMALL),
     "add_users_to_session.php?page=resume_session.php&id_session=$sessionId"
 );
 $url .= Display::url(
@@ -260,7 +262,7 @@ $userList = SessionManager::get_users_by_session($sessionId);
 
 if (!empty($userList)) {
     $table = new HTML_Table(
-        ['class' => 'data_table', 'id' => 'session-user-list']
+        ['class' => 'table table-hover data_table', 'id' => 'session-user-list']
     );
     $table->setHeaderContents(0, 0, get_lang('User'));
     $table->setHeaderContents(0, 1, get_lang('Status'));

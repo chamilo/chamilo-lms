@@ -11,7 +11,7 @@
 require_once __DIR__.'/../inc/global.inc.php';
 
 $htmlHeadXtra[] = '<script>
-$(document).ready( function() {
+$(function() {
     $("button").click(function() {
         $("#is_executable").attr("value",$(this).attr("name"));
     });
@@ -137,7 +137,6 @@ switch ($_GET['type']) {
         Display::addFlash(Display::return_message(get_lang('QuestionTags')));
         break;
 }
-
 
 // We are editing a question
 if (isset($_GET['question_id']) && !empty($_GET['question_id'])) {

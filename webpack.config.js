@@ -1,5 +1,6 @@
 var Encore = require('@symfony/webpack-encore');
 var copyWebpackPlugin = require('copy-webpack-plugin');
+var fileManagerPlugin = require('filemanager-webpack-plugin');
 
 Encore
     .setOutputPath('public/build/')
@@ -52,5 +53,20 @@ themes.forEach(function (theme) {
     },
     ]));
 });
+
+// Fix free-jqgrid langiages files
+Encore.addPlugin(new fileManagerPlugin({
+    onEnd: {
+        move: [
+            {
+                source: './public/public/build/free-jqgrid/',
+                destination: './public/build/free-jqgrid/'
+            }
+        ],
+        delete: [
+            './public/public/'
+        ]
+    }
+}));
 
 module.exports = Encore.getWebpackConfig();

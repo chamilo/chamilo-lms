@@ -4009,6 +4009,7 @@ function processWorkForm(
                         $courseId,
                         $sessionId
                     );
+
                     if (count($userWorks) == 1) {
                         // The student only uploaded one doc so far, so add the
                         // considered work time to his course connection time

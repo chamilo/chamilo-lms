@@ -687,7 +687,7 @@ if (!api_is_allowed_to_edit(false, true) &&
 
 if (!api_is_allowed_to_edit(false, true) &&
     (
-        (   $current_forum_category && $current_forum_category['locked'] != 0) ||
+        ($current_forum_category && $current_forum_category['locked'] != 0) ||
             $current_forum['locked'] != 0 || $current_thread['locked'] != 0
     )
 ) {

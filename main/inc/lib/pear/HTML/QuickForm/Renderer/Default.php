@@ -287,6 +287,12 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
 
         if (is_array($label)) {
             $nameLabel = array_shift($label);
+            // In some cases, label (coming from display_text) might be a
+            // double-level array. In this case, take the first item of the
+            // sub-array as label
+            if (is_array($nameLabel)) {
+                $nameLabel = $nameLabel[0];
+            }
         } else {
             $nameLabel = $label;
         }

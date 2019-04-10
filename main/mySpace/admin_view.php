@@ -46,6 +46,7 @@ switch ($display) {
         MySpace::display_tracking_coach_overview($exportCSV);
         break;
     case 'user':
+        echo MySpace::returnTrackingUserOverview();
         MySpace::display_tracking_user_overview();
         break;
     case 'session':

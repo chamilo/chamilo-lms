@@ -54,4 +54,6 @@
             {{ display.panel('', post_data) }}
         </div>
     {% endfor %}
+
+    {{ form }}
 {% endblock %}

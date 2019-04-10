@@ -1,0 +1,62 @@
+{% extends '@ChamiloTheme/Layout/layout_one_col.html.twig' %}
+{% block content %}
+
+    {% autoescape false %}
+        <div id="message_{{ message.id }}" data-status="{{ message.status }}" class="mail-email">
+            <div class="email-head">
+                <div class="email-head-subject">
+                    <div class="title">
+                        <a class="active" href="#">
+                            <span class="icon">
+                                <i class="fas fa-star"></i>
+                            </span>
+                        </a>
+                        <span>
+                            {{ message.title }}
+                        </span>
+                        <div class="icons">
+                            <div class="btn-group" role="group" >
+                                <a href="{{ message.url.back }}" class="btn btn-outline-secondary icon"><i class="fas fa-arrow-circle-left"></i> {{ 'Back'|trans }}</a>
+                                <a href="#" onclick="window.print();" class="btn btn-outline-secondary icon"><i class="fas fa-print"></i> {{ 'Print'|trans }}</a>
+                                <a href="{{ message.url.new_message }}" class="btn btn-outline-secondary icon"><i class="fas fa-reply"></i> {{ 'Reply'|trans }}</a>
+                                <a href="{{ message.url.delete }}" class="btn btn-outline-secondary icon"><i class="fas fa-trash"></i> {{ 'Delete'|trans }}</a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="email-head-sender">
+                    <div class="date">{{ message.date }}</div>
+                    <div class="avatar">
+                        <img src="{{ message.form_user.avatar }}" alt="Avatar" class="rounded-circle user-avatar-md">
+                    </div>
+                    <div class="sender">
+                        <a href="{{ _p.web }}main/social/profile.php?u={{ message.form_user.id }}">{{ message.form_user.name }}</a>
+                        <div class="email">{{ message.form_user.email }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="email-body">
+               {{ message.content }}
+            </div>
+
+            {% if message.attachments %}
+                <div class="email-attachments">
+                    <div class="title">{{ 'Attachments'|trans }} <span>({{ message.attachments.quantity }} {{ 'Files'|trans }}, {{ message.attachments.total_size }})</span></div>
+                    <ul>
+                        {% for item in message.attachments.files %}
+                        <li>
+                            <a href="{{ item.url }}">
+                                <i class="fas fa-paperclip"></i> {{ item.filename }}
+                                <span>({{ item.size }})</span>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        </div>
+
+
+    {% endautoescape %}
+{% endblock %}

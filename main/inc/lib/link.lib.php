@@ -1656,9 +1656,10 @@ class Link extends Model
             $listCategory[] = $category;
         }
         $list['in_category'] = $listCategory;
-
+        $isTeacher = api_is_allowed_to_edit(null, true);
         $tpl = new Template(null);
         $tpl->assign('list_not_category', $list['not_category']);
+        $tpl->assign('is_allowed_to_edit', $isTeacher);
         $tpl->assign('list_in_category', $list['in_category']);
         $courseInfoLayout = $tpl->get_template("link/index.html.twig");
         $content = $tpl->fetch($courseInfoLayout);

@@ -1278,13 +1278,14 @@ class MessageManager
      *
      * @todo replace numbers with letters in the $row array pff...
      *
-     * @return string html with the message content
+     * @return array the message content
      */
     public static function showMessageBox($messageId, $source = 'inbox')
     {
         $table = Database::get_main_table(TABLE_MESSAGE);
         $messageId = (int) $messageId;
         $currentUserId = api_get_user_id();
+        $msg = [];
 
         if ($source == 'outbox') {
             if (isset($messageId) && is_numeric($messageId)) {
@@ -1315,119 +1316,65 @@ class MessageManager
         $row = Database::fetch_array($result, 'ASSOC');
 
         if (empty($row)) {
-            return '';
+            return $msg;
         }
 
         $user_sender_id = $row['user_sender_id'];
+        $msg['id'] = $row['id'];
+        $msg['status'] = $row['msg_status'];
+        $msg['user_id'] = $user_sender_id;
 
         // get file attachments by message id
         $files_attachments = self::getAttachmentLinkList(
             $messageId,
             $source
         );
+        $msg['title'] = Security::remove_XSS($row['title'], STUDENT, true);
+        $msg['attachments'] = $files_attachments;
 
-        $row['content'] = str_replace('</br>', '<br />', $row['content']);
-        $title = Security::remove_XSS($row['title'], STUDENT, true);
-        $content = Security::remove_XSS($row['content'], STUDENT, true);
-
-        $name = get_lang('UnknownUser');
+        $contentMsg = str_replace('</br>', '<br />', $row['content']);
+        $content = Security::remove_XSS($contentMsg, STUDENT, true);
+        $msg['content'] = $content;
         $fromUser = api_get_user_info($user_sender_id);
-        $userImage = '';
+
         if (!empty($user_sender_id) && !empty($fromUser)) {
-            $name = $fromUser['complete_name_with_username'];
-            $userImage = Display::img(
-                $fromUser['avatar_small'],
-                $name,
-                ['title' => $name, 'class' => 'rounded-circle mr-2'],
-                false
-            );
+            $msg['form_user'] = [
+                'id' => $fromUser['id'],
+                'name' => $fromUser['complete_name'],
+                'username' => $fromUser['username'],
+                'avatar' => $fromUser['avatar_small'],
+                'email' => $fromUser['email'],
+            ];
         }
+        $msg['date'] = Display::dateToStringAgoAndLongDate($row['send_date']);
 
-        $message_content = Display::page_subheader(str_replace("\\", "", $title));
-
-        $receiverUserInfo = [];
         if (!empty($row['user_receiver_id'])) {
             $receiverUserInfo = api_get_user_info($row['user_receiver_id']);
+            $msg['receiver_user'] = [
+                'id' => $receiverUserInfo['id'],
+                'name' => $receiverUserInfo['complete_name'],
+                'username' => $receiverUserInfo['username'],
+                'avatar' => $receiverUserInfo['avatar'],
+                'email' => $receiverUserInfo['email']
+            ];
         }
 
-        $message_content .= '<tr>';
-        if (api_get_setting('allow_social_tool') == 'true') {
-            $message_content .= '<div class="row">';
-            if ($source == 'outbox') {
-                $message_content .= '<div class="col-md-12">';
-                $message_content .= '<ul class="list-message">';
-                $message_content .= '<li>'.$userImage.'</li>';
-                $message_content .= '<li>'.$name.'&nbsp;';
-                if (!empty($receiverUserInfo)) {
-                    $message_content .= api_strtolower(
-                            get_lang('To')
-                        ).'&nbsp;<b>'.$receiverUserInfo['complete_name_with_username'].'</b></li>';
-                } else {
-                    $message_content .= api_strtolower(get_lang('To')).'&nbsp;<b>-</b></li>';
-                }
-
-                $message_content .= '<li>'.Display::dateToStringAgoAndLongDate($row['send_date']).'</li>';
-                $message_content .= '</ul>';
-                $message_content .= '</div>';
-            } else {
-                $message_content .= '<div class="col-md-12">';
-                $message_content .= '<ul class="list-message">';
-                if (!empty($user_sender_id)) {
-                    $message_content .= '<li>'.$userImage.'</li>';
-                    $message_content .= '<li><a href="'.api_get_path(
-                            WEB_PATH
-                        ).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a>';
-                } else {
-                    $message_content .= '<li>'.$name;
-                }
-
-                $message_content .= '&nbsp;'.api_strtolower(get_lang('To')).'&nbsp;'.get_lang('Me');
-                $message_content .= '<li>'.Display::dateToStringAgoAndLongDate($row['send_date']).'</li>';
-                $message_content .= '</ul>';
-                $message_content .= '</div>';
-            }
-            $message_content .= '</div>';
-        } else {
-            if ($source == 'outbox') {
-                $message_content .= get_lang('From').':&nbsp;'.$name.'</b> '.api_strtolower(get_lang('To')).' <b>'.
-                    $receiverUserInfo['complete_name_with_username'].'</b>';
-            } else {
-                $message_content .= get_lang('From').':&nbsp;'.$name.'</b> '.api_strtolower(get_lang('To')).' <b>'.
-                    get_lang('Me').'</b>';
-            }
-        }
-
-        $message_content .= '		        
-		        <hr style="color:#ddd" />
-		        <table width="100%">
-		            <tr>
-		              <td valign=top class="view-message-content">'.str_replace("\\", "", $content).'</td>
-		            </tr>
-		        </table>
-		        <div id="message-attach">'.(!empty($files_attachments) ? implode('<br />', $files_attachments) : '').'</div>
-		        <div style="padding: 15px 0px 5px 0px">';
+        $urlMessage = [];
         $social_link = '';
         if (isset($_GET['f']) && $_GET['f'] == 'social') {
             $social_link = 'f=social';
         }
         if ($source == 'outbox') {
-            $message_content .= '<a href="outbox.php?'.$social_link.'">'.
-                Display::return_icon('back.png', get_lang('ReturnToOutbox')).'</a> &nbsp';
+            $urlMessage['return'] = 'outbox.php?'.$social_link;
         } else {
-            $message_content .= '<a href="inbox.php?'.$social_link.'">'.
-                Display::return_icon('back.png', get_lang('ReturnToInbox')).'</a> &nbsp';
-            $message_content .= '<a href="new_message.php?re_id='.$messageId.'&'.$social_link.'">'.
-                Display::return_icon('message_reply.png', get_lang('ReplyToMessage')).'</a> &nbsp';
+            $urlMessage['back'] = 'inbox.php?'.$social_link;
+            $urlMessage['new_message'] = 'new_message.php?re_id='.$messageId.'&'.$social_link;
         }
-        $message_content .= '<a href="inbox.php?action=deleteone&id='.$messageId.'&'.$social_link.'" >'.
-            Display::return_icon('delete.png', get_lang('DeleteMessage')).'</a>&nbsp';
+        $urlMessage['delete'] = 'inbox.php?action=deleteone&id='.$messageId.'&'.$social_link;
 
-        $message_content .= '</div></td>
-		      <td width=10></td>
-		    </tr>
-		</table>';
+        $msg['url'] = $urlMessage;
 
-        return $message_content;
+        return $msg;
     }
 
     /**
@@ -2005,28 +1952,44 @@ class MessageManager
         $files = self::getAttachmentList($messageId);
         // get file attachments by message id
         $list = [];
+        $totalSize = 0;
+
         if ($files) {
-            $attachIcon = Display::return_icon('attachment.gif', '');
+
             $archiveURL = api_get_path(WEB_CODE_PATH).'messages/download.php?type='.$type.'&file=';
+            $countFiles = count($files);
+
             foreach ($files as $row_file) {
                 $archiveFile = $row_file['path'];
                 $filename = $row_file['filename'];
+                $totalSize += $row_file['size'];
                 $size = format_file_size($row_file['size']);
                 $comment = Security::remove_XSS($row_file['comment']);
                 $filename = Security::remove_XSS($filename);
-                $link = Display::url($filename, $archiveURL.$archiveFile);
-                $comment = !empty($comment) ? '&nbsp;-&nbsp;<i>'.$comment.'</i>' : '';
+                $type = 'file';
 
-                $attachmentLine = $attachIcon.'&nbsp;'.$link.'&nbsp;('.$size.')'.$comment;
                 if ($row_file['comment'] == 'audio_message') {
-                    $attachmentLine = '<audio src="'.$archiveURL.$archiveFile.'"/>';
+                    $type= 'audio';
                 }
 
-                $list[] = $attachmentLine;
-            }
-        }
+                $listTemp = [
+                    'filename' => $filename,
+                    'size' => $size,
+                    'comment' => $comment,
+                    'url' => $archiveURL.$archiveFile,
+                    'type' => $type
+                ];
 
-        return $list;
+                $list[] = $listTemp;
+            }
+            return [
+                'quantity' => $countFiles,
+                'total_size' => format_file_size($totalSize),
+                'files' => $list
+            ];
+        } else {
+            return [];
+        }
     }
 
     /**

@@ -24,16 +24,37 @@ if ($allowSocial) {
 }
 $interbreadcrumb[] = ['url' => 'inbox.php', 'name' => get_lang('Messages')];
 
-$social_right_content = '<div class="actions">';
+
 if (api_get_setting('allow_message_tool') === 'true') {
-    $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
-        Display::return_icon('new-message.png', get_lang('ComposeMessage')).'</a>';
-    $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
-        Display::return_icon('inbox.png', get_lang('Inbox')).'</a>';
-    $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.
-        Display::return_icon('outbox.png', get_lang('Outbox')).'</a>';
+
+    $actionLeft = Display::url(
+        Display::return_icon(
+            'new-message.png',
+            get_lang('ComposeMessage')
+        ),
+        api_get_path(WEB_PATH).'main/messages/new_message.php'
+    );
+
+    $actionLeft.=Display::url(
+        Display::return_icon(
+            'inbox.png',
+            get_lang('Inbox')
+        ),
+        api_get_path(WEB_PATH).'main/messages/inbox.php'
+    );
+
+    $actionLeft.=Display::url(
+        Display::return_icon(
+            'outbox.png',
+            get_lang('Outbox')
+        ),
+        api_get_path(WEB_PATH).'main/messages/outbox.php'
+    );
+
+    $toolbar = Display::toolbarAction('inbox',[ 0 => $actionLeft ]);
+
 }
-$social_right_content .= '</div>';
+
 
 if (empty($_GET['id'])) {
     $messageId = $_GET['id_send'];
@@ -56,31 +77,28 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
-// LEFT COLUMN
-if (api_get_setting('allow_social_tool') === 'true') {
-    // Block Social Menu
-    $social_menu_block = SocialManager::show_social_menu($show_menu);
-}
 // MAIN CONTENT
-$message .= MessageManager::showMessageBox($messageId, $source);
+$message = MessageManager::showMessageBox($messageId, $source);
+$messageContent = '';
+
 
 if (!empty($message)) {
-    $social_right_content .= $message;
+    $messageContent = $message;
 } else {
     api_not_allowed(true);
 }
+
 $tpl = new Template(get_lang('View'));
 // Block Social Avatar
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), $show_menu);
 
 if (api_get_setting('allow_social_tool') === 'true') {
-    $tpl->assign('social_menu_block', $social_menu_block);
-    $tpl->assign('social_right_content', $social_right_content);
-    $social_layout = $tpl->get_template('social/inbox.tpl');
+    $tpl->assign('actions',$toolbar);
+    $tpl->assign('message', $messageContent);
+    $social_layout = $tpl->get_template('message/view_message.html.twig');
     $tpl->display($social_layout);
 } else {
     $content = $social_right_content;
-
     $tpl->assign('content', $content);
     $tpl->display_one_col_template();
 }

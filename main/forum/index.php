@@ -584,7 +584,7 @@ if (is_array($forumCategories)) {
         $listForumCategory[] = $forumCategoryInfo;
     }
 }
-
+$isTeacher = api_is_allowed_to_edit(false, true);
 $tpl = new Template($nameTools);
 $tpl->assign('introduction', $introduction);
 $tpl->assign('actions', $actions);
@@ -593,6 +593,7 @@ $tpl->assign('form_content', $formContent);
 $tpl->assign('search_filter', $searchFilter);
 $tpl->assign('default_user_language', $defaultUserLanguage);
 $tpl->assign('languages', $languages);
+$tpl->assign('is_allowed_to_edit', $isTeacher);
 $extraFieldValue = new ExtraFieldValue('course');
 $value = $extraFieldValue->get_values_by_handler_and_field_variable(api_get_course_int_id(), 'global_forum');
 if ($value && isset($value['value']) && $value['value'] == 1) {

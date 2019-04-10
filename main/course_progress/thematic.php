@@ -19,9 +19,13 @@ $user_info = api_get_user_info();
 $params = '&'.api_get_cidreq();
 
 $tpl = new Template(get_lang('ThematicControl'));
+$isTeacher = api_is_allowed_to_edit(null, true);
 
+$tpl->assign('token', $url_token);
+$tpl->assign('is_allowed_to_edit', $isTeacher);
 $toolbar = null;
-if (api_is_allowed_to_edit(null, true)) {
+
+if ($isTeacher) {
     switch ($action) {
         case 'thematic_add':
         case 'thematic_import_select':
@@ -216,7 +220,7 @@ if ($action == 'thematic_list') {
             $tpl->assign('data', $listThematic);
         } //End for
     }
-    $thematicLayout = $tpl->get_template('course_progress/progress.tpl');
+    $thematicLayout = $tpl->get_template('course_progress/progress.html.twig');
     $content = $tpl->fetch($thematicLayout);
     $tpl->assign('content', $content);
 } elseif ($action == 'thematic_add' || $action == 'thematic_edit') {
@@ -291,7 +295,7 @@ if ($action == 'thematic_list') {
 $tpl->assign('actions', $toolbar);
 if (!empty($html)) {
     $tpl->assign('content', $html);
-    $thematicLayout = $tpl->get_template('course_progress/layout.tpl');
+    $thematicLayout = $tpl->get_template('course_progress/layout.html.twig');
 }
 if (!empty($message) && !empty($total_average_of_advances)) {
     $tpl->assign('message', $message);

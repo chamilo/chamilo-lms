@@ -3119,6 +3119,8 @@ function store_thread(
  *                              (I first thought to put and I-frame with the message only)
  *                              4. quote: Quoting a message ($action= quotemessage) => I-frame with the complete thread (if enabled).
  *                              The message will be in the reply. (I first thought not to put an I-frame here)
+ * @param array  $form_values
+ * @param bool   $showPreview
  *
  * @return FormValidator
  *
@@ -3126,14 +3128,14 @@ function store_thread(
  *
  * @version february 2006, dokeos 1.8
  */
-function show_add_post_form($current_forum, $action, $id = '', $form_values = '')
+function show_add_post_form($current_forum, $action, $form_values = '', $showPreview = true)
 {
     $_user = api_get_user_info();
     $action = isset($action) ? Security::remove_XSS($action) : '';
     $myThread = isset($_GET['thread']) ? (int) $_GET['thread'] : '';
     $forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : '';
     $my_post = isset($_GET['post']) ? (int) $_GET['post'] : '';
-    $giveRevision = (isset($_GET['give_revision']) && $_GET['give_revision'] == 1);
+    $giveRevision = isset($_GET['give_revision']) && $_GET['give_revision'] == 1;
 
     $url = api_get_self().'?'.http_build_query(
         [
@@ -3197,12 +3199,15 @@ function show_add_post_form($current_forum, $action, $id = '', $form_values = ''
     }
 
     $iframe = null;
+    if ($showPreview) {
     $myThread = Security::remove_XSS($myThread);
     if ($action != 'newthread' && !empty($myThread)) {
-        $iframe = "<iframe style=\"border: 1px solid black\" src=\"iframe_thread.php?".api_get_cidreq()."&forum=".$forumId."&thread=".$myThread."#".$my_post."\" width=\"100%\"></iframe>";
-    }
-    if (!empty($iframe)) {
-        $form->addElement('label', get_lang('Thread'), $iframe);
+            $iframe = "<iframe style=\"border: 1px solid black\" src=\"iframe_thread.php?".api_get_cidreq(
+                )."&forum=".$forumId."&thread=".$myThread."#".$my_post."\" width=\"100%\"></iframe>";
+    	}
+    	if (!empty($iframe)) {
+        	$form->addElement('label', get_lang('Thread'), $iframe);
+        }
     }
 
     if (Gradebook::is_active() &&
@@ -3255,7 +3260,7 @@ function show_add_post_form($current_forum, $action, $id = '', $form_values = ''
         $form->addElement('html', '</div>');
     }
 
-    if ($action == 'newthread') {
+    if ($action === 'newthread') {
         Skill::addSkillsToForm($form, ITEM_TYPE_FORUM_THREAD, 0);
     }
 
@@ -3279,18 +3284,23 @@ function show_add_post_form($current_forum, $action, $id = '', $form_values = ''
     }
 
     if ($giveRevision) {
+        $hide = api_get_configuration_value('hide_forum_post_revision_language');
         $form->addHidden('give_revision', 1);
-        $extraField = new ExtraField('forum_post');
-        $returnParams = $extraField->addElements(
-            $form,
-            null,
-            [], //exclude
-            false, // filter
-            false, // tag as select
-            ['revision_language'], //show only fields
-            [], // order fields
-            [] // extra data
-        );
+        if ($hide === false) {
+            $extraField = new ExtraField('forum_post');
+            $extraField->addElements(
+                $form,
+                null,
+                [], //exclude
+                false, // filter
+                false, // tag as select
+                ['revision_language'], //show only fields
+                [], // order fields
+                [] // extra data
+            );
+        } else {
+            $form->addHidden('extra_revision_language', 1);
+        }
     }
 
     // Setting the class and text of the form title and submit button.
@@ -3407,10 +3417,13 @@ function show_add_post_form($current_forum, $action, $id = '', $form_values = ''
 
                 if (isset($values['give_revision']) && $values['give_revision'] == 1) {
                     $extraFieldValues = new ExtraFieldValue('forum_post');
+                    $revisionLanguage = isset($values['extra_revision_language']) ? $values['extra_revision_language'] : '';
+
                     $params = [
                         'item_id' => $postId,
-                        'extra_revision_language' => $values['extra_revision_language'],
+                        'extra_revision_language' => $revisionLanguage,
                     ];
+
                     $extraFieldValues->saveFieldValues(
                         $params,
                         false,

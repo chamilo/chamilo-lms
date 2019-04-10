@@ -45,16 +45,15 @@ if (!isset($_GET['selected_course']) && !isset($_GET['exerciseId'])) {
 }
 
 $_course = api_get_course_info();
-
-if (empty($objExercise) && !empty($fromExercise)) {
-    $objExercise = new Exercise();
+$objExercise = new Exercise();
+if (!empty($fromExercise)) {
     $objExercise->read($fromExercise, false);
 }
 
 $nameTools = get_lang('QuestionPool');
 $interbreadcrumb[] = ['url' => 'exercise.php?'.api_get_cidreq(), 'name' => get_lang('Exercises')];
 
-if (!empty($objExercise)) {
+if (!empty($objExercise->id)) {
     $interbreadcrumb[] = [
         'url' => 'admin.php?exerciseId='.$objExercise->id.'&'.api_get_cidreq(),
         'name' => $objExercise->selectTitle(true),

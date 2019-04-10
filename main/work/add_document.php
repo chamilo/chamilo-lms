@@ -88,6 +88,7 @@ if (empty($docId)) {
     echo Display::page_subheader(get_lang('Documents'));
     echo $documentTree;
     echo '<hr /><div class="clear"></div>';
+    Display::display_footer();
 } else {
     $documentInfo = DocumentManager::get_document_data_by_id($docId, $courseInfo['code']);
     $url = api_get_path(WEB_CODE_PATH).'work/add_document.php?id='.$workId.'&document_id='.$docId.'&'.api_get_cidreq();
@@ -118,4 +119,5 @@ if (empty($docId)) {
 
     Display::display_header(null);
     $form->display();
+    Display::display_footer();
 }

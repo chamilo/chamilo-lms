@@ -7159,29 +7159,27 @@ function api_get_jquery_ui_css_web_path()
 /**
  * Returns the jquery-ui library js headers.
  *
- * @param   bool    add the jqgrid library
- *
  * @return string html tags
  */
-function api_get_jquery_ui_js($include_jqgrid = false)
+function api_get_jquery_ui_js()
 {
     $libraries = [];
-    if ($include_jqgrid) {
-        $libraries[] = 'jqgrid';
-    }
 
     return api_get_jquery_libraries_js($libraries);
 }
 
 function api_get_jqgrid_js()
 {
-    return api_get_jquery_libraries_js(['jqgrid']);
+    $routePublic = Container::getRouter()->generate('legacy_public');
+
+    return api_get_css($routePublic.'build/free-jqgrid.css').PHP_EOL
+        .api_get_js_simple($routePublic.'build/free-jqgrid.js');
 }
 
 /**
  * Returns the jquery library js and css headers.
  *
- * @param   array   list of jquery libraries supported jquery-ui, jqgrid
+ * @param   array   list of jquery libraries supported jquery-ui
  * @param   bool    add the jquery library
  *
  * @return string html tags
@@ -7189,26 +7187,6 @@ function api_get_jqgrid_js()
 function api_get_jquery_libraries_js($libraries)
 {
     $js = '';
-    $js_path = api_get_path(WEB_LIBRARY_PATH).'javascript/';
-
-    //jqgrid js and css
-    if (in_array('jqgrid', $libraries)) {
-        $languaje = 'en';
-        $platform_isocode = strtolower(api_get_language_isocode());
-
-        //languages supported by jqgrid see files in main/inc/lib/javascript/jqgrid/js/i18n
-        $jqgrid_langs = [
-            'bg', 'bg1251', 'cat', 'cn', 'cs', 'da', 'de', 'el', 'en', 'es', 'fa', 'fi', 'fr', 'gl', 'he', 'hu', 'is', 'it', 'ja', 'nl', 'no', 'pl', 'pt-br', 'pt', 'ro', 'ru', 'sk', 'sr', 'sv', 'tr', 'ua',
-        ];
-
-        if (in_array($platform_isocode, $jqgrid_langs)) {
-            $languaje = $platform_isocode;
-        }
-        //$js .= '<link rel="stylesheet" href="'.$js_path.'jqgrid/css/ui.jqgrid.css" type="text/css">';
-        $js .= api_get_css($js_path.'jqgrid/css/ui.jqgrid.css');
-        $js .= api_get_js('jqgrid/js/i18n/grid.locale-'.$languaje.'.js');
-        $js .= api_get_js('jqgrid/js/jquery.jqGrid.min.js');
-    }
 
     //Document multiple upload funcionality
     if (in_array('jquery-uploadzs', $libraries)) {
@@ -7231,7 +7209,6 @@ function api_get_jquery_libraries_js($libraries)
         $languaje = 'en-GB';
         $platform_isocode = strtolower(api_get_language_isocode());
 
-        // languages supported by jqgrid see files in main/inc/lib/javascript/jqgrid/js/i18n
         $datapicker_langs = [
             'af', 'ar', 'ar-DZ', 'az', 'bg', 'bs', 'ca', 'cs', 'cy-GB', 'da', 'de', 'el', 'en-AU', 'en-GB', 'en-NZ', 'eo', 'es', 'et', 'eu', 'fa', 'fi', 'fo', 'fr', 'fr-CH', 'gl', 'he', 'hi', 'hr', 'hu', 'hy', 'id', 'is', 'it', 'ja', 'ka', 'kk', 'km', 'ko', 'lb', 'lt', 'lv', 'mk', 'ml', 'ms', 'nl', 'nl-BE', 'no', 'pl', 'pt', 'pt-BR', 'rm', 'ro', 'ru', 'sk', 'sl', 'sq', 'sr', 'sr-SR', 'sv', 'ta', 'th', 'tj', 'tr', 'uk', 'vi', 'zh-CN', 'zh-HK', 'zh-TW',
         ];

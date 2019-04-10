@@ -6,6 +6,8 @@ import Routing from '../../vendor/friendsofsymfony/jsrouting-bundle/Resources/pu
 
 Routing.setRoutingData(routes);
 
+const locale = document.querySelector('html').lang;
+
 require('./vendor');
 require('./main');
 
@@ -218,7 +220,6 @@ $(function() {
 
     $('.scrollbar-inner').scrollbar();
 
-    var locale = $('html').attr('lang');
     // Date time settings.
     moment.locale(locale);
     $.datepicker.setDefaults($.datepicker.regional[locale]);

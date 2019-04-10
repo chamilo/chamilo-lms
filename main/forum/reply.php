@@ -164,7 +164,6 @@ Event::registerLog($logInfo);
 $form = show_add_post_form(
     $current_forum,
     $my_action,
-    $my_post,
     $my_elements
 );
 

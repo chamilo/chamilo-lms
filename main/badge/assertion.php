@@ -8,7 +8,6 @@
  *
  * @package chamilo.badge
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $userId = isset($_GET['user']) ? (int) $_GET['user'] : 0;

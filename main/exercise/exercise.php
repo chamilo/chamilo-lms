@@ -978,7 +978,7 @@ if (!empty($exerciseList)) {
 
                     // Check if this exercise was added in a LP
                     if ($exercise->exercise_was_added_in_lp == true) {
-                        $visiblity = Display::return_icon(
+                        $visibility = Display::return_icon(
                             'invisible.png',
                             get_lang('AddedToLPCannotBeAccessed'),
                             '',
@@ -986,7 +986,7 @@ if (!empty($exerciseList)) {
                         );
                     } else {
                         if ($row['active'] == 0 || $visibility == 0) {
-                            $visiblity = Display::url(
+                            $visibility = Display::url(
                                 Display::return_icon(
                                     'invisible.png',
                                     get_lang('Activate'),
@@ -997,7 +997,7 @@ if (!empty($exerciseList)) {
                             );
                         } else {
                             // else if not active
-                            $visiblity = Display::url(
+                            $visibility = Display::url(
                                 Display::return_icon(
                                     'visible.png',
                                     get_lang('Deactivate'),
@@ -1010,10 +1010,10 @@ if (!empty($exerciseList)) {
                     }
 
                     if ($limitTeacherAccess && !api_is_platform_admin()) {
-                        $visiblity = '';
+                        $visibility = '';
                     }
 
-                    $actions .= $visiblity;
+                    $actions .= $visibility;
 
                     $actions .= '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.
                         Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
@@ -1144,7 +1144,7 @@ if (!empty($exerciseList)) {
                 if ($time_limits) {
                     // Exam is ready to be taken
                     if ($is_actived_time) {
-                        // Show results 	697 	$attempt_text = get_lang('LatestAttempt').' : ';
+                        // Show results
                         if (
                             in_array(
                                 $my_result_disabled,
@@ -1155,21 +1155,23 @@ if (!empty($exerciseList)) {
                                 ]
                             )
                         ) {
-                            //More than one attempt
+                            // More than one attempt
                             if ($num > 0) {
                                 $row_track = Database :: fetch_array($qryres);
                                 $attempt_text = get_lang('LatestAttempt').' : ';
-                                $attempt_text .= ExerciseLib::show_score($row_track['exe_result'], $row_track['exe_weighting']);
+                                $attempt_text .= ExerciseLib::show_score(
+                                    $row_track['exe_result'],
+                                    $row_track['exe_weighting']
+                                );
                             } else {
                                 //No attempts
                                 $attempt_text = get_lang('NotAttempted');
                             }
                         } else {
-                            //$attempt_text = get_lang('CantShowResults');
                             $attempt_text = '-';
                         }
                     } else {
-                        //Quiz not ready due to time limits 	700 	$attempt_text = get_lang('NotAttempted');
+                        // Quiz not ready due to time limits
                         //@todo use the is_visible function
                         if (!empty($row['start_time']) && !empty($row['end_time'])) {
                             $today = time();

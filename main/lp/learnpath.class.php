@@ -2298,11 +2298,16 @@ class learnpath
         $tbl_lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
         $lpItemId = (int) $lpItemId;
 
+        /** @var learnpathItem $item */
+        $item = $this->items[$lpItemId];
+        $itemViewId = (int) $item->db_item_view_id;
+
         // Getting all the information about the item.
-        $sql = "SELECT * FROM $tbl_lp_item as lpi
+        $sql = "SELECT lpi.audio, lpi.item_type, lp_view.status FROM $tbl_lp_item as lpi
                 INNER JOIN $tbl_lp_item_view as lp_view
                 ON (lpi.iid = lp_view.lp_item_id)
                 WHERE
+                    lp_view.iid = $itemViewId AND
                     lpi.iid = $lpItemId AND
                     lp_view.c_id = $course_id";
         $result = Database::query($sql);
@@ -2335,6 +2340,8 @@ class learnpath
                 default:
                     $autostart_audio = 'true';
             }
+
+            error_log($autostart_audio);
 
             $courseInfo = api_get_course_info();
             $audio = $row['audio'];

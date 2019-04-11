@@ -47,7 +47,7 @@ switch ($display) {
         break;
     case 'user':
         echo MySpace::returnTrackingUserOverview();
-        MySpace::display_tracking_user_overview();
+        /*MySpace::display_tracking_user_overview();*/
         break;
     case 'session':
         MySpace::display_tracking_session_overview();

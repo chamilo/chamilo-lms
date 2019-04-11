@@ -47,7 +47,7 @@
                     <img src="{{ item.avatar }}" class="img-circle">
                 </div>
                 <div class="user">
-                    <a href="#" class="name">
+                    <a href="{{ _p.web }}main/social/profile.php?u={{ item.id }}" class="name">
                         {{ item.complete_name }}
                     </a>
                     <div class="username">{{ item.username }}</div>

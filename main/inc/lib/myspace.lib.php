@@ -358,7 +358,7 @@ class MySpace
                 'student_progress' => round(Tracking::get_avg_student_progress($user_id, $courseCode)),
                 'student_score' => $avg_score,
                 'student_message' => Tracking::count_student_messages($user_id, $courseCode),
-                'student assignments' => Tracking::count_student_assignments($user_id, $courseCode),
+                'student_assignments' => Tracking::count_student_assignments($user_id, $courseCode),
                 'student_exercises' => (is_null($exercises_results['percentage']) ? '' : $exercises_results['score_obtained'].'/'.$exercises_results['score_possible'].' ( '.$exercises_results['percentage'].'% )'),
                 'questions_answered' => $exercises_results['questions_answered'],
                 'last_connection' => Tracking::get_last_connection_date_on_the_course($user_id, $courseInfo)
@@ -387,12 +387,14 @@ class MySpace
 
         $list = [];
         foreach ($dataUser as $item){
+            $avatar = UserManager::getUserPicture($item['col4'],USER_IMAGE_SIZE_SMALL);
             $listUser =  [
                 'id' => $item['col4'],
                 'code_user' => $item['col0'],
                 'complete_name' => $item['col1'] . ' ' . $item['col2'],
                 'username' => $item['col3'],
-                'course' => self::returnCourseTrackingFilter($item['col4'])
+                'course' => self::returnCourseTrackingFilter($item['col4']),
+                'avatar' => $avatar
             ];
             $list [] = $listUser;
         }

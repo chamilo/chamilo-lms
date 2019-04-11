@@ -9797,10 +9797,157 @@ ul.dropdown-menu.inner > li > a {
     position: relative;
 }
 
-/* Fix grid with one row and multiples columns. Works for .col-sm-6.col-md-4.col-lg-3 */
-.row.clear-rows-6-4-3 {
+.summary-height{
+    height: calc(100% - 20px);
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    box-shadow: 0 0 13px 0 rgba(82,63,105,0.05);
+    margin-bottom: 20px;
+    border-radius: 4px;
+    border: 1px solid #cdcdcd;
 }
+.summary{
+    padding: 0;
+    height: 100%;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    flex-direction: row;
+    width: 100%;
+}
+.summary-body{
+    flex-grow: 1;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    margin-top: 15px !important;
+}
+.summary-item{
+    display: flex;
+    -webkit-box-pack: justify;
+    justify-content: flex-start;
+    -webkit-box-align: center;
+    align-items: center;
+    padding-bottom: 2rem;
 
+}
+.summary-item .icon{
+    padding-right: 1.25rem;
+}
+.summary-item .icon img{
+    border: 1px solid #cdcdcd;
+}
+.summary-item .user .username{
+    font-size: 12px;
+}
+.summary-item .user .name{
+    color: #6c7293;
+    font-size: 1.56rem;
+    font-weight: 500;
+    padding-right: 1.25rem;
+    margin-top: 1rem;
+    display: inline-block;
+    flex-grow: 1;
+    transition: color 0.3s ease;
+}
+.summary-item .user .name:hover{
+    color: #366cf3;
+    transition: color 0.3s ease;
+}
+.summary-item .user{
+    width: 14%;
+}
+.summary-item .summary-course{
+    width: 80%;
+}
+.summary-item .summary-course .alert{
+    margin-bottom: 0;
+}
+.summary-item .summary-course .course-item{
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+    border-bottom: 1px dashed #cdcdcd;
+    display: flex;
+    flex-wrap: nowrap;
+}
+.summary-item .summary-course .course-item:last-child{
+    border-bottom: none;
+}
+.summary-item .summary-course .course-item .course-info{
+    margin-right: 20px;
+    width: 30%;
+}
+.summary-item .summary-course .course-item .course-info h5{
+    font-weight: bold;
+    padding: 0;
+    margin: 0;
+}
+.summary-item .summary-course .course-item .course-info .code{
+    font-size: 12px;
+}
+.summary-item .summary-course .course-item .box{
+    width: 10%;
+    text-align: center;
+    line-height: 50px;
+    margin-right: 5px;
+    font-size: 12px;
+    border-radius: 5px;
+}
+.summary-item .summary-course .course-item .box .kt-badge{
+    height: 0;
+    width: auto;
+    padding: 0.5rem 0.5rem;
+    border-radius: 2px;
+    font-weight: bold;
+}
+.summary-legend{
+    padding: 10px 0;
+    margin-bottom: 2rem;
+}
+.summary-legend .list-legend{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.summary-legend .list-legend li{
+    display: inline-block;
+    font-size: 12px;
+}
+.summary-legend .cube{
+    width: 13px;
+    height: 13px;
+    display: inline-block;
+    margin-right: 2px;
+    border-radius: 2px;
+    border: 1px solid;
+}
+.student-progress{
+    color: #366cf3;
+    background: rgba(54,108,243,0.35);
+}
+.student-score{
+    color: #1dc9b7;
+    background: rgba(29,201,183,0.35);
+}
+.student-message{
+    color: #fd397a;
+    background: rgba(253,57,122,0.35);
+}
+.student-assignments{
+    color: #ffb822;
+    background: rgba(255,184,34,0.35);
+}
+.student-exercises{
+    background-color: #83af3d3b !important;
+    color: #4f9c53;
+}
+.questions-answered{
+    background-color: #fb5f0442 !important;
+    color: #FF5722;
+}
+.last-connection{
+    color: #2196f3;
+    background: rgba(57, 217, 253, 0.35);
+}
 @media (min-width: 768px) {
     .clear-rows-6-4-3 .col-sm-6:nth-child(2n+1) {
         clear: left;

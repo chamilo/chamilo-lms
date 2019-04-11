@@ -807,7 +807,7 @@ if (!empty($exerciseList)) {
                 $sql = "SELECT count(*) count FROM $TBL_EXERCISE_QUESTION
                         WHERE c_id = $courseId AND exercice_id = $my_exercise_id";
                 $sqlresult = Database::query($sql);
-                $rowi = intval(Database :: result($sqlresult, 0, 0));
+                $rowi = (int) Database::result($sqlresult, 0, 0);
 
                 if ($sessionId == $row['session_id']) {
                     $actions = '';
@@ -1079,8 +1079,8 @@ if (!empty($exerciseList)) {
                         $number_of_questions .= min(TestCategory::getNumberMaxQuestionByCat($my_exercise_id), $random_number_of_question).' '.get_lang('QuestionByCategory');
                     } else {
                         $random_label = ' ('.get_lang('Random').') ';
-                        $number_of_questions = $random_number_of_question.' '.$random_label;
-                        //Bug if we set a random value bigger than the real number of questions
+                        $number_of_questions = $random_number_of_question.' '.$random_label.' / '.$rowi;
+                        // Bug if we set a random value bigger than the real number of questions
                         if ($random_number_of_question > $rowi) {
                             $number_of_questions = $rowi.' '.$random_label;
                         }

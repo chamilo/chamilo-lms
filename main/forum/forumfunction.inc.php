@@ -6938,22 +6938,3 @@ function reportPost($postId, $forumInfo, $threadInfo)
     }
 }
 
-/**
- * @return array
- */
-function getLanguageListForFlag()
-{
-    $table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-    $sql = "SELECT english_name, isocode FROM $table 
-            ORDER BY original_name ASC";
-    static $languages = [];
-    if (empty($languages)) {
-        $result = Database::query($sql);
-        while ($row = Database::fetch_array($result)) {
-            $languages[$row['english_name']] = $row['isocode'];
-        }
-        $languages['english'] = 'gb';
-    }
-
-    return $languages;
-}

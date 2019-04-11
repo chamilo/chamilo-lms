@@ -30,9 +30,9 @@ $result = Database::query($sql);
 $data = Database::store_result($result, 'ASSOC');
 foreach ($data as $result) {
     if (!empty($result['ville'])) {
-        $newAdress = getCoordinates($result['ville']);
-        if ($newAdress) {
-            $sql = "UPDATE $tableValues SET value = '".$newAdress."' WHERE id = ".$result['ville_id'];
+        $newAddress = Database::escape_string(getCoordinates($result['ville']));
+        if ($newAddress) {
+            $sql = "UPDATE $tableValues SET value = '".$newAddress."' WHERE id = ".$result['ville_id'];
             Database::query($sql);
             var_dump($result['ville']."-".$sql);
         } else {
@@ -60,9 +60,9 @@ $result = Database::query($sql);
 $data = Database::store_result($result, 'ASSOC');
 foreach ($data as $result) {
     if (!empty($result['stage'])) {
-        $newAdress = getCoordinates($result['stage']);
-        if ($newAdress) {
-            $sql = "UPDATE $tableValues SET value = '".$newAdress."' WHERE id = ".$result['stage_id'];
+        $newAddress = Database::escape_string(getCoordinates($result['stage']));
+        if ($newAddress) {
+            $sql = "UPDATE $tableValues SET value = '".$newAddress."' WHERE id = ".$result['stage_id'];
             Database::query($sql);
             var_dump($result['stage']."-".$sql);
         } else {

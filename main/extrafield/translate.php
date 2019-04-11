@@ -31,7 +31,7 @@ if (!$extraField || empty($variableLanguage) || empty($originalName)) {
     api_not_allowed(true);
 }
 
-$languageId = isset($_GET['sub_language']) ? intval($_GET['sub_language']) : 0;
+$languageId = isset($_GET['sub_language']) ? (int) $_GET['sub_language'] : 0;
 
 $languages = $em
     ->getRepository('ChamiloCoreBundle:Language')

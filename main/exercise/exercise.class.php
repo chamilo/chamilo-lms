@@ -7915,35 +7915,35 @@ class Exercise
 
     /**
      * @param int $start
-     * @param int $lenght
+     * @param int $length
      *
      * @return array
      */
-    public function getQuestionForTeacher($start = 0, $lenght = 10)
+    public function getQuestionForTeacher($start = 0, $length = 10)
     {
         $start = (int) $start;
         if ($start < 0) {
             $start = 0;
         }
 
-        $lenght = (int) $lenght;
+        $length = (int) $length;
 
-        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $sql = "SELECT DISTINCT e.question_id, e.question_order
-                FROM $TBL_EXERCICE_QUESTION e
-                INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.id AND e.c_id = q.c_id)
+        $quizRelQuestion = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $question = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $sql = "SELECT DISTINCT e.question_id
+                FROM $quizRelQuestion e
+                INNER JOIN $question q
+                ON (e.question_id = q.iid AND e.c_id = q.c_id)
                 WHERE
                     e.c_id = {$this->course_id} AND
                     e.exercice_id = '".$this->id."'
                 ORDER BY question_order
-                LIMIT $start, $lenght
+                LIMIT $start, $length
             ";
         $result = Database::query($sql);
         $questionList = [];
         while ($object = Database::fetch_object($result)) {
-            $questionList[$object->question_order] = $object->question_id;
+            $questionList[] = $object->question_id;
         }
 
         return $questionList;

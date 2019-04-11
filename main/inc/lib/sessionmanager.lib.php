@@ -8093,6 +8093,7 @@ SQL;
                         'width' => '160',
                         'align' => 'left',
                         'search' => 'true',
+                        'formatter' => null,
                         'searchoptions' => ['sopt' => $operators],
                     ],
                     [

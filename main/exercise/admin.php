@@ -223,7 +223,7 @@ if ($cancelQuestion) {
     // if we are creating a new question from the question pool
     if (!$exerciseId && !$questionId) {
         // goes back to the question pool
-        header('Location: question_pool.php');
+        header('Location: question_pool.php?'.api_get_cidreq());
         exit();
     } else {
         // goes back to the question viewing
@@ -263,7 +263,8 @@ if ($cancelAnswers) {
     $editQuestion = $modifyAnswers;
     unset($modifyAnswers);
 }
-$nameTools = null;
+
+$nameTools = '';
 // modifies the query string that is used in the link of tool name
 if ($editQuestion || $modifyQuestion || $newQuestion || $modifyAnswers) {
     $nameTools = get_lang('QuestionManagement');

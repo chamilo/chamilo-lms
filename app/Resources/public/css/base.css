@@ -9797,13 +9797,21 @@ ul.dropdown-menu.inner > li > a {
     position: relative;
 }
 
+.table-transparent>tbody>tr>td,
+.table-transparent>tbody>tr>th,
+.table-transparent>tfoot>tr>td,
+.table-transparent>tfoot>tr>th,
+.table-transparent>thead>tr>td,
+.table-transparent>thead>tr>th{
+    border: none;
+}
 .summary-height{
     height: calc(100% - 20px);
     display: flex;
     flex-grow: 1;
     flex-direction: column;
     box-shadow: 0 0 13px 0 rgba(82,63,105,0.05);
-    margin-bottom: 20px;
+    margin-bottom: 0;
     border-radius: 4px;
     border: 1px solid #cdcdcd;
     background-color: #f9f9fc;

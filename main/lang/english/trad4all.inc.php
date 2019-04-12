@@ -2480,7 +2480,7 @@ $LearnpathNoNext = "This is the last learning object.";
 $LearnpathNoPrev = "This is the first learning object.";
 $LearnpathAddLearnpath = "Create new learning path";
 $LearnpathEditLearnpath = "Edit learnpath";
-$LearnpathDeleteLearnpath = "Delete course";
+$LearnpathDeleteLearnpath = "Delete";
 $LearnpathDoNotPublish = "do not publish";
 $LearnpathPublish = "Publish on course homepage";
 $LearnpathNotPublished = "not published";
@@ -8389,4 +8389,5 @@ $GenerateStats = "Generate statistics";
 $BasicCourseDocuments = "Basic course documents";
 $WeekX = "Week %s";
 $QuizWrongAnswerHereIsTheCorrectOne = "Wrong answer. The correct one was:";
+$ThisQuizCanBeEmbeddable = "This quiz can be embeddable on videos or mobile content";
 ?>

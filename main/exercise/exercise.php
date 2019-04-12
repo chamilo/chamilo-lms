@@ -799,7 +799,12 @@ if (!empty($exerciseList)) {
 
                 $url = $move.'<a '.$alt_title.' class="'.$class_tip.'" id="tooltip_'.$row['id'].'" href="overview.php?'.api_get_cidreq().$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'">
                              '.Display::return_icon('quiz.png', $row['title']).'
-                 '.$title.' </a>';
+                 '.$title.' </a>'.PHP_EOL;
+
+                if (ExerciseLib::isQuizEmbeddable($row)) {
+                    $embeddableIcon = Display::return_icon('om_integration.png', get_lang('ThisQuizCanBeEmbeddable'));
+                    $url .= Display::div($embeddableIcon, ['class' => 'pull-right']);
+                }
 
                 $item = Display::tag('td', $url.' '.$session_img.$lp_blocked);
 
@@ -811,11 +816,6 @@ if (!empty($exerciseList)) {
 
                 if ($sessionId == $row['session_id']) {
                     $actions = '';
-
-                    if (ExerciseLib::isQuizEmbeddable($row)) {
-                        $actions .= Display::return_icon('om_integration.png', get_lang('ThisQuizCanBeEmbeddable'))
-                            .PHP_EOL;
-                    }
 
                     // Questions list
                     $actions .= Display::url(

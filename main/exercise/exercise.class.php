@@ -771,6 +771,10 @@ class Exercise
      */
     public function getQuestionOrderedListByName()
     {
+        if (empty($this->course_id) || empty($this->id)) {
+            return [];
+        }
+
         $exerciseQuestionTable = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $questionTable = Database::get_course_table(TABLE_QUIZ_QUESTION);
 

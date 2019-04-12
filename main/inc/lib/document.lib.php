@@ -535,6 +535,11 @@ class DocumentManager
         $search = false,
         $sessionId = 0
     ) {
+
+        if (empty($courseInfo)) {
+            return [];
+        }
+
         $tblItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tblDocument = Database::get_course_table(TABLE_DOCUMENT);
 

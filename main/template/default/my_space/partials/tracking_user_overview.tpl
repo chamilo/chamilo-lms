@@ -20,41 +20,41 @@
                                 <h5>{{ course.title }}</h5>
                                 <span class="code">{{ course.code }}</span>
                             </div>
-                            <div class="box time-spent">
+                            <div class="box time-spent" data-toggle="tooltip" data-placement="top" title="{{ 'CourseTimeInfo'|get_lang }}">
                                 <i class="fa fa-clock-o" aria-hidden="true"></i>
                                  {{ course.time_spent }}
                             </div>
-                            <div class="box">
+                            <div class="box" data-toggle="tooltip" data-placement="top" title="{{ 'AvgStudentsProgress'|get_lang }}">
                                 <span class="kt-badge student-progress">
                                     {{ course.student_progress }} %
                                 </span>
                             </div>
-                            <div class="box">
+                            <div class="box" data-toggle="tooltip" data-placement="top" title="{{ 'AvgCourseScore'|get_lang }}">
                                 <span class="kt-badge student-score">
                                     {{ course.student_score }}
                                 </span>
                             </div>
-                            <div class="box">
+                            <div class="box" data-toggle="tooltip" data-placement="top" title="{{ 'TotalNumberOfMessages'|get_lang }}">
                                 <span class="kt-badge student-message">
                                     {{ course.student_message }}
                                 </span>
                             </div>
-                            <div class="box">
+                            <div class="box" data-toggle="tooltip" data-placement="top" title="{{ 'TotalNumberOfAssignments'|get_lang }}">
                                 <span class="kt-badge student-assignments">
                                     {{ course.student_assignments }}
                                 </span>
                             </div>
                             <div class="box">
-                                <span class="kt-badge student-exercises">
+                                <span class="kt-badge student-exercises" data-toggle="tooltip" data-placement="top" title="{{ 'TotalExercisesScoreObtained'|get_lang }}">
                                     {{ course.student_assignments }}
                                 </span>
                             </div>
                             <div class="box">
-                                <span class="kt-badge questions-answered">
+                                <span class="kt-badge questions-answered" data-toggle="tooltip" data-placement="top" title="{{ 'TotalExercisesAnswered'|get_lang }}">
                                     {{ course.questions_answered }}
                                 </span>
                             </div>
-                            <div class="box">
+                            <div class="box" data-toggle="tooltip" data-placement="top" title="{{ 'LatestLogin'|get_lang }}">
                                 {% if course.last_connection  %}
                                 <span class="kt-badge last-connection">
                                      {{ course.last_connection }}

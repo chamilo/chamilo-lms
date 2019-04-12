@@ -1,3 +1,9 @@
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
+</script>
 <div class="summary-legend">
     <ul class="list-legend">
         <li>

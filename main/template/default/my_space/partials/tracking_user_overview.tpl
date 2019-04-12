@@ -6,18 +6,17 @@
                     <img src="{{ item.avatar }}" class="img-circle">
                 </div>
                 <div class="user">
-                    <a href="{{ _p.web }}main/social/profile.php?u={{ item.id }}" class="name">
+                    <a title="{{ item.complete_name }}" href="{{ _p.web }}main/social/profile.php?u={{ item.id }}" class="name">
                         {{ item.complete_name }}
                     </a>
                     <div class="username">{{ item.username }}</div>
                 </div>
-
                 <div class="summary-course">
                     {% if item.course %}
                     {% for course in item.course %}
                         <div id="course-{{ course.real_id }}" class="course-item">
                             <div class="course-info">
-                                <h5>{{ course.title }}</h5>
+                                <h5><a title="{{ 'Course'|get_lang }} - {{ course.title }}" href="{{ _p.web ~ 'main/mySpace/myStudents.php?details=true' ~ _p.web_cid_query ~ '&course=' ~ course.code ~ '&origin=tracking_course&id_session=0&student=' ~ item.id }}" target="_blank">{{ course.title }}</a></h5>
                                 <span class="code">{{ course.code }}</span>
                             </div>
                             <div class="box time-spent" data-toggle="tooltip" data-placement="top" title="{{ 'CourseTimeInfo'|get_lang }}">
@@ -65,7 +64,7 @@
                     {% endfor %}
                     {% else %}
                         <div class="alert alert-warning" role="alert">
-                            Sin registros
+                            {{ 'HaveNoCourse'|get_lang }}
                         </div>
                     {% endif %}
                 </div>

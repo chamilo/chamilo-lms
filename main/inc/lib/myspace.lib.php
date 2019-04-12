@@ -2209,11 +2209,13 @@ class MySpace
     public static function get_user_data_tracking_overview($from, $numberItems, $column, $direction)
     {
         $isWestern = api_is_western_name_order();
+
         switch ($column) {
             case '0':
-                $column = 'official_code';
+                $column = $isWestern ? 'firstname' : 'lastname';
+                //$column = 'official_code';
                 break;
-            case '1':
+            /*case '1':
                 $column = $isWestern ? 'firstname' : 'lastname';
                 break;
             case '2':
@@ -2224,7 +2226,7 @@ class MySpace
                 break;
             case '4':
                 $column = 'username';
-                break;
+                break;*/
         }
 
         $order = [

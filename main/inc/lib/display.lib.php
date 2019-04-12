@@ -2174,17 +2174,14 @@ class Display
     {
         $fileInfo = pathinfo($file);
 
+        $autoplay = isset($params['autoplay']) && 'true' === $params['autoplay'] ? 'autoplay' : '';
+        $id = isset($params['id']) ? $params['id'] : $fileInfo['basename'];
+        $width = isset($params['width']) ? 'width="'.$params['width'].'"' : null;
+        $class = isset($params['class']) ? ' class="'.$params['class'].'"' : null;
+
         switch ($fileInfo['extension']) {
             case 'mp3':
             case 'webm':
-                $autoplay = null;
-                if (isset($params['autoplay']) && $params['autoplay'] == 'true') {
-                    $autoplay = 'autoplay';
-                }
-                $width = isset($params['width']) ? 'width="'.$params['width'].'"' : null;
-                $id = isset($params['id']) ? $params['id'] : $fileInfo['basename'];
-                $class = isset($params['class']) ? ' class="'.$params['class'].'"' : null;
-
                 $html = '<audio id="'.$id.'" '.$class.' controls '.$autoplay.' '.$width.' src="'.$params['url'].'" >';
                 $html .= '<object width="'.$width.'" height="50" type="application/x-shockwave-flash" data="'.api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/flashmediaelement.swf">
                             <param name="movie" value="'.api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/flashmediaelement.swf" />
@@ -2196,7 +2193,7 @@ class Display
                 break;
             case 'wav':
             case 'ogg':
-                $html = '<audio width="300px" controls src="'.$params['url'].'" >';
+                $html = '<audio width="300px" controls id="'.$id.'" '.$autoplay.' src="'.$params['url'].'" >';
 
                 return $html;
                 break;

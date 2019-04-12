@@ -5,9 +5,9 @@
  * @package chamilo.document
  */
 require_once __DIR__.'/../inc/global.inc.php';
-
-// Including additional libraries
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
+
+api_protect_course_script(true);
 
 // Adding extra javascript to the form
 $htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
@@ -20,7 +20,7 @@ $courseDir = $_course['path'].'/document';
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $base_work_dir = $sys_course_path.$courseDir;
 $sessionId = api_get_session_id();
-$selectcat = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : null;
+$selectcat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : null;
 
 $document_data = [];
 

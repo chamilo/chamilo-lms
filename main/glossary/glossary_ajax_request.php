@@ -9,6 +9,8 @@
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script(true);
+
 /**
  * Search a term and return description from a glossary.
  */

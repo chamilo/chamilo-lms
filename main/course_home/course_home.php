@@ -32,6 +32,9 @@ use Fhaculty\Graph\Graph;
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
+$js = '<script>'.api_get_language_translate_html().'</script>';
+$htmlHeadXtra[] = $js;
+
 $htmlHeadXtra[] = '<script>
 /* option show/hide thematic-block */
 $(function() {

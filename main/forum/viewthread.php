@@ -464,17 +464,18 @@ foreach ($posts as $post) {
 
     $postIsARevision = false;
     $flagRevision = '';
+
     if ($post['poster_id'] == $userId) {
         $revision = getPostRevision($post['post_id']);
         if (empty($revision)) {
             $askForRevision = getAskRevisionButton($post['post_id'], $current_thread);
         } else {
+            $postIsARevision = true;
             $languageId = api_get_language_id(strtolower($revision));
             $languageInfo = api_get_language_info($languageId);
             if ($languageInfo) {
-                $languages = getLanguageListForFlag();
+                $languages = api_get_language_list_for_flag();
                 $flagRevision = '<span class="flag-icon flag-icon-'.$languages[$languageInfo['english_name']].'"></span> ';
-                $postIsARevision = true;
             }
         }
     } else {
@@ -483,12 +484,12 @@ foreach ($posts as $post) {
         } else {
             $revision = getPostRevision($post['post_id']);
             if (!empty($revision)) {
+                $postIsARevision = true;
                 $languageId = api_get_language_id(strtolower($revision));
                 $languageInfo = api_get_language_info($languageId);
                 if ($languageInfo) {
-                    $languages = getLanguageListForFlag();
+                    $languages = api_get_language_list_for_flag();
                     $flagRevision = '<span class="flag-icon flag-icon-'.$languages[$languageInfo['english_name']].'"></span> ';
-                    $postIsARevision = true;
                 }
             }
         }
@@ -676,6 +677,50 @@ foreach ($posts as $post) {
 }
 
 $template->assign('posts', $postList);
+
+$formToString = '';
+$showForm = true;
+if (!api_is_allowed_to_edit(false, true) &&
+    (($current_forum_category && $current_forum_category['visibility'] == 0) || $current_forum['visibility'] == 0)
+) {
+    $showForm = false;
+}
+
+if (!api_is_allowed_to_edit(false, true) &&
+    (
+        ($current_forum_category && $current_forum_category['locked'] != 0) ||
+            $current_forum['locked'] != 0 || $current_thread['locked'] != 0
+    )
+) {
+    $showForm = false;
+}
+
+if (!$_user['user_id'] && $current_forum['allow_anonymous'] == 0) {
+    $showForm = false;
+}
+
+if ($current_forum['forum_of_group'] != 0) {
+    $show_forum = GroupManager::user_has_access(
+        api_get_user_id(),
+        $current_forum['forum_of_group'],
+        GroupManager::GROUP_TOOL_FORUM
+    );
+    if (!$show_forum) {
+        $showForm = false;
+    }
+}
+
+if ($showForm) {
+    $form = show_add_post_form(
+        $current_forum,
+        'replythread',
+        null,
+        false
+    );
+    $formToString = $form->returnForm();
+}
+
+$template->assign('form', $formToString);
 
 $layout = $template->get_template('forum/posts.tpl');
 

@@ -569,7 +569,7 @@ function email_filter($email)
  */
 function user_filter($name, $params, $row)
 {
-    return '<a href="'.api_get_path(WEB_PATH).'whoisonline.php?origin=user_list&id='.$row[0].'">'.$name.'</a>';
+    return '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$row[0].'">'.$name.'</a>';
 }
 
 /**

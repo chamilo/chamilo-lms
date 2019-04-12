@@ -155,7 +155,6 @@ $htmlHeadXtra[] = "
 $form = show_add_post_form(
     $current_forum,
     'newthread',
-    '',
     isset($_SESSION['formelements']) ? $_SESSION['formelements'] : null
 );
 

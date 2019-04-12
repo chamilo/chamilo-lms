@@ -8,7 +8,7 @@
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
-$blog_id = intval($_GET['blog_id']);
+$blog_id = isset($_GET['blog_id']) ? $_GET['blog_id'] : 0;
 
 if (empty($blog_id)) {
     api_not_allowed(true);
@@ -422,11 +422,11 @@ switch ($action) {
             $titleSearch = get_lang('PostsOf').' '.$dateSearch;
             $tpl->assign('search', $titleSearch);
             $tpl->assign('articles', $listArticles);
-            $blogLayout = $tpl->get_template('blog/blog.html.twig');
+            $blogLayout = $tpl->get_template('blog/blog.tpl');
         } else {
             $listArticles = Blog::getPosts($blog_id);
             $tpl->assign('articles', $listArticles);
-            $blogLayout = $tpl->get_template('blog/blog.html.twig');
+            $blogLayout = $tpl->get_template('blog/blog.tpl');
         }
         break;
 }

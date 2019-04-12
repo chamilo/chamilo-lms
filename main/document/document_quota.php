@@ -8,13 +8,17 @@
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script(true);
+
 if (!api_is_allowed_to_edit(null, true)) {
     api_not_allowed(true);
 }
 
 $current_course_tool = TOOL_DOCUMENT;
 $this_section = SECTION_COURSES;
+
 $tool_name = get_lang('DocumentQuota');
+
 $interbreadcrumb[] = ['url' => 'document.php', 'name' => get_lang('Documents')];
 
 $htmlHeadXtra[] = api_get_js('jqplot/jquery.jqplot.js');

@@ -131,7 +131,7 @@ $topics = [
 $subscriptionUser = CourseManager::is_user_subscribed_in_course($userId, $course->getCode());
 
 $allowSubscribe = false;
-if ($course->getSubscribe() == true || api_is_platform_admin()) {
+if ($course->getSubscribe() || api_is_platform_admin()) {
     $allowSubscribe = true;
 }
 $plugin = BuyCoursesPlugin::create();
@@ -169,8 +169,7 @@ $metaInfo .= '<meta property="og:image" content="'.$courseItem['image'].'" />';
 $htmlHeadXtra[] = $metaInfo;
 $htmlHeadXtra[] = api_get_asset('readmore-js/readmore.js');
 
-$template = new Template(null);
-//$template->assign('course', $course);
+$template = new Template($course->getTitle(), true, true, false, true, false);
 $template->assign('course', $courseItem);
 $essence = new Essence\Essence();
 $template->assign('essence', $essence);

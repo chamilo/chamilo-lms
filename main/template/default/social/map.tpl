@@ -6,8 +6,8 @@
 function start()
 {
     var options = {
-        center: new google.maps.LatLng(54.526, 15.255), // "Europe center"
-        zoom: 4,
+        center: new google.maps.LatLng(45.526, 6.255), // "Europe center"
+        zoom: 5,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
 
@@ -19,7 +19,6 @@ function start()
     var imageCity = {
         url: '{{ image_city }}'
     }
-
     var stageCity = {
         url:'{{ image_stage }}'
     }
@@ -62,12 +61,14 @@ function start()
         });
 
         // Auto-boxing
+
         if (markers.length) {
             var bounds = new google.maps.LatLngBounds();
             for (var i = 0; i < markers.length; ++i) {
                 bounds.extend(markers[i].position);
             }
-            map.fitBounds(bounds);
+            // Disable re center of map to another location based in other points in the map
+            //map.fitBounds(bounds);
         }
 
         // window when clicking

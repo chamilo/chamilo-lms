@@ -316,14 +316,15 @@ class MySpace
      * @return array List course
      */
 
-    public static function returnCourseTracking($user_id){
+    public static function returnCourseTracking($user_id)
+    {
 
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         // getting all the courses of the user
         $sql = "SELECT * FROM $tbl_course_user
                 WHERE
-                    user_id = '".intval($user_id)."' AND
-                    relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
+                    user_id = '" . intval($user_id) . "' AND
+                    relation_type<>" . COURSE_RELATION_TYPE_RRHH . " ";
         $result = Database::query($sql);
 
         $list = [];
@@ -359,7 +360,7 @@ class MySpace
                 'student_score' => $avg_score,
                 'student_message' => Tracking::count_student_messages($user_id, $courseCode),
                 'student_assignments' => Tracking::count_student_assignments($user_id, $courseCode),
-                'student_exercises' => (is_null($exercises_results['percentage']) ? '' : $exercises_results['score_obtained'].'/'.$exercises_results['score_possible'].' ( '.$exercises_results['percentage'].'% )'),
+                'student_exercises' => (is_null($exercises_results['percentage']) ? '' : $exercises_results['score_obtained'] . '/' . $exercises_results['score_possible'] . ' ( ' . $exercises_results['percentage'] . '% )'),
                 'questions_answered' => $exercises_results['questions_answered'],
                 'last_connection' => Tracking::get_last_connection_date_on_the_course($user_id, $courseInfo)
             ];
@@ -381,13 +382,14 @@ class MySpace
      * @since April 2019
      */
 
-    public static function returnTrackingUserOverviewFilter($user_id){
+    public static function returnTrackingUserOverviewFilter($user_id)
+    {
 
-        $tpl = new Template('', false, false,false,false,false,false);
+        $tpl = new Template('', false, false, false, false, false, false);
         $userInfo = api_get_user_info($user_id);
 
-        $avatar = UserManager::getUserPicture($user_id,USER_IMAGE_SIZE_SMALL);
-        $user =  [
+        $avatar = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_SMALL);
+        $user = [
             'id' => $user_id,
             'code_user' => $userInfo['official_code'],
             'complete_name' => $userInfo['complete_name'],
@@ -427,7 +429,7 @@ class MySpace
             0,
             20,
             'ASC',
-            null,[
+            null, [
                 'class' => 'table table-transparent'
             ]
         );
@@ -435,7 +437,7 @@ class MySpace
 
         $table->set_column_filter(0, ['MySpace', 'returnTrackingUserOverviewFilter']);
         $tableContent = $table->return_table();
-        $tpl = new Template('', false, false,false,false,false,false);
+        $tpl = new Template('', false, false, false, false, false, false);
         $tpl->assign('table', $tableContent);
         $templateName = $tpl->get_template('my_space/user_summary.tpl');
         $tpl->display($templateName);

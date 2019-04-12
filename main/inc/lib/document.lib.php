@@ -726,6 +726,10 @@ class DocumentManager
         $getInvisibleList = false,
         $path = ''
     ) {
+        if (empty($_course)) {
+            return [];
+        }
+
         $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
         $groupIid = (int) $groupIid;

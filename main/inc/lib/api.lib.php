@@ -9457,16 +9457,14 @@ function api_get_language_list_for_flag()
 }
 
 /**
- *
  * @return string
- *
  */
 function api_get_language_translate_html()
 {
     $translate = api_get_configuration_value('translate_html');
 
     if (!$translate) {
-       return '';
+        return '';
     }
 
     $languageList = api_get_languages();

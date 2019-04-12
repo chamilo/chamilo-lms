@@ -3287,17 +3287,17 @@ function show_add_post_form($current_forum, $action, $form_values = '', $showPre
         $hide = api_get_configuration_value('hide_forum_post_revision_language');
         $form->addHidden('give_revision', 1);
         if ($hide === false) {
-        $extraField = new ExtraField('forum_post');
+            $extraField = new ExtraField('forum_post');
             $extraField->addElements(
-            $form,
-            null,
-            [], //exclude
-            false, // filter
-            false, // tag as select
-            ['revision_language'], //show only fields
-            [], // order fields
-            [] // extra data
-        );
+                $form,
+                null,
+                [], //exclude
+                false, // filter
+                false, // tag as select
+                ['revision_language'], //show only fields
+                [], // order fields
+                [] // extra data
+            );
         } else {
             $form->addHidden('extra_revision_language', 1);
         }

@@ -17,7 +17,6 @@
  * @return string JSON output
  */
 
-
 /* FIX for IE cache when using https */
 session_cache_limiter('none');
 require_once __DIR__.'/../inc/global.inc.php';

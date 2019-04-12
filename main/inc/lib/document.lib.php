@@ -535,7 +535,6 @@ class DocumentManager
         $search = false,
         $sessionId = 0
     ) {
-
         if (empty($courseInfo)) {
             return [];
         }

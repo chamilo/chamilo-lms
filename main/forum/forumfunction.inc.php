@@ -6937,4 +6937,3 @@ function reportPost($postId, $forumInfo, $threadInfo)
         }
     }
 }
-

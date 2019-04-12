@@ -33,8 +33,6 @@ if (empty($course_id) || empty($doc_url)) {
 $doc_url = $_REQUEST['file'];
 $session_id = api_get_session_id();
 
-
-
 $is_user_is_subscribed = CourseManager::is_user_subscribed_in_course(
     $user_id,
     $course_info['code'],

@@ -219,7 +219,7 @@ class Timeline extends Model
 
     /**
      * @param array $params
-     * @param bool $showQuery
+     * @param bool  $showQuery
      *
      * @return bool
      */

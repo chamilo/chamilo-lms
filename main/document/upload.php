@@ -32,7 +32,6 @@
  *
  * @package chamilo.document
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 

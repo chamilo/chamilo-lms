@@ -50,7 +50,8 @@ Feature: LP tool
     And I should see "Exercise 1"
 
   Scenario: Delete a LP category
-    Given I am on "/main/lp/lp_controller.php?cidReq=TEMP&action=list"
+    Given I am on "/main/lp/lp_controller.php?cidReq=TEMP&action=list&isStudentView=false"
+    And wait for the page to be loaded
     Then I should see "LP category 1"
     And I follow "Delete"
     Then I should not see "LP category 1"

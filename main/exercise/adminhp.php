@@ -12,6 +12,8 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
 
+api_protect_course_script(true);
+
 $_course = api_get_course_info();
 
 if (isset($_REQUEST["cancel"])) {

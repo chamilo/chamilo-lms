@@ -19,15 +19,17 @@
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
-$linkId = intval($_GET['link_id']);
+$linkId = isset($_GET['link_id']) ? $_GET['link_id'] : 0;
 
 $linkInfo = Link::getLinkInfo($linkId);
-$linkUrl = html_entity_decode(Security::remove_XSS($linkInfo['url']));
-// Launch event
-Event::event_link($linkId);
+if ($linkInfo) {
+    $linkUrl = html_entity_decode(Security::remove_XSS($linkInfo['url']));
+    // Launch event
+    Event::event_link($linkId);
 
-header("Cache-Control: no-store, no-cache, must-revalidate"); // HTTP/1.1
-header("Cache-Control: post-check=0, pre-check=0", false);
-header("Pragma: no-cache"); // HTTP/1.0
-header("Location: $linkUrl");
-exit;
+    header("Cache-Control: no-store, no-cache, must-revalidate"); // HTTP/1.1
+    header("Cache-Control: post-check=0, pre-check=0", false);
+    header("Pragma: no-cache"); // HTTP/1.0
+    header("Location: $linkUrl");
+    exit;
+}

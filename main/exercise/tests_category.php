@@ -25,9 +25,12 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
 
+api_protect_course_script(true);
+
 if (!api_is_allowed_to_edit()) {
     api_not_allowed(true);
 }
+
 $category = new TestCategory();
 $courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();

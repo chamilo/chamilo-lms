@@ -5,6 +5,8 @@ use Chamilo\CoreBundle\Entity\TrackEExercises;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script(true);
+
 $isAllowedToEdit = api_is_allowed_to_edit(true, true);
 
 if (!$isAllowedToEdit) {

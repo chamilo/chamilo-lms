@@ -13,12 +13,17 @@ session_cache_limiter('public');
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+$file_url = isset($_GET['file']) ? $_GET['file'] : '';
+
+if (empty($file_url)) {
+    api_not_allowed();
+}
+
 // IMPORTANT to avoid caching of documents
 header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
 header('Cache-Control: public');
 header('Pragma: no-cache');
 
-$file_url = $_GET['file'];
 //change the '&' that got rewritten to '///' by mod_rewrite back to '&'
 $file_url = str_replace('///', '&', $file_url);
 //still a space present? it must be a '+' (that got replaced by mod_rewrite)

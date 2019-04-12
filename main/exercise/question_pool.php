@@ -17,6 +17,8 @@ use Knp\Component\Pager\Paginator;
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script(true);
+
 $this_section = SECTION_COURSES;
 
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);

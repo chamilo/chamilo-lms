@@ -1048,6 +1048,20 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
     ]
 ];*/
 
+/*
+ * Fields visibility in the profile user page
+$_configuration['profile_fields_visibility'] = [
+    'options' => [
+        'vcard' => false,
+        'firstname' => false,
+        'lastname' => false,
+        'photo' => true,
+        'email' => true,
+        'chat' => true,
+        'terms_ville' => false, // extra field value
+    ]
+];*/
+
 // This option sets default parameters in the main/admin/user_import.php
 /*$_configuration['user_import_settings'] = [
     'options' =>  [
@@ -1129,6 +1143,14 @@ ALTER TABLE gradebook_evaluation ADD score_weight DOUBLE PRECISION DEFAULT NULL,
     ],
 ];*/
 
+/* Set extra fields as required in the profile.php page
+$_configuration['required_extra_fields_in_profile'] = [
+    'options' => [
+        'terms_villedustage'
+    ],
+];
+*/
+
 // Community manager users
 //$_configuration['community_managers_user_list'] = ['users' => [1]];
 
@@ -1137,6 +1159,9 @@ ALTER TABLE gradebook_evaluation ADD score_weight DOUBLE PRECISION DEFAULT NULL,
 
 // global forum in social network BT#15309
 //$_configuration['global_forums_course_id'] = 0;
+
+// Hide forum post revision checkbox
+//$_configuration['hide_forum_post_revision_language'] = false;
 
 // Allow forum post revisions
 // Requires new forum_category and forum_post "language" extra fields (multiple select)

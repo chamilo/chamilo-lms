@@ -464,17 +464,18 @@ foreach ($posts as $post) {
 
     $postIsARevision = false;
     $flagRevision = '';
+
     if ($post['poster_id'] == $userId) {
         $revision = getPostRevision($post['post_id']);
         if (empty($revision)) {
             $askForRevision = getAskRevisionButton($post['post_id'], $current_thread);
         } else {
+            $postIsARevision = true;
             $languageId = api_get_language_id(strtolower($revision));
             $languageInfo = api_get_language_info($languageId);
             if ($languageInfo) {
-                $languages = getLanguageListForFlag();
+                $languages = api_get_language_list_for_flag();
                 $flagRevision = '<span class="flag-icon flag-icon-'.$languages[$languageInfo['english_name']].'"></span> ';
-                $postIsARevision = true;
             }
         }
     } else {
@@ -483,12 +484,12 @@ foreach ($posts as $post) {
         } else {
             $revision = getPostRevision($post['post_id']);
             if (!empty($revision)) {
+                $postIsARevision = true;
                 $languageId = api_get_language_id(strtolower($revision));
                 $languageInfo = api_get_language_info($languageId);
                 if ($languageInfo) {
-                    $languages = getLanguageListForFlag();
+                    $languages = api_get_language_list_for_flag();
                     $flagRevision = '<span class="flag-icon flag-icon-'.$languages[$languageInfo['english_name']].'"></span> ';
-                    $postIsARevision = true;
                 }
             }
         }

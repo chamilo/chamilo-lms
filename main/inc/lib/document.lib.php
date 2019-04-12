@@ -2937,16 +2937,8 @@ class DocumentManager
                     $treat_spaces_as_hyphens
                 );
 
-                // Showing message when sending zip files
+                // When sending zip files
                 if ($new_path === true && $unzip == 1) {
-                    if ($show_output) {
-                        echo Display::return_message(
-                            get_lang('UplUploadSucceeded').'<br />',
-                            'confirm',
-                            false
-                        );
-                    }
-
                     return [
                         'title' => $files[$fileKey]['name'],
                         'url' => '#',

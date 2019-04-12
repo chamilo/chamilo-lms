@@ -15,6 +15,8 @@ use ChamiloSession as Session;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
+api_protect_course_script(true);
+
 if (!api_is_allowed_to_edit(null, true)) {
     api_not_allowed(true);
 }

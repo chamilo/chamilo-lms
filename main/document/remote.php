@@ -16,9 +16,13 @@
  *
  * @return string JSON output
  */
+
+
 /* FIX for IE cache when using https */
 session_cache_limiter('none');
 require_once __DIR__.'/../inc/global.inc.php';
+
+api_protect_course_script(true);
 api_block_anonymous_users();
 /*==== Variables initialisation ====*/
 $action = $_REQUEST['action']; //safe as only used in if()'s

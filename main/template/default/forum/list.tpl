@@ -146,7 +146,7 @@
 
             <div class="category-forum {{ category_language }}" id="category_{{ item.id }}">
             {% if fold_forum_categories %}
-                {{ display.collapse('category_' ~ item.id, panel_title, panel_content, false, 'false', item.tools, panel_icon ) }}
+                {{ display.collapse('category_' ~ item.id, panel_title, panel_content, false, fold_forum_categories, item.tools, panel_icon ) }}
             {% else %}
                 {{ display.panel(panel_title, panel_content) }}
             {% endif %}

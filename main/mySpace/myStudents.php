@@ -869,8 +869,6 @@ $userGroups = $userGroupManager->getNameListByUser(
     UserGroup::NORMAL_CLASS
 );
 
-var_dump($user_info);
-
 $userInfo = [
         'id' => $user_info['user_id'],
         'complete_name' => $user_info['complete_name'],

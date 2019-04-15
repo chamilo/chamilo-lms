@@ -3614,16 +3614,16 @@ class SocialManager extends UserManager
 
         if ($userStatus === 5) {
             if ($authorInfo['has_certificates']) {
-                $iconStatus = Display::return_icon('identifier_graduated.png',get_lang('User status'),['class' => 'float-left'],ICON_SIZE_SMALL);
+                $iconStatus = Display::return_icon('identifier_graduated.png', get_lang('User status'), ['class' => 'float-left'], ICON_SIZE_SMALL);
             } else {
-                $iconStatus = Display::return_icon('identifier_student.png',get_lang('User status'),['class' => 'float-left'],ICON_SIZE_SMALL);
+                $iconStatus = Display::return_icon('identifier_student.png', get_lang('User status'), ['class' => 'float-left'], ICON_SIZE_SMALL);
             }
         } else {
             if ($userStatus === 1) {
                 if ($isAdmin) {
-                    $iconStatus = Display::return_icon('identifier_admin.png',get_lang('User status'),['class' => 'float-left'],ICON_SIZE_SMALL);
+                    $iconStatus = Display::return_icon('identifier_admin.png', get_lang('User status'), ['class' => 'float-left'], ICON_SIZE_SMALL);
                 } else {
-                    $iconStatus = Display::return_icon('identifier_teacher.png',get_lang('User status'),['class' => 'float-left'],ICON_SIZE_SMALL);
+                    $iconStatus = Display::return_icon('identifier_teacher.png', get_lang('User status'), ['class' => 'float-left'], ICON_SIZE_SMALL);
                 }
             }
         }

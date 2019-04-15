@@ -3115,15 +3115,15 @@ class SessionManager
         //Setting session_category_id to 0
         if ($deleteSessions) {
             $sql = "SELECT id FROM $tblSession WHERE session_category_id IN ($categoryId)";
-        $result = Database::query($sql);
-        while ($rows = Database::fetch_array($result)) {
+            $result = Database::query($sql);
+            while ($rows = Database::fetch_array($result)) {
                 $sessionId = $rows['id'];
                 self::delete($sessionId, $fromWs);
             }
-                } else {
+        } else {
             $sql = "UPDATE $tblSession SET session_category_id = NULL WHERE session_category_id IN ($categoryId)";
             Database::query($sql);
-                }
+        }
 
         $sql = "DELETE FROM $tblSessionCategory WHERE id IN ($categoryId)";
         Database::query($sql);

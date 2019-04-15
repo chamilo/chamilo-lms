@@ -3291,7 +3291,7 @@ function show_add_post_form($current_forum, $action, $form_values = '', $showPre
         $form->addHidden('give_revision', 1);
         if ($hide === false) {
             $extraField = new ExtraField('forum_post');
-                $extraField->addElements(
+            $extraField->addElements(
                 $form,
                 null,
                 [], //exclude

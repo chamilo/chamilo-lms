@@ -283,9 +283,9 @@ EOT;
     }
 
     /**
-     * @param string $name
+     * @param string       $name
      * @param string|array $label
-     * @param array  $attributes
+     * @param array        $attributes
      *
      * @return DateTimeRangePicker
      */
@@ -373,11 +373,11 @@ EOT;
     /**
      * Returns a button with the primary color and a check mark.
      *
-     * @param string $label Text appearing on the button
-     * @param string $name Element name (for form treatment purposes)
-     * @param bool $createElement Whether to use the create or add method
-     * @param array $attributes
-
+     * @param string $label         Text appearing on the button
+     * @param string $name          Element name (for form treatment purposes)
+     * @param bool   $createElement Whether to use the create or add method
+     * @param array  $attributes
+     *
      * @return HTML_QuickForm_button
      */
     public function addButtonSave($label, $name = 'submit', $createElement = false, $attributes = [])
@@ -1001,12 +1001,12 @@ EOT;
     /**
      * Adds a HTML-editor to the form.
      *
-     * @param string $name
+     * @param string       $name
      * @param string|array $label      The label for the form-element
-     * @param bool   $required   (optional) Is the form-element required (default=true)
-     * @param bool   $fullPage   (optional) When it is true, the editor loads completed html code for a full page
-     * @param array  $config     (optional) Configuration settings for the online editor
-     * @param array  $attributes
+     * @param bool         $required   (optional) Is the form-element required (default=true)
+     * @param bool         $fullPage   (optional) When it is true, the editor loads completed html code for a full page
+     * @param array        $config     (optional) Configuration settings for the online editor
+     * @param array        $attributes
      *
      * @throws Exception
      * @throws HTML_QuickForm_Error

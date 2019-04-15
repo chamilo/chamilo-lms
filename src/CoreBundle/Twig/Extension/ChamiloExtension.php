@@ -6,7 +6,6 @@ namespace Chamilo\CoreBundle\Twig\Extension;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
-
 /**
  * Class ChamiloExtension.
  *

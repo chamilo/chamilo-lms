@@ -134,7 +134,7 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
                 $filename = api_replace_dangerous_char(trim($_FILES['userFile']['name']));
                 $fld = GenerateHpFolder($document_sys_path.$uploadPath.'/');
                 @mkdir($document_sys_path.$uploadPath.'/'.$fld, api_get_permissions_for_new_directories());
-                $doc_id = DocumentManager::addDocument($_course, '/HotPotatoes_files/'.$fld, 'folder', 0, $fld);   
+                $doc_id = DocumentManager::addDocument($_course, '/HotPotatoes_files/'.$fld, 'folder', 0, $fld);
             } else {
                 // It is not the first step... get the filename directly from the system params.
                 $filename = $_FILES['userFile']['name'];

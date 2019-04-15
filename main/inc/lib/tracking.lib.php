@@ -1551,9 +1551,9 @@ class Tracking
      * Calculates the time spent on the platform by a user.
      *
      * @param int|array $userId
-     * @param string $timeFilter type of time filter: 'last_week' or 'custom'
-     * @param string $start_date start date date('Y-m-d H:i:s')
-     * @param string $end_date   end date date('Y-m-d H:i:s')
+     * @param string    $timeFilter type of time filter: 'last_week' or 'custom'
+     * @param string    $start_date start date date('Y-m-d H:i:s')
+     * @param string    $end_date   end date date('Y-m-d H:i:s')
      *
      * @return int
      */
@@ -3186,10 +3186,10 @@ class Tracking
      * This function does not take the results of a Test out of a LP.
      *
      * @param int|array $student_id  Array of user ids or an user id
-     * @param string $course_code Course code
-     * @param array  $lp_ids      List of LP ids
-     * @param int    $session_id  Session id (optional), if param $session_id is 0(default)
-     *                            it'll return results including sessions, 0 = session is not filtered
+     * @param string    $course_code Course code
+     * @param array     $lp_ids      List of LP ids
+     * @param int       $session_id  Session id (optional), if param $session_id is 0(default)
+     *                               it'll return results including sessions, 0 = session is not filtered
      *
      * @return string value (number %) Which represents a round integer explain in got in 3
      */

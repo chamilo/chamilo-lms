@@ -1833,16 +1833,16 @@ class Display
         $accesses = isset($point_info['accesses']) ? $point_info['accesses'] : 0;
         $star_label = sprintf(get_lang('XStarsOutOf5'), $point_info['point_average_star']);
 
-        $html= '<section class="rating-widget">';
-        $html.= '<div class="rating-stars"><ul id="stars">';
-        $html.= '<li class="star" data-link="'.$url.'&amp;star=1" title="Poor" data-value="1"><i class="fa fa-star fa-fw"></i></li>
+        $html = '<section class="rating-widget">';
+        $html .= '<div class="rating-stars"><ul id="stars">';
+        $html .= '<li class="star" data-link="'.$url.'&amp;star=1" title="Poor" data-value="1"><i class="fa fa-star fa-fw"></i></li>
                  <li class="star" data-link="'.$url.'&amp;star=2" title="Fair" data-value="2"><i class="fa fa-star fa-fw"></i></li>
                  <li class="star" data-link="'.$url.'&amp;star=3" title="Good" data-value="3"><i class="fa fa-star fa-fw"></i></li>
                  <li class="star" data-link="'.$url.'&amp;star=4" title="Excellent" data-value="4"><i class="fa fa-star fa-fw"></i></li>
                  <li class="star" data-link="'.$url.'&amp;star=5" title="WOW!!!" data-value="5"><i class="fa fa-star fa-fw"></i></li>
         ';
-        $html.= '</ul></div>';
-        $html.= '</section>';
+        $html .= '</ul></div>';
+        $html .= '</section>';
         /*$html.= '<ul id="'.$id.'" class="star-rating">
                     <li class="current-rating" style="width:'.$percentage.'px;"></li>
                     <li><a href="javascript:void(0);" data-link="'.$url.'&amp;star=1" title="'.$star_label.'" class="one-star">1</a></li>

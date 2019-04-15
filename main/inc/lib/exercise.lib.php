@@ -2881,7 +2881,7 @@ HOTSPOT;
             'html' => $html,
             'percentage' => $percentage,
             'score_obtained' => $score,
-            'total_score' => $weight
+            'total_score' => $weight,
         ];
     }
 

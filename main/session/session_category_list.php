@@ -165,7 +165,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
                     <?php
                 } else {
                     echo get_lang('Next');
-            } ?>
+                } ?>
         </div>
                 <?php
             } ?>

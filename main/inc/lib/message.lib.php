@@ -1355,7 +1355,7 @@ class MessageManager
                 'name' => $receiverUserInfo['complete_name'],
                 'username' => $receiverUserInfo['username'],
                 'avatar' => $receiverUserInfo['avatar'],
-                'email' => $receiverUserInfo['email']
+                'email' => $receiverUserInfo['email'],
             ];
         }
 
@@ -1955,7 +1955,6 @@ class MessageManager
         $totalSize = 0;
 
         if ($files) {
-
             $archiveURL = api_get_path(WEB_CODE_PATH).'messages/download.php?type='.$type.'&file=';
             $countFiles = count($files);
 
@@ -1969,7 +1968,7 @@ class MessageManager
                 $type = 'file';
 
                 if ($row_file['comment'] == 'audio_message') {
-                    $type= 'audio';
+                    $type = 'audio';
                 }
 
                 $listTemp = [
@@ -1977,15 +1976,16 @@ class MessageManager
                     'size' => $size,
                     'comment' => $comment,
                     'url' => $archiveURL.$archiveFile,
-                    'type' => $type
+                    'type' => $type,
                 ];
 
                 $list[] = $listTemp;
             }
+
             return [
                 'quantity' => $countFiles,
                 'total_size' => format_file_size($totalSize),
-                'files' => $list
+                'files' => $list,
             ];
         } else {
             return [];

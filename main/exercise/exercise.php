@@ -654,7 +654,7 @@ if (isset($list_ordered) && !empty($list_ordered)) {
 
 $tableRows = [];
 $listExercise = [];
-$list=[];
+$list = [];
 /*  LIST EXERCISES  */
 
 if (!empty($exerciseList)) {
@@ -804,7 +804,7 @@ if (!empty($exerciseList)) {
 
                 $listExercise['id'] = $row['id'];
                 $listExercise['title'] = $title;
-                $listExercise['description'] = cut($row['description'],150, false);
+                $listExercise['description'] = cut($row['description'], 150, false);
                 $listExercise['url'] = "overview.php?".api_get_cidreq().$mylpid.$mylpitemid.'&exerciseId='.$row['id'];
                 $listExercise['lp_blocked'] = $lp_blocked;
                 $listExercise['visibility'] = $visibility;
@@ -1086,7 +1086,7 @@ if (!empty($exerciseList)) {
                     $number_of_questions = $rowi;
                 }
                 $listExercise['number_questions'] = $number_of_questions;
-                //$item .= Display::tag('td', $number_of_questions);
+            //$item .= Display::tag('td', $number_of_questions);
             } else {
                 // Student only.
                 $visibility = api_get_item_visibility(
@@ -1228,7 +1228,6 @@ if (!empty($exerciseList)) {
                                 $row_track['max_score']
                             );
                             $attempt_text .= $score['html'];
-
                         } else {
                             $attempt_text = get_lang('NotAttempted');
                         }
@@ -1263,8 +1262,8 @@ if (!empty($exerciseList)) {
 
                 if (!empty($additionalActions)) {
                     $actions .= $additionalActions.PHP_EOL;
-                }		
-		        $listExercise['actions'] = $actions;
+                }
+                $listExercise['actions'] = $actions;
             } else {
                 if ($isDrhOfCourse) {
                     $actions = '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.
@@ -1272,7 +1271,6 @@ if (!empty($exerciseList)) {
                     $listExercise['actions'] = $actions;
 
                     // .= Display::tag('td', $actions, ['class' => 'td_actions']);
-
                 }
             }
             $list[] = $listExercise;
@@ -1396,9 +1394,8 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
             $itemHotpotatoes['actions'] = $actions;
 
             $listHotpotatoes[] = $itemHotpotatoes;
-            //$item .= Display::tag('td', $actions);
+        //$item .= Display::tag('td', $actions);
             //$tableRows[] = Display::tag('tr', $item);
-
         } else {
             $visibility = api_get_item_visibility(
                 ['real_id' => $courseId],
@@ -1419,7 +1416,6 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
                 api_get_course_int_id(),
                 api_get_session_id()
             );
-
 
             $url = 'showinframes.php?'.api_get_cidreq().'&'.http_build_query(['file' => $path, 'cid' => api_get_course_id(), 'uid' => $userId]);
             $itemHotpotatoes['url'] = $url;
@@ -1455,8 +1451,6 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
                 );
 
                 $itemHotpotatoes['score'] = $score;
-
-
             } else {
                 // No attempts.
                 $attemptText = get_lang('NotAttempted').' ';
@@ -1481,7 +1475,6 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
 
             $listHotpotatoes[] = $itemHotpotatoes;
             //$tableRows[] = Display::tag('tr', $item);
-
         }
     }
 }
@@ -1537,7 +1530,7 @@ if (empty($exerciseList) && $hotpotatoes_exist == false) {
 
     echo '</tbody>';
     echo '</table>';
-    echo '</div>'*/;
+    echo '</div>'*/
 
     $tpl = new Template(null);
     $tpl->assign('data', $list);

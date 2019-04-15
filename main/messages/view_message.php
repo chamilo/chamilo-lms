@@ -24,9 +24,7 @@ if ($allowSocial) {
 }
 $interbreadcrumb[] = ['url' => 'inbox.php', 'name' => get_lang('Messages')];
 
-
 if (api_get_setting('allow_message_tool') === 'true') {
-
     $actionLeft = Display::url(
         Display::return_icon(
             'new-message.png',
@@ -35,7 +33,7 @@ if (api_get_setting('allow_message_tool') === 'true') {
         api_get_path(WEB_PATH).'main/messages/new_message.php'
     );
 
-    $actionLeft.=Display::url(
+    $actionLeft .= Display::url(
         Display::return_icon(
             'inbox.png',
             get_lang('Inbox')
@@ -43,7 +41,7 @@ if (api_get_setting('allow_message_tool') === 'true') {
         api_get_path(WEB_PATH).'main/messages/inbox.php'
     );
 
-    $actionLeft.=Display::url(
+    $actionLeft .= Display::url(
         Display::return_icon(
             'outbox.png',
             get_lang('Outbox')
@@ -51,10 +49,8 @@ if (api_get_setting('allow_message_tool') === 'true') {
         api_get_path(WEB_PATH).'main/messages/outbox.php'
     );
 
-    $toolbar = Display::toolbarAction('inbox',[ 0 => $actionLeft ]);
-
+    $toolbar = Display::toolbarAction('inbox', [0 => $actionLeft]);
 }
-
 
 if (empty($_GET['id'])) {
     $messageId = $_GET['id_send'];
@@ -81,7 +77,6 @@ Event::registerLog($logInfo);
 $message = MessageManager::showMessageBox($messageId, $source);
 $messageContent = '';
 
-
 if (!empty($message)) {
     $messageContent = $message;
 } else {
@@ -93,7 +88,7 @@ $tpl = new Template(get_lang('View'));
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), $show_menu);
 
 if (api_get_setting('allow_social_tool') === 'true') {
-    $tpl->assign('actions',$toolbar);
+    $tpl->assign('actions', $toolbar);
     $tpl->assign('message', $messageContent);
     $social_layout = $tpl->get_template('message/view_message.html.twig');
     $tpl->display($social_layout);

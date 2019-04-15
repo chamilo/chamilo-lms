@@ -116,7 +116,7 @@ class SortableTable extends HTML_Table
      * @param string $default_order_direction   The default order direction;
      *                                          either the constant 'ASC' or 'DESC'
      * @param string $table_id
-     * @param array $parameters         They are custom attributes of the table
+     * @param array  $parameters                They are custom attributes of the table
      */
     public function __construct(
         $table_name = 'table',
@@ -131,7 +131,7 @@ class SortableTable extends HTML_Table
         if (empty($table_id)) {
             $table_id = $table_name.uniqid();
         }
-        if(isset($parameters) && empty($parameters)){
+        if (isset($parameters) && empty($parameters)) {
             $parameters = ['class' => 'table table-bordered data_table', 'id' => $table_id];
         }
 

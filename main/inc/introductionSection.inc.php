@@ -60,7 +60,7 @@ $config = [
 ];
 
 $form->addHtmlEditor('intro_content', null, false, false, $config, ['data-block' => true]);
-$form->addButtonSave(get_lang('Save introductory text'), 'intro_cmdUpdate',false,['data-block'=> true]);
+$form->addButtonSave(get_lang('Save introductory text'), 'intro_cmdUpdate', false, ['data-block' => true]);
 
 /* INTRODUCTION MICRO MODULE - COMMANDS SECTION (IF ALLOWED) */
 $course_id = api_get_course_int_id();

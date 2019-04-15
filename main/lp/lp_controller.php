@@ -660,8 +660,10 @@ switch ($action) {
             api_not_allowed(true);
         }
         if (isset($_REQUEST['id'])) {
-            learnpath::deleteCategory($_REQUEST['id']);
-            Display::addFlash(Display::return_message(get_lang('Deleted')));
+            $result = learnpath::deleteCategory($_REQUEST['id']);
+            if ($result) {
+                Display::addFlash(Display::return_message(get_lang('Deleted')));
+            }
         }
         require 'lp_list.php';
         break;

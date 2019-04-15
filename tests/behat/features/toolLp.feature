@@ -49,13 +49,6 @@ Feature: LP tool
     And I should see "Document 1"
     And I should see "Exercise 1"
 
-  Scenario: Delete a LP category
-    Given I am on "/main/lp/lp_controller.php?cidReq=TEMP&action=list&isStudentView=false"
-    And wait for the page to be loaded
-    Then I should see "LP category 1"
-    And I follow "Delete"
-    Then I should not see "LP category 1"
-
 #  Scenario: Check the PDF export in LP list if hide SCORM PDF link is false
 #    Given I am on "/main/admin/settings.php?category=Course"
 #    And I check the "hide_scorm_pdf_link" radio button with "false" value
@@ -72,6 +65,14 @@ Feature: LP tool
 
   Scenario: Delete a LP
     Given I am on "/main/lp/lp_controller.php?cidReq=TEMP&action=list"
+    And wait for the page to be loaded
     And I follow "Delete"
     And I confirm the popup
     Then I should not see "LP 1"
+
+  Scenario: Delete a LP category
+    Given I am on "/main/lp/lp_controller.php?cidReq=TEMP&action=list&isStudentView=false"
+    And wait for the page to be loaded
+    Then I should see "LP category 1"
+    And I follow "Delete"
+    Then I should see "Deleted"

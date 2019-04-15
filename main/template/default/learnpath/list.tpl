@@ -22,7 +22,7 @@
                 {% if categories|length > 1 and lp_data.category.id %}
                     {% if is_allowed_to_edit %}
                         <h3 class="page-header">
-                            {{ lp_data.category.getName() }}
+                            {{ lp_data.category.getName() | trim }}
 
                             {% if lp_data.category.getId() > 0 %}
                                 {% if not _c.session_id %}

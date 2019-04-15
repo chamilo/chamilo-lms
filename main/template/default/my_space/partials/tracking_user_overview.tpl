@@ -53,7 +53,7 @@
                                     {{ course.questions_answered }}
                                 </span>
                             </div>
-                            <div class="box" data-toggle="tooltip" data-placement="top" title="{{ 'LatestLogin'|get_lang }}">
+                            <div class="box box-date" data-toggle="tooltip" data-placement="top" title="{{ 'LatestLogin'|get_lang }}">
                                 {% if course.last_connection  %}
                                 <span class="kt-badge last-connection">
                                      {{ course.last_connection }}

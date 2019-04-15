@@ -8390,4 +8390,5 @@ $BasicCourseDocuments = "Basic course documents";
 $WeekX = "Week %s";
 $QuizWrongAnswerHereIsTheCorrectOne = "Wrong answer. The correct one was:";
 $ThisQuizCanBeEmbeddable = "This quiz can be embeddable on videos or mobile content";
+$SearchGeolocalization = "Search for this location";
 ?>

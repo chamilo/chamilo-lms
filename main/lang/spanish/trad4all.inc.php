@@ -8415,4 +8415,6 @@ $GenerateStats = "Generar estatisticas";
 $BasicCourseDocuments = "Documentos básicos del curso";
 $WeekX = "Semana %s";
 $QuizWrongAnswerHereIsTheCorrectOne = "Su selección ha sido errónea, la correcta es:";
+$ThisQuizCanBeEmbeddable = "Este ejercicio puede ser integrado con videos o contenido móvil";
+$SearchGeolocalization = "Localizar por esta dirección";
 ?>

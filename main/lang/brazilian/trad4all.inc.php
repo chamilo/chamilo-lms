@@ -8272,4 +8272,6 @@ $VoteDislike = "Dislike";
 $GenerateStats = "Gerar estatísticas";
 $BasicCourseDocuments = "Documentos básicos do curso";
 $WeekX = "Semana %s";
+$QuizWrongAnswerHereIsTheCorrectOne = "Resposta errada. O correto foi:";
+$ThisQuizCanBeEmbeddable = "Este questionário pode ser incorporado em vídeos ou conteúdo para dispositivos móveis";
 ?>

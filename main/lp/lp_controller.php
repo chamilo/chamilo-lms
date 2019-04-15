@@ -18,11 +18,10 @@ use ChamiloSession as Session;
 $use_anonymous = true;
 $debug = 0;
 
-if ($debug) {
-    error_log('Entering lp_controller.php. Checking if LP exist in current session');
-}
-
 require_once __DIR__.'/../inc/global.inc.php';
+
+api_protect_course_script(true);
+
 $current_course_tool = TOOL_LEARNPATH;
 $_course = api_get_course_info();
 
@@ -185,7 +184,6 @@ $htmlHeadXtra[] = '
 </script>';
 
 $session_id = api_get_session_id();
-api_protect_course_script(true);
 
 $lpfound = false;
 $myrefresh = 0;
@@ -1199,7 +1197,8 @@ switch ($action) {
             exit;
         }
         break;
-    case 'add_sub_item': // Add an item inside a dir/chapter.
+    case 'add_sub_item':
+        // Add an item inside a dir/chapter.
         // @todo check if this is @deprecated
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);

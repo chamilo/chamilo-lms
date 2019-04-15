@@ -63,16 +63,19 @@ Feature: LP tool
 #    And I am on "/main/lp/lp_controller.php?cidReq=TEMP&action=list&isStudentView=true"
 #    Then I should not see an icon with title "Export to PDF"
 
+  Scenario: LP exists and LP category exists
+    Given I am on "/main/lp/lp_controller.php?cidReq=TEMP&action=list&isStudentView=false"
+    Then I should see "LP 1"
+    And I should see "LP category 1"
+
   Scenario: Delete a LP
-    Given I am on "/main/lp/lp_controller.php?cidReq=TEMP&action=list"
-    And wait for the page to be loaded
+    Given I am on "/main/lp/lp_controller.php?cidReq=TEMP&action=list&isStudentView=false"
     And I follow "Delete"
     And I confirm the popup
     Then I should not see "LP 1"
 
   Scenario: Delete a LP category
     Given I am on "/main/lp/lp_controller.php?cidReq=TEMP&action=list&isStudentView=false"
-    And wait for the page to be loaded
     Then I should see "LP category 1"
     And I follow "Delete"
     Then I should see "Deleted"

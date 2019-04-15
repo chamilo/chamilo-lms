@@ -57,7 +57,7 @@ class ExerciseLib
         // Change false to true in the following line to enable answer hinting
         $debug_mark_answer = $show_answers;
         // Reads question information
-        if (!$objQuestionTmp = Question::read($questionId, $course_id)) {
+        if (!$objQuestionTmp = Question::read($questionId, $course)) {
             // Question not found
             return false;
         }
@@ -247,7 +247,7 @@ class ExerciseLib
                 if ($show_comment) {
                     $header .= Display::tag('th', get_lang('Feedback'));
                 }
-                $s .= '<table class="table table-hover">';
+                $s .= '<table class="table table-hover table-striped">';
                 $s .= Display::tag(
                     'tr',
                     $header,
@@ -432,7 +432,7 @@ class ExerciseLib
                     if ($exercise->feedback_type == EXERCISE_FEEDBACK_TYPE_END) {
                         $header .= Display::tag('th', get_lang('Feedback'));
                     }
-                    $s .= '<table class="table table-hover">';
+                    $s .= '<table class="table table-hover table-striped">';
                     $s .= Display::tag(
                         'tr',
                         $header,
@@ -2855,6 +2855,7 @@ HOTSPOT;
             $weight = float_format($weight, 1, $decimalSeparator, $thousandSeparator);
         }
 
+        $html = '';
         if ($show_percentage) {
             $percentageSign = '%';
             if ($hidePercentageSign) {
@@ -4560,7 +4561,7 @@ EOT;
         if (!empty($question_list)) {
             foreach ($question_list as $questionId) {
                 // Creates a temporary Question object
-                $objQuestionTmp = Question::read($questionId);
+                $objQuestionTmp = Question::read($questionId, $objExercise->course);
                 // This variable came from exercise_submit_modal.php
                 ob_start();
                 $choice = null;
@@ -5056,7 +5057,7 @@ EOT;
      * @return string
      */
     public static function getTotalScoreRibbon(
-        $objExercise,
+        Exercise $objExercise,
         $score,
         $weight,
         $checkPassPercentage = false,
@@ -5334,7 +5335,7 @@ EOT;
 
         $midnightTime = ChamiloApi::getServerMidnightTime();
 
-        $answeredQuestionsCount = ExerciseLib::countAnsweredQuestionsByUserAfterTime(
+        $answeredQuestionsCount = self::countAnsweredQuestionsByUserAfterTime(
             $midnightTime,
             $userId,
             $courseId,
@@ -5342,5 +5343,51 @@ EOT;
         );
 
         return ($answeredQuestionsCount + $numberOfQuestions) > $questionsLimitPerDay;
+    }
+
+    /**
+     * Check if an exercise complies with the requirements to be embedded in the mobile app or a video. By making sure
+     * it is set on one question per page and it only contains unique-answer or multiple-answer questions.
+     *
+     * @param array $exercise Exercise info
+     *
+     * @throws \Doctrine\ORM\Query\QueryException
+     *
+     * @return bool
+     */
+    public static function isQuizEmbeddable(array $exercise)
+    {
+        $em = Database::getManager();
+
+        if (2 != $exercise['type']) {
+            return false;
+        }
+
+        $countAll = $em
+            ->createQuery('SELECT COUNT(qq)
+                FROM ChamiloCourseBundle:CQuizQuestion qq
+                INNER JOIN ChamiloCourseBundle:CQuizRelQuestion qrq
+                   WITH qq.iid = qrq.questionId
+                WHERE qrq.exerciceId = :id'
+            )
+            ->setParameter('id', $exercise['iid'])
+            ->getSingleScalarResult();
+
+        $countOfAllowed = $em
+            ->createQuery('SELECT COUNT(qq)
+                FROM ChamiloCourseBundle:CQuizQuestion qq
+                INNER JOIN ChamiloCourseBundle:CQuizRelQuestion qrq
+                   WITH qq.iid = qrq.questionId
+                WHERE qrq.exerciceId = :id AND qq.type IN (:types)'
+            )
+            ->setParameters(
+                [
+                    'id' => $exercise['iid'],
+                    'types' => [UNIQUE_ANSWER, MULTIPLE_ANSWER, UNIQUE_ANSWER_IMAGE],
+                ]
+            )
+            ->getSingleScalarResult();
+
+        return $countAll === $countOfAllowed;
     }
 }

@@ -157,7 +157,7 @@ if (is_array($personal_course_list)) {
 }
 
 //Social Block Menu
-$social_menu_block = SocialManager::getMenuSocial(
+$social_menu_block = SocialManager::show_social_menu(
     'shared_profile',
     null,
     $user_id,

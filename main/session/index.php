@@ -13,11 +13,12 @@ use ChamiloSession as Session;
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (empty($_GET['session_id'])) {
+$session_id = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
+
+if (empty($session_id)) {
     api_not_allowed(true);
 }
 
-$session_id = isset($_GET['session_id']) ? intval($_GET['session_id']) : null;
 $sessionField = new ExtraFieldValue('session');
 $valueAllowVisitors = $sessionField->get_values_by_handler_and_field_variable(
     $session_id,
@@ -32,7 +33,7 @@ if (!$allowVisitors) {
 
 $this_section = SECTION_COURSES;
 $htmlHeadXtra[] = api_get_jqgrid_js();
-$course_id = isset($_GET['course_id']) ? intval($_GET['course_id']) : null;
+$course_id = isset($_GET['course_id']) ? (int) $_GET['course_id'] : null;
 Session::write('id_session', $session_id);
 
 // Clear the exercise session just in case
@@ -43,12 +44,13 @@ Session::erase('duration_time');
 $userId = api_get_user_id();
 $session_info = SessionManager::fetch($session_id);
 $session_list = SessionManager::get_sessions_by_coach(api_get_user_id());
-$course_list = SessionManager::get_course_list_by_session_id($session_id);
-
+$courseList = SessionManager::get_course_list_by_session_id($session_id);
 $userIsGeneralCoach = SessionManager::user_is_general_coach($userId, $session_id);
 
 $user_course_list = [];
-foreach ($course_list as $course) {
+$exerciseListPerCourse = [];
+
+foreach ($courseList as $course) {
     $status = SessionManager::get_user_status_in_course_session(
         $userId,
         $course['real_id'],
@@ -57,6 +59,32 @@ foreach ($course_list as $course) {
     if ($status !== false || api_is_platform_admin() || $userIsGeneralCoach) {
         $user_course_list[] = $course['real_id'];
     }
+
+    $exerciseList = ExerciseLib::get_all_exercises_for_course_id(
+        $course,
+        $session_id,
+        $course['real_id'],
+        true
+    );
+
+    $exerciseListNew = [];
+    if (!empty($exerciseList)) {
+        // Exercises
+        foreach ($exerciseList as $exerciseInfo) {
+            $exerciseId = $exerciseInfo['id'];
+            $visibility = api_get_item_visibility(
+                $course,
+                TOOL_QUIZ,
+                $exerciseId,
+                $session_id
+            );
+            if ($visibility == 0) {
+                continue;
+            }
+            $exerciseListNew[] = $exerciseInfo;
+        }
+    }
+    $exerciseListPerCourse[$course['real_id']] = $exerciseListNew;
 }
 
 if (empty($user_course_list)) {
@@ -66,9 +94,8 @@ if (empty($user_course_list)) {
 $my_session_list = [];
 $final_array = [];
 $new_course_list = [];
-
-if (!empty($course_list)) {
-    foreach ($course_list as $course_data) {
+if (!empty($courseList)) {
+    foreach ($courseList as $course_data) {
         if (api_is_platform_admin()) {
             $course_data['title'] = Display::url(
                 $course_data['title'],
@@ -107,17 +134,7 @@ if (!empty($course_list)) {
         }
 
         $course_info = api_get_course_info($course_data['code']);
-        $exercise_count = count(
-            ExerciseLib::get_all_exercises(
-                $course_info,
-                $session_id,
-                true,
-                null,
-                false,
-                1
-            )
-        );
-
+        $exerciseCount = count($exerciseListPerCourse[$course_info['real_id']]);
         $max_mutation_date = '';
         $last_date = Tracking::get_last_connection_date_on_the_course(
             api_get_user_id(),
@@ -158,7 +175,7 @@ if (!empty($course_list)) {
             'title' => $course_data['title'].$icons,
             //  'recent_lps' => $icons,
             //'max_mutation_date' => substr(api_get_local_time($max_mutation_date),0,10),
-            'exercise_count' => $exercise_count,
+            'exercise_count' => $exerciseCount,
             'lp_count' => $lp_count,
         ];
     }
@@ -223,7 +240,6 @@ if (empty($session_id)) {
 //Final data to be show
 $my_real_array = $new_exercises = [];
 $now = time();
-$courseList = SessionManager::get_course_list_by_session_id($session_id);
 
 if (!empty($courseList)) {
     foreach ($courseList as $courseInfo) {
@@ -237,18 +253,11 @@ if (!empty($courseList)) {
             $session_id
         );
 
-        $exerciseList = ExerciseLib::get_all_exercises_for_course_id(
-            $courseInfo,
-            $session_id,
-            $courseId,
-            true
-        );
+        $exerciseList = $exerciseListPerCourse[$courseId];
 
         if (!empty($exerciseList)) {
             // Exercises
             foreach ($exerciseList as $exerciseInfo) {
-                $exerciseId = $exerciseInfo['id'];
-
                 if ($exerciseInfo['start_time'] == '0000-00-00 00:00:00') {
                     $start_date = '-';
                 } else {
@@ -264,7 +273,7 @@ if (!empty($courseList)) {
                 $best_score = '';
                 if (!empty($best_score_data)) {
                     $best_score = ExerciseLib::show_score(
-                        $best_score_data['exe_result'],
+                        $best_score_data['score'],
                         $best_score_data['max_score']
                     );
                 }

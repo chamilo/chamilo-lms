@@ -179,6 +179,8 @@ switch ($action) {
                 exit;
             }
         }
+
+        $courseController->courseList($action);
         break;
     case 'subscribe_course':
         if (api_is_anonymous()) {

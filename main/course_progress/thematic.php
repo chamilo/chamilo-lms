@@ -295,7 +295,7 @@ if ($action == 'thematic_list') {
 $tpl->assign('actions', $toolbar);
 if (!empty($html)) {
     $tpl->assign('content', $html);
-    $thematicLayout = $tpl->get_template('course_progress/layout.html.twig');
+    $thematicLayout = $tpl->get_template('course_progress/layout.tpl');
 }
 if (!empty($message) && !empty($total_average_of_advances)) {
     $tpl->assign('message', $message);

@@ -124,21 +124,19 @@ abstract class Question
      * Reads question information from the data base.
      *
      * @param int $id        - question ID
-     * @param int $course_id
+     * @param array $course_info
+     * @param bool  $getExerciseList
      *
      * @return Question
      *
      * @author Olivier Brouckaert
      */
-    public static function read($id, $course_id = null)
+    public static function read($id, $course_info = [], $getExerciseList = true)
     {
         $id = (int) $id;
-        if (!empty($course_id)) {
-            $course_info = api_get_course_info_by_id($course_id);
-        } else {
+        if (empty($course_info)) {
             $course_info = api_get_course_info();
         }
-
         $course_id = $course_info['real_id'];
 
         if (empty($course_id) || $course_id == -1) {
@@ -172,22 +170,24 @@ abstract class Question
                 $objQuestion->category = TestCategory::getCategoryForQuestion($id, $course_id);
                 $objQuestion->code = isset($object->code) ? $object->code : '';
 
-                $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
-                $sql = "SELECT DISTINCT q.exercice_id
-                        FROM $TBL_EXERCISE_QUESTION q
-                        INNER JOIN $tblQuiz e
-                        ON e.c_id = q.c_id AND e.id = q.exercice_id
-                        WHERE
-                            q.c_id = $course_id AND
-                            q.question_id = $id AND
-                            e.active >= 0";
+                if ($getExerciseList) {
+                    $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
+                    $sql = "SELECT DISTINCT q.exercice_id
+                            FROM $TBL_EXERCISE_QUESTION q
+                            INNER JOIN $tblQuiz e
+                            ON e.c_id = q.c_id AND e.id = q.exercice_id
+                            WHERE
+                                q.c_id = $course_id AND
+                                q.question_id = $id AND
+                                e.active >= 0";
 
-                $result = Database::query($sql);
+                    $result = Database::query($sql);
 
-                // fills the array with the exercises which this question is in
-                if ($result) {
-                    while ($obj = Database::fetch_object($result)) {
-                        $objQuestion->exerciseList[] = $obj->exercice_id;
+                    // fills the array with the exercises which this question is in
+                    if ($result) {
+                        while ($obj = Database::fetch_object($result)) {
+                            $objQuestion->exerciseList[] = $obj->exercice_id;
+                        }
                     }
                 }
 
@@ -1981,16 +1981,27 @@ abstract class Question
      *
      * @return string HTML string with the header of the question (before the answers table)
      */
-    public function return_header($exercise, $counter = null, $score = [])
+    public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $counterLabel = '';
         if (!empty($counter)) {
             $counterLabel = (int) $counter;
         }
+
         $scoreLabel = get_lang('Wrong');
+
+        if ($exercise->results_disabled == RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
+            $scoreLabel = get_lang('QuizWrongAnswerHereIsTheCorrectOne');
+        }
+
         $class = 'error';
         if (isset($score['pass']) && $score['pass'] == true) {
             $scoreLabel = get_lang('Correct');
+
+            if ($exercise->results_disabled == RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
+                $scoreLabel = get_lang('CorrectAnswer');
+            }
+
             $class = 'success';
         }
 

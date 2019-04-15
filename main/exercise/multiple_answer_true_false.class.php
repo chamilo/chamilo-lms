@@ -43,7 +43,7 @@ class MultipleAnswerTrueFalse extends Question
         $renderer = &$form->defaultRenderer();
         $defaults = [];
 
-        $html = '<table class="table table-hover">';
+        $html = '<table class="table table-striped table-hover">';
         $html .= '<thead>';
         $html .= '<tr>';
         $html .= '<th>'.get_lang('Number').'</th>';

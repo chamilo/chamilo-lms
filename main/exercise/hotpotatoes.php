@@ -9,6 +9,9 @@
  * @author Istvan Mandak (original author)
  */
 require_once __DIR__.'/../inc/global.inc.php';
+
+api_protect_course_script(true);
+
 require_once 'hotpotatoes.lib.php';
 
 // Section (for the tabs).
@@ -131,14 +134,7 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
                 $filename = api_replace_dangerous_char(trim($_FILES['userFile']['name']));
                 $fld = GenerateHpFolder($document_sys_path.$uploadPath.'/');
                 @mkdir($document_sys_path.$uploadPath.'/'.$fld, api_get_permissions_for_new_directories());
-                $doc_id = DocumentManager::addDocument($_course, '/HotPotatoes_files/'.$fld, 'folder', 0, $fld);
-            /*api_item_property_update(
-                $_course,
-                TOOL_DOCUMENT,
-                $doc_id,
-                'FolderCreated',
-                api_get_user_id()
-            );*/
+                $doc_id = DocumentManager::addDocument($_course, '/HotPotatoes_files/'.$fld, 'folder', 0, $fld);   
             } else {
                 // It is not the first step... get the filename directly from the system params.
                 $filename = $_FILES['userFile']['name'];

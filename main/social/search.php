@@ -24,6 +24,8 @@ $interbreadcrumb[] = [
 ];
 
 $query = isset($_GET['q']) ? Security::remove_XSS($_GET['q']) : null;
+
+$queryNoFilter = isset($_GET['q']) ? $_GET['q'] : null;
 $query_search_type = isset($_GET['search_type']) && in_array($_GET['search_type'], ['0', '1', '2']) ? $_GET['search_type'] : null;
 $extra_fields = UserManager::getExtraFilterableFields();
 $query_vars = ['q' => $query, 'search_type' => $query_search_type];
@@ -37,9 +39,9 @@ if (!empty($extra_fields)) {
 }
 
 //Block Social Menu
-$social_menu_block = SocialManager::getMenuSocial('search');
+$social_menu_block = SocialManager::show_social_menu('search');
 $block_search = '';
-$searchForm = UserManager::getSearchForm($query);
+$searchForm = UserManager::get_search_form($queryNoFilter);
 
 $groups = [];
 $totalGroups = [];
@@ -124,9 +126,8 @@ if ($query != '' || ($query_vars['search_type'] == '1' && count($query_vars) > 2
                 $user_icon = Display::return_icon('teacher.png', get_lang('Teacher'), null, ICON_SIZE_TINY);
             }
 
-            $tag = isset($user['tag']) ? ' <br /><br />'.$user['tag'] : null;
             $user_info['complete_name'] = Display::url($user_info['complete_name'], $url);
-            $invitations = $user['tag'].$sendInvitation.$sendMessage;
+            $invitations = $sendInvitation.$sendMessage;
 
             $results .= Display::getUserCard(
                 $user_info,

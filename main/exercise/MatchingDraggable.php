@@ -96,7 +96,7 @@ class MatchingDraggable extends Question
         $form->addElement('hidden', 'nb_options', $nb_options);
 
         // DISPLAY MATCHES
-        $html = '<table class="table table-hover">
+        $html = '<table class="table table-striped table-hover">
             <thead>
                 <tr>
                     <th width="10">'.get_lang('Number').'</th>
@@ -158,7 +158,7 @@ class MatchingDraggable extends Question
         $form->addHtml('</tbody></table>');
 
         // DISPLAY OPTIONS
-        $html = '<table class="table table-hover">
+        $html = '<table class="table table-striped table-hover">
             <thead>
                 <tr>
                     <th width="15%">'.get_lang('Number').'</th>

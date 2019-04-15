@@ -14,6 +14,8 @@ $help_content = 'exercise_upload';
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script(true);
+
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 $debug = false;
 $origin = api_get_origin();
@@ -436,7 +438,7 @@ function lp_upload_quiz_action_handling()
 
                             $questionObj = Question::read(
                                 $question_id,
-                                $courseId
+                                $_course
                             );
 
                             if ($questionObj) {
@@ -456,7 +458,7 @@ function lp_upload_quiz_action_handling()
                         break;
                     case FREE_ANSWER:
                         $globalScore = isset($scoreList[$i]) ? $scoreList[$i] : null;
-                        $questionObj = Question::read($question_id, $courseId);
+                        $questionObj = Question::read($question_id, $_course);
                         if ($questionObj) {
                             $questionObj->updateWeighting($globalScore);
                             $questionObj->save($exercise);
@@ -489,7 +491,7 @@ function lp_upload_quiz_action_handling()
 
                         $objAnswer->save();
 
-                        $questionObj = Question::read($question_id, $courseId);
+                        $questionObj = Question::read($question_id, $_course);
                         if ($questionObj) {
                             $questionObj->updateWeighting($globalScore);
                             $questionObj->save($exercise);
@@ -520,7 +522,7 @@ function lp_upload_quiz_action_handling()
                             $counter++;
                         }
                         $objAnswer->save();
-                        $questionObj = Question::read($question_id, $courseId);
+                        $questionObj = Question::read($question_id, $_course);
                         if ($questionObj) {
                             $questionObj->updateWeighting($globalScore);
                             $questionObj->save($exercise);

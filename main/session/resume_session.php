@@ -99,12 +99,17 @@ switch ($action) {
         }
 
         if (!empty($_GET['class'])) {
+            $class = (int) $_GET['class'];
             $result = Database::query(
                 "DELETE FROM $tbl_session_rel_class
-                 WHERE session_id='$sessionId' AND class_id=".intval($_GET['class'])
+                 WHERE session_id = $sessionId
+                  AND class_id = $class"
             );
             $nbr_affected_rows = Database::affected_rows($result);
-            Database::query("UPDATE $tbl_session SET nbr_classes=nbr_classes-$nbr_affected_rows WHERE id='$sessionId'");
+            Database::query(
+                "UPDATE $tbl_session 
+                SET nbr_classes = nbr_classes - $nbr_affected_rows 
+                WHERE id = $sessionId");
         }
 
         if (!empty($_GET['user'])) {
@@ -145,7 +150,7 @@ $url = Display::url(
 );
 $courseListToShow = Display::page_subheader(get_lang('CourseList').$url);
 
-$courseListToShow .= '<table id="session-list-course" class="table table-bordered">
+$courseListToShow .= '<table id="session-list-course" class="table table-hover data_table">
 <tr>
   <th width="35%">'.get_lang('CourseTitle').'</th>
   <th width="30%">'.get_lang('CourseCoach').'</th>
@@ -209,11 +214,12 @@ if ($session->getNbrCourses() === 0) {
         // hide_course_breadcrumb the parameter has been added to hide the name
         // of the course, that appeared in the default $interbreadcrumb
         $courseItem .= '<tr>
-			<td class="title">'.
-            Display::url(
+			<td class="title">'
+            .Display::url(
                 $course->getTitle().' ('.$course->getVisualCode().')',
                 $courseUrl
-            ).'</td>';
+            )
+            .'</td>';
         $courseItem .= '<td>'.($namesOfCoaches ? implode('<br>', $namesOfCoaches) : get_lang('None')).'</td>';
         $courseItem .= '<td>'.$numberOfUsers.'</td>';
         $courseItem .= '<td>';
@@ -284,8 +290,8 @@ $url .= Display::url(
     $codePath."session/session_user_import.php?id_session=$sessionId"
 );
 $url .= Display::url(
-    Display::return_icon('export_csv.png', get_lang('ExportUsers'), [], ICON_SIZE_SMALL),
-    api_get_path(WEB_CODE_PATH)."user/user_export.php?file_type=csv&session=$sessionId&addcsvheader=1"
+    Display::return_icon('export_csv.png', get_lang('ExportUsers')),
+    $codePath."user/user_export.php?file_type=csv&session=$sessionId&addcsvheader=1"
 );
 
 $userListToShow = Display::page_subheader(get_lang('UserList').$url);
@@ -415,5 +421,5 @@ $tpl->assign('user_list', $userListToShow);
 $tpl->assign('dependencies', $dependencies);
 $tpl->assign('requirements', $requirements);
 
-$layout = $tpl->get_template('session/resume_session.html.twig');
+$layout = $tpl->get_template('session/resume_session.tpl');
 $tpl->display($layout);

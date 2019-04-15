@@ -14,7 +14,7 @@ $id = isset($_REQUEST['id']) ? (int) $_GET['id'] : null; //exe id
 $show_headers = isset($_REQUEST['show_headers']) ? (int) $_REQUEST['show_headers'] : null;
 $origin = api_get_origin();
 
-if ($origin == 'learnpath') {
+if (in_array($origin, ['learnpath', 'embeddable'])) {
     $show_headers = false;
 }
 

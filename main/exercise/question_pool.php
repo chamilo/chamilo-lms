@@ -17,6 +17,8 @@ use Knp\Component\Pager\Paginator;
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script(true);
+
 $this_section = SECTION_COURSES;
 
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
@@ -45,16 +47,15 @@ if (!isset($_GET['selected_course']) && !isset($_GET['exerciseId'])) {
 }
 
 $_course = api_get_course_info();
-
-if (empty($objExercise) && !empty($fromExercise)) {
-    $objExercise = new Exercise();
+$objExercise = new Exercise();
+if (!empty($fromExercise)) {
     $objExercise->read($fromExercise, false);
 }
 
 $nameTools = get_lang('QuestionPool');
 $interbreadcrumb[] = ['url' => 'exercise.php?'.api_get_cidreq(), 'name' => get_lang('Exercises')];
 
-if (!empty($objExercise)) {
+if (!empty($objExercise->id)) {
     $interbreadcrumb[] = [
         'url' => 'admin.php?exerciseId='.$objExercise->id.'&'.api_get_cidreq(),
         'name' => $objExercise->selectTitle(true),
@@ -71,7 +72,7 @@ if ($is_allowedToEdit) {
         $current_course = api_get_course_info();
         $old_question_id = $question_copy;
         // Reading the source question
-        $old_question_obj = Question::read($old_question_id, $origin_course_id);
+        $old_question_obj = Question::read($old_question_id, $origin_course_info);
         $courseId = $current_course['real_id'];
         if ($old_question_obj) {
             $old_question_obj->updateTitle($old_question_obj->selectTitle().' - '.get_lang('Copy'));
@@ -141,7 +142,7 @@ if ($is_allowedToEdit) {
             $current_course = api_get_course_info();
             foreach ($question_data as $old_question_id) {
                 //Reading the source question
-                $old_question_obj = Question::read($old_question_id, $origin_course_id);
+                $old_question_obj = Question::read($old_question_id, $origin_course_info);
                 if ($old_question_obj) {
                     $old_question_obj->updateTitle(
                         $old_question_obj->selectTitle().' - '.get_lang('Copy')
@@ -1040,7 +1041,8 @@ function get_action_icon_for_question(
  */
 function get_question_type_for_question($in_selectedcourse, $in_questionid)
 {
-    $myObjQuestion = Question::read($in_questionid, $in_selectedcourse);
+    $courseInfo = api_get_course_info_by_id($in_selectedcourse);
+    $myObjQuestion = Question::read($in_questionid, $courseInfo);
     $questionType = null;
     if (!empty($myObjQuestion)) {
         list($typeImg, $typeExpl) = $myObjQuestion->get_type_icon_html();

@@ -38,7 +38,7 @@ class MultipleAnswerCombination extends Question
         $nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
         $obj_ex = Session::read('objExercise');
 
-        $html = '<table class="table table-hover">';
+        $html = '<table class="table table-striped table-hover">';
         $html .= '<thead>';
         $html .= '<tr>';
         $html .= '<th width="10">'.get_lang('Number').'</th>';

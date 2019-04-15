@@ -10,7 +10,7 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-$id_session = intval($_GET['id_session']);
+$id_session = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
 SessionManager::protectSession($id_session);
 $course_code = $_GET['course_code'];
 $course_info = api_get_course_info($_REQUEST['course_code']);

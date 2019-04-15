@@ -662,20 +662,8 @@ class IndexManager
     ) {
         $html = '';
         if (!empty($idAccordion)) {
-            /*$html .= '<div class="panel-group" id="'.$idAccordion.'" role="tablist" aria-multiselectable="true">';
-            $html .= '<div class="panel panel-default" id="'.$id.'">';
-            $html .= '<div class="panel-heading" role="tab"><h4 class="panel-title">';
-            $html .= '<a role="button" data-toggle="collapse" data-parent="#'.$idAccordion.'" href="#'.$idCollapse.'" aria-expanded="true" aria-controls="'.$idCollapse.'">'.$title.'</a>';
-            $html .= '</h4></div>';
-            $html .= '<div id="'.$idCollapse.'" class="panel-collapse collapse in" role="tabpanel">';
-            $html .= '<div class="panel-body">'.$content.'</div>';
-            $html .= '</div></div></div>';*/
-
             $html = Display::panel($content, $title);
         } else {
-            /*if (!empty($id)) {
-                $params['id'] = $id;
-            }        */
             $html = Display::panel($content, $title);
         }
 
@@ -843,24 +831,24 @@ class IndexManager
                     'link' => api_get_path(WEB_PATH).'main/social/invitations.php',
                     'title' => get_lang('PendingInvitations').$total_invitations,
                 ];
-            } else {
-                $items[] = [
-                    'class' => 'personal-data',
-                    'icon' => Display::return_icon('database.png', get_lang('PersonalDataReport')),
-                    'link' => api_get_path(WEB_CODE_PATH).'social/personal_data.php',
-                    'title' => get_lang('PersonalDataReport'),
-                ];
             }
+        }
 
-            if (api_get_configuration_value('allow_my_files_link_in_homepage')) {
-                if (api_get_setting('allow_my_files') !== 'false') {
-                    $items[] = [
-                        'class' => 'myfiles-social',
-                        'icon' => Display::return_icon('sn-files.png', get_lang('Files')),
-                        'link' => api_get_path(WEB_PATH).'main/social/myfiles.php',
-                        'title' => get_lang('MyFiles'),
-                    ];
-                }
+        $items[] = [
+            'class' => 'personal-data',
+            'icon' => Display::return_icon('database.png', get_lang('PersonalDataReport')),
+            'link' => api_get_path(WEB_CODE_PATH).'social/personal_data.php',
+            'title' => get_lang('PersonalDataReport'),
+        ];
+
+        if (api_get_configuration_value('allow_my_files_link_in_homepage')) {
+            if (api_get_setting('allow_my_files') !== 'false') {
+                $items[] = [
+                    'class' => 'myfiles-social',
+                    'icon' => Display::return_icon('sn-files.png', get_lang('Files')),
+                    'link' => api_get_path(WEB_PATH).'main/social/myfiles.php',
+                    'title' => get_lang('MyFiles'),
+                ];
             }
         }
 

@@ -29,54 +29,6 @@ if (api_get_setting('allow_social_tool') !== 'true') {
 
 $userGroup = new UserGroup();
 
-//fast upload image
-/*if (api_get_setting('profile', 'picture') == 'true') {
-    $form = new FormValidator('profile', 'post', 'home.php', null, []);
-
-    //	PICTURE
-    $form->addElement('file', 'picture', get_lang('AddImage'));
-    $form->addProgress();
-    if (!empty($user_data['picture_uri'])) {
-        $form->addElement(
-            'checkbox',
-            'remove_picture',
-            null,
-            get_lang('DelImage')
-        );
-    }
-    $allowed_picture_types = api_get_supported_image_extensions();
-    $form->addRule(
-        'picture',
-        get_lang('OnlyImagesAllowed').' ('.implode(
-            ',',
-            $allowed_picture_types
-        ).')',
-        'filetype',
-        $allowed_picture_types
-    );
-    $form->addButtonSave(get_lang('SaveSettings'), 'apply_change');
-
-    if ($form->validate()) {
-        $user_data = $form->getSubmitValues();
-        // upload picture if a new one is provided
-        if ($_FILES['picture']['size']) {
-            if ($new_picture = UserManager::update_user_picture(
-                api_get_user_id(),
-                $_FILES['picture']['name'],
-                $_FILES['picture']['tmp_name']
-            )) {
-                $table_user = Database::get_main_table(TABLE_MAIN_USER);
-                $sql = "UPDATE $table_user
-                        SET
-                            picture_uri = '$new_picture'
-                        WHERE user_id =  ".api_get_user_id();
-
-                $result = Database::query($sql);
-            }
-        }
-    }
-}*/
-
 SocialManager::handlePosts(api_get_self());
 
 $threadList = SocialManager::getThreadList($user_id);
@@ -95,7 +47,7 @@ SocialManager::getScrollJs($countPost, $htmlHeadXtra);
 $social_menu_block = SocialManager::show_social_menu('home');
 
 $social_search_block = Display::panel(
-    UserManager::getSearchForm(''),
+    UserManager::get_search_form(''),
     get_lang('SearchUsers')
 );
 

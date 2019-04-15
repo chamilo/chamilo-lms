@@ -76,7 +76,7 @@ $(function() {
 </script>';
 
 // Social Menu Block
-$social_menu_block = SocialManager::getMenuSocial('myfiles');
+$social_menu_block = SocialManager::show_social_menu('myfiles');
 $actions = null;
 
 if (isset($_GET['cidReq'])) {

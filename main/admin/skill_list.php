@@ -189,7 +189,7 @@ switch ($action) {
         $tpl->assign('skills', $skillList);
         $tpl->assign('current_tag_id', $extraFieldSearchTagId);
         $tpl->assign('tags', $tags);
-        $templateName = $tpl->get_template('skill/list.html.twig');
+        $templateName = $tpl->get_template('skill/list.tpl');
         $content = $tpl->fetch($templateName);
 
         $tpl->assign(

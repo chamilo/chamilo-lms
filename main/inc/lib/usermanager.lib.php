@@ -4472,7 +4472,7 @@ class UserManager
      *
      * @return string HTML form
      */
-    public static function getSearchForm($query, $defaultParams = [])
+    public static function get_search_form($query, $defaultParams = [])
     {
         $searchType = isset($_GET['search_type']) ? $_GET['search_type'] : null;
         $form = new FormValidator(
@@ -4481,12 +4481,23 @@ class UserManager
             api_get_path(WEB_PATH).'main/social/search.php',
             '',
             [],
-            'box-no-label'
+            FormValidator::LAYOUT_HORIZONTAL
         );
 
-        $form->addText('q', get_lang('UsersGroups'), false, [
-            "id" => "q",
-        ]);
+        $query = Security::remove_XSS($query);
+
+        if (!empty($query)) {
+            $form->addHeader(get_lang('Results').' "'.$query.'"');
+        }
+
+        $form->addText(
+            'q',
+            get_lang('UsersGroups'),
+            false,
+            [
+                'id' => 'q',
+            ]
+        );
         $options = [
             0 => get_lang('Select'),
             1 => get_lang('User'),
@@ -4522,8 +4533,8 @@ class UserManager
             }
         }
 
-        $defaults['search_type'] = intval($searchType);
-        $defaults['q'] = api_htmlentities(Security::remove_XSS($query));
+        $defaults['search_type'] = (int) $searchType;
+        $defaults['q'] = $query;
 
         if (!empty($defaultParams)) {
             $defaults = array_merge($defaults, $defaultParams);
@@ -4628,8 +4639,8 @@ class UserManager
     /**
      * Deletes a contact.
      *
-     * @param int user friend id
-     * @param bool true will delete ALL friends relationship from $friend_id
+     * @param bool   $friend_id
+     * @param bool   $real_removed          true will delete ALL friends relationship
      * @param string                                              $with_status_condition
      *
      * @author isaac flores paz <isaac.flores@dokeos.com>
@@ -6443,7 +6454,6 @@ SQL;
         return (int) $row['count'];
     }
 
-    
     /**
      * @param array $userInfo
      * @param int   $searchYear

@@ -974,7 +974,7 @@ if (!empty($exerciseList)) {
 
                     // Check if this exercise was added in a LP
                     if ($exercise->exercise_was_added_in_lp == true) {
-                        $visiblity = Display::return_icon(
+                        $visibility = Display::return_icon(
                             'invisible.png',
                             get_lang('AddedToLPCannotBeAccessed'),
                             '',
@@ -982,7 +982,7 @@ if (!empty($exerciseList)) {
                         );
                     } else {
                         if ($row['active'] == 0 || $visibility == 0) {
-                            $visiblity = Display::url(
+                            $visibility = Display::url(
                                 Display::return_icon(
                                     'invisible.png',
                                     get_lang('Activate'),
@@ -993,7 +993,7 @@ if (!empty($exerciseList)) {
                             );
                         } else {
                             // else if not active
-                            $visiblity = Display::url(
+                            $visibility = Display::url(
                                 Display::return_icon(
                                     'visible.png',
                                     get_lang('Deactivate'),
@@ -1006,10 +1006,10 @@ if (!empty($exerciseList)) {
                     }
 
                     if ($limitTeacherAccess && !api_is_platform_admin()) {
-                        $visiblity = '';
+                        $visibility = '';
                     }
 
-                    $actions .= $visiblity;
+                    $actions .= $visibility;
 
                     $actions .= '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.
                         Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
@@ -1076,7 +1076,7 @@ if (!empty($exerciseList)) {
                         $number_of_questions .= min(TestCategory::getNumberMaxQuestionByCat($my_exercise_id), $random_number_of_question).' '.get_lang('QuestionByCategory');
                     } else {
                         $random_label = ' ('.get_lang('Random').') ';
-                        $number_of_questions = $random_number_of_question.' '.$random_label;
+                        $number_of_questions = $random_number_of_question.' '.$random_label.' / '.$rowi;
                         //Bug if we set a random value bigger than the real number of questions
                         if ($random_number_of_question > $rowi) {
                             $number_of_questions = $rowi.' '.$random_label;
@@ -1167,7 +1167,6 @@ if (!empty($exerciseList)) {
                                 $attempt_text = get_lang('NotAttempted');
                             }
                         } else {
-                            //$attempt_text = get_lang('CantShowResults');
                             $attempt_text = '-';
                         }
                     } else {

@@ -773,6 +773,10 @@ class Exercise
      */
     public function getQuestionOrderedListByName()
     {
+        if (empty($this->course_id) || empty($this->id)) {
+            return [];
+        }
+
         $exerciseQuestionTable = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $questionTable = Database::get_course_table(TABLE_QUIZ_QUESTION);
 
@@ -3307,7 +3311,7 @@ class Exercise
 
         // Creates a temporary Question object
         $course_id = $this->course_id;
-        $objQuestionTmp = Question::read($questionId, $course_id);
+        $objQuestionTmp = Question::read($questionId, $this->course);
 
         if ($objQuestionTmp === false) {
             return false;
@@ -5178,7 +5182,7 @@ class Exercise
                                         }
                                         //type no error shouldn't be treated
                                         $next = 1;
-                                        continue;
+                                        break;
                                     }
                                     if ($debug > 0) {
                                         error_log(__LINE__.' - answerId is >1 so we\'re probably in OAR', 0);
@@ -5192,7 +5196,7 @@ class Exercise
                                     if ($overlap == false) {
                                         //all good, no overlap
                                         $next = 1;
-                                        continue;
+                                        break;
                                     } else {
                                         if ($debug > 0) {
                                             error_log(__LINE__.' - Overlap is '.$overlap.': OAR hit', 0);
@@ -6442,7 +6446,6 @@ class Exercise
         $new_question_list = [];
         if (!empty($question_list)) {
             $media_questions = $this->getMediaList();
-
             $media_active = $this->mediaIsActivated($media_questions);
 
             if ($media_active) {
@@ -6488,66 +6491,66 @@ class Exercise
      */
     public function get_validated_question_list()
     {
-        $result = [];
         $isRandomByCategory = $this->isRandomByCat();
         if ($isRandomByCategory == 0) {
             if ($this->isRandom()) {
-                $result = $this->getRandomList();
-            } else {
-                $result = $this->selectQuestionList();
+                return $this->getRandomList();
             }
-        } else {
-            if ($this->isRandom()) {
-                // USE question categories
-                // get questions by category for this exercise
-                // we have to choice $objExercise->random question in each array values of $tabCategoryQuestions
-                // key of $tabCategoryQuestions are the categopy id (0 for not in a category)
-                // value is the array of question id of this category
-                $questionList = [];
-                $tabCategoryQuestions = TestCategory::getQuestionsByCat($this->id);
-                $isRandomByCategory = $this->getRandomByCategory();
-                // We sort categories based on the term between [] in the head
-                // of the category's description
-                /* examples of categories :
-                 * [biologie] Maitriser les mecanismes de base de la genetique
-                 * [biologie] Relier les moyens de depenses et les agents infectieux
-                 * [biologie] Savoir ou est produite l'enrgie dans les cellules et sous quelle forme
-                 * [chimie] Classer les molles suivant leur pouvoir oxydant ou reacteur
-                 * [chimie] Connaître la denition de la theoie acide/base selon Brönsted
-                 * [chimie] Connaître les charges des particules
-                 * We want that in the order of the groups defined by the term
-                 * between brackets at the beginning of the category title
-                */
-                // If test option is Grouped By Categories
-                if ($isRandomByCategory == 2) {
-                    $tabCategoryQuestions = TestCategory::sortTabByBracketLabel($tabCategoryQuestions);
-                }
-                foreach ($tabCategoryQuestions as $tabquestion) {
-                    $number_of_random_question = $this->random;
-                    if ($this->random == -1) {
-                        $number_of_random_question = count($this->questionList);
-                    }
-                    $questionList = array_merge(
-                        $questionList,
-                        TestCategory::getNElementsFromArray(
-                            $tabquestion,
-                            $number_of_random_question
-                        )
-                    );
-                }
-                // shuffle the question list if test is not grouped by categories
-                if ($isRandomByCategory == 1) {
-                    shuffle($questionList); // or not
-                }
-                $result = $questionList;
-            } else {
-                // Problem, random by category has been selected and
-                // we have no $this->isRandom number of question selected
-                // Should not happened
-            }
+
+            return $this->selectQuestionList();
         }
 
-        return $result;
+        if ($this->isRandom()) {
+            // USE question categories
+            // get questions by category for this exercise
+            // we have to choice $objExercise->random question in each array values of $tabCategoryQuestions
+            // key of $tabCategoryQuestions are the categopy id (0 for not in a category)
+            // value is the array of question id of this category
+            $questionList = [];
+            $tabCategoryQuestions = TestCategory::getQuestionsByCat($this->id);
+            $isRandomByCategory = $this->getRandomByCategory();
+            // We sort categories based on the term between [] in the head
+            // of the category's description
+            /* examples of categories :
+             * [biologie] Maitriser les mecanismes de base de la genetique
+             * [biologie] Relier les moyens de depenses et les agents infectieux
+             * [biologie] Savoir ou est produite l'enrgie dans les cellules et sous quelle forme
+             * [chimie] Classer les molles suivant leur pouvoir oxydant ou reacteur
+             * [chimie] Connaître la denition de la theoie acide/base selon Brönsted
+             * [chimie] Connaître les charges des particules
+             * We want that in the order of the groups defined by the term
+             * between brackets at the beginning of the category title
+            */
+            // If test option is Grouped By Categories
+            if ($isRandomByCategory == 2) {
+                $tabCategoryQuestions = TestCategory::sortTabByBracketLabel($tabCategoryQuestions);
+            }
+            foreach ($tabCategoryQuestions as $tabquestion) {
+                $number_of_random_question = $this->random;
+                if ($this->random == -1) {
+                    $number_of_random_question = count($this->questionList);
+                }
+                $questionList = array_merge(
+                    $questionList,
+                    TestCategory::getNElementsFromArray(
+                        $tabquestion,
+                        $number_of_random_question
+                    )
+                );
+            }
+            // shuffle the question list if test is not grouped by categories
+            if ($isRandomByCategory == 1) {
+                shuffle($questionList); // or not
+            }
+            // Problem, random by category has been selected and
+            return $questionList;
+        }
+
+        // Problem, random by category has been selected and
+        // we have no $this->isRandom number of question selected
+        // Should not happened
+
+        return [];
     }
 
     public function get_question_list($expand_media_questions = false)
@@ -7465,7 +7468,7 @@ class Exercise
         } else {
             // standard test, just add each question score
             foreach ($questionList as $questionId) {
-                $question = Question::read($questionId, $this->course_id);
+                $question = Question::read($questionId, $this->course);
                 $out_max_score += $question->weighting;
             }
         }
@@ -7906,35 +7909,35 @@ class Exercise
 
     /**
      * @param int $start
-     * @param int $lenght
+     * @param int $length
      *
      * @return array
      */
-    public function getQuestionForTeacher($start = 0, $lenght = 10)
+    public function getQuestionForTeacher($start = 0, $length = 10)
     {
         $start = (int) $start;
         if ($start < 0) {
             $start = 0;
         }
 
-        $lenght = (int) $lenght;
+        $length = (int) $length;
 
-        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $sql = "SELECT DISTINCT e.question_id, e.question_order
-                FROM $TBL_EXERCICE_QUESTION e
-                INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.id AND e.c_id = q.c_id)
+        $quizRelQuestion = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $question = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $sql = "SELECT DISTINCT e.question_id
+                FROM $quizRelQuestion e
+                INNER JOIN $question q
+                ON (e.question_id = q.iid AND e.c_id = q.c_id)
                 WHERE
                     e.c_id = {$this->course_id} AND
                     e.exercice_id = '".$this->id."'
                 ORDER BY question_order
-                LIMIT $start, $lenght
+                LIMIT $start, $length
             ";
         $result = Database::query($sql);
         $questionList = [];
         while ($object = Database::fetch_object($result)) {
-            $questionList[$object->question_order] = $object->question_id;
+            $questionList[] = $object->question_id;
         }
 
         return $questionList;
@@ -8087,13 +8090,12 @@ class Exercise
      */
     private function getQuestionOrderedList()
     {
-        $questionList = [];
         $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
 
         // Getting question_order to verify that the question
         // list is correct and all question_order's were set
-        $sql = "SELECT DISTINCT e.question_order
+        $sql = "SELECT DISTINCT count(e.question_order) as count
                 FROM $TBL_EXERCICE_QUESTION e
                 INNER JOIN $TBL_QUESTIONS q
                 ON (e.question_id = q.id AND e.c_id = q.c_id)
@@ -8102,7 +8104,8 @@ class Exercise
                   e.exercice_id	= ".$this->id;
 
         $result = Database::query($sql);
-        $count_question_orders = Database::num_rows($result);
+        $row = Database::fetch_array($result);
+        $count_question_orders = $row['count'];
 
         // Getting question list from the order (question list drag n drop interface).
         $sql = "SELECT DISTINCT e.question_id, e.question_order
@@ -8119,6 +8122,7 @@ class Exercise
         // the key of the array is the question position
         $temp_question_list = [];
         $counter = 1;
+        $questionList = [];
         while ($new_object = Database::fetch_object($result)) {
             // Correct order.
             $questionList[$new_object->question_order] = $new_object->question_id;
@@ -8389,7 +8393,7 @@ class Exercise
             $msg = str_replace("#mail#", $user_info['email'], $msg1);
             $msg = str_replace("#course#", $courseInfo['name'], $msg1);
 
-            if ($origin != 'learnpath') {
+            if (!in_array($origin, ['learnpath', 'embeddable'])) {
                 $msg .= '<br /><a href="#url#">'.get_lang('ClickToCommentAndGiveFeedback').'</a>';
             }
             $msg1 = str_replace("#url#", $url_email, $msg);
@@ -8429,6 +8433,8 @@ class Exercise
     private function setMediaList($questionList)
     {
         $mediaList = [];
+        /*
+         * Media feature is not activated in 1.11.x
         if (!empty($questionList)) {
             foreach ($questionList as $questionId) {
                 $objQuestionTmp = Question::read($questionId, $this->course_id);
@@ -8436,13 +8442,12 @@ class Exercise
                 if (isset($objQuestionTmp->parent_id) && $objQuestionTmp->parent_id != 0) {
                     $mediaList[$objQuestionTmp->parent_id][] = $objQuestionTmp->id;
                 } else {
-                    if ($objQuestionTmp) {
                         // Always the last item
                         $mediaList[999][] = $objQuestionTmp->id;
                     }
                 }
-            }
-        }
+        }*/
+
         $this->mediaList = $mediaList;
     }
 

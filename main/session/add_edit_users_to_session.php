@@ -15,7 +15,10 @@ $xajax->registerFunction('search_users');
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
-$id_session = intval($_GET['id_session']);
+$id_session = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
+if (empty($id_session)) {
+    api_not_allowed(true);
+}
 $addProcess = isset($_GET['add']) ? Security::remove_XSS($_GET['add']) : null;
 
 SessionManager::protectSession($id_session);

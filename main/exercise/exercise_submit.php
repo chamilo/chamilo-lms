@@ -134,7 +134,7 @@ if (!isset($exerciseInSession) || isset($exerciseInSession) && ($exerciseInSessi
 
     // if the specified exercise doesn't exist or is disabled
     if (!$objExercise->read($exerciseId) ||
-        (!$objExercise->selectStatus() && !$is_allowedToEdit && $origin != 'learnpath')
+        (!$objExercise->selectStatus() && !$is_allowedToEdit && !in_array($origin, ['learnpath', 'embeddable']))
     ) {
         if ($debug) {
             error_log('1.1. Error while reading the exercise');
@@ -181,7 +181,7 @@ if ($objExercise->review_answers) {
 }
 
 $template->assign('shuffle_answers', $objExercise->random_answers);
-$templateName = $template->get_template('exercise/submit.js.html.twig');
+$templateName = $template->get_template('exercise/submit.js.tpl');
 $htmlHeadXtra[] = $template->fetch($templateName);
 
 $current_timestamp = time();
@@ -235,7 +235,7 @@ if ($objExercise->selectAttempts() > 0) {
     if ($attempt_count >= $objExercise->selectAttempts()) {
         $show_clock = false;
         if (!api_is_allowed_to_edit(null, true)) {
-            if ($objExercise->results_disabled == 0 && $origin != 'learnpath') {
+            if ($objExercise->results_disabled == 0 && !in_array($origin, ['learnpath', 'embeddable'])) {
                 // Showing latest attempt according with task BT#1628
                 $exercise_stat_info = Event::getExerciseResultsByUser(
                     $user_id,
@@ -247,7 +247,7 @@ if ($objExercise->selectAttempts() > 0) {
                 if (!empty($exercise_stat_info)) {
                     $isQuestionsLimitReached = ExerciseLib::isQuestionsLimitPerDayReached(
                         $user_id,
-                        $objExercise->selectNbrQuestions(),
+                        count($objExercise->get_validated_question_list()),
                         $courseId,
                         $sessionId
                     );
@@ -263,7 +263,7 @@ if ($objExercise->selectAttempts() > 0) {
                             )
                         );
 
-                        if ($origin == 'learnpath') {
+                        if (in_array($origin, ['learnpath', 'embeddable'])) {
                             Display::display_reduced_header();
                             Display::display_reduced_footer();
                         } else {
@@ -319,7 +319,7 @@ if ($objExercise->selectAttempts() > 0) {
             $attempt_html .= $messageReachedMax;
         }
 
-        if ($origin == 'learnpath') {
+        if (in_array($origin, ['learnpath', 'embeddable'])) {
             Display::display_reduced_header();
         } else {
             Display::display_header(get_lang('Exercises'));
@@ -327,7 +327,7 @@ if ($objExercise->selectAttempts() > 0) {
 
         echo $attempt_html;
 
-        if ($origin != 'learnpath') {
+        if (!in_array($origin, ['learnpath', 'embeddable'])) {
             Display::display_footer();
         }
         exit;
@@ -724,7 +724,7 @@ if ($formSent && isset($_POST)) {
                             'warning',
                             false
                         );
-                        if ($origin != 'learnpath') {
+                        if (!in_array($origin, ['learnpath', 'embeddable'])) {
                             //so we are not in learnpath tool
                             echo '</div>'; //End glossary div
                             Display::display_footer();
@@ -797,7 +797,7 @@ if ($question_count != 0) {
                             'warning',
                             false
                         );
-                        if ($origin != 'learnpath') {
+                        if (!in_array($origin, ['learnpath', 'embeddable'])) {
                             //so we are not in learnpath tool
                             echo '</div>'; //End glossary div
                             Display::display_footer();
@@ -860,7 +860,7 @@ $interbreadcrumb[] = [
 ];
 $interbreadcrumb[] = ["url" => "#", "name" => $objExercise->selectTitle(true)];
 
-if ($origin != 'learnpath') { //so we are not in learnpath tool
+if (!in_array($origin, ['learnpath', 'embeddable'])) { //so we are not in learnpath tool
     if (!api_is_allowed_to_session_edit()) {
         Display::addFlash(
             Display::return_message(get_lang('SessionIsReadOnly'), 'warning')
@@ -877,7 +877,7 @@ if ($origin != 'learnpath') { //so we are not in learnpath tool
 $show_quiz_edition = $objExercise->added_in_lp();
 
 // I'm in a preview mode
-if (api_is_course_admin() && $origin != 'learnpath') {
+if (api_is_course_admin() && !in_array($origin, ['learnpath', 'embeddable'])) {
     echo '<div class="actions">';
     if ($show_quiz_edition == false) {
         echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.
@@ -897,7 +897,7 @@ $is_visible_return = $objExercise->is_visible(
 
 if ($is_visible_return['value'] == false) {
     echo $is_visible_return['message'];
-    if ($origin != 'learnpath') {
+    if (!in_array($origin, ['learnpath', 'embeddable'])) {
         Display :: display_footer();
     }
     exit;
@@ -933,7 +933,7 @@ if ($limit_time_exists) {
                 ),
                 'warning'
             );
-            if ($origin != 'learnpath') {
+            if (!in_array($origin, ['learnpath', 'embeddable'])) {
                 Display::display_footer();
             }
             exit;
@@ -965,7 +965,7 @@ if (isset($_custom['exercises_hidden_when_no_start_date']) &&
             ),
             'warning'
         );
-        if ($origin != 'learnpath') {
+        if (!in_array($origin, ['learnpath', 'embeddable'])) {
             Display :: display_footer();
         }
     }
@@ -978,7 +978,7 @@ if ($time_control) {
         get_lang('ExerciseExpiredTimeMessage').'</div>';
 }
 
-if ($origin != 'learnpath') {
+if (!in_array($origin, ['learnpath', 'embeddable'])) {
     echo '<div id="highlight-plugin" class="glossary-content">';
 }
 
@@ -1546,7 +1546,7 @@ if (!empty($error)) {
     echo '</form>';
 }
 
-if ($origin != 'learnpath') {
+if (!in_array($origin, ['learnpath', 'embeddable'])) {
     // So we are not in learnpath tool
     echo '</div>'; //End glossary div
 }

@@ -14,6 +14,8 @@ use ChamiloSession as Session;
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script(true);
+
 $courseCode = $_GET['coursecode'];
 $questionId = $_GET['questionId'];
 $coordinates = $_GET['coord'];

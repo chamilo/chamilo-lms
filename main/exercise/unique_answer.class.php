@@ -66,7 +66,7 @@ class UniqueAnswer extends Question
             $comment_title = '<th width="40%">'.get_lang('Comment').'</th>';
         }
 
-        $html = '<table class="table table-hover">
+        $html = '<table class="table table-striped table-hover">
             <thead>
                 <tr style="text-align: center;">
                     <th width="5%">'.get_lang('Number').'</th>

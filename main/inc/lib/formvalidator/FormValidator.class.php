@@ -142,7 +142,6 @@ EOT;
                 <div class="col-sm-8">
                     {icon}
                     {element}
-
                     <!-- BEGIN label_2 -->
                         <p class="help-block">{label_2}</p>
                     <!-- END label_2 -->
@@ -376,10 +375,9 @@ EOT;
      *
      * @param string $label Text appearing on the button
      * @param string $name Element name (for form treatment purposes)
-     * @param string $style
      * @param bool $createElement Whether to use the create or add method
-     *
-     * @param $attributes
+     * @param array $attributes
+
      * @return HTML_QuickForm_button
      */
     public function addButtonSave($label, $name = 'submit', $createElement = false, $attributes = [])

@@ -28,7 +28,7 @@ $sessionId = api_get_session_id();
 $exercise_id = isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) : 0;
 
 $objExercise = new Exercise();
-$result = $objExercise->read($exercise_id, false);
+$result = $objExercise->read($exercise_id, true);
 
 if (!$result) {
     api_not_allowed(true);
@@ -72,7 +72,7 @@ if ($time_control) {
     $htmlHeadXtra[] = $objExercise->showTimeControlJS($time_left);
 }
 
-if ($origin != 'learnpath') {
+if (!in_array($origin, ['learnpath', 'embeddable'])) {
     Display::display_header();
 } else {
     $htmlHeadXtra[] = "

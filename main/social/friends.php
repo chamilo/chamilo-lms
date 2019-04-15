@@ -70,7 +70,7 @@ $interbreadcrumb[] = ['url' => 'profile.php', 'name' => get_lang('SocialNetwork'
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Friends')];
 
 //Block Social Menu
-$social_menu_block = SocialManager::getMenuSocial('friends');
+$social_menu_block = SocialManager::show_social_menu('friends');
 $user_id = api_get_user_id();
 $name_search = isset($_POST['search_name_q']) ? $_POST['search_name_q'] : null;
 $number_friends = 0;
@@ -111,7 +111,6 @@ if (count($friends) == 0) {
 
     $friend_html = '<div id="whoisonline">';
     $friend_html .= '<div class="row">';
-    $friend_html .= '<div class="col-lg-12">';
     $number_friends = count($friends);
     $j = 0;
 
@@ -129,7 +128,6 @@ if (count($friends) == 0) {
             $j++;
         }
     }
-    $friend_html .= '</div>';
     $friend_html .= '</div>';
     $friend_html .= '</div>';
     $social_right_content .= $friend_html;

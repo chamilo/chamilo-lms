@@ -63,7 +63,7 @@ class UniqueAnswerNoOption extends Question
             $comment_title = '<th width="50%">'.get_lang('Comment').'</th>';
         }
 
-        $html = '<table class="table table-hover">';
+        $html = '<table class="table table-striped table-hover">';
         $html .= '<thead>';
         $html .= '<tr>';
         $html .= '<th>'.get_lang('Number').'</th>';

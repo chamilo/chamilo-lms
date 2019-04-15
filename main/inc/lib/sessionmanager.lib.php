@@ -148,9 +148,7 @@ class SessionManager
      * @return mixed Session ID on success, error message otherwise
      *
      * @todo use an array to replace all this parameters or use the model.lib.php ...
-     *
-     * @return mixed Session ID on success, error message otherwise
-     * */
+     */
     public static function create_session(
         $name,
         $startDate,
@@ -3093,53 +3091,50 @@ class SessionManager
     /**
      * Delete sessions categories.
      *
-     * @author Jhon Hinojosa <jhon.hinojosa@dokeos.com>, from existing code
-     *
-     * @param    array    id_checked
-     * @param    bool    include delete session
-     * @param    bool    optional, true if the function is called by a webservice, false otherwise
+     * @param array|int $categoryId
+     * @param bool      $deleteSessions Optional. Include delete session.
+     * @param bool      $fromWs         Optional. True if the function is called by a webservice, false otherwise.
      *
      * @return bool Nothing, or false on error
      *              The parameters is a array to delete sessions
-     * */
-    public static function delete_session_category($id_checked, $delete_session = false, $from_ws = false)
+     *
+     * @author Jhon Hinojosa <jhon.hinojosa@dokeos.com>, from existing code
+     */
+    public static function delete_session_category($categoryId, $deleteSessions = false, $fromWs = false)
     {
-        $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-        if (is_array($id_checked)) {
-            $id_checked = Database::escape_string(implode(',', $id_checked));
+        $tblSessionCategory = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+        $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
+
+        if (is_array($categoryId)) {
+            $categoryId = array_map('intval', $categoryId);
         } else {
-            $id_checked = intval($id_checked);
+            $categoryId = [(int) $categoryId];
         }
 
+        $categoryId = implode(', ', $categoryId);
         //Setting session_category_id to 0
-        $sql = "UPDATE $tbl_session SET session_category_id = NULL
-                WHERE session_category_id IN (".$id_checked.")";
-        Database::query($sql);
-
-        $sql = "SELECT id FROM $tbl_session WHERE session_category_id IN (".$id_checked.")";
+        if ($deleteSessions) {
+            $sql = "SELECT id FROM $tblSession WHERE session_category_id IN ($categoryId)";
         $result = Database::query($sql);
         while ($rows = Database::fetch_array($result)) {
-            $session_id = $rows['id'];
-            if ($delete_session) {
-                if ($from_ws) {
-                    self::delete($session_id, true);
-                } else {
-                    self::delete($session_id);
-                }
+                $sessionId = $rows['id'];
+                self::delete($sessionId, $fromWs);
             }
-        }
-        $sql = "DELETE FROM $tbl_session_category WHERE id IN (".$id_checked.")";
+                } else {
+            $sql = "UPDATE $tblSession SET session_category_id = NULL WHERE session_category_id IN ($categoryId)";
+            Database::query($sql);
+                }
+
+        $sql = "DELETE FROM $tblSessionCategory WHERE id IN ($categoryId)";
         Database::query($sql);
 
         // Add event to system log
-        $user_id = api_get_user_id();
         Event::addEvent(
             LOG_SESSION_CATEGORY_DELETE,
             LOG_SESSION_CATEGORY_ID,
-            $id_checked,
+            $categoryId,
             api_get_utc_datetime(),
-            $user_id
+            api_get_user_id()
         );
 
         return true;

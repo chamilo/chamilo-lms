@@ -93,7 +93,7 @@ class Draggable extends Question
         );
 
         // DISPLAY MATCHES
-        $html = '<table class="table table-hover">
+        $html = '<table class="table table-striped table-hover">
             <thead>
                 <tr>
                     <th width="85%">'.get_lang('Answer').'</th>

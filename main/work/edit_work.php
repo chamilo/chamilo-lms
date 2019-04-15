@@ -2,6 +2,9 @@
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
+
+api_protect_course_script(true);
+
 $lib_path = api_get_path(LIBRARY_PATH);
 
 /* Libraries */

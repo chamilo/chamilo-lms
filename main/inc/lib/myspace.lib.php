@@ -309,92 +309,138 @@ class MySpace
     }
 
     /**
+     * Creates a small table in the last column of the table with the user overview.
+     *
+     * @param int   $user_id    the id of the user
+     *
+     * @return array List course
+     */
+
+    public static function returnCourseTracking($user_id)
+    {
+
+        $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        // getting all the courses of the user
+        $sql = "SELECT * FROM $tbl_course_user
+                WHERE
+                    user_id = '" . intval($user_id) . "' AND
+                    relation_type<>" . COURSE_RELATION_TYPE_RRHH . " ";
+        $result = Database::query($sql);
+
+        $list = [];
+
+        while ($row = Database::fetch_array($result)) {
+            $courseInfo = api_get_course_info_by_id($row['c_id']);
+            $courseId = $courseInfo['real_id'];
+            $courseCode = $courseInfo['code'];
+
+            if (empty($courseInfo)) {
+                continue;
+            }
+
+            $avg_score = Tracking::get_avg_student_score($user_id, $courseCode);
+            if (is_numeric($avg_score)) {
+                $avg_score = round($avg_score, 2);
+            } else {
+                $avg_score = '-';
+            }
+
+            // student exercises results (obtained score, maximum score, number of exercises answered, score percentage)
+            $exercises_results = self::exercises_results($user_id, $courseCode);
+
+            $item = [
+                'code' => $courseInfo['code'],
+                'real_id' => $courseInfo['real_id'],
+                'title' => $courseInfo['title'],
+                'category' => $courseInfo['categoryName'],
+                'image_small' => $courseInfo['course_image'],
+                'image_large' => $courseInfo['course_image_large'],
+                'time_spent' => api_time_to_hms(Tracking::get_time_spent_on_the_course($user_id, $courseId)),
+                'student_progress' => round(Tracking::get_avg_student_progress($user_id, $courseCode)),
+                'student_score' => $avg_score,
+                'student_message' => Tracking::count_student_messages($user_id, $courseCode),
+                'student_assignments' => Tracking::count_student_assignments($user_id, $courseCode),
+                'student_exercises' => (is_null($exercises_results['percentage']) ? '' : $exercises_results['score_obtained'] . '/' . $exercises_results['score_possible'] . ' ( ' . $exercises_results['percentage'] . '% )'),
+                'questions_answered' => $exercises_results['questions_answered'],
+                'last_connection' => Tracking::get_last_connection_date_on_the_course($user_id, $courseInfo)
+            ];
+            $list[] = $item;
+        }
+
+        return $list;
+    }
+
+    /**
      * Display a sortable table that contains an overview off all the
      * reporting progress of all users and all courses the user is subscribed to.
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+     *          Alex Aragon <alex.aragon@beeznest.com>, BeezNest, Perú
      *
-     * @version Dokeos 1.8.6
+     * @version Chamilo 1.11.8
      *
-     * @since October 2008
+     * @since April 2019
+     */
+
+    public static function returnTrackingUserOverviewFilter($user_id)
+    {
+
+        $tpl = new Template('', false, false, false, false, false, false);
+        $userInfo = api_get_user_info($user_id);
+
+        $avatar = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_SMALL);
+        $user = [
+            'id' => $user_id,
+            'code_user' => $userInfo['official_code'],
+            'complete_name' => $userInfo['complete_name'],
+            'username' => $userInfo['username'],
+            'course' => self::returnCourseTracking($user_id),
+            'avatar' => $avatar
+        ];
+
+        $tpl->assign('item', $user);
+        $templateName = $tpl->get_template('my_space/partials/tracking_user_overview.tpl');
+        $content = $tpl->fetch($templateName);
+
+        return $content;
+
+    }
+
+    /**
+     * Display a sortable table that contains an overview off all the
+     * reporting progress of all users and all courses the user is subscribed to.
+     *
+     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+     *         Alex Aragon <alex.aragon@beeznest.com>, BeezNest, Perú
+     *
+     * @version Chamilo 1.11.8
+     *
+     * @since October 2008, Update April 2019
      */
     public static function display_tracking_user_overview()
     {
         self::display_user_overview_export_options();
-        $t_head = '<table style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
-        $t_head .= '<tr>';
-        $t_head .= '<th width="155px" style="border-left:0;border-bottom:0"><span>'.get_lang('Course').'</span></th>';
-        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgTimeSpentInTheCourse'), 6, true).'</span></th>';
-        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgStudentsProgress'), 6, true).'</span></th>';
-        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgCourseScore'), 6, true).'</span></th>';
-        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalNumberOfMessages'), 6, true).'</span></th>';
-        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalNumberOfAssignments'), 6, true).'</span></th>';
-        $t_head .= '<th width="105px" style="border-bottom:0"><span>'.get_lang('TotalExercisesScoreObtained').'</span></th>';
-        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalExercisesAnswered'), 6, true).'</span></th>';
-        $t_head .= '<th style="padding:0;border-bottom:0;border-right:0;"><span>'.get_lang('LatestLogin').'</span></th>';
-        $t_head .= '</tr></table>';
+
         $addparams = ['view' => 'admin', 'display' => 'user'];
         $table = new SortableTable(
             'tracking_user_overview',
             ['MySpace', 'get_number_of_users_tracking_overview'],
             ['MySpace', 'get_user_data_tracking_overview'],
-            0
+            0,
+            20,
+            'ASC',
+            null, [
+                'class' => 'table table-transparent'
+            ]
         );
         $table->additional_parameters = $addparams;
-        $table->set_header(
-            0,
-            get_lang('OfficialCode'),
-            true,
-            ['style' => 'font-size:8pt'],
-            ['style' => 'font-size:8pt']
-        );
-        if (api_is_western_name_order()) {
-            $table->set_header(
-                1,
-                get_lang('FirstName'),
-                true,
-                ['style' => 'font-size:8pt'],
-                ['style' => 'font-size:8pt']
-            );
-            $table->set_header(
-                2,
-                get_lang('LastName'),
-                true,
-                ['style' => 'font-size:8pt'],
-                ['style' => 'font-size:8pt']
-            );
-        } else {
-            $table->set_header(
-                1,
-                get_lang('LastName'),
-                true,
-                ['style' => 'font-size:8pt'],
-                ['style' => 'font-size:8pt']
-            );
-            $table->set_header(
-                2,
-                get_lang('FirstName'),
-                true,
-                ['style' => 'font-size:8pt'],
-                ['style' => 'font-size:8pt']
-            );
-        }
-        $table->set_header(
-            3,
-            get_lang('LoginName'),
-            true,
-            ['style' => 'font-size:8pt'],
-            ['style' => 'font-size:8pt']
-        );
-        $table->set_header(
-            4,
-            $t_head,
-            false,
-            ['style' => 'width:90%;border:0;padding:0;font-size:7.5pt;'],
-            ['style' => 'width:90%;padding:0;font-size:7.5pt;']
-        );
-        $table->set_column_filter(4, ['MySpace', 'course_info_tracking_filter']);
-        $table->display();
+
+        $table->set_column_filter(0, ['MySpace', 'returnTrackingUserOverviewFilter']);
+        $tableContent = $table->return_table();
+        $tpl = new Template('', false, false, false, false, false, false);
+        $tpl->assign('table', $tableContent);
+        $templateName = $tpl->get_template('my_space/user_summary.tpl');
+        $tpl->display($templateName);
     }
 
     /**
@@ -2163,11 +2209,13 @@ class MySpace
     public static function get_user_data_tracking_overview($from, $numberItems, $column, $direction)
     {
         $isWestern = api_is_western_name_order();
+
         switch ($column) {
             case '0':
-                $column = 'official_code';
+                $column = $isWestern ? 'firstname' : 'lastname';
+                //$column = 'official_code';
                 break;
-            case '1':
+            /*case '1':
                 $column = $isWestern ? 'firstname' : 'lastname';
                 break;
             case '2':
@@ -2178,7 +2226,7 @@ class MySpace
                 break;
             case '4':
                 $column = 'username';
-                break;
+                break;*/
         }
 
         $order = [
@@ -2187,23 +2235,15 @@ class MySpace
         $userList = UserManager::get_user_list([], $order, $from, $numberItems);
         $return = [];
         foreach ($userList as $user) {
-            $firstPosition = $user['lastname'];
-            $secondPosition = $user['firstname'];
-            if ($isWestern) {
+            //$firstPosition = $user['lastname'];
+            //$secondPosition = $user['firstname'];
+            /*if ($isWestern) {
                 $firstPosition = $user['firstname'];
                 $secondPosition = $user['lastname'];
-            }
+            }*/
             $return[] = [
-                '0' => $user['official_code'],
-                'col0' => $user['official_code'],
-                '1' => $firstPosition,
-                'col1' => $firstPosition,
-                '2' => $secondPosition,
-                'col2' => $secondPosition,
-                '3' => $user['username'],
-                'col3' => $user['username'],
-                '4' => $user['user_id'],
-                'col4' => $user['user_id'],
+                '0' => $user['user_id'],
+                'col0' => $user['user_id']
             ];
         }
 

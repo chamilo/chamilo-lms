@@ -149,7 +149,7 @@ switch ($action) {
         break;
 }
 
-$tpl = new Template($tool_name);
+$tpl = new Template();
 
 $tpl->assign('actions', $actions);
 $tpl->assign('message', $message);

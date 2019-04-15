@@ -650,7 +650,7 @@ while ($row = Database::fetch_array($rs, 'ASSOC')) {
 
 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
     api_get_user_id(),
-    api_get_course_info()
+    $courseInfo
 );
 
 if (api_is_drh() && !api_is_platform_admin()) {
@@ -666,7 +666,7 @@ if (api_is_drh() && !api_is_platform_admin()) {
                 api_not_allowed(true);
             }*/
         } else {
-            if (!($isDrhOfCourse)) {
+            if (!$isDrhOfCourse) {
                 if (api_is_drh() &&
                    !UserManager::is_user_followed_by_drh($student_id, api_get_user_id())
                 ) {
@@ -763,16 +763,21 @@ if ($isAllow) {
 echo '</div>';
 
 // is the user online ?
+$online = get_lang('No');
 if (user_is_online($student_id)) {
     $online = get_lang('Yes');
-} else {
-    $online = get_lang('No');
 }
 
 // get average of score and average of progress by student
 $avg_student_progress = $avg_student_score = 0;
 
-if (CourseManager::is_user_subscribed_in_course($user_info['user_id'], $course_code, true)) {
+if (empty($sessionId)) {
+    $isSubscribedToCourse = CourseManager::is_user_subscribed_in_course($user_info['user_id'], $course_code);
+} else {
+    $isSubscribedToCourse = CourseManager::is_user_subscribed_in_course($user_info['user_id'], $course_code, true, $sessionId);
+}
+
+if ($isSubscribedToCourse) {
     $avg_student_progress = Tracking::get_avg_student_progress(
         $user_info['user_id'],
         $course_code,

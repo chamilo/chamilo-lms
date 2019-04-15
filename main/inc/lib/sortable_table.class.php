@@ -116,7 +116,7 @@ class SortableTable extends HTML_Table
      * @param string $default_order_direction   The default order direction;
      *                                          either the constant 'ASC' or 'DESC'
      * @param string $table_id
-     * @param string $style
+     * @param array $parameters         They are custom attributes of the table
      */
     public function __construct(
         $table_name = 'table',
@@ -126,13 +126,17 @@ class SortableTable extends HTML_Table
         $default_items_per_page = 20,
         $default_order_direction = 'ASC',
         $table_id = null,
-        $style = null
+        $parameters = []
     ) {
         if (empty($table_id)) {
             $table_id = $table_name.uniqid();
         }
+        if(isset($parameters) && empty($parameters)){
+            $parameters = ['class' => 'table table-bordered data_table', 'id' => $table_id];
+        }
+
         $this->table_id = $table_id;
-        parent::__construct(['class' => 'table table-hover mt-4 mb-4'.$style, 'id' => $table_id]);
+        parent::__construct($parameters);
         $this->table_name = $table_name;
         $this->additional_parameters = [];
         $this->param_prefix = $table_name.'_';

@@ -889,15 +889,26 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
                 // Active
                 $temp[] = $o_course_user['active'];
+                $extraFieldOption = new ExtraFieldOption('user');
+                $extraFieldValue = new ExtraFieldValue('user');
 
                 if (!empty($extraFields)) {
                     foreach ($extraFields as $extraField) {
-                        $extraFieldValue = new ExtraFieldValue('user');
                         $data = $extraFieldValue->get_values_by_handler_and_field_id(
                             $user_id,
                             $extraField['id']
                         );
-                        $temp[] = $data['value'];
+
+                        $optionList = $extraFieldOption->get_field_option_by_field_and_option(
+                            $extraField['id'],
+                            $data['value']
+                        );
+                        if (!empty($optionList)) {
+                            $options = implode(', ', array_column($optionList, 'display_text'));
+                            $temp[] = $options;
+                        } else {
+                            $temp[] = $data['value'];
+                        }
                     }
                 }
 

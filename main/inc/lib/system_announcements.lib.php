@@ -685,9 +685,6 @@ class SystemAnnouncementManager
             ->setContent($content)
             ->setDateStart($dateStart)
             ->setDateEnd($dateEnd)
-            /*->setVisibleTeacher($visible_teacher)
-            ->setVisibleStudent($visible_student)
-            ->setVisibleGuest($visible_guest)*/
             ->setAccessUrlId(api_get_current_access_url_id());
 
         $em->merge($announcement);

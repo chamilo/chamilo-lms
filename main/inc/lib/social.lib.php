@@ -815,23 +815,16 @@ class SocialManager extends UserManager
      *                         friends,
      *                         groups search
      * @param int    $group_id
-     * @param int    $userId
+     * @param int    $user_id
      */
-    public static function getAvatarBlock($show = '', $group_id = 0, $userId = 0)
+    public static function show_social_avatar_block($show = '', $group_id = 0, $user_id = 0)
     {
-        if (empty($userId)) {
-            $userId = api_get_user_id();
+        $user_id = (int) $user_id;
+        $group_id = (int) $group_id;
+
+        if (empty($user_id)) {
+            $user_id = api_get_user_id();
         }
-
-        $userInfo = api_get_user_info($userId, true, false, true, true);
-
-        $user = [
-            'id' => $userInfo['user_id'],
-            'complete_name' => $userInfo['complete_name'],
-            'username' => $userInfo['username'],
-            'email' => $userInfo['email'],
-            'status' => $userInfo['status'],
-        ];
 
         $show_groups = [
             'groups',
@@ -851,46 +844,44 @@ class SocialManager extends UserManager
         if (in_array($show, $show_groups) && !empty($group_id)) {
             // Group image
             $userGroup = new UserGroup();
-            $groupInfo = $userGroup->get($group_id);
+            $group_info = $userGroup->get($group_id);
 
-            $userGroupImage = [
-                'big' => $userGroup->get_picture_group(
+            $userGroupImage = $userGroup->get_picture_group(
                     $group_id,
-                    $groupInfo['picture'],
+                $group_info['picture'],
                     128,
                     GROUP_IMAGE_SIZE_BIG
-                ),
-                'normal' => $userGroup->get_picture_group(
-                    $group_id,
-                    $groupInfo['picture'],
-                    128,
-                    GROUP_IMAGE_SIZE_MEDIUM
-                ),
-            ];
+            );
 
             $template->assign('show_group', true);
-            $template->assign('group', $groupInfo);
-            $template->assign('avatar', $userGroupImage);
+            $template->assign('group_id', $group_id);
+            $template->assign('user_group_image', $userGroupImage);
+            $template->assign(
+                'user_is_group_admin',
+                $userGroup->is_group_admin(
+                    $group_id,
+                    api_get_user_id()
+                )
+            );
         } else {
             $template->assign('show_group', false);
             $template->assign('show_user', true);
-            $template->assign('user', $user);
             $template->assign(
-                'avatar',
+                'user_image',
                 [
                     'big' => UserManager::getUserPicture(
-                        $userId,
+                        $user_id,
                         USER_IMAGE_SIZE_BIG
                     ),
                     'normal' => UserManager::getUserPicture(
-                        $userId,
+                        $user_id,
                         USER_IMAGE_SIZE_MEDIUM
                     ),
                 ]
             );
         }
 
-        $skillBlock = $template->get_template('social/avatar_block.html.twig');
+        $skillBlock = $template->get_template('social/avatar_block.tpl');
 
         return $template->fetch($skillBlock);
     }
@@ -1443,6 +1434,14 @@ class SocialManager extends UserManager
                 $links .= '</ul>';
             }
 
+            $html .= Display::panelCollapse(
+                get_lang('SocialNetwork'),
+                $links,
+                'social-network-menu',
+                null,
+                'sn-sidebar',
+                'sn-sidebar-collapse'
+            );
         }
 
         if (in_array($show, $show_groups) && !empty($group_id)) {
@@ -1580,7 +1579,14 @@ class SocialManager extends UserManager
             }
 
             $links .= '</ul>';
-
+            $html .= Display::panelCollapse(
+                get_lang('SocialNetwork'),
+                $links,
+                'social-network-menu',
+                null,
+                'sn-sidebar',
+                'sn-sidebar-collapse'
+            );
 
             if ($show_full_profile && $user_id == intval(api_get_user_id())) {
                 $personal_course_list = UserManager::get_personal_session_course_list($user_id);
@@ -1728,6 +1734,70 @@ class SocialManager extends UserManager
                             <div class="items-user-status">'.$status_icon_chat.' '.$user_rol.'</div>
                         </div>
                       </div>';
+        }
+
+        return $html;
+    }
+
+    /**
+     * Displays the information of an individual user.
+     *
+     * @param int $user_id
+     *
+     * @return string
+     */
+    public static function display_individual_user($user_id)
+    {
+        global $interbreadcrumb;
+        $safe_user_id = (int) $user_id;
+        $currentUserId = api_get_user_id();
+
+        $user_table = Database::get_main_table(TABLE_MAIN_USER);
+        $sql = "SELECT * FROM $user_table WHERE user_id = ".$safe_user_id;
+        $result = Database::query($sql);
+        $html = null;
+        if (Database::num_rows($result) == 1) {
+            $user_object = Database::fetch_object($result);
+            $userInfo = api_get_user_info($user_id);
+            $alt = $userInfo['complete_name'].($currentUserId == $user_id ? '&nbsp;('.get_lang('Me').')' : '');
+            $status = get_status_from_code($user_object->status);
+            $interbreadcrumb[] = ['url' => 'whoisonline.php', 'name' => get_lang('UsersOnLineList')];
+
+            $html .= '<div class ="thumbnail">';
+            $fullurl = $userInfo['avatar'];
+
+            $html .= '<img src="'.$fullurl.'" alt="'.$alt.'" />';
+
+            if (!empty($status)) {
+                $html .= '<div class="caption">'.$status.'</div>';
+            }
+            $html .= '</div>';
+
+            if (api_get_setting('show_email_addresses') == 'true') {
+                $html .= Display::encrypted_mailto_link($user_object->email, $user_object->email).'<br />';
+            }
+
+            if ($user_object->competences) {
+                $html .= Display::page_subheader(get_lang('MyCompetences'));
+                $html .= '<p>'.$user_object->competences.'</p>';
+            }
+            if ($user_object->diplomas) {
+                $html .= Display::page_subheader(get_lang('MyDiplomas'));
+                $html .= '<p>'.$user_object->diplomas.'</p>';
+            }
+            if ($user_object->teach) {
+                $html .= Display::page_subheader(get_lang('MyTeach'));
+                $html .= '<p>'.$user_object->teach.'</p>';
+            }
+            self::display_productions($user_object->user_id);
+            if ($user_object->openarea) {
+                $html .= Display::page_subheader(get_lang('MyPersonalOpenArea'));
+                $html .= '<p>'.$user_object->openarea.'</p>';
+            }
+        } else {
+            $html .= '<div class="actions-title">';
+            $html .= get_lang('UsersOnLineList');
+            $html .= '</div>';
         }
 
         return $html;
@@ -2440,7 +2510,7 @@ class SocialManager extends UserManager
         $userId = (int) $userId;
         $userRelationType = 0;
 
-        $socialAvatarBlock = self::getAvatarBlock(
+        $socialAvatarBlock = self::show_social_avatar_block(
             $groupBlock,
             $groupId,
             $userId
@@ -2534,6 +2604,14 @@ class SocialManager extends UserManager
         $template->assign('user_relation', $userRelationType);
         $template->assign('user_relation_type_friend', USER_RELATION_TYPE_FRIEND);
         $template->assign('show_full_profile', $show_full_profile);
+
+        $templateName = $template->get_template('social/user_block.tpl');
+
+        if (in_array($groupBlock, ['groups', 'group_edit', 'member_list'])) {
+            $templateName = $template->get_template('social/group_block.tpl');
+        }
+
+        $template->assign('social_avatar_block', $template->fetch($templateName));
     }
 
     /**
@@ -3533,7 +3611,6 @@ class SocialManager extends UserManager
         $userStatus = (int) $authorInfo['status'];
         $urlImg = api_get_path(WEB_IMG_PATH);
         $isAdmin = self::is_admin($authorId);
-
 
         if ($userStatus === 5) {
             if ($authorInfo['has_certificates']) {

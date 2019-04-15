@@ -6,16 +6,15 @@
  *
  * @package chamilo.admin
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
+SessionManager::protectSession(null, false);
+
 // Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
-
-SessionManager::protectSession(null, false);
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $idChecked = isset($_REQUEST['idChecked']) ? $_REQUEST['idChecked'] : null;
@@ -263,6 +262,8 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
                     multipleSearch : true,
                     overlay : false,
                     width: 'auto',
+                    caption: '<?php echo addslashes(get_lang('Search')); ?>',
+                    formclass:'data_table',
                     onSearch : function() {
                         var postdata = grid.jqGrid('getGridParam', 'postData');
 
@@ -335,6 +336,16 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
             ?>
 
             //Select first elements by default
+            var searchDialogAll = $("#fbox_"+grid[0].id);
+            searchDialogAll.addClass("table");
+            var searchDialog = $("#searchmodfbox_"+grid[0].id);
+            searchDialog.addClass("ui-jqgrid ui-widget ui-widget-content ui-corner-all");
+            searchDialog.css({position:"adsolute", "z-index":"100", "float":"left", "top":"55%", "left" : "25%", "padding" : "5px", "border": "1px solid #CCC"})
+            var gbox = $("#gbox_"+grid[0].id);
+            gbox.before(searchDialog);
+            gbox.css({clear:"left"});
+
+            //Select first elements by default
             $('.input-elm').each(function(){
                 $(this).find('option:first').attr('selected', 'selected');
             });
@@ -392,6 +403,8 @@ if (api_is_platform_admin()) {
     echo '</div>';
 }
 echo '</div>';
+echo '<div id="session-table" class="table-responsive">';
 echo Display::grid_html('sessions');
+echo '</div>';
 
 Display::display_footer();

@@ -463,6 +463,7 @@ class Event
         $exe_id = Database::escape_string($exe_id);
         $position = Database::escape_string($position);
         $now = api_get_utc_datetime();
+        $course_id = (int) $course_id;
 
         // check user_id or get from context
         if (empty($user_id)) {
@@ -473,10 +474,11 @@ class Event
             }
         }
         // check course_id or get from context
-        if (empty($course_id) or intval($course_id) != $course_id) {
+        if (empty($course_id)) {
             $course_id = api_get_course_int_id();
         }
         // check session_id or get from context
+        $session_id = (int) $session_id;
         if (empty($session_id)) {
             $session_id = api_get_session_id();
         }
@@ -507,8 +509,6 @@ class Event
             $score = 0;
             $answer = 0;
         }
-
-        $session_id = api_get_session_id();
 
         if (!empty($question_id) && !empty($exe_id) && !empty($user_id)) {
             if (is_null($answer)) {

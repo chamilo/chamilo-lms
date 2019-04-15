@@ -5,6 +5,8 @@ use Chamilo\CoreBundle\Entity\TrackEExercises;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script(true);
+
 $isAllowedToEdit = api_is_allowed_to_edit(true, true);
 
 if (!$isAllowedToEdit) {
@@ -62,7 +64,7 @@ if ('true' === $pluginEvaluation->get(QuestionOptionsEvaluationPlugin::SETTING_E
 
 if (!$useEvaluationPlugin) {
     foreach ($questionList as $questionId) {
-        $question = Question::read($questionId, $courseId);
+        $question = Question::read($questionId, api_get_course_info());
         $totalWeight += $question->selectWeighting();
 
         // We're inside *one* question. Go through each possible answer for this question

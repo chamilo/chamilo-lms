@@ -110,22 +110,6 @@
 {% block chamilo_wrap %}
 <div id="page-wrap">
     <!-- page section -->
-    {# Bug and help notifications #}
-    {#{% block help_notifications %}#}
-    {#<ul id="navigation" class="notification-panel">#}
-    {#{{ help_content }}#}
-    {#{{ bug_notification_link }}#}
-    {#</ul>#}
-    {#{% endblock %}#}
-
-    {# topbar #}
-    {% block topbar %}
-        {#{% include "@template_style/layout/topbar.html.twig" %}#}
-        {#{% if show_toolbar == 1 %}#}
-            {#<div class="clear-header"></div>#}
-        {#{% endif %}#}
-    {% endblock %}
-
     <header>
         <div class="extra-header">
             {{ header_extra_content }}

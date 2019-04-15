@@ -15,6 +15,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script();
 
+$_course = api_get_course_info();
 $questionId = isset($_GET['modifyAnswers']) ? (int) $_GET['modifyAnswers'] : 0;
 $exerciseId = isset($_GET['exerciseId']) ? (int) $_GET['exerciseId'] : 0;
 $exeId = isset($_GET['exeId']) ? (int) $_GET['exeId'] : 0;

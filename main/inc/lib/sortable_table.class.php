@@ -104,19 +104,19 @@ class SortableTable extends HTML_Table
     /**
      * Create a new SortableTable.
      *
-     * @param string $table_name A name for the table (default = 'table')
+     * @param string $table_name                A name for the table (default = 'table')
      * @param string $get_total_number_function A user defined function to get
      *                                          the total number of items in the table
-     * @param string $get_data_function A function to get the data to display on
+     * @param string $get_data_function         A function to get the data to display on
      *                                          the current page
-     * @param int $default_column The default column on which the data should be
+     * @param int    $default_column            The default column on which the data should be
      *                                          sorted
-     * @param int $default_items_per_page The default number of items to show
+     * @param int    $default_items_per_page    The default number of items to show
      *                                          on one page
-     * @param string $default_order_direction The default order direction;
+     * @param string $default_order_direction   The default order direction;
      *                                          either the constant 'ASC' or 'DESC'
      * @param string $table_id
-     * @param array $parameters         They are custom attributes of the table
+     * @param array  $parameters                They are custom attributes of the table
      */
     public function __construct(
         $table_name = 'table',
@@ -131,7 +131,7 @@ class SortableTable extends HTML_Table
         if (empty($table_id)) {
             $table_id = $table_name.uniqid();
         }
-        if(isset($parameters) && empty($parameters)){
+        if (isset($parameters) && empty($parameters)) {
             $parameters = ['class' => 'table table-bordered data_table', 'id' => $table_id];
         }
 
@@ -142,9 +142,9 @@ class SortableTable extends HTML_Table
         $this->param_prefix = $table_name.'_';
 
         $this->page_nr = Session::read($this->param_prefix.'page_nr', 1);
-        $this->page_nr = isset($_GET[$this->param_prefix.'page_nr']) ? intval($_GET[$this->param_prefix.'page_nr']) : $this->page_nr;
+        $this->page_nr = isset($_GET[$this->param_prefix.'page_nr']) ? (int) $_GET[$this->param_prefix.'page_nr'] : $this->page_nr;
         $this->column = Session::read($this->param_prefix.'column', $default_column);
-        $this->column = isset($_GET[$this->param_prefix.'column']) ? intval($_GET[$this->param_prefix.'column']) : $this->column;
+        $this->column = isset($_GET[$this->param_prefix.'column']) ? (int) $_GET[$this->param_prefix.'column'] : $this->column;
 
         $defaultRow = api_get_configuration_value('table_default_row');
         if (!empty($defaultRow)) {
@@ -174,9 +174,9 @@ class SortableTable extends HTML_Table
             if (!in_array($my_get_direction, ['ASC', 'DESC'])) {
                 $this->direction = 'ASC';
             } else {
-                if ($my_get_direction == 'ASC') {
+                if ($my_get_direction === 'ASC') {
                     $this->direction = 'ASC';
-                } elseif ($my_get_direction == 'DESC') {
+                } elseif ($my_get_direction === 'DESC') {
                     $this->direction = 'DESC';
                 }
             }

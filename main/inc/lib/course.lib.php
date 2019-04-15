@@ -4270,6 +4270,7 @@ class CourseManager
             if (Skill::isAllowed($user_id, false)) {
                 $em = Database::getManager();
                 $objUser = api_get_user_entity($user_id);
+                /** @var Course $objCourse */
                 $objCourse = $em->find('ChamiloCoreBundle:Course', $course['real_id']);
                 $objSession = $em->find('ChamiloCoreBundle:Session', $session_id);
 

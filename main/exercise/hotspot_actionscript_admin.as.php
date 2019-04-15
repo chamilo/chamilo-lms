@@ -21,10 +21,9 @@ if (!$isAllowedToEdit) {
     exit;
 }
 
-// set vars
-$questionId = intval($_GET['modifyAnswers']);
-$objQuestion = Question::read($questionId);
 $_course = api_get_course_info();
+$questionId = isset($_GET['modifyAnswers']) ? (int) $_GET['modifyAnswers'] : 0;
+$objQuestion = Question::read($questionId);
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 $picturePath = $documentPath.'/images';
 $pictureName = $objQuestion->getPictureFilename();

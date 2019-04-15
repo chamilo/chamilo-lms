@@ -12653,7 +12653,11 @@ EOD;
             $sql = "DELETE FROM $tbl_tool
                     WHERE c_id = ".$courseId." AND (link LIKE '$link%' AND image='lp_category.gif')";
             Database::query($sql);
+
+            return true;
         }
+
+        return false;
     }
 
     /**

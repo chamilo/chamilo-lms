@@ -83,9 +83,8 @@ class PDF
      * Export the given HTML to PDF, using a global template.
      *
      * @uses \export/table_pdf.tpl
-
      *
-     * @param $content
+     * @param string     $content
      * @param bool|false $saveToFile
      * @param bool|false $returnHtml
      * @param bool       $addDefaultCss (bootstrap/default/base.css)

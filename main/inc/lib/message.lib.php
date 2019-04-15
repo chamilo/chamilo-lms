@@ -470,7 +470,7 @@ class MessageManager
             return false;
         } elseif ($totalFileSize > intval(api_get_setting('message_max_upload_filesize'))) {
             $warning = sprintf(
-                get_lang("FilesSizeExceedsX"),
+                get_lang('FilesSizeExceedsX'),
                 format_file_size(api_get_setting('message_max_upload_filesize'))
             );
 

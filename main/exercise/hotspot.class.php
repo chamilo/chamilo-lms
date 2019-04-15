@@ -77,17 +77,15 @@ class HotSpot extends Question
      */
     public function processCreation($form, $exercise)
     {
-        $file_info = $form->getSubmitValue('imageUpload');
+        $fileInfo = $form->getSubmitValue('imageUpload');
         parent::processCreation($form, $exercise);
 
-        if (!empty($file_info['tmp_name'])) {
-            $result = $this->uploadPicture($file_info['tmp_name']);
+        if (!empty($fileInfo['tmp_name'])) {
+            $result = $this->uploadPicture($fileInfo);
             if ($result) {
                 $this->save($exercise);
 
                 return true;
-            } else {
-                return false;
             }
         }
 

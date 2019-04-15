@@ -683,6 +683,7 @@ class UserManager
      * @param int $user_id The user id
      *
      * @return bool true if user can be deleted
+     *
      * @assert (null) === false
      * @assert (-1) === false
      * @assert ('abc') === false

@@ -7553,8 +7553,6 @@ function api_user_is_login($user_id = null)
  */
 function api_get_real_ip()
 {
-    // Guess the IP if behind a reverse proxy
-    global $debug;
     $ip = trim($_SERVER['REMOTE_ADDR']);
     if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
         if (preg_match('/,/', $_SERVER['HTTP_X_FORWARDED_FOR'])) {
@@ -7563,9 +7561,6 @@ function api_get_real_ip()
             $ip1 = $_SERVER['HTTP_X_FORWARDED_FOR'];
         }
         $ip = trim($ip1);
-    }
-    if (!empty($debug)) {
-        error_log('Real IP: '.$ip);
     }
 
     return $ip;
@@ -8358,11 +8353,11 @@ function api_is_allowed_in_course()
  * Set the cookie to go directly to the course code $in_firstpage
  * after login.
  *
- * @param string $in_firstpage is the course code of the course to go
+ * @param string $value is the course code of the course to go
  */
-function api_set_firstpage_parameter($in_firstpage)
+function api_set_firstpage_parameter($value)
 {
-    setcookie('GotoCourse', $in_firstpage);
+    setcookie('GotoCourse', $value);
 }
 
 /**

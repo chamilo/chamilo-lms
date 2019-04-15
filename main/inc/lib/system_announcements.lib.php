@@ -900,11 +900,12 @@ class SystemAnnouncementManager
         $selectedUserLanguage = Database::escape_string(api_get_interface_language());
         $announcementTable = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
         $now = api_get_utc_datetime();
+        $announcementId = (int) $announcementId;
 
         $whereConditions = [
             "(lang = ? OR lang IS NULL OR lang = '') " => $selectedUserLanguage,
             "AND (? >= date_start AND ? <= date_end) " => [$now, $now],
-            "AND id = ? " => intval($announcementId),
+            "AND id = ? " => $announcementId,
         ];
 
         $condition = self::getVisibilityCondition($visibility);

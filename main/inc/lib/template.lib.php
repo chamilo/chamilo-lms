@@ -1293,13 +1293,16 @@ class Template
             if (!empty($courseInfo)) {
                 $courseParams = api_get_cidreq();
             }
-            $url = api_get_path(WEB_CODE_PATH).
-                'ticket/tickets.php?project_id='.$defaultProjectId.'&'.$courseParams;
-            $rightFloatMenu .= '<div class="help">
-                <a href="'.$url.'" target="_blank">
-                    '.$iconTicket.'
-                </a>
-            </div>';
+            $url = api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$defaultProjectId.'&'.$courseParams;
+
+            $allow = TicketManager::userIsAllowInProject(api_get_user_info(), $defaultProjectId);
+            if ($allow) {
+                $rightFloatMenu .= '<div class="help">
+                    <a href="'.$url.'" target="_blank">
+                        '.$iconTicket.'
+                    </a>
+                </div>';
+            }
         }
 
         $this->assign('bug_notification', $rightFloatMenu);

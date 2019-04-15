@@ -142,9 +142,9 @@ class SortableTable extends HTML_Table
         $this->param_prefix = $table_name.'_';
 
         $this->page_nr = Session::read($this->param_prefix.'page_nr', 1);
-        $this->page_nr = isset($_GET[$this->param_prefix.'page_nr']) ? intval($_GET[$this->param_prefix.'page_nr']) : $this->page_nr;
+        $this->page_nr = isset($_GET[$this->param_prefix.'page_nr']) ? (int) $_GET[$this->param_prefix.'page_nr'] : $this->page_nr;
         $this->column = Session::read($this->param_prefix.'column', $default_column);
-        $this->column = isset($_GET[$this->param_prefix.'column']) ? intval($_GET[$this->param_prefix.'column']) : $this->column;
+        $this->column = isset($_GET[$this->param_prefix.'column']) ? (int) $_GET[$this->param_prefix.'column'] : $this->column;
 
         $defaultRow = api_get_configuration_value('table_default_row');
         if (!empty($defaultRow)) {
@@ -174,9 +174,9 @@ class SortableTable extends HTML_Table
             if (!in_array($my_get_direction, ['ASC', 'DESC'])) {
                 $this->direction = 'ASC';
             } else {
-                if ($my_get_direction == 'ASC') {
+                if ($my_get_direction === 'ASC') {
                     $this->direction = 'ASC';
-                } elseif ($my_get_direction == 'DESC') {
+                } elseif ($my_get_direction === 'DESC') {
                     $this->direction = 'DESC';
                 }
             }

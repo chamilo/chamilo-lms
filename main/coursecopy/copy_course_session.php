@@ -9,7 +9,7 @@ use ChamiloSession as Session;
 /**
  * Copy resources from one course in a session to another one.
  *
- * @author Christian Fasanando <christian.fasanando@dokeos.com>
+ * @author Christian Fasanando
  * @author Julio Montoya <gugli100@gmail.com> Lots of bug fixes/improvements
  *
  * @package chamilo.backup

@@ -1210,3 +1210,4 @@ unset($questionList);
 
 Session::erase('exerciseResult');
 unset($exerciseResult);
+Session::erase('calculatedAnswerId');

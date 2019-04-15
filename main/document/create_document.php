@@ -63,10 +63,9 @@ if (isset($_REQUEST['certificate']) && $_REQUEST['certificate'] == 'true') {
     $is_certificate_mode = true;
 }
 
+$nameTools = get_lang('CreateDocument');
 if ($is_certificate_mode) {
     $nameTools = get_lang('CreateCertificate');
-} else {
-    $nameTools = get_lang('CreateDocument');
 }
 
 /* Constants and variables */

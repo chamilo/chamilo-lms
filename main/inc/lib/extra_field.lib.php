@@ -1977,7 +1977,7 @@ class ExtraField extends Model
         $header = get_lang('Add');
         $defaults = [];
 
-        if ($action == 'edit') {
+        if ($action === 'edit') {
             $header = get_lang('Modify');
             // Setting the defaults
             $defaults = $this->get($id, false);
@@ -1985,7 +1985,7 @@ class ExtraField extends Model
 
         $form->addElement('header', $header);
 
-        if ($action == 'edit') {
+        if ($action === 'edit') {
             $translateUrl = api_get_path(WEB_CODE_PATH).'extrafield/translate.php?'
                 .http_build_query(['extra_field' => $id]);
             $translateButton = Display::toolbarButton(get_lang('TranslateThisTerm'), $translateUrl, 'language', 'link');

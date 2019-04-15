@@ -151,9 +151,6 @@ $ajax_url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&
 //we filter the type of questions we can add
 Question::displayTypeMenu($objExercise);
 
-// Re sets the question list
-//$objExercise->setQuestionList();
-
 echo '<div id="message"></div>';
 $token = Security::get_token();
 //deletes a session when using don't know question type (ugly fix)

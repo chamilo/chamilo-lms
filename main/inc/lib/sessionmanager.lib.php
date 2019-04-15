@@ -103,9 +103,9 @@ class SessionManager
         ];
 
         foreach ($variables as $value) {
-            $result[$value."_to_local_time"] = null;
+            $result[$value.'_to_local_time'] = null;
             if (!empty($result[$value])) {
-                $result[$value."_to_local_time"] = api_get_local_time($result[$value]);
+                $result[$value.'_to_local_time'] = api_get_local_time($result[$value]);
             }
         }
 
@@ -182,8 +182,8 @@ class SessionManager
         }
 
         $name = Database::escape_string(trim($name));
-        $sessionCategoryId = intval($sessionCategoryId);
-        $visibility = intval($visibility);
+        $sessionCategoryId = (int) $sessionCategoryId;
+        $visibility = (int) $visibility;
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
         $startDate = Database::escape_string($startDate);
@@ -238,7 +238,7 @@ class SessionManager
                     'session_admin_id' => $sessionAdminId,
                     'visibility' => $visibility,
                     'description' => $description,
-                    'show_description' => intval($showDescription),
+                    'show_description' => $showDescription,
                     'send_subscription_notification' => (int) $sendSubscriptionNotification,
                 ];
 
@@ -270,8 +270,7 @@ class SessionManager
                 }
 
                 $session_id = Database::insert($tbl_session, $values);
-
-                $duration = intval($duration);
+                $duration = (int) $duration;
 
                 if (!empty($duration)) {
                     $sql = "UPDATE $tbl_session SET
@@ -1551,9 +1550,9 @@ class SessionManager
         $sessionAdminId = 0,
         $sendSubscriptionNotification = false
     ) {
-        $coachId = intval($coachId);
-        $sessionCategoryId = intval($sessionCategoryId);
-        $visibility = intval($visibility);
+        $coachId = (int) $coachId;
+        $sessionCategoryId = (int) $sessionCategoryId;
+        $visibility = (int) $visibility;
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
         if (empty($name)) {
@@ -3395,8 +3394,8 @@ class SessionManager
         // Definition of variables
         $userId = (int) $userId;
 
-        $sessionId = !empty($sessionId) ? intval($sessionId) : api_get_session_id();
-        $courseId = !empty($courseId) ? intval($courseId) : api_get_course_id();
+        $sessionId = !empty($sessionId) ? (int) $sessionId : api_get_session_id();
+        $courseId = !empty($courseId) ? (int) $courseId : api_get_course_id();
 
         if (empty($sessionId) || empty($courseId) || empty($userId)) {
             return false;
@@ -7753,7 +7752,7 @@ SQL;
         $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
         if (empty($sessionId)) {
-            $sessions = SessionManager::formatSessionsAdminForGrid();
+            $sessions = self::formatSessionsAdminForGrid();
             $sessionList = [];
             $sessionList[] = '';
             foreach ($sessions as $session) {

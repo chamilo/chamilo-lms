@@ -280,14 +280,14 @@ class UrlManager
      */
     public static function getCountUrlRelCourse($courseId)
     {
-        $courseId = intval($courseId);
+        $courseId = (int) $courseId;
         $tableUrlRelCourse = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $sql = "SELECT *
                 FROM $tableUrlRelCourse
                 WHERE c_id = '$courseId'";
         $res = Database::query($sql);
 
-        return Database::num_rows($res);
+        return (int) Database::num_rows($res);
     }
 
     /**

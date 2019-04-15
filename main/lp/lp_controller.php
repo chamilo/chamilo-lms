@@ -55,18 +55,7 @@ $htmlHeadXtra[] = '
     /*
     Script to manipulate Learning Path items with Drag and drop
      */
-    var newOrderData = "";
-    var lptree_debug = "";  // for debug
-    var lp_id_list = "";    // for debug
-
-    // uncomment for some debug display utility
-    /*
-    $(function() {
-        buildLPtree_debug($("#lp_item_list"), 0, 0);
-        alert(lp_id_list+"\n\n"+lptree_debug);
-    });
-    */
-
+    var newOrderData = "";    
     function buildLPtree(in_elem, in_parent_id) {
         var item_tag = in_elem.get(0).tagName;
         var item_id =  in_elem.attr("id");
@@ -79,26 +68,6 @@ $htmlHeadXtra[] = '
 
         in_elem.children().each(function () {
             buildLPtree($(this), parent_id);
-        });
-    }
-
-    // same than buildLPtree with some text display for debug in string lptree_debug
-    function buildLPtree_debug(in_elem, in_lvl, in_parent_id) {
-        var item_tag = in_elem.get(0).tagName;
-        var item_id =  in_elem.attr("id");
-        var parent_id = item_id;
-
-        if (item_tag == "LI" && item_id != undefined) {
-            for (i=0; i < 4 * in_lvl; i++) {
-                lptree_debug += " ";
-            }
-            lptree_debug += " Lvl="+(in_lvl - 1)/2+" ("+item_tag+" "+item_id+" Fils de="+in_parent_id+") \n";
-            // in_parent_id de la forme UL_x
-            lp_id_list += item_id+"|"+get_UL_integer_id(in_parent_id)+"^";
-        }
-
-        in_elem.children().each(function () {
-            buildLPtree_debug($(this), in_lvl + 1, parent_id);
         });
     }
 
@@ -348,30 +317,13 @@ if ($debug > 0) {
 $is_allowed_to_edit = api_is_allowed_to_edit(false, true, false, false);
 
 if (isset($_SESSION['oLP'])) {
-    $_SESSION['oLP']->update_queue = [];
     // Reinitialises array used by javascript to update items in the TOC.
+    $_SESSION['oLP']->update_queue = [];
 }
 
-/*$studentView = api_is_student_view_active();
-if ($studentView) {
-    if (isset($_REQUEST['action']) && !in_array($_REQUEST['action'], ['list', 'view', 'view_category'])) {
-        if (!empty($_REQUEST['lp_id'])) {
-            $_REQUEST['action'] = 'view';
-        } elseif ($_REQUEST['action'] == 'view_category') {
-            $_REQUEST['action'] = 'view_category';
-        } else {
-            $_REQUEST['action'] = 'list';
-        }
-    }
-} else {
-    if ($is_allowed_to_edit) {
-        if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'view' && !isset($_REQUEST['exeId'])) {
-            $_REQUEST['action'] = 'build';
-        }
-    }
-}*/
 
 $action = !empty($_REQUEST['action']) ? $_REQUEST['action'] : '';
+//var_dump($action);exit;
 
 if ($debug) {
     error_log('Entered lp_controller.php -+- (action: '.$action.')');

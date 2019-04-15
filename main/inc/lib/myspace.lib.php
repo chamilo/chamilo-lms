@@ -354,11 +354,11 @@ class MySpace
             }
 
             // Student exercises results (obtained score, maximum score, number of exercises answered, score percentage)
-            $result = self::exercises_results($user_id, $courseCode);
+            $exercisesResults = self::exercises_results($user_id, $courseCode);
 
             $resultToString = '';
-            if (!is_null($result['percentage'])) {
-                $resultToString = $result['score_obtained'].'/'.$result['score_possible'].' ( '.$result['percentage'].'% )';
+            if (!is_null($exercisesResults['percentage'])) {
+                $resultToString = $exercisesResults['score_obtained'].'/'.$exercisesResults['score_possible'].' ( '.$exercisesResults['percentage'].'% )';
             }
 
             $item = [
@@ -374,7 +374,7 @@ class MySpace
                 'student_message' => Tracking::count_student_messages($user_id, $courseCode),
                 'student_assignments' => Tracking::count_student_assignments($user_id, $courseCode),
                 'student_exercises' => $resultToString,
-                'questions_answered' => $result['questions_answered'],
+                'questions_answered' => $exercisesResults['questions_answered'],
                 'last_connection' => Tracking::get_last_connection_date_on_the_course($user_id, $courseInfo),
             ];
             $list[] = $item;

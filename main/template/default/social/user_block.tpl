@@ -141,9 +141,6 @@
                                             {{ "Chat" | get_lang }} ({{ "Online" | get_lang }})
                                         </a>
                                     </li>
-                                {# else #}
-                                    {# <img src="{{ "offline.png" | icon }}" alt="{{ "Online" | get_lang }}"> #}
-                                    {# {{ "Chat" | get_lang }} ({{ "Offline" | get_lang }}) #}
                                 {% endif %}
                             {% endif %}
                         {% endif %}

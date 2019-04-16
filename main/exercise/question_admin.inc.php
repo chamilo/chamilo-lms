@@ -13,10 +13,10 @@
  */
 if (isset($_GET['editQuestion'])) {
     $objQuestion = Question::read($_GET['editQuestion']);
-    $action = api_get_self()."?".api_get_cidreq()."&myid=1&modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id.'&page='.$page;
+    $action = api_get_self().'?'.api_get_cidreq()."&myid=1&modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id.'&page='.$page;
 } else {
     $objQuestion = Question::getInstance($_REQUEST['answerType']);
-    $action = api_get_self()."?".api_get_cidreq()."&modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion;
+    $action = api_get_self().'?'.api_get_cidreq()."&modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion;
 }
 
 if (is_object($objQuestion)) {

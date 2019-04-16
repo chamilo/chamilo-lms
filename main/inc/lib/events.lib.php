@@ -1282,13 +1282,15 @@ class Event
         $course_id,
         $session_id = 0
     ) {
-        $track_e_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+
         $user_id = (int) $user_id;
         $exercise_id = (int) $exercise_id;
         $course_id = (int) $course_id;
         $session_id = (int) $session_id;
-        if (!empty($user_id) && !empty($exercise_id) && !empty($course_code)) {
-            $sql = "DELETE FROM $track_e_exercises
+
+        if (!empty($user_id) && !empty($exercise_id) && !empty($course_id)) {
+            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+            $sql = "DELETE FROM $table
                     WHERE
                         exe_user_id = $user_id AND
                         exe_exo_id = $exercise_id AND
@@ -1311,9 +1313,9 @@ class Event
     /**
      * Gets all exercise results (NO Exercises in LPs ) from a given exercise id, course, session.
      *
-     * @param   int     exercise id
+     * @param int $exercise_id
      * @param int $courseId
-     * @param   int     session id
+     * @param int $session_id
      *
      * @return array with the results
      */
@@ -1365,8 +1367,8 @@ class Event
     /**
      * Gets all exercise results (NO Exercises in LPs ) from a given exercise id, course, session.
      *
-     * @param int $courseId
-     * @param   int     session id
+     * @param int  $courseId
+     * @param int  $session_id
      * @param bool $get_count
      *
      * @return array with the results
@@ -1409,9 +1411,9 @@ class Event
     /**
      * Gets all exercise results (NO Exercises in LPs) from a given exercise id, course, session.
      *
-     * @param   int     exercise id
+     * @param   int     $user_id
      * @param int $courseId
-     * @param   int     session id
+     * @param   int     $session_id
      *
      * @return array with the results
      */
@@ -1454,7 +1456,7 @@ class Event
     /**
      * Gets exercise results (NO Exercises in LPs) from a given exercise id, course, session.
      *
-     * @param int    $exe_id exercise id
+     * @param int    $exe_id attempt id
      * @param string $status
      *
      * @return array with the results
@@ -1574,9 +1576,9 @@ class Event
      * Count exercise attempts (NO Exercises in LPs ) from a given exercise id, course, session.
      *
      * @param int $user_id
-     * @param   int     exercise id
+     * @param int $exercise_id
      * @param int $courseId
-     * @param   int     session id
+     * @param int $session_id
      *
      * @return array with the results
      */

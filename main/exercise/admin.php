@@ -62,7 +62,7 @@ if (!$is_allowedToEdit) {
     api_not_allowed(true);
 }
 
-$exerciseId = isset($_GET['exerciseId']) ? (int) $_GET['exerciseId'] : '0';
+$exerciseId = isset($_GET['exerciseId']) ? (int) $_GET['exerciseId'] : 0;
 
 /*  stripslashes POST data  */
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -252,6 +252,8 @@ if (!empty($clone_question) && !empty($objExercise->id)) {
 
     // Reloading tne $objExercise obj
     $objExercise->read($objExercise->id, false);
+
+    Display::addFlash(Display::return_message(get_lang('ItemCopied')));
 
     header('Location: admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&page='.$page);
     exit;

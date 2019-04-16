@@ -28,20 +28,31 @@ switch ($action) {
     case 'upload_file':
         api_protect_course_script(true);
         // User access same as upload.php
-        $allow = api_is_allowed_to_edit(null, true);
+        $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+
+        $sessionId = api_get_session_id();
+
+        if (!$is_allowed_to_edit && $sessionId && $_REQUEST['curdirpath'] == "/basic-course-documents__{$sessionId}__0") {
+            $session = SessionManager::fetch($sessionId);
+
+            if (!empty($session) && $session['session_admin_id'] == api_get_user_id()) {
+                $is_allowed_to_edit = true;
+            }
+        }
+
         // This needs cleaning!
         if (api_get_group_id()) {
             $groupInfo = GroupManager::get_group_properties(api_get_group_id());
             // Only course admin or group members allowed
-            if ($allow || GroupManager::is_user_in_group(api_get_user_id(), $groupInfo)) {
+            if ($is_allowed_to_edit || GroupManager::is_user_in_group(api_get_user_id(), $groupInfo)) {
                 if (!GroupManager::allowUploadEditDocument(api_get_user_id(), api_get_course_int_id(), $groupInfo)) {
                     exit;
                 }
             } else {
                 exit;
             }
-        } elseif ($allow ||
-            DocumentManager::is_my_shared_folder(api_get_user_id(), $_POST['curdirpath'], api_get_session_id())
+        } elseif ($is_allowed_to_edit ||
+            DocumentManager::is_my_shared_folder(api_get_user_id(), $_REQUEST['curdirpath'], api_get_session_id())
         ) {
             // ??
         } else {

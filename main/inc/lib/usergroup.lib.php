@@ -1665,10 +1665,10 @@ class UserGroup extends Model
         $size_picture = GROUP_IMAGE_SIZE_MEDIUM,
         $style = ''
     ) {
-        $picture = null;
+        $picture = [];
         //$picture['style'] = $style;
         if ($picture_file === 'unknown.jpg') {
-            $picture = Display::returnIconPath($picture_file);
+            $picture['file'] = Display::returnIconPath($picture_file);
 
             return $picture;
         }
@@ -1694,19 +1694,19 @@ class UserGroup extends Model
         $image_array = $this->get_group_picture_path_by_id($id, 'web', false, true);
         $file = $image_array_sys['dir'].$size_picture.$picture_file;
         if (file_exists($file)) {
-            $picture = $image_array['dir'].$size_picture.$picture_file;
+            $picture['file'] = $image_array['dir'].$size_picture.$picture_file;
             //$picture['style'] = '';
             if ($height > 0) {
-                $dimension = api_getimagesize($picture);
+                $dimension = api_getimagesize($picture['file']);
                 $margin = ($height - $dimension['width']) / 2;
                 //@ todo the padding-top should not be here
             }
         } else {
             $file = $image_array_sys['dir'].$picture_file;
             if (file_exists($file) && !is_dir($file)) {
-                $picture = $image_array['dir'].$picture_file;
+                $picture['file'] = $image_array['dir'].$picture_file;
             } else {
-                $picture = Display::returnIconPath('group_na.png', 64);
+                $picture['file'] = Display::returnIconPath('group_na.png', 64);
             }
         }
 
@@ -2147,18 +2147,10 @@ class UserGroup extends Model
         $result = Database::query($sql);
         $array = [];
         while ($row = Database::fetch_array($result, 'ASSOC')) {
-            $description = Security::remove_XSS($row['description'], STUDENT, true);
-            $row['description'] = cut($description, 250, true);
-            $row['name'] = Security::remove_XSS($row['name'], STUDENT, true);
-            $row['url'] = "group_view.php?id=".$row['id'];
             if ($with_image) {
-                $picture = self::get_picture_group(
-                    $row['id'],
-                    $row['picture'],
-                    null,
-                    GROUP_IMAGE_SIZE_MEDIUM
-                );
-                $row['picture'] = $picture;
+                $picture = self::get_picture_group($row['id'], $row['picture'], 80);
+                $img = '<img src="'.$picture['file'].'" />';
+                $row['picture'] = $img;
             }
             if (empty($row['id'])) {
                 continue;

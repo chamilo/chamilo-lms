@@ -115,7 +115,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
                 ); ?>
             </div>
             <div class="col-md-6">
-                <div class="float-right">
+                <div class="pull-right">
                 <form method="POST" action="session_category_list.php" class="form-inline">
                     <div class="form-group">
                     <input class="form-control" type="text" name="keyword" value="<?php echo $keyword; ?>"

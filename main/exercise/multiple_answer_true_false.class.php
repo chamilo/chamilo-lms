@@ -239,7 +239,7 @@ class MultipleAnswerTrueFalse extends Question
      */
     public function processAnswersCreation($form, $exercise)
     {
-        $questionWeighting = $nbrGoodAnswers = 0;
+        $questionWeighting = 0;
         $objAnswer = new Answer($this->id);
         $nb_answers = $form->getSubmitValue('nb_answers');
         $course_id = api_get_course_int_id();

@@ -1108,9 +1108,15 @@ class ExtraField extends Model
                 if ($help) {
                     $translatedDisplayHelpText .= get_lang($field_details['display_text'].'Help');
                 }
-                $label = [$translatedDisplayText, $translatedDisplayHelpText];
                 if (!empty($translatedDisplayText)) {
-                    $field_details['display_text'] = $label;
+                    if (!empty($translatedDisplayHelpText)) {
+                        // In this case, exceptionally, display_text is an array
+                        // which is then treated by display_form()
+                        $field_details['display_text'] = [$translatedDisplayText, $translatedDisplayHelpText];
+                    } else {
+                        // We have an helper text, use it
+                        $field_details['display_text'] = $translatedDisplayText;
+                    }
                 }
 
                 switch ($field_details['field_type']) {

@@ -789,7 +789,7 @@ function cut($text, $maxchar, $embed = false)
 {
     if (api_strlen($text) > $maxchar) {
         if ($embed) {
-            return '<div class="embed-text">'.api_substr($text, 0, $maxchar).'...</div>';
+            return '<p title="'.$text.'">'.api_substr($text, 0, $maxchar).'...</p>';
         }
 
         return api_substr($text, 0, $maxchar).' ...';

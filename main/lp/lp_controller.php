@@ -18,11 +18,10 @@ use ChamiloSession as Session;
 $use_anonymous = true;
 $debug = 0;
 
-if ($debug) {
-    error_log('Entering lp_controller.php. Checking if LP exist in current session');
-}
-
 require_once __DIR__.'/../inc/global.inc.php';
+
+api_protect_course_script(true);
+
 $current_course_tool = TOOL_LEARNPATH;
 $_course = api_get_course_info();
 
@@ -57,17 +56,6 @@ $htmlHeadXtra[] = '
     Script to manipulate Learning Path items with Drag and drop
      */
     var newOrderData = "";
-    var lptree_debug = "";  // for debug
-    var lp_id_list = "";    // for debug
-
-    // uncomment for some debug display utility
-    /*
-    $(function() {
-        buildLPtree_debug($("#lp_item_list"), 0, 0);
-        alert(lp_id_list+"\n\n"+lptree_debug);
-    });
-    */
-
     function buildLPtree(in_elem, in_parent_id) {
         var item_tag = in_elem.get(0).tagName;
         var item_id =  in_elem.attr("id");
@@ -84,26 +72,6 @@ $htmlHeadXtra[] = '
     }
 
     // same than buildLPtree with some text display for debug in string lptree_debug
-    function buildLPtree_debug(in_elem, in_lvl, in_parent_id) {
-        var item_tag = in_elem.get(0).tagName;
-        var item_id =  in_elem.attr("id");
-        var parent_id = item_id;
-
-        if (item_tag == "LI" && item_id != undefined) {
-            for (i=0; i < 4 * in_lvl; i++) {
-                lptree_debug += " ";
-            }
-            lptree_debug += " Lvl="+(in_lvl - 1)/2+" ("+item_tag+" "+item_id+" Fils de="+in_parent_id+") \n";
-            // in_parent_id de la forme UL_x
-            lp_id_list += item_id+"|"+get_UL_integer_id(in_parent_id)+"^";
-        }
-
-        in_elem.children().each(function () {
-            buildLPtree_debug($(this), in_lvl + 1, parent_id);
-        });
-    }
-
-    // return the interge part of an UL id
     // (0 for lp_item_list)
     function get_UL_integer_id(in_ul_id) {
         in_parent_integer_id = in_ul_id;
@@ -185,7 +153,6 @@ $htmlHeadXtra[] = '
 </script>';
 
 $session_id = api_get_session_id();
-api_protect_course_script(true);
 
 $lpfound = false;
 $myrefresh = 0;
@@ -258,9 +225,6 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
     }
     // Regenerate a new lp object? Not always as some pages don't need the object (like upload?)
     if (!empty($_REQUEST['lp_id']) || !empty($myrefresh_id)) {
-        if ($debug > 0) {
-            error_log(' lp_id is defined');
-        }
         // Select the lp in the database and check which type it is (scorm/chamilo/aicc) to generate the
         // right object.
         if (!empty($_REQUEST['lp_id'])) {
@@ -298,32 +262,24 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
                         $oLP = new learnpath(api_get_course_id(), $lpIid, api_get_user_id());
                         if ($oLP !== false) {
                             $lp_found = true;
-                        } else {
-                            error_log($oLP->error);
                         }
                         break;
                     case 2:
                         $oLP = new scorm(api_get_course_id(), $lpIid, api_get_user_id());
                         if ($oLP !== false) {
                             $lp_found = true;
-                        } else {
-                            error_log($oLP->error);
                         }
                         break;
                     case 3:
                         $oLP = new aicc(api_get_course_id(), $lpIid, api_get_user_id());
                         if ($oLP !== false) {
                             $lp_found = true;
-                        } else {
-                            error_log($oLP->error);
                         }
                         break;
                     default:
                         $oLP = new learnpath(api_get_course_id(), $lpIid, api_get_user_id());
                         if ($oLP !== false) {
                             $lp_found = true;
-                        } else {
-                            error_log($oLP->error);
                         }
                         break;
                 }
@@ -344,34 +300,15 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
 }
 
 if ($debug > 0) {
-    error_log('Passed oLP creation check', 0);
+    error_log('Passed oLP creation check');
 }
 
 $is_allowed_to_edit = api_is_allowed_to_edit(false, true, false, false);
 
 if (isset($_SESSION['oLP'])) {
-    $_SESSION['oLP']->update_queue = [];
     // Reinitialises array used by javascript to update items in the TOC.
+    $_SESSION['oLP']->update_queue = [];
 }
-
-/*$studentView = api_is_student_view_active();
-if ($studentView) {
-    if (isset($_REQUEST['action']) && !in_array($_REQUEST['action'], ['list', 'view', 'view_category'])) {
-        if (!empty($_REQUEST['lp_id'])) {
-            $_REQUEST['action'] = 'view';
-        } elseif ($_REQUEST['action'] == 'view_category') {
-            $_REQUEST['action'] = 'view_category';
-        } else {
-            $_REQUEST['action'] = 'list';
-        }
-    }
-} else {
-    if ($is_allowed_to_edit) {
-        if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'view' && !isset($_REQUEST['exeId'])) {
-            $_REQUEST['action'] = 'build';
-        }
-    }
-}*/
 
 $action = !empty($_REQUEST['action']) ? $_REQUEST['action'] : '';
 
@@ -514,10 +451,9 @@ switch ($action) {
                     $description = isset($_POST['description']) ? $_POST['description'] : '';
                     $prerequisites = isset($_POST['prerequisites']) ? $_POST['prerequisites'] : '';
                     $maxTimeAllowed = isset($_POST['maxTimeAllowed']) ? $_POST['maxTimeAllowed'] : '';
-                    $edit = isset($_GET['edit']) ? $_GET['edit'] : '';
 
                     if ($_POST['type'] == TOOL_DOCUMENT) {
-                        if (isset($_POST['path']) && $edit != 'true') {
+                        if (isset($_POST['path']) && $_GET['edit'] != 'true') {
                             $document_id = $_POST['path'];
                         } else {
                             if ($_POST['content_lp']) {
@@ -541,7 +477,7 @@ switch ($action) {
                             $prerequisites
                         );
                     } elseif ($_POST['type'] == TOOL_READOUT_TEXT) {
-                        if (isset($_POST['path']) && $edit != 'true') {
+                        if (isset($_POST['path']) && $_GET['edit'] != 'true') {
                             $document_id = $_POST['path'];
                         } else {
                             $document_id = $_SESSION['oLP']->createReadOutText(
@@ -661,8 +597,10 @@ switch ($action) {
             api_not_allowed(true);
         }
         if (isset($_REQUEST['id'])) {
-            learnpath::deleteCategory($_REQUEST['id']);
-            Display::addFlash(Display::return_message(get_lang('Deleted')));
+            $result = learnpath::deleteCategory($_REQUEST['id']);
+            if ($result) {
+                Display::addFlash(Display::return_message(get_lang('Deleted')));
+            }
         }
         require 'lp_list.php';
         break;
@@ -835,11 +773,14 @@ switch ($action) {
                 // Updating the lp.modified_on
                 $_SESSION['oLP']->set_modified_on();
                 Session::write('refresh', 1);
+                $min = isset($_POST['min_'.$_POST['prerequisites']]) ? $_POST['min_'.$_POST['prerequisites']] : '';
+                $max = isset($_POST['max_'.$_POST['prerequisites']]) ? $_POST['max_'.$_POST['prerequisites']] : '';
+
                 $editPrerequisite = $_SESSION['oLP']->edit_item_prereq(
                     $_GET['id'],
                     $_POST['prerequisites'],
-                    $_POST['min_'.$_POST['prerequisites']],
-                    $_POST['max_'.$_POST['prerequisites']]
+                    $min,
+                    $max
                 );
 
                 if ($editPrerequisite) {
@@ -1196,6 +1137,7 @@ switch ($action) {
         }
         break;
     case 'add_sub_item': // Add an item inside a dir/chapter.
+        // Add an item inside a dir/chapter.
         // @todo check if this is @deprecated
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);

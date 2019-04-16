@@ -207,13 +207,15 @@ class MySpace
         }
 
         // protect data
-        $user_id = intval($user_id);
-        $session_id = intval($session_id);
+        $user_id = (int) $user_id;
+        $session_id = (int) $session_id;
         $new_course_list = [];
         foreach ($course_list as $course_item) {
             $courseInfo = api_get_course_info($course_item['code']);
-            $courseId = $courseInfo['real_id'];
-            $new_course_list[] = '"'.$courseId.'"';
+            if ($courseInfo) {
+                $courseId = $courseInfo['real_id'];
+                $new_course_list[] = '"'.$courseId.'"';
+            }
         }
         $course_list = implode(', ', $new_course_list);
 
@@ -259,11 +261,13 @@ class MySpace
         // database table definition
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
+        $user_id = (int) $user_id;
+
         // getting all the courses of the user
         $sql = "SELECT * FROM $tbl_course_user
                 WHERE
-                    user_id = '".intval($user_id)."' AND
-                    relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
+                    user_id = '".$user_id."' AND
+                    relation_type <> ".COURSE_RELATION_TYPE_RRHH;
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             $courseInfo = api_get_course_info_by_id($row['c_id']);
@@ -317,12 +321,18 @@ class MySpace
      */
     public static function returnCourseTracking($user_id)
     {
+        $user_id = (int) $user_id;
+
+        if (empty($user_id)) {
+            return [];
+        }
+
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         // getting all the courses of the user
         $sql = "SELECT * FROM $tbl_course_user
                 WHERE
-                    user_id = '".intval($user_id)."' AND
-                    relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
+                    user_id = $user_id AND
+                    relation_type <> ".COURSE_RELATION_TYPE_RRHH;
         $result = Database::query($sql);
 
         $list = [];
@@ -344,7 +354,12 @@ class MySpace
             }
 
             // student exercises results (obtained score, maximum score, number of exercises answered, score percentage)
-            $exercises_results = self::exercises_results($user_id, $courseCode);
+            $exercisesResults = self::exercises_results($user_id, $courseCode);
+
+            $resultToString = '';
+            if (!is_null($exercisesResults['percentage'])) {
+                $resultToString = $exercisesResults['score_obtained'].'/'.$exercisesResults['score_possible'].' ( '.$exercisesResults['percentage'].'% )';
+            }
 
             $item = [
                 'code' => $courseInfo['code'],
@@ -358,8 +373,8 @@ class MySpace
                 'student_score' => $avg_score,
                 'student_message' => Tracking::count_student_messages($user_id, $courseCode),
                 'student_assignments' => Tracking::count_student_assignments($user_id, $courseCode),
-                'student_exercises' => (is_null($exercises_results['percentage']) ? '' : $exercises_results['score_obtained'].'/'.$exercises_results['score_possible'].' ( '.$exercises_results['percentage'].'% )'),
-                'questions_answered' => $exercises_results['questions_answered'],
+                'student_exercises' => $resultToString,
+                'questions_answered' => $exercisesResults['questions_answered'],
                 'last_connection' => Tracking::get_last_connection_date_on_the_course($user_id, $courseInfo),
             ];
             $list[] = $item;
@@ -416,7 +431,7 @@ class MySpace
     {
         self::display_user_overview_export_options();
 
-        $addparams = ['view' => 'admin', 'display' => 'user'];
+        $params = ['view' => 'admin', 'display' => 'user'];
         $table = new SortableTable(
             'tracking_user_overview',
             ['MySpace', 'get_number_of_users_tracking_overview'],
@@ -428,7 +443,7 @@ class MySpace
                 'class' => 'table table-transparent',
             ]
         );
-        $table->additional_parameters = $addparams;
+        $table->additional_parameters = $params;
 
         $table->set_column_filter(0, ['MySpace', 'returnTrackingUserOverviewFilter']);
         $tableContent = $table->return_table();
@@ -1038,14 +1053,14 @@ class MySpace
         $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalExercisesAnswered'), 6, true).'</span></th>';
         $t_head .= '<th style="padding:0;border-bottom:0;border-right:0;"><span>'.get_lang('LatestLogin').'</span></th>';
         $t_head .= '</tr></table>';
-        $addparams = ['view' => 'admin', 'display' => 'courseoverview'];
+        $params = ['view' => 'admin', 'display' => 'courseoverview'];
         $table = new SortableTable(
             'tracking_session_overview',
             ['MySpace', 'get_total_number_courses'],
             ['MySpace', 'get_course_data_tracking_overview'],
             1
         );
-        $table->additional_parameters = $addparams;
+        $table->additional_parameters = $params;
 
         $table->set_header(0, '', false, null, ['style' => 'display: none']);
         $table->set_header(1, get_lang('Course'), true, ['style' => 'font-size:8pt'], ['style' => 'font-size:8pt']);
@@ -1456,14 +1471,14 @@ class MySpace
         $head .= '<th style="padding:0;border-bottom:0;border-right:0;"><span>'.get_lang('LatestLogin').'</span></th>';
         $head .= '</tr></table>';
 
-        $addparams = ['view' => 'admin', 'display' => 'sessionoverview'];
+        $params = ['view' => 'admin', 'display' => 'sessionoverview'];
         $table = new SortableTable(
             'tracking_session_overview',
             ['MySpace', 'get_total_number_sessions'],
             ['MySpace', 'get_session_data_tracking_overview'],
             1
         );
-        $table->additional_parameters = $addparams;
+        $table->additional_parameters = $params;
 
         $table->set_header(0, '', false, null, ['style' => 'display: none']);
         $table->set_header(
@@ -1685,21 +1700,19 @@ class MySpace
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
         // the values of the sortable table
+        $from = 0;
         if ($_GET['tracking_session_overview_page_nr']) {
             $from = $_GET['tracking_session_overview_page_nr'];
-        } else {
-            $from = 0;
-        }
-        if ($_GET['tracking_session_overview_column']) {
-            $orderby = $_GET['tracking_session_overview_column'];
-        } else {
-            $orderby = 0;
         }
 
+        $orderby = 0;
+        if ($_GET['tracking_session_overview_column']) {
+            $orderby = $_GET['tracking_session_overview_column'];
+        }
+
+        $direction = 'ASC';
         if ($_GET['tracking_session_overview_direction']) {
             $direction = $_GET['tracking_session_overview_direction'];
-        } else {
-            $direction = 'ASC';
         }
 
         $session_data = self::get_session_data_tracking_overview($from, 1000, $orderby, $direction);
@@ -1876,6 +1889,7 @@ class MySpace
      *
      * @param int    $user_id     the id of the user
      * @param string $course_code the course code
+     * @param int    $session_id
      *
      * @return array
      *
@@ -1885,15 +1899,20 @@ class MySpace
      *
      * @since November 2008
      */
-    public static function exercises_results($user_id, $course_code, $session_id = false)
+    public static function exercises_results($user_id, $course_code, $session_id = 0)
     {
+        $user_id = (int) $user_id;
         $courseId = api_get_course_int_id($course_code);
-        $sql = 'SELECT score, max_score
-                FROM '.Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES)."
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+
+        $sql = "SELECT exe_result, exe_weighting
+                FROM $table
                 WHERE 
-                    c_id = ' . $courseId . ' AND 
-                    exe_user_id = '".intval($user_id)."'";
-        if ($session_id !== false) {
+                    c_id = $courseId AND 
+                    exe_user_id = $user_id";
+
+        $session_id = (int) $session_id;
+        if (!empty($session_id)) {
             $sql .= " AND session_id = '".$session_id."' ";
         }
         $result = Database::query($sql);
@@ -1906,10 +1925,9 @@ class MySpace
             $questions_answered++;
         }
 
+        $percentage = null;
         if ($score_possible != 0) {
             $percentage = round(($score_obtained / $score_possible * 100), 2);
-        } else {
-            $percentage = null;
         }
 
         return [
@@ -2208,20 +2226,7 @@ class MySpace
         switch ($column) {
             case '0':
                 $column = $isWestern ? 'firstname' : 'lastname';
-                //$column = 'official_code';
                 break;
-            /*case '1':
-                $column = $isWestern ? 'firstname' : 'lastname';
-                break;
-            case '2':
-                $column = $isWestern ? 'lastname' : 'firstname';
-                break;
-            case '3':
-                $column = 'username';
-                break;
-            case '4':
-                $column = 'username';
-                break;*/
         }
 
         $order = [
@@ -2230,12 +2235,6 @@ class MySpace
         $userList = UserManager::get_user_list([], $order, $from, $numberItems);
         $return = [];
         foreach ($userList as $user) {
-            //$firstPosition = $user['lastname'];
-            //$secondPosition = $user['firstname'];
-            /*if ($isWestern) {
-                $firstPosition = $user['firstname'];
-                $secondPosition = $user['lastname'];
-            }*/
             $return[] = [
                 '0' => $user['user_id'],
                 'col0' => $user['user_id'],
@@ -2262,9 +2261,9 @@ class MySpace
     public static function get_user_overview_export_extra_fields($user_id)
     {
         // include the user manager
-        $extra_data = UserManager::get_extra_user_data($user_id, true);
+        $data = UserManager::get_extra_user_data($user_id, true);
 
-        return $extra_data;
+        return $data;
     }
 
     /**
@@ -2293,9 +2292,7 @@ class MySpace
                 }
                 $desired_username = UserManager::create_username(
                     $firstname,
-                    $lastname,
-                    $language,
-                    $encoding
+                    $lastname
                 );
                 if (UserManager::is_username_available($desired_username.$sufix)) {
                     break;
@@ -2355,10 +2352,10 @@ class MySpace
     {
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $id_session = intval($id_session);
+        $id_session = (int) $id_session;
         $username = Database::escape_string($username);
         foreach ($course_list as $courseId) {
-            $courseId = intval($courseId);
+            $courseId = (int) $courseId;
             $sql = " SELECT u.user_id FROM $tbl_session_rel_course_rel_user rel
                      INNER JOIN $table_user u
                      ON (rel.user_id = u.user_id)
@@ -2447,9 +2444,8 @@ class MySpace
     public static function get_user_creator($users)
     {
         $errors = [];
+        $table_user = Database::get_main_table(TABLE_MAIN_USER);
         foreach ($users as $index => $user) {
-            // database table definition
-            $table_user = Database::get_main_table(TABLE_MAIN_USER);
             $username = Database::escape_string($user['UserName']);
             $sql = "SELECT creator_id FROM $table_user WHERE username='$username' ";
 
@@ -2563,24 +2559,20 @@ class MySpace
         $users = $new_users;
 
         // Inserting users.
-        $super_list = [];
         foreach ($course_list as $enreg_course) {
             $nbr_users = 0;
             $new_users = [];
             $enreg_course = Database::escape_string($enreg_course);
             foreach ($users as $index => $user) {
-                $userid = intval($user['id']);
+                $userid = (int) $user['id'];
                 $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(session_id, c_id, user_id)
                         VALUES('$id_session','$enreg_course','$userid')";
-                $course_session = ['course' => $enreg_course, 'added' => 1];
-
                 $result = Database::query($sql);
                 if (Database::affected_rows($result)) {
                     $nbr_users++;
                 }
                 $new_users[] = $user;
             }
-            $super_list[] = $new_users;
 
             //update the nbr_users field
             $sql_select = "SELECT COUNT(user_id) as nbUsers FROM $tbl_session_rel_course_rel_user
@@ -2610,7 +2602,6 @@ class MySpace
         // Sending emails.
         $addedto = '';
         if ($sendMail) {
-            $i = 0;
             foreach ($users as $index => $user) {
                 $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
                 $emailbody = get_lang('Dear').' '.
@@ -2650,7 +2641,6 @@ class MySpace
                 $registered_users .= UserManager::getUserProfileLink($userInfo).' - '.$addedto.'<br />';
             }
         } else {
-            $i = 0;
             foreach ($users as $index => $user) {
                 $userInfo = api_get_user_info($user['id']);
                 if (($user['added_at_platform'] == 1 && $user['added_at_session'] == 1) || $user['added_at_session'] == 1) {
@@ -3047,7 +3037,7 @@ class MySpace
         $user_id = (int) $user_id;
         $connections = [];
         if (!empty($course_info)) {
-            $courseId = intval($course_info['real_id']);
+            $courseId = (int) $course_info['real_id'];
             $end_date = add_day_to($end_date);
             $sessionCondition = api_get_session_condition($sessionId);
             $sql = "SELECT login_course_date, logout_course_date
@@ -3127,8 +3117,8 @@ function get_stats($user_id, $course_info, $sessionId, $start_date = null, $end_
 function add_day_to($end_date)
 {
     $foo_date = strtotime($end_date);
-    $foo_date = strtotime(" +1 day", $foo_date);
-    $foo_date = date("Y-m-d", $foo_date);
+    $foo_date = strtotime(' +1 day', $foo_date);
+    $foo_date = date('Y-m-d', $foo_date);
 
     return $foo_date;
 }
@@ -3150,7 +3140,7 @@ function convert_to_array($sql_result)
             api_time_to_hms($data['logout'] - $data['login']).'</tr></td>'."\n";
     }
     $result_to_print .= '</table>';
-    $result_to_print = ["result" => $result_to_print];
+    $result_to_print = ['result' => $result_to_print];
 
     return $result_to_print;
 }

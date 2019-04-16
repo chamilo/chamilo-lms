@@ -112,7 +112,6 @@ if ($group_id != 0) {
     $groupInfo = $usergroup->get($group_id);
     $groupInfo['name'] = Security::remove_XSS($groupInfo['name']);
     $groupInfo['description'] = Security::remove_XSS($groupInfo['description']);
-
     $interbreadcrumb[] = ['url' => '#', 'name' => $groupInfo['name']];
 
     if (isset($_GET['action']) && $_GET['action'] == 'leave') {
@@ -180,14 +179,14 @@ if ($is_group_member || $groupInfo['visibility'] == GROUP_PERMISSION_OPEN) {
             [GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER, GROUP_USER_PERMISSION_PENDING_INVITATION]
         )) {
             $social_right_content .= '<div class="group-tool">';
-            $social_right_content .= '<div class="float-right">';
+            $social_right_content .= '<div class="pull-right">';
             $social_right_content .= '<a class="btn btn-default btn-sm" href="group_view.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.
                 get_lang('JoinGroup').'</a>';
             $social_right_content .= '</div>';
             $social_right_content .= '</div>';
         } elseif ($role == GROUP_USER_PERMISSION_PENDING_INVITATION) {
             $social_right_content .= '<div class="group-tool">';
-            $social_right_content .= '<div class="float-right">';
+            $social_right_content .= '<div class="pull-right">';
             $social_right_content .= '<a class="btn btn-default btn-sm" href="group_view.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.
                     Display::returnFontAwesomeIcon('envelope').' '.
                 get_lang('YouHaveBeenInvitedJoinNow').'</a>';
@@ -244,7 +243,7 @@ if ($is_group_member || $groupInfo['visibility'] == GROUP_PERMISSION_OPEN) {
 
     // My friends
     $friend_html = SocialManager::listMyFriendsBlock(
-        $user_id,
+        api_get_user_id(),
         '',
         ''
     );
@@ -253,7 +252,7 @@ if ($is_group_member || $groupInfo['visibility'] == GROUP_PERMISSION_OPEN) {
     if (count($members) > 0) {
         if ($role == GROUP_USER_PERMISSION_ADMIN) {
             $member_content .= '<div class="group-tool">';
-            $member_content .= '<div class="float-right">';
+            $member_content .= '<div class="pull-right">';
             $member_content .= Display::url(
                 Display::returnFontAwesomeIcon('pencil').' '.get_lang('EditMembersList'),
                 'group_members.php?id='.$group_id,
@@ -300,7 +299,7 @@ if ($is_group_member || $groupInfo['visibility'] == GROUP_PERMISSION_OPEN) {
     }
 
     if (!empty($create_thread_link)) {
-        $create_thread_link = Display::div($create_thread_link, ['class' => 'float-right']);
+        $create_thread_link = Display::div($create_thread_link, ['class' => 'pull-right']);
     }
     $headers = [get_lang('Discussions'), get_lang('Members')];
     $socialForum = Display::tabs($headers, [$content, $member_content], 'tabs');
@@ -328,16 +327,10 @@ $social_menu_block = SocialManager::show_social_menu('groups', $group_id);
 $tpl->setHelp('Groups');
 $tpl->assign('create_link', $create_thread_link);
 $tpl->assign('is_group_member', $is_group_member);
-$tpl->assign('group_info', $group_info);
+$tpl->assign('group_info', $groupInfo);
 $tpl->assign('social_friend_block', $friend_html);
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_forum', $socialForum);
-
-$tpl->assign('list_members', $listMembers);
-$tpl->assign('list_topic', $listTopic);
-
 $tpl->assign('social_right_content', $social_right_content);
-$social_layout = $tpl->get_template('social/group_view.html.twig');
-$content = $tpl->fetch($social_layout);
-$tpl->assign('content', $content);
-$tpl->display_one_col_template();
+$social_layout = $tpl->get_template('social/group_view.tpl');
+$tpl->display($social_layout);

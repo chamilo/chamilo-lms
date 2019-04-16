@@ -16,7 +16,6 @@ use SkillRelUser as SkillRelUserManager;
 require_once __DIR__.'/../inc/global.inc.php';
 
 $issue = isset($_REQUEST['issue']) ? (int) $_REQUEST['issue'] : 0;
-$userId = isset($_REQUEST['user']) ? (int) $_REQUEST['user'] : 0;
 
 if (empty($issue)) {
     api_not_allowed(true);

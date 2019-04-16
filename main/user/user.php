@@ -614,7 +614,7 @@ if (api_is_allowed_to_edit(null, true)) {
 
     echo '</div>';
     echo '<div class="col-md-6">';
-    echo '<div class="float-right">';
+    echo '<div class="pull-right">';
     // Build search-form
     $form = new FormValidator(
         'search_user',
@@ -1049,7 +1049,7 @@ function modify_filter($user_id, $row, $data)
                 $result .= Display::url(
                     $text,
                     'user.php?'.api_get_cidreq().'&action=set_tutor&is_tutor='.$isTutor.'&user_id='.$user_id.'&type='.$type,
-                    ['class' => 'btn btn-sm btn-primary '.$disabled]
+                    ['class' => 'btn btn-default '.$disabled]
                 ).'&nbsp;';
             }
         }

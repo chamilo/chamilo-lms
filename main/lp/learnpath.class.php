@@ -1489,54 +1489,53 @@ class learnpath
      *
      * @param int    $id              Element ID
      * @param string $prerequisite_id Prerequisite Element ID
-     * @param int    $mastery_score   Prerequisite min score
-     * @param int    $max_score       Prerequisite max score
+     * @param int    $minScore        Prerequisite min score
+     * @param int    $maxScore        Prerequisite max score
      *
      * @return bool True on success, false on error
      */
     public function edit_item_prereq(
         $id,
         $prerequisite_id,
-        $mastery_score = 0,
-        $max_score = 100
+        $minScore = 0,
+        $maxScore = 100
     ) {
-        $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
-            error_log('In learnpath::edit_item_prereq('.$id.','.$prerequisite_id.','.$mastery_score.','.$max_score.')', 0);
+            error_log('In learnpath::edit_item_prereq('.$id.','.$prerequisite_id.','.$minScore.','.$maxScore.')', 0);
         }
 
-        if (empty($id) || ($id != strval(intval($id))) || empty($prerequisite_id)) {
+        $id = (int) $id;
+        $prerequisite_id = (int) $prerequisite_id;
+
+        if (empty($id)) {
             return false;
         }
 
-        $prerequisite_id = (int) $prerequisite_id;
-        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-
-        if (!is_numeric($mastery_score) || $mastery_score < 0) {
-            $mastery_score = 0;
+        if (empty($minScore) || $minScore < 0) {
+            $minScore = 0;
         }
 
-        if (!is_numeric($max_score) || $max_score < 0) {
-            $max_score = 100;
+        if (empty($maxScore) || $maxScore < 0) {
+            $maxScore = 100;
         }
 
-        /*if ($mastery_score > $max_score) {
-            $max_score = $mastery_score;
-        }*/
+        $minScore = floatval($minScore);
+        $maxScore = floatval($maxScore);
 
-        if (!is_numeric($prerequisite_id)) {
+        if (empty($prerequisite_id)) {
             $prerequisite_id = 'NULL';
+            $minScore = 0;
+            $maxScore = 100;
         }
 
-        $mastery_score = floatval($mastery_score);
-        $max_score = floatval($max_score);
-
+        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $sql = " UPDATE $tbl_lp_item
                  SET
                     prerequisite = $prerequisite_id ,
-                    prerequisite_min_score = $mastery_score ,
-                    prerequisite_max_score = $max_score
+                    prerequisite_min_score = $minScore ,
+                    prerequisite_max_score = $maxScore
                  WHERE iid = $id";
+
         Database::query($sql);
         // TODO: Update the item object (can be ignored for now because refreshed).
         return true;
@@ -2250,10 +2249,19 @@ class learnpath
         $lpItemId = (int) $lpItemId;
 
         // Getting all the information about the item.
-        $sql = "SELECT * FROM $tbl_lp_item as lpi
+        $item = isset($this->items[$lpItemId]) ? $this->items[$lpItemId] : null;
+        $itemViewId = 0;
+        if ($item) {
+            $itemViewId = (int) $item->db_item_view_id;
+        }
+
+        // Getting all the information about the item.
+        $sql = "SELECT lpi.audio, lpi.item_type, lp_view.status 
+                FROM $tbl_lp_item as lpi
                 INNER JOIN $tbl_lp_item_view as lp_view
                 ON (lpi.iid = lp_view.lp_item_id)
                 WHERE
+                    lp_view.iid = $itemViewId AND
                     lpi.iid = $lpItemId AND
                     lp_view.c_id = $course_id";
         $result = Database::query($sql);
@@ -2350,7 +2358,6 @@ class learnpath
         }
 
         $isBlocked = false;
-
         if (!empty($prerequisite)) {
             $progress = self::getProgress(
                 $prerequisite,
@@ -2384,12 +2391,6 @@ class learnpath
                     $accumulateWorkTime = ($pl * $tc * $perc / 100);
 
                     // Spent time (in seconds) so far in the learning path
-                    /*$lpTime = Tracking::get_time_spent_in_lp(
-                        $studentId,
-                        $courseInfo['code'],
-                        [$prerequisite],
-                        $sessionId
-                    );*/
                     $lpTimeList = Tracking::getCalculateTime($studentId, $courseId, $sessionId);
                     $lpTime = isset($lpTimeList[TOOL_LEARNPATH][$prerequisite]) ? $lpTimeList[TOOL_LEARNPATH][$prerequisite] : 0;
 
@@ -2560,7 +2561,6 @@ class learnpath
         $userId = (int) $userId;
         $courseId = (int) $courseId;
         $sessionId = (int) $sessionId;
-        $progress = 0;
 
         $sessionCondition = api_get_session_condition($sessionId);
         $table = Database::get_course_table(TABLE_LP_VIEW);
@@ -2570,12 +2570,14 @@ class learnpath
                     lp_id = $lpId AND
                     user_id = $userId $sessionCondition ";
         $res = Database::query($sql);
+
+        $progress = 0;
         if (Database::num_rows($res) > 0) {
             $row = Database:: fetch_array($res);
-            $progress = $row['progress'];
+            $progress = (int) $row['progress'];
         }
 
-        return (int) $progress;
+        return $progress;
     }
 
     /**
@@ -12575,7 +12577,11 @@ EOD;
             $sql = "DELETE FROM $tbl_tool
                     WHERE c_id = ".$courseId." AND (link LIKE '$link%' AND image='lp_category.gif')";
             Database::query($sql);
+
+            return true;
         }
+
+        return false;
     }
 
     /**
@@ -13150,7 +13156,8 @@ EOD;
             null,
             true,
             false,
-            $editorConfig
+            $editorConfig,
+            true
         );
         $form->addHidden('action', 'add_final_item');
         $form->addHidden('path', Session::read('pathItem'));

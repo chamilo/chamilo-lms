@@ -199,7 +199,7 @@ foreach ($messages as $message) {
         $message['user_info']['complete_name_with_message_link']
     );
 
-    $messageToShow .= ' '.$date.' <span class="float-right">'.$counterLink.'</span></h4>';
+    $messageToShow .= ' '.$date.' <span class="pull-right">'.$counterLink.'</span></h4>';
     $messageToShow .= '<hr />';
 
     if (!empty($entireMessage)) {

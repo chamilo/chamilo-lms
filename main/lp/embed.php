@@ -5,6 +5,8 @@ use ChamiloSession as Session;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script(true);
+
 $type = $_REQUEST['type'];
 $src = Security::remove_XSS($_REQUEST['source']);
 if (empty($type) || empty($src)) {

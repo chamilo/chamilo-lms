@@ -222,7 +222,7 @@ if (!empty($projectId)) {
         Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch'),
         'javascript://',
         [
-            'class' => 'btn btn-outline-secondary advanced-parameters',
+            'class' => 'btn btn-default advanced-parameters',
             'onclick' => 'display_advanced_search_form();',
         ]
     );

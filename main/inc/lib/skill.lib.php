@@ -1305,7 +1305,7 @@ class Skill extends Model
             foreach ($skills as $skill) {
                 if ($getSkillData) {
                     $skillData = $this->get($skill['id']);
-                    $skillData['url'] = api_get_path(WEB_PATH).'badge/'.$skill['issue'].'/user/'.$userId;
+                    $skillData['url'] = api_get_path(WEB_PATH).'badge/'.$skill['id'].'/user/'.$userId;
                     $skillList[$skill['id']] = array_merge($skill, $skillData);
                 } else {
                     $skillList[$skill['id']] = $skill['id'];
@@ -1412,9 +1412,8 @@ class Skill extends Model
                     $courseTempList[$courseId] = $courseInfo;
                 }
             }
-
             $tableRow = [
-                'skill_badge' => $resultData['img_mini'],
+                'skill_badge' => $resultData['img_small'],
                 'skill_name' => self::translateName($resultData['name']),
                 'short_code' => $resultData['short_code'],
                 'skill_url' => $resultData['url'],
@@ -1439,15 +1438,9 @@ class Skill extends Model
         }
 
         if ($addTitle) {
-            $tableResult .= '
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>'.get_lang('AchievedSkills').'</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <tr><td>';
+            $tableResult .= '<div class="header-title">'.get_lang('AchievedSkills').'</div>
+                    <div class="skills-badges">
+                   ';
         }
 
         if (!empty($skillParents)) {
@@ -1547,11 +1540,7 @@ class Skill extends Model
         }
 
         if ($addTitle) {
-            $tableResult .= '</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                ';
+            $tableResult .= '</div>';
         }
         $tableResult .= '</div>';
 

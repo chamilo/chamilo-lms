@@ -94,12 +94,10 @@ if ($export) {
 }
 $csv_content = [];
 $from_myspace = false;
-
+$this_section = SECTION_COURSES;
 if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
     $from_myspace = true;
     $this_section = SECTION_TRACKING;
-} else {
-    $this_section = SECTION_COURSES;
 }
 
 $nameTools = get_lang('StudentDetails');
@@ -162,7 +160,7 @@ if (!empty($details)) {
     }
     $nameTools = get_lang('DetailsStudentInCourse');
 } else {
-    if ($origin == 'resume_session') {
+    if ($origin === 'resume_session') {
         $interbreadcrumb[] = [
             'url' => "../session/session_list.php",
             'name' => get_lang('SessionList'),
@@ -269,7 +267,6 @@ switch ($action) {
         $table->setCellContents(1, 4, $last);
 
         $courseTable = '';
-
         if (!empty($courses)) {
             $courseTable .= '<table class="data_table">';
             $courseTable .= '<thead>';
@@ -392,7 +389,6 @@ switch ($action) {
 
         $params = [
             'pdf_title' => get_lang('Resume'),
-            //'course_code' => api_get_course_id(),
             'session_info' => $sessionInfo,
             'course_info' => '',
             'pdf_date' => '',
@@ -571,6 +567,7 @@ switch ($action) {
     default:
         break;
 }
+
 $courses_in_session = [];
 
 // See #4676
@@ -656,15 +653,6 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
 if (api_is_drh() && !api_is_platform_admin()) {
     if (!empty($student_id)) {
         if (api_drh_can_access_all_session_content()) {
-            //@todo securize drh with student id
-            /*$users = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus('drh_all', api_get_user_id());
-            $userList = array();
-            foreach ($users as $user) {
-                $userList[] = $user['user_id'];
-            }
-            if (!in_array($student_id, $userList)) {
-                api_not_allowed(true);
-            }*/
         } else {
             if (!$isDrhOfCourse) {
                 if (api_is_drh() &&
@@ -774,7 +762,12 @@ $avg_student_progress = $avg_student_score = 0;
 if (empty($sessionId)) {
     $isSubscribedToCourse = CourseManager::is_user_subscribed_in_course($user_info['user_id'], $course_code);
 } else {
-    $isSubscribedToCourse = CourseManager::is_user_subscribed_in_course($user_info['user_id'], $course_code, true, $sessionId);
+    $isSubscribedToCourse = CourseManager::is_user_subscribed_in_course(
+        $user_info['user_id'],
+        $course_code,
+        true,
+        $sessionId
+    );
 }
 
 if ($isSubscribedToCourse) {
@@ -862,11 +855,30 @@ $table_title = Display::return_icon('user.png', get_lang('User')).$user_info['co
 
 echo Display::page_subheader($table_title);
 $userPicture = UserManager::getUserPicture($user_info['user_id'], USER_IMAGE_SIZE_BIG);
+
 $userGroupManager = new UserGroup();
 $userGroups = $userGroupManager->getNameListByUser(
     $user_info['user_id'],
     UserGroup::NORMAL_CLASS
 );
+
+$userInfo = [
+    'id' => $user_info['user_id'],
+    'complete_name' => $user_info['complete_name'],
+    'complete_name_link' => $user_info['complete_name_with_message_link'],
+    'phone' => $user_info['phone'],
+    'code' => $user_info['official_code'],
+    'username' => $user_info['username'],
+    'registration_date' => $user_info['registration_date'],
+    'email' => $user_info['email'],
+    'has_certificates' => $user_info['has_certificates'],
+    'last_login' => $user_info['last_login'],
+    'profile_url' => $user_info['profile_url'],
+    'groups' => $userGroupManager,
+    'avatar' => $userPicture,
+    'online' => $online,
+];
+
 ?>
     <div class="row">
         <div class="col-sm-2">
@@ -1070,6 +1082,19 @@ $userGroups = $userGroupManager->getNameListByUser(
         </div>
     </div>
 <?php
+
+$tpl = new Template(
+    '',
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+);
+$tpl->assign('user', $userInfo);
+$templateName = $tpl->get_template('my_space/user_details.tpl');
+$content = $tpl->fetch($templateName);
 
 $exportCourseList = [];
 $lpIdList = [];
@@ -1703,7 +1728,7 @@ if (empty($details)) {
         $i = 0;
         if (Database::num_rows($result_exercices) > 0) {
             while ($exercices = Database::fetch_array($result_exercices)) {
-                $exercise_id = intval($exercices['id']);
+                $exercise_id = (int) $exercices['id'];
                 $count_attempts = Tracking::count_student_exercise_attempts(
                     $student_id,
                     $courseInfo['real_id'],
@@ -2110,5 +2135,7 @@ if ($export) {
     }
     exit;
 }
+
+echo $content;
 
 Display::display_footer();

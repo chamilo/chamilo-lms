@@ -152,24 +152,29 @@ echo Display::page_header($tool_name);
                 <?php if ($is_western_name_order) {
                 ?>
                     <th>
-                        <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=firstname&direction=<?php echo urlencode($direction); ?>"><?php echo get_lang('FirstName'); ?></a>
+                        <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=firstname&direction=<?php echo urlencode($direction); ?>">
+                            <?php echo get_lang('FirstName'); ?></a>
                     </th>
                     <th>
-                        <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=lastname&direction=<?php echo urlencode($direction); ?>"><?php echo get_lang('LastName'); ?></a>
+                        <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=lastname&direction=<?php echo urlencode($direction); ?>">
+                            <?php echo get_lang('LastName'); ?></a>
                     </th>
                 <?php
             } else {
                 ?>
                     <th>
-                        <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=lastname&direction=<?php echo urlencode($direction); ?>"><?php echo get_lang('LastName'); ?></a>
+                        <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=lastname&direction=<?php echo urlencode($direction); ?>">
+                            <?php echo get_lang('LastName'); ?></a>
                     </th>
                     <th>
-                        <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=firstname&direction=<?php echo urlencode($direction); ?>"><?php echo get_lang('FirstName'); ?></a>
+                        <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=firstname&direction=<?php echo urlencode($direction); ?>">
+                            <?php echo get_lang('FirstName'); ?></a>
                     </th>
                 <?php
             } ?>
                 <th>
-                    <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=username&direction=<?php echo urlencode($direction); ?>"><?php echo get_lang('Login'); ?></a>
+                    <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=username&direction=<?php echo urlencode($direction); ?>">
+                        <?php echo get_lang('Login'); ?></a>
                 </th>
                 <th><?php echo get_lang('Actions'); ?></th>
             </tr>

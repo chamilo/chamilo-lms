@@ -62,7 +62,7 @@ if (!$is_allowedToEdit) {
     api_not_allowed(true);
 }
 
-$exerciseId = isset($_GET['exerciseId']) ? (int) $_GET['exerciseId'] : '0';
+$exerciseId = isset($_GET['exerciseId']) ? (int) $_GET['exerciseId'] : 0;
 
 /*  stripslashes POST data  */
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -253,6 +253,8 @@ if (!empty($clone_question) && !empty($objExercise->id)) {
     // Reloading tne $objExercise obj
     $objExercise->read($objExercise->id, false);
 
+    Display::addFlash(Display::return_message(get_lang('ItemCopied')));
+
     header('Location: admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&page='.$page);
     exit;
 }
@@ -299,7 +301,7 @@ if (!$exerciseId && $nameTools != get_lang('ExerciseManagement')) {
 }
 
 // if the question is duplicated, disable the link of tool name
-if ($modifyIn == 'thisExercise') {
+if ($modifyIn === 'thisExercise') {
     if ($buttonBack) {
         $modifyIn = 'allExercises';
     }
@@ -328,12 +330,12 @@ $inATest = isset($exerciseId) && $exerciseId > 0;
 
 if ($inATest) {
     echo '<div class="actions">';
-    if (isset($_GET['hotspotadmin']) || isset($_GET['newQuestion']) || isset($_GET['myid'])) {
+    if (isset($_GET['hotspotadmin']) || isset($_GET['newQuestion'])) {
         echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'">'.
             Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
     }
 
-    if (!isset($_GET['hotspotadmin']) && !isset($_GET['newQuestion']) && !isset($_GET['myid']) && !isset($_GET['editQuestion'])) {
+    if (!isset($_GET['hotspotadmin']) && !isset($_GET['newQuestion']) && !isset($_GET['editQuestion'])) {
         echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'">'.
             Display::return_icon('back.png', get_lang('BackToExercisesList'), '', ICON_SIZE_MEDIUM).'</a>';
     }

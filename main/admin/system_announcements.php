@@ -17,7 +17,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 $_SESSION['this_section'] = $this_section;
 
-$action = $_GET['action'] ?? null;
+$action = isset($_GET['action']) ? $_GET['action'] : null;
 $action_todo = false;
 
 // Access restrictions

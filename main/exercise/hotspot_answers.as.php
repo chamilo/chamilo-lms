@@ -100,9 +100,9 @@ if (in_array(
 ) {
     $showOnlyScore = true;
     $showResults = true;
+    $lpId = isset($trackExerciseInfo['orig_lp_id']) ? $trackExerciseInfo['orig_lp_id'] : 0;
+    $lpItemId = isset($trackExerciseInfo['orig_lp_item_id']) ? $trackExerciseInfo['orig_lp_item_id'] : 0;
     if ($objExercise->attempts > 0) {
-        $lpId = $trackExerciseInfo['orig_lp_id'] ?? 0;
-        $lpItemId = $trackExerciseInfo['orig_lp_item_id'] ?? 0;
         $attempts = Event::getExerciseResultsByUser(
             api_get_user_id(),
             $objExercise->id,

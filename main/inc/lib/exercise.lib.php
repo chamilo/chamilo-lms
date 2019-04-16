@@ -526,7 +526,6 @@ class ExerciseLib
                             $answer = '<div class="thumbnail">'.$answer.'</div>';
                         }
 
-                        $answer_input .= '<div class="input-item">';
                         $answer_input .= '<label class="radio '.$hidingClass.'">';
                         $answer_input .= Display::input(
                             'radio',
@@ -535,7 +534,7 @@ class ExerciseLib
                             $attributes
                         );
                         $answer_input .= $answer;
-                        $answer_input .= '</label></div>';
+                        $answer_input .= '</label>';
 
                         if ($answerType == UNIQUE_ANSWER_IMAGE) {
                             $answer_input .= "</div>";
@@ -579,8 +578,7 @@ class ExerciseLib
                         if ($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {
                             $s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
                             $attributes['class'] = 'checkradios';
-                            $answer_input = '<div class="input-item">';
-                            $answer_input .= '<label class="checkbox">';
+                            $answer_input = '<label class="checkbox">';
                             $answer_input .= Display::input(
                                 'checkbox',
                                 'choice['.$questionId.']['.$numAnswer.']',
@@ -588,7 +586,7 @@ class ExerciseLib
                                 $attributes
                             );
                             $answer_input .= $answer;
-                            $answer_input .= '</label></div>';
+                            $answer_input .= '</label>';
 
                             if ($show_comment) {
                                 $s .= '<tr><td>';
@@ -901,7 +899,7 @@ class ExerciseLib
                             // display the last common word
                             $answer .= $listAnswerInfo['common_words'][$i];
                         }
-                        $s .= '<div class="fill-blank">'.$answer.'</div>';
+                        $s .= $answer;
                         break;
                     case CALCULATED_ANSWER:
                         /*
@@ -1058,13 +1056,13 @@ class ExerciseLib
                             $s .= '<tr><td width="45%" valign="top">';
                             $parsed_answer = $answer;
                             // Left part questions
-                            $s .= '<div class="indent"><span class="round number">'.$lines_count.'</span>'.$parsed_answer.'</div></td>';
+                            $s .= '<p class="indent">'.$lines_count.'.&nbsp;'.$parsed_answer.'</p></td>';
                             // Middle part (matches selects)
                             // Id of select is # question + # of option
                             $s .= '<td width="10%" valign="top" align="center">
                                 <div class="select-matching">
                                 <select 
-                                   class="selectpicker" id="choice_id_'.$current_item.'_'.$lines_count.'" 
+                                    id="choice_id_'.$current_item.'_'.$lines_count.'" 
                                     name="choice['.$questionId.']['.$numAnswer.']">';
 
                             // fills the list-box
@@ -1089,11 +1087,11 @@ class ExerciseLib
                             $s .= '</select></div></td><td width="5%" class="separate">&nbsp;</td>';
                             $s .= '<td width="40%" valign="top" >';
                             if (isset($select_items[$lines_count])) {
-                                $s .= '<div class="text-left">
-                                        <div class="indent"><span class="round letter">'.
-                                            $select_items[$lines_count]['letter'].'</span> '.
+                                $s .= '<div class="text-right">
+                                        <p class="indent">'.
+                                    $select_items[$lines_count]['letter'].'.&nbsp; '.
                                             $select_items[$lines_count]['answer'].'
-                                        </div>
+                                        </p>
                                         </div>';
                             } else {
                                 $s .= '&nbsp;';
@@ -2548,7 +2546,7 @@ HOTSPOT;
                                     $question_list = explode(',', $exercise_stat_info['data_tracking']);
                                     if (!empty($question_list)) {
                                         foreach ($question_list as $questionId) {
-                                            $objQuestionTmp = Question::read($questionId, $course_id);
+                                            $objQuestionTmp = Question::read($questionId, $objExercise->course);
                                             // We're inside *one* question. Go through each possible answer for this question
                                             $result = $objExercise->manage_answer(
                                                 $exeId,
@@ -2877,12 +2875,7 @@ HOTSPOT;
 
         $html = Display::span($html, ['class' => 'score_exercise']);
 
-        return [
-            'html' => $html,
-            'percentage' => $percentage,
-            'score_obtained' => $score,
-            'total_score' => $weight,
-        ];
+        return $html;
     }
 
     /**

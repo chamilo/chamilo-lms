@@ -2797,7 +2797,6 @@ class Wiki
                 }
             } else {
                 if ($search_content == '1') {
-                    // warning don't use group by reflink because don't return the last version
                     $sql = "SELECT * FROM ".$tbl_wiki." s1
                             WHERE
                                 s1.c_id = $course_id AND

@@ -381,7 +381,7 @@ if ($list_type == 'complete') {
 
 echo $actions;
 if (api_is_platform_admin()) {
-    echo '<div class="float-right">';
+    echo '<div class="pull-right">';
     // Create a search-box
     $form = new FormValidator(
         'search_simple',
@@ -398,7 +398,7 @@ if (api_is_platform_admin()) {
     $form->display();
     echo '</div>';
 
-    echo '<div class="float-right">';
+    echo '<div class="pull-right">';
     echo $sessionFilter->returnForm();
     echo '</div>';
 }

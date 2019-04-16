@@ -293,7 +293,7 @@ if ($show_full_profile) {
                     $invitations .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_invitation_id.'">'
                                  .api_get_person_name($userInfo['firstname'], $userInfo['lastname']).'</a>';
 
-                    $invitations .= '<div class="float-right">';
+                    $invitations .= '<div class="pull-right">';
                     $invitations .= Display::toolbarButton(
                         get_lang('SocialAddToFriends'),
                         api_get_path(WEB_AJAX_PATH).'social.ajax.php?'.http_build_query([

@@ -173,6 +173,7 @@ function online_logout($user_id = null, $logout_redirect = false)
         }
     }
 
+    api_delete_firstpage_parameter();
     Session::erase('last_id');
     CourseChatUtils::exitChat($user_id);
     session_regenerate_id();

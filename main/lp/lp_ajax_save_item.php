@@ -16,6 +16,8 @@ use ChamiloSession as Session;
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script();
+
 /**
  * Writes an item's new values into the database and returns the operation result.
  *

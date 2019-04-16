@@ -170,7 +170,7 @@ if (isset($action) && $action == 'calendar_add') {
 
                 if (!$is_locked_attendance || api_is_platform_admin()) {
                     if (api_is_allowed_to_edit()) {
-                        echo '<div class="float-right">';
+                        echo '<div class="pull-right">';
                         echo '<a href="index.php?'.api_get_cidreq().'&action=calendar_edit&calendar_id='.intval($calendar['id']).'&attendance_id='.$attendance_id.'">'.
                             Display::return_icon('edit.png', get_lang('Edit'), ['style' => 'vertical-align:middle'], ICON_SIZE_SMALL).'</a>&nbsp;';
                         echo '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=calendar_delete&calendar_id='.intval($calendar['id']).'&attendance_id='.$attendance_id.'">'.

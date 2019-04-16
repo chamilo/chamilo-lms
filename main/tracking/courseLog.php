@@ -202,7 +202,7 @@ Display::display_header($nameTools, 'Tracking');
 
 $actionsLeft = TrackingCourseLog::actionsLeft('users', $sessionId);
 
-$actionsRight = '<div class="float-right">';
+$actionsRight = '<div class="pull-right">';
 $actionsRight .= '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
     Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).'</a>';
 

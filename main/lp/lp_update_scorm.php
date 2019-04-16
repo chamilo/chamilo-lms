@@ -8,11 +8,12 @@
  *
  * @package chamilo.learnpath
  */
-$this_section = SECTION_COURSES;
-
 require_once __DIR__.'/../inc/global.inc.php';
 
+$this_section = SECTION_COURSES;
+
 api_protect_course_script();
+
 $allow = api_is_allowed_to_edit(null, true);
 $lpId = !empty($_GET['lp_id']) ? (int) $_GET['lp_id'] : 0;
 

@@ -388,7 +388,6 @@ if ($lp->mode == 'fullscreen') {
     </script>";
 }
 
-// Set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php).
 Session::write('loaded_lp_view', true);
 $display_none = '';
 $margin_left = '340px';
@@ -410,7 +409,7 @@ if (!api_is_invitee()) {
     $progress_bar = $lp->getProgressBar();
 }
 $navigation_bar = $lp->get_navigation_bar();
-$navigation_bar_bottom = $lp->get_navigation_bar("control-bottom", "display:none");
+$navigation_bar_bottom = $lp->get_navigation_bar('control-bottom', 'display:none');
 $mediaplayer = $lp->get_mediaplayer($lp->current, $autostart);
 
 $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
@@ -517,6 +516,7 @@ $template->assign('glossary_tool_available_list', ['true', 'lp', 'exercise_and_l
 $gamificationMode = api_get_setting('gamification_mode');
 // ...AND this learning path is set in gamification mode, then change the display
 $gamificationMode = $gamificationMode && $lp->seriousgame_mode;
+
 $template->assign('gamification_mode', $gamificationMode);
 $template->assign('glossary_extra_tools', api_get_setting('show_glossary_in_extra_tools'));
 $template->assign('show_glossary_in_documents', api_get_setting('show_glossary_in_documents'));

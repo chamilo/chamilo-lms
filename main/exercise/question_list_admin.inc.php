@@ -254,7 +254,6 @@ if (!$inATest) {
                         api_get_self().'?'.api_get_cidreq().'&'
                             .http_build_query([
                                 'type' => $objQuestionTmp->selectType(),
-                                'myid' => 1,
                                 'editQuestion' => $id,
                                 'page' => $page,
                             ]),

@@ -653,9 +653,6 @@ if (isset($list_ordered) && !empty($list_ordered)) {
 }
 
 $tableRows = [];
-$listExercise = [];
-$list = [];
-/*  LIST EXERCISES  */
 
 if (!empty($exerciseList)) {
     if ($origin != 'learnpath') {
@@ -800,21 +797,26 @@ if (!empty($exerciseList)) {
 
                 $url = $move.'<a '.$alt_title.' class="'.$class_tip.'" id="tooltip_'.$row['id'].'" href="overview.php?'.api_get_cidreq().$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'">
                              '.Display::return_icon('quiz.png', $row['title']).'
-                 '.$title.' </a>';
+                 '.$title.' </a>'.PHP_EOL;
 
-                $listExercise['id'] = $row['id'];
-                $listExercise['title'] = $title;
-                $listExercise['description'] = cut($row['description'], 150, false);
-                $listExercise['url'] = "overview.php?".api_get_cidreq().$mylpid.$mylpitemid.'&exerciseId='.$row['id'];
-                $listExercise['lp_blocked'] = $lp_blocked;
-                $listExercise['visibility'] = $visibility;
-                $listExercise['active'] = $row['active'];
+                if (ExerciseLib::isQuizEmbeddable($row)) {
+                    $embeddableIcon = Display::return_icon('om_integration.png', get_lang('ThisQuizCanBeEmbeddable'));
+                    $url .= Display::div($embeddableIcon, ['class' => 'pull-right']);
+                }
 
-                //$item = Display::tag('td', $url.' '.$session_img.$lp_blocked);
+                $item = Display::tag('td', $url.' '.$session_img.$lp_blocked);
+
+                // Count number exercise - teacher
+                $sql = "SELECT count(*) count FROM $TBL_EXERCISE_QUESTION
+                        WHERE c_id = $courseId AND exercice_id = $my_exercise_id";
+                $sqlresult = Database::query($sql);
+                $rowi = (int) Database::result($sqlresult, 0, 0);
 
                 if ($sessionId == $row['session_id']) {
+                    $actions = '';
                     // Questions list
-                    $actions = Display::url(
+                    // Questions list
+                    $actions .= Display::url(
                         Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL),
                         'admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']
                     );
@@ -1085,8 +1087,7 @@ if (!empty($exerciseList)) {
                 } else {
                     $number_of_questions = $rowi;
                 }
-                $listExercise['number_questions'] = $number_of_questions;
-            //$item .= Display::tag('td', $number_of_questions);
+                $item .= Display::tag('td', $number_of_questions);
             } else {
                 // Student only.
                 $visibility = api_get_item_visibility(
@@ -1099,15 +1100,12 @@ if (!empty($exerciseList)) {
                 if ($visibility == 0) {
                     continue;
                 }
-                $score = null;
+
                 $url = '<a '.$alt_title.'  href="overview.php?'.api_get_cidreq().$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'">'.
                         $cut_title.'</a>';
-                $listExercise['id'] = $row['id'];
-                $listExercise['title'] = $cut_title;
-                $listExercise['url'] = 'overview.php?'.api_get_cidreq().$mylpid.$mylpitemid.'&exerciseId='.$row['id'];
 
                 // Link of the exercise.
-                //$item = Display::tag('td', $url.' '.$session_img);
+                $item = Display::tag('td', $url.' '.$session_img);
 
                 // Count number exercise questions.
                 /*$sql = "SELECT count(*) FROM $TBL_EXERCISE_QUESTION
@@ -1160,8 +1158,10 @@ if (!empty($exerciseList)) {
                             if ($num > 0) {
                                 $row_track = Database :: fetch_array($qryres);
                                 $attempt_text = get_lang('LatestAttempt').' : ';
-                                $score = ExerciseLib::show_score($row_track['score'], $row_track['max_score']);
-                                $attempt_text .= $score['html'];
+                                $attempt_text .= ExerciseLib::show_score(
+                                    $row_track['score'],
+                                    $row_track['max_score']
+                                );
                             } else {
                                 //No attempts
                                 $attempt_text = get_lang('NotAttempted');
@@ -1223,11 +1223,10 @@ if (!empty($exerciseList)) {
                         if ($num > 0) {
                             $row_track = Database :: fetch_array($qryres);
                             $attempt_text = get_lang('LatestAttempt').' : ';
-                            $score = ExerciseLib::show_score(
+                            $attempt_text .= ExerciseLib::show_score(
                                 $row_track['score'],
                                 $row_track['max_score']
                             );
-                            $attempt_text .= $score['html'];
                         } else {
                             $attempt_text = get_lang('NotAttempted');
                         }
@@ -1251,10 +1250,7 @@ if (!empty($exerciseList)) {
                     $num = '<span class="tooltip" style="display: none;">'.$num.'</span>';
                 }
 
-                $listExercise['status'] = $attempt_text;
-                $listExercise['description'] = cut($row['description'], 150, false);
-                $listExercise['score'] = $score;
-                $listExercise['number_questions'] = $rowi;
+                $item .= Display::tag('td', $attempt_text);
             }
 
             if ($is_allowedToEdit) {
@@ -1263,17 +1259,23 @@ if (!empty($exerciseList)) {
                 if (!empty($additionalActions)) {
                     $actions .= $additionalActions.PHP_EOL;
                 }
-                $listExercise['actions'] = $actions;
+
+                $item .= Display::tag('td', $actions, ['class' => 'td_actions']);
             } else {
                 if ($isDrhOfCourse) {
                     $actions = '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.
                         Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
-                    $listExercise['actions'] = $actions;
-
-                    // .= Display::tag('td', $actions, ['class' => 'td_actions']);
+                    $item .= Display::tag('td', $actions, ['class' => 'td_actions']);
                 }
             }
-            $list[] = $listExercise;
+
+            $tableRows[] = Display::tag(
+                'tr',
+                $item,
+                [
+                    'id' => 'exercise_list_'.$my_exercise_id,
+                ]
+            );
         }
     }
 }
@@ -1310,12 +1312,10 @@ while ($row = Database :: fetch_array($result, 'ASSOC')) {
 }
 
 $nbrActiveTests = 0;
-$itemHotpotatoes = [];
-$listHotpotatoes = [];
-
 if (isset($attribute['path']) && is_array($attribute['path'])) {
     $hotpotatoes_exist = true;
     foreach ($attribute['path'] as $key => $path) {
+        $item = '';
         $title = GetQuizName($path, $documentPath);
         if ($title == '') {
             $title = basename($path);
@@ -1343,11 +1343,7 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
                 );
             }
 
-            $url = 'showinframes.php?'.api_get_cidreq().'&'.http_build_query(['file' => $path, 'uid' => $userId]);
-            $itemHotpotatoes['url'] = $url;
-            $itemHotpotatoes['visibility'] = $visibility;
-
-            /*$item = Display::tag(
+            $item = Display::tag(
                 'td',
                 implode(PHP_EOL, [
                     Display::return_icon('hotpotatoes_s.png', "HotPotatoes"),
@@ -1360,11 +1356,9 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
                         ['class' => $visibility == 0 ? 'text-muted' : null]
                     ),
                 ])
-            );*/
+            );
 
-            $itemHotpotatoes['title'] = $title;
-
-            //$item .= Display::tag('td', '-');
+            $item .= Display::tag('td', '-');
 
             $actions = Display::url(
                 Display::return_icon(
@@ -1390,12 +1384,8 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
             }
             $actions .= '<a href="'.$exercisePath.'?'.api_get_cidreq().'&hpchoice=delete&file='.$path.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('AreYouSureToDeleteJS'), ENT_QUOTES, $charset).' '.$title."?").'\')) return false;">'.
                 Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
-
-            $itemHotpotatoes['actions'] = $actions;
-
-            $listHotpotatoes[] = $itemHotpotatoes;
-        //$item .= Display::tag('td', $actions);
-            //$tableRows[] = Display::tag('tr', $item);
+            $item .= Display::tag('td', $actions);
+            $tableRows[] = Display::tag('tr', $item);
         } else {
             $visibility = api_get_item_visibility(
                 ['real_id' => $courseId],
@@ -1403,7 +1393,6 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
                 $attribute['id'][$key],
                 $sessionId
             );
-            $itemHotpotatoes['visibility'] = $visibility;
 
             if (0 == $visibility) {
                 continue;
@@ -1417,13 +1406,8 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
                 api_get_session_id()
             );
 
-            $url = 'showinframes.php?'.api_get_cidreq().'&'.http_build_query(['file' => $path, 'cid' => api_get_course_id(), 'uid' => $userId]);
-            $itemHotpotatoes['url'] = $url;
-            $itemHotpotatoes['title'] = $title;
-            $itemHotpotatoes['attempt'] = $attempt;
-
             $nbrActiveTests = $nbrActiveTests + 1;
-            /*$item .= Display::tag(
+            $item .= Display::tag(
                 'td',
                 Display::url(
                     $title,
@@ -1433,60 +1417,46 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
                         'uid' => $userId,
                     ])
                 )
-            );*/
+            );
 
             if (!empty($attempt)) {
-                $urlResults = 'hotpotatoes_exercise_report.php?'.api_get_cidreq().'&path='.$path.'&filter_by_user='.$userId;
-                $itemHotpotatoes['results'] = $url;
-
-                /*$actions = '<a href="hotpotatoes_exercise_report.php?'.api_get_cidreq().'&path='.$path.'&filter_by_user='.$userId.'">'
-                    .Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).
-                    '</a>';*/
-
-                $attemptText = get_lang('LatestAttempt');
-
-                $score = ExerciseLib::show_score(
+                $actions = '<a href="hotpotatoes_exercise_report.php?'.api_get_cidreq().'&path='.$path.'&filter_by_user='.$userId.'">'.Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
+                $attemptText = get_lang('LatestAttempt').' : ';
+                $attemptText .= ExerciseLib::show_score(
                     $attempt['score'],
                     $attempt['max_score']
-                );
-
-                $itemHotpotatoes['score'] = $score;
+                ).' ';
+                $attemptText .= $actions;
             } else {
                 // No attempts.
                 $attemptText = get_lang('NotAttempted').' ';
             }
 
-            $itemHotpotatoes['status'] = $attemptText;
-
-            //$item .= Display::tag('td', $attemptText);
+            $item .= Display::tag('td', $attemptText);
 
             if ($isDrhOfCourse) {
-                $urlResults = 'hotpotatoes_exercise_report.php?'.api_get_cidreq().'&path='.$path;
-                $itemHotpotatoes['results'] = $urlResults;
-                /*$actions = '<a href="hotpotatoes_exercise_report.php?'.api_get_cidreq().'&path='.$path.'">'.
+                $actions = '<a href="hotpotatoes_exercise_report.php?'.api_get_cidreq().'&path='.$path.'">'.
                     Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
 
                 $item .= Display::tag(
                     'td',
                     $actions,
                     ['class' => 'td_actions']
-                );*/
+                );
             }
-
-            $listHotpotatoes[] = $itemHotpotatoes;
-            //$tableRows[] = Display::tag('tr', $item);
+            $tableRows[] = Display::tag('tr', $item);
         }
     }
 }
 
 if (empty($exerciseList) && $hotpotatoes_exist == false) {
     if ($is_allowedToEdit && $origin != 'learnpath') {
-        echo '<div id="no-data-view" class="tool-view">';
+        echo '<div id="no-data-view">';
         echo '<h3>'.get_lang('Quiz').'</h3>';
         echo Display::return_icon('quiz.png', '', [], 64);
         echo '<div class="controls">';
         echo Display::url(
-            '<em class="fa fa-plus"></em> '.get_lang('New Exercise'),
+            '<em class="fa fa-plus"></em> '.get_lang('NewEx'),
             'exercise_admin.php?'.api_get_cidreq(),
             ['class' => 'btn btn-primary']
         );
@@ -1494,7 +1464,7 @@ if (empty($exerciseList) && $hotpotatoes_exist == false) {
         echo '</div>';
     }
 } else {
-    /*if ($is_allowedToEdit) {
+    if ($is_allowedToEdit) {
         $headers = [
             get_lang('ExerciseName'),
             get_lang('QuantityQuestions'),
@@ -1517,7 +1487,7 @@ if (empty($exerciseList) && $hotpotatoes_exist == false) {
     }
 
     echo '<div class="table-responsive">';
-    echo '<table class="table table-hover">';
+    echo '<table class="table table-striped table-hover">';
     echo Display::tag(
         'thead',
         Display::tag('tr', $headerList)
@@ -1530,15 +1500,7 @@ if (empty($exerciseList) && $hotpotatoes_exist == false) {
 
     echo '</tbody>';
     echo '</table>';
-    echo '</div>'*/
-
-    $tpl = new Template(null);
-    $tpl->assign('data', $list);
-    $tpl->assign('hotpotatoes', $listHotpotatoes);
-    $tpl->assign('is_teacher', $is_allowedToEdit);
-    $layout = $tpl->get_template('exercise/index.html.twig');
-    $content = $tpl->fetch($layout);
-    echo $content;
+    echo '</div>';
 }
 
 if ($origin != 'learnpath') { //so we are not in learnpath tool

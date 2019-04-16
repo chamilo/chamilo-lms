@@ -4070,3 +4070,7 @@ table.certaintyTable {
   margin-bottom: 10px;
   vertical-align: top;
 }
+
+.pull-right {
+  @extend .float-right;
+}

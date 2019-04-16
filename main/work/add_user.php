@@ -78,7 +78,7 @@ if (!empty($items)) {
             ['class' => 'btn btn-danger btn-sm']
         );
         echo '<li class="list-group-item">'.
-                $userInfo['complete_name_with_username'].'<div class="float-right">'.$link.'</div></li>';
+                $userInfo['complete_name_with_username'].'<div class="pull-right">'.$link.'</div></li>';
     }
     echo '</ul>';
 }

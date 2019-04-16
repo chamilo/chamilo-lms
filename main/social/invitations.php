@@ -127,7 +127,7 @@ if ($numberLoop != 0) {
         $invitationHtml .= '</div>';
         $invitationHtml .= '<div class="col-md-10">';
 
-        $invitationHtml .= '<div class="float-right">';
+        $invitationHtml .= '<div class="pull-right">';
         $invitationHtml .= '<div class="btn-group btn-group-sm" role="group">';
         $invitationHtml .= Display::toolbarButton(
             null,

@@ -1751,7 +1751,7 @@ class SurveyUtil
         if ($display_extra_user_fields) {
             //show user fields data, if any, for this user
             $user_fields_values = UserManager::get_extra_user_data(
-                intval($user),
+                $user,
                 false,
                 false,
                 false,

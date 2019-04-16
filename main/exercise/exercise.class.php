@@ -1722,7 +1722,6 @@ class Exercise
      * Updates question position.
      *
      * @return bool
-     *
      */
     public function update_question_positions()
     {

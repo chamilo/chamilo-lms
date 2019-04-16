@@ -1282,7 +1282,6 @@ class Event
         $course_id,
         $session_id = 0
     ) {
-
         $user_id = (int) $user_id;
         $exercise_id = (int) $exercise_id;
         $course_id = (int) $course_id;
@@ -1411,9 +1410,9 @@ class Event
     /**
      * Gets all exercise results (NO Exercises in LPs) from a given exercise id, course, session.
      *
-     * @param   int     $user_id
+     * @param int $user_id
      * @param int $courseId
-     * @param   int     $session_id
+     * @param int $session_id
      *
      * @return array with the results
      */

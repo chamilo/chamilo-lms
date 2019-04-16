@@ -843,7 +843,7 @@ class SystemAnnouncementManager
         $sql .= self::getVisibilityCondition($visible);
 
         if (isset($id) && !empty($id)) {
-            $id = intval($id);
+            $id = (int) $id;
             $sql .= " AND id = $id ";
         }
 
@@ -852,7 +852,7 @@ class SystemAnnouncementManager
             $sql .= " AND access_url_id IN ('1', '$current_url_id') ";
         }
 
-        $sql .= " ORDER BY date_start DESC";
+        $sql .= ' ORDER BY date_start DESC';
         $result = Database::query($sql);
         $announcements = [];
 

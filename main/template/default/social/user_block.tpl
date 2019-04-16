@@ -21,7 +21,7 @@
                                     <img src="{{ _p.web_img }}icons/svg/identifier_student.svg" width="32px" height="32px">
                                 {% endif %}
                             </div>
-                        {% elseif user.status == 1 %}
+                        {% elseif user.status == 1 or user.status == 17 %}
                             <div class="avatar-icon">
                                 {% if user.is_admin %}
                                     <img src="{{ _p.web_img }}icons/svg/identifier_admin.svg" width="32px" height="32px">
@@ -33,9 +33,7 @@
                         <!-- END TYPE PROFILE -->
                         <!-- LM -->
                         <div class="avatar-lm">
-
                             <h5></h5>
-
                             {% if user.language %}
                                 {% if user.language.code == 'fr' %}
                                     <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/fr.svg" width="36px">

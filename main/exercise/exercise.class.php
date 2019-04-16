@@ -1720,23 +1720,36 @@ class Exercise
 
     /**
      * Updates question position.
+     *
+     * @return bool
      */
     public function update_question_positions()
     {
         $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        //Fixes #3483 when updating order
-        $question_list = $this->selectQuestionList(true);
-        if (!empty($question_list)) {
-            foreach ($question_list as $position => $questionId) {
+        // Fixes #3483 when updating order
+        $questionList = $this->selectQuestionList(true);
+
+        $this->id = (int) $this->id;
+
+        if (empty($this->id)) {
+            return false;
+        }
+
+        if (!empty($questionList)) {
+            foreach ($questionList as $position => $questionId) {
+                $position = (int) $position;
+                $questionId = (int) $questionId;
                 $sql = "UPDATE $table SET
-                            question_order ='".intval($position)."'
+                            question_order ='".$position."'
                         WHERE
                             c_id = ".$this->course_id." AND
-                            question_id = ".intval($questionId)." AND
-                            exercice_id=".intval($this->id);
+                            question_id = ".$questionId." AND
+                            exercice_id=".$this->id;
                 Database::query($sql);
             }
         }
+
+        return true;
     }
 
     /**

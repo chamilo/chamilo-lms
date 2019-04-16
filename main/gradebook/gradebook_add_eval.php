@@ -14,9 +14,12 @@ api_block_anonymous_users();
 GradebookUtils::block_students();
 
 $select_cat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
-$is_allowedToEdit = $is_courseAdmin;
+$is_allowedToEdit = api_is_course_admin();
+
+$userId = api_get_user_id();
+
 $evaladd = new Evaluation();
-$evaladd->set_user_id($_user['user_id']);
+$evaladd->set_user_id($userId);
 if (!empty($select_cat)) {
     $evaladd->set_category_id($_GET['selectcat']);
     $cat = Category::load($_GET['selectcat']);

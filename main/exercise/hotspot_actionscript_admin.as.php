@@ -59,11 +59,9 @@ $data['image_height'] = $pictureHeight;
 $data['courseCode'] = $_course['path'];
 $data['hotspots'] = [];
 
-// Init
 $i = 0;
 $nmbrTries = 0;
 $answer_type = $objQuestion->type;
-
 $answers = Session::read('tmp_answers');
 $nbrAnswers = count($answers['answer']);
 

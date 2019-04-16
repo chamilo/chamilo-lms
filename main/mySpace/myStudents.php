@@ -95,12 +95,10 @@ if ($export) {
 }
 $csv_content = [];
 $from_myspace = false;
-
+$this_section = SECTION_COURSES;
 if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
     $from_myspace = true;
     $this_section = SECTION_TRACKING;
-} else {
-    $this_section = SECTION_COURSES;
 }
 
 $nameTools = get_lang('StudentDetails');
@@ -163,7 +161,7 @@ if (!empty($details)) {
     }
     $nameTools = get_lang('DetailsStudentInCourse');
 } else {
-    if ($origin == 'resume_session') {
+    if ($origin === 'resume_session') {
         $interbreadcrumb[] = [
             'url' => "../session/session_list.php",
             'name' => get_lang('SessionList'),
@@ -393,7 +391,6 @@ switch ($action) {
 
         $params = [
             'pdf_title' => get_lang('Resume'),
-            //'course_code' => api_get_course_id(),
             'session_info' => $sessionInfo,
             'course_info' => '',
             'pdf_date' => '',
@@ -572,6 +569,7 @@ switch ($action) {
     default:
         break;
 }
+
 $courses_in_session = [];
 
 // See #4676
@@ -657,15 +655,7 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
 if (api_is_drh() && !api_is_platform_admin()) {
     if (!empty($student_id)) {
         if (api_drh_can_access_all_session_content()) {
-            //@todo securize drh with student id
-            /*$users = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus('drh_all', api_get_user_id());
-            $userList = array();
-            foreach ($users as $user) {
-                $userList[] = $user['user_id'];
-            }
-            if (!in_array($student_id, $userList)) {
-                api_not_allowed(true);
-            }*/
+          
         } else {
             if (!$isDrhOfCourse) {
                 if (api_is_drh() &&
@@ -775,7 +765,12 @@ $avg_student_progress = $avg_student_score = 0;
 if (empty($sessionId)) {
     $isSubscribedToCourse = CourseManager::is_user_subscribed_in_course($user_info['user_id'], $course_code);
 } else {
-    $isSubscribedToCourse = CourseManager::is_user_subscribed_in_course($user_info['user_id'], $course_code, true, $sessionId);
+    $isSubscribedToCourse = CourseManager::is_user_subscribed_in_course(
+        $user_info['user_id'],
+        $course_code,
+        true,
+        $sessionId
+    );
 }
 
 if ($isSubscribedToCourse) {
@@ -884,7 +879,7 @@ $userInfo = [
     'profile_url' => $user_info['profile_url'],
     'groups' => $userGroupManager,
     'avatar' => $userPicture,
-    'online' => $online
+    'online' => $online,
 ];
 
 if (!empty($course_code)) {
@@ -973,7 +968,10 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
 
 ?>
     <div class="row">
+       
         <div class="col-sm-5">
+
+
 
             <?php if (!empty($userGroups)) {
                     ?>
@@ -1632,7 +1630,7 @@ if (empty($details)) {
         $i = 0;
         if (Database::num_rows($result_exercices) > 0) {
             while ($exercices = Database::fetch_array($result_exercices)) {
-                $exercise_id = intval($exercices['id']);
+                $exercise_id = (int) $exercices['id'];
                 $count_attempts = Tracking::count_student_exercise_attempts(
                     $student_id,
                     $courseInfo['real_id'],

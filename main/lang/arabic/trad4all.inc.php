@@ -1192,7 +1192,7 @@ $HideAndSubscribeClosed = " مخفي / مغلق";
 $HideAndSubscribeOpen = " مخفي / مفتوح";
 $ShowAndSubscribeOpen = " ظاهر / مفتوح";
 $ShowAndSubscribeClosed = " ظاهر / مغلق";
-$AdminThisUser = " Back to user";
+$AdminThisUser = "الرجوع للمستخدم";
 $Manage = " Portal ادارة الـ";
 $EnrollToCourseSuccessful = " لقد تم تسجيلك في المقرر";
 $SubCat = " التصانيف الفرعية";
@@ -1644,7 +1644,7 @@ $ShowIconsInNavigationsMenuComment = " هل ستظهر قائمة التصفح �
 $Plugin = " ادخال";
 $MainMenu = " القائمة الرئيسية";
 $MainMenuLogged = " القائمة الرئيسية بعد تسجيل الدخول";
-$Banner = " Banner";
+$Banner = "لافتة";
 $ImageResizeTitle = " تغيير حجم صور المستخدم التي تم تحميلها";
 $ImageResizeComment = " .غير متاح يتم تجاهل هذا الإعداد بشكل صامت (GD) إذا كان جي دي  <a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">GD library - مكتبة معالجة الصور </a> بـ PHP ال  (compile) يمكن إعادة تحجيم صور المستخدم عند التحميل إذا تم تجميع";
 $MaxImageWidthTitle = "  الحد الأقصى لعرض صورة المستخدم";
@@ -3098,7 +3098,7 @@ $Logout = "تسجيل خروج";
 $MyAgenda = "التقويم الشخصي";
 $CourseHomepage = "صفحة المقرر";
 $SwitchToTeacherView = "معاينة منظور المدرس";
-$SwitchToStudentView = " معاينة واجهة الطلاب";
+$SwitchToStudentView = "عرض منظور الطالب";
 $AddResource = "أضفه";
 $AddedResources = "مرفقات";
 $TimeReportForTeacherX = "تقرير الوقت للمدرس %s";
@@ -8419,4 +8419,6 @@ $VoteDislike = "لا يعجبني";
 $GenerateStats = "توليد احصاءات";
 $BasicCourseDocuments = "المستندات الاساسية للمقرر";
 $WeekX = "اسبوعX";
+$QuizWrongAnswerHereIsTheCorrectOne = ":اجابة خاطئة. الاجابة الصحيحة كانت";
+$ThisQuizCanBeEmbeddable = "يمكن تضمين الاختبار في الفيديوهات او محتوى الموبايل";
 ?>

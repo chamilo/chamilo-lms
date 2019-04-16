@@ -310,7 +310,6 @@ if (isset($_SESSION['oLP'])) {
     $_SESSION['oLP']->update_queue = [];
 }
 
-
 $action = !empty($_REQUEST['action']) ? $_REQUEST['action'] : '';
 
 if ($debug) {

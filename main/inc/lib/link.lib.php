@@ -1100,7 +1100,7 @@ class Link extends Model
                             false
                         );
 
-                        $url .= api_get_self().'?'.api_get_cidreq().'&sec_token='.$token.'&action=deletelink&id='.$linkId.'&category_id='.$categoryId;
+                        $url = api_get_self().'?'.api_get_cidreq().'&sec_token='.$token.'&action=deletelink&id='.$linkId.'&category_id='.$categoryId;
                         $event = "javascript: if(!confirm('".get_lang('LinkDelconfirm')."'))return false;";
                         $title = get_lang('Delete');
 

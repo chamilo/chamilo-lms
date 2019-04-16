@@ -952,6 +952,7 @@ abstract class Question
             if ($exercise->questionFeedbackEnabled) {
                 $params['feedback'] = $this->feedback;
             }
+
             Database::update(
                 $TBL_QUESTIONS,
                 $params,
@@ -974,24 +975,17 @@ abstract class Question
                     api_get_user_id()
                 );
             }
-            if (api_get_setting('search_enabled') == 'true') {
-                if ($exerciseId != 0) {
-                    $this->search_engine_edit($exerciseId);
-                } else {
-                    /**
-                     * actually there is *not* an user interface for
-                     * creating questions without a relation with an exercise.
-                     */
-                }
+            if (api_get_setting('search_enabled') === 'true') {
+                $this->search_engine_edit($exerciseId);
             }
         } else {
-            // creates a new question
+            // Creates a new question
             $sql = "SELECT max(position)
                     FROM $TBL_QUESTIONS as question,
                     $TBL_EXERCISE_QUESTION as test_question
                     WHERE
                         question.id = test_question.question_id AND
-                        test_question.exercice_id = ".intval($exerciseId)." AND
+                        test_question.exercice_id = ".$exerciseId." AND
                         question.c_id = $c_id AND
                         test_question.c_id = $c_id ";
             $result = Database::query($sql);
@@ -1087,33 +1081,33 @@ abstract class Question
                     }
                 }
 
-                if (api_get_setting('search_enabled') == 'true') {
-                    if ($exerciseId != 0) {
-                        $this->search_engine_edit($exerciseId, true);
-                    } else {
-                        /**
-                         * actually there is *not* an user interface for
-                         * creating questions without a relation with an exercise.
-                         */
-                    }
+                if (api_get_setting('search_enabled') === 'true') {
+                    $this->search_engine_edit($exerciseId, true);
                 }
             }
         }
 
         // if the question is created in an exercise
-        if ($exerciseId) {
+        if (!empty($exerciseId)) {
             // adds the exercise into the exercise list of this question
             $this->addToList($exerciseId, true);
         }
     }
 
+    /**
+     * @param int  $exerciseId
+     * @param bool $addQs
+     * @param bool $rmQs
+     */
     public function search_engine_edit(
         $exerciseId,
         $addQs = false,
         $rmQs = false
     ) {
         // update search engine and its values table if enabled
-        if (api_get_setting('search_enabled') == 'true' && extension_loaded('xapian')) {
+        if (!empty($exerciseId) && api_get_setting('search_enabled') == 'true' &&
+            extension_loaded('xapian')
+        ) {
             $course_id = api_get_course_id();
             // get search_did
             $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
@@ -1260,9 +1254,11 @@ abstract class Question
     public function addToList($exerciseId, $fromSave = false)
     {
         $exerciseRelQuestionTable = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $id = $this->id;
+        $id = (int) $this->id;
+        $exerciseId = (int) $exerciseId;
+
         // checks if the exercise ID is not in the list
-        if (!in_array($exerciseId, $this->exerciseList)) {
+        if (!empty($exerciseId) && !in_array($exerciseId, $this->exerciseList)) {
             $this->exerciseList[] = $exerciseId;
             $courseId = isset($this->course['real_id']) ? $this->course['real_id'] : 0;
             $newExercise = new Exercise($courseId);
@@ -1270,7 +1266,7 @@ abstract class Question
             $count = $newExercise->getQuestionCount();
             $count++;
             $sql = "INSERT INTO $exerciseRelQuestionTable (c_id, question_id, exercice_id, question_order)
-                    VALUES ({$this->course['real_id']}, ".intval($id).", ".intval($exerciseId).", '$count')";
+                    VALUES ({$this->course['real_id']}, ".$id.", ".$exerciseId.", '$count')";
             Database::query($sql);
 
             // we do not want to reindex if we had just saved adnd indexed the question
@@ -1606,10 +1602,10 @@ abstract class Question
         $form->addRule('questionName', get_lang('GiveQuestion'), 'required');
 
         // default content
-        $isContent = isset($_REQUEST['isContent']) ? intval($_REQUEST['isContent']) : null;
+        $isContent = isset($_REQUEST['isContent']) ? (int) $_REQUEST['isContent'] : null;
 
         // Question type
-        $answerType = isset($_REQUEST['answerType']) ? intval($_REQUEST['answerType']) : null;
+        $answerType = isset($_REQUEST['answerType']) ? (int) $_REQUEST['answerType'] : null;
         $form->addElement('hidden', 'answerType', $answerType);
 
         // html editor
@@ -1631,10 +1627,6 @@ abstract class Question
             false,
             $editorConfig
         );
-
-        // hidden values
-        $my_id = isset($_REQUEST['myid']) ? intval($_REQUEST['myid']) : null;
-        $form->addElement('hidden', 'myid', $my_id);
 
         if ($this->type != MEDIA_QUESTION) {
             // Advanced parameters
@@ -1746,13 +1738,17 @@ abstract class Question
             $form->setDefaults($defaults);
         }
 
-        if (!empty($_REQUEST['myid'])) {
+        if (!isset($_GET['newQuestion']) || $isContent) {
+            $form->setDefaults($defaults);
+        }
+
+        /*if (!empty($_REQUEST['myid'])) {
             $form->setDefaults($defaults);
         } else {
             if ($isContent == 1) {
                 $form->setDefaults($defaults);
             }
-        }
+        }*/
     }
 
     /**

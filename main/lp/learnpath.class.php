@@ -2299,11 +2299,15 @@ class learnpath
         $lpItemId = (int) $lpItemId;
 
         /** @var learnpathItem $item */
-        $item = $this->items[$lpItemId];
-        $itemViewId = (int) $item->db_item_view_id;
+        $item = isset($this->items[$lpItemId]) ? $this->items[$lpItemId] : null;
+        $itemViewId = 0;
+        if ($item) {
+            $itemViewId = (int) $item->db_item_view_id;
+        }
 
         // Getting all the information about the item.
-        $sql = "SELECT lpi.audio, lpi.item_type, lp_view.status FROM $tbl_lp_item as lpi
+        $sql = "SELECT lpi.audio, lpi.item_type, lp_view.status 
+                FROM $tbl_lp_item as lpi
                 INNER JOIN $tbl_lp_item_view as lp_view
                 ON (lpi.iid = lp_view.lp_item_id)
                 WHERE
@@ -2404,7 +2408,6 @@ class learnpath
         }
 
         $isBlocked = false;
-
         if (!empty($prerequisite)) {
             $progress = self::getProgress(
                 $prerequisite,
@@ -2438,12 +2441,6 @@ class learnpath
                     $accumulateWorkTime = ($pl * $tc * $perc / 100);
 
                     // Spent time (in seconds) so far in the learning path
-                    /*$lpTime = Tracking::get_time_spent_in_lp(
-                        $studentId,
-                        $courseInfo['code'],
-                        [$prerequisite],
-                        $sessionId
-                    );*/
                     $lpTimeList = Tracking::getCalculateTime($studentId, $courseId, $sessionId);
                     $lpTime = isset($lpTimeList[TOOL_LEARNPATH][$prerequisite]) ? $lpTimeList[TOOL_LEARNPATH][$prerequisite] : 0;
 
@@ -2614,7 +2611,6 @@ class learnpath
         $userId = (int) $userId;
         $courseId = (int) $courseId;
         $sessionId = (int) $sessionId;
-        $progress = 0;
 
         $sessionCondition = api_get_session_condition($sessionId);
         $table = Database::get_course_table(TABLE_LP_VIEW);
@@ -2624,12 +2620,14 @@ class learnpath
                     lp_id = $lpId AND
                     user_id = $userId $sessionCondition ";
         $res = Database::query($sql);
+
+        $progress = 0;
         if (Database::num_rows($res) > 0) {
             $row = Database:: fetch_array($res);
-            $progress = $row['progress'];
+            $progress = (int) $row['progress'];
         }
 
-        return (int) $progress;
+        return $progress;
     }
 
     /**
@@ -4715,6 +4713,10 @@ class learnpath
         $category = $em->find('ChamiloCourseBundle:CLpCategory', $id);
 
         if (!$category) {
+            return false;
+        }
+
+        if (empty($courseId)) {
             return false;
         }
 

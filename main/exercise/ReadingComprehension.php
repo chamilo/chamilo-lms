@@ -155,10 +155,8 @@ class ReadingComprehension extends UniqueAnswer
         }
 
         // hidden values
-        $my_id = isset($_REQUEST['myid']) ? intval($_REQUEST['myid']) : null;
-        $form->addElement('hidden', 'myid', $my_id);
         $form->addRule('questionName', get_lang('GiveQuestion'), 'required');
-        $isContent = isset($_REQUEST['isContent']) ? intval($_REQUEST['isContent']) : null;
+        $isContent = isset($_REQUEST['isContent']) ? (int) $_REQUEST['isContent'] : null;
 
         // default values
         $defaults = [];
@@ -172,12 +170,8 @@ class ReadingComprehension extends UniqueAnswer
             $form->setDefaults($defaults);
         }
 
-        if (!empty($_REQUEST['myid'])) {
+        if (!isset($_GET['newQuestion']) || $isContent) {
             $form->setDefaults($defaults);
-        } else {
-            if ($isContent == 1) {
-                $form->setDefaults($defaults);
-            }
         }
     }
 

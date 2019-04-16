@@ -54,6 +54,9 @@ if ($formSent) {
 
     $questions = $repo->matching($criteria);
 
+    if (empty($id)) {
+        $id = '';
+    }
     $params = [
         'id' => $id,
         'title' => $title,
@@ -127,7 +130,6 @@ if ($formSent) {
                         $url.http_build_query([
                             'cidReq' => $courseCode,
                             'id_session' => $exercise->sessionId,
-                            'myid' => 1,
                             'exerciseId' => $exerciseId,
                             'type' => $question->getType(),
                             'editQuestion' => $question->getId(),
@@ -136,10 +138,14 @@ if ($formSent) {
                 }
                 $question->questionData .= '<br />'.$exerciseData;
             } else {
-                $question->questionData .= get_lang('Course').': '.Display::url(
-                    $courseInfo['name'],
-                    $exerciseUrl.http_build_query([
+                $question->questionData = Display::url(
+                    Display::return_icon('edit.png', get_lang('Edit')),
+                    $url.http_build_query([
                         'cidReq' => $courseCode,
+                        'id_session' => $exercise->sessionId,
+                        'exerciseId' => $exerciseId,
+                        'type' => $question->getType(),
+                        'editQuestion' => $question->getId(),
                     ])
                 );
             }

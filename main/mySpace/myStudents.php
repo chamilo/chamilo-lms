@@ -966,6 +966,54 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
     ];
 }
 
+$nb_assignments = Tracking::count_student_assignments($student_id, $course_code, $sessionId);
+$messages = Tracking::count_student_messages($student_id, $course_code, $sessionId);
+$links = Tracking::count_student_visited_links($student_id, $courseInfo['real_id'], $sessionId);
+$chat_last_connection = Tracking::chat_last_connection($student_id, $courseInfo['real_id'], $sessionId);
+$documents = Tracking::count_student_downloaded_documents($student_id, $courseInfo['real_id'], $sessionId);
+$uploaded_documents = Tracking::count_student_uploaded_documents($student_id, $course_code, $sessionId);
+
+$userInfo['tools'] = [
+    'tasks' => $nb_assignments,
+    'messages' => $messages,
+    'links' => $links,
+    'chat_connection' => $chat_last_connection,
+    'documents' => $documents,
+    'upload_documents' => $uploaded_documents
+];
+
+$tpl = new Template('',
+    false,
+    false,
+    false,
+    false,
+    false,
+    false);
+$tpl->assign('user', $userInfo);
+$templateName = $tpl->get_template('my_space/user_details.tpl');
+$content = $tpl->fetch($templateName);
+
+echo $content;
+
+$allowAll = api_get_configuration_value('allow_teacher_access_student_skills');
+if ($allowAll) {
+    // Show all skills
+    echo Tracking::displayUserSkills(
+        $user_info['user_id'],
+        0,
+        0,
+        true
+    );
+} else {
+    // Default behaviour - Show all skills depending the course and session id
+    echo Tracking::displayUserSkills(
+        $user_info['user_id'],
+        $courseInfo ? $courseInfo['real_id'] : 0,
+        $sessionId
+    );
+}
+echo '<br><br>';
+
 ?>
     <div class="row">
        
@@ -1873,21 +1921,7 @@ if (empty($details)) {
 
 
     $csv_content[] = [];
-    $nb_assignments = Tracking::count_student_assignments($student_id, $course_code, $sessionId);
-    $messages = Tracking::count_student_messages($student_id, $course_code, $sessionId);
-    $links = Tracking::count_student_visited_links($student_id, $courseInfo['real_id'], $sessionId);
-    $chat_last_connection = Tracking::chat_last_connection($student_id, $courseInfo['real_id'], $sessionId);
-    $documents = Tracking::count_student_downloaded_documents($student_id, $courseInfo['real_id'], $sessionId);
-    $uploaded_documents = Tracking::count_student_uploaded_documents($student_id, $course_code, $sessionId);
 
-    $userInfo['tools'] = [
-            'tasks' => $nb_assignments,
-            'messages' => $messages,
-            'links' => $links,
-            'chat_connection' => $chat_last_connection,
-            'documents' => $documents,
-            'upload_documents' => $uploaded_documents
-    ];
 
     $csv_content[] = [
         get_lang('OtherTools'),
@@ -1920,23 +1954,7 @@ if (empty($details)) {
 
 } //end details
 
-$allowAll = api_get_configuration_value('allow_teacher_access_student_skills');
-if ($allowAll) {
-    // Show all skills
-    echo Tracking::displayUserSkills(
-        $user_info['user_id'],
-        0,
-        0,
-        true
-    );
-} else {
-    // Default behaviour - Show all skills depending the course and session id
-    echo Tracking::displayUserSkills(
-        $user_info['user_id'],
-        $courseInfo ? $courseInfo['real_id'] : 0,
-        $sessionId
-    );
-}
+
 
 if ($allowMessages === true) {
     // Messages
@@ -2013,17 +2031,5 @@ if ($export) {
 }
 
 
-$tpl = new Template('',
-    false,
-    false,
-    false,
-    false,
-    false,
-    false);
-$tpl->assign('user', $userInfo);
-$templateName = $tpl->get_template('my_space/user_details.tpl');
-$content = $tpl->fetch($templateName);
-
-echo $content;
 
 Display::display_footer();

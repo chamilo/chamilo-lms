@@ -74,7 +74,7 @@
                             <div class="card box-widget">
                                 <div class="card-body">
                                     <div class="stat-widget-five">
-                                        <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                                        <i class="fa fa-download" aria-hidden="true"></i>
                                         {{ user.tools.documents }}
                                         <div class="box-name">
                                             {{ 'DocumentsDetails'|get_lang }}
@@ -113,7 +113,7 @@
                             <div class="card box-widget">
                                 <div class="card-body">
                                     <div class="stat-widget-five">
-                                        <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                                        <i class="fa fa-paper-plane" aria-hidden="true"></i>
                                         {{ user.tools.upload_documents }}
                                         <div class="box-name">
                                             {{ 'UploadedDocuments'|get_lang }}

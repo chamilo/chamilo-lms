@@ -4716,6 +4716,10 @@ class learnpath
             return false;
         }
 
+        if (empty($courseId)) {
+            return false;
+        }
+
         $link = self::getCategoryLinkForTool($id);
 
         /** @var CTool $tool */

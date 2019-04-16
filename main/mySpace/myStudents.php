@@ -862,11 +862,29 @@ $table_title = Display::return_icon('user.png', get_lang('User')).$user_info['co
 
 echo Display::page_subheader($table_title);
 $userPicture = UserManager::getUserPicture($user_info['user_id'], USER_IMAGE_SIZE_BIG);
+
 $userGroupManager = new UserGroup();
 $userGroups = $userGroupManager->getNameListByUser(
     $user_info['user_id'],
     UserGroup::NORMAL_CLASS
 );
+
+$userInfo = [
+        'id' => $user_info['user_id'],
+        'complete_name' => $user_info['complete_name'],
+    'complete_name_link' => $user_info['complete_name_with_message_link'],
+    'phone' => $user_info['phone'],
+    'code' => $user_info['official_code'],
+    'username' => $user_info['username'],
+    'registration_date' => $user_info['registration_date'],
+    'email' => $user_info['email'],
+    'has_certificates' => $user_info['has_certificates'],
+    'last_login' => $user_info['last_login'],
+    'profile_url' => $user_info['profile_url'],
+    'groups' => $userGroupManager,
+    'avatar' => $userPicture,
+    'online' => $online
+];
 ?>
     <div class="row">
         <div class="col-sm-2">
@@ -1070,6 +1088,18 @@ $userGroups = $userGroupManager->getNameListByUser(
         </div>
     </div>
 <?php
+
+
+$tpl = new Template('',
+    false,
+    false,
+    false,
+    false,
+    false,
+    false);
+$tpl->assign('user', $userInfo);
+$templateName = $tpl->get_template('my_space/user_details.tpl');
+$content = $tpl->fetch($templateName);
 
 $exportCourseList = [];
 $lpIdList = [];
@@ -2110,5 +2140,7 @@ if ($export) {
     }
     exit;
 }
+
+echo $content;
 
 Display::display_footer();

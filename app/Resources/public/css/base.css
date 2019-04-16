@@ -9866,7 +9866,7 @@ ul.dropdown-menu.inner > li > a {
     width: 14%;
 }
 .summary-item .summary-course{
-    width: 80%;
+    width: 82%;
 }
 .summary-item .summary-course .alert{
     margin-bottom: 0;
@@ -9901,13 +9901,15 @@ ul.dropdown-menu.inner > li > a {
     font-size: 12px;
     border-radius: 5px;
 }
+.summary-item .summary-course .course-item .box.box-date{
+    width: 20%;
+}
 .summary-item .summary-course .course-item .box .kt-badge{
     height: 0;
     width: auto;
     padding: 0.5rem 0.5rem;
     border-radius: 2px;
     font-weight: bold;
-    border: 1px solid;
 }
 .summary-legend{
     padding: 10px 0;
@@ -9955,9 +9957,8 @@ ul.dropdown-menu.inner > li > a {
     color: #FF5722;
 }
 .last-connection{
-    color: #2196f3;
-    background: rgba(57, 217, 253, 0.35);
 }
+
 @media (min-width: 768px) {
     .clear-rows-6-4-3 .col-sm-6:nth-child(2n+1) {
         clear: left;

@@ -20,16 +20,10 @@ switch ($action) {
         $courseQuota = DocumentManager::get_course_quota();
 
         // Calculating the total space
-        $already_consumed_space_course = DocumentManager::documents_total_space(
-            api_get_course_int_id()
-        );
+        $total = DocumentManager::documents_total_space(api_get_course_int_id());
 
         // Displaying the quota
-        echo DocumentManager::displaySimpleQuota(
-            $courseQuota,
-            $already_consumed_space_course
-        );
-
+        echo DocumentManager::displaySimpleQuota($courseQuota, $total);
         break;
     case 'upload_file':
         api_protect_course_script(true);

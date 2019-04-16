@@ -21,7 +21,7 @@ class FeatureContext extends MinkContext
      */
     public function iAmAPlatformAdministrator()
     {
-        $this->visit('/index.php?logout=logout');
+        $this->visit('/index.php?logout=logout&uid=1');
         $this->iAmOnHomepage();
         $this->fillField('login', 'admin');
         $this->fillField('password', 'admin');

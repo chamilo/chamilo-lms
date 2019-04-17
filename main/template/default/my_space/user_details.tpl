@@ -37,6 +37,7 @@
         <div class="col-md-8">
             <div class="row">
                 <div class="col-md-8">
+                    {% if details %}
                     <div class="row">
                         <div class="col-md-6">
                             <div class="easy-donut">
@@ -145,6 +146,7 @@
 
                         </div>
                     </div>
+                    {% endif %}
                 </div>
                 <div class="col-md-4">
                     <div class="card card-first-date">

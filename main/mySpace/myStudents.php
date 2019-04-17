@@ -962,21 +962,27 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
     ];
 }
 
-$nb_assignments = Tracking::count_student_assignments($student_id, $course_code, $sessionId);
-$messages = Tracking::count_student_messages($student_id, $course_code, $sessionId);
-$links = Tracking::count_student_visited_links($student_id, $courseInfo['real_id'], $sessionId);
-$chat_last_connection = Tracking::chat_last_connection($student_id, $courseInfo['real_id'], $sessionId);
-$documents = Tracking::count_student_downloaded_documents($student_id, $courseInfo['real_id'], $sessionId);
-$uploaded_documents = Tracking::count_student_uploaded_documents($student_id, $course_code, $sessionId);
+$details = false;
 
-$userInfo['tools'] = [
-    'tasks' => $nb_assignments,
-    'messages' => $messages,
-    'links' => $links,
-    'chat_connection' => $chat_last_connection,
-    'documents' => $documents,
-    'upload_documents' => $uploaded_documents,
-];
+if(!empty($courseInfo)) {
+    $nb_assignments = Tracking::count_student_assignments($student_id, $course_code, $sessionId);
+    $messages = Tracking::count_student_messages($student_id, $course_code, $sessionId);
+    $links = Tracking::count_student_visited_links($student_id, $courseInfo['real_id'], $sessionId);
+    $chat_last_connection = Tracking::chat_last_connection($student_id, $courseInfo['real_id'], $sessionId);
+    $documents = Tracking::count_student_downloaded_documents($student_id, $courseInfo['real_id'], $sessionId);
+    $uploaded_documents = Tracking::count_student_uploaded_documents($student_id, $course_code, $sessionId);
+
+    $userInfo['tools'] = [
+        'tasks' => $nb_assignments,
+        'messages' => $messages,
+        'links' => $links,
+        'chat_connection' => $chat_last_connection,
+        'documents' => $documents,
+        'upload_documents' => $uploaded_documents,
+    ];
+} else {
+    $details = true;
+}
 
 $tpl = new Template('',
     false,
@@ -986,6 +992,7 @@ $tpl = new Template('',
     false,
     false);
 $tpl->assign('user', $userInfo);
+$tpl->assign('details', $details);
 $templateName = $tpl->get_template('my_space/user_details.tpl');
 $content = $tpl->fetch($templateName);
 

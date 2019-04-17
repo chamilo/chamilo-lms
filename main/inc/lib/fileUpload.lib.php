@@ -1713,7 +1713,7 @@ function create_unexisting_directory(
 
                 if ($document_id) {
                     // Update document item_property
-                    if (!empty($visibility)) {
+                    if (in_array($visibility, [0, 1, 2])) {
                         $visibilities = [
                             0 => 'invisible',
                             1 => 'visible',

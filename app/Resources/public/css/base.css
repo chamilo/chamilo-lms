@@ -2069,13 +2069,19 @@ div.admin_section h4 {
     border: 2px dotted #BDB76B;
 }
 
-#lp_item_list ul, #lp_item_list li {
+#lp_item_list li{
+    border-bottom: 1px solid #dddddd;
     width: 100%;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+#lp_item_list li:last-child{
+    border-bottom: none;
 }
 
 #lp_item_list .item_data {
-    padding: 0;
-    /* float:left;*/
+    padding: .5em;
 }
 
 #lp_item_list .item_data span {
@@ -2089,6 +2095,7 @@ div.admin_section h4 {
 
 .item_data:hover .button_actions {
     display: block;
+    padding-top: 5px;
 }
 
 #lp_item_list .item {
@@ -4162,6 +4169,11 @@ a.forum-goto {
     margin: 5px;
     width: 100%;
     float: left;
+}
+.doc_resource.lp_resource_element .item_data{
+    display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
 }
 
 .lp_resource_element_new {

@@ -3715,21 +3715,23 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
  *
  * @param int   $workId
  * @param array $courseInfo
- * @param int   $session_id
+ * @param int   $sessionId
  */
-function sendAlertToUsers($workId, $courseInfo, $session_id)
+function sendAlertToUsers($workId, $courseInfo, $sessionId)
 {
-    $user_list = [];
-    $workData = get_work_data_by_id($workId, $courseInfo['real_id'], $session_id);
+    $sessionId = (int) $sessionId;
+
+    $workData = get_work_data_by_id($workId, $courseInfo['real_id'], $sessionId);
     // last value is to check this is not "just" an edit
     // YW Tis part serve to send a e-mail to the tutors when a new file is sent
     $send = api_get_course_setting('email_alert_manager_on_new_doc');
 
+    $userList = [];
     if ($send == SEND_EMAIL_EVERYONE || $send == SEND_EMAIL_TEACHERS) {
         // Lets predefine some variables. Be sure to change the from address!
-        if (empty($session_id)) {
-            //Teachers
-            $user_list = CourseManager::get_user_list_from_course_code(
+        if (empty($sessionId)) {
+            // Teachers
+            $userList = CourseManager::get_user_list_from_course_code(
                 api_get_course_id(),
                 null,
                 null,
@@ -3738,9 +3740,9 @@ function sendAlertToUsers($workId, $courseInfo, $session_id)
             );
         } else {
             // Coaches
-            $user_list = CourseManager::get_user_list_from_course_code(
+            $userList = CourseManager::get_user_list_from_course_code(
                 api_get_course_id(),
-                $session_id,
+                $sessionId,
                 null,
                 null,
                 2
@@ -3749,34 +3751,22 @@ function sendAlertToUsers($workId, $courseInfo, $session_id)
     }
 
     if ($send == SEND_EMAIL_EVERYONE || $send == SEND_EMAIL_STUDENTS) {
-        if (!$session_id) {
-            $session_id = null;
-        }
-        $student = CourseManager::get_user_list_from_course_code(
-            api_get_course_id(),
-            $session_id,
-            null,
-            null,
-            STUDENT,
-            null,
-            null,
-            null,
-            null,
-            null,
-            [api_get_user_id()]
-        );
-        $user_list = array_merge($user_list, $student);
+        // Send mail only to sender
+        $studentList = [[
+           'user_id' => api_get_user_id()
+        ]];
+        $userList = array_merge($userList, $studentList);
     }
 
     if ($send) {
         $subject = "[".api_get_setting('siteName')."] ".get_lang('SendMailBody')."\n ".get_lang('CourseName').": ".$courseInfo['name']."  ";
-        foreach ($user_list as $user_data) {
+        foreach ($userList as $user_data) {
             $to_user_id = $user_data['user_id'];
             $user_info = api_get_user_info($to_user_id);
             $message = get_lang('SendMailBody')."\n".get_lang('CourseName')." : ".$courseInfo['name']."\n";
             $message .= get_lang('UserName')." : ".$user_info['complete_name']."\n";
             $message .= get_lang('DateSent')." : ".api_format_date(api_get_local_time())."\n";
-            $url = api_get_path(WEB_CODE_PATH)."work/work.php?cidReq=".$courseInfo['code']."&id_session=".$session_id."&id=".$workData['id'];
+            $url = api_get_path(WEB_CODE_PATH)."work/work.php?cidReq=".$courseInfo['code']."&id_session=".$sessionId."&id=".$workData['id'];
             $message .= get_lang('WorkName')." : ".$workData['title']."\n\n".'<a href="'.$url.'">'.get_lang('DownloadLink')."</a>\n";
             MessageManager::send_message_simple(
                 $to_user_id,
@@ -3950,12 +3940,13 @@ function processWorkForm(
             }
 
             if (array_key_exists('document_id', $workInfo)) {
-                $documentId = isset($values['document_id']) ? intval($values['document_id']) : 0;
+                $documentId = isset($values['document_id']) ? (int) $values['document_id'] : 0;
                 $sql = "UPDATE $work_table SET
                             document_id = '$documentId'
                         WHERE iid = $workId";
                 Database::query($sql);
             }
+
             api_item_property_update(
                 $courseInfo,
                 'work',

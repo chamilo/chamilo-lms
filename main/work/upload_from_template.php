@@ -22,6 +22,7 @@ $session_id = api_get_session_id();
 $course_info = api_get_course_info();
 $course_code = $course_info['code'];
 $group_id = api_get_group_id();
+$sessionId = api_get_session_id();
 
 if (empty($work_id)) {
     api_not_allowed(true);
@@ -92,7 +93,7 @@ if ($form->validate()) {
             $workInfo,
             $values,
             $course_info,
-            $id_session,
+            $sessionId,
             $group_id,
             $user_id,
             [],

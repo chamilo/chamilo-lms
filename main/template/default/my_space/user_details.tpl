@@ -1,3 +1,6 @@
+<div class="page-header">
+    <h3>{{ user.complete_name }}</h3>
+</div>
 <div class="details">
     <div class="row">
         <div class="col-md-4">

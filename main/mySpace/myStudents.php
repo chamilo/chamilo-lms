@@ -853,9 +853,7 @@ $csv_content[] = [
 
 $coachs_name = '';
 $session_name = '';
-$table_title = Display::return_icon('user.png', get_lang('User')).$user_info['complete_name'];
 
-echo Display::page_subheader($table_title);
 $userPicture = UserManager::getUserPicture($user_info['user_id'], USER_IMAGE_SIZE_BIG);
 
 $userGroupManager = new UserGroup();
@@ -1370,7 +1368,7 @@ if (empty($details)) {
 
     if ($user_info['status'] != INVITEE) {
         $csv_content[] = [];
-        $csv_content[] = [str_replace('&nbsp;', '', strip_tags($table_title))];
+        $csv_content[] = [str_replace('&nbsp;', '', strip_tags($userInfo['complete_name']))];
         $trackingColumns = api_get_configuration_value('tracking_columns');
         if (isset($trackingColumns['my_students_lp'])) {
             foreach ($columnHeaders as $key => $value) {

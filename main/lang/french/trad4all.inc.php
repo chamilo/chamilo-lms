@@ -8323,4 +8323,5 @@ $WeekX = "Semaine %s";
 $QuizWrongAnswerHereIsTheCorrectOne = "Vous vous êtes trompé. La réponse correcte était :";
 $ThisQuizCanBeEmbeddable = "Cet exercice peut être inséré dans une vidéo ou du contenu mobile";
 $SearchGeolocalization = "Localiser par l'adresse";
+$LegalTermsAgreementStatus = "État d'acceptation des conditions d'utilisation";
 ?>

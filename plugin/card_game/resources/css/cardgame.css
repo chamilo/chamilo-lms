@@ -1,0 +1,238 @@
+/** CSS used to show a 5x3 table of cells hiding a big image */
+#home-card {
+    overflow: hidden;
+}
+
+.enjoy-cardgame-active {
+    position: relative;
+    left: 50%;
+    top: 90%;
+    width: 40px;
+    height: 40px;
+    margin-top: -35px;
+    margin-left: 10px;
+    background-image: url('card-acces-active.svg');
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: center fixed;
+    -webkit-background-size: cover;
+    background-size: cover;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.enjoy-cardgame {
+    position: relative;
+    left: 50%;
+    top: 90%;
+    width: 40px;
+    height: 40px;
+    margin-top: -35px;
+    margin-left: 10px;
+    background-image: url('card-acces.svg');
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: center fixed;
+    -webkit-background-size: cover;
+    background-size: cover;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.card-one {
+    position: absolute;
+    transform: rotate(160deg);
+    background-image: url('card1.jpg');
+    background-position: center center;
+    left: 130%;
+    top: 50px;
+    width: 220px;
+    height: 330px;
+    margin-left: -110px;
+    background-color: #CECEF6;
+    border: solid 2px green;
+    cursor: pointer;
+    border-radius: 20px;
+    -webkit-transition: all 1s ease-in-out;
+    transition: all 1s ease-in-out;
+    opacity: 0.1;
+}
+
+.card-one-2 {
+    transform: rotate(0deg);
+    left: 50%;
+    opacity: 1;
+}
+
+.cardgame-pack {
+    position: relative;
+    width: 100%;
+    height: 450px;
+    background-image: url('cardpack450.jpg');
+    background-color: transparent;
+    background-position: -500px bottom;
+    -webkit-transition: all 1s ease-in-out;
+    transition: all 1s ease-in-out;
+}
+
+.cardgame-open {
+    background-position: 0px 0px;
+}
+
+.linescissors {
+    position: absolute;
+    left: 60px;
+    top: 135px;
+    width: 220px;
+    height: 6px;
+    transform: rotate(-26deg);
+    border-top: dotted 3px gray;
+}
+
+.messagePackDeck {
+    position: absolute;
+    text-align: center;
+    right: 20px;
+    top: 30px;
+    width: 200px;
+    padding: 20px;
+    font-size: 22px;
+    border-radius: 15px;
+    background-color: #8A0886;
+    color: white;
+}
+
+.viewDeckBottom {
+    position: absolute;
+    left: 3px;
+    bottom: 5px;
+    width: 73px;
+    height: 60px;
+    background-image: url('galerie.png');
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: center fixed;
+    -webkit-background-size: cover;
+    background-size: cover;
+    display: none;
+    cursor: pointer;
+}
+
+.messagePackDeckBottom {
+    position: absolute;
+    text-align: center;
+    left: 85px;
+    bottom: 10px;
+    right: 20px;
+    padding: 14px;
+    font-size: 16px;
+    border-radius: 15px;
+    background-color: #8A0886;
+    color: white;
+}
+
+.scissorsrightinit {
+    transform: rotate(160deg);
+    position: absolute;
+    left: 260px;
+    top: 50px;
+    width: 60px;
+    height: 60px;
+    background-image: url('scissorsright.gif');
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: center fixed;
+    -webkit-background-size: cover;
+    background-size: cover;
+    cursor: pointer;
+    z-index: 1000;
+    -webkit-transition: all 3s ease-in-out;
+    transition: all 3s ease-in-out;
+}
+
+.scissorsrightinitfinal {
+    left: 10px;
+    top: 170px;
+}
+
+.puzzlecardone {
+    position: absolute;
+    display: none;
+    left: 5%;
+    top: 2%;
+    width: 90%;
+    height: 80%;
+    background-color: gray;
+    background-repeat: no-repeat;
+    background-position: center fixed;
+    -webkit-background-size: cover;
+    background-size: cover;
+    border: solid 1px green;
+    overflow: hidden;
+}
+
+.puzzleMin {
+    float: left;
+    position: relative;
+    left: 10px;
+    top: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    width: 150px;
+    height: 100px;
+    -webkit-transition: all 1s ease-in-out;
+    transition: all 1s ease-in-out;
+}
+
+.puzzleMinOther {
+    float: left;
+    position: relative;
+    left: 10px;
+    top: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    width: 150px;
+    height: 100px;
+    background-image: url('b-back.jpg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    -webkit-background-size: cover;
+    background-size: cover;
+    display: none;
+    -webkit-transition: all 1s ease-in-out;
+    transition: all 1s ease-in-out;
+}
+
+.pimg01 {
+    background-image: url('img01.jpg');
+}
+
+.pimg02 {
+    background-image: url('img02.jpg');
+}
+
+.pimg03 {
+    background-image: url('img03.jpg');
+}
+
+.pimg04 {
+    background-image: url('img04.jpg');
+}
+
+.puzzlepart1 {
+    position: relative;
+    border-right: dotted 3px green;
+    border-bottom: dotted 3px green;
+    float: left;
+    left: 0%;
+    top: 0%;
+    width: 20%;
+    height: 33.34%;
+    background-image: url('b-back.jpg');
+    background-color: transparent;
+    background-position: center center;
+}
+
+.puzzlepartstar {
+    background-image: url('animstar.png');
+}

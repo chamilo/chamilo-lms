@@ -126,7 +126,7 @@ if ($typeUser) {
         /** @var User $user */
         foreach ($users as $user) {
             if (intval($userInfo['user_id']) !== intval($user->getId())) {
-                $selectOptions[$user->getId()] = UserManager::formatUserFullName($user, true);
+                $selectOptions[$user->getId()] = $user->getCompleteNameWithUsername();
             }
         }
     }

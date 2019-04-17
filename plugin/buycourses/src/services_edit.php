@@ -23,7 +23,7 @@ $users = UserManager::getRepository()->findAll();
 $userOptions = [];
 if (!empty($users)) {
     foreach ($users as $user) {
-        $userOptions[$user->getId()] = UserManager::formatUserFullName($user, true);
+        $userOptions[$user->getId()] = $user->getCompleteNameWithUsername();
     }
 }
 
@@ -37,12 +37,14 @@ $interbreadcrumb[] = [
     'name' => $plugin->get_lang('Configuration'),
 ];
 
+$globalSettingsParams = $plugin->getGlobalParameters();
 $service = $plugin->getServices($serviceId);
 
 $formDefaultValues = [
     'name' => $service['name'],
     'description' => $service['description'],
     'price' => $service['price'],
+    'tax_perc' => $service['tax_perc'],
     'duration_days' => $service['duration_days'],
     'owner_id' => intval($service['owner_id']),
     'applies_to' => intval($service['applies_to']),
@@ -62,6 +64,12 @@ $form->addElement(
     'price',
     [$plugin->get_lang('Price'), null, $currency['iso_code']],
     ['step' => 0.01]
+);
+$form->addElement(
+    'number',
+    'tax_perc',
+    [$plugin->get_lang('TaxPerc'), $plugin->get_lang('TaxPercDescription'), '%'],
+    ['step' => 1, 'placeholder' => $globalSettingsParams['global_tax_perc'].'% '.$plugin->get_lang('ByDefault')]
 );
 $form->addElement(
     'number',

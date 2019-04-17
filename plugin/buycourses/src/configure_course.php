@@ -57,7 +57,7 @@ if ($editingCourse) {
     foreach ($teachers as $courseTeacher) {
         $teacher = $courseTeacher->getUser();
         $teachersOptions[] = [
-            'text' => UserManager::formatUserFullName($teacher),
+            'text' => $teacher->getCompleteName(),
             'value' => $teacher->getId(),
         ];
 
@@ -88,6 +88,7 @@ if ($editingCourse) {
         'name' => $courseItem['course_title'],
         'visible' => $courseItem['visible'],
         'price' => $courseItem['price'],
+        'tax_perc' => $courseItem['tax_perc'],
         'beneficiaries' => $defaultBeneficiaries,
         ($commissionsEnable == "true") ? 'commissions' : '' => ($commissionsEnable == "true") ? $commissions : '',
     ];
@@ -105,7 +106,7 @@ if ($editingCourse) {
     $sessionItem = $plugin->getSessionForConfiguration($session, $currency);
     $generalCoach = $session->getGeneralCoach();
     $generalCoachOption = [
-        'text' => UserManager::formatUserFullName($generalCoach),
+        'text' => $generalCoach->getCompleteName(),
         'value' => $generalCoach->getId(),
     ];
     $defaultBeneficiaries = [
@@ -123,7 +124,7 @@ if ($editingCourse) {
             }
 
             $courseCoachesOptions[] = [
-                'text' => UserManager::formatUserFullName($courseCoach),
+                'text' => $courseCoach->getCompleteName(),
                 'value' => $courseCoach->getId(),
             ];
             $defaultBeneficiaries[] = $courseCoach->getId();
@@ -154,6 +155,7 @@ if ($editingCourse) {
         'name' => $sessionItem['session_name'],
         'visible' => $sessionItem['visible'],
         'price' => $sessionItem['price'],
+        'tax_perc' => $sessionItem['tax_perc'],
         'beneficiaries' => $defaultBeneficiaries,
         ($commissionsEnable == "true") ? 'commissions' : '' => ($commissionsEnable == "true") ? $commissions : '',
     ];
@@ -190,6 +192,8 @@ if ($commissionsEnable === 'true') {
     ";
 }
 
+$globalSettingsParams = $plugin->getGlobalParameters();
+
 $form = new FormValidator('beneficiaries');
 $form->addText('product_type', $plugin->get_lang('ProductType'), false);
 $form->addText('name', get_lang('Name'), false);
@@ -203,6 +207,12 @@ $form->addElement(
     'price',
     [$plugin->get_lang('Price'), null, $currencyIso],
     ['step' => 0.01]
+);
+$form->addElement(
+    'number',
+    'tax_perc',
+    [$plugin->get_lang('TaxPerc'), $plugin->get_lang('TaxPercDescription'), '%'],
+    ['step' => 1, 'placeholder' => $globalSettingsParams['global_tax_perc'].'% '.$plugin->get_lang('ByDefault')]
 );
 $beneficiariesSelect = $form->addSelect(
     'beneficiaries',
@@ -252,9 +262,13 @@ if ($form->validate()) {
     $productItem = $plugin->getItemByProduct($formValues['i'], $formValues['t']);
 
     if (isset($formValues['visible'])) {
+        $taxPerc = $formValues['tax_perc'] != '' ? (int) $formValues['tax_perc'] : null;
         if (!empty($productItem)) {
             $plugin->updateItem(
-                ['price' => floatval($formValues['price'])],
+                [
+                    'price' => floatval($formValues['price']),
+                    'tax_perc' => $taxPerc,
+                ],
                 $formValues['i'],
                 $formValues['t']
             );
@@ -264,6 +278,7 @@ if ($form->validate()) {
                 'product_type' => $formValues['t'],
                 'product_id' => intval($formValues['i']),
                 'price' => floatval($_POST['price']),
+                'tax_perc' => $taxPerc,
             ]);
             $productItem['id'] = $itemId;
         }

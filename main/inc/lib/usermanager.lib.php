@@ -3238,7 +3238,7 @@ class UserManager
             $collapsed = '';
             $collapsedAction = '';
             if ($collapsable) {
-                $collapsableData = Sessionmanager::getCollapsableData(
+                $collapsableData = SessionManager::getCollapsableData(
                     $user_id,
                     $session_id,
                     $extraField,

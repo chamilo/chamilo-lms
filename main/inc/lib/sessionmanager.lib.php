@@ -8953,7 +8953,7 @@ SQL;
             $collapsed = $value['value'];
         }
 
-        $userRelSession = Sessionmanager::getUserSession($userId, $sessionId);
+        $userRelSession = self::getUserSession($userId, $sessionId);
         if ($userRelSession) {
             if (isset($userRelSession['collapsed']) && $userRelSession['collapsed'] != '') {
                 $collapsed = $userRelSession['collapsed'];

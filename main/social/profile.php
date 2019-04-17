@@ -394,7 +394,7 @@ $tpl->assign('social_right_information', $socialRightInformation);
 $tpl->assign('social_auto_extend_link', $socialAutoExtendLink);
 
 $formModalTpl = new Template();
-$formModalTpl->assign('invitation_form', MessageManager::generate_invitation_form('send_invitation'));
+$formModalTpl->assign('invitation_form', MessageManager::generate_invitation_form());
 $template = $formModalTpl->get_template('social/form_modals.tpl');
 $formModals = $formModalTpl->fetch($template);
 

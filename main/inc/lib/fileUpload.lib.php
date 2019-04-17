@@ -740,7 +740,11 @@ function moveUploadedFile($file, $storePath)
     $handleFromFile = isset($file['from_file']) && $file['from_file'] ? true : false;
     $moveFile = isset($file['move_file']) && $file['move_file'] ? true : false;
     if ($moveFile) {
-        copy($file['tmp_name'], $storePath);
+        $copied = copy($file['tmp_name'], $storePath);
+
+        if (!$copied) {
+            return false;
+        }
     }
     if ($handleFromFile) {
         return file_exists($file['tmp_name']);

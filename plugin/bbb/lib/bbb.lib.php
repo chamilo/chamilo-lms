@@ -1017,7 +1017,8 @@ class bbb
     }
 
     /**
-     * Generated a moderator password for the meeting
+     * Generated a moderator password for the meeting.
+     *
      * @param string $courseCode
      *
      * @return string A password for the moderation of the videoconference
@@ -1038,7 +1039,8 @@ class bbb
     }
 
     /**
-     * Get users online in the current course room
+     * Get users online in the current course room.
+     *
      * @return int The number of users currently connected to the videoconference
      * @assert () > -1
      */
@@ -1108,15 +1110,18 @@ class bbb
 
         if (!empty($info) && isset($info['participantCount'])) {
             return $info['participantCount'];
-
         }
+
         return 0;
     }
 
     /**
-     * Deletes a previous recording of a meeting
+     * Deletes a recording of a meeting
+     *
      * @param int $id ID of the recording
-     * @return array ?
+     *
+     * @return bool
+     *
      * @assert () === false
      * @todo Also delete links and agenda items created from this recording
      */
@@ -1135,24 +1140,20 @@ class bbb
 
         $delete = false;
         // Check if there are recordings for this meeting
-        $recordings = $this->api->getRecordingsWithXmlResponseArray(['meetingId' => $meetingData['remote_id']]);
+        $recordings = $this->api->getRecordings(['meetingId' => $meetingData['remote_id']]);
         if (!empty($recordings) && isset($recordings['messageKey']) && $recordings['messageKey'] == 'noRecordings') {
             $delete = true;
         } else {
-            $recordingParams = array(
-                /*
-                 * NOTE: Set the recordId below to a valid id after you have
-                 * created a recorded meeting, and received a real recordID
-                 * back from your BBB server using the
-                 * getRecordingsWithXmlResponseArray method.
-                 */
-
-                // REQUIRED - We have to know which recording:
-                'recordId' => $meetingData['remote_id'],
-            );
-            $result = $this->api->deleteRecordingsWithXmlResponseArray($recordingParams);
-            if (!empty($result) && isset($result['deleted']) && $result['deleted'] === 'true') {
-                $delete = true;
+            $recordsToDelete = [];
+            if (!empty($recordings['records'])) {
+                foreach ($recordings['records'] as $record) {
+                    $recordsToDelete[] = $record['recordId'];
+                }
+                $recordingParams = ['recordId' => implode(',', $recordsToDelete)];
+                $result = $this->api->deleteRecordingsWithXmlResponseArray($recordingParams);
+                if (!empty($result) && isset($result['deleted']) && $result['deleted'] === 'true') {
+                    $delete = true;
+                }
             }
         }
 

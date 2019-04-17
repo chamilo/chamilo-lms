@@ -117,7 +117,7 @@ $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Inbox')];
 $actions = '';
 
 // Comes from normal profile
-if ($allowSocial == false && $allowMessage) {
+if ($allowSocial === false && $allowMessage) {
     $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
         Display::return_icon('message_new.png', get_lang('ComposeMessage')).'</a>';
     $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
@@ -136,7 +136,7 @@ if ($allowSocial) {
 // Right content
 $social_right_content = '';
 $keyword = '';
-if (api_get_setting('allow_social_tool') === 'true') {
+if ($allowSocial) {
     $actionsLeft = '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
         Display::return_icon('new-message.png', get_lang('ComposeMessage'), [], 32).'</a>';
     $actionsLeft .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.
@@ -150,15 +150,14 @@ if (api_get_setting('allow_social_tool') === 'true') {
     $actionsRight = $form->returnForm();
     $social_right_content .= Display::toolbarAction('toolbar', [$actionsLeft, $actionsRight]);
 }
-//MAIN CONTENT
 
 if (!isset($_GET['del_msg'])) {
     $social_right_content .= MessageManager::inbox_display($keyword);
 } else {
-    $num_msg = intval($_POST['total']);
+    $num_msg = (int) $_POST['total'];
     for ($i = 0; $i < $num_msg; $i++) {
         if ($_POST[$i]) {
-            //the user_id was necessary to delete a message??
+            // The user_id was necessary to delete a message??
             $show_message .= MessageManager::delete_message_by_user_receiver(
                 api_get_user_id(),
                 $_POST['_'.$i]

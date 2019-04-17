@@ -871,7 +871,7 @@ if ($form->validate()) {
                 }
 
                 // 2. set account inactive
-                Usermanager::disable($user_id);
+                UserManager::disable($user_id);
 
                 // 3. exit the page
                 unset($user_id);
@@ -887,7 +887,7 @@ if ($form->validate()) {
                 UserManager::sendUserConfirmationMail($thisUser);
 
                 // 2. set account inactive
-                Usermanager::disable($user_id);
+                UserManager::disable($user_id);
 
                 // 3. exit the page
                 unset($user_id);

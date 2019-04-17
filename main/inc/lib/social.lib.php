@@ -2185,7 +2185,7 @@ class SocialManager extends UserManager
             $userInfo['has_certificates'] = 1;
         }
 
-        $userInfo['is_admin'] = Usermanager::is_admin($userId);
+        $userInfo['is_admin'] = UserManager::is_admin($userId);
 
         $languageId = api_get_language_id($userInfo['language']);
         $languageInfo = api_get_language_info($languageId);

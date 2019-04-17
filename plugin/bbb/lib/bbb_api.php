@@ -509,6 +509,69 @@ class BigBlueButtonBN {
 		}
 	}
 
+	/**
+	 * @param $array recordingParams
+	 *
+	 * @return array|null
+	 */
+	public function getRecordings($recordingParams)
+	{
+		/* USAGE:
+		$recordingParams = array(
+			'meetingId' => '1234',		-- OPTIONAL - comma separate if multiple ids
+		);
+		NOTE: 'duration' DOES work when creating a meeting, so if you set duration
+		when creating a meeting, it will kick users out after the duration. Should
+		probably be required in user code when 'recording' is set to true.
+		*/
+		$xml = $this->_processXmlResponse($this->getRecordingsUrl($recordingParams));
+		if($xml) {
+			// If we don't get a success code or messageKey, find out why:
+			if (($xml->returncode != 'SUCCESS') || ($xml->messageKey == null)) {
+				$result = array(
+					'returncode' => $xml->returncode->__toString(),
+					'messageKey' => $xml->messageKey->__toString(),
+					'message' => $xml->message->__toString()
+				);
+				return $result;
+			}
+			else {
+				// In this case, we have success and recording info:
+				$result = array(
+					'returncode' => $xml->returncode->__toString(),
+					'messageKey' => $xml->messageKey->__toString(),
+					'message' => $xml->message->__toString()
+				);
+				$result['records'] = [];
+				if (!empty($xml->recordings->recording)) {
+					foreach ($xml->recordings->recording as $r) {
+						$result['records'][] = array(
+							'recordId' => $r->recordID->__toString(),
+							'meetingId' => $r->meetingID->__toString(),
+							'name' => $r->name->__toString(),
+							'published' => $r->published->__toString(),
+							'startTime' => $r->startTime->__toString(),
+							'endTime' => $r->endTime->__toString(),
+							'playbackFormatType' => $r->playback->format->type->__toString(),
+							'playbackFormatUrl' => $r->playback->format->url->__toString(),
+							'playbackFormatLength' => $r->playback->format->length->__toString(),
+							'metadataTitle' => $r->metadata->title->__toString(),
+							'metadataSubject' => $r->metadata->subject->__toString(),
+							'metadataDescription' => $r->metadata->description->__toString(),
+							'metadataCreator' => $r->metadata->creator->__toString(),
+							'metadataContributor' => $r->metadata->contributor->__toString(),
+							'metadataLanguage' => $r->metadata->language->__toString(),
+						);
+					}
+				}
+
+				return $result;
+			}
+		}
+
+		return null;
+	}
+
 	public function getPublishRecordingsUrl($recordingParams) {
 		/* USAGE:
 		$recordingParams = array(

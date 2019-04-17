@@ -1582,7 +1582,7 @@ class IndexManager
                                 $params['show_actions'] = SessionManager::cantEditSession($session_id);
 
                                 if ($collapsable) {
-                                    $collapsableData = Sessionmanager::getCollapsableData(
+                                    $collapsableData = SessionManager::getCollapsableData(
                                         $user_id,
                                         $session_id,
                                         $extraFieldValue,
@@ -1736,7 +1736,7 @@ class IndexManager
                                     $sessionParams[0]['is_future'] = $markAsFuture;
 
                                     if ($collapsable) {
-                                        $collapsableData = Sessionmanager::getCollapsableData(
+                                        $collapsableData = SessionManager::getCollapsableData(
                                             $user_id,
                                             $session_id,
                                             $extraFieldValue,

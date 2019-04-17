@@ -92,6 +92,7 @@ class MessageManager
      * @param int    $number_of_items
      * @param string $column
      * @param string $direction
+     * @param int    $userId
      *
      * @return array
      */
@@ -106,12 +107,12 @@ class MessageManager
         $number_of_items = (int) $number_of_items;
         $userId = empty($userId) ? api_get_user_id() : (int) $userId;
 
-        //forcing this order
+        // Forcing this order.
         if (!isset($direction)) {
             $column = 2;
             $direction = 'DESC';
         } else {
-            $column = intval($column);
+            $column = (int) $column;
             if (!in_array($direction, ['ASC', 'DESC'])) {
                 $direction = 'ASC';
             }
@@ -144,7 +145,7 @@ class MessageManager
                 LIMIT $from, $number_of_items";
 
         $result = Database::query($sql);
-        $message_list = [];
+        $messageList = [];
         $newMessageLink = api_get_path(WEB_CODE_PATH).'messages/new_message.php';
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $messageId = $row['col0'];
@@ -156,10 +157,9 @@ class MessageManager
             $title = Security::remove_XSS($title, STUDENT, true);
             $title = cut($title, 80, true);
 
+            $class = 'class = "read"';
             if ($status == 1) {
                 $class = 'class = "unread"';
-            } else {
-                $class = 'class = "read"';
             }
 
             $userInfo = api_get_user_info($senderId);
@@ -201,10 +201,10 @@ class MessageManager
             foreach ($message as $key => $value) {
                 $message[$key] = api_xml_http_response_encode($value);
             }
-            $message_list[] = $message;
+            $messageList[] = $message;
         }
 
-        return $message_list;
+        return $messageList;
     }
 
     /**
@@ -984,7 +984,7 @@ class MessageManager
         $message_id = (int) $message_id;
         $type = (int) $type;
 
-        if (empty($user_id) || empty($message_id) || empty($type)) {
+        if (empty($user_id) || empty($message_id)) {
             return false;
         }
 
@@ -1117,9 +1117,10 @@ class MessageManager
     /**
      * Gets information about messages sent.
      *
-     * @param  int
-     * @param  int
-     * @param  string
+     * @param int
+     * @param int
+     * @param string
+     * @param string
      *
      * @return array
      */
@@ -1129,13 +1130,13 @@ class MessageManager
         $column,
         $direction
     ) {
-        $from = intval($from);
-        $number_of_items = intval($number_of_items);
+        $from = (int) $from;
+        $number_of_items = (int) $number_of_items;
         if (!isset($direction)) {
             $column = 2;
             $direction = 'DESC';
         } else {
-            $column = intval($column);
+            $column = (int) $column;
             if (!in_array($direction, ['ASC', 'DESC'])) {
                 $direction = 'ASC';
             }
@@ -1168,13 +1169,12 @@ class MessageManager
                 ORDER BY col$column $direction
                 LIMIT $from, $number_of_items";
         $result = Database::query($sql);
-        $i = 0;
+
         $message_list = [];
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $messageId = $row['col0'];
             $title = $row['col1'];
             $sendDate = $row['col2'];
-            $status = $row['msg_status'];
             $senderId = $row['user_sender_id'];
 
             if ($request === true) {
@@ -1212,7 +1212,6 @@ class MessageManager
             }
 
             $message_list[] = $message;
-            $i++;
         }
 
         return $message_list;
@@ -1281,14 +1280,14 @@ class MessageManager
                           msg_status = '".MESSAGE_STATUS_NEW."'
                           WHERE
                             user_receiver_id=".$currentUserId." AND
-                            id='".$messageId."'";
+                            id = '".$messageId."'";
                 Database::query($query);
 
                 $query = "SELECT * FROM $table
                           WHERE
                             msg_status<> ".MESSAGE_STATUS_OUTBOX." AND
-                            user_receiver_id=".$currentUserId." AND
-                            id='".$messageId."'";
+                            user_receiver_id = ".$currentUserId." AND
+                            id = '".$messageId."'";
                 $result = Database::query($query);
             }
         }
@@ -1331,7 +1330,7 @@ class MessageManager
         }
 
         $message_content .= '<tr>';
-        if (api_get_setting('allow_social_tool') == 'true') {
+        if (api_get_setting('allow_social_tool') === 'true') {
             $message_content .= '<div class="row">';
             if ($source == 'outbox') {
                 $message_content .= '<div class="col-md-12">';
@@ -1419,16 +1418,17 @@ class MessageManager
      */
     public static function get_user_id_by_email($user_email)
     {
-        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = 'SELECT user_id FROM '.$tbl_user.'
+        $table = Database::get_main_table(TABLE_MAIN_USER);
+        $sql = 'SELECT user_id 
+                FROM '.$table.'
                 WHERE email="'.Database::escape_string($user_email).'";';
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs, 'ASSOC');
         if (isset($row['user_id'])) {
             return $row['user_id'];
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     /**
@@ -1566,12 +1566,10 @@ class MessageManager
      *
      * @param $groupId
      * @param $topic_id
-     * @param $is_member
-     * @param $messageId
      *
      * @return string
      */
-    public static function display_message_for_group($groupId, $topic_id, $is_member, $messageId)
+    public static function display_message_for_group($groupId, $topic_id)
     {
         global $my_group_role;
         $main_message = self::get_message_by_id($topic_id);
@@ -2055,12 +2053,9 @@ class MessageManager
     }
 
     /**
-     * @param $id
-     * @param array $params
-     *
      * @return string
      */
-    public static function generate_invitation_form($id, $params = [])
+    public static function generate_invitation_form()
     {
         $form = new FormValidator('send_invitation');
         $form->addTextarea(
@@ -2071,8 +2066,6 @@ class MessageManager
 
         return $form->returnForm();
     }
-
-    //@todo this functions should be in the message class
 
     /**
      * @param string $keyword
@@ -2242,8 +2235,8 @@ class MessageManager
      */
     public static function getMessagesFromLastReceivedMessage($userId, $lastId = 0)
     {
-        $userId = intval($userId);
-        $lastId = intval($lastId);
+        $userId = (int) $userId;
+        $lastId = (int) $lastId;
 
         if (empty($userId)) {
             return [];
@@ -2446,13 +2439,13 @@ class MessageManager
         $i = 1;
         while (!feof($file)) {
             $line = fgets($file);
-            //$line = trim($line);
+            // $line = trim($line);
 
             if (trim($line) == '') {
                 continue;
             }
 
-            //Get the mail code, something like 1WBumL-0002xg-FF
+            // Get the mail code, something like 1WBumL-0002xg-FF
             if (preg_match('/(.*)\s((.*)-(.*)-(.*))\s<(.*)$/', $line, $codeMatches)) {
                 $mail_queue[$i]['code'] = $codeMatches[2];
             }
@@ -2460,9 +2453,8 @@ class MessageManager
             $fullMail = $base.$mail_queue[$i]['code'];
             $mailFile = fopen($fullMail, 'r');
 
-            //Get the reason of mail fail
+            // Get the reason of mail fail
             $iX = 1;
-
             while (!feof($mailFile)) {
                 $mailLine = fgets($mailFile);
                 //if ($iX == 4 && preg_match('/(.*):\s(.*)$/', $mailLine, $matches)) {
@@ -2471,13 +2463,12 @@ class MessageManager
                 ) {
                     $mail_queue[$i]['reason'] = $detailsMatches[3];
                 }
-
                 $iX++;
             }
 
             fclose($mailFile);
 
-            //Get the time of mail fail
+            // Get the time of mail fail
             if (preg_match('/^\s?(\d+)(\D+)\s+(.*)$/', $line, $timeMatches)) {
                 $mail_queue[$i]['time'] = $timeMatches[1].$timeMatches[2];
             } elseif (preg_match('/^(\s+)((.*)@(.*))\s+(.*)$/', $line, $emailMatches)) {
@@ -2569,6 +2560,7 @@ class MessageManager
         if (empty($courseInfo)) {
             return false;
         }
+
         $senderId = api_get_user_id();
         if (empty($senderId)) {
             return false;

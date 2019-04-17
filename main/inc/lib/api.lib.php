@@ -1859,9 +1859,8 @@ function api_get_course_path($course_code = null)
 /**
  * Gets a course setting from the current course_setting table. Try always using integer values.
  *
- * @param string    The name of the setting we want from the table
- * @param string    Optional: course code
- * @param string $setting_name
+ * @param string $setting_name The name of the setting we want from the table
+ * @param string $course_code
  *
  * @return mixed The value of that setting in that table. Return -1 if not found.
  */

@@ -63,6 +63,7 @@ class Basic extends Toolbar
         'wordcount',
         'inserthtml',
         'xml',
+        'qmarkersrolls',
     ];
 
     /**

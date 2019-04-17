@@ -3347,7 +3347,7 @@ class CourseRestorer
                             $this->destination_course_info['real_id']
                         );
                         if (!empty($workData)) {
-                            continue;
+                            break;
                         }
                         break;
                     case FILE_OVERWRITE:
@@ -3543,7 +3543,7 @@ class CourseRestorer
                 ) {
                     switch ($this->file_option) {
                         case FILE_SKIP:
-                            continue;
+                            break;
                         case FILE_OVERWRITE:
                             copy(
                                 $this->course->backup_path.'/'.$asset->path,

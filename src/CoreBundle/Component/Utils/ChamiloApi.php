@@ -355,4 +355,44 @@ class ChamiloApi
 
         return $localMidnight;
     }
+
+    /**
+     * Get JavaScript code necessary to load quiz markers-rolls in medialement's Markers Rolls plugin.
+     *
+     * @return string
+     */
+    public static function getQuizMarkersRollsJS()
+    {
+        $webCodePath = api_get_path(WEB_CODE_PATH);
+        $colorPalette = self::getColorPalette(false, true);
+
+        return "
+            var \$originalNode = $(originalNode),
+                    qMarkersRolls = \$originalNode.data('q-markersrolls') || [],
+                    qMarkersColor = \$originalNode.data('q-markersrolls-color') || '{$colorPalette[0]}';
+
+                if (0 == qMarkersRolls.length) {
+                    return;
+                }
+
+                instance.options.markersRollsColor = qMarkersColor;
+                instance.options.markersRollsWidth = 2;
+                instance.options.markersRolls = {};
+
+                qMarkersRolls.forEach(function (qMarkerRoll) {
+                    var url = '{$webCodePath}exercise/exercise_submit.php?{{ _p.web_cid_query }}&'
+                        + $.param({
+                            exerciseId: qMarkerRoll[1],
+                            learnpath_id: 0,
+                            learnpath_item_id: 0,
+                            learnpath_item_view_id: 0,
+                            origin: 'embeddable'
+                        });
+
+                    instance.options.markersRolls[qMarkerRoll[0]] = url;
+                });
+
+                instance.buildmarkersrolls(instance, instance.controls, instance.layers, instance.media);
+        ";
+    }
 }

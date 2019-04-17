@@ -655,7 +655,6 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
 if (api_is_drh() && !api_is_platform_admin()) {
     if (!empty($student_id)) {
         if (api_drh_can_access_all_session_content()) {
-          
         } else {
             if (!$isDrhOfCourse) {
                 if (api_is_drh() &&
@@ -899,7 +898,6 @@ if (!empty($course_code)) {
     );
 }
 
-
 // Display timezone if the user selected one and if the admin allows the use of user's timezone
 $timezone = null;
 $timezone_user = UserManager::get_extra_user_data_by_field(
@@ -962,7 +960,7 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
     $userInfo['legal'] = [
             'icon' => $icon,
             'datetime' => $timeLegalAccept,
-            'url_send' => $btn
+            'url_send' => $btn,
     ];
 }
 
@@ -979,7 +977,7 @@ $userInfo['tools'] = [
     'links' => $links,
     'chat_connection' => $chat_last_connection,
     'documents' => $documents,
-    'upload_documents' => $uploaded_documents
+    'upload_documents' => $uploaded_documents,
 ];
 
 $tpl = new Template('',
@@ -1022,7 +1020,7 @@ echo '<br><br>';
 
 
             <?php if (!empty($userGroups)) {
-                    ?>
+    ?>
                 <table class="table table-striped table-hover">
                     <thead>
                     <tr>
@@ -1031,20 +1029,19 @@ echo '<br><br>';
                     </thead>
                     <tbody>
                     <?php foreach ($userGroups as $class) {
-                        ?>
+        ?>
                         <tr>
                             <td><?php echo $class; ?></td>
                         </tr>
                         <?php
-                    } ?>
+    } ?>
                     </tbody>
                 </table>
                 <?php
-                } ?>
+} ?>
         </div>
     </div>
 <?php
-
 
 $exportCourseList = [];
 $lpIdList = [];
@@ -1919,9 +1916,7 @@ if (empty($details)) {
         </div>
     ';
 
-
     $csv_content[] = [];
-
 
     $csv_content[] = [
         get_lang('OtherTools'),
@@ -1951,10 +1946,7 @@ if (empty($details)) {
         get_lang('ChatLastConnection'),
         $chat_last_connection,
     ];
-
 } //end details
-
-
 
 if ($allowMessages === true) {
     // Messages
@@ -2029,7 +2021,5 @@ if ($export) {
     }
     exit;
 }
-
-
 
 Display::display_footer();

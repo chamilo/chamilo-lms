@@ -394,12 +394,10 @@ $tpl->assign('social_right_information', $socialRightInformation);
 $tpl->assign('social_auto_extend_link', $socialAutoExtendLink);
 
 $formModalTpl = new Template();
-$formModalTpl->assign('invitation_form', MessageManager::generate_invitation_form('send_invitation'));
+$formModalTpl->assign('invitation_form', MessageManager::generate_invitation_form());
 $template = $formModalTpl->get_template('social/form_modals.tpl');
 $formModals = $formModalTpl->fetch($template);
 
 $tpl->assign('form_modals', $formModals);
 $social_layout = $tpl->get_template('social/profile.tpl');
-$content = $tpl->fetch($social_layout);
-$tpl->assign('content', $content);
-$tpl->display_one_col_template();
+$tpl->display($social_layout);

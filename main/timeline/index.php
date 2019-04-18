@@ -20,6 +20,8 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 
 $check = Security::check_token('request');
 $token = Security::get_token();
+$actions = '';
+$message = '';
 
 switch ($action) {
     case 'add':

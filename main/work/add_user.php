@@ -115,7 +115,7 @@ if (!empty($userToAddList)) {
             $url,
             ['class' => 'btn btn-primary btn-sm']
         );
-        echo '<li class="list-group-item">'.$userName.'<div class="float-right"> '.$link.'</div></li>';
+        echo '<li class="list-group-item">'.$userName.'<div class="pull-right"> '.$link.'</div></li>';
     }
     echo '</ul>';
 } else {

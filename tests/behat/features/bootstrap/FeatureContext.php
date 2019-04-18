@@ -132,16 +132,22 @@ class FeatureContext extends MinkContext
         $friendId = $friendId;
         $friendUsername = $friendUsername;
 
-        $sendInvitationURL = '/main/inc/ajax/message.ajax.php?' . http_build_query([
+        $sendInvitationURL = '/main/inc/ajax/message.ajax.php?'.
+            http_build_query(
+                [
             'a' => 'send_invitation',
             'user_id' => $friendId,
-            'content' => 'Add me'
-        ]);
-        $acceptInvitationURL = '/main/inc/ajax/social.ajax.php?' . http_build_query([
+                    'content' => 'Add me',
+                ]
+            );
+        $acceptInvitationURL = '/main/inc/ajax/social.ajax.php?'.
+            http_build_query(
+                [
             'a' => 'add_friend',
             'friend_id' => $adminId,
-            'is_my_friend' => 'friend'
-        ]);
+                    'is_my_friend' => 'friend',
+                ]
+            );
 
         $this->iAmAPlatformAdministrator();
         $this->visit($sendInvitationURL);
@@ -156,11 +162,15 @@ class FeatureContext extends MinkContext
     public function iHaveAPublicPasswordProtectedCourse($code, $password)
     {
         $this->visit('/main/admin/course_add.php');
-        $this->fillFields(new TableNode([
+        $this->fillFields(
+            new TableNode(
+                [
             ['title', 'Password Protected'],
             ['visual_code', $code],
-            ['visibility', 3]
-        ]));
+                    ['visibility', 3],
+                ]
+            )
+        );
         $this->pressButton('submit');
         $this->visit('/main/course_info/infocours.php?cidReq=' . $code);
         $this->assertPageContainsText('Course registration password');
@@ -230,11 +240,15 @@ class FeatureContext extends MinkContext
      */
     public function iTryDeleteAFriendFromSocialGroup($friendId, $groupId)
     {
-        $this->visit('/main/social/group_members.php?' . http_build_query([
+        $this->visit(
+            '/main/social/group_members.php?'.http_build_query(
+                [
             'id' => $groupId,
             'u' => $friendId,
-            'action' => 'delete'
-        ]));
+                    'action' => 'delete',
+                ]
+            )
+        );
     }
 
     /**

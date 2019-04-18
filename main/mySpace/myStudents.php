@@ -13,6 +13,7 @@ use ChamiloSession as Session;
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
+$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery.easy-pie-chart/dist/jquery.easypiechart.js"></script>';
 
 $export = isset($_GET['export']) ? $_GET['export'] : false;
 $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
@@ -267,6 +268,7 @@ switch ($action) {
         $table->setCellContents(1, 4, $last);
 
         $courseTable = '';
+
         if (!empty($courses)) {
             $courseTable .= '<table class="data_table">';
             $courseTable .= '<thead>';
@@ -851,9 +853,7 @@ $csv_content[] = [
 
 $coachs_name = '';
 $session_name = '';
-$table_title = Display::return_icon('user.png', get_lang('User')).$user_info['complete_name'];
 
-echo Display::page_subheader($table_title);
 $userPicture = UserManager::getUserPicture($user_info['user_id'], USER_IMAGE_SIZE_BIG);
 
 $userGroupManager = new UserGroup();
@@ -879,56 +879,8 @@ $userInfo = [
     'online' => $online,
 ];
 
-?>
-    <div class="row">
-        <div class="col-sm-2">
-            <img src="<?php echo $userPicture; ?>" class="thumbnail img-responsive">
-        </div>
-        <div class="col-sm-5">
-            <table class="table table-striped table-hover">
-                <thead>
-                <tr>
-                    <th colspan="2"><?php echo get_lang('Information'); ?></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td><?php echo get_lang('Name'); ?></td>
-                    <td><?php echo $user_info['complete_name_with_message_link']; ?></td>
-                </tr>
-                <tr>
-                    <td><?php echo get_lang('Email'); ?></td>
-                    <td>
-                        <?php
-                        echo !empty($user_info['email'])
-                            ? '<a href="mailto:'.$user_info['email'].'">'.$user_info['email'].'</a>'
-                            : get_lang('NoEmail');
-                        ?>
-                    </td>
-                </tr>
-                <tr>
-                    <td><?php echo get_lang('Tel'); ?></td>
-                    <td><?php echo !empty($user_info['phone']) ? $user_info['phone'] : get_lang('NoTel'); ?></td>
-                </tr>
-                <tr>
-                    <td><?php echo get_lang('OfficialCode'); ?></td>
-                    <td><?php
-                        echo !empty($user_info['official_code'])
-                            ? $user_info['official_code']
-                            : get_lang('NoOfficialCode');
-                        ?></td>
-                </tr>
-                <tr>
-                    <td><?php echo get_lang('OnLine'); ?></td>
-                    <td><?php echo $online; ?></td>
-                </tr>
-                <?php
-                if (!empty($course_code)) {
-                    ?>
-                    <tr>
-                        <td colspan="2">
-                            <?php
-                            echo Display::url(
+if (!empty($course_code)) {
+    $userInfo['url_access'] = Display::url(
                                 get_lang('SeeAccesses'),
                                 'access_details.php?'
                                     .http_build_query(
@@ -941,11 +893,9 @@ $userInfo = [
                                         ]
                                     ),
                                 ['class' => 'btn btn-default']
-                            ); ?>
-                        </td>
-                    </tr>
-                    <?php
+    );
                 }
+
                 // Display timezone if the user selected one and if the admin allows the use of user's timezone
                 $timezone = null;
                 $timezone_user = UserManager::get_extra_user_data_by_field(
@@ -959,71 +909,21 @@ $userInfo = [
                     $timezone = $timezone_user['timezone'];
                 }
                 if ($timezone !== null) {
-                    ?>
-                    <tr>
-                        <td> <?php echo get_lang('Timezone').' : '.$timezone; ?> </td>
-                    </tr>
-                    <?php
+        $userInfo['timezone'] = $timezone;
                 }
-                ?>
-                </tbody>
-            </table>
-        </div>
-        <div class="col-sm-5">
-            <table class="table table-striped table-hover">
-                <thead>
-                <tr>
-                    <th colspan="2" class="text-center"><?php echo get_lang('Tracking'); ?></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td align="right"><?php echo get_lang('FirstLoginInPlatform'); ?></td>
-                    <td align="left"><?php echo $first_connection_date; ?></td>
-                </tr>
-                <tr>
-                    <td align="right"><?php echo get_lang('LatestLoginInPlatform'); ?></td>
-                    <td align="left"><?php echo $last_connection_date; ?></td>
-                </tr>
-                <?php
-                if ($details == 'true') {
-                    ?>
-                    <tr>
-                        <td align="right"><?php echo get_lang('TimeSpentInTheCourse'); ?></td>
-                        <td align="left"><?php echo $time_spent_on_the_course; ?></td>
-                    </tr>
-                    <tr>
-                        <td align="right">
-                            <?php
-                            echo get_lang('Progress').' ';
-                    Display::display_icon(
-                                'info3.gif',
-                                get_lang('ScormAndLPProgressTotalAverage'),
-                                ['align' => 'absmiddle', 'hspace' => '3px']
-                            ); ?>
-                        </td>
-                        <td align="left"><?php echo $avg_student_progress.'%'; ?></td>
-                    </tr>
-                    <tr>
-                        <td align="right">
-                            <?php
-                            echo get_lang('Score').' ';
-                    Display::display_icon(
-                                'info3.gif',
-                                get_lang('ScormAndLPTestTotalAverage'),
-                                ['align' => 'absmiddle', 'hspace' => '3px']
-                            ); ?>
-                        </td>
-                        <td align="left">
-                            <?php
+
                             if (is_numeric($avg_student_score)) {
-                                echo $avg_student_score.'%';
+        $score = $avg_student_score.'%';
                             } else {
-                                echo $avg_student_score;
-                            } ?>
-                        </td>
-                    </tr>
-                    <?php
+        $score = $avg_student_score;
+    }
+
+$userInfo['student_score'] = $score;
+$userInfo['student_progress'] = $avg_student_progress;
+$userInfo['first_connection'] = $first_connection_date;
+$userInfo['last_connection'] = $last_connection_date;
+if ($details == 'true') {
+    $userInfo['time_spent_course'] = $time_spent_on_the_course;
                 }
 
                 if (api_get_setting('allow_terms_conditions') === 'true') {
@@ -1035,30 +935,95 @@ $userInfo = [
                             'legal_accept'
                         );
                         $icon = Display::return_icon('accept_na.png');
+        $legalTime = null;
+
                         if (isset($value['value']) && !empty($value['value'])) {
                             list($legalId, $legalLanguageId, $legalTime) = explode(':', $value['value']);
-                            $icon = Display::return_icon('accept.png').' '.api_get_local_time($legalTime);
-                            $icon .= ' '.Display::url(
+            $icon = Display::return_icon('accept.png');
+            $btn = Display::url(
                                     get_lang('DeleteLegal'),
                                     api_get_self().'?action=delete_legal&student='.$student_id.'&course='.$course_code,
-                                    ['class' => 'btn btn-danger btn-xs']
+                    ['class' => 'btn btn-danger']
                                 );
+            $timeLegalAccept = api_get_local_time($legalTime);
                         } else {
-                            $icon .= ' '.Display::url(
+            $btn = Display::url(
                                     get_lang('SendLegal'),
                                     api_get_self().'?action=send_legal&student='.$student_id.'&course='.$course_code,
-                                    ['class' => 'btn btn-primary btn-xs']
+                    ['class' => 'btn btn-primary']
                                 );
+            $timeLegalAccept = get_lang('NotRegistered');
                         }
-                        echo '<tr>
-                    <td align="right">';
-                        echo get_lang('LegalAccepted').' </td>  <td align="left">'.$icon;
-                        echo '</td></tr>';
                     }
+    $userInfo['legal'] = [
+            'icon' => $icon,
+            'datetime' => $timeLegalAccept,
+            'url_send' => $btn,
+    ];
                 }
+
+$details = false;
+
+if (!empty($courseInfo)) {
+    $nb_assignments = Tracking::count_student_assignments($student_id, $course_code, $sessionId);
+    $messages = Tracking::count_student_messages($student_id, $course_code, $sessionId);
+    $links = Tracking::count_student_visited_links($student_id, $courseInfo['real_id'], $sessionId);
+    $chat_last_connection = Tracking::chat_last_connection($student_id, $courseInfo['real_id'], $sessionId);
+    $documents = Tracking::count_student_downloaded_documents($student_id, $courseInfo['real_id'], $sessionId);
+    $uploaded_documents = Tracking::count_student_uploaded_documents($student_id, $course_code, $sessionId);
+
+    $userInfo['tools'] = [
+        'tasks' => $nb_assignments,
+        'messages' => $messages,
+        'links' => $links,
+        'chat_connection' => $chat_last_connection,
+        'documents' => $documents,
+        'upload_documents' => $uploaded_documents,
+    ];
+} else {
+    $details = true;
+}
+
+$tpl = new Template('',
+    false,
+    false,
+    false,
+    false,
+    false,
+    false);
+$tpl->assign('user', $userInfo);
+$tpl->assign('details', $details);
+$templateName = $tpl->get_template('my_space/user_details.tpl');
+$content = $tpl->fetch($templateName);
+
+echo $content;
+
+$allowAll = api_get_configuration_value('allow_teacher_access_student_skills');
+if ($allowAll) {
+    // Show all skills
+    echo Tracking::displayUserSkills(
+        $user_info['user_id'],
+        0,
+        0,
+        true
+    );
+} else {
+    // Default behaviour - Show all skills depending the course and session id
+    echo Tracking::displayUserSkills(
+        $user_info['user_id'],
+        $courseInfo ? $courseInfo['real_id'] : 0,
+        $sessionId
+    );
+}
+echo '<br><br>';
+
                 ?>
-                </tbody>
-            </table>
+    <div class="row">
+       
+        <div class="col-sm-5">
+
+
+
             <?php if (!empty($userGroups)) {
                     ?>
                 <table class="table table-striped table-hover">
@@ -1082,19 +1047,6 @@ $userInfo = [
         </div>
     </div>
 <?php
-
-$tpl = new Template(
-    '',
-    false,
-    false,
-    false,
-    false,
-    false,
-    false
-);
-$tpl->assign('user', $userInfo);
-$templateName = $tpl->get_template('my_space/user_details.tpl');
-$content = $tpl->fetch($templateName);
 
 $exportCourseList = [];
 $lpIdList = [];
@@ -1423,7 +1375,7 @@ if (empty($details)) {
 
     if ($user_info['status'] != INVITEE) {
         $csv_content[] = [];
-        $csv_content[] = [str_replace('&nbsp;', '', strip_tags($table_title))];
+        $csv_content[] = [str_replace('&nbsp;', '', strip_tags($userInfo['complete_name']))];
         $trackingColumns = api_get_configuration_value('tracking_columns');
         if (isset($trackingColumns['my_students_lp'])) {
             foreach ($columnHeaders as $key => $value) {
@@ -1969,22 +1921,7 @@ if (empty($details)) {
         </div>
     ';
 
-    echo '<div class="table-responsive">
-    <table class="table table-striped table-hover">
-        <thead>
-            <tr>
-                <th colspan="2">'.get_lang('OtherTools').'</th>
-            </tr>
-        </thead>
-        <tbody>
-    ';
     $csv_content[] = [];
-    $nb_assignments = Tracking::count_student_assignments($student_id, $course_code, $sessionId);
-    $messages = Tracking::count_student_messages($student_id, $course_code, $sessionId);
-    $links = Tracking::count_student_visited_links($student_id, $courseInfo['real_id'], $sessionId);
-    $chat_last_connection = Tracking::chat_last_connection($student_id, $courseInfo['real_id'], $sessionId);
-    $documents = Tracking::count_student_downloaded_documents($student_id, $courseInfo['real_id'], $sessionId);
-    $uploaded_documents = Tracking::count_student_uploaded_documents($student_id, $course_code, $sessionId);
 
     $csv_content[] = [
         get_lang('OtherTools'),
@@ -2013,53 +1950,7 @@ if (empty($details)) {
     $csv_content[] = [
         get_lang('ChatLastConnection'),
         $chat_last_connection,
-    ]; ?>
-    <tr><!-- assignments -->
-        <td width="40%"><?php echo get_lang('Student_publication'); ?></td>
-        <td><?php echo $nb_assignments; ?></td>
-    </tr>
-    <tr><!-- messages -->
-        <td><?php echo get_lang('Forum').' - '.get_lang('NumberOfPostsForThisUser'); ?></td>
-        <td><?php echo $messages; ?></td>
-    </tr>
-    <tr><!-- links -->
-        <td><?php echo get_lang('LinksDetails'); ?></td>
-        <td><?php echo $links; ?></td>
-    </tr>
-    <tr><!-- downloaded documents -->
-        <td><?php echo get_lang('DocumentsDetails'); ?></td>
-        <td><?php echo $documents; ?></td>
-    </tr>
-    <tr><!-- uploaded documents -->
-        <td><?php echo get_lang('UploadedDocuments'); ?></td>
-        <td><?php echo $uploaded_documents; ?></td>
-    </tr>
-    <tr><!-- Chats -->
-        <td><?php echo get_lang('ChatLastConnection'); ?></td>
-        <td><?php echo $chat_last_connection; ?></td>
-    </tr>
-    </tbody>
-    </table>
-    </div>
-    <?php
-} //end details
-
-$allowAll = api_get_configuration_value('allow_teacher_access_student_skills');
-if ($allowAll) {
-    // Show all skills
-    echo Tracking::displayUserSkills(
-        $user_info['user_id'],
-        0,
-        0,
-        true
-    );
-} else {
-    // Default behaviour - Show all skills depending the course and session id
-    echo Tracking::displayUserSkills(
-        $user_info['user_id'],
-        $courseInfo ? $courseInfo['real_id'] : 0,
-        $sessionId
-    );
+    ];
 }
 
 if ($allowMessages === true) {
@@ -2135,7 +2026,5 @@ if ($export) {
     }
     exit;
 }
-
-echo $content;
 
 Display::display_footer();

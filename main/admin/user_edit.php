@@ -512,11 +512,11 @@ $actions = [
     ),
 ];
 
-$actionBar = Display::toolbarAction('toolbar-user-information', [implode(PHP_EOL, $actions)]);
+$content = Display::toolbarAction('toolbar-user-information', [implode(PHP_EOL, $actions)]);
 
 $bigImage = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_BIG);
 $normalImage = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_ORIGINAL);
-$content = '<div class="row">';
+$content .= '<div class="row">';
 $content .= '<div class="col-md-10">';
 // Display form
 $content .= $form->returnForm();
@@ -526,6 +526,5 @@ $content .= '<a class="thumbnail expand-image" href="'.$bigImage.'" /><img src="
 $content .= '</div>';
 
 $tpl = new Template($tool_name);
-$tpl->assign('actions', $actionBar);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

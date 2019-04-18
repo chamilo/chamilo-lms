@@ -88,7 +88,7 @@ $htmlHeadXtra[] = '
             connectWith: "#lp_item_list",
             placeholder: "ui-state-highlight", //defines the yellow highlight
             start: function(event, ui) {
-                $(ui.item).css("width", "160px");
+                $(ui.item).css("width", "350px");
                 $(ui.item).find(".item_data").attr("style", "");
             },
             stop: function(event, ui) {

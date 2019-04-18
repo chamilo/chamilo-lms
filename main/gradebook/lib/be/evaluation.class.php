@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 
 /**
  * Class Evaluation.
@@ -11,7 +12,7 @@ use ChamiloSession as Session;
 class Evaluation implements GradebookItem
 {
     public $studentList;
-    /** @var \Chamilo\CoreBundle\Entity\GradebookEvaluation */
+    /** @var GradebookEvaluation */
     public $entity;
     private $id;
     private $name;
@@ -305,49 +306,29 @@ class Evaluation implements GradebookItem
             isset($this->eval_max) &&
             isset($this->visible)
         ) {
-            $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
-
-            $sql = 'INSERT INTO '.$table
-                .' (name, user_id, weight, max, visible';
-            if (isset($this->description)) {
-                $sql .= ',description';
-            }
-            if (isset($this->courseId)) {
-                $sql .= ', c_id';
-            }
-            if (isset($this->category)) {
-                $sql .= ', category_id';
-            }
-            $sql .= ', created_at';
-            $sql .= ',type';
-            $sql .= ") VALUES ('".Database::escape_string($this->get_name())."'"
-                .','.intval($this->get_user_id())
-                .','.api_float_val($this->get_weight())
-                .','.intval($this->get_max())
-                .','.intval($this->is_visible());
-
-            if (isset($this->description)) {
-                $sql .= ",'".Database::escape_string($this->get_description())."'";
-            }
-            if (isset($this->courseId)) {
-                $sql .= ",'".Database::escape_string($this->getCourseId())."'";
-            }
-            if (isset($this->category)) {
-                $sql .= ','.intval($this->get_category_id());
-            }
             if (empty($this->type)) {
                 $this->type = 'evaluation';
             }
-            $sql .= ", '".api_get_utc_datetime()."'";
-            $sql .= ',\''.Database::escape_string($this->type).'\'';
-            $sql .= ")";
+            $em = Database::getManager();
 
-            Database::query($sql);
-            $this->set_id(Database::insert_id());
-        } else {
-            return false;
-            //die('Error in Evaluation add: required field empty');
+            $evaluation = new GradebookEvaluation();
+            $evaluation
+                ->setDescription($this->description)
+                ->setCourse(api_get_course_entity())
+                ->setName($this->get_name())
+                ->setCategoryId($this->get_category_id())
+                ->setUserId($this->get_user_id())
+                ->setWeight(api_float_val($this->get_weight()))
+                ->setMax($this->get_max())
+                ->setVisible($this->is_visible())
+                ->setType($this->type)
+            ;
+            $em->persist($evaluation);
+            $em->flush();
+            $this->set_id($evaluation->getId());
         }
+
+        return false;
     }
 
     /**

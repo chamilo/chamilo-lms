@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\GradebookLink;
+
 /**
  * Class AbstractLink
  * Defines a gradebook AbstractLink object.
@@ -17,7 +19,7 @@ abstract class AbstractLink implements GradebookItem
 {
     public $course_id;
     public $studentList;
-    /** @var \Chamilo\CoreBundle\Entity\GradebookLink */
+    /** @var GradebookLink */
     public $entity;
     protected $id;
     protected $type;
@@ -392,21 +394,23 @@ abstract class AbstractLink implements GradebookItem
             $row = Database::fetch_array($result, 'ASSOC');
 
             if ($row['count'] == 0) {
-                $params = [
-                    'type' => $this->get_type(),
-                    'ref_id' => $this->get_ref_id(),
-                    'user_id' => $this->get_user_id(),
-                    'c_id' => $this->course_id,
-                    'category_id' => $this->get_category_id(),
-                    'weight' => $this->get_weight(),
-                    'visible' => $this->is_visible(),
-                    'created_at' => api_get_utc_datetime(),
-                    'locked' => 0,
-                ];
-                $id = Database::insert($table, $params);
-                $this->set_id($id);
+                $em = Database::getManager();
+                $link = new GradebookLink();
+                $link
+                    ->setType($this->get_type())
+                    ->setVisible($this->is_visible())
+                    ->setWeight(api_float_val($this->get_weight()))
+                    ->setUserId($this->get_user_id())
+                    ->setRefId($this->get_ref_id())
+                    ->setCategoryId($this->get_category_id())
+                    ->setCourse(api_get_course_entity())
+                    ->setCategoryId($this->get_category_id());
+                $em->persist($link);
+                $em->flush();
 
-                return $id;
+                $this->set_id($link->getId());
+
+                return $link->getId();
             }
         }
 

@@ -16,12 +16,14 @@ class CkEditor extends Editor
     /**
      * Return the HTML code required to run editor.
      *
+     * @param string $value
+     *
      * @return string
      */
-    public function createHtml()
+    public function createHtml($value)
     {
         $html = '<textarea id="'.$this->getName().'" name="'.$this->getName().'" class="ckeditor">
-                 '.$this->value.'
+                 '.$value.'
                  </textarea>';
         $html .= $this->editorReplace();
 
@@ -31,18 +33,22 @@ class CkEditor extends Editor
     /**
      * Return the HTML code required to run editor.
      *
+     * @param string $value
+     *
      * @return string
      */
-    public function createHtmlStyle()
+    public function createHtmlStyle($value): string
     {
         $style = '';
-        if (trim($this->value) === '<html><head><title></title></head><body></body></html>' || $this->value === '') {
+        $value = trim($value);
+
+        if ($value === '' || $value === '<html><head><title></title></head><body></body></html>') {
             $style = api_get_bootstrap_and_font_awesome();
             $style .= api_get_css(ChamiloApi::getEditorDocStylePath());
         }
 
         $html = '<textarea id="'.$this->getName().'" name="'.$this->getName().'" class="ckeditor">
-                 '.$style.htmlspecialchars($this->value, ENT_COMPAT).'
+                 '.$style.$value.'
                  </textarea>';
         $html .= $this->editorReplace();
 

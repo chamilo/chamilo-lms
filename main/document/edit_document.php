@@ -280,10 +280,6 @@ if ($is_allowed_to_edit) {
         $read_only_flag = isset($_POST['readonly']) ? $_POST['readonly'] : null;
         $read_only_flag = empty($read_only_flag) ? 0 : 1;
 
-        if ($file_type != 'link') {
-            //$file_size = filesize($document_data['absolute_path']);
-        }
-
         if ($read_only_flag == 0) {
             if (!empty($content)) {
                 $node = $document->getResourceNode();
@@ -300,14 +296,6 @@ if ($is_allowed_to_edit) {
                     $em->merge($node);
                     $em->flush();
                 }
-            } else {
-                if ($document_id) {
-                    //update_existing_document($_course, $document_id, $file_size, $read_only_flag);
-                }
-            }
-        } else {
-            if ($document_id) {
-                //update_existing_document($_course, $document_id, $file_size, $read_only_flag);
             }
         }
 
@@ -384,6 +372,7 @@ if ($owner_id == api_get_user_id() ||
     // Desactivation of IE proprietary commenting tags inside the text before loading it on the online editor.
     // This fix has been proposed by Hubert Borderiou, see Bug #573, http://support.chamilo.org/issues/573
     $defaults['content'] = str_replace('<!--[', '<!-- [', $content);
+
     // HotPotatoes tests are html files, but they should not be edited in order their functionality to be preserved.
     $showSystemFolders = api_get_course_setting('show_system_folders');
     $condition = stripos($dir, '/HotPotatoes_files') === false;

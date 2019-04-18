@@ -57,7 +57,7 @@
             };
         })();
 
-        $(document).on('ready', function() {
+        $(function () {
             var pages = {{ tour.pages }};
 
             $.each(pages, function(index, page) {

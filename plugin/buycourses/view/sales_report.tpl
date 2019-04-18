@@ -81,7 +81,7 @@
 </div>
 
 <script>
-    $(document).on('ready', function () {
+    $(function () {
         $('[name="filter_type"]').on('change', function () {
             var self = $(this);
 

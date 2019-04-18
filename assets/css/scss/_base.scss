@@ -4074,3 +4074,7 @@ table.certaintyTable {
 .pull-right {
   @extend .float-right;
 }
+
+.btn-default {
+  @extend .btn-secondary;
+}

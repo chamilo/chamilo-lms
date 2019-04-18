@@ -894,7 +894,7 @@ if (!empty($course_code)) {
                                     ),
                                 ['class' => 'btn btn-default']
     );
-                }
+}
 
                 // Display timezone if the user selected one and if the admin allows the use of user's timezone
                 $timezone = null;
@@ -909,14 +909,14 @@ if (!empty($course_code)) {
                     $timezone = $timezone_user['timezone'];
                 }
                 if ($timezone !== null) {
-        $userInfo['timezone'] = $timezone;
+                    $userInfo['timezone'] = $timezone;
                 }
 
                             if (is_numeric($avg_student_score)) {
-        $score = $avg_student_score.'%';
+                                $score = $avg_student_score.'%';
                             } else {
-        $score = $avg_student_score;
-    }
+                                $score = $avg_student_score;
+                            }
 
 $userInfo['student_score'] = $score;
 $userInfo['student_progress'] = $avg_student_progress;
@@ -924,7 +924,7 @@ $userInfo['first_connection'] = $first_connection_date;
 $userInfo['last_connection'] = $last_connection_date;
 if ($details == 'true') {
     $userInfo['time_spent_course'] = $time_spent_on_the_course;
-                }
+}
 
                 if (api_get_setting('allow_terms_conditions') === 'true') {
                     $isBoss = UserManager::userIsBossOfStudent(api_get_user_id(), $student_id);
@@ -935,27 +935,27 @@ if ($details == 'true') {
                             'legal_accept'
                         );
                         $icon = Display::return_icon('accept_na.png');
-        $legalTime = null;
+                        $legalTime = null;
 
                         if (isset($value['value']) && !empty($value['value'])) {
                             list($legalId, $legalLanguageId, $legalTime) = explode(':', $value['value']);
-            $icon = Display::return_icon('accept.png');
-            $btn = Display::url(
+                            $icon = Display::return_icon('accept.png');
+                            $btn = Display::url(
                                     get_lang('DeleteLegal'),
                                     api_get_self().'?action=delete_legal&student='.$student_id.'&course='.$course_code,
                     ['class' => 'btn btn-danger']
                                 );
-            $timeLegalAccept = api_get_local_time($legalTime);
+                            $timeLegalAccept = api_get_local_time($legalTime);
                         } else {
-            $btn = Display::url(
+                            $btn = Display::url(
                                     get_lang('SendLegal'),
                                     api_get_self().'?action=send_legal&student='.$student_id.'&course='.$course_code,
                     ['class' => 'btn btn-primary']
                                 );
-            $timeLegalAccept = get_lang('NotRegistered');
+                            $timeLegalAccept = get_lang('NotRegistered');
                         }
                     }
-    $userInfo['legal'] = [
+                    $userInfo['legal'] = [
             'icon' => $icon,
             'datetime' => $timeLegalAccept,
             'url_send' => $btn,

@@ -360,15 +360,15 @@ if ($group_id != 0) {
     } else {
         $social_right_content .= '<div class=actions>';
         if (api_get_setting('allow_message_tool') === 'true') {
-                $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
+            $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
                     Display::return_icon('message_new.png', get_lang('ComposeMessage')).'</a>';
-                $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
+            $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
                     Display::return_icon('inbox.png', get_lang('Inbox')).'</a>';
-                $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.
+            $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.
                     Display::return_icon('outbox.png', get_lang('Outbox')).'</a>';
         }
         $social_right_content .= '</div>';
-}
+    }
 }
 
 // LEFT COLUMN

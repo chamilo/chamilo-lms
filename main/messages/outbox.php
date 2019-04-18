@@ -66,7 +66,6 @@ if (isset($_REQUEST['action'])) {
 $keyword = '';
 $social_right_content = '';
 if ($allowSocial) {
-
     $social_menu_block = SocialManager::show_social_menu('messages');
     $actionsLeft = '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
         Display::return_icon('back.png', get_lang('Back'), [], 32).'</a>';

@@ -143,10 +143,10 @@ if ($allowSocial) {
         Display::return_icon('outbox.png', get_lang('Outbox'), [], 32).'</a>';
 
     $form = MessageManager::getSearchForm(api_get_path(WEB_PATH).'main/messages/inbox.php');
-        if ($form->validate()) {
-            $values = $form->getSubmitValues();
-            $keyword = $values['keyword'];
-        }
+    if ($form->validate()) {
+        $values = $form->getSubmitValues();
+        $keyword = $values['keyword'];
+    }
     $actionsRight = $form->returnForm();
     $social_right_content .= Display::toolbarAction('toolbar', [$actionsLeft, $actionsRight]);
 }

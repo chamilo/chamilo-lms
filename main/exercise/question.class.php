@@ -983,7 +983,7 @@ abstract class Question
                 );
             }
             if (api_get_setting('search_enabled') === 'true') {
-                    $this->search_engine_edit($exerciseId);
+                $this->search_engine_edit($exerciseId);
             }
         } else {
             // creates a new question
@@ -1089,7 +1089,7 @@ abstract class Question
                 }
 
                 if (api_get_setting('search_enabled') === 'true') {
-                        $this->search_engine_edit($exerciseId, true);
+                    $this->search_engine_edit($exerciseId, true);
                 }
             }
         }

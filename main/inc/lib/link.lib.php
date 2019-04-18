@@ -1121,12 +1121,12 @@ class Link extends Model
                 $showLink = false;
                 $titleClass = '';
                 if ($myrow['visibility'] == '1') {
-                $showLink = true;
+                    $showLink = true;
                 } else {
                     if (api_is_allowed_to_edit(null, true)) {
                         $showLink = true;
                         $titleClass = 'text-muted';
-                }
+                    }
                 }
 
                 if ($showLink) {

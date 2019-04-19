@@ -9,7 +9,6 @@ use Chamilo\CoreBundle\Repository\AccessUrlRepository;
 use Chamilo\UserBundle\Entity\User;
 use Chamilo\UserBundle\Repository\UserRepository;
 use ChamiloSession as Session;
-use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 
 /**
  * Class UserManager.
@@ -107,23 +106,6 @@ class UserManager
         $validPassword = $encoder->isPasswordValid($encoded, $raw, $salt);
 
         return $validPassword;
-    }
-
-    /**
-     * @param string $raw
-     * @param User   $user
-     *
-     * @return string
-     */
-    public static function encryptPassword($raw, User $user)
-    {
-        $encoder = self::getEncoder($user);
-        $encodedPassword = $encoder->encodePassword(
-            $raw,
-            $user->getSalt()
-        );
-
-        return $encodedPassword;
     }
 
     /**
@@ -6650,33 +6632,6 @@ SQL;
         }
 
         return $fullName;
-    }
-
-    /**
-     * @return EncoderFactory
-     */
-    private static function getEncoderFactory()
-    {
-        $encryption = self::getPasswordEncryption();
-        $encoders = [
-            'Chamilo\\UserBundle\\Entity\\User' => new \Chamilo\UserBundle\Security\Encoder($encryption),
-        ];
-
-        $encoderFactory = new EncoderFactory($encoders);
-
-        return $encoderFactory;
-    }
-
-    /**
-     * @param User $user
-     *
-     * @return \Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface
-     */
-    private static function getEncoder(User $user)
-    {
-        $encoderFactory = self::getEncoderFactory();
-
-        return $encoderFactory->getEncoder($user);
     }
 
     /**

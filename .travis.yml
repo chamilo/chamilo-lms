@@ -13,7 +13,7 @@ addons:
 
 services:
     - mysql
-
+    - xvfb
 cache:
   yarn: true
   directories:
@@ -47,9 +47,9 @@ before_install:
   - sudo mv chromedriver /usr/bin
   - sudo chmod +x /usr/bin/chromedriver
   # Setup display for Selenium
-  - sh -e /etc/init.d/xvfb start
-  - export DISPLAY=:99.0
-  - sleep 3
+#  - sh -e /etc/init.d/xvfb start
+#  - export DISPLAY=:99.0
+#  - sleep 3
   # Get Selenium
   - wget http://selenium-release.storage.googleapis.com/3.1/selenium-server-standalone-3.1.0.jar
   # Check java

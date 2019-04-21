@@ -1185,8 +1185,8 @@ $_configuration['required_extra_fields_in_profile'] = [
 // - edit src/Chamilo/CoreBundle/Entity/MessageFeedback.php
 //   and follow the instructions about the @ORM\Entity() line
 // - edit src/Chamilo/CoreBundle/Entity/Message.php
-//   and fllow the instruccions about the @ORM\OneToMany line for the $likes property
-// - launch composer install to rebuild the autoload.php
+//   and follow the instructions about the @ORM\OneToMany line for the $likes property
+// - launch "composer install" to rebuild the autoload.php
 //$_configuration['social_enable_messages_feedback'] = false;
 
 // Block student's access to the course documents when using the ckeditor "Browse server" button

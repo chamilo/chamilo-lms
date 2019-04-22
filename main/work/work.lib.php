@@ -3753,7 +3753,7 @@ function sendAlertToUsers($workId, $courseInfo, $sessionId)
     if ($send == SEND_EMAIL_EVERYONE || $send == SEND_EMAIL_STUDENTS) {
         // Send mail only to sender
         $studentList = [[
-           'user_id' => api_get_user_id()
+           'user_id' => api_get_user_id(),
         ]];
         $userList = array_merge($userList, $studentList);
     }

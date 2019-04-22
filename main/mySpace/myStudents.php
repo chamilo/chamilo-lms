@@ -964,7 +964,7 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
 
 $details = false;
 
-if(!empty($courseInfo)) {
+if (!empty($courseInfo)) {
     $nb_assignments = Tracking::count_student_assignments($student_id, $course_code, $sessionId);
     $messages = Tracking::count_student_messages($student_id, $course_code, $sessionId);
     $links = Tracking::count_student_visited_links($student_id, $courseInfo['real_id'], $sessionId);

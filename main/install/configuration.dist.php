@@ -1100,6 +1100,7 @@ $_configuration['profile_fields_visibility'] = [
 // Requires to edit the GradebookLink.php And GradebookEvaluation.php files adding the "@" in the ORM phpdoc block
 /* ALTER TABLE gradebook_link ADD score_weight DOUBLE PRECISION DEFAULT NULL, ADD average_score DOUBLE PRECISION DEFAULT NULL, ADD best_score DOUBLE PRECISION DEFAULT NULL, ADD user_score_list LONGTEXT DEFAULT NULL COMMENT '(DC2Type:array)' ;
 ALTER TABLE gradebook_evaluation ADD score_weight DOUBLE PRECISION DEFAULT NULL, ADD average_score DOUBLE PRECISION DEFAULT NULL, ADD best_score DOUBLE PRECISION DEFAULT NULL, ADD user_score_list LONGTEXT DEFAULT NULL COMMENT '(DC2Type:array)' ;
+*/
 
 //$_configuration['allow_gradebook_stats'] = false;
 
@@ -1184,8 +1185,8 @@ $_configuration['required_extra_fields_in_profile'] = [
 // - edit src/Chamilo/CoreBundle/Entity/MessageFeedback.php
 //   and follow the instructions about the @ORM\Entity() line
 // - edit src/Chamilo/CoreBundle/Entity/Message.php
-//   and fllow the instruccions about the @ORM\OneToMany line for the $likes property
-// - launch composer install to rebuild the autoload.php
+//   and follow the instructions about the @ORM\OneToMany line for the $likes property
+// - launch "composer install" to rebuild the autoload.php
 //$_configuration['social_enable_messages_feedback'] = false;
 
 // Block student's access to the course documents when using the ckeditor "Browse server" button

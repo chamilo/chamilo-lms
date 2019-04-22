@@ -153,7 +153,9 @@ class MultipleAnswerCombination extends Question
         $form->addText('weighting[1]', get_lang('Score'), false, ['value' => 10]);
 
         global $text;
-        if ($obj_ex->edit_exercise_in_lp == true) {
+        if ($obj_ex->edit_exercise_in_lp == true ||
+            (empty($this->exerciseList) && empty($obj_ex->id))
+        ) {
             // setting the save button here and not in the question class.php
             $buttonGroup = [
                 $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true),

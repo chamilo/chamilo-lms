@@ -249,7 +249,9 @@ class UniqueAnswerImage extends UniqueAnswer
 
         global $text;
         $buttonGroup = [];
-        if ($objExercise->edit_exercise_in_lp == true) {
+        if ($objExercise->edit_exercise_in_lp == true ||
+            (empty($this->exerciseList) && empty($objExercise->id))
+        ) {
             //setting the save button here and not in the question class.php
             $buttonGroup[] = $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true);
             $buttonGroup[] = $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers', true);

@@ -211,7 +211,9 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             }
         }
 
-        if ($objEx->edit_exercise_in_lp === true) {
+        if ($objEx->edit_exercise_in_lp === true ||
+            (empty($this->exerciseList) && empty($objEx->id))
+        ) {
             $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'), 'class="btn btn-danger minus"');
             $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'), 'class="btn btn-primary plus"');
             //$text and $class defined in calling script

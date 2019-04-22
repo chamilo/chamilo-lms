@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
+use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
 use Knp\Component\Pager\Paginator;
 
@@ -14,6 +15,10 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
+
+Session::erase('objExercise');
+Session::erase('objQuestion');
+Session::erase('objAnswer');
 
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 

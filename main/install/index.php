@@ -811,7 +811,7 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
     <script type="text/javascript" src="../../public/build/runtime.js"></script>
     <script type="text/javascript" src="../../public/build/app.js"></script>
     <script type="text/javascript">
-        $(document).ready( function() {
+        $(function() {
             $("#details_button").click(function() {
                 $( "#details" ).toggle("slow", function() {
                 });
@@ -836,7 +836,7 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
         });
 
         init_visibility=0;
-        $(document).ready( function() {
+        $(function() {
             $(".advanced_parameters").click(function() {
                 if ($("#id_contact_form").css("display") == "none") {
                     $("#id_contact_form").css("display","block");

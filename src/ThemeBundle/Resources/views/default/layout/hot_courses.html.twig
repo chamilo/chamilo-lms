@@ -3,7 +3,7 @@
 
     {% if hot_courses is not null and hot_courses is not empty %}
         <script>
-            $(document).ready(function () {
+            $(function() {
                 $('.star-rating li a').on('click', function (event) {
                     var id = $(this).parents('ul').attr('id');
                     $('#vote_label2_' + id).html("{{ 'Loading'|trans }}");

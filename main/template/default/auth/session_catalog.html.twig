@@ -1,13 +1,13 @@
 {% import "@ChamiloTheme/Macros/box.html.twig" as macro %}
 {% block content %}
 {% autoescape false %}
-    <script>
-        $(document).ready(function () {
-            $('#date').datepicker({
-                dateFormat: 'yy-mm-dd'
-            });
+<script>
+    $(function() {
+        $('#date').datepicker({
+            dateFormat: 'yy-mm-dd'
         });
-    </script>
+    });
+</script>
 <div class="catalog" style="width: 100%;">
     <h2>{{ 'Catalog Sessions'|get_lang }}</h2>
     <div class="search">

@@ -4,7 +4,7 @@
     (function ($) {
         'use strict';
 
-        $(document).ready(function () {
+        $(function() {
             $(document).on('click', 'a[data-collection-button="add"]', function (e) {
                 e.preventDefault();
                 var collectionContainer = $('#' + $(this).data('collection'));

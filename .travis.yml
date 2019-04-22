@@ -77,7 +77,7 @@ before_install:
   # Permissions
   - sudo chmod -R 777 var/cache var/log var/courses var/upload public
   # Dump js routes
-  - bin/console fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json
+  - php bin/console fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json
   - # Install third party js/css libraries
   - yarn install
   - ./node_modules/.bin/encore dev
@@ -89,6 +89,8 @@ before_install:
   - sudo chmod +x /home/travis/build
   - sudo service apache2 restart
   - curl $VHOST_URL
+  - curl $VHOST_URL/public
+  - curl $VHOST_URL/public/login
   - ls -la public/build
 
 script:

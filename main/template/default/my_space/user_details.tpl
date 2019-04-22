@@ -2,6 +2,7 @@
     <h3>{{ user.complete_name }}</h3>
 </div>
 <!-- NO DETAILS -->
+{% if details != true %}
 <div class="no-details">
     <div class="panel panel-default">
         <div class="panel-body">
@@ -103,7 +104,7 @@
 
 </div>
 <!-- DETAILS -->
-{% if details %}
+{% else %}
 <div class="details">
     <div class="row">
         <div class="col-md-4">

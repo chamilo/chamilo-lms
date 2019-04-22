@@ -2247,9 +2247,10 @@ function api_format_course_array($course_data)
             null,
             null,
             true,
-            false
+            true
         );
     }
+
     $_course['course_image_large'] = $url_image;
 
     return $_course;

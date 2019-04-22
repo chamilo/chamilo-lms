@@ -1199,3 +1199,5 @@ $_configuration['required_extra_fields_in_profile'] = [
 // You need add a new option called "confirmation" to the registration settings
 //INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_registration', 'confirmation', 'MailConfirmation');
 // ------ (End) Custom DB changes
+// Show a language flag next to the user picture in the social network
+//$_configuration['social_show_language_flag_in_profile'] = false;

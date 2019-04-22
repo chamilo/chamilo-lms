@@ -962,7 +962,7 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
     ];
 }
 
-$details = false;
+$details = true;
 
 if (!empty($courseInfo)) {
     $nb_assignments = Tracking::count_student_assignments($student_id, $course_code, $sessionId);
@@ -981,7 +981,7 @@ if (!empty($courseInfo)) {
         'upload_documents' => $uploaded_documents,
     ];
 } else {
-    $details = true;
+    $details = false;
 }
 
 $tpl = new Template('',

@@ -1,6 +1,109 @@
 <div class="page-header">
     <h3>{{ user.complete_name }}</h3>
 </div>
+<!-- NO DETAILS -->
+<div class="no-details">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="user text-center">
+                        <div class="avatar">
+                            <img width="128px" src="{{ user.avatar }}" class="img-responsive" >
+                        </div>
+                        <div class="name">
+                            <h3>{{ user.complete_name_link }}</h3>
+                            <p class="email">{{ user.email }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="user text-center">
+                        <div class="parameters">
+                            <dl class="dl-horizontal">
+                                <dt>{{ 'Tel'|get_lang }}</dt>
+                                <dd>{{ user.phone == '' ? 'NoTel'|get_lang : user.phone }}</dd>
+                                <dt>{{ 'OfficialCode'|get_lang }}</dt>
+                                <dd>{{ user.code == '' ? 'NoOfficialCode'|get_lang : user.code }}</dd>
+                                <dt>{{ 'OnLine'|get_lang }}</dt>
+                                <dd>{{ user.online }}</dd>
+                                <dt>{{ 'Timezone'|get_lang }}</dt>
+                                <dd>{{ user.timezone }}</dd>
+                            </dl>
+                        </div>
+                        <div class="access">
+                            {{ user.url_access }}
+                            {{ user.legal.url_send }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card card-first-date">
+                        <div class="card-body">
+                            <div class="stat-widget-five">
+                                <div class="stat-icon">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="text-left">
+                                        <div class="stat-text">
+                                            {{ user.first_connection }}
+                                        </div>
+                                        <div class="stat-heading">
+                                            {{ 'FirstLoginInPlatform'|get_lang }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card card-last-date">
+                        <div class="card-body">
+                            <div class="stat-widget-five">
+                                <div class="stat-icon">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="text-left">
+                                        <div class="stat-text">
+                                            {{ user.first_connection }}
+                                        </div>
+                                        <div class="stat-heading">
+                                            {{ 'LatestLoginInPlatform'|get_lang }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card card-legal">
+                        <div class="card-body">
+                            <div class="stat-widget-five">
+                                <div class="stat-icon">
+                                    <i class="fa fa-gavel" aria-hidden="true"></i>
+                                    <span class="active-icon">{{ user.legal.icon }}</span>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="text-left">
+                                        <div class="stat-text">
+                                            {{ user.legal.datetime }}
+                                        </div>
+                                        <div class="stat-heading">
+                                            {{ 'LegalAccepted'|get_lang }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- DETAILS -->
+{% if details %}
 <div class="details">
     <div class="row">
         <div class="col-md-4">
@@ -34,10 +137,11 @@
                 </div>
             </div>
         </div>
+
         <div class="col-md-8">
             <div class="row">
                 <div class="col-md-8">
-                    {% if details %}
+
                     <div class="row">
                         <div class="col-md-6">
                             <div class="easy-donut">
@@ -146,7 +250,7 @@
 
                         </div>
                     </div>
-                    {% endif %}
+
                 </div>
                 <div class="col-md-4">
                     <div class="card card-first-date">
@@ -234,6 +338,8 @@
         </div>
     </div>
 </div>
+{% endif %}
+
 <script type="text/javascript">
     $(function() {
         $('#easypiechart-blue').easyPieChart({

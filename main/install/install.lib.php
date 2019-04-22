@@ -2975,6 +2975,23 @@ function fixLpId($connection, $debug)
  */
 function updateEnvFile($distFile, $envFile, $params)
 {
+    $requirements = [
+        'DATABASE_HOST',
+        'DATABASE_PORT',
+        'DATABASE_NAME',
+        'DATABASE_USER',
+        'DATABASE_PASSWORD',
+        'APP_INSTALLED',
+        'APP_ENCRYPT_METHOD',
+        'APP_URL_APPEND',
+    ];
+
+    foreach ($requirements as $requirement) {
+        if (!isset($params[$requirement])) {
+            throw new \Exception("The parameter $requirement is needed in order to edit the .env file");
+        }
+    }
+
     $contents = file_get_contents($distFile);
     $contents = str_replace(array_keys($params), array_values($params), $contents);
     file_put_contents($envFile, $contents);

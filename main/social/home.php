@@ -144,7 +144,7 @@ $tpl->assign('social_auto_extend_link', $socialAutoExtendLink);
 $tpl->assign('search_friends_form', $formSearch->returnForm());
 $tpl->assign('social_friend_block', $friend_html);
 $tpl->assign('social_search_block', $social_search_block);
-$tpl->assign('social_skill_block', SocialManager::getSkillBlock($user_id));
+$tpl->assign('social_skill_block', SocialManager::getSkillBlock($user_id,'vertical'));
 $tpl->assign('social_group_block', $social_group_block);
 $tpl->assign('session_list', $social_session_block);
 $social_layout = $tpl->get_template('social/home.tpl');

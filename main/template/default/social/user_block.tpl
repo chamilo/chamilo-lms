@@ -32,9 +32,10 @@
                             </div>
                         {% endif %}
                         <!-- END TYPE PROFILE -->
+
+                        {% if show_language_flag %}
                         <!-- LM -->
                         <div class="avatar-lm">
-                            <h5></h5>
                             {% if user.language %}
                                 {% if user.language.code == 'fr' %}
                                     <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/fr.svg" width="36px">
@@ -52,7 +53,6 @@
                         <!-- END LM -->
                         <!-- LC -->
                         <div class="avatar-lc">
-                            <h5></h5>
                             {% for item in extra_info %}
                                 {% if item.variable == 'langue_cible' %}
                                     {% if item.value == 'French2' %}
@@ -72,6 +72,8 @@
                             {% endfor %}
                         </div>
                         <!-- END LC -->
+                        {% endif %}
+
                     </div>
                     {# Ofaj #}
                     <ul class="list-user-data">

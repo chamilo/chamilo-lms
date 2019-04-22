@@ -2206,8 +2206,10 @@ class SocialManager extends UserManager
         }
 
         $extraFieldBlock = self::getExtraFieldBlock($userId, true);
+        $showLanguageFlag = api_get_configuration_value('social_show_language_flag_in_profile');
 
         $template->assign('user', $userInfo);
+        $template->assign('show_language_flag', $showLanguageFlag);
         $template->assign('extra_info', $extraFieldBlock);
         $template->assign('social_avatar_block', $socialAvatarBlock);
         $template->assign('profile_edition_link', $profileEditionLink);

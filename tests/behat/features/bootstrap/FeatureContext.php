@@ -116,11 +116,11 @@ class FeatureContext extends MinkContext
      */
     public function iAmLoggedAs($username)
     {
-        $this->visit('/index.php?logout=logout');
+        $this->visit('/public/login');
         $this->iAmOnHomepage();
-        $this->fillField('_username', $username);
-        $this->fillField('_password', $username);
-        $this->pressButton('submitAuth');
+        $this->fillField('login__username', $username);
+        $this->fillField('login__password', $username);
+        $this->pressButton('_submit');
     }
 
     /**

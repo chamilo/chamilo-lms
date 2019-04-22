@@ -28,13 +28,6 @@ env:
     - CHAMILO_VERSION=master
 
 before_install:
-  # Repo for Yarn
-#  - sudo apt-key adv --fetch-keys http://dl.yarnpkg.com/debian/pubkey.gpg
-#  - echo "deb http://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-#  - sudo apt-get update -qq
-#  - sudo apt-get install -y -qq yarn
-  #- sudo apt-get update
-  #- sudo apt-get install apache2 libapache2-mod-fastcgi
   # Fix travis error https://github.com/travis-ci/travis-ci/issues/8607
   - sudo rm -vf /etc/apt/sources.list.d/*riak*
   # Get Chrome
@@ -55,6 +48,7 @@ before_install:
   # Apache & php-fpm configuration
   - bash tests/travis/setup-php-fpm.sh
   - bash tests/travis/setup-apache.sh
+  - curl $VHOST_URL
 
   - mysqld --version
   - apache2 -v
@@ -85,8 +79,8 @@ before_install:
   # Dump js routes
   - bin/console fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json
   - # Install third party js/css libraries
-#  - yarn install
   - yarn --version
+  - yarn install
   - ./node_modules/.bin/encore dev
   # Check chamilo status
   - php -d date.timezone="Europe/Paris" $TRAVIS_BUILD_DIR/chash/chash.php chash:chamilo_status

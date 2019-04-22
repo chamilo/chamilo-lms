@@ -11,3 +11,7 @@ sudo chmod 777 -R $HOME
 
 # Starting Apache
 sudo service apache2 restart
+
+echo "* Apache restarted";
+
+curl $VHOST_URL

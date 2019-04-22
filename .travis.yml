@@ -29,33 +29,25 @@ env:
 
 before_install:
   # Repo for Yarn
-  - sudo apt-key adv --fetch-keys http://dl.yarnpkg.com/debian/pubkey.gpg
-  - echo "deb http://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-  - sudo apt-get update -qq
-  - sudo apt-get install -y -qq yarn
+#  - sudo apt-key adv --fetch-keys http://dl.yarnpkg.com/debian/pubkey.gpg
+#  - echo "deb http://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+#  - sudo apt-get update -qq
+#  - sudo apt-get install -y -qq yarn
   #- sudo apt-get update
   #- sudo apt-get install apache2 libapache2-mod-fastcgi
   # Fix travis error https://github.com/travis-ci/travis-ci/issues/8607
   - sudo rm -vf /etc/apt/sources.list.d/*riak*
   # Get Chrome
-  #- wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-  #- sudo apt-get update
-  #- sudo apt-get install google-chrome-stable
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
   # Get Chrome driver
   - wget https://chromedriver.storage.googleapis.com/2.35/chromedriver_linux64.zip && unzip chromedriver_linux64.zip
   - sudo mv chromedriver /usr/bin
   - sudo chmod +x /usr/bin/chromedriver
-  # Setup display for Selenium
-#  - sh -e /etc/init.d/xvfb start
-#  - export DISPLAY=:99.0
-#  - sleep 3
+
   # Get Selenium
   - wget http://selenium-release.storage.googleapis.com/3.1/selenium-server-standalone-3.1.0.jar
   # Check java
   - java -version
-#  - sudo apt-get install oracle-java8-installer
-#  - java -version
   - java -jar selenium-server-standalone-3.1.0.jar -log selenium.log  > /dev/null &
   - nohup bash -c "webdriver-manager start 2>&1 &"
   - sleep 10
@@ -93,7 +85,8 @@ before_install:
   # Dump js routes
   - bin/console fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json
   - # Install third party js/css libraries
-  - yarn install
+#  - yarn install
+  - yarn --version
   - ./node_modules/.bin/encore dev
   # Check chamilo status
   - php -d date.timezone="Europe/Paris" $TRAVIS_BUILD_DIR/chash/chash.php chash:chamilo_status

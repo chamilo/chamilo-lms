@@ -4,6 +4,7 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Career.
@@ -46,12 +47,16 @@ class Career
     /**
      * @var \DateTime
      *
+     * @Gedmo\Timestampable(on="create")
+     *
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
     protected $createdAt;
 
     /**
      * @var \DateTime
+     *
+     * @Gedmo\Timestampable(on="update")
      *
      * @ORM\Column(name="updated_at", type="datetime", nullable=false)
      */

@@ -116,6 +116,7 @@ function get_users($from, $limit, $column, $direction)
     $url = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php';
     foreach ($students as $student_data) {
         $student_id = $student_data['user_id'];
+        $student_data = api_get_user_info($student_id);
         if (isset($_GET['id_session'])) {
             $courses = Tracking::get_course_list_in_session_from_student($student_id, $_GET['id_session']);
         }

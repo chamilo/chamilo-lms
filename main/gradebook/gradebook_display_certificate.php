@@ -78,6 +78,11 @@ if ($filter === 'true') {
 
 $content = '';
 
+$courseCode = api_get_course_id();
+
+$allowExportToZip = api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') == 'true' &&
+    api_get_course_setting('customcertificate_course_enable', $courseCode) == 1;
+
 $tags = Certificate::notificationTags();
 
 switch ($action) {
@@ -127,28 +132,29 @@ switch ($action) {
         $content = $form->returnForm();
         break;
     case 'export_all_certificates':
-        $courseCode = api_get_course_id();
-        if (api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') == 'true' &&
-            api_get_course_setting('customcertificate_course_enable', $courseCode) == 1
-        ) {
-            $params = 'course_code='.api_get_course_id().'&session_id='.api_get_session_id().'&'.api_get_cidreq();
-            $url = api_get_path(WEB_PLUGIN_PATH).'customcertificate/src/print_certificate.php?export_all=1&'.$params;
+        if (api_is_student_boss()) {
+            $userGroup = new UserGroup();
+            $userList = $userGroup->getGroupUsersByUser(api_get_user_id());
         } else {
-            if (api_is_student_boss()) {
-                $userGroup = new UserGroup();
-                $userList = $userGroup->getGroupUsersByUser(api_get_user_id());
-            } else {
-                $userList = [];
-                if (!empty($filterOfficialCodeGet)) {
-                    $userList = UserManager::getUsersByOfficialCode($filterOfficialCodeGet);
-                }
+            $userList = [];
+            if (!empty($filterOfficialCodeGet)) {
+                $userList = UserManager::getUsersByOfficialCode($filterOfficialCodeGet);
             }
-
-            Category::exportAllCertificates($categoryId, $userList);
         }
+
+        Category::exportAllCertificates($categoryId, $userList);
+
         header('Location: '.$url);
         exit;
         break;
+    case 'export_all_certificates_zip':
+        if ($allowExportToZip) {
+            $params = 'course_code='.api_get_course_id().'&session_id='.api_get_session_id().'&'.api_get_cidreq();
+            $url = api_get_path(WEB_PLUGIN_PATH).'customcertificate/src/print_certificate.php?export_all=1&'.$params;
+
+            header('Location: '.$url);
+        }
+        exit;
     case 'generate_all_certificates':
         $userList = CourseManager::get_user_list_from_course_code(
             api_get_course_id(),
@@ -272,6 +278,14 @@ if (count($certificate_list) > 0 && $hideCertificateExport !== 'true') {
         Display::return_icon('pdf.png', get_lang('ExportAllCertificatesToPDF'), [], ICON_SIZE_MEDIUM),
         $url.'&action=export_all_certificates'
     );
+
+    if ($allowExportToZip) {
+        $actions .= Display::url(
+            Display::return_icon('file_zip.png', get_lang('ExportAllCertificatesToZIP'), [], ICON_SIZE_MEDIUM),
+            $url.'&action=export_all_certificates_zip'
+        );
+    }
+
     $actions .= Display::url(
         Display::return_icon('notification_mail.png', get_lang('SendCertificateNotifications'), [], ICON_SIZE_MEDIUM),
         $url.'&action=show_notification_form'

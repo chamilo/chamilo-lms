@@ -10027,6 +10027,10 @@ ul.dropdown-menu.inner > li > a {
     background-color: #fb5f0442 !important;
     color: #FF5722;
 }
+.details{
+    margin-top: 2rem;
+    padding: 1rem;
+}
 .details .user .avatar,
 .details .user .name,
 .details .user .access
@@ -10043,12 +10047,27 @@ ul.dropdown-menu.inner > li > a {
     margin-top: 1rem;
     padding-top: 1rem;
 }
+.details .user .parameters .create{
+    text-align: center;
+}
 .details .easypiechart-legend{
     text-align: center;
 }
 .details .easy-donut{
     padding-bottom: 10px;
     margin-bottom: 10px;
+}
+.details .list-card{
+    display: grid;
+    grid-gap: 1rem;
+    grid-row-gap: 16px;
+    grid-template-columns: repeat(3, 1fr);
+}
+.details .list-box-widget{
+    display: grid;
+    grid-gap: 1rem;
+    grid-row-gap: 16px;
+    grid-template-columns: repeat(2, 1fr);
 }
 @media (min-width: 768px) {
     .clear-rows-6-4-3 .col-sm-6:nth-child(2n+1) {

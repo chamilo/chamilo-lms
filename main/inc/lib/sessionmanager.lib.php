@@ -5865,7 +5865,7 @@ SQL;
     }
 
     /**
-     * Return user id list or count of users depending of the $getCount parameter
+     * Return user id list or count of users depending of the $getCount parameter.
      *
      * @param string $status
      * @param int    $userId

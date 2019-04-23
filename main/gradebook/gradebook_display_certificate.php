@@ -255,43 +255,37 @@ if (!empty($cats)) {
     }
 }
 
-echo '<div class="btn-group">';
-
-echo Display::url(
-    get_lang('GenerateCertificates'),
-    $url.'&action=generate_all_certificates',
-    ['class' => 'btn btn-default']
+$actions = '';
+$actions .= Display::url(
+    Display::return_icon('tuning.png', get_lang('GenerateCertificates'), [], ICON_SIZE_MEDIUM),
+    $url.'&action=generate_all_certificates'
 );
-
-echo Display::url(
-    get_lang('DeleteAllCertificates'),
-    $url.'&action=delete_all_certificates',
-    ['class' => 'btn btn-default']
+$actions .= Display::url(
+    Display::return_icon('delete.png', get_lang('DeleteAllCertificates'), [], ICON_SIZE_MEDIUM),
+    $url.'&action=delete_all_certificates'
 );
 
 $hideCertificateExport = api_get_setting('hide_certificate_export_link');
-if (count($certificate_list) > 0 && $hideCertificateExport !== 'true') {
-    echo Display::url(
-        get_lang('ExportAllCertificatesToPDF'),
-        $url.'&action=export_all_certificates',
-        ['class' => 'btn btn-default']
-    );
 
-    echo Display::url(
-        get_lang('SendCertificateNotifications'),
-        $url.'&action=show_notification_form',
-        ['class' => 'btn btn-default']
+if (count($certificate_list) > 0 && $hideCertificateExport !== 'true') {
+    $actions .= Display::url(
+        Display::return_icon('pdf.png', get_lang('ExportAllCertificatesToPDF'), [], ICON_SIZE_MEDIUM),
+        $url.'&action=export_all_certificates'
+    );
+    $actions .= Display::url(
+        Display::return_icon('notification_mail.png', get_lang('SendCertificateNotifications'), [], ICON_SIZE_MEDIUM),
+        $url.'&action=show_notification_form'
     );
 }
 
-echo '</div>';
+echo Display::toolbarAction('actions', [$actions]);
 
 echo $filterForm;
 
 if (count($certificate_list) == 0) {
     echo Display::return_message(get_lang('NoResultsAvailable'), 'warning');
 } else {
-    echo '<br /><br /><table class="data_table">';
+    echo '<table class="data_table">';
     foreach ($certificate_list as $index => $value) {
         echo '<tr>
                 <td width="100%" class="actions">'.get_lang('Student').' : '.api_get_person_name($value['firstname'], $value['lastname']).' ('.$value['username'].')</td>';

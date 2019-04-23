@@ -5865,6 +5865,8 @@ SQL;
     }
 
     /**
+     * Return user id list or count of users depending of the $getCount parameter
+     *
      * @param string $status
      * @param int    $userId
      * @param bool   $getCount
@@ -5896,7 +5898,8 @@ SQL;
         $studentIdList = [],
         $filterByStatus = null
     ) {
-        $filterByStatus = intval($filterByStatus);
+        $filterByStatus = (int) $filterByStatus;
+        $userId = (int) $userId;
 
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -5909,12 +5912,11 @@ SQL;
 
         $direction = in_array(strtolower($direction), ['asc', 'desc']) ? $direction : 'asc';
         $column = Database::escape_string($column);
-        $userId = intval($userId);
 
         $limitCondition = '';
         if (isset($from) && isset($numberItems)) {
-            $from = intval($from);
-            $numberItems = intval($numberItems);
+            $from = (int) $from;
+            $numberItems = (int) $numberItems;
             $limitCondition = "LIMIT $from, $numberItems";
         }
 
@@ -5925,7 +5927,7 @@ SQL;
         $userConditions = '';
 
         if (isset($active)) {
-            $active = intval($active);
+            $active = (int) $active;
             $userConditions .= " AND active = $active";
         }
 
@@ -5954,7 +5956,7 @@ SQL;
             $studentListSql = "'".implode("','", $studentIdList)."'";
         }
         if (!empty($studentListSql)) {
-            $userConditionsFromDrh = " AND u.user_id IN (".$studentListSql.") ";
+            $userConditionsFromDrh = " AND u.user_id IN ($studentListSql) ";
         }
 
         switch ($status) {
@@ -5976,7 +5978,7 @@ SQL;
                     $sessionsListSql = "'".implode("','", $sessionIdList)."'";
                 }
                 if (!empty($sessionsListSql)) {
-                    $sessionConditions = " AND s.id IN (".$sessionsListSql.") ";
+                    $sessionConditions = " AND s.id IN ($sessionsListSql) ";
                 }
                 break;
             case 'session_admin':
@@ -5991,16 +5993,16 @@ SQL;
                 break;
         }
 
-        $select = "SELECT DISTINCT u.* ";
-        $masterSelect = "SELECT DISTINCT * FROM ";
+        $select = 'SELECT DISTINCT u.* ';
+        $masterSelect = 'SELECT DISTINCT user_id FROM ';
 
         if ($getCount) {
-            $select = "SELECT DISTINCT u.user_id ";
-            $masterSelect = "SELECT COUNT(DISTINCT(user_id)) as count FROM ";
+            $select = 'SELECT DISTINCT u.user_id ';
+            $masterSelect = 'SELECT COUNT(DISTINCT(user_id)) as count FROM ';
         }
 
         if (!empty($filterByStatus)) {
-            $userConditions .= " AND u.status = ".$filterByStatus;
+            $userConditions .= " AND u.status = $filterByStatus";
         }
 
         if (!empty($lastConnectionDate)) {

@@ -77,7 +77,7 @@ try {
     $container = $kernel->getContainer();
 
     if ($kernel->isInstalled()) {
-        require_once $kernel->getConfigurationFile();
+        //require_once $kernel->getConfigurationFile();
     } else {
         $_configuration = [];
         // Redirects to the main/install/ page
@@ -87,12 +87,12 @@ try {
         exit;
     }
 
-    $kernel->setApi($_configuration);
+    //$kernel->setApi($_configuration);
 
     // Ensure that _configuration is in the global scope before loading
     // main_api.lib.php. This is particularly helpful for unit tests
     if (!isset($GLOBALS['_configuration'])) {
-        $GLOBALS['_configuration'] = $_configuration;
+        //$GLOBALS['_configuration'] = $_configuration;
     }
 
     // Do not over-use this variable. It is only for this script's local use.

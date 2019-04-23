@@ -237,19 +237,14 @@ if (!$playerSupported && $execute_iframe) {
     </script>';
     $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
     $htmlHeadXtra[] = '<script>
-        var updateContentHeight = function() {
-            my_iframe = document.getElementById("mainFrame");
-            if (my_iframe) {
-                //this doesnt seem to work in IE 7,8,9         
-                my_iframe.height = my_iframe.contentWindow.document.body.scrollHeight + 50 + "px";
-            }
-        };
-
         // Fixes the content height of the frame
-        window.onload = function() {
-            updateContentHeight();
+        $(function() {
+            $(\'#mainFrame\').on(\'load\', function () {
+                this.style.height = (this.contentWindow.document.body.scrollHeight + 50) + \'px\';
+            });
+            
             '.$frameReady.'
-        }
+        });
     </script>';
 }
 

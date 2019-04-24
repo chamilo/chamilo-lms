@@ -116,3 +116,42 @@
         {% endif %}
     </div>
 {% endmacro %}
+
+{% macro box_widget(name, content, icon) %}
+    <div class="card box-widget">
+        <div class="card-body">
+            <div class="stat-widget-five">
+                <i class="fa fa-{{ icon }}" aria-hidden="true"></i>
+                {{ content }}
+                <div class="box-name">
+                    {{ name }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro card_widget(name, content, icon, extra) %}
+    <div class="card card-first-date">
+        <div class="card-body">
+            <div class="stat-widget-five">
+                <div class="stat-icon">
+                    <i class="fa fa-{{ icon }}" aria-hidden="true"></i>
+                    {% if extra %}
+                        <span class="active-icon">{{ extra }}</span>
+                    {% endif %}
+                </div>
+                <div class="stat-content">
+                    <div class="text-left">
+                        <div class="stat-text">
+                            {{ content }}
+                        </div>
+                        <div class="stat-heading">
+                            {{ name }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}

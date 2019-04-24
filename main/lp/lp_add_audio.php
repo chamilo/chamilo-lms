@@ -171,7 +171,12 @@ $page .= $recordVoiceForm;
 $page .= '<br>';
 $page .= $form->returnForm();
 $page .= '<h3 class="page-header"><small>'.get_lang('Or').'</small> '.get_lang('SelectAnAudioFileFromDocuments').'</h3>';
-$page .= $documentTree;
+$page .= '<ul class="lp_resource">';
+$page .= '<li class="doc_folder" style="margin-left: 36px;">'.get_lang('Audio').'</li>';
+$page .= '<li class="doc_folder">';
+$page .= '<ul class="lp_resource">'.$documentTree.'</ul>';
+$page .= '</div>';
+$page .= '</ul>';
 $page .= '</div>';
 $page .= '</div>';
 

@@ -2195,8 +2195,8 @@ class SurveyUtil
      * @param int  $reminder
      * @param bool $sendmail
      * @param int  $remindUnAnswered
-     *
-     * @return bool $isAdditionalEmail
+     * @param bool $isAdditionalEmail
+     * @param bool $hideLink
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @author Julio Montoya - Adding auto-generated link support
@@ -2210,7 +2210,8 @@ class SurveyUtil
         $reminder = 0,
         $sendmail = false,
         $remindUnAnswered = 0,
-        $isAdditionalEmail = false
+        $isAdditionalEmail = false,
+        $hideLink = false
     ) {
         if (!is_array($users_array)) {
             // Should not happen
@@ -2225,7 +2226,8 @@ class SurveyUtil
 
         // Remind unanswered is a special version of remind all reminder
         $exclude_users = [];
-        if ($remindUnAnswered == 1) { // Remind only unanswered users
+        if ($remindUnAnswered == 1) {
+            // Remind only unanswered users
             $reminder = 1;
             $exclude_users = SurveyManager::get_people_who_filled_survey($_GET['survey_id']);
         }
@@ -2315,7 +2317,8 @@ class SurveyUtil
                     $value,
                     $invitation_code,
                     $invitation_title,
-                    $invitation_text
+                    $invitation_text,
+                    $hideLink
                 );
                 $counter++;
             }
@@ -2389,7 +2392,8 @@ class SurveyUtil
         $invitedUser,
         $invitation_code,
         $invitation_title,
-        $invitation_text
+        $invitation_text,
+        $hideLink = false
     ) {
         $_user = api_get_user_info();
         $_course = api_get_course_info();
@@ -2397,14 +2401,17 @@ class SurveyUtil
 
         // Replacing the **link** part with a valid link for the user
         $link = self::generateFillSurveyLink($invitation_code, $_course, $sessionId);
+        if ($hideLink) {
+            $full_invitation_text = str_replace('**link**', '', $invitation_text);
+        } else {
+            $text_link = '<a href="'.$link.'">'.get_lang('ClickHereToAnswerTheSurvey')."</a><br />\r\n<br />\r\n"
+                .get_lang('OrCopyPasteTheFollowingUrl')." <br /> \r\n <br /> \r\n ".$link;
 
-        $text_link = '<a href="'.$link.'">'.get_lang('ClickHereToAnswerTheSurvey')."</a><br />\r\n<br />\r\n"
-            .get_lang('OrCopyPasteTheFollowingUrl')." <br /> \r\n <br /> \r\n ".$link;
-
-        $replace_count = 0;
-        $full_invitation_text = api_str_ireplace('**link**', $text_link, $invitation_text, $replace_count);
-        if ($replace_count < 1) {
-            $full_invitation_text = $full_invitation_text."<br />\r\n<br />\r\n".$text_link;
+            $replace_count = 0;
+            $full_invitation_text = api_str_ireplace('**link**', $text_link, $invitation_text, $replace_count);
+            if ($replace_count < 1) {
+                $full_invitation_text = $full_invitation_text."<br />\r\n<br />\r\n".$text_link;
+            }
         }
 
         // Sending the mail

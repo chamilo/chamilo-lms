@@ -173,13 +173,13 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
         $form->addElement('hidden', 'parent_id', $message_id);
     }
 
-    $form->addText('title', get_lang('Subject'), true);
+    $form->addText('title', get_lang('Subject'));
     $form->addHtmlEditor(
         'content',
         get_lang('Message'),
         false,
         false,
-        ['ToolbarSet' => 'Messages', 'Width' => '100%', 'Height' => '250']
+        ['ToolbarSet' => 'Messages', 'Width' => '100%', 'Height' => '250', 'style' => true]
     );
 
     if (isset($_GET['re_id'])) {

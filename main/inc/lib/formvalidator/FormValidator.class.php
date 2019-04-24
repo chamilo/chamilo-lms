@@ -1024,7 +1024,8 @@ EOT;
 
         /** @var HtmlEditor $element */
         $element = $this->getElement($name);
-        $config['style'] = false;
+
+        $config['style'] = isset($config['style']) ? $config['style'] : false;
         if ($fullPage) {
             $config['fullPage'] = true;
             // Adds editor_content.css in ckEditor

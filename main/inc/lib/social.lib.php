@@ -2389,6 +2389,8 @@ class SocialManager extends UserManager
                 $j++;
             }
             $friendHtml .= '</div>';
+        } else {
+            $friendHtml = Display::return_message(get_lang('NoFriendsInYourContactList'), 'warning');
         }
 
         return $friendHtml;

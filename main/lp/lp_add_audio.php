@@ -87,6 +87,10 @@ $suredel = trim(get_lang('AreYouSureToDeleteJS'));
 
 $lpPathInfo = $lp->generate_lp_folder(api_get_course_info());
 
+DocumentManager::createDefaultAudioFolder($courseInfo);
+
+$audioFolderId = DocumentManager::get_document_id($courseInfo, '/audio');
+
 $file = null;
 if (isset($lp_item->audio) && !empty($lp_item->audio)) {
     $file = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/audio/'.$lp_item->audio;
@@ -154,14 +158,15 @@ $form->addElement('header', get_lang('Or'));
 $courseInfo = api_get_course_info();
 $documentTree = DocumentManager::get_document_preview(
     $courseInfo,
-    false,
+    $lp->get_id(),
     null,
     api_get_session_id(),
     false,
     '',
     api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=add_audio&lp_id='.$lp->get_id().'&id='.$lp_item_id,
     false,
-    true
+    true,
+    $audioFolderId
 );
 
 $page .= $recordVoiceForm;

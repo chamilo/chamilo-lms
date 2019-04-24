@@ -3471,7 +3471,7 @@ class DocumentManager
         }
 
         if (!empty($overwrite_url)) {
-            $url .= '&url='.Security::remove_XSS($overwrite_url);
+            $url .= '&url='.urlencode(Security::remove_XSS($overwrite_url));
         }
 
         if ($add_move_button) {

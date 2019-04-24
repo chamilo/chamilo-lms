@@ -157,14 +157,10 @@ if ($survey_data['anonymous'] != 1 || api_get_configuration_value('survey_anonym
 }
 // Allow resending to all selected users
 $form->addElement('checkbox', 'resend_to_all', '', get_lang('ReminderResendToAllUsers'));
+$form->addElement('checkbox', 'hide_link', '', get_lang('HideSurveyInvitationLink'));
 
 // Submit button
 $form->addButtonSave(get_lang('PublishSurvey'));
-// The rules (required fields)
-/*if ($survey_data['send_mail'] == 0) {
-    $form->addRule('mail_title', get_lang('ThisFieldIsRequired'), 'required');
-    $form->addRule('mail_text', get_lang('ThisFieldIsRequired'), 'required');
-}*/
 $portal_url = api_get_path(WEB_PATH);
 if (api_is_multiple_url_enabled()) {
     $access_url_id = api_get_current_access_url_id();
@@ -175,7 +171,12 @@ if (api_is_multiple_url_enabled()) {
 }
 
 // Show the URL that can be used by users to fill a survey without invitation
-$auto_survey_link = SurveyUtil::generateFillSurveyLink('auto', $_course, $survey_data['session_id'], $survey_data['survey_code']);
+$auto_survey_link = SurveyUtil::generateFillSurveyLink(
+    'auto',
+    $_course,
+    $survey_data['session_id'],
+    $survey_data['survey_code']
+);
 
 $form->addElement('label', null, get_lang('AutoInviteLink'));
 $form->addElement('label', null, $auto_survey_link);
@@ -187,6 +188,7 @@ if ($form->validate()) {
     $sendMail = isset($values['send_mail']) ? $values['send_mail'] : '';
     $remindUnAnswered = isset($values['remindUnAnswered']) ? $values['remindUnAnswered'] : '';
     $users = isset($values['users']) ? $values['users'] : [];
+    $hideLink = isset($values['hide_link']) && $values['hide_link'] ? true : false;
 
     if ($sendMail) {
         if (empty($values['mail_title']) || empty($values['mail_text'])) {
@@ -223,7 +225,9 @@ if ($form->validate()) {
         $values['mail_text'],
         $resendAll,
         $sendMail,
-        $remindUnAnswered
+        $remindUnAnswered,
+        false,
+        $hideLink
     );
 
     // Saving the invitations for the additional users

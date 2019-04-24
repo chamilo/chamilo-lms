@@ -9482,9 +9482,7 @@ function api_get_language_list_for_flag()
 }
 
 /**
- *
  * @return string
- *
  */
 function api_get_language_translate_html()
 {
@@ -9497,12 +9495,17 @@ function api_get_language_translate_html()
     $languageList = api_get_languages();
     $hideAll = '';
     foreach ($languageList['all'] as $language) {
-        $hideAll .=
-            '$("span:lang('.$language['isocode'].')").filter(
-                function() {
-                    // Ignore ckeditor classes
-                    return !this.className.match(/cke(.*)/);
-            }).hide();';
+        $hideAll .= '
+        $("span:lang('.$language['isocode'].')").filter(
+            function(e, val) {
+                // Only find the spans if they have set the lang                
+                if ($(this).attr("lang") == null) {                
+                    return false;
+                }
+                
+                // Ignore ckeditor classes
+                return !this.className.match(/cke(.*)/);
+        }).hide();'."\n";
     }
 
     $userInfo = api_get_user_info();

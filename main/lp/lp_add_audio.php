@@ -110,7 +110,7 @@ $page .= $lp->return_new_tree(null, true);
 // Show the template list.
 $page .= '</div>';
 
-$recordVoiceForm = Display::page_subheader(get_lang('RecordYourVoice'));
+$recordVoiceForm = '<h3 class="page-header">'.get_lang('RecordYourVoice').'</h3>';
 
 $page .= '<div id="doc_form" class="col-md-8">';
 
@@ -129,8 +129,7 @@ $tpl->assign('lp_item_id', $lp_item_id);
 $tpl->assign('lp_dir', api_remove_trailing_slash($lpPathInfo['dir']));
 $template = $tpl->get_template('learnpath/record_voice.tpl');
 $recordVoiceForm .= $tpl->fetch($template);
-$form->addElement('header', get_lang('Or'));
-$form->addElement('header', get_lang('AudioFile'));
+$form->addElement('header', '<small class="text-muted">'.get_lang('Or').'</small> '.get_lang('AudioFile'));
 $form->addLabel(null, sprintf(get_lang('AudioFileForItemX'), $lp_item->get_title()));
 
 if (!empty($file)) {
@@ -153,7 +152,6 @@ if (!empty($file)) {
     $form->addElement('hidden', 'id', $lp_item_id);
     $form->addButtonSave(get_lang('Save'));
 }
-$form->addElement('header', get_lang('Or'));
 
 $courseInfo = api_get_course_info();
 $documentTree = DocumentManager::get_document_preview(
@@ -170,8 +168,9 @@ $documentTree = DocumentManager::get_document_preview(
 );
 
 $page .= $recordVoiceForm;
+$page .= '<br>';
 $page .= $form->returnForm();
-$page .= '<legend>'.get_lang('SelectAnAudioFileFromDocuments').'</legend>';
+$page .= '<h3 class="page-header"><small>'.get_lang('Or').'</small> '.get_lang('SelectAnAudioFileFromDocuments').'</h3>';
 $page .= $documentTree;
 $page .= '</div>';
 $page .= '</div>';

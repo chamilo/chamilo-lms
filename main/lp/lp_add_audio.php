@@ -172,6 +172,4 @@ $page .= '</div>';
 $page .= '</div>';
 
 $tpl->assign('content', $page);
-$template = $tpl->get_template('learnpath/lp_upload_audio.tpl');
-$content = $tpl->fetch($template);
 $tpl->display_one_col_template();

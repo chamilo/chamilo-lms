@@ -139,7 +139,7 @@
                     <i class="fa fa-{{ icon }}" aria-hidden="true"></i>
                     {% if extra %}
                         <span class="active-icon">{{ extra }}</span>
-                    {% end %}
+                    {% endif %}
                 </div>
                 <div class="stat-content">
                     <div class="text-left">

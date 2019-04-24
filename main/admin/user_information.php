@@ -27,7 +27,7 @@ $user = api_get_user_info($userId, true);
 if (empty($user)) {
     api_not_allowed(true);
 }
-$tpl = new Template(null,false,false,false,false,false,false);
+$tpl = new Template(null, false, false, false, false, false, false);
 /** @var User $userEntity */
 $userEntity = api_get_user_entity($user['user_id']);
 $myUserId = api_get_user_id();
@@ -168,7 +168,7 @@ $userInfo = [
     'official_code' => $user['official_code'],
     'user_is_online' => !empty($user['user_is_online']) ? Display::return_icon('online.png') : Display::return_icon('offline.png'),
     'status' => $user['status'] == 1 ? get_lang('Teacher') : get_lang('Student'),
-    'avatar' => $user['avatar']
+    'avatar' => $user['avatar'],
 ];
 
 // Show info about who created this user and when
@@ -182,8 +182,6 @@ if (!empty($creatorId) && !empty($creatorInfo)) {
         api_get_utc_datetime($registrationDate)
     );
 }
-
-
 
 $row = 1;
 foreach ($data as $label => $item) {
@@ -205,7 +203,6 @@ $data = [
 ];
 $userInfo['first_connection'] = Tracking::get_first_connection_date($userId);
 $userInfo['last_connection'] = Tracking::get_last_connection_date($userId, true);
-
 
 if (api_get_setting('allow_terms_conditions') === 'true') {
     $extraFieldValue = new ExtraFieldValue('user');
@@ -250,8 +247,6 @@ foreach ($data as $label => $item) {
     $row++;
 }
 
-
-
 /**
  * Show social activity.
  */
@@ -284,7 +279,7 @@ if (api_get_setting('allow_social_tool') === 'true') {
         'invitation_received' => $countReceived,
         'messages_posted' => $wallMessagesPosted,
         'message_sent' => $messagesSent,
-        'message_received' => $messagesReceived
+        'message_received' => $messagesReceived,
     ];
 }
 
@@ -616,7 +611,6 @@ Display::display_header($tool_name);
 
 echo Display::toolbarAction('toolbar-user-information', [implode(PHP_EOL, $actions)]);
 
-
 $fullUrlBig = UserManager::getUserPicture(
     $userId,
     USER_IMAGE_SIZE_BIG
@@ -626,7 +620,6 @@ $fullUrl = UserManager::getUserPicture(
     $userId,
     USER_IMAGE_SIZE_ORIGINAL
 );
-
 
 if ($studentBossList) {
     echo Display::page_subheader(get_lang('StudentBossList'));
@@ -711,7 +704,5 @@ echo Tracking::displayUserSkills(
     0,
     0
 );
-
-
 
 Display::display_footer();

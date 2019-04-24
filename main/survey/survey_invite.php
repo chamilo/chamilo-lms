@@ -159,7 +159,6 @@ if ($survey_data['anonymous'] != 1 || api_get_configuration_value('survey_anonym
 $form->addElement('checkbox', 'resend_to_all', '', get_lang('ReminderResendToAllUsers'));
 $form->addElement('checkbox', 'hide_link', '', get_lang('HideSurveyInvitationLink'));
 
-
 // Submit button
 $form->addButtonSave(get_lang('PublishSurvey'));
 $portal_url = api_get_path(WEB_PATH);

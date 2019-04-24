@@ -308,7 +308,7 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
                     });
                     orderList = JSON.stringify(orderList);
                     $.get("<?php echo $orderUrl; ?>", "order="+orderList, function (result) {
-                        console.log(result);
+                        //console.log(result);
                     });
                 }
             };

@@ -16,7 +16,7 @@ api_protect_course_script(true);
  */
 $charset = api_get_system_encoding();
 
-//replace image path
+// Replace image path
 $path_image = api_get_path(WEB_COURSE_PATH).api_get_course_path();
 $path_image_search = '../..'.api_get_path(REL_COURSE_PATH).api_get_course_path();
 $glossaryId = isset($_POST['glossary_id']) ? (int) $_POST['glossary_id'] : 0;
@@ -47,16 +47,18 @@ if (!empty($glossaryId)) {
 
     $glossaryInfo = GlossaryManager::get_glossary_term_by_glossary_name($my_glossary_name);
 
-    $glossary_description = str_replace(
+    $description = str_replace(
         $path_image_search,
         $path_image,
         $glossaryInfo['description']
     );
 
-    if (is_null($glossary_description) || strlen(trim($glossary_description)) == 0) {
+    if (is_null($description) || strlen(trim($description)) == 0) {
         echo api_xml_http_response_encode(get_lang('NoResults'));
     } else {
-        echo api_xml_http_response_encode($glossary_description);
+
+        $description = str_replace('class="glossary"', '', $description);
+        echo api_xml_http_response_encode($description);
     }
 } else {
     echo api_xml_http_response_encode(get_lang('NoResults'));

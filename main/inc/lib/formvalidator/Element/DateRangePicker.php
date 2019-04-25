@@ -63,9 +63,20 @@ class DateRangePicker extends HTML_QuickForm_text
         $start = isset($dates[0]) ? $dates[0] : '';
         $end = isset($dates[1]) ? $dates[1] : '';
 
+        $formatter = new IntlDateFormatter(
+            'en',
+            IntlDateFormatter::NONE,
+            IntlDateFormatter::NONE,
+            'UTC',
+            IntlDateFormatter::GREGORIAN,
+            'yyyy-MM-dd HH:mm'
+        );
+        $resultStart = $formatter->format($formatter->parse($start));
+        $resultEnd = $formatter->format($formatter->parse($end));
+
         return [
-            'start' => $start,
-            'end' => $end,
+            'start' => $resultStart,
+            'end' => $resultEnd,
         ];
     }
 

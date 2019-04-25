@@ -2389,9 +2389,52 @@ class SocialManager extends UserManager
                 $j++;
             }
             $friendHtml .= '</div>';
+        } else {
+            $friendHtml = Display::return_message(get_lang('NoFriendsInYourContactList'), 'warning');
         }
 
         return $friendHtml;
+    }
+
+    /**
+     * @return string Get the JS code necessary for social wall to load open graph from URLs.
+     */
+    public static function getScriptToGetOpenGraph()
+    {
+        return '<script>
+            $(function() {
+                $("[name=\'social_wall_new_msg_main\']").on("paste", function(e) {
+                    $.ajax({
+                        contentType: "application/x-www-form-urlencoded",
+                        beforeSend: function() {
+                            $("[name=\'wall_post_button\']").prop( "disabled", true );
+                            $(".panel-preview").hide();
+                            $(".spinner").html("'
+                                .'<div class=\'text-center\'>'
+                                .'<em class=\'fa fa-spinner fa-pulse fa-1x\'></em>'
+                                .'<p>'.get_lang('Loading').' '.get_lang('Preview').'</p>'
+                                .'</div>'
+                            .'");
+                        },
+                        type: "POST",
+                        url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=read_url_with_open_graph",
+                        data: "social_wall_new_msg_main=" + e.originalEvent.clipboardData.getData("text"),
+                        success: function(response) {
+                            $("[name=\'wall_post_button\']").prop("disabled", false);
+                            if (!response == false) {
+                                $(".spinner").html("");
+                                $(".panel-preview").show();
+                                $(".url_preview").html(response);
+                                $("[name=\'url_content\']").val(response);
+                                $(".url_preview img").addClass("img-responsive");
+                            } else {
+                                $(".spinner").html("");
+                            }
+                        }
+                    });
+                });
+            });
+        </script>';
     }
 
     /**

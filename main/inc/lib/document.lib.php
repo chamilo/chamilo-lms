@@ -3471,7 +3471,7 @@ class DocumentManager
         }
 
         if (!empty($overwrite_url)) {
-            $url .= '&url='.Security::remove_XSS($overwrite_url);
+            $url .= '&url='.urlencode(Security::remove_XSS($overwrite_url));
         }
 
         if ($add_move_button) {
@@ -4477,7 +4477,7 @@ class DocumentManager
         $path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
         if (!is_dir($path.'audio')) {
             mkdir($path.'audio', api_get_permissions_for_new_directories());
-            $audioId = add_document($_course, '/audio', 'folder', 0, 'Audio');
+            $audioId = add_document($_course, '/audio', 'folder', 0, get_lang('Audio'));
             api_item_property_update(
                 $_course,
                 TOOL_DOCUMENT,

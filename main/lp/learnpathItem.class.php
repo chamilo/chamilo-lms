@@ -4419,7 +4419,8 @@ class learnpathItem
 
         $file_path = '';
         if (!empty($document_data)) {
-            $file_path = basename($document_data['path']);
+            $file_path = substr($document_data['path'], 6);
+            $file_path = ltrim($file_path, "/");
             // Store the mp3 file in the lp_item table.
             $table = Database::get_course_table(TABLE_LP_ITEM);
             $sql = "UPDATE $table SET

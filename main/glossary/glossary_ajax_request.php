@@ -19,21 +19,18 @@ $charset = api_get_system_encoding();
 //replace image path
 $path_image = api_get_path(WEB_COURSE_PATH).api_get_course_path();
 $path_image_search = '../..'.api_get_path(REL_COURSE_PATH).api_get_course_path();
+$glossaryId = isset($_POST['glossary_id']) ? (int) $_POST['glossary_id'] : 0;
 
-if (isset($_POST['glossary_id']) &&
-    $_POST['glossary_id'] == strval(intval($_POST['glossary_id']))
-) {
-    $glossary_description_by_id = GlossaryManager::get_glossary_term_by_glossary_id(
-        $_POST['glossary_id']
-    );
-    $glossary_description_by_id = str_replace(
+if (!empty($glossaryId)) {
+    $description = GlossaryManager::get_glossary_term_by_glossary_id($glossaryId);
+    $description = str_replace(
         $path_image_search,
         $path_image,
-        $glossary_description_by_id
+        $description
     );
-    echo api_xml_http_response_encode($glossary_description_by_id);
+    echo api_xml_http_response_encode($description);
 } elseif (isset($_POST['glossary_data']) && $_POST['glossary_data'] == 'true') {
-    //get_glossary_terms
+    // get_glossary_terms
     $glossary_data = GlossaryManager::get_glossary_terms();
     $glossary_all_data = [];
     if (count($glossary_data) > 0) {
@@ -48,9 +45,7 @@ if (isset($_POST['glossary_id']) &&
     $my_glossary_name = api_convert_encoding($my_glossary_name, $charset, 'UTF-8');
     $my_glossary_name = trim($my_glossary_name);
 
-    $glossaryInfo = GlossaryManager::get_glossary_term_by_glossary_name(
-        $my_glossary_name
-    );
+    $glossaryInfo = GlossaryManager::get_glossary_term_by_glossary_name($my_glossary_name);
 
     $glossary_description = str_replace(
         $path_image_search,

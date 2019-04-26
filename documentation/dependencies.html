@@ -62,47 +62,52 @@ We recommend using HTML5-compatible technology.
 <ul>
   <li>PC with a minimum of 512MB or any tablet or smartphone</li>
   <li>We recommend a Pentium-I as a minimum processor capability for PCs</li>
-  <li>Works on Windows XP (SP3 recommended) and later versions, Linux (any version with a graphical interface), Mac OS (any version), FreeBSD, Android, iOS and pretty much any other operating system with a graphical interface you might think about</li>
+  <li>Works on Windows 8 and later versions, Linux (any version with a graphical interface), Mac OSX (any version), FreeBSD, Android, iOS and pretty much any other operating system with a graphical interface you might think about</li>
   <li>Any modern browser (IE10 and inferior *excluded*).</li>
-  <li>Optional: Flash plugin (only required for a few features like the videoconference plugins)</li>
+  <li>Optional: Flash plugin (only required if WebRTC is not supported by your browser)</li>
   <li>Optional: Java applet capability (only required for some plugins)</li>
 </ul>
 
 <h2>Dependencies - server-side</h2>
 <ul>
   <li>Apache 2+</li>
-  <li>PHP 5.5 or higher with MySQL bindings (mysqlnd is recommended for PHP 5). Now also supports PHP up to 7.2. If you use PHP 5, we highly recommend PHP 5.6. Otherwise, please use the latest stable PHP version available.</li>
+  <li>PHP 5.6 or higher with MySQL bindings. Now also supports PHP up to 7.3.</li>
   <li>MySQL 5.6+ or any version of MariaDB database server</li>
-  <li>php-intl package (for international behaviour support)</li>
-  <li>php-gd package (for images resizing/cropping)</li>
-  <li>php-mbstring package (for international behaviour support)</li>
-  <li>php-imagick</li>
-  <li>php-curl (only required for a feature in the links tool and an optional installer check)</li>
-  <li>php-mcrypt (only required for a feature in the survey tool)</li>
+  <li>php-curl</li>
+  <li>php-dom (usually available by default)</li>
+  <li>php-fileinfo (usually available by default)</li>
+  <li>php-gd or php-imagick (for images resizing/cropping)</li>
+  <li>php-intl (for international behaviour support)</li>
+  <li>php-json</li>
+  <li>php-mbstring</li>
+  <li>php-mysql</li>
+  <li>php-soap (for web services)</li>
+  <li>php-xml</li>
+  <li>php-zip</li>
   <li>php-ldap (only required for connection to a LDAP server)</li>
-  <li>php-xapian (only required for full-text indexing and search)</li>
 </ul><br />
 <a name="included_dependencies"></a>
 <h2>Included Dependencies</h2>
 <ul>
   <li>EZpdf and MPDF</li>
-  <li>FCKEditor (previously HTMLArea) </li>
-  <li>FormValidator </li>
+  <li>CKEditor (previously FCKeditor, previously HTMLArea) </li>
+  <li>FormValidator (own version)</li>
   <li>iCalCreator</li>
-  <li>kSes </li>
-  <li>MIMETex </li>
-  <li>MP3Player </li>
-  <li>PCLZip </li>
-  <li>PEAR::HTML_Common </li>
-  <li>PEAR::HTML_QuickForm </li>
+  <li>kSes</li>
+  <li>mathjax</li>
+  <li>MIMETex</li>
+  <li>MP3Player</li>
+  <li>Mediaplayer</li>
+  <li>PCLZip</li>
+  <li>PEAR::HTML_Common</li>
+  <li>PEAR::HTML_QuickForm</li>
   <li>PEAR::HTML_Table</li>
   <li>PEAR::OLE</li>
   <li>PEAR::Pager</li>
   <li>PEAR::Spreadsheet_Excel_Writer</li>
-  <li>PECL</li>
-  <li>PHPMailer </li>
+  <li>PHPMailer</li>
   <li>WCAG_Rendering</li>
-  <li>xajax </li>
+  <li>xajax</li>
   <li>jQuery</li>
   <li>Others (see composer.json)</li>
 </ul>

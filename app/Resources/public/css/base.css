@@ -10030,6 +10030,10 @@ ul.dropdown-menu.inner > li > a {
     background-color: #fb5f0442 !important;
     color: #FF5722;
 }
+.details-title{
+    font-weight: bold;
+    font-size: 22px;
+}
 .details{
     margin-top: 2rem;
     padding: 1rem;
@@ -10078,6 +10082,71 @@ ul.dropdown-menu.inner > li > a {
     text-overflow: ellipsis;
     white-space: nowrap;
     width: 100%;
+}
+
+.summary-course .course .title{
+    font-weight: bold;
+    font-size: 14px;
+}
+.summary-course .course .image{
+    margin-bottom: 10px;
+}
+.summary-course .course .info{
+    font-size: 12px;
+}
+.summary-course .list-donut{
+    display: grid;
+    grid-gap: 1rem;
+    grid-row-gap: 16px;
+    grid-template-columns: repeat(2, 1fr);
+}
+.summary-course .list-donut .easypiechart{
+    margin: 5px auto 5px auto;
+    width: 100px;
+    height: 100px;
+}
+.summary-course .list-donut .easypiechart .percent{
+    font-size: 20px;
+    top: 40px;
+    width: 100px;
+}
+.summary-course .list-donut .easypiechart canvas{
+    width: 100px;
+    height: 100px;
+}
+.summary-course .list-donut .easy-donut{
+    text-align: center;
+}
+.summary-course .state{
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.summary-course .state .stat-heading{
+    text-align: center;
+    font-size: 12px;
+}
+.summary-course .state .stat-text {
+    font-size: 22px;
+    text-align: center;
+}
+.summary-course .state .stat-icon{
+    font-size: 30px;
+    text-align: center;
+}
+.summary-course .easypiechart-legend {
+    font-size: 12px;
+}
+.summary-course .list-info{
+    margin-bottom: 0;
+}
+.summary-course .list-info dt,
+.summary-course .list-info dd
+{
+    padding-top: 7px;
+    padding-bottom: 7px;
+}
+.summary-course .list-info .text-color{
+    color: #0A649F;
 }
 
 @media (min-width: 768px) {

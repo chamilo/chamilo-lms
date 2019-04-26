@@ -1,3 +1,7 @@
+{% if title %}
+<h2 class="details-title"><img src="{{ 'course.png'|icon(32) }}"> {{ title }}</h2>
+{% endif %}
+
 <div class="page-header">
     <h3>{{ user.complete_name }}</h3>
 </div>

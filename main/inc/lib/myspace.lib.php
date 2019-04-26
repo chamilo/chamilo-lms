@@ -1042,7 +1042,7 @@ class MySpace
      */
     public static function display_tracking_course_overview()
     {
-        $t_head = '<table style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
+        /*$t_head = '<table style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
         $t_head .= '<tr>';
         $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgTimeSpentInTheCourse'), 6, true).'</span></th>';
         $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgStudentsProgress'), 6, true).'</span></th>';
@@ -1052,21 +1052,32 @@ class MySpace
         $t_head .= '<th width="105px" style="border-bottom:0"><span>'.get_lang('TotalExercisesScoreObtained').'</span></th>';
         $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalExercisesAnswered'), 6, true).'</span></th>';
         $t_head .= '<th style="padding:0;border-bottom:0;border-right:0;"><span>'.get_lang('LatestLogin').'</span></th>';
-        $t_head .= '</tr></table>';
+        $t_head .= '</tr></table>';*/
         $params = ['view' => 'admin', 'display' => 'courseoverview'];
         $table = new SortableTable(
             'tracking_session_overview',
             ['MySpace', 'get_total_number_courses'],
             ['MySpace', 'get_course_data_tracking_overview'],
-            1
+            1,
+            20,
+            'ASC',
+            null,[
+                'class' => 'table table-transparent'
+            ]
         );
         $table->additional_parameters = $params;
 
-        $table->set_header(0, '', false, null, ['style' => 'display: none']);
-        $table->set_header(1, get_lang('Course'), true, ['style' => 'font-size:8pt'], ['style' => 'font-size:8pt']);
-        $table->set_header(2, $t_head, false, ['style' => 'width:90%;border:0;padding:0;font-size:7.5pt;'], ['style' => 'width:90%;padding:0;font-size:7.5pt;']);
-        $table->set_column_filter(2, ['MySpace', 'course_tracking_filter']);
-        $table->display();
+        //$table->set_header(0, '', false, null, ['style' => 'display: none']);
+        //$table->set_header(1, get_lang('Course'), true, ['style' => 'font-size:8pt'], ['style' => 'font-size:8pt']);
+        //$table->set_header(2, $t_head, false, ['style' => 'width:90%;border:0;padding:0;font-size:7.5pt;'], ['style' => 'width:90%;padding:0;font-size:7.5pt;']);
+        $table->set_column_filter(0, ['MySpace', 'course_tracking_filter']);
+
+        $tableContent = $table->return_table();
+
+        $tpl = new Template('', false, false, false, false, false, false);
+        $tpl->assign('table', $tableContent);
+        $templateName = $tpl->get_template('my_space/course_summary.tpl');
+        $tpl->display($templateName);
     }
 
     /**
@@ -1109,9 +1120,7 @@ class MySpace
         foreach ($courses as $course) {
             $list[] = [
                 '0' => $course['code'],
-                'col0' => $course['code'],
-                '1' => $course['title'],
-                'col1' => $course['title'],
+                'col0' => $course['code']
             ];
         }
 
@@ -1133,8 +1142,8 @@ class MySpace
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['real_id'];
 
-        // the table header
-        $return = '<table class="data_table" style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
+        $tpl = new Template('', false, false, false, false, false, false);
+        $data = null;
 
         // database table definition
         $tbl_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
@@ -1245,26 +1254,31 @@ class MySpace
         } else {
             $total_score = '-';
         }
-        $return .= '<tr>';
-        // time spent in the course
-        $return .= '    <td style="width:164px;">'.api_time_to_hms($time_spent).'</td>';
-        // student progress in course
-        $return .= '    <td>'.$avg_progress.'</td>';
-        // student score
-        $return .= '    <td>'.$avg_score.'</td>';
-        // student messages
-        $return .= '    <td>'.$nb_messages.'</td>';
-        // student assignments
-        $return .= '    <td>'.$nb_assignments.'</td>';
-        // student exercises results (obtained score, maximum score, number of exercises answered, score percentage)
-        $return .= '<td width="105px;">'.$total_score.'</td>';
-        $return .= '<td>'.$total_questions_answered.'</td>';
-        // last connection
-        $return .= '    <td>'.$last_login_date.'</td>';
-        $return .= '</tr>';
-        $return .= '</table>';
 
-        return $return;
+
+        $data = [
+            'course_code' => $course_code,
+            'id' => $courseId,
+            'image' => $courseInfo['course_image_large'],
+            'image_small' => $courseInfo['course_image'],
+            'title' => $courseInfo['title'],
+            'url' => $courseInfo['course_public_url'],
+            'category' => $courseInfo['categoryName'],
+            'time_spent' => api_time_to_hms($time_spent),
+            'avg_progress' => $avg_progress,
+            'avg_score' => $avg_score,
+            'number_message' => $nb_messages,
+            'number_assignments' => $nb_assignments,
+            'total_score' => $total_score,
+            'questions_answered' => $total_questions_answered,
+            'last_login' => $last_login_date
+        ];
+
+        $tpl->assign('data', $data);
+        $layout = $tpl->get_template('my_space/partials/tracking_course_overview.tpl');
+        $content = $tpl->fetch($layout);
+
+        return $content;
     }
 
     /**

@@ -10106,16 +10106,36 @@ ul.dropdown-menu.inner > li > a {
 .summary-course .list-donut .easy-donut{
     text-align: center;
 }
-.summary-course .state-time .stat-heading{
+.summary-course .state{
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.summary-course .state .stat-heading{
+    text-align: center;
+    font-size: 12px;
+}
+.summary-course .state .stat-text {
+    font-size: 22px;
     text-align: center;
 }
-.summary-course .state-time .stat-text {
-    font-size: 24px;
-    text-align: center;
-}
-.summary-course .state-time .stat-icon{
+.summary-course .state .stat-icon{
     font-size: 30px;
     text-align: center;
+}
+.summary-course .easypiechart-legend {
+    font-size: 12px;
+}
+.summary-course .list-info{
+    margin-bottom: 0;
+}
+.summary-course .list-info dt,
+.summary-course .list-info dd
+{
+    padding-top: 7px;
+    padding-bottom: 7px;
+}
+.summary-course .list-info .text-color{
+    color: #0A649F;
 }
 @media (min-width: 768px) {
     .clear-rows-6-4-3 .col-sm-6:nth-child(2n+1) {

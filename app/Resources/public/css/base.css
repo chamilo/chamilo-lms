@@ -10072,6 +10072,14 @@ ul.dropdown-menu.inner > li > a {
     grid-row-gap: 16px;
     grid-template-columns: repeat(2, 1fr);
 }
+
+#question_admin_form .bootstrap-select .dropdown-menu li a span.text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+}
+
 @media (min-width: 768px) {
     .clear-rows-6-4-3 .col-sm-6:nth-child(2n+1) {
         clear: left;

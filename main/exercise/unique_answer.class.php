@@ -104,10 +104,8 @@ class UniqueAnswer extends Question
                     continue;
                 }
                 $question = Question::read($questionid);
-                $select_question[$questionid] = 'Q'.$key.' :'.cut(
-                    $question->selectTitle(),
-                    20
-                );
+                $questionTitle = strip_tags($question->selectTitle());
+                $select_question[$questionid] = "Q$key: $questionTitle";
             }
         }
         $select_question[-1] = get_lang('ExitTest');

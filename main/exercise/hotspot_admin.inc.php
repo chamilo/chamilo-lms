@@ -662,7 +662,8 @@ if (isset($modifyAnswers)) {
             foreach ($question_list as $key => $questionid) {
                 $selected = '';
                 $question = Question::read($questionid);
-                $val = 'Q'.$key.' :'.substrwords($question->selectTitle(), ICON_SIZE_SMALL);
+                $questionTitle = strip_tags($question->selectTitle());
+                $val = "Q$key: $questionTitle";
 
                 if (isset($select_question[$i]) && $questionid == $select_question[$i]) {
                     $selected = 'selected="selected"';
@@ -1017,7 +1018,8 @@ if (isset($modifyAnswers)) {
     foreach ($question_list as $key => $questionid) {
         $selected = '';
         $question = Question::read($questionid);
-        $val = 'Q'.$key.' :'.substrwords($question->selectTitle(), ICON_SIZE_SMALL);
+        $questionTitle = $question->selectTitle();
+        $val = "Q$key: $questionTitle";
         if ($questionid == $selectQuestionNoError) {
             $selected = 'selected="selected"';
         }

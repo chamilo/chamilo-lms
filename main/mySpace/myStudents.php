@@ -963,6 +963,13 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
 }
 
 $details = true;
+$tpl = new Template('',
+    false,
+    false,
+    false,
+    false,
+    false,
+    false);
 
 if (!empty($courseInfo)) {
     $nb_assignments = Tracking::count_student_assignments($student_id, $course_code, $sessionId);
@@ -971,6 +978,8 @@ if (!empty($courseInfo)) {
     $chat_last_connection = Tracking::chat_last_connection($student_id, $courseInfo['real_id'], $sessionId);
     $documents = Tracking::count_student_downloaded_documents($student_id, $courseInfo['real_id'], $sessionId);
     $uploaded_documents = Tracking::count_student_uploaded_documents($student_id, $course_code, $sessionId);
+    $courseTitle = $courseInfo['title'];
+    $tpl->assign('title', $courseTitle);
 
     $userInfo['tools'] = [
         'tasks' => $nb_assignments,
@@ -984,13 +993,6 @@ if (!empty($courseInfo)) {
     $details = false;
 }
 
-$tpl = new Template('',
-    false,
-    false,
-    false,
-    false,
-    false,
-    false);
 $tpl->assign('user', $userInfo);
 $tpl->assign('details', $details);
 $templateName = $tpl->get_template('my_space/user_details.tpl');

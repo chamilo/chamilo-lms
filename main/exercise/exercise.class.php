@@ -5980,29 +5980,18 @@ class Exercise
             if (api_is_teacher() || api_is_platform_admin(true, true)) {
                 $userFullName = '<a href="'.$user_data['profile_url'].'" title="'.get_lang('GoToStudentDetails').'">'.$user_data['complete_name'].'</a>';
             }
-            $array[] = [
-                'title' => get_lang('Name'),
-                'content' => $userFullName,
-            ];
-            $array[] = [
-                'title' => get_lang('Username'),
-                'content' => $user_data['username'],
-            ];
-            if (!empty($user_data['official_code'])) {
-                $array[] = [
-                    'title' => get_lang('OfficialCode'),
-                    'content' => $user_data['official_code'],
-                ];
-            }
 
             $data = [
                 'name_url' => $userFullName,
                 'complete_name' => $user_data['complete_name'],
                 'username' => $user_data['username'],
-                'code' => $user_data['official_code'],
                 'avatar' => $user_data['avatar_medium'],
                 'url' => $user_data['profile_url']
             ];
+
+            if (!empty($user_data['official_code'])) {
+                $data['code'] = $user_data['official_code'];
+            }
         }
         // Description can be very long and is generally meant to explain
         //   rules *before* the exam. Leaving here to make display easier if
@@ -6013,17 +6002,14 @@ class Exercise
         }
         */
         if (!empty($start_date)) {
-            $array[] = ['title' => get_lang('StartDate'), 'content' => $start_date];
             $data['start_date'] = $start_date;
         }
 
         if (!empty($duration)) {
-            $array[] = ['title' => get_lang('Duration'), 'content' => $duration];
             $data['duration'] = $duration;
         }
 
         if (!empty($ip)) {
-            $array[] = ['title' => get_lang('IP'), 'content' => $ip];
             $data['ip'] = $ip;
         }
 

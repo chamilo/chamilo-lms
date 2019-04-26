@@ -7371,8 +7371,11 @@ div#chat-remote-video video {
     padding-left: 15px;
 }
 
-#toolbar-agenda .show-tick {
+#toolbar-agenda .bootstrap-select {
     width: 420px;
+}
+#toolbar-agenda .bootstrap-select .dropdown-menu li a {
+    margin-left: 0px;
 }
 
 .files-table {

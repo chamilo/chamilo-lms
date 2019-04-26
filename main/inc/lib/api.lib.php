@@ -4629,7 +4629,7 @@ function api_get_languages_combo($name = 'language')
     $languages = $language_list['name'];
     $folder = $language_list['folder'];
 
-    $ret .= '<select name="'.$name.'" id="language_chosen" class="selectpicker show-tick form-control">';
+    $ret .= '<select name="'.$name.'" id="language_chosen" class="selectpicker form-control">';
     foreach ($languages as $key => $value) {
         if ($folder[$key] == $default) {
             $selected = ' selected="selected"';

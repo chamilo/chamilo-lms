@@ -279,7 +279,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
                     </div>
                 </div>
                 <div class="col-sm-6">
-                    <select class="selectpicker show-tick form-control" name="action">
+                    <select class="selectpicker form-control" name="action">
                         <option value="delete_off_session" selected="selected">
                             <?php echo get_lang('DeleteSelectedSessionCategory'); ?>
                         </option>

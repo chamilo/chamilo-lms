@@ -441,7 +441,7 @@ $result = Database::query($sql);
             <?php if ($add_type == 'multiple') {
                             ?>
                 <p><?php echo get_lang('FirstLetterUser'); ?></p>
-                <select class="selectpicker show-tick form-control" name="firstLetterUser" onchange = "xajax_search_users(this.value,'multiple')">
+                <select class="selectpicker form-control" name="firstLetterUser" onchange = "xajax_search_users(this.value,'multiple')">
                     <option value="%">--</option>
                     <?php echo Display::get_alphabet_options($firstLetterUser); ?>
                 </select>

@@ -251,7 +251,7 @@ unset($Courses);
                 <div class="code-course">
                     <?php echo get_lang('FirstLetterCourse'); ?> :
 
-                    <select name="firstLetterCourse" onchange = "xajax_search_courses(this.value,'multiple', <?php echo $sessionId; ?>)" class="selectpicker show-tick form-control">
+                    <select name="firstLetterCourse" onchange = "xajax_search_courses(this.value,'multiple', <?php echo $sessionId; ?>)" class="selectpicker form-control">
                         <option value="%">--</option>
                         <?php
                         echo Display :: get_alphabet_options();

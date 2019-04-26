@@ -97,10 +97,8 @@ class UniqueAnswerImage extends UniqueAnswer
                 }
 
                 $question = Question::read($questionid);
-                $selectQuestion[$questionid] = 'Q'.$key.' :'.cut(
-                    $question->selectTitle(),
-                    20
-                );
+                $questionTitle = strip_tags($question->selectTitle());
+                $selectQuestion[$questionid] = "Q$key: $questionTitle";
             }
         }
 

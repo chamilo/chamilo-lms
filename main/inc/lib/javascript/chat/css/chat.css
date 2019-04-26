@@ -57,7 +57,7 @@
 	font-family: arial,sans-serif;
 	font-size: 13px;
 	color: #333333;
-	height:200px;
+	max-height:200px;
 	overflow-y:auto;
 	overflow-x:auto;
 	padding:7px;
@@ -66,6 +66,9 @@
 	border-bottom:1px solid #eeeeee;
 	background-color: #ffffff;
 	line-height: 1.3em;
+}
+.chatboxcontent .alert {
+	margin-bottom: 0;
 }
 
 .user_status {

@@ -135,6 +135,9 @@ $formSearch->addText(
     ]
 );
 
+// Added a Jquery Function to return the Preview of OpenGraph URL Content
+$htmlHeadXtra[] = SocialManager::getScriptToGetOpenGraph();
+
 $tpl = new Template(get_lang('SocialNetwork'));
 SocialManager::setSocialUserBlock($tpl, $user_id, 'home');
 $tpl->assign('social_wall_block', $wallSocialAddPost);

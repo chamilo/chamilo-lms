@@ -43,7 +43,7 @@ class GlossaryManager
     }
 
     /**
-     * Get glossary term by glossary id.
+     * Get glossary description by glossary id.
      *
      * @author Isaac Flores <florespaz@bidsoftperu.com>
      *
@@ -55,17 +55,19 @@ class GlossaryManager
     {
         $table = Database::get_course_table(TABLE_GLOSSARY);
         $course_id = api_get_course_int_id();
+        $glossary_id = (int) $glossary_id;
+
         $sql = "SELECT description 
                 FROM $table
-                WHERE c_id = $course_id  AND glossary_id =".intval($glossary_id);
+                WHERE c_id = $course_id  AND glossary_id =".$glossary_id;
         $rs = Database::query($sql);
         if (Database::num_rows($rs) > 0) {
             $row = Database::fetch_array($rs);
 
             return $row['description'];
-        } else {
-            return '';
         }
+
+        return '';
     }
 
     /**

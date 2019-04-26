@@ -1340,10 +1340,20 @@ abstract class Question
      * @author Olivier Brouckaert
      *
      * @param int $deleteFromEx - exercise ID if the question is only removed from one exercise
+     *
+     * @return bool
      */
     public function delete($deleteFromEx = 0)
     {
-        $course_id = api_get_course_int_id();
+        if (empty($this->course)) {
+            return false;
+        }
+
+        $courseId = $this->course['real_id'];
+
+        if (empty($courseId)) {
+            return false;
+        }
 
         $TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
@@ -1357,7 +1367,7 @@ abstract class Question
             //update the question_order of each question to avoid inconsistencies
             $sql = "SELECT exercice_id, question_order 
                     FROM $TBL_EXERCISE_QUESTION
-                    WHERE c_id = $course_id AND question_id = ".intval($id);
+                    WHERE c_id = $courseId AND question_id = ".$id;
 
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
@@ -1366,7 +1376,7 @@ abstract class Question
                         $sql = "UPDATE $TBL_EXERCISE_QUESTION
                                 SET question_order = question_order-1
                                 WHERE
-                                    c_id = $course_id AND 
+                                    c_id = $courseId AND 
                                     exercice_id = ".intval($row['exercice_id'])." AND 
                                     question_order > ".$row['question_order'];
                         Database::query($sql);
@@ -1375,21 +1385,21 @@ abstract class Question
             }
 
             $sql = "DELETE FROM $TBL_EXERCISE_QUESTION
-                    WHERE c_id = $course_id AND question_id = ".$id;
+                    WHERE c_id = $courseId AND question_id = ".$id;
             Database::query($sql);
 
             $sql = "DELETE FROM $TBL_QUESTIONS
-                    WHERE c_id = $course_id AND id = ".$id;
+                    WHERE c_id = $courseId AND id = ".$id;
             Database::query($sql);
 
             $sql = "DELETE FROM $TBL_REPONSES
-                    WHERE c_id = $course_id AND question_id = ".$id;
+                    WHERE c_id = $courseId AND question_id = ".$id;
             Database::query($sql);
 
             // remove the category of this question in the question_rel_category table
             $sql = "DELETE FROM $TBL_QUIZ_QUESTION_REL_CATEGORY
                     WHERE 
-                        c_id = $course_id AND 
+                        c_id = $courseId AND 
                         question_id = ".$id;
             Database::query($sql);
 

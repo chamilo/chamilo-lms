@@ -5966,6 +5966,8 @@ class Exercise
         $trackExerciseInfo
     ) {
         $start_date = null;
+        $tpl = new Template(null, false, false, false, false, false, false);
+
         if (isset($trackExerciseInfo['start_date'])) {
             $start_date = api_convert_and_format_date($trackExerciseInfo['start_date']);
         }
@@ -5978,19 +5980,17 @@ class Exercise
             if (api_is_teacher() || api_is_platform_admin(true, true)) {
                 $userFullName = '<a href="'.$user_data['profile_url'].'" title="'.get_lang('GoToStudentDetails').'">'.$user_data['complete_name'].'</a>';
             }
-            $array[] = [
-                'title' => get_lang('Name'),
-                'content' => $userFullName,
+
+            $data = [
+                'name_url' => $userFullName,
+                'complete_name' => $user_data['complete_name'],
+                'username' => $user_data['username'],
+                'avatar' => $user_data['avatar_medium'],
+                'url' => $user_data['profile_url']
             ];
-            $array[] = [
-                'title' => get_lang('Username'),
-                'content' => $user_data['username'],
-            ];
+
             if (!empty($user_data['official_code'])) {
-                $array[] = [
-                    'title' => get_lang('OfficialCode'),
-                    'content' => $user_data['official_code'],
-                ];
+                $data['code'] = $user_data['official_code'];
             }
         }
         // Description can be very long and is generally meant to explain
@@ -6002,43 +6002,32 @@ class Exercise
         }
         */
         if (!empty($start_date)) {
-            $array[] = ['title' => get_lang('StartDate'), 'content' => $start_date];
+            $data['start_date'] = $start_date;
         }
 
         if (!empty($duration)) {
-            $array[] = ['title' => get_lang('Duration'), 'content' => $duration];
+            $data['duration'] = $duration;
         }
 
         if (!empty($ip)) {
-            $array[] = ['title' => get_lang('IP'), 'content' => $ip];
+            $data['ip'] = $ip;
         }
 
-        $icon = Display::return_icon(
-            'test-quiz.png',
-            get_lang('Result'),
-            null,
-            ICON_SIZE_MEDIUM
-        );
 
-        $html = '<div class="question-result">';
         if (api_get_configuration_value('save_titles_as_html')) {
-            $html .= $this->get_formated_title();
-            $html .= Display::page_header(get_lang('Result'));
+            $data['title'] = $this->get_formated_title().get_lang('Result');
         } else {
-            $html .= Display::page_header(
-                $icon.PHP_EOL.$this->exercise.' : '.get_lang('Result')
-            );
+            $data['title'] = PHP_EOL.$this->exercise.' : '.get_lang('Result');
         }
 
         $hide = api_get_configuration_value('hide_user_info_in_quiz_result');
 
-        if ($hide === false) {
-            $html .= Display::description($array);
-        }
+        $tpl->assign('hide', $hide);
+        $tpl->assign('data', $data);
+        $layoutTemplate = $tpl->get_template('exercise/partials/result_exercise.tpl');
+        $content = $tpl->fetch($layoutTemplate);
 
-        $html .= "</div>";
-
-        return $html;
+        return $content;
     }
 
     /**

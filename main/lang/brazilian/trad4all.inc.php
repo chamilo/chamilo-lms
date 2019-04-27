@@ -8274,4 +8274,7 @@ $BasicCourseDocuments = "Documentos básicos do curso";
 $WeekX = "Semana %s";
 $QuizWrongAnswerHereIsTheCorrectOne = "Resposta errada. O correto foi:";
 $ThisQuizCanBeEmbeddable = "Este questionário pode ser incorporado em vídeos ou conteúdo para dispositivos móveis";
+$SearchGeolocalization = "Procurar por este local";
+$LegalTermsAgreementStatus = "Termos do contrato de termos de uso";
+$HideSurveyInvitationLink = "Ocultar link de convite de pesquisa";
 ?>

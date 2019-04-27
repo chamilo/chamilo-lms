@@ -2419,14 +2419,6 @@ div.admin_section h4 {
     background: #FAFAFA;
 }
 
-.question-result .page-header {
-    margin-top: 20px;
-}
-
-.question-result h2.page-header {
-    font-size: 25px;
-}
-
 .question_row_score .title-score .total h3 {
     margin: 0;
     font-size: 22px;
@@ -8650,14 +8642,6 @@ main[dir="rtl"] .radio-inline input[type=radio]{
         margin: 0;
     }
 
-    .question-result .page-header {
-        margin-top: 20px;
-    }
-
-    .question-result h2.page-header {
-        font-size: 20px;
-    }
-
     .dl-horizontal dt {
         float: left;
         width: 120px;
@@ -8718,14 +8702,6 @@ main[dir="rtl"] .radio-inline input[type=radio]{
     .question_row_answer h3.page-header {
         font-size: 16px;
         margin: 0;
-    }
-
-    .question-result .page-header {
-        margin-top: 20px;
-    }
-
-    .question-result h2.page-header {
-        font-size: 20px;
     }
 
     .navbar-nav .open .dropdown-menu .user-header {
@@ -10148,7 +10124,37 @@ ul.dropdown-menu.inner > li > a {
 .summary-course .list-info .text-color{
     color: #0A649F;
 }
-
+.question-result h3{
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
+.question-result .user-avatar,
+.question-result .user-info{
+    text-align: center;
+}
+.question-result .user-avatar img{
+    border-radius: 10px;
+}
+.group-data .list-data .item{
+    width: 150px;
+    display: inline-block;
+    font-weight: bold;
+}
+.badge-username{
+    font-weight: bold;
+}
+.badge-item{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.badge-item .msg{
+    border: 1px solid #cdcdcd;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f3f3f3;
+}
 @media (min-width: 768px) {
     .clear-rows-6-4-3 .col-sm-6:nth-child(2n+1) {
         clear: left;

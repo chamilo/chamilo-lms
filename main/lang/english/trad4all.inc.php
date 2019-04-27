@@ -8392,4 +8392,6 @@ $QuizWrongAnswerHereIsTheCorrectOne = "Wrong answer. The correct one was:";
 $ThisQuizCanBeEmbeddable = "This quiz can be embeddable on videos or mobile content";
 $SearchGeolocalization = "Search for this location";
 $LegalTermsAgreementStatus = "Terms of use agreement status";
+$HideSurveyInvitationLink = "Hide survey invitation link";
+$LeaveAMessage = "Leave a message";
 ?>

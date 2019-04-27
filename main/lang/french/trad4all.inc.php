@@ -8324,4 +8324,6 @@ $QuizWrongAnswerHereIsTheCorrectOne = "Vous vous êtes trompé. La réponse corr
 $ThisQuizCanBeEmbeddable = "Cet exercice peut être inséré dans une vidéo ou du contenu mobile";
 $SearchGeolocalization = "Localiser par l'adresse";
 $LegalTermsAgreementStatus = "État d'acceptation des conditions d'utilisation";
+$HideSurveyInvitationLink = "Cacher le lien d'invitation à l'enquête";
+$LeaveAMessage = "Laisser un message";
 ?>

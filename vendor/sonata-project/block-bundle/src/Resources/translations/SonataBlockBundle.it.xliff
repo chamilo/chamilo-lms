@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="it" datatype="plaintext" original="SonataBlockBundle.en.xliff">
+        <body>
+            <trans-unit id="sonata.block.container">
+                <source>sonata.block.container</source>
+                <target>Contenitore</target>
+            </trans-unit>
+            <trans-unit id="sonata.block.text">
+                <source>sonata.block.text</source>
+                <target>Testo semplice</target>
+            </trans-unit>
+            <trans-unit id="sonata.block.rss">
+                <source>sonata.block.rss</source>
+                <target>Feed RSS</target>
+            </trans-unit>
+            <trans-unit id="sonata.block.menu">
+                <source>sonata.block.menu</source>
+                <target>Menu</target>
+            </trans-unit>
+            <trans-unit id="sonata.block.template">
+                <source>sonata.block.template</source>
+                <target>Template</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

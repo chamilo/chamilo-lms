@@ -1,0 +1,93 @@
+# Group
+group:
+    edit:
+        submit: Upraviť skupinu
+    show:
+        name: Názov skupiny
+    new:
+        submit: Vytvoriť skupinu
+    flash:
+        updated: Skupina bola úspešne zmenená.
+        created: Skupina bola úspešne vytvorená.
+        deleted: Skupina bola úspešne vymazaná.
+
+# Security
+security:
+    login:
+        username: Užívateľské meno
+        password: Heslo
+        remember_me: Zapamätať si
+        submit: Prihlásenie
+
+# Profile
+profile:
+    show:
+        username: Užívateľské meno
+        email: Email
+    edit:
+        submit: Upraviť
+    flash:
+        updated: Profil bol úspešne zmenený.
+
+# Password change
+change_password:
+    submit: Zmena hesla
+    flash:
+        success: Heslo bolo úspešne zmenené
+
+# Registration
+registration:
+    check_email: Aktivačný email bol zaslaný na adresu %email%. V tele správy je aktivačná linka, na ktorú treba kliknúť pre úspešné dokončenie registrácie.
+    confirmed: Gratulujeme %username%, Vaše konto bolo aktivované.
+    back: Návrat na predchádzajúcu stránku.
+    submit: Registrácia
+    flash:
+        user_created: Vaše konto bolo úspešne vytvorené.
+    email:
+        subject: Vitaj %username%!
+        message: |
+            Ahoj %username%!
+
+            Pre ukončenie registrácie, prosím klikni na nasledovnú linku: %confirmationUrl%
+
+            S pozdravom,
+            Realizačný tím
+
+# Password resetting
+resetting:
+    password_already_requested: Požiadavka na heslo už bola vykonaná za posledných 24 hodín.
+    check_email: Postup pre zmenu hesla bol zaslaný na adresu %email%. Správa obsahuje linku, na ktorú treba kliknúť pre úspešné dokončenie zmeny hesla.
+    request:
+        invalid_username: Užívateľské meno alebo emailová adresa "%username%" neexistuje. Skontrolujte si prosím Vami zadané údaje a skúste znovu.
+        username: Užívateľské meno alebo emailová adresa
+        submit: Obnova hesla
+    reset:
+        submit: Zmeniť heslo
+    flash:
+        success: Heslo bolo úspešne zmenené.
+    email: |
+        Vynulovanie hesla
+        Ahoj %username%!
+
+        Pre zmenu hesla, klikni prosím na nasledovnú linku: %confirmationUrl%
+
+        S pozdravom,
+        Realizačný tím
+
+# Global strings
+layout:
+    logout: Odhlásenie
+    login: Prihlásenie
+    register: Registrácia
+    logged_in_as: Ste prihlásený ako %username%
+
+# Form field labels
+form:
+    group_name: Názov skupiny
+    username: Užívateľské meno
+    email: Email
+    current_password: Súčasné heslo
+    password: Heslo
+    password_confirmation: Potvrdenie hesla
+    new_password: Nové heslo
+    new_password_confirmation: Potvrdenie hesla

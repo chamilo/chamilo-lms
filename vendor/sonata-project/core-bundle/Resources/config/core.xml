@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="sonata.core.slugify.cocur" class="Cocur\Slugify\Slugify"/>
+        <service id="sonata.core.slugify.native" class="Sonata\CoreBundle\Component\NativeSlugify"/>
+        <service id="sonata.core.form.extension.dependency" class="Sonata\CoreBundle\Form\Extension\DependencyInjectionExtension">
+            <argument type="service" id="service_container"/>
+            <argument type="collection"/>
+            <argument type="collection"/>
+            <argument type="collection"/>
+            <argument type="collection"/>
+            <argument type="collection"/>
+            <argument type="collection"/>
+        </service>
+    </services>
+</container>

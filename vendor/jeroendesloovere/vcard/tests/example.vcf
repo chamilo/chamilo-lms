@@ -1,0 +1,10 @@
+BEGIN:VCARD
+VERSION:3.0
+REV:2016-05-30T10:36:13Z
+N;CHARSET=utf-8:Desloovere;Jeroen;;;
+FN;CHARSET=utf-8:Jeroen Desloovere
+item1.EMAIL;type=INTERNET:site@example.com
+item1.X-ABLabel:$!<Email>!$
+item2.URL:http://www.jeroendesloovere.be
+item2.X-ABLabel:$!<Home>!$
+END:VCARD

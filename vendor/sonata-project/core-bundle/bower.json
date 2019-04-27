@@ -1,0 +1,20 @@
+{
+  "name": "sonata-project-core-bundle",
+  "homepage": "https://sonata-project.org/bundles/core-bundle",
+  "authors": [
+    "Thomas Rabaix <thomas.rabaix@gmail.com>"
+  ],
+  "dependencies": {
+    "eonasdan-bootstrap-datetimepicker": "^3.1",
+    "select2": "^3.5",
+    "select2-bootstrap-css": "^1.4",
+    "moment": "^2.8",
+    "components-font-awesome": "^4.5",
+    "ionicons": "^2.0"
+  },
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "*"
+  ]
+}

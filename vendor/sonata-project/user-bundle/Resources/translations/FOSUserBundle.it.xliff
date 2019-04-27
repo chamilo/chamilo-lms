@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" datatype="plaintext" original="">
+        <body>
+            <trans-unit id="form.username">
+                <source>form.username</source>
+                <target>Username</target>
+            </trans-unit>
+            <trans-unit id="form.email">
+                <source>form.email</source>
+                <target>Email</target>
+            </trans-unit>
+            <trans-unit id="form.password">
+                <source>form.password</source>
+                <target>Password</target>
+            </trans-unit>
+            <trans-unit id="form.password_confirmation">
+                <source>form.password_confirmation</source>
+                <target>Verifica</target>
+            </trans-unit>
+            <trans-unit id="form.new_password">
+                <source>form.new_password</source>
+                <target>Nuova password</target>
+            </trans-unit>
+            <trans-unit id="form.current_password">
+                <source>form.current_password</source>
+                <target>Password corrente</target>
+            </trans-unit>
+            <trans-unit id="form.new_password_confirmation">
+                <source>form.new_password_confirmation</source>
+                <target>Verifica</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

@@ -1,0 +1,18 @@
+---
+filter:
+    excluded_paths: [bin/, cache/, resources/, tests/, vendor/]
+
+checks:
+    php:
+        code_rating: true
+        duplication: true
+
+tools:
+    external_code_coverage:
+        timeout: 1200
+    sensiolabs_security_checker: true
+    php_cpd:
+        enabled: true
+        excluded_dirs: [bin, cache, resources, tests, vendor]
+    php_pdepend:
+        excluded_dirs: [bin, cache, resources, tests, vendor]

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+    colors="true"
+    forceCoversAnnotation="false"
+    codecoverage="true">
+    <!-- <formatter type="clover" usefile="false" />
+
+    <logging>
+        <log type="coverage-html" target="../build/coverage"/>
+        <log type="coverage-clover" target="../build/logs/clover.xml"/>
+        <log type="coverage-crap4j" target="../build/logs/crap4j.xml"/>
+        <log type="junit" target="../build/logs/junit.xml" logIncompleteSkipped="false"/>
+    </logging> -->
+
+    <testsuite name="php-time-ago">
+        <directory>./</directory>
+    </testsuite>
+
+    <filter>
+        <whitelist>
+            <file>../timeago.inc.php</file>
+        </whitelist>
+    </filter>
+</phpunit>

@@ -1,0 +1,26 @@
+--TEST--
+Suggestions are not displayed in non-dev mode
+--COMPOSER--
+{
+    "repositories": [
+        {
+            "type": "package",
+            "package": [
+                { "name": "a/a", "version": "1.0.0", "suggest": { "b/b": "an obscure reason" } }
+            ]
+        }
+    ],
+    "require": {
+        "a/a": "1.0.0"
+    }
+}
+--RUN--
+install --no-dev
+--EXPECT-OUTPUT--
+Loading composer repositories with package information
+Updating dependencies
+Writing lock file
+Generating autoload files
+
+--EXPECT--
+Installing a/a (1.0.0)

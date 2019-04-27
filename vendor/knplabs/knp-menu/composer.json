@@ -1,0 +1,48 @@
+{
+    "name":         "knplabs/knp-menu",
+    "type":         "library",
+    "description":  "An object oriented menu library",
+    "keywords":     ["menu", "tree"],
+    "homepage":     "https://knplabs.com",
+    "license":      "MIT",
+    "authors":      [
+        {
+            "name":     "KnpLabs",
+            "homepage": "https://knplabs.com"
+        },
+        {
+            "name":     "Christophe Coevoet",
+            "email":    "stof@notk.org"
+        },
+        {
+            "name":     "Symfony Community",
+            "homepage": "https://github.com/KnpLabs/KnpMenu/contributors"
+        }
+    ],
+    "require":      {
+        "php":  ">=5.6.0"
+    },
+    "require-dev":  {
+        "psr/container": "^1.0",
+        "symfony/http-foundation": "~2.4|~3.0|^4.0",
+        "symfony/phpunit-bridge": "~3.3|^4.0",
+        "symfony/routing": "~2.3|~3.0|^4.0",
+        "twig/twig":       "~1.16|~2.0"
+    },
+    "suggest":      {
+        "twig/twig":    "for the TwigRenderer and the integration with your templates"
+    },
+    "autoload":     {
+        "psr-4": { "Knp\\Menu\\": "src/Knp/Menu" }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Knp\\Menu\\Tests\\": "tests/Knp/Menu/Tests"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.3-dev"
+        }
+    }
+}

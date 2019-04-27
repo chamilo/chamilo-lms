@@ -1,0 +1,19 @@
+{
+    "name": "yuloh/bccomp-polyfill",
+    "authors": [
+        {
+            "name": "Matt Allan",
+            "email": "matthew.james.allan@gmail.com"
+        }
+    ],
+    "license": "MIT",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Yuloh\\BcCompPolyfill\\": "src"
+        },
+        "files": [
+            "src/functions.php"
+        ]
+    }
+}

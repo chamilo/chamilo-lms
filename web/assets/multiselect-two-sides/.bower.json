@@ -1,0 +1,26 @@
+{
+  "name": "multiselect",
+  "version": "2.5.2",
+  "homepage": "https://github.com/crlcu/multiselect",
+  "authors": [
+    "Adrian Crisan <adrian.crisan88@gmail.com>"
+  ],
+  "description": "jQuery multiselect plugin with two sides",
+  "main": "dist/js/multiselect.min.js",
+  "keywords": [
+    "multiselect"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "jquery": ">= 1.7"
+  },
+  "_release": "2.5.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.5.2",
+    "commit": "5d850b4a2992dbab1cf913559da0d2398f5db30f"
+  },
+  "_source": "https://github.com/crlcu/multiselect.git",
+  "_target": "2.5.*",
+  "_originalSource": "multiselect-two-sides"
+}

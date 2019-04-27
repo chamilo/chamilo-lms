@@ -1,0 +1,5 @@
+composer.phar
+composer.lock
+/nbproject/
+/tests/lib/PHPExiftool/Test/tmp
+/vendor

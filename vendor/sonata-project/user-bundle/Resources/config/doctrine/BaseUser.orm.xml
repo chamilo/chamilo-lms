@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping                   http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <mapped-superclass name="Sonata\UserBundle\Entity\BaseUser">
+        <field name="createdAt" type="datetime" column="created_at"/>
+        <field name="updatedAt" type="datetime" column="updated_at"/>
+        <!-- Profile fields -->
+        <field name="dateOfBirth" type="datetime" column="date_of_birth" nullable="true"/>
+        <field name="firstname" type="string" column="firstname" length="64" nullable="true"/>
+        <field name="lastname" type="string" column="lastname" length="64" nullable="true"/>
+        <field name="website" type="string" column="website" length="64" nullable="true"/>
+        <field name="biography" type="string" column="biography" length="1000" nullable="true"/>
+        <field name="gender" type="string" column="gender" length="1" nullable="true"/>
+        <field name="locale" type="string" column="locale" length="8" nullable="true"/>
+        <field name="timezone" type="string" column="timezone" length="64" nullable="true"/>
+        <field name="phone" type="string" column="phone" length="64" nullable="true"/>
+        <!-- social fields -->
+        <field name="facebookUid" type="string" column="facebook_uid" length="255" nullable="true"/>
+        <field name="facebookName" type="string" column="facebook_name" length="255" nullable="true"/>
+        <field name="facebookData" type="json" column="facebook_data" nullable="true"/>
+        <field name="twitterUid" type="string" column="twitter_uid" length="255" nullable="true"/>
+        <field name="twitterName" type="string" column="twitter_name" length="255" nullable="true"/>
+        <field name="twitterData" type="json" column="twitter_data" nullable="true"/>
+        <field name="gplusUid" type="string" column="gplus_uid" length="255" nullable="true"/>
+        <field name="gplusName" type="string" column="gplus_name" length="255" nullable="true"/>
+        <field name="gplusData" type="json" column="gplus_data" nullable="true"/>
+        <!-- extra security fields -->
+        <field name="token" type="string" length="255" column="token" nullable="true"/>
+        <field name="twoStepVerificationCode" type="string" length="255" column="two_step_code" nullable="true"/>
+        <lifecycle-callbacks>
+            <lifecycle-callback type="prePersist" method="prePersist"/>
+            <lifecycle-callback type="preUpdate" method="preUpdate"/>
+        </lifecycle-callbacks>
+    </mapped-superclass>
+</doctrine-mapping>

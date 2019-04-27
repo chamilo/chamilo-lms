@@ -1,0 +1,603 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" datatype="plaintext" original="">
+        <body>
+            <trans-unit id="link_add">
+                <source>link_add</source>
+                <target>Adicionar novo</target>
+            </trans-unit>
+            <trans-unit id="label_type_yes">
+                <source>label_type_yes</source>
+                <target>sim</target>
+            </trans-unit>
+            <trans-unit id="label_type_no">
+                <source>label_type_no</source>
+                <target>não</target>
+            </trans-unit>
+            <trans-unit id="sonata_core_template_box_file_found_in">
+                <source>sonata_core_template_box_file_found_in</source>
+                <target>sonata_core_template_box_file_found_in</target>
+            </trans-unit>
+            <trans-unit id="label_type_equals">
+                <source>label_type_equals</source>
+                <target>é igual a</target>
+            </trans-unit>
+            <trans-unit id="label_type_not_equals">
+                <source>label_type_not_equals</source>
+                <target>não é igual a</target>
+            </trans-unit>
+            <trans-unit id="date_range_start">
+                <source>date_range_start</source>
+                <target>De</target>
+            </trans-unit>
+            <trans-unit id="date_range_end">
+                <source>date_range_end</source>
+                <target>Até</target>
+            </trans-unit>
+            <trans-unit id="aliceblue">
+                <source>aliceblue</source>
+                <target>Azul alice</target>
+            </trans-unit>
+            <trans-unit id="antiquewhite">
+                <source>antiquewhite</source>
+                <target>Branco antigo</target>
+            </trans-unit>
+            <trans-unit id="aqua">
+                <source>aqua</source>
+                <target>Água</target>
+            </trans-unit>
+            <trans-unit id="aquamarine">
+                <source>aquamarine</source>
+                <target>Água-marinha</target>
+            </trans-unit>
+            <trans-unit id="azure">
+                <source>azure</source>
+                <target>Azul celeste</target>
+            </trans-unit>
+            <trans-unit id="beige">
+                <source>beige</source>
+                <target>Bege</target>
+            </trans-unit>
+            <trans-unit id="bisque">
+                <source>bisque</source>
+                <target>Creme de marisco</target>
+            </trans-unit>
+            <trans-unit id="black">
+                <source>black</source>
+                <target>Preto</target>
+            </trans-unit>
+            <trans-unit id="blanchedalmond">
+                <source>blanchedalmond</source>
+                <target>Amêndoa</target>
+            </trans-unit>
+            <trans-unit id="blue">
+                <source>blue</source>
+                <target>Azul</target>
+            </trans-unit>
+            <trans-unit id="blueviolet">
+                <source>blueviolet</source>
+                <target>Azul violeta</target>
+            </trans-unit>
+            <trans-unit id="brown">
+                <source>brown</source>
+                <target>Marrom claro</target>
+            </trans-unit>
+            <trans-unit id="burlywood">
+                <source>burlywood</source>
+                <target>Madeira</target>
+            </trans-unit>
+            <trans-unit id="cadetblue">
+                <source>cadetblue</source>
+                <target>Azul cadete</target>
+            </trans-unit>
+            <trans-unit id="chartreuse">
+                <source>chartreuse</source>
+                <target>Verde Paris</target>
+            </trans-unit>
+            <trans-unit id="chocolate">
+                <source>chocolate</source>
+                <target>Chocolate</target>
+            </trans-unit>
+            <trans-unit id="coral">
+                <source>coral</source>
+                <target>Coral</target>
+            </trans-unit>
+            <trans-unit id="cornflowerblue">
+                <source>cornflowerblue</source>
+                <target>Azul flor de milho</target>
+            </trans-unit>
+            <trans-unit id="cornsilk">
+                <source>cornsilk</source>
+                <target>Milho Claro</target>
+            </trans-unit>
+            <trans-unit id="crimson">
+                <source>crimson</source>
+                <target>Carmesim</target>
+            </trans-unit>
+            <trans-unit id="cyan">
+                <source>cyan</source>
+                <target>Ciano</target>
+            </trans-unit>
+            <trans-unit id="darkblue">
+                <source>darkblue</source>
+                <target>Azul escuro</target>
+            </trans-unit>
+            <trans-unit id="darkcyan">
+                <source>darkcyan</source>
+                <target>Ciano escuro</target>
+            </trans-unit>
+            <trans-unit id="darkgoldenrod">
+                <source>darkgoldenrod</source>
+                <target>Dourado escuro</target>
+            </trans-unit>
+            <trans-unit id="darkgray">
+                <source>darkgray</source>
+                <target>Cinza escuro</target>
+            </trans-unit>
+            <trans-unit id="darkgreen">
+                <source>darkgreen</source>
+                <target>Verde escuro</target>
+            </trans-unit>
+            <trans-unit id="darkkhaki">
+                <source>darkkhaki</source>
+                <target>Caqui escuro</target>
+            </trans-unit>
+            <trans-unit id="darkmagenta">
+                <source>darkmagenta</source>
+                <target>Magenta escuro</target>
+            </trans-unit>
+            <trans-unit id="darkolivegreen">
+                <source>darkolivegreen</source>
+                <target>Oliva escura</target>
+            </trans-unit>
+            <trans-unit id="darkorange">
+                <source>darkorange</source>
+                <target>Laranja escuro</target>
+            </trans-unit>
+            <trans-unit id="darkorchid">
+                <source>darkorchid</source>
+                <target>Orquídea escura</target>
+            </trans-unit>
+            <trans-unit id="darkred">
+                <source>darkred</source>
+                <target>Vermelho escuro</target>
+            </trans-unit>
+            <trans-unit id="darksalmon">
+                <source>darksalmon</source>
+                <target>Salmão escuro</target>
+            </trans-unit>
+            <trans-unit id="darkseagreen">
+                <source>darkseagreen</source>
+                <target>Verde mar escuro</target>
+            </trans-unit>
+            <trans-unit id="darkslateblue">
+                <source>darkslateblue</source>
+                <target>Azul ardósia escuro</target>
+            </trans-unit>
+            <trans-unit id="darkslategray">
+                <source>darkslategray</source>
+                <target>Cinza ardósia escuro</target>
+            </trans-unit>
+            <trans-unit id="darkturquoise">
+                <source>darkturquoise</source>
+                <target>Turquesa escura</target>
+            </trans-unit>
+            <trans-unit id="darkviolet">
+                <source>darkviolet</source>
+                <target>Violeta escuro</target>
+            </trans-unit>
+            <trans-unit id="deeppink">
+                <source>deeppink</source>
+                <target>Rosa profundo</target>
+            </trans-unit>
+            <trans-unit id="deepskyblue">
+                <source>deepskyblue</source>
+                <target>Azul céu profundo</target>
+            </trans-unit>
+            <trans-unit id="dimgray">
+                <source>dimgray</source>
+                <target>Cinza fosco</target>
+            </trans-unit>
+            <trans-unit id="dodgerblue">
+                <source>dodgerblue</source>
+                <target>Azul furtivo</target>
+            </trans-unit>
+            <trans-unit id="firebrick">
+                <source>firebrick</source>
+                <target>Tijolo refratário</target>
+            </trans-unit>
+            <trans-unit id="floralwhite">
+                <source>floralwhite</source>
+                <target>Branco floral</target>
+            </trans-unit>
+            <trans-unit id="forestgreen">
+                <source>forestgreen</source>
+                <target>Verde floresta</target>
+            </trans-unit>
+            <trans-unit id="fuchsia">
+                <source>fuchsia</source>
+                <target>Fuchsia</target>
+            </trans-unit>
+            <trans-unit id="gainsboro">
+                <source>gainsboro</source>
+                <target>Gainsboro</target>
+            </trans-unit>
+            <trans-unit id="ghostwhite">
+                <source>ghostwhite</source>
+                <target>Branco fantasma</target>
+            </trans-unit>
+            <trans-unit id="gold">
+                <source>gold</source>
+                <target>Ouro</target>
+            </trans-unit>
+            <trans-unit id="goldenrod">
+                <source>goldenrod</source>
+                <target>Dourado</target>
+            </trans-unit>
+            <trans-unit id="gray">
+                <source>gray</source>
+                <target>Cinza</target>
+            </trans-unit>
+            <trans-unit id="green">
+                <source>green</source>
+                <target>Verde</target>
+            </trans-unit>
+            <trans-unit id="greenyellow">
+                <source>greenyellow</source>
+                <target>Amarelo esverdeado</target>
+            </trans-unit>
+            <trans-unit id="honeydew">
+                <source>honeydew</source>
+                <target>Maná</target>
+            </trans-unit>
+            <trans-unit id="hotpink">
+                <source>hotpink</source>
+                <target>Rosa forte</target>
+            </trans-unit>
+            <trans-unit id="indianred">
+                <source>indianred</source>
+                <target>Vermelho indiano</target>
+            </trans-unit>
+            <trans-unit id="indigo">
+                <source>indigo</source>
+                <target>Índigo</target>
+            </trans-unit>
+            <trans-unit id="ivory">
+                <source>ivory</source>
+                <target>Marfim</target>
+            </trans-unit>
+            <trans-unit id="khaki">
+                <source>khaki</source>
+                <target>Caqui</target>
+            </trans-unit>
+            <trans-unit id="lavender">
+                <source>lavender</source>
+                <target>Lavanda</target>
+            </trans-unit>
+            <trans-unit id="lavenderblush">
+                <source>lavenderblush</source>
+                <target>Lavanda avermelhada</target>
+            </trans-unit>
+            <trans-unit id="lawngreen">
+                <source>lawngreen</source>
+                <target>Verde grama</target>
+            </trans-unit>
+            <trans-unit id="lemonchiffon">
+                <source>lemonchiffon</source>
+                <target>Lemon Chiffon</target>
+            </trans-unit>
+            <trans-unit id="lightblue">
+                <source>lightblue</source>
+                <target>Azul claro</target>
+            </trans-unit>
+            <trans-unit id="lightcoral">
+                <source>lightcoral</source>
+                <target>Coral claro</target>
+            </trans-unit>
+            <trans-unit id="lightcyan">
+                <source>lightcyan</source>
+                <target>Ciano claro</target>
+            </trans-unit>
+            <trans-unit id="lightgoldenrodyellow">
+                <source>lightgoldenrodyellow</source>
+                <target>Amarelo ouro claro</target>
+            </trans-unit>
+            <trans-unit id="lightgray">
+                <source>lightgray</source>
+                <target>Cinza claro</target>
+            </trans-unit>
+            <trans-unit id="lightgreen">
+                <source>lightgreen</source>
+                <target>Verde claro</target>
+            </trans-unit>
+            <trans-unit id="lightpink">
+                <source>lightpink</source>
+                <target>Rosa claro</target>
+            </trans-unit>
+            <trans-unit id="lightsalmon">
+                <source>lightsalmon</source>
+                <target>Salmão claro</target>
+            </trans-unit>
+            <trans-unit id="lightseagreen">
+                <source>lightseagreen</source>
+                <target>Verde mar claro</target>
+            </trans-unit>
+            <trans-unit id="lightskyblue">
+                <source>lightskyblue</source>
+                <target>Azul céu claro</target>
+            </trans-unit>
+            <trans-unit id="lightslategray">
+                <source>lightslategray</source>
+                <target>Dainise</target>
+            </trans-unit>
+            <trans-unit id="lightsteelblue">
+                <source>lightsteelblue</source>
+                <target>Azul aço claro</target>
+            </trans-unit>
+            <trans-unit id="lightyellow">
+                <source>lightyellow</source>
+                <target>Amarelo claro</target>
+            </trans-unit>
+            <trans-unit id="lime">
+                <source>lime</source>
+                <target>Verde espectro</target>
+            </trans-unit>
+            <trans-unit id="limegreen">
+                <source>limegreen</source>
+                <target>Verde lima</target>
+            </trans-unit>
+            <trans-unit id="linen">
+                <source>linen</source>
+                <target>Linho</target>
+            </trans-unit>
+            <trans-unit id="magenta">
+                <source>magenta</source>
+                <target>Magenta</target>
+            </trans-unit>
+            <trans-unit id="maroon">
+                <source>maroon</source>
+                <target>Bordô</target>
+            </trans-unit>
+            <trans-unit id="mediumaquamarine">
+                <source>mediumaquamarine</source>
+                <target>Água-marinha média</target>
+            </trans-unit>
+            <trans-unit id="mediumblue">
+                <source>mediumblue</source>
+                <target>Azul médio</target>
+            </trans-unit>
+            <trans-unit id="mediumorchid">
+                <source>mediumorchid</source>
+                <target>Orquídea média</target>
+            </trans-unit>
+            <trans-unit id="mediumpurple">
+                <source>mediumpurple</source>
+                <target>Púrpura média</target>
+            </trans-unit>
+            <trans-unit id="mediumseagreen">
+                <source>mediumseagreen</source>
+                <target>Verde mar médio</target>
+            </trans-unit>
+            <trans-unit id="mediumslateblue">
+                <source>mediumslateblue</source>
+                <target>Azul ardósia médio</target>
+            </trans-unit>
+            <trans-unit id="mediumspringgreen">
+                <source>mediumspringgreen</source>
+                <target>Verde primavera médio</target>
+            </trans-unit>
+            <trans-unit id="mediumturquoise">
+                <source>mediumturquoise</source>
+                <target>Turquesa média</target>
+            </trans-unit>
+            <trans-unit id="mediumvioletred">
+                <source>mediumvioletred</source>
+                <target>Vermelho violeta médio</target>
+            </trans-unit>
+            <trans-unit id="midnightblue">
+                <source>midnightblue</source>
+                <target>Azul meia-noite</target>
+            </trans-unit>
+            <trans-unit id="mintcream">
+                <source>mintcream</source>
+                <target>Creme de menta</target>
+            </trans-unit>
+            <trans-unit id="mistyrose">
+                <source>mistyrose</source>
+                <target>Rosa embaçado</target>
+            </trans-unit>
+            <trans-unit id="moccasin">
+                <source>moccasin</source>
+                <target>Mocassim</target>
+            </trans-unit>
+            <trans-unit id="navajowhite">
+                <source>navajowhite</source>
+                <target>Branco navajo</target>
+            </trans-unit>
+            <trans-unit id="navy">
+                <source>navy</source>
+                <target>Naval</target>
+            </trans-unit>
+            <trans-unit id="oldlace">
+                <source>oldlace</source>
+                <target>Renda antiga</target>
+            </trans-unit>
+            <trans-unit id="olive">
+                <source>olive</source>
+                <target>Oliva</target>
+            </trans-unit>
+            <trans-unit id="olivedrab">
+                <source>olivedrab</source>
+                <target>Oliva parda</target>
+            </trans-unit>
+            <trans-unit id="orange">
+                <source>orange</source>
+                <target>Laranja</target>
+            </trans-unit>
+            <trans-unit id="orangered">
+                <source>orangered</source>
+                <target>Jambo</target>
+            </trans-unit>
+            <trans-unit id="orchid">
+                <source>orchid</source>
+                <target>Orquídea</target>
+            </trans-unit>
+            <trans-unit id="palegoldenrod">
+                <source>palegoldenrod</source>
+                <target>Dourado pálido</target>
+            </trans-unit>
+            <trans-unit id="palegreen">
+                <source>palegreen</source>
+                <target>Verde pálido</target>
+            </trans-unit>
+            <trans-unit id="paleturquoise">
+                <source>paleturquoise</source>
+                <target>Turquesa pálida</target>
+            </trans-unit>
+            <trans-unit id="palevioletred">
+                <source>palevioletred</source>
+                <target>Vermelho violeta pálido</target>
+            </trans-unit>
+            <trans-unit id="papayawhip">
+                <source>papayawhip</source>
+                <target>Mamão batido</target>
+            </trans-unit>
+            <trans-unit id="peachpuff">
+                <source>peachpuff</source>
+                <target>Pêssego</target>
+            </trans-unit>
+            <trans-unit id="peru">
+                <source>peru</source>
+                <target>Pardo</target>
+            </trans-unit>
+            <trans-unit id="pink">
+                <source>pink</source>
+                <target>Rosa</target>
+            </trans-unit>
+            <trans-unit id="plum">
+                <source>plum</source>
+                <target>Ameixa</target>
+            </trans-unit>
+            <trans-unit id="powderblue">
+                <source>powderblue</source>
+                <target>Azul pólvora</target>
+            </trans-unit>
+            <trans-unit id="purple">
+                <source>purple</source>
+                <target>Púrpura</target>
+            </trans-unit>
+            <trans-unit id="rebeccapurple">
+                <source>rebeccapurple</source>
+                <target>Rebecca Purple</target>
+            </trans-unit>
+            <trans-unit id="red">
+                <source>red</source>
+                <target>Vermelho</target>
+            </trans-unit>
+            <trans-unit id="rosybrown">
+                <source>rosybrown</source>
+                <target>Marrom rosado</target>
+            </trans-unit>
+            <trans-unit id="royalblue">
+                <source>royalblue</source>
+                <target>Azul Real</target>
+            </trans-unit>
+            <trans-unit id="saddlebrown">
+                <source>saddlebrown</source>
+                <target>Marrom sela</target>
+            </trans-unit>
+            <trans-unit id="salmon">
+                <source>salmon</source>
+                <target>Salmão</target>
+            </trans-unit>
+            <trans-unit id="sandybrown">
+                <source>sandybrown</source>
+                <target>Marrom amarelado</target>
+            </trans-unit>
+            <trans-unit id="seagreen">
+                <source>seagreen</source>
+                <target>Herbal</target>
+            </trans-unit>
+            <trans-unit id="seashell">
+                <source>seashell</source>
+                <target>Concha</target>
+            </trans-unit>
+            <trans-unit id="sienna">
+                <source>sienna</source>
+                <target>Siena</target>
+            </trans-unit>
+            <trans-unit id="silver">
+                <source>silver</source>
+                <target>Prata</target>
+            </trans-unit>
+            <trans-unit id="skyblue">
+                <source>skyblue</source>
+                <target>Azul céu</target>
+            </trans-unit>
+            <trans-unit id="slateblue">
+                <source>slateblue</source>
+                <target>Azul ardósia</target>
+            </trans-unit>
+            <trans-unit id="slategray">
+                <source>slategray</source>
+                <target>Cinza ardósia</target>
+            </trans-unit>
+            <trans-unit id="snow">
+                <source>snow</source>
+                <target>Neve</target>
+            </trans-unit>
+            <trans-unit id="springgreen">
+                <source>springgreen</source>
+                <target>Verde primavera</target>
+            </trans-unit>
+            <trans-unit id="steelblue">
+                <source>steelblue</source>
+                <target>Azul aço</target>
+            </trans-unit>
+            <trans-unit id="tan">
+                <source>tan</source>
+                <target>Castanho claro</target>
+            </trans-unit>
+            <trans-unit id="teal">
+                <source>teal</source>
+                <target>Verde-azulado</target>
+            </trans-unit>
+            <trans-unit id="thistle">
+                <source>thistle</source>
+                <target>Cardo</target>
+            </trans-unit>
+            <trans-unit id="tomato">
+                <source>tomato</source>
+                <target>Tomate</target>
+            </trans-unit>
+            <trans-unit id="turquoise">
+                <source>turquoise</source>
+                <target>Turquesa</target>
+            </trans-unit>
+            <trans-unit id="violet">
+                <source>violet</source>
+                <target>Violeta</target>
+            </trans-unit>
+            <trans-unit id="wheat">
+                <source>wheat</source>
+                <target>Trigo</target>
+            </trans-unit>
+            <trans-unit id="white">
+                <source>white</source>
+                <target>Branco</target>
+            </trans-unit>
+            <trans-unit id="whitesmoke">
+                <source>whitesmoke</source>
+                <target>Branco fumaça</target>
+            </trans-unit>
+            <trans-unit id="yellow">
+                <source>yellow</source>
+                <target>Amarelo</target>
+            </trans-unit>
+            <trans-unit id="yellowgreen">
+                <source>yellowgreen</source>
+                <target>Verde amarelado</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

@@ -1,0 +1,796 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+  ~ This file is part of the PHPExiftool package.
+  ~
+  ~ (c) Alchemy <support@alchemy.fr>
+  ~
+  ~ For the full copyright and license information, please view the LICENSE
+  ~ file that was distributed with this source code.
+  -->
+
+<rdf:RDF xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>
+
+<rdf:Description rdf:about='tests/files/ExifTool.jpg'
+  xmlns:et='http://ns.exiftool.ca/1.0/' et:toolkit='Image::ExifTool 8.88'
+  xmlns:ExifTool='http://ns.exiftool.ca/ExifTool/1.0/'
+  xmlns:System='http://ns.exiftool.ca/File/System/1.0/'
+  xmlns:File='http://ns.exiftool.ca/File/1.0/'
+  xmlns:IFD0='http://ns.exiftool.ca/EXIF/IFD0/1.0/'
+  xmlns:ExifIFD='http://ns.exiftool.ca/EXIF/ExifIFD/1.0/'
+  xmlns:IFD1='http://ns.exiftool.ca/EXIF/IFD1/1.0/'
+  xmlns:JFIF='http://ns.exiftool.ca/JFIF/JFIF/1.0/'
+  xmlns:SPIFF='http://ns.exiftool.ca/APP8/SPIFF/1.0/'
+  xmlns:CIFF='http://ns.exiftool.ca/MakerNotes/CIFF/1.0/'
+  xmlns:AVI1='http://ns.exiftool.ca/APP0/AVI1/1.0/'
+  xmlns:XMP='http://ns.exiftool.ca/XMP/XMP/1.0/'
+  xmlns:XMP-x='http://ns.exiftool.ca/XMP/XMP-x/1.0/'
+  xmlns:XMP-rdf='http://ns.exiftool.ca/XMP/XMP-rdf/1.0/'
+  xmlns:XMP-dc='http://ns.exiftool.ca/XMP/XMP-dc/1.0/'
+  xmlns:XMP-photoshop='http://ns.exiftool.ca/XMP/XMP-photoshop/1.0/'
+  xmlns:XMP-xmpBJ='http://ns.exiftool.ca/XMP/XMP-xmpBJ/1.0/'
+  xmlns:XMP-xmpMM='http://ns.exiftool.ca/XMP/XMP-xmpMM/1.0/'
+  xmlns:XMP-xmpRights='http://ns.exiftool.ca/XMP/XMP-xmpRights/1.0/'
+  xmlns:ICC_Profile='http://ns.exiftool.ca/ICC_Profile/ICC_Profile/1.0/'
+  xmlns:ICC-header='http://ns.exiftool.ca/ICC_Profile/ICC-header/1.0/'
+  xmlns:FlashPix='http://ns.exiftool.ca/FlashPix/FlashPix/1.0/'
+  xmlns:MPF0='http://ns.exiftool.ca/MPF/MPF0/1.0/'
+  xmlns:MPImage1='http://ns.exiftool.ca/MPF/MPImage1/1.0/'
+  xmlns:MPImage2='http://ns.exiftool.ca/MPF/MPImage2/1.0/'
+  xmlns:MetaIFD='http://ns.exiftool.ca/Meta/MetaIFD/1.0/'
+  xmlns:RMETA='http://ns.exiftool.ca/APP5/RMETA/1.0/'
+  xmlns:PrintIM='http://ns.exiftool.ca/PrintIM/PrintIM/1.0/'
+  xmlns:NITF='http://ns.exiftool.ca/APP6/NITF/1.0/'
+  xmlns:Qualcomm='http://ns.exiftool.ca/MakerNotes/Qualcomm/1.0/'
+  xmlns:PictureInfo='http://ns.exiftool.ca/APP12/PictureInfo/1.0/'
+  xmlns:Ducky='http://ns.exiftool.ca/Ducky/Ducky/1.0/'
+  xmlns:IPTC='http://ns.exiftool.ca/IPTC/IPTC/1.0/'
+  xmlns:Photoshop='http://ns.exiftool.ca/Photoshop/Photoshop/1.0/'
+  xmlns:AdobeCM='http://ns.exiftool.ca/APP13/AdobeCM/1.0/'
+  xmlns:Adobe='http://ns.exiftool.ca/APP14/Adobe/1.0/'
+  xmlns:GraphConv='http://ns.exiftool.ca/APP15/GraphConv/1.0/'
+  xmlns:MIE-Doc='http://ns.exiftool.ca/MIE/MIE-Doc/1.0/'
+  xmlns:MIE-Main='http://ns.exiftool.ca/MIE/MIE-Main/1.0/'
+  xmlns:PhotoMechanic='http://ns.exiftool.ca/PhotoMechanic/PhotoMechanic/1.0/'
+  xmlns:CanonVRD='http://ns.exiftool.ca/CanonVRD/CanonVRD/1.0/'
+  xmlns:FotoStation='http://ns.exiftool.ca/FotoStation/FotoStation/1.0/'
+  xmlns:IPTC2='http://ns.exiftool.ca/IPTC/IPTC2/1.0/'
+  xmlns:IPTC3='http://ns.exiftool.ca/IPTC/IPTC3/1.0/'
+  xmlns:EXIF='http://ns.exiftool.ca/EXIF/EXIF/1.0/'
+  xmlns:Composite='http://ns.exiftool.ca/Composite/1.0/'>
+ <ExifTool:ExifToolVersion>8.88</ExifTool:ExifToolVersion>
+ <ExifTool:Warning>[minor] Error reading PreviewImage from file</ExifTool:Warning>
+ <System:FileName>ExifTool.jpg</System:FileName>
+ <System:Directory>tests/files</System:Directory>
+ <System:FileSize>24 kB</System:FileSize>
+ <System:FileModifyDate>2012:03:16 11:05:29+01:00</System:FileModifyDate>
+ <System:FilePermissions>rw-r--r--</System:FilePermissions>
+ <File:FileType>JPEG</File:FileType>
+ <File:MIMEType>image/jpeg</File:MIMEType>
+ <File:ExifByteOrder>Little-endian (Intel, II)</File:ExifByteOrder>
+ <File:Comment>© PhotoStudio Unicode comment
+</File:Comment>
+ <File:CurrentIPTCDigest>6895be53ef9a287520f400aa17242c09</File:CurrentIPTCDigest>
+ <File:Comment>a comment</File:Comment>
+ <File:ImageWidth>8</File:ImageWidth>
+ <File:ImageHeight>8</File:ImageHeight>
+ <File:EncodingProcess>Baseline DCT, Huffman coding</File:EncodingProcess>
+ <File:BitsPerSample>8</File:BitsPerSample>
+ <File:ColorComponents>3</File:ColorComponents>
+ <File:YCbCrSubSampling>YCbCr4:2:0 (2 2)</File:YCbCrSubSampling>
+ <IFD0:ImageDescription>A witty caption</IFD0:ImageDescription>
+ <IFD0:Make>FUJIFILM</IFD0:Make>
+ <IFD0:Model>FinePix2400Zoom</IFD0:Model>
+ <IFD0:Orientation>Horizontal (normal)</IFD0:Orientation>
+ <IFD0:XResolution>72</IFD0:XResolution>
+ <IFD0:YResolution>72</IFD0:YResolution>
+ <IFD0:ResolutionUnit>inches</IFD0:ResolutionUnit>
+ <IFD0:Software>Adobe Photoshop 7.0</IFD0:Software>
+ <IFD0:ModifyDate>2004:02:26 09:36:46</IFD0:ModifyDate>
+ <IFD0:Artist>Phil Harvey</IFD0:Artist>
+ <IFD0:YCbCrPositioning>Co-sited</IFD0:YCbCrPositioning>
+ <IFD0:Copyright>Copyright 2004 Phil Harvey</IFD0:Copyright>
+ <ExifIFD:FNumber>3.5</ExifIFD:FNumber>
+ <ExifIFD:ExposureProgram>Program AE</ExifIFD:ExposureProgram>
+ <ExifIFD:ISO>100</ExifIFD:ISO>
+ <ExifIFD:ExifVersion>0210</ExifIFD:ExifVersion>
+ <ExifIFD:DateTimeOriginal>2001:05:19 18:36:41</ExifIFD:DateTimeOriginal>
+ <ExifIFD:CreateDate>2001:05:19 18:36:41</ExifIFD:CreateDate>
+ <ExifIFD:ComponentsConfiguration>Y, Cb, Cr, -</ExifIFD:ComponentsConfiguration>
+ <ExifIFD:CompressedBitsPerPixel>1.6</ExifIFD:CompressedBitsPerPixel>
+ <ExifIFD:ShutterSpeedValue>1/64</ExifIFD:ShutterSpeedValue>
+ <ExifIFD:ApertureValue>3.5</ExifIFD:ApertureValue>
+ <ExifIFD:BrightnessValue>2</ExifIFD:BrightnessValue>
+ <ExifIFD:ExposureCompensation>0</ExifIFD:ExposureCompensation>
+ <ExifIFD:MaxApertureValue>3.5</ExifIFD:MaxApertureValue>
+ <ExifIFD:MeteringMode>Multi-segment</ExifIFD:MeteringMode>
+ <ExifIFD:Flash>Fired</ExifIFD:Flash>
+ <ExifIFD:FocalLength>6.0 mm</ExifIFD:FocalLength>
+ <ExifIFD:FlashpixVersion>0100</ExifIFD:FlashpixVersion>
+ <ExifIFD:ColorSpace>sRGB</ExifIFD:ColorSpace>
+ <ExifIFD:ExifImageWidth>100</ExifIFD:ExifImageWidth>
+ <ExifIFD:ExifImageHeight>80</ExifIFD:ExifImageHeight>
+ <ExifIFD:FocalPlaneXResolution>3053</ExifIFD:FocalPlaneXResolution>
+ <ExifIFD:FocalPlaneYResolution>3053</ExifIFD:FocalPlaneYResolution>
+ <ExifIFD:FocalPlaneResolutionUnit>cm</ExifIFD:FocalPlaneResolutionUnit>
+ <ExifIFD:SensingMethod>One-chip color area</ExifIFD:SensingMethod>
+ <ExifIFD:FileSource>Digital Camera</ExifIFD:FileSource>
+ <ExifIFD:SceneType>Directly photographed</ExifIFD:SceneType>
+ <IFD1:Compression>JPEG (old-style)</IFD1:Compression>
+ <IFD1:XResolution>72</IFD1:XResolution>
+ <IFD1:YResolution>72</IFD1:YResolution>
+ <IFD1:ResolutionUnit>inches</IFD1:ResolutionUnit>
+ <IFD1:ThumbnailOffset>852</IFD1:ThumbnailOffset>
+ <IFD1:ThumbnailLength>0</IFD1:ThumbnailLength>
+ <JFIF:JFIFVersion>1.01</JFIF:JFIFVersion>
+ <JFIF:ResolutionUnit>inches</JFIF:ResolutionUnit>
+ <JFIF:XResolution>144</JFIF:XResolution>
+ <JFIF:YResolution>144</JFIF:YResolution>
+ <JFIF:ThumbnailImage rdf:datatype='http://www.w3.org/2001/XMLSchema#base64Binary'>
+/9j/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4n
+ICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwh
+MjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIy
+MjIyMjL/wAARCAA8AC0DASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAA
+AAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEG
+E1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6
+Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWW
+l5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl
+5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcI
+CQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEI
+FEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElK
+U1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOk
+paanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP0
+9fb3+Pn6/9oADAMBAAIRAxEAPwDYFvdY4uh+MYqtezzWEIklu4vmOFXyeSf+
++qh1vxNaaNb9Ge5YfJEUI/E5HSuOh1W71S7jubn9+VDSCPIVQo64BrF6K5UF
+zSsdmt3flkXERzyWEZwB9N1XfJvzgi5t/wDwHb/4uq1xJMtmzLEIvKx8wYEP
+nHGO3WtCyuYZLON2kRcjozYqObU0nT5SuYL/AP5+bf8A8Bz/APF0nk3ve5i/
+CEj/ANmq/wCZC3SRD9GFGFPcVSZkeQ6zLPd6vdPNkyGQjHpg4AFTQ6NqM7Ww
+XTblWSNt3BXen3sge2PpXT+A3ttR8aG5hskiSGNpAhYvk5HXPfGemPxr1yeJ
+f7TsroAt9n3QSRE9UZME/UYz7j8K2ceZakxlyu6OCj0271W1ggtECySsivvP
+PHP/ANet6LSZtJiFrOBvXuOh+ldBpGkQaWZ5Lt1IDts3nGEXPJ/AZ+mKrL4k
+0S4vvszzK1uAWklkbEcQOcZZjweOg9cds1iqel3ub1KvM7IxZIlb7yg/UVAb
+WDPMMf8A3yKr6lrun2MkjNqNs1uGYJInzB8emCc8VJa3v261jubfypIpBuVg
+56flRytK9jN72MD4OWLPc3F5gks4jUj2GT/6EK9D8U61b+FILnVpIw7KuwRn
+7pchQoPpwCa8Y+Hniz+wJ7qCViEl2uoB6kdVHuePyr1PXYNG8S6GLa8vArNh
+i8UmSG7cd8DPUV0My6HJWXxDM2shNWaBFig32mWG0EL2YckngY78/hwmua3P
+qcjlLqBIpLnds2bQQOgYg4Hfjr0q/f8AgK3j1Jobe/MttwykqQSOeh7kcH8S
+KkHwyl1USnTpZWmUcxyD5e4GW/Lv2PrURq8rNFCTiixHZaNqlrYvHcsL0eYl
+xGhLKCfuuAcYHHb1/P0rQtOt7PTltbKNoljOGAAbJ7nJ5PeuG0Tw/deF76/S
+80pr2WNRHCbeVQpzg7huIIIx+tdvo1x9h02JJ45JHI+60mCnoDjIP4VyyqYm
+b5VokddSOH5nKLv+Z87LG9zII48DJALNwB7mtOxujYxCK1lbBOd3UKenFZ2p
+uYZjbxnbGnYdzjqalgG1VA6AAD8q9PD01VXNLY8xzcdjtrT4geIbazhgS7jb
+yeA7xAkj0PQV1nh/xzqWrXH2aZbdCsRYuiYLnI6jp+leTRMePdSf1FdV4Qka
+PVnIx/qmHP1FdFalBU20hQm+ZJno9xPLcyb5ZnZwMAk54qMFx0f8xTASRXH6
+94l1Cw1aS2tzEsaAYymScjNeWldnS2f/2QAAAA==
+</JFIF:ThumbnailImage>
+ <SPIFF:SPIFFVersion>1.2</SPIFF:SPIFFVersion>
+ <SPIFF:ProfileID>Continuous-tone Base</SPIFF:ProfileID>
+ <SPIFF:ColorComponents>3</SPIFF:ColorComponents>
+ <SPIFF:ImageHeight>4500</SPIFF:ImageHeight>
+ <SPIFF:ImageWidth>3000</SPIFF:ImageWidth>
+ <SPIFF:ColorSpace>YCbCr, ITU-R BT 709, video</SPIFF:ColorSpace>
+ <SPIFF:BitsPerSample>8</SPIFF:BitsPerSample>
+ <SPIFF:Compression>JPEG</SPIFF:Compression>
+ <SPIFF:ResolutionUnit>inches</SPIFF:ResolutionUnit>
+ <SPIFF:YResolution>300</SPIFF:YResolution>
+ <SPIFF:XResolution>300</SPIFF:XResolution>
+ <CIFF:FileFormat>JPEG (lossy)</CIFF:FileFormat>
+ <CIFF:TargetCompressionRatio>2</CIFF:TargetCompressionRatio>
+ <CIFF:ImageWidth>512</CIFF:ImageWidth>
+ <CIFF:ImageHeight>384</CIFF:ImageHeight>
+ <CIFF:PixelAspectRatio>1</CIFF:PixelAspectRatio>
+ <CIFF:Rotation>0</CIFF:Rotation>
+ <CIFF:ComponentBitDepth>8</CIFF:ComponentBitDepth>
+ <CIFF:ColorBitDepth>24</CIFF:ColorBitDepth>
+ <CIFF:ColorBW>1</CIFF:ColorBW>
+ <CIFF:TargetImageType>Real-world Subject</CIFF:TargetImageType>
+ <CIFF:RecordID>0</CIFF:RecordID>
+ <CIFF:FileNumber>45</CIFF:FileNumber>
+ <CIFF:DateTimeOriginal>1998:05:01 21:33:18</CIFF:DateTimeOriginal>
+ <CIFF:TimeZoneCode>0</CIFF:TimeZoneCode>
+ <CIFF:TimeZoneInfo>0</CIFF:TimeZoneInfo>
+ <CIFF:OriginalFileName>C:\DC97\CTG_0000\AUT_0045.JPG</CIFF:OriginalFileName>
+ <CIFF:ThumbnailFileName>C:\DC97\CTG_0000\THM_0045.JPG</CIFF:ThumbnailFileName>
+ <CIFF:ShutterReleaseMethod>Single Shot</CIFF:ShutterReleaseMethod>
+ <CIFF:ShutterReleaseTiming>Priority on focus</CIFF:ShutterReleaseTiming>
+ <CIFF:FlashGuideNumber>0</CIFF:FlashGuideNumber>
+ <CIFF:FlashThreshold>0</CIFF:FlashThreshold>
+ <CIFF:ExposureCompensation>1</CIFF:ExposureCompensation>
+ <CIFF:ShutterSpeedValue>1/83</CIFF:ShutterSpeedValue>
+ <CIFF:ApertureValue>6.2</CIFF:ApertureValue>
+ <CIFF:TargetDistanceSetting>476 mm</CIFF:TargetDistanceSetting>
+ <CIFF:MeasuredEV>16.25</CIFF:MeasuredEV>
+ <CIFF:CanonFileDescription></CIFF:CanonFileDescription>
+ <CIFF:CanonImageType>AUT:Full automatic mode</CIFF:CanonImageType>
+ <CIFF:OwnerName></CIFF:OwnerName>
+ <CIFF:Make>Canon</CIFF:Make>
+ <CIFF:Model>Canon PowerShot A5</CIFF:Model>
+ <CIFF:BaseISO>100</CIFF:BaseISO>
+ <CIFF:ROMOperationMode>USA</CIFF:ROMOperationMode>
+ <CIFF:CanonFirmwareVersion>Firmware Version 01.00</CIFF:CanonFirmwareVersion>
+ <CIFF:FreeBytes rdf:datatype='http://www.w3.org/2001/XMLSchema#base64Binary'>
+AAAAAAAAAAAAAAAA
+</CIFF:FreeBytes>
+ <CIFF:FocalType>Fixed</CIFF:FocalType>
+ <CIFF:FocalLength>5 mm</CIFF:FocalLength>
+ <CIFF:FocalPlaneXSize>5.05 mm</CIFF:FocalPlaneXSize>
+ <CIFF:FocalPlaneYSize>3.71 mm</CIFF:FocalPlaneYSize>
+ <AVI1:InterleavedField>Not Interleaved</AVI1:InterleavedField>
+ <XMP-x:XMPToolkit>Image::ExifTool 4.73</XMP-x:XMPToolkit>
+ <XMP-rdf:About>uuid:80056b68-1045-fa97-3401-6f4ed84cd53d</XMP-rdf:About>
+ <XMP-dc:Creator>Phil Harvey</XMP-dc:Creator>
+ <XMP-dc:Description>UTF-16 (big-endian) encoded XMP</XMP-dc:Description>
+ <XMP-dc:Rights>Copyright 2004 Phil Harvey</XMP-dc:Rights>
+ <XMP-dc:Subject>
+  <rdf:Bag>
+   <rdf:li>ExifTool</rdf:li>
+   <rdf:li>Test</rdf:li>
+   <rdf:li>XMP</rdf:li>
+  </rdf:Bag>
+ </XMP-dc:Subject>
+ <XMP-dc:Title>Test IPTC picture</XMP-dc:Title>
+ <XMP-photoshop:AuthorsPosition>My Position</XMP-photoshop:AuthorsPosition>
+ <XMP-photoshop:CaptionWriter>I wrote it</XMP-photoshop:CaptionWriter>
+ <XMP-photoshop:Category>1</XMP-photoshop:Category>
+ <XMP-photoshop:City>Kingston</XMP-photoshop:City>
+ <XMP-photoshop:Country>Canada</XMP-photoshop:Country>
+ <XMP-photoshop:Credit>My Credit</XMP-photoshop:Credit>
+ <XMP-photoshop:DateCreated>2004:02:26</XMP-photoshop:DateCreated>
+ <XMP-photoshop:Headline>No headline</XMP-photoshop:Headline>
+ <XMP-photoshop:Instructions>What instructions</XMP-photoshop:Instructions>
+ <XMP-photoshop:Source>I&#39;m the source</XMP-photoshop:Source>
+ <XMP-photoshop:State>Ont</XMP-photoshop:State>
+ <XMP-photoshop:SupplementalCategories>
+  <rdf:Bag>
+   <rdf:li>amazing</rdf:li>
+   <rdf:li>image</rdf:li>
+   <rdf:li>utilities</rdf:li>
+  </rdf:Bag>
+ </XMP-photoshop:SupplementalCategories>
+ <XMP-photoshop:TransmissionReference>What is a transmission reference?</XMP-photoshop:TransmissionReference>
+ <XMP-photoshop:Urgency>8 (least urgent)</XMP-photoshop:Urgency>
+ <XMP-xmpBJ:JobRefName>My Job</XMP-xmpBJ:JobRefName>
+ <XMP-xmpMM:DocumentID>adobe:docid:photoshop:4cc7b857-69d0-11d8-8ac4-bb59c92f0d9a</XMP-xmpMM:DocumentID>
+ <XMP-xmpRights:Marked>False</XMP-xmpRights:Marked>
+ <XMP-xmpRights:WebStatement>http://owl.phy.queensu.ca/~phil/exiftool/</XMP-xmpRights:WebStatement>
+ <ICC_Profile:ProfileCopyright>Copyright 1999 Adobe Systems Incorporated</ICC_Profile:ProfileCopyright>
+ <ICC_Profile:ProfileDescription>Adobe RGB (1998)</ICC_Profile:ProfileDescription>
+ <ICC_Profile:MediaWhitePoint>0.95045 1 1.08905</ICC_Profile:MediaWhitePoint>
+ <ICC_Profile:MediaBlackPoint>0 0 0</ICC_Profile:MediaBlackPoint>
+ <ICC_Profile:RedTRC rdf:datatype='http://www.w3.org/2001/XMLSchema#base64Binary'>
+Y3VydgAAAAAAAAABAjM=
+</ICC_Profile:RedTRC>
+ <ICC_Profile:GreenTRC rdf:datatype='http://www.w3.org/2001/XMLSchema#base64Binary'>
+Y3VydgAAAAAAAAABAjM=
+</ICC_Profile:GreenTRC>
+ <ICC_Profile:BlueTRC rdf:datatype='http://www.w3.org/2001/XMLSchema#base64Binary'>
+Y3VydgAAAAAAAAABAjM=
+</ICC_Profile:BlueTRC>
+ <ICC_Profile:RedMatrixColumn>0.60974 0.31111 0.01947</ICC_Profile:RedMatrixColumn>
+ <ICC_Profile:GreenMatrixColumn>0.20528 0.62567 0.06087</ICC_Profile:GreenMatrixColumn>
+ <ICC_Profile:BlueMatrixColumn>0.14919 0.06322 0.74457</ICC_Profile:BlueMatrixColumn>
+ <ICC-header:ProfileCMMType>ADBE</ICC-header:ProfileCMMType>
+ <ICC-header:ProfileVersion>2.1.0</ICC-header:ProfileVersion>
+ <ICC-header:ProfileClass>Display Device Profile</ICC-header:ProfileClass>
+ <ICC-header:ColorSpaceData>RGB </ICC-header:ColorSpaceData>
+ <ICC-header:ProfileConnectionSpace>XYZ </ICC-header:ProfileConnectionSpace>
+ <ICC-header:ProfileDateTime>1999:06:03 00:00:00</ICC-header:ProfileDateTime>
+ <ICC-header:ProfileFileSignature>acsp</ICC-header:ProfileFileSignature>
+ <ICC-header:PrimaryPlatform>Apple Computer Inc.</ICC-header:PrimaryPlatform>
+ <ICC-header:CMMFlags>Not Embedded, Independent</ICC-header:CMMFlags>
+ <ICC-header:DeviceManufacturer>none</ICC-header:DeviceManufacturer>
+ <ICC-header:DeviceModel></ICC-header:DeviceModel>
+ <ICC-header:DeviceAttributes>Reflective, Glossy, Positive, Color</ICC-header:DeviceAttributes>
+ <ICC-header:RenderingIntent>Perceptual</ICC-header:RenderingIntent>
+ <ICC-header:ConnectionSpaceIlluminant>0.9642 1 0.82491</ICC-header:ConnectionSpaceIlluminant>
+ <ICC-header:ProfileCreator>ADBE</ICC-header:ProfileCreator>
+ <ICC-header:ProfileID>0</ICC-header:ProfileID>
+ <FlashPix:CodePage>Unicode UTF-16, little endian</FlashPix:CodePage>
+ <FlashPix:UsedExtensionNumbers>1</FlashPix:UsedExtensionNumbers>
+ <FlashPix:ExtensionName>Screen nail</FlashPix:ExtensionName>
+ <FlashPix:ExtensionClassID>10000230-6FC0-11D0-BD01-00609719A180</FlashPix:ExtensionClassID>
+ <FlashPix:ExtensionPersistence>Invalidated By Modification</FlashPix:ExtensionPersistence>
+ <FlashPix:ExtensionCreateDate>1999:05:14 21:47:25</FlashPix:ExtensionCreateDate>
+ <FlashPix:ExtensionModifyDate>1999:05:14 21:47:25</FlashPix:ExtensionModifyDate>
+ <FlashPix:CreatingApplication>Digita</FlashPix:CreatingApplication>
+ <FlashPix:ExtensionDescription>Presized image for LCD display</FlashPix:ExtensionDescription>
+ <FlashPix:Storage-StreamPathname rdf:datatype='http://www.w3.org/2001/XMLSchema#base64Binary'>
+LwVTY3JlZW4gTmFpbF9iZDAxMDA2MDk3MTlhMTgw
+</FlashPix:Storage-StreamPathname>
+ <FlashPix:ScreenNail rdf:datatype='http://www.w3.org/2001/XMLSchema#base64Binary'>
+MQIAEMBv0BG9AQBglxmhgDAAAAAJFwAABwAAAAEAAABAAAAAAgAAAEgAAAAD
+AAAAUAAAAAQAAABYAAAABQAAAGAAAAAGAAAAaAAAAAcAAABwAAAAAgAAALAE
+AAATAAAAIAEAABMAAADAAAAABAAAAAAAgD8SAAAAAwAAABMAAAAAAAAAQQAA
+AJEWAAD/2P/bAIQABwcHCwsLExAQEx4YGxgeMSQoKCQxTzg5Qzk4T4RaVGZm
+VFqElIGWsJaBlM3g///gzf///////////////////wEHBwcKCgoQDg4QGhQX
+FBonHiEhHic8LC00LSw8X0M/S0s/Q19pXWp6al1pjJe4uJeM3P///9z/////
+/////////8QBogAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoLAQADAQEB
+AQEBAQEBAAAAAAAAAQIDBAUGBwgJCgsQAAIBAwMCBAMFBQQEAAABfQECAwAE
+EQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkq
+NDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeI
+iYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY
+2drh4uPk5ebn6Onq8fLz9PX29/j5+hEAAgECBAQDBAcFBAQAAQJ3AAECAxEE
+BSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygp
+KjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaH
+iImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX
+2Nna4uPk5ebn6Onq8vP09fb3+Pn6/90ABAAE/8AAEQgAwAEgAwEiAAISAQMS
+Af/aAAwDAQACEQMRAD8A5Okp1JXoiuQAlJS0lFxXAQlJTqShiABppKdSUCGB
+/9DjMUlOpK7REAMppFSYphobAAGGm1IabUgADCKYakpppAMD/9Hz00wipDWf
+c6jBD1bJ9BWzCTsSMskUw1z0+uMR+7XH1qkdXuCev6UjFyfoBR1ZpuKwF1tg
+BuTP41rW17FMPlPPoa1IUu4gLBFMIqXFNIpsGwA//9LycimFanK0hWqJuMCv
+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
+0PnKTKsQexpm406RizEnqaZSYCQidblgu3jrmlNyx7VXpKmwyriRcuJlYjaC
+owOK9M0WVXs4ivYY/KvPdRhuR5bStnKDGTnjtXoml26wW6ovatMOrSHh2nIq
+WqKlB2bNUUopgal3V1DaMCrH/9HnahuFDRkH0p+6opnwhPtXYxmZdjzSTrSC
+nP1pBUUvgQ6Xwr0MnuDWooBp3Sk6daWG2eY56CtEYV6vJEg3pU+eSRNbwmds
+Dp3rttLtAq4AqnY2gVdqj0rsLKAYGeM15+Oq3lbscM22zuwVKyv3PQpwUVZH
+/9KvaQfJweavg7k2kUy3OPlpJPlYY65rwmaHvaCsRKMDcRzjFcx4gudlu5HG
+a6W4k2qa868S3Jysefc1dKPNJLuzbCxvUj6mFZ2i35EYrSnJnKmkBpM0hNe4
+Ox4gxM80UhNNzSAQz//T8GNPzxUQ60/NdYznGB6VGaeTULNxSASHYgep7RVa
+UZ7c0zAPalX5WDDtXnzbbZM377XmdySUS4QvBehuqozmn+YVOKzmuSAPejzC
+1YsroVEi5//U8dZ8isW76VdRm71SuzuwK4o7jjujsk9BPYpxSFDkVaN654NU
+AaWui7Ec/s1fc0uOZFJ60zyx607NKKfOySPZLuapjViJ6c0142XqMVahneN8
+qcGkuJmkwWOatMhbo55RS6m8loz/2Q==
+</FlashPix:ScreenNail>
+ <MPF0:MPFVersion>0100</MPF0:MPFVersion>
+ <MPF0:NumberOfImages>2</MPF0:NumberOfImages>
+ <MPImage1:MPImageFlags>Dependent parent image</MPImage1:MPImageFlags>
+ <MPImage1:MPImageFormat>JPEG</MPImage1:MPImageFormat>
+ <MPImage1:MPImageType>Baseline MP Primary Image</MPImage1:MPImageType>
+ <MPImage1:MPImageLength>5959981</MPImage1:MPImageLength>
+ <MPImage1:MPImageStart>0</MPImage1:MPImageStart>
+ <MPImage1:DependentImage1EntryNumber>2</MPImage1:DependentImage1EntryNumber>
+ <MPImage1:DependentImage2EntryNumber>0</MPImage1:DependentImage2EntryNumber>
+ <MPImage2:MPImageFlags>Dependent child image</MPImage2:MPImageFlags>
+ <MPImage2:MPImageFormat>JPEG</MPImage2:MPImageFormat>
+ <MPImage2:MPImageType>Large Thumbnail (full HD equivalent)</MPImage2:MPImageType>
+ <MPImage2:MPImageLength>1039273</MPImage2:MPImageLength>
+ <MPImage2:MPImageStart>5945405</MPImage2:MPImageStart>
+ <MPImage2:DependentImage1EntryNumber>0</MPImage2:DependentImage1EntryNumber>
+ <MPImage2:DependentImage2EntryNumber>0</MPImage2:DependentImage2EntryNumber>
+ <MetaIFD:FilmProductCode>37</MetaIFD:FilmProductCode>
+ <MetaIFD:ImageSourceEK>1</MetaIFD:ImageSourceEK>
+ <MetaIFD:CaptureConditionsPAR>1</MetaIFD:CaptureConditionsPAR>
+ <MetaIFD:FrameNumber>0</MetaIFD:FrameNumber>
+ <MetaIFD:FilmCategory>2</MetaIFD:FilmCategory>
+ <MetaIFD:FilmGencode>2</MetaIFD:FilmGencode>
+ <MetaIFD:ModelAndVersion>Version 9</MetaIFD:ModelAndVersion>
+ <MetaIFD:FilmSize>1</MetaIFD:FilmSize>
+ <MetaIFD:SBA_RGBShifts>0 0 0</MetaIFD:SBA_RGBShifts>
+ <MetaIFD:SBAInputImageColorspace>3</MetaIFD:SBAInputImageColorspace>
+ <MetaIFD:SBAInputImageBitDepth>12 12 12</MetaIFD:SBAInputImageBitDepth>
+ <MetaIFD:SBAExposureRecord rdf:datatype='http://www.w3.org/2001/XMLSchema#base64Binary'>
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAqAfMCkwMAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEUJIQAKAkUJ
+IQAKAooDLgWGBhUFQAENA+cDvQKfBosIvwlGCPf/QQBEAEIARQPSBCoGwASt
+AaIDtAa7Ap0FAAAEASkA2wGOAVX3LADfABQBAAAAAAAAAQABAAIAAAAyAAEA
+AQAGAP///////wAAAAAbCNIHoAB0AywAhQKNAtIHgf8aAz4AzPx+AhwCUf/m
+/yEBEAK4IlIIGgWgACwAjQIaAz4AfgIcAub/nv+4IpMALACNAoH/PgAxAzEA
+jQN+ArgA5v8=
+</MetaIFD:SBAExposureRecord>
+ <MetaIFD:UserAdjSBA_RGBShifts>0 0 0</MetaIFD:UserAdjSBA_RGBShifts>
+ <MetaIFD:ImageRotationStatus>0</MetaIFD:ImageRotationStatus>
+ <MetaIFD:RollGuidElements>00000000000000000000000000000000</MetaIFD:RollGuidElements>
+ <MetaIFD:MetadataNumber>0100</MetaIFD:MetadataNumber>
+ <RMETA:SignType>Information</RMETA:SignType>
+ <RMETA:Location>Roundabout</RMETA:Location>
+ <RMETA:Lit>No</RMETA:Lit>
+ <RMETA:Condition>Good</RMETA:Condition>
+ <RMETA:Azimuth>E</RMETA:Azimuth>
+ <PrintIM:PrintIMVersion>0250</PrintIM:PrintIMVersion>
+ <NITF:NITFVersion>2.00</NITF:NITFVersion>
+ <NITF:ImageFormat>IMode B</NITF:ImageFormat>
+ <NITF:BlocksPerRow>1</NITF:BlocksPerRow>
+ <NITF:BlocksPerColumn>1</NITF:BlocksPerColumn>
+ <NITF:ImageColor>Monochrome</NITF:ImageColor>
+ <NITF:BitDepth>8</NITF:BitDepth>
+ <NITF:ImageClass>General Purpose</NITF:ImageClass>
+ <NITF:JPEGProcess>Baseline sequential DCT, Huffman coding, 8-bit samples</NITF:JPEGProcess>
+ <NITF:Quality>1</NITF:Quality>
+ <NITF:StreamColor>Monochrome</NITF:StreamColor>
+ <NITF:StreamBitDepth>8</NITF:StreamBitDepth>
+ <NITF:Flags>0x1010000</NITF:Flags>
+ <Qualcomm:AECCurrentSensorLuma>22</Qualcomm:AECCurrentSensorLuma>
+ <Qualcomm:AFPosition>26</Qualcomm:AFPosition>
+ <Qualcomm:AECCurrentExpIndex>308</Qualcomm:AECCurrentExpIndex>
+ <Qualcomm:AWBSampleDecision>7</Qualcomm:AWBSampleDecision>
+ <Qualcomm:ASF5Enable>1</Qualcomm:ASF5Enable>
+ <Qualcomm:ASF5FilterMode>0</Qualcomm:ASF5FilterMode>
+ <Qualcomm:ASF5ExposureIndex1>180</Qualcomm:ASF5ExposureIndex1>
+ <Qualcomm:ASF5ExposureIndex2>270</Qualcomm:ASF5ExposureIndex2>
+ <Qualcomm:ASF5MaxExposureIndex>290</Qualcomm:ASF5MaxExposureIndex>
+ <PictureInfo:DateTimeOriginal>1998:12:31 15:17:20</PictureInfo:DateTimeOriginal>
+ <PictureInfo:ExposureTime>1/155</PictureInfo:ExposureTime>
+ <PictureInfo:Flash>Off</PictureInfo:Flash>
+ <PictureInfo:Resolution>5</PictureInfo:Resolution>
+ <PictureInfo:Protect>0</PictureInfo:Protect>
+ <PictureInfo:ContTake>0</PictureInfo:ContTake>
+ <PictureInfo:ImageSize>1280x960</PictureInfo:ImageSize>
+ <PictureInfo:ColorMode>1</PictureInfo:ColorMode>
+ <PictureInfo:FNumber>11.0</PictureInfo:FNumber>
+ <PictureInfo:Zoom>2.1</PictureInfo:Zoom>
+ <PictureInfo:Macro>Off</PictureInfo:Macro>
+ <PictureInfo:LightS>0</PictureInfo:LightS>
+ <PictureInfo:ExposureCompensation>+2.0</PictureInfo:ExposureCompensation>
+ <PictureInfo:CameraType>SR84</PictureInfo:CameraType>
+ <PictureInfo:SerialNumber>#00000001</PictureInfo:SerialNumber>
+ <PictureInfo:Version>v84-71</PictureInfo:Version>
+ <PictureInfo:ID>AGFA DIGITAL CAMERA</PictureInfo:ID>
+ <PictureInfo:PicLen>561039</PictureInfo:PicLen>
+ <PictureInfo:ThmLen>3802</PictureInfo:ThmLen>
+ <PictureInfo:TagQ>96</PictureInfo:TagQ>
+ <PictureInfo:TagR>293</PictureInfo:TagR>
+ <PictureInfo:TagB>332</PictureInfo:TagB>
+ <PictureInfo:S0>1e8,0,11b0,6f72,15cf,4225,4225,1050000,a1e0004,0,2f0030d,2f102c5,2880090,0,0</PictureInfo:S0>
+ <PictureInfo:T0>11b15600,1290000,e00c0f,2,0,0</PictureInfo:T0>
+ <Ducky:Quality>84%</Ducky:Quality>
+ <Ducky:Copyright>Copyright 2004 Phil Harvey</Ducky:Copyright>
+ <IPTC:ApplicationRecordVersion>2</IPTC:ApplicationRecordVersion>
+ <IPTC:Caption-Abstract>A witty caption</IPTC:Caption-Abstract>
+ <IPTC:Writer-Editor>I wrote it</IPTC:Writer-Editor>
+ <IPTC:Headline>No headline</IPTC:Headline>
+ <IPTC:SpecialInstructions>What instructions</IPTC:SpecialInstructions>
+ <IPTC:By-line>Phil Harvey</IPTC:By-line>
+ <IPTC:By-lineTitle>My Position</IPTC:By-lineTitle>
+ <IPTC:Credit>My Credit</IPTC:Credit>
+ <IPTC:ObjectName>Test IPTC picture</IPTC:ObjectName>
+ <IPTC:DateCreated>2004:02:26</IPTC:DateCreated>
+ <IPTC:City>Kingston</IPTC:City>
+ <IPTC:Province-State>Ont</IPTC:Province-State>
+ <IPTC:Country-PrimaryLocationName>Canada</IPTC:Country-PrimaryLocationName>
+ <IPTC:OriginalTransmissionReference>What is a transmission reference</IPTC:OriginalTransmissionReference>
+ <IPTC:Category>1</IPTC:Category>
+ <IPTC:SupplementalCategories>
+  <rdf:Bag>
+   <rdf:li>amazing</rdf:li>
+   <rdf:li>image</rdf:li>
+   <rdf:li>utilities</rdf:li>
+  </rdf:Bag>
+ </IPTC:SupplementalCategories>
+ <IPTC:CopyrightNotice>Copyright 2004 Phil Harvey</IPTC:CopyrightNotice>
+ <IPTC:Urgency>8 (least urgent)</IPTC:Urgency>
+ <IPTC:Source>I&#39;m the source</IPTC:Source>
+ <IPTC:Keywords>jambalaya</IPTC:Keywords>
+ <Photoshop:IPTCDigest>05ad1770b1a95f1f9788ac995fa647da</Photoshop:IPTCDigest>
+ <Photoshop:XResolution>72</Photoshop:XResolution>
+ <Photoshop:DisplayedUnitsX>inches</Photoshop:DisplayedUnitsX>
+ <Photoshop:YResolution>72</Photoshop:YResolution>
+ <Photoshop:DisplayedUnitsY>inches</Photoshop:DisplayedUnitsY>
+ <Photoshop:GlobalAngle>30</Photoshop:GlobalAngle>
+ <Photoshop:GlobalAltitude>30</Photoshop:GlobalAltitude>
+ <Photoshop:CopyrightFlag>False</Photoshop:CopyrightFlag>
+ <Photoshop:URL>http://owl.phy.queensu.ca/~phil/exiftool/</Photoshop:URL>
+ <Photoshop:PhotoshopQuality>7</Photoshop:PhotoshopQuality>
+ <Photoshop:PhotoshopFormat>Standard</Photoshop:PhotoshopFormat>
+ <Photoshop:ProgressiveScans>3 Scans</Photoshop:ProgressiveScans>
+ <AdobeCM:AdobeCMType>3</AdobeCM:AdobeCMType>
+ <Adobe:DCTEncodeVersion>100</Adobe:DCTEncodeVersion>
+ <Adobe:APP14Flags0>(none)</Adobe:APP14Flags0>
+ <Adobe:APP14Flags1>(none)</Adobe:APP14Flags1>
+ <Adobe:ColorTransform>YCbCr</Adobe:ColorTransform>
+ <GraphConv:Quality>70</GraphConv:Quality>
+ <MIE-Doc:Copyright>© 2006 Phil Harvey</MIE-Doc:Copyright>
+ <MIE-Main:TrailerSignature></MIE-Main:TrailerSignature>
+ <PhotoMechanic:Tagged>Yes</PhotoMechanic:Tagged>
+ <PhotoMechanic:ColorClass>6 (Typical alt)</PhotoMechanic:ColorClass>
+ <PhotoMechanic:Rotation>180</PhotoMechanic:Rotation>
+ <PhotoMechanic:CropLeft>438</PhotoMechanic:CropLeft>
+ <PhotoMechanic:CropTop>618</PhotoMechanic:CropTop>
+ <PhotoMechanic:CropRight>890</PhotoMechanic:CropRight>
+ <PhotoMechanic:CropBottom>1072</PhotoMechanic:CropBottom>
+ <CanonVRD:VRDVersion>1.0.0</CanonVRD:VRDVersion>
+ <CanonVRD:WBAdjRGGBLevels>0 0 0 0</CanonVRD:WBAdjRGGBLevels>
+ <CanonVRD:WhiteBalanceAdj>Shot Settings</CanonVRD:WhiteBalanceAdj>
+ <CanonVRD:WBAdjColorTemp>5600</CanonVRD:WBAdjColorTemp>
+ <CanonVRD:WBFineTuneActive>No</CanonVRD:WBFineTuneActive>
+ <CanonVRD:WBFineTuneSaturation>0</CanonVRD:WBFineTuneSaturation>
+ <CanonVRD:WBFineTuneTone>0</CanonVRD:WBFineTuneTone>
+ <CanonVRD:RawColorAdj>Shot Settings</CanonVRD:RawColorAdj>
+ <CanonVRD:RawCustomSaturation>0</CanonVRD:RawCustomSaturation>
+ <CanonVRD:RawCustomTone>0</CanonVRD:RawCustomTone>
+ <CanonVRD:RawBrightnessAdj>0.00</CanonVRD:RawBrightnessAdj>
+ <CanonVRD:ToneCurveProperty>Shot Settings</CanonVRD:ToneCurveProperty>
+ <CanonVRD:DynamicRangeMin>0</CanonVRD:DynamicRangeMin>
+ <CanonVRD:DynamicRangeMax>4095</CanonVRD:DynamicRangeMax>
+ <CanonVRD:ToneCurveActive>No</CanonVRD:ToneCurveActive>
+ <CanonVRD:ToneCurveMode>RGB</CanonVRD:ToneCurveMode>
+ <CanonVRD:BrightnessAdj>0</CanonVRD:BrightnessAdj>
+ <CanonVRD:ContrastAdj>0</CanonVRD:ContrastAdj>
+ <CanonVRD:SaturationAdj>100</CanonVRD:SaturationAdj>
+ <CanonVRD:ColorToneAdj>0</CanonVRD:ColorToneAdj>
+ <CanonVRD:LuminanceCurvePoints>(0,0) (255,255)</CanonVRD:LuminanceCurvePoints>
+ <CanonVRD:LuminanceCurveLimits>255 0 255 0</CanonVRD:LuminanceCurveLimits>
+ <CanonVRD:ToneCurveInterpolation>Curve</CanonVRD:ToneCurveInterpolation>
+ <CanonVRD:RedCurvePoints>(0,0) (255,255)</CanonVRD:RedCurvePoints>
+ <CanonVRD:RedCurveLimits>255 0 255 0</CanonVRD:RedCurveLimits>
+ <CanonVRD:GreenCurvePoints>(0,0) (255,255)</CanonVRD:GreenCurvePoints>
+ <CanonVRD:GreenCurveLimits>255 0 255 0</CanonVRD:GreenCurveLimits>
+ <CanonVRD:BlueCurvePoints>(0,0) (255,255)</CanonVRD:BlueCurvePoints>
+ <CanonVRD:BlueCurveLimits>255 0 255 0</CanonVRD:BlueCurveLimits>
+ <CanonVRD:RGBCurvePoints>(0,0) (255,255)</CanonVRD:RGBCurvePoints>
+ <CanonVRD:RGBCurveLimits>255 0 255 0</CanonVRD:RGBCurveLimits>
+ <CanonVRD:CropActive>No</CanonVRD:CropActive>
+ <CanonVRD:CropLeft>0</CanonVRD:CropLeft>
+ <CanonVRD:CropTop>0</CanonVRD:CropTop>
+ <CanonVRD:CropWidth>0</CanonVRD:CropWidth>
+ <CanonVRD:CropHeight>0</CanonVRD:CropHeight>
+ <CanonVRD:SharpnessAdj>0</CanonVRD:SharpnessAdj>
+ <CanonVRD:CropAspectRatio>Free</CanonVRD:CropAspectRatio>
+ <CanonVRD:ConstrainedCropWidth>0</CanonVRD:ConstrainedCropWidth>
+ <CanonVRD:ConstrainedCropHeight>0</CanonVRD:ConstrainedCropHeight>
+ <CanonVRD:CheckMark>Clear</CanonVRD:CheckMark>
+ <CanonVRD:Rotation>90</CanonVRD:Rotation>
+ <CanonVRD:WorkColorSpace>sRGB</CanonVRD:WorkColorSpace>
+ <FotoStation:OriginalImageWidth>16</FotoStation:OriginalImageWidth>
+ <FotoStation:OriginalImageHeight>16</FotoStation:OriginalImageHeight>
+ <FotoStation:ColorPlanes>3</FotoStation:ColorPlanes>
+ <FotoStation:XYResolution>9</FotoStation:XYResolution>
+ <FotoStation:Rotation>0</FotoStation:Rotation>
+ <FotoStation:CropLeft>24.557%</FotoStation:CropLeft>
+ <FotoStation:CropTop>21.25%</FotoStation:CropTop>
+ <FotoStation:CropRight>30.676%</FotoStation:CropRight>
+ <FotoStation:CropBottom>86.25%</FotoStation:CropBottom>
+ <FotoStation:CropRotation>0</FotoStation:CropRotation>
+ <IPTC2:ApplicationRecordVersion>2</IPTC2:ApplicationRecordVersion>
+ <IPTC3:ApplicationRecordVersion>2</IPTC3:ApplicationRecordVersion>
+ <IPTC3:Category>p</IPTC3:Category>
+ <IPTC3:DateCreated>2005:12:23</IPTC3:DateCreated>
+ <IPTC3:ObjectName>object name</IPTC3:ObjectName>
+ <IPTC3:Urgency>2</IPTC3:Urgency>
+ <IPTC3:SupplementalCategories>supp cat</IPTC3:SupplementalCategories>
+ <IPTC3:SpecialInstructions>special instructions</IPTC3:SpecialInstructions>
+ <IPTC3:By-line>byline</IPTC3:By-line>
+ <IPTC3:By-lineTitle>byline title</IPTC3:By-lineTitle>
+ <IPTC3:City>city</IPTC3:City>
+ <IPTC3:Country-PrimaryLocationName>country name</IPTC3:Country-PrimaryLocationName>
+ <IPTC3:OriginalTransmissionReference>otr</IPTC3:OriginalTransmissionReference>
+ <IPTC3:Headline>headline</IPTC3:Headline>
+ <IPTC3:Credit>credit</IPTC3:Credit>
+ <IPTC3:Source>source</IPTC3:Source>
+ <IPTC3:CopyrightNotice>copy freely</IPTC3:CopyrightNotice>
+ <IPTC3:Caption-Abstract>ExifTool AFCP test</IPTC3:Caption-Abstract>
+ <IPTC3:Writer-Editor>caption writer</IPTC3:Writer-Editor>
+ <IPTC3:Province-State>state</IPTC3:Province-State>
+ <IPTC3:Keywords>jambalaya</IPTC3:Keywords>
+ <Composite:Aperture>11.0</Composite:Aperture>
+ <Composite:ImageSize>8x8</Composite:ImageSize>
+ <Composite:PreviewImage rdf:datatype='http://www.w3.org/2001/XMLSchema#base64Binary'>
+/9j/2wCEAAcHBwsLCxMQEBMeGBsYHjEkKCgkMU84OUM5OE+EWlRmZlRahJSB
+lrCWgZTN4P//4M3///////////////////8BBwcHCgoKEA4OEBoUFxQaJx4h
+IR4nPCwtNC0sPF9DP0tLP0NfaV1qempdaYyXuLiXjNz////c////////////
+///EAaIAAAEFAQEBAQEBAAAAAAAAAAABAgMEBQYHCAkKCwEAAwEBAQEBAQEB
+AQAAAAAAAAECAwQFBgcICQoLEAACAQMDAgQDBQUEBAAAAX0BAgMABBEFEiEx
+QQYTUWEHInEUMoGRoQgjQrHBFVLR8CQzYnKCCQoWFxgZGiUmJygpKjQ1Njc4
+OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoOEhYaHiImKkpOU
+lZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4eLj
+5OXm5+jp6vHy8/T19vf4+foRAAIBAgQEAwQHBQQEAAECdwABAgMRBAUhMQYS
+QVEHYXETIjKBCBRCkaGxwQkjM1LwFWJy0QoWJDThJfEXGBkaJicoKSo1Njc4
+OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoKDhIWGh4iJipKT
+lJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uLj
+5OXm5+jp6vLz9PX29/j5+v/dAAQABP/AABEIAMABIAMBIgACEgEDEgH/2gAM
+AwEAAhEDEQA/AOTpKdSV6IrkAJSUtJRcVwEJSU6koYgAaaSnUlAhgf/Q4zFJ
+TqSu0RADKaRUmKYaGwABhptSGm1IAAwimGpKaaQDA//R89NMIqQ1n3OowQ9W
+yfQVswk7EjLJFMNc9PrjEfu1x9apHV7gnr+lIxcn6AUdWabisBdbYAbkz+Na
+1texTD5Tz6GtSFLuICwRTCKlxTSKbBsAP//S8nIphWpytIVqibjAr4o21OVp
+MUyLjERFMjFZtzpKvynB/St1EqfyqV7GUpDauUjz+a3li++uKgzXoMlurDBG
+RWHdaKrcxnHtW9jKE++xkaSVz//T+bqXdxipZreSI4cYqGk0AgAUlFFAAB7N
+RRSV6AEgFJS0lAWEM//U5GkpaSu4GQCEpKdTaTABhTadSUCEA2kNOpKQMAP/
+1eIppp9NNdQmSIbTDUlZeo3IVdndqLkSdlcYJamNqOqSFykXHbNVrbRpnXcw
+resdPBIYj3Fdbb23TiuepNI460zanTcj0cHSsr9zyy5094nCkYyM1RaEBute
+y6rpC3FuSPvAcV5dcWEgO3ByDiulSuctCd9H0POnGz1PRxtGzuup/9b51dR2
+qMEg5FbX9nysvCnrUseiTFC5UgVF7mbmkM1hTlLoNstXIwsnPbNdJjNcHNEU
+Yit/QrpmzEewyK1v0JWxiU1Zm7to2VY2UuymxNiQ7FUpVeQha0WXArKcNK4V
+RmhMcdwEz//X8ztmDVsx2MzjhGP4V6J4f0AWlqoP3mAJrWmt0RSxOAK46jtv
+oeVWqc9ST3uzVFJWR47exi2A835c1nxSwzZ2NnFZfiDUzd3Bbt2rngxByK9V
+O6utjqpw5IRRO5ne7O0lt1YYIyK5280QDmM49jRb6vPHwfmHvW1DqdtMOTtP
+oawhO3oOdJrVFyjcaascNLC8ZwwxUVegXFqrjBGRXO3OkdShx7VuYU529DE1
+lE//0OTpDS0mK7wIBoKSlpKQAAUlLSUgAApKWg0gYAf/0eOpKdSV2CIASm0+
+koEADMUmKfikxUjYAROwUZNcvGftFzmtfVpSkXHeqGj7YwXb1rCrKyM67NIK
+7RdD4kf/0uXs7cAVvW6DNYNpdKxHXFdVaw71+XmvIqydxVVY+gw8UkKhNF+G
+IEdKxz4XUtIzHO49hW/CCvWpjOMUqc3G5nsa1Yc1k+hb3ObXS7eJQNg4qjdx
+gjGK6WZw1Yt0o2mr522QnqQqUYrYtnm+u6cqqXUcmuMtpWgmVumDXp+qLmFv
+pXnlyodunJr1KLvEig9DwsVHlmaY34kf/9PgwlO2VaCVBOwRTWLYkWBmXcmB
+gV2vgLw8ZpPtT/dQ4A965bR9Jm1O7Ecff9BX0pZ6dHbQrFGMKo4qcRPkoyfc
+48wnrGPbUS1kh0+rKfk4ry/4g60sEQt0OGPJ+lepaveJZ2skzfwgmvlHXdTk
+vbp5XPLGuTDQ56kUdmWw1lJ+hcnZMib2RiM2TmoqeaYa9Zg0iUgsj//U+e6a
+acaaaA3KEW4L+aLGG49DWzBqkMvDfKf0rmTSVhUp9UbIqL6EHrtFLSV32AgA
+pKKKBMAP/9XkaKWiu0CAEpKdikpBcAEpKdRSBgA2inUmKQNgB//W47FFOqC4
+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
+pMFjmrTIW6OeUUupvJaM/9k=
+</Composite:PreviewImage>
+ <Composite:ShutterSpeed>1/155</Composite:ShutterSpeed>
+ <Composite:LightValue>14.2</Composite:LightValue>
+ <Composite:ScaleFactor35efl>6.9</Composite:ScaleFactor35efl>
+ <Composite:CircleOfConfusion>0.004 mm</Composite:CircleOfConfusion>
+ <Composite:FOV>47.0 deg</Composite:FOV>
+ <Composite:FocalLength35efl>6.0 mm (35 mm equivalent: 41.4 mm)</Composite:FocalLength35efl>
+ <Composite:HyperfocalDistance>0.75 m</Composite:HyperfocalDistance>
+</rdf:Description>
+</rdf:RDF>

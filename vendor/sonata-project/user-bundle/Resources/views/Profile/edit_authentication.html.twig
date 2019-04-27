@@ -1,0 +1,35 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+
+{% sonata_template_box 'This is the user authentication edition template. Feel free to override it.' %}
+
+<div class="row">
+    <div class="span6 col-lg-6">
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ 'title_user_edit_authentication'|trans({}, 'SonataUserBundle') }}</h3>
+            </div>
+            <div class="panel-body">
+                {% include "SonataUserBundle:Profile:edit_authentication_content.html.twig" %}
+            </div>
+        </div>
+    </div>
+    <div class="span6 col-lg-6">
+        <div class="panel panel-danger">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ 'sonata_change_password_link'|trans({}, 'SonataUserBundle') }}</h3>
+            </div>
+            <div class="panel-body">
+                {{ render(url("sonata_user_change_password")) }}
+            </div>
+        </div>
+    </div>
+</div>

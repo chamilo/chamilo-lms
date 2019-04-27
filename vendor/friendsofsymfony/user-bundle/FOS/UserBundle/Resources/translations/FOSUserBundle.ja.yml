@@ -1,0 +1,99 @@
+# Group
+group:
+    edit:
+        submit: グループの更新
+    show:
+        name: グループ名
+    new:
+        submit: グループの作成
+    flash:
+        updated: グループが更新されました
+        created: グループが作成されました
+        deleted: グループが削除されました
+
+# Security
+"Bad credentials": ユーザ名またはパスワードが間違っています
+
+# Since Symfony 2.6 the error message has changed
+"Bad credentials.": ユーザ名またはパスワードが間違っています。
+
+security:
+    login:
+        username: ユーザー名
+        password: パスワード
+        remember_me: ログイン状態を記憶する
+        submit: ログイン
+
+# Profile
+profile:
+    show:
+        username: ユーザー名
+        email: メールアドレス
+    edit:
+        submit: 更新
+    flash:
+        updated: プロフィールが更新されました
+
+# Password change
+change_password:
+    submit: パスワードの変更
+    flash:
+        success: パスワードが変更されました
+
+# Registration
+registration:
+    check_email: %email% 宛にメールを送信しました。メールに記載された確認 URL にアクセスして、アカウントを有効化してください。
+    confirmed: %username% さんのアカウントの確認が完了しました。
+    back: 元のページに戻る
+    submit: 登録
+    flash:
+        user_created: ユーザーの作成が完了しました
+    email:
+        subject: %username% さん、ようこそ!
+        message: |
+            こんにちは %username% さん!
+
+            アカウントを有効化するには、次の確認 URL へアクセスしてください %confirmationUrl%
+
+
+            開発チーム
+
+# Password resetting
+resetting:
+    password_already_requested: このユーザーのパスワードは 24 時間以内ですでにリクエストされています。
+    check_email: %email% 宛にメールを送信しました。メールに記載された確認 URL にアクセスして、アカウントを有効化してください。
+    request:
+        invalid_username: '"%username%" というユーザー名またはメールアドレスは存在しません。'
+        username: ユーザー名かメールアドレス
+        submit: パスワードのリセット
+    reset:
+        submit: パスワードの変更
+    flash:
+        success: パスワードのリセットが完了しました
+    email:
+        subject: パスワードのリセット
+        message: |
+            こんにちは %username% さん!
+
+            パスワードをリセットするには、次のリセット URL へアクセスしてください %confirmationUrl%
+
+
+            開発チーム
+
+# Global strings
+layout:
+    logout: ログアウト
+    login: ログイン
+    register: 登録
+    logged_in_as: %username% でログイン中
+
+# Form field labels
+form:
+    group_name: グループ名
+    username: ユーザー名
+    email: メールアドレス
+    current_password: 現在のパスワード
+    password: パスワード
+    password_confirmation: 確認
+    new_password: 新しいパスワード
+    new_password_confirmation: 確認

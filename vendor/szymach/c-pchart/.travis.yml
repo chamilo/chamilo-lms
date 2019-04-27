@@ -1,0 +1,37 @@
+language: php
+
+cache:
+  directories:
+    - bin
+    - vendor
+
+sudo: false
+
+matrix:
+    include:
+        - php: 5.4
+          env:
+            - COMPOSER_FLAGS='--prefer-lowest'
+        - php: 5.5
+        - php: 5.6
+        - php: 7.0
+        - php: 7.1
+          env:
+            - COVERAGE='--coverage --coverage-xml'
+    # Travis has some issues with php-gd/freetype libs, not going to bother
+    # trying to fix them
+    allow_failures:
+        - php: 5.5
+
+before_install:
+    - if [[ ! $COVERAGE ]]; then phpenv config-rm xdebug.ini; fi;
+
+before_script:
+    - composer update -n --prefer-dist -v $COMPOSER_FLAGS
+
+script:
+    - bin/phpcs
+    - bin/codecept run unit $COVERAGE
+
+after_script:
+    - if [[ $COVERAGE ]]; then ./coverage.sh; fi;

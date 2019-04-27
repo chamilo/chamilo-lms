@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  php71:
+    build:
+      context: .
+      dockerfile: ./Dockerfile-php71
+    volumes:
+      - './spec:/usr/src/gaufrette/spec:rw'
+      - './src:/usr/src/gaufrette/src:ro'
+      - './tests:/usr/src/gaufrette/tests:rw'
+      - './bin/tests:/usr/src/gaufrette/bin/tests:ro'
+    env_file: .env
+    depends_on:
+      - mongodb
+      - sftp
+      - ftp
+
+  mongodb:
+    image: mongo
+
+  sftp:
+    image: atmoz/sftp:alpine
+    command: gaufrette:gaufrette:::gaufrette
+
+  ftp:
+    build:
+      context: docker
+      dockerfile: Dockerfile-ftp
+    environment:
+      PUBLICHOST: 'ftp'

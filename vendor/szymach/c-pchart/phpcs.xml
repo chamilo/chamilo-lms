@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<ruleset name="Custom Standard">
+
+    <rule ref="PSR2"/>
+
+    <file>src</file>
+
+    <exclude-pattern>bin/*</exclude-pattern>
+    <exclude-pattern>tests/*</exclude-pattern>
+    <exclude-pattern>vendor/*</exclude-pattern>
+    <exclude-pattern>*.db</exclude-pattern>
+    <exclude-pattern>*.color</exclude-pattern>
+    <exclude-pattern>*.ttf</exclude-pattern>
+
+    <arg name="encoding" value="utf-8"/>
+    <arg name="report" value="full"/>
+    <arg name="report-width" value="120"/>
+    <arg name="colors"/>
+    <arg value="p"/>
+
+</ruleset>

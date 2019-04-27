@@ -58,8 +58,8 @@
                                         {% for teacher in item.teachers %}
                                         <div class="popover-teacher">
                                             <a href="{{ teacher.url }}" class="ajax"
-                                               data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                                <img src="{{ teacher.avatar }}"/>
+                                               data-title="{{ teacher.firstname }} {{ teacher.lastname }}" >
+                                                <img title="{{ teacher.firstname }} {{ teacher.lastname }}" src="{{ teacher.avatar }}"/>
                                             </a>
                                             <div class="teachers-details">
                                                 <h5>
@@ -76,8 +76,8 @@
                                     {% for teacher in item.teachers %}
                                         {% if item.teachers | length <= 2 %}
                                             <a href="{{ teacher.url }}" class="ajax"
-                                               data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                                <img src="{{ teacher.avatar }}"/>
+                                               data-title="{{ teacher.firstname }} {{ teacher.lastname }}" title="{{ teacher.firstname }} {{ teacher.lastname }}">
+                                                <img title="{{ teacher.firstname }} {{ teacher.lastname }}" src="{{ teacher.avatar }}"/>
                                             </a>
                                             <div class="teachers-details">
                                                 <h5>
@@ -91,7 +91,7 @@
                                         {% elseif item.teachers | length <= 6 %}
                                             <a href="{{ teacher.url }}" class="ajax"
                                                data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                                <img src="{{ teacher.avatar }}"/>
+                                                <img title="{{ teacher.firstname }} {{ teacher.lastname }}" src="{{ teacher.avatar }}"/>
                                             </a>
                                         {% endif %}
                                     {% endfor %}

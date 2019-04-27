@@ -10142,7 +10142,19 @@ ul.dropdown-menu.inner > li > a {
     display: inline-block;
     font-weight: bold;
 }
-
+.badge-username{
+    font-weight: bold;
+}
+.badge-item{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.badge-item .msg{
+    border: 1px solid #cdcdcd;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f3f3f3;
+}
 @media (min-width: 768px) {
     .clear-rows-6-4-3 .col-sm-6:nth-child(2n+1) {
         clear: left;

@@ -380,9 +380,9 @@ function return_teacher($courseInfo)
             $name = $value['firstname'].' '.$value['lastname'];
             $html .= '<div class="popover-teacher">';
             $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'" title="'.$name.'">
-                        <img src="'.$value['avatar'].'" alt="'.get_lang('UserPicture').'"/></a>';
+                        <img src="'.$value['avatar'].'" title="'.$name.'" alt="'.get_lang('UserPicture').'"/></a>';
             $html .= '<div class="teachers-details"><h5>
-                        <a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">'
+                        <a href="'.$value['url'].'" class="ajax" data-title="'.$name.'" title="'.$name.'">'
                         .$name.'</a></h5></div>';
             $html .= '</div>';
         }
@@ -392,10 +392,10 @@ function return_teacher($courseInfo)
             $name = $value['firstname'].' '.$value['lastname'];
             if ($length > 2) {
                 $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'" title="'.$name.'">
-                        <img src="'.$value['avatar'].'" alt="'.get_lang('UserPicture').'"/></a>';
+                        <img src="'.$value['avatar'].'" title="'.$name.'" alt="'.get_lang('UserPicture').'"/></a>';
             } else {
                 $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'" title="'.$name.'">
-                        <img src="'.$value['avatar'].'" alt="'.get_lang('UserPicture').'"/></a>';
+                        <img src="'.$value['avatar'].'" title="'.$name.'" alt="'.get_lang('UserPicture').'"/></a>';
                 $html .= '<div class="teachers-details"><h5>
                         <a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">'
                         .$name.'</a></h5><p>'.get_lang('Teacher').'</p></div>';

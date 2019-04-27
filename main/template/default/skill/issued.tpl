@@ -51,7 +51,7 @@
         {% endif %}
     </div>
     <div class="col-md-7">
-        <h3>{{ 'RecipientDetails'|get_lang }}</h3>
+        <h5>{{ 'RecipientDetails'|get_lang }}</h5>
         <p class="lead">{{ issue_info.user_complete_name }}</p>
         <h4>{{ 'SkillAcquiredAt'|get_lang }}</h4>
         <ul class="fa-ul">

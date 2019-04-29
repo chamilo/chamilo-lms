@@ -99,8 +99,20 @@ if ($invitationcode == 'auto' && isset($_GET['scode'])) {
     if ($isAnonymous) {
         $autoInvitationcode = 'auto-ANONY_'.md5(time())."-$surveyCode";
     } else {
-        // New invitation code from userid
-        $autoInvitationcode = "auto-$userid-$surveyCode";
+        $invitations = SurveyManager::getUserInvitationsForSurveyInCourse(
+            $userid,
+            $surveyCode,
+            $courseInfo['real_id'],
+            $sessionId
+        );
+        $lastInvitation = current($invitations);
+
+        if (!$lastInvitation) {
+            // New invitation code from userid
+            $autoInvitationcode = "auto-$userid-$surveyCode";
+        } else {
+            $autoInvitationcode = $lastInvitation->getInvitationCode();
+        }
     }
 
     // The survey code must exist in this course, or the URL is invalid

@@ -1875,7 +1875,7 @@ class Display
             $title .= "<small> $second_title<small>";
         }
 
-        return '<'.$size.'>'.Security::remove_XSS($title).'</'.$size.'>';
+        return '<'.$size.' class="section-title">'.Security::remove_XSS($title).'</'.$size.'>';
     }
 
     public static function page_subheader2($title, $second_title = null)

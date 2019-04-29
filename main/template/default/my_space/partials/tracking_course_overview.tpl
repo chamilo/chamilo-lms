@@ -48,7 +48,7 @@
                         </div>
                     </div>
                     <div class="easy-donut">
-                        <div class="easypiechart-blue easypiechart" title="{{ 'Progress'|get_lang }}"  data-percent="{{ data.avg_score }}">
+                        <div class="easypiechart-red easypiechart" title="{{ 'Progress'|get_lang }}"  data-percent="{{ data.avg_score }}">
                             <span class="percent">{{ data.avg_score }}%</span>
                         </div>
                         <div class="easypiechart-legend">

@@ -692,10 +692,10 @@ $layoutTemplate = $tpl->get_template('admin/user_information.tpl');
 $content = $tpl->fetch($layoutTemplate);
 echo $content;
 
-echo Display::page_subheader(get_lang('SessionList'));
+echo Display::page_subheader(get_lang('SessionList'), null, 'h3', ['class' => 'section-title']);
 echo $sessionInformation;
 
-echo Display::page_subheader(get_lang('CourseList'));
+echo Display::page_subheader(get_lang('CourseList'), null, 'h3', ['class' => 'section-title']);
 echo $courseInformation;
 echo $urlInformation;
 

@@ -844,7 +844,6 @@ input[type=checkbox], input[type=radio] {
     margin: 20px auto 10px auto;
 }
 .section-title{
-    font-size: 18px;
     padding-bottom: 1rem;
     border-bottom: 1px solid #cdcdcd;
     font-weight: bold;

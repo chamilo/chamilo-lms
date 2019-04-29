@@ -3392,7 +3392,13 @@ class SurveyUtil
         $now = api_get_utc_datetime(null, false, true);
         $filterDate = $allowSurveyAvailabilityDatetime ? $now->format('Y-m-d H:i') : $now->format('Y-m-d');
 
-        $sql = "SELECT *
+        $sql = "SELECT survey_invitation.answered,
+                    survey_invitation.invitation_code,
+                    survey_invitation.session_id,
+                    survey.title,
+                    survey.visible_results,
+                    survey.survey_id,
+                    survey.anonymous
                 FROM $table_survey survey
                 INNER JOIN
                 $table_survey_invitation survey_invitation
@@ -3413,7 +3419,13 @@ class SurveyUtil
 
         $efv = new ExtraFieldValue('survey');
 
+        $surveyIds = [];
+
         while ($row = Database::fetch_array($result, 'ASSOC')) {
+            if (in_array($row['survey_id'], $surveyIds)) {
+                continue;
+            }
+
             echo '<tr>';
             if ($row['answered'] == 0) {
                 echo '<td>';
@@ -3464,6 +3476,8 @@ class SurveyUtil
                 echo '<td class="text-center">'.($efvMandatory['value'] ? get_lang('Yes') : get_lang('No')).'</td>';
             }
             echo '</tr>';
+
+            $surveyIds[] = $row['survey_id'];
         }
         echo '</tbody>';
         echo '</table>';

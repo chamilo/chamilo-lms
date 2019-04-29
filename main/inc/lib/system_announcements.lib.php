@@ -757,35 +757,38 @@ class SystemAnnouncementManager
             return true;
         }
 
+        $urlJoin = '';
+        $urlCondition = '';
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         if (api_is_multiple_url_enabled()) {
             $current_access_url_id = api_get_current_access_url_id();
             $url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-            $url_condition = " INNER JOIN $url_rel_user uu ON uu.user_id = u.user_id ";
+            $urlJoin = " INNER JOIN $url_rel_user uu ON uu.user_id = u.user_id ";
+            $urlCondition = " AND access_url_id = '".$current_access_url_id."' ";
         }
 
         if ($teacher != 0 && $student == 0) {
-            $sql = "SELECT DISTINCT u.user_id FROM $user_table u $url_condition 
-                    WHERE status = '1' ";
+            $sql = "SELECT DISTINCT u.user_id FROM $user_table u $urlJoin 
+                    WHERE status = '1' $urlCondition";
         }
 
         if ($teacher == 0 && $student != 0) {
-            $sql = "SELECT DISTINCT u.user_id FROM $user_table u $url_condition 
-                    WHERE status = '5' ";
+            $sql = "SELECT DISTINCT u.user_id FROM $user_table u $urlJoin 
+                    WHERE status = '5' $urlCondition";
         }
 
         if ($teacher != 0 && $student != 0) {
-            $sql = "SELECT DISTINCT u.user_id FROM $user_table u $url_condition 
-                    WHERE 1 = 1 ";
+            $sql = "SELECT DISTINCT u.user_id FROM $user_table u $urlJoin 
+                    WHERE 1 = 1 $urlCondition";
+        }
+
+        if (!isset($sql)) {
+            return false;
         }
 
         if (!empty($language)) {
             //special condition because language was already treated for SQL insert before
             $sql .= " AND language = '".Database::escape_string($language)."' ";
-        }
-
-        if (api_is_multiple_url_enabled()) {
-            $sql .= " AND access_url_id = '".$current_access_url_id."' ";
         }
 
         // Sent to active users.

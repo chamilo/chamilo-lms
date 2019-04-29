@@ -2003,9 +2003,7 @@ class learnpath
 
     /**
      * Get the last element in the first level.
-     * Unlike learnpath::get_last this delete_item doesn't consider the subsection' elements.
-     *
-     * @throws \Doctrine\ORM\Query\QueryException
+     * Unlike learnpath::get_last this function doesn't consider the subsection' elements.
      *
      * @return mixed
      */

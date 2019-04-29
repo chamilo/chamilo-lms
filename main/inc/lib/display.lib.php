@@ -1868,14 +1868,15 @@ class Display
         return self::page_subheader($title, $second_title);
     }
 
-    public static function page_subheader($title, $second_title = null, $size = 'h3')
+    public static function page_subheader($title, $second_title = null, $size = 'h3', $attributes=[])
     {
+
         if (!empty($second_title)) {
             $second_title = Security::remove_XSS($second_title);
             $title .= "<small> $second_title<small>";
         }
-
-        return '<'.$size.' class="section-title">'.Security::remove_XSS($title).'</'.$size.'>';
+        $subTitle = self::tag($size,Security::remove_XSS($title),$attributes);
+        return $subTitle;
     }
 
     public static function page_subheader2($title, $second_title = null)

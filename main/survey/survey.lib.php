@@ -2356,4 +2356,35 @@ class SurveyManager
             );
         }
     }
+
+    /**
+     * @param int    $userId
+     * @param string $surveyCode
+     * @param int    $courseId
+     * @param int    $sessionId
+     * @param int    $groupId
+     *
+     * @return array|CSurveyInvitation[]
+     */
+    public static function getUserInvitationsForSurveyInCourse(
+        $userId,
+        $surveyCode,
+        $courseId,
+        $sessionId = 0,
+        $groupId = 0
+    ) {
+        $invitationRepo = Database::getManager()->getRepository('ChamiloCourseBundle:CSurveyInvitation');
+        $invitations = $invitationRepo->findBy(
+            [
+                'user' => $userId,
+                'cId' => $courseId,
+                'sessionId' => $sessionId,
+                'groupId' => $groupId,
+                'surveyCode' => $surveyCode,
+            ],
+            ['invitationDate' => 'DESC']
+        );
+
+        return $invitations;
+    }
 }

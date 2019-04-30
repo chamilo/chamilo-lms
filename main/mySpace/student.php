@@ -254,12 +254,7 @@ if (api_is_drh()) {
         ),
     ];
 
-    $nb_menu_items = count($menu_items);
-    if ($nb_menu_items > 1) {
-        foreach ($menu_items as $key => $item) {
-            $actionsLeft .= $item;
-        }
-    }
+    $actionsLeft .= implode('', $menu_items);
 } elseif (api_is_student_boss()) {
     $actionsLeft .= Display::url(
         Display::return_icon('statistics.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),

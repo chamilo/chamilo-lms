@@ -237,20 +237,18 @@ foreach ($question_list as $questionId) {
         $attributes['checked'] = 1;
     }
     $label_attributes = [];
-    $label_attributes['class'] = 'checkbox';
     $label_attributes['for'] = $check_id;
-    $label_attributes['class'] = "checkbox";
     $checkbox = Display::input('checkbox', 'remind_list['.$questionId.']', '', $attributes);
     $url = 'exercise_submit.php?exerciseId='.$objExercise->id.'&num='.$counter.'&reminder=1&'.api_get_cidreq();
 
     $counter++;
-    $question_title = $counter.'. '.cut($objQuestionTmp->selectTitle(), 40);
+    $question_title = $counter.'. '.strip_tags($objQuestionTmp->selectTitle());
     //Check if the question doesn't have an answer
     if (!in_array($questionId, $exercise_result)) {
         $question_title = Display::label($question_title, 'warning');
     }
     $question_title = Display::tag('label', $checkbox.$question_title, $label_attributes);
-    $table .= Display::div($question_title, ['class' => 'exercise_reminder_item']);
+    $table .= Display::div($question_title, ['class' => 'exercise_reminder_item checkbox']);
 } // end foreach() block that loops over all questions
 
 echo Display::div($table, ['class' => 'question-check-test']);

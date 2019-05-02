@@ -10053,7 +10053,8 @@ ul.dropdown-menu.inner > li > a {
     grid-template-columns: repeat(2, 1fr);
 }
 
-#question_admin_form .bootstrap-select .dropdown-menu li a span.text {
+#question_admin_form .bootstrap-select .dropdown-menu li a span.text,
+.exercise_reminder_item label {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

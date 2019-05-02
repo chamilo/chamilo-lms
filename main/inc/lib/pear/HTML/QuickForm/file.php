@@ -341,15 +341,13 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
 
             $cropButton.on(\'click\', function () {
                 var $imageLarge = $("#image-cut-lg");
-                var $imageSmall = $("#image-cut-sm");
                 var canvas = $image.cropper(\'getCroppedCanvas\'),
                     dataUrl = canvas.toDataURL();
                 
                 $(".img-box").show();
                 $(".img-preview").hide();
                 
-                image.attr(\'src\', dataUrl).cropper(\'destroy\').off(\'load\', imageCropper);
-                $imageSmall.attr(\'src\', dataUrl).cropper(\'destroy\').off(\'load\', imageCropper);
+                $image.attr(\'src\', dataUrl).cropper(\'destroy\').off(\'load\', imageCropper);
                 $imageLarge.attr(\'src\', dataUrl).cropper(\'destroy\').off(\'load\', imageCropper);
                 $(\'[name="'.$id.'_crop_image_base_64"]\').val(dataUrl);
                 $cropButton.hide();
@@ -447,7 +445,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                     ';
                 } else {
                     $template = '
-                    <div id="file_'.$name.'" class="form-group {error_class}">
+                    <div id="file_'.$name.'" class="form-group row {error_class}">
                         
                         <label {label-for} class="col-sm-'.$size[0].' control-label" >
                             <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->

@@ -11,7 +11,7 @@ use ChamiloSession as Session;
  *
  * @author  Toon Keppens
  */
-$modifyAnswers = (int)$_GET['hotspotadmin'];
+$modifyAnswers = (int) $_GET['hotspotadmin'];
 
 if (!is_object($objQuestion)) {
     $objQuestion = Question::read($modifyAnswers);
@@ -582,21 +582,25 @@ if (isset($modifyAnswers)) {
           name="frm_exercise">
         <div class="form-group">
             <div class="col-sm-12">
-                <?php if ($answerType == HOT_SPOT_DELINEATION) { ?>
+                <?php if ($answerType == HOT_SPOT_DELINEATION) {
+            ?>
                     <button type="submit" class="btn btn-danger" name="lessAnswers" value="lessAnswers">
                         <em class="fa fa-trash"></em> <?php echo get_lang('LessOAR'); ?>
                     </button>
                     <button type="submit" class="btn btn-primary" name="moreOARAnswers" value="moreOARAnswers">
                         <em class="fa fa-plus"></em> <?php echo get_lang('MoreOAR'); ?>
                     </button>
-                <?php } else { ?>
+                <?php
+        } else {
+            ?>
                     <button type="submit" class="btn btn-danger" name="lessAnswers" value="lessAnswers">
                         <em class="fa fa-trash"></em> <?php echo get_lang('LessHotspots'); ?>
                     </button>
                     <button type="submit" class="btn btn-primary" name="moreAnswers" value="moreAnswers">
                         <em class="fa fa-plus"></em> <?php echo get_lang('MoreHotspots'); ?>
                     </button>
-                <?php } ?>
+                <?php
+        } ?>
                 <button type="submit" class="btn btn-primary" name="submitAnswers" value="submitAnswers">
                     <em class="fa fa-save"></em> <?php echo get_lang('AddQuestionToExercise'); ?>
                 </button>
@@ -625,74 +629,74 @@ if (isset($modifyAnswers)) {
                 <tbody>
                 <?php
                 $list = new LearnpathList(api_get_user_id());
-                // Loading list of LPs
-                $flat_list = $list->get_flat_list();
+    // Loading list of LPs
+    $flat_list = $list->get_flat_list();
 
-                for ($i = 1; $i <= $nbrAnswers; $i++) {
-                    // is an delineation
-                    if ($answerType == HOT_SPOT_DELINEATION) {
-                        $option_lp = '';
+    for ($i = 1; $i <= $nbrAnswers; $i++) {
+        // is an delineation
+        if ($answerType == HOT_SPOT_DELINEATION) {
+            $option_lp = '';
 
-                        // setting the LP
-                        $isSelected = false;
-                        foreach ($flat_list as $id => $details) {
-                            $selected = '';
-                            if (isset($lp[$i]) && $id == $lp[$i]) {
-                                $isSelected = true;
-                                $selected = 'selected="selected"';
-                            }
-                            $option_lp .= '<option value="'.$id.'" '.$selected.'>'.$details['lp_name'].'</option>';
-                        }
+            // setting the LP
+            $isSelected = false;
+            foreach ($flat_list as $id => $details) {
+                $selected = '';
+                if (isset($lp[$i]) && $id == $lp[$i]) {
+                    $isSelected = true;
+                    $selected = 'selected="selected"';
+                }
+                $option_lp .= '<option value="'.$id.'" '.$selected.'>'.$details['lp_name'].'</option>';
+            }
 
-                        if ($isSelected) {
-                            $option_lp = '<option value="0">'.get_lang('SelectTargetLP').'</option>'.$option_lp;
-                        } else {
-                            $option_lp = '<option value="0" selected="selected" >'.get_lang('SelectTargetLP')
+            if ($isSelected) {
+                $option_lp = '<option value="0">'.get_lang('SelectTargetLP').'</option>'.$option_lp;
+            } else {
+                $option_lp = '<option value="0" selected="selected" >'.get_lang('SelectTargetLP')
                                 .'</option>'.$option_lp;
-                        }
+            }
 
-                        // Feedback SELECT
-                        $question_list = $objExercise->selectQuestionList();
-                        $option_feed = '';
-                        $option_feed .= '<option value="0">'.get_lang('SelectTargetQuestion').'</option>';
+            // Feedback SELECT
+            $question_list = $objExercise->selectQuestionList();
+            $option_feed = '';
+            $option_feed .= '<option value="0">'.get_lang('SelectTargetQuestion').'</option>';
 
-                        foreach ($question_list as $key => $questionid) {
-                            $selected = '';
-                            $question = Question::read($questionid);
-                            $questionTitle = strip_tags($question->selectTitle());
-                            $val = "Q$key: $questionTitle";
+            foreach ($question_list as $key => $questionid) {
+                $selected = '';
+                $question = Question::read($questionid);
+                $questionTitle = strip_tags($question->selectTitle());
+                $val = "Q$key: $questionTitle";
 
-                            if (isset($select_question[$i]) && $questionid == $select_question[$i]) {
-                                $selected = 'selected="selected"';
-                            }
+                if (isset($select_question[$i]) && $questionid == $select_question[$i]) {
+                    $selected = 'selected="selected"';
+                }
 
-                            $option_feed .= '<option value="'.$questionid.'" '.$selected.' >'.$val.'</option>';
-                        }
+                $option_feed .= '<option value="'.$questionid.'" '.$selected.' >'.$val.'</option>';
+            }
 
-                        if (isset($select_question[$i]) && $select_question[$i] == -1) {
-                            $option_feed .= '<option value="-1" selected="selected" >'.get_lang('ExitTest').'</option>';
-                        } else {
-                            $option_feed .= '<option value="-1">'.get_lang('ExitTest').'</option>';
-                        }
+            if (isset($select_question[$i]) && $select_question[$i] == -1) {
+                $option_feed .= '<option value="-1" selected="selected" >'.get_lang('ExitTest').'</option>';
+            } else {
+                $option_feed .= '<option value="-1">'.get_lang('ExitTest').'</option>';
+            }
 
-                        //-------- IF it is a delineation
-                        if ($_SESSION['tmp_answers']['hotspot_type'][$i] == 'delineation') {
-                            $option1 = $option2 = $option3 = '';
-                            for ($k = 1; $k <= 100; $k++) {
-                                $selected1 = $selected2 = $selected3 = '';
-                                if ($k == $threadhold1[$i]) {
-                                    $selected1 = 'selected="selected"';
-                                }
-                                if ($k == $threadhold2[$i]) {
-                                    $selected2 = 'selected="selected"';
-                                }
-                                if ($k == $threadhold3[$i]) {
-                                    $selected3 = 'selected="selected"';
-                                }
-                                $option1 .= '<option '.$selected1.' >'.$k.' % </option>';
-                                $option2 .= '<option '.$selected2.' >'.$k.' % </option>';
-                                $option3 .= '<option '.$selected3.'>'.$k.' %</option>';
-                            } ?>
+            //-------- IF it is a delineation
+            if ($_SESSION['tmp_answers']['hotspot_type'][$i] == 'delineation') {
+                $option1 = $option2 = $option3 = '';
+                for ($k = 1; $k <= 100; $k++) {
+                    $selected1 = $selected2 = $selected3 = '';
+                    if ($k == $threadhold1[$i]) {
+                        $selected1 = 'selected="selected"';
+                    }
+                    if ($k == $threadhold2[$i]) {
+                        $selected2 = 'selected="selected"';
+                    }
+                    if ($k == $threadhold3[$i]) {
+                        $selected3 = 'selected="selected"';
+                    }
+                    $option1 .= '<option '.$selected1.' >'.$k.' % </option>';
+                    $option2 .= '<option '.$selected2.' >'.$k.' % </option>';
+                    $option3 .= '<option '.$selected3.'>'.$k.' %</option>';
+                } ?>
                             <tr>
                             <td>
                                 <span class="fa fa-square fa-2x" aria-hidden="true"
@@ -732,13 +736,16 @@ if (isset($modifyAnswers)) {
                                 <input type="hidden" name="hotspot_coordinates[<?php echo $i; ?>]" value="<?php
                                 echo empty($hotspot_coordinates[$i]) ? '0;0|0|0' : $hotspot_coordinates[$i]; ?>"/>
                             </td>
-                            <?php if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) { ?>
+                            <?php if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
+                                    ?>
                                 <td>
                                     <div class="checkbox">
                                         <p>
                                             <label>
                                                 <input type="checkbox" class="checkbox" name="<?php echo 'try['.$i; ?>]"
-                                                <?php if ($try[$i] == 1) { echo 'checked'; } ?> />
+                                                <?php if ($try[$i] == 1) {
+                                        echo 'checked';
+                                    } ?> />
                                                 <?php echo get_lang('TryAgain'); ?>
                                             </label>
                                         </p>
@@ -762,13 +769,13 @@ if (isset($modifyAnswers)) {
                                     </p>
                                 </td>
                                 <?php
-                            } else {
-                                ?>
+                                } else {
+                                    ?>
                                 <td> &nbsp;</td>
                                 <?php
-                            }
-                        } elseif (false) {
-                            ?>
+                                }
+            } elseif (false) {
+                ?>
                             <tr>
                                 <th colspan="2"><?php echo get_lang('IfNoError'); ?></th>
                                 <th colspan="3"><?php echo get_lang('Feedback'); ?></th>
@@ -789,7 +796,7 @@ if (isset($modifyAnswers)) {
                                               style="width: 100%"><?php echo Security::remove_XSS($comment[$i]); ?></textarea>
                                 </td>
                                 <?php if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
-                                    ?>
+                    ?>
                                     <td>
                                         <table>
                                             <tr>
@@ -800,8 +807,8 @@ if (isset($modifyAnswers)) {
                                                                 <input type="checkbox" class="checkbox"
                                                                        name="<?php echo 'try['
                                                                            .$i; ?>]" <?php if ($try[$i] == 1) {
-                                                                    echo 'checked';
-                                                                } ?> />
+                                                                               echo 'checked';
+                                                                           } ?> />
                                                                 <?php echo get_lang('TryAgain'); ?>
                                                             </label>
                                                         </p>
@@ -829,36 +836,36 @@ if (isset($modifyAnswers)) {
                                         </table>
                                     </td>
                                     <?php
-                                } else {
-                                    ?>
+                } else {
+                    ?>
                                     <td>&nbsp;</td>
                                     <?php
-                                } ?>
+                } ?>
                             </tr>
                             <?php
-                        } elseif ($_SESSION['tmp_answers']['hotspot_type'][$i] == 'oar') {
-                            // if it's an OAR
-                            if ($i == 2) {
-                                ?>
+            } elseif ($_SESSION['tmp_answers']['hotspot_type'][$i] == 'oar') {
+                // if it's an OAR
+                if ($i == 2) {
+                    ?>
                                 <tr>
                                     <th width="5">&nbsp;<?php /* echo get_lang('Hotspot'); */ ?></th>
                                     <th><?php echo get_lang('OAR'); ?>*</th>
                                     <?php if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
-                                        ?>
+                        ?>
                                         <th colspan="2"><?php echo get_lang('Comment'); ?></th>
                                         <th><?php if ($answerType == HOT_SPOT_DELINEATION) {
-                                                echo get_lang('Scenario');
-                                            } ?></th>
+                            echo get_lang('Scenario');
+                        } ?></th>
                                         <?php
-                                    } else {
-                                        ?>
+                    } else {
+                        ?>
                                         <th colspan="3"><?php echo get_lang('Comment'); ?></th>
                                         <?php
-                                    } ?>
+                    } ?>
                                     <th>&nbsp;</th>
                                 </tr>
                                 <?php
-                            } ?>
+                } ?>
                             <tr>
                             <td>
                                 <span class="fa fa-square fa-2x" aria-hidden="true"
@@ -877,13 +884,15 @@ if (isset($modifyAnswers)) {
                                 echo empty($hotspot_coordinates[$i]) ? '0;0|0|0' : $hotspot_coordinates[$i]; ?>"/>
                             </td>
                             <?php if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
-                                ?>
+                                    ?>
                                 <td>
                                     <div class="checkbox">
                                         <p>
                                             <label>
                                                 <input type="checkbox" class="checkbox"
-                                                       name="<?php echo 'try['.$i; ?>]" <?php if (isset($try[$i]) && $try[$i] == 1) { echo 'checked'; } ?> />
+                                                       name="<?php echo 'try['.$i; ?>]" <?php if (isset($try[$i]) && $try[$i] == 1) {
+                                        echo 'checked';
+                                    } ?> />
                                                 <?php echo get_lang('TryAgain'); ?>
                                             </label>
                                         </p>
@@ -907,16 +916,16 @@ if (isset($modifyAnswers)) {
                                     </p>
                                 </td>
                                 <?php
-                            } else {
-                                ?>
+                                } else {
+                                    ?>
                                 <td>&nbsp;</td>
                                 <?php
-                            }
-                        }
-                        //end if is delineation
-                    } else {
-                        $commentValue = isset($comment[$i]) ? $comment[$i] : null;
-                        $responseValue = isset($reponse[$i]) ? $reponse[$i] : null; ?>
+                                }
+            }
+            //end if is delineation
+        } else {
+            $commentValue = isset($comment[$i]) ? $comment[$i] : null;
+            $responseValue = isset($reponse[$i]) ? $reponse[$i] : null; ?>
                         <tr>
                         <td>
                             <span class="fa fa-square fa-2x" style="color: <?php echo $hotspot_colors[$i]; ?>"
@@ -928,22 +937,22 @@ if (isset($modifyAnswers)) {
                         </td>
                         <?php
                         $form = new FormValidator('form_'.$i);
-                        $config = [
+            $config = [
                             'ToolbarSet' => 'TestProposedAnswer',
                             'cols-size' => [0, 12, 0],
                         ];
-                        $form->addHtmlEditor('comment['.$i.']', null, false, false, $config);
-                        $renderer = $form->defaultRenderer();
-                        $form_template = '{content}';
-                        $renderer->setFormTemplate($form_template);
-                        $element_template = '{label} {element}';
-                        $renderer->setElementTemplate($element_template);
+            $form->addHtmlEditor('comment['.$i.']', null, false, false, $config);
+            $renderer = $form->defaultRenderer();
+            $form_template = '{content}';
+            $renderer->setFormTemplate($form_template);
+            $element_template = '{label} {element}';
+            $renderer->setElementTemplate($element_template);
 
-                        $form->setDefaults(['comment['.$i.']' => $commentValue]);
-                        $return = $form->returnForm(); ?>
+            $form->setDefaults(['comment['.$i.']' => $commentValue]);
+            $return = $form->returnForm(); ?>
                         <td colspan="2" align="left"><?php echo $return; ?></td>
                         <?php
-                    } ?>
+        } ?>
                     <td>
                         <?php
                         if ($answerType == HOT_SPOT_DELINEATION) {
@@ -958,8 +967,8 @@ if (isset($modifyAnswers)) {
                                 <?php
                             }
                         }
-                        if ($answerType == HOT_SPOT) {
-                            ?>
+        if ($answerType == HOT_SPOT) {
+            ?>
                             <input class="form-control" type="text" name="weighting[<?php echo $i; ?>]"
                                    value="<?php echo isset($weighting[$i]) ? $weighting[$i] : 10; ?>"/>
                             <input type="hidden" name="hotspot_coordinates[<?php echo $i; ?>]"
@@ -969,63 +978,67 @@ if (isset($modifyAnswers)) {
                             <input type="hidden" name="hotspot_type[<?php echo $i; ?>]"
                                    value="<?php echo empty($hotspot_type[$i]) ? 'square' : $hotspot_type[$i]; ?>"/>
                             <?php
-                        } ?>
+        } ?>
                     </td>
                     </tr>
                     <?php
-                }
+    }
 
-                $list = new LearnpathList(api_get_user_id());
-                $flat_list = $list->get_flat_list();
-                $option_lp = '';
-                $isSelected = false;
-                foreach ($flat_list as $id => $details) {
-                    $selected = '';
-                    if (isset($lp_noerror) && $id == $lp_noerror) {
-                        $selected = 'selected="selected"';
-                        $isSelected = true;
-                    }
-                    $option_lp .= '<option value="'.$id.'" '.$selected.'>'.$details['lp_name'].'</option>';
-                }
+    $list = new LearnpathList(api_get_user_id());
+    $flat_list = $list->get_flat_list();
+    $option_lp = '';
+    $isSelected = false;
+    foreach ($flat_list as $id => $details) {
+        $selected = '';
+        if (isset($lp_noerror) && $id == $lp_noerror) {
+            $selected = 'selected="selected"';
+            $isSelected = true;
+        }
+        $option_lp .= '<option value="'.$id.'" '.$selected.'>'.$details['lp_name'].'</option>';
+    }
 
-                if ($isSelected) {
-                    $option_lp = '<option value="0">'.get_lang('SelectTargetLP').'</option>'.$option_lp;
-                } else {
-                    $option_lp = '<option value="0" selected="selected" >'.get_lang('SelectTargetLP').'</option>'
+    if ($isSelected) {
+        $option_lp = '<option value="0">'.get_lang('SelectTargetLP').'</option>'.$option_lp;
+    } else {
+        $option_lp = '<option value="0" selected="selected" >'.get_lang('SelectTargetLP').'</option>'
                         .$option_lp;
-                }
+    }
 
-                // Feedback SELECT
-                $question_list = $objExercise->selectQuestionList();
-                $option_feed = '';
-                $option_feed .= '<option value="0">'.get_lang('SelectTargetQuestion').'</option>';
-                $selectQuestionNoError = isset($selectQuestionNoError) ? $selectQuestionNoError : null;
-                foreach ($question_list as $key => $questionid) {
-                    $selected = '';
-                    $question = Question::read($questionid);
-                    $questionTitle = $question->selectTitle();
-                    $val = "Q$key: $questionTitle";
-                    if ($questionid == $selectQuestionNoError) {
-                        $selected = 'selected="selected"';
-                    }
-                    $option_feed .= '<option value="'.$questionid.'" '.$selected.' >'.$val.'</option>';
-                }
-                if ($selectQuestionNoError == -1) {
-                    $option_feed .= '<option value="-1" selected="selected" >'.get_lang('ExitTest').'</option>';
-                } else {
-                    $option_feed .= '<option value="-1">'.get_lang('ExitTest').'</option>';
-                }
+    // Feedback SELECT
+    $question_list = $objExercise->selectQuestionList();
+    $option_feed = '';
+    $option_feed .= '<option value="0">'.get_lang('SelectTargetQuestion').'</option>';
+    $selectQuestionNoError = isset($selectQuestionNoError) ? $selectQuestionNoError : null;
+    foreach ($question_list as $key => $questionid) {
+        $selected = '';
+        $question = Question::read($questionid);
+        $questionTitle = $question->selectTitle();
+        $val = "Q$key: $questionTitle";
+        if ($questionid == $selectQuestionNoError) {
+            $selected = 'selected="selected"';
+        }
+        $option_feed .= '<option value="'.$questionid.'" '.$selected.' >'.$val.'</option>';
+    }
+    if ($selectQuestionNoError == -1) {
+        $option_feed .= '<option value="-1" selected="selected" >'.get_lang('ExitTest').'</option>';
+    } else {
+        $option_feed .= '<option value="-1">'.get_lang('ExitTest').'</option>';
+    }
 
-                if ($answerType == HOT_SPOT_DELINEATION) {
-                    ?>
+    if ($answerType == HOT_SPOT_DELINEATION) {
+        ?>
                     <tr>
                         <th colspan="2"><?php echo get_lang('IfNoError'); ?></th>
-                        <?php if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) { ?>
+                        <?php if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
+            ?>
                             <th colspan="2"><?php echo get_lang('Feedback'); ?></th>
                             <th><?php echo get_lang('Scenario'); ?></th>
-                        <?php } else { ?>
+                        <?php
+        } else {
+            ?>
                             <th colspan="3"><?php echo get_lang('Feedback'); ?></th>
-                        <?php } ?>
+                        <?php
+        } ?>
                         <th>&nbsp;</th>
                     </tr>
                     <tr>
@@ -1036,13 +1049,16 @@ if (isset($modifyAnswers)) {
                             <textarea class="form-control" wrap="virtual" rows="3" cols="25"
                                       name="comment_noerror"><?php echo Security::remove_XSS($comment_noerror); ?></textarea>
                         </td>
-                        <?php if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) { ?>
+                        <?php if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
+            ?>
                             <td>
                                 <div class="checkbox">
                                     <p>
                                         <label>
                                             <input type="checkbox" class="checkbox"
-                                                   name="try_noerror" <?php if ($try_noerror == 1) { echo 'checked'; } ?> />
+                                                   name="try_noerror" <?php if ($try_noerror == 1) {
+                echo 'checked';
+            } ?> />
                                             <?php echo get_lang('TryAgain'); ?>
                                         </label>
                                     </p>
@@ -1065,11 +1081,15 @@ if (isset($modifyAnswers)) {
                                 </p>
                             </td>
                             <td>&nbsp;</td>
-                        <?php } else { ?>
+                        <?php
+        } else {
+            ?>
                             <td colspan="2">&nbsp;</td>
-                        <?php } ?>
+                        <?php
+        } ?>
                     </tr>
-                <?php } ?>
+                <?php
+    } ?>
                 </tbody>
             </table>
         </div>
@@ -1077,29 +1097,33 @@ if (isset($modifyAnswers)) {
             <div class="col-xs-12">
                 <?php
                 $swf_loaded = $answerType == HOT_SPOT_DELINEATION ? 'hotspot_delineation_admin' : 'hotspot_admin';
-                $height = 450;
-                $relPath = api_get_path(WEB_CODE_PATH); ?>
+    $height = 450;
+    $relPath = api_get_path(WEB_CODE_PATH); ?>
                 <div id="hotspot-container" class="center-block"></div>
             </div>
         </div>
     </form>
     <script>
         $(function () {
-            <?php if ($answerType == HOT_SPOT_DELINEATION) { ?>
+            <?php if ($answerType == HOT_SPOT_DELINEATION) {
+        ?>
                 new DelineationQuestion({
                     questionId: <?php echo $modifyAnswers; ?>,
                     selector: '#hotspot-container',
                     for: 'admin',
                     relPath: '<?php echo $relPath; ?>'
                 });
-            <?php } else { ?>
+            <?php
+    } else {
+        ?>
                 new HotspotQuestion({
                     questionId: <?php echo $modifyAnswers; ?>,
                     selector: '#hotspot-container',
                     for: 'admin',
                     relPath: '<?php echo $relPath; ?>'
                 });
-            <?php } ?>
+            <?php
+    } ?>
         });
     </script>
     <?php

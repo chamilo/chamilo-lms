@@ -5989,7 +5989,7 @@ class Exercise
                 'complete_name' => $user_data['complete_name'],
                 'username' => $user_data['username'],
                 'avatar' => $user_data['avatar_medium'],
-                'url' => $user_data['profile_url']
+                'url' => $user_data['profile_url'],
             ];
 
             if (!empty($user_data['official_code'])) {
@@ -6015,7 +6015,6 @@ class Exercise
         if (!empty($ip)) {
             $data['ip'] = $ip;
         }
-
 
         if (api_get_configuration_value('save_titles_as_html')) {
             $data['title'] = $this->get_formated_title().get_lang('Result');

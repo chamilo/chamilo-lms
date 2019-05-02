@@ -1061,8 +1061,8 @@ class MySpace
             1,
             20,
             'ASC',
-            null,[
-                'class' => 'table table-transparent'
+            null, [
+                'class' => 'table table-transparent',
             ]
         );
         $table->additional_parameters = $params;
@@ -1120,7 +1120,7 @@ class MySpace
         foreach ($courses as $course) {
             $list[] = [
                 '0' => $course['code'],
-                'col0' => $course['code']
+                'col0' => $course['code'],
             ];
         }
 
@@ -1255,7 +1255,6 @@ class MySpace
             $total_score = '-';
         }
 
-
         $data = [
             'course_code' => $course_code,
             'id' => $courseId,
@@ -1271,7 +1270,7 @@ class MySpace
             'number_assignments' => $nb_assignments,
             'total_score' => $total_score,
             'questions_answered' => $total_questions_answered,
-            'last_login' => $last_login_date
+            'last_login' => $last_login_date,
         ];
 
         $tpl->assign('data', $data);

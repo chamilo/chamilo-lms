@@ -360,8 +360,9 @@ if (!$inATest) {
                 unset($objQuestionTmp);
             }
         }
+
+        echo '</div>'; //question list div
     } else {
         echo Display::return_message(get_lang('NoQuestion'), 'warning');
     }
-    echo '</div>'; //question list div
 }

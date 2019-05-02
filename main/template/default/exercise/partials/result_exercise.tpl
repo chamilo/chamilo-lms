@@ -1,5 +1,3 @@
-
-{% if hide != true %}
 <div class="question-result">
     <div class="panel panel-default">
         <div class="panel-body">
@@ -37,4 +35,3 @@
         </div>
     </div>
 </div>
-{% endif %}

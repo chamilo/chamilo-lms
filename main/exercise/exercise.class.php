@@ -5965,8 +5965,11 @@ class Exercise
         $user_data,
         $trackExerciseInfo
     ) {
+        if (api_get_configuration_value('hide_user_info_in_quiz_result')) {
+            return '';
+        }
+
         $start_date = null;
-        $tpl = new Template(null, false, false, false, false, false, false);
 
         if (isset($trackExerciseInfo['start_date'])) {
             $start_date = api_convert_and_format_date($trackExerciseInfo['start_date']);
@@ -6020,9 +6023,7 @@ class Exercise
             $data['title'] = PHP_EOL.$this->exercise.' : '.get_lang('Result');
         }
 
-        $hide = api_get_configuration_value('hide_user_info_in_quiz_result');
-
-        $tpl->assign('hide', $hide);
+        $tpl = new Template(null, false, false, false, false, false, false);
         $tpl->assign('data', $data);
         $layoutTemplate = $tpl->get_template('exercise/partials/result_exercise.tpl');
         $content = $tpl->fetch($layoutTemplate);

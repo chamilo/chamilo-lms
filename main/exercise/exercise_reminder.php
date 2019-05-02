@@ -244,15 +244,7 @@ foreach ($question_list as $questionId) {
     $url = 'exercise_submit.php?exerciseId='.$objExercise->id.'&num='.$counter.'&reminder=1&'.api_get_cidreq();
 
     $counter++;
-    if ($objExercise->type == ONE_PER_PAGE) {
-        $question_title = Display::url(
-            $counter.'. '.cut($objQuestionTmp->selectTitle(), 40),
-            $url
-        );
-        $question_title = $counter.'. '.cut($objQuestionTmp->selectTitle(), 40);
-    } else {
-        $question_title = $counter.'. '.cut($objQuestionTmp->selectTitle(), 40);
-    }
+    $question_title = $counter.'. '.cut($objQuestionTmp->selectTitle(), 40);
     //Check if the question doesn't have an answer
     if (!in_array($questionId, $exercise_result)) {
         $question_title = Display::label($question_title, 'warning');

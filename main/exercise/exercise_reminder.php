@@ -108,7 +108,9 @@ if (empty($exercise_stat_info) || empty($question_list)) {
 $nameTools = get_lang('Exercises');
 $interbreadcrumb[] = ["url" => "exercise.php?".api_get_cidreq(), "name" => get_lang('Exercises')];
 
-if ($origin != 'learnpath') {
+$hideHeaderAndFooter = in_array($origin, ['learnpath', 'embeddable']);
+
+if (!$hideHeaderAndFooter) {
     //so we are not in learnpath tool
     Display::display_header($nameTools, get_lang('Exercise'));
 } else {
@@ -118,7 +120,7 @@ if ($origin != 'learnpath') {
 /* DISPLAY AND MAIN PROCESS */
 
 // I'm in a preview mode as course admin. Display the action menu.
-if (api_is_course_admin() && $origin != 'learnpath') {
+if (api_is_course_admin() && !$hideHeaderAndFooter) {
     echo '<div class="actions">';
     echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.
         Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';
@@ -288,7 +290,9 @@ $exerciseActions .= '&nbsp;'.Display::url(
 echo Display::div('', ['class' => 'clear']);
 echo Display::div($exerciseActions, ['class' => 'form-actions']);
 
-if ($origin != 'learnpath') {
-    // We are not in learnpath tool
+if (!$hideHeaderAndFooter) {
+    // We are not in learnpath tool or embeddable quiz
     Display::display_footer();
+} else {
+    Display::display_reduced_footer();
 }

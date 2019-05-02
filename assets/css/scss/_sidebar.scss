@@ -9,7 +9,7 @@
       .nav-link{
         font-size: 12px;
         padding: 10px 15px;
-        border-top: 1px solid $sidebar-background;
+        border-top: 1px solid $sidebar-border;
         &:hover{
           color: $sidebar-link-hover;
         }
@@ -74,4 +74,7 @@
 }
 .app-footer a{
   color: #ffc500;
+}
+.breadcrumb{
+  background-color: $breadcrumb-back;
 }

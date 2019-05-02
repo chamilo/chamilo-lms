@@ -133,7 +133,9 @@ CKEDITOR.dialog.add('qMarkersrollsDialog', function (editor) {
             var label = document.createElement('label');
             label.textContent = quiz.title;
             label.htmlFor = 'ck-qmr-quiz-' + quiz.id;
-            label.style.verticalAlign = 'super';
+            label.style.verticalAlign = 'top';
+            label.style.whiteSpace = 'normal';
+            label.style.display = 'inline-block';
 
             var radio = document.createElement('input');
             radio.type = 'radio';
@@ -141,7 +143,7 @@ CKEDITOR.dialog.add('qMarkersrollsDialog', function (editor) {
             radio.id = 'ck-qmr-quiz-' + quiz.id;
             radio.value = quiz.id;
 
-            var row = document.createElement('div');
+            var row = document.createElement('li');
             row.appendChild(radio);
             row.appendChild(label);
 
@@ -187,6 +189,7 @@ CKEDITOR.dialog.add('qMarkersrollsDialog', function (editor) {
             }, false);
 
             var divMarker = document.createElement('span');
+            divMarker.style.whiteSpace = 'normal';
             divMarker.innerHTML = ' <strong>' + encodeTime(markerRoll[0]) + '</strong> &mdash; '
                 + makerForQuiz.title;
 
@@ -239,8 +242,8 @@ CKEDITOR.dialog.add('qMarkersrollsDialog', function (editor) {
                                     {
                                         type: 'html',
                                         html: lang.embeddableQuizzes + ' '
-                                            + '<div id="ck-qmr-quizzes-container" '
-                                            + 'style="max-height: 110px; overflow: hidden auto;"></div>'
+                                            + '<ul id="ck-qmr-quizzes-container" '
+                                            + 'style="max-height: 110px; overflow: hidden auto; list-style: none;"></ul>'
                                     },
                                     {
                                         type: 'button',

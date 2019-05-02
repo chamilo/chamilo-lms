@@ -9,7 +9,7 @@
       .nav-link{
         font-size: 12px;
         padding: 10px 15px;
-        border-top: 1px solid #3c72d5;
+        border-top: 1px solid $sidebar-background;
         &:hover{
           color: $sidebar-link-hover;
         }
@@ -41,9 +41,6 @@
     &.current{
       i{
         color: $sidebar-link;
-      }
-      .nav-link{
-        color: $sidebar-link-item;
       }
       background-color: $sidebar-current;
     }

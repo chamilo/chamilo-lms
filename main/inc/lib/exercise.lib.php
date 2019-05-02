@@ -4514,7 +4514,7 @@ EOT;
             }
         }
 
-        if ($show_results || $show_only_score) {
+        if (($show_results || $show_only_score) && $origin != 'embeddable') {
             if (isset($exercise_stat_info['exe_user_id'])) {
                 $user_info = api_get_user_info($exercise_stat_info['exe_user_id']);
                 if ($user_info) {

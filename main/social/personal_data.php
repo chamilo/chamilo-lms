@@ -270,7 +270,13 @@ foreach ($properties as $key => $value) {
                     $personalDataContent .= '<li>'.get_lang('NoData').'</li>';
                 } else {
                     foreach ($value as $subValue) {
-                        $personalDataContent .= '<li>'.$subValue->variable.': '.Security::remove_XSS($subValue->value).'</li>';
+                        if (is_array($subValue->value)) {
+                            // tags fields can be stored as arrays
+                            $val = json_encode(Security::remove_XSS($subValue->value));
+                        } else {
+                            $val = Security::remove_XSS($subValue->value);
+                        }
+                        $personalDataContent .= '<li>'.$subValue->variable.': '.$val.'</li>';
                     }
                 }
                 $personalDataContent .= '</ul>';

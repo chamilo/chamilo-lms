@@ -109,7 +109,7 @@
     <div class="version" aria-label="1.11.10">
         <a name="1.11.10"></a>
 
-        <h1>Chamilo 1.11.10 - Winchester,  30/04/2019</h1>
+        <h1>Chamilo 1.11.10 - Winchester,  07/05/2019</h1>
         <h3>Release notes - summary</h3>
         <p>Chamilo 1.11.10 is a minor bugfix release on top of 1.11.8. Contrary to previous releases, this one has a large number of security fixes. We strongly recommend you update to this version as soon as you can. Most notable in this version are 2 new features in the survey tool.</p>
         <p>Starting from this release, changes are registered by reversed date of addition (the latest changes first), which dramatically improves the changelog edition time. Because yes, it is reviewed manually.</p>
@@ -256,6 +256,32 @@
         </ul>
         <h3>Improvements (minor features) and debug</h3>
         <ul aria-live="off">
+            <li>[2019-05-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/5db21799eb4eb3c1dd7bd74400304e1154b4912e">5db21799</a> - <a href="https://task.beeznest.com/issues/15617">BT#15617</a>) Tracking: Don't show legal block on user details page when allow_terms_conditions is disabled</li>
+            <li>[2019-05-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/2437c45c972bf0f04d478b10b6cee3a6f478fba1">2437c45c</a> - <a href="https://task.beeznest.com/issues/15617">BT#15617</a>) Template: Avoid double function call in user details page</li>
+            <li>[2019-05-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/4e74c84af89f7cd2c8ed04209c9f8517e302994f">4e74c84a</a> - <a href="https://task.beeznest.com/issues/15617">BT#15617</a>) Template: Create macro for user details in reporting</li>
+            <li>[2019-05-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/e4143df0ca6bfbd0563a47769d252bcc0e3d35b0">e4143df0</a> - <a href="https://task.beeznest.com/issues/15617">BT#15617</a>) Display: Tracking: Use macros for user details template</li>
+            <li>[2019-05-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/966c18c7517a1845dcdf2f3aab4d55316d1424a4">966c18c7</a> - <a href="https://task.beeznest.com/issues/15389">BT#15389</a>) Quiz: Show button to close embeddable quiz result</li>
+            <li>[2019-05-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/b966e60034d578680c5ea8aa36b7540c006e6d3a">b966e600</a> - <a href="https://task.beeznest.com/issues/15389">BT#15389</a>) Quiz: Update mediaelement's markersrolls plugin</li>
+            <li>[2019-05-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/9990517c5189b9ee586fe1098697663b0e7e454b">9990517c</a> - <a href="https://task.beeznest.com/issues/15389">BT#15389</a>) Quiz: Fix question titles in exercise reminder when save_titles_as_html is enabled</li>
+            <li>[2019-05-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/dcbdd8670884f0f411334a8f5f82da9f1a1af223">dcbdd867</a> - <a href="https://task.beeznest.com/issues/15389">BT#15389</a>) Quiz: Remove unnecessary conditional</li>
+            <li>[2019-05-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/5eb9fb6c004cee6ef117f58fd1c632b6eef261a2">5eb9fb6c</a> - <a href="https://task.beeznest.com/issues/15389">BT#15389</a>) Quiz: Don't show header/footer in embeddable quizzes</li>
+            <li>[2019-05-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/ee2749e6673d0891303f5cd7a3cc185065be0b26">ee2749e6</a> - <a href="https://task.beeznest.com/issues/15389">BT#15389</a>) Quiz: Fix JS for embeddable quizzes</li>
+            <li>[2019-05-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/f5fd5b741843c951165304829deae71223003784">f5fd5b74</a> - <a href="https://task.beeznest.com/issues/15389">BT#15389</a>) Quiz: Hide header in result page when exercise is embed on video</li>
+            <li>[2019-05-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/8de615946992e7bb8d4f2fd293ec6bf0714ea913">8de61594</a> - <a href="https://task.beeznest.com/issues/15389">BT#15389</a>) Quiz: Avoid load data when hide_user_info_in_quiz_result is enabled</li>
+            <li>[2019-05-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/9cca874ec114ee4aa16d2133aecf2d9160be1b4e">9cca874e</a> - <a href="https://task.beeznest.com/issues/15389">BT#15389</a>) Quiz: Fix CKEditor's qmarkersrolls dialog whith large quiz titles</li>
+            <li>[2019-04-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/dcf36bc75af7a5ed0103ffc322fd75ae78f8c2fe">dcf36bc7</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2892">GH#2892</a>) Skills: Improve template in skills report for student boss</li>
+            <li>[2019-04-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/cdcc010fe0eb15ebf68083a5fe30fe7cff90781c">cdcc010f</a>) Display: Fix color</li>
+            <li>[2019-04-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/934b6312499f1d2a523472d1bd6dbd693e797f77">934b6312</a>) Display: Fix class</li>
+            <li>[2019-04-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/76c8c5e75a35b370525adefbc2076b3072d4a773">76c8c5e7</a> - <a href="https://task.beeznest.com/issues/15392">BT#15392</a>) Survey: Avoid auto-generation of invitation code when invitation already exists</li>
+            <li>[2019-04-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/56d5998d4bdb6475ddbe8918b5ff0c90e15b1cca">56d5998d</a> - <a href="https://task.beeznest.com/issues/15392">BT#15392</a>) Survey: Avoid show survey link duplicated by auto invitation code</li>
+            <li>[2019-04-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/21553d0383fa7c60ba1841ff7fa04b1e177f9029">21553d03</a>) Display: Fix page subheader</li>
+            <li>[2019-04-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/3a999e3281b0b3e09eaf7d272cb7af8d843d5584">3a999e32</a>) Display: Fix base.css</li>
+            <li>[2019-04-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/0eda50bb67768289eed8b2f11b65fc132750c86c">0eda50bb</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2889">GH#2889</a>) Internal: Fix E_NOTICE when sending mail by platform announcement</li>
+            <li>[2019-04-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/64b42e92053cfa875cf8c93295dd70e54670349a">64b42e92</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2885">GH#2885</a>) Internal: Fix E_NOTICE when creating folder</li>
+            <li>[2019-04-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/e0920d66c83a99d5640a1359090343a02d852e68">e0920d66</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2887">GH#2887</a>) Learnpath: Fix position for Certificate item</li>
+            <li>[2019-04-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/690cb7bb7398ebbd5c94e4132033c5085132efbd">690cb7bb</a>) Display: Fix section-title</li>
+            <li>[2019-04-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/2b1d000d5dffcd57ca4bbc81e9698afd31a52064">2b1d000d</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2884">GH#2884</a>) Internal: Fix E_NOTICE</li>
+            <li>[2019-04-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/915fa57b4bfbc388105511f8a632a613d08d7388">915fa57b</a> - <a href="https://task.beeznest.com/issues/14921">BT#14921</a>) Plugin: Restoring Whispeakauth</li>
             <li>[2019-04-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/94b6743da05a85d702a3557c313fbbb59beef3fe">94b6743d</a>) Display: remove course sorting when in course grid view. Add alt attribute to teacher image when more than 2 in grid view. Improve badge display.</li>
             <li>[2019-04-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/affe0b799d61ec0e183423be1ade1d208990a906">affe0b79</a>) Documentation: Update documentation directory with new dependencies, requirement on PHP 5.6 and LTI compliance</li>
             <li>[2019-04-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/fa9071bd997af013a0a49ec84c89e47d21f3589a">fa9071bd</a>) Quiz: Fix exercise result display (2)</li>

@@ -1,3 +1,5 @@
+{% import 'macro/macro.tpl'|get_template as display %}
+
 {% if title %}
     <h2 class="details-title"><img src="{{ 'course.png'|icon(32) }}"> {{ title }}</h2>
 {% endif %}
@@ -43,64 +45,11 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="card card-first-date">
-                            <div class="card-body">
-                                <div class="stat-widget-five">
-                                    <div class="stat-icon">
-                                        <i class="fa fa-calendar" aria-hidden="true"></i>
-                                    </div>
-                                    <div class="stat-content">
-                                        <div class="text-left">
-                                            <div class="stat-text">
-                                                {{ user.first_connection }}
-                                            </div>
-                                            <div class="stat-heading">
-                                                {{ 'FirstLoginInPlatform'|get_lang }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card card-last-date">
-                            <div class="card-body">
-                                <div class="stat-widget-five">
-                                    <div class="stat-icon">
-                                        <i class="fa fa-calendar" aria-hidden="true"></i>
-                                    </div>
-                                    <div class="stat-content">
-                                        <div class="text-left">
-                                            <div class="stat-text">
-                                                {{ user.first_connection }}
-                                            </div>
-                                            <div class="stat-heading">
-                                                {{ 'LatestLoginInPlatform'|get_lang }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card card-legal">
-                            <div class="card-body">
-                                <div class="stat-widget-five">
-                                    <div class="stat-icon">
-                                        <i class="fa fa-gavel" aria-hidden="true"></i>
-                                        <span class="active-icon">{{ user.legal.icon }}</span>
-                                    </div>
-                                    <div class="stat-content">
-                                        <div class="text-left">
-                                            <div class="stat-text">
-                                                {{ user.legal.datetime }}
-                                            </div>
-                                            <div class="stat-heading">
-                                                {{ 'LegalAccepted'|get_lang }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        {{ display.card_widget('FirstLoginInPlatform'|get_lang, user.first_connection, 'calendar') }}
+
+                        {{ display.card_widget('LatestLoginInPlatform'|get_lang, user.last_connection, 'calendar') }}
+
+                        {{ display.card_widget('LegalAccepted'|get_lang, user.legal.datetime, 'gavel', user.legal.icon) }}
                     </div>
                 </div>
             </div>
@@ -260,85 +209,15 @@
 
                     </div>
                     <div class="col-md-4">
-                        <div class="card card-first-date">
-                            <div class="card-body">
-                                <div class="stat-widget-five">
-                                    <div class="stat-icon">
-                                        <i class="fa fa-calendar" aria-hidden="true"></i>
-                                    </div>
-                                    <div class="stat-content">
-                                        <div class="text-left">
-                                            <div class="stat-text">
-                                                {{ user.first_connection }}
-                                            </div>
-                                            <div class="stat-heading">
-                                                {{ 'FirstLoginInPlatform'|get_lang }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card card-last-date">
-                            <div class="card-body">
-                                <div class="stat-widget-five">
-                                    <div class="stat-icon">
-                                        <i class="fa fa-calendar" aria-hidden="true"></i>
-                                    </div>
-                                    <div class="stat-content">
-                                        <div class="text-left">
-                                            <div class="stat-text">
-                                                {{ user.first_connection }}
-                                            </div>
-                                            <div class="stat-heading">
-                                                {{ 'LatestLoginInPlatform'|get_lang }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        {{ display.card_widget('FirstLoginInPlatform'|get_lang, user.first_connection, 'calendar') }}
+
+                        {{ display.card_widget('LatestLoginInPlatform'|get_lang, user.last_connection, 'calendar') }}
+
                         {% if(user.time_spent_course) %}
-                            <div class="card card-time">
-                                <div class="card-body">
-                                    <div class="stat-widget-five">
-                                        <div class="stat-icon">
-                                            <i class="fa fa-clock-o" aria-hidden="true"></i>
-                                        </div>
-                                        <div class="stat-content">
-                                            <div class="text-left">
-                                                <div class="stat-text">
-                                                    {{ user.time_spent_course }}
-                                                </div>
-                                                <div class="stat-heading">
-                                                    {{ 'TimeSpentInTheCourse'|get_lang }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            {{ display.card_widget('TimeSpentInTheCourse'|get_lang, user.time_spent_course, 'clock-o') }}
                         {% endif %}
-                        <div class="card card-legal">
-                            <div class="card-body">
-                                <div class="stat-widget-five">
-                                    <div class="stat-icon">
-                                        <i class="fa fa-gavel" aria-hidden="true"></i>
-                                        <span class="active-icon">{{ user.legal.icon }}</span>
-                                    </div>
-                                    <div class="stat-content">
-                                        <div class="text-left">
-                                            <div class="stat-text">
-                                                {{ user.legal.datetime }}
-                                            </div>
-                                            <div class="stat-heading">
-                                                {{ 'LegalAccepted'|get_lang }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
+                        {{ display.card_widget('LegalAccepted'|get_lang, user.legal.datetime, 'gavel', user.legal.icon) }}
                     </div>
                 </div>
 

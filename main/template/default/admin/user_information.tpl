@@ -12,7 +12,9 @@
 
                 {{ display.card_widget('LatestLoginInPlatform'|get_lang, user.last_connection, 'calendar') }}
 
-                {{ display.card_widget('LegalAccepted'|get_lang, user.legal.datetime, 'gavel', user.legal.icon) }}
+                {% if user.legal %}
+                    {{ display.card_widget('LegalAccepted'|get_lang, user.legal.datetime, 'gavel', user.legal.icon) }}
+                {% endif %}
 
             </div>
             {% if social_tool %}

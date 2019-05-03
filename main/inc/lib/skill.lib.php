@@ -1437,7 +1437,7 @@ class Skill extends Model
         }
 
         if ($addTitle) {
-            $tableResult .= '<h3 class="section-title">'.get_lang('AchievedSkills').'</div>
+            $tableResult .= '<h3 class="section-title">'.get_lang('AchievedSkills').'</h3>
                     <div class="skills-badges">
                    ';
         }

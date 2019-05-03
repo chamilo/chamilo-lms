@@ -3,31 +3,7 @@
 <div class="details">
     <div class="row">
         <div class="col-md-4">
-            {% set content %}
-                <div class="user">
-                    <div class="avatar">
-                        <img width="128px" src="{{ user.avatar }}" class="img-responsive">
-                    </div>
-                    <div class="name">
-                        <h3>{{ user.complete_name }}</h3>
-                        <p class="email">{{ user.email }}</p>
-                    </div>
-                    <div class="parameters">
-                        <dl class="dl-horizontal">
-                            <dt>{{ 'Tel'|get_lang }}</dt>
-                            <dd>{{ user.phone == '' ? 'NoTel'|get_lang : user.phone }}</dd>
-                            <dt>{{ 'OfficialCode'|get_lang }}</dt>
-                            <dd>{{ user.official_code == '' ? 'NoOfficialCode'|get_lang : user.official_code }}</dd>
-                            <dt>{{ 'OnLine'|get_lang }}</dt>
-                            <dd>{{ user.user_is_online }}</dd>
-                            <dt>{{ 'Status'|get_lang }}</dt>
-                            <dd>{{ user.status }}</dd>
-                        </dl>
-                        <div class="create">{{ user.created }}</div>
-                    </div>
-                </div>
-            {% endset %}
-            {{ display.panel('',content,'') }}
+            {{ display.panel('', display.reporting_user_box(user), '') }}
         </div>
         <div class="col-md-8">
             <div class="list-card">

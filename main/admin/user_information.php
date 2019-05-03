@@ -197,12 +197,12 @@ foreach ($data as $label => $item) {
 $table = new HTML_Table(['class' => 'data_table']);
 $table->setHeaderContents(0, 0, get_lang('Tracking'));
 $csvContent[] = [get_lang('Tracking')];
-$data = [
-    get_lang('FirstLogin') => Tracking::get_first_connection_date($userId),
-    get_lang('LatestLogin') => Tracking::get_last_connection_date($userId, true),
-];
 $userInfo['first_connection'] = Tracking::get_first_connection_date($userId);
 $userInfo['last_connection'] = Tracking::get_last_connection_date($userId, true);
+$data = [
+    get_lang('FirstLogin') => $userInfo['first_connection'],
+    get_lang('LatestLogin') => $userInfo['last_connection'],
+];
 
 if (api_get_setting('allow_terms_conditions') === 'true') {
     $extraFieldValue = new ExtraFieldValue('user');

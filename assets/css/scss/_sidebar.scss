@@ -1,6 +1,13 @@
 // ---------------------------------------------------------
 // SIDEBAR SCSS
 // ---------------------------------------------------------
+.navbar-nav {
+  .nav-link {
+    &:focus{
+      color: #FFFFFF;
+    }
+  }
+}
 
 .sidebar {
   background-color: $sidebar-background;
@@ -77,4 +84,5 @@
 }
 .breadcrumb{
   background-color: $breadcrumb-back;
+  margin-bottom: 0.7rem;
 }

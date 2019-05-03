@@ -473,7 +473,7 @@ if ($slide_id != 'all' && !empty($image_files_only)) {
     <?php
         } else {
             echo "<img 
-                class=\"img-responsive\" 
+                class=\"img-fluid\" 
                 src='download.php?doc_url=$path/".$image_files_only[$slide]."' alt='".$image_files_only[$slide]."' 
                 border='0'".$height_width_tags.'>';
         }

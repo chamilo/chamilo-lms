@@ -207,7 +207,7 @@ $(function() {
                     $(".panel-preview").show();
                     $(".url_preview").html(response);
                     $("[name=\'url_content\']").val(response);
-                    $(".url_preview img").addClass("img-responsive");
+                    $(".url_preview img").addClass("img-fluid");
                 } else {
                     $(".spinner").html("");
                 }

@@ -54,7 +54,7 @@ function getCustomTabs()
 function return_logo($theme = '', $responsive = true)
 {
     $siteName = api_get_setting('siteName');
-    $class = 'img-responsive';
+    $class = 'img-fluid';
     if (!$responsive) {
         $class = '';
     }

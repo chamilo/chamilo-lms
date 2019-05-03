@@ -1651,7 +1651,7 @@ class MessageManager
         $main_content .= Display::img(
             $userPicture,
             $name,
-            ['width' => '60px', 'class' => 'img-responsive img-circle'],
+            ['width' => '60px', 'class' => 'img-fluid img-circle'],
             false
         );
         $main_content .= '</div>';
@@ -1779,7 +1779,7 @@ class MessageManager
                 $html_items .= Display::img(
                     $userPicture,
                     $name,
-                    ['width' => '60px', 'class' => 'img-responsive img-circle'],
+                    ['width' => '60px', 'class' => 'img-fluid img-circle'],
                     false
                 );
                 $html_items .= '</div>';

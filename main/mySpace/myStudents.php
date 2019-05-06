@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use ChamiloSession as Session;
 
@@ -963,13 +962,15 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
 }
 
 $details = true;
-$tpl = new Template('',
+$tpl = new Template(
+    '',
     false,
     false,
     false,
     false,
     false,
-    false);
+    false
+);
 
 if (!empty($courseInfo)) {
     $nb_assignments = Tracking::count_student_assignments($student_id, $course_code, $sessionId);
@@ -1018,14 +1019,9 @@ if ($allowAll) {
     );
 }
 echo '<br><br>';
-
 ?>
     <div class="row">
-       
         <div class="col-sm-5">
-
-
-
             <?php if (!empty($userGroups)) {
     ?>
                 <table class="table table-striped table-hover">

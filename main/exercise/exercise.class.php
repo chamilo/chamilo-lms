@@ -5977,11 +5977,11 @@ class Exercise
         $duration = isset($trackExerciseInfo['duration_formatted']) ? $trackExerciseInfo['duration_formatted'] : null;
         $ip = isset($trackExerciseInfo['user_ip']) ? $trackExerciseInfo['user_ip'] : null;
 
-        $array = [];
         if (!empty($user_data)) {
             $userFullName = $user_data['complete_name'];
             if (api_is_teacher() || api_is_platform_admin(true, true)) {
-                $userFullName = '<a href="'.$user_data['profile_url'].'" title="'.get_lang('GoToStudentDetails').'">'.$user_data['complete_name'].'</a>';
+                $userFullName = '<a href="'.$user_data['profile_url'].'" title="'.get_lang('GoToStudentDetails').'">'.
+                    $user_data['complete_name'].'</a>';
             }
 
             $data = [
@@ -6035,7 +6035,7 @@ class Exercise
      *
      * @param 	int		attempt id
      *
-     * @return float exercise result
+     * @return array
      */
     public function get_exercise_result($exe_id)
     {
@@ -6305,6 +6305,9 @@ class Exercise
         ];
     }
 
+    /**
+     * @return bool
+     */
     public function added_in_lp()
     {
         $TBL_LP_ITEM = Database::get_course_table(TABLE_LP_ITEM);

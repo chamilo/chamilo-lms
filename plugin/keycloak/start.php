@@ -105,17 +105,17 @@ if (isset($_GET['sso'])) {
     $userId = 0;
     if (!empty($attributes) && empty($userInfo)) {
         $firstName = '';
-        if (isset($attributes['FirstName']) && !empty($attributes['FirstName']) {
+        if (isset($attributes['FirstName']) && !empty($attributes['FirstName'])) {
             $firstName = reset($attributes['FirstName']);
         }
 
         $lastName = '';
-        if (isset($attributes['LastName']) && !empty($attributes['LastName']) {
+        if (isset($attributes['LastName']) && !empty($attributes['LastName'])) {
             $lastName = reset($attributes['LastName']);
         }
 
         $email = '';
-        if (isset($attributes['Email']) && !empty($attributes['Email']) {
+        if (isset($attributes['Email']) && !empty($attributes['Email'])) {
             $email = reset($attributes['Email']);
         }
 

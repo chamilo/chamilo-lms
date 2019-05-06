@@ -2849,9 +2849,11 @@ HTML;
         }
 
         $defaultFeatures = implode("','", $defaultFeatures);
-        $frameReady = '$.frameReady(function() {
-            $(function() {
-                $("video:not(.skip), audio:not(.skip)").mediaelementplayer({                    
+        $frameReady = '
+        $.frameReady(function() {
+             // Use $(document).ready() instead of shortcut method in order to work with frameReady
+             $(document).ready(function () {
+                $("video:not(.skip), audio:not(.skip)").mediaelementplayer({
                     pluginPath: "'.$webPublicPath.'assets/mediaelement/build/",            
                     features: [\''.$defaultFeatures.'\'],
                     success: function(mediaElement, originalNode, instance) {
@@ -2860,22 +2862,25 @@ HTML;
                     vrPath: "'.$webPublicPath.'assets/vrview/build/vrview.js"
                 });
             });
-        }, "'.$frameName.'",
+        }, 
+        "'.$frameName.'",
         {
             load: [
-                { type:"script", id:"_fr1", src:"'.api_get_jquery_web_path().'"},
-                { type:"script", id:"_fr7", src:"'.$webPublicPath.'assets/MathJax/MathJax.js?config=AM_HTMLorMML"},
-                { type:"script", id:"_fr4", src:"'.$webPublicPath.'assets/jquery-ui/jquery-ui.min.js"},
-                { type:"stylesheet", id:"_fr5", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/jquery-ui.min.css"},
-                { type:"stylesheet", id:"_fr6", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/theme.css"},
-                { type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
-                { type:"stylesheet", id:"_fr7", src:"'.$webPublicPath.'css/dialog.css"},
-                { type:"script", id:"_fr3", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?'.api_get_cidreq().'"},
-                {type: "script", id: "_media1", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelement-and-player.min.js"},
-                {type: "stylesheet", id: "_media2", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelementplayer.min.css"},                
-                {type: "stylesheet", id: "_media4", src: "'.$webPublicPath.'assets/mediaelement/plugins/vrview/vrview.css"},
-                {type: "script", id: "_media4", src: "'.$webPublicPath.'assets/mediaelement/plugins/vrview/vrview.js"},
-                {type: "script", id: "_media5", src: "'.$webPublicPath.'assets/mediaelement/plugins/markersrolls/markersrolls.js"},
+                {type:"script", id:"_fr1", src:"'.api_get_jquery_web_path().'"},
+                {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
+                {type:"script", id:"_fr3", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?'.api_get_cidreq().'"},
+                {type:"script", id:"_fr4", src:"'.$webPublicPath.'assets/jquery-ui/jquery-ui.min.js"},
+                {type:"script", id:"_fr5", src:"'.$webPublicPath.'assets/MathJax/MathJax.js?config=AM_HTMLorMML"},
+                {type:"script", id:"_fr6", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelement-and-player.min.js"},
+                {type:"script", id:"_fr7", src: "'.$webPublicPath.'assets/mediaelement/plugins/vrview/vrview.js"},
+                {type:"script", id:"_fr8", src: "'.$webPublicPath.'assets/mediaelement/plugins/markersrolls/markersrolls.js"},
+                                
+                {type:"stylesheet", id:"_fr9", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/jquery-ui.min.css"},
+                {type:"stylesheet", id:"_fr10", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/theme.css"},                
+                {type:"stylesheet", id:"_fr11", src:"'.$webPublicPath.'css/dialog.css"},
+                {type:"stylesheet", id: "_fr12", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelementplayer.min.css"},                
+                {type:"stylesheet", id: "_fr13", src: "'.$webPublicPath.'assets/mediaelement/plugins/vrview/vrview.css"},
+                
                 '.$extraMediaFiles.'
                 '.$translateHtml.'
             ]

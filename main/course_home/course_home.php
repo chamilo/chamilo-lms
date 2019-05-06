@@ -74,7 +74,7 @@ $(function() {
 			success: function(data) {
 				eval("var info=" + data);
 				new_current_tool_image = info.image;
-				new_current_view       = "'.api_get_path(WEB_IMG_PATH).'" + info.view;
+				new_current_view       = "'.api_get_path('WEB_PUBLIC_PATH').'img/" + info.view;
 				//eyes
 				$("#" + tool_id).attr("src", new_current_view);
 				//tool

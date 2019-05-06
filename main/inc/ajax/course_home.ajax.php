@@ -65,7 +65,7 @@ switch ($action) {
 
             if (api_get_setting('homepage_view') != 'activity_big') {
                 $toolImage = Display::return_icon(
-                    $toolImage,
+                    'tool_'.$toolImage,
                     null,
                     null,
                     null,
@@ -77,7 +77,7 @@ switch ($action) {
                 // Display::return_icon() also checks in the app/Resources/public/css/themes/{theme}/icons folder
                 $toolImage = (substr($toolImage, 0, strpos($toolImage, '.'))).'.png';
                 $toolImage = Display::return_icon(
-                    $toolImage,
+                    'tool_'.$toolImage,
                     get_lang(ucfirst($tool->getName())),
                     null,
                     ICON_SIZE_BIG,

@@ -4,11 +4,11 @@
  * @param {Array} resources
  * @constructor
  */
-$.frameReady = function (callback, target, resources) {
+$.frameReady = function (callback, targetSelector, resources) {
     /**
      * @type {window}
      */
-    var targetWindow = eval(target);
+    var targetWindow = document.querySelector(targetSelector);
     /**
      * @type {Document}
      */
@@ -41,9 +41,12 @@ $.frameReady = function (callback, target, resources) {
 
         return count;
     })();
+    var scripsLoadedCount = 0;
 
     targetWindow.onload = function () {
-        targetDocument = targetWindow.document;
+        scripsLoadedCount = 0;
+
+        targetDocument = targetWindow.contentDocument;
 
         scripts.forEach(function (script) {
             createScript(script);
@@ -54,8 +57,6 @@ $.frameReady = function (callback, target, resources) {
         });
     };
 
-    var scripsLoadedCount = 0;
-
     /**
      * @param {Object} script
      */
@@ -63,7 +64,7 @@ $.frameReady = function (callback, target, resources) {
         /**
          * @type {HTMLScriptElement}
          */
-        var elParent = targetWindow.document.createElement('script');
+        var elParent = targetWindow.contentDocument.createElement('script');
         elParent.async = false;
         elParent.onload = function () {
             scripsLoadedCount++;
@@ -90,7 +91,7 @@ $.frameReady = function (callback, target, resources) {
         /**
          * @type {HTMLLinkElement}
          */
-        var el = targetWindow.document.createElement('link');
+        var el = targetWindow.contentDocument.createElement('link');
         el.setAttribute('href', stylesheet.src);
         el.setAttribute('rel', "stylesheet");
         el.setAttribute('type', "text/css");
@@ -103,6 +104,6 @@ $.frameReady = function (callback, target, resources) {
             return;
         }
 
-        targetWindow.eval('(' + callback.toString() + ')();');
+        targetWindow.contentWindow.eval('(' + callback.toString() + ')();');
     }
 };

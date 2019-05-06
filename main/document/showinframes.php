@@ -174,7 +174,7 @@ if (api_is_course_admin()) {
     $frameheight = 165;
 }
 
-$frameReady = Display::getFrameReadyBlock('top.mainFrame');
+$frameReady = Display::getFrameReadyBlock('#mainFrame');
 
 $web_odf_supported_files = DocumentManager::get_web_odf_extension_list();
 // PDF should be displayed with viewerJS

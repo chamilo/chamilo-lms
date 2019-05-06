@@ -338,7 +338,7 @@
                         function(){
                             //  $("<div>I am a div courses</div>").prependTo("body");
                         },
-                        "top.content_name",
+                        "#content_id",
                         [
                             { type:"script", id:"_fr1", src:"{{ jquery_web_path }}", deps: [
                                 { type:"script", id:"_fr4", src:"{{ jquery_ui_js_web_path }}"},
@@ -353,7 +353,7 @@
                         function(){
                             //  $("<div>I am a div courses</div>").prependTo("body");
                         },
-                        "top.content_name",
+                        "#content_id",
                         [
                             { type:"script", id:"_fr1", src:"{{ jquery_web_path }}", deps: [
                                 { type:"script", id:"_fr4", src:"{{ jquery_ui_js_web_path }}"},
@@ -368,7 +368,7 @@
                         function(){
                             //  $("<div>I am a div courses</div>").prependTo("body");
                         },
-                        "top.content_name",
+                        "#content_id",
                         [
                             { type:"script", id:"_fr1", src:"{{ jquery_web_path }}", deps: [
                                 { type:"script", id:"_fr4", src:"{{ jquery_ui_js_web_path }}"},

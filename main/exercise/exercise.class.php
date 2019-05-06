@@ -5863,7 +5863,6 @@ class Exercise
             $this->sendNotificationForOpenQuestions(
                 $question_list_answers,
                 $origin,
-                $exe_id,
                 $user_info,
                 $url,
                 $teachers
@@ -8250,12 +8249,14 @@ class Exercise
      *
      * @param array  $question_list_answers
      * @param string $origin
-     * @param int    $exe_id
+     * @param array  $user_info
+     * @param string $url_email
+     * @param array  $teachers
+     *
      */
     private function sendNotificationForOpenQuestions(
         $question_list_answers,
         $origin,
-        $exe_id,
         $user_info,
         $url_email,
         $teachers
@@ -8263,6 +8264,17 @@ class Exercise
         // Email configuration settings
         $courseCode = api_get_course_id();
         $courseInfo = api_get_course_info($courseCode);
+        $sessionId = api_get_session_id();
+        $sessionData = '';
+        if (!empty($sessionId)) {
+            $sessionInfo = api_get_session_info($sessionId);
+            if (!empty($sessionInfo)) {
+                $sessionData = '<tr>'
+                    .'<td><em>'.get_lang('SessionName').'</em></td>'
+                    .'<td>&nbsp;<b>'.$sessionInfo['name'].'</b></td>'
+                    .'</tr>';
+            }
+        }
 
         $msg = get_lang('OpenQuestionsAttempted').'<br /><br />'
             .get_lang('AttemptDetails').' : <br /><br />'
@@ -8271,6 +8283,7 @@ class Exercise
             .'<td><em>'.get_lang('CourseName').'</em></td>'
             .'<td>&nbsp;<b>#course#</b></td>'
             .'</tr>'
+            .$sessionData
             .'<tr>'
             .'<td>'.get_lang('TestAttempted').'</td>'
             .'<td>&nbsp;#exercise#</td>'
@@ -8284,6 +8297,7 @@ class Exercise
             .'<td>&nbsp;#mail#</td>'
             .'</tr>'
             .'</table>';
+
         $open_question_list = null;
         foreach ($question_list_answers as $item) {
             $question = $item['question'];
@@ -8309,11 +8323,11 @@ class Exercise
             $msg .= $open_question_list;
             $msg .= '</table><br />';
 
-            $msg = str_replace("#exercise#", $this->exercise, $msg);
-            $msg = str_replace("#firstName#", $user_info['firstname'], $msg);
-            $msg = str_replace("#lastName#", $user_info['lastname'], $msg);
-            $msg = str_replace("#mail#", $user_info['email'], $msg);
-            $msg = str_replace("#course#", $courseInfo['name'], $msg);
+            $msg = str_replace('#exercise#', $this->exercise, $msg);
+            $msg = str_replace('#firstName#', $user_info['firstname'], $msg);
+            $msg = str_replace('#lastName#', $user_info['lastname'], $msg);
+            $msg = str_replace('#mail#', $user_info['email'], $msg);
+            $msg = str_replace('#course#', $courseInfo['name'], $msg);
 
             if ($origin != 'learnpath') {
                 $msg .= '<br /><a href="#url#">'.get_lang('ClickToCommentAndGiveFeedback').'</a>';

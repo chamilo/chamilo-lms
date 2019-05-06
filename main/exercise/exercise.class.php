@@ -5807,6 +5807,19 @@ class Exercise
         }
 
         $sessionId = api_get_session_id();
+
+        $sessionData = '';
+        if (!empty($sessionId)) {
+            $sessionInfo = api_get_session_info($sessionId);
+            if (!empty($sessionInfo)) {
+                $sessionData = '<tr>'
+                    .'<td>'.get_lang('SessionName').'</td>'
+                    .'<td>'.$sessionInfo['name'].'</td>'
+                    .'</tr>';
+            }
+        }
+
+
         $sendStart = false;
         $sendEnd = false;
         $sendEndOpenQuestion = false;
@@ -5908,6 +5921,7 @@ class Exercise
                             <td>'.get_lang('CourseName').'</td>
                             <td>#course#</td>
                         </tr>
+                        '.$sessionData.'
                         <tr>
                             <td>'.get_lang('Exercise').'</td>
                             <td>&nbsp;#exercise#</td>
@@ -5927,7 +5941,10 @@ class Exercise
             '#email#' => $user_info['email'],
             '#exercise#' => $this->exercise,
             '#student_complete_name#' => $user_info['complete_name'],
-            '#course#' => $courseInfo['title'],
+            '#course#' => Display::url(
+                $courseInfo['title'],
+                $courseInfo['course_public_url'].'?id_session='.$sessionId
+            ),
         ];
 
         if ($sendEnd) {
@@ -8078,21 +8095,22 @@ class Exercise
             api_get_session_id()
         );
 
-        $repo = $em->getRepository('ChamiloCoreBundle:GradebookLink');
+        if (!empty($links)) {
+            $repo = $em->getRepository('ChamiloCoreBundle:GradebookLink');
 
-        foreach ($links as $link) {
-            $linkId = $link['id'];
-            /** @var \Chamilo\CoreBundle\Entity\GradebookLink $exerciseLink */
-            $exerciseLink = $repo->find($linkId);
-            if ($exerciseLink) {
-                $exerciseLink
-                    ->setUserScoreList($students)
-                    ->setBestScore($bestResult)
-                    ->setAverageScore($average)
-                    ->setScoreWeight($this->get_max_score())
-                ;
-                $em->persist($exerciseLink);
-                $em->flush();
+            foreach ($links as $link) {
+                $linkId = $link['id'];
+                /** @var \Chamilo\CoreBundle\Entity\GradebookLink $exerciseLink */
+                $exerciseLink = $repo->find($linkId);
+                if ($exerciseLink) {
+                    $exerciseLink
+                        ->setUserScoreList($students)
+                        ->setBestScore($bestResult)
+                        ->setAverageScore($average)
+                        ->setScoreWeight($this->get_max_score());
+                    $em->persist($exerciseLink);
+                    $em->flush();
+                }
             }
         }
     }
@@ -8327,12 +8345,16 @@ class Exercise
             $msg = str_replace('#firstName#', $user_info['firstname'], $msg);
             $msg = str_replace('#lastName#', $user_info['lastname'], $msg);
             $msg = str_replace('#mail#', $user_info['email'], $msg);
-            $msg = str_replace('#course#', $courseInfo['name'], $msg);
+            $msg = str_replace(
+                '#course#',
+                Display::url($courseInfo['title'], $courseInfo['course_public_url'].'?id_session='.$sessionId),
+                $msg
+            );
 
             if ($origin != 'learnpath') {
                 $msg .= '<br /><a href="#url#">'.get_lang('ClickToCommentAndGiveFeedback').'</a>';
             }
-            $msg = str_replace("#url#", $url_email, $msg);
+            $msg = str_replace('#url#', $url_email, $msg);
             $subject = get_lang('OpenQuestionsAttempted');
 
             if (!empty($teachers)) {

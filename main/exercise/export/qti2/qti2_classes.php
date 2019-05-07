@@ -328,8 +328,10 @@ class ImsAnswerHotspot extends Answer implements ImsAnswerInterface
     public function imsExportResponses($questionIdent, $questionStatment, $questionDesc = '', $questionMedia = '')
     {
         $this->answerList = $this->getAnswersList(true);
-        $questionMedia = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/images/'.$questionMedia;
-        $mimetype = mime_content_type($questionMedia);
+        $mediaFilePath = api_get_course_path().'/document/images/'.$questionMedia;
+        $sysQuestionMediaPath = api_get_path(SYS_COURSE_PATH).$mediaFilePath;
+        $questionMedia = api_get_path(WEB_COURSE_PATH).$mediaFilePath;
+        $mimetype = mime_content_type($sysQuestionMediaPath);
         if (empty($mimetype)) {
             $mimetype = 'image/jpeg';
         }

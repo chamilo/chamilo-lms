@@ -135,7 +135,7 @@ class ImsAssessmentItem
                 $this->questionIdent,
                 $this->question->question,
                 $this->question->description,
-                $this->question->picture
+                $this->question->getPictureFilename()
             )
             .$this->end_item_body()
             .$this->add_response_processing()
@@ -476,6 +476,12 @@ function export_question_qti($questionId, $standalone = true)
     if (!$qst) {
         return '';
     }
+
+    $isValid = $qst instanceof UniqueAnswer || $qst instanceof MultipleAnswer || $qst instanceof FreeAnswer;
+    if (!$isValid) {
+        return '';
+    }
+
     $question->id = $qst->id;
     $question->type = $qst->type;
     $question->question = $qst->question;

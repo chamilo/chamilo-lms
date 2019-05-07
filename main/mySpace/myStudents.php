@@ -1351,8 +1351,8 @@ if (empty($details)) {
     ];
 
     $timeCourse = null;
-    if (Tracking::minimunTimeAvailable($session_id, $courseInfo['real_id'])) {
-        $timeCourse = Tracking::getCalculateTime($student_id, $courseInfo['real_id'], $session_id);
+    if (Tracking::minimunTimeAvailable($sessionId, $courseInfo['real_id'])) {
+        $timeCourse = Tracking::getCalculateTime($student_id, $courseInfo['real_id'], $sessionId);
     }
 
     if ($user_info['status'] != INVITEE) {

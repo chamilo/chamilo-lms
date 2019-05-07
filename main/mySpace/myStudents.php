@@ -95,7 +95,7 @@ if ($export) {
 $csv_content = [];
 $from_myspace = false;
 $this_section = SECTION_COURSES;
-if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
+if (isset($_GET['from']) && $_GET['from'] === 'myspace') {
     $from_myspace = true;
     $this_section = SECTION_TRACKING;
 }
@@ -162,7 +162,7 @@ if (!empty($details)) {
 } else {
     if ($origin === 'resume_session') {
         $interbreadcrumb[] = [
-            'url' => "../session/session_list.php",
+            'url' => '../session/session_list.php',
             'name' => get_lang('SessionList'),
         ];
         if (!empty($sessionId)) {
@@ -902,9 +902,7 @@ $timezone_user = UserManager::get_extra_user_data_by_field(
     'timezone'
 );
 $use_users_timezone = api_get_setting('use_users_timezone', 'timezones');
-    if ($timezone_user['timezone'] != null &&
-        $use_users_timezone == 'true'
-    ) {
+    if ($timezone_user['timezone'] != null && $use_users_timezone === 'true') {
         $timezone = $timezone_user['timezone'];
     }
     if ($timezone !== null) {
@@ -940,24 +938,24 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
             list($legalId, $legalLanguageId, $legalTime) = explode(':', $value['value']);
             $icon = Display::return_icon('accept.png');
             $btn = Display::url(
-                    get_lang('DeleteLegal'),
-                    api_get_self().'?action=delete_legal&student='.$student_id.'&course='.$course_code,
-                    ['class' => 'btn btn-danger']
-                );
+                get_lang('DeleteLegal'),
+                api_get_self().'?action=delete_legal&student='.$student_id.'&course='.$course_code,
+                ['class' => 'btn btn-danger']
+            );
             $timeLegalAccept = api_get_local_time($legalTime);
         } else {
             $btn = Display::url(
-                    get_lang('SendLegal'),
-                    api_get_self().'?action=send_legal&student='.$student_id.'&course='.$course_code,
-                    ['class' => 'btn btn-primary']
-                );
+                get_lang('SendLegal'),
+                api_get_self().'?action=send_legal&student='.$student_id.'&course='.$course_code,
+                ['class' => 'btn btn-primary']
+            );
             $timeLegalAccept = get_lang('NotRegistered');
         }
     }
     $userInfo['legal'] = [
-            'icon' => $icon,
-            'datetime' => $timeLegalAccept,
-            'url_send' => $btn,
+        'icon' => $icon,
+        'datetime' => $timeLegalAccept,
+        'url_send' => $btn,
     ];
 }
 
@@ -979,8 +977,7 @@ if (!empty($courseInfo)) {
     $chat_last_connection = Tracking::chat_last_connection($student_id, $courseInfo['real_id'], $sessionId);
     $documents = Tracking::count_student_downloaded_documents($student_id, $courseInfo['real_id'], $sessionId);
     $uploaded_documents = Tracking::count_student_uploaded_documents($student_id, $course_code, $sessionId);
-    $courseTitle = $courseInfo['title'];
-    $tpl->assign('title', $courseTitle);
+    $tpl->assign('title', $courseInfo['title']);
 
     $userInfo['tools'] = [
         'tasks' => $nb_assignments,
@@ -1018,33 +1015,27 @@ if ($allowAll) {
         $sessionId
     );
 }
-echo '<br><br>';
-?>
-    <div class="row">
-        <div class="col-sm-5">
-            <?php if (!empty($userGroups)) {
-    ?>
-                <table class="table table-striped table-hover">
-                    <thead>
-                    <tr>
-                        <th><?php echo get_lang('Classes'); ?></th>
+
+echo '<br /><br />';
+echo '<div class="row">
+        <div class="col-sm-5">';
+if (!empty($userGroups)) {
+    echo '<table class="table table-striped table-hover">
+           <thead>
+            <tr>
+            <th>';
+    echo get_lang('Classes');
+    echo '</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <?php foreach ($userGroups as $class) {
-        ?>
-                        <tr>
-                            <td><?php echo $class; ?></td>
-                        </tr>
-                        <?php
-    } ?>
-                    </tbody>
-                </table>
-                <?php
-} ?>
-        </div>
-    </div>
-<?php
+                    <tbody>';
+    foreach ($userGroups as $class) {
+        echo '<tr><td>'.$class.'</td></tr>';
+    }
+    echo '</tbody></table>';
+}
+echo '</div></div>';
+
 
 $exportCourseList = [];
 $lpIdList = [];

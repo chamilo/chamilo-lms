@@ -334,13 +334,6 @@ switch ($action) {
                         $totalScore += $bestScore;
                     }
 
-                    /*$score = Tracking::get_avg_student_score(
-                        $user_info['user_id'],
-                        $courseCodeItem,
-                        [],
-                        $sId
-                    );*/
-
                     $progress = empty($progress) ? '0%' : $progress.'%';
                     $score = empty($bestScore) ? '0%' : $bestScore.'%';
 
@@ -1406,7 +1399,7 @@ if (empty($details)) {
         /** @var CLpCategory $item */
         foreach ($categories as $item) {
             $categoryId = $item->getId();
-            if (!learnpath::categoryIsVisibleForStudent($item, $userEntity)) {
+            if (!learnpath::categoryIsVisibleForStudent($item, $userEntity, $courseInfo['real_id'], $sessionId)) {
                 continue;
             }
 
@@ -1527,9 +1520,9 @@ if (empty($details)) {
                 }
 
                 if ($i % 2 == 0) {
-                    $css_class = "row_even";
+                    $css_class = 'row_even';
                 } else {
-                    $css_class = "row_odd";
+                    $css_class = 'row_odd';
                 }
 
                 $i++;
@@ -1734,14 +1727,14 @@ if (empty($details)) {
                 echo '<td>';
 
                 $sql = 'SELECT exe_id FROM '.$tbl_stats_exercices.'
-                     WHERE
-                        exe_exo_id = "'.$exercise_id.'" AND
-                        exe_user_id ="'.$student_id.'" AND
-                        c_id = '.$courseInfo['real_id'].' AND
-                        session_id = "'.$sessionId.'" AND
-                        status = ""
-                    ORDER BY exe_date DESC
-                    LIMIT 1';
+                         WHERE
+                            exe_exo_id = "'.$exercise_id.'" AND
+                            exe_user_id ="'.$student_id.'" AND
+                            c_id = '.$courseInfo['real_id'].' AND
+                            session_id = "'.$sessionId.'" AND
+                            status = ""
+                        ORDER BY exe_date DESC
+                        LIMIT 1';
                 $result_last_attempt = Database::query($sql);
                 if (Database::num_rows($result_last_attempt) > 0) {
                     $id_last_attempt = Database::result($result_last_attempt, 0, 0);

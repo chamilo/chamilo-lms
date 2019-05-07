@@ -645,12 +645,12 @@ class CoursesController
     public function sessionList($action, $nameTools, $limit = [])
     {
         $date = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
-        $hiddenLinks = isset($_GET['hidden_links']) ? intval($_GET['hidden_links']) == 1 : false;
+        $hiddenLinks = isset($_GET['hidden_links']) ? $_GET['hidden_links'] == 1 : false;
         $limit = isset($limit) ? $limit : self::getLimitArray();
         $countSessions = SessionManager::countSessionsByEndDate($date);
         $sessions = CoursesAndSessionsCatalog::browseSessions($date, $limit);
 
-        $pageTotal = intval(intval($countSessions) / $limit['length']);
+        $pageTotal = round($countSessions / $limit['length']);
         // Do NOT show pagination if only one page or less
         $cataloguePagination = $pageTotal > 1 ? CourseCategory::getCatalogPagination($limit['current'], $limit['length'], $pageTotal) : '';
         $sessionsBlocks = $this->getFormattedSessionsBlock($sessions);

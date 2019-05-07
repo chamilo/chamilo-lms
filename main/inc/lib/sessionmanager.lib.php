@@ -4586,7 +4586,6 @@ class SessionManager
      */
     public static function countSessionsByEndDate($date = null)
     {
-        $count = 0;
         $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
         $url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $date = Database::escape_string($date);
@@ -4596,8 +4595,10 @@ class SessionManager
             $dateFilter = <<<SQL
                 AND ('$date' BETWEEN s.access_start_date AND s.access_end_date)
                 OR (s.access_end_date IS NULL)
-                OR (s.access_start_date IS NULL AND
-                s.access_end_date IS NOT NULL AND s.access_end_date > '$date')
+                OR (
+                    s.access_start_date IS NULL AND 
+                    s.access_end_date IS NOT NULL AND s.access_end_date > '$date'
+                )
 SQL;
         }
         $sql = "SELECT COUNT(*) 
@@ -4606,8 +4607,10 @@ SQL;
                 ON (s.id = u.session_id)
                 WHERE u.access_url_id = $urlId $dateFilter";
         $res = Database::query($sql);
+
+        $count = 0;
         if ($res !== false && Database::num_rows($res) > 0) {
-            $count = current(Database::fetch_row($res));
+            $count = (int) current(Database::fetch_row($res));
         }
 
         return $count;

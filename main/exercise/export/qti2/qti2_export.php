@@ -22,8 +22,17 @@ require __DIR__.'/qti2_classes.php';
  */
 class ImsAssessmentItem
 {
+    /**
+     * @var Ims2Question
+     */
     public $question;
+    /**
+     * @var string
+     */
     public $questionIdent;
+    /**
+     * @var ImsAnswerInterface
+     */
     public $answer;
 
     /**

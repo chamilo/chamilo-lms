@@ -650,7 +650,7 @@ class CoursesController
         $countSessions = SessionManager::countSessionsByEndDate($date);
         $sessions = CoursesAndSessionsCatalog::browseSessions($date, $limit);
 
-        $pageTotal = round($countSessions / $limit['length']);
+        $pageTotal = ceil($countSessions / $limit['length']);
         // Do NOT show pagination if only one page or less
         $cataloguePagination = $pageTotal > 1 ? CourseCategory::getCatalogPagination($limit['current'], $limit['length'], $pageTotal) : '';
         $sessionsBlocks = $this->getFormattedSessionsBlock($sessions);

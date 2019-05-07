@@ -2835,8 +2835,9 @@ HTML;
             $videoPluginFiles .= '{type: "script", src: "'.$webPublicPath.'assets/'.$file.'"},';
         }
 
+        $videoPluginCssFiles = '';
         foreach ($videoPluginCSS as $file) {
-            $videoPluginFiles .= '{type: "stylesheet", src: "'.$webPublicPath.'assets/'.$file.'"},';
+            $videoPluginCssFiles .= '{type: "stylesheet", src: "'.$webPublicPath.'assets/'.$file.'"},';
         }
 
         $translateHtml = '';
@@ -2865,15 +2866,16 @@ HTML;
                 {type:"script", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
                 {type:"script", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?'.api_get_cidreq().'"},
                 {type:"script", src:"'.$webPublicPath.'assets/jquery-ui/jquery-ui.min.js"},
-                {type:"script", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelement-and-player.min.js", deps: [
+                {type:"script", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelement-and-player.min.js", 
+                    deps: [
                     {type:"script", src: "'.$webPublicPath.'assets/mediaelement/plugins/vrview/vrview.js"},
                     {type:"script", src: "'.$webPublicPath.'assets/mediaelement/plugins/markersrolls/markersrolls.js"},
                     '.$videoPluginFiles.'
-                ]},
+            ]},
+                '.$videoPluginCssFiles.'
                 '.$translateHtml.'
             ]},
             {type:"script", src:"'.$webPublicPath.'assets/MathJax/MathJax.js?config=AM_HTMLorMML"},
-
             {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/jquery-ui.min.css"},
             {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/theme.css"},                
             {type:"stylesheet", src:"'.$webPublicPath.'css/dialog.css"},

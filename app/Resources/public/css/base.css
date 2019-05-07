@@ -2487,6 +2487,13 @@ div.admin_section h4 {
     float: left;
 }
 
+.ribbon .rib-info  {
+    background: deepskyblue;
+    border-top: none;
+    border-bottom: none;
+    float: left;
+}
+
 .ribbon .rib-gray {
     background: #cccccc;
     background-image: -ms-linear-gradient(top, #bbbbbb, #cccccc);

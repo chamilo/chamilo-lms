@@ -3445,6 +3445,8 @@ class Exercise
         if ($debug) {
             error_log('Start answer loop ');
         }
+
+        $userAnsweredQuestion = false;
         for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
             $answer = $objAnswerTmp->selectAnswer($answerId);
             $answerComment = $objAnswerTmp->selectComment($answerId);
@@ -3476,6 +3478,9 @@ class Exercise
                         $result = Database::query($sql);
                         $choice = Database::result($result, 0, 'answer');
 
+                        if ($userAnsweredQuestion === false) {
+                            $userAnsweredQuestion = !empty($choice);
+                        }
                         $studentChoice = $choice == $answerAutoId ? 1 : 0;
                         if ($studentChoice) {
                             $questionScore += $answerWeighting;
@@ -5353,6 +5358,7 @@ class Exercise
             'threadhold2' => $threadhold2,
             'threadhold3' => $threadhold3,
         ];
+
         if ($from == 'exercise_result') {
             // if answer is hotspot. To the difference of exercise_show.php,
             //  we use the results from the session (from_db=0)
@@ -5754,7 +5760,7 @@ class Exercise
             }
         }
 
-        $return_array = [
+        $return = [
             'score' => $questionScore,
             'weight' => $questionWeighting,
             'extra' => $extra_data,
@@ -5762,9 +5768,10 @@ class Exercise
             'open_answer' => $arrans,
             'answer_type' => $answerType,
             'generated_oral_file' => $generatedFile,
+            'user_answered' => $userAnsweredQuestion,
         ];
 
-        return $return_array;
+        return $return;
     }
 
     /**

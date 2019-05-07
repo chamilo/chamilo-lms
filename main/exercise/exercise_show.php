@@ -925,6 +925,10 @@ foreach ($questionList as $questionId) {
         $score['score'] = $my_total_score;
         $score['weight'] = $my_total_weight;
         $score['comments'] = isset($comnt) ? $comnt : null;
+
+        if (isset($question_result['user_answered'])) {
+            $score['user_answered'] = $question_result['user_answered'];
+        }
     }
 
     if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {

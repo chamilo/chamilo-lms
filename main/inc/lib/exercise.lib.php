@@ -4678,6 +4678,7 @@ EOT;
                         'score' => $my_total_score,
                         'weight' => $my_total_weight,
                         'comments' => $comnt,
+                        'user_answered' => $result['user_answered'],
                     ];
                 }
 

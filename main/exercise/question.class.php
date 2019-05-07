@@ -2005,28 +2005,42 @@ abstract class Question
             $class = 'success';
         }
 
-        if (in_array($this->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
-            $score['revised'] = isset($score['revised']) ? $score['revised'] : false;
-            if ($score['revised'] == true) {
-                $scoreLabel = get_lang('Revised');
-                $class = '';
-            } else {
-                $scoreLabel = get_lang('NotRevised');
-                $class = 'warning';
-                if (isset($score['weight'])) {
-                    $weight = float_format($score['weight'], 1);
-                    $score['result'] = ' ? / '.$weight;
-                }
-                $model = ExerciseLib::getCourseScoreModel();
-                if (!empty($model)) {
-                    $score['result'] = ' ? ';
-                }
+        switch ($this->type) {
+            case FREE_ANSWER:
+            case ORAL_EXPRESSION:
+            case ANNOTATION:
+                $score['revised'] = isset($score['revised']) ? $score['revised'] : false;
+                if ($score['revised'] == true) {
+                    $scoreLabel = get_lang('Revised');
+                    $class = '';
+                } else {
+                    $scoreLabel = get_lang('NotRevised');
+                    $class = 'warning';
+                    if (isset($score['weight'])) {
+                        $weight = float_format($score['weight'], 1);
+                        $score['result'] = ' ? / '.$weight;
+                    }
+                    $model = ExerciseLib::getCourseScoreModel();
+                    if (!empty($model)) {
+                        $score['result'] = ' ? ';
+                    }
 
-                $hide = api_get_configuration_value('hide_free_question_score');
-                if ($hide === true) {
-                    $score['result'] = '-';
+                    $hide = api_get_configuration_value('hide_free_question_score');
+                    if ($hide === true) {
+                        $score['result'] = '-';
+                    }
                 }
-            }
+                break;
+            case UNIQUE_ANSWER:
+                if ($exercise->results_disabled == RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
+                    if (isset($score['user_answered'])) {
+                        if ($score['user_answered'] === false) {
+                            $scoreLabel = get_lang('Unanswered');
+                            $class = 'info';
+                        }
+                    }
+                }
+                break;
         }
 
         // display question category, if any
@@ -2038,6 +2052,7 @@ abstract class Question
         if ($show_media) {
             $header .= $this->show_media_content();
         }
+
         $scoreCurrent = [
             'used' => isset($score['score']) ? $score['score'] : '',
             'missing' => isset($score['weight']) ? $score['weight'] : '',

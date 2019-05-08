@@ -132,7 +132,7 @@ class SortableTable extends HTML_Table
             $table_id = $table_name.uniqid();
         }
         if (isset($parameters) && empty($parameters)) {
-            $parameters = ['class' => 'table table-bordered data_table', 'id' => $table_id];
+            $parameters = ['class' => 'table data_table', 'id' => $table_id];
         }
 
         $this->table_id = $table_id;

@@ -2394,7 +2394,7 @@ abstract class Question
      *
      * @throws \Doctrine\ORM\Query\QueryException
      *
-     * @return mixed
+     * @return bool
      */
     public function existsInAnotherExercise()
     {
@@ -2404,9 +2404,9 @@ abstract class Question
     }
 
     /**
-     * @return int
-     *
      * @throws \Doctrine\ORM\Query\QueryException
+     *
+     * @return int
      */
     public function getCountExercise()
     {

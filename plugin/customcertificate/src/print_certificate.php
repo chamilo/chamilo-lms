@@ -183,7 +183,7 @@ foreach ($userList as $userInfo) {
     $htmlText .= '</tr>';
     $htmlText .= '</table>';
 
-    $all_user_info = DocumentManager::get_all_info_to_certificate(
+    $allUserInfo = DocumentManager::get_all_info_to_certificate(
         $studentId,
         $courseCode,
         false
@@ -191,11 +191,11 @@ foreach ($userList as $userInfo) {
 
     $myContentHtml = $infoCertificate['content_course'];
     $myContentHtml = str_replace(chr(13).chr(10).chr(13).chr(10), chr(13).chr(10), $myContentHtml);
-    $info_to_be_replaced_in_content_html = $all_user_info[0];
-    $info_to_replace_in_content_html = $all_user_info[1];
+    $infoToBeReplacedInContentHtml = $allUserInfo[0];
+    $infoToReplaceInContentHtml = $allUserInfo[1];
     $myContentHtml = str_replace(
-        $info_to_be_replaced_in_content_html,
-        $info_to_replace_in_content_html,
+        $infoToBeReplacedInContentHtml,
+        $infoToReplaceInContentHtml,
         $myContentHtml
     );
 
@@ -254,7 +254,7 @@ foreach ($userList as $userInfo) {
                 );
             }
         } elseif ($infoCertificate['type_date_expediction'] == 4) {
-            $dateExpediction .= $plugin->get_lang('to').$info_to_replace_in_content_html[9]; //date_certificate_no_time
+            $dateExpediction .= $plugin->get_lang('to').$infoToReplaceInContentHtml[9]; //date_certificate_no_time
         } else {
             if (!empty($sessionInfo)) {
                 $dateInfo = api_get_local_time($sessionInfo['access_end_date']);

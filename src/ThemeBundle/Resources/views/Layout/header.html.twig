@@ -66,7 +66,7 @@ $(function () {
     });
 });
 </script>
-<header class="app-header navbar">
+<header id="app_header" class="app-header navbar">
     <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -84,6 +84,9 @@ $(function () {
             <a class="nav-link " href="{{ url('legacy_main', { 'name' : 'auth/courses.php' }) }}" id="btncatalog" role="button" >
                 {{ "Course catalog"|trans }}
             </a>
+        </li>
+        <li>
+            [[ chamilo ]]
         </li>
         <form class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">

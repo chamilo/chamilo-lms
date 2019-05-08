@@ -147,7 +147,7 @@ if ($formSent) {
                 $question->questionData .= '<br />'.$exerciseData;
             } else {
                 // Question exists but it's orphan or it belongs to a deleted exercise
-                $question->questionData = Display::url(
+                $question->questionData .= Display::url(
                     Display::return_icon('edit.png', get_lang('Edit')),
                     $urlExercise.http_build_query([
                         'cidReq' => $courseCode,

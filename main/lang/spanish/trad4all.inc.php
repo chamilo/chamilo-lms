@@ -8422,4 +8422,5 @@ $SearchGeolocalization = "Localizar por esta dirección";
 $LegalTermsAgreementStatus = "Estado de validación de condiciones de uso";
 $HideSurveyInvitationLink = "Esconder el enlace de invitación a la encuesta";
 $LeaveAMessage = "Deje un mensaje";
+$OrphanQuestion = "Pregunta huérfana";
 ?>

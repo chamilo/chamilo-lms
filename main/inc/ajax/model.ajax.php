@@ -1298,6 +1298,7 @@ switch ($action) {
                 $columns = array_merge(['official_code'], $columns);
             }
         }
+
         $result = ExerciseLib::get_exam_results_data(
             $start,
             $limit,

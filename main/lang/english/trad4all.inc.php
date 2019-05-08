@@ -8394,4 +8394,5 @@ $SearchGeolocalization = "Search for this location";
 $LegalTermsAgreementStatus = "Terms of use agreement status";
 $HideSurveyInvitationLink = "Hide survey invitation link";
 $LeaveAMessage = "Leave a message";
+$OrphanQuestion = "Orphan question";
 ?>

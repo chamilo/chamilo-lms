@@ -2396,7 +2396,19 @@ abstract class Question
      *
      * @return mixed
      */
-    public function existsInAnotherExercises()
+    public function existsInAnotherExercise()
+    {
+        $count = $this->getCountExercise();
+
+        return $count > 1;
+    }
+
+    /**
+     * @return int
+     *
+     * @throws \Doctrine\ORM\Query\QueryException
+     */
+    public function getCountExercise()
     {
         $em = Database::getManager();
 
@@ -2408,7 +2420,31 @@ abstract class Question
             ->setParameters(['id' => (int) $this->id])
             ->getSingleScalarResult();
 
-        return $count > 1;
+        return (int) $count;
+    }
+
+    /**
+     * Check if this question exists in another exercise.
+     *
+     * @throws \Doctrine\ORM\Query\QueryException
+     *
+     * @return mixed
+     */
+    public function getExerciseListWhereQuestionExists()
+    {
+        $em = Database::getManager();
+
+        $result = $em
+            ->createQuery('
+                SELECT e 
+                FROM ChamiloCourseBundle:CQuizRelQuestion qq
+                JOIN ChamiloCourseBundle:CQuiz e                
+                WHERE e.iid = qq.exerciceId AND qq.questionId = :id 
+            ')
+            ->setParameters(['id' => (int) $this->id])
+            ->getResult();
+
+        return $result;
     }
 
     /**

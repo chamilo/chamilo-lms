@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
@@ -93,10 +94,11 @@ if ($formSent) {
         return $render;
     };
 
-    /** @var CQuizQuestion $question */
     if ($pagination) {
         $url = api_get_path(WEB_CODE_PATH).'exercise/admin.php?';
         $exerciseUrl = api_get_path(WEB_CODE_PATH).'exercise/exercise.php?';
+
+        /** @var CQuizQuestion $question */
         foreach ($pagination as $question) {
             $courseId = $question->getCId();
             $courseInfo = api_get_course_info_by_id($courseId);
@@ -124,6 +126,7 @@ if ($formSent) {
             $exerciseData = '';
             $exerciseId = 0;
             if (!empty($questionObject->exerciseList)) {
+                // Question exists in a valid exercise
                 $exerciseData .= get_lang('Exercises').'<br />';
                 foreach ($questionObject->exerciseList as $exerciseId) {
                     $exercise = new Exercise();
@@ -143,6 +146,7 @@ if ($formSent) {
                 }
                 $question->questionData .= '<br />'.$exerciseData;
             } else {
+                // Question exists but it's orphan or it belongs to a deleted exercise
                 $question->questionData = Display::url(
                     Display::return_icon('edit.png', get_lang('Edit')),
                     $url.http_build_query([
@@ -153,6 +157,25 @@ if ($formSent) {
                         'editQuestion' => $question->getId(),
                     ])
                 );
+
+                // This means the question is added in a deleted exercise
+                if ($questionObject->getCountExercise() > 0) {
+                    $exerciseList = $questionObject->getExerciseListWhereQuestionExists();
+                    if (!empty($exerciseList)) {
+                        $question->questionData .= '<br />'.get_lang('Exercises').'<br />';
+                        /** @var CQuiz $exercise */
+                        foreach ($exerciseList as $exercise) {
+                            $question->questionData .= $exercise->getTitle();
+                            if ($exercise->getActive() == -1) {
+                                $question->questionData .= '- ('.get_lang('ExerciseDeleted').') ';
+                            }
+                            $question->questionData .= '<br />';
+                        }
+                    }
+                } else {
+                    // This question is orphan :(
+                    $question->questionData .= '&nbsp;'.get_lang('OrphanQuestion').'<br />';
+                }
             }
             ob_end_clean();
         }

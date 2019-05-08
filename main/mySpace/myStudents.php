@@ -1029,7 +1029,6 @@ if (!empty($userGroups)) {
 }
 echo '</div></div>';
 
-
 $exportCourseList = [];
 $lpIdList = [];
 if (empty($details)) {

@@ -5826,7 +5826,6 @@ class Exercise
             }
         }
 
-
         $sendStart = false;
         $sendEnd = false;
         $sendEndOpenQuestion = false;
@@ -8277,7 +8276,6 @@ class Exercise
      * @param array  $user_info
      * @param string $url_email
      * @param array  $teachers
-     *
      */
     private function sendNotificationForOpenQuestions(
         $question_list_answers,

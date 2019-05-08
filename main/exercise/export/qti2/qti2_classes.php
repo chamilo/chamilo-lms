@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Interface ImsAnswerInterface
+ * Interface ImsAnswerInterface.
  */
 interface ImsAnswerInterface
 {

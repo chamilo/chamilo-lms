@@ -95,7 +95,7 @@ if ($formSent) {
     };
 
     if ($pagination) {
-        $url = api_get_path(WEB_CODE_PATH).'exercise/admin.php?';
+        $urlExercise = api_get_path(WEB_CODE_PATH).'exercise/admin.php?';
         $exerciseUrl = api_get_path(WEB_CODE_PATH).'exercise/exercise.php?';
 
         /** @var CQuizQuestion $question */
@@ -135,7 +135,7 @@ if ($formSent) {
                     $exerciseData .= $exercise->title.'&nbsp;';
                     $exerciseData .= Display::url(
                         Display::return_icon('edit.png', get_lang('Edit')),
-                        $url.http_build_query([
+                        $urlExercise.http_build_query([
                             'cidReq' => $courseCode,
                             'id_session' => $exercise->sessionId,
                             'exerciseId' => $exerciseId,
@@ -149,7 +149,7 @@ if ($formSent) {
                 // Question exists but it's orphan or it belongs to a deleted exercise
                 $question->questionData = Display::url(
                     Display::return_icon('edit.png', get_lang('Edit')),
-                    $url.http_build_query([
+                    $urlExercise.http_build_query([
                         'cidReq' => $courseCode,
                         'id_session' => $exercise->sessionId,
                         'exerciseId' => $exerciseId,
@@ -157,6 +157,15 @@ if ($formSent) {
                         'editQuestion' => $question->getId(),
                     ])
                 );
+
+                $question->questionData .= Display::url(
+                    Display::return_icon('delete.png', get_lang('Delete')),
+                    $url.'&'.http_build_query([
+                        'courseId' => $question->getCId(),
+                        'questionId' => $question->getId(),
+                        'action' => 'delete'
+                    ])
+                ).'<br />';
 
                 // This means the question is added in a deleted exercise
                 if ($questionObject->getCountExercise() > 0) {
@@ -167,14 +176,14 @@ if ($formSent) {
                         foreach ($exerciseList as $exercise) {
                             $question->questionData .= $exercise->getTitle();
                             if ($exercise->getActive() == -1) {
-                                $question->questionData .= '- ('.get_lang('ExerciseDeleted').') ';
+                                $question->questionData .= '- ('.get_lang('ExerciseDeleted').' #'.$exercise->getIid().') ';
                             }
                             $question->questionData .= '<br />';
                         }
                     }
                 } else {
                     // This question is orphan :(
-                    $question->questionData .= '&nbsp;'.get_lang('OrphanQuestion').'<br />';
+                    $question->questionData .= '&nbsp;'.get_lang('OrphanQuestion');
                 }
             }
             ob_end_clean();
@@ -183,6 +192,31 @@ if ($formSent) {
 }
 
 $formContent = $form->returnForm();
+
+$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
+switch ($action) {
+    case 'delete':
+        $questionId = isset($_REQUEST['questionId']) ? $_REQUEST['questionId'] : '';
+        $courseId = isset($_REQUEST['courseId']) ? $_REQUEST['courseId'] : '';
+        $courseInfo = api_get_course_info_by_id($courseId);
+
+        $objQuestionTmp = Question::read($questionId, $courseInfo);
+        if (!empty($objQuestionTmp)) {
+            $result = $objQuestionTmp->delete();
+            if ($result) {
+                Display::addFlash(
+                    Display::return_message(
+                        get_lang('Deleted').' #'.$questionId.' - "'.$objQuestionTmp->question.'"'
+                    )
+                );
+            }
+        }
+
+        header("Location: $url");
+        exit;
+        break;
+}
+
 
 $tpl = new Template(get_lang('Questions'));
 $tpl->assign('form', $formContent);

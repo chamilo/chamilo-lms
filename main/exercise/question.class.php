@@ -1282,17 +1282,19 @@ abstract class Question
      * @author Olivier Brouckaert
      *
      * @param int $exerciseId - exercise ID
+     * @param int $courseId
      *
      * @return bool - true if removed, otherwise false
      */
-    public function removeFromList($exerciseId)
+    public function removeFromList($exerciseId, $courseId = 0)
     {
-        $TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $id = $this->id;
+        $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $id = (int) $this->id;
+        $exerciseId = (int) $exerciseId;
 
         // searches the position of the exercise ID in the list
         $pos = array_search($exerciseId, $this->exerciseList);
-        $course_id = api_get_course_int_id();
+        $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
 
         // exercise not found
         if ($pos === false) {
@@ -1302,30 +1304,30 @@ abstract class Question
             unset($this->exerciseList[$pos]);
             //update order of other elements
             $sql = "SELECT question_order
-                    FROM $TBL_EXERCISE_QUESTION
+                    FROM $table
                     WHERE
-                        c_id = $course_id
-                        AND question_id = ".intval($id)."
-                        AND exercice_id = ".intval($exerciseId);
+                        c_id = $courseId AND 
+                        question_id = $id AND 
+                        exercice_id = $exerciseId";
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
                 $row = Database::fetch_array($res);
                 if (!empty($row['question_order'])) {
-                    $sql = "UPDATE $TBL_EXERCISE_QUESTION
-                        SET question_order = question_order-1
-                        WHERE
-                            c_id = $course_id
-                            AND exercice_id = ".intval($exerciseId)."
-                            AND question_order > ".$row['question_order'];
+                    $sql = "UPDATE $table
+                            SET question_order = question_order-1
+                            WHERE
+                                c_id = $courseId AND 
+                                exercice_id = $exerciseId AND 
+                                question_order > ".$row['question_order'];
                     Database::query($sql);
                 }
             }
 
-            $sql = "DELETE FROM $TBL_EXERCISE_QUESTION
+            $sql = "DELETE FROM $table
                     WHERE
-                        c_id = $course_id
-                        AND question_id = ".intval($id)."
-                        AND exercice_id = ".intval($exerciseId);
+                        c_id = $courseId AND 
+                        question_id = $id AND 
+                        exercice_id = $exerciseId";
             Database::query($sql);
 
             return true;
@@ -1413,7 +1415,7 @@ abstract class Question
             $this->removePicture();
         } else {
             // just removes the exercise from the list
-            $this->removeFromList($deleteFromEx);
+            $this->removeFromList($deleteFromEx, $courseId);
             if (api_get_setting('search_enabled') == 'true' && extension_loaded('xapian')) {
                 // disassociate question with this exercise
                 $this->search_engine_edit($deleteFromEx, false, true);
@@ -1427,6 +1429,8 @@ abstract class Question
                 api_get_user_id()
             );
         }
+
+        return true;
     }
 
     /**

@@ -186,7 +186,7 @@ foreach ($userList as $userInfo) {
     $all_user_info = DocumentManager::get_all_info_to_certificate(
         $studentId,
         $courseCode,
-        true
+        false
     );
 
     $myContentHtml = $infoCertificate['content_course'];
@@ -253,6 +253,8 @@ foreach ($userList as $userInfo) {
                     '............'
                 );
             }
+        } elseif ($infoCertificate['type_date_expediction'] == 4) {
+            $dateExpediction .= $plugin->get_lang('to').$info_to_replace_in_content_html[9]; //date_certificate_no_time
         } else {
             if (!empty($sessionInfo)) {
                 $dateInfo = api_get_local_time($sessionInfo['access_end_date']);

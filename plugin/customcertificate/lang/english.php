@@ -31,6 +31,7 @@ $strings['ExpectionPlace'] = "Expection place";
 $strings['DateExpediction'] = "Expediction date";
 $strings['UseDateEndAccessSession'] = "Use end date of session access";
 $strings['UseDateDownloadCertificate'] = "Use certificate download date";
+$strings['UseDateGenerationCertificate'] = "Use certificate generation date";
 $strings['UseCustomDate'] = "Use custom date";
 $strings['LogosSeal'] = "Logos / Seals";
 $strings['LogoLeft'] = "Logo left";

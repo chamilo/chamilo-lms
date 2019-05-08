@@ -368,19 +368,6 @@ $(function() {
         placement: 'right'
     };
     $('.boot-tooltip').tooltip(tip_options);
-    // var more = '{{ 'SeeMore' | get_lang | escape('js') }}';
-    // var close = '{{ 'Close' | get_lang | escape('js') }}';
-
-    var more = 'see more';
-    var close = 'close';
-    // readmore dont work with jquery3
-    // $('.list-teachers').readmore({
-    //     speed: 75,
-    //     moreLink: '<a href="#">' + more + '</a>',
-    //     lessLink: '<a href="#">' + close + '</a>',
-    //     collapsedHeight: 35,
-    //     blockCSS: 'display: block; width: 100%;'
-    // });
 
     $('.star-rating li a').on('click', function(event) {
         var id = $(this).parents('ul').attr('id');

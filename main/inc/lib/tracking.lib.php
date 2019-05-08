@@ -6838,7 +6838,7 @@ class Tracking
                                 $lpTime[$item['action_details']] = 0;
                             }
                             if ($beforeItem['action'] == 'learnpath_id') {
-                                $lpTime[$item['action_details']] += $partialTime;
+                                //$lpTime[$item['action_details']] += $partialTime;
                             } else {
                                 $quizTime += $partialTime;
                             }

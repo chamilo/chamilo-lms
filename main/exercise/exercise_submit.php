@@ -966,7 +966,8 @@ if (isset($_custom['exercises_hidden_when_no_start_date']) &&
             'warning'
         );
         if (!in_array($origin, ['learnpath', 'embeddable'])) {
-            Display :: display_footer();
+            Display::display_footer();
+            exit;
         }
     }
 }
@@ -1551,4 +1552,4 @@ if (!in_array($origin, ['learnpath', 'embeddable'])) {
     echo '</div>'; //End glossary div
 }
 
-Display :: display_footer();
+Display::display_footer();

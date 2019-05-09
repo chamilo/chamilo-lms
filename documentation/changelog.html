@@ -109,7 +109,7 @@
     <div class="version" aria-label="1.11.10">
         <a name="1.11.10"></a>
 
-        <h1>Chamilo 1.11.10 - Winchester,  07/05/2019</h1>
+        <h1>Chamilo 1.11.10 - Winchester,  08/05/2019</h1>
         <h3>Release notes - summary</h3>
         <p>Chamilo 1.11.10 is a minor bugfix release on top of 1.11.8. Contrary to previous releases, this one has a large number of security fixes. We strongly recommend you update to this version as soon as you can. Most notable in this version are 2 new features in the survey tool.</p>
         <p>Starting from this release, changes are registered by reversed date of addition (the latest changes first), which dramatically improves the changelog edition time. Because yes, it is reviewed manually.</p>
@@ -160,6 +160,7 @@
         <h3>Notable new Features</h3>
         <h4>For end-users, teachers and Chamilo admins</h4>
         <ul aria-live="off">
+            <li>[2019-05-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/94b7ca55b6648fdb01136c13d0d0334ef9b344d7">94b7ca55</a> - <a href="https://task.beeznest.com/issues/15579">BT#15579</a>) Quiz: Add "Unanswered" status for unique questions, showing on the quiz results page</li>
             <li>[2019-04-30] The IMS/LTI plugin now fully supports LTI 1, 1.1, 1.1.1, Outcomes and Deep Linking</li>
             <li>[2019-04-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/f8d91f9c2dc5502b90088a706a50cb2f8b6a066d">f8d91f9c</a> - <a href="https://task.beeznest.com/issues/15534">BT#15534</a>) Quiz: Allow editing questions that are not inside an exercise</li>
             <li>[2019-04-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/c68ccd9f7a637b992d7269d15c62cf1a574d8c1b">c68ccd9f</a> - <a href="https://support.chamilo.org/issues/7683">CT#7683</a>) Display: Improvement in user summary (tracking)</li>
@@ -256,6 +257,29 @@
         </ul>
         <h3>Improvements (minor features) and debug</h3>
         <ul aria-live="off">
+            <li>[2019-05-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/bca6e5887ef508559b0432025b87d9b0ff9f9e0a">bca6e588</a>) Plugin: CustomCertificate: Fix camel caps format</li>
+            <li>[2019-05-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/db498a914d320f6c1f9e7c92f4fd3cb9b762c37d">db498a91</a>) Plugin: CustomCertificate: Add certificate generation date</li>
+            <li>[2019-05-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/cf030732c5d8ed4cd2b0f0bb5a4b8bd05a275168">cf030732</a> - <a href="https://task.beeznest.com/issues/15609">BT#15609</a>) Gradebook: Create "/certificates" folder when creating course In order to avoid issues when creating a course and different sessions BT#15609</li>
+            <li>[2019-05-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/daab628e82c0c06f888ccacec8b7fd840d8ae60e">daab628e</a> - <a href="https://task.beeznest.com/issues/15534">BT#15534</a>) Quiz: Add delete option in question list</li>
+            <li>[2019-05-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/961c380ac71c56bffd7c1fcbd88f062b312d5a6d">961c380a</a> - <a href="https://task.beeznest.com/issues/15631">BT#15631</a>) Quiz: Fix page access when setting "exercises_hidden_when_no_start_date" is "on" in configuration.php $_custom['exercises_hidden_when_no_start_date']</li>
+            <li>[2019-05-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/f7bfb84fc6dc1d2cbc795be85cb74d330e77be63">f7bfb84f</a> - <a href="https://task.beeznest.com/issues/15534">BT#15534</a>) Admin: Improve question search</li>
+            <li>[2019-05-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/6ce8d9e8bd5d396d7a8dad9cfc3c70c0da9ddb0f">6ce8d9e8</a> - <a href="https://task.beeznest.com/issues/15607">BT#15607</a>) Learnpath: Don't add time to a LP with an exercise</li>
+            <li>[2019-05-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/4989cffdce828f2fb17ec9df0eac7c1740e42a33">4989cffd</a>) UI: Restore Open Sans as default font</li>
+            <li>[2019-05-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/70710b512026acaaf0e07f1548b7f847ff4e854e">70710b51</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2890">GH#2890</a>) Quiz: Allow export/import unique answer, multiple choice, free question in QTI #2890</li>
+            <li>[2019-05-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/a4e9dbbb5d7d657603939ead488bcc6b651794bf">a4e9dbbb</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2890">GH#2890</a>) Quiz: Fix export/import QTI questions #2890</li>
+            <li>[2019-05-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/5cb0dc94b75dbf0062342ee99d406f7ca3e63ede">5cb0dc94</a> - <a href="https://task.beeznest.com/issues/15629">BT#15629</a>) Session: Fix session catalog pagination</li>
+            <li>[2019-05-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/ee8f82ed0631b35d5be513c363da145e7bcd2127">ee8f82ed</a> - <a href="https://task.beeznest.com/issues/15607">BT#15607</a>) Internal: Fix correct session id</li>
+            <li>[2019-05-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/59e4230c7f7a8dec4cedae6b0fa998bc19cda465">59e4230c</a>) Internal: Use parameter instead of global course/session value</li>
+            <li>[2019-05-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/0d4c6a8d42b3cf840d3efd98d405e44f9e12f2fc">0d4c6a8d</a> - <a href="https://support.chamilo.org/issues/15629">CT#15629</a>) Session: Fix session catalog pagination</li>
+            <li>[2019-05-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/d0dc37daa99ff289a00431e734ec22a09f0c71ee">d0dc37da</a>) Learnpath: Fix frameReady when loading css files</li>
+            <li>[2019-05-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/5ae54427ab8ef9ebc38a19f39688ec00cd3c6762">5ae54427</a>) Learnpath: Fix frameReady when loading css files</li>
+            <li>[2019-05-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/33601ce60e18f193af08099ae1ea4882c55f6560">33601ce6</a> - <a href="https://task.beeznest.com/issues/15389">BT#15389</a>) Learnpath: Fix frameReady when change item</li>
+            <li>[2019-05-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/3ed37d202e340f9507b121e8c73b5171e0c60f43">3ed37d20</a> - <a href="https://task.beeznest.com/issues/15389">BT#15389</a>) Internal: Replace jquery frameReady to load dependencies properly</li>
+            <li>[2019-05-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/8ec637d50fece7a1a0dff374ad6617ca949efa36">8ec637d5</a> - <a href="https://task.beeznest.com/issues/15612">BT#15612</a>) Quiz: Add session info in email notification</li>
+            <li>[2019-05-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/643ea18809079d93e4cf795f19d4d04a7fd30528">643ea188</a> - <a href="https://task.beeznest.com/issues/15612">BT#15612</a>) Quiz: Add session info in email notification</li>
+            <li>[2019-05-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/0ca45d559ab7bb72f20921463b1ae2f1530749ea">0ca45d55</a> - <a href="https://task.beeznest.com/issues/12552">BT#12552</a>) Glossary: Render glossary in the glossary list</li>
+            <li>[2019-05-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/366dfb4a6776cc4d13d353b6191dc5ff9975f39d">366dfb4a</a>) Learnpath: Fix lp js errors</li>
+            <li>[2019-05-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/5db21799eb4eb3c1dd7bd74400304e1154b4912e">5db21799</a> - <a href="https://task.beeznest.com/issues/15617">BT#15617</a>) Reporting: Don't show legal block when allow_terms_conditions is disabled</li>
             <li>[2019-05-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/5db21799eb4eb3c1dd7bd74400304e1154b4912e">5db21799</a> - <a href="https://task.beeznest.com/issues/15617">BT#15617</a>) Tracking: Don't show legal block on user details page when allow_terms_conditions is disabled</li>
             <li>[2019-05-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/2437c45c972bf0f04d478b10b6cee3a6f478fba1">2437c45c</a> - <a href="https://task.beeznest.com/issues/15617">BT#15617</a>) Template: Avoid double function call in user details page</li>
             <li>[2019-05-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/4e74c84af89f7cd2c8ed04209c9f8517e302994f">4e74c84a</a> - <a href="https://task.beeznest.com/issues/15617">BT#15617</a>) Template: Create macro for user details in reporting</li>

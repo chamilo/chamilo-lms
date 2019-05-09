@@ -8326,4 +8326,5 @@ $SearchGeolocalization = "Localiser par l'adresse";
 $LegalTermsAgreementStatus = "État d'acceptation des conditions d'utilisation";
 $HideSurveyInvitationLink = "Cacher le lien d'invitation à l'enquête";
 $LeaveAMessage = "Laisser un message";
+$OrphanQuestion = "Question orpheline";
 ?>

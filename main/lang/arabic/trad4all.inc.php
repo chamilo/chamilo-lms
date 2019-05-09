@@ -8425,4 +8425,5 @@ $SearchGeolocalization = "البحث عن هذا الموقع";
 $LegalTermsAgreementStatus = "حالة الموافقة على احكام الاستخدام";
 $HideSurveyInvitationLink = "اخفاء رابط الدعوة الخاص بالاستبيان";
 $LeaveAMessage = "اترك رسالة";
+$OrphanQuestion = "سؤال غير متصل";
 ?>

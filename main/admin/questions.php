@@ -163,7 +163,7 @@ if ($formSent) {
                     $url.'&'.http_build_query([
                         'courseId' => $question->getCId(),
                         'questionId' => $question->getId(),
-                        'action' => 'delete'
+                        'action' => 'delete',
                     ])
                 ).'<br />';
 

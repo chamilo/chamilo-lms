@@ -454,7 +454,7 @@ $form->addText(
 );
 
 $group = [];
-$option1 = &$form->createElement(
+$option = &$form->createElement(
     'radio',
     'type_date_expediction',
     '',
@@ -466,9 +466,9 @@ $option1 = &$form->createElement(
         (($sessionId == 0) ? 'disabled' : ''),
     ]
 );
-$group[] = $option1;
+$group[] = $option;
 
-$option2 = &$form->createElement(
+$option = &$form->createElement(
     'radio',
     'type_date_expediction',
     '',
@@ -479,9 +479,22 @@ $option2 = &$form->createElement(
         'onclick' => 'javascript: typeDateExpedictionSwitchRadioButton();',
     ]
 );
-$group[] = $option2;
+$group[] = $option;
 
-$option4 = &$form->createElement(
+$option = &$form->createElement(
+    'radio',
+    'type_date_expediction',
+    '',
+    get_lang('UseDateGenerationCertificate'),
+    4,
+    [
+        'id' => 'type_date_expediction_4',
+        'onclick' => 'javascript: typeDateExpedictionSwitchRadioButton();',
+    ]
+);
+$group[] = $option;
+
+$option = &$form->createElement(
     'radio',
     'type_date_expediction',
     '',
@@ -492,9 +505,9 @@ $option4 = &$form->createElement(
         'onclick' => 'javascript: typeDateExpedictionSwitchRadioButton();',
     ]
 );
-$group[] = $option4;
+$group[] = $option;
 
-$option3 = &$form->createElement(
+$option = &$form->createElement(
     'radio',
     'type_date_expediction',
     '',
@@ -505,7 +518,7 @@ $option3 = &$form->createElement(
         'onclick' => 'javascript: typeDateExpedictionSwitchRadioButton();',
     ]
 );
-$group[] = $option3;
+$group[] = $option;
 
 $form->addGroup(
     $group,

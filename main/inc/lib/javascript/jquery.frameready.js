@@ -95,8 +95,9 @@ $.frameReady = function (callback, targetSelector, resources) {
         el.setAttribute('href', stylesheet.src);
         el.setAttribute('rel', "stylesheet");
         el.setAttribute('type', "text/css");
-
-        targetDocument.head.appendChild(el);
+        if (targetDocument.head) {
+            targetDocument.head.appendChild(el);
+        }
     }
 
     function tryExecuteCallback() {

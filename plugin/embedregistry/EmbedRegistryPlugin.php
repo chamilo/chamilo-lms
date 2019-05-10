@@ -14,7 +14,6 @@ class EmbedRegistryPlugin extends Plugin
     const SETTING_ENABLED = 'tool_enabled';
     const SETTING_TITLE = 'tool_title';
     const SETTING_EXTERNAL_URL = 'external_url';
-
     const TBL_EMBED = 'plugin_embed_registry_embed';
 
     /**
@@ -240,7 +239,8 @@ class EmbedRegistryPlugin extends Plugin
     /**
      * @param Embed $embed
      *
-     * @return mixed
+     * @return int
+     *
      * @throws \Doctrine\ORM\Query\QueryException
      */
     public function getMembersCount(Embed $embed)
@@ -275,16 +275,13 @@ class EmbedRegistryPlugin extends Plugin
     public function saveEventAccessTool()
     {
         $tableAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
-
-
-
         $params = [
             'access_user_id' => api_get_user_id(),
             'c_id' => api_get_course_int_id(),
             'access_tool' => 'plugin_'.$this->get_name(),
             'access_date' => api_get_utc_datetime(),
             'access_session_id' => api_get_session_id(),
-            'user_ip' => Database::escape_string(api_get_real_ip()),
+            'user_ip' => api_get_real_ip(),
         ];
         Database::insert($tableAccess, $params);
     }

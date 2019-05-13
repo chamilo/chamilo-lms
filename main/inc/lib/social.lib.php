@@ -3232,27 +3232,31 @@ class SocialManager extends UserManager
     private static function headerMessagePost($authorInfo, $receiverInfo, $message)
     {
         $currentUserId = api_get_user_id();
-        $iconStatus = null;
         $authorId = (int) $authorInfo['user_id'];
         $receiverId = (int) $receiverInfo['user_id'];
         $userStatus = (int) $authorInfo['status'];
         $urlImg = api_get_path(WEB_IMG_PATH);
         $isAdmin = self::is_admin($authorId);
 
-        if ($userStatus === 5) {
-            if ($authorInfo['has_certificates']) {
-                $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_graduated.svg" width="22px" height="22px">';
-            } else {
-                $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_student.svg" width="22px" height="22px">';
-            }
-        } else {
-            if ($userStatus === 1) {
+        $iconStatus = '';
+        switch ($userStatus) {
+            case STUDENT:
+                if ($authorInfo['has_certificates']) {
+                    $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_graduated.svg" width="22px" height="22px">';
+                } else {
+                    $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_student.svg" width="22px" height="22px">';
+                }
+                break;
+            case COURSEMANAGER:
                 if ($isAdmin) {
                     $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_admin.svg" width="22px" height="22px">';
                 } else {
                     $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_teacher.svg" width="22px" height="22px">';
                 }
-            }
+                break;
+            case STUDENT_BOSS:
+                $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_teacher.svg" width="22px" height="22px">';
+                break;
         }
 
         $date = Display::dateToStringAgoAndLongDate($message['send_date']);

@@ -19,6 +19,27 @@ $tblCLp = Database::get_course_table(TABLE_LP_MAIN);
 $tblCLpItem = Database::get_course_table(TABLE_LP_ITEM);
 $toolTable = Database::get_course_table(TABLE_TOOL_LIST);
 
+// Start custom changes
+// Delete inconsistencies from old base
+$sql = 'DELETE FROM c_lp_item_view WHERE c_id = 0';
+Database::query($sql);
+
+var_dump($sql);
+error_log($sql);
+
+// This is a custom change, probably you don't needed it in your script (removing an empty attempt)
+$sql = 'DELETE FROM c_lp_item_view WHERE lp_view_id = 18 and c_id = 4';
+Database::query($sql);
+var_dump($sql);
+error_log($sql);
+
+$sql = 'DELETE FROM c_lp_view where id = 18 and c_id = 4';
+Database::query($sql);
+var_dump($sql);
+error_log($sql);
+
+// end custom changes
+
 $sessions = Database::select('id', Database::get_main_table(TABLE_MAIN_SESSION));
 if (!empty($sessions)) {
     $sessions = array_column($sessions, 'id');

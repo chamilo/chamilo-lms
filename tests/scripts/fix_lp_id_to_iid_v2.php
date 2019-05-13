@@ -38,6 +38,8 @@ Database::query($sql);
 var_dump($sql);
 error_log($sql);
 
+///update c_lp_item_view set status = 'not attempted', suspend_data = null where iid = 2148;
+
 // end custom changes
 
 $sessions = Database::select('id', Database::get_main_table(TABLE_MAIN_SESSION));

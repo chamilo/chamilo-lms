@@ -217,7 +217,6 @@ switch ($action) {
         break;
 }
 
-
 $tpl = new Template(get_lang('Questions'));
 $tpl->assign('form', $formContent);
 $tpl->assign('pagination', $pagination);

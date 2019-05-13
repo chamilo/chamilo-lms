@@ -91,7 +91,11 @@ if ($loadFromDatabase) {
 }
 
 foreach ($data as &$result) {
-    $result['complete_name'] = addslashes(api_get_person_name($result['firstname'], $result['lastname']));
+    // Clean process is made in twig with escape('js')
+    $result['complete_name'] = $result['firstname'].' '.$result['lastname'];
+    $result['lastname'] = '';
+    $result['firstname'] = '';
+
     $parts = explode('::', $result['ville']);
     if (isset($parts[1]) && !empty($parts[1])) {
         $parts2 = explode(',', $parts[1]);

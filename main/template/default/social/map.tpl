@@ -13,7 +13,7 @@ function start()
 
     var map = new google.maps.Map(document.getElementById("map"), options);
     var oms = new OverlappingMarkerSpiderfier(map);
-    var cities = '{{ places }}';
+    var cities = '{{ places | escape('js') }}';
     cities = JSON.parse(cities);
 
     var imageCity = {

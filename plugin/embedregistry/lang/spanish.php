@@ -6,12 +6,17 @@ $strings['plugin_comment'] = 'Agrega una herramienta de curso para llevar un reg
 
 $strings['tool_enabled'] = 'Herramienta habilitada';
 $strings['tool_title'] = 'Título de la herramienta';
+$strings['tool_title_help'] = 'El título del icono de la herramienta en la página principal del curso (usualmente el título del servicio siendo compartido).';
 $strings['external_url'] = 'URL externa';
+$strings['external_url_help'] = 'La URL en la cual se puede gestionar el contenido que va a ser embedido en esta herramienta. Usualmente algo como https://[proveedor.com]/my_account, por ejemplo.';
 
-$strings['YouNeedCreateContent'] = 'Primero necesita crear el contenido externo. Luego, puede agregar el contenido Embed a su curso.';
+$strings['YouNeedCreateContent'] = 'Necesita tener contenido externo para luego pegar su código embed aquí.';
 $strings['CreateContent'] = 'Crear contenido externo';
-$strings['CreateEmbeddable'] = 'Agregar Embed';
-$strings['EditEmbeddable'] = 'Editar Embed';
+$strings['CreateEmbeddable'] = 'Crear';
+$strings['EditEmbeddable'] = 'Editar';
 $strings['ContentNotFound'] = 'Contenido no encontrado';
+$strings['EmbedTitleHelp'] = 'El título que desea que tenga este contenido incrustado en particular. Si tiene contraseña, incluya la contraseña para que sus usuarios puedan abrirlo.';
+$strings['EmbedDateRangeHelp'] = 'Dentro de este rango de fechas, el contenido activo será resaltado en la parte superior de la página.';
 $strings['HtmlCode'] = 'Código HTML';
-$strings['LaunchContent'] = 'Lanzar contenido';
+$strings['HtmlCodeHelp'] = 'El código HTML compartido por la herramienta externa, al elegir compartir en formato Embed.';
+$strings['LaunchContent'] = 'Ingresar ahora';

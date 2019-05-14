@@ -41,9 +41,21 @@ switch ($action) {
         );
 
         $form = new FormValidator('frm_edit');
-        $form->addText('title', get_lang('Title'), true);
-        $form->addDateRangePicker('range', get_lang('DateRange'));
-        $form->addTextarea('html_code', $plugin->get_lang('HtmlCode'), ['rows' => 5], true);
+        $form->addText(
+            'title',
+            [get_lang('Title'), $plugin->get_lang('EmbedTitleHelp')],
+            true
+        );
+        $form->addDateRangePicker(
+            'range',
+            [get_lang('DateRange'), $plugin->get_lang('EmbedDateRangeHelp')]
+        );
+        $form->addTextarea(
+            'html_code',
+            [$plugin->get_lang('HtmlCode'), $plugin->get_lang('HtmlCodeHelp')],
+            ['rows' => 5],
+            true
+        );
         $form->addButtonUpdate(get_lang('Add'));
         $form->addHidden('action', 'add');
 

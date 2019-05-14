@@ -13,28 +13,16 @@
                 <div class="panel-body">
                     <div class="area-avatar">
                     {{ social_avatar_block }}
-                        <!-- TYPE USER PROFILE -->
-                        {% if user.status == 5 %}
+                        {% if user.icon_status %}
+                            <!-- User icon -->
                             <div class="avatar-icon">
-                                {% if user.has_certificates %}
-                                    <img src="{{ _p.web_img }}icons/svg/identifier_graduated.svg" width="32px" height="32px">
-                                {% else %}
-                                    <img src="{{ _p.web_img }}icons/svg/identifier_student.svg" width="32px" height="32px">
-                                {% endif %}
+                                {{ user.icon_status }}
                             </div>
-                        {% elseif user.status == 1 or user.status == 17 %}
-                            <div class="avatar-icon">
-                                {% if user.is_admin %}
-                                    <img src="{{ _p.web_img }}icons/svg/identifier_admin.svg" width="32px" height="32px">
-                                {% else %}
-                                    <img src="{{ _p.web_img }}icons/svg/identifier_teacher.svg" width="32px" height="32px">
-                                {% endif %}
-                            </div>
+                            <!-- End user icon -->
                         {% endif %}
-                        <!-- END TYPE PROFILE -->
 
                         {% if show_language_flag %}
-                        <!-- LM -->
+                        <!-- Language flag -->
                         <div class="avatar-lm">
                             {% if user.language %}
                                 {% if user.language.code == 'fr' %}
@@ -50,8 +38,9 @@
                                 {% endif %}
                             {% endif %}
                         </div>
-                        <!-- END LM -->
-                        <!-- LC -->
+                        <!-- End language flag -->
+
+                        <!-- Language cible -->
                         <div class="avatar-lc">
                             {% for item in extra_info %}
                                 {% if item.variable == 'langue_cible' %}
@@ -71,9 +60,8 @@
                                 {% endif %}
                             {% endfor %}
                         </div>
-                        <!-- END LC -->
+                        <!-- End language cible ->
                         {% endif %}
-
                     </div>
                     {# Ofaj #}
                     <ul class="list-user-data">

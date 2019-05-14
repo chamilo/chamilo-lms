@@ -1864,31 +1864,12 @@ class SocialManager extends UserManager
         $currentUserId = api_get_user_id();
         $userIdLoop = $message['user_sender_id'];
         $receiverId = $message['user_receiver_id'];
-        $urlImg = api_get_path(WEB_IMG_PATH);
 
         if (!isset($users[$userIdLoop])) {
             $users[$userIdLoop] = api_get_user_info($userIdLoop);
         }
 
-        $iconStatus = '';
-        $userStatus = (int) $users[$userIdLoop]['status'];
-        $isAdmin = self::is_admin($users[$userIdLoop]['id']);
-        if ($userStatus === 5) {
-            if ($users[$userIdLoop]['has_certificates']) {
-                $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_graduated.svg" width="22px" height="22px">';
-            } else {
-                $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_student.svg" width="22px" height="22px">';
-            }
-        } else {
-            if ($userStatus === 1) {
-                if ($isAdmin) {
-                    $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_admin.svg" width="22px" height="22px">';
-                } else {
-                    $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_teacher.svg" width="22px" height="22px">';
-                }
-            }
-        }
-
+        $iconStatus = $users[$userIdLoop]['icon_status'];
         $nameComplete = $users[$userIdLoop]['complete_name'];
         $url = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$userIdLoop;
 
@@ -3285,30 +3266,7 @@ class SocialManager extends UserManager
         $currentUserId = api_get_user_id();
         $authorId = (int) $authorInfo['user_id'];
         $receiverId = (int) $receiverInfo['user_id'];
-        $userStatus = (int) $authorInfo['status'];
-        $urlImg = api_get_path(WEB_IMG_PATH);
-        $isAdmin = self::is_admin($authorId);
-
-        $iconStatus = '';
-        switch ($userStatus) {
-            case STUDENT:
-                if ($authorInfo['has_certificates']) {
-                    $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_graduated.svg" width="22px" height="22px">';
-                } else {
-                    $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_student.svg" width="22px" height="22px">';
-                }
-                break;
-            case COURSEMANAGER:
-                if ($isAdmin) {
-                    $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_admin.svg" width="22px" height="22px">';
-                } else {
-                    $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_teacher.svg" width="22px" height="22px">';
-                }
-                break;
-            case STUDENT_BOSS:
-                $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_teacher.svg" width="22px" height="22px">';
-                break;
-        }
+        $iconStatus = $authorInfo['icon_status'];
 
         $date = Display::dateToStringAgoAndLongDate($message['send_date']);
         $avatarAuthor = $authorInfo['avatar'];

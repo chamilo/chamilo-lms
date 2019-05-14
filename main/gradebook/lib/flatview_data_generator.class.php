@@ -345,13 +345,8 @@ class FlatViewDataGenerator
         $scoreDisplay = ScoreDisplay::instance();
 
         $data = [];
-        $displaytype = SCORE_DIV;
-        if ($ignore_score_color) {
-            $displaytype |= SCORE_IGNORE_SPLIT;
-        }
         //@todo move these in a function
         $sum_categories_weight_array = [];
-
         $mainCategoryId = null;
         $mainCourseCategory = $this->getMainCourseCategory();
         if (!empty($mainCourseCategory)) {

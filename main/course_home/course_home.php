@@ -183,10 +183,13 @@ $showAutoLaunchLpWarning = false;
 $course_id = api_get_course_int_id();
 $lpAutoLaunch = api_get_course_setting('enable_lp_auto_launch');
 $session_id = api_get_session_id();
+
+$allowAutoLaunchForCourseAdmins = api_is_platform_admin() || api_is_allowed_to_edit(true, true);
+
 if (!empty($lpAutoLaunch)) {
     if ($lpAutoLaunch == 2) {
         // LP list
-        if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+        if ($allowAutoLaunchForCourseAdmins) {
             $showAutoLaunchLpWarning = true;
         } else {
             $session_key = 'lp_autolaunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
@@ -220,7 +223,7 @@ if (!empty($lpAutoLaunch)) {
         if (Database::num_rows($result) > 0) {
             $lp_data = Database::fetch_array($result, 'ASSOC');
             if (!empty($lp_data['id'])) {
-                if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+                if ($allowAutoLaunchForCourseAdmins) {
                     $showAutoLaunchLpWarning = true;
                 } else {
                     $session_key = 'lp_autolaunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
@@ -244,7 +247,7 @@ if ($showAutoLaunchLpWarning) {
 
 $forumAutoLaunch = api_get_course_setting('enable_forum_auto_launch');
 if ($forumAutoLaunch == 1) {
-    if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+    if ($allowAutoLaunchForCourseAdmins) {
         if (empty($autoLaunchWarning)) {
             $autoLaunchWarning = get_lang('TheForumAutoLaunchSettingIsOnStudentsWillBeRedirectToTheForumTool');
         }
@@ -258,7 +261,7 @@ if ($forumAutoLaunch == 1) {
 if (api_get_configuration_value('allow_exercise_auto_launch')) {
     $exerciseAutoLaunch = (int) api_get_course_setting('enable_exercise_auto_launch');
     if ($exerciseAutoLaunch == 2) {
-        if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+        if ($allowAutoLaunchForCourseAdmins) {
             if (empty($autoLaunchWarning)) {
                 $autoLaunchWarning = get_lang(
                     'TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToTheExerciseList'
@@ -271,7 +274,7 @@ if (api_get_configuration_value('allow_exercise_auto_launch')) {
             exit;
         }
     } elseif ($exerciseAutoLaunch == 1) {
-        if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+        if ($allowAutoLaunchForCourseAdmins) {
             if (empty($autoLaunchWarning)) {
                 $autoLaunchWarning = get_lang(
                     'TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificExercise'
@@ -311,7 +314,7 @@ if (api_get_configuration_value('allow_exercise_auto_launch')) {
 
 $documentAutoLaunch = api_get_course_setting('enable_document_auto_launch');
 if ($documentAutoLaunch == 1) {
-    if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+    if ($allowAutoLaunchForCourseAdmins) {
         if (empty($autoLaunchWarning)) {
             $autoLaunchWarning = get_lang('TheDocumentAutoLaunchSettingIsOnStudentsWillBeRedirectToTheDocumentTool');
         }

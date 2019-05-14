@@ -1525,6 +1525,15 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
     // Maintain the user_id index for backwards compatibility
     $result['user_id'] = $result['id'] = $user_id;
 
+    $hasCertificates = Certificate::getCertificateByUser($user_id);
+    $result['has_certificates'] = 0;
+    if (!empty($hasCertificates)) {
+        $result['has_certificates'] = 1;
+    }
+
+    $result['icon_status'] = '';
+    $result['is_admin'] = UserManager::is_admin($user_id);
+
     // Getting user avatar.
     if ($loadAvatars) {
         $result['avatar'] = '';
@@ -1571,6 +1580,31 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
         } else {
             $result['avatar_medium'] = $user['avatar_medium'];
         }
+
+        $iconStatus = '';
+        $urlImg = api_get_path(WEB_IMG_PATH);
+
+        switch ($result['status']) {
+            case STUDENT:
+                if ($result['has_certificates']) {
+                    $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_graduated.svg" width="22px" height="22px">';
+                } else {
+                    $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_student.svg" width="22px" height="22px">';
+                }
+                break;
+            case COURSEMANAGER:
+                if ($result['is_admin']) {
+                    $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_admin.svg" width="22px" height="22px">';
+                } else {
+                    $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_teacher.svg" width="22px" height="22px">';
+                }
+                break;
+            case STUDENT_BOSS:
+                $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_teacher.svg" width="22px" height="22px">';
+                break;
+        }
+
+        $result['icon_status'] = $iconStatus;
     }
 
     if (isset($user['user_is_online'])) {
@@ -1589,12 +1623,6 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
     }
 
     $result['profile_url'] = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id;
-
-    $hasCertificates = Certificate::getCertificateByUser($user_id);
-    $result['has_certificates'] = 0;
-    if (!empty($hasCertificates)) {
-        $result['has_certificates'] = 1;
-    }
 
     // Send message link
     $sendMessage = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='.$user_id;

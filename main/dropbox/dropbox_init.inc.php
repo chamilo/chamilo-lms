@@ -180,7 +180,7 @@ if (empty($session_id)) {
 // only when it is needed.
 if ($action == 'add') {
     $dropbox_person = new Dropbox_Person(
-        $_user['user_id'],
+        $user_id,
         $is_courseAdmin,
         $is_courseTutor
     );

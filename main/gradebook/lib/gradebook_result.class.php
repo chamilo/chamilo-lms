@@ -38,7 +38,6 @@ class GradeBookResult
                     if (isset($header_col['header'])) {
                         $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($header_col['header']))).';';
                     }
-
                 } else {
                     $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($header_col))).';';
                 }

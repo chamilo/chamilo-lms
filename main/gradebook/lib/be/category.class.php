@@ -987,7 +987,6 @@ class Category implements GradebookItem
                         $session_id
                     );
 
-
                     $catweight = 0;
                     if ($cat->get_weight() != 0) {
                         $catweight = $cat->get_weight();

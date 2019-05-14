@@ -640,9 +640,10 @@ $_configuration['score_grade_model'] = [
 // SETTINGS FOR USER COURSE LIST
 // Manage the links to Session Index page
 // 1 = Default. Works as it is now (default is to link to the special session page)
-// 0 = No link (not clickable)
+// 0 = No link (hide session title)
 // 2 = Link to the course if there is only one course
 // 3 = Session link will make course list foldable
+// 4 = No link (only session title)
 //$_configuration['courses_list_session_title_link'] = 1;
 // New grid view the list of courses
 //$_configuration['view_grid_courses'] = true;

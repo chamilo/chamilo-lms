@@ -173,18 +173,16 @@ $logInfo = [
     'tool_id' => 0,
     'tool_id_detail' => 0,
     'action' => $action,
-    'info' => '',
 ];
 Event::registerLog($logInfo);
 
-/*Auto launch code */
+/* Auto launch code */
 $autoLaunchWarning = '';
 $showAutoLaunchLpWarning = false;
 $course_id = api_get_course_int_id();
 $lpAutoLaunch = api_get_course_setting('enable_lp_auto_launch');
 $session_id = api_get_session_id();
-
-$allowAutoLaunchForCourseAdmins = api_is_platform_admin() || api_is_allowed_to_edit(true, true);
+$allowAutoLaunchForCourseAdmins = api_is_platform_admin() || api_is_allowed_to_edit(true, true) || api_is_coach();
 
 if (!empty($lpAutoLaunch)) {
     if ($lpAutoLaunch == 2) {

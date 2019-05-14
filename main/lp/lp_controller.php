@@ -682,7 +682,8 @@ switch ($action) {
         }
         break;
     case 'auto_launch':
-        if (api_get_course_setting('enable_lp_auto_launch') == 1) { //Redirect to a specific LP
+        // Redirect to a specific LP
+        if (api_get_course_setting('enable_lp_auto_launch') == 1) {
             if (!$is_allowed_to_edit) {
                 api_not_allowed(true);
             }

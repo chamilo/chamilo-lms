@@ -139,6 +139,9 @@ if (!$is_allowedToEdit) {
 $allowRecordAudio = api_get_setting('enable_record_audio') === 'true';
 $allowTeacherCommentAudio = api_get_configuration_value('allow_teacher_comment_audio') === true;
 
+$js = '<script>'.api_get_language_translate_html().'</script>';
+$htmlHeadXtra[] = $js;
+
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),

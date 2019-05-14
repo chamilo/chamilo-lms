@@ -54,6 +54,9 @@ if (empty($objExercise)) {
     api_not_allowed(true);
 }
 
+$js = '<script>'.api_get_language_translate_html().'</script>';
+$htmlHeadXtra[] = $js;
+
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),

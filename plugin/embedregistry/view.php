@@ -51,7 +51,7 @@ if ($session && $embed->getSession()) {
 $plugin->saveEventAccessTool();
 
 $interbreadcrumb[] = [
-    'name' => $plugin->get_title(),
+    'name' => $plugin->getToolTitle(),
     'url' => api_get_path(WEB_PLUGIN_PATH).$plugin->get_name().'/start.php',
 ];
 

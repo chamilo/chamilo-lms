@@ -26,7 +26,7 @@ $session = api_get_session_entity(api_get_session_id());
 
 $actions = [];
 
-$view = new Template($plugin->get_title());
+$view = new Template($plugin->getToolTitle());
 $view->assign('is_allowed_to_edit', $isAllowedToEdit);
 
 switch ($action) {

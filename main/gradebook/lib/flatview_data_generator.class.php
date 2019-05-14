@@ -397,6 +397,9 @@ class FlatViewDataGenerator
             $export_to_pdf = true;
         }
 
+        $course_code = api_get_course_id();
+        $session_id = api_get_session_id();
+
         foreach ($selected_users as $user) {
             $row = [];
             // User id
@@ -452,8 +455,7 @@ class FlatViewDataGenerator
             $item_value_total = 0;
             $item_total = 0;
             $convert_using_the_global_weight = true;
-            $course_code = api_get_course_id();
-            $session_id = api_get_session_id();
+
             $allcat = $this->category->get_subcategories(
                 null,
                 $course_code,
@@ -500,12 +502,7 @@ class FlatViewDataGenerator
                     $percentage = $sub_cat->get_weight() / ($sub_cat_percentage) * $sub_cat_percentage / $this->category->get_weight();
                     $item_value = $percentage * $item_value;
                     $item_total += $sub_cat->get_weight();
-                    /*
-                        if ($convert_using_the_global_weight) {
-                            $score[0] = $score[0]/$main_weight*$sub_cat->get_weight();
-                            $score[1] = $main_weight ;
-                        }
-                    */
+
                     if (api_get_setting('gradebook_show_percentage_in_reports') === 'false') {
                         $real_score = $scoreDisplay->display_score(
                             $real_score,

@@ -953,7 +953,6 @@ class Category implements GradebookItem
                 return $cacheDriver->fetch($key);
             }
         }
-
         // Classic
         if (!empty($stud_id) && $type == '') {
             if (!empty($course_code)) {
@@ -988,6 +987,7 @@ class Category implements GradebookItem
                         $session_id
                     );
 
+
                     $catweight = 0;
                     if ($cat->get_weight() != 0) {
                         $catweight = $cat->get_weight();
@@ -1005,12 +1005,10 @@ class Category implements GradebookItem
                 /** @var Evaluation $eval */
                 foreach ($evals as $eval) {
                     $eval->setStudentList($this->getStudentList());
-                    $evalres = $eval->calc_score($stud_id, null);
-
+                    $evalres = $eval->calc_score($stud_id);
                     if (isset($evalres) && $eval->get_weight() != 0) {
                         $evalweight = $eval->get_weight();
                         $weightsum += $evalweight;
-                        $count++;
                         if (!empty($evalres[1])) {
                             $ressum += $evalres[0] / $evalres[1] * $evalweight;
                         }

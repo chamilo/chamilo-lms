@@ -126,10 +126,10 @@ class IntroductionSection extends Basic
             [
                 'Language',
                 'ShowBlocks',
-                'Source',
             ],
             api_get_setting('enabled_wiris') === 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
             ['Toolbarswitch'],
+            ['Source'],
         ];
     }
 }

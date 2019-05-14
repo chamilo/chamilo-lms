@@ -106,7 +106,7 @@ class TestQuestionDescription extends Basic
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['PageBreak', 'ShowBlocks'],
             ['Toolbarswitch'],
-            ['Source']
+            ['Source'],
         ];
     }
 
@@ -138,7 +138,7 @@ class TestQuestionDescription extends Basic
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['Bold', 'Italic', 'Underline'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight'],
-            ['Source']
+            ['Source'],
         ];
     }
 
@@ -168,7 +168,7 @@ class TestQuestionDescription extends Basic
                 api_get_configuration_value('translate_html') ? 'Language' : '',
             ],
             ['Toolbarswitch'],
-            ['Source']
+            ['Source'],
         ];
     }
 }

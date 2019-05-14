@@ -54,6 +54,9 @@ if (empty($objExercise)) {
     api_not_allowed(true);
 }
 
+$js = '<script>'.api_get_language_translate_html().'</script>';
+$htmlHeadXtra[] = $js;
+
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
@@ -75,7 +78,7 @@ if (api_get_configuration_value('quiz_prevent_copy_paste')) {
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'jquery.nocopypaste.js"></script>';
 }
 
-if ($origin != 'learnpath') {
+if (!in_array($origin, ['learnpath', 'embeddable'])) {
     // So we are not in learnpath tool
     Display::display_header($nameTools, get_lang('Exercise'));
 } else {
@@ -88,7 +91,7 @@ if ($origin != 'learnpath') {
 }
 
 // I'm in a preview mode as course admin. Display the action menu.
-if (api_is_course_admin() && $origin != 'learnpath') {
+if (api_is_course_admin() && !in_array($origin, ['learnpath', 'embeddable'])) {
     echo '<div class="actions">';
     echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.
         Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';
@@ -148,7 +151,7 @@ if ($objExercise->selectAttempts() > 0) {
             'warning',
             false
         );
-        if ($origin != 'learnpath') {
+        if (!in_array($origin, ['learnpath', 'embeddable'])) {
             //we are not in learnpath tool
             Display::display_footer();
         }

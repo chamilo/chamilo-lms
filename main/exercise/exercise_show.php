@@ -139,6 +139,9 @@ if (!$is_allowedToEdit) {
 $allowRecordAudio = api_get_setting('enable_record_audio') === 'true';
 $allowTeacherCommentAudio = api_get_configuration_value('allow_teacher_comment_audio') === true;
 
+$js = '<script>'.api_get_language_translate_html().'</script>';
+$htmlHeadXtra[] = $js;
+
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
@@ -288,7 +291,7 @@ if ($origin == 'learnpath' && !isset($_GET['fb_type'])) {
     $show_results = false;
 }
 
-if ($is_allowedToEdit && in_array($action, ['qualify', 'edit'])) {
+if ($is_allowedToEdit && in_array($action, ['qualify', 'edit', 'export'])) {
     $show_results = true;
 }
 
@@ -489,7 +492,7 @@ foreach ($questionList as $questionId) {
                             <td colspan=\"2\">
                                 <div id=\"hotspot-solution-$questionId-$id\"></div>
                                 <script>
-                                    $(document).on('ready', function () {
+                                    $(function() {
                                         new HotspotQuestion({
                                             questionId: $questionId,
                                             exerciseId: {$objExercise->id},                                            
@@ -658,7 +661,7 @@ foreach ($questionList as $questionId) {
                             <td colspan=\"2\">
                                 <div id=\"hotspot-solution\"></div>
                                 <script>
-                                    $(document).on('ready', function () {
+                                    $(function() {
                                         new HotspotQuestion({
                                             questionId: $questionId,
                                             exerciseId: {$objExercise->id},
@@ -727,7 +730,6 @@ foreach ($questionList as $questionId) {
         if ($isBossOfStudent) {
             $isFeedbackAllowed = false;
         }
-
         $marksname = '';
         if ($isFeedbackAllowed && $action != 'export') {
             $name = 'fckdiv'.$questionId;

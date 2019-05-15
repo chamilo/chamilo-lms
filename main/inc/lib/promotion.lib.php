@@ -295,18 +295,31 @@ class Promotion extends Model
      */
     public function save($params, $show_query = false)
     {
-        $id = parent::save($params, $show_query);
-        if (!empty($id)) {
+        $promotion = new \Chamilo\CoreBundle\Entity\Promotion();
+
+        $em = Database::getManager();
+        $repo = $em->getRepository('ChamiloCoreBundle:Career');
+        $promotion
+            ->setName($params['name'])
+            ->setStatus($params['status'])
+            ->setDescription($params['description'])
+            ->setCareer($repo->find($params['career_id']))
+        ;
+
+        $em->persist($promotion);
+        $em->flush();
+
+        if (!empty($promotion->getId())) {
             Event::addEvent(
                 LOG_PROMOTION_CREATE,
                 LOG_PROMOTION_ID,
-                $id,
+                $promotion->getId(),
                 api_get_utc_datetime(),
                 api_get_user_id()
             );
         }
 
-        return $id;
+        return $promotion->getId();
     }
 
     /**

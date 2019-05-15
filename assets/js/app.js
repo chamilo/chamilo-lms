@@ -17,11 +17,6 @@ const legacyIndex = Routing.generate('legacy_index');
 const mainUrl = Routing.generate('web.main');
 const webAjax = Routing.generate('web.ajax');
 
-/*console.log(homePublicUrl);
-console.log(legacyIndex);
-console.log(mainUrl);
-console.log(webAjax);*/
-
 var ajax_url = webAjax + 'chat.ajax.php';
 var online_button = '<img src="' + homePublicUrl + 'img/statusonline.png">';
 var offline_button = '<img src="' + homePublicUrl + 'img/statusoffline.png">';
@@ -31,7 +26,36 @@ var disconnect_lang = '{{ "ChatDisconnected"|get_lang }}';*/
 var connect_lang = 'ChatConnected';
 var disconnect_lang = 'ChatDisconnected';
 
+// Import Vue and Components
+import Vue from 'vue';
+import {VueConfig} from './VueConfig';
+import Example from './components/Example'
+
+
 $(function() {
+    // Create App Aplication Vue
+    new Vue(
+        Object.assign(VueConfig, {
+            el: '#app_header',
+            components: {Example},
+            data() {
+                return {
+                    chamilo: ''
+                }
+            },
+            methods: {
+                getConsole() {
+                    console.log("Hello Vuejs");
+                }
+            }, created() {
+                this.chamilo = "Hello Chamilo";
+                this.getConsole();
+                console.log(this.chamilo);
+            }
+        })
+    );
+
+
     var webCidReq = '&cidReq=' + $('body').attr('data-course-code');
     window.webCidReq = webCidReq;
 
@@ -344,19 +368,6 @@ $(function() {
         placement: 'right'
     };
     $('.boot-tooltip').tooltip(tip_options);
-    // var more = '{{ 'SeeMore' | get_lang | escape('js') }}';
-    // var close = '{{ 'Close' | get_lang | escape('js') }}';
-
-    var more = 'see more';
-    var close = 'close';
-    // readmore dont work with jquery3
-    // $('.list-teachers').readmore({
-    //     speed: 75,
-    //     moreLink: '<a href="#">' + more + '</a>',
-    //     lessLink: '<a href="#">' + close + '</a>',
-    //     collapsedHeight: 35,
-    //     blockCSS: 'display: block; width: 100%;'
-    // });
 
     $('.star-rating li a').on('click', function(event) {
         var id = $(this).parents('ul').attr('id');

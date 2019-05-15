@@ -127,8 +127,9 @@ function get_users($from, $limit, $column, $direction)
     $all_datas = [];
     foreach ($students as $student_data) {
         $student_id = $student_data['user_id'];
+        $student_data = api_get_user_info($student_id);
         if (isset($_GET['id_session'])) {
-            $courses = Tracking :: get_course_list_in_session_from_student($student_id, $sessionId);
+            $courses = Tracking::get_course_list_in_session_from_student($student_id, $sessionId);
         }
 
         $avg_time_spent = $avg_student_score = $avg_student_progress = 0;
@@ -139,7 +140,11 @@ function get_users($from, $limit, $column, $direction)
                 $courseId = $courseInfo['real_id'];
 
                 if (CourseManager::is_user_subscribed_in_course($student_id, $course_code, true)) {
-                    $avg_time_spent += Tracking::get_time_spent_on_the_course($student_id, $courseId, $_GET['id_session']);
+                    $avg_time_spent += Tracking::get_time_spent_on_the_course(
+                        $student_id,
+                        $courseId,
+                        $_GET['id_session']
+                    );
                     $my_average = Tracking::get_avg_student_score($student_id, $course_code);
                     if (is_numeric($my_average)) {
                         $avg_student_score += $my_average;

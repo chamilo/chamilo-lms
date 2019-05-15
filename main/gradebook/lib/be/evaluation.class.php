@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
+use ChamiloSession as Session;
 
 /**
  * Class Evaluation.

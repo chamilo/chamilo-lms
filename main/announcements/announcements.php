@@ -292,7 +292,7 @@ switch ($action) {
         if (empty($count)) {
             $html = '';
             if ($allowToEdit && (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')) {
-                $html .= '<div id="no-data-view">';
+                $html .= '<div id="no-data-view" class="tool-view">';
                 $html .= '<h3>'.get_lang('Announcements').'</h3>';
                 $html .= Display::return_icon('valves.png', '', [], 64);
                 $html .= '<div class="controls">';

@@ -31,7 +31,7 @@ Encore
     // .enableVersioning(Encore.isProduction())
 
     .enableSassLoader()
-
+    .enableVueLoader()
     .autoProvidejQuery()
 ;
 

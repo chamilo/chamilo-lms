@@ -246,22 +246,26 @@ class Career extends Model
      */
     public function save($params, $show_query = false)
     {
-        if (isset($params['description'])) {
-            $params['description'] = Security::remove_XSS($params['description']);
-        }
+        $career = new \Chamilo\CoreBundle\Entity\Career();
+        $career
+            ->setName($params['name'])
+            ->setStatus($params['status'])
+            ->setDescription($params['description']);
 
-        $id = parent::save($params);
-        if (!empty($id)) {
+        Database::getManager()->persist($career);
+        Database::getManager()->flush();
+
+        if ($career->getId()) {
             Event::addEvent(
                 LOG_CAREER_CREATE,
                 LOG_CAREER_ID,
-                $id,
+                $career->getId(),
                 api_get_utc_datetime(),
                 api_get_user_id()
             );
         }
 
-        return $id;
+        return $career->getId();
     }
 
     /**

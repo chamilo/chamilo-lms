@@ -66,7 +66,7 @@ $(function () {
     });
 });
 </script>
-<header class="app-header navbar">
+<header id="app_header" class="app-header navbar">
     <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -77,9 +77,6 @@ $(function () {
         <img class="navbar-brand-full" width="130"
              src="{{ url('legacy_public') ~ 'build/css/themes/'~ theme ~'/images/logo_chamilo.svg' }}"
              alt="Chamilo"/>
-        <img class="navbar-brand-minimized" width="35"
-             src="{{ url('legacy_public') ~ 'build/css/themes/'~ theme ~'/images/avatar.svg' }}"
-             alt="Chamilo">
     </a>
 
     <ul class="nav navbar-nav d-md-down-none">

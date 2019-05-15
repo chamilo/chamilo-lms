@@ -226,7 +226,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
         $courseInfo = api_get_course_info();
         $titleThematic = $thematic_advance.' : '.$courseInfo['name'].' <b>( '.$thematicScore.' )</b>';
 
-        $infoUser = '<div class="thematic-avatar"><img src="'.$userInfo['avatar'].'" class="img-circle img-responsive"></div>';
+        $infoUser = '<div class="thematic-avatar"><img src="'.$userInfo['avatar'].'" class="img-circle img-fluid"></div>';
         $infoUser .= '<div class="progress">
                         <div class="progress-bar progress-bar-primary" role="progressbar" style="width: '.$thematicScore.';">
                         '.$thematicScore.'

@@ -389,7 +389,7 @@ function show_add_forum_form($inputvalues = [], $lp_id)
             $show_preview_image = Display::img(
                 $image_path,
                 null,
-                ['class' => 'img-responsive']
+                ['class' => 'img-fluid']
             );
             $form->addElement('label', get_lang('PreviewImage'), $show_preview_image);
             $form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage'));

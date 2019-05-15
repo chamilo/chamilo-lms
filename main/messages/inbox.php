@@ -35,6 +35,8 @@ if (isset($_GET['messages_page_nr'])) {
 
 $nameTools = get_lang('Messages');
 $show_message = null;
+$messageContent = null;
+
 if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
     $info_reply = [];
     $info_delete = [];
@@ -72,12 +74,12 @@ if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
         if (isset($user_reply) && !is_null($user_id_by_email) && strlen($info_reply[0]) > 0) {
             MessageManager::send_message($user_id_by_email, $title, $content);
             $show_message .= MessageManager::return_message($user_id_by_email, 'confirmation');
-            $social_right_content .= MessageManager::inbox_display();
+            $messageContent .= MessageManager::inbox_display();
             exit;
         } elseif (is_null($user_id_by_email)) {
             $message_box = get_lang('ErrorSendingMessage');
             $show_message .= Display::return_message(api_xml_http_response_encode($message_box), 'error');
-            $social_right_content .= MessageManager::inbox_display();
+            $messageContent .= MessageManager::inbox_display();
             exit;
         }
     } elseif (trim($info_delete[0]) == 'delete') {
@@ -89,7 +91,7 @@ if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
         }
         $message_box = get_lang('SelectedMessagesDeleted');
         $show_message .= Display::return_message(api_xml_http_response_encode($message_box));
-        $social_right_content .= MessageManager::inbox_display();
+        $messageContent .= MessageManager::inbox_display();
         exit;
     }
 }
@@ -126,15 +128,8 @@ if ($allowSocial === false && $allowMessage) {
         Display::return_icon('outbox.png', get_lang('Outbox')).'</a>';
 }
 
-// LEFT CONTENT
-$social_menu_block = '';
-if ($allowSocial) {
-    // Block Social Menu
-    $social_menu_block = SocialManager::show_social_menu('messages');
-}
-
 // Right content
-$social_right_content = '';
+
 $keyword = '';
 if ($allowSocial) {
     $actionsLeft = '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
@@ -148,11 +143,11 @@ if ($allowSocial) {
         $keyword = $values['keyword'];
     }
     $actionsRight = $form->returnForm();
-    $social_right_content .= Display::toolbarAction('toolbar', [$actionsLeft, $actionsRight]);
+    $toolbar = Display::toolbarAction('toolbar', [$actionsLeft, $actionsRight]);
 }
 
 if (!isset($_GET['del_msg'])) {
-    $social_right_content .= MessageManager::inbox_display($keyword);
+    $messageContent .= MessageManager::inbox_display($keyword);
 } else {
     $num_msg = (int) $_POST['total'];
     for ($i = 0; $i < $num_msg; $i++) {
@@ -164,7 +159,7 @@ if (!isset($_GET['del_msg'])) {
             );
         }
     }
-    $social_right_content .= MessageManager::inbox_display();
+    $messageContent .= MessageManager::inbox_display();
 }
 
 $tpl = new Template(null);
@@ -173,15 +168,11 @@ if ($actions) {
     $tpl->assign('actions', Display::toolbarAction('toolbar', [$actions]));
 }
 // Block Social Avatar
-SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
-if (api_get_setting('allow_social_tool') == 'true') {
-    $tpl->assign('social_menu_block', $social_menu_block);
-    $tpl->assign('social_right_content', $social_right_content);
-    $social_layout = $tpl->get_template('social/inbox.tpl');
-    $tpl->display($social_layout);
-} else {
-    $content = $social_right_content;
+
+    $tpl->assign('content_inbox', $messageContent);
+    $social_layout = $tpl->get_template('social/inbox.html.twig');
+    $content =  $tpl->fetch($social_layout);
     $tpl->assign('message', $show_message);
+    $tpl->assign('actions', $toolbar);
     $tpl->assign('content', $content);
     $tpl->display_one_col_template();
-}

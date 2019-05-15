@@ -188,7 +188,7 @@ if ($query != '' || ($query_vars['search_type'] == '1' && count($query_vars) > 2
             );
 
             $tags = null;
-            $group['picture'] = '<img class="img-responsive img-circle" src="'.$picture['file'].'" />';
+            $group['picture'] = '<img class="img-fluid img-circle" src="'.$picture['file'].'" />';
 
             $members = Display::returnFontAwesomeIcon('user').'( '.$count_users_group.' )';
             $item_1 = Display::tag('p', $url_open.$name.$url_close);

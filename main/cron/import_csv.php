@@ -1308,6 +1308,9 @@ class ImportCsv
             }
 
             $eventAlreadySent = [];
+
+            $tpl = new Template(null, false, false, false, false, false);
+
             foreach ($eventsToCreateFinal as $event) {
                 $courseInfo = $event['course_info'];
                 $item = $event['item'];
@@ -1359,7 +1362,7 @@ class ImportCsv
                 }
 
                 // Working days (Mon-Fri)see BT#12156#note-16
-                $days = 5;
+                $days = 3;
                 $startDatePlusDays = api_strtotime("$days weekdays");
 
                 /*
@@ -1368,7 +1371,7 @@ class ImportCsv
                 $startDatePlusDays = "$timePart $datePart";
                 */
                 $this->logger->addInfo(
-                    "startDatePlusDays: ".api_get_utc_datetime($startDatePlusDays).' - First date: '.$firstDate
+                    'startDatePlusDays: '.api_get_utc_datetime($startDatePlusDays).' - First date: '.$firstDate
                 );
 
                 // Send
@@ -1383,7 +1386,8 @@ class ImportCsv
                     $end = $firstEndDate;
 
                     if (!empty($end) &&
-                        api_format_date($start, DATE_FORMAT_LONG) == api_format_date($end, DATE_FORMAT_LONG)
+                        api_format_date($start, DATE_FORMAT_LONG) ==
+                        api_format_date($end, DATE_FORMAT_LONG)
                     ) {
                         $date = api_format_date($start, DATE_FORMAT_LONG).' ('.
                             api_format_date($start, TIME_NO_SEC_FORMAT).' '.
@@ -1399,19 +1403,38 @@ class ImportCsv
                     }
 
                     $courseTitle = $courseInfo['title'].$sessionName;
-                    $emailBody = get_lang('Dear').' ((user_firstname)) <br />'.
-                        sprintf(
-                            get_lang('YouHaveBeenSubscribedToCourseXTheStartDateXAndCommentX'),
-                            $courseTitle,
-                            $date,
-                            $event['comment']
-                        )
-                    ;
 
-                    $subject = sprintf(
+                    /*$subject = sprintf(
                         get_lang('AgendaAvailableInCourseX'),
                         $courseInfo['title']
+                    );*/
+
+                    $sessionExtraFieldValue = new ExtraFieldValue('session');
+                    $values = $sessionExtraFieldValue->get_values_by_handler_and_field_variable(
+                        $event['session_id'],
+                        $this->extraFieldIdNameList['session_career']
                     );
+
+                    $careerName = '';
+                    if (!empty($values)) {
+                        foreach ($values as $value) {
+                            $careerName = $value['value'];
+                        }
+                    }
+
+                    $subject = sprintf(
+                        get_lang('WelcomeToPortalXInCourseSessionX'),
+                        api_get_setting('siteName'),
+                        $courseInfo['title']
+                    );
+
+                    $tpl->assign('site_name', api_get_setting('siteName'));
+                    $tpl->assign('course_title', $courseTitle);
+                    $tpl->assign('career_name', $careerName);
+                    $tpl->assign('first_lesson', $date);
+                    $tpl->assign('location', $eventComment);
+
+                    $emailBody = $tpl->get_template('mail/custom_calendar_welcome.dist.tpl');
 
                     $coaches = SessionManager::getCoachesByCourseSession(
                         $event['session_id'],
@@ -1428,7 +1451,7 @@ class ImportCsv
 
                     if (count($announcementsWithTitleList) === 0) {
                         $this->logger->addInfo(
-                            "Mail to be sent because start date: ".$event['start']." and no announcement found."
+                            'Mail to be sent because start date: '.$event['start'].' and no announcement found.'
                         );
 
                         $senderId = $this->defaultAdminId;

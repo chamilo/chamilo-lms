@@ -8395,4 +8395,8 @@ $LegalTermsAgreementStatus = "Terms of use agreement status";
 $HideSurveyInvitationLink = "Hide survey invitation link";
 $LeaveAMessage = "Leave a message";
 $OrphanQuestion = "Orphan question";
+$WelcomeToPortalXInCourseSessionX = "Welcome to portal %s Course session: %s";
+$WelcomeToPortalXInCourseSessionXCoursePartOfCareerX = "Welcome to portal %s in course %s, part of career %s";
+$YourNextModule = "Your next module";
+$FirstLesson = "First lesson";
 ?>

@@ -2929,7 +2929,7 @@ $Visible = "Zichtbaar/onzichtbaar";
 $NewDir = "Naam van de nieuwe map";
 $DirCr = "Map is aangemaakt.";
 $Download = "Downloaden";
-$Group = "Groepen";
+$Group = "Groep";
 $Edit = "Wijzig";
 $GroupForum = "groepsforum";
 $Language = "Taal";
@@ -4669,7 +4669,7 @@ $KeywordTip = "met komma's ertussen (letters, cijfers, -.)";
 $Coverage = "Doelgebied";
 $CoverageTip = "bv. Bachelor in xxx";
 $KwNote = "Als u de taal van de beschrijving wil veranderen, voeg niet tegelijk nieuwe sleutelwoorden toe.";
-$Location = "URL/URI";
+$Location = "Locatie";
 $LocationTip = "klik om het object te openen";
 $Store = "Bewaren";
 $DeleteAll = "Alle metadata verwijderen";
@@ -6871,4 +6871,8 @@ $YouHaveBeenSubscribedToCourseXTheStartDateXAndCommentX = "<br />Je bent ingesch
 Indien je nog geen toegang hebt tot onze ELO, zal je bij de eerste les de nodige info ontvangen van jouw lesgever.<br /> <br />
 Het eerstvolgende moment dat voor deze module werd ingevuld is: <br />
 %s <br /> %s";
+$WelcomeToPortalXInCourseSessionXCoursePartOfCareerX = "Welkom bij %s. Je bent ingeschreven voor de module %s 
+Deze module maakt deel uit van de opleiding  %s";
+$YourNextModule = "Jouw eerstvolgende lesmoment voor deze module";
+$FirstLesson = "Eerste lesmoment";
 ?>

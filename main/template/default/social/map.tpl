@@ -61,7 +61,6 @@ function start()
         });
 
         // Auto-boxing
-
         if (markers.length) {
             var bounds = new google.maps.LatLngBounds();
             for (var i = 0; i < markers.length; ++i) {

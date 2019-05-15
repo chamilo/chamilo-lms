@@ -523,7 +523,7 @@ switch ($action) {
 
         $form->addHtml("
             <script>
-                $(document).on('ready', function () {
+                $(function () {
                     $('#announcement_preview').on('click', function() {  
                         var users = [];
                         $('#users_to option').each(function() {
@@ -566,7 +566,7 @@ switch ($action) {
                 $form->addHtml(
                     "
                     <script>
-                        $(document).on('ready', function () {
+                        $(function () {
                             $('#choose_recipients').click();
                         });
                     </script>

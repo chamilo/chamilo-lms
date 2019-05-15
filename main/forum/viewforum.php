@@ -476,10 +476,7 @@ if (is_array($threads)) {
             }
 
             $_user = api_get_user_info($row['user_id']);
-            $urlImg = api_get_path(WEB_IMG_PATH);
-            $iconStatus = null;
-            $isAdmin = UserManager::is_admin($row['user_id']);
-
+            $iconStatus = $_user['icon_status'];
             $last_post_info = get_last_post_by_thread(
                 $row['c_id'],
                 $row['thread_id'],
@@ -496,20 +493,6 @@ if (is_array($threads)) {
                     '',
                     $poster_info['username']
                 );
-            }
-
-            if ($_user['status'] == 5) {
-                if ($_user['has_certificates']) {
-                    $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_graduated.svg" width="22px" height="22px">';
-                } else {
-                    $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_student.svg" width="22px" height="22px">';
-                }
-            } elseif ($_user['status'] == 1) {
-                if ($isAdmin) {
-                    $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_admin.svg" width="22px" height="22px">';
-                } else {
-                    $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_teacher.svg" width="22px" height="22px">';
-                }
             }
 
             $html .= '<div class="thumbnail">'.display_user_image($row['user_id'], $name, $origin).'</div>';

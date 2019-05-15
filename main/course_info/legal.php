@@ -8,8 +8,8 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
-$course_code = isset($_REQUEST['course_code']) ? $_REQUEST['course_code'] : null;
-$session_id = isset($_REQUEST['session_id']) ? intval($_REQUEST['session_id']) : null;
+$course_code = isset($_REQUEST['course_code']) ? Security::remove_XSS($_REQUEST['course_code']) : null;
+$session_id = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : null;
 $user_id = api_get_user_id();
 
 if (empty($course_code)) {

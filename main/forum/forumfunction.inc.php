@@ -3200,13 +3200,13 @@ function show_add_post_form($current_forum, $action, $form_values = '', $showPre
 
     $iframe = null;
     if ($showPreview) {
-    $myThread = Security::remove_XSS($myThread);
-    if ($action != 'newthread' && !empty($myThread)) {
+        $myThread = Security::remove_XSS($myThread);
+        if ($action != 'newthread' && !empty($myThread)) {
             $iframe = "<iframe style=\"border: 1px solid black\" src=\"iframe_thread.php?".api_get_cidreq(
                 )."&forum=".$forumId."&thread=".$myThread."#".$my_post."\" width=\"100%\"></iframe>";
-    	}
-    	if (!empty($iframe)) {
-        	$form->addElement('label', get_lang('Thread'), $iframe);
+        }
+        if (!empty($iframe)) {
+            $form->addElement('label', get_lang('Thread'), $iframe);
         }
     }
 

@@ -40,7 +40,6 @@ class TestQuestionDescription extends Basic
             $config['toolbar'] = $this->getNormalToolbar();
         } else {
             $config['toolbar_minToolbar'] = $this->getMinimizedToolbar();
-
             $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
         }
 
@@ -53,7 +52,7 @@ class TestQuestionDescription extends Basic
     public function getConditionalPlugins()
     {
         $plugins = [];
-        if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
+        if (api_get_setting('show_glossary_in_documents') === 'ismanual') {
             $plugins[] = 'glossary';
         }
 
@@ -90,11 +89,23 @@ class TestQuestionDescription extends Basic
             ['Table', '-', 'CreateDiv'],
             ['BulletedList', 'NumberedList', 'HorizontalRule', '-', 'Outdent', 'Indent', 'Blockquote'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-            ['Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript', '-', 'TextColor', 'BGColor'],
+            [
+                'Bold',
+                'Italic',
+                'Underline',
+                'Strike',
+                '-',
+                'Subscript',
+                'Superscript',
+                '-',
+                'TextColor',
+                'BGColor',
+                api_get_configuration_value('translate_html') ? 'Language' : '',
+            ],
             [api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : ''],
             ['Styles', 'Format', 'Font', 'FontSize'],
-            ['PageBreak', 'ShowBlocks', 'Source'],
-            ['Toolbarswitch'],
+            ['PageBreak', 'ShowBlocks'],
+            ['Toolbarswitch', 'Source'],
         ];
     }
 
@@ -110,11 +121,23 @@ class TestQuestionDescription extends Basic
             ['Link', 'Unlink'],
             ['Image', 'Video', 'Flash', 'Oembed', 'Youtube', 'Audio'],
             ['Table', 'SpecialChar'],
-            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'TextColor', 'BGColor', '-', 'Source'],
+            [
+                'NumberedList',
+                'BulletedList',
+                '-',
+                'Outdent',
+                'Indent',
+                '-',
+                'TextColor',
+                'BGColor',
+                '-',
+                api_get_configuration_value('translate_html') ? 'Language' : '',
+            ],
             '/',
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['Bold', 'Italic', 'Underline'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight'],
+            ['Source'],
         ];
     }
 
@@ -131,8 +154,19 @@ class TestQuestionDescription extends Basic
             ['Link', 'Unlink', 'Image', 'Video', 'Flash', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-            ['Styles', 'Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
-            ['Source', 'Toolbarswitch'],
+            [
+                'Styles',
+                'Format',
+                'Font',
+                'FontSize',
+                'Bold',
+                'Italic',
+                'Underline',
+                'TextColor',
+                'BGColor',
+                api_get_configuration_value('translate_html') ? 'Language' : '',
+            ],
+            ['Toolbarswitch', 'Source'],
         ];
     }
 }

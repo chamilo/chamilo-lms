@@ -105,8 +105,7 @@ class TestQuestionDescription extends Basic
             [api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : ''],
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['PageBreak', 'ShowBlocks'],
-            ['Toolbarswitch'],
-            ['Source'],
+            ['Toolbarswitch', 'Source'],
         ];
     }
 
@@ -167,8 +166,7 @@ class TestQuestionDescription extends Basic
                 'BGColor',
                 api_get_configuration_value('translate_html') ? 'Language' : '',
             ],
-            ['Toolbarswitch'],
-            ['Source'],
+            ['Toolbarswitch', 'Source'],
         ];
     }
 }

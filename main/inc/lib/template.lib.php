@@ -1608,11 +1608,13 @@ class Template
             $adminName = '';
             // Administrator name
             if (!empty($name)) {
-                $adminName = get_lang('Manager').' : '.
-                    Display::encrypted_mailto_link(
-                        api_get_setting('emailAdministrator'),
-                        $name
-                    );
+                $adminName = get_lang('Manager').' : ';
+                $adminName .= Display::encrypted_mailto_link(
+                    api_get_setting('emailAdministrator'),
+                    $name,
+                    '',
+                    true
+                );
             }
             $this->assign('administrator_name', $adminName);
         }

@@ -1195,6 +1195,9 @@ $_configuration['required_extra_fields_in_profile'] = [
 // Show a language flag next to the user picture in the social network
 //$_configuration['social_show_language_flag_in_profile'] = false;
 
+// Add subject and body in the mailto: footer
+//$_configuration['add_user_course_information_in_mailto'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

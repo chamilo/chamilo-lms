@@ -1532,6 +1532,8 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
     }
 
     $result['icon_status'] = '';
+    $result['icon_status_medium'] = '';
+
     $result['is_admin'] = UserManager::is_admin($user_id);
 
     // Getting user avatar.
@@ -1581,30 +1583,37 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
             $result['avatar_medium'] = $user['avatar_medium'];
         }
 
-        $iconStatus = '';
         $urlImg = api_get_path(WEB_IMG_PATH);
+        $iconStatus = '';
+        $iconStatusMedium = '';
 
         switch ($result['status']) {
             case STUDENT:
                 if ($result['has_certificates']) {
-                    $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_graduated.svg" width="22px" height="22px">';
+                    $iconStatus = $urlImg.'icons/svg/identifier_graduated.svg';
                 } else {
-                    $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_student.svg" width="22px" height="22px">';
+                    $iconStatus = $urlImg.'icons/svg/identifier_student.svg';
                 }
                 break;
             case COURSEMANAGER:
                 if ($result['is_admin']) {
-                    $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_admin.svg" width="22px" height="22px">';
+                    $iconStatus = $urlImg.'icons/svg/identifier_admin.svg';
                 } else {
-                    $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_teacher.svg" width="22px" height="22px">';
+                    $iconStatus = $urlImg.'icons/svg/identifier_teacher.svg';
                 }
                 break;
             case STUDENT_BOSS:
-                $iconStatus = '<img class="pull-left" src="'.$urlImg.'icons/svg/identifier_teacher.svg" width="22px" height="22px">';
+                $iconStatus = $urlImg.'icons/svg/identifier_teacher.svg';
                 break;
         }
 
+        if (!empty($iconStatus)) {
+            $iconStatusMedium = '<img class="pull-left" src="'.$iconStatus.'" width="32px" height="32px">';
+            $iconStatus = '<img class="pull-left" src="'.$iconStatus.'" width="22px" height="22px">';
+        }
+
         $result['icon_status'] = $iconStatus;
+        $result['icon_status_medium'] = $iconStatusMedium;
     }
 
     if (isset($user['user_is_online'])) {

@@ -15,7 +15,7 @@
                         {% if user.icon_status %}
                             <!-- User icon -->
                             <div class="avatar-icon">
-                                {{ user.icon_status }}
+                                {{ user.icon_status_medium }}
                             </div>
                             <!-- End user icon -->
                         {% endif %}

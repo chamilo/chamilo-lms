@@ -511,14 +511,20 @@ class FlatViewDataGenerator
                         );
                         $temp_score = Display::tip($real_score, $temp_score);
                     } else {
+                        $style = api_get_configuration_value('gradebook_report_score_style');
+                        $defaultStyle = SCORE_DIV_SIMPLE_WITH_CUSTOM;
+                        if (!empty($style)) {
+                            $defaultStyle = (int) $style;
+                        }
                         $real_score = $scoreDisplay->display_score(
                             $real_score,
                             SCORE_DIV_PERCENT,
                             SCORE_ONLY_SCORE
                         );
+
                         $temp_score = $scoreDisplay->display_score(
                             $score,
-                            SCORE_DIV_SIMPLE_WITH_CUSTOM,
+                            $defaultStyle,
                             null
                         );
                         $temp_score = Display::tip($temp_score, $real_score);
@@ -548,10 +554,6 @@ class FlatViewDataGenerator
                         }
                     }
                     $item_value_total += $item_value;
-                }
-
-                if ($convert_using_the_global_weight) {
-                    //$item_total = $main_weight;
                 }
             } else {
                 // All evaluations
@@ -586,6 +588,12 @@ class FlatViewDataGenerator
             $item_value_total += $result['item_value_total'];
             $total_score = [$item_value_total, $item_total];
 
+            $style = api_get_configuration_value('gradebook_report_score_style');
+            $defaultStyle = SCORE_DIV_SIMPLE_WITH_CUSTOM_LETTERS;
+            if (!empty($style)) {
+                $defaultStyle = (int) $style;
+            }
+
             if (!$show_all) {
                 if ($export_to_pdf) {
                     $row['total'] = $scoreDisplay->display_score($total_score);
@@ -596,12 +604,12 @@ class FlatViewDataGenerator
                 if ($export_to_pdf) {
                     $row['total'] = $scoreDisplay->display_score(
                         $total_score,
-                        SCORE_DIV_SIMPLE_WITH_CUSTOM_LETTERS
+                        $defaultStyle
                     );
                 } else {
                     $row[] = $scoreDisplay->display_score(
                         $total_score,
-                        SCORE_DIV_SIMPLE_WITH_CUSTOM_LETTERS
+                        $defaultStyle
                     );
                 }
             }

@@ -1198,6 +1198,10 @@ $_configuration['required_extra_fields_in_profile'] = [
 // Add subject and body in the mailto: footer
 //$_configuration['add_user_course_information_in_mailto'] = false;
 
+// Add gradebook score style configuration in the flat view
+// See api.lib.php in order to find the options: examples SCORE_DIV = 1, SCORE_PERCENT = 2, etc
+//$_configuration['gradebook_report_score_style'] = 1; //  Means the score will be (X / Y) "SCORE_DIV"
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

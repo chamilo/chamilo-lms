@@ -53,6 +53,10 @@ class MySpace
                 'url' => api_get_path(WEB_CODE_PATH).'mySpace/exercise_category_report.php',
                 'content' => get_lang('ExerciseCategoryAllSessionsReport'),
             ],
+            [
+                'url' => api_get_path(WEB_CODE_PATH).'mySpace/survey_report.php',
+                'content' => get_lang('SurveyReport'),
+            ],
         ];
 
         return Display::actions($actions, null);

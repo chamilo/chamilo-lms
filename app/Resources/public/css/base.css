@@ -7141,9 +7141,19 @@ div#chat-remote-video video {
 
 .ui-jqgrid tr.jqgrow td {
     line-height: 22px;
-    font-size: 13px;
+    text-align: center !important;
+    border-bottom: 1px solid #cdcdcd;
 }
-
+.ui-jqgrid .ui-jqgrid-htable th div {
+    overflow: hidden;
+    position: relative;
+    height: auto;
+    background: #e5f4ff;
+}
+.ui-th-ltr, .ui-jqgrid .ui-jqgrid-htable th.ui-th-ltr {
+    border-left: 0 none;
+    background: #e5f4ff;
+}
 .ui-jqgrid .ui-jqgrid-labels .ui-state-hover {
     background-color: transparent;
 }
@@ -7209,13 +7219,9 @@ div#chat-remote-video video {
     height: 35px;
 }
 
-.ui-jqgrid .ui-jqgrid-htable th div {
-    height: 25px;
-}
-
 .ui-jqgrid .ui-jqgrid-htable th {
-    height: 35px;
     font-weight: bold;
+    white-space: normal !important;
 }
 
 .ui-jqgrid .ui-state-highlight, .ui-jqgrid .ui-widget-content .ui-state-highlight, .ui-jqgrid .ui-widget-header .ui-state-highlight {

@@ -1612,6 +1612,7 @@ class CourseManager
                                 $sessionId
                             )
                         );
+
                         $report_info['progress_100'] = $progress == 100 ? Display::label(get_lang('Yes'), 'success') : Display::label(get_lang('No'));
                         $report_info['progress'] = $progress."%";
 

@@ -210,8 +210,8 @@ if (olms.score == 0 && olms.lms_item_type == 'sco' && olms.lesson_status == 'not
 }
 
 olms.asset_timer = 0;
-olms.userfname = '<?php echo str_replace("'", "\\'", $user['firstname']); ?>';
-olms.userlname = '<?php echo str_replace("'", "\\'", $user['lastname']); ?>';
+olms.userfname = '<?php echo addslashes(trim($user['firstname'])); ?>';
+olms.userlname = '<?php echo addslashes(trim($user['lastname'])); ?>';
 olms.execute_stats = false;
 
 var courseUrl = '?cidReq='+olms.lms_course_code+'&id_session='+olms.lms_session_id;
@@ -475,7 +475,7 @@ function LMSGetValue(param) {
     } else if(param == 'cmi.core.student_name'){
         // ---- cmi.core.student_name
         <?php
-          $who = addslashes($user['lastname']).', '.addslashes($user['firstname']);
+          $who = addslashes(trim($user['lastname']).', '.trim($user['firstname']));
           echo "result='$who';";
         ?>
     } else if(param == 'cmi.core.lesson_location'){

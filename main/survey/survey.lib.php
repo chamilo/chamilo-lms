@@ -2409,15 +2409,17 @@ class SurveyManager
         $invitations = $repo->findBy(['user' => $userId, 'answered' => $answered]);
         $mainUrl = api_get_path(WEB_CODE_PATH).'survey/survey.php?';
         $content = '';
+
+        if (empty($answered)) {
+            $content .= Display::page_subheader(get_lang('Answered'));
+        } else {
+            $content .= Display::page_subheader(get_lang('Unanswered'));
+        }
+
         if (!empty($invitations)) {
             $table = new HTML_Table(['class' => 'table']);
             $table->setHeaderContents(0, 0, get_lang('SurveyName'));
             $table->setHeaderContents(0, 1, get_lang('Course'));
-            if (empty($answered)) {
-                $content .= Display::page_subheader(get_lang('Answered'));
-            } else {
-                $content .= Display::page_subheader(get_lang('Unanswered'));
-            }
 
             // Not answered
             /** @var CSurveyInvitation $invitation */
@@ -2428,7 +2430,12 @@ class SurveyManager
                 $sessionId = $invitation->getSessionId();
                 $surveyCode = $invitation->getSurveyCode();
 
-                $survey = $repoSurvey->findOneBy(['cId' => $courseId, 'sessionId' => $sessionId, 'code' => $surveyCode]);
+                $survey = $repoSurvey->findOneBy([
+                    'cId' => $courseId,
+                    'sessionId' => $sessionId,
+                    'code' => $surveyCode
+                ]);
+
                 if (empty($survey)) {
                     continue;
                 }
@@ -2446,6 +2453,8 @@ class SurveyManager
                 $row++;
             }
             $content .= $table->toHtml();
+        } else {
+            $content .= Display::return_message(get_lang('NoData'));
         }
 
         return $content;

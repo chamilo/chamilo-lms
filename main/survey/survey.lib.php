@@ -2396,7 +2396,7 @@ class SurveyManager
      */
     public static function surveyReport($userInfo, $answered = 0)
     {
-        $userId = $userInfo['user_id'];
+        $userId = isset($userInfo['user_id']) ? (int) $userInfo['user_id'] : 0;
         $answered = (int) $answered;
 
         if (empty($userId)) {

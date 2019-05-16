@@ -5,7 +5,6 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-// the section (for the tabs)
 $this_section = SECTION_TRACKING;
 
 $csv_content = [];
@@ -39,11 +38,12 @@ echo MySpace::getTopMenu();
 echo '</div>';
 echo MySpace::getAdminActions();
 
+$form->display();
+
 if (!empty($userInfo)) {
     echo Display::page_subheader($userInfo['complete_name']);
     echo SurveyManager::surveyReport($userInfo);
     echo SurveyManager::surveyReport($userInfo, 1);
-
 }
 
 Display::display_footer();

@@ -505,14 +505,18 @@ class FlatViewDataGenerator
                     }
 
                     if (api_get_setting('gradebook_show_percentage_in_reports') === 'false') {
+                        $defaultShowPercentageValue = SCORE_SIMPLE;
+                        if (!empty($style)) {
+                            $defaultShowPercentageValue = $style;
+                        }
                         $real_score = $scoreDisplay->display_score(
                             $real_score,
-                            SCORE_SIMPLE,
+                            $defaultShowPercentageValue,
                             true
                         );
                         $temp_score = $scoreDisplay->display_score(
                             $score,
-                            $defaultStyle,
+                            SCORE_DIV_SIMPLE_WITH_CUSTOM,
                             null
                         );
                         $temp_score = Display::tip($real_score, $temp_score);
@@ -522,7 +526,6 @@ class FlatViewDataGenerator
                             SCORE_DIV_PERCENT,
                             SCORE_ONLY_SCORE
                         );
-
                         $temp_score = $scoreDisplay->display_score(
                             $score,
                             $defaultStyle,

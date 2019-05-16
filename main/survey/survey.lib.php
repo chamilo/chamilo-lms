@@ -2410,7 +2410,6 @@ class SurveyManager
         $mainUrl = api_get_path(WEB_CODE_PATH).'survey/survey.php?';
         $content = '';
         if (!empty($invitations)) {
-
             $table = new HTML_Table(['class' => 'table']);
             $table->setHeaderContents(0, 0, get_lang('SurveyName'));
             $table->setHeaderContents(0, 1, get_lang('Course'));

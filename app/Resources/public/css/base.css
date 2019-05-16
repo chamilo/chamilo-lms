@@ -4891,6 +4891,10 @@ i.size-32.icon-new-work {
     max-height: 50px;
 }
 
+.top-mediapost .user-data img {
+    margin-right: 5px;
+}
+
 .top-mediapost {
     border-bottom: 1px solid #ECF0F1;
 }

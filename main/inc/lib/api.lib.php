@@ -1607,8 +1607,8 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
         }
 
         if (!empty($iconStatus)) {
-            $iconStatusMedium = '<img class="pull-left" src="'.$iconStatus.'" width="32px" height="32px">';
-            $iconStatus = '<img class="pull-left" src="'.$iconStatus.'" width="22px" height="22px">';
+            $iconStatusMedium = '<img src="'.$iconStatus.'" width="32px" height="32px">';
+            $iconStatus = '<img src="'.$iconStatus.'" width="22px" height="22px">';
         }
 
         $result['icon_status'] = $iconStatus;

@@ -327,26 +327,7 @@ foreach ($posts as $post) {
         );
 
         $_user = api_get_user_info($posterId);
-        $urlImg = api_get_path(WEB_IMG_PATH);
-        $iconStatus = null;
-        $isAdmin = UserManager::is_admin($posterId);
-
-        if ($_user['status'] == 5) {
-            if ($_user['has_certificates']) {
-                $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_graduated.svg" width="22px" height="22px">';
-            } else {
-                $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_student.svg" width="22px" height="22px">';
-            }
-        } else {
-            if ($_user['status'] == 1) {
-                if ($isAdmin) {
-                    $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_admin.svg" width="22px" height="22px">';
-                } else {
-                    $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_teacher.svg" width="22px" height="22px">';
-                }
-            }
-        }
-
+        $iconStatus = $_user['icon_status'];
         $post['user_data'] .= '<div class="user-type text-center">'.$iconStatus.'</div>';
     } else {
         if ($allowUserImageForum) {
@@ -688,7 +669,7 @@ if (!api_is_allowed_to_edit(false, true) &&
 
 if (!api_is_allowed_to_edit(false, true) &&
     (
-        (   $current_forum_category && $current_forum_category['locked'] != 0) ||
+        ($current_forum_category && $current_forum_category['locked'] != 0) ||
             $current_forum['locked'] != 0 || $current_thread['locked'] != 0
     )
 ) {

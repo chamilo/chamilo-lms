@@ -1525,6 +1525,17 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
     // Maintain the user_id index for backwards compatibility
     $result['user_id'] = $result['id'] = $user_id;
 
+    $hasCertificates = Certificate::getCertificateByUser($user_id);
+    $result['has_certificates'] = 0;
+    if (!empty($hasCertificates)) {
+        $result['has_certificates'] = 1;
+    }
+
+    $result['icon_status'] = '';
+    $result['icon_status_medium'] = '';
+
+    $result['is_admin'] = UserManager::is_admin($user_id);
+
     // Getting user avatar.
     if ($loadAvatars) {
         $result['avatar'] = '';
@@ -1571,6 +1582,38 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
         } else {
             $result['avatar_medium'] = $user['avatar_medium'];
         }
+
+        $urlImg = api_get_path(WEB_IMG_PATH);
+        $iconStatus = '';
+        $iconStatusMedium = '';
+
+        switch ($result['status']) {
+            case STUDENT:
+                if ($result['has_certificates']) {
+                    $iconStatus = $urlImg.'icons/svg/identifier_graduated.svg';
+                } else {
+                    $iconStatus = $urlImg.'icons/svg/identifier_student.svg';
+                }
+                break;
+            case COURSEMANAGER:
+                if ($result['is_admin']) {
+                    $iconStatus = $urlImg.'icons/svg/identifier_admin.svg';
+                } else {
+                    $iconStatus = $urlImg.'icons/svg/identifier_teacher.svg';
+                }
+                break;
+            case STUDENT_BOSS:
+                $iconStatus = $urlImg.'icons/svg/identifier_teacher.svg';
+                break;
+        }
+
+        if (!empty($iconStatus)) {
+            $iconStatusMedium = '<img src="'.$iconStatus.'" width="32px" height="32px">';
+            $iconStatus = '<img src="'.$iconStatus.'" width="22px" height="22px">';
+        }
+
+        $result['icon_status'] = $iconStatus;
+        $result['icon_status_medium'] = $iconStatusMedium;
     }
 
     if (isset($user['user_is_online'])) {
@@ -1589,12 +1632,6 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
     }
 
     $result['profile_url'] = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id;
-
-    $hasCertificates = Certificate::getCertificateByUser($user_id);
-    $result['has_certificates'] = 0;
-    if (!empty($hasCertificates)) {
-        $result['has_certificates'] = 1;
-    }
 
     // Send message link
     $sendMessage = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='.$user_id;
@@ -1855,9 +1892,8 @@ function api_get_course_path($course_code = null)
 /**
  * Gets a course setting from the current course_setting table. Try always using integer values.
  *
- * @param string    The name of the setting we want from the table
- * @param string    Optional: course code
- * @param string $setting_name
+ * @param string $setting_name The name of the setting we want from the table
+ * @param string $course_code
  *
  * @return mixed The value of that setting in that table. Return -1 if not found.
  */
@@ -2248,6 +2284,7 @@ function api_format_course_array($course_data)
             false
         );
     }
+
     $_course['course_image_large'] = $url_image;
 
     return $_course;
@@ -7550,8 +7587,6 @@ function api_user_is_login($user_id = null)
  */
 function api_get_real_ip()
 {
-    // Guess the IP if behind a reverse proxy
-    global $debug;
     $ip = trim($_SERVER['REMOTE_ADDR']);
     if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
         if (preg_match('/,/', $_SERVER['HTTP_X_FORWARDED_FOR'])) {
@@ -7560,9 +7595,6 @@ function api_get_real_ip()
             $ip1 = $_SERVER['HTTP_X_FORWARDED_FOR'];
         }
         $ip = trim($ip1);
-    }
-    if (!empty($debug)) {
-        error_log('Real IP: '.$ip);
     }
 
     return $ip;
@@ -8355,11 +8387,11 @@ function api_is_allowed_in_course()
  * Set the cookie to go directly to the course code $in_firstpage
  * after login.
  *
- * @param string $in_firstpage is the course code of the course to go
+ * @param string $value is the course code of the course to go
  */
-function api_set_firstpage_parameter($in_firstpage)
+function api_set_firstpage_parameter($value)
 {
-    setcookie('GotoCourse', $in_firstpage);
+    setcookie('GotoCourse', $value);
 }
 
 /**
@@ -9490,7 +9522,7 @@ function api_get_language_translate_html()
     $translate = api_get_configuration_value('translate_html');
 
     if (!$translate) {
-       return '';
+        return '';
     }
 
     $languageList = api_get_languages();

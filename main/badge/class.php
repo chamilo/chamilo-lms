@@ -10,17 +10,20 @@
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
-$skillId = isset($_GET['id']) ? intval($_GET['id']) : 0;
+$skillId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 $objSkill = new Skill();
 $skill = $objSkill->get($skillId);
+$json = [];
 
-$json = [
-    'name' => $skill['name'],
-    'description' => $skill['description'],
-    'image' => api_get_path(WEB_UPLOAD_PATH)."badges/{$skill['icon']}",
-    'criteria' => api_get_path(WEB_CODE_PATH)."badge/criteria.php?id=$skillId",
-    'issuer' => api_get_path(WEB_CODE_PATH)."badge/issuer.php",
-];
+if ($skill) {
+    $json = [
+        'name' => $skill['name'],
+        'description' => $skill['description'],
+        'image' => api_get_path(WEB_UPLOAD_PATH)."badges/{$skill['icon']}",
+        'criteria' => api_get_path(WEB_CODE_PATH)."badge/criteria.php?id=$skillId",
+        'issuer' => api_get_path(WEB_CODE_PATH).'badge/issuer.php',
+    ];
+}
 
 header('Content-Type: application/json');
 

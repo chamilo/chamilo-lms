@@ -352,17 +352,17 @@ $message_content = null;
 $actions = null;
 
 if ($group_id != 0) {
-    $actions .= '<a href="' . api_get_path(WEB_PATH) . 'main/social/group_view.php?id=' . $group_id . '">' .
-        Display::return_icon('back.png', api_xml_http_response_encode(get_lang('ComposeMessage'))) . '</a>';
-    $actions .= '<a href="' . api_get_path(WEB_PATH) . 'main/messages/new_message.php?group_id=' . $group_id . '">' .
-        Display::return_icon('message_new.png', api_xml_http_response_encode(get_lang('ComposeMessage'))) . '</a>';
+    $actions .= '<a href="'.api_get_path(WEB_PATH).'main/social/group_view.php?id='.$group_id.'">'.
+        Display::return_icon('back.png', api_xml_http_response_encode(get_lang('ComposeMessage'))).'</a>';
+    $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?group_id='.$group_id.'">'.
+        Display::return_icon('message_new.png', api_xml_http_response_encode(get_lang('ComposeMessage'))).'</a>';
 } else {
-    $actions .= '<a href="' . api_get_path(WEB_PATH) . 'main/messages/new_message.php">' .
-        Display::return_icon('message_new.png', get_lang('ComposeMessage')) . '</a>';
-    $actions .= '<a href="' . api_get_path(WEB_PATH) . 'main/messages/inbox.php">' .
-        Display::return_icon('inbox.png', get_lang('Inbox')) . '</a>';
-    $actions .= '<a href="' . api_get_path(WEB_PATH) . 'main/messages/outbox.php">' .
-        Display::return_icon('outbox.png', get_lang('Outbox')) . '</a>';
+    $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
+        Display::return_icon('message_new.png', get_lang('ComposeMessage')).'</a>';
+    $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
+        Display::return_icon('inbox.png', get_lang('Inbox')).'</a>';
+    $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.
+        Display::return_icon('outbox.png', get_lang('Outbox')).'</a>';
 }
 
 $show_message = null;
@@ -413,7 +413,6 @@ if (!isset($_POST['compose'])) {
         }
     }
 }
-
 
 MessageManager::cleanAudioMessage();
 if ($actions) {

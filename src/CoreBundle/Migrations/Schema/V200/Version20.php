@@ -216,7 +216,6 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_survey_invitation CHANGE reminder_date reminder_date DATETIME DEFAULT NULL');
         $this->addSql('UPDATE c_survey_invitation SET reminder_date = NULL WHERE CAST(reminder_date AS CHAR(20)) = "0000-00-00 00:00:00"');
 
-
         $table = $schema->hasTable('message_feedback');
         if ($table === false) {
             $this->addSql(

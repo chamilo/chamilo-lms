@@ -171,7 +171,7 @@ if ($actions) {
 
     $tpl->assign('content_inbox', $messageContent);
     $social_layout = $tpl->get_template('social/inbox.html.twig');
-    $content =  $tpl->fetch($social_layout);
+    $content = $tpl->fetch($social_layout);
     $tpl->assign('message', $show_message);
     $tpl->assign('actions', $toolbar);
     $tpl->assign('content', $content);

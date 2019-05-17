@@ -79,7 +79,7 @@ $actions .= Display::toolbarAction(
     'toolbar',
     [
         $actionsLeft,
-        $actionsRight
+        $actionsRight,
     ]
 );
 $message_content = null;
@@ -126,4 +126,3 @@ $content = $tpl->fetch($social_layout);
 $tpl->assign('message', $show_message);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();
-

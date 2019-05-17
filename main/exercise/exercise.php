@@ -653,7 +653,7 @@ if (isset($list_ordered) && !empty($list_ordered)) {
 }
 
 $tableRows = [];
-
+/*  Listing exercises  */
 if (!empty($exerciseList)) {
     if ($origin != 'learnpath') {
         //avoid sending empty parameters
@@ -814,7 +814,7 @@ if (!empty($exerciseList)) {
 
                 if ($sessionId == $row['session_id']) {
                     $actions = '';
-                    // Questions list
+
                     // Questions list
                     $actions .= Display::url(
                         Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL),
@@ -1079,7 +1079,7 @@ if (!empty($exerciseList)) {
                     } else {
                         $random_label = ' ('.get_lang('Random').') ';
                         $number_of_questions = $random_number_of_question.' '.$random_label.' / '.$rowi;
-                        //Bug if we set a random value bigger than the real number of questions
+                        // Bug if we set a random value bigger than the real number of questions
                         if ($random_number_of_question > $rowi) {
                             $number_of_questions = $rowi.' '.$random_label;
                         }
@@ -1143,7 +1143,7 @@ if (!empty($exerciseList)) {
                 if ($time_limits) {
                     // Exam is ready to be taken
                     if ($is_actived_time) {
-                        // Show results 	697 	$attempt_text = get_lang('LatestAttempt').' : ';
+                        // Show results
                         if (
                             in_array(
                                 $my_result_disabled,
@@ -1154,7 +1154,7 @@ if (!empty($exerciseList)) {
                                 ]
                             )
                         ) {
-                            //More than one attempt
+                            // More than one attempt
                             if ($num > 0) {
                                 $row_track = Database :: fetch_array($qryres);
                                 $attempt_text = get_lang('LatestAttempt').' : ';
@@ -1170,7 +1170,7 @@ if (!empty($exerciseList)) {
                             $attempt_text = '-';
                         }
                     } else {
-                        //Quiz not ready due to time limits 	700 	$attempt_text = get_lang('NotAttempted');
+                        // Quiz not ready due to time limits
                         //@todo use the is_visible function
                         if (!empty($row['start_time']) && !empty($row['end_time'])) {
                             $today = time();

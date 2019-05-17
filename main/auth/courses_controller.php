@@ -108,28 +108,24 @@ class CoursesController
         $limit = []
     ) {
         $data = [];
-        $browse_course_categories = CoursesAndSessionsCatalog::getCourseCategories();
+        $listCategories = CoursesAndSessionsCatalog::getCourseCategoriesTree();
+
         $data['countCoursesInCategory'] = CourseCategory::countCoursesInCategory($category_code);
         if ($action === 'display_random_courses') {
             // Random value is used instead limit filter
-            $data['browse_courses_in_category'] = CoursesAndSessionsCatalog::getCoursesInCategory(
-                null,
-                12
-            );
+            $data['browse_courses_in_category'] = CoursesAndSessionsCatalog::getCoursesInCategory(null, 12);
             $data['countCoursesInCategory'] = count($data['browse_courses_in_category']);
         } else {
             if (!isset($category_code)) {
-                $category_code = $browse_course_categories[0][1]['code']; // by default first category
+                $category_code = $listCategories['ALL']['code']; // by default first category
             }
             $limit = isset($limit) ? $limit : self::getLimitArray();
-            $data['browse_courses_in_category'] = CoursesAndSessionsCatalog::getCoursesInCategory(
-                $category_code,
-                null,
-                $limit
-            );
+            $listCourses = CoursesAndSessionsCatalog::getCoursesInCategory($category_code, null, $limit);
+
+            $data['browse_courses_in_category'] = $listCourses;
         }
 
-        $data['browse_course_categories'] = $browse_course_categories;
+        $data['list_categories'] = $listCategories;
         $data['code'] = Security::remove_XSS($category_code);
 
         // getting all the courses to which the user is subscribed to
@@ -162,6 +158,7 @@ class CoursesController
             $data['catalogShowCoursesSessions'] = $showCoursesSessions;
         }
 
+        // render to the view
         $this->view->set_data($data);
         $this->view->set_layout('layout');
         $this->view->set_template('courses_categories');
@@ -187,10 +184,7 @@ class CoursesController
         $data = [];
         $limit = !empty($limit) ? $limit : self::getLimitArray();
         $browse_course_categories = CoursesAndSessionsCatalog::getCourseCategories();
-        $data['countCoursesInCategory'] = CourseCategory::countCoursesInCategory(
-            'ALL',
-            $search_term
-        );
+        $data['countCoursesInCategory'] = CourseCategory::countCoursesInCategory('ALL', $search_term);
         $data['browse_courses_in_category'] = CoursesAndSessionsCatalog::search_courses(
             $search_term,
             $limit,
@@ -642,21 +636,21 @@ class CoursesController
     }
 
     /**
-     * Return Session Catalogue rendered view.
+     * Return Session catalog rendered view.
      *
      * @param string $action
      * @param string $nameTools
      * @param array  $limit
      */
-    public function sessionsList($action, $nameTools, $limit = [])
+    public function sessionList($action, $nameTools, $limit = [])
     {
         $date = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
-        $hiddenLinks = isset($_GET['hidden_links']) ? intval($_GET['hidden_links']) == 1 : false;
+        $hiddenLinks = isset($_GET['hidden_links']) ? $_GET['hidden_links'] == 1 : false;
         $limit = isset($limit) ? $limit : self::getLimitArray();
         $countSessions = SessionManager::countSessionsByEndDate($date);
         $sessions = CoursesAndSessionsCatalog::browseSessions($date, $limit);
 
-        $pageTotal = intval(intval($countSessions) / $limit['length']);
+        $pageTotal = ceil($countSessions / $limit['length']);
         // Do NOT show pagination if only one page or less
         $cataloguePagination = $pageTotal > 1 ? CourseCategory::getCatalogPagination($limit['current'], $limit['length'], $pageTotal) : '';
         $sessionsBlocks = $this->getFormattedSessionsBlock($sessions);
@@ -673,7 +667,7 @@ class CoursesController
         $tpl = new Template();
         $tpl->assign('show_courses', CoursesAndSessionsCatalog::showCourses());
         $tpl->assign('show_sessions', CoursesAndSessionsCatalog::showSessions());
-        $tpl->assign('show_tutor', api_get_setting('show_session_coach') === 'true' ? true : false);
+        $tpl->assign('show_tutor', api_get_setting('show_session_coach') === 'true');
         $tpl->assign('course_url', $courseUrl);
         $tpl->assign('catalog_pagination', $cataloguePagination);
         $tpl->assign('hidden_links', $hiddenLinks);

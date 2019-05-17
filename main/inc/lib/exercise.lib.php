@@ -1090,7 +1090,7 @@ class ExerciseLib
                                 $s .= '<div class="text-right">
                                         <p class="indent">'.
                                     $select_items[$lines_count]['letter'].'.&nbsp; '.
-                                            $select_items[$lines_count]['answer'].'
+                                    $select_items[$lines_count]['answer'].'
                                         </p>
                                         </div>';
                             } else {
@@ -1108,7 +1108,7 @@ class ExerciseLib
                                       <td colspan="2"></td>
                                       <td valign="top">';
                                     $s .= '<b>'.$select_items[$lines_count]['letter'].'.</b> '.
-                                                $select_items[$lines_count]['answer'];
+                                        $select_items[$lines_count]['answer'];
                                     $s .= "</td>
                                 </tr>";
                                     $lines_count++;
@@ -4510,7 +4510,7 @@ EOT;
             }
         }
 
-        if ($show_results || $show_only_score) {
+        if (($show_results || $show_only_score) && $origin != 'embeddable') {
             if (isset($exercise_stat_info['exe_user_id'])) {
                 $user_info = api_get_user_info($exercise_stat_info['exe_user_id']);
                 if ($user_info) {
@@ -4674,6 +4674,7 @@ EOT;
                         'score' => $my_total_score,
                         'weight' => $my_total_weight,
                         'comments' => $comnt,
+                        'user_answered' => $result['user_answered'],
                     ];
                 }
 

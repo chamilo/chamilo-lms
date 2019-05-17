@@ -43,6 +43,7 @@ class CourseDescription
      */
     public static function get_descriptions($course_id)
     {
+        $course_id = (int) $course_id;
         // Get course code
         $course_info = api_get_course_info_by_id($course_id);
         if (!empty($course_info)) {
@@ -59,7 +60,6 @@ class CourseDescription
             $desc_tmp = new CourseDescription();
             $desc_tmp->set_id($row['id']);
             $desc_tmp->set_title($row['title']);
-
             $desc_tmp->set_content($row['content']);
             $desc_tmp->set_session_id($row['session_id']);
             $desc_tmp->set_description_type($row['description_type']);
@@ -85,6 +85,11 @@ class CourseDescription
             true
         );
         $course_id = $this->course_id ?: api_get_course_int_id();
+
+        if (empty($course_id)) {
+            return [];
+        }
+
         $sql = "SELECT * FROM $table
 		        WHERE c_id = $course_id $condition_session
 		        ORDER BY id ";
@@ -113,6 +118,8 @@ class CourseDescription
         $session_id = null
     ) {
         $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
+        $courseId = (int) $courseId;
+
         if (empty($courseId)) {
             $courseId = api_get_course_int_id();
         }
@@ -121,7 +128,8 @@ class CourseDescription
             $session_id = $this->session_id;
         }
         $condition_session = api_get_session_condition($session_id);
-        $description_type = intval($description_type);
+        $description_type = (int) $description_type;
+
         $sql = "SELECT * FROM $table
 		        WHERE 
 		            c_id = $courseId AND 
@@ -150,6 +158,7 @@ class CourseDescription
     {
         $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
         $course_id = api_get_course_int_id();
+        $id = (int) $id;
 
         if (!isset($session_id)) {
             $session_id = $this->session_id;
@@ -159,7 +168,7 @@ class CourseDescription
             $course_info = api_get_course_info($course_code);
             $course_id = $course_info['real_id'];
         }
-        $id = intval($id);
+
         $sql = "SELECT * FROM $table
 		        WHERE c_id = $course_id AND id='$id' $condition_session ";
         $rs = Database::query($sql);

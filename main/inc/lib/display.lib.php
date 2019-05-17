@@ -625,31 +625,60 @@ class Display
         $email,
         $clickable_text = null,
         $style_class = '',
-        $cut = false
+        $addExtraContent = false
     ) {
         if (is_null($clickable_text)) {
             $clickable_text = $email;
         }
+
         // "mailto:" already present?
         if (substr($email, 0, 7) != 'mailto:') {
             $email = 'mailto:'.$email;
         }
+
         // Class (stylesheet) defined?
         if ($style_class != '') {
             $style_class = ' class="'.$style_class.'"';
         }
+
         // Encrypt email
         $hmail = '';
         for ($i = 0; $i < strlen($email); $i++) {
-            $hmail .= '&#'.ord($email[
-            $i]).';';
+            $hmail .= '&#'.ord($email[$i]).';';
         }
-        $hclickable_text = null;
+
+        $value = api_get_configuration_value('add_user_course_information_in_mailto');
+
+        if ($value) {
+            $hmail .= '?';
+            if (!api_is_anonymous()) {
+                $hmail .= '&subject='.Security::remove_XSS(api_get_setting('siteName'));
+            }
+            if ($addExtraContent) {
+                $content = '';
+                if (!api_is_anonymous()) {
+                    $userInfo = api_get_user_info();
+                    $content .= get_lang('User').': '.$userInfo['complete_name']."\n";
+
+                    $courseInfo = api_get_course_info();
+                    if (!empty($courseInfo)) {
+                        $content .= get_lang('Course').': ';
+                        $content .= $courseInfo['name'];
+                        $sessionInfo = api_get_session_info(api_get_session_id());
+                        if (!empty($sessionInfo)) {
+                            $content .= ' '.$sessionInfo['name'].' <br />';
+                        }
+                    }
+                }
+                $hmail .= '&body='.rawurlencode($content);
+            }
+        }
+
+        $hclickable_text = '';
         // Encrypt clickable text if @ is present
         if (strpos($clickable_text, '@')) {
             for ($i = 0; $i < strlen($clickable_text); $i++) {
-                $hclickable_text .= '&#'.ord($clickable_text[
-                $i]).';';
+                $hclickable_text .= '&#'.ord($clickable_text[$i]).';';
             }
         } else {
             $hclickable_text = @htmlspecialchars(
@@ -659,12 +688,7 @@ class Display
             );
         }
         // Return encrypted mailto hyperlink
-        $classCut = '';
-        if ($cut) {
-            $classCut = 'cut-email';
-        }
-
-        return '<a href="'.$hmail.'"'.$style_class.' class="clickable_email_link '.$classCut.'">'.$hclickable_text.'</a>';
+        return '<a href="'.$hmail.'"'.$style_class.' class="clickable_email_link">'.$hclickable_text.'</a>';
     }
 
     /**

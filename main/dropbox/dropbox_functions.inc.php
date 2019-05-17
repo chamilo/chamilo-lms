@@ -61,7 +61,7 @@ function handle_multiple_actions()
         return get_lang('CheckAtLeastOneFile');
     }
 
-    // STEP 3A: deleting
+    // Deleting
     if ($_POST['action'] == 'delete_received' || $_POST['action'] == 'delete_sent') {
         $dropboxfile = new Dropbox_Person($_user['user_id'], $is_courseAdmin, $is_courseTutor);
         foreach ($checked_file_ids as $key => $value) {
@@ -78,7 +78,7 @@ function handle_multiple_actions()
         return $message;
     }
 
-    // STEP 3B: giving comment
+    // moving
     if (strstr($_POST['action'], 'move_')) {
         // check move_received_n or move_sent_n command
         if (strstr($_POST['action'], 'received')) {

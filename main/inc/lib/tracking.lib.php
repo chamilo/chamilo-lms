@@ -4038,7 +4038,7 @@ class Tracking
         $sql = "SELECT count(ip.tool) as count
                 FROM $tbl_item_property ip
                 INNER JOIN $tbl_student_publication pub
-                ON (ip.ref = pub.id AND ip.c_id = pub.c_id)
+                ON (ip.ref = pub.iid AND ip.c_id = pub.c_id)
                 WHERE
                     ip.tool='work' AND
                     $conditionToString";

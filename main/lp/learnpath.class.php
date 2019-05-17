@@ -625,7 +625,7 @@ class learnpath
             if (!empty($next)) {
                 $sql = "UPDATE $tbl_lp_item
                         SET previous_item_id = $new_item_id 
-                        WHERE c_id = $course_id AND id = $next";
+                        WHERE c_id = $course_id AND id = $next AND item_type != '".TOOL_LP_FINAL_ITEM."'";
                 Database::query($sql);
             }
 
@@ -652,6 +652,11 @@ class learnpath
             $sql = "UPDATE $tbl_lp_item
                     SET ref = $new_item_id
                     WHERE c_id = $course_id AND iid = $new_item_id";
+            Database::query($sql);
+
+            $sql = "UPDATE $tbl_lp_item
+                    SET previous_item_id = ".$this->getLastInFirstLevel()."
+                    WHERE c_id = $course_id AND lp_id = {$this->lp_id} AND item_type = '".TOOL_LP_FINAL_ITEM."'";
             Database::query($sql);
 
             // Upload audio.
@@ -1216,7 +1221,7 @@ class learnpath
                     WHERE iid = $previous";
         Database::query($sql_upd);
         $sql_upd = "UPDATE $lp_item SET previous_item_id = $previous
-                    WHERE iid = $next";
+                    WHERE iid = $next AND item_type != '".TOOL_LP_FINAL_ITEM."'";
         Database::query($sql_upd);
         // Now update all following items with new display order.
         $sql_all = "UPDATE $lp_item SET display_order = display_order-1
@@ -1231,6 +1236,11 @@ class learnpath
         $sql_all = "UPDATE $lp_item SET prerequisite = '' 
                     WHERE c_id = $course_id AND prerequisite = $id";
         Database::query($sql_all);
+
+        $sql = "UPDATE $lp_item
+                    SET previous_item_id = ".$this->getLastInFirstLevel()."
+                    WHERE c_id = $course_id AND lp_id = {$this->lp_id} AND item_type = '".TOOL_LP_FINAL_ITEM."'";
+        Database::query($sql);
 
         // Remove from search engine if enabled.
         if (api_get_setting('search_enabled') === 'true') {
@@ -1537,7 +1547,7 @@ class learnpath
                  WHERE iid = $id";
 
         Database::query($sql);
-        // TODO: Update the item object (can be ignored for now because refreshed).
+
         return true;
     }
 
@@ -1942,6 +1952,28 @@ class learnpath
     }
 
     /**
+     * Get the last element in the first level.
+     * Unlike learnpath::get_last this function doesn't consider the subsection' elements.
+     *
+     * @return mixed
+     */
+    public function getLastInFirstLevel()
+    {
+        try {
+            $lastId = Database::getManager()
+                ->createQuery('SELECT i.iid FROM ChamiloCourseBundle:CLpItem i
+                WHERE i.lpId = :lp AND i.parentItemId = 0 AND i.itemType != :type ORDER BY i.displayOrder DESC')
+                ->setMaxResults(1)
+                ->setParameters(['lp' => $this->lp_id, 'type' => TOOL_LP_FINAL_ITEM])
+                ->getSingleScalarResult();
+
+            return $lastId;
+        } catch (Exception $exception) {
+            return 0;
+        }
+    }
+
+    /**
      * Gets the navigation bar for the learnpath display screen.
      *
      * @return string The HTML string to use as a navigation bar
@@ -1989,16 +2021,16 @@ class learnpath
         $nextIcon = '';
         if ($hideArrows === false) {
             $previousIcon = '
-            <a class="icon-toolbar" id="scorm-previous" href="#" 
-                onclick="switch_item('.$mycurrentitemid.',\'previous\');return false;" title="'.$previousText.'">
-                <span class="fa fa-chevron-left"></span><span class="sr-only">'.$previousText.'</span>
-            </a>';
+                <a class="icon-toolbar" id="scorm-previous" href="#" 
+                    onclick="switch_item('.$mycurrentitemid.',\'previous\');return false;" title="'.$previousText.'">
+                    <span class="fa fa-chevron-left"></span><span class="sr-only">'.$previousText.'</span>
+                </a>';
 
             $nextIcon = '
-            <a class="icon-toolbar" id="scorm-next" href="#" 
-                onclick="switch_item('.$mycurrentitemid.',\'next\');return false;" title="'.$nextText.'">
-                <span class="fa fa-chevron-right"></span><span class="sr-only">'.$nextText.'</span>
-            </a>';
+                <a class="icon-toolbar" id="scorm-next" href="#" 
+                    onclick="switch_item('.$mycurrentitemid.',\'next\');return false;" title="'.$nextText.'">
+                    <span class="fa fa-chevron-right"></span><span class="sr-only">'.$nextText.'</span>
+                </a>';
         }
 
         if ($this->mode === 'fullscreen') {
@@ -2248,7 +2280,7 @@ class learnpath
         $tbl_lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
         $lpItemId = (int) $lpItemId;
 
-        // Getting all the information about the item.
+        /** @var learnpathItem $item */
         $item = isset($this->items[$lpItemId]) ? $this->items[$lpItemId] : null;
         $itemViewId = 0;
         if ($item) {
@@ -4741,14 +4773,19 @@ class learnpath
      *
      * @param CLpCategory $category
      * @param User        $user
+     * @param int
+     * @param int
      *
      * @return bool
      */
     public static function categoryIsVisibleForStudent(
         CLpCategory $category,
-        User $user
+        User $user,
+        $courseId = 0,
+        $sessionId = 0
     ) {
         $subscriptionSettings = self::getSubscriptionSettings();
+
         if ($subscriptionSettings['allow_add_users_to_lp_category'] == false) {
             return true;
         }
@@ -4769,6 +4806,9 @@ class learnpath
             return true;
         }
 
+        $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
+        $sessionId = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
+
         if ($category->hasUserAdded($user)) {
             return true;
         }
@@ -4782,13 +4822,12 @@ class learnpath
 
             /** @var CourseRepository $courseRepo */
             $courseRepo = $em->getRepository('ChamiloCoreBundle:Course');
-            $sessionId = api_get_session_id();
             $session = null;
             if (!empty($sessionId)) {
                 $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
             }
 
-            $course = $courseRepo->find(api_get_course_int_id());
+            $course = $courseRepo->find($courseId);
 
             // Subscribed groups to a LP
             $subscribedGroupsInLp = $itemRepo->getGroupsSubscribedToItem(
@@ -8637,7 +8676,8 @@ class learnpath
         $arrHide = [];
         // POSITION
         for ($i = 0; $i < count($arrLP); $i++) {
-            if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) {
+            if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id &&
+                $arrLP[$i]['item_type'] !== TOOL_LP_FINAL_ITEM) {
                 //this is the same!
                 if (isset($extra_info['previous_item_id']) &&
                     $extra_info['previous_item_id'] == $arrLP[$i]['id']
@@ -9102,7 +9142,7 @@ class learnpath
                         $renderer = $form->defaultRenderer();
                         $renderer->setElementTemplate('&nbsp;{label}{element}', 'content_lp');
                         $form->addElement('html', '<div class="editor-lp">');
-                        $form->addHtmlEditor('content_lp', null, null, true, $editor_config);
+                        $form->addHtmlEditor('content_lp', null, null, true, $editor_config, true);
                         $form->addElement('html', '</div>');
                         $defaults['content_lp'] = $content;
                     }
@@ -9353,8 +9393,8 @@ class learnpath
         $lastPosition = null;
 
         for ($i = 0; $i < count($arrLP); $i++) {
-            if (($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) ||
-                $arrLP[$i]['item_type'] == TOOL_LP_FINAL_ITEM
+            if (($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) &&
+                $arrLP[$i]['item_type'] !== TOOL_LP_FINAL_ITEM
             ) {
                 if ((isset($extra_info['previous_item_id']) &&
                     $extra_info['previous_item_id'] == $arrLP[$i]['id']) || $action == 'add'
@@ -13168,7 +13208,7 @@ EOD;
 
         if ($form->validate()) {
             $values = $form->exportValues();
-            $lastItemId = $this->get_last();
+            $lastItemId = $this->getLastInFirstLevel();
 
             if (!$finalItem) {
                 $documentId = $this->create_document(

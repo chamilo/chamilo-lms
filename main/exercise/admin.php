@@ -367,7 +367,7 @@ if ($inATest) {
     if ($objExercise->added_in_lp()) {
         echo Display::return_message(get_lang('AddedToLPCannotBeAccessed'), 'warning');
     }
-    if ($editQuestion && $objQuestion->existsInAnotherExercises()) {
+    if ($editQuestion && $objQuestion->existsInAnotherExercise()) {
         echo Display::return_message(
             Display::returnFontAwesomeIcon('exclamation-triangle"')
                 .get_lang('ThisQuestionExistsInAnotherExercisesWarning'),

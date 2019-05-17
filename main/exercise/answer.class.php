@@ -43,7 +43,7 @@ class Answer
     public $iid;
     public $questionJSId;
     public $standalone;
-
+    /** @var Exercise|null */
     private $exercise;
 
     /**

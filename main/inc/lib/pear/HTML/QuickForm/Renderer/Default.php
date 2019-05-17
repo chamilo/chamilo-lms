@@ -322,8 +322,8 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
             } else {
                 $template = $customElementTemplate;
             }
-                $html = str_replace('{label}', $nameLabel, $template);
-            }
+            $html = str_replace('{label}', $nameLabel, $template);
+        }
         $html = str_replace('{label-for}', $labelFor, $html);
         $html = str_replace('{icon}', $icon, $html);
         $html = str_replace('{extra_label_class}', $extraLabelClass, $html);

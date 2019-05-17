@@ -22,6 +22,9 @@ Session::erase('duration_time');
 
 $this_section = SECTION_COURSES;
 
+$js = '<script>'.api_get_language_translate_html().'</script>';
+$htmlHeadXtra[] = $js;
+
 // Notice for unauthorized people.
 api_protect_course_script(true);
 $sessionId = api_get_session_id();

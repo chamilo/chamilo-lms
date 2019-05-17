@@ -51,6 +51,9 @@ if ($showGlossary) {
     $htmlHeadXtra[] = api_get_js('jquery.highlight.js');
 }
 
+$js = '<script>'.api_get_language_translate_html().'</script>';
+$htmlHeadXtra[] = $js;
+
 $htmlHeadXtra[] = api_get_js('jqueryui-touch-punch/jquery.ui.touch-punch.min.js');
 $htmlHeadXtra[] = api_get_js('jquery.jsPlumb.all.js');
 $htmlHeadXtra[] = api_get_js('d3/jquery.xcolor.js');
@@ -966,7 +969,8 @@ if (isset($_custom['exercises_hidden_when_no_start_date']) &&
             'warning'
         );
         if (!in_array($origin, ['learnpath', 'embeddable'])) {
-            Display :: display_footer();
+            Display::display_footer();
+            exit;
         }
     }
 }
@@ -1551,4 +1555,4 @@ if (!in_array($origin, ['learnpath', 'embeddable'])) {
     echo '</div>'; //End glossary div
 }
 
-Display :: display_footer();
+Display::display_footer();

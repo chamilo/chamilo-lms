@@ -4913,6 +4913,8 @@ class CourseManager
             $userRegisteredInCourse = self::is_user_subscribed_in_course($user_id, $course_info['code']);
             $userRegisteredInCourseAsTeacher = self::is_course_teacher($user_id, $course_info['code']);
             $userRegistered = $userRegisteredInCourse && $userRegisteredInCourseAsTeacher;
+            $my_course['is_course_student'] = $userRegisteredInCourse;
+            $my_course['is_course_teacher'] = $userRegisteredInCourseAsTeacher;
             $my_course['is_registered'] = $userRegistered;
             $my_course['title_cut'] = cut($course_info['title'], 45);
 

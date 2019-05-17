@@ -27,7 +27,7 @@ $user = api_get_user_info($userId, true);
 if (empty($user)) {
     api_not_allowed(true);
 }
-
+$tpl = new Template(null, false, false, false, false, false, false);
 /** @var User $userEntity */
 $userEntity = api_get_user_entity($user['user_id']);
 $myUserId = api_get_user_id();
@@ -128,7 +128,7 @@ if (api_is_platform_admin()) {
         );
     }
 }
-
+$userInfo = null;
 $studentBossList = UserManager::getStudentBossList($userId);
 $studentBossListToString = '';
 if (!empty($studentBossList)) {
@@ -161,11 +161,21 @@ $data = [
     get_lang('Status') => $user['status'] == 1 ? get_lang('Teacher') : get_lang('Student'),
 ];
 
+$userInfo = [
+    'complete_name' => $user['complete_name'],
+    'email' => $user['email'],
+    'phone' => $user['phone'],
+    'official_code' => $user['official_code'],
+    'user_is_online' => !empty($user['user_is_online']) ? Display::return_icon('online.png') : Display::return_icon('offline.png'),
+    'status' => $user['status'] == 1 ? get_lang('Teacher') : get_lang('Student'),
+    'avatar' => $user['avatar'],
+];
+
 // Show info about who created this user and when
 $creatorId = $user['creator_id'];
 $creatorInfo = api_get_user_info($creatorId);
 if (!empty($creatorId) && !empty($creatorInfo)) {
-    $data[null] = sprintf(
+    $userInfo['created'] = sprintf(
         get_lang('CreatedByXYOnZ'),
         'user_information.php?user_id='.$creatorId,
         $creatorInfo['username'],
@@ -182,14 +192,16 @@ foreach ($data as $label => $item) {
     $csvContent[] = [$label, strip_tags($item)];
     $row++;
 }
-$userInformation = $table->toHtml();
+//$userInformation = $table->toHtml();
 
 $table = new HTML_Table(['class' => 'data_table']);
 $table->setHeaderContents(0, 0, get_lang('Tracking'));
 $csvContent[] = [get_lang('Tracking')];
+$userInfo['first_connection'] = Tracking::get_first_connection_date($userId);
+$userInfo['last_connection'] = Tracking::get_last_connection_date($userId, true);
 $data = [
-    get_lang('FirstLogin') => Tracking::get_first_connection_date($userId),
-    get_lang('LatestLogin') => Tracking::get_last_connection_date($userId, true),
+    get_lang('FirstLogin') => $userInfo['first_connection'],
+    get_lang('LatestLogin') => $userInfo['last_connection'],
 ];
 
 if (api_get_setting('allow_terms_conditions') === 'true') {
@@ -201,21 +213,29 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
     $icon = Display::return_icon('accept_na.png');
     if (!empty($value['value'])) {
         list($legalId, $legalLanguageId, $legalTime) = explode(':', $value['value']);
-        $icon = Display::return_icon('accept.png').' '.api_get_local_time($legalTime);
-        $icon .= ' '.Display::url(
+        $icon = Display::return_icon('accept.png');
+        $timeLegalAccept = api_get_local_time($legalTime);
+        $btn = Display::url(
             get_lang('DeleteLegal'),
             api_get_self().'?action=delete_legal&user_id='.$userId,
             ['class' => 'btn btn-danger btn-xs']
         );
     } else {
-        $icon .= ' '.Display::url(
+        $btn = Display::url(
             get_lang('SendLegal'),
             api_get_self().'?action=send_legal&user_id='.$userId,
             ['class' => 'btn btn-primary btn-xs']
         );
+        $timeLegalAccept = get_lang('NotRegistered');
     }
 
     $data[get_lang('LegalAccepted')] = $icon;
+
+    $userInfo['legal'] = [
+        'icon' => $icon,
+        'datetime' => $timeLegalAccept,
+        'url_send' => $btn,
+    ];
 }
 $row = 1;
 foreach ($data as $label => $item) {
@@ -226,8 +246,6 @@ foreach ($data as $label => $item) {
     $csvContent[] = [$label, strip_tags($item)];
     $row++;
 }
-$trackingInformation = $table->toHtml();
-$socialInformation = '';
 
 /**
  * Show social activity.
@@ -249,13 +267,20 @@ if (api_get_setting('allow_social_tool') === 'true') {
     $friends = SocialManager::getCountFriends($user['user_id']);
     $data[] = [get_lang('Friends'), $friends];
 
-    $count = SocialManager::getCountInvitationSent($user['user_id']);
-    $data[] = [get_lang('InvitationSent'), $count];
+    $countSent = SocialManager::getCountInvitationSent($user['user_id']);
+    $data[] = [get_lang('InvitationSent'), $countSent];
 
-    $count = SocialManager::get_message_number_invitation_by_user_id($user['user_id']);
-    $data[] = [get_lang('InvitationReceived'), $count];
+    $countReceived = SocialManager::get_message_number_invitation_by_user_id($user['user_id']);
+    $data[] = [get_lang('InvitationReceived'), $countReceived];
 
-    $socialInformation = Display::return_sortable_table('', $data);
+    $userInfo['social'] = [
+        'friends' => $friends,
+        'invitation_sent' => $countSent,
+        'invitation_received' => $countReceived,
+        'messages_posted' => $wallMessagesPosted,
+        'message_sent' => $messagesSent,
+        'message_received' => $messagesReceived,
+    ];
 }
 
 /**
@@ -585,7 +610,6 @@ if (isset($_GET['action'])) {
 Display::display_header($tool_name);
 
 echo Display::toolbarAction('toolbar-user-information', [implode(PHP_EOL, $actions)]);
-echo Display::page_header($tool_name);
 
 $fullUrlBig = UserManager::getUserPicture(
     $userId,
@@ -596,22 +620,6 @@ $fullUrl = UserManager::getUserPicture(
     $userId,
     USER_IMAGE_SIZE_ORIGINAL
 );
-
-echo '<div class="row">';
-
-echo '<div class="col-md-2">';
-echo '<a class="thumbnail expand-image" href="'.$fullUrlBig.'">'
-    .'<img src="'.$fullUrl.'" /></a><br />';
-echo '</div>';
-
-echo '<div class="col-md-5">';
-echo $userInformation;
-echo '</div>';
-
-echo '<div class="col-md-5">';
-echo $trackingInformation;
-echo '</div>';
-echo '</div>';
 
 if ($studentBossList) {
     echo Display::page_subheader(get_lang('StudentBossList'));
@@ -676,16 +684,18 @@ if ($user['status'] == DRH) {
         echo '</div>';
     }
 }
+$socialTool = api_get_setting('allow_social_tool');
+$tpl->assign('social_tool', $socialTool);
 
-if (api_get_setting('allow_social_tool') === 'true') {
-    echo Display::page_subheader(get_lang('SocialData'));
-    echo $socialInformation;
-}
+$tpl->assign('user', $userInfo);
+$layoutTemplate = $tpl->get_template('admin/user_information.tpl');
+$content = $tpl->fetch($layoutTemplate);
+echo $content;
 
-echo Display::page_subheader(get_lang('SessionList'));
+echo Display::page_subheader(get_lang('SessionList'), null, 'h3', ['class' => 'section-title']);
 echo $sessionInformation;
 
-echo Display::page_subheader(get_lang('CourseList'));
+echo Display::page_subheader(get_lang('CourseList'), null, 'h3', ['class' => 'section-title']);
 echo $courseInformation;
 echo $urlInformation;
 

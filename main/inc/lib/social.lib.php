@@ -847,10 +847,10 @@ class SocialManager extends UserManager
             $group_info = $userGroup->get($group_id);
 
             $userGroupImage = $userGroup->get_picture_group(
-                    $group_id,
+                $group_id,
                 $group_info['picture'],
-                    128,
-                    GROUP_IMAGE_SIZE_BIG
+                128,
+                GROUP_IMAGE_SIZE_BIG
             );
 
             $template->assign('show_group', true);
@@ -1165,9 +1165,9 @@ class SocialManager extends UserManager
                     $sendMessageText
                 );
                 $sendMessageUrl = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?'.http_build_query([
-                        'a' => 'get_user_popup',
-                        'user_id' => $user_id,
-                    ]);
+                    'a' => 'get_user_popup',
+                    'user_id' => $user_id,
+                ]);
 
                 $links .= '<li>';
                 $links .= Display::url(
@@ -1864,31 +1864,12 @@ class SocialManager extends UserManager
         $currentUserId = api_get_user_id();
         $userIdLoop = $message['user_sender_id'];
         $receiverId = $message['user_receiver_id'];
-        $urlImg = api_get_path(WEB_IMG_PATH);
 
         if (!isset($users[$userIdLoop])) {
             $users[$userIdLoop] = api_get_user_info($userIdLoop);
         }
 
-        $iconStatus = '';
-        $userStatus = (int) $users[$userIdLoop]['status'];
-        $isAdmin = self::is_admin($users[$userIdLoop]['id']);
-        if ($userStatus === 5) {
-            if ($users[$userIdLoop]['has_certificates']) {
-                $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_graduated.svg" width="22px" height="22px">';
-            } else {
-                $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_student.svg" width="22px" height="22px">';
-            }
-        } else {
-            if ($userStatus === 1) {
-                if ($isAdmin) {
-                    $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_admin.svg" width="22px" height="22px">';
-                } else {
-                    $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_teacher.svg" width="22px" height="22px">';
-                }
-            }
-        }
-
+        $iconStatus = $users[$userIdLoop]['icon_status'];
         $nameComplete = $users[$userIdLoop]['complete_name'];
         $url = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$userIdLoop;
 
@@ -2185,7 +2166,7 @@ class SocialManager extends UserManager
             $userInfo['has_certificates'] = 1;
         }
 
-        $userInfo['is_admin'] = Usermanager::is_admin($userId);
+        $userInfo['is_admin'] = UserManager::is_admin($userId);
 
         $languageId = api_get_language_id($userInfo['language']);
         $languageInfo = api_get_language_info($languageId);
@@ -2206,8 +2187,10 @@ class SocialManager extends UserManager
         }
 
         $extraFieldBlock = self::getExtraFieldBlock($userId, true);
+        $showLanguageFlag = api_get_configuration_value('social_show_language_flag_in_profile');
 
         $template->assign('user', $userInfo);
+        $template->assign('show_language_flag', $showLanguageFlag);
         $template->assign('extra_info', $extraFieldBlock);
         $template->assign('social_avatar_block', $socialAvatarBlock);
         $template->assign('profile_edition_link', $profileEditionLink);
@@ -2255,7 +2238,7 @@ class SocialManager extends UserManager
      */
     public static function listMyFriends($user_id, $link_shared, $show_full_profile)
     {
-        //SOCIALGOODFRIEND , USER_RELATION_TYPE_FRIEND, USER_RELATION_TYPE_PARENT
+        // SOCIALGOODFRIEND , USER_RELATION_TYPE_FRIEND, USER_RELATION_TYPE_PARENT
         $friends = self::get_friends($user_id, USER_RELATION_TYPE_FRIEND);
         $number_of_images = 30;
         $number_friends = count($friends);
@@ -2387,9 +2370,52 @@ class SocialManager extends UserManager
                 $j++;
             }
             $friendHtml .= '</div>';
+        } else {
+            $friendHtml = Display::return_message(get_lang('NoFriendsInYourContactList'), 'warning');
         }
 
         return $friendHtml;
+    }
+
+    /**
+     * @return string Get the JS code necessary for social wall to load open graph from URLs.
+     */
+    public static function getScriptToGetOpenGraph()
+    {
+        return '<script>
+            $(function() {
+                $("[name=\'social_wall_new_msg_main\']").on("paste", function(e) {
+                    $.ajax({
+                        contentType: "application/x-www-form-urlencoded",
+                        beforeSend: function() {
+                            $("[name=\'wall_post_button\']").prop( "disabled", true );
+                            $(".panel-preview").hide();
+                            $(".spinner").html("'
+                                .'<div class=\'text-center\'>'
+                                .'<em class=\'fa fa-spinner fa-pulse fa-1x\'></em>'
+                                .'<p>'.get_lang('Loading').' '.get_lang('Preview').'</p>'
+                                .'</div>'
+                            .'");
+                        },
+                        type: "POST",
+                        url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=read_url_with_open_graph",
+                        data: "social_wall_new_msg_main=" + e.originalEvent.clipboardData.getData("text"),
+                        success: function(response) {
+                            $("[name=\'wall_post_button\']").prop("disabled", false);
+                            if (!response == false) {
+                                $(".spinner").html("");
+                                $(".panel-preview").show();
+                                $(".url_preview").html(response);
+                                $("[name=\'url_content\']").val(response);
+                                $(".url_preview img").addClass("img-responsive");
+                            } else {
+                                $(".spinner").html("");
+                            }
+                        }
+                    });
+                });
+            });
+        </script>';
     }
 
     /**
@@ -3237,28 +3263,9 @@ class SocialManager extends UserManager
     private static function headerMessagePost($authorInfo, $receiverInfo, $message)
     {
         $currentUserId = api_get_user_id();
-        $iconStatus = null;
         $authorId = (int) $authorInfo['user_id'];
         $receiverId = (int) $receiverInfo['user_id'];
-        $userStatus = (int) $authorInfo['status'];
-        $urlImg = api_get_path(WEB_IMG_PATH);
-        $isAdmin = self::is_admin($authorId);
-
-        if ($userStatus === 5) {
-            if ($authorInfo['has_certificates']) {
-                $iconStatus = Display::return_icon('identifier_graduated.png', get_lang('User status'), ['class' => 'float-left'], ICON_SIZE_SMALL);
-            } else {
-                $iconStatus = Display::return_icon('identifier_student.png', get_lang('User status'), ['class' => 'float-left'], ICON_SIZE_SMALL);
-            }
-        } else {
-            if ($userStatus === 1) {
-                if ($isAdmin) {
-                    $iconStatus = Display::return_icon('identifier_admin.png', get_lang('User status'), ['class' => 'float-left'], ICON_SIZE_SMALL);
-                } else {
-                    $iconStatus = Display::return_icon('identifier_teacher.png', get_lang('User status'), ['class' => 'float-left'], ICON_SIZE_SMALL);
-                }
-            }
-        }
+        $iconStatus = $authorInfo['icon_status'];
 
         $date = Display::dateToStringAgoAndLongDate($message['send_date']);
         $avatarAuthor = $authorInfo['avatar'];

@@ -209,9 +209,9 @@ if (!$inATest) {
                 <div class="col-sm-1 text-right"><strong>'.get_lang('Difficulty').'</strong></div>
                 <div class="col-sm-1 text-right"><strong>'.get_lang('MaximumScore').'</strong></div>
                 <div class="col-sm-2 text-right"><strong>'.get_lang('Actions').'</strong></div>
-        </div>
-        <div id="question_list">
-    ';
+            </div>
+            <div id="question_list">
+        ';
 
         $category_list = TestCategory::getListOfCategoriesNameForTest($objExercise->id, false);
 
@@ -328,29 +328,29 @@ if (!$inATest) {
                 echo '<div id="question_id_list_'.$id.'">
                         <div class="header_operations" data-exercise="'.$objExercise->selectId().'"
                             data-question="'.$id.'">
-                                     <div class="row">
+                            <div class="row">
                                 <div class="question col-sm-5 col-xs-12">'
                                     .$questionName.'
-                                        </div>
+                                </div>
                                 <div class="type text-center col-sm-1 col-xs-12">
                                     <span class="visible-xs-inline">'.get_lang('Type').' </span>'
                                     .$questionType.'
-                                            </div>
+                                </div>
                                 <div class="category col-sm-2 col-xs-12" title="'.$txtQuestionCat.'">
                                     <span class="visible-xs-inline">'.get_lang('Category').' </span>'
                                     .cut($txtQuestionCat, 42).'
-                                        </div>
+                                </div>
                                 <div class="level text-right col-sm-1 col-xs-6">
                                     <span class="visible-xs-inline">'.get_lang('Difficulty').' </span>'
                                     .$questionLevel.'
-                                            </div>
+                                </div>
                                 <div class="score text-right col-sm-1 col-xs-6">
                                     <span class="visible-xs-inline">'.get_lang('Score').' </span>'
                                     .$questionScore.'
-                                        </div>
+                                </div>
                                 <div class="btn-actions text-right col-sm-2 col-xs-6">
                                     <div class="edition">'.$btnActions.'</div>
-                                </div>                     
+                                </div>
                             </div>
                         </div>
                         <div class="question-list-description-block" id="pnl-question-'.$id.'">
@@ -360,8 +360,9 @@ if (!$inATest) {
                 unset($objQuestionTmp);
             }
         }
+
+        echo '</div>'; //question list div
     } else {
         echo Display::return_message(get_lang('NoQuestion'), 'warning');
     }
-    echo '</div>'; //question list div
 }

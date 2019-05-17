@@ -675,10 +675,10 @@ if ($is_allowedToEdit || $is_tutor) {
     }';
 }
 
-//Autowidth
+// Autowidth
 $extra_params['autowidth'] = 'true';
 
-//height auto
+// Height auto
 $extra_params['height'] = 'auto';
 ?>
 <script>
@@ -861,4 +861,4 @@ $extra_params['height'] = 'auto';
 
 <?php
 echo Display::grid_html('results');
-Display :: display_footer();
+Display::display_footer();

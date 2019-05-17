@@ -108,7 +108,9 @@ if (empty($exercise_stat_info) || empty($question_list)) {
 $nameTools = get_lang('Exercises');
 $interbreadcrumb[] = ["url" => "exercise.php?".api_get_cidreq(), "name" => get_lang('Exercises')];
 
-if ($origin != 'learnpath') {
+$hideHeaderAndFooter = in_array($origin, ['learnpath', 'embeddable']);
+
+if (!$hideHeaderAndFooter) {
     //so we are not in learnpath tool
     Display::display_header($nameTools, get_lang('Exercise'));
 } else {
@@ -118,7 +120,7 @@ if ($origin != 'learnpath') {
 /* DISPLAY AND MAIN PROCESS */
 
 // I'm in a preview mode as course admin. Display the action menu.
-if (api_is_course_admin() && $origin != 'learnpath') {
+if (api_is_course_admin() && !$hideHeaderAndFooter) {
     echo '<div class="actions">';
     echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.
         Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';
@@ -235,28 +237,18 @@ foreach ($question_list as $questionId) {
         $attributes['checked'] = 1;
     }
     $label_attributes = [];
-    $label_attributes['class'] = 'checkbox';
     $label_attributes['for'] = $check_id;
-    $label_attributes['class'] = "checkbox";
     $checkbox = Display::input('checkbox', 'remind_list['.$questionId.']', '', $attributes);
     $url = 'exercise_submit.php?exerciseId='.$objExercise->id.'&num='.$counter.'&reminder=1&'.api_get_cidreq();
 
     $counter++;
-    if ($objExercise->type == ONE_PER_PAGE) {
-        $question_title = Display::url(
-            $counter.'. '.cut($objQuestionTmp->selectTitle(), 40),
-            $url
-        );
-        $question_title = $counter.'. '.cut($objQuestionTmp->selectTitle(), 40);
-    } else {
-        $question_title = $counter.'. '.cut($objQuestionTmp->selectTitle(), 40);
-    }
+    $question_title = $counter.'. '.strip_tags($objQuestionTmp->selectTitle());
     //Check if the question doesn't have an answer
     if (!in_array($questionId, $exercise_result)) {
         $question_title = Display::label($question_title, 'warning');
     }
     $question_title = Display::tag('label', $checkbox.$question_title, $label_attributes);
-    $table .= Display::div($question_title, ['class' => 'exercise_reminder_item']);
+    $table .= Display::div($question_title, ['class' => 'exercise_reminder_item checkbox']);
 } // end foreach() block that loops over all questions
 
 echo Display::div($table, ['class' => 'question-check-test']);
@@ -288,7 +280,9 @@ $exerciseActions .= '&nbsp;'.Display::url(
 echo Display::div('', ['class' => 'clear']);
 echo Display::div($exerciseActions, ['class' => 'form-actions']);
 
-if ($origin != 'learnpath') {
-    // We are not in learnpath tool
+if (!$hideHeaderAndFooter) {
+    // We are not in learnpath tool or embeddable quiz
     Display::display_footer();
+} else {
+    Display::display_reduced_footer();
 }

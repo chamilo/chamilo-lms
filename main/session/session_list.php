@@ -311,7 +311,7 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
                     });
                     orderList = JSON.stringify(orderList);
                     $.get("<?php echo $orderUrl; ?>", "order="+orderList, function (result) {
-                        console.log(result);
+                        //console.log(result);
                     });
                 }
             };
@@ -335,7 +335,7 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
             }
             ?>
 
-            //Select first elements by default
+            // Fixes search table.
             var searchDialogAll = $("#fbox_"+grid[0].id);
             searchDialogAll.addClass("table");
             var searchDialog = $("#searchmodfbox_"+grid[0].id);

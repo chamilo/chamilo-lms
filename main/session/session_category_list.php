@@ -48,7 +48,7 @@ $interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('SessionLi
 if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
     $interbreadcrumb[] = ['url' => 'session_category_list.php', 'name' => get_lang('ListSessionCategory')];
     $tool_name = get_lang('SearchASession');
-    Display :: display_header($tool_name);
+    Display::display_header($tool_name);
     $form = new FormValidator('advanced_search', 'get');
     $form->addElement('header', '', $tool_name);
     $active_group = [];

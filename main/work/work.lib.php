@@ -3758,7 +3758,7 @@ function sendAlertToUsers($workId, $courseInfo, $sessionId)
     if ($send == SEND_EMAIL_EVERYONE || $send == SEND_EMAIL_TEACHERS) {
         // Lets predefine some variables. Be sure to change the from address!
         if (empty($sessionId)) {
-            //Teachers
+            // Teachers
             $userList = CourseManager::get_user_list_from_course_code(
                 api_get_course_id(),
                 null,

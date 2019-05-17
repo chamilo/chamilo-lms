@@ -120,6 +120,6 @@ if (isset($_GET['term'])) {
     if (!$q) {
         return;
     }
-    //echo $q . "| value\n";
+
     get_suggestions_from_search_engine($q);
 }

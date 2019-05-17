@@ -607,7 +607,7 @@ $template->assign(
     )
 );
 
-$frameReady = Display::getFrameReadyBlock('top.content_name');
+$frameReady = Display::getFrameReadyBlock('#content_id, #content_id_blank');
 $template->assign('frame_ready', $frameReady);
 $template->displayTemplate('@ChamiloTheme/LearnPath/view.html.twig');
 

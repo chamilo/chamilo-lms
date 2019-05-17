@@ -2848,70 +2848,85 @@ HTML;
      */
     public static function getFrameReadyBlock($frameName)
     {
-        $defaultFeatures = ['playpause', 'current', 'progress', 'duration', 'tracks', 'volume', 'fullscreen', 'vrview'];
+        $webPublicPath = api_get_path(WEB_PUBLIC_PATH);
+
+        $videoFeatures = [
+            'playpause',
+            'current',
+            'progress',
+            'duration',
+            'tracks',
+            'volume',
+            'fullscreen',
+            'vrview',
+            'markersrolls',
+        ];
         $features = api_get_configuration_value('video_features');
-        $bowerJsFiles = [];
-        $bowerCSSFiles = [];
+        $videoPluginsJS = [];
+        $videoPluginCSS = [];
         if (!empty($features) && isset($features['features'])) {
             foreach ($features['features'] as $feature) {
                 if ($feature === 'vrview') {
                     continue;
                 }
                 $defaultFeatures[] = $feature;
-                $bowerJsFiles[] = "mediaelement/plugins/$feature/$feature.js";
-                $bowerCSSFiles[] = "mediaelement/plugins/$feature/$feature.css";
+                $videoPluginsJS[] = "mediaelement/plugins/$feature/$feature.js";
+                $videoPluginCSS[] = "mediaelement/plugins/$feature/$feature.css";
             }
+        }
+
+        $videoPluginFiles = '';
+        foreach ($videoPluginsJS as $file) {
+            $videoPluginFiles .= '{type: "script", src: "'.$webPublicPath.'assets/'.$file.'"},';
+        }
+
+        $videoPluginCssFiles = '';
+        foreach ($videoPluginCSS as $file) {
+            $videoPluginCssFiles .= '{type: "stylesheet", src: "'.$webPublicPath.'assets/'.$file.'"},';
         }
 
         $translateHtml = '';
         $translate = api_get_configuration_value('translate_html');
         if ($translate) {
-            $translateHtml = '{type:"script", id:"_fr4", src:"'.api_get_path(WEB_AJAX_PATH).'lang.ajax.php?a=translate_html&'.api_get_cidreq().'"},';
+            $translateHtml = '{type:"script", src:"'.api_get_path(WEB_AJAX_PATH).'lang.ajax.php?a=translate_html&'.api_get_cidreq().'"},';
         }
 
-        $counter = 10;
-        $extraMediaFiles = '';
-        foreach ($bowerJsFiles as $file) {
-            $extraMediaFiles .= '{type: "script", id: "media_'.$counter.'", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/'.$file.'"},';
-            $counter++;
-        }
-
-        foreach ($bowerCSSFiles as $file) {
-            $extraMediaFiles .= '{type: "stylesheet", id: "media_'.$counter.'", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/'.$file.'"},';
-            $counter++;
-        }
-
-        $defaultFeatures = implode("','", $defaultFeatures);
+        $videoFeatures = implode("','", $videoFeatures);
         $frameReady = '
-          $.frameReady(function() {
-            $(function() {
-                $("video:not(.skip), audio:not(.skip)").mediaelementplayer({                    
-                    pluginPath: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/build/",            
-                    features: ["'.$defaultFeatures.'"],
+        $.frameReady(function() {
+             $(function () {
+                $("video:not(.skip), audio:not(.skip)").mediaelementplayer({
+                    pluginPath: "'.$webPublicPath.'assets/mediaelement/plugins/",            
+                    features: [\''.$videoFeatures.'\'],
                     success: function(mediaElement, originalNode, instance) {
+                        '.ChamiloApi::getQuizMarkersRollsJS().'
                     },
-                    vrPath: "'.api_get_path(WEB_PUBLIC_PATH).'assets/vrview/build/vrview.js"
+                    vrPath: "'.$webPublicPath.'assets/vrview/build/vrview.js"
                 });
             });
-          }, "'.$frameName.'",
-          {
-            load: [
-                { type:"script", id:"_fr1", src:"'.api_get_jquery_web_path().'"},
-                { type:"script", id:"_fr7", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/MathJax/MathJax.js?config=AM_HTMLorMML"},
-                { type:"script", id:"_fr4", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery-ui/jquery-ui.min.js"},
-                { type:"stylesheet", id:"_fr5", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery-ui/themes/smoothness/jquery-ui.min.css"},
-                { type:"stylesheet", id:"_fr6", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery-ui/themes/smoothness/theme.css"},
-                { type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
-                { type:"stylesheet", id:"_fr7", src:"'.api_get_path(WEB_PUBLIC_PATH).'css/dialog.css"},
-                { type:"script", id:"_fr3", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?'.api_get_cidreq().'"},
-                {type: "script", id: "_media1", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/build/mediaelement-and-player.min.js"},
-                {type: "stylesheet", id: "_media2", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/build/mediaelementplayer.min.css"},                
-                {type: "stylesheet", id: "_media4", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/plugins/vrview/vrview.css"},
-                {type: "script", id: "_media4", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/plugins/vrview/vrview.js"},
-                '.$extraMediaFiles.'
+        }, 
+        "'.$frameName.'",
+        [
+            {type:"script", src:"'.api_get_jquery_web_path().'", deps: [
+                {type:"script", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
+                {type:"script", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?'.api_get_cidreq().'"},
+                {type:"script", src:"'.$webPublicPath.'assets/jquery-ui/jquery-ui.min.js"},
+                {type:"script", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelement-and-player.min.js", 
+                    deps: [
+                    {type:"script", src: "'.$webPublicPath.'assets/mediaelement/plugins/vrview/vrview.js"},
+                    {type:"script", src: "'.$webPublicPath.'assets/mediaelement/plugins/markersrolls/markersrolls.js"},
+                    '.$videoPluginFiles.'
+                ]},                
                 '.$translateHtml.'
-            ]
-          });';
+            ]},
+            '.$videoPluginCssFiles.'
+            {type:"script", src:"'.$webPublicPath.'assets/MathJax/MathJax.js?config=AM_HTMLorMML"},
+            {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/jquery-ui.min.css"},
+            {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/theme.css"},                
+            {type:"stylesheet", src:"'.$webPublicPath.'css/dialog.css"},
+            {type:"stylesheet", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelementplayer.min.css"},                
+            {type:"stylesheet", src: "'.$webPublicPath.'assets/mediaelement/plugins/vrview/vrview.css"},
+        ]);';
 
         return $frameReady;
     }

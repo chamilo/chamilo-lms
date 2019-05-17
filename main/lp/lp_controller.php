@@ -55,7 +55,7 @@ $htmlHeadXtra[] = '
     /*
     Script to manipulate Learning Path items with Drag and drop
      */
-    var newOrderData = "";
+    var newOrderData = "";    
     function buildLPtree(in_elem, in_parent_id) {
         var item_tag = in_elem.get(0).tagName;
         var item_id =  in_elem.attr("id");
@@ -71,7 +71,7 @@ $htmlHeadXtra[] = '
         });
     }
 
-    // same than buildLPtree with some text display for debug in string lptree_debug
+    // return the interge part of an UL id
     // (0 for lp_item_list)
     function get_UL_integer_id(in_ul_id) {
         in_parent_integer_id = in_ul_id;
@@ -682,7 +682,8 @@ switch ($action) {
         }
         break;
     case 'auto_launch':
-        if (api_get_course_setting('enable_lp_auto_launch') == 1) { //Redirect to a specific LP
+        // Redirect to a specific LP
+        if (api_get_course_setting('enable_lp_auto_launch') == 1) {
             if (!$is_allowed_to_edit) {
                 api_not_allowed(true);
             }
@@ -1136,7 +1137,7 @@ switch ($action) {
             exit;
         }
         break;
-    case 'add_sub_item': // Add an item inside a dir/chapter.
+    case 'add_sub_item':
         // Add an item inside a dir/chapter.
         // @todo check if this is @deprecated
         if (!$is_allowed_to_edit) {

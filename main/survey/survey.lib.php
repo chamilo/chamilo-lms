@@ -2359,4 +2359,107 @@ class SurveyManager
             );
         }
     }
+
+    /**
+     * @param int    $userId
+     * @param string $surveyCode
+     * @param int    $courseId
+     * @param int    $sessionId
+     * @param int    $groupId
+     *
+     * @return array|CSurveyInvitation[]
+     */
+    public static function getUserInvitationsForSurveyInCourse(
+        $userId,
+        $surveyCode,
+        $courseId,
+        $sessionId = 0,
+        $groupId = 0
+    ) {
+        $invitationRepo = Database::getManager()->getRepository('ChamiloCourseBundle:CSurveyInvitation');
+        $invitations = $invitationRepo->findBy(
+            [
+                'user' => $userId,
+                'cId' => $courseId,
+                'sessionId' => $sessionId,
+                'groupId' => $groupId,
+                'surveyCode' => $surveyCode,
+            ],
+            ['invitationDate' => 'DESC']
+        );
+
+        return $invitations;
+    }
+
+    /**
+     * @param array $userInfo
+     * @param int   $answered
+     *
+     * @return string
+     */
+    public static function surveyReport($userInfo, $answered = 0)
+    {
+        $userId = isset($userInfo['user_id']) ? (int) $userInfo['user_id'] : 0;
+        $answered = (int) $answered;
+
+        if (empty($userId)) {
+            return '';
+        }
+
+        $em = Database::getManager();
+        $repo = $em->getRepository('ChamiloCourseBundle:CSurveyInvitation');
+        $repoSurvey = $em->getRepository('ChamiloCourseBundle:CSurvey');
+        $invitations = $repo->findBy(['user' => $userId, 'answered' => $answered]);
+        $mainUrl = api_get_path(WEB_CODE_PATH).'survey/survey.php?';
+        $content = '';
+
+        if (empty($answered)) {
+            $content .= Display::page_subheader(get_lang('Answered'));
+        } else {
+            $content .= Display::page_subheader(get_lang('Unanswered'));
+        }
+
+        if (!empty($invitations)) {
+            $table = new HTML_Table(['class' => 'table']);
+            $table->setHeaderContents(0, 0, get_lang('SurveyName'));
+            $table->setHeaderContents(0, 1, get_lang('Course'));
+
+            // Not answered
+            /** @var CSurveyInvitation $invitation */
+            $row = 1;
+            foreach ($invitations as $invitation) {
+                $courseId = $invitation->getCId();
+                $courseInfo = api_get_course_info_by_id($courseId);
+                $sessionId = $invitation->getSessionId();
+                $surveyCode = $invitation->getSurveyCode();
+
+                $survey = $repoSurvey->findOneBy([
+                    'cId' => $courseId,
+                    'sessionId' => $sessionId,
+                    'code' => $surveyCode
+                ]);
+
+                if (empty($survey)) {
+                    continue;
+                }
+
+                $url = $mainUrl.'survey_id='.$survey->getSurveyId().'&cidReq='.$courseInfo['code'].'&id_session='.$sessionId;
+                $title = $survey->getTitle();
+                $title = Display::url($title, $url);
+
+                if (!empty($sessionId)) {
+                    $sessionInfo = api_get_session_info($sessionId);
+                    $courseInfo['name'] .= ' ('.$sessionInfo['name'].')';
+                }
+                $table->setCellContents($row, 0, $title);
+                $table->setCellContents($row, 1, $courseInfo['name']);
+                $row++;
+            }
+            $content .= $table->toHtml();
+        } else {
+            $content .= Display::return_message(get_lang('NoData'));
+        }
+
+        return $content;
+    }
 }

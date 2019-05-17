@@ -203,10 +203,10 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'lp', 'LearningPath')");
         $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'exercise_and_lp', 'ExerciseAndLearningPath')");
 
-        $cSurvey = $schema->getTable('c_survey');
+        $survey = $schema->getTable('c_survey');
 
-        if (!$cSurvey->hasColumn('is_mandatory')) {
-            $cSurvey->addColumn('is_mandatory', Type::BOOLEAN)->setDefault(false);
+        if (!$survey->hasColumn('is_mandatory')) {
+            $survey->addColumn('is_mandatory', Type::BOOLEAN)->setDefault(false);
         }
 
         $this->addSql('ALTER TABLE c_student_publication ADD filesize INT DEFAULT NULL');
@@ -215,6 +215,20 @@ class Version20 extends AbstractMigrationChamilo
 
         $this->addSql('ALTER TABLE c_survey_invitation CHANGE reminder_date reminder_date DATETIME DEFAULT NULL');
         $this->addSql('UPDATE c_survey_invitation SET reminder_date = NULL WHERE CAST(reminder_date AS CHAR(20)) = "0000-00-00 00:00:00"');
+
+
+        $table = $schema->hasTable('message_feedback');
+        if ($table === false) {
+            $this->addSql(
+                'CREATE TABLE message_feedback (id BIGINT AUTO_INCREMENT NOT NULL, message_id BIGINT NOT NULL, user_id INT NOT NULL, liked TINYINT(1) DEFAULT 0 NOT NULL, disliked TINYINT(1) DEFAULT 0 NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_DB0F8049537A1329 (message_id), INDEX IDX_DB0F8049A76ED395 (user_id), INDEX idx_message_feedback_uid_mid (message_id, user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
+            );
+            $this->addSql(
+                'ALTER TABLE message_feedback ADD CONSTRAINT FK_DB0F8049537A1329 FOREIGN KEY (message_id) REFERENCES message (id) ON DELETE CASCADE'
+            );
+            $this->addSql(
+                'ALTER TABLE message_feedback ADD CONSTRAINT FK_DB0F8049A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;'
+            );
+        }
 
         /*$table = $schema->getTable('course_rel_class');
         if (!$table->hasColumn('c_id')) {

@@ -227,6 +227,9 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // E-mail accounts to send notifications to when executing cronjobs - works for main/cron/import_csv.php
 //$_configuration['cron_notification_mails'] = array('email@example.com', 'email2@example.com');
 
+// Help desk emails that will recieve email notifications in import_csv.php
+//$_configuration['cron_notification_help_desk'] = array('email@example.com', 'email2@example.com');
+
 // Only shows the fields in this list
 /*$_configuration['allow_fields_inscription'] = [
     'fields' => [

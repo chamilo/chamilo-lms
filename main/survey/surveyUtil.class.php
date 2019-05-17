@@ -924,7 +924,7 @@ class SurveyUtil
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
 
         $surveyId = (int) $survey_data['survey_id'];
-        $course_id = (int)  $survey_data['c_id'];
+        $course_id = (int) $survey_data['c_id'];
 
         if (empty($surveyId) || empty($course_id)) {
             return '';
@@ -1198,7 +1198,7 @@ class SurveyUtil
     }
 
     /**
-     * Return user answers in a row
+     * Return user answers in a row.
      *
      * @param      $survey_data
      * @param      $possible_options

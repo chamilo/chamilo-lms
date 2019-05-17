@@ -2433,7 +2433,7 @@ class SurveyManager
                 $survey = $repoSurvey->findOneBy([
                     'cId' => $courseId,
                     'sessionId' => $sessionId,
-                    'code' => $surveyCode
+                    'code' => $surveyCode,
                 ]);
 
                 if (empty($survey)) {

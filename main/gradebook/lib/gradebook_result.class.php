@@ -32,6 +32,9 @@ class GradeBookResult
         $filename = 'gradebook_results_'.gmdate('YmdGis').'.csv';
 
         $data = '';
+        //build the results
+        //titles
+
         foreach ($dato[0] as $header_col) {
             if (!empty($header_col)) {
                 if (is_array($header_col)) {
@@ -46,7 +49,9 @@ class GradeBookResult
 
         $data .= "\r\n";
         $cant_students = count($dato[1]);
+
         for ($i = 0; $i < $cant_students; $i++) {
+            $column = 0;
             foreach ($dato[1][$i] as $col_name) {
                 $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($col_name))).';';
             }

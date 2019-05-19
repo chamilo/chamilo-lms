@@ -8426,4 +8426,8 @@ $LegalTermsAgreementStatus = "حالة الموافقة على احكام الا
 $HideSurveyInvitationLink = "اخفاء رابط الدعوة الخاص بالاستبيان";
 $LeaveAMessage = "اترك رسالة";
 $OrphanQuestion = "سؤال غير متصل";
+$WelcomeToPortalXInCourseSessionX = "مرحبا بك في منصة %s مقرر الموسم: %s";
+$WelcomeToPortalXInCourseSessionXCoursePartOfCareerX = "مرحبا بك في منصة %s في مقرر %s, جزء من وظيفة %s";
+$YourNextModule = "درسك التالي";
+$FirstLesson = "الدرس الاول";
 ?>

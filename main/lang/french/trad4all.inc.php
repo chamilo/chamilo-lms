@@ -8327,4 +8327,8 @@ $LegalTermsAgreementStatus = "État d'acceptation des conditions d'utilisation";
 $HideSurveyInvitationLink = "Cacher le lien d'invitation à l'enquête";
 $LeaveAMessage = "Laisser un message";
 $OrphanQuestion = "Question orpheline";
+$WelcomeToPortalXInCourseSessionX = "Bienvenue sur le portail %s, Cours/session: %s";
+$WelcomeToPortalXInCourseSessionXCoursePartOfCareerX = "Bienvenue sur le portail %s dans le cours %s qui fait partie de la carrière %s";
+$YourNextModule = "Votre module suivant";
+$FirstLesson = "Première leçon";
 ?>

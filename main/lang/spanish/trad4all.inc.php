@@ -8423,4 +8423,8 @@ $LegalTermsAgreementStatus = "Estado de validación de condiciones de uso";
 $HideSurveyInvitationLink = "Esconder el enlace de invitación a la encuesta";
 $LeaveAMessage = "Deje un mensaje";
 $OrphanQuestion = "Pregunta huérfana";
+$WelcomeToPortalXInCourseSessionX = "Bienvenid@ en el portal %s, Curso/sesión: %s";
+$WelcomeToPortalXInCourseSessionXCoursePartOfCareerX = "Bienvenid@ en el portal %s en el curso %s, parte de la carrera %s";
+$YourNextModule = "Su próximo módulo";
+$FirstLesson = "Primera lección";
 ?>

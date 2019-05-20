@@ -1289,7 +1289,7 @@ class Skill extends Model
     /**
      * Get user's skills.
      *
-     * @param int  $userId User's id
+     * @param int  $userId
      * @param bool $getSkillData
      * @param int  $courseId
      * @param int  $sessionId

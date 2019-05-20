@@ -272,12 +272,6 @@ class MessageManager
                 $message = $repo->find($row['id']);
                 $messages[] = $message;
             }
-            /*$criteria = [
-                'userReceiverId' => $aboutUserInfo['id'],
-                'msgStatus' => MESSAGE_STATUS_CONVERSATION,
-            ];
-            $repo = Database::getManager()->getRepository('ChamiloCoreBundle:Message');
-            $messages = $repo->findBy($criteria, ['sendDate' => 'DESC']);*/
 
             return $messages;
         }
@@ -771,8 +765,8 @@ class MessageManager
         if ($id != strval(intval($id))) {
             return false;
         }
-        $user_receiver_id = intval($user_receiver_id);
-        $id = intval($id);
+        $id = (int) $id;
+        $user_receiver_id = (int) $user_receiver_id;
         $sql = "SELECT * FROM $table
                 WHERE id = ".$id." AND msg_status <>".MESSAGE_STATUS_OUTBOX;
         $rs = Database::query($sql);
@@ -1578,7 +1572,6 @@ class MessageManager
         }
 
         $webCodePath = api_get_path(WEB_CODE_PATH);
-
         $iconCalendar = Display::returnFontAwesomeIcon('calendar');
 
         $langEdit = get_lang('Edit');

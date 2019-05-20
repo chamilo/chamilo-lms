@@ -1148,44 +1148,68 @@ class Skill extends Model
     }
 
     /**
-     * @param int $user_id
-     * @param int $gradebookId
+     * @param int $userId
+     * @param Category $category
      * @param int $courseId
      * @param int $sessionId
+     *
+     * @return bool
      */
     public function addSkillToUser(
-        $user_id,
-        $gradebookId,
-        $courseId = 0,
-        $sessionId = 0
+        $userId,
+        $category,
+        $courseId,
+        $sessionId
     ) {
         $skill_gradebook = new SkillRelGradebook();
         $skill_rel_user = new SkillRelUser();
 
-        $skill_gradebooks = $skill_gradebook->get_all(
-            ['where' => ['gradebook_id = ?' => $gradebookId]]
-        );
+        if (empty($category)) {
+            return false;
+        }
+
+        // Load subcategories
+        if (empty($category->get_parent_id())) {
+            $subCategories = $category->get_subcategories(
+                $userId,
+                $category->get_course_code(),
+                $category->get_session_id()
+            );
+            if (!empty($subCategories)) {
+                /** @var Category $subCategory */
+                foreach ($subCategories as $subCategory) {
+                    $this->addSkillToUser($userId, $subCategory, $courseId, $sessionId);
+                }
+            }
+        }
+
+        $gradebookId = $category->get_id();
+        $skill_gradebooks = $skill_gradebook->get_all(['where' => ['gradebook_id = ?' => $gradebookId]]);
+
         if (!empty($skill_gradebooks)) {
             foreach ($skill_gradebooks as $skill_gradebook) {
-                $user_has_skill = $this->userHasSkill(
-                    $user_id,
+                $hasSkill = $this->userHasSkill(
+                    $userId,
                     $skill_gradebook['skill_id'],
                     $courseId,
                     $sessionId
                 );
-                if (!$user_has_skill) {
+
+                if (!$hasSkill) {
                     $params = [
-                        'user_id' => $user_id,
+                        'user_id' => $userId,
                         'skill_id' => $skill_gradebook['skill_id'],
                         'acquired_skill_at' => api_get_utc_datetime(),
-                        'course_id' => intval($courseId),
-                        'session_id' => $sessionId ? intval($sessionId) : null,
+                        'course_id' => (int) $courseId,
+                        'session_id' => $sessionId ? (int) $sessionId : null,
                     ];
 
                     $skill_rel_user->save($params);
                 }
             }
         }
+
+        return true;
     }
 
     /* Deletes a skill */

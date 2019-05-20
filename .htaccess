@@ -75,6 +75,9 @@ RewriteRule ^lti/os$ plugin/ims_lti/outcome_service.php [L]
 # http://my.chamilo.net/jdoe to http://my.chamilo.net/user.php?jdoe
 RewriteRule ^([^/.]+)/?$ user.php?$1 [L]
 
+# Deny direct access to user my files
+RewriteRule ^app/upload/users/([^/]+)/([^/]+)/my_files/(.*)$ main/social/download_my_files.php?user_id=$2&file=$3 [QSA,L]
+
 # Deny access
 RewriteRule ^(tests|.git) - [F,L,NC]
 

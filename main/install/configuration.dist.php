@@ -1205,6 +1205,9 @@ $_configuration['required_extra_fields_in_profile'] = [
 // See api.lib.php in order to find the options: examples SCORE_DIV = 1, SCORE_PERCENT = 2, etc
 //$_configuration['gradebook_report_score_style'] = 1; //  Means the score will be (X / Y) "SCORE_DIV"
 
+// Blocks "my files" access to anon users
+//$_configuration['block_my_files_access'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

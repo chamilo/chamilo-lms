@@ -1446,7 +1446,7 @@ class Skill extends Model
             ];
 
             if (!empty($courseInfo)) {
-                $tableRow['course_image'] = $courseInfo['course_image_source'];
+                $tableRow['course_image'] = $courseInfo['course_image'];
                 $tableRow['course_name'] = $courseInfo['title'];
             }
             $tableRows[] = $tableRow;

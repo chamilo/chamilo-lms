@@ -2177,11 +2177,11 @@ JAVASCRIPT;
                     : null;
 
                 if ($field['field_type'] == self::FIELD_TYPE_DOUBLE_SELECT) {
-                    //Add 2 selects
+                    // Add 2 selects
                     $options = $extraFieldOption->get_field_options_by_field($field['id']);
                     $options = self::extra_field_double_select_convert_array_to_ordered_array($options);
-                    $first_options = [];
 
+                    $first_options = [];
                     if (!empty($options)) {
                         foreach ($options as $option) {
                             foreach ($option as $sub_option) {
@@ -2248,6 +2248,7 @@ JAVASCRIPT;
                 $rules[] = [
                     'field' => 'extra_'.$field['variable'],
                     'op' => 'cn',
+                    'data' => ''
                 ];
             }
         }

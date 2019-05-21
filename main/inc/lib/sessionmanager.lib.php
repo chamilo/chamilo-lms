@@ -8221,8 +8221,8 @@ SQL;
         }
 
         // Inject extra session fields
-        $session_field = new ExtraFieldModel('session');
-        $rules = $session_field->getRules($columns, $columnModel);
+        $sessionField = new ExtraFieldModel('session');
+        $rules = $sessionField->getRules($columns, $columnModel);
 
         if (!in_array('actions', array_column($columnModel, 'name'))) {
             $columnModel[] = [
@@ -8238,8 +8238,8 @@ SQL;
         }
 
         $columnName = [];
-        foreach ($columnModel as $col_model) {
-            $columnName[] = $col_model['name'];
+        foreach ($columnModel as $col) {
+            $columnName[] = $col['name'];
         }
 
         $return = [

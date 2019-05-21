@@ -480,7 +480,7 @@ class SessionManager
 
         if (!api_is_platform_admin()) {
             if (api_is_session_admin() &&
-                api_get_setting('allow_session_admins_to_manage_all_sessions') == 'false'
+                api_get_setting('allow_session_admins_to_manage_all_sessions') === 'false'
             ) {
                 $where .= " AND s.session_admin_id = $userId ";
             }
@@ -488,7 +488,7 @@ class SessionManager
 
         if (!api_is_platform_admin() &&
             api_is_teacher() &&
-            api_get_setting('allow_teachers_to_create_sessions') == 'true'
+            api_get_setting('allow_teachers_to_create_sessions') === 'true'
         ) {
             $where .= " AND s.id_coach = $userId ";
         }
@@ -505,8 +505,8 @@ class SessionManager
         $isMakingOrder = false;
         $showCountUsers = false;
 
-        if ($getCount == true) {
-            $select = " SELECT count(DISTINCT s.id) as total_rows";
+        if ($getCount === true) {
+            $select = ' SELECT count(DISTINCT s.id) as total_rows ';
         } else {
             if (!empty($columns['column_model'])) {
                 foreach ($columns['column_model'] as $column) {
@@ -623,7 +623,6 @@ class SessionManager
         }
 
         $userId = api_get_user_id();
-
         $sessions = self::getSessionsForAdmin($userId, $options, $getCount, $columns);
 
         if ($getCount) {
@@ -648,7 +647,7 @@ class SessionManager
                 $session['users'] = self::get_users_by_session($session['id'], 0, true);
             }
             $url = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session['id'];
-            if (api_is_drh() || $extraFieldsToLoad) {
+            if ($extraFieldsToLoad || api_is_drh()) {
                 $url = api_get_path(WEB_PATH).'session/'.$session['id'].'/about/';
             }
 
@@ -3671,6 +3670,7 @@ class SessionManager
      * @param string $orderCondition
      * @param string $keyword
      * @param string $description
+     * @param array  $options
      *
      * @return array sessions
      */
@@ -3683,7 +3683,8 @@ class SessionManager
         $getSql = false,
         $orderCondition = null,
         $keyword = '',
-        $description = ''
+        $description = '',
+        $options = []
     ) {
         return self::getSessionsFollowedByUser(
             $userId,
@@ -3695,7 +3696,8 @@ class SessionManager
             $getSql,
             $orderCondition,
             $keyword,
-            $description
+            $description,
+            $options
         );
     }
 
@@ -3712,6 +3714,7 @@ class SessionManager
      * @param string $orderCondition
      * @param string $keyword
      * @param string $description
+     * @param array $options
      *
      * @return array sessions
      */
@@ -3725,7 +3728,8 @@ class SessionManager
         $getSql = false,
         $orderCondition = null,
         $keyword = '',
-        $description = ''
+        $description = '',
+        $options = []
     ) {
         // Database Table Definitions
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -3733,15 +3737,26 @@ class SessionManager
         $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
+        $extraFieldModel = new ExtraFieldModel('session');
+        $conditions = $extraFieldModel->parseConditions($options);
+        $sqlInjectJoins = $conditions['inject_joins'];
+        $extraFieldsConditions = $conditions['where'];
+        $sqlInjectWhere = $conditions['inject_where'];
+        $injectExtraFields = $conditions['inject_extra_fields'];
+
+        if (!empty($injectExtraFields)) {
+            $injectExtraFields = ' , '.$injectExtraFields.' s.id';
+        }
+
         $userId = (int) $userId;
 
-        $select = " SELECT DISTINCT * ";
+        $select = ' SELECT DISTINCT * '.$injectExtraFields;
         if ($getCount) {
-            $select = " SELECT count(DISTINCT(s.id)) as count ";
+            $select = ' SELECT count(DISTINCT(s.id)) as count ';
         }
 
         if ($getOnlySessionId) {
-            $select = " SELECT DISTINCT(s.id) ";
+            $select = ' SELECT DISTINCT(s.id) ';
         }
 
         $limitCondition = null;
@@ -3750,7 +3765,7 @@ class SessionManager
         }
 
         if (empty($orderCondition)) {
-            $orderCondition = " ORDER BY s.name ";
+            $orderCondition = ' ORDER BY s.name ';
         }
 
         $whereConditions = null;
@@ -3799,15 +3814,19 @@ class SessionManager
         $whereConditions .= $keywordCondition;
         $subQuery = $sessionQuery.$courseSessionQuery;
 
-        $sql = " $select FROM $tbl_session s
+        $sql = " $select 
+                FROM $tbl_session s
                 INNER JOIN $tbl_session_rel_access_url a 
                 ON (s.id = a.session_id)
+                $sqlInjectJoins
                 WHERE
                     access_url_id = ".api_get_current_access_url_id()." AND
                     s.id IN (
                         $subQuery
                     )
                     $whereConditions
+                    $extraFieldsConditions
+                    $sqlInjectWhere                    
                     $orderCondition
                     $limitCondition";
 
@@ -8040,13 +8059,13 @@ SQL;
     }
 
     /**
-     * @param string $list_type
+     * @param string $listType
      * @param array  $extraFields
      *
      * @return array
      */
     public static function getGridColumns(
-        $list_type = 'simple',
+        $listType = 'simple',
         $extraFields = []
     ) {
         $showCount = api_get_configuration_value('session_list_show_count_users');
@@ -8054,7 +8073,36 @@ SQL;
         $operators = ['cn', 'nc'];
         $date_operators = ['gt', 'ge', 'lt', 'le'];
 
-        switch ($list_type) {
+        switch ($listType) {
+            case 'my_space':
+                $columns = [
+                    get_lang('Title'),
+                    get_lang('Date'),
+                    get_lang('NbCoursesPerSession'),
+                    get_lang('NbStudentPerSession'),
+                    get_lang('Details'),
+                ];
+
+                $columnModel = [
+                    ['name' => 'name', 'index' => 'name', 'width' => '255', 'align' => 'left'],
+                    ['name' => 'date', 'index' => 'access_start_date', 'width' => '150', 'align' => 'left'],
+                    [
+                        'name' => 'course_per_session',
+                        'index' => 'course_per_session',
+                        'width' => '150',
+                        'sortable' => 'false',
+                        'search' => 'false',
+                    ],
+                    [
+                        'name' => 'student_per_session',
+                        'index' => 'student_per_session',
+                        'width' => '100',
+                        'sortable' => 'false',
+                        'search' => 'false',
+                    ],
+                    ['name' => 'actions', 'index' => 'actions', 'width' => '100', 'sortable' => 'false', 'search' => 'false'],
+                ];
+                break;
             case 'simple':
                 $columns = [
                     '#',
@@ -8062,13 +8110,10 @@ SQL;
                     get_lang('Category'),
                     get_lang('SessionDisplayStartDate'),
                     get_lang('SessionDisplayEndDate'),
-                    //get_lang('Coach'),
-                    //get_lang('Status'),
-                    //get_lang('CourseTitle'),
                     get_lang('Visibility'),
                 ];
 
-                $column_model = [
+                $columnModel = [
                     [
                         'name' => 'id',
                         'index' => 's.id',
@@ -8124,7 +8169,7 @@ SQL;
 
                 if ($showCount) {
                     $columns[] = get_lang('Users');
-                    $column_model[] = [
+                    $columnModel[] = [
                         'name' => 'users',
                         'index' => 'users',
                         'width' => '20',
@@ -8143,7 +8188,7 @@ SQL;
                     get_lang('Visibility'),
                     get_lang('CourseTitle'),
                 ];
-                $column_model = [
+                $columnModel = [
                     ['name' => 'name', 'index' => 's.name', 'width' => '200', 'align' => 'left', 'search' => 'true', 'searchoptions' => ['sopt' => $operators]],
                     ['name' => 'display_start_date', 'index' => 'display_start_date', 'width' => '70', 'align' => 'left', 'search' => 'true', 'searchoptions' => ['dataInit' => 'date_pick_today', 'sopt' => $date_operators]],
                     ['name' => 'display_end_date', 'index' => 'display_end_date', 'width' => '70', 'align' => 'left', 'search' => 'true', 'searchoptions' => ['dataInit' => 'date_pick_one_month', 'sopt' => $date_operators]],
@@ -8165,7 +8210,7 @@ SQL;
         if (!empty($extraFields)) {
             foreach ($extraFields as $field) {
                 $columns[] = $field['display_text'];
-                $column_model[] = [
+                $columnModel[] = [
                     'name' => $field['variable'],
                     'index' => $field['variable'],
                     'width' => '80',
@@ -8177,30 +8222,34 @@ SQL;
 
         // Inject extra session fields
         $session_field = new ExtraFieldModel('session');
-        $rules = $session_field->getRules($columns, $column_model);
-        $column_model[] = [
-            'name' => 'actions',
-            'index' => 'actions',
-            'width' => '80',
-            'align' => 'left',
-            'formatter' => 'action_formatter',
-            'sortable' => 'false',
-            'search' => 'false',
-        ];
-        $columns[] = get_lang('Actions');
+        $rules = $session_field->getRules($columns, $columnModel);
 
-        foreach ($column_model as $col_model) {
-            $simple_column_name[] = $col_model['name'];
+        if (!in_array('actions', array_column($columnModel, 'name'))) {
+            $columnModel[] = [
+                'name' => 'actions',
+                'index' => 'actions',
+                'width' => '80',
+                'align' => 'left',
+                'formatter' => 'action_formatter',
+                'sortable' => 'false',
+                'search' => 'false',
+            ];
+            $columns[] = get_lang('Actions');
         }
 
-        $return_array = [
+        $columnName = [];
+        foreach ($columnModel as $col_model) {
+            $columnName[] = $col_model['name'];
+        }
+
+        $return = [
             'columns' => $columns,
-            'column_model' => $column_model,
+            'column_model' => $columnModel,
             'rules' => $rules,
-            'simple_column_name' => $simple_column_name,
+            'simple_column_name' => $columnName,
         ];
 
-        return $return_array;
+        return $return;
     }
 
     /**

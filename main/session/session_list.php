@@ -133,13 +133,8 @@ $extra_params['height'] = 'auto';
 if (!isset($_GET['keyword'])) {
     $extra_params['postData'] = [
         'filters' => [
-            "groupOp" => "AND",
-            "rules" => $result['rules'],
-            /*array(
-                array( "field" => "display_start_date", "op" => "gt", "data" => ""),
-                array( "field" => "display_end_date", "op" => "gt", "data" => "")
-            ),*/
-            //'groups' => $groups
+            'groupOp' => 'AND',
+            'rules' => $result['rules'],
         ],
     ];
 }
@@ -164,23 +159,14 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
     <script>
         function setSearchSelect(columnName) {
             $("#sessions").jqGrid('setColProp', columnName, {
-                /*searchoptions:{
-                 dataInit:function(el){
-                 $("option[value='1']",el).attr("selected", "selected");
-                 setTimeout(function(){
-                 $(el).trigger('change');
-                 }, 1000);
-                 }
-                 }*/
             });
         }
         var added_cols = [];
         var original_cols = [];
 
         function clean_cols(grid, added_cols) {
-            //Cleaning
+            // Cleaning
             for (key in added_cols) {
-                //console.log('hide: ' + key);
                 grid.hideCol(key);
             };
             grid.showCol('name');
@@ -192,7 +178,6 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
         function show_cols(grid, added_cols) {
             grid.showCol('name').trigger('reloadGrid');
             for (key in added_cols) {
-                //console.log('show: ' + key);
                 grid.showCol(key);
             };
         }
@@ -268,17 +253,12 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
                             filters = jQuery.parseJSON(postdata.filters);
                             clean_cols(grid, added_cols);
                             added_cols = [];
-                            $.each(filters, function(key, value){
-                                //console.log('key: ' + key );
+                            $.each(filters, function(key, value) {
                                 if (key == 'rules') {
                                     $.each(value, function(subkey, subvalue) {
                                         if (subvalue.data == undefined) {
                                         }
-
-                                        //if (added_cols[value.field] == undefined) {
                                         added_cols[subvalue.field] = subvalue.field;
-                                        //}
-                                        //grid.showCol(value.field);
                                     });
                                 }
                             });
@@ -308,10 +288,10 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
                     });
                     orderList = JSON.stringify(orderList);
                     $.get("<?php echo $orderUrl; ?>", "order="+orderList, function (result) {
-                        //console.log(result);
                     });
                 }
             };
+
             // Sortable rows
             grid.jqGrid('sortableRows', options);
             <?php
@@ -342,7 +322,7 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
             gbox.before(searchDialog);
             gbox.css({clear:"left"});
 
-            //Select first elements by default
+            // Select first elements by default
             $('.input-elm').each(function(){
                 $(this).find('option:first').attr('selected', 'selected');
             });

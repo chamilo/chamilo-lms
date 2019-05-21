@@ -9,6 +9,7 @@ use ChamiloSession as Session;
 use CpChart\Cache as pCache;
 use CpChart\Data as pData;
 use CpChart\Image as pImage;
+use ExtraField as ExtraFieldModel;
 
 /**
  *  Class Tracking.
@@ -3767,7 +3768,7 @@ class Tracking
     /**
      * Get sessions coached by user.
      *
-     * @param        $coach_id
+     * @param int    $coach_id
      * @param int    $start
      * @param int    $limit
      * @param bool   $getCount
@@ -3775,6 +3776,7 @@ class Tracking
      * @param string $description
      * @param string $orderByName
      * @param string $orderByDirection
+     * @param array  $options
      *
      * @return mixed
      */
@@ -3786,16 +3788,17 @@ class Tracking
         $keyword = '',
         $description = '',
         $orderByName = '',
-        $orderByDirection = ''
+        $orderByDirection = '',
+        $options = []
     ) {
         // table definition
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $coach_id = (int) $coach_id;
 
-        $select = " SELECT * FROM ";
+        $select = ' SELECT * FROM ';
         if ($getCount) {
-            $select = " SELECT count(DISTINCT id) as count FROM ";
+            $select = ' SELECT count(DISTINCT id) as count FROM ';
         }
 
         $limitCondition = null;
@@ -3804,7 +3807,6 @@ class Tracking
         }
 
         $keywordCondition = null;
-
         if (!empty($keyword)) {
             $keyword = Database::escape_string($keyword);
             $keywordCondition = " AND (name LIKE '%$keyword%' ) ";
@@ -3814,6 +3816,14 @@ class Tracking
                 $keywordCondition = " AND (name LIKE '%$keyword%' OR description LIKE '%$description%' ) ";
             }
         }
+
+
+        $extraFieldModel = new ExtraFieldModel('session');
+        $conditions = $extraFieldModel->parseConditions($options);
+        $sqlInjectJoins = $conditions['inject_joins'];
+        $extraFieldsConditions = $conditions['where'];
+        $sqlInjectWhere = $conditions['inject_where'];
+        $injectExtraFields = $conditions['inject_extra_fields'];
 
         $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $access_url_id = api_get_current_access_url_id();
@@ -3831,34 +3841,42 @@ class Tracking
             $select
             (
                 SELECT DISTINCT
-                    session.id,
+                    s.id,
                     name,
+                    $injectExtraFields
                     access_start_date,
                     access_end_date
-                FROM $tbl_session session
+                FROM $tbl_session s
                 INNER JOIN $tbl_session_rel_access_url session_rel_url
-                ON (session.id = session_rel_url.session_id)
+                ON (s.id = session_rel_url.session_id)
+                $sqlInjectJoins
                 WHERE
                     id_coach = $coach_id AND
                     access_url_id = $access_url_id
                     $keywordCondition
+                    $extraFieldsConditions
+                    $sqlInjectWhere
             UNION
                 SELECT DISTINCT
-                    session.id,
-                    session.name,
-                    session.access_start_date,
-                    session.access_end_date
-                FROM $tbl_session as session
+                    s.id,
+                    s.name,
+                    $injectExtraFields
+                    s.access_start_date,
+                    s.access_end_date
+                FROM $tbl_session as s
                 INNER JOIN $tbl_session_course_user as session_course_user
                 ON
-                    session.id = session_course_user.session_id AND
+                    s.id = session_course_user.session_id AND
                     session_course_user.user_id = $coach_id AND
                     session_course_user.status = 2
-                INNER JOIN $tbl_session_rel_access_url session_rel_url
-                ON (session.id = session_rel_url.session_id)
+                INNER JOIN $tbl_session_rel_access_url session_rel_url                
+                ON (s.id = session_rel_url.session_id)
+                $sqlInjectJoins
                 WHERE
                     access_url_id = $access_url_id
                     $keywordCondition
+                    $extraFieldsConditions
+                    $sqlInjectWhere
             ) as sessions $limitCondition $orderBy
             ";
 

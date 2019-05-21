@@ -1,11 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ExtraField as ExtraFieldModel;
+
 /**
  * Sessions reporting.
  *
  * @package chamilo.reporting
  */
+
 ob_start();
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -14,13 +17,13 @@ api_block_anonymous_users();
 
 $this_section = SECTION_TRACKING;
 $export_csv = false;
-if (isset($_GET['export']) && $_GET['export'] == 'csv') {
+if (isset($_REQUEST['export']) && $_REQUEST['export'] == 'csv') {
     $export_csv = true;
 }
 
 $id_coach = api_get_user_id();
-if (isset($_GET['id_coach']) && $_GET['id_coach'] != '') {
-    $id_coach = (int) $_GET['id_coach'];
+if (isset($_REQUEST['id_coach']) && $_REQUEST['id_coach'] != '') {
+    $id_coach = (int) $_REQUEST['id_coach'];
 }
 
 $allowToTrack = api_is_platform_admin(true, true) || api_is_teacher();
@@ -121,7 +124,7 @@ if (api_is_platform_admin(true, true)) {
 
 $form = new FormValidator(
     'search_course',
-    'get',
+    'post',
     api_get_path(WEB_CODE_PATH).'mySpace/session.php'
 );
 $form->addElement('text', 'keyword', get_lang('Keyword'));
@@ -132,48 +135,183 @@ if ($form->validate()) {
 }
 $form->setDefaults(['keyword' => $keyword]);
 
-$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions_tracking&keyword='.Security::remove_XSS($keyword);
-
-$columns = [
-    get_lang('Title'),
-    get_lang('Date'),
-    get_lang('NbCoursesPerSession'),
-    get_lang('NbStudentPerSession'),
-    get_lang('Details'),
-];
+$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions_tracking&_search=true&_force_search=true&filters=&keyword='.Security::remove_XSS($keyword);
 
 // Column config
-$columnModel = [
-    ['name' => 'name', 'index' => 'name', 'width' => '255', 'align' => 'left'],
-    ['name' => 'date', 'index' => 'access_start_date', 'width' => '150', 'align' => 'left'],
-    ['name' => 'course_per_session', 'index' => 'course_per_session', 'width' => '150', 'sortable' => 'false'],
-    ['name' => 'student_per_session', 'index' => 'student_per_session', 'width' => '100', 'sortable' => 'false'],
-    ['name' => 'details', 'index' => 'details', 'width' => '100', 'sortable' => 'false'],
-];
-
 $extraParams = [
     'autowidth' => 'true',
     'height' => 'auto',
 ];
 
-$js = '<script>
-    $(function() {
-        '.Display::grid_js(
-        'session_tracking',
-        $url,
-        $columns,
-        $columnModel,
-        $extraParams,
-        [],
-        null,
-        true
-    ).'
-    });
-</script>';
+$result = SessionManager::getGridColumns('my_space');
 
-echo $js;
+$columns = $result['columns'];
+$columnModel = $result['column_model'];
+
+$extraParams['postData'] = [
+    'filters' => [
+        'groupOp' => 'AND',
+        'rules' => $result['rules'],
+    ],
+];
+
+$urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
+$allowOrder = api_get_configuration_value('session_list_order');
+$orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
+
+?>
+    <script>
+        function setSearchSelect(columnName) {
+            $("#sessions").jqGrid('setColProp', columnName, {
+            });
+        }
+        var added_cols = [];
+        var original_cols = [];
+
+        function clean_cols(grid, added_cols) {
+            // Cleaning
+            for (key in added_cols) {
+                grid.hideCol(key);
+            };
+            grid.showCol('name');
+            grid.showCol('display_start_date');
+            grid.showCol('display_end_date');
+            grid.showCol('course_title');
+        }
+
+        function show_cols(grid, added_cols) {
+            grid.showCol('name').trigger('reloadGrid');
+            for (key in added_cols) {
+                grid.showCol(key);
+            };
+        }
+
+        var second_filters = [];
+
+        $(function() {
+            date_pick_today = function(elem) {
+                $(elem).datetimepicker({dateFormat: "yy-mm-dd"});
+                $(elem).datetimepicker('setDate', (new Date()));
+            }
+            date_pick_one_month = function(elem) {
+                $(elem).datetimepicker({dateFormat: "yy-mm-dd"});
+                next_month = Date.today().next().month();
+                $(elem).datetimepicker('setDate', next_month);
+            }
+
+            // Great hack
+            register_second_select = function(elem) {
+                second_filters[$(elem).val()] = $(elem);
+            }
+
+            fill_second_select = function(elem) {
+                $(elem).on("change", function() {
+                    composed_id = $(this).val();
+                    field_id = composed_id.split("#")[0];
+                    id = composed_id.split("#")[1];
+                    $.ajax({
+                        url: "<?php echo $urlAjaxExtraField; ?>&a=get_second_select_options",
+                        dataType: "json",
+                        data: "type=session&field_id="+field_id+"&option_value_id="+id,
+                        success: function(data) {
+                            my_select = second_filters[field_id];
+                            my_select.empty();
+                            $.each(data, function(index, value) {
+                                my_select.append($("<option/>", {
+                                    value: index,
+                                    text: value
+                                }));
+                            });
+                        }
+                    });
+                });
+            }
+
+            <?php
+            echo Display::grid_js(
+                'sessions',
+                $url,
+                $columns,
+                $columnModel,
+                $extraParams,
+                [],
+                null,
+                true
+            );
+            ?>
+
+            setSearchSelect("status");
+
+            var grid = $("#sessions"),
+                prmSearch = {
+                    multipleSearch : true,
+                    overlay : false,
+                    width: 'auto',
+                    caption: '<?php echo addslashes(get_lang('Search')); ?>',
+                    formclass:'data_table',
+                    onSearch : function() {
+                        var postdata = grid.jqGrid('getGridParam', 'postData');
+                        if (postdata && postdata.filters) {
+                            filters = jQuery.parseJSON(postdata.filters);
+                            clean_cols(grid, added_cols);
+                            added_cols = [];
+                            $.each(filters, function(key, value) {
+                                if (key == 'rules') {
+                                    $.each(value, function(subkey, subvalue) {
+                                        added_cols[subvalue.field] = subvalue.field;
+                                    });
+                                }
+                            });
+                            show_cols(grid, added_cols);
+                        }
+                    },
+                    onReset: function() {
+                        clean_cols(grid, added_cols);
+                    }
+                };
+
+            original_cols = grid.jqGrid('getGridParam', 'colModel');
+
+            grid.jqGrid('navGrid','#sessions_pager',
+                {edit:false,add:false,del:false},
+                {height:280,reloadAfterSubmit:false}, // edit options
+                {height:280,reloadAfterSubmit:false}, // add options
+                {reloadAfterSubmit:false},// del options
+                prmSearch
+            );
+
+            <?php
+            // Create the searching dialog.
+            echo 'grid.searchGrid(prmSearch);';
+            ?>
+            // Fixes search table.
+            var searchDialogAll = $("#fbox_"+grid[0].id);
+            searchDialogAll.addClass("table");
+            var searchDialog = $("#searchmodfbox_"+grid[0].id);
+            searchDialog.addClass("ui-jqgrid ui-widget ui-widget-content ui-corner-all");
+            searchDialog.css({position:"adsolute", "z-index":"100", "float":"left", "top":"55%", "left" : "25%", "padding" : "5px", "border": "1px solid #CCC"})
+            var gbox = $("#gbox_"+grid[0].id);
+            gbox.before(searchDialog);
+            gbox.css({clear:"left"});
+
+            // Select first elements by default
+            $('.input-elm').each(function() {
+                $(this).find('option:first').attr('selected', 'selected');
+            });
+
+            $('.delete-rule').each(function(){
+                $(this).click(function(){
+                    $('.input-elm').each(function(){
+                        $(this).find('option:first').attr('selected', 'selected');
+                    });
+                });
+            });
+        });
+    </script>
+<?php
+
 $form->display();
 
-echo Display::grid_html('session_tracking');
+echo Display::grid_html('sessions');
 
 Display::display_footer();

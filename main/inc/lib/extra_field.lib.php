@@ -3026,15 +3026,9 @@ JAVASCRIPT;
         }
 
         // Get extra field workflow
-        $userInfo = api_get_user_info();
         $addOptions = [];
         $optionsExists = false;
-        global $app;
-
         $options = [];
-        if (empty($defaultValueId)) {
-            $options[''] = get_lang('SelectAnOption');
-        }
 
         $optionList = [];
         if (!empty($fieldDetails['options'])) {
@@ -3090,6 +3084,10 @@ JAVASCRIPT;
             [],
             ['id' => 'extra_'.$fieldDetails['variable']]
         );
+
+        if (empty($defaultValueId)) {
+            $slct->addOption(get_lang('SelectAnOption'), '');
+        }
 
         foreach ($options as $value => $text) {
             if (empty($value)) {

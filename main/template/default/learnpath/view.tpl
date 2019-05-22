@@ -10,12 +10,12 @@
                                 {{ lp_preview_image }}
                             </div>
                         {% else %}
-                            <div class="media">
-                                <div class="media-left">
+                            <div class="media-author">
+                                <div class="media-author-avatar">
                                     {{ lp_preview_image }}
                                 </div>
-                                <div class="media-body">
-                                    <div class="description-autor"> {{ lp_author }} </div>
+                                <div class="media-author-description">
+                                    {{ lp_author }}
                                 </div>
                             </div>
                         {% endif %}

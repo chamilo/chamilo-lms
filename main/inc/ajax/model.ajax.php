@@ -1212,6 +1212,7 @@ switch ($action) {
                 'actions',
             ];
         }
+
         $result = get_work_user_list(
             $start,
             $limit,

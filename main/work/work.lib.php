@@ -1762,7 +1762,7 @@ function get_work_user_list_from_documents(
  * @param int    $column
  * @param string $direction
  * @param int    $work_id
- * @param array  $where_condition
+ * @param string $where_condition
  * @param int    $studentId
  * @param bool   $getCount
  * @param int    $courseId
@@ -1776,7 +1776,7 @@ function get_work_user_list(
     $column,
     $direction,
     $work_id,
-    $where_condition = null,
+    $where_condition = '',
     $studentId = null,
     $getCount = false,
     $courseId = 0,
@@ -1791,10 +1791,11 @@ function get_work_user_list(
     $course_info = empty($course_info) ? api_get_course_info_by_id($courseId) : $course_info;
     $course_id = isset($course_info['real_id']) ? $course_info['real_id'] : $courseId;
 
-    $work_id = intval($work_id);
+    $work_id = (int) $work_id;
+    $start = (int) $start;
+    $limit = (int) $limit;
+
     $column = !empty($column) ? Database::escape_string($column) : 'sent_date';
-    $start = intval($start);
-    $limit = intval($limit);
 
     if (!in_array($direction, ['asc', 'desc'])) {
         $direction = 'desc';
@@ -1808,6 +1809,7 @@ function get_work_user_list(
         false,
         'work.session_id'
     );
+
     $locked = api_resource_is_locked_by_gradebook(
         $work_id,
         LINK_STUDENTPUBLICATION,
@@ -1822,13 +1824,15 @@ function get_work_user_list(
     $groupIid = 0;
     if ($group_id) {
         $groupInfo = GroupManager::get_group_properties($group_id);
-        $groupIid = $groupInfo['iid'];
+        if ($groupInfo) {
+            $groupIid = $groupInfo['iid'];
+        }
     }
 
     if (!empty($work_data)) {
         if (!empty($group_id)) {
-            $extra_conditions = " work.post_group_id = '".intval($groupIid)."' ";
-        // set to select only messages posted by the user's group
+            // set to select only messages posted by the user's group
+            $extra_conditions = " work.post_group_id = '".$groupIid."' ";
         } else {
             $extra_conditions = " (work.post_group_id = '0' OR work.post_group_id is NULL) ";
         }
@@ -1845,7 +1849,7 @@ function get_work_user_list(
             }
         }
 
-        $extra_conditions .= " AND parent_id  = ".$work_id." ";
+        $extra_conditions .= " AND parent_id  = $work_id ";
 
         $select = 'SELECT DISTINCT
                         u.user_id,
@@ -1870,13 +1874,20 @@ function get_work_user_list(
                         title_correction
                         ';
         if ($getCount) {
-            $select = "SELECT DISTINCT count(u.user_id) as count ";
+            $select = 'SELECT DISTINCT count(u.user_id) as count ';
         }
 
         $work_assignment = get_work_assignment_by_id($work_id, $courseId);
 
+        $where_condition = Database::escape_string($where_condition);
+
+        if (!empty($where_condition)) {
+            $where_condition = ' AND '.$where_condition;
+        }
+
         if (!empty($studentId)) {
-            $where_condition .= " AND u.user_id = ".intval($studentId);
+            $studentId = (int) $studentId;
+            $where_condition .= " AND u.user_id = $studentId ";
         }
 
         $sql = " $select

@@ -7141,18 +7141,6 @@ div#chat-remote-video video {
 
 .ui-jqgrid tr.jqgrow td {
     line-height: 22px;
-    text-align: center !important;
-    border-bottom: 1px solid #cdcdcd;
-}
-.ui-jqgrid .ui-jqgrid-htable th div {
-    overflow: hidden;
-    position: relative;
-    height: auto;
-    background: #e5f4ff;
-}
-.ui-th-ltr, .ui-jqgrid .ui-jqgrid-htable th.ui-th-ltr {
-    border-left: 0 none;
-    background: #e5f4ff;
 }
 .ui-jqgrid .ui-jqgrid-labels .ui-state-hover {
     background-color: transparent;

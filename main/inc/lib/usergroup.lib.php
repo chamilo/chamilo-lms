@@ -40,6 +40,7 @@ class UserGroup extends Model
         $this->usergroup_rel_course_table = Database::get_main_table(TABLE_USERGROUP_REL_COURSE);
         $this->usergroup_rel_session_table = Database::get_main_table(TABLE_USERGROUP_REL_SESSION);
         $this->access_url_rel_usergroup = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USERGROUP);
+        $this->access_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $this->table_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $this->table_user = Database::get_main_table(TABLE_MAIN_USER);
         $this->useMultipleUrl = api_get_configuration_value('multiple_access_urls');
@@ -67,7 +68,7 @@ class UserGroup extends Model
     }
 
     /**
-     * @param int  $id
+     * @param int  $id user group id
      * @param bool $getCount
      *
      * @return array|int
@@ -86,13 +87,13 @@ class UserGroup extends Model
             $urlId = api_get_current_access_url_id();
             $sql = "SELECT $select
                     FROM ".$this->usergroup_rel_user_table." u
-                    INNER JOIN ".$this->access_url_rel_usergroup." a 
+                    INNER JOIN ".$this->access_url_rel_user." a 
                     ON (u.user_id = a.user_id)
-                    WHERE usergroup_id = $id AND access_url_id = $urlId ";
+                    WHERE u.usergroup_id = $id AND access_url_id = $urlId ";
         } else {
             $sql = "SELECT $select
                     FROM ".$this->usergroup_rel_user_table." u
-                    WHERE usergroup_id = $id";
+                    WHERE u.usergroup_id = $id";
         }
         $result = Database::query($sql);
         if ($getCount) {

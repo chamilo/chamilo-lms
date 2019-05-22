@@ -952,6 +952,7 @@ abstract class Question
             if ($exercise->questionFeedbackEnabled) {
                 $params['feedback'] = $this->feedback;
             }
+
             Database::update(
                 $TBL_QUESTIONS,
                 $params,
@@ -974,24 +975,17 @@ abstract class Question
                     api_get_user_id()
                 );
             }
-            if (api_get_setting('search_enabled') == 'true') {
-                if ($exerciseId != 0) {
-                    $this->search_engine_edit($exerciseId);
-                } else {
-                    /**
-                     * actually there is *not* an user interface for
-                     * creating questions without a relation with an exercise.
-                     */
-                }
+            if (api_get_setting('search_enabled') === 'true') {
+                $this->search_engine_edit($exerciseId);
             }
         } else {
-            // creates a new question
+            // Creates a new question
             $sql = "SELECT max(position)
                     FROM $TBL_QUESTIONS as question,
                     $TBL_EXERCISE_QUESTION as test_question
                     WHERE
                         question.id = test_question.question_id AND
-                        test_question.exercice_id = ".intval($exerciseId)." AND
+                        test_question.exercice_id = ".$exerciseId." AND
                         question.c_id = $c_id AND
                         test_question.c_id = $c_id ";
             $result = Database::query($sql);
@@ -1087,33 +1081,33 @@ abstract class Question
                     }
                 }
 
-                if (api_get_setting('search_enabled') == 'true') {
-                    if ($exerciseId != 0) {
-                        $this->search_engine_edit($exerciseId, true);
-                    } else {
-                        /**
-                         * actually there is *not* an user interface for
-                         * creating questions without a relation with an exercise.
-                         */
-                    }
+                if (api_get_setting('search_enabled') === 'true') {
+                    $this->search_engine_edit($exerciseId, true);
                 }
             }
         }
 
         // if the question is created in an exercise
-        if ($exerciseId) {
+        if (!empty($exerciseId)) {
             // adds the exercise into the exercise list of this question
             $this->addToList($exerciseId, true);
         }
     }
 
+    /**
+     * @param int  $exerciseId
+     * @param bool $addQs
+     * @param bool $rmQs
+     */
     public function search_engine_edit(
         $exerciseId,
         $addQs = false,
         $rmQs = false
     ) {
         // update search engine and its values table if enabled
-        if (api_get_setting('search_enabled') == 'true' && extension_loaded('xapian')) {
+        if (!empty($exerciseId) && api_get_setting('search_enabled') == 'true' &&
+            extension_loaded('xapian')
+        ) {
             $course_id = api_get_course_id();
             // get search_did
             $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
@@ -1260,9 +1254,11 @@ abstract class Question
     public function addToList($exerciseId, $fromSave = false)
     {
         $exerciseRelQuestionTable = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $id = $this->id;
+        $id = (int) $this->id;
+        $exerciseId = (int) $exerciseId;
+
         // checks if the exercise ID is not in the list
-        if (!in_array($exerciseId, $this->exerciseList)) {
+        if (!empty($exerciseId) && !in_array($exerciseId, $this->exerciseList)) {
             $this->exerciseList[] = $exerciseId;
             $courseId = isset($this->course['real_id']) ? $this->course['real_id'] : 0;
             $newExercise = new Exercise($courseId);
@@ -1270,7 +1266,7 @@ abstract class Question
             $count = $newExercise->getQuestionCount();
             $count++;
             $sql = "INSERT INTO $exerciseRelQuestionTable (c_id, question_id, exercice_id, question_order)
-                    VALUES ({$this->course['real_id']}, ".intval($id).", ".intval($exerciseId).", '$count')";
+                    VALUES ({$this->course['real_id']}, ".$id.", ".$exerciseId.", '$count')";
             Database::query($sql);
 
             // we do not want to reindex if we had just saved adnd indexed the question
@@ -1286,17 +1282,19 @@ abstract class Question
      * @author Olivier Brouckaert
      *
      * @param int $exerciseId - exercise ID
+     * @param int $courseId
      *
      * @return bool - true if removed, otherwise false
      */
-    public function removeFromList($exerciseId)
+    public function removeFromList($exerciseId, $courseId = 0)
     {
-        $TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $id = $this->id;
+        $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $id = (int) $this->id;
+        $exerciseId = (int) $exerciseId;
 
         // searches the position of the exercise ID in the list
         $pos = array_search($exerciseId, $this->exerciseList);
-        $course_id = api_get_course_int_id();
+        $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
 
         // exercise not found
         if ($pos === false) {
@@ -1306,30 +1304,30 @@ abstract class Question
             unset($this->exerciseList[$pos]);
             //update order of other elements
             $sql = "SELECT question_order
-                    FROM $TBL_EXERCISE_QUESTION
+                    FROM $table
                     WHERE
-                        c_id = $course_id
-                        AND question_id = ".intval($id)."
-                        AND exercice_id = ".intval($exerciseId);
+                        c_id = $courseId AND 
+                        question_id = $id AND 
+                        exercice_id = $exerciseId";
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
                 $row = Database::fetch_array($res);
                 if (!empty($row['question_order'])) {
-                    $sql = "UPDATE $TBL_EXERCISE_QUESTION
-                        SET question_order = question_order-1
-                        WHERE
-                            c_id = $course_id
-                            AND exercice_id = ".intval($exerciseId)."
-                            AND question_order > ".$row['question_order'];
+                    $sql = "UPDATE $table
+                            SET question_order = question_order-1
+                            WHERE
+                                c_id = $courseId AND 
+                                exercice_id = $exerciseId AND 
+                                question_order > ".$row['question_order'];
                     Database::query($sql);
                 }
             }
 
-            $sql = "DELETE FROM $TBL_EXERCISE_QUESTION
+            $sql = "DELETE FROM $table
                     WHERE
-                        c_id = $course_id
-                        AND question_id = ".intval($id)."
-                        AND exercice_id = ".intval($exerciseId);
+                        c_id = $courseId AND 
+                        question_id = $id AND 
+                        exercice_id = $exerciseId";
             Database::query($sql);
 
             return true;
@@ -1344,10 +1342,20 @@ abstract class Question
      * @author Olivier Brouckaert
      *
      * @param int $deleteFromEx - exercise ID if the question is only removed from one exercise
+     *
+     * @return bool
      */
     public function delete($deleteFromEx = 0)
     {
-        $course_id = api_get_course_int_id();
+        if (empty($this->course)) {
+            return false;
+        }
+
+        $courseId = $this->course['real_id'];
+
+        if (empty($courseId)) {
+            return false;
+        }
 
         $TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
@@ -1361,7 +1369,7 @@ abstract class Question
             //update the question_order of each question to avoid inconsistencies
             $sql = "SELECT exercice_id, question_order 
                     FROM $TBL_EXERCISE_QUESTION
-                    WHERE c_id = $course_id AND question_id = ".intval($id);
+                    WHERE c_id = $courseId AND question_id = ".$id;
 
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
@@ -1370,7 +1378,7 @@ abstract class Question
                         $sql = "UPDATE $TBL_EXERCISE_QUESTION
                                 SET question_order = question_order-1
                                 WHERE
-                                    c_id = $course_id AND 
+                                    c_id = $courseId AND 
                                     exercice_id = ".intval($row['exercice_id'])." AND 
                                     question_order > ".$row['question_order'];
                         Database::query($sql);
@@ -1379,21 +1387,21 @@ abstract class Question
             }
 
             $sql = "DELETE FROM $TBL_EXERCISE_QUESTION
-                    WHERE c_id = $course_id AND question_id = ".$id;
+                    WHERE c_id = $courseId AND question_id = ".$id;
             Database::query($sql);
 
             $sql = "DELETE FROM $TBL_QUESTIONS
-                    WHERE c_id = $course_id AND id = ".$id;
+                    WHERE c_id = $courseId AND id = ".$id;
             Database::query($sql);
 
             $sql = "DELETE FROM $TBL_REPONSES
-                    WHERE c_id = $course_id AND question_id = ".$id;
+                    WHERE c_id = $courseId AND question_id = ".$id;
             Database::query($sql);
 
             // remove the category of this question in the question_rel_category table
             $sql = "DELETE FROM $TBL_QUIZ_QUESTION_REL_CATEGORY
                     WHERE 
-                        c_id = $course_id AND 
+                        c_id = $courseId AND 
                         question_id = ".$id;
             Database::query($sql);
 
@@ -1407,7 +1415,7 @@ abstract class Question
             $this->removePicture();
         } else {
             // just removes the exercise from the list
-            $this->removeFromList($deleteFromEx);
+            $this->removeFromList($deleteFromEx, $courseId);
             if (api_get_setting('search_enabled') == 'true' && extension_loaded('xapian')) {
                 // disassociate question with this exercise
                 $this->search_engine_edit($deleteFromEx, false, true);
@@ -1421,6 +1429,8 @@ abstract class Question
                 api_get_user_id()
             );
         }
+
+        return true;
     }
 
     /**
@@ -1606,10 +1616,10 @@ abstract class Question
         $form->addRule('questionName', get_lang('GiveQuestion'), 'required');
 
         // default content
-        $isContent = isset($_REQUEST['isContent']) ? intval($_REQUEST['isContent']) : null;
+        $isContent = isset($_REQUEST['isContent']) ? (int) $_REQUEST['isContent'] : null;
 
         // Question type
-        $answerType = isset($_REQUEST['answerType']) ? intval($_REQUEST['answerType']) : null;
+        $answerType = isset($_REQUEST['answerType']) ? (int) $_REQUEST['answerType'] : null;
         $form->addElement('hidden', 'answerType', $answerType);
 
         // html editor
@@ -1631,10 +1641,6 @@ abstract class Question
             false,
             $editorConfig
         );
-
-        // hidden values
-        $my_id = isset($_REQUEST['myid']) ? intval($_REQUEST['myid']) : null;
-        $form->addElement('hidden', 'myid', $my_id);
 
         if ($this->type != MEDIA_QUESTION) {
             // Advanced parameters
@@ -1746,13 +1752,17 @@ abstract class Question
             $form->setDefaults($defaults);
         }
 
-        if (!empty($_REQUEST['myid'])) {
+        if (!isset($_GET['newQuestion']) || $isContent) {
+            $form->setDefaults($defaults);
+        }
+
+        /*if (!empty($_REQUEST['myid'])) {
             $form->setDefaults($defaults);
         } else {
             if ($isContent == 1) {
                 $form->setDefaults($defaults);
             }
-        }
+        }*/
     }
 
     /**
@@ -1999,28 +2009,42 @@ abstract class Question
             $class = 'success';
         }
 
-        if (in_array($this->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
-            $score['revised'] = isset($score['revised']) ? $score['revised'] : false;
-            if ($score['revised'] == true) {
-                $scoreLabel = get_lang('Revised');
-                $class = '';
-            } else {
-                $scoreLabel = get_lang('NotRevised');
-                $class = 'warning';
-                if (isset($score['weight'])) {
-                    $weight = float_format($score['weight'], 1);
-                    $score['result'] = ' ? / '.$weight;
-                }
-                $model = ExerciseLib::getCourseScoreModel();
-                if (!empty($model)) {
-                    $score['result'] = ' ? ';
-                }
+        switch ($this->type) {
+            case FREE_ANSWER:
+            case ORAL_EXPRESSION:
+            case ANNOTATION:
+                $score['revised'] = isset($score['revised']) ? $score['revised'] : false;
+                if ($score['revised'] == true) {
+                    $scoreLabel = get_lang('Revised');
+                    $class = '';
+                } else {
+                    $scoreLabel = get_lang('NotRevised');
+                    $class = 'warning';
+                    if (isset($score['weight'])) {
+                        $weight = float_format($score['weight'], 1);
+                        $score['result'] = ' ? / '.$weight;
+                    }
+                    $model = ExerciseLib::getCourseScoreModel();
+                    if (!empty($model)) {
+                        $score['result'] = ' ? ';
+                    }
 
-                $hide = api_get_configuration_value('hide_free_question_score');
-                if ($hide === true) {
-                    $score['result'] = '-';
+                    $hide = api_get_configuration_value('hide_free_question_score');
+                    if ($hide === true) {
+                        $score['result'] = '-';
+                    }
                 }
-            }
+                break;
+            case UNIQUE_ANSWER:
+                if ($exercise->results_disabled == RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
+                    if (isset($score['user_answered'])) {
+                        if ($score['user_answered'] === false) {
+                            $scoreLabel = get_lang('Unanswered');
+                            $class = 'info';
+                        }
+                    }
+                }
+                break;
         }
 
         // display question category, if any
@@ -2032,6 +2056,7 @@ abstract class Question
         if ($show_media) {
             $header .= $this->show_media_content();
         }
+
         $scoreCurrent = [
             'used' => isset($score['score']) ? $score['score'] : '',
             'missing' => isset($score['weight']) ? $score['weight'] : '',
@@ -2373,9 +2398,21 @@ abstract class Question
      *
      * @throws \Doctrine\ORM\Query\QueryException
      *
-     * @return mixed
+     * @return bool
      */
-    public function existsInAnotherExercises()
+    public function existsInAnotherExercise()
+    {
+        $count = $this->getCountExercise();
+
+        return $count > 1;
+    }
+
+    /**
+     * @throws \Doctrine\ORM\Query\QueryException
+     *
+     * @return int
+     */
+    public function getCountExercise()
     {
         $em = Database::getManager();
 
@@ -2387,7 +2424,31 @@ abstract class Question
             ->setParameters(['id' => (int) $this->id])
             ->getSingleScalarResult();
 
-        return $count > 1;
+        return (int) $count;
+    }
+
+    /**
+     * Check if this question exists in another exercise.
+     *
+     * @throws \Doctrine\ORM\Query\QueryException
+     *
+     * @return mixed
+     */
+    public function getExerciseListWhereQuestionExists()
+    {
+        $em = Database::getManager();
+
+        $result = $em
+            ->createQuery('
+                SELECT e 
+                FROM ChamiloCourseBundle:CQuizRelQuestion qq
+                JOIN ChamiloCourseBundle:CQuiz e                
+                WHERE e.iid = qq.exerciceId AND qq.questionId = :id 
+            ')
+            ->setParameters(['id' => (int) $this->id])
+            ->getResult();
+
+        return $result;
     }
 
     /**

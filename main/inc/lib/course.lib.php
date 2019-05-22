@@ -1612,6 +1612,7 @@ class CourseManager
                                 $sessionId
                             )
                         );
+
                         $report_info['progress_100'] = $progress == 100 ? Display::label(get_lang('Yes'), 'success') : Display::label(get_lang('No'));
                         $report_info['progress'] = $progress."%";
 
@@ -4270,6 +4271,7 @@ class CourseManager
             if (Skill::isAllowed($user_id, false)) {
                 $em = Database::getManager();
                 $objUser = api_get_user_entity($user_id);
+                /** @var Course $objCourse */
                 $objCourse = $em->find('ChamiloCoreBundle:Course', $course['real_id']);
                 $objSession = $em->find('ChamiloCoreBundle:Session', $session_id);
 
@@ -4880,6 +4882,8 @@ class CourseManager
             $userRegisteredInCourse = self::is_user_subscribed_in_course($user_id, $course_info['code']);
             $userRegisteredInCourseAsTeacher = self::is_course_teacher($user_id, $course_info['code']);
             $userRegistered = $userRegisteredInCourse && $userRegisteredInCourseAsTeacher;
+            $my_course['is_course_student'] = $userRegisteredInCourse;
+            $my_course['is_course_teacher'] = $userRegisteredInCourseAsTeacher;
             $my_course['is_registered'] = $userRegistered;
             $my_course['title_cut'] = cut($course_info['title'], 45);
 

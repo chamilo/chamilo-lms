@@ -136,7 +136,7 @@ $accessStartDate = '';
 $accessEndDate = '';
 $overwriteColumnHeaderExport = [];
 
-if (!empty($searchString)) {
+if (!empty($search)) {
     $search = 'true';
 }
 
@@ -153,18 +153,18 @@ if (($search || $forceSearch) && ($search !== 'false')) {
         $whereCondition .= '  ('.$whereConditionInForm.') ';
     }
     $filters = isset($_REQUEST['filters']) && !is_array($_REQUEST['filters']) ? json_decode($_REQUEST['filters']) : false;
-
     if (isset($_REQUEST['filters2'])) {
         $filters = json_decode($_REQUEST['filters2']);
     }
 
     if (!empty($filters)) {
-        if (in_array($action, ['get_questions', 'get_sessions'])) {
+        if (in_array($action, ['get_questions', 'get_sessions', 'get_sessions_tracking'])) {
             switch ($action) {
                 case 'get_questions':
                     $type = 'question';
                     break;
                 case 'get_sessions':
+                case 'get_sessions_tracking':
                     $type = 'session';
                     break;
             }
@@ -177,11 +177,11 @@ if (($search || $forceSearch) && ($search !== 'false')) {
                     if (empty($data)) {
                         continue;
                     }
-                    if ($data->field == 'extra_access_start_date') {
+                    if ($data->field === 'extra_access_start_date') {
                         $accessStartDate = $data->data;
                     }
 
-                    if ($data->field == 'extra_access_end_date') {
+                    if ($data->field === 'extra_access_end_date') {
                         $accessEndDate = $data->data;
                     }
 
@@ -193,7 +193,6 @@ if (($search || $forceSearch) && ($search !== 'false')) {
 
                 $extra_fields = $result['extra_fields'];
                 $condition_array = $result['condition_array'];
-
                 $extraCondition = '';
                 if (!empty($condition_array)) {
                     $extraCondition = $filters->groupOp.' ( ';
@@ -656,7 +655,8 @@ switch ($action) {
                 false,
                 null,
                 $keyword,
-                $description
+                $description,
+                ['where' => $whereCondition, 'extra' => $extra_fields]
             );
         } else {
             // Sessions for the coach
@@ -666,7 +666,10 @@ switch ($action) {
                 null,
                 true,
                 $keyword,
-                $description
+                $description,
+                null,
+                null,
+                ['where' => $whereCondition, 'extra' => $extra_fields]
             );
         }
         break;
@@ -1298,6 +1301,7 @@ switch ($action) {
                 $columns = array_merge(['official_code'], $columns);
             }
         }
+
         $result = ExerciseLib::get_exam_results_data(
             $start,
             $limit,
@@ -1476,7 +1480,8 @@ switch ($action) {
                 false,
                 $orderBy,
                 $keyword,
-                $description
+                $description,
+                ['where' => $whereCondition, 'extra' => $extra_fields]
             );
         } else {
             // Sessions for the coach
@@ -1488,17 +1493,13 @@ switch ($action) {
                 $keyword,
                 $description,
                 $sidx,
-                $sord
+                $sord,
+                ['where' => $whereCondition, 'extra' => $extra_fields]
             );
         }
 
-        $columns = [
-            'name',
-            'date',
-            'course_per_session',
-            'student_per_session',
-            'details',
-        ];
+        $session_columns = SessionManager::getGridColumns('my_space');
+        $columns = $session_columns['simple_column_name'];
 
         $result = [];
         if (!empty($sessions)) {
@@ -1542,7 +1543,7 @@ switch ($action) {
                     api_get_path(WEB_CODE_PATH).'mySpace/course.php?session_id='.$session['id']
                 );
 
-                $result[] = [
+                $item = [
                     'name' => Display::url(
                         $session['name'],
                         api_get_path(WEB_CODE_PATH).'mySpace/course.php?session_id='.$session['id']
@@ -1550,8 +1551,15 @@ switch ($action) {
                     'date' => $dateToString,
                     'course_per_session' => $count_courses_in_session,
                     'student_per_session' => $count_users_in_session,
-                    'details' => implode(' ', $detailButtons),
+                    'actions' => implode(' ', $detailButtons),
                 ];
+
+                if (!empty($extra_fields)) {
+                    foreach ($extra_fields as $extraField) {
+                        $item[$extraField['field']] = $extraField['data'];
+                    }
+                }
+                $result[] = $item;
             }
         }
         break;
@@ -1580,41 +1588,6 @@ switch ($action) {
                 ]
             );
         }
-        break;
-        /*
-        $columns = array(
-            'name',
-            'nbr_courses',
-            'nbr_users',
-            'category_name',
-            'access_start_date',
-            'access_end_date',
-            'coach_name',
-            'session_active',
-            'visibility'
-        );
-
-        if (SessionManager::allowToManageSessions()) {
-            if (SessionManager::allowOnlyMySessions()) {
-                $whereCondition .= ' AND s.id_coach = '.api_get_user_id();
-            }
-
-            // Rename Category_name
-            $whereCondition = str_replace(
-                'category_name',
-                'sc.name',
-                $whereCondition
-            );
-
-            $result = SessionManager::get_sessions_admin(
-                array(
-                    'where' => $whereCondition,
-                    'order' => "$sidx $sord",
-                    'limit' => "$start , $limit"
-                )
-            );
-        }
-        */
         break;
     case 'get_exercise_progress':
         $sessionId = (int) $_GET['session_id'];

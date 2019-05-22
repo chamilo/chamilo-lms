@@ -14,6 +14,8 @@ $help_content = 'exercise_upload';
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script(true);
+
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 $debug = false;
 $origin = api_get_origin();

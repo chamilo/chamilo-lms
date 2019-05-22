@@ -633,8 +633,7 @@ class GradebookUtils
             $mainCourseCategory
         );
 
-        $offset = isset($_GET['offset']) ? $_GET['offset'] : '0';
-        $offset = intval($offset);
+        $offset = isset($_GET['offset']) ? (int) $_GET['offset'] : 0;
 
         // step 2: generate rows: students
         $datagen->category = $cat;

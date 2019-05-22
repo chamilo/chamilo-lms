@@ -54,6 +54,9 @@ if (empty($objExercise)) {
     api_not_allowed(true);
 }
 
+$js = '<script>'.api_get_language_translate_html().'</script>';
+$htmlHeadXtra[] = $js;
+
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
@@ -177,7 +180,13 @@ if (!empty($exercise_stat_info)) {
 
 $max_score = $objExercise->get_max_score();
 
-echo Display::return_message(get_lang('Saved').'<br />', 'normal', false);
+if ($origin !== 'embeddable') {
+    echo Display::return_message(get_lang('Saved').'<br />', 'normal', false);
+}
+
+if ($origin == 'embeddable') {
+    showEmbeddableFinishButton();
+}
 
 // Display and save questions
 ExerciseLib::displayQuestionListByAttempt(
@@ -224,6 +233,8 @@ if (!in_array($origin, ['learnpath', 'embeddable'])) {
 
     Session::write('attempt_remaining', $remainingMessage);
 
+    showEmbeddableFinishButton();
+
     Display::display_reduced_footer();
 } else {
     $lp_mode = Session::read('lp_mode');
@@ -244,4 +255,27 @@ if (!in_array($origin, ['learnpath', 'embeddable'])) {
     echo '<script type="text/javascript">'.$href.'</script>';
 
     Display::display_reduced_footer();
+}
+
+function showEmbeddableFinishButton()
+{
+    echo '<script>
+        $(function () {
+            $(\'.btn-close-quiz\').on(\'click\', function () {    
+                window.parent.$(\'video:not(.skip), audio:not(.skip)\').get(0).play();
+            });
+        });
+    </script>';
+
+    echo Display::tag(
+        'p',
+        Display::toolbarButton(
+            get_lang('EndTest'),
+            '#',
+            'times',
+            'warning',
+            ['role' => 'button', 'class' => 'btn-close-quiz']
+        ),
+        ['class' => 'text-right']
+    );
 }

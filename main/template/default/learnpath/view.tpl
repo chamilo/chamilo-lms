@@ -338,59 +338,55 @@
                         function(){
                             //  $("<div>I am a div courses</div>").prependTo("body");
                         },
-                        "top.content_name",
-                        {
-                            load: [
-                                { type:"script", id:"_fr1", src:"{{ jquery_web_path }}"},
+                        "#content_id",
+                        [
+                            { type:"script", id:"_fr1", src:"{{ jquery_web_path }}", deps: [
                                 { type:"script", id:"_fr4", src:"{{ jquery_ui_js_web_path }}"},
-                                { type:"stylesheet", id:"_fr5", src:"{{ jquery_ui_css_web_path }}"},
                                 { type:"script", id:"_fr2", src:"{{ _p.web_lib }}javascript/jquery.highlight.js"},
                                 {{ fix_link }}
-                            ]
-                        }
+                            ]},
+                            { type:"stylesheet", id:"_fr5", src:"{{ jquery_ui_css_web_path }}"},
+                        ]
                     );
                 {% elseif show_glossary_in_documents == 'isautomatic' %}
                     $.frameReady(
                         function(){
                             //  $("<div>I am a div courses</div>").prependTo("body");
                         },
-                        "top.content_name",
-                        {
-                            load: [
-                                { type:"script", id:"_fr1", src:"{{ jquery_web_path }}"},
+                        "#content_id",
+                        [
+                            { type:"script", id:"_fr1", src:"{{ jquery_web_path }}", deps: [
                                 { type:"script", id:"_fr4", src:"{{ jquery_ui_js_web_path }}"},
-                                { type:"stylesheet", id:"_fr5", src:"{{ jquery_ui_css_web_path }}"},
                                 { type:"script", id:"_fr2", src:"{{ _p.web_lib }}javascript/jquery.highlight.js"},
                                 {{ fix_link }}
-                            ]
-                        }
+                            ]},
+                            { type:"stylesheet", id:"_fr5", src:"{{ jquery_ui_css_web_path }}"},
+                        ]
                     );
                 {% elseif fix_link != '' %}
                     $.frameReady(
                         function(){
                             //  $("<div>I am a div courses</div>").prependTo("body");
                         },
-                        "top.content_name",
-                        {
-                            load: [
-                                { type:"script", id:"_fr1", src:"{{ jquery_web_path }}"},
+                        "#content_id",
+                        [
+                            { type:"script", id:"_fr1", src:"{{ jquery_web_path }}", deps: [
                                 { type:"script", id:"_fr4", src:"{{ jquery_ui_js_web_path }}"},
-                                { type:"stylesheet", id:"_fr5", src:"{{ jquery_ui_css_web_path }}"},
                                 {{ fix_link }}
-                            ]
-                        }
+                            ]},
+                            { type:"stylesheet", id:"_fr5", src:"{{ jquery_ui_css_web_path }}"},
+                        ]
                     );
                 {% endif %}
             })();
         {% endif %}
         {% if disable_js_in_lp_view == 0 %}
             $(function() {
-                $('iframe#content_id').on('load', function () {
-                    var arr = ['link', 'sco'];
-                    if ($.inArray(olms.lms_item_type, arr) == -1) {
-                        {{ frame_ready }}
-                    }
-                });
+                var arr = ['link', 'sco'];
+
+                if ($.inArray(olms.lms_item_type, arr) == -1) {
+                    {{ frame_ready }}
+                }
             });
         {% endif %}
 

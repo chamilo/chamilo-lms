@@ -453,8 +453,6 @@ function show_add_forum_form($inputvalues = [], $lp_id)
         $defaults['group_forum'] = isset($inputvalues['forum_of_group']) ? $inputvalues['forum_of_group'] : null;
     }
 
-    // $defaults['skills'] = array_keys($skillList);
-
     $form->setDefaults($defaults);
     // Validation or display
     if ($form->validate()) {
@@ -3260,7 +3258,7 @@ function show_add_post_form($current_forum, $action, $form_values = '', $showPre
         $form->addElement('html', '</div>');
     }
 
-    if ($action == 'newthread') {
+    if ($action === 'newthread') {
         Skill::addSkillsToForm($form, ITEM_TYPE_FORUM_THREAD, 0);
     }
 
@@ -3284,18 +3282,23 @@ function show_add_post_form($current_forum, $action, $form_values = '', $showPre
     }
 
     if ($giveRevision) {
+        $hide = api_get_configuration_value('hide_forum_post_revision_language');
         $form->addHidden('give_revision', 1);
-        $extraField = new ExtraField('forum_post');
-        $returnParams = $extraField->addElements(
-            $form,
-            null,
-            [], //exclude
-            false, // filter
-            false, // tag as select
-            ['revision_language'], //show only fields
-            [], // order fields
-            [] // extra data
-        );
+        if ($hide === false) {
+            $extraField = new ExtraField('forum_post');
+            $extraField->addElements(
+                $form,
+                null,
+                [], //exclude
+                false, // filter
+                false, // tag as select
+                ['revision_language'], //show only fields
+                [], // order fields
+                [] // extra data
+            );
+        } else {
+            $form->addHidden('extra_revision_language', 1);
+        }
     }
 
     // Setting the class and text of the form title and submit button.
@@ -3412,10 +3415,13 @@ function show_add_post_form($current_forum, $action, $form_values = '', $showPre
 
                 if (isset($values['give_revision']) && $values['give_revision'] == 1) {
                     $extraFieldValues = new ExtraFieldValue('forum_post');
+                    $revisionLanguage = isset($values['extra_revision_language']) ? $values['extra_revision_language'] : '';
+
                     $params = [
                         'item_id' => $postId,
-                        'extra_revision_language' => $values['extra_revision_language'],
+                        'extra_revision_language' => $revisionLanguage,
                     ];
+
                     $extraFieldValues->saveFieldValues(
                         $params,
                         false,
@@ -6928,24 +6934,4 @@ function reportPost($postId, $forumInfo, $threadInfo)
             }
         }
     }
-}
-
-/**
- * @return array
- */
-function getLanguageListForFlag()
-{
-    $table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-    $sql = "SELECT english_name, isocode FROM $table 
-            ORDER BY original_name ASC";
-    static $languages = [];
-    if (empty($languages)) {
-        $result = Database::query($sql);
-        while ($row = Database::fetch_array($result)) {
-            $languages[$row['english_name']] = $row['isocode'];
-        }
-        $languages['english'] = 'gb';
-    }
-
-    return $languages;
 }

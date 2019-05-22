@@ -118,6 +118,8 @@ switch ($action) {
                 $_GET['user']
             );
         }
+
+        Display::addFlash(Display::return_message(get_lang('Updated')));
         break;
 }
 

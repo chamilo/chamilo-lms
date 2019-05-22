@@ -395,7 +395,7 @@ class DashboardManager
                     $html .= '<td>'.$block['name'].'</td>';
                     $html .= '<td>'.$block['description'].'</td>';
                     $html .= '<td>
-                            <select class="selectpicker show-tick form-control" name="columns['.$block['id'].']">
+                            <select class="selectpicker form-control" name="columns['.$block['id'].']">
                             <option value="1" '.(isset($user_block_data[$block['id']]) && $user_block_data[$block['id']]['column'] == 1 ? 'selected' : '').' >1</option>
                             <option value="2" '.(isset($user_block_data[$block['id']]) && $user_block_data[$block['id']]['column'] == 2 ? 'selected' : '').' >2</option>
                             </select>
@@ -490,6 +490,11 @@ class DashboardManager
         $user_id = intval($user_id);
         $field_variable = 'dashboard';
         $extra_user_data = UserManager::get_extra_user_data_by_field($user_id, $field_variable);
+
+        if (!isset($extra_user_data[$field_variable])) {
+            return [];
+        }
+
         $extra_user_data = explode(';', $extra_user_data[$field_variable]);
         $data = [];
         foreach ($extra_user_data as $extra) {

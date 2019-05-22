@@ -771,6 +771,10 @@ class Exercise
      */
     public function getQuestionOrderedListByName()
     {
+        if (empty($this->course_id) || empty($this->id)) {
+            return [];
+        }
+
         $exerciseQuestionTable = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $questionTable = Database::get_course_table(TABLE_QUIZ_QUESTION);
 
@@ -1716,23 +1720,36 @@ class Exercise
 
     /**
      * Updates question position.
+     *
+     * @return bool
      */
     public function update_question_positions()
     {
         $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        //Fixes #3483 when updating order
-        $question_list = $this->selectQuestionList(true);
-        if (!empty($question_list)) {
-            foreach ($question_list as $position => $questionId) {
+        // Fixes #3483 when updating order
+        $questionList = $this->selectQuestionList(true);
+
+        $this->id = (int) $this->id;
+
+        if (empty($this->id)) {
+            return false;
+        }
+
+        if (!empty($questionList)) {
+            foreach ($questionList as $position => $questionId) {
+                $position = (int) $position;
+                $questionId = (int) $questionId;
                 $sql = "UPDATE $table SET
-                            question_order ='".intval($position)."'
+                            question_order ='".$position."'
                         WHERE
                             c_id = ".$this->course_id." AND
-                            question_id = ".intval($questionId)." AND
-                            exercice_id=".intval($this->id);
+                            question_id = ".$questionId." AND
+                            exercice_id=".$this->id;
                 Database::query($sql);
             }
         }
+
+        return true;
     }
 
     /**
@@ -3428,6 +3445,8 @@ class Exercise
         if ($debug) {
             error_log('Start answer loop ');
         }
+
+        $userAnsweredQuestion = false;
         for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
             $answer = $objAnswerTmp->selectAnswer($answerId);
             $answerComment = $objAnswerTmp->selectComment($answerId);
@@ -3459,6 +3478,9 @@ class Exercise
                         $result = Database::query($sql);
                         $choice = Database::result($result, 0, 'answer');
 
+                        if ($userAnsweredQuestion === false) {
+                            $userAnsweredQuestion = !empty($choice);
+                        }
                         $studentChoice = $choice == $answerAutoId ? 1 : 0;
                         if ($studentChoice) {
                             $questionScore += $answerWeighting;
@@ -5336,6 +5358,7 @@ class Exercise
             'threadhold2' => $threadhold2,
             'threadhold3' => $threadhold3,
         ];
+
         if ($from == 'exercise_result') {
             // if answer is hotspot. To the difference of exercise_show.php,
             //  we use the results from the session (from_db=0)
@@ -5737,7 +5760,7 @@ class Exercise
             }
         }
 
-        $return_array = [
+        $return = [
             'score' => $questionScore,
             'weight' => $questionWeighting,
             'extra' => $extra_data,
@@ -5745,9 +5768,10 @@ class Exercise
             'open_answer' => $arrans,
             'answer_type' => $answerType,
             'generated_oral_file' => $generatedFile,
+            'user_answered' => $userAnsweredQuestion,
         ];
 
-        return $return_array;
+        return $return;
     }
 
     /**
@@ -5790,6 +5814,18 @@ class Exercise
         }
 
         $sessionId = api_get_session_id();
+
+        $sessionData = '';
+        if (!empty($sessionId)) {
+            $sessionInfo = api_get_session_info($sessionId);
+            if (!empty($sessionInfo)) {
+                $sessionData = '<tr>'
+                    .'<td>'.get_lang('SessionName').'</td>'
+                    .'<td>'.$sessionInfo['name'].'</td>'
+                    .'</tr>';
+            }
+        }
+
         $sendStart = false;
         $sendEnd = false;
         $sendEndOpenQuestion = false;
@@ -5846,7 +5882,6 @@ class Exercise
             $this->sendNotificationForOpenQuestions(
                 $question_list_answers,
                 $origin,
-                $exe_id,
                 $user_info,
                 $url,
                 $teachers
@@ -5892,6 +5927,7 @@ class Exercise
                             <td>'.get_lang('CourseName').'</td>
                             <td>#course#</td>
                         </tr>
+                        '.$sessionData.'
                         <tr>
                             <td>'.get_lang('Exercise').'</td>
                             <td>&nbsp;#exercise#</td>
@@ -5911,7 +5947,10 @@ class Exercise
             '#email#' => $user_info['email'],
             '#exercise#' => $this->exercise,
             '#student_complete_name#' => $user_info['complete_name'],
-            '#course#' => $courseInfo['title'],
+            '#course#' => Display::url(
+                $courseInfo['title'],
+                $courseInfo['course_public_url'].'?id_session='.$sessionId
+            ),
         ];
 
         if ($sendEnd) {
@@ -5948,32 +5987,35 @@ class Exercise
         $user_data,
         $trackExerciseInfo
     ) {
+        if (api_get_configuration_value('hide_user_info_in_quiz_result')) {
+            return '';
+        }
+
         $start_date = null;
+
         if (isset($trackExerciseInfo['start_date'])) {
             $start_date = api_convert_and_format_date($trackExerciseInfo['start_date']);
         }
         $duration = isset($trackExerciseInfo['duration_formatted']) ? $trackExerciseInfo['duration_formatted'] : null;
         $ip = isset($trackExerciseInfo['user_ip']) ? $trackExerciseInfo['user_ip'] : null;
 
-        $array = [];
         if (!empty($user_data)) {
             $userFullName = $user_data['complete_name'];
             if (api_is_teacher() || api_is_platform_admin(true, true)) {
-                $userFullName = '<a href="'.$user_data['profile_url'].'" title="'.get_lang('GoToStudentDetails').'">'.$user_data['complete_name'].'</a>';
+                $userFullName = '<a href="'.$user_data['profile_url'].'" title="'.get_lang('GoToStudentDetails').'">'.
+                    $user_data['complete_name'].'</a>';
             }
-            $array[] = [
-                'title' => get_lang('Name'),
-                'content' => $userFullName,
+
+            $data = [
+                'name_url' => $userFullName,
+                'complete_name' => $user_data['complete_name'],
+                'username' => $user_data['username'],
+                'avatar' => $user_data['avatar_medium'],
+                'url' => $user_data['profile_url'],
             ];
-            $array[] = [
-                'title' => get_lang('Username'),
-                'content' => $user_data['username'],
-            ];
+
             if (!empty($user_data['official_code'])) {
-                $array[] = [
-                    'title' => get_lang('OfficialCode'),
-                    'content' => $user_data['official_code'],
-                ];
+                $data['code'] = $user_data['official_code'];
             }
         }
         // Description can be very long and is generally meant to explain
@@ -5985,43 +6027,29 @@ class Exercise
         }
         */
         if (!empty($start_date)) {
-            $array[] = ['title' => get_lang('StartDate'), 'content' => $start_date];
+            $data['start_date'] = $start_date;
         }
 
         if (!empty($duration)) {
-            $array[] = ['title' => get_lang('Duration'), 'content' => $duration];
+            $data['duration'] = $duration;
         }
 
         if (!empty($ip)) {
-            $array[] = ['title' => get_lang('IP'), 'content' => $ip];
+            $data['ip'] = $ip;
         }
 
-        $icon = Display::return_icon(
-            'test-quiz.png',
-            get_lang('Result'),
-            null,
-            ICON_SIZE_MEDIUM
-        );
-
-        $html = '<div class="question-result">';
         if (api_get_configuration_value('save_titles_as_html')) {
-            $html .= $this->get_formated_title();
-            $html .= Display::page_header(get_lang('Result'));
+            $data['title'] = $this->get_formated_title().get_lang('Result');
         } else {
-            $html .= Display::page_header(
-                $icon.PHP_EOL.$this->exercise.' : '.get_lang('Result')
-            );
+            $data['title'] = PHP_EOL.$this->exercise.' : '.get_lang('Result');
         }
 
-        $hide = api_get_configuration_value('hide_user_info_in_quiz_result');
+        $tpl = new Template(null, false, false, false, false, false, false);
+        $tpl->assign('data', $data);
+        $layoutTemplate = $tpl->get_template('exercise/partials/result_exercise.tpl');
+        $content = $tpl->fetch($layoutTemplate);
 
-        if ($hide === false) {
-            $html .= Display::description($array);
-        }
-
-        $html .= "</div>";
-
-        return $html;
+        return $content;
     }
 
     /**
@@ -6029,7 +6057,7 @@ class Exercise
      *
      * @param 	int		attempt id
      *
-     * @return float exercise result
+     * @return array
      */
     public function get_exercise_result($exe_id)
     {
@@ -6299,6 +6327,9 @@ class Exercise
         ];
     }
 
+    /**
+     * @return bool
+     */
     public function added_in_lp()
     {
         $TBL_LP_ITEM = Database::get_course_table(TABLE_LP_ITEM);
@@ -7915,35 +7946,35 @@ class Exercise
 
     /**
      * @param int $start
-     * @param int $lenght
+     * @param int $length
      *
      * @return array
      */
-    public function getQuestionForTeacher($start = 0, $lenght = 10)
+    public function getQuestionForTeacher($start = 0, $length = 10)
     {
         $start = (int) $start;
         if ($start < 0) {
             $start = 0;
         }
 
-        $lenght = (int) $lenght;
+        $length = (int) $length;
 
-        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $sql = "SELECT DISTINCT e.question_id, e.question_order
-                FROM $TBL_EXERCICE_QUESTION e
-                INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.id AND e.c_id = q.c_id)
+        $quizRelQuestion = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $question = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $sql = "SELECT DISTINCT e.question_id
+                FROM $quizRelQuestion e
+                INNER JOIN $question q
+                ON (e.question_id = q.iid AND e.c_id = q.c_id)
                 WHERE
                     e.c_id = {$this->course_id} AND
                     e.exercice_id = '".$this->id."'
                 ORDER BY question_order
-                LIMIT $start, $lenght
+                LIMIT $start, $length
             ";
         $result = Database::query($sql);
         $questionList = [];
         while ($object = Database::fetch_object($result)) {
-            $questionList[$object->question_order] = $object->question_id;
+            $questionList[] = $object->question_id;
         }
 
         return $questionList;
@@ -8070,21 +8101,22 @@ class Exercise
             api_get_session_id()
         );
 
-        $repo = $em->getRepository('ChamiloCoreBundle:GradebookLink');
+        if (!empty($links)) {
+            $repo = $em->getRepository('ChamiloCoreBundle:GradebookLink');
 
-        foreach ($links as $link) {
-            $linkId = $link['id'];
-            /** @var \Chamilo\CoreBundle\Entity\GradebookLink $exerciseLink */
-            $exerciseLink = $repo->find($linkId);
-            if ($exerciseLink) {
-                $exerciseLink
-                    ->setUserScoreList($students)
-                    ->setBestScore($bestResult)
-                    ->setAverageScore($average)
-                    ->setScoreWeight($this->get_max_score())
-                ;
-                $em->persist($exerciseLink);
-                $em->flush();
+            foreach ($links as $link) {
+                $linkId = $link['id'];
+                /** @var \Chamilo\CoreBundle\Entity\GradebookLink $exerciseLink */
+                $exerciseLink = $repo->find($linkId);
+                if ($exerciseLink) {
+                    $exerciseLink
+                        ->setUserScoreList($students)
+                        ->setBestScore($bestResult)
+                        ->setAverageScore($average)
+                        ->setScoreWeight($this->get_max_score());
+                    $em->persist($exerciseLink);
+                    $em->flush();
+                }
             }
         }
     }
@@ -8241,12 +8273,13 @@ class Exercise
      *
      * @param array  $question_list_answers
      * @param string $origin
-     * @param int    $exe_id
+     * @param array  $user_info
+     * @param string $url_email
+     * @param array  $teachers
      */
     private function sendNotificationForOpenQuestions(
         $question_list_answers,
         $origin,
-        $exe_id,
         $user_info,
         $url_email,
         $teachers
@@ -8254,6 +8287,17 @@ class Exercise
         // Email configuration settings
         $courseCode = api_get_course_id();
         $courseInfo = api_get_course_info($courseCode);
+        $sessionId = api_get_session_id();
+        $sessionData = '';
+        if (!empty($sessionId)) {
+            $sessionInfo = api_get_session_info($sessionId);
+            if (!empty($sessionInfo)) {
+                $sessionData = '<tr>'
+                    .'<td><em>'.get_lang('SessionName').'</em></td>'
+                    .'<td>&nbsp;<b>'.$sessionInfo['name'].'</b></td>'
+                    .'</tr>';
+            }
+        }
 
         $msg = get_lang('OpenQuestionsAttempted').'<br /><br />'
             .get_lang('AttemptDetails').' : <br /><br />'
@@ -8262,6 +8306,7 @@ class Exercise
             .'<td><em>'.get_lang('CourseName').'</em></td>'
             .'<td>&nbsp;<b>#course#</b></td>'
             .'</tr>'
+            .$sessionData
             .'<tr>'
             .'<td>'.get_lang('TestAttempted').'</td>'
             .'<td>&nbsp;#exercise#</td>'
@@ -8275,6 +8320,7 @@ class Exercise
             .'<td>&nbsp;#mail#</td>'
             .'</tr>'
             .'</table>';
+
         $open_question_list = null;
         foreach ($question_list_answers as $item) {
             $question = $item['question'];
@@ -8300,16 +8346,20 @@ class Exercise
             $msg .= $open_question_list;
             $msg .= '</table><br />';
 
-            $msg = str_replace("#exercise#", $this->exercise, $msg);
-            $msg = str_replace("#firstName#", $user_info['firstname'], $msg);
-            $msg = str_replace("#lastName#", $user_info['lastname'], $msg);
-            $msg = str_replace("#mail#", $user_info['email'], $msg);
-            $msg = str_replace("#course#", $courseInfo['name'], $msg);
+            $msg = str_replace('#exercise#', $this->exercise, $msg);
+            $msg = str_replace('#firstName#', $user_info['firstname'], $msg);
+            $msg = str_replace('#lastName#', $user_info['lastname'], $msg);
+            $msg = str_replace('#mail#', $user_info['email'], $msg);
+            $msg = str_replace(
+                '#course#',
+                Display::url($courseInfo['title'], $courseInfo['course_public_url'].'?id_session='.$sessionId),
+                $msg
+            );
 
             if ($origin != 'learnpath') {
                 $msg .= '<br /><a href="#url#">'.get_lang('ClickToCommentAndGiveFeedback').'</a>';
             }
-            $msg = str_replace("#url#", $url_email, $msg);
+            $msg = str_replace('#url#', $url_email, $msg);
             $subject = get_lang('OpenQuestionsAttempted');
 
             if (!empty($teachers)) {

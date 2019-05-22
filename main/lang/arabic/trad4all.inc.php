@@ -142,7 +142,7 @@ $FirstAccessWasXSessionDurationYEndDateInZDays = "كان اول دخول للم�
 $UserNeverAccessedSessionDefaultDurationIsX = "لم يقم المستخدم بالولوج الى الموسم من قبل. المدة محددة بـ %s يوم - من اول يوم دخول";
 $SessionDurationEdit = "تحرير مدة الموسم";
 $EditUserSessionDuration = "تحرير مدة المستخدم في الموسم";
-$SessionDurationXDaysLeft = "هذا الموسم فيه مدة قصوى. فقط %s يوم قد تبقى.";
+$SessionDurationXDaysLeft = "هذا الموسم فيه مدة قصوى. فقط %s يوم قد بقي.";
 $NextTopic = "الموضوع القادم";
 $CurrentTopic = "الموضوع الحالي";
 $ShowFullCourseAdvance = "عرض تخطيط المقرر";
@@ -580,7 +580,7 @@ $MessageSent = "الرسائل المرسلة";
 $ModifInfo = "إعدادات المقرر";
 $ModifDone = "تم تعديل المعلومات";
 $DelCourse = "إحذفْ منطقةَ الفصلِ الكاملةِ";
-$Professors = "المعلمون";
+$Professors = "المدرسين";
 $Faculty = "الفئة";
 $Confidentiality = "السرية";
 $Unsubscription = " إلغاء التسجيل";
@@ -1192,7 +1192,7 @@ $HideAndSubscribeClosed = " مخفي / مغلق";
 $HideAndSubscribeOpen = " مخفي / مفتوح";
 $ShowAndSubscribeOpen = " ظاهر / مفتوح";
 $ShowAndSubscribeClosed = " ظاهر / مغلق";
-$AdminThisUser = " Back to user";
+$AdminThisUser = "الرجوع للمستخدم";
 $Manage = " Portal ادارة الـ";
 $EnrollToCourseSuccessful = " لقد تم تسجيلك في المقرر";
 $SubCat = " التصانيف الفرعية";
@@ -1644,7 +1644,7 @@ $ShowIconsInNavigationsMenuComment = " هل ستظهر قائمة التصفح �
 $Plugin = " ادخال";
 $MainMenu = " القائمة الرئيسية";
 $MainMenuLogged = " القائمة الرئيسية بعد تسجيل الدخول";
-$Banner = " Banner";
+$Banner = "لافتة";
 $ImageResizeTitle = " تغيير حجم صور المستخدم التي تم تحميلها";
 $ImageResizeComment = " .غير متاح يتم تجاهل هذا الإعداد بشكل صامت (GD) إذا كان جي دي  <a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">GD library - مكتبة معالجة الصور </a> بـ PHP ال  (compile) يمكن إعادة تحجيم صور المستخدم عند التحميل إذا تم تجميع";
 $MaxImageWidthTitle = "  الحد الأقصى لعرض صورة المستخدم";
@@ -2654,7 +2654,7 @@ $TargetAudience = "الجمهور المستهدف";
 $OpenBadgesActionCall = "تحويل النظام الى تجربة تعلم مستندة الى المهارات";
 $CallSent = "تم ارسال اتصال الدردشة، بانتظار موافقة الطرف المقابل";
 $ChatDenied = "لقد تم منع ندائك من قبل الطرف الآخر";
-$Send = "أرسل";
+$Send = "ارسال رسالة";
 $Connected = "متصل";
 $Exercice = "اختبار";
 $NoEx = "لا يوجد أي اختبار حاليا";
@@ -3098,7 +3098,7 @@ $Logout = "تسجيل خروج";
 $MyAgenda = "التقويم الشخصي";
 $CourseHomepage = "صفحة المقرر";
 $SwitchToTeacherView = "معاينة منظور المدرس";
-$SwitchToStudentView = " معاينة واجهة الطلاب";
+$SwitchToStudentView = "عرض منظور الطالب";
 $AddResource = "أضفه";
 $AddedResources = "مرفقات";
 $TimeReportForTeacherX = "تقرير الوقت للمدرس %s";
@@ -3232,9 +3232,9 @@ $OctoberLong = "أكتوبر";
 $NovemberLong = "نوفمبر";
 $DecemberLong = "ديسمبر";
 $MyCompetences = "قدراتي";
-$MyDiplomas = "دبلوماتي";
+$MyDiplomas = "شهاداتي";
 $MyPersonalOpenArea = "مساحتي الشخصية المفتوحة";
-$MyTeach = "ما أنا قادرة على تدريسه";
+$MyTeach = "المقررات التي استطيع تدريسها";
 $Agenda = "التقويم";
 $HourShort = "h";
 $PleaseTryAgain = "فضلا كرر المحاولة";
@@ -3339,7 +3339,7 @@ $Progress = "الإجراء";
 $Or = "أو";
 $Uploading = "يتم التحميل ...";
 $AccountExpired = "انتهت صلاحية الحساب";
-$AccountInactive = "الحساب غير نشط";
+$AccountInactive = "الحساب معطل";
 $ActionNotAllowed = "العملية غير مسموح بها";
 $SubTitle = "العنوان الفرعي";
 $NoResourcesToRecycle = "لا يوجد مصادر لإعادة استخدامها";
@@ -3960,7 +3960,7 @@ $EmptyFields = "لقد تركت بعض الحقول فارغة , استخدم ز
 $PassTwice = "لقد قمت بإدخال كلمتي سر مختلفتين, فضلا استخدم زر المتصفح للرجوع وحاول مرة أخرى";
 $RegAdmin = "إنشاء منطقة مقرر";
 $RegStudent = "متابعة المقررات";
-$Confirmation = "التأكيد";
+$Confirmation = "تأكيد كلمة المرور";
 $Surname = "اللقب";
 $Registration = "التسجيل";
 $YourAccountParam = "هذه هي معلوماتك للإتصال إلى";
@@ -3996,8 +3996,8 @@ $RequestSentToPlatformAdmin = "Chamilo can't handle the request automatically fo
 $ProgressIntroduction = "Start with selecting a course session below.<br />You can then see your progress for every course you are subscribed to.";
 $NeverExpires = "صلاحية غير محدودة";
 $ActiveAccount = "الحسابات النشطة";
-$YourAccountHasToBeApproved = "يجب إعتماد حسابك";
-$ApprovalForNewAccount = "إعتماد الحسابات الجديدة";
+$YourAccountHasToBeApproved = "سوف يتم التحقق من حسابك قبل ان تتم الموافقة عليه";
+$ApprovalForNewAccount = "الموافقة على حساب جديد";
 $ManageUser = "Manage user";
 $SubscribeUserToCourseAsTeacher = "سجل المستخدمين كمدرسين في هذا المقرر";
 $PasswordEncryptedForSecurity = "كلمة السر مشفره لأسباب أمنية. لذا وبعد الضغط على الوصلة التي ستصلك عن طريق البريد الالكتروني سترسل إليكم مرة أخرى مع كلمة السر الخاصة بك";
@@ -4024,7 +4024,7 @@ $RegisterUser = "التسجيل";
 $IHaveReadAndAgree = "لقد قرأت ووافقت على";
 $ByClickingRegisterYouAgreeTermsAndConditions = "بضغطك على زر التسجيل تكون قد وافقت على شروط الاستخدام";
 $LostPass = "كلمة المرور مفقودة";
-$EnterEmailUserAndWellSendYouPassword = "المرجو إدخال بريدك الإلكتروني الذي قمت بالتسجيل به معنا و سنقوم بإرسال كلمة مرورك له";
+$EnterEmailUserAndWellSendYouPassword = "يرجى ادخال اسم المستخدم او البريد الالكتروني الذي تم التسجيل بواسطته، وسوف يتم ارسال رمز المرور";
 $NoUserAccountWithThisEmailAddress = "لا يوجد أي مستخدم له هذا البريد الإلكتروني";
 $InLnk = " الأدوات والروابط المخفية";
 $DelLk = " هل تريد حقا حذف هذا الرابط؟";
@@ -5947,7 +5947,7 @@ $dateFormatShortNumberNoYear = "%d/%m";
 $CourseTutor = "معلم المقرر";
 $StudentInSessionCourse = "طالب في مقرر الموسم";
 $StudentInCourse = "طالب في مقرر";
-$SessionGeneralCoach = "المعلم العام للموسم";
+$SessionGeneralCoach = "المدير العام للموسم";
 $SessionCourseCoach = "معلم مقرر الموسم";
 $Admin = "المدير";
 $SessionTutorsCanSeeExpiredSessionsResultsComment = "هل يمكن لمعلمي الموسم مشاهدة تقارير مواسمهم بعد انتهائها؟";
@@ -6925,7 +6925,7 @@ $XStarsOutOf5 = "%s نجوم من اصل 5";
 $Visit = "الزيارة";
 $Visits = "الزيارات";
 $YourVote = "تصويتك";
-$HottestCourses = "احدث المقررات";
+$HottestCourses = "المقررات الأكثر انتشاراً";
 $SentAtX = "تم الارسال الى: %s";
 $dateTimeFormatShort = "%b %d, %Y قي %I:%M %p";
 $dateTimeFormatShortTimeFirst = "%I:%M %p, %b %d %Y";
@@ -7474,7 +7474,7 @@ $DependentSessions = "المواسم التابعة";
 $ByDuration = "وفقا للمدة";
 $ByDates = "وفقا للتواريخ";
 $SendAnnouncementCopyToDRH = "ارسال نسخة الى مدراء الموارد البشرية للطلبة الذين تم تحديدهم";
-$PoweredByX = "مدعوم من قبل %s";
+$PoweredByX = "مدعوم بواسطة %s";
 $AnnouncementErrorNoUserSelected = "يرجى اختيار مستخدم واحد على الاقل، لم يتم حفظ التبليغ";
 $NoDependencies = "لا توجد توابع";
 $SendMailToStudent = "ارسال بريد الى الطالب";
@@ -8156,12 +8156,12 @@ $LPItemCanBeAccessed = "يمكن عرض العنصر - تم اكمال المت�
 $ItemXBlocksThisElement = "عنصر %s يمنع هذه الخطوة";
 $YourResultAtXBlocksThisElement = "نتيجتك في %s تمنع هذه الخطوة";
 $RegistrationRoleWhatDoYouWantToDo = "ما الذي تود فعله؟";
-$RegistrationRoleFollowCourses = "التسجيل في المقررات";
-$RegistrationRoleTeachCourses = "تدريس المقررات";
+$RegistrationRoleFollowCourses = "التسجيل كطالب";
+$RegistrationRoleTeachCourses = "التسجيل كمدرس";
 $EditPortfolioItem = "تحرير عنصر المحفظة";
 $PortfolioItemAdded = "تم اضافة عنصر المحفظة";
 $ExploreMoreCourses = "استكشاف مقررات اكثر";
-$LinksOfInterest = "روابط الاهتمام";
+$LinksOfInterest = "روابط مفيدة";
 $ExportToChamiloFormat = "تصدير الى صيغة كاميلو";
 $CoursesComingSoon = "المقررات التي ستصدر قريبا";
 $SalePrice = "سعر البيع";
@@ -8419,4 +8419,15 @@ $VoteDislike = "لا يعجبني";
 $GenerateStats = "توليد احصاءات";
 $BasicCourseDocuments = "المستندات الاساسية للمقرر";
 $WeekX = "اسبوعX";
+$QuizWrongAnswerHereIsTheCorrectOne = ":اجابة خاطئة. الاجابة الصحيحة كانت";
+$ThisQuizCanBeEmbeddable = "يمكن تضمين الاختبار في الفيديوهات او محتوى الموبايل";
+$SearchGeolocalization = "البحث عن هذا الموقع";
+$LegalTermsAgreementStatus = "حالة الموافقة على احكام الاستخدام";
+$HideSurveyInvitationLink = "اخفاء رابط الدعوة الخاص بالاستبيان";
+$LeaveAMessage = "اترك رسالة";
+$OrphanQuestion = "سؤال غير متصل";
+$WelcomeToPortalXInCourseSessionX = "مرحبا بك في منصة %s مقرر الموسم: %s";
+$WelcomeToPortalXInCourseSessionXCoursePartOfCareerX = "مرحبا بك في منصة %s في مقرر %s, جزء من وظيفة %s";
+$YourNextModule = "درسك التالي";
+$FirstLesson = "الدرس الاول";
 ?>

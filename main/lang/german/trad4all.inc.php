@@ -7984,4 +7984,6 @@ Benutzer %s hat eine Follow-up-Nachricht zum Lernenden %s gesendet.<br/><br/>
 
 Die Nachricht ist an %s sichtbar";
 $PersonalDataReport = "Persönliche Daten";
+$FromTimeX = "Von %s";
+$ToTimeX = "bis %s";
 ?>

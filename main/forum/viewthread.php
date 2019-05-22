@@ -327,26 +327,7 @@ foreach ($posts as $post) {
         );
 
         $_user = api_get_user_info($posterId);
-        $urlImg = api_get_path(WEB_IMG_PATH);
-        $iconStatus = null;
-        $isAdmin = UserManager::is_admin($posterId);
-
-        if ($_user['status'] == 5) {
-            if ($_user['has_certificates']) {
-                $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_graduated.svg" width="22px" height="22px">';
-            } else {
-                $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_student.svg" width="22px" height="22px">';
-            }
-        } else {
-            if ($_user['status'] == 1) {
-                if ($isAdmin) {
-                    $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_admin.svg" width="22px" height="22px">';
-                } else {
-                    $iconStatus = '<img src="'.$urlImg.'icons/svg/identifier_teacher.svg" width="22px" height="22px">';
-                }
-            }
-        }
-
+        $iconStatus = $_user['icon_status'];
         $post['user_data'] .= '<div class="user-type text-center">'.$iconStatus.'</div>';
     } else {
         if ($allowUserImageForum) {
@@ -464,17 +445,18 @@ foreach ($posts as $post) {
 
     $postIsARevision = false;
     $flagRevision = '';
+
     if ($post['poster_id'] == $userId) {
         $revision = getPostRevision($post['post_id']);
         if (empty($revision)) {
             $askForRevision = getAskRevisionButton($post['post_id'], $current_thread);
         } else {
+            $postIsARevision = true;
             $languageId = api_get_language_id(strtolower($revision));
             $languageInfo = api_get_language_info($languageId);
             if ($languageInfo) {
-                $languages = getLanguageListForFlag();
+                $languages = api_get_language_list_for_flag();
                 $flagRevision = '<span class="flag-icon flag-icon-'.$languages[$languageInfo['english_name']].'"></span> ';
-                $postIsARevision = true;
             }
         }
     } else {
@@ -483,12 +465,12 @@ foreach ($posts as $post) {
         } else {
             $revision = getPostRevision($post['post_id']);
             if (!empty($revision)) {
+                $postIsARevision = true;
                 $languageId = api_get_language_id(strtolower($revision));
                 $languageInfo = api_get_language_info($languageId);
                 if ($languageInfo) {
-                    $languages = getLanguageListForFlag();
+                    $languages = api_get_language_list_for_flag();
                     $flagRevision = '<span class="flag-icon flag-icon-'.$languages[$languageInfo['english_name']].'"></span> ';
-                    $postIsARevision = true;
                 }
             }
         }
@@ -633,7 +615,7 @@ foreach ($posts as $post) {
         'Aw:',
     ];
     $replace = '<span>'.Display::returnFontAwesomeIcon('mail-reply').'</span>';
-    $post['post_title'] = str_replace($search, $replace, $post['post_title']);
+    $post['post_title'] = str_replace($search, $replace, Security::remove_XSS($post['post_title']));
 
     // The post title
     $titlePost = Display::tag('h3', $post['post_title'], ['class' => 'forum_post_title']);

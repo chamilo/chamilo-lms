@@ -8321,4 +8321,14 @@ $GenerateStats = "Générer les statistiques";
 $BasicCourseDocuments = "Documents de base du cours";
 $WeekX = "Semaine %s";
 $QuizWrongAnswerHereIsTheCorrectOne = "Vous vous êtes trompé. La réponse correcte était :";
+$ThisQuizCanBeEmbeddable = "Cet exercice peut être inséré dans une vidéo ou du contenu mobile";
+$SearchGeolocalization = "Localiser par l'adresse";
+$LegalTermsAgreementStatus = "État d'acceptation des conditions d'utilisation";
+$HideSurveyInvitationLink = "Cacher le lien d'invitation à l'enquête";
+$LeaveAMessage = "Laisser un message";
+$OrphanQuestion = "Question orpheline";
+$WelcomeToPortalXInCourseSessionX = "Bienvenue sur le portail %s, Cours/session: %s";
+$WelcomeToPortalXInCourseSessionXCoursePartOfCareerX = "Bienvenue sur le portail %s dans le cours %s qui fait partie de la carrière %s";
+$YourNextModule = "Votre module suivant";
+$FirstLesson = "Première leçon";
 ?>

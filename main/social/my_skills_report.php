@@ -28,6 +28,61 @@ switch ($action) {
         $certificate = new Certificate(0, api_get_user_id(), false, false);
         $certificate->generatePdfFromCustomCertificate();
         break;
+    case 'generate':
+        $controller = new IndexManager(get_lang('MyCourses'));
+        $courseAndSessions = $controller->returnCoursesAndSessions($userId, true, null, true, false);
+
+        foreach ($courseAndSessions['courses'] as $course) {
+            $cats = Category:: load(
+                null,
+                null,
+                $course['code'],
+                null,
+                null,
+                null,
+                false
+            );
+
+            if (isset($cats[0]) && !empty($cats[0])) {
+                $certificate = Category::generateUserCertificate(
+                    $cats[0]->get_id(),
+                    $userId
+                );
+            }
+        }
+
+        foreach ($courseAndSessions['sessions'] as $sessionCategory) {
+            if (isset($sessionCategory['sessions'])) {
+                foreach ($sessionCategory['sessions'] as $sessionData) {
+                    if (!empty($sessionData['courses'])) {
+                        $sessionId = $sessionData['session_id'];
+                        foreach ($sessionData['courses'] as $courseData) {
+                            $cats = Category:: load(
+                                null,
+                                null,
+                                $courseData['course_code'],
+                                null,
+                                null,
+                                $sessionId,
+                                false
+                            );
+
+                            if (isset($cats[0]) && !empty($cats[0])) {
+                                $certificate = Category::generateUserCertificate(
+                                    $cats[0]->get_id(),
+                                    $userId
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        Display::addFlash(Display::return_message(get_lang('Updated')));
+        header('Location: '.api_get_self());
+        exit;
+        break;
 }
 
 $skillTable = Database::get_main_table(TABLE_MAIN_SKILL);
@@ -47,15 +102,26 @@ if ($isStudent) {
     $tpl->assign('skill_table', $result['table']);
     $tplPath = 'skill/student_report.tpl';
 } elseif ($isStudentBoss) {
-    $selectedStudent = isset($_REQUEST['student']) ? (int) $_REQUEST['student'] : 0;
     $tableRows = [];
     $followedStudents = UserManager::getUsersFollowedByStudentBoss($userId);
 
+    $frmStudents = new FormValidator('students', 'get');
+    $slcStudent = $frmStudents->addSelect(
+        'student',
+        get_lang('Student'),
+        ['0' => get_lang('Select')]
+    );
+    $frmStudents->addButtonSearch(get_lang('Search'));
+
     foreach ($followedStudents as &$student) {
         $student['completeName'] = api_get_person_name($student['firstname'], $student['lastname']);
+
+        $slcStudent->addOption($student['completeName'], $student['user_id']);
     }
 
-    if ($selectedStudent > 0) {
+    if ($frmStudents->validate()) {
+        $selectedStudent = (int) $frmStudents->exportValue('student');
+
         $sql = "SELECT s.name, sru.acquired_skill_at, c.title, c.directory
                 FROM $skillTable s
                 INNER JOIN $skillRelUserTable sru
@@ -109,8 +175,7 @@ if ($isStudent) {
     }
 
     $tplPath = 'skill/student_boss_report.tpl';
-    $tpl->assign('followed_students', $followedStudents);
-    $tpl->assign('selected_student', $selectedStudent);
+    $tpl->assign('form', $frmStudents->returnForm());
 } elseif ($isDRH) {
     $selectedCourse = isset($_REQUEST['course']) ? intval($_REQUEST['course']) : null;
     $selectedSkill = isset($_REQUEST['skill']) ? intval($_REQUEST['skill']) : 0;

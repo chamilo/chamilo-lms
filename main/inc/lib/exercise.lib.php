@@ -3721,8 +3721,6 @@ EOT;
                 }
             }
             //We asumme that all exe_weighting
-            //$avg_score = show_score( $avg_score / count($user_results) , $result['exe_weighting']);
-            //$avg_score = ($avg_score / count($user_results));
             if (!empty($user_count)) {
                 $avg_score = float_format($avg_score / $user_count, 1) * 100;
             } else {
@@ -4516,7 +4514,7 @@ EOT;
             }
         }
 
-        if ($show_results || $show_only_score) {
+        if (($show_results || $show_only_score) && $origin != 'embeddable') {
             if (isset($exercise_stat_info['exe_user_id'])) {
                 $user_info = api_get_user_info($exercise_stat_info['exe_user_id']);
                 if ($user_info) {
@@ -4680,6 +4678,7 @@ EOT;
                         'score' => $my_total_score,
                         'weight' => $my_total_weight,
                         'comments' => $comnt,
+                        'user_answered' => $result['user_answered'],
                     ];
                 }
 

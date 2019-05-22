@@ -104,10 +104,8 @@ class UniqueAnswer extends Question
                     continue;
                 }
                 $question = Question::read($questionid);
-                $select_question[$questionid] = 'Q'.$key.' :'.cut(
-                    $question->selectTitle(),
-                    20
-                );
+                $questionTitle = strip_tags($question->selectTitle());
+                $select_question[$questionid] = "Q$key: $questionTitle";
             }
         }
         $select_question[-1] = get_lang('ExitTest');
@@ -276,8 +274,10 @@ class UniqueAnswer extends Question
 
         global $text;
         $buttonGroup = [];
-        //ie6 fix
-        if ($obj_ex->edit_exercise_in_lp == true) {
+
+        if ($obj_ex->edit_exercise_in_lp == true ||
+            (empty($this->exerciseList) && empty($obj_ex->id))
+        ) {
             //setting the save button here and not in the question class.php
             $buttonGroup[] = $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true);
             $buttonGroup[] = $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers', true);

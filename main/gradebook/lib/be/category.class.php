@@ -798,14 +798,18 @@ class Category implements GradebookItem
 
     /**
      * Show message resource delete.
+     *
+     * @param string $courseCode
+     *
+     * @return mixed
      */
-    public function show_message_resource_delete($course_id)
+    public function show_message_resource_delete($courseCode)
     {
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $sql = 'SELECT count(*) AS num 
                 FROM '.$table.'
                 WHERE
-                    course_code = "'.Database::escape_string($course_id).'" AND
+                    course_code = "'.Database::escape_string($courseCode).'" AND
                     visible = 3';
         $res = Database::query($sql);
         $option = Database::fetch_array($res, 'ASSOC');
@@ -953,7 +957,6 @@ class Category implements GradebookItem
                 return $cacheDriver->fetch($key);
             }
         }
-
         // Classic
         if (!empty($stud_id) && $type == '') {
             if (!empty($course_code)) {
@@ -1005,12 +1008,10 @@ class Category implements GradebookItem
                 /** @var Evaluation $eval */
                 foreach ($evals as $eval) {
                     $eval->setStudentList($this->getStudentList());
-                    $evalres = $eval->calc_score($stud_id, null);
-
+                    $evalres = $eval->calc_score($stud_id);
                     if (isset($evalres) && $eval->get_weight() != 0) {
                         $evalweight = $eval->get_weight();
                         $weightsum += $evalweight;
-                        $count++;
                         if (!empty($evalres[1])) {
                             $ressum += $evalres[0] / $evalres[1] * $evalweight;
                         }
@@ -2120,6 +2121,9 @@ class Category implements GradebookItem
         $user_id,
         $sendNotification = false
     ) {
+        $user_id = (int) $user_id;
+        $category_id = (int) $category_id;
+
         // Generating the total score for a course
         $cats_course = self::load(
             $category_id,
@@ -2148,32 +2152,21 @@ class Category implements GradebookItem
         $courseInfo = api_get_course_info($courseCode);
         $courseId = $courseInfo['real_id'];
 
-        //@todo move these in a function
-        $sum_categories_weight_array = [];
-        if (isset($cats_course) && !empty($cats_course)) {
-            $categories = self::load(null, null, null, $category_id);
-            if (!empty($categories)) {
-                foreach ($categories as $subCategory) {
-                    $sum_categories_weight_array[$subCategory->get_id()] = $subCategory->get_weight();
-                }
-            } else {
-                $sum_categories_weight_array[$category_id] = $cats_course[0]->get_weight();
-            }
-        }
-
         $cattotal = self::load($category_id);
         $scoretotal = $cattotal[0]->calc_score($user_id);
 
         // Do not remove this the gradebook/lib/fe/gradebooktable.class.php
         // file load this variable as a global
         $scoredisplay = ScoreDisplay::instance();
+
         $my_score_in_gradebook = $scoredisplay->display_score(
             $scoretotal,
             SCORE_SIMPLE
         );
+
         $userFinishedCourse = self::userFinishedCourse(
             $user_id,
-            $cats_course[0],
+            $category,
             true
         );
 
@@ -2185,13 +2178,13 @@ class Category implements GradebookItem
             api_get_user_id(),
             $user_id
         );
-        $userHasSkills = false;
 
+        $userHasSkills = false;
         if ($skillToolEnabled) {
             $skill = new Skill();
             $skill->addSkillToUser(
                 $user_id,
-                $category_id,
+                $category,
                 $courseId,
                 $sessionId
             );
@@ -2204,7 +2197,7 @@ class Category implements GradebookItem
             );
             $userHasSkills = !empty($userSkills);
 
-            if (!$category->getGenerateCertificates() && $userHasSkills) {
+            if ($userHasSkills && !$category->getGenerateCertificates()) {
                 return [
                     'badge_link' => Display::toolbarButton(
                         get_lang('ExportBadges'),
@@ -2216,7 +2209,7 @@ class Category implements GradebookItem
         }
 
         $my_certificate = GradebookUtils::get_certificate_by_user_id(
-            $cats_course[0]->get_id(),
+            $category->get_id(),
             $user_id
         );
 
@@ -2228,7 +2221,7 @@ class Category implements GradebookItem
                 api_get_utc_datetime()
             );
             $my_certificate = GradebookUtils::get_certificate_by_user_id(
-                $cats_course[0]->get_id(),
+                $category->get_id(),
                 $user_id
             );
         }

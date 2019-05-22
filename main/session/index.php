@@ -13,7 +13,7 @@ use ChamiloSession as Session;
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
-$session_id = isset($_GET['session_id']) ? (int) $_GET['session_id'] : null;
+$session_id = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
 
 if (empty($session_id)) {
     api_not_allowed(true);

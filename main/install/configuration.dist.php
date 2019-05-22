@@ -227,6 +227,9 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // E-mail accounts to send notifications to when executing cronjobs - works for main/cron/import_csv.php
 //$_configuration['cron_notification_mails'] = array('email@example.com', 'email2@example.com');
 
+// Help desk emails that will recieve email notifications in import_csv.php
+//$_configuration['cron_notification_help_desk'] = array('email@example.com', 'email2@example.com');
+
 // Only shows the fields in this list
 /*$_configuration['allow_fields_inscription'] = [
     'fields' => [
@@ -640,9 +643,10 @@ $_configuration['score_grade_model'] = [
 // SETTINGS FOR USER COURSE LIST
 // Manage the links to Session Index page
 // 1 = Default. Works as it is now (default is to link to the special session page)
-// 0 = No link (not clickable)
+// 0 = No link (hide session title)
 // 2 = Link to the course if there is only one course
 // 3 = Session link will make course list foldable
+// 4 = No link (only session title)
 //$_configuration['courses_list_session_title_link'] = 1;
 // New grid view the list of courses
 //$_configuration['view_grid_courses'] = true;
@@ -1048,6 +1052,20 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
     ]
 ];*/
 
+/*
+ * Fields visibility in the profile user page
+$_configuration['profile_fields_visibility'] = [
+    'options' => [
+        'vcard' => false,
+        'firstname' => false,
+        'lastname' => false,
+        'photo' => true,
+        'email' => true,
+        'chat' => true,
+        'terms_ville' => false, // extra field value
+    ]
+];*/
+
 // This option sets default parameters in the main/admin/user_import.php
 /*$_configuration['user_import_settings'] = [
     'options' =>  [
@@ -1086,6 +1104,7 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Requires to edit the GradebookLink.php And GradebookEvaluation.php files adding the "@" in the ORM phpdoc block
 /* ALTER TABLE gradebook_link ADD score_weight DOUBLE PRECISION DEFAULT NULL, ADD average_score DOUBLE PRECISION DEFAULT NULL, ADD best_score DOUBLE PRECISION DEFAULT NULL, ADD user_score_list LONGTEXT DEFAULT NULL COMMENT '(DC2Type:array)' ;
 ALTER TABLE gradebook_evaluation ADD score_weight DOUBLE PRECISION DEFAULT NULL, ADD average_score DOUBLE PRECISION DEFAULT NULL, ADD best_score DOUBLE PRECISION DEFAULT NULL, ADD user_score_list LONGTEXT DEFAULT NULL COMMENT '(DC2Type:array)' ;
+*/
 
 //$_configuration['allow_gradebook_stats'] = false;
 
@@ -1129,6 +1148,14 @@ ALTER TABLE gradebook_evaluation ADD score_weight DOUBLE PRECISION DEFAULT NULL,
     ],
 ];*/
 
+/* Set extra fields as required in the profile.php page
+$_configuration['required_extra_fields_in_profile'] = [
+    'options' => [
+        'terms_villedustage'
+    ],
+];
+*/
+
 // Community manager users
 //$_configuration['community_managers_user_list'] = ['users' => [1]];
 
@@ -1137,6 +1164,9 @@ ALTER TABLE gradebook_evaluation ADD score_weight DOUBLE PRECISION DEFAULT NULL,
 
 // global forum in social network BT#15309
 //$_configuration['global_forums_course_id'] = 0;
+
+// Hide forum post revision checkbox
+//$_configuration['hide_forum_post_revision_language'] = false;
 
 // Allow forum post revisions
 // Requires new forum_category and forum_post "language" extra fields (multiple select)
@@ -1159,12 +1189,24 @@ ALTER TABLE gradebook_evaluation ADD score_weight DOUBLE PRECISION DEFAULT NULL,
 // - edit src/Chamilo/CoreBundle/Entity/MessageFeedback.php
 //   and follow the instructions about the @ORM\Entity() line
 // - edit src/Chamilo/CoreBundle/Entity/Message.php
-//   and fllow the instruccions about the @ORM\OneToMany line for the $likes property
-// - launch composer install to rebuild the autoload.php
+//   and follow the instructions about the @ORM\OneToMany line for the $likes property
+// - launch "composer install" to rebuild the autoload.php
 //$_configuration['social_enable_messages_feedback'] = false;
 
 // Block student's access to the course documents when using the ckeditor "Browse server" button
 //$_configuration['block_editor_file_manager_for_students'] = false;
+// Show a language flag next to the user picture in the social network
+//$_configuration['social_show_language_flag_in_profile'] = false;
+
+// Add subject and body in the mailto: footer
+//$_configuration['add_user_course_information_in_mailto'] = false;
+
+// Add gradebook score style configuration in the flat view
+// See api.lib.php in order to find the options: examples SCORE_DIV = 1, SCORE_PERCENT = 2, etc
+//$_configuration['gradebook_report_score_style'] = 1; //  Means the score will be (X / Y) "SCORE_DIV"
+
+// Blocks "my files" access to anon users
+//$_configuration['block_my_files_access'] = false;
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

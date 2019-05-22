@@ -535,6 +535,10 @@ class DocumentManager
         $search = false,
         $sessionId = 0
     ) {
+        if (empty($courseInfo)) {
+            return [];
+        }
+
         $tblItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tblDocument = Database::get_course_table(TABLE_DOCUMENT);
 
@@ -726,6 +730,10 @@ class DocumentManager
         $getInvisibleList = false,
         $path = ''
     ) {
+        if (empty($_course)) {
+            return [];
+        }
+
         $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
         $groupIid = (int) $groupIid;
@@ -2929,16 +2937,8 @@ class DocumentManager
                     $treat_spaces_as_hyphens
                 );
 
-                // Showing message when sending zip files
+                // When sending zip files
                 if ($new_path === true && $unzip == 1) {
-                    if ($show_output) {
-                        echo Display::return_message(
-                            get_lang('UplUploadSucceeded').'<br />',
-                            'confirm',
-                            false
-                        );
-                    }
-
                     return [
                         'title' => $files[$fileKey]['name'],
                         'url' => '#',
@@ -3471,7 +3471,7 @@ class DocumentManager
         }
 
         if (!empty($overwrite_url)) {
-            $url .= '&url='.Security::remove_XSS($overwrite_url);
+            $url .= '&url='.urlencode(Security::remove_XSS($overwrite_url));
         }
 
         if ($add_move_button) {
@@ -4477,7 +4477,7 @@ class DocumentManager
         $path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
         if (!is_dir($path.'audio')) {
             mkdir($path.'audio', api_get_permissions_for_new_directories());
-            $audioId = add_document($_course, '/audio', 'folder', 0, 'Audio');
+            $audioId = add_document($_course, '/audio', 'folder', 0, get_lang('Audio'));
             api_item_property_update(
                 $_course,
                 TOOL_DOCUMENT,

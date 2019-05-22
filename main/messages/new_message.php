@@ -179,7 +179,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
         get_lang('Message'),
         false,
         false,
-        ['ToolbarSet' => 'Messages', 'Width' => '100%', 'Height' => '250']
+        ['ToolbarSet' => 'Messages', 'Width' => '100%', 'Height' => '250', 'style' => true]
     );
 
     if (isset($_GET['re_id'])) {

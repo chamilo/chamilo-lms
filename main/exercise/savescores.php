@@ -7,6 +7,9 @@
  * @package chamilo.exercise
  */
 require_once __DIR__.'/../inc/global.inc.php';
+
+api_protect_course_script(true);
+
 $courseInfo = api_get_course_info();
 $_user = api_get_user_info();
 

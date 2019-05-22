@@ -172,6 +172,9 @@ function import_exercise($file)
     if (!empty($last_exercise_id)) {
         // For each question found...
         foreach ($exerciseInfo['question'] as $question_array) {
+            if (!in_array($question_array['type'], [UNIQUE_ANSWER, MULTIPLE_ANSWER, FREE_ANSWER])) {
+                continue;
+            }
             //2. Create question
             $question = new Ims2Question();
             $question->type = $question_array['type'];

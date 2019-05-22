@@ -1106,9 +1106,15 @@ class ExtraField extends Model
                 if ($help) {
                     $translatedDisplayHelpText .= get_lang($field_details['display_text'].'Help');
                 }
-                $label = [$translatedDisplayText, $translatedDisplayHelpText];
                 if (!empty($translatedDisplayText)) {
-                    $field_details['display_text'] = $label;
+                    if (!empty($translatedDisplayHelpText)) {
+                        // In this case, exceptionally, display_text is an array
+                        // which is then treated by display_form()
+                        $field_details['display_text'] = [$translatedDisplayText, $translatedDisplayHelpText];
+                    } else {
+                        // We have an helper text, use it
+                        $field_details['display_text'] = $translatedDisplayText;
+                    }
                 }
 
                 switch ($field_details['field_type']) {
@@ -1971,7 +1977,7 @@ class ExtraField extends Model
         $header = get_lang('Add');
         $defaults = [];
 
-        if ($action == 'edit') {
+        if ($action === 'edit') {
             $header = get_lang('Modify');
             // Setting the defaults
             $defaults = $this->get($id, false);
@@ -1979,7 +1985,7 @@ class ExtraField extends Model
 
         $form->addElement('header', $header);
 
-        if ($action == 'edit') {
+        if ($action === 'edit') {
             $translateUrl = api_get_path(WEB_CODE_PATH).'extrafield/translate.php?'
                 .http_build_query(['extra_field' => $id]);
             $translateButton = Display::toolbarButton(get_lang('TranslateThisTerm'), $translateUrl, 'language', 'link');
@@ -2171,11 +2177,11 @@ JAVASCRIPT;
                     : null;
 
                 if ($field['field_type'] == self::FIELD_TYPE_DOUBLE_SELECT) {
-                    //Add 2 selects
+                    // Add 2 selects
                     $options = $extraFieldOption->get_field_options_by_field($field['id']);
                     $options = self::extra_field_double_select_convert_array_to_ordered_array($options);
-                    $first_options = [];
 
+                    $first_options = [];
                     if (!empty($options)) {
                         foreach ($options as $option) {
                             foreach ($option as $sub_option) {
@@ -2242,6 +2248,7 @@ JAVASCRIPT;
                 $rules[] = [
                     'field' => 'extra_'.$field['variable'],
                     'op' => 'cn',
+                    'data' => '',
                 ];
             }
         }
@@ -3020,15 +3027,9 @@ JAVASCRIPT;
         }
 
         // Get extra field workflow
-        $userInfo = api_get_user_info();
         $addOptions = [];
         $optionsExists = false;
-        global $app;
-
         $options = [];
-        if (empty($defaultValueId)) {
-            $options[''] = get_lang('SelectAnOption');
-        }
 
         $optionList = [];
         if (!empty($fieldDetails['options'])) {
@@ -3081,9 +3082,13 @@ JAVASCRIPT;
             'select',
             'extra_'.$fieldDetails['variable'],
             $fieldDetails['display_text'],
-            $options,
+            [],
             ['id' => 'extra_'.$fieldDetails['variable']]
         );
+
+        if (empty($defaultValueId)) {
+            $slct->addOption(get_lang('SelectAnOption'), '');
+        }
 
         foreach ($options as $value => $text) {
             if (empty($value)) {

@@ -151,9 +151,6 @@ $ajax_url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&
 //we filter the type of questions we can add
 Question::displayTypeMenu($objExercise);
 
-// Re sets the question list
-//$objExercise->setQuestionList();
-
 echo '<div id="message"></div>';
 $token = Security::get_token();
 //deletes a session when using don't know question type (ugly fix)
@@ -162,7 +159,7 @@ Session::erase('less_answer');
 // If we are in a test
 $inATest = isset($exerciseId) && $exerciseId > 0;
 if (!$inATest) {
-    echo "<div class='alert alert-warning'>".get_lang('ChoiceQuestionType')."</div>";
+    echo Display::return_message(get_lang('ChoiceQuestionType'), 'warning');
 } else {
     if ($nbrQuestions) {
         // In the building exercise mode show question list ordered as is.
@@ -170,15 +167,13 @@ if (!$inATest) {
 
         // In building mode show all questions not render by teacher order.
         $objExercise->questionSelectionType = EX_Q_SELECTION_ORDERED;
-        $alloQuestionOrdering = true;
+        $allowQuestionOrdering = true;
         $showPagination = api_get_configuration_value('show_question_pagination');
         if (!empty($showPagination) && $nbrQuestions > $showPagination) {
-            // $page is declare in admin.php
-            //$page = isset($_GET['page']) && !empty($_GET['page']) ? (int) $_GET['page'] : 1;
             $length = api_get_configuration_value('question_pagination_length');
             $url = api_get_self().'?'.api_get_cidreq();
             // Use pagination for exercise with more than 200 questions.
-            $alloQuestionOrdering = false;
+            $allowQuestionOrdering = false;
             $start = ($page - 1) * $length;
             $questionList = $objExercise->getQuestionForTeacher($start, $length);
             $paginator = new Knp\Component\Pager\Paginator();
@@ -259,7 +254,6 @@ if (!$inATest) {
                         api_get_self().'?'.api_get_cidreq().'&'
                             .http_build_query([
                                 'type' => $objQuestionTmp->selectType(),
-                                'myid' => 1,
                                 'editQuestion' => $id,
                                 'page' => $page,
                             ]),
@@ -299,7 +293,7 @@ if (!$inATest) {
                 $title = Security::remove_XSS($objQuestionTmp->selectTitle());
                 $title = strip_tags($title);
                 $move = '&nbsp;';
-                if ($alloQuestionOrdering) {
+                if ($allowQuestionOrdering) {
                     $move = Display::returnFontAwesomeIcon('arrows moved', 1, true);
                 }
 
@@ -366,8 +360,9 @@ if (!$inATest) {
                 unset($objQuestionTmp);
             }
         }
+
+        echo '</div>'; //question list div
     } else {
         echo Display::return_message(get_lang('NoQuestion'), 'warning');
     }
-    echo '</div>'; //question list div
 }

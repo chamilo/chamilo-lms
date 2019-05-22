@@ -16,11 +16,14 @@ use ChamiloSession as Session;
 $this_section = SECTION_COURSES;
 //@todo who turns on $lp_controller_touched?
 if (empty($lp_controller_touched) || $lp_controller_touched != 1) {
-    header('location: lp_controller.php?action=list');
+    header('Location: lp_controller.php?action=list&'.api_get_cidreq());
     exit;
 }
 
 require_once __DIR__.'/../inc/global.inc.php';
+
+api_protect_course_script();
+
 $courseDir = api_get_course_path().'/scorm';
 $baseWordDir = $courseDir;
 
@@ -28,8 +31,7 @@ $baseWordDir = $courseDir;
  * Display initialisation and security checks.
  */
 // Extra javascript functions for in html head:
-$htmlHeadXtra[]
-    = "<script>
+$htmlHeadXtra[] = "<script>
 function confirmation(name) {
     if (confirm(\" ".trim(get_lang('AreYouSureToDeleteJS'))." \"+name+\"?\")) {
         return true;
@@ -40,7 +42,6 @@ function confirmation(name) {
 </script>";
 $nameTools = get_lang('LearningPaths');
 Event::event_access_tool(TOOL_LEARNPATH);
-api_protect_course_script();
 
 /**
  * Display.
@@ -51,6 +52,8 @@ if (api_get_setting('search_enabled') === 'true') {
     search_widget_prepare($htmlHeadXtra);
 }
 $sessionId = api_get_session_id();
+$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+$courseInfo = api_get_course_info();
 
 $subscriptionSettings = learnpath::getSubscriptionSettings();
 
@@ -67,11 +70,8 @@ $introduction = Display::return_introduction_section(
     ]
 );
 
-$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-$courseInfo = api_get_course_info();
 $message = '';
 $actions = '';
-
 if ($is_allowed_to_edit) {
     $actionLeft = '';
     $actionLeft .= Display::url(
@@ -806,11 +806,9 @@ foreach ($categories as $item) {
                             'delete.png',
                             get_lang('LearnpathDeleteLearnpath')
                         ),
-                        'lp_controller.php?'.api_get_cidreq()
-                        ."&action=delete&lp_id=$id",
+                        'lp_controller.php?'.api_get_cidreq()."&action=delete&lp_id=$id",
                         [
-                            'onclick' => "javascript: return confirmation('"
-                                .addslashes($name)."');",
+                            'onclick' => "javascript: return confirmation('".addslashes($name)."');",
                         ]
                     );
                 } else {

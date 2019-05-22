@@ -9,6 +9,7 @@ use ChamiloSession as Session;
 use CpChart\Cache as pCache;
 use CpChart\Data as pData;
 use CpChart\Image as pImage;
+use ExtraField as ExtraFieldModel;
 
 /**
  *  Class Tracking.
@@ -3767,7 +3768,7 @@ class Tracking
     /**
      * Get sessions coached by user.
      *
-     * @param        $coach_id
+     * @param int    $coach_id
      * @param int    $start
      * @param int    $limit
      * @param bool   $getCount
@@ -3775,6 +3776,7 @@ class Tracking
      * @param string $description
      * @param string $orderByName
      * @param string $orderByDirection
+     * @param array  $options
      *
      * @return mixed
      */
@@ -3786,16 +3788,17 @@ class Tracking
         $keyword = '',
         $description = '',
         $orderByName = '',
-        $orderByDirection = ''
+        $orderByDirection = '',
+        $options = []
     ) {
         // table definition
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $coach_id = (int) $coach_id;
 
-        $select = " SELECT * FROM ";
+        $select = ' SELECT * FROM ';
         if ($getCount) {
-            $select = " SELECT count(DISTINCT id) as count FROM ";
+            $select = ' SELECT count(DISTINCT id) as count FROM ';
         }
 
         $limitCondition = null;
@@ -3804,7 +3807,6 @@ class Tracking
         }
 
         $keywordCondition = null;
-
         if (!empty($keyword)) {
             $keyword = Database::escape_string($keyword);
             $keywordCondition = " AND (name LIKE '%$keyword%' ) ";
@@ -3814,6 +3816,13 @@ class Tracking
                 $keywordCondition = " AND (name LIKE '%$keyword%' OR description LIKE '%$description%' ) ";
             }
         }
+
+        $extraFieldModel = new ExtraFieldModel('session');
+        $conditions = $extraFieldModel->parseConditions($options);
+        $sqlInjectJoins = $conditions['inject_joins'];
+        $extraFieldsConditions = $conditions['where'];
+        $sqlInjectWhere = $conditions['inject_where'];
+        $injectExtraFields = $conditions['inject_extra_fields'];
 
         $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $access_url_id = api_get_current_access_url_id();
@@ -3831,34 +3840,42 @@ class Tracking
             $select
             (
                 SELECT DISTINCT
-                    session.id,
+                    s.id,
                     name,
+                    $injectExtraFields
                     access_start_date,
                     access_end_date
-                FROM $tbl_session session
+                FROM $tbl_session s
                 INNER JOIN $tbl_session_rel_access_url session_rel_url
-                ON (session.id = session_rel_url.session_id)
+                ON (s.id = session_rel_url.session_id)
+                $sqlInjectJoins
                 WHERE
                     id_coach = $coach_id AND
                     access_url_id = $access_url_id
                     $keywordCondition
+                    $extraFieldsConditions
+                    $sqlInjectWhere
             UNION
                 SELECT DISTINCT
-                    session.id,
-                    session.name,
-                    session.access_start_date,
-                    session.access_end_date
-                FROM $tbl_session as session
+                    s.id,
+                    s.name,
+                    $injectExtraFields
+                    s.access_start_date,
+                    s.access_end_date
+                FROM $tbl_session as s
                 INNER JOIN $tbl_session_course_user as session_course_user
                 ON
-                    session.id = session_course_user.session_id AND
+                    s.id = session_course_user.session_id AND
                     session_course_user.user_id = $coach_id AND
                     session_course_user.status = 2
-                INNER JOIN $tbl_session_rel_access_url session_rel_url
-                ON (session.id = session_rel_url.session_id)
+                INNER JOIN $tbl_session_rel_access_url session_rel_url                
+                ON (s.id = session_rel_url.session_id)
+                $sqlInjectJoins
                 WHERE
                     access_url_id = $access_url_id
                     $keywordCondition
+                    $extraFieldsConditions
+                    $sqlInjectWhere
             ) as sessions $limitCondition $orderBy
             ";
 
@@ -3912,7 +3929,7 @@ class Tracking
      */
     public static function get_courses_list_from_session($session_id)
     {
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
 
         // table definition
         $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
@@ -3961,20 +3978,20 @@ class Tracking
                 $studentList = array_map('intval', $student_id);
                 $condition_user = " AND ip.insert_user_id IN ('".implode(',', $studentList)."') ";
             } else {
-                $student_id = intval($student_id);
+                $student_id = (int) $student_id;
                 $condition_user = " AND ip.insert_user_id = '$student_id' ";
             }
 
             $condition_session = null;
             if (isset($session_id)) {
-                $session_id = intval($session_id);
+                $session_id = (int) $session_id;
                 $condition_session = " AND pub.session_id = $session_id ";
             }
 
             $sql = "SELECT count(ip.tool) AS count
                     FROM $tbl_item_property ip
                     INNER JOIN $tbl_document pub
-                    ON (ip.ref = pub.id AND ip.c_id = pub.c_id)
+                    ON (ip.ref = pub.iid AND ip.c_id = pub.c_id)
                     WHERE
                         ip.c_id  = $course_id AND
                         pub.c_id  = $course_id AND
@@ -4038,7 +4055,7 @@ class Tracking
         $sql = "SELECT count(ip.tool) as count
                 FROM $tbl_item_property ip
                 INNER JOIN $tbl_student_publication pub
-                ON (ip.ref = pub.id AND ip.c_id = pub.c_id)
+                ON (ip.ref = pub.iid AND ip.c_id = pub.c_id)
                 WHERE
                     ip.tool='work' AND
                     $conditionToString";
@@ -4072,7 +4089,7 @@ class Tracking
             $studentList = array_map('intval', $student_id);
             $conditions[] = " post.poster_id IN ('".implode("','", $studentList)."') ";
         } else {
-            $student_id = intval($student_id);
+            $student_id = (int) $student_id;
             $conditions[] = " post.poster_id = '$student_id' ";
         }
 
@@ -4139,7 +4156,7 @@ class Tracking
 
             $condition_session = '';
             if (isset($session_id)) {
-                $session_id = intval($session_id);
+                $session_id = (int) $session_id;
                 $condition_session = api_get_session_condition(
                     $session_id,
                     true,
@@ -4149,11 +4166,11 @@ class Tracking
             }
 
             $course_id = $courseInfo['real_id'];
-            $groupId = intval($groupId);
+            $groupId = (int) $groupId;
             if (!empty($groupId)) {
-                $groupCondition = " i.to_group_id = $groupId  ";
+                $groupCondition = " i.to_group_id = $groupId ";
             } else {
-                $groupCondition = " (i.to_group_id = 0 OR i.to_group_id IS NULL) ";
+                $groupCondition = ' (i.to_group_id = 0 OR i.to_group_id IS NULL) ';
             }
 
             $item = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -4209,7 +4226,7 @@ class Tracking
             $condition_session = ' AND f.session_id = '.$session_id;
         }
 
-        $groupId = intval($groupId);
+        $groupId = (int) $groupId;
 
         if (!empty($groupId)) {
             $groupCondition = " i.to_group_id = $groupId ";

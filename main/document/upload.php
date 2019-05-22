@@ -32,11 +32,10 @@
  *
  * @package chamilo.document
  */
-// Including the global initialization file
 require_once __DIR__.'/../inc/global.inc.php';
-
-// Including additional libraries
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
+
+api_protect_course_script(true);
 
 // Adding extra javascript to the form
 $htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
@@ -49,7 +48,7 @@ $courseDir = $_course['path'].'/document';
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $base_work_dir = $sys_course_path.$courseDir;
 $sessionId = api_get_session_id();
-$selectcat = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : null;
+$selectcat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : null;
 
 $document_data = [];
 
@@ -86,14 +85,10 @@ $group_properties = [];
 
 $htmlHeadXtra[] = '<script>
 function check_unzip() {
-    if (document.upload.unzip.checked){
-        //document.upload.if_exists[0].disabled=true;
-        document.upload.if_exists[1].checked=true;
-        //document.upload.if_exists[2].disabled=true;
+    if (document.upload.unzip.checked) {        
+        document.upload.if_exists[1].checked=true;        
     } else {
         document.upload.if_exists[2].checked=true;
-        //document.upload.if_exists[0].disabled=false;
-        //document.upload.if_exists[2].disabled=false;
     }
 }
 

@@ -210,8 +210,8 @@ if (olms.score == 0 && olms.lms_item_type == 'sco' && olms.lesson_status == 'not
 }
 
 olms.asset_timer = 0;
-olms.userfname = '<?php echo str_replace("'", "\\'", $user['firstname']); ?>';
-olms.userlname = '<?php echo str_replace("'", "\\'", $user['lastname']); ?>';
+olms.userfname = '<?php echo addslashes(trim($user['firstname'])); ?>';
+olms.userlname = '<?php echo addslashes(trim($user['lastname'])); ?>';
 olms.execute_stats = false;
 
 var courseUrl = '?cidReq='+olms.lms_course_code+'&id_session='+olms.lms_session_id;
@@ -237,7 +237,6 @@ $(function() {
 
     olms.info_lms_item[0] = '<?php echo $oItem->get_id(); ?>';
     olms.info_lms_item[1] = '<?php echo $oItem->get_id(); ?>';
-
 
     $("#content_id").load(function() {
         logit_lms('#content_id load event starts');
@@ -476,7 +475,7 @@ function LMSGetValue(param) {
     } else if(param == 'cmi.core.student_name'){
         // ---- cmi.core.student_name
         <?php
-          $who = addslashes($user['lastname']).', '.addslashes($user['firstname']);
+          $who = addslashes(trim($user['lastname']).', '.trim($user['firstname']));
           echo "result='$who';";
         ?>
     } else if(param == 'cmi.core.lesson_location'){
@@ -1446,12 +1445,18 @@ function reinit_updatable_vars_list() {
  */
 function switch_item(current_item, next_item)
 {
+    logit_lms('switch_item() called with params '+olms.lms_item_id+' and '+next_item+'',2);
+
     if (olms.lms_initialized == 0) {
         // Fix error when flash is not loaded and SCO is not started BT#14944
         olms.G_LastError = G_NotInitialized;
         olms.G_LastErrorMessage = G_NotInitializedMessage;
         logit_scorm('Error '+ G_NotInitialized + G_NotInitializedMessage, 0);
-        window.location.reload(false);
+        //window.location.reload(false);
+
+        var url = window.location.href + '&item_id='  + parseInt(next_item);
+        window.location.replace(url);
+
         return false;
     }
 
@@ -1468,8 +1473,6 @@ function switch_item(current_item, next_item)
         // set in a previous stage
         olms.statusSignalReceived = 1;
     }
-
-    logit_lms('switch_item() called with params '+olms.lms_item_id+' and '+next_item+'',2);
 
     /*
      There are four "cases" for switching items:

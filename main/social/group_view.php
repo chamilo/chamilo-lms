@@ -109,17 +109,16 @@ $role = 0;
 $usergroup = new UserGroup();
 
 if ($group_id != 0) {
-    $group_info = $usergroup->get($group_id);
-    $group_info['name'] = Security::remove_XSS($group_info['name']);
-    $group_info['description'] = Security::remove_XSS($group_info['description']);
-
-    $interbreadcrumb[] = ['url' => '#', 'name' => $group_info['name']];
+    $groupInfo = $usergroup->get($group_id);
+    $groupInfo['name'] = Security::remove_XSS($groupInfo['name']);
+    $groupInfo['description'] = Security::remove_XSS($groupInfo['description']);
+    $interbreadcrumb[] = ['url' => '#', 'name' => $groupInfo['name']];
 
     if (isset($_GET['action']) && $_GET['action'] == 'leave') {
         $user_leaved = intval($_GET['u']);
         // I can "leave me myself"
         if (api_get_user_id() == $user_leaved) {
-            if (UserGroup::canLeave($group_info)) {
+            if (UserGroup::canLeave($groupInfo)) {
                 $usergroup->delete_user_rel_group($user_leaved, $group_id);
                 Display::addFlash(
                     Display::return_message(get_lang('UserIsNotSubscribedToThisGroup'), 'confirmation', false)
@@ -133,7 +132,7 @@ if ($group_id != 0) {
         // we add a user only if is a open group
         $user_join = intval($_GET['u']);
         if (api_get_user_id() == $user_join && !empty($group_id)) {
-            if ($group_info['visibility'] == GROUP_PERMISSION_OPEN) {
+            if ($groupInfo['visibility'] == GROUP_PERMISSION_OPEN) {
                 $usergroup->add_user_to_group($user_join, $group_id);
                 Display::addFlash(
                     Display::return_message(get_lang('UserIsSubscribedToThisGroup'), 'confirmation', false)
@@ -155,9 +154,9 @@ $create_thread_link = '';
 $social_right_content = null;
 $socialForum = '';
 
-$group_info = $usergroup->get($group_id);
-$group_info['name'] = Security::remove_XSS($group_info['name']);
-$group_info['description'] = Security::remove_XSS($group_info['description']);
+$groupInfo = $usergroup->get($group_id);
+$groupInfo['name'] = Security::remove_XSS($groupInfo['name']);
+$groupInfo['description'] = Security::remove_XSS($groupInfo['description']);
 
 //Loading group information
 if (isset($_GET['status']) && $_GET['status'] == 'sent') {
@@ -167,13 +166,13 @@ if (isset($_GET['status']) && $_GET['status'] == 'sent') {
 $is_group_member = $usergroup->is_group_member($group_id);
 $role = $usergroup->get_user_group_role(api_get_user_id(), $group_id);
 
-if (!$is_group_member && $group_info['visibility'] == GROUP_PERMISSION_CLOSED) {
+if (!$is_group_member && $groupInfo['visibility'] == GROUP_PERMISSION_CLOSED) {
     if ($role == GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER) {
         $social_right_content .= Display::return_message(get_lang('YouAlreadySentAnInvitation'));
     }
 }
 
-if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
+if ($is_group_member || $groupInfo['visibility'] == GROUP_PERMISSION_OPEN) {
     if (!$is_group_member) {
         if (!in_array(
             $role,
@@ -244,7 +243,7 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
 
     // My friends
     $friend_html = SocialManager::listMyFriendsBlock(
-        $user_id,
+        api_get_user_id(),
         '',
         ''
     );
@@ -328,7 +327,7 @@ $social_menu_block = SocialManager::show_social_menu('groups', $group_id);
 $tpl->setHelp('Groups');
 $tpl->assign('create_link', $create_thread_link);
 $tpl->assign('is_group_member', $is_group_member);
-$tpl->assign('group_info', $group_info);
+$tpl->assign('group_info', $groupInfo);
 $tpl->assign('social_friend_block', $friend_html);
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_forum', $socialForum);

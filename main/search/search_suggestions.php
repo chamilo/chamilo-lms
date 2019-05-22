@@ -115,9 +115,11 @@ function get_suggestions_from_search_engine($q)
     echo json_encode($json);
 }
 
-$q = strtolower($_GET["term"]);
-if (!$q) {
-    return;
+if (isset($_GET['term'])) {
+    $q = strtolower($_GET['term']);
+    if (!$q) {
+        return;
+    }
+
+    get_suggestions_from_search_engine($q);
 }
-//echo $q . "| value\n";
-get_suggestions_from_search_engine($q);

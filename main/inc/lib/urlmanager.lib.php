@@ -61,12 +61,14 @@ class UrlManager
      */
     public static function update($urlId, $url, $description, $active)
     {
-        $urlId = intval($urlId);
+        $urlId = (int) $urlId;
+        $active = (int) $active;
+
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
         $sql = "UPDATE $table
                 SET url 	= '".Database::escape_string($url)."',
                 description = '".Database::escape_string($description)."',
-                active 		= '".intval($active)."',
+                active 		= '".$active."',
                 created_by 	= '".api_get_user_id()."',
                 tms 		= '".api_get_utc_datetime()."'
                 WHERE id = '$urlId'";
@@ -87,7 +89,7 @@ class UrlManager
      * */
     public static function delete($id)
     {
-        $id = intval($id);
+        $id = (int) $id;
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
         $tableUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $tableCourse = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -130,17 +132,18 @@ class UrlManager
     }
 
     /**
-     * @param string $url
+     * @param string $urlId
      *
      * @return int
      */
-    public static function url_id_exist($url)
+    public static function url_id_exist($urlId)
     {
-        if (empty($url)) {
+        $urlId = (int) $urlId;
+        if (empty($urlId)) {
             return false;
         }
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-        $sql = "SELECT id FROM $table WHERE id = ".intval($url)."";
+        $sql = "SELECT id FROM $table WHERE id = ".$urlId;
         $res = Database::query($sql);
         $num = Database::num_rows($res);
 
@@ -203,10 +206,11 @@ class UrlManager
      * */
     public static function get_url_data_from_id($urlId)
     {
+        $urlId = (int) $urlId;
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
         $sql = "SELECT id, url, description, active
                 FROM $table
-                WHERE id = ".intval($urlId);
+                WHERE id = ".$urlId;
         $res = Database::query($sql);
         $row = Database::fetch_array($res);
 
@@ -225,11 +229,12 @@ class UrlManager
      */
     public static function get_url_rel_user_data($urlId = 0, $order_by = null)
     {
+        $urlId = (int) $urlId;
         $where = '';
         $table_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         if (!empty($urlId)) {
-            $where = "WHERE $table_url_rel_user.access_url_id = ".intval($urlId);
+            $where = "WHERE $table_url_rel_user.access_url_id = ".$urlId;
         }
         if (empty($order_by)) {
             $order_clause = api_sort_by_first_name(
@@ -260,11 +265,12 @@ class UrlManager
     public static function get_url_rel_course_data($urlId = 0)
     {
         $where = '';
+        $urlId = (int) $urlId;
         $table_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
         if (!empty($urlId)) {
-            $where = " WHERE uc.access_url_id = ".intval($urlId);
+            $where = " WHERE uc.access_url_id = ".$urlId;
         }
 
         $sql = "SELECT u.id, c_id, title, uc.access_url_id
@@ -291,14 +297,14 @@ class UrlManager
      */
     public static function getCountUrlRelCourse($courseId)
     {
-        $courseId = intval($courseId);
+        $courseId = (int) $courseId;
         $tableUrlRelCourse = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $sql = "SELECT *
                 FROM $tableUrlRelCourse
                 WHERE c_id = '$courseId'";
         $res = Database::query($sql);
 
-        return Database::num_rows($res);
+        return (int) Database::num_rows($res);
     }
 
     /**
@@ -312,12 +318,13 @@ class UrlManager
      */
     public static function get_url_rel_session_data($urlId = 0)
     {
+        $urlId = (int) $urlId;
         $where = '';
         $table_url_rel_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
         if (!empty($urlId)) {
-            $where = "WHERE $table_url_rel_session.access_url_id = ".intval($urlId);
+            $where = "WHERE $table_url_rel_session.access_url_id = ".$urlId;
         }
 
         $sql = "SELECT id, name, access_url_id
@@ -348,8 +355,9 @@ class UrlManager
         $table_url_rel_usergroup = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USERGROUP);
         $table_user_group = Database::get_main_table(TABLE_USERGROUP);
 
+        $urlId = (int) $urlId;
         if (!empty($urlId)) {
-            $where = " WHERE $table_url_rel_usergroup.access_url_id = ".intval($urlId);
+            $where = " WHERE $table_url_rel_usergroup.access_url_id = ".$urlId;
         }
 
         $sql = "SELECT u.id, u.name, access_url_id
@@ -379,8 +387,10 @@ class UrlManager
         $table_url_rel = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
         $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $where = " WHERE 1=1 ";
+
+        $urlId = (int) $urlId;
         if (!empty($urlId)) {
-            $where .= " AND $table_url_rel.access_url_id = ".intval($urlId);
+            $where .= " AND $table_url_rel.access_url_id = ".$urlId;
         }
         $where .= " AND (parent_id IS NULL) ";
 
@@ -828,11 +838,12 @@ class UrlManager
         }
         $result = false;
         $count = self::relation_url_session_exist($session_id, $urlId);
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
+        $urlId = (int) $urlId;
+
         if (empty($count) && !empty($session_id)) {
-            $urlId = intval($urlId);
             $sql = "INSERT INTO $table
-                    SET session_id = ".intval($session_id).", access_url_id = ".$urlId;
+                    SET session_id = ".$session_id.", access_url_id = ".$urlId;
             try {
                 Database::query($sql);
             } catch (Exception $e) {

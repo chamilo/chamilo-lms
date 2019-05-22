@@ -174,7 +174,7 @@ if (api_is_course_admin()) {
     $frameheight = 165;
 }
 
-$frameReady = Display::getFrameReadyBlock('top.mainFrame');
+$frameReady = Display::getFrameReadyBlock('#mainFrame');
 
 $web_odf_supported_files = DocumentManager::get_web_odf_extension_list();
 // PDF should be displayed with viewerJS
@@ -237,19 +237,14 @@ if (!$playerSupported && $execute_iframe) {
     </script>';
     $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
     $htmlHeadXtra[] = '<script>
-        var updateContentHeight = function() {
-            my_iframe = document.getElementById("mainFrame");
-            if (my_iframe) {
-                //this doesnt seem to work in IE 7,8,9         
-                my_iframe.height = my_iframe.contentWindow.document.body.scrollHeight + 50 + "px";
-            }
-        };
-
         // Fixes the content height of the frame
-        window.onload = function() {
-            updateContentHeight();
+        $(function() {
+            $(\'#mainFrame\').on(\'load\', function () {
+                this.style.height = (this.contentWindow.document.body.scrollHeight + 50) + \'px\';
+            });
+            
             '.$frameReady.'
-        }
+        });
     </script>';
 }
 

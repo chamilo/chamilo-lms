@@ -217,7 +217,9 @@ class MultipleAnswerTrueFalse extends Question
         }
 
         global $text;
-        if ($obj_ex->edit_exercise_in_lp == true) {
+        if ($obj_ex->edit_exercise_in_lp == true ||
+            (empty($this->exerciseList) && empty($obj_ex->id))
+        ) {
             // setting the save button here and not in the question class.php
             $buttonGroup[] = $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true);
             $buttonGroup[] = $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers', true);
@@ -239,7 +241,7 @@ class MultipleAnswerTrueFalse extends Question
      */
     public function processAnswersCreation($form, $exercise)
     {
-        $questionWeighting = $nbrGoodAnswers = 0;
+        $questionWeighting = 0;
         $objAnswer = new Answer($this->id);
         $nb_answers = $form->getSubmitValue('nb_answers');
         $course_id = api_get_course_int_id();

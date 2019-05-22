@@ -67,7 +67,6 @@ class Certificate extends Model
         if ($this->user_id) {
             // Need to be called before any operation
             $this->check_certificate_path();
-
             // To force certification generation
             if ($this->force_certificate_generation) {
                 $this->generate([], $sendNotification);
@@ -227,14 +226,18 @@ class Certificate extends Model
         if (isset($my_category[0]) && !empty($categoryId) &&
             $my_category[0]->is_certificate_available($this->user_id)
         ) {
-            $courseInfo = api_get_course_info($my_category[0]->get_course_code());
+            /** @var Category $category */
+            $category = $my_category[0];
+
+            $courseInfo = api_get_course_info($category->get_course_code());
             $courseId = $courseInfo['real_id'];
-            $sessionId = $my_category[0]->get_session_id();
+            $sessionId = $category->get_session_id();
 
             $skill = new Skill();
+
             $skill->addSkillToUser(
                 $this->user_id,
-                $this->certificate_data['cat_id'],
+                $category,
                 $courseId,
                 $sessionId
             );
@@ -243,13 +246,13 @@ class Certificate extends Model
                 if (!empty($this->certificate_data)) {
                     $new_content_html = GradebookUtils::get_user_certificate_content(
                         $this->user_id,
-                        $my_category[0]->get_course_code(),
-                        $my_category[0]->get_session_id(),
+                        $category->get_course_code(),
+                        $category->get_session_id(),
                         false,
                         $params['hide_print_button']
                     );
 
-                    if ($my_category[0]->get_id() == strval(intval($this->certificate_data['cat_id']))) {
+                    if ($category->get_id() == $categoryId) {
                         $name = $this->certificate_data['path_certificate'];
                         $myPathCertificate = $this->certification_user_path.basename($name);
 
@@ -288,7 +291,7 @@ class Certificate extends Model
                             $result = @file_put_contents($myPathCertificate, $newContent);
                             if ($result) {
                                 // Updating the path
-                                self::updateUserCertificateInfo(
+                                $this->updateUserCertificateInfo(
                                     $this->certificate_data['cat_id'],
                                     $this->user_id,
                                     $path_certificate
@@ -309,7 +312,7 @@ class Certificate extends Model
                                             $subject = get_lang('NotificationCertificateSubject');
                                             $message = nl2br(get_lang('NotificationCertificateTemplate'));
                                             $score = $this->certificate_data['score_certificate'];
-                                            Certificate::sendNotification(
+                                            self::sendNotification(
                                                 $subject,
                                                 $message,
                                                 api_get_user_info($this->user_id),
@@ -473,7 +476,7 @@ class Certificate extends Model
         $path_certificate,
         $updateCertificateData = true
     ) {
-        if (!UserManager::is_user_certified($categoryId, $user_id) && $updateCertificateData) {
+        if ($updateCertificateData && !UserManager::is_user_certified($categoryId, $user_id)) {
             $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
             $now = api_get_utc_datetime();
             $sql = 'UPDATE '.$table.' SET 

@@ -76,7 +76,7 @@ foreach ($courses as $course) {
             $question = Database::escape_string($question);
 
             $sql = "UPDATE c_quiz_question SET 
-                      description = '$newContent',
+                      description = '$description',
                       question = '$question'
                     WHERE iid = $id";
             Database::query($sql);

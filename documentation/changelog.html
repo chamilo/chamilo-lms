@@ -41,12 +41,11 @@
 
 <script>
     $(document).ready(function() {
-        var versionList = '';
         $('.version').each(function( index ) {
             var version = $(this).attr('aria-label');
             var title = $(this).find('h1').text();
             var titleParts = title.split('-');
-            var title = titleParts[0];
+            title = titleParts[0];
             var cityParts = titleParts[1].split(',');
 
             var city = cityParts[0];
@@ -107,10 +106,10 @@
 
     </table>
 
-    <div class="version" aria-role="article" aria-label="1.11.10">
+    <div class="version" aria-label="1.11.10">
         <a name="1.11.10"></a>
 
-        <h1>Chamilo 1.11.10 - Winchester,  ??/03/2019</h1>
+        <h1>Chamilo 1.11.10 - Winchester,  08/05/2019</h1>
         <h3>Release notes - summary</h3>
         <p>Chamilo 1.11.10 is a minor bugfix release on top of 1.11.8. Contrary to previous releases, this one has a large number of security fixes. We strongly recommend you update to this version as soon as you can. Most notable in this version are 2 new features in the survey tool.</p>
         <p>Starting from this release, changes are registered by reversed date of addition (the latest changes first), which dramatically improves the changelog edition time. Because yes, it is reviewed manually.</p>
@@ -128,7 +127,7 @@
             at a time where the separation between the UK and the rest of Europe is all over the press. <br />
             Version 1.11.10 is also more secure, as it comes with a dozen security fixes.</p>
         <h3>Security fixes</h3>
-        <ul aria-role="log" aria-live="off">
+        <ul aria-live="off">
             <li>[2019-02-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/c245b03308f8274b93f2a39e5435d5e9e4b6aecf">c245b033</a>) Security: Use "clean_up_files_in_zip" function before extracting content Blocks php/htaccess files</li>
             <li>[2019-02-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/53c0dc4a9fba27644905c19c80ee19fb9d6ff390">53c0dc4a</a>) Security: Remove folder main/inc/lib/nanogong after composer update</li>
             <li>[2019-02-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/2164d36f0b0f61f342dff08d7ef977634e05e876">2164d36f</a>) Security: Remove nanogong files (deprecated).</li>
@@ -155,12 +154,19 @@
             <li>[2018-10-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/39b3162698455246dbfe791b2f9415c629f52120">39b31626</a>) Security: Protect agenda events using Security::remove_XSS</li>
         </ul>
         <h3>Possibly breaking changes</h3>
-        <ul aria-role="log" aria-live="off">
+        <ul aria-live="off">
             <li>[2018-12-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/a681bf55eac1742d1e4fca865f52679286b745b8">a681bf55</a>) <a href="https://github.com/chamilo/chamilo-lms/issues/2708">GH#2708</a> Remove duplicate from limit_session_admin_role configuration setting</li>
         </ul>
         <h3>Notable new Features</h3>
         <h4>For end-users, teachers and Chamilo admins</h4>
-        <ul aria-role="log" aria-live="off">
+        <ul aria-live="off">
+            <li>[2019-05-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/94b7ca55b6648fdb01136c13d0d0334ef9b344d7">94b7ca55</a> - <a href="https://task.beeznest.com/issues/15579">BT#15579</a>) Quiz: Add "Unanswered" status for unique questions, showing on the quiz results page</li>
+            <li>[2019-04-30] The IMS/LTI plugin now fully supports LTI 1, 1.1, 1.1.1, Outcomes and Deep Linking</li>
+            <li>[2019-04-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/f8d91f9c2dc5502b90088a706a50cb2f8b6a066d">f8d91f9c</a> - <a href="https://task.beeznest.com/issues/15534">BT#15534</a>) Quiz: Allow editing questions that are not inside an exercise</li>
+            <li>[2019-04-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/c68ccd9f7a637b992d7269d15c62cf1a574d8c1b">c68ccd9f</a> - <a href="https://support.chamilo.org/issues/7683">CT#7683</a>) Display: Improvement in user summary (tracking)</li>
+            <li>[2019-04-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/f2b8f7336fa34de53843d035d538f6e2af06bc4d">f2b8f733</a> - <a href="https://task.beeznest.com/issues/15535">BT#15535</a>) Quiz: If random show also the total number of questions</li>
+            <li>[2019-04-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/6153de7e603dbd8d8662d576eaa56ddffc04801b">6153de7e</a> - <a href="https://task.beeznest.com/issues/15389">BT#15389</a>) Quiz: Show icon to indicate when exercises is embeddable in videos</li>
+            <li>[2019-03-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/a3d00fdb4ca39cc116d86a8677afb6ee3ada8231">a3d00fdb</a>) Documentation: Indicate support reduced to IE11+</li>
             <li>[2019-03-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/ed0cba3cf4d9dbf769c497cbf3f1ae5d532d2cbc">ed0cba3c</a> - <a href="https://task.beeznest.com/issues/15234">BT#15234</a>) Quiz: Add course setting "quiz_question_limit_per_day"</li>
             <li>[2019-03-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/f25743cb1cdf7673e91a5f6661691ac059c3e7cc">f25743cb</a> - <a href="https://task.beeznest.com/issues/15394">BT#15394</a>) Calendar: Add calendar for training sessions planning</li>
             <li>[2019-03-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/7c93e972321d371541382a3adbc342f9faff8a48">7c93e972</a> - <a href="https://task.beeznest.com/issues/15233">BT#15233</a>) Quiz: Add new "result disable" option in exercises "Show only correct answer" BT#15233</li>
@@ -181,8 +187,12 @@
             <li>[2018-09-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/260549e93c21ee2af5c6b4017e246c9a6be981e4">260549e9</a> - <a href="https://task.beeznest.com/issues/14824">BT#14824</a>) Add option  "SendAnnouncementCopyToMyself" in announcement</li>
         </ul>
         <h4>For developers and sysadmins</h4>
-        <ul aria-role="log" aria-live="off">
-
+        <ul aria-live="off">
+            <li>[2019-04-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/82697e63faec970e6b5d18ef0ed6c7fa80dfb5f7">82697e63</a> - <a href="https://task.beeznest.com/issues/15533">BT#15533</a>) Learnpath: Optimize query to get media player</li>
+            <li>[2019-04-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/14112742a5225e5b4ca93af39ba15d1af8d305e2">14112742</a> - <a href="https://task.beeznest.com/issues/15327">BT#15327</a>) Language: Include extra language file main/lang/xxx/custom.php if exists</li>
+            <li>[2019-03-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/09b447d1f6bac26058bcd58f716206fc9bb8a299">09b447d1</a> - <a href="https://task.beeznest.com/issues/15362">BT#15362</a>) Session: Allow session admin to upload files to BasicCourseDocuments folder</li>
+            <li>[2019-03-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/efcd6d14dd2b515c3c56c912457e9a23e9f307ed">efcd6d14</a> - <a href="https://task.beeznest.com/issues/14357">BT#14357</a>) Admin: Add configuration setting "allow_gradebook_stats" to improve gradebook speed</li>
+            <li>[2019-03-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/4cb8f2e1b46328956ba8e5185cfddb58efc223a0">4cb8f2e1</a> - <a href="https://task.beeznest.com/issues/15437">BT#15437</a>) Admin: Add configuration setting "block_editor_file_manager_for_students" to block student's access to the course documents when using the ckeditor "Browse server" button</li>
             <li>[2019-03-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/9af667f5af4f90180ed69ebfb2aeda354ccd6198">9af667f5</a> - <a href="https://task.beeznest.com/issues/15393">BT#15393</a>) Admin: Add configuration setting "social_enable_likes_messages" (requires high level of customization to enable)</li>
             <li>[2019-03-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/89cbc14cd0324f6be262bdaf618838b305ea86e3">89cbc14c</a> - <a href="https://task.beeznest.com/issues/15280">BT#15280</a>) Admin: Add configuration setting "survey_anonymous_show_answered" to enable showing who answered or not an anonymous survey (requires a minimum of 2 submissions to show)</li>
             <li>[2019-03-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/399d7ce660f5334b3743a819148a837cb519c39d">399d7ce6</a> - <a href="https://task.beeznest.com/issues/15265">BT#15265</a>) Plugin: QuestionOptionsEvaluation: Add questionoptionsevaluation plugin</li>
@@ -201,52 +211,260 @@
             <li>[2019-01-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/dc21353812ade069dff4465067620db9fa932f08">dc213538</a> - <a href="https://task.beeznest.com/issues/15230">BT#15230</a>) Admin: Add configuration setting "show_question_id" config to show question ID in the exercises + Add DESCRIPTION option when importing exercises with AIKEN</li>
             <li>[2019-01-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/a1e9e3f287e41cf2feed86f004a3b68ac24eb84f">a1e9e3f2</a> - <a href="https://task.beeznest.com/issues/15235">BT#15235</a>) Admin: Add configuration setting that limits teachers rights in exercise $_configuration['limit_exercise_teacher_access']</li>
             <li>[2019-01-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/a7fbce409028e60845a608d1d9d89e403591a4a7">a7fbce40</a> - <a href="https://task.beeznest.com/issues/11784">BT#11784</a>) Admin: Add configuration setting "quiz_show_description_on_results_page" to control whether the test description is shown on the results page or not</li>
-            <li>[2019-01-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/f4653e53d57b5fe34b060d83eeecf8a43e441e6c">f4653e53</a> - <a href="https://task.beeznest.com/issues/15208">BT#15208</a>) Admin: Add configuration setting "quiz_prevent_copy_paste" to prevent copying questions/answers text with the keyboard or the right-click menu</li>
-            <li>[2019-01-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/ec1faa53b0d596624243f642f7e67972db9a4e19">ec1faa53</a> - <a href="https://task.beeznest.com/issues/15010">BT#15010</a>) Admin: Add configuration setting "hide_social_media_links"</li>
+            <li>[2019-01-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/f4653e53d57b5fe34b060d83eeecf8a43e441e6c">f4653e53</a> - <a href="https://task.beeznest.com/issues/15208">BT#15208</a>) Admin: Add configuration setting 'quiz_prevent_copy_paste' to prevent copying questions/answers text with the keyboard or the right-click menu</li>
+            <li>[2019-01-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/ec1faa53b0d596624243f642f7e67972db9a4e19">ec1faa53</a> - <a href="https://task.beeznest.com/issues/15010">BT#15010</a>) Admin: Add configuration setting 'hide_social_media_links'</li>
             <li>[2019-01-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/244f36b353dc9f97e05568c0b0b65afa10c0c88d">244f36b3</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2701">GH#2701</a>) Documents: Add Accept-Range HTTP header for pseudo-streaming</li>
             <li>[2018-12-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/d2e4aa42a77eb920151042007ae6dacb3d1879a8">d2e4aa42</a>) Add indexes for gradebook tables in optimization guide</li>
             <li>[2018-12-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/625ed0b9f2a047dd78d6f4555f9e0640b2567d53">625ed0b9</a>) Add script to check if the default extra fields are present in the platform. See BT# 13954 If a default extra field doesn't exists then it will be created. Extra field list as in 1.11.8 Requires to manually remove an "exit".</li>
             <li>[2018-12-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/c51a213e5e360bf1d0ee4d1072b55acf9c0d456d">c51a213e</a>) Allow performing actions from plugin when deleting user/course/session</li>
             <li>[2018-12-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/a681bf55eac1742d1e4fca865f52679286b745b8">a681bf55</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2708">GH#2708</a>) Remove limit_session_admin_role from conf file and use setting</li>
-            <li>[2018-12-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/dbc571c72b73e1a223699c2ed571e84fad65b210">dbc571c7</a> - <a href="https://task.beeznest.com/issues/15095">BT#15095</a>) Add allow_session_admin_login_as_teacher conf setting</li>
-            <li>[2018-12-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/c1cdf0a8d35d3e42b5e9e44c8d9007e0bd6b9f8d">c1cdf0a8</a> - <a href="https://task.beeznest.com/issues/15126">BT#15126</a>) Add config "allow_user_session_collapsable"</li>
-            <li>[2018-12-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/3520689c330fd400b52976f184d9f9f2e7ca0f43">3520689c</a> - <a href="https://task.beeznest.com/issues/15126">BT#15126</a>) Add setting 'allow_user_course_category_collapsable'</li>
+            <li>[2018-12-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/dbc571c72b73e1a223699c2ed571e84fad65b210">dbc571c7</a> - <a href="https://task.beeznest.com/issues/15095">BT#15095</a>) Admin: Add configuration setting 'allow_session_admin_login_as_teacher'</li>
+            <li>[2018-12-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/c1cdf0a8d35d3e42b5e9e44c8d9007e0bd6b9f8d">c1cdf0a8</a> - <a href="https://task.beeznest.com/issues/15126">BT#15126</a>) Admin: Add configuration setting 'allow_user_session_collapsable'</li>
+            <li>[2018-12-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/3520689c330fd400b52976f184d9f9f2e7ca0f43">3520689c</a> - <a href="https://task.beeznest.com/issues/15126">BT#15126</a>) Admin: Add configuration setting 'allow_user_course_category_collapsable'</li>
             <li>[2018-12-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/237f9bb6dcf41b4db26b3e410b0240a465ae1a55">237f9bb6</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2717">GH#2717</a>) Admin: Add charts for several statistics pages</li>
-            <li>[2018-12-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/676d2c17feb4965ac8eb12a99ffa8ea2f0a0beb8">676d2c17</a> - <a href="https://task.beeznest.com/issues/15020">BT#15020</a>) Setting added $_configuration['allow_track_complete'] = false; BT#15020 Allows more detail user tracking</li>
-            <li>[2018-12-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/74964fc204cb80f6a978b3ecb4d448861e928f36">74964fc2</a> - <a href="https://task.beeznest.com/issues/15095">BT#15095</a>) Add session_admins_edit_courses_content conf setting</li>
+            <li>[2018-12-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/676d2c17feb4965ac8eb12a99ffa8ea2f0a0beb8">676d2c17</a> - <a href="https://task.beeznest.com/issues/15020">BT#15020</a>) Admin: Add configuration setting $_configuration['allow_track_complete'] = false; Allows more detail user tracking</li>
+            <li>[2018-12-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/74964fc204cb80f6a978b3ecb4d448861e928f36">74964fc2</a> - <a href="https://task.beeznest.com/issues/15095">BT#15095</a>) Admin: Add configuration setting 'session_admins_edit_courses_content'</li>
             <li>[2018-12-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/0d5b3441a862d996190bce5cd98ee78aa70db1b5">0d5b3441</a> - <a href="https://task.beeznest.com/issues/15020">BT#15020</a>) Add table track_e_access_complete creation</li>
-            <li>[2018-12-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/fe19616765fe16813c25e2d5f4014292e3d7fc09">fe196167</a> - <a href="https://task.beeznest.com/issues/15020">BT#15020</a>) Add AccumulateWorkTime (a.k.a lp min time) New conf setting: $_configuration['lp_minimum_time'] = false;</li>
+            <li>[2018-12-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/fe19616765fe16813c25e2d5f4014292e3d7fc09">fe196167</a> - <a href="https://task.beeznest.com/issues/15020">BT#15020</a>) Admin: Add configuration setting $_configuration['lp_minimum_time'] = false; Add AccumulateWorkTime (a.k.a lp min time) </li>
             <li>[2018-12-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/c243556393b516edd3cac4649347210f97247e1c">c2435563</a> - <a href="https://task.beeznest.com/issues/15102">BT#15102</a>) Add proxy.php needed when using setting "lp_fix_embed_content"</li>
-            <li>[2018-12-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/a9a284989ca56f8e29b63ade508945f82b913cdb">a9a28498</a> - <a href="https://task.beeznest.com/issues/14357">BT#14357</a>) Improve speed when rendering gradebook student reports BT#14357 Using Doctrine APCU cache Setting: $_configuration['gradebook_use_apcu_cache']</li>
-            <li>[2018-11-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/3292b3c108af05b1c4fcea748f81067870da1f9b">3292b3c1</a> - <a href="https://task.beeznest.com/issues/15081">BT#15081</a>) Add new configuration option "user_import_settings"</li>
-            <li>[2018-11-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/ed38dc279e11ee4b030fee241d49e60226dc2bc5">ed38dc27</a> - <a href="https://task.beeznest.com/issues/15091">BT#15091</a>) New setting added "exercises_disable_new_attempts"</li>
+            <li>[2018-12-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/a9a284989ca56f8e29b63ade508945f82b913cdb">a9a28498</a> - <a href="https://task.beeznest.com/issues/14357">BT#14357</a>) Improve speed when rendering gradebook student reports. Using Doctrine APCU cache Setting: $_configuration['gradebook_use_apcu_cache']</li>
+            <li>[2018-11-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/3292b3c108af05b1c4fcea748f81067870da1f9b">3292b3c1</a> - <a href="https://task.beeznest.com/issues/15081">BT#15081</a>) Admin: Add configuration setting "user_import_settings"</li>
+            <li>[2018-11-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/ed38dc279e11ee4b030fee241d49e60226dc2bc5">ed38dc27</a> - <a href="https://task.beeznest.com/issues/15091">BT#15091</a>) Admin: Add configuration setting "exercises_disable_new_attempts"</li>
             <li>[2018-11-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/e30fb0dffa2f8dd7bbd82fcb0587b61ff1e6d95f">e30fb0df</a>) DRH can see visible announcement (allow_drh_access_announcement option)</li>
-            <li>[2018-11-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/ba6bffcce7a95ccbee25ef40da3e795eb8a67406">ba6bffcc</a> - <a href="https://task.beeznest.com/issues/15081">BT#15081</a>) Add "session_import_settings" configuration value</li>
+            <li>[2018-11-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/ba6bffcce7a95ccbee25ef40da3e795eb8a67406">ba6bffcc</a> - <a href="https://task.beeznest.com/issues/15081">BT#15081</a>) Admin: Add configuration setting "session_import_settings"</li>
             <li>[2018-11-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/5178a59137cfb9eb28704e2afc8999434500bea1">5178a591</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2738">GH#2738</a>) Improve composer update speed</li>
-            <li>[2018-11-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/eb0c06dcad78c0e45bbf93b5fa496f9a40e5a470">eb0c06dc</a>) Add missing setting in "allow_my_files_link_in_homepage" Allow my personal files link in the homepage</li>
-            <li>[2018-11-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/3bfab64cd09198b1b46f9be10de5bb2340e2cbd9">3bfab64c</a> - <a href="https://task.beeznest.com/issues/15072">BT#15072</a>) Add setting 'allow_drh_access_announcement'</li>
-            <li>[2018-11-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/156bcf867579f0b3d78bc2973fb920e05cd896d5">156bcf86</a> - <a href="https://task.beeznest.com/issues/15044">BT#15044</a>) Add configuration parameter to activate view with ViewerJS PDF LP</li>
-            <li>[2018-11-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/4c7dc3ce58250c5939d747c06ae8ada973ab4aba">4c7dc3ce</a> - <a href="https://task.beeznest.com/issues/14813">BT#14813</a>) Add importOpenSessions option</li>
-            <li>[2018-11-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/0d5172265a2ad9a15f05860ee17be8d5633cf00f">0d517226</a> - <a href="https://task.beeznest.com/issues/14976">BT#14976</a>) Add new setting in BBB plugin "disable_download_conference_link"</li>
-            <li>[2018-10-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/40dcc1e7b49ce8ef263052be2abd3d73bb5db7b3">40dcc1e7</a> - <a href="https://task.beeznest.com/issues/14972">BT#14972</a>) Add option "hide_gradebook_percentage_user_result" + fix rank column - Hide percentage in best/average gradebook results</li>
-            <li>[2018-10-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/26d6fb48bd20122b9f4be1d360e6972712f5d4f1">26d6fb48</a> - <a href="https://task.beeznest.com/issues/15028">BT#15028</a>) Add config "allow_only_one_student_publication_per_user"</li>
+            <li>[2018-11-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/eb0c06dcad78c0e45bbf93b5fa496f9a40e5a470">eb0c06dc</a>) Admin: Add configuration setting "allow_my_files_link_in_homepage" Allow my personal files link in the homepage</li>
+            <li>[2018-11-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/3bfab64cd09198b1b46f9be10de5bb2340e2cbd9">3bfab64c</a> - <a href="https://task.beeznest.com/issues/15072">BT#15072</a>) Admin: Add configuration setting 'allow_drh_access_announcement'</li>
+            <li>[2018-11-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/156bcf867579f0b3d78bc2973fb920e05cd896d5">156bcf86</a> - <a href="https://task.beeznest.com/issues/15044">BT#15044</a>) Admin: Add configuration setting to activate view with ViewerJS PDF LP</li>
+            <li>[2018-11-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/4c7dc3ce58250c5939d747c06ae8ada973ab4aba">4c7dc3ce</a> - <a href="https://task.beeznest.com/issues/14813">BT#14813</a>) Admin: Add configuration setting importOpenSessions</li>
+            <li>[2018-11-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/0d5172265a2ad9a15f05860ee17be8d5633cf00f">0d517226</a> - <a href="https://task.beeznest.com/issues/14976">BT#14976</a>) Admin: Add configuration setting in BBB plugin "disable_download_conference_link"</li>
+            <li>[2018-10-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/40dcc1e7b49ce8ef263052be2abd3d73bb5db7b3">40dcc1e7</a> - <a href="https://task.beeznest.com/issues/14972">BT#14972</a>) Admin: Add configuration setting "hide_gradebook_percentage_user_result" + fix rank column - Hide percentage in best/average gradebook results</li>
+            <li>[2018-10-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/26d6fb48bd20122b9f4be1d360e6972712f5d4f1">26d6fb48</a> - <a href="https://task.beeznest.com/issues/15028">BT#15028</a>) Admin: Add configuration setting "allow_only_one_student_publication_per_user"</li>
             <li>[2018-10-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/744479d6df2adc944016d31b74ff846c4ceca4c8">744479d6</a> - <a href="https://task.beeznest.com/issues/14938">BT#14938</a>) Add option to setting to hide lp navigation with arrows</li>
-            <li>[2018-10-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/ed0d11a7c5ee9fd66dabebcc2e74b145a1662d0f">ed0d11a7</a> - <a href="https://task.beeznest.com/issues/15003">BT#15003</a>) Add conf limit_session_admin_list_users</li>
-            <li>[2018-10-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/0c1446077b37c4fe9e8984cad0eec9a690454e8d">0c144607</a> - <a href="https://task.beeznest.com/issues/14894">BT#14894</a>) Add config "mail_template_system"</li>
-            <li>[2018-10-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/54a8d0d0a5f5670867dd8f52685cae1b43caae5b">54a8d0d0</a> - <a href="https://task.beeznest.com/issues/14987">BT#14987</a>) Add config 'block_student_publication_score_edition' BT#14987 Teachers can't edit student score once the score was set. Admins can still edit those values</li>
-            <li>[2018-10-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/501dcbe38a6069a96e6159068e7e488077397673">501dcbe3</a> - <a href="https://task.beeznest.com/issues/14986">BT#14986</a>) Add setting "block_student_publication_add_documents" BT#14986 Block "add documents" in student publication feature</li>
-            <li>[2018-10-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/59d8aec747510cd3d3a583571d02421739b73dc6">59d8aec7</a> - <a href="https://task.beeznest.com/issues/14894">BT#14894</a>) WIP - Add Mail template manager</li>
-            <li>[2018-10-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/53f18dca32d41308bf907bdd51f7c7abcca4c3c6">53f18dca</a> - <a href="https://task.beeznest.com/issues/14985">BT#14985</a>) Add config "block_student_publication_edition"</li>
-            <li>[2018-10-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/60eaebf0866ce5fb25968788cde608df766e5437">60eaebf0</a> - <a href="https://task.beeznest.com/issues/14906">BT#14906</a>) Add setting "hide_complete_name_in_whoisonline" To hide name from who is on line BT#14906</li>
-            <li>[2018-10-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/5603615df8d7763431a5276f5ba3559a027f3319">5603615d</a> - <a href="https://task.beeznest.com/issues/14910">BT#14910</a>) Setting "session_list_show_count_users" show only students</li>
-            <li>[2018-09-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/cd9460d7fb1db7b81dbb20b447c87ef5bfc35a96">cd9460d7</a> - <a href="https://task.beeznest.com/issues/14372">BT#14372</a>) Hide country flags in the language switcher + fix login form BT#14372 New setting $_configuration['hide_flag_language_switcher'] = false;</li>
-            <li>[2018-08-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/4c603d5466d8960b4e50b9db6e4e8e4327a0a9f3">4c603d54</a>) Add setting "gradebook_multiple_evaluation_attempts" Allow the possibility to add more attempts to the gradebook evaluation tool. Requires a DB change.</li>
-            <li>[2018-08-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/7b6f760c0c5aaa80ed6d3012de6b9f8ba027e4f5">7b6f760c</a> - <a href="https://task.beeznest.com/issues/14769">BT#14769</a>) Add hide_username_in_course_chat conf setting</li>
-            <li>[2018-08-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/afba2a6f73f99408ef262a6fcc5284bbd66efdb7">afba2a6f</a> - <a href="https://task.beeznest.com/issues/14769">BT#14769</a>) Add hide_username_with_complete_name conf setting</li>
+            <li>[2018-10-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/ed0d11a7c5ee9fd66dabebcc2e74b145a1662d0f">ed0d11a7</a> - <a href="https://task.beeznest.com/issues/15003">BT#15003</a>) Admin: Add configuration setting 'limit_session_admin_list_users'</li>
+            <li>[2018-10-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/0c1446077b37c4fe9e8984cad0eec9a690454e8d">0c144607</a> - <a href="https://task.beeznest.com/issues/14894">BT#14894</a>) Admin: Add configuration setting "mail_template_system"</li>
+            <li>[2018-10-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/54a8d0d0a5f5670867dd8f52685cae1b43caae5b">54a8d0d0</a> - <a href="https://task.beeznest.com/issues/14987">BT#14987</a>) Admin: Add configuration setting 'block_student_publication_score_edition'. Teachers can't edit student score once the score was set. Admins can still edit those values</li>
+            <li>[2018-10-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/501dcbe38a6069a96e6159068e7e488077397673">501dcbe3</a> - <a href="https://task.beeznest.com/issues/14986">BT#14986</a>) Admin: Add configuration setting "block_student_publication_add_documents". Block "add documents" in student publication feature</li>
+            <li>[2018-10-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/59d8aec747510cd3d3a583571d02421739b73dc6">59d8aec7</a> - <a href="https://task.beeznest.com/issues/14894">BT#14894</a>) Admin: Add Mail template manager (requires specific activation process)</li>
+            <li>[2018-10-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/53f18dca32d41308bf907bdd51f7c7abcca4c3c6">53f18dca</a> - <a href="https://task.beeznest.com/issues/14985">BT#14985</a>) Admin: Add configuration setting "block_student_publication_edition"</li>
+            <li>[2018-10-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/60eaebf0866ce5fb25968788cde608df766e5437">60eaebf0</a> - <a href="https://task.beeznest.com/issues/14906">BT#14906</a>) Admin: Add configuration setting "hide_complete_name_in_whoisonline" To hide name from whoisonline</li>
+            <li>[2018-10-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/5603615df8d7763431a5276f5ba3559a027f3319">5603615d</a> - <a href="https://task.beeznest.com/issues/14910">BT#14910</a>) Admin: Add configuration setting "session_list_show_count_users" show only students</li>
+            <li>[2018-09-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/cd9460d7fb1db7b81dbb20b447c87ef5bfc35a96">cd9460d7</a> - <a href="https://task.beeznest.com/issues/14372">BT#14372</a>) Admin: Add configuration setting $_configuration['hide_flag_language_switcher'] = false; Hide country flags in the language switcher + fix login form.</li>
+            <li>[2018-08-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/4c603d5466d8960b4e50b9db6e4e8e4327a0a9f3">4c603d54</a>) Admin: Add configuration setting "gradebook_multiple_evaluation_attempts". Add the possibility to add more attempts to the gradebook evaluation tool. Requires a DB change.</li>
+            <li>[2018-08-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/7b6f760c0c5aaa80ed6d3012de6b9f8ba027e4f5">7b6f760c</a> - <a href="https://task.beeznest.com/issues/14769">BT#14769</a>) Admin: Add configuration setting 'hide_username_in_course_chat'</li>
+            <li>[2018-08-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/afba2a6f73f99408ef262a6fcc5284bbd66efdb7">afba2a6f</a> - <a href="https://task.beeznest.com/issues/14769">BT#14769</a>) Admin: Add configuration setting 'hide_username_with_complete_name'</li>
             <li>[2018-08-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/f23fa4b9c9a18045e9f1297b1fc50d48ac5450b7">f23fa4b9</a> - <a href="https://task.beeznest.com/issues/14747">BT#14747</a>) Scripts: Add multiple-access-urls conversion script allowing for the conversion of an existing single-url portal to the secondary url of a multiple-access-url portal</li>
         </ul>
         <h3>Improvements (minor features) and debug</h3>
-        <ul aria-role="log" aria-live="off">
+        <ul aria-live="off">
+            <li>[2019-05-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/bca6e5887ef508559b0432025b87d9b0ff9f9e0a">bca6e588</a>) Plugin: CustomCertificate: Fix camel caps format</li>
+            <li>[2019-05-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/db498a914d320f6c1f9e7c92f4fd3cb9b762c37d">db498a91</a>) Plugin: CustomCertificate: Add certificate generation date</li>
+            <li>[2019-05-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/cf030732c5d8ed4cd2b0f0bb5a4b8bd05a275168">cf030732</a> - <a href="https://task.beeznest.com/issues/15609">BT#15609</a>) Gradebook: Create "/certificates" folder when creating course In order to avoid issues when creating a course and different sessions BT#15609</li>
+            <li>[2019-05-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/daab628e82c0c06f888ccacec8b7fd840d8ae60e">daab628e</a> - <a href="https://task.beeznest.com/issues/15534">BT#15534</a>) Quiz: Add delete option in question list</li>
+            <li>[2019-05-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/961c380ac71c56bffd7c1fcbd88f062b312d5a6d">961c380a</a> - <a href="https://task.beeznest.com/issues/15631">BT#15631</a>) Quiz: Fix page access when setting "exercises_hidden_when_no_start_date" is "on" in configuration.php $_custom['exercises_hidden_when_no_start_date']</li>
+            <li>[2019-05-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/f7bfb84fc6dc1d2cbc795be85cb74d330e77be63">f7bfb84f</a> - <a href="https://task.beeznest.com/issues/15534">BT#15534</a>) Admin: Improve question search</li>
+            <li>[2019-05-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/6ce8d9e8bd5d396d7a8dad9cfc3c70c0da9ddb0f">6ce8d9e8</a> - <a href="https://task.beeznest.com/issues/15607">BT#15607</a>) Learnpath: Don't add time to a LP with an exercise</li>
+            <li>[2019-05-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/4989cffdce828f2fb17ec9df0eac7c1740e42a33">4989cffd</a>) UI: Restore Open Sans as default font</li>
+            <li>[2019-05-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/70710b512026acaaf0e07f1548b7f847ff4e854e">70710b51</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2890">GH#2890</a>) Quiz: Allow export/import unique answer, multiple choice, free question in QTI #2890</li>
+            <li>[2019-05-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/a4e9dbbb5d7d657603939ead488bcc6b651794bf">a4e9dbbb</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2890">GH#2890</a>) Quiz: Fix export/import QTI questions #2890</li>
+            <li>[2019-05-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/5cb0dc94b75dbf0062342ee99d406f7ca3e63ede">5cb0dc94</a> - <a href="https://task.beeznest.com/issues/15629">BT#15629</a>) Session: Fix session catalog pagination</li>
+            <li>[2019-05-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/ee8f82ed0631b35d5be513c363da145e7bcd2127">ee8f82ed</a> - <a href="https://task.beeznest.com/issues/15607">BT#15607</a>) Internal: Fix correct session id</li>
+            <li>[2019-05-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/59e4230c7f7a8dec4cedae6b0fa998bc19cda465">59e4230c</a>) Internal: Use parameter instead of global course/session value</li>
+            <li>[2019-05-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/0d4c6a8d42b3cf840d3efd98d405e44f9e12f2fc">0d4c6a8d</a> - <a href="https://support.chamilo.org/issues/15629">CT#15629</a>) Session: Fix session catalog pagination</li>
+            <li>[2019-05-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/d0dc37daa99ff289a00431e734ec22a09f0c71ee">d0dc37da</a>) Learnpath: Fix frameReady when loading css files</li>
+            <li>[2019-05-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/5ae54427ab8ef9ebc38a19f39688ec00cd3c6762">5ae54427</a>) Learnpath: Fix frameReady when loading css files</li>
+            <li>[2019-05-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/33601ce60e18f193af08099ae1ea4882c55f6560">33601ce6</a> - <a href="https://task.beeznest.com/issues/15389">BT#15389</a>) Learnpath: Fix frameReady when change item</li>
+            <li>[2019-05-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/3ed37d202e340f9507b121e8c73b5171e0c60f43">3ed37d20</a> - <a href="https://task.beeznest.com/issues/15389">BT#15389</a>) Internal: Replace jquery frameReady to load dependencies properly</li>
+            <li>[2019-05-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/8ec637d50fece7a1a0dff374ad6617ca949efa36">8ec637d5</a> - <a href="https://task.beeznest.com/issues/15612">BT#15612</a>) Quiz: Add session info in email notification</li>
+            <li>[2019-05-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/643ea18809079d93e4cf795f19d4d04a7fd30528">643ea188</a> - <a href="https://task.beeznest.com/issues/15612">BT#15612</a>) Quiz: Add session info in email notification</li>
+            <li>[2019-05-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/0ca45d559ab7bb72f20921463b1ae2f1530749ea">0ca45d55</a> - <a href="https://task.beeznest.com/issues/12552">BT#12552</a>) Glossary: Render glossary in the glossary list</li>
+            <li>[2019-05-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/366dfb4a6776cc4d13d353b6191dc5ff9975f39d">366dfb4a</a>) Learnpath: Fix lp js errors</li>
+            <li>[2019-05-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/5db21799eb4eb3c1dd7bd74400304e1154b4912e">5db21799</a> - <a href="https://task.beeznest.com/issues/15617">BT#15617</a>) Reporting: Don't show legal block when allow_terms_conditions is disabled</li>
+            <li>[2019-05-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/5db21799eb4eb3c1dd7bd74400304e1154b4912e">5db21799</a> - <a href="https://task.beeznest.com/issues/15617">BT#15617</a>) Tracking: Don't show legal block on user details page when allow_terms_conditions is disabled</li>
+            <li>[2019-05-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/2437c45c972bf0f04d478b10b6cee3a6f478fba1">2437c45c</a> - <a href="https://task.beeznest.com/issues/15617">BT#15617</a>) Template: Avoid double function call in user details page</li>
+            <li>[2019-05-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/4e74c84af89f7cd2c8ed04209c9f8517e302994f">4e74c84a</a> - <a href="https://task.beeznest.com/issues/15617">BT#15617</a>) Template: Create macro for user details in reporting</li>
+            <li>[2019-05-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/e4143df0ca6bfbd0563a47769d252bcc0e3d35b0">e4143df0</a> - <a href="https://task.beeznest.com/issues/15617">BT#15617</a>) Display: Tracking: Use macros for user details template</li>
+            <li>[2019-05-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/966c18c7517a1845dcdf2f3aab4d55316d1424a4">966c18c7</a> - <a href="https://task.beeznest.com/issues/15389">BT#15389</a>) Quiz: Show button to close embeddable quiz result</li>
+            <li>[2019-05-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/b966e60034d578680c5ea8aa36b7540c006e6d3a">b966e600</a> - <a href="https://task.beeznest.com/issues/15389">BT#15389</a>) Quiz: Update mediaelement's markersrolls plugin</li>
+            <li>[2019-05-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/9990517c5189b9ee586fe1098697663b0e7e454b">9990517c</a> - <a href="https://task.beeznest.com/issues/15389">BT#15389</a>) Quiz: Fix question titles in exercise reminder when save_titles_as_html is enabled</li>
+            <li>[2019-05-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/dcbdd8670884f0f411334a8f5f82da9f1a1af223">dcbdd867</a> - <a href="https://task.beeznest.com/issues/15389">BT#15389</a>) Quiz: Remove unnecessary conditional</li>
+            <li>[2019-05-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/5eb9fb6c004cee6ef117f58fd1c632b6eef261a2">5eb9fb6c</a> - <a href="https://task.beeznest.com/issues/15389">BT#15389</a>) Quiz: Don't show header/footer in embeddable quizzes</li>
+            <li>[2019-05-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/ee2749e6673d0891303f5cd7a3cc185065be0b26">ee2749e6</a> - <a href="https://task.beeznest.com/issues/15389">BT#15389</a>) Quiz: Fix JS for embeddable quizzes</li>
+            <li>[2019-05-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/f5fd5b741843c951165304829deae71223003784">f5fd5b74</a> - <a href="https://task.beeznest.com/issues/15389">BT#15389</a>) Quiz: Hide header in result page when exercise is embed on video</li>
+            <li>[2019-05-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/8de615946992e7bb8d4f2fd293ec6bf0714ea913">8de61594</a> - <a href="https://task.beeznest.com/issues/15389">BT#15389</a>) Quiz: Avoid load data when hide_user_info_in_quiz_result is enabled</li>
+            <li>[2019-05-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/9cca874ec114ee4aa16d2133aecf2d9160be1b4e">9cca874e</a> - <a href="https://task.beeznest.com/issues/15389">BT#15389</a>) Quiz: Fix CKEditor's qmarkersrolls dialog whith large quiz titles</li>
+            <li>[2019-04-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/dcf36bc75af7a5ed0103ffc322fd75ae78f8c2fe">dcf36bc7</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2892">GH#2892</a>) Skills: Improve template in skills report for student boss</li>
+            <li>[2019-04-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/cdcc010fe0eb15ebf68083a5fe30fe7cff90781c">cdcc010f</a>) Display: Fix color</li>
+            <li>[2019-04-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/934b6312499f1d2a523472d1bd6dbd693e797f77">934b6312</a>) Display: Fix class</li>
+            <li>[2019-04-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/76c8c5e75a35b370525adefbc2076b3072d4a773">76c8c5e7</a> - <a href="https://task.beeznest.com/issues/15392">BT#15392</a>) Survey: Avoid auto-generation of invitation code when invitation already exists</li>
+            <li>[2019-04-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/56d5998d4bdb6475ddbe8918b5ff0c90e15b1cca">56d5998d</a> - <a href="https://task.beeznest.com/issues/15392">BT#15392</a>) Survey: Avoid show survey link duplicated by auto invitation code</li>
+            <li>[2019-04-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/21553d0383fa7c60ba1841ff7fa04b1e177f9029">21553d03</a>) Display: Fix page subheader</li>
+            <li>[2019-04-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/3a999e3281b0b3e09eaf7d272cb7af8d843d5584">3a999e32</a>) Display: Fix base.css</li>
+            <li>[2019-04-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/0eda50bb67768289eed8b2f11b65fc132750c86c">0eda50bb</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2889">GH#2889</a>) Internal: Fix E_NOTICE when sending mail by platform announcement</li>
+            <li>[2019-04-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/64b42e92053cfa875cf8c93295dd70e54670349a">64b42e92</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2885">GH#2885</a>) Internal: Fix E_NOTICE when creating folder</li>
+            <li>[2019-04-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/e0920d66c83a99d5640a1359090343a02d852e68">e0920d66</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2887">GH#2887</a>) Learnpath: Fix position for Certificate item</li>
+            <li>[2019-04-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/690cb7bb7398ebbd5c94e4132033c5085132efbd">690cb7bb</a>) Display: Fix section-title</li>
+            <li>[2019-04-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/2b1d000d5dffcd57ca4bbc81e9698afd31a52064">2b1d000d</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2884">GH#2884</a>) Internal: Fix E_NOTICE</li>
+            <li>[2019-04-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/915fa57b4bfbc388105511f8a632a613d08d7388">915fa57b</a> - <a href="https://task.beeznest.com/issues/14921">BT#14921</a>) Plugin: Restoring Whispeakauth</li>
+            <li>[2019-04-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/94b6743da05a85d702a3557c313fbbb59beef3fe">94b6743d</a>) Display: remove course sorting when in course grid view. Add alt attribute to teacher image when more than 2 in grid view. Improve badge display.</li>
+            <li>[2019-04-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/affe0b799d61ec0e183423be1ade1d208990a906">affe0b79</a>) Documentation: Update documentation directory with new dependencies, requirement on PHP 5.6 and LTI compliance</li>
+            <li>[2019-04-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/fa9071bd997af013a0a49ec84c89e47d21f3589a">fa9071bd</a>) Quiz: Fix exercise result display (2)</li>
+            <li>[2019-04-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/53b74781aedd9ea7b7b1072003d6dd119f4a9fc6">53b74781</a>) Quiz: Fix exercise result display</li>
+            <li>[2019-04-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/23bad83a744482179b36bc14365ed0c1bef45a2c">23bad83a</a>) Quiz: Fix regression in hotspot image upload introduced in d8fdd1f410cdcc8fcce7580d677f4045475ec267</li>
+            <li>[2019-04-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/310467271dadea6cdc5cb1224c661fca0b52e815">31046727</a>) Quiz: Fix questions titles in scenario when save_titles_as_html is enabled</li>
+            <li>[2019-04-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/d56a0871cd8ec24d40a5b603603a9785ced76ee9">d56a0871</a>) Tracking: Display: Improve courses overview</li>
+            <li>[2019-04-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/976e45267cab49c38c269231e36e6fc38560000b">976e4526</a>) Internal: Remove show-tick CSS class from selects elements</li>
+            <li>[2019-04-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/3f08ed68a6f040406b2829ac070f4b4b6aea4e91">3f08ed68</a>) Tracking: Fix title in user details</li>
+            <li>[2019-04-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/0aac59420871b8c84d19d6c5613adc1f07ec4185">0aac5942</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2849">GH#2849</a>) Global: Format date range to save it with EN locale format</li>
+            <li>[2019-04-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/3e052551a83b9039db2ad58918772c0264292ca8">3e052551</a> - <a href="https://task.beeznest.com/issues/15534">BT#15534</a>) Quiz: Add script to delete orphan questions from the platform </li>
+            <li>[2019-04-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/f52b084e35e529afcf3904249f2d438e90574c5d">f52b084e</a> - <a href="https://task.beeznest.com/issues/12552">BT#12552</a>) Glossary: Fix double glossary popup</li>
+            <li>[2019-04-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/1b072202838fea684fa03357934f887c3a7da264">1b072202</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2856">GH#2856</a>) Chat: Show message when no friends in contact list</li>
+            <li>[2019-04-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/bae8f1de7c5b66d50042835e2c3023782e59b7f0">bae8f1de</a>) Social: Fix load Open Graph content in wall</li>
+            <li>[2019-04-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/914c5ed72fef38e9bd0e91751337711d02f9188c">914c5ed7</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2873">GH#2873</a>) Learnpath: Improve display of forms to add audio to LP item</li>
+            <li>[2019-04-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/17a939d65c7860811357c5f07af26e0382316c36">17a939d6</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2873">GH#2873</a>) Learnpath: Only show audio folder to assign audio to LP item</li>
+            <li>[2019-04-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/b715d1a5a5b28b63222700a52b7cd4bd6fef1af2">b715d1a5</a>) Internal: Fix tag in macro from 13646483</li>
+            <li>[2019-04-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/87845f6dd024939cd4260c73273ebd6e7303f86e">87845f6d</a>) Tracking: Add TPL for course_summary</li>
+            <li>[2019-04-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/13646483999ec3416690f8c6d576257319f8cd96">13646483</a>) Tracking: Use TPL card widget in user information TPL</li>
+            <li>[2019-04-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/f60fa913b901aa834b4467c7b85be8c2fa1eebb8">f60fa913</a> - <a href="https://task.beeznest.com/issues/15533">BT#15533</a>) Assignment: Improve speed of assignments stats requests by using iid instead of id</li>
+            <li>[2019-04-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/a7ca4cc33430591636dd4bb67adce10d75b21445">a7ca4cc3</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2873">GH#2873</a>) Learnpath: Remove unnecessary template</li>
+            <li>[2019-04-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/9effa4710d009b7aac0b327a0966f908ed00d9f3">9effa471</a> - <a href="https://task.beeznest.com/issues/15562">BT#15562</a>) Global: Fix translate html</li>
+            <li>[2019-04-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/30f3192822e7e19941dbeb0262fb4bdcb4f9a4e3">30f31928</a> - <a href="https://task.beeznest.com/issues/15546">BT#15546</a>) Survey: Add option to hide the survey link when inviting users</li>
+            <li>[2019-04-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/a16946cd3548becea1b750449700259a7b2f3baf">a16946cd</a>) Gradebook: Show (again) Export Certificates to PDf when customcertificates is enabled (was previously replaced by the export to one zip with multiple PDFs)</li>
+            <li>[2019-04-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/fa1472f8f93dd8b433ea1e4db9b4f8179d6d5338">fa1472f8</a>) Gradebook: Show icons in gradebook action bar</li>
+            <li>[2019-04-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/15012a77e39caefe179e3d46f9bb9a9dec6fb05c">15012a77</a> - <a href="https://task.beeznest.com/issues/15389">BT#15389</a>) Document: Improve load of js injected in documents viewer</li>
+            <li>[2019-04-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/86a67fe9acb7432b03466c8326bc7bef602511e6">86a67fe9</a>) Global: Redirect user to the course immediately from the popular courses list if user already subscribed to the course</li>
+            <li>[2019-04-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/96207a964f5676286104609aacafd900c7fe4940">96207a96</a>) Tracking: Display: Add user information TPL</li>
+            <li>[2019-04-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/ed86123cca8cd8ee2b08702747925a5253b7274e">ed86123c</a>) Internal: Improve code to return only user_id SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus Throws an error 'Out of sort memory consider increasing server sort buffer size' in master.</li>
+            <li>[2019-04-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/cfda8c92e0bf1706f8c3934765280aa4c5d48a71">cfda8c92</a> - <a href="https://task.beeznest.com/issues/15556">BT#15556</a>) Gradebook: Fix exercise list id in gradebook</li>
+            <li>[2019-04-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/e8b61b6e8a132ec2387592e0afe22e8417bef9cf">e8b61b6e</a>) Social: Fix badges skills overflow in profile page</li>
+            <li>[2019-04-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/cfdd99868fbff60c0f18711458c0f518e9ce0df6">cfdd9986</a> - <a href="https://task.beeznest.com/issues/15551">BT#15551</a>) Display: Fix return session_default.png</li>
+            <li>[2019-04-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/b4a3bcf2dd45c2972c10666de97c6180e514946d">b4a3bcf2</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2878">GH#2878</a>) Tracking: User details: Fix template (2)</li>
+            <li>[2019-04-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/14fa6ea0998d081c4c0d3537cec2a851304d464e">14fa6ea0</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2878">GH#2878</a>) Tracking: User details: Fix template</li>
+            <li>[2019-04-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/4ac55d47f39ba2cb2a6d2d5b8725c7f43cb53da9">4ac55d47</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2880">GH#2880</a>) Admin: Add configurations</li>
+            <li>[2019-04-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/ac4172fef683dec2338c78a016e7a7d8460187e3">ac4172fe</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2880">GH#2880</a>) Admin: Add configuration setting social_show_language_flag_in_profile</li>
+            <li>[2019-04-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/fc709ca68ec3f7c63b53fc92b8882cbb4b81efa6">fc709ca6</a> - <a href="https://task.beeznest.com/issues/15534">BT#15534</a>) Quiz: Allow edit orphan questions</li>
+            <li>[2019-04-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/533a143bf6346bc7616bb6ecb28e3f743ac4feb9">533a143b</a> - <a href="https://task.beeznest.com/issues/15554">BT#15554</a>) Social: Fix wrong font when creating a new message</li>
+            <li>[2019-04-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/f922a9ebd9a4fa5a46be9995cb91a25d60664478">f922a9eb</a>) Internal: Replace document.ready with shortcut "$(function () {" document.ready is not working in jquery v3, needed in master.</li>
+            <li>[2019-04-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/3c1f083e40ce82d402c691f632ee95119097324f">3c1f083e</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2878">GH#2878</a>) Tracking: Fix details in user page</li>
+            <li>[2019-04-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/31e3b7448633f677bdef8a6d09b4dec243cc9c4f">31e3b744</a> - <a href="https://support.chamilo.org/issues/7683">CT#7683</a>) Tracking: Update page header</li>
+            <li>[2019-04-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/478c6e4fbb12555411b70eb8135ca61ce90a2960">478c6e4f</a> - <a href="https://task.beeznest.com/issues/15387">BT#15387</a>) Document: Fix create hidden directory</li>
+            <li>[2019-04-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/f88f85054d7e052f9ee71142d51716ef3986380a">f88f8505</a> - <a href="https://support.chamilo.org/issues/7683">CT#7683</a>) Learnpath: Fix learnpath css</li>
+            <li>[2019-04-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/d2edeecc286ac2e989ff35bde5767f2aab3f7296">d2edeecc</a> - <a href="https://task.beeznest.com/issues/15387">BT#15387</a>) Internal: Return false when file is not copied</li>
+            <li>[2019-04-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/ce853aac97a93485d86661c757768bdcd7ad331a">ce853aac</a>) Internal: Add int casting, Database::escape_string in queries</li>
+            <li>[2019-04-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/283ae424aa15f6696d1f708a34b50104cb2d5999">283ae424</a> - <a href="https://task.beeznest.com/issues/15543">BT#15543</a>) Social: Fix set message to unread</li>
+            <li>[2019-04-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/e6fc4bd1c77a8d5bcb96c23000725508c71d76f1">e6fc4bd1</a> - <a href="https://task.beeznest.com/issues/15549">BT#15549</a>) Assignment: Fix work notification</li>
+            <li>[2019-04-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/29cc82f9773bc98d95ce31030e0fb58631eeb71c">29cc82f9</a> - <a href="https://task.beeznest.com/issues/15513">BT#15513</a>) Plugin: BigBlueButton: Fix delete bbb records</li>
+            <li>[2019-04-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/e4340b98ff399b9f7d5b4706bbdb79e055a4a118">e4340b98</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2878">GH#2878</a>) Tracking: Changing position of user report blocks</li>
+            <li>[2019-04-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/5e5495a61da6cba021146c22c68f73df9cb4e289">5e5495a6</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2878">GH#2878</a>) Tracking: Improvement in detailed user report</li>
+            <li>[2019-04-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/01302a7ce6940063de1a1b72b46241aedddbcd67">01302a7c</a> - <a href="https://task.beeznest.com/issues/15175">BT#15175</a>) Display: Add icon for student boss</li>
+            <li>[2019-04-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/2c7a87bdbdb80c383e6790af6e432d01a5c1ef4d">2c7a87bd</a> - <a href="https://task.beeznest.com/issues/15280">BT#15280</a>) Plugin: SurveyExportCSV: Consider last attempt for question answered twice</li>
+            <li>[2019-04-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/3750e4b19677604424fcfa790c5b9fd423204dd2">3750e4b1</a>) Tracking: Add user_details.tpl</li>
+            <li>[2019-04-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/7773aa0c7a99e7a8010d05c2f6250151438e1b98">7773aa0c</a>) Tracking: Last connection fix</li>
+            <li>[2019-04-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/ede166e8225fc8ffcdcc0b205965118b66211109">ede166e8</a>) Tracking: Fix myspace returnCourseTracking query</li>
+            <li>[2019-04-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/9e8bc8f90ee2d21a1ccd105cb7b038369f66ba96">9e8bc8f9</a> - <a href="https://task.beeznest.com/issues/15539">BT#15539</a>) Ticket: Check setting "ticket_project_user_roles" to show the ticket link</li>
+            <li>[2019-04-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/db4935e3241b02c93631eb5cc71197e1bc4d6f8f">db4935e3</a> - <a href="https://support.chamilo.org/issues/7683">CT#7683</a>) Display: Fix tooltip help</li>
+            <li>[2019-04-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/223ec82082d64a896708088a5c94aa23f19db993">223ec820</a>) Display: Add tooltip help</li>
+            <li>[2019-04-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/0d3f5e14cac63711c603f0b236e30c5e0d902b26">0d3f5e14</a> - <a href="https://support.chamilo.org/issues/7683">CT#7683</a>) Display: Format code user summary</li>
+            <li>[2019-04-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/86255ae8187e82c10ffbb40796b39d11cbec17f1">86255ae8</a> - <a href="https://task.beeznest.com/issues/15389">BT#15389</a>) Quiz: Improve presentation of icon for embeddable exercises</li>
+            <li>[2019-04-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/076d6e3abac4e995a3507be6817ee0197306146c">076d6e3a</a> - <a href="https://support.chamilo.org/issues/7683">CT#7683</a>) Display: Pagination of results user summary</li>
+            <li>[2019-04-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/1f303558ddb2f82615a4c8a5e10de67cc78226a2">1f303558</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2875">GH#2875</a>) Document: Fix redirect and fix double message when unzipping a file</li>
+            <li>[2019-04-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/49fd40eedb03bc6540d2a56d31cb8b3db6586624">49fd40ee</a>) Internal: Fix course access to files, blocking using api_protect_course_script() - format code + add "int" casting</li>
+            <li>[2019-04-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/1afa6f0521228ed593159d941289688b1fd3fcbc">1afa6f05</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2875">GH#2875</a>) Internal: Add api_protect_course_script</li>
+            <li>[2019-04-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/61f7df478c40dbfa27b08bbf8d82755e2525d58c">61f7df47</a> - <a href="https://support.chamilo.org/issues/7683">CT#7683</a>) Display: Update colors</li>
+            <li>[2019-04-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/934f3704e9e7d9becf461aafb429c181dbec1cb5">934f3704</a> - <a href="https://task.beeznest.com/issues/15533">BT#15533</a>) Learnpath: Fix autoplay in player with wav/ogg</li>
+            <li>[2019-04-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/0f695892f1d2a99261bccf58b22ea8e426ea1c22">0f695892</a> - <a href="https://task.beeznest.com/issues/15535">BT#15535</a>) Quiz: Fix pagination</li>
+            <li>[2019-04-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/53bc13e4eba4fef73b797b27e8b26ef368a65637">53bc13e4</a> - <a href="https://support.chamilo.org/issues/7683">CT#7683</a>) Internal: New array function for user summary</li>
+            <li>[2019-04-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/502bbf4baf7717507b54f2f352d997d1e5274992">502bbf4b</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2763">GH#2763</a>) Internal: Add additional check for array-type labels (used for extra field descriptions) to avoid array to string conversion notice</li>
+            <li>[2019-04-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/a937bd8a342f7f567c81788307ac8d2cf1da7cbf">a937bd8a</a>) Internal: Fix php warning</li>
+            <li>[2019-04-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/e04a9b37127ebb6132887ff666147b44acb0984a">e04a9b37</a>) Internal: Fix composer update - Clean also twig templates + run opcache_reset</li>
+            <li>[2019-04-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/f5ecc03c88ba6a50529704c4dc30fc175d702a5d">f5ecc03c</a> - <a href="https://task.beeznest.com/issues/15496">BT#15496</a>) Forum: Add validation on who can add a post</li>
+            <li>[2019-04-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/31e665410e237cc7ce9d3bb4c6ae763a949adb24">31e66541</a> - <a href="https://task.beeznest.com/issues/15389">BT#15389</a>) Display: CKEditor Markers Rolls: Use minified version</li>
+            <li>[2019-04-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/b14121afec680fe5d0e76533049c77efa01c579c">b14121af</a> - <a href="https://task.beeznest.com/issues/15389">BT#15389</a>) Display: CKEditor Markers Rolls: Update with min.js</li>
+            <li>[2019-04-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/06614c25262a751c622e3c9b818332b8b44a209b">06614c25</a> - <a href="https://task.beeznest.com/issues/15496">BT#15496</a>) Display: Show ckeditor at the end of the post list</li>
+            <li>[2019-04-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/6140ea69bc30f47b060918ae5818977e3cdd58d4">6140ea69</a> - <a href="https://task.beeznest.com/issues/15517">BT#15517</a>) Tracking: Improve query performance to get average student score</li>
+            <li>[2019-04-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/f4ded69c9db82013966687eee65231055080ee4a">f4ded69c</a> - <a href="https://task.beeznest.com/issues/15494">BT#15494</a>) Learnpath: Allow min prerequisite to be 0. Don't overwrite value</li>
+            <li>[2019-04-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/7f279342b49dba948e0a37602f7918b70eda9308">7f279342</a> - <a href="https://task.beeznest.com/issues/15265">BT#15265</a>) Plugin: QuestionOptionsEvaluation: Fix result when teacher correcting quiz</li>
+            <li>[2019-04-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/ee6da54924eff8a1144e883da2e7316eed55d94a">ee6da549</a> - <a href="https://task.beeznest.com/issues/15265">BT#15265</a>) Plugin: QuestionOptionsEvaluation: Don't consider empty answers as fails</li>
+            <li>[2019-04-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/9cc95caf770fe0707477aa8749be46278008c31a">9cc95caf</a> - <a href="https://task.beeznest.com/issues/15515">BT#15515</a>) Session: Fix delete session category with its sessions</li>
+            <li>[2019-04-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/ea2f8f5b24cbe939f9933b95b6d1f9f2be1319c4">ea2f8f5b</a> - <a href="https://task.beeznest.com/issues/15515">BT#15515</a>) Internal: Code clean up + format</li>
+            <li>[2019-04-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/ff66bd1712d622b89eff9f040b3c13900fbe2575">ff66bd17</a> - <a href="https://task.beeznest.com/issues/15515">BT#15515</a>) Session: Fix form layout in session categories list</li>
+            <li>[2019-04-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/7b4c53df60616af028b59b594d22228b678e9aef">7b4c53df</a> - <a href="https://task.beeznest.com/issues/15515">BT#15515</a>) Session: Fix search session categories</li>
+            <li>[2019-04-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/2bee27a4648b7f696ddc054ffd8a463b1c462328">2bee27a4</a> - <a href="https://task.beeznest.com/issues/15494">BT#15494</a>) Learnpath: Fix prerequisite edition</li>
+            <li>[2019-04-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/ade80129c45dd46245cedfa36befe7d4adf16552">ade80129</a>) Admin: Fix user link, in admin user list</li>
+            <li>[2019-04-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/b5cdd13df4ffdfc5e6417cccac3b8d09f6a3f101">b5cdd13d</a> - <a href="https://task.beeznest.com/issues/15505">BT#15505</a>) Internal: Remove web/build after composer update, it will be regenerated after</li>
+            <li>[2019-04-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/bc572a73993b75728fa89c4cfd73b7d6701733c9">bc572a73</a> - <a href="https://task.beeznest.com/issues/15280">BT#15280</a>) Survey: Fix survey invitations report for surveys with same code in different courses (when using code, the c_id and session_id are necessary)</li>
+            <li>[2019-04-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/671d8659fc4c020946baa249149fda4ff0b1d0ee">671d8659</a> - <a href="https://task.beeznest.com/issues/15265">BT#15265</a>) Plugin: QuestionOptionsEvaluation: Improve code</li>
+            <li>[2019-04-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/d9b66393486fa82198bc1d600d469a4be386dcc4">d9b66393</a> - <a href="https://task.beeznest.com/issues/15389">BT#15389</a>) Display: Add CKEditor plugin Quiz Markers Rolls</li>
+            <li>[2019-04-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/2d8d1dc371b6dc446d295a1fa8dee476ada255ab">2d8d1dc3</a> - <a href="https://task.beeznest.com/issues/15502">BT#15502</a>) Internal: Fix student progress/score when entering for the first time</li>
+            <li>[2019-04-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/a004c95712c63f2e26f570300813ce27a9bf941c">a004c957</a> - <a href="https://task.beeznest.com/issues/15232">BT#15232</a>) Quiz: Improve aiken import</li>
+            <li>[2019-04-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/56c10148b3e8f4f48310afa31c91f84ec12fa029">56c10148</a>) Quiz: Improve speed when generating score</li>
+            <li>[2019-04-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/12cedeb4738e184b7dab3227861fe47946d9aa2f">12cedeb4</a> - <a href="https://task.beeznest.com/issues/15492">BT#15492</a>) Quiz: Fix exercise count</li>
+            <li>[2019-04-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/2c588909ef43949e635c9468b7ef19a251485f41">2c588909</a> - <a href="https://task.beeznest.com/issues/15233">BT#15233</a>) Quiz: Improve labels for only global score and correct score setting</li>
+            <li>[2019-04-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/639431333110cb8c2f43324ce929295299bf8fb0">63943133</a> - <a href="https://task.beeznest.com/issues/15492">BT#15492</a>) Session: Fix exercise list. Don't show disabled exercises</li>
+            <li>[2019-04-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/d9eb5fb40ce0449b1685f1b79940316d60ec1b31">d9eb5fb4</a> - <a href="https://task.beeznest.com/issues/15173">BT#15173</a>) Forum: Fix forum flag list</li>
+            <li>[2019-04-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/a980c4b28478faaa0f05511587765a9c9e3def8d">a980c4b2</a> - <a href="https://task.beeznest.com/issues/15174">BT#15174</a>) Internal: Fix wrong encoding in search form</li>
+            <li>[2019-04-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/b1a40290066aec384d93ac975020e85c9bebf259">b1a40290</a>) Display: SVG calendar icons</li>
+            <li>[2019-04-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/4485a881e7e05be8a644941651ebf81dca0e5e67">4485a881</a>) Display: Update calendar icons</li>
+            <li>[2019-04-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/1be31f3c2efe35e8ad5135f9dc7e93bb6af8963b">1be31f3c</a>) Display: Update calendar icons</li>
+            <li>[2019-04-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/62b1fb0f522a85b23536e7703ba7936cb391b599">62b1fb0f</a> - <a href="https://task.beeznest.com/issues/15265">BT#15265</a>) Plugin: QuestionOptionsEvaluation: Negative scores will be equivalent to 0</li>
+            <li>[2019-04-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/6a32035d3bfd957f57b5e28cc82864715e8f867a">6a32035d</a> - <a href="https://task.beeznest.com/issues/15265">BT#15265</a>) Plugin: QuestionOptionsEvaluation: Add readme file</li>
+            <li>[2019-04-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/f1d70b58017b98dc113d0930fff47f4402151c8e">f1d70b58</a> - <a href="https://task.beeznest.com/issues/15280">BT#15280</a>) Plugin: SurveyExportTxt: fix exporting with multiple pagebreak</li>
+            <li>[2019-04-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/4ee20dec629bbee6e02eff041d1d79c3e8239a51">4ee20dec</a> - <a href="https://task.beeznest.com/issues/15362">BT#15362</a>) Session: Don't keep showing uploaded files in resume session page</li>
+            <li>[2019-04-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/c5464953e8765e0dfed0fb437c223368fb7f3b4c">c5464953</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2869">GH#2869</a>) Display: Add right-aligned text icon on all minimal CKeditor toolbars - replace JustifyBlock by JustifyRight whenever needed to maintain display size to minimum</li>
+            <li>[2019-04-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/6d7bf9b45cdf7aec4738f3bae9a1e7e478699880">6d7bf9b4</a>) Quiz: Fix exercise creation</li>
+            <li>[2019-04-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/084a9056d211b34fc87c3b23969d5a0f7cd1a2ee">084a9056</a> - <a href="https://task.beeznest.com/issues/15484">BT#15484</a>) Internal: Fix query, improve code in course catalog search</li>
+            <li>[2019-04-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/6fbb6d9b4163e8ee2817c21cbc05c5a1f5aa81fd">6fbb6d9b</a>) Internal: Fix php warning $list_categories not declared. Remove apc code see: 120a8d79ce1299859f080fcad52be0f1dfc9af81</li>
+            <li>[2019-04-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/74beb624b5c01124d2e2a184c028bd28be08db6b">74beb624</a> - <a href="https://task.beeznest.com/issues/15389">BT#15389</a>) Display: MediaElement: Add markersrolls plugin</li>
+            <li>[2019-04-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/541ccc2a94b80cc90acff38b27abf038a70a23aa">541ccc2a</a>) Internal: Fix load medialement plugins in iframes</li>
+            <li>[2019-04-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/eb970f2659dfcccc6f66f003103bc38334e3e255">eb970f26</a>) Internal: Add content-type to translate_html</li>
+            <li>[2019-04-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/084048aba2e080d7ecc38503c04d53efff34e29f">084048ab</a>) Glossary: Fix content-type for glossary.js.php</li>
+            <li>[2019-04-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/8968b74a11c8acf63dea6945e0720338314adf06">8968b74a</a>) Internal: Add key "self_basename" needed to get current file name</li>
+            <li>[2019-04-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/c717006f66e523252d1d9b8201873086ae44c9d4">c717006f</a>) Internal: Add int casting</li>
+            <li>[2019-04-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/93887d8674e73de2c2770dd44e08a19c76bf6dac">93887d86</a>) Internal: Don't ignore app/courses/proxy.php</li>
+            <li>[2019-03-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/36b15cffc0c6434dd8cc20e06ed0b534f9694ebb">36b15cff</a>) Internal: Add missing proxy.php</li>
+            <li>[2019-03-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/bc16fa6254cde674ddd08e88f8ac0cac7d751740">bc16fa62</a> - <a href="https://task.beeznest.com/issues/15234">BT#15234</a>) Quiz: Fix validation with quiz_question_limit_per_day</li>
+            <li>[2019-03-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/7c222659db5647329378b61ffbe6e4fbce71032e">7c222659</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2845">GH#2845</a>) Course creation: Fix create course with example content</li>
+            <li>[2019-03-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/6e2c7b4e8225208ae8e4f9f7d1166b791b0fd7d7">6e2c7b4e</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2859">GH#2859</a>) Install: Add missing settings when installing</li>
+            <li>[2019-03-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/1c81dcb2c5a883bd6894ca9c74ea5e207354f985">1c81dcb2</a>) Social: Fix message_feedback see 9c5371b</li>
+            <li>[2019-03-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/c07b9958a4f53cabac8b4fcbf0bf9c0d29ab827a">c07b9958</a>) Internal: Replace $(document).ready with shortcut version</li>
+            <li>[2019-03-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/9c5371b448fcb1e9ee33f868e07710166b319406">9c5371b4</a>) Internal: Rename entity MessageLikes to MessageFeedback See 9af667f5af4f90180ed69ebfb2aeda354ccd6198</li>
+            <li>[2019-03-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/ddac4546154fbdd51024033066fcc5f44a894051">ddac4546</a>) Internal: Refactor code, remove repetitive code into a single function</li>
+            <li>[2019-03-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/77e36219eed503f9e134ad0c5a6fe333564fe2ec">77e36219</a>) Internal: Fix file attachment UI, move code into a function class</li>
+            <li>[2019-03-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/460521a23ebc6150779187b829684a8b5068d7da">460521a2</a>) Forum: Fix folding categories</li>
+            <li>[2019-03-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/878df6fcffb8386872781f1561f9cb1c4e3c85f2">878df6fc</a> - <a href="https://task.beeznest.com/issues/15461">BT#15461</a>) Assignments: Fix "eventAddVirtualCourseTime()" sometimes the record is not created</li>
+            <li>[2019-03-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/fd492c85fca5e92fb6d910d62349ffa87c530a25">fd492c85</a> - <a href="https://task.beeznest.com/issues/15403">BT#15403</a>) Quiz: If feedback is set to no results/no score then don't send email. It is useless to send a notification when the student cannot have access to the page</li>
+            <li>[2019-03-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/e3e5a822b47de92a03010460592e29cd8e0264ed">e3e5a822</a> - <a href="https://task.beeznest.com/issues/15403">BT#15403</a>) Quiz: Don't allow send email notification in exam mode. Link inside email will contain no data because student cannot see results</li>
+            <li>[2019-03-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/cb8c066648171e4a4122180e8234f9fae1452037">cb8c0666</a> - <a href="https://task.beeznest.com/issues/15402">BT#15402</a>) Internal: Add app/courses/proxy.php & add rule in .htaccess to allow that file</li>
+            <li>[2019-03-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/90603d4d047e3518e9aa7d15c024a82774194234">90603d4d</a> - <a href="https://task.beeznest.com/issues/15473">BT#15473</a>) Social: Add missing session block</li>
+            <li>[2019-03-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/e2eda96358c76ca8ccdde8ad4ebea8e89e2b8536">e2eda963</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2846">GH#2846</a>) Social: Fix "See More" button</li>
+            <li>[2019-03-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/18e8b1f43073734e9c66cf579f1b1fb525d69311">18e8b1f4</a> - <a href="https://task.beeznest.com/issues/15393">BT#15393</a>) Social: Optimize count of likes/dislikes in social group</li>
+            <li>[2019-03-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/5fe1bcdf3de4cf3bc61d2ea6697a3fa6f2d000c3">5fe1bcdf</a>) Agenda: Show all session for platform admin in planification calendar</li>
+            <li>[2019-03-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/e0e07d3d3dd485bb64b22b5dc62b7843f2811932">e0e07d3d</a>) Internal: Rename SessionManager getSessionsAdmin to getSessionsByAdmin</li>
+            <li>[2019-03-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/a79b7564f72f45c5a4ee5d7f6f36caafefe14059">a79b7564</a> - <a href="https://task.beeznest.com/issues/15362">BT#15362</a>) Session: Don't show basic_course_documents when is empty</li>
+            <li>[2019-03-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/5f3acd1cbdb925c4e38a04b3908aaa75de5da46c">5f3acd1c</a> - <a href="https://task.beeznest.com/issues/15265">BT#15265</a>) Plugin: QuestionOptionsEvaluation: Fix questions options score according formula</li>
+            <li>[2019-03-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/427be3886bd1cf61f0d5e81ea559fdae0f59809e">427be388</a> - <a href="https://task.beeznest.com/issues/15417">BT#15417</a>) Course group: Default group category "max_student" changed from 8 to "No limit" when creating a new course.</li>
+            <li>[2019-03-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/c0ec8531ffb75c659ea240cf885c62764c5eda70">c0ec8531</a> - <a href="https://task.beeznest.com/issues/15442">BT#15442</a>) Survey: Add missing tool introduction in surveys</li>
+            <li>[2019-03-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/d0e61c64bfd3a1eed832357ea0cd30d18d3c2d4d">d0e61c64</a> - <a href="https://task.beeznest.com/issues/15438">BT#15438</a>) Internal: Add yuloh/bccomp-polyfill to use bccomp without installing bcmath ext</li>
+            <li>[2019-03-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/99c49fda4f01cdd5cb57551ff70b928736cd8e53">99c49fda</a>) Gradebook: (internal) Remove new fields "@"</li>
+            <li>[2019-03-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/47f03518fd3c39e6c27c6a0e12cf9b7b226b60b8">47f03518</a> - <a href="https://task.beeznest.com/issues/14357">BT#14357</a>) Gradebook: Fix missing field when using config allow_gradebook_stats</li>
+            <li>[2019-03-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/15b04b2c1087ed96e89e6df5f4fe03061305b1c5">15b04b2c</a> - <a href="https://task.beeznest.com/issues/15265">BT#15265</a>) Plugin: QuestionOptionsEvaluation: Add lang var</li>
+            <li>[2019-03-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/8b9d626563786ca25239a06921e865829417b3cd">8b9d6265</a> - <a href="https://task.beeznest.com/issues/15265">BT#15265</a>) Plugin: QuestionOptionsEvaluation: Use max score to calculate result</li>
+            <li>[2019-03-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/3f3c16b4bd9cb09a4bb95515f2e82cf84d8403d2">3f3c16b4</a> - <a href="https://task.beeznest.com/issues/15265">BT#15265</a>) Plugin: QuestionOptionsEvaluation: Fix save and show score</li>
+            <li>[2019-03-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/1caea04a9c7a0a316830394bb5af47d700bdb720">1caea04a</a> - <a href="https://task.beeznest.com/issues/15280">BT#15280</a>) Plugin: SurveyExport: Add option to export incomplete surveys</li>
+            <li>[2019-03-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/492252c5526bdcc736347a794782f6f6f709cf18">492252c5</a> - <a href="https://task.beeznest.com/issues/15441">BT#15441</a>) Quiz: Fix NoNegativeScore when importing CSV quizzes</li>
+            <li>[2019-03-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/43fe85b9150a75fe21554e75ca0d6052ed3ae4d4">43fe85b9</a> - <a href="https://task.beeznest.com/issues/15395">BT#15395</a>) Quiz: Add more memory and time limit when importing a quiz</li>
+            <li>[2019-03-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/128126b9baa0ce1975833ad8539c09b8f835734d">128126b9</a>) Quiz: Improve exercise loading speed</li>
+            <li>[2019-03-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/d0ecc6c54cf0a4a7690940cf9b8b11bf502257c4">d0ecc6c5</a> - <a href="https://task.beeznest.com/issues/15233">BT#15233</a>) Quiz: Fix RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER option (2)</li>
+            <li>[2019-03-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/29bf4c5bb138eaa0232859eeca79db3131c51b16">29bf4c5b</a> - <a href="https://task.beeznest.com/issues/15265">BT#15265</a>) Plugin: QuestionOptionsEvaluation: Fix evaluation formulas</li>
+            <li>[2019-03-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/b5eac6a7ee2d52d547a1cc81b1f592af6f1cdabe">b5eac6a7</a> - <a href="https://task.beeznest.com/issues/15256">BT#15256</a>) Learnpath: SCORM: Use encodeURIComponent to avoid error with "+" char</li>
+            <li>[2019-03-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/f4a130ed9dfc4437a78445b66effda2af885a25a">f4a130ed</a> - <a href="https://task.beeznest.com/issues/15458">BT#15458</a>) Quiz: Remove 100 chars limit when importing questions using Aiken</li>
+            <li>[2019-03-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/c16538f660ee486f9d49e84d1024e5788f9c1c24">c16538f6</a> - <a href="https://task.beeznest.com/issues/15465">BT#15465</a>) Display: Fix selects inside inline forms</li>
+            <li>[2019-03-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/90e13a9e48e1a1f02e0f2535035f365c707e1ee6">90e13a9e</a>) Forum: Fix category flag for translation-enabled forums</li>
+            <li>[2019-03-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/60e793810dde49ad6f0b2596a8c887648b2b7f1a">60e79381</a> - <a href="https://task.beeznest.com/issues/15445">BT#15445</a>) Social: Show only friend users in chat box</li>
+            <li>[2019-03-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/8ffc709f24d9c32cb9d0ed82ea8374d0ce148c3f">8ffc709f</a> - <a href="https://task.beeznest.com/issues/15445">BT#15445</a>) Quiz: Fix array_flip error when importing an exercise</li>
+            <li>[2019-03-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/10f6629a33be94f625b23c4be0ea0537ebf37275">10f6629a</a> - <a href="https://task.beeznest.com/issues/15309">BT#15309</a>) Social: Fix thread list when getting social groups</li>
+            <li>[2019-03-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/72bb2bf70ce2e68991fb94a5a35d252eff6fba0c">72bb2bf7</a> - <a href="https://task.beeznest.com/issues/15233">BT#15233</a>) Quiz: Fix RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER option</li>
+            <li>[2019-03-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/f7441c566fa5d61ea9e468f721f6cd3fc1282e68">f7441c56</a> - <a href="https://task.beeznest.com/issues/15309">BT#15309</a>) Internal: Move social group block code into a function</li>
             <li>[2019-03-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/6b440f6852a6c4ef583173906c53b2e0cbdd8239">6b440f68</a> - <a href="https://task.beeznest.com/issues/15329">BT#15329</a>) Quiz: Fix form with Random field selected</li>
             <li>[2019-03-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/a9fc7aceadbb2e540f570fd7b52f9c2c751cdf9a">a9fc7ace</a> - <a href="https://task.beeznest.com/issues/15329">BT#15329</a>) Plugin: QuestionOptionsEvaluation: use count of validated questions</li>
             <li>[2019-03-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/49918ed6abfdecfa44d3dcdee3df8afb9fcc6002">49918ed6</a> - <a href="https://task.beeznest.com/issues/15460">BT#15460</a>) Survey: Fix survey question UI</li>
@@ -263,34 +481,34 @@
             <li>[2019-03-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/fe1f86ed49839b90d27fb7ab6f1011db06006dc2">fe1f86ed</a>) Display: Fix rtl</li>
             <li>[2019-03-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/e26cf2bec7a9a8a778dcff9d8546b61d481c7c78">e26cf2be</a> - <a href="https://task.beeznest.com/issues/15394">BT#15394</a>) Internal: Fix wrapped results when using getColorPallete</li>
             <li>[2019-03-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/bc97795e833789986522340228a7ca8ba41b74cf">bc97795e</a> - <a href="https://task.beeznest.com/issues/15312">BT#15312</a>) Social: Update css btn geolocazation</li>
-            <li>[2019-03-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/982038650261a1ab22fcf98513d672bc232920b8">98203865</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2854">GH#2854</a>) Social: Add responsive css in img social post -rest #2854</li>
-            <li>[2019-03-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/53fa359966f655e0579795e9420a52b37d72c486">53fa3599</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2854">GH#2854</a>) Social: Use responsive css class, fixes big images in social posts #2854</li>
-            <li>[2019-03-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/6e36fbcd2ca533e18053e8bfb1fc21290ae9ba17">6e36fbcd</a> - <a href="https://task.beeznest.com/issues/15438">BT#15438</a>) Internal: Use bccomp to compare float requires php-bcmath extension BT#15438</li>
+            <li>[2019-03-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/982038650261a1ab22fcf98513d672bc232920b8">98203865</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2854">GH#2854</a>) Social: Add responsive css in img social post</li>
+            <li>[2019-03-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/53fa359966f655e0579795e9420a52b37d72c486">53fa3599</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2854">GH#2854</a>) Social: Use responsive css class, fixes big images in social posts</li>
+            <li>[2019-03-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/6e36fbcd2ca533e18053e8bfb1fc21290ae9ba17">6e36fbcd</a> - <a href="https://task.beeznest.com/issues/15438">BT#15438</a>) Internal: Use bccomp to compare float requires php-bcmath extension</li>
             <li>[2019-03-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/e3f1130cbf9b156ac1b8ee996ad800bbd879e7c2">e3f1130c</a> - <a href="https://task.beeznest.com/issues/15417">BT#15417</a>) Social: When adding groups with category respect the category max limit</li>
             <li>[2019-03-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/80d80a53a696026950beaeb36ca104808cada2e3">80d80a53</a>) Quiz: Fix missing column in matching answer list</li>
             <li>[2019-03-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/0a1ba00c355e5e431330639eef64db0f48d670dc">0a1ba00c</a>) Internal: Remove bcmath requirement</li>
-            <li>[2019-03-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/30a15f33b6ebeaa6f55c804eb74fffbfc346f72a">30a15f33</a> - <a href="https://task.beeznest.com/issues/15438">BT#15438</a>) Internal: Check if bccomp function exists BT#15438</li>
-            <li>[2019-03-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/457e2fe725ad84304d932acecbc0dd11e9053958">457e2fe7</a> - <a href="https://task.beeznest.com/issues/15438">BT#15438</a>) Internal: Use bccomp to compare floats instead of '>=' fixes BT#15438</li>
-            <li>[2019-03-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/9be1fe6059fe4fbd66f8de5ac4bc7f6193085d01">9be1fe60</a> - <a href="https://task.beeznest.com/issues/15437">BT#15437</a>) Document: Hide protected folders from student BT#15437</li>
+            <li>[2019-03-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/30a15f33b6ebeaa6f55c804eb74fffbfc346f72a">30a15f33</a> - <a href="https://task.beeznest.com/issues/15438">BT#15438</a>) Internal: Check if bccomp function exists</li>
+            <li>[2019-03-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/457e2fe725ad84304d932acecbc0dd11e9053958">457e2fe7</a> - <a href="https://task.beeznest.com/issues/15438">BT#15438</a>) Internal: Use bccomp to compare floats instead of '>='</li>
+            <li>[2019-03-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/9be1fe6059fe4fbd66f8de5ac4bc7f6193085d01">9be1fe60</a> - <a href="https://task.beeznest.com/issues/15437">BT#15437</a>) Document: Hide protected folders from student</li>
             <li>[2019-03-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/764ef902d9464d6d4573afc32631087a19b6b0e2">764ef902</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2851">GH#2851</a>) Display: Align input in arabic #RTL</li>
             <li>[2019-03-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/a6a1fe25b0f6cb164d1d92cdd63f4666439ccdae">a6a1fe25</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2850">GH#2850</a>) Display: Change Arab flag (was UAE) #RTL</li>
             <li>[2019-03-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/561ab909041e642411185155deb441891a458a4a">561ab909</a> - <a href="https://task.beeznest.com/issues/15175">BT#15175</a>) Display: Fix css icon</li>
-            <li>[2019-03-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/2f129063e3edd0f97e84e654ef31f7aa26dd9e22">2f129063</a> - <a href="https://task.beeznest.com/issues/15437">BT#15437</a>) Learning path: Fix access to learning path folder and session course docs BT#15437</li>
-            <li>[2019-03-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/52ffe3b37a97d40f279df8ebcbf0467a7b48e215">52ffe3b3</a> - <a href="https://task.beeznest.com/issues/15437">BT#15437</a>) Learning path: Fix access to learning path folder and session course docs BT#15437</li>
+            <li>[2019-03-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/2f129063e3edd0f97e84e654ef31f7aa26dd9e22">2f129063</a> - <a href="https://task.beeznest.com/issues/15437">BT#15437</a>) Learning path: Fix access to learning path folder and session course docs</li>
+            <li>[2019-03-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/52ffe3b37a97d40f279df8ebcbf0467a7b48e215">52ffe3b3</a> - <a href="https://task.beeznest.com/issues/15437">BT#15437</a>) Learning path: Fix access to learning path folder and session course docs</li>
             <li>[2019-03-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/d86d9803d8d0e777405a0fbf89c0b60f05e18005">d86d9803</a> - <a href="https://task.beeznest.com/issues/15177">BT#15177</a>) Global chat: WIP: Chat sync issues</li>
             <li>[2019-03-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/8dac91b4e9a31bcd5a773dc4edc4b7df5941ed42">8dac91b4</a> - <a href="https://task.beeznest.com/issues/15411">BT#15411</a>) Plugin: Wiris: Fix wiris plugin, adding ckeditor plugin requirements</li>
             <li>[2019-03-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/2a2ae0836898e0b0ba2dee1386520c10c4968eb8">2a2ae083</a> - <a href="https://task.beeznest.com/issues/15173">BT#15173</a>) Forum: Fix notification subject</li>
-            <li>[2019-03-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/fa99373d8627837f101bb13b996a7038d2f252e4">fa99373d</a> - <a href="https://task.beeznest.com/issues/15173">BT#15173</a>) Forum: Fix revision proposed text in forums BT#15173</li>
-            <li>[2019-03-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/abeb752448b0c56ff0dfcf51cc4b9524ac9c8b45">abeb7524</a> - <a href="https://task.beeznest.com/issues/15173">BT#15173</a>) Forum: Fix re:re: forum title BT#15173</li>
+            <li>[2019-03-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/fa99373d8627837f101bb13b996a7038d2f252e4">fa99373d</a> - <a href="https://task.beeznest.com/issues/15173">BT#15173</a>) Forum: Fix revision proposed text in forums</li>
+            <li>[2019-03-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/abeb752448b0c56ff0dfcf51cc4b9524ac9c8b45">abeb7524</a> - <a href="https://task.beeznest.com/issues/15173">BT#15173</a>) Forum: Fix re:re: forum title</li>
             <li>[2019-03-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/08686dd2b2d935fae7a8e44bce7376935799aba1">08686dd2</a> - <a href="https://task.beeznest.com/issues/15394">BT#15394</a>) Sessions: Parse dates wihout time</li>
             <li>[2019-03-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/d0085e1acf5d163c4f241f913c833563491a7c97">d0085e1a</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2808">GH#2808</a>) Plugin: BuyCourse: Fix PR#2808 that adds a duplicate table field in the plugin_buycourses_global_config table</li>
             <li>[2019-03-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/07693517c5bb5c966d948a94efa88f0b86a7dd2a">07693517</a>) Display: Update icons colors</li>
             <li>[2019-03-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/3006b730ba8a1e9adf779b76a0de3ce3a7758588">3006b730</a> - <a href="https://task.beeznest.com/issues/15177">BT#15177</a>) Global chat: Fix global chat heart beat</li>
-            <li>[2019-03-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/5dff17315a6df8a45322fefe211d83d69417a711">5dff1731</a> - <a href="https://task.beeznest.com/issues/15309">BT#15309</a>) Forum: Fix group url when "global_forums_course_id" is set BT#15309</li>
+            <li>[2019-03-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/5dff17315a6df8a45322fefe211d83d69417a711">5dff1731</a> - <a href="https://task.beeznest.com/issues/15309">BT#15309</a>) Forum: Fix group url when "global_forums_course_id" is set</li>
             <li>[2019-03-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/9b25f66fe0c77a718357956f5f2c7e6c6ae90b73">9b25f66f</a>) Social: Fix PHP error when message like is disabled https://github.com/chamilo/chamilo-lms/commit/9af667f5af4f90180ed69ebfb2aeda354ccd6198</li>
             <li>[2019-03-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/2ebdce452e7efafe40cf0e58313d43d90c9b152f">2ebdce45</a> - <a href="https://task.beeznest.com/issues/15280">BT#15280</a>) Survey: Fix copy survey when is_required is set</li>
-            <li>[2019-03-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/28982feb570ce3e8cf31f99dc4c363803dc3de29">28982feb</a> - <a href="https://task.beeznest.com/issues/15173">BT#15173</a>) Forum: Fix send forum notification when "global_forums_course_id" is set BT#15173</li>
-            <li>[2019-03-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/20e80b236f01b1b90f1884aee8c314ac3aaecad6">20e80b23</a> - <a href="https://task.beeznest.com/issues/15173">BT#15173</a>) Forum: Remove course info if "global_forums_course_id" is set BT#15173</li>
+            <li>[2019-03-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/28982feb570ce3e8cf31f99dc4c363803dc3de29">28982feb</a> - <a href="https://task.beeznest.com/issues/15173">BT#15173</a>) Forum: Fix send forum notification when "global_forums_course_id" is set</li>
+            <li>[2019-03-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/20e80b236f01b1b90f1884aee8c314ac3aaecad6">20e80b23</a> - <a href="https://task.beeznest.com/issues/15173">BT#15173</a>) Forum: Remove course info if "global_forums_course_id" is set</li>
             <li>[2019-03-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/6a2b20afe713dc9347ee6dab7e63654a9e681b39">6a2b20af</a> - <a href="https://task.beeznest.com/issues/15173">BT#15173</a>) Forum: Add message in post notification</li>
             <li>[2019-03-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/d83f9f956c33c45fe7cbc1b7bf455e568d70ddd0">d83f9f95</a> - <a href="https://task.beeznest.com/issues/15173">BT#15173</a>) Social: Replace "Re:" with icon</li>
             <li>[2019-03-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/5c44af75563e90fd253bf4d87aa15ab6ec06aad0">5c44af75</a>) Display: Fix dialog ui</li>
@@ -409,7 +627,7 @@
             <li>[2019-03-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/9d2f24a74a8b1960c5c6fa448cf8c0271774b8c1">9d2f24a7</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2755">GH#2755</a>) Learning path: Fix SCORM type</li>
             <li>[2019-03-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/88e095abf358fe2b3079e1e5a1deb27bff8f4656">88e095ab</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2755">GH#2755</a>) Learning path: Add iframe type</li>
             <li>[2019-03-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/c10632aeb1acf9b8dc136b40463be0d9557d7d40">c10632ae</a> - <a href="https://task.beeznest.com/issues/15374">BT#15374</a>) Skills: Fix query for badge assertion</li>
-            <li>[2019-03-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/364010011e323fbb52de6e1019f854a343cf0503">36401001</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2821">GH#2821</a>) Plugins: LTI: Fix ImsLti plugin by unserialize settings refs #2821</li>
+            <li>[2019-03-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/364010011e323fbb52de6e1019f854a343cf0503">36401001</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2821">GH#2821</a>) Plugins: LTI: Fix ImsLti plugin by unserialize settings</li>
             <li>[2019-03-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/b23f847a71351231b6978317240fa3814fbccbf9">b23f847a</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2755">GH#2755</a>) Learning path: Fix view scorm</li>
             <li>[2019-03-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/c18601c84eb836e8c140011a4ec2a06f5bd39220">c18601c8</a>) Internal: Add missing file in be4f22be03c332765704a7321a4e89878ae38cd8</li>
             <li>[2019-03-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/be4f22be03c332765704a7321a4e89878ae38cd8">be4f22be</a>) Internal: Moving api_unserialize_content for Unserialize::unserialize Moving to avoid overload api.lib.php</li>
@@ -510,7 +728,7 @@
             <li>[2019-02-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/2f89e9c033f611be4f3b8e02862c11f5fae5d6a5">2f89e9c0</a> - <a href="https://task.beeznest.com/issues/15270">BT#15270</a>) Internal: Change jqgrid settings to be used in sortable table too</li>
             <li>[2019-02-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/1c77a2cdd225884db5d4bdec1e04e9385f18db17">1c77a2cd</a> - <a href="https://task.beeznest.com/issues/13954">BT#13954</a>) Quiz: Fix double column for matching draggable</li>
             <li>[2019-02-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/cf0c96904d74dcec9273baa88cd5819ca46b65ff">cf0c9690</a>) Document: Update document.lib.php</li>
-            <li>[2019-02-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/097585fd4a5ac90e21b590427b88c59d9918af60">097585fd</a> - <a href="https://task.beeznest.com/issues/15252">BT#15252</a>) Tracking: Config "lp_minimum_item", depends in a course extra field BT#15252 The course extra field name is "new_tracking_system". It should be turned on in order to process the new stats, otherwise it will load the classic stats.</li>
+            <li>[2019-02-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/097585fd4a5ac90e21b590427b88c59d9918af60">097585fd</a> - <a href="https://task.beeznest.com/issues/15252">BT#15252</a>) Tracking: Config "lp_minimum_item", depends in a course extra field. The course extra field name is "new_tracking_system". It should be turned on in order to process the new stats, otherwise it will load the classic stats.</li>
             <li>[2019-02-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/bb29bba32a2ef3756d5d6b98b68436f12964c573">bb29bba3</a>) Admin: Fix default value in checkbox extra field in a new element</li>
             <li>[2019-02-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/894b8fb861d7a82ac106e0d4e21ea85361e3d2e6">894b8fb8</a> - <a href="https://task.beeznest.com/issues/15262">BT#15262</a>) Quiz: Add log when creating/updating questions</li>
             <li>[2019-01-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/2f6d826c59d8ec2fdbe7736c336026c99616c41c">2f6d826c</a>) Forum: Fix condition when adding new forum thread</li>
@@ -625,7 +843,7 @@
             <li>[2018-12-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/8d88b9d0c1746371073e0fceef1971911f357d4a">8d88b9d0</a> - <a href="https://task.beeznest.com/issues/15095">BT#15095</a>) Fix login_as to session admins with students</li>
             <li>[2018-12-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/b7f800406f49ec42409193a1df284b2e029f51d4">b7f80040</a> - <a href="https://task.beeznest.com/issues/15095">BT#15095</a>) Fix user info about api_can_login_as function</li>
             <li>[2018-12-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/04bdba481e28d56f2317175acb1104bfd2d6ffde">04bdba48</a> - <a href="https://task.beeznest.com/issues/15132">BT#15132</a>) Use new way to get fill in blank answer instead of old style</li>
-            <li>[2018-12-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/2da99aeb3e0baf9fec5384f3721a2b58f3ca9d16">2da99aeb</a> - <a href="https://task.beeznest.com/issues/15131">BT#15131</a>) LP: show download link instead of downloading the file directly BT#15131</li>
+            <li>[2018-12-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/2da99aeb3e0baf9fec5384f3721a2b58f3ca9d16">2da99aeb</a> - <a href="https://task.beeznest.com/issues/15131">BT#15131</a>) LP: show download link instead of downloading the file directly</li>
             <li>[2018-12-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/7aaf04346bea4e68733b081dc27e4f90f25a0eb3">7aaf0434</a> - <a href="https://task.beeznest.com/issues/15095">BT#15095</a>) Reset cId and gId when login</li>
             <li>[2018-12-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/7e0a264fddd1f55c5b5e693521cbaf534ad6c3cb">7e0a264f</a> - <a href="https://task.beeznest.com/issues/15095">BT#15095</a>) Fix session catalog when session has no general coach</li>
             <li>[2018-12-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/669d3a4e727991cf9da7b0ae6642ed3979f0a45e">669d3a4e</a> - <a href="https://task.beeznest.com/issues/15095">BT#15095</a>) Avoid set anonymous user in apcu</li>
@@ -650,16 +868,16 @@
             <li>[2018-11-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/b72f4689a5bfcc5c06cfaa65bfe9ff9486fac067">b72f4689</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2705">GH#2705</a>) Add links to official documentation to contribution documentation</li>
             <li>[2018-11-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/26eb4994105487abd8032c1ad6ddf5a6aab98946">26eb4994</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2738">GH#2738</a>) Add Guzzle as main dependency to avoid depending on dev environment for version-checker AJAX call</li>
             <li>[2018-11-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/99429a53cb378195472bda3145131344a4b91e51">99429a53</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2180">GH#2180</a>) Survey: Add one_question_per_page and shuffle in restore and backup - Allow edit of "shuffle" and "one question per page" #2180</li>
-            <li>[2018-11-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/6ce609b5eb4958616f6fe20b86e0bd19bf9ad3ea">6ce609b5</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2734">GH#2734</a>) Moodle import check if value is not empty #2734</li>
+            <li>[2018-11-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/6ce609b5eb4958616f6fe20b86e0bd19bf9ad3ea">6ce609b5</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2734">GH#2734</a>) Moodle import check if value is not empty</li>
             <li>[2018-11-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/795a50a6442d3d3737dc354126223bed30bf9a1c">795a50a6</a>) Set fixed pages to be opened in a new window</li>
-            <li>[2018-11-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/c72fef5614191fbbca9b66ddd36c8acb0afb9eaf">c72fef56</a> - <a href="https://task.beeznest.com/issues/14957">BT#14957</a>) Fix doodle edition BT#14957</li>
+            <li>[2018-11-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/c72fef5614191fbbca9b66ddd36c8acb0afb9eaf">c72fef56</a> - <a href="https://task.beeznest.com/issues/14957">BT#14957</a>) Fix doodle edition</li>
             <li>[2018-11-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/3650185b93c775bcef25ad37fd1de4b8d7aa719d">3650185b</a> - <a href="https://task.beeznest.com/issues/14957">BT#14957</a>) Fix icons + save when user is not available</li>
-            <li>[2018-11-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/d06eac7efe62308e5a9402036d43d1fdc22f97d1">d06eac7e</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2180">GH#2180</a>) Fix survey "one question per page" + fix question list  #2180</li>
+            <li>[2018-11-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/d06eac7efe62308e5a9402036d43d1fdc22f97d1">d06eac7e</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2180">GH#2180</a>) Fix survey "one question per page" + fix question list</li>
             <li>[2018-11-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/82bd13b183dbfd69bd5618d386d924c11a0fe27d">82bd13b1</a>) Fix template show breadcrumb/shortcut tool bar if show header = true</li>
-            <li>[2018-11-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/32ba8ee3e5c25ff86c168c78adc7155a8b9ff4a0">32ba8ee3</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2734">GH#2734</a>) Moodle Import - fix e_notice #2734</li>
-            <li>[2018-11-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/8f8485a0e850adc8b600f977ea54a1a3cedb530e">8f8485a0</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2734">GH#2734</a>) Moodle Import - Restore 3.x backups #2734</li>
+            <li>[2018-11-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/32ba8ee3e5c25ff86c168c78adc7155a8b9ff4a0">32ba8ee3</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2734">GH#2734</a>) Moodle Import - fix e_notice</li>
+            <li>[2018-11-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/8f8485a0e850adc8b600f977ea54a1a3cedb530e">8f8485a0</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2734">GH#2734</a>) Moodle Import - Restore 3.x backups</li>
             <li>[2018-11-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/575960764324658f7c29d9be968c4b7033448c48">57596076</a>) Fix copy of plugin files</li>
-            <li>[2018-11-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/a1020ecea33e999702da4fb6ee2f4ed5f9e9bf86">a1020ece</a> - <a href="https://task.beeznest.com/issues/14836">BT#14836</a>) Fix course home, use only one function to get the course tools BT#14836</li>
+            <li>[2018-11-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/a1020ecea33e999702da4fb6ee2f4ed5f9e9bf86">a1020ece</a> - <a href="https://task.beeznest.com/issues/14836">BT#14836</a>) Fix course home, use only one function to get the course tools</li>
             <li>[2018-11-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/6bcdf30c4c37ec37c52226cd879e89663c5ece5a">6bcdf30c</a>) Refactor - Move code into functions</li>
             <li>[2018-11-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/85c98572e0d2cc9b5f0921eab767c2a0f8eab35e">85c98572</a>) Moodle Import - Improve readability</li>
             <li>[2018-11-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/0628080e0c175d51876580cbd7ab2c648517adc5">0628080e</a> - <a href="https://task.beeznest.com/issues/14957">BT#14957</a>) Fix date time range UI when creating a survey meeting</li>
@@ -674,7 +892,7 @@
             <li>[2018-11-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/2985cb2b4979f5f1f6575759750dacca396c8011">2985cb2b</a> - <a href="https://task.beeznest.com/issues/13469">BT#13469</a>) LTI add missing class</li>
             <li>[2018-11-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/f329c0027e31e5258ca82d90b8bcd62c4fe7f0b5">f329c002</a> - <a href="https://task.beeznest.com/issues/15055">BT#15055</a>) Fix session order</li>
             <li>[2018-11-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/a250035a3032e969436492ee27c2b7a68a4f3ea0">a250035a</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2725">GH#2725</a>) Fix document preview</li>
-            <li>[2018-11-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/a69446b4079fb5be7c5eedd2a5b1ed9d0025b0f2">a69446b4</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2732">GH#2732</a>) Fix "show_course_shortcut" position closes #2732</li>
+            <li>[2018-11-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/a69446b4079fb5be7c5eedd2a5b1ed9d0025b0f2">a69446b4</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2732">GH#2732</a>) Fix "show_course_shortcut" position</li>
             <li>[2018-11-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/516abd40f99e3db945bdfb7f1f1fa489fc0d03e7">516abd40</a>) Fix double htmlspecialchars https://github.com/chamilo/chamilo-lms/commit/d9c37bf1f3e43b67b4f5b54938af2c45a51db309#commitcomment-31372296</li>
             <li>[2018-11-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/5cf9630048754194e8533951a9891d2acfd88cd3">5cf96300</a>) Undo htmlspecialchars see: https://github.com/chamilo/chamilo-lms/commit/d9c37bf1f3e43b67b4f5b54938af2c45a51db309#commitcomment-31372296</li>
             <li>[2018-11-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/090bb3d1e7ba4b3d1b5682861f091b671359359d">090bb3d1</a> - <a href="https://task.beeznest.com/issues/13469">BT#13469</a>) LTI add substitution of variables</li>
@@ -684,7 +902,7 @@
             <li>[2018-11-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/ed957bc3f25c63e246bbb577eedc343168138770">ed957bc3</a> - <a href="https://task.beeznest.com/issues/15056">BT#15056</a>) Remove duplicate fix for c_item_property.to_group_id migration</li>
             <li>[2018-11-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/706355aec8437619c87853f191b287a4375e4183">706355ae</a> - <a href="https://task.beeznest.com/issues/13954">BT#13954</a>) Use group.iid to get correct student list</li>
             <li>[2018-11-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/df571b4733ea9261b9e0d81b6cd02b373ec4b336">df571b47</a> - <a href="https://task.beeznest.com/issues/13954">BT#13954</a>) Use group.iid to get the student/tutor list</li>
-            <li>[2018-11-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/b621f2d25a5cf0f0df3d41bac61326b5cafd5828">b621f2d2</a> - <a href="https://task.beeznest.com/issues/15080">BT#15080</a>) Add GDPR (personal data page) when social tool is disabled BT#15080</li>
+            <li>[2018-11-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/b621f2d25a5cf0f0df3d41bac61326b5cafd5828">b621f2d2</a> - <a href="https://task.beeznest.com/issues/15080">BT#15080</a>) Add GDPR (personal data page) when social tool is disabled</li>
             <li>[2018-11-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/b3fa8b01b030d9ccd520be127dfd5dff202c8d25">b3fa8b01</a> - <a href="https://task.beeznest.com/issues/14835">BT#14835</a>) Fix scorm layout</li>
             <li>[2018-11-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/af715c54c18f30a270f6abef0e1162f3d94d98d6">af715c54</a>) Fix - show certificate default content</li>
             <li>[2018-11-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/74894f2523c372312330fbc58108afe5dc424c74">74894f25</a> - <a href="https://task.beeznest.com/issues/13469">BT#13469</a>) LTI avoid escape html for description in admin page</li>
@@ -713,13 +931,13 @@
             <li>[2018-11-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/25a76e04282f89399c29616bfa438e27460bfef3">25a76e04</a>) Fix reinstall problem</li>
             <li>[2018-11-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/f6cb14b3b352d09af4569d1de8e143b63b356246">f6cb14b3</a> - <a href="https://task.beeznest.com/issues/15058">BT#15058</a>) Fix company report + remove e_notice</li>
             <li>[2018-11-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/e775761113ff33e700cde0eefae503c94e047f1d">e7757611</a> - <a href="https://task.beeznest.com/issues/15056">BT#15056</a>) Use invited course users and not registered users</li>
-            <li>[2018-11-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/b1143a0ef883236d581db4edd25c6825f5e2bbfe">b1143a0e</a> - <a href="https://task.beeznest.com/issues/15033">BT#15033</a>) Fix survey question counter + add a page break when multiplying BT#15033</li>
+            <li>[2018-11-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/b1143a0ef883236d581db4edd25c6825f5e2bbfe">b1143a0e</a> - <a href="https://task.beeznest.com/issues/15033">BT#15033</a>) Fix survey question counter + add a page break when multiplying</li>
             <li>[2018-11-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/13b5fcf76e880cf736b22b60bd29c1e4e9908c86">13b5fcf7</a>) Avoid doodle-type survey when checking other survey invitations</li>
-            <li>[2018-11-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/e1e866de59de355b2bee7cf36b31332f43de10a4">e1e866de</a> - <a href="https://task.beeznest.com/issues/14957">BT#14957</a>) Add datepair/date time picker range improve UI meeting survey BT#14957 Requires composer update</li>
+            <li>[2018-11-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/e1e866de59de355b2bee7cf36b31332f43de10a4">e1e866de</a> - <a href="https://task.beeznest.com/issues/14957">BT#14957</a>) Add datepair/date time picker range improve UI meeting survey. Requires composer update</li>
             <li>[2018-11-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/755344ec69185548a1dd0c839cc5708dd78eaeab">755344ec</a> - <a href="https://task.beeznest.com/issues/15049">BT#15049</a>) Fix wrong course list in stats page</li>
             <li>[2018-11-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/a28fe6bfd5f0c49a7cf99f0471b2f59524de1bb4">a28fe6bf</a> - <a href="https://task.beeznest.com/issues/13469">BT#13469</a>) LTI Avoid translate name from course name created by plugin</li>
             <li>[2018-11-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/fe04a731bebbe56624f06af0e2a9de677e5a4495">fe04a731</a>) Restoring "data_table" breaks html tables in 1.11.x installations sent here: https://github.com/chamilo/chamilo-lms/commit/d734f37cf3c933ca75bbd2cd41c9a9e1643f884b#commitcomment-31218612</li>
-            <li>[2018-11-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/4b4252d91b084a2d83075b446a30a0985a3bb100">4b4252d9</a> - <a href="https://task.beeznest.com/issues/15044">BT#15044</a>) Force to show scroll when a PDF is in landscape mode BT#15044 Issue reported here: https://github.com/kogmbh/ViewerJS/issues/111</li>
+            <li>[2018-11-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/4b4252d91b084a2d83075b446a30a0985a3bb100">4b4252d9</a> - <a href="https://task.beeznest.com/issues/15044">BT#15044</a>) Force to show scroll when a PDF is in landscape mode. Issue reported here: https://github.com/kogmbh/ViewerJS/issues/111</li>
             <li>[2018-11-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/735e13b54e1d1ff9b505318111b6c9f9450298ce">735e13b5</a> - <a href="https://task.beeznest.com/issues/15046">BT#15046</a>) Admin can also see the report page</li>
             <li>[2018-11-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/40f2d83175a0de651a3d6dc55b48a04f1e0f5215">40f2d831</a> - <a href="https://task.beeznest.com/issues/13469">BT#13469</a>) LTI fix launch with empty custom params</li>
             <li>[2018-11-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/2f2ecfbc088d998cb200b46c3d87dddfc9ade616">2f2ecfbc</a> - <a href="https://task.beeznest.com/issues/14957">BT#14957</a>) Block options not allowed for the meeting survey</li>
@@ -730,7 +948,7 @@
             <li>[2018-11-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/6d09bf9ed8a617d07a0354b45bdb07c04ac1860a">6d09bf9e</a> - <a href="https://task.beeznest.com/issues/13469">BT#13469</a>) LTI allow send custom params</li>
             <li>[2018-11-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/11658ff3567ea87e437794bf90e5e967f621dd4c">11658ff3</a> - <a href="https://task.beeznest.com/issues/13469">BT#13469</a>) LTI Allow edit/configure tool with deep linking</li>
             <li>[2018-11-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/92962a98e4ffe87f444a1fec3d52fc203d7679a8">92962a98</a>) Fix table resume session</li>
-            <li>[2018-11-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/08e9f1df2cc0577754662792a771b6f84a7db20e">08e9f1df</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2721">GH#2721</a>) Remove each() because it's depecreated in php7.2 #2721</li>
+            <li>[2018-11-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/08e9f1df2cc0577754662792a771b6f84a7db20e">08e9f1df</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2721">GH#2721</a>) Remove each() because it's depecreated in php7.2</li>
             <li>[2018-11-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/e60db238799ace652e60f9456f03a84f2a03b8f7">e60db238</a>) Plugin: Card Game: Minor: Bumped plugin version after a series of improvements</li>
             <li>[2018-11-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/3c96c5ae5aea736be4b2cb3f18d176d20571fbfa">3c96c5ae</a>) Plugin: Card Game: Minor: Remove "one attempt" marker on card-game icon when just attempted.</li>
             <li>[2018-11-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/dc8491831e7428879f2c78d76b38b1f88ea01524">dc849183</a>) Plugin: Card Game: Fix missing session variable setting in previous commit + add "loose" action to save data in database if already found</li>
@@ -752,8 +970,8 @@
             <li>[2018-11-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/0a1bdf7686b52c965c7f713d7dfc4bd22e6b4992">0a1bdf76</a> - <a href="https://task.beeznest.com/issues/14972">BT#14972</a>) Fix total ranking value (session id was not set)</li>
             <li>[2018-11-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/35f5f30a21c40c98f2a6d5eb34b8a04d280390c4">35f5f30a</a> - <a href="https://task.beeznest.com/issues/10885">BT#10885</a>) Fix course restore when exercise in LP has a document in description</li>
             <li>[2018-11-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/bdb0adb1b638121269bf9a6e0dfd4352e1cab536">bdb0adb1</a>) Add info about c_item_property and extra_field_values tables optimization for deleting users</li>
-            <li>[2018-11-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/2a0bec5ca8d6884458a5e2ced8f3a3fc52b4ea13">2a0bec5c</a> - <a href="https://task.beeznest.com/issues/15022">BT#15022</a>) Use iconv if available to convert non standard ASCII (CP437) BT#15022</li>
-            <li>[2018-10-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/f6cca27aea51eab47611f92e7f8f029abd9eedc3">f6cca27a</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2717">GH#2717</a>) Add chart in tools usage stats - loosely refs #2717</li>
+            <li>[2018-11-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/2a0bec5ca8d6884458a5e2ced8f3a3fc52b4ea13">2a0bec5c</a> - <a href="https://task.beeznest.com/issues/15022">BT#15022</a>) Use iconv if available to convert non standard ASCII (CP437)</li>
+            <li>[2018-10-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/f6cca27aea51eab47611f92e7f8f029abd9eedc3">f6cca27a</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2717">GH#2717</a>) Add chart in tools usage stats</li>
             <li>[2018-10-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/5bf5d3c76b23902d4ecd727af88661c72921e3db">5bf5d3c7</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2717">GH#2717</a>) Create getToolsStats() to get tools stats for the platform rather than calling printToolStats and having it printed straight away - loosely refs #2717</li>
             <li>[2018-10-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/82067510bff0fd29308892547cef4293eb13d81f">82067510</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2717">GH#2717</a>) Update charts summary</li>
             <li>[2018-10-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/317b0ab5feafa9ba5574346203da6d5792a1ade3">317b0ab5</a> - <a href="https://task.beeznest.com/issues/13469">BT#13469</a>) LTI Fix plugin installation</li>
@@ -767,7 +985,7 @@
             <li>[2018-10-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/9fcd081c9dd3bc5b8d5b466ac51f40171c89e83d">9fcd081c</a> - <a href="https://task.beeznest.com/issues/15021">BT#15021</a>) Set the course driver as default</li>
             <li>[2018-10-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/77b82879798b8d142f10da8356e9483f8cceff98">77b82879</a> - <a href="https://task.beeznest.com/issues/14972">BT#14972</a>) Use exercise platform score settings in the gradebook graph</li>
             <li>[2018-10-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/300cbea74eaaf15ab21d7b1059351b9904d515c9">300cbea7</a> - <a href="https://task.beeznest.com/issues/14988">BT#14988</a>) Student publication is more strict when using it as a prereq in a LP In order to continue the next step, the student should add at least one student publication. BT#14988</li>
-            <li>[2018-10-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/d1931fe6debf890fffafabee793c4b48e3c8d41b">d1931fe6</a> - <a href="https://task.beeznest.com/issues/15028">BT#15028</a>) Block upload if setting allow_only_one_student_publication_per_user on BT#15028</li>
+            <li>[2018-10-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/d1931fe6debf890fffafabee793c4b48e3c8d41b">d1931fe6</a> - <a href="https://task.beeznest.com/issues/15028">BT#15028</a>) Block upload if setting allow_only_one_student_publication_per_user</li>
             <li>[2018-10-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/517f1fc7272e3927351b4daba6647ba48e969946">517f1fc7</a> - <a href="https://task.beeznest.com/issues/13469">BT#13469</a>) WIP LTI adding privacy settings</li>
             <li>[2018-10-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/869f6f39fbf47ca336be5a3b9aabfc8c24cfc664">869f6f39</a> - <a href="https://task.beeznest.com/issues/13469">BT#13469</a>) LTI verify oauth signature for deep linking</li>
             <li>[2018-10-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/5fa59382d099d32728e6dc8ef72e5178b18b5b36">5fa59382</a> - <a href="https://task.beeznest.com/issues/15024">BT#15024</a>) Fix filter for doc url when viewing LP item</li>
@@ -785,7 +1003,7 @@
             <li>[2018-10-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/027d55ca4468179b50a40c9583d2020656457e0a">027d55ca</a> - <a href="https://task.beeznest.com/issues/13469">BT#13469</a>) LTI fix requests processing</li>
             <li>[2018-10-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/a16f361eccb9f262067e0f9fe96b385d6a54f35f">a16f361e</a> - <a href="https://task.beeznest.com/issues/13469">BT#13469</a>) Lti fix service request</li>
             <li>[2018-10-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/07c746c38214fc9e3601d4e4da1e9f56173b7693">07c746c3</a> - <a href="https://task.beeznest.com/issues/13469">BT#13469</a>) WIP lti plugin send responses</li>
-            <li>[2018-10-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/4077065463958473470fb8095a55788c8aa09569">40770654</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2035">GH#2035</a>) Fix check access to course in local.inc Related to #2035</li>
+            <li>[2018-10-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/4077065463958473470fb8095a55788c8aa09569">40770654</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2035">GH#2035</a>) Fix check access to course in local.inc</li>
             <li>[2018-10-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/7d498495986a2779637e114fbc90700011da5931">7d498495</a> - <a href="https://task.beeznest.com/issues/14990">BT#14990</a>) Fix build survey question when building course</li>
             <li>[2018-10-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/0e3890ad3f97cdf6a9564e21ef6a85d959e9ecd9">0e3890ad</a> - <a href="https://task.beeznest.com/issues/13469">BT#13469</a>) Add method to check is eval result exists</li>
             <li>[2018-10-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/99c99c97a6a1567aa002b22408be04d99d0b599e">99c99c97</a> - <a href="https://task.beeznest.com/issues/13469">BT#13469</a>) LTI fix save evaluation result</li>
@@ -799,7 +1017,7 @@
             <li>[2018-10-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/9246c3decd1c3d08bd2d90433de9409dc249f1ee">9246c3de</a> - <a href="https://task.beeznest.com/issues/14970">BT#14970</a>) Fix custom certificate errors when checking as admin</li>
             <li>[2018-10-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/3c69aea2dbdb0bf7712328c5f8224afeb002fbbd">3c69aea2</a> - <a href="https://task.beeznest.com/issues/14747">BT#14747</a>) Allow set custom url id when creating session</li>
             <li>[2018-10-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/ac7c97f283f852c444bb33891a67c024268348e1">ac7c97f2</a> - <a href="https://task.beeznest.com/issues/14967">BT#14967</a>) Admin can see all courses in question pool</li>
-            <li>[2018-10-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/949346097bb216ea8eb426168e8bf856d45fd141">94934609</a> - <a href="https://task.beeznest.com/issues/14949">BT#14949</a>) When moving a forum from a group to another update c_item_property Fixes BT#14949 You can move a course forum to a course-group forum and vice versa</li>
+            <li>[2018-10-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/949346097bb216ea8eb426168e8bf856d45fd141">94934609</a> - <a href="https://task.beeznest.com/issues/14949">BT#14949</a>) When moving a forum from a group to another update c_item_property. You can move a course forum to a course-group forum and vice versa</li>
             <li>[2018-10-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/c9e7c9e5bb9950e7a97d7d96a3c3711a5e624df5">c9e7c9e5</a> - <a href="https://task.beeznest.com/issues/14334">BT#14334</a>) Add introduction to form when adding read-out text</li>
             <li>[2018-10-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/2267f91f0d732f2800efc2a9df10ee8fb1bfb3bb">2267f91f</a> - <a href="https://task.beeznest.com/issues/14334">BT#14334</a>) Rename highlighted document to read-out text</li>
             <li>[2018-06-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/298777251977ca1397b989de311bf3bbcb508fdd">29877725</a> - <a href="https://task.beeznest.com/issues/14334">BT#14334</a>) Fix detecting special chars in highlighted doc</li>
@@ -808,7 +1026,7 @@
             <li>[2018-06-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/4d505701cb10f9b155f73e48cc575bbb27f1d747">4d505701</a> - <a href="https://task.beeznest.com/issues/14334">BT#14334</a>) Fix move lp item</li>
             <li>[2018-10-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/1811e278a5e9e909cb3843f1fa0df14747cdc260">1811e278</a> - <a href="https://task.beeznest.com/issues/14921">BT#14921</a>) Avoid convert wav audio to wav</li>
             <li>[2018-10-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/978a89642bbb962ebaaaca56943ed17fb7d1f80b">978a8964</a> - <a href="https://task.beeznest.com/issues/14921">BT#14921</a>) Whispeak allow save audio in mono</li>
-            <li>[2018-10-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/2fb58b5d0a3dbfe3e0398d429fbc216759fc6a5a">2fb58b5d</a> - <a href="https://task.beeznest.com/issues/14947">BT#14947</a>) SCORM: Don't update lesson status, SCORM should send an update This fixes an error that sets an item to not attempted automatically BT#14947</li>
+            <li>[2018-10-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/2fb58b5d0a3dbfe3e0398d429fbc216759fc6a5a">2fb58b5d</a> - <a href="https://task.beeznest.com/issues/14947">BT#14947</a>) SCORM: Don't update lesson status, SCORM should send an update This fixes an error that sets an item to not attempted automatically</li>
             <li>[2018-10-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/0318d42d147480ecb8927775c77f5d393893b769">0318d42d</a> - <a href="https://task.beeznest.com/issues/13469">BT#13469</a>) Ims LTI improve redirection when add lti tool</li>
             <li>[2018-10-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/21fa3589705d1de7aa5ccab514d7564bf1e0d573">21fa3589</a> - <a href="https://task.beeznest.com/issues/13469">BT#13469</a>) Ims LTI avoid duplicate course tool</li>
             <li>[2018-10-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/37bf70e3592d3fdb5c7d59e3683ea460925f620f">37bf70e3</a> - <a href="https://task.beeznest.com/issues/14947">BT#14947</a>) LP: Fix error that switches the time spent in a step</li>
@@ -818,12 +1036,12 @@
             <li>[2018-10-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/8ceb0fab60cdb3347fdbd3f2571ef7ef12db402f">8ceb0fab</a> - <a href="https://task.beeznest.com/issues/13469">BT#13469</a>) Ims LTI fix student role</li>
             <li>[2018-10-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/5b55bb8002ebc1f43377297f6f2aa1ff92abcb60">5b55bb80</a> - <a href="https://task.beeznest.com/issues/13469">BT#13469</a>) Ims LTI fix student role</li>
             <li>[2018-10-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/2c60e2e88d7fd915bbd278b466d81be01c47f435">2c60e2e8</a> - <a href="https://task.beeznest.com/issues/13469">BT#13469</a>) Ims LTI add support for deep linking</li>
-            <li>[2018-10-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/da2d7f7c9acfa6da369e61236f612d8e84a20997">da2d7f7c</a> - <a href="https://task.beeznest.com/issues/14944">BT#14944</a>) Fix error when flash is not loaded and SCO is not started BT#14944</li>
+            <li>[2018-10-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/da2d7f7c9acfa6da369e61236f612d8e84a20997">da2d7f7c</a> - <a href="https://task.beeznest.com/issues/14944">BT#14944</a>) Fix error when flash is not loaded and SCO is not started</li>
             <li>[2018-10-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/d88715bd730be5eea1baf2910303dbdf57efb2b5">d88715bd</a> - <a href="https://task.beeznest.com/issues/13469">BT#13469</a>) Ims/Lti plugin improve roles and params</li>
             <li>[2018-10-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/c93c1130e5da31d3bdabd0d87121475a7e015608">c93c1130</a> - <a href="https://task.beeznest.com/issues/14928">BT#14928</a>) Add "comment" question in the report</li>
             <li>[2018-10-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/0231762f8b606057f7a77206d512af021e883da3">0231762f</a> - <a href="https://task.beeznest.com/issues/14943">BT#14943</a>) Fix correct list of follow courses for course coach</li>
             <li>[2018-10-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/3b8f9ebca99b07e37207cb367670a43fcab6fdf9">3b8f9ebc</a> - <a href="https://task.beeznest.com/issues/14834">BT#14834</a>) Fix record_audio on exercises</li>
-            <li>[2018-10-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/592ec636bb002d9fc6a2d624562cc119e373a32e">592ec636</a> - <a href="https://task.beeznest.com/issues/14870">BT#14870</a>) Fix recalculate exercise in order to get the correct result BT#14870</li>
+            <li>[2018-10-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/592ec636bb002d9fc6a2d624562cc119e373a32e">592ec636</a> - <a href="https://task.beeznest.com/issues/14870">BT#14870</a>) Fix recalculate exercise in order to get the correct result</li>
             <li>[2018-10-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/54581278e0a5cb5925fe86df513e87d18b8e812e">54581278</a> - <a href="https://task.beeznest.com/issues/14921">BT#14921</a>) Whispeak Protect tool when plugin is not enabled</li>
             <li>[2018-10-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/3834ea4fc0583a2a5f49909580b5ca997ccaae5e">3834ea4f</a> - <a href="https://task.beeznest.com/issues/14921">BT#14921</a>) Allow re-save whispeak speech auth</li>
             <li>[2018-10-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/f5efac45c0e689a7e0128f977ce324682765eb1b">f5efac45</a> - <a href="https://task.beeznest.com/issues/14921">BT#14921</a>) Show reliability when authentifing with whispeak</li>
@@ -837,22 +1055,22 @@
             <li>[2018-10-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/384a32777427d2ec9e1c8df33f72c9609a3874ce">384a3277</a>) Fix installation when using chash</li>
             <li>[2018-10-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/e6234612485df2b398d76e8f6d1cb96c2d8079a0">e6234612</a> - <a href="https://task.beeznest.com/issues/14875">BT#14875</a>) Correction of checkbox alignment</li>
             <li>[2018-10-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/a874bdd52ebfe96326d97a3b44af4079eae27502">a874bdd5</a>) Use ChamiloSession instead of $_SESSION https://github.com/chamilo/chamilo-lms/commit/f9eda9b23bc7dd03057578ef37bb8cd267a0892e</li>
-            <li>[2018-10-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/d2f2def3b849b70c8661a5d937bdbeca1f861095">d2f2def3</a> - <a href="https://task.beeznest.com/issues/14888">BT#14888</a>) Skip import if "Disable import calendar" is set BT#14888</li>
+            <li>[2018-10-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/d2f2def3b849b70c8661a5d937bdbeca1f861095">d2f2def3</a> - <a href="https://task.beeznest.com/issues/14888">BT#14888</a>) Skip import if "Disable import calendar" is set</li>
             <li>[2018-10-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/e97f365f43b300930c2ad39c504a66f63c36291a">e97f365f</a> - <a href="https://task.beeznest.com/issues/14888">BT#14888</a>) Add "Disable import calendar" course extra field to skip calendar import When using the import_csv.php cron file</li>
             <li>[2018-10-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/c76dec6c4bc2e0681661e1cbe132451a6a1ce3d9">c76dec6c</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2549">GH#2549</a>) Fix checkbox-inline survey</li>
-            <li>[2018-10-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/acfcfbbae776772ad189be0d0f4343960e841d06">acfcfbba</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2692">GH#2692</a>) Fix skills_gradebook in french language #2692</li>
+            <li>[2018-10-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/acfcfbbae776772ad189be0d0f4343960e841d06">acfcfbba</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2692">GH#2692</a>) Fix skills_gradebook in french language</li>
             <li>[2018-10-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/1a097cc10d9761905f2c4eaf1c1cb83018736eb5">1a097cc1</a> - <a href="https://task.beeznest.com/issues/14890">BT#14890</a>) Show only completed exercise in "exercise_category_report.php" report</li>
-            <li>[2018-10-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/c17643b6049de3c548db341f9156e2c7b02432c8">c17643b6</a> - <a href="https://task.beeznest.com/issues/14892">BT#14892</a>) Get iid but load old id = ref relationships CourseBuilder BT#14892 This fix an error when exporting LPs from old courses to a a new course</li>
-            <li>[2018-10-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/ddf259ad01411decee2555dc3594de62a1e9032b">ddf259ad</a> - <a href="https://task.beeznest.com/issues/14892">BT#14892</a>) Use iid instead to generate list of documents in CourseBuilder BT#14892 This fix an error when exporting LPs from old courses to a a new course</li>
+            <li>[2018-10-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/c17643b6049de3c548db341f9156e2c7b02432c8">c17643b6</a> - <a href="https://task.beeznest.com/issues/14892">BT#14892</a>) Get iid but load old id = ref relationships CourseBuilder. This fix an error when exporting LPs from old courses to a a new course</li>
+            <li>[2018-10-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/ddf259ad01411decee2555dc3594de62a1e9032b">ddf259ad</a> - <a href="https://task.beeznest.com/issues/14892">BT#14892</a>) Use iid instead to generate list of documents in CourseBuilder. This fix an error when exporting LPs from old courses to a a new course</li>
             <li>[2018-09-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/2d235bfa0d3ac4eee480a1fbe21d0bea9ed2ac42">2d235bfa</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2687">GH#2687</a>) A logic condition as described in Issue #2687 was showing the subscribe button in the course about page even when the course was not allowing subscription. Improved code thanks to @jmontoyaa Enjoy!</li>
             <li>[2018-09-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/bd0be34ec9fa4ea08e24a9098980ca662a8a0a00">bd0be34e</a>) Fix linter stuff Damnit vi!</li>
             <li>[2018-09-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/57e0541f77ac020bc7e2e33426970bb9ff65f900">57e0541f</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2687">GH#2687</a>) A logic condition as described in Issue #2687 was showing the subscribe button in the course about page even when the course was not allowing subscription. Re-used the code that was tossing the error back to the page in order to trigger visible or not. Enjoy!</li>
             <li>[2018-09-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/8a5c0625599e2a72db3e2951baa02389c12398b7">8a5c0625</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2687">GH#2687</a>) A logic condition as described in Issue #2687 was showing the subscribe button in the course about page even when the course was not allowing subscription. Re-used the code that was tossing the error back to the page in order to trigger visible or not. Enjoy!</li>
-            <li>[2018-09-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/79f7b0183e4894f18090e7b36db5c495e7b44de8">79f7b018</a> - <a href="https://task.beeznest.com/issues/14877">BT#14877</a>) Fix $_configuration['course_student_info']['score'] setting BT#14877</li>
+            <li>[2018-09-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/79f7b0183e4894f18090e7b36db5c495e7b44de8">79f7b018</a> - <a href="https://task.beeznest.com/issues/14877">BT#14877</a>) Fix $_configuration['course_student_info']['score'] setting</li>
             <li>[2018-09-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/91a0e34f8e9d688b443bffbb61abf2d1298df58a">91a0e34f</a> - <a href="https://task.beeznest.com/issues/14867">BT#14867</a>) Check if DRH has access to the user via a session Only if "api_drh_can_access_all_session_content" returns true BT#14867</li>
             <li>[2018-09-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/0d6b46021bfbfe2e1adc8aec0acdb48f889b9bca">0d6b4602</a> - <a href="https://task.beeznest.com/issues/14824">BT#14824</a>) Disable announcement edit inside a group if it was sent to many groups</li>
             <li>[2018-09-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/a2aba799112d8095e78aea5e7b1965c690d1dcc0">a2aba799</a>) Don't show other groups when in an announcement group</li>
-            <li>[2018-09-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/62894c17bf7cc16d1346dcbe840c83dea63386ed">62894c17</a> - <a href="https://task.beeznest.com/issues/14824">BT#14824</a>) If announcement is in a group avoid loading other groups BT#14824</li>
+            <li>[2018-09-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/62894c17bf7cc16d1346dcbe840c83dea63386ed">62894c17</a> - <a href="https://task.beeznest.com/issues/14824">BT#14824</a>) If announcement is in a group avoid loading other groups</li>
             <li>[2018-09-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/e59c3dcda4e0cd0c5e57ee77f7339f48792bc6de">e59c3dcd</a> - <a href="https://task.beeznest.com/issues/14871">BT#14871</a>) Improve feedback when adding users to a session</li>
             <li>[2018-09-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/d08d2c0bfad6891f7bbd338230f5f7b785decd61">d08d2c0b</a> - <a href="https://task.beeznest.com/issues/14863">BT#14863</a>) Show creation date in url list</li>
             <li>[2018-09-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/071eb6b998f904d3aeea6f2297b9b3177dfe53a9">071eb6b9</a> - <a href="https://task.beeznest.com/issues/14821">BT#14821</a>) Fix exercise result link, allow teachers to qualify</li>
@@ -869,53 +1087,53 @@
             <li>[2018-09-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/1be201a17cefefe39b68c784644826cb28894e87">1be201a1</a> - <a href="https://task.beeznest.com/issues/14835">BT#14835</a>) Plugin: BuyCourses: Fix redirection after self-registration</li>
             <li>[2018-09-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/23825c416a27103ec11d94d880241b7834a97c2b">23825c41</a> - <a href="https://task.beeznest.com/issues/14835">BT#14835</a>) Plugin: BuyCourses: Show link when subscription is done</li>
             <li>[2018-09-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/835d62620a9aa5276765bd6b7299a71f06dca0f7">835d6262</a> - <a href="https://task.beeznest.com/issues/14835">BT#14835</a>) Plugin: BuyCourses when showing teachers</li>
-            <li>[2018-09-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/3801ab9183605ec36dbfdbd77195b0e884a81249">3801ab91</a> - <a href="https://task.beeznest.com/issues/14835">BT#14835</a>) Fix get_lang's $returnEmptyIfNotFound param -  refs BT#14835 See 47685b169b99f560e591fb0283e36d50bf0436fa</li>
+            <li>[2018-09-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/3801ab9183605ec36dbfdbd77195b0e884a81249">3801ab91</a> - <a href="https://task.beeznest.com/issues/14835">BT#14835</a>) Fix get_lang's $returnEmptyIfNotFound param. See 47685b169b99f560e591fb0283e36d50bf0436fa</li>
             <li>[2018-09-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/01dcdb749be45c6b5b20fe561e8e1f2c56679803">01dcdb74</a> - <a href="https://task.beeznest.com/issues/14835">BT#14835</a>) Remove e_notice in advanced course search</li>
             <li>[2018-09-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/5c9a57f72268a86fa2725a42ebd09c6d443f9867">5c9a57f7</a> - <a href="https://task.beeznest.com/issues/14839">BT#14839</a>) Fix chat view</li>
             <li>[2018-09-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/2b58386ab96484a404d0e7d5f99ec770368a1040">2b58386a</a> - <a href="https://task.beeznest.com/issues/14839">BT#14839</a>) Fix global chat unsent messages error</li>
             <li>[2018-09-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/5d4ddb3f8923e913b0d1a4d17e15352e5e9886dc">5d4ddb3f</a>) Add best score, ranking for teachers</li>
             <li>[2018-09-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/216ce12292167b7d6dd9cf938ae9704b716375c7">216ce122</a> - <a href="https://task.beeznest.com/issues/14608">BT#14608</a>) Update language variables</li>
             <li>[2018-09-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/60c784440282184a7ba1cee766e801e62a86f426">60c78444</a> - <a href="https://task.beeznest.com/issues/14608">BT#14608</a>) Plugin: Learning calendar: Improve translations</li>
-            <li>[2018-09-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/f7cccabd2a9a385e81a18664268459a5fd7af435">f7cccabd</a> - <a href="https://task.beeznest.com/issues/14827">BT#14827</a>) Don't send calendar events if course is hidden BT#14827</li>
+            <li>[2018-09-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/f7cccabd2a9a385e81a18664268459a5fd7af435">f7cccabd</a> - <a href="https://task.beeznest.com/issues/14827">BT#14827</a>) Don't send calendar events if course is hidden</li>
             <li>[2018-09-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/ea4ff4f691671802a6eb7d9a66a854cbd5ef4cfd">ea4ff4f6</a> - <a href="https://task.beeznest.com/issues/14821">BT#14821</a>) Fix review question + time left in exercise error</li>
             <li>[2018-09-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/552ab5af7694c77ecea106a3d8ca9804bf3bb9e3">552ab5af</a> - <a href="https://task.beeznest.com/issues/14824">BT#14824</a>) Validate that variable is an object</li>
             <li>[2018-09-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/a1e7082fecd901ce91d09ab51808699cca7eeb3d">a1e7082f</a> - <a href="https://task.beeznest.com/issues/14824">BT#14824</a>) Fix empty user group select when editing an announcement</li>
-            <li>[2018-09-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/71c5ed53809f7cfb5cc67570dc39b1e936b51e58">71c5ed53</a> - <a href="https://task.beeznest.com/issues/14824">BT#14824</a>) Fix error when adding an announcement in a group in a session BT#14824</li>
+            <li>[2018-09-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/71c5ed53809f7cfb5cc67570dc39b1e936b51e58">71c5ed53</a> - <a href="https://task.beeznest.com/issues/14824">BT#14824</a>) Fix error when adding an announcement in a group in a session</li>
             <li>[2018-09-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/8a2545c84fd1fd71b62eb462a14c61283049e391">8a2545c8</a> - <a href="https://task.beeznest.com/issues/14825">BT#14825</a>) Fix LP prerequisite error when multiple attempts are set</li>
             <li>[2018-09-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/93cbd9271b54a73b8ae75a999ab150884b89fe62">93cbd927</a> - <a href="https://task.beeznest.com/issues/14822">BT#14822</a>) Fix custom certificate queries</li>
             <li>[2018-09-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/b0501cfdbee3639e5995f3f36fc499c9d2205f83">b0501cfd</a>) Use default LP folder instead of document root</li>
             <li>[2018-09-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/bc1335635a5254f71eca1ef792bf69a85aacfb32">bc133563</a>) Remove "I am a student subscribed to session" shortcut - Use behat instructions to create a session on the fly for a test - Add message after adding users to a session Refs: https://github.com/chamilo/chamilo-lms/commit/407536472f49e450c8e9c12db1ddb87512d629c6</li>
-            <li>[2018-09-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/416fa5b926aaf3ede9cd32bed7b053291dc7d44f">416fa5b9</a> - <a href="https://task.beeznest.com/issues/14814">BT#14814</a>) Set settings "extra_mail_notify_*" to immediate by default BT#14814 When importing the CSV students/teachers</li>
+            <li>[2018-09-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/416fa5b926aaf3ede9cd32bed7b053291dc7d44f">416fa5b9</a> - <a href="https://task.beeznest.com/issues/14814">BT#14814</a>) Set settings "extra_mail_notify_*" to immediate by default. When importing the CSV students/teachers</li>
             <li>[2018-09-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/d8acb7a1dd2795503a6aba2c2ec66660fc9f84af">d8acb7a1</a>) Don't lose the work made when adding or removing an answer in degree type of question.</li>
-            <li>[2018-09-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/935304a92dc207383b72cbae8a98143aeba97eae">935304a9</a> - <a href="https://support.chamilo.org/issues/14766">CT#14766</a>) Fix fill in blanks when save correct answers is active Refs #14766</li>
-            <li>[2018-09-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/918ada2d6343641410deb62fe1038d6ed92643ef">918ada2d</a> - <a href="https://task.beeznest.com/issues/14753">BT#14753</a>) Add limit of 1000 records when dumping user data BT#14753</li>
+            <li>[2018-09-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/935304a92dc207383b72cbae8a98143aeba97eae">935304a9</a> - <a href="https://support.chamilo.org/issues/14766">CT#14766</a>) Fix fill in blanks when save correct answers is active</li>
+            <li>[2018-09-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/918ada2d6343641410deb62fe1038d6ed92643ef">918ada2d</a> - <a href="https://task.beeznest.com/issues/14753">BT#14753</a>) Add limit of 1000 records when dumping user data</li>
             <li>[2018-09-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/1e6db66419e9a79bdf23b7f6f04bed04157fa3b3">1e6db664</a> - <a href="https://task.beeznest.com/issues/14799">BT#14799</a>) If $_GET['id_session'] is set to 0 then delete the chamilo session</li>
-            <li>[2018-09-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/384ec251d877b4ad5eb355a68b2b08af24a1f202">384ec251</a> - <a href="https://task.beeznest.com/issues/14791">BT#14791</a>) In mobile show qtip instead of popup (if event is readable only) BT#14791</li>
+            <li>[2018-09-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/384ec251d877b4ad5eb355a68b2b08af24a1f202">384ec251</a> - <a href="https://task.beeznest.com/issues/14791">BT#14791</a>) In mobile show qtip instead of popup (if event is readable only)</li>
             <li>[2018-09-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/6955791cc636deee08f213063bee91f89623b8e0">6955791c</a> - <a href="https://task.beeznest.com/issues/14789">BT#14789</a>) Fix tool introducction for blogs</li>
-            <li>[2018-09-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/7a73ae26ad368d648db209b915588322c6efa59d">7a73ae26</a> - <a href="https://task.beeznest.com/issues/14692">BT#14692</a>) Put attempt table into a function, show attempt list to user BT#14692</li>
+            <li>[2018-09-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/7a73ae26ad368d648db209b915588322c6efa59d">7a73ae26</a> - <a href="https://task.beeznest.com/issues/14692">BT#14692</a>) Put attempt table into a function, show attempt list to user</li>
             <li>[2018-09-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/28805ab1670008a8251bb0be23169d1ab7e8e014">28805ab1</a> - <a href="https://task.beeznest.com/issues/14692">BT#14692</a>) If score >= 2 then take into account in evaluation stats</li>
-            <li>[2018-09-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/46597a4676715c6bf2900f25a56f60743a1a5385">46597a46</a> - <a href="https://task.beeznest.com/issues/14692">BT#14692</a>) Use "gradebook_number_decimals" to handle GradebookResultAttempt table BT#14692 Hide edit button if multiple attempts option is on</li>
-            <li>[2018-09-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/e5521dd9b7d00e0316cb62df5012d001f46cecb5">e5521dd9</a> - <a href="https://task.beeznest.com/issues/13518">BT#13518</a>) Fix wrong email change BT#13518</li>
-            <li>[2018-09-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/9b536580ab53246b299b39b80e3393eb8cada57e">9b536580</a> - <a href="https://task.beeznest.com/issues/13518">BT#13518</a>) Set "email_to_teachers_on_new_work_feedback" on by default BT#13518</li>
+            <li>[2018-09-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/46597a4676715c6bf2900f25a56f60743a1a5385">46597a46</a> - <a href="https://task.beeznest.com/issues/14692">BT#14692</a>) Use "gradebook_number_decimals" to handle GradebookResultAttempt table. Hide edit button if multiple attempts option is on</li>
+            <li>[2018-09-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/e5521dd9b7d00e0316cb62df5012d001f46cecb5">e5521dd9</a> - <a href="https://task.beeznest.com/issues/13518">BT#13518</a>) Fix wrong email change</li>
+            <li>[2018-09-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/9b536580ab53246b299b39b80e3393eb8cada57e">9b536580</a> - <a href="https://task.beeznest.com/issues/13518">BT#13518</a>) Set "email_to_teachers_on_new_work_feedback" on by default</li>
             <li>[2018-08-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/20ddfcccb85b2f331e419587487793adba06496b">20ddfccc</a> - <a href="https://task.beeznest.com/issues/14785">BT#14785</a>) Add "user_email" tag in announcements</li>
             <li>[2018-08-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/0e4e947f10c99c4833cd7a78731f95b9f2f1b625">0e4e947f</a> - <a href="https://task.beeznest.com/issues/14692">BT#14692</a>) If result is deleted then delete all attempts</li>
             <li>[2018-08-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/fb4e618399fd5365c0ca79a922d7a40a1fcf5606">fb4e6183</a> - <a href="https://task.beeznest.com/issues/14776">BT#14776</a>) Fix course hidden</li>
             <li>[2018-08-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/b7c06521b71705329be5e54fc2a8397162de974c">b7c06521</a> - <a href="https://task.beeznest.com/issues/14691">BT#14691</a>) Adding script done by jmontoya to update days counting for elearning calendars</li>
             <li>[2018-08-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/800980a69b566f9c14cad21e5c56b41f97f45067">800980a6</a> - <a href="https://task.beeznest.com/issues/14771">BT#14771</a>) Fix announcement sent by first coach course-session insted of admin</li>
-            <li>[2018-08-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/74520411cdb404628fb39f3a1aab0f8722f0d5ae">74520411</a> - <a href="https://task.beeznest.com/issues/14776">BT#14776</a>) Reload the session id if user change from one course to another BT#14776</li>
+            <li>[2018-08-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/74520411cdb404628fb39f3a1aab0f8722f0d5ae">74520411</a> - <a href="https://task.beeznest.com/issues/14776">BT#14776</a>) Reload the session id if user change from one course to another</li>
             <li>[2018-08-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/1efecd1b8ac38d46fd154b3dd6ef659dadaed169">1efecd1b</a> - <a href="https://task.beeznest.com/issues/14771">BT#14771</a>) Use first coach course-session user as a sender instead of default admin</li>
             <li>[2018-08-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/7c51c6e5e54a6c47ec236b3dfe5abc911d38dc7b">7c51c6e5</a> - <a href="https://task.beeznest.com/issues/14771">BT#14771</a>) If sender info is set, then setup as a "reply-to"</li>
             <li>[2018-08-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/eafbed61a54bd1bca7fa3c88323acac0c2750706">eafbed61</a> - <a href="https://task.beeznest.com/issues/14739">BT#14739</a>) Fix correct origin value BT#14739</li>
             <li>[2018-08-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/4a7b49877994beb4340e931f608d0c7842b12f39">4a7b4987</a> - <a href="https://task.beeznest.com/issues/14608">BT#14608</a>) LP calendar - Fix wrong calendar dates in win 8 + firefox</li>
             <li>[2018-08-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/7faa3c8e3ff8499e2d091a76e4f95892ce83554d">7faa3c8e</a> - <a href="https://task.beeznest.com/issues/14776">BT#14776</a>) Fix download work for coach session users</li>
-            <li>[2018-08-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/b6474b2794058e4a67299ba1f8ee064aae51556b">b6474b27</a> - <a href="https://task.beeznest.com/issues/14771">BT#14771</a>) Add new condition when importing calendar events BT#14771 - check the start date of the session, via the "external_sessionID" - ONLY import the relevant calendar items IF the specified session starts within 7 days (so seven or less).</li>
-            <li>[2018-08-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/106ade52561411736ce4250d0fc583be2a4feb4d">106ade52</a> - <a href="https://task.beeznest.com/issues/14770">BT#14770</a>) Fix hotspot edition BT#14770 - Restore code previously removed</li>
+            <li>[2018-08-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/b6474b2794058e4a67299ba1f8ee064aae51556b">b6474b27</a> - <a href="https://task.beeznest.com/issues/14771">BT#14771</a>) Add new condition when importing calendar events - check the start date of the session, via the "external_sessionID" - ONLY import the relevant calendar items IF the specified session starts within 7 days (so seven or less).</li>
+            <li>[2018-08-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/106ade52561411736ce4250d0fc583be2a4feb4d">106ade52</a> - <a href="https://task.beeznest.com/issues/14770">BT#14770</a>) Fix hotspot edition - Restore code previously removed</li>
             <li>[2018-08-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/28e8c054ff827901a91bcd9be2395053011b3d72">28e8c054</a> - <a href="https://task.beeznest.com/issues/14747">BT#14747</a>) Scripts: Disable multiple-access-url script by default</li>
             <li>[2018-08-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/01f4d15e267992159305ab13915c5766efe3d4bf">01f4d15e</a>) Skills: Fix skills import to use current access_url_id by default</li>
             <li>[2018-08-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/e763818b7ccb4478451c09a59543a5da1817676b">e763818b</a> - <a href="https://task.beeznest.com/issues/14539">BT#14539</a>) Adding italian translation sent by OFAJ</li>
         </ul>
         <h3>Stylesheets and theming</h3>
-        <ul aria-role="log" aria-live="off">
+        <ul aria-live="off">
             <li>[2018-11-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/881fdc94c172acad21d0635690ad49acaeab617b">881fdc94</a>) Display: remove stats.png - duplicated by statistics.png</li>
             <li>[2018-11-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/694291454a0827501d5815adf48bdb88def1be96">69429145</a> - <a href="https://task.beeznest.com/issues/15033">BT#15033</a>) Add icon for "survey multiplication"</li>
             <li>[2018-11-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/d3269d119f9f854c8b5922cc473cf4ac1aef432c">d3269d11</a> - <a href="https://task.beeznest.com/issues/13469">BT#15063</a>) Add icon for doodle-type survey</li>
@@ -932,20 +1150,21 @@
             <li>[2018-09-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/4bc9d32872b71a8daf0f31438adcf263c6b44c9e">4bc9d328</a> - <a href="https://task.beeznest.com/issues/14791">BT#14791</a>) Fix calendar height when rendered in a mobile phone</li>
         </ul>
         <h3>Web services</h3>
-        <ul aria-role="log" aria-live="off">
+        <ul aria-live="off">
             <li>None</li>
         </ul>
         <h3>Removals</h3>
-        <ul aria-role="log" aria-live="off">
-            <li>None</li>
+        <ul aria-live="off">
+            <li>We have removed the possibility to start WebRTC videoconference sessions in the global chat as the library used suffer security vulnerabilities and was not maintained. We have not, at this time, found any equivalent JS library that would fit our needs and the strict GPLv3 licensing terms.</li>
+            <li>Some chart legends do not show in UTF-8 languages like Arabic due to the library we use for those charts.</li>
         </ul>
         <h3>Known issues</h3>
-        <ul aria-role="log" aria-live="off">
+        <ul aria-live="off">
             <li>None</li>
         </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.11.8">
+    <div class="version" aria-label="1.11.8">
     <a name="1.11.8"></a>
 
     <h1>Chamilo 1.11.8 - Sayaxché,  15/08/2018</h1>
@@ -960,7 +1179,7 @@
             are hoping to make after 1.11.8 to get out of the 1.11 versions and into our restructured version 2.0.
         </p>
         <h3>Security fixes</h3>
-        <ul aria-role="log" aria-live="off">
+        <ul aria-live="off">
             <li>[2018-07-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/385a84efe62a1910700465c1748e4036dc43bf18">385a84ef</a>) Security: Add app/Resources/public/css to the list of directories where execution of PHP is forbidden</li>
             <li>[2018-07-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/b0041b6250b3fdbe5a939c549e8d0ce69dd686e1">b0041b62</a>) Security: Add documentation about X-Frame-Options in configuration.dist.php</li>
             <li>[2018-07-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/0de84700648f098c1fbf6b807dee28ec640efe62">4ffe5edb</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2532">#2532</a>) Security: Add Security::remove_XSS to clean variables from $_REQUEST</li>
@@ -973,14 +1192,14 @@
             <li>[2018-04-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/00f3e4a6506035674a58ccdf4ebe098bd6f607e3">00f3e4a6</a>) Security: Fix work access for teachers and students </li>
         </ul>
         <h3>Possibly breaking changes</h3>
-        <ul aria-role="log" aria-live="off">
+        <ul aria-live="off">
             <li>[2018-07-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/6750c5f582038458378194ca0d14992441c942c5">6750c5f5</a> - <a href="https://task.beeznest.com/issues/14687">BT#14687</a>) Gradebook: Rename disable_gradebook_stats to gradebook_enable_best_score and fix behaviour: now the setting will be required to *enable* the 3 last columns of the gradebook results table (avg, best score and ranking)</li>
             <li>[2018-07-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/4d67dfb66a3e489ef12fa4db7eef3c3f5e89367a">4d67dfb6</a> - <a href="https://task.beeznest.com/issues/14687">BT#14687</a>) Gradebook: Avoid conflict between gradebook_detailed_admin_view and disable_gradebook_stats</li>
         </ul>
 
         <h3>Notable new Features</h3>
         <h4>For end-users, teachers and Chamilo admins</h4>
-        <ul aria-role="log" aria-live="off">
+        <ul aria-live="off">
             <li>[2018-08-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/c7b881eecc33fc75b4091cc670c72a7f770b9ab5">c7b881ee</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2622">GH#2622</a>) Document: Add support for 360° videos in documents and learning paths</li>
             <li>[2018-07-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/33dc232d6ffcd985f52bf8b1a56b497033b6b52f">33dc232d</a> - <a href="https://task.beeznest.com/issues/14609">BT#14609</a>) Learnpath: SCORM change: Default value of olms.lesson_status is "not attempted"</li>
             <li>[2018-06-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/43bf48686b636cdb6623d5bd53a4eae6e14a1ea6">43bf4868</a> - <a href="https://task.beeznest.com/issues/14435">BT#14435</a>) Quiz: Change color from blue to black in ASCIIMathML scripts to highlight formulas (now will appear in a normal black)</li>
@@ -996,7 +1215,7 @@
             <li>[2018-03-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/b256c09001123d01154edff3eea8c6f0b8f096bb">b256c090</a> - <a href="https://task.beeznest.com/issues/14056">BT#14056</a>) Portfolio: Add Portfolio Tool. Requires DB changes</li>
         </ul>
         <h4>For developers and sysadmins</h4>
-        <ul aria-role="log" aria-live="off">
+        <ul aria-live="off">
             <li>[2018-08-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/9472341ef0b207235f75e65cf64604b3846c21cc">9472341e</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2606">GH#2606</a>) GDPR (#2606/#2503) Admin: Add configuration setting 'enable_gdpr' to enable special privacy options to ease implementation of European GDPR. Add personal data info page, LegalRepository, personal data treatment types display and update getLastLogin() results including track_e_login for legacy users</li>
             <li>[2018-07-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/c0259638105253f1148cce5fd23da1c90ab27dcd">c0259638</a> - <a href="https://task.beeznest.com/issues/14687">BT#14687</a>) Gradebook: Delete gradebook categories when deleting course</li>
             <li>[2018-07-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/5acc3b24c4b68e1030fc6924549c904df5801267">5acc3b24</a> - <a href="https://task.beeznest.com/issues/14687">BT#14687</a>) Admin: Allow search course by ajax to platform admin</li>
@@ -1038,7 +1257,7 @@
 
         </ul>
         <h3>Improvements (minor features) and debug</h3>
-        <ul aria-role="log" aria-live="off">
+        <ul aria-live="off">
             <li>[2018-08-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/47c76fdb8f45c33bf8bc8c6e2543476fe7492274">47c76fdb</a>) Add missing statistics_na.png icon</li>
             <li>[2018-08-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/cd6e9dcac60d2197ee6a02d779b9edbf664a493a">cd6e9dca</a>) Portfolio: Fix portfolios list in social network (void the course context to avoid showing only portfolios from one course)</li>
             <li>[2018-08-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/fd944a29fb95cd4cadf34f3eb11f9f6b5a6b6ac8">fd944a29</a>) Portfolio: Add instructions about course portfolio activation to main/install/configuration.dist.php</li>
@@ -1717,7 +1936,7 @@
             <li>[2018-02-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/96cd3ddedc6287262c9157f4fe5b768796cd2820">96cd3dde</a>) Document: Remove api_not_allowed() in order to avoid double headers</li>
             <li>[2018-02-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/9835041cca2bd9189e74e442843d8641d16ef20e">9835041c</a> - <a href="https://task.beeznest.com/issues/14005">BT#14005</a>) Document: Fix move document feature</li>
             <li>[2018-02-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/3d837cf4883d254f53eedcb59f119dff7b2720d8">3d837cf4</a> - <a href="https://task.beeznest.com/issues/13829">BT#13829</a>) Global: Course catalog: Hide course categories with no courses</li>
-            <li>[2018-02-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/2e7c681bee5cc143a3a7eaabdd0a94111f85dd7c">2e7c681b</a> - <a href="https://task.beeznest.com/issues/13556">BT#13556</a>) Message: Replace not valid tag </br> to <br /> when parsing message</li>
+            <li>[2018-02-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/2e7c681bee5cc143a3a7eaabdd0a94111f85dd7c">2e7c681b</a> - <a href="https://task.beeznest.com/issues/13556">BT#13556</a>) Message: Replace not valid tag &lt;/br&gt; to <br /> when parsing message</li>
             <li>[2018-02-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/f4c672195362161b11219b8af563dd9e7be981a6">f4c67219</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2351">GH#2351</a>) Quiz: Hide question category if setting is on</li>
             <li>[2018-02-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/f78ca9d963e5df3ae4b29d8b599b00f762f4d161">f78ca9d9</a> - <a href="https://task.beeznest.com/issues/13992">BT#13992</a>) Tracking: Fix "onbeforeunload" not calling course logout in firefox</li>
             <li>[2018-02-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/fbffecbfb44b776af1af6b2ea10903a742300d4d">fbffecbf</a> - <a href="https://task.beeznest.com/issues/13808">BT#13808</a>) Display: Fix wrong css styles when printing</li>
@@ -1726,7 +1945,7 @@
             <li>[2018-02-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/0eed7fd8e4651a58c05b94397b878737fbaeb647">0eed7fd8</a> - <a href="https://task.beeznest.com/issues/13808">BT#13808</a>) Display: Add bootstrap to keep HTML structure when printing</li>
             <li>[2018-02-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/876c4a821477ad5e2b564a72f8202b8dcca4dee9">876c4a82</a> - <a href="https://task.beeznest.com/issues/13913">BT#13913</a>) Plugin: "getToolIconVisibility" added to allow plugins to show icon to teachers</li>
             <li>[2018-02-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/2b26a9ca508ddd237c2dde4d7b5894892085c002">2b26a9ca</a> - <a href="https://task.beeznest.com/issues/13954">BT#13954</a>) Internal: Add script to fix issues with migrations from Chamilo <1.11.6 where lp.id and lp.iid could be mixed in the c_lp_item table</li>
-            <li>[2018-02-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/102264d49a7010a838f58a3db1b696b6f76b4e49">102264d4</a> - <a href="https://task.beeznest.com/issues/13979">BT#13979</a>) Global: Wrap recover password url in a <a> tag</li>
+            <li>[2018-02-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/102264d49a7010a838f58a3db1b696b6f76b4e49">102264d4</a> - <a href="https://task.beeznest.com/issues/13979">BT#13979</a>) Global: Wrap recover password url in a &lt;a&gt; tag</li>
             <li>[2018-02-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/06d0d12ee52a3e5907e7bca44454639793fcf992">06d0d12e</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2351">GH#2351</a>) Quiz: Save question category when duplicate exercise</li>
             <li>[2018-02-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/772dbcb74be89b711e2e9d961ac53de91bde8556">772dbcb7</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2351">GH#2351</a>) Quiz: Save question category when cloning a question</li>
             <li>[2018-02-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/57984f132717ae6a88e0f3571691260cb0ab8cd2">57984f13</a> - <a href="https://task.beeznest.com/issues/13187">BT#13187</a>) Global: Use real xls export instead of html table in generic data export AJAX</li>
@@ -1755,7 +1974,7 @@
             <li>[2018-01-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/7ededc83970b6a293b00380e5eb2ee26916c653d">7ededc83</a> - <a href="https://task.beeznest.com/issues/13697">BT#13697</a>) Ticket: Send ticket attachments in email</li>
         </ul>
         <h3>Stylesheets and theming</h3>
-        <ul aria-role="log" aria-live="off">
+        <ul aria-live="off">
             <li>[2018-08-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/38e649ac17cf8c74dfe6b63af41e42c0f8cd1728">38e649ac</a>) Template: Fix footer</li>
             <li>[2018-08-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/c267e71b7f2c12f5434e9c9592181aa0e740617c">c267e71b</a>) Template: Update fix show_footer and show_header tpl</li>
             <li>[2018-08-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/248d9d9a43cdadca731427898ef818d25388aacc">248d9d9a</a>) Template: Improvement of template layout and css structure</li>
@@ -1772,7 +1991,7 @@
             <li>[2017-12-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/355066261c39f6eddff6c077935d8837d8af3a6f">35506626</a> - <a href="https://task.beeznest.com/issues/12835">BT#12835</a>) Template: Add template for document/webcam</li>
         </ul>
         <h3>Web services</h3>
-        <ul aria-role="log" aria-live="off">
+        <ul aria-live="off">
             <li>[2018-08-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/9ab965d95808a6b473fe757ec426e8c3e21fce7d">9ab965d9</a> - <a href="https://task.beeznest.com/issues/14613">BT#14613</a>) Webservice: Webservice can register user to a course no matter the course config Webservice is kind of "admin" $checkTeacherPermission parameter added</li>
             <li>[2018-08-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/7b1bf11218ea9dbec342bb0ea02f627e1e98fd26">7b1bf112</a> - <a href="https://task.beeznest.com/issues/14613">BT#14613</a>) Webservice: Add "webservice_validation" conf to validate login against a webservice</li>
             <li>[2018-08-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/df10c53f2203724a85e39d3c1e16f80fef4bcd69">df10c53f</a> - <a href="https://task.beeznest.com/issues/14613">BT#14613</a>) Webservice: WSGetUserFromUsername now returns extra fields</li>
@@ -1782,7 +2001,7 @@
             <li>Parameters encode change from base64 to json in file main/webservices/api/v2.php <a href="https://github.com/chamilo/chamilo-lms/commit/0de84700648f098c1fbf6b807dee28ec640efe62">4ffe5edb</a></li>
         </ul>
         <h3>Removals</h3>
-        <ul aria-role="log" aria-live="off">
+        <ul aria-live="off">
             <li>[2018-04-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/bc808c832d7f54eeb6f9f041f5c458111ed5bfa1">bc808c83</a> - <a href="https://task.beeznest.com/issues/14242">BT#14242</a>) Gradebook: Remove unused code get_not_created_links, try find exercise with iid.</li>
             <li>[2018-04-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/6094513dfc52402c84a0c2b4fffdbb6bfc26b7cb">6094513d</a>) Course info: Remove unused variables</li>
             <li>[2018-03-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/82f724d67510c6dae44b0c5ae0d9b21e6b3523a9">82f724d6</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2469">GH#2469</a>) Internal: Remove call of setting "user_name_sort_by" not used anymore</li>
@@ -1794,11 +2013,11 @@
             <li>[2018-03-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/f38583cf0df8716caa6c7e5ab7b552403c396437">f38583cf</a>) Internal: Remove deprecated use "create_function" in compare rule - FormValidator Shows error in php 7.2</li>
         </ul>
         <h3>Known issues</h3>
-        <ul aria-role="log" aria-live="off">
+        <ul aria-live="off">
         </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.11.6">
+    <div class="version" aria-label="1.11.6">
     <a name="1.11.6"></a>
 
     <h1>Chamilo 1.11.6 - Poznán,  18/01/2018</h1>
@@ -1807,16 +2026,16 @@
     <h3>Release name</h3>
     <p><a href="https://en.wikipedia.org/wiki/Pozna%C5%84">Poznán</a> is a city on the Warta river in west-central Poland. It is best known for its renaissance Old Town and Ostrów Tumski Cathedral. Poznań is among the oldest and largest cities in Poland. It has often topped rankings as a city with very high quality of education and a very high standard of living. Giving the stability this 8th anniversary version 1.11.6 has achieved and its high benefits to education, we believe Poznán is a fitting name for us.</p>
     <h3>Security fixes</h3>
-    <ul aria-role="log" aria-live="off">
+    <ul aria-live="off">
         <li>[2017-09-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/4ffe5edb442d27943c0a52bd2078c64aa2328c80">4ffe5edb</a> - <a href="https://task.beeznest.com/issues/13285">BT#13285</a>) Security: Remove excessive SQL quotes filtering adding risk to queries</li>
     </ul>
     <h3>Possibly breaking changes</h3>
-    <ul aria-role="log" aria-live="off">
+    <ul aria-live="off">
     </ul>
 
     <h3>Notable new Features</h3>.
     <h4>For end-users, teachers and Chamilo admins</h4>
-    <ul aria-role="log" aria-live="off">
+    <ul aria-live="off">
         <li>[2018-01-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/49ba4f6d7b9888928e19a19b331d37925d86c351">49ba4f6d</a>) Plugin: Test2PDF: Add test2pdf plugin to convert exercises to PDF. This plugin can be further cleaned up but works as is.</li>
         <li>[2017-12-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/958f1f59b64e4008915350cadaf1e4fb3370f578">958f1f59</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2229">GH#2229</a>) Document: Add Cloud Files links (and fixes)</li>
         <li>[2017-10-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/8700571d786e7d153479bd43b1744676cd75daaf">8700571d</a>) Document: Add webm support in showinframes.php (using jplayer)</li>
@@ -1828,7 +2047,7 @@
     </ul>
 
     <h4>For developers and sysadmins</h4>
-    <ul aria-role="log" aria-live="off">
+    <ul aria-live="off">
         <li>[2017-12-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/b00352a5b2cc4ed199e1db41e4398503e15fec5c">b00352a5</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2149">GH#2149</a>) Webservices: Add REST services to create user, create course and subscribe to course. Remove SQL injection. Improve code style</li>
         <li>[2017-12-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/39bbae3c5da98e2abef53fb39ac14c40893067ed">39bbae3c</a> - <a href="https://task.beeznest.com/issues/13750">BT#13750</a>) Admin: Add configuration setting "session_list_order" to enable sessions ordering in courses list (requires DB changes)</li>
         <li>[2017-12-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/a8974e8061fe744f68a8730b72a87e5e9364bd84">a8974e80</a> - <a href="https://task.beeznest.com/issues/13789">BT#13789</a>) Admin: Add configuration setting "exercise_category_report_user_extra_fields" to add extra fields to the exercise_category_report.php page</li>
@@ -1892,7 +2111,7 @@
     </ul>
 
     <h3>Improvements (minor features) and debug</h3>
-    <ul aria-role="log" aria-live="off">
+    <ul aria-live="off">
         <li>[2018-01-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/d713cbff9ff1ebceb4c0e90ecb8131bcf04763cd">d713cbff</a>) Add LTI plugin translation to French and Spanish</li>
         <li>[2018-01-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/002b907867dcea704c0533b85c3876a91e393e97">002b9078</a> - <a href="https://task.beeznest.com/issues/13469">BT#13469</a>) Fix and improve Ims/LIT plugin</li>
         <li>[2018-01-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/e40687261466e8b5a8173db9e62c7c5faa3b5d97">e4068726</a>) Style: Fix dropdown menu color</li>
@@ -2967,7 +3186,7 @@
     </ul>
 
     <h3>Stylesheets and theming</h3>
-    <ul aria-role="log" aria-live="off">
+    <ul aria-live="off">
         <li>[2017-12-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/de79a59f46e2de4ecf81b9782532f4bef092bd27">de79a59f</a>) Template: Change course code for the course id to use in Twig variable</li>
         <li>[2017-08-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/b092665a78e8ee82757b51f03ab496ea0aac569a">b092665a</a> - <a href="https://task.beeznest.com/issues/13169">BT#13169</a>) Template: Add _p.web_url variable in twig template</li>
         <li>[2017-06-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/686274be02c1ed3027ed0b7a76b2f6e12cc800cd">686274be</a> - <a href="https://task.beeznest.com/issues/12926">BT#12926</a>) Template: Improving and create tpl for forum view</li>
@@ -2976,11 +3195,11 @@
     </ul>
 
     <h3>Web services</h3>
-    <ul aria-role="log" aria-live="off">
+    <ul aria-live="off">
     </ul>
 
     <h3>Removals</h3>
-    <ul aria-role="log" aria-live="off">
+    <ul aria-live="off">
         <li>[2017-10-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/fe4fb5d0d1d5e099c3b766b3250fb35a4b489867">fe4fb5d0</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2200">GH#2200</a>) Remove "Text" plugin as it duplicates the "Static" plugin features</li>
         <li>[2017-10-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/070043ec4c6e733127e51a040ac245f649f45c84">070043ec</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2198">GH#2198</a>) Internal: Remove unused and unmaintained main/reports code</li>
         <li>[2017-10-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/280e06aa60f6f21ff4926c0463f845020bc96dd5">280e06aa</a>) Internal: Remove unused get_test_id</li>
@@ -3009,13 +3228,13 @@
     </ul>
 
     <h3>Known issues</h3>
-    <ul aria-role="log" aria-live="off">
+    <ul aria-live="off">
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/a285f48555774f1ef2df4df4b9b27c32187b07c0">a285f485</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/1956">GH#1956</a>) Document: Text-to-speech feature is broken due to the services providers not allowing the service for free anymore. See configuration.dist.php for the API key to use Google Translate. Pediaphon will be removed.</li>
         <li>Several issues have been reported migrating from 1.9 to 1.11.4. Some have been fixed in 1.11.6, but did not have the capacity (in terms of human resources) to review the migration process in-depth. Please make sure you undertake any critical production-environment migration with a specialist. Try Chamilo Official Providers, for example.</li>
     </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.11.4">
+    <div class="version" aria-label="1.11.4">
     <a name="1.11.4"></a>
     <h1>Chamilo 1.11.4 - Uyuni, 31st of May 2017</h1>
     <h3>Release notes - summary</h3>
@@ -4268,7 +4487,7 @@
     </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.11.2">
+    <div class="version" aria-label="1.11.2">
     <a name="1.11.2"></a>
     <h1>Chamilo 1.11.2 - Bari, 1st of November 2016</h1>
     <h3>Release notes - summary</h3>
@@ -4377,7 +4596,7 @@
     </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.11.0">
+    <div class="version" aria-label="1.11.0">
     <a name="1.11.0"></a>
     <h1>Chamilo 1.11.0 - Lecce, 17th of October 2016</h1>
     <h3>Release notes - summary</h3>
@@ -5824,7 +6043,7 @@
 
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.10.8">
+    <div class="version" aria-label="1.10.8">
     <a name="1.10.8"></a>
     <h1>Chamilo 1.10.8 - Vilcashuamán, 22nd of July 2016</h1>
     <h3>Release notes - summary</h3>
@@ -5940,7 +6159,7 @@
     </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.10.6">
+    <div class="version" aria-label="1.10.6">
     <a name="1.10.6"></a>
     <h1>Chamilo 1.10.6 - Zacatecas, 24th of May 2016</h1>
     <h3>Release notes - summary</h3>
@@ -6166,7 +6385,7 @@
     </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.10.4">
+    <div class="version" aria-label="1.10.4">
     <a name="1.10.4"></a>
     <h1>Chamilo 1.10.4 - Bath, 22th of March 2016</h1>
     <h3>Release notes - summary</h3>
@@ -6498,7 +6717,7 @@
     </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.10.2">
+    <div class="version" aria-label="1.10.2">
     <a  name="1.10.2"></a>
     <h1>Chamilo 1.10.2 - Alsted, 22nd of December 2015</h1>
     <h3>Release notes - summary</h3>
@@ -6728,7 +6947,7 @@
     </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.10.0">
+    <div class="version" aria-label="1.10.0">
 <a  name="1.10.0"></a>
 
 <h1>Chamilo 1.10.0 - San Juan, 16th of October 2015</h1>
@@ -7700,7 +7919,7 @@
 </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.9.10.2">
+    <div class="version" aria-label="1.9.10.2">
 <a  name="1.9.10.2"></a>
 
 <h1>Chamilo 1.9.10.2 - Sipán, 19th of March, 2015</h1>
@@ -7773,7 +7992,7 @@
 
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.9.10">
+    <div class="version" aria-label="1.9.10">
 <a  name="1.9.10"></a>
 <h1>Chamilo 1.9.10 - Huánuco, 25th of January, 2015</h1>
 <h3>Release notes - summary</h3>
@@ -8142,20 +8361,20 @@ All security issues are published and patches are attached on <a href="https://s
 </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.9.8.2">
+    <div class="version" aria-label="1.9.8.2">
 <a  name="1.9.8.2"></a>
 <h1>Chamilo 1.9.8.2 - ,21st of June, 2014</h1>
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.9.8.2 is a very little patch version with one bugfix regarding the learning paths tool. Considering the fact that 1.9.8 is planned for the long term, we'd hate to have such a minor patch left on the side for a year or so. This will be packaged and promoted as 1.9.8, but the folder inside the 1.9.8 will be called 1.9.8.2, with a change to this changelog file and a one-line change to main/newscorm/learnpathItem.class.php (as such, you can update just this file to upgrade from 1.9.8.1 to 1.9.8.2. See <a href="https://github.com/chamilo/chamilo-lms/commit/642a80e9e838f98f25135fbb64795e4f3df86260">the code change</a> for detais.</p>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.9.8.1">
+    <div class="version" aria-label="1.9.8.1">
 <h1>Chamilo 1.9.8.1 - ,18th of June 2014</h1>
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.9.8.1 is a patch version with one security patch on top of 1.9.8 (in the included library for FCKeditor). Please check <a href="https://support.chamilo.org/projects/chamilo-18/wiki/Security_issues">our security issues page</a> for more information.</p>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.9.8.0">
+    <div class="version" aria-label="1.9.8.0">
         <a  name="1.9.8.0"></a>
 <h1>Chamilo 1.9.8 - Thon, 15th of June, 2014</h1>
 <h3>Release notes - summary</h3>
@@ -8664,7 +8883,7 @@ Stylesheets have been considerably changed in version 1.9.8, which might require
 </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.9.6.1">
+    <div class="version" aria-label="1.9.6.1">
 <a  name="1.9.6.1"></a>
 
 <h1>Chamilo 1.9.6.1 - ,22th of May 2014</h1>
@@ -8672,7 +8891,7 @@ Stylesheets have been considerably changed in version 1.9.8, which might require
 <p>Chamilo 1.9.6.1 is a patch version with security patches on top of 1.9.6. Please check <a href="https://support.chamilo.org/projects/chamilo-18/wiki/Security_issues">our security issues page</a> for more information.</p>
 </div>
 
-<div class="version" aria-role="article" aria-label="1.9.6.0">
+<div class="version" aria-label="1.9.6.0">
 <h1>Chamilo 1.9.6 - Rochefort, 4th of June, 2013</h1>
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.9.6 is a minor stable version with security patches and a series of improvements on top of 1.9.4.</p>
@@ -8812,7 +9031,7 @@ Stylesheets have been considerably changed in version 1.9.8, which might require
 </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.9.4">
+    <div class="version" aria-label="1.9.4">
 <a  name="1.9.4"></a>
 
 <h1>Chamilo 1.9.4 - Puebla, 18th of January, 2013</h1>
@@ -9085,7 +9304,7 @@ Stylesheets have been considerably changed in version 1.9.8, which might require
 </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.9.2">
+    <div class="version" aria-label="1.9.2">
 <a  name="1.9.2"></a>
 
 <h1>Chamilo 1.9.2 - Hanga Roa, 27th of September, 2012</h1>
@@ -9184,7 +9403,7 @@ Stylesheets have been considerably changed in version 1.9.8, which might require
 </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.9.0">
+    <div class="version" aria-label="1.9.0">
 <a  name="1.9.0"></a>
 
 <h1>Chamilo 1.9.0 - Vogüé, 31st of July, 2012</h1>
@@ -9689,7 +9908,7 @@ Due to the move to HTML5, it is very likely that any older stylesheet will have 
 </ul>
     </div>
 
-<div class="version" aria-role="article" aria-label="1.8.8.6">
+<div class="version" aria-label="1.8.8.6">
 <a  name="1.8.8.6"></a>
 
 <h1>Chamilo 1.8.8.6 - Rottweil, 20th of July 2012</h1>
@@ -9708,7 +9927,7 @@ Due to the move to HTML5, it is very likely that any older stylesheet will have 
 </ul>
 </div>
 
-    <div class="version" aria-role="article" aria-label="1.8.8.4">
+    <div class="version" aria-label="1.8.8.4">
 <a  name="1.8.8.4"></a>
 
 <h1>Chamilo 1.8.8.4 - La Molina, August 2011</h1>
@@ -9898,7 +10117,7 @@ This version of Chamilo only includes a few minor new features:
 </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.8.8.2">
+    <div class="version" aria-label="1.8.8.2">
 <a  name="1.8.8.2"></a>
 
 <h1>Chamilo 1.8.8.2 - Bellavista, May 2011</h1>
@@ -9960,7 +10179,7 @@ This version of Chamilo only includes a few minor new features:
 </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.8.8">
+    <div class="version" aria-label="1.8.8">
   <a  name="1.8.8"></a>
 
 <h1>Chamilo 1.8.8 - Miraflores, May 2011</h1>
@@ -10224,7 +10443,7 @@ providers (see our website, <i>Support</i> tab).
 
     </div>
 
-<div class="version" aria-role="article" aria-label="1.8.7.1">
+<div class="version" aria-label="1.8.7.1">
 <a  name="1.8.7.1"></a>
 
 <h1>Chamilo 1.8.7.1 - Palmas, July 2010</h1>
@@ -10325,7 +10544,7 @@ providers (see our website, <i>Support</i> tab).
   <li>main/online folder has been removed (deprecated)</li>
 </ul>
     </div>
-    <div class="version" aria-role="article" aria-label="1.8.7">
+    <div class="version" aria-label="1.8.7">
 <a  name="1.8.7"></a>
 
 <h1>Chamilo 1.8.7 - Istanbul, June 2010</h1>
@@ -10431,7 +10650,7 @@ providers (see our website, <i>Support</i> tab).
 <br />
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.8.6.2">
+    <div class="version" aria-label="1.8.6.2">
 <a  name="1.8.6.2"></a>
 
 <h1>Chamilo 1.8.6.2 - Salto, January 2010</h1>
@@ -10530,7 +10749,7 @@ providers (see our website, <i>Support</i> tab).
 </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.8.6.1">
+    <div class="version" aria-label="1.8.6.1">
 <a  name="1.8.6.1"></a>
 <p>
     Chamilo was initially a fork of the Dokeos project, which was a 2004 fork of the Claroline project.
@@ -10588,7 +10807,7 @@ providers (see our website, <i>Support</i> tab).
 <br />
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.8.6">
+    <div class="version" aria-label="1.8.6">
 <a  name="1.8.6"></a>
 
 <h1>Dokeos 1.8.6 - Svalbard, June 2009</h1>
@@ -10788,7 +11007,7 @@ providers (see our website, <i>Support</i> tab).
 </ul>
 <br />
     </div>
-    <div class="version" aria-role="article" aria-label="1.8.5">
+    <div class="version" aria-label="1.8.5">
         <a name="1.8.5"></a>
         <h1>Dokeos 1.8.5 - Valparaiso, June 2008</h1>
         <h3>Release notes - summary</h3>
@@ -10918,7 +11137,7 @@ providers (see our website, <i>Support</i> tab).
             </li>
         </ul>
     </div>
-    <div class="version" aria-role="article" aria-label="1.8.4">
+    <div class="version" aria-label="1.8.4">
         <a name="1.8.4"></a>
         <h1>Dokeos 1.8.4 - September 2007</h1>
 
@@ -10985,7 +11204,7 @@ providers (see our website, <i>Support</i> tab).
         </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.8.0">
+    <div class="version" aria-label="1.8.0">
 <a name="1.8.0"></a>
 
 <h1>Dokeos 1.8 - May 2007</h1>
@@ -11020,21 +11239,21 @@ a simple videoconferencing interface.</p>
 </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.6.5">
+    <div class="version" aria-label="1.6.5">
         <a name="1.6.5"></a>
         <h1>Dokeos 1.6.5 - , July 2006 </h1>
         <h3>Release notes - summary</h3>
         <p>Security Release. 1 bug has been fixed.<br/>
         </p>
     </div>
-    <div class="version" aria-role="article" aria-label="1.6.4">
+    <div class="version" aria-label="1.6.4">
 <a name="1.6.4"></a>
 <h1>Dokeos 1.6.4 - , April 2006 </h1>
 <h3>Release notes - summary</h3>
 <p>Bugfix release. 2 bugs have been fixed. One security hole has been fixed <br />
 </p>
     </div>
-    <div class="version" aria-role="article" aria-label="1.6.3">
+    <div class="version" aria-label="1.6.3">
 <a name="1.6.3"></a>
 
 <h1>Dokeos 1.6.3 - , February 2006 </h1>
@@ -11043,7 +11262,7 @@ a simple videoconferencing interface.</p>
 
 <p>Bugfix release. 44 bugs have been fixed.<br />
     </div>
-    <div class="version" aria-role="article" aria-label="1.6.2">
+    <div class="version" aria-label="1.6.2">
 <a name="1.6.2"></a>
 
 <h1>Dokeos 1.6.2 - , September 2005</h1>
@@ -11053,7 +11272,7 @@ a simple videoconferencing interface.</p>
 <p>Bugfix release. 14 bugs have been fixed.<br />
 
     </div>
-    <div class="version" aria-role="article" aria-label="1.6.1">
+    <div class="version" aria-label="1.6.1">
 <a name="1.6.1"></a>
 
 <h1>Dokeos 1.6.1 - , August 2005</h1>
@@ -11062,7 +11281,7 @@ a simple videoconferencing interface.</p>
 
 <p>Bugfix release. 31 bugs have been fixed.<br />
     </div>
-    <div class="version" aria-role="article" aria-label="1.6.0">
+    <div class="version" aria-label="1.6.0">
 <a name="1.6"></a>
 
 <h1>Dokeos 1.6 - July 2005</h1>
@@ -11098,7 +11317,7 @@ a simple videoconferencing interface.</p>
         as plugin).</li>
     </ul>
     </div>
-    <div class="version" aria-role="article" aria-label="1.5.5">
+    <div class="version" aria-label="1.5.5">
     <a name="1.5.5"></a>
 
     <h1>Dokeos 1.5.5 - 2004</h1>
@@ -11125,21 +11344,21 @@ a simple videoconferencing interface.</p>
           <li> Language revision : dokeos vocabulary has been generalised to be adapted to different types of organisations and not only universities</li>
     </ul>
     </div>
-    <div class="version" aria-role="article" aria-label="1.4.2">
+    <div class="version" aria-label="1.4.2">
     <a name="1.4.2"></a>
     <h1>Claroline 1.4.2 - 2003</h1>
     <ul>
         <li>No feature is added to Claroline 1.4.2. This release is basically stressed on stability increase and bugs fixing.</li>
     </ul>
     </div>
-    <div class="version" aria-role="article" aria-label="1.4.1">
+    <div class="version" aria-label="1.4.1">
     <a name="1.4.1"></a>
     <h1>Claroline 1.4.1 - 2003</h1>
     <ul>
         <li>No feature is added to Claroline 1.4.2. This release is basically stressed on stability increase and bugs fixing.</li>
     </ul>
     </div>
-    <div class="version" aria-role="article" aria-label="1.4.0">
+    <div class="version" aria-label="1.4.0">
     <a name="1.4"></a>
     <h1>Claroline 1.4 - 2003</h1>
     The main Claroline improvements are hidden behind the screen.
@@ -11187,14 +11406,14 @@ a simple videoconferencing interface.</p>
             every user's action on the platform.</li>
     </ul>
     </div>
-    <div class="version" aria-role="article" aria-label="1.3.1">
+    <div class="version" aria-label="1.3.1">
     <a name="1.3.1"></a>
     <h1>Claroline 1.3.1 - 2003</h1>
     <ul>
         <li>No feature is added to Claroline 1.3.1. This release is basically stressed on stability increase and bugs fixing.</li>
     </ul>
     </div>
-    <div class="version" aria-role="article" aria-label="1.3.0">
+    <div class="version" aria-label="1.3.0">
     <a name="1.3.0"></a>
     <h1>Claroline 1.3.0 - 2003</h1>
     <ul>
@@ -11219,7 +11438,7 @@ a simple videoconferencing interface.</p>
             completely rewritten.</li>
     </ul>
     </div>
-    <div class="version" aria-role="article" aria-label="1.2.0">
+    <div class="version" aria-label="1.2.0">
     <a name="1.2.0"></a>
     <h1>Claroline 1.2.0 - 2002</h1>
     <ul>
@@ -11252,7 +11471,6 @@ a simple videoconferencing interface.</p>
     <h2>Syntax and terminology</h2>
     <p>To ensure a quality report, we are using a specific syntax and terms for this changelog, provided below:</p>
     <h3>Versions</h3>
-    <p>
         Each version is shortly described, with:
     <ul>
         <li>a version number using <a href="http://semver.org/">Semantic Versioning</a></li>
@@ -11260,9 +11478,7 @@ a simple videoconferencing interface.</p>
         <li>a release date</li>
         <li>an optional, short history explaining the relationship between the version and the place</li>
     </ul>
-    </p>
     <h3>Sections</h3>
-    <p>
         Inside each version block, different sections are laid out to ease the reading of the changelog:
     <ul>
         <li>Security fixes: indicate if any known vulnerability was fixed in this version. This section is very important as each version with a vulnerability fix indicates that you should *really* upgrade to that version if you value your Chamilo portal's security and the data of your users</li>
@@ -11276,13 +11492,10 @@ a simple videoconferencing interface.</p>
         <li>Removals: when a tool or stylesheet is not maintained anymore, or when we replaced some library with another, we will remove deprecated files. This is a list of such files that might have been removed or simply marked for deprecation or removal in later versions.</li>
         <li>Known issues: sometimes we are made aware that some Chamilo features will not work anymore. We will report those here to make sure our users are aware of them.</li>
     </ul>
-    </p>
+
     <h3>Syntax</h3>
-    <p>
         Every change comes with a link to the change in our versions tracking system, a link to the reported issue or task (if any) and a description of the change's purpose.
-    </p>
     <h3>Tools terminology</h3>
-    <p>
         We use a short terminology to try and group all changes applying to the same tool. We use the singular version. The names we use for these tools are:
     <ul>
         <li>Admin</li>
@@ -11333,9 +11546,7 @@ a simple videoconferencing interface.</p>
         <li>Wiki</li>
         <li>Work</li>
     </ul>
-    </p>
     <h3>Hashtags</h3>
-    <p>
         In some very specific cases, this changelog might contain references to specific topics, like compliance to
         a standard or a law. In this case, we will use the "(#hashtag)" format. Here is a list of topics you might find:
     <ul>
@@ -11343,9 +11554,10 @@ a simple videoconferencing interface.</p>
         <li>(#scorm): indicates that this feature relates to the SCORM standard</li>
         <li>(#fresh-users): indicates that this feature helps prevent drama with fresh users lacking experience and prone to error</li>
     </ul>
-    </p>
     </div>
-</div></div></div>
+    </div>
+  </div>
+</div>
 
 <hr />
     <a href="http://validator.w3.org/check?uri=referer"><img src="//www.w3.org/Icons/valid-xhtml10-blue" alt="Valid XHTML 1.0 Transitional" style="margin: 1em; float: right;" height="31" width="88" /></a>

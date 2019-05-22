@@ -128,13 +128,13 @@ function getQuestionOptions($user, $courseId, $surveyId, $questionId)
     $options = Database::getManager()
         ->createQuery(
             'SELECT sqo FROM ChamiloCourseBundle:CSurveyQuestionOption sqo
-                INNER JOIN ChamiloCourseBundle:CSurveyAnswer sa
-                    WITH
-                        sqo.cId = sa.cId
-                        AND sqo.questionId = sa.questionId
-                        AND sqo.surveyId = sa.surveyId
-                        AND sqo.iid = sa.optionId
-                WHERE sa.user = :user AND sa.cId = :course AND sa.surveyId = :survey AND sa.questionId = :question'
+            INNER JOIN ChamiloCourseBundle:CSurveyAnswer sa
+                WITH
+                    sqo.cId = sa.cId
+                    AND sqo.questionId = sa.questionId
+                    AND sqo.surveyId = sa.surveyId
+                    AND sqo.iid = sa.optionId
+            WHERE sa.user = :user AND sa.cId = :course AND sa.surveyId = :survey AND sa.questionId = :question'
         )
         ->setParameters(
             [
@@ -201,9 +201,10 @@ function otherRow($questions, $user, $courseId)
                 $question['survey_id'],
                 $question['question_id']
             );
+            /** @var CSurveyQuestionOption|null $option */
+            $option = end($options);
 
-            /** @var CSurveyQuestionOption $option */
-            foreach ($options as $option) {
+            if ($option) {
                 $value = $option->getSort();
                 $row[] = '"'.$value.'"';
             }

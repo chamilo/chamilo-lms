@@ -28,6 +28,7 @@ if (!empty($message)) {
 }
 
 $allowCollapsable = api_get_configuration_value('allow_user_course_category_collapsable');
+$teachersIcon = Display::return_icon('teacher.png', get_lang('Teachers'), null, ICON_SIZE_TINY);
 
 // COURSES WITH CATEGORIES
 if (!empty($user_course_categories)) {
@@ -75,26 +76,32 @@ if (!empty($user_course_categories)) {
                 ?>
                 <?php echo Display::return_icon('up_na.png', get_lang('Up'), '', 22); ?>
            <?php
-            } ?>
-
-            <?php if ($row['id'] != $last['id']) {
+            }
+            if ($row['id'] != $last['id']) {
                 ?>
                 <a href="courses.php?action=<?php echo $action; ?>&amp;move=down&amp;category=<?php echo $row['id']; ?>&amp;sec_token=<?php echo $stok; ?>">
                 <?php echo Display::return_icon('down.png', get_lang('Down'), '', 22); ?>
                 </a>
             <?php
             } else {
-                ?>
-                <?php echo Display::return_icon('down_na.png', get_lang('Down'), '', 22); ?>
+                echo Display::return_icon('down_na.png', get_lang('Down'), '', 22); ?>
             <?php
             } ?>
             <a href="courses.php?action=deletecoursecategory&amp;id=<?php echo $row['id']; ?>&amp;sec_token=<?php echo $stok; ?>">
-            <?php echo Display::display_icon(
+                <?php echo Display::display_icon(
                     'delete.png',
                     get_lang('Delete'),
-                    ['onclick' => "javascript: if (!confirm('".addslashes(api_htmlentities(get_lang('CourseCategoryAbout2bedeleted'), ENT_QUOTES, api_get_system_encoding()))."')) return false;"],
+                    [
+                        'onclick' => "javascript: if (!confirm('".addslashes(
+                                api_htmlentities(
+                                    get_lang('CourseCategoryAbout2bedeleted'),
+                                    ENT_QUOTES,
+                                    api_get_system_encoding()
+                                )
+                            )."')) return false;",
+                    ],
                     22
-            ); ?>
+                ); ?>
             </a>
         <?php
         }
@@ -107,29 +114,24 @@ if (!empty($user_course_categories)) {
         $key = 0;
         if (!empty($courses_in_category[$row['id']])) {
             foreach ($courses_in_category[$row['id']] as $course) {
-                ?>
-            <tr>
-                <td>
-                <a name="course<?php echo $course['code']; ?>"></a>
-                <strong><?php echo $course['title']; ?></strong><br />
-                <?php
+                echo '<tr><td>';
+                echo '<a name="course'.$course['code'].'"></a>';
+                echo '<strong>'.$course['title'].'</strong>';
+
                 if (api_get_setting('display_coursecode_in_courselist') === 'true') {
-                    echo $course['visual_code'];
+                    echo ' ('.$course['visual_code'].')';
                 }
 
-                if (api_get_setting('display_coursecode_in_courselist') === 'true' &&
-                    api_get_setting('display_teacher_in_courselist') === 'true'
-                ) {
-                    echo ' - ';
-                }
+                echo '<br />';
+                echo $teachersIcon;
+                echo '&nbsp;';
+                echo CourseManager::getTeacherListFromCourseCodeToString($course['code']);
+                echo '<br />';
 
                 if (api_get_setting('display_teacher_in_courselist') === 'true') {
                     echo $course['tutor'];
-                } ?>
-                </td>
-                <td valign="top">
-                <!-- edit -->
-                <?php
+                }
+                echo '</td><td valign="top">';
                 if (isset($_GET['edit']) && $course['code'] == $_GET['edit']) {
                     $edit_course = Security::remove_XSS($_GET['edit']); ?>
 
@@ -226,27 +228,25 @@ if (!empty($courses_without_category)) {
     $number_of_courses = count($courses_without_category);
     $key = 0;
     foreach ($courses_without_category as $course) {
-        echo '<tr>'; ?>
-        <td>
-            <a name="course<?php echo $course['code']; ?>"></a>
-            <strong><?php echo $course['title']; ?></strong><br />
-            <?php
-            if (api_get_setting('display_coursecode_in_courselist') === 'true') {
-                echo $course['visual_code'];
-            }
-
-        if (api_get_setting('display_coursecode_in_courselist') === 'true' &&
-                api_get_setting('display_teacher_in_courselist') === 'true'
-            ) {
-            echo ' - ';
+        echo '<tr><td>';
+        echo '<a name="course'.$course['code'].'"></a>';
+        echo '<strong>'.$course['title'].'</strong>';
+        if (api_get_setting('display_coursecode_in_courselist') === 'true') {
+            echo ' ('.$course['visual_code'].')';
         }
+
+        echo '<br />';
+        echo $teachersIcon;
+        echo '&nbsp;';
+        echo CourseManager::getTeacherListFromCourseCodeToString($course['code']);
+        echo '<br />';
+
         if (api_get_setting('display_teacher_in_courselist') === 'true') {
             echo $course['tutor'];
-        } ?>
-        </td>
-        <td valign="top">
-            <!-- the edit icon OR the edit dropdown list -->
-            <?php if (isset($_GET['edit']) && $course['code'] == $_GET['edit']) {
+        }
+        echo '</td><td valign="top">';
+        // the edit icon OR the edit dropdown list
+        if (isset($_GET['edit']) && $course['code'] == $_GET['edit']) {
             $edit_course = Security::remove_XSS($_GET['edit']); ?>
             <div style="float:left;">
             <form name="edit_course_category" method="post" action="courses.php?action=<?php echo $action; ?>">
@@ -259,11 +259,11 @@ if (!empty($courses_without_category)) {
                         <option value="<?php echo $row['id']; ?>"><?php echo $row['title']; ?></option>
                     <?php
             } ?>
-                </select>
-                <button class="save" type="submit" name="submit_change_course_category"><?php echo get_lang('Ok'); ?></button>
-            </form><br />
-            </div>
-            <?php
+                    </select>
+                    <button class="save" type="submit" name="submit_change_course_category"><?php echo get_lang('Ok'); ?></button>
+                </form><br />
+                </div>
+                <?php
         } ?>
             <div style="float:left; width:110px">
             <?php
@@ -275,19 +275,15 @@ if (!empty($courses_without_category)) {
             <?php
             }
         if (isset($_GET['edit']) && $course['code'] == $_GET['edit']) {
-            ?>
-                <?php echo Display::display_icon('edit_na.png', get_lang('Edit'), '', 22); ?>
-              <?php
+            echo Display::display_icon('edit_na.png', get_lang('Edit'), '', 22);
         } else {
             ?>
                 <a href="courses.php?action=<?php echo $action; ?>&amp;edit=<?php echo $course['code']; ?>&amp;sec_token=<?php echo $stok; ?>">
                 <?php echo Display::display_icon('edit.png', get_lang('Edit'), '', 22); ?>
                 </a>
              <?php
-        } ?>
-
-            <!-- up /down icons-->
-            <?php if ($key > 0) {
+        }
+        if ($key > 0) {
             ?>
                 <a href="courses.php?action=<?php echo $action; ?>&amp;move=up&amp;course=<?php echo $course['code']; ?>&amp;category=<?php echo $course['user_course_cat']; ?>&amp;sec_token=<?php echo $stok; ?>">
                 <?php echo Display::display_icon('up.png', get_lang('Up'), '', 22); ?>

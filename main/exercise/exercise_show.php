@@ -139,6 +139,9 @@ if (!$is_allowedToEdit) {
 $allowRecordAudio = api_get_setting('enable_record_audio') === 'true';
 $allowTeacherCommentAudio = api_get_configuration_value('allow_teacher_comment_audio') === true;
 
+$js = '<script>'.api_get_language_translate_html().'</script>';
+$htmlHeadXtra[] = $js;
+
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
@@ -925,6 +928,10 @@ foreach ($questionList as $questionId) {
         $score['score'] = $my_total_score;
         $score['weight'] = $my_total_weight;
         $score['comments'] = isset($comnt) ? $comnt : null;
+
+        if (isset($question_result['user_answered'])) {
+            $score['user_answered'] = $question_result['user_answered'];
+        }
     }
 
     if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
@@ -1210,3 +1217,4 @@ unset($questionList);
 
 Session::erase('exerciseResult');
 unset($exerciseResult);
+Session::erase('calculatedAnswerId');

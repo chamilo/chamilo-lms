@@ -322,7 +322,7 @@ class SurveyUtil
     {
         $surveyId = $survey_data['survey_id'];
 
-        if (empty($people_filled) || empty($survey_data)) {
+        if (empty($survey_data)) {
             return '';
         }
 
@@ -540,7 +540,7 @@ class SurveyUtil
             echo '</div>';
         }
 
-        self::displayUserReportForm($survey_data, $people_filled);
+        echo self::displayUserReportForm($survey_data, $people_filled);
         if (isset($_GET['user'])) {
             echo self::displayUserReportAnswers($_GET['user'], $survey_data);
         }
@@ -913,11 +913,17 @@ class SurveyUtil
      * @param int   $userId
      * @param bool  $addActionBar
      * @param bool  $addFilters
+     * @param bool  $addExtraFields
      *
      * @return string
      */
-    public static function displayCompleteReport($survey_data, $userId = 0, $addActionBar = true, $addFilters = true)
-    {
+    public static function displayCompleteReport(
+        $survey_data,
+        $userId = 0,
+        $addActionBar = true,
+        $addFilters = true,
+        $addExtraFields = true
+    ) {
         // Database table definitions
         $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
@@ -990,30 +996,32 @@ class SurveyUtil
         }
 
         $display_extra_user_fields = false;
-        if (!(isset($_POST['submit_question_filter']) && $_POST['submit_question_filter'] ||
-            isset($_POST['export_report']) && $_POST['export_report']) ||
-            !empty($_POST['fields_filter'])
-        ) {
-            // Show user fields section with a big th colspan that spans over all fields
-            $extra_user_fields = UserManager::get_extra_fields(
-                0,
-                0,
-                5,
-                'ASC',
-                false,
-                true
-            );
-            $num = count($extra_user_fields);
-            if ($num > 0) {
-                $content .= '<th '.($num > 0 ? ' colspan="'.$num.'"' : '').'>';
-                $content .= '<label>';
-                if ($addFilters) {
-                    $content .= '<input type="checkbox" name="fields_filter" value="1" checked="checked"/> ';
+        if ($addExtraFields) {
+            if (!(isset($_POST['submit_question_filter']) && $_POST['submit_question_filter'] ||
+                    isset($_POST['export_report']) && $_POST['export_report']) ||
+                !empty($_POST['fields_filter'])
+            ) {
+                // Show user fields section with a big th colspan that spans over all fields
+                $extra_user_fields = UserManager::get_extra_fields(
+                    0,
+                    0,
+                    5,
+                    'ASC',
+                    false,
+                    true
+                );
+                $num = count($extra_user_fields);
+                if ($num > 0) {
+                    $content .= '<th '.($num > 0 ? ' colspan="'.$num.'"' : '').'>';
+                    $content .= '<label>';
+                    if ($addFilters) {
+                        $content .= '<input type="checkbox" name="fields_filter" value="1" checked="checked"/> ';
+                    }
+                    $content .= get_lang('UserFields');
+                    $content .= '</label>';
+                    $content .= '</th>';
+                    $display_extra_user_fields = true;
                 }
-                $content .= get_lang('UserFields');
-                $content .= '</label>';
-                $content .= '</th>';
-                $display_extra_user_fields = true;
             }
         }
 
@@ -1067,12 +1075,15 @@ class SurveyUtil
         // Getting all the questions and options
         $content .= '	<tr>';
         $content .= '		<th>&nbsp;</th>'; // the user column
+
         if (!(isset($_POST['submit_question_filter']) && $_POST['submit_question_filter'] ||
             isset($_POST['export_report']) && $_POST['export_report']) || !empty($_POST['fields_filter'])
         ) {
-            //show the fields names for user fields
-            foreach ($extra_user_fields as &$field) {
-                $content .= '<th>'.$field[3].'</th>';
+            if ($addExtraFields) {
+                // show the fields names for user fields
+                foreach ($extra_user_fields as &$field) {
+                    $content .= '<th>'.$field[3].'</th>';
+                }
             }
         }
 

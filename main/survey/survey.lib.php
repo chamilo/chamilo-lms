@@ -2458,6 +2458,7 @@ class SurveyManager
                         $surveyData,
                         $userId,
                         false,
+                        false,
                         false
                     );
                     $table->setCellContents(++$row, 0, $answers);

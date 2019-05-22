@@ -76,26 +76,32 @@ if (!empty($user_course_categories)) {
                 ?>
                 <?php echo Display::return_icon('up_na.png', get_lang('Up'), '', 22); ?>
            <?php
-            } ?>
-
-            <?php if ($row['id'] != $last['id']) {
+            }
+            if ($row['id'] != $last['id']) {
                 ?>
                 <a href="courses.php?action=<?php echo $action; ?>&amp;move=down&amp;category=<?php echo $row['id']; ?>&amp;sec_token=<?php echo $stok; ?>">
                 <?php echo Display::return_icon('down.png', get_lang('Down'), '', 22); ?>
                 </a>
             <?php
             } else {
-                ?>
-                <?php echo Display::return_icon('down_na.png', get_lang('Down'), '', 22); ?>
+                echo Display::return_icon('down_na.png', get_lang('Down'), '', 22); ?>
             <?php
             } ?>
             <a href="courses.php?action=deletecoursecategory&amp;id=<?php echo $row['id']; ?>&amp;sec_token=<?php echo $stok; ?>">
-            <?php echo Display::display_icon(
+                <?php echo Display::display_icon(
                     'delete.png',
                     get_lang('Delete'),
-                    ['onclick' => "javascript: if (!confirm('".addslashes(api_htmlentities(get_lang('CourseCategoryAbout2bedeleted'), ENT_QUOTES, api_get_system_encoding()))."')) return false;"],
+                    [
+                        'onclick' => "javascript: if (!confirm('".addslashes(
+                                api_htmlentities(
+                                    get_lang('CourseCategoryAbout2bedeleted'),
+                                    ENT_QUOTES,
+                                    api_get_system_encoding()
+                                )
+                            )."')) return false;",
+                    ],
                     22
-            ); ?>
+                ); ?>
             </a>
         <?php
         }
@@ -111,20 +117,16 @@ if (!empty($user_course_categories)) {
                 echo '<tr><td>';
                 echo '<a name="course'.$course['code'].'"></a>';
                 echo '<strong>'.$course['title'].'</strong>';
+
+                if (api_get_setting('display_coursecode_in_courselist') === 'true') {
+                    echo ' ('.$course['visual_code'].')';
+                }
+
                 echo '<br />';
                 echo $teachersIcon;
                 echo '&nbsp;';
                 echo CourseManager::getTeacherListFromCourseCodeToString($course['code']);
                 echo '<br />';
-                if (api_get_setting('display_coursecode_in_courselist') === 'true') {
-                    echo $course['visual_code'];
-                }
-
-                if (api_get_setting('display_coursecode_in_courselist') === 'true' &&
-                    api_get_setting('display_teacher_in_courselist') === 'true'
-                ) {
-                    echo ' - ';
-                }
 
                 if (api_get_setting('display_teacher_in_courselist') === 'true') {
                     echo $course['tutor'];
@@ -229,20 +231,15 @@ if (!empty($courses_without_category)) {
         echo '<tr><td>';
         echo '<a name="course'.$course['code'].'"></a>';
         echo '<strong>'.$course['title'].'</strong>';
+        if (api_get_setting('display_coursecode_in_courselist') === 'true') {
+            echo ' ('.$course['visual_code'].')';
+        }
+
         echo '<br />';
         echo $teachersIcon;
         echo '&nbsp;';
         echo CourseManager::getTeacherListFromCourseCodeToString($course['code']);
         echo '<br />';
-        if (api_get_setting('display_coursecode_in_courselist') === 'true') {
-            echo $course['visual_code'];
-        }
-
-        if (api_get_setting('display_coursecode_in_courselist') === 'true' &&
-            api_get_setting('display_teacher_in_courselist') === 'true'
-        ) {
-            echo ' - ';
-        }
 
         if (api_get_setting('display_teacher_in_courselist') === 'true') {
             echo $course['tutor'];

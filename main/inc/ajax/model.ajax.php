@@ -153,7 +153,6 @@ if (($search || $forceSearch) && ($search !== 'false')) {
         $whereCondition .= '  ('.$whereConditionInForm.') ';
     }
     $filters = isset($_REQUEST['filters']) && !is_array($_REQUEST['filters']) ? json_decode($_REQUEST['filters']) : false;
-    //echo($filters);    exit;
     if (isset($_REQUEST['filters2'])) {
         $filters = json_decode($_REQUEST['filters2']);
     }

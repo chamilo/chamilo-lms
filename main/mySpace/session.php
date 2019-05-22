@@ -125,14 +125,50 @@ $form = new FormValidator(
     api_get_path(WEB_CODE_PATH).'mySpace/session.php'
 );
 $form->addElement('text', 'keyword', get_lang('Keyword'));
+
+$extraFieldSession = new ExtraField('session');
+$extraFieldSession->addElements(
+    $form,
+    null,
+    [], //exclude
+    true
+);
+
 $form->addButtonSearch(get_lang('Search'));
 $keyword = '';
+$result = SessionManager::getGridColumns('my_space');
+
+$columns = $result['columns'];
+$columnModel = $result['column_model'];
+
+$filterToString = '';
 if ($form->validate()) {
-    $keyword = $form->getSubmitValue('keyword');
+    $values = $form->getSubmitValues();
+    $keyword = Security::remove_XSS($form->getSubmitValue('keyword'));
+    $extraField = new ExtraField('session');
+    $extraFields = $extraField->get_all(null, 'option_order');
+    $extraFields = array_column($extraFields, 'variable');
+    $filter = new stdClass();
+    $filter->groupOp = 'AND';
+
+    foreach ($columnModel as $col) {
+        if (isset($values[$col['index']]) &&
+            in_array(str_replace('extra_','', $col['index']), $extraFields)
+        ) {
+            $rule = new stdClass();
+            $rule->field = $col['index'];
+            $rule->op = 'in';
+            $rule->data = Security::remove_XSS($values[$col['index']]);
+            $filter->rules[] = $rule;
+            $filter->groupOp = 'AND';
+        }
+    }
+    $filterToString = json_encode($filter);
 }
 $form->setDefaults(['keyword' => $keyword]);
 
-$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions_tracking&_search=true&_force_search=true&filters=&keyword='.Security::remove_XSS($keyword);
+$url = api_get_path(WEB_AJAX_PATH).
+    'model.ajax.php?a=get_sessions_tracking&_search=true&_force_search=true&filters='.$filterToString.'&keyword='.$keyword;
 
 // Column config
 $extraParams = [
@@ -140,17 +176,12 @@ $extraParams = [
     'height' => 'auto',
 ];
 
-$result = SessionManager::getGridColumns('my_space');
-
-$columns = $result['columns'];
-$columnModel = $result['column_model'];
-
-$extraParams['postData'] = [
+/*$extraParams['postData'] = [
     'filters' => [
         'groupOp' => 'AND',
         'rules' => $result['rules'],
     ],
-];
+];*/
 
 $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
 $allowOrder = api_get_configuration_value('session_list_order');
@@ -164,7 +195,6 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
         }
         var added_cols = [];
         var original_cols = [];
-
         function clean_cols(grid, added_cols) {
             // Cleaning
             for (key in added_cols) {
@@ -279,7 +309,7 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
 
             <?php
             // Create the searching dialog.
-            echo 'grid.searchGrid(prmSearch);';
+            //echo 'grid.searchGrid(prmSearch);';
             ?>
             // Fixes search table.
             var searchDialogAll = $("#fbox_"+grid[0].id);

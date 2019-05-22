@@ -7,7 +7,6 @@
  * @todo use formvalidator
  */
 
-// resetting the course id.
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -29,7 +28,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('SessionList'),
 ];
 $interbreadcrumb[] = [
-    'url' => "resume_session.php?id_session=".$sessionId,
+    'url' => "resume_session.php?id_session=$sessionId",
     'name' => get_lang('SessionOverview'),
 ];
 
@@ -131,8 +130,8 @@ if ($ajax_search) {
 			INNER JOIN $tbl_session_rel_course session_rel_course
             ON
                 course.id = session_rel_course.c_id AND
-                session_rel_course.session_id = ".$sessionId."
-			ORDER BY ".(sizeof($courses) ? "(code IN(".implode(',', $courses).")) DESC," : "")." title";
+                session_rel_course.session_id = $sessionId
+			ORDER BY ".(count($courses) ? "(code IN (".implode(',', $courses).")) DESC," : '')." title";
 
     if (api_is_multiple_url_enabled()) {
         $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -141,12 +140,11 @@ if ($ajax_search) {
             $sql = "SELECT course.id, code, title, visual_code, session_id
                     FROM $tbl_course course
                     INNER JOIN $tbl_session_rel_course session_rel_course
-                        ON course.id = session_rel_course.c_id
-                        AND session_rel_course.session_id = ".$sessionId."
-                        INNER JOIN $tbl_course_rel_access_url url_course
-                        ON (url_course.c_id = course.id)
+                    ON course.id = session_rel_course.c_id AND session_rel_course.session_id = $sessionId
+                    INNER JOIN $tbl_course_rel_access_url url_course
+                    ON (url_course.c_id = course.id)
                     WHERE access_url_id = $access_url_id
-                    ORDER BY ".(sizeof($courses) ? "(code IN(".implode(',', $courses).")) DESC," : "")." title";
+                    ORDER BY ".(count($courses) ? " (code IN(".implode(',', $courses).")) DESC," : '')." title";
         }
     }
 
@@ -161,8 +159,8 @@ if ($ajax_search) {
 			LEFT JOIN $tbl_session_rel_course session_rel_course
             ON
                 course.id = session_rel_course.c_id AND
-                session_rel_course.session_id = ".$sessionId."
-			ORDER BY ".(sizeof($courses) ? "(code IN(".implode(',', $courses).")) DESC," : "")." title";
+                session_rel_course.session_id = $sessionId
+			ORDER BY ".(count($courses) ? "(code IN(".implode(',', $courses).")) DESC," : '')." title";
 
     if (api_is_multiple_url_enabled()) {
         $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -173,11 +171,11 @@ if ($ajax_search) {
                     LEFT JOIN $tbl_session_rel_course session_rel_course
                     ON
                         course.id = session_rel_course.c_id AND
-                        session_rel_course.session_id = ".$sessionId."
+                        session_rel_course.session_id = $sessionId
                     INNER JOIN $tbl_course_rel_access_url url_course
                     ON (url_course.c_id = course.id)
                     WHERE access_url_id = $access_url_id
-                    ORDER BY ".(sizeof($courses) ? "(code IN(".implode(',', $courses).")) DESC," : "")." title";
+                    ORDER BY ".(count($courses) ? "(code IN(".implode(',', $courses).")) DESC," : '')." title";
         }
     }
     $result = Database::query($sql);
@@ -208,7 +206,8 @@ if (!api_is_platform_admin() && api_is_teacher()) {
 
 unset($Courses);
 ?>
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id_session=<?php echo $sessionId; ?><?php if (!empty($_GET['add'])) {
+<form name="formulaire"
+      method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id_session=<?php echo $sessionId; if (!empty($_GET['add'])) {
     echo '&add=true';
 } ?>" style="margin:0px;" <?php if ($ajax_search) {
     echo ' onsubmit="valide();"';
@@ -304,7 +303,6 @@ unset($Courses);
         <div class="col-md-4">
             <label><?php echo get_lang('CourseListInSession'); ?> :</label>
             <select id='destination' name="SessionCoursesList[]" multiple="multiple" size="20" class="form-control">
-
                 <?php
                 foreach ($sessionCourses as $enreg) {
                     ?>

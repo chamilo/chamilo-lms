@@ -888,12 +888,16 @@ switch ($action) {
         }
         break;
     case 'export_to_pdf':
-        if (!learnpath::is_lp_visible_for_student($_SESSION['oLP']->lp_id, api_get_user_id())) {
-            api_not_allowed();
-        }
         $hideScormPdfLink = api_get_setting('hide_scorm_pdf_link');
         if ($hideScormPdfLink === 'true') {
             api_not_allowed(true);
+        }
+
+        // Teachers can export to PDF
+        if (!$is_allowed_to_edit) {
+            if (!learnpath::is_lp_visible_for_student($_SESSION['oLP']->lp_id, api_get_user_id())) {
+                api_not_allowed();
+            }
         }
 
         if (!$lp_found) {

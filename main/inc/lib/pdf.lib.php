@@ -187,6 +187,7 @@ class PDF
      * @param bool   $print_title     add title
      * @param bool   $complete_style  show header and footer if true
      * @param bool   $addStyle
+     * @param string $mainTitle
      *
      * @return false|null
      */
@@ -196,7 +197,8 @@ class PDF
         $course_code = null,
         $print_title = false,
         $complete_style = true,
-        $addStyle = true
+        $addStyle = true,
+        $mainTitle = ''
     ) {
         if (empty($html_file_array)) {
             return false;
@@ -231,14 +233,13 @@ class PDF
 
         $counter = 1;
         foreach ($html_file_array as $file) {
-            //Add a page break per file
+            // Add a page break per file
             $page_break = '<pagebreak>';
             if ($counter == count($html_file_array)) {
                 $page_break = '';
             }
-            $counter++;
 
-            //if the array provided contained subarrays with 'title' entry,
+            // if the array provided contained subarrays with 'title' entry,
             // then print the title in the PDF
             if (is_array($file) && isset($file['title'])) {
                 $html_title = $file['title'];
@@ -248,14 +249,27 @@ class PDF
                 $html_title = basename($file);
             }
 
+            $counter++;
+
             if (empty($file) && !empty($html_title)) {
-                //this is a chapter, print title & skip the rest
+                // this is a chapter, print title & skip the rest
+                if ($counter === 2 && !empty($mainTitle)) {
+                    $this->pdf->WriteHTML(
+                        '<html><body><h2 style="text-align: center">'.$mainTitle.'</h2></body></html>'
+                    );
+                }
                 if ($print_title) {
                     $this->pdf->WriteHTML(
                         '<html><body><h3>'.$html_title.'</h3></body></html>'.$page_break
                     );
                 }
                 continue;
+            } else {
+                if ($counter === 2 && !empty($mainTitle)) {
+                    $this->pdf->WriteHTML(
+                        '<html><body><h2 style="text-align: center">'.$mainTitle.'</h2></body></html>'
+                    );
+                }
             }
 
             if (!file_exists($file)) {

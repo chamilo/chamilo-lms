@@ -12126,7 +12126,10 @@ EOD;
     {
         $lp_id = (int) $lp_id;
         $files_to_export = [];
+
+        $sessionId = api_get_session_id();
         $course_data = api_get_course_info($this->cc);
+
         if (!empty($course_data)) {
             $scorm_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/scorm/'.$this->path;
             $list = self::get_flat_ordered_items_list($lp_id);
@@ -12135,7 +12138,7 @@ EOD;
                     $item = $this->items[$item_id];
                     switch ($item->type) {
                         case 'document':
-                            //Getting documents from a LP with chamilo documents
+                            // Getting documents from a LP with chamilo documents
                             $file_data = DocumentManager::get_document_data_by_id($item->path, $this->cc);
                             // Try loading document from the base course.
                             if (empty($file_data) && !empty($sessionId)) {
@@ -12173,12 +12176,16 @@ EOD;
                     }
                 }
             }
+
             $pdf = new PDF();
             $result = $pdf->html_to_pdf(
                 $files_to_export,
                 $this->name,
                 $this->cc,
-                true
+                true,
+                true,
+                true,
+                $this->get_name()
             );
 
             return $result;

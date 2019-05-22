@@ -3929,7 +3929,7 @@ class Tracking
      */
     public static function get_courses_list_from_session($session_id)
     {
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
 
         // table definition
         $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
@@ -3978,13 +3978,13 @@ class Tracking
                 $studentList = array_map('intval', $student_id);
                 $condition_user = " AND ip.insert_user_id IN ('".implode(',', $studentList)."') ";
             } else {
-                $student_id = intval($student_id);
+                $student_id = (int) $student_id;
                 $condition_user = " AND ip.insert_user_id = '$student_id' ";
             }
 
             $condition_session = null;
             if (isset($session_id)) {
-                $session_id = intval($session_id);
+                $session_id = (int) $session_id;
                 $condition_session = " AND pub.session_id = $session_id ";
             }
 
@@ -4089,7 +4089,7 @@ class Tracking
             $studentList = array_map('intval', $student_id);
             $conditions[] = " post.poster_id IN ('".implode("','", $studentList)."') ";
         } else {
-            $student_id = intval($student_id);
+            $student_id = (int) $student_id;
             $conditions[] = " post.poster_id = '$student_id' ";
         }
 
@@ -4156,7 +4156,7 @@ class Tracking
 
             $condition_session = '';
             if (isset($session_id)) {
-                $session_id = intval($session_id);
+                $session_id = (int) $session_id;
                 $condition_session = api_get_session_condition(
                     $session_id,
                     true,
@@ -4166,11 +4166,11 @@ class Tracking
             }
 
             $course_id = $courseInfo['real_id'];
-            $groupId = intval($groupId);
+            $groupId = (int) $groupId;
             if (!empty($groupId)) {
-                $groupCondition = " i.to_group_id = $groupId  ";
+                $groupCondition = " i.to_group_id = $groupId ";
             } else {
-                $groupCondition = " (i.to_group_id = 0 OR i.to_group_id IS NULL) ";
+                $groupCondition = ' (i.to_group_id = 0 OR i.to_group_id IS NULL) ';
             }
 
             $item = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -4226,7 +4226,7 @@ class Tracking
             $condition_session = ' AND f.session_id = '.$session_id;
         }
 
-        $groupId = intval($groupId);
+        $groupId = (int) $groupId;
 
         if (!empty($groupId)) {
             $groupCondition = " i.to_group_id = $groupId ";

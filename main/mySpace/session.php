@@ -153,7 +153,7 @@ if ($form->validate()) {
 
     foreach ($columnModel as $col) {
         if (isset($values[$col['index']]) && !empty($values[$col['index']]) &&
-            in_array(str_replace('extra_','', $col['index']), $extraFields)
+            in_array(str_replace('extra_', '', $col['index']), $extraFields)
         ) {
             $rule = new stdClass();
             $rule->field = $col['index'];

@@ -1852,7 +1852,9 @@ class SessionManager
         $empty_users = true,
         $registerUsersToAllCourses = true
     ) {
-        if ($sessionId != strval(intval($sessionId))) {
+        $sessionId = (int) $sessionId;
+
+        if (empty($sessionId)) {
             return false;
         }
 
@@ -2470,6 +2472,7 @@ class SessionManager
      * @param bool  $removeExistingCoursesWithUsers Whether to unsubscribe
      *                                              existing courses and users (true, default) or not (false)
      * @param bool  $copyEvaluation                 from base course to session course
+     * @param bool  $copyCourseTeachersAsCoach
      *
      * @throws Exception
      *
@@ -2479,7 +2482,8 @@ class SessionManager
         $sessionId,
         $courseList,
         $removeExistingCoursesWithUsers = true,
-        $copyEvaluation = false
+        $copyEvaluation = false,
+        $copyCourseTeachersAsCoach = false
     ) {
         $sessionId = (int) $sessionId;
 
@@ -2640,9 +2644,7 @@ class SessionManager
                                 /** @var AbstractLink $link */
                                 foreach ($links as $link) {
                                     //$newCategoryId = $newCategoryIdList[$link->get_category_id()];
-                                    $link->set_category_id(
-                                        $sessionGradeBookCategoryId
-                                    );
+                                    $link->set_category_id($sessionGradeBookCategoryId);
                                     $link->add();
                                 }
                             }
@@ -2658,9 +2660,7 @@ class SessionManager
                                 /** @var Evaluation $evaluation */
                                 foreach ($evaluationList as $evaluation) {
                                     //$evaluationId = $newCategoryIdList[$evaluation->get_category_id()];
-                                    $evaluation->set_category_id(
-                                        $sessionGradeBookCategoryId
-                                    );
+                                    $evaluation->set_category_id($sessionGradeBookCategoryId);
                                     $evaluation->add();
                                 }
                             }
@@ -2695,10 +2695,10 @@ class SessionManager
                 $existingCourses[] = ['c_id' => $courseId];
                 $nbr_courses++;
 
-                // subscribe all the users from the session to this course inside the session
+                // Subscribe all the users from the session to this course inside the session
                 $nbr_users = 0;
                 foreach ($user_list as $enreg_user) {
-                    $enreg_user_id = intval($enreg_user['user_id']);
+                    $enreg_user_id = (int) $enreg_user['user_id'];
                     $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user (session_id, c_id, user_id, visibility)
                             VALUES ($sessionId, $courseId, $enreg_user_id, $sessionVisibility)";
                     $result = Database::query($sql);
@@ -2722,11 +2722,23 @@ class SessionManager
                         WHERE session_id = $sessionId AND c_id = $courseId";
                 Database::query($sql);
             }
+
+            if ($copyCourseTeachersAsCoach) {
+                $teachers = CourseManager::get_teacher_list_from_course_code($courseInfo['code']);
+                if (!empty($teachers)) {
+                    foreach ($teachers as $teacher) {
+                        self::updateCoaches(
+                            $sessionId,
+                            $courseId,
+                            [$teacher['user_id']],
+                            false
+                        );
+                    }
+                }
+            }
         }
 
-        $sql = "UPDATE $tbl_session
-                SET nbr_courses = $nbr_courses
-                WHERE id = $sessionId";
+        $sql = "UPDATE $tbl_session SET nbr_courses = $nbr_courses WHERE id = $sessionId";
         Database::query($sql);
 
         return true;
@@ -2783,9 +2795,9 @@ class SessionManager
             Database::query($sql);
 
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**

@@ -152,7 +152,7 @@ if ($form->validate()) {
     $filter->groupOp = 'AND';
 
     foreach ($columnModel as $col) {
-        if (isset($values[$col['index']]) &&
+        if (isset($values[$col['index']]) && !empty($values[$col['index']]) &&
             in_array(str_replace('extra_','', $col['index']), $extraFields)
         ) {
             $rule = new stdClass();

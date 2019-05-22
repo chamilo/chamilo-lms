@@ -1,14 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ExtraField as ExtraFieldModel;
-
 /**
  * Sessions reporting.
  *
  * @package chamilo.reporting
  */
-
 ob_start();
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';

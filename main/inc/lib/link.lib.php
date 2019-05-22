@@ -970,8 +970,8 @@ class Link extends Model
      * @param bool $showActionLinks
      *
      * @return string
-     * @author Julio Montoya
      *
+     * @author Julio Montoya
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      */
     public static function showLinksPerCategory($catid, $courseId, $session_id, $showActionLinks = true)

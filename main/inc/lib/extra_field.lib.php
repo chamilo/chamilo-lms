@@ -2248,7 +2248,7 @@ JAVASCRIPT;
                 $rules[] = [
                     'field' => 'extra_'.$field['variable'],
                     'op' => 'cn',
-                    'data' => ''
+                    'data' => '',
                 ];
             }
         }

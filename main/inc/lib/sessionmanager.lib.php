@@ -3714,7 +3714,7 @@ class SessionManager
      * @param string $orderCondition
      * @param string $keyword
      * @param string $description
-     * @param array $options
+     * @param array  $options
      *
      * @return array sessions
      */

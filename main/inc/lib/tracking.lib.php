@@ -3817,7 +3817,6 @@ class Tracking
             }
         }
 
-
         $extraFieldModel = new ExtraFieldModel('session');
         $conditions = $extraFieldModel->parseConditions($options);
         $sqlInjectJoins = $conditions['inject_joins'];

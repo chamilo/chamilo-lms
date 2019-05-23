@@ -18,11 +18,10 @@ class UrlManager
      * @param string $url         The URL of the site
      * @param string $description The description of the site
      * @param int    $active      is active or not
-     * @param bool   $lastId
      *
-     * @return bool|string if success
+     * @return int
      */
-    public static function add($url, $description, $active, $lastId = false)
+    public static function add($url, $description, $active)
     {
         $tms = time();
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
@@ -32,19 +31,11 @@ class UrlManager
                 active 		= '".intval($active)."',
                 created_by 	= '".api_get_user_id()."',
                 tms = FROM_UNIXTIME(".$tms.")";
-        $result = Database::query($sql);
+        Database::query($sql);
 
-        if($lastId){
-            $rs = Database::query("SELECT @@identity AS id");
-            $id = 0;
+        $id = Database::insert_id();
 
-            if ($row = Database::fetch_array($rs)) {
-                $id = trim($row[0]);
-            }
-            return $id;
-        }
-
-        return $result;
+        return $id;
     }
 
     /**

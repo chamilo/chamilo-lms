@@ -68,7 +68,7 @@ class UserGroup extends Model
     }
 
     /**
-     * @param int  $id user group id
+     * @param int  $id       user group id
      * @param bool $getCount
      *
      * @return array|int

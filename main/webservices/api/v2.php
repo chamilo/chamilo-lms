@@ -131,35 +131,35 @@ try {
             $data = $restApi->subscribeUserToCourse($_POST);
             $restResponse->setData($data);
             break;
-        case Rest::CREATE_CAMPUS;
+        case Rest::CREATE_CAMPUS:
             $data = $restApi->createCampusURL($_POST);
             $restResponse->setData($data);
             break;
-        case Rest::EDIT_CAMPUS;
+        case Rest::EDIT_CAMPUS:
             $data = $restApi->editCampusURL($_POST);
             $restResponse->setData($data);
             break;
-        case Rest::DELETE_CAMPUS;
+        case Rest::DELETE_CAMPUS:
             $data = $restApi->deleteCampusURL($_POST);
             $restResponse->setData($data);
             break;
-        case Rest::SAVE_SESSION;
+        case Rest::SAVE_SESSION:
             $data = $restApi->addSession($_POST);
             $restResponse->setData($data);
             break;
-        case Rest::GET_USERS;
+        case Rest::GET_USERS:
             $data = $restApi->getUsersCampus($_POST);
             $restResponse->setData($data);
             break;
-        case Rest::GET_COURSE;
+        case Rest::GET_COURSE:
             $data = $restApi->getCoursesCampus($_POST);
             $restResponse->setData($data);
             break;
-        case Rest::ADD_COURSES_SESSION;
+        case Rest::ADD_COURSES_SESSION:
             $data = $restApi->addCoursesSession($_POST);
             $restResponse->setData($data);
             break;
-        case Rest::ADD_USER_SESSION;
+        case Rest::ADD_USER_SESSION:
             $data = $restApi->addUsersSession($_POST);
             $restResponse->setData($data);
             break;

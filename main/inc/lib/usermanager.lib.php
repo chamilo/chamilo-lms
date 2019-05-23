@@ -1679,7 +1679,7 @@ class UserManager
         $sql = "SELECT user.* FROM $user_table user ";
 
         if (api_is_multiple_url_enabled()) {
-            if($idCampus){
+            if ($idCampus) {
                 $urlId = $idCampus;
             } else {
                 $urlId = api_get_current_access_url_id();

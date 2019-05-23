@@ -3275,6 +3275,7 @@ class SessionManager
 
     /**
      * Get the session image.
+     *
      * @param int $id
      *
      * @return image path

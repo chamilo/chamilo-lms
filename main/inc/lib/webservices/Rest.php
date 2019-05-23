@@ -283,7 +283,7 @@ class Rest extends WebService
             $results[] = [
                 'id' => $description->get_description_type(),
                 'title' => $description->get_title(),
-                'content' => str_replace('src="/', 'src="' . api_get_path(WEB_PATH), $description->get_content()),
+                'content' => str_replace('src="/', 'src="'.api_get_path(WEB_PATH), $description->get_content()),
             ];
         }
 
@@ -331,7 +331,7 @@ class Rest extends WebService
         $results = [];
 
         if (!empty($documents)) {
-            $webPath = api_get_path(WEB_CODE_PATH) . 'document/document.php?';
+            $webPath = api_get_path(WEB_CODE_PATH).'document/document.php?';
 
             /** @var array $document */
             foreach ($documents as $document) {
@@ -348,7 +348,7 @@ class Rest extends WebService
                     'type' => $document['filetype'],
                     'title' => $document['title'],
                     'path' => $document['path'],
-                    'url' => $webPath . http_build_query([
+                    'url' => $webPath.http_build_query([
                             'username' => $this->user->getUsername(),
                             'api_key' => $this->apiKey,
                             'cidReq' => $this->course->getCode(),
@@ -491,7 +491,7 @@ class Rest extends WebService
                 return [
                     'id' => intval($event['unique_id']),
                     'title' => $event['title'],
-                    'content' => str_replace('src="/', 'src="' . $webPath, $event['description']),
+                    'content' => str_replace('src="/', 'src="'.$webPath, $event['description']),
                     'startDate' => $event['start_date_localtime'],
                     'endDate' => $event['end_date_localtime'],
                     'isAllDay' => $event['allDay'] ? true : false,
@@ -539,9 +539,9 @@ class Rest extends WebService
     public function getCourseForumCategories()
     {
         $sessionId = $this->session ? $this->session->getId() : 0;
-        $webCoursePath = api_get_path(WEB_COURSE_PATH) . $this->course->getDirectory() . '/upload/forum/images/';
+        $webCoursePath = api_get_path(WEB_COURSE_PATH).$this->course->getDirectory().'/upload/forum/images/';
 
-        require_once api_get_path(SYS_CODE_PATH) . 'forum/forumfunction.inc.php';
+        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
         $categoriesFullData = get_forum_categories('', $this->course->getId(), $sessionId);
         $categories = [];
@@ -555,7 +555,7 @@ class Rest extends WebService
                 'catId' => intval($forumInfo['forum_category']),
                 'title' => $forumInfo['forum_title'],
                 'description' => $forumInfo['forum_comment'],
-                'image' => $forumInfo['forum_image'] ? ($webCoursePath . $forumInfo['forum_image']) : '',
+                'image' => $forumInfo['forum_image'] ? ($webCoursePath.$forumInfo['forum_image']) : '',
                 'numberOfThreads' => isset($forumInfo['number_of_threads']) ? intval($forumInfo['number_of_threads']) : 0,
                 'lastPost' => null,
             ];
@@ -609,7 +609,7 @@ class Rest extends WebService
      */
     public function getCourseForum($forumId)
     {
-        require_once api_get_path(SYS_CODE_PATH) . 'forum/forumfunction.inc.php';
+        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
         $sessionId = $this->session ? $this->session->getId() : 0;
         $forumInfo = get_forums($forumId, $this->course->getCode(), true, $sessionId);
@@ -618,12 +618,12 @@ class Rest extends WebService
             throw new Exception(get_lang('NoForum'));
         }
 
-        $webCoursePath = api_get_path(WEB_COURSE_PATH) . $this->course->getDirectory() . '/upload/forum/images/';
+        $webCoursePath = api_get_path(WEB_COURSE_PATH).$this->course->getDirectory().'/upload/forum/images/';
         $forum = [
             'id' => $forumInfo['iid'],
             'title' => $forumInfo['forum_title'],
             'description' => $forumInfo['forum_comment'],
-            'image' => $forumInfo['forum_image'] ? ($webCoursePath . $forumInfo['forum_image']) : '',
+            'image' => $forumInfo['forum_image'] ? ($webCoursePath.$forumInfo['forum_image']) : '',
             'threads' => [],
         ];
 
@@ -651,7 +651,7 @@ class Rest extends WebService
      */
     public function getCourseForumThread($forumId, $threadId)
     {
-        require_once api_get_path(SYS_CODE_PATH) . 'forum/forumfunction.inc.php';
+        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
         $sessionId = $this->session ? $this->session->getId() : 0;
         $threadInfo = get_thread_information($forumId, $threadId, $sessionId);
@@ -689,7 +689,7 @@ class Rest extends WebService
         $pictureInfo = UserManager::get_user_picture_path_by_id($this->user->getId(), 'web');
 
         $result = [
-            'pictureUri' => $pictureInfo['dir'] . $pictureInfo['file'],
+            'pictureUri' => $pictureInfo['dir'].$pictureInfo['file'],
             'id' => $this->user->getId(),
             'status' => $this->user->getStatus(),
             'fullName' => $this->user->getCompleteName(),
@@ -801,7 +801,7 @@ class Rest extends WebService
                     'id' => $lpId,
                     'title' => Security::remove_XSS($lpDetails['lp_name']),
                     'progress' => intval($progress),
-                    'url' => api_get_path(WEB_CODE_PATH) . 'webservices/api/v2.php?' . http_build_query([
+                    'url' => api_get_path(WEB_CODE_PATH).'webservices/api/v2.php?'.http_build_query([
                             'hash' => $this->encodeParams([
                                 'action' => 'course_learnpath',
                                 'lp_id' => $lpId,
@@ -853,7 +853,7 @@ class Rest extends WebService
         ChamiloSession::write('_user', $loggedUser);
         Login::init_user($this->user->getId(), true);
 
-        $url = api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?' . http_build_query([
+        $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.http_build_query([
                 'cidReq' => $this->course->getCode(),
                 'id_session' => $sessionId,
                 'gidReq' => 0,
@@ -870,13 +870,13 @@ class Rest extends WebService
 
     /**
      * @param array $postValues
-     * @param int $forumId
+     * @param int   $forumId
      *
      * @return array
      */
     public function saveForumPost(array $postValues, $forumId)
     {
-        require_once api_get_path(SYS_CODE_PATH) . 'forum/forumfunction.inc.php';
+        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
         $forum = get_forums($forumId, $this->course->getCode());
         store_reply($forum, $postValues, $this->course->getId(), $this->user->getId());
@@ -943,7 +943,7 @@ class Rest extends WebService
     /**
      * @param string $subject
      * @param string $text
-     * @param array $receivers
+     * @param array  $receivers
      *
      * @return array
      */
@@ -1014,13 +1014,13 @@ class Rest extends WebService
 
     /**
      * @param array $values
-     * @param int $forumId
+     * @param int   $forumId
      *
      * @return array
      */
     public function saveForumThread(array $values, $forumId)
     {
-        require_once api_get_path(SYS_CODE_PATH) . 'forum/forumfunction.inc.php';
+        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
         $sessionId = $this->session ? $this->session->getId() : 0;
         $forum = get_forums($forumId, $this->course->getCode(), true, $sessionId);
@@ -1032,7 +1032,8 @@ class Rest extends WebService
         ];
     }
 
-    public function getUsersCampus(array $params){
+    public function getUsersCampus(array $params)
+    {
         $conditions = [
             'status' => $params['status'],
         ];
@@ -1040,21 +1041,21 @@ class Rest extends WebService
         $users = UserManager::get_user_list($conditions, ['firstname'], false, false, $idCampus);
         $listTemp = [];
         $list = [];
-        foreach ($users as $item){
+        foreach ($users as $item) {
             $listTemp = [
                 'id' => $item['user_id'],
                 'firstname' => $item['firstname'],
                 'lastname' => $item['lastname'],
-                'email' => $item['email']
+                'email' => $item['email'],
             ];
             $list[] = $listTemp;
-
         }
+
         return $list;
     }
 
-    public function getCoursesCampus(array $params){
-
+    public function getCoursesCampus(array $params)
+    {
         $idCampus = $params['id_campus'];
 
         $courseList = CourseManager::get_courses_list(
@@ -1068,12 +1069,11 @@ class Rest extends WebService
             true //AlsoSearchCode
         );
 
-
         return $courseList;
     }
 
-    public function addSession(array $params){
-
+    public function addSession(array $params)
+    {
         $name = $params['name'];
         $coach_username = intval($params['coach_username']);
         $startDate = $params['access_start_date'];
@@ -1082,7 +1082,6 @@ class Rest extends WebService
         $displayEndDate = $endDate;
         $description = $params['description'];
         $idUrlCampus = $params['id_campus'];
-
 
         $return = SessionManager::create_session(
             $name,
@@ -1105,17 +1104,16 @@ class Rest extends WebService
             $idUrlCampus
         );
 
-
-        if($return){
+        if ($return) {
             $out = [
                 'status' => true,
                 'message' => 'Sesión creada correctamente',
-                'id_session' => $return
+                'id_session' => $return,
             ];
         } else {
             $out = [
                 'status' => false,
-                'message' => 'Error al crear la sesión'
+                'message' => 'Error al crear la sesión',
             ];
         }
 
@@ -1136,17 +1134,16 @@ class Rest extends WebService
         $title = isset($courseParam['title']) ? $courseParam['title'] : '';
         $wantedCode = isset($courseParam['wanted_code']) ? $courseParam['wanted_code'] : null;
         $diskQuota = isset($courseParam['disk_quota']) ? $courseParam['disk_quota'] : '100';
-        $visibility = isset($courseParam['visibility']) ? (int)$courseParam['visibility'] : null;
+        $visibility = isset($courseParam['visibility']) ? (int) $courseParam['visibility'] : null;
 
         if (isset($courseParam['visibility'])) {
             if ($courseParam['visibility'] &&
                 $courseParam['visibility'] >= 0 &&
                 $courseParam['visibility'] <= 3
             ) {
-                $visibility = (int)$courseParam['visibility'];
+                $visibility = (int) $courseParam['visibility'];
             }
         }
-
 
         $params = [];
         $params['title'] = $title;
@@ -1155,7 +1152,7 @@ class Rest extends WebService
         $params['visibility'] = $visibility;
         $params['disk_quota'] = $diskQuota;
 
-        $courseInfo = CourseManager::create_course($params, $params['user_id'],$idCampus);
+        $courseInfo = CourseManager::create_course($params, $params['user_id'], $idCampus);
 
         if (!empty($courseInfo)) {
             $results['status'] = true;
@@ -1319,29 +1316,12 @@ class Rest extends WebService
     }
 
     /**
-     * @param array $additionalParams Optional
-     *
-     * @return string
-     */
-    private function encodeParams(array $additionalParams = [])
-    {
-        $params = array_merge($additionalParams, [
-            'api_key' => $this->apiKey,
-            'username' => $this->user->getUsername(),
-        ]);
-        $encoded = json_encode($params);
-
-        return $encoded;
-    }
-
-    /**
-     * Add Campus Virtual
+     * Add Campus Virtual.
      *
      * @param  array Params Campus
-     * @return array
      *
+     * @return array
      */
-
     public function createCampusURL($params)
     {
         $urlCampus = Security::remove_XSS($params['url']);
@@ -1357,28 +1337,28 @@ class Rest extends WebService
                 $idCampus = UrlManager::add($urlCampus, $description, $active, true);
             } else {
                 //create
-                $idCampus = UrlManager::add($urlCampus . '/', $description, $active, true);
+                $idCampus = UrlManager::add($urlCampus.'/', $description, $active, true);
             }
+
             return [
                 'status' => true,
-                'id_campus' => $idCampus
+                'id_campus' => $idCampus,
             ];
         }
 
         return [
             'status' => false,
-            'id_campus' => 0
+            'id_campus' => 0,
         ];
     }
 
     /**
-     * Edit Campus Virtual
+     * Edit Campus Virtual.
      *
      * @param  array Params Campus
-     * @return array
      *
+     * @return array
      */
-
     public function editCampusURL($params)
     {
         $urlCampus = Security::remove_XSS($params['url']);
@@ -1396,8 +1376,9 @@ class Rest extends WebService
             if (substr($urlCampus, strlen($urlCampus) - 1, strlen($urlCampus)) == '/') {
                 UrlManager::update($url_id, $urlCampus, $description, $active);
             } else {
-                UrlManager::update($url_id, $urlCampus . '/', $description, $active);
+                UrlManager::update($url_id, $urlCampus.'/', $description, $active);
             }
+
             return [true];
         }
 
@@ -1405,13 +1386,12 @@ class Rest extends WebService
     }
 
     /**
-     * Delete Campus Virtual
+     * Delete Campus Virtual.
      *
      * @param  array Params Campus
-     * @return array
      *
+     * @return array
      */
-
     public function deleteCampusURL($params)
     {
         $url_id = isset($params['id']) ? intval($params['id']) : 0;
@@ -1420,18 +1400,18 @@ class Rest extends WebService
         if ($result) {
             return [
                 'status' => true,
-                'message' => get_lang('URLDeleted')
+                'message' => get_lang('URLDeleted'),
             ];
-
         } else {
             return [
                 'status' => false,
-                'message' => get_lang('Error')
+                'message' => get_lang('Error'),
             ];
         }
     }
 
-    public function addCoursesSession(array $params){
+    public function addCoursesSession(array $params)
+    {
         $sessionId = $params['id_session'];
         $courseList = $params['list_courses'];
 
@@ -1442,20 +1422,21 @@ class Rest extends WebService
             false
         );
 
-        if($result){
+        if ($result) {
             return [
                 'status' => $result,
-                'message' => 'Los cursos fueron añadidos a la sessión'
+                'message' => 'Los cursos fueron añadidos a la sessión',
             ];
         } else {
             return [
                 'status' => $result,
-                'message' => 'Error al añadir cursos a la sessión'
+                'message' => 'Error al añadir cursos a la sessión',
             ];
         }
     }
 
-    public function addUsersSession(array $params){
+    public function addUsersSession(array $params)
+    {
         $sessionId = $params['id_session'];
         $userList = $params['list_users'];
 
@@ -1469,12 +1450,26 @@ class Rest extends WebService
             null,
             false
         );
-        
+
         return [
             'status' => true,
-            'message' => 'Error al añadir usuarios a la sessión'
+            'message' => 'Error al añadir usuarios a la sessión',
         ];
+    }
 
+    /**
+     * @param array $additionalParams Optional
+     *
+     * @return string
+     */
+    private function encodeParams(array $additionalParams = [])
+    {
+        $params = array_merge($additionalParams, [
+            'api_key' => $this->apiKey,
+            'username' => $this->user->getUsername(),
+        ]);
+        $encoded = json_encode($params);
+
+        return $encoded;
     }
 }
-

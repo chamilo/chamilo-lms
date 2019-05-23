@@ -17,7 +17,6 @@
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;
 
-// setting the global file that gets the general configuration, the databases, the languages, ...
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script(true);
@@ -253,7 +252,8 @@ switch ($action) {
         // height auto
         $extra_params['height'] = 'auto';
         $editOptions = '';
-        if (api_is_allowed_to_edit() || $isTutor) {
+
+        if ($isTutor || api_is_allowed_to_edit()) {
             $extra_params['multiselect'] = true;
             $editOptions = '
             $("#announcements").jqGrid(

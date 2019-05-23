@@ -407,7 +407,7 @@ $(function() {
         },
         position:"last"
     }).navButtonAdd('#results_pager', {
-        //caption:"<?php //echo addslashes(get_lang('SetVisible')); ?>//",
+        //caption:"<?php //echo addslashes(get_lang('SetVisible'));?>//",
         caption:"<i class=\"fa fa-eye-slash\" ></i>",
         buttonicon:"ui-icon-blank",
         onClickButton: function(a) {

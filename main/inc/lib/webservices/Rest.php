@@ -1422,8 +1422,9 @@ class Rest extends WebService
     /**
      * @param array $params
      *
-     * @return array
      * @throws Exception
+     *
+     * @return array
      */
     public function addCoursesSession(array $params)
     {

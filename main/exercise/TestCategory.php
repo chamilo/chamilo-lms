@@ -433,6 +433,8 @@ class TestCategory
             $result[$cat['id']] = $cat;
         }
 
+        ksort($result);
+
         return $result;
     }
 

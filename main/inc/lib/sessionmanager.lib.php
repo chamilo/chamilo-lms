@@ -3275,6 +3275,7 @@ class SessionManager
 
     /**
      * Get the session image.
+     * @param int $id
      *
      * @return image path
      */
@@ -3312,7 +3313,7 @@ class SessionManager
         $tbl_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 
-        $extraField = new \ExtraField('session');
+        $extraField = new ExtraFieldModel('session');
         $field = $extraField->get_handler_field_info_by_field_variable('image');
 
         $sql = "SELECT 
@@ -3871,7 +3872,7 @@ class SessionManager
                     $sessions[$row['id']] = $row;
                     continue;
                 }
-                $imageFilename = \ExtraField::FIELD_TYPE_FILE_IMAGE.'_'.$row['id'].'.png';
+                $imageFilename = ExtraFieldModel::FIELD_TYPE_FILE_IMAGE.'_'.$row['id'].'.png';
                 $row['image'] = is_file($sysUploadPath.$imageFilename) ? $webUploadPath.$imageFilename : $imgPath;
 
                 if ($row['display_start_date'] == '0000-00-00 00:00:00' || $row['display_start_date'] == '0000-00-00') {
@@ -8358,7 +8359,6 @@ SQL;
 
         $today = api_get_utc_datetime();
         $inject_extra_fields = null;
-        $extra_fields = [];
         $extra_fields_info = [];
 
         //for now only sessions
@@ -8378,7 +8378,7 @@ SQL;
                         $extra_fields_info[$extra['id']] = $info;
                     }
 
-                    if ($info['field_type'] == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {
+                    if ($info['field_type'] == ExtraFieldModel::FIELD_TYPE_DOUBLE_SELECT) {
                         $double_fields[$info['id']] = $info;
                     }
                 }

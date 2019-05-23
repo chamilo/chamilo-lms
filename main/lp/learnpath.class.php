@@ -3085,18 +3085,30 @@ class learnpath
                 'student_response' => api_htmlentities(get_lang('StudentResponse'), ENT_QUOTES),
                 'result' => api_htmlentities(get_lang('Result'), ENT_QUOTES),
                 'latency' => api_htmlentities(get_lang('LatencyTimeSpent'), ENT_QUOTES),
+                'student_response_formatted' => ''
             ];
             while ($row = Database::fetch_array($res)) {
+
+                $studentResponseFormatted = urldecode($row['student_response']);
+                $content_student_response = explode('__|', $studentResponseFormatted);
+                if (count($content_student_response) > 0) {
+                    if (count($content_student_response) >= 3) {
+                        // Pop the element off the end of array.
+                        array_pop($content_student_response);
+                    }
+                    $studentResponseFormatted = implode(',', $content_student_response);
+                }
+
                 $list[] = [
                     'order_id' => $row['order_id'] + 1,
                     'id' => urldecode($row['interaction_id']), //urldecode because they often have %2F or stuff like that
                     'type' => $row['interaction_type'],
                     'time' => $row['completion_time'],
-                    //'correct_responses' => $row['correct_responses'],
                     'correct_responses' => '', // Hide correct responses from students.
                     'student_response' => $row['student_response'],
                     'result' => $row['result'],
                     'latency' => $row['latency'],
+                    'student_response_formatted' => $studentResponseFormatted,
                 ];
             }
         }

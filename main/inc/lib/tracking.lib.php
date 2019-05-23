@@ -172,7 +172,7 @@ class Tracking
         // Extend all button
         $output = '';
         $extend_all = 0;
-        if ($origin == 'tracking') {
+        if ($origin === 'tracking') {
             $url_suffix = '&session_id='.$session_id.'&course='.$courseCode.'&student_id='.$user_id.'&lp_id='.$lp_id.'&origin='.$origin;
         } else {
             $url_suffix = '&lp_id='.$lp_id;
@@ -326,7 +326,7 @@ class Tracking
                 if (($extend_this || $extend_all) && $num > 0) {
                     $row = Database::fetch_array($result);
                     $result_disabled_ext_all = false;
-                    if ($row['item_type'] == 'quiz') {
+                    if ($row['item_type'] === 'quiz') {
                         // Check results_disabled in quiz table.
                         $my_path = Database::escape_string($row['path']);
                         $sql = "SELECT results_disabled
@@ -373,7 +373,7 @@ class Tracking
                     $counter++;
 
                     $action = null;
-                    if ($type == 'classic') {
+                    if ($type === 'classic') {
                         $action = '<td></td>';
                     }
 
@@ -392,9 +392,7 @@ class Tracking
                     } else {
                         $output .= '<tr class="'.$oddclass.'">
                                 <td>'.$extend_link.'</td>
-                                <td colspan="4">
-                                   '.$title.'
-                                </td>
+                                <td colspan="4">'.$title.'</td>
                                 <td colspan="2"></td>
                                 <td colspan="2"></td>
                                 <td colspan="2"></td>
@@ -422,8 +420,13 @@ class Tracking
                             } else { // Same case if fold_attempt_id is set, so not implemented explicitly.
                                 // The extend button for this attempt has not been clicked.
                                 $extend_attempt_link = Display::url(
-                                    Display::return_icon('invisible.gif', get_lang('ExtendAttemptView')),
+                                    Display::return_icon('invisible.png', get_lang('ExtendAttemptView')),
                                     api_get_self().'?action=stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix
+                                );
+                                $extend_attempt_link .= '&nbsp;'.
+                                    Display::url(
+                                    Display::return_icon('pdf.png', get_lang('ExportToPdf')),
+                                    api_get_self().'?action=export_stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix
                                 );
                             }
                         }
@@ -469,7 +472,7 @@ class Tracking
                         if ($row['item_type'] != 'dir') {
                             if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                 $view_score = Display::return_icon(
-                                    'invisible.gif',
+                                    'invisible.png',
                                     get_lang('ResultsHiddenByExerciseSetting')
                                 );
                             } else {
@@ -523,7 +526,7 @@ class Tracking
                                     learnpathItem::humanize_status($lesson_status, false, $type)
                                 );
 
-                                if ($row['item_type'] == 'quiz') {
+                                if ($row['item_type'] === 'quiz') {
                                     if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                         $temp[] = '/';
                                     } else {
@@ -553,17 +556,6 @@ class Tracking
                                 if (($counter % 2) == 0) {
                                     $oddclass = 'row_odd';
                                 }
-                                $student_response = urldecode($interaction['student_response']);
-                                $content_student_response = explode('__|', $student_response);
-
-                                if (count($content_student_response) > 0) {
-                                    if (count($content_student_response) >= 3) {
-                                        // Pop the element off the end of array.
-                                        array_pop($content_student_response);
-                                    }
-                                    $student_response = implode(',', $content_student_response);
-                                }
-
                                 $timeRow = '<td class="lp_time">'.$interaction['time'].'</td>';
                                 if ($hideTime) {
                                     $timeRow = '';
@@ -574,9 +566,11 @@ class Tracking
                                         <td></td>
                                         <td></td>
                                         <td>'.$interaction['order_id'].'</td>
-                                        <td>'.$interaction['id'].'</td>
+                                        <td>'.$interaction['id'].'</td>';
+
+                                $output .= '
                                         <td colspan="2">'.$interaction['type'].'</td>
-                                        <td>'.$student_response.'</td>
+                                        <td>'.$interaction['student_response_formatted'].'</td>
                                         <td>'.$interaction['result'].'</td>
                                         <td>'.$interaction['latency'].'</td>
                                         '.$timeRow.'
@@ -641,14 +635,14 @@ class Tracking
                             // The extend button for this attempt has been clicked.
                             $extend_this_attempt = 1;
                             $extend_attempt_link = Display::url(
-                                Display::return_icon('visible.gif', get_lang('HideAttemptView')),
+                                Display::return_icon('visible.png', get_lang('HideAttemptView')),
                                 api_get_self().'?action=stats&extend_id='.$my_item_id.'&fold_attempt_id='.$row['iv_id'].$url_suffix
                             );
                         } else {
                             // Same case if fold_attempt_id is set, so not implemented explicitly.
                             // The extend button for this attempt has not been clicked.
                             $extend_attempt_link = Display::url(
-                                Display::return_icon('invisible.gif', get_lang('ExtendAttemptView')),
+                                Display::return_icon('invisible.png', get_lang('ExtendAttemptView')),
                                 api_get_self().'?action=stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix
                             );
                         }
@@ -662,7 +656,7 @@ class Tracking
                     $extend_link = '';
                     if ($inter_num > 1) {
                         $extend_link = Display::url(
-                            Display::return_icon('invisible.gif', get_lang('ExtendAttemptView')),
+                            Display::return_icon('invisible.png', get_lang('ExtendAttemptView')),
                             api_get_self().'?action=stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix
                         );
                     }
@@ -973,6 +967,7 @@ class Tracking
                             $counter++;
                         }
                         $list2 = learnpath::get_iv_objectives_array($row['iv_id']);
+
                         foreach ($list2 as $id => $interaction) {
                             if (($counter % 2) == 0) {
                                 $oddclass = 'row_odd';

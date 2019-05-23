@@ -1879,8 +1879,6 @@ function get_work_user_list(
 
         $work_assignment = get_work_assignment_by_id($work_id, $courseId);
 
-        $whereCondition = Database::escape_string(trim($whereCondition));
-
         if (!empty($studentId)) {
             $studentId = (int) $studentId;
             $whereCondition .= " AND u.user_id = $studentId ";

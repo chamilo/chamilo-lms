@@ -1215,9 +1215,7 @@ switch ($action) {
             ];
         }
 
-        if (trim($whereCondition) === '1 = 1') {
-            $whereCondition = '';
-        }
+        $whereCondition = " AND $whereCondition ";
 
         $result = get_work_user_list(
             $start,

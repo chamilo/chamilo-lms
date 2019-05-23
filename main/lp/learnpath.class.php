@@ -3085,10 +3085,9 @@ class learnpath
                 'student_response' => api_htmlentities(get_lang('StudentResponse'), ENT_QUOTES),
                 'result' => api_htmlentities(get_lang('Result'), ENT_QUOTES),
                 'latency' => api_htmlentities(get_lang('LatencyTimeSpent'), ENT_QUOTES),
-                'student_response_formatted' => ''
+                'student_response_formatted' => '',
             ];
             while ($row = Database::fetch_array($res)) {
-
                 $studentResponseFormatted = urldecode($row['student_response']);
                 $content_student_response = explode('__|', $studentResponseFormatted);
                 if (count($content_student_response) > 0) {
@@ -10319,7 +10318,6 @@ class learnpath
     {
         $return = '';
         if (is_numeric($item_id)) {
-
             $item_id = (int) $item_id;
             $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 

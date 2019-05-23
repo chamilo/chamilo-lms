@@ -9,7 +9,6 @@ use ChamiloSession as Session;
  *
  * @author Julio Montoya - Simple exercise result page
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $hash = isset($_REQUEST['hash']) ? $_GET['hash'] : null;

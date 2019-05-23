@@ -537,6 +537,10 @@ switch ($action) {
         $courseInfo = api_get_course_info();
         $documents = getAllDocumentToWork($work_id, api_get_course_int_id());
 
+        if (trim($whereCondition) === '1 = 1') {
+            $whereCondition = '';
+        }
+
         if (empty($documents)) {
             $whereCondition .= " AND u.user_id = ".api_get_user_id();
             $count = get_work_user_list(
@@ -1206,11 +1210,13 @@ switch ($action) {
                 'title',
                 'qualification',
                 'sent_date',
-                //'status',
-                //'has_correction',
                 'correction',
                 'actions',
             ];
+        }
+
+        if (trim($whereCondition) === '1 = 1') {
+            $whereCondition = '';
         }
 
         $result = get_work_user_list(
@@ -1221,7 +1227,6 @@ switch ($action) {
             $work_id,
             $whereCondition
         );
-
         break;
     case 'get_work_user_list_others':
         if (isset($_GET['type']) && $_GET['type'] === 'simple') {
@@ -1231,6 +1236,11 @@ switch ($action) {
         } else {
             $columns = ['type', 'firstname', 'lastname', 'title', 'sent_date', 'actions'];
         }
+
+        if (trim($whereCondition) === '1 = 1') {
+            $whereCondition = '';
+        }
+
         $whereCondition .= " AND u.user_id <> ".api_get_user_id();
         $result = get_work_user_list(
             $start,
@@ -1251,6 +1261,10 @@ switch ($action) {
         }
 
         $documents = getAllDocumentToWork($work_id, api_get_course_int_id());
+
+        if (trim($whereCondition) === '1 = 1') {
+            $whereCondition = '';
+        }
 
         if (empty($documents)) {
             $whereCondition .= " AND u.user_id = ".api_get_user_id();

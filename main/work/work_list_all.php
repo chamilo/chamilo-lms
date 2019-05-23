@@ -220,7 +220,7 @@ if (!empty($my_folder_data['description'])) {
     echo $html;
 }
 
-$check_qualification = intval($my_folder_data['qualification']);
+$check_qualification = (int) $my_folder_data['qualification'];
 $orderName = api_is_western_name_order() ? 'firstname' : 'lastname';
 
 if (!empty($work_data['enable_qualification']) &&
@@ -318,7 +318,7 @@ if (!empty($work_data['enable_qualification']) &&
             'width' => '30',
             'align' => 'left',
             'search' => 'false',
-            'wrap_cell' => "true",
+            'wrap_cell' => 'true',
         ],
         [
             'name' => 'qualification',
@@ -382,7 +382,7 @@ $(function() {
     $("#results").jqGrid(
         "navGrid",
         "#results_pager",
-        { edit: false, add: false, del: true },
+        { edit: false, add: false, search: false, del: true },
         { height:280, reloadAfterSubmit:false }, // edit options
         { height:280, reloadAfterSubmit:false }, // add options
         { reloadAfterSubmit:false, url: "<?php echo $deleteUrl; ?>" }, // del options

@@ -1212,31 +1212,31 @@ function getWorkListStudent(
     }
 
     $column = !empty($column) ? Database::escape_string($column) : 'sent_date';
-    $start = intval($start);
-    $limit = intval($limit);
+    $start = (int) $start;
+    $limit = (int) $limit;
 
     $groupIid = 0;
     if ($group_id) {
         $groupInfo = GroupManager::get_group_properties($group_id);
-        $groupIid = $groupInfo['iid'];
+        if ($groupInfo) {
+            $groupIid = (int) $groupInfo['iid'];
+        }
     }
-    $groupIid = (int) $groupIid;
 
-    // Get list from database
     if (!empty($groupIid)) {
         $group_query = " WHERE w.c_id = $course_id AND post_group_id = $groupIid";
-        $subdirs_query = "AND parent_id = 0";
+        $subdirs_query = 'AND parent_id = 0';
     } else {
         $group_query = " WHERE w.c_id = $course_id AND (post_group_id = '0' or post_group_id is NULL)  ";
-        $subdirs_query = "AND parent_id = 0";
+        $subdirs_query = 'AND parent_id = 0';
     }
 
     $active_condition = ' AND active IN (1, 0)';
 
     if ($getCount) {
-        $select = "SELECT count(w.id) as count ";
+        $select = 'SELECT count(w.id) as count ';
     } else {
-        $select = "SELECT w.*, a.expires_on, expires_on, ends_on, enable_qualification ";
+        $select = 'SELECT w.*, a.expires_on, expires_on, ends_on, enable_qualification ';
     }
 
     $sql = "$select
@@ -1290,7 +1290,7 @@ function getWorkListStudent(
             $work['title'] = basename($work['url']);
         }
 
-        $whereCondition = " AND u.user_id = ".intval($userId);
+        $whereCondition = " AND u.user_id = $userId ";
 
         $workList = get_work_user_list(
             0,
@@ -1762,7 +1762,7 @@ function get_work_user_list_from_documents(
  * @param int    $column
  * @param string $direction
  * @param int    $work_id
- * @param string $where_condition
+ * @param string $whereCondition
  * @param int    $studentId
  * @param bool   $getCount
  * @param int    $courseId
@@ -1776,7 +1776,7 @@ function get_work_user_list(
     $column,
     $direction,
     $work_id,
-    $where_condition = '',
+    $whereCondition = '',
     $studentId = null,
     $getCount = false,
     $courseId = 0,
@@ -1879,15 +1879,11 @@ function get_work_user_list(
 
         $work_assignment = get_work_assignment_by_id($work_id, $courseId);
 
-        $where_condition = Database::escape_string($where_condition);
-
-        if (!empty($where_condition)) {
-            $where_condition = ' AND '.$where_condition;
-        }
+        $whereCondition = Database::escape_string(trim($whereCondition));
 
         if (!empty($studentId)) {
             $studentId = (int) $studentId;
-            $where_condition .= " AND u.user_id = $studentId ";
+            $whereCondition .= " AND u.user_id = $studentId ";
         }
 
         $sql = " $select
@@ -1897,7 +1893,7 @@ function get_work_user_list(
                 WHERE
                     work.c_id = $course_id AND
                     $extra_conditions 
-                    $where_condition 
+                    $whereCondition 
                     $condition_session
                     AND u.status != ".INVITEE."
                 ORDER BY $column $direction";

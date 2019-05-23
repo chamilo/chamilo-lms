@@ -395,7 +395,7 @@ class Rest extends WebService
         $announcements = array_map(
             function ($announcement) {
                 return [
-                    'id' => intval($announcement['id']),
+                    'id' => (int) $announcement['id'],
                     'title' => strip_tags($announcement['title']),
                     'creatorName' => strip_tags($announcement['username']),
                     'date' => strip_tags($announcement['insert_date']),
@@ -428,7 +428,7 @@ class Rest extends WebService
         }
 
         return [
-            'id' => intval($announcement['announcement']->getIid()),
+            'id' => $announcement['announcement']->getIid(),
             'title' => $announcement['announcement']->getTitle(),
             'creatorName' => $announcement['item_property']->getInsertUser()->getCompleteName(),
             'date' => api_convert_and_format_date(
@@ -489,7 +489,7 @@ class Rest extends WebService
         return array_map(
             function ($event) use ($webPath) {
                 return [
-                    'id' => intval($event['unique_id']),
+                    'id' => (int) $event['unique_id'],
                     'title' => $event['title'],
                     'content' => str_replace('src="/', 'src="'.$webPath, $event['description']),
                     'startDate' => $event['start_date_localtime'],
@@ -968,7 +968,6 @@ class Rest extends WebService
         $repo = UserManager::getRepository();
 
         $users = $repo->findUsersToSendMessage($this->user->getId(), $search);
-
         $showEmail = api_get_setting('show_email_addresses') === 'true';
         $data = [];
 
@@ -1032,6 +1031,11 @@ class Rest extends WebService
         ];
     }
 
+    /**
+     * @param array $params
+     *
+     * @return array
+     */
     public function getUsersCampus(array $params)
     {
         $conditions = [
@@ -1039,7 +1043,6 @@ class Rest extends WebService
         ];
         $idCampus = $params['id_campus'];
         $users = UserManager::get_user_list($conditions, ['firstname'], false, false, $idCampus);
-        $listTemp = [];
         $list = [];
         foreach ($users as $item) {
             $listTemp = [
@@ -1054,6 +1057,11 @@ class Rest extends WebService
         return $list;
     }
 
+    /**
+     * @param array $params
+     *
+     * @return array
+     */
     public function getCoursesCampus(array $params)
     {
         $idCampus = $params['id_campus'];
@@ -1072,6 +1080,11 @@ class Rest extends WebService
         return $courseList;
     }
 
+    /**
+     * @param array $params
+     *
+     * @return array
+     */
     public function addSession(array $params)
     {
         $name = $params['name'];
@@ -1127,8 +1140,6 @@ class Rest extends WebService
      */
     public function addCourse(array $courseParam)
     {
-        $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
-        $extraList = [];
         $results = [];
         $idCampus = isset($courseParam['id_campus']) ? $courseParam['id_campus'] : 1;
         $title = isset($courseParam['title']) ? $courseParam['title'] : '';
@@ -1328,8 +1339,6 @@ class Rest extends WebService
         $description = Security::remove_XSS($params['description']);
 
         $active = isset($params['active']) ? intval($params['active']) : 0;
-        //$url_id = isset($params['id']) ? intval($params['id']) : 0;
-
         $num = UrlManager::url_exist($urlCampus);
         if ($num == 0) {
             // checking url
@@ -1410,6 +1419,12 @@ class Rest extends WebService
         }
     }
 
+    /**
+     * @param array $params
+     *
+     * @return array
+     * @throws Exception
+     */
     public function addCoursesSession(array $params)
     {
         $sessionId = $params['id_session'];
@@ -1435,6 +1450,11 @@ class Rest extends WebService
         }
     }
 
+    /**
+     * @param array $params
+     *
+     * @return array
+     */
     public function addUsersSession(array $params)
     {
         $sessionId = $params['id_session'];

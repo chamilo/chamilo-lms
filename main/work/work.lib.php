@@ -4445,13 +4445,17 @@ function deleteAllWorkPerUser($userId, $courseInfo)
  */
 function deleteWorkItem($item_id, $courseInfo)
 {
+    $item_id = (int) $item_id;
+
+    if (empty($item_id) || empty($courseInfo)) {
+        return false;
+    }
+
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $TSTDPUBASG = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
     $currentCourseRepositorySys = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/';
     $is_allowed_to_edit = api_is_allowed_to_edit();
     $file_deleted = false;
-    $item_id = intval($item_id);
-
     $is_author = user_is_author($item_id);
     $work_data = get_work_data_by_id($item_id);
     $locked = api_resource_is_locked_by_gradebook($work_data['parent_id'], LINK_STUDENTPUBLICATION);
@@ -4712,51 +4716,51 @@ function getUploadDocumentType()
 }
 
 /**
- * @param int   $item_id
+ * @param int   $itemId
  * @param array $course_info
  *
  * @return bool
  */
-function makeVisible($item_id, $course_info)
+function makeVisible($itemId, $course_info)
 {
-    if (empty($course_info) || empty($item_id)) {
+    $itemId = (int) $itemId;
+    if (empty($course_info) || empty($itemId)) {
         return false;
     }
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $course_id = $course_info['real_id'];
-    $item_id = intval($item_id);
 
     $sql = "UPDATE $work_table SET accepted = 1
-            WHERE c_id = $course_id AND id = $item_id";
+            WHERE c_id = $course_id AND id = $itemId";
     Database::query($sql);
-    api_item_property_update($course_info, 'work', $item_id, 'visible', api_get_user_id());
+    api_item_property_update($course_info, 'work', $itemId, 'visible', api_get_user_id());
 
     return true;
 }
 
 /**
- * @param int   $item_id
+ * @param int   $itemId
  * @param array $course_info
  *
  * @return int
  */
-function makeInvisible($item_id, $course_info)
+function makeInvisible($itemId, $course_info)
 {
-    if (empty($course_info) || empty($item_id)) {
+    $itemId = (int) $itemId;
+    if (empty($course_info) || empty($itemId)) {
         return false;
     }
 
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $item_id = intval($item_id);
     $course_id = $course_info['real_id'];
     $sql = "UPDATE $table
             SET accepted = 0
-            WHERE c_id = $course_id AND id = '".$item_id."'";
+            WHERE c_id = $course_id AND id = '".$itemId."'";
     Database::query($sql);
     api_item_property_update(
         $course_info,
         'work',
-        $item_id,
+        $itemId,
         'invisible',
         api_get_user_id()
     );
@@ -4778,9 +4782,9 @@ function generateMoveForm($item_id, $path, $courseInfo, $groupId, $sessionId)
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $courseId = $courseInfo['real_id'];
     $folders = [];
-    $session_id = intval($sessionId);
-    $groupId = intval($groupId);
-    $sessionCondition = empty($sessionId) ? " AND (session_id = 0 OR session_id IS NULL) " : " AND session_id='".$session_id."'";
+    $session_id = (int) $sessionId;
+    $groupId = (int) $groupId;
+    $sessionCondition = empty($sessionId) ? ' AND (session_id = 0 OR session_id IS NULL) ' : " AND session_id='".$session_id."'";
 
     $groupIid = 0;
     if ($groupId) {

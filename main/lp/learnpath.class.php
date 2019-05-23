@@ -3064,8 +3064,9 @@ class learnpath
         $course_id = api_get_course_int_id();
         $list = [];
         $table = Database::get_course_table(TABLE_LP_IV_INTERACTION);
+        $lp_iv_id = (int) $lp_iv_id;
 
-        if (empty($lp_iv_id)) {
+        if (empty($lp_iv_id) || empty($course_id)) {
             return [];
         }
 
@@ -3087,7 +3088,7 @@ class learnpath
             ];
             while ($row = Database::fetch_array($res)) {
                 $list[] = [
-                    'order_id' => ($row['order_id'] + 1),
+                    'order_id' => $row['order_id'] + 1,
                     'id' => urldecode($row['interaction_id']), //urldecode because they often have %2F or stuff like that
                     'type' => $row['interaction_type'],
                     'time' => $row['completion_time'],
@@ -8165,8 +8166,8 @@ class learnpath
             $item_title = stripslashes($extra_info['title']);
         } elseif (is_numeric($extra_info)) {
             $sql = "SELECT forum_title as title, forum_comment as comment
-                    FROM ".$tbl_forum."
-                    WHERE c_id = ".$course_id." AND forum_id = ".$extra_info;
+                    FROM $tbl_forum
+                    WHERE c_id = $course_id AND forum_id = ".$extra_info;
 
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
@@ -8849,7 +8850,8 @@ class learnpath
         $id = isset($_GET['id']) ? (int) $_GET['id'] : '';
         $view = isset($_GET['view']) ? Security::remove_XSS($_GET['view']) : '';
 
-        $currentUrl = api_get_self().'?'.api_get_cidreq().'&action='.$action.'&lp_id='.$this->lp_id.'&path_item='.$pathItem.'&view='.$view.'&id='.$id;
+        $currentUrl = api_get_self().'?'.api_get_cidreq().
+            '&action='.$action.'&lp_id='.$this->lp_id.'&path_item='.$pathItem.'&view='.$view.'&id='.$id;
 
         return $currentUrl;
     }
@@ -10116,30 +10118,6 @@ class learnpath
         $_course = api_get_course_info();
         $course_code = api_get_course_id();
         $return = '<div class="actions">';
-        switch ($item_type) {
-            case 'dir':
-                // Commented the message cause should not show it.
-                //$lang = get_lang('TitleManipulateChapter');
-                break;
-            case TOOL_LP_FINAL_ITEM:
-            case TOOL_DOCUMENT:
-                // Commented the message cause should not show it.
-                //$lang = get_lang('TitleManipulateDocument');
-                break;
-            case TOOL_LINK:
-            case 'link':
-                // Commented the message cause should not show it.
-                //$lang = get_lang('TitleManipulateLink');
-                break;
-            case TOOL_QUIZ:
-                // Commented the message cause should not show it.
-                //$lang = get_lang('TitleManipulateQuiz');
-                break;
-            case TOOL_STUDENTPUBLICATION:
-                // Commented the message cause should not show it.
-                //$lang = get_lang('TitleManipulateStudentPublication');
-                break;
-        }
 
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $item_id = (int) $item_id;
@@ -10329,6 +10307,8 @@ class learnpath
     {
         $return = '';
         if (is_numeric($item_id)) {
+
+            $item_id = (int) $item_id;
             $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
             $sql = "SELECT * FROM $tbl_lp_item
@@ -10681,7 +10661,7 @@ class learnpath
             $form->createElement(
                 'radio',
                 'if_exists',
-                get_lang("UplWhatIfFileExists"),
+                get_lang('UplWhatIfFileExists'),
                 get_lang('UplDoNothing'),
                 'nothing'
             ),
@@ -10869,7 +10849,7 @@ class learnpath
             $session_id,
             true,
             true,
-            "link.session_id"
+            'link.session_id'
         );
 
         $sql = "SELECT 
@@ -10881,7 +10861,7 @@ class learnpath
                 FROM $tbl_link as link
                 LEFT JOIN $linkCategoryTable as link_category
                 ON (link.category_id = link_category.id AND link.c_id = link_category.c_id)
-                WHERE link.c_id = ".$course_id." $condition_session
+                WHERE link.c_id = $course_id $condition_session
                 ORDER BY link_category.category_title ASC, link.title ASC";
         $result = Database::query($sql);
         $categorizedLinks = [];
@@ -12299,8 +12279,8 @@ EOD;
     public function set_autolaunch($lp_id, $status)
     {
         $course_id = api_get_course_int_id();
-        $lp_id = intval($lp_id);
-        $status = intval($status);
+        $lp_id = (int) $lp_id;
+        $status = (int) $status;
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
 
         // Setting everything to autolaunch = 0
@@ -12612,11 +12592,6 @@ EOD;
     public static function getCategories($courseId)
     {
         $em = Database::getManager();
-        //Default behaviour
-        /*$items = $em->getRepository('ChamiloCourseBundle:CLpCategory')->findBy(
-            array('cId' => $course_id),
-            array('name' => 'ASC')
-        );*/
 
         // Using doctrine extensions
         /** @var SortableRepository $repo */
@@ -13206,7 +13181,7 @@ EOD;
                 'lp_id' => $this->lp_id,
                 'forum_title' => $this->name,
                 'forum_comment' => null,
-                'forum_category' => intval($forumCategoryId),
+                'forum_category' => (int) $forumCategoryId,
                 'students_can_edit_group' => ['students_can_edit' => 0],
                 'allow_new_threads_group' => ['allow_new_threads' => 0],
                 'default_view_type_group' => ['default_view_type' => 'flat'],
@@ -13388,7 +13363,7 @@ EOD;
         if ($this->debug > 0) {
             error_log('In learnpath::setAccumulateScormTime()', 0);
         }
-        $this->accumulateScormTime = intval($value);
+        $this->accumulateScormTime = (int) $value;
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
         $sql = "UPDATE $lp_table 
@@ -14091,6 +14066,11 @@ EOD;
         return $icon;
     }
 
+    /**
+     * @param int $lpId
+     *
+     * @return string
+     */
     public static function getSelectedIconHtml($lpId)
     {
         $icon = self::getSelectedIcon($lpId);

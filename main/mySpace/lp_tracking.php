@@ -7,7 +7,6 @@
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
-// resetting the course id
 $cidReset = true;
 $from_myspace = false;
 $from_link = '';
@@ -22,10 +21,10 @@ $session_id = isset($_REQUEST['id_session']) && !empty($_REQUEST['id_session'])
     ? intval($_REQUEST['id_session'])
     : api_get_session_id();
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
-$user_id = isset($_GET['student_id']) ? intval($_GET['student_id']) : api_get_user_id();
+$user_id = isset($_GET['student_id']) ? (int) $_GET['student_id'] : api_get_user_id();
 $courseCode = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : api_get_course_id();
 $origin = api_get_origin();
-$lp_id = intval($_GET['lp_id']);
+$lp_id = (int) $_GET['lp_id'];
 $csv_content = [];
 $course_info = api_get_course_info($courseCode);
 
@@ -43,35 +42,33 @@ if (!api_is_platform_admin(true) &&
     !api_is_drh() &&
     !api_is_course_tutor()
 ) {
-    api_not_allowed(
-        api_get_origin() !== 'learnpath'
-    );
+    api_not_allowed(api_get_origin() !== 'learnpath');
 }
 
-if ($origin == 'user_course') {
+if ($origin === 'user_course') {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_COURSE_PATH).$course_info['directory'],
         'name' => $course_info['name'],
     ];
     $interbreadcrumb[] = [
         'url' => "../user/user.php?cidReq=$courseCode",
-        'name' => get_lang("Users"),
+        'name' => get_lang('Users'),
     ];
-} elseif ($origin == 'tracking_course') {
+} elseif ($origin === 'tracking_course') {
     $interbreadcrumb[] = [
         'url' => "../tracking/courseLog.php?cidReq=$courseCode&id_session=$session_id",
-        'name' => get_lang("Tracking"),
+        'name' => get_lang('Tracking'),
     ];
 } else {
     $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('MySpace')];
-    $interbreadcrumb[] = ['url' => 'student.php', 'name' => get_lang("MyStudents")];
-    $interbreadcrumb[] = ['url' => "myStudents.php?student=$user_id", 'name' => get_lang("StudentDetails")];
-    $nameTools = get_lang("DetailsStudentInCourse");
+    $interbreadcrumb[] = ['url' => 'student.php', 'name' => get_lang('MyStudents')];
+    $interbreadcrumb[] = ['url' => "myStudents.php?student=$user_id", 'name' => get_lang('StudentDetails')];
+    $nameTools = get_lang('DetailsStudentInCourse');
 }
 
 $interbreadcrumb[] = [
     'url' => "myStudents.php?student=$user_id&course=$courseCode&details=true&origin=$origin",
-    'name' => get_lang("DetailsStudentInCourse"),
+    'name' => get_lang('DetailsStudentInCourse'),
 ];
 $nameTools = get_lang('LearningPathDetails');
 $sql = 'SELECT name	FROM '.Database::get_course_table(TABLE_LP_MAIN).' 

@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CQuizCategory;
 use ChamiloSession as Session;
 
 /**
@@ -41,6 +42,8 @@ $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 $courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();
 $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
+
+$em = Database::getManager();
 
 $showGlossary = in_array($glossaryExtraTools, ['true', 'exercise', 'exercise_and_lp']);
 if ($origin == 'learnpath') {
@@ -775,6 +778,73 @@ if (is_null($current_question)) {
 }
 
 if ($question_count != 0) {
+    if (EXERCISE_FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE == $objExercise->selectFeedbackType()) {
+        $categoryList = Session::read('track_e_adaptive', []);
+
+        if (isset($objExercise->questionList[$current_question - 1])) { // Current question is not the last in quiz
+            $currentQuestionId = $objExercise->questionList[$current_question - 1];
+            $objCurrentQuestion = Question::read($currentQuestionId, [], false);
+
+            if (isset($objExercise->questionList[$current_question - 2])) { // Current questions is not the first
+                $previousQuestionId = $objExercise->questionList[$current_question - 2];
+                $objPreviousQuestion = Question::read($previousQuestionId, [], false);
+                $checkCategoryDestination = $objExercise->isLastQuestionInCategory(
+                    $objPreviousQuestion->category,
+                    $previousQuestionId
+                );
+
+                if ($checkCategoryDestination) {
+                    $categoryList[$objPreviousQuestion->category] = true;
+                    Session::write('track_e_adaptive', $categoryList);
+
+                    $destinationCategory = $objExercise->findCategoryDestination(
+                        $exe_id,
+                        $objPreviousQuestion->category
+                    );
+
+                    if ($objCurrentQuestion->category !== $destinationCategory) {
+                        if (0 === $destinationCategory || !empty($categoryList[$destinationCategory])) {
+                            $category = $objExercise->categoryWithQuestionList[$objPreviousQuestion->category]['category'];
+
+                            Session::write('adaptive_quiz_level', $category['name']);
+
+                            header("Location: exercise_result.php?$params");
+                            exit;
+                        }
+
+                        $destinationQuestionId = $objExercise->getFirstQuestionInCategory($destinationCategory);
+                        $destinationPosition = $objExercise->getPositionInCompressedQuestionList(
+                            $destinationQuestionId
+                        );
+
+                        header('Location: '.api_get_self().'?'.$params.'&num='.($destinationPosition - 1));
+                        exit;
+                    }
+
+                    $categoryList[$objCurrentQuestion->category] = true;
+                    Session::write('track_e_adaptive', $categoryList);
+                }
+            }
+        } else {// current question is the last in quiz
+            $currentQuestionId = $objExercise->questionList[$current_question - 2];
+            $objCurrentQuestion = Question::read($currentQuestionId, [], false);
+
+            $destinationCategory = $objExercise->findCategoryDestination($exe_id, $objCurrentQuestion->category);
+
+            if (0 !== $destinationCategory && empty($categoryList[$destinationCategory])) {
+                $destinationQuestionId = $objExercise->getFirstQuestionInCategory($destinationCategory);
+                $destinationPosition = $objExercise->getPositionInCompressedQuestionList($destinationQuestionId);
+
+                header('Location: '.api_get_self().'?'.$params.'&num='.($destinationPosition - 1));
+                exit;
+            }
+
+            $category = $objExercise->categoryWithQuestionList[$objCurrentQuestion->category]['category'];
+
+            Session::write('adaptive_quiz_level', $category['name']);
+        }
+    }
+
     if ($objExercise->type == ALL_ON_ONE_PAGE ||
         $current_question > $question_count
     ) {

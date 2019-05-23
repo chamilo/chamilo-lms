@@ -306,7 +306,7 @@ class Exercise
     }
 
     /** returns the number of FeedbackType  *
-     *  0=>Feedback , 1=>DirectFeedback, 2=>NoFeedback.
+     *  0=>Feedback , 1=>DirectFeedback, 2=>NoFeedback, 3=>Progresive/Adaptive
      *
      * @return int - exercise attempts
      */
@@ -1953,6 +1953,16 @@ class Exercise
                     '2',
                     ['id' => 'exerciseType_2']
                 );
+                if (api_get_configuration_value('quiz_question_category_destinations')) {
+                    $radios_feedback[] = $form->createElement(
+                        'radio',
+                        'exerciseFeedbackType',
+                        null,
+                        get_lang('ProgressiveAdaptive'),
+                        EXERCISE_FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE,
+                        ['id' => 'exerciseType_3', 'onchange' => 'checkPassiveFeedback()']
+                    );
+                }
                 $form->addGroup(
                     $radios_feedback,
                     null,
@@ -8596,5 +8606,156 @@ class Exercise
         );
 
         return $group;
+    }
+
+    /**
+     * @param int $categoryId
+     *
+     * @return array
+     */
+    public function getQuestionsInCategory($categoryId)
+    {
+        if (!isset($this->categoryWithQuestionList[$categoryId])) {
+            return [];
+        }
+
+        return $this->categoryWithQuestionList[$categoryId]['question_list'];
+    }
+
+    /**
+     * @param int $categoryId
+     *
+     * @return int
+     */
+    public function getFirstQuestionInCategory($categoryId)
+    {
+        $questionList = $this->getQuestionsInCategory($categoryId);
+
+        $firstQuestion = reset($questionList);
+
+        return (int) $firstQuestion;
+    }
+
+    /**
+     * @param int $categoryId
+     *
+     * @return int
+     */
+    public function getLastQuestionInCategory($categoryId)
+    {
+        $questionList = $this->getQuestionsInCategory($categoryId);
+
+        $lastQuestion = end($questionList);
+
+        return (int) $lastQuestion;
+    }
+
+    /**
+     * @param int $categoryId
+     * @param int $questionId
+     *
+     * @return bool
+     */
+    public function isFirstQuestionInCategory($categoryId, $questionId)
+    {
+        return (int) $questionId === $this->getFirstQuestionInCategory($categoryId);
+    }
+
+    /**
+     * @param int $categoryId
+     * @param int $questionId
+     *
+     * @return bool
+     */
+    public function isLastQuestionInCategory($categoryId, $questionId)
+    {
+        return (int) $questionId === $this->getLastQuestionInCategory($categoryId);
+    }
+
+    /**
+     * @param int   $exeId
+     * @param array $questionList
+     *
+     * @return float
+     */
+    public function calculatePercentageScoreInCategory($exeId, array $questionList)
+    {
+        $totalScore = 0;
+        $totalWeight = 0;
+
+        foreach ($questionList as $questionId) {
+            $result = $this->manage_answer(
+                $exeId,
+                $questionId,
+                null,
+                'exercise_result',
+                [],
+                false,
+                true,
+                false,
+                $this->propagate_neg
+            );
+
+            $totalScore += $result['score'];
+            $totalWeight += $result['weight'];
+        }
+
+        $categoryScore = ExerciseLib::show_score($totalScore, $totalWeight, true, false, true, true);
+        $categoryScore = strip_tags($categoryScore);
+
+        return (float) $categoryScore;
+    }
+
+    /**
+     * @param string $destinationStr
+     *
+     * @return array
+     */
+    public function decodeCategoryDestination($destinationStr)
+    {
+        $result = [];
+
+        $parts = explode('@@', $destinationStr);
+
+        foreach ($parts as $part) {
+            list($percentage, $categoryId) = explode(':', $part);
+
+            $result[$percentage] = $categoryId;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param int $exeId
+     * @param int $refCategoryId
+     *
+     * @return int
+     */
+    public function findCategoryDestination($exeId, $refCategoryId)
+    {
+        $questionsInCategory = $this->getQuestionsInCategory($refCategoryId);
+        $scoreInCategory = $this->calculatePercentageScoreInCategory($exeId, $questionsInCategory);
+
+        $quizCategory = Database::getManager()
+            ->getRepository('ChamiloCourseBundle:CQuizCategory')
+            ->findOneBy(['exerciseId' => $this->iId, 'categoryId' => $refCategoryId]);
+
+        $destinations = $this->decodeCategoryDestination($quizCategory->getDestinations());
+        $destinationCategoryId = 0;
+
+        foreach ($destinations as $percentage => $categoryId) {
+            $haveFoundCategory = 100 == $percentage
+                ? $scoreInCategory <= $percentage
+                : $scoreInCategory < $percentage;
+
+            if ($haveFoundCategory) {
+                $destinationCategoryId = (int) $categoryId;
+
+                break;
+            }
+        }
+
+        return $destinationCategoryId;
     }
 }

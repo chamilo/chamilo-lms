@@ -376,6 +376,21 @@ if ($inATest) {
         );
     }
 
+    if (api_get_configuration_value('quiz_question_category_destinations') &&
+        EXERCISE_FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE == $objExercise->selectFeedbackType()
+    ) {
+        $btnDestinations = Display::toolbarButton(
+            get_lang('CategoryDestinations'),
+            api_get_path(WEB_CODE_PATH).'exercise/category_destinations.php?id='.$exerciseId.'&'.api_get_cidreq(),
+            'sort-amount-asc',
+            'info'
+        );
+
+        echo '<div class="well well-sm">
+           '.$btnDestinations.'
+        </div>';
+    }
+
     $alert = '';
     if ($showPagination === false) {
         $alert .= sprintf(

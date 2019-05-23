@@ -114,6 +114,12 @@ $htmlHeadXtra[] = '<script>
                 break;
         }
     }
+    
+    function checkPassiveFeedback() {
+        if (document.getElementById(\'exerciseType_3\').checked) {
+            $(\'#questionSelection\').val(3).selectpicker(\'refresh\').trigger(\'change\');
+        }
+    }
 </script>';
 
 // to correct #4029 Random and number of attempt menu empty added window.onload=advanced_parameters;

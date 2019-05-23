@@ -51,6 +51,14 @@ class CQuizCategory
     protected $countQuestions;
 
     /**
+     * @var string
+     *
+     * Add @ to the next line if api_get_configuration_value('quiz_question_category_destinations') is true
+     * ORM\Column(name="destinations", type="text", nullable=true)
+     */
+    protected $destinations;
+
+    /**
      * @return int
      */
     public function getIid()
@@ -148,5 +156,21 @@ class CQuizCategory
         $this->countQuestions = $countQuestions;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDestinations()
+    {
+        return $this->destinations;
+    }
+
+    /**
+     * @param string $destinations
+     */
+    public function setDestinations($destinations)
+    {
+        $this->destinations = $destinations;
     }
 }

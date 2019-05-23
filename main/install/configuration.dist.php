@@ -591,6 +591,17 @@ $_configuration['send_all_emails_to'] = [
 //$_configuration['hide_user_info_in_quiz_result'] = false;
 // Show the username field in exercise results report
 //$_configuration['exercise_attempts_report_show_username'] = false;
+// Add the progressive/adaptive quiz mode:
+// 1. Add "@" in the ORM phpdoc block for $destinations property.
+// 2. Add "@" in the ORM phpdoc block for CQuizDestinationResult class. For ORM\Table and ORM\Table.
+// 3. Run this query in database
+/*
+ALTER TABLE c_quiz_rel_category ADD destinations LONGTEXT DEFAULT NULL;
+CREATE TABLE c_quiz_destination_result (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, exe_id INT DEFAULT NULL, achieved_level VARCHAR(255) NOT NULL, hash VARCHAR(255) NOT NULL, INDEX IDX_2A495FEFA76ED395 (user_id), INDEX IDX_2A495FEFB5A18F57 (exe_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+ALTER TABLE c_quiz_destination_result ADD CONSTRAINT FK_2A495FEFA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;
+ALTER TABLE c_quiz_destination_result ADD CONSTRAINT FK_2A495FEFB5A18F57 FOREIGN KEY (exe_id) REFERENCES track_e_exercises (exe_id) ON DELETE CASCADE;
+ */
+//$_configuration['quiz_question_category_destinations'] = false;
 
 // Score model
 // Allow to convert a score into a text/color label

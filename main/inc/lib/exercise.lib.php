@@ -4404,6 +4404,7 @@ EOT;
         $save_user_result = false,
         $remainingMessage = ''
     ) {
+        $exerciseIsAdaptive = EXERCISE_FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE == $objExercise->selectFeedbackType();
         $origin = api_get_origin();
 
         // Getting attempt info
@@ -4512,6 +4513,12 @@ EOT;
                     $showQuestionScore = true;
                 }
             }
+        }
+
+        if ($exerciseIsAdaptive) {
+            $show_only_score = true;
+            $show_results = false;
+            $showTotalScore = false;
         }
 
         if (($show_results || $show_only_score) && $origin != 'embeddable') {
@@ -4775,16 +4782,18 @@ EOT;
             echo $chartMultiAnswer;
         }
 
-        if (!empty($category_list) && ($show_results || $show_only_score)) {
-            // Adding total
-            $category_list['total'] = [
-                'score' => $total_score,
-                'total' => $total_weight,
-            ];
-            echo TestCategory::get_stats_table_by_attempt(
-                $objExercise->id,
-                $category_list
-            );
+        if (!$exerciseIsAdaptive) {
+            if (!empty($category_list) && ($show_results || $show_only_score)) {
+                // Adding total
+                $category_list['total'] = [
+                    'score' => $total_score,
+                    'total' => $total_weight,
+                ];
+                echo TestCategory::get_stats_table_by_attempt(
+                    $objExercise->id,
+                    $category_list
+                );
+            }
         }
 
         if ($show_all_but_expected_answer) {
@@ -4807,7 +4816,9 @@ EOT;
             echo Display::div($objExercise->description, ['class' => 'exercise_description']);
         }
 
-        echo $exercise_content;
+        if (!$exerciseIsAdaptive) {
+            echo $exercise_content;
+        }
 
         if (!$show_only_score) {
             echo $totalScoreText;
@@ -5384,5 +5395,40 @@ EOT;
             ->getSingleScalarResult();
 
         return $countAll === $countOfAllowed;
+    }
+
+    /**
+     * Check the quizzes directory path into user directory path.
+     *
+     * @param int $userId
+     *
+     * @return array
+     */
+    public static function checkQuizzesPath($userId)
+    {
+        $systemUserPath = UserManager::getUserPathById($userId, 'system');
+
+        if (empty($systemUserPath)) {
+            return [];
+        }
+
+        $permissions = api_get_permissions_for_new_directories();
+
+        if (!is_dir($systemUserPath)) {
+            mkdir($systemUserPath, $permissions, true);
+        }
+
+        $systemDirPath = $systemUserPath.'quizzes/';
+
+        if (!is_dir($systemDirPath)) {
+            mkdir($systemDirPath, $permissions);
+        }
+
+        $webDirPath = UserManager::getUserPathById($userId, 'web').'quizzes/';
+
+        return [
+            'system' => $systemDirPath,
+            'web' => $webDirPath,
+        ];
     }
 }

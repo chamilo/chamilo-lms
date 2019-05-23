@@ -393,8 +393,8 @@
                                 </a>
                             </h4>
                         </div>
-
-                        <div id="collapse-{{ lp_data.category.getId() }}" class="panel-collapse collapse {{ (categories|length > 1 ? 'in':'') }}"
+                        {% set number = number + 1 %}
+                        <div id="collapse-{{ lp_data.category.getId() }}" class="panel-collapse collapse {{ (number == 1 ? 'in':'') }}"
                              role="tabpanel" aria-labelledby="heading-{{ lp_data.category.getId() }}">
                             <div class="panel-body">
                                 {% if lp_data.lp_list %}

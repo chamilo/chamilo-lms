@@ -331,17 +331,6 @@ See https://support.chamilo.org/issues/6976
     margin-bottom: 5px;
 }
 
-.image-avatar .media-left img,
-.image-avatar img {
-    border: 1px solid #DDD;
-    border-radius: 5px;
-}
-
-.image-avatar {
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-
 .scorm-title {
     padding: 10px;
     display: inline-block;
@@ -357,6 +346,21 @@ See https://support.chamilo.org/issues/6976
     font-size: 18px;
     font-weight: bold;
     color: #686f7a;
+}
+
+.image-avatar {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-left: 3rem;
+    margin-right: 1rem;
+}
+.image-avatar .media-author .media-author-avatar{
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+.image-avatar .media-author .media-author-avatar img{
+    border: 1px solid #cdcdcd;
+    border-radius: 10px;
 }
 
 .lp-view-tabs{

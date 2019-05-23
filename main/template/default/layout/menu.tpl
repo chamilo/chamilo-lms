@@ -4,7 +4,7 @@
         $(document).ready(function () {
             $.get('{{ _p.web_main }}inc/ajax/message.ajax.php?a=get_count_message', function(data) {
                 var countNotifications = (data.ms_friends + data.ms_groups + data.ms_inbox);
-                if (countNotifications === 0 ) {
+                if (countNotifications === 0 || isNaN(countNotifications)) {
                     $("#count_message_li").addClass('hidden');
                 } else {
                     $("#count_message_li").removeClass('hidden');

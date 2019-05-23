@@ -1670,7 +1670,8 @@ class UserManager
         $conditions = [],
         $order_by = [],
         $limit_from = false,
-        $limit_to = false
+        $limit_to = false,
+        $idCampus = null
     ) {
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $userUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -1678,7 +1679,11 @@ class UserManager
         $sql = "SELECT user.* FROM $user_table user ";
 
         if (api_is_multiple_url_enabled()) {
-            $urlId = api_get_current_access_url_id();
+            if($idCampus){
+                $urlId = $idCampus;
+            } else {
+                $urlId = api_get_current_access_url_id();
+            }
             $sql .= " INNER JOIN $userUrlTable url_user
                       ON (user.user_id = url_user.user_id)
                       WHERE url_user.access_url_id = $urlId";

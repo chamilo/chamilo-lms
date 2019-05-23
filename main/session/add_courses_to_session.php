@@ -6,7 +6,6 @@
  *
  * @todo use formvalidator
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -96,19 +95,20 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 
     Display::addFlash(Display::return_message(get_lang('Updated')));
 
+    $url = api_get_path(WEB_CODE_PATH).'session/';
     if (isset($add)) {
-        header('Location: add_users_to_session.php?id_session='.$sessionId.'&add=true');
+        header('Location: '.$url.'add_users_to_session.php?id_session='.$sessionId.'&add=true');
     } else {
-        header('Location: resume_session.php?id_session='.$sessionId);
+        header('Location: '.$url.'resume_session.php?id_session='.$sessionId);
     }
 
     exit;
 }
 
-// display the header
+// Display the header
 Display::display_header($tool_name);
 
-if ($add_type == 'multiple') {
+if ($add_type === 'multiple') {
     $link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$sessionId.'&add='.$add.'&add_type=unique">'.
         Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
     $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').' ';
@@ -124,7 +124,7 @@ echo '<div class="actions">';
 echo $link_add_type_unique.$link_add_type_multiple;
 echo '</div>';
 
-$ajax_search = $add_type == 'unique' ? true : false;
+$ajax_search = $add_type === 'unique' ? true : false;
 $nosessionCourses = $sessionCourses = [];
 if ($ajax_search) {
     $sql = "SELECT course.id, code, title, visual_code, session_id
@@ -351,10 +351,10 @@ unset($Courses);
     }
 
     function mysort(a, b) {
-        if(a.text.toLowerCase() > b.text.toLowerCase()){
+        if (a.text.toLowerCase() > b.text.toLowerCase()){
             return 1;
         }
-        if(a.text.toLowerCase() < b.text.toLowerCase()){
+        if (a.text.toLowerCase() < b.text.toLowerCase()){
             return -1;
         }
         return 0;

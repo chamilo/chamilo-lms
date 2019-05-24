@@ -5193,16 +5193,19 @@ class UserManager
         if (is_array($subscribedUsersId)) {
             foreach ($subscribedUsersId as $subscribedUserId) {
                 $subscribedUserId = (int) $subscribedUserId;
-                $sql = "SELECT id FROM $userRelUserTable
-                        WHERE user_id = $subscribedUserId
-                        AND friend_user_id = $userId
-                        AND relation_type = $relationType";
+                $sql = "SELECT id 
+                        FROM $userRelUserTable
+                        WHERE 
+                            user_id = $subscribedUserId AND 
+                            friend_user_id = $userId AND 
+                            relation_type = $relationType";
+
                 $result = Database::query($sql);
                 $num = Database::num_rows($result);
                 if ($num === 0) {
                     $date = api_get_utc_datetime();
                     $sql = "INSERT INTO $userRelUserTable (user_id, friend_user_id, relation_type, last_edit)
-                        VALUES ($subscribedUserId, $userId, $relationType, '$date')";
+                            VALUES ($subscribedUserId, $userId, $relationType, '$date')";
                     $result = Database::query($sql);
                     $affectedRows += Database::affected_rows($result);
                 }
@@ -5222,7 +5225,6 @@ class UserManager
      */
     public static function is_user_followed_by_drh($user_id, $hr_dept_id)
     {
-        // Database table and variables Definitions
         $tbl_user_rel_user = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
         $user_id = (int) $user_id;
         $hr_dept_id = (int) $hr_dept_id;
@@ -5306,18 +5308,23 @@ class UserManager
      */
     public static function is_user_certified($cat_id, $user_id)
     {
-        $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-        $sql = 'SELECT path_certificate FROM '.$table_certificate.'
+        $cat_id = (int) $cat_id;
+        $user_id = (int) $user_id;
+
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
+        $sql = 'SELECT path_certificate 
+                FROM '.$table.'
                 WHERE
-                    cat_id="'.intval($cat_id).'" AND
-                    user_id="'.intval($user_id).'"';
+                    cat_id = "'.$cat_id.'" AND
+                    user_id = "'.$user_id.'"';
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs);
+
         if ($row['path_certificate'] == '' || is_null($row['path_certificate'])) {
             return false;
-        } else {
-            return true;
         }
+
+        return true;
     }
 
     /**
@@ -5785,6 +5792,7 @@ class UserManager
     ) {
         $userId = (int) $userId;
         $sessionId = (int) $sessionId;
+
         $trackCourseAccessTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $whereConditions = [
             'user_id = ? ' => $userId,
@@ -5855,6 +5863,7 @@ class UserManager
     public static function getStudentBossList($userId)
     {
         $userId = (int) $userId;
+
         if ($userId > 0) {
             $userRelTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
             $result = Database::select(
@@ -5910,9 +5919,9 @@ class UserManager
                 $userInfo['complete_name_with_username'],
                 $userInfo['profile_url']
             );
-        } else {
-            return get_lang('Anonymous');
         }
+
+        return get_lang('Anonymous');
     }
 
     /**
@@ -6069,12 +6078,10 @@ SQL;
             Session::write('is_allowedCreateCourse', $userInfo['status'] == 1);
             // will be useful later to know if the user is actually an admin or not (example reporting)
             Session::write('login_as', true);
-
             $logInfo = [
                 'tool' => 'login',
                 'tool_id' => 0,
                 'tool_id_detail' => 0,
-                'action' => '',
                 'info' => $userId,
             ];
             Event::registerLog($logInfo);
@@ -6513,7 +6520,6 @@ SQL;
         $timezone = new DateTimeZone(api_get_timezone());
 
         $sessions = [];
-
         if (DRH == $userInfo['status']) {
             $sessions = SessionManager::get_sessions_followed_by_drh($userInfo['id']);
         } elseif (api_is_platform_admin(true)) {

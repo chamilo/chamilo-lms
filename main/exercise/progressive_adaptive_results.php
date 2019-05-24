@@ -14,11 +14,11 @@ require_once __DIR__.'/../inc/global.inc.php';
 $hash = isset($_REQUEST['hash']) ? $_GET['hash'] : null;
 $origin = api_get_origin();
 
-$show_headers = !in_array($origin, ['learnpath', 'embeddable']);
+$showHeaders = !in_array($origin, ['learnpath', 'embeddable']);
 
 if (empty($hash)) {
     api_not_allowed(
-        $show_headers,
+        $showHeaders,
         Display::return_message(get_lang('NoData'), 'warning')
     );
 }
@@ -32,7 +32,7 @@ $destinationResult = $em
 
 if (empty($destinationResult)) {
     api_not_allowed(
-        $show_headers,
+        $showHeaders,
         Display::return_message(get_lang('NoData'), 'warning')
     );
 }
@@ -46,7 +46,7 @@ $objExercise->sessionId = $exe->getSessionId();
 
 if (false === $objExercise->read($exe->getExeExoId())) {
     api_not_allowed(
-        $show_headers,
+        $showHeaders,
         Display::return_message(get_lang('NoData'), 'warning')
     );
 }
@@ -55,7 +55,7 @@ $isAdaptive = EXERCISE_FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE == $objExercise->selec
 
 if (!$isAdaptive) {
     api_not_allowed(
-        $show_headers,
+        $showHeaders,
         Display::return_message(get_lang('NoData'), 'warning')
     );
 }
@@ -71,7 +71,7 @@ $quizzesDir = ExerciseLib::checkQuizzesPath(
 
 if (empty($quizzesDir)) {
     api_not_allowed(
-        $show_headers,
+        $showHeaders,
         Display::return_message(get_lang('NoData'), 'warning')
     );
 }
@@ -81,7 +81,7 @@ $trackExerciseInfo = ExerciseLib::get_exercise_track_exercise_info(
     $exe->getExeId()
 );
 
-if ($show_headers) {
+if ($showHeaders) {
     $this_section = SECTION_COURSES;
 
     Display::display_header(get_lang('Result'));
@@ -107,7 +107,7 @@ $content .= '
 
 echo $content;
 
-if ($show_headers) {
+if ($showHeaders) {
     Display::display_footer();
 } else {
     Display::display_reduced_footer();

@@ -1427,6 +1427,24 @@ class Display
             unset($extra_params['beforeSelectRow']);
         }
 
+        $beforeProcessing = '';
+        if (isset($extra_params['beforeProcessing'])) {
+            $beforeProcessing = 'beforeProcessing : function() { '.$extra_params['beforeProcessing'].' },';
+            unset($extra_params['beforeProcessing']);
+        }
+
+        $beforeRequest = '';
+        if (isset($extra_params['beforeRequest'])) {
+            $beforeRequest = 'beforeRequest : function() { '.$extra_params['beforeRequest'].' },';
+            unset($extra_params['beforeRequest']);
+        }
+
+        $gridComplete = '';
+        if (isset($extra_params['gridComplete'])) {
+            $gridComplete = 'gridComplete : function() { '.$extra_params['gridComplete'].' },';
+            unset($extra_params['gridComplete']);
+        }
+
         // Adding extra params
         if (!empty($extra_params)) {
             foreach ($extra_params as $key => $element) {
@@ -1468,6 +1486,9 @@ class Display
         // Creating the jqgrid element.
         $json .= '$("#'.$div_id.'").jqGrid({';
         //$json .= $beforeSelectRow;
+        $json .= $gridComplete;
+        $json .= $beforeProcessing;
+        $json .= $beforeRequest;
         $json .= $json_encode;
         $json .= '});';
 

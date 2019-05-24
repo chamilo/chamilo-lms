@@ -4955,8 +4955,12 @@ function api_get_language_from_type($lang_type)
  */
 function api_get_language_info($languageId)
 {
+    if (empty($languageId)) {
+        return [];
+    }
+
     $language = Database::getManager()
-        ->find('ChamiloCoreBundle:Language', intval($languageId));
+        ->find('ChamiloCoreBundle:Language', $languageId);
 
     if (!$language) {
         return [];
@@ -9518,13 +9522,18 @@ function api_get_language_translate_html()
     $userInfo = api_get_user_info();
     $languageId = api_get_language_id($userInfo['language']);
     $languageInfo = api_get_language_info($languageId);
+    $isoCode = 'en';
+
+    if (!empty($languageInfo)) {
+        $isoCode = $languageInfo['isocode'];
+    }
 
     return '
             $(function() {
                 '.$hideAll.'                 
-                var defaultLanguageFromUser = "'.$languageInfo['isocode'].'";   
+                var defaultLanguageFromUser = "'.$isoCode.'";   
                                              
-                $("span:lang('.$languageInfo['isocode'].')").filter(
+                $("span:lang('.$isoCode.')").filter(
                     function() {
                         // Ignore ckeditor classes
                         return !this.className.match(/cke(.*)/);

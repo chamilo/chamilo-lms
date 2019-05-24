@@ -4405,6 +4405,7 @@ EOT;
         $remainingMessage = ''
     ) {
         $exerciseIsAdaptive = EXERCISE_FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE == $objExercise->selectFeedbackType();
+        $showResultsWhenIsAdaptive = $exerciseIsAdaptive && !$save_user_result;
         $origin = api_get_origin();
 
         // Getting attempt info
@@ -4515,7 +4516,7 @@ EOT;
             }
         }
 
-        if ($exerciseIsAdaptive) {
+        if ($exerciseIsAdaptive && !$showResultsWhenIsAdaptive) {
             $show_only_score = true;
             $show_results = false;
             $showTotalScore = false;
@@ -4782,7 +4783,9 @@ EOT;
             echo $chartMultiAnswer;
         }
 
-        if (!$exerciseIsAdaptive) {
+        if (!$exerciseIsAdaptive ||
+            ($exerciseIsAdaptive && $showResultsWhenIsAdaptive)
+        ) {
             if (!empty($category_list) && ($show_results || $show_only_score)) {
                 // Adding total
                 $category_list['total'] = [
@@ -4816,7 +4819,9 @@ EOT;
             echo Display::div($objExercise->description, ['class' => 'exercise_description']);
         }
 
-        if (!$exerciseIsAdaptive) {
+        if (!$exerciseIsAdaptive ||
+            ($exerciseIsAdaptive && $showResultsWhenIsAdaptive)
+        ) {
             echo $exercise_content;
         }
 

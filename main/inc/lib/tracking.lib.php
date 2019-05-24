@@ -353,7 +353,7 @@ class Tracking
                     if (!empty($inter_num)) {
                         $extend_link = Display::url(
                             Display::return_icon(
-                                'visible.gif',
+                                'visible.png',
                                 get_lang('HideAttemptView')
                             ),
                             api_get_self().'?action=stats&fold_id='.$my_item_id.$url_suffix
@@ -406,17 +406,24 @@ class Tracking
                         $extend_attempt_link = '';
                         $extend_this_attempt = 0;
 
-                        if ((learnpath::get_interactions_count_from_db($row['iv_id'], $course_id) > 0 ||
-                            learnpath::get_objectives_count_from_db($row['iv_id'], $course_id) > 0) &&
+                        if ((
+                            learnpath::get_interactions_count_from_db($row['iv_id'], $course_id) > 0 ||
+                            learnpath::get_objectives_count_from_db($row['iv_id'], $course_id) > 0
+                            ) &&
                             !$extend_all
                         ) {
                             if ($extendAttemptId == $row['iv_id']) {
                                 // The extend button for this attempt has been clicked.
                                 $extend_this_attempt = 1;
                                 $extend_attempt_link = Display::url(
-                                    Display::return_icon('visible.gif', get_lang('HideAttemptView')),
+                                    Display::return_icon('visible.png', get_lang('HideAttemptView')),
                                     api_get_self().'?action=stats&extend_id='.$my_item_id.'&fold_attempt_id='.$row['iv_id'].$url_suffix
                                 );
+                                $extend_attempt_link .= '&nbsp;'.
+                                    Display::url(
+                                        Display::return_icon('pdf.png', get_lang('ExportToPdf')),
+                                        api_get_self().'?action=export_stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix
+                                    );
                             } else { // Same case if fold_attempt_id is set, so not implemented explicitly.
                                 // The extend button for this attempt has not been clicked.
                                 $extend_attempt_link = Display::url(
@@ -511,7 +518,7 @@ class Tracking
                             }
                             $output .= '<tr class="'.$oddclass.'">
                                     <td></td>
-                                    <td>'.$extend_attempt_link.'</td>
+                                    <td style="width:70px;float:left;">'.$extend_attempt_link.'</td>
                                     <td colspan="3">'.get_lang('Attempt').' '.$attemptCount.'</td>
                                     <td colspan="2">'.learnpathItem::humanize_status($lesson_status, true, $type).'</td>
                                     <td colspan="2">'.$view_score.'</td>
@@ -1032,7 +1039,7 @@ class Tracking
                                         }
                                         if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                             $view_score = Display::return_icon(
-                                                'invisible.gif',
+                                                'invisible.png',
                                                 get_lang(
                                                     'ResultsHiddenByExerciseSetting'
                                                 )
@@ -1157,7 +1164,7 @@ class Tracking
         $total_time = str_replace('NaN', '00'.$h.'00\'00"', $total_time);
 
         if (!$is_allowed_to_edit && $result_disabled_ext_all) {
-            $final_score = Display::return_icon('invisible.gif', get_lang('ResultsHiddenByExerciseSetting'));
+            $final_score = Display::return_icon('invisible.png', get_lang('ResultsHiddenByExerciseSetting'));
             $finalScoreToCsv = get_lang('ResultsHiddenByExerciseSetting');
         } else {
             if (is_numeric($total_score)) {

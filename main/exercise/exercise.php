@@ -52,6 +52,8 @@ $TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
 $TBL_TRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
+$em = Database::getManager();
+
 // document path
 $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
 // picture path
@@ -1158,11 +1160,22 @@ if (!empty($exerciseList)) {
                             // More than one attempt
                             if ($num > 0) {
                                 $row_track = Database :: fetch_array($qryres);
-                                $attempt_text = get_lang('LatestAttempt').' : ';
-                                $attempt_text .= ExerciseLib::show_score(
-                                    $row_track['exe_result'],
-                                    $row_track['exe_weighting']
-                                );
+
+                                if (EXERCISE_FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE == $exercise->selectFeedbackType()) {
+                                    $destinationResult = $em
+                                        ->getRepository('ChamiloCourseBundle:CQuizDestinationResult')
+                                        ->findOneBy(['exe' => $row_track['exe_id'], 'user' => $row_track['exe_user_id']]);
+
+                                    $attempt_text = !empty($destinationResult)
+                                        ? sprintf(get_lang('LevelReachedX'), $destinationResult->getAchievedLevel())
+                                        : '';
+                                } else {
+                                    $attempt_text = get_lang('LatestAttempt').' : ';
+                                    $attempt_text .= ExerciseLib::show_score(
+                                        $row_track['exe_result'],
+                                        $row_track['exe_weighting']
+                                    );
+                                }
                             } else {
                                 //No attempts
                                 $attempt_text = get_lang('NotAttempted');
@@ -1223,11 +1236,22 @@ if (!empty($exerciseList)) {
                     ) {
                         if ($num > 0) {
                             $row_track = Database :: fetch_array($qryres);
-                            $attempt_text = get_lang('LatestAttempt').' : ';
-                            $attempt_text .= ExerciseLib::show_score(
-                                $row_track['exe_result'],
-                                $row_track['exe_weighting']
-                            );
+
+                            if (EXERCISE_FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE == $exercise->selectFeedbackType()) {
+                                $destinationResult = $em
+                                    ->getRepository('ChamiloCourseBundle:CQuizDestinationResult')
+                                    ->findOneBy(['exe' => $row_track['exe_id'], 'user' => $row_track['exe_user_id']]);
+
+                                $attempt_text = !empty($destinationResult)
+                                    ? sprintf(get_lang('LevelReachedX'), $destinationResult->getAchievedLevel())
+                                    : '';
+                            } else {
+                                $attempt_text = get_lang('LatestAttempt').' : ';
+                                $attempt_text .= ExerciseLib::show_score(
+                                    $row_track['exe_result'],
+                                    $row_track['exe_weighting']
+                                );
+                            }
                         } else {
                             $attempt_text = get_lang('NotAttempted');
                         }

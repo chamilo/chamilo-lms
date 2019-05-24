@@ -54,6 +54,8 @@ if (!$is_allowedToEdit) {
     }
 }
 
+$isAdaptive = EXERCISE_FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE == $objExercise->selectFeedbackType();
+
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/css/hotspot.css">';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'annotation/js/annotation.js"></script>';
@@ -76,12 +78,48 @@ if ($show_headers) {
 $message = Session::read('attempt_remaining');
 Session::erase('attempt_remaining');
 
-ExerciseLib::displayQuestionListByAttempt(
-    $objExercise,
-    $id,
-    false,
-    $message
-);
+if ($isAdaptive) {
+    $em = Database::getManager();
+
+    $destinationResult = Database::getManager()
+        ->getRepository('ChamiloCourseBundle:CQuizDestinationResult')
+        ->findOneBy(['user' => $student_id, 'exe' => $id]);
+
+    if (empty($destinationResult)) {
+        echo Display::return_message(get_lang('NoData'), 'warning');
+    }
+
+    $studentInfo = api_get_user_info($student_id);
+    $quizzesDir = ExerciseLib::checkQuizzesPath($student_id);
+    $qrUrl = api_get_path(WEB_CODE_PATH).'exercise/progressive_adaptive_results.php?'
+        .http_build_query(['hash' => $destinationResult->getHash(), 'origin' => $origin]);
+
+    echo $objExercise->showExerciseResultHeader(
+        api_get_user_info($student_id),
+        $track_exercise_info
+    );
+    echo PHP_EOL;
+    echo '
+        <div class="row">
+            <div class="col-md-4 text-right">
+                '.Display::img($quizzesDir['web'].$destinationResult->getHash().'.png').'
+            </div>
+            <div class="col-md-8 text-left">
+                <p class="lead">'.sprintf(get_lang('LevelReachedX'), $destinationResult->getAchievedLevel()).'</p>
+                <p>'.$studentInfo['complete_name_with_username'].'</p>
+                <p>'.sprintf(get_lang('ResultHashX'), $destinationResult->getHash()).'</p>
+                <p>'.Display::url(get_lang('SeeResults'), $qrUrl, ['target' => '_blank']).'</p>
+            </div>
+        </div>
+    ';
+} else {
+    ExerciseLib::displayQuestionListByAttempt(
+        $objExercise,
+        $id,
+        false,
+        $message
+    );
+}
 
 if ($show_headers) {
     Display::display_footer();

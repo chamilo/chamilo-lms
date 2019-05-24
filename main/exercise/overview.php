@@ -213,7 +213,18 @@ if (in_array(
 if (!empty($attempts)) {
     $i = $counter;
     foreach ($attempts as $attempt_result) {
-        $score = ExerciseLib::show_score($attempt_result['exe_result'], $attempt_result['exe_weighting']);
+        if (EXERCISE_FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE == $objExercise->selectFeedbackType()) {
+            $destinationResult = Database::getManager()
+                ->getRepository('ChamiloCourseBundle:CQuizDestinationResult')
+                ->findOneBy(['exe' => $attempt_result['exe_id'], 'user' => $attempt_result['exe_user_id']]);
+
+            $score = !empty($destinationResult)
+                ? sprintf(get_lang('LevelReachedX'), $destinationResult->getAchievedLevel())
+                : '';
+        } else {
+            $score = ExerciseLib::show_score($attempt_result['exe_result'], $attempt_result['exe_weighting']);
+        }
+
         $attempt_url = api_get_path(WEB_CODE_PATH).'exercise/result.php?';
         $attempt_url .= api_get_cidreq().'&show_headers=1&';
         $attempt_url .= http_build_query([

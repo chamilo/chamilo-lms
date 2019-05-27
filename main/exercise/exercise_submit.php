@@ -780,30 +780,49 @@ if ($question_count != 0) {
     if (EXERCISE_FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE == $objExercise->selectFeedbackType()) {
         $categoryList = Session::read('track_e_adaptive', []);
 
-        if (isset($objExercise->questionList[$current_question - 1])) { // Current question is not the last in quiz
+        if (isset($objExercise->questionList[$current_question - 1])) { // Current question is not the last one in quiz
             $currentQuestionId = $objExercise->questionList[$current_question - 1];
             $objCurrentQuestion = Question::read($currentQuestionId, [], false);
 
-            if (isset($objExercise->questionList[$current_question - 2])) { // Current questions is not the first
+            if (isset($objExercise->questionList[$current_question - 2])) { // Current question is not the first one
                 $previousQuestionId = $objExercise->questionList[$current_question - 2];
                 $objPreviousQuestion = Question::read($previousQuestionId, [], false);
-                $checkCategoryDestination = $objExercise->isLastQuestionInCategory(
-                    $objPreviousQuestion->category,
-                    $previousQuestionId
-                );
 
-                if ($checkCategoryDestination) {
-                    $categoryList[$objPreviousQuestion->category] = true;
-                    Session::write('track_e_adaptive', $categoryList);
-
-                    $destinationCategory = $objExercise->findCategoryDestination(
-                        $exe_id,
-                        $objPreviousQuestion->category
+                // Check if category of current question has not been taken.
+                if (!empty($categoryList[$objPreviousQuestion->category])) {
+                    $previousQuestionIsLastInCategory = $objExercise->isLastQuestionInCategory(
+                        $objPreviousQuestion->category,
+                        $previousQuestionId
                     );
 
-                    if ($objCurrentQuestion->category !== $destinationCategory) {
+                    if ($previousQuestionIsLastInCategory) {
+                        $destinationCategory = $objExercise->findCategoryDestination(
+                            $exe_id,
+                            $objPreviousQuestion->category
+                        );
+
+                        if ($objCurrentQuestion->category !== $destinationCategory) {
+                            if (0 === $destinationCategory || !empty($categoryList[$destinationCategory])) {
+                                $category = $objExercise->categoryWithQuestionList[$objPreviousQuestion->category]['category'];
+
+                                Session::write('adaptive_quiz_level', $category['name']);
+
+                                header("Location: exercise_result.php?$params");
+                                exit;
+                            }
+
+                            $destinationQuestionId = $objExercise->getFirstQuestionInCategory($destinationCategory);
+                            $destinationPosition = $objExercise->getPositionInCompressedQuestionList(
+                                $destinationQuestionId
+                            );
+
+                            header('Location: '.api_get_self().'?'.$params.'&num='.($destinationPosition - 1));
+                            exit;
+                        }
+
+                        // If go to end quiz or user have already done this category
                         if (0 === $destinationCategory || !empty($categoryList[$destinationCategory])) {
-                            $category = $objExercise->categoryWithQuestionList[$objPreviousQuestion->category]['category'];
+                            $category = $objExercise->categoryWithQuestionList[$objCurrentQuestion->category]['category'];
 
                             Session::write('adaptive_quiz_level', $category['name']);
 
@@ -811,30 +830,39 @@ if ($question_count != 0) {
                             exit;
                         }
 
-                        $destinationQuestionId = $objExercise->getFirstQuestionInCategory($destinationCategory);
-                        $destinationPosition = $objExercise->getPositionInCompressedQuestionList(
-                            $destinationQuestionId
-                        );
+                        // Category of current question is the next category. Then let it continue.
+                        $categoryList[$objCurrentQuestion->category] = true;
+                        Session::write('track_e_adaptive', $categoryList);
+                    } else {
+                        if (!$categoryList[$objCurrentQuestion->category]) {
+                            Session::write('track_e_adaptive', []);
 
-                        header('Location: '.api_get_self().'?'.$params.'&num='.($destinationPosition - 1));
-                        exit;
+                            header('Location: '.api_get_self().'?'.$params.'&num=0');
+                            exit;
+                        }
                     }
-
-                    $categoryList[$objCurrentQuestion->category] = true;
-                    Session::write('track_e_adaptive', $categoryList);
                 } else {
-                    if (!$categoryList[$objCurrentQuestion->category]) {
+                    // Current question is the first one in its category
+                    $currentQuestionIsFirstInCategory = $objExercise->isFirstQuestionInCategory(
+                        $objCurrentQuestion->category,
+                        $objCurrentQuestion->iid
+                    );
+
+                    if (!$currentQuestionIsFirstInCategory) {
                         Session::write('track_e_adaptive', []);
 
                         header('Location: '.api_get_self().'?'.$params.'&num=0');
                         exit;
                     }
+
+                    $categoryList[$objCurrentQuestion->category] = true;
+                    Session::write('track_e_adaptive', $categoryList);
                 }
-            } else {
+            } else { // Questions is the first one in quiz. Then let it continue.
                 $categoryList[$objCurrentQuestion->category] = true;
                 Session::write('track_e_adaptive', $categoryList);
             }
-        } else {// current question is the last in quiz
+        } else { // Current question is the last one in quiz
             $currentQuestionId = $objExercise->questionList[$current_question - 2];
             $objCurrentQuestion = Question::read($currentQuestionId, [], false);
 

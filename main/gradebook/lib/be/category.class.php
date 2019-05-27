@@ -2142,27 +2142,10 @@ class Category implements GradebookItem
             return false;
         }
 
-        // Block certification links depending gradebook configuration (generate certifications)
-        if (empty($category->getGenerateCertificates())) {
-            return false;
-        }
-
         $sessionId = $category->get_session_id();
         $courseCode = $category->get_course_code();
         $courseInfo = api_get_course_info($courseCode);
         $courseId = $courseInfo['real_id'];
-
-        $cattotal = self::load($category_id);
-        $scoretotal = $cattotal[0]->calc_score($user_id);
-
-        // Do not remove this the gradebook/lib/fe/gradebooktable.class.php
-        // file load this variable as a global
-        $scoredisplay = ScoreDisplay::instance();
-
-        $my_score_in_gradebook = $scoredisplay->display_score(
-            $scoretotal,
-            SCORE_SIMPLE
-        );
 
         $userFinishedCourse = self::userFinishedCourse(
             $user_id,
@@ -2197,7 +2180,7 @@ class Category implements GradebookItem
             );
             $userHasSkills = !empty($userSkills);
 
-            if ($userHasSkills && !$category->getGenerateCertificates()) {
+            if ($userHasSkills) {
                 return [
                     'badge_link' => Display::toolbarButton(
                         get_lang('ExportBadges'),
@@ -2207,6 +2190,23 @@ class Category implements GradebookItem
                 ];
             }
         }
+
+        // Block certification links depending gradebook configuration (generate certifications)
+        if (empty($category->getGenerateCertificates())) {
+            return false;
+        }
+
+        $cattotal = self::load($category_id);
+        $scoretotal = $cattotal[0]->calc_score($user_id);
+
+        // Do not remove this the gradebook/lib/fe/gradebooktable.class.php
+        // file load this variable as a global
+        $scoredisplay = ScoreDisplay::instance();
+
+        $my_score_in_gradebook = $scoredisplay->display_score(
+            $scoretotal,
+            SCORE_SIMPLE
+        );
 
         $my_certificate = GradebookUtils::get_certificate_by_user_id(
             $category->get_id(),

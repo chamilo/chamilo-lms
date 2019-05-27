@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CourseBundle\Entity\CLpItemView;
+
 /**
  * Learning paths reporting.
  *
@@ -27,9 +30,9 @@ $courseCode = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : a
 $origin = api_get_origin();
 $lp_id = (int) $_GET['lp_id'];
 $csv_content = [];
-$course_info = api_get_course_info($courseCode);
+$courseInfo = api_get_course_info($courseCode);
 
-if (empty($course_info) || empty($lp_id)) {
+if (empty($courseInfo) || empty($lp_id)) {
     api_not_allowed(api_get_origin() !== 'learnpath');
 }
 $userInfo = api_get_user_info($user_id);
@@ -48,8 +51,8 @@ if (!api_is_platform_admin(true) &&
 
 if ($origin === 'user_course') {
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_COURSE_PATH).$course_info['directory'],
-        'name' => $course_info['name'],
+        'url' => api_get_path(WEB_COURSE_PATH).$courseInfo['directory'],
+        'name' => $courseInfo['name'],
     ];
     $interbreadcrumb[] = [
         'url' => "../user/user.php?cidReq=$courseCode",
@@ -73,7 +76,7 @@ $interbreadcrumb[] = [
 ];
 $nameTools = get_lang('LearningPathDetails');
 $sql = 'SELECT name	FROM '.Database::get_course_table(TABLE_LP_MAIN).' 
-        WHERE c_id = '.$course_info['real_id'].' AND id='.$lp_id;
+        WHERE c_id = '.$courseInfo['real_id'].' AND id='.$lp_id;
 $rs = Database::query($sql);
 $lp_title = Database::result($rs, 0, 0);
 
@@ -82,12 +85,15 @@ $origin = 'tracking';
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 switch ($action) {
     case 'export_stats':
+        if (!api_is_allowed_to_edit()) {
+            api_not_allowed();
+        }
         $itemId = isset($_REQUEST['extend_id']) ? $_REQUEST['extend_id'] : 0;
         $itemViewId = isset($_REQUEST['extend_attempt_id']) ? $_REQUEST['extend_attempt_id'] : 0;
         $em = Database::getManager();
 
         $repo = $em->getRepository('ChamiloCourseBundle:CLpItemView');
-        /** @var \Chamilo\CourseBundle\Entity\CLpItemView $itemView */
+        /** @var CLpItemView $itemView */
         $itemView = $repo->find($itemViewId);
 
         if (!$itemView) {
@@ -110,6 +116,7 @@ switch ($action) {
 
         $studentName = '';
         $questions = [];
+        $categories = [];
         foreach ($list1 as $id => $interaction) {
             $counter++;
             if ($counter === 1) {
@@ -151,24 +158,58 @@ switch ($action) {
                     $total++;
                     $globalTotal++;
                 }
-                $table->setCellContents($row, 0, $choiceCounter);
+                $table->setCellContents($row, 0, 'Q'.$choiceCounter);
                 $table->setCellContents($row, 1, $option['student_response_formatted']);
-                $table->setCellContents($row, 2, $option['result']);
+                $result = Display::return_icon('completed.png');
+                if ($option['result'] === 'wrong') {
+                    $result = Display::return_icon('delete.png');
+                }
+
+                $table->setCellContents($row, 2, $result);
                 $choiceCounter++;
                 $row++;
             }
+
             // Question total
             $table->setCellContents($row, 0, get_lang('Total'));
             $table->setCellContents($row, 1, $data['question']);
             $totalOptions = count($data['options']);
-            $score = $scoreDisplay->display_score([0 => $total, 1 => $totalOptions]);
-            $table->setCellContents($row, 2, $score);
-            $globalTotalCount += $totalOptions;
+            $arrayScore = [0 => $total, 1 => $totalOptions];
+            $scoreToString = $scoreDisplay->display_score($arrayScore);
+            $table->setCellContents($row, 2, $scoreToString);
 
+            $categories[] = [
+                'name' => $data['question'],
+                'score' => $scoreDisplay->display_score($arrayScore, SCORE_DIV),
+                'score_percentage' => $scoreDisplay->display_score($arrayScore, SCORE_PERCENT),
+            ];
+
+            $globalTotalCount += $totalOptions;
             $row++;
         }
 
-        $score = $scoreDisplay->display_score([0 => $globalTotal, 1 => $globalTotalCount]);
+        $tableSummary = new HTML_Table(['class' => 'data_table']);
+        $tableSummary->setCellContents(0, 0, get_lang('CategoryName'));
+        $tableSummary->setCellContents(0, 1, get_lang('Score'));
+        $tableSummary->setCellContents(0, 2, get_lang('Percentage'));
+
+        $rowSummary = 1;
+        foreach ($categories as $data) {
+            $tableSummary->setCellContents($rowSummary, 0, $data['name']);
+            $tableSummary->setCellContents($rowSummary, 1, $data['score']);
+            $tableSummary->setCellContents($rowSummary, 2, $data['score_percentage']);
+            $rowSummary++;
+        }
+
+        $globalScoreTotal = [0 => $globalTotal, 1 => $globalTotalCount];
+        $score = $scoreDisplay->display_score($globalScoreTotal);
+
+        $tableSummary->setCellContents($rowSummary, 0, get_lang('GeneralTotal'));
+        $tableSummary->setCellContents($rowSummary, 1, $scoreDisplay->display_score($globalScoreTotal, SCORE_DIV));
+        $tableSummary->setCellContents($rowSummary, 2, $scoreDisplay->display_score($globalScoreTotal, SCORE_PERCENT));
+        $rowSummary++;
+
+
         $table->setCellContents($row, 0, get_lang('GlobalTotal'));
         $table->setCellContents($row, 1, '');
         $table->setCellContents($row, 2, $score);
@@ -177,7 +218,7 @@ switch ($action) {
 
         $duration = learnpathItem::getScormTimeFromParameter('js', $itemView->getTotalTime());
 
-        $table = new HTML_Table(['class' => 'table']);
+        $table = new HTML_Table(['class' => 'data_table']);
         $data = [
             get_lang('Name') => $lp->getName(),
             get_lang('Attempt') => $itemView->getViewCount(),
@@ -185,8 +226,9 @@ switch ($action) {
             get_lang('Duration') => $duration,
             get_lang('StartTime') => api_get_local_time($itemView->getStartTime()),
             get_lang('EndTime') => api_get_local_time($endTime),
-            get_lang('Student') => $studentName,
+            get_lang('Candidate') => $studentName,
         ];
+
         $row = 0;
         foreach ($data as $key => $value) {
             $table->setCellContents($row, 0, $key);
@@ -196,13 +238,37 @@ switch ($action) {
 
         $headerTableToString = $table->toHtml();
 
-        $content = $headerTableToString.$tableToString;
+        $content = $headerTableToString.'<br /><br />'.$tableSummary->toHtml().'<pagebreak>'.$tableToString;
 
         $pdf = new PDF();
+
+        $table = new HTML_Table(['class' => 'table']);
+        $logo = ChamiloApi::getPlatformLogo(
+            $theme,
+            [
+                'title' => '',
+                'class' => '',
+                'id' => 'header-logo',
+            ]
+        );
+        $table->setCellContents(0, 0, $logo);
+
+        $secondLogo = api_get_path(SYS_PATH).'custompages/url-images/'.api_get_current_access_url_id().'_url_image_2.png';
+        $logo2 = Display::img($secondLogo, null, ['style' => 'height:70px;']);
+        $table->setCellContents(0, 1, $logo2);
+        $table->setCellAttributes(0, 1, ['style' => 'display:block;float:right;text-align:right']);
+
+        $pdf->set_custom_header($table->toHtml());
+
+        $background = api_get_path(SYS_PATH).'custompages/url-images/'.api_get_current_access_url_id().'_pdf_background.png';
+
+        $content = '<html><body style="background-image-resize: 5; background-position: top left; background-image: url('.$background.');">'
+            .$content.'</body></html>';
+
         $pdf->content_to_pdf(
             $content,
             null,
-            $courseInfo['code'],
+            $courseInfo['code'].'_'.$lp->getName(),
             $courseInfo['code'],
             'D',
             false,
@@ -238,7 +304,7 @@ echo Display::toolbarAction(
 $table_title = $session_id
     ? Display::return_icon('session.png', get_lang('Session')).PHP_EOL.api_get_session_name($session_id).PHP_EOL
     : PHP_EOL;
-$table_title .= Display::return_icon('course.png', get_lang('Course')).PHP_EOL.$course_info['name'].PHP_EOL
+$table_title .= Display::return_icon('course.png', get_lang('Course')).PHP_EOL.$courseInfo['name'].PHP_EOL
     .Display::return_icon('user.png', get_lang('User')).' '.$name;
 
 echo Display::page_header($table_title);

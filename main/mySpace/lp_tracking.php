@@ -85,6 +85,9 @@ $origin = 'tracking';
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 switch ($action) {
     case 'export_stats':
+        if (!api_is_allowed_to_edit()) {
+            api_not_allowed();
+        }
         $itemId = isset($_REQUEST['extend_id']) ? $_REQUEST['extend_id'] : 0;
         $itemViewId = isset($_REQUEST['extend_attempt_id']) ? $_REQUEST['extend_attempt_id'] : 0;
         $em = Database::getManager();

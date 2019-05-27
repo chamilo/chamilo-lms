@@ -419,22 +419,28 @@ class Tracking
                                     Display::return_icon('visible.png', get_lang('HideAttemptView')),
                                     api_get_self().'?action=stats&extend_id='.$my_item_id.'&fold_attempt_id='.$row['iv_id'].$url_suffix
                                 );
-                                $extend_attempt_link .= '&nbsp;'.
-                                    Display::url(
-                                        Display::return_icon('pdf.png', get_lang('ExportToPdf')),
-                                        api_get_self().'?action=export_stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix
-                                    );
+                                if (api_is_allowed_to_edit()) {
+                                    $extend_attempt_link .= '&nbsp;'.
+                                        Display::url(
+                                            Display::return_icon('pdf.png', get_lang('ExportToPdf')),
+                                            api_get_self(
+                                            ).'?action=export_stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix
+                                        );
+                                }
                             } else { // Same case if fold_attempt_id is set, so not implemented explicitly.
                                 // The extend button for this attempt has not been clicked.
                                 $extend_attempt_link = Display::url(
                                     Display::return_icon('invisible.png', get_lang('ExtendAttemptView')),
                                     api_get_self().'?action=stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix
                                 );
-                                $extend_attempt_link .= '&nbsp;'.
-                                    Display::url(
-                                    Display::return_icon('pdf.png', get_lang('ExportToPdf')),
-                                    api_get_self().'?action=export_stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix
-                                );
+                                if (api_is_allowed_to_edit()) {
+                                    $extend_attempt_link .= '&nbsp;'.
+                                        Display::url(
+                                            Display::return_icon('pdf.png', get_lang('ExportToPdf')),
+                                            api_get_self(
+                                            ).'?action=export_stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix
+                                        );
+                                }
                             }
                         }
 

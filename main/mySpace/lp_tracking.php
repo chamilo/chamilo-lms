@@ -88,6 +88,7 @@ switch ($action) {
         if (!api_is_allowed_to_edit()) {
             api_not_allowed();
         }
+        $tpl = new Template(null,false,false);
         $itemId = isset($_REQUEST['extend_id']) ? $_REQUEST['extend_id'] : 0;
         $itemViewId = isset($_REQUEST['extend_attempt_id']) ? $_REQUEST['extend_attempt_id'] : 0;
         $em = Database::getManager();
@@ -181,33 +182,27 @@ switch ($action) {
             $categories[] = [
                 'name' => $data['question'],
                 'score' => $scoreDisplay->display_score($arrayScore, SCORE_DIV),
+                'score_numeric' => $scoreDisplay->display_score($arrayScore, SCORE_NUMERIC),
                 'score_percentage' => $scoreDisplay->display_score($arrayScore, SCORE_PERCENT),
             ];
+            $tpl->assign('categories', $categories);
 
             $globalTotalCount += $totalOptions;
             $row++;
         }
 
-        $tableSummary = new HTML_Table(['class' => 'data_table']);
-        $tableSummary->setCellContents(0, 0, get_lang('CategoryName'));
-        $tableSummary->setCellContents(0, 1, get_lang('Score'));
-        $tableSummary->setCellContents(0, 2, get_lang('Percentage'));
-
-        $rowSummary = 1;
-        foreach ($categories as $data) {
-            $tableSummary->setCellContents($rowSummary, 0, $data['name']);
-            $tableSummary->setCellContents($rowSummary, 1, $data['score']);
-            $tableSummary->setCellContents($rowSummary, 2, $data['score_percentage']);
-            $rowSummary++;
-        }
-
         $globalScoreTotal = [0 => $globalTotal, 1 => $globalTotalCount];
         $score = $scoreDisplay->display_score($globalScoreTotal);
+        $generalScore[] = [
+                'score' => $scoreDisplay->display_score($globalScoreTotal, SCORE_DIV),
+                'score_numeric' => $scoreDisplay->display_score($globalScoreTotal, SCORE_NUMERIC),
+                'score_percentage' => $scoreDisplay->display_score($globalScoreTotal, SCORE_PERCENT)
+        ];
+        $tpl->assign('general_score', $generalScore);
+        $tpl->assign('global_total', $score);
 
-        $tableSummary->setCellContents($rowSummary, 0, get_lang('GeneralTotal'));
-        $tableSummary->setCellContents($rowSummary, 1, $scoreDisplay->display_score($globalScoreTotal, SCORE_DIV));
-        $tableSummary->setCellContents($rowSummary, 2, $scoreDisplay->display_score($globalScoreTotal, SCORE_PERCENT));
-        $rowSummary++;
+
+
 
 
         $table->setCellContents($row, 0, get_lang('GlobalTotal'));
@@ -228,12 +223,12 @@ switch ($action) {
             'candidate' => $studentName,
         ];
 
-        $tpl = new Template(null,false,false);
+
         $tpl->assign('data', $dataLpInfo);
         $template = $tpl->fetch($tpl->get_template('my_space/pdf_tracking_lp.tpl'));
         $contentText = $template;
 
-        $content = $contentText.'<br><br />'.$tableSummary->toHtml().'<pagebreak>'.$tableToString;
+        $content = $contentText.'<pagebreak>'.$tableToString;
 
         $pdf = new PDF();
 

@@ -3073,6 +3073,7 @@ class learnpath
         $sql = "SELECT * FROM $table
                 WHERE c_id = ".$course_id." AND lp_iv_id = $lp_iv_id
                 ORDER BY order_id ASC";
+        print_r($sql);
         $res = Database::query($sql);
         $num = Database::num_rows($res);
         if ($num > 0) {

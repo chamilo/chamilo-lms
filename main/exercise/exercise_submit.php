@@ -822,7 +822,17 @@ if ($question_count != 0) {
 
                     $categoryList[$objCurrentQuestion->category] = true;
                     Session::write('track_e_adaptive', $categoryList);
+                } else {
+                    if (!$categoryList[$objCurrentQuestion->category]) {
+                        Session::write('track_e_adaptive', []);
+
+                        header('Location: '.api_get_self().'?'.$params.'&num=0');
+                        exit;
+                    }
                 }
+            } else {
+                $categoryList[$objCurrentQuestion->category] = true;
+                Session::write('track_e_adaptive', $categoryList);
             }
         } else {// current question is the last in quiz
             $currentQuestionId = $objExercise->questionList[$current_question - 2];

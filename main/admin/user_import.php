@@ -2,7 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
-use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use ChamiloSession as Session;
 
 /**
@@ -773,4 +772,4 @@ if ($count_fields > 0) {
 </pre>
     </blockquote>
 <?php
-Display :: display_footer();
+Display::display_footer();

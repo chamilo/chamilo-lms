@@ -41,8 +41,6 @@ if (empty($remind_list)) {
     $remind_list = isset($_REQUEST['remind_list']) ? $_REQUEST['remind_list'] : null;
 }
 
-$isAdaptive = EXERCISE_FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE == $objExercise->selectFeedbackType();
-
 $exe_id = isset($_REQUEST['exe_id']) ? (int) $_REQUEST['exe_id'] : 0;
 
 if (empty($objExercise)) {
@@ -104,6 +102,7 @@ if (api_is_course_admin() && !in_array($origin, ['learnpath', 'embeddable'])) {
 }
 
 $feedback_type = $objExercise->feedback_type;
+$isAdaptive = EXERCISE_FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE == $objExercise->selectFeedbackType();
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
 
 if (!empty($exercise_stat_info['data_tracking'])) {

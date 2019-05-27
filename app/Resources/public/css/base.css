@@ -10186,8 +10186,19 @@ ul.dropdown-menu.inner > li > a {
     border-radius: 5px;
     background-color: #f3f3f3;
 }
+
+.section-mycourses #course_tools .col-xs-6:nth-child(2n+1) {
+    clear: left;
+}
+
 @media (min-width: 768px) {
     .clear-rows-6-4-3 .col-sm-6:nth-child(2n+1) {
+        clear: left;
+    }
+    .section-mycourses #course_tools .col-xs-6:nth-child(2n+1) {
+        clear: none;
+    }
+    .section-mycourses #course_tools .col-xs-6:nth-child(3n+1) {
         clear: left;
     }
 }
@@ -10198,6 +10209,13 @@ ul.dropdown-menu.inner > li > a {
     }
 
     .clear-rows-6-4-3 .col-sm-6:nth-child(3n+1) {
+        clear: left;
+    }
+
+    .section-mycourses #course_tools .col-xs-6:nth-child(3n+1) {
+        clear: none;
+    }
+    .section-mycourses #course_tools .col-xs-6:nth-child(4n+1) {
         clear: left;
     }
 }

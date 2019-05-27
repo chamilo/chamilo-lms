@@ -218,27 +218,22 @@ switch ($action) {
 
         $duration = learnpathItem::getScormTimeFromParameter('js', $itemView->getTotalTime());
 
-        $table = new HTML_Table(['class' => 'data_table']);
-        $data = [
-            get_lang('Name') => $lp->getName(),
-            get_lang('Attempt') => $itemView->getViewCount(),
-            get_lang('Score') => $score,
-            get_lang('Duration') => $duration,
-            get_lang('StartTime') => api_get_local_time($itemView->getStartTime()),
-            get_lang('EndTime') => api_get_local_time($endTime),
-            get_lang('Candidate') => $studentName,
+        $dataLpInfo = [
+            'name' => $lp->getName(),
+            'attempt' => $itemView->getViewCount(),
+            'score' => $score,
+            'duration' => $duration,
+            'start_time' => api_get_local_time($itemView->getStartTime()),
+            'end_time' => api_get_local_time($endTime),
+            'candidate' => $studentName,
         ];
 
-        $row = 0;
-        foreach ($data as $key => $value) {
-            $table->setCellContents($row, 0, $key);
-            $table->setCellContents($row, 1, $value);
-            $row++;
-        }
+        $tpl = new Template(null,false,false);
+        $tpl->assign('data', $dataLpInfo);
+        $template = $tpl->fetch($tpl->get_template('my_space/pdf_tracking_lp.tpl'));
+        $contentText = $template;
 
-        $headerTableToString = $table->toHtml();
-
-        $content = $headerTableToString.'<br /><br />'.$tableSummary->toHtml().'<pagebreak>'.$tableToString;
+        $content = $contentText.'<br><br />'.$tableSummary->toHtml().'<pagebreak>'.$tableToString;
 
         $pdf = new PDF();
 

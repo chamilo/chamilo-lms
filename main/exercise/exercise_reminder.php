@@ -86,6 +86,8 @@ if ($time_control) {
     $htmlHeadXtra[] = $objExercise->showTimeControlJS($time_left);
 }
 
+$htmlHeadXtra[] = api_get_css_asset('pretty-checkbox/dist/pretty-checkbox.min.css');
+
 $exe_id = 0;
 if (isset($_GET['exe_id'])) {
     $exe_id = (int) $_GET['exe_id'];
@@ -215,7 +217,7 @@ foreach ($attempt_list as $question_id => $options) {
         }
     }
 }
-echo Display::label(get_lang('QuestionWithNoAnswer'), 'warning');
+echo Display::label(get_lang('QuestionWithNoAnswer'), 'danger');
 echo '<div class="clear"></div><br />';
 
 $table = '';
@@ -229,24 +231,34 @@ foreach ($question_list as $questionId) {
     $objQuestionTmp = Question:: read($questionId);
     $quesId = $objQuestionTmp->selectId();
     $check_id = 'remind_list['.$questionId.']';
-    $attributes = ['id' => $check_id, 'onclick' => "save_remind_item(this, '$questionId');"];
 
+    $attributes = ['id' => $check_id, 'onclick' => "save_remind_item(this, '$questionId');"];
     if (in_array($questionId, $remind_list)) {
         $attributes['checked'] = 1;
     }
-    $label_attributes = [];
-    $label_attributes['for'] = $check_id;
+
     $checkbox = Display::input('checkbox', 'remind_list['.$questionId.']', '', $attributes);
+
+    $checkbox = '<div class="pretty p-default">
+        '.$checkbox.'
+        <div class="state p-primary ">
+            <label>&nbsp;</label>
+        </div>
+    </div>';
+
     $url = 'exercise_submit.php?exerciseId='.$objExercise->id.'&num='.$counter.'&reminder=1&'.api_get_cidreq();
 
     $counter++;
     $questionTitle = $counter.'. '.strip_tags($objQuestionTmp->selectTitle());
     // Check if the question doesn't have an answer
     if (!in_array($questionId, $exercise_result)) {
-        $questionTitle = Display::label($questionTitle, 'warning');
+        $questionTitle = Display::label($questionTitle, 'danger');
     }
+
+    $label_attributes = [];
+    $label_attributes['for'] = $check_id;
     $questionTitle = Display::tag('label', $checkbox.$questionTitle, $label_attributes);
-    $table .= Display::div($questionTitle, ['class' => 'exercise_reminder_item checkbox']);
+    $table .= Display::div($questionTitle, ['class' => 'exercise_reminder_item ']);
 } // end foreach() block that loops over all questions
 
 echo Display::div($table, ['class' => 'question-check-test']);
@@ -254,7 +266,7 @@ echo Display::div($table, ['class' => 'question-check-test']);
 $exerciseActions = Display::url(
     get_lang('ReviewQuestions'),
     'javascript://',
-    ['onclick' => 'review_questions();', 'class' => 'btn btn-success']
+    ['onclick' => 'review_questions();', 'class' => 'btn btn-primary']
 );
 
 $exerciseActions .= '&nbsp;'.Display::url(

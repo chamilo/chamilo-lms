@@ -98,7 +98,7 @@ $choice = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : null;
 $choice = empty($choice) ? isset($_REQUEST['choice2']) ? $_REQUEST['choice2'] : null : null;
 
 //From submit modal
-$current_question = isset($_REQUEST['num']) ? intval($_REQUEST['num']) : null;
+$currentQuestion = isset($_REQUEST['num']) ? intval($_REQUEST['num']) : null;
 $currentAnswer = isset($_REQUEST['num_answer']) ? intval($_REQUEST['num_answer']) : null;
 $endExercise = isset($_REQUEST['end_exercise']) && $_REQUEST['end_exercise'] == 1 ? true : false;
 
@@ -437,7 +437,7 @@ if (empty($exercise_stat_info)) {
                 }
                 $count++;
             }
-            $current_question = $count;
+            $currentQuestion = $count;
         }
     }
 
@@ -619,11 +619,11 @@ if (!empty($questionList)) {
     $question_count = count($questionList);
 }
 
-if ($current_question > $question_count) {
+if ($currentQuestion > $question_count) {
     // If time control then don't change the current question, otherwise there will be a loop.
     // @todo
     if ($time_control == false) {
-        $current_question = 0;
+        $currentQuestion = 0;
     }
 }
 
@@ -670,7 +670,7 @@ if ($formSent && isset($_POST)) {
                 $exerciseResult[$key] = $choice[$key];
                 //saving each question
                 if ($objExercise->feedback_type != EXERCISE_FEEDBACK_TYPE_DIRECT) {
-                    $nro_question = $current_question; // - 1;
+                    $nro_question = $currentQuestion; // - 1;
                     $questionId = $key;
                     // gets the student choice for this question
                     $choice = $exerciseResult[$questionId];
@@ -707,7 +707,7 @@ if ($formSent && isset($_POST)) {
     Session::write('exerciseResultCoordinates', $exerciseResultCoordinates);
 
     // if all questions on one page OR if it is the last question (only for an exercise with one question per page)
-    if ($objExercise->type == ALL_ON_ONE_PAGE || $current_question >= $question_count) {
+    if ($objExercise->type == ALL_ON_ONE_PAGE || $currentQuestion >= $question_count) {
         if (api_is_allowed_to_session_edit()) {
             // goes to the script that will show the result of the exercise
             if ($objExercise->type == ALL_ON_ONE_PAGE) {
@@ -767,25 +767,25 @@ if ($formSent && isset($_POST)) {
 // If questionNum comes from POST and not from GET
 $latestQuestionId = Event::getLatestQuestionIdFromAttempt($exe_id);
 
-if (is_null($current_question)) {
-    $current_question = 1;
+if (is_null($currentQuestion)) {
+    $currentQuestion = 1;
     if ($latestQuestionId) {
-        $current_question = $objExercise->getPositionInCompressedQuestionList($latestQuestionId);
+        $currentQuestion = $objExercise->getPositionInCompressedQuestionList($latestQuestionId);
     }
 } else {
-    $current_question++;
+    $currentQuestion++;
 }
 
 if ($question_count != 0) {
     if (EXERCISE_FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE == $objExercise->selectFeedbackType()) {
         $categoryList = Session::read('track_e_adaptive', []);
 
-        if (isset($objExercise->questionList[$current_question - 1])) { // Current question is not the last one in quiz
-            $currentQuestionId = $objExercise->questionList[$current_question - 1];
+        if (isset($objExercise->questionList[$currentQuestion - 1])) { // Current question is not the last one in quiz
+            $currentQuestionId = $objExercise->questionList[$currentQuestion - 1];
             $objCurrentQuestion = Question::read($currentQuestionId, [], false);
 
-            if (isset($objExercise->questionList[$current_question - 2])) { // Current question is not the first one
-                $previousQuestionId = $objExercise->questionList[$current_question - 2];
+            if (isset($objExercise->questionList[$currentQuestion - 2])) { // Current question is not the first one
+                $previousQuestionId = $objExercise->questionList[$currentQuestion - 2];
                 $objPreviousQuestion = Question::read($previousQuestionId, [], false);
 
                 // Check if category of current question has not been taken.
@@ -863,7 +863,7 @@ if ($question_count != 0) {
                 Session::write('track_e_adaptive', $categoryList);
             }
         } else { // Current question is the last one in quiz
-            $currentQuestionId = $objExercise->questionList[$current_question - 2];
+            $currentQuestionId = $objExercise->questionList[$currentQuestion - 2];
             $objCurrentQuestion = Question::read($currentQuestionId, [], false);
 
             $destinationCategory = $objExercise->findCategoryDestination($exe_id, $objCurrentQuestion->category);
@@ -883,7 +883,7 @@ if ($question_count != 0) {
     }
 
     if ($objExercise->type == ALL_ON_ONE_PAGE ||
-        $current_question > $question_count
+        $currentQuestion > $question_count
     ) {
         if (api_is_allowed_to_session_edit()) {
             // goes to the script that will show the result of the exercise
@@ -1099,7 +1099,7 @@ if ($reminder == 2) {
     }
     $data_tracking = $exercise_stat_info['data_tracking'];
     $data_tracking = explode(',', $data_tracking);
-    $current_question = 1; //set by default the 1st question
+    $currentQuestion = 1; //set by default the 1st question
 
     if (!empty($myRemindList)) {
         // Checking which questions we are going to call from the remind list
@@ -1110,11 +1110,11 @@ if ($reminder == 2) {
                         if ($remind_question_id == $data_tracking[$i]) {
                             if (isset($myRemindList[$j + 1])) {
                                 $remind_question_id = $myRemindList[$j + 1];
-                                $current_question = $i + 1;
+                                $currentQuestion = $i + 1;
                             } else {
                                 // We end the remind list we go to the exercise_reminder.php please
                                 $remind_question_id = -1;
-                                $current_question = $i + 1; // last question
+                                $currentQuestion = $i + 1; // last question
                             }
                             break 2;
                         }
@@ -1123,11 +1123,11 @@ if ($reminder == 2) {
                     if ($myRemindList[$j] == $data_tracking[$i]) {
                         if (isset($myRemindList[$j + 1])) {
                             $remind_question_id = $myRemindList[$j + 1];
-                            $current_question = $i + 1; // last question
+                            $currentQuestion = $i + 1; // last question
                         } else {
                             // We end the remind list we go to the exercise_reminder.php please
                             $remind_question_id = -1;
-                            $current_question = $i + 1; // last question
+                            $currentQuestion = $i + 1; // last question
                         }
                         break 2;
                     }
@@ -1172,7 +1172,7 @@ if (!empty($error)) {
 
             if ($objExercise->type == ONE_PER_PAGE) {
                 // if it is not the right question, goes to the next loop iteration
-                if ($current_question != $i) {
+                if ($currentQuestion != $i) {
                     continue;
                 } else {
                     if ($objQuestionTmp->selectType() == HOT_SPOT ||
@@ -1324,11 +1324,11 @@ if (!empty($error)) {
 
             var url = "";
             if ('.$reminder.' == 1 ) {
-                url = "exercise_reminder.php?'.$params.'&num='.$current_question.'";
+                url = "exercise_reminder.php?'.$params.'&num='.$currentQuestion.'";
             } else if ('.$reminder.' == 2 ) {
-                url = "exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'&reminder=2";
+                url = "exercise_submit.php?'.$params.'&num='.$currentQuestion.'&remind_question_id='.$remind_question_id.'&reminder=2";
             } else {
-                url = "exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'";
+                url = "exercise_submit.php?'.$params.'&num='.$currentQuestion.'&remind_question_id='.$remind_question_id.'";
             }
             //$("#save_for_now_"+question_id).html(\''.Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
             window.location = url;
@@ -1389,12 +1389,12 @@ if (!empty($error)) {
                     } else if (return_value == "one_per_page") {
                         var url = "";
                         if ('.$reminder.' == 1 ) {
-                            url = "exercise_reminder.php?'.$params.'&num='.$current_question.'";
+                            url = "exercise_reminder.php?'.$params.'&num='.$currentQuestion.'";
                         } else if ('.$reminder.' == 2 ) {
-                            url = "exercise_submit.php?'.$params.'&num='.$current_question.
+                            url = "exercise_submit.php?'.$params.'&num='.$currentQuestion.
                                 '&remind_question_id='.$remind_question_id.'&reminder=2";
                         } else {
-                            url = "exercise_submit.php?'.$params.'&num='.$current_question.
+                            url = "exercise_submit.php?'.$params.'&num='.$currentQuestion.
                                 '&remind_question_id='.$remind_question_id.'";
                         }
 
@@ -1471,7 +1471,7 @@ if (!empty($error)) {
             '&autocomplete=off&exerciseId='.$exerciseId.'" name="frm_exercise" '.$onsubmit.'>
          <input type="hidden" name="formSent" value="1" />
          <input type="hidden" name="exerciseId" value="'.$exerciseId.'" />
-         <input type="hidden" name="num" value="'.$current_question.'" id="num_current_id" />
+         <input type="hidden" name="num" value="'.$currentQuestion.'" id="num_current_id" />
          <input type="hidden" name="num_answer" value="'.$currentAnswer.'" id="num_current_answer_id" />
          <input type="hidden" name="exe_id" value="'.$exe_id.'" />
          <input type="hidden" name="origin" value="'.$origin.'" />
@@ -1498,7 +1498,7 @@ if (!empty($error)) {
         // for sequential exercises
         if ($objExercise->type == ONE_PER_PAGE) {
             // if it is not the right question, goes to the next loop iteration
-            if ($current_question != $i) {
+            if ($currentQuestion != $i) {
                 $i++;
                 continue;
             } else {
@@ -1591,7 +1591,7 @@ if (!empty($error)) {
             case ONE_PER_PAGE:
                 $exerciseActions .= $objExercise->show_button(
                     $questionId,
-                    $current_question,
+                    $currentQuestion,
                     [],
                     [],
                     $myRemindList
@@ -1649,7 +1649,7 @@ if (!empty($error)) {
     if ($objExercise->type == ALL_ON_ONE_PAGE) {
         $exerciseActions = $objExercise->show_button(
             $questionId,
-            $current_question
+            $currentQuestion
         );
         echo Display::div($exerciseActions, ['class' => 'exercise_actions']);
         echo '<br>';

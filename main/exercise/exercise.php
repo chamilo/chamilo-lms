@@ -148,7 +148,7 @@ if ($is_allowedToEdit && !empty($choice) && $choice === 'exportqti2') {
 
 if ($origin != 'learnpath') {
     //so we are not in learnpath tool
-    Display :: display_header($nameTools, get_lang('Exercise'));
+    Display::display_header($nameTools, get_lang('Exercise'));
     if (isset($_GET['message']) && in_array($_GET['message'], ['ExerciseEdited'])) {
         echo Display::return_message(get_lang('ExerciseEdited'), 'confirmation');
     }
@@ -410,7 +410,7 @@ if ($is_allowedToEdit) {
                 $query = "SELECT id FROM $TBL_DOCUMENT
                           WHERE c_id = $courseId AND path='".Database::escape_string($file)."'";
                 $res = Database::query($query);
-                $row = Database :: fetch_array($res, 'ASSOC');
+                $row = Database::fetch_array($res, 'ASSOC');
                 api_item_property_update(
                     $courseInfo,
                     TOOL_DOCUMENT,
@@ -430,7 +430,7 @@ if ($is_allowedToEdit) {
                 $query = "SELECT id FROM $TBL_DOCUMENT
                           WHERE c_id = $courseId AND path='".Database::escape_string($file)."'";
                 $res = Database::query($query);
-                $row = Database :: fetch_array($res, 'ASSOC');
+                $row = Database::fetch_array($res, 'ASSOC');
                 api_item_property_update(
                     $courseInfo,
                     TOOL_DOCUMENT,
@@ -486,7 +486,7 @@ $result_total = Database::query($total_sql);
 
 $total_exercises = 0;
 
-if (Database :: num_rows($result_total)) {
+if (Database::num_rows($result_total)) {
     $result_total = Database::fetch_array($result_total);
     $total_exercises = $result_total['count'];
 }
@@ -498,7 +498,7 @@ if ($is_allowedToEdit) {
                 c_id = $courseId AND
                 path LIKE '".Database::escape_string($uploadPath.'/%/%')."'";
     $res = Database::query($sql);
-    $hp_count = Database :: num_rows($res);
+    $hp_count = Database::num_rows($res);
 } else {
     $sql = "SELECT * FROM $TBL_DOCUMENT d 
             INNER JOIN $TBL_ITEM_PROPERTY ip
@@ -1137,7 +1137,7 @@ if (!empty($exerciseList)) {
                         ORDER BY exe_id DESC";
 
                 $qryres = Database::query($sql);
-                $num = Database :: num_rows($qryres);
+                $num = Database::num_rows($qryres);
 
                 // Hide the results.
                 $my_result_disabled = $row['results_disabled'];
@@ -1159,29 +1159,29 @@ if (!empty($exerciseList)) {
                         ) {
                             // More than one attempt
                             if ($num > 0) {
-                                $row_track = Database :: fetch_array($qryres);
+                                $rowTrack = Database::fetch_array($qryres);
 
                                 if (EXERCISE_FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE == $exercise->selectFeedbackType()) {
                                     $destinationResult = $em
                                         ->getRepository('ChamiloCourseBundle:CQuizDestinationResult')
-                                        ->findOneBy(['exe' => $row_track['exe_id'], 'user' => $row_track['exe_user_id']]);
+                                        ->findOneBy(['exe' => $rowTrack['exe_id'], 'user' => $rowTrack['exe_user_id']]);
 
-                                    $attempt_text = !empty($destinationResult)
+                                    $attemptText = !empty($destinationResult)
                                         ? sprintf(get_lang('LevelReachedX'), $destinationResult->getAchievedLevel())
                                         : '';
                                 } else {
-                                    $attempt_text = get_lang('LatestAttempt').' : ';
-                                    $attempt_text .= ExerciseLib::show_score(
-                                        $row_track['exe_result'],
-                                        $row_track['exe_weighting']
+                                    $attemptText = get_lang('LatestAttempt').' : ';
+                                    $attemptText .= ExerciseLib::show_score(
+                                        $rowTrack['exe_result'],
+                                        $rowTrack['exe_weighting']
                                     );
                                 }
                             } else {
                                 //No attempts
-                                $attempt_text = get_lang('NotAttempted');
+                                $attemptText = get_lang('NotAttempted');
                             }
                         } else {
-                            $attempt_text = '-';
+                            $attemptText = '-';
                         }
                     } else {
                         // Quiz not ready due to time limits
@@ -1191,14 +1191,14 @@ if (!empty($exerciseList)) {
                             $start_time = api_strtotime($row['start_time'], 'UTC');
                             $end_time = api_strtotime($row['end_time'], 'UTC');
                             if ($today < $start_time) {
-                                $attempt_text = sprintf(
+                                $attemptText = sprintf(
                                     get_lang('ExerciseWillBeActivatedFromXToY'),
                                     api_convert_and_format_date($row['start_time']),
                                     api_convert_and_format_date($row['end_time'])
                                 );
                             } else {
                                 if ($today > $end_time) {
-                                    $attempt_text = sprintf(
+                                    $attemptText = sprintf(
                                         get_lang('ExerciseWasActivatedFromXToY'),
                                         api_convert_and_format_date($row['start_time']),
                                         api_convert_and_format_date($row['end_time'])
@@ -1206,15 +1206,15 @@ if (!empty($exerciseList)) {
                                 }
                             }
                         } else {
-                            //$attempt_text = get_lang('ExamNotAvailableAtThisTime');
+                            //$attemptText = get_lang('ExamNotAvailableAtThisTime');
                             if (!empty($row['start_time'])) {
-                                $attempt_text = sprintf(
+                                $attemptText = sprintf(
                                     get_lang('ExerciseAvailableFromX'),
                                     api_convert_and_format_date($row['start_time'])
                                 );
                             }
                             if (!empty($row['end_time'])) {
-                                $attempt_text = sprintf(
+                                $attemptText = sprintf(
                                     get_lang('ExerciseAvailableUntilX'),
                                     api_convert_and_format_date($row['end_time'])
                                 );
@@ -1235,28 +1235,28 @@ if (!empty($exerciseList)) {
                         )
                     ) {
                         if ($num > 0) {
-                            $row_track = Database :: fetch_array($qryres);
+                            $rowTrack = Database::fetch_array($qryres);
 
                             if (EXERCISE_FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE == $exercise->selectFeedbackType()) {
                                 $destinationResult = $em
                                     ->getRepository('ChamiloCourseBundle:CQuizDestinationResult')
-                                    ->findOneBy(['exe' => $row_track['exe_id'], 'user' => $row_track['exe_user_id']]);
+                                    ->findOneBy(['exe' => $rowTrack['exe_id'], 'user' => $rowTrack['exe_user_id']]);
 
-                                $attempt_text = !empty($destinationResult)
+                                $attemptText = !empty($destinationResult)
                                     ? sprintf(get_lang('LevelReachedX'), $destinationResult->getAchievedLevel())
                                     : '';
                             } else {
-                                $attempt_text = get_lang('LatestAttempt').' : ';
-                                $attempt_text .= ExerciseLib::show_score(
-                                    $row_track['exe_result'],
-                                    $row_track['exe_weighting']
+                                $attemptText = get_lang('LatestAttempt').' : ';
+                                $attemptText .= ExerciseLib::show_score(
+                                    $rowTrack['exe_result'],
+                                    $rowTrack['exe_weighting']
                                 );
                             }
                         } else {
-                            $attempt_text = get_lang('NotAttempted');
+                            $attemptText = get_lang('NotAttempted');
                         }
                     } else {
-                        $attempt_text = '-';
+                        $attemptText = '-';
                     }
                 }
 
@@ -1275,7 +1275,7 @@ if (!empty($exerciseList)) {
                     $num = '<span class="tooltip" style="display: none;">'.$num.'</span>';
                 }
 
-                $item .= Display::tag('td', $attempt_text);
+                $item .= Display::tag('td', $attemptText);
             }
 
             if ($is_allowedToEdit) {
@@ -1315,7 +1315,7 @@ if ($is_allowedToEdit) {
             WHERE
                 d.c_id = $courseId AND
                 (d.path LIKE '%htm%') AND
-                d.path  LIKE '".Database :: escape_string($uploadPath.'/%/%')."'
+                d.path  LIKE '".Database::escape_string($uploadPath.'/%/%')."'
             LIMIT ".$from.",".$limit; // only .htm or .html files listed
 } else {
     $sql = "SELECT d.iid, d.path as path, d.comment as comment
@@ -1323,14 +1323,14 @@ if ($is_allowedToEdit) {
             WHERE
                 d.c_id = $courseId AND
                 (d.path LIKE '%htm%') AND
-                d.path  LIKE '".Database :: escape_string($uploadPath.'/%/%')."'
+                d.path  LIKE '".Database::escape_string($uploadPath.'/%/%')."'
             LIMIT ".$from.",".$limit;
 }
 
 $result = Database::query($sql);
 $attribute = [];
 
-while ($row = Database :: fetch_array($result, 'ASSOC')) {
+while ($row = Database::fetch_array($result, 'ASSOC')) {
     $attribute['id'][] = $row['iid'];
     $attribute['path'][] = $row['path'];
     $attribute['comment'][] = $row['comment'];

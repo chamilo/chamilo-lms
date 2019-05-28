@@ -81,8 +81,8 @@ foreach ($categoriesInfo as $categoryId => $categoryInfo) {
                 <input type="text" id="'.$txtId.'" class="form-control" readonly value="'.$url.'">
                 <span class="input-group-btn">
                     <button class="btn btn-info" type="button" onclick="copyTextToClipBoard(\''.$txtId.'\');">'
-                        .get_lang('CopyTextToClipboard')
-                        .'</button>
+        .get_lang('CopyTextToClipboard')
+        .'</button>
                 </span>
             </div>
         </p>

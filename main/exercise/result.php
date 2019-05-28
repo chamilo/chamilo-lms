@@ -27,15 +27,15 @@ if (empty($id)) {
 $is_allowedToEdit = api_is_allowed_to_edit(null, true) || $is_courseTutor;
 
 // Getting results from the exe_id. This variable also contain all the information about the exercise
-$track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($id);
+$trackExerciseInfo = ExerciseLib::get_exercise_track_exercise_info($id);
 
 // No track info
-if (empty($track_exercise_info)) {
+if (empty($trackExerciseInfo)) {
     api_not_allowed($show_headers);
 }
 
-$exercise_id = $track_exercise_info['exe_exo_id'];
-$student_id = $track_exercise_info['exe_user_id'];
+$exercise_id = $trackExerciseInfo['exe_exo_id'];
+$studentId = $trackExerciseInfo['exe_user_id'];
 $current_user_id = api_get_user_id();
 
 $objExercise = new Exercise();
@@ -49,7 +49,7 @@ if (empty($objExercise)) {
 
 // Only users can see their own results
 if (!$is_allowedToEdit) {
-    if ($student_id != $current_user_id) {
+    if ($studentId != $current_user_id) {
         api_not_allowed($show_headers);
     }
 }
@@ -83,20 +83,20 @@ if ($isAdaptive) {
 
     $destinationResult = Database::getManager()
         ->getRepository('ChamiloCourseBundle:CQuizDestinationResult')
-        ->findOneBy(['user' => $student_id, 'exe' => $id]);
+        ->findOneBy(['user' => $studentId, 'exe' => $id]);
 
     if (empty($destinationResult)) {
         echo Display::return_message(get_lang('NoData'), 'warning');
     }
 
-    $studentInfo = api_get_user_info($student_id);
-    $quizzesDir = ExerciseLib::checkQuizzesPath($student_id);
+    $studentInfo = api_get_user_info($studentId);
+    $quizzesDir = ExerciseLib::checkQuizzesPath($studentId);
     $qrUrl = api_get_path(WEB_CODE_PATH).'exercise/progressive_adaptive_results.php?'
         .http_build_query(['hash' => $destinationResult->getHash(), 'origin' => $origin]);
 
     echo $objExercise->showExerciseResultHeader(
-        api_get_user_info($student_id),
-        $track_exercise_info
+        api_get_user_info($studentId),
+        $trackExerciseInfo
     );
     echo PHP_EOL;
     echo '

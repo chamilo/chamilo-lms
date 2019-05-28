@@ -229,6 +229,13 @@ class Version20 extends AbstractMigrationChamilo
             );
         }
 
+        $table = $schema->hasTable('gradebook_result_attempt');
+        if ($table === false) {
+            $this->addSql(
+                'CREATE TABLE gradebook_result_attempt (id INT AUTO_INCREMENT NOT NULL, comment LONGTEXT DEFAULT NULL, score DOUBLE PRECISION DEFAULT NULL, result_id INT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
+            );
+        }
+
         /*$table = $schema->getTable('course_rel_class');
         if (!$table->hasColumn('c_id')) {
             $this->addSql("ALTER TABLE course_rel_class ADD c_id int NOT NULL");

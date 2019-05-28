@@ -22,7 +22,7 @@ $courseId = api_get_course_int_id();
 
 $objExercise = new Exercise();
 
-if (!$objExercise->read($exerciseId, false)) {
+if (!$objExercise->read($exerciseId)) {
     api_not_allowed(
         true,
         Display::return_message(get_lang('ExerciseNotFound'), 'error')
@@ -36,6 +36,9 @@ if (EXERCISE_FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE != $objExercise->selectFeedbackT
 $em = Database::getManager();
 $quizCategoryRepo = $em->getRepository('ChamiloCourseBundle:CQuizCategory');
 
+$webCodePath = api_get_path(WEB_CODE_PATH);
+$cidReq = api_get_cidreq();
+
 $quizCategory = new TestCategory();
 $categoriesInfo = $quizCategory->getListOfCategoriesForTest($objExercise);
 $savedCategories = $objExercise->getCategoriesInExercise();
@@ -43,6 +46,21 @@ $savedCategories = $objExercise->getCategoriesInExercise();
 $form = new FormValidator('category_destinations');
 
 foreach ($categoriesInfo as $categoryId => $categoryInfo) {
+    $firstQuestionInCategory = $objExercise->getFirstQuestionInCategory($categoryId);
+    $questionPosition = $objExercise->getPositionInCompressedQuestionList($firstQuestionInCategory);
+
+    $url = "{$webCodePath}exercise/exercise_submit.php?$cidReq&"
+        .http_build_query(
+            [
+                'exerciseId' => $exerciseId,
+                'num' => $questionPosition - 1,
+                'learnpath_id' => '',
+                'learnpath_item_id' => '',
+                'learnpath_item_view_id' => '',
+            ]
+        );
+    $txtId = "copy-link-$categoryId";
+
     $table = '<div id="tbl-category-'.$categoryId.'" class="table-responsive">
         <table class="data_table">
             <thead>
@@ -57,6 +75,17 @@ foreach ($categoriesInfo as $categoryId => $categoryInfo) {
             <tbody>
             </tbody>
         </table>
+        <p>
+            <strong>'.get_lang('DestinationUrl').'</strong>
+            <div class="input-group">
+                <input type="text" id="'.$txtId.'" class="form-control" readonly value="'.$url.'">
+                <span class="input-group-btn">
+                    <button class="btn btn-info" type="button" onclick="copyTextToClipBoard(\''.$txtId.'\');">'
+                        .get_lang('CopyTextToClipboard')
+                        .'</button>
+                </span>
+            </div>
+        </p>
     </div>';
 
     $form->addLabel($categoryInfo['name'], $table);

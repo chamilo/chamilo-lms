@@ -88,7 +88,7 @@ switch ($action) {
         if (!api_is_allowed_to_edit()) {
             api_not_allowed();
         }
-        $tpl = new Template(null,false,false);
+        $tpl = new Template(null, false, false);
         $itemId = isset($_REQUEST['extend_id']) ? $_REQUEST['extend_id'] : 0;
         $itemViewId = isset($_REQUEST['extend_attempt_id']) ? $_REQUEST['extend_attempt_id'] : 0;
         $em = Database::getManager();
@@ -196,14 +196,10 @@ switch ($action) {
         $generalScore[] = [
                 'score' => $scoreDisplay->display_score($globalScoreTotal, SCORE_DIV),
                 'score_numeric' => $scoreDisplay->display_score($globalScoreTotal, SCORE_NUMERIC),
-                'score_percentage' => $scoreDisplay->display_score($globalScoreTotal, SCORE_PERCENT)
+                'score_percentage' => $scoreDisplay->display_score($globalScoreTotal, SCORE_PERCENT),
         ];
         $tpl->assign('general_score', $generalScore);
         $tpl->assign('global_total', $score);
-
-
-
-
 
         $table->setCellContents($row, 0, get_lang('GlobalTotal'));
         $table->setCellContents($row, 1, '');
@@ -222,7 +218,6 @@ switch ($action) {
             'end_time' => api_get_local_time($endTime),
             'candidate' => $studentName,
         ];
-
 
         $tpl->assign('data', $dataLpInfo);
         $template = $tpl->fetch($tpl->get_template('my_space/pdf_tracking_lp.tpl'));

@@ -39,10 +39,11 @@ if (empty($destinationResult)) {
 
 $exe = $destinationResult->getExe();
 $student = $destinationResult->getUser();
+$course = api_get_course_entity($exe->getCId());
+$session = api_get_session_entity($exe->getSessionId());
 
-$objExercise = new Exercise();
-$objExercise->course_id = $exe->getCId();
-$objExercise->sessionId = $exe->getSessionId();
+$objExercise = new Exercise($course->getId());
+$objExercise->sessionId = $session ? $session->getId() : 0;
 
 if (false === $objExercise->read($exe->getExeExoId())) {
     api_not_allowed(
@@ -81,34 +82,68 @@ $trackExerciseInfo = ExerciseLib::get_exercise_track_exercise_info(
     $exe->getExeId()
 );
 
-if ($showHeaders) {
-    $this_section = SECTION_COURSES;
+$content = $objExercise->showExerciseResultHeader($userInfo, $trackExerciseInfo);
 
-    Display::display_header(get_lang('Result'));
-} else {
-    Display::display_reduced_header();
+$extraFields = api_get_configuration_value('quiz_adaptive_show_extrafields');
+$courseFields = [];
+$sessionFields = [];
+
+if (isset($extraFields['course'])) {
+    $ef = new ExtraField('course');
+    $efv = new ExtraFieldValue('course');
+
+    foreach ($extraFields['course'] as $variable) {
+        $extraField = $ef->get_handler_field_info_by_field_variable($variable);
+
+        if (false === $extraField) {
+            continue;
+        }
+
+        $extraValue = $efv->get_values_by_handler_and_field_id($course->getId(), $extraField['id'], true);
+
+        if (false === $extraValue) {
+            continue;
+        }
+
+        $courseFields[$extraField['display_text']] = $extraValue['value'];
+    }
 }
 
-$content = '';
-$content .= $objExercise->showExerciseResultHeader($userInfo, $trackExerciseInfo);
-$content .= PHP_EOL;
-$content .= '
-    <div class="row">
-        <div class="col-md-4 text-right">
-            '.Display::img($quizzesDir['web'].$destinationResult->getHash().'.png').'
-        </div>
-        <div class="col-md-8 text-left">
-            <p class="lead">'.sprintf(get_lang('LevelReachedX'), $destinationResult->getAchievedLevel()).'</p>
-            <p>'.$student->getCompleteNameWithUsername().'</p>
-            <p>'.sprintf(get_lang('ResultHashX'), $destinationResult->getHash()).'</p>
-        </div>
-    </div>
-';
+if ($session) {
+    if (isset($extraFields['session'])) {
+        $ef = new ExtraField('session');
+        $efv = new ExtraFieldValue('session');
 
-echo $content;
+        foreach ($extraFields['session'] as $variable) {
+            $extraField = $ef->get_handler_field_info_by_field_variable($variable);
 
-if ($showHeaders) {
-    Display::display_footer();
-} else {
-    Display::display_reduced_footer();
+            if (false === $extraField) {
+                continue;
+            }
+
+            $extraValue = $efv->get_values_by_handler_and_field_id($session->getId(), $extraField['id'], true);
+
+            if (false === $extraValue) {
+                continue;
+            }
+
+            $sessionExtra['fields'][$extraField['display_text']] = $extraValue['value'];
+        }
+    }
 }
+
+$this_section = SECTION_COURSES;
+
+$view = new Template(get_lang('LevelReachedInQuiz'), $showHeaders, $showHeaders);
+$view->assign('results_header', $content);
+$view->assign('result', $destinationResult);
+$view->assign('course', $course);
+$view->assign('course_fields', $courseFields);
+$view->assign('session', $session);
+$view->assign('session_fields', $sessionFields);
+$view->assign('exe_duration', api_format_time($exe->getExeDuration(), 'js'));
+$view->assign('qr', $quizzesDir['web'].$destinationResult->getHash().'.png');
+$layout = $view->get_template('exercise/progressive_adaptive_results.tpl');
+$content = $view->fetch($layout);
+$view->assign('content', $content);
+$view->display_one_col_template();

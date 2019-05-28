@@ -253,6 +253,8 @@ if ($isAdaptive) {
                 </div>
             </div>
         ';
+
+        ExerciseLib::sendEmailNotificationForAdaptiveResult($destinationResult);
     }
 
     Session::erase('adaptive_quiz_level');

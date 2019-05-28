@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\TrackEExercises;
+use Chamilo\CourseBundle\Entity\CQuizDestinationResult;
 use ChamiloSession as Session;
 
 /**
@@ -4889,6 +4890,110 @@ EOT;
         if (!empty($remainingMessage)) {
             echo Display::return_message($remainingMessage, 'normal', false);
         }
+    }
+
+    /**
+     * Send a mail to current user with the result of a adaptive/progressive quiz.
+     *
+     * @param CQuizDestinationResult $result
+     */
+    public static function sendEmailNotificationForAdaptiveResult(CQuizDestinationResult $result)
+    {
+        $exe = $result->getExe();
+        $courseId = $result->getExe()->getCId();
+        $sessionId = $result->getExe()->getSessionId();
+        $qrFilename = $result->getHash().'.png';
+
+        $extraFields = api_get_configuration_value('quiz_adaptive_show_extrafields');
+
+        $quizzesDir = ExerciseLib::checkQuizzesPath($exe->getExeUserId());
+
+        $course = api_get_course_entity($courseId);
+        $courseExtra = [
+            'course' => $course,
+            'fields' => [],
+        ];
+
+        if (isset($extraFields['course'])) {
+            $courseFields = $extraFields['course'];
+            $ef = new ExtraField('course');
+            $efv = new ExtraFieldValue('course');
+
+            foreach ($courseFields as $variable) {
+                $extraField = $ef->get_handler_field_info_by_field_variable($variable);
+
+                if (false === $extraField) {
+                    continue;
+                }
+
+                $extraValue = $efv->get_values_by_handler_and_field_id($courseId, $extraField['id'], true);
+
+                if (false === $extraValue) {
+                    continue;
+                }
+
+                $courseExtra['fields'][$extraField['display_text']] = $extraValue['value'];
+            }
+        }
+
+        $sessionExtra = [];
+
+        if ($sessionId) {
+            $session = api_get_session_entity($sessionId);
+            $sessionExtra['session'] = $session;;
+
+            if (isset($extraFields['session'])) {
+                $sessionFields = $extraFields['session'];
+                $ef = new ExtraField('session');
+                $efv = new ExtraFieldValue('session');
+
+                foreach ($sessionFields as $variable) {
+                    $extraField = $ef->get_handler_field_info_by_field_variable($variable);
+
+                    if (false === $extraField) {
+                        continue;
+                    }
+
+                    $extraValue = $efv->get_values_by_handler_and_field_id($sessionId, $extraField['id'], true);
+
+                    if (false === $extraValue) {
+                        continue;
+                    }
+
+                    $sessionExtra['fields'][$extraField['display_text']] = $extraValue['value'];
+                }
+            }
+        }
+
+        $view = new Template('', false, false, false, true, false, false);
+        $view->assign('result', $result);
+        $view->assign('exe_duration', api_format_time($exe->getExeDuration(), 'js'));
+        $view->assign('course_info', $courseExtra);
+        $view->assign('session_info', $sessionExtra);
+        $view->assign('qr', $quizzesDir['web'].$qrFilename);
+
+        $layout = $view->get_template('mail/quiz_student_adaptive_result.tpl');
+        $content = $view->fetch($layout);
+
+        MessageManager::send_message_simple(
+            $result->getUser()->getId(),
+            get_lang('LevelReachedInQuiz'),
+            $content,
+            0,
+            false,
+            true,
+            [],
+            true,
+            [
+                [
+                    'name' => $result->getHash().'.png',
+                    'tmp_name' => $quizzesDir['system'].$qrFilename,
+                    'size' => filesize($quizzesDir['system'].$qrFilename),
+                    'error' => 0,
+                    'comment' => '',
+                ]
+            ]
+        );
     }
 
     /**

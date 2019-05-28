@@ -602,6 +602,15 @@ ALTER TABLE c_quiz_destination_result ADD CONSTRAINT FK_2A495FEFA76ED395 FOREIGN
 ALTER TABLE c_quiz_destination_result ADD CONSTRAINT FK_2A495FEFB5A18F57 FOREIGN KEY (exe_id) REFERENCES track_e_exercises (exe_id) ON DELETE CASCADE;
  */
 //$_configuration['quiz_question_category_destinations'] = false;
+// Allow include some extrafields in the results page from adaptive/progressive quizzes.
+// Also these extrafields are included in the mail sent with the results.
+/*
+$_configuration['quiz_adaptive_show_extrafields'] = [
+    'session' => [],
+    'course' => [],
+    'user' => [],
+];
+*/
 
 // Score model
 // Allow to convert a score into a text/color label

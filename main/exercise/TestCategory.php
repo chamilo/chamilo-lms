@@ -662,16 +662,26 @@ class TestCategory
     public static function returnCategoryAndTitle($questionId, $in_display_category_name = 1)
     {
         $is_student = !(api_is_allowed_to_edit(null, true) || api_is_session_admin());
+        /** @var Exercise $objExercise */
         $objExercise = Session::read('objExercise');
         if (!empty($objExercise)) {
             $in_display_category_name = $objExercise->display_category_name;
         }
         $content = null;
-        if (self::getCategoryNameForQuestion($questionId) != '' &&
+
+        $categoryName = self::getCategoryNameForQuestion($questionId);
+
+        if (EXERCISE_FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE == $objExercise->selectFeedbackType() &&
+            $categoryName != ''
+        ) {
+            return Display::page_header($categoryName, null, 'h3');
+        }
+
+        if ($categoryName != '' &&
             ($in_display_category_name == 1 || !$is_student)
         ) {
             $content .= '<div class="page-header">';
-            $content .= '<h4>'.get_lang('Category').": ".self::getCategoryNameForQuestion($questionId).'</h4>';
+            $content .= '<h4>'.get_lang('Category').": ".$categoryName.'</h4>';
             $content .= "</div>";
         }
 

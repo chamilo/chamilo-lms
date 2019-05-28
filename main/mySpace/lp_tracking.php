@@ -258,7 +258,7 @@ switch ($action) {
         $pdf->content_to_pdf(
             $content,
             null,
-            $courseInfo['code'].'_'.$lp->getName(),
+            $courseInfo['code'].'_'.$lp->getName().'_'.api_get_local_time(),
             $courseInfo['code'],
             'D',
             false,

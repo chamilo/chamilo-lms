@@ -3092,8 +3092,13 @@ class Exercise
                         $label = get_lang('ReviewQuestions');
                         $class = 'btn btn-success';
                     } else {
-                        $label = get_lang('EndTest');
-                        $class = 'btn btn-warning';
+                        if (EXERCISE_FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE == $this->feedback_type) {
+                            $label = get_lang('NextQuestion');
+                            $class = 'btn btn-primary';
+                        } else {
+                            $label = get_lang('EndTest');
+                            $class = 'btn btn-warning';
+                        }
                     }
                 } else {
                     $label = get_lang('NextQuestion');
@@ -3128,6 +3133,15 @@ class Exercise
                                     $prev_question = $num;
                                     //$question_id = $beforeId;
                                 }
+                            }
+
+                            if (EXERCISE_FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE == $this->feedback_type) {
+                                $currentCategoryId = $this->getCategoryByQuestion($question_id);
+
+                                $showPreview = !$this->isFirstQuestionInCategory(
+                                    $currentCategoryId,
+                                    $question_id
+                                );
                             }
 
                             if ($showPreview) {
@@ -8757,5 +8771,25 @@ class Exercise
         );
 
         return $group;
+    }
+
+    /**
+     * Get the category ID for a question by its ID
+     *
+     * @param int $sourceQuestionId
+     *
+     * @return int
+     */
+    public function getCategoryByQuestion($sourceQuestionId)
+    {
+        foreach ($this->categoryWithQuestionList as $categoryId => $categoryInfo) {
+            foreach ($categoryInfo['question_list'] as $questionId) {
+                if ((int) $questionId === (int) $sourceQuestionId) {
+                    return (int) $categoryId;
+                }
+            }
+        }
+
+        return 0;
     }
 }

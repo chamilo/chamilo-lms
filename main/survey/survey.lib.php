@@ -2414,9 +2414,9 @@ class SurveyManager
         $content = '';
 
         if (empty($answered)) {
-            $content .= Display::page_subheader(get_lang('Answered'));
-        } else {
             $content .= Display::page_subheader(get_lang('Unanswered'));
+        } else {
+            $content .= Display::page_subheader(get_lang('Answered'));
         }
 
         if (!empty($invitations)) {
@@ -2451,8 +2451,23 @@ class SurveyManager
                     $sessionInfo = api_get_session_info($sessionId);
                     $courseInfo['name'] .= ' ('.$sessionInfo['name'].')';
                 }
+
+                $surveyData = SurveyManager::get_survey($survey->getSurveyId(), 0, $courseInfo['code']);
                 $table->setCellContents($row, 0, $title);
                 $table->setCellContents($row, 1, $courseInfo['name']);
+
+                if (!empty($answered) && $surveyData['anonymous'] == 0) {
+                    $answers = SurveyUtil::displayCompleteReport(
+                        $surveyData,
+                        $userId,
+                        false,
+                        false,
+                        false
+                    );
+                    $table->setCellContents(++$row, 0, $answers);
+                    $table->setCellContents(++$row, 1, '');
+                }
+
                 $row++;
             }
             $content .= $table->toHtml();

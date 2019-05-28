@@ -503,7 +503,7 @@ class GlossaryManager
         foreach ($glossaryList as $key => $glossary_item) {
             $actions = '';
             if (api_is_allowed_to_edit(null, true)) {
-                $actions = '<div class="float-right">'.self::actions_filter($glossary_item[2], '', $glossary_item).'</div>';
+                $actions = '<div class="pull-right">'.self::actions_filter($glossary_item[2], '', $glossary_item).'</div>';
             }
             $content .= Display::panel($glossary_item[1], $glossary_item[0].' '.$actions);
         }

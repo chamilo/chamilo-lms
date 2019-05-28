@@ -9,6 +9,7 @@ use ChamiloSession as Session;
 use CpChart\Cache as pCache;
 use CpChart\Data as pData;
 use CpChart\Image as pImage;
+use ExtraField as ExtraFieldModel;
 
 /**
  *  Class Tracking.
@@ -171,7 +172,7 @@ class Tracking
         // Extend all button
         $output = '';
         $extend_all = 0;
-        if ($origin == 'tracking') {
+        if ($origin === 'tracking') {
             $url_suffix = '&session_id='.$session_id.'&course='.$courseCode.'&student_id='.$user_id.'&lp_id='.$lp_id.'&origin='.$origin;
         } else {
             $url_suffix = '&lp_id='.$lp_id;
@@ -325,7 +326,7 @@ class Tracking
                 if (($extend_this || $extend_all) && $num > 0) {
                     $row = Database::fetch_array($result);
                     $result_disabled_ext_all = false;
-                    if ($row['item_type'] == 'quiz') {
+                    if ($row['item_type'] === 'quiz') {
                         // Check results_disabled in quiz table.
                         $my_path = Database::escape_string($row['path']);
                         $sql = "SELECT results_disabled
@@ -372,7 +373,7 @@ class Tracking
                     $counter++;
 
                     $action = null;
-                    if ($type == 'classic') {
+                    if ($type === 'classic') {
                         $action = '<td></td>';
                     }
 
@@ -391,9 +392,7 @@ class Tracking
                     } else {
                         $output .= '<tr class="'.$oddclass.'">
                                 <td>'.$extend_link.'</td>
-                                <td colspan="4">
-                                   '.$title.'
-                                </td>
+                                <td colspan="4">'.$title.'</td>
                                 <td colspan="2"></td>
                                 <td colspan="2"></td>
                                 <td colspan="2"></td>
@@ -407,8 +406,10 @@ class Tracking
                         $extend_attempt_link = '';
                         $extend_this_attempt = 0;
 
-                        if ((learnpath::get_interactions_count_from_db($row['iv_id'], $course_id) > 0 ||
-                            learnpath::get_objectives_count_from_db($row['iv_id'], $course_id) > 0) &&
+                        if ((
+                            learnpath::get_interactions_count_from_db($row['iv_id'], $course_id) > 0 ||
+                            learnpath::get_objectives_count_from_db($row['iv_id'], $course_id) > 0
+                            ) &&
                             !$extend_all
                         ) {
                             if ($extendAttemptId == $row['iv_id']) {
@@ -418,12 +419,28 @@ class Tracking
                                     Display::return_icon('visible.png', get_lang('HideAttemptView')),
                                     api_get_self().'?action=stats&extend_id='.$my_item_id.'&fold_attempt_id='.$row['iv_id'].$url_suffix
                                 );
+                                if (api_is_allowed_to_edit()) {
+                                    $extend_attempt_link .= '&nbsp;'.
+                                        Display::url(
+                                            Display::return_icon('pdf.png', get_lang('ExportToPdf')),
+                                            api_get_self(
+                                            ).'?action=export_stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix
+                                        );
+                                }
                             } else { // Same case if fold_attempt_id is set, so not implemented explicitly.
                                 // The extend button for this attempt has not been clicked.
                                 $extend_attempt_link = Display::url(
                                     Display::return_icon('invisible.png', get_lang('ExtendAttemptView')),
                                     api_get_self().'?action=stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix
                                 );
+                                if (api_is_allowed_to_edit()) {
+                                    $extend_attempt_link .= '&nbsp;'.
+                                        Display::url(
+                                            Display::return_icon('pdf.png', get_lang('ExportToPdf')),
+                                            api_get_self(
+                                            ).'?action=export_stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix
+                                        );
+                                }
                             }
                         }
 
@@ -507,7 +524,7 @@ class Tracking
                             }
                             $output .= '<tr class="'.$oddclass.'">
                                     <td></td>
-                                    <td>'.$extend_attempt_link.'</td>
+                                    <td style="width:70px;float:left;">'.$extend_attempt_link.'</td>
                                     <td colspan="3">'.get_lang('Attempt').' '.$attemptCount.'</td>
                                     <td colspan="2">'.learnpathItem::humanize_status($lesson_status, true, $type).'</td>
                                     <td colspan="2">'.$view_score.'</td>
@@ -522,7 +539,7 @@ class Tracking
                                     learnpathItem::humanize_status($lesson_status, false, $type)
                                 );
 
-                                if ($row['item_type'] == 'quiz') {
+                                if ($row['item_type'] === 'quiz') {
                                     if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                         $temp[] = '/';
                                     } else {
@@ -552,17 +569,6 @@ class Tracking
                                 if (($counter % 2) == 0) {
                                     $oddclass = 'row_odd';
                                 }
-                                $student_response = urldecode($interaction['student_response']);
-                                $content_student_response = explode('__|', $student_response);
-
-                                if (count($content_student_response) > 0) {
-                                    if (count($content_student_response) >= 3) {
-                                        // Pop the element off the end of array.
-                                        array_pop($content_student_response);
-                                    }
-                                    $student_response = implode(',', $content_student_response);
-                                }
-
                                 $timeRow = '<td class="lp_time">'.$interaction['time'].'</td>';
                                 if ($hideTime) {
                                     $timeRow = '';
@@ -573,9 +579,11 @@ class Tracking
                                         <td></td>
                                         <td></td>
                                         <td>'.$interaction['order_id'].'</td>
-                                        <td>'.$interaction['id'].'</td>
+                                        <td>'.$interaction['id'].'</td>';
+
+                                $output .= '
                                         <td colspan="2">'.$interaction['type'].'</td>
-                                        <td>'.$student_response.'</td>
+                                        <td>'.$interaction['student_response_formatted'].'</td>
                                         <td>'.$interaction['result'].'</td>
                                         <td>'.$interaction['latency'].'</td>
                                         '.$timeRow.'
@@ -972,6 +980,7 @@ class Tracking
                             $counter++;
                         }
                         $list2 = learnpath::get_iv_objectives_array($row['iv_id']);
+
                         foreach ($list2 as $id => $interaction) {
                             if (($counter % 2) == 0) {
                                 $oddclass = 'row_odd';
@@ -2679,7 +2688,7 @@ class Tracking
 
         $conditions = [
             " c_id = {$courseInfo['real_id']} ",
-            " lp_view.lp_id IN(".implode(', ', $filteredLP).") ",
+            " lp_view.lp_id IN (".implode(', ', $filteredLP).") ",
         ];
 
         $groupBy = 'GROUP BY lp_id';
@@ -3767,7 +3776,7 @@ class Tracking
     /**
      * Get sessions coached by user.
      *
-     * @param        $coach_id
+     * @param int    $coach_id
      * @param int    $start
      * @param int    $limit
      * @param bool   $getCount
@@ -3775,6 +3784,7 @@ class Tracking
      * @param string $description
      * @param string $orderByName
      * @param string $orderByDirection
+     * @param array  $options
      *
      * @return mixed
      */
@@ -3786,16 +3796,17 @@ class Tracking
         $keyword = '',
         $description = '',
         $orderByName = '',
-        $orderByDirection = ''
+        $orderByDirection = '',
+        $options = []
     ) {
         // table definition
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $coach_id = (int) $coach_id;
 
-        $select = " SELECT * FROM ";
+        $select = ' SELECT * FROM ';
         if ($getCount) {
-            $select = " SELECT count(DISTINCT id) as count FROM ";
+            $select = ' SELECT count(DISTINCT id) as count FROM ';
         }
 
         $limitCondition = null;
@@ -3804,7 +3815,6 @@ class Tracking
         }
 
         $keywordCondition = null;
-
         if (!empty($keyword)) {
             $keyword = Database::escape_string($keyword);
             $keywordCondition = " AND (name LIKE '%$keyword%' ) ";
@@ -3814,6 +3824,13 @@ class Tracking
                 $keywordCondition = " AND (name LIKE '%$keyword%' OR description LIKE '%$description%' ) ";
             }
         }
+
+        $extraFieldModel = new ExtraFieldModel('session');
+        $conditions = $extraFieldModel->parseConditions($options);
+        $sqlInjectJoins = $conditions['inject_joins'];
+        $extraFieldsConditions = $conditions['where'];
+        $sqlInjectWhere = $conditions['inject_where'];
+        $injectExtraFields = $conditions['inject_extra_fields'];
 
         $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $access_url_id = api_get_current_access_url_id();
@@ -3831,34 +3848,42 @@ class Tracking
             $select
             (
                 SELECT DISTINCT
-                    session.id,
+                    s.id,
                     name,
+                    $injectExtraFields
                     access_start_date,
                     access_end_date
-                FROM $tbl_session session
+                FROM $tbl_session s
                 INNER JOIN $tbl_session_rel_access_url session_rel_url
-                ON (session.id = session_rel_url.session_id)
+                ON (s.id = session_rel_url.session_id)
+                $sqlInjectJoins
                 WHERE
                     id_coach = $coach_id AND
                     access_url_id = $access_url_id
                     $keywordCondition
+                    $extraFieldsConditions
+                    $sqlInjectWhere
             UNION
                 SELECT DISTINCT
-                    session.id,
-                    session.name,
-                    session.access_start_date,
-                    session.access_end_date
-                FROM $tbl_session as session
+                    s.id,
+                    s.name,
+                    $injectExtraFields
+                    s.access_start_date,
+                    s.access_end_date
+                FROM $tbl_session as s
                 INNER JOIN $tbl_session_course_user as session_course_user
                 ON
-                    session.id = session_course_user.session_id AND
+                    s.id = session_course_user.session_id AND
                     session_course_user.user_id = $coach_id AND
                     session_course_user.status = 2
-                INNER JOIN $tbl_session_rel_access_url session_rel_url
-                ON (session.id = session_rel_url.session_id)
+                INNER JOIN $tbl_session_rel_access_url session_rel_url                
+                ON (s.id = session_rel_url.session_id)
+                $sqlInjectJoins
                 WHERE
                     access_url_id = $access_url_id
                     $keywordCondition
+                    $extraFieldsConditions
+                    $sqlInjectWhere
             ) as sessions $limitCondition $orderBy
             ";
 
@@ -3912,7 +3937,7 @@ class Tracking
      */
     public static function get_courses_list_from_session($session_id)
     {
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
 
         // table definition
         $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
@@ -3961,20 +3986,20 @@ class Tracking
                 $studentList = array_map('intval', $student_id);
                 $condition_user = " AND ip.insert_user_id IN ('".implode(',', $studentList)."') ";
             } else {
-                $student_id = intval($student_id);
+                $student_id = (int) $student_id;
                 $condition_user = " AND ip.insert_user_id = '$student_id' ";
             }
 
             $condition_session = null;
             if (isset($session_id)) {
-                $session_id = intval($session_id);
+                $session_id = (int) $session_id;
                 $condition_session = " AND pub.session_id = $session_id ";
             }
 
             $sql = "SELECT count(ip.tool) AS count
                     FROM $tbl_item_property ip
                     INNER JOIN $tbl_document pub
-                    ON (ip.ref = pub.id AND ip.c_id = pub.c_id)
+                    ON (ip.ref = pub.iid AND ip.c_id = pub.c_id)
                     WHERE
                         ip.c_id  = $course_id AND
                         pub.c_id  = $course_id AND
@@ -4072,7 +4097,7 @@ class Tracking
             $studentList = array_map('intval', $student_id);
             $conditions[] = " post.poster_id IN ('".implode("','", $studentList)."') ";
         } else {
-            $student_id = intval($student_id);
+            $student_id = (int) $student_id;
             $conditions[] = " post.poster_id = '$student_id' ";
         }
 
@@ -4139,7 +4164,7 @@ class Tracking
 
             $condition_session = '';
             if (isset($session_id)) {
-                $session_id = intval($session_id);
+                $session_id = (int) $session_id;
                 $condition_session = api_get_session_condition(
                     $session_id,
                     true,
@@ -4149,11 +4174,11 @@ class Tracking
             }
 
             $course_id = $courseInfo['real_id'];
-            $groupId = intval($groupId);
+            $groupId = (int) $groupId;
             if (!empty($groupId)) {
-                $groupCondition = " i.to_group_id = $groupId  ";
+                $groupCondition = " i.to_group_id = $groupId ";
             } else {
-                $groupCondition = " (i.to_group_id = 0 OR i.to_group_id IS NULL) ";
+                $groupCondition = ' (i.to_group_id = 0 OR i.to_group_id IS NULL) ';
             }
 
             $item = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -4209,7 +4234,7 @@ class Tracking
             $condition_session = ' AND f.session_id = '.$session_id;
         }
 
-        $groupId = intval($groupId);
+        $groupId = (int) $groupId;
 
         if (!empty($groupId)) {
             $groupCondition = " i.to_group_id = $groupId ";

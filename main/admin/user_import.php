@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
 use ChamiloSession as Session;
 
 /**
@@ -199,7 +200,8 @@ function complete_missing_data($user)
  */
 function save_data($users, $sendMail = false)
 {
-    global $inserted_in_course;
+    global $inserted_in_course, $extra_fields;
+
     // Not all scripts declare the $inserted_in_course array (although they should).
     if (!isset($inserted_in_course)) {
         $inserted_in_course = [];
@@ -207,6 +209,10 @@ function save_data($users, $sendMail = false)
 
     $usergroup = new UserGroup();
     if (is_array($users)) {
+        $efo = new ExtraFieldOption('user');
+
+        $optionsByField = [];
+
         foreach ($users as &$user) {
             if ($user['has_error']) {
                 continue;
@@ -270,15 +276,27 @@ function save_data($users, $sendMail = false)
                     }
                 }
 
-                // Saving extra fields.
-                global $extra_fields;
                 // We are sure that the extra field exists.
                 foreach ($extra_fields as $extras) {
-                    if (isset($user[$extras[1]])) {
-                        $key = $extras[1];
-                        $value = $user[$extras[1]];
-                        UserManager::update_extra_field_value($user_id, $key, $value);
+                    if (!isset($user[$extras[1]])) {
+                        continue;
                     }
+
+                    $key = $extras[1];
+                    $value = $user[$key];
+
+                    if (!array_key_exists($key, $optionsByField)) {
+                        $optionsByField[$key] = $efo->getOptionsByFieldVariable($key);
+                    }
+
+                    /** @var ExtraFieldOptions $option */
+                    foreach ($optionsByField[$key] as $option) {
+                        if ($option->getDisplayText() === $value) {
+                            $value = $option->getValue();
+                        }
+                    }
+
+                    UserManager::update_extra_field_value($user_id, $key, $value);
                 }
             } else {
                 $returnMessage = Display::return_message(get_lang('Error'), 'warning');
@@ -754,4 +772,4 @@ if ($count_fields > 0) {
 </pre>
     </blockquote>
 <?php
-Display :: display_footer();
+Display::display_footer();

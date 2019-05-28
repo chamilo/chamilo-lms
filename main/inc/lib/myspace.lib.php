@@ -475,19 +475,19 @@ class MySpace
             $order = [
                 0 => 'firstname',
                 1 => 'lastname',
-                2 => ($sort_by_first_name ? 'firstname' : 'lastname'),
+                2 => $sort_by_first_name ? 'firstname' : 'lastname',
                 3 => 'login_date',
-                4 => ($sort_by_first_name ? 'firstname' : 'lastname'),
-                5 => ($sort_by_first_name ? 'firstname' : 'lastname'),
+                4 => $sort_by_first_name ? 'firstname' : 'lastname',
+                5 => $sort_by_first_name ? 'firstname' : 'lastname',
             ];
         } else {
             $order = [
                 0 => 'lastname',
                 1 => 'firstname',
-                2 => ($sort_by_first_name ? 'firstname' : 'lastname'),
+                2 => $sort_by_first_name ? 'firstname' : 'lastname',
                 3 => 'login_date',
-                4 => ($sort_by_first_name ? 'firstname' : 'lastname'),
-                5 => ($sort_by_first_name ? 'firstname' : 'lastname'),
+                4 => $sort_by_first_name ? 'firstname' : 'lastname',
+                5 => $sort_by_first_name ? 'firstname' : 'lastname',
             ];
         }
         $table = new SortableTable(
@@ -1046,17 +1046,6 @@ class MySpace
      */
     public static function display_tracking_course_overview()
     {
-        /*$t_head = '<table style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
-        $t_head .= '<tr>';
-        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgTimeSpentInTheCourse'), 6, true).'</span></th>';
-        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgStudentsProgress'), 6, true).'</span></th>';
-        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgCourseScore'), 6, true).'</span></th>';
-        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalNumberOfMessages'), 6, true).'</span></th>';
-        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalNumberOfAssignments'), 6, true).'</span></th>';
-        $t_head .= '<th width="105px" style="border-bottom:0"><span>'.get_lang('TotalExercisesScoreObtained').'</span></th>';
-        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalExercisesAnswered'), 6, true).'</span></th>';
-        $t_head .= '<th style="padding:0;border-bottom:0;border-right:0;"><span>'.get_lang('LatestLogin').'</span></th>';
-        $t_head .= '</tr></table>';*/
         $params = ['view' => 'admin', 'display' => 'courseoverview'];
         $table = new SortableTable(
             'tracking_session_overview',
@@ -1070,12 +1059,7 @@ class MySpace
             ]
         );
         $table->additional_parameters = $params;
-
-        //$table->set_header(0, '', false, null, ['style' => 'display: none']);
-        //$table->set_header(1, get_lang('Course'), true, ['style' => 'font-size:8pt'], ['style' => 'font-size:8pt']);
-        //$table->set_header(2, $t_head, false, ['style' => 'width:90%;border:0;padding:0;font-size:7.5pt;'], ['style' => 'width:90%;padding:0;font-size:7.5pt;']);
         $table->set_column_filter(0, ['MySpace', 'course_tracking_filter']);
-
         $tableContent = $table->return_table();
 
         $tpl = new Template('', false, false, false, false, false, false);
@@ -1215,9 +1199,8 @@ class MySpace
                 $last_login_date == false
             ) { // TODO: To be cleaned
                 $last_login_date = $last_login_date_tmp;
-            } elseif ($last_login_date_tmp != false &&
-                $last_login_date != false
-            ) { // TODO: Repeated previous condition. To be cleaned.
+            } elseif ($last_login_date_tmp != false && $last_login_date != false) {
+                // TODO: Repeated previous condition. To be cleaned.
                 // Find the max and assign it to first_login_date
                 if (strtotime($last_login_date_tmp) > strtotime($last_login_date)) {
                     $last_login_date = $last_login_date_tmp;
@@ -2002,11 +1985,11 @@ class MySpace
         $csv_row = [];
         $csv_row[] = get_lang('OfficialCode');
         if ($is_western_name_order) {
-            $csv_row[] = get_lang('FirstName', '');
-            $csv_row[] = get_lang('LastName', '');
+            $csv_row[] = get_lang('FirstName');
+            $csv_row[] = get_lang('LastName');
         } else {
-            $csv_row[] = get_lang('LastName', '');
-            $csv_row[] = get_lang('FirstName', '');
+            $csv_row[] = get_lang('LastName');
+            $csv_row[] = get_lang('FirstName');
         }
         $csv_row[] = get_lang('LoginName');
         $csv_row[] = get_lang('CourseCode');
@@ -2857,9 +2840,6 @@ class MySpace
                 ['MySpace', 'getUserDataAccessTrackingOverview'],
                 0
             );
-
-            //$table->additional_parameters = $form->exportValues();
-
             $table->set_header(0, get_lang('LoginDate'), true);
             $table->set_header(1, get_lang('Username'), true);
             if (api_is_western_name_order()) {
@@ -2959,11 +2939,6 @@ class MySpace
         if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
             $sessionId = (int) $_GET['session_id'];
             $sql .= " AND a.session_id = ".$sessionId;
-        }
-
-        if (isset($_GET['student_id']) && !empty($_GET['student_id'])) {
-            $userId = (int) $_GET['student_id'];
-            $sql .= " AND u.user_id = ".$userId;
         }
 
         if (isset($_GET['student_id']) && !empty($_GET['student_id'])) {

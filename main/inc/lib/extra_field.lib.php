@@ -2185,11 +2185,11 @@ JAVASCRIPT;
                     : null;
 
                 if ($field['field_type'] == self::FIELD_TYPE_DOUBLE_SELECT) {
-                    //Add 2 selects
+                    // Add 2 selects
                     $options = $extraFieldOption->get_field_options_by_field($field['id']);
                     $options = self::extra_field_double_select_convert_array_to_ordered_array($options);
-                    $first_options = [];
 
+                    $first_options = [];
                     if (!empty($options)) {
                         foreach ($options as $option) {
                             foreach ($option as $sub_option) {
@@ -2256,6 +2256,7 @@ JAVASCRIPT;
                 $rules[] = [
                     'field' => 'extra_'.$field['variable'],
                     'op' => 'cn',
+                    'data' => '',
                 ];
             }
         }
@@ -3034,15 +3035,9 @@ JAVASCRIPT;
         }
 
         // Get extra field workflow
-        $userInfo = api_get_user_info();
         $addOptions = [];
         $optionsExists = false;
-        global $app;
-
         $options = [];
-        if (empty($defaultValueId)) {
-            $options[''] = get_lang('SelectAnOption');
-        }
 
         $optionList = [];
         if (!empty($fieldDetails['options'])) {
@@ -3095,9 +3090,13 @@ JAVASCRIPT;
             'select',
             'extra_'.$fieldDetails['variable'],
             $fieldDetails['display_text'],
-            $options,
+            [],
             ['id' => 'extra_'.$fieldDetails['variable']]
         );
+
+        if (empty($defaultValueId)) {
+            $slct->addOption(get_lang('SelectAnOption'), '');
+        }
 
         foreach ($options as $value => $text) {
             if (empty($value)) {

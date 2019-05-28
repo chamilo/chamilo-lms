@@ -19,7 +19,7 @@ class UrlManager
      * @param string $description The description of the site
      * @param int    $active      is active or not
      *
-     * @return bool if success
+     * @return int
      */
     public static function add($url, $description, $active)
     {
@@ -31,9 +31,11 @@ class UrlManager
                 active 		= '".intval($active)."',
                 created_by 	= '".api_get_user_id()."',
                 tms = FROM_UNIXTIME(".$tms.")";
-        $result = Database::query($sql);
+        Database::query($sql);
 
-        return $result;
+        $id = Database::insert_id();
+
+        return $id;
     }
 
     /**

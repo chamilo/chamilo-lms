@@ -106,9 +106,7 @@ class MoodleImport
         $filesXml = @file_get_contents($destinationDir.'/files.xml');
         $mainFileModuleValues = $this->getAllQuestionFiles($filesXml);
         $currentResourceFilePath = $destinationDir.'/files/';
-
         $importedFiles = [];
-
         foreach ($mainFileModuleValues as $fileInfo) {
             $dirs = new RecursiveDirectoryIterator($currentResourceFilePath);
             foreach (new RecursiveIteratorIterator($dirs) as $file) {

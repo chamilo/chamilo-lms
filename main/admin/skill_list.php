@@ -19,7 +19,7 @@ api_protect_admin_script();
 Skill::isAllowed();
 
 $action = isset($_GET['action']) ? $_GET['action'] : 'list';
-$skillId = isset($_GET['id']) ? intval($_GET['id']) : 0;
+$skillId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
 $entityManager = Database::getManager();
 
@@ -112,7 +112,7 @@ switch ($action) {
         break;
     case 'list':
     default:
-        $interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
+        $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 
         $toolbar = Display::url(
             Display::return_icon(
@@ -135,17 +135,6 @@ switch ($action) {
             api_get_path(WEB_CODE_PATH).'admin/skills_wheel.php',
             ['title' => get_lang('SkillsWheel')]
         );
-
-        /*$toolbar .= Display::url(
-            Display::return_icon(
-                'edit-skill.png',
-                get_lang('BadgesManagement'),
-                null,
-                ICON_SIZE_MEDIUM
-            ),
-            api_get_path(WEB_CODE_PATH).'admin/skill_badge_list.php',
-            ['title' => get_lang('BadgesManagement')]
-        );*/
 
         $toolbar .= Display::url(
             Display::return_icon(
@@ -175,7 +164,6 @@ switch ($action) {
 
         if ($extraFieldSearchTagId) {
             $skills = [];
-
             $skillsFiltered = $extraField->getAllSkillPerTag($arrayVals['id'], $extraFieldSearchTagId);
             foreach ($skillList as $index => $value) {
                 if (array_search($index, $skillsFiltered)) {

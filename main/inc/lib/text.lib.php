@@ -75,11 +75,11 @@ function api_set_encoding_html(&$string, $encoding)
         $count = 1;
         if (strpos('</head>', strtolower($string)) !== false) {
             $string = str_ireplace(
-            '</head>',
-            '<meta http-equiv="Content-Type" content="text/html; charset='.$encoding.'"/></head>',
-            $string,
-            $count
-        );
+                '</head>',
+                '<meta http-equiv="Content-Type" content="text/html; charset='.$encoding.'"/></head>',
+                $string,
+                $count
+            );
         } else {
             $string = str_ireplace(
                 '<body>',

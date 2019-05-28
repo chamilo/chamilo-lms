@@ -826,6 +826,35 @@ class ImportCsv
                     $userInfoByOfficialCode = api_get_user_info_from_official_code($row['official_code']);
                 }
 
+                $userInfoFromUsername = api_get_user_info_from_official_code($row['username']);
+                if (!empty($userInfoFromUsername)) {
+                    $extraFieldValue = new ExtraFieldValue('user');
+                    $extraFieldValues = $extraFieldValue->get_values_by_handler_and_field_variable(
+                        $userInfoFromUsername['user_id'],
+                        $this->extraFieldIdNameList['user']
+                    );
+
+                    if (!empty($extraFieldValues)) {
+                        $value = 0;
+                        foreach ($extraFieldValues as $extraFieldValue) {
+                            $value = $extraFieldValue['value'];
+                        }
+                        if (!empty($user_id) && $value != $user_id) {
+                            $emails = api_get_configuration_value('cron_notification_help_desk');
+                            if (!empty($emails)) {
+                                $subject = 'User not added due to same username';
+                                $body = 'Cannot add username: "'.$row['username'].'" 
+                                    with external_user_id: '.$row['extra_'.$this->extraFieldIdNameList['user']].'
+                                    because '.$userInfoFromUsername['username'].' with external_user_id '.$value.' exists on the portal    
+    ';
+                                foreach ($emails as $email) {
+                                    api_mail_html('', $email, $subject, $body);
+                                }
+                            }
+                        }
+                    }
+                }
+
                 if (empty($userInfo) && empty($userInfoByOfficialCode)) {
                     // Create user
                     $result = UserManager::create_user(
@@ -840,7 +869,7 @@ class ImportCsv
                         $row['phone'],
                         null, //$row['picture'], //picture
                         $row['auth_source'], // ?
-                        $expirationDateOnCreate, //'0000-00-00 00:00:00', //$row['expiration_date'], //$expiration_date = '0000-00-00 00:00:00',
+                        $expirationDateOnCreate,
                         1, //active
                         0,
                         null, // extra
@@ -973,7 +1002,6 @@ class ImportCsv
                                 );
                             }
                         }
-
                         $this->logger->addInfo("Students - User updated: ".$row['username']);
                     } else {
                         $this->logger->addError("Students - User NOT updated: ".$row['username']." ".$row['firstname']." ".$row['lastname']);

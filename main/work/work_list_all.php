@@ -10,7 +10,7 @@ api_protect_course_script(true);
 require_once 'work.lib.php';
 $this_section = SECTION_COURSES;
 
-$workId = isset($_GET['id']) ? intval($_GET['id']) : null;
+$workId = isset($_GET['id']) ? (int) $_GET['id'] : null;
 $is_allowed_to_edit = api_is_allowed_to_edit() || api_is_coach();
 
 if (empty($workId)) {
@@ -81,7 +81,7 @@ $interbreadcrumb[] = [
 ];
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
-$itemId = isset($_REQUEST['item_id']) ? intval($_REQUEST['item_id']) : null;
+$itemId = isset($_REQUEST['item_id']) ? (int) $_REQUEST['item_id'] : null;
 
 switch ($action) {
     case 'export_to_doc':
@@ -220,7 +220,7 @@ if (!empty($my_folder_data['description'])) {
     echo $html;
 }
 
-$check_qualification = intval($my_folder_data['qualification']);
+$check_qualification = (int) $my_folder_data['qualification'];
 $orderName = api_is_western_name_order() ? 'firstname' : 'lastname';
 
 if (!empty($work_data['enable_qualification']) &&
@@ -318,7 +318,7 @@ if (!empty($work_data['enable_qualification']) &&
             'width' => '30',
             'align' => 'left',
             'search' => 'false',
-            'wrap_cell' => "true",
+            'wrap_cell' => 'true',
         ],
         [
             'name' => 'qualification',
@@ -361,15 +361,72 @@ $extra_params = [
     'height' => 'auto',
     'sortname' => $orderName,
     'sortable' => 'false',
+    'multiselect' => 'true',
 ];
 
-$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_user_list_all&work_id='.$workId.'&type='.$type.'&'.api_get_cidreq();
+$url = api_get_path(WEB_AJAX_PATH).
+    'model.ajax.php?a=get_work_user_list_all&work_id='.$workId.'&type='.$type.'&'.api_get_cidreq();
+
+$workUrl = api_get_path(WEB_AJAX_PATH).'work.ajax.php?'.api_get_cidreq();
+$deleteUrl = $workUrl.'&a=delete_student_work';
+$showUrl = $workUrl.'&a=show_student_work';
+$hideUrl = $workUrl.'&a=hide_student_work';
+
 ?>
 <script>
 $(function() {
     <?php
     echo Display::grid_js('results', $url, $columns, $column_model, $extra_params);
-?>
+    ?>
+
+    $("#results").jqGrid(
+        "navGrid",
+        "#results_pager",
+        { edit: false, add: false, search: false, del: true },
+        { height:280, reloadAfterSubmit:false }, // edit options
+        { height:280, reloadAfterSubmit:false }, // add options
+        { reloadAfterSubmit:false, url: "<?php echo $deleteUrl; ?>" }, // del options
+        { width:500 } // search options
+    ).navButtonAdd('#results_pager', {
+        caption:"<i class=\"fa fa-eye\" ></i>",
+        buttonicon:"ui-icon-blank",
+        onClickButton: function(a) {
+            var userIdList = $("#results").jqGrid('getGridParam', 'selarrrow');
+            if (userIdList.length) {
+                $.ajax({
+                    type: "POST",
+                    url: "<?php echo $showUrl; ?>&item_list=" + userIdList,
+                    dataType: "json",
+                    success: function(data) {
+                        $('#results').trigger('reloadGrid');
+                    }
+                });
+            } else {
+                alert("<?php echo addslashes(get_lang('SelectAnOption')); ?>");
+            }
+        },
+        position:"last"
+    }).navButtonAdd('#results_pager', {
+        //caption:"<?php //echo addslashes(get_lang('SetVisible'));?>//",
+        caption:"<i class=\"fa fa-eye-slash\" ></i>",
+        buttonicon:"ui-icon-blank",
+        onClickButton: function(a) {
+            var userIdList = $("#results").jqGrid('getGridParam', 'selarrrow');
+            if (userIdList.length) {
+                $.ajax({
+                    type: "POST",
+                    url: "<?php echo $hideUrl; ?>&item_list=" + userIdList,
+                    dataType: "json",
+                    success: function(data) {
+                        $('#results').trigger('reloadGrid');
+                    }
+                });
+            } else {
+                alert("<?php echo addslashes(get_lang('SelectAnOption')); ?>");
+            }
+        },
+        position:"last"
+    });
 });
 
 </script>

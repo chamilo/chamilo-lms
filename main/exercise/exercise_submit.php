@@ -82,22 +82,22 @@ if (api_get_setting('enable_record_audio') === 'true') {
 $template = new Template();
 
 // General parameters passed via POST/GET
-$learnpath_id = isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpath_id']) : 0;
-$learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : 0;
-$learnpath_item_view_id = isset($_REQUEST['learnpath_item_view_id']) ? intval($_REQUEST['learnpath_item_view_id']) : 0;
+$learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
+$learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
+$learnpath_item_view_id = isset($_REQUEST['learnpath_item_view_id']) ? (int) $_REQUEST['learnpath_item_view_id'] : 0;
 
-$reminder = isset($_REQUEST['reminder']) ? intval($_REQUEST['reminder']) : 0;
-$remind_question_id = isset($_REQUEST['remind_question_id']) ? intval($_REQUEST['remind_question_id']) : 0;
-$exerciseId = isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) : 0;
+$reminder = isset($_REQUEST['reminder']) ? (int) $_REQUEST['reminder'] : 0;
+$remind_question_id = isset($_REQUEST['remind_question_id']) ? (int) $_REQUEST['remind_question_id'] : 0;
+$exerciseId = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 0;
 $formSent = isset($_REQUEST['formSent']) ? $_REQUEST['formSent'] : null;
 $exerciseResult = isset($_REQUEST['exerciseResult']) ? $_REQUEST['exerciseResult'] : null;
 $exerciseResultCoordinates = isset($_REQUEST['exerciseResultCoordinates']) ? $_REQUEST['exerciseResultCoordinates'] : null;
 $choice = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : null;
 $choice = empty($choice) ? isset($_REQUEST['choice2']) ? $_REQUEST['choice2'] : null : null;
 
-//From submit modal
-$current_question = isset($_REQUEST['num']) ? intval($_REQUEST['num']) : null;
-$currentAnswer = isset($_REQUEST['num_answer']) ? intval($_REQUEST['num_answer']) : null;
+// From submit modal
+$current_question = isset($_REQUEST['num']) ? (int) $_REQUEST['num'] : null;
+$currentAnswer = isset($_REQUEST['num_answer']) ? (int) $_REQUEST['num_answer'] : null;
 $endExercise = isset($_REQUEST['end_exercise']) && $_REQUEST['end_exercise'] == 1 ? true : false;
 
 $logInfo = [
@@ -111,7 +111,6 @@ Event::registerLog($logInfo);
 
 // Error message
 $error = '';
-
 $exercise_attempt_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
 /*  Teacher takes an exam and want to see a preview,
@@ -178,7 +177,8 @@ $exercise_sound = $objExercise->selectSound();
 // If reminder ends we jump to the exercise_reminder
 if ($objExercise->review_answers) {
     if ($remind_question_id == -1) {
-        header('Location: exercise_reminder.php?exerciseId='.$exerciseId.'&'.api_get_cidreq());
+        header('Location: '.api_get_path(WEB_CODE_PATH).
+            'exercise/exercise_reminder.php?exerciseId='.$exerciseId.'&'.api_get_cidreq());
         exit;
     }
 }

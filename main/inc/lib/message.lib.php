@@ -288,12 +288,6 @@ class MessageManager
                 $message = $repo->find($row['id']);
                 $messages[] = $message;
             }
-            /*$criteria = [
-                'userReceiverId' => $aboutUserInfo['id'],
-                'msgStatus' => MESSAGE_STATUS_CONVERSATION,
-            ];
-            $repo = Database::getManager()->getRepository('ChamiloCoreBundle:Message');
-            $messages = $repo->findBy($criteria, ['sendDate' => 'DESC']);*/
 
             return $messages;
         }
@@ -789,8 +783,8 @@ class MessageManager
         if ($id != strval(intval($id))) {
             return false;
         }
-        $user_receiver_id = intval($user_receiver_id);
-        $id = intval($id);
+        $id = (int) $id;
+        $user_receiver_id = (int) $user_receiver_id;
         $sql = "SELECT * FROM $table
                 WHERE id = ".$id." AND msg_status <>".MESSAGE_STATUS_OUTBOX;
         $rs = Database::query($sql);
@@ -1548,7 +1542,6 @@ class MessageManager
         }
 
         $webCodePath = api_get_path(WEB_CODE_PATH);
-
         $iconCalendar = Display::returnFontAwesomeIcon('calendar');
 
         $langEdit = get_lang('Edit');
@@ -1709,7 +1702,7 @@ class MessageManager
                     ? (int) $_GET['items_'.$topic['id'].'_page_nr']
                     : null;
                 $links = '';
-                $links .= '<div class="float-right">';
+                $links .= '<div class="pull-right">';
                 $html_items = '';
                 $user_sender_info = api_get_user_info($topic['user_sender_id']);
                 $files_attachments = self::getAttachmentLinkList($topic['id']);
@@ -2039,12 +2032,9 @@ class MessageManager
     }
 
     /**
-     * @param $id
-     * @param array $params
-     *
      * @return string
      */
-    public static function generate_invitation_form($id, $params = [])
+    public static function generate_invitation_form()
     {
         $form = new FormValidator('send_invitation');
         $form->addTextarea(
@@ -2055,8 +2045,6 @@ class MessageManager
 
         return $form->returnForm();
     }
-
-    //@todo this functions should be in the message class
 
     /**
      * @param string $keyword

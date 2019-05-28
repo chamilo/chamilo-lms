@@ -85,8 +85,8 @@ class ExerciseLink extends AbstractLink
                 ";
 
         require_once api_get_path(SYS_CODE_PATH).'exercise/hotpotatoes.lib.php';
-        $exerciseInLP = [];
 
+        $exerciseInLP = [];
         if (!$this->is_hp) {
             $result = Database::query($sql);
             $resultLp = Database::query($sqlLp);
@@ -99,7 +99,7 @@ class ExerciseLink extends AbstractLink
         if (isset($result)) {
             if (Database::num_rows($result) > 0) {
                 while ($data = Database::fetch_array($result)) {
-                    $cats[] = [$data['id'], $data['title']];
+                    $cats[] = [$data['iid'], $data['title']];
                 }
             }
         }
@@ -134,7 +134,7 @@ class ExerciseLink extends AbstractLink
         if (!empty($exerciseInLP)) {
             foreach ($exerciseInLP as $exercise) {
                 $cats[] = [
-                    $exercise['id'],
+                    $exercise['iid'],
                     $exercise['title'].' ('.get_lang('ToolLearnpath').')',
                 ];
             }

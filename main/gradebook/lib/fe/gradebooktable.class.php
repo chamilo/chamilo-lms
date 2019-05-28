@@ -465,9 +465,6 @@ class GradebookTable extends SortableTable
 
                 if ($this->teacherView) {
                     $weight_total_links += $data[3];
-                } else {
-                    $cattotal = Category::load($_GET['selectcat']);
-                    $scoretotal = $cattotal[0]->calc_score($this->userId);
                 }
 
                 // Edit (for admins).
@@ -646,13 +643,6 @@ class GradebookTable extends SortableTable
 
                             // Weight
                             $row[] = $invisibility_span_open.$weight.$invisibility_span_close;
-
-                            if ($this->teacherView) {
-                                //$weight_total_links += intval($data[3]);
-                            } else {
-                                $cattotal = Category::load($_GET['selectcat']);
-                                $scoretotal = $cattotal[0]->calc_score($this->userId);
-                            }
 
                             // Admins get an edit column.
                             if (api_is_allowed_to_edit(null, true) &&

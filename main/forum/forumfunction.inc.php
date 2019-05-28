@@ -454,8 +454,6 @@ function show_add_forum_form($inputvalues = [], $lp_id)
         $defaults['group_forum'] = isset($inputvalues['forum_of_group']) ? $inputvalues['forum_of_group'] : null;
     }
 
-    // $defaults['skills'] = array_keys($skillList);
-
     $form->setDefaults($defaults);
     // Validation or display
     if ($form->validate()) {

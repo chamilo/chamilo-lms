@@ -782,9 +782,11 @@ switch ($action) {
         $codePath = api_get_path(WEB_CODE_PATH);
 
         foreach ($exercises as $exercise) {
+            $title = Security::remove_XSS(api_html_entity_decode($exercise['title']));
+
             $result[] = [
                 'id' => $exercise['iid'],
-                'title' => Security::remove_XSS($exercise['title']),
+                'title' => strip_tags($title),
             ];
         }
 

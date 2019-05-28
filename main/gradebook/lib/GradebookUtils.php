@@ -83,6 +83,7 @@ class GradebookUtils
         $course_code,
         $weight
     ) {
+        $link_id = (int) $link_id;
         $courseInfo = api_get_course_info($course_code);
         if (!empty($link_id) && !empty($courseInfo)) {
             $link_id = intval($link_id);
@@ -351,8 +352,8 @@ class GradebookUtils
         $courseParams = api_get_cidreq_params($eval->get_course_code(), $eval->getSessionId());
 
         if ($message_eval === false && api_is_allowed_to_edit(null, true)) {
-            $visibility_icon = ($eval->is_visible() == 0) ? 'invisible' : 'visible';
-            $visibility_command = ($eval->is_visible() == 0) ? 'set_visible' : 'set_invisible';
+            $visibility_icon = $eval->is_visible() == 0 ? 'invisible' : 'visible';
+            $visibility_command = $eval->is_visible() == 0 ? 'set_visible' : 'set_invisible';
             if ($is_locked && !api_is_platform_admin()) {
                 $modify_icons = Display::return_icon(
                     'edit_na.png',
@@ -448,8 +449,8 @@ class GradebookUtils
         );
 
         if ($message_link === false) {
-            $visibility_icon = ($link->is_visible() == 0) ? 'invisible' : 'visible';
-            $visibility_command = ($link->is_visible() == 0) ? 'set_visible' : 'set_invisible';
+            $visibility_icon = $link->is_visible() == 0 ? 'invisible' : 'visible';
+            $visibility_command = $link->is_visible() == 0 ? 'set_visible' : 'set_invisible';
 
             if ($is_locked && !api_is_platform_admin()) {
                 $modify_icons = Display::return_icon(
@@ -590,6 +591,8 @@ class GradebookUtils
     {
         $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_grade_links = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+        $id_link = (int) $id_link;
+
         $sql = 'SELECT c.id FROM '.$course_table.' c
                 INNER JOIN '.$tbl_grade_links.' l
                 ON c.id = l.c_id
@@ -1327,7 +1330,7 @@ class GradebookUtils
      */
     public static function updateLinkWeight($linkId, $name, $weight)
     {
-        $linkId = intval($linkId);
+        $linkId = (int) $linkId;
         $weight = api_float_val($weight);
         $course_id = api_get_course_int_id();
 
@@ -1393,7 +1396,7 @@ class GradebookUtils
     public static function updateEvaluationWeight($id, $weight)
     {
         $table_evaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
-        $id = intval($id);
+        $id = (int) $id;
         $evaluation = new Evaluation();
         $evaluation->addEvaluationLog($id);
         $sql = 'UPDATE '.$table_evaluation.'
@@ -1414,7 +1417,7 @@ class GradebookUtils
         $userId,
         $includeNonPublicCertificates = true
     ) {
-        $userId = intval($userId);
+        $userId = (int) $userId;
         $courseList = [];
         $courses = CourseManager::get_courses_list_by_user_id($userId);
 
@@ -1476,7 +1479,7 @@ class GradebookUtils
      */
     public static function getUserCertificatesInSessions($userId, $includeNonPublicCertificates = true)
     {
-        $userId = intval($userId);
+        $userId = (int) $userId;
         $sessionList = [];
         $sessions = SessionManager::get_sessions_by_user($userId, true, true);
 

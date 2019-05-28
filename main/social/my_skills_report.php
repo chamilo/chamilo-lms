@@ -29,56 +29,7 @@ switch ($action) {
         $certificate->generatePdfFromCustomCertificate();
         break;
     case 'generate':
-        $controller = new IndexManager(get_lang('MyCourses'));
-        $courseAndSessions = $controller->returnCoursesAndSessions($userId, true, null, true, false);
-
-        foreach ($courseAndSessions['courses'] as $course) {
-            $cats = Category:: load(
-                null,
-                null,
-                $course['code'],
-                null,
-                null,
-                null,
-                false
-            );
-
-            if (isset($cats[0]) && !empty($cats[0])) {
-                $certificate = Category::generateUserCertificate(
-                    $cats[0]->get_id(),
-                    $userId
-                );
-            }
-        }
-
-        foreach ($courseAndSessions['sessions'] as $sessionCategory) {
-            if (isset($sessionCategory['sessions'])) {
-                foreach ($sessionCategory['sessions'] as $sessionData) {
-                    if (!empty($sessionData['courses'])) {
-                        $sessionId = $sessionData['session_id'];
-                        foreach ($sessionData['courses'] as $courseData) {
-                            $cats = Category:: load(
-                                null,
-                                null,
-                                $courseData['course_code'],
-                                null,
-                                null,
-                                $sessionId,
-                                false
-                            );
-
-                            if (isset($cats[0]) && !empty($cats[0])) {
-                                $certificate = Category::generateUserCertificate(
-                                    $cats[0]->get_id(),
-                                    $userId
-                                );
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
+        $certificate = Certificate::generateUserSkills(api_get_user_id());
         Display::addFlash(Display::return_message(get_lang('Updated')));
         header('Location: '.api_get_self());
         exit;

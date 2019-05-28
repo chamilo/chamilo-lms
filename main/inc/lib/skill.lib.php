@@ -2261,8 +2261,8 @@ class Skill extends Model
     }
 
     /**
-     * @param $currentUserId
-     * @param $studentId
+     * @param int $currentUserId
+     * @param int $studentId
      *
      * @return bool
      */
@@ -2270,6 +2270,13 @@ class Skill extends Model
     {
         if (self::isToolAvailable()) {
             if (api_is_platform_admin()) {
+                return true;
+            }
+
+            $currentUserId = (int) $currentUserId;
+            $studentId = (int) $studentId;
+
+            if ($currentUserId === $studentId) {
                 return true;
             }
 

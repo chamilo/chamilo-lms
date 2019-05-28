@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
@@ -418,8 +419,7 @@ class Display
      * @param array $query_vars      Additional variables to add in the query-string
      * @param array $column_show     Array of binaries 1= show columns 0. hide a column
      * @param array $column_order    An array of integers that let us decide how the columns are going to be sort.
-     *                               i.e:  $column_order=array('1''4','3','4'); The 2nd column will be order like the
-     *                               4th column
+     *                               i.e:  $column_order=array('1''4','3','4'); The 2nd column will be order like the 4th column
      * @param array $form_actions    Set optional forms actions
      *
      * @author Julio Montoya
@@ -618,6 +618,7 @@ class Display
      * @param string  e-mail
      * @param string  clickable text
      * @param string  optional, class from stylesheet
+     * @param bool $addExtraContent
      *
      * @return string encrypted mailto hyperlink
      */
@@ -1336,7 +1337,7 @@ class Display
      *
      * @param string $div_id       div id
      * @param string $url          url where the jqgrid will ask for data (if datatype = json)
-     * @param array  $column_names visible columns (you should use get_lang).
+     * @param array  $column_names Visible columns (you should use get_lang).
      *                             An array in which we place the names of the columns.
      *                             This is the text that appears in the head of the grid (Header layer).
      *                             Example: colname   {name:'date',     index:'date',   width:120, align:'right'},
@@ -1449,6 +1450,24 @@ class Display
             unset($extra_params['beforeSelectRow']);
         }
 
+        $beforeProcessing = '';
+        if (isset($extra_params['beforeProcessing'])) {
+            $beforeProcessing = 'beforeProcessing : function() { '.$extra_params['beforeProcessing'].' },';
+            unset($extra_params['beforeProcessing']);
+        }
+
+        $beforeRequest = '';
+        if (isset($extra_params['beforeRequest'])) {
+            $beforeRequest = 'beforeRequest : function() { '.$extra_params['beforeRequest'].' },';
+            unset($extra_params['beforeRequest']);
+        }
+
+        $gridComplete = '';
+        if (isset($extra_params['gridComplete'])) {
+            $gridComplete = 'gridComplete : function() { '.$extra_params['gridComplete'].' },';
+            unset($extra_params['gridComplete']);
+        }
+
         // Adding extra params
         if (!empty($extra_params)) {
             foreach ($extra_params as $key => $element) {
@@ -1490,6 +1509,9 @@ class Display
         // Creating the jqgrid element.
         $json .= '$("#'.$div_id.'").jqGrid({';
         //$json .= $beforeSelectRow;
+        $json .= $gridComplete;
+        $json .= $beforeProcessing;
+        $json .= $beforeRequest;
         $json .= $json_encode;
         $json .= '});';
 
@@ -1853,7 +1875,6 @@ class Display
         if (!empty($percentage)) {
             $percentage = $percentage * 125 / 100;
         }
-
         $accesses = isset($point_info['accesses']) ? $point_info['accesses'] : 0;
         $star_label = sprintf(get_lang('XStarsOutOf5'), $point_info['point_average_star']);
 
@@ -1934,14 +1955,15 @@ class Display
         return self::page_subheader($title, $second_title);
     }
 
-    public static function page_subheader($title, $second_title = null, $size = 'h3')
+    public static function page_subheader($title, $second_title = null, $size = 'h3', $attributes = [])
     {
         if (!empty($second_title)) {
             $second_title = Security::remove_XSS($second_title);
             $title .= "<small> $second_title<small>";
         }
+        $subTitle = self::tag($size, Security::remove_XSS($title), $attributes);
 
-        return '<'.$size.'>'.Security::remove_XSS($title).'</'.$size.'>';
+        return $subTitle;
     }
 
     public static function page_subheader2($title, $second_title = null)
@@ -2241,17 +2263,14 @@ class Display
     {
         $fileInfo = pathinfo($file);
 
+        $autoplay = isset($params['autoplay']) && 'true' === $params['autoplay'] ? 'autoplay' : '';
+        $id = isset($params['id']) ? $params['id'] : $fileInfo['basename'];
+        $width = isset($params['width']) ? 'width="'.$params['width'].'"' : null;
+        $class = isset($params['class']) ? ' class="'.$params['class'].'"' : null;
+
         switch ($fileInfo['extension']) {
             case 'mp3':
             case 'webm':
-                $autoplay = null;
-                if (isset($params['autoplay']) && $params['autoplay'] == 'true') {
-                    $autoplay = 'autoplay';
-                }
-                $width = isset($params['width']) ? 'width="'.$params['width'].'"' : null;
-                $id = isset($params['id']) ? $params['id'] : $fileInfo['basename'];
-                $class = isset($params['class']) ? ' class="'.$params['class'].'"' : null;
-
                 $html = '<audio id="'.$id.'" '.$class.' controls '.$autoplay.' '.$width.' src="'.$params['url'].'" >';
                 $html .= '<object width="'.$width.'" height="50" type="application/x-shockwave-flash" data="'.api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/flashmediaelement.swf">
                             <param name="movie" value="'.api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/flashmediaelement.swf" />
@@ -2263,7 +2282,7 @@ class Display
                 break;
             case 'wav':
             case 'ogg':
-                $html = '<audio width="300px" controls src="'.$params['url'].'" >';
+                $html = '<audio width="300px" controls id="'.$id.'" '.$autoplay.' src="'.$params['url'].'" >';
 
                 return $html;
                 break;
@@ -2649,7 +2668,7 @@ class Display
     /**
      * Get a HTML code for a icon by Font Awesome.
      *
-     * @param string     $name            The icon name
+     * @param string     $name            The icon name. Example: "mail-reply"
      * @param int|string $size            Optional. The size for the icon. (Example: lg, 2, 3, 4, 5)
      * @param bool       $fixWidth        Optional. Whether add the fw class
      * @param string     $additionalClass Optional. Additional class
@@ -2722,6 +2741,7 @@ class Display
             $contentClass = 'panel-collapse collapse ';
             $contentClass .= $open ? 'in' : '';
             $ariaExpanded = $open ? 'true' : 'false';
+
             $html = <<<HTML
             
                 <div class="card" id="$id">
@@ -2730,7 +2750,6 @@ class Display
                     </div>                    
                     <div class="card-body">$content</div>                    
                 </div>
-            
 HTML;
         } else {
             if (!empty($id)) {
@@ -2790,7 +2809,7 @@ HTML;
         }
 
         if (!empty($toolbar)) {
-            $toolbar = '<div class="btn-group float-right">'.$toolbar.'</div>';
+            $toolbar = '<div class="btn-group pull-right">'.$toolbar.'</div>';
         }
 
         return '<div id="user_card_'.$userInfo['id'].'" class="card d-flex flex-row">                    

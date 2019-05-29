@@ -716,18 +716,6 @@ class Template
             'chosen/chosen.jquery.min.js',
         ];
 
-        $viewBySession = api_get_setting('my_courses_view_by_session') === 'true';
-
-        if (api_is_global_chat_enabled() || $viewBySession) {
-            // Do not include the global chat in LP
-            if ($this->show_learnpath == false &&
-                $this->show_footer == true &&
-                $this->hide_global_chat == false
-            ) {
-                $js_files[] = 'chat/js/chat.js';
-            }
-        }
-
         if (api_get_setting('accessibility_font_resize') === 'true') {
             $js_files[] = 'fontresize.js';
         }
@@ -755,6 +743,20 @@ class Template
             'js-cookie/src/js.cookie.js',
             'mediaelement/plugins/markersrolls/markersrolls.min.js',
         ];
+
+        $viewBySession = api_get_setting('my_courses_view_by_session') === 'true';
+
+        if ($viewBySession || api_is_global_chat_enabled()) {
+            // Do not include the global chat in LP
+            if ($this->show_learnpath == false &&
+                $this->show_footer == true &&
+                $this->hide_global_chat == false
+            ) {
+                $js_files[] = 'chat/js/chat.js';
+                $bowerJsFiles[] = 'linkifyjs/linkify.js';
+                $bowerJsFiles[] = 'linkifyjs/linkify-jquery.js';
+            }
+        }
 
         $features = api_get_configuration_value('video_features');
         if (!empty($features) && isset($features['features'])) {
@@ -849,10 +851,13 @@ class Template
     {
         global $disable_js_and_css_files;
         $js_files = [];
+        $bower = '';
         if (api_is_global_chat_enabled()) {
             //Do not include the global chat in LP
             if ($this->show_learnpath == false && $this->show_footer == true && $this->hide_global_chat == false) {
                 $js_files[] = 'chat/js/chat.js';
+                $bower .= '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/linkifyjs/linkify.js"></script>';
+                $bower .= '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/linkifyjs/linkify-jquery.js"></script>';
             }
         }
         $js_file_to_string = '';
@@ -860,7 +865,7 @@ class Template
             $js_file_to_string .= api_get_js($js_file);
         }
         if (!$disable_js_and_css_files) {
-            $this->assign('js_file_to_string_post', $js_file_to_string);
+            $this->assign('js_file_to_string_post', $js_file_to_string.$bower);
         }
     }
 

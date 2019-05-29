@@ -165,7 +165,6 @@ function startChatSession()
 										window_user_info.avatar_small
 									);
 								}
-
 								createChatBubble(my_user_id, item);
 							}
 						});
@@ -279,7 +278,6 @@ function chatHeartbeat()
 						newMessagesWin[my_user_id]= {'status':true, 'username':item.username};
 
 						var chatBubble = createChatBubble(my_user_id, item);
-						//$("#chatbox_"+my_user_id+" .chatboxcontent").append(chatBubble);
 
 						$("#chatbox_"+my_user_id+" .chatboxcontent").scrollTop(
 							$("#chatbox_"+my_user_id+" .chatboxcontent")[0].scrollHeight
@@ -338,18 +336,22 @@ function createChatBubble(my_user_id, item, appendType = 'append')
 
 	var messageObject = $("#chatbox_"+my_user_id+" .chatboxcontent").find('#message_id_' + item.id);
 	var exists = messageObject.length !== 0;
-	var messageHeader = '<div id="message_id_'+item.id+'" class="chatbox-common  well '+myDiv+'" title="'+sentDate+'" >';
+	var messageHeader = '<div id="message_id_'+item.id+'" class="chatbox-common well '+myDiv+'" title="'+sentDate+'" >';
 	var messageEnd = '</div>';
 
 	var message = '';
 	if (my_user_id == item.from_user_info.id) {
 		message += '<span class="chatboxmessagefrom">'+item.from_user_info.complete_name+':&nbsp;&nbsp;</span>';
 	}
+
 	message += '<div class="chatboxmessagecontent">'+item.message+'</div>';
 	message += '<div class="chatbox_checks' + unCheckClass + '">'+check+'</div>';
 
 	if (exists) {
 		messageObject.html(message);
+		$(messageObject).linkify({
+			target: "_blank"
+		});
 	} else {
 		message = messageHeader + message + messageEnd;
 		if (appendType == 'append') {
@@ -358,6 +360,9 @@ function createChatBubble(my_user_id, item, appendType = 'append')
 			$("#chatbox_"+my_user_id+" .chatboxcontent").prepend(message);
 		}
 
+		$("#chatbox_"+my_user_id+" .chatboxcontent").linkify({
+			target: "_blank"
+		});
 	}
 
 	return message;
@@ -369,9 +374,7 @@ function createChatBubble(my_user_id, item, appendType = 'append')
 function closeChat()
 {
 	$.post(
-		ajax_url + "?action=close",
-		{
-		},
+		ajax_url + "?action=close", {},
 		function (data) {
 			// Disconnects from chat
 			set_user_status(0);
@@ -764,26 +767,13 @@ function getMoreItems(userId, scrollType)
 						restructureChatBoxes();
 					}
 					var chatBubble = createChatBubble(userId, item, 'prepend');
-					//$("#chatbox_"+userId+" .chatboxcontent").prepend(chatBubble);
-
 					if ($('#chatbox_'+userId+' .chatboxcontent').css('display') == 'none') {
 						$('#chatbox_'+userId+' .chatboxhead').toggleClass('chatboxblink');
 					}
-
-					// When using scroll set the scroll window to the first
-					var scrollValue = 10;
-					if (scrollType === 'last') {
-						// When loading for the first time show the last msg
-						//scrollValue = $("#chatbox_"+userId+" .chatboxcontent").height();
-					}
-
-					/*$("#chatbox_"+userId+" .chatboxcontent").scrollTop(
-						scrollValue
-					);*/
 				}
 			});
 		}
-	}); //ajax
+	});
 }
 
 /**
@@ -845,7 +835,6 @@ function toggleChatBoxGrowth(user_id)
 		Cookies.set('chatbox_minimized', newCookie);
 		$('#chatbox_'+user_id+' .chatboxcontent').css('display','block');
 		$('#chatbox_'+user_id+' .chatboxinput').css('display','block');
-		//$("#chatbox_"+user_id+" .chatboxcontent").scrollTop($("#chatbox_"+user_id+" .chatboxcontent")[0].scrollHeight);
 		$('.togglelink').html('<em class="fa fa-toggle-down"></em>');
 	} else {
 		// hide box
@@ -924,8 +913,7 @@ function checkChatBoxInputKey(event, chatboxtextarea, user_id)
 						message: message,
 						id: messageId
 					};
-					var bubble = createChatBubble(user_id, item);
-					//$("#chatbox_" + user_id + " .chatboxcontent").append(bubble);
+					createChatBubble(user_id, item);
 					$("#chatbox_" + user_id + " .chatboxcontent").scrollTop(
 						$("#chatbox_" + user_id + " .chatboxcontent")[0].scrollHeight
 					);

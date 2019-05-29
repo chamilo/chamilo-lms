@@ -60,6 +60,10 @@
 .chatboxmessagecontent {
 }
 
+.chatboxmessage_me .chatboxmessagecontent a {
+    color: #ffffff;
+}
+
 .chatboxcontent {
     font-family: arial, sans-serif;
     font-size: 13px;

@@ -8427,4 +8427,10 @@ $WelcomeToPortalXInCourseSessionX = "Bienvenid@ en el portal %s, Curso/sesión: 
 $WelcomeToPortalXInCourseSessionXCoursePartOfCareerX = "Bienvenid@ en el portal %s en el curso %s, parte de la carrera %s";
 $YourNextModule = "Su próximo módulo";
 $FirstLesson = "Primera lección";
+$ImportCourseTeachersAsCourseCoach = "Importar los profesores del curso como tutores del curso en la session";
+$ResumeImport = "Reanudar importación";
+$Candidate = "Candidato";
+$GeneralTotal = "Total general";
+$Domains = "Dominios";
+$ScormStartAttemptDate = "Fecha";
 ?>
